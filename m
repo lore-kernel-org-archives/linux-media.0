@@ -2,78 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F9AC433DB
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 12:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E9DDC4332B
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:29:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 708E623358
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 12:33:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52D4B23118
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:29:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728308AbhAGMdS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 07:33:18 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39410 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728304AbhAGMdS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 07:33:18 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 931831F4628C
-Message-ID: <f499532ca147a0d2907a5020fb69def89d4c69a6.camel@collabora.com>
-Subject: Re: [PATCH] media: rkvdec: silence ktest bot build warning
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Adrian Ratiu <adrian.ratiu@collabora.com>,
-        linux-media@vger.kernel.org, kernel@collabora.com,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Date:   Thu, 07 Jan 2021 09:32:28 -0300
-In-Reply-To: <20210107124132.3648e789@collabora.com>
-References: <20201208155540.340583-1-adrian.ratiu@collabora.com>
-         <76b5569c-bc19-3d11-4da7-cf0dbb244433@xs4all.nl>
-         <20210107124132.3648e789@collabora.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        id S1728538AbhAGN3l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728526AbhAGN3k (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:29:40 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FF4C0612F9;
+        Thu,  7 Jan 2021 05:29:00 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id i9so5659603wrc.4;
+        Thu, 07 Jan 2021 05:29:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yjuAIsCe9VKkF/J+5IX/iTbQDrOnLfNuC/kDWAD2YYc=;
+        b=c+p7KuMrhW2Wpo3oPiZ/mr7gyedNEc8AfDZr2cbX9VC3L6GypgWk3uQVMHxYNVlD9m
+         AUVnJ+icNAbJ5+a21hyCinmXYO3RgsH8wfpcSc2PHWhJYzGsswu1Zlwd5vrg2nq3gnOQ
+         Mhg4pTw1tBGltIMuV2h836qmhxECSMWEejX4roObNIQ8WnGXIW3vaPMyT4Ue7qdMUKy1
+         IFZGh1c6z7yz6QIOYvfPQ4gmbmgi0gMwYbKndtpndw7eUstZz+ln+glZQODuOj0cU+cU
+         Pdd9OxZhWpLH9uvrP8JDVkYAAD10cZL2yEzVaHsaVTmTtZ9/8N1LABpQpJ2g+/nEwCK2
+         qkDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yjuAIsCe9VKkF/J+5IX/iTbQDrOnLfNuC/kDWAD2YYc=;
+        b=qrQNtgM2PytBPNJbSEEbIxbiy3JCi+q0xqH/6gq0v2ji3HkSpIbemUGE9mKBB9PY2G
+         tl6kJIrR+yopcAF0ovjwrgxsrpOj1QYoBja2cUZGPTx87P+l2VDrKmMgByDabsAGHn+X
+         /jVghjt4rFRRxQGDhFPEuyyeanKTd5q8FyDD0qnd1K65fRf2LMArEbJUAbjG0fIufyCZ
+         BVkiksK9rGC/8s4k9tKeaqcelHPaojCaRbThH3s2UCNjeUFf46sTwBpFyLXuuIjsR2aR
+         m8wR7QLaDsY7KAuib2v0r7teBRa7EdCPVraAm8eqPZU8O0JgIgnaisqm+E26fNVwOLNd
+         JlRw==
+X-Gm-Message-State: AOAM533AvVe2XT6UQPQZrf9KoMxwxq01TYA8kDCDBH2CGXYvzz1X7prB
+        QoFK98SEQSLcRgIbk99Mork/7XtXg825p4+U
+X-Google-Smtp-Source: ABdhPJyc73BrGwv2CU2kAQpV8Ix9IIgMkJ00T1XVmaMV8zQO/qPOmfZQOew9wkccp0UzZNeUh4cJ2Q==
+X-Received: by 2002:a5d:51d2:: with SMTP id n18mr9205822wrv.92.1610026139072;
+        Thu, 07 Jan 2021 05:28:59 -0800 (PST)
+Received: from valhalla.home ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 05:28:58 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org, mchehab@kernel.org,
+        sergey.senozhatsky@gmail.com
+Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
+        niklas.soderlund+renesas@ragnatech.se,
+        prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
+        heikki.krogerus@linux.intel.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v5 04/15] device property: Call fwnode_graph_get_endpoint_by_id() for fwnode->secondary
+Date:   Thu,  7 Jan 2021 13:28:27 +0000
+Message-Id: <20210107132838.396641-5-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
+References: <20210107132838.396641-1-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2021-01-07 at 12:41 +0100, Boris Brezillon wrote:
-> On Thu, 7 Jan 2021 10:13:43 +0100
-> Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> 
-> > On 08/12/2020 16:55, Adrian Ratiu wrote:
-> > > Some configurations built by the ktest bot produce the following
-> > > warn, so mark the struct as __maybe_unused to avoid unnecessary
-> > > ML spam.
-> > >   
-> > > > > drivers/staging/media/rkvdec/rkvdec.c:967:34: warning: unused variable 'of_rkvdec_match' [-Wunused-const-variable]  
-> > >    static const struct of_device_id of_rkvdec_match[] = {
-> > >                                     ^
-> > >    1 warning generated.  
-> > 
-> > I suspect that this is because there is no 'depends on OF' in the Kconfig.
-> > 
-> > '__maybe_unused' isn't used for this anywhere else, so this does not seem like the
-> > right approach.
-> 
-> It's not uncommon to do that, especially when you want the driver to be
-> compile-tested (`git grep -C2 __maybe_unused|grep of_device_id` even
-> reports 2 drivers in the media tree :P). A `depends on OF` or an
-> `#ifdef CONFIG_OF` section surrounding the of_rkvdec_match declaration
-> would also do the trick.
-> 
+This function is used to find fwnode endpoints against a device. In
+some instances those endpoints are software nodes which are children of
+fwnode->secondary. Add support to fwnode_graph_get_endpoint_by_id() to
+find those endpoints by recursively calling itself passing the ptr to
+fwnode->secondary in the event no endpoint is found for the primary.
 
-I'm fine either way, __maybe_unused or depends on OF.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v5:
 
-Thanks,
-Ezequiel
+	- Changed the commit subject
+
+ drivers/base/property.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 0bf5260f14c6..1421e9548857 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -1215,7 +1215,14 @@ fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+ 		best_ep_id = fwnode_ep.id;
+ 	}
+ 
+-	return best_ep;
++	if (best_ep)
++		return best_ep;
++
++	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
++		return fwnode_graph_get_endpoint_by_id(fwnode->secondary, port,
++						       endpoint, flags);
++
++	return NULL;
+ }
+ EXPORT_SYMBOL_GPL(fwnode_graph_get_endpoint_by_id);
+ 
+-- 
+2.25.1
 
