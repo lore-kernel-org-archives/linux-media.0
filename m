@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F513C43331
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B784AC433E9
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F101622BE8
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9344422B4B
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbhAGNaV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 08:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S1728742AbhAGNay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728585AbhAGNaT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:19 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209FAC061282;
-        Thu,  7 Jan 2021 05:29:10 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id c124so5149435wma.5;
-        Thu, 07 Jan 2021 05:29:10 -0800 (PST)
+        with ESMTP id S1728624AbhAGNaS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:18 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B03BC0612FE;
+        Thu,  7 Jan 2021 05:29:07 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id y23so5550270wmi.1;
+        Thu, 07 Jan 2021 05:29:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iUMxq9sm/N1IcgtSTNHft9W//qV2OwXPT/djjfo6B80=;
-        b=NZC1gCGiJNPa4E4p4wziv2RxukmwdGPNYUnn6yA35t3Gs9qxLVA/8Ru+z40RDQZk+w
-         hPkpnr3uDzEzoRm9K2/cff7ZRBZI2gw1dPebmesNm81DZJH0zUbvUtjS/8p3ONw625/N
-         42tAFBhHREu/eP5RyGch+sb8W4vlGlgWztF+FkTCsEswbAdb/ZxPLBqo4VPvoNhHYICG
-         AuaMSfut/eVK11z5TPjMVRqf+XikMjnof0NIxbsgE3vLg9IEiC7unruu/bfyrgOBcgA8
-         rQCwhUs5Wice36aaEMQgBKXqoox7ifMfMkYcEdTyOz/o5CGrRFNJw1vR+e9H/R0Anq+I
-         uiRw==
+        bh=RsWfNl/LfJPYltSfgM5k0kShmiXfj0UFMpIcwGS3CSw=;
+        b=q5s+uupW2gkoHIZp21Xe/5SEAOCq6vMHXVibD/Ad9n0Obgn5qlboxIVYHE/F767+Pa
+         hB6pu8Zgq4L1Jd8L50BWY0Yev5YGNHgAoD6vt5mRbiELfzsLCUw85ve+LGtAQUO7c8hn
+         XXYLVF6ElgiOhfVY/lGw+8rrwlY/bH7BqBxGhRI3x8W5T7e0cUobMFBvMf4GbwYqTt4g
+         0SRwQlFVApKq7amBmFq8kRjmgsxeP9h3l92LnKumGFy8Td3DS1Lq0eRR38P2lusglZjO
+         As+BPJkH0UkwQvkrTffSvZi2S4EyuLK43lWf6onz72i1mo8E78LThQZoCZjH5cSQBC6F
+         2f2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iUMxq9sm/N1IcgtSTNHft9W//qV2OwXPT/djjfo6B80=;
-        b=nxBWS+OojR4XJltaeMaYaBFBGyHDrDRBfJk+ZbxDA9tb0Pv674W+nCmtW0ZfB6GGdD
-         0tHmU3oETpmitJsIkQEMWj+Akb5ywnopo2g5we9WkkK05gZYPFHNdEq/Q1M69cnqdxcw
-         Wl6U1HbH6qFF6HH1lW/k4KhvNWdH0aCG9DR2Ww+J+cWYryIiYKq75OGN5QxEwRncB3d1
-         AaNaRqxwStQRWe6W/SDKPvmu7yRdVl+QVOe76u12flbvKmOyMfChPatWc3uIfY86Bnb+
-         R+YDF2SmrqEilt+SXepPkqQHnEYamlYR0PQfMxwqLw1atrvaAGcMH/CIjFkBuVUG/tf0
-         c8/Q==
-X-Gm-Message-State: AOAM5323qOBN55l2cUeQ99qkB6IE19LvSN65rBi4Xw+fpxKtoQ2QDVZD
-        A0m364XTUDdXJ6aAMZ8HFdZWZx73Q0IeLD78
-X-Google-Smtp-Source: ABdhPJy03paiRqbUzQYJ5PSzdk/e1RvBo+kKcumvn2amiBu/QxZBgMAuB6RU+F4Prb5UJhVb3H7JRQ==
-X-Received: by 2002:a05:600c:20f:: with SMTP id 15mr8119112wmi.36.1610026148856;
-        Thu, 07 Jan 2021 05:29:08 -0800 (PST)
+        bh=RsWfNl/LfJPYltSfgM5k0kShmiXfj0UFMpIcwGS3CSw=;
+        b=ZGVwybUlHXyhU8veK+xZFOLYKC59gwxVqrObc9Q4iBIRAYkAVGaexcCD5hHol99sex
+         yUIS/3bUPE3HSjAly3DzEaKl2HFHn9IFxO1U2d3+R+i+JiQfWiShBULS8Snp5vGmcHH+
+         rbojiQZ/8hDE7mxR6ttOdgwUXYVvqvUsNydIDr28VV3CvxXo8reMC0Zo/1+mHPvJRB0X
+         CiiRcxBtYXvMmdidaRZsXVd+DtSyyn7b4u38kkqCB/p4HQzMQm7qWIbAsYsGhlv15Ql0
+         ox3rtN6gawQXjb2telMGgu18R+q+vWzAraMNium4CpV+WyGnDShdQA4BsB/ww0OHw6ad
+         cuYw==
+X-Gm-Message-State: AOAM531HwPPXVCem1i4k+jWTCNTu2kNTLmpzC/gEb7cSmLykeKoAPNxn
+        5IZoXhLnXb27Mjc10DLc5u6PQHDECdwi7wPy
+X-Google-Smtp-Source: ABdhPJyKuaTIenzmquxGHWP2i+AduDEM7inet3uRuUb/yiq2bZI+6EQ4tVfIsJF7Hto4otVR7HqM9w==
+X-Received: by 2002:a7b:cd91:: with SMTP id y17mr8067524wmj.5.1610026146121;
+        Thu, 07 Jan 2021 05:29:06 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.07
+        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:29:08 -0800 (PST)
+        Thu, 07 Jan 2021 05:29:05 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
@@ -73,9 +73,9 @@ Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 11/15] ipu3-cio2: Rename ipu3-cio2.c
-Date:   Thu,  7 Jan 2021 13:28:34 +0000
-Message-Id: <20210107132838.396641-12-djrscally@gmail.com>
+Subject: [PATCH v5 09/15] lib/test_printf.c: Use helper function to unwind array of software_nodes
+Date:   Thu,  7 Jan 2021 13:28:32 +0000
+Message-Id: <20210107132838.396641-10-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
@@ -85,36 +85,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ipu3-cio2 driver needs extending with multiple files; rename the main
-source file and specify the renamed file in Makefile to accommodate that.
+Use the software_node_unregister_nodes() helper function to unwind this
+array in a cleaner way.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Petr Mladek <pmladek@suse.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v5:
 
 	- None
 
- drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
- drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
+ lib/test_printf.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
-index 98ddd5beafe0..429d516452e4 100644
---- a/drivers/media/pci/intel/ipu3/Makefile
-+++ b/drivers/media/pci/intel/ipu3/Makefile
-@@ -1,2 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
-+
-+ipu3-cio2-y += ipu3-cio2-main.o
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-similarity index 100%
-rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
-rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 7ac87f18a10f..7d60f24240a4 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
+ 	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
+ 	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
+ 
+-	software_node_unregister(&softnodes[2]);
+-	software_node_unregister(&softnodes[1]);
+-	software_node_unregister(&softnodes[0]);
++	software_node_unregister_nodes(softnodes);
+ }
+ 
+ static void __init
 -- 
 2.25.1
 
