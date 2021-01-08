@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5965AC433E9
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50882C43381
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:44:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E57E233EA
+	by mail.kernel.org (Postfix) with ESMTP id 0C954233EA
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:44:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727762AbhAHJo3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 04:44:29 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35792 "EHLO mx2.suse.de"
+        id S1727864AbhAHJoa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 04:44:30 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35860 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727502AbhAHJoZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:44:25 -0500
+        id S1727649AbhAHJo1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:44:27 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0EF9EAD2B;
-        Fri,  8 Jan 2021 09:43:44 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 914E5AE1C;
+        Fri,  8 Jan 2021 09:43:45 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
         airlied@redhat.com, daniel@ffwll.ch,
@@ -34,9 +34,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v4 01/13] dma-buf: Add vmap_local and vnumap_local operations
-Date:   Fri,  8 Jan 2021 10:43:28 +0100
-Message-Id: <20210108094340.15290-2-tzimmermann@suse.de>
+Subject: [PATCH v4 03/13] drm/cma-helper: Provide a vmap function for short-term mappings
+Date:   Fri,  8 Jan 2021 10:43:30 +0100
+Message-Id: <20210108094340.15290-4-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
 References: <20210108094340.15290-1-tzimmermann@suse.de>
@@ -46,173 +46,101 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The existing dma-buf calls dma_buf_vmap() and dma_buf_vunmap() are
-allowed to pin the buffer or acquire the buffer's reservation object
-lock.
+Implementations of the vmap/vunmap GEM callbacks may perform pinning
+of the BO and may acquire the associated reservation object's lock.
+Callers that only require a mapping of the contained memory can thus
+interfere with other tasks that require exact pinning, such as scanout.
+This is less of an issue with private CMA buffers, but may happen
+with imported ones.
 
-This is a problem for callers that only require a short-term mapping
-of the buffer without the pinning, or callers that have special locking
-requirements. These may suffer from unnecessary overhead or interfere
-with regular pin operations.
+Therefore provide the new interface drm_gem_cma_vmap_local(), which only
+performs the vmap operations. Callers have to hold the reservation lock
+while the mapping persists.
 
-The new interfaces dma_buf_vmap_local(), dma_buf_vunmapo_local(), and
-their rsp callbacks in struct dma_buf_ops provide an alternative without
-pinning or reservation locking. Callers are responsible for these
-operations.
+This patch also connects GEM CMA helpers to the GEM object function with
+equivalent functionality.
 
 v4:
-	* update documentation (Daniel)
+	* vc4: don't wrap drm_gem_cma_vmap_local() in BO funcs (Daniel)
+	* remove the TODO comment (Daniel)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/dma-buf/dma-buf.c | 81 +++++++++++++++++++++++++++++++++++++++
- include/linux/dma-buf.h   | 34 ++++++++++++++++
- 2 files changed, 115 insertions(+)
+ drivers/gpu/drm/drm_gem_cma_helper.c | 27 +++++++++++++++++++++++++++
+ drivers/gpu/drm/vc4/vc4_bo.c         |  1 +
+ include/drm/drm_gem_cma_helper.h     |  1 +
+ 3 files changed, 29 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index b8465243eca2..01f9c74d97fa 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -1295,6 +1295,87 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
+diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
+index 7942cf05cd93..f854027fa01f 100644
+--- a/drivers/gpu/drm/drm_gem_cma_helper.c
++++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+@@ -38,6 +38,7 @@ static const struct drm_gem_object_funcs drm_gem_cma_default_funcs = {
+ 	.print_info = drm_gem_cma_print_info,
+ 	.get_sg_table = drm_gem_cma_get_sg_table,
+ 	.vmap = drm_gem_cma_vmap,
++	.vmap_local = drm_gem_cma_vmap_local,
+ 	.mmap = drm_gem_cma_mmap,
+ 	.vm_ops = &drm_gem_cma_vm_ops,
+ };
+@@ -471,6 +472,32 @@ int drm_gem_cma_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
  }
- EXPORT_SYMBOL_GPL(dma_buf_vunmap);
+ EXPORT_SYMBOL_GPL(drm_gem_cma_vmap);
  
 +/**
-+ * dma_buf_vmap_local - Create virtual mapping for the buffer object into kernel
-+ * address space.
-+ * @dmabuf:	[in]	buffer to vmap
-+ * @map:	[out]	returns the vmap pointer
++ * drm_gem_cma_vmap_local - map a CMA GEM object into the kernel's virtual
++ *     address space
++ * @obj: GEM object
++ * @map: Returns the kernel virtual address of the CMA GEM object's backing
++ *       store.
 + *
-+ * Unlike dma_buf_vmap() this is a short term mapping and will not pin
-+ * the buffer. The struct dma_resv for the @dmabuf must be locked until
-+ * dma_buf_vunmap_local() is called.
++ * This function maps a buffer into the kernel's
++ * virtual address space. Since the CMA buffers are already mapped into the
++ * kernel virtual address space this simply returns the cached virtual
++ * address. Drivers using the CMA helpers should set this as their DRM
++ * driver's &drm_gem_object_funcs.vmap_local callback.
 + *
 + * Returns:
-+ * 0 on success, or a negative errno code otherwise.
++ * 0 on success, or a negative error code otherwise.
 + */
-+int dma_buf_vmap_local(struct dma_buf *dmabuf, struct dma_buf_map *map)
++int drm_gem_cma_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map)
 +{
-+	struct dma_buf_map ptr;
-+	int ret = 0;
++	struct drm_gem_cma_object *cma_obj = to_drm_gem_cma_obj(obj);
 +
-+	dma_buf_map_clear(map);
++	dma_buf_map_set_vaddr(map, cma_obj->vaddr);
 +
-+	if (WARN_ON(!dmabuf))
-+		return -EINVAL;
-+
-+	dma_resv_assert_held(dmabuf->resv);
-+
-+	if (!dmabuf->ops->vmap_local)
-+		return -EINVAL;
-+
-+	mutex_lock(&dmabuf->lock);
-+	if (dmabuf->vmapping_counter) {
-+		dmabuf->vmapping_counter++;
-+		BUG_ON(dma_buf_map_is_null(&dmabuf->vmap_ptr));
-+		*map = dmabuf->vmap_ptr;
-+		goto out_unlock;
-+	}
-+
-+	BUG_ON(dma_buf_map_is_set(&dmabuf->vmap_ptr));
-+
-+	ret = dmabuf->ops->vmap_local(dmabuf, &ptr);
-+	if (WARN_ON_ONCE(ret))
-+		goto out_unlock;
-+
-+	dmabuf->vmap_ptr = ptr;
-+	dmabuf->vmapping_counter = 1;
-+
-+	*map = dmabuf->vmap_ptr;
-+
-+out_unlock:
-+	mutex_unlock(&dmabuf->lock);
-+	return ret;
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(dma_buf_vmap_local);
++EXPORT_SYMBOL_GPL(drm_gem_cma_vmap_local);
 +
-+/**
-+ * dma_buf_vunmap_local - Unmap a vmap obtained by dma_buf_vmap_local.
-+ * @dmabuf:	[in]	buffer to vunmap
-+ * @map:	[in]	vmap pointer to vunmap
-+ *
-+ * Release a mapping established with dma_buf_vmap_local().
-+ */
-+void dma_buf_vunmap_local(struct dma_buf *dmabuf, struct dma_buf_map *map)
-+{
-+	if (WARN_ON(!dmabuf))
-+		return;
-+
-+	dma_resv_assert_held(dmabuf->resv);
-+
-+	BUG_ON(dma_buf_map_is_null(&dmabuf->vmap_ptr));
-+	BUG_ON(dmabuf->vmapping_counter == 0);
-+	BUG_ON(!dma_buf_map_is_equal(&dmabuf->vmap_ptr, map));
-+
-+	mutex_lock(&dmabuf->lock);
-+	if (--dmabuf->vmapping_counter == 0) {
-+		if (dmabuf->ops->vunmap_local)
-+			dmabuf->ops->vunmap_local(dmabuf, map);
-+		dma_buf_map_clear(&dmabuf->vmap_ptr);
-+	}
-+	mutex_unlock(&dmabuf->lock);
-+}
-+EXPORT_SYMBOL_GPL(dma_buf_vunmap_local);
-+
- #ifdef CONFIG_DEBUG_FS
- static int dma_buf_debug_show(struct seq_file *s, void *unused)
- {
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 628681bf6c99..aeed754b5467 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -264,6 +264,38 @@ struct dma_buf_ops {
- 
- 	int (*vmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
- 	void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+
-+	/**
-+	 * @vmap_local:
-+	 *
-+	 * Creates a virtual mapping for the buffer into kernel address space.
-+	 *
-+	 * This callback establishes short-term mappings for situations where
-+	 * callers only use the buffer for a bounded amount of time; such as
-+	 * updates to the framebuffer or reading back contained information.
-+	 * In contrast to the regular @vmap callback, vmap_local does never pin
-+	 * the buffer to a specific domain or acquire the buffer's reservation
-+	 * lock.
-+	 *
-+	 * This is called with the &dma_buf.resv object locked. Callers must hold
-+	 * the lock until after removing the mapping with @vunmap_local.
-+	 *
-+	 * This callback is optional.
-+	 *
-+	 * Returns:
-+	 *
-+	 * 0 on success or a negative error code on failure.
-+	 */
-+	int (*vmap_local)(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+
-+	/**
-+	 * @vunmap_local:
-+	 *
-+	 * Removes a virtual mapping that was established by @vmap_local.
-+	 *
-+	 * This callback is optional.
-+	 */
-+	void (*vunmap_local)(struct dma_buf *dmabuf, struct dma_buf_map *map);
+ /**
+  * drm_gem_cma_mmap - memory-map an exported CMA GEM object
+  * @obj: GEM object
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index dc316cb79e00..7283c018dbaf 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -387,6 +387,7 @@ static const struct drm_gem_object_funcs vc4_gem_object_funcs = {
+ 	.export = vc4_prime_export,
+ 	.get_sg_table = drm_gem_cma_get_sg_table,
+ 	.vmap = vc4_prime_vmap,
++	.vmap_local = drm_gem_cma_vmap_local,
+ 	.vm_ops = &vc4_vm_ops,
  };
  
+diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
+index 0a9711caa3e8..05122e71bc6d 100644
+--- a/include/drm/drm_gem_cma_helper.h
++++ b/include/drm/drm_gem_cma_helper.h
+@@ -99,6 +99,7 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
+ 				  struct dma_buf_attachment *attach,
+ 				  struct sg_table *sgt);
+ int drm_gem_cma_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
++int drm_gem_cma_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map);
+ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
+ 
  /**
-@@ -501,4 +533,6 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
- 		 unsigned long);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
- void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+int dma_buf_vmap_local(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+void dma_buf_vunmap_local(struct dma_buf *dmabuf, struct dma_buf_map *map);
- #endif /* __DMA_BUF_H__ */
 -- 
 2.29.2
 
