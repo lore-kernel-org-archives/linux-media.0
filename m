@@ -2,139 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 545F0C433E0
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56051C433E0
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 13:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06765239FE
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:52:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0845E235DD
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 13:00:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725817AbhAHMwf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 07:52:35 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51248 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbhAHMwf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jan 2021 07:52:35 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 9981B1F46715
-Message-ID: <4bec214a8e749c640998fa74a7ebc703d4c40c7a.camel@collabora.com>
+        id S1727566AbhAHNAZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 08:00:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59476 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726545AbhAHNAY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 08:00:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC6EB23884
+        for <linux-media@vger.kernel.org>; Fri,  8 Jan 2021 12:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610110784;
+        bh=BTjkIjNo6NpfBPhuXpVpEVPxTh/ZzLyxZIQKnD1tukw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b7ugSOPXg7hh5k4xQiiDq3Fsa7zAp85oLOgbT2R6h6KnnQzuQj9KYKOI5ZG1960nj
+         SPtrYYzW0tzV5321xoFsjo+ga2AHE0QKPjATjAzFuCxT2m6tVeCvRmuQLrqQYG0ZMD
+         btX2Riu+zWfeU/Ai44XXEkIWphlypYLowRCTfdLbbP9CSGinBhkmRFWdf7NO4VqwAA
+         7VLUrGu6z/ho3GQhh4BfQjQ/sAihPD5FFsuKDHQiPBGRnmKeWMAYMtO7qTqGR1zgaa
+         27r2gLmMcHv3RChWIADQwl7dzibP+OD/+sfZ99rOKT7gK1XeMvTS8xt/RtcbDywv3I
+         orQmMPdgBsCdA==
+Received: by mail-ot1-f44.google.com with SMTP id r9so9498025otk.11
+        for <linux-media@vger.kernel.org>; Fri, 08 Jan 2021 04:59:43 -0800 (PST)
+X-Gm-Message-State: AOAM530SvSINUdgZr46gpz2T5fEFUNyNz6iJCXiEE0ZyFKt7n5nqT5AX
+        8gJUqWePs+4Kh4PzNyq7XEv6rOTuxhw+7MqwcKU=
+X-Google-Smtp-Source: ABdhPJxPbFXlMEqXIoihrrXpbX0xaUDjzMb5Oi2IPMwipIFc3Gvs2WenodK/X/cCNYkYWteYtUlX6zETFp94vbKtrws=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr2460200otm.305.1610110783103;
+ Fri, 08 Jan 2021 04:59:43 -0800 (PST)
+MIME-Version: 1.0
+References: <20210104165739.116404-1-ezequiel@collabora.com> <20210104165739.116404-2-ezequiel@collabora.com>
+In-Reply-To: <20210104165739.116404-2-ezequiel@collabora.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 8 Jan 2021 13:59:27 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3E4z50fecwFdwmMjj8Pk5_BoT8E1LNKAnsvgPfsdEhAw@mail.gmail.com>
+Message-ID: <CAK8P3a3E4z50fecwFdwmMjj8Pk5_BoT8E1LNKAnsvgPfsdEhAw@mail.gmail.com>
 Subject: Re: [PATCH 1/6] media: mach-pxa: Register the camera sensor
  fixed-rate clock
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Petr Cvek <petrcvekcz@gmail.com>, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Collabora kernel ML <kernel@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
+        Petr Cvek <petrcvekcz@gmail.com>,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
-Date:   Fri, 08 Jan 2021 09:51:43 -0300
-In-Reply-To: <c8b39f6c-7a21-b597-c633-b053d701fe67@gmail.com>
-References: <20210104165739.116404-1-ezequiel@collabora.com>
-         <20210104165739.116404-2-ezequiel@collabora.com>
-         <d07ac542-8b1c-779f-0b69-683c0d0ae2d1@gmail.com>
-         <3950cb4b337e6373b066034c32e51a1e9e88a50f.camel@collabora.com>
-         <c8b39f6c-7a21-b597-c633-b053d701fe67@gmail.com>
-Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 2021-01-08 at 12:02 +0100, Petr Cvek wrote:
-> Dne 06. 01. 21 v 16:53 Ezequiel Garcia napsal(a):
-> > Hi Petr,
-> > 
-> > Thanks a lot for reviewing and testing the series.
-> > 
-> > On Tue, 2021-01-05 at 17:41 +0100, Petr Cvek wrote:
-> > > 
-> > > Dne 04. 01. 21 v 17:57 Ezequiel Garcia napsal(a):
-> > > > The pxa-camera capture driver currently registers a v4l2-clk
-> > > > clock, named "mclk", to represent the mt9m111 sensor clock.
-> > > > 
-> > > > Register a proper fixed-rate clock using the generic clock framework,
-> > > > which will allow to remove the v4l2-clk clock in the pxa-camera
-> > > > driver in a follow-up commit.
-> > > > 
-> > > 
-> > > BTW the mclk output to a sensor is actually a variable rate, divided from lcdclk (which can be changed too). PXA camera driver  is using
-> > > variable
-> > > pcdev->mclk_divisor to generate the mclk from lcdclk. 
-> > > 
-> > 
-> > Hm, now that I look at this, I see the pxa-camera driver
-> > is requiring a clock:
-> > 
-> >         pcdev->clk = devm_clk_get(&pdev->dev, NULL);                             
-> >         if (IS_ERR(pcdev->clk))                                                  
-> >                 return PTR_ERR(pcdev->clk);   
-> > 
-> > Where is this clock registered in the non-devicetree case?
-> > 
-> 
-> I think this is where the clock is defined 
-> 
->         PXA27X_CKEN_1RATE("pxa27x-camera.0", NULL, CAMERA, pxa27x_lcd_bus_parents, 0),
-> 
-> https://elixir.bootlin.com/linux/v5.10.2/source/drivers/clk/pxa/clk-pxa27x.c#L180
-> 
+On Mon, Jan 4, 2021 at 5:57 PM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+>
+> The pxa-camera capture driver currently registers a v4l2-clk
+> clock, named "mclk", to represent the mt9m111 sensor clock.
+>
+> Register a proper fixed-rate clock using the generic clock framework,
+> which will allow to remove the v4l2-clk clock in the pxa-camera
+> driver in a follow-up commit.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 
-Ah, nice. That's the part I was missing.
-> 
-> > > The rate change is done in pxa_camera_activate():
-> > > 
-> > > https://elixir.bootlin.com/linux/v5.11-rc2/source/drivers/media/platform/pxa_camera.c#L1136
-> > > 
-> > >         __raw_writel(pcdev->mclk_divisor | cicr4, pcdev->base + CICR4);
-> > > 
-> > > Would it be possible to register a correct clock type with possibility to change the divisor by the standard way?
-> > > 
-> > 
-> > Right, so you mean the pxa-camera driver is the one providing the clock for the sensors?
-> > 
-> > In that case, I guess the pxa-camera driver should be the one registering
-> > a CCF clock. Other drivers are doing this, through clk_register for instance.
-> > 
-> 
-> Yeah that would make the sense, because the camera controller controls the divider and enable signals.
-> 
-> > However, for the sake of this series, which is meant to get rid
-> > of the v4l2-clk API, I would say it's fine to just register a fixed-rate.
-> > 
-> > This is similar to what v4l2_clk_register was doing, which was registering
-> > a dummy clock.
-> > 
-> 
-> I guess. Just the 1:1 replacement. 
-> 
+If there are no objections to the change itself, please take it through
+the v4l2 git tree. For arch/arm/mach-*/
 
-Exactly.
-
-> > Having said that, as I mentioned above, I'm wondering if the mach-pxa
-> > boards are really working, given I'm not seeing the clock for pxa-camera.
-> > 
-> > Maybe the best way forward is to just accept that pxa-camera
-> > is only supported for the device tree platforms, and therefore drop the
-> > support from mach-pxa/ boards.
-> > 
-> 
-> PXA camera worked without devicetree without problems (I'm not sure if I ever used devicetree). The definition should be in that file above (but I'm
-> not that familiar with the clock framework).
-> 
-
-That's fine.
-
-I'm quite sure this series should be fine,
-since we are just replacing the dummy v4l2-clk with
-dummy proper CCF clock.
-
-Thanks!
-Ezequiel
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
