@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B839C433E0
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA6FC4332E
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC403233EA
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1553623435
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728092AbhAHJpN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728091AbhAHJpN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 8 Jan 2021 04:45:13 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36776 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:36788 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727966AbhAHJpJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:45:09 -0500
+        id S1728002AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:45:10 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 79F5BAFAE;
-        Fri,  8 Jan 2021 09:43:48 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 6C39FAFBF;
+        Fri,  8 Jan 2021 09:43:51 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
         airlied@redhat.com, daniel@ffwll.ch,
@@ -33,9 +33,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 07/13] drm/gm12u320: Use drm_gem_shmem_vmap_local() in damage handling
-Date:   Fri,  8 Jan 2021 10:43:34 +0100
-Message-Id: <20210108094340.15290-8-tzimmermann@suse.de>
+Subject: [PATCH v4 11/13] drm/vboxvideo: Use drm_gem_vram_vmap_local() in cursor update
+Date:   Fri,  8 Jan 2021 10:43:38 +0100
+Message-Id: <20210108094340.15290-12-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
 References: <20210108094340.15290-1-tzimmermann@suse.de>
@@ -45,50 +45,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Damage handling in gm12u320 requires a short-term mapping of the source
-BO. Use drm_gem_shmem_vmap_local().
+Cursor updates in vboxvideo require a short-term mapping of the
+source BO. Use drm_gem_vram_vmap_local() and avoid the pinning
+operations.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/gpu/drm/tiny/gm12u320.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/vboxvideo/vbox_mode.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/tiny/gm12u320.c b/drivers/gpu/drm/tiny/gm12u320.c
-index 33f65f4626e5..b0c6e350f2b3 100644
---- a/drivers/gpu/drm/tiny/gm12u320.c
-+++ b/drivers/gpu/drm/tiny/gm12u320.c
-@@ -265,11 +265,16 @@ static void gm12u320_copy_fb_to_blocks(struct gm12u320_device *gm12u320)
- 	y1 = gm12u320->fb_update.rect.y1;
- 	y2 = gm12u320->fb_update.rect.y2;
+diff --git a/drivers/gpu/drm/vboxvideo/vbox_mode.c b/drivers/gpu/drm/vboxvideo/vbox_mode.c
+index dbc0dd53c69e..215b37c78c10 100644
+--- a/drivers/gpu/drm/vboxvideo/vbox_mode.c
++++ b/drivers/gpu/drm/vboxvideo/vbox_mode.c
+@@ -381,7 +381,8 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
+ 		container_of(plane->dev, struct vbox_private, ddev);
+ 	struct vbox_crtc *vbox_crtc = to_vbox_crtc(plane->state->crtc);
+ 	struct drm_framebuffer *fb = plane->state->fb;
+-	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(fb->obj[0]);
++	struct drm_gem_object *obj = fb->obj[0];
++	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(obj);
+ 	u32 width = plane->state->crtc_w;
+ 	u32 height = plane->state->crtc_h;
+ 	size_t data_size, mask_size;
+@@ -401,11 +402,12 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
  
--	ret = drm_gem_shmem_vmap(fb->obj[0], &map);
-+	ret = dma_resv_lock(fb->obj[0]->resv, NULL);
+ 	vbox_crtc->cursor_enabled = true;
+ 
+-	ret = drm_gem_vram_vmap(gbo, &map);
++	ret = dma_resv_lock(obj->resv, NULL);
++	if (ret)
++		return;
++	ret = drm_gem_vram_vmap_local(gbo, &map);
  	if (ret) {
--		GM12U320_ERR("failed to vmap fb: %d\n", ret);
-+		GM12U320_ERR("failed to reserve fb: %d\n", ret);
- 		goto put_fb;
- 	}
-+	ret = drm_gem_shmem_vmap_local(fb->obj[0], &map);
-+	if (ret) {
-+		GM12U320_ERR("failed to vmap fb: %d\n", ret);
-+		goto unlock_resv;
-+	}
- 	vaddr = map.vaddr; /* TODO: Use mapping abstraction properly */
+-		/*
+-		 * BUG: we should have pinned the BO in prepare_fb().
+-		 */
++		dma_resv_unlock(obj->resv);
+ 		mutex_unlock(&vbox->hw_mutex);
+ 		DRM_WARN("Could not map cursor bo, skipping update\n");
+ 		return;
+@@ -421,7 +423,8 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
+ 	data_size = width * height * 4 + mask_size;
  
- 	if (fb->obj[0]->import_attach) {
-@@ -321,8 +326,11 @@ static void gm12u320_copy_fb_to_blocks(struct gm12u320_device *gm12u320)
- 		if (ret)
- 			GM12U320_ERR("dma_buf_end_cpu_access err: %d\n", ret);
- 	}
-+
-+unlock_resv:
-+	dma_resv_unlock(fb->obj[0]->resv);
- vunmap:
--	drm_gem_shmem_vunmap(fb->obj[0], &map);
-+	drm_gem_shmem_vunmap_local(fb->obj[0], &map);
- put_fb:
- 	drm_framebuffer_put(fb);
- 	gm12u320->fb_update.fb = NULL;
+ 	copy_cursor_image(src, vbox->cursor_data, width, height, mask_size);
+-	drm_gem_vram_vunmap(gbo, &map);
++	drm_gem_vram_vunmap_local(gbo, &map);
++	dma_resv_unlock(obj->resv);
+ 
+ 	flags = VBOX_MOUSE_POINTER_VISIBLE | VBOX_MOUSE_POINTER_SHAPE |
+ 		VBOX_MOUSE_POINTER_ALPHA;
 -- 
 2.29.2
 
