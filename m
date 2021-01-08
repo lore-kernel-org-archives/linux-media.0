@@ -2,99 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA6FC4332E
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B69C433DB
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:50:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1553623435
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8488A235DD
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:50:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728091AbhAHJpN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 04:45:13 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36788 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728002AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:45:10 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6C39FAFBF;
-        Fri,  8 Jan 2021 09:43:51 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
-        airlied@redhat.com, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        kraxel@redhat.com, hdegoede@redhat.com, sean@poorly.run,
-        eric@anholt.net, sam@ravnborg.org
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        virtualization@lists.linux-foundation.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 11/13] drm/vboxvideo: Use drm_gem_vram_vmap_local() in cursor update
-Date:   Fri,  8 Jan 2021 10:43:38 +0100
-Message-Id: <20210108094340.15290-12-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
-References: <20210108094340.15290-1-tzimmermann@suse.de>
+        id S1727834AbhAHJtl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 04:49:41 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:48347 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726683AbhAHJtk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:49:40 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 32FB75805D1;
+        Fri,  8 Jan 2021 04:48:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 08 Jan 2021 04:48:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=T
+        ytH3TW5ntRxZ1LpTYSljem0k/W8jkP4F1c3fUJ+HnI=; b=W3F2qLClKz+EIUHj1
+        pv70rfj99kjHw5cSQWbB+HijiNCWpzhjGi5yptuS//finB4rRnYVI0LrJ8SvHTr2
+        +5MGi5cR+C4GWr5anRTBVMif4V3TfDelToTBfAfeLKMXaF8HHA3VUKHhLbsfwp/c
+        xqoOT+jB7EIMAoWSWuHfdQ3G96SOepw8okwkDXI5F+mcPr5yGgJ2jxXDfIZSzurt
+        v7RU568SvVs2/kckacscI/Y8816G7pIqGywlrAyxBZIXRKijQ+gXnAed/K/Sfd/M
+        UuPeCCL/XXliHSR/mg4Z6UL2Z04aZhG+vKYIN0fvQQXCiahlKovIOZZJYJQtfGkl
+        3D1Ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=TytH3TW5ntRxZ1LpTYSljem0k/W8jkP4F1c3fUJ+H
+        nI=; b=dvLWvQnc+tGYtY5Ktw5Nv60Z2gEzvnYGdAeKcKrfgM3yB0w1DA2nMjMWb
+        87srFgfXi0KPy/XIT2aFkW+L2SNm0UO3lz4BjhcurLhQMwpuD4EUdtEd6iEGgF0X
+        aPcwwkj5NoRVDyJglif8E3HUsqDq5EkWSvqqbi8kjF+FaZfGZ/GzlmQMOTB9iuf7
+        Iabaou+nUWZ9bVn/a4iXu+A7H+b6l7St8dJJleUVEAWRwqroAegdVyD6ePS4RvuV
+        MjReMwNCOdoP+2sDSFGbrQn87RBWVB9fIjnKFcjeL71kds928Rsb33eOagBzUTuC
+        XQDT0VVEKD9Rhc1p6UtSWcMQiUOhQ==
+X-ME-Sender: <xms:cCr4XwXj0PKIWNmqVR-oTuQrqqORN9LX6e4Hojg1sTDdHlVc8TObMw>
+    <xme:cCr4X0lDefX2fYgiqmmwkHM515jroZ62sabD940CHyxLYIW3_QQ82ovwyV5HZmd3r
+    Sc3wZcZV17SVBsrhLY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdeggedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefgjeettdejgffgffdvteeutdehtdehgeehueetkeefgefhtdetjeekledu
+    gedvudenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:cCr4X0aUwcPPWAHJ5z4rzpXyY02ZK-FVieH81hLxeY748HZ74uu9sw>
+    <xmx:cCr4X_VxDu4MnTytDOB-yCRgYACgQDwv7llt5mu0Xyn54_mTIHLrUg>
+    <xmx:cCr4X6lnqBbTcRkSwR3kgpGeVMsAJwmEce1NWD34avV_Amz-rXXO3A>
+    <xmx:cir4X8XjlFasr4jNuf3X53We_AZ3OUI6qRjSHA9nQ--7odUbviF99A>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id AF09D108005C;
+        Fri,  8 Jan 2021 04:48:31 -0500 (EST)
+Date:   Fri, 8 Jan 2021 10:48:30 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com, Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kevin.lhopital@hotmail.com, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 06/15] dt-bindings: media: sun6i-a31-csi: Add MIPI
+ CSI-2 input port
+Message-ID: <20210108094830.6cmuelnraxjpgmaf@gilmour>
+References: <20201231142948.3241780-1-paul.kocialkowski@bootlin.com>
+ <20201231142948.3241780-7-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201231142948.3241780-7-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Cursor updates in vboxvideo require a short-term mapping of the
-source BO. Use drm_gem_vram_vmap_local() and avoid the pinning
-operations.
+On Thu, Dec 31, 2020 at 03:29:39PM +0100, Paul Kocialkowski wrote:
+> The A31 CSI controller supports two distinct input interfaces:
+> parallel and an external MIPI CSI-2 bridge. The parallel interface
+> is often connected to a set of hardware pins while the MIPI CSI-2
+> bridge is an internal FIFO-ish link. As a result, these two inputs
+> are distinguished as two different ports.
+>=20
+> Note that only one of the two may be present on a controller instance.
+> For example, the V3s has one controller dedicated to MIPI-CSI2 and one
+> dedicated to parallel.
+>=20
+> Update the binding with an explicit ports node that holds two distinct
+> port nodes: one for parallel input and one for MIPI CSI-2.
+>=20
+> This is backward-compatible with the single-port approach that was
+> previously taken for representing the parallel interface port, which
+> stays enumerated as fwnode port 0.
+>=20
+> Note that additional ports may be added in the future, especially to
+> support feeding the CSI controller's output to the ISP.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- drivers/gpu/drm/vboxvideo/vbox_mode.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
-diff --git a/drivers/gpu/drm/vboxvideo/vbox_mode.c b/drivers/gpu/drm/vboxvideo/vbox_mode.c
-index dbc0dd53c69e..215b37c78c10 100644
---- a/drivers/gpu/drm/vboxvideo/vbox_mode.c
-+++ b/drivers/gpu/drm/vboxvideo/vbox_mode.c
-@@ -381,7 +381,8 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
- 		container_of(plane->dev, struct vbox_private, ddev);
- 	struct vbox_crtc *vbox_crtc = to_vbox_crtc(plane->state->crtc);
- 	struct drm_framebuffer *fb = plane->state->fb;
--	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(fb->obj[0]);
-+	struct drm_gem_object *obj = fb->obj[0];
-+	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(obj);
- 	u32 width = plane->state->crtc_w;
- 	u32 height = plane->state->crtc_h;
- 	size_t data_size, mask_size;
-@@ -401,11 +402,12 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
- 
- 	vbox_crtc->cursor_enabled = true;
- 
--	ret = drm_gem_vram_vmap(gbo, &map);
-+	ret = dma_resv_lock(obj->resv, NULL);
-+	if (ret)
-+		return;
-+	ret = drm_gem_vram_vmap_local(gbo, &map);
- 	if (ret) {
--		/*
--		 * BUG: we should have pinned the BO in prepare_fb().
--		 */
-+		dma_resv_unlock(obj->resv);
- 		mutex_unlock(&vbox->hw_mutex);
- 		DRM_WARN("Could not map cursor bo, skipping update\n");
- 		return;
-@@ -421,7 +423,8 @@ static void vbox_cursor_atomic_update(struct drm_plane *plane,
- 	data_size = width * height * 4 + mask_size;
- 
- 	copy_cursor_image(src, vbox->cursor_data, width, height, mask_size);
--	drm_gem_vram_vunmap(gbo, &map);
-+	drm_gem_vram_vunmap_local(gbo, &map);
-+	dma_resv_unlock(obj->resv);
- 
- 	flags = VBOX_MOUSE_POINTER_VISIBLE | VBOX_MOUSE_POINTER_SHAPE |
- 		VBOX_MOUSE_POINTER_ALPHA;
--- 
-2.29.2
-
+Maxime
