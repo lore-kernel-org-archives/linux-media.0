@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1F5C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B37DFC433E6
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19BA1235DD
+	by mail.kernel.org (Postfix) with ESMTP id 65840233EA
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbhAHJpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728069AbhAHJpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 8 Jan 2021 04:45:11 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36778 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:36792 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727975AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728004AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 8 Jan 2021 04:45:10 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 38000AFD7;
-        Fri,  8 Jan 2021 09:43:49 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 27ECFAFF1;
+        Fri,  8 Jan 2021 09:43:53 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
         airlied@redhat.com, daniel@ffwll.ch,
@@ -33,9 +33,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 08/13] drm/udl: Use drm_gem_shmem_vmap_local() in damage handling
-Date:   Fri,  8 Jan 2021 10:43:35 +0100
-Message-Id: <20210108094340.15290-9-tzimmermann@suse.de>
+Subject: [PATCH v4 13/13] drm/vram-helper: Remove unused drm_gem_vram_{vmap,vunmap}()
+Date:   Fri,  8 Jan 2021 10:43:40 +0100
+Message-Id: <20210108094340.15290-14-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
 References: <20210108094340.15290-1-tzimmermann@suse.de>
@@ -45,77 +45,155 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Damage handling in udl requires a short-term mapping of the source
-BO. Use drm_gem_shmem_vmap_local().
+VRAM-helper BO's cannot be exported, so calls for vmap and vunmap
+can only come from the BO's drivers or a kernel client. These are
+supposed use vmap_local functionality.
+
+The vmap and vunmap operations in VRAM helpers are therefore unused
+and can be removed.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/gpu/drm/udl/udl_modeset.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/drm_gem_vram_helper.c | 98 ---------------------------
+ include/drm/drm_gem_vram_helper.h     |  2 -
+ 2 files changed, 100 deletions(-)
 
-diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
-index 9d34ec9d03f6..46b55b4d03c2 100644
---- a/drivers/gpu/drm/udl/udl_modeset.c
-+++ b/drivers/gpu/drm/udl/udl_modeset.c
-@@ -290,14 +290,18 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
- 	else if ((clip.x2 > fb->width) || (clip.y2 > fb->height))
- 		return -EINVAL;
- 
-+	ret = dma_resv_lock(fb->obj[0]->resv, NULL);
-+	if (ret)
-+		return ret;
-+
- 	if (import_attach) {
- 		ret = dma_buf_begin_cpu_access(import_attach->dmabuf,
- 					       DMA_FROM_DEVICE);
- 		if (ret)
--			return ret;
-+			goto out_dma_resv_unlock;
- 	}
- 
--	ret = drm_gem_shmem_vmap(fb->obj[0], &map);
-+	ret = drm_gem_shmem_vmap_local(fb->obj[0], &map);
- 	if (ret) {
- 		DRM_ERROR("failed to vmap fb\n");
- 		goto out_dma_buf_end_cpu_access;
-@@ -307,7 +311,7 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
- 	urb = udl_get_urb(dev);
- 	if (!urb) {
- 		ret = -ENOMEM;
--		goto out_drm_gem_shmem_vunmap;
-+		goto out_drm_gem_shmem_vunmap_local;
- 	}
- 	cmd = urb->transfer_buffer;
- 
-@@ -320,7 +324,7 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
- 				       &cmd, byte_offset, dev_byte_offset,
- 				       byte_width);
- 		if (ret)
--			goto out_drm_gem_shmem_vunmap;
-+			goto out_drm_gem_shmem_vunmap_local;
- 	}
- 
- 	if (cmd > (char *)urb->transfer_buffer) {
-@@ -336,8 +340,8 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
- 
- 	ret = 0;
- 
--out_drm_gem_shmem_vunmap:
--	drm_gem_shmem_vunmap(fb->obj[0], &map);
-+out_drm_gem_shmem_vunmap_local:
-+	drm_gem_shmem_vunmap_local(fb->obj[0], &map);
- out_dma_buf_end_cpu_access:
- 	if (import_attach) {
- 		tmp_ret = dma_buf_end_cpu_access(import_attach->dmabuf,
-@@ -345,6 +349,8 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
- 		if (tmp_ret && !ret)
- 			ret = tmp_ret; /* only update ret if not set yet */
- 	}
-+out_dma_resv_unlock:
-+	dma_resv_unlock(fb->obj[0]->resv);
- 
- 	return ret;
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index c7fba3a0758e..c7d166cd16df 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -379,72 +379,6 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
  }
+ EXPORT_SYMBOL(drm_gem_vram_unpin);
+ 
+-/**
+- * drm_gem_vram_vmap() - Pins and maps a GEM VRAM object into kernel address
+- *                       space
+- * @gbo: The GEM VRAM object to map
+- * @map: Returns the kernel virtual address of the VRAM GEM object's backing
+- *       store.
+- *
+- * The vmap function pins a GEM VRAM object to its current location, either
+- * system or video memory, and maps its buffer into kernel address space.
+- * As pinned object cannot be relocated, you should avoid pinning objects
+- * permanently. Call drm_gem_vram_vunmap() with the returned address to
+- * unmap and unpin the GEM VRAM object.
+- *
+- * Returns:
+- * 0 on success, or a negative error code otherwise.
+- */
+-int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
+-{
+-	int ret;
+-
+-	ret = ttm_bo_reserve(&gbo->bo, true, false, NULL);
+-	if (ret)
+-		return ret;
+-
+-	ret = drm_gem_vram_pin_locked(gbo, 0);
+-	if (ret)
+-		goto err_ttm_bo_unreserve;
+-	ret = drm_gem_vram_vmap_local(gbo, map);
+-	if (ret)
+-		goto err_drm_gem_vram_unpin_locked;
+-
+-	ttm_bo_unreserve(&gbo->bo);
+-
+-	return 0;
+-
+-err_drm_gem_vram_unpin_locked:
+-	drm_gem_vram_unpin_locked(gbo);
+-err_ttm_bo_unreserve:
+-	ttm_bo_unreserve(&gbo->bo);
+-	return ret;
+-}
+-EXPORT_SYMBOL(drm_gem_vram_vmap);
+-
+-/**
+- * drm_gem_vram_vunmap() - Unmaps and unpins a GEM VRAM object
+- * @gbo: The GEM VRAM object to unmap
+- * @map: Kernel virtual address where the VRAM GEM object was mapped
+- *
+- * A call to drm_gem_vram_vunmap() unmaps and unpins a GEM VRAM buffer. See
+- * the documentation for drm_gem_vram_vmap() for more information.
+- */
+-void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
+-{
+-	int ret;
+-
+-	ret = ttm_bo_reserve(&gbo->bo, false, false, NULL);
+-	if (WARN_ONCE(ret, "ttm_bo_reserve_failed(): ret=%d\n", ret))
+-		return;
+-
+-	drm_gem_vram_vunmap_local(gbo, map);
+-	drm_gem_vram_unpin_locked(gbo);
+-
+-	ttm_bo_unreserve(&gbo->bo);
+-}
+-EXPORT_SYMBOL(drm_gem_vram_vunmap);
+-
+ /**
+  * drm_gem_vram_vmap_local() - Maps a GEM VRAM object into kernel address space
+  * @gbo: The GEM VRAM object to map
+@@ -870,36 +804,6 @@ static void drm_gem_vram_object_unpin(struct drm_gem_object *gem)
+ 	drm_gem_vram_unpin(gbo);
+ }
+ 
+-/**
+- * drm_gem_vram_object_vmap() -
+- *	Implements &struct drm_gem_object_funcs.vmap
+- * @gem: The GEM object to map
+- * @map: Returns the kernel virtual address of the VRAM GEM object's backing
+- *       store.
+- *
+- * Returns:
+- * 0 on success, or a negative error code otherwise.
+- */
+-static int drm_gem_vram_object_vmap(struct drm_gem_object *gem, struct dma_buf_map *map)
+-{
+-	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(gem);
+-
+-	return drm_gem_vram_vmap(gbo, map);
+-}
+-
+-/**
+- * drm_gem_vram_object_vunmap() -
+- *	Implements &struct drm_gem_object_funcs.vunmap
+- * @gem: The GEM object to unmap
+- * @map: Kernel virtual address where the VRAM GEM object was mapped
+- */
+-static void drm_gem_vram_object_vunmap(struct drm_gem_object *gem, struct dma_buf_map *map)
+-{
+-	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(gem);
+-
+-	drm_gem_vram_vunmap(gbo, map);
+-}
+-
+ static int drm_gem_vram_object_vmap_local(struct drm_gem_object *gem, struct dma_buf_map *map)
+ {
+ 	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(gem);
+@@ -922,8 +826,6 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs = {
+ 	.free = drm_gem_vram_object_free,
+ 	.pin = drm_gem_vram_object_pin,
+ 	.unpin = drm_gem_vram_object_unpin,
+-	.vmap = drm_gem_vram_object_vmap,
+-	.vunmap	= drm_gem_vram_object_vunmap,
+ 	.vmap_local = drm_gem_vram_object_vmap_local,
+ 	.vunmap_local = drm_gem_vram_object_vunmap_local,
+ 	.mmap = drm_gem_ttm_mmap,
+diff --git a/include/drm/drm_gem_vram_helper.h b/include/drm/drm_gem_vram_helper.h
+index bd6a60e7c22b..e571867f4069 100644
+--- a/include/drm/drm_gem_vram_helper.h
++++ b/include/drm/drm_gem_vram_helper.h
+@@ -97,8 +97,6 @@ u64 drm_gem_vram_mmap_offset(struct drm_gem_vram_object *gbo);
+ s64 drm_gem_vram_offset(struct drm_gem_vram_object *gbo);
+ int drm_gem_vram_pin(struct drm_gem_vram_object *gbo, unsigned long pl_flag);
+ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo);
+-int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
+-void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
+ int drm_gem_vram_vmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
+ void drm_gem_vram_vunmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
+ 
 -- 
 2.29.2
 
