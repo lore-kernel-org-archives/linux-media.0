@@ -2,827 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5D5C433E6
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F497C433E9
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:18:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00D5A2388B
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:08:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09C97238E4
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:18:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728064AbhAHMIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 07:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S1727002AbhAHMRv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 07:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727485AbhAHMGo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jan 2021 07:06:44 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E0DC06124F
-        for <linux-media@vger.kernel.org>; Fri,  8 Jan 2021 04:05:12 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ce23so14180626ejb.8
-        for <linux-media@vger.kernel.org>; Fri, 08 Jan 2021 04:05:12 -0800 (PST)
+        with ESMTP id S1728156AbhAHMRn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jan 2021 07:17:43 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B17C0612FA;
+        Fri,  8 Jan 2021 04:17:01 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id z12so3552078pjn.1;
+        Fri, 08 Jan 2021 04:17:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=09M3V/5FwYf/kT0n+tNbV1aLnrShXWYexohZ6k0F4HQ=;
-        b=nmqcV8fp9rrWbqD/2x+xGXHgbezLInh+vi1Fkxb8xl0tXzwZtqqPr+4Def8iIAs0C2
-         1teMB1O5cax/24Qka0pr4sxJFnjfX0zf+88VKtd2aaRm7duErFZFrX4ApyUTV/uULcNF
-         bkp3iP4q4A0x6CX50sa+eWbD4kv5LYUM8J7vaIlJ3lPeNOZgsIVmKkd8GG/SQo7SPMhz
-         ME2saIGWiCBP7Oa4jKtgiKK5nlZ3Zxo4A4jpaIii7pgjO+xSTuuOZwZoXyfkkfqJso8P
-         D7eU62dfpY7PxuT8YQbtzgn/brBPH7fOG4f1WRM8+uS9PoaUGJe5lIEOI0mm8pnnYcx8
-         JZ/A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QJpmPSXBMkDyRpOAie8nEtiKxW2diZukk9pipJ57ovs=;
+        b=APSTOjBSR9NIMt2G+tAKvfWj2tZ4hY4e3e1aiF7JekWmZUQuDSiZ5IbRXu1/KhIooQ
+         J/HcWQyXi3KQ8+D3KlBShkw+3DV6P4O1wxDFt0b6FOjSvZOjWafWoGAE5gPV76cBRJEm
+         Trby4n2kGLMcOmuVcRt+XtceGuTyFfThWFR/vn0PxK22wx1n4JN5HZUiXRxrbyd94B1R
+         vwNFtlu1wjAJNAzTBHWOysPbZxTNUDeohmI4FYAlxbyEXEsJR4qwQI7U+VJiK8rIce49
+         UCcCgQVlofROPknaFgODvIv6KE0B/8oLY3ZGWbI6odx41TeD/9kCPg7pBagojBWs0pX9
+         gmyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=09M3V/5FwYf/kT0n+tNbV1aLnrShXWYexohZ6k0F4HQ=;
-        b=Lv0oN89AVT4IQM/9KI2jQXn7+wuzA20XaHHeALwlcjd/5QaU+DJy/C8s6zNkq1yGtw
-         zsksLjA0gHsAqHAaG6yH77ZWQtzXTdTRhAuy/vefuVcRnedBfILxzNn1sKfWYMT7zYE2
-         QGkrr7d8sY0oDP01mpd5pjUqwVGa2BNi6qLU66Y0l6adLPPLPCksvaCZB+YZr9DS6FOa
-         AehWowVA4ve9sAzIStITs0SKjy/5zg0TV9UPb0G5az5nP32N26R1CspMYdDY+HxxJqbj
-         9IYpgpzye/oq3iql9g0UzJkVQTPPmdU19Zza4lucDkyi/rTVQfgXHCMrTVjKqpaJqgTM
-         hfeQ==
-X-Gm-Message-State: AOAM5310rpGtaxORth7ce1rgEIlB7Ra3cGd9v3TpaLOx1Fdu+Qw5xHwq
-        DJf903IFcQYQn1rg+OFBuwWFnw==
-X-Google-Smtp-Source: ABdhPJzwJwVwP4ABTcvdub09UDL2dNS1YmXxdAgg0LXd3mhB9HQGmpLxhSNwqzEfAH2PpdQqZOSYiw==
-X-Received: by 2002:a17:906:2f07:: with SMTP id v7mr2380321eji.343.1610107511038;
-        Fri, 08 Jan 2021 04:05:11 -0800 (PST)
-Received: from localhost.localdomain ([2a02:2450:102f:d6a:bb2e:8b50:322a:1b9a])
-        by smtp.gmail.com with ESMTPSA id i18sm3674498edt.68.2021.01.08.04.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 04:05:10 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, leoyang.li@nxp.com, geert+renesas@glider.be,
-        arnd@arndb.de, Anson.Huang@nxp.com, michael@walle.cc,
-        agx@sigxcpu.org, max.oss.09@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v1 09/17] media: camss: Add support for CSID hardware version Titan 170
-Date:   Fri,  8 Jan 2021 13:04:21 +0100
-Message-Id: <20210108120429.895046-10-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210108120429.895046-1-robert.foss@linaro.org>
-References: <20210108120429.895046-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QJpmPSXBMkDyRpOAie8nEtiKxW2diZukk9pipJ57ovs=;
+        b=kzWJdXbWtSVdYF6un2pC2l5x5uFmu+iPWhmo4sNz5Ad5uIB7syYNEMUVHno8CSedOQ
+         s5Re3PrCE2EXBrz+vl8Mvq7v5+iPL23Ilx4BXYhaMzSHQZVTxErhaHsYO2eE/93ATJQe
+         JLWkKnodJ8HWtqW1AToeCE66JfK2mGGYQXslo/cO7NDKCfxxS8SETU1obiEtY06/iZhX
+         2fQB4bfNaa7iwHpyUa3Be7Cmz2SIRgJC8xYPVJjx1OxMZiP1GfQR10NYs2lKx7ZQiEHA
+         XgzM8UT0edGCs+aIsn4YC5SVb5ucidiLKTvwUnJ9BqTLQz9W/H6ZQ1pIxgeqDvSJzAEl
+         ZYZA==
+X-Gm-Message-State: AOAM531yOEuXnIZwoycRCf0pjkNvWPzX+lXiQPOyUTXSUBQ+3M0eQtUv
+        HC4ZhwlTMDqxJRnzf6XuRRRlz2cEUJbJf0odauw=
+X-Google-Smtp-Source: ABdhPJyldR1piNAeKj9uIZ1Le/5wxh9TOr537qIrpxGvyxjo1onN4F4oe8SR/CXSTDkdvSzMQ7bZigw9hkKUqlRE4vo=
+X-Received: by 2002:a17:90a:c592:: with SMTP id l18mr3486365pjt.228.1610108221001;
+ Fri, 08 Jan 2021 04:17:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201130133129.1024662-1-djrscally@gmail.com> <20201130133129.1024662-19-djrscally@gmail.com>
+ <20201130200719.GB4077@smile.fi.intel.com> <778f23fc-b99c-33a2-642d-ca0e47fd4ed5@gmail.com>
+In-Reply-To: <778f23fc-b99c-33a2-642d-ca0e47fd4ed5@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 8 Jan 2021 14:17:49 +0200
+Message-ID: <CAHp75VeYOqJt9iKaGPA4=dkb2kYUbqUV4PGTn8uSsnUt_kSGSw@mail.gmail.com>
+Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devel@acpica.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tian Shu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kieran.bingham+renesas@ideasonboard.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Jordan Hand <jorhand@linux.microsoft.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add register definitions for version 170 of the Titan architecture
-and implement support for the CSID subdevice.
+On Fri, Jan 8, 2021 at 1:56 AM Daniel Scally <djrscally@gmail.com> wrote:
+> On 30/11/2020 20:07, Andy Shevchenko wrote:
+> > On Mon, Nov 30, 2020 at 01:31:29PM +0000, Daniel Scally wrote:
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- drivers/media/platform/qcom/camss/Makefile    |   1 +
- .../platform/qcom/camss/camss-csid-170.c      | 602 ++++++++++++++++++
- .../media/platform/qcom/camss/camss-csid.c    |   4 +
- .../media/platform/qcom/camss/camss-csid.h    |   2 +
- drivers/media/platform/qcom/camss/camss.c     |  62 ++
- 5 files changed, 671 insertions(+)
- create mode 100644 drivers/media/platform/qcom/camss/camss-csid-170.c
+...
 
-diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
-index cff388b653ba..0752c46ea37b 100644
---- a/drivers/media/platform/qcom/camss/Makefile
-+++ b/drivers/media/platform/qcom/camss/Makefile
-@@ -6,6 +6,7 @@ qcom-camss-objs += \
- 		camss-csid.o \
- 		camss-csid-4-1.o \
- 		camss-csid-4-7.o \
-+		camss-csid-170.o \
- 		camss-csiphy-2ph-1-0.o \
- 		camss-csiphy-3ph-1-0.o \
- 		camss-csiphy.o \
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-new file mode 100644
-index 000000000000..0e9b08ed38c2
---- /dev/null
-+++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-@@ -0,0 +1,602 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * camss-csid-4-7.c
-+ *
-+ * Qualcomm MSM Camera Subsystem - CSID (CSI Decoder) Module
-+ *
-+ * Copyright (C) 2020 Linaro Ltd.
-+ */
-+#include <linux/completion.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/of.h>
-+
-+#include "camss-csid.h"
-+#include "camss.h"
-+
-+/* The CSID 2 IP-block is different from the others,
-+ * and is of a bare-bones Lite version, with no PIX
-+ * interface support. As a result of that it has an
-+ * alternate register layout.
-+ */
-+#define IS_LITE		(csid->id == 2 ? 1 : 0)
-+
-+#define CSID_HW_VERSION		0x0
-+#define		HW_VERSION_STEPPING	0
-+#define		HW_VERSION_REVISION	16
-+#define		HW_VERSION_GENERATION	28
-+
-+#define CSID_RST_STROBES	0x10
-+#define		RST_STROBES	0
-+
-+#define CSID_CSI2_RX_IRQ_STATUS	0x20
-+#define	CSID_CSI2_RX_IRQ_MASK	0x24
-+#define CSID_CSI2_RX_IRQ_CLEAR	0x28
-+
-+#define CSID_CSI2_RDIN_IRQ_STATUS(rdi)		((IS_LITE ? 0x30 : 0x40) \
-+						 + 0x10 * (rdi))
-+#define CSID_CSI2_RDIN_IRQ_MASK(rdi)		((IS_LITE ? 0x34 : 0x44) \
-+						 + 0x10 * (rdi))
-+#define CSID_CSI2_RDIN_IRQ_CLEAR(rdi)		((IS_LITE ? 0x38 : 0x48) \
-+						 + 0x10 * (rdi))
-+#define CSID_CSI2_RDIN_IRQ_SET(rdi)		((IS_LITE ? 0x3C : 0x4C) \
-+						 + 0x10 * (rdi))
-+
-+#define CSID_TOP_IRQ_STATUS	0x70
-+#define		TOP_IRQ_STATUS_RESET_DONE 0
-+#define CSID_TOP_IRQ_MASK	0x74
-+#define CSID_TOP_IRQ_CLEAR	0x78
-+#define CSID_TOP_IRQ_SET	0x7C
-+#define CSID_IRQ_CMD		0x80
-+#define		IRQ_CMD_CLEAR	0
-+#define		IRQ_CMD_SET	4
-+
-+#define CSID_CSI2_RX_CFG0	0x100
-+#define		CSI2_RX_CFG0_NUM_ACTIVE_LANES	0
-+#define		CSI2_RX_CFG0_DL0_INPUT_SEL	4
-+#define		CSI2_RX_CFG0_DL1_INPUT_SEL	8
-+#define		CSI2_RX_CFG0_DL2_INPUT_SEL	12
-+#define		CSI2_RX_CFG0_DL3_INPUT_SEL	16
-+#define		CSI2_RX_CFG0_PHY_NUM_SEL	20
-+#define		CSI2_RX_CFG0_PHY_TYPE_SEL	24
-+
-+#define CSID_CSI2_RX_CFG1	0x104
-+#define		CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN		0
-+#define		CSI2_RX_CFG1_DE_SCRAMBLE_EN			1
-+#define		CSI2_RX_CFG1_VC_MODE				2
-+#define		CSI2_RX_CFG1_COMPLETE_STREAM_EN			4
-+#define		CSI2_RX_CFG1_COMPLETE_STREAM_FRAME_TIMING	5
-+#define		CSI2_RX_CFG1_MISR_EN				6
-+#define		CSI2_RX_CFG1_CGC_MODE				7
-+#define			CGC_MODE_DYNAMIC_GATING		0
-+#define			CGC_MODE_ALWAYS_ON		1
-+
-+#define CSID_RDI_CFG0(rdi)			((IS_LITE ? 0x200 : 0x300) \
-+						 + 0x100 * (rdi))
-+#define		RDI_CFG0_BYTE_CNTR_EN		0
-+#define		RDI_CFG0_FORMAT_MEASURE_EN	1
-+#define		RDI_CFG0_TIMESTAMP_EN		2
-+#define		RDI_CFG0_DROP_H_EN		3
-+#define		RDI_CFG0_DROP_V_EN		4
-+#define		RDI_CFG0_CROP_H_EN		5
-+#define		RDI_CFG0_CROP_V_EN		6
-+#define		RDI_CFG0_MISR_EN		7
-+#define		RDI_CFG0_CGC_MODE		8
-+#define			CGC_MODE_DYNAMIC	0
-+#define			CGC_MODE_ALWAYS_ON	1
-+#define		RDI_CFG0_PLAIN_ALIGNMENT	9
-+#define			PLAIN_ALIGNMENT_LSB	0
-+#define			PLAIN_ALIGNMENT_MSB	1
-+#define		RDI_CFG0_PLAIN_FORMAT		10
-+#define		RDI_CFG0_DECODE_FORMAT		12
-+#define		RDI_CFG0_DATA_TYPE		16
-+#define		RDI_CFG0_VIRTUAL_CHANNEL	22
-+#define		RDI_CFG0_DT_ID			27
-+#define		RDI_CFG0_EARLY_EOF_EN		29
-+#define		RDI_CFG0_PACKING_FORMAT		30
-+#define		RDI_CFG0_ENABLE			31
-+
-+#define CSID_RDI_CFG1(rdi)			((IS_LITE ? 0x204 : 0x304)\
-+						+ 0x100 * (rdi))
-+#define		RDI_CFG1_TIMESTAMP_STB_SEL	0
-+
-+#define CSID_RDI_CTRL(rdi)			((IS_LITE ? 0x208 : 0x308)\
-+						+ 0x100 * (rdi))
-+#define		RDI_CTRL_HALT_CMD		0
-+#define			ALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
-+#define		RDI_CTRL_HALT_MODE		2
-+
-+#define CSID_RDI_FRM_DROP_PATTERN(rdi)			((IS_LITE ? 0x20C : 0x30C)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_FRM_DROP_PERIOD(rdi)			((IS_LITE ? 0x210 : 0x310)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_IRQ_SUBSAMPLE_PATTERN(rdi)		((IS_LITE ? 0x214 : 0x314)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_IRQ_SUBSAMPLE_PERIOD(rdi)		((IS_LITE ? 0x218 : 0x318)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_RPP_PIX_DROP_PATTERN(rdi)		((IS_LITE ? 0x224 : 0x324)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_RPP_PIX_DROP_PERIOD(rdi)		((IS_LITE ? 0x228 : 0x328)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_RPP_LINE_DROP_PATTERN(rdi)		((IS_LITE ? 0x22C : 0x32C)\
-+							+ 0x100 * (rdi))
-+#define CSID_RDI_RPP_LINE_DROP_PERIOD(rdi)		((IS_LITE ? 0x230 : 0x330)\
-+							+ 0x100 * (rdi))
-+
-+#define CSID_TPG_CTRL		0x600
-+#define		TPG_CTRL_TEST_EN		0
-+#define		TPG_CTRL_FS_PKT_EN		1
-+#define		TPG_CTRL_FE_PKT_EN		2
-+#define		TPG_CTRL_NUM_ACTIVE_LANES	4
-+#define		TPG_CTRL_CYCLES_BETWEEN_PKTS	8
-+#define		TPG_CTRL_NUM_TRAIL_BYTES	20
-+
-+#define CSID_TPG_VC_CFG0	0x604
-+#define		TPG_VC_CFG0_VC_NUM			0
-+#define		TPG_VC_CFG0_NUM_ACTIVE_SLOTS		8
-+#define			NUM_ACTIVE_SLOTS_0_ENABLED	0
-+#define			NUM_ACTIVE_SLOTS_0_1_ENABLED	1
-+#define			NUM_ACTIVE_SLOTS_0_1_2_ENABLED	2
-+#define			NUM_ACTIVE_SLOTS_0_1_3_ENABLED	3
-+#define		TPG_VC_CFG0_LINE_INTERLEAVING_MODE	10
-+#define			INTELEAVING_MODE_INTERLEAVED	0
-+#define			INTELEAVING_MODE_ONE_SHOT	1
-+#define		TPG_VC_CFG0_NUM_FRAMES			16
-+
-+#define CSID_TPG_VC_CFG1	0x608
-+#define		TPG_VC_CFG1_H_BLANKING_COUNT		0
-+#define		TPG_VC_CFG1_V_BLANKING_COUNT		12
-+#define		TPG_VC_CFG1_V_BLANK_FRAME_WIDTH_SEL	24
-+
-+#define CSID_TPG_LFSR_SEED	0x60C
-+
-+#define CSID_TPG_DT_n_CFG_0(n)	(0x610 + (n) * 0xC)
-+#define		TPG_DT_n_CFG_0_FRAME_HEIGHT	0
-+#define		TPG_DT_n_CFG_0_FRAME_WIDTH	16
-+
-+#define CSID_TPG_DT_n_CFG_1(n)	(0x614 + (n) * 0xC)
-+#define		TPG_DT_n_CFG_1_DATA_TYPE	0
-+#define		TPG_DT_n_CFG_1_ECC_XOR_MASK	8
-+#define		TPG_DT_n_CFG_1_CRC_XOR_MASK	16
-+
-+#define CSID_TPG_DT_n_CFG_2(n)	(0x618 + (n) * 0xC)
-+#define		TPG_DT_n_CFG_2_PAYLOAD_MODE		0
-+#define		TPG_DT_n_CFG_2_USER_SPECIFIED_PAYLOAD	4
-+#define		TPG_DT_n_CFG_2_ENCODE_FORMAT		16
-+
-+#define CSID_TPG_COLOR_BARS_CFG	0x640
-+#define		TPG_COLOR_BARS_CFG_UNICOLOR_BAR_EN	0
-+#define		TPG_COLOR_BARS_CFG_UNICOLOR_BAR_SEL	4
-+#define		TPG_COLOR_BARS_CFG_SPLIT_EN		5
-+#define		TPG_COLOR_BARS_CFG_ROTATE_PERIOD	8
-+
-+#define CSID_TPG_COLOR_BOX_CFG	0x644
-+#define		TPG_COLOR_BOX_CFG_MODE		0
-+#define		TPG_COLOR_BOX_PATTERN_SEL	2
-+
-+
-+static const struct csid_format csid_formats[] = {
-+	{
-+		MEDIA_BUS_FMT_UYVY8_2X8,
-+		DATA_TYPE_YUV422_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		2,
-+	},
-+	{
-+		MEDIA_BUS_FMT_VYUY8_2X8,
-+		DATA_TYPE_YUV422_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		2,
-+	},
-+	{
-+		MEDIA_BUS_FMT_YUYV8_2X8,
-+		DATA_TYPE_YUV422_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		2,
-+	},
-+	{
-+		MEDIA_BUS_FMT_YVYU8_2X8,
-+		DATA_TYPE_YUV422_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		2,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_10_BIT,
-+		10,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_10_BIT,
-+		10,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_10_BIT,
-+		10,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_10_BIT,
-+		10,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_Y10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_10_BIT,
-+		10,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_12_BIT,
-+		12,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_12_BIT,
-+		12,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_12_BIT,
-+		12,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_12_BIT,
-+		12,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR14_1X14,
-+		DATA_TYPE_RAW_14BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_14_BIT,
-+		14,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG14_1X14,
-+		DATA_TYPE_RAW_14BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_14_BIT,
-+		14,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG14_1X14,
-+		DATA_TYPE_RAW_14BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_14_BIT,
-+		14,
-+		1,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB14_1X14,
-+		DATA_TYPE_RAW_14BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_14_BIT,
-+		14,
-+		1,
-+	},
-+};
-+
-+static void csid_configure_stream(struct csid_device *csid, u8 enable)
-+{
-+	struct csid_testgen_config *tg = &csid->testgen;
-+	u32 val;
-+	u32 phy_sel = 0;
-+	u8 lane_cnt = csid->phy.lane_cnt;
-+	struct v4l2_mbus_framefmt *input_format =
-+			&csid->fmt[MSM_CSID_PAD_SRC];
-+	const struct csid_format *format = csid_get_fmt_entry(
-+			csid->formats, csid->nformats, input_format->code);
-+	if (!lane_cnt)
-+		lane_cnt = 4;
-+
-+	if (!tg->enabled)
-+		phy_sel = csid->phy.csiphy_id;
-+
-+	if (enable) {
-+		u8 vc = 0; /* Virtual Channel 0 */
-+		u8 dt_id = vc * 4;
-+
-+		if (tg->enabled) {
-+			/* Config Test Generator */
-+			vc = 0xa;
-+
-+			/* configure one DT, infinite frames */
-+			val = vc << TPG_VC_CFG0_VC_NUM;
-+			val |= INTELEAVING_MODE_ONE_SHOT << TPG_VC_CFG0_LINE_INTERLEAVING_MODE;
-+			val |= 0 << TPG_VC_CFG0_NUM_FRAMES;
-+			writel_relaxed(val, csid->base + CSID_TPG_VC_CFG0);
-+
-+			val = 0x740 << TPG_VC_CFG1_H_BLANKING_COUNT;
-+			val |= 0x3ff << TPG_VC_CFG1_V_BLANKING_COUNT;
-+			writel_relaxed(val, csid->base + CSID_TPG_VC_CFG1);
-+
-+			writel_relaxed(0x12345678, csid->base + CSID_TPG_LFSR_SEED);
-+
-+			val = input_format->height & 0x1fff << TPG_DT_n_CFG_0_FRAME_HEIGHT;
-+			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
-+			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
-+
-+			val = DATA_TYPE_RAW_10BIT << TPG_DT_n_CFG_1_DATA_TYPE;
-+			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
-+
-+			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
-+			val |= 0xBE << TPG_DT_n_CFG_2_USER_SPECIFIED_PAYLOAD;
-+			val |= format->decode_format << TPG_DT_n_CFG_2_ENCODE_FORMAT;
-+			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_2(0));
-+
-+			writel_relaxed(0, csid->base + CSID_TPG_COLOR_BARS_CFG);
-+
-+			writel_relaxed(0, csid->base + CSID_TPG_COLOR_BOX_CFG);
-+		}
-+
-+		val = 1 << RDI_CFG0_BYTE_CNTR_EN;
-+		val |= 1 << RDI_CFG0_FORMAT_MEASURE_EN;
-+		val |= 1 << RDI_CFG0_TIMESTAMP_EN;
-+		val |= DECODE_FORMAT_PAYLOAD_ONLY << RDI_CFG0_DECODE_FORMAT;
-+		val |= DATA_TYPE_RAW_10BIT << RDI_CFG0_DATA_TYPE;
-+		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
-+		val |= dt_id << RDI_CFG0_DT_ID;
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
-+
-+		/* CSID_TIMESTAMP_STB_POST_IRQ */
-+		val = 2 << RDI_CFG1_TIMESTAMP_STB_SEL;
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG1(0));
-+
-+		val = 1;
-+		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
-+
-+		val = 0;
-+		writel_relaxed(0, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
-+
-+		val = 1;
-+		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
-+
-+		val = 0;
-+		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PATTERN(0));
-+
-+		val = 1;
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PERIOD(0));
-+
-+		val = 0;
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PATTERN(0));
-+
-+		val = 1;
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PERIOD(0));
-+
-+		val = 0;
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PATTERN(0));
-+
-+		val = 0;
-+		writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
-+
-+		val = readl_relaxed(csid->base + CSID_RDI_CFG0(0));
-+		val |=  1 << RDI_CFG0_ENABLE;
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
-+	}
-+
-+	if (tg->enabled) {
-+		val = enable << TPG_CTRL_TEST_EN;
-+		val |= 1 << TPG_CTRL_FS_PKT_EN;
-+		val |= 1 << TPG_CTRL_FE_PKT_EN;
-+		val |= (lane_cnt - 1) << TPG_CTRL_NUM_ACTIVE_LANES;
-+		val |= 0x64 << TPG_CTRL_CYCLES_BETWEEN_PKTS;
-+		val |= 0xA << TPG_CTRL_NUM_TRAIL_BYTES;
-+		writel_relaxed(val, csid->base + CSID_TPG_CTRL);
-+	}
-+
-+	val = (lane_cnt - 1) << CSI2_RX_CFG0_NUM_ACTIVE_LANES;
-+	val |= csid->phy.lane_assign << CSI2_RX_CFG0_DL0_INPUT_SEL;
-+	val |= phy_sel << CSI2_RX_CFG0_PHY_NUM_SEL;
-+	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
-+
-+
-+	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
-+	val |= 1 << CSI2_RX_CFG1_MISR_EN;
-+	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
-+
-+	/* error irqs start at BIT(11) */
-+	writel_relaxed(~0u, csid->base + CSID_CSI2_RX_IRQ_MASK);
-+
-+	/* RDI irq */
-+	writel_relaxed(~0u, csid->base + CSID_TOP_IRQ_MASK);
-+
-+	val = 1 << RDI_CTRL_HALT_CMD;
-+	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
-+}
-+
-+static int csid_configure_testgen_pattern(struct csid_device *csid, s32 val)
-+{
-+	s32 regval = val - 1;
-+
-+	if (regval > 0 || regval <= CSID_PAYLOAD_MODE_MAX_SUPPORTED_170)
-+		csid->testgen.mode = regval;
-+
-+	return 0;
-+}
-+
-+/*
-+ * csid_hw_version - CSID hardware version query
-+ * @csid: CSID device
-+ *
-+ * Return HW version or error
-+ */
-+static u32 csid_hw_version(struct csid_device *csid)
-+{
-+	u32 hw_version;
-+	u32 hw_gen;
-+	u32 hw_rev;
-+	u32 hw_step;
-+
-+	hw_version = readl_relaxed(csid->base + CSID_HW_VERSION);
-+	hw_gen = (hw_version >> HW_VERSION_GENERATION) & 0xF;
-+	hw_rev = (hw_version >> HW_VERSION_REVISION) & 0xFFF;
-+	hw_step = (hw_version >> HW_VERSION_STEPPING) & 0xFFFF;
-+	dev_dbg(csid->camss->dev, "CSID HW Version = %u.%u.%u\n",
-+		hw_gen, hw_rev, hw_step);
-+
-+	return hw_version;
-+}
-+
-+/*
-+ * csid_isr - CSID module interrupt service routine
-+ * @irq: Interrupt line
-+ * @dev: CSID device
-+ *
-+ * Return IRQ_HANDLED on success
-+ */
-+static irqreturn_t csid_isr(int irq, void *dev)
-+{
-+	struct csid_device *csid = dev;
-+	u32 val;
-+	u8 reset_done;
-+
-+	val = readl_relaxed(csid->base + CSID_TOP_IRQ_STATUS);
-+	writel_relaxed(val, csid->base + CSID_TOP_IRQ_CLEAR);
-+	reset_done = val & BIT(TOP_IRQ_STATUS_RESET_DONE);
-+
-+	val = readl_relaxed(csid->base + CSID_CSI2_RX_IRQ_STATUS);
-+	writel_relaxed(val, csid->base + CSID_CSI2_RX_IRQ_CLEAR);
-+
-+	val = readl_relaxed(csid->base + CSID_CSI2_RDIN_IRQ_STATUS(0));
-+	writel_relaxed(val, csid->base + CSID_CSI2_RDIN_IRQ_CLEAR(0));
-+
-+	val = 1 << IRQ_CMD_CLEAR;
-+	writel_relaxed(val, csid->base + CSID_IRQ_CMD);
-+
-+	if (reset_done)
-+		complete(&csid->reset_complete);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+/*
-+ * csid_reset - Trigger reset on CSID module and wait to complete
-+ * @csid: CSID device
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+static int csid_reset(struct csid_device *csid)
-+{
-+	unsigned long time;
-+	u32 val;
-+
-+	reinit_completion(&csid->reset_complete);
-+
-+	writel_relaxed(1, csid->base + CSID_TOP_IRQ_CLEAR);
-+	writel_relaxed(1, csid->base + CSID_IRQ_CMD);
-+	writel_relaxed(1, csid->base + CSID_TOP_IRQ_MASK);
-+	writel_relaxed(1, csid->base + CSID_IRQ_CMD);
-+
-+	/* preserve registers */
-+	val = 0x1e << RST_STROBES;
-+	writel_relaxed(val, csid->base + CSID_RST_STROBES);
-+
-+	time = wait_for_completion_timeout(&csid->reset_complete,
-+		msecs_to_jiffies(CSID_RESET_TIMEOUT_MS));
-+	if (!time) {
-+		dev_err(csid->camss->dev, "CSID reset timeout\n");
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static u32 csid_src_pad_code(struct csid_device *csid, u32 sink_code,
-+			     unsigned int match_format_idx, u32 match_code)
-+{
-+	switch (sink_code) {
-+	case MEDIA_BUS_FMT_SBGGR10_1X10:
-+	{
-+		u32 src_code[] = {
-+			MEDIA_BUS_FMT_SBGGR10_1X10,
-+			MEDIA_BUS_FMT_SBGGR10_2X8_PADHI_LE,
-+		};
-+
-+		return csid_find_code(src_code, ARRAY_SIZE(src_code),
-+				      match_format_idx, match_code);
-+	}
-+	case MEDIA_BUS_FMT_Y10_1X10:
-+	{
-+		u32 src_code[] = {
-+			MEDIA_BUS_FMT_Y10_1X10,
-+			MEDIA_BUS_FMT_Y10_2X8_PADHI_LE,
-+		};
-+
-+		return csid_find_code(src_code, ARRAY_SIZE(src_code),
-+				      match_format_idx, match_code);
-+	}
-+	default:
-+		if (match_format_idx > 0)
-+			return 0;
-+
-+		return sink_code;
-+	}
-+}
-+
-+static void csid_subdev_init(struct csid_device *csid)
-+{
-+	csid->formats = csid_formats;
-+	csid->nformats = ARRAY_SIZE(csid_formats);
-+	csid->testgen.modes = csid_testgen_modes;
-+	csid->testgen.nmodes = CSID_PAYLOAD_MODE_MAX_SUPPORTED_170;
-+}
-+
-+const struct csid_hw_ops csid_ops_170 = {
-+	.configure_stream = csid_configure_stream,
-+	.configure_testgen_pattern = csid_configure_testgen_pattern,
-+	.hw_version = csid_hw_version,
-+	.isr = csid_isr,
-+	.reset = csid_reset,
-+	.src_pad_code = csid_src_pad_code,
-+	.subdev_init = csid_subdev_init,
-+};
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 601bd810f2b0..294a0a9e4dfa 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -123,6 +123,8 @@ static int csid_set_clock_rates(struct csid_device *csid)
- 				dev_err(dev, "clk set rate failed: %d\n", ret);
- 				return ret;
- 			}
-+		} else if (clock->nfreqs) {
-+			clk_set_rate(clock->clk, clock->freq[0]);
- 		}
- 	}
- 
-@@ -544,6 +546,8 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
- 	} else if (camss->version == CAMSS_8x96 ||
- 		   camss->version == CAMSS_660) {
- 		csid->ops = &csid_ops_4_7;
-+	} else if (camss->version == CAMSS_845) {
-+		csid->ops = &csid_ops_170;
- 	} else {
- 		return -EINVAL;
- 	}
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
-index bcc8bdb6e0ad..fe9182ff73aa 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.h
-+++ b/drivers/media/platform/qcom/camss/camss-csid.h
-@@ -244,5 +244,7 @@ void msm_csid_get_csid_id(struct media_entity *entity, u8 *id);
- 
- extern const struct csid_hw_ops csid_ops_4_1;
- extern const struct csid_hw_ops csid_ops_4_7;
-+extern const struct csid_hw_ops csid_ops_170;
-+
- 
- #endif /* QC_MSM_CAMSS_CSID_H */
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 1c3d64d612ff..a4fd8c32bfd8 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -465,6 +465,68 @@ static const struct resources vfe_res_660[] = {
- 	}
- };
- 
-+static const struct resources csid_res_845[] = {
-+	/* CSID0 */
-+	{
-+		.regulator = { "vdda-csi0" },
-+		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
-+				"soc_ahb", "vfe0", "vfe0_src",
-+				"vfe0_cphy_rx", "csi0",
-+				"csi0_src" },
-+		.clock_rate = { { 0 },
-+				{ 384000000 },
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 100000000, 320000000, 404000000, 480000000, 600000000 },
-+				{ 320000000 },
-+				{ 0 },
-+				{ 19200000, 75000000, 384000000, 538666667 },
-+				{ 384000000 } },
-+		.reg = { "csid0" },
-+		.interrupt = { "csid0" }
-+	},
-+
-+	/* CSID1 */
-+	{
-+		.regulator = { "vdda-csi1" },
-+		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
-+				"soc_ahb", "vfe1", "vfe1_src",
-+				"vfe1_cphy_rx", "csi1",
-+				"csi1_src" },
-+		.clock_rate = { { 0 },
-+				{ 384000000 },
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 100000000, 320000000, 404000000, 480000000, 600000000 },
-+				{ 320000000 },
-+				{ 0 },
-+				{ 19200000, 75000000, 384000000, 538666667 },
-+				{ 384000000 } },
-+		.reg = { "csid1" },
-+		.interrupt = { "csid1" }
-+	},
-+
-+	/* CSID2 */
-+	{
-+		.regulator = { "vdda-csi2" },
-+		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
-+				"soc_ahb", "vfe_lite", "vfe_lite_src",
-+				"vfe_lite_cphy_rx", "csi2",
-+				"csi2_src" },
-+		.clock_rate = { { 0 },
-+				{ 384000000 },
-+				{ 80000000 },
-+				{ 0 },
-+				{ 19200000, 100000000, 320000000, 404000000, 480000000, 600000000 },
-+				{ 320000000 },
-+				{ 0 },
-+				{ 19200000, 75000000, 384000000, 538666667 },
-+				{ 384000000 } },
-+		.reg = { "csid2" },
-+		.interrupt = { "csid2" }
-+	}
-+};
-+
- static const struct resources vfe_res_845[] = {
- 	/* VFE0 */
- 	{
+> > It's solely Windows driver design...
+> > Luckily I found some information and can clarify above table:
+> >
+> > 0x00 Reset
+> > 0x01 Power down
+> > 0x0b Power enable
+> > 0x0c Clock enable
+> > 0x0d LED (active high)
+> >
+> > The above text perhaps should go somewhere under Documentation.
+>
+> Coming back to this; there's a bit of an anomaly with the 0x01 Power
+> Down pin for at least one platform.  As listed above, the OV2680 on one
+> of my platforms has 3 GPIOs defined, and the table above gives them as
+> type Reset, Power down and Clock enable. I'd assumed from this table
+> that "power down" meant a powerdown GPIO (I.E. the one usually called
+> PWDNB in Omnivision datasheets and "powerdown" in drivers), but the
+> datasheet for the OV2680 doesn't list a separate reset and powerdown
+> pin, but rather a single pin that performs both functions.
+
+All of them are GPIOs, the question here is how they are actually
+connected on PCB level and I have no answer to that. You have to find
+schematics somewhere.
+
+> Am I wrong to treat that as something that ought to be mapped as a
+> powerdown GPIO to the sensors? Or do you know of any other way to
+> reconcile that discrepancy?
+
+The GPIOs can go directly to the sensors or be a control pin for
+separate discrete power gates.
+So, we can do one of the following:
+ a) present PD GPIO as fixed regulator;
+ b) present PD & Reset GPIOs as regulator;
+ c) provide them as is to the sensor and sensor driver must do what it
+considers right.
+
+Since we don't have schematics (yet?) and we have plenty of variations
+of sensors, I would go to c) and update the driver of the affected
+sensor as needed. Because even if you have separate discrete PD for
+one sensor on one platform there is no guarantee that it will be the
+same on another. Providing a "virtual" PD in a sensor that doesn't
+support it is the best choice I think. Let's hear what Sakari and
+other experienced camera sensor developers say.
+
+My vision is purely based on electrical engineering background,
+experience with existing (not exactly camera) sensor drivers and
+generic cases.
+
+> Failing that; the only way I can think to handle this is to register
+> proxy GPIO pins assigned to the sensors as you suggested previously, and
+> have them toggle the GPIO's assigned to the INT3472 based on platform
+> specific mapping data (I.E. we register a pin called "reset", which on
+> most platforms just toggles the 0x00 pin, but on this specific platform
+> would drive both 0x00 and 0x01 together. We're already heading that way
+> for the regulator consumer supplies so it's sort of nothing new, but I'd
+> still rather not if it can be avoided.
+
+
 -- 
-2.27.0
-
+With Best Regards,
+Andy Shevchenko
