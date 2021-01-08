@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E14C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1F5C433E9
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD3DD233EA
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19BA1235DD
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbhAHJpJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 04:45:09 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36772 "EHLO mx2.suse.de"
+        id S1728034AbhAHJpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 04:45:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36778 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727649AbhAHJpJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:45:09 -0500
+        id S1727975AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:45:10 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0A672AFA8;
-        Fri,  8 Jan 2021 09:43:47 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 38000AFD7;
+        Fri,  8 Jan 2021 09:43:49 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
         airlied@redhat.com, daniel@ffwll.ch,
@@ -33,9 +33,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 05/13] drm/mgag200: Use drm_gem_shmem_vmap_local() in damage handling
-Date:   Fri,  8 Jan 2021 10:43:32 +0100
-Message-Id: <20210108094340.15290-6-tzimmermann@suse.de>
+Subject: [PATCH v4 08/13] drm/udl: Use drm_gem_shmem_vmap_local() in damage handling
+Date:   Fri,  8 Jan 2021 10:43:35 +0100
+Message-Id: <20210108094340.15290-9-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
 References: <20210108094340.15290-1-tzimmermann@suse.de>
@@ -45,54 +45,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Damage handling in mgag200 requires a short-term mapping of the source
+Damage handling in udl requires a short-term mapping of the source
 BO. Use drm_gem_shmem_vmap_local().
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- drivers/gpu/drm/mgag200/mgag200_mode.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/udl/udl_modeset.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/mgag200/mgag200_mode.c b/drivers/gpu/drm/mgag200/mgag200_mode.c
-index 1dfc42170059..a33e28d4c5e9 100644
---- a/drivers/gpu/drm/mgag200/mgag200_mode.c
-+++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
-@@ -1552,22 +1552,32 @@ mgag200_handle_damage(struct mga_device *mdev, struct drm_framebuffer *fb,
- 		      struct drm_rect *clip)
- {
- 	struct drm_device *dev = &mdev->base;
-+	struct drm_gem_object *obj = fb->obj[0];
- 	struct dma_buf_map map;
- 	void *vmap;
- 	int ret;
+diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+index 9d34ec9d03f6..46b55b4d03c2 100644
+--- a/drivers/gpu/drm/udl/udl_modeset.c
++++ b/drivers/gpu/drm/udl/udl_modeset.c
+@@ -290,14 +290,18 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
+ 	else if ((clip.x2 > fb->width) || (clip.y2 > fb->height))
+ 		return -EINVAL;
+ 
++	ret = dma_resv_lock(fb->obj[0]->resv, NULL);
++	if (ret)
++		return ret;
++
+ 	if (import_attach) {
+ 		ret = dma_buf_begin_cpu_access(import_attach->dmabuf,
+ 					       DMA_FROM_DEVICE);
+ 		if (ret)
+-			return ret;
++			goto out_dma_resv_unlock;
+ 	}
  
 -	ret = drm_gem_shmem_vmap(fb->obj[0], &map);
-+	ret = dma_resv_lock(obj->resv, NULL);
- 	if (drm_WARN_ON(dev, ret))
--		return; /* BUG: SHMEM BO should always be vmapped */
-+		return;
-+	ret = drm_gem_shmem_vmap_local(obj, &map);
-+	if (drm_WARN_ON(dev, ret))
-+		goto err_dma_resv_unlock; /* BUG: SHMEM BO should always be vmapped */
- 	vmap = map.vaddr; /* TODO: Use mapping abstraction properly */
++	ret = drm_gem_shmem_vmap_local(fb->obj[0], &map);
+ 	if (ret) {
+ 		DRM_ERROR("failed to vmap fb\n");
+ 		goto out_dma_buf_end_cpu_access;
+@@ -307,7 +311,7 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
+ 	urb = udl_get_urb(dev);
+ 	if (!urb) {
+ 		ret = -ENOMEM;
+-		goto out_drm_gem_shmem_vunmap;
++		goto out_drm_gem_shmem_vunmap_local;
+ 	}
+ 	cmd = urb->transfer_buffer;
  
- 	drm_fb_memcpy_dstclip(mdev->vram, vmap, fb, clip);
+@@ -320,7 +324,7 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
+ 				       &cmd, byte_offset, dev_byte_offset,
+ 				       byte_width);
+ 		if (ret)
+-			goto out_drm_gem_shmem_vunmap;
++			goto out_drm_gem_shmem_vunmap_local;
+ 	}
  
+ 	if (cmd > (char *)urb->transfer_buffer) {
+@@ -336,8 +340,8 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
+ 
+ 	ret = 0;
+ 
+-out_drm_gem_shmem_vunmap:
 -	drm_gem_shmem_vunmap(fb->obj[0], &map);
-+	drm_gem_shmem_vunmap_local(obj, &map);
-+	dma_resv_unlock(obj->resv);
++out_drm_gem_shmem_vunmap_local:
++	drm_gem_shmem_vunmap_local(fb->obj[0], &map);
+ out_dma_buf_end_cpu_access:
+ 	if (import_attach) {
+ 		tmp_ret = dma_buf_end_cpu_access(import_attach->dmabuf,
+@@ -345,6 +349,8 @@ static int udl_handle_damage(struct drm_framebuffer *fb, int x, int y,
+ 		if (tmp_ret && !ret)
+ 			ret = tmp_ret; /* only update ret if not set yet */
+ 	}
++out_dma_resv_unlock:
++	dma_resv_unlock(fb->obj[0]->resv);
  
- 	/* Always scanout image at VRAM offset 0 */
- 	mgag200_set_startadd(mdev, (u32)0);
- 	mgag200_set_offset(mdev, fb);
-+
-+	return;
-+
-+err_dma_resv_unlock:
-+	dma_resv_unlock(obj->resv);
+ 	return ret;
  }
- 
- static void
 -- 
 2.29.2
 
