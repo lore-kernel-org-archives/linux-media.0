@@ -5,25 +5,25 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D966C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2516C43381
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 19:34:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2683323A9D
+	by mail.kernel.org (Postfix) with ESMTP id 9042523A75
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 19:34:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728942AbhAHTe1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 14:34:27 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:59468 "EHLO gloria.sntech.de"
+        id S1728948AbhAHTe3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 14:34:29 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:59476 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728931AbhAHTe1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 14:34:27 -0500
+        id S1728926AbhAHTe2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 14:34:28 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1kxxVx-0004Zr-7V; Fri, 08 Jan 2021 20:33:37 +0100
+        id 1kxxVv-0004Zr-5o; Fri, 08 Jan 2021 20:33:35 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     ezequiel@collabora.com, dafna.hirschfeld@collabora.com,
         helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com
@@ -31,9 +31,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         christoph.muellner@theobroma-systems.com,
         linux-media@vger.kernel.org, mchehab@kernel.org, heiko@sntech.de,
         Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH RFC 07/11] media: rockchip: rkisp1: carry ip version information
-Date:   Fri,  8 Jan 2021 20:33:07 +0100
-Message-Id: <20210108193311.3423236-8-heiko@sntech.de>
+Subject: [PATCH RFC 01/11] arm64: dts: rockchip: add csi-dphy to px30
+Date:   Fri,  8 Jan 2021 20:33:01 +0100
+Message-Id: <20210108193311.3423236-2-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108193311.3423236-1-heiko@sntech.de>
 References: <20210108193311.3423236-1-heiko@sntech.de>
@@ -45,82 +45,35 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-The IP block evolved from its rk3288/rk3399 base and the vendor
-designates them with a numerical version. rk3399 for example
-is designated V10 probably meaning V1.0.
-
-There doesn't seem to be an actual version register we could read that
-information from, so allow the match_data to carry that information
-for future differentiation.
-
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-common.h | 5 +++++
- drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c    | 7 +++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/px30.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 44f333bf5d6a..7678eabc9ffc 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -59,6 +59,10 @@
- 					 RKISP1_CIF_ISP_EXP_END |	\
- 					 RKISP1_CIF_ISP_HIST_MEASURE_RDY)
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index f4dfcb01e3d9..52bc54416657 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -863,6 +863,19 @@ dsi_dphy: phy@ff2e0000 {
+ 		status = "disabled";
+ 	};
  
-+enum rkisp1_isp_ver {
-+	RKISP1_V10 = 0,
-+};
++	csi_dphy: phy@ff2f0000 {
++		compatible = "rockchip,px30-mipi-dphy";
++		reg = <0x0 0xff2f0000 0x0 0x4000>;
++		clocks = <&cru PCLK_MIPICSIPHY>;
++		clock-names = "pclk";
++		#phy-cells = <0>;
++		power-domains = <&power PX30_PD_VI>;
++		resets = <&cru SRST_MIPICSIPHY_P>;
++		reset-names = "apb";
++		rockchip,grf = <&grf>;
++		status = "disabled";
++	};
 +
- /* enum for the resizer pads */
- enum rkisp1_rsz_pad {
- 	RKISP1_RSZ_PAD_SINK,
-@@ -355,6 +359,7 @@ struct rkisp1_device {
- 	void __iomem *base_addr;
- 	int irq;
- 	struct device *dev;
-+	enum rkisp1_isp_ver isp_ver;
- 	unsigned int clk_size;
- 	struct clk_bulk_data clks[RKISP1_MAX_BUS_CLK];
- 	struct v4l2_device v4l2_dev;
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 96afc1d1a914..0a01ffbc2cae 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -104,6 +104,7 @@
- struct rkisp1_match_data {
- 	const char * const *clks;
- 	unsigned int size;
-+	enum rkisp1_isp_ver isp_ver;
- };
- 
- /* ----------------------------------------------------------------------------
-@@ -408,15 +409,16 @@ static const char * const rk3399_isp_clks[] = {
- 	"hclk",
- };
- 
--static const struct rkisp1_match_data rk3399_isp_clk_data = {
-+static const struct rkisp1_match_data rk3399_isp_match_data = {
- 	.clks = rk3399_isp_clks,
- 	.size = ARRAY_SIZE(rk3399_isp_clks),
-+	.isp_ver = RKISP1_V10,
- };
- 
- static const struct of_device_id rkisp1_of_match[] = {
- 	{
- 		.compatible = "rockchip,rk3399-cif-isp",
--		.data = &rk3399_isp_clk_data,
-+		.data = &rk3399_isp_match_data,
- 	},
- 	{},
- };
-@@ -532,6 +534,7 @@ static int rkisp1_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 	rkisp1->clk_size = clk_data->size;
-+	rkisp1->isp_ver = clk_data->isp_ver;
- 
- 	pm_runtime_enable(&pdev->dev);
- 
+ 	usb20_otg: usb@ff300000 {
+ 		compatible = "rockchip,px30-usb", "rockchip,rk3066-usb",
+ 			     "snps,dwc2";
 -- 
 2.29.2
 
