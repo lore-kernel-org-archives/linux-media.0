@@ -2,168 +2,198 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13602C433E9
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63E58C43333
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:06:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C43292388B
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:06:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21A8C238EA
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 12:06:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727406AbhAHMGa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 07:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbhAHMG1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jan 2021 07:06:27 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BCEC061240
-        for <linux-media@vger.kernel.org>; Fri,  8 Jan 2021 04:05:07 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id w1so14096020ejf.11
-        for <linux-media@vger.kernel.org>; Fri, 08 Jan 2021 04:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sfFHGntv9vS08N2U1NTEmFN9zbWTIzne2qD4TJ7xpuU=;
-        b=YrS5onGrGvI5kc+hU07e8iO1kfRO+wc82YA1np16KghHZs1sVHxuiHxsnMIibvSqh3
-         DkUcXskKGQRCADC74hLTJvm4F/P0xWqOrosMFLVzZwtTi46AihoDwSJRznGPq2cw9Dcs
-         sXdxhHznH/0azJ6h96BDKzFqkOUMCUBj4G64DZc7l3FXf9q57FdJlHKRy3dWF5Qg/VQX
-         loRJNPLqmWYFBT62VrUhgLg7UM8LjqwOFimkuZ4GxuZ5DpH6P+obS24jRmzEgFKv0kGZ
-         DtWVVaeHEJ39a9GfTLuxumq3xQpqQfU8flvmxGHvBhbtN1w67thWlar4TipVGGXEa1at
-         ezXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sfFHGntv9vS08N2U1NTEmFN9zbWTIzne2qD4TJ7xpuU=;
-        b=UYv5MRfQHWYToWW50XerjNCQOVb9iGzNbbPviVmQafw2aorcb+lkHS/NSep6vaFgzG
-         wMyFF9/ay13J1RnSyGFV325CvsCuqRr0UVGy0ifphdA3FcJWO8cjdRDRPWrM9+/xhC2a
-         vt61j0gMzJcIaVyjUZTMlFSScMuXRyqmPV9GmOGxp+aRfairqg3JXZMYYKy4td+fqozf
-         rL3+iAJwqol6Shd3sqsQB9nleuPbjuku3z0xYuQpCQ2gT8sRQ9QJ8QCa7hT9xW4052fr
-         cdCW5V+BPErJ7yVTBYwb+QZLPNB/qpwCUU6bJyJuaadK09v54jw4/rCUNxZ1V3hZxDKS
-         cw9w==
-X-Gm-Message-State: AOAM533AgN2zchR/EOyK2W6eK0VvCk8H5KQUds+no0B6SCBAL4zkVXcs
-        uvJefsoW5w0LF5RM5LIx27qw6Q==
-X-Google-Smtp-Source: ABdhPJxpsWyMGLiEF4tu5gHe19wgSMrSjb8XQA0Zn0Ko6DZxp8MzPXhuXQXw+BTowyFA6sKxhfY3Cw==
-X-Received: by 2002:a17:907:101c:: with SMTP id ox28mr2256847ejb.201.1610107506124;
-        Fri, 08 Jan 2021 04:05:06 -0800 (PST)
-Received: from localhost.localdomain ([2a02:2450:102f:d6a:bb2e:8b50:322a:1b9a])
-        by smtp.gmail.com with ESMTPSA id i18sm3674498edt.68.2021.01.08.04.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 04:05:05 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, leoyang.li@nxp.com, geert+renesas@glider.be,
-        arnd@arndb.de, Anson.Huang@nxp.com, michael@walle.cc,
-        agx@sigxcpu.org, max.oss.09@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v1 07/17] media: camss: Add missing format identifiers
-Date:   Fri,  8 Jan 2021 13:04:19 +0100
-Message-Id: <20210108120429.895046-8-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210108120429.895046-1-robert.foss@linaro.org>
-References: <20210108120429.895046-1-robert.foss@linaro.org>
+        id S1727468AbhAHMGn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 07:06:43 -0500
+Received: from vegas.theobroma-systems.com ([144.76.126.164]:48955 "EHLO
+        mail.theobroma-systems.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726992AbhAHMGm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 07:06:42 -0500
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74]:56442 helo=diego.localnet)
+        by mail.theobroma-systems.com with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <heiko.stuebner@theobroma-systems.com>)
+        id 1kxqWi-0007d6-DR; Fri, 08 Jan 2021 13:05:56 +0100
+From:   Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+To:     kever.yang@rock-chips.com, Eddie Cai <eddie.cai@rock-chips.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     Helen Koike <helen.koike@collabora.com>,
+        linux-media@vger.kernel.org,
+        christoph.muellner@theobroma-systems.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Collabora Kernel ML <kernel@collabora.com>
+Subject: Re: rkisp in mainline (destaging) vs. rk3326/px30 uapi differences
+Date:   Fri, 08 Jan 2021 13:05:55 +0100
+Message-ID: <2125881.iZASKD2KPV@diego>
+Organization: Theobroma Systems
+In-Reply-To: <a75546bb-8af7-a0ab-fce2-89a6e6b63972@collabora.com>
+References: <3342088.iIbC2pHGDl@diego> <a75546bb-8af7-a0ab-fce2-89a6e6b63972@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CSI-2 spec defines the following types:
- - Data Type - Often abbreviated DT
- - Decode Format - Often abbreviated as DF
- - Encode Format
+Hi Dafna,
 
-These definitions are as far as I can tell complete for CSI-2.
+Am Freitag, 8. Januar 2021, 12:17:43 CET schrieb Dafna Hirschfeld:
+> Am 07.01.21 um 21:23 schrieb Heiko Stuebner:
+> > the rkisp driver in the mainline Linux kernel moved out of staging with
+> > 5.11-rc1, so the uapi will be fixed after 5.11 proper is released.
+> > 
+> > The rkisp driver currently only supports the rk3399 and while working
+> > on porting the support for rk3326/px30 I noticed discrepancies.
+> > 
+> > Hence it would be somewhat urgent to clarify this, as later it will get
+> > really cumbersome.
+> 
+> I see that we are now on 5.11-rc2 so that gives us about 4-5 weeks,
+> 
+> > 
+> > ----
+> > 
+> > The rkisp on the px30 (v12) has some changes compared to the rk3399 (v10).
+> 
+> How do you know that the isp of rk3399 is v10 ? I looked at the RK3399 TRM
+> and the datasheet for the isp and could not find this information.
 
-Additionally the Qualcomm internal type describing Plain Formats
-has been added. Plain formats describe the size of the pixels
-written by the RDI units to memory. PLAIN8 for example has the size
-8 bits, and PLAIN32 32 bits. The appropriate Plain Format is
-determined by the Decode Format used. The smallest Plain Format
-that is able to contain a pixel of the used Decode Format is the
-appropriate one to use.
+That's from Rockchip's upstream sources where they introduced the new code.
+There're some (if v12) conditionals in there ;-) .
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- .../media/platform/qcom/camss/camss-csid.h    | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
-index 1824b3745e10..02fc34ee8a41 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.h
-+++ b/drivers/media/platform/qcom/camss/camss-csid.h
-@@ -21,6 +21,56 @@
- #define MSM_CSID_PAD_SRC 1
- #define MSM_CSID_PADS_NUM 2
- 
-+#define DATA_TYPE_EMBEDDED_DATA_8BIT	0x12
-+#define DATA_TYPE_YUV420_8BIT		0x18
-+#define DATA_TYPE_YUV420_10BIT		0x19
-+#define DATA_TYPE_YUV420_8BIT_LEGACY	0x1a
-+#define DATA_TYPE_YUV420_8BIT_SHIFTED	0x1c /* Chroma Shifted Pixel Sampling */
-+#define DATA_TYPE_YUV420_10BIT_SHIFTED	0x1d /* Chroma Shifted Pixel Sampling */
-+#define DATA_TYPE_YUV422_8BIT		0x1e
-+#define DATA_TYPE_YUV422_10BIT		0x1f
-+#define DATA_TYPE_RGB444		0x20
-+#define DATA_TYPE_RGB555		0x21
-+#define DATA_TYPE_RGB565		0x22
-+#define DATA_TYPE_RGB666		0x23
-+#define DATA_TYPE_RGB888		0x24
-+#define DATA_TYPE_RAW_24BIT		0x27
-+#define DATA_TYPE_RAW_6BIT		0x28
-+#define DATA_TYPE_RAW_7BIT		0x29
-+#define DATA_TYPE_RAW_8BIT		0x2a
-+#define DATA_TYPE_RAW_10BIT		0x2b
-+#define DATA_TYPE_RAW_12BIT		0x2c
-+#define DATA_TYPE_RAW_14BIT		0x2d
-+#define DATA_TYPE_RAW_16BIT		0x2e
-+#define DATA_TYPE_RAW_20BIT		0x2f
-+
-+#define DECODE_FORMAT_UNCOMPRESSED_6_BIT	0x0
-+#define DECODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
-+#define DECODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
-+#define DECODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
-+#define DECODE_FORMAT_UNCOMPRESSED_14_BIT	0x4
-+#define DECODE_FORMAT_UNCOMPRESSED_16_BIT	0x5
-+#define DECODE_FORMAT_UNCOMPRESSED_20_BIT	0x6
-+#define DECODE_FORMAT_DPCM_10_6_10		0x7
-+#define DECODE_FORMAT_DPCM_10_8_10		0x8
-+#define DECODE_FORMAT_DPCM_12_6_12		0x9
-+#define DECODE_FORMAT_DPCM_12_8_12		0xA
-+#define DECODE_FORMAT_DPCM_14_8_14		0xB
-+#define DECODE_FORMAT_DPCM_14_10_14		0xC
-+#define DECODE_FORMAT_USER_DEFINED		0xE
-+#define DECODE_FORMAT_PAYLOAD_ONLY		0xF
-+
-+#define ENCODE_FORMAT_RAW_8_BIT		0x1
-+#define ENCODE_FORMAT_RAW_10_BIT	0x2
-+#define ENCODE_FORMAT_RAW_12_BIT	0x3
-+#define ENCODE_FORMAT_RAW_14_BIT	0x4
-+#define ENCODE_FORMAT_RAW_16_BIT	0x5
-+
-+#define PLAIN_FORMAT_PLAIN8	0x0 /* supports DPCM, UNCOMPRESSED_6/8_BIT */
-+#define PLAIN_FORMAT_PLAIN16	0x1 /* supports DPCM, UNCOMPRESSED_10/16_BIT */
-+#define PLAIN_FORMAT_PLAIN32	0x2 /* supports UNCOMPRESSED_20_BIT */
-+
-+
- enum csid_payload_mode {
- 	CSID_PAYLOAD_MODE_INCREMENTING = 0,
- 	CSID_PAYLOAD_MODE_ALTERNATING_55_AA = 1,
--- 
-2.27.0
+> > Some sub-blocks moved around or seem to have been replaced with newer
+> > variants and the gist of changes can be seen in [0] with the important
+> > part being the uapi changes [1] and those values also exist in mainline.
+> > 
+> > 
+> > See functions in that patch:
+> > - isp_goc_config_v12()
+> > - rkisp1_stats_get_aec_meas_v12()
+> > - rkisp1_stats_get_hst_meas_v12()
+> > 
+> > Looking at the code, the register locations are different, for gammas and
+> > the histogram the actual amount of raw registers is the same, while the
+> > "aec" seems to use 25 registers on V10 while 21 registers on V12. Though
+> > their content gets split into multiple values in that v12 variant.
+> > 
+> > 
+> > As somehow expected the whole thing is pretty undocumented and I
+> > have no clue what these "bins" or "gammas" mean and why the amount of
+> > entries now differs and how this relates to userspace at all.
+> > 
+> > Also looking through libcamera as the one open user of the driver,
+> > the whole rkisp1_cif_isp_isp_other_cfg (containing the gamma config)
+> > as well as the rkisp1_cif_isp_stat struct (for ae and histogram)
+> > don't seem to be used so far.
+> 
+> yes, that's a shame. There is a simple implementation using the ae in
+> stuct rkisp1_cif_isp_stat in src/ipa/rkisp1.c
+
+Thanks for pointing me to that :-)
+
+
+> > Hence I also added some Rockchip people in the hope of getting
+> > a bit of clarification ;-) .
+> > 
+> > 
+> > Ideas on how to proceed?
+> > 
+> > Thanks
+> > Heiko
+> > 
+> > 
+> > [0] https://github.com/rockchip-linux/kernel/commit/2ff670508e8fdfefd67318e885effb8cee4a0f4c
+> > [1]
+> > diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+> > index b471f01a8459..fbeb6b5dba03 100644
+> > --- a/include/uapi/linux/rkisp1-config.h
+> > +++ b/include/uapi/linux/rkisp1-config.h
+> > @@ -32,8 +32,8 @@
+> >   #define CIFISP_CTK_COEFF_MAX            0x100
+> >   #define CIFISP_CTK_OFFSET_MAX           0x800
+> >   
+> > -#define CIFISP_AE_MEAN_MAX              25
+> > -#define CIFISP_HIST_BIN_N_MAX           16
+> > +#define CIFISP_AE_MEAN_MAX              81
+> > +#define CIFISP_HIST_BIN_N_MAX           32
+> >   #define CIFISP_AFM_MAX_WINDOWS          3
+> >   #define CIFISP_DEGAMMA_CURVE_SIZE       17
+> >   
+> > @@ -69,7 +69,7 @@
+> >    * Gamma out
+> >    */
+> >   /* Maximum number of color samples supported */
+> > -#define CIFISP_GAMMA_OUT_MAX_SAMPLES       17
+> > +#define CIFISP_GAMMA_OUT_MAX_SAMPLES       34
+> 
+> I see that in that code you use the old names of the registers.
+> The names are different in the current version of the driver,
+> in the media tree: git://linuxtv.org/media_tree.git
+> Also, I guess that instead of changing the values you should
+> add a separated define, something like:
+> 
+> -#define CIFISP_GAMMA_OUT_MAX_SAMPLES       17
+> +#define CIFISP_GAMMA_OUT_MAX_SAMPLES_V10       17
+> +#define CIFISP_GAMMA_OUT_MAX_SAMPLES_v12       34
+
+Just for clarity, that is Rockchip's commit in their vendor kernel.
+I'm just using that as base to get the changes needed for mainline :-) .
+
+The main issue I see is that these max-values directly influence the sizes
+of arrays inside the uapi - where the "v12" seems to need bigger arrays
+on first glance.
+^^^ which is essentially the part I'm mostly worried about
+
+The vendor-code only used the MAX-constants for the uapi to get the
+biggest size needed and then defines the real per-version maximums
+inside the driver, see
+https://github.com/rockchip-linux/kernel/commit/2ff670508e8fdfefd67318e885effb8cee4a0f4c#diff-961dbaed00164098bb082b01d6c9446501cfcef808cf5a71bf18405067fb5426R378
+
+and for the auto-exposure:
+https://github.com/rockchip-linux/kernel/commit/2ff670508e8fdfefd67318e885effb8cee4a0f4c#diff-961dbaed00164098bb082b01d6c9446501cfcef808cf5a71bf18405067fb5426R265
+
+> Thanks for working on that, hope we could still fix this in 5.11,
+> 
+> I don't have a rk3326/px30 hardware so I can't test your patches.
+> Do you have a hardware to test it?
+
+Yep, I'm working on a px30-evb and thankfully the driver for the camera
+on it is also already part of mainline.
+
+
+> I suggest that you send a patchset to the mailing list then I can
+> review it and test it on rk3399. Unfortunately there is indeed no way
+> to thoroughly test the params/stats since there is no userspace for that.
+
+From looking at the currently newest version [0] it looks like these
+new max values seem to have stayed the same, so one solution might be
+to just make the uapi structures bigger to these new max values and
+hope for the best?
+
+It seems rk3568 and newer will use a really different isp block (they
+seem to call it rkisp2 already), so will probably have a separate userspace
+interface?
+
+
+Thanks for your input and help
+Heiko
+
+
+[0] https://github.com/rockchip-linux/kernel/blob/develop-4.19/include/uapi/linux/rkisp1-config.h
+
+
 
