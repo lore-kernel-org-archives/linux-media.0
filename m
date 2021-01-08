@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B0F4C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7039C4332D
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4070B235FC
+	by mail.kernel.org (Postfix) with ESMTP id 8EDBB23435
 	for <linux-media@archiver.kernel.org>; Fri,  8 Jan 2021 09:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbhAHJpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 04:45:11 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36780 "EHLO mx2.suse.de"
+        id S1728083AbhAHJpM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jan 2021 04:45:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36790 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727987AbhAHJpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:45:10 -0500
+        id S1727993AbhAHJpL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:45:11 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 02ED9AFE2;
-        Fri,  8 Jan 2021 09:43:50 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 3CFF4AFF0;
+        Fri,  8 Jan 2021 09:43:52 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     sumit.semwal@linaro.org, christian.koenig@amd.com,
         airlied@redhat.com, daniel@ffwll.ch,
@@ -34,9 +34,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v4 09/13] drm/vram-helper: Provide a vmap function for short-term mappings
-Date:   Fri,  8 Jan 2021 10:43:36 +0100
-Message-Id: <20210108094340.15290-10-tzimmermann@suse.de>
+Subject: [PATCH v4 12/13] drm/fb-helper: Move BO locking from DRM client to fbdev damage worker
+Date:   Fri,  8 Jan 2021 10:43:39 +0100
+Message-Id: <20210108094340.15290-13-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210108094340.15290-1-tzimmermann@suse.de>
 References: <20210108094340.15290-1-tzimmermann@suse.de>
@@ -46,228 +46,241 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implementations of the vmap/vunmap GEM callbacks may perform pinning
-of the BO and may acquire the associated reservation object's lock.
-It's somewhat inconvenient to callers that simply require a mapping of
-the contained memory; and also ipmplies a certain overhead.
+Fbdev emulation has to lock the BO into place while flushing the shadow
+buffer into the BO's memory. Remove any interference with pinning by
+using vmap_local functionality (instead of full vmap). This requires
+BO reservation locking in fbdev's damage worker.
 
-Therefore provide drm_gem_vram_vmap_local() drm_gem_vram_vunmap_local(),
-which only perform the vmap/vunmap operations. Callers have to hold the
-reservation lock while the mapping persists; or have to pin the BO by
-themselves.
-
-This patch connects GEM VRAM helpers to GEM object functions with
-equivalent functionality.
+The new DRM client functions for locking and vmap_local functionality
+are added for consistency with the existing style.
 
 v4:
-	* move driver changes into separate patches (Daniel)
 	* update documentation (Daniel)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/gpu/drm/drm_gem_vram_helper.c | 141 +++++++++++++++++---------
- include/drm/drm_gem_vram_helper.h     |   2 +
- 2 files changed, 95 insertions(+), 48 deletions(-)
+ drivers/gpu/drm/drm_client.c    | 94 +++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/drm_fb_helper.c | 41 +++++++-------
+ include/drm/drm_client.h        |  4 ++
+ 3 files changed, 119 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
-index 02ca22e90290..c7fba3a0758e 100644
---- a/drivers/gpu/drm/drm_gem_vram_helper.c
-+++ b/drivers/gpu/drm/drm_gem_vram_helper.c
-@@ -379,47 +379,6 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
+diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
+index ce45e380f4a2..0220165810aa 100644
+--- a/drivers/gpu/drm/drm_client.c
++++ b/drivers/gpu/drm/drm_client.c
+@@ -288,6 +288,37 @@ drm_client_buffer_create(struct drm_client_dev *client, u32 width, u32 height, u
+ 	return ERR_PTR(ret);
  }
- EXPORT_SYMBOL(drm_gem_vram_unpin);
- 
--static int drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
--				    struct dma_buf_map *map)
--{
--	int ret;
--
--	if (gbo->vmap_use_count > 0)
--		goto out;
--
--	ret = ttm_bo_vmap(&gbo->bo, &gbo->map);
--	if (ret)
--		return ret;
--
--out:
--	++gbo->vmap_use_count;
--	*map = gbo->map;
--
--	return 0;
--}
--
--static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo,
--				       struct dma_buf_map *map)
--{
--	struct drm_device *dev = gbo->bo.base.dev;
--
--	if (drm_WARN_ON_ONCE(dev, !gbo->vmap_use_count))
--		return;
--
--	if (drm_WARN_ON_ONCE(dev, !dma_buf_map_is_equal(&gbo->map, map)))
--		return; /* BUG: map not mapped from this BO */
--
--	if (--gbo->vmap_use_count > 0)
--		return;
--
--	/*
--	 * Permanently mapping and unmapping buffers adds overhead from
--	 * updating the page tables and creates debugging output. Therefore,
--	 * we delay the actual unmap operation until the BO gets evicted
--	 * from memory. See drm_gem_vram_bo_driver_move_notify().
--	 */
--}
--
- /**
-  * drm_gem_vram_vmap() - Pins and maps a GEM VRAM object into kernel address
-  *                       space
-@@ -447,7 +406,7 @@ int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
- 	ret = drm_gem_vram_pin_locked(gbo, 0);
- 	if (ret)
- 		goto err_ttm_bo_unreserve;
--	ret = drm_gem_vram_kmap_locked(gbo, map);
-+	ret = drm_gem_vram_vmap_local(gbo, map);
- 	if (ret)
- 		goto err_drm_gem_vram_unpin_locked;
- 
-@@ -479,13 +438,83 @@ void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *ma
- 	if (WARN_ONCE(ret, "ttm_bo_reserve_failed(): ret=%d\n", ret))
- 		return;
- 
--	drm_gem_vram_kunmap_locked(gbo, map);
-+	drm_gem_vram_vunmap_local(gbo, map);
- 	drm_gem_vram_unpin_locked(gbo);
- 
- 	ttm_bo_unreserve(&gbo->bo);
- }
- EXPORT_SYMBOL(drm_gem_vram_vunmap);
  
 +/**
-+ * drm_gem_vram_vmap_local() - Maps a GEM VRAM object into kernel address space
-+ * @gbo: The GEM VRAM object to map
-+ * @map: Returns the kernel virtual address of the VRAM GEM object's backing
-+ *       store.
++ * drm_client_buffer_lock - Locks the DRM client buffer
++ * @buffer: DRM client buffer
 + *
-+ * The vmap_local function maps the buffer of a GEM VRAM object into kernel address
-+ * space. Call drm_gem_vram_vunmap_local() with the returned address to unmap and
-+ * unpin the GEM VRAM object.
++ * This function locks the client buffer by acquiring the buffer
++ * object's reservation lock.
 + *
-+ * The function is called with the BO's reservation object locked. For short-term
-+ * mappings, callers must hold the BO's reservation lock until after unmapping the
-+ * buffer.
++ * Unlock the buffer with drm_client_buffer_unlock().
 + *
 + * Returns:
-+ * 0 on success, or a negative error code otherwise.
++ *	0 on success, or a negative errno code otherwise.
 + */
-+int drm_gem_vram_vmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
++int
++drm_client_buffer_lock(struct drm_client_buffer *buffer)
 +{
++	return dma_resv_lock(buffer->gem->resv, NULL);
++}
++EXPORT_SYMBOL(drm_client_buffer_lock);
++
++/**
++ * drm_client_buffer_unlock - Unlock DRM client buffer
++ * @buffer: DRM client buffer
++ *
++ * Unlocks a client buffer. See drm_client_buffer_lock().
++ */
++void drm_client_buffer_unlock(struct drm_client_buffer *buffer)
++{
++	dma_resv_unlock(buffer->gem->resv);
++}
++EXPORT_SYMBOL(drm_client_buffer_unlock);
++
+ /**
+  * drm_client_buffer_vmap - Map DRM client buffer into address space
+  * @buffer: DRM client buffer
+@@ -305,6 +336,9 @@ drm_client_buffer_create(struct drm_client_dev *client, u32 width, u32 height, u
+  * other vmap interfaces, you don't need it for the client's vunmap
+  * function. So you can modify it at will during blit and draw operations.
+  *
++ * drm_client_buffer_vmap() is for permanent or long-term mappings. See
++ * drm_client_buffer_vmap_local() for short-term mappings.
++ *
+  * Returns:
+  *	0 on success, or a negative errno code otherwise.
+  */
+@@ -348,6 +382,66 @@ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer)
+ }
+ EXPORT_SYMBOL(drm_client_buffer_vunmap);
+ 
++/**
++ * drm_client_buffer_vmap_local - Map DRM client buffer into address space
++ * @buffer: DRM client buffer
++ * @map_copy: Returns the mapped memory's address
++ *
++ * This function maps a client buffer into kernel address space. If the
++ * buffer is already mapped, it returns the existing mapping's address.
++ *
++ * Client buffer mappings are not ref'counted. Each call to
++ * drm_client_buffer_vmap_local() should be followed by a call to
++ * drm_client_buffer_vunmap_local(); or the client buffer should be mapped
++ * throughout its lifetime.
++ *
++ * The returned address is a copy of the internal value. In contrast to
++ * other vmap interfaces, you don't need it for the client's vunmap
++ * function. So you can modify it at will during blit and draw operations.
++ *
++ * Returns:
++ *	0 on success, or a negative errno code otherwise.
++ */
++int
++drm_client_buffer_vmap_local(struct drm_client_buffer *buffer, struct dma_buf_map *map_copy)
++{
++	struct dma_buf_map *map = &buffer->map;
 +	int ret;
 +
-+	dma_resv_assert_held(gbo->bo.base.resv);
-+
-+	if (gbo->vmap_use_count > 0)
-+		goto out;
-+
-+	ret = ttm_bo_vmap(&gbo->bo, &gbo->map);
++	/*
++	 * FIXME: The dependency on GEM here isn't required, we could
++	 * convert the driver handle to a dma-buf instead and use the
++	 * backend-agnostic dma-buf vmap_local support instead. This would
++	 * require that the handle2fd prime ioctl is reworked to pull the
++	 * fd_install step out of the driver backend hooks, to make that
++	 * final step optional for internal users.
++	 */
++	ret = drm_gem_vmap_local(buffer->gem, map);
 +	if (ret)
 +		return ret;
 +
-+out:
-+	++gbo->vmap_use_count;
-+	*map = gbo->map;
++	*map_copy = *map;
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL(drm_gem_vram_vmap_local);
++EXPORT_SYMBOL(drm_client_buffer_vmap_local);
 +
 +/**
-+ * drm_gem_vram_vunmap_local() - Unmaps a GEM VRAM object
-+ * @gbo: The GEM VRAM object to unmap
-+ * @map: Kernel virtual address where the VRAM GEM object was mapped
++ * drm_client_buffer_vunmap_local - Unmap DRM client buffer
++ * @buffer: DRM client buffer
 + *
-+ * A call to drm_gem_vram_vunmap_local() unmaps a GEM VRAM object's buffer. See
-+ * the documentation for drm_gem_vram_vmap_local() for more information.
++ * This function removes a client buffer's memory mapping. Calling this
++ * function is only required by clients that manage their buffer mappings
++ * by themselves.
 + */
-+void drm_gem_vram_vunmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
++void drm_client_buffer_vunmap_local(struct drm_client_buffer *buffer)
 +{
-+	struct drm_device *dev = gbo->bo.base.dev;
++	struct dma_buf_map *map = &buffer->map;
 +
-+	dma_resv_assert_held(gbo->bo.base.resv);
++	drm_gem_vunmap_local(buffer->gem, map);
++}
++EXPORT_SYMBOL(drm_client_buffer_vunmap_local);
 +
-+	if (drm_WARN_ON_ONCE(dev, !gbo->vmap_use_count))
-+		return;
-+
-+	if (drm_WARN_ON_ONCE(dev, !dma_buf_map_is_equal(&gbo->map, map)))
-+		return; /* BUG: map not mapped from this BO */
-+
-+	if (--gbo->vmap_use_count > 0)
-+		return;
-+
+ static void drm_client_buffer_rmfb(struct drm_client_buffer *buffer)
+ {
+ 	int ret;
+diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+index a44c3a438059..283d27f8fe67 100644
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -399,28 +399,34 @@ static int drm_fb_helper_damage_blit(struct drm_fb_helper *fb_helper,
+ 	int ret;
+ 
+ 	/*
+-	 * We have to pin the client buffer to its current location while
+-	 * flushing the shadow buffer. In the general case, concurrent
+-	 * modesetting operations could try to move the buffer and would
+-	 * fail. The modeset has to be serialized by acquiring the reservation
+-	 * object of the underlying BO here.
+-	 *
+ 	 * For fbdev emulation, we only have to protect against fbdev modeset
+ 	 * operations. Nothing else will involve the client buffer's BO. So it
+ 	 * is sufficient to acquire struct drm_fb_helper.lock here.
+ 	 */
+ 	mutex_lock(&fb_helper->lock);
+ 
+-	ret = drm_client_buffer_vmap(buffer, &map);
 +	/*
-+	 * Permanently mapping and unmapping buffers adds overhead from
-+	 * updating the page tables and creates debugging output. Therefore,
-+	 * we delay the actual unmap operation until the BO gets evicted
-+	 * from memory. See drm_gem_vram_bo_driver_move_notify().
++	 * We have to keep the client buffer at its current location while
++	 * flushing the shadow buffer. Concurrent operations could otherwise
++	 * try to move the buffer. Therefore acquiring the reservation
++	 * object of the underlying BO here.
 +	 */
-+}
-+EXPORT_SYMBOL(drm_gem_vram_vunmap_local);
++	ret = drm_client_buffer_lock(buffer);
++	if (ret)
++		goto out_mutex_unlock;
 +
- /**
-  * drm_gem_vram_fill_create_dumb() - \
- 	Helper for implementing &struct drm_driver.dumb_create
-@@ -871,17 +900,33 @@ static void drm_gem_vram_object_vunmap(struct drm_gem_object *gem, struct dma_bu
- 	drm_gem_vram_vunmap(gbo, map);
- }
++	ret = drm_client_buffer_vmap_local(buffer, &map);
+ 	if (ret)
+-		goto out;
++		goto out_drm_client_buffer_unlock;
  
-+static int drm_gem_vram_object_vmap_local(struct drm_gem_object *gem, struct dma_buf_map *map)
-+{
-+	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(gem);
-+
-+	return drm_gem_vram_vmap_local(gbo, map);
-+}
-+
-+static void drm_gem_vram_object_vunmap_local(struct drm_gem_object *gem, struct dma_buf_map *map)
-+{
-+	struct drm_gem_vram_object *gbo = drm_gem_vram_of_gem(gem);
-+
-+	drm_gem_vram_vunmap_local(gbo, map);
-+}
-+
- /*
-  * GEM object funcs
-  */
+ 	dst = map;
+ 	drm_fb_helper_damage_blit_real(fb_helper, clip, &dst);
  
- static const struct drm_gem_object_funcs drm_gem_vram_object_funcs = {
--	.free	= drm_gem_vram_object_free,
--	.pin	= drm_gem_vram_object_pin,
--	.unpin	= drm_gem_vram_object_unpin,
--	.vmap	= drm_gem_vram_object_vmap,
-+	.free = drm_gem_vram_object_free,
-+	.pin = drm_gem_vram_object_pin,
-+	.unpin = drm_gem_vram_object_unpin,
-+	.vmap = drm_gem_vram_object_vmap,
- 	.vunmap	= drm_gem_vram_object_vunmap,
--	.mmap   = drm_gem_ttm_mmap,
-+	.vmap_local = drm_gem_vram_object_vmap_local,
-+	.vunmap_local = drm_gem_vram_object_vunmap_local,
-+	.mmap = drm_gem_ttm_mmap,
- 	.print_info = drm_gem_ttm_print_info,
- };
+-	drm_client_buffer_vunmap(buffer);
++	drm_client_buffer_vunmap_local(buffer);
  
-diff --git a/include/drm/drm_gem_vram_helper.h b/include/drm/drm_gem_vram_helper.h
-index a4bac02249c2..bd6a60e7c22b 100644
---- a/include/drm/drm_gem_vram_helper.h
-+++ b/include/drm/drm_gem_vram_helper.h
-@@ -99,6 +99,8 @@ int drm_gem_vram_pin(struct drm_gem_vram_object *gbo, unsigned long pl_flag);
- int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo);
- int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
- void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
-+int drm_gem_vram_vmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
-+void drm_gem_vram_vunmap_local(struct drm_gem_vram_object *gbo, struct dma_buf_map *map);
+-out:
++out_drm_client_buffer_unlock:
++	drm_client_buffer_unlock(buffer);
++out_mutex_unlock:
+ 	mutex_unlock(&fb_helper->lock);
  
- int drm_gem_vram_fill_create_dumb(struct drm_file *file,
- 				  struct drm_device *dev,
+ 	return ret;
+@@ -946,15 +952,11 @@ static int setcmap_legacy(struct fb_cmap *cmap, struct fb_info *info)
+ 	drm_modeset_lock_all(fb_helper->dev);
+ 	drm_client_for_each_modeset(modeset, &fb_helper->client) {
+ 		crtc = modeset->crtc;
+-		if (!crtc->funcs->gamma_set || !crtc->gamma_size) {
+-			ret = -EINVAL;
+-			goto out;
+-		}
++		if (!crtc->funcs->gamma_set || !crtc->gamma_size)
++			return -EINVAL;
+ 
+-		if (cmap->start + cmap->len > crtc->gamma_size) {
+-			ret = -EINVAL;
+-			goto out;
+-		}
++		if (cmap->start + cmap->len > crtc->gamma_size)
++			return -EINVAL;
+ 
+ 		r = crtc->gamma_store;
+ 		g = r + crtc->gamma_size;
+@@ -967,9 +969,8 @@ static int setcmap_legacy(struct fb_cmap *cmap, struct fb_info *info)
+ 		ret = crtc->funcs->gamma_set(crtc, r, g, b,
+ 					     crtc->gamma_size, NULL);
+ 		if (ret)
+-			goto out;
++			return ret;
+ 	}
+-out:
+ 	drm_modeset_unlock_all(fb_helper->dev);
+ 
+ 	return ret;
+diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
+index f07f2fb02e75..df61e339a11c 100644
+--- a/include/drm/drm_client.h
++++ b/include/drm/drm_client.h
+@@ -156,8 +156,12 @@ struct drm_client_buffer *
+ drm_client_framebuffer_create(struct drm_client_dev *client, u32 width, u32 height, u32 format);
+ void drm_client_framebuffer_delete(struct drm_client_buffer *buffer);
+ int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect);
++int drm_client_buffer_lock(struct drm_client_buffer *buffer);
++void drm_client_buffer_unlock(struct drm_client_buffer *buffer);
+ int drm_client_buffer_vmap(struct drm_client_buffer *buffer, struct dma_buf_map *map);
+ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
++int drm_client_buffer_vmap_local(struct drm_client_buffer *buffer, struct dma_buf_map *map);
++void drm_client_buffer_vunmap_local(struct drm_client_buffer *buffer);
+ 
+ int drm_client_modeset_create(struct drm_client_dev *client);
+ void drm_client_modeset_free(struct drm_client_dev *client);
 -- 
 2.29.2
 
