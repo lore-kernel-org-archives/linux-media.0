@@ -2,188 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37B41C433E0
-	for <linux-media@archiver.kernel.org>; Sat,  9 Jan 2021 04:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E99BC433E0
+	for <linux-media@archiver.kernel.org>; Sat,  9 Jan 2021 07:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02C8E23A69
-	for <linux-media@archiver.kernel.org>; Sat,  9 Jan 2021 04:42:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A2FE23A68
+	for <linux-media@archiver.kernel.org>; Sat,  9 Jan 2021 07:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbhAIEmE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jan 2021 23:42:04 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:54651 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726077AbhAIEmE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Jan 2021 23:42:04 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id y63ykkEnSatBcy640k1EWv; Sat, 09 Jan 2021 05:41:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1610167280; bh=37hRpPGNFcmVLTuKihtpioxI3TpDfzKnkRstsq2Jbgc=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=wZcF/9tkD02N/D6tywUfR7+8y2cDXRhd4cj5vlCd8dX65komLtvoNTvchX/q+LTbu
-         TSVtxn9wRJO65xMZmpxBLj7QqIFepvzI3FA2kA6ZV5Qz8N8gpZ3N9snROwL5x0m8yq
-         RDB05gRErzYQfrdR07AwhXe42yAYbA5BPV7G6LyWmva/RWkyew5fVewb0dXoY90CPk
-         yypauNPKcOJNa7C5djstoSuYE97AGRMYb2lY6av0afXl8q2Nav8rqAXrHMoMvjq44D
-         xt8tBSJTiXSHy5oVfcsU4fLyYYxmhfcd0V5mWzt/Bgy0buEiGbKkBvOSMn1LdENp4Z
-         DKPDbvAjlHsDw==
-Message-ID: <0b912bdd3bd7c92206f0a8bdc16497a3@smtp-cloud9.xs4all.net>
-Date:   Sat, 09 Jan 2021 05:41:18 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4xfMNFEvP2Gl1a06LBlNyLcbzprq0t8/vwqszpFakqz1QBbPUPB24OMU6XmzynfFKT0NhkIBPxLoc9l/5BYMEAeHqP0R/r5qSZEVzimN5N7k1ismy4GFdW
- 8aSfvTzYT5705WB7Qyn1E/StCZNHTxC1YpGkXU5kL/h7Oz6R46Uvi3MAts1XoKXondWcyW3Nvz3fOUe3zv0S46y6vy4rjXSnz8LM/nfQMtoWn8GlmHpHH241
- IDTLdUKKce/jI4p6ajh14A==
+        id S1726463AbhAIHWX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Jan 2021 02:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726374AbhAIHWX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jan 2021 02:22:23 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23D6C061574
+        for <linux-media@vger.kernel.org>; Fri,  8 Jan 2021 23:21:42 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id q22so17642563eja.2
+        for <linux-media@vger.kernel.org>; Fri, 08 Jan 2021 23:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=oMPxP8SoOc9C3ojU0+ecvXLMtYQCURVMW/VkKHiEGY4=;
+        b=D3oeU1IUw5BxYChFH5RBM7HmjqemG9yIWB6lQNXUDu/LEVX4AYOn0CEz0Tu+JlpRKA
+         H2YAjUNChY8MYNUtmRJ3iNQNoGYFLTA1oI4P1Znwk5PIfAUwcn/H51JwaINe0B+zZS3z
+         VAEsmp2RAzZfoQH/+gM/qON1rQpIeMC3sfaJZPnV27dlWalgGfs0uQl1CUR9XAU8Bhoz
+         fLt+e1HtXqiCaZSL8CUSnbh+5gPucZo0y5O5pWPsJVvDpV6XyttfKg4VXC6b/hliS5lb
+         m11Ov8r5+GXtZpkXW1gUHvLsodMSodEhFEq558uu3OBjw+XMYAkvzu++gJBS+otcXEVI
+         AbZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oMPxP8SoOc9C3ojU0+ecvXLMtYQCURVMW/VkKHiEGY4=;
+        b=qgmqZpOIXbyXRWRO0Qq8VL0SkhouqjeYTHVoCD4/pImRDxGjEzDp0M0bAF0ZRddbXa
+         9v1sNzrNUkQKML0v6u7IP/3llMGI+/VKlVd+Md1IT2jmlobon8C3D3tHyFRQKCDXk1Xq
+         98GnwWvL4Jn+Syx27STBtkN+Tky1aE0BqQFc+NEF0+RPRsjeG7Y8bZ5NPuxO5rAveiHJ
+         NvRnHUM5xitxLs0aK/hdXW5fyvpNBVse7zGZjA5D908MipoTM4U2jSII+qSk1YCMsju+
+         baE+h9r7nauFSR6Xd2jQuZsiLjyIm/EaWm2LzalhXBz4T43eX+Gi3s856w0HD432HVR2
+         WPEg==
+X-Gm-Message-State: AOAM53288KTdlpHbMNXzLB4hbccP96hgSHDSKqoOhrr++MHBjTH3msaH
+        EpRepiqpjxpIscIE5XiKurgTrzcvQFoqwYAQ
+X-Google-Smtp-Source: ABdhPJz50lAAVKVmI5+jnQY8Ve3Q6+tO4q+i/rMfqHyZ23xEsIImRCgLUhd+SAECxRJoVR4JSWfl7g==
+X-Received: by 2002:a17:906:b309:: with SMTP id n9mr4905950ejz.365.1610176901271;
+        Fri, 08 Jan 2021 23:21:41 -0800 (PST)
+Received: from localhost.localdomain (hst-221-28.medicom.bg. [84.238.221.28])
+        by smtp.gmail.com with ESMTPSA id o10sm4293997eju.89.2021.01.08.23.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jan 2021 23:21:40 -0800 (PST)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH] venus: pm_helpers: Control core power domain manually
+Date:   Sat,  9 Jan 2021 09:21:30 +0200
+Message-Id: <20210109072130.784-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Presently we use device_link to control core power domain. But this
+leads to issues because the genpd doesn't guarantee synchronous on/off
+for supplier devices. Switch to manually control by pmruntime calls.
 
-Results of the daily build of media_tree:
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.h      |  1 -
+ .../media/platform/qcom/venus/pm_helpers.c    | 36 ++++++++++---------
+ 2 files changed, 19 insertions(+), 18 deletions(-)
 
-date:			Sat Jan  9 05:00:11 CET 2021
-media-tree git hash:	ecd07f4b9d2173694be9214a3ab07f9efb5ba206
-media_build git hash:	3a3077793e73ba835328508c25b79a091ea649d7
-v4l-utils git hash:	f4316861d164a4fbd097eaf703e862835f396486
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 10.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		v0.6.3-1-g58d3c1ca
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		v0.5.0-7065-gbe18f90f0
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 15d5f5f08f8d6e3a7875110d833caeee82f06e62
-host hardware:		x86_64
-host os:		5.7.0-1-amd64
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index dfc13b2f371f..74d9fd3d51cc 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -128,7 +128,6 @@ struct venus_core {
+ 	struct icc_path *cpucfg_path;
+ 	struct opp_table *opp_table;
+ 	bool has_opp_table;
+-	struct device_link *pd_dl_venus;
+ 	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
+ 	struct device_link *opp_dl_venus;
+ 	struct device *opp_pmdomain;
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index 94219a3093cb..e0338932a720 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -774,13 +774,6 @@ static int vcodec_domains_get(struct device *dev)
+ 		core->pmdomains[i] = pd;
+ 	}
+ 
+-	core->pd_dl_venus = device_link_add(dev, core->pmdomains[0],
+-					    DL_FLAG_PM_RUNTIME |
+-					    DL_FLAG_STATELESS |
+-					    DL_FLAG_RPM_ACTIVE);
+-	if (!core->pd_dl_venus)
+-		return -ENODEV;
+-
+ skip_pmdomains:
+ 	if (!core->has_opp_table)
+ 		return 0;
+@@ -807,14 +800,12 @@ static int vcodec_domains_get(struct device *dev)
+ opp_dl_add_err:
+ 	dev_pm_opp_detach_genpd(core->opp_table);
+ opp_attach_err:
+-	if (core->pd_dl_venus) {
+-		device_link_del(core->pd_dl_venus);
+-		for (i = 0; i < res->vcodec_pmdomains_num; i++) {
+-			if (IS_ERR_OR_NULL(core->pmdomains[i]))
+-				continue;
+-			dev_pm_domain_detach(core->pmdomains[i], true);
+-		}
++	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
++		if (IS_ERR_OR_NULL(core->pmdomains[i]))
++			continue;
++		dev_pm_domain_detach(core->pmdomains[i], true);
+ 	}
++
+ 	return ret;
+ }
+ 
+@@ -827,9 +818,6 @@ static void vcodec_domains_put(struct device *dev)
+ 	if (!res->vcodec_pmdomains_num)
+ 		goto skip_pmdomains;
+ 
+-	if (core->pd_dl_venus)
+-		device_link_del(core->pd_dl_venus);
+-
+ 	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
+ 		if (IS_ERR_OR_NULL(core->pmdomains[i]))
+ 			continue;
+@@ -917,16 +905,30 @@ static void core_put_v4(struct device *dev)
+ static int core_power_v4(struct device *dev, int on)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
++	struct device *pmctrl = core->pmdomains[0];
+ 	int ret = 0;
+ 
+ 	if (on == POWER_ON) {
++		if (pmctrl) {
++			ret = pm_runtime_get_sync(pmctrl);
++			if (ret < 0) {
++				pm_runtime_put_noidle(pmctrl);
++				return ret;
++			}
++		}
++
+ 		ret = core_clks_enable(core);
++		if (ret < 0 && pmctrl)
++			pm_runtime_put_sync(pmctrl);
+ 	} else {
+ 		/* Drop the performance state vote */
+ 		if (core->opp_pmdomain)
+ 			dev_pm_opp_set_rate(dev, 0);
+ 
+ 		core_clks_disable(core);
++
++		if (pmctrl)
++			pm_runtime_put_sync(pmctrl);
+ 	}
+ 
+ 	return ret;
+-- 
+2.17.1
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-powerpc64: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: WARNINGS
-linux-git-arm64: WARNINGS
-linux-git-arm-multi: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.238-i686: OK
-linux-4.4.238-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.238-i686: OK
-linux-4.9.238-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.200-i686: OK
-linux-4.14.200-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: WARNINGS
-linux-4.16.18-x86_64: WARNINGS
-linux-4.17.19-i686: WARNINGS
-linux-4.17.19-x86_64: WARNINGS
-linux-4.18.20-i686: WARNINGS
-linux-4.18.20-x86_64: WARNINGS
-linux-4.19.149-i686: OK
-linux-4.19.149-x86_64: OK
-linux-4.20.17-i686: WARNINGS
-linux-4.20.17-x86_64: WARNINGS
-linux-5.0.21-i686: WARNINGS
-linux-5.0.21-x86_64: WARNINGS
-linux-5.1.21-i686: WARNINGS
-linux-5.1.21-x86_64: WARNINGS
-linux-5.2.21-i686: WARNINGS
-linux-5.2.21-x86_64: WARNINGS
-linux-5.3.18-i686: WARNINGS
-linux-5.3.18-x86_64: WARNINGS
-linux-5.4.69-i686: OK
-linux-5.4.69-x86_64: OK
-linux-5.5.19-i686: WARNINGS
-linux-5.5.19-x86_64: WARNINGS
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.13-i686: OK
-linux-5.8.13-x86_64: OK
-linux-5.9.1-i686: OK
-linux-5.9.1-x86_64: OK
-linux-5.10.1-i686: OK
-linux-5.10.1-x86_64: OK
-linux-5.11-rc1-i686: OK
-linux-5.11-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
