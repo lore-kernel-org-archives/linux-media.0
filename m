@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24642C4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C91DC4332B
 	for <linux-media@archiver.kernel.org>; Sun, 10 Jan 2021 15:09:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC59622AAE
-	for <linux-media@archiver.kernel.org>; Sun, 10 Jan 2021 15:09:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1762B22AB0
+	for <linux-media@archiver.kernel.org>; Sun, 10 Jan 2021 15:09:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbhAJPJB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 Jan 2021 10:09:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38336 "EHLO mail.kernel.org"
+        id S1727002AbhAJPJK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Jan 2021 10:09:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726884AbhAJPJB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726932AbhAJPJB (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sun, 10 Jan 2021 10:09:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 207C52376E;
-        Sun, 10 Jan 2021 15:07:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F77F22AAE;
+        Sun, 10 Jan 2021 15:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610291277;
-        bh=8lazxr0bsHJMCHXodV1dqv/fHtdhHix0sogPQF33OI4=;
+        s=korg; t=1610291300;
+        bh=34h9XEcoyG0a79tBf0gNmOm8EBxK+Yu03mrFZdXwVGY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pqsSaWM9/Let0R26dPQ6yRoLzEGcf2G8E7znpgam22JZDrxjRLvR8GQ1oJ6fyEatS
-         YPqxeKzHJDJ7sN0Aq0za7inn2Ba60iY/91xFpDPvPzPX3P4xLEJBCUZdWxQg27cXv3
-         9k0+syJWNP+qYG/b2g/5iGoojeEvWjqGBcz9L2DI=
-Date:   Sun, 10 Jan 2021 16:09:11 +0100
+        b=B4hhSjh128MIKlkunuIdFSNKBomwgy0FcJlokV4EXXM0xxgghL29dFCxohN7LMLvs
+         NuxNE2VHx3orzO+YhnmpD2mTnv056UT3vjYAncfDa0J/lEB0sZUBW8/xc5qXLao0co
+         mW8EBLOvq0JLKGUReJGSE6zkyYsdJNs6YxQErWuo=
+Date:   Sun, 10 Jan 2021 16:09:34 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
@@ -46,36 +46,35 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v5 05/15] software_node: Enforce parent before child
- ordering of nodes arrays
-Message-ID: <X/sYl0e2gO2fJ4Nf@kroah.com>
+Subject: Re: [PATCH v5 03/15] device property: Return true in
+ fwnode_device_is_available for NULL ops
+Message-ID: <X/sYrpHzJVpqrRis@kroah.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
- <20210107132838.396641-6-djrscally@gmail.com>
+ <20210107132838.396641-4-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107132838.396641-6-djrscally@gmail.com>
+In-Reply-To: <20210107132838.396641-4-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 01:28:28PM +0000, Daniel Scally wrote:
-> Registering software_nodes with the .parent member set to point to a
-> currently unregistered software_node has the potential for problems,
-> so enforce parent -> child ordering in arrays passed in to
-> software_node_register_nodes().
+On Thu, Jan 07, 2021 at 01:28:26PM +0000, Daniel Scally wrote:
+> Some types of fwnode_handle do not implement the device_is_available()
+> check, such as those created by software_nodes. There isn't really a
+> meaningful way to check for the availability of a device that doesn't
+> actually exist, so if the check isn't implemented just assume that the
+> "device" is present.
 > 
-> Software nodes that are children of another software node should be
-> unregistered before their parent. To allow easy unregistering of an array
-> of software_nodes ordered parent to child, reverse the order in which
-> software_node_unregister_nodes() unregisters software_nodes.
-> 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > Signed-off-by: Daniel Scally <djrscally@gmail.com>
 > ---
 > Changes in v5:
 > 
-> 	- None
+> 	- Changed the commit subject
+> 
 
 Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
