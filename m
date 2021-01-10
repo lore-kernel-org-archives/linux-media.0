@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 623A4C43331
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD182C43219
 	for <linux-media@archiver.kernel.org>; Sun, 10 Jan 2021 15:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30F792388A
+	by mail.kernel.org (Postfix) with ESMTP id BBB84238E5
 	for <linux-media@archiver.kernel.org>; Sun, 10 Jan 2021 15:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbhAJPIu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 Jan 2021 10:08:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38276 "EHLO mail.kernel.org"
+        id S1726957AbhAJPJC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Jan 2021 10:09:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726228AbhAJPIu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 Jan 2021 10:08:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59C1523719;
-        Sun, 10 Jan 2021 15:07:48 +0000 (UTC)
+        id S1726929AbhAJPJB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 10 Jan 2021 10:09:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06CCB22AAC;
+        Sun, 10 Jan 2021 15:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610291268;
-        bh=bCoT+YC8imLT2HAQJHyTTrBGySz+HBiv3aSwzELycoM=;
+        s=korg; t=1610291291;
+        bh=F3EeeseoQ50cEe+lhsHfw5cqy1qVtLLWQEchAr4nMxY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OhUPFLdO29F8HOoRwt/e0iVSgi3zlrrPU+nggNDAgbxI9t+qQPBuMbQsJkfOpWXun
-         RPvshY4syPPPoHE93oRwvdeLIFG0g6V3bqZ7TRASLlz3fJbr2FPFdHUXPlQPJbPiQu
-         ZWNz7iS5zPNhWehA2wumkgSZqyp6dgaitFm/4EE0=
-Date:   Sun, 10 Jan 2021 16:09:02 +0100
+        b=P/YOFwuACcFFkW1sbvVMAq2oXxhTWyrkCFCQU6Vm6LXJkpNP0yG2JnJvGPq76Y6Eb
+         S/d/OcVJyfbQDsHAbC/kpZmhkuDp5R0TGrAgNOhompGy9Nq1elfuUENu/pcjmX9r5N
+         fV411KolbF3CROc/HFVsf4MIBnnK6j6pNggslI+Q=
+Date:   Sun, 10 Jan 2021 16:09:25 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
@@ -44,32 +44,38 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        heikki.krogerus@linux.intel.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v5 06/15] software_node: unregister software_nodes in
- reverse order
-Message-ID: <X/sYjqjcWKlOoaQ0@kroah.com>
+Subject: Re: [PATCH v5 04/15] device property: Call
+ fwnode_graph_get_endpoint_by_id() for fwnode->secondary
+Message-ID: <X/sYpT+RFV7iPops@kroah.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
- <20210107132838.396641-7-djrscally@gmail.com>
+ <20210107132838.396641-5-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107132838.396641-7-djrscally@gmail.com>
+In-Reply-To: <20210107132838.396641-5-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 01:28:29PM +0000, Daniel Scally wrote:
-> To maintain consistency with software_node_unregister_nodes(), reverse
-> the order in which the software_node_unregister_node_group() function
-> unregisters nodes.
+On Thu, Jan 07, 2021 at 01:28:27PM +0000, Daniel Scally wrote:
+> This function is used to find fwnode endpoints against a device. In
+> some instances those endpoints are software nodes which are children of
+> fwnode->secondary. Add support to fwnode_graph_get_endpoint_by_id() to
+> find those endpoints by recursively calling itself passing the ptr to
+> fwnode->secondary in the event no endpoint is found for the primary.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> Changes in v5:
+> 
+> 	- Changed the commit subject
+> 
+>  drivers/base/property.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
 Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
