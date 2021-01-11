@@ -5,64 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D4BC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 357D1C433E9
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C24BC22473
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D035224B1
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732653AbhAKOZM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jan 2021 09:25:12 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44297 "EHLO
+        id S1730952AbhAKOZp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jan 2021 09:25:45 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:53833 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728945AbhAKOZK (ORCPT
+        by vger.kernel.org with ESMTP id S1732547AbhAKOZK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 11 Jan 2021 09:25:10 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 82DA858067A;
-        Mon, 11 Jan 2021 09:23:28 -0500 (EST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 130D3580675;
+        Mon, 11 Jan 2021 09:23:20 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 11 Jan 2021 09:23:28 -0500
+  by compute6.internal (MEProxy); Mon, 11 Jan 2021 09:23:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=11pCekn6vi323
-        R47NZChoCtnD6NCg2tPit6OTEdjkCg=; b=W2Z52a4XnA1vMC9ArxSUAhBjKt5M9
-        ZdeKIVGkIHnmpGibekMNERzrUFZjjJ2g7Z9P8u2Qu+T0310gEflhTDymy0Z2Fa6z
-        YHfocyjZlT0YgmBk+Sc79olLw0yQmaazJNcpeH9XUxrpYac1Ja6cHzxuZ6SH/4Ql
-        CMRIXjg4u67/8dCM+brG0OWh1G/5dyrKzZlOaZrYfJV+SDumRqBuiwyhMzQ0iK1C
-        RRtysxLfdJhcJn5frcYeVqrWAyD8c78kymdQqr2bOEi5FpyM22LIyq8ExdLqcnwX
-        HB2MTLwxalZ7s3UbV2aKD6G4JQJVk5zjQ0jSBJ1CM2uc0Dh6GpVpBjVPw==
+        :mime-version:content-transfer-encoding; s=fm1; bh=AgKCKi0QARr4S
+        8+YcxFZCyP7RPZtrbbiyRr0jdL6ov8=; b=q2inPmSRkLvDdYDd0IKRmRqgPetqy
+        53JiHeeq6alT7FaS8TACbFQOaypZ3ewk/X4tQgHPCGBC8SBQmC+f5aNHxH3Y6v/I
+        qMMNfJ0s1cKuM6HXcn0jkuUspd6UzcxG/Py7zUiSQVY5xJrJ8UX6Hiq9FiSfaKvb
+        cHXHwNiYY/+rxaQqkSbAOHAILOlUzxcBBDmEb6qeeU/2/5RJedV1BTsfdkBKn1bv
+        OUZxpz+Xgm6YlfxQXpsBYbyjg48vwQYHZRsIDIjnt0rYDC/QEWvmgecVR9ln6wcB
+        9dEpcCTTdu4fcU10ZSPjKDrJneAkiXw8GsOnXIFORm+5f8KXLOAxNkqhw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=11pCekn6vi323R47NZChoCtnD6NCg2tPit6OTEdjkCg=; b=riLtP+ur
-        EsjzAleo/MODN3QAQhjIoBLVVHucc+tzhbf3kPkTeG+2y8AuSgLfxyHj4ctCSqe4
-        MqhGbcuNuJv3oy//5q9ddgOZcxc3+so82HqynwgDLh5LXLvTaqkzVAw6rIB2xwUc
-        HSzfiMAYldpWjcMOHDkJzvCJAzl46O+NKARXtPy5iqcmCsosefO7Za0wo0UToFMb
-        +HG6QnUy1VWyycJMv+eG8Q/2BFx0H1I+/LCn1c4JLy4HM8c1SqbtkZOadceYjk1h
-        x89qomO6daLAFHnocUrX2B5n9KU4hBuBLFY4B85uFJtXmQKqshatQoN5pMkCobdP
-        +ZSWPv4M1Vtkeg==
-X-ME-Sender: <xms:YF_8XwU16bYmQ5karTicUc_X_j3VHuxxV3ybXhr9YXZ0Agnjvq4ewQ>
-    <xme:YF_8XzwsVW2MmxbBTu-DZwPBPGw2nUr1Fs5QNJCwfwNOMAwloh5OCl-Ox30x6wxPB
-    hVdcEVDV5-dKCG04SE>
+        fm1; bh=AgKCKi0QARr4S8+YcxFZCyP7RPZtrbbiyRr0jdL6ov8=; b=oNpj+mot
+        78+oCeKYiC+0TbGX+XNnKovaP4CNRLhqY8z39bp+zEITFworh4ibVo1HfYgo0STh
+        TzAobwkIPFGBE1lFPchzpdX1GaDKpyPvSIGULtU0+rEEUQXO2i86XdGrxn36YC+J
+        bxhNwiZc9v+2721SNtdHhCx7RrQt5NYa/ILqXhNE88chOih3242DBjYldlLl02VO
+        HN0PmJMGGdMTSDPVSCaDpHBYtZH3ZlSyKK1INa3k0yY9duC56I+JNpZXQ4VPjINe
+        zOrDLjeqLNRjvLIn0HkVQz5RmEo8JsnSXWgdZKEHxuxzqviCGqDItEyZSx39eOu6
+        mWP8Ttq2vDQwxQ==
+X-ME-Sender: <xms:V1_8Xwt1g8xs4YyJ0kvewhDCzc9m88YG7YbgYET-Xz0HYUzYBxD95Q>
+    <xme:V1_8X4XBFw1oXt1-BqgQ1XfJTEVAjpVRy-ZaNpMSnqGVrXEtxJycjizI5V-Wu792l
+    wAhQzPURYr9p6IRPnY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:YF_8X3Eog5_MrfJuNEsWWZh-ubnOy6x4uPs3ID7KNt40pcsH5apBUA>
-    <xmx:YF_8X4v3qs91FpzFEHJXCtY6Zl9movLESimVHD2WyImLQFbUNEstuQ>
-    <xmx:YF_8X3CFBPdCHurApCQgBNST-GKVP9SweM5Q4Zff8g2zNGjHiIaH9w>
-    <xmx:YF_8X2xqqJK2pJ1QoXE1oS-19Ert22e4X20uUffGHnCjLi_iMxHnAg>
+X-ME-Proxy: <xmx:V1_8XzmkxQor4FpMppnwtpJ3D_xv_KtMqfMysyO21gn5WFSLJXqWQw>
+    <xmx:V1_8XxYwKGhLQXCOTb1o_6qjxeKJuBwbARztZC0KWUcbtE3ezebjSw>
+    <xmx:V1_8X2NLuLWOLggumUSL1xJLirhRUX2i4wO5yxTHixj5-DnwpAKzOg>
+    <xmx:WF_8XwX-Tul54PUjMaqmnXcCjFXUAXHrA_EaCv_xCyh2RF17RhNQVw>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2B57C24005D;
-        Mon, 11 Jan 2021 09:23:28 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id A789924005E;
+        Mon, 11 Jan 2021 09:23:19 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Eric Anholt <eric@anholt.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -78,9 +78,9 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 12/15] drm/vc4: hdmi: Don't register the CEC adapter if there's no interrupts
-Date:   Mon, 11 Jan 2021 15:23:06 +0100
-Message-Id: <20210111142309.193441-13-maxime@cerno.tech>
+Subject: [PATCH v2 06/15] drm/vc4: hdmi: Compute the CEC clock divider from the clock rate
+Date:   Mon, 11 Jan 2021 15:23:00 +0100
+Message-Id: <20210111142309.193441-7-maxime@cerno.tech>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210111142309.193441-1-maxime@cerno.tech>
 References: <20210111142309.193441-1-maxime@cerno.tech>
@@ -90,39 +90,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We introduced the BCM2711 support to the vc4 HDMI controller with 5.10,
-but this was lacking any of the interrupts of the CEC controller so we
-have to deal with the backward compatibility.
+The CEC clock divider needs to output a frequency of 40kHz from the HSM
+rate on the BCM2835. The driver used to have a fixed frequency for it,
+but that changed for the BCM2711 and we now need to compute it
+dynamically to maintain the proper rate.
 
-Do so by simply ignoring the CEC setup if the DT doesn't have the
-interrupts property.
-
+Fixes: cd4cb49dc5bb ("drm/vc4: hdmi: Adjust HSM clock rate depending on pixel rate")
 Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 5a606b6f2917..eee9751009c2 100644
+index c3a301396aad..50008513edfc 100644
 --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
 +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -1667,9 +1667,15 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
+@@ -1598,6 +1598,7 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
  {
  	struct cec_connector_info conn_info;
  	struct platform_device *pdev = vc4_hdmi->pdev;
-+	struct device *dev = &pdev->dev;
++	u16 clk_cnt;
  	u32 value;
  	int ret;
  
-+	if (!of_find_property(dev->of_node, "interrupts", NULL)) {
-+		dev_warn(dev, "'interrupts' DT property is missing, no CEC\n");
-+		return 0;
-+	}
-+
- 	vc4_hdmi->cec_adap = cec_allocate_adapter(&vc4_hdmi_cec_adap_ops,
- 						  vc4_hdmi, "vc4",
- 						  CEC_CAP_DEFAULTS |
+@@ -1623,8 +1624,9 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
+ 	 * divider: the hsm_clock rate and this divider setting will
+ 	 * give a 40 kHz CEC clock.
+ 	 */
++	clk_cnt = clk_get_rate(vc4_hdmi->hsm_clock) / CEC_CLOCK_FREQ;
+ 	value |= VC4_HDMI_CEC_ADDR_MASK |
+-		 (4091 << VC4_HDMI_CEC_DIV_CLK_CNT_SHIFT);
++		 (clk_cnt << VC4_HDMI_CEC_DIV_CLK_CNT_SHIFT);
+ 	HDMI_WRITE(HDMI_CEC_CNTRL_1, value);
+ 	ret = devm_request_threaded_irq(&pdev->dev, platform_get_irq(pdev, 0),
+ 					vc4_cec_irq_handler,
 -- 
 2.29.2
 
