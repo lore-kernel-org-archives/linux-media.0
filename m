@@ -2,71 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C663C43217
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1450FC4161F
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB4BE22D57
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0EF222D58
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403963AbhALA0E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2404106AbhALA0E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 11 Jan 2021 19:26:04 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:52472 "EHLO gloria.sntech.de"
+Received: from gloria.sntech.de ([185.11.138.130]:52480 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404172AbhAKXla (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2404168AbhAKXla (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 11 Jan 2021 18:41:30 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1kz6nm-0001p6-0M; Tue, 12 Jan 2021 00:40:46 +0100
+        id 1kz6nm-0001p6-Pl; Tue, 12 Jan 2021 00:40:46 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         linux-media@vger.kernel.org, mchehab@kernel.org,
         Laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
 Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
-        christoph.muellner@theobroma-systems.com, heiko@sntech.de
-Subject: [PATCH 0/2] Fix the rkisp1 userspace API for later IP versions
-Date:   Tue, 12 Jan 2021 00:40:09 +0100
-Message-Id: <20210111234011.3642481-1-heiko@sntech.de>
+        christoph.muellner@theobroma-systems.com, heiko@sntech.de,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Subject: [PATCH 2/2] media: rockchip: rkisp1: extend uapi array sizes
+Date:   Tue, 12 Jan 2021 00:40:11 +0100
+Message-Id: <20210111234011.3642481-3-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210111234011.3642481-1-heiko@sntech.de>
+References: <20210111234011.3642481-1-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This NEEDs to go into 5.11 while we can still adapt the uapi
-during its RC-cycle.
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
+Later variants of the rkisp1 block use more entries in some arrays:
 
-When looking into supporting the rkisp1 of the px30 I noticed that
-some fields got bigger in the uapi, caused by bigger number of samples
-for example for histograms or gamma values.
+RKISP1_CIF_ISP_AE_MEAN_MAX                 25 -> 81
+RKISP1_CIF_ISP_HIST_BIN_N_MAX              16 -> 32
+RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES       17 -> 34
+RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28 -> 81
 
-The rkisp1 was destaged with 5.11-rc1 so we have still time during
-the 5.11 cycle to fix that without big hassles.
+and we can still extend the uapi during the 5.11-rc cycle, so do that
+now to be on the safe side.
 
-This was discussed previously in a mail [0] and a rfc series [1]
-and this two-part series now splits out the important parts that
-really should become part of a 5.11-rc and thus the final 5.11.
+V10 and V11 only need the smaller sizes, while V12 and V13 needed
+the larger sizes.
 
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+---
+changes since rfc:
+- introduce constants for versions and make max use the biggest
 
-[0] http://lore.kernel.org/r/3342088.iIbC2pHGDl@diego
-[1] https://lore.kernel.org/r/20210108193311.3423236-2-heiko@sntech.de
+ include/uapi/linux/rkisp1-config.h | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-Heiko Stuebner (2):
-  media: rockchip: rkisp1: carry ip version information
-  media: rockchip: rkisp1: extend uapi array sizes
-
- .../platform/rockchip/rkisp1/rkisp1-common.h  |  1 +
- .../platform/rockchip/rkisp1/rkisp1-dev.c     | 22 +++++++++-------
- include/uapi/linux/rkisp1-config.h            | 25 ++++++++++++++++---
- 3 files changed, 35 insertions(+), 13 deletions(-)
-
+diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+index bad46aadf838..20d24656a8b7 100644
+--- a/include/uapi/linux/rkisp1-config.h
++++ b/include/uapi/linux/rkisp1-config.h
+@@ -49,8 +49,14 @@
+ #define RKISP1_CIF_ISP_CTK_COEFF_MAX            0x100
+ #define RKISP1_CIF_ISP_CTK_OFFSET_MAX           0x800
+ 
+-#define RKISP1_CIF_ISP_AE_MEAN_MAX              25
+-#define RKISP1_CIF_ISP_HIST_BIN_N_MAX           16
++#define RKISP1_CIF_ISP_AE_MEAN_MAX_V10		25
++#define RKISP1_CIF_ISP_AE_MEAN_MAX_V12		81
++#define RKISP1_CIF_ISP_AE_MEAN_MAX		RKISP1_CIF_ISP_AE_MEAN_MAX_V12
++
++#define RKISP1_CIF_ISP_HIST_BIN_N_MAX_V10	16
++#define RKISP1_CIF_ISP_HIST_BIN_N_MAX_V12	32
++#define RKISP1_CIF_ISP_HIST_BIN_N_MAX		RKISP1_CIF_ISP_HIST_BIN_N_MAX_V12
++
+ #define RKISP1_CIF_ISP_AFM_MAX_WINDOWS          3
+ #define RKISP1_CIF_ISP_DEGAMMA_CURVE_SIZE       17
+ 
+@@ -86,7 +92,9 @@
+  * Gamma out
+  */
+ /* Maximum number of color samples supported */
+-#define RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES       17
++#define RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES_V10   17
++#define RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES_V12   34
++#define RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES       RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES_V12
+ 
+ /*
+  * Lens shade correction
+@@ -103,7 +111,9 @@
+  * Histogram calculation
+  */
+ /* Last 3 values unused. */
+-#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
++#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V10 28
++#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V12 81
++#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE     RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V12
+ 
+ /*
+  * Defect Pixel Cluster Correction
 -- 
 2.29.2
 
