@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D846C43381
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 005E1C43331
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:56:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81EA2225AC
+	by mail.kernel.org (Postfix) with ESMTP id D62D0229CA
 	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:56:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388756AbhAKO4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2388441AbhAKO4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 11 Jan 2021 09:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730264AbhAKO4J (ORCPT
+        with ESMTP id S1730163AbhAKO4J (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 11 Jan 2021 09:56:09 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED20C0617A5
-        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:51 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id y23so138112wmi.1
-        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:51 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839E7C0617A3
+        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:50 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id v14so109571wml.1
+        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QAsmUUEgKueJfUyE+PDxMx4ue7SmU3mq0cNtqhnnYsE=;
-        b=cdKRerAvU1UPYuCV0vCuEM401EAsTCASkDnjlSRj1WBN57Ay7ruzDTalMK6YAH259i
-         jNHa3Ywloylm9orbp/B59KbWqm+d+JrN+QB3raBMkVmxefG/Pf8KzPBSRKe8aicX/C3i
-         vBLTwd6rdHknL3WZygJWlCDfMvLFEPQEqNZr8=
+        bh=gqQD8/80d4lI7bJ5BkF04XGNAqEe6coGxChG+Im6UdQ=;
+        b=MU+JTSjlB5pP8MpoRRx6svcjs01UzZUhf+aMlFi01hgpEEu6Sxpjj5nM9Izn+lc9T3
+         n0mgHNXqxMFFrwUAm+LXFjHV2pcagP4DqlWw53F9n5vueQzIqsGLJbs4zW8ASWGEBs6E
+         NEXrC4+uYE63KVWhsd6KDQZdZaFNPqmyJGJ3o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QAsmUUEgKueJfUyE+PDxMx4ue7SmU3mq0cNtqhnnYsE=;
-        b=lLIsOfSejvn9l9IknsVsNRsheSEhS8uxvDWUYtU6rP8PuJ1fUKexZ4fFePUVuUqS2h
-         8aa3Lf6MzGMx/YcTBUCqcrKne+AJtBkhuWRRopUN2tuk4ZYRsnwDp4BnMk/GUCBJbG/2
-         QwDq3O4/fBgl9r2gnwZUZxdZHlTEgZvH7RKU94A9c7q5B39h+orLl0K4G+FxxItf2hoY
-         Bs8aSNd1o94aB4PNXZaGjFVONfYbgezFNzH6s7alWO79DGYHIJbIz4fy7E0dIpkcFp5x
-         sFP2J38NqFnw822ToZbrD1Yg2qSLNvTUX1hZ0qb6cdNRsRcUAgP9zAPplseFJdtHFrBq
-         loug==
-X-Gm-Message-State: AOAM531rqQ9Zc0VnQ27pxGHyd1o/qamNe56v3uFH4Aek9elvOiF0JjEM
-        QPihFkkL3cipDpwrLvXoTEHgHL+dSTi6mURquH4=
-X-Google-Smtp-Source: ABdhPJyOYz9gxuEVRQRIvRU+Jl4KvAUI5AC5g0C3gmc/dNz+48JZjXBUIIcCzXiCCego+TORLUQbYg==
-X-Received: by 2002:a1c:6208:: with SMTP id w8mr103281wmb.96.1610376889935;
+        bh=gqQD8/80d4lI7bJ5BkF04XGNAqEe6coGxChG+Im6UdQ=;
+        b=j69tetD5T/VW0SVgk3Dcx9eE6FPED/GCX418eoR9lJgr9DYuKt6zUsca/QW2Lqh0vb
+         aOK8wgZjydAG7jR1244Oe3xpv1WwEYfHOycgdzBkaoKEvx2hwCp5U9lR8GuQoVPbwe8s
+         GtmSUM8NOHzWMOcMICSOsxgWt/TsTLTo5IIE4Z6TD3rfa+tPNy4nQ6oxHclROIHi3ruC
+         jP0tQtg28XsY2ZPCsQGRgY+NhrQlwfSeS7dCJEX88007UISZ0YtkCSqeMRMr0W9ODN8G
+         CR2KEnsuwEDHywc1olxzJVJU2m/vKV18N8c1Ws8PD8eOFdWkGLfdeQ/pAAJq2fizPCCE
+         AyWA==
+X-Gm-Message-State: AOAM5304d8knQKsDCecZqDmLg21/RJrqIXAIw5F8dvc2hQJ28D55Ep9g
+        vqSeiiN/ZAu+IsPghi9pbCoi+KOfhXz1JL6r8/M=
+X-Google-Smtp-Source: ABdhPJy1Fi5TqRnSQ/AhkZQG5j5NkOX2yRSDqdpuHp2wRpoEfTueibevUrLphrS28hBfrmaaCgr60w==
+X-Received: by 2002:a05:600c:22c6:: with SMTP id 6mr77729wmg.33.1610376889181;
         Mon, 11 Jan 2021 06:54:49 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id s133sm17780wmf.38.2021.01.11.06.54.49
+        by smtp.gmail.com with ESMTPSA id s133sm17780wmf.38.2021.01.11.06.54.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 06:54:49 -0800 (PST)
+        Mon, 11 Jan 2021 06:54:48 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH 3/9] media: mtk-vcodec: Do not zero reserved fields
-Date:   Mon, 11 Jan 2021 15:54:39 +0100
-Message-Id: <20210111145445.28854-4-ribalda@chromium.org>
+Subject: [PATCH 2/9] media: mtk-mdp: Do not zero reserved fields
+Date:   Mon, 11 Jan 2021 15:54:38 +0100
+Message-Id: <20210111145445.28854-3-ribalda@chromium.org>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
 In-Reply-To: <20210111145445.28854-1-ribalda@chromium.org>
 References: <20210111145445.28854-1-ribalda@chromium.org>
@@ -77,54 +77,30 @@ v4l2_plane_pix_format reserved fields").
 Cc: Matthias Brugger <matthias.bgg@gmail.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 5 -----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 8 --------
- 2 files changed, 13 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index c768a587a944..d746c41ea805 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -715,12 +715,7 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 		}
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index 724c7333b6e5..ace4528cdc5e 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -199,7 +199,6 @@ static const struct mtk_mdp_fmt *mtk_mdp_try_fmt_mplane(struct mtk_mdp_ctx *ctx,
+ 		pix_mp->ycbcr_enc = ctx->ycbcr_enc;
+ 		pix_mp->quantization = ctx->quant;
  	}
+-	memset(pix_mp->reserved, 0, sizeof(pix_mp->reserved));
  
--	for (i = 0; i < pix_fmt_mp->num_planes; i++)
--		memset(&(pix_fmt_mp->plane_fmt[i].reserved[0]), 0x0,
--			   sizeof(pix_fmt_mp->plane_fmt[0].reserved));
--
- 	pix_fmt_mp->flags = 0;
--	memset(&pix_fmt_mp->reserved, 0x0, sizeof(pix_fmt_mp->reserved));
- 	return 0;
- }
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 21de1431cfcb..db1f62cc38b3 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -320,13 +320,7 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 		}
+ 	max_w = variant->pix_max->target_rot_dis_w;
+ 	max_h = variant->pix_max->target_rot_dis_h;
+@@ -247,8 +246,6 @@ static const struct mtk_mdp_fmt *mtk_mdp_try_fmt_mplane(struct mtk_mdp_ctx *ctx,
+ 		pix_mp->plane_fmt[i].bytesperline = bpl;
+ 		if (pix_mp->plane_fmt[i].sizeimage < sizeimage)
+ 			pix_mp->plane_fmt[i].sizeimage = sizeimage;
+-		memset(pix_mp->plane_fmt[i].reserved, 0,
+-		       sizeof(pix_mp->plane_fmt[i].reserved));
+ 		mtk_mdp_dbg(2, "[%d] p%d, bpl:%d, sizeimage:%u (%u)", ctx->id,
+ 			    i, bpl, pix_mp->plane_fmt[i].sizeimage, sizeimage);
  	}
- 
--	for (i = 0; i < pix_fmt_mp->num_planes; i++)
--		memset(&(pix_fmt_mp->plane_fmt[i].reserved[0]), 0x0,
--			   sizeof(pix_fmt_mp->plane_fmt[0].reserved));
--
- 	pix_fmt_mp->flags = 0;
--	memset(&pix_fmt_mp->reserved, 0x0,
--		sizeof(pix_fmt_mp->reserved));
- 
- 	return 0;
- }
-@@ -532,8 +526,6 @@ static int vidioc_venc_g_fmt(struct file *file, void *priv,
- 	for (i = 0; i < pix->num_planes; i++) {
- 		pix->plane_fmt[i].bytesperline = q_data->bytesperline[i];
- 		pix->plane_fmt[i].sizeimage = q_data->sizeimage[i];
--		memset(&(pix->plane_fmt[i].reserved[0]), 0x0,
--		       sizeof(pix->plane_fmt[i].reserved));
- 	}
- 
- 	pix->flags = 0;
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
