@@ -2,92 +2,179 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46B97C433E9
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 22:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D2DC43332
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 092E022D37
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 22:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A815522D57
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 00:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389791AbhAKWUv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jan 2021 17:20:51 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:35496 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389420AbhAKWUt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jan 2021 17:20:49 -0500
-Received: by mail-ot1-f45.google.com with SMTP id i6so435232otr.2;
-        Mon, 11 Jan 2021 14:20:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VyFCFff7hYJpxW+Rad4By7LUlx7N6qhPoYPEaO1tJps=;
-        b=NxtbbNjHq6wTCHvDZqGd7CCrZuktBH1DDLrVUUMM1eCbueN18rWYeATbjloawk95CZ
-         VlUmjyKBTrZQyKO4VErMMZ41Fi3j0uMOnW1pBenVgTDCXPdqONPXXUoLLvnqnfgecS0e
-         /Rz/n2OqoWnY9KTPxoHoDtmsGD28haLssjkgdhuUrzoKubQCP0tYXFy6IS9jt+LdNh7J
-         le2CZf/xTQlMgSwiRyR3MRs+Oq354cU7TCb/w/BK5Xt7cOaCFGBDDB8p8mAyKvqBIrvF
-         XOIouR8lgxfjT8U2mO4gwVEexLu5ie8+oll8cSebexyi7uoSSkuxK+yzxktVslUrL1Z4
-         WrMw==
-X-Gm-Message-State: AOAM531KjYYU6rV9MFIK1F7uLScHrvo3A3AYSITXXGcPDMvt1fEmcCqg
-        ix9B0peSA4A+jFXa6MCXFw==
-X-Google-Smtp-Source: ABdhPJwU6Becx7jAKNM9/tRzPRBw1eNYiQOnEXAerdi4abgkEPy3hpSEyntlUQKR5I5QMiNGp8R4gg==
-X-Received: by 2002:a9d:5f9a:: with SMTP id g26mr843215oti.241.1610403608789;
-        Mon, 11 Jan 2021 14:20:08 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p10sm67054otp.43.2021.01.11.14.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 14:20:07 -0800 (PST)
-Received: (nullmailer pid 3160469 invoked by uid 1000);
-        Mon, 11 Jan 2021 22:20:05 -0000
-Date:   Mon, 11 Jan 2021 16:20:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>, Vinod Koul <vkoul@kernel.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yong Deng <yong.deng@magewell.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        devel@driverdev.osuosl.org, kevin.lhopital@hotmail.com,
-        Maxime Ripard <mripard@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-sunxi@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH v4 08/15] dt-bindings: media: Add A31 MIPI CSI-2 bindings
- documentation
-Message-ID: <20210111222005.GA3160418@robh.at.kernel.org>
-References: <20201231142948.3241780-1-paul.kocialkowski@bootlin.com>
- <20201231142948.3241780-9-paul.kocialkowski@bootlin.com>
+        id S2404118AbhALA0F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jan 2021 19:26:05 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:52474 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404169AbhAKXla (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 Jan 2021 18:41:30 -0500
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1kz6nm-0001p6-D3; Tue, 12 Jan 2021 00:40:46 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        Laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
+        christoph.muellner@theobroma-systems.com, heiko@sntech.de,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Subject: [PATCH 1/2] media: rockchip: rkisp1: carry ip version information
+Date:   Tue, 12 Jan 2021 00:40:10 +0100
+Message-Id: <20210111234011.3642481-2-heiko@sntech.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210111234011.3642481-1-heiko@sntech.de>
+References: <20210111234011.3642481-1-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201231142948.3241780-9-paul.kocialkowski@bootlin.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 31 Dec 2020 15:29:41 +0100, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the A31 MIPI CSI-2
-> controller.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 149 ++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-> 
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The IP block evolved from its rk3288/rk3399 base and the vendor
+designates them with a numerical version. rk3399 for example
+is designated V10 probably meaning V1.0.
+
+There doesn't seem to be an actual version register we could read that
+information from, so allow the match_data to carry that information
+for future differentiation.
+
+Also carry that information in the hw_revision field of the media-
+controller API, so that userspace also has access to that.
+
+The added versions are:
+- V10: at least rk3288 + rk3399
+- V11: seemingly unused as of now, but probably appeared in some soc
+- V12: at least rk3326 + px30
+- V13: at least rk1808
+
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+---
+changes since rfc:
+- move rkisp1_version enum into uapo
+- show version in media-api hw_revision
+
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  1 +
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     | 22 +++++++++++--------
+ include/uapi/linux/rkisp1-config.h            |  7 ++++++
+ 3 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+index 038c303a8aed..bad1bd468f2f 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+@@ -354,6 +354,7 @@ struct rkisp1_device {
+ 	void __iomem *base_addr;
+ 	int irq;
+ 	struct device *dev;
++	enum rkisp1_cif_isp_version isp_ver;
+ 	unsigned int clk_size;
+ 	struct clk_bulk_data clks[RKISP1_MAX_BUS_CLK];
+ 	struct v4l2_device v4l2_dev;
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+index 68da1eed753d..f594d7cd03d0 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+@@ -104,6 +104,7 @@
+ struct rkisp1_match_data {
+ 	const char * const *clks;
+ 	unsigned int size;
++	enum rkisp1_cif_isp_version isp_ver;
+ };
+ 
+ /* ----------------------------------------------------------------------------
+@@ -411,15 +412,16 @@ static const char * const rk3399_isp_clks[] = {
+ 	"hclk",
+ };
+ 
+-static const struct rkisp1_match_data rk3399_isp_clk_data = {
++static const struct rkisp1_match_data rk3399_isp_match_data = {
+ 	.clks = rk3399_isp_clks,
+ 	.size = ARRAY_SIZE(rk3399_isp_clks),
++	.isp_ver = RKISP1_V10,
+ };
+ 
+ static const struct of_device_id rkisp1_of_match[] = {
+ 	{
+ 		.compatible = "rockchip,rk3399-cif-isp",
+-		.data = &rk3399_isp_clk_data,
++		.data = &rk3399_isp_match_data,
+ 	},
+ 	{},
+ };
+@@ -457,15 +459,15 @@ static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
+ 
+ static int rkisp1_probe(struct platform_device *pdev)
+ {
+-	const struct rkisp1_match_data *clk_data;
++	const struct rkisp1_match_data *match_data;
+ 	struct device *dev = &pdev->dev;
+ 	struct rkisp1_device *rkisp1;
+ 	struct v4l2_device *v4l2_dev;
+ 	unsigned int i;
+ 	int ret, irq;
+ 
+-	clk_data = of_device_get_match_data(&pdev->dev);
+-	if (!clk_data)
++	match_data = of_device_get_match_data(&pdev->dev);
++	if (!match_data)
+ 		return -ENODEV;
+ 
+ 	rkisp1 = devm_kzalloc(dev, sizeof(*rkisp1), GFP_KERNEL);
+@@ -494,15 +496,17 @@ static int rkisp1_probe(struct platform_device *pdev)
+ 
+ 	rkisp1->irq = irq;
+ 
+-	for (i = 0; i < clk_data->size; i++)
+-		rkisp1->clks[i].id = clk_data->clks[i];
+-	ret = devm_clk_bulk_get(dev, clk_data->size, rkisp1->clks);
++	for (i = 0; i < match_data->size; i++)
++		rkisp1->clks[i].id = match_data->clks[i];
++	ret = devm_clk_bulk_get(dev, match_data->size, rkisp1->clks);
+ 	if (ret)
+ 		return ret;
+-	rkisp1->clk_size = clk_data->size;
++	rkisp1->clk_size = match_data->size;
++	rkisp1->isp_ver = match_data->isp_ver;
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
++	rkisp1->media_dev.hw_revision = rkisp1->isp_ver;
+ 	strscpy(rkisp1->media_dev.model, RKISP1_DRIVER_NAME,
+ 		sizeof(rkisp1->media_dev.model));
+ 	rkisp1->media_dev.dev = &pdev->dev;
+diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+index 6e449e784260..bad46aadf838 100644
+--- a/include/uapi/linux/rkisp1-config.h
++++ b/include/uapi/linux/rkisp1-config.h
+@@ -124,6 +124,13 @@
+ #define RKISP1_CIF_ISP_STAT_AFM           (1U << 2)
+ #define RKISP1_CIF_ISP_STAT_HIST          (1U << 3)
+ 
++enum rkisp1_cif_isp_version {
++	RKISP1_V10 = 0,
++	RKISP1_V11,
++	RKISP1_V12,
++	RKISP1_V13,
++};
++
+ enum rkisp1_cif_isp_histogram_mode {
+ 	RKISP1_CIF_ISP_HISTOGRAM_MODE_DISABLE,
+ 	RKISP1_CIF_ISP_HISTOGRAM_MODE_RGB_COMBINED,
+-- 
+2.29.2
+
