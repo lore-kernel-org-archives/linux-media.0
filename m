@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7E93C4332B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E0DC43331
 	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EAED224B8
+	by mail.kernel.org (Postfix) with ESMTP id 971CA224D2
 	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731841AbhAKOZG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727668AbhAKOZG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 11 Jan 2021 09:25:06 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:32971 "EHLO
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:35043 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728945AbhAKOZG (ORCPT
+        by vger.kernel.org with ESMTP id S1728070AbhAKOZF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:25:06 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C0A77580676;
-        Mon, 11 Jan 2021 09:23:22 -0500 (EST)
+        Mon, 11 Jan 2021 09:25:05 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A5420580673;
+        Mon, 11 Jan 2021 09:23:18 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 11 Jan 2021 09:23:22 -0500
+  by compute6.internal (MEProxy); Mon, 11 Jan 2021 09:23:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=y5a4AZQCjSaKy
-        3iWjD7TJ49t/ESJPK/f64O6IhJsz2U=; b=a8eCPavE2VqoYxW9t2Q3iz1OwR8sB
-        aCYlgBYEjiNKkc2SJyB5Kx9pIFJHP5CzwTQR79zH3IfddFNxBYyo+412LiMtQYOe
-        eUtFG/H9G9279+iQ+FAdsFV3I66Mdqyrh43MNW0l5P5UyoIWEQSIYshU6e1lTv+h
-        FWmCz3FkknH3GoZjItYl7yiKMlXZvby3kAImdXsXCjupEzZWx6/4Pdbb7DEnD94L
-        bYDsWieatrrFnZpuG66sZscr/yi7LKNZbXLrnaxASLH7GjivFQ39lyv38cTpck8c
-        Hu1TZSebciDBUilYmecV1SKECrGBFBoF4PP6HX2RIHsipfxH6CZvYK9Eg==
+        :mime-version:content-transfer-encoding; s=fm1; bh=SDxCcurjWzwhz
+        oqpeRp22hxUkocQjnOCHFbLsnXrelE=; b=D+LEoaF6HueE3Wks02j55NVuTL/cZ
+        1CY4KCGOq32XRV2c+p9uS4hGFDEAHFV8pq1Jn8mPaQAM5AF45LLZYqDqePG+NtaV
+        uoKJvMD3Qg3GcIsCTNMPlD+YL7dSn8UBEH6cqwx8VG7o3CqIflJgCxDyHu/T9uCi
+        fawVKXb8s9lNK4m35p+F92E8PUwO/Ug6pNAVsLjSe9n/6V1ksimkCPWqLdHJHATF
+        BoOvkEQS1AU40oQO2t3kMXeVCi+X87nr9DfXHMkw+tt1QcF7OPsvem469KlOmN6V
+        Zyhm8i5S5MClRFDenX9Y2W1mb1DQKwCYxJ/rsDn1SLsaHdIpjiwhdJG0A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=y5a4AZQCjSaKy3iWjD7TJ49t/ESJPK/f64O6IhJsz2U=; b=GPDlHtCc
-        IxHI1uYaAK7AnuaXklI2DPCHa8m8e7e7KoByK+vXjqg62oUap7P+IFPFovYEZPvR
-        IiXLjnbYa5KSht2e3GGzC72ERBaDT6aTrulao3bUBMR0be3QRnXEuuE8zU0VBLxh
-        cWXmpkmJ+cWHgryVtbHENtEet5a9Uyp7W7PFhtRI/IK6ovCpUexUzm9yW1k/RQqC
-        Z1kU0xiA+lYGQaDQIUCVDGrmZOnjzg1m3zVF+pMJR1ydR5Z/QLa0DQqM2Kc4uLkL
-        5XTyj0TDEftJotjTxVycVd1uzhkLuTs+82RJw2mUOGk5IHpJhvXUbR83he/Yxjj8
-        TOubgCGjPT5CIQ==
-X-ME-Sender: <xms:Wl_8X-dLUn8a5-Y_uGCr0mrrcsGl4qJCSy3OP9M8QgVW1UTXXuC56Q>
-    <xme:Wl_8XyP5GOaQuZplQpGiQw4v-92WDKUikazSbVDoT2yTP-pEyggsPzTyPdQLItXEv
-    bzfy5O8_H0Xnrb2Pao>
+        fm1; bh=SDxCcurjWzwhzoqpeRp22hxUkocQjnOCHFbLsnXrelE=; b=HhF6kXQQ
+        cEKEl9jZKhStuGk+b3lesfGKOY8hkTzPU1sHMOYIcPhOZdhgQwXpRzqQr5ZXGzqs
+        ndfwhsZC4BgGHRtFtUgWEMkcAlfoDX//PplH/MudRHyLwpsV7JGPmBUvDktZRRYO
+        SLYaeRHjx7IPFMIxIJVpxq6+dGh4CALFt/Rh4K9NticKUs8p8/1nbxLl4AW+YhUt
+        /8/RTlxb1chT2cfOq/wAsCrESnzimcIG+F6BZEYWO4Vxbs4lF6iW5M49rdXX4nb9
+        m1ETwHnT2Pbv7om7GzD45yA4Oxrbt0yPCdqK/Hqyj2PbMNL1l2LCaBrY04G7jqMV
+        teN4D7inzRH2rA==
+X-ME-Sender: <xms:Vl_8X5HRt8qKjpfBbOUcoUwhfPBzsJZN-xShvr2J4-OwZk60HUr08A>
+    <xme:Vl_8X-WcLq5u2b1y5t2c7tEePs_DxAFMVRyRjPxwzru5SiwH7mmjJBfuWz8niQeAV
+    iR54fX2AtEVWP6vzuM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepudenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Wl_8X2IU-pbsWbxtIgUEXMJ8PW6UMdoHUUIu3KOmiHgtkW2X6hKh6Q>
-    <xmx:Wl_8X6K32p2ECFYUbgDL9OjoFPbEkH6MzMwTWum9g7I7A_60X-Vqyg>
-    <xmx:Wl_8X44MN_8q6OsvHe3vu4ALG5Uy39nxbmiSgURqXDXDCSi06CSmHg>
-    <xmx:Wl_8XzymEcDVRiFZE6cN-077QisjLGjWZck9Sl9LD52EUwOibcxEiw>
+X-ME-Proxy: <xmx:Vl_8X7LjSjs0a_zSM-l1EoMrIc369zB8sbdkLOWUL84pQFH8-_r6EA>
+    <xmx:Vl_8X_FKcBBDleLaSYlx2QEstoA8EMpC_cLTl2iRWUCnA_V-lfb9CQ>
+    <xmx:Vl_8X_UylDOXK4QXHzKLcH-C-Mnys6FdsT4-jClevtHHriR48U7X5w>
+    <xmx:Vl_8X8Xq-dcaSe5McG77zpkAeyTlIcip_zw5GmUCQyxduILCvJ2tdQ>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7B1D524005E;
-        Mon, 11 Jan 2021 09:23:22 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 33EC6240057;
+        Mon, 11 Jan 2021 09:23:18 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Eric Anholt <eric@anholt.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -77,10 +77,10 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 08/15] drm/vc4: hdmi: Introduce a CEC clock
-Date:   Mon, 11 Jan 2021 15:23:02 +0100
-Message-Id: <20210111142309.193441-9-maxime@cerno.tech>
+        linux-media@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
+Subject: [PATCH v2 05/15] drm/vc4: hdmi: Restore cec physical address on reconnect
+Date:   Mon, 11 Jan 2021 15:22:59 +0100
+Message-Id: <20210111142309.193441-6-maxime@cerno.tech>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210111142309.193441-1-maxime@cerno.tech>
 References: <20210111142309.193441-1-maxime@cerno.tech>
@@ -90,65 +90,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While the BCM2835 had the CEC clock derived from the HSM clock, the
-BCM2711 has a dedicated parent clock for it.
+From: Dom Cobley <popcornmix@gmail.com>
 
-Let's introduce a separate clock for it so that we can handle both
-cases.
+Currently we call cec_phys_addr_invalidate on a hotplug deassert.
+That may be due to a TV power cycling, or an AVR being switched
+on (and switching edid).
 
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+This makes CEC unusable since our controller wouldn't have a physical
+address anymore.
+
+Set it back up again on the hotplug assert.
+
+Fixes: 15b4511a4af6 ("drm/vc4: add HDMI CEC support")
+Signed-off-by: Dom Cobley <popcornmix@gmail.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 9 ++++++++-
- drivers/gpu/drm/vc4/vc4_hdmi.h | 1 +
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 0627b8db32f6..7b5c92df8f1b 100644
+index 7945dbcee78c..c3a301396aad 100644
 --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
 +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -145,7 +145,7 @@ static void vc4_hdmi_cec_update_clk_div(struct vc4_hdmi *vc4_hdmi)
- 	 * Set the clock divider: the hsm_clock rate and this divider
- 	 * setting will give a 40 kHz CEC clock.
- 	 */
--	clk_cnt = clk_get_rate(vc4_hdmi->hsm_clock) / CEC_CLOCK_FREQ;
-+	clk_cnt = clk_get_rate(vc4_hdmi->cec_clock) / CEC_CLOCK_FREQ;
- 	value |= clk_cnt << VC4_HDMI_CEC_DIV_CLK_CNT_SHIFT;
- 	HDMI_WRITE(HDMI_CEC_CNTRL_1, value);
- }
-@@ -1752,6 +1752,7 @@ static int vc4_hdmi_init_resources(struct vc4_hdmi *vc4_hdmi)
- 		return PTR_ERR(vc4_hdmi->hsm_clock);
- 	}
- 	vc4_hdmi->audio_clock = vc4_hdmi->hsm_clock;
-+	vc4_hdmi->cec_clock = vc4_hdmi->hsm_clock;
+@@ -136,20 +136,32 @@ static enum drm_connector_status
+ vc4_hdmi_connector_detect(struct drm_connector *connector, bool force)
+ {
+ 	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
++	bool connected = false;
  
- 	return 0;
- }
-@@ -1845,6 +1846,12 @@ static int vc5_hdmi_init_resources(struct vc4_hdmi *vc4_hdmi)
- 		return PTR_ERR(vc4_hdmi->audio_clock);
+ 	if (vc4_hdmi->hpd_gpio) {
+ 		if (gpio_get_value_cansleep(vc4_hdmi->hpd_gpio) ^
+ 		    vc4_hdmi->hpd_active_low)
+-			return connector_status_connected;
+-		cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
+-		return connector_status_disconnected;
++			connected = true;
++	} else if (drm_probe_ddc(vc4_hdmi->ddc)) {
++		connected = true;
++	} else if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED) {
++		connected = true;
  	}
  
-+	vc4_hdmi->cec_clock = devm_clk_get(dev, "cec");
-+	if (IS_ERR(vc4_hdmi->cec_clock)) {
-+		DRM_ERROR("Failed to get CEC clock\n");
-+		return PTR_ERR(vc4_hdmi->cec_clock);
+-	if (drm_probe_ddc(vc4_hdmi->ddc))
+-		return connector_status_connected;
++	if (connected) {
++		if (connector->status != connector_status_connected) {
++			struct edid *edid = drm_get_edid(connector, vc4_hdmi->ddc);
++
++			if (edid) {
++				cec_s_phys_addr_from_edid(vc4_hdmi->cec_adap, edid);
++				vc4_hdmi->encoder.hdmi_monitor = drm_detect_hdmi_monitor(edid);
++				kfree(edid);
++			}
++		}
+ 
+-	if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED)
+ 		return connector_status_connected;
 +	}
 +
- 	vc4_hdmi->reset = devm_reset_control_get(dev, NULL);
- 	if (IS_ERR(vc4_hdmi->reset)) {
- 		DRM_ERROR("Failed to get HDMI reset line\n");
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.h b/drivers/gpu/drm/vc4/vc4_hdmi.h
-index 4c8994cfd932..6966db1a0957 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.h
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.h
-@@ -155,6 +155,7 @@ struct vc4_hdmi {
- 	bool cec_tx_ok;
- 	bool cec_irq_was_rx;
- 
-+	struct clk *cec_clock;
- 	struct clk *pixel_clock;
- 	struct clk *hsm_clock;
- 	struct clk *audio_clock;
+ 	cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
+ 	return connector_status_disconnected;
+ }
 -- 
 2.29.2
 
