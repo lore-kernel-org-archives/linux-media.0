@@ -2,155 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E0DC43331
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB699C43381
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:56:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 971CA224D2
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A163C225AC
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:56:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727668AbhAKOZG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jan 2021 09:25:06 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:35043 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728070AbhAKOZF (ORCPT
+        id S1728354AbhAKOzr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jan 2021 09:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732320AbhAKOz3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:25:05 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A5420580673;
-        Mon, 11 Jan 2021 09:23:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 11 Jan 2021 09:23:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=SDxCcurjWzwhz
-        oqpeRp22hxUkocQjnOCHFbLsnXrelE=; b=D+LEoaF6HueE3Wks02j55NVuTL/cZ
-        1CY4KCGOq32XRV2c+p9uS4hGFDEAHFV8pq1Jn8mPaQAM5AF45LLZYqDqePG+NtaV
-        uoKJvMD3Qg3GcIsCTNMPlD+YL7dSn8UBEH6cqwx8VG7o3CqIflJgCxDyHu/T9uCi
-        fawVKXb8s9lNK4m35p+F92E8PUwO/Ug6pNAVsLjSe9n/6V1ksimkCPWqLdHJHATF
-        BoOvkEQS1AU40oQO2t3kMXeVCi+X87nr9DfXHMkw+tt1QcF7OPsvem469KlOmN6V
-        Zyhm8i5S5MClRFDenX9Y2W1mb1DQKwCYxJ/rsDn1SLsaHdIpjiwhdJG0A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=SDxCcurjWzwhzoqpeRp22hxUkocQjnOCHFbLsnXrelE=; b=HhF6kXQQ
-        cEKEl9jZKhStuGk+b3lesfGKOY8hkTzPU1sHMOYIcPhOZdhgQwXpRzqQr5ZXGzqs
-        ndfwhsZC4BgGHRtFtUgWEMkcAlfoDX//PplH/MudRHyLwpsV7JGPmBUvDktZRRYO
-        SLYaeRHjx7IPFMIxIJVpxq6+dGh4CALFt/Rh4K9NticKUs8p8/1nbxLl4AW+YhUt
-        /8/RTlxb1chT2cfOq/wAsCrESnzimcIG+F6BZEYWO4Vxbs4lF6iW5M49rdXX4nb9
-        m1ETwHnT2Pbv7om7GzD45yA4Oxrbt0yPCdqK/Hqyj2PbMNL1l2LCaBrY04G7jqMV
-        teN4D7inzRH2rA==
-X-ME-Sender: <xms:Vl_8X5HRt8qKjpfBbOUcoUwhfPBzsJZN-xShvr2J4-OwZk60HUr08A>
-    <xme:Vl_8X-WcLq5u2b1y5t2c7tEePs_DxAFMVRyRjPxwzru5SiwH7mmjJBfuWz8niQeAV
-    iR54fX2AtEVWP6vzuM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Vl_8X7LjSjs0a_zSM-l1EoMrIc369zB8sbdkLOWUL84pQFH8-_r6EA>
-    <xmx:Vl_8X_FKcBBDleLaSYlx2QEstoA8EMpC_cLTl2iRWUCnA_V-lfb9CQ>
-    <xmx:Vl_8X_UylDOXK4QXHzKLcH-C-Mnys6FdsT4-jClevtHHriR48U7X5w>
-    <xmx:Vl_8X8Xq-dcaSe5McG77zpkAeyTlIcip_zw5GmUCQyxduILCvJ2tdQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 33EC6240057;
-        Mon, 11 Jan 2021 09:23:18 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Eric Anholt <eric@anholt.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
-Subject: [PATCH v2 05/15] drm/vc4: hdmi: Restore cec physical address on reconnect
-Date:   Mon, 11 Jan 2021 15:22:59 +0100
-Message-Id: <20210111142309.193441-6-maxime@cerno.tech>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210111142309.193441-1-maxime@cerno.tech>
-References: <20210111142309.193441-1-maxime@cerno.tech>
+        Mon, 11 Jan 2021 09:55:29 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E571C06179F
+        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:49 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g185so126810wmf.3
+        for <linux-media@vger.kernel.org>; Mon, 11 Jan 2021 06:54:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/b1R3+bsCNv0D8QaTlCdd9Cg/ZmadyVtn3+pLwATEWc=;
+        b=Ah7J8LN0jlZEL24PLX4WG1e3DiCnqHEN630ZaqiqvWw7XaQh60RtZO84LDEJd95g0B
+         rC6J9lvBFXnqZ7OKBlfmteclgVykEj1nnnmX3gJCXPNSLiho6s5c78EY5a/TayLTL5QX
+         IPVa1mzpBmZN3LPedZiYIMxOtyAwskSZD+WAQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/b1R3+bsCNv0D8QaTlCdd9Cg/ZmadyVtn3+pLwATEWc=;
+        b=VH3g0w34EPPOhLAdeiGRBBNlrVfysQl/Alu9BgLqdHIkVTRHMGI7UK9FlnY0HCof8K
+         E0ByjEoO+W+7DBM4bTQHFRgSVwfGvxyuJIjdvqXtZzzb4KmEIFE08s2LBCeyLTyLIVrS
+         UAx14AeES2ZQc4KyWKnnx7CVKcAqzDdps6ouyxBkkvBfPG/l3qz617UDIoiCksGWgje5
+         c4fho+i7vUFSvniDRMs6W/fEKt45svbHdShoWwmd9gmu/vZ9X2bT+xQ8RXkrIOETCfYU
+         2P5I4at/IOSiaUsALBdE5QJQzrieVyV0OfXmOPbjftAi/9b+6HuZZEScAr7sz8gjFDai
+         /OaA==
+X-Gm-Message-State: AOAM530jfqgnQbKDzxBKxEGAcbyqhjjeYjMvCQOQbATu573dueUF3YVe
+        JGVa+HffhPKldcqsbTUaDGPiSMhh/IgUdW76xSY=
+X-Google-Smtp-Source: ABdhPJziuRVwPLalrG6E3rAJ9OUpO6HGQxNVSLmpi4fw6EyNHSq6p9HhJ2/VSjm/bGnZlEOIu0rw2A==
+X-Received: by 2002:a7b:c198:: with SMTP id y24mr61099wmi.151.1610376888199;
+        Mon, 11 Jan 2021 06:54:48 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id s133sm17780wmf.38.2021.01.11.06.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 06:54:47 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH] media: staging/intel-ipu3 : Do not zero reserved fields
+Date:   Mon, 11 Jan 2021 15:54:37 +0100
+Message-Id: <20210111145445.28854-2-ribalda@chromium.org>
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+In-Reply-To: <20210111145445.28854-1-ribalda@chromium.org>
+References: <20210111145445.28854-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dom Cobley <popcornmix@gmail.com>
+Core code already clears reserved fields of struct
+v4l2_pix_format_mplane, check: 4e1e0eb0e074 ("media: v4l2-ioctl: Zero
+v4l2_plane_pix_format reserved fields").
 
-Currently we call cec_phys_addr_invalidate on a hotplug deassert.
-That may be due to a TV power cycling, or an AVR being switched
-on (and switching edid).
-
-This makes CEC unusable since our controller wouldn't have a physical
-address anymore.
-
-Set it back up again on the hotplug assert.
-
-Fixes: 15b4511a4af6 ("drm/vc4: add HDMI CEC support")
-Signed-off-by: Dom Cobley <popcornmix@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/staging/media/ipu3/ipu3-v4l2.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 7945dbcee78c..c3a301396aad 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -136,20 +136,32 @@ static enum drm_connector_status
- vc4_hdmi_connector_detect(struct drm_connector *connector, bool force)
- {
- 	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
-+	bool connected = false;
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index 4dc8d9165f63..60aa02eb7d2a 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -773,9 +773,6 @@ static int imgu_try_fmt(struct file *file, void *fh, struct v4l2_format *f)
  
- 	if (vc4_hdmi->hpd_gpio) {
- 		if (gpio_get_value_cansleep(vc4_hdmi->hpd_gpio) ^
- 		    vc4_hdmi->hpd_active_low)
--			return connector_status_connected;
--		cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
--		return connector_status_disconnected;
-+			connected = true;
-+	} else if (drm_probe_ddc(vc4_hdmi->ddc)) {
-+		connected = true;
-+	} else if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED) {
-+		connected = true;
- 	}
+ 	pixm->pixelformat = fmt->fourcc;
  
--	if (drm_probe_ddc(vc4_hdmi->ddc))
--		return connector_status_connected;
-+	if (connected) {
-+		if (connector->status != connector_status_connected) {
-+			struct edid *edid = drm_get_edid(connector, vc4_hdmi->ddc);
-+
-+			if (edid) {
-+				cec_s_phys_addr_from_edid(vc4_hdmi->cec_adap, edid);
-+				vc4_hdmi->encoder.hdmi_monitor = drm_detect_hdmi_monitor(edid);
-+				kfree(edid);
-+			}
-+		}
- 
--	if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED)
- 		return connector_status_connected;
-+	}
-+
- 	cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
- 	return connector_status_disconnected;
+-	memset(pixm->plane_fmt[0].reserved, 0,
+-	       sizeof(pixm->plane_fmt[0].reserved));
+-
+ 	return 0;
  }
+ 
 -- 
-2.29.2
+2.30.0.284.gd98b1dd5eaa7-goog
 
