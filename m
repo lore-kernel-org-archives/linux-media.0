@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B12D5C43333
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D4BC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D61322473
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:25:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C24BC22473
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:26:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388644AbhAKOZ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jan 2021 09:25:28 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:51593 "EHLO
+        id S1732653AbhAKOZM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jan 2021 09:25:12 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44297 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388637AbhAKOZ1 (ORCPT
+        by vger.kernel.org with ESMTP id S1728945AbhAKOZK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:25:27 -0500
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CB4DE58067E;
-        Mon, 11 Jan 2021 09:23:32 -0500 (EST)
+        Mon, 11 Jan 2021 09:25:10 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 82DA858067A;
+        Mon, 11 Jan 2021 09:23:28 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Mon, 11 Jan 2021 09:23:32 -0500
+  by compute5.internal (MEProxy); Mon, 11 Jan 2021 09:23:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=2UJ5fuVx0fd+N
-        mWUjZ3j/otRbpaIkIN2Yqbqj/0LMQI=; b=gmJsgSzmBVOJgCOqeYyuojWlR6fr2
-        Se2czyZ8KkbwfC+1qymwyhGA1OEioSYRIT6MtXKulxsuIsbWux2sJQTnNcwpZr0m
-        HdCe2s7j3dALoOAxzhk+EbsC2gKSyPmpi0i5fTozbEQS/k1zWFCO+Ks/dlz0yt61
-        ety5p4afG0mdSUdf1ajLNO3pH4PS17kL0DQPJ53/ka5cQeVY2+WpsR/FO5++gRWp
-        5S8PFCFvIxsKQho3BGfQ+8XQBG8uJB5WoNEpTSbLWYhBCjFlub1X1SxEjqvFEDx9
-        ZvgzuYlfaOS5BGcc/N0txAtvrkaStN1e1G2pN4psX1ZTAPukVF6hnNX1w==
+        :mime-version:content-transfer-encoding; s=fm1; bh=11pCekn6vi323
+        R47NZChoCtnD6NCg2tPit6OTEdjkCg=; b=W2Z52a4XnA1vMC9ArxSUAhBjKt5M9
+        ZdeKIVGkIHnmpGibekMNERzrUFZjjJ2g7Z9P8u2Qu+T0310gEflhTDymy0Z2Fa6z
+        YHfocyjZlT0YgmBk+Sc79olLw0yQmaazJNcpeH9XUxrpYac1Ja6cHzxuZ6SH/4Ql
+        CMRIXjg4u67/8dCM+brG0OWh1G/5dyrKzZlOaZrYfJV+SDumRqBuiwyhMzQ0iK1C
+        RRtysxLfdJhcJn5frcYeVqrWAyD8c78kymdQqr2bOEi5FpyM22LIyq8ExdLqcnwX
+        HB2MTLwxalZ7s3UbV2aKD6G4JQJVk5zjQ0jSBJ1CM2uc0Dh6GpVpBjVPw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=2UJ5fuVx0fd+NmWUjZ3j/otRbpaIkIN2Yqbqj/0LMQI=; b=qtupaJIJ
-        QPjWfZ2lvqir1OKsDTnKi/1v3hhg3B1SNt6Gir/jWhMcIKct5h90FuUo7Wx05cAI
-        B644oGNBNhCOiX6K5sovwGH15OTz7UJfnlH7Ag2XLVGPXjSRkmLiMPgE7iyU04Iq
-        HRAz4Hz7Vmbme3SBdtTnK/BxCEUcMw5IGIzVApsfeGFw0i2oLNMt506utk4uVtVk
-        UJZYRDT7E2n3Z7FyUyOS/Yd5VgP51UVkJcDL5ZmZeeJgYV+AYRWJKoP1LcW3KnR2
-        BMeMsB5W3sUvfuCo2fOA/RKImuqnTZyszdKh9HiG5Jh0Le/hGotLh8pcfu7D7lTF
-        dzabEm4Es+rLfQ==
-X-ME-Sender: <xms:ZF_8X4zXA9D8hF6s9WwFDyNe625VUT7jJMKhhu4YF-qqc--haXkKBQ>
-    <xme:ZF_8X8MP0Ip3NBzFXfQOR_VVcX1k8AFQqevJmwCN159hdjprEGFtnxsvHli6NNowk
-    L1o6SxURaOBwZ9qtiA>
+        fm1; bh=11pCekn6vi323R47NZChoCtnD6NCg2tPit6OTEdjkCg=; b=riLtP+ur
+        EsjzAleo/MODN3QAQhjIoBLVVHucc+tzhbf3kPkTeG+2y8AuSgLfxyHj4ctCSqe4
+        MqhGbcuNuJv3oy//5q9ddgOZcxc3+so82HqynwgDLh5LXLvTaqkzVAw6rIB2xwUc
+        HSzfiMAYldpWjcMOHDkJzvCJAzl46O+NKARXtPy5iqcmCsosefO7Za0wo0UToFMb
+        +HG6QnUy1VWyycJMv+eG8Q/2BFx0H1I+/LCn1c4JLy4HM8c1SqbtkZOadceYjk1h
+        x89qomO6daLAFHnocUrX2B5n9KU4hBuBLFY4B85uFJtXmQKqshatQoN5pMkCobdP
+        +ZSWPv4M1Vtkeg==
+X-ME-Sender: <xms:YF_8XwU16bYmQ5karTicUc_X_j3VHuxxV3ybXhr9YXZ0Agnjvq4ewQ>
+    <xme:YF_8XzwsVW2MmxbBTu-DZwPBPGw2nUr1Fs5QNJCwfwNOMAwloh5OCl-Ox30x6wxPB
+    hVdcEVDV5-dKCG04SE>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -56,13 +56,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggod
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
     hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:ZF_8X3PdqEsaWNBAAn-5wxQ2fD7r9hMwda3Ne61n-mJden-INbNphQ>
-    <xmx:ZF_8X-SIio-iUAhVyTq9YiJEr2sJ9-XJ2-NEXT_SMAhmUULubeNjCA>
-    <xmx:ZF_8X5AqKI7w7EVY6v6z5Kc7Vmb8K47mprZ9xdIF6Ttgso7AT4MUoQ>
-    <xmx:ZF_8Xy0M_oXuoVtcLCYagfLbqFUPgk8rvwafjwAa2yEEhZctumKBCQ>
+X-ME-Proxy: <xmx:YF_8X3Eog5_MrfJuNEsWWZh-ubnOy6x4uPs3ID7KNt40pcsH5apBUA>
+    <xmx:YF_8X4v3qs91FpzFEHJXCtY6Zl9movLESimVHD2WyImLQFbUNEstuQ>
+    <xmx:YF_8X3CFBPdCHurApCQgBNST-GKVP9SweM5Q4Zff8g2zNGjHiIaH9w>
+    <xmx:YF_8X2xqqJK2pJ1QoXE1oS-19Ert22e4X20uUffGHnCjLi_iMxHnAg>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 660E824005A;
-        Mon, 11 Jan 2021 09:23:32 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2B57C24005D;
+        Mon, 11 Jan 2021 09:23:28 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Eric Anholt <eric@anholt.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -77,11 +77,10 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH v2 15/15] ARM: dts: bcm2711: Add the CEC interrupt controller
-Date:   Mon, 11 Jan 2021 15:23:09 +0100
-Message-Id: <20210111142309.193441-16-maxime@cerno.tech>
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 12/15] drm/vc4: hdmi: Don't register the CEC adapter if there's no interrupts
+Date:   Mon, 11 Jan 2021 15:23:06 +0100
+Message-Id: <20210111142309.193441-13-maxime@cerno.tech>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210111142309.193441-1-maxime@cerno.tech>
 References: <20210111142309.193441-1-maxime@cerno.tech>
@@ -91,61 +90,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CEC and hotplug interrupts go through an interrupt controller shared
-between the two HDMI controllers.
+We introduced the BCM2711 support to the vc4 HDMI controller with 5.10,
+but this was lacking any of the interrupts of the CEC controller so we
+have to deal with the backward compatibility.
 
-Let's add that interrupt controller and the interrupts for both HDMI
-controllers
+Do so by simply ignoring the CEC setup if the DT doesn't have the
+interrupts property.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- arch/arm/boot/dts/bcm2711.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index 8bb46ae76a92..06b15797ec11 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -316,6 +316,14 @@ bsc_intr: interrupt-controller@7ef00040 {
- 			#interrupt-cells = <1>;
- 		};
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 5a606b6f2917..eee9751009c2 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1667,9 +1667,15 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
+ {
+ 	struct cec_connector_info conn_info;
+ 	struct platform_device *pdev = vc4_hdmi->pdev;
++	struct device *dev = &pdev->dev;
+ 	u32 value;
+ 	int ret;
  
-+		aon_intr: interrupt-controller@7ef00100 {
-+			compatible = "brcm,bcm2711-l2-intc", "brcm,l2-intc";
-+			reg = <0x7ef00100 0x30>;
-+			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+		};
++	if (!of_find_property(dev->of_node, "interrupts", NULL)) {
++		dev_warn(dev, "'interrupts' DT property is missing, no CEC\n");
++		return 0;
++	}
 +
- 		hdmi0: hdmi@7ef00700 {
- 			compatible = "brcm,bcm2711-hdmi0";
- 			reg = <0x7ef00700 0x300>,
-@@ -338,6 +346,11 @@ hdmi0: hdmi@7ef00700 {
- 				    "hd";
- 			clock-names = "hdmi", "bvb", "audio", "cec";
- 			resets = <&dvp 0>;
-+			interrupt-parent = <&aon_intr>;
-+			interrupts = <0>, <1>, <2>,
-+				     <3>, <4>, <5>;
-+			interrupt-names = "cec-tx", "cec-rx", "cec-low",
-+					  "wakeup", "hpd-connected", "hpd-removed";
- 			ddc = <&ddc0>;
- 			dmas = <&dma 10>;
- 			dma-names = "audio-rx";
-@@ -377,6 +390,11 @@ hdmi1: hdmi@7ef05700 {
- 			ddc = <&ddc1>;
- 			clock-names = "hdmi", "bvb", "audio", "cec";
- 			resets = <&dvp 1>;
-+			interrupt-parent = <&aon_intr>;
-+			interrupts = <8>, <7>, <6>,
-+				     <9>, <10>, <11>;
-+			interrupt-names = "cec-tx", "cec-rx", "cec-low",
-+					  "wakeup", "hpd-connected", "hpd-removed";
- 			dmas = <&dma 17>;
- 			dma-names = "audio-rx";
- 			status = "disabled";
+ 	vc4_hdmi->cec_adap = cec_allocate_adapter(&vc4_hdmi_cec_adap_ops,
+ 						  vc4_hdmi, "vc4",
+ 						  CEC_CAP_DEFAULTS |
 -- 
 2.29.2
 
