@@ -5,64 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 550C9C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D1AEC43333
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:25:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21DE0224B8
+	by mail.kernel.org (Postfix) with ESMTP id DAF68225AB
 	for <linux-media@archiver.kernel.org>; Mon, 11 Jan 2021 14:25:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388425AbhAKOYY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jan 2021 09:24:24 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:55909 "EHLO
+        id S1730488AbhAKOYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jan 2021 09:24:47 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:49005 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731452AbhAKOYV (ORCPT
+        by vger.kernel.org with ESMTP id S1728348AbhAKOYr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:24:21 -0500
+        Mon, 11 Jan 2021 09:24:47 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AF511580671;
-        Mon, 11 Jan 2021 09:23:15 -0500 (EST)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4C796580677;
+        Mon, 11 Jan 2021 09:23:24 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 11 Jan 2021 09:23:15 -0500
+  by compute6.internal (MEProxy); Mon, 11 Jan 2021 09:23:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=dUEU7+mtatpsm
-        3n6Bg9z6AG1wwyBz3mt2EN+DMCMFms=; b=VFeIERgoP1KDc8lohNc8ynOVu49A5
-        3/TrQ4eZOaCgUJxaXOtul3Qca276iGHNMW3OcDuC9xTG4z5T8BDynGRbUzJo3nOP
-        4OLXd/jkXfqWw/mNqqeYmUlv+lNTNINkOP7vhVnNmygeyi7zyCa8ztLbvBS67BuV
-        LAB3dMMil6gtioJ5S+agh4JWHbgriUb/kPpD8BQO6EIa6cVz0bJg5XSoQlgZGpto
-        V6TzRGj1d9UuV8qTDS7JSMrR/pqkhDuAY8mb9niufbP4iIoPz+fsUs6JN8FLJp+T
-        7HlCbDkxL+Zu9BQwlEbxax+V2X+nTe2dZw28eNU6T6QPOBFdk+ddaBO8Q==
+        :mime-version:content-transfer-encoding; s=fm1; bh=/Ad2iVRipXqGp
+        pegZRIk/NN02smUVWPzBKu1TR5HnFQ=; b=Td5FadssRdQhvwyBlo6wGhrmqVkZE
+        nW/PaYA90FEMY8v7DTG4qEXFhFdvbZg4PSZc9Er75jZupoFSR/+pXhvq8Nd0bixe
+        H7y2Z5Xq2QH/TOfyAZQuBtLj/26lrdAMTnH0T+uEVUiH9R2TMGZ+Os0eMLYWO6EA
+        Es2q+3HL9djApA5m8HfOYjxmsdXWCEMgxBSMtmAJLcvnUpjlskyKcOrso9f3cmFl
+        vMoEdIeSFCT8RY5FXBkloUnQNY+i1brmHhk8H0lU2NRukG0UjKgItZLbmaoKtdu8
+        bUZtdmXITtQlUq3iB+mlSn5WbPqGbXyA9keY9L8V4R9YTVUch2A7v6qUQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=dUEU7+mtatpsm3n6Bg9z6AG1wwyBz3mt2EN+DMCMFms=; b=fH/TbQTu
-        VvTYmy6eZuzBRMdE3KBI07s7S/ZYHniQm6doAXT9gAAbQgjNHtijFC/Y6d7Rk8hY
-        S1YckK3IAHB7cMb/2kZcpaMe2mhoPMAZDkWJsEb2oK22dxQwVWXiTkbdzQnMP08O
-        9EN48FKCTeWDnfWBpfEYyV1z/gkGEsgLh1Tr0SBk9bk4ZqLC5YRmmX77g7aRBWvY
-        0LFg5bOa762jwLji/rufhVoqePEUncPcv1rBVIWiCCJj3UX15cw8WEAYdSvqRvFn
-        lBO/CzTL0x/o43+8ktuDCW5fj0/rUOu6L+/H9g/U4VByc40b+XBOABGVDXxqyXZG
-        MPOUAQoa1ucpLg==
-X-ME-Sender: <xms:U1_8X7UVCdisTpJ7vaMe3JuXFjcc2NDJ_KdwgfvCzcGFS5NpZkwcAA>
-    <xme:U1_8Xzn4MGbOsmdrTpSkCHy3lCa1E-erWxuCouOnaRw6RfCgptt2jVSKJNqkn8kMA
-    rM6u8HS0LftUpI_VOE>
+        fm1; bh=/Ad2iVRipXqGppegZRIk/NN02smUVWPzBKu1TR5HnFQ=; b=LX0KE+bq
+        FuEm6CrERboGUIgjlGoTZHND5zsW4uzvyELM7araoqepzvc+4Cdht7HHjpAFHyHU
+        hBep5XAtukbkVtNrzz8bP4kQ93Sqquz+cBFDZSllf3Nhivn/0xnDZhSmSQQUR4ko
+        FqJT7iI/YCWSH8G/4XPP1DXaMYfztP9FCher58UGixFZSvxJ7rR2MaSY0muxZdOr
+        TzRLDEvxu6exUj8ie29zNHlCyUs8PInQuHiW4FHNeNotLJ2FY0+sVz211op7o/71
+        5Hykf4yum+OPKfuY5raHA2g9vv7I39eP/x90awPWRIcaZSz9DF5oHIaMow70IBS5
+        uW1hpYDqf6WWww==
+X-ME-Sender: <xms:XF_8X_AWU3LgkLyx3LP1dwUwOtqsv1Idb7vwSPYq4Dhqj8-AOrAP-Q>
+    <xme:XF_8X_luJjLnFl8TzF5JHK445Ov2yKkVNSDxFl1_iqYBLmJVWTvCNy99ggoYo_Njq
+    z4aECV6Q96Fyf-llDQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehuddgieegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepheenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:U1_8X3Y-ybsz3HGTv3PYvFb7qy_iwQpNldmEEbBsTAnHFC14jWZcyg>
-    <xmx:U1_8X2UIefAFuq4WR4wWjsq2wxmQ0CPlRi2oWvDrWAXZUwKv2dggfQ>
-    <xmx:U1_8X1kVc7Bz2Rc6zV1UDu1yQun8u_lXFLxEi6J_vXeDTP9aMUmUkQ>
-    <xmx:U1_8X3kgRh5ylHHeQzEqrz_2skjiwpGGtezW0VupgA106v2kU71lcA>
+X-ME-Proxy: <xmx:XF_8X_hBRyuIUxdd9SnDD-JPGGtSP680UAnKqS5qQr9Td7ryA1elgg>
+    <xmx:XF_8X5jJKc2yf60HFqv0_dMe2r4i5MJGNvuZthryKL1at4SGXAxKeQ>
+    <xmx:XF_8XxtZzyvKtlz_9jZtqlcxDqhdUliBsZOykrAvyKzkyrlg25DzFQ>
+    <xmx:XF_8X4uLN9mJVWvBb9uXs-MSYUSdiMUutW2XjRFb0iaw4h_ggptbFQ>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4300824005A;
-        Mon, 11 Jan 2021 09:23:15 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id E96F2240057;
+        Mon, 11 Jan 2021 09:23:23 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Eric Anholt <eric@anholt.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -77,10 +77,10 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
-Subject: [PATCH v2 03/15] drm/vc4: hdmi: Fix register offset with longer CEC messages
-Date:   Mon, 11 Jan 2021 15:22:57 +0100
-Message-Id: <20210111142309.193441-4-maxime@cerno.tech>
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 09/15] drm/vc4: hdmi: Split the interrupt handlers
+Date:   Mon, 11 Jan 2021 15:23:03 +0100
+Message-Id: <20210111142309.193441-10-maxime@cerno.tech>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210111142309.193441-1-maxime@cerno.tech>
 References: <20210111142309.193441-1-maxime@cerno.tech>
@@ -90,70 +90,143 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dom Cobley <popcornmix@gmail.com>
+The BCM2711 has two different interrupt sources to transmit and receive
+CEC messages, provided through an external interrupt chip shared between
+the two HDMI interrupt controllers.
 
-The code prior to 311e305fdb4e ("drm/vc4: hdmi: Implement a register
-layout abstraction") was relying on the fact that the register offset
-was incremented by 4 for each readl call. That worked since the register
-width is 4 bytes.
+The rest of the CEC controller is identical though so we need to change
+a bit the code organisation to share the code as much as possible, yet
+still allowing to register independant handlers.
 
-However, since that commit the HDMI_READ macro is now taking an enum,
-and the offset doesn't increment by 4 but 1 now. Divide the index by 4
-to fix this.
-
-Fixes: 311e305fdb4e ("drm/vc4: hdmi: Implement a register layout abstraction")
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Dom Cobley <popcornmix@gmail.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 86 +++++++++++++++++++++++++---------
+ 1 file changed, 65 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index cb4594e7df6f..7945dbcee78c 100644
+index 7b5c92df8f1b..12ca5f3084af 100644
 --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
 +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -1443,13 +1443,20 @@ static irqreturn_t vc4_cec_irq_handler_thread(int irq, void *priv)
+@@ -1454,15 +1454,22 @@ static int vc4_hdmi_audio_init(struct vc4_hdmi *vc4_hdmi)
+ }
  
+ #ifdef CONFIG_DRM_VC4_HDMI_CEC
+-static irqreturn_t vc4_cec_irq_handler_thread(int irq, void *priv)
++static irqreturn_t vc4_cec_irq_handler_rx_thread(int irq, void *priv)
+ {
+ 	struct vc4_hdmi *vc4_hdmi = priv;
+ 
+-	if (vc4_hdmi->cec_irq_was_rx) {
+-		if (vc4_hdmi->cec_rx_msg.len)
+-			cec_received_msg(vc4_hdmi->cec_adap,
+-					 &vc4_hdmi->cec_rx_msg);
+-	} else if (vc4_hdmi->cec_tx_ok) {
++	if (vc4_hdmi->cec_rx_msg.len)
++		cec_received_msg(vc4_hdmi->cec_adap,
++				 &vc4_hdmi->cec_rx_msg);
++
++	return IRQ_HANDLED;
++}
++
++static irqreturn_t vc4_cec_irq_handler_tx_thread(int irq, void *priv)
++{
++	struct vc4_hdmi *vc4_hdmi = priv;
++
++	if (vc4_hdmi->cec_tx_ok) {
+ 		cec_transmit_done(vc4_hdmi->cec_adap, CEC_TX_STATUS_OK,
+ 				  0, 0, 0, 0);
+ 	} else {
+@@ -1476,6 +1483,19 @@ static irqreturn_t vc4_cec_irq_handler_thread(int irq, void *priv)
+ 	return IRQ_HANDLED;
+ }
+ 
++static irqreturn_t vc4_cec_irq_handler_thread(int irq, void *priv)
++{
++	struct vc4_hdmi *vc4_hdmi = priv;
++	irqreturn_t ret;
++
++	if (vc4_hdmi->cec_irq_was_rx)
++		ret = vc4_cec_irq_handler_rx_thread(irq, priv);
++	else
++		ret = vc4_cec_irq_handler_tx_thread(irq, priv);
++
++	return ret;
++}
++
  static void vc4_cec_read_msg(struct vc4_hdmi *vc4_hdmi, u32 cntrl1)
  {
-+	struct drm_device *dev = vc4_hdmi->connector.dev;
- 	struct cec_msg *msg = &vc4_hdmi->cec_rx_msg;
- 	unsigned int i;
+ 	struct drm_device *dev = vc4_hdmi->connector.dev;
+@@ -1500,31 +1520,55 @@ static void vc4_cec_read_msg(struct vc4_hdmi *vc4_hdmi, u32 cntrl1)
+ 	}
+ }
  
- 	msg->len = 1 + ((cntrl1 & VC4_HDMI_CEC_REC_WRD_CNT_MASK) >>
- 					VC4_HDMI_CEC_REC_WRD_CNT_SHIFT);
++static irqreturn_t vc4_cec_irq_handler_tx_bare(int irq, void *priv)
++{
++	struct vc4_hdmi *vc4_hdmi = priv;
++	u32 cntrl1;
 +
-+	if (msg->len > 16) {
-+		drm_err(dev, "Attempting to read too much data (%d)\n", msg->len);
-+		return;
-+	}
++	cntrl1 = HDMI_READ(HDMI_CEC_CNTRL_1);
++	vc4_hdmi->cec_tx_ok = cntrl1 & VC4_HDMI_CEC_TX_STATUS_GOOD;
++	cntrl1 &= ~VC4_HDMI_CEC_START_XMIT_BEGIN;
++	HDMI_WRITE(HDMI_CEC_CNTRL_1, cntrl1);
 +
- 	for (i = 0; i < msg->len; i += 4) {
--		u32 val = HDMI_READ(HDMI_CEC_RX_DATA_1 + i);
-+		u32 val = HDMI_READ(HDMI_CEC_RX_DATA_1 + (i >> 2));
- 
- 		msg->msg[i] = val & 0xff;
- 		msg->msg[i + 1] = (val >> 8) & 0xff;
-@@ -1542,11 +1549,17 @@ static int vc4_hdmi_cec_adap_transmit(struct cec_adapter *adap, u8 attempts,
- 				      u32 signal_free_time, struct cec_msg *msg)
++	return IRQ_WAKE_THREAD;
++}
++
++static irqreturn_t vc4_cec_irq_handler_rx_bare(int irq, void *priv)
++{
++	struct vc4_hdmi *vc4_hdmi = priv;
++	u32 cntrl1;
++
++	vc4_hdmi->cec_rx_msg.len = 0;
++	cntrl1 = HDMI_READ(HDMI_CEC_CNTRL_1);
++	vc4_cec_read_msg(vc4_hdmi, cntrl1);
++	cntrl1 |= VC4_HDMI_CEC_CLEAR_RECEIVE_OFF;
++	HDMI_WRITE(HDMI_CEC_CNTRL_1, cntrl1);
++	cntrl1 &= ~VC4_HDMI_CEC_CLEAR_RECEIVE_OFF;
++
++	HDMI_WRITE(HDMI_CEC_CNTRL_1, cntrl1);
++
++	return IRQ_WAKE_THREAD;
++}
++
+ static irqreturn_t vc4_cec_irq_handler(int irq, void *priv)
  {
- 	struct vc4_hdmi *vc4_hdmi = cec_get_drvdata(adap);
-+	struct drm_device *dev = vc4_hdmi->connector.dev;
- 	u32 val;
- 	unsigned int i;
+ 	struct vc4_hdmi *vc4_hdmi = priv;
+ 	u32 stat = HDMI_READ(HDMI_CEC_CPU_STATUS);
+-	u32 cntrl1, cntrl5;
++	irqreturn_t ret;
++	u32 cntrl5;
  
-+	if (msg->len > 16) {
-+		drm_err(dev, "Attempting to transmit too much data (%d)\n", msg->len);
-+		return -ENOMEM;
-+	}
+ 	if (!(stat & VC4_HDMI_CPU_CEC))
+ 		return IRQ_NONE;
+-	vc4_hdmi->cec_rx_msg.len = 0;
+-	cntrl1 = HDMI_READ(HDMI_CEC_CNTRL_1);
 +
- 	for (i = 0; i < msg->len; i += 4)
--		HDMI_WRITE(HDMI_CEC_TX_DATA_1 + i,
-+		HDMI_WRITE(HDMI_CEC_TX_DATA_1 + (i >> 2),
- 			   (msg->msg[i]) |
- 			   (msg->msg[i + 1] << 8) |
- 			   (msg->msg[i + 2] << 16) |
+ 	cntrl5 = HDMI_READ(HDMI_CEC_CNTRL_5);
+ 	vc4_hdmi->cec_irq_was_rx = cntrl5 & VC4_HDMI_CEC_RX_CEC_INT;
+-	if (vc4_hdmi->cec_irq_was_rx) {
+-		vc4_cec_read_msg(vc4_hdmi, cntrl1);
+-		cntrl1 |= VC4_HDMI_CEC_CLEAR_RECEIVE_OFF;
+-		HDMI_WRITE(HDMI_CEC_CNTRL_1, cntrl1);
+-		cntrl1 &= ~VC4_HDMI_CEC_CLEAR_RECEIVE_OFF;
+-	} else {
+-		vc4_hdmi->cec_tx_ok = cntrl1 & VC4_HDMI_CEC_TX_STATUS_GOOD;
+-		cntrl1 &= ~VC4_HDMI_CEC_START_XMIT_BEGIN;
+-	}
+-	HDMI_WRITE(HDMI_CEC_CNTRL_1, cntrl1);
++	if (vc4_hdmi->cec_irq_was_rx)
++		ret = vc4_cec_irq_handler_rx_bare(irq, priv);
++	else
++		ret = vc4_cec_irq_handler_tx_bare(irq, priv);
++
+ 	HDMI_WRITE(HDMI_CEC_CPU_CLEAR, VC4_HDMI_CPU_CEC);
+-
+-	return IRQ_WAKE_THREAD;
++	return ret;
+ }
+ 
+ static int vc4_hdmi_cec_adap_enable(struct cec_adapter *adap, bool enable)
 -- 
 2.29.2
 
