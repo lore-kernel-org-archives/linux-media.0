@@ -7,22 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D50DC433E9
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A96BAC4332D
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A2A4206C3
+	by mail.kernel.org (Postfix) with ESMTP id 8A9AC2311B
 	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436763AbhALTwZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:52:25 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44248 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406358AbhALTwZ (ORCPT
+        id S2436812AbhALTwb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406358AbhALTwb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:52:25 -0500
+        Tue, 12 Jan 2021 14:52:31 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46213C061795
+        for <linux-media@vger.kernel.org>; Tue, 12 Jan 2021 11:51:51 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 5CA821F45505
+        with ESMTPSA id 95C231F45508
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
@@ -32,9 +35,9 @@ Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
         Daniel Mack <zonque@gmail.com>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 3/6] media: ov9640: Use the generic clock framework
-Date:   Tue, 12 Jan 2021 16:49:16 -0300
-Message-Id: <20210112194919.50176-4-ezequiel@collabora.com>
+Subject: [PATCH v2 5/6] media: ov6650: Use the generic clock framework
+Date:   Tue, 12 Jan 2021 16:49:18 -0300
+Message-Id: <20210112194919.50176-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210112194919.50176-1-ezequiel@collabora.com>
 References: <20210112194919.50176-1-ezequiel@collabora.com>
@@ -44,7 +47,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 63839882c597 ("media: mach-pxa: palmz72/pcm990: remove soc_camera dependencies")
+Commit ce548396a433 ("media: mach-omap1: board-ams-delta.c: remove soc_camera dependencies")
 removed the last in-tree user of this sensor. New users
 will be required to use the generic clock framework,
 so it's possible to convert the driver to use it.
@@ -53,97 +56,115 @@ Convert the driver to use the CCF, and drop the legacy
 v4l2-clk API.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 ---
- drivers/media/i2c/ov9640.c | 15 ++++++---------
- drivers/media/i2c/ov9640.h |  2 +-
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ov6650.c | 28 +++++++++++-----------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/i2c/ov9640.c b/drivers/media/i2c/ov9640.c
-index e2a25240fc85..d36b04c49628 100644
---- a/drivers/media/i2c/ov9640.c
-+++ b/drivers/media/i2c/ov9640.c
-@@ -17,6 +17,7 @@
-  * Copyright (C) 2008, Guennadi Liakhovetski <kernel@pengutronix.de>
+diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
+index d73f9f540932..85dd13694bd2 100644
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -22,13 +22,13 @@
   */
  
+ #include <linux/bitops.h>
 +#include <linux/clk.h>
- #include <linux/init.h>
- #include <linux/module.h>
+ #include <linux/delay.h>
  #include <linux/i2c.h>
-@@ -26,7 +27,6 @@
- #include <linux/videodev2.h>
+ #include <linux/slab.h>
+ #include <linux/v4l2-mediabus.h>
+ #include <linux/module.h>
  
- #include <media/v4l2-async.h>
 -#include <media/v4l2-clk.h>
- #include <media/v4l2-common.h>
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
-@@ -333,13 +333,13 @@ static int ov9640_s_power(struct v4l2_subdev *sd, int on)
- 	if (on) {
- 		gpiod_set_value(priv->gpio_power, 1);
- 		usleep_range(1000, 2000);
+ 
+@@ -194,7 +194,7 @@ struct ov6650 {
+ 		struct v4l2_ctrl *blue;
+ 		struct v4l2_ctrl *red;
+ 	};
+-	struct v4l2_clk		*clk;
++	struct clk		*clk;
+ 	bool			half_scale;	/* scale down output by 2 */
+ 	struct v4l2_rect	rect;		/* sensor cropping window */
+ 	struct v4l2_fract	tpf;		/* as requested with s_frame_interval */
+@@ -459,9 +459,9 @@ static int ov6650_s_power(struct v4l2_subdev *sd, int on)
+ 	int ret = 0;
+ 
+ 	if (on)
 -		ret = v4l2_clk_enable(priv->clk);
 +		ret = clk_prepare_enable(priv->clk);
- 		usleep_range(1000, 2000);
- 		gpiod_set_value(priv->gpio_reset, 0);
- 	} else {
- 		gpiod_set_value(priv->gpio_reset, 1);
- 		usleep_range(1000, 2000);
+ 	else
 -		v4l2_clk_disable(priv->clk);
 +		clk_disable_unprepare(priv->clk);
- 		usleep_range(1000, 2000);
- 		gpiod_set_value(priv->gpio_power, 0);
- 	}
-@@ -719,7 +719,7 @@ static int ov9640_probe(struct i2c_client *client,
  
- 	priv->subdev.ctrl_handler = &priv->hdl;
+ 	return ret;
+ }
+@@ -821,14 +821,14 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
+ 	u8 pidh, pidl, midh, midl;
+ 	int i, ret = 0;
  
--	priv->clk = v4l2_clk_get(&client->dev, "mclk");
-+	priv->clk = devm_clk_get(&client->dev, "mclk");
+-	priv->clk = v4l2_clk_get(&client->dev, NULL);
++	priv->clk = devm_clk_get(&client->dev, NULL);
  	if (IS_ERR(priv->clk)) {
  		ret = PTR_ERR(priv->clk);
- 		goto ectrlinit;
-@@ -727,17 +727,15 @@ static int ov9640_probe(struct i2c_client *client,
+-		dev_err(&client->dev, "v4l2_clk request err: %d\n", ret);
++		dev_err(&client->dev, "clk request err: %d\n", ret);
+ 		return ret;
+ 	}
  
- 	ret = ov9640_video_probe(client);
- 	if (ret)
--		goto eprobe;
-+		goto ectrlinit;
+-	rate = v4l2_clk_get_rate(priv->clk);
++	rate = clk_get_rate(priv->clk);
+ 	for (i = 0; rate && i < ARRAY_SIZE(ov6650_xclk); i++) {
+ 		if (rate != ov6650_xclk[i].rate)
+ 			continue;
+@@ -839,8 +839,8 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
+ 		break;
+ 	}
+ 	for (i = 0; !xclk && i < ARRAY_SIZE(ov6650_xclk); i++) {
+-		ret = v4l2_clk_set_rate(priv->clk, ov6650_xclk[i].rate);
+-		if (ret || v4l2_clk_get_rate(priv->clk) != ov6650_xclk[i].rate)
++		ret = clk_set_rate(priv->clk, ov6650_xclk[i].rate);
++		if (ret || clk_get_rate(priv->clk) != ov6650_xclk[i].rate)
+ 			continue;
  
- 	priv->subdev.dev = &client->dev;
- 	ret = v4l2_async_register_subdev(&priv->subdev);
- 	if (ret)
--		goto eprobe;
-+		goto ectrlinit;
+ 		xclk = &ov6650_xclk[i];
+@@ -852,12 +852,12 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
+ 		dev_err(&client->dev, "unable to get supported clock rate\n");
+ 		if (!ret)
+ 			ret = -EINVAL;
+-		goto eclkput;
++		return ret;
+ 	}
  
- 	return 0;
+ 	ret = ov6650_s_power(sd, 1);
+ 	if (ret < 0)
+-		goto eclkput;
++		return ret;
  
--eprobe:
+ 	msleep(20);
+ 
+@@ -899,11 +899,6 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
+ 
+ done:
+ 	ov6650_s_power(sd, 0);
+-	if (!ret)
+-		return 0;
+-eclkput:
 -	v4l2_clk_put(priv->clk);
- ectrlinit:
- 	v4l2_ctrl_handler_free(&priv->hdl);
+-
+ 	return ret;
+ }
  
-@@ -749,7 +747,6 @@ static int ov9640_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct ov9640_priv *priv = to_ov9640_sensor(sd);
+@@ -1089,7 +1084,6 @@ static int ov6650_remove(struct i2c_client *client)
+ {
+ 	struct ov6650 *priv = to_ov6650(client);
  
 -	v4l2_clk_put(priv->clk);
  	v4l2_async_unregister_subdev(&priv->subdev);
  	v4l2_ctrl_handler_free(&priv->hdl);
- 
-diff --git a/drivers/media/i2c/ov9640.h b/drivers/media/i2c/ov9640.h
-index a8ed6992c1a8..c105594b2472 100644
---- a/drivers/media/i2c/ov9640.h
-+++ b/drivers/media/i2c/ov9640.h
-@@ -196,7 +196,7 @@ struct ov9640_reg {
- struct ov9640_priv {
- 	struct v4l2_subdev		subdev;
- 	struct v4l2_ctrl_handler	hdl;
--	struct v4l2_clk			*clk;
-+	struct clk			*clk;
- 	struct gpio_desc		*gpio_power;
- 	struct gpio_desc		*gpio_reset;
- 
+ 	return 0;
 -- 
 2.29.2
 
