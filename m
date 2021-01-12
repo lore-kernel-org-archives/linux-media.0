@@ -2,231 +2,303 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30E23C433E6
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 09:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F8F1C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 09:16:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6E9622DFA
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 09:11:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05AE822DFA
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 09:16:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389499AbhALJLd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 04:11:33 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:45254 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389421AbhALJLc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 04:11:32 -0500
-Received: by mail-ot1-f54.google.com with SMTP id n42so1579341ota.12;
-        Tue, 12 Jan 2021 01:11:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Dyp8AF4nmDmjmAO/5yDLFX4yPf7LOKRvDr6UBsIM48=;
-        b=elwTOJUy1q/yULEOCgWrbVAnI+ZGXefLSyQaVoAWmD37biDeDKm8Jbhdu949a6HfZo
-         bNFe334/J2W0eKHdl0VRfMdYaIADDJtdR2jd9n8+rdItb5+Cw5WzmlNZHkj3Q0m/Unad
-         r5vg31KKgLQyRkOYcG+lJoHVXx5hoHnftzbQ7JktD8bDn///VhdSskWSsW1jEGjBJkt6
-         R5LGb1Jri+SZx/lMUDcNgxImjN7Y0v5C6I9mDza3AUl19QZIH8F+i3uTjpuE/kC5kI7/
-         eTeW6BMXalnoLVZM6qk17BFgG+XvOsoTxB33c3SZCrludiw3Co1QqB8QaOQbtGZZ7efN
-         iVVw==
-X-Gm-Message-State: AOAM530kJDwP+jSKn7zLsKRyag7pMzZT3hrHXLmHWRmUHiIj4XY1xDlv
-        ouRiz6AzAcvOErs6ucyw/lKdb2RJ4OvdiH2uwiFshTHN
-X-Google-Smtp-Source: ABdhPJydTlCkYU2F8i1kDzzGEBDQRQ6rnNUYhkFyaQ0aWearu1Ieu57z30X1/FP70MJPfH47+3FiSmFuq2d7XX9jDOU=
-X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr2165279otc.145.1610442651166;
- Tue, 12 Jan 2021 01:10:51 -0800 (PST)
+        id S2389686AbhALJQl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 04:16:41 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:36388 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389916AbhALJQk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 12 Jan 2021 04:16:40 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kzFmO-00BRPL-Eq; Tue, 12 Jan 2021 09:15:56 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kzFpo-0003RG-81; Tue, 12 Jan 2021 09:19:28 +0000
+Date:   Tue, 12 Jan 2021 09:19:28 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <700614131.43.1610443168238@builder.linuxtv.org>
+In-Reply-To: <1937634800.42.1610356768932@builder.linuxtv.org>
+References: <1937634800.42.1610356768932@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3358
 MIME-Version: 1.0
-References: <20201215170957.92761-1-jacopo+renesas@jmondi.org>
- <20201215170957.92761-6-jacopo+renesas@jmondi.org> <X9pCSfxE722rnPHE@pendragon.ideasonboard.com>
- <20210111104311.e6nyxhzhvlyjjxxw@uno.localdomain> <X/wvc26LXz2VsCkp@pendragon.ideasonboard.com>
- <20210111112023.brrhxgfedo5fer53@uno.localdomain> <X/0triYZZJiXaf07@pendragon.ideasonboard.com>
- <20210112090805.myglp2lpozo3blq5@uno.localdomain>
-In-Reply-To: <20210112090805.myglp2lpozo3blq5@uno.localdomain>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Jan 2021 10:10:39 +0100
-Message-ID: <CAMuHMdV3Cz_spPi=fMnsJ15On_MEhW15NArc8=6CsbJ7XfNZYA@mail.gmail.com>
-Subject: Re: [PATCH v6 5/5] media: i2c: max9286: Configure reverse channel amplitude
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+See <https://builder.linuxtv.org/job/media-build/3358/display/redirect>
 
-On Tue, Jan 12, 2021 at 10:07 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
-> On Tue, Jan 12, 2021 at 07:03:42AM +0200, Laurent Pinchart wrote:
-> > On Mon, Jan 11, 2021 at 12:20:23PM +0100, Jacopo Mondi wrote:
-> > > On Mon, Jan 11, 2021 at 12:58:59PM +0200, Laurent Pinchart wrote:
-> > > > On Mon, Jan 11, 2021 at 11:43:11AM +0100, Jacopo Mondi wrote:
-> > > >> On Wed, Dec 16, 2020 at 07:22:17PM +0200, Laurent Pinchart wrote:
-> > > >>> On Tue, Dec 15, 2020 at 06:09:57PM +0100, Jacopo Mondi wrote:
-> > > >>>> Adjust the initial reverse channel amplitude parsing from
-> > > >>>> firmware interface the 'maxim,reverse-channel-microvolt'
-> > > >>>> property.
-> > > >>>>
-> > > >>>> This change is required for both rdacm20 and rdacm21 camera
-> > > >>>> modules to be correctly probed when used in combination with
-> > > >>>> the max9286 deserializer.
-> > > >>>>
-> > > >>>> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > > >>>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > > >>>> ---
-> > > >>>>  drivers/media/i2c/max9286.c | 23 ++++++++++++++++++++++-
-> > > >>>>  1 file changed, 22 insertions(+), 1 deletion(-)
-> > > >>>>
-> > > >>>> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-> > > >>>> index 021309c6dd6f..9b40a4890c4d 100644
-> > > >>>> --- a/drivers/media/i2c/max9286.c
-> > > >>>> +++ b/drivers/media/i2c/max9286.c
-> > > >>>> @@ -163,6 +163,8 @@ struct max9286_priv {
-> > > >>>>        unsigned int mux_channel;
-> > > >>>>        bool mux_open;
-> > > >>>>
-> > > >>>> +      u32 reverse_channel_mv;
-> > > >>>> +
-> > > >>>>        struct v4l2_ctrl_handler ctrls;
-> > > >>>>        struct v4l2_ctrl *pixelrate;
-> > > >>>>
-> > > >>>> @@ -557,10 +559,14 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
-> > > >>>>         * All enabled sources have probed and enabled their reverse control
-> > > >>>>         * channels:
-> > > >>>>         *
-> > > >>>> +       * - Increase the reverse channel amplitude to compensate for the
-> > > >>>> +       *   remote ends high threshold, if not done already
-> > > >>>>         * - Verify all configuration links are properly detected
-> > > >>>>         * - Disable auto-ack as communication on the control channel are now
-> > > >>>>         *   stable.
-> > > >>>>         */
-> > > >>>> +      if (priv->reverse_channel_mv < 170)
-> > > >>>> +              max9286_reverse_channel_setup(priv, 170);
-> > > >>>
-> > > >>> I'm beginning to wonder if there will be a need in the future to not
-> > > >>> increase the reverse channel amplitude (keeping the threshold low on the
-> > > >>> remote side). An increased amplitude increases power consumption, and if
-> > > >>> the environment isn't noisy, a low amplitude would work. The device tree
-> > > >>> would then need to specify both the initial amplitude required by the
-> > > >>> remote side, and the desired amplitude after initialization. What do you
-> > > >>> think ? Is it overkill ? We don't have to implement this now, so
-> > > >>>
-> > > >>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > >>>
-> > > >>> but if this feature could be required later, we may want to take into
-> > > >>> account in the naming of the new DT property to reflect the fact that it
-> > > >>> is the initial value.
-> > > >>
-> > > >> I had the same thought when I initially proposed
-> > > >> "maxim,initial-reverse-channel-mV"
-> > > >>
-> > > >> Having to use the standard unit suffix that would have become
-> > > >> "maxim,initial-reverse-channel-microvolt"
-> > > >> which is extremely long.
-> > > >>
-> > > >> I can't tell if there will be any need to adjust the amplitude later.
-> > > >> In any case, I would not rely on a DTS property to do so, as once we
-> > > >> have probed the remote we have a subdev where to call
-> > > >> 'get_mbus_config()' on, and from there we can report the high threshold
-> > > >> status of the serializer and adjust the deser amplitude accordingly.
-> > > >
-> > > > I don't think that's the point. The threshold of the serializer is
-> > > > something we can configure at runtime. What voltage level to use after
-> > >
-> > > How so ? I mean, we can add an API for this, but currently it's
-> > > configured at probe time and that's it. Its configuration might as
-> > > well come from a DT property like we do on the deserializer here but I
-> > > fail to see why it's different. Both settings depends on the required
-> > > noise immunity of th system.
-> >
-> > The voltage level configuration need to match between the tserializer
-> > (transmitter) and the deserializer (receiver). The serializer is
-> > configured with a voltage level, and the deserializer needs to be
-> > configured with a corresponding threshold.
-> >
->
-> If I'm not mistaken it's actually the other way around, at least for
-> the chips we're dealing with.
->
-> The serializer (MAX9271) has an "Reverse Channel Receiver High
-> Threshold Enable" bit (register 0x08[0]) undocumented in the chip
-> manual but described in the "MAX9286 Programming Guide 2 10.pdf"
-> document in the "Important Registers" section.
->
-> The deserializer (MAX9286) has instead a configurable setting for the reverse
-> channel signal amplitude, which is what we are controlling in this
-> series.
->
-> The deserializer reverse channel amplitude has to match the remote
-> side 'high threshold enable' setting. If it is enabled the amplitude
-> has to be increased to be able to probe the remote side. If it's not
-> a lower amplitude has to be used to make comunication reliable.
->
-> As you said, some models (RDACM20) might be pre-programmed with the
-> 'high threshold enable' bit set, and so the deserializer reverse
-> channel amplitude has to be adjusted accordingly to be able to
-> comunicate on the reverse channel.
->
-> > The voltage level of the serializer is configurable on the camera side
-> > when the system is powered up. The RDACM20 has a microcontroller which
-> > can configure the serializer, and other cameras may have similar
-> > mechanisms. As the deserializer can't query the information from the
-> > serializer (communication is unreliable if the threshold has an
-> > incorrect value), we need a DT property to tell the deserializer what
-> > threshold is initially used by the camera when it gets powered up.
-> >
->
-> That's what this series does, yes.
->
-> > This only covers initialization. A camera could boot up with a low
-> > voltage level, but we may want to increase the voltage level (and thus
-> > the threshold on the deserializer side) to increase noise immunity. Or,
-> > if the system environment isn't noisy, we may want to keep a low voltage
-> > level, or even decrease it if the camera boots up with a high voltage
-> > level. This runtime voltage level depends on the system design and its
-> > susceptibility to noise, and is thus a system property. Should we want
-> > to make it configurable, it should be specified in DT, and it's separate
-> > from the initial voltage level that is used to establish communication.
-> >
->
-> And that's what I meant. Assuming we handle initialization correctly
-> with this series, the serializers 'high threshold' configuration
-> -after- initialization can be specified with a DT property on the
-> -serializer- side. Then, to adjust the deserializer reverse channel
-> amplitude, once we the remote has probed and we have a subdevice
-> registered for it, we can query the 'high threshold' configuration
-> using get_mbus_config() (or another API if we think it's better) and
-> adjust the deserializer accordingly.
->
-> All in all:
-> - yes, I think there might be a need to control the noise immunity
->   settings after initialization
-> - I think it should be done on the serializer side, possibly with a DT
->   property, possibly something like a boolean 'maxim,high-threshold-enable'
+Changes:
 
-Can the needed voltage level be calibrated at runtime, cfr. DDR
-link training?
 
-Gr{oetje,eeting}s,
+------------------------------------------
+[...truncated 6.25 KB...]
+Applying patches for kernel 4.19.0-5-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+patch -s -f -N -p1 -i ../backports/debug.patch
+patch -s -f -N -p1 -i ../backports/drx39xxj.patch
+patch -s -f -N -p1 -i ../backports/ccs.patch
+patch -s -f -N -p1 -i ../backports/v5.10_vb2_dma_buf_map.patch
+patch -s -f -N -p1 -i ../backports/v5.9_tasklet.patch
+patch -s -f -N -p1 -i ../backports/v5.9_netup_unidvb_devm_revert.patch
+patch -s -f -N -p1 -i ../backports/v5.7_mmap_read_lock.patch
+patch -s -f -N -p1 -i ../backports/v5.7_vm_map_ram.patch
+patch -s -f -N -p1 -i ../backports/v5.7_pin_user_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.7_define_seq_attribute.patch
+patch -s -f -N -p1 -i ../backports/v5.6_pin_user_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.6_const_fb_ops.patch
+patch -s -f -N -p1 -i ../backports/v5.6_pm_runtime_get_if_active.patch
+patch -s -f -N -p1 -i ../backports/v5.5_alsa_pcm_api_updates.patch
+patch -s -f -N -p1 -i ../backports/v5.5_memtype_h.patch
+patch -s -f -N -p1 -i ../backports/v5.5_dev_printk_h.patch
+patch -s -f -N -p1 -i ../backports/v5.5_vb2_kmap.patch
+patch -s -f -N -p1 -i ../backports/v5.4_revert_spi_transfer.patch
+patch -s -f -N -p1 -i ../backports/v5.1_vm_map_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.1_devm_i2c_new_dummy_device.patch
+patch -s -f -N -p1 -i ../backports/v5.0_ipu3-cio2.patch
+patch -s -f -N -p1 -i ../backports/v5.0_time32.patch
+patch -s -f -N -p1 -i ../backports/v4.20_access_ok.patch
+Patched drivers/media/dvb-core/dvbdev.c
+Patched drivers/media/v4l2-core/v4l2-dev.c
+Patched drivers/media/rc/rc-main.c
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+./scripts/make_kconfig.pl /lib/modules/4.19.0-5-amd64/build /lib/modules/4.19.0-5-amd64/source 1
+Preparing to compile for kernel version 4.19.0
 
-                        Geert
+***WARNING:*** You do not have the full kernel sources installed.
+This does not prevent you from building the v4l-dvb tree if you have the
+kernel headers, but the full kernel source may be required in order to use
+make menuconfig / xconfig / qconfig.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+If you are experiencing problems building the v4l-dvb tree, please try
+building against a vanilla kernel before reporting a bug.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Vanilla kernels are available at http://kernel.org.
+On most distros, this will compile a newly downloaded kernel:
+
+cp /boot/config-`uname -r` <your kernel dir>/.config
+cd <your kernel dir>
+make all modules_install install
+
+Please see your distro's web site for instructions to build a new kernel.
+
+WARNING: This is the V4L/DVB backport tree, with experimental drivers
+	 backported to run on legacy kernels from the development tree at:
+		http://git.linuxtv.org/media-tree.git.
+	 It is generally safe to use it for testing a new driver or
+	 feature, but its usage on production environments is risky.
+	 Don't use it in production. You've been warned.
+CEC_CROS_EC: Requires at least kernel 9.255.255
+V4L2_H264: Requires at least kernel 9.255.255
+VIDEO_IPU3_CIO2: Requires at least kernel 9.255.255
+VIDEO_OMAP3: Requires at least kernel 9.255.255
+VIDEO_IMX274: Requires at least kernel 9.255.255
+SND_BT87X: Requires at least kernel 9.255.255
+INTEL_ATOMISP: Requires at least kernel 9.255.255
+VIDEO_HANTRO: Requires at least kernel 9.255.255
+VIDEO_ROCKCHIP_VDEC: Requires at least kernel 9.255.255
+VIDEO_IPU3_IMGU: Requires at least kernel 9.255.255
+Created default (all yes) .config file
+./scripts/fix_kconfig.pl
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> 
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+./scripts/make_myconfig.pl
+[ ! -f "./config-mycompat.h" ] && echo "/* empty config-mycompat.h */" > "./config-mycompat.h" || true
+perl scripts/make_config_compat.pl /lib/modules/4.19.0-5-amd64/source ./.myconfig ./config-compat.h
+creating symbolic links...
+Kernel build directory is /lib/modules/4.19.0-5-amd64/build
+make -C ../linux apply_patches
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Patches for 4.19.0-5-amd64 already applied.
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make -C /lib/modules/4.19.0-5-amd64/build M=<https://builder.linuxtv.org/job/media-build/ws/v4l>  modules
+make[2]: Entering directory '/usr/src/linux-headers-4.19.0-5-amd64'
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/msp3400-driver.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/msp3400-kthreads.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-core.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-reg-access.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-quirk.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-limits.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/et8ek8_mode.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/et8ek8_driver.o>
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>: In function 'ccs_data_parse_regs.isra.4':
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>:310:11: warning: 'regs_base' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   *__regs = regs_base;
+   ~~~~~~~~^~~~~~~~~~~
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>:291:16: warning: 'regs' may be used uninitialized in this function [-Wmaybe-uninitialized]
+    regs->value = bin_alloc(bin, len);
+    ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>: In function 'ccs_data_parse_rules':
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>:506:25: warning: 'next_rule' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     rules->num_if_rules = __num_if_rules;
+     ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>:559:12: warning: 'rules_base' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   *__rules = rules_base;
+   ~~~~~~~~~^~~~~~~~~~~~
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>: In function 'ccs_data_parse_pdaf.isra.10':
+<https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-data.c>:725:20: warning: 'pdgroup' may be used uninitialized in this function [-Wmaybe-uninitialized]
+    pdesc = &pdgroup->descs[j];
+             ~~~~~~~^~~~~~~
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cx25840-core.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cx25840-audio.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cx25840-firmware.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cx25840-vbi.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cx25840-ir.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/m5mols_core.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/m5mols_controls.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/m5mols_capture.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/aptina-pll.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tvaudio.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tda7432.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa6588.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tda9840.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tda1997x.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tea6415c.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tea6420.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa7110.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa7115.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa717x.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa7127.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa7185.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/saa6752hs.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ad5820.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ak7375.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/dw9714.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/dw9768.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/dw9807-vcm.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7170.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7175.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7180.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7183.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7343.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7393.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7604.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7842.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ad9389b.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adv7511-v4l2.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/vpx3220.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/vs6624.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/bt819.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/bt856.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/bt866.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ks0127.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ths7303.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ths8200.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tvp5150.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tvp514x.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tvp7002.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tw2804.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tw9903.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tw9906.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tw9910.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cs3308.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cs5345.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/cs53l32a.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/m52790.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tlv320aic23b.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/uda1342.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/wm8775.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/wm8739.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/vp27smpx.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/sony-btf-mpx.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/upd64031a.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/upd64083.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov02a10.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov2640.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov2680.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov2685.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov2740.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov5647.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov5670.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov5675.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov5695.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov6650.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov7251.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov7640.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov7670.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov8856.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov9640.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov9650.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov9734.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov13858.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9m001.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9m032.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9m111.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9p031.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9t001.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9t112.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9v011.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9v032.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/mt9v111.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/sr030pc30.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/noon010pc30.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/rj54n1cb0c.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5k6aa.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5k6a3.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5k4ecgx.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5k5baf.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5c73m3-core.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5c73m3-spi.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/s5c73m3-ctrls.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/adp1653.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/lm3560.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/lm3646.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ccs-pll.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ak881x.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ir-kbd-i2c.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/video-i2c.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ml86v7667.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/ov2659.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/tc358743.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/hi556.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx214.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx219.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx258.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx290.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx319.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/imx355.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/rdacm20.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/max9271.o>
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/st-mipid02.o>
+In file included from <https://builder.linuxtv.org/job/media-build/ws/v4l/../linux/include/media/videobuf2-core.h>:18,
+                 from <https://builder.linuxtv.org/job/media-build/ws/v4l/../linux/include/media/videobuf2-v4l2.h>:16,
+                 from <https://builder.linuxtv.org/job/media-build/ws/v4l/video-i2c.c>:32:
+<https://builder.linuxtv.org/job/media-build/ws/v4l/../linux/include/linux/dma-buf.h>:16:10: fatal error: linux/dma-buf-map.h: No such file or directory
+ #include <linux/dma-buf-map.h>
+          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+  CC [M]  <https://builder.linuxtv.org/job/media-build/ws/v4l/max2175.o>
+make[5]: *** [/usr/src/linux-headers-4.19.0-5-common/scripts/Makefile.build:314: <https://builder.linuxtv.org/job/media-build/ws/v4l/video-i2c.o]> Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [/usr/src/linux-headers-4.19.0-5-common/Makefile:1539: _module_<https://builder.linuxtv.org/job/media-build/ws/v4l]> Error 2
+make[3]: *** [Makefile:146: sub-make] Error 2
+make[2]: *** [Makefile:8: all] Error 2
+make[2]: Leaving directory '/usr/src/linux-headers-4.19.0-5-amd64'
+make[1]: *** [Makefile:53: default] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: all] Error 2
+build failed at ./build line 533
+Build step 'Execute shell' marked build as failure
