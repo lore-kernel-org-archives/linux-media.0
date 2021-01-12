@@ -2,39 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D38CC433E0
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1727C4332B
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 252D7230F9
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78949230FC
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728629AbhALNYt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 08:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727395AbhALNYt (ORCPT
+        id S1727428AbhALNYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 08:24:47 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40376 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728629AbhALNYq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 08:24:49 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2229C06179F
-        for <linux-media@vger.kernel.org>; Tue, 12 Jan 2021 05:24:08 -0800 (PST)
+        Tue, 12 Jan 2021 08:24:46 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id D13471F451D7
+        with ESMTPSA id 774711F451DE
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     kernel@collabora.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 08/13] media: marvell-ccic: Use v4l2_async_notifier_add_{i2c,fwnode_remote}_subdev helpers
-Date:   Tue, 12 Jan 2021 10:23:34 -0300
-Message-Id: <20210112132339.5621-9-ezequiel@collabora.com>
+Subject: [PATCH 07/13] media: cdns-csi2rx: Use v4l2_async_notifier_add_fwnode_remote_subdev helpers
+Date:   Tue, 12 Jan 2021 10:23:33 -0300
+Message-Id: <20210112132339.5621-8-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210112132339.5621-1-ezequiel@collabora.com>
 References: <20210112132339.5621-1-ezequiel@collabora.com>
@@ -52,121 +49,57 @@ This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
 should get a kmalloc'ed struct v4l2_async_subdev,
 removing some boilerplate code while at it.
 
-Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
-or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
-the needed setup, instead of open-coding it.
+Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+which handles the needed setup, instead of open-coding it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/platform/marvell-ccic/cafe-driver.c | 14 +++++++++++---
- drivers/media/platform/marvell-ccic/mcam-core.c   | 10 ----------
- drivers/media/platform/marvell-ccic/mcam-core.h   |  1 -
- drivers/media/platform/marvell-ccic/mmp-driver.c  | 11 ++++++++---
- 4 files changed, 19 insertions(+), 17 deletions(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell-ccic/cafe-driver.c
-index 00f623d62c96..91d65f71be96 100644
---- a/drivers/media/platform/marvell-ccic/cafe-driver.c
-+++ b/drivers/media/platform/marvell-ccic/cafe-driver.c
-@@ -489,6 +489,7 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 	int ret;
- 	struct cafe_camera *cam;
- 	struct mcam_camera *mcam;
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index be9ec59774d6..7d299cacef8c 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -81,7 +81,6 @@ struct csi2rx_priv {
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
+ 
+ 	/* Remote source */
+-	struct v4l2_async_subdev	asd;
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
+@@ -362,6 +361,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ {
+ 	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
 +	struct v4l2_async_subdev *asd;
+ 	struct fwnode_handle *fwh;
+ 	struct device_node *ep;
+ 	int ret;
+@@ -395,17 +395,13 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 		return -EINVAL;
+ 	}
  
- 	/*
- 	 * Start putting together one of our big camera structures.
-@@ -546,9 +547,16 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 	if (ret)
- 		goto out_pdown;
- 
--	mcam->asd.match_type = V4L2_ASYNC_MATCH_I2C;
--	mcam->asd.match.i2c.adapter_id = i2c_adapter_id(cam->i2c_adapter);
--	mcam->asd.match.i2c.address = ov7670_info.addr;
-+	v4l2_async_notifier_init(&mcam->notifier);
-+
-+	asd = v4l2_async_notifier_add_i2c_subdev(&mcam->notifier,
-+					i2c_adapter_id(cam->i2c_adapter),
-+					ov7670_info.addr,
-+					sizeof(*asd));
-+	if (IS_ERR(asd)) {
-+		ret = PTR_ERR(asd);
-+		goto out_smbus_shutdown;
-+	}
- 
- 	ret = mccic_register(mcam);
- 	if (ret)
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
-index c012fd2e1d29..153277e4fe80 100644
---- a/drivers/media/platform/marvell-ccic/mcam-core.c
-+++ b/drivers/media/platform/marvell-ccic/mcam-core.c
-@@ -1866,16 +1866,6 @@ int mccic_register(struct mcam_camera *cam)
- 	cam->pix_format = mcam_def_pix_format;
- 	cam->mbus_code = mcam_def_mbus_code;
- 
--	/*
--	 * Register sensor notifier.
--	 */
--	v4l2_async_notifier_init(&cam->notifier);
--	ret = v4l2_async_notifier_add_subdev(&cam->notifier, &cam->asd);
--	if (ret) {
--		cam_warn(cam, "failed to add subdev to a notifier");
--		goto out;
--	}
+-	csi2rx->asd.match.fwnode = fwnode_graph_get_remote_port_parent(fwh);
+-	csi2rx->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	of_node_put(ep);
 -
- 	cam->notifier.ops = &mccic_notify_ops;
- 	ret = v4l2_async_notifier_register(&cam->v4l2_dev, &cam->notifier);
- 	if (ret < 0) {
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell-ccic/mcam-core.h
-index b55545822fd2..f324d808d737 100644
---- a/drivers/media/platform/marvell-ccic/mcam-core.h
-+++ b/drivers/media/platform/marvell-ccic/mcam-core.h
-@@ -151,7 +151,6 @@ struct mcam_camera {
- 	 */
- 	struct video_device vdev;
- 	struct v4l2_async_notifier notifier;
--	struct v4l2_async_subdev asd;
- 	struct v4l2_subdev *sensor;
+ 	v4l2_async_notifier_init(&csi2rx->notifier);
  
- 	/* Videobuf2 stuff */
-diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell-ccic/mmp-driver.c
-index 032fdddbbecc..40d9fc4a731a 100644
---- a/drivers/media/platform/marvell-ccic/mmp-driver.c
-+++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
-@@ -180,6 +180,7 @@ static int mmpcam_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct fwnode_handle *ep;
- 	struct mmp_camera_platform_data *pdata;
-+	struct v4l2_async_subdev *asd;
- 	int ret;
+-	ret = v4l2_async_notifier_add_subdev(&csi2rx->notifier, &csi2rx->asd);
+-	if (ret) {
+-		fwnode_handle_put(csi2rx->asd.match.fwnode);
+-		return ret;
+-	}
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&csi2rx->notifier,
++							   fwh, sizeof(*asd));
++	of_node_put(ep);
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
  
- 	cam = devm_kzalloc(&pdev->dev, sizeof(*cam), GFP_KERNEL);
-@@ -238,10 +239,15 @@ static int mmpcam_probe(struct platform_device *pdev)
- 	if (!ep)
- 		return -ENODEV;
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
  
--	mcam->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
--	mcam->asd.match.fwnode = fwnode_graph_get_remote_port_parent(ep);
-+	v4l2_async_notifier_init(&mcam->notifier);
- 
-+	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&mcam->notifier,
-+							   ep, sizeof(*asd));
- 	fwnode_handle_put(ep);
-+	if (IS_ERR(asd)) {
-+		ret = PTR_ERR(asd);
-+		goto out;
-+	}
- 
- 	/*
- 	 * Register the device with the core.
-@@ -278,7 +284,6 @@ static int mmpcam_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 	return 0;
- out:
--	fwnode_handle_put(mcam->asd.match.fwnode);
- 	mccic_shutdown(mcam);
- 
- 	return ret;
 -- 
 2.29.2
 
