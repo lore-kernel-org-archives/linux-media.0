@@ -2,70 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E69ADC43332
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 16:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64C6CC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 16:45:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0CDA2310A
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 16:42:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1097D2312F
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 16:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731303AbhALQmP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 11:42:15 -0500
-Received: from www.zeus03.de ([194.117.254.33]:37316 "EHLO mail.zeus03.de"
+        id S1727622AbhALQpR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 11:45:17 -0500
+Received: from www.zeus03.de ([194.117.254.33]:38196 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727201AbhALQmO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 11:42:14 -0500
+        id S1729490AbhALQpQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 12 Jan 2021 11:45:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=WLEbJPC873nWMnwiOyARO6xkxnK
-        66e/bwM7RBGOc70U=; b=3aWck16ZLDFqsEERVcrG/peOwcndHVX81Zdi5G2ZNnP
-        w+9LXhDQNUemSSZLlLj0qZtGyFKOQte76GZYWEWVFUafwUH5CO1XQ58ciL4S1pNU
-        INxkLjEZppFgDcGN8TM0qah05T4kowS/Zm9NEpTL6KAipNtU8dLBw/x9YYQf3Heg
-        =
-Received: (qmail 2812363 invoked from network); 12 Jan 2021 17:41:32 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jan 2021 17:41:32 +0100
-X-UD-Smtp-Session: l3s3148p1@h5zqsba4RtEgAwDPXwxzAHrEwO71dOp2
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=wnKCSjcDuaBu5Dw3faPAZNWGPVwG
+        m9aVO5eOWICBkSc=; b=JLwMTQGghUyIuBEKpFDnFVE0JIuoyLc2+kZX4E91mLXM
+        31oyshuzxzU5EzUSOG7LXcIjcoARcZUOtiTePM+RJ/kzje/CEQYUiP6S9yjmTUT1
+        XcYJzoZVy3rLQr8ZypTYHVPrpIK+DN6H5ly5oJQa6PW8/6OYaElVURHGrV4HX8A=
+Received: (qmail 2813548 invoked from network); 12 Jan 2021 17:44:35 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jan 2021 17:44:35 +0100
+X-UD-Smtp-Session: l3s3148p1@HqLPvLa4vtEgAwDPXwxzAHrEwO71dOp2
+Date:   Tue, 12 Jan 2021 17:44:34 +0100
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: [PATCH RFC 0/3] treewide: remove open coded SMBus block transfers
-Date:   Tue, 12 Jan 2021 17:41:26 +0100
-Message-Id: <20210112164130.47895-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.29.2
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 2/3] media: i2c: adv7842: remove open coded version
+ of SMBus block read
+Message-ID: <20210112164434.GA47645@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210112164130.47895-1-wsa+renesas@sang-engineering.com>
+ <20210112164130.47895-3-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LZvS9be/3tNcYl/X"
+Content-Disposition: inline
+In-Reply-To: <20210112164130.47895-3-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The bigger picture is that I want to extend the maximum block length for
-SMBus block transfers from 32 (SMBus2) to 255 (SMBus3). That needs some
-cleanups and refactoring first. To make that easier, it would be helpful
-if all in-kernel users would call the helper functions of the I2C core
-for SMBus block transfers and not open code it via the generic
-smbus_xfer.
 
-This series converts the three users doing that. I don't have the
-hardware, so these patches are only build tested. Please let me know
-what you think.
+--LZvS9be/3tNcYl/X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 12, 2021 at 05:41:28PM +0100, Wolfram Sang wrote:
+> The open coded version differs from the one in the core in one way: the
+> buffer will be always copied back, even when the transfer failed. It
+> looks like it is expected that the sanity check for a correct CRC and
+> header will bail out later.
+>=20
+> Use the block read from the I2C core and propagate a potential errno
+> further to the sanity check.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+$subject should say "adv7511", sorry!
 
 
-Wolfram Sang (3):
-  media: i2c: adv7842: remove open coded version of SMBus block write
-  media: i2c: adv7842: remove open coded version of SMBus block read
-  ipmi: remove open coded version of SMBus block write
+--LZvS9be/3tNcYl/X
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/char/ipmi/ipmb_dev_int.c | 21 +++++++----------
- drivers/media/i2c/adv7511-v4l2.c | 40 +++++++++++---------------------
- drivers/media/i2c/adv7842.c      | 14 +----------
- 3 files changed, 23 insertions(+), 52 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
--- 
-2.29.2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/90e4ACgkQFA3kzBSg
+KbbBMg/+JZzUyWKwElld60MIkYxKvRuq3e/me60lsKJVz/BBfuu7TVxXuF7SRLug
+B++WrDe2gRbePRy7u3Z6ww2xQ9KchGsJ4im39wFDVm+HhFAGqIkbsEndzbyr+12g
+pnvJ+eNaH0mW8I3iNF1xaIsC3QToVYzMkjS7g55ba4yR0rcUN0ufyZZoUNHYrYN+
+NUsFAeyQ/L4EItyCR86oa7Y7liKEMoQOQgVztbXUO8U9+6MBuhbwktTeHuR3KgQs
+FXNLWpDxKHCZPo92LLtYQ0q3b3SKqPFYUBTKoYe0gJUKPIdJQlKsUVDWxxa/JN+G
+wJ45f6VdvDtoIS5/aAj857MJYzgmF13HN0OoM1sxg25TCN3tJQ8QKWR31055lcZ6
+U/8Xu4af9FKOZl3U3VcUajRAK5fyr7N1HAwBRYBQMRGcVlG8vL+xEhMBzJuq1lnW
+6Yi1Tx79H8hR6Fdt3bu8AJoR6y26PpvYsVBbK7sxvkAI+7QCR9CXjOjizBQUReM9
+oq8uGKduuJJRoSjEUMv9Lh6j08bBLi4Pgs6VS0Mkd5EQdVHoIi1MMf5rkCBQzFAa
+PdzkWtSIIJb3v0ySe8Qlr6SBhazhfB2FSdYodgqSjfPa018OmTS6UZowVjeQNJPE
+8U1hm6hrWBdsjEpRWZscQxTnPwO89QgP/h5OfjFYXng/h25Srww=
+=00Lt
+-----END PGP SIGNATURE-----
 
+--LZvS9be/3tNcYl/X--
