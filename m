@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B039C4332B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 577F6C433DB
 	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70F1F23117
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 084E223117
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 19:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436828AbhALTw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S2436747AbhALTwW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436812AbhALTw2 (ORCPT
+        with ESMTP id S2406358AbhALTwW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:52:28 -0500
+        Tue, 12 Jan 2021 14:52:22 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303ECC061575
-        for <linux-media@vger.kernel.org>; Tue, 12 Jan 2021 11:51:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EF6C061794
+        for <linux-media@vger.kernel.org>; Tue, 12 Jan 2021 11:51:41 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 7CDF01F45506
+        with ESMTPSA id 40B971F45506
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
@@ -35,9 +35,9 @@ Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
         Daniel Mack <zonque@gmail.com>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 4/6] media: mt9m111: Use the generic clock framework
-Date:   Tue, 12 Jan 2021 16:49:17 -0300
-Message-Id: <20210112194919.50176-5-ezequiel@collabora.com>
+Subject: [PATCH v2 2/6] media: pxa_camera: Drop the v4l2-clk clock register
+Date:   Tue, 12 Jan 2021 16:49:15 -0300
+Message-Id: <20210112194919.50176-3-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210112194919.50176-1-ezequiel@collabora.com>
 References: <20210112194919.50176-1-ezequiel@collabora.com>
@@ -47,109 +47,105 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This sensor driver has a proper device-tree binding, and also
-all its platform-data based in-tree users have been converted to use
-the generic clock framework.
+Now that mach-based PXA platforms are registering proper
+fixed-rate clocks through the CCF, the v4l2-clk clock
+is no longer required.
 
-Convert the driver to use the CCF, and drop the legacy
-v4l2-clk API.
+Drop this clock, so the driver no longer depends on the
+legacy v4l2-clk API.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/i2c/mt9m111.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/media/platform/pxa_camera.c | 30 +----------------------------
+ 1 file changed, 1 insertion(+), 29 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-index 69697386ffcd..0e11734f75aa 100644
---- a/drivers/media/i2c/mt9m111.c
-+++ b/drivers/media/i2c/mt9m111.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2008, Robert Jarzmik <robert.jarzmik@free.fr>
-  */
-+#include <linux/clk.h>
- #include <linux/videodev2.h>
- #include <linux/slab.h>
- #include <linux/i2c.h>
-@@ -16,7 +17,6 @@
- #include <linux/property.h>
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index b664ce7558a1..8cfa39108162 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -31,7 +31,6 @@
+ #include <linux/dma/pxa-dma.h>
  
  #include <media/v4l2-async.h>
 -#include <media/v4l2-clk.h>
  #include <media/v4l2-common.h>
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
-@@ -232,7 +232,7 @@ struct mt9m111 {
- 	struct v4l2_ctrl *gain;
- 	struct mt9m111_context *ctx;
- 	struct v4l2_rect rect;	/* cropping rectangle */
--	struct v4l2_clk *clk;
-+	struct clk *clk;
- 	unsigned int width;	/* output */
- 	unsigned int height;	/* sizes */
- 	struct v4l2_fract frame_interval;
-@@ -977,7 +977,7 @@ static int mt9m111_power_on(struct mt9m111 *mt9m111)
- 	struct i2c_client *client = v4l2_get_subdevdata(&mt9m111->subdev);
- 	int ret;
+@@ -677,7 +676,6 @@ struct pxa_camera_dev {
+ 	unsigned long		ciclk;
+ 	unsigned long		mclk;
+ 	u32			mclk_divisor;
+-	struct v4l2_clk		*mclk_clk;
+ 	u16			width_flags;	/* max 10 bits */
  
--	ret = v4l2_clk_enable(mt9m111->clk);
-+	ret = clk_prepare_enable(mt9m111->clk);
- 	if (ret < 0)
- 		return ret;
+ 	struct list_head	capture;
+@@ -2030,9 +2028,6 @@ static const struct v4l2_ioctl_ops pxa_camera_ioctl_ops = {
+ 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+ };
  
-@@ -995,7 +995,7 @@ static int mt9m111_power_on(struct mt9m111 *mt9m111)
- 	regulator_disable(mt9m111->regulator);
+-static const struct v4l2_clk_ops pxa_camera_mclk_ops = {
+-};
+-
+ static const struct video_device pxa_camera_videodev_template = {
+ 	.name = "pxa-camera",
+ 	.minor = -1,
+@@ -2140,11 +2135,6 @@ static void pxa_camera_sensor_unbind(struct v4l2_async_notifier *notifier,
  
- out_clk_disable:
--	v4l2_clk_disable(mt9m111->clk);
-+	clk_disable_unprepare(mt9m111->clk);
+ 	pxa_camera_destroy_formats(pcdev);
  
- 	dev_err(&client->dev, "Failed to resume the sensor: %d\n", ret);
+-	if (pcdev->mclk_clk) {
+-		v4l2_clk_unregister(pcdev->mclk_clk);
+-		pcdev->mclk_clk = NULL;
+-	}
+-
+ 	video_unregister_device(&pcdev->vdev);
+ 	pcdev->sensor = NULL;
  
-@@ -1006,7 +1006,7 @@ static void mt9m111_power_off(struct mt9m111 *mt9m111)
- {
- 	mt9m111_suspend(mt9m111);
- 	regulator_disable(mt9m111->regulator);
--	v4l2_clk_disable(mt9m111->clk);
-+	clk_disable_unprepare(mt9m111->clk);
- }
+@@ -2278,7 +2268,6 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 		.src_maxburst = 8,
+ 		.direction = DMA_DEV_TO_MEM,
+ 	};
+-	char clk_name[V4L2_CLK_NAME_SIZE];
+ 	int irq;
+ 	int err = 0, i;
  
- static int mt9m111_s_power(struct v4l2_subdev *sd, int on)
-@@ -1266,7 +1266,7 @@ static int mt9m111_probe(struct i2c_client *client)
- 			return ret;
- 	}
+@@ -2417,23 +2406,11 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto exit_notifier_cleanup;
  
--	mt9m111->clk = v4l2_clk_get(&client->dev, "mclk");
-+	mt9m111->clk = devm_clk_get(&client->dev, "mclk");
- 	if (IS_ERR(mt9m111->clk))
- 		return PTR_ERR(mt9m111->clk);
- 
-@@ -1311,7 +1311,7 @@ static int mt9m111_probe(struct i2c_client *client)
- 	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
- 	if (mt9m111->hdl.error) {
- 		ret = mt9m111->hdl.error;
--		goto out_clkput;
-+		return ret;
- 	}
- 
- #ifdef CONFIG_MEDIA_CONTROLLER
-@@ -1354,8 +1354,6 @@ static int mt9m111_probe(struct i2c_client *client)
- out_hdlfree:
- #endif
- 	v4l2_ctrl_handler_free(&mt9m111->hdl);
--out_clkput:
--	v4l2_clk_put(mt9m111->clk);
- 
- 	return ret;
- }
-@@ -1366,7 +1364,6 @@ static int mt9m111_remove(struct i2c_client *client)
- 
- 	v4l2_async_unregister_subdev(&mt9m111->subdev);
- 	media_entity_cleanup(&mt9m111->subdev.entity);
--	v4l2_clk_put(mt9m111->clk);
- 	v4l2_ctrl_handler_free(&mt9m111->hdl);
+-	v4l2_clk_name_i2c(clk_name, sizeof(clk_name),
+-			  pcdev->asd.match.i2c.adapter_id,
+-			  pcdev->asd.match.i2c.address);
+-
+-	pcdev->mclk_clk = v4l2_clk_register(&pxa_camera_mclk_ops, clk_name, NULL);
+-	if (IS_ERR(pcdev->mclk_clk)) {
+-		err = PTR_ERR(pcdev->mclk_clk);
+-		goto exit_notifier_cleanup;
+-	}
+-
+ 	err = v4l2_async_notifier_register(&pcdev->v4l2_dev, &pcdev->notifier);
+ 	if (err)
+-		goto exit_free_clk;
++		goto exit_notifier_cleanup;
  
  	return 0;
+-exit_free_clk:
+-	v4l2_clk_unregister(pcdev->mclk_clk);
+ exit_notifier_cleanup:
+ 	v4l2_async_notifier_cleanup(&pcdev->notifier);
+ exit_free_v4l2dev:
+@@ -2463,11 +2440,6 @@ static int pxa_camera_remove(struct platform_device *pdev)
+ 	v4l2_async_notifier_unregister(&pcdev->notifier);
+ 	v4l2_async_notifier_cleanup(&pcdev->notifier);
+ 
+-	if (pcdev->mclk_clk) {
+-		v4l2_clk_unregister(pcdev->mclk_clk);
+-		pcdev->mclk_clk = NULL;
+-	}
+-
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ 
+ 	dev_info(&pdev->dev, "PXA Camera driver unloaded\n");
 -- 
 2.29.2
 
