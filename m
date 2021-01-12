@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1727C4332B
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78BDBC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78949230FC
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A85622EBE
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jan 2021 13:24:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727428AbhALNYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 08:24:47 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40376 "EHLO
+        id S1729095AbhALNY4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 08:24:56 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40414 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728629AbhALNYq (ORCPT
+        with ESMTP id S1726900AbhALNY4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 08:24:46 -0500
+        Tue, 12 Jan 2021 08:24:56 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 774711F451DE
+        with ESMTPSA id F0ABC1F451E0
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     kernel@collabora.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 07/13] media: cdns-csi2rx: Use v4l2_async_notifier_add_fwnode_remote_subdev helpers
-Date:   Tue, 12 Jan 2021 10:23:33 -0300
-Message-Id: <20210112132339.5621-8-ezequiel@collabora.com>
+Subject: [PATCH 11/13] media: v4l2-async: Drop v4l2_fwnode_reference_parse_sensor_common mention
+Date:   Tue, 12 Jan 2021 10:23:37 -0300
+Message-Id: <20210112132339.5621-12-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210112132339.5621-1-ezequiel@collabora.com>
 References: <20210112132339.5621-1-ezequiel@collabora.com>
@@ -41,65 +41,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The use of v4l2_async_notifier_add_subdev is discouraged.
-Drivers are instead encouraged to use a helper such as
-v4l2_async_notifier_add_fwnode_remote_subdev.
-
-This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-should get a kmalloc'ed struct v4l2_async_subdev,
-removing some boilerplate code while at it.
-
-Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
-which handles the needed setup, instead of open-coding it.
+The v4l2_async_notifier_cleanup documentation mentions
+v4l2_fwnode_reference_parse_sensor_common, which doesn't exist.
+Drop it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ include/media/v4l2-async.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index be9ec59774d6..7d299cacef8c 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -81,7 +81,6 @@ struct csi2rx_priv {
- 	struct media_pad		pads[CSI2RX_PAD_MAX];
- 
- 	/* Remote source */
--	struct v4l2_async_subdev	asd;
- 	struct v4l2_subdev		*source_subdev;
- 	int				source_pad;
- };
-@@ -362,6 +361,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
- {
- 	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
-+	struct v4l2_async_subdev *asd;
- 	struct fwnode_handle *fwh;
- 	struct device_node *ep;
- 	int ret;
-@@ -395,17 +395,13 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
- 		return -EINVAL;
- 	}
- 
--	csi2rx->asd.match.fwnode = fwnode_graph_get_remote_port_parent(fwh);
--	csi2rx->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
--	of_node_put(ep);
--
- 	v4l2_async_notifier_init(&csi2rx->notifier);
- 
--	ret = v4l2_async_notifier_add_subdev(&csi2rx->notifier, &csi2rx->asd);
--	if (ret) {
--		fwnode_handle_put(csi2rx->asd.match.fwnode);
--		return ret;
--	}
-+	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&csi2rx->notifier,
-+							   fwh, sizeof(*asd));
-+	of_node_put(ep);
-+	if (IS_ERR(asd))
-+		return PTR_ERR(asd);
- 
- 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
- 
+diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+index 76be1e01222e..2429ac55be1c 100644
+--- a/include/media/v4l2-async.h
++++ b/include/media/v4l2-async.h
+@@ -290,9 +290,8 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
+  * sub-devices allocated for the purposes of the notifier but not the notifier
+  * itself. The user is responsible for calling this function to clean up the
+  * notifier after calling
+- * @v4l2_async_notifier_add_subdev,
+- * @v4l2_async_notifier_parse_fwnode_endpoints or
+- * @v4l2_fwnode_reference_parse_sensor_common.
++ * @v4l2_async_notifier_add_subdev or
++ * @v4l2_async_notifier_parse_fwnode_endpoints.
+  *
+  * There is no harm from calling v4l2_async_notifier_cleanup in other
+  * cases as long as its memory has been zeroed after it has been
 -- 
 2.29.2
 
