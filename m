@@ -2,297 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF42C433E9
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 04:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E68C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 05:06:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C0832312E
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 04:53:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3053A23117
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 05:06:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726451AbhAMEwp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 23:52:45 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:52431 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726375AbhAMEwl (ORCPT
+        id S1725869AbhAMFFx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 00:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbhAMFFw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 23:52:41 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 172991A97;
-        Tue, 12 Jan 2021 23:51:35 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 12 Jan 2021 23:51:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=ih9mGv1qM3ePD
-        xTUPxNck+dFubidDoXlLwxus9O0g8A=; b=ZH71xXh1CLDdwyw2g+diVyQEFEnj9
-        v+96qoK/uoSsIwx8EqPV4kPKWuuJfBiilBz1EZP9raxjI71QtV3I6bXfqu/6n/mP
-        QlI1PcKdVGuaofmQQyVud0c6Y3JR7vKx4vxk0XInfrOBgf5ubS5vcq/obz/2cuKU
-        xOa6+/sPPlq9tuirvunhIZgfWaXae0EvzAfRLcS4vfpydQ+NsL5RrFhHjV68Ru7s
-        Hpdjcgpn7unHb30CdOS/9J1F/1+AbcbcROn2S73y//nG/XqvwhChsoNFBc7mmGb/
-        yiO1KDElL/2ZtO/HOOlnRmzRs58U1pj5c0iEEddqnOtPklUeCnb/OB6Yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=ih9mGv1qM3ePDxTUPxNck+dFubidDoXlLwxus9O0g8A=; b=pezWa+Os
-        jNq2Y3IaG7C5PDSmWbrsPDnOidB/tXhOF+UcWKwThP7UTKJht5TMXbcvbH588+Bq
-        pyEKkp5fLR9Bc3Bun0coJaK4jr6SJS/xVUvK0fJAtgRX3+rXRKXB1Lj6OnPOyRWr
-        RQxDmsYidXP/hLAMWLSuThFZtYSwR5wUCr8Ul/9OSqNG3iJGDaA8dKNoufM3hdIX
-        cSgIJUboDiNa+9Y2nlHAc9v8RGdLKJFSB3SzasPm9P/ae2J0dfJGr9Wl0jxWFTXh
-        ZLuh6ZNqmGPJR2D/QGNBVeAEa3K5XL/5ojpSNngdSSt/nxIuNoJ0u0DiBE5p5Sav
-        +UtXLIQLyEBBuw==
-X-ME-Sender: <xms:Vnz-X_h8DzxloHXn6F7GyEMetiut8FUEjlSA-pg3mKUxDyrOBus8Tg>
-    <xme:Vnz-X8AhdQnoXmzhnblll9bwSLIFGJwBgls7kgI4Yc-6wR6NCRO4wCXcfXBWjoG9T
-    w79NhZ-ZPSGngIdXQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtddugdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
-    jeehueeinecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
-    rdhorhhg
-X-ME-Proxy: <xmx:Vnz-X_E2ktfnc79LLkAO796pDK2-REkCkG7_jbWDrcF6Z2JU07wUuA>
-    <xmx:Vnz-X8RWrQ_2GX-hcdNmfmQ35FYBTyrW3hbV2MalnP65cGMbwBYmVw>
-    <xmx:Vnz-X8zNtZmXVCuSxIJXzdLo7UODurNjL7aF4SKDcnUh9YTEBTdeeg>
-    <xmx:Vnz-XzkQtqrr9C4KExEjsPmjwF3yeOIOeYZrYyMf3xjHG3eGm_VFFw>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1975824005B;
-        Tue, 12 Jan 2021 23:51:34 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 3/4] media: sunxi-cir: Factor out hardware initialization
-Date:   Tue, 12 Jan 2021 22:51:31 -0600
-Message-Id: <20210113045132.31430-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210113045132.31430-1-samuel@sholland.org>
-References: <20210113045132.31430-1-samuel@sholland.org>
+        Wed, 13 Jan 2021 00:05:52 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F542C061794;
+        Tue, 12 Jan 2021 21:05:12 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id g4so985947ybo.11;
+        Tue, 12 Jan 2021 21:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=H2fJ/axecH/6J+gsobPUGUVGWusfX311kFU3BlwJyaw=;
+        b=WdUKppHh5qE2nA/G2cqUSZgTE18MWaSdNoakRvX046FhmCZ7Ouqhy11j5jqFhEsx7+
+         ZrJk5+BKCXJuiT0CjYMC7Clj/gilwyFxQUF5WR2k2YiShWhoHSF4i2q0s7JZ568PojuG
+         PgpVcLcPz9GuBSwWEZecqTVUrWWJpW7fx+pw9DJ0pbhQ1Glj9XEiztH/3Iq66SUQjT4X
+         /shzjl/k74NjNNj/SmsXNmQo0yKfdlbeGsIBXm1S7ypGtWq5lLiojgwkF/ImqvfwWHpL
+         IchiUjjal3JJ3/GF5ArYvNdyu+7Wb3MzPs3/Y+uQ5l+/lZT67nnyBwWTB0Wv/jigNqqv
+         A3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=H2fJ/axecH/6J+gsobPUGUVGWusfX311kFU3BlwJyaw=;
+        b=OBVFB2KPBb5BOvfG08lVC/eIlYOZHKuSlVgVOio9OKYwV222sARp+JkC09RZU5cb2G
+         WqB9C/BBPG8nPA8LJRzdGbth9iQtTFTGxvL/y4bvdgMtOWpqWmfilgABiourov58f4uK
+         HzQXeu9ACjFbfgTswIM0QGm37/KAJKchXVQVi2W8Bto/N/+SgQlnSYx3bMsnV9+7ndlQ
+         YpDVghmOJxG47iM+U+hAxlxtJtHRroXhN8uvvhUnGRqTVfX6T03FRCg93cfaZlWUphiA
+         YDO43PEk47wH03moS9cPwqlTKJjwnoUf2gtKkPt+dFn4wVlUBt3FY35Pr6k3xOTuaP8A
+         SrSg==
+X-Gm-Message-State: AOAM5307ZAjKLsfmCxV2AirKkuqfZvpukwhI68ovj0fZZAl4egcC0UBU
+        RiOmrCC3HK0ZLDraocQt57Y/3g/Ehmxvi+IU3/FqUU9JpCfvhrnr
+X-Google-Smtp-Source: ABdhPJwWR5KSECnDvOvXv6NvLQlRekb3+GXlW2S+NzrNMmuR5ehuW0T0YGRFcXu/k0xODwLSL3lxja4jF5Sj55pjyfU=
+X-Received: by 2002:a25:3457:: with SMTP id b84mr796341yba.167.1610514311118;
+ Tue, 12 Jan 2021 21:05:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
+Date:   Wed, 13 Jan 2021 13:04:44 +0800
+Message-ID: <CAD-N9QW-zm37f9PW-iF-NaAH5LLePWFba3aG5LkXD2a07YBZpg@mail.gmail.com>
+Subject: "UBSAN: shift-out-of-bounds in mceusb_dev_recv" should share the same
+ root cause with "UBSAN: shift-out-of-bounds in mceusb_dev_printdata"
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, mchehab@kernel.org, sean@mess.org,
+        anant.thazhemadam@gmail.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Greg KH <greg@kroah.com>, Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In preparation for adding suspend/resume hooks, factor out the hardware
-initialization from the driver probe/remove functions.
+Hi developers,
 
-The timeout programmed during init is taken from the `struct rc_dev` so
-it is maintained across an exit/init cycle.
+I found that "UBSAN: shift-out-of-bounds in mceusb_dev_recv" and
+"UBSAN: shift-out-of-bounds in mceusb_dev_printdata" should share the
+same root cause.
+The reason is that the PoCs after minimization has a high similarity
+with the other. And their stack trace only diverges at the last
+function call. The following is some analysis for this bug.
 
-This resolves some trivial issues with the probe function: throwing away
-the error from clk_prepare_enable and using the wrong type for the
-temporary register value.
+The following code in the mceusb_process_ir_data is the vulnerable
+--------------------------------------------------------------------------------------------------------------------------
+for (; i < buf_len; i++) {
+     switch (ir->parser_state) {
+     case SUBCMD:
+             ir->rem = mceusb_cmd_datasize(ir->cmd, ir->buf_in[i]);
+             mceusb_dev_printdata(ir, ir->buf_in, buf_len, i - 1,
+                                                   ir->rem + 2, false);
+             if (i + ir->rem < buf_len)
+             mceusb_handle_command(ir, &ir->buf_in[i - 1]);
+--------------------------------------------------------------------------------------------------------------------------
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
- drivers/media/rc/sunxi-cir.c | 128 ++++++++++++++++++++---------------
- 1 file changed, 74 insertions(+), 54 deletions(-)
+The first report crashes at a shift operation(1<<*hi) in mceusb_handle_command.
+--------------------------------------------------------------------------------------------------------------------------
+static void mceusb_handle_command(struct mceusb_dev *ir, u8 *buf_in)
+{
+u8 *hi = &buf_in[2]; /* read only when required */
+if (cmd == MCE_CMD_PORT_SYS) {
+      switch (subcmd) {
+      case MCE_RSP_GETPORTSTATUS:
+              if (buf_in[5] == 0)
+                     ir->txports_cabled |= 1 << *hi;
+--------------------------------------------------------------------------------------------------------------------------
 
-diff --git a/drivers/media/rc/sunxi-cir.c b/drivers/media/rc/sunxi-cir.c
-index 48be400421cd..ccb9d6b4225d 100644
---- a/drivers/media/rc/sunxi-cir.c
-+++ b/drivers/media/rc/sunxi-cir.c
-@@ -169,10 +169,74 @@ static int sunxi_ir_set_timeout(struct rc_dev *rc_dev, unsigned int timeout)
- 	return 0;
- }
- 
-+static int sunxi_ir_hw_init(struct device *dev)
-+{
-+	struct sunxi_ir *ir = dev_get_drvdata(dev);
-+	u32 tmp;
-+	int ret;
-+
-+	ret = reset_control_deassert(ir->rst);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(ir->apb_clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable apb clk\n");
-+		goto exit_assert_reset;
-+	}
-+
-+	ret = clk_prepare_enable(ir->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable ir clk\n");
-+		goto exit_disable_apb_clk;
-+	}
-+
-+	/* Enable CIR Mode */
-+	writel(REG_CTL_MD, ir->base + SUNXI_IR_CTL_REG);
-+
-+	/* Set noise threshold and idle threshold */
-+	sunxi_ir_set_timeout(ir->rc, ir->rc->timeout);
-+
-+	/* Invert Input Signal */
-+	writel(REG_RXCTL_RPPI, ir->base + SUNXI_IR_RXCTL_REG);
-+
-+	/* Clear All Rx Interrupt Status */
-+	writel(REG_RXSTA_CLEARALL, ir->base + SUNXI_IR_RXSTA_REG);
-+
-+	/*
-+	 * Enable IRQ on overflow, packet end, FIFO available with trigger
-+	 * level
-+	 */
-+	writel(REG_RXINT_ROI_EN | REG_RXINT_RPEI_EN |
-+	       REG_RXINT_RAI_EN | REG_RXINT_RAL(ir->fifo_size / 2 - 1),
-+	       ir->base + SUNXI_IR_RXINT_REG);
-+
-+	/* Enable IR Module */
-+	tmp = readl(ir->base + SUNXI_IR_CTL_REG);
-+	writel(tmp | REG_CTL_GEN | REG_CTL_RXEN, ir->base + SUNXI_IR_CTL_REG);
-+
-+	return 0;
-+
-+exit_disable_apb_clk:
-+	clk_disable_unprepare(ir->apb_clk);
-+exit_assert_reset:
-+	reset_control_assert(ir->rst);
-+
-+	return ret;
-+}
-+
-+static void sunxi_ir_hw_exit(struct device *dev)
-+{
-+	struct sunxi_ir *ir = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(ir->clk);
-+	clk_disable_unprepare(ir->apb_clk);
-+	reset_control_assert(ir->rst);
-+}
-+
- static int sunxi_ir_probe(struct platform_device *pdev)
- {
- 	int ret = 0;
--	unsigned long tmp = 0;
- 
- 	struct device *dev = &pdev->dev;
- 	struct device_node *dn = dev->of_node;
-@@ -213,43 +277,26 @@ static int sunxi_ir_probe(struct platform_device *pdev)
- 		ir->rst = devm_reset_control_get_exclusive(dev, NULL);
- 		if (IS_ERR(ir->rst))
- 			return PTR_ERR(ir->rst);
--		ret = reset_control_deassert(ir->rst);
--		if (ret)
--			return ret;
- 	}
- 
- 	ret = clk_set_rate(ir->clk, b_clk_freq);
- 	if (ret) {
- 		dev_err(dev, "set ir base clock failed!\n");
--		goto exit_reset_assert;
-+		return ret;
- 	}
- 	dev_dbg(dev, "set base clock frequency to %d Hz.\n", b_clk_freq);
- 
--	if (clk_prepare_enable(ir->apb_clk)) {
--		dev_err(dev, "try to enable apb_ir_clk failed\n");
--		ret = -EINVAL;
--		goto exit_reset_assert;
--	}
--
--	if (clk_prepare_enable(ir->clk)) {
--		dev_err(dev, "try to enable ir_clk failed\n");
--		ret = -EINVAL;
--		goto exit_clkdisable_apb_clk;
--	}
--
- 	/* IO */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	ir->base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(ir->base)) {
--		ret = PTR_ERR(ir->base);
--		goto exit_clkdisable_clk;
-+		return PTR_ERR(ir->base);
- 	}
- 
- 	ir->rc = rc_allocate_device(RC_DRIVER_IR_RAW);
- 	if (!ir->rc) {
- 		dev_err(dev, "failed to allocate device\n");
--		ret = -ENOMEM;
--		goto exit_clkdisable_clk;
-+		return -ENOMEM;
- 	}
- 
- 	ir->rc->priv = ir;
-@@ -265,6 +312,7 @@ static int sunxi_ir_probe(struct platform_device *pdev)
- 	ir->rc->allowed_protocols = RC_PROTO_BIT_ALL_IR_DECODER;
- 	/* Frequency after IR internal divider with sample period in us */
- 	ir->rc->rx_resolution = (USEC_PER_SEC / (b_clk_freq / 64));
-+	ir->rc->timeout = IR_DEFAULT_TIMEOUT;
- 	ir->rc->min_timeout = sunxi_ithr_to_usec(b_clk_freq, 0);
- 	ir->rc->max_timeout = sunxi_ithr_to_usec(b_clk_freq, 255);
- 	ir->rc->s_timeout = sunxi_ir_set_timeout;
-@@ -291,41 +339,15 @@ static int sunxi_ir_probe(struct platform_device *pdev)
- 		goto exit_free_dev;
- 	}
- 
--	/* Enable CIR Mode */
--	writel(REG_CTL_MD, ir->base+SUNXI_IR_CTL_REG);
--
--	/* Set noise threshold and idle threshold */
--	sunxi_ir_set_timeout(ir->rc, IR_DEFAULT_TIMEOUT);
--
--	/* Invert Input Signal */
--	writel(REG_RXCTL_RPPI, ir->base + SUNXI_IR_RXCTL_REG);
--
--	/* Clear All Rx Interrupt Status */
--	writel(REG_RXSTA_CLEARALL, ir->base + SUNXI_IR_RXSTA_REG);
--
--	/*
--	 * Enable IRQ on overflow, packet end, FIFO available with trigger
--	 * level
--	 */
--	writel(REG_RXINT_ROI_EN | REG_RXINT_RPEI_EN |
--	       REG_RXINT_RAI_EN | REG_RXINT_RAL(ir->fifo_size / 2 - 1),
--	       ir->base + SUNXI_IR_RXINT_REG);
--
--	/* Enable IR Module */
--	tmp = readl(ir->base + SUNXI_IR_CTL_REG);
--	writel(tmp | REG_CTL_GEN | REG_CTL_RXEN, ir->base + SUNXI_IR_CTL_REG);
-+	ret = sunxi_ir_hw_init(dev);
-+	if (ret)
-+		goto exit_free_dev;
- 
- 	dev_info(dev, "initialized sunXi IR driver\n");
- 	return 0;
- 
- exit_free_dev:
- 	rc_free_device(ir->rc);
--exit_clkdisable_clk:
--	clk_disable_unprepare(ir->clk);
--exit_clkdisable_apb_clk:
--	clk_disable_unprepare(ir->apb_clk);
--exit_reset_assert:
--	reset_control_assert(ir->rst);
- 
- 	return ret;
- }
-@@ -334,11 +356,9 @@ static int sunxi_ir_remove(struct platform_device *pdev)
- {
- 	struct sunxi_ir *ir = platform_get_drvdata(pdev);
- 
--	clk_disable_unprepare(ir->clk);
--	clk_disable_unprepare(ir->apb_clk);
--	reset_control_assert(ir->rst);
--
-+	sunxi_ir_hw_exit(&pdev->dev);
- 	rc_unregister_device(ir->rc);
-+
- 	return 0;
- }
- 
--- 
-2.26.2
+The second report crashes at another shift operation (1U << data[0])
+in mceusb_dev_printdata.
+--------------------------------------------------------------------------------------------------------------------------
+static void mceusb_dev_printdata(struct mceusb_dev *ir, u8 *buf, int buf_len,
+int offset, int len, bool out)
+{
+data   = &buf[offset] + 2;
 
+          period = DIV_ROUND_CLOSEST((1U << data[0] * 2) *
+                        (data[1] + 1), 10);
+--------------------------------------------------------------------------------------------------------------------------
+
+From the analysis, we can know the data[0] and *hi access the same
+memory cell - ``ir->buf_in[i+1]``. So the root cause should be that it
+misses the check of ir->buf_in[i+1].
+
+For the patch of this bug, there is one from anant.thazhemadam@gmail.com:
+--------------------------------------------------------------------------------------------------------------------------
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index f1dbd059ed08..79de721b1c4a 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1169,7 +1169,7 @@ static void mceusb_handle_command(struct
+mceusb_dev *ir, u8 *buf_in)
+  switch (subcmd) {
+  /* the one and only 5-byte return value command */
+  case MCE_RSP_GETPORTSTATUS:
+- if (buf_in[5] == 0)
++ if ((buf_in[5] == 0) && (*hi <= 32))
+  ir->txports_cabled |= 1 << *hi;
+  break;
+--------------------------------------------------------------------------------------------------------------------------
+I tried this patch in the second crash report and found it does not
+work. I think we should add another filter for the value in
+``ir->buf_in[i+1]``.
+
+With this grouping, I think developers can take into consideration the
+issue in mceusb_dev_printdata and generate a complete patch for this
+bug.
+
+If any of my understanding is incorrect or has issues, please let me
+know. Thanks very much.
+
+--
+My best regards to you.
+
+     No System Is Safe!
+     Dongliang Mu
