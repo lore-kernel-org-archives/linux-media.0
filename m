@@ -2,30 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A02EC433E0
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 18:37:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DD9C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 18:37:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E60982065D
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 18:37:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6063D2065D
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 18:37:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728228AbhAMShL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 13:37:11 -0500
-Received: from relay06.th.seeweb.it ([5.144.164.167]:52381 "EHLO
-        relay06.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728195AbhAMShL (ORCPT
+        id S1728294AbhAMShZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 13:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728227AbhAMShZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 13:37:11 -0500
-X-Greylist: delayed 390 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 Jan 2021 13:37:10 EST
+        Wed, 13 Jan 2021 13:37:25 -0500
+X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jan 2021 10:36:30 PST
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E188C061575
+        for <linux-media@vger.kernel.org>; Wed, 13 Jan 2021 10:36:30 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 899FA3F279;
-        Wed, 13 Jan 2021 19:29:42 +0100 (CET)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 4596E3F27C;
+        Wed, 13 Jan 2021 19:29:43 +0100 (CET)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
 To:     mchehab@kernel.org
@@ -36,64 +40,164 @@ Cc:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         martin.botka@somainline.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH v4 0/2] Add support for the Sony Exmor-RS IMX300 camera sensor
-Date:   Wed, 13 Jan 2021 19:29:32 +0100
-Message-Id: <20210113182934.444727-1-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v4 2/2] media: dt-bindings: media: i2c: Add IMX300 CMOS sensor binding
+Date:   Wed, 13 Jan 2021 19:29:34 +0100
+Message-Id: <20210113182934.444727-3-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210113182934.444727-1-angelogioacchino.delregno@somainline.org>
+References: <20210113182934.444727-1-angelogioacchino.delregno@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series adds support for the IMX300 camera sensor, (one of the)
-first Exmor-RS Stacked CMOS sensor(s), with support for both of the
-supported aspect ratios (4:3 and 16:9).
-This driver came out from reverse engineering of so called "userspace
-drivers" from Sony Xperia smartphones.
+Add YAML device tree binding for IMX300 CMOS image sensor, and
+the relevant MAINTAINERS entries.
 
-I tried to document all of my findings and giving a sense to the registers
-as much as possible, but that was only partially possible and resembles
-some names from the IMX219 public datasheet, even though the addresses are
-basically completely different.
-
-This camera sensor driver was tested with all the resolutions declared in
-it on two phones: Sony Xperia XA2 and XA2 Ultra, on a SDM630 SoC and is
-working great.
-
-- Changes in v4:
-  - My e-mail address was changed in all files to reflect the new one
-  - Fixed selection targets and out-of-bounds rectangles (thanks Jacopo!)
-  - Fixed a warning: changed do_div to div_s64 for 64-bit division
-  - Added one more register definition
-
-- Changes in v3:
-  - Removed unneeded fallthrough statements
-  - Fixed double mode initialization at probe time
-  - Fixed typo in the dt-binding description (8->25MPixels)
-  - Fixed dt-binding data-lanes description, added to required properties
-
-- Changes in v2:
-  - Changed dt-binding name and fixed a misconception about lane
-    operation (sensor supports 2/4-Lane, driver supports 4-Lane only)
-  - Now using lowercase names for regulator supplies
-  - Fixed redefinition of clock-noncontinuous property
-  - Added informations about constraints on data bus frequencies
-  - Fixed MAINTAINERS: removed git tree
-
-AngeloGioacchino Del Regno (2):
-  media: i2c: Add driver for the Sony Exmor-RS IMX300 camera sensor
-  media: dt-bindings: media: i2c: Add IMX300 CMOS sensor binding
-
- .../bindings/media/i2c/sony,imx300.yaml       |  112 +
- MAINTAINERS                                   |    7 +
- drivers/media/i2c/Kconfig                     |   13 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/imx300.c                    | 3084 +++++++++++++++++
- 5 files changed, 3217 insertions(+)
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+---
+ .../bindings/media/i2c/sony,imx300.yaml       | 112 ++++++++++++++++++
+ MAINTAINERS                                   |   7 ++
+ 2 files changed, 119 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
- create mode 100644 drivers/media/i2c/imx300.c
 
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
+new file mode 100644
+index 000000000000..4fa767feea80
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/sony,imx300.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sony 1/2.3-Inch 25Mpixel Stacked CMOS Digital Image Sensor
++
++maintainers:
++  - AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
++
++description: |-
++  The Sony IMX300 is a 1/2.3-inch Stacked CMOS (Exmor-RS) digital image
++  sensor with a pixel size of 1.08um and an active array size of
++  5948H x 4140V. It is programmable through I2C interface at address 0x10.
++  Image data is sent through MIPI CSI-2, which is configured as either 2 or
++  4 data lanes.
++
++properties:
++  compatible:
++    const: sony,imx300
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  vdig-supply:
++    description:
++      Digital I/O voltage supply, 1.15-1.20 volts
++
++  vana-supply:
++    description:
++      Analog voltage supply, 2.2 volts
++
++  vddl-supply:
++    description:
++      Digital core voltage supply, 1.8 volts
++
++  reset-gpios:
++    description: |-
++      Reference to the GPIO connected to the xclr pin, if any.
++      Must be released (set high) after all supplies are applied.
++
++  # See ../video-interfaces.txt for more details
++  port:
++    type: object
++    properties:
++      endpoint:
++        type: object
++
++        properties:
++          data-lanes:
++            description: |-
++              The driver only supports four-lane operation.
++            items:
++              - const: 0
++              - const: 1
++              - const: 2
++              - const: 3
++
++          clock-noncontinuous: true
++
++          link-frequencies:
++            $ref: /schemas/types.yaml#/definitions/uint64-array
++            description:
++              Allowed data bus frequencies. The driver currently needs
++              to switch between 780000000 and 480000000 Hz in order to
++              guarantee functionality of all modes.
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - vana-supply
++  - vdig-supply
++  - vddl-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        imx300: sensor@10 {
++            compatible = "sony,imx300";
++            reg = <0x10>;
++            clocks = <&imx300_xclk>;
++            vana-supply = <&imx300_vana>;   /* 2.2v */
++            vdig-supply = <&imx300_vdig>;   /* 1.2v */
++            vddl-supply = <&imx300_vddl>;   /* 1.8v */
++
++            port {
++                imx300_0: endpoint {
++                    remote-endpoint = <&csi1_ep>;
++                    data-lanes = <0 1 2 3>;
++                    clock-noncontinuous;
++                    link-frequencies = /bits/ 64 <780000000 480000000>;
++                };
++            };
++        };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ad9abb42f852..5e0f08f48d48 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16633,6 +16633,13 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/i2c/imx290.txt
+ F:	drivers/media/i2c/imx290.c
+ 
++SONY IMX300 SENSOR DRIVER
++M:	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
++F:	drivers/media/i2c/imx300.c
++
+ SONY IMX319 SENSOR DRIVER
+ M:	Bingbu Cao <bingbu.cao@intel.com>
+ L:	linux-media@vger.kernel.org
 -- 
 2.29.2
 
