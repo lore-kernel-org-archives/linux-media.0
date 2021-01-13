@@ -2,94 +2,135 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ADE2C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 10:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD97C4332D
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:01:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B3CB233A2
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 10:30:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DC8E2333F
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:01:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbhAMKaL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 05:30:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726898AbhAMKaL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 05:30:11 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217B2C061795
-        for <linux-media@vger.kernel.org>; Wed, 13 Jan 2021 02:29:31 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id d17so2290218ejy.9
-        for <linux-media@vger.kernel.org>; Wed, 13 Jan 2021 02:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=O1ISGW1RaU0XNG0J5lpJPahfmekjOSoZHUoUK6eXzeY=;
-        b=tpSYzA/7Owm4gVFs36ogemVFjXeDYR+jzWi4Cp4UMcA7mHlFrB0cpVoAAfLcJR6kET
-         Q6CT4ymmP+DRgWCQVXkiHK3BKdzJgWcpWWRokCgPIGP3vBHT8iVYqaKy/vBq494I0G3O
-         Y5SkiVY7r51r4dU6H779DFjkUJ10nGvUIuv3lNYF7UVMQSi9hxmnZTB5lDVH5Kt2wym0
-         Tv1OARpOnqnjQObG16qloUrd8XMdBsraAmWCwfwDpsJx6WWtBFGPiDKgCsgmRXisNNGl
-         1nkuMIK2jPkcOLTed9cRLlwkRmPVpWtgMKlJPASVIIf3Nhp7uLKkCFw3cec+DUQkWCL/
-         U3GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=O1ISGW1RaU0XNG0J5lpJPahfmekjOSoZHUoUK6eXzeY=;
-        b=gb0SySWqNK3ukJvzZvuCn0J5mv2DpwYAGLiG07rS/7yK4WUvLOOQthtOe6+cdseGY6
-         wolxWEX3kVyOKkl7GAjKoXckx9SWOzlVSci3c81+NUU5BjMziO7TVPtZTGEE26kegRe3
-         eJVabjEP946nRLf3DkgE0H8zo6HKQFN0ZSZet9E6/6/W6g6V3Nce2Z/IpK45LnPZ+Nlg
-         RfA3v6rOIedX0BM2OPXkIdCexbstIJNeYOCHAXhEPkLsz03iEWwE0sTDHJHSGuTdW/e+
-         cMaSBoOjSUzUF2FDxfSsv3lyXa0u616B59k7YVFAqg9UHhJZmIPDTFnR6NrBIDE2V/lR
-         MrLg==
-X-Gm-Message-State: AOAM533iAxX06WU7UQFb6NOw86goZqxlUpCmUfK31iIkNaWPLB4fCyXB
-        ZN/n1UVbBxPx/nbfuNQclt60TcPuKposDoaX
-X-Google-Smtp-Source: ABdhPJxmf863ISkG6HUSgsuXyuhC9GiBpmDhAY8DCknXAyR9TX9tYt7SyZfcMin1m25CvnWirp2FMQ==
-X-Received: by 2002:a17:906:1288:: with SMTP id k8mr1063584ejb.206.1610533769627;
-        Wed, 13 Jan 2021 02:29:29 -0800 (PST)
-Received: from localhost.localdomain (hst-221-90.medicom.bg. [84.238.221.90])
-        by smtp.gmail.com with ESMTPSA id h12sm551253ejx.81.2021.01.13.02.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 02:29:28 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH] venus: hfi_plat: Fix warning for missing function prototype
-Date:   Wed, 13 Jan 2021 12:29:20 +0200
-Message-Id: <20210113102920.12841-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1727687AbhAMLBO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 06:01:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727663AbhAMLBM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 13 Jan 2021 06:01:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 65B06235FA;
+        Wed, 13 Jan 2021 10:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610535570;
+        bh=OG8KARVyVfWYeNIgPTfTdgsyg/2eyYBbFoiOqndpscA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C6y6kfCLqJoaNBZjagFxC2DgAOjVcfgzTmVYim/sVNZZ1oh8fWHV2beHlGn9HAkST
+         6t/Z6cmxn97UbDjITbUJOS12Zl+6FJaySTwjuPuByHABHmi4Zh5ojE4zWrunibi1Xr
+         jkpIyRZBEwuyM1K4qu+Mjz97juTQL3qfYo6F5tqmsrOLjYfrTLgDNIANMNdiWNa+KV
+         +4zicVDyahiyVYwCZumJzJtAymc1gCCavBO5nRiroinsvcD+kcS2xxXlCysuxz5xtQ
+         /gVvgRDRGkZkF1Vl9vTCrDaRmUpd76mbqlkcwwYDskSgngmx+NLTkT3nT0m90DK6uW
+         uu51KA4N23VNA==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kzds7-00DpGp-SO; Wed, 13 Jan 2021 11:59:27 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Linux Doc Mailing List" <linux-doc@vger.kernel.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rick Chang <rick.chang@mediatek.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 22/24] dt-bindings: memory: mediatek: update mediatek,smi-larb.yaml references
+Date:   Wed, 13 Jan 2021 11:59:23 +0100
+Message-Id: <c70bd79b311a65babe7374eaf81974563400a943.1610535350.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1610535349.git.mchehab+huawei@kernel.org>
+References: <cover.1610535349.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The bufreq_enc function should be static.
+Changeset 27bb0e42855a ("dt-bindings: memory: mediatek: Convert SMI to DT schema")
+renamed: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
+to: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Update its cross-references accordingly.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/display/mediatek/mediatek,disp.txt      | 2 +-
+ .../devicetree/bindings/media/mediatek-jpeg-decoder.txt         | 2 +-
+ .../devicetree/bindings/media/mediatek-jpeg-encoder.txt         | 2 +-
+ Documentation/devicetree/bindings/media/mediatek-mdp.txt        | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-index 072e349dd46c..d43d1a53e72d 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-@@ -1239,8 +1239,8 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
- 	return 0;
- }
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+index 865e1e1b88ac..ed76332ec01e 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+@@ -61,7 +61,7 @@ Required properties (DMA function blocks):
+ 	"mediatek,<chip>-disp-wdma"
+   the supported chips are mt2701, mt8167 and mt8173.
+ - larb: Should contain a phandle pointing to the local arbiter device as defined
+-  in Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  in Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+ - iommus: Should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+index 044b11913c49..cf60c5acc0e4 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+@@ -16,7 +16,7 @@ Required properties:
+ - power-domains: a phandle to the power domain, see
+   Documentation/devicetree/bindings/power/power_domain.txt for details.
+ - mediatek,larb: must contain the local arbiters in the current Socs, see
+-  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+   for details.
+ - iommus: should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
+index 736be7cad385..acfb50375b8a 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
+@@ -14,7 +14,7 @@ Required properties:
+ - power-domains: a phandle to the power domain, see
+   Documentation/devicetree/bindings/power/power_domain.txt for details.
+ - mediatek,larb: must contain the local arbiters in the current SoCs, see
+-  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+   for details.
+ - iommus: should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mdp.txt b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
+index 0d03e3ae2be2..f4798d04e925 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-mdp.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
+@@ -28,7 +28,7 @@ Required properties (DMA function blocks, child node):
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+ - mediatek,larb: must contain the local arbiters in the current Socs, see
+-  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+   for details.
  
--int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
--	       struct hfi_buffer_requirements *bufreq)
-+static int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
-+		      struct hfi_buffer_requirements *bufreq)
- {
- 	enum hfi_version version = params->version;
- 	struct enc_bufsize_ops *enc_ops;
+ Example:
 -- 
-2.17.1
+2.29.2
 
