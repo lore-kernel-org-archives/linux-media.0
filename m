@@ -5,49 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D05C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84308C43381
 	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 04:53:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B119A2312E
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 04:53:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F2DE23131
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 04:53:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbhAMEwl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 23:52:41 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:43559 "EHLO
+        id S1726429AbhAMEwp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 23:52:45 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:37185 "EHLO
         wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726367AbhAMEwl (ORCPT
+        by vger.kernel.org with ESMTP id S1725842AbhAMEwl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 12 Jan 2021 23:52:41 -0500
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 9EF451A84;
-        Tue, 12 Jan 2021 23:51:34 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 6CEA61A98;
+        Tue, 12 Jan 2021 23:51:35 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 12 Jan 2021 23:51:35 -0500
+  by compute5.internal (MEProxy); Tue, 12 Jan 2021 23:51:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=TiYp14NjYhNaG
-        DavfUkENnnnnmh73vB4utXtV8iWYX0=; b=qCLbWtk/M+ckGcMdYO965LqCFPohV
-        0pIsMOVjausLkz5/hBdCI4OaS6QJ3gm1z4MkpeFouqT1Yo39lrELhq7VvsdVK+mK
-        XTaWN2VYdcpeyDe1N1/ll2yzT9BE1qakwUsj7X6O/XTU3xHBDTZHSQlyeX+Mbb40
-        ks0sjZk/bmHBan55pvsfiBjt8jRsWkWwlblpt2ZCfYr2EmfLqZHkbBaGpYROErVc
-        OVxmRCK/zw0ifcyxmvVOljbPy55ARUOIQOq4H5M64dmosixbvYMILN3jTWhV/sBH
-        brY5HSHBJHzUqAkqwLh2IWNrJfbYGjxM05XlcpxbGMkpRX0LrUIDgN04A==
+        :mime-version:content-transfer-encoding; s=fm1; bh=ShOwykOk3rSnz
+        klCoW5PQa5WqRMT3Vxxh+HMfWymvtk=; b=HL2IFPwvUEd8MxkJj1jonsK6s7Y0C
+        fCNIfOgFo1yAiBEBnpoSOoG8J1trlQakrrlMn4lNSHsnGD5OR92Yn72fVnlGzx0T
+        M+cdi7YlkPorXwUTsqBOs9/Mv4E/OPdNICGsIPpdQGfrhxGCCld5/paQ45Mi5RuR
+        TRWCZ8VYjKHBEVN+HVXZPUijUDZSGRJg9TUeZ4EJA7pdbXDqTPzizmebuLyp5pKJ
+        59/k3vOJuvN9t24qlznFJCHHR+OCXDVcqBDSviABGsvdSOSpIvY+zGlJ5N0IcoTN
+        svXkslDzYfM9vdyGIk72ehB764r27seuoWgWiMe51MzhMeitr28z7kceg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=TiYp14NjYhNaGDavfUkENnnnnmh73vB4utXtV8iWYX0=; b=q3bxNVUH
-        ctYdAmPvOX/PW5lLmNA6M8vlki9xZXsbU8FtScR/8i8o0uzkigpKkaHQjdZK1+lq
-        CRF0uCpxucYue/ds8tYc5g9om9N5GUHoRJPkxLpFbqMLIf4lcFiSNKzzh3+lE/Mm
-        O9/K0Udjx4d90Ib9GEDw0gqsY1MXl5JmQKiiNJJnoKwEbH5SB1Suaj3hFUOUWWkN
-        9crkc6NKL5xhq9UckB9xRaHbzvcILx4rxy9Wnxf63ZYhhotP0WmdL3Yz3S/Lrr3F
-        DsSaICF/n23/gXef/9V4mKAi5rTmZVF+DPZplP+jTzMpL0aZcuk+fGw6281cb3lJ
-        Z0LD4hhoY797SQ==
-X-ME-Sender: <xms:Vnz-Xwrxy5Tx1Y-wXBBEO8IlujRwzC7gK4TQB-vp6L2ODS0LRF8LPQ>
-    <xme:Vnz-X2q5kr7XhZIz5t_AmcNdgqzYE29aqt61nPV9irG9Zn9yyJfQQ9Ik9GsPkvpF6
-    7hX7Eci48l8TosIJw>
+        fm1; bh=ShOwykOk3rSnzklCoW5PQa5WqRMT3Vxxh+HMfWymvtk=; b=YFDkxPoo
+        TmIrELCm4qonBUPoRI+TWhkWCpNYOZf/+bEpgXWKVRbvR3tA4S8FQ/98CrKkVFx8
+        PFPeotEGPFF1SSVuB4HufwfsdOCgFQBM3P2tL0nCsR+6Ffpgkcgw7qXkqcEa8nts
+        UIk09V+7EnGK0QaVt8guDTzyOyrRnnl2HpLQe/6cWO6cPC/vFbRLs5iN/NeOl4U2
+        R4LrXgkkZ5YRVBnQbv2wvB4nK7+fkq0Txbv0EdkrwI1iM4nn/dsTCRpJL9DUlf36
+        Spxto74LOp0fTHbt9kOZaJomZBZClr13hfRIJYc6wj5CmE8LRTCJIZLZG2QTd9H+
+        +qPAhgxieHVX0g==
+X-ME-Sender: <xms:Vnz-X8AHriibEptU0zYPO6pmVAJ-_OsENVsCeh39JxNu6UU0zg6z1w>
+    <xme:Vnz-X-joBZrwr8VT4jq2Y7LGFRaxHAFdZMQH9z8a7s4LXTUP9i8CQqOzIHfDQICkg
+    AnMEJ_3MyAWTTw-Cg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtddugdejkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -57,13 +57,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtddugdejkecutefuodetggdote
     jeehueeinecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghrufhiii
     gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
     rdhorhhg
-X-ME-Proxy: <xmx:Vnz-X1OGJsgTwqbYCsivX-yAur8v8z_suVHlL7zic-wWv5xOnqPSvg>
-    <xmx:Vnz-X34vfejgQjVokF2Y-JM7Vio3UbArzi3YY3ZK-8qHD38PLK0WkQ>
-    <xmx:Vnz-X_4wZL7SbicYukkiE_pNSvAk0jlWZHYsjdIqW6tJL3olfGlGBA>
-    <xmx:Vnz-X8usnwMJmQsZKEauEb0f5K2S-Ut3nwkWkqdiyxYY5CEthYYbVw>
+X-ME-Proxy: <xmx:Vnz-X_nyBMH9CNbV3o7fe6GW9QjqR4sXq5LkV0CclI40XyJn3S9bKA>
+    <xmx:Vnz-XyyW1tHh6HMSJ_N3mq42TlMxCGDU7Gd1htzDtywVHxFltjMOyA>
+    <xmx:Vnz-XxQ9HfgPFRqaZ8Qu61CwqAaldaB4m7tA3fCnW8RwwCpSZgc56Q>
+    <xmx:V3z-XwHdrN4w_o9mw_I8-mwB3xdrJP8_LyOtE64RhGoaqVto1XQZdA>
 Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id AABC3240062;
-        Tue, 12 Jan 2021 23:51:33 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 7BB4C240065;
+        Tue, 12 Jan 2021 23:51:34 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -72,9 +72,9 @@ To:     Sean Young <sean@mess.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 2/4] media: sunxi-cir: Remove unnecessary spinlock
-Date:   Tue, 12 Jan 2021 22:51:30 -0600
-Message-Id: <20210113045132.31430-3-samuel@sholland.org>
+Subject: [PATCH 4/4] media: sunxi-cir: Implement suspend/resume/shutdown callbacks
+Date:   Tue, 12 Jan 2021 22:51:32 -0600
+Message-Id: <20210113045132.31430-5-samuel@sholland.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210113045132.31430-1-samuel@sholland.org>
 References: <20210113045132.31430-1-samuel@sholland.org>
@@ -84,72 +84,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only one register, SUNXI_IR_CIR_REG, is accessed from outside the
-interrupt handler, and that register is not accessed from inside it.
-As there is no overlap between different contexts, no lock is needed.
+To save power, gate/reset the hardware block while the system is
+asleep or powered off.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
- drivers/media/rc/sunxi-cir.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/media/rc/sunxi-cir.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/drivers/media/rc/sunxi-cir.c b/drivers/media/rc/sunxi-cir.c
-index 0a7f7eab3cc3..48be400421cd 100644
+index ccb9d6b4225d..a0bdbf6f66c9 100644
 --- a/drivers/media/rc/sunxi-cir.c
 +++ b/drivers/media/rc/sunxi-cir.c
-@@ -86,7 +86,6 @@ struct sunxi_ir_quirks {
- };
- 
- struct sunxi_ir {
--	spinlock_t      ir_lock;
- 	struct rc_dev   *rc;
- 	void __iomem    *base;
- 	int             irq;
-@@ -105,8 +104,6 @@ static irqreturn_t sunxi_ir_irq(int irqno, void *dev_id)
- 	struct sunxi_ir *ir = dev_id;
- 	struct ir_raw_event rawir = {};
- 
--	spin_lock(&ir->ir_lock);
--
- 	status = readl(ir->base + SUNXI_IR_RXSTA_REG);
- 
- 	/* clean all pending statuses */
-@@ -137,8 +134,6 @@ static irqreturn_t sunxi_ir_irq(int irqno, void *dev_id)
- 		ir_raw_event_handle(ir->rc);
- 	}
- 
--	spin_unlock(&ir->ir_lock);
--
- 	return IRQ_HANDLED;
+@@ -234,6 +234,20 @@ static void sunxi_ir_hw_exit(struct device *dev)
+ 	reset_control_assert(ir->rst);
  }
  
-@@ -160,17 +155,14 @@ static int sunxi_ir_set_timeout(struct rc_dev *rc_dev, unsigned int timeout)
++static int __maybe_unused sunxi_ir_suspend(struct device *dev)
++{
++	sunxi_ir_hw_exit(dev);
++
++	return 0;
++}
++
++static int __maybe_unused sunxi_ir_resume(struct device *dev)
++{
++	return sunxi_ir_hw_init(dev);
++}
++
++static SIMPLE_DEV_PM_OPS(sunxi_ir_pm_ops, sunxi_ir_suspend, sunxi_ir_resume);
++
+ static int sunxi_ir_probe(struct platform_device *pdev)
  {
- 	struct sunxi_ir *ir = rc_dev->priv;
- 	unsigned int base_clk = clk_get_rate(ir->clk);
--	unsigned long flags;
+ 	int ret = 0;
+@@ -362,6 +376,11 @@ static int sunxi_ir_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
- 	unsigned int ithr = sunxi_usec_to_ithr(base_clk, timeout);
++static void sunxi_ir_shutdown(struct platform_device *pdev)
++{
++	sunxi_ir_hw_exit(&pdev->dev);
++}
++
+ static const struct sunxi_ir_quirks sun4i_a10_ir_quirks = {
+ 	.has_reset = false,
+ 	.fifo_size = 16,
+@@ -397,9 +416,11 @@ MODULE_DEVICE_TABLE(of, sunxi_ir_match);
+ static struct platform_driver sunxi_ir_driver = {
+ 	.probe          = sunxi_ir_probe,
+ 	.remove         = sunxi_ir_remove,
++	.shutdown       = sunxi_ir_shutdown,
+ 	.driver = {
+ 		.name = SUNXI_IR_DEV,
+ 		.of_match_table = sunxi_ir_match,
++		.pm = &sunxi_ir_pm_ops,
+ 	},
+ };
  
- 	dev_dbg(rc_dev->dev.parent, "setting idle threshold to %u\n", ithr);
- 
--	spin_lock_irqsave(&ir->ir_lock, flags);
- 	/* Set noise threshold and idle threshold */
- 	writel(REG_CIR_NTHR(SUNXI_IR_RXNOISE) | REG_CIR_ITHR(ithr),
- 	       ir->base + SUNXI_IR_CIR_REG);
--	spin_unlock_irqrestore(&ir->ir_lock, flags);
- 
- 	rc_dev->timeout = sunxi_ithr_to_usec(base_clk, ithr);
- 
-@@ -199,8 +191,6 @@ static int sunxi_ir_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	spin_lock_init(&ir->ir_lock);
--
- 	ir->fifo_size = quirks->fifo_size;
- 
- 	/* Clock */
 -- 
 2.26.2
 
