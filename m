@@ -2,277 +2,728 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 330D8C4332B
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A37BFC43332
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07582235F8
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:08:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D543235FF
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730143AbhANCHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 21:07:44 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:37834 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730190AbhANCHf (ORCPT
+        id S1729889AbhANCFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 21:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729359AbhAMWao (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 21:07:35 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD32C279;
-        Thu, 14 Jan 2021 03:06:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610590013;
-        bh=JgdIZiLxk9q1B38ti25OWY0D1Lrs2/XMY68L7Uiy4aM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SQ8cDS9fjzdfDc402xw3QMMKh0ezBqyJUFmOu1diFVzhAg73axS76ZcnSLGMKuARK
-         UxV37MwriLCjdmyCEDGnMgIBFhMLNMS5oehXNLnGfhKOXgjuiiiOHA31cVd7V3IBST
-         Sw4VRc2LlnrkX/9kEyztowd7iim1Zx/kv8r7Sjeo=
-Date:   Thu, 14 Jan 2021 04:06:35 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com, Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH 03/13] media: renesas-ceu: Use
- v4l2_async_notifier_add_{i2c,fwnode_remote}_subdev helpers
-Message-ID: <X/+nKwhIhDY7Z9HW@pendragon.ideasonboard.com>
-References: <20210112132339.5621-1-ezequiel@collabora.com>
- <20210112132339.5621-4-ezequiel@collabora.com>
+        Wed, 13 Jan 2021 17:30:44 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D43C0617A7
+        for <linux-media@vger.kernel.org>; Wed, 13 Jan 2021 14:28:35 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id m10so4372570lji.1
+        for <linux-media@vger.kernel.org>; Wed, 13 Jan 2021 14:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tsPSdZ8Aw4g0TYx7JW/kAU6i2N4McGrt/cbxtG7nAXE=;
+        b=RMdTch7AyLw4Nyvjw5yB8UhNcoiPSdb9JTZd12fD4+jkAc2xq70SDb2UvLmBvsg/WN
+         o9Nt2lTqHflISFDSxSy30z+TELnaauZuu3BGntJ4lWEIN2cldnHMYl6dSV8Tt7ESv3Dx
+         I8ANjPmO+Id0zy9P1YBK6vApkDkkopG8tdobMUoTrwU6Zt/Zw4w9YYanJkRrjaeUAL/G
+         e+f8TYz4QTxGNIVTNW7KyJi0M2cR3G4rfUm0Vt4EWhlxSIJ+yuErminm6cOE2mWsrXMz
+         eLX7fir8X6OFkLbDx1UPB2Z/n7XywOOPdeAzFclbrtTDJES4yLrLPtOcgDhI+lAJRXcz
+         ax/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tsPSdZ8Aw4g0TYx7JW/kAU6i2N4McGrt/cbxtG7nAXE=;
+        b=p2kzXs/mpxJS96veubqI5+Dcr9hgWroYwSKynlgM8LDpxpqx2UVYe4dVDOC4ALH+SG
+         72eKdE0FQj9GpkvwIDY9o7XMDA0UxbZdxd5LeGtAC9se1iyC61pQCE69DTw1rsv2AR59
+         GYdRFCoUmKScU0PcPfPSkhSuXsJXnjJNNFnPHKMxIrihaaDL39yZnA8UyVJg4t+AtWgK
+         15KWVPoHrUom5Q6lB9zyNSseKxsRUUEEXp3zEt8059IYtc0/Kn+P0yydFKAUs8CtSkKT
+         c+P7zHOrJYate/Oy5ufDVS8MbPNDbklCO3p5nTDqpeeAweE7HOLpJdTr6g/38n4pZTi0
+         pwcw==
+X-Gm-Message-State: AOAM530u1ilDAzGnkSvbW3oHGjSreihYqQQZYNSqFDKPfYtqsHOf7B9w
+        FqhKSDz0hvPlx64F63qCz7Y/mA==
+X-Google-Smtp-Source: ABdhPJxgnCeCngkz7yOC1vUzRojbJM1YLBDyyOYE1eSrPQJmtxuGRRJr/vMGjagIg+/3cldzvF9HsA==
+X-Received: by 2002:a05:651c:1027:: with SMTP id w7mr1803200ljm.297.1610576913047;
+        Wed, 13 Jan 2021 14:28:33 -0800 (PST)
+Received: from [192.168.118.216] ([85.249.43.69])
+        by smtp.gmail.com with ESMTPSA id l13sm336422lfk.296.2021.01.13.14.28.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jan 2021 14:28:32 -0800 (PST)
+Subject: Re: [PATCH v1 04/17] media: camss: Make ISPIF subdevice optional
+To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, todor.too@gmail.com,
+        mchehab@kernel.org, robh+dt@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com,
+        geert+renesas@glider.be, arnd@arndb.de, Anson.Huang@nxp.com,
+        michael@walle.cc, agx@sigxcpu.org, max.oss.09@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
+        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20210108120429.895046-1-robert.foss@linaro.org>
+ <20210108120429.895046-5-robert.foss@linaro.org>
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+Message-ID: <97d0a789-a4c7-b66f-3c6c-8f89dcdfe8a6@linaro.org>
+Date:   Thu, 14 Jan 2021 01:28:27 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210112132339.5621-4-ezequiel@collabora.com>
+In-Reply-To: <20210108120429.895046-5-robert.foss@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+Hi Robert,
 
-Thank you for the patch.
+Thanks for the patch!
 
-On Tue, Jan 12, 2021 at 10:23:29AM -0300, Ezequiel Garcia wrote:
-> The use of v4l2_async_notifier_add_subdev is discouraged.
-
-It's not yet, that only happens at the end of the series :-)
-
-s/is discouraged/will be discouraged/
-
-> Drivers are instead encouraged to use a helper such as
-> v4l2_async_notifier_add_i2c_subdev.
+On 08.01.2021 15:04, Robert Foss wrote:
+> This driver supports multiple architecture versions of the Qualcomm ISP.
+> The CAMSS architecure which this driver is name after, and with the
+> introduction of this series, the Titan architecture.
 > 
-> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-> should get a kmalloc'ed struct v4l2_async_subdev,
-> removing some boilerplate code while at it.
+> The ISPIF is IP-block that is only present in the CAMSS architecture.
+> In order to support the Titan architecture, make the ISPIF an optional
+> subdevice.
 > 
-> Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
-> or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
-> the needed setup, instead of open-coding it.
-> 
-> Using v4l2-async to allocate the driver-specific structs,
-> requires to change struct ceu_subdev so the embedded
-> struct v4l2_async_subdev is now the first element.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 > ---
->  drivers/media/platform/renesas-ceu.c | 89 ++++++++++------------------
->  1 file changed, 31 insertions(+), 58 deletions(-)
+>   .../media/platform/qcom/camss/camss-ispif.c   | 144 ++++++++++--------
+>   .../media/platform/qcom/camss/camss-ispif.h   |   3 +-
+>   drivers/media/platform/qcom/camss/camss.c     | 113 +++++++++-----
+>   drivers/media/platform/qcom/camss/camss.h     |   2 +-
+>   4 files changed, 160 insertions(+), 102 deletions(-)
 > 
-> diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-> index 4a633ad0e8fa..18485812a21e 100644
-> --- a/drivers/media/platform/renesas-ceu.c
-> +++ b/drivers/media/platform/renesas-ceu.c
-> @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
->   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
->   */
->  struct ceu_subdev {
-> -	struct v4l2_subdev *v4l2_sd;
->  	struct v4l2_async_subdev asd;
-> +	struct v4l2_subdev *v4l2_sd;
->  
->  	/* per-subdevice mbus configuration options */
->  	unsigned int mbus_flags;
-> @@ -174,7 +174,7 @@ struct ceu_device {
->  	struct v4l2_device	v4l2_dev;
->  
->  	/* subdevices descriptors */
-> -	struct ceu_subdev	*subdevs;
-> +	struct ceu_subdev	**subdevs;
->  	/* the subdevice currently in use */
->  	struct ceu_subdev	*sd;
->  	unsigned int		sd_index;
-> @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
->  	if (inp->index >= ceudev->num_sd)
->  		return -EINVAL;
->  
-> -	ceusd = &ceudev->subdevs[inp->index];
-> +	ceusd = ceudev->subdevs[inp->index];
->  
->  	inp->type = V4L2_INPUT_TYPE_CAMERA;
->  	inp->std = 0;
-> @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
->  		return 0;
->  
->  	ceu_sd_old = ceudev->sd;
-> -	ceudev->sd = &ceudev->subdevs[i];
-> +	ceudev->sd = ceudev->subdevs[i];
->  
->  	/*
->  	 * Make sure we can generate output image formats and apply
-> @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
->  	 * ceu formats.
->  	 */
->  	if (!ceudev->sd) {
-> -		ceudev->sd = &ceudev->subdevs[0];
-> +		ceudev->sd = ceudev->subdevs[0];
->  		ceudev->sd_index = 0;
->  	}
->  
-> @@ -1465,28 +1465,6 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
->  	.complete	= ceu_notify_complete,
->  };
->  
-> -/*
-> - * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
-> - *			      ceu device. Both DT and platform data parsing use
-> - *			      this routine.
-> - *
-> - * Returns 0 for success, -ENOMEM for failure.
-> - */
-> -static int ceu_init_async_subdevs(struct ceu_device *ceudev, unsigned int n_sd)
-> -{
-> -	/* Reserve memory for 'n_sd' ceu_subdev descriptors. */
-> -	ceudev->subdevs = devm_kcalloc(ceudev->dev, n_sd,
-> -				       sizeof(*ceudev->subdevs), GFP_KERNEL);
-
-I may be missing something, but it looks like the subdevs array isn't
-allocated anymore. It turned to an array of pointers, but it still need
-allocation.
-
-> -	if (!ceudev->subdevs)
-> -		return -ENOMEM;
-> -
-> -	ceudev->sd = NULL;
-> -	ceudev->sd_index = 0;
-> -	ceudev->num_sd = 0;
-> -
-> -	return 0;
-> -}
-> -
->  /*
->   * ceu_parse_platform_data() - Initialize async_subdevices using platform
->   *			       device provided data.
-> @@ -1495,6 +1473,7 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
->  				   const struct ceu_platform_data *pdata)
->  {
->  	const struct ceu_async_subdev *async_sd;
-> +	struct v4l2_async_subdev *asd;
->  	struct ceu_subdev *ceu_sd;
->  	unsigned int i;
->  	int ret;
-> @@ -1502,29 +1481,26 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
->  	if (pdata->num_subdevs == 0)
->  		return -ENODEV;
->  
-> -	ret = ceu_init_async_subdevs(ceudev, pdata->num_subdevs);
-> -	if (ret)
+> diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+> index adeb92808998..0c804584dd65 100644
+> --- a/drivers/media/platform/qcom/camss/camss-ispif.c
+> +++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+> @@ -161,6 +161,7 @@ static const u32 ispif_formats_8x96[] = {
+>   static irqreturn_t ispif_isr_8x96(int irq, void *dev)
+>   {
+>   	struct ispif_device *ispif = dev;
+> +	struct camss *camss = ispif->camss;
+>   	u32 value0, value1, value2, value3, value4, value5;
+>   
+>   	value0 = readl_relaxed(ispif->base + ISPIF_VFE_m_IRQ_STATUS_0(0));
+> @@ -186,34 +187,34 @@ static irqreturn_t ispif_isr_8x96(int irq, void *dev)
+>   		complete(&ispif->reset_complete[1]);
+>   
+>   	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 pix0 overflow\n");
+>   
+>   	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi0 overflow\n");
+>   
+>   	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 pix1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 pix1 overflow\n");
+>   
+>   	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi1 overflow\n");
+>   
+>   	if (unlikely(value2 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi2 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi2 overflow\n");
+>   
+>   	if (unlikely(value3 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE1 pix0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE1 pix0 overflow\n");
+>   
+>   	if (unlikely(value3 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE1 rdi0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE1 rdi0 overflow\n");
+>   
+>   	if (unlikely(value4 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE1 pix1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE1 pix1 overflow\n");
+>   
+>   	if (unlikely(value4 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE1 rdi1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE1 rdi1 overflow\n");
+>   
+>   	if (unlikely(value5 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE1 rdi2 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE1 rdi2 overflow\n");
+>   
+>   	return IRQ_HANDLED;
+>   }
+> @@ -228,6 +229,7 @@ static irqreturn_t ispif_isr_8x96(int irq, void *dev)
+>   static irqreturn_t ispif_isr_8x16(int irq, void *dev)
+>   {
+>   	struct ispif_device *ispif = dev;
+> +	struct camss *camss = ispif->camss;
+>   	u32 value0, value1, value2;
+>   
+>   	value0 = readl_relaxed(ispif->base + ISPIF_VFE_m_IRQ_STATUS_0(0));
+> @@ -244,30 +246,32 @@ static irqreturn_t ispif_isr_8x16(int irq, void *dev)
+>   		complete(&ispif->reset_complete[0]);
+>   
+>   	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 pix0 overflow\n");
+>   
+>   	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi0 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi0 overflow\n");
+>   
+>   	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 pix1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 pix1 overflow\n");
+>   
+>   	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi1 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi1 overflow\n");
+>   
+>   	if (unlikely(value2 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
+> -		dev_err_ratelimited(to_device(ispif), "VFE0 rdi2 overflow\n");
+> +		dev_err_ratelimited(camss->dev, "VFE0 rdi2 overflow\n");
+>   
+>   	return IRQ_HANDLED;
+>   }
+>   
+>   static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
+>   {
+> +	struct camss *camss = ispif->camss;
+> +
+>   	unsigned long time;
+>   	u32 val;
+>   
+> -	if (vfe_id > (to_camss(ispif)->vfe_num - 1)) {
+> -		dev_err(to_device(ispif),
+> +	if (vfe_id > (camss->vfe_num - 1)) {
+> +		dev_err(camss->dev,
+>   			"Error: asked reset for invalid VFE%d\n", vfe_id);
+>   		return -ENOENT;
+>   	}
+> @@ -300,7 +304,7 @@ static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
+>   	time = wait_for_completion_timeout(&ispif->reset_complete[vfe_id],
+>   		msecs_to_jiffies(ISPIF_RESET_TIMEOUT_MS));
+>   	if (!time) {
+> -		dev_err(to_device(ispif),
+> +		dev_err(camss->dev,
+>   			"ISPIF for VFE%d reset timeout\n", vfe_id);
+>   		return -EIO;
+>   	}
+> @@ -316,30 +320,31 @@ static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
+>    */
+>   static int ispif_reset(struct ispif_device *ispif, u8 vfe_id)
+>   {
+> +	struct camss *camss = ispif->camss;
+>   	int ret;
+>   
+> -	ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE0);
+> +	ret = camss_pm_domain_on(camss, PM_DOMAIN_VFE0);
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE1);
+> +	ret = camss_pm_domain_on(camss, PM_DOMAIN_VFE1);
+>   	if (ret < 0)
+>   		return ret;
+>   
+>   	ret = camss_enable_clocks(ispif->nclocks_for_reset,
+>   				  ispif->clock_for_reset,
+> -				  to_device(ispif));
+> +				  camss->dev);
+>   	if (ret < 0)
+>   		return ret;
+>   
+>   	ret = ispif_vfe_reset(ispif, vfe_id);
+>   	if (ret)
+> -		dev_dbg(to_device(ispif), "ISPIF Reset failed\n");
+> +		dev_dbg(camss->dev, "ISPIF Reset failed\n");
+>   
+>   	camss_disable_clocks(ispif->nclocks_for_reset, ispif->clock_for_reset);
+>   
+> -	camss_pm_domain_off(to_camss(ispif), PM_DOMAIN_VFE0);
+> -	camss_pm_domain_off(to_camss(ispif), PM_DOMAIN_VFE1);
+> +	camss_pm_domain_off(camss, PM_DOMAIN_VFE0);
+> +	camss_pm_domain_off(camss, PM_DOMAIN_VFE1);
+>   
+>   	return ret;
+>   }
+> @@ -355,7 +360,7 @@ static int ispif_set_power(struct v4l2_subdev *sd, int on)
+>   {
+>   	struct ispif_line *line = v4l2_get_subdevdata(sd);
+>   	struct ispif_device *ispif = line->ispif;
+> -	struct device *dev = to_device(ispif);
+> +	struct device *dev = ispif->camss->dev;
+>   	int ret = 0;
+>   
+>   	mutex_lock(&ispif->power_lock);
+> @@ -505,7 +510,7 @@ static int ispif_validate_intf_status(struct ispif_device *ispif,
+>   	}
+>   
+>   	if ((val & 0xf) != 0xf) {
+> -		dev_err(to_device(ispif), "%s: ispif is busy: 0x%x\n",
+> +		dev_err(ispif->camss->dev, "%s: ispif is busy: 0x%x\n",
+>   			__func__, val);
+>   		ret = -EBUSY;
+>   	}
+> @@ -552,7 +557,7 @@ static int ispif_wait_for_stop(struct ispif_device *ispif,
+>   				 ISPIF_TIMEOUT_SLEEP_US,
+>   				 ISPIF_TIMEOUT_ALL_US);
+>   	if (ret < 0)
+> -		dev_err(to_device(ispif), "%s: ispif stop timeout\n",
+> +		dev_err(ispif->camss->dev, "%s: ispif stop timeout\n",
+>   			__func__);
+>   
+>   	return ret;
+> @@ -800,6 +805,7 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
+>   {
+>   	struct ispif_line *line = v4l2_get_subdevdata(sd);
+>   	struct ispif_device *ispif = line->ispif;
+> +	struct camss *camss = ispif->camss;
+>   	enum ispif_intf intf = line->interface;
+>   	u8 csid = line->csid_id;
+>   	u8 vfe = line->vfe_id;
+> @@ -825,8 +831,8 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
+>   		ispif_select_csid(ispif, intf, csid, vfe, 1);
+>   		ispif_select_cid(ispif, intf, cid, vfe, 1);
+>   		ispif_config_irq(ispif, intf, vfe, 1);
+> -		if (to_camss(ispif)->version == CAMSS_8x96 ||
+> -		    to_camss(ispif)->version == CAMSS_660)
+> +		if (camss->version == CAMSS_8x96 ||
+> +		    camss->version == CAMSS_660)
+>   			ispif_config_pack(ispif,
+>   					  line->fmt[MSM_ISPIF_PAD_SINK].code,
+>   					  intf, cid, vfe, 1);
+> @@ -843,8 +849,8 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
+>   			return ret;
+>   
+>   		mutex_lock(&ispif->config_lock);
+> -		if (to_camss(ispif)->version == CAMSS_8x96 ||
+> -		    to_camss(ispif)->version == CAMSS_660)
+> +		if (camss->version == CAMSS_8x96 ||
+> +		    camss->version == CAMSS_660)
+>   			ispif_config_pack(ispif,
+>   					  line->fmt[MSM_ISPIF_PAD_SINK].code,
+>   					  intf, cid, vfe, 0);
+> @@ -1088,26 +1094,31 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+>    *
+>    * Return 0 on success or a negative error code otherwise
+>    */
+> -int msm_ispif_subdev_init(struct ispif_device *ispif,
+> +int msm_ispif_subdev_init(struct camss *camss,
+>   			  const struct resources_ispif *res)
+>   {
+> -	struct device *dev = to_device(ispif);
+> -	struct platform_device *pdev = to_platform_device(dev);
+> +	struct ispif_device *ispif = camss->ispif;
+> +	struct platform_device *pdev = to_platform_device(camss->dev);
+>   	struct resource *r;
+>   	int i;
+>   	int ret;
+>   
+> +	if (res == NULL && ispif == NULL)
+> +		return 0;
+> +
+> +	ispif->camss = camss;
+> +
+>   	/* Number of ISPIF lines - same as number of CSID hardware modules */
+> -	if (to_camss(ispif)->version == CAMSS_8x16)
+> +	if (camss->version == CAMSS_8x16)
+>   		ispif->line_num = 2;
+> -	else if (to_camss(ispif)->version == CAMSS_8x96 ||
+> -		 to_camss(ispif)->version == CAMSS_660)
+> +	else if (camss->version == CAMSS_8x96 ||
+> +		 camss->version == CAMSS_660)
+>   		ispif->line_num = 4;
+>   	else
+>   		return -EINVAL;
+>   
+> -	ispif->line = devm_kcalloc(dev, ispif->line_num, sizeof(*ispif->line),
+> -				   GFP_KERNEL);
+> +	ispif->line = devm_kcalloc(camss->dev, ispif->line_num,
+> +			sizeof(*ispif->line), GFP_KERNEL);
+>   	if (!ispif->line)
+>   		return -ENOMEM;
+>   
+> @@ -1115,12 +1126,12 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   		ispif->line[i].ispif = ispif;
+>   		ispif->line[i].id = i;
+>   
+> -		if (to_camss(ispif)->version == CAMSS_8x16) {
+> +		if (camss->version == CAMSS_8x16) {
+>   			ispif->line[i].formats = ispif_formats_8x16;
+>   			ispif->line[i].nformats =
+>   					ARRAY_SIZE(ispif_formats_8x16);
+> -		} else if (to_camss(ispif)->version == CAMSS_8x96 ||
+> -			   to_camss(ispif)->version == CAMSS_660) {
+> +		} else if (camss->version == CAMSS_8x96 ||
+> +			   camss->version == CAMSS_660) {
+>   			ispif->line[i].formats = ispif_formats_8x96;
+>   			ispif->line[i].nformats =
+>   					ARRAY_SIZE(ispif_formats_8x96);
+> @@ -1132,16 +1143,16 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	/* Memory */
+>   
+>   	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
+> -	ispif->base = devm_ioremap_resource(dev, r);
+> +	ispif->base = devm_ioremap_resource(camss->dev, r);
+>   	if (IS_ERR(ispif->base)) {
+> -		dev_err(dev, "could not map memory\n");
+> +		dev_err(camss->dev, "could not map memory\n");
+>   		return PTR_ERR(ispif->base);
+>   	}
+>   
+>   	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[1]);
+> -	ispif->base_clk_mux = devm_ioremap_resource(dev, r);
+> +	ispif->base_clk_mux = devm_ioremap_resource(camss->dev, r);
+>   	if (IS_ERR(ispif->base_clk_mux)) {
+> -		dev_err(dev, "could not map memory\n");
+> +		dev_err(camss->dev, "could not map memory\n");
+>   		return PTR_ERR(ispif->base_clk_mux);
+>   	}
+>   
+> @@ -1150,24 +1161,25 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ, res->interrupt);
+>   
+>   	if (!r) {
+> -		dev_err(dev, "missing IRQ\n");
+> +		dev_err(camss->dev, "missing IRQ\n");
+>   		return -EINVAL;
+>   	}
+>   
+>   	ispif->irq = r->start;
+>   	snprintf(ispif->irq_name, sizeof(ispif->irq_name), "%s_%s",
+> -		 dev_name(dev), MSM_ISPIF_NAME);
+> -	if (to_camss(ispif)->version == CAMSS_8x16)
+> -		ret = devm_request_irq(dev, ispif->irq, ispif_isr_8x16,
+> +		 dev_name(camss->dev), MSM_ISPIF_NAME);
+> +	if (camss->version == CAMSS_8x16)
+> +		ret = devm_request_irq(camss->dev, ispif->irq, ispif_isr_8x16,
+>   			       IRQF_TRIGGER_RISING, ispif->irq_name, ispif);
+> -	else if (to_camss(ispif)->version == CAMSS_8x96 ||
+> -		 to_camss(ispif)->version == CAMSS_660)
+> -		ret = devm_request_irq(dev, ispif->irq, ispif_isr_8x96,
+> +	else if (camss->version == CAMSS_8x96 ||
+> +		 camss->version == CAMSS_660)
+> +		ret = devm_request_irq(camss->dev, ispif->irq, ispif_isr_8x96,
+>   			       IRQF_TRIGGER_RISING, ispif->irq_name, ispif);
+>   	else
+>   		ret = -EINVAL;
+> +
+>   	if (ret < 0) {
+> -		dev_err(dev, "request_irq failed: %d\n", ret);
+> +		dev_err(camss->dev, "request_irq failed: %d\n", ret);
+>   		return ret;
+>   	}
+>   
+> @@ -1177,7 +1189,7 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	while (res->clock[ispif->nclocks])
+>   		ispif->nclocks++;
+>   
+> -	ispif->clock = devm_kcalloc(dev,
+> +	ispif->clock = devm_kcalloc(camss->dev,
+>   				    ispif->nclocks, sizeof(*ispif->clock),
+>   				    GFP_KERNEL);
+>   	if (!ispif->clock)
+> @@ -1186,7 +1198,7 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	for (i = 0; i < ispif->nclocks; i++) {
+>   		struct camss_clock *clock = &ispif->clock[i];
+>   
+> -		clock->clk = devm_clk_get(dev, res->clock[i]);
+> +		clock->clk = devm_clk_get(camss->dev, res->clock[i]);
+>   		if (IS_ERR(clock->clk))
+>   			return PTR_ERR(clock->clk);
+>   
+> @@ -1198,7 +1210,7 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	while (res->clock_for_reset[ispif->nclocks_for_reset])
+>   		ispif->nclocks_for_reset++;
+>   
+> -	ispif->clock_for_reset = devm_kcalloc(dev,
+> +	ispif->clock_for_reset = devm_kcalloc(camss->dev,
+>   					      ispif->nclocks_for_reset,
+>   					      sizeof(*ispif->clock_for_reset),
+>   					      GFP_KERNEL);
+> @@ -1208,7 +1220,7 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
+>   	for (i = 0; i < ispif->nclocks_for_reset; i++) {
+>   		struct camss_clock *clock = &ispif->clock_for_reset[i];
+>   
+> -		clock->clk = devm_clk_get(dev, res->clock_for_reset[i]);
+> +		clock->clk = devm_clk_get(camss->dev, res->clock_for_reset[i]);
+>   		if (IS_ERR(clock->clk))
+>   			return PTR_ERR(clock->clk);
+>   
+> @@ -1331,10 +1343,13 @@ static const struct media_entity_operations ispif_media_ops = {
+>   int msm_ispif_register_entities(struct ispif_device *ispif,
+>   				struct v4l2_device *v4l2_dev)
+>   {
+> -	struct device *dev = to_device(ispif);
+> +	struct camss *camss =  ispif->camss;
+>   	int ret;
+>   	int i;
+>   
+> +	if (!ispif)
+> +		return 0;
+> +
+>   	for (i = 0; i < ispif->line_num; i++) {
+>   		struct v4l2_subdev *sd = &ispif->line[i].subdev;
+>   		struct media_pad *pads = ispif->line[i].pads;
+> @@ -1348,7 +1363,7 @@ int msm_ispif_register_entities(struct ispif_device *ispif,
+>   
+>   		ret = ispif_init_formats(sd, NULL);
+>   		if (ret < 0) {
+> -			dev_err(dev, "Failed to init format: %d\n", ret);
+> +			dev_err(camss->dev, "Failed to init format: %d\n", ret);
+>   			goto error;
+>   		}
+>   
+> @@ -1360,13 +1375,15 @@ int msm_ispif_register_entities(struct ispif_device *ispif,
+>   		ret = media_entity_pads_init(&sd->entity, MSM_ISPIF_PADS_NUM,
+>   					     pads);
+>   		if (ret < 0) {
+> -			dev_err(dev, "Failed to init media entity: %d\n", ret);
+> +			dev_err(camss->dev, "Failed to init media entity: %d\n",
+> +				ret);
+>   			goto error;
+>   		}
+>   
+>   		ret = v4l2_device_register_subdev(v4l2_dev, sd);
+>   		if (ret < 0) {
+> -			dev_err(dev, "Failed to register subdev: %d\n", ret);
+> +			dev_err(camss->dev, "Failed to register subdev: %d\n",
+> +				ret);
+>   			media_entity_cleanup(&sd->entity);
+>   			goto error;
+>   		}
+> @@ -1393,6 +1410,9 @@ void msm_ispif_unregister_entities(struct ispif_device *ispif)
+>   {
+>   	int i;
+>   
+> +	if (!ispif)
+> +		return;
+> +
+>   	mutex_destroy(&ispif->power_lock);
+>   	mutex_destroy(&ispif->config_lock);
+>   
+> diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
+> index 4132174f7ea1..fdf28e68cc7d 100644
+> --- a/drivers/media/platform/qcom/camss/camss-ispif.h
+> +++ b/drivers/media/platform/qcom/camss/camss-ispif.h
+> @@ -63,11 +63,12 @@ struct ispif_device {
+>   	struct mutex config_lock;
+>   	unsigned int line_num;
+>   	struct ispif_line *line;
+> +	struct camss *camss;
+>   };
+>   
+>   struct resources_ispif;
+>   
+> -int msm_ispif_subdev_init(struct ispif_device *ispif,
+> +int msm_ispif_subdev_init(struct camss *camss,
+>   			  const struct resources_ispif *res);
+>   
+>   int msm_ispif_register_entities(struct ispif_device *ispif,
+> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+> index 8fefce57bc49..aeec59bc6194 100644
+> --- a/drivers/media/platform/qcom/camss/camss.c
+> +++ b/drivers/media/platform/qcom/camss/camss.c
+> @@ -748,11 +748,13 @@ static int camss_init_subdevices(struct camss *camss)
+>   		}
+>   	}
+>   
+> -	ret = msm_ispif_subdev_init(&camss->ispif, ispif_res);
+> -	if (ret < 0) {
+> -		dev_err(camss->dev, "Failed to init ispif sub-device: %d\n",
+> +	if (camss->ispif) {
+> +		ret = msm_ispif_subdev_init(camss, ispif_res);
+> +		if (ret < 0) {
+> +			dev_err(camss->dev, "Failed to init ispif sub-device: %d\n",
+>   			ret);
 > -		return ret;
-> +	ceudev->sd = NULL;
-> +	ceudev->sd_index = 0;
-> +	ceudev->num_sd = 0;
-
-ceudev is kzalloc()ed, so I think you could skip this.
-
->  
->  	for (i = 0; i < pdata->num_subdevs; i++) {
->  
->  		/* Setup the ceu subdevice and the async subdevice. */
->  		async_sd = &pdata->subdevs[i];
-> -		ceu_sd = &ceudev->subdevs[i];
+> +			return ret;
+> +		}
+>   	}
+>   
+>   	for (i = 0; i < camss->vfe_num; i++) {
+> @@ -801,11 +803,14 @@ static int camss_register_entities(struct camss *camss)
+>   		}
+>   	}
+>   
+> -	ret = msm_ispif_register_entities(&camss->ispif, &camss->v4l2_dev);
+> -	if (ret < 0) {
+> -		dev_err(camss->dev, "Failed to register ispif entities: %d\n",
+> +	if (camss->ispif) {
+> +		ret = msm_ispif_register_entities(camss->ispif,
+> +						  &camss->v4l2_dev);
+> +		if (ret < 0) {
+> +			dev_err(camss->dev, "Failed to register ispif entities: %d\n",
+>   			ret);
+> -		goto err_reg_ispif;
+> +			goto err_reg_ispif;
+> +		}
+>   	}
+>   
+>   	for (i = 0; i < camss->vfe_num; i++) {
+> @@ -838,43 +843,64 @@ static int camss_register_entities(struct camss *camss)
+>   		}
+>   	}
+>   
+> -	for (i = 0; i < camss->csid_num; i++) {
+> -		for (j = 0; j < camss->ispif.line_num; j++) {
+> -			ret = media_create_pad_link(
+> -				&camss->csid[i].subdev.entity,
+> -				MSM_CSID_PAD_SRC,
+> -				&camss->ispif.line[j].subdev.entity,
+> -				MSM_ISPIF_PAD_SINK,
+> -				0);
+> -			if (ret < 0) {
+> -				dev_err(camss->dev,
+> -					"Failed to link %s->%s entities: %d\n",
+> -					camss->csid[i].subdev.entity.name,
+> -					camss->ispif.line[j].subdev.entity.name,
+> -					ret);
+> -				goto err_link;
+> -			}
+> -		}
+> -	}
 > -
-> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
-> -
-> -		ceu_sd->mbus_flags	= async_sd->flags;
-> -		ceu_sd->asd.match_type	= V4L2_ASYNC_MATCH_I2C;
-> -		ceu_sd->asd.match.i2c.adapter_id = async_sd->i2c_adapter_id;
-> -		ceu_sd->asd.match.i2c.address = async_sd->i2c_address;
-> -
-> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
-> -						     &ceu_sd->asd);
-> -		if (ret) {
-> +		asd = v4l2_async_notifier_add_i2c_subdev(&ceudev->notifier,
-> +				async_sd->i2c_adapter_id,
-> +				async_sd->i2c_address,
-> +				sizeof(*ceu_sd));
-> +		if (IS_ERR(asd)) {
-> +			ret = PTR_ERR(asd);
->  			v4l2_async_notifier_cleanup(&ceudev->notifier);
->  			return ret;
->  		}
-> +		ceu_sd = to_ceu_subdev(asd);
-> +		ceu_sd->mbus_flags = async_sd->flags;
-> +		ceudev->subdevs[i] = ceu_sd;
->  	}
->  
->  	return pdata->num_subdevs;
-> @@ -1536,7 +1512,8 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
->  static int ceu_parse_dt(struct ceu_device *ceudev)
->  {
->  	struct device_node *of = ceudev->dev->of_node;
-> -	struct device_node *ep, *remote;
-> +	struct device_node *ep;
-> +	struct v4l2_async_subdev *asd;
->  	struct ceu_subdev *ceu_sd;
->  	unsigned int i;
->  	int num_ep;
-> @@ -1546,9 +1523,9 @@ static int ceu_parse_dt(struct ceu_device *ceudev)
->  	if (!num_ep)
->  		return -ENODEV;
->  
-> -	ret = ceu_init_async_subdevs(ceudev, num_ep);
-> -	if (ret)
-> -		return ret;
-> +	ceudev->sd = NULL;
-> +	ceudev->sd_index = 0;
-> +	ceudev->num_sd = 0;
+> -	for (i = 0; i < camss->ispif.line_num; i++)
+> -		for (k = 0; k < camss->vfe_num; k++)
+> -			for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
+> +	if (camss->ispif) {
+> +		for (i = 0; i < camss->csid_num; i++) {
+> +			for (j = 0; j < camss->ispif->line_num; j++) {
+>   				ret = media_create_pad_link(
+> -					&camss->ispif.line[i].subdev.entity,
+> -					MSM_ISPIF_PAD_SRC,
+> -					&camss->vfe[k].line[j].subdev.entity,
+> -					MSM_VFE_PAD_SINK,
+> +					&camss->csid[i].subdev.entity,
+> +					MSM_CSID_PAD_SRC,
+> +					&camss->ispif->line[j].subdev.entity,
+> +					MSM_ISPIF_PAD_SINK,
+>   					0);
+>   				if (ret < 0) {
+>   					dev_err(camss->dev,
+>   						"Failed to link %s->%s entities: %d\n",
+> -						camss->ispif.line[i].subdev.entity.name,
+> -						camss->vfe[k].line[j].subdev.entity.name,
+> +						camss->csid[i].subdev.entity.name,
+> +						camss->ispif->line[j].subdev.entity.name,
+>   						ret);
+>   					goto err_link;
+>   				}
+>   			}
+> +		}
+> +
+> +		for (i = 0; i < camss->ispif->line_num; i++)
+> +			for (k = 0; k < camss->vfe_num; k++)
+> +				for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
+> +					ret = media_create_pad_link(
+> +						&camss->ispif->line[i].subdev.entity,
+> +						MSM_ISPIF_PAD_SRC,
+> +						&camss->vfe[k].line[j].subdev.entity,
+> +						MSM_VFE_PAD_SINK,
+> +						0);
+> +					if (ret < 0) {
+> +						dev_err(camss->dev,
+> +							"Failed to link %s->%s entities: %d\n",
+> +							camss->ispif->line[i].subdev.entity.name,
+> +							camss->vfe[k].line[j].subdev.entity.name,
+> +							ret);
+> +						goto err_link;
+> +					}
+> +				}
+> +	} else {
+> +		for (i = 0; i < camss->csid_num; i++)
+> +			for (k = 0; k < camss->vfe_num; k++)
+> +				for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
+> +					ret = media_create_pad_link(
+> +						&camss->csid[i].subdev.entity,
+> +						MSM_CSID_PAD_SRC,
+> +						&camss->vfe[k].line[j].subdev.entity,
+> +						MSM_VFE_PAD_SINK,
+> +						0);
+> +					if (ret < 0) {
+> +						dev_err(camss->dev,
+> +							"Failed to link %s->%s entities: %d\n",
+> +							camss->csid[i].subdev.entity.name,
+> +							camss->vfe[k].line[j].subdev.entity.name,
+> +							ret);
+> +						goto err_link;
+> +					}
+> +				}
+> +	}
+>   
+>   	return 0;
+>   
+> @@ -884,8 +910,9 @@ static int camss_register_entities(struct camss *camss)
+>   	for (i--; i >= 0; i--)
+>   		msm_vfe_unregister_entities(&camss->vfe[i]);
+>   
+> -	msm_ispif_unregister_entities(&camss->ispif);
+>   err_reg_ispif:
+> +	if (camss->ispif)
+> +		msm_ispif_unregister_entities(camss->ispif);
+>   
+>   	i = camss->csid_num;
+>   err_reg_csid:
+> @@ -916,7 +943,8 @@ static void camss_unregister_entities(struct camss *camss)
+>   	for (i = 0; i < camss->csid_num; i++)
+>   		msm_csid_unregister_entity(&camss->csid[i]);
+>   
+> -	msm_ispif_unregister_entities(&camss->ispif);
+> +	if (camss->ispif)
+> +		msm_ispif_unregister_entities(camss->ispif);
+>   
+>   	for (i = 0; i < camss->vfe_num; i++)
+>   		msm_vfe_unregister_entities(&camss->vfe[i]);
+> @@ -1047,6 +1075,15 @@ static int camss_probe(struct platform_device *pdev)
+>   		goto err_free;
+>   	}
+>   
+> +	if (camss->version == CAMSS_8x16 ||
+> +	    camss->version == CAMSS_8x96) {
+> +		camss->ispif = devm_kcalloc(dev, 1, sizeof(*camss->csid), GFP_KERNEL);
 
-Same here, I think this could be skipped.
+- shouldn't it be sizeof(*camss->ispif) instead?
 
->  
->  	for (i = 0; i < num_ep; i++) {
->  		struct v4l2_fwnode_endpoint fw_ep = {
-> @@ -1578,20 +1555,16 @@ static int ceu_parse_dt(struct ceu_device *ceudev)
->  		}
->  
->  		/* Setup the ceu subdevice and the async subdevice. */
-> -		ceu_sd = &ceudev->subdevs[i];
-> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
-> -
-> -		remote = of_graph_get_remote_port_parent(ep);
-> -		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> -		ceu_sd->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-> -		ceu_sd->asd.match.fwnode = of_fwnode_handle(remote);
-> -
-> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
-> -						     &ceu_sd->asd);
-> -		if (ret) {
-> -			of_node_put(remote);
-> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +				&ceudev->notifier, of_fwnode_handle(ep),
-> +				sizeof(*ceu_sd));
-> +		if (IS_ERR(asd)) {
-> +			ret = PTR_ERR(asd);
->  			goto error_cleanup;
->  		}
-> +		ceu_sd = to_ceu_subdev(asd);
-> +		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> +		ceudev->subdevs[i] = ceu_sd;
->  
->  		of_node_put(ep);
->  	}
+Thanks,
+Andrey
 
--- 
-Regards,
-
-Laurent Pinchart
+> +		if (!camss->ispif) {
+> +			ret = -ENOMEM;
+> +			goto err_free;
+> +		}
+> +	}
+> +
+>   	camss->vfe = devm_kcalloc(dev, camss->vfe_num, sizeof(*camss->vfe),
+>   				  GFP_KERNEL);
+>   	if (!camss->vfe) {
+> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+> index 46e986452824..b7ad8e9f68a8 100644
+> --- a/drivers/media/platform/qcom/camss/camss.h
+> +++ b/drivers/media/platform/qcom/camss/camss.h
+> @@ -79,7 +79,7 @@ struct camss {
+>   	struct csiphy_device *csiphy;
+>   	int csid_num;
+>   	struct csid_device *csid;
+> -	struct ispif_device ispif;
+> +	struct ispif_device *ispif;
+>   	int vfe_num;
+>   	struct vfe_device *vfe;
+>   	atomic_t ref_count;
+> 
