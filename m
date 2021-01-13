@@ -2,59 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B610CC433DB
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 01:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C0CFC43381
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 01:23:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 836282311B
+	by mail.kernel.org (Postfix) with ESMTP id ED8232311F
 	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 01:23:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbhAMBWe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jan 2021 20:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S1727216AbhAMBWw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jan 2021 20:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbhAMBWe (ORCPT
+        with ESMTP id S1727136AbhAMBWk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jan 2021 20:22:34 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65C9C061575;
-        Tue, 12 Jan 2021 17:21:53 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id q20so204713pfu.8;
-        Tue, 12 Jan 2021 17:21:53 -0800 (PST)
+        Tue, 12 Jan 2021 20:22:40 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415FAC061795;
+        Tue, 12 Jan 2021 17:22:00 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id h10so201131pfo.9;
+        Tue, 12 Jan 2021 17:22:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OF1vzKHCoB9FbkveX0jDIMlRTwuLz60PQrD10fcsFvo=;
-        b=UH6sv5ytYE04PK0iHS7mRqn5lcCiexxf2Xe/PoK4fkM38pimasFBp9BCAd/TmTSoS9
-         Y4fVpf/+DWDnHW5kmP6xjFsK6xAfA0q5HreB3l3g4q9VKhRRf+pccwYFmP56UvofNi1G
-         3b0+4KQFMRB32GMMzMyUlx8kc30ezji0D8deRhI+tWRphT+7hx4Sj9EUc0E5GcaekxJw
-         td6bgRnXqduBYHBGBdHIdCtFeAnohT6yU4EvXnGXShnNj53hjVxDAfoO8lMKPjL3wTnT
-         4iQecTf1TQq/T/ElIygy0BI8zamN3WGw9kxQuoUjcQB8/HMNai/6Gc6O9tzrT38Eq2EY
-         cq2A==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=moLKqW8sUzdDe7Tu+bx0keAxg66CW63q9xlqRNBYrrA=;
+        b=XUDwakez4EGE0+imMc50hGx3ds5QMmtB9M5WblPQvBHRhPN2royeIYKqS9ueWEaeMt
+         70V/NvI6mYHZWxn4quFPSoW8gISButU43tslILdi4HOA+4x8p71KnIRyoIG6/6GPhOQJ
+         +dmhxIzPBOsyt+vTmaNf/S9BbzfZS12Jw7bdccqgSk2Txk35XxW4u9ckwu9z31+FajDH
+         ezWy+YqvNWsZbPtSKxF6mqZ29Flxm+bcg9xHOWYCGrpkM2yfXBHjrR0mY4CuaZAr81PZ
+         5ePUpF69j4The4uiJitpef/JoIe48XGfF9t1oNFv+xGOYGdymXqc0bYHKDIYBG24ihhm
+         kckw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=OF1vzKHCoB9FbkveX0jDIMlRTwuLz60PQrD10fcsFvo=;
-        b=GamozwIPHzR9QeXtKsvW6bJpe2axLB3nXX+ehJYidKJGoi1CDKzS8876VJu2yzA7XE
-         H436BLm047xnbJTr0FlduRZmShcZedegoOlvkgn7sn+3Pazb0z54imlxrwu8KtJbPB+J
-         r5GMHXDdS0ucC1zCb2UCBmV4SMfF2bIVS3g++4HhAnFqrjvPBVUO1j1O/cF5PrBcKAE9
-         t0vuCAcETPuK0IrqdlO90Jgu9Gd2vaITXg5KmDMtXX6ntZCb2yKmCPTidfsNJhLBF2BW
-         AzE8coVws5JJ5NdzZ8Wxu4qtKuHzVbrp3EWs/U06R17XqQRZLL5+kRJukR1QcINeZjMb
-         dovA==
-X-Gm-Message-State: AOAM530wNIiCb646Kj680tE/3HL7ZSvVeDcg5ZiY5Fde0VC+KIFkOw05
-        1RHZi66uMGDJ/Th09dLO03vc8rSxX6g=
-X-Google-Smtp-Source: ABdhPJzYrt3TdM44/itCkvsZ36dDJ69idE7ohZq5unbjsjwFA2k+bmee0Jqg9Tmdb+3ZMwABk51ytA==
-X-Received: by 2002:aa7:95aa:0:b029:1ad:d810:42be with SMTP id a10-20020aa795aa0000b02901add81042bemr2009988pfk.51.1610500913498;
-        Tue, 12 Jan 2021 17:21:53 -0800 (PST)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=moLKqW8sUzdDe7Tu+bx0keAxg66CW63q9xlqRNBYrrA=;
+        b=jWxqrhd3n1GX1QWN1PuA4bDFoqX1V6pvhBtVPkf1cIaLanL1TD2gyNbMU3ArdfqCZd
+         tox8ZrS/FTSLcl/8Alpwyibt4CMG8scwz7FmeChnLrD/AsQYLFL8W6qcB1e4OSOnLWE3
+         5U4vOkjG28WtvjlnsNhc9WPLuxUkxTKV/wu9N5vI+vgsFRUTl9Jyfa65K29UfvTZVkft
+         w1P8K1RXekVvxryZcCjCQwRwwywW5o2EXQ350E74K7zCCnSCl9XtZPkqihAIhR4cyPc6
+         Y1kPs5ootrw0gwpEy+m5BHhdZvAJTRn/rBLXAR2ItWHWchzBnmMKtrV3FlWjgt9o/v7b
+         3/TQ==
+X-Gm-Message-State: AOAM533JeRdTgmr3uW6+uPG9HFaJArZVb+hEQgzCf4uzcr3+cZWxOZea
+        N2ElKhsoBjIyj1Zxls5lXc4=
+X-Google-Smtp-Source: ABdhPJx5ssWUpEIEIBeaTawSvCWhAJ4WrRqcd7JRRzO48BBfVLvjE9R4HsG7zK71sU4cpDiUxflR/w==
+X-Received: by 2002:a63:cf56:: with SMTP id b22mr1900832pgj.16.1610500919879;
+        Tue, 12 Jan 2021 17:21:59 -0800 (PST)
 Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:7220:84ff:fe09:5e58])
-        by smtp.gmail.com with ESMTPSA id b2sm355197pff.79.2021.01.12.17.21.51
+        by smtp.gmail.com with ESMTPSA id b2sm355197pff.79.2021.01.12.17.21.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 17:21:52 -0800 (PST)
+        Tue, 12 Jan 2021 17:21:59 -0800 (PST)
 Sender: Minchan Kim <minchan.kim@gmail.com>
 From:   Minchan Kim <minchan@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -65,71 +66,97 @@ Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         hch@infradead.org, robh+dt@kernel.org,
         linaro-mm-sig@lists.linaro.org, Minchan Kim <minchan@kernel.org>
-Subject: [PATCH v3 0/4] Chunk Heap Support on DMA-HEAP
-Date:   Tue, 12 Jan 2021 17:21:39 -0800
-Message-Id: <20210113012143.1201105-1-minchan@kernel.org>
+Subject: [PATCH v3 3/4] dt-bindings: reserved-memory: Make DMA-BUF CMA heap DT-configurable
+Date:   Tue, 12 Jan 2021 17:21:42 -0800
+Message-Id: <20210113012143.1201105-4-minchan@kernel.org>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+In-Reply-To: <20210113012143.1201105-1-minchan@kernel.org>
+References: <20210113012143.1201105-1-minchan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset introduces a new dma heap, "chunk-heap" that makes it
-easy to perform the bulk allocation of high order pages.
-It has been created to help optimize the 4K/8K HDR video playback
-with secure DRM HW to protect contents on memory. The HW needs
-physically contiguous memory chunks(e.g, 64K) up to several hundred
-MB memory.
+From: Hyesoo Yu <hyesoo.yu@samsung.com>
 
-To make such high-order big bulk allocations work, chunk-heap uses
-CMA area. To avoid CMA allocation long stall on blocking pages(e.g.,
-page writeback and/or page locking), it uses failfast mode of the
-CMA API(i.e., __GFP_NORETRY) so it will continue to find easy
-migratable pages in different pageblocks without stalling. At last
-resort, it will allow the blocking only if it couldn't find the
-available memory in the end.
+Document devicetree binding for chunk cma heap on dma heap framework.
 
-First two patches introduces the failfast mode as __GFP_NORETRY
-in alloc_contig_range and the allow to use it from the CMA API.
-Third patch introduces device tree syntax for chunk-heap to bind
-the specific CMA area with chunk-heap.
-Finally, last patch implements chunk-heap as dma-buf heap.
+The DMA chunk heap supports the bulk allocation of higher order pages.
 
-* since v2 -
-  * introduce gfp_mask with __GFP_NORETRY on cma_alloc - mhocko
-  * do not expoert CMA APIs - Christoph
-  * use compatible string for DT instead of dma-heap specific property - Hridya
-
-* Since v1 - https://lore.kernel.org/linux-mm/20201117181935.3613581-1-minchan@kernel.org/
-  * introduce alloc_contig_mode - David
-  * use default CMA instead of device tree - John
-
-Hyesoo Yu (2):
-  dt-bindings: reserved-memory: Make DMA-BUF CMA heap DT-configurable
-  dma-buf: heaps: add chunk heap to dmabuf heaps
-
-Minchan Kim (2):
-  mm: cma: introduce gfp flag in cma_alloc instead of no_warn
-  mm: failfast mode with __GFP_NORETRY in alloc_contig_range
-
- .../reserved-memory/dma_heap_chunk.yaml       |  58 +++
- drivers/dma-buf/heaps/Kconfig                 |   8 +
- drivers/dma-buf/heaps/Makefile                |   1 +
- drivers/dma-buf/heaps/chunk_heap.c            | 477 ++++++++++++++++++
- drivers/dma-buf/heaps/cma_heap.c              |   2 +-
- drivers/s390/char/vmcp.c                      |   2 +-
- include/linux/cma.h                           |   2 +-
- kernel/dma/contiguous.c                       |   3 +-
- mm/cma.c                                      |  12 +-
- mm/cma_debug.c                                |   2 +-
- mm/hugetlb.c                                  |   6 +-
- mm/page_alloc.c                               |   8 +-
- mm/secretmem.c                                |   3 +-
- 13 files changed, 568 insertions(+), 16 deletions(-)
+Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+Signed-off-by: Hridya Valsaraju <hridya@google.com>
+Change-Id: I8fb231e5a8360e2d8f65947e155b12aa664dde01
+---
+ .../reserved-memory/dma_heap_chunk.yaml       | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
- create mode 100644 drivers/dma-buf/heaps/chunk_heap.c
 
+diff --git a/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+new file mode 100644
+index 000000000000..3e7fed5fb006
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reserved-memory/dma_heap_chunk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Device tree binding for chunk heap on DMA HEAP FRAMEWORK
++
++description: |
++  The DMA chunk heap is backed by the Contiguous Memory Allocator (CMA) and
++  supports bulk allocation of fixed size pages.
++
++maintainers:
++  - Hyesoo Yu <hyesoo.yu@samsung.com>
++  - John Stultz <john.stultz@linaro.org>
++  - Minchan Kim <minchan@kernel.org>
++  - Hridya Valsaraju<hridya@google.com>
++
++
++properties:
++  compatible:
++    enum:
++      - dma_heap,chunk
++
++  chunk-order:
++    description: |
++            order of pages that will get allocated from the chunk DMA heap.
++    maxItems: 1
++
++  size:
++    maxItems: 1
++
++  alignment:
++    maxItems: 1
++
++required:
++  - compatible
++  - size
++  - alignment
++  - chunk-order
++
++additionalProperties: false
++
++examples:
++  - |
++    reserved-memory {
++        #address-cells = <2>;
++        #size-cells = <1>;
++
++        chunk_memory: chunk_memory {
++            compatible = "dma_heap,chunk";
++            size = <0x3000000>;
++            alignment = <0x0 0x00010000>;
++            chunk-order = <4>;
++        };
++    };
++
++
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
