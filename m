@@ -2,126 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4653EC433E9
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C7AC433DB
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:12:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00A0123383
-	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2BA522286
+	for <linux-media@archiver.kernel.org>; Wed, 13 Jan 2021 11:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbhAMLCK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 06:02:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38838 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727442AbhAMLAw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 06:00:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 96C0123383;
-        Wed, 13 Jan 2021 10:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610535569;
-        bh=UsiaJ5TeFRIuOKIuSBE3ueTDIjqdP8/ojUP8xNThLiU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JwQBO8e3swkxbw4v0qYoQuzfOutZcHgnI0MSHLSa7aQYUqKKz9xGmdslvbE+6X+pl
-         iQOsreIaYUaopfrnoALMeRcoV8b2ewED6qoB6VZAohTV2XoiM/Ugq8CdhsTDpkpFSC
-         sHsApbyrBjWJlSbUXBv7tLCy1UNX3cGrSSAD7j++4HLesIzeEjFZVPQJn2J5oLmjON
-         LO6JcKkXMZsrXk8YpCGzlX782pac1zAqJFB7uHTlnn9sXRcGD3zlcwAV7Mf5VR7pFG
-         iH9Nqr9o9EuUz7C11onQCo1Sg/vfJIRxblyM1+yeUPdfpo0R+ivUmKOYdf8WcgHtgm
-         MAEc9cWWKa5YQ==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kzds7-00DpFo-1W; Wed, 13 Jan 2021 11:59:27 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 00/24] Fix broken file docs cross-references
-Date:   Wed, 13 Jan 2021 11:59:01 +0100
-Message-Id: <cover.1610535349.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S1728132AbhAMLMU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 06:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728126AbhAMLMT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 13 Jan 2021 06:12:19 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D06C061794;
+        Wed, 13 Jan 2021 03:11:39 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id i7so1273893pgc.8;
+        Wed, 13 Jan 2021 03:11:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O2lyKnr22hhUPpXetJhQO1be4sEDYnPV91pq2a64nS4=;
+        b=WCc2cSmh1/HAtrSeE3fS7o3q7edSXlxbkDEFscAtWV8E3lbQ4KsOgEQEWNoH9Hqhpc
+         /cWsZufkwl8BBXyhZ2IpSTpoyEVegJUcporbNOEvm3xcxNWJyBmr5Gl7aFGOH18M0htk
+         ApaOboMiOBCsaJOSJkj4aUZflO8ued9e7np0zjLbDVpk6+aHaxHJ9CWY4ucK2cyFXuds
+         fcG6xe335OD8M97mv6XjucBFlaIr7d3Duiql4qzMj5oukgrF8z7woz5+336Fr2wCdgnz
+         qZ3tNE3s08EfuIXCqw7iY55srPsT7tEuglnl9+vIoJ7U8X0ck3hkfANwHNGo0Bh9/T76
+         X4LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O2lyKnr22hhUPpXetJhQO1be4sEDYnPV91pq2a64nS4=;
+        b=sjz6WFJP2qkpWfr4Y0yJzpTkpIq8H4kkGrMC4K9knDMpUr+AieV6X42e7X64bQ8D+L
+         QXDjeuBI+dlyAsuXLRFi4Z9oiE3lSqkqZ4X66B6zmRKXtktUC1giBVpOie7aTlRYKLDR
+         qjmvOWdsIdhir4fGKp8X9oQcm0rJj8BIcNj7E+q7KU07db0pUW6/qM7roE36BrWAJSl9
+         OTIgqCltNVOnsrp43H5O4t/vcvpo4/xDr6QLK4ihcm+5FUD4NvjWXtNIM8FyIof4C2XG
+         CHfQJTt0xP9QO3QcEqTYv/4Iz6rmH0yWm264XMILPVJH7iQCkMurJpuFW/Y9SoesHHe+
+         9+3g==
+X-Gm-Message-State: AOAM533e8Vi2Vb+5/e7fYAenf/qTAr9RE4PZgnC/HOkKfyI9xva5Xoeo
+        KnzwlhPUq4/ChKWgpLl8xwGHOd2j6hhSvpHT
+X-Google-Smtp-Source: ABdhPJyPF0Xy8RdIGT8687M41wVItB/eXfu7VrohRmnK3LZZglJYI2fFko8o7mOtpRFSfX8fHTYSXQ==
+X-Received: by 2002:a63:4e44:: with SMTP id o4mr1671941pgl.46.1610536298837;
+        Wed, 13 Jan 2021 03:11:38 -0800 (PST)
+Received: from localhost.localdomain ([45.135.186.83])
+        by smtp.gmail.com with ESMTPSA id gw21sm2351247pjb.28.2021.01.13.03.11.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jan 2021 03:11:38 -0800 (PST)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com
+Subject: [PATCH] Fix shift-out-of-bound in mceusb_process_ir_data
+Date:   Wed, 13 Jan 2021 19:11:22 +0800
+Message-Id: <20210113111122.1739478-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-File renames and yaml conversions broke file references for several files,
-as reported by:
+The missing check of ir->buf_in[i+1] can lead to an shift-out-of-bound
+in mceusb_handle_command or mceusb_dev_printdata. This patch adds a
+check to limit its value lower than 16. The concrete report of UBSAN is
+as follows.
 
-	./scripts/documentation-file-ref-check
+UBSAN: shift-out-of-bounds in drivers/media/rc/mceusb.c:704:13
+shift exponent 230 is too large for 32-bit type 'unsigned int'
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.0-syzkaller #0
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:120
+ ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
+ mceusb_dev_printdata.cold+0x19/0x1e drivers/media/rc/mceusb.c:704
+ mceusb_process_ir_data drivers/media/rc/mceusb.c:1275 [inline]
+ mceusb_dev_recv+0x3cb/0x1990 drivers/media/rc/mceusb.c:1376
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1657
+ usb_hcd_giveback_urb+0x38c/0x430 drivers/usb/core/hcd.c:1728
+ dummy_timer+0x11f4/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1971
 
-Fix most of them.
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/media/rc/mceusb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Please notice that this series was generated against  linux-next
-(next-20210113).  So, it is better if the fixup patch could be added
-at the same tree that received the patch renaming the filename.
-
-Regards,
-Mauro
-
-Mauro Carvalho Chehab (24):
-  MAINTAINERS: update adi,ad5758.yaml reference
-  MAINTAINERS: update fsl,dpaa2-console.yaml reference
-  MAINTAINERS: update st,hts221.yaml reference
-  MAINTAINERS: update dpot-dac.yaml reference
-  MAINTAINERS: update envelope-detector.yaml reference
-  MAINTAINERS: update current-sense-amplifier.yaml reference
-  MAINTAINERS: update current-sense-shunt.yaml reference
-  MAINTAINERS: update voltage-divider.yaml reference
-  MAINTAINERS: update mtk-sd.yaml reference
-  MAINTAINERS: update atmel,sama5d2-adc.yaml reference
-  MAINTAINERS: update pni,rm3100.yaml reference
-  MAINTAINERS: update renesas,rcar-gyroadc.yaml reference
-  MAINTAINERS: update st,lsm6dsx.yaml reference
-  MAINTAINERS: update st,vl53l0x.yaml reference
-  MAINTAINERS: update ti,dac7612.yaml reference
-  Documentation/hwmon/ina2xx.rst: update ti,ina2xx.yaml reference
-  arch/Kconfig: update unaligned-memory-access.rst reference
-  include/linux/iio/dac/mcp4725.h: update a microchip,mcp4725.yaml ref
-  doc: update rcu_dereference.rst reference
-  ASoC: audio-graph-card: update audio-graph-card.yaml reference
-  dt-bindings: display: mediatek: update mediatek,dpi.yaml reference
-  dt-bindings: memory: mediatek: update mediatek,smi-larb.yaml
-    references
-  dt-bindings:iio:adc: update adc.yaml reference
-  dt-bindings: phy: update phy-cadence-sierra.yaml reference
-
- .../bindings/display/bridge/sii902x.txt       |  2 +-
- .../display/mediatek/mediatek,disp.txt        |  4 +--
- .../bindings/iio/adc/adi,ad7192.yaml          |  2 +-
- .../bindings/media/mediatek-jpeg-decoder.txt  |  2 +-
- .../bindings/media/mediatek-jpeg-encoder.txt  |  2 +-
- .../bindings/media/mediatek-mdp.txt           |  2 +-
- .../bindings/phy/ti,phy-j721e-wiz.yaml        |  2 +-
- Documentation/hwmon/ina2xx.rst                |  2 +-
- MAINTAINERS                                   | 30 +++++++++----------
- arch/Kconfig                                  |  2 +-
- include/linux/iio/dac/mcp4725.h               |  2 +-
- tools/memory-model/Documentation/glossary.txt |  2 +-
- 12 files changed, 27 insertions(+), 27 deletions(-)
-
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index f9616158bcf4..755808c6e747 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1272,6 +1272,8 @@ static void mceusb_process_ir_data(struct mceusb_dev *ir, int buf_len)
+ 		switch (ir->parser_state) {
+ 		case SUBCMD:
+ 			ir->rem = mceusb_cmd_datasize(ir->cmd, ir->buf_in[i]);
++			if (ir->buf_in[i+1] >= 16)
++				continue;
+ 			mceusb_dev_printdata(ir, ir->buf_in, buf_len, i - 1,
+ 					     ir->rem + 2, false);
+ 			if (i + ir->rem < buf_len)
 -- 
-2.29.2
-
+2.25.1
 
