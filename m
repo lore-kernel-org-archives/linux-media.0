@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B6AFC433E6
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF850C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4686022B2B
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:24:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCBCB23B2A
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbhANQYy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Jan 2021 11:24:54 -0500
+        id S1726744AbhANQZL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Jan 2021 11:25:11 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:54854 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbhANQYy (ORCPT
+        with ESMTP id S1725954AbhANQZL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Jan 2021 11:24:54 -0500
+        Thu, 14 Jan 2021 11:25:11 -0500
 Received: from Q.local (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 715EAB87;
-        Thu, 14 Jan 2021 17:24:07 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C78A91508;
+        Thu, 14 Jan 2021 17:24:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610641447;
-        bh=eWZL3uR7aIaMFvyWgGOxEbslCY/dFvdleeP2xAGhhDg=;
+        s=mail; t=1610641449;
+        bh=ZiaSi4ZIWMnQkmja46QYdDXMyRy892v7aQHp0ryTsOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9KLsOrpczllt9lyqicPWCff9nzZsNFVW28Younfwh0azwkWUigcMMXGnrBfqH46I
-         U16VSVUbdgn3myMQ7GehfNDbR5fehvLd3+Z4ijHiVzjU0Dj7IRLnL+DIZqUj8aMR4n
-         ls+bHqrs29ZmqBb7Pomy7dSc+m/PZ6/Hl9XQJLvs=
+        b=KG3s7gA+Xy/XClOU5kQw+8Zkf7d1TcsumlXMtrrSvfHE9WySUivfrJhIyRUUCWNSk
+         0ToT9s6kb9STRI7Sl6omr6Zn5ozQ1+q/JEYIp6vJXjTvsa8m42ptRP1CAyQeGz5pWp
+         SkVb45F2fd6j99BfDu9+idwqZksA84gAr7TQl13Y=
 From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
@@ -37,9 +37,9 @@ To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
 Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Ulrich Hecht <uli+renesas@fpond.eu>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v4 04/10] media: vsp1: drm: Remove vsp1_du_setup_lif()
-Date:   Thu, 14 Jan 2021 16:22:49 +0000
-Message-Id: <20210114162255.705868-5-kieran.bingham+renesas@ideasonboard.com>
+Subject: [PATCH v4 07/10] drm: rcar-du: Provide for_each_group helper
+Date:   Thu, 14 Jan 2021 16:22:52 +0000
+Message-Id: <20210114162255.705868-8-kieran.bingham+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210114162255.705868-1-kieran.bingham+renesas@ideasonboard.com>
 References: <20210114162255.705868-1-kieran.bingham+renesas@ideasonboard.com>
@@ -49,108 +49,76 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The vsp1_du_setup_lif() function is deprecated, and the users have been
-removed. Remove the implementation and the associated configuration
-structure.
+Refactoring of the group control code will soon require more iteration
+over the available groups. Simplify this process by introducing a group
+iteration helper.
 
 Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/platform/vsp1/vsp1_drm.c | 46 --------------------------
- include/media/vsp1.h                   | 22 ------------
- 2 files changed, 68 deletions(-)
+Changes since v2:
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index fa79cac32e49..46692460f8a6 100644
---- a/drivers/media/platform/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -814,52 +814,6 @@ int vsp1_du_atomic_disable(struct device *dev, unsigned int pipe_index)
+- Don't assign __group in the condition part of the for statement of the
+  for_each_rcdu_group() macro
+
+ drivers/gpu/drm/rcar-du/rcar_du_drv.h |  5 +++++
+ drivers/gpu/drm/rcar-du/rcar_du_kms.c | 10 ++--------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.h b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+index 02ca2d0e1b55..e792ba7f5145 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_drv.h
++++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+@@ -104,6 +104,11 @@ static inline struct rcar_du_device *to_rcar_du_device(struct drm_device *dev)
+ 	return container_of(dev, struct rcar_du_device, ddev);
  }
- EXPORT_SYMBOL_GPL(vsp1_du_atomic_disable);
  
--/**
-- * vsp1_du_setup_lif - Setup the output part of the VSP pipeline
-- * @dev: the VSP device
-- * @pipe_index: the DRM pipeline index
-- * @cfg: the LIF configuration
-- *
-- * Configure the output part of VSP DRM pipeline for the given frame @cfg.width
-- * and @cfg.height. This sets up formats on the BRx source pad, the WPF sink and
-- * source pads, and the LIF sink pad.
-- *
-- * The @pipe_index argument selects which DRM pipeline to setup. The number of
-- * available pipelines depend on the VSP instance.
-- *
-- * As the media bus code on the blend unit source pad is conditioned by the
-- * configuration of its sink 0 pad, we also set up the formats on all blend unit
-- * sinks, even if the configuration will be overwritten later by
-- * vsp1_du_setup_rpf(). This ensures that the blend unit configuration is set to
-- * a well defined state.
-- *
-- * Return 0 on success or a negative error code on failure.
-- */
--int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
--		      const struct vsp1_du_lif_config *cfg)
--{
--	struct vsp1_du_modeset_config modes;
--	struct vsp1_du_enable_config enable;
--	int ret;
--
--	if (!cfg)
--		return vsp1_du_atomic_disable(dev, pipe_index);
--
--	modes.width = cfg->width;
--	modes.height = cfg->height;
--	modes.interlaced = cfg->interlaced;
--
--	ret = vsp1_du_atomic_modeset(dev, pipe_index, &modes);
--	if (ret)
--		return ret;
--
--	enable.callback = cfg->callback;
--	enable.callback_data = cfg->callback_data;
--
--	return vsp1_du_atomic_enable(dev, pipe_index, &enable);
--}
--EXPORT_SYMBOL_GPL(vsp1_du_setup_lif);
--
- /**
-  * vsp1_du_atomic_begin - Prepare for an atomic update
-  * @dev: the VSP device
-diff --git a/include/media/vsp1.h b/include/media/vsp1.h
-index 253db8029752..a4eda8c9d048 100644
---- a/include/media/vsp1.h
-+++ b/include/media/vsp1.h
-@@ -20,28 +20,6 @@ int vsp1_du_init(struct device *dev);
- #define VSP1_DU_STATUS_COMPLETE		BIT(0)
- #define VSP1_DU_STATUS_WRITEBACK	BIT(1)
++#define for_each_rcdu_group(__rcdu, __group, __i) \
++	for ((__i) = 0, (__group) = &(__rcdu)->groups[0]; \
++	     (__i) < DIV_ROUND_UP((__rcdu)->num_crtcs, 2); \
++	     __i++, __group++)
++
+ static inline bool rcar_du_has(struct rcar_du_device *rcdu,
+ 			       unsigned int feature)
+ {
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
+index 3c10c329c81c..732aac342dab 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
+@@ -771,9 +771,9 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
  
--/**
-- * struct vsp1_du_lif_config - VSP LIF configuration - Deprecated
-- * @width: output frame width
-- * @height: output frame height
-- * @interlaced: true for interlaced pipelines
-- * @callback: frame completion callback function (optional). When a callback
-- *	      is provided, the VSP driver guarantees that it will be called once
-- *	      and only once for each vsp1_du_atomic_flush() call.
-- * @callback_data: data to be passed to the frame completion callback
-- */
--struct vsp1_du_lif_config {
--	unsigned int width;
--	unsigned int height;
--	bool interlaced;
+ 	struct drm_device *dev = &rcdu->ddev;
+ 	struct drm_encoder *encoder;
++	struct rcar_du_group *rgrp;
+ 	unsigned int dpad0_sources;
+ 	unsigned int num_encoders;
+-	unsigned int num_groups;
+ 	unsigned int swindex;
+ 	unsigned int hwindex;
+ 	unsigned int i;
+@@ -820,11 +820,7 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
+ 		return ret;
+ 
+ 	/* Initialize the groups. */
+-	num_groups = DIV_ROUND_UP(rcdu->num_crtcs, 2);
 -
--	void (*callback)(void *data, unsigned int status, u32 crc);
--	void *callback_data;
--};
+-	for (i = 0; i < num_groups; ++i) {
+-		struct rcar_du_group *rgrp = &rcdu->groups[i];
 -
--int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
--		      const struct vsp1_du_lif_config *cfg);
++	for_each_rcdu_group(rcdu, rgrp, i) {
+ 		mutex_init(&rgrp->lock);
+ 
+ 		rgrp->dev = rcdu;
+@@ -866,8 +862,6 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
+ 
+ 	/* Create the CRTCs. */
+ 	for (swindex = 0, hwindex = 0; swindex < rcdu->num_crtcs; ++hwindex) {
+-		struct rcar_du_group *rgrp;
 -
- /**
-  * struct vsp1_du_modeset_config - VSP display mode configuration
-  * @width: output frame width
+ 		/* Skip unpopulated DU channels. */
+ 		if (!(rcdu->info->channels_mask & BIT(hwindex)))
+ 			continue;
 -- 
 2.25.1
 
