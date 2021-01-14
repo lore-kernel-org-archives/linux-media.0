@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A83C433E9
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 23:34:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C219C43381
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 23:34:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEA4623A7C
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 23:34:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A7AB23A7C
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 23:34:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730937AbhANXex (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730953AbhANXex (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Jan 2021 18:34:53 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:53570 "EHLO gloria.sntech.de"
+Received: from gloria.sntech.de ([185.11.138.130]:53554 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730612AbhANXew (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730834AbhANXew (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Jan 2021 18:34:52 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.sntech)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1l0C81-0001lf-Hk; Fri, 15 Jan 2021 00:34:09 +0100
+        id 1l0C82-0001lf-Nk; Fri, 15 Jan 2021 00:34:10 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         linux-media@vger.kernel.org, mchehab@kernel.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
         christoph.muellner@theobroma-systems.com, heiko@sntech.de,
         tfiga@chromium.org,
         Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH v2 1/2] media: rockchip: rkisp1: carry ip version information
-Date:   Fri, 15 Jan 2021 00:33:41 +0100
-Message-Id: <20210114233345.160223-2-heiko@sntech.de>
+Subject: [PATCH 1/2] media: rockchip: rkisp1: carry ip version information
+Date:   Fri, 15 Jan 2021 00:33:44 +0100
+Message-Id: <20210114233345.160223-5-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210114233345.160223-1-heiko@sntech.de>
 References: <20210114233345.160223-1-heiko@sntech.de>
@@ -65,39 +65,29 @@ The added versions are:
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- Documentation/admin-guide/media/rkisp1.rst    | 15 +++++++++++++
- .../platform/rockchip/rkisp1/rkisp1-dev.c     | 21 +++++++++++--------
- include/uapi/linux/rkisp1-config.h            |  7 +++++++
- 3 files changed, 34 insertions(+), 9 deletions(-)
+changes since rfc:
+- move rkisp1_version enum into uapo
+- show version in media-api hw_revision
 
-diff --git a/Documentation/admin-guide/media/rkisp1.rst b/Documentation/admin-guide/media/rkisp1.rst
-index 2267e4fb475e..e960678f47ca 100644
---- a/Documentation/admin-guide/media/rkisp1.rst
-+++ b/Documentation/admin-guide/media/rkisp1.rst
-@@ -13,6 +13,21 @@ This file documents the driver for the Rockchip ISP1 that is part of RK3288
- and RK3399 SoCs. The driver is located under drivers/staging/media/rkisp1
- and uses the Media-Controller API.
- 
-+Revisions
-+=========
-+
-+There exist multiple smaller revisions to this ISP that got introduced in
-+later SoCs. Revisions in use are documented in enum rkisp1_cif_isp_version
-+in the UAPI and the revision of the ISP inside the running SoC can be read
-+in the field hw_revision of struct media_device.
-+
-+Versions in use are:
-+
-+- RKISP1_V10: used at least in rk3288 and rk3399
-+- RKISP1_V11: declared in the original vendor code, but not used
-+- RKISP1_V12: used at least in rk3326 and px30
-+- RKISP1_V13: used at least in rk1808
-+
- Topology
- ========
- .. _rkisp1_topology_graph:
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  1 +
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     | 22 +++++++++++--------
+ include/uapi/linux/rkisp1-config.h            |  7 ++++++
+ 3 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+index 038c303a8aed..bad1bd468f2f 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+@@ -354,6 +354,7 @@ struct rkisp1_device {
+ 	void __iomem *base_addr;
+ 	int irq;
+ 	struct device *dev;
++	enum rkisp1_cif_isp_version isp_ver;
+ 	unsigned int clk_size;
+ 	struct clk_bulk_data clks[RKISP1_MAX_BUS_CLK];
+ 	struct v4l2_device v4l2_dev;
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 68da1eed753d..f7e9fd305548 100644
+index 68da1eed753d..f594d7cd03d0 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
 @@ -104,6 +104,7 @@
@@ -146,7 +136,7 @@ index 68da1eed753d..f7e9fd305548 100644
  		return -ENODEV;
  
  	rkisp1 = devm_kzalloc(dev, sizeof(*rkisp1), GFP_KERNEL);
-@@ -494,15 +496,16 @@ static int rkisp1_probe(struct platform_device *pdev)
+@@ -494,15 +496,17 @@ static int rkisp1_probe(struct platform_device *pdev)
  
  	rkisp1->irq = irq;
  
@@ -160,10 +150,11 @@ index 68da1eed753d..f7e9fd305548 100644
  		return ret;
 -	rkisp1->clk_size = clk_data->size;
 +	rkisp1->clk_size = match_data->size;
++	rkisp1->isp_ver = match_data->isp_ver;
  
  	pm_runtime_enable(&pdev->dev);
  
-+	rkisp1->media_dev.hw_revision = match_data->isp_ver;
++	rkisp1->media_dev.hw_revision = rkisp1->isp_ver;
  	strscpy(rkisp1->media_dev.model, RKISP1_DRIVER_NAME,
  		sizeof(rkisp1->media_dev.model));
  	rkisp1->media_dev.dev = &pdev->dev;
