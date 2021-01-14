@@ -2,98 +2,631 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A3CC43217
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 01:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C3F9C43219
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:00:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14E5D2343B
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 01:45:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E75F2235E4
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:00:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbhANBpQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 20:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726730AbhANBFP (ORCPT
+        id S1728033AbhANCAT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 21:00:19 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37784 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729636AbhANCAK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 20:05:15 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B154C061795;
-        Wed, 13 Jan 2021 17:04:33 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id s15so2056921plr.9;
-        Wed, 13 Jan 2021 17:04:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VpmEfhmuE4m3lCR0CbzUbqFZms+Fz8wndQrnmUOwqpU=;
-        b=TcU4dQzKhkz4u0aGbShBlkm5Lgq7vBIeKqPRvRSA67x2gzxKRk0RspQzEpBkEcuoIy
-         1c2YEI0lQBpuFJ2rrFEGVoWUQg7apSF/CkrdhKvTZrG/WUCjf0KBkpgYE4ZzazRYp9PT
-         HcHbBRZImxTueiR83MlHPjrLeK9YdmZLwXksGik3Kb2iw5fOMV/tlh+oaWPsyk6wt9KS
-         6YvyqRtrbHAVN0Wd2R4y+DaQytJYM2FSKtytA9b9TN+amnbNQILqW90/6PYQVxJBU5mc
-         zR08x9HrQ5CxzaT1W2mj/h10bGZb378QVuIHUepaNTKZvEaTE8nve9wNWSNZPv0i2dNi
-         0mNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=VpmEfhmuE4m3lCR0CbzUbqFZms+Fz8wndQrnmUOwqpU=;
-        b=f9w+aHBkqUfH4pP/mNH27Gg4T9L2m6EYb9D5Z/6EGCu41AxG7VG07bgdcHYw4bHEjy
-         mz2aLsH9H5BH3pHmOmXvO3p+3h1uLBuuxuP2kN9o2yW+NTBYBPrHws1FMyheb56wUhx8
-         gg3PqK8ymStGBfP421JKeuKRcybP1IPhT5A44Pz5TWZ0v0h2/0BMvPVxzhCZ7KdHp048
-         moT3RL7iJB6OW2Acjz5RLjXsvWfwPF069WgY29Bg634xUR0JhBHjxvKJK9Ne6fMfQYQ0
-         y1VAuyRCeuhHjbIfRSjMhS1tjMqbw/t5d+Ft/9lKufEiHkmxZiBX3g4cydbsoJY3pq3h
-         gp9Q==
-X-Gm-Message-State: AOAM532dS2Kj9iR6orgNN9wUp0z4Sbr47VKbnPQd1nMPqnIp1zKZ8IUB
-        olVdHyCrRAKXUXUcWXKlY7s=
-X-Google-Smtp-Source: ABdhPJwrJ8Isxj4nRytmMfOvMREHmP4joIOQKLfG5NRnAzquyOfiEt2ltmtABLIC4FEuwymZgPSspw==
-X-Received: by 2002:a17:90a:f2c6:: with SMTP id gt6mr2130111pjb.35.1610586272925;
-        Wed, 13 Jan 2021 17:04:32 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:7220:84ff:fe09:5e58])
-        by smtp.gmail.com with ESMTPSA id h1sm3901522pgj.59.2021.01.13.17.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 17:04:31 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 13 Jan 2021 17:04:29 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, mhocko@suse.com, surenb@google.com,
-        pullip.cho@samsung.com, joaodias@google.com, hridya@google.com,
-        john.stultz@linaro.org, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
-Message-ID: <X/+Yne/3X3jvdCj0@google.com>
-References: <20210113012143.1201105-1-minchan@kernel.org>
- <20210113012143.1201105-5-minchan@kernel.org>
- <23b60450-b6ac-447b-4a61-fc4649c3a390@infradead.org>
+        Wed, 13 Jan 2021 21:00:10 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 46E6F279;
+        Thu, 14 Jan 2021 02:59:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1610589567;
+        bh=pE8dGO8ZAVIlD5mP1DN9pSj+yaC1tecZ6v2Hy8yBSEM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dM5+JVbKV5KWeUApoIQrvi57hQqKnk0ym+lGhVMFGwbN06xKDex7WPaLZE7HDQmS5
+         84vg/0B7QDtn6scAoHQXFXV93uNAG5lJWLwaMppL86x3Cj+KbdEg6U7GDJmp0bXMzK
+         oDIV2cPjejmfoeSulc6v1hO2gMfxxj/RwhafzeBw=
+Date:   Thu, 14 Jan 2021 03:59:10 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com, Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH 01/13] media: v4l2-async: Clean
+ v4l2_async_notifier_add_fwnode_remote_subdev semantics
+Message-ID: <X/+lbrp7bLuAjl8e@pendragon.ideasonboard.com>
+References: <20210112132339.5621-1-ezequiel@collabora.com>
+ <20210112132339.5621-2-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <23b60450-b6ac-447b-4a61-fc4649c3a390@infradead.org>
+In-Reply-To: <20210112132339.5621-2-ezequiel@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 07:38:40PM -0800, Randy Dunlap wrote:
-> On 1/12/21 5:21 PM, Minchan Kim wrote:
-> > +config DMABUF_HEAPS_CHUNK
-> > +	bool "DMA-BUF CHUNK Heap"
-> > +	depends on DMABUF_HEAPS && DMA_CMA
-> > +	help
-> > +	  Choose this option to enable dma-buf CHUNK heap. This heap is backed
-> > +	  by the Contiguous Memory Allocator (CMA) and allocates the buffers that
-> > +	  arranged into a list of fixed size chunks taken from CMA.
+Hi Ezequiel,
+
+Thank you for the patch.
+
+On Tue, Jan 12, 2021 at 10:23:27AM -0300, Ezequiel Garcia wrote:
+> Change v4l2_async_notifier_add_fwnode_remote_subdev semantics
+> so it allocates the struct v4l2_async_subdev pointer.
 > 
-> maybe:
-> 	  are arranged into
+> This makes the API consistent: the v4l2-async subdevice addition
+> functions have now a unified usage model. This model is simpler,
+> as it makes v4l2-async responsible for the allocation and release
+> of the subdevice descriptor, and no longer something the driver
+> has to worry about.
+> 
+> On the user side, the change makes the API simpler for the drivers
+> to use and less error-prone.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  drivers/media/pci/intel/ipu3/ipu3-cio2.c      | 17 ++--
+>  drivers/media/platform/omap3isp/isp.c         | 78 ++++++++-----------
+>  .../platform/rockchip/rkisp1/rkisp1-dev.c     | 15 ++--
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  9 ++-
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.h      |  1 -
+>  drivers/media/platform/video-mux.c            | 14 +---
+>  drivers/media/v4l2-core/v4l2-async.c          | 24 +++---
+>  drivers/staging/media/imx/imx-media-csi.c     | 14 +---
+>  drivers/staging/media/imx/imx6-mipi-csi2.c    | 19 ++---
+>  drivers/staging/media/imx/imx7-media-csi.c    | 16 ++--
+>  drivers/staging/media/imx/imx7-mipi-csis.c    | 15 +---
+>  include/media/v4l2-async.h                    | 15 ++--
+>  12 files changed, 93 insertions(+), 144 deletions(-)
+> 
+> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> index 36e354ecf71e..c1d42cbecbc1 100644
+> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> @@ -1467,7 +1467,8 @@ static int cio2_parse_firmware(struct cio2_device *cio2)
+>  		struct v4l2_fwnode_endpoint vep = {
+>  			.bus_type = V4L2_MBUS_CSI2_DPHY
+>  		};
+> -		struct sensor_async_subdev *s_asd = NULL;
+> +		struct sensor_async_subdev *s_asd;
+> +		struct v4l2_async_subdev *asd;
+>  		struct fwnode_handle *ep;
+>  
+>  		ep = fwnode_graph_get_endpoint_by_id(
+> @@ -1481,27 +1482,23 @@ static int cio2_parse_firmware(struct cio2_device *cio2)
+>  		if (ret)
+>  			goto err_parse;
+>  
+> -		s_asd = kzalloc(sizeof(*s_asd), GFP_KERNEL);
+> -		if (!s_asd) {
+> -			ret = -ENOMEM;
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +				&cio2->notifier, ep, sizeof(*s_asd));
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			goto err_parse;
+>  		}
+>  
+> +		s_asd = container_of(asd, struct sensor_async_subdev, asd);
+>  		s_asd->csi2.port = vep.base.port;
+>  		s_asd->csi2.lanes = vep.bus.mipi_csi2.num_data_lanes;
+>  
+> -		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -			&cio2->notifier, ep, &s_asd->asd);
+> -		if (ret)
+> -			goto err_parse;
+> -
+>  		fwnode_handle_put(ep);
+>  
+>  		continue;
+>  
+>  err_parse:
+>  		fwnode_handle_put(ep);
+> -		kfree(s_asd);
+>  		return ret;
+>  	}
+>  
+> diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+> index b1fc4518e275..51c35f42773f 100644
+> --- a/drivers/media/platform/omap3isp/isp.c
+> +++ b/drivers/media/platform/omap3isp/isp.c
+> @@ -2126,21 +2126,6 @@ static void isp_parse_of_csi1_endpoint(struct device *dev,
+>  	buscfg->bus.ccp2.crc = 1;
+>  }
+>  
+> -static int isp_alloc_isd(struct isp_async_subdev **isd,
+> -			 struct isp_bus_cfg **buscfg)
+> -{
+> -	struct isp_async_subdev *__isd;
+> -
+> -	__isd = kzalloc(sizeof(*__isd), GFP_KERNEL);
+> -	if (!__isd)
+> -		return -ENOMEM;
+> -
+> -	*isd = __isd;
+> -	*buscfg = &__isd->bus;
+> -
+> -	return 0;
+> -}
+> -
+>  static struct {
+>  	u32 phy;
+>  	u32 csi2_if;
+> @@ -2156,7 +2141,7 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+>  {
+>  	struct fwnode_handle *ep;
+>  	struct isp_async_subdev *isd = NULL;
+> -	struct isp_bus_cfg *buscfg;
+> +	struct v4l2_async_subdev *asd;
+>  	unsigned int i;
+>  
+>  	ep = fwnode_graph_get_endpoint_by_id(
+> @@ -2174,20 +2159,15 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+>  		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+>  
+>  		if (!ret) {
+> -			ret = isp_alloc_isd(&isd, &buscfg);
+> -			if (ret)
+> -				return ret;
+> -		}
+> -
+> -		if (!ret) {
+> -			isp_parse_of_parallel_endpoint(isp->dev, &vep, buscfg);
+> -			ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -				&isp->notifier, ep, &isd->asd);
+> +			asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +				&isp->notifier, ep, sizeof(*isd));
+> +			if (!IS_ERR(asd)) {
+> +				isd = container_of(asd, struct isp_async_subdev, asd);
+> +				isp_parse_of_parallel_endpoint(isp->dev, &vep, &isd->bus);
+> +			}
+>  		}
+>  
+>  		fwnode_handle_put(ep);
+> -		if (ret)
+> -			kfree(isd);
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(isp_bus_interfaces); i++) {
+> @@ -2206,15 +2186,8 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+>  		dev_dbg(isp->dev, "parsing serial interface %u, node %pOF\n", i,
+>  			to_of_node(ep));
+>  
+> -		ret = isp_alloc_isd(&isd, &buscfg);
+> -		if (ret)
+> -			return ret;
+> -
+>  		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+> -		if (!ret) {
+> -			buscfg->interface = isp_bus_interfaces[i].csi2_if;
+> -			isp_parse_of_csi2_endpoint(isp->dev, &vep, buscfg);
+> -		} else if (ret == -ENXIO) {
+> +		if (ret == -ENXIO) {
+>  			vep = (struct v4l2_fwnode_endpoint)
+>  				{ .bus_type = V4L2_MBUS_CSI1 };
+>  			ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+> @@ -2224,21 +2197,34 @@ static int isp_parse_of_endpoints(struct isp_device *isp)
+>  					{ .bus_type = V4L2_MBUS_CCP2 };
+>  				ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+>  			}
+> -			if (!ret) {
+> -				buscfg->interface =
+> -					isp_bus_interfaces[i].csi1_if;
+> -				isp_parse_of_csi1_endpoint(isp->dev, &vep,
+> -							   buscfg);
+> -			}
+>  		}
+>  
+> -		if (!ret)
+> -			ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -				&isp->notifier, ep, &isd->asd);
+> +		if (!ret) {
+> +			asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +				&isp->notifier, ep, sizeof(*isd));
+> +
+> +			if (!IS_ERR(asd)) {
+> +				isd = container_of(asd, struct isp_async_subdev, asd);
 
-Let me fix it.
+I'd add a blank line here.
 
-Thanks, Randy. 
+> +				switch (vep.bus_type) {
+> +				case V4L2_MBUS_CSI2_DPHY:
+> +					isd->bus.interface =
+> +						isp_bus_interfaces[i].csi2_if;
+> +					isp_parse_of_csi2_endpoint(isp->dev, &vep, &isd->bus);
+> +					break;
+> +				case V4L2_MBUS_CSI1:
+> +				case V4L2_MBUS_CCP2:
+> +					isd->bus.interface =
+> +						isp_bus_interfaces[i].csi1_if;
+> +					isp_parse_of_csi1_endpoint(isp->dev, &vep,
+> +								   &isd->bus);
+> +					break;
+> +				default:
+> +					break;
+> +				}
+> +			}
+> +		}
+>  
+>  		fwnode_handle_put(ep);
+> -		if (ret)
+> -			kfree(isd);
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> index 68da1eed753d..235dcf0c4122 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> @@ -252,6 +252,7 @@ static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
+>  			.bus_type = V4L2_MBUS_CSI2_DPHY
+>  		};
+>  		struct rkisp1_sensor_async *rk_asd = NULL;
+> +		struct v4l2_async_subdev *asd;
+>  		struct fwnode_handle *ep;
+>  
+>  		ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(rkisp1->dev),
+> @@ -264,21 +265,16 @@ static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
+>  		if (ret)
+>  			goto err_parse;
+>  
+> -		rk_asd = kzalloc(sizeof(*rk_asd), GFP_KERNEL);
+> -		if (!rk_asd) {
+> -			ret = -ENOMEM;
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(ntf, ep,
+> +							sizeof(*rk_asd));
+> +		if (IS_ERR(asd))
+>  			goto err_parse;
+> -		}
+>  
+> +		rk_asd = container_of(asd, struct rkisp1_sensor_async, asd);
+
+It could be nice to turn v4l2_async_notifier_add_fwnode_remote_subdev()
+into a macro that would take the asd structure type, and cast the
+result, to avoid container_of() in the caller. That can be done on top
+of this series.
+
+>  		rk_asd->mbus_type = vep.bus_type;
+>  		rk_asd->mbus_flags = vep.bus.mipi_csi2.flags;
+>  		rk_asd->lanes = vep.bus.mipi_csi2.num_data_lanes;
+>  
+> -		ret = v4l2_async_notifier_add_fwnode_remote_subdev(ntf, ep,
+> -								   &rk_asd->asd);
+> -		if (ret)
+> -			goto err_parse;
+> -
+>  		dev_dbg(rkisp1->dev, "registered ep id %d with %d lanes\n",
+>  			vep.base.id, rk_asd->lanes);
+>  
+> @@ -289,7 +285,6 @@ static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
+>  		continue;
+>  err_parse:
+>  		fwnode_handle_put(ep);
+> -		kfree(rk_asd);
+>  		v4l2_async_notifier_cleanup(ntf);
+>  		return ret;
+>  	}
+> diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
+> index ec46cff80fdb..3f94b8c966f3 100644
+> --- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
+> @@ -118,6 +118,7 @@ static int sun4i_csi_notifier_init(struct sun4i_csi *csi)
+>  	struct v4l2_fwnode_endpoint vep = {
+>  		.bus_type = V4L2_MBUS_PARALLEL,
+>  	};
+> +	struct v4l2_async_subdev *asd;
+>  	struct fwnode_handle *ep;
+>  	int ret;
+>  
+> @@ -134,10 +135,12 @@ static int sun4i_csi_notifier_init(struct sun4i_csi *csi)
+>  
+>  	csi->bus = vep.bus.parallel;
+>  
+> -	ret = v4l2_async_notifier_add_fwnode_remote_subdev(&csi->notifier,
+> -							   ep, &csi->asd);
+> -	if (ret)
+> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&csi->notifier,
+> +							   ep, sizeof(*asd));
+> +	if (IS_ERR(asd)) {
+> +		ret = PTR_ERR(asd);
+>  		goto out;
+> +	}
+>  
+>  	csi->notifier.ops = &sun4i_csi_notify_ops;
+>  
+> diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
+> index 0f67ff652c2e..a5f61ee0ec4d 100644
+> --- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
+> +++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
+> @@ -139,7 +139,6 @@ struct sun4i_csi {
+>  	struct v4l2_mbus_framefmt	subdev_fmt;
+>  
+>  	/* V4L2 Async variables */
+> -	struct v4l2_async_subdev	asd;
+>  	struct v4l2_async_notifier	notifier;
+>  	struct v4l2_subdev		*src_subdev;
+>  	int				src_pad;
+> diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+> index 53570250a25d..7b280dfca727 100644
+> --- a/drivers/media/platform/video-mux.c
+> +++ b/drivers/media/platform/video-mux.c
+> @@ -370,19 +370,13 @@ static int video_mux_async_register(struct video_mux *vmux,
+>  		if (!ep)
+>  			continue;
+>  
+> -		asd = kzalloc(sizeof(*asd), GFP_KERNEL);
+> -		if (!asd) {
+> -			fwnode_handle_put(ep);
+> -			return -ENOMEM;
+> -		}
+> -
+> -		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -			&vmux->notifier, ep, asd);
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +			&vmux->notifier, ep, sizeof(*asd));
+>  
+>  		fwnode_handle_put(ep);
+>  
+> -		if (ret) {
+> -			kfree(asd);
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			/* OK if asd already exists */
+>  			if (ret != -EEXIST)
+>  				return ret;
+> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> index 32cd1ecced97..b325bacddff4 100644
+> --- a/drivers/media/v4l2-core/v4l2-async.c
+> +++ b/drivers/media/v4l2-core/v4l2-async.c
+> @@ -675,26 +675,26 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_fwnode_subdev);
+>  
+> -int
+> +struct v4l2_async_subdev *
+>  v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif,
+>  					     struct fwnode_handle *endpoint,
+> -					     struct v4l2_async_subdev *asd)
+> +					     unsigned int asd_struct_size)
+>  {
+> +	struct v4l2_async_subdev *asd;
+>  	struct fwnode_handle *remote;
+> -	int ret;
+>  
+>  	remote = fwnode_graph_get_remote_port_parent(endpoint);
+>  	if (!remote)
+> -		return -ENOTCONN;
+> +		return ERR_PTR(ENOTCONN);
+>  
+> -	asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+> -	asd->match.fwnode = remote;
+> -
+> -	ret = v4l2_async_notifier_add_subdev(notif, asd);
+> -	if (ret)
+> -		fwnode_handle_put(remote);
+> -
+> -	return ret;
+> +	asd = v4l2_async_notifier_add_fwnode_subdev(notif,
+> +						    remote, asd_struct_size);
+
+Maybe
+
+	asd = v4l2_async_notifier_add_fwnode_subdev(notif, remote,
+						    asd_struct_size);
+
+?
+
+> +	/*
+> +	 * Calling v4l2_async_notifier_add_fwnode_subdev grabs a refcount,
+> +	 * so drop then one we got in fwnode_graph_get_remote_port_parent.
+> +	 */
+> +	fwnode_handle_put(remote);
+> +	return asd;
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_fwnode_remote_subdev);
+>  
+> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> index db77fef07654..6344389e6afa 100644
+> --- a/drivers/staging/media/imx/imx-media-csi.c
+> +++ b/drivers/staging/media/imx/imx-media-csi.c
+> @@ -1922,19 +1922,13 @@ static int imx_csi_async_register(struct csi_priv *priv)
+>  					     port, 0,
+>  					     FWNODE_GRAPH_ENDPOINT_NEXT);
+>  	if (ep) {
+> -		asd = kzalloc(sizeof(*asd), GFP_KERNEL);
+> -		if (!asd) {
+> -			fwnode_handle_put(ep);
+> -			return -ENOMEM;
+> -		}
+> -
+> -		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -			&priv->notifier, ep, asd);
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +			&priv->notifier, ep, sizeof(*asd));
+>  
+>  		fwnode_handle_put(ep);
+>  
+> -		if (ret) {
+> -			kfree(asd);
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			/* OK if asd already exists */
+>  			if (ret != -EEXIST)
+>  				return ret;
+> diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> index bf6a61dd34c2..807d0dcbd6fd 100644
+> --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
+> +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> @@ -636,7 +636,7 @@ static int csi2_async_register(struct csi2_dev *csi2)
+>  	struct v4l2_fwnode_endpoint vep = {
+>  		.bus_type = V4L2_MBUS_CSI2_DPHY,
+>  	};
+> -	struct v4l2_async_subdev *asd = NULL;
+> +	struct v4l2_async_subdev *asd;
+>  	struct fwnode_handle *ep;
+>  	int ret;
+>  
+> @@ -656,19 +656,13 @@ static int csi2_async_register(struct csi2_dev *csi2)
+>  	dev_dbg(csi2->dev, "data lanes: %d\n", vep.bus.mipi_csi2.num_data_lanes);
+>  	dev_dbg(csi2->dev, "flags: 0x%08x\n", vep.bus.mipi_csi2.flags);
+>  
+> -	asd = kzalloc(sizeof(*asd), GFP_KERNEL);
+> -	if (!asd) {
+> -		ret = -ENOMEM;
+> -		goto err_parse;
+> -	}
+> -
+> -	ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -		&csi2->notifier, ep, asd);
+> -	if (ret)
+> -		goto err_parse;
+> -
+> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +		&csi2->notifier, ep, sizeof(*asd));
+>  	fwnode_handle_put(ep);
+>  
+> +	if (IS_ERR(asd))
+> +		return PTR_ERR(asd);
+> +
+>  	csi2->notifier.ops = &csi2_notify_ops;
+>  
+>  	ret = v4l2_async_subdev_notifier_register(&csi2->sd,
+> @@ -680,7 +674,6 @@ static int csi2_async_register(struct csi2_dev *csi2)
+>  
+>  err_parse:
+>  	fwnode_handle_put(ep);
+> -	kfree(asd);
+>  	return ret;
+>  }
+>  
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index a3f3df901704..4ea6e0bb274d 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1180,7 +1180,7 @@ static const struct v4l2_async_notifier_operations imx7_csi_notify_ops = {
+>  
+>  static int imx7_csi_async_register(struct imx7_csi *csi)
+>  {
+> -	struct v4l2_async_subdev *asd = NULL;
+> +	struct v4l2_async_subdev *asd;
+>  	struct fwnode_handle *ep;
+>  	int ret;
+>  
+> @@ -1189,19 +1189,13 @@ static int imx7_csi_async_register(struct imx7_csi *csi)
+>  	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(csi->dev), 0, 0,
+>  					     FWNODE_GRAPH_ENDPOINT_NEXT);
+>  	if (ep) {
+> -		asd = kzalloc(sizeof(*asd), GFP_KERNEL);
+> -		if (!asd) {
+> -			fwnode_handle_put(ep);
+> -			return -ENOMEM;
+> -		}
+> -
+> -		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -			&csi->notifier, ep, asd);
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +			&csi->notifier, ep, sizeof(*asd));
+>  
+>  		fwnode_handle_put(ep);
+>  
+> -		if (ret) {
+> -			kfree(asd);
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			/* OK if asd already exists */
+>  			if (ret != -EEXIST)
+>  				return ret;
+> diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+> index 7612993cc1d6..32d8e7a824d4 100644
+> --- a/drivers/staging/media/imx/imx7-mipi-csis.c
+> +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+> @@ -1004,7 +1004,7 @@ static int mipi_csis_async_register(struct csi_state *state)
+>  	struct v4l2_fwnode_endpoint vep = {
+>  		.bus_type = V4L2_MBUS_CSI2_DPHY,
+>  	};
+> -	struct v4l2_async_subdev *asd = NULL;
+> +	struct v4l2_async_subdev *asd;
+>  	struct fwnode_handle *ep;
+>  	int ret;
+>  
+> @@ -1024,15 +1024,9 @@ static int mipi_csis_async_register(struct csi_state *state)
+>  	dev_dbg(state->dev, "data lanes: %d\n", state->bus.num_data_lanes);
+>  	dev_dbg(state->dev, "flags: 0x%08x\n", state->bus.flags);
+>  
+> -	asd = kzalloc(sizeof(*asd), GFP_KERNEL);
+> -	if (!asd) {
+> -		ret = -ENOMEM;
+> -		goto err_parse;
+> -	}
+> -
+> -	ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+> -		&state->notifier, ep, asd);
+> -	if (ret)
+> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +		&state->notifier, ep, sizeof(*asd));
+> +	if (IS_ERR(asd))
+>  		goto err_parse;
+>  
+>  	fwnode_handle_put(ep);
+> @@ -1048,7 +1042,6 @@ static int mipi_csis_async_register(struct csi_state *state)
+>  
+>  err_parse:
+>  	fwnode_handle_put(ep);
+> -	kfree(asd);
+>  
+>  	return ret;
+>  }
+> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> index a5dc4a74d42d..76be1e01222e 100644
+> --- a/include/media/v4l2-async.h
+> +++ b/include/media/v4l2-async.h
+> @@ -197,9 +197,11 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
+>   *
+>   * @notif: pointer to &struct v4l2_async_notifier
+>   * @endpoint: local endpoint pointing to the remote sub-device to be matched
+> - * @asd: Async sub-device struct allocated by the caller. The &struct
+> - *	 v4l2_async_subdev shall be the first member of the driver's async
+> - *	 sub-device struct, i.e. both begin at the same memory address.
+> + * @asd_struct_size: size of the driver's async sub-device struct, including
+> + *		     sizeof(struct v4l2_async_subdev). The &struct
+> + *		     v4l2_async_subdev shall be the first member of
+> + *		     the driver's async sub-device struct, i.e. both
+> + *		     begin at the same memory address.
+
+Feel free to drop one indentation level (keeping just one tab after the
+*).
+
+>   *
+
+Should we explain here that the returned as is allocated by this
+function, like documented for the
+v4l2_async_notifier_add_fwnode_subdev() documentation ?
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>   * Gets the remote endpoint of a given local endpoint, set it up for fwnode
+>   * matching and adds the async sub-device to the notifier's @asd_list. The
+> @@ -207,13 +209,12 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
+>   * notifier cleanup time.
+>   *
+>   * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
+> - * exception that the fwnode refers to a local endpoint, not the remote one, and
+> - * the function relies on the caller to allocate the async sub-device struct.
+> + * exception that the fwnode refers to a local endpoint, not the remote one.
+>   */
+> -int
+> +struct v4l2_async_subdev *
+>  v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif,
+>  					     struct fwnode_handle *endpoint,
+> -					     struct v4l2_async_subdev *asd);
+> +					     unsigned int asd_struct_size);
+>  
+>  /**
+>   * v4l2_async_notifier_add_i2c_subdev - Allocate and add an i2c async
+
+-- 
+Regards,
+
+Laurent Pinchart
