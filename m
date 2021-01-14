@@ -4,213 +4,273 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB22C43332
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 330D8C4332B
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:08:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0BE923447
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07582235F8
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 02:08:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729216AbhANCCF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Jan 2021 21:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbhAMXYZ (ORCPT
+        id S1730143AbhANCHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Jan 2021 21:07:44 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37834 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730190AbhANCHf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Jan 2021 18:24:25 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C084C0617B1;
-        Wed, 13 Jan 2021 15:23:44 -0800 (PST)
+        Wed, 13 Jan 2021 21:07:35 -0500
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D74A82B3;
-        Thu, 14 Jan 2021 00:23:42 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD32C279;
+        Thu, 14 Jan 2021 03:06:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610580223;
-        bh=5S2iSaf/NmC3AEKI99ksJq5/SvaCPBBUy0hssBB/JbE=;
+        s=mail; t=1610590013;
+        bh=JgdIZiLxk9q1B38ti25OWY0D1Lrs2/XMY68L7Uiy4aM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XyDuOQttLypaHaVfrW5+YsVK3ZAFwPW9kHLL/A9LcZ+Ga7lezOooyYix/R+88VcSD
-         LlpdU9YCsepZ5zqOWsxCZhqeuLLcJ4tTr/bDkWn1lyRDvQ+I/tzz4XEV/IeTMCgoUM
-         LJmanIYMCFnu8pG+rlrjmNBmfSjlLEU56wc2caeM=
-Date:   Thu, 14 Jan 2021 01:23:25 +0200
+        b=SQ8cDS9fjzdfDc402xw3QMMKh0ezBqyJUFmOu1diFVzhAg73axS76ZcnSLGMKuARK
+         UxV37MwriLCjdmyCEDGnMgIBFhMLNMS5oehXNLnGfhKOXgjuiiiOHA31cVd7V3IBST
+         Sw4VRc2LlnrkX/9kEyztowd7iim1Zx/kv8r7Sjeo=
+Date:   Thu, 14 Jan 2021 04:06:35 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sergei.shtylyov@gmail.com
-Subject: Re: [PATCH v7 3/7] fixup! media: i2c: rdacm21: Break-out ov10640
- initialization
-Message-ID: <X/+A7btfIZpdktrL@pendragon.ideasonboard.com>
-References: <20210113185506.119808-1-jacopo+renesas@jmondi.org>
- <20210113185506.119808-4-jacopo+renesas@jmondi.org>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com, Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH 03/13] media: renesas-ceu: Use
+ v4l2_async_notifier_add_{i2c,fwnode_remote}_subdev helpers
+Message-ID: <X/+nKwhIhDY7Z9HW@pendragon.ideasonboard.com>
+References: <20210112132339.5621-1-ezequiel@collabora.com>
+ <20210112132339.5621-4-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210113185506.119808-4-jacopo+renesas@jmondi.org>
+In-Reply-To: <20210112132339.5621-4-ezequiel@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Ezequiel,
 
 Thank you for the patch.
 
-On Wed, Jan 13, 2021 at 07:55:01PM +0100, Jacopo Mondi wrote:
-> The embedded OV490 ISP chip provides a secondary SCCB interface and
-> two GPIO lines to control the connected OV10640 image sensor.
-> 
-> Break out the OV10640 initialization from the OV490 initialization and
-> explicitely control the powerdown and reset GPIOs. After the image
+On Tue, Jan 12, 2021 at 10:23:29AM -0300, Ezequiel Garcia wrote:
+> The use of v4l2_async_notifier_add_subdev is discouraged.
 
-s/explicitely/explicitly/
+It's not yet, that only happens at the end of the series :-)
 
-> sensor has been hard reset, implement a more clear handling of the
-> secondary SCCB interface to read the image sensor chip ID.
+s/is discouraged/will be discouraged/
+
+> Drivers are instead encouraged to use a helper such as
+> v4l2_async_notifier_add_i2c_subdev.
 > 
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+> should get a kmalloc'ed struct v4l2_async_subdev,
+> removing some boilerplate code while at it.
+> 
+> Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
+> or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
+> the needed setup, instead of open-coding it.
+> 
+> Using v4l2-async to allocate the driver-specific structs,
+> requires to change struct ceu_subdev so the embedded
+> struct v4l2_async_subdev is now the first element.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > ---
->  drivers/media/i2c/rdacm21.c | 75 ++++++++++++++++++++++++++++++-------
->  1 file changed, 61 insertions(+), 14 deletions(-)
+>  drivers/media/platform/renesas-ceu.c | 89 ++++++++++------------------
+>  1 file changed, 31 insertions(+), 58 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-> index 0428e3209463..944009687de5 100644
-> --- a/drivers/media/i2c/rdacm21.c
-> +++ b/drivers/media/i2c/rdacm21.c
-> @@ -30,11 +30,24 @@
->  #define OV490_PAGE_HIGH_REG		0xfffd
->  #define OV490_PAGE_LOW_REG		0xfffe
+> diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
+> index 4a633ad0e8fa..18485812a21e 100644
+> --- a/drivers/media/platform/renesas-ceu.c
+> +++ b/drivers/media/platform/renesas-ceu.c
+> @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
+>   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
+>   */
+>  struct ceu_subdev {
+> -	struct v4l2_subdev *v4l2_sd;
+>  	struct v4l2_async_subdev asd;
+> +	struct v4l2_subdev *v4l2_sd;
 >  
-> +/*
-> + * The SCCB slave handling is undocumented; the registers naming scheme is
-> + * totally arbitrary.
-> + */
-> +#define OV490_SCCB_SLAVE_WRITE		0x00
-> +#define OV490_SCCB_SLAVE_READ		0x01
-> +#define OV490_SCCB_SLAVE0_DIR		0x80195000
-> +#define OV490_SCCB_SLAVE0_ADDR_HIGH	0x80195001
-> +#define OV490_SCCB_SLAVE0_ADDR_LOW	0x80195002
-> +
->  #define OV490_DVP_CTRL3			0x80286009
+>  	/* per-subdevice mbus configuration options */
+>  	unsigned int mbus_flags;
+> @@ -174,7 +174,7 @@ struct ceu_device {
+>  	struct v4l2_device	v4l2_dev;
 >  
->  #define OV490_ODS_CTRL_FRAME_OUTPUT_EN	0x0c
->  #define OV490_ODS_CTRL			0x8029d000
+>  	/* subdevices descriptors */
+> -	struct ceu_subdev	*subdevs;
+> +	struct ceu_subdev	**subdevs;
+>  	/* the subdevice currently in use */
+>  	struct ceu_subdev	*sd;
+>  	unsigned int		sd_index;
+> @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
+>  	if (inp->index >= ceudev->num_sd)
+>  		return -EINVAL;
 >  
-> +#define OV490_HOST_CMD			0x808000c0
-> +#define OV490_HOST_CMD_TRIGGER		0xc1
-> +
->  #define OV490_ID_VAL			0x0490
->  #define OV490_ID(_p, _v)		((((_p) & 0xff) << 8) | ((_v) & 0xff))
->  #define OV490_PID			0x8080300a
-> @@ -42,12 +55,22 @@
->  #define OV490_PID_TIMEOUT		20
->  #define OV490_OUTPUT_EN_TIMEOUT		300
+> -	ceusd = &ceudev->subdevs[inp->index];
+> +	ceusd = ceudev->subdevs[inp->index];
 >  
-> +#define OV490_GPIO0_RESETB		0x01
-
-Shouldn't this be named just OV490_GPIO0 ? The fact that it's connected
-to the RESETB signal of the OV10640 is board-specific, not an OV490
-intrinsic property.
-
-BIT(0) ?
-
-> +#define OV490_SPWDN0			0x01
-
-Same here.
-
-> +#define OV490_GPIO_SEL0			0x80800050
-> +#define OV490_GPIO_SEL1			0x80800051
-> +#define OV490_GPIO_DIRECTION0		0x80800054
-> +#define OV490_GPIO_DIRECTION1		0x80800055
-> +#define OV490_GPIO_OUTPUT_VALUE0	0x80800058
-> +#define OV490_GPIO_OUTPUT_VALUE1	0x80800059
-> +
->  #define OV490_ISP_HSIZE_LOW		0x80820060
->  #define OV490_ISP_HSIZE_HIGH		0x80820061
->  #define OV490_ISP_VSIZE_LOW		0x80820062
->  #define OV490_ISP_VSIZE_HIGH		0x80820063
+>  	inp->type = V4L2_INPUT_TYPE_CAMERA;
+>  	inp->std = 0;
+> @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
+>  		return 0;
 >  
-> -#define OV10640_ID_LOW			0xa6
-> +#define OV10640_ID_HIGH			0xa6
-> +#define OV10640_CHIP_ID			0x300a
->  #define OV10640_PIXEL_RATE		55000000
+>  	ceu_sd_old = ceudev->sd;
+> -	ceudev->sd = &ceudev->subdevs[i];
+> +	ceudev->sd = ceudev->subdevs[i];
 >  
->  struct rdacm21_device {
-> @@ -306,6 +329,39 @@ static const struct v4l2_subdev_ops rdacm21_subdev_ops = {
->  	.pad		= &rdacm21_subdev_pad_ops,
->  };
->  
-> +static int ov10640_initialize(struct rdacm21_device *dev)
-> +{
-> +	u8 val;
-> +
-> +	/* Power-up OV10640 by setting RESETB and PWDNB pins high. */
-> +	ov490_write_reg(dev, OV490_GPIO_SEL0, OV490_GPIO0_RESETB);
-> +	ov490_write_reg(dev, OV490_GPIO_SEL1, OV490_SPWDN0);
-> +	ov490_write_reg(dev, OV490_GPIO_DIRECTION0, OV490_GPIO0_RESETB);
-> +	ov490_write_reg(dev, OV490_GPIO_DIRECTION1, OV490_SPWDN0);
-> +	ov490_write_reg(dev, OV490_GPIO_OUTPUT_VALUE0, OV490_GPIO0_RESETB);
-> +	ov490_write_reg(dev, OV490_GPIO_OUTPUT_VALUE0, OV490_SPWDN0);
-> +	usleep_range(3000, 5000);
-
-So the OV490 firmware doesn't handle this ?
-
-> +
-> +	/* Read OV10640 ID to test communications. */
-> +	ov490_write_reg(dev, OV490_SCCB_SLAVE0_DIR, OV490_SCCB_SLAVE_READ);
-> +	ov490_write_reg(dev, OV490_SCCB_SLAVE0_ADDR_HIGH, OV10640_CHIP_ID >> 8);
-> +	ov490_write_reg(dev, OV490_SCCB_SLAVE0_ADDR_LOW, (u8)OV10640_CHIP_ID);
-> +
-> +	/* Trigger SCCB slave transaction and give it some time to complete. */
-> +	ov490_write_reg(dev, OV490_HOST_CMD, OV490_HOST_CMD_TRIGGER);
-> +	usleep_range(1000, 1500);
-> +
-> +	ov490_read_reg(dev, OV490_SCCB_SLAVE0_DIR, &val);
-> +	if (val != OV10640_ID_HIGH) {
-> +		dev_err(dev->dev, "OV10640 ID mismatch: (0x%02x)\n", val);
-> +		return -ENODEV;
-> +	}
-
-Would it make sense to create an ov490_sensor_read() helper ?
-
-> +
-> +	dev_dbg(dev->dev, "OV10640 ID = 0x%2x\n", val);
-> +
-> +	return 0;
-> +}
-> +
->  static int ov490_initialize(struct rdacm21_device *dev)
->  {
->  	u8 pid, ver, val;
-> @@ -349,20 +405,11 @@ static int ov490_initialize(struct rdacm21_device *dev)
->  		return -ENODEV;
+>  	/*
+>  	 * Make sure we can generate output image formats and apply
+> @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
+>  	 * ceu formats.
+>  	 */
+>  	if (!ceudev->sd) {
+> -		ceudev->sd = &ceudev->subdevs[0];
+> +		ceudev->sd = ceudev->subdevs[0];
+>  		ceudev->sd_index = 0;
 >  	}
 >  
-> -	/* Read OV10640 Id to test communications. */
-> -	ov490_write_reg(dev, 0x80195000, 0x01);
-> -	ov490_write_reg(dev, 0x80195001, 0x30);
-> -	ov490_write_reg(dev, 0x80195002, 0x0a);
-> -	ov490_write_reg(dev, 0x808000c0, 0xc1);
-> -
-> -	ov490_read_reg(dev, 0x80195000, &val);
-> -	if (val != OV10640_ID_LOW) {
-> -		dev_err(dev->dev, "OV10640 ID mismatch: (0x%02x)\n", val);
-> -		return -ENODEV;
-> -	}
-> -
-> -	dev_dbg(dev->dev, "OV10640 ID = 0x%2x\n", val);
-> +	ret = ov10640_initialize(dev);
-> +	if (ret)
-> +		return ret;
+> @@ -1465,28 +1465,6 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
+>  	.complete	= ceu_notify_complete,
+>  };
 >  
-> +	/* Program OV490 with register-value table. */
->  	for (i = 0; i < ARRAY_SIZE(ov490_regs_wizard); ++i) {
->  		ret = ov490_write(dev, ov490_regs_wizard[i].reg,
->  				  ov490_regs_wizard[i].val);
+> -/*
+> - * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
+> - *			      ceu device. Both DT and platform data parsing use
+> - *			      this routine.
+> - *
+> - * Returns 0 for success, -ENOMEM for failure.
+> - */
+> -static int ceu_init_async_subdevs(struct ceu_device *ceudev, unsigned int n_sd)
+> -{
+> -	/* Reserve memory for 'n_sd' ceu_subdev descriptors. */
+> -	ceudev->subdevs = devm_kcalloc(ceudev->dev, n_sd,
+> -				       sizeof(*ceudev->subdevs), GFP_KERNEL);
+
+I may be missing something, but it looks like the subdevs array isn't
+allocated anymore. It turned to an array of pointers, but it still need
+allocation.
+
+> -	if (!ceudev->subdevs)
+> -		return -ENOMEM;
+> -
+> -	ceudev->sd = NULL;
+> -	ceudev->sd_index = 0;
+> -	ceudev->num_sd = 0;
+> -
+> -	return 0;
+> -}
+> -
+>  /*
+>   * ceu_parse_platform_data() - Initialize async_subdevices using platform
+>   *			       device provided data.
+> @@ -1495,6 +1473,7 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
+>  				   const struct ceu_platform_data *pdata)
+>  {
+>  	const struct ceu_async_subdev *async_sd;
+> +	struct v4l2_async_subdev *asd;
+>  	struct ceu_subdev *ceu_sd;
+>  	unsigned int i;
+>  	int ret;
+> @@ -1502,29 +1481,26 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
+>  	if (pdata->num_subdevs == 0)
+>  		return -ENODEV;
+>  
+> -	ret = ceu_init_async_subdevs(ceudev, pdata->num_subdevs);
+> -	if (ret)
+> -		return ret;
+> +	ceudev->sd = NULL;
+> +	ceudev->sd_index = 0;
+> +	ceudev->num_sd = 0;
+
+ceudev is kzalloc()ed, so I think you could skip this.
+
+>  
+>  	for (i = 0; i < pdata->num_subdevs; i++) {
+>  
+>  		/* Setup the ceu subdevice and the async subdevice. */
+>  		async_sd = &pdata->subdevs[i];
+> -		ceu_sd = &ceudev->subdevs[i];
+> -
+> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
+> -
+> -		ceu_sd->mbus_flags	= async_sd->flags;
+> -		ceu_sd->asd.match_type	= V4L2_ASYNC_MATCH_I2C;
+> -		ceu_sd->asd.match.i2c.adapter_id = async_sd->i2c_adapter_id;
+> -		ceu_sd->asd.match.i2c.address = async_sd->i2c_address;
+> -
+> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
+> -						     &ceu_sd->asd);
+> -		if (ret) {
+> +		asd = v4l2_async_notifier_add_i2c_subdev(&ceudev->notifier,
+> +				async_sd->i2c_adapter_id,
+> +				async_sd->i2c_address,
+> +				sizeof(*ceu_sd));
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			v4l2_async_notifier_cleanup(&ceudev->notifier);
+>  			return ret;
+>  		}
+> +		ceu_sd = to_ceu_subdev(asd);
+> +		ceu_sd->mbus_flags = async_sd->flags;
+> +		ceudev->subdevs[i] = ceu_sd;
+>  	}
+>  
+>  	return pdata->num_subdevs;
+> @@ -1536,7 +1512,8 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
+>  static int ceu_parse_dt(struct ceu_device *ceudev)
+>  {
+>  	struct device_node *of = ceudev->dev->of_node;
+> -	struct device_node *ep, *remote;
+> +	struct device_node *ep;
+> +	struct v4l2_async_subdev *asd;
+>  	struct ceu_subdev *ceu_sd;
+>  	unsigned int i;
+>  	int num_ep;
+> @@ -1546,9 +1523,9 @@ static int ceu_parse_dt(struct ceu_device *ceudev)
+>  	if (!num_ep)
+>  		return -ENODEV;
+>  
+> -	ret = ceu_init_async_subdevs(ceudev, num_ep);
+> -	if (ret)
+> -		return ret;
+> +	ceudev->sd = NULL;
+> +	ceudev->sd_index = 0;
+> +	ceudev->num_sd = 0;
+
+Same here, I think this could be skipped.
+
+>  
+>  	for (i = 0; i < num_ep; i++) {
+>  		struct v4l2_fwnode_endpoint fw_ep = {
+> @@ -1578,20 +1555,16 @@ static int ceu_parse_dt(struct ceu_device *ceudev)
+>  		}
+>  
+>  		/* Setup the ceu subdevice and the async subdevice. */
+> -		ceu_sd = &ceudev->subdevs[i];
+> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
+> -
+> -		remote = of_graph_get_remote_port_parent(ep);
+> -		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
+> -		ceu_sd->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> -		ceu_sd->asd.match.fwnode = of_fwnode_handle(remote);
+> -
+> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
+> -						     &ceu_sd->asd);
+> -		if (ret) {
+> -			of_node_put(remote);
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +				&ceudev->notifier, of_fwnode_handle(ep),
+> +				sizeof(*ceu_sd));
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			goto error_cleanup;
+>  		}
+> +		ceu_sd = to_ceu_subdev(asd);
+> +		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
+> +		ceudev->subdevs[i] = ceu_sd;
+>  
+>  		of_node_put(ep);
+>  	}
 
 -- 
 Regards,
