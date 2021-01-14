@@ -7,29 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F317DC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32775C43381
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9E5E22B2B
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFE9323A53
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 16:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbhANQZ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Jan 2021 11:25:29 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54854 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbhANQZ2 (ORCPT
+        id S1727379AbhANQZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Jan 2021 11:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbhANQZb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Jan 2021 11:25:28 -0500
+        Thu, 14 Jan 2021 11:25:31 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37E6C061575;
+        Thu, 14 Jan 2021 08:24:49 -0800 (PST)
 Received: from Q.local (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 409818D7;
-        Thu, 14 Jan 2021 17:24:09 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE638FDB;
+        Thu, 14 Jan 2021 17:24:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610641449;
-        bh=WUVDqOVKjC8/d7VNEAOBw0f9CPhuvr9vlUwSUsdupCg=;
+        s=mail; t=1610641448;
+        bh=fP5KKc5tyrHk0EOKBNwhOcakxu2ma05NgfV8e3gGWI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C28r2MV6+oV8IduYuL7mDkfyWbRSz2NASyy5jWs1U/fQepz/kWUy3c6Wdbz6Qf4oa
-         7xm3gxzgXIQj3q+l3f2WsR+U5yoGu5OhaorDurZyv2EtLD26vE+MVGkcmI7VW8V/zx
-         wD03NWXMkLLEOf19ld/YlMOaXBNADF486nzslKpY=
+        b=u10z3IZ63Gk1Q4nfEfG4NI5iFBsev/Ki4RX3Dmq/cX1Hp1X7DXzhiQj7MbXfqWiTw
+         QzfOTO+cwx9X50VQbP/VGrJ5AJw/AmbA/HRmous4xcMjJkTXJwapqYCI8iZRJaZ/Sf
+         hqJlM1eVB1BJBK2UpyfOkRBGDIM/QoEnP7Ci6fJg=
 From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
@@ -37,9 +40,9 @@ To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
 Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Ulrich Hecht <uli+renesas@fpond.eu>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v4 08/10] drm: rcar-du: Create a group state object
-Date:   Thu, 14 Jan 2021 16:22:53 +0000
-Message-Id: <20210114162255.705868-9-kieran.bingham+renesas@ideasonboard.com>
+Subject: [PATCH v4 05/10] drm: rcar-du: Handle CRTC standby from commit tail handler
+Date:   Thu, 14 Jan 2021 16:22:50 +0000
+Message-Id: <20210114162255.705868-6-kieran.bingham+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210114162255.705868-1-kieran.bingham+renesas@ideasonboard.com>
 References: <20210114162255.705868-1-kieran.bingham+renesas@ideasonboard.com>
@@ -49,305 +52,218 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create a new private state object for the DU groups, and move the
-initialisation of a group object to a new function rcar_du_group_init().
+Manage the power state, and initial configuration of the CRTC from the
+commit tail handler. CRTCs which need to be activated are taken out of
+standby, and any deactivated CRTCs are put into standby.
+
+This aims at removing CRTC state tracking from the rcar_du_crtc
+structure. The initial configuration of the CRTC background colours and
+disabling of all planes is taken out of rcar_du_crtc_setup() and moved
+inline into rcar_du_crtc_enable(). rcar_du_crtc_get() and
+rcar_du_crtc_put() are kept as they are needed to configure the VSP at
+the correct time, this will be addressed in a separate change.
 
 Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-Changes since v3:
-- Rebase to v5.11
-- Fix pointer passing for drm_atomic_private_obj_init()
-- Fix checkpatch.pl --strict warning about if (state == NULL)
-
 Changes since v2:
 
-- Call mutex_destroy() when cleaning up the group
-- Include mutex.h and slab.h
-- Squash "drm: rcar-du: Add rcar_du_get_{old,new}_group_state()"
+- Add more documentation
+- Keep rcar_du_crtc_get() and rcar_du_crtc_put()
+- Renamed rcar_du_crtc_enable() to rcar_du_crtc_exit_standby() and
+  rcar_du_crtc_disable() to rcar_du_crtc_enter_standby()
+- Reword commit message
 
- drivers/gpu/drm/rcar-du/rcar_du_group.c | 144 ++++++++++++++++++++++++
- drivers/gpu/drm/rcar-du/rcar_du_group.h |  29 +++++
- drivers/gpu/drm/rcar-du/rcar_du_kms.c   |  27 +----
- 3 files changed, 177 insertions(+), 23 deletions(-)
+Changes since v1:
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.c b/drivers/gpu/drm/rcar-du/rcar_du_group.c
-index 88a783ceb3e9..7c13def703b7 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_group.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_group.c
-@@ -25,6 +25,11 @@
+- Registers sequence confirmed unchanged
+- Re-ordered in the series to handle before groups
+- Do not merge rcar_du_crtc_setup() (now handled by _crtc_pre_commit)
+
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 90 ++++++++++++++++++++------
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.h |  5 ++
+ drivers/gpu/drm/rcar-du/rcar_du_kms.c  |  4 ++
+ 3 files changed, 81 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+index 53838dde2f29..55c0e0259153 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+@@ -521,17 +521,10 @@ static void rcar_du_cmm_setup(struct drm_crtc *crtc)
  
- #include <linux/clk.h>
- #include <linux/io.h>
-+#include <linux/slab.h>
-+
-+#include <drm/drm_atomic.h>
-+#include <drm/drm_atomic_state_helper.h>
-+#include <drm/drm_device.h>
+ static void rcar_du_crtc_setup(struct rcar_du_crtc *rcrtc)
+ {
+-	/* Set display off and background to black */
+-	rcar_du_crtc_write(rcrtc, DOOR, DOOR_RGB(0, 0, 0));
+-	rcar_du_crtc_write(rcrtc, BPOR, BPOR_RGB(0, 0, 0));
+-
+ 	/* Configure display timings and output routing */
+ 	rcar_du_crtc_set_display_timing(rcrtc);
+ 	rcar_du_group_set_routing(rcrtc->group);
  
- #include "rcar_du_drv.h"
- #include "rcar_du_group.h"
-@@ -361,3 +366,142 @@ int rcar_du_group_set_routing(struct rcar_du_group *rgrp)
- 
- 	return rcar_du_set_dpad0_vsp1_routing(rgrp->dev);
+-	/* Start with all planes disabled. */
+-	rcar_du_group_write(rcrtc->group, rcrtc->index % 2 ? DS2PR : DS1PR, 0);
+-
+ 	/* Enable the VSP compositor. */
+ 	if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE)) {
+ 		rcar_du_vsp_modeset(rcrtc);
+@@ -542,17 +535,10 @@ static void rcar_du_crtc_setup(struct rcar_du_crtc *rcrtc)
+ 	drm_crtc_vblank_on(&rcrtc->crtc);
  }
+ 
+-static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
++static int rcar_du_crtc_exit_standby(struct rcar_du_crtc *rcrtc)
+ {
+ 	int ret;
+ 
+-	/*
+-	 * Guard against double-get, as the function is called from both the
+-	 * .atomic_enable() and .atomic_begin() handlers.
+-	 */
+-	if (rcrtc->initialized)
+-		return 0;
+-
+ 	ret = clk_prepare_enable(rcrtc->clock);
+ 	if (ret < 0)
+ 		return ret;
+@@ -565,8 +551,12 @@ static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
+ 	if (ret < 0)
+ 		goto error_group;
+ 
+-	rcar_du_crtc_setup(rcrtc);
+-	rcrtc->initialized = true;
++	/* Set display off and background to black. */
++	rcar_du_crtc_write(rcrtc, DOOR, DOOR_RGB(0, 0, 0));
++	rcar_du_crtc_write(rcrtc, BPOR, BPOR_RGB(0, 0, 0));
 +
-+/* -----------------------------------------------------------------------------
-+ * Group State Handling
-+ */
-+
-+static struct drm_private_state *
-+rcar_du_group_atomic_duplicate_state(struct drm_private_obj *obj)
-+{
-+	struct rcar_du_group_state *state;
-+
-+	if (WARN_ON(!obj->state))
-+		return NULL;
-+
-+	state = kzalloc(sizeof(*state), GFP_KERNEL);
-+	if (!state)
-+		return NULL;
-+
-+	__drm_atomic_helper_private_obj_duplicate_state(obj, &state->state);
-+
-+	return &state->state;
++	/* Start with all planes disabled. */
++	rcar_du_group_write(rcrtc->group, rcrtc->index % 2 ? DS2PR : DS1PR, 0);
+ 
+ 	return 0;
+ 
+@@ -577,13 +567,29 @@ static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
+ 	return ret;
+ }
+ 
+-static void rcar_du_crtc_put(struct rcar_du_crtc *rcrtc)
++static void rcar_du_crtc_enter_standby(struct rcar_du_crtc *rcrtc)
+ {
+ 	rcar_du_group_put(rcrtc->group);
+ 
+ 	clk_disable_unprepare(rcrtc->extclock);
+ 	clk_disable_unprepare(rcrtc->clock);
 +}
 +
-+static void rcar_du_group_atomic_destroy_state(struct drm_private_obj *obj,
-+					       struct drm_private_state *state)
++static void rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
 +{
-+	kfree(to_rcar_group_state(state));
-+}
-+
-+static const struct drm_private_state_funcs rcar_du_group_state_funcs = {
-+	.atomic_duplicate_state = rcar_du_group_atomic_duplicate_state,
-+	.atomic_destroy_state = rcar_du_group_atomic_destroy_state,
-+};
-+
-+/**
-+ * rcar_du_get_old_group_state - get old group state, if it exists
-+ * @state: global atomic state object
-+ * @rgrp: group to grab
-+ *
-+ * This function returns the old group state for the given group, or
-+ * NULL if the group is not part of the global atomic state.
-+ */
-+struct rcar_du_group_state *
-+rcar_du_get_old_group_state(struct drm_atomic_state *state,
-+			    struct rcar_du_group *rgrp)
-+{
-+	struct drm_private_obj *obj = &rgrp->private;
-+	struct drm_private_state *pstate;
-+	unsigned int i;
-+
-+	for (i = 0; i < state->num_private_objs; i++) {
-+		if (obj == state->private_objs[i].ptr) {
-+			pstate = state->private_objs[i].old_state;
-+			return to_rcar_group_state(pstate);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+/**
-+ * rcar_du_get_new_group_state - get new group state, if it exists
-+ * @state: global atomic state object
-+ * @rgrp: group to grab
-+ *
-+ * This function returns the new group state for the given group, or
-+ * NULL if the group is not part of the global atomic state.
-+ */
-+struct rcar_du_group_state *
-+rcar_du_get_new_group_state(struct drm_atomic_state *state,
-+			    struct rcar_du_group *rgrp)
-+{
-+	struct drm_private_obj *obj = &rgrp->private;
-+	struct drm_private_state *pstate;
-+	unsigned int i;
-+
-+	for (i = 0; i < state->num_private_objs; i++) {
-+		if (obj == state->private_objs[i].ptr) {
-+			pstate = state->private_objs[i].new_state;
-+			return to_rcar_group_state(pstate);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * Init and Cleanup
-+ */
-+
-+/*
-+ * rcar_du_group_init - Initialise and reset a group object
-+ *
-+ * Return 0 in case of success or a negative error code otherwise.
-+ */
-+int rcar_du_group_init(struct rcar_du_device *rcdu, struct rcar_du_group *rgrp,
-+		       unsigned int index)
-+{
-+	static const unsigned int mmio_offsets[] = {
-+		DU0_REG_OFFSET, DU2_REG_OFFSET
-+	};
-+
-+	struct rcar_du_group_state *state;
-+
-+	state = kzalloc(sizeof(*state), GFP_KERNEL);
-+	if (!state)
-+		return -ENOMEM;
-+
-+	drm_atomic_private_obj_init(&rcdu->ddev, &rgrp->private, &state->state,
-+				    &rcar_du_group_state_funcs);
-+
-+	mutex_init(&rgrp->lock);
-+
-+	rgrp->dev = rcdu;
-+	rgrp->mmio_offset = mmio_offsets[index];
-+	rgrp->index = index;
-+	/* Extract the channel mask for this group only. */
-+	rgrp->channels_mask = (rcdu->info->channels_mask >> (2 * index))
-+			    & GENMASK(1, 0);
-+	rgrp->num_crtcs = hweight8(rgrp->channels_mask);
-+
 +	/*
-+	 * If we have more than one CRTC in this group pre-associate
-+	 * the low-order planes with CRTC 0 and the high-order planes
-+	 * with CRTC 1 to minimize flicker occurring when the
-+	 * association is changed.
++	 * Guard against double-get, as the function is called from both the
++	 * .atomic_enable() and .atomic_begin() handlers.
 +	 */
-+	rgrp->dptsr_planes = rgrp->num_crtcs > 1
-+			   ? (rcdu->info->gen >= 3 ? 0x04 : 0xf0)
-+			   : 0;
++	if (rcrtc->initialized)
++		return;
++
++	rcar_du_crtc_setup(rcrtc);
++	rcrtc->initialized = true;
++}
+ 
++static void rcar_du_crtc_put(struct rcar_du_crtc *rcrtc)
++{
+ 	rcrtc->initialized = false;
+ }
+ 
+@@ -714,6 +720,54 @@ static int rcar_du_crtc_atomic_check(struct drm_crtc *crtc,
+ 	return 0;
+ }
+ 
++/*
++ * Take all CRTCs that are made active in this commit out of standby.
++ * CRTCs that are deactivated by the commit are untouched and will be
++ * put in standby by rcar_du_crtc_atomic_enter_standby().
++ */
++int rcar_du_crtc_atomic_exit_standby(struct drm_device *dev,
++				     struct drm_atomic_state *state)
++{
++	struct drm_crtc_state *crtc_state;
++	struct drm_crtc *crtc;
++	unsigned int i;
++	int ret;
++
++	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
++		struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
++
++		if (crtc_state->active_changed && crtc_state->active) {
++			ret = rcar_du_crtc_exit_standby(rcrtc);
++			if (ret)
++				return ret;
++		}
++	}
 +
 +	return 0;
 +}
 +
-+void rcar_du_group_cleanup(struct rcar_du_group *rgrp)
-+{
-+	mutex_destroy(&rgrp->lock);
-+
-+	drm_atomic_private_obj_fini(&rgrp->private);
-+}
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.h b/drivers/gpu/drm/rcar-du/rcar_du_group.h
-index e9906609c635..f0b94eb77746 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_group.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_group.h
-@@ -12,12 +12,15 @@
- 
- #include <linux/mutex.h>
- 
-+#include <drm/drm_atomic.h>
-+
- #include "rcar_du_plane.h"
- 
- struct rcar_du_device;
- 
- /*
-  * struct rcar_du_group - CRTCs and planes group
-+ * @private: The base drm private object
-  * @dev: the DU device
-  * @mmio_offset: registers offset in the device memory map
-  * @index: group index
-@@ -33,6 +36,8 @@ struct rcar_du_device;
-  * @need_restart: the group needs to be restarted due to a configuration change
-  */
- struct rcar_du_group {
-+	struct drm_private_obj private;
-+
- 	struct rcar_du_device *dev;
- 	unsigned int mmio_offset;
- 	unsigned int index;
-@@ -51,6 +56,19 @@ struct rcar_du_group {
- 	bool need_restart;
- };
- 
-+#define to_rcar_group(s) container_of(s, struct rcar_du_group, private)
-+
-+/**
-+ * struct rcar_du_group_state - Driver-specific group state
-+ * @state: base DRM private state
++/*
++ * Put all CRTCs that have been deactivated by this commit in standby.
++ * This shall be called at the end of the commit tail handler as the
++ * last operation that touches the CRTC hardware.
 + */
-+struct rcar_du_group_state {
-+	struct drm_private_state state;
-+};
++int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
++				      struct drm_atomic_state *state)
++{
++	struct drm_crtc_state *crtc_state;
++	struct drm_crtc *crtc;
++	unsigned int i;
 +
-+#define to_rcar_group_state(s) \
-+	container_of(s, struct rcar_du_group_state, state)
++	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
++		struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
 +
- u32 rcar_du_group_read(struct rcar_du_group *rgrp, u32 reg);
- void rcar_du_group_write(struct rcar_du_group *rgrp, u32 reg, u32 data);
++		if (crtc_state->active_changed && !crtc_state->active)
++			rcar_du_crtc_enter_standby(rcrtc);
++	}
++
++	return 0;
++}
++
+ static void rcar_du_crtc_atomic_enable(struct drm_crtc *crtc,
+ 				       struct drm_atomic_state *state)
+ {
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
+index 5f2940c42225..7ff0618b9998 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
++++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
+@@ -109,6 +109,11 @@ int rcar_du_crtc_create(struct rcar_du_group *rgrp, unsigned int swindex,
  
-@@ -62,4 +80,15 @@ int rcar_du_group_set_routing(struct rcar_du_group *rgrp);
+ void rcar_du_crtc_finish_page_flip(struct rcar_du_crtc *rcrtc);
  
- int rcar_du_set_dpad0_vsp1_routing(struct rcar_du_device *rcdu);
++int rcar_du_crtc_atomic_exit_standby(struct drm_device *dev,
++				     struct drm_atomic_state *state);
++int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
++				      struct drm_atomic_state *state);
++
+ void rcar_du_crtc_dsysr_clr_set(struct rcar_du_crtc *rcrtc, u32 clr, u32 set);
  
-+struct rcar_du_group_state *
-+rcar_du_get_old_group_state(struct drm_atomic_state *state,
-+			    struct rcar_du_group *rgrp);
-+struct rcar_du_group_state *
-+rcar_du_get_new_group_state(struct drm_atomic_state *state,
-+			    struct rcar_du_group *rgrp);
-+
-+int rcar_du_group_init(struct rcar_du_device *rcdu, struct rcar_du_group *rgrp,
-+		       unsigned int index);
-+void rcar_du_group_cleanup(struct rcar_du_group *rgrp);
-+
- #endif /* __RCAR_DU_GROUP_H__ */
+ #endif /* __RCAR_DU_CRTC_H__ */
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 732aac342dab..d3069fb284fb 100644
+index fdb8a0d127ad..ff50316b87b5 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -26,6 +26,7 @@
- #include "rcar_du_crtc.h"
- #include "rcar_du_drv.h"
- #include "rcar_du_encoder.h"
-+#include "rcar_du_group.h"
- #include "rcar_du_kms.h"
- #include "rcar_du_regs.h"
- #include "rcar_du_vsp.h"
-@@ -765,10 +766,6 @@ static void rcar_du_modeset_cleanup(struct drm_device *dev, void *res)
+@@ -462,11 +462,15 @@ static void rcar_du_atomic_commit_tail(struct drm_atomic_state *old_state)
+ 	}
  
- int rcar_du_modeset_init(struct rcar_du_device *rcdu)
- {
--	static const unsigned int mmio_offsets[] = {
--		DU0_REG_OFFSET, DU2_REG_OFFSET
--	};
--
- 	struct drm_device *dev = &rcdu->ddev;
- 	struct drm_encoder *encoder;
- 	struct rcar_du_group *rgrp;
-@@ -821,25 +818,9 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
+ 	/* Apply the atomic update. */
++	rcar_du_crtc_atomic_exit_standby(dev, old_state);
++
+ 	drm_atomic_helper_commit_modeset_disables(dev, old_state);
+ 	drm_atomic_helper_commit_planes(dev, old_state,
+ 					DRM_PLANE_COMMIT_ACTIVE_ONLY);
+ 	drm_atomic_helper_commit_modeset_enables(dev, old_state);
  
- 	/* Initialize the groups. */
- 	for_each_rcdu_group(rcdu, rgrp, i) {
--		mutex_init(&rgrp->lock);
--
--		rgrp->dev = rcdu;
--		rgrp->mmio_offset = mmio_offsets[i];
--		rgrp->index = i;
--		/* Extract the channel mask for this group only. */
--		rgrp->channels_mask = (rcdu->info->channels_mask >> (2 * i))
--				   & GENMASK(1, 0);
--		rgrp->num_crtcs = hweight8(rgrp->channels_mask);
--
--		/*
--		 * If we have more than one CRTCs in this group pre-associate
--		 * the low-order planes with CRTC 0 and the high-order planes
--		 * with CRTC 1 to minimize flicker occurring when the
--		 * association is changed.
--		 */
--		rgrp->dptsr_planes = rgrp->num_crtcs > 1
--				   ? (rcdu->info->gen >= 3 ? 0x04 : 0xf0)
--				   : 0;
-+		ret = rcar_du_group_init(rcdu, rgrp, i);
-+		if (ret < 0)
-+			return ret;
++	rcar_du_crtc_atomic_enter_standby(dev, old_state);
++
+ 	drm_atomic_helper_commit_hw_done(old_state);
+ 	drm_atomic_helper_wait_for_flip_done(dev, old_state);
  
- 		if (!rcar_du_has(rcdu, RCAR_DU_FEATURE_VSP1_SOURCE)) {
- 			ret = rcar_du_planes_init(rgrp);
 -- 
 2.25.1
 
