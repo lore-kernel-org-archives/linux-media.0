@@ -2,355 +2,179 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6DBC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 18:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C76AC4332D
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25F7F23B54
-	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 18:18:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D67023B5D
+	for <linux-media@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbhANSRy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Jan 2021 13:17:54 -0500
-Received: from mga06.intel.com ([134.134.136.31]:50338 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726035AbhANSRy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Jan 2021 13:17:54 -0500
-IronPort-SDR: XfKdyKCV+mPlzo6JS4kJ0fRU/bTcylMX5b6OtI7vmTfS1vE8NHssUNmQ38Y0XaRIDkLQU+OXrh
- q86GOFF2J7iA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="239963233"
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="239963233"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 10:16:57 -0800
-IronPort-SDR: Z6QrMyffDMmDuZ6FE5qTCa7kG7IMRUp3bTZqjBzKbHvUVGsyf2RVK3mRY4dX09o2zFr8o0KO5c
- WkdiSjd1fqkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="400996003"
-Received: from lkp-server01.sh.intel.com (HELO d5d1a9a2c6bb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jan 2021 10:16:55 -0800
-Received: from kbuild by d5d1a9a2c6bb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l07B1-00014G-33; Thu, 14 Jan 2021 18:16:55 +0000
-Date:   Fri, 15 Jan 2021 02:15:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [ragnatech:media-tree] BUILD SUCCESS WITH WARNING
- 7371093f983d35d60a7fac3a6f082de7fefe3648
-Message-ID: <60008a5e.1QPKyiK0NpOwJwPm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729721AbhANSTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Jan 2021 13:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729705AbhANSTp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 14 Jan 2021 13:19:45 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DFAC061757
+        for <linux-media@vger.kernel.org>; Thu, 14 Jan 2021 10:18:52 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t30so6816621wrb.0
+        for <linux-media@vger.kernel.org>; Thu, 14 Jan 2021 10:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=PCah/n5rkh/QtCy+v8eMm30PJ5w4gNLWd9gaHy4xfQU=;
+        b=f7UNY2cDz+S8bXMqpz9RBnXI0HW5mYqeCcHgUOg5LMxSTy+jJwvWYgPX0HlnRMJI/X
+         ivj00WKs6Hob98esMhBFKi2sPy6LiZ3IgIqwwIywMJLdapx2o1z7EQa3bsONKGEnifqM
+         sKEVp8xsXNATPsd4J80hvUQpg7A+FX2kF0OMmio4NbG/y/2vYCKWH0wTNz4wbUrGXi/2
+         4epDtws8nraqNS9qBIVqkaZ2jZZTPGXXH4Ic9QMql5CQbdKDsmnv4bTZx2HQF4aDk7b6
+         b9mopU1dWsK7KZsjz6EbY6RLUYmGSZMlUyMPHx/tQM3tfsOE3TFhZXEOkxbqbsLkO0UU
+         qvIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=PCah/n5rkh/QtCy+v8eMm30PJ5w4gNLWd9gaHy4xfQU=;
+        b=gcnMYLBJhaiq5kILk5MO3gyB8FMWgK7XWpyr+RBQlcbfJwnrep2h1zizfSe7H0nB4y
+         R6gzJ4Dsd64x86/LU076VPUilv3+5DzWV9gmVjzW/fimRL4NROh2HWgqaytQYR8Cn9qu
+         LAqP8EDSSnpyAQ0EFatNit9+HUyFT5cn8xLRbDt1TEgChSk5p2nvuFCx6x4rAwkWba86
+         XjLLtdKLDC9XJp2SObPQOnB+Q06oB6XqxpxL0JtsurpymK98GnCN/u1yBOoZk9YBBdDV
+         /ezV7P/S4pww246QKze9g13aiISVBg3Yrt+pW2ElOaAAhxNgP+jkoGead9cZHQ9K2XPi
+         ++Aw==
+X-Gm-Message-State: AOAM530J2Vlkm249/tifufjH5DaSxtTptH7bEQtH52wwAQeDSinh9dbV
+        RAhsCnhUsQn3NY6dk6I6T81Q4g==
+X-Google-Smtp-Source: ABdhPJzzBeSmLxP/bOvQx2acvXsOknE9G+4YnoxmumbkIHtGGvqhehMKCM97cgaXFObAuOEt6c/qXA==
+X-Received: by 2002:a5d:5913:: with SMTP id v19mr9228610wrd.207.1610648330834;
+        Thu, 14 Jan 2021 10:18:50 -0800 (PST)
+Received: from zen.linaroharston ([51.148.130.216])
+        by smtp.gmail.com with ESMTPSA id z6sm9253273wmi.15.2021.01.14.10.18.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jan 2021 10:18:49 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id 16A451FF7E;
+        Thu, 14 Jan 2021 18:18:49 +0000 (GMT)
+References: <20200623111325.237158-1-keiichiw@chromium.org>
+User-agent: mu4e 1.5.7; emacs 28.0.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Keiichi Watanabe <keiichiw@chromium.org>
+Cc:     linux-media@vger.kernel.org, acourbot@chromium.org,
+        alexlau@chromium.org, daniel@ffwll.ch, dgreid@chromium.org,
+        dstaessens@chromium.org, dmitry.sepp@opensynergy.com,
+        egranata@google.com, fziglio@redhat.com, hverkuil@xs4all.nl,
+        kraxel@redhat.com, marcheu@chromium.org, posciak@chromium.org,
+        spice-devel@lists.freedesktop.org, stevensd@chromium.org,
+        tfiga@chromium.org, uril@redhat.com,
+        samiullah.khawaja@opensynergy.com, kiran.pawar@opensynergy.com,
+        saket.sinha89@gmail.com, laurent.pinchart@ideasonboard.com,
+        nicolas@ndufresne.ca, mst@redhat.com,
+        virtio-dev@lists.oasis-open.org,
+        Ruchika Gupta <ruchika.gupta@linaro.org>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        Mike Holmes <mike.holmes@linaro.org>
+Subject: Re: [virtio-dev] [PATCH RFC v4 0/1] Virtio Video Device Specification
+Date:   Thu, 14 Jan 2021 17:55:39 +0000
+In-reply-to: <20200623111325.237158-1-keiichiw@chromium.org>
+Message-ID: <87czy7l6uu.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://git.ragnatech.se/linux  media-tree
-branch HEAD: 7371093f983d35d60a7fac3a6f082de7fefe3648  media: venus: helpers: Wire up hfi platform buffer requirements
 
-Warning reports:
+Keiichi Watanabe <keiichiw@chromium.org> writes:
 
-https://lore.kernel.org/linux-media/202101131847.Yohd2Cfr-lkp@intel.com
+> This is the v4 RFC of virtio video device specification.
+> PDF versions are available at [1, 2].
+>
+> Note that this patch depends on a recent patchset "Cross-device resource
+> sharing" [3].
+>
+> Here is a list of major changes from v3:
+> * Redesingned struct definitions for each command and request based on
+>   discussions at [4].
+> * Renamed commands/structs/enums to more descriptive names.
+> * Had different structs and fields for image formats and bitstream format=
+s.
+> * Added more detailed specification for supported video codecs.
+> * Made stream_id be allocated by the device.
+> * Had a single parameter struct per-stream instead of per-queue parameter=
+s and
+>   controls.
+> * Allowed the driver to specify the number of buffers to use via
+>   "cur_{image,bitstream}_buffers".
+> * Renamed RESOURCE_CREATE command to RESOURCE_ATTACH command and allow the
+>   driver to use this command when replacing backing memories as well.
+>
+> [5] is the diff of the header file from v3. Note that it only contains ch=
+anges
+> in the header. We haven't updated the driver nor device implementation to=
+ focus
+> on protocol design discussion first.
+>
+> While it may appear that many parts have been changed since the previous
+> revision, these changes are to address the issues raised in previous disc=
+ussions
+> or/and to make the protocol simpler and easier to prevent misuse.
+> I'd appreciate any types of feedback.
+>
+> Best regards,
+> Keiichi
+>
+> [1] (full): https://drive.google.com/file/d/1DiOJZfUJ5wvFtnNFQicxt0zkp4Ob=
+1o9C/view?usp=3Dsharing
+> [2] (only video section): https://drive.google.com/file/d/188uAkIWE0BsXET=
+ECez98y5fJKw8rslj3/view?usp=3Dsharing
+> [3] https://lists.oasis-open.org/archives/virtio-comment/202003/msg00035.=
+html
+> [4] https://markmail.org/thread/c6h3e3zn647qli3w
+> [5]
+> https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/=
++/2164411
 
-Warning in current branch:
+Hi Keiichi,
 
-drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c:1242:5: warning: no previous prototype for 'bufreq_enc' [-Wmissing-prototypes]
+I wanted to ask what the current status of this spec was. Are you
+planning to submit a new revision of the specification due or are things
+fairly stable now?
 
-Warning ids grouped by kconfigs:
+We are starting to think about next steps for virtualised video as part
+of Linaro's Stratos work. Specifically we are thinking about
+implementing backends and getting a stack up and running which we can
+use to experiment with multiple hypervisors and VM deployment
+approaches.
 
-gcc_recent_errors
-|-- arc-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- arm-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- arm-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- arm64-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- c6x-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- c6x-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- c6x-randconfig-m031-20210113
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- c6x-randconfig-r013-20210113
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- h8300-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- i386-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- ia64-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- m68k-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- m68k-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- nds32-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- nios2-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- parisc-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- riscv-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- riscv-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- sh-allmodconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- sparc-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- x86_64-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-|-- xtensa-allyesconfig
-|   `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
-`-- xtensa-randconfig-r013-20210113
-    `-- drivers-media-platform-qcom-venus-hfi_plat_bufs_v6.c:warning:no-previous-prototype-for-bufreq_enc
+Longer term goals included looking at how to integrate virtio-video with
+a secure world on ARM (e.g. feed video data to a secure world device for
+playback via virtio). As part of that we will also be looking at how to
+minimise the memory profile of the backend to do this.
 
-elapsed time: 2008m
+Looking at the virtio-spec repo it looks like the cross-device resource
+sharing is now merged:
 
-configs tested: 231
-configs skipped: 2
+  87fa6b5 * virtio-gpu: add support for mapping/unmapping blob resources
+  89e7eb5 * virtio-gpu: add resource create blob
+  162578b * virtio-gpu: add the ability to export resources
+  68f66ff * content: define what an exported object is
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                 mpc834x_itx_defconfig
-sh                          polaris_defconfig
-ia64                         bigsur_defconfig
-mips                            e55_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                  nommu_kc705_defconfig
-mips                          ath25_defconfig
-mips                            gpr_defconfig
-arm                       multi_v4t_defconfig
-m68k                        stmark2_defconfig
-sh                      rts7751r2d1_defconfig
-sh                           se7206_defconfig
-m68k                        m5272c3_defconfig
-sh                            migor_defconfig
-powerpc                        icon_defconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                 mpc8313_rdb_defconfig
-arm                        mvebu_v7_defconfig
-mips                        bcm47xx_defconfig
-sh                          rsk7201_defconfig
-arm                           corgi_defconfig
-arm                     eseries_pxa_defconfig
-ia64                          tiger_defconfig
-m68k                          hp300_defconfig
-powerpc64                           defconfig
-ia64                             allyesconfig
-m68k                          multi_defconfig
-powerpc                      pasemi_defconfig
-mips                         bigsur_defconfig
-mips                       rbtx49xx_defconfig
-c6x                              alldefconfig
-powerpc                 mpc8560_ads_defconfig
-arm                         vf610m4_defconfig
-h8300                               defconfig
-ia64                      gensparse_defconfig
-arm                          pxa910_defconfig
-sparc                            alldefconfig
-powerpc                      ppc64e_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                         wii_defconfig
-arm                        magician_defconfig
-powerpc                 mpc85xx_cds_defconfig
-mips                           ip28_defconfig
-m68k                         amcore_defconfig
-sh                        apsh4ad0a_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                      ppc44x_defconfig
-arm                         lubbock_defconfig
-arm                        vexpress_defconfig
-mips                         tb0226_defconfig
-arc                     nsimosci_hs_defconfig
-c6x                        evmc6474_defconfig
-arm                      jornada720_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                      katmai_defconfig
-powerpc                       eiger_defconfig
-arc                              alldefconfig
-m68k                        mvme147_defconfig
-um                            kunit_defconfig
-arm                         shannon_defconfig
-sh                          sdk7786_defconfig
-mips                      bmips_stb_defconfig
-powerpc                     ksi8560_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                    gamecube_defconfig
-arm                         axm55xx_defconfig
-m68k                            q40_defconfig
-arm                        mini2440_defconfig
-powerpc                     tqm8560_defconfig
-sh                         ecovec24_defconfig
-powerpc                      pcm030_defconfig
-sparc                            allyesconfig
-mips                         db1xxx_defconfig
-powerpc                     rainier_defconfig
-powerpc                     sbc8548_defconfig
-c6x                        evmc6457_defconfig
-arm                            hisi_defconfig
-arc                           tb10x_defconfig
-mips                      pistachio_defconfig
-sh                         ap325rxa_defconfig
-sh                           se7751_defconfig
-arm                       versatile_defconfig
-mips                          ath79_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                  mpc866_ads_defconfig
-um                           x86_64_defconfig
-mips                          malta_defconfig
-sh                           se7724_defconfig
-arm                       aspeed_g5_defconfig
-arm                        mvebu_v5_defconfig
-arm                         assabet_defconfig
-arm                        multi_v7_defconfig
-powerpc                      walnut_defconfig
-c6x                         dsk6455_defconfig
-m68k                          sun3x_defconfig
-arm                          collie_defconfig
-powerpc                    amigaone_defconfig
-arc                     haps_hs_smp_defconfig
-csky                                defconfig
-parisc                              defconfig
-mips                           xway_defconfig
-arm                           u8500_defconfig
-sh                           se7343_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        sh7785lcr_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                     tqm5200_defconfig
-mips                      maltasmvp_defconfig
-arc                        nsimosci_defconfig
-riscv                    nommu_virt_defconfig
-m68k                        m5307c3_defconfig
-arc                      axs103_smp_defconfig
-m68k                        mvme16x_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arm64                            alldefconfig
-powerpc                     pseries_defconfig
-mips                        nlm_xlp_defconfig
-arm                         hackkit_defconfig
-arm                         socfpga_defconfig
-arm                             mxs_defconfig
-x86_64                              defconfig
-xtensa                       common_defconfig
-powerpc                 mpc8315_rdb_defconfig
-nios2                               defconfig
-arm                         cm_x300_defconfig
-sh                           se7750_defconfig
-powerpc                     tqm8555_defconfig
-arm                         lpc32xx_defconfig
-sh                           se7722_defconfig
-mips                        maltaup_defconfig
-csky                             alldefconfig
-arm                          iop32x_defconfig
-mips                      pic32mzda_defconfig
-arm                     am200epdkit_defconfig
-nios2                            alldefconfig
-mips                            ar7_defconfig
-arm                        keystone_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210113
-x86_64               randconfig-a004-20210113
-x86_64               randconfig-a001-20210113
-x86_64               randconfig-a005-20210113
-x86_64               randconfig-a003-20210113
-x86_64               randconfig-a002-20210113
-i386                 randconfig-a002-20210113
-i386                 randconfig-a005-20210113
-i386                 randconfig-a006-20210113
-i386                 randconfig-a003-20210113
-i386                 randconfig-a001-20210113
-i386                 randconfig-a004-20210113
-i386                 randconfig-a002-20210114
-i386                 randconfig-a005-20210114
-i386                 randconfig-a006-20210114
-i386                 randconfig-a001-20210114
-i386                 randconfig-a003-20210114
-i386                 randconfig-a004-20210114
-x86_64               randconfig-a015-20210114
-x86_64               randconfig-a012-20210114
-x86_64               randconfig-a013-20210114
-x86_64               randconfig-a016-20210114
-x86_64               randconfig-a014-20210114
-x86_64               randconfig-a011-20210114
-i386                 randconfig-a012-20210113
-i386                 randconfig-a011-20210113
-i386                 randconfig-a016-20210113
-i386                 randconfig-a013-20210113
-i386                 randconfig-a015-20210113
-i386                 randconfig-a014-20210113
-i386                 randconfig-a012-20210114
-i386                 randconfig-a011-20210114
-i386                 randconfig-a016-20210114
-i386                 randconfig-a015-20210114
-i386                 randconfig-a013-20210114
-i386                 randconfig-a014-20210114
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+are there any other prerequisites?
 
-clang tested configs:
-x86_64               randconfig-a004-20210114
-x86_64               randconfig-a006-20210114
-x86_64               randconfig-a001-20210114
-x86_64               randconfig-a003-20210114
-x86_64               randconfig-a005-20210114
-x86_64               randconfig-a002-20210114
-x86_64               randconfig-a015-20210113
-x86_64               randconfig-a012-20210113
-x86_64               randconfig-a013-20210113
-x86_64               randconfig-a016-20210113
-x86_64               randconfig-a014-20210113
-x86_64               randconfig-a011-20210113
+From a backend implementation point of view it makes sense to wait until
+there is a working frontend driver up-streamed into the kernel. I guess
+that is blocked on the final call for vote on the virtio spec?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I'm sure there is scope for parallelism here but I wanted to get a sense
+of the current direction before embarking on work that would require a
+big re-write down the line.
+
+Regards,
+
+--=20
+Alex Benn=C3=A9e
