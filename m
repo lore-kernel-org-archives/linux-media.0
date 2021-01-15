@@ -2,29 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DB4CC433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6207AC4361A
 	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E143C23A58
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 433AD23A75
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388326AbhAOUDz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 15:03:55 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:57767 "EHLO
+        id S2388724AbhAOUDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 15:03:21 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:52889 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388716AbhAOUDW (ORCPT
+        with ESMTP id S2388714AbhAOUDU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 15:03:22 -0500
+        Fri, 15 Jan 2021 15:03:20 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 45DB41C0011;
-        Fri, 15 Jan 2021 20:02:28 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 793801C0014;
+        Fri, 15 Jan 2021 20:02:18 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -49,9 +50,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH v5 16/16] MAINTAINERS: Add entry for the Allwinner A83T MIPI CSI-2 bridge
-Date:   Fri, 15 Jan 2021 21:01:41 +0100
-Message-Id: <20210115200141.1397785-17-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v5 12/16] MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge
+Date:   Fri, 15 Jan 2021 21:01:37 +0100
+Message-Id: <20210115200141.1397785-13-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
 References: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
@@ -61,7 +62,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add myself as maintainer of the A83T MIPI CSI-2 bridge media driver.
+Add myself as maintainer of the A31 MIPI CSI-2 bridge media driver.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
@@ -69,20 +70,20 @@ Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a41c41f6387c..af8095085f0f 100644
+index 57f9e3047227..a41c41f6387c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -718,6 +718,14 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
- F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
+@@ -710,6 +710,14 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+ F:	drivers/media/platform/sunxi/sun4i-csi/
  
-+ALLWINNER A83T MIPI CSI-2 BRIDGE
++ALLWINNER A31 MIPI CSI-2 BRIDGE
 +M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 +L:	linux-media@vger.kernel.org
 +S:	Maintained
 +T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-+F:	drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/
++F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
++F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
 +
  ALLWINNER CPUFREQ DRIVER
  M:	Yangtao Li <tiny.windzz@gmail.com>
