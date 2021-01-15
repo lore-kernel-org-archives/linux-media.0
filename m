@@ -5,26 +5,26 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C93EC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:02:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F67C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:03:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D92723A9C
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:02:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BD5823A56
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:03:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732549AbhAOUCj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 15:02:39 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43331 "EHLO
+        id S2388548AbhAOUCv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 15:02:51 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:59217 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726467AbhAOUCh (ORCPT
+        with ESMTP id S1728460AbhAOUCt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 15:02:37 -0500
+        Fri, 15 Jan 2021 15:02:49 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 1EE0E1C0006;
-        Fri, 15 Jan 2021 20:01:53 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B95B51C000A;
+        Fri, 15 Jan 2021 20:02:04 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -48,55 +48,108 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH v5 01/16] docs: phy: Add a part about PHY mode and submode
-Date:   Fri, 15 Jan 2021 21:01:26 +0100
-Message-Id: <20210115200141.1397785-2-paul.kocialkowski@bootlin.com>
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
+        <kevin.lhopital@bootlin.com>
+Subject: [PATCH v5 06/16] media: sun6i-csi: Only configure the interface data width for parallel
+Date:   Fri, 15 Jan 2021 21:01:31 +0100
+Message-Id: <20210115200141.1397785-7-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
 References: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Besides giving pointers to the relevant functions for PHY mode and
-submode configuration, this clarifies the need to set them before
-powering on the PHY.
+Bits related to the interface data width are only applicable to the
+parallel interface and are irrelevant when the CSI controller is taking
+input from the MIPI CSI-2 controller.
 
+In prevision of adding support for this case, set these bits
+conditionally so there is no ambiguity. The conditional block is
+moved around before the interlaced conditional block for nicer code
+symmetry (conditional blocks first) while at it.
+
+Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Acked-by: Maxime Ripard <mripard@kernel.org>
 ---
- Documentation/driver-api/phy/phy.rst | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 42 +++++++++++--------
+ 1 file changed, 25 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/driver-api/phy/phy.rst b/Documentation/driver-api/phy/phy.rst
-index 8fc1ce0bb905..6cbc72707a49 100644
---- a/Documentation/driver-api/phy/phy.rst
-+++ b/Documentation/driver-api/phy/phy.rst
-@@ -195,3 +195,21 @@ DeviceTree Binding
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 1a11a6174a17..d06028f42534 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -378,8 +378,13 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 	unsigned char bus_width;
+ 	u32 flags;
+ 	u32 cfg;
++	bool input_parallel = false;
+ 	bool input_interlaced = false;
  
- The documentation for PHY dt binding can be found @
- Documentation/devicetree/bindings/phy/phy-bindings.txt
++	if (endpoint->bus_type == V4L2_MBUS_PARALLEL ||
++	    endpoint->bus_type == V4L2_MBUS_BT656)
++		input_parallel = true;
 +
-+PHY Mode and Submode
-+====================
+ 	if (csi->config.field == V4L2_FIELD_INTERLACED
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_TB
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_BT)
+@@ -395,6 +400,26 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		 CSI_IF_CFG_HREF_POL_MASK | CSI_IF_CFG_FIELD_MASK |
+ 		 CSI_IF_CFG_SRC_TYPE_MASK);
+ 
++	if (input_parallel) {
++		switch (bus_width) {
++		case 8:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
++			break;
++		case 10:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
++			break;
++		case 12:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
++			break;
++		case 16: /* No need to configure DATA_WIDTH for 16bit */
++			break;
++		default:
++			dev_warn(sdev->dev, "Unsupported bus width: %u\n",
++				 bus_width);
++			break;
++		}
++	}
 +
-+Once a reference to a PHY is obtained by a controller, the PHY can be configured
-+to a PHY mode and submode. PHY modes are described in the `phy_mode` enum while
-+submodes are specific to the selected PHY mode.
-+
-+Mode and submode configuration is done by calling::
-+
-+	int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
-+
-+If no submode is to be configured, users can call::
-+
-+	int phy_set_mode(struct phy *phy, enum phy_mode mode);
-+
-+The PHY mode and submode must not be configured after the PHY has already been
-+powered on.
+ 	if (input_interlaced)
+ 		cfg |= CSI_IF_CFG_SRC_TYPE_INTERLACED;
+ 	else
+@@ -440,23 +465,6 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		break;
+ 	}
+ 
+-	switch (bus_width) {
+-	case 8:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
+-		break;
+-	case 10:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
+-		break;
+-	case 12:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
+-		break;
+-	case 16: /* No need to configure DATA_WIDTH for 16bit */
+-		break;
+-	default:
+-		dev_warn(sdev->dev, "Unsupported bus width: %u\n", bus_width);
+-		break;
+-	}
+-
+ 	regmap_write(sdev->regmap, CSI_IF_CFG_REG, cfg);
+ }
+ 
 -- 
 2.30.0
 
