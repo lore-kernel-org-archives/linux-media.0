@@ -2,136 +2,218 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52999C433DB
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DAA5C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2637A23603
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:20:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9DBE239ED
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:25:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725865AbhAOVU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 16:20:57 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38328 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbhAOVU4 (ORCPT
+        id S1726648AbhAOVZQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 16:25:16 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:51358 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbhAOVZP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 16:20:56 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 452571F4623F
-Subject: Re: Failing V4l2-compliance test with a sensor driver
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <20210115115324.glhnixqafh2jakw4@basti-TUXEDO-Book-XA1510>
- <1821bd61-818f-5e1b-156a-3c72b2bca800@xs4all.nl>
- <20210115183449.xrkl6u2sk2su7zgp@basti-TUXEDO-Book-XA1510>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <b4a9a516-88bb-c278-0088-d652ec588556@collabora.com>
-Date:   Fri, 15 Jan 2021 22:20:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 15 Jan 2021 16:25:15 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3165E58B;
+        Fri, 15 Jan 2021 22:24:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1610745873;
+        bh=qGkI3lR19pN5KRZbrXgNeW0qNn8d+UVXRQHeYXN2Ijs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VqmFvSShoCW4ZRyUrpIizkBGJ6JxeQUu+ib9T4yjxvOcOoMssZDxxSZCsE7vhTqog
+         L2mLNPGSb2JaVnKQSozsVL/HYzHwebJoFNsABaQtmABj/p8hU1AOjKbhZwVdTS2Wbm
+         c92PTrz98S9QojxIJ0wM52R3F7P+uu6Wf9TUgmJs=
+Date:   Fri, 15 Jan 2021 23:24:16 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com, Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH] media: v4l2-async: Remove V4L2_ASYNC_MATCH_DEVNAME
+Message-ID: <YAIIABpFb34F4hpe@pendragon.ideasonboard.com>
+References: <20210115202357.169556-1-ezequiel@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20210115183449.xrkl6u2sk2su7zgp@basti-TUXEDO-Book-XA1510>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210115202357.169556-1-ezequiel@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Ezequiel,
 
+Thank you for the patch.
 
-Am 15.01.21 um 19:34 schrieb Sebastian Fricke:
-> Hello Hans,
+On Fri, Jan 15, 2021 at 05:23:57PM -0300, Ezequiel Garcia wrote:
+> The last user for this type of match was the soc-camera/sh_mobile_csi2
+> driver, which was removed in v4.9. If the support is ever needed,
+> it can always be restored.
 > 
-> Thank you very much for the quick response.
-> 
-> On 15.01.2021 13:11, Hans Verkuil wrote:
->> On 15/01/2021 12:53, Sebastian Fricke wrote:
->>> Hello,
->>>
->>> I believe you are the creator of v4l2-compliance, right? My hope is that you might be able to lead me in the right direction.
->>> I am currently finishing up a sensor driver that I ported from a downstream kernel. And I try to clear up the last compliance error:
->>>
->>> ```
->>>      info: checking control event 'User Controls' (0x00980001)
->>>      VIDIOC_SUBSCRIBE_EVENT returned -1 (Inappropriate ioctl for device)
->>
->> This returns ENOTTY, which is weird...
->>
->>>      fail: v4l2-test-controls.cpp(818): subscribe event for control 'User Controls' failed
->>> test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
->>> ```
->>>
->>> I notice that it calls a normal v4l2 ioctl on my subdevice. I implemented the event handling just like I was able to find in other devices like:
->>> imx219, imx355, ov2640 by adding:
->>>
->>> ```
->>> #include <media/v4l2-event.h>
->>> ...
->>>     sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
->>>              V4L2_SUBDEV_FL_HAS_EVENTS;
->>> ...
->>> static const struct v4l2_subdev_core_ops ov13850_core_ops = {
->>>      ...
->>>     .subscribe_event = v4l2_ctrl_subdev_subscribe_event,
->>>     .unsubscribe_event = v4l2_event_subdev_unsubscribe
->>>      ...
->>> ```
->>
->> ...since this looks exactly as it should be.
->>
->>>
->>> Am I supposed to correct that error, or asked in another way is it actually an error when a subdevice doesn't implement VIDIOC_SUBSCRIBE_EVENT?
->>
->> Yes, it is an error if subscribe_event isn't implemented, but you DO have controls in your driver.
->>
->> Are you compiling v4l2-compliance from the git repo? You shouldn't use the version packages by distros since that is typically much too old.
-> 
-> Yes I have compiled it directly from the git repo `git clone https://git.linuxtv.org/v4l-utils.git/`, to be more specific I have an ansible playbook that shows exactly how I compiled it:
-> https://github.com/initBasti/NanoPC-T4_armbian_configuration/blob/main/ansible/setup_nanopct4.yml#L95
-> 
-> The build I currently use is 3 days old.
-> 
->>
->> I can't give support either if you are using an old version.
->>
->>> Additionally, I noticed that the compliance check doesn't look at my VIDIOC_SUBDEV_G_SELECTION implementation but instead searches for any implementation of the VIDIOC_G_SELECTION ioctl.
->>
->> It shouldn't, at least v4l2-test-subdevs.cpp only uses VIDIOC_SUBDEV_G_SELECTION.
-> 
-> That is exactly what confuses me, I cannot find a *single* SUBDEV ioctl
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 
-That's weird, looking at the v4l2-compliance code I see there is a function "'mi_media_detect_type", maybe you should see what type is detected
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Thanks,
-Dafna
+> ---
+> Applies on top of "media: v4l2-async: Remove V4L2_ASYNC_MATCH_CUSTOM"
+> https://patchwork.linuxtv.org/project/linux-media/patch/20210108171728.39434-1-ezequiel@collabora.com/
 
-> within the output of the tests.
-> Here is the complete output: https://paste.debian.net/1181280/
+By the way, for this patch, I just found out that you can also drop the
+forward declaration of struct device.
+
 > 
->>
->> Regards,
->>
->>     Hans
+>  drivers/media/v4l2-core/v4l2-async.c | 38 ----------------------------
+>  include/media/v4l2-async.h           | 25 ------------------
+>  2 files changed, 63 deletions(-)
 > 
-> Thanks a lot
-> Sebastian
->>
->>>
->>> I invoked the compliance test with:
->>>
->>> v4l2-compliance -u /dev/v4l-subdev3 -v -T
->>>
->>> My current code can be located here: https://github.com/initBasti/Linux_kernel_media_tree_fork/blob/fix_subscribe_event_user_controls/drivers/media/i2c/ov13850.c
->>>
->>> Greetings and thanks in advance,
->>> Sebastian
->>>
->>
+> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> index 3faf1d12d49d..d05809b81870 100644
+> --- a/drivers/media/v4l2-core/v4l2-async.c
+> +++ b/drivers/media/v4l2-core/v4l2-async.c
+> @@ -64,12 +64,6 @@ static bool match_i2c(struct v4l2_async_notifier *notifier,
+>  #endif
+>  }
+>  
+> -static bool match_devname(struct v4l2_async_notifier *notifier,
+> -			  struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+> -{
+> -	return !strcmp(asd->match.device_name, dev_name(sd->dev));
+> -}
+> -
+>  static bool match_fwnode(struct v4l2_async_notifier *notifier,
+>  			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+>  {
+> @@ -154,9 +148,6 @@ v4l2_async_find_match(struct v4l2_async_notifier *notifier,
+>  	list_for_each_entry(asd, &notifier->waiting, list) {
+>  		/* bus_type has been verified valid before */
+>  		switch (asd->match_type) {
+> -		case V4L2_ASYNC_MATCH_DEVNAME:
+> -			match = match_devname;
+> -			break;
+>  		case V4L2_ASYNC_MATCH_I2C:
+>  			match = match_i2c;
+>  			break;
+> @@ -185,9 +176,6 @@ static bool asd_equal(struct v4l2_async_subdev *asd_x,
+>  		return false;
+>  
+>  	switch (asd_x->match_type) {
+> -	case V4L2_ASYNC_MATCH_DEVNAME:
+> -		return strcmp(asd_x->match.device_name,
+> -			      asd_y->match.device_name) == 0;
+>  	case V4L2_ASYNC_MATCH_I2C:
+>  		return asd_x->match.i2c.adapter_id ==
+>  			asd_y->match.i2c.adapter_id &&
+> @@ -454,7 +442,6 @@ static int v4l2_async_notifier_asd_valid(struct v4l2_async_notifier *notifier,
+>  		return -EINVAL;
+>  
+>  	switch (asd->match_type) {
+> -	case V4L2_ASYNC_MATCH_DEVNAME:
+>  	case V4L2_ASYNC_MATCH_I2C:
+>  	case V4L2_ASYNC_MATCH_FWNODE:
+>  		if (v4l2_async_notifier_has_async_subdev(notifier, asd,
+> @@ -708,31 +695,6 @@ v4l2_async_notifier_add_i2c_subdev(struct v4l2_async_notifier *notifier,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_i2c_subdev);
+>  
+> -struct v4l2_async_subdev *
+> -v4l2_async_notifier_add_devname_subdev(struct v4l2_async_notifier *notifier,
+> -				       const char *device_name,
+> -				       unsigned int asd_struct_size)
+> -{
+> -	struct v4l2_async_subdev *asd;
+> -	int ret;
+> -
+> -	asd = kzalloc(asd_struct_size, GFP_KERNEL);
+> -	if (!asd)
+> -		return ERR_PTR(-ENOMEM);
+> -
+> -	asd->match_type = V4L2_ASYNC_MATCH_DEVNAME;
+> -	asd->match.device_name = device_name;
+> -
+> -	ret = v4l2_async_notifier_add_subdev(notifier, asd);
+> -	if (ret) {
+> -		kfree(asd);
+> -		return ERR_PTR(ret);
+> -	}
+> -
+> -	return asd;
+> -}
+> -EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_devname_subdev);
+> -
+>  int v4l2_async_register_subdev(struct v4l2_subdev *sd)
+>  {
+>  	struct v4l2_async_notifier *subdev_notifier;
+> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> index 8ed42188e7c9..49c14cc5f85a 100644
+> --- a/include/media/v4l2-async.h
+> +++ b/include/media/v4l2-async.h
+> @@ -21,7 +21,6 @@ struct v4l2_async_notifier;
+>   * enum v4l2_async_match_type - type of asynchronous subdevice logic to be used
+>   *	in order to identify a match
+>   *
+> - * @V4L2_ASYNC_MATCH_DEVNAME: Match will use the device name
+>   * @V4L2_ASYNC_MATCH_I2C: Match will check for I2C adapter ID and address
+>   * @V4L2_ASYNC_MATCH_FWNODE: Match will use firmware node
+>   *
+> @@ -29,7 +28,6 @@ struct v4l2_async_notifier;
+>   * algorithm that will be used to match an asynchronous device.
+>   */
+>  enum v4l2_async_match_type {
+> -	V4L2_ASYNC_MATCH_DEVNAME,
+>  	V4L2_ASYNC_MATCH_I2C,
+>  	V4L2_ASYNC_MATCH_FWNODE,
+>  };
+> @@ -42,9 +40,6 @@ enum v4l2_async_match_type {
+>   * @match.fwnode:
+>   *		pointer to &struct fwnode_handle to be matched.
+>   *		Used if @match_type is %V4L2_ASYNC_MATCH_FWNODE.
+> - * @match.device_name:
+> - *		string containing the device name to be matched.
+> - *		Used if @match_type is %V4L2_ASYNC_MATCH_DEVNAME.
+>   * @match.i2c:	embedded struct with I2C parameters to be matched.
+>   *		Both @match.i2c.adapter_id and @match.i2c.address
+>   *		should be matched.
+> @@ -68,7 +63,6 @@ struct v4l2_async_subdev {
+>  	enum v4l2_async_match_type match_type;
+>  	union {
+>  		struct fwnode_handle *fwnode;
+> -		const char *device_name;
+>  		struct {
+>  			int adapter_id;
+>  			unsigned short address;
+> @@ -210,25 +204,6 @@ v4l2_async_notifier_add_i2c_subdev(struct v4l2_async_notifier *notifier,
+>  				   int adapter_id, unsigned short address,
+>  				   unsigned int asd_struct_size);
+>  
+> -/**
+> - * v4l2_async_notifier_add_devname_subdev - Allocate and add a device-name
+> - *				async subdev to the notifier's master asd_list.
+> - *
+> - * @notifier: pointer to &struct v4l2_async_notifier
+> - * @device_name: device name string to be matched
+> - * @asd_struct_size: size of the driver's async sub-device struct, including
+> - *		     sizeof(struct v4l2_async_subdev). The &struct
+> - *		     v4l2_async_subdev shall be the first member of
+> - *		     the driver's async sub-device struct, i.e. both
+> - *		     begin at the same memory address.
+> - *
+> - * Same as above but for device-name matched sub-devices.
+> - */
+> -struct v4l2_async_subdev *
+> -v4l2_async_notifier_add_devname_subdev(struct v4l2_async_notifier *notifier,
+> -				       const char *device_name,
+> -				       unsigned int asd_struct_size);
+> -
+>  /**
+>   * v4l2_async_notifier_register - registers a subdevice asynchronous notifier
+>   *
+
+-- 
+Regards,
+
+Laurent Pinchart
