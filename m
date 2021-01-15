@@ -2,168 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C21CC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3380C4321A
 	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 09:28:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61EE723436
+	by mail.kernel.org (Postfix) with ESMTP id 9CA0723435
 	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 09:28:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbhAOJ2T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 04:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728652AbhAOJ1o (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 04:27:44 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF0EC061799
-        for <linux-media@vger.kernel.org>; Fri, 15 Jan 2021 01:26:26 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id f4so12323361ejx.7
-        for <linux-media@vger.kernel.org>; Fri, 15 Jan 2021 01:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NiDOyGK2bOsrwUw3iahcb+Ehu3HtnFpXGarV1c+5LM8=;
-        b=ZFsRL5mF1MBomvAa3QRzKuOzv/1Y2Eeyf90TC5tvrq8mNB+QD2ypMStgZXbhQldc8Y
-         khcdK5GjLd4UuwFsmyOrVdhCNH2h6Wnvr0mtmWbl3Gt9R88Vvb8PlwY9U3oJ1SxVPTua
-         BtPPn8Q7/t+xiasgCXlLVnSDzgQz5lrfMJGjYPszGDp0eVkj3Am0Ip9r5srZ7/PO+VGJ
-         mu6xZsT0UlAQW4r7SuRsNnCEwrZ6AKoPBYwzBsc2SCNk/++uSUzf19EVdz2x+eTfPi5c
-         RJHhIRIKslEbyCiJS/I8QDI4YRQmHy6VjQWru77tNEHq98MigM2rCso4Uj21+3rq49+n
-         A7Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=NiDOyGK2bOsrwUw3iahcb+Ehu3HtnFpXGarV1c+5LM8=;
-        b=DaBylLJxglG1icNAw8SRGDcN7k/HBR49WtRIpT3WyKsF3A7w64Qouf642PigaQHcyV
-         R/fwjPewL8DmPNbMcv4yldsm2+fFE2QhVZ6LS2jpp/vTxP5+WPrgwLFZpPkECm0Roa8I
-         Y6pA+Z+LaFArwPPIIrbRnEZ9QuBllsE7EqjebXZ+rTOf0CzWWIZDT10U6Llp9QD8w0Ov
-         1cr3t0RNLG2/Qk2RbDH/dQBJA/jggbOzeLdSozvxqxJcnwps+GExRhw7vrcJNvm3Nu5S
-         4PJl/nsx3PUBzHuDT2nKFR2ws+HE3KlDCs44YRyvM4dJ10zTUpJK8FK+ah71ZBDWoZJr
-         Nw+Q==
-X-Gm-Message-State: AOAM533qqcsmJ49G5rKl/YIOpAErlcnULjf1XZKQHwvRlmOnArKB0kRY
-        sOQPs697rR/DCIOtYKPSlNO2+ESBUUXncxkj
-X-Google-Smtp-Source: ABdhPJyX7rZZcVY49O3f8EhLNpc21KMU6uOJ/7/y1etku1GyJRlAIo6rilAKq9+Pcp7XWLDZS2ChKg==
-X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr3009334ejc.526.1610702785385;
-        Fri, 15 Jan 2021 01:26:25 -0800 (PST)
-Received: from localhost.localdomain (hst-221-63.medicom.bg. [84.238.221.63])
-        by smtp.gmail.com with ESMTPSA id u24sm3004140eje.71.2021.01.15.01.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 01:26:24 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 2/4] venus: vdec: Add support for display delay and delay enable controls
-Date:   Fri, 15 Jan 2021 11:26:05 +0200
-Message-Id: <20210115092607.29849-3-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210115092607.29849-1-stanimir.varbanov@linaro.org>
-References: <20210115092607.29849-1-stanimir.varbanov@linaro.org>
+        id S1730909AbhAOJ22 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 04:28:28 -0500
+Received: from mga03.intel.com ([134.134.136.65]:41112 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729172AbhAOJ21 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Jan 2021 04:28:27 -0500
+IronPort-SDR: vkHvCL/UdoOEiTe08AgJYfTICXi69wN3dpBYmuUbijXKBqRPUEof5UTHHSKYHbVHVDixPZI17P
+ r+uov+N8ljyA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="178611070"
+X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
+   d="scan'208";a="178611070"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 01:26:41 -0800
+IronPort-SDR: 88dXyl/0gw5XIMHuouF1nDiZ/c618bWw9ZCwXlY6MlY7JDivP8c1c4jDWSSxOYObPcYMQzG2op
+ NNsUdgfYw9Uw==
+X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
+   d="scan'208";a="364525233"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 01:26:38 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id A9C30206A9; Fri, 15 Jan 2021 11:26:36 +0200 (EET)
+Date:   Fri, 15 Jan 2021 11:26:36 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        roman.kovalivskyi@globallogic.com,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        naush@raspberrypi.com, Eugeniu Rosca <erosca@de.adit-jv.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 01/30] dt-bindings: media: i2c: Rename ov5647.yaml
+Message-ID: <20210115092636.GP11878@paasikivi.fi.intel.com>
+References: <20201119161956.756455-1-jacopo@jmondi.org>
+ <20201119161956.756455-2-jacopo@jmondi.org>
+ <20201125091526.GI3940@paasikivi.fi.intel.com>
+ <CAL_JsqLfdGumeicqqhkfn5K40GaXX93NuNZTOpgcCLycHmVQbg@mail.gmail.com>
+ <20201222095025.GS26370@paasikivi.fi.intel.com>
+ <CAL_JsqL6e3Ko=gwPZj6SeFHofiebeR3-HzsEHcNiXrabruJtLA@mail.gmail.com>
+ <20210115090326.qufukw5cd73ansby@uno.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210115090326.qufukw5cd73ansby@uno.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for display delay and display delay enable std controls.
-With this we implement decoder decode output order (decode vs display).
-Once firmware implement few new features the controls will be used
-for other use-cases.
+Hi Jacopo,
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/platform/qcom/venus/core.h       |  2 ++
- drivers/media/platform/qcom/venus/vdec.c       | 10 +++++++++-
- drivers/media/platform/qcom/venus/vdec_ctrls.c | 16 +++++++++++++++-
- 3 files changed, 26 insertions(+), 2 deletions(-)
+On Fri, Jan 15, 2021 at 10:03:26AM +0100, Jacopo Mondi wrote:
+> Ups,
+> 
+>    I'll fix. A question for Mauro though
+> 
+> On Thu, Jan 14, 2021 at 02:20:34PM -0600, Rob Herring wrote:
+> > On Tue, Dec 22, 2020 at 3:50 AM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Hi Rob,
+> > >
+> > > On Mon, Dec 21, 2020 at 01:23:29PM -0700, Rob Herring wrote:
+> > > > On Wed, Nov 25, 2020 at 2:15 AM Sakari Ailus
+> > > > <sakari.ailus@linux.intel.com> wrote:
+> > > > >
+> > > > > Cc Rob + DT list.
+> > > >
+> > > > You have to resend if you really want me to see things. In this case,
+> > > > I don't think you need to wait on me for a rename.
+> > >
+> > > I merged the patch earlier based on the IRC discussion.
+> >
+> > Seems this landed in -next:
+> >
+> > ./Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml: $id:
+> > relative path/filename doesn't match actual path or filename
+> > expected: http://devicetree.org/schemas/media/i2c/ovti,ov5647.yaml#
+> >
+> 
+> The fix is worth a Fixes: tag, should I refer to the current commit
+> sha1 in linux-media/master or is there any risk for a rebase before
+> the tree is merged in the v5.12 merge window ?
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index b984d508ed71..1028b492216c 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -172,6 +172,8 @@ struct vdec_controls {
- 	u32 post_loop_deb_mode;
- 	u32 profile;
- 	u32 level;
-+	u32 display_delay;
-+	u32 display_delay_enable;
- };
- 
- struct venc_controls {
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index e4dc97f00fc3..c20496a14a55 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -620,7 +620,7 @@ static int vdec_set_properties(struct venus_inst *inst)
- {
- 	struct vdec_controls *ctr = &inst->controls.dec;
- 	struct hfi_enable en = { .enable = 1 };
--	u32 ptype;
-+	u32 ptype, decode_order;
- 	int ret;
- 
- 	if (ctr->post_loop_deb_mode) {
-@@ -630,6 +630,14 @@ static int vdec_set_properties(struct venus_inst *inst)
- 			return ret;
- 	}
- 
-+	if (ctr->display_delay_enable && ctr->display_delay == 0) {
-+		ptype = HFI_PROPERTY_PARAM_VDEC_OUTPUT_ORDER;
-+		decode_order = HFI_OUTPUT_ORDER_DECODE;
-+		ret = hfi_session_set_property(inst, ptype, &decode_order);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
-index 974110b75b93..07680aae0a36 100644
---- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
-@@ -30,6 +30,12 @@ static int vdec_op_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
- 		ctr->level = ctrl->val;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY:
-+		ctr->display_delay = ctrl->val;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE:
-+		ctr->display_delay_enable = ctrl->val;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -89,7 +95,7 @@ int vdec_ctrl_init(struct venus_inst *inst)
- 	struct v4l2_ctrl *ctrl;
- 	int ret;
- 
--	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 9);
-+	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 11);
- 	if (ret)
- 		return ret;
- 
-@@ -158,6 +164,14 @@ int vdec_ctrl_init(struct venus_inst *inst)
- 	if (ctrl)
- 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
- 
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
-+			  V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY,
-+			  0, 16383, 1, 0);
-+
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
-+			  V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE,
-+			  0, 1, 1, 0);
-+
- 	ret = inst->ctrl_handler.error;
- 	if (ret) {
- 		v4l2_ctrl_handler_free(&inst->ctrl_handler);
+I'd say that happens only in exceptional circumstances. I think you can do
+that.
+
 -- 
-2.17.1
+Regards,
 
+Sakari Ailus
