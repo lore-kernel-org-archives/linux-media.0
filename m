@@ -5,38 +5,37 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D03BBC4332D
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 346EAC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:35:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2DB6239EE
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:26:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 060C9206E9
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 21:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbhAOV0D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 16:26:03 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:45662 "EHLO
+        id S1726147AbhAOVfp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 16:35:45 -0500
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:21306 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbhAOV0C (ORCPT
+        with ESMTP id S1725878AbhAOVfp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 16:26:02 -0500
+        Fri, 15 Jan 2021 16:35:45 -0500
 Received: from localhost.localdomain ([92.131.99.25])
         by mwinf5d04 with ME
-        id H9QF2400C0Ys01Y039QHn8; Fri, 15 Jan 2021 22:24:18 +0100
+        id H9a1240040Ys01Y039a1aa; Fri, 15 Jan 2021 22:34:01 +0100
 X-ME-Helo: localhost.localdomain
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 15 Jan 2021 22:24:18 +0100
+X-ME-Date: Fri, 15 Jan 2021 22:34:01 +0100
 X-ME-IP: 92.131.99.25
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     mchehab@kernel.org, dwlsalmeida@gmail.com,
-        hverkuil-cisco@xs4all.nl, vaibhavgupta40@gmail.com,
-        liushixin2@huawei.com
+To:     mchehab@kernel.org, romain.perier@gmail.com, allen.lkml@gmail.com,
+        hverkuil-cisco@xs4all.nl
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] media: saa7164: switch from 'pci_' to 'dma_' API
-Date:   Fri, 15 Jan 2021 22:24:15 +0100
-Message-Id: <20210115212415.497079-1-christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] media: smipcie: switch from 'pci_' to 'dma_' API
+Date:   Fri, 15 Jan 2021 22:34:03 +0100
+Message-Id: <20210115213403.498637-1-christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -50,8 +49,14 @@ The patch has been generated with the coccinelle script below and has been
 hand modified to replace GFP_ with a correct flag.
 It has been compile tested.
 
-When memory is allocated in 'saa7164_buffer_alloc()' GFP_KERNEL can be used
-because this function is already using this flag just a few lines above.
+When memory is allocated in 'smi_port_init()' GFP_KERNEL can be used
+because this function is called only from the probe function and no lock
+is taken in between.
+
+The call chain is:
+  smi_probe()
+    --> smi_port_attach()
+      --> smi_port_init()
 
 @@
 @@
@@ -174,67 +179,70 @@ Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 If needed, see post from Christoph Hellwig on the kernel-janitors ML:
    https://marc.info/?l=kernel-janitors&m=158745678307186&w=4
 ---
- drivers/media/pci/saa7164/saa7164-buffer.c | 16 +++++++++-------
- drivers/media/pci/saa7164/saa7164-core.c   |  2 +-
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ drivers/media/pci/smipcie/smipcie-main.c | 26 ++++++++++++++----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-buffer.c b/drivers/media/pci/saa7164/saa7164-buffer.c
-index 245d9db280aa..89c5b79a5b24 100644
---- a/drivers/media/pci/saa7164/saa7164-buffer.c
-+++ b/drivers/media/pci/saa7164/saa7164-buffer.c
-@@ -103,13 +103,13 @@ struct saa7164_buffer *saa7164_buffer_alloc(struct saa7164_port *port,
- 	buf->pt_size = (SAA7164_PT_ENTRIES * sizeof(u64)) + 0x1000;
+diff --git a/drivers/media/pci/smipcie/smipcie-main.c b/drivers/media/pci/smipcie/smipcie-main.c
+index e7604b7ecc8d..0c300d019d9c 100644
+--- a/drivers/media/pci/smipcie/smipcie-main.c
++++ b/drivers/media/pci/smipcie/smipcie-main.c
+@@ -351,13 +351,15 @@ static void smi_dma_xfer(struct tasklet_struct *t)
+ static void smi_port_dma_free(struct smi_port *port)
+ {
+ 	if (port->cpu_addr[0]) {
+-		pci_free_consistent(port->dev->pci_dev, SMI_TS_DMA_BUF_SIZE,
+-				    port->cpu_addr[0], port->dma_addr[0]);
++		dma_free_coherent(&port->dev->pci_dev->dev,
++				  SMI_TS_DMA_BUF_SIZE, port->cpu_addr[0],
++				  port->dma_addr[0]);
+ 		port->cpu_addr[0] = NULL;
+ 	}
+ 	if (port->cpu_addr[1]) {
+-		pci_free_consistent(port->dev->pci_dev, SMI_TS_DMA_BUF_SIZE,
+-				    port->cpu_addr[1], port->dma_addr[1]);
++		dma_free_coherent(&port->dev->pci_dev->dev,
++				  SMI_TS_DMA_BUF_SIZE, port->cpu_addr[1],
++				  port->dma_addr[1]);
+ 		port->cpu_addr[1] = NULL;
+ 	}
+ }
+@@ -398,9 +400,10 @@ static int smi_port_init(struct smi_port *port, int dmaChanUsed)
+ 	}
  
- 	/* Allocate contiguous memory */
--	buf->cpu = pci_alloc_consistent(port->dev->pci, buf->pci_size,
--		&buf->dma);
-+	buf->cpu = dma_alloc_coherent(&port->dev->pci->dev, buf->pci_size,
-+				      &buf->dma, GFP_KERNEL);
- 	if (!buf->cpu)
- 		goto fail1;
+ 	if (port->_dmaInterruptCH0) {
+-		port->cpu_addr[0] = pci_alloc_consistent(port->dev->pci_dev,
+-					SMI_TS_DMA_BUF_SIZE,
+-					&port->dma_addr[0]);
++		port->cpu_addr[0] = dma_alloc_coherent(&port->dev->pci_dev->dev,
++						       SMI_TS_DMA_BUF_SIZE,
++						       &port->dma_addr[0],
++						       GFP_KERNEL);
+ 		if (!port->cpu_addr[0]) {
+ 			dev_err(&port->dev->pci_dev->dev,
+ 				"Port[%d] DMA CH0 memory allocation failed!\n",
+@@ -410,9 +413,10 @@ static int smi_port_init(struct smi_port *port, int dmaChanUsed)
+ 	}
  
--	buf->pt_cpu = pci_alloc_consistent(port->dev->pci, buf->pt_size,
--		&buf->pt_dma);
-+	buf->pt_cpu = dma_alloc_coherent(&port->dev->pci->dev, buf->pt_size,
-+					 &buf->pt_dma, GFP_KERNEL);
- 	if (!buf->pt_cpu)
- 		goto fail2;
+ 	if (port->_dmaInterruptCH1) {
+-		port->cpu_addr[1] = pci_alloc_consistent(port->dev->pci_dev,
+-					SMI_TS_DMA_BUF_SIZE,
+-					&port->dma_addr[1]);
++		port->cpu_addr[1] = dma_alloc_coherent(&port->dev->pci_dev->dev,
++						       SMI_TS_DMA_BUF_SIZE,
++						       &port->dma_addr[1],
++						       GFP_KERNEL);
+ 		if (!port->cpu_addr[1]) {
+ 			dev_err(&port->dev->pci_dev->dev,
+ 				"Port[%d] DMA CH1 memory allocation failed!\n",
+@@ -963,7 +967,7 @@ static int smi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	}
  
-@@ -137,7 +137,8 @@ struct saa7164_buffer *saa7164_buffer_alloc(struct saa7164_port *port,
- 	goto ret;
+ 	/* should we set to 32bit DMA? */
+-	ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
++	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+ 	if (ret < 0)
+ 		goto err_pci_iounmap;
  
- fail2:
--	pci_free_consistent(port->dev->pci, buf->pci_size, buf->cpu, buf->dma);
-+	dma_free_coherent(&port->dev->pci->dev, buf->pci_size, buf->cpu,
-+			  buf->dma);
- fail1:
- 	kfree(buf);
- 
-@@ -160,8 +161,9 @@ int saa7164_buffer_dealloc(struct saa7164_buffer *buf)
- 	if (buf->flags != SAA7164_BUFFER_FREE)
- 		log_warn(" freeing a non-free buffer\n");
- 
--	pci_free_consistent(dev->pci, buf->pci_size, buf->cpu, buf->dma);
--	pci_free_consistent(dev->pci, buf->pt_size, buf->pt_cpu, buf->pt_dma);
-+	dma_free_coherent(&dev->pci->dev, buf->pci_size, buf->cpu, buf->dma);
-+	dma_free_coherent(&dev->pci->dev, buf->pt_size, buf->pt_cpu,
-+			  buf->pt_dma);
- 
- 	kfree(buf);
- 
-diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-index f3a4e575a782..7973ae42873a 100644
---- a/drivers/media/pci/saa7164/saa7164-core.c
-+++ b/drivers/media/pci/saa7164/saa7164-core.c
-@@ -1273,7 +1273,7 @@ static int saa7164_initdev(struct pci_dev *pci_dev,
- 
- 	pci_set_master(pci_dev);
- 	/* TODO */
--	err = pci_set_dma_mask(pci_dev, 0xffffffff);
-+	err = dma_set_mask(&pci_dev->dev, 0xffffffff);
- 	if (err) {
- 		printk("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
- 		goto fail_irq;
 -- 
 2.27.0
 
