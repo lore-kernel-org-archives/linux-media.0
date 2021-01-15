@@ -2,162 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D865C433DB
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 12:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D775C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 12:19:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4341223128
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 12:14:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B0BF2256F
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 12:19:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbhAOMNv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 07:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbhAOMNv (ORCPT
+        id S1727112AbhAOMT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 07:19:27 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:32894 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbhAOMT1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 07:13:51 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B36EC061757
-        for <linux-media@vger.kernel.org>; Fri, 15 Jan 2021 04:13:08 -0800 (PST)
+        Fri, 15 Jan 2021 07:19:27 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id B07291F45EB9
-Message-ID: <276aeddcb765139e03a77a833dce682af9f0bf3d.camel@collabora.com>
-Subject: Re: [PATCH 03/13] media: renesas-ceu: Use
- v4l2_async_notifier_add_{i2c,fwnode_remote}_subdev helpers
+        with ESMTPSA id 4D0201F45ECD
+Message-ID: <17998f3e2af82598f0b47015cb959bc3518682b5.camel@collabora.com>
+Subject: Re: [PATCH v3 1/2] media: rockchip: rkisp1: carry ip version
+ information
 From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com, Sakari Ailus <sakari.ailus@linux.intel.com>
-Date:   Fri, 15 Jan 2021 09:12:50 -0300
-In-Reply-To: <X/+nKwhIhDY7Z9HW@pendragon.ideasonboard.com>
-References: <20210112132339.5621-1-ezequiel@collabora.com>
-         <20210112132339.5621-4-ezequiel@collabora.com>
-         <X/+nKwhIhDY7Z9HW@pendragon.ideasonboard.com>
+To:     Heiko Stuebner <heiko@sntech.de>, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, linux-media@vger.kernel.org,
+        mchehab@kernel.org, Laurent.pinchart@ideasonboard.com,
+        hverkuil@xs4all.nl
+Cc:     linux-rockchip@lists.infradead.org,
+        christoph.muellner@theobroma-systems.com, tfiga@chromium.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Date:   Fri, 15 Jan 2021 09:18:36 -0300
+In-Reply-To: <20210115112351.208011-2-heiko@sntech.de>
+References: <20210115112351.208011-1-heiko@sntech.de>
+         <20210115112351.208011-2-heiko@sntech.de>
 Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi Heiko,
 
-On Thu, 2021-01-14 at 04:06 +0200, Laurent Pinchart wrote:
-> Hi Ezequiel,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Jan 12, 2021 at 10:23:29AM -0300, Ezequiel Garcia wrote:
-> > The use of v4l2_async_notifier_add_subdev is discouraged.
-> 
-> It's not yet, that only happens at the end of the series :-)
-> 
-> s/is discouraged/will be discouraged/
-> 
-> > Drivers are instead encouraged to use a helper such as
-> > v4l2_async_notifier_add_i2c_subdev.
-> > 
-> > This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-> > should get a kmalloc'ed struct v4l2_async_subdev,
-> > removing some boilerplate code while at it.
-> > 
-> > Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
-> > or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
-> > the needed setup, instead of open-coding it.
-> > 
-> > Using v4l2-async to allocate the driver-specific structs,
-> > requires to change struct ceu_subdev so the embedded
-> > struct v4l2_async_subdev is now the first element.
-> > 
-> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > ---
-> >  drivers/media/platform/renesas-ceu.c | 89 ++++++++++------------------
-> >  1 file changed, 31 insertions(+), 58 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-> > index 4a633ad0e8fa..18485812a21e 100644
-> > --- a/drivers/media/platform/renesas-ceu.c
-> > +++ b/drivers/media/platform/renesas-ceu.c
-> > @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
-> >   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
-> >   */
-> >  struct ceu_subdev {
-> > -       struct v4l2_subdev *v4l2_sd;
-> >         struct v4l2_async_subdev asd;
-> > +       struct v4l2_subdev *v4l2_sd;
-> >  
-> >         /* per-subdevice mbus configuration options */
-> >         unsigned int mbus_flags;
-> > @@ -174,7 +174,7 @@ struct ceu_device {
-> >         struct v4l2_device      v4l2_dev;
-> >  
-> >         /* subdevices descriptors */
-> > -       struct ceu_subdev       *subdevs;
-> > +       struct ceu_subdev       **subdevs;
-> >         /* the subdevice currently in use */
-> >         struct ceu_subdev       *sd;
-> >         unsigned int            sd_index;
-> > @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
-> >         if (inp->index >= ceudev->num_sd)
-> >                 return -EINVAL;
-> >  
-> > -       ceusd = &ceudev->subdevs[inp->index];
-> > +       ceusd = ceudev->subdevs[inp->index];
-> >  
-> >         inp->type = V4L2_INPUT_TYPE_CAMERA;
-> >         inp->std = 0;
-> > @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
-> >                 return 0;
-> >  
-> >         ceu_sd_old = ceudev->sd;
-> > -       ceudev->sd = &ceudev->subdevs[i];
-> > +       ceudev->sd = ceudev->subdevs[i];
-> >  
-> >         /*
-> >          * Make sure we can generate output image formats and apply
-> > @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
-> >          * ceu formats.
-> >          */
-> >         if (!ceudev->sd) {
-> > -               ceudev->sd = &ceudev->subdevs[0];
-> > +               ceudev->sd = ceudev->subdevs[0];
-> >                 ceudev->sd_index = 0;
-> >         }
-> >  
-> > @@ -1465,28 +1465,6 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
-> >         .complete       = ceu_notify_complete,
-> >  };
-> >  
-> > -/*
-> > - * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
-> > - *                           ceu device. Both DT and platform data parsing use
-> > - *                           this routine.
-> > - *
-> > - * Returns 0 for success, -ENOMEM for failure.
-> > - */
-> > -static int ceu_init_async_subdevs(struct ceu_device *ceudev, unsigned int n_sd)
-> > -{
-> > -       /* Reserve memory for 'n_sd' ceu_subdev descriptors. */
-> > -       ceudev->subdevs = devm_kcalloc(ceudev->dev, n_sd,
-> > -                                      sizeof(*ceudev->subdevs), GFP_KERNEL);
-> 
-> I may be missing something, but it looks like the subdevs array isn't
-> allocated anymore. It turned to an array of pointers, but it still need
-> allocation.
-> 
+Thanks a lot for pushing this.
 
-After some thought, I'd say it would be better to leave
-ceu_init_async_subdevs() untouched, trying to be as
-uninvasive as possible.
+On Fri, 2021-01-15 at 12:23 +0100, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+> 
+> The IP block evolved from its rk3288/rk3399 base and the vendor
+> designates them with a numerical version. rk3399 for example
+> is designated V10 probably meaning V1.0.
+> 
+> There doesn't seem to be an actual version register we could read that
+> information from, so allow the match_data to carry that information
+> for future differentiation.
+> 
+> Also carry that information in the hw_revision field of the media-
+> controller API, so that userspace also has access to that.
+> 
+> The added versions are:
+> - V10: at least rk3288 + rk3399
+> - V11: seemingly unused as of now, but probably appeared in some soc
+> - V12: at least rk3326 + px30
+> - V13: at least rk1808
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Thanks for the catch.
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 
+Regards,
 Ezequiel
 
