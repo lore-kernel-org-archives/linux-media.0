@@ -2,306 +2,200 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16742C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 16:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B8C4C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 16:39:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C44C3238EE
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 16:21:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45F162313E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 16:39:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbhAOQVk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 11:21:40 -0500
-Received: from mail-dm6nam11on2043.outbound.protection.outlook.com ([40.107.223.43]:29920
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726137AbhAOQVj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 11:21:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Prfu3zA6+BUplEZEsU26v7caoL3mrxJJQ6VBKorjuyIudf++dHWJ8xzoNeYg8cSpfCvgn3DnICI0/GDH6IwSRvOLfD31RtPdTGemHd+1OrhlOIB7zFcFjVxZqxrNW+WeWYuY4XVpj+byUYFF0gflcCEYd4BwcbjRGXfNV5dvUfyPTPk5XSyMYe1IUdh1WSUyuDDdygnvf4qf8Gj64jWXGir1dkUFdJQ17a1aFx0Ui0tlZDNdNQepxEP4RgK9HE4vvR2V8B+obIlGSz283fFyT0Pxv8e49fZVVtBkgbqFSr8BkVJDq6SGbzRFcQij4kQJngWI8suOog1KeL+zKFenQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L6ASaopxxJHj0qGsFR3vRweFhAPvF4JWAO8tw4IdLjk=;
- b=a1KYcmJqIgN8908Z0cFl8RfyIxtyOrTYWvEyBYm+KWE4++AMhWgbnuV1c+cNNMnQBV1pH/YVbjEwngA56lFVIgWTFGKKm9YcVYvl+wJGGd3dCF5izFJyy4P+lAPROAFxriCkZ1j2W2KV+zSffvF1Zsv2TQKj/Xg86BNJOo/to5DW6MgLKyUVOraDCEX93XTGm8ttW7GFJ9GkTdHs1tNuoHJjqyBBidWYwHjLtJavXlnoZZew9EraOJqFrrjXeT98olrRaeMgbacUMDR3KMVcr9U0ozKrsjs/xpoFRlrsy3oUU1RiM9WSPlVuprS7T7rAbqZY20EooKkyH8vuHSiZ2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L6ASaopxxJHj0qGsFR3vRweFhAPvF4JWAO8tw4IdLjk=;
- b=xyZo9EAQWlr4Rb2T2HwDKd2l9FN7P8Xfv4XN8vJnON6WPtSy5DnQzONtF710bNYhn5k1So+dI/JWsJPimeCi0t3vMoVORvQJrq0kk2FsD8tFwPQmT1mVQtJU+FZ2Sr1Ic9hEw5mllLe8qFntvnJdlE2XMMx5DbQ3Iq4zxnq7Ouc=
-Authentication-Results: lists.linaro.org; dkim=none (message not signed)
- header.d=none;lists.linaro.org; dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
- by MN2PR12MB4253.namprd12.prod.outlook.com (2603:10b6:208:1de::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10; Fri, 15 Jan
- 2021 16:20:46 +0000
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::44f:9f01:ece7:f0e5]) by MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::44f:9f01:ece7:f0e5%3]) with mapi id 15.20.3763.011; Fri, 15 Jan 2021
- 16:20:45 +0000
-Subject: Re: [PATCH] dma-buf: Add debug option
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
-Cc:     Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        David Stevens <stevensd@chromium.org>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20210115130219.3915789-1-daniel.vetter@ffwll.ch>
- <20210115155226.3943181-1-daniel.vetter@ffwll.ch>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <a91ce968-0633-cfc6-1d7a-f1ac20c64e07@amd.com>
-Date:   Fri, 15 Jan 2021 17:20:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20210115155226.3943181-1-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
-X-ClientProxiedBy: AM0PR03CA0089.eurprd03.prod.outlook.com
- (2603:10a6:208:69::30) To MN2PR12MB3775.namprd12.prod.outlook.com
- (2603:10b6:208:159::19)
+        id S1727175AbhAOQjR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 11:39:17 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:58676 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726136AbhAOQjQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Jan 2021 11:39:16 -0500
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.sntech)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1l0S7O-0006YA-8C; Fri, 15 Jan 2021 17:38:34 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        Laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
+        christoph.muellner@theobroma-systems.com, heiko@sntech.de,
+        tfiga@chromium.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Subject: [PATCH v4 2/3] media: rockchip: rkisp1: carry ip version information
+Date:   Fri, 15 Jan 2021 17:38:28 +0100
+Message-Id: <20210115163829.217131-3-heiko@sntech.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210115163829.217131-1-heiko@sntech.de>
+References: <20210115163829.217131-1-heiko@sntech.de>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR03CA0089.eurprd03.prod.outlook.com (2603:10a6:208:69::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10 via Frontend Transport; Fri, 15 Jan 2021 16:20:44 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 637871c4-f534-41e5-8c8f-08d8b971833f
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4253:
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4253476913896B8D82FB36E883A70@MN2PR12MB4253.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 19WQ06YqJxXLScyLKaUy9E3RE/xP3Z+6Nku0FaGBv8OYR4VJuN5dqkgFW8o10xNy0pkLIBTvRsUD/XkL+5Nugal+nraCgXTYJUroQJp6flrP6wsM7Z54A85Q4/3VGAeKCqVwU7/2LdTKhVTGCJ4MJ43ECzY1RTebhKObcd7qQjyr4pf9wxMzh8igvTTFu4GDTYkOaw37xiff5220m7fLgcOiGI82kIKrddARXRHIXtFVEW6QVnCfj5e2R/lVoWE3Khu4j/l7JiUH2WJCpzpKafTTF33QwagDms/B5YOWvkuJXL9Vm+os++irHCA9PThZdn0pSg3CDBq24g7FEuDzbxXvQj0rHEjDy3vhu6MKlnAD/xJDx20TwmKCpyojPyL+pva3Cc9RzWp3ymRGmmKSp2+R+HM1cg6Ksz0w2c3PqrprPpmof71/mntLzH1vA696JQYrdnEJ0UhvPriuHC47Y2GUmrMYktgjbYUpHsww44c=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(31696002)(83380400001)(66574015)(110136005)(66946007)(66556008)(66476007)(52116002)(2906002)(31686004)(316002)(54906003)(478600001)(4326008)(6666004)(86362001)(186003)(2616005)(36756003)(5660300002)(8676002)(6486002)(16526019)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?OVQwU1hFNFNJejlsaEZFRm5SVjZYWEY5bkRDYWtyZ0JnNGJ2L1N5NHJ5K1N2?=
- =?utf-8?B?T3dLTWdMVjk0TkE5SjQ5L3FpUnJRbFdxbHdENkE1VHZVU0VCNDRRWlNsRHdZ?=
- =?utf-8?B?ZnpJdStiUXFib2dnTDVjMG9UaTNSWTlad25zSDdTRGhsTGtmaitLbmxkMGRs?=
- =?utf-8?B?VFNjdVhna2xZc1RyOXl3U0xsZVB3OXEzR3U1MHd2bVc2S014SU1iamJOVnZQ?=
- =?utf-8?B?cExHejFiUm9hZDE3cVdLSVB0UU1Xbm1STVhDRjF5RElhY1Mzc2lDRlFtQW1t?=
- =?utf-8?B?V3k4U2U0S0ZkSk5vdW1xcGkzWW9uMCs5OCtjWDgyQnNJclRITTJubmc5VmdB?=
- =?utf-8?B?RUR2cDRqdjV5Vk14WklMS1NwTDlDRXRvSHVwMkFkK0ZyOHlCYUFYS1hzUzBB?=
- =?utf-8?B?MHZmM0NkU2o3bDhiYWdFRDNRRkpIQmRpNzV6SWxHTHljdk9YZlZMWkdRVDVO?=
- =?utf-8?B?YkYxakxPdHBXampQU0p0TUhXU0J5VXFkZFh0R2xkU1JyUStSQjY0RDNGakhZ?=
- =?utf-8?B?L1pFMVk1V0FvVmE3aE9Wd0lTSC80NjVCK3lzQWtOcU84L2xONUNpWHl3UHk1?=
- =?utf-8?B?eFI0dzJQZzM2cGJTMDN3L3hTWVhCUEhBSUVhOEhkQVZPdXA2QjIyU1k0Rmtl?=
- =?utf-8?B?SzZLMjA2ZWZvd3BmeE5jTzAvaVdrSENzMmx1U3BjOGlFczBjdHpLMm82OWNr?=
- =?utf-8?B?cml0cGZLTG4vSTFpbFZCMU5nY1k2bVdzYlUrRytGenFJQlh5N2M0S1V6OVVr?=
- =?utf-8?B?R1ArbzVlS0xPT2UvMk1DMUgvam02cUJrZWllWCtIdUFmRTVIUHdGbEpUOEtv?=
- =?utf-8?B?RGRqTHcwY2wvY1c5ejJoUEZNOVFjNStvZG8relQzNUtWZExQVDhtQkhiNkhy?=
- =?utf-8?B?eFlEZXRuUm53YmQ5d21Zblp3VXAwRVNzUkl2NlVQWFRIVGd6aWZ4UEszSTNE?=
- =?utf-8?B?MkkxcmlPS0VmTWxhaUQzYW9aU1p6ZzBLaFJFZkJYTmxzTUVYZ1dzNzFnU2lx?=
- =?utf-8?B?c3haN2o5THc1MkVNcmZWRDIwRlJ4Zng0U2Y2VVd3UEVvaWxwbklCUDhJWXc3?=
- =?utf-8?B?V2RLeEFCZDlsVVVQZGhUbTUwenk2cm9tRFp2cEFCTVcyb1FCUlhPUDZZRDEx?=
- =?utf-8?B?eXlRR21YS3BKekVpVGMwUS9hNVlSc08rQXpyQ2FDM2JLUjRyS1RMbWtYclRw?=
- =?utf-8?B?VDk0TXlxSnlpOG9JMjVreDE0dmFBUFRoUTU0MGd5V1dURnl1VDBRWjNWRjZm?=
- =?utf-8?B?NkRKREhvUHcyRW14TzMvRGlmZXBlUUpIeG5uVVVVWG1ZdTZOQXNLRW9pcWNo?=
- =?utf-8?B?Y3F1OWpIM0JrY2JTdXE2WlhRWlZCMS92bXVicFZzN05YR2JvcE5lTmNiMTVo?=
- =?utf-8?B?QWI0SVU1RERaN0lMcy9DTHNCeUFhS3NkNDJHWXpTemdpYVNUM0tDaWxoeWM2?=
- =?utf-8?Q?CigBb1tr?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 637871c4-f534-41e5-8c8f-08d8b971833f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2021 16:20:45.9127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q+dsEGsW37x4biaAQam/wA8n/juhFCLlwNwukBk18x0D3nm4bZayL+scmYdYWCYD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4253
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 15.01.21 um 16:52 schrieb Daniel Vetter:
-> We have too many people abusing the struct page they can get at but
-> really shouldn't in importers. Aside from that the backing page might
-> simply not exist (for dynamic p2p mappings) looking at it and using it
-> e.g. for mmap can also wreak the page handling of the exporter
-> completely. Importers really must go through the proper interface like
-> dma_buf_mmap for everything.
->
-> I'm semi-tempted to enforce this for dynamic importers since those
-> really have no excuse at all to break the rules.
->
-> Unfortuantely we can't store the right pointers somewhere safe to make
-> sure we oops on something recognizable, so best is to just wrangle
-> them a bit by flipping all the bits. At least on x86 kernel addresses
-> have all their high bits sets and the struct page array is fairly low
-> in the kernel mapping, so flipping all the bits gives us a very high
-> pointer in userspace and hence excellent chances for an invalid
-> dereference.
->
-> v2: Add a note to the @map_dma_buf hook that exporters shouldn't do
-> fancy caching tricks, which would blow up with this address scrambling
-> trick here (Chris)
->
-> Enable by default when CONFIG_DMA_API_DEBUG is enabled.
->
-> v3: Only one copy of the mangle/unmangle code (Christian)
->
-> v4: #ifdef, not #if (0day)
->
-> Reviewed-by: Chris Wilson <chris@chris-wilson.co.uk> (v2)
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: David Stevens <stevensd@chromium.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> ---
->   drivers/dma-buf/Kconfig   |  8 +++++++
->   drivers/dma-buf/dma-buf.c | 48 +++++++++++++++++++++++++++++++++++----
->   include/linux/dma-buf.h   |  6 +++++
->   3 files changed, 58 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/dma-buf/Kconfig b/drivers/dma-buf/Kconfig
-> index 4f8224a6ac95..4e16c71c24b7 100644
-> --- a/drivers/dma-buf/Kconfig
-> +++ b/drivers/dma-buf/Kconfig
-> @@ -50,6 +50,14 @@ config DMABUF_MOVE_NOTIFY
->   	  This is marked experimental because we don't yet have a consistent
->   	  execution context and memory management between drivers.
->   
-> +config DMABUF_DEBUG
-> +	bool "DMA-BUF debug checks"
-> +	default y if DMA_API_DEBUG
-> +	help
-> +	  This option enables additional checks for DMA-BUF importers and
-> +	  exporters. Specifically it validates that importers do not peek at the
-> +	  underlying struct page when they import a buffer.
-> +
->   config DMABUF_SELFTESTS
->   	tristate "Selftests for the dma-buf interfaces"
->   	default n
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 1c9bd51db110..f676bab64f55 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -666,6 +666,36 @@ void dma_buf_put(struct dma_buf *dmabuf)
->   }
->   EXPORT_SYMBOL_GPL(dma_buf_put);
->   
-> +static void mangle_sg_table(struct sg_table *sg_table)
-> +{
-> +#ifdef CONFIG_DMABUF_DEBUG
-> +	int i;
-> +	struct scatterlist *sg;
-> +
-> +	if (!sg_table)
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-At least in the map case the sg_table returned could also be an ERR_PTR().
+The IP block evolved from its rk3288/rk3399 base and the vendor
+designates them with a numerical version. rk3399 for example
+is designated V10 probably meaning V1.0.
 
-Might be even better to drop the __map_dma_buf wrappers and call the 
-mangle after the error handling.
+There doesn't seem to be an actual version register we could read that
+information from, so allow the match_data to carry that information
+for future differentiation.
 
-Christian.
+Also carry that information in the hw_revision field of the media-
+controller API, so that userspace also has access to that.
 
-> +		return;
-> +
-> +	/* To catch abuse of the underlying struct page by importers mix
-> +	 * up the bits, but take care to preserve the low SG_ bits to
-> +	 * not corrupt the sgt. The mixing is undone in __unmap_dma_buf
-> +	 * before passing the sgt back to the exporter. */
-> +	for_each_sgtable_sg(sg_table, sg, i)
-> +		sg->page_link ^= ~0xffUL;
-> +#endif
-> +
-> +}
-> +static struct sg_table * __map_dma_buf(struct dma_buf_attachment *attach,
-> +				       enum dma_data_direction direction)
-> +{
-> +	struct sg_table *sg_table;
-> +
-> +	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
-> +
-> +	mangle_sg_table(sg_table);
-> +
-> +	return sg_table;
-> +}
-> +
->   /**
->    * dma_buf_dynamic_attach - Add the device to dma_buf's attachments list
->    * @dmabuf:		[in]	buffer to attach device to.
-> @@ -737,7 +767,7 @@ dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
->   				goto err_unlock;
->   		}
->   
-> -		sgt = dmabuf->ops->map_dma_buf(attach, DMA_BIDIRECTIONAL);
-> +		sgt = __map_dma_buf(attach, DMA_BIDIRECTIONAL);
->   		if (!sgt)
->   			sgt = ERR_PTR(-ENOMEM);
->   		if (IS_ERR(sgt)) {
-> @@ -784,6 +814,16 @@ struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
->   }
->   EXPORT_SYMBOL_GPL(dma_buf_attach);
->   
-> +static void __unmap_dma_buf(struct dma_buf_attachment *attach,
-> +			    struct sg_table *sg_table,
-> +			    enum dma_data_direction direction)
-> +{
-> +	/* uses XOR, hence this unmangles */
-> +	mangle_sg_table(sg_table);
-> +
-> +	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table, direction);
-> +}
-> +
->   /**
->    * dma_buf_detach - Remove the given attachment from dmabuf's attachments list
->    * @dmabuf:	[in]	buffer to detach from.
-> @@ -802,7 +842,7 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
->   		if (dma_buf_is_dynamic(attach->dmabuf))
->   			dma_resv_lock(attach->dmabuf->resv, NULL);
->   
-> -		dmabuf->ops->unmap_dma_buf(attach, attach->sgt, attach->dir);
-> +		__unmap_dma_buf(attach, attach->sgt, attach->dir);
->   
->   		if (dma_buf_is_dynamic(attach->dmabuf)) {
->   			dma_buf_unpin(attach);
-> @@ -924,7 +964,7 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
->   		}
->   	}
->   
-> -	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
-> +	sg_table = __map_dma_buf(attach, direction);
->   	if (!sg_table)
->   		sg_table = ERR_PTR(-ENOMEM);
->   
-> @@ -987,7 +1027,7 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
->   	if (dma_buf_is_dynamic(attach->dmabuf))
->   		dma_resv_assert_held(attach->dmabuf->resv);
->   
-> -	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table, direction);
-> +	__unmap_dma_buf(attach, sg_table, direction);
->   
->   	if (dma_buf_is_dynamic(attach->dmabuf) &&
->   	    !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY))
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 628681bf6c99..efdc56b9d95f 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -154,6 +154,12 @@ struct dma_buf_ops {
->   	 * On failure, returns a negative error value wrapped into a pointer.
->   	 * May also return -EINTR when a signal was received while being
->   	 * blocked.
-> +	 *
-> +	 * Note that exporters should not try to cache the scatter list, or
-> +	 * return the same one for multiple calls. Caching is done either by the
-> +	 * DMA-BUF code (for non-dynamic importers) or the importer. Ownership
-> +	 * of the scatter list is transferred to the caller, and returned by
-> +	 * @unmap_dma_buf.
->   	 */
->   	struct sg_table * (*map_dma_buf)(struct dma_buf_attachment *,
->   					 enum dma_data_direction);
+The added versions are:
+- V10: at least rk3288 + rk3399
+- V11: seemingly unused as of now, but probably appeared in some soc
+- V12: at least rk3326 + px30
+- V13: at least rk1808
+
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ Documentation/admin-guide/media/rkisp1.rst    | 16 ++++++++++++++
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     | 21 +++++++++++--------
+ include/uapi/linux/rkisp1-config.h            | 16 ++++++++++++++
+ 3 files changed, 44 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/admin-guide/media/rkisp1.rst b/Documentation/admin-guide/media/rkisp1.rst
+index 2267e4fb475e..ccf418713623 100644
+--- a/Documentation/admin-guide/media/rkisp1.rst
++++ b/Documentation/admin-guide/media/rkisp1.rst
+@@ -13,6 +13,22 @@ This file documents the driver for the Rockchip ISP1 that is part of RK3288
+ and RK3399 SoCs. The driver is located under drivers/staging/media/rkisp1
+ and uses the Media-Controller API.
+ 
++Revisions
++=========
++
++There exist multiple smaller revisions to this ISP that got introduced in
++later SoCs. Revisions can be found in the enum :c:type:`rkisp1_cif_isp_version`
++in the UAPI and the revision of the ISP inside the running SoC can be read
++in the field hw_revision of struct media_device_info as returned by
++ioctl MEDIA_IOC_DEVICE_INFO.
++
++Versions in use are:
++
++- RKISP1_V10: used at least in rk3288 and rk3399
++- RKISP1_V11: declared in the original vendor code, but not used
++- RKISP1_V12: used at least in rk3326 and px30
++- RKISP1_V13: used at least in rk1808
++
+ Topology
+ ========
+ .. _rkisp1_topology_graph:
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+index 68da1eed753d..f7e9fd305548 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+@@ -104,6 +104,7 @@
+ struct rkisp1_match_data {
+ 	const char * const *clks;
+ 	unsigned int size;
++	enum rkisp1_cif_isp_version isp_ver;
+ };
+ 
+ /* ----------------------------------------------------------------------------
+@@ -411,15 +412,16 @@ static const char * const rk3399_isp_clks[] = {
+ 	"hclk",
+ };
+ 
+-static const struct rkisp1_match_data rk3399_isp_clk_data = {
++static const struct rkisp1_match_data rk3399_isp_match_data = {
+ 	.clks = rk3399_isp_clks,
+ 	.size = ARRAY_SIZE(rk3399_isp_clks),
++	.isp_ver = RKISP1_V10,
+ };
+ 
+ static const struct of_device_id rkisp1_of_match[] = {
+ 	{
+ 		.compatible = "rockchip,rk3399-cif-isp",
+-		.data = &rk3399_isp_clk_data,
++		.data = &rk3399_isp_match_data,
+ 	},
+ 	{},
+ };
+@@ -457,15 +459,15 @@ static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
+ 
+ static int rkisp1_probe(struct platform_device *pdev)
+ {
+-	const struct rkisp1_match_data *clk_data;
++	const struct rkisp1_match_data *match_data;
+ 	struct device *dev = &pdev->dev;
+ 	struct rkisp1_device *rkisp1;
+ 	struct v4l2_device *v4l2_dev;
+ 	unsigned int i;
+ 	int ret, irq;
+ 
+-	clk_data = of_device_get_match_data(&pdev->dev);
+-	if (!clk_data)
++	match_data = of_device_get_match_data(&pdev->dev);
++	if (!match_data)
+ 		return -ENODEV;
+ 
+ 	rkisp1 = devm_kzalloc(dev, sizeof(*rkisp1), GFP_KERNEL);
+@@ -494,15 +496,16 @@ static int rkisp1_probe(struct platform_device *pdev)
+ 
+ 	rkisp1->irq = irq;
+ 
+-	for (i = 0; i < clk_data->size; i++)
+-		rkisp1->clks[i].id = clk_data->clks[i];
+-	ret = devm_clk_bulk_get(dev, clk_data->size, rkisp1->clks);
++	for (i = 0; i < match_data->size; i++)
++		rkisp1->clks[i].id = match_data->clks[i];
++	ret = devm_clk_bulk_get(dev, match_data->size, rkisp1->clks);
+ 	if (ret)
+ 		return ret;
+-	rkisp1->clk_size = clk_data->size;
++	rkisp1->clk_size = match_data->size;
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
++	rkisp1->media_dev.hw_revision = match_data->isp_ver;
+ 	strscpy(rkisp1->media_dev.model, RKISP1_DRIVER_NAME,
+ 		sizeof(rkisp1->media_dev.model));
+ 	rkisp1->media_dev.dev = &pdev->dev;
+diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+index ba443771cc0b..9fecb6bc457d 100644
+--- a/include/uapi/linux/rkisp1-config.h
++++ b/include/uapi/linux/rkisp1-config.h
+@@ -124,6 +124,22 @@
+ #define RKISP1_CIF_ISP_STAT_AFM           (1U << 2)
+ #define RKISP1_CIF_ISP_STAT_HIST          (1U << 3)
+ 
++
++/**
++ * enum rkisp1_cif_isp_version - ISP variants
++ *
++ * @RKISP1_V10: used at least in rk3288 and rk3399
++ * @RKISP1_V11: declared in the original vendor code, but not used
++ * @RKISP1_V12: used at least in rk3326 and px30
++ * @RKISP1_V13: used at least in rk1808
++ */
++enum rkisp1_cif_isp_version {
++	RKISP1_V10 = 0,
++	RKISP1_V11,
++	RKISP1_V12,
++	RKISP1_V13,
++};
++
+ enum rkisp1_cif_isp_histogram_mode {
+ 	RKISP1_CIF_ISP_HISTOGRAM_MODE_DISABLE,
+ 	RKISP1_CIF_ISP_HISTOGRAM_MODE_RGB_COMBINED,
+-- 
+2.29.2
 
