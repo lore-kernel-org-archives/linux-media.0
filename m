@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25359C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BDC5C43603
 	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02A6B21D7A
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 404A121D7A
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jan 2021 20:04:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388821AbhAOUEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jan 2021 15:04:05 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:40155 "EHLO
+        id S2388391AbhAOUCn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jan 2021 15:02:43 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:34219 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388715AbhAOUDV (ORCPT
+        with ESMTP id S2387598AbhAOUCm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jan 2021 15:03:21 -0500
+        Fri, 15 Jan 2021 15:02:42 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id A247C1C0016;
-        Fri, 15 Jan 2021 20:02:20 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id C1D7C1C0009;
+        Fri, 15 Jan 2021 20:01:57 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -48,11 +48,10 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 13/16] dt-bindings: media: Add A83T MIPI CSI-2 bindings documentation
-Date:   Fri, 15 Jan 2021 21:01:38 +0100
-Message-Id: <20210115200141.1397785-14-paul.kocialkowski@bootlin.com>
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Subject: [PATCH v5 03/16] phy: allwinner: phy-sun6i-mipi-dphy: Support D-PHY Rx mode for MIPI CSI-2
+Date:   Fri, 15 Jan 2021 21:01:28 +0100
+Message-Id: <20210115200141.1397785-4-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
 References: <20210115200141.1397785-1-paul.kocialkowski@bootlin.com>
@@ -62,169 +61,247 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the A83T MIPI CSI-2
-controller.
+The Allwinner A31 D-PHY supports both Rx and Tx modes. While the latter
+is already supported and used for MIPI DSI this adds support for the
+former, to be used with MIPI CSI-2.
+
+This implementation is inspired by Allwinner's V3s Linux SDK
+implementation, which was used as a documentation base.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Maxime Ripard <mripard@kernel.org>
 ---
- .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+ drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 164 +++++++++++++++++++-
+ 1 file changed, 160 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-new file mode 100644
-index 000000000000..e607fae7d85e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+index f0bc87d654d4..326383e72528 100644
+--- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
++++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+@@ -24,6 +24,14 @@
+ #define SUN6I_DPHY_TX_CTL_REG		0x04
+ #define SUN6I_DPHY_TX_CTL_HS_TX_CLK_CONT	BIT(28)
+ 
++#define SUN6I_DPHY_RX_CTL_REG		0x08
++#define SUN6I_DPHY_RX_CTL_EN_DBC	BIT(31)
++#define SUN6I_DPHY_RX_CTL_RX_CLK_FORCE	BIT(24)
++#define SUN6I_DPHY_RX_CTL_RX_D3_FORCE	BIT(23)
++#define SUN6I_DPHY_RX_CTL_RX_D2_FORCE	BIT(22)
++#define SUN6I_DPHY_RX_CTL_RX_D1_FORCE	BIT(21)
++#define SUN6I_DPHY_RX_CTL_RX_D0_FORCE	BIT(20)
 +
-+title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
+ #define SUN6I_DPHY_TX_TIME0_REG		0x10
+ #define SUN6I_DPHY_TX_TIME0_HS_TRAIL(n)		(((n) & 0xff) << 24)
+ #define SUN6I_DPHY_TX_TIME0_HS_PREPARE(n)	(((n) & 0xff) << 16)
+@@ -44,12 +52,29 @@
+ #define SUN6I_DPHY_TX_TIME4_HS_TX_ANA1(n)	(((n) & 0xff) << 8)
+ #define SUN6I_DPHY_TX_TIME4_HS_TX_ANA0(n)	((n) & 0xff)
+ 
++#define SUN6I_DPHY_RX_TIME0_REG		0x30
++#define SUN6I_DPHY_RX_TIME0_HS_RX_SYNC(n)	(((n) & 0xff) << 24)
++#define SUN6I_DPHY_RX_TIME0_HS_RX_CLK_MISS(n)	(((n) & 0xff) << 16)
++#define SUN6I_DPHY_RX_TIME0_LP_RX(n)		(((n) & 0xff) << 8)
 +
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++#define SUN6I_DPHY_RX_TIME1_REG		0x34
++#define SUN6I_DPHY_RX_TIME1_RX_DLY(n)		(((n) & 0xfff) << 20)
++#define SUN6I_DPHY_RX_TIME1_LP_RX_ULPS_WP(n)	((n) & 0xfffff)
 +
-+properties:
-+  compatible:
-+    const: allwinner,sun8i-a83t-mipi-csi2
++#define SUN6I_DPHY_RX_TIME2_REG		0x38
++#define SUN6I_DPHY_RX_TIME2_HS_RX_ANA1(n)	(((n) & 0xff) << 8)
++#define SUN6I_DPHY_RX_TIME2_HS_RX_ANA0(n)	((n) & 0xff)
 +
-+  reg:
-+    maxItems: 1
++#define SUN6I_DPHY_RX_TIME3_REG		0x40
++#define SUN6I_DPHY_RX_TIME3_LPRST_DLY(n)	(((n) & 0xffff) << 16)
 +
-+  interrupts:
-+    maxItems: 1
+ #define SUN6I_DPHY_ANA0_REG		0x4c
+ #define SUN6I_DPHY_ANA0_REG_PWS			BIT(31)
+ #define SUN6I_DPHY_ANA0_REG_DMPC		BIT(28)
+ #define SUN6I_DPHY_ANA0_REG_DMPD(n)		(((n) & 0xf) << 24)
+ #define SUN6I_DPHY_ANA0_REG_SLV(n)		(((n) & 7) << 12)
+ #define SUN6I_DPHY_ANA0_REG_DEN(n)		(((n) & 0xf) << 8)
++#define SUN6I_DPHY_ANA0_REG_SFB(n)		(((n) & 3) << 2)
+ 
+ #define SUN6I_DPHY_ANA1_REG		0x50
+ #define SUN6I_DPHY_ANA1_REG_VTTMODE		BIT(31)
+@@ -92,6 +117,8 @@ struct sun6i_dphy {
+ 
+ 	struct phy				*phy;
+ 	struct phy_configure_opts_mipi_dphy	config;
 +
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+      - description: MIPI-specific Clock
-+      - description: Misc CSI Clock
++	int					submode;
+ };
+ 
+ static int sun6i_dphy_init(struct phy *phy)
+@@ -105,6 +132,18 @@ static int sun6i_dphy_init(struct phy *phy)
+ 	return 0;
+ }
+ 
++static int sun6i_dphy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
++{
++	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
 +
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+      - const: mipi
-+      - const: misc
++	if (mode != PHY_MODE_MIPI_DPHY)
++		return -EINVAL;
 +
-+  resets:
-+    maxItems: 1
++	dphy->submode = submode;
 +
-+  # See ./video-interfaces.txt for details
-+  ports:
-+    type: object
++	return 0;
++}
 +
-+    properties:
-+      port@0:
-+        type: object
-+        description: Input port, connect to a MIPI CSI-2 sensor
+ static int sun6i_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
+ {
+ 	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
+@@ -119,9 +158,8 @@ static int sun6i_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
+ 	return 0;
+ }
+ 
+-static int sun6i_dphy_power_on(struct phy *phy)
++static int sun6i_dphy_tx_power_on(struct sun6i_dphy *dphy)
+ {
+-	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
+ 	u8 lanes_mask = GENMASK(dphy->config.lanes - 1, 0);
+ 
+ 	regmap_write(dphy->regs, SUN6I_DPHY_TX_CTL_REG,
+@@ -211,12 +249,129 @@ static int sun6i_dphy_power_on(struct phy *phy)
+ 	return 0;
+ }
+ 
++static int sun6i_dphy_rx_power_on(struct sun6i_dphy *dphy)
++{
++	/* Physical clock rate is actually half of symbol rate with DDR. */
++	unsigned long mipi_symbol_rate = dphy->config.hs_clk_rate;
++	unsigned long dphy_clk_rate;
++	unsigned int rx_dly;
++	unsigned int lprst_dly;
++	u32 value;
 +
-+        properties:
-+          reg:
-+            const: 0
++	dphy_clk_rate = clk_get_rate(dphy->mod_clk);
++	if (!dphy_clk_rate)
++		return -EINVAL;
 +
-+          endpoint:
-+            type: object
++	/* Hardcoded timing parameters from the Allwinner BSP. */
++	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME0_REG,
++		     SUN6I_DPHY_RX_TIME0_HS_RX_SYNC(255) |
++		     SUN6I_DPHY_RX_TIME0_HS_RX_CLK_MISS(255) |
++		     SUN6I_DPHY_RX_TIME0_LP_RX(255));
 +
-+            properties:
-+              remote-endpoint: true
++	/*
++	 * Formula from the Allwinner BSP, with hardcoded coefficients
++	 * (probably internal divider/multiplier).
++	 */
++	rx_dly = 8 * (unsigned int)(dphy_clk_rate / (mipi_symbol_rate / 8));
 +
-+              clock-lanes:
-+                maxItems: 1
++	/*
++	 * The Allwinner BSP has an alternative formula for LP_RX_ULPS_WP:
++	 * lp_ulps_wp_cnt = lp_ulps_wp_ms * lp_clk / 1000
++	 * but does not use it and hardcodes 255 instead.
++	 */
++	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME1_REG,
++		     SUN6I_DPHY_RX_TIME1_RX_DLY(rx_dly) |
++		     SUN6I_DPHY_RX_TIME1_LP_RX_ULPS_WP(255));
 +
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
++	/* HS_RX_ANA0 value is hardcoded in the Allwinner BSP. */
++	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME2_REG,
++		     SUN6I_DPHY_RX_TIME2_HS_RX_ANA0(4));
 +
-+            required:
-+              - data-lanes
-+              - remote-endpoint
++	/*
++	 * Formula from the Allwinner BSP, with hardcoded coefficients
++	 * (probably internal divider/multiplier).
++	 */
++	lprst_dly = 4 * (unsigned int)(dphy_clk_rate / (mipi_symbol_rate / 2));
 +
-+        required:
-+          - endpoint
++	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME3_REG,
++		     SUN6I_DPHY_RX_TIME3_LPRST_DLY(lprst_dly));
 +
-+        additionalProperties: false
++	/* Analog parameters are hardcoded in the Allwinner BSP. */
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG,
++		     SUN6I_DPHY_ANA0_REG_PWS |
++		     SUN6I_DPHY_ANA0_REG_SLV(7) |
++		     SUN6I_DPHY_ANA0_REG_SFB(2));
 +
-+      port@1:
-+        type: object
-+        description: Output port, connect to a CSI controller
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA1_REG,
++		     SUN6I_DPHY_ANA1_REG_SVTT(4));
 +
-+        properties:
-+          reg:
-+            const: 1
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA4_REG,
++		     SUN6I_DPHY_ANA4_REG_DMPLVC |
++		     SUN6I_DPHY_ANA4_REG_DMPLVD(1));
 +
-+          endpoint:
-+            type: object
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA2_REG,
++		     SUN6I_DPHY_ANA2_REG_ENIB);
 +
-+            properties:
-+              remote-endpoint: true
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA3_REG,
++		     SUN6I_DPHY_ANA3_EN_LDOR |
++		     SUN6I_DPHY_ANA3_EN_LDOC |
++		     SUN6I_DPHY_ANA3_EN_LDOD);
 +
-+            required:
-+              - remote-endpoint
++	/*
++	 * Delay comes from the Allwinner BSP, likely for internal regulator
++	 * ramp-up.
++	 */
++	udelay(3);
 +
-+        required:
-+          - endpoint
++	value = SUN6I_DPHY_RX_CTL_EN_DBC | SUN6I_DPHY_RX_CTL_RX_CLK_FORCE;
 +
-+        additionalProperties: false
++	/*
++	 * Rx data lane force-enable bits are used as regular RX enable by the
++	 * Allwinner BSP.
++	 */
++	if (dphy->config.lanes >= 1)
++		value |= SUN6I_DPHY_RX_CTL_RX_D0_FORCE;
++	if (dphy->config.lanes >= 2)
++		value |= SUN6I_DPHY_RX_CTL_RX_D1_FORCE;
++	if (dphy->config.lanes >= 3)
++		value |= SUN6I_DPHY_RX_CTL_RX_D2_FORCE;
++	if (dphy->config.lanes == 4)
++		value |= SUN6I_DPHY_RX_CTL_RX_D3_FORCE;
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
++	regmap_write(dphy->regs, SUN6I_DPHY_RX_CTL_REG, value);
 +
-+additionalProperties: false
++	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
++		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
++		     SUN6I_DPHY_GCTL_EN);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
++	return 0;
++}
 +
-+    mipi_csi2: csi@1cb1000 {
-+        compatible = "allwinner,sun8i-a83t-mipi-csi2";
-+        reg = <0x01cb1000 0x1000>;
-+        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_BUS_CSI>,
-+                 <&ccu CLK_CSI_SCLK>,
-+                 <&ccu CLK_MIPI_CSI>,
-+                 <&ccu CLK_CSI_MISC>;
-+        clock-names = "bus", "mod", "mipi", "misc";
-+        resets = <&ccu RST_BUS_CSI>;
++static int sun6i_dphy_power_on(struct phy *phy)
++{
++	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
 +
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
++	switch (dphy->submode) {
++	case PHY_MIPI_DPHY_SUBMODE_TX:
++		return sun6i_dphy_tx_power_on(dphy);
++	case PHY_MIPI_DPHY_SUBMODE_RX:
++		return sun6i_dphy_rx_power_on(dphy);
++	default:
++		return -EINVAL;
++	}
++}
 +
-+            mipi_csi2_in: port@0 {
-+                reg = <0>;
+ static int sun6i_dphy_power_off(struct phy *phy)
+ {
+ 	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
+ 
+-	regmap_update_bits(dphy->regs, SUN6I_DPHY_ANA1_REG,
+-			   SUN6I_DPHY_ANA1_REG_VTTMODE, 0);
++	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG, 0);
 +
-+                mipi_csi2_in_ov8865: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+
-+                    remote-endpoint = <&ov8865_out_mipi_csi2>;
-+                };
-+            };
-+
-+            mipi_csi2_out: port@1 {
-+                reg = <1>;
-+
-+                mipi_csi2_out_csi: endpoint {
-+                    remote-endpoint = <&csi_in_mipi_csi2>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG, 0);
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA1_REG, 0);
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA2_REG, 0);
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA3_REG, 0);
++	regmap_write(dphy->regs, SUN6I_DPHY_ANA4_REG, 0);
+ 
+ 	return 0;
+ }
+@@ -234,6 +389,7 @@ static int sun6i_dphy_exit(struct phy *phy)
+ 
+ 
+ static const struct phy_ops sun6i_dphy_ops = {
++	.set_mode	= sun6i_dphy_set_mode,
+ 	.configure	= sun6i_dphy_configure,
+ 	.power_on	= sun6i_dphy_power_on,
+ 	.power_off	= sun6i_dphy_power_off,
 -- 
 2.30.0
 
