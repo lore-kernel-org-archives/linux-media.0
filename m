@@ -2,199 +2,78 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA976C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A2A6C433DB
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 20:12:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 927E920709
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:44:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05D7722CAE
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 20:12:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbhAPRom (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Jan 2021 12:44:42 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:57838 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725964AbhAPRol (ORCPT
+        id S1726597AbhAPUMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 Jan 2021 15:12:00 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:18242
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726083AbhAPUL4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Jan 2021 12:44:41 -0500
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 9E1663A4623
-        for <linux-media@vger.kernel.org>; Sat, 16 Jan 2021 15:57:31 +0000 (UTC)
-X-Originating-IP: 93.61.96.190
-Received: from uno.localdomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B21C51C000B;
-        Sat, 16 Jan 2021 15:56:28 +0000 (UTC)
-Date:   Sat, 16 Jan 2021 16:56:47 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH 03/13] media: renesas-ceu: Use
- v4l2_async_notifier_add_{i2c,fwnode_remote}_subdev helpers
-Message-ID: <20210116155647.kjmsv2zch2dmqgfk@uno.localdomain>
-References: <20210112132339.5621-1-ezequiel@collabora.com>
- <20210112132339.5621-4-ezequiel@collabora.com>
+        Sat, 16 Jan 2021 15:11:56 -0500
+X-IronPort-AV: E=Sophos;i="5.79,352,1602540000"; 
+   d="scan'208";a="370224224"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2021 21:11:13 +0100
+Date:   Sat, 16 Jan 2021 21:11:13 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        =?ISO-8859-15?Q?K=E9vin_L'h=F4pital?= <kevin.lhopital@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        kbuild-all@lists.01.org
+Subject: [PATCH] media: i2c: fix odd_ptr_err.cocci warnings
+Message-ID: <alpine.DEB.2.22.394.2101162109350.2697@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210112132339.5621-4-ezequiel@collabora.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+From: kernel test robot <lkp@intel.com>
 
-On Tue, Jan 12, 2021 at 10:23:29AM -0300, Ezequiel Garcia wrote:
-> The use of v4l2_async_notifier_add_subdev is discouraged.
-> Drivers are instead encouraged to use a helper such as
-> v4l2_async_notifier_add_i2c_subdev.
->
-> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-> should get a kmalloc'ed struct v4l2_async_subdev,
-> removing some boilerplate code while at it.
->
-> Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
-> or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
-> the needed setup, instead of open-coding it.
->
-> Using v4l2-async to allocate the driver-specific structs,
-> requires to change struct ceu_subdev so the embedded
-> struct v4l2_async_subdev is now the first element.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  drivers/media/platform/renesas-ceu.c | 89 ++++++++++------------------
->  1 file changed, 31 insertions(+), 58 deletions(-)
->
-> diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-> index 4a633ad0e8fa..18485812a21e 100644
-> --- a/drivers/media/platform/renesas-ceu.c
-> +++ b/drivers/media/platform/renesas-ceu.c
-> @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
->   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
->   */
->  struct ceu_subdev {
-> -	struct v4l2_subdev *v4l2_sd;
->  	struct v4l2_async_subdev asd;
-> +	struct v4l2_subdev *v4l2_sd;
->
->  	/* per-subdevice mbus configuration options */
->  	unsigned int mbus_flags;
-> @@ -174,7 +174,7 @@ struct ceu_device {
->  	struct v4l2_device	v4l2_dev;
->
->  	/* subdevices descriptors */
-> -	struct ceu_subdev	*subdevs;
-> +	struct ceu_subdev	**subdevs;
->  	/* the subdevice currently in use */
->  	struct ceu_subdev	*sd;
->  	unsigned int		sd_index;
-> @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
->  	if (inp->index >= ceudev->num_sd)
->  		return -EINVAL;
->
-> -	ceusd = &ceudev->subdevs[inp->index];
-> +	ceusd = ceudev->subdevs[inp->index];
->
->  	inp->type = V4L2_INPUT_TYPE_CAMERA;
->  	inp->std = 0;
-> @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
->  		return 0;
->
->  	ceu_sd_old = ceudev->sd;
-> -	ceudev->sd = &ceudev->subdevs[i];
-> +	ceudev->sd = ceudev->subdevs[i];
->
->  	/*
->  	 * Make sure we can generate output image formats and apply
-> @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
->  	 * ceu formats.
->  	 */
->  	if (!ceudev->sd) {
-> -		ceudev->sd = &ceudev->subdevs[0];
-> +		ceudev->sd = ceudev->subdevs[0];
->  		ceudev->sd_index = 0;
->  	}
->
-> @@ -1465,28 +1465,6 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
->  	.complete	= ceu_notify_complete,
->  };
->
-> -/*
-> - * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
-> - *			      ceu device. Both DT and platform data parsing use
-> - *			      this routine.
-> - *
-> - * Returns 0 for success, -ENOMEM for failure.
-> - */
-> -static int ceu_init_async_subdevs(struct ceu_device *ceudev, unsigned int n_sd)
-> -{
-> -	/* Reserve memory for 'n_sd' ceu_subdev descriptors. */
-> -	ceudev->subdevs = devm_kcalloc(ceudev->dev, n_sd,
-> -				       sizeof(*ceudev->subdevs), GFP_KERNEL);
-> -	if (!ceudev->subdevs)
-> -		return -ENOMEM;
-> -
-> -	ceudev->sd = NULL;
-> -	ceudev->sd_index = 0;
-> -	ceudev->num_sd = 0;
-> -
+PTR_ERR should access the value just tested by IS_ERR
 
-As Laurent the array of subdevs still needs to be allocated, and the
-zeroing of the ceudev fields could be removed. If you don't want to
-mix too many things I can do it on top as..
+Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
 
-> -	return 0;
-> -}
-> -
+Fixes: 11c0d8fdccc5 ("media: i2c: Add support for the OV8865 image sensor")
+CC: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+---
 
-[snip]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b3a3cbdec55b090d22a09f75efb7c7d34cb97f25
+commit: 11c0d8fdccc56fa15cb15906480b4737c31dd085 [2650/3956] media: i2c: Add support for the OV8865 image sensor
+:::::: branch date: 2 days ago
+:::::: commit date: 4 days ago
 
->  		}
->
->  		/* Setup the ceu subdevice and the async subdevice. */
-> -		ceu_sd = &ceudev->subdevs[i];
-> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
-> -
-> -		remote = of_graph_get_remote_port_parent(ep);
-> -		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> -		ceu_sd->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-> -		ceu_sd->asd.match.fwnode = of_fwnode_handle(remote);
-> -
-> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
-> -						     &ceu_sd->asd);
-> -		if (ret) {
-> -			of_node_put(remote);
-> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +				&ceudev->notifier, of_fwnode_handle(ep),
-> +				sizeof(*ceu_sd));
-> +		if (IS_ERR(asd)) {
-> +			ret = PTR_ERR(asd);
+ ov8865.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This could also probably be moved before the endpoint parsing to
-avoid that if the async subdev registration fails.
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -2849,7 +2849,7 @@ static int ov8865_probe(struct i2c_clien
+ 	sensor->avdd = devm_regulator_get(dev, "avdd");
+ 	if (IS_ERR(sensor->avdd)) {
+ 		dev_err(dev, "cannot get AVDD (analog) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
++		ret = PTR_ERR(sensor->avdd);
+ 		goto error_endpoint;
+ 	}
 
-All on top though and not major.
-With the subdev allocation fixed
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-
-Thanks
-  j
-
->  			goto error_cleanup;
->  		}
-> +		ceu_sd = to_ceu_subdev(asd);
-> +		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> +		ceudev->subdevs[i] = ceu_sd;
->
->  		of_node_put(ep);
->  	}
-> --
-> 2.29.2
->
