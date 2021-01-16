@@ -2,171 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DD7EC43333
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C83C433DB
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:17:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3667F2388E
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:13:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 690E3227BF
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jan 2021 17:17:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbhAPRNh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Jan 2021 12:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727119AbhAPRKj (ORCPT
+        id S1727198AbhAPRFo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 Jan 2021 12:05:44 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49666 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726201AbhAPRFk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Jan 2021 12:10:39 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564BAC06179B
-        for <linux-media@vger.kernel.org>; Sat, 16 Jan 2021 05:34:48 -0800 (PST)
+        Sat, 16 Jan 2021 12:05:40 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 879931F40864
-Subject: Re: [PATCH v4 3/3] media: rockchip: rkisp1: extend uapi array sizes
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        helen.koike@collabora.com, linux-media@vger.kernel.org,
-        mchehab@kernel.org, Laurent.pinchart@ideasonboard.com,
-        hverkuil@xs4all.nl
-Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
-        christoph.muellner@theobroma-systems.com, tfiga@chromium.org
-References: <20210115163829.217131-1-heiko@sntech.de>
- <1739328.QCnGb9OGeP@diego>
- <06d42f41-d570-7327-daca-40a52978d4f9@collabora.com>
- <2554499.uZKlY2gecq@diego>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <1635e481-364a-f99b-8a0c-3d3e33440ed1@collabora.com>
-Date:   Sat, 16 Jan 2021 14:34:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 310C61F45867
+Message-ID: <7cb1f5f43d9c40405c07a4be74046c0425cc1379.camel@collabora.com>
+Subject: Re: [PATCH 04/13] media: exynos4-is: Use
+ v4l2_async_notifier_add_fwnode_remote_subdev
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Date:   Sat, 16 Jan 2021 13:55:02 -0300
+In-Reply-To: <20210116160718.3ogm3vx5j3mdpgii@uno.localdomain>
+References: <20210112132339.5621-1-ezequiel@collabora.com>
+         <20210112132339.5621-5-ezequiel@collabora.com>
+         <20210116160718.3ogm3vx5j3mdpgii@uno.localdomain>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-In-Reply-To: <2554499.uZKlY2gecq@diego>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Sat, 2021-01-16 at 17:07 +0100, Jacopo Mondi wrote:
+> Hi Ezequiel
+> 
+> On Tue, Jan 12, 2021 at 10:23:30AM -0300, Ezequiel Garcia wrote:
+> > The use of v4l2_async_notifier_add_subdev is discouraged.
+> > Drivers are instead encouraged to use a helper such as
+> > v4l2_async_notifier_add_fwnode_remote_subdev.
+> > 
+> > This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+> > should get a kmalloc'ed struct v4l2_async_subdev,
+> > removing some boilerplate code while at it.
+> > 
+> > Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+> > which handles the needed setup, instead of open-coding it.
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> >  drivers/media/platform/exynos4-is/media-dev.c | 25 +++++++++----------
+> >  drivers/media/platform/exynos4-is/media-dev.h |  2 +-
+> >  2 files changed, 13 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+> > index e636c33e847b..196166a9a4e5 100644
+> > --- a/drivers/media/platform/exynos4-is/media-dev.c
+> > +++ b/drivers/media/platform/exynos4-is/media-dev.c
+> > @@ -401,6 +401,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
+> >         int index = fmd->num_sensors;
+> >         struct fimc_source_info *pd = &fmd->sensor[index].pdata;
+> >         struct device_node *rem, *np;
+> > +       struct v4l2_async_subdev *asd;
+> >         struct v4l2_fwnode_endpoint endpoint = { .bus_type = 0 };
+> >         int ret;
+> > 
+> > @@ -418,7 +419,6 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
+> >         pd->mux_id = (endpoint.base.port - 1) & 0x1;
+> > 
+> >         rem = of_graph_get_remote_port_parent(ep);
+> > -       of_node_put(ep);
+> 
+> If you remove it from here, don't forget to put it in the here below
+> error path
+> 
 
+Oops, think you are right.
 
-Am 16.01.21 um 12:57 schrieb Heiko Stübner:
-> Hi Dafna,
+> >         if (rem == NULL) {
 > 
-> Am Samstag, 16. Januar 2021, 10:05:39 CET schrieb Dafna Hirschfeld:
->> Am 16.01.21 um 00:52 schrieb Heiko Stübner:
->>> Am Freitag, 15. Januar 2021, 18:41:06 CET schrieb Dafna Hirschfeld:
->>>> Am 15.01.21 um 17:38 schrieb Heiko Stuebner:
->>>>> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
->>>>>
->>>>> Later variants of the rkisp1 block use more entries in some arrays:
->>>>>
->>>>> RKISP1_CIF_ISP_AE_MEAN_MAX                 25 -> 81
->>>>> RKISP1_CIF_ISP_HIST_BIN_N_MAX              16 -> 32
->>>>> RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES       17 -> 34
->>>>> RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28 -> 81
->>>>
->>>> I see you didn't change the value for that define.
->>>
->>> In the below patch I find
->>>
->>> @@ -103,7 +111,9 @@
->>> * Histogram calculation
->>> */
->>> /* Last 3 values unused. */
->>> -#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
->>> +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V10 28
->>> +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V12 81
->>> +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE     RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V12
->>>
->>> so I'm not sure I understand what you mean except this.
->>
->> Opps, I somehow missed that.
->> But now since we have 81 entries, it makes no sense to
->> define it to 28 for V10 and documenting "Last 3 values unused" (see just above the definition).
->> We can set it just to 25, we have 56 (81-25) unused values anyway.
+> >                 v4l2_info(&fmd->v4l2_dev, "Remote device at %pOF not found\n",
+> >                                                         ep);
+> > @@ -450,6 +450,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
+> >          * checking parent's node name.
+> >          */
+> >         np = of_get_parent(rem);
+> > +       of_node_put(rem);
 > 
-> The rkisp1_hst_config() function iterates over its regs-array and accesses
-> 4 weight values in each step and writing them to the register:
+> unrelated but good
+> > 
+> >         if (of_node_name_eq(np, "i2c-isp"))
+> >                 pd->fimc_bus_type = FIMC_BUS_TYPE_ISP_WRITEBACK;
+> > @@ -457,21 +458,18 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
+> >                 pd->fimc_bus_type = pd->sensor_bus_type;
+> >         of_node_put(np);
+> > 
+> > -       if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor))) {
+> > -               of_node_put(rem);
 > 
-> static const u32 hist_weight_regs[] = {
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_00TO30_V10, ... weight0-3
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_40TO21_V10, ... weight4-7
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_31TO12_V10, ... weight8-11
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_22TO03_V10, ... weight12-15
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_13TO43_V10, ... weight16-19
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_04TO34_V10, ... weight20-23
-> 	RKISP1_CIF_ISP_HIST_WEIGHT_44_V10, ... weight24-27
-> };
+> I think if you need to keep 'ep' around until the call to
+> v4l2_async_notifier_add_fwnode_remote_subdev() below, it should be put
+> here as you remove the above of_node_put(ep).
 > 
-> and yes the last step only uses 1 value to write to the register.
-> But I guess if we really want to reduce the max value, we should move
-> that last part into a separate write, so that we don't access parts we claim
-> to not access ;-)
+> I wonder if registering the async subdev before parsing the endpoint
+> would make things simpler. Not required for this patch though.
 > 
->>>> The usage of it is a bit more complicated.
->>>> It is used in function rkisp1_hst_config.
->>>
->>> Yeah, though the for-loop iterates over 4*7 entry values, so stays
->>> below the RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE_V10 in all cases.
->>>
->>>
->>>> Actually the real number of weight values are 25 (5x5) for rk3399,
->>>> the last 3 are not used. I think that in order to support both
->>>> 5x5 and 9x9 the code in rkisp1-params.c should change. I'll
->>>> send a patch fixing it.
->>>
->>> If you look at my V12-patch [0] the weight handling is done different there
->>> and from the registers, it looks like they exchanges that part of the isp.
->>>
->>> [0] https://lore.kernel.org/linux-media/20210108193311.3423236-11-heiko@sntech.de/
->>> void rkisp1_hst_config_v12() as a search term
->>>
->>> [...]
->>
->> Right, there is no need to change the relevant code in rkisp1-param.c when setting the
->> RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE to 25.
-> 
-> ok, should we add a 4th patch fixing that and moving the last write out of the loop?
 
-I think changing the related code in the rkisp1-params.c can be done later in a separate patch.
-I think you can change it to 25 in the same patch that adds V12 support and write in the commit message
-that because the array size is now 81, there is no point defining the grid size for V10 to 28
-and in addition documenting that the last 3 values are not used.
+I have tried to make these conversions simple, and let the
+people with hardware do more interesting cleanups.
 
-Thanks,
-Dafna
+> > +       if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor)))
+> >                 return -EINVAL;
+> > -       }
+> > 
+> > -       fmd->sensor[index].asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> > -       fmd->sensor[index].asd.match.fwnode = of_fwnode_handle(rem);
+> > +       asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> > +               &fmd->subdev_notifier, of_fwnode_handle(ep), sizeof(*asd));
+> > 
+> > -       ret = v4l2_async_notifier_add_subdev(&fmd->subdev_notifier,
+> > -                                            &fmd->sensor[index].asd);
+> > -       if (ret) {
+> > -               of_node_put(rem);
+> > -               return ret;
+> > -       }
+> > +       of_node_put(ep);
+> > +
+> > +       if (IS_ERR(asd))
+> > +               return PTR_ERR(asd);
+> > 
+> > +       fmd->sensor[index].asd = asd;
+> >         fmd->num_sensors++;
+> > 
+> >         return 0;
+> > @@ -1381,7 +1379,8 @@ static int subdev_notifier_bound(struct v4l2_async_notifier *notifier,
+> > 
+> >         /* Find platform data for this sensor subdev */
+> >         for (i = 0; i < ARRAY_SIZE(fmd->sensor); i++)
+> > -               if (fmd->sensor[i].asd.match.fwnode ==
+> > +               if (fmd->sensor[i].asd &&
+> 
+> Is this needed ? If the subdev has bound the async subdev has been
+> allocated correctly, doesn't it ?
+> 
 
+The idea is to keep the code the same. You are probably right,
+and the above felt quite nasty, but then again, didn't
+want to go down the cleanup road.
+
+> With the ep ref counting clarified
+
+Sure.
+
+> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 > 
-> 
-> Heiko
-> 
->>>>> @@ -862,8 +898,16 @@ struct rkisp1_cif_isp_af_stat {
->>>>>      *
->>>>>      * @hist_bins: measured bin counters
->>>>>      *
->>>>> - * Measurement window divided into 16 sub-windows, set
->>>>> - * with ISP_HIST_XXX
->>>>> + * Measurement window divided into 16 sub-windows for V10/V10
->>>>> + * and 32 sub-windows for V12/V13, set with ISP_HIST_XXX
->>>>
->>>> It is actually not windows but histogram bins. Could you change it to:
->>>> "The histogram values divided into 16 bins for V10/V11 and 32 bins
->>>> for V12/V13. It is configured within the struct rkisp1_cif_isp_hst_config.
->>>
->>> I've changed this like your suggestions and will give a bit of time for
->>> the stuff above. But I guess I can send a v5 some time tomorrow?
->>>
->>>
->>> Thanks for your input
->>> Heiko
->>>
->>>
->>
-> 
-> 
-> 
-> 
+
+Thanks a lot,
+Ezequiel
+
