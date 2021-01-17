@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98185C433E0
-	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 18:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 230B2C433DB
+	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 18:32:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C58622227
-	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 18:32:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E13FF22227
+	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 18:32:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728998AbhAQSb5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 Jan 2021 13:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S1728193AbhAQScC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 Jan 2021 13:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729745AbhAQSbt (ORCPT
+        with ESMTP id S1728498AbhAQSb4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 Jan 2021 13:31:49 -0500
+        Sun, 17 Jan 2021 13:31:56 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BC7C0613C1
-        for <linux-media@vger.kernel.org>; Sun, 17 Jan 2021 10:31:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E87C061573
+        for <linux-media@vger.kernel.org>; Sun, 17 Jan 2021 10:31:15 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 8381F1F44A59
+        with ESMTPSA id 79A8A1F44A56
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     kernel@collabora.com,
@@ -47,9 +47,9 @@ Cc:     kernel@collabora.com,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v2 03/14] media: stm32-dcmi: Use v4l2_async_notifier_add_fwnode_remote_subdev
-Date:   Sun, 17 Jan 2021 15:29:38 -0300
-Message-Id: <20210117182956.41298-7-ezequiel@collabora.com>
+Subject: [PATCH v2 03/14] media: stm32: Use v4l2_async_notifier_add_fwnode_remote_subdev
+Date:   Sun, 17 Jan 2021 15:29:39 -0300
+Message-Id: <20210117182956.41298-8-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210117182956.41298-1-ezequiel@collabora.com>
 References: <20210117182956.41298-1-ezequiel@collabora.com>
