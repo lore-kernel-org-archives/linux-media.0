@@ -4,176 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AED34C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 17:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 036DBC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:04:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B7B62222A
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 17:54:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB6DF21D42
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:04:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407219AbhARRqk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jan 2021 12:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436713AbhARRp5 (ORCPT
+        id S2407396AbhARSE4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jan 2021 13:04:56 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46544 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407467AbhARSEs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jan 2021 12:45:57 -0500
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52633C061574;
-        Mon, 18 Jan 2021 09:45:17 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C11E73EBDE;
-        Mon, 18 Jan 2021 18:45:13 +0100 (CET)
-Subject: Re: [PATCH 1/2] media: venus: core: Add sdm660 DT compatible and
- resource struct
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, phone-devel@vger.kernel.org
-References: <20210115185252.333562-1-angelogioacchino.delregno@somainline.org>
- <20210115185252.333562-2-angelogioacchino.delregno@somainline.org>
- <2dc8a95f-110f-526f-18a8-6393e508c3a6@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <eabc91cc-de96-08ef-756c-87fe43d6fadc@somainline.org>
-Date:   Mon, 18 Jan 2021 18:45:13 +0100
+        Mon, 18 Jan 2021 13:04:48 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id EA5C11F44836
+Subject: Re: [PATCH v6 2/4] media: rockchip: rkisp1: reduce number of
+ histogram grid elements in uapi
+To:     Heiko Stuebner <heiko@sntech.de>, dafna.hirschfeld@collabora.com,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        Laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Cc:     linux-rockchip@lists.infradead.org, ezequiel@collabora.com,
+        christoph.muellner@theobroma-systems.com, tfiga@chromium.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+References: <20210118110448.275389-1-heiko@sntech.de>
+ <20210118110448.275389-3-heiko@sntech.de>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <31c655ca-ec76-6135-5e05-5d2f62a48ff5@collabora.com>
+Date:   Mon, 18 Jan 2021 15:04:01 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <2dc8a95f-110f-526f-18a8-6393e508c3a6@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210118110448.275389-3-heiko@sntech.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 18/01/21 18:21, Stanimir Varbanov ha scritto:
-> Hi Angelo,
-> 
-> Thanks for the patch!
-> 
-> On 1/15/21 8:52 PM, AngeloGioacchino Del Regno wrote:
->> Add the SDM660 DT compatible and its resource structure, also
->> including support for the Venus pmdomains, in order to support
->> the Venus block in SDM630, SDM636, SDM660 and SDA variants.
->>
->> This SoC features Venus 4.4 (HFI3XX), with one vcodec used for
->> both encoding and decoding, switched on through two GDSCs.
->> The core clock for this Venus chip is powered by the RPM VDD_CX
->> power domain.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->> ---
->>   drivers/media/platform/qcom/venus/core.c | 66 ++++++++++++++++++++++++
->>   1 file changed, 66 insertions(+)
->>
->> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
->> index bdd293faaad0..83ca86a63241 100644
->> --- a/drivers/media/platform/qcom/venus/core.c
->> +++ b/drivers/media/platform/qcom/venus/core.c
->> @@ -565,6 +565,71 @@ static const struct venus_resources sdm845_res_v2 = {
->>   	.fwname = "qcom/venus-5.2/venus.mdt",
->>   };
->>   
->> +static const struct freq_tbl sdm660_freq_table[] = {
->> +	{ 0, 518400000 },
->> +	{ 0, 441600000 },
->> +	{ 0, 404000000 },
->> +	{ 0, 320000000 },
->> +	{ 0, 269330000 },
->> +	{ 0, 133330000 },
->> +};
->> +
->> +static const struct reg_val sdm660_reg_preset[] = {
->> +	{ 0x80010, 0x001f001f },
->> +	{ 0x80018, 0x00000156 },
->> +	{ 0x8001C, 0x00000156 },
->> +};
->> +
->> +static const struct bw_tbl sdm660_bw_table_enc[] = {
->> +	{  979200,  1044000, 0, 2446336, 0 },	/* 4k UHD @ 30 */
->> +	{  864000,   887000, 0, 2108416, 0 },	/* 720p @ 240 */
->> +	{  489600,   666000, 0, 1207296, 0 },	/* 1080p @ 60 */
->> +	{  432000,   578000, 0, 1058816, 0 },	/* 720p @ 120 */
->> +	{  244800,   346000, 0,  616448, 0 },	/* 1080p @ 30 */
->> +	{  216000,   293000, 0,  534528, 0 },	/* 720p @ 60 */
->> +	{  108000,   151000, 0,  271360, 0 },	/* 720p @ 30 */
->> +};
->> +
->> +static const struct bw_tbl sdm660_bw_table_dec[] = {
->> +	{  979200,  2365000, 0, 1892000, 0 },	/* 4k UHD @ 30 */
->> +	{  864000,  1978000, 0, 1554000, 0 },	/* 720p @ 240 */
->> +	{  489600,  1133000, 0,  895000, 0 },	/* 1080p @ 60 */
->> +	{  432000,   994000, 0,  781000, 0 },	/* 720p @ 120 */
->> +	{  244800,   580000, 0,  460000, 0 },	/* 1080p @ 30 */
->> +	{  216000,   501000, 0,  301000, 0 },	/* 720p @ 60 */
->> +	{  108000,   255000, 0,  202000, 0 },	/* 720p @ 30 */
->> +};
->> +
->> +static const struct venus_resources sdm660_res = {
->> +	.freq_tbl = sdm660_freq_table,
->> +	.freq_tbl_size = ARRAY_SIZE(sdm660_freq_table),
->> +	.reg_tbl = sdm660_reg_preset,
->> +	.reg_tbl_size = ARRAY_SIZE(sdm660_reg_preset),
->> +	.bw_tbl_enc = sdm660_bw_table_enc,
->> +	.bw_tbl_enc_size = ARRAY_SIZE(sdm660_bw_table_enc),
->> +	.bw_tbl_dec = sdm660_bw_table_dec,
->> +	.bw_tbl_dec_size = ARRAY_SIZE(sdm660_bw_table_dec),
->> +	.clks = {"core", "iface", "bus_throttle", "bus" },
->> +	.clks_num = 4,
->> +	.vcodec0_clks = { "vcodec0_core" },
->> +	.vcodec_clks_num = 1,
->> +	.vcodec_pmdomains = { "venus", "vcodec0" },
->> +	.vcodec_pmdomains_num = 2,
->> +	.opp_pmdomain = (const char *[]) { "cx", NULL },
->> +	.vcodec_num = 1,
->> +	.max_load = 1036800,
->> +	.hfi_version = HFI_VERSION_3XX,
->> +	.vmem_id = VIDC_RESOURCE_NONE,
->> +	.vmem_size = 0,
->> +	.vmem_addr = 0,
->> +	.cp_start = 0,
->> +	.cp_size = 0x79000000,
->> +	.cp_nonpixel_start = 0x1000000,
->> +	.cp_nonpixel_size = 0x28000000,
->> +	.dma_mask = 0xd9000000 - 1,
->> +	.fwname = "qcom/venus-4.4/venus.mdt",
-> 
-> Did you try venus-4.2 firmware from linux-firmware tree [1] ?
-> 
 
-No I haven't.. and I can't... my Sony devices (but I think that this is
-a practice of all OEMs/ODMs) are using a Sony signed venus firmware, so
-I am totally limited to use the firmware that comes with the device.
 
-Besides that, the version is still different so, even if I had any
-possibility to try that, I don't think that it would work anyway...
-
->> +};
->> +
->>   static const struct freq_tbl sc7180_freq_table[] = {
->>   	{  0, 500000000 },
->>   	{  0, 434000000 },
->> @@ -613,6 +678,7 @@ static const struct venus_resources sc7180_res = {
->>   static const struct of_device_id venus_dt_match[] = {
->>   	{ .compatible = "qcom,msm8916-venus", .data = &msm8916_res, },
->>   	{ .compatible = "qcom,msm8996-venus", .data = &msm8996_res, },
->> +	{ .compatible = "qcom,sdm660-venus", .data = &sdm660_res, },
->>   	{ .compatible = "qcom,sdm845-venus", .data = &sdm845_res, },
->>   	{ .compatible = "qcom,sdm845-venus-v2", .data = &sdm845_res_v2, },
->>   	{ .compatible = "qcom,sc7180-venus", .data = &sc7180_res, },
->>
+On 1/18/21 8:04 AM, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 > 
-> Reviewed-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> The uapi right now specifies an array size of 28 but the actual number
+> of elements is only 25 with the last 3 being unused.
 > 
+> Reduce the array size to the correct number of elements.
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Thank you!
-- Angelo
+Acked-by: Helen Koike <helen.koike@collabora.com>
+
+> ---
+>  include/uapi/linux/rkisp1-config.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+> index ba443771cc0b..ecfb8f7a6c70 100644
+> --- a/include/uapi/linux/rkisp1-config.h
+> +++ b/include/uapi/linux/rkisp1-config.h
+> @@ -102,8 +102,7 @@
+>  /*
+>   * Histogram calculation
+>   */
+> -/* Last 3 values unused. */
+> -#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
+> +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 25
+>  
+>  /*
+>   * Defect Pixel Cluster Correction
+> 
