@@ -2,82 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24892C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:10:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73944C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:14:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4DF522CA2
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:10:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48EC622CA2
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 18:14:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407435AbhARSBO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jan 2021 13:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406376AbhARSAn (ORCPT
+        id S2407428AbhARSOA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jan 2021 13:14:00 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46696 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407409AbhARSNb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jan 2021 13:00:43 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFD1C061573;
-        Mon, 18 Jan 2021 10:00:02 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id CF5DBC6398; Mon, 18 Jan 2021 17:59:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1610992798; bh=dUnol4dNLt4sxGL9jTPjSsDKqZnkTEIQQ+kgAK0Zsa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k23ozMbBIxCmX0mx16Dztfjapk5c303qZVpO73WYW4utMCqh4h3PRRVfNpxn1e12a
-         YXEFOk3vGxucBQ8mQD4CGjrTpWsKBYxcaikcf5w2aL1wLiKH0KlerboKaIHpan8Yp5
-         SANkCM5DS2S3NOyDuYMou6y4hB5WsUugoPIBwiT2uYv83V+dmuW8PGPz+c+TSqQmfn
-         43AS7QUFymR5bRrzh/qQbH6w4BpGCEwsQW1pcxECP6NpJOT48Y143oYSnq6peKQb4K
-         oEAhXc+4a4dxKULm1hhDZ5IgzNqqIMc8pWrZeQUb4roTxqhmXaUxRFh3vYjd4qxxeM
-         9tbKyXPfR2zZw==
-Date:   Mon, 18 Jan 2021 17:59:58 +0000
-From:   Sean Young <sean@mess.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com
-Subject: Re: [PATCH v2 0/4] media: sunxi-cir: Cleanup and power management
-Message-ID: <20210118175958.GA3682@gofer.mess.org>
-References: <20210118060048.22267-1-samuel@sholland.org>
+        Mon, 18 Jan 2021 13:13:31 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id B87301F44A00
+Subject: Re: RkISP1 simulataneously streaming with two cameras
+To:     Sebastian Fricke <sebastian.fricke@posteo.net>,
+        linux-media@vger.kernel.org
+Cc:     kernel@collabora.com, dafna.hirschfeld@collabora.com,
+        ezequiel@vanguardiasur.com.ar, heiko@sntech.de
+References: <20210117131209.4m2vqht4mflci7hy@basti-TUXEDO-Book-XA1510>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <4e3159d4-7320-271f-ede8-1399fd23b0d6@collabora.com>
+Date:   Mon, 18 Jan 2021 15:12:43 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118060048.22267-1-samuel@sholland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210117131209.4m2vqht4mflci7hy@basti-TUXEDO-Book-XA1510>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 12:00:44AM -0600, Samuel Holland wrote:
-> This series cleans up some dead code in the sunxi-cir driver and adds
-> system power management hooks.
-> 
-> ---
-> Changes from v1:
->   - Unregister the RC device first thing in sunxi_ir_remove() [3]
-> 
+Hi Sebastian,
 
-Thanks. I've tested it on my Cubieboard1 and everything looks fine.
-
-I've applied it to my tree.
-
-Sean
-
-> Samuel Holland (4):
->   media: sunxi-cir: Clean up dead register writes
->   media: sunxi-cir: Remove unnecessary spinlock
->   media: sunxi-cir: Factor out hardware initialization
->   media: sunxi-cir: Implement suspend/resume/shutdown callbacks
+On 1/17/21 10:12 AM, Sebastian Fricke wrote:
+> Hello,
 > 
->  drivers/media/rc/sunxi-cir.c | 169 ++++++++++++++++++++---------------
->  1 file changed, 95 insertions(+), 74 deletions(-)
+> I am currently trying to figure out how to configure my NanoPC-T4 for
+> streaming with two cameras at the same time. The cameras are the CAM1320
+> (OV13850) and the MCAM40(OV4689), I have ported the drivers from the
+> downstream BSP Kernel to the current 5.11 rc1 kernel.
+> My current attempt is to enable the second instance of the RkISP1, the
+> mipi_dphy_tx1rx1 and setup the OV13850 on i2c1 and the OV4689 on the
+
+The driver phy-rockchip-dphy-rx0.c doesn't support tx1rx1.
+
+Regards,
+Helen
+
+> i2c2.
+> The patch that I apply in this case is the following:
+> https://github.com/initBasti/Linux_kernel_media_tree_fork/commit/9a8e594a660d67f3790da32f3268bebd3d233526> 
+> Here is the dmesg ouput when I start the kernel with this patch:
+> ```
+> [    7.021079] mc: Linux media interface: v0.10
+> ...
+> [    7.084369] videodev: Linux video capture interface: v2.00
+> ...
+> [    7.125911] ov4689 2-0036: driver version: 00.01.01
+> [    7.125939] ov4689 2-0036: could not get module information!
+> [    7.130037] ov4689 2-0036: Unexpected sensor id(000000), ret(-5)
+> ...
+> [    7.143951] ov13850 1-0010: driver version: 00.01.01
+> [    7.143980] ov13850 1-0010: could not get module information!
+> [    7.149127] ov13850 1-0010: Detected OV00d850 sensor, REVISION 0xb1
+> ...
+> [    7.259601] rkisp1 ff910000.isp0: Adding to iommu group 4
+> [    7.260911] rkisp1: registered rkisp1_mainpath as /dev/video1
+> [    7.261100] rkisp1: registered rkisp1_selfpath as /dev/video2
+> ...
+> [    7.262628] rkisp1 ff910000.isp0: registered ep id 0 with 2 lanes
+> [    7.263666] rkvdec ff660000.video-codec: Adding to iommu group 1
+> [    7.265120] rkisp1 ff910000.isp0: Async subdev notifier completed
+> [    7.265458] rkisp1 ff920000.isp1: Adding to iommu group 5
+> [    7.266441] rkisp1: registered rkisp1_mainpath as /dev/video6
+> [    7.267380] rkisp1: registered rkisp1_selfpath as /dev/video7
+> [    7.267945] rkisp1 ff920000.isp1: registered ep id 0 with 2 lanes
+> [    7.267994] debugfs: Directory 'rkisp1' with parent '/' already present!
+> ```
 > 
-> -- 
-> 2.26.2
+> And here is the long version of the log with pinctrl and gpio debug
+> output. https://paste.debian.net/1181487/
+> 
+> These are the drivers that I use:
+> OV13850: https://github.com/initBasti/Linux_kernel_media_tree_fork/blob/dual_cam/drivers/media/i2c/ov13850.c
+> OV4689: https://github.com/initBasti/Linux_kernel_media_tree_fork/blob/dual_cam/drivers/media/i2c/ov4689.c
+> 
+> I have the following questions:
+> 1. Within the mipi_dphy_tx1rx1, I chose the phy-cells value to be `<0>`, but I have to say I am not entirely sure about this value. My current research was within the Documentation/devicetree/bindings/phy folder where I was able to find:
+>> #phy-cells:    Number of cells in a PHY specifier;  The meaning of all
+>> those cells is defined by the binding for the phy node. The PHY
+>> provider can use the values in cells to find the appropriate PHY.
+> But as there is only a binding for the rx0, I felt like I had to guess.
+> Could someone give me a hint in the right direction?
+> 
+> 2. Both ISP instances try to acquire the same endpoint 0, I found out
+> within the code at `rkisp1-dev.c:257`, that the rkisp1 driver tries to
+> get the endpoint from the firmware node at port 0. Looking deeper into
+> the code I can see that there are multiple debugging messages which
+> might be useful, how do I enable the debugging output for prints like:
+> `drivers/media/v4l2-core/v4l2-fwnode.c:419` ? I already enabled
+> CONFIG_DEBUG_KERNEL & CONFIG_DEBUG_MISC & CONFIG_DYNAMIC_DEBUG
+> 
+> 3. Is it correct when two camera sensors try to multiplex the
+> cif-clkout-a pinctrl? I have taken this from the friendlyElec fork of
+> the rockchip BSP downstream kernel. https://github.com/friendlyarm/kernel-rockchip/blob/nanopi4-linux-v4.4.y/arch/arm64/boot/dts/rockchip/rk3399-nanopi4-rkisp1.dtsi#L30
+> I have been testing on of their official images and there the dual mipi setup works.
+> So, I currently ask myself has something significantly changed in this
+> part of the code that I am unaware of?
+> And also I have a really hard time figuring out, where the cif-clkout-a
+> pinctrl is actually used.
+> 
+> 4. Has anyone been able to set up the dual cam setup on the rkisp1 on an
+> upstream kernel? If yes how did you do it?
+> 
+> Greetings,
+> Sebastian
