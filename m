@@ -2,133 +2,70 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 041DDC433E6
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7229BC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:29:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9D9222228
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:23:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39969221F7
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:29:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394264AbhARUXl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jan 2021 15:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394284AbhARUW1 (ORCPT
+        id S2394156AbhARU3Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jan 2021 15:29:24 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:53875 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389074AbhARKmb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jan 2021 15:22:27 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19610C061573
-        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 12:21:22 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id CA1DF1F447E1
-Message-ID: <8c71f7b3e19b9d66fc41d54c6e0d44cc03daa35b.camel@collabora.com>
-Subject: Re: [PATCH v2 1/6] media: mach-pxa: Register the camera sensor
- fixed-rate clock
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
-        Petr Cvek <petrcvekcz@gmail.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Daniel Mack <zonque@gmail.com>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Date:   Mon, 18 Jan 2021 17:21:12 -0300
-In-Reply-To: <20210118163657.GZ11878@paasikivi.fi.intel.com>
-References: <20210112194919.50176-1-ezequiel@collabora.com>
-         <20210112194919.50176-2-ezequiel@collabora.com>
-         <20210118163657.GZ11878@paasikivi.fi.intel.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        Mon, 18 Jan 2021 05:42:31 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 1RyRlHzOYyutM1RyVlYLNK; Mon, 18 Jan 2021 11:41:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1610966491; bh=Z81GYA5hCsz9rOR+QBeSuC2HZtYFow62usjSwYgC2W0=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=WkSUJj+3ebcAfsfqlzwKsMS5l+glvwZsJCa5yM0OeX9fUm7vkCLuv2FwNjufeyn6N
+         +wCPT3nt0Ev2PqGmBn6nv5olQtg5oXdTzvurH0foEy5mSqdxV0qZh7tFYAj3/GNXdq
+         KNYAKoJJsWJISfhEOywQt896/2Ru155Z8WqxxSKsj9Yqub27hrQVF57aS5+25iufrR
+         UC5nZFLWtkfA5bmJo2CUeRMYjYL1zJNWJ5P0R0JJ0aVQBPg8w0VGb/nCc2U+rz5Sya
+         jm+16hpuK20oI5rwYJidMmSnnXjgOYXNshiDRli87KCQByiATB081gHpVhjMIbwWco
+         J27ovAzSh2gTQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH for v5.11] v4l2-subdev.h: BIT() is not available in userspace
+Message-ID: <c6705331-7a41-1752-8f59-ccc9f487c949@xs4all.nl>
+Date:   Mon, 18 Jan 2021 11:41:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfAPjrEMmIfF+0m2ORHo1WX4qa0wRbDInTAYJlQ6w2VscfbuLIAksDtLUBi7zg9D9VGts0CiBbN4VrTZzTiUQPnCbK1kI0uwJaTiAbMv6+pjaqLRgUAvL
+ 4oDkvCjHGuq4pp37EoFqjwiZbOmePAVMiD9YYNM9fz9ktVRfRZIAgivCd/Tqs0NjNeeM5oSGLuC+TkcXSN5wUZ5UxwVvKWQXuok=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 2021-01-18 at 18:36 +0200, Sakari Ailus wrote:
-> Hi Ezequiel,
-> 
-> Thanks for the patch.
-> 
-> On Tue, Jan 12, 2021 at 04:49:14PM -0300, Ezequiel Garcia wrote:
-> > The pxa-camera capture driver currently registers a v4l2-clk
-> > clock, named "mclk", to represent the mt9m111 sensor clock.
-> > 
-> > Register a proper fixed-rate clock using the generic clock framework,
-> > which will allow to remove the v4l2-clk clock in the pxa-camera
-> > driver in a follow-up commit.
-> 
-> Where is the clock generated?
-> 
-> If it's the same device, shouldn't it be registered in the pxa_camera
-> driver?
-> 
+The BIT macro is not available in userspace, so replace BIT(0) by
+0x00000001.
 
-Apparently, as Petr explained, the PXA camera controller
-can provide a clock.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 6446ec6cbf46 (media: v4l2-subdev: add VIDIOC_SUBDEV_QUERYCAP ioctl)
+---
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 00850b98078a..a38454d9e0f5 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -176,7 +176,7 @@ struct v4l2_subdev_capability {
+ };
 
-However, it seems to me this is not necesarily the only
-way to provide a clock to a sensor, is it?
+ /* The v4l2 sub-device video device node is registered in read-only mode. */
+-#define V4L2_SUBDEV_CAP_RO_SUBDEV		BIT(0)
++#define V4L2_SUBDEV_CAP_RO_SUBDEV		0x00000001
 
-Moreover, doing the proper clock conversion in the PXA driver
-doesn't seem trivial and I don't have hardware to test it.
-
-I'd rather keep things simple, and just register a fixed-rate
-clock at mach-pxa level, which will be removed anyway
-once these non-DT platforms are finally converted to DT
-or dropped.
-
-This way is at least a tiny bit less ugly than the current
-dummy v4l2-clk.
-
-Thanks,
-Ezequiel
-
-> > 
-> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de> (for arch/arm/mach-*/)
-> > ---
-> > Quoting Arnd:
-> > """
-> > If there are no objections to the change itself, please take it through
-> > the v4l2 git tree.
-> > """
-> > 
-> >  arch/arm/mach-pxa/devices.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/arch/arm/mach-pxa/devices.c b/arch/arm/mach-pxa/devices.c
-> > index 524d6093e0c7..09b8495f3fd9 100644
-> > --- a/arch/arm/mach-pxa/devices.c
-> > +++ b/arch/arm/mach-pxa/devices.c
-> > @@ -4,6 +4,7 @@
-> >  #include <linux/init.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/clkdev.h>
-> > +#include <linux/clk-provider.h>
-> >  #include <linux/dma-mapping.h>
-> >  #include <linux/dmaengine.h>
-> >  #include <linux/spi/pxa2xx_spi.h>
-> > @@ -634,6 +635,13 @@ static struct platform_device pxa27x_device_camera = {
-> >  
-> >  void __init pxa_set_camera_info(struct pxacamera_platform_data *info)
-> >  {
-> > +       struct clk *mclk;
-> > +
-> > +       /* Register a fixed-rate clock for camera sensors. */
-> > +       mclk = clk_register_fixed_rate(NULL, "pxa_camera_clk", NULL, 0,
-> > +                                            info->mclk_10khz * 10000);
-> > +       if (!IS_ERR(mclk))
-> > +               clkdev_create(mclk, "mclk", NULL);
-> >         pxa_register_device(&pxa27x_device_camera, info);
-> >  }
-> >  
-> 
-
-
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
