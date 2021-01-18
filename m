@@ -2,65 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30627C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 19:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27EC7C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:05:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0343E22D37
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 19:58:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E90A722CAD
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 20:05:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437655AbhART6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jan 2021 14:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S2437712AbhARUEj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jan 2021 15:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394056AbhARTy7 (ORCPT
+        with ESMTP id S2437800AbhARUDr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jan 2021 14:54:59 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076D0C061757
-        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 11:54:18 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id b3so10821202pft.3
-        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 11:54:18 -0800 (PST)
+        Mon, 18 Jan 2021 15:03:47 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D516C061574
+        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 12:03:07 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b26so25811999lff.9
+        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 12:03:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XkhatLqEkgIoYwb7mkLwQ8lZ/MYBFBwFSP6oHKHVpXQ=;
-        b=S2ufpP7+N7L91fhBl914NPNxyICKXp+sSmwGueCHAMWJQYF+woBsBCwxp3cgw/GjeS
-         dr6WuA9pEBvnhojge12ecr6/KdQwK7dVSEjhbuxzxZOEYCzjfo3QvlX/arWVp4s545a1
-         /XrpDiCKZNt1GWdCWj1vShOPbnZkIkRa4TzXU3XZ1LKl2OGOR0Kzaxzej5J6Q0beJ+iH
-         LFI6cLHpgQJw/zVsG/Srpm8L9Iv9U+ZeaV7mcN2jqzZLaUN4E9X0jeQsJUahWvxMPQzz
-         m/HNXnCZqhZfepW6XwzWcmb/WPdiCBr1BAEkAgb42PpyEqXm5IkeXrq6wWt1ZrV/g62+
-         BO4w==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7alCZU74sYXZV+z2uTznaZthaKp3BCYeASOmff2ui7k=;
+        b=SrYXliND6Oh+2oSBueZymwtXnV3QfzIfdTGfexRuvg5TStwvicae9b2Lo9AlyzB/BY
+         BuZRORCvr9q0XlU4F/RkPQPYA0ECgzcupN+N+LHX2W/vB/Q9O4e/Vv6ucXkqjKkOZkZM
+         nx0dntzNLu0tQtHuZIjvm60/HUsSMCK7mvptfhUx+96Yna6CiO+8dGIBfD01PFZyeB9g
+         h4bKTbjLlxM+lv33mlhhWXZV2uuEbgULiP30fo6Bg/zaaQ3FbVYwXE6ixt4aVSJo+fL1
+         2WtcNCVdw3AcQBUjj+sJJE8SGkl73GYZPINwg04imZfeH5c4C5dBvtERa26lIuzuV2mF
+         YBWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XkhatLqEkgIoYwb7mkLwQ8lZ/MYBFBwFSP6oHKHVpXQ=;
-        b=oHt78nle8uXk/VNJ4VQyUH8JFXYgORxa7WZyyuCwCLLnS3Lf7keAuptfqYhzCEgH2O
-         G/sFHzn+dYHRfJWhsVGAg937XA5ao61CLpuFCAgtUHD0E+mSBBJKZk0ff+l0y3bTmpTZ
-         p8uvq4qqnYLhuKvSXcvkIettI/gPPJOXrU22riE1QvBZhnKT/0foyBbnvYkzJMozi02v
-         Z7hJvrA5EjYpEFXYiAVBn/rQeuX4GM0m2R7/v33Kohw+UPRysHzz8MptN//MXbNZiJHB
-         VgBDbSepmGBj3OA5SOb00tC8zB3OFYN92V4Ks2hXBZ6V3dtxKPC8T7eoCXAgGSYhHLya
-         4Lyg==
-X-Gm-Message-State: AOAM532lnhBB0Z+a9ePyHhvRiO5ZTxId+5JM1eW0t2Q6n32X2ZwjQkdi
-        beInjQjhXMuCyxhpUu0J1rX0f4FeHY34MtAwSwO2/Q==
-X-Google-Smtp-Source: ABdhPJz293yiVEmFyg9Ji6ORLpESmcRSjoRP14xcMxpV/RcJw8nEFFyC0vIwFDMo1uUMCwligXAeHNxYwVhl+kPaTCs=
-X-Received: by 2002:a63:e049:: with SMTP id n9mr1162424pgj.339.1610999658487;
- Mon, 18 Jan 2021 11:54:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210118190132.1045913-1-robert.foss@linaro.org>
- <db76aedb-de5e-2040-1e1c-777848614a7f@linaro.org> <357f6099-7a36-bbf6-723c-a4ca76835d00@linaro.org>
-In-Reply-To: <357f6099-7a36-bbf6-723c-a4ca76835d00@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 18 Jan 2021 20:54:07 +0100
-Message-ID: <CAG3jFyuzs00KoMQ2FZfqNAE9+hULTLoXJ2ja0pO-ikS8rvKW3A@mail.gmail.com>
-Subject: Re: [PATCH v4] media: ov8856: Configure sensor for GRBG Bayer for all modes
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7alCZU74sYXZV+z2uTznaZthaKp3BCYeASOmff2ui7k=;
+        b=E61YGtBz14imy9Os09TuQCf+MQ5tluB8wHrLjiGEND5sqlckivyPR4R5JaXabmYn1B
+         5gr4r/X91fvZWYlza+PigOouIjXiOQodXFxYG2ZDzzEk9XADl47OaPd6aF70N7kIOTse
+         ANrLTpGNfZix2+O5XJE728SyulQSLcU4Fd+aBWcMihtvMZvQPgLdeToMEgJb684+zZdx
+         GP8ETkzsiWcsVp8q5RbX3OZQHmZhUOQvy1RIRLmOh6JOivRmtYEw+2mEsiGiObD8cQYv
+         E3l8ypOEWrnCiDYTN3Xvzv2DNgky1AQK4xxsXqwMZgbU3B08BZAqKzAMBEmGMVTzgW3w
+         Fz4A==
+X-Gm-Message-State: AOAM532DYd8k4pVKA734lIMiycV8kS5O9ML+ui6uNGW8y05aAQB+LaA+
+        vtajZi8r9bpEtVuSF1TfcFPCMA==
+X-Google-Smtp-Source: ABdhPJwF51/aX4FTbG5kCK1BB4KSS9O5EWPwO2EInwvKz65Wd6gW5mAeIodUdbkWqYzZ4oJ4hIgsXw==
+X-Received: by 2002:a19:997:: with SMTP id 145mr355979lfj.588.1611000185480;
+        Mon, 18 Jan 2021 12:03:05 -0800 (PST)
+Received: from [192.168.118.216] ([85.249.43.69])
+        by smtp.gmail.com with ESMTPSA id i19sm1999072lfj.212.2021.01.18.12.03.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 12:03:04 -0800 (PST)
+Subject: Re: [PATCH v4] media: ov8856: Configure sensor for GRBG Bayer for all
+ modes
+To:     Robert Foss <robert.foss@linaro.org>
 Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media <linux-media@vger.kernel.org>,
@@ -68,91 +68,116 @@ Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Bingbu Cao <bingbu.cao@linux.intel.com>,
         Tomasz Figa <tfiga@google.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210118190132.1045913-1-robert.foss@linaro.org>
+ <db76aedb-de5e-2040-1e1c-777848614a7f@linaro.org>
+ <357f6099-7a36-bbf6-723c-a4ca76835d00@linaro.org>
+ <CAG3jFyuzs00KoMQ2FZfqNAE9+hULTLoXJ2ja0pO-ikS8rvKW3A@mail.gmail.com>
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+Message-ID: <af6eb377-6f7a-7b08-4a28-14f1a79a9d4a@linaro.org>
+Date:   Mon, 18 Jan 2021 23:03:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAG3jFyuzs00KoMQ2FZfqNAE9+hULTLoXJ2ja0pO-ikS8rvKW3A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I was going for row, but got a bit wild with the Ctrl-C + Ctrl-V, is
-that alright with you?
+Hi Robert,
 
-On Mon, 18 Jan 2021 at 20:28, Andrey Konovalov
-<andrey.konovalov@linaro.org> wrote:
->
-> Oops.. I've missed a few mistypes
->
-> On 18.01.2021 22:18, Andrey Konovalov wrote:
-> > Hi Robert,
-> >
-> > Thanks for you patch!
-> >
-> > Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-> >
-> > On 18.01.2021 22:01, Robert Foss wrote:
-> >> The previously added modes 3264x2448 & 1632x1224 are actually
-> >> configuring the sensor for BGGR mode, this is an issue since
-> >> the mode that is exposed through V4L incorrectly is set as GRBG.
-> >>
-> >> This patch fixes the issue by moving the output crop window of
-> >> internal sensor ISP uses by one row, which means that the Bayer
-> >> pattern of the output is changed.
-> >>
-> >> From:
-> >> row 1: B G B G B G ...
-> >> row 2: G R G R G R ...
-> >> raw 3: B G B G B G ...
-> - row
-> >> ...
-> >>
-> >> To:
-> >> raw 2: G R G R G R ...
-> - row
-> >> raw 3: B G B G B G ...
-> - row
->
-> Thanks,
-> Andrey
->
-> >> ...
-> >>
-> >> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> >> Suggested-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-> >> ---
-> >>
-> >> Changes since v1:
-> >>   - Sakari: Added mode information to ov8856_mode struct
-> >>   - Sakari: enum_mbus_code updated
-> >>
-> >> Changes since v2:
-> >>   - Andrey: Switched approach to changing the sensor configuration
-> >>     to yield identical Bayer modes for all modes
-> >>
-> >> Changes since v3:
-> >>   - Andrey: Improve commit msg to explain Bayer shift better
-> >>
-> >>   drivers/media/i2c/ov8856.c | 4 ++--
-> >>   1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-> >> index 2f4ceaa80593..8a355135c7db 100644
-> >> --- a/drivers/media/i2c/ov8856.c
-> >> +++ b/drivers/media/i2c/ov8856.c
-> >> @@ -428,7 +428,7 @@ static const struct ov8856_reg mode_3264x2448_regs[] = {
-> >>       {0x3810, 0x00},
-> >>       {0x3811, 0x04},
-> >>       {0x3812, 0x00},
-> >> -    {0x3813, 0x02},
-> >> +    {0x3813, 0x01},
-> >>       {0x3814, 0x01},
-> >>       {0x3815, 0x01},
-> >>       {0x3816, 0x00},
-> >> @@ -821,7 +821,7 @@ static const struct ov8856_reg mode_1632x1224_regs[] = {
-> >>       {0x3810, 0x00},
-> >>       {0x3811, 0x02},
-> >>       {0x3812, 0x00},
-> >> -    {0x3813, 0x02},
-> >> +    {0x3813, 0x01},
-> >>       {0x3814, 0x03},
-> >>       {0x3815, 0x01},
-> >>       {0x3816, 0x00},
-> >>
+On 18.01.2021 22:54, Robert Foss wrote:
+> I was going for row, but got a bit wild with the Ctrl-C + Ctrl-V, is
+
+Yeah... "raw" was in my original text
+
+> that alright with you?
+
+Other than these few raw vs row mistypes the patch is fine for me.
+My Reviewed-by tag holds.
+
+Thanks,
+Andrey
+
+> On Mon, 18 Jan 2021 at 20:28, Andrey Konovalov
+> <andrey.konovalov@linaro.org> wrote:
+>>
+>> Oops.. I've missed a few mistypes
+>>
+>> On 18.01.2021 22:18, Andrey Konovalov wrote:
+>>> Hi Robert,
+>>>
+>>> Thanks for you patch!
+>>>
+>>> Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+>>>
+>>> On 18.01.2021 22:01, Robert Foss wrote:
+>>>> The previously added modes 3264x2448 & 1632x1224 are actually
+>>>> configuring the sensor for BGGR mode, this is an issue since
+>>>> the mode that is exposed through V4L incorrectly is set as GRBG.
+>>>>
+>>>> This patch fixes the issue by moving the output crop window of
+>>>> internal sensor ISP uses by one row, which means that the Bayer
+>>>> pattern of the output is changed.
+>>>>
+>>>> From:
+>>>> row 1: B G B G B G ...
+>>>> row 2: G R G R G R ...
+>>>> raw 3: B G B G B G ...
+>> - row
+>>>> ...
+>>>>
+>>>> To:
+>>>> raw 2: G R G R G R ...
+>> - row
+>>>> raw 3: B G B G B G ...
+>> - row
+>>
+>> Thanks,
+>> Andrey
+>>
+>>>> ...
+>>>>
+>>>> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+>>>> Suggested-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+>>>> ---
+>>>>
+>>>> Changes since v1:
+>>>>    - Sakari: Added mode information to ov8856_mode struct
+>>>>    - Sakari: enum_mbus_code updated
+>>>>
+>>>> Changes since v2:
+>>>>    - Andrey: Switched approach to changing the sensor configuration
+>>>>      to yield identical Bayer modes for all modes
+>>>>
+>>>> Changes since v3:
+>>>>    - Andrey: Improve commit msg to explain Bayer shift better
+>>>>
+>>>>    drivers/media/i2c/ov8856.c | 4 ++--
+>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+>>>> index 2f4ceaa80593..8a355135c7db 100644
+>>>> --- a/drivers/media/i2c/ov8856.c
+>>>> +++ b/drivers/media/i2c/ov8856.c
+>>>> @@ -428,7 +428,7 @@ static const struct ov8856_reg mode_3264x2448_regs[] = {
+>>>>        {0x3810, 0x00},
+>>>>        {0x3811, 0x04},
+>>>>        {0x3812, 0x00},
+>>>> -    {0x3813, 0x02},
+>>>> +    {0x3813, 0x01},
+>>>>        {0x3814, 0x01},
+>>>>        {0x3815, 0x01},
+>>>>        {0x3816, 0x00},
+>>>> @@ -821,7 +821,7 @@ static const struct ov8856_reg mode_1632x1224_regs[] = {
+>>>>        {0x3810, 0x00},
+>>>>        {0x3811, 0x02},
+>>>>        {0x3812, 0x00},
+>>>> -    {0x3813, 0x02},
+>>>> +    {0x3813, 0x01},
+>>>>        {0x3814, 0x03},
+>>>>        {0x3815, 0x01},
+>>>>        {0x3816, 0x00},
+>>>>
