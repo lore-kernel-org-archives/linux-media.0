@@ -2,124 +2,162 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34C1EC433DB
-	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 22:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55728C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 01:49:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01AE9224B0
-	for <linux-media@archiver.kernel.org>; Sun, 17 Jan 2021 22:24:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E528221EC
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jan 2021 01:49:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730525AbhAQWXt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 Jan 2021 17:23:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24719 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730487AbhAQWXT (ORCPT
+        id S1730086AbhARBtj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 Jan 2021 20:49:39 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35320 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728797AbhARBti (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 Jan 2021 17:23:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610922112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1Q/nirjyd353laCSIcUJdblTkIhaVs8AOQO2AamTKH0=;
-        b=YT2htPgRh3IjSkrigGvxEeBTkLV+rJ8Mmx+1YJXQw7kNz78OUrwTK44vUzqH92aqunqF2m
-        i+1BoDAwmwb0OpgcOwrqzW9jM8fWojC1XQGToM9YeCotec/JVn3hp3sWdmhNaAcP4rWXOI
-        JovaZnIVj7ki5I6XzZKBrNUJVBiJbpI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-319-kWFSImbxOM2DKXBix1Lk5A-1; Sun, 17 Jan 2021 17:21:50 -0500
-X-MC-Unique: kWFSImbxOM2DKXBix1Lk5A-1
-Received: by mail-qv1-f69.google.com with SMTP id m1so14566642qvp.0
-        for <linux-media@vger.kernel.org>; Sun, 17 Jan 2021 14:21:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1Q/nirjyd353laCSIcUJdblTkIhaVs8AOQO2AamTKH0=;
-        b=nvcj401/uxxOrwZG84C9UtY4dositJyBRePxz/AjMbasc4PFV20HKxcQM+xCVArhkq
-         ZxO0+J0ECdrZmzRsK16IePL0G7U0ZSnIohb81D3JdnPY//4IlTm+e77SD+SKDYa8o7Pr
-         1WOgTtm+EFnuCJykCYIvIsmgp6ei817Nlkug6N4Bx+J6/eACzp9Ka6MdSW0v3HsiLXE8
-         FQ2oPFe9Ar5uCYEMJSVl310M/7Dv9oVZZWK94bK5Q5jkGXDIMpDTkbw8lhd6M1AubaLF
-         iXfSHFJfj/tjZ0q4oKtdwcwEsqefAxY0nQBDcEwUOBe/Nf/dz5NgBW9xLe6KD97aXenr
-         1J2Q==
-X-Gm-Message-State: AOAM531xg/kLEQJPZfYTx0eCIEktvYGmQqXfFjswwF9PEQBs4l14rNZB
-        D9GfML6H//qv8DCJKA/vqCKHhq6KyezRouHOvq/8Zbu5yDtIZVN7fYIe9ZgOW9+AN7e5MPfCt1M
-        l4QBklZDQL74eWtNtpbb/GcQ=
-X-Received: by 2002:a0c:9e50:: with SMTP id z16mr21356533qve.13.1610922110404;
-        Sun, 17 Jan 2021 14:21:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLfAViRBC01RcVQ97+1PHfTVCqF3ZzkhqNaMPivdg097DavcqB1qB4Ni4JYwm+u1ckPY0Qnw==
-X-Received: by 2002:a0c:9e50:: with SMTP id z16mr21356516qve.13.1610922110196;
-        Sun, 17 Jan 2021 14:21:50 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d25sm9674480qkl.97.2021.01.17.14.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 14:21:49 -0800 (PST)
-From:   trix@redhat.com
-To:     tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        mchehab@kernel.org, matthias.bgg@gmail.com,
-        hverkuil-cisco@xs4all.nl, yunfei.dong@mediatek.com,
-        acourbot@chromium.org
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: mtk-vcodec: fix argument used when DEBUG is defined
-Date:   Sun, 17 Jan 2021 14:21:38 -0800
-Message-Id: <20210117222138.551147-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 17 Jan 2021 20:49:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id E9A971F44A18
+Message-ID: <78ec5632dbb523f225267adc91f4d360f21df179.camel@collabora.com>
+Subject: Re: [PATCH v2 00/14] V4L2 Async notifier API cleanup
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Date:   Sun, 17 Jan 2021 22:48:45 -0300
+In-Reply-To: <20210117182956.41298-1-ezequiel@collabora.com>
+References: <20210117182956.41298-1-ezequiel@collabora.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Seems I messed up something here so I'll resend the
+whole series. Please ignore this thread :)
 
-When DEBUG is defined this error occurs
+On Sun, 2021-01-17 at 15:29 -0300, Ezequiel Garcia wrote:
+> The goal of this series is to make the API more consistent,
+> also fixing all the drivers which are currently misusing the API.
+> 
+> With this change, the v4l2-async functions that add subdevices
+> to a notifier have the same semantics, that is they all
+> allocate a struct v4l2_async_subdev, and take a size argument
+> for drivers to embed struct v4l2_async_subdev in a larger
+> struct.
+> 
+> This makes the struct v4l2_async_subdev allocation model
+> more consistent, and simpler to understand.
+> 
+> The V4L2 sub-devices documentation, as well as the kernel-doc
+> are also improved a bit, clarifying the API.
+> 
+> Finally, all the drivers previously using v4l2_async_notifier_add_subdev
+> are converted to proper helpers, which allows us to rename
+> v4l2_async_notifier_add_subdev to __v4l2_async_notifier_add_subdev,
+> and clarify the documentation so hopefully future drivers
+> will avoid it.
+> 
+> I have tried to convert the drivers in the least invasive way,
+> keeping the original code as much as possible. In many cases,
+> specially the old drivers, there is some bitrot and some room
+> for more cleanups, which is beyond the scope of this patchset.
+> 
+> The series is now rebased on top of these patches:
+> media: v4l2-async: Remove V4L2_ASYNC_MATCH_CUSTOM
+> media: v4l2-async: Remove V4L2_ASYNC_MATCH_DEVNAME
+> media: pxa_camera: Drop the v4l2-clk clock register
+> media: imx6-mipi-csi2: Call remote subdev get_mbus_config to get active lanes
+> 
+> Changes from v1:
+> * Add Laurent's follow cleanup, which makes the API safer.
+> * Fix commit description s/is discouraged/will be discouraged
+> * Fix missing allocation in renesas-ceu driver.
+> * Fix missing of_node puts in exynos4-is driver.
+> * Rework mention of v4l2_fwnode_reference_parse_sensor_common 
+> 
+> Ezequiel Garcia (13):
+>   media: v4l2-async: Clean v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: atmel: Use v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: stm32: Use v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: exynos4-is: Use v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: st-mipid02: Use v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: cadence: Use v4l2_async_notifier_add_fwnode_remote_subdev
+>   media: marvell-ccic: Use v4l2_async_notifier_add_*_subdev
+>   media: renesas-ceu: Use v4l2_async_notifier_add_*_subdev
+>   media: pxa-camera: Use v4l2_async_notifier_add_*_subdev
+>   media: davinci: vpif_display: Remove unused v4l2-async code
+>   media: v4l2-async: Fix incorrect comment
+>   media: Clarify v4l2-async subdevice addition API
+>   media: v4l2-async: Discourage use of v4l2_async_notifier_add_subdev
+> 
+> Laurent Pinchart (1):
+>   media: v4l2-async: Improve v4l2_async_notifier_add_*_subdev() API
+> 
+>  .../driver-api/media/v4l2-subdev.rst          | 38 ++++++--
+>  drivers/media/i2c/max9286.c                   |  2 +-
+>  drivers/media/i2c/st-mipid02.c                | 16 ++--
+>  drivers/media/pci/intel/ipu3/ipu3-cio2.c      | 15 ++--
+>  drivers/media/platform/am437x/am437x-vpfe.c   |  2 +-
+>  drivers/media/platform/atmel/atmel-isc.h      |  1 +
+>  drivers/media/platform/atmel/atmel-isi.c      | 46 +++-------
+>  .../media/platform/atmel/atmel-sama5d2-isc.c  | 44 ++++------
+>  drivers/media/platform/cadence/cdns-csi2rx.c  | 17 ++--
+>  drivers/media/platform/davinci/vpif_capture.c |  2 +-
+>  drivers/media/platform/davinci/vpif_display.c | 86 ++++--------------
+>  drivers/media/platform/davinci/vpif_display.h |  1 -
+>  drivers/media/platform/exynos4-is/media-dev.c | 26 +++---
+>  drivers/media/platform/exynos4-is/media-dev.h |  2 +-
+>  .../media/platform/marvell-ccic/cafe-driver.c | 14 ++-
+>  .../media/platform/marvell-ccic/mcam-core.c   | 10 ---
+>  .../media/platform/marvell-ccic/mcam-core.h   |  1 -
+>  .../media/platform/marvell-ccic/mmp-driver.c  | 11 ++-
+>  drivers/media/platform/omap3isp/isp.c         | 74 ++++++----------
+>  drivers/media/platform/pxa_camera.c           | 53 +++++------
+>  drivers/media/platform/qcom/camss/camss.c     | 11 +--
+>  drivers/media/platform/rcar-vin/rcar-core.c   |  5 +-
+>  drivers/media/platform/rcar-vin/rcar-csi2.c   |  2 +-
+>  drivers/media/platform/rcar_drif.c            |  2 +-
+>  drivers/media/platform/renesas-ceu.c          | 55 +++++-------
+>  .../platform/rockchip/rkisp1/rkisp1-dev.c     | 15 +---
+>  drivers/media/platform/stm32/stm32-dcmi.c     | 87 +++++++------------
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  9 +-
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.h      |  1 -
+>  drivers/media/platform/ti-vpe/cal.c           | 12 ++-
+>  drivers/media/platform/video-mux.c            | 14 +--
+>  drivers/media/platform/xilinx/xilinx-vipp.c   | 10 +--
+>  drivers/media/v4l2-core/v4l2-async.c          | 54 ++++++------
+>  drivers/media/v4l2-core/v4l2-fwnode.c         |  6 +-
+>  drivers/staging/media/imx/imx-media-csi.c     | 14 +--
+>  drivers/staging/media/imx/imx-media-of.c      |  2 +-
+>  drivers/staging/media/imx/imx6-mipi-csi2.c    | 19 ++--
+>  drivers/staging/media/imx/imx7-media-csi.c    | 16 ++--
+>  drivers/staging/media/imx/imx7-mipi-csis.c    | 15 +---
+>  drivers/staging/media/tegra-video/vi.c        | 10 +--
+>  include/media/davinci/vpif_types.h            |  2 -
+>  include/media/v4l2-async.h                    | 62 ++++++++-----
+>  42 files changed, 367 insertions(+), 517 deletions(-)
+> 
 
-drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c:306:41:
-  error: ‘i’ undeclared (first use in this function)
-  mtk_v4l2_debug(2, "reg[%d] base=0x%p", i, dev->reg_base[VENC_SYS]);
-
-Reviewing the old line
-
-	mtk_v4l2_debug(2, "reg[%d] base=0x%p", i, dev->reg_base[i]);
-
-All the i's need to be changed to VENC_SYS.
-Fix a similar error for VENC_LT_SYS.
-
-Fixes: 0dc4b3286125 ("media: mtk-vcodec: venc: support SCP firmware")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index dfb42e19bf81..be3842e6ca47 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -303,7 +303,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		ret = PTR_ERR((__force void *)dev->reg_base[VENC_SYS]);
- 		goto err_res;
- 	}
--	mtk_v4l2_debug(2, "reg[%d] base=0x%p", i, dev->reg_base[VENC_SYS]);
-+	mtk_v4l2_debug(2, "reg[%d] base=0x%p", VENC_SYS, dev->reg_base[VENC_SYS]);
- 
- 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 	if (res == NULL) {
-@@ -332,7 +332,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 			ret = PTR_ERR((__force void *)dev->reg_base[VENC_LT_SYS]);
- 			goto err_res;
- 		}
--		mtk_v4l2_debug(2, "reg[%d] base=0x%p", i, dev->reg_base[VENC_LT_SYS]);
-+		mtk_v4l2_debug(2, "reg[%d] base=0x%p", VENC_LT_SYS, dev->reg_base[VENC_LT_SYS]);
- 
- 		dev->enc_lt_irq = platform_get_irq(pdev, 1);
- 		irq_set_status_flags(dev->enc_lt_irq, IRQ_NOAUTOEN);
--- 
-2.27.0
 
