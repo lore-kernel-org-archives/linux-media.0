@@ -2,114 +2,167 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE76C433E6
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB072C433E9
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:38:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29C2322D08
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:27:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 990B322DD3
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728031AbhASSoh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 13:44:37 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:34323 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391595AbhASSj6 (ORCPT
+        id S1726743AbhASVh6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 16:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388826AbhASRwX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:39:58 -0500
-Received: by mail-io1-f70.google.com with SMTP id r16so37119583ioa.1
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 10:39:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WdkBn9riwIbRJJ+uSYY9Jvm7Ton9pmCnypyx0bUimvQ=;
-        b=kKglrpjdhNP23q+gerk/RXAFy/tmb4NwKMI8Jvva86tljIgljjtgkuftu1xneQvXMv
-         eix+TfhexK33jgJ4iaOseg8lzv+Bvm5AgVJEu/YHzhoFzHdF89vM+ywwX5jTmOYFjCVM
-         nxDnjsbqr529kar/KloKMmCS2bXCq5bG8S0dTszVmhvH5Smfb3I1sdZIQs5HHwtpnB23
-         T/jDb89fofZfn1M0v/H53NF/kdezdGEMAj2i0A3n5pvrmaU9eFNCYG5OhlN+YX9hO124
-         AKf+u2quyRy+sGGtWUgs9Zm489u4YvO9sy9mpYv+fWQU0p3buaEoVWj1yBF3YIT3N1S0
-         Fcnw==
-X-Gm-Message-State: AOAM532Gk7sYEVVpuL5RDALedLOfH0lRTNJ+zjxZNBMddVJOQtt6WixW
-        bEZWYwnC+OzfIcgvb4TPPvq2+GQ/uUOr5hVoq9ePyJ0ngzz2
-X-Google-Smtp-Source: ABdhPJxa3gLsf9Z4xg5RCxUHvK2/e6vpqujSQ54YT4qMV/IbyZxynsLQLJvLPM2M4NB1H6/PP91l9uoSyXLCWU+FlQFgn+AstOTy
+        Tue, 19 Jan 2021 12:52:23 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0BCC061573
+        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 09:47:06 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id BFCBB1F448ED
+Subject: Re: [PATCH] media: rkisp1: uapi: change hist_bins array type from
+ __u16 to __u32
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com, heiko@sntech.de
+Cc:     helen.koike@collabora.com, ezequiel@collabora.com,
+        kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+References: <20210119145341.29686-1-dafna.hirschfeld@collabora.com>
+ <a8f8d9e9-30b1-b594-a9bc-f4a11924bf56@xs4all.nl>
+ <fbe57350-f319-dbc7-f093-d3c1c76feb89@collabora.com>
+ <2e48068e-fcc4-9288-a9a6-59f71d7f20ce@xs4all.nl>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <65be169f-417f-a1f5-53e7-31f701a04d08@collabora.com>
+Date:   Tue, 19 Jan 2021 18:47:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:c25:: with SMTP id q5mr4535832ilg.286.1611081557543;
- Tue, 19 Jan 2021 10:39:17 -0800 (PST)
-Date:   Tue, 19 Jan 2021 10:39:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f1136d05b9452773@google.com>
-Subject: UBSAN: shift-out-of-bounds in std_validate
-From:   syzbot <syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com>
-To:     ezequiel@collabora.com, hverkuil-cisco@xs4all.nl,
-        jacopo@jmondi.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <2e48068e-fcc4-9288-a9a6-59f71d7f20ce@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    1e2a199f Merge tag 'spi-fix-v5.11-rc4' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=146e0c94d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=41e68e7e8a23ad09
-dashboard link: https://syzkaller.appspot.com/bug?extid=42d8c7c3d3e594b34346
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12166d58d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14dfc294d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/media/v4l2-core/v4l2-ctrls.c:2168:36
-shift exponent 100 is too large for 64-bit type 'long long unsigned int'
-CPU: 0 PID: 8469 Comm: syz-executor534 Not tainted 5.11.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
- std_validate.cold+0x19/0x1e drivers/media/v4l2-core/v4l2-ctrls.c:2168
- validate_new drivers/media/v4l2-core/v4l2-ctrls.c:2477 [inline]
- set_ctrl+0x207/0x4a0 drivers/media/v4l2-core/v4l2-ctrls.c:4425
- set_ctrl_lock drivers/media/v4l2-core/v4l2-ctrls.c:4448 [inline]
- v4l2_s_ctrl+0x2fd/0x4f0 drivers/media/v4l2-core/v4l2-ctrls.c:4469
- v4l_s_ctrl+0x324/0x390 drivers/media/v4l2-core/v4l2-ioctl.c:2253
- __video_do_ioctl+0xb94/0xe20 drivers/media/v4l2-core/v4l2-ioctl.c:2993
- video_usercopy+0x23d/0x12d0 drivers/media/v4l2-core/v4l2-ioctl.c:3345
- v4l2_ioctl+0x1b3/0x250 drivers/media/v4l2-core/v4l2-dev.c:360
- vfs_ioctl fs/ioctl.c:48 [inline]
- __do_sys_ioctl fs/ioctl.c:753 [inline]
- __se_sys_ioctl fs/ioctl.c:739 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x443ee9
-Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb d7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffe02e7df08 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000443ee9
-RDX: 0000000020000140 RSI: 00000000c008561c RDI: 0000000000000003
-RBP: 00000000006ce018 R08: 0000000000000000 R09: 00000000004002e0
-R10: 000000000000000f R11: 0000000000000246 R12: 0000000000401b70
-R13: 0000000000401c00 R14: 0000000000000000 R15: 0000000000000000
-================================================================================
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Am 19.01.21 um 17:32 schrieb Hans Verkuil:
+> On 19/01/2021 16:32, Dafna Hirschfeld wrote:
+>>
+>>
+>> Am 19.01.21 um 16:00 schrieb Hans Verkuil:
+>>> On 19/01/2021 15:53, Dafna Hirschfeld wrote:
+>>>> Each entry in the array is a 20 bits value composed of 16
+>>>> bits unsigned integer and 4 bits fractional part. So the
+>>>> type should change to __u32.
+>>>>
+>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>>> ---
+>>>> This patch is applied on top of v6 of the patchset
+>>>> "Fix the rkisp1 userspace API for later IP versions"
+>>>>
+>>>>    include/uapi/linux/rkisp1-config.h | 5 +++--
+>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+>>>> index 57ca3eea985f..47f6b84d7c56 100644
+>>>> --- a/include/uapi/linux/rkisp1-config.h
+>>>> +++ b/include/uapi/linux/rkisp1-config.h
+>>>> @@ -895,7 +895,8 @@ struct rkisp1_cif_isp_af_stat {
+>>>>    /**
+>>>>     * struct rkisp1_cif_isp_hist_stat - statistics histogram data
+>>>>     *
+>>>> - * @hist_bins: measured bin counters
+>>>> + * @hist_bins: measured bin counters. Each bin is a 20 bits value
+>>>> + *	       composed of a 16-bit unsigned integer and 4 bits fractional part.
+>>>
+>>> So bits 0-3 are the fractional part and bits 4-19 contain the integer part?
+>>> What goes where should be defined!
+>>
+>> Actually I don't know, I just copied the docs in the datasheet.
+>> I can try figure it out. I can meanwhile send a patch without the doc until
+>> we are sure. Is that OK?
+> 
+> No, this should be documented properly.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+I see that indeed bits 0-3 are the fractional part.
+The measurements are taken over 25 sub-windows and it is possible to
+give a weight to each window. If I set all weights to 1 then I expect to get
+an integer value and indeed in that case I see that the last 4 bits are always 0.
+If I set the weights to other than 1 I get the last 4 bits not only 0.
+
+The UAPI is generally not very good documented mainly because there is currently
+no open source userspace that uses it.
+
+> 
+> Is this the only fractional type that is used in the rkisp1 uapi or are there
+> others? (Just checking).
+
+There are other places as well.
+I see that there are some values in rkisp1_cif_isp_lsc_config that are fractional
+and not documented.
+The two other fractional types in the uapi are already documented.
+
+I can add a patch that extends the documentation of all the fields in the uapi using the datasheet.
+But I think such a patch can be added after de-staging.
+
+Thanks,
+Dafna
+
+
+> 
+>>
+>>>
+>>> Looking at rkisp1_stats_get_hst_meas() I see this:
+>>>
+>>>           for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
+>>>                   pbuf->params.hist.hist_bins[i] =
+>>>                           (u8)rkisp1_read(rkisp1,
+>>>                                           RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
+>>>
+>>> Here this is cast to a u8, so how does this work?
+>>
+>> This seems to be a bug. I see that this cast is introduced in v12 of the patch
+>> "media: staging: rkisp1: add capture device for statistics".
+>> This cast does not exist in any of the downstream versions.
+> 
+> Clearly something that needs to be fixed as well.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+>>
+>> Thanks,
+>> Dafna
+>>
+>>>
+>>> There is something fishy here...
+>>>
+>>> Regards,
+>>>
+>>> 	Hans
+>>>
+>>>>     *
+>>>>     * The histogram values divided into 16 bins for V10/V11 and 32 bins
+>>>>     * for V12/V13. It is configured within the struct rkisp1_cif_isp_hst_config.
+>>>> @@ -909,7 +910,7 @@ struct rkisp1_cif_isp_af_stat {
+>>>>     * RKISP1_CIF_ISP_HIST_BIN_N_MAX is equal to the maximum of the two.
+>>>>     */
+>>>>    struct rkisp1_cif_isp_hist_stat {
+>>>> -	__u16 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
+>>>> +	__u32 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
+>>>>    };
+>>>>    
+>>>>    /**
+>>>>
+>>>
+> 
