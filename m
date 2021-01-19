@@ -2,97 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E44C433DB
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 16:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24494C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDBF52245C
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 16:10:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF1BE22573
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391462AbhASQKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 11:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391433AbhASPwp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 10:52:45 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641B8C061574;
-        Tue, 19 Jan 2021 07:51:55 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id i63so5408102pfg.7;
-        Tue, 19 Jan 2021 07:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jGeJYEKHSWeoJcj5qAEZzduzYII6G03XjO2vsKZy9EA=;
-        b=hJ0iWDtRDdsvNgT4hiugAwGjsUNhnUCdTvbXWk4iz/IOuvGZmbcvd16r0EnSkMqqnp
-         QkQLl9bzqEgmLVsz0ItuuP6eTWk/sVER62hGsW0mDDRsLiExwHbDYT9ll5fJV4mKn8BP
-         hN1ILSB4S0B5U/LwWcOoBp5jzIPPEG67Wd/akzffGALccvQxyg+CiSZor4lrXcwdKjHQ
-         YTmTBZj5l1mclfnWNgreXQUnt38S6kwUXPv66RuvGNJpnfWVNOIO1P/5ArhQMphsPX32
-         RdXm9StV2ozHpE6ZZd78hBi9RpFCQtOkgrQCt5x4aFJFRKzRUMtPtjCR3ZihNQnR6kPJ
-         iwfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jGeJYEKHSWeoJcj5qAEZzduzYII6G03XjO2vsKZy9EA=;
-        b=APDRGHHv1gP48mGq7RvcTUyN2ayM/7RY1QNNBuKD9xFFIrzurS+RZwdzVL30fmV9i4
-         RKBZkJD1dvy5YRgFAa7cjM48YDD3UCwu1tEc/FzJgru+EDfQUikdTVrhKLS/2hK8+e5O
-         oNy/EMDhIQ3BTR265LNhVNPZzfAPtS58Hyn8DKL+be4d+Zs2Noy+LybTUj3Yfx0DycIy
-         8mZWtYEmpymOP5CeaAulBZDNm4Nbqs0IKClm8tAQ0l1gTBxc0LzldAsWab9iVeGc1StG
-         ZhM66ECYv8KCGBDhaqMHVCsHnOfhEvTIk+yYCIAqmfgg01eUVkOwirsj16jL+2zsrRj5
-         0DTQ==
-X-Gm-Message-State: AOAM532ruegrAmCGEK91JlO5zpA1YaMkmGIKjksnbAGnqOh4aFHS/oct
-        /wPSemgOLT75hFk1SpGz8ac=
-X-Google-Smtp-Source: ABdhPJyIr1aZov1YBsbDAEgjuC6i0+b3UdroSmkUYkfVGPf5O/G+0lPpjcSTJae7Ou5RcNlfOjI74Q==
-X-Received: by 2002:a63:605:: with SMTP id 5mr4916819pgg.144.1611071514834;
-        Tue, 19 Jan 2021 07:51:54 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8d1f:e7:cd3c:db2f])
-        by smtp.gmail.com with ESMTPSA id a204sm5841762pfa.49.2021.01.19.07.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 07:51:53 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 19 Jan 2021 07:51:51 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        hyesoo.yu@samsung.com, david@redhat.com, mhocko@suse.com,
-        surenb@google.com, pullip.cho@samsung.com, joaodias@google.com,
-        hridya@google.com, john.stultz@linaro.org, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
-Message-ID: <YAcAF2FUhaOIDY3N@google.com>
-References: <20210113012143.1201105-1-minchan@kernel.org>
- <20210113012143.1201105-5-minchan@kernel.org>
+        id S2387895AbhASPFQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 10:05:16 -0500
+Received: from gofer.mess.org ([88.97.38.141]:49185 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391099AbhASOze (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 19 Jan 2021 09:55:34 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 9EEECC63BE; Tue, 19 Jan 2021 14:54:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1611068092; bh=4FCk/3hL7LqfDUDV5R8M7KZf2iejU6Dbcp6DcL4aT20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kKZyK9lq5hsZgQzh7Tovpf+G4vnPVDMm5wJKKJuxnu9PgrYuZg7D3CPPq7a8qEF80
+         17r66RM07SfWNVGbK3dWVjWAtWOC8Q/9C5SclRZDJKs21NyfFYeyF0kOHd9OU+JC64
+         Ixrtp7xV5MhcA7m0yYlOQEtsyHxPQFw4FSmDEUMYPRyG7a8latL35lKahBywtfYWxs
+         EEGQvpV8a8FGkhqpN8PpmVYLRWkEPhf9tdCj/tnEUE2yiBILPotCrjcq6T39UE9L3b
+         E9PR+BneTYHTrX39gRe3TOM6AEAM3Vh7eU9JOEmJJiWFFF8aHrt/uSkxKy6tESbP86
+         WRXafBiJ5hqvA==
+Date:   Tue, 19 Jan 2021 14:54:52 +0000
+From:   Sean Young <sean@mess.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: rc: select CONFIG_BITREVERSE where needed
+Message-ID: <20210119145452.GA19746@gofer.mess.org>
+References: <20201203231714.1484408-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210113012143.1201105-5-minchan@kernel.org>
+In-Reply-To: <20201203231714.1484408-1-arnd@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 05:21:43PM -0800, Minchan Kim wrote:
-> From: Hyesoo Yu <hyesoo.yu@samsung.com>
+On Fri, Dec 04, 2020 at 12:17:03AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> This patch supports chunk heap that allocates the buffers that
-> arranged into a list a fixed size chunks taken from CMA.
+> A number of remote control drivers require the bitreverse
+> helper, and run into a link error when it is disabled:
 > 
-> The chunk heap driver is bound directly to a reserved_memory
-> node by following Rob Herring's suggestion in [1].
+> arm-linux-gnueabi-ld: drivers/media/rc/img-ir/img-ir-nec.o: in function `img_ir_nec_scancode':
+> img-ir-nec.c:(.text+0x10c): undefined reference to `byte_rev_table'
+> arm-linux-gnueabi-ld: drivers/media/rc/img-ir/img-ir-nec.o: in function `img_ir_nec_filter':
+> img-ir-nec.c:(.text+0x2dc): undefined reference to `byte_rev_table'
+> arm-linux-gnueabi-ld: drivers/media/usb/cx231xx/cx231xx-input.o: in function `get_key_isdbt':
+> cx231xx-input.c:(.text+0x38c): undefined reference to `byte_rev_table'
+> arm-linux-gnueabi-ld: drivers/media/usb/em28xx/em28xx-input.o: in function `em28xx_get_key_em_haup':
+> em28xx-input.c:(.text+0x1704): undefined reference to `byte_rev_table'
 > 
-> [1] https://lore.kernel.org/lkml/20191025225009.50305-2-john.stultz@linaro.org/T/#m3dc63acd33fea269a584f43bb799a876f0b2b45d
-> 
-> Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
-> Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
+Acked-by: Sean Young <sean@mess.org>
 
-DMABUF folks,
+Thanks
 
-It would be great if you guys give any comments.
+Sean
+
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/media/rc/Kconfig          | 2 ++
+>  drivers/media/rc/img-ir/Kconfig   | 1 +
+>  drivers/media/usb/cx231xx/Kconfig | 1 +
+>  drivers/media/usb/em28xx/Kconfig  | 1 +
+>  4 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/media/rc/Kconfig b/drivers/media/rc/Kconfig
+> index 2c0ee2e5b446..8a4b4040be45 100644
+> --- a/drivers/media/rc/Kconfig
+> +++ b/drivers/media/rc/Kconfig
+> @@ -92,6 +92,7 @@ config IR_SONY_DECODER
+>  config IR_SANYO_DECODER
+>  	tristate "Enable IR raw decoder for the Sanyo protocol"
+>  	depends on RC_CORE
+> +	select BITREVERSE
+>  
+>  	help
+>  	   Enable this option if you have an infrared remote control which
+> @@ -101,6 +102,7 @@ config IR_SANYO_DECODER
+>  config IR_SHARP_DECODER
+>  	tristate "Enable IR raw decoder for the Sharp protocol"
+>  	depends on RC_CORE
+> +	select BITREVERSE
+>  
+>  	help
+>  	   Enable this option if you have an infrared remote control which
+> diff --git a/drivers/media/rc/img-ir/Kconfig b/drivers/media/rc/img-ir/Kconfig
+> index 5c0508f2719f..a80cfcd87a95 100644
+> --- a/drivers/media/rc/img-ir/Kconfig
+> +++ b/drivers/media/rc/img-ir/Kconfig
+> @@ -30,6 +30,7 @@ config IR_IMG_HW
+>  config IR_IMG_NEC
+>  	bool "NEC protocol support"
+>  	depends on IR_IMG_HW
+> +	select BITREVERSE
+>  	help
+>  	   Say Y here to enable support for the NEC, extended NEC, and 32-bit
+>  	   NEC protocols in the ImgTec infrared decoder block.
+> diff --git a/drivers/media/usb/cx231xx/Kconfig b/drivers/media/usb/cx231xx/Kconfig
+> index 2fe2b2d335ba..b80661b8375f 100644
+> --- a/drivers/media/usb/cx231xx/Kconfig
+> +++ b/drivers/media/usb/cx231xx/Kconfig
+> @@ -18,6 +18,7 @@ config VIDEO_CX231XX_RC
+>  	bool "Conexant cx231xx Remote Controller additional support"
+>  	depends on RC_CORE=y || RC_CORE=VIDEO_CX231XX
+>  	depends on VIDEO_CX231XX
+> +	select BITREVERSE
+>  	default y
+>  	help
+>  	  cx231xx hardware has a builtin RX/TX support. However, a few
+> diff --git a/drivers/media/usb/em28xx/Kconfig b/drivers/media/usb/em28xx/Kconfig
+> index f2031a933e54..8a24731b373a 100644
+> --- a/drivers/media/usb/em28xx/Kconfig
+> +++ b/drivers/media/usb/em28xx/Kconfig
+> @@ -77,5 +77,6 @@ config VIDEO_EM28XX_RC
+>  	depends on VIDEO_EM28XX
+>  	depends on !(RC_CORE=m && VIDEO_EM28XX=y)
+>  	default VIDEO_EM28XX
+> +	select BITREVERSE
+>  	help
+>  	  Enables Remote Controller support on em28xx driver.
+> -- 
+> 2.27.0
