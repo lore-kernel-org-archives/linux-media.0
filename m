@@ -2,167 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_RED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C6F5C43381
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1BDAC433E9
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:45:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD27823138
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71E0D2250E
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:45:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403925AbhASNlV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 08:41:21 -0500
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:42689 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404081AbhASMY7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:24:59 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 1q3JlOl5LyutM1q3MlbVVy; Tue, 19 Jan 2021 13:24:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611059053; bh=+fygwg8H7qkyKanjBFzInEqDikPrCtVia5ztmXeuT8o=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=esWbI+Lh9FRvuG9LpVYDuouJ84+y5SVFATzQP7ZpAkWlKhxpMQNv10g7tZk+Q+4GR
-         P8w0iKSjARrqozBk9TMk4qupccz3HMw/pPa5j+Fl4C2W0pgaEOFIATNA5dfqmNbXpF
-         WY3dgySHr2MM3+6svDtBqw3Cm53j9ZKlcznqjLsgYdpTtvUnDnYFt00lTZiImdL2fY
-         qY1XJPsfQLCx3vnp/zkfosk3P0gx6P0mVbHxoub0/O3N+aYXqUBlwVZ01FyUjwj1I0
-         OZ20uGwGN94AfvQR5wgjFi/ySkQn4HCvdPm/riMHsIyPvQ/Hw151NoHZMXG5h6/u3B
-         ZllT5HuMu4+8A==
-Subject: Re: [PATCH v7 14/17] media/videobuf1|2: Mark follow_pfn usage as
- unsafe
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>
-References: <20201127164131.2244124-1-daniel.vetter@ffwll.ch>
- <20201127164131.2244124-15-daniel.vetter@ffwll.ch>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <f15ba4c6-211c-f93e-919e-e18adfe6c75e@xs4all.nl>
-Date:   Tue, 19 Jan 2021 13:24:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S2389546AbhASNia (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 08:38:30 -0500
+Received: from www.zeus03.de ([194.117.254.33]:55056 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387668AbhASJkK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 19 Jan 2021 04:40:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=rKwj1AfOLCGXOesf4eVBjnn2gVf
+        wi0SlaspsyM9LG+I=; b=oee3ecn0uienirp2jDwWU+e7Y5MuiH5+fUUSnG1B98l
+        uag0O9R6618Ou5swlFlhnVVLeDxqpJh6tpiUnJaYetAWPBy0nSexXtazuqWvjN/E
+        +DQfSEaiuBH9Tipikok+JclDS0eyMAV15EO+WUdH0oF5tm4Fsxt19iRrnxTMU148
+        =
+Received: (qmail 1003424 invoked from network); 19 Jan 2021 10:39:19 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Jan 2021 10:39:19 +0100
+X-UD-Smtp-Session: l3s3148p1@dCTXnD257NkgAwDPXyX1ACWcscxtZ2TX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: [PATCH 0/3] treewide: remove open coded SMBus block transfers
+Date:   Tue, 19 Jan 2021 10:39:07 +0100
+Message-Id: <20210119093912.1838-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20201127164131.2244124-15-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfA1H6w7Z451hXz5uBfC+T4CILwukWC7IM/06HM55r5dwzXzD5s4d8wprZRF6kMCTJKToPwR+OFR57hUr5TUeAa3J/b4Bano5cXG5JJs7aDyySvyBQ7iT
- AF6NJi1hvvqh1FElksqvzLVa/QmOEEejZBgjFwsoa8P3BlX71aUZg55UgN1CoKfvJigaVMx8OmJVZTP1TBgBzYBEZA+0dH6f1b1DMDgA9kXqoDqQfIJqtbCX
- qHojNYKAiISwBmDYuSZMkSH7KYRNIIB59C3sKlux+Osh+dIvr5KeKL/UVyQNN5t4C8bA3xzI7WdxGoWOTrcrh6osz7j5RinbLE8qyeEUJUyvvWjXKkpd7dqS
- HMIEDbWiUVhRUKJ1yDeGKCpWevlCpEVMVzY1pNK0/aVSSfNEBvtodYg6CYCokOhjJHvuA+Ep4e+YV4DPrzHET+/xc+NX8AyQiHwb8/yP2YmEZJ49rfgQR9BP
- dr/7nk6Q/Zh1zkv3OibjwZY9c+4YhA+0B7uhgqimrkbKOf8Rigw2QOU+Ca/UadrwBpoSe8JeVoEhBEL9Z1DvGPDVJmztfvzZh/WKgR3U/UdzLA58H6XYG2Wi
- kRopGvfHjGH7BGq7rfl3p2JRUv4RPzrY67wfHIz7CJCMySBHEhQmO0DqCexzJwuN7qVDQQUew+dVW+zy8VfPtcLvnQ/ulL2+sYo0AsauVMOoEKmJsD13zo8F
- BwOGLGocDuv11A3T9etYvQWCfQotxHdMIivYlD9K45bjGngn5VQTZJEBfHREoydJ8pRl5Zubmv1dwvrtHzJ5cUaN75JDMp0+rY6t7CQSF6ElQBaS/BkwGvqT
- E/8oCoh/4PmJ0q6wWIfjNWnYVoGo3VhXp1URyLLFriMg9vsz5Zk8hKxx6nVgqUGGVM+9vX7XOQ6WrUu2nFalkCfyREoU2d7TZo3kbyVR1cFUVs4KSoSVdkYX
- 9CdJyh8ZOIugxyoIdE14LTtUXncHFwG8YxkQ+bn6EZL1uWAR
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 27/11/2020 17:41, Daniel Vetter wrote:
-> The media model assumes that buffers are all preallocated, so that
-> when a media pipeline is running we never miss a deadline because the
-> buffers aren't allocated or available.
-> 
-> This means we cannot fix the v4l follow_pfn usage through
-> mmu_notifier, without breaking how this all works. The only real fix
-> is to deprecate userptr support for VM_IO | VM_PFNMAP mappings and
-> tell everyone to cut over to dma-buf memory sharing for zerocopy.
-> 
-> userptr for normal memory will keep working as-is, this only affects
-> the zerocopy userptr usage enabled in 50ac952d2263 ("[media]
-> videobuf2-dma-sg: Support io userptr operations on io memory").
-> 
-> Acked-by: Tomasz Figa <tfiga@chromium.org>
+The bigger picture is that I want to extend the maximum block length for
+SMBus block transfers from 32 (SMBus2) to 255 (SMBus3). That needs some
+cleanups and refactoring first. To make that easier, it would be helpful
+if all in-kernel users would call the helper functions of the I2C core
+for SMBus block transfers and not open code it via the generic
+smbus_xfer.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+This series converts the three users doing that. I don't have the
+hardware, so these patches are only build tested. Please let me know
+what you think.
 
-Regards,
+Changes since RFC:
+* addressed review comments, see individual patches
 
-	Hans
+Wolfram Sang (3):
+  media: i2c: adv7842: remove open coded version of SMBus block write
+  media: i2c: adv7511: remove open coded version of SMBus block read
+  ipmi: remove open coded version of SMBus block write
 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: Pawel Osciak <pawel@osciak.com>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: Tomasz Figa <tfiga@chromium.org>
-> Cc: Laurent Dufour <ldufour@linux.ibm.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: Michel Lespinasse <walken@google.com>
-> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> --
-> v3:
-> - Reference the commit that enabled the zerocopy userptr use case to
->   make it abundandtly clear that this patch only affects that, and not
->   normal memory userptr. The old commit message already explained that
->   normal memory userptr is unaffected, but I guess that was not clear
->   enough.
-> ---
->  drivers/media/common/videobuf2/frame_vector.c | 2 +-
->  drivers/media/v4l2-core/videobuf-dma-contig.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-> index a0e65481a201..1a82ec13ea00 100644
-> --- a/drivers/media/common/videobuf2/frame_vector.c
-> +++ b/drivers/media/common/videobuf2/frame_vector.c
-> @@ -70,7 +70,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  			break;
->  
->  		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
-> -			err = follow_pfn(vma, start, &nums[ret]);
-> +			err = unsafe_follow_pfn(vma, start, &nums[ret]);
->  			if (err) {
->  				if (ret == 0)
->  					ret = err;
-> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-> index 52312ce2ba05..821c4a76ab96 100644
-> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-> @@ -183,7 +183,7 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
->  	user_address = untagged_baddr;
->  
->  	while (pages_done < (mem->size >> PAGE_SHIFT)) {
-> -		ret = follow_pfn(vma, user_address, &this_pfn);
-> +		ret = unsafe_follow_pfn(vma, user_address, &this_pfn);
->  		if (ret)
->  			break;
->  
-> 
+ drivers/char/ipmi/ipmb_dev_int.c | 24 +++++++++----------
+ drivers/media/i2c/adv7511-v4l2.c | 41 ++++++++++++--------------------
+ drivers/media/i2c/adv7842.c      | 24 ++++---------------
+ 3 files changed, 32 insertions(+), 57 deletions(-)
+
+-- 
+2.29.2
 
