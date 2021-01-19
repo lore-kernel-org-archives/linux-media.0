@@ -2,108 +2,143 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE3EC433E9
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DDBC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C10323133
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 629952312E
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 13:44:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393141AbhASNkk convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 08:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390618AbhASMJM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:09:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008AEC061573
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 04:08:31 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1l1poB-0006J2-OX; Tue, 19 Jan 2021 13:08:27 +0100
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1l1poA-0005Rp-So; Tue, 19 Jan 2021 13:08:26 +0100
-Message-ID: <eb52b15885682f7c356f8d67afa18ad21e85b8f2.camel@pengutronix.de>
-Subject: Re: Coda: imx53 plays video with incorrect colors
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media <linux-media@vger.kernel.org>,
-        Discussion of the development of and with GStreamer 
-        <gstreamer-devel@lists.freedesktop.org>,
-        Tim Harvey <tharvey@gateworks.com>
-Date:   Tue, 19 Jan 2021 13:08:26 +0100
-In-Reply-To: <CAOMZO5Cu_=vEe23R+siqcH2UKPUvaBnCo=WD5FvKcSmbdX6Tbg@mail.gmail.com>
-References: <CAOMZO5A3Dr2SF_u9z9p1dAwBrrPXTqkdVqZuBR0v6iYRPcJEig@mail.gmail.com>
-         <CAOMZO5B=2z5sHWQvb0872v4f7YYN8Aq4ptf4YuDmoebJBtEY+w@mail.gmail.com>
-         <f8d2536fb5dadf7b7bdb4bfb6b3aaadf68318a88.camel@ndufresne.ca>
-         <CAOMZO5DBRGqn5DTsMG3RRHdN1HMo7CtP6HYw3PajK3A6Y6iCoQ@mail.gmail.com>
-         <CAKQmDh-KgO4TameRQs_D3_rdW8n0oY-ZLmbsQzWQPOkUJdiObw@mail.gmail.com>
-         <CAOMZO5DCzodXDVygMfnhJi=DF3W64NZJQxLBT6LoOJ_V6NJ9Hg@mail.gmail.com>
-         <4366a936909a3f33788719f00441e81b1f3576f7.camel@pengutronix.de>
-         <CAOMZO5CyDtEW4Uo3u9ANRro5fV4DBx3WLKDc_ok8HB41mNKF5w@mail.gmail.com>
-         <180eccb13a035e6245da319b285c6cd622fb30ec.camel@pengutronix.de>
-         <CAOMZO5Cu_=vEe23R+siqcH2UKPUvaBnCo=WD5FvKcSmbdX6Tbg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        id S2390685AbhASNkF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 08:40:05 -0500
+Received: from www.zeus03.de ([194.117.254.33]:55080 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387683AbhASJkZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 19 Jan 2021 04:40:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=k1; bh=D/a5mp3Y9DlTj5
+        umviADmsnNfOp+6c9C7wik2zre4KU=; b=pTSWJo0UyyegjPqDm8A/9ZPRc+MkZF
+        Y+WA8nSgtQgzUvzBCcphEPt5W/XRQlLtZctEFJXjBc0+b1w12d/vbNga8jcPtfOw
+        7JZW5OjTwWl9xj6iIqOu1GCXnKS4Z2r9aP82VFOF4iVQvpkcTFEtVZbSDBAEuqtZ
+        XRmXVCHRVwO7Q=
+Received: (qmail 1003521 invoked from network); 19 Jan 2021 10:39:20 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Jan 2021 10:39:20 +0100
+X-UD-Smtp-Session: l3s3148p1@VA3tnD258NkgAwDPXyX1ACWcscxtZ2TX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] media: i2c: adv7511: remove open coded version of SMBus block read
+Date:   Tue, 19 Jan 2021 10:39:09 +0100
+Message-Id: <20210119093912.1838-3-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210119093912.1838-1-wsa+renesas@sang-engineering.com>
+References: <20210119093912.1838-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fabio,
+The open coded version differs from the one in the core in one way: the
+buffer will be always copied back, even when the transfer failed. Be
+more robust: use the block read from the I2C core and propagate a
+potential errno further to the sanity checks.
 
-On Mon, 2021-01-18 at 15:36 -0300, Fabio Estevam wrote:
-> Hi Philipp,
-> 
-> On Mon, Jan 18, 2021 at 12:29 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> 
-> > Please try forcing decoder output to NV12 instead of I420.
-> 
-> Your suggestion works, thank you. After applying your IPU patch and
-> using this Gstreamer pipeline:
-> 
-> gst-launch-1.0 filesrc location=/media/clip.mp4 ! qtdemux ! h264parse
-> ! v4l2h264dec ! video/x-raw,format=NV12  !  kmssink
-> 
-> The video is played with correct colors.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Ok, thank you. It looks to me like the I420 issue is either a bug in
-coda-dev, or an interaction issue between GStreamer and coda-dev, where
-coda-dev doesn't let GStreamer change the format at a point where it
-expects to be able to. The b/w image (with slight discolorations in a
-regular pattern) could very well be actual NV12 interpreted as I420 by
-GStreamer (and thus kmssink). I'll have closer look.
+Changes since RFC:
+* removed wrong assumption from the commit message
 
-> Can we make the NV12 format be used automatically so that a simple
-> 'gst-play-1.0 /media/clip.mp4' works?
+ drivers/media/i2c/adv7511-v4l2.c | 41 ++++++++++++--------------------
+ 1 file changed, 15 insertions(+), 26 deletions(-)
 
-That would be a matter of increasing the rank of the NV12 format
-in gst_v4l2_object_format_get_rank() above that of I420 and YV12.
+diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+index a3161d709015..441bafa743a6 100644
+--- a/drivers/media/i2c/adv7511-v4l2.c
++++ b/drivers/media/i2c/adv7511-v4l2.c
+@@ -214,36 +214,25 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
+ 	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
+ }
+ 
+-static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
+-					 u8 command, unsigned length, u8 *values)
+-{
+-	union i2c_smbus_data data;
+-	int ret;
+-
+-	if (length > I2C_SMBUS_BLOCK_MAX)
+-		length = I2C_SMBUS_BLOCK_MAX;
+-	data.block[0] = length;
+-
+-	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+-			     I2C_SMBUS_READ, command,
+-			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
+-	memcpy(values, data.block + 1, length);
+-	return ret;
+-}
+-
+-static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
++static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+ {
+ 	struct adv7511_state *state = get_adv7511_state(sd);
+ 	int i;
+-	int err = 0;
+ 
+ 	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
+ 
+-	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
+-		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
++	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
++		s32 ret;
++
++		ret = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
+ 						    I2C_SMBUS_BLOCK_MAX, buf + i);
+-	if (err)
+-		v4l2_err(sd, "%s: i2c read error\n", __func__);
++		if (ret < 0) {
++			v4l2_err(sd, "%s: i2c read error\n", __func__);
++			return ret;
++		}
++	}
++
++	return 0;
+ }
+ 
+ static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
+@@ -1668,20 +1657,20 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
+ 	if (edidRdy & MASK_ADV7511_EDID_RDY) {
+ 		int segment = adv7511_rd(sd, 0xc4);
+ 		struct adv7511_edid_detect ed;
++		int err;
+ 
+ 		if (segment >= EDID_MAX_SEGM) {
+ 			v4l2_err(sd, "edid segment number too big\n");
+ 			return false;
+ 		}
+ 		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
+-		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
++		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+ 		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
+ 		if (segment == 0) {
+ 			state->edid.blocks = state->edid.data[0x7e] + 1;
+ 			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
+ 		}
+-		if (!edid_verify_crc(sd, segment) ||
+-		    !edid_verify_header(sd, segment)) {
++		if (err < 0 || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
+ 			/* edid crc error, force reread of edid segment */
+ 			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
+ 			state->have_monitor = false;
+-- 
+2.29.2
 
-> > Yes. Please try if the following patch makes it work:
-> 
-> With this Gstreamer patch, I don't see the segfault anymore, but it
-> plays in black-and-white.
-
-Thanks for testing. I've opened
-
-https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/merge_requests/856
-
-to track this.
-
-regards
-Philipp
