@@ -2,188 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57215C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 05:08:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C628DC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 08:01:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23AB822BE9
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 05:08:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73FA620773
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 08:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387859AbhASErU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jan 2021 23:47:20 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:46171 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732925AbhASEmU (ORCPT
+        id S1730894AbhASIBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 03:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729993AbhASIAZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jan 2021 23:42:20 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id 1ipjl2tOkqqWw1ipkl235o; Tue, 19 Jan 2021 05:41:36 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611031296; bh=jJSqEJ3fHjABJQvGIhAeU5CXoi3gvv8Ddc3oXQFNDK0=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=eTlbC9m97T5cNu54lNNjH+2afXum65/UnS/vajEmWoIdse5ppS37D/5SAD6pX5lk/
-         OyUmtdGuHmQPZ7mIGxUNuWxGWPm0OOhpBKFWzKCcMIvaxziB3oo4p8VVqxYqChkcoE
-         kbXV0JKG12Gt0swVdJNVCajzx0TqJiAH2IHtIweeHwU7T6yHKPahidyM2QV85vJzbS
-         xDtxVu+WNS9wY7POgN+8YhuaNB6sO/KtjHDtUfMf5Jhci8EQSzXjghO3F9ZAK/laqt
-         kEjYPFY1okBR5ynoY8pZJneG0MdSXPlIqWKNviUkNKzId8pWF8YzXjLcRMLzxGaUQE
-         cZhAt6MTn/Uxw==
-Message-ID: <2bf831fdc71b078b7b12158b1b6abdce@smtp-cloud9.xs4all.net>
-Date:   Tue, 19 Jan 2021 05:41:35 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4xfBdPliSu4JgdlVY/IGGq9yrV0HHJXTd4LirsBgM8+uOAsrOj95eS3JENPhnApOxksXrV+pbEp4Ck/V6/Tkjw/Qy2kY3Fk/LRCtpfUBwJOarlbn6dyAJy
- lCVk26jDRQbZyLpRk/yrOps9pW0yeAFX62QHIeNhrGNWghgIZdBipY4UU1iAQeq+6gOtnOfiAoOzQVtt4b4b1vPG4Yl7hLc+RjphVuATWhG3J5mlbnaDYa9F
- 2Pjb2cavI3QflRzSnEAEBQ==
+        Tue, 19 Jan 2021 03:00:25 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24652C061757
+        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 23:59:44 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id p22so20351319edu.11
+        for <linux-media@vger.kernel.org>; Mon, 18 Jan 2021 23:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N3oQVFDD2OO6IL6zbge+VvrfxMcHQq0KNtK/qBzCFsc=;
+        b=ztMy3qngkDrMUnpW5LjO0RrtrW1+iO2EdZShwfH9OGMSMH1DvX8DQl+t01HMwzpJcd
+         zaDeTr+WAOP4d18I1QDsXKWPfXYmE1iXnTUigTuVREC3O0M4ZwB7Rih1hCaWxHh5eG6f
+         702D3bKFvM9Ra+N7y0Ya6uiUKMCrE30Bvq7m0Kf5hS9JkuoV5kN6QUBqB9krrrKcqEoE
+         CYjklsphNbYBh4OvltSurGJ+9aJY1P2R2flzdNtQlXXee958kkQZjDGQTnZI8XGV4gCS
+         7BNaN8FOGIhMFLch9amf/WCo5vQ32KXDkNtLk8Nj5vZvB0ljyaNXyECurpaBjbxWfAhx
+         NaCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N3oQVFDD2OO6IL6zbge+VvrfxMcHQq0KNtK/qBzCFsc=;
+        b=DFlr4XrbULedbT+DAryoMX1R4THPKAh7cCbezOe0RKOak2uiuf9WfeyK9E+fWj/oBb
+         MfZljucS7yEncaQow7vA8T1il9DBZhEw2LVYYBH+xMa0qjLyPjgROWd77iIw8hr5ECr8
+         KURfCPTR6n0yrOv+n05bVcBo348Ufg2Pi8chrggcePyFO+74yNMaqG6C4+As7zhQaaF0
+         7wU1yIZw3U9jtd/ggjXMuvyy+956hf5gnlZLg6VPfYWFkeS5Mo1jOazCRt3PTGQxi6TR
+         DN9yGLtJ7MRSLzULOXpuK0zK7vWV2rlzaQNXtSZBwldEvRx1jp2lVZXvbrmEx1zWxjIi
+         Z/NA==
+X-Gm-Message-State: AOAM532xm3ARQZ4+ttYk7R//GWWrshDzlyB/hku6dP5Oog+/zDbepUZY
+        QxCvZiozoFwCLTIszXetOqZrMQ0tFAX/vwl5
+X-Google-Smtp-Source: ABdhPJymbSINexw7sN7HVMR/EmLkqH7Fm1TbDnwinCyGkk+du1UwghGE9kwKZnF2KerIX/MbQe9ceQ==
+X-Received: by 2002:aa7:d5d5:: with SMTP id d21mr2445194eds.252.1611043182809;
+        Mon, 18 Jan 2021 23:59:42 -0800 (PST)
+Received: from [192.168.0.3] (hst-221-113.medicom.bg. [84.238.221.113])
+        by smtp.googlemail.com with ESMTPSA id p3sm11731346edh.50.2021.01.18.23.59.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 23:59:42 -0800 (PST)
+Subject: Re: [PATCH] venus: core: Fix platform driver shutdown
+To:     Shawn Guo <shawn.guo@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        vgarodia@codeaurora.org,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+References: <20201221095820.27192-1-stanimir.varbanov@linaro.org>
+ <20210119074044.GB17701@dragon>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <72d85c1b-ec0b-3cf1-dbbc-6c4924e4beec@linaro.org>
+Date:   Tue, 19 Jan 2021 09:59:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <20210119074044.GB17701@dragon>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
 
-Results of the daily build of media_tree:
 
-date:			Tue Jan 19 05:00:10 CET 2021
-media-tree git hash:	321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8
-media_build git hash:	f6e3542673d19355e8e42be40f5fc78431d611c5
-v4l-utils git hash:	3abb9556eff581e3ba424972cc54a40611ead80b
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 10.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		v0.6.3-1-g58d3c1ca
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		v0.5.0-7065-gbe18f90f0
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 01932d8c0f1bcf9780263707cc9aa0af06014d36
-host hardware:		x86_64
-host os:		5.7.0-1-amd64
+On 1/19/21 9:40 AM, Shawn Guo wrote:
+> On Mon, Dec 21, 2020 at 11:58:20AM +0200, Stanimir Varbanov wrote:
+>> With TZ system reboot cannot finish successfully. To fix that
+>> enable core clocks by runtime pm before TZ calls and disable
+>> clocks after that.
+>>
+>> Fixes: 7399139be6b2 ("media: venus: core: add shutdown callback for venus")
+>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> 
+> Hi Mauro,
+> 
+> Could you help pick this fix up?
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-powerpc64: OK
-linux-git-arm-stm32: OK
-linux-git-mips: OK
-linux-git-arm-pxa: OK
-linux-git-arm64: OK
-linux-git-arm-multi: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.238-i686: OK
-linux-4.4.238-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.238-i686: OK
-linux-4.9.238-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.200-i686: OK
-linux-4.14.200-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.149-i686: OK
-linux-4.19.149-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.69-i686: OK
-linux-5.4.69-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.13-i686: OK
-linux-5.8.13-x86_64: OK
-linux-5.9.1-i686: OK
-linux-5.9.1-x86_64: OK
-linux-5.10.1-i686: OK
-linux-5.10.1-x86_64: OK
-linux-5.11-rc1-i686: OK
-linux-5.11-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 1
-virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: ERRORS
+Shawn, it is part of linux-next already.
 
-Detailed results are available here:
+> 
+> Shawn
+> 
+>> ---
+>>  drivers/media/platform/qcom/venus/core.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+>> index bdd293faaad0..7233a7311757 100644
+>> --- a/drivers/media/platform/qcom/venus/core.c
+>> +++ b/drivers/media/platform/qcom/venus/core.c
+>> @@ -349,8 +349,10 @@ static void venus_core_shutdown(struct platform_device *pdev)
+>>  {
+>>  	struct venus_core *core = platform_get_drvdata(pdev);
+>>  
+>> +	pm_runtime_get_sync(core->dev);
+>>  	venus_shutdown(core);
+>>  	venus_firmware_deinit(core);
+>> +	pm_runtime_put_sync(core->dev);
+>>  }
+>>  
+>>  static __maybe_unused int venus_runtime_suspend(struct device *dev)
+>> -- 
+>> 2.17.1
+>>
 
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+-- 
+regards,
+Stan
