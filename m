@@ -2,114 +2,268 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 925DAC433DB
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37239C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:38:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47F2F23104
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:32:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D858D23107
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729786AbhASUcX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730420AbhASUcQ (ORCPT
+        id S1727230AbhASUVy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 15:21:54 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33642 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbhASSwg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 15:32:16 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEA0C061573
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:31:32 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b26so30993143lff.9
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/nJcXNoH8E3aokPgO4BKfYF5qohGlAlcDu7kLVa0nBA=;
-        b=DYUO2d4yCSIx4re3VOc4/ejR4WqTUcf27k5UZ6RV9JxY36OFGaixYjqS4nz3+0SSqE
-         L9CJf326BCDrmNptAHBfZl73wCmr87tEeElAp1V7MadlglUZY/yI/GwyhY96izF8BrGj
-         ETe6diBX9DQJLKINfEQyfHQDTJD3Z9bNz2rhIM/l6LAIyqEDoGY4Oz7YvgIoPgOUg95I
-         qEr2O8r1hNa8OknyZkdRtmPfFSO5W+s1Kj7b4QfxYEdOudnAutghQqr84srwWazErzDk
-         n7iJJILsOHRPIcRdSPdSncqlOgkRx9n2xVjB0k3cpyvWYKgKSo8PHH8WYXBOqS+zMg/7
-         1xng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/nJcXNoH8E3aokPgO4BKfYF5qohGlAlcDu7kLVa0nBA=;
-        b=uAWzJFtQruNsKAPPOpP5hAgAnfZbY4cbJTC/e5dP3EGa7PmRNsMXkGIDfjCGl8MDNF
-         S+wXn1aCHT9NLDpyCZSPSShX65OssPpNYgGLEVSV3ZtddVU28BfCN+0P+n2kX08foFpo
-         vWe52zy1tKwwSUTHrqjqwUmH7d58xjbpLabXQNwIWPFPfLtrLHsnzf9/IFIZxwSl1pwO
-         +lUwCll0eQbmkai3WWjvNyNUbHq4QVvhI7+SQzHKhp3RThobJLlzblLH8sdtgxfIH4EH
-         b1c4WBJVcw2hx8i4a6CuGPhw74baAYwHmTOndoH+DH8r2cOjpnqh5lheRUi69SePhHq8
-         ThzQ==
-X-Gm-Message-State: AOAM533Dw/SXN6aEahBKv1PkDHT+43MnIpGzERr9ziAiSakd3QGJ/8lz
-        FkahySVxkMP4EWSJkgWtDfWf1woBmZeWxneByxFTdA==
-X-Google-Smtp-Source: ABdhPJzn6b8f4IdmLW+Jc4y/BacRK4n5UWsqai7H2T3iKIHKBVAXQ9I/doUhxxJ2NE90WdVGTsbugI4YcP/KGNlmhM4=
-X-Received: by 2002:a19:8357:: with SMTP id f84mr2538481lfd.567.1611088291224;
- Tue, 19 Jan 2021 12:31:31 -0800 (PST)
+        Tue, 19 Jan 2021 13:52:36 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 3520D1F45221
+Subject: Re: [PATCH v2 02/14] media: atmel: Use
+ v4l2_async_notifier_add_fwnode_remote_subdev
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+References: <20210118015258.3993-1-ezequiel@collabora.com>
+ <20210118015258.3993-3-ezequiel@collabora.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <2b1bf722-1cdc-f17d-df19-c4da11d82a26@collabora.com>
+Date:   Tue, 19 Jan 2021 15:51:44 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <1610757107-11892-1-git-send-email-veeras@codeaurora.org> <1610757107-11892-2-git-send-email-veeras@codeaurora.org>
-In-Reply-To: <1610757107-11892-2-git-send-email-veeras@codeaurora.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 19 Jan 2021 12:31:19 -0800
-Message-ID: <CALAqxLX9Jh8NpXQwQ5ssBYuypbzzNg2OF+hPxxYfCnvzmzNOWg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] drm/drm_vblank: set the dma-fence timestamp during send_vblank_event
-To:     Veera Sundaram Sankaran <veeras@codeaurora.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        pdhaval@codeaurora.org, abhinavk@codeaurora.org,
-        jsanka@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210118015258.3993-3-ezequiel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 4:31 PM Veera Sundaram Sankaran
-<veeras@codeaurora.org> wrote:
->
-> The explicit out-fences in crtc are signaled as part of vblank event,
-> indicating all framebuffers present on the Atomic Commit request are
-> scanned out on the screen. Though the fence signal and the vblank event
-> notification happens at the same time, triggered by the same hardware
-> vsync event, the timestamp set in both are different. With drivers
-> supporting precise vblank timestamp the difference between the two
-> timestamps would be even higher. This might have an impact on use-mode
-> frameworks using these fence timestamps for purposes other than simple
-> buffer usage. For instance, the Android framework [1] uses the
-> retire-fences as an alternative to vblank when frame-updates are in
-> progress. Set the fence timestamp during send vblank event using a new
-> drm_send_event_timestamp_locked variant to avoid discrepancies.
->
-> [1] https://android.googlesource.com/platform/frameworks/native/+/master/
-> services/surfaceflinger/Scheduler/Scheduler.cpp#397
->
-> Changes in v2:
-> - Use drm_send_event_timestamp_locked to update fence timestamp
-> - add more information to commit text
->
-> Changes in v3:
-> - use same backend helper function for variants of drm_send_event to
-> avoid code duplications
->
-> Changes in v4:
-> - remove WARN_ON from drm_send_event_timestamp_locked
->
-> Signed-off-by: Veera Sundaram Sankaran <veeras@codeaurora.org>
+Hello,
+
+On 1/17/21 10:52 PM, Ezequiel Garcia wrote:
+> The use of v4l2_async_notifier_add_subdev will be discouraged.
+> Drivers are instead encouraged to use a helper such as
+> v4l2_async_notifier_add_fwnode_remote_subdev.
+> 
+> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+> should get a kmalloc'ed struct v4l2_async_subdev,
+> removing some boilerplate code while at it.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+
+I see this driver could be improved in multiple ways (single notifiers,
+single loop adding the remotes in the notifiers, etc), but since the
+idea is to change drivers the least as possible, then lets leave
+the improvements for future patches.
+
+Reviewed-by: Helen Koike <helen.koike@collabora.com>
+
+Thanks
+Helen
+
 > ---
-
-Looks good, as expected no longer seeing the warning.
-
-Reviewed-by: John Stultz <john.stultz@linaro.org>
-
-thanks
--john
+>  drivers/media/platform/atmel/atmel-isc.h      |  1 +
+>  drivers/media/platform/atmel/atmel-isi.c      | 46 ++++++-------------
+>  .../media/platform/atmel/atmel-sama5d2-isc.c  | 44 ++++++------------
+>  3 files changed, 29 insertions(+), 62 deletions(-)
+> 
+> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+> index 24b784b893d6..fab8eca58d93 100644
+> --- a/drivers/media/platform/atmel/atmel-isc.h
+> +++ b/drivers/media/platform/atmel/atmel-isc.h
+> @@ -41,6 +41,7 @@ struct isc_buffer {
+>  struct isc_subdev_entity {
+>  	struct v4l2_subdev		*sd;
+>  	struct v4l2_async_subdev	*asd;
+> +	struct device_node		*epn;
+>  	struct v4l2_async_notifier      notifier;
+>  
+>  	u32 pfe_cfg0;
+> diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+> index d74aa73f26be..c1a6dd7af002 100644
+> --- a/drivers/media/platform/atmel/atmel-isi.c
+> +++ b/drivers/media/platform/atmel/atmel-isi.c
+> @@ -70,7 +70,6 @@ struct frame_buffer {
+>  struct isi_graph_entity {
+>  	struct device_node *node;
+>  
+> -	struct v4l2_async_subdev asd;
+>  	struct v4l2_subdev *subdev;
+>  };
+>  
+> @@ -1136,45 +1135,26 @@ static const struct v4l2_async_notifier_operations isi_graph_notify_ops = {
+>  	.complete = isi_graph_notify_complete,
+>  };
+>  
+> -static int isi_graph_parse(struct atmel_isi *isi, struct device_node *node)
+> -{
+> -	struct device_node *ep = NULL;
+> -	struct device_node *remote;
+> -
+> -	ep = of_graph_get_next_endpoint(node, ep);
+> -	if (!ep)
+> -		return -EINVAL;
+> -
+> -	remote = of_graph_get_remote_port_parent(ep);
+> -	of_node_put(ep);
+> -	if (!remote)
+> -		return -EINVAL;
+> -
+> -	/* Remote node to connect */
+> -	isi->entity.node = remote;
+> -	isi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> -	isi->entity.asd.match.fwnode = of_fwnode_handle(remote);
+> -	return 0;
+> -}
+> -
+>  static int isi_graph_init(struct atmel_isi *isi)
+>  {
+> +	struct v4l2_async_subdev *asd;
+> +	struct device_node *ep;
+>  	int ret;
+>  
+> -	/* Parse the graph to extract a list of subdevice DT nodes. */
+> -	ret = isi_graph_parse(isi, isi->dev->of_node);
+> -	if (ret < 0) {
+> -		dev_err(isi->dev, "Graph parsing failed\n");
+> -		return ret;
+> -	}
+> +	ep = of_graph_get_next_endpoint(isi->dev->of_node, NULL);
+> +	if (!ep)
+> +		return -EINVAL;
+>  
+>  	v4l2_async_notifier_init(&isi->notifier);
+>  
+> -	ret = v4l2_async_notifier_add_subdev(&isi->notifier, &isi->entity.asd);
+> -	if (ret) {
+> -		of_node_put(isi->entity.node);
+> -		return ret;
+> -	}
+> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +						&isi->notifier,
+> +						of_fwnode_handle(ep),
+> +						sizeof(*asd));
+> +	of_node_put(ep);
+> +
+> +	if (IS_ERR(asd))
+> +		return PTR_ERR(asd);
+>  
+>  	isi->notifier.ops = &isi_graph_notify_ops;
+>  
+> diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> index a3304f49e499..9ee2cd194f93 100644
+> --- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> +++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> @@ -57,7 +57,7 @@
+>  static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+>  {
+>  	struct device_node *np = dev->of_node;
+> -	struct device_node *epn = NULL, *rem;
+> +	struct device_node *epn = NULL;
+>  	struct isc_subdev_entity *subdev_entity;
+>  	unsigned int flags;
+>  	int ret;
+> @@ -71,17 +71,9 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+>  		if (!epn)
+>  			return 0;
+>  
+> -		rem = of_graph_get_remote_port_parent(epn);
+> -		if (!rem) {
+> -			dev_notice(dev, "Remote device at %pOF not found\n",
+> -				   epn);
+> -			continue;
+> -		}
+> -
+>  		ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(epn),
+>  						 &v4l2_epn);
+>  		if (ret) {
+> -			of_node_put(rem);
+>  			ret = -EINVAL;
+>  			dev_err(dev, "Could not parse the endpoint\n");
+>  			break;
+> @@ -90,21 +82,10 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+>  		subdev_entity = devm_kzalloc(dev, sizeof(*subdev_entity),
+>  					     GFP_KERNEL);
+>  		if (!subdev_entity) {
+> -			of_node_put(rem);
+> -			ret = -ENOMEM;
+> -			break;
+> -		}
+> -
+> -		/* asd will be freed by the subsystem once it's added to the
+> -		 * notifier list
+> -		 */
+> -		subdev_entity->asd = kzalloc(sizeof(*subdev_entity->asd),
+> -					     GFP_KERNEL);
+> -		if (!subdev_entity->asd) {
+> -			of_node_put(rem);
+>  			ret = -ENOMEM;
+>  			break;
+>  		}
+> +		subdev_entity->epn = epn;
+>  
+>  		flags = v4l2_epn.bus.parallel.flags;
+>  
+> @@ -121,12 +102,10 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+>  			subdev_entity->pfe_cfg0 |= ISC_PFE_CFG0_CCIR_CRC |
+>  					ISC_PFE_CFG0_CCIR656;
+>  
+> -		subdev_entity->asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+> -		subdev_entity->asd->match.fwnode = of_fwnode_handle(rem);
+>  		list_add_tail(&subdev_entity->list, &isc->subdev_entities);
+>  	}
+> -
+>  	of_node_put(epn);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -228,13 +207,20 @@ static int atmel_isc_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	list_for_each_entry(subdev_entity, &isc->subdev_entities, list) {
+> +		struct v4l2_async_subdev *asd;
+> +
+>  		v4l2_async_notifier_init(&subdev_entity->notifier);
+>  
+> -		ret = v4l2_async_notifier_add_subdev(&subdev_entity->notifier,
+> -						     subdev_entity->asd);
+> -		if (ret) {
+> -			fwnode_handle_put(subdev_entity->asd->match.fwnode);
+> -			kfree(subdev_entity->asd);
+> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +					&subdev_entity->notifier,
+> +					of_fwnode_handle(subdev_entity->epn),
+> +					sizeof(*asd));
+> +
+> +		of_node_put(subdev_entity->epn);
+> +		subdev_entity->epn = NULL;
+> +
+> +		if (IS_ERR(asd)) {
+> +			ret = PTR_ERR(asd);
+>  			goto cleanup_subdev;
+>  		}
+>  
+> 
