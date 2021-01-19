@@ -2,176 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AED69C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 878E9C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:31:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F9DF23133
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:21:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 289FA2310D
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:31:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730469AbhASUVg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S2392091AbhASUbt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 15:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728682AbhASSxI (ORCPT
+        with ESMTP id S2392094AbhASUb0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:53:08 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8D3C061574
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 10:52:19 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 5F2A31F45271
-Subject: Re: [PATCH v2 04/14] media: exynos4-is: Use
- v4l2_async_notifier_add_fwnode_remote_subdev
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     kernel@collabora.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-References: <20210118015258.3993-1-ezequiel@collabora.com>
- <20210118015258.3993-5-ezequiel@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <79a74c16-47d7-1833-1625-6590cb29d5e4@collabora.com>
-Date:   Tue, 19 Jan 2021 15:52:10 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 19 Jan 2021 15:31:26 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8EBC061573
+        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:30:46 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u21so23504601lja.0
+        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:30:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nF7UbpB2XeoCjbiO8VMOKYIHRLbtv9cSr4i7RtcGNLw=;
+        b=GiX2j5Kt1ekUGCYLmuPr3Gve1jltlwAlXhP2At39z+/uek4RxUF3MfgJWoXEvat9CE
+         L6E4m1fHeO4flYsscnqsgGIHnK+gphGU8FLCU+F8+5ptsMoEnHwbVDOqoHbxhEMUYIXc
+         mQdC1OVchX+wt4Y8CmlLKX7sHaPTOT/2t3CcSpZJHNbIrujw4QioYSnAf78HbhWWzbDd
+         0cwR3gAW1DI98X1pJVqFck0oITbPBRGugj1dD1u84cJpjH8UMz8VWPC6gENCXK1y5iaD
+         FlRMGuFfCyo3n0tjB/ohjAQtpURlvnMjOpCHaDjhgZxOsisPsFP8/kLndAPCU9fqH7E7
+         rq9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nF7UbpB2XeoCjbiO8VMOKYIHRLbtv9cSr4i7RtcGNLw=;
+        b=BAA5E79Qjl4yh+DYpfymBd/hJjSbpWSwa74VYCyLpdtyhIUgadrVRQxjf1rX2AEY4P
+         c4pmUqxFAax1rVbAiaiYgzY78G1VngwzhX+xlaBezJP4FAQnC2WDJf6mdUwEeuAizpdq
+         zMznkLIzwQC1rRCgIqTF1mkyYN4y/MS+ODdS97uOLtr6HDmCVAU8+SBx+LxqsySp+Ql2
+         glJ3azZMALEaUkLlCr0jzTcoIN2dcITJd9GEtcbW5Q0xCCr1Ofiuigdd3djW1mZl8qCg
+         b8VyslLS+2u4kDG1x4kWn6EM5DK6Z4oJBKxaMDdSjLKUQAoQ77LWS0+eYMjL+59zGEoG
+         md3w==
+X-Gm-Message-State: AOAM532u6Tmsckiyw9PY2v34sMqd+7I6WRdEwIeTzuW1OEdv2G+m0bWP
+        ShDuWOzsLZkY6IKDutYINqvFBR+1GdEbzsVEiYC3Mg==
+X-Google-Smtp-Source: ABdhPJx5YvfQq/BpJkwnrqT77I3705LpbokmXAy1PRaAygaddGOSWbFfD5d4ga04BDUPWi0m67euPyhBFxqc37g4alo=
+X-Received: by 2002:a2e:8090:: with SMTP id i16mr999488ljg.257.1611088244719;
+ Tue, 19 Jan 2021 12:30:44 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210118015258.3993-5-ezequiel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1610757107-11892-1-git-send-email-veeras@codeaurora.org>
+In-Reply-To: <1610757107-11892-1-git-send-email-veeras@codeaurora.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 19 Jan 2021 12:30:32 -0800
+Message-ID: <CALAqxLUr09++rtqy56q-KfkKYtPKd8mV-r=Zou7vZVmyNze7Og@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dma-fence: allow signaling drivers to set fence timestamp
+To:     Veera Sundaram Sankaran <veeras@codeaurora.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        pdhaval@codeaurora.org, abhinavk@codeaurora.org,
+        jsanka@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
-
-On 1/17/21 10:52 PM, Ezequiel Garcia wrote:
-> The use of v4l2_async_notifier_add_subdev will be discouraged.
-> Drivers are instead encouraged to use a helper such as
-> v4l2_async_notifier_add_fwnode_remote_subdev.
-> 
-> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-> should get a kmalloc'ed struct v4l2_async_subdev,
-> removing some boilerplate code while at it.
-> 
-> Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
-> which handles the needed setup, instead of open-coding it.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+On Fri, Jan 15, 2021 at 4:31 PM Veera Sundaram Sankaran
+<veeras@codeaurora.org> wrote:
+>
+> Some drivers have hardware capability to get the precise HW timestamp
+> of certain events based on which the fences are triggered. The delta
+> between the event HW timestamp & current HW reference timestamp can
+> be used to calculate the timestamp in kernel's CLOCK_MONOTONIC time
+> domain. This allows it to set accurate timestamp factoring out any
+> software and IRQ latencies. Add a timestamp variant of fence signal
+> function, dma_fence_signal_timestamp to allow drivers to update the
+> precise timestamp for fences.
+>
+> Changes in v2:
+> - Add a new fence signal variant instead of modifying fence struct
+>
+> Changes in v3:
+> - Add timestamp domain information to commit-text and
+> dma_fence_signal_timestamp documentation
+>
+> Signed-off-by: Veera Sundaram Sankaran <veeras@codeaurora.org>
 > ---
->  drivers/media/platform/exynos4-is/media-dev.c | 25 +++++++++++--------
->  drivers/media/platform/exynos4-is/media-dev.h |  2 +-
->  2 files changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-> index e636c33e847b..de26ecdcfe81 100644
-> --- a/drivers/media/platform/exynos4-is/media-dev.c
-> +++ b/drivers/media/platform/exynos4-is/media-dev.c
-> @@ -401,6 +401,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
->  	int index = fmd->num_sensors;
->  	struct fimc_source_info *pd = &fmd->sensor[index].pdata;
->  	struct device_node *rem, *np;
-> +	struct v4l2_async_subdev *asd;
->  	struct v4l2_fwnode_endpoint endpoint = { .bus_type = 0 };
->  	int ret;
->  
-> @@ -418,10 +419,11 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
->  	pd->mux_id = (endpoint.base.port - 1) & 0x1;
->  
->  	rem = of_graph_get_remote_port_parent(ep);
-> -	of_node_put(ep);
->  	if (rem == NULL) {
->  		v4l2_info(&fmd->v4l2_dev, "Remote device at %pOF not found\n",
->  							ep);
-> +		of_node_put(rem);
+>  drivers/dma-buf/dma-fence.c | 70 ++++++++++++++++++++++++++++++++++++++++-----
+>  include/linux/dma-fence.h   |  3 ++
+>  2 files changed, 66 insertions(+), 7 deletions(-)
 
-rem is NULL here.
+Thanks for respinning this!
 
-Regards,
-Helen
+Reviewed-by: John Stultz <john.stultz@linaro.org>
 
-> +		of_node_put(ep);
->  		return 0;
->  	}
->  
-> @@ -450,6 +452,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
->  	 * checking parent's node name.
->  	 */
->  	np = of_get_parent(rem);
-> +	of_node_put(rem);
->  
->  	if (of_node_name_eq(np, "i2c-isp"))
->  		pd->fimc_bus_type = FIMC_BUS_TYPE_ISP_WRITEBACK;
-> @@ -458,20 +461,19 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
->  	of_node_put(np);
->  
->  	if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor))) {
-> -		of_node_put(rem);
-> +		of_node_put(ep);
->  		return -EINVAL;
->  	}
->  
-> -	fmd->sensor[index].asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-> -	fmd->sensor[index].asd.match.fwnode = of_fwnode_handle(rem);
-> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +		&fmd->subdev_notifier, of_fwnode_handle(ep), sizeof(*asd));
->  
-> -	ret = v4l2_async_notifier_add_subdev(&fmd->subdev_notifier,
-> -					     &fmd->sensor[index].asd);
-> -	if (ret) {
-> -		of_node_put(rem);
-> -		return ret;
-> -	}
-> +	of_node_put(ep);
-> +
-> +	if (IS_ERR(asd))
-> +		return PTR_ERR(asd);
->  
-> +	fmd->sensor[index].asd = asd;
->  	fmd->num_sensors++;
->  
->  	return 0;
-> @@ -1381,7 +1383,8 @@ static int subdev_notifier_bound(struct v4l2_async_notifier *notifier,
->  
->  	/* Find platform data for this sensor subdev */
->  	for (i = 0; i < ARRAY_SIZE(fmd->sensor); i++)
-> -		if (fmd->sensor[i].asd.match.fwnode ==
-> +		if (fmd->sensor[i].asd &&
-> +		    fmd->sensor[i].asd->match.fwnode ==
->  		    of_fwnode_handle(subdev->dev->of_node))
->  			si = &fmd->sensor[i];
->  
-> diff --git a/drivers/media/platform/exynos4-is/media-dev.h b/drivers/media/platform/exynos4-is/media-dev.h
-> index 9447fafe23c6..a3876d668ea6 100644
-> --- a/drivers/media/platform/exynos4-is/media-dev.h
-> +++ b/drivers/media/platform/exynos4-is/media-dev.h
-> @@ -83,7 +83,7 @@ struct fimc_camclk_info {
->   */
->  struct fimc_sensor_info {
->  	struct fimc_source_info pdata;
-> -	struct v4l2_async_subdev asd;
-> +	struct v4l2_async_subdev *asd;
->  	struct v4l2_subdev *subdev;
->  	struct fimc_dev *host;
->  };
-> 
+-john
