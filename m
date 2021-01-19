@@ -2,313 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60256C433E6
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F3EEC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:39:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C6192310D
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:38:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06C5123107
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:38:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730121AbhASUVr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:21:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S1730225AbhASUii (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 15:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727730AbhASSww (ORCPT
+        with ESMTP id S1732149AbhASUhY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:52:52 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CCEC061573
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 10:52:04 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 3A5AB1F45271
-Subject: Re: [PATCH v2 03/14] media: stm32: Use
- v4l2_async_notifier_add_fwnode_remote_subdev
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     kernel@collabora.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-References: <20210118015258.3993-1-ezequiel@collabora.com>
- <20210118015258.3993-4-ezequiel@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <240c6471-9004-6f3f-dd70-ee480f95db4d@collabora.com>
-Date:   Tue, 19 Jan 2021 15:51:55 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 19 Jan 2021 15:37:24 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F33C061757;
+        Tue, 19 Jan 2021 12:36:44 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id g15so673209pjd.2;
+        Tue, 19 Jan 2021 12:36:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B8V4SvilY22Ou2CtEY4Ue8qbjrsp3tthnLCK+7Q59QY=;
+        b=PeAXI8eTzedOObem6tpD3NZRZKrBkgPenj/spRJ6lVUlMubwNa3Hsb2icgzXSomLqy
+         jZ0E6xPVrfpe5ilrFFeyILMIUF5YcgHQi8+CknGm8Z7ZWUZZCKKEMDt51BM3ZYstg0yS
+         2eROI954uU0JzmDnA7QdgSEGNXTAfT2mPXLCf5SRW6gvfz0nZx1CGzLXdOpj0nPZz7V4
+         y59gAQtbX2e1l++jNfgypKC6n73SaA/zOLG1zk0c85OMOYgSZgOx+w37YU2SDizmy0t1
+         fvYjxUEcFgSQxSZ+zg5/YjdqyN0owSiUhq96CQQhEn4PximkBY0CGFHHAzCp3nk1Coad
+         NRDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=B8V4SvilY22Ou2CtEY4Ue8qbjrsp3tthnLCK+7Q59QY=;
+        b=eLbXha3AZwW4YcP11twEA0IatZARw2/7VYE3M+mL00WU+KOvcEkx7mJvTr8ARXyx1Y
+         5mOxcXSIkhVi6RrNjoGcavcmDuL5vSeUrZHYs8CuZW8P8aLyTay5yVWcBQ73uCHbS4uF
+         MIzDm2NZHIwPbJWJ61bVLSVzfziSeMXEZumLv2gE+GWyygw1Lb+W267yuFE62GY3p+Wr
+         EQlmnM8emIhhcIC4niHKUUgLkzVpAx/pyygIG1Sqox1Y6wB95MibXHnTjSQprOYNSA34
+         vFsOd2MDqUvrDAjhpiEhdtJFF3FVmCxqK/wbUAiKTsyC7kJVSwVHqCHNOxN0DSQhnzOg
+         6neQ==
+X-Gm-Message-State: AOAM533vqjPNcC4H53UdkkvpQtoFBbbH0rLrqHZcuZouz4sAM7jIDDuk
+        AC0KNzhgf837gQFcsK0Z5mw=
+X-Google-Smtp-Source: ABdhPJxMgNFUumt9XiceexCYO3QOZQGhZnpeiTmcQUHGdDtv9MMjBRezO5wS52FU++T2/s/pwxcgsg==
+X-Received: by 2002:a17:902:d909:b029:df:52b4:8147 with SMTP id c9-20020a170902d909b02900df52b48147mr1944220plz.33.1611088603852;
+        Tue, 19 Jan 2021 12:36:43 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:8d1f:e7:cd3c:db2f])
+        by smtp.gmail.com with ESMTPSA id b67sm1171pfa.140.2021.01.19.12.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 12:36:42 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 19 Jan 2021 12:36:40 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>, david@redhat.com,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        KyongHo Cho <pullip.cho@samsung.com>,
+        John Dias <joaodias@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH v3 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
+Message-ID: <YAdC2J4x/4J9ozkq@google.com>
+References: <20210113012143.1201105-1-minchan@kernel.org>
+ <20210113012143.1201105-5-minchan@kernel.org>
+ <CALAqxLWPT8PWYue0h1863NjNxKn_FH0DtoRtArpmmxZ1Ve5xCw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210118015258.3993-4-ezequiel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALAqxLWPT8PWYue0h1863NjNxKn_FH0DtoRtArpmmxZ1Ve5xCw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Tue, Jan 19, 2021 at 10:29:29AM -0800, John Stultz wrote:
+> On Tue, Jan 12, 2021 at 5:22 PM Minchan Kim <minchan@kernel.org> wrote:
+> >
+> > From: Hyesoo Yu <hyesoo.yu@samsung.com>
+> >
+> > This patch supports chunk heap that allocates the buffers that
+> > arranged into a list a fixed size chunks taken from CMA.
+> >
+> > The chunk heap driver is bound directly to a reserved_memory
+> > node by following Rob Herring's suggestion in [1].
+> >
+> > [1] https://lore.kernel.org/lkml/20191025225009.50305-2-john.stultz@linaro.org/T/#m3dc63acd33fea269a584f43bb799a876f0b2b45d
+> >
+> > Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > Signed-off-by: Minchan Kim <minchan@kernel.org>
+> > ---
+> ...
+> > +static int register_chunk_heap(struct chunk_heap *chunk_heap_info)
+> > +{
+> > +       struct dma_heap_export_info exp_info;
+> > +
+> > +       exp_info.name = cma_get_name(chunk_heap_info->cma);
+> 
+> One potential issue here, you're setting the name to the same as the
+> CMA name. Since the CMA heap uses the CMA name, if one chunk was
+> registered as a chunk heap but also was the default CMA area, it might
+> be registered twice. But since both would have the same name it would
+> be an initialization race as to which one "wins".
 
+Good point. Maybe someone might want to use default CMA area for
+both cma_heap and chunk_heap. I cannot come up with ideas why we
+should prohibit it atm.
 
-On 1/17/21 10:52 PM, Ezequiel Garcia wrote:
-> The use of v4l2_async_notifier_add_subdev will be discouraged.
-> Drivers are instead encouraged to use a helper such as
-> v4l2_async_notifier_add_fwnode_remote_subdev.
 > 
-> This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-> should get a kmalloc'ed struct v4l2_async_subdev,
-> removing some boilerplate code while at it.
-> 
-> Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
-> which handles the needed setup, instead of open-coding it.
-> 
-> This results in removal of the now unneeded driver-specific state
-> struct dcmi_graph_entity, keeping track of just the source
-> subdevice.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> So maybe could you postfix the CMA name with "-chunk" or something?
 
-Reviewed-by: Helen Koike <helen.koike@collabora.com>
-
-> ---
->  drivers/media/platform/stm32/stm32-dcmi.c | 86 ++++++++---------------
->  1 file changed, 30 insertions(+), 56 deletions(-)
-> 
-> diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-> index b745f1342c2e..142f63d07dcd 100644
-> --- a/drivers/media/platform/stm32/stm32-dcmi.c
-> +++ b/drivers/media/platform/stm32/stm32-dcmi.c
-> @@ -99,13 +99,6 @@ enum state {
->  
->  #define OVERRUN_ERROR_THRESHOLD	3
->  
-> -struct dcmi_graph_entity {
-> -	struct v4l2_async_subdev asd;
-> -
-> -	struct device_node *remote_node;
-> -	struct v4l2_subdev *source;
-> -};
-> -
->  struct dcmi_format {
->  	u32	fourcc;
->  	u32	mbus_code;
-> @@ -139,7 +132,7 @@ struct stm32_dcmi {
->  	struct v4l2_device		v4l2_dev;
->  	struct video_device		*vdev;
->  	struct v4l2_async_notifier	notifier;
-> -	struct dcmi_graph_entity	entity;
-> +	struct v4l2_subdev		*source;
->  	struct v4l2_format		fmt;
->  	struct v4l2_rect		crop;
->  	bool				do_crop;
-> @@ -610,7 +603,7 @@ static int dcmi_pipeline_s_fmt(struct stm32_dcmi *dcmi,
->  			       struct v4l2_subdev_pad_config *pad_cfg,
->  			       struct v4l2_subdev_format *format)
->  {
-> -	struct media_entity *entity = &dcmi->entity.source->entity;
-> +	struct media_entity *entity = &dcmi->source->entity;
->  	struct v4l2_subdev *subdev;
->  	struct media_pad *sink_pad = NULL;
->  	struct media_pad *src_pad = NULL;
-> @@ -1018,7 +1011,7 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
->  	}
->  
->  	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
-> +	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
->  			       &pad_cfg, &format);
->  	if (ret < 0)
->  		return ret;
-> @@ -1152,7 +1145,7 @@ static int dcmi_get_sensor_format(struct stm32_dcmi *dcmi,
->  	};
->  	int ret;
->  
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_fmt, NULL, &fmt);
-> +	ret = v4l2_subdev_call(dcmi->source, pad, get_fmt, NULL, &fmt);
->  	if (ret)
->  		return ret;
->  
-> @@ -1181,7 +1174,7 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
->  	}
->  
->  	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
-> +	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
->  			       &pad_cfg, &format);
->  	if (ret < 0)
->  		return ret;
-> @@ -1204,7 +1197,7 @@ static int dcmi_get_sensor_bounds(struct stm32_dcmi *dcmi,
->  	/*
->  	 * Get sensor bounds first
->  	 */
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_selection,
-> +	ret = v4l2_subdev_call(dcmi->source, pad, get_selection,
->  			       NULL, &bounds);
->  	if (!ret)
->  		*r = bounds.r;
-> @@ -1385,7 +1378,7 @@ static int dcmi_enum_framesizes(struct file *file, void *fh,
->  
->  	fse.code = sd_fmt->mbus_code;
->  
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad, enum_frame_size,
-> +	ret = v4l2_subdev_call(dcmi->source, pad, enum_frame_size,
->  			       NULL, &fse);
->  	if (ret)
->  		return ret;
-> @@ -1402,7 +1395,7 @@ static int dcmi_g_parm(struct file *file, void *priv,
->  {
->  	struct stm32_dcmi *dcmi = video_drvdata(file);
->  
-> -	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.source, p);
-> +	return v4l2_g_parm_cap(video_devdata(file), dcmi->source, p);
->  }
->  
->  static int dcmi_s_parm(struct file *file, void *priv,
-> @@ -1410,7 +1403,7 @@ static int dcmi_s_parm(struct file *file, void *priv,
->  {
->  	struct stm32_dcmi *dcmi = video_drvdata(file);
->  
-> -	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.source, p);
-> +	return v4l2_s_parm_cap(video_devdata(file), dcmi->source, p);
->  }
->  
->  static int dcmi_enum_frameintervals(struct file *file, void *fh,
-> @@ -1432,7 +1425,7 @@ static int dcmi_enum_frameintervals(struct file *file, void *fh,
->  
->  	fie.code = sd_fmt->mbus_code;
->  
-> -	ret = v4l2_subdev_call(dcmi->entity.source, pad,
-> +	ret = v4l2_subdev_call(dcmi->source, pad,
->  			       enum_frame_interval, NULL, &fie);
->  	if (ret)
->  		return ret;
-> @@ -1452,7 +1445,7 @@ MODULE_DEVICE_TABLE(of, stm32_dcmi_of_match);
->  static int dcmi_open(struct file *file)
->  {
->  	struct stm32_dcmi *dcmi = video_drvdata(file);
-> -	struct v4l2_subdev *sd = dcmi->entity.source;
-> +	struct v4l2_subdev *sd = dcmi->source;
->  	int ret;
->  
->  	if (mutex_lock_interruptible(&dcmi->lock))
-> @@ -1483,7 +1476,7 @@ static int dcmi_open(struct file *file)
->  static int dcmi_release(struct file *file)
->  {
->  	struct stm32_dcmi *dcmi = video_drvdata(file);
-> -	struct v4l2_subdev *sd = dcmi->entity.source;
-> +	struct v4l2_subdev *sd = dcmi->source;
->  	bool fh_singular;
->  	int ret;
->  
-> @@ -1616,7 +1609,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
->  {
->  	const struct dcmi_format *sd_fmts[ARRAY_SIZE(dcmi_formats)];
->  	unsigned int num_fmts = 0, i, j;
-> -	struct v4l2_subdev *subdev = dcmi->entity.source;
-> +	struct v4l2_subdev *subdev = dcmi->source;
->  	struct v4l2_subdev_mbus_code_enum mbus_code = {
->  		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->  	};
-> @@ -1675,7 +1668,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
->  static int dcmi_framesizes_init(struct stm32_dcmi *dcmi)
->  {
->  	unsigned int num_fsize = 0;
-> -	struct v4l2_subdev *subdev = dcmi->entity.source;
-> +	struct v4l2_subdev *subdev = dcmi->source;
->  	struct v4l2_subdev_frame_size_enum fse = {
->  		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->  		.code = dcmi->sd_format->mbus_code,
-> @@ -1727,14 +1720,13 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
->  	 * we search for the source subdevice
->  	 * in order to expose it through V4L2 interface
->  	 */
-> -	dcmi->entity.source =
-> -		media_entity_to_v4l2_subdev(dcmi_find_source(dcmi));
-> -	if (!dcmi->entity.source) {
-> +	dcmi->source = media_entity_to_v4l2_subdev(dcmi_find_source(dcmi));
-> +	if (!dcmi->source) {
->  		dev_err(dcmi->dev, "Source subdevice not found\n");
->  		return -ENODEV;
->  	}
->  
-> -	dcmi->vdev->ctrl_handler = dcmi->entity.source->ctrl_handler;
-> +	dcmi->vdev->ctrl_handler = dcmi->source->ctrl_handler;
->  
->  	ret = dcmi_formats_init(dcmi);
->  	if (ret) {
-> @@ -1813,46 +1805,28 @@ static const struct v4l2_async_notifier_operations dcmi_graph_notify_ops = {
->  	.complete = dcmi_graph_notify_complete,
->  };
->  
-> -static int dcmi_graph_parse(struct stm32_dcmi *dcmi, struct device_node *node)
-> -{
-> -	struct device_node *ep = NULL;
-> -	struct device_node *remote;
-> -
-> -	ep = of_graph_get_next_endpoint(node, ep);
-> -	if (!ep)
-> -		return -EINVAL;
-> -
-> -	remote = of_graph_get_remote_port_parent(ep);
-> -	of_node_put(ep);
-> -	if (!remote)
-> -		return -EINVAL;
-> -
-> -	/* Remote node to connect */
-> -	dcmi->entity.remote_node = remote;
-> -	dcmi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-> -	dcmi->entity.asd.match.fwnode = of_fwnode_handle(remote);
-> -	return 0;
-> -}
-> -
->  static int dcmi_graph_init(struct stm32_dcmi *dcmi)
->  {
-> +	struct v4l2_async_subdev *asd;
-> +	struct device_node *ep;
->  	int ret;
->  
-> -	/* Parse the graph to extract a list of subdevice DT nodes. */
-> -	ret = dcmi_graph_parse(dcmi, dcmi->dev->of_node);
-> -	if (ret < 0) {
-> -		dev_err(dcmi->dev, "Failed to parse graph\n");
-> -		return ret;
-> +	ep = of_graph_get_next_endpoint(dcmi->dev->of_node, NULL);
-> +	if (!ep) {
-> +		dev_err(dcmi->dev, "Failed to get next endpoint\n");
-> +		return -EINVAL;
->  	}
->  
->  	v4l2_async_notifier_init(&dcmi->notifier);
->  
-> -	ret = v4l2_async_notifier_add_subdev(&dcmi->notifier,
-> -					     &dcmi->entity.asd);
-> -	if (ret) {
-> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +		&dcmi->notifier, of_fwnode_handle(ep), sizeof(*asd));
-> +
-> +	of_node_put(ep);
-> +
-> +	if (IS_ERR(asd)) {
->  		dev_err(dcmi->dev, "Failed to add subdev notifier\n");
-> -		of_node_put(dcmi->entity.remote_node);
-> -		return ret;
-> +		return PTR_ERR(asd);
->  	}
->  
->  	dcmi->notifier.ops = &dcmi_graph_notify_ops;
-> 
+Hyesoo, Any opinion?
+Unless you have something other idea, let's fix it in next version.
