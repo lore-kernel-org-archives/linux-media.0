@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B23FDC433E9
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2629AC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:05:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 541BD23119
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 20:46:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D512722D71
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jan 2021 21:05:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388647AbhASUqU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S2389476AbhASVDt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jan 2021 16:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387591AbhASUpy (ORCPT
+        with ESMTP id S1730302AbhASUpb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jan 2021 15:45:54 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3861EC0613ED
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:45:14 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 30so13712902pgr.6
-        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:45:14 -0800 (PST)
+        Tue, 19 Jan 2021 15:45:31 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3DDC061574
+        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:45:16 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id u11so6932737plg.13
+        for <linux-media@vger.kernel.org>; Tue, 19 Jan 2021 12:45:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+HPHLTIbnqvyYqZakEN0yW6023R2vX5SvJvHEGRsu88=;
-        b=rVY83dpi8ReoTmjM5P+oExiEZYsinMGkbYee1lkK/ULznES2ZNsQayfBScXWTZxwHT
-         xzR9TWfOeB0CMtADGKZkF8TcwHODZPc1u4AMryo79Zq9NNv2fP2u7rpmstz007F5Nwzb
-         fYc/mdbBQq3n41ctal8AiQZluORE84aHZh48bd34Zb95cR6VzRRKiIQtqtWHSWK5Ql/Z
-         37MtMXfQhlWisjAseq7aB5u02jTDZwCwRQhmEw5cye33lLvuVq6TSjWkKCFJCnRio0sf
-         Jg4mseBZ0ILUNtu46AlrTKRbSYK79YX03tEGKvAoDHj4I2D3x6wz8PcifiCFUrwR00mS
-         hKXA==
+        bh=njrcSIJAkGY2OvZcMcUOB/aiSRsE8gSP15fU7c5jB6I=;
+        b=D4Tiif4UHDgXE0lEl4K0r5he4Lv75bV6HrswkUdJtOBDALOY20/c4H2BSvtnyOb/TI
+         lUvOJdmQt0XsbtCcgTlnkqqpAJQNX09TzBmy5RJFv/agoix5egESsaXy3Nveu5r9N10z
+         fNuTeUbV3nBdadsnb+AbFgi8g+pyo8yGfsg6cOewdwkf78efJVxidklQClROooreN6BY
+         4Awgdijgf5MJ1bxffI2A7/j/1T07ikg94dEgS8D0bY9No74cF+y6jibT4Ne9hGHwHwRa
+         IX/mVVnT24EmSAISdSkb4YSF2D9+3eN6ND0QDmXLnQZmVdO6m6rILjT+jOvuB8NqiI1K
+         uABQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+HPHLTIbnqvyYqZakEN0yW6023R2vX5SvJvHEGRsu88=;
-        b=ow1iwcKAqwPMPw41b16kv9wOaTep/MLHHmejUzZNk1TxmGeK9kPKPN0bWZpQGpvDY/
-         8iE4wVwAv/+BOfVwa5VJxvve69XTvNmhDnmqpjnaeGHHR7xe5EutZZwBxfF0PTKaP6n6
-         c8m/bsxJNTzNwExNcFizo1o/cORpWaOOgLs3HhLq6kHJQ4X5VnyyDXS7GJxxrIgxLjO4
-         i+5RXMa16+LY9rrhwvgXBoYDuMxioYE85+A16s8mI/Q0dcfJ3VUWjmYUr65bMWFW/DC4
-         Yseol8p/KGwQjVNOvdP7JdvZZY6nNlwpynnoTM42j46f5q/ktGvLyL/oWIXmnDLKn+2a
-         Cbug==
-X-Gm-Message-State: AOAM532xd5rKbr32jzlO/qZSXlmxT31Y+1SZqajprm+aMW9HpS18bK4k
-        DuXTzdAA3R/691dhgXKyQ0MguA==
-X-Google-Smtp-Source: ABdhPJx7XqKFUvEfxsZUM/yPecJslI2EJghoNxHC6weKaxS/Wdl7E5UFXQpws/ka9g4TjNc2jaAWIA==
-X-Received: by 2002:a62:5b07:0:b029:1ae:177d:69e1 with SMTP id p7-20020a625b070000b02901ae177d69e1mr5644437pfb.25.1611089113811;
-        Tue, 19 Jan 2021 12:45:13 -0800 (PST)
+        bh=njrcSIJAkGY2OvZcMcUOB/aiSRsE8gSP15fU7c5jB6I=;
+        b=BuVccw39+uZCNzXuATeS+nPj9diGmbhAPBLgK0INK3zahTBmey1BfRj471W1K1dJ99
+         7jSsp1JQQFchZHck3X0eany1EPHps81bQqWM7L3mjiT1PlLcqhKuRlzjqRJok0WB2GGK
+         V9q8liDyNKKq7rs+cB3PpLYbEz6uQkkjyMdST0e5MQyDhehO079M/fiEcpSvxuEorcwp
+         dbQsHwEkT/t7nvDUV0PlaU6I349F1Du1SM/I8g5JxacaTYvFIceK9EE1BiW/7zbeS0DS
+         p+BY94Hq2n8J+HlHozEEoQV1yGl02nuI+nQ5ps2IZttvALRz8CdpCo3/fc43wWAsqcMq
+         sZSQ==
+X-Gm-Message-State: AOAM533I0uKaV+J5FcO+mAlJYKhxXCJG+gSqNB/cwMEWr2LVO/93jfGo
+        S8/lhMihSyQMB78ocfHu5ldkRQ==
+X-Google-Smtp-Source: ABdhPJxNNMADX9CbUQovzjYXc9TxCQoBpybpXFayDx9hPArekpnWGmkjCQtFXmhn9Lpe14eQ01u5eg==
+X-Received: by 2002:a17:90a:7e18:: with SMTP id i24mr1669643pjl.72.1611089115609;
+        Tue, 19 Jan 2021 12:45:15 -0800 (PST)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id md7sm4129838pjb.52.2021.01.19.12.45.12
+        by smtp.gmail.com with ESMTPSA id md7sm4129838pjb.52.2021.01.19.12.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 12:45:12 -0800 (PST)
+        Tue, 19 Jan 2021 12:45:14 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -74,9 +74,9 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Simon Ser <contact@emersion.fr>,
         James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [RESEND][PATCH 2/3] dma-buf: heaps: Add a WARN_ON should the vmap_cnt go negative
-Date:   Tue, 19 Jan 2021 20:45:07 +0000
-Message-Id: <20210119204508.9256-2-john.stultz@linaro.org>
+Subject: [RESEND][PATCH 3/3] dma-buf: heaps: Rework heep allocation hooks to return struct dma_buf instead of fd
+Date:   Tue, 19 Jan 2021 20:45:08 +0000
+Message-Id: <20210119204508.9256-3-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210119204508.9256-1-john.stultz@linaro.org>
 References: <20210119204508.9256-1-john.stultz@linaro.org>
@@ -87,8 +87,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We shouldn't vunmap more then we vmap, but if we do, make
-sure we complain loudly.
+Every heap needs to create a dmabuf and then export it to a fd
+via dma_buf_fd(), so to consolidate things a bit, have the heaps
+just return a struct dmabuf * and let the top level
+dma_heap_buffer_alloc() call handle creating the fd via
+dma_buf_fd().
 
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: Liam Mark <lmark@codeaurora.org>
@@ -106,37 +109,179 @@ Cc: Simon Ser <contact@emersion.fr>
 Cc: James Jones <jajones@nvidia.com>
 Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
-Suggested-by: Suren Baghdasaryan <surenb@google.com>
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- drivers/dma-buf/heaps/cma_heap.c    | 1 +
- drivers/dma-buf/heaps/system_heap.c | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/dma-buf/dma-heap.c          | 14 +++++++++++++-
+ drivers/dma-buf/heaps/cma_heap.c    | 22 +++++++---------------
+ drivers/dma-buf/heaps/system_heap.c | 21 +++++++--------------
+ include/linux/dma-heap.h            | 12 ++++++------
+ 4 files changed, 33 insertions(+), 36 deletions(-)
 
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index afd22c9dbdcf..6b5db954569f 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -52,6 +52,9 @@ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+ 				 unsigned int fd_flags,
+ 				 unsigned int heap_flags)
+ {
++	struct dma_buf *dmabuf;
++	int fd;
++
+ 	/*
+ 	 * Allocations from all heaps have to begin
+ 	 * and end on page boundaries.
+@@ -60,7 +63,16 @@ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+ 	if (!len)
+ 		return -EINVAL;
+ 
+-	return heap->ops->allocate(heap, len, fd_flags, heap_flags);
++	dmabuf = heap->ops->allocate(heap, len, fd_flags, heap_flags);
++	if (IS_ERR(dmabuf))
++		return PTR_ERR(dmabuf);
++
++	fd = dma_buf_fd(dmabuf, fd_flags);
++	if (fd < 0) {
++		dma_buf_put(dmabuf);
++		/* just return, as put will call release and that will free */
++	}
++	return fd;
+ }
+ 
+ static int dma_heap_open(struct inode *inode, struct file *file)
 diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-index 364fc2f3e499..0c76cbc3fb11 100644
+index 0c76cbc3fb11..985c41ffd85b 100644
 --- a/drivers/dma-buf/heaps/cma_heap.c
 +++ b/drivers/dma-buf/heaps/cma_heap.c
-@@ -232,6 +232,7 @@ static void cma_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- 	struct cma_heap_buffer *buffer = dmabuf->priv;
+@@ -272,10 +272,10 @@ static const struct dma_buf_ops cma_heap_buf_ops = {
+ 	.release = cma_heap_dma_buf_release,
+ };
  
- 	mutex_lock(&buffer->lock);
-+	WARN_ON(buffer->vmap_cnt == 0);
- 	if (!--buffer->vmap_cnt) {
- 		vunmap(buffer->vaddr);
- 		buffer->vaddr = NULL;
+-static int cma_heap_allocate(struct dma_heap *heap,
+-				  unsigned long len,
+-				  unsigned long fd_flags,
+-				  unsigned long heap_flags)
++static struct dma_buf *cma_heap_allocate(struct dma_heap *heap,
++					 unsigned long len,
++					 unsigned long fd_flags,
++					 unsigned long heap_flags)
+ {
+ 	struct cma_heap *cma_heap = dma_heap_get_drvdata(heap);
+ 	struct cma_heap_buffer *buffer;
+@@ -290,7 +290,7 @@ static int cma_heap_allocate(struct dma_heap *heap,
+ 
+ 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+ 	if (!buffer)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	INIT_LIST_HEAD(&buffer->attachments);
+ 	mutex_init(&buffer->lock);
+@@ -349,15 +349,7 @@ static int cma_heap_allocate(struct dma_heap *heap,
+ 		ret = PTR_ERR(dmabuf);
+ 		goto free_pages;
+ 	}
+-
+-	ret = dma_buf_fd(dmabuf, fd_flags);
+-	if (ret < 0) {
+-		dma_buf_put(dmabuf);
+-		/* just return, as put will call release and that will free */
+-		return ret;
+-	}
+-
+-	return ret;
++	return dmabuf;
+ 
+ free_pages:
+ 	kfree(buffer->pages);
+@@ -366,7 +358,7 @@ static int cma_heap_allocate(struct dma_heap *heap,
+ free_buffer:
+ 	kfree(buffer);
+ 
+-	return ret;
++	return ERR_PTR(ret);
+ }
+ 
+ static const struct dma_heap_ops cma_heap_ops = {
 diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index 405351aad2a8..2321c91891f6 100644
+index 2321c91891f6..7b154424aeb3 100644
 --- a/drivers/dma-buf/heaps/system_heap.c
 +++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -273,6 +273,7 @@ static void system_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- 	struct system_heap_buffer *buffer = dmabuf->priv;
+@@ -332,10 +332,10 @@ static struct page *alloc_largest_available(unsigned long size,
+ 	return NULL;
+ }
  
- 	mutex_lock(&buffer->lock);
-+	WARN_ON(buffer->vmap_cnt == 0);
- 	if (!--buffer->vmap_cnt) {
- 		vunmap(buffer->vaddr);
- 		buffer->vaddr = NULL;
+-static int system_heap_allocate(struct dma_heap *heap,
+-				unsigned long len,
+-				unsigned long fd_flags,
+-				unsigned long heap_flags)
++static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
++					    unsigned long len,
++					    unsigned long fd_flags,
++					    unsigned long heap_flags)
+ {
+ 	struct system_heap_buffer *buffer;
+ 	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+@@ -350,7 +350,7 @@ static int system_heap_allocate(struct dma_heap *heap,
+ 
+ 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+ 	if (!buffer)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	INIT_LIST_HEAD(&buffer->attachments);
+ 	mutex_init(&buffer->lock);
+@@ -400,14 +400,7 @@ static int system_heap_allocate(struct dma_heap *heap,
+ 		ret = PTR_ERR(dmabuf);
+ 		goto free_pages;
+ 	}
+-
+-	ret = dma_buf_fd(dmabuf, fd_flags);
+-	if (ret < 0) {
+-		dma_buf_put(dmabuf);
+-		/* just return, as put will call release and that will free */
+-		return ret;
+-	}
+-	return ret;
++	return dmabuf;
+ 
+ free_pages:
+ 	for_each_sgtable_sg(table, sg, i) {
+@@ -421,7 +414,7 @@ static int system_heap_allocate(struct dma_heap *heap,
+ 		__free_pages(page, compound_order(page));
+ 	kfree(buffer);
+ 
+-	return ret;
++	return ERR_PTR(ret);
+ }
+ 
+ static const struct dma_heap_ops system_heap_ops = {
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index 454e354d1ffb..5bc5c946af58 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -16,15 +16,15 @@ struct dma_heap;
+ 
+ /**
+  * struct dma_heap_ops - ops to operate on a given heap
+- * @allocate:		allocate dmabuf and return fd
++ * @allocate:		allocate dmabuf and return struct dma_buf ptr
+  *
+- * allocate returns dmabuf fd  on success, -errno on error.
++ * allocate returns dmabuf on success, ERR_PTR(-errno) on error.
+  */
+ struct dma_heap_ops {
+-	int (*allocate)(struct dma_heap *heap,
+-			unsigned long len,
+-			unsigned long fd_flags,
+-			unsigned long heap_flags);
++	struct dma_buf *(*allocate)(struct dma_heap *heap,
++				    unsigned long len,
++				    unsigned long fd_flags,
++				    unsigned long heap_flags);
+ };
+ 
+ /**
 -- 
 2.17.1
 
