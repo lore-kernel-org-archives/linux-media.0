@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96303C433DB
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B2BBC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:52:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F07723358
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:51:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2E57233EB
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:52:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391622AbhATQvy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 11:51:54 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50598 "EHLO
+        id S2391679AbhATQv7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 11:51:59 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50576 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391579AbhATQpm (ORCPT
+        with ESMTP id S2391570AbhATQpm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 20 Jan 2021 11:45:42 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 8D98D1F44FBD
+        with ESMTPSA id 3E1631F44FA7
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, heiko.stuebner@theobroma-systems.com,
         heiko@sntech.de
@@ -31,9 +31,9 @@ Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
         hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
         sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
         mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v7 2/5] media: rkisp1: stats: remove a wrong cast to u8
-Date:   Wed, 20 Jan 2021 17:44:43 +0100
-Message-Id: <20210120164446.1220-3-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v7 1/5] media: rkisp1: uapi: change hist_bins array type from __u16 to __u32
+Date:   Wed, 20 Jan 2021 17:44:42 +0100
+Message-Id: <20210120164446.1220-2-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
 References: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
@@ -41,29 +41,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-hist_bins is an array of type __u32. Each entry represent
-a 20 bit fixed point value as documented inline.
-The cast to u8 when setting the values is wrong. Remove it.
+Each entry in the array is a 20 bits value composed of 16
+bits unsigned integer and 4 bits fractional part. So the
+type should change to __u32.
+In addition add a documentation of how the measurements
+are done.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/uapi/linux/rkisp1-config.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-index 3ddab8fa8f2d..4cdb180fa64d 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-@@ -235,8 +235,7 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
- 	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
- 	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
- 		pbuf->params.hist.hist_bins[i] =
--			(u8)rkisp1_read(rkisp1,
--					RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
-+			rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
- }
+diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+index 6e449e784260..f75f8d698fb4 100644
+--- a/include/uapi/linux/rkisp1-config.h
++++ b/include/uapi/linux/rkisp1-config.h
+@@ -844,13 +844,17 @@ struct rkisp1_cif_isp_af_stat {
+ /**
+  * struct rkisp1_cif_isp_hist_stat - statistics histogram data
+  *
+- * @hist_bins: measured bin counters
++ * @hist_bins: measured bin counters. Each bin is a 20 bits unsigned fixed point type.
++ *	       Bits 0-4 are the fractional part and bits 5-19 are the integer part.
+  *
+- * Measurement window divided into 25 sub-windows, set
+- * with ISP_HIST_XXX
++ * The window of the measurements area is divided to 5x5 sub-windows. The histogram
++ * is then computed for each sub-window independently and the final result is a weighted
++ * average of the histogram measurements on all sub-windows.
++ * The window of the measurements area and the weight of each sub-window are configurable
++ * using struct @rkisp1_cif_isp_hst_config.
+  */
+ struct rkisp1_cif_isp_hist_stat {
+-	__u16 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
++	__u32 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
+ };
  
- static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
+ /**
 -- 
 2.17.1
 
