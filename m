@@ -2,86 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF88BC433E0
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C0CC10DCE
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAFF723332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DDA52333C
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387671AbhATKlp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:41:45 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:38111 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731667AbhATJop (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:44:45 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Bl8jFd; Wed, 20 Jan 2021 10:43:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135793; bh=E5z65qRlZQuYEUTcnzqsRIcp4AaIXPW+rtHHdPXH8zE=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=MkGlxY3+17hEJvpqBcIu6bAb4ttszPfneF7xq/hmPSRJEijwgJQcC8acnExcIRwLI
-         yFwixOtqwt9ot5AruQa7T99C3fyFytkH15xqCTevrGjqnhC2D6roHWeL75pqkAro3U
-         kdmjUNuEg5sRfFFPo66S94Wg3ZaCWNZSCGU6bBnUxcA1sxnZSH7Bl/hbC9XfNLvHKm
-         mo177o6cripID3VMfILIY82Di/YvAcU7gE1/BiZ7rKwbpyhJUcmRhknImoXkKt2NGy
-         qLda0TP/Ddxxu/QLIdEOid5bGsd0SSF1MUkzl2CKag6NZAlzb+h+zbSyYq7BfLQKNr
-         iE/tfzBdIifxA==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 12/14] dvb-frontends/af9033.c: fix missing error codes
-Date:   Wed, 20 Jan 2021 10:43:04 +0100
-Message-Id: <20210120094306.784318-13-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
-References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+        id S2387730AbhATKmj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:42:39 -0500
+Received: from mx2.suse.de ([195.135.220.15]:56362 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732961AbhATKVn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 05:21:43 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9B356AF90;
+        Wed, 20 Jan 2021 10:21:00 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Seyfried <seife+kernel@b1-systems.com>
+Subject: [PATCH 1/2] media: dvb-usb: Fix memory leak at error in dvb_usb_device_init()
+Date:   Wed, 20 Jan 2021 11:20:56 +0100
+Message-Id: <20210120102057.21143-2-tiwai@suse.de>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210120102057.21143-1-tiwai@suse.de>
+References: <20210120102057.21143-1-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
- spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
- 59IpAWQKL4x5TIxzCbqj6A==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes two smatch warnings:
+dvb_usb_device_init() allocates a dvb_usb_device object, but it
+doesn't release it even when returning an error.  The callers don't
+seem caring it as well, hence those memories are leaked.
 
-drivers/media/dvb-frontends/af9033.c:128 af9033_init() warn: missing error code 'ret'
-drivers/media/dvb-frontends/af9033.c:855 af9033_read_snr() warn: missing error code 'ret'
+This patch assures releasing the memory at the error path in
+dvb_usb_device_init().  Also it makes sure that USB intfdata is reset
+and don't return the bogus pointer to the caller at the error path,
+too.
 
-Set error codes correctly.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/media/dvb-frontends/af9033.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/af9033.c b/drivers/media/dvb-frontends/af9033.c
-index 6a8d78b6edac..785c49b3d307 100644
---- a/drivers/media/dvb-frontends/af9033.c
-+++ b/drivers/media/dvb-frontends/af9033.c
-@@ -125,6 +125,7 @@ static int af9033_init(struct dvb_frontend *fe)
- 	if (i == ARRAY_SIZE(clock_adc_lut)) {
- 		dev_err(&client->dev, "Couldn't find ADC config for clock %d\n",
- 			dev->cfg.clock);
-+		ret = -ENODEV;
- 		goto err;
- 	}
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index c1a7634e27b4..5befec87f26a 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -281,15 +281,21 @@ int dvb_usb_device_init(struct usb_interface *intf,
  
-@@ -852,6 +853,7 @@ static int af9033_read_snr(struct dvb_frontend *fe, u16 *snr)
- 				*snr = *snr * 0xffff / 32;
- 				break;
- 			default:
-+				ret = -EINVAL;
- 				goto err;
- 			}
- 		}
+ 	usb_set_intfdata(intf, d);
+ 
+-	if (du != NULL)
++	ret = dvb_usb_init(d, adapter_nums);
++	if (ret) {
++		info("%s error while loading driver (%d)", desc->name, ret);
++		goto error;
++	}
++
++	if (du)
+ 		*du = d;
+ 
+-	ret = dvb_usb_init(d, adapter_nums);
++	info("%s successfully initialized and connected.", desc->name);
++	return 0;
+ 
+-	if (ret == 0)
+-		info("%s successfully initialized and connected.", desc->name);
+-	else
+-		info("%s error while loading driver (%d)", desc->name, ret);
++ error:
++	usb_set_intfdata(intf, NULL);
++	kfree(d);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(dvb_usb_device_init);
 -- 
-2.29.2
+2.26.2
 
