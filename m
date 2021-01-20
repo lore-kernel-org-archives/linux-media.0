@@ -2,96 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D377C10DC3
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ECC3C433E6
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:49:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67BCB23339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB4222075A
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:49:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387498AbhATKka (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:40:30 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:56565 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731645AbhATJny (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:43:54 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A19l8jEn; Wed, 20 Jan 2021 10:43:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135792; bh=cASv0L/3Ndr/1cXJ9kG21MCLpitVUBYkCIZgva6q27M=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=hSoGyyGFfq9hqb/lRu6BjCknO8UQoDDcQunwRywbbELDW0oF57/zZK5CR2qZjN2QY
-         7xw9BzUn9s4kPmJSq8tQpc69wvHwPq3I4ER8ogmxfMcOAy2DKxoQ7ZxUdqAhjFHjB0
-         OvIE26XPDUA7/GIuSb5kUmxEeSoXY/oucp2hHaOKMmJ2XbTw0OB0eKqRZP47oHvXDg
-         xbTXGxacYNsDmA08CT4ZCNW36+KADHsGDFt5bofKMAhTAthp0uaKXzmyZ/W1rdcRG/
-         sk7fG1zfufVvGu0f/2lUPdnunHIApD6ZbMOfYq4+0KNtbPNiuIeN4djnss9WXBJmQ/
-         6Yt83tUCjL3MQ==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 06/14] i2c/ov8865.c: fix error checks using wrong variable
-Date:   Wed, 20 Jan 2021 10:42:58 +0100
-Message-Id: <20210120094306.784318-7-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
-References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+        id S1729344AbhATKpq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:45:46 -0500
+Received: from mga18.intel.com ([134.134.136.126]:50461 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733261AbhATKi7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 05:38:59 -0500
+IronPort-SDR: IdyA32rCVCDh9U+fbyV2ii6Wqnpm/WC4sTSEejRzrh21NZx+z810gy7M81xtDrnugtI/wMevqV
+ wVT0248MbKhg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="166745658"
+X-IronPort-AV: E=Sophos;i="5.79,360,1602572400"; 
+   d="scan'208";a="166745658"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 02:36:53 -0800
+IronPort-SDR: ea0/FmMHB3StJdYQIaQoBimu5XQcLNU9YeInwP5wV7gJbK85SSO9l65dJ9TsYzobrMoP3u+5R/
+ 4i7vUyRJzxBA==
+X-IronPort-AV: E=Sophos;i="5.79,360,1602572400"; 
+   d="scan'208";a="347507163"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 02:36:50 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id CBE6F20503; Wed, 20 Jan 2021 12:36:48 +0200 (EET)
+Date:   Wed, 20 Jan 2021 12:36:48 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
+Message-ID: <20210120103648.GI11878@paasikivi.fi.intel.com>
+References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
- m2SpTLrwFJwp98Do2dpK1L+DfVBTDRbf2cJz+GRrOWgLQIra6CHaoOKUlywpUr370CJGTmKaILUaPAvbmaZj00hpRivhZUM5xOWpM1QF9KAOKJsh2bLDALE4
- eWQXvTlROWPiQ1smvld8vu/Mes68RDdGCInOYWCmnkXtabvHEnNKkjwGrXufHF3ZWd7O3Qk6aQSs4uE1ptnzUQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix two typos: dvdd -> dovdd and dvdd -> avdd
+On Wed, Jan 20, 2021 at 10:17:14AM +0000, Kieran Bingham wrote:
+> Hi Lad,
+> 
+> On 20/01/2021 09:01, Lad Prabhakar wrote:
+> > Fix OV772x build breakage by selecting V4L2_FWNODE config:
+> > 
+> > ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
+> > ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> > ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
+> > ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> > 
+> > Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> I see this driver uses subdev API too.
+> 
+> Should the driver also select VIDEO_V4L2_SUBDEV_API?
 
-Both clearly copy-and-paste mistakes.
+Yes, it should. Another patch? This one fixes a compilation problem.
 
-Fixes this smatch warning:
+> 
+> Or is that covered sufficiently already on any platforms that would use
+> the driver?
+> 
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> 
+> > ---
+> >  drivers/media/i2c/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> > index eddb10220953..bb1b5a340431 100644
+> > --- a/drivers/media/i2c/Kconfig
+> > +++ b/drivers/media/i2c/Kconfig
+> > @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
+> >  	tristate "OmniVision OV772x sensor support"
+> >  	depends on I2C && VIDEO_V4L2
+> >  	select REGMAP_SCCB
+> > +	select V4L2_FWNODE
+> >  	help
+> >  	  This is a Video4Linux2 sensor driver for the OmniVision
+> >  	  OV772x camera.
+> > 
+> 
 
-drivers/media/i2c/ov8865.c:2852 ov8865_probe() warn: passing zero to 'PTR_ERR'
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/media/i2c/ov8865.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index fda5a55979aa..72ef300c0b67 100644
---- a/drivers/media/i2c/ov8865.c
-+++ b/drivers/media/i2c/ov8865.c
-@@ -2839,9 +2839,9 @@ static int ov8865_probe(struct i2c_client *client)
- 
- 	/* DOVDD: digital I/O */
- 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
--	if (IS_ERR(sensor->dvdd)) {
-+	if (IS_ERR(sensor->dovdd)) {
- 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
--		ret = PTR_ERR(sensor->dvdd);
-+		ret = PTR_ERR(sensor->dovdd);
- 		goto error_endpoint;
- 	}
- 
-@@ -2849,7 +2849,7 @@ static int ov8865_probe(struct i2c_client *client)
- 	sensor->avdd = devm_regulator_get(dev, "avdd");
- 	if (IS_ERR(sensor->avdd)) {
- 		dev_err(dev, "cannot get AVDD (analog) regulator\n");
--		ret = PTR_ERR(sensor->dvdd);
-+		ret = PTR_ERR(sensor->avdd);
- 		goto error_endpoint;
- 	}
- 
 -- 
-2.29.2
-
+Sakari Ailus
