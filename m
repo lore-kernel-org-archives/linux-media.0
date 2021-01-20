@@ -7,73 +7,75 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC298C43142
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 841F1C4361B
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 934DC23332
+	by mail.kernel.org (Postfix) with ESMTP id 6A4442333F
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387650AbhATKle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:41:34 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:40217 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731658AbhATJoo (ORCPT
+        id S2387542AbhATKku (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:40:50 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:41331 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731649AbhATJon (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:44:44 -0500
+        Wed, 20 Jan 2021 04:44:43 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Al8jF7; Wed, 20 Jan 2021 10:43:12 +0100
+        id 2A14lJCTVftvz2A1Bl8jFk; Wed, 20 Jan 2021 10:43:13 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135792; bh=DPEsPco8QmKy9HybatKhPIkZ08H34N8xzyBedSbzkIY=;
+        t=1611135793; bh=cs1cjxFmxTssq1ygaCbCIhvLeOoO+oVCiVzdkJyEZ3g=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=D5kPFClva7eV+DWAkjynLN/rwBM5BQZK2KoqrBDgwfx9JazNDP7Ez29XjQ2vroyqL
-         c9GD6v5DfRXXC9LbjW86GPp+fWuv+Cx8aai0QBJqPDN63Uc93d3woCQWvxEU7kkrtp
-         HuwJEtRgDVpjV5MwWxC49AxAGW/M1zzWM1A/haMQQxubDf4UVv5YH5Q+7BR3WIm8Uy
-         4ELb2vJEWwzZZVn/oKXDScgk3BvzrPBKyuGUXjFc3Ju8pyNnEc1xIEpU6YyX6AFoIv
-         weDapCr+0zkDxH+7E3/Q0SAo3G5wGG+Ax5jJll7FptjnQyOGEVEerQ7ordYrZQhciA
-         PDzv58cMks2aw==
+        b=unBak7/DC+sdpBIe6z1q8jbuyDM3uua0wX5jbnTPgK1ErxOf1SaVKq3E4SkZAtLgk
+         uC+pMbUPgboW163mC4eWpU5U8gLLpjNvKEBLCKGJCnnYIYrYL0tWeGG4CD0r6LrwLs
+         xAeY1p7Xiag9p7wXsuSAzIca83o3e62MAqxqEJiz2BgcRgXkhVNwL/0U1gEN6OnBJp
+         1ZkHo5YnFR1vKFtIEokDsweWEvQfuZRW38Lt/EGmAxIIgNYE01B/PPqmJ35u/XyrqM
+         Q9whJZ/9LVTuI1mGEfqZ10PnxFfGW/M8Q/eH5oE9E4XB5BR/L7cVwsxmjlavN6hxgX
+         3Ohw8DPA+3j6Q==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jean-Christophe Trotin <jean-christophe.trotin@st.com>
-Subject: [PATCH 08/14] sti/hva: add missing clk_disable_unprepare()
-Date:   Wed, 20 Jan 2021 10:43:00 +0100
-Message-Id: <20210120094306.784318-9-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 13/14] atomisp/pci: add missing include
+Date:   Wed, 20 Jan 2021 10:43:05 +0100
+Message-Id: <20210120094306.784318-14-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
- m2SpTLrwFJwp9zBW1P1/x4g1u/iRmZS8OTIXiETopGzzwZ0FpBe27E6Im3OLUCU5bTmJMl0cInRss2P0+vZRDlzZCxq9BSOHthjp/OylirLZtBJRy8e6spBI
- CspxGB5zQPDsjib/hcvDEFJF2kanhb4tTfo3PC+dh9aYnypScjkYW8f7cWB5e4hB
+X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
+ spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
+ 59IpAWQKL4x5TIxzCbqj6A==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this smatch warning:
+Fix two smatch warnings:
 
-drivers/media/platform/sti/hva/hva-hw.c:453 hva_hw_runtime_resume() warn: 'hva->clk' not released on lines: 450.
+drivers/staging/media/atomisp//pci/ia_css_firmware.h:52:29: warning: 'struct device' declared inside parameter list will not be visible outside of this definition or declaration
+drivers/staging/media/atomisp//pci/ia_css_control.h:49:24: warning: 'struct device' declared inside parameter list will not be visible outside of this definition or declaration
 
-Call clk_disable_unprepare() when clk_set_rate() fails.
+Add '#include <linux/device.h>' to ia_css_firmware.h so struct device is defined.
+
+ia_css_control.h includes ia_css_firmware.h, so it is sufficient to
+just modify ia_css_firmware.h.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Jean-Christophe Trotin <jean-christophe.trotin@st.com>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 1 +
+ drivers/staging/media/atomisp/pci/ia_css_firmware.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index 43f279e2a6a3..f59811e27f51 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -447,6 +447,7 @@ int hva_hw_runtime_resume(struct device *dev)
- 	if (clk_set_rate(hva->clk, CLK_RATE)) {
- 		dev_err(dev, "%s     failed to set clock frequency\n",
- 			HVA_PREFIX);
-+		clk_disable_unprepare(hva->clk);
- 		return -EINVAL;
- 	}
+diff --git a/drivers/staging/media/atomisp/pci/ia_css_firmware.h b/drivers/staging/media/atomisp/pci/ia_css_firmware.h
+index edab72256494..e5e2f6fb37e0 100644
+--- a/drivers/staging/media/atomisp/pci/ia_css_firmware.h
++++ b/drivers/staging/media/atomisp/pci/ia_css_firmware.h
+@@ -20,6 +20,7 @@
+  * This file contains firmware loading/unloading support functionality
+  */
+ 
++#include <linux/device.h>
+ #include "ia_css_err.h"
+ #include "ia_css_env.h"
  
 -- 
 2.29.2
