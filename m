@@ -5,56 +5,47 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50FA4C433DB
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EAD0C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:38:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03BD02332B
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:38:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15E312332B
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:38:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388919AbhATMiO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 07:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730576AbhATLKB (ORCPT
+        id S1728225AbhATMin (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 07:38:43 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:39500 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389008AbhATLP0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 06:10:01 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD9DC061757;
-        Wed, 20 Jan 2021 03:09:20 -0800 (PST)
+        Wed, 20 Jan 2021 06:15:26 -0500
 Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E37F4813;
-        Wed, 20 Jan 2021 12:09:17 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DFE6813;
+        Wed, 20 Jan 2021 12:14:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1611140958;
-        bh=sFi/hEScTaxdTq017okbl3zNwuFGLI/1aZfFPxurQIw=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jvG//FB2cf01XM13rcS2cwW6ytU7X5awoYe5f/MGGs8G1EadY7k2GTeyU0pSKKsdv
-         YJOTYfhxo30TwrA7SlfZgDVk/CXvyKxSxtZzhyzKTbjQOw00otHZPyjB68ptX0fowQ
-         XRbGbWOjcahNyMpf3HJwnX+1X7eTltEJ5nPh7ykQ=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com>
- <20210120103648.GI11878@paasikivi.fi.intel.com>
+        s=mail; t=1611141281;
+        bh=HaJAvKcYlDmB9FAWVOPHs4uc5EfRItjpPBQei+OeaPw=;
+        h=Subject:To:Cc:References:From:Reply-To:Date:In-Reply-To:From;
+        b=BVoJI2RJSPQexw9hHn47EChZx4Ax/BYF9r3zHs8mFt0ZPpljlq+O0e7HmLQtYjYqE
+         DO10pQFzi2ZSRLzvXitDspGcfRaJrsSvf2NHoWLigsqi2rLyK6o93uyrcqo1XbNBtm
+         ZnAkQUgtRtAeIHZFtwGX6k25lAzzfJ38co+Np7Yc=
+Subject: Re: [PATCH] media: v4l2-async: Safely unregister an non-registered
+ async subdev
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+References: <20210107225458.4485-1-laurent.pinchart@ideasonboard.com>
 From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Reply-To: kieran.bingham+renesas@ideasonboard.com
 Organization: Ideas on Board
-Message-ID: <8bdf95af-5df7-df7b-4ded-4d291522f77c@ideasonboard.com>
-Date:   Wed, 20 Jan 2021 11:09:15 +0000
+Message-ID: <ec851753-b344-ea01-0551-7fb9ffa477bb@ideasonboard.com>
+Date:   Wed, 20 Jan 2021 11:14:39 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210120103648.GI11878@paasikivi.fi.intel.com>
+In-Reply-To: <20210107225458.4485-1-laurent.pinchart@ideasonboard.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -62,59 +53,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 20/01/2021 10:36, Sakari Ailus wrote:
-> On Wed, Jan 20, 2021 at 10:17:14AM +0000, Kieran Bingham wrote:
->> Hi Lad,
->>
->> On 20/01/2021 09:01, Lad Prabhakar wrote:
->>> Fix OV772x build breakage by selecting V4L2_FWNODE config:
->>>
->>> ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
->>> ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
->>> ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
->>> ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
->>>
->>> Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->>
->> I see this driver uses subdev API too.
->>
->> Should the driver also select VIDEO_V4L2_SUBDEV_API?
+Hi Laurent,
+
+On 07/01/2021 22:54, Laurent Pinchart wrote:
+> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 > 
-> Yes, it should. Another patch? This one fixes a compilation problem.
+> Make the V4L2 async framework a bit more robust by allowing to
+> unregister a non-registered async subdev. Otherwise the
+> v4l2_async_cleanup() will attempt to delete the async subdev from the
+> subdev_list with the corresponding list_head not initialized.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-async.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> index 8bde33c21ce4..fc4525c4a75f 100644
+> --- a/drivers/media/v4l2-core/v4l2-async.c
+> +++ b/drivers/media/v4l2-core/v4l2-async.c
+> @@ -750,6 +750,9 @@ EXPORT_SYMBOL(v4l2_async_register_subdev);
+>  
+>  void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+>  {
+> +	if (!sd->async_list.next)
+> +		return;
 
-Yes, it's probably another patch, because indeed this is a specific fix.
+This is a bit opaque for anyone reading the code alone.
 
-I wonder if that means the builders haven't been able to construct a
-combination without VIDEO_V4L2_SUBDEV_API...
+It could easily read as:
 
---
-Kieran
+"If we don't have a following item in the async list - then don't
+unregister?", which seems a bit nonsensical.
+
+Hopefully that would make someone question what it's actually checking
+but still.
+
+I think I've seen you reference this pattern a couple of times so
+perhaps having a way to check if a list is initialised would be worth
+having as a helper in the list.
+
+Otherwise, at least a comment to say that we're using the initialisation
+of the list to determine if the async subdevice is already registered or
+not. (perhaps a bit more briefly ;D)
 
 
->> Or is that covered sufficiently already on any platforms that would use
->> the driver?
->>
->> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->>
->>> ---
->>>  drivers/media/i2c/Kconfig | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
->>> index eddb10220953..bb1b5a340431 100644
->>> --- a/drivers/media/i2c/Kconfig
->>> +++ b/drivers/media/i2c/Kconfig
->>> @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
->>>  	tristate "OmniVision OV772x sensor support"
->>>  	depends on I2C && VIDEO_V4L2
->>>  	select REGMAP_SCCB
->>> +	select V4L2_FWNODE
->>>  	help
->>>  	  This is a Video4Linux2 sensor driver for the OmniVision
->>>  	  OV772x camera.
->>>
->>
+Anyway, with that all in mind - I always like being able to simplify
+error and clean up paths, so
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> +
+>  	mutex_lock(&list_lock);
+>  
+>  	__v4l2_async_notifier_unregister(sd->subdev_notifier);
 > 
 
