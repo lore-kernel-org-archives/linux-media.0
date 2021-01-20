@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB0EDC41519
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D95DC10F26
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91AF923332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E88D23332
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733017AbhATKdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S1731595AbhATKce (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731244AbhATJ1P (ORCPT
+        with ESMTP id S1731267AbhATJ1O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:27:15 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E4EC0613ED
-        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:32 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id d22so13889216edy.1
-        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:32 -0800 (PST)
+        Wed, 20 Jan 2021 04:27:14 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BCFC0613CF
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:29 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id p22so24878627edu.11
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tTT0+SqKfrfhaHcnRFvnvU9qDTr8hatpLylY1+aK+yQ=;
-        b=S+8/ubQWgNSY0+aeQAy708NPaa9yQucZWs8A74w5rv9PjdxLXxpUU4BiMq+RljwggJ
-         vT1IdBTbqBdf0oqf8H+EX/XVrrNHU0kPPVKSkC6OmSDHgw1PO5r5nPwv6lA0mFK8Lar2
-         /ebuzzLZWUT8TEPRpzvymqDnBiYMci7Tmf1mxBVnjJ3pzf1l5e/FYsnaHiZg4b488IUb
-         KWwSaZXetc+EpBt65C635eV0463cyZpTIN++PC7RWhYzIAEBXbnvMOxrs9bAaYQxMjXF
-         MhIL8OrGY98++7sSJY+a/g1fOjWZozfAuH/DuMh97vqUugp2cgnUzg00Zirr95T4yMo/
-         kSig==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=preh9tSrWByzX0iC59qqOe0jVy4Db/7g+720/5yLWEs=;
+        b=GQJQmjZk7RrinGH7kkq8WQ3evkskWMdrS0y9QNQgiGO1TTaoDzm0LfHzVCWvL64rBO
+         NAY8nSnfB7+NtM6IE565C17hW6fkyVkd/benZ1MfXuw8uklX/7JmGFm1QivIWXxJz022
+         DBK4EcuktTNqoFcvFQxSH+fHAnsBvp6PODr2XKD1GS1ebSYIDyOS3pm+oek27k6msTUD
+         sPYkMFG8p5gx5LUPJIJKNY8RT7JUyQSGcxfFCRu9FwfGgR0FA6wvVTs2NYcN59LeMF+U
+         JE9YdPRKie3iP2wutHHj7O6D1ge6FX4H3ftStYN4kot2UIEsyOJ4niKRFRXcekfWYUdK
+         ffnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tTT0+SqKfrfhaHcnRFvnvU9qDTr8hatpLylY1+aK+yQ=;
-        b=oaiGXcDCsMiqXYuezzT8Q3jliGjtm3nhUrV4B9JZ1d0kRgjn29WO0NSRsQ4+zlUAzK
-         Mlx7vFQ0aQuqv+N1mqMbUNlw20kQEPXCjeo92Borhv/hug2+tUrSKNN3XFdRkJE/iuKY
-         di059pZNBEkU6C3I+VPVff6J7DjRU8SP9YBtIvHQRJMxe9aQflmv98NfsXkyjJAUafuK
-         bD1TOXtV2fskP4JUB5Fq13IvU3H5cjYHxvS+E0DTf30nZwdLJGAYf5SjPrLCRDSJX9TO
-         QeodtARx9EjNR2nn6GRBOHgPt32pKMiJsFCwIBl3118ej+eq5QI7DhDIeWUFfejUNUFs
-         gToQ==
-X-Gm-Message-State: AOAM533GzkM5KM51BX6TqPw7VoCBkodSVO5tV3L/ncQV4cFazUaOHR76
-        MLaxGsC4cqb1IaP3yhXA+mtlmqo3eE62kU0A
-X-Google-Smtp-Source: ABdhPJzbVr9bKOhKB5w1vpD4zCZzXTS5MKV1IETe1k/SjINiPVdYfqHXxuithV9Nk9EU7ka/IRtheQ==
-X-Received: by 2002:a05:6402:614:: with SMTP id n20mr6592595edv.358.1611134790882;
-        Wed, 20 Jan 2021 01:26:30 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=preh9tSrWByzX0iC59qqOe0jVy4Db/7g+720/5yLWEs=;
+        b=hB5zPauMwk75/DC82g7d7+3dQXtQeB9NTsVK7M+4bziqt/X9xjUFyX/HjJdEahY+QQ
+         jfScaMvKJhuU9Lhw4mrjuAig8FIWi51uSJCs337dyWVDxDGXnczxhZmKVE4QV9I8BMwf
+         f6EO1UTDhuja5TeuMZCF6gq393Gt4bouzynYgFvRxqtKTEuwqwQRADh0tT8KyeB+Cm1+
+         hO0KQhiQcSPkQYbz8F0MAw2BqgWE6E7v1x2Nf9COJRsbsO1rVoYWuAzdksmf37VZF3pX
+         7oWpu4XO/TYhtyIAPenZG1BARq3J5TylB8uNqzfP8v1VzRXbRojcp90ZH59WZNpb0SNn
+         K/aQ==
+X-Gm-Message-State: AOAM5339As/05MCYI2prxQY9s2mFgx6dNUfcnWd3+B+vMBt/HPUtcA4H
+        dnSVt1M+wmuKjdklAqHb5dr2FIEnC5V74+1y
+X-Google-Smtp-Source: ABdhPJyD3+EuraqXHezsvz2uM2/JjU3biqgYrOxDEMzB02/Br0lqpxzmdI+iyLBLGrFZXU5lLMAvDw==
+X-Received: by 2002:aa7:d288:: with SMTP id w8mr6596197edq.241.1611134788373;
+        Wed, 20 Jan 2021 01:26:28 -0800 (PST)
 Received: from localhost.localdomain (hst-221-66.medicom.bg. [84.238.221.66])
-        by smtp.gmail.com with ESMTPSA id k16sm619392ejd.78.2021.01.20.01.26.30
+        by smtp.gmail.com with ESMTPSA id k16sm619392ejd.78.2021.01.20.01.26.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:26:30 -0800 (PST)
+        Wed, 20 Jan 2021 01:26:27 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
@@ -63,71 +63,52 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v4 1/5] v4l: Add new Colorimetry Class
-Date:   Wed, 20 Jan 2021 11:26:02 +0200
-Message-Id: <20210120092606.3987207-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH v4 0/5] HDR10 static metadata
+Date:   Wed, 20 Jan 2021 11:26:01 +0200
+Message-Id: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
-References: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add Colorimetry control class for colorimetry controls
+Hello,
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/v4l2-core/v4l2-ctrls.c | 5 +++++
- include/uapi/linux/v4l2-controls.h   | 4 ++++
- 2 files changed, 9 insertions(+)
+Changes in v4:
+ * reorder and split patches (Hans)
+ * fixed typos in documentation patches (Hans)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index f7b310240af2..a5137a867411 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1201,6 +1201,10 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_STATELESS_H264_SLICE_PARAMS:		return "H264 Slice Parameters";
- 	case V4L2_CID_STATELESS_H264_DECODE_PARAMS:		return "H264 Decode Parameters";
- 	case V4L2_CID_STATELESS_FWHT_PARAMS:			return "FWHT Stateless Parameters";
-+
-+	/* Colorimetry controls */
-+	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-+	case V4L2_CID_COLORIMETRY_CLASS:	return "Colorimetry Controls";
- 	default:
- 		return NULL;
- 	}
-@@ -1389,6 +1393,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_RF_TUNER_CLASS:
- 	case V4L2_CID_DETECT_CLASS:
- 	case V4L2_CID_CODEC_STATELESS_CLASS:
-+	case V4L2_CID_COLORIMETRY_CLASS:
- 		*type = V4L2_CTRL_TYPE_CTRL_CLASS;
- 		/* You can neither read not write these */
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 039c0d7add1b..a41039559193 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -66,6 +66,7 @@
- #define V4L2_CTRL_CLASS_RF_TUNER	0x00a20000	/* RF tuner controls */
- #define V4L2_CTRL_CLASS_DETECT		0x00a30000	/* Detection controls */
- #define V4L2_CTRL_CLASS_CODEC_STATELESS 0x00a40000	/* Stateless codecs controls */
-+#define V4L2_CTRL_CLASS_COLORIMETRY	0x00a50000	/* Colorimetry controls */
+v3 can be found at [1].
  
- /* User-class control IDs */
- 
-@@ -1657,6 +1658,9 @@ struct v4l2_ctrl_fwht_params {
- 	__u32 quantization;
- };
- 
-+#define V4L2_CID_COLORIMETRY_CLASS_BASE	(V4L2_CTRL_CLASS_COLORIMETRY | 0x900)
-+#define V4L2_CID_COLORIMETRY_CLASS	(V4L2_CTRL_CLASS_COLORIMETRY | 1)
-+
- /* MPEG-compression definitions kept for backwards compatibility */
- #ifndef __KERNEL__
- #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
+regards,
+Stan
+
+[1] https://patchwork.linuxtv.org/project/linux-media/cover/20201208145931.6187-1-stanimir.varbanov@linaro.org/
+
+Stanimir Varbanov (5):
+  v4l: Add new Colorimetry Class
+  docs: Document colorimetry class
+  v4l: Add HDR10 static metadata controls
+  docs: Document CLL and Mastering display colorimetry controls
+  venus: venc: Add support for CLL and Mastering display controls
+
+ .../userspace-api/media/v4l/common.rst        |  1 +
+ .../media/v4l/ext-ctrls-colorimetry.rst       | 90 +++++++++++++++++++
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  4 +
+ .../media/videodev2.h.rst.exceptions          |  2 +
+ drivers/media/platform/qcom/venus/core.h      |  2 +
+ drivers/media/platform/qcom/venus/hfi_cmds.c  |  8 ++
+ .../media/platform/qcom/venus/hfi_helper.h    | 20 +++++
+ drivers/media/platform/qcom/venus/venc.c      | 29 ++++++
+ .../media/platform/qcom/venus/venc_ctrls.c    | 16 +++-
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 72 +++++++++++++++
+ include/media/v4l2-ctrls.h                    |  4 +
+ include/uapi/linux/v4l2-controls.h            | 35 ++++++++
+ include/uapi/linux/videodev2.h                |  3 +
+ 13 files changed, 285 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst
+
 -- 
 2.25.1
 
