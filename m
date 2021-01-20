@@ -7,76 +7,72 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 113FDC0044D
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8775C10F00
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1E6F23339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B3F52333C
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387677AbhATKly (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:41:54 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:35375 "EHLO
+        id S2387454AbhATKkY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:40:24 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:59895 "EHLO
         lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731660AbhATJop (ORCPT
+        by vger.kernel.org with ESMTP id S1731647AbhATJny (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:44:45 -0500
+        Wed, 20 Jan 2021 04:43:54 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Al8jFM; Wed, 20 Jan 2021 10:43:13 +0100
+        id 2A14lJCTVftvz2A1Al8jF2; Wed, 20 Jan 2021 10:43:12 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135793; bh=IB09Ru0Dwkgtmy8Sizw+EPS/eOIBZ32GMG7jQ4yKpeQ=;
+        t=1611135792; bh=jk8ExUIRHzkWPr8vA/2/QT51ujbhxJnmlqq3kXlcOZI=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=kez0JI3VwuTqP+vJT8FUW7V5ftHfxwXlGHoiZkRRSRh9k30V+SQIKt1aSKQKf30uU
-         Dx+hA2cRc8BUs4omFb1XJCC1AMPWthG1KGPNhwicTIdOIOnO+khptX14CBFWHL3pqS
-         Zzv+dIlA0g13WFLr+sXguybfEssG70dxd6EPboqV9sHeN+0WgNBE2zo04nwtRPASPV
-         rhf7/pExacoTcsh3OZLyrJmNdBFlhuYPw69SJOkkGSplbE8xFxXplj5QcT7Nj4OkgZ
-         v2bF6kNUcYYsL7c/IytpPDS7e4H0JbD5mlIMfofQAGYJuCOxGO65x9a/FFs4r24j4r
-         76OyJSMM1muvA==
+        b=djYrzza9uBAIQM4zTdQsgST+2WHIJtWnh2n6vwBNn17yhkm+Pu3qRS5qtxKhe+0jb
+         xSP3P/J17m24pUnS2YQoOUYFF+yPvCqY1Gn8VwUqgiVpMxJaL023zwZunVSW+Chk0o
+         jESU/qJ8/OH9AqVMsRlsKdd6oAxwlPQEz7uJf9mVPCvbfKKgYbJ9/u6MP6l+tMHelI
+         It1iScmhaAwbEICWpHO4e/o/QoYzANb5RYMaDPGwV8Je37Uilbs5FpAeBMoFsgBA20
+         UIjvaXogr8R/yaTaLnohisNsNcAm6TamR3hIMyvJg9ONVUuQ1ZZAEHwXkx9v2S47oo
+         qL4Sxh9R9+vgg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 09/14] pci/ivtv: release memory regions on error
-Date:   Wed, 20 Jan 2021 10:43:01 +0100
-Message-Id: <20210120094306.784318-10-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 07/14] sti/c8sectpfe: set correct return code
+Date:   Wed, 20 Jan 2021 10:42:59 +0100
+Message-Id: <20210120094306.784318-8-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
- spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
- 59IpAWQKL4x5TIxzCbqj6A==
+X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
+ m2SpTLrwFJwp91ObOojllz25+H8lTtAoDwLHG8jZpGrKrwU7APww6+sf1nrLb4EicX2xlBYvrLjBqU+uaG6RA0wJBMBQS9YBDMxonC7PwXWYQLCm2T02g8s1
+ le9Lr6PJfCEpDuvg3Oefuw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix this smatch warning:
+Fixes this smatch warning:
 
-drivers/media/pci/ivtv/ivtv-driver.c:900 ivtv_setup_pci() warn: 'itv->base_addr' not released on lines: 876.
+drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c:829 c8sectpfe_probe() warn: missing error code 'ret'
 
-One error path didn't release the memory regions.
+Set ret to -EINVAL if the reset gpio was not found.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/pci/ivtv/ivtv-driver.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index 28acb14490d5..6e448cb3b51c 100644
---- a/drivers/media/pci/ivtv/ivtv-driver.c
-+++ b/drivers/media/pci/ivtv/ivtv-driver.c
-@@ -873,6 +873,11 @@ static int ivtv_setup_pci(struct ivtv *itv, struct pci_dev *pdev,
- 		pci_read_config_word(pdev, PCI_COMMAND, &cmd);
- 		if (!(cmd & PCI_COMMAND_MASTER)) {
- 			IVTV_ERR("Bus Mastering is not enabled\n");
-+			if (itv->has_cx23415)
-+				release_mem_region(itv->base_addr + IVTV_DECODER_OFFSET,
-+						   IVTV_DECODER_SIZE);
-+			release_mem_region(itv->base_addr, IVTV_ENCODER_SIZE);
-+			release_mem_region(itv->base_addr + IVTV_REG_OFFSET, IVTV_REG_SIZE);
- 			return -ENXIO;
+diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+index 5ceb366648b3..a7a6ea666740 100644
+--- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+@@ -826,6 +826,7 @@ static int c8sectpfe_probe(struct platform_device *pdev)
+ 			dev_err(dev,
+ 				"reset gpio for tsin%d not valid (gpio=%d)\n",
+ 				tsin->tsin_id, tsin->rst_gpio);
++			ret = -EINVAL;
+ 			goto err_node_put;
  		}
- 	}
+ 
 -- 
 2.29.2
 
