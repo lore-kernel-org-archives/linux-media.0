@@ -2,59 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E714C07EBC
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 282E3C43217
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EE3223332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E31BD2333F
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387711AbhATKma (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:42:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56358 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732965AbhATKVn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 05:21:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 97B8BAAAE;
-        Wed, 20 Jan 2021 10:21:00 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stefan Seyfried <seife+kernel@b1-systems.com>
-Subject: [PATCH 0/2] media: dvb-usb: Fix UAF and memory leaks
-Date:   Wed, 20 Jan 2021 11:20:55 +0100
-Message-Id: <20210120102057.21143-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.26.2
+        id S1733294AbhATKjS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:39:18 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:55609 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731636AbhATJnx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 04:43:53 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 2A14lJCTVftvz2A18l8jEP; Wed, 20 Jan 2021 10:43:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611135791; bh=6NRXEHUxjZBx2VWD5wEWM0Lrged4zVx6TCrEsDhzyOc=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=KKA7O6Z3HXzfEKgCZWLjBE+95eRDIQGW3NvUHypMdYG1qwC8RcB7NenuminCkIodY
+         WAfZR/IUlM80twq5xAlltbOeuqRf0Hfa7ddIt7E8EGcq6d6p/dRTyqWjtOuo6MAQPF
+         kaM/M+eMpVjB4y36suX/bk3sAdbRs/vhgS0bUBJKHaJSG/RjPNlKT+pNaVx2qtSlQV
+         /+jWMR84PK+z6McNe+0X0WSMKe4kFNOKQ9umWipXF6cm8+QVz/67cRt92ke0WTh6QT
+         QCPCzsAHqdZa/8mu5oPfz8U/DSwqzxsJzgm2sem1SH7chST7EFkybvqNi6hXy+xNTp
+         SfobkQPtlaIYw==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Subject: [PATCH 04/14] davinci/vpbe.c: ret contains the return code, not err
+Date:   Wed, 20 Jan 2021 10:42:56 +0100
+Message-Id: <20210120094306.784318-5-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfL6gXyIQamfwxJt2kYKZXIXPfvD+J+cb4hNqS4nbZzw1GI5vvllDlxOUWgqraiFNhq3F/LZtBzfudYa84HR768+XzVha/eeTgmB7xn3J2//BbfAk1A8s
+ 5K51t7mq0GZhhRzy8q2mJCkBnW/olr6hAcPJJmtpi7qySuQkPni50WBwSuSgWdujIYeONtM5tvxr8wdI8jbwvKfnflQAK8HUBVwJAB70utBQl/HA+1/JemGD
+ Qm+5gqLU4GqEBAAl2YVr3KW5mXMyHo1977iCpb9OoBCvqG58vxnSnnoHzxWADMg3
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Fixes this smatch warning:
 
-here is a patch set to address the use-after-free at disconnecting
-a USB DVB device that was recently reported on openSUSE Bugzilla.
-The bug itself seems to be a long-standing one, and I spotted
-another memory leak there, which is covered in the first patch.
+drivers/media/platform/davinci/vpbe.c:632 vpbe_initialize() warn: missing error code 'ret'
 
+The function returns 'ret', but instead 'err' was set to -ENOMEM.
 
-Takashi
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+---
+ drivers/media/platform/davinci/vpbe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-===
-
-Takashi Iwai (2):
-  media: dvb-usb: Fix memory leak at error in dvb_usb_device_init()
-  media: dvb-usb: Fix use-after-free access
-
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 41 +++++++++++++++---------
- 1 file changed, 25 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/media/platform/davinci/vpbe.c b/drivers/media/platform/davinci/vpbe.c
+index fe9468b180e6..5f0aeb744e81 100644
+--- a/drivers/media/platform/davinci/vpbe.c
++++ b/drivers/media/platform/davinci/vpbe.c
+@@ -628,7 +628,7 @@ static int vpbe_initialize(struct device *dev, struct vpbe_device *vpbe_dev)
+ 		if (err) {
+ 			v4l2_err(&vpbe_dev->v4l2_dev,
+ 				 "unable to initialize the OSD device");
+-			err = -ENOMEM;
++			ret = -ENOMEM;
+ 			goto fail_dev_unregister;
+ 		}
+ 	}
 -- 
-2.26.2
+2.29.2
 
