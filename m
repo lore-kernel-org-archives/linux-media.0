@@ -2,133 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7415C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 17:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6746C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 18:05:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CF6423358
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 17:22:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD32723122
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 18:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732264AbhATPiz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 10:38:55 -0500
-Received: from mga18.intel.com ([134.134.136.126]:47532 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732005AbhATPhX (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 10:37:23 -0500
-IronPort-SDR: XANggYIgo3iLCPUw4n4P6JCrm/QZqlF9THdegIzAQBxfZwXK1ZQphrqYGTkeFTJw50sP4v83aa
- YxV3VEA73ZWg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="166787378"
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="166787378"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 07:35:25 -0800
-IronPort-SDR: kqusGp0UM6BgtkGAy08PFQG0KblX/AjeowN0nTgO1yotSaTofI1cl4Y6TDdeUA0IMORG1HkdVH
- NqcIpw7huuig==
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="402774940"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 07:35:24 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 2A768206D0; Wed, 20 Jan 2021 17:35:22 +0200 (EET)
-Date:   Wed, 20 Jan 2021 17:35:22 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [PATCH] media: v4l2-async: Safely unregister an non-registered
- async subdev
-Message-ID: <20210120153522.GM11878@paasikivi.fi.intel.com>
-References: <20210107225458.4485-1-laurent.pinchart@ideasonboard.com>
- <ec851753-b344-ea01-0551-7fb9ffa477bb@ideasonboard.com>
- <20210120133716.GK11878@paasikivi.fi.intel.com>
- <9eee9dbf-a30b-cd5e-aa7f-dda2b2d10229@ideasonboard.com>
+        id S2389565AbhATSE4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 13:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391452AbhATSEg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 13:04:36 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1C8C0613D3
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 10:03:55 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id d189so25929395oig.11
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 10:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r0c/YZ8GjVTyP0w+VrpQ2AmOJVqjrISAFl9tsDI76YM=;
+        b=m7s2uKE2WCxSZn2wLO2vYX7Euav+c2Ak6HnopbS/GJRBt/XTC+atumqnMnAUs1+x/5
+         A80g6czwDlidrwjxfaoqEc6vQc/YEHoOyYA5YKD5PM1wJjEzSRJ9ljsWl3jFAmfB3Isy
+         LJRWCNB6HxnFe8KM8+awbM9twcpaHaQEtS11llI3mSY4p36W8O1BQlhcst+egEZazry+
+         h/vX4ikLeotfK96E+7Ik7ju11zhAlG5xuuT9ML9sAKbHtxamD5mGa/2buyIVPUHwqade
+         Zhqq7wQ2ibWwhqUyEi1WAa7yGqswSJHw7kjQ1utWxW90y7b6QToLsL2h8c6ETq4DdrCO
+         06NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r0c/YZ8GjVTyP0w+VrpQ2AmOJVqjrISAFl9tsDI76YM=;
+        b=WF6REbvKCIQz2EyX8gaGX7MTubY2+nwvP9au5FIb3RqpKXytxYatekDkcInKNeYQmt
+         pVb7A0g2J40m2z27DRzgawI84QsNVckZHXk12XiwsG76FACWX8UAXUix0V37qFSrLWnA
+         xC394lDGxrSywTLU2sDqjxh0QhcGeT47qgZPdig0ENHLL+SH3WgxakuI3t7Li3SbA2nR
+         nk0rdwudbOD1HQX1G8YjSVSBNhIDosfMK/E+mf4NZYJHKsZ59Kh+oLitEXIwDlTo+DRT
+         bdhV55xje0nfzBuQY3tnf4LEOSxvsdSHLXwRbP0T++q0W5eLMfg/4x/bXYsU8pGRQGaq
+         Gu0A==
+X-Gm-Message-State: AOAM533OzOpmKoBdYfNrElQzvFOkGAnZ1lHHnEzHEmcqbud3rSoY9rQ2
+        TXbGGC1aiIKPhsoBS9zTHS/TIg==
+X-Google-Smtp-Source: ABdhPJwPY/Qtx36Vw0VkDh29SyG9rkmTQemhiiJHu7Ba1no56dfgF4UL15rJtGE794O4rIyCvoav8A==
+X-Received: by 2002:aca:c188:: with SMTP id r130mr3726383oif.99.1611165835041;
+        Wed, 20 Jan 2021 10:03:55 -0800 (PST)
+Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t2sm545263otj.47.2021.01.20.10.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 10:03:54 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dt-bindings: media: i2c: Fix $id of renamed ov5647.yaml
+Date:   Wed, 20 Jan 2021 10:04:03 -0800
+Message-Id: <20210120180403.1580423-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9eee9dbf-a30b-cd5e-aa7f-dda2b2d10229@ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 02:02:00PM +0000, Kieran Bingham wrote:
-> On 20/01/2021 13:37, Sakari Ailus wrote:
-> > Hi Kieran,
-> > 
-> > On Wed, Jan 20, 2021 at 11:14:39AM +0000, Kieran Bingham wrote:
-> >> Hi Laurent,
-> >>
-> >> On 07/01/2021 22:54, Laurent Pinchart wrote:
-> >>> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> >>>
-> >>> Make the V4L2 async framework a bit more robust by allowing to
-> >>> unregister a non-registered async subdev. Otherwise the
-> >>> v4l2_async_cleanup() will attempt to delete the async subdev from the
-> >>> subdev_list with the corresponding list_head not initialized.
-> >>>
-> >>> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> >>> ---
-> >>>  drivers/media/v4l2-core/v4l2-async.c | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-> >>> index 8bde33c21ce4..fc4525c4a75f 100644
-> >>> --- a/drivers/media/v4l2-core/v4l2-async.c
-> >>> +++ b/drivers/media/v4l2-core/v4l2-async.c
-> >>> @@ -750,6 +750,9 @@ EXPORT_SYMBOL(v4l2_async_register_subdev);
-> >>>  
-> >>>  void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
-> >>>  {
-> >>> +	if (!sd->async_list.next)
-> >>> +		return;
-> >>
-> >> This is a bit opaque for anyone reading the code alone.
-> >>
-> >> It could easily read as:
-> >>
-> >> "If we don't have a following item in the async list - then don't
-> >> unregister?", which seems a bit nonsensical.
-> >>
-> >> Hopefully that would make someone question what it's actually checking
-> >> but still.
-> >>
-> >> I think I've seen you reference this pattern a couple of times so
-> >> perhaps having a way to check if a list is initialised would be worth
-> >> having as a helper in the list.
-> >>
-> >> Otherwise, at least a comment to say that we're using the initialisation
-> >> of the list to determine if the async subdevice is already registered or
-> >> not. (perhaps a bit more briefly ;D)
-> >>
-> >>
-> >> Anyway, with that all in mind - I always like being able to simplify
-> >> error and clean up paths, so
-> >>
-> >> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > 
-> > Thanks.
-> > 
-> > I think the patch is good as-is but I wouldn't mind to see such a list
-> > helper either. V4L2-async could later on use it.
-> 
-> Yes, I don't think a list-helper is 'required' for this patch (though a
-> comment would be nice otherwise as described above).
-> 
-> Checking an internal object's list's next pointer to determine if the
-> object is already registered is quite opaque. That was my only concern.
+The recent rename of ov5647.yaml missed to update the $id, resulting in
+a binding check error. Fix this.
 
-I also have to say I don't like poking list internal data structures. There
-are just no other struct members that could tell the same bit of
-information, and as we do have the list, there's no reason to add a new
-field for the purpose either.
+Fixes: 1b5071af8240 ("media: dt-bindings: media: i2c: Rename ov5647.yaml")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Who would like to submit the patch to add a function telling whether a list
-is initialised? :-)
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
+index 280c62afae13..429566c9ee1d 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/media/i2c/ov5647.yaml#
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov5647.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Omnivision OV5647 raw image sensor
 -- 
-Sakari Ailus
+2.29.2
+
