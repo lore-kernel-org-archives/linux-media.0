@@ -2,62 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC4FC43381
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E74EBC433DB
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:51:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14B1F233EB
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:25:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9570233E2
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 16:51:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403904AbhATQZF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 11:25:05 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:43100 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729298AbhATQY5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 11:24:57 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2GHE-00646M-GI; Wed, 20 Jan 2021 16:24:12 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2GKi-0005MQ-6a; Wed, 20 Jan 2021 16:27:48 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.12] rc & dvb (#70967)
-Date:   Wed, 20 Jan 2021 16:27:46 +0000
-Message-Id: <20210120162746.20565-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210120160205.GA8993@gofer.mess.org>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727175AbhATQvG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 11:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391588AbhATQpm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 11:45:42 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2F6C0613CF
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 08:45:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 48FA41F44FC0
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, heiko.stuebner@theobroma-systems.com,
+        heiko@sntech.de
+Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: [PATCH v7 3/5] media: rockchip: rkisp1: reduce number of histogram grid elements in uapi
+Date:   Wed, 20 Jan 2021 17:44:44 +0100
+Message-Id: <20210120164446.1220-4-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
+References: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210120160205.GA8993@gofer.mess.org/
-Build log: https://builder.linuxtv.org/job/patchwork/86631/
-Build time: 00:05:24
-Link: https://lore.kernel.org/linux-media/20210120160205.GA8993@gofer.mess.org
+The uapi right now specifies an array size of 28 but the actual number
+of elements is only 25 with the last 3 being unused.
 
-gpg: Signature made Wed 20 Jan 2021 03:58:00 PM UTC
-gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
-gpg:                issuer "sean@mess.org"
-gpg: Good signature from "Sean Young <sean@mess.org>" [full]
+Reduce the array size to the correct number of elements and change
+the params code to iterate the array 25 times.
 
-Summary: got 0/8 patches with issues, being 0 at build time, plus one error when buinding PDF document
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 3 ++-
+ include/uapi/linux/rkisp1-config.h                     | 3 +--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Error/warnings:
-
-
-Error #512 when building PDF docs
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+index 6af4d551ffb5..021939466b24 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+@@ -589,7 +589,6 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
+ 		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03,
+ 		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43,
+ 		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34,
+-		RKISP1_CIF_ISP_HIST_WEIGHT_44,
+ 	};
+ 	const u8 *weight;
+ 	unsigned int i;
+@@ -622,6 +621,8 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
+ 							    weight[2],
+ 							    weight[3]),
+ 				 hist_weight_regs[i]);
++
++	rkisp1_write(params->rkisp1, weight[0] & 0x1F, RKISP1_CIF_ISP_HIST_WEIGHT_44);
+ }
+ 
+ static void
+diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+index f75f8d698fb4..0da07cd1ceeb 100644
+--- a/include/uapi/linux/rkisp1-config.h
++++ b/include/uapi/linux/rkisp1-config.h
+@@ -102,8 +102,7 @@
+ /*
+  * Histogram calculation
+  */
+-/* Last 3 values unused. */
+-#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
++#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 25
+ 
+ /*
+  * Defect Pixel Cluster Correction
+-- 
+2.17.1
 
