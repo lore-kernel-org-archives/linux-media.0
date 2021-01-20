@@ -2,94 +2,86 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A91FC10DC1
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF88BC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D47F23332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAFF723332
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387694AbhATKmZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:42:25 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38970 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728546AbhATKIH (ORCPT
+        id S2387671AbhATKlp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:41:45 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:38111 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731667AbhATJop (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 05:08:07 -0500
-Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AF122813;
-        Wed, 20 Jan 2021 11:07:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1611137244;
-        bh=fKEom3Dk6qQrh07LhsoTg6Y9oKVyFfBUEUUiB2LINeE=;
-        h=Subject:To:References:Reply-To:From:Date:In-Reply-To:From;
-        b=UePyYrqUq2Dj5yxzmkLkGPm3rs5egAfJ7MgWJH5nyXxzdqVh08JMepe8t8VDawkcO
-         zMJZ44vuooqp7zfftqmrnUp6ubPdT48O7MQ69mafuiqKK5CAidxZ24EolgHJrWDPWG
-         HH5bfkZ8mQxxfoz/OI5NYBXmV9N8c3xHaiYiJeak=
-Subject: Re: V4L2 logging for multiple streams
-To:     Fritz Koenig <frkoenig@google.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <CAMfZQbzay0+tyYvZmF_L=iYfp+F02iz3qz=a=J1Yuf55P=RebA@mail.gmail.com>
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <211ad9f0-f888-61dc-656f-10c1c6c97aad@ideasonboard.com>
-Date:   Wed, 20 Jan 2021 10:07:22 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 20 Jan 2021 04:44:45 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 2A14lJCTVftvz2A1Bl8jFd; Wed, 20 Jan 2021 10:43:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611135793; bh=E5z65qRlZQuYEUTcnzqsRIcp4AaIXPW+rtHHdPXH8zE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=MkGlxY3+17hEJvpqBcIu6bAb4ttszPfneF7xq/hmPSRJEijwgJQcC8acnExcIRwLI
+         yFwixOtqwt9ot5AruQa7T99C3fyFytkH15xqCTevrGjqnhC2D6roHWeL75pqkAro3U
+         kdmjUNuEg5sRfFFPo66S94Wg3ZaCWNZSCGU6bBnUxcA1sxnZSH7Bl/hbC9XfNLvHKm
+         mo177o6cripID3VMfILIY82Di/YvAcU7gE1/BiZ7rKwbpyhJUcmRhknImoXkKt2NGy
+         qLda0TP/Ddxxu/QLIdEOid5bGsd0SSF1MUkzl2CKag6NZAlzb+h+zbSyYq7BfLQKNr
+         iE/tfzBdIifxA==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 12/14] dvb-frontends/af9033.c: fix missing error codes
+Date:   Wed, 20 Jan 2021 10:43:04 +0100
+Message-Id: <20210120094306.784318-13-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <CAMfZQbzay0+tyYvZmF_L=iYfp+F02iz3qz=a=J1Yuf55P=RebA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
+ spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
+ 59IpAWQKL4x5TIxzCbqj6A==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fritz,
+Fixes two smatch warnings:
 
-On 16/01/2021 04:33, Fritz Koenig wrote:
-> Hi,
-> 
-> I'm trying to sort some issues with regards to decoding multiple
-> streams at once.  Logging can be helpful with messages like this:
-> 
-> [105188.500450] video2: VIDIOC_STREAMOFF: type=vid-out-mplane
-> 
+drivers/media/dvb-frontends/af9033.c:128 af9033_init() warn: missing error code 'ret'
+drivers/media/dvb-frontends/af9033.c:855 af9033_read_snr() warn: missing error code 'ret'
 
-The type is telling you useful information there, is that what you are
-after?
+Set error codes correctly.
 
-> but when I have:
-> 
-> [105188.498697] video2: VIDIOC_STREAMOFF: type=vid-out-mplane
-> [105188.498715] video2: VIDIOC_STREAMOFF: type=vid-cap-mplane
-> [105188.499116] video2: VIDIOC_UNSUBSCRIBE_EVENT: type=0x5, id=0x0, flags=0x0
-> [105188.500450] video2: VIDIOC_STREAMOFF: type=vid-out-mplane
-> [105188.500467] video2: VIDIOC_STREAMOFF: type=vid-cap-mplane
-> [105188.500611] video2: VIDIOC_UNSUBSCRIBE_EVENT: type=0x5, id=0x0, flags=0x0
-> [105188.501879] video2: VIDIOC_UNSUBSCRIBE_EVENT: type=0x5, id=0x0, flags=0x0
-> [105188.502276] video2: VIDIOC_STREAMOFF: type=vid-out-mplane
-> [105188.502331] video2: VIDIOC_STREAMOFF: type=vid-cap-mplane
-> 
-> I can't tell which stream VIDIOC_STREAMOFF is associated with.  Is
-> there a logging option that I'm missing that would help indicate which
-> stream that ioctl is associated with.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/dvb-frontends/af9033.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The type expresses if it's from an output queue or a capture queue.
+diff --git a/drivers/media/dvb-frontends/af9033.c b/drivers/media/dvb-frontends/af9033.c
+index 6a8d78b6edac..785c49b3d307 100644
+--- a/drivers/media/dvb-frontends/af9033.c
++++ b/drivers/media/dvb-frontends/af9033.c
+@@ -125,6 +125,7 @@ static int af9033_init(struct dvb_frontend *fe)
+ 	if (i == ARRAY_SIZE(clock_adc_lut)) {
+ 		dev_err(&client->dev, "Couldn't find ADC config for clock %d\n",
+ 			dev->cfg.clock);
++		ret = -ENODEV;
+ 		goto err;
+ 	}
+ 
+@@ -852,6 +853,7 @@ static int af9033_read_snr(struct dvb_frontend *fe, u16 *snr)
+ 				*snr = *snr * 0xffff / 32;
+ 				break;
+ 			default:
++				ret = -EINVAL;
+ 				goto err;
+ 			}
+ 		}
+-- 
+2.29.2
 
-  type=vid-out-mplane : Output queue
-  type=vid-cap-mplane : Capture queue
-
-
-That's not so helpful/useful on the UNSUBSCRIBE_EVENT lines though, but
-your specific request is regarding STREAMOFF.
-
-I hope that helps you read the logs a little.
-
---
-Kieran
