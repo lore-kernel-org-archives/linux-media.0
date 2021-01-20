@@ -2,164 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E365C072B3
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55D95C4151A
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04C6323332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2702323332
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387683AbhATKmS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:42:18 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:42465 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731653AbhATJou (ORCPT
+        id S1730025AbhATKbS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:31:18 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:54277 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731191AbhATJVb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:44:50 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Bl8jFR; Wed, 20 Jan 2021 10:43:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135793; bh=/CUlZ4gB273owm3WI6BFTHh2Aoe9MLl4inaEJzppNWU=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=KqLm75kRMrs2OS0akafqFHRHqQ/kCWzMEntw5toy9V5RvCXZq3Qyom9dfu9sIcRyX
-         xth/yN1pudL0sHpuh6cyksfurlMVaqwn7YelxjV2FkiSj4D9pHnTnIjQwSWY/IdII5
-         7yjw/Rxb4w7LkdifYAM3nqAsP0htTlsIjvVdJaoZwrD2mpl1D5JmPkXWH2jBS1BtGb
-         CouMP6sYTAVjE3BeN9vv5/1vXI9Ll1pAcF9O6m/HSLDPNs9OTy+hkdeYweOx5HrH8E
-         ztvVqz/7023wvz9Wfxnjvn8BFU1M7v4YKy8wxp1aiAvuU0e8NvIBpmNBFXYbiN/eEU
-         KHm2OlBvAHiDQ==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 10/14] usb/dvb-usb-v2/rtl28xxu.c: clean up code to fix smatch warning
-Date:   Wed, 20 Jan 2021 10:43:02 +0100
-Message-Id: <20210120094306.784318-11-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
-References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+        Wed, 20 Jan 2021 04:21:31 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 517C120016;
+        Wed, 20 Jan 2021 09:20:46 +0000 (UTC)
+Date:   Wed, 20 Jan 2021 10:21:05 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
+Message-ID: <20210120092105.niausxf2dfe46p7p@uno.localdomain>
+References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
- spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
- 59IpAWQKL4x5TIxzCbqj6A==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this smatch warning:
+Hi Prabhakar,
 
-drivers/media/usb/dvb-usb-v2/rtl28xxu.c:1040 rtl2832u_frontend_attach() warn: missing error code 'ret'
+On Wed, Jan 20, 2021 at 09:01:48AM +0000, Lad Prabhakar wrote:
+> Fix OV772x build breakage by selecting V4L2_FWNODE config:
+>
+> ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
+> ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
+> ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+>
+> Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-It is actually a bogus warning since in this particular case ret isn't
-meant to be set. But by reworking the code a bit the code is actually
-a lot more understandable and it fixes this warning.
+You beat me to it, I was about to hit send for the same patch :)
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 35 +++++++++----------------
- 1 file changed, 13 insertions(+), 22 deletions(-)
+Thanks!
+Acked-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 3952cc534b4a..97ed17a141bb 100644
---- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-+++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -944,12 +944,6 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 	if (dev->slave_demod) {
- 		struct i2c_board_info info = {};
- 
--		/*
--		 * We continue on reduced mode, without DVB-T2/C, using master
--		 * demod, when slave demod fails.
--		 */
--		ret = 0;
--
- 		/* attach slave demodulator */
- 		if (dev->slave_demod == SLAVE_DEMOD_MN88472) {
- 			struct mn88472_config mn88472_config = {};
-@@ -964,14 +958,11 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 			info.platform_data = &mn88472_config;
- 			request_module(info.type);
- 			client = i2c_new_client_device(&d->i2c_adap, &info);
--			if (!i2c_client_has_driver(client)) {
--				dev->slave_demod = SLAVE_DEMOD_NONE;
-+			if (!i2c_client_has_driver(client))
- 				goto err_slave_demod_failed;
--			}
- 
- 			if (!try_module_get(client->dev.driver->owner)) {
- 				i2c_unregister_device(client);
--				dev->slave_demod = SLAVE_DEMOD_NONE;
- 				goto err_slave_demod_failed;
- 			}
- 
-@@ -986,14 +977,11 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 			info.platform_data = &mn88473_config;
- 			request_module(info.type);
- 			client = i2c_new_client_device(&d->i2c_adap, &info);
--			if (!i2c_client_has_driver(client)) {
--				dev->slave_demod = SLAVE_DEMOD_NONE;
-+			if (!i2c_client_has_driver(client))
- 				goto err_slave_demod_failed;
--			}
- 
- 			if (!try_module_get(client->dev.driver->owner)) {
- 				i2c_unregister_device(client);
--				dev->slave_demod = SLAVE_DEMOD_NONE;
- 				goto err_slave_demod_failed;
- 			}
- 
-@@ -1009,10 +997,8 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 			adap->fe[1] = dvb_attach(cxd2841er_attach_t_c,
- 						 &cxd2837er_config,
- 						 &d->i2c_adap);
--			if (!adap->fe[1]) {
--				dev->slave_demod = SLAVE_DEMOD_NONE;
-+			if (!adap->fe[1])
- 				goto err_slave_demod_failed;
--			}
- 			adap->fe[1]->id = 1;
- 			dev->i2c_client_slave_demod = NULL;
- 		} else {
-@@ -1029,14 +1015,11 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 			info.platform_data = &si2168_config;
- 			request_module(info.type);
- 			client = i2c_new_client_device(&d->i2c_adap, &info);
--			if (!i2c_client_has_driver(client)) {
--				dev->slave_demod = SLAVE_DEMOD_NONE;
-+			if (!i2c_client_has_driver(client))
- 				goto err_slave_demod_failed;
--			}
- 
- 			if (!try_module_get(client->dev.driver->owner)) {
- 				i2c_unregister_device(client);
--				dev->slave_demod = SLAVE_DEMOD_NONE;
- 				goto err_slave_demod_failed;
- 			}
- 
-@@ -1047,10 +1030,18 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
- 		}
- 	}
- 	return 0;
--err_slave_demod_failed:
-+
- err:
- 	dev_dbg(&d->intf->dev, "failed=%d\n", ret);
- 	return ret;
-+
-+err_slave_demod_failed:
-+	/*
-+	 * We continue on reduced mode, without DVB-T2/C, using master
-+	 * demod, when slave demod fails.
-+	 */
-+	dev->slave_demod = SLAVE_DEMOD_NONE;
-+	return 0;
- }
- 
- static int rtl28xxu_frontend_attach(struct dvb_usb_adapter *adap)
--- 
-2.29.2
-
+> ---
+>  drivers/media/i2c/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index eddb10220953..bb1b5a340431 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
+>  	tristate "OmniVision OV772x sensor support"
+>  	depends on I2C && VIDEO_V4L2
+>  	select REGMAP_SCCB
+> +	select V4L2_FWNODE
+>  	help
+>  	  This is a Video4Linux2 sensor driver for the OmniVision
+>  	  OV772x camera.
+> --
+> 2.17.1
+>
