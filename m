@@ -2,78 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB2EDC4160E
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64691C4161F
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A8C2F23339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 420BB23339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387661AbhATKlk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:41:40 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:49445 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731657AbhATJoo (ORCPT
+        id S2387700AbhATKm2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:42:28 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:39052 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732248AbhATKR6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:44:44 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Bl8jFW; Wed, 20 Jan 2021 10:43:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135793; bh=Wk05yQtqStxFJUKVqNfq5qjxGWd/CT0EeCirjMw2RFg=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=hiP5ziZ6oBuG98xtt3sF6WP0yubAbncKHfoiTuo/ZWG/pXuHvLUQX6r3hPCP94eQi
-         jRfoXc4jTSbC1mFiDwwlMjOImvxedC38AYQu9hvUJsAh3CWVV5cPCGQL1Kgjt4baDE
-         cX+EBA9iNoIsKArmKMjzcdKZFdAo0Z80vLrbJlZMiI1iKeyX9+sFaGOnVn2i/KEywx
-         q8sIzZNc/tsoSfvG3VzyJYSlYOXSH00zP1NfT3xkUJAt7qVnx9gU9x87BD5IRHAkdn
-         wru/BguMWwcmDdv2cliTa54Qq42XUx9bLbFigYMP1Lqa18ba9latboX+GGhHx49WSk
-         IccIUTVOk0Ulw==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 11/14] dvb-frontends/rtl2832.c: fix missing error code
-Date:   Wed, 20 Jan 2021 10:43:03 +0100
-Message-Id: <20210120094306.784318-12-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
-References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+        Wed, 20 Jan 2021 05:17:58 -0500
+Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 817EE813;
+        Wed, 20 Jan 2021 11:17:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1611137836;
+        bh=9LS1tzVULivXbxvsb4fOqaJBauUFKNy4KU9N+8aTcpo=;
+        h=Subject:To:Cc:References:Reply-To:From:Date:In-Reply-To:From;
+        b=cerHDvXdwMHMWqmvTHi+HwigwJqHXAIq2h/BlCbCQDg85zA6AdSOnF4T24kUMvaNB
+         4aQbtgMbJr9f4NqfdWTCo5iS9/tkWynjddiGFpSe682QaRKuVjYRmlPWK1r8cYg1YY
+         JD1EI5xmeh4IqeREbcQMTx18ZK7S1BCSYTYBUVaM=
+Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Organization: Ideas on Board
+Message-ID: <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com>
+Date:   Wed, 20 Jan 2021 10:17:14 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
- spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
- 59IpAWQKL4x5TIxzCbqj6A==
+In-Reply-To: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this smatch warning:
+Hi Lad,
 
-drivers/media/dvb-frontends/rtl2832.c:702 rtl2832_read_status() warn: missing error code 'ret'
+On 20/01/2021 09:01, Lad Prabhakar wrote:
+> Fix OV772x build breakage by selecting V4L2_FWNODE config:
+> 
+> ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
+> ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
+> ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> 
+> Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-'ret' is indeed not set, so set it to -EINVAL so a proper error
-code is returned.
+I see this driver uses subdev API too.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/dvb-frontends/rtl2832.c | 1 +
- 1 file changed, 1 insertion(+)
+Should the driver also select VIDEO_V4L2_SUBDEV_API?
 
-diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
-index 01dcc7f1b9b2..dcbeb9f5e12a 100644
---- a/drivers/media/dvb-frontends/rtl2832.c
-+++ b/drivers/media/dvb-frontends/rtl2832.c
-@@ -698,6 +698,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
- 			goto err;
- 
- 		constellation = (u8tmp >> 2) & 0x03; /* [3:2] */
-+		ret = -EINVAL;
- 		if (constellation > CONSTELLATION_NUM - 1)
- 			goto err;
- 
--- 
-2.29.2
+Or is that covered sufficiently already on any platforms that would use
+the driver?
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> ---
+>  drivers/media/i2c/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index eddb10220953..bb1b5a340431 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
+>  	tristate "OmniVision OV772x sensor support"
+>  	depends on I2C && VIDEO_V4L2
+>  	select REGMAP_SCCB
+> +	select V4L2_FWNODE
+>  	help
+>  	  This is a Video4Linux2 sensor driver for the OmniVision
+>  	  OV772x camera.
+> 
 
