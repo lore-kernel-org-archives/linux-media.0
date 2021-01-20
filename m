@@ -2,93 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A154CC10DC2
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4635AC43219
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 890E923332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28FF023332
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387723AbhATKmi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:42:38 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:41371 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732054AbhATKRZ (ORCPT
+        id S2387420AbhATKjo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:39:44 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:44247 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731644AbhATJny (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 05:17:25 -0500
+        Wed, 20 Jan 2021 04:43:54 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2AXUlJQksftvz2AXXl8rwF; Wed, 20 Jan 2021 11:16:39 +0100
+        id 2A14lJCTVftvz2A17l8jDt; Wed, 20 Jan 2021 10:43:10 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611137799; bh=kh0RCFRcSZLc3sZQmxYzo1ISwv4q2QvPNy6Y+CZzJ90=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=eYRW1BhXLNcDoJ5xEaZOTmdxXqUNyZoQ4yIHVk/Uj7/+QdL4/U3e1o+vukttlsatr
-         pSdFZ9J8e6yawwMDeqISxKOqCfXieKphidpyi/dh97H0nPQ0vrH1aQ2GUPJUDLqZ8J
-         fSw1VKD1Gd2LgiRNYLjJH1bJa3yHT2PYdt0TFeARwLySvVzLdY91qEjBaT8xEO96zb
-         f6LAln2Sa5pcZ/y21+64DEqPieFHiVKV/kAybvn1XKatATaoPLEb6eDdRyG3+l5smE
-         aqOkiYvG8M5/92Y57eBHs2tHXClBGxDZnfAwaXqOF9JYlfFnKI8V3kBl5Qut8wSmOL
-         w7Acit+0bUQnw==
-Subject: Re: Failing V4l2-compliance test with a sensor driver
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <20210115115324.glhnixqafh2jakw4@basti-TUXEDO-Book-XA1510>
- <1821bd61-818f-5e1b-156a-3c72b2bca800@xs4all.nl>
- <20210115183449.xrkl6u2sk2su7zgp@basti-TUXEDO-Book-XA1510>
- <b4a9a516-88bb-c278-0088-d652ec588556@collabora.com>
- <20210118071500.x7e2pdszql44ncba@basti-TUXEDO-Book-XA1510>
- <bea28ee9-0cb4-4849-5e73-96e6ef1f945a@xs4all.nl>
- <20210118180306.aai3zfo5xpcr3y32@basti-TUXEDO-Book-XA1510>
- <cb50dc5e-33c6-d002-a31a-af91bbec6d6e@collabora.com>
- <7b77875c-5339-1c90-a6d8-304d56097861@xs4all.nl>
- <20210119191634.nolxxbisfdgm4gj7@basti-TUXEDO-Book-XA1510>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <06878d92-70c2-ca24-b6c7-032becb0a0f6@xs4all.nl>
-Date:   Wed, 20 Jan 2021 11:16:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        t=1611135790; bh=6LGxA5WBLgXBOwMVcq9pjOftrhauWjC2h9oPKKHoJDE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=RKjicG01syX/2yiOG+D1LkqXsUp0GULwKaI9A0kNrtkLb4QPpc4k5S4C2NgIS/erT
+         3NRMRAc5g5GxO2gM/bkvc5PWlfldbj0O9i/t0IBNvcA1Ry1yXmhthxQz+tSJCNM135
+         JuyTTakpGD8gQ2yB1+5ZdHWYjRyZxCxWPDeVsx8b0hKR39qZcRmHSrtIy7vY+4FLUz
+         3sCNAKuFnUclgBF+INwG/Z/EOWXOwUslVWX6yOGPVEQpx1h5SfwnzG7OOyKZvryL9f
+         bLI0ByESozFr3U1EDwVkKayI27jCStp7ndRRmXGaqR2eWRx9SIk9f7JQL6wYDTKCsi
+         Wg2lyDaBi5RNA==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 00/14] Fixes for smatch/sparse/sysbot/compiler warnings
+Date:   Wed, 20 Jan 2021 10:42:52 +0100
+Message-Id: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20210119191634.nolxxbisfdgm4gj7@basti-TUXEDO-Book-XA1510>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfKGvuGZIo7TA6IY8orkxzyFbjNXoIWcsTdgBMRT9T1/ktQvJpiGe+lTqSqqJRJt0MU4mWw9m/hNto8v5SB/Ih7xGgdkOAQLLbwdCjqBaksRyszKd2kJn
- eMZqaD7+ZZSpYCIme3BggNeQvF83nmN/ptjDtG/XcRQn0SADcgh8sMZCh2hlfqTDq+S0wGQv/8KPwi0NNQSTMh29nTb2BfNXHaX048JBpmqd89tX/+4nnp6U
- rslpbC71SJDHshlYB17jaZT8/HR2Itzxl06OaxJUPJbsNHs0AcZ7Hu7VEOnJ/ZnL8TKtL7Zmx/QPoLLCStG/pw==
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGCYqhuwV3+Yk1rv2QJDZScmo32gHmrOGHUW680tMvz8mG7tCBVf9OnohmtN4nL1GUNY/zfLKBZtYzV8Xbr2NOg5rrxGzfqKLgJgrvnqWJC4O9RuLB9k
+ 4+VfNDbmV2VhmiocUDJEUTkE6j8PfLoikiLAtkB/Ip/WM8S7VZznmsQJm2Y7dFTFCJ9cpyCfu9LGs2GIOXDrwD4YXI4wlJCqTSc=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19/01/2021 20:16, Sebastian Fricke wrote:
-
-<snip>
-
-> I gathered all the information you require within this paste-bin:
-> https://paste.debian.net/1181807/
-
-Hmm, the problem is that v4l2-compliance can't find the media controller
-that the subdev is part of.
-
-What is the output of:
-
-ls -l /sys/class/video4linux/v4l-subdev3
-
-There should be a 'device' link listed.
-
-Please also show the output of:
-
-ls -l /sys/class/video4linux/v4l-subdev3/device/
-
-If I compare this with the vimc test driver (using v4l-subdev0) there is a
-media0 directory in /sys/class/video4linux/v4l-subdev0/device/ which is
-the media controller that the subdev is associated with.
+The first patch fixes a compiler warning for i686, the second
+patch fixes a sysbot error, the last patch fixes a sparse warning
+and all others fix smatch warnings.
 
 Regards,
 
 	Hans
+
+Hans Verkuil (14):
+  atomisp/pci/hmm: fix wrong printk format
+  v4l2-ctrls.c: fix shift-out-of-bounds in std_validate
+  meson/ge2d: set ret to -ENOMEM
+  davinci/vpbe.c: ret contains the return code, not err
+  tuners/it913x.c: fix missing error code
+  i2c/ov8865.c: fix error checks using wrong variable
+  sti/c8sectpfe: set correct return code
+  sti/hva: add missing clk_disable_unprepare()
+  pci/ivtv: release memory regions on error
+  usb/dvb-usb-v2/rtl28xxu.c: clean up code to fix smatch warning
+  dvb-frontends/rtl2832.c: fix missing error code
+  dvb-frontends/af9033.c: fix missing error codes
+  atomisp/pci: add missing include
+  i2c/ov02a10.c: add cast to fix type mismatch
+
+ drivers/media/dvb-frontends/af9033.c          |  2 ++
+ drivers/media/dvb-frontends/rtl2832.c         |  1 +
+ drivers/media/i2c/ov02a10.c                   |  2 +-
+ drivers/media/i2c/ov8865.c                    |  6 ++--
+ drivers/media/pci/ivtv/ivtv-driver.c          |  5 +++
+ drivers/media/platform/davinci/vpbe.c         |  2 +-
+ drivers/media/platform/meson/ge2d/ge2d.c      |  1 +
+ .../platform/sti/c8sectpfe/c8sectpfe-core.c   |  1 +
+ drivers/media/platform/sti/hva/hva-hw.c       |  1 +
+ drivers/media/tuners/it913x.c                 |  1 +
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c       | 35 +++++++------------
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  3 +-
+ drivers/staging/media/atomisp/pci/hmm/hmm.c   |  2 +-
+ .../media/atomisp/pci/ia_css_firmware.h       |  1 +
+ 14 files changed, 34 insertions(+), 29 deletions(-)
+
+-- 
+2.29.2
+
