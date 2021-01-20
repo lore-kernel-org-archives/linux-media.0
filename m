@@ -7,74 +7,79 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EEBAC43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C83EC43331
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD12A23339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FB7923339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733146AbhATKgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:36:51 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:54385 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731616AbhATJnx (ORCPT
+        id S1733175AbhATKhZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:37:25 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:41079 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731628AbhATJnx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 20 Jan 2021 04:43:53 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A18l8jEC; Wed, 20 Jan 2021 10:43:10 +0100
+        id 2A14lJCTVftvz2A18l8jDv; Wed, 20 Jan 2021 10:43:10 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135790; bh=hzRq6gcUKb9kyoq3Szr5E1bDwNwDQ12pPde39gwBv3M=;
+        t=1611135790; bh=MfC1s2lgwyYxPnZZbWRrWIDKFG8VbjFQpRmGZkZ0ssY=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=f1L543L1yn7ODN01uLgcE2kSX+JpKR4/u8hnH6PLW0GGMVzfyk9NAQqUqFs/z/78p
-         cravbxN1fAYKWyScpux0s+ESbChizJ4mdhMY2L1GiN4sfXWcozNR4mS084jjK/1bgU
-         5VtWu8KCJPB9rSuD16GZoFH9UI7XGCBb0ejZM1obgK2aYVZwYM4Zx6GJeuCiDQLpxN
-         DiRMQvZBZDAkH15JOLvqJOwpbp6K33WRD1PD9ZPZjuBTUJiPwtE27M85ElMoRqyQoC
-         ef6TiwSjkPDtDQiC3FJApIgsnFXjLaiHAD5B0thqnhNksybFv2E2mzRompcA+3bv45
-         C48uH0B67WyPg==
+        b=KnTgMU4KdD+niD/Mub53wVy27MLo58Ar2gVm77ofzPplcBiiKT9bRtYY12Ab/XP/0
+         qXOeHzrKX5bnreI7CDatZyJ/CY5wOQU6NTtGYsqbAgpFaA+7dfVEIjkba01zOtoSqf
+         OTaOTwvlrhFUBUbcIHXlQm131595kVQ3fCN5kqEgzHeltuomYOZTnA9EMA+pH+vq1I
+         K97YArVX8WHiT7R5YFI5VlKAfsvFadPVTO3cIbAvfEO8nTqhsXpH20Ro7NZ+jJ7e2S
+         dsb7VXY0DDdPZ5AD25hvtKoCPg8PmLwjFzUpey7DKZ7rQ87XlL8veCB8GJdyVaNUev
+         UgkIG/CSjEr7Q==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 03/14] meson/ge2d: set ret to -ENOMEM
-Date:   Wed, 20 Jan 2021 10:42:55 +0100
-Message-Id: <20210120094306.784318-4-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 01/14] atomisp/pci/hmm: fix wrong printk format
+Date:   Wed, 20 Jan 2021 10:42:53 +0100
+Message-Id: <20210120094306.784318-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4xfGCYqhuwV3+Yk1rv2QJDZScmo32gHmrOGHUW680tMvz8mG7tCBVf9OnohmtN4nL1GUNY/zfLKBZtYzV8Xbr2NOg5rrxGzfqKLgJgrvnqWJC4O9RuLB9k
- 4+VfNDbmV2VhmkuyyJOenL24yx7QFERp9o2SQ72ibKL0wbJ7Hf8SEVIm0JL+mHbYV7hUgZNj6H36R7elzTCc5UMO46UrRVuc1FprAlm6JDtpBOg8NKiw9C2V
- WmJ7HTddDRRKbNYr521QD/4NNZeYi3N80Mo5YI4icZY=
+ 4+VfNDbmV2VhmlnSBs8pyyraikQBcoRXd7vgdYwk0bep6SSkhbuKHiaknI3RYF1/TuiKsb196eIX2rNikNdhPTEn8ceAbNvsq8cGeQ4VWTmyFMyxZ4+yxggF
+ Q1gMJr27nkwFUlAGjc3T6Q==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix this smatch warning:
+Fix this compiler warning on i686:
 
-drivers/media/platform/meson/ge2d/ge2d.c:991 ge2d_probe() warn: missing error code 'ret'
+In file included from include/linux/printk.h:409,
+                 from include/linux/kernel.h:16,
+                 from drivers/staging/media/atomisp/pci/hmm/hmm.c:23:
+drivers/staging/media/atomisp/pci/hmm/hmm.c: In function 'hmm_alloc':
+drivers/staging/media/atomisp/pci/hmm/hmm.c:272:3: warning: format '%ld' expects argument of type 'long int', but argument 6 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+  272 |   "%s: pages: 0x%08x (%ld bytes), type: %d from highmem %d, user ptr %p, cached %d\n",
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-when video_device_alloc() returns NULL.
+Use %zu instead of %ld.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
 ---
- drivers/media/platform/meson/ge2d/ge2d.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/atomisp/pci/hmm/hmm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/meson/ge2d/ge2d.c b/drivers/media/platform/meson/ge2d/ge2d.c
-index f526501bd473..153612ca96fc 100644
---- a/drivers/media/platform/meson/ge2d/ge2d.c
-+++ b/drivers/media/platform/meson/ge2d/ge2d.c
-@@ -988,6 +988,7 @@ static int ge2d_probe(struct platform_device *pdev)
- 	vfd = video_device_alloc();
- 	if (!vfd) {
- 		v4l2_err(&ge2d->v4l2_dev, "Failed to allocate video device\n");
-+		ret = -ENOMEM;
- 		goto unreg_v4l2_dev;
- 	}
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index e0eaff0f8a22..6a5ee4607089 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -269,7 +269,7 @@ ia_css_ptr hmm_alloc(size_t bytes, enum hmm_bo_type type,
+ 		hmm_set(bo->start, 0, bytes);
  
+ 	dev_dbg(atomisp_dev,
+-		"%s: pages: 0x%08x (%ld bytes), type: %d from highmem %d, user ptr %p, cached %d\n",
++		"%s: pages: 0x%08x (%zu bytes), type: %d from highmem %d, user ptr %p, cached %d\n",
+ 		__func__, bo->start, bytes, type, from_highmem, userptr, cached);
+ 
+ 	return bo->start;
 -- 
 2.29.2
 
