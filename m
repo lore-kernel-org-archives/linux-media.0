@@ -5,138 +5,93 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33898C10F29
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D377C10DC3
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0105023339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67BCB23339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731313AbhATKbx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731249AbhATJ1O (ORCPT
+        id S2387498AbhATKka (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:40:30 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:56565 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731645AbhATJny (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:27:14 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1C6C061794
-        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:33 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id c6so17783862ede.0
-        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cNEG6Wf0FIfViBspVuOimQ9Ufn7OM3gR5b0lBFKYH9s=;
-        b=w3DM53GoY3/BqPTYQ9HHe9jPcIQOY2KZRFnfsde2B3+gHng6/IM0kq0P8g0UzqN8cF
-         AZu6liGhdskAPOJgSe6zuqHppseXAIpB9Klj35tQ41kMActjknJkWK+ITLF0jd3vDxoE
-         UjtjFZW6qw3FwFPa/dSK42r2tqZ/WLZbVy6pvSmpEts2XpAPL28dR88/NwtVQHVglIrW
-         wkgRSjJKcCmtXEpItONAplJNSwWzU2zIcafuN5lg4ko7fFkV0uhKrkKK4S+A8uH6CaWn
-         YFndia741VRzTF6tJreMEy0Ctpi4JjW6I6IU5dPhXqtTFxyYfds/+Ps8USSRzaOOXPz/
-         XJYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cNEG6Wf0FIfViBspVuOimQ9Ufn7OM3gR5b0lBFKYH9s=;
-        b=Hrm9jpB4XhWxCxWLej9+QbpBmJCRBERxK2574XPl9V4uEYGblmmJKJ2dNNqiYqYeLy
-         WitiVImQwNwkIHth28vOnXdFrXopHKPt97cvAn4Y6nACqb+rVWiqG/ZjTKZiRF61JzgF
-         BZKOVobolHjm+DlA23K6dnUjoq0xT46hsPOhdpdb6mcZ0fJA5D8sOeZWUkKHo2C4QJsM
-         fvRcA9D6mRjjQCmT2FAr+g/Adzt3COsefp3mD8icK3bC+Ns0IpaLVobTuVHPVS8w4fSv
-         PfI6SOMUGoWYG877EtOFBqxgyPKlC/GpIy+OhZlijMUpymw6bX6smKUQfB2AUbiKkHtN
-         /Z+Q==
-X-Gm-Message-State: AOAM5314e74hC91egPXxZiTWcCFQ3y9A9pKy0h4JhLa+leMVWSC6GB02
-        lMPGLajvghhX31kMk36bxE2WVUJw2yp53HKC
-X-Google-Smtp-Source: ABdhPJyMFxPjSTe5/tLrPdZGq7xwIVcnOlU+Efz0xBj30QCTOuprpWQzAyY0hgsAA+dr6x/u+Gmpjw==
-X-Received: by 2002:aa7:cd4c:: with SMTP id v12mr6641709edw.17.1611134792447;
-        Wed, 20 Jan 2021 01:26:32 -0800 (PST)
-Received: from localhost.localdomain (hst-221-66.medicom.bg. [84.238.221.66])
-        by smtp.gmail.com with ESMTPSA id k16sm619392ejd.78.2021.01.20.01.26.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:26:32 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+        Wed, 20 Jan 2021 04:43:54 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 2A14lJCTVftvz2A19l8jEn; Wed, 20 Jan 2021 10:43:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611135792; bh=cASv0L/3Ndr/1cXJ9kG21MCLpitVUBYkCIZgva6q27M=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=hSoGyyGFfq9hqb/lRu6BjCknO8UQoDDcQunwRywbbELDW0oF57/zZK5CR2qZjN2QY
+         7xw9BzUn9s4kPmJSq8tQpc69wvHwPq3I4ER8ogmxfMcOAy2DKxoQ7ZxUdqAhjFHjB0
+         OvIE26XPDUA7/GIuSb5kUmxEeSoXY/oucp2hHaOKMmJ2XbTw0OB0eKqRZP47oHvXDg
+         xbTXGxacYNsDmA08CT4ZCNW36+KADHsGDFt5bofKMAhTAthp0uaKXzmyZ/W1rdcRG/
+         sk7fG1zfufVvGu0f/2lUPdnunHIApD6ZbMOfYq4+0KNtbPNiuIeN4djnss9WXBJmQ/
+         6Yt83tUCjL3MQ==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v4 2/5] docs: Document colorimetry class
-Date:   Wed, 20 Jan 2021 11:26:03 +0200
-Message-Id: <20210120092606.3987207-3-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
-References: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 06/14] i2c/ov8865.c: fix error checks using wrong variable
+Date:   Wed, 20 Jan 2021 10:42:58 +0100
+Message-Id: <20210120094306.784318-7-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
+ m2SpTLrwFJwp98Do2dpK1L+DfVBTDRbf2cJz+GRrOWgLQIra6CHaoOKUlywpUr370CJGTmKaILUaPAvbmaZj00hpRivhZUM5xOWpM1QF9KAOKJsh2bLDALE4
+ eWQXvTlROWPiQ1smvld8vu/Mes68RDdGCInOYWCmnkXtabvHEnNKkjwGrXufHF3ZWd7O3Qk6aQSs4uE1ptnzUQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a document for ext control colorimetry class.
+Fix two typos: dvdd -> dovdd and dvdd -> avdd
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Both clearly copy-and-paste mistakes.
+
+Fixes this smatch warning:
+
+drivers/media/i2c/ov8865.c:2852 ov8865_probe() warn: passing zero to 'PTR_ERR'
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- .../userspace-api/media/v4l/common.rst        |  1 +
- .../media/v4l/ext-ctrls-colorimetry.rst       | 19 +++++++++++++++++++
- .../media/v4l/vidioc-g-ext-ctrls.rst          |  4 ++++
- 3 files changed, 24 insertions(+)
- create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst
+ drivers/media/i2c/ov8865.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/common.rst b/Documentation/userspace-api/media/v4l/common.rst
-index 8c263c5a85d8..ea0435182e44 100644
---- a/Documentation/userspace-api/media/v4l/common.rst
-+++ b/Documentation/userspace-api/media/v4l/common.rst
-@@ -51,6 +51,7 @@ applicable to all devices.
-     ext-ctrls-fm-tx
-     ext-ctrls-fm-rx
-     ext-ctrls-detect
-+    ext-ctrls-colorimetry
-     fourcc
-     format
-     planar-apis
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst
-new file mode 100644
-index 000000000000..6b0cd2054e84
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst
-@@ -0,0 +1,19 @@
-+.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+
-+.. _colorimetry-controls:
-+
-+*****************************
-+Colorimetry Control Reference
-+*****************************
-+
-+Below are controls within the Colorimetry control class.
-+
-+Colorimetry Control IDs
-+-----------------------
-+
-+.. _colorimetry-control-id:
-+
-+``V4L2_CID_COLORIMETRY_CLASS (class)``
-+    The Colorimetry class descriptor. Calling
-+    :ref:`VIDIOC_QUERYCTRL` for this control will
-+    return a description of this control class.
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index b9c62affbb5a..8a95ebdd499a 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -394,6 +394,10 @@ still cause this situation.
-       - 0xa40000
-       - The class containing stateless codec controls. These controls are
- 	described in :ref:`codec-stateless-controls`.
-+    * - ``V4L2_CTRL_CLASS_COLORIMETRY``
-+      - 0xa50000
-+      - The class containing colorimetry controls. These controls are
-+	described in :ref:`colorimetry-controls`.
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index fda5a55979aa..72ef300c0b67 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -2839,9 +2839,9 @@ static int ov8865_probe(struct i2c_client *client)
  
- Return Value
- ============
+ 	/* DOVDD: digital I/O */
+ 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
+-	if (IS_ERR(sensor->dvdd)) {
++	if (IS_ERR(sensor->dovdd)) {
+ 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
++		ret = PTR_ERR(sensor->dovdd);
+ 		goto error_endpoint;
+ 	}
+ 
+@@ -2849,7 +2849,7 @@ static int ov8865_probe(struct i2c_client *client)
+ 	sensor->avdd = devm_regulator_get(dev, "avdd");
+ 	if (IS_ERR(sensor->avdd)) {
+ 		dev_err(dev, "cannot get AVDD (analog) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
++		ret = PTR_ERR(sensor->avdd);
+ 		goto error_endpoint;
+ 	}
+ 
 -- 
-2.25.1
+2.29.2
 
