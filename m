@@ -2,174 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 039BDC43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAC8C4332E
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:46:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ABA432339D
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:46:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BE42233F6
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:46:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728792AbhATMiv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 07:38:51 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47284 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbhATLc5 (ORCPT
+        id S2388802AbhATMiX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 07:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388984AbhATLOe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 06:32:57 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 2C3B91F455BE
-Subject: Re: [PATCH] media: rkisp1: uapi: change hist_bins array type from
- __u16 to __u32
-To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, heiko@sntech.de
-Cc:     helen.koike@collabora.com, ezequiel@collabora.com,
-        kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, tfiga@chromium.org
-References: <20210119145341.29686-1-dafna.hirschfeld@collabora.com>
- <a8f8d9e9-30b1-b594-a9bc-f4a11924bf56@xs4all.nl>
- <fbe57350-f319-dbc7-f093-d3c1c76feb89@collabora.com>
- <2e48068e-fcc4-9288-a9a6-59f71d7f20ce@xs4all.nl>
- <65be169f-417f-a1f5-53e7-31f701a04d08@collabora.com>
- <41194a0e-e8ef-1acf-82c2-3553e17e5dca@xs4all.nl>
- <c474d304-65ee-a768-a3b1-af1045c97b76@collabora.com>
- <290b42e0-12ad-011e-a6db-9eb7a057a7e8@xs4all.nl>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <b77aed66-6c52-8548-c3c0-ea988c51c7aa@collabora.com>
-Date:   Wed, 20 Jan 2021 12:32:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 20 Jan 2021 06:14:34 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1236CC0613D6;
+        Wed, 20 Jan 2021 03:13:54 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id i141so11618185yba.0;
+        Wed, 20 Jan 2021 03:13:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n8w0wrgIwK99I/XLO+qT38i1rhaM0hDIWfrrjrmpxSs=;
+        b=GXni0TITHijZ716FXff3R1IztZ1OMAIBdCEy032oVBOVCA9SH86KOh4thFAc8jCPwf
+         lG06FYLYbrU1WcJqfNjUszxi+qAQwVl8vVkC2mcetS9X8Jrc6MQy2SFKZlRi24sWr2UT
+         HGJpAchnTBiTBKbs3eC22aurTuhGv8eGvo9aHWuXbJopG8s0yVjHzhbKWF/wvD/ggHaH
+         B/CCZ5D8xHC9SayI/EOkRbzFJGFsaedVPJG5nrxw8Sik2/80kDNQ5e/EmwyXz23VDis2
+         YqjcmH3aJn5sSKJgwI1mxeZOP95M+Re+TehgarhznQhcBZFokgQqKURcvIlLz+d1hmYM
+         1EWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n8w0wrgIwK99I/XLO+qT38i1rhaM0hDIWfrrjrmpxSs=;
+        b=S4VsFzp17xaFx1W6PkH2E0CslL6JvCVOQ3CjHwb93u0Z2xIdCpPpiQcMlhdhqOZWRA
+         Oqi323xqMqXZNfPuyzTHvQz9pww4vrHtQ/n3HcpQzDx8zxwVePZi5AOfjO5tLU9rvM0a
+         CSdvEtuCfC/n72W0jUoQBX1tRfASMMHDkwVSmpeMLjAEvA3JGhnONgqJT9eF9cy3jUmE
+         4ZMvmPwzS8On8JCCiUh9l0/47ESYgj4lzW9YbTP4DFqR54AfYTYoM4/HJsx0z0bg5WpS
+         iaGxBCLv7+l5pqw/vwzpbdo13Z12kJeA/W8oIRfkXY2qAlcj/uQnlGc75ShEmDIWKGNM
+         OVqg==
+X-Gm-Message-State: AOAM533/sneAQRwmxXv6pdRUAdatfxt/7IXs4wgQsev9vXC4DhTNY5yV
+        aH1Qa/VulO9I59VOJMmfxA5+Y5WMHQQv8VgAXVw=
+X-Google-Smtp-Source: ABdhPJyYcXGJ7UBt8GoLLEiX2wuisF0lCj3RDfHKYpJuROaJ4hobYM9JG5KV1nkwI4hEZyy4YqRoes955e2EyvyM5Eo=
+X-Received: by 2002:a25:94b:: with SMTP id u11mr13351112ybm.518.1611141233400;
+ Wed, 20 Jan 2021 03:13:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <290b42e0-12ad-011e-a6db-9eb7a057a7e8@xs4all.nl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com> <20210120103648.GI11878@paasikivi.fi.intel.com>
+ <8bdf95af-5df7-df7b-4ded-4d291522f77c@ideasonboard.com>
+In-Reply-To: <8bdf95af-5df7-df7b-4ded-4d291522f77c@ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 20 Jan 2021 11:13:27 +0000
+Message-ID: <CA+V-a8v1W5jdUyD-S_qt4Lu7vksdmLiQrV7ZwJiDGOa6WBiMfA@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Wed, Jan 20, 2021 at 11:09 AM Kieran Bingham
+<kieran.bingham+renesas@ideasonboard.com> wrote:
+>
+> On 20/01/2021 10:36, Sakari Ailus wrote:
+> > On Wed, Jan 20, 2021 at 10:17:14AM +0000, Kieran Bingham wrote:
+> >> Hi Lad,
+> >>
+> >> On 20/01/2021 09:01, Lad Prabhakar wrote:
+> >>> Fix OV772x build breakage by selecting V4L2_FWNODE config:
+> >>>
+> >>> ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
+> >>> ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> >>> ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
+> >>> ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
+> >>>
+> >>> Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
+> >>> Reported-by: kernel test robot <lkp@intel.com>
+> >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>
+> >> I see this driver uses subdev API too.
+> >>
+> >> Should the driver also select VIDEO_V4L2_SUBDEV_API?
+> >
+> > Yes, it should. Another patch? This one fixes a compilation problem.
+>
+> Yes, it's probably another patch, because indeed this is a specific fix.
+>
+> I wonder if that means the builders haven't been able to construct a
+> combination without VIDEO_V4L2_SUBDEV_API...
+>
+Thats because v4l2-subdev.o is built irrespective of
+VIDEO_V4L2_SUBDEV_API enabled/disabled and there are empty fillers in
+v4l2-subdev.c when VIDEO_V4L2_SUBDEV_API is disabled.
 
-
-Am 20.01.21 um 11:49 schrieb Hans Verkuil:
-> On 20/01/2021 11:37, Dafna Hirschfeld wrote:
->>
->>
->> Am 20.01.21 um 10:58 schrieb Hans Verkuil:
->>> On 19/01/2021 18:47, Dafna Hirschfeld wrote:
->>>>
->>>>
->>>> Am 19.01.21 um 17:32 schrieb Hans Verkuil:
->>>>> On 19/01/2021 16:32, Dafna Hirschfeld wrote:
->>>>>>
->>>>>>
->>>>>> Am 19.01.21 um 16:00 schrieb Hans Verkuil:
->>>>>>> On 19/01/2021 15:53, Dafna Hirschfeld wrote:
->>>>>>>> Each entry in the array is a 20 bits value composed of 16
->>>>>>>> bits unsigned integer and 4 bits fractional part. So the
->>>>>>>> type should change to __u32.
->>>>>>>>
->>>>>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>>>>>>> ---
->>>>>>>> This patch is applied on top of v6 of the patchset
->>>>>>>> "Fix the rkisp1 userspace API for later IP versions"
->>>>>>>>
->>>>>>>>      include/uapi/linux/rkisp1-config.h | 5 +++--
->>>>>>>>      1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
->>>>>>>> index 57ca3eea985f..47f6b84d7c56 100644
->>>>>>>> --- a/include/uapi/linux/rkisp1-config.h
->>>>>>>> +++ b/include/uapi/linux/rkisp1-config.h
->>>>>>>> @@ -895,7 +895,8 @@ struct rkisp1_cif_isp_af_stat {
->>>>>>>>      /**
->>>>>>>>       * struct rkisp1_cif_isp_hist_stat - statistics histogram data
->>>>>>>>       *
->>>>>>>> - * @hist_bins: measured bin counters
->>>>>>>> + * @hist_bins: measured bin counters. Each bin is a 20 bits value
->>>>>>>> + *	       composed of a 16-bit unsigned integer and 4 bits fractional part.
->>>>>>>
->>>>>>> So bits 0-3 are the fractional part and bits 4-19 contain the integer part?
->>>>>>> What goes where should be defined!
->>>>>>
->>>>>> Actually I don't know, I just copied the docs in the datasheet.
->>>>>> I can try figure it out. I can meanwhile send a patch without the doc until
->>>>>> we are sure. Is that OK?
->>>>>
->>>>> No, this should be documented properly.
->>>>
->>>> I see that indeed bits 0-3 are the fractional part.
->>>> The measurements are taken over 25 sub-windows and it is possible to
->>>> give a weight to each window. If I set all weights to 1 then I expect to get
->>>> an integer value and indeed in that case I see that the last 4 bits are always 0.
->>>> If I set the weights to other than 1 I get the last 4 bits not only 0.
->>>>
->>>> The UAPI is generally not very good documented mainly because there is currently
->>>> no open source userspace that uses it.
->>>>
->>>>>
->>>>> Is this the only fractional type that is used in the rkisp1 uapi or are there
->>>>> others? (Just checking).
->>>>
->>>> There are other places as well.
->>>> I see that there are some values in rkisp1_cif_isp_lsc_config that are fractional
->>>> and not documented.
->>>> The two other fractional types in the uapi are already documented.
->>>>
->>>> I can add a patch that extends the documentation of all the fields in the uapi using the datasheet.
->>>> But I think such a patch can be added after de-staging.
->>>
->>> You need to make changes anyway in the uAPI for 5.11 (including fixing the
->>> bad u8 cast), so let's do this right.
->>>
->>> Regards,
->>>
->>> 	Hans
->>
->> So just to make sure I understood correctly, in addition to Heiko Stuebner's patchset.
->> I should a add another patchset that includes:
->>
->> 1. changing the hist_bins type to __u32,
->> 2. removing the u8 cast in rkisp1-stats.c
->> 3. documenting all the fields in the uapi
-> 
-> Well, documenting the fractional types at least. Or are you talking about other
-> fields as well?
-> 
->>
->> I don't know what is the policy for fixes among the kernel management,
->> I am worried that if we are too late or the changes are too big they might reject it.
-> 
-> rc4 was released last weekend, so if it is possible to post these fixes today/tomorrow
-> then there is enough time. I'd like to post a PR for these and other fixes ideally no
-> later than Friday.
-> 
-> The documentation patch can slip to 5.12 if really necessary, but I would prefer
-> to have that as part of the 5.11 fixes as well.
-> 
->>
->> Also, documenting thoroughly can only be done if there is userspace app or at least unit tests
->> that test each component since the datasheet lack some details as in this case.
-> 
-> Do what you can. If some things need more time, then it is OK to postpone that
-> part to 5.12.
-> 
-> Regards,
-> 
-> 	Hans
-
-Hi, so there is one issue in Heiko's patch, in 2/4 which changes the array size to 25,
-the code in rkisp1-params.c should also change to iterate it only 25 times.
-I talked to Heiko, and we said that I'll send a v7 of his patchset that includes in addition
-to his patches my patches and also that fix to patch 2/4.
-Is that fine or should we keep it in two separated patches?
-
-Thanks,
-Dafna
-
-> 
+Cheers,
+Prabhakar
+> --
+> Kieran
+>
+>
+> >> Or is that covered sufficiently already on any platforms that would use
+> >> the driver?
+> >>
+> >> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> >>
+> >>> ---
+> >>>  drivers/media/i2c/Kconfig | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>>
+> >>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> >>> index eddb10220953..bb1b5a340431 100644
+> >>> --- a/drivers/media/i2c/Kconfig
+> >>> +++ b/drivers/media/i2c/Kconfig
+> >>> @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
+> >>>     tristate "OmniVision OV772x sensor support"
+> >>>     depends on I2C && VIDEO_V4L2
+> >>>     select REGMAP_SCCB
+> >>> +   select V4L2_FWNODE
+> >>>     help
+> >>>       This is a Video4Linux2 sensor driver for the OmniVision
+> >>>       OV772x camera.
+> >>>
+> >>
+> >
+>
