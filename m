@@ -2,142 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAC8C4332E
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0CC2C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 13:05:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BE42233F6
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 12:46:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8491A2333C
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 13:05:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388802AbhATMiX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 07:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388984AbhATLOe (ORCPT
+        id S2387770AbhATND1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 08:03:27 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:40442 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728371AbhATMlR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 06:14:34 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1236CC0613D6;
-        Wed, 20 Jan 2021 03:13:54 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id i141so11618185yba.0;
-        Wed, 20 Jan 2021 03:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n8w0wrgIwK99I/XLO+qT38i1rhaM0hDIWfrrjrmpxSs=;
-        b=GXni0TITHijZ716FXff3R1IztZ1OMAIBdCEy032oVBOVCA9SH86KOh4thFAc8jCPwf
-         lG06FYLYbrU1WcJqfNjUszxi+qAQwVl8vVkC2mcetS9X8Jrc6MQy2SFKZlRi24sWr2UT
-         HGJpAchnTBiTBKbs3eC22aurTuhGv8eGvo9aHWuXbJopG8s0yVjHzhbKWF/wvD/ggHaH
-         B/CCZ5D8xHC9SayI/EOkRbzFJGFsaedVPJG5nrxw8Sik2/80kDNQ5e/EmwyXz23VDis2
-         YqjcmH3aJn5sSKJgwI1mxeZOP95M+Re+TehgarhznQhcBZFokgQqKURcvIlLz+d1hmYM
-         1EWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n8w0wrgIwK99I/XLO+qT38i1rhaM0hDIWfrrjrmpxSs=;
-        b=S4VsFzp17xaFx1W6PkH2E0CslL6JvCVOQ3CjHwb93u0Z2xIdCpPpiQcMlhdhqOZWRA
-         Oqi323xqMqXZNfPuyzTHvQz9pww4vrHtQ/n3HcpQzDx8zxwVePZi5AOfjO5tLU9rvM0a
-         CSdvEtuCfC/n72W0jUoQBX1tRfASMMHDkwVSmpeMLjAEvA3JGhnONgqJT9eF9cy3jUmE
-         4ZMvmPwzS8On8JCCiUh9l0/47ESYgj4lzW9YbTP4DFqR54AfYTYoM4/HJsx0z0bg5WpS
-         iaGxBCLv7+l5pqw/vwzpbdo13Z12kJeA/W8oIRfkXY2qAlcj/uQnlGc75ShEmDIWKGNM
-         OVqg==
-X-Gm-Message-State: AOAM533/sneAQRwmxXv6pdRUAdatfxt/7IXs4wgQsev9vXC4DhTNY5yV
-        aH1Qa/VulO9I59VOJMmfxA5+Y5WMHQQv8VgAXVw=
-X-Google-Smtp-Source: ABdhPJyYcXGJ7UBt8GoLLEiX2wuisF0lCj3RDfHKYpJuROaJ4hobYM9JG5KV1nkwI4hEZyy4YqRoes955e2EyvyM5Eo=
-X-Received: by 2002:a25:94b:: with SMTP id u11mr13351112ybm.518.1611141233400;
- Wed, 20 Jan 2021 03:13:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120090148.30598-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <a1c42817-e2e4-b96a-c494-742808443f6b@ideasonboard.com> <20210120103648.GI11878@paasikivi.fi.intel.com>
- <8bdf95af-5df7-df7b-4ded-4d291522f77c@ideasonboard.com>
-In-Reply-To: <8bdf95af-5df7-df7b-4ded-4d291522f77c@ideasonboard.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 20 Jan 2021 11:13:27 +0000
-Message-ID: <CA+V-a8v1W5jdUyD-S_qt4Lu7vksdmLiQrV7ZwJiDGOa6WBiMfA@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c/Kconfig: Select FWNODE for OV772x sensor
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wed, 20 Jan 2021 07:41:17 -0500
+Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F32F5813;
+        Wed, 20 Jan 2021 13:40:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1611146420;
+        bh=opRChhKp2O3QHX41q97CASKly8ol8WJrSjQa84EOsUM=;
+        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Vr/il1BK75Nv6+X2Qg8zAXdDZNEnP1VRvbztt2biy7UpJZ/h5ye++gtxZHq9Iq71M
+         EsDYi41lwbpIzpBqsnY8YmY87bZ2bfQCQ4o9YcMGDv05pK+dc/RedtLFSeb6Ojg2xW
+         dPvBDjcArAMkKCk2TmJGwbKtDoXObpWGcIGY/DjE=
+Reply-To: kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH] media: i2c: max9286: fix access to unallocated memory
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-media@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20210118081446.46555-1-tomi.valkeinen@ideasonboard.com>
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Autocrypt: addr=kieran.bingham@ideasonboard.com; keydata=
+ mQINBFYE/WYBEACs1PwjMD9rgCu1hlIiUA1AXR4rv2v+BCLUq//vrX5S5bjzxKAryRf0uHat
+ V/zwz6hiDrZuHUACDB7X8OaQcwhLaVlq6byfoBr25+hbZG7G3+5EUl9cQ7dQEdvNj6V6y/SC
+ rRanWfelwQThCHckbobWiQJfK9n7rYNcPMq9B8e9F020LFH7Kj6YmO95ewJGgLm+idg1Kb3C
+ potzWkXc1xmPzcQ1fvQMOfMwdS+4SNw4rY9f07Xb2K99rjMwZVDgESKIzhsDB5GY465sCsiQ
+ cSAZRxqE49RTBq2+EQsbrQpIc8XiffAB8qexh5/QPzCmR4kJgCGeHIXBtgRj+nIkCJPZvZtf
+ Kr2EAbc6tgg6DkAEHJb+1okosV09+0+TXywYvtEop/WUOWQ+zo+Y/OBd+8Ptgt1pDRyOBzL8
+ RXa8ZqRf0Mwg75D+dKntZeJHzPRJyrlfQokngAAs4PaFt6UfS+ypMAF37T6CeDArQC41V3ko
+ lPn1yMsVD0p+6i3DPvA/GPIksDC4owjnzVX9kM8Zc5Cx+XoAN0w5Eqo4t6qEVbuettxx55gq
+ 8K8FieAjgjMSxngo/HST8TpFeqI5nVeq0/lqtBRQKumuIqDg+Bkr4L1V/PSB6XgQcOdhtd36
+ Oe9X9dXB8YSNt7VjOcO7BTmFn/Z8r92mSAfHXpb07YJWJosQOQARAQABtDBLaWVyYW4gQmlu
+ Z2hhbSA8a2llcmFuLmJpbmdoYW1AaWRlYXNvbmJvYXJkLmNvbT6JAlcEEwEKAEECGwMFCwkI
+ BwIGFQgJCgsCBBYCAwECHgECF4ACGQEWIQSQLdeYP70o/eNy1HqhHkZyEKRh/QUCXWTtygUJ
+ CyJXZAAKCRChHkZyEKRh/f8dEACTDsbLN2nioNZMwyLuQRUAFcXNolDX48xcUXsWS2QjxaPm
+ VsJx8Uy8aYkS85mdPBh0C83OovQR/OVbr8AxhGvYqBs3nQvbWuTl/+4od7DfK2VZOoKBAu5S
+ QK2FYuUcikDqYcFWJ8DQnubxfE8dvzojHEkXw0sA4igINHDDFX3HJGZtLio+WpEFQtCbfTAG
+ YZslasz1YZRbwEdSsmO3/kqy5eMnczlm8a21A3fKUo3g8oAZEFM+f4DUNzqIltg31OAB/kZS
+ enKZQ/SWC8PmLg/ZXBrReYakxXtkP6w3FwMlzOlhGxqhIRNiAJfXJBaRhuUWzPOpEDE9q5YJ
+ BmqQL2WJm1VSNNVxbXJHpaWMH1sA2R00vmvRrPXGwyIO0IPYeUYQa3gsy6k+En/aMQJd27dp
+ aScf9am9PFICPY5T4ppneeJLif2lyLojo0mcHOV+uyrds9XkLpp14GfTkeKPdPMrLLTsHRfH
+ fA4I4OBpRrEPiGIZB/0im98MkGY/Mu6qxeZmYLCcgD6qz4idOvfgVOrNh+aA8HzIVR+RMW8H
+ QGBN9f0E3kfwxuhl3omo6V7lDw8XOdmuWZNC9zPq1UfryVHANYbLGz9KJ4Aw6M+OgBC2JpkD
+ hXMdHUkC+d20dwXrwHTlrJi1YNp6rBc+xald3wsUPOZ5z8moTHUX/uPA/qhGsbkCDQRWBP1m
+ ARAAzijkb+Sau4hAncr1JjOY+KyFEdUNxRy+hqTJdJfaYihxyaj0Ee0P0zEi35CbE6lgU0Uz
+ tih9fiUbSV3wfsWqg1Ut3/5rTKu7kLFp15kF7eqvV4uezXRD3Qu4yjv/rMmEJbbD4cTvGCYI
+ d6MDC417f7vK3hCbCVIZSp3GXxyC1LU+UQr3fFcOyCwmP9vDUR9JV0BSqHHxRDdpUXE26Dk6
+ mhf0V1YkspE5St814ETXpEus2urZE5yJIUROlWPIL+hm3NEWfAP06vsQUyLvr/GtbOT79vXl
+ En1aulcYyu20dRRxhkQ6iILaURcxIAVJJKPi8dsoMnS8pB0QW12AHWuirPF0g6DiuUfPmrA5
+ PKe56IGlpkjc8cO51lIxHkWTpCMWigRdPDexKX+Sb+W9QWK/0JjIc4t3KBaiG8O4yRX8ml2R
+ +rxfAVKM6V769P/hWoRGdgUMgYHFpHGSgEt80OKK5HeUPy2cngDUXzwrqiM5Sz6Od0qw5pCk
+ NlXqI0W/who0iSVM+8+RmyY0OEkxEcci7rRLsGnM15B5PjLJjh1f2ULYkv8s4SnDwMZ/kE04
+ /UqCMK/KnX8pwXEMCjz0h6qWNpGwJ0/tYIgQJZh6bqkvBrDogAvuhf60Sogw+mH8b+PBlx1L
+ oeTK396wc+4c3BfiC6pNtUS5GpsPMMjYMk7kVvEAEQEAAYkCPAQYAQoAJgIbDBYhBJAt15g/
+ vSj943LUeqEeRnIQpGH9BQJdizzIBQkLSKZiAAoJEKEeRnIQpGH9eYgQAJpjaWNgqNOnMTmD
+ MJggbwjIotypzIXfhHNCeTkG7+qCDlSaBPclcPGYrTwCt0YWPU2TgGgJrVhYT20ierN8LUvj
+ 6qOPTd+Uk7NFzL65qkh80ZKNBFddx1AabQpSVQKbdcLb8OFs85kuSvFdgqZwgxA1vl4TFhNz
+ PZ79NAmXLackAx3sOVFhk4WQaKRshCB7cSl+RIng5S/ThOBlwNlcKG7j7W2MC06BlTbdEkUp
+ ECzuuRBv8wX4OQl+hbWbB/VKIx5HKlLu1eypen/5lNVzSqMMIYkkZcjV2SWQyUGxSwq0O/sx
+ S0A8/atCHUXOboUsn54qdxrVDaK+6jIAuo8JiRWctP16KjzUM7MO0/+4zllM8EY57rXrj48j
+ sbEYX0YQnzaj+jO6kJtoZsIaYR7rMMq9aUAjyiaEZpmP1qF/2sYenDx0Fg2BSlLvLvXM0vU8
+ pQk3kgDu7kb/7PRYrZvBsr21EIQoIjXbZxDz/o7z95frkP71EaICttZ6k9q5oxxA5WC6sTXc
+ MW8zs8avFNuA9VpXt0YupJd2ijtZy2mpZNG02fFVXhIn4G807G7+9mhuC4XG5rKlBBUXTvPU
+ AfYnB4JBDLmLzBFavQfvonSfbitgXwCG3vS+9HEwAjU30Bar1PEOmIbiAoMzuKeRm2LVpmq4
+ WZw01QYHU/GUV/zHJSFk
+Organization: Ideas on Board
+Message-ID: <4b05ea4f-9127-e2ac-2aa8-83b350e0f7d9@ideasonboard.com>
+Date:   Wed, 20 Jan 2021 12:40:17 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210118081446.46555-1-tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 11:09 AM Kieran Bingham
-<kieran.bingham+renesas@ideasonboard.com> wrote:
->
-> On 20/01/2021 10:36, Sakari Ailus wrote:
-> > On Wed, Jan 20, 2021 at 10:17:14AM +0000, Kieran Bingham wrote:
-> >> Hi Lad,
-> >>
-> >> On 20/01/2021 09:01, Lad Prabhakar wrote:
-> >>> Fix OV772x build breakage by selecting V4L2_FWNODE config:
-> >>>
-> >>> ia64-linux-ld: drivers/media/i2c/ov772x.o: in function `ov772x_probe':
-> >>> ov772x.c:(.text+0x1ee2): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
-> >>> ia64-linux-ld: ov772x.c:(.text+0x1f12): undefined reference to `v4l2_fwnode_endpoint_free'
-> >>> ia64-linux-ld: ov772x.c:(.text+0x2212): undefined reference to `v4l2_fwnode_endpoint_alloc_parse'
-> >>>
-> >>> Fixes: 8a10b4e3601e ("media: i2c: ov772x: Parse endpoint properties")
-> >>> Reported-by: kernel test robot <lkp@intel.com>
-> >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >>
-> >> I see this driver uses subdev API too.
-> >>
-> >> Should the driver also select VIDEO_V4L2_SUBDEV_API?
-> >
-> > Yes, it should. Another patch? This one fixes a compilation problem.
->
-> Yes, it's probably another patch, because indeed this is a specific fix.
->
-> I wonder if that means the builders haven't been able to construct a
-> combination without VIDEO_V4L2_SUBDEV_API...
->
-Thats because v4l2-subdev.o is built irrespective of
-VIDEO_V4L2_SUBDEV_API enabled/disabled and there are empty fillers in
-v4l2-subdev.c when VIDEO_V4L2_SUBDEV_API is disabled.
+Hi Tomi,
 
-Cheers,
-Prabhakar
-> --
-> Kieran
->
->
-> >> Or is that covered sufficiently already on any platforms that would use
-> >> the driver?
-> >>
-> >> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> >>
-> >>> ---
-> >>>  drivers/media/i2c/Kconfig | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> >>> index eddb10220953..bb1b5a340431 100644
-> >>> --- a/drivers/media/i2c/Kconfig
-> >>> +++ b/drivers/media/i2c/Kconfig
-> >>> @@ -1013,6 +1013,7 @@ config VIDEO_OV772X
-> >>>     tristate "OmniVision OV772x sensor support"
-> >>>     depends on I2C && VIDEO_V4L2
-> >>>     select REGMAP_SCCB
-> >>> +   select V4L2_FWNODE
-> >>>     help
-> >>>       This is a Video4Linux2 sensor driver for the OmniVision
-> >>>       OV772x camera.
-> >>>
-> >>
-> >
->
+On 18/01/2021 08:14, Tomi Valkeinen wrote:
+> The asd allocated with v4l2_async_notifier_add_fwnode_subdev() must be
+> of size max9286_asd, otherwise access to max9286_asd->source will go to
+> unallocated memory.
+> 
+> Fixes: 86d37bf31af6 ("media: i2c: max9286: Allocate v4l2_async_subdev dynamically")
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Cc: stable@vger.kernel.org # v5.10+
+
+Thanks this looks like a good spot.
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+And also, now verified:
+
+Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> ---
+>  drivers/media/i2c/max9286.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> index c82c1493e099..b1e2476d3c9e 100644
+> --- a/drivers/media/i2c/max9286.c
+> +++ b/drivers/media/i2c/max9286.c
+> @@ -580,7 +580,7 @@ static int max9286_v4l2_notifier_register(struct max9286_priv *priv)
+>  
+>  		asd = v4l2_async_notifier_add_fwnode_subdev(&priv->notifier,
+>  							    source->fwnode,
+> -							    sizeof(*asd));
+> +							    sizeof(struct max9286_asd));
+>  		if (IS_ERR(asd)) {
+>  			dev_err(dev, "Failed to add subdev for source %u: %ld",
+>  				i, PTR_ERR(asd));
+> 
+
+-- 
+Regards
+--
+Kieran
