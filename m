@@ -5,74 +5,129 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8775C10F00
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB0EDC41519
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B3F52333C
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91AF923332
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387454AbhATKkY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:40:24 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:59895 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731647AbhATJny (ORCPT
+        id S1733017AbhATKdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731244AbhATJ1P (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:43:54 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Al8jF2; Wed, 20 Jan 2021 10:43:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135792; bh=jk8ExUIRHzkWPr8vA/2/QT51ujbhxJnmlqq3kXlcOZI=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=djYrzza9uBAIQM4zTdQsgST+2WHIJtWnh2n6vwBNn17yhkm+Pu3qRS5qtxKhe+0jb
-         xSP3P/J17m24pUnS2YQoOUYFF+yPvCqY1Gn8VwUqgiVpMxJaL023zwZunVSW+Chk0o
-         jESU/qJ8/OH9AqVMsRlsKdd6oAxwlPQEz7uJf9mVPCvbfKKgYbJ9/u6MP6l+tMHelI
-         It1iScmhaAwbEICWpHO4e/o/QoYzANb5RYMaDPGwV8Je37Uilbs5FpAeBMoFsgBA20
-         UIjvaXogr8R/yaTaLnohisNsNcAm6TamR3hIMyvJg9ONVUuQ1ZZAEHwXkx9v2S47oo
-         qL4Sxh9R9+vgg==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 07/14] sti/c8sectpfe: set correct return code
-Date:   Wed, 20 Jan 2021 10:42:59 +0100
-Message-Id: <20210120094306.784318-8-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
-References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+        Wed, 20 Jan 2021 04:27:15 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E4EC0613ED
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:32 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id d22so13889216edy.1
+        for <linux-media@vger.kernel.org>; Wed, 20 Jan 2021 01:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tTT0+SqKfrfhaHcnRFvnvU9qDTr8hatpLylY1+aK+yQ=;
+        b=S+8/ubQWgNSY0+aeQAy708NPaa9yQucZWs8A74w5rv9PjdxLXxpUU4BiMq+RljwggJ
+         vT1IdBTbqBdf0oqf8H+EX/XVrrNHU0kPPVKSkC6OmSDHgw1PO5r5nPwv6lA0mFK8Lar2
+         /ebuzzLZWUT8TEPRpzvymqDnBiYMci7Tmf1mxBVnjJ3pzf1l5e/FYsnaHiZg4b488IUb
+         KWwSaZXetc+EpBt65C635eV0463cyZpTIN++PC7RWhYzIAEBXbnvMOxrs9bAaYQxMjXF
+         MhIL8OrGY98++7sSJY+a/g1fOjWZozfAuH/DuMh97vqUugp2cgnUzg00Zirr95T4yMo/
+         kSig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tTT0+SqKfrfhaHcnRFvnvU9qDTr8hatpLylY1+aK+yQ=;
+        b=oaiGXcDCsMiqXYuezzT8Q3jliGjtm3nhUrV4B9JZ1d0kRgjn29WO0NSRsQ4+zlUAzK
+         Mlx7vFQ0aQuqv+N1mqMbUNlw20kQEPXCjeo92Borhv/hug2+tUrSKNN3XFdRkJE/iuKY
+         di059pZNBEkU6C3I+VPVff6J7DjRU8SP9YBtIvHQRJMxe9aQflmv98NfsXkyjJAUafuK
+         bD1TOXtV2fskP4JUB5Fq13IvU3H5cjYHxvS+E0DTf30nZwdLJGAYf5SjPrLCRDSJX9TO
+         QeodtARx9EjNR2nn6GRBOHgPt32pKMiJsFCwIBl3118ej+eq5QI7DhDIeWUFfejUNUFs
+         gToQ==
+X-Gm-Message-State: AOAM533GzkM5KM51BX6TqPw7VoCBkodSVO5tV3L/ncQV4cFazUaOHR76
+        MLaxGsC4cqb1IaP3yhXA+mtlmqo3eE62kU0A
+X-Google-Smtp-Source: ABdhPJzbVr9bKOhKB5w1vpD4zCZzXTS5MKV1IETe1k/SjINiPVdYfqHXxuithV9Nk9EU7ka/IRtheQ==
+X-Received: by 2002:a05:6402:614:: with SMTP id n20mr6592595edv.358.1611134790882;
+        Wed, 20 Jan 2021 01:26:30 -0800 (PST)
+Received: from localhost.localdomain (hst-221-66.medicom.bg. [84.238.221.66])
+        by smtp.gmail.com with ESMTPSA id k16sm619392ejd.78.2021.01.20.01.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 01:26:30 -0800 (PST)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v4 1/5] v4l: Add new Colorimetry Class
+Date:   Wed, 20 Jan 2021 11:26:02 +0200
+Message-Id: <20210120092606.3987207-2-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
+References: <20210120092606.3987207-1-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
- m2SpTLrwFJwp91ObOojllz25+H8lTtAoDwLHG8jZpGrKrwU7APww6+sf1nrLb4EicX2xlBYvrLjBqU+uaG6RA0wJBMBQS9YBDMxonC7PwXWYQLCm2T02g8s1
- le9Lr6PJfCEpDuvg3Oefuw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this smatch warning:
+Add Colorimetry control class for colorimetry controls
 
-drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c:829 c8sectpfe_probe() warn: missing error code 'ret'
-
-Set ret to -EINVAL if the reset gpio was not found.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 5 +++++
+ include/uapi/linux/v4l2-controls.h   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-index 5ceb366648b3..a7a6ea666740 100644
---- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-@@ -826,6 +826,7 @@ static int c8sectpfe_probe(struct platform_device *pdev)
- 			dev_err(dev,
- 				"reset gpio for tsin%d not valid (gpio=%d)\n",
- 				tsin->tsin_id, tsin->rst_gpio);
-+			ret = -EINVAL;
- 			goto err_node_put;
- 		}
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index f7b310240af2..a5137a867411 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1201,6 +1201,10 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_STATELESS_H264_SLICE_PARAMS:		return "H264 Slice Parameters";
+ 	case V4L2_CID_STATELESS_H264_DECODE_PARAMS:		return "H264 Decode Parameters";
+ 	case V4L2_CID_STATELESS_FWHT_PARAMS:			return "FWHT Stateless Parameters";
++
++	/* Colorimetry controls */
++	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
++	case V4L2_CID_COLORIMETRY_CLASS:	return "Colorimetry Controls";
+ 	default:
+ 		return NULL;
+ 	}
+@@ -1389,6 +1393,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_RF_TUNER_CLASS:
+ 	case V4L2_CID_DETECT_CLASS:
+ 	case V4L2_CID_CODEC_STATELESS_CLASS:
++	case V4L2_CID_COLORIMETRY_CLASS:
+ 		*type = V4L2_CTRL_TYPE_CTRL_CLASS;
+ 		/* You can neither read not write these */
+ 		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY;
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 039c0d7add1b..a41039559193 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -66,6 +66,7 @@
+ #define V4L2_CTRL_CLASS_RF_TUNER	0x00a20000	/* RF tuner controls */
+ #define V4L2_CTRL_CLASS_DETECT		0x00a30000	/* Detection controls */
+ #define V4L2_CTRL_CLASS_CODEC_STATELESS 0x00a40000	/* Stateless codecs controls */
++#define V4L2_CTRL_CLASS_COLORIMETRY	0x00a50000	/* Colorimetry controls */
  
+ /* User-class control IDs */
+ 
+@@ -1657,6 +1658,9 @@ struct v4l2_ctrl_fwht_params {
+ 	__u32 quantization;
+ };
+ 
++#define V4L2_CID_COLORIMETRY_CLASS_BASE	(V4L2_CTRL_CLASS_COLORIMETRY | 0x900)
++#define V4L2_CID_COLORIMETRY_CLASS	(V4L2_CTRL_CLASS_COLORIMETRY | 1)
++
+ /* MPEG-compression definitions kept for backwards compatibility */
+ #ifndef __KERNEL__
+ #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
 -- 
-2.29.2
+2.25.1
 
