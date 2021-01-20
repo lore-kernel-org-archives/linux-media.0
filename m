@@ -7,72 +7,76 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D2A4C41621
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 113FDC0044D
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 460A823339
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1E6F23339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733207AbhATKiD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:38:03 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:37355 "EHLO
+        id S2387677AbhATKly (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:41:54 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:35375 "EHLO
         lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731640AbhATJnx (ORCPT
+        by vger.kernel.org with ESMTP id S1731660AbhATJop (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:43:53 -0500
+        Wed, 20 Jan 2021 04:44:45 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A19l8jEb; Wed, 20 Jan 2021 10:43:11 +0100
+        id 2A14lJCTVftvz2A1Al8jFM; Wed, 20 Jan 2021 10:43:13 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135791; bh=CKIGfhq1KWOmGl6UjN6qnlcI8sCmeEHWOWE2stnPNWM=;
+        t=1611135793; bh=IB09Ru0Dwkgtmy8Sizw+EPS/eOIBZ32GMG7jQ4yKpeQ=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=QHU95PRBy6fYt4ksYfvC2rzv47gn9kGgYJetQI1THLooJrn2zb1FbaauJcEHxM06Q
-         FH0WAe04xpCGb2Gc5QqJKgopk5sl0ZeO5AXyyXSm5Vy0uMPLQRLos0U6sUaihWrePe
-         nJJoVnkxxCP9GvkFyr5V+cTjMPvRSSOdbt3mJgFNmovi/Eyx/t6AVr8hwtKOFAqT74
-         4Fdtunz7Y8pI2MscLN3XF/R9jjKU1JmTnGiymqA34/eYKu4HJ+heg67+WwJB+Qfzeg
-         +9Lho/fRg3kL52lHrvCQcR8gi262e23rMrU2IQ+Jwe8KZhoLIrexfRS11mWMOfHwAA
-         GJqrdf6YOSNCw==
+        b=kez0JI3VwuTqP+vJT8FUW7V5ftHfxwXlGHoiZkRRSRh9k30V+SQIKt1aSKQKf30uU
+         Dx+hA2cRc8BUs4omFb1XJCC1AMPWthG1KGPNhwicTIdOIOnO+khptX14CBFWHL3pqS
+         Zzv+dIlA0g13WFLr+sXguybfEssG70dxd6EPboqV9sHeN+0WgNBE2zo04nwtRPASPV
+         rhf7/pExacoTcsh3OZLyrJmNdBFlhuYPw69SJOkkGSplbE8xFxXplj5QcT7Nj4OkgZ
+         v2bF6kNUcYYsL7c/IytpPDS7e4H0JbD5mlIMfofQAGYJuCOxGO65x9a/FFs4r24j4r
+         76OyJSMM1muvA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 05/14] tuners/it913x.c: fix missing error code
-Date:   Wed, 20 Jan 2021 10:42:57 +0100
-Message-Id: <20210120094306.784318-6-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 09/14] pci/ivtv: release memory regions on error
+Date:   Wed, 20 Jan 2021 10:43:01 +0100
+Message-Id: <20210120094306.784318-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfL6gXyIQamfwxJt2kYKZXIXPfvD+J+cb4hNqS4nbZzw1GI5vvllDlxOUWgqraiFNhq3F/LZtBzfudYa84HR768+XzVha/eeTgmB7xn3J2//BbfAk1A8s
- 5K51t7mq0GZhhQ49J7CLA+RHjKt5Hf37i+bOtd1gdl67I4sW94CZUKZ7oKlpPPXv1ea/7JeAdQ5LUW/5vUTX2byGUDAugDmGCw5EWS8w0pd7OAxiojkwR3Kr
- 4pB9lnSLupHvBjX2nym/AA==
+X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
+ spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
+ 59IpAWQKL4x5TIxzCbqj6A==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes this smatch warning:
+Fix this smatch warning:
 
-drivers/media/tuners/it913x.c:65 it913x_init() warn: missing error code 'ret'
+drivers/media/pci/ivtv/ivtv-driver.c:900 ivtv_setup_pci() warn: 'itv->base_addr' not released on lines: 876.
 
-Set ret to -EINVAL if the clock identifier was invalid.
+One error path didn't release the memory regions.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/tuners/it913x.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/pci/ivtv/ivtv-driver.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/tuners/it913x.c b/drivers/media/tuners/it913x.c
-index e8e66390be41..7696a28fe407 100644
---- a/drivers/media/tuners/it913x.c
-+++ b/drivers/media/tuners/it913x.c
-@@ -62,6 +62,7 @@ static int it913x_init(struct dvb_frontend *fe)
- 		break;
- 	default:
- 		dev_err(&pdev->dev, "unknown clock identifier %d\n", utmp);
-+		ret = -EINVAL;
- 		goto err;
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
+index 28acb14490d5..6e448cb3b51c 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.c
++++ b/drivers/media/pci/ivtv/ivtv-driver.c
+@@ -873,6 +873,11 @@ static int ivtv_setup_pci(struct ivtv *itv, struct pci_dev *pdev,
+ 		pci_read_config_word(pdev, PCI_COMMAND, &cmd);
+ 		if (!(cmd & PCI_COMMAND_MASTER)) {
+ 			IVTV_ERR("Bus Mastering is not enabled\n");
++			if (itv->has_cx23415)
++				release_mem_region(itv->base_addr + IVTV_DECODER_OFFSET,
++						   IVTV_DECODER_SIZE);
++			release_mem_region(itv->base_addr, IVTV_ENCODER_SIZE);
++			release_mem_region(itv->base_addr + IVTV_REG_OFFSET, IVTV_REG_SIZE);
+ 			return -ENXIO;
+ 		}
  	}
- 
 -- 
 2.29.2
 
