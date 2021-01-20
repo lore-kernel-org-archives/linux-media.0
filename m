@@ -7,72 +7,74 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D85C43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC298C43142
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F73A23339
+	by mail.kernel.org (Postfix) with ESMTP id 934DC23332
 	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387600AbhATKlF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:41:05 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:40641 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731652AbhATJoo (ORCPT
+        id S2387650AbhATKle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:41:34 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:40217 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731658AbhATJoo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 20 Jan 2021 04:44:44 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A1Cl8jFp; Wed, 20 Jan 2021 10:43:14 +0100
+        id 2A14lJCTVftvz2A1Al8jF7; Wed, 20 Jan 2021 10:43:12 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135794; bh=IDsjD26s9Euj4LyFV2CX/jH5MvgJQtDQzudauhxg5Es=;
+        t=1611135792; bh=DPEsPco8QmKy9HybatKhPIkZ08H34N8xzyBedSbzkIY=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=kn+T8KzmzfKD1JHGc5chdePZs0CS823G0kbJ70WCSa6vb0OeMRmufD2YrT185rIFT
-         KqXgameTx8Ld/B4/WbURMCHrpBmUIQBCitQKiQwxyBhLlpkMZOenVqVIwT9xt9igf9
-         txbtEt1wFK2xgzoAt1c9T0Ju2q9ffo50IiuEL6jBQ4gUgOZxtAykkT1Ruk411q9CE+
-         18H4rn9Q6VUGYS/fdFoDym/uD5s3nfZiWrYRXYaTHvkCjTsy/VuaLygZBR5pwhR5Ze
-         QmTLCrFeFGK2jE8/q2qTRE65csEpMYARHmSwUHjByrm1FimYfH8ggdvNGpuLtyvUqW
-         iTA1/fikqAnRw==
+        b=D5kPFClva7eV+DWAkjynLN/rwBM5BQZK2KoqrBDgwfx9JazNDP7Ez29XjQ2vroyqL
+         c9GD6v5DfRXXC9LbjW86GPp+fWuv+Cx8aai0QBJqPDN63Uc93d3woCQWvxEU7kkrtp
+         HuwJEtRgDVpjV5MwWxC49AxAGW/M1zzWM1A/haMQQxubDf4UVv5YH5Q+7BR3WIm8Uy
+         4ELb2vJEWwzZZVn/oKXDScgk3BvzrPBKyuGUXjFc3Ju8pyNnEc1xIEpU6YyX6AFoIv
+         weDapCr+0zkDxH+7E3/Q0SAo3G5wGG+Ax5jJll7FptjnQyOGEVEerQ7ordYrZQhciA
+         PDzv58cMks2aw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 14/14] i2c/ov02a10.c: add cast to fix type mismatch
-Date:   Wed, 20 Jan 2021 10:43:06 +0100
-Message-Id: <20210120094306.784318-15-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jean-Christophe Trotin <jean-christophe.trotin@st.com>
+Subject: [PATCH 08/14] sti/hva: add missing clk_disable_unprepare()
+Date:   Wed, 20 Jan 2021 10:43:00 +0100
+Message-Id: <20210120094306.784318-9-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfFBmGvvIwAai6tS3xwV9jizlTIpPC1BRkt5zPhw/jABfdUFd8iZJDaGlQzyTlMRxlWvat/SWxV7oqACoU1YyUVOyjCwTWyP12TnFGah7LkRj926zOx+1
- CanBVhBYdbVOCeUxqt/9PyeJ5nT4/YorDGl3CNNkHZAMkgsMGqFUnLM+4qS47DqniBN8MxgADgUL+X4MXacdfA21CmbZW3hjOH4/5LCHFJF53oXTHYtXgiXs
- +VKVew8VTexvUxYzSAPp+Q==
+X-CMAE-Envelope: MS4xfORkKQX5gN9k5kFaBKWeo+8JRWkTLMzG6fpWfMxdBNifkxq9v62lX9Jj+rbzuwPnakICu39PzPg6MMJv16bir3xVLnIVCkM9B8JQVe0xWy2saKwmQdGd
+ m2SpTLrwFJwp9zBW1P1/x4g1u/iRmZS8OTIXiETopGzzwZ0FpBe27E6Im3OLUCU5bTmJMl0cInRss2P0+vZRDlzZCxq9BSOHthjp/OylirLZtBJRy8e6spBI
+ CspxGB5zQPDsjib/hcvDEFJF2kanhb4tTfo3PC+dh9aYnypScjkYW8f7cWB5e4hB
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-By adding this cast '(__force __le16)' this sparse warning
-is fixed:
+Fixes this smatch warning:
 
-drivers/media/i2c/ov02a10.c:391:19: warning: cast to restricted __le16
+drivers/media/platform/sti/hva/hva-hw.c:453 hva_hw_runtime_resume() warn: 'hva->clk' not released on lines: 450.
+
+Call clk_disable_unprepare() when clk_set_rate() fails.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Jean-Christophe Trotin <jean-christophe.trotin@st.com>
 ---
- drivers/media/i2c/ov02a10.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/sti/hva/hva-hw.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-index 8683ffd3287a..60b4bc645334 100644
---- a/drivers/media/i2c/ov02a10.c
-+++ b/drivers/media/i2c/ov02a10.c
-@@ -388,7 +388,7 @@ static int ov02a10_check_sensor_id(struct ov02a10 *ov02a10)
- 	if (ret < 0)
- 		return ret;
+diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
+index 43f279e2a6a3..f59811e27f51 100644
+--- a/drivers/media/platform/sti/hva/hva-hw.c
++++ b/drivers/media/platform/sti/hva/hva-hw.c
+@@ -447,6 +447,7 @@ int hva_hw_runtime_resume(struct device *dev)
+ 	if (clk_set_rate(hva->clk, CLK_RATE)) {
+ 		dev_err(dev, "%s     failed to set clock frequency\n",
+ 			HVA_PREFIX);
++		clk_disable_unprepare(hva->clk);
+ 		return -EINVAL;
+ 	}
  
--	chip_id = le16_to_cpu(ret);
-+	chip_id = le16_to_cpu((__force __le16)ret);
- 
- 	if ((chip_id & OV02A10_ID_MASK) != OV02A10_ID) {
- 		dev_err(&client->dev, "unexpected sensor id(0x%04x)\n", chip_id);
 -- 
 2.29.2
 
