@@ -7,73 +7,72 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E047EC43332
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D85C43603
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C25D2333C
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F73A23339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733277AbhATKi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:38:59 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:49687 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731639AbhATJnx (ORCPT
+        id S2387600AbhATKlF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:41:05 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:40641 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731652AbhATJoo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 04:43:53 -0500
+        Wed, 20 Jan 2021 04:44:44 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 2A14lJCTVftvz2A18l8jE1; Wed, 20 Jan 2021 10:43:10 +0100
+        id 2A14lJCTVftvz2A1Cl8jFp; Wed, 20 Jan 2021 10:43:14 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611135790; bh=JZzkiPmVAaBmQuP/1MtsV6/a+PnMIh7Hh1MIHYnWOrk=;
+        t=1611135794; bh=IDsjD26s9Euj4LyFV2CX/jH5MvgJQtDQzudauhxg5Es=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=jiOL0K7siGBgE14+bwao2bL4Ltgr3sivd+Kei6XmUVouyo28M8QkMwdcvAihjCIon
-         mo4IMW9Z4ZIjVlqVkpzlgsjiUPR7p0Crzmrp0X++AtGhaitN7CchznVk5sir2oEQV7
-         bM90AsxWGa0VdWQ4DErlKwJQmsJNHjIdTj32zoRdpmd8Km3i+8FtkfusKlsrlkSCud
-         ODXDJ8djZoIJwOHkR39UuE5GxMugePc7gcUVycq0ANBLlozza+DhsFKGSlX75ztaSw
-         9R27IXLc2xDa7EHIp/xMkNJ6k4eGaRIqwPouk0LCRWHPB5BaWbjFEsRpftv19SqUc6
-         3g0RpsMClXZSA==
+        b=kn+T8KzmzfKD1JHGc5chdePZs0CS823G0kbJ70WCSa6vb0OeMRmufD2YrT185rIFT
+         KqXgameTx8Ld/B4/WbURMCHrpBmUIQBCitQKiQwxyBhLlpkMZOenVqVIwT9xt9igf9
+         txbtEt1wFK2xgzoAt1c9T0Ju2q9ffo50IiuEL6jBQ4gUgOZxtAykkT1Ruk411q9CE+
+         18H4rn9Q6VUGYS/fdFoDym/uD5s3nfZiWrYRXYaTHvkCjTsy/VuaLygZBR5pwhR5Ze
+         QmTLCrFeFGK2jE8/q2qTRE65csEpMYARHmSwUHjByrm1FimYfH8ggdvNGpuLtyvUqW
+         iTA1/fikqAnRw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com
-Subject: [PATCH 02/14] v4l2-ctrls.c: fix shift-out-of-bounds in std_validate
-Date:   Wed, 20 Jan 2021 10:42:54 +0100
-Message-Id: <20210120094306.784318-3-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 14/14] i2c/ov02a10.c: add cast to fix type mismatch
+Date:   Wed, 20 Jan 2021 10:43:06 +0100
+Message-Id: <20210120094306.784318-15-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfGCYqhuwV3+Yk1rv2QJDZScmo32gHmrOGHUW680tMvz8mG7tCBVf9OnohmtN4nL1GUNY/zfLKBZtYzV8Xbr2NOg5rrxGzfqKLgJgrvnqWJC4O9RuLB9k
- 4+VfNDbmV2VhmkuyyJOenL24yx7QFERp9o2SQ72ibKL0wbJ7Hf8SEVIm0JL+mHbYV7hUgZNj6H36R7elzTCc5UMO46UrRVuc1Fq0Arh/79aSp4oBJ79kDWjk
- 32sBleXhNHyUT+nYtbDuI0FKCA/YsGqezDlArjJfBIo+M3+KWoarFf4bhXy5OYcD/ApKwPBU3V7b4F22rCuJxw==
+X-CMAE-Envelope: MS4xfFBmGvvIwAai6tS3xwV9jizlTIpPC1BRkt5zPhw/jABfdUFd8iZJDaGlQzyTlMRxlWvat/SWxV7oqACoU1YyUVOyjCwTWyP12TnFGah7LkRj926zOx+1
+ CanBVhBYdbVOCeUxqt/9PyeJ5nT4/YorDGl3CNNkHZAMkgsMGqFUnLM+4qS47DqniBN8MxgADgUL+X4MXacdfA21CmbZW3hjOH4/5LCHFJF53oXTHYtXgiXs
+ +VKVew8VTexvUxYzSAPp+Q==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a menu has more than 64 items, then don't check menu_skip_mask
-for items 65 and up.
+By adding this cast '(__force __le16)' this sparse warning
+is fixed:
+
+drivers/media/i2c/ov02a10.c:391:19: warning: cast to restricted __le16
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ov02a10.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index f7b310240af2..016cf6204cbb 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2181,7 +2181,8 @@ static int std_validate(const struct v4l2_ctrl *ctrl, u32 idx,
- 	case V4L2_CTRL_TYPE_INTEGER_MENU:
- 		if (ptr.p_s32[idx] < ctrl->minimum || ptr.p_s32[idx] > ctrl->maximum)
- 			return -ERANGE;
--		if (ctrl->menu_skip_mask & (1ULL << ptr.p_s32[idx]))
-+		if (ptr.p_s32[idx] < BITS_PER_LONG_LONG &&
-+		    (ctrl->menu_skip_mask & BIT_ULL(ptr.p_s32[idx])))
- 			return -EINVAL;
- 		if (ctrl->type == V4L2_CTRL_TYPE_MENU &&
- 		    ctrl->qmenu[ptr.p_s32[idx]][0] == '\0')
+diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
+index 8683ffd3287a..60b4bc645334 100644
+--- a/drivers/media/i2c/ov02a10.c
++++ b/drivers/media/i2c/ov02a10.c
+@@ -388,7 +388,7 @@ static int ov02a10_check_sensor_id(struct ov02a10 *ov02a10)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	chip_id = le16_to_cpu(ret);
++	chip_id = le16_to_cpu((__force __le16)ret);
+ 
+ 	if ((chip_id & OV02A10_ID_MASK) != OV02A10_ID) {
+ 		dev_err(&client->dev, "unexpected sensor id(0x%04x)\n", chip_id);
 -- 
 2.29.2
 
