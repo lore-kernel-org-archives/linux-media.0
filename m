@@ -2,90 +2,78 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C0CC10DCE
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB2EDC4160E
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DDA52333C
-	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8C2F23339
+	for <linux-media@archiver.kernel.org>; Wed, 20 Jan 2021 10:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387730AbhATKmj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 05:42:39 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56362 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732961AbhATKVn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 05:21:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9B356AF90;
-        Wed, 20 Jan 2021 10:21:00 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stefan Seyfried <seife+kernel@b1-systems.com>
-Subject: [PATCH 1/2] media: dvb-usb: Fix memory leak at error in dvb_usb_device_init()
-Date:   Wed, 20 Jan 2021 11:20:56 +0100
-Message-Id: <20210120102057.21143-2-tiwai@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210120102057.21143-1-tiwai@suse.de>
-References: <20210120102057.21143-1-tiwai@suse.de>
+        id S2387661AbhATKlk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 05:41:40 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:49445 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731657AbhATJoo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 04:44:44 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 2A14lJCTVftvz2A1Bl8jFW; Wed, 20 Jan 2021 10:43:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611135793; bh=Wk05yQtqStxFJUKVqNfq5qjxGWd/CT0EeCirjMw2RFg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=hiP5ziZ6oBuG98xtt3sF6WP0yubAbncKHfoiTuo/ZWG/pXuHvLUQX6r3hPCP94eQi
+         jRfoXc4jTSbC1mFiDwwlMjOImvxedC38AYQu9hvUJsAh3CWVV5cPCGQL1Kgjt4baDE
+         cX+EBA9iNoIsKArmKMjzcdKZFdAo0Z80vLrbJlZMiI1iKeyX9+sFaGOnVn2i/KEywx
+         q8sIzZNc/tsoSfvG3VzyJYSlYOXSH00zP1NfT3xkUJAt7qVnx9gU9x87BD5IRHAkdn
+         wru/BguMWwcmDdv2cliTa54Qq42XUx9bLbFigYMP1Lqa18ba9latboX+GGhHx49WSk
+         IccIUTVOk0Ulw==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 11/14] dvb-frontends/rtl2832.c: fix missing error code
+Date:   Wed, 20 Jan 2021 10:43:03 +0100
+Message-Id: <20210120094306.784318-12-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
+References: <20210120094306.784318-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfAX5slZdcEG06gClf1fIbSEcdCCiibSaO57tXMNZ1RIGZ6Bnhop5RCmAwSDRBq0pMH9u1fnxz2YJnBjddl0CUTNYr+CsDS0ZgH7HSCI/FBqqF/Lc17c1
+ spMTuaX3EY59qmTlxUrh7WdPKN+QMvl/ueTCuoV7ce54KMRIJcbPGXQgqeDUKYloleGy3kY3NfG34FOIu/4gLICuUcAx8qvPQhkcY/j7Cxe5kgNgO9ercodC
+ 59IpAWQKL4x5TIxzCbqj6A==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-dvb_usb_device_init() allocates a dvb_usb_device object, but it
-doesn't release it even when returning an error.  The callers don't
-seem caring it as well, hence those memories are leaked.
+Fixes this smatch warning:
 
-This patch assures releasing the memory at the error path in
-dvb_usb_device_init().  Also it makes sure that USB intfdata is reset
-and don't return the bogus pointer to the caller at the error path,
-too.
+drivers/media/dvb-frontends/rtl2832.c:702 rtl2832_read_status() warn: missing error code 'ret'
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+'ret' is indeed not set, so set it to -EINVAL so a proper error
+code is returned.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/media/dvb-frontends/rtl2832.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index c1a7634e27b4..5befec87f26a 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -281,15 +281,21 @@ int dvb_usb_device_init(struct usb_interface *intf,
+diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
+index 01dcc7f1b9b2..dcbeb9f5e12a 100644
+--- a/drivers/media/dvb-frontends/rtl2832.c
++++ b/drivers/media/dvb-frontends/rtl2832.c
+@@ -698,6 +698,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
+ 			goto err;
  
- 	usb_set_intfdata(intf, d);
+ 		constellation = (u8tmp >> 2) & 0x03; /* [3:2] */
++		ret = -EINVAL;
+ 		if (constellation > CONSTELLATION_NUM - 1)
+ 			goto err;
  
--	if (du != NULL)
-+	ret = dvb_usb_init(d, adapter_nums);
-+	if (ret) {
-+		info("%s error while loading driver (%d)", desc->name, ret);
-+		goto error;
-+	}
-+
-+	if (du)
- 		*du = d;
- 
--	ret = dvb_usb_init(d, adapter_nums);
-+	info("%s successfully initialized and connected.", desc->name);
-+	return 0;
- 
--	if (ret == 0)
--		info("%s successfully initialized and connected.", desc->name);
--	else
--		info("%s error while loading driver (%d)", desc->name, ret);
-+ error:
-+	usb_set_intfdata(intf, NULL);
-+	kfree(d);
- 	return ret;
- }
- EXPORT_SYMBOL(dvb_usb_device_init);
 -- 
-2.26.2
+2.29.2
 
