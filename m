@@ -2,126 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF7C5C4332E
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4449C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:56:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F34722B2B
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:28:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1355C23A24
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:56:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388423AbhAURNw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 12:13:52 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:41170 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388589AbhAURNf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 12:13:35 -0500
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1l2dVf-0005Fz-F8; Thu, 21 Jan 2021 18:12:39 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        hverkuil@xs4all.nl, sakari.ailus@linux.intel.com,
-        Helen Koike <helen.koike@collabora.com>
-Cc:     ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-Subject: Re: [PATCH v8 4/6] media: rockchip: rkisp1: reduce number of histogram grid elements in uapi
-Date:   Thu, 21 Jan 2021 18:12:38 +0100
-Message-ID: <2974513.zE8UqtGg2D@diego>
-In-Reply-To: <c9d0ac1b-2cb7-a5b6-aa97-1510c44404c1@collabora.com>
-References: <20210121144407.9045-1-dafna.hirschfeld@collabora.com> <20210121144407.9045-5-dafna.hirschfeld@collabora.com> <c9d0ac1b-2cb7-a5b6-aa97-1510c44404c1@collabora.com>
+        id S2387457AbhAUR4J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 12:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389311AbhAURzz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 21 Jan 2021 12:55:55 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80484C0613ED;
+        Thu, 21 Jan 2021 09:55:15 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id j12so2116039pjy.5;
+        Thu, 21 Jan 2021 09:55:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=K8nQ7vZePLiBr4AwY3n+MiyEOXEnc2UqVALdrd2awxo=;
+        b=PVpV8V+s0wyvXhKyAIPSie0XgUgDIJQGqojYz53hp4jmRi5GJwvTzVJiYzHzAwaxP+
+         tL3Hf4oxKufPJomneZrTCnhcasC4lil6Di9IvP1gQCbW/ReneiTOrtnen2GYgi78QPWc
+         2u0VLyN+agWRvFgsJ5WB4tYzDpmsIJayReSKTcHMWJQcPHPp26WBTd4P1BYW0qdHQoFa
+         Uks8tfAiQ1qZS0ebe4lh2D1ZZp/1pgkbWiJr506XrVWNgSa0bFETsPheHdcNn+xvw0dg
+         Gn4iNfhnMyCv0kU4oX8y6/jPKoygMjwET/5AzqQuB/IG3svfpXUEXSjyF1v2CiG96qR5
+         rA0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=K8nQ7vZePLiBr4AwY3n+MiyEOXEnc2UqVALdrd2awxo=;
+        b=NtM7Vs8jqaSnCEnYqoo4xiZNcs0w0Wb1wUrX1nL4oINsOCS4e9ZudT8aMIKDrrH4bg
+         kn4heMKX8H3d+lBU5lsV3yvQ264i3W68ip/hLQ4LjnPhYZdx9jbHAkoP90X2XqJLNK1y
+         KtnQd5FGktLGZ+RNVWyM27Nmy8uS4c6S/7PMCJKufEwDKRlSFFFSAW33DNuYsEzYBYk1
+         soeqGGNfI0iWW/jcL1CZRXr0PDXYDBqXiclqVNtY2caF7Vvvxfr0ZdnVlIV/RnJKWLgi
+         EsRa5Wp2PAPMbnvUaCLDAuTPn/9iQzizQQ4DfHgb425Ie2JmT0fnheKGtc2bpYrMFq9F
+         pZjQ==
+X-Gm-Message-State: AOAM532RDL0JiCJFldC9IDIeDZQCVTU7CHjxm7EFlrKkAv0DUL8s4/QU
+        kkCF+J2Glm5zt+bKu7dKELU=
+X-Google-Smtp-Source: ABdhPJwoClfcVILfT+MG/hOAtpiA8kxG4mvryV2nmV2o6uqTe/csRvO9CeiR4QmEKb0A/Qe1bAhjgA==
+X-Received: by 2002:a17:902:b496:b029:da:d356:be8c with SMTP id y22-20020a170902b496b02900dad356be8cmr854145plr.56.1611251715067;
+        Thu, 21 Jan 2021 09:55:15 -0800 (PST)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:74d0:bb24:e25e:dc4d])
+        by smtp.gmail.com with ESMTPSA id t2sm6897317pju.19.2021.01.21.09.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 09:55:14 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        hyesoo.yu@samsung.com, david@redhat.com, mhocko@suse.com,
+        surenb@google.com, pullip.cho@samsung.com, joaodias@google.com,
+        hridya@google.com, john.stultz@linaro.org, sumit.semwal@linaro.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        hch@infradead.org, robh+dt@kernel.org,
+        linaro-mm-sig@lists.linaro.org, Minchan Kim <minchan@kernel.org>
+Subject: [PATCH v4 3/4] dt-bindings: reserved-memory: Make DMA-BUF CMA heap DT-configurable
+Date:   Thu, 21 Jan 2021 09:55:01 -0800
+Message-Id: <20210121175502.274391-4-minchan@kernel.org>
+X-Mailer: git-send-email 2.30.0.296.g2bfb1c46d8-goog
+In-Reply-To: <20210121175502.274391-1-minchan@kernel.org>
+References: <20210121175502.274391-1-minchan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Helen,
+From: Hyesoo Yu <hyesoo.yu@samsung.com>
 
-Am Donnerstag, 21. Januar 2021, 18:04:49 CET schrieb Helen Koike:
-> Hi Dafna,
-> 
-> On 1/21/21 11:44 AM, Dafna Hirschfeld wrote:
-> > From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-> > 
-> > The uapi right now specifies an array size of 28 but the actual number
-> > of elements is only 25 with the last 3 being unused.
-> > 
-> > Reduce the array size to the correct number of elements and change
-> > the params code to iterate the array 25 times.
-> > 
-> > Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-> > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> > ---
-> >  drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 3 ++-
-> >  include/uapi/linux/rkisp1-config.h                     | 3 +--
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-> > index 6af4d551ffb5..021939466b24 100644
-> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-> > @@ -589,7 +589,6 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
-> >  		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03,
-> >  		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43,
-> >  		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34,
-> > -		RKISP1_CIF_ISP_HIST_WEIGHT_44,
-> >  	};
-> >  	const u8 *weight;
-> >  	unsigned int i;
-> > @@ -622,6 +621,8 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
-> >  							    weight[2],
-> >  							    weight[3]),
-> >  				 hist_weight_regs[i]);
-> > +
-> > +	rkisp1_write(params->rkisp1, weight[0] & 0x1F, RKISP1_CIF_ISP_HIST_WEIGHT_44);
-> 
-> I just noticed that the default value to arg->hist_weight was:
-> 
-> 	memset(hst.hist_weight, 0x01, sizeof(hst.hist_weight));
-> 
-> Shouldn't the value be RKISP1_CIF_ISP_HIST_WEIGHT_SET(weight[0], 0x01, 0x01, 0x01) ?
-> Or am I missing something?
+Document devicetree binding for chunk cma heap on dma heap framework.
 
-The last register only has that one value from weight[24];
+The DMA chunk heap supports the bulk allocation of higher order pages.
 
-I.e. before we were writing the 4 values into that last register as well
-from indices 24, 25, 26, 27 ... hence the 3 unused values in the weight array.
+The chunk heap's allocator allocates from the CMA area. It is optimized
+to perform bulk allocation of higher order pages in an efficient manner.
+For this purpose, the heap needs an exclusive CMA area that will only be
+used for allocation by the heap. This is the reason why we need to use
+the DT to create and configure a reserved memory region for use by the
+chunk CMA heap driver. Since all allocation from DMA-BUF heaps happen
+from the user-space, there is no other appropriate device-driver that
+we can use to register the chunk CMA heap and configure the reserved
+memory region for its use.
 
-But that was merely a crutch to make that fit into the write loop.
+Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+Signed-off-by: Hridya Valsaraju <hridya@google.com>
+---
+ .../reserved-memory/dma_heap_chunk.yaml       | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
 
-
-Heiko
-
-
-> >  }
-> >  
-> >  static void
-> > diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
-> > index 24f05d6d258f..35aa82d5f6dd 100644
-> > --- a/include/uapi/linux/rkisp1-config.h
-> > +++ b/include/uapi/linux/rkisp1-config.h
-> > @@ -102,8 +102,7 @@
-> >  /*
-> >   * Histogram calculation
-> >   */
-> > -/* Last 3 values unused. */
-> > -#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
-> > +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 25
-> >  
-> >  /*
-> >   * Defect Pixel Cluster Correction
-> > 
-> 
-
-
-
+diff --git a/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+new file mode 100644
+index 000000000000..00db0ae6af61
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reserved-memory/dma_heap_chunk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Device tree binding for chunk heap on DMA HEAP FRAMEWORK
++
++description: |
++  The DMA chunk heap is backed by the Contiguous Memory Allocator (CMA) and
++  supports bulk allocation of fixed size pages.
++
++maintainers:
++  - Hyesoo Yu <hyesoo.yu@samsung.com>
++  - John Stultz <john.stultz@linaro.org>
++  - Minchan Kim <minchan@kernel.org>
++  - Hridya Valsaraju<hridya@google.com>
++
++
++properties:
++  compatible:
++    enum:
++      - dma_heap,chunk
++
++  chunk-order:
++    description: |
++            order of pages that will get allocated from the chunk DMA heap.
++    maxItems: 1
++
++  size:
++    maxItems: 1
++
++  alignment:
++    maxItems: 1
++
++required:
++  - compatible
++  - size
++  - alignment
++  - chunk-order
++
++additionalProperties: false
++
++examples:
++  - |
++    reserved-memory {
++        #address-cells = <2>;
++        #size-cells = <1>;
++
++        chunk_memory: chunk_memory {
++            compatible = "dma_heap,chunk";
++            size = <0x3000000>;
++            alignment = <0x0 0x00010000>;
++            chunk-order = <4>;
++        };
++    };
+-- 
+2.30.0.296.g2bfb1c46d8-goog
 
