@@ -2,132 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8E06C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 11:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83A00C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:38:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DA712395A
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 11:59:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D255239FD
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:38:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730627AbhAUL7Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 06:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730699AbhAUL6l (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 06:58:41 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2EDC061575
-        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 03:58:00 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id b21so2114707edy.6
-        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 03:58:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:mime-version
-         :content-transfer-encoding;
-        bh=G3/9rnUEXnD/Swp7RNDFlICbV6Ptsh2mK5XsE8b82pM=;
-        b=No0nKp0TEu4qJ4DoFRimKFTZW1eAQT+Q4AcKxHtKV4Qv/sCBoumvVDyztUlKWcchQI
-         PZ0vHdoGJCS1hRM01HhooXAXYqCiIYKzaI2PCta49Fow1XnA5cRfJj42AZZpyqqi/Gm6
-         XFJ37YlKSm98I7vVqxAiDnhXrYTuRlMlvMaSFyPb9xhElrK5n9I2rwmGPnZQgZSki5N0
-         nzj3myfNNTgkAcFlNTFP4ORIiS+G+7yq9l134GxkKCz1ViTq4ejoOnvijv+VO3QqBVUV
-         Pfp+1vdbRN7i50/6P1Tpkah8va05XunSdRR8gV0N5pLCNWL8fqTv5PeQXFjdrXrd4JYt
-         H9fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:mime-version
-         :content-transfer-encoding;
-        bh=G3/9rnUEXnD/Swp7RNDFlICbV6Ptsh2mK5XsE8b82pM=;
-        b=SiD0G5zidvfwFUe8EL+pKDqP/PRab/TY4J/Q/dCtTv/Qloo6OTi6Px788TTgj8iXuS
-         LbUy/2yUYMA1CtKz2jqsdxsVyMo8TxkgrnrcOzMzCRDYhbCzFhIL7z/XR5bU2s3KEkuC
-         g6lmcbAxsiEsfeTvDhjAyBDXHPQWlnltSDFoUsrH1cWq130/g3aF3yX6vl5TPVAHo66I
-         qo57EhxBhnQR3QD/4rsiREGpVvBfbh4fJgRDsJqBMwSNJ+p2Y1grgyPyfvH4kalK2mIr
-         bTi2aytdDfQ73q+TzntuleAeGyhiDKuHRnHcrv7XYvgpbTYn+K7V+xuVCdsYAWF9JUTb
-         kt5g==
-X-Gm-Message-State: AOAM5332ORW/cCPeIpyO1qMeKOdUF4+tAUhalqosH6Gjf6T3ONzouED9
-        KYbrcfjCqYP90ieGzaxJiTH3JRcjkyMNnA==
-X-Google-Smtp-Source: ABdhPJy2kqU60rrMmCaYPbJkX/mUdupaNDcYNKIj8mCED3NjRuv1Q9Ga+0OwQVhA7irKUB0DUhdZyA==
-X-Received: by 2002:aa7:c84b:: with SMTP id g11mr1775330edt.169.1611230279024;
-        Thu, 21 Jan 2021 03:57:59 -0800 (PST)
-Received: from oggy-kuba (snat-19.cgn.sat-an.net. [176.222.226.19])
-        by smtp.googlemail.com with ESMTPSA id p26sm2700640edq.94.2021.01.21.03.57.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Jan 2021 03:57:58 -0800 (PST)
-Message-ID: <c6ecd6a7f8a655d6089c3f0dbbaf9fafe11305a2.camel@gmail.com>
-Subject: tc358743 - first rx'd frame is incomplete
-From:   Jakub =?UTF-8?Q?Van=C4=9Bk?= <linuxtardis@gmail.com>
+        id S1731307AbhAUMhv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 07:37:51 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:47694 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731223AbhAUMhN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 21 Jan 2021 07:37:13 -0500
+X-Greylist: delayed 547 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Jan 2021 07:37:11 EST
+Received: from hillosipuli.retiisi.eu (dbd4xkyj7wcfw2k22jcct-3.rev.dnainternet.fi [IPv6:2001:14ba:8f1:3400:fb90:892b:22d6:3885])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id E5B5F2016D
+        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 14:27:18 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1611232039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=dxDyjxUC3Z4sHP8Al712E22fkr8mP7TlfIeqRq8D3l8=;
+        b=ccufn1WUFSJn7w8KwtCkuwYMWDc8WtrJMCA9t1VTDnFh0Ng3dAsaZHnOXWi7dBDkTXTkML
+        kq1FyWOve6X/cvZK+uAIoB/wprsE1GVyhQAoq7TILdz3fq+5Vwvn6TcAmeYDXMR8nVyPUX
+        n2bV8CyHusPs6fOJ2oJKZP5OKrZA3Q0=
+Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 15027634C8C
+        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 14:25:57 +0200 (EET)
+Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
+        by valkosipuli.localdomain with esmtp (Exim 4.92)
+        (envelope-from <sakari.ailus@iki.fi>)
+        id 1l2Z2C-0004eO-Qe
+        for linux-media@vger.kernel.org; Thu, 21 Jan 2021 14:25:56 +0200
+Date:   Thu, 21 Jan 2021 14:25:56 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
 To:     linux-media@vger.kernel.org
-Cc:     Mats Randgaard <matrandg@cisco.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 21 Jan 2021 12:57:57 +0100
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: [GIT PULL for 5.12] More V4L2 patches
+Message-ID: <20210121122556.GK3@valkosipuli.retiisi.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1611232039; a=rsa-sha256; cv=none;
+        b=awqxTXDcgPnPgbsPzQJn1BrtqobYW1cZvj/VmqYeFqf4a+FzGEpTTnhA4TRCSbPBrcS62Z
+        F7pXdxmyFVdLdPqz6Hd3IgQylsaAmz4uUkX9WQJfzvZUkLk82wuWjJpL/bc9DNRWGoW0+M
+        EcVkERsZiPJ4fQMQGxihdf1jWrye3wM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1611232039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=dxDyjxUC3Z4sHP8Al712E22fkr8mP7TlfIeqRq8D3l8=;
+        b=Jf7dHunZrMqZkKMrtDB+UYR9uJ7x1oXwsYNcfVToCKF9mXeLx+KNbpBEDhWBmHMKSkJqs9
+        at/uOS+p8QRjhOpQKUBIUyGHSshLhOxSe776cXjKWSDRv3BUkigNNxI23tlncfbFxykl5n
+        muvwWUy1OvzjfnUYG5E5IdrZRn5216Y=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Mauro,
 
-I think I might have found a bug in the tc358743 driver.
-The issue is that only the bottom part of the first captured
-frame is received by userspace V4L2 applications. All frames
-following the first one are received without this issue.
+Here's a small set of fixes and improvements for DT bindings, ov8865 driver
+and v4l2-async.
 
-I'm observing this on a Raspberry Pi 4 w/ their 5.4.83 kernel.
-To communicate with the chip, I'm using the unicam+tc358743
-kernel drivers. The chip itself is on the Auvidea B101 board.
+Please pull.
 
-I can reproduce the problem by running the following commands
-with the HDMI-CSI bridge running (1024x768@60Hz input):
 
-# sync timings between HDMI and CSI
-$ v4l2-ctl --device /dev/video0 \
-           --set-dv-bt-timings query
-# capture one raw frame without skipping the first one:
-$ v4l2-ctl --device /dev/video0 \
-           --stream-mmap=1 \
-           --stream-to=frame.raw \
-           --stream-count=1
+The following changes since commit 321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8:
 
-Then, to convert from raw pixels to PNG, I would run one of these
-ImageMagick commands (depending on the format - size of YUV frame
-would be 2*w*h bytes, size of RGB 3*w*h bytes):
+  media: atomisp: convert comma to semicolon (2021-01-14 13:59:46 +0100)
 
-# from yuv to png (set WxH to HDMI input resolution):
-$ convert -size WxH -depth 8 -colorspace YUV \
-          -sampling-factor 4:2:2 yuv:frame.raw frame.png
+are available in the Git repository at:
 
-# from rgb to png (set WxH to HDMI input resolution):
-$ convert -size WxH -depth 8 -colorspace RGB rgb:frame.raw \
-          -separate +channel -swap 0,2 -combine -gamma 2.2 frame.png
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.12-4-signed
 
-The result is that the remaining part of the frame is shifted upwards
-and the bottom of the picture is green (YUV) or black (RGB).
+for you to fetch changes up to 1f09359977f13880269a2109f55b7596a6dc479e:
 
-In this case, I can work the issue around with --stream-skip=1.
-However, it gets a bit more complicated when GStreamer is involved.
+  dt-bindings: media: ov5647: Fix filename (2021-01-21 14:18:36 +0200)
 
-I have already created a ticket for the Raspberry kernel here:
-https://github.com/raspberrypi/linux/issues/4058,
-but given that tc358743 is a mainline driver, it would be better
-to solve this issue in mainline first.
+----------------------------------------------------------------
+V4L2 patches for 5.12
 
-Can anyone reproduce this on other kernels or boards?
-There is some chance that this problem is Raspberry-specific.
+----------------------------------------------------------------
+Ezequiel Garcia (1):
+      media: v4l2-async: Add waiting subdevices debugfs
 
-If it turns out that the issue happens on multiple boards,
-a fix was suggested by Dave Stevenson - implementing
-v4l2_subdev_sensor_ops's g_skip_frames() in the tc358743 driver.
-This would signal to CSI2 RX drivers that the first frame is invalid
-and needs to be skipped.
+Jacopo Mondi (1):
+      dt-bindings: media: ov5647: Fix filename
 
-With best regards
+Lad Prabhakar (1):
+      media: i2c/Kconfig: Select FWNODE for OV772x sensor
 
-Jakub
+Laurent Pinchart (1):
+      media: v4l2-async: Safely unregister an non-registered async subdev
 
+kernel test robot (1):
+      media: i2c: fix odd_ptr_err.cocci warnings
+
+ .../devicetree/bindings/media/i2c/ovti,ov5647.yaml |  2 +-
+ drivers/media/i2c/Kconfig                          |  1 +
+ drivers/media/i2c/ov8865.c                         |  2 +-
+ drivers/media/v4l2-core/v4l2-async.c               | 69 ++++++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-dev.c                 |  5 ++
+ include/media/v4l2-async.h                         |  8 +++
+ 6 files changed, 85 insertions(+), 2 deletions(-)
+
+-- 
+Kind regards,
+
+Sakari Ailus
