@@ -2,83 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE5D2C433E6
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21ABDC433DB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:58:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 925EB23A1C
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:55:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2E95239FF
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728996AbhAUMzF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 07:55:05 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:57662 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731513AbhAUMyU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 07:54:20 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2ZSy-007Jdv-24; Thu, 21 Jan 2021 12:53:36 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2ZWS-0001VB-2I; Thu, 21 Jan 2021 12:57:12 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for 5.12] More V4L2 patches (#71010)
-Date:   Thu, 21 Jan 2021 12:57:11 +0000
-Message-Id: <20210121125711.5732-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210121122556.GK3@valkosipuli.retiisi.org.uk>
-References: 
+        id S1729465AbhAUKcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 05:32:42 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49243 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729139AbhAUKc1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:32:27 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 2XFalaeDjyutM2XFelgmgx; Thu, 21 Jan 2021 11:31:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611225102; bh=xVkjGcpxGSM83vonioKnujRFoyjs79T5J1H0IPxugMU=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=JJ0z+nlVjkZu0itqu2B3IwxnZFuui6Bi+6CYYf38GNd4RANMLr5lM1O34CzcrvJ+0
+         bRVI0w+OyoP8Y+ers3XCEORdH3L3Fmw3uW60NuVcDLHJhRhF8O3Ft9TBa3GvXEg93c
+         767o1WeHPgZexoEXqqwOXBQYSPkzTzKiY1aLgsHWwnr4gG+35Pj9/KvLiveaEw/SEc
+         KAxmNZwd03KxXP5v1uvh01iYssRqbitpi/f99cTk7UuWDRhnrWbSkL0qO3zWKLyLnk
+         F0QE0KmhhLinxlU9DhtuNIJPrv9/XpYl2i2lCwf/OccNLM2g9YYUtfXwSGTfhOyELi
+         0D1C3jyZSC5RQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT FIXES FOR v5.11] Fixes for 5.11
+Message-ID: <87ea4873-bad1-6575-c104-4be6ba59dfc4@xs4all.nl>
+Date:   Thu, 21 Jan 2021 11:31:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfJ9rfofsHjYMdiN4b+THTN1tERu/yd//3bEbe0gd+r21bA2rOBw06HUMSpMI4zAm2eETO71Vzuf64pFMtrlWdt3rIwQccga1FQn7jLFB5uD47yWCCgRZ
+ cq6wiI/e7e4D/NDU//j9+cU0xdQN3r6lDuv/dfcMEqFnLIcnUfRqReEb6maI5fNu6gD+C0sMQHRwJkJO1/8CY6h+vzGpdn4O5OU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+The following changes since commit 321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8:
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210121122556.GK3@valkosipuli.retiisi.org.uk/
-Build log: https://builder.linuxtv.org/job/patchwork/86754/
-Build time: 00:06:06
-Link: https://lore.kernel.org/linux-media/20210121122556.GK3@valkosipuli.retiisi.org.uk
+  media: atomisp: convert comma to semicolon (2021-01-14 13:59:46 +0100)
 
-gpg: Signature made Thu 21 Jan 2021 12:18:46 PM UTC
-gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Can't check signature: No public key
+are available in the Git repository at:
 
-Summary: got 3/5 patches with issues, being 2 at build time, plus one error when buinding PDF document
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.11b
 
-Error/warnings:
+for you to fetch changes up to 0792e86517a21079dac2883fc2021848610d7de9:
 
-patches/0001-media-v4l2-async-Add-waiting-subdevices-debugfs.patch:
+  media: hantro: Fix reset_raw_fmt initialization (2021-01-21 11:21:56 +0100)
 
-    allmodconfig: return code #0:
-	../drivers/media/v4l2-core/v4l2-async.c:846:2: warning: enumeration value ‘V4L2_ASYNC_MATCH_CUSTOM’ not handled in switch [-Wswitch]
+----------------------------------------------------------------
+Tag branch
 
-   checkpatch.pl:
-	$ cat patches/0001-media-v4l2-async-Add-waiting-subdevices-debugfs.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:20: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+----------------------------------------------------------------
+Hans Verkuil (1):
+      v4l2-subdev.h: BIT() is not available in userspace
 
-patches/0003-media-i2c-Kconfig-Select-FWNODE-for-OV772x-sensor.patch:
+Jernej Skrabec (1):
+      media: cedrus: Fix H264 decoding
 
-   checkpatch.pl:
-	$ cat patches/0003-media-i2c-Kconfig-Select-FWNODE-for-OV772x-sensor.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+Ricardo Ribalda (1):
+      media: hantro: Fix reset_raw_fmt initialization
 
-patches/0004-media-v4l2-async-Safely-unregister-an-non-registered.patch:
+Yannick Fertre (1):
+      media: cec: add stm32 driver
 
-    allmodconfig: return code #0:
-	../drivers/media/v4l2-core/v4l2-async.c:849:2: warning: enumeration value ‘V4L2_ASYNC_MATCH_CUSTOM’ not handled in switch [-Wswitch]
-
-
-Error #512 when building PDF docs
-
+ drivers/media/cec/platform/Makefile              | 1 +
+ drivers/staging/media/hantro/hantro_v4l2.c       | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
+ include/uapi/linux/v4l2-subdev.h                 | 2 +-
+ 4 files changed, 4 insertions(+), 3 deletions(-)
