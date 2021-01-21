@@ -7,36 +7,35 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65F32C433E9
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78172C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C5E622248
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35798230FC
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732084AbhAUOpW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 09:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S1732111AbhAUOql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 09:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731458AbhAUOpF (ORCPT
+        with ESMTP id S1731557AbhAUOpF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 21 Jan 2021 09:45:05 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68361C061786
-        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 06:44:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DC8C0613D6
+        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 06:44:16 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id B51991F45EBA
+        with ESMTPSA id 7D89F1F45EB8
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
         hverkuil@xs4all.nl, sakari.ailus@linux.intel.com, heiko@sntech.de
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH v8 4/6] media: rockchip: rkisp1: reduce number of histogram grid elements in uapi
-Date:   Thu, 21 Jan 2021 15:44:05 +0100
-Message-Id: <20210121144407.9045-5-dafna.hirschfeld@collabora.com>
+        tfiga@chromium.org
+Subject: [PATCH v8 2/6] media: rkisp1: stats: remove a wrong cast to u8
+Date:   Thu, 21 Jan 2021 15:44:03 +0100
+Message-Id: <20210121144407.9045-3-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121144407.9045-1-dafna.hirschfeld@collabora.com>
 References: <20210121144407.9045-1-dafna.hirschfeld@collabora.com>
@@ -44,56 +43,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+hist_bins is an array of type __u32. Each entry represent
+a 20 bit fixed point value as documented inline.
+The cast to u8 when setting the values is wrong. Remove it.
 
-The uapi right now specifies an array size of 28 but the actual number
-of elements is only 25 with the last 3 being unused.
-
-Reduce the array size to the correct number of elements and change
-the params code to iterate the array 25 times.
-
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 3 ++-
- include/uapi/linux/rkisp1-config.h                     | 3 +--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-index 6af4d551ffb5..021939466b24 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -589,7 +589,6 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
- 		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03,
- 		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43,
- 		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34,
--		RKISP1_CIF_ISP_HIST_WEIGHT_44,
- 	};
- 	const u8 *weight;
- 	unsigned int i;
-@@ -622,6 +621,8 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
- 							    weight[2],
- 							    weight[3]),
- 				 hist_weight_regs[i]);
-+
-+	rkisp1_write(params->rkisp1, weight[0] & 0x1F, RKISP1_CIF_ISP_HIST_WEIGHT_44);
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
+index 3ddab8fa8f2d..4cdb180fa64d 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
+@@ -235,8 +235,7 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
+ 	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
+ 	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
+ 		pbuf->params.hist.hist_bins[i] =
+-			(u8)rkisp1_read(rkisp1,
+-					RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
++			rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
  }
  
- static void
-diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
-index 24f05d6d258f..35aa82d5f6dd 100644
---- a/include/uapi/linux/rkisp1-config.h
-+++ b/include/uapi/linux/rkisp1-config.h
-@@ -102,8 +102,7 @@
- /*
-  * Histogram calculation
-  */
--/* Last 3 values unused. */
--#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
-+#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 25
- 
- /*
-  * Defect Pixel Cluster Correction
+ static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
 -- 
 2.17.1
 
