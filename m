@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D244C433E6
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:59:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D97C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 19:34:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BD4422B2B
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:59:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A8B423A22
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 19:34:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389319AbhAUR7p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 12:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S1727390AbhAUTdn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 14:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389053AbhAURzv (ORCPT
+        with ESMTP id S1726735AbhAUSvK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 12:55:51 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA4C061756;
-        Thu, 21 Jan 2021 09:55:11 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 31so1686590plb.10;
-        Thu, 21 Jan 2021 09:55:11 -0800 (PST)
+        Thu, 21 Jan 2021 13:51:10 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A694C06174A;
+        Thu, 21 Jan 2021 10:50:16 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y8so1785564plp.8;
+        Thu, 21 Jan 2021 10:50:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5aQuxt1nZst2lLKkiFlWOAqj/tVkXqtYs356x95d5f0=;
-        b=FKdfqGEX6B9MgedVW8r+6/43MRAQYZp3W6O+lYUOhIWcHvMRfGHmJxoN9lBT8g64hG
-         xEoIwo264ZbNkC9mApttjnw+IyU4VnDVgkmVVlbEltjJ4DkdE1g6HkjdL9moCRGKgFW4
-         f0lgOkk2ME5EEXtyG1rq6DQV9WzXsT3U/skp0pYkIDhXAIn5n0b2JnlX4nKoAN1/3R5Z
-         heTu/JHH4VvqGNK2HWJUiYLqnAvHNRZTS6sYGx8x/oeVEfALUxzgSOGxG5K9q9j+C1Y9
-         k9VlO9x9K5HSo3j4ZRCoi1kDdHZSJVfZ6vsDaRE427BihHUZHnA00HfDLqr8JxY5IquS
-         TizA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Gzk23zajungTlCb2zZF+0WgvgyrDA4yvKtkR1qaP/Ig=;
+        b=Xz6NOONbGpI8fy5u2HmJJVGmoZPbRnH3JHmvd32Iazx7o2poDKrgDud7nprz+i6zb4
+         gRb16/Lo/qfJSmsY7xJJs8GT7ShWs6jdrgITMD6D6z9c8Yn1Ha0p8wwLv3biS7XNyk2q
+         +ps7du1yQH91OFksV2ICbUastQTLzsKVvMGd/cakBDrwigciJ7PzpoI6Bhtv9TyiQdsI
+         C1uHS1Iom5uhlDufTxww+wdIfw2c47UAzSSToKlOYnsaxUwYNcBhlK3Z5wV57jPoV0mO
+         aEkINUonChkxshGiEagNTQ1sq1zntzaPRQIbUfZzdaSiFBzDjBnr+0drncwamQMYFRSz
+         DTuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=5aQuxt1nZst2lLKkiFlWOAqj/tVkXqtYs356x95d5f0=;
-        b=dBpT3nVzyvrImp77tuCzcJT5NSakTuGpXhv8umUgqt6BgQo8FyLHQRxTiY6mtejKAb
-         xxGi4bFqEyT2KK2IJwv30aJd8O7Pbj/mqECm32AIQdaiRpMD/zbP++JPKTjacNkmwzax
-         18Q5rbmGJiomDTQRTX7S9m32J/Gu8bunfiF5Xr7+BjOt6UzcIov4pWtAvDNXYgcpMxCt
-         Bc3uAY6zrL5x2wxGoIJEK9Vn7W8rgDNAfgUlytMb0noD6980ijeoIxmjhZQVpx/WCvcm
-         g3h7wKkVQZm1htqUCRZarIIy+kWoiV5kWHodL+4nDUpWdtBmERrP47BW3m/oobhg7aYa
-         Vf+Q==
-X-Gm-Message-State: AOAM531/ymwuNwuBDT93qRv3KJMwzdACPZSkodNl5oilboUFxVgY7Dah
-        0X9qPW8z68JnpxwTUAtpQ/M=
-X-Google-Smtp-Source: ABdhPJz84d4NP4LNFL0MoEneIS25lKrepaWWshMn2GI68bIrXjZpBav7A7tXuDrjAGcsuJdMwCVHDQ==
-X-Received: by 2002:a17:902:edc7:b029:de:6cde:8cfd with SMTP id q7-20020a170902edc7b02900de6cde8cfdmr812671plk.59.1611251710651;
-        Thu, 21 Jan 2021 09:55:10 -0800 (PST)
-Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:74d0:bb24:e25e:dc4d])
-        by smtp.gmail.com with ESMTPSA id t2sm6897317pju.19.2021.01.21.09.55.08
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Gzk23zajungTlCb2zZF+0WgvgyrDA4yvKtkR1qaP/Ig=;
+        b=R5QDWwevHVk4E41f6mPKyBTpaAEiIHzVDwPnVNcc9ui6BR77i/eRKB+E3FNqAbJKqk
+         2H4lNxr5YCfiUNv9ma1NNk5R4TOknJt7DBz8JC44j20xvyugaaxPh4WoNK8lNvWDND+t
+         QWzknwWHrDTyGFpAUOp5kLcnQj3J2MBEus0rZ6EmNjsK92kizWsDKJH6b7m/ZwtNonzi
+         8NLqcbFtkL8J/V3VGRzG01EbwqIaxeSqLiY+CypGafRqU8u4n8aEZz6rkTg58jd73lrx
+         7PAsHq6mGQDlwBRG+UgBKR5BFKBVs1bxr0EnmklQ1feVpRIBjcuQLG3w1fHJ7hrXvn8T
+         bLXw==
+X-Gm-Message-State: AOAM5332B3O7AO0rjEA04tzexcpiGisI7Ys+NaU2AVnR5FKkFT4uU2hV
+        psA0WLzjPfOINpPoKMIrMOg=
+X-Google-Smtp-Source: ABdhPJyfH862LfwsBBPrzhoeOlf41yFFc4kB5MAcVlKsh2VxeTXSxBN2yqWWIhsFKo0Q9csPN8kefQ==
+X-Received: by 2002:a17:90a:5303:: with SMTP id x3mr891727pjh.54.1611255015949;
+        Thu, 21 Jan 2021 10:50:15 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:74d0:bb24:e25e:dc4d])
+        by smtp.gmail.com with ESMTPSA id x19sm6440436pfp.207.2021.01.21.10.50.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 09:55:09 -0800 (PST)
+        Thu, 21 Jan 2021 10:50:15 -0800 (PST)
 Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 21 Jan 2021 10:50:12 -0800
 From:   Minchan Kim <minchan@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
@@ -65,18 +65,46 @@ Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         hridya@google.com, john.stultz@linaro.org, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org, Minchan Kim <minchan@kernel.org>
-Subject: [PATCH v4 1/4] mm: cma: introduce gfp flag in cma_alloc instead of no_warn
-Date:   Thu, 21 Jan 2021 09:54:59 -0800
-Message-Id: <20210121175502.274391-2-minchan@kernel.org>
-X-Mailer: git-send-email 2.30.0.296.g2bfb1c46d8-goog
-In-Reply-To: <20210121175502.274391-1-minchan@kernel.org>
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v4 1/4] mm: cma: introduce gfp flag in cma_alloc instead
+ of no_warn
+Message-ID: <YAnM5PbNJZlk//iX@google.com>
 References: <20210121175502.274391-1-minchan@kernel.org>
+ <20210121175502.274391-2-minchan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121175502.274391-2-minchan@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
+
+On Thu, Jan 21, 2021 at 09:54:59AM -0800, Minchan Kim wrote:
+> The upcoming patch will introduce __GFP_NORETRY semantic
+> in alloc_contig_range which is a failfast mode of the API.
+> Instead of adding a additional parameter for gfp, replace
+> no_warn with gfp flag.
+> 
+> To keep old behaviors, it follows the rule below.
+> 
+>   no_warn 			gfp_flags
+> 
+>   false         		GFP_KERNEL
+>   true          		GFP_KERNEL|__GFP_NOWARN
+>   gfp & __GFP_NOWARN		GFP_KERNEL | (gfp & __GFP_NOWARN)
+> 
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+
+Found one missing piece : cma_alloc_alinged
+
+Resend with fixing
+
+
+From 54f5de059636d2178bf5f716239a4a1ea9cbdc52 Mon Sep 17 00:00:00 2001
+From: Minchan Kim <minchan@kernel.org>
+Date: Mon, 21 Dec 2020 17:55:37 -0800
+Subject: [PATCH v4 1/4] mm: cma: introduce gfp flag in cma_alloc instead
 
 The upcoming patch will introduce __GFP_NORETRY semantic
 in alloc_contig_range which is a failfast mode of the API.
@@ -97,12 +125,12 @@ Signed-off-by: Minchan Kim <minchan@kernel.org>
  drivers/dma-buf/heaps/cma_heap.c |  2 +-
  drivers/s390/char/vmcp.c         |  2 +-
  include/linux/cma.h              |  2 +-
- kernel/dma/contiguous.c          |  3 ++-
+ kernel/dma/contiguous.c          |  6 ++++--
  mm/cma.c                         | 12 ++++++------
  mm/cma_debug.c                   |  2 +-
  mm/hugetlb.c                     |  6 ++++--
  mm/secretmem.c                   |  3 ++-
- 8 files changed, 18 insertions(+), 14 deletions(-)
+ 8 files changed, 20 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
 index 364fc2f3e499..0afc1907887a 100644
@@ -144,7 +172,7 @@ index 217999c8a762..d6c02d08ddbc 100644
  
  extern int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data);
 diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
-index 3d63d91cba5c..552ed531c018 100644
+index 3d63d91cba5c..f5a6fcaa9876 100644
 --- a/kernel/dma/contiguous.c
 +++ b/kernel/dma/contiguous.c
 @@ -260,7 +260,8 @@ struct page *dma_alloc_from_contiguous(struct device *dev, size_t count,
@@ -154,6 +182,16 @@ index 3d63d91cba5c..552ed531c018 100644
 -	return cma_alloc(dev_get_cma_area(dev), count, align, no_warn);
 +	return cma_alloc(dev_get_cma_area(dev), count, align, GFP_KERNEL |
 +			(no_warn ? __GFP_NOWARN : 0));
+ }
+ 
+ /**
+@@ -283,7 +284,8 @@ static struct page *cma_alloc_aligned(struct cma *cma, size_t size, gfp_t gfp)
+ {
+ 	unsigned int align = min(get_order(size), CONFIG_CMA_ALIGNMENT);
+ 
+-	return cma_alloc(cma, size >> PAGE_SHIFT, align, gfp & __GFP_NOWARN);
++	return cma_alloc(cma, size >> PAGE_SHIFT, align,
++				GFP_KERNEL | (gfp & __GFP_NOWARN));
  }
  
  /**
@@ -259,4 +297,5 @@ index b8a32954ac68..585d55b9f9d8 100644
  
 -- 
 2.30.0.296.g2bfb1c46d8-goog
+
 
