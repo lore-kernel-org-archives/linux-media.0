@@ -2,113 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F4DFC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 16:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ED1CC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:11:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46546212CC
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 16:33:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F2AD23A58
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 17:11:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387954AbhAUQcL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 11:32:11 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:41370 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732253AbhAUQCw (ORCPT
+        id S2387823AbhAURLV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 12:11:21 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38408 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388391AbhAURFy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 11:02:52 -0500
-Received: by mail-ot1-f43.google.com with SMTP id k8so2049358otr.8;
-        Thu, 21 Jan 2021 08:02:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=iPS8KYGvDCMZBW9Bd66TN2/ZYPxfM8AgyY5LXqUt8EA=;
-        b=C+bjC7wATEX4YcbBkrprKraGj4A08ABZdWo/0dNaluWyQmKDe3OmG+PV+0k/cEgkx9
-         VyNcLKXdAerifWDsSd+8oScrwdznn850pqcEudQlexv7DY/f1aW7U8vP4Oq4TNm0cM9E
-         5G1xs6DU9vDo9hPVuvDh8i7IOmXIDrxoJolGWatdXmWk2FjM+zjrWEXbk0yaCzQk8bS/
-         tHfWL7aVu5f6hTUqaqyV4AXOYspwHH/dVsy+uioGb64qMAUCFiGzRIwSctgYuH+IdH5u
-         MfyVPc99QgWZwBQzPN00Gd+mkeUdWnxDJhmFXj0ebDHUmMcJFGW+Y08ERAE373ej6Mxh
-         bKWg==
-X-Gm-Message-State: AOAM533aZAIlRbkmNGLHKYwN/4uO8NTMsF4grSqKThe3Z8u+MKkDht4X
-        xYcixQohD8p6mZzxksUAHw==
-X-Google-Smtp-Source: ABdhPJzn834Px5M7k9xi4eRDYRx+iVifQaTS4PmZA5nghDXcJpx0MLp8oEr2SSf1ujrQ0M2iXhI2VA==
-X-Received: by 2002:a9d:8c9:: with SMTP id 67mr10410484otf.29.1611244927549;
-        Thu, 21 Jan 2021 08:02:07 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e20sm849213otr.14.2021.01.21.08.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 08:02:06 -0800 (PST)
-Received: (nullmailer pid 2814844 invoked by uid 1000);
-        Thu, 21 Jan 2021 16:01:58 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        michael@walle.cc, shawnguo@kernel.org,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        agross@kernel.org, leoyang.li@nxp.com, agx@sigxcpu.org,
-        Anson.Huang@nxp.com, linux-arm-kernel@lists.infradead.org,
-        todor.too@gmail.com,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        will@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, catalin.marinas@arm.com,
-        max.oss.09@gmail.com, Jonathan Marek <jonathan@marek.ca>,
-        mchehab@kernel.org, bjorn.andersson@linaro.org,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        geert+renesas@glider.be, Tomasz Figa <tfiga@chromium.org>
-In-Reply-To: <20210120134357.1522254-15-robert.foss@linaro.org>
-References: <20210120134357.1522254-1-robert.foss@linaro.org> <20210120134357.1522254-15-robert.foss@linaro.org>
-Subject: Re: [PATCH v2 15/22] dt-bindings: media: camss: Add qcom, sdm660-camss binding
-Date:   Thu, 21 Jan 2021 10:01:58 -0600
-Message-Id: <1611244918.532478.2814843.nullmailer@robh.at.kernel.org>
+        Thu, 21 Jan 2021 12:05:54 -0500
+Received: from [IPv6:2804:214:8594:2ad2:6dc:ed37:185c:8a4b] (unknown [IPv6:2804:214:8594:2ad2:6dc:ed37:185c:8a4b])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: koike)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5586A1F45F76;
+        Thu, 21 Jan 2021 17:04:59 +0000 (GMT)
+Subject: Re: [PATCH v8 4/6] media: rockchip: rkisp1: reduce number of
+ histogram grid elements in uapi
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        hverkuil@xs4all.nl, sakari.ailus@linux.intel.com, heiko@sntech.de
+Cc:     ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+References: <20210121144407.9045-1-dafna.hirschfeld@collabora.com>
+ <20210121144407.9045-5-dafna.hirschfeld@collabora.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <c9d0ac1b-2cb7-a5b6-aa97-1510c44404c1@collabora.com>
+Date:   Thu, 21 Jan 2021 14:04:49 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <20210121144407.9045-5-dafna.hirschfeld@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 20 Jan 2021 14:43:50 +0100, Robert Foss wrote:
-> Add bindings for qcom,sdm660-camss in order to support the camera
-> subsystem on SDM630/660 and SDA variants.
+Hi Dafna,
+
+On 1/21/21 11:44 AM, Dafna Hirschfeld wrote:
+> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> The uapi right now specifies an array size of 28 but the actual number
+> of elements is only 25 with the last 3 being unused.
+> 
+> Reduce the array size to the correct number of elements and change
+> the params code to iterate the array 25 times.
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 > ---
+>  drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 3 ++-
+>  include/uapi/linux/rkisp1-config.h                     | 3 +--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> Changes since v1:
->  - Laurent: Reworked driver to use dtschema
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> index 6af4d551ffb5..021939466b24 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> @@ -589,7 +589,6 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
+>  		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03,
+>  		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43,
+>  		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_44,
+>  	};
+>  	const u8 *weight;
+>  	unsigned int i;
+> @@ -622,6 +621,8 @@ static void rkisp1_hst_config(struct rkisp1_params *params,
+>  							    weight[2],
+>  							    weight[3]),
+>  				 hist_weight_regs[i]);
+> +
+> +	rkisp1_write(params->rkisp1, weight[0] & 0x1F, RKISP1_CIF_ISP_HIST_WEIGHT_44);
+
+I just noticed that the default value to arg->hist_weight was:
+
+	memset(hst.hist_weight, 0x01, sizeof(hst.hist_weight));
+
+Shouldn't the value be RKISP1_CIF_ISP_HIST_WEIGHT_SET(weight[0], 0x01, 0x01, 0x01) ?
+Or am I missing something?
+
+Thanks
+Helen
+
+
+>  }
+>  
+>  static void
+> diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
+> index 24f05d6d258f..35aa82d5f6dd 100644
+> --- a/include/uapi/linux/rkisp1-config.h
+> +++ b/include/uapi/linux/rkisp1-config.h
+> @@ -102,8 +102,7 @@
+>  /*
+>   * Histogram calculation
+>   */
+> -/* Last 3 values unused. */
+> -#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 28
+> +#define RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE 25
+>  
+>  /*
+>   * Defect Pixel Cluster Correction
 > 
-> 
->  .../bindings/media/qcom,sdm660-camss.yaml     | 416 ++++++++++++++++++
->  1 file changed, 416 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-> 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/media/qcom,sdm660-camss.example.dts:21:18: fatal error: dt-bindings/clock/qcom,mmcc-sdm660.h: No such file or directory
-   21 |         #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:344: Documentation/devicetree/bindings/media/qcom,sdm660-camss.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1370: dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1429447
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
