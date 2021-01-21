@@ -2,71 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78172C433DB
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3147BC433E9
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 15:03:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35798230FC
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 14:46:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE7FE239EB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 15:03:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732111AbhAUOql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 09:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S1732185AbhAUPDB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 10:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731557AbhAUOpF (ORCPT
+        with ESMTP id S1731207AbhAUN3v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 09:45:05 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DC8C0613D6
-        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 06:44:16 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 7D89F1F45EB8
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        hverkuil@xs4all.nl, sakari.ailus@linux.intel.com, heiko@sntech.de
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-Subject: [PATCH v8 2/6] media: rkisp1: stats: remove a wrong cast to u8
-Date:   Thu, 21 Jan 2021 15:44:03 +0100
-Message-Id: <20210121144407.9045-3-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210121144407.9045-1-dafna.hirschfeld@collabora.com>
-References: <20210121144407.9045-1-dafna.hirschfeld@collabora.com>
+        Thu, 21 Jan 2021 08:29:51 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB026C0613D3
+        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 05:29:10 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id v67so2517267lfa.0
+        for <linux-media@vger.kernel.org>; Thu, 21 Jan 2021 05:29:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TCBmtAGF/p0qcpEu6dpC3LB6xwiWGvLiDJYZOK21eQg=;
+        b=kso9808x4AKlVCLoDuCnsIu39a5rc+GdoErbN4v9A0LeyKqKlKZnQ1dZCtCi/0HC8w
+         KnpoXw6adp5LSyaXaJqzK1+/d0XrFyt+6exKUKkPuXHFe6dn1pOpw630yXpyGwMieW0j
+         T6KPRzXmXWmgk8S0am1TrBzX0lIsQL5iGtEEwTwKcJfen4UKw/mkoT/Whj00fjmxTOWW
+         eNJ5E1psjb4UowIw3L/ze2bL8N1I12lKlDeGZOI6qWOSHemRUyNBu/cfHfl7YMRSREJf
+         y85GfZVxzSHd0veFJ2SPwAvJmAw/Q7l8G1Mm9YmwoUiNIqbqr9FVssgzQyuO802KfYmR
+         eBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TCBmtAGF/p0qcpEu6dpC3LB6xwiWGvLiDJYZOK21eQg=;
+        b=gUreIPxocw24c4v/ZMlvW+lXj4J3bGzpWrf3KLWZu4AtepYJWmgkdxTlOEAykO0CKr
+         6wKtHxCik5bE9d5fiEwvP/FruBpoa7BSQYU5wJKSC9GUNvm6cYh2vsHzwXvX1kKYT87B
+         M9NFYIErVjNZqKf4RmaDzoZggKgFwNCA5ARu95QzEdpTldbtQYjqylbKX2VG88HugkGd
+         lkV7fH2hIAy/KJ+O2Jpms+ATt6ArDTbcAGovJ8ETNNS376CCWY7543YqgeevzUuNBJI6
+         AsQqbuiBGoLIdWqpuYtfLDLz5mQ8+QLhEj9IzeSivUup4rcfdH1+4VnPBzFIhyE4af+c
+         wiRg==
+X-Gm-Message-State: AOAM532sVUBYM7eMBw1VFxtFSEMM+ZR+zQENVf++HQKoW4X3N0WY742p
+        MYtHh5tG2H0+c2aQjvc2lRbVtFiLQ+sGEZAigc8bTA==
+X-Google-Smtp-Source: ABdhPJxLYG8wma3X3iAjIq15alrm3ByQ9m1SEliYlbpIky8zpSJ6MErlEFnMHA3/JFYzicxGQZp2bcYAzKcs4eMeICU=
+X-Received: by 2002:a19:7616:: with SMTP id c22mr4729640lff.550.1611235749239;
+ Thu, 21 Jan 2021 05:29:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20210119204508.9256-1-john.stultz@linaro.org>
+In-Reply-To: <20210119204508.9256-1-john.stultz@linaro.org>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Thu, 21 Jan 2021 18:58:57 +0530
+Message-ID: <CAO_48GHfGPqcX8B7BC5tf0J3+RWrtjpgHpfnJ-+sVaNv3bxYiw@mail.gmail.com>
+Subject: Re: [RESEND][PATCH 1/3] dma-buf: system_heap: Make sure to return an
+ error if we abort
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-hist_bins is an array of type __u32. Each entry represent
-a 20 bit fixed point value as documented inline.
-The cast to u8 when setting the values is wrong. Remove it.
+Hi John,
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
----
- drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Wed, 20 Jan 2021 at 02:15, John Stultz <john.stultz@linaro.org> wrote:
+>
+> If we abort from the allocation due to a fatal_signal_pending(),
+> be sure we report an error so any return code paths don't trip
+> over the fact that the allocation didn't succeed.
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-index 3ddab8fa8f2d..4cdb180fa64d 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-@@ -235,8 +235,7 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
- 	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
- 	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
- 		pbuf->params.hist.hist_bins[i] =
--			(u8)rkisp1_read(rkisp1,
--					RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
-+			rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
- }
- 
- static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
--- 
-2.17.1
+Thanks for the patch; LGTM, will push into drm-misc-next.
+>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Liam Mark <lmark@codeaurora.org>
+> Cc: Laura Abbott <labbott@kernel.org>
+> Cc: Brian Starkey <Brian.Starkey@arm.com>
+> Cc: Hridya Valsaraju <hridya@google.com>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Sandeep Patil <sspatil@google.com>
+> Cc: Daniel Mentz <danielmentz@google.com>
+> Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+> Cc: =C3=98rjan Eide <orjan.eide@arm.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Ezequiel Garcia <ezequiel@collabora.com>
+> Cc: Simon Ser <contact@emersion.fr>
+> Cc: James Jones <jajones@nvidia.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+>  drivers/dma-buf/heaps/system_heap.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/=
+system_heap.c
+> index 17e0e9a68baf..405351aad2a8 100644
+> --- a/drivers/dma-buf/heaps/system_heap.c
+> +++ b/drivers/dma-buf/heaps/system_heap.c
+> @@ -363,8 +363,10 @@ static int system_heap_allocate(struct dma_heap *hea=
+p,
+>                  * Avoid trying to allocate memory if the process
+>                  * has been killed by SIGKILL
+>                  */
+> -               if (fatal_signal_pending(current))
+> +               if (fatal_signal_pending(current)) {
+> +                       ret =3D -EINTR;
+>                         goto free_buffer;
+> +               }
+>
+>                 page =3D alloc_largest_available(size_remaining, max_orde=
+r);
+>                 if (!page)
+> --
+> 2.17.1
+>
 
+Best,
+Sumit.
