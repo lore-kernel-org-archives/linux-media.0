@@ -2,85 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21ABDC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7839C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 13:11:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2E95239FF
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 12:58:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6084E239FF
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 13:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729465AbhAUKcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jan 2021 05:32:42 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49243 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729139AbhAUKc1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jan 2021 05:32:27 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 2XFalaeDjyutM2XFelgmgx; Thu, 21 Jan 2021 11:31:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611225102; bh=xVkjGcpxGSM83vonioKnujRFoyjs79T5J1H0IPxugMU=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=JJ0z+nlVjkZu0itqu2B3IwxnZFuui6Bi+6CYYf38GNd4RANMLr5lM1O34CzcrvJ+0
-         bRVI0w+OyoP8Y+ers3XCEORdH3L3Fmw3uW60NuVcDLHJhRhF8O3Ft9TBa3GvXEg93c
-         767o1WeHPgZexoEXqqwOXBQYSPkzTzKiY1aLgsHWwnr4gG+35Pj9/KvLiveaEw/SEc
-         KAxmNZwd03KxXP5v1uvh01iYssRqbitpi/f99cTk7UuWDRhnrWbSkL0qO3zWKLyLnk
-         F0QE0KmhhLinxlU9DhtuNIJPrv9/XpYl2i2lCwf/OccNLM2g9YYUtfXwSGTfhOyELi
-         0D1C3jyZSC5RQ==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT FIXES FOR v5.11] Fixes for 5.11
-Message-ID: <87ea4873-bad1-6575-c104-4be6ba59dfc4@xs4all.nl>
-Date:   Thu, 21 Jan 2021 11:31:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1731600AbhAUNDd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jan 2021 08:03:33 -0500
+Received: from mga09.intel.com ([134.134.136.24]:62364 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729663AbhAUND2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:03:28 -0500
+IronPort-SDR: 4sRZxa1BGAWfS0qgaIVMMjPI9+Yi4bD9Ew5YZKFLo+IPLJnVcZ8eR3aY1Xj8v3/OTDIrbUgQEK
+ H++NAvliOnzA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="179413999"
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="179413999"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 05:01:24 -0800
+IronPort-SDR: 1eUyjMpjjryq+aukYze5uL3uJ5Kay2XMhajOfVuAbdlz7kCnKPmu/ExS5hHpgm0T7kobS4P/mu
+ +Qyn6KoQSRDQ==
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="347904719"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 05:01:21 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id EF5E72067A; Thu, 21 Jan 2021 15:01:18 +0200 (EET)
+Date:   Thu, 21 Jan 2021 15:01:18 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-media@vger.kernel.org, heiko.stuebner@theobroma-systems.com,
+        heiko@sntech.de, laurent.pinchart@ideasonboard.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: Re: [PATCH v7 1/5] media: rkisp1: uapi: change hist_bins array type
+ from __u16 to __u32
+Message-ID: <20210121130118.GC6234@paasikivi.fi.intel.com>
+References: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
+ <20210120164446.1220-2-dafna.hirschfeld@collabora.com>
+ <20210120213207.GN11878@paasikivi.fi.intel.com>
+ <12823703-5a32-f08a-5b4d-3a5ead231b33@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfJ9rfofsHjYMdiN4b+THTN1tERu/yd//3bEbe0gd+r21bA2rOBw06HUMSpMI4zAm2eETO71Vzuf64pFMtrlWdt3rIwQccga1FQn7jLFB5uD47yWCCgRZ
- cq6wiI/e7e4D/NDU//j9+cU0xdQN3r6lDuv/dfcMEqFnLIcnUfRqReEb6maI5fNu6gD+C0sMQHRwJkJO1/8CY6h+vzGpdn4O5OU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12823703-5a32-f08a-5b4d-3a5ead231b33@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8:
+Hi Dafna,
 
-  media: atomisp: convert comma to semicolon (2021-01-14 13:59:46 +0100)
+On Thu, Jan 21, 2021 at 01:48:58PM +0100, Dafna Hirschfeld wrote:
+> 
+> 
+> Am 20.01.21 um 22:32 schrieb Sakari Ailus:
+> > Hi Dafna,
+> > 
+> > Thanks for the update.
+> > 
+> > On Wed, Jan 20, 2021 at 05:44:42PM +0100, Dafna Hirschfeld wrote:
+> > > Each entry in the array is a 20 bits value composed of 16
+> > > bits unsigned integer and 4 bits fractional part. So the
+> > > type should change to __u32.
+> > > In addition add a documentation of how the measurements
+> > > are done.
+> > 
+> > The commit message lines wrap at 74, under 60 is not much.
+> > 
+> > > 
+> > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > 
+> > Should there be a Fixes: line? The patch is changing UAPI...
+> > 
+> > The file has been recently introduced. Should it go to fixes or to a stable
+> > kernel, too?
+> 
+> The file was in the staging directory and will be first destaged in the coming 5.11,
+> so I don't think this is necessary.
 
-are available in the Git repository at:
+You still probably want to avoid making the uAPI change after 5.11, so
+the fixes branch would be the right target I presume.
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.11b
-
-for you to fetch changes up to 0792e86517a21079dac2883fc2021848610d7de9:
-
-  media: hantro: Fix reset_raw_fmt initialization (2021-01-21 11:21:56 +0100)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Hans Verkuil (1):
-      v4l2-subdev.h: BIT() is not available in userspace
-
-Jernej Skrabec (1):
-      media: cedrus: Fix H264 decoding
-
-Ricardo Ribalda (1):
-      media: hantro: Fix reset_raw_fmt initialization
-
-Yannick Fertre (1):
-      media: cec: add stm32 driver
-
- drivers/media/cec/platform/Makefile              | 1 +
- drivers/staging/media/hantro/hantro_v4l2.c       | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
- include/uapi/linux/v4l2-subdev.h                 | 2 +-
- 4 files changed, 4 insertions(+), 3 deletions(-)
+-- 
+Sakari Ailus
