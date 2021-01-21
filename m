@@ -2,120 +2,188 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4411AC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 00:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FCA3C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 04:53:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F00CC2376F
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 00:27:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02192238E2
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jan 2021 04:53:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392995AbhAUA0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Jan 2021 19:26:46 -0500
-Received: from mga03.intel.com ([134.134.136.65]:36322 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388743AbhATVec (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Jan 2021 16:34:32 -0500
-IronPort-SDR: KSGpgyxxSoHBwUiWovWedlc6GngpGHqVQoTgc86p0Bd+QJrSUajwOlcEIPftl6pr7F7qaLji4d
- XYSG0rPVQxtA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="179263499"
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="179263499"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 13:32:13 -0800
-IronPort-SDR: ClBbH19ia4QOiuyNHGqhQLNYBFvtit6Tkd2b+GPHK61WwT09kd1YA7lA3Nf7zaIoKQUhjYsz/j
- pQPw0lRJNCKg==
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="427043427"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 13:32:09 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 92D9B206D0; Wed, 20 Jan 2021 23:32:07 +0200 (EET)
-Date:   Wed, 20 Jan 2021 23:32:07 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     linux-media@vger.kernel.org, heiko.stuebner@theobroma-systems.com,
-        heiko@sntech.de, laurent.pinchart@ideasonboard.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-Subject: Re: [PATCH v7 1/5] media: rkisp1: uapi: change hist_bins array type
- from __u16 to __u32
-Message-ID: <20210120213207.GN11878@paasikivi.fi.intel.com>
-References: <20210120164446.1220-1-dafna.hirschfeld@collabora.com>
- <20210120164446.1220-2-dafna.hirschfeld@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210120164446.1220-2-dafna.hirschfeld@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726379AbhAUEwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Jan 2021 23:52:39 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:39497 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727766AbhAUEoX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Jan 2021 23:44:23 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 2RoilZ5T6yutM2Rojlg25W; Thu, 21 Jan 2021 05:43:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611204213; bh=oyzlp4FUFyheyJw1j2teNjrsrLCotIR7vYPBjL1Srmc=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=C2yaCJ51Tmmjp1aBb2uPACwcpwZ27rBtYrBDimPJhI8us2isZaxPi4RL2umv/Bl4/
+         58vh6J59Ca/+WrExQEWwCNH1javUZh8EgDDRclLNcAcaH1Sgz6TuBB7hCyr+IPRQ+T
+         dRMerPSO09gtEiLUmh8G6k6vWQ3isOt2UBRIf8+5sLSLNBKegJv7iKbe1x6m3+MaTw
+         Q24z0e8Mhop854XZokYgmok4HCMyErpRYa5dNGNaIybnw52XFTBm+gqZeWR8LZJI2R
+         IuLjb0KA5pQnuNUu32mHwFPhM9fXmIFbKRXmZLtgIaPv+K1TAF/XJAeudQDhU1rBLk
+         UwBIKNLd1BBRw==
+Message-ID: <52b8a4c1774a73967602be4061dc44a7@smtp-cloud7.xs4all.net>
+Date:   Thu, 21 Jan 2021 05:43:32 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfEtlEpU6Pzi072o+smD8XMMhpuBVpeS4L7Ql9M+5HaPj5L+xpk+ou7trVjNhac9OPhe5AIyi525EP4ObSGHKVcP6CYViY6OdbgCVjTDP8qcWoYvrUssk
+ PHodWsT5gmqptwON1wSQTTiIZbb1WlPrz2GwAjIdKvuwAzvNswr5Jgq471+7HPNSCbNa93RfBeC9zg85ZBUNDVK3nu6wgYf0wc1XS1yVbFnomSAbZGBcIM3V
+ jcNDmeDcg5SJFVdomUgPKg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Thanks for the update.
+Results of the daily build of media_tree:
 
-On Wed, Jan 20, 2021 at 05:44:42PM +0100, Dafna Hirschfeld wrote:
-> Each entry in the array is a 20 bits value composed of 16
-> bits unsigned integer and 4 bits fractional part. So the
-> type should change to __u32.
-> In addition add a documentation of how the measurements
-> are done.
+date:			Thu Jan 21 05:00:12 CET 2021
+media-tree git hash:	321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8
+media_build git hash:	f6e3542673d19355e8e42be40f5fc78431d611c5
+v4l-utils git hash:	6053dad4c63a063fcd4714c85fd9dd10fe07f93e
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-1-g58d3c1ca
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7087-gdbdb27615
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 01932d8c0f1bcf9780263707cc9aa0af06014d36
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-The commit message lines wrap at 74, under 60 is not much.
+linux-git-arm-stm32: OK
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-powerpc64: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-x86_64: OK
+linux-git-i686: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.238-i686: OK
+linux-4.4.238-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.238-i686: OK
+linux-4.9.238-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.200-i686: OK
+linux-4.14.200-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.149-i686: OK
+linux-4.19.149-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.69-i686: OK
+linux-5.4.69-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10.1-i686: OK
+linux-5.10.1-x86_64: OK
+linux-5.11-rc1-i686: OK
+linux-5.11-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: ERRORS
 
-> 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Detailed results are available here:
 
-Should there be a Fixes: line? The patch is changing UAPI...
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
 
-The file has been recently introduced. Should it go to fixes or to a stable
-kernel, too?
+Detailed regression test results are available here:
 
-> ---
->  include/uapi/linux/rkisp1-config.h | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
-> index 6e449e784260..f75f8d698fb4 100644
-> --- a/include/uapi/linux/rkisp1-config.h
-> +++ b/include/uapi/linux/rkisp1-config.h
-> @@ -844,13 +844,17 @@ struct rkisp1_cif_isp_af_stat {
->  /**
->   * struct rkisp1_cif_isp_hist_stat - statistics histogram data
->   *
-> - * @hist_bins: measured bin counters
-> + * @hist_bins: measured bin counters. Each bin is a 20 bits unsigned fixed point type.
-> + *	       Bits 0-4 are the fractional part and bits 5-19 are the integer part.
->   *
-> - * Measurement window divided into 25 sub-windows, set
-> - * with ISP_HIST_XXX
-> + * The window of the measurements area is divided to 5x5 sub-windows. The histogram
-> + * is then computed for each sub-window independently and the final result is a weighted
-> + * average of the histogram measurements on all sub-windows.
-> + * The window of the measurements area and the weight of each sub-window are configurable
-> + * using struct @rkisp1_cif_isp_hst_config.
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
 
-Please wrap the lines before 80.
+Full logs are available here:
 
->   */
->  struct rkisp1_cif_isp_hist_stat {
-> -	__u16 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
-> +	__u32 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
->  };
->  
->  /**
-> -- 
-> 2.17.1
-> 
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
 
--- 
-Regards,
+The Media Infrastructure API from this daily build is here:
 
-Sakari Ailus
+http://www.xs4all.nl/~hverkuil/spec/index.html
