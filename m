@@ -2,66 +2,159 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72A05C10DC2
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76901C433DB
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 11:48:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CAE623358
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:55:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2020B2376F
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 11:48:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbhAVJ1I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jan 2021 04:27:08 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:57302 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726488AbhAVJYn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jan 2021 04:24:43 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UMW2N.v_1611307426;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0UMW2N.v_1611307426)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 22 Jan 2021 17:23:56 +0800
-From:   Yang Li <abaci-bugfix@linux.alibaba.com>
-To:     mchehab@kernel.org
-Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Yang Li <abaci-bugfix@linux.alibaba.com>
-Subject: [PATCH] scsi: megaraid_sas: remove redundant NULL check
-Date:   Fri, 22 Jan 2021 17:23:44 +0800
-Message-Id: <1611307424-109090-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1727148AbhAVLsZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jan 2021 06:48:25 -0500
+Received: from mga17.intel.com ([192.55.52.151]:27190 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727136AbhAVLqy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 22 Jan 2021 06:46:54 -0500
+IronPort-SDR: cJErxF5/EMC2vnGfC5Phsn00QGJZvXHz5cqQ9cGbt2d2/o78KjfC/lV7umt3hwt2c58MUDQmc2
+ dXgwzs2Gkl6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="159210871"
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="159210871"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 03:44:56 -0800
+IronPort-SDR: J3y7zTLgpFbaDviXa8dk3nMWsL+Fn8NPNjxh2QW0TPOPXZ4ARTv73fqatRp2vnSiQpIUr7GN+Q
+ J6df8arTpqmA==
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="356996021"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 03:44:54 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id EEFFE209EB; Fri, 22 Jan 2021 11:18:22 +0200 (EET)
+Date:   Fri, 22 Jan 2021 11:18:22 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 1/4] dt-bindings: media: imx258: add bindings for
+ IMX258 sensor
+Message-ID: <20210122091822.GB27155@paasikivi.fi.intel.com>
+References: <20201118202715.6692-1-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118202715.6692-1-krzk@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix below warnings reported by coccicheck:
-./drivers/scsi/megaraid/megaraid_sas_fusion.c:3924:3-8: WARNING: NULL
-check before some freeing functions is not needed.
+Hi Krysztof,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <abaci-bugfix@linux.alibaba.com>
----
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Wed, Nov 18, 2020 at 09:27:12PM +0100, Krzysztof Kozlowski wrote:
+> Add bindings for the IMX258 camera sensor.  The bindings, just like the
+> driver, are quite limited, e.g. do not support regulator supplies.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+> 
+> Changes since v4:
+> 1. Add clock-lanes,
+> 2. Add Rob's review,
+> 3. Add one more example and extend existing one,
+> 4. Add common clock properties (assigned-*).
+> 
+> Changes since v3:
+> 1. Document also two lane setup.
+> 
+> Changes since v2:
+> 1. Remove clock-frequency, add reset GPIOs, add supplies.
+> 2. Use additionalProperties.
+> 
+> Changes since v1:
+> 1. None
+> ---
+>  .../devicetree/bindings/media/i2c/imx258.yaml | 140 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 141 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/imx258.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/imx258.yaml b/Documentation/devicetree/bindings/media/i2c/imx258.yaml
+> new file mode 100644
+> index 000000000000..4a3471fb88a1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/imx258.yaml
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/imx258.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sony IMX258 13 Mpixel CMOS Digital Image Sensor
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +description: |-
+> +  IMX258 is a diagonal 5.867mm (Type 1/3.06) 13 Mega-pixel CMOS active pixel
+> +  type stacked image sensor with a square pixel array of size 4208 x 3120. It
+> +  is programmable through I2C interface.  Image data is sent through MIPI
+> +  CSI-2.
+> +
+> +properties:
+> +  compatible:
+> +    const: sony,imx258
+> +
+> +  assigned-clocks: true
+> +  assigned-clock-parents: true
+> +  assigned-clock-rates: true
+> +
+> +  clocks:
+> +    description:
+> +      Clock frequency from 6 to 27 MHz.
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    description: |-
+> +      Reference to the GPIO connected to the XCLR pin, if any.
+> +
+> +  vana-supply:
+> +    description:
+> +      Analog voltage (VANA) supply, 2.7 V
+> +
+> +  vdig-supply:
+> +    description:
+> +      Digital I/O voltage (VDIG) supply, 1.2 V
+> +
+> +  vif-supply:
+> +    description:
+> +      Interface voltage (VIF) supply, 1.8 V
+> +
+> +  # See ../video-interfaces.txt for more details
+> +  port:
+> +    type: object
+> +    properties:
+> +      endpoint:
+> +        type: object
+> +        properties:
+> +          clock-lanes:
+> +            const: 0
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index fd60728..38fc946 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -3920,8 +3920,7 @@ static irqreturn_t megasas_isr_fusion(int irq, void *devp)
- {
- 	unsigned int i;
- 	for (i = 0; i < instance->drv_buf_alloc; i++) {
--		if (instance->crash_buf[i])
--			vfree(instance->crash_buf[i]);
-+		vfree(instance->crash_buf[i]);
- 	}
- 	instance->drv_buf_index = 0;
- 	instance->drv_buf_alloc = 0;
+This is redundant. Please remove, same for the examples. Can be a separate
+patch, too.
+
+With this change the set seems good to me.
+
 -- 
-1.8.3.1
-
+Sakari Ailus
