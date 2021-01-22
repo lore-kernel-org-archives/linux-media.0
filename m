@@ -2,121 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 032EDC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 08:59:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A169C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 09:46:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC361238D7
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 08:59:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EC1523381
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 09:46:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbhAVI6r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jan 2021 03:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbhAVI6F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jan 2021 03:58:05 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8B7C0613D6
-        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 00:57:24 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id p18so3268523pgm.11
-        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 00:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Om1fWmk45UJnPODoi3J7JRR5hgr9TDBF5Ojj+VBLP+Q=;
-        b=DQdwse1o8A4TFLSTf635UiaPyi6CNnDBdu5E/VRgybpjhBuPc82DnqYHZjg9t92Pzc
-         UCF9pC7g/PGDlbtLtmLOdTiS8Tdhquzw4+i/E8QkV/k3FnXrSAHcDrBhxbByYv6RW/Xk
-         rh1ZriX32mO6dzrqx8Bn4boIowsGWzV61/SfbmR07pY85OSd8cbypVBtAU7uRE71SPWP
-         ZGvAgVm7e6EB80Mb9g20xsmyaq+xclF6iYsiqEgyJCVldiHH+6Ll4/6flPjuNvpwgBKy
-         bYAQbRWKnEvkPf4yITKKlicI0Y8rb331KxOYB/Oq+WD6M3bsMFD9cDI0DmfkQoFKLUvq
-         YVDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Om1fWmk45UJnPODoi3J7JRR5hgr9TDBF5Ojj+VBLP+Q=;
-        b=BlFxJ6ItQ0zif/0L6OV/ab0iI7JzFGzZzFBP92LLbK3KHte1LvlUigKcZUi5K3cqvi
-         8N/HctJ9U9A4PFYIVLwQSYTvks2BAuQEONuxOX2AgZemPXlFQqvdgdp3CLgo1IwMYHVo
-         bKGN0mkm4S5BWnTVfKQtnNdqDJofI3MW/dkqgpSmSkMnGT25x+h8nr5sn5C5xFqNaS0l
-         //kCBDPpA/YEwFgssWjJ4K+W4UiWHWBdECgX/GnUgi2/hBnILKNlyBa4m0XGbHzAqZNd
-         G1sr2LsxET3tB4NEQiKstu6LCyS4k5fccpUG9TmlQ0Tv8w7lBMoFJAedL59wvxC4Drqj
-         HI1w==
-X-Gm-Message-State: AOAM531Rx7NX4V0pXvPStrDQW/SHCoKhz3qW9RnNcMDbO3zGzqQvdFAv
-        sN8LLzvVA2XZfWWGuOj0aDBXIOhWIkw5ewqi5uYgBg==
-X-Google-Smtp-Source: ABdhPJz+NkTbQB3eSzWRE6o4dt43ME127orJ75xc5hTZL4LE30MLU3ITXQSmDnFKbpmkkVpVgOnCehiaM5NJZfbh6HM=
-X-Received: by 2002:a62:8895:0:b029:19e:92ec:6886 with SMTP id
- l143-20020a6288950000b029019e92ec6886mr3763217pfd.12.1611305844294; Fri, 22
- Jan 2021 00:57:24 -0800 (PST)
+        id S1727645AbhAVJqI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jan 2021 04:46:08 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:45562 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727389AbhAVJpW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 22 Jan 2021 04:45:22 -0500
+Received: from hillosipuli.retiisi.eu (213-243-181-26.bb.dnainternet.fi [213.243.181.26])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id AC1AB20244
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 11:44:14 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1611308654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=aChDf+j/KsLWQiwg+NC5BtNE507x7IxTK6RIcLX8TrM=;
+        b=Wx3vlexeiZv7R/JuVA04TRrRJ8vlFjfpMzkWZ/RIRttJV+CEKnFqDNpvDcN3qsO828vadb
+        tkjZNpHEGvOF2cVjNrwm+VWF5TxIf32bk7efIqmIgTIP0tkwCJ60f8D2o4sB64KBqQjuGh
+        2chCqKNKiRSrjrbIpkea8Sj+FFfm5hc=
+Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4DB1A634C8C
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 11:42:48 +0200 (EET)
+Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
+        by valkosipuli.localdomain with esmtp (Exim 4.92)
+        (envelope-from <sakari.ailus@iki.fi>)
+        id 1l2sxs-0004jN-4t
+        for linux-media@vger.kernel.org; Fri, 22 Jan 2021 11:42:48 +0200
+Date:   Fri, 22 Jan 2021 11:42:48 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL v2 for 5.12] More V4L2 patches
+Message-ID: <20210122094248.GL3@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
-References: <20210121202855.17400-1-tiwai@suse.de>
-In-Reply-To: <20210121202855.17400-1-tiwai@suse.de>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 22 Jan 2021 09:57:13 +0100
-Message-ID: <CAG3jFyu5RWvbxkiLHXtijGuXChBoKy-kPv38qk-_h9ir8u=ybg@mail.gmail.com>
-Subject: Re: [PATCH] media: pwc: Fix the URB buffer allocation
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1611308654; a=rsa-sha256; cv=none;
+        b=ZaShHOlAOJNNrXxsVWnyfSIrA1f6/DxyoPC+V825awF1Iz5FkYPVFrTVqCVPNJoNjP9X8V
+        kL4j/ZPhYupb9BZcr6Txve/V70WfZYpXs2U9DYvYBD4AWeyp+v4v1FZRtqBTSA1JWfhzj7
+        /2zoyuPul1KR6xgJm+4BkBnMCb5EOxM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1611308654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=aChDf+j/KsLWQiwg+NC5BtNE507x7IxTK6RIcLX8TrM=;
+        b=iY5jiJoYa79Zynd2uokIBFP3GfKLyg/UkzjESeKuNeZZCjmJGRSB8yLL6X2a8PJmAzKTBR
+        x9UpyFjSj0jLfPYpEQIuZx292Kqo9GjbH6r95M4BtbTCueUIMznMfXDnuuobVOc3/MCowe
+        oSSR/SaBLdsp3y+ukivg3WtMKuPemv0=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Thanks for the patch, it all looks good to me.
+Hi Mauro,
 
-Feel free to add my r-b:
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Here's a small set of fixes and improvements for DT bindings, ov8865 driver
+and v4l2-async.
 
-On Thu, 21 Jan 2021 at 21:34, Takashi Iwai <tiwai@suse.de> wrote:
->
-> The URB buffer allocation of pwc driver involves with the
-> dma_map_single(), and it needs to pass the right device.  Currently it
-> passes usb_device.dev, but it's no real device that manages the DMA.
-> Since the passed device has no DMA mask set up, now the pwc driver
-> hits the WARN_ON_ONCE() check in dma_map_page_attrs() (that was
-> introduced in 5.10), resulting in an error at URB allocations.
-> Eventually this ended up with the black output.
->
-> This patch fixes the bug by passing the proper device, the bus
-> controller, to make the URB allocation and map working again.
->
-> BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1181133
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->  drivers/media/usb/pwc/pwc-if.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/usb/pwc/pwc-if.c b/drivers/media/usb/pwc/pwc-if.c
-> index 61869636ec61..d771160bb168 100644
-> --- a/drivers/media/usb/pwc/pwc-if.c
-> +++ b/drivers/media/usb/pwc/pwc-if.c
-> @@ -461,7 +461,7 @@ static int pwc_isoc_init(struct pwc_device *pdev)
->                 urb->pipe = usb_rcvisocpipe(udev, pdev->vendpoint);
->                 urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
->                 urb->transfer_buffer_length = ISO_BUFFER_SIZE;
-> -               urb->transfer_buffer = pwc_alloc_urb_buffer(&udev->dev,
-> +               urb->transfer_buffer = pwc_alloc_urb_buffer(udev->bus->controller,
->                                                             urb->transfer_buffer_length,
->                                                             &urb->transfer_dma);
->                 if (urb->transfer_buffer == NULL) {
-> @@ -524,7 +524,7 @@ static void pwc_iso_free(struct pwc_device *pdev)
->                 if (urb) {
->                         PWC_DEBUG_MEMORY("Freeing URB\n");
->                         if (urb->transfer_buffer)
-> -                               pwc_free_urb_buffer(&urb->dev->dev,
-> +                               pwc_free_urb_buffer(urb->dev->bus->controller,
->                                                     urb->transfer_buffer_length,
->                                                     urb->transfer_buffer,
->                                                     urb->transfer_dma);
-> --
-> 2.26.2
->
+Since v1, added a patch from Ezequiel to remove the custom async match
+type. This addresses the warnings in the earlier pull request.
+
+Please pull.
+
+
+The following changes since commit 321af22a3d2f6ed1fb1737c8588c01f6fec8a7b8:
+
+  media: atomisp: convert comma to semicolon (2021-01-14 13:59:46 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.12-4.1-signed
+
+for you to fetch changes up to bd5927c372287d51cde8741c83bd7e302b6ecd0a:
+
+  dt-bindings: media: ov5647: Fix filename (2021-01-22 11:35:29 +0200)
+
+----------------------------------------------------------------
+More V4L2 patches
+
+----------------------------------------------------------------
+Ezequiel Garcia (2):
+      media: v4l2-async: Remove V4L2_ASYNC_MATCH_CUSTOM
+      media: v4l2-async: Add waiting subdevices debugfs
+
+Jacopo Mondi (1):
+      dt-bindings: media: ov5647: Fix filename
+
+Lad Prabhakar (1):
+      media: i2c/Kconfig: Select FWNODE for OV772x sensor
+
+Laurent Pinchart (1):
+      media: v4l2-async: Safely unregister an non-registered async subdev
+
+kernel test robot (1):
+      media: i2c: fix odd_ptr_err.cocci warnings
+
+ .../devicetree/bindings/media/i2c/ovti,ov5647.yaml |  2 +-
+ drivers/media/i2c/Kconfig                          |  1 +
+ drivers/media/i2c/ov8865.c                         |  2 +-
+ drivers/media/v4l2-core/v4l2-async.c               | 83 ++++++++++++++++++----
+ drivers/media/v4l2-core/v4l2-dev.c                 |  5 ++
+ include/media/v4l2-async.h                         | 25 +++----
+ 6 files changed, 85 insertions(+), 33 deletions(-)
+
+-- 
+Kind regards,
+
+Sakari Ailus
