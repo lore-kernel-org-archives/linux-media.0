@@ -2,177 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E06B9C4332B
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 19:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E807AC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 21:42:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B36E023B21
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 19:37:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABBA723B06
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 21:42:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728013AbhAVOJo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jan 2021 09:09:44 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60104 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728295AbhAVOH2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jan 2021 09:07:28 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C328FAD19;
-        Fri, 22 Jan 2021 14:06:45 +0000 (UTC)
-Subject: Re: [PATCH] drm/todo: Add entry for moving to dma_resv_lock
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     David Airlie <airlied@linux.ie>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        linux-media@vger.kernel.org
-References: <20210122133624.1751802-1-daniel.vetter@ffwll.ch>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Message-ID: <97c93ad7-9aa1-dcf7-42a9-4f8076eeb135@suse.de>
-Date:   Fri, 22 Jan 2021 15:06:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1729264AbhAVVmF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jan 2021 16:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728491AbhAVVlB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 22 Jan 2021 16:41:01 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED4C061788
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 13:40:21 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id v67so9581179lfa.0
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 13:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fVQGipISqL+GidmgskuqE54mrZNWSegyyQUFD/qGixM=;
+        b=DBYc+xh+//BuisFJO7Qj1/JPZY3GmA6Q6VyAQhmchMrcnNdQgI3jZFePMXCHUuaEGg
+         5RGO80cSZyrTGMfD5NST6y8FzE5ZHd23XF5yoG3UYaBQDzFj4EBslBBv+RMkVdaje+V7
+         1w8G104HZiAVP9Xw4H9rO76cPe9oNYOh3DJhL4jOXrv0KPDJz0j53J/JhIHOT3M43fAm
+         w0FEQ+PVt5C4c9c+XLzX44lm3z0UUqXZrPr489pWycIYpyiq4GPqoBcsQfZi8tPWdPI3
+         PJGhLhoQrjfWBxZf2vgIATJgsgdEu5EAdBl5KswwMCDnuF9udk8RL7pcv6HehjvmkuOr
+         eezw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fVQGipISqL+GidmgskuqE54mrZNWSegyyQUFD/qGixM=;
+        b=Ycepvw/fUcrOjdp22Fusz6DK0dV29t20QrCtom2anrFVK3jM9fnrJWdWeyXTVKUCCh
+         LnazCZye9Vxh5W/ZcK6t/JpS8ChG0t26+iLFwnc42XeeB+mJke61dVOFL+1DwCwWfULf
+         YCpy5xG2I7mkyP700hlU0RUR1GJpiXjECTByPE32IlX231FRgwvb30Nfhiqt0zgP10se
+         cyodVhltvHYdGwHcwbxCYskM6u+bvVAKUjvFuyA7fPNtrAc2xxsr7/mqpIpGbEsxk87F
+         7xX2EU1ZzxEML/NN7dzUGMMVVm1Mts9IwETd5IrN7AxLjcPpE3WIJJuGeWIIgg8uathb
+         AXsQ==
+X-Gm-Message-State: AOAM532bEX721nVKTUtArUPZ4g02kRvVdPczFotkcHQTshYmR6SD3pjF
+        ijEJGSSUW094pJXi1zdWkFow+AC185EP9qznRxBl5g==
+X-Google-Smtp-Source: ABdhPJxfbwAudp1weWzfAaiCkKvD4TAjwf6Rim6UybIVL3cqXpXKCe6HdRAIpeeYqM+DRPelpzMSFkQEYdi9Ys2JH6I=
+X-Received: by 2002:a05:6512:3238:: with SMTP id f24mr3247513lfe.29.1611351619532;
+ Fri, 22 Jan 2021 13:40:19 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210122133624.1751802-1-daniel.vetter@ffwll.ch>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="HaDnuMBCYLhsDliuMvZN6yNcVbtbbFnmX"
+References: <20210102231510.2068851-1-linus.walleij@linaro.org> <20210102231510.2068851-2-linus.walleij@linaro.org>
+In-Reply-To: <20210102231510.2068851-2-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 22 Jan 2021 22:40:08 +0100
+Message-ID: <CACRpkdbihCo+OYuu8ffokOO=eXeTDAYG1k91dFh+2HGh0jQCWQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2 v9] leds: rt8515: Add Richtek RT8515 LED driver
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>
+Cc:     Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>, newbytee@protonmail.com,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        phone-devel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---HaDnuMBCYLhsDliuMvZN6yNcVbtbbFnmX
-Content-Type: multipart/mixed; boundary="c8l1JC1rMcFzs0Nla4OljL8uVpN9IeK3I";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel.vetter@ffwll.ch>,
- DRI Development <dri-devel@lists.freedesktop.org>
-Cc: David Airlie <airlied@linux.ie>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- linaro-mm-sig@lists.linaro.org, Daniel Vetter <daniel.vetter@intel.com>,
- linux-media@vger.kernel.org
-Message-ID: <97c93ad7-9aa1-dcf7-42a9-4f8076eeb135@suse.de>
-Subject: Re: [PATCH] drm/todo: Add entry for moving to dma_resv_lock
-References: <20210122133624.1751802-1-daniel.vetter@ffwll.ch>
-In-Reply-To: <20210122133624.1751802-1-daniel.vetter@ffwll.ch>
+Hi LED folks,
 
---c8l1JC1rMcFzs0Nla4OljL8uVpN9IeK3I
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+I think this version has covered all review comments, at least it's been silent,
+can the driver be merged?
 
-Hi
-
-Am 22.01.21 um 14:36 schrieb Daniel Vetter:
-> Requested by Thomas. I think it justifies a new level, since I tried
-> to make some forward progress on this last summer, and gave up (for
-> now). This is very tricky.
-
-Adding it to the TODO list is a first step. :)
-
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-
->=20
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> ---
->   Documentation/gpu/todo.rst | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
->=20
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index dea9082c0e5f..f872d3d33218 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -23,6 +23,9 @@ Advanced: Tricky tasks that need fairly good understa=
-nding of the DRM subsystem
->   and graphics topics. Generally need the relevant hardware for develop=
-ment and
->   testing.
->  =20
-> +Expert: Only attempt these if you've successfully completed some trick=
-y
-> +refactorings already and are an expert in the specific area
-> +
->   Subsystem-wide refactorings
->   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->  =20
-> @@ -168,6 +171,22 @@ Contact: Daniel Vetter, respective driver maintain=
-ers
->  =20
->   Level: Advanced
->  =20
-> +Move Buffer Object Locking to dma_resv_lock()
-> +---------------------------------------------
-> +
-> +Many drivers have their own per-object locking scheme, usually using
-> +mutex_lock(). This causes all kinds of trouble for buffer sharing, sin=
-ce
-> +depending which driver is the exporter and importer, the locking hiera=
-rchy is
-> +reversed.
-> +
-> +To solve this we need one standard per-object locking mechanism, which=
- is
-> +dma_resv_lock(). This lock needs to be called as the outermost lock, w=
-ith all
-> +other driver specific per-object locks removed. The problem is tha rol=
-ling out
-> +the actual change to the locking contract is a flag day, due to struct=
- dma_buf
-> +buffer sharing.
-> +
-> +Level: Expert
-> +
->   Convert logging to drm_* functions with drm_device paramater
->   ------------------------------------------------------------
->  =20
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
-
-
---c8l1JC1rMcFzs0Nla4OljL8uVpN9IeK3I--
-
---HaDnuMBCYLhsDliuMvZN6yNcVbtbbFnmX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAK2/QFAwAAAAAACgkQlh/E3EQov+D8
-Fw/+MS3JyICgqsu8kPrj+GPX9X6pa7qf9iup7N4mOQhvxjsa2dRI1DBcxqNNs11ePCw21faWnEZU
-JT/FhKCYZaMdeMDYKLSby2D0wyrV4XhN5xW2NrOPSox9uF9Do2XzxStMl89IHai+qkOLX5/4RSXt
-L5KMtC6t/6DhV/xkLLx1ealvABlL7Z1CPrqL8acGqbXABcUixGTi4hVWSED43M2FrHsTpYvtDvqX
-n79juLQpwdtnr7qAwoTMo/Fj6mrU29p0apd0Nb2LR1qfYMyE0idZPQbIcQJNyXMzL4D0YE0P/1dY
-YL/KKk+7SsWRY+ewrHOOt2tE8ZI3x7dYuU8h204RB17WUQIMghu5dwsPIjhyoysDTINHgKTrZfHr
-l/ruWNfxgoBpxb4XdPVrOSbB4b3BelFVGaJ5Q3nzN7Jzdfn6oyZAsTAlfK0L4wThk/heDkVAiVqk
-1IoTLQl2ihjj1tB3AsTCjZRfcSWH81Ksz5uCgQwzV1CcfgPYzGiCkg1U7EXcuNidkn9oDu4VgJhv
-Nq1y+Awe/vi9ilsMRraX5O6oHPuIExwD+Amus0E6klaLEltOI9Yn38VMkwXUw8AwwVDnBK16s+Ki
-u871/Dr7GLELcTeACuRP9r7McW4ba00Sw1tCswJPXHaqFkVqdj3AkAJODLLO52ePhhenxvyxhs2U
-Upc=
-=R+9w
------END PGP SIGNATURE-----
-
---HaDnuMBCYLhsDliuMvZN6yNcVbtbbFnmX--
+Yours,
+Linus Walleij
