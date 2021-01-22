@@ -2,74 +2,158 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA5EC43331
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF60AC433E6
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:44:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F18AF2376F
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:25:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8742F222B6
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jan 2021 10:44:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbhAVKOn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jan 2021 05:14:43 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:43272 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727820AbhAVKIO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jan 2021 05:08:14 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2tLF-008iTZ-F4; Fri, 22 Jan 2021 10:06:57 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l2tOj-0001uV-Hh; Fri, 22 Jan 2021 10:10:33 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL v2 for 5.12] More V4L2 patches (#71031)
-Date:   Fri, 22 Jan 2021 10:10:33 +0000
-Message-Id: <20210122101033.7302-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210122094248.GL3@valkosipuli.retiisi.org.uk>
-References: 
+        id S1727140AbhAVKfw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jan 2021 05:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727918AbhAVKcv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 22 Jan 2021 05:32:51 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D81EC061786
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 02:32:10 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c128so3877917wme.2
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 02:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zqPi5MJbj1ms2b0Q8q7oOCrglElwMPk+QoWvn6qZ8Lg=;
+        b=H6BDzO8wt0zPd6IO4WofunMxSNshx5vl4o49LxSFogf+BCn/vCC98TIqePtTm+5h1x
+         yDVKOa6am8btjgY6xmYocEO3sKTXo/j5sGlKyPVb01mODw69yYenSPEmmJqreultpMc+
+         pPoqPqSNIGNzoVdenVvvuZ2hF9qZQLTgm5B9ViaW6zn75oXHq5/w0AF8gehobqmXsQD9
+         d/r5mCeBkE1m63az/u6sD2pg7hYzXSmMERBgwYc1aIKdD8UDD+NS9zjberNwTsJ5m3ba
+         idj1NpnscvnWVUtl9Fn6mpJi5BMN+96RRV0QvmGGIo1iUMwCjFb7RRJ3fgJKdgPwTUz0
+         h6VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zqPi5MJbj1ms2b0Q8q7oOCrglElwMPk+QoWvn6qZ8Lg=;
+        b=eL8hDrfAfZu35od/hZc4X4BwRWs7OP48kPAnhcZNo9WX9zZoTRq3oVCn89H5ME8w0E
+         F9FmPO5FjwEDMN0UBkLnjsa6jJhA0JGaV368Nxd8QIPj9XdsEc/535zWX9+s6X9vQW3g
+         RvLCm9eALEhYcV15o7TtZ8TZaIQw3yir3GZ1sbiwwXQAiG6MWu3XHjt6vaj/Ugg12A5z
+         ZuSO9EvyGlVW4UT6QonpdAJbrgRhcX2tKSk/RxVvDSodyzgonU/7mI54RhEdkHCwIkUm
+         rZtiHYBu7A0vPvQpWaUzITIm6vlZbsAWpG2kTDUzh5yPYxcvR85kC2mqWFKcmtydVwE5
+         b1bQ==
+X-Gm-Message-State: AOAM533QE7o+gK5hwGfw1B4KeMus/Tknye+9s606IH/aRWgMQxZGJMR0
+        ZrYZxEeKC9cW8CejQxjnDctx9riPWnRkw/rPgp1fJw==
+X-Google-Smtp-Source: ABdhPJz76UhEva/JXNulXxfAlQoMv3hOfREdUPUZ/oJbYQoDfEa5wiLS2sBJAZNWLdnfrtRz6I0qapY32xXzEYiN/Xo=
+X-Received: by 2002:a1c:f201:: with SMTP id s1mr3237293wmc.158.1611311528710;
+ Fri, 22 Jan 2021 02:32:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210111142309.193441-1-maxime@cerno.tech> <20210111142309.193441-6-maxime@cerno.tech>
+In-Reply-To: <20210111142309.193441-6-maxime@cerno.tech>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 22 Jan 2021 10:31:53 +0000
+Message-ID: <CAPY8ntD=52HEwc6-3XggH4_CErjc2q9aBUc_c29L13UGuJcvqQ@mail.gmail.com>
+Subject: Re: [PATCH v2 05/15] drm/vc4: hdmi: Restore cec physical address on reconnect
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Eric Anholt <eric@anholt.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Dom Cobley <popcornmix@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Maxime
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210122094248.GL3@valkosipuli.retiisi.org.uk/
-Build log: https://builder.linuxtv.org/job/patchwork/86881/
-Build time: 00:09:29
-Link: https://lore.kernel.org/linux-media/20210122094248.GL3@valkosipuli.retiisi.org.uk
+Sorry for the slow reply on these patches.
 
-gpg: Signature made Fri 22 Jan 2021 09:35:55 AM UTC
-gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Can't check signature: No public key
+On Mon, 11 Jan 2021 at 14:23, Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> From: Dom Cobley <popcornmix@gmail.com>
+>
+> Currently we call cec_phys_addr_invalidate on a hotplug deassert.
+> That may be due to a TV power cycling, or an AVR being switched
+> on (and switching edid).
+>
+> This makes CEC unusable since our controller wouldn't have a physical
+> address anymore.
+>
+> Set it back up again on the hotplug assert.
+>
+> Fixes: 15b4511a4af6 ("drm/vc4: add HDMI CEC support")
+> Signed-off-by: Dom Cobley <popcornmix@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Summary: got 2/6 patches with issues, being 0 at build time, plus one error when buinding PDF document
+I follow the logic, and trust Dom that it works, but I don't know if
+that is the correct thing within CEC.
+Ideally Hans will comment as the original author of the CEC code - I
+believe he's testing the series anyway.
 
-Error/warnings:
+Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-patches/0002-media-v4l2-async-Add-waiting-subdevices-debugfs.patch:
-
-   checkpatch.pl:
-	$ cat patches/0002-media-v4l2-async-Add-waiting-subdevices-debugfs.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:20: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-patches/0004-media-i2c-Kconfig-Select-FWNODE-for-OV772x-sensor.patch:
-
-   checkpatch.pl:
-	$ cat patches/0004-media-i2c-Kconfig-Select-FWNODE-for-OV772x-sensor.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-
-Error #512 when building PDF docs
-
+> ---
+>  drivers/gpu/drm/vc4/vc4_hdmi.c | 24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index 7945dbcee78c..c3a301396aad 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -136,20 +136,32 @@ static enum drm_connector_status
+>  vc4_hdmi_connector_detect(struct drm_connector *connector, bool force)
+>  {
+>         struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+> +       bool connected = false;
+>
+>         if (vc4_hdmi->hpd_gpio) {
+>                 if (gpio_get_value_cansleep(vc4_hdmi->hpd_gpio) ^
+>                     vc4_hdmi->hpd_active_low)
+> -                       return connector_status_connected;
+> -               cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
+> -               return connector_status_disconnected;
+> +                       connected = true;
+> +       } else if (drm_probe_ddc(vc4_hdmi->ddc)) {
+> +               connected = true;
+> +       } else if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED) {
+> +               connected = true;
+>         }
+>
+> -       if (drm_probe_ddc(vc4_hdmi->ddc))
+> -               return connector_status_connected;
+> +       if (connected) {
+> +               if (connector->status != connector_status_connected) {
+> +                       struct edid *edid = drm_get_edid(connector, vc4_hdmi->ddc);
+> +
+> +                       if (edid) {
+> +                               cec_s_phys_addr_from_edid(vc4_hdmi->cec_adap, edid);
+> +                               vc4_hdmi->encoder.hdmi_monitor = drm_detect_hdmi_monitor(edid);
+> +                               kfree(edid);
+> +                       }
+> +               }
+>
+> -       if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED)
+>                 return connector_status_connected;
+> +       }
+> +
+>         cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
+>         return connector_status_disconnected;
+>  }
+> --
+> 2.29.2
+>
