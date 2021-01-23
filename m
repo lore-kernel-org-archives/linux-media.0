@@ -2,118 +2,210 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3838C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 23 Jan 2021 03:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E5D9C433DB
+	for <linux-media@archiver.kernel.org>; Sat, 23 Jan 2021 03:48:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D05C23B02
-	for <linux-media@archiver.kernel.org>; Sat, 23 Jan 2021 03:48:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D5F723B2A
+	for <linux-media@archiver.kernel.org>; Sat, 23 Jan 2021 03:48:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbhAWDrt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jan 2021 22:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S1727050AbhAWDsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jan 2021 22:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726590AbhAWDpy (ORCPT
+        with ESMTP id S1727024AbhAWDrn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jan 2021 22:45:54 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21074C0617A7
-        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 19:44:34 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d4so4393481plh.5
-        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 19:44:34 -0800 (PST)
+        Fri, 22 Jan 2021 22:47:43 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09438C06178B
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 19:47:03 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id u11so4360584plg.13
+        for <linux-media@vger.kernel.org>; Fri, 22 Jan 2021 19:47:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dJGIvDbFer174uYIU3S/UHlxuD0C4SN9Ba2a5uW/TjI=;
-        b=OifXzFWywulgTYIb9jiyHpcD9JRWqdvQpqyIxxU2D6tsvuICK7UAWAuNdhwL9zUrAR
-         K+Nk1PB3vJuukAby67BHb75dLenU9dJldjAEfwR/2+8xvD7W58qyqrNjKfvj0OLfm/Vm
-         zbEeseMkg52zIyx68ryB6lk3sZbv2Q8yvg+zE=
+        bh=NeU+sbXmljaYFeP3l6UlIJg8urIJG4eKqAQWq4YMm7Q=;
+        b=WnxuHG+58B7ObL97OX1lcKW9Hk6NeIHCjNLj+Ln4wJsoDeIQbBP+2ByXlvfZxdp6xM
+         ZHm3dS++P7X/juDRpoRnVOs0+6P0DE/MLFMnFT+oG23Y2K+iDsKR1IqSXz50WqwNLXrW
+         kc8oy2ktygL6toj6sEVnLbt/YzPbduFQAvMvfJWGL9Y19Os79LYUZkD+vum4PHTIZ9f9
+         LawLrkgE7NuSJ9/Pmb2fkpeWzn3k2SIDnK1MsF3/sHRAvqXGygs4L1hd7DocUguZpid5
+         cnYdR20sbtKRuHIyD3eTOjXgWNMHabLZkKYmh20fZBkdsFl6m0tC8YWSw9nyfLchkhQu
+         S8yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dJGIvDbFer174uYIU3S/UHlxuD0C4SN9Ba2a5uW/TjI=;
-        b=CQvpb7jju3G6eMCYVd5YtyK3NQA5GtBC0hGIbYPIaP9SOFJQBMwSR/1XrVfdUh977k
-         eacd3L0onjpAG25tWXyMWRaOTVfrXJ9Lrx9qwpHuHl3lwu6QAbvVuJZyA77q+uv27+gU
-         rx4l122vjRIsfrZyue+leOcNV0/Oc8CUmIbCsn1cvUsZswCBfrRNbqCmEiAHiZ/OJr6B
-         IywA1fLyXh0sCzNYV2OI8VVl4DlQUQeIQRLM9l82xEsQRo4ThpAdhctk+AkUMW6qjprw
-         jds3ZR167VIkIy3qNdJRVhlc8AYXHt+B4fdazzD/W6BBudXuB0x6bjsaddwsKOwrB1+o
-         5NmA==
-X-Gm-Message-State: AOAM532iqt4dhOZ/Xv3pRjCqqvgwka6wDRrPzXTL+OJOb2zsFgcYJ6r2
-        FMLnSQfqhwHc2he7Chu4ZaBLBQ==
-X-Google-Smtp-Source: ABdhPJwOaNd8kn+wXdYuJVArrzuHdGMUINcUY27IXOlFKIQTp/Yvg53oR2Q8FrPD6gGeNitPo2TNQw==
-X-Received: by 2002:a17:90b:3792:: with SMTP id mz18mr8968978pjb.23.1611373473763;
-        Fri, 22 Jan 2021 19:44:33 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:201:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id gf23sm10480343pjb.42.2021.01.22.19.44.32
+        bh=NeU+sbXmljaYFeP3l6UlIJg8urIJG4eKqAQWq4YMm7Q=;
+        b=CKVfQkQ6VH7KXcINsIFSRcb4j0AYXjjzommf4+GwC5kmiDuywnlHB1U7490ypBnfVZ
+         R2PL5p1vx4kzAjtWKoI0+5D971iP7PaUywPr7oQniU19sD1BFoCia12NPpO84qv+XJwT
+         1DCr2ppGFGlT1++kqTDh+//FhRBRmtkfl+ltG/7sJDg79FJy39BdbPRUCN2f90G6x6aS
+         92I7UmedcQr2jgUT0drq3kZGwTKzI6vwxas6+kC8P7j77GYMHclBN18tyMHVY+A58LwF
+         xWKkvE+4KwYKFjrPxJZY0UbXFu88QNufNyvcowrAIv4OHLayRVygFHhNMxtkzc79VE60
+         DMiw==
+X-Gm-Message-State: AOAM531f+W7NedMCC2Vq5z99WkiDUmE7eARUM+SzaXCDK9N3mulw3cN8
+        NYuF9JJ3huXdWDWw65w8+cD8dA==
+X-Google-Smtp-Source: ABdhPJxIYWGLWs4iE8DbmMqeyBbwTuBXL43v1z7ZqgX+FHaaaJjZZAx1y0u7UHKgbJEkz+l0gMljOA==
+X-Received: by 2002:a17:90b:4c0b:: with SMTP id na11mr2604106pjb.45.1611373622594;
+        Fri, 22 Jan 2021 19:47:02 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id q24sm10316702pfs.72.2021.01.22.19.47.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 19:44:33 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 1/6] media: renesas-ceu: Use of_device_get_match_data()
-Date:   Fri, 22 Jan 2021 19:44:23 -0800
-Message-Id: <20210123034428.2841052-2-swboyd@chromium.org>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-In-Reply-To: <20210123034428.2841052-1-swboyd@chromium.org>
-References: <20210123034428.2841052-1-swboyd@chromium.org>
+        Fri, 22 Jan 2021 19:47:01 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 3/3] dma-buf: system_heap: Add deferred freeing to the system heap
+Date:   Sat, 23 Jan 2021 03:46:55 +0000
+Message-Id: <20210123034655.102813-3-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210123034655.102813-1-john.stultz@linaro.org>
+References: <20210123034655.102813-1-john.stultz@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This driver can use the replacement API instead of calling
-of_match_device() and then dereferencing the pointer that is returned.
-This nicely avoids referencing the match table when it is undefined with
-configurations where CONFIG_OF=n.
+Utilize the deferred free helper library in the system heap.
 
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Acked-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Jacopo Mondi <jacopo@jmondi.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: <linux-media@vger.kernel.org>
-Cc: <linux-renesas-soc@vger.kernel.org>
+This provides a nice performance bump and puts the
+system heap performance on par with ION.
+
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Daniel Mentz <danielmentz@google.com>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
+v2:
+* Rework deferred-free api to use reason enum as suggested by
+  Suren Baghdasaryan
+---
+ drivers/dma-buf/heaps/Kconfig       |  1 +
+ drivers/dma-buf/heaps/system_heap.c | 32 ++++++++++++++++++++++-------
+ 2 files changed, 26 insertions(+), 7 deletions(-)
 
-Please ack so Rob can apply.
-
- drivers/media/platform/renesas-ceu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-index 4a633ad0e8fa..352e7c84d5ba 100644
---- a/drivers/media/platform/renesas-ceu.c
-+++ b/drivers/media/platform/renesas-ceu.c
-@@ -1679,7 +1679,7 @@ static int ceu_probe(struct platform_device *pdev)
- 	v4l2_async_notifier_init(&ceudev->notifier);
+diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
+index 748e840e6edd..3f4d7b949301 100644
+--- a/drivers/dma-buf/heaps/Kconfig
++++ b/drivers/dma-buf/heaps/Kconfig
+@@ -6,6 +6,7 @@ config DMABUF_HEAPS_SYSTEM
+ 	depends on DMABUF_HEAPS
+ 	select NET
+ 	select PAGE_POOL
++	select DMABUF_HEAPS_DEFERRED_FREE
+ 	help
+ 	  Choose this option to enable the system dmabuf heap. The system heap
+ 	  is backed by pages from the buddy allocator. If in doubt, say Y.
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 885e30894b77..747fa2250e84 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -22,6 +22,8 @@
+ #include <linux/vmalloc.h>
+ #include <net/page_pool.h>
  
- 	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
--		ceu_data = of_match_device(ceu_of_match, dev)->data;
-+		ceu_data = of_device_get_match_data(dev);
- 		num_subdevs = ceu_parse_dt(ceudev);
- 	} else if (dev->platform_data) {
- 		/* Assume SH4 if booting with platform data. */
++#include "deferred-free-helper.h"
++
+ static struct dma_heap *sys_heap;
+ 
+ struct system_heap_buffer {
+@@ -32,6 +34,7 @@ struct system_heap_buffer {
+ 	struct sg_table sg_table;
+ 	int vmap_cnt;
+ 	void *vaddr;
++	struct deferred_freelist_item deferred_free;
+ };
+ 
+ struct dma_heap_attachment {
+@@ -317,30 +320,45 @@ static int system_heap_zero_buffer(struct system_heap_buffer *buffer)
+ 	return ret;
+ }
+ 
+-static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
++static void system_heap_buf_free(struct deferred_freelist_item *item,
++				 enum df_reason reason)
+ {
+-	struct system_heap_buffer *buffer = dmabuf->priv;
++	struct system_heap_buffer *buffer;
+ 	struct sg_table *table;
+ 	struct scatterlist *sg;
+ 	int i, j;
+ 
++	buffer = container_of(item, struct system_heap_buffer, deferred_free);
+ 	/* Zero the buffer pages before adding back to the pool */
+-	system_heap_zero_buffer(buffer);
++	if (reason == DF_NORMAL)
++		if (system_heap_zero_buffer(buffer))
++			reason = DF_UNDER_PRESSURE; // On failure, just free
+ 
+ 	table = &buffer->sg_table;
+ 	for_each_sg(table->sgl, sg, table->nents, i) {
+ 		struct page *page = sg_page(sg);
+ 
+-		for (j = 0; j < NUM_ORDERS; j++) {
+-			if (compound_order(page) == orders[j])
+-				break;
++		if (reason == DF_UNDER_PRESSURE) {
++			__free_pages(page, compound_order(page));
++		} else {
++			for (j = 0; j < NUM_ORDERS; j++) {
++				if (compound_order(page) == orders[j])
++					break;
++			}
++			page_pool_put_full_page(pools[j], page, false);
+ 		}
+-		page_pool_put_full_page(pools[j], page, false);
+ 	}
+ 	sg_free_table(table);
+ 	kfree(buffer);
+ }
+ 
++static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
++{
++	struct system_heap_buffer *buffer = dmabuf->priv;
++
++	deferred_free(&buffer->deferred_free, system_heap_buf_free, buffer->len);
++}
++
+ static const struct dma_buf_ops system_heap_buf_ops = {
+ 	.attach = system_heap_attach,
+ 	.detach = system_heap_detach,
 -- 
-https://chromeos.dev
+2.17.1
 
