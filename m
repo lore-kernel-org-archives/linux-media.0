@@ -7,20 +7,24 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D543C43603
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8010DC4321A
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44D0E22228
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5187F22B2C
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388561AbhAZFpG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:45:06 -0500
-Received: from retiisi.eu ([95.216.213.190]:37386 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728866AbhAYN3r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:29:47 -0500
+        id S2388544AbhAZFpB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728863AbhAYN3q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:29:46 -0500
+Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54BCC06174A
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 05:27:40 -0800 (PST)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D9FA5634C95;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 510D6634C8F;
         Mon, 25 Jan 2021 15:25:57 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -39,9 +43,9 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Robert Foss <robert.foss@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 11/14] media: v4l2-async: Fix incorrect comment
-Date:   Mon, 25 Jan 2021 15:22:12 +0200
-Message-Id: <20210125132230.6600-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH 06/14] media: cadence: Use v4l2_async_notifier_add_fwnode_remote_subdev
+Date:   Mon, 25 Jan 2021 15:22:07 +0200
+Message-Id: <20210125132230.6600-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
 References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
@@ -53,66 +57,68 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Ezequiel Garcia <ezequiel@collabora.com>
 
-The v4l2_async_notifier_cleanup() documentation mentions
-v4l2_fwnode_reference_parse_sensor_common, which was actually
-introduced as v4l2_async_notifier_parse_fwnode_sensor_common(),
-in commit 7a9ec808ad46 ("media: v4l: fwnode: Add convenience function for
-parsing common external refs").
+The use of v4l2_async_notifier_add_subdev will be discouraged.
+Drivers are instead encouraged to use a helper such as
+v4l2_async_notifier_add_fwnode_remote_subdev.
 
-The function drivers do use is
-v4l2_async_register_subdev_sensor_common().
+This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+should get a kmalloc'ed struct v4l2_async_subdev,
+removing some boilerplate code while at it.
+
+Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+which handles the needed setup, instead of open-coding it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Helen Koike <helen.koike@collabora.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/media/v4l2-async.h | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-index 0ddc06e36c08..f2cac0931372 100644
---- a/include/media/v4l2-async.h
-+++ b/include/media/v4l2-async.h
-@@ -174,9 +174,11 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
-  *
-  * @notif: pointer to &struct v4l2_async_notifier
-  * @endpoint: local endpoint pointing to the remote sub-device to be matched
-- * @asd: Async sub-device struct allocated by the caller. The &struct
-- *	 v4l2_async_subdev shall be the first member of the driver's async
-- *	 sub-device struct, i.e. both begin at the same memory address.
-+ * @asd_struct_size: size of the driver's async sub-device struct, including
-+ *		     sizeof(struct v4l2_async_subdev). The &struct
-+ *		     v4l2_async_subdev shall be the first member of
-+ *		     the driver's async sub-device struct, i.e. both
-+ *		     begin at the same memory address.
-  *
-  * Gets the remote endpoint of a given local endpoint, set it up for fwnode
-  * matching and adds the async sub-device to the notifier's @asd_list. The
-@@ -184,13 +186,12 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
-  * notifier cleanup time.
-  *
-  * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
-- * exception that the fwnode refers to a local endpoint, not the remote one, and
-- * the function relies on the caller to allocate the async sub-device struct.
-+ * exception that the fwnode refers to a local endpoint, not the remote one.
-  */
--int
-+struct v4l2_async_subdev *
- v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif,
- 					     struct fwnode_handle *endpoint,
--					     struct v4l2_async_subdev *asd);
-+					     unsigned int asd_struct_size);
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index be9ec59774d6..7d299cacef8c 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -81,7 +81,6 @@ struct csi2rx_priv {
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
  
- /**
-  * v4l2_async_notifier_add_i2c_subdev - Allocate and add an i2c async
-@@ -249,7 +250,7 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
-  * notifier after calling
-  * @v4l2_async_notifier_add_subdev,
-  * @v4l2_async_notifier_parse_fwnode_endpoints or
-- * @v4l2_fwnode_reference_parse_sensor_common.
-+ * @v4l2_async_register_subdev_sensor_common.
-  *
-  * There is no harm from calling v4l2_async_notifier_cleanup in other
-  * cases as long as its memory has been zeroed after it has been
+ 	/* Remote source */
+-	struct v4l2_async_subdev	asd;
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
+@@ -362,6 +361,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ {
+ 	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
++	struct v4l2_async_subdev *asd;
+ 	struct fwnode_handle *fwh;
+ 	struct device_node *ep;
+ 	int ret;
+@@ -395,17 +395,13 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 		return -EINVAL;
+ 	}
+ 
+-	csi2rx->asd.match.fwnode = fwnode_graph_get_remote_port_parent(fwh);
+-	csi2rx->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	of_node_put(ep);
+-
+ 	v4l2_async_notifier_init(&csi2rx->notifier);
+ 
+-	ret = v4l2_async_notifier_add_subdev(&csi2rx->notifier, &csi2rx->asd);
+-	if (ret) {
+-		fwnode_handle_put(csi2rx->asd.match.fwnode);
+-		return ret;
+-	}
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&csi2rx->notifier,
++							   fwh, sizeof(*asd));
++	of_node_put(ep);
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
+ 
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
+ 
 -- 
 2.29.2
 
