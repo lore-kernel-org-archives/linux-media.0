@@ -2,84 +2,187 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6CC5C4332E
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32154C43331
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC4612223D
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09AD8229C4
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388476AbhAZFok (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:44:40 -0500
-Received: from mga11.intel.com ([192.55.52.93]:9402 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728634AbhAYNLB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:11:01 -0500
-IronPort-SDR: HR/uvIcumXgD6ElE7isb23RWQ3cwx39xYZ6sZzMM2/OEOy8lsZlNi2/TS1wk7B+wi9k/uwn6y4
- ZjFjgDiSsyWw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="176209834"
-X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="176209834"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 05:09:14 -0800
-IronPort-SDR: 7GzcIalg2+AR/07ad4cZ0eUUB6MJcxBi1zEKDOCMHCQsnVWdpoOUWKGFHcbGYyvX2dfvsxegYY
- ijVHhYL4BH7A==
-X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="361488912"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 05:09:12 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id E06F42080B; Mon, 25 Jan 2021 15:08:40 +0200 (EET)
-Date:   Mon, 25 Jan 2021 15:08:40 +0200
+        id S2388596AbhAZFpJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728909AbhAYNbp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:31:45 -0500
+Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9992EC0617AA
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 05:27:57 -0800 (PST)
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1E7D6634CC0;
+        Mon, 25 Jan 2021 15:25:59 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Martina Krasteva <martinax.krasteva@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        daniele.alessandrelli@linux.intel.com,
-        paul.j.murphy@linux.intel.com, gjorgjix.rosikopulos@linux.intel.com
-Subject: Re: [PATCH v4 2/2] media: i2c: Add imx334 camera sensor driver
-Message-ID: <20210125130840.GK27155@paasikivi.fi.intel.com>
-References: <20201211105633.708-1-martinax.krasteva@linux.intel.com>
- <20201211105633.708-3-martinax.krasteva@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 07/14] media: marvell-ccic: Use v4l2_async_notifier_add_*_subdev
+Date:   Mon, 25 Jan 2021 15:22:23 +0200
+Message-Id: <20210125132230.6600-22-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
+References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201211105633.708-3-martinax.krasteva@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martina,
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-A few more comments.
+The use of v4l2_async_notifier_add_subdev will be discouraged.
+Drivers are instead encouraged to use a helper such as
+v4l2_async_notifier_add_fwnode_remote_subdev.
 
-On Fri, Dec 11, 2020 at 10:56:33AM +0000, Martina Krasteva wrote:
-> From: Martina Krasteva <martinax.krasteva@intel.com>
-> 
-> Add a v4l2 sub-device driver for the Sony imx334 image sensor.
-> This is a camera sensor using the i2c bus for control and the
-> csi-2 bus for data.
-> 
-> The following features are supported:
-> - manual exposure and analog gain control support
-> - vblank/hblank/pixel rate control support
-> - supported resolution:
->     - 3840x2160 @ 60fps
-> - supported bayer order output:
->     - SRGGB12
+This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+should get a kmalloc'ed struct v4l2_async_subdev,
+removing some boilerplate code while at it.
 
-Could you add the external clock and link frequencies related properties to
-the bindings and use them in the driver?
+Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
+or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
+the needed setup, instead of open-coding it.
 
-<URL:https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Helen Koike <helen.koike@collabora.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/platform/marvell-ccic/cafe-driver.c | 14 +++++++++++---
+ drivers/media/platform/marvell-ccic/mcam-core.c   | 10 ----------
+ drivers/media/platform/marvell-ccic/mcam-core.h   |  1 -
+ drivers/media/platform/marvell-ccic/mmp-driver.c  | 11 ++++++++---
+ 4 files changed, 19 insertions(+), 17 deletions(-)
 
-Apart from these it looks good to me.
-
+diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell-ccic/cafe-driver.c
+index 00f623d62c96..91d65f71be96 100644
+--- a/drivers/media/platform/marvell-ccic/cafe-driver.c
++++ b/drivers/media/platform/marvell-ccic/cafe-driver.c
+@@ -489,6 +489,7 @@ static int cafe_pci_probe(struct pci_dev *pdev,
+ 	int ret;
+ 	struct cafe_camera *cam;
+ 	struct mcam_camera *mcam;
++	struct v4l2_async_subdev *asd;
+ 
+ 	/*
+ 	 * Start putting together one of our big camera structures.
+@@ -546,9 +547,16 @@ static int cafe_pci_probe(struct pci_dev *pdev,
+ 	if (ret)
+ 		goto out_pdown;
+ 
+-	mcam->asd.match_type = V4L2_ASYNC_MATCH_I2C;
+-	mcam->asd.match.i2c.adapter_id = i2c_adapter_id(cam->i2c_adapter);
+-	mcam->asd.match.i2c.address = ov7670_info.addr;
++	v4l2_async_notifier_init(&mcam->notifier);
++
++	asd = v4l2_async_notifier_add_i2c_subdev(&mcam->notifier,
++					i2c_adapter_id(cam->i2c_adapter),
++					ov7670_info.addr,
++					sizeof(*asd));
++	if (IS_ERR(asd)) {
++		ret = PTR_ERR(asd);
++		goto out_smbus_shutdown;
++	}
+ 
+ 	ret = mccic_register(mcam);
+ 	if (ret)
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index c012fd2e1d29..153277e4fe80 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -1866,16 +1866,6 @@ int mccic_register(struct mcam_camera *cam)
+ 	cam->pix_format = mcam_def_pix_format;
+ 	cam->mbus_code = mcam_def_mbus_code;
+ 
+-	/*
+-	 * Register sensor notifier.
+-	 */
+-	v4l2_async_notifier_init(&cam->notifier);
+-	ret = v4l2_async_notifier_add_subdev(&cam->notifier, &cam->asd);
+-	if (ret) {
+-		cam_warn(cam, "failed to add subdev to a notifier");
+-		goto out;
+-	}
+-
+ 	cam->notifier.ops = &mccic_notify_ops;
+ 	ret = v4l2_async_notifier_register(&cam->v4l2_dev, &cam->notifier);
+ 	if (ret < 0) {
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell-ccic/mcam-core.h
+index b55545822fd2..f324d808d737 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.h
++++ b/drivers/media/platform/marvell-ccic/mcam-core.h
+@@ -151,7 +151,6 @@ struct mcam_camera {
+ 	 */
+ 	struct video_device vdev;
+ 	struct v4l2_async_notifier notifier;
+-	struct v4l2_async_subdev asd;
+ 	struct v4l2_subdev *sensor;
+ 
+ 	/* Videobuf2 stuff */
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell-ccic/mmp-driver.c
+index 032fdddbbecc..40d9fc4a731a 100644
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@ -180,6 +180,7 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct fwnode_handle *ep;
+ 	struct mmp_camera_platform_data *pdata;
++	struct v4l2_async_subdev *asd;
+ 	int ret;
+ 
+ 	cam = devm_kzalloc(&pdev->dev, sizeof(*cam), GFP_KERNEL);
+@@ -238,10 +239,15 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	if (!ep)
+ 		return -ENODEV;
+ 
+-	mcam->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	mcam->asd.match.fwnode = fwnode_graph_get_remote_port_parent(ep);
++	v4l2_async_notifier_init(&mcam->notifier);
+ 
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&mcam->notifier,
++							   ep, sizeof(*asd));
+ 	fwnode_handle_put(ep);
++	if (IS_ERR(asd)) {
++		ret = PTR_ERR(asd);
++		goto out;
++	}
+ 
+ 	/*
+ 	 * Register the device with the core.
+@@ -278,7 +284,6 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 	return 0;
+ out:
+-	fwnode_handle_put(mcam->asd.match.fwnode);
+ 	mccic_shutdown(mcam);
+ 
+ 	return ret;
 -- 
-Kind regards,
+2.29.2
 
-Sakari Ailus
