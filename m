@@ -7,30 +7,27 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D4CCC433DB
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 16:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C5B8C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:24:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDE7B22795
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 16:52:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D72AE21707
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:24:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbhAYQww (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 11:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727834AbhAYQvo (ORCPT
+        id S1728304AbhAYRXo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 12:23:44 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:32842 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731012AbhAYRX1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 11:51:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A99BC06178A
-        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 08:50:37 -0800 (PST)
+        Mon, 25 Jan 2021 12:23:27 -0500
 Received: from [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d] (unknown [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B61251F45362;
-        Mon, 25 Jan 2021 16:50:30 +0000 (GMT)
-Subject: Re: [PATCH v3 08/14] media: renesas-ceu: Use
- v4l2_async_notifier_add_*_subdev
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 139701F45377;
+        Mon, 25 Jan 2021 17:22:32 +0000 (GMT)
+Subject: Re: [PATCH v3 05/14] media: st-mipid02: Use
+ v4l2_async_notifier_add_fwnode_remote_subdev
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
@@ -48,14 +45,14 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
 References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
- <20210125132230.6600-23-sakari.ailus@linux.intel.com>
+ <20210125132230.6600-20-sakari.ailus@linux.intel.com>
 From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <e58b42da-cb08-28c7-ec0a-fd3a07f76228@collabora.com>
-Date:   Mon, 25 Jan 2021 13:50:25 -0300
+Message-ID: <2e9d2224-fd75-aa20-ff3f-fa1e06a75231@collabora.com>
+Date:   Mon, 25 Jan 2021 14:22:29 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210125132230.6600-23-sakari.ailus@linux.intel.com>
+In-Reply-To: <20210125132230.6600-20-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -70,174 +67,70 @@ On 1/25/21 10:22 AM, Sakari Ailus wrote:
 > 
 > The use of v4l2_async_notifier_add_subdev will be discouraged.
 > Drivers are instead encouraged to use a helper such as
-> v4l2_async_notifier_add_i2c_subdev.
+> v4l2_async_notifier_add_fwnode_remote_subdev.
 > 
 > This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
 > should get a kmalloc'ed struct v4l2_async_subdev,
 > removing some boilerplate code while at it.
 > 
-> Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
-> or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
-> the needed setup, instead of open-coding it.
-> 
-> Using v4l2-async to allocate the driver-specific structs,
-> requires to change struct ceu_subdev so the embedded
-> struct v4l2_async_subdev is now the first element.
+> Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+> which handles the needed setup, instead of open-coding it.
 > 
 > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/platform/renesas-ceu.c | 60 +++++++++++++---------------
->  1 file changed, 27 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-> index 4a633ad0e8fa..0298d08b39e4 100644
-> --- a/drivers/media/platform/renesas-ceu.c
-> +++ b/drivers/media/platform/renesas-ceu.c
-> @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
->   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
->   */
->  struct ceu_subdev {
-> -	struct v4l2_subdev *v4l2_sd;
->  	struct v4l2_async_subdev asd;
-> +	struct v4l2_subdev *v4l2_sd;
->  
->  	/* per-subdevice mbus configuration options */
->  	unsigned int mbus_flags;
-> @@ -174,7 +174,7 @@ struct ceu_device {
->  	struct v4l2_device	v4l2_dev;
->  
->  	/* subdevices descriptors */
-> -	struct ceu_subdev	*subdevs;
-> +	struct ceu_subdev	**subdevs;
->  	/* the subdevice currently in use */
->  	struct ceu_subdev	*sd;
->  	unsigned int		sd_index;
-> @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
->  	if (inp->index >= ceudev->num_sd)
->  		return -EINVAL;
->  
-> -	ceusd = &ceudev->subdevs[inp->index];
-> +	ceusd = ceudev->subdevs[inp->index];
->  
->  	inp->type = V4L2_INPUT_TYPE_CAMERA;
->  	inp->std = 0;
-> @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
->  		return 0;
->  
->  	ceu_sd_old = ceudev->sd;
-> -	ceudev->sd = &ceudev->subdevs[i];
-> +	ceudev->sd = ceudev->subdevs[i];
->  
->  	/*
->  	 * Make sure we can generate output image formats and apply
-> @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
->  	 * ceu formats.
->  	 */
->  	if (!ceudev->sd) {
-> -		ceudev->sd = &ceudev->subdevs[0];
-> +		ceudev->sd = ceudev->subdevs[0];
->  		ceudev->sd_index = 0;
->  	}
->  
-> @@ -1467,8 +1467,8 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
->  
->  /*
->   * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
-> - *			      ceu device. Both DT and platform data parsing use
-> - *			      this routine.
-> + *                           ceu device. Both DT and platform data parsing use
-> + *                           this routine.
-
-Maybe doc alignment fix should be sent in another patch.
-
-With or without this:
 
 Reviewed-by: Helen Koike <helen.koike@collabora.com>
 
-Regards,
-Helen
-
->   *
->   * Returns 0 for success, -ENOMEM for failure.
->   */
-> @@ -1495,6 +1495,7 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
->  				   const struct ceu_platform_data *pdata)
+> ---
+>  drivers/media/i2c/st-mipid02.c | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
+> index 003ba22334cd..42549b3a62a0 100644
+> --- a/drivers/media/i2c/st-mipid02.c
+> +++ b/drivers/media/i2c/st-mipid02.c
+> @@ -92,7 +92,6 @@ struct mipid02_dev {
+>  	u64 link_frequency;
+>  	struct v4l2_fwnode_endpoint tx;
+>  	/* remote source */
+> -	struct v4l2_async_subdev asd;
+>  	struct v4l2_async_notifier notifier;
+>  	struct v4l2_subdev *s_subdev;
+>  	/* registers */
+> @@ -844,6 +843,7 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
 >  {
->  	const struct ceu_async_subdev *async_sd;
+>  	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
+>  	struct i2c_client *client = bridge->i2c_client;
 > +	struct v4l2_async_subdev *asd;
->  	struct ceu_subdev *ceu_sd;
->  	unsigned int i;
+>  	struct device_node *ep_node;
 >  	int ret;
-> @@ -1510,21 +1511,17 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
 >  
->  		/* Setup the ceu subdevice and the async subdevice. */
->  		async_sd = &pdata->subdevs[i];
-> -		ceu_sd = &ceudev->subdevs[i];
-> -
-> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
-> -
-> -		ceu_sd->mbus_flags	= async_sd->flags;
-> -		ceu_sd->asd.match_type	= V4L2_ASYNC_MATCH_I2C;
-> -		ceu_sd->asd.match.i2c.adapter_id = async_sd->i2c_adapter_id;
-> -		ceu_sd->asd.match.i2c.address = async_sd->i2c_address;
-> -
-> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
-> -						     &ceu_sd->asd);
-> -		if (ret) {
-> +		asd = v4l2_async_notifier_add_i2c_subdev(&ceudev->notifier,
-> +				async_sd->i2c_adapter_id,
-> +				async_sd->i2c_address,
-> +				sizeof(*ceu_sd));
-> +		if (IS_ERR(asd)) {
->  			v4l2_async_notifier_cleanup(&ceudev->notifier);
-> -			return ret;
-> +			return PTR_ERR(asd);
->  		}
-> +		ceu_sd = to_ceu_subdev(asd);
-> +		ceu_sd->mbus_flags = async_sd->flags;
-> +		ceudev->subdevs[i] = ceu_sd;
+> @@ -875,18 +875,17 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
+>  	bridge->rx = ep;
+>  
+>  	/* register async notifier so we get noticed when sensor is connected */
+> -	bridge->asd.match.fwnode =
+> -		fwnode_graph_get_remote_port_parent(of_fwnode_handle(ep_node));
+> -	bridge->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> +	v4l2_async_notifier_init(&bridge->notifier);
+> +	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
+> +					&bridge->notifier,
+> +					of_fwnode_handle(ep_node),
+> +					sizeof(*asd));
+>  	of_node_put(ep_node);
+>  
+> -	v4l2_async_notifier_init(&bridge->notifier);
+> -	ret = v4l2_async_notifier_add_subdev(&bridge->notifier, &bridge->asd);
+> -	if (ret) {
+> +	if (IS_ERR(asd)) {
+>  		dev_err(&client->dev, "fail to register asd to notifier %d",
+> -			ret);
+> -		fwnode_handle_put(bridge->asd.match.fwnode);
+> -		return ret;
+> +			PTR_ERR(asd));
+> +		return PTR_ERR(asd);
 >  	}
+>  	bridge->notifier.ops = &mipid02_notifier_ops;
 >  
->  	return pdata->num_subdevs;
-> @@ -1536,7 +1533,8 @@ static int ceu_parse_platform_data(struct ceu_device *ceudev,
->  static int ceu_parse_dt(struct ceu_device *ceudev)
->  {
->  	struct device_node *of = ceudev->dev->of_node;
-> -	struct device_node *ep, *remote;
-> +	struct device_node *ep;
-> +	struct v4l2_async_subdev *asd;
->  	struct ceu_subdev *ceu_sd;
->  	unsigned int i;
->  	int num_ep;
-> @@ -1578,20 +1576,16 @@ static int ceu_parse_dt(struct ceu_device *ceudev)
->  		}
->  
->  		/* Setup the ceu subdevice and the async subdevice. */
-> -		ceu_sd = &ceudev->subdevs[i];
-> -		INIT_LIST_HEAD(&ceu_sd->asd.list);
-> -
-> -		remote = of_graph_get_remote_port_parent(ep);
-> -		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> -		ceu_sd->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-> -		ceu_sd->asd.match.fwnode = of_fwnode_handle(remote);
-> -
-> -		ret = v4l2_async_notifier_add_subdev(&ceudev->notifier,
-> -						     &ceu_sd->asd);
-> -		if (ret) {
-> -			of_node_put(remote);
-> +		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +				&ceudev->notifier, of_fwnode_handle(ep),
-> +				sizeof(*ceu_sd));
-> +		if (IS_ERR(asd)) {
-> +			ret = PTR_ERR(asd);
->  			goto error_cleanup;
->  		}
-> +		ceu_sd = to_ceu_subdev(asd);
-> +		ceu_sd->mbus_flags = fw_ep.bus.parallel.flags;
-> +		ceudev->subdevs[i] = ceu_sd;
->  
->  		of_node_put(ep);
->  	}
 > 
