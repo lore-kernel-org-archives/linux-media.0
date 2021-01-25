@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EB6C433E9
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EFAC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:25:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B31122B37
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0288F22B3F
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:25:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388511AbhAZFop (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S2388493AbhAZFoo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728869AbhAYN3q (ORCPT
+        with ESMTP id S1728860AbhAYN3p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:29:46 -0500
+        Mon, 25 Jan 2021 08:29:45 -0500
 Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8727BC061788
-        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 05:27:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDC1C061574
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 05:27:38 -0800 (PST)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id C172D634C94;
-        Mon, 25 Jan 2021 15:25:57 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id CF2F2634C89;
+        Mon, 25 Jan 2021 15:25:56 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
@@ -43,9 +43,9 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Robert Foss <robert.foss@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 10/14] media: davinci: vpif_display: Remove unused v4l2-async code
-Date:   Mon, 25 Jan 2021 15:22:11 +0200
-Message-Id: <20210125132230.6600-10-sakari.ailus@linux.intel.com>
+Subject: [PATCH 02/14] media: atmel: Use v4l2_async_notifier_add_fwnode_remote_subdev
+Date:   Mon, 25 Jan 2021 15:22:03 +0200
+Message-Id: <20210125132230.6600-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
 References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
@@ -57,171 +57,201 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Ezequiel Garcia <ezequiel@collabora.com>
 
-There are no users for vpif_display_config.asd_sizes
-and vpif_display_config.asd members, which means the v4l2-async
-subdevices aren't being defined anywhere.
+The use of v4l2_async_notifier_add_subdev will be discouraged.
+Drivers are instead encouraged to use a helper such as
+v4l2_async_notifier_add_fwnode_remote_subdev.
 
-Remove the v4l2-async, leaving only the synchronous setup.
+This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+should get a kmalloc'ed struct v4l2_async_subdev,
+removing some boilerplate code while at it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Reviewed-by: Helen Koike <helen.koike@collabora.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/davinci/vpif_display.c | 86 ++++---------------
- drivers/media/platform/davinci/vpif_display.h |  1 -
- include/media/davinci/vpif_types.h            |  2 -
- 3 files changed, 15 insertions(+), 74 deletions(-)
+ drivers/media/platform/atmel/atmel-isc.h      |  1 +
+ drivers/media/platform/atmel/atmel-isi.c      | 46 ++++++-------------
+ .../media/platform/atmel/atmel-sama5d2-isc.c  | 44 ++++++------------
+ 3 files changed, 29 insertions(+), 62 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpif_display.c b/drivers/media/platform/davinci/vpif_display.c
-index 46afc029138f..e5f61d9b221d 100644
---- a/drivers/media/platform/davinci/vpif_display.c
-+++ b/drivers/media/platform/davinci/vpif_display.c
-@@ -1117,23 +1117,6 @@ static void free_vpif_objs(void)
- 		kfree(vpif_obj.dev[i]);
- }
+diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+index 24b784b893d6..fab8eca58d93 100644
+--- a/drivers/media/platform/atmel/atmel-isc.h
++++ b/drivers/media/platform/atmel/atmel-isc.h
+@@ -41,6 +41,7 @@ struct isc_buffer {
+ struct isc_subdev_entity {
+ 	struct v4l2_subdev		*sd;
+ 	struct v4l2_async_subdev	*asd;
++	struct device_node		*epn;
+ 	struct v4l2_async_notifier      notifier;
  
--static int vpif_async_bound(struct v4l2_async_notifier *notifier,
--			    struct v4l2_subdev *subdev,
--			    struct v4l2_async_subdev *asd)
+ 	u32 pfe_cfg0;
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index d74aa73f26be..c1a6dd7af002 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -70,7 +70,6 @@ struct frame_buffer {
+ struct isi_graph_entity {
+ 	struct device_node *node;
+ 
+-	struct v4l2_async_subdev asd;
+ 	struct v4l2_subdev *subdev;
+ };
+ 
+@@ -1136,45 +1135,26 @@ static const struct v4l2_async_notifier_operations isi_graph_notify_ops = {
+ 	.complete = isi_graph_notify_complete,
+ };
+ 
+-static int isi_graph_parse(struct atmel_isi *isi, struct device_node *node)
 -{
--	int i;
+-	struct device_node *ep = NULL;
+-	struct device_node *remote;
 -
--	for (i = 0; i < vpif_obj.config->subdev_count; i++)
--		if (!strcmp(vpif_obj.config->subdevinfo[i].name,
--			    subdev->name)) {
--			vpif_obj.sd[i] = subdev;
--			vpif_obj.sd[i]->grp_id = 1 << i;
--			return 0;
--		}
+-	ep = of_graph_get_next_endpoint(node, ep);
+-	if (!ep)
+-		return -EINVAL;
 -
--	return -EINVAL;
+-	remote = of_graph_get_remote_port_parent(ep);
+-	of_node_put(ep);
+-	if (!remote)
+-		return -EINVAL;
+-
+-	/* Remote node to connect */
+-	isi->entity.node = remote;
+-	isi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	isi->entity.asd.match.fwnode = of_fwnode_handle(remote);
+-	return 0;
 -}
 -
- static int vpif_probe_complete(void)
+ static int isi_graph_init(struct atmel_isi *isi)
  {
- 	struct common_obj *common;
-@@ -1230,16 +1213,6 @@ static int vpif_probe_complete(void)
- 	return err;
++	struct v4l2_async_subdev *asd;
++	struct device_node *ep;
+ 	int ret;
+ 
+-	/* Parse the graph to extract a list of subdevice DT nodes. */
+-	ret = isi_graph_parse(isi, isi->dev->of_node);
+-	if (ret < 0) {
+-		dev_err(isi->dev, "Graph parsing failed\n");
+-		return ret;
+-	}
++	ep = of_graph_get_next_endpoint(isi->dev->of_node, NULL);
++	if (!ep)
++		return -EINVAL;
+ 
+ 	v4l2_async_notifier_init(&isi->notifier);
+ 
+-	ret = v4l2_async_notifier_add_subdev(&isi->notifier, &isi->entity.asd);
+-	if (ret) {
+-		of_node_put(isi->entity.node);
+-		return ret;
+-	}
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
++						&isi->notifier,
++						of_fwnode_handle(ep),
++						sizeof(*asd));
++	of_node_put(ep);
++
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
+ 
+ 	isi->notifier.ops = &isi_graph_notify_ops;
+ 
+diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+index a3304f49e499..9ee2cd194f93 100644
+--- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+@@ -57,7 +57,7 @@
+ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+ {
+ 	struct device_node *np = dev->of_node;
+-	struct device_node *epn = NULL, *rem;
++	struct device_node *epn = NULL;
+ 	struct isc_subdev_entity *subdev_entity;
+ 	unsigned int flags;
+ 	int ret;
+@@ -71,17 +71,9 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+ 		if (!epn)
+ 			return 0;
+ 
+-		rem = of_graph_get_remote_port_parent(epn);
+-		if (!rem) {
+-			dev_notice(dev, "Remote device at %pOF not found\n",
+-				   epn);
+-			continue;
+-		}
+-
+ 		ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(epn),
+ 						 &v4l2_epn);
+ 		if (ret) {
+-			of_node_put(rem);
+ 			ret = -EINVAL;
+ 			dev_err(dev, "Could not parse the endpoint\n");
+ 			break;
+@@ -90,21 +82,10 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+ 		subdev_entity = devm_kzalloc(dev, sizeof(*subdev_entity),
+ 					     GFP_KERNEL);
+ 		if (!subdev_entity) {
+-			of_node_put(rem);
+-			ret = -ENOMEM;
+-			break;
+-		}
+-
+-		/* asd will be freed by the subsystem once it's added to the
+-		 * notifier list
+-		 */
+-		subdev_entity->asd = kzalloc(sizeof(*subdev_entity->asd),
+-					     GFP_KERNEL);
+-		if (!subdev_entity->asd) {
+-			of_node_put(rem);
+ 			ret = -ENOMEM;
+ 			break;
+ 		}
++		subdev_entity->epn = epn;
+ 
+ 		flags = v4l2_epn.bus.parallel.flags;
+ 
+@@ -121,12 +102,10 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
+ 			subdev_entity->pfe_cfg0 |= ISC_PFE_CFG0_CCIR_CRC |
+ 					ISC_PFE_CFG0_CCIR656;
+ 
+-		subdev_entity->asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+-		subdev_entity->asd->match.fwnode = of_fwnode_handle(rem);
+ 		list_add_tail(&subdev_entity->list, &isc->subdev_entities);
+ 	}
+-
+ 	of_node_put(epn);
++
+ 	return ret;
  }
  
--static int vpif_async_complete(struct v4l2_async_notifier *notifier)
--{
--	return vpif_probe_complete();
--}
--
--static const struct v4l2_async_notifier_operations vpif_async_ops = {
--	.bound = vpif_async_bound,
--	.complete = vpif_async_complete,
--};
--
- /*
-  * vpif_probe: This function creates device entries by register itself to the
-  * V4L2 driver and initializes fields of each channel objects
-@@ -1294,52 +1267,28 @@ static __init int vpif_probe(struct platform_device *pdev)
- 		goto vpif_unregister;
+@@ -228,13 +207,20 @@ static int atmel_isc_probe(struct platform_device *pdev)
  	}
  
--	v4l2_async_notifier_init(&vpif_obj.notifier);
--
--	if (!vpif_obj.config->asd_sizes) {
--		i2c_adap = i2c_get_adapter(vpif_obj.config->i2c_adapter_id);
--		for (i = 0; i < subdev_count; i++) {
--			vpif_obj.sd[i] =
--				v4l2_i2c_new_subdev_board(&vpif_obj.v4l2_dev,
--							  i2c_adap,
--							  &subdevdata[i].
--							  board_info,
--							  NULL);
--			if (!vpif_obj.sd[i]) {
--				vpif_err("Error registering v4l2 subdevice\n");
--				err = -ENODEV;
--				goto probe_subdev_out;
--			}
--
--			if (vpif_obj.sd[i])
--				vpif_obj.sd[i]->grp_id = 1 << i;
--		}
--		err = vpif_probe_complete();
--		if (err) {
-+	i2c_adap = i2c_get_adapter(vpif_obj.config->i2c_adapter_id);
-+	for (i = 0; i < subdev_count; i++) {
-+		vpif_obj.sd[i] =
-+			v4l2_i2c_new_subdev_board(&vpif_obj.v4l2_dev,
-+						  i2c_adap,
-+						  &subdevdata[i].board_info,
-+						  NULL);
-+		if (!vpif_obj.sd[i]) {
-+			vpif_err("Error registering v4l2 subdevice\n");
-+			err = -ENODEV;
- 			goto probe_subdev_out;
+ 	list_for_each_entry(subdev_entity, &isc->subdev_entities, list) {
++		struct v4l2_async_subdev *asd;
++
+ 		v4l2_async_notifier_init(&subdev_entity->notifier);
+ 
+-		ret = v4l2_async_notifier_add_subdev(&subdev_entity->notifier,
+-						     subdev_entity->asd);
+-		if (ret) {
+-			fwnode_handle_put(subdev_entity->asd->match.fwnode);
+-			kfree(subdev_entity->asd);
++		asd = v4l2_async_notifier_add_fwnode_remote_subdev(
++					&subdev_entity->notifier,
++					of_fwnode_handle(subdev_entity->epn),
++					sizeof(*asd));
++
++		of_node_put(subdev_entity->epn);
++		subdev_entity->epn = NULL;
++
++		if (IS_ERR(asd)) {
++			ret = PTR_ERR(asd);
+ 			goto cleanup_subdev;
  		}
--	} else {
--		for (i = 0; i < vpif_obj.config->asd_sizes[0]; i++) {
--			err = v4l2_async_notifier_add_subdev(
--				&vpif_obj.notifier, vpif_obj.config->asd[i]);
--			if (err)
--				goto probe_cleanup;
--		}
  
--		vpif_obj.notifier.ops = &vpif_async_ops;
--		err = v4l2_async_notifier_register(&vpif_obj.v4l2_dev,
--						   &vpif_obj.notifier);
--		if (err) {
--			vpif_err("Error registering async notifier\n");
--			err = -EINVAL;
--			goto probe_cleanup;
--		}
-+		if (vpif_obj.sd[i])
-+			vpif_obj.sd[i]->grp_id = 1 << i;
- 	}
-+	err = vpif_probe_complete();
-+	if (err)
-+		goto probe_subdev_out;
- 
- 	return 0;
- 
--probe_cleanup:
--	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
- probe_subdev_out:
- 	kfree(vpif_obj.sd);
- vpif_unregister:
-@@ -1358,11 +1307,6 @@ static int vpif_remove(struct platform_device *device)
- 	struct channel_obj *ch;
- 	int i;
- 
--	if (vpif_obj.config->asd_sizes) {
--		v4l2_async_notifier_unregister(&vpif_obj.notifier);
--		v4l2_async_notifier_cleanup(&vpif_obj.notifier);
--	}
--
- 	v4l2_device_unregister(&vpif_obj.v4l2_dev);
- 
- 	kfree(vpif_obj.sd);
-diff --git a/drivers/media/platform/davinci/vpif_display.h b/drivers/media/platform/davinci/vpif_display.h
-index f731a65eefd6..f98062e79167 100644
---- a/drivers/media/platform/davinci/vpif_display.h
-+++ b/drivers/media/platform/davinci/vpif_display.h
-@@ -118,7 +118,6 @@ struct vpif_device {
- 	struct v4l2_device v4l2_dev;
- 	struct channel_obj *dev[VPIF_DISPLAY_NUM_CHANNELS];
- 	struct v4l2_subdev **sd;
--	struct v4l2_async_notifier notifier;
- 	struct vpif_display_config *config;
- };
- 
-diff --git a/include/media/davinci/vpif_types.h b/include/media/davinci/vpif_types.h
-index 8439e46fb993..d03e5c54347a 100644
---- a/include/media/davinci/vpif_types.h
-+++ b/include/media/davinci/vpif_types.h
-@@ -48,8 +48,6 @@ struct vpif_display_config {
- 	int i2c_adapter_id;
- 	struct vpif_display_chan_config chan_config[VPIF_DISPLAY_MAX_CHANNELS];
- 	const char *card_name;
--	struct v4l2_async_subdev **asd;	/* Flat array, arranged in groups */
--	int *asd_sizes;		/* 0-terminated array of asd group sizes */
- };
- 
- struct vpif_input {
 -- 
 2.29.2
 
