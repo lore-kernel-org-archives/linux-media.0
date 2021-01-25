@@ -2,101 +2,176 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AC17C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 03:03:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 251BBC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 03:13:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D51D22EBF
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 03:03:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E727F22D58
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 03:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728152AbhAYNOY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 08:14:24 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:59472 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728678AbhAYNOC (ORCPT
+        id S1727316AbhAYKJx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 05:09:53 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:60053 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727292AbhAYKIW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:14:02 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10P8iTaT171912;
-        Mon, 25 Jan 2021 08:48:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=pSuQ6+zFIOAaRAOPaTbRFPTUs8YM615/VcVUuMuizOI=;
- b=YG4rajvThpUpN9nEkZfyESkOH72I/fJvR+SenZKckmZwRGUtBGP9UqRnlLh23eccvEvi
- wVLLZIL3WYiStBjMrH9qX3csoncsconBoJPuHFStaAxGNVWm9aE6TjdfveK4LtbVSTFc
- t6LRe/DQzt/mH7ZTxHe68slBmrz+NJKEWjwD55D0B8rz1vVqht9K817b3YGvKI/SNdjP
- Lqu82B8hA1UieQPlLCM2A1e2oVro//hV5HbHGlwZBZPJ1KWt2wEduE+9MmWTrG9E+tqo
- nn7aLT98FtNEK3fzIIVq2UGb6os1w+2JAAdJ3Gk1iTgMF46h5wykaZ/BMftwA2JChiFN RQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 368brkc44n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Jan 2021 08:48:14 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10P8k3V2018946;
-        Mon, 25 Jan 2021 08:46:11 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 368wqunn0t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Jan 2021 08:46:11 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10P8k9oG024058;
-        Mon, 25 Jan 2021 08:46:09 GMT
-Received: from mwanda (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 25 Jan 2021 00:46:09 -0800
-Date:   Mon, 25 Jan 2021 11:46:03 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] media: i2c: ov5648: remove unnecessary NULL check
-Message-ID: <YA6FSxjBGVtRgT+Z@mwanda>
+        Mon, 25 Jan 2021 05:08:22 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 3yk4lT13qiWRg3yk8lfn4z; Mon, 25 Jan 2021 11:05:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611569108; bh=EZyY6OPIKTmAZ+Lle54XD0ZsxAcxpAxlvB7rjzdjVd4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=oMO9CZwr20DeRa4YZWnS6BtEHG/ND2RKd8bKl81jP+CIqmn2+rqRTGxhgub/ur0qa
+         Nt1Akk3KeLpZqrIUsHDR1+enTuCd1CEQwfotY4VZ0YvbNcrzLzXtOS1yNy7wWGkp5x
+         vxuRkSM8ca58opmz8iaQ+9gHhJhsi2jFGclHdJaal1O6LbUS1QgoUQuyeJUv+wMgz8
+         8YH4W6FLMxqi6vfOfTQKtL8XO0y12f8maR5QWQqrRjVE7SUlqJwc1GZK+aMPiZa/T8
+         z0T9HgmuX1cWv3PInzcxsrpaBME0q42y4b+A0YOhFh2B7LlNpLe6pnn00PoP9stsyQ
+         4B679wPMa0YRg==
+Subject: Re: [PATCH 2/3] media: i2c: adv7511: remove open coded version of
+ SMBus block read
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210119093912.1838-1-wsa+renesas@sang-engineering.com>
+ <20210119093912.1838-3-wsa+renesas@sang-engineering.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <1b3f4451-20e5-4f73-acab-d0deaa7ba63d@xs4all.nl>
+Date:   Mon, 25 Jan 2021 11:05:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9874 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101250052
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9874 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101250052
+In-Reply-To: <20210119093912.1838-3-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfHecP3iwuKNUGb27eJui5/FTNoELVuxuRsE0+jCAVCwbLK6sFmVr6DJCYGyAdS4t0W8wlePeCtUNCypOhMVvhakmA474jhTxjHMg+q+fAhYk4whjFcjq
+ za4lHtra6jw9vJPgbGjQDdrSqWp4eNLAXZuDXurENgAKlP8dErhZyQg9I3gGBjfNGtS0ffG96K3djByKUjjKKFfrc1TM+n5womFdwGPmkVb/65PQyt9d7Qaf
+ 9+6FZwFXymCWFZ5tBXf4Oa5vo+7tiMFrX6oe4XG5EEKv97GsKnCSxVqukA2fHKbmcGoy/tAJ2XxQZ57pc/5OB5vG9nWR9/SLT/46NfwvDQRWPxf3Jg+VfPSM
+ wW0xpgFf6bx/I0T+9LVcPa6EASjevH9AbqtokpG3uNzkZKB5O79tTEXIWmdqYct08w0bzZ47
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The "mode_index == ARRAY_SIZE(ov5648_modes)" check ensures that we
-exited the loop via a break statement so we know that "mode" must
-be valid.  Delete this unnecessary NULL check.
+On 19/01/2021 10:39, Wolfram Sang wrote:
+> The open coded version differs from the one in the core in one way: the
+> buffer will be always copied back, even when the transfer failed. Be
+> more robust: use the block read from the I2C core and propagate a
+> potential errno further to the sanity checks.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Changes since RFC:
+> * removed wrong assumption from the commit message
+> 
+>  drivers/media/i2c/adv7511-v4l2.c | 41 ++++++++++++--------------------
+>  1 file changed, 15 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+> index a3161d709015..441bafa743a6 100644
+> --- a/drivers/media/i2c/adv7511-v4l2.c
+> +++ b/drivers/media/i2c/adv7511-v4l2.c
+> @@ -214,36 +214,25 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
+>  	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
+>  }
+>  
+> -static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
+> -					 u8 command, unsigned length, u8 *values)
+> -{
+> -	union i2c_smbus_data data;
+> -	int ret;
+> -
+> -	if (length > I2C_SMBUS_BLOCK_MAX)
+> -		length = I2C_SMBUS_BLOCK_MAX;
+> -	data.block[0] = length;
+> -
+> -	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+> -			     I2C_SMBUS_READ, command,
+> -			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
+> -	memcpy(values, data.block + 1, length);
+> -	return ret;
+> -}
+> -
+> -static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+> +static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+>  {
+>  	struct adv7511_state *state = get_adv7511_state(sd);
+>  	int i;
+> -	int err = 0;
+>  
+>  	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
+>  
+> -	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
+> -		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
+> +	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
+> +		s32 ret;
+> +
+> +		ret = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
+>  						    I2C_SMBUS_BLOCK_MAX, buf + i);
+> -	if (err)
+> -		v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +		if (ret < 0) {
+> +			v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
+> @@ -1668,20 +1657,20 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
+>  	if (edidRdy & MASK_ADV7511_EDID_RDY) {
+>  		int segment = adv7511_rd(sd, 0xc4);
+>  		struct adv7511_edid_detect ed;
+> +		int err;
+>  
+>  		if (segment >= EDID_MAX_SEGM) {
+>  			v4l2_err(sd, "edid segment number too big\n");
+>  			return false;
+>  		}
+>  		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
+> -		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+> +		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+>  		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/media/i2c/ov5648.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Only call adv7511_dbg_dump_edid if err >= 0.
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index 609aa67b54ce..b3864be33df2 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2337,7 +2337,7 @@ static int ov5648_enum_frame_interval(struct v4l2_subdev *subdev,
- 		}
- 	}
- 
--	if (mode_index == ARRAY_SIZE(ov5648_modes) || !mode)
-+	if (mode_index == ARRAY_SIZE(ov5648_modes))
- 		return -EINVAL;
- 
- 	switch (interval_enum->code) {
--- 
-2.29.2
+>  		if (segment == 0) {
 
+Change condition to: err >= 0 && segment == 0
+
+>  			state->edid.blocks = state->edid.data[0x7e] + 1;
+>  			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
+>  		}
+> -		if (!edid_verify_crc(sd, segment) ||
+> -		    !edid_verify_header(sd, segment)) {
+> +		if (err < 0 || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
+>  			/* edid crc error, force reread of edid segment */
+
+Hmm, this comment is a bit out of date. Change to:
+
+			/*
+			 * Couldn't read EDID or EDID has invalid content.
+			 * Force reread of EDID segment.
+			 */
+
+>  			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
+
+Only show this message if err >= 0. For err < 0 the adv7511_edid_rd() already
+logs an error.
+
+>  			state->have_monitor = false;
+> 
+
+Regards,
+
+	Hans
