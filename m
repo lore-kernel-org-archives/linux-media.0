@@ -2,41 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68862C41620
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:22:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6241C4332E
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E1BE22B2C
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:22:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B365822A84
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:23:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388764AbhAZFqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbhAYQvo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 11:51:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B7DC06174A
-        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 08:50:58 -0800 (PST)
-Received: from [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d] (unknown [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9115F1F45362;
-        Mon, 25 Jan 2021 16:50:52 +0000 (GMT)
-Subject: Re: [PATCH v3 11/14] media: v4l2-async: Fix incorrect comment
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
+        id S2388536AbhAZFos (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:44:48 -0500
+Received: from retiisi.eu ([95.216.213.190]:37512 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728871AbhAYN3q (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:29:46 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D302D634CAA;
+        Mon, 25 Jan 2021 15:25:58 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         niklas.soderlund+renesas@ragnatech.se,
+        Helen Koike <helen.koike@collabora.com>,
         Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Hugues Fruchet <hugues.fruchet@st.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -46,93 +39,85 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Robert Foss <robert.foss@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 05/14] media: st-mipid02: Use v4l2_async_notifier_add_fwnode_remote_subdev
+Date:   Mon, 25 Jan 2021 15:22:21 +0200
+Message-Id: <20210125132230.6600-20-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
 References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
- <20210125132230.6600-26-sakari.ailus@linux.intel.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <fab49b26-1297-fb0f-4d02-103e8faedffd@collabora.com>
-Date:   Mon, 25 Jan 2021 13:50:48 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210125132230.6600-26-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-Thank you for the patch.
+The use of v4l2_async_notifier_add_subdev will be discouraged.
+Drivers are instead encouraged to use a helper such as
+v4l2_async_notifier_add_fwnode_remote_subdev.
 
-On 1/25/21 10:22 AM, Sakari Ailus wrote:
-> From: Ezequiel Garcia <ezequiel@collabora.com>
-> 
-> The v4l2_async_notifier_cleanup() documentation mentions
-> v4l2_fwnode_reference_parse_sensor_common, which was actually
-> introduced as v4l2_async_notifier_parse_fwnode_sensor_common(),
-> in commit 7a9ec808ad46 ("media: v4l: fwnode: Add convenience function for
-> parsing common external refs").
-> 
-> The function drivers do use is
-> v4l2_async_register_subdev_sensor_common().
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  include/media/v4l2-async.h | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-> index 0ddc06e36c08..f2cac0931372 100644
-> --- a/include/media/v4l2-async.h
-> +++ b/include/media/v4l2-async.h
-> @@ -174,9 +174,11 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
->   *
->   * @notif: pointer to &struct v4l2_async_notifier
->   * @endpoint: local endpoint pointing to the remote sub-device to be matched
-> - * @asd: Async sub-device struct allocated by the caller. The &struct
-> - *	 v4l2_async_subdev shall be the first member of the driver's async
-> - *	 sub-device struct, i.e. both begin at the same memory address.
-> + * @asd_struct_size: size of the driver's async sub-device struct, including
-> + *		     sizeof(struct v4l2_async_subdev). The &struct
-> + *		     v4l2_async_subdev shall be the first member of
-> + *		     the driver's async sub-device struct, i.e. both
-> + *		     begin at the same memory address.
->   *
->   * Gets the remote endpoint of a given local endpoint, set it up for fwnode
->   * matching and adds the async sub-device to the notifier's @asd_list. The
-> @@ -184,13 +186,12 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
->   * notifier cleanup time.
->   *
->   * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
-> - * exception that the fwnode refers to a local endpoint, not the remote one, and
-> - * the function relies on the caller to allocate the async sub-device struct.
-> + * exception that the fwnode refers to a local endpoint, not the remote one.
->   */
-> -int
-> +struct v4l2_async_subdev *
->  v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif,
->  					     struct fwnode_handle *endpoint,
-> -					     struct v4l2_async_subdev *asd);
-> +					     unsigned int asd_struct_size);
+This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+should get a kmalloc'ed struct v4l2_async_subdev,
+removing some boilerplate code while at it.
 
-This change should go with patch 1/14.
+Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+which handles the needed setup, instead of open-coding it.
 
-Regards,
-Helen
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/st-mipid02.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
->  
->  /**
->   * v4l2_async_notifier_add_i2c_subdev - Allocate and add an i2c async
-> @@ -249,7 +250,7 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
->   * notifier after calling
->   * @v4l2_async_notifier_add_subdev,
->   * @v4l2_async_notifier_parse_fwnode_endpoints or
-> - * @v4l2_fwnode_reference_parse_sensor_common.
-> + * @v4l2_async_register_subdev_sensor_common.
->   *
->   * There is no harm from calling v4l2_async_notifier_cleanup in other
->   * cases as long as its memory has been zeroed after it has been
-> 
+diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
+index 003ba22334cd..42549b3a62a0 100644
+--- a/drivers/media/i2c/st-mipid02.c
++++ b/drivers/media/i2c/st-mipid02.c
+@@ -92,7 +92,6 @@ struct mipid02_dev {
+ 	u64 link_frequency;
+ 	struct v4l2_fwnode_endpoint tx;
+ 	/* remote source */
+-	struct v4l2_async_subdev asd;
+ 	struct v4l2_async_notifier notifier;
+ 	struct v4l2_subdev *s_subdev;
+ 	/* registers */
+@@ -844,6 +843,7 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
+ {
+ 	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
+ 	struct i2c_client *client = bridge->i2c_client;
++	struct v4l2_async_subdev *asd;
+ 	struct device_node *ep_node;
+ 	int ret;
+ 
+@@ -875,18 +875,17 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
+ 	bridge->rx = ep;
+ 
+ 	/* register async notifier so we get noticed when sensor is connected */
+-	bridge->asd.match.fwnode =
+-		fwnode_graph_get_remote_port_parent(of_fwnode_handle(ep_node));
+-	bridge->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
++	v4l2_async_notifier_init(&bridge->notifier);
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
++					&bridge->notifier,
++					of_fwnode_handle(ep_node),
++					sizeof(*asd));
+ 	of_node_put(ep_node);
+ 
+-	v4l2_async_notifier_init(&bridge->notifier);
+-	ret = v4l2_async_notifier_add_subdev(&bridge->notifier, &bridge->asd);
+-	if (ret) {
++	if (IS_ERR(asd)) {
+ 		dev_err(&client->dev, "fail to register asd to notifier %d",
+-			ret);
+-		fwnode_handle_put(bridge->asd.match.fwnode);
+-		return ret;
++			PTR_ERR(asd));
++		return PTR_ERR(asd);
+ 	}
+ 	bridge->notifier.ops = &mipid02_notifier_ops;
+ 
+-- 
+2.29.2
+
