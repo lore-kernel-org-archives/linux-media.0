@@ -2,306 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53295C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 832C6C43219
 	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34B812223D
+	by mail.kernel.org (Postfix) with ESMTP id 5FEF72223D
 	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 05:46:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388615AbhAZFpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728910AbhAYNbr (ORCPT
+        id S2388669AbhAZFpY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:45:24 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59254 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729172AbhAYN6R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:31:47 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AB9C0617A7
-        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 05:27:53 -0800 (PST)
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A1196634CA5;
-        Mon, 25 Jan 2021 15:25:58 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 03/14] media: stm32: Use v4l2_async_notifier_add_fwnode_remote_subdev
-Date:   Mon, 25 Jan 2021 15:22:19 +0200
-Message-Id: <20210125132230.6600-18-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
-References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
+        Mon, 25 Jan 2021 08:58:17 -0500
+Received: from [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d] (unknown [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: koike)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6D84A1F452BC;
+        Mon, 25 Jan 2021 13:57:20 +0000 (GMT)
+Subject: Re: [PATCH] media: doc: pixfmt-yuv: Fix 4:4:4 subsampling info
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+        hans.verkuil@cisco.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org
+References: <20210122182723.327438-1-helen.koike@collabora.com>
+ <YAvyu6AvEmZy6WRq@pendragon.ideasonboard.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <7f650d51-d419-53cc-0ad1-b241a10ab801@collabora.com>
+Date:   Mon, 25 Jan 2021 10:57:15 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YAvyu6AvEmZy6WRq@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ezequiel Garcia <ezequiel@collabora.com>
 
-The use of v4l2_async_notifier_add_subdev will be discouraged.
-Drivers are instead encouraged to use a helper such as
-v4l2_async_notifier_add_fwnode_remote_subdev.
 
-This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-should get a kmalloc'ed struct v4l2_async_subdev,
-removing some boilerplate code while at it.
+On 1/23/21 6:56 AM, Laurent Pinchart wrote:
+> Hi Helen,
+> 
+> Thank you for the patch.
+> 
+> On Fri, Jan 22, 2021 at 03:27:23PM -0300, Helen Koike wrote:
+>> YUV 4:4:4 is not subsampled, fix this in the docs.
+>>
+>> Fixes: da785536e007 ("media: doc: pixfmt-yuv: Move all semi-planar YUV formats to common file")
+>> Signed-off-by: Helen Koike <helen.koike@collabora.com>
+>> ---
+>>  Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> index 7d4d39201a3f..bcb4ef24c334 100644
+>> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> @@ -396,8 +396,8 @@ number of lines as the luma plane.
+>>  NV24 and NV42
+>>  -------------
+>>  
+>> -Semi-planar YUV 4:4:4 formats. The chroma plane is subsampled by 2 in the
+>> -horizontal direction. Chroma lines contain half the number of pixels and the
+>> +Semi-planar YUV 4:4:4 formats. No sub-sampling.
+> 
+> "The chroma plane is not subsampled." ?
 
-Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
-which handles the needed setup, instead of open-coding it.
+Ack.
 
-This results in removal of the now unneeded driver-specific state
-struct dcmi_graph_entity, keeping track of just the source
-subdevice.
+> 
+>> +Chroma lines contain the same number of pixels and the
+>>  same number of bytes as luma lines, and the chroma plane contains the same
+>>  number of lines as the luma plane.
+> 
+> That's not quite right, the chroma lines contain twice the number of
+> pixels and bytes, as there's one Cb and one Cr value in the chroma line
+> for each Y value in the luma line.
+> 
+> 
+> Maybe the text could be reflowed ?
+> 
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Reviewed-by: Helen Koike <helen.koike@collabora.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 86 ++++++++---------------
- 1 file changed, 30 insertions(+), 56 deletions(-)
+Ack.
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b745f1342c2e..142f63d07dcd 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -99,13 +99,6 @@ enum state {
- 
- #define OVERRUN_ERROR_THRESHOLD	3
- 
--struct dcmi_graph_entity {
--	struct v4l2_async_subdev asd;
--
--	struct device_node *remote_node;
--	struct v4l2_subdev *source;
--};
--
- struct dcmi_format {
- 	u32	fourcc;
- 	u32	mbus_code;
-@@ -139,7 +132,7 @@ struct stm32_dcmi {
- 	struct v4l2_device		v4l2_dev;
- 	struct video_device		*vdev;
- 	struct v4l2_async_notifier	notifier;
--	struct dcmi_graph_entity	entity;
-+	struct v4l2_subdev		*source;
- 	struct v4l2_format		fmt;
- 	struct v4l2_rect		crop;
- 	bool				do_crop;
-@@ -610,7 +603,7 @@ static int dcmi_pipeline_s_fmt(struct stm32_dcmi *dcmi,
- 			       struct v4l2_subdev_pad_config *pad_cfg,
- 			       struct v4l2_subdev_format *format)
- {
--	struct media_entity *entity = &dcmi->entity.source->entity;
-+	struct media_entity *entity = &dcmi->source->entity;
- 	struct v4l2_subdev *subdev;
- 	struct media_pad *sink_pad = NULL;
- 	struct media_pad *src_pad = NULL;
-@@ -1018,7 +1011,7 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -1152,7 +1145,7 @@ static int dcmi_get_sensor_format(struct stm32_dcmi *dcmi,
- 	};
- 	int ret;
- 
--	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_fmt, NULL, &fmt);
-+	ret = v4l2_subdev_call(dcmi->source, pad, get_fmt, NULL, &fmt);
- 	if (ret)
- 		return ret;
- 
-@@ -1181,7 +1174,7 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -1204,7 +1197,7 @@ static int dcmi_get_sensor_bounds(struct stm32_dcmi *dcmi,
- 	/*
- 	 * Get sensor bounds first
- 	 */
--	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_selection,
-+	ret = v4l2_subdev_call(dcmi->source, pad, get_selection,
- 			       NULL, &bounds);
- 	if (!ret)
- 		*r = bounds.r;
-@@ -1385,7 +1378,7 @@ static int dcmi_enum_framesizes(struct file *file, void *fh,
- 
- 	fse.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.source, pad, enum_frame_size,
-+	ret = v4l2_subdev_call(dcmi->source, pad, enum_frame_size,
- 			       NULL, &fse);
- 	if (ret)
- 		return ret;
-@@ -1402,7 +1395,7 @@ static int dcmi_g_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.source, p);
-+	return v4l2_g_parm_cap(video_devdata(file), dcmi->source, p);
- }
- 
- static int dcmi_s_parm(struct file *file, void *priv,
-@@ -1410,7 +1403,7 @@ static int dcmi_s_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.source, p);
-+	return v4l2_s_parm_cap(video_devdata(file), dcmi->source, p);
- }
- 
- static int dcmi_enum_frameintervals(struct file *file, void *fh,
-@@ -1432,7 +1425,7 @@ static int dcmi_enum_frameintervals(struct file *file, void *fh,
- 
- 	fie.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.source, pad,
-+	ret = v4l2_subdev_call(dcmi->source, pad,
- 			       enum_frame_interval, NULL, &fie);
- 	if (ret)
- 		return ret;
-@@ -1452,7 +1445,7 @@ MODULE_DEVICE_TABLE(of, stm32_dcmi_of_match);
- static int dcmi_open(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.source;
-+	struct v4l2_subdev *sd = dcmi->source;
- 	int ret;
- 
- 	if (mutex_lock_interruptible(&dcmi->lock))
-@@ -1483,7 +1476,7 @@ static int dcmi_open(struct file *file)
- static int dcmi_release(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.source;
-+	struct v4l2_subdev *sd = dcmi->source;
- 	bool fh_singular;
- 	int ret;
- 
-@@ -1616,7 +1609,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- {
- 	const struct dcmi_format *sd_fmts[ARRAY_SIZE(dcmi_formats)];
- 	unsigned int num_fmts = 0, i, j;
--	struct v4l2_subdev *subdev = dcmi->entity.source;
-+	struct v4l2_subdev *subdev = dcmi->source;
- 	struct v4l2_subdev_mbus_code_enum mbus_code = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 	};
-@@ -1675,7 +1668,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- static int dcmi_framesizes_init(struct stm32_dcmi *dcmi)
- {
- 	unsigned int num_fsize = 0;
--	struct v4l2_subdev *subdev = dcmi->entity.source;
-+	struct v4l2_subdev *subdev = dcmi->source;
- 	struct v4l2_subdev_frame_size_enum fse = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.code = dcmi->sd_format->mbus_code,
-@@ -1727,14 +1720,13 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 	 * we search for the source subdevice
- 	 * in order to expose it through V4L2 interface
- 	 */
--	dcmi->entity.source =
--		media_entity_to_v4l2_subdev(dcmi_find_source(dcmi));
--	if (!dcmi->entity.source) {
-+	dcmi->source = media_entity_to_v4l2_subdev(dcmi_find_source(dcmi));
-+	if (!dcmi->source) {
- 		dev_err(dcmi->dev, "Source subdevice not found\n");
- 		return -ENODEV;
- 	}
- 
--	dcmi->vdev->ctrl_handler = dcmi->entity.source->ctrl_handler;
-+	dcmi->vdev->ctrl_handler = dcmi->source->ctrl_handler;
- 
- 	ret = dcmi_formats_init(dcmi);
- 	if (ret) {
-@@ -1813,46 +1805,28 @@ static const struct v4l2_async_notifier_operations dcmi_graph_notify_ops = {
- 	.complete = dcmi_graph_notify_complete,
- };
- 
--static int dcmi_graph_parse(struct stm32_dcmi *dcmi, struct device_node *node)
--{
--	struct device_node *ep = NULL;
--	struct device_node *remote;
--
--	ep = of_graph_get_next_endpoint(node, ep);
--	if (!ep)
--		return -EINVAL;
--
--	remote = of_graph_get_remote_port_parent(ep);
--	of_node_put(ep);
--	if (!remote)
--		return -EINVAL;
--
--	/* Remote node to connect */
--	dcmi->entity.remote_node = remote;
--	dcmi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
--	dcmi->entity.asd.match.fwnode = of_fwnode_handle(remote);
--	return 0;
--}
--
- static int dcmi_graph_init(struct stm32_dcmi *dcmi)
- {
-+	struct v4l2_async_subdev *asd;
-+	struct device_node *ep;
- 	int ret;
- 
--	/* Parse the graph to extract a list of subdevice DT nodes. */
--	ret = dcmi_graph_parse(dcmi, dcmi->dev->of_node);
--	if (ret < 0) {
--		dev_err(dcmi->dev, "Failed to parse graph\n");
--		return ret;
-+	ep = of_graph_get_next_endpoint(dcmi->dev->of_node, NULL);
-+	if (!ep) {
-+		dev_err(dcmi->dev, "Failed to get next endpoint\n");
-+		return -EINVAL;
- 	}
- 
- 	v4l2_async_notifier_init(&dcmi->notifier);
- 
--	ret = v4l2_async_notifier_add_subdev(&dcmi->notifier,
--					     &dcmi->entity.asd);
--	if (ret) {
-+	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-+		&dcmi->notifier, of_fwnode_handle(ep), sizeof(*asd));
-+
-+	of_node_put(ep);
-+
-+	if (IS_ERR(asd)) {
- 		dev_err(dcmi->dev, "Failed to add subdev notifier\n");
--		of_node_put(dcmi->entity.remote_node);
--		return ret;
-+		return PTR_ERR(asd);
- 	}
- 
- 	dcmi->notifier.ops = &dcmi_graph_notify_ops;
--- 
-2.29.2
+I'll submit v2 updating the text.
 
+Thanks,
+Helen
