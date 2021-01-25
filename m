@@ -2,170 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ABA3C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FA4BC433E6
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 241ED21707
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:24:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F139F22B3F
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 17:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730901AbhAYRYI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 12:24:08 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:32880 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731022AbhAYRXc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 12:23:32 -0500
-Received: from [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d] (unknown [IPv6:2804:214:81d7:a6cc:f83c:66c3:4225:e59d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0FE701F45379;
-        Mon, 25 Jan 2021 17:22:44 +0000 (GMT)
-Subject: Re: [PATCH v3 13/14] media: v4l2-async: Discourage use of
- v4l2_async_notifier_add_subdev
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
- <20210125132230.6600-28-sakari.ailus@linux.intel.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <d41e013b-14cb-0a32-3f0c-6396bfffccca@collabora.com>
-Date:   Mon, 25 Jan 2021 14:22:41 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1730924AbhAYRQc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 12:16:32 -0500
+Received: from mga06.intel.com ([134.134.136.31]:38598 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730878AbhAYRQS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Jan 2021 12:16:18 -0500
+IronPort-SDR: BLjo28aGVDgyAB7cSxvQwipazReQYJ8VIzbVKSn1l1CIVxW2N59/pT1B6rJ2TCIFaPQiY+rGbf
+ R+b9psjAg8Tg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="241298485"
+X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
+   d="scan'208";a="241298485"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 09:14:10 -0800
+IronPort-SDR: uyKGD0sEHGPxfenqmDJg7sEx6uXTt80BokbxPhVCI6nL1VdmVQ6ml+sM7Nuw1ncUs+eDUC+CiV
+ Zm0mqUPKDBsg==
+X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
+   d="scan'208";a="387465929"
+Received: from mkrastex-mobl.ger.corp.intel.com (HELO mkrastexMOBL) ([10.104.84.23])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 09:14:08 -0800
+From:   "Martina Krasteva" <martinax.krasteva@linux.intel.com>
+To:     "'Sakari Ailus'" <sakari.ailus@linux.intel.com>
+Cc:     <linux-media@vger.kernel.org>, <mchehab@kernel.org>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <daniele.alessandrelli@linux.intel.com>,
+        <paul.j.murphy@linux.intel.com>,
+        <gjorgjix.rosikopulos@linux.intel.com>
+References: <20201211105633.708-1-martinax.krasteva@linux.intel.com> <20201211105633.708-3-martinax.krasteva@linux.intel.com> <20210125130840.GK27155@paasikivi.fi.intel.com>
+In-Reply-To: <20210125130840.GK27155@paasikivi.fi.intel.com>
+Subject: RE: [PATCH v4 2/2] media: i2c: Add imx334 camera sensor driver
+Date:   Mon, 25 Jan 2021 17:14:04 -0000
+Message-ID: <000101d6f33d$7f08dc10$7d1a9430$@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210125132230.6600-28-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJ+AAXszZC+XWREX7U1zNfsFhfiYwHZem/YASKTefio0poGoA==
+Content-Language: en-us
+dlp-product: dlpe-windows
+dlp-version: 11.5.1.3
+dlp-reaction: no-action
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Sakari,
 
+> -----Original Message-----
+> From: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Sent: Monday, January 25, 2021 1:09 PM
+> To: Martina Krasteva <martinax.krasteva@linux.intel.com>
+> Cc: linux-media@vger.kernel.org; mchehab@kernel.org; robh+dt@kernel.org;
+> devicetree@vger.kernel.org; daniele.alessandrelli@linux.intel.com;
+> paul.j.murphy@linux.intel.com; gjorgjix.rosikopulos@linux.intel.com
+> Subject: Re: [PATCH v4 2/2] media: i2c: Add imx334 camera sensor driver
+> 
+> Hi Martina,
+> 
+> A few more comments.
+> 
+> On Fri, Dec 11, 2020 at 10:56:33AM +0000, Martina Krasteva wrote:
+> > From: Martina Krasteva <martinax.krasteva@intel.com>
+> >
+> > Add a v4l2 sub-device driver for the Sony imx334 image sensor.
+> > This is a camera sensor using the i2c bus for control and the
+> > csi-2 bus for data.
+> >
+> > The following features are supported:
+> > - manual exposure and analog gain control support
+> > - vblank/hblank/pixel rate control support
+> > - supported resolution:
+> >     - 3840x2160 @ 60fps
+> > - supported bayer order output:
+> >     - SRGGB12
+> 
+> Could you add the external clock and link frequencies related properties
+to the
+> bindings and use them in the driver?
+> 
+> <URL:https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html>
+> 
+> Apart from these it looks good to me.
 
-On 1/25/21 10:22 AM, Sakari Ailus wrote:
-> From: Ezequiel Garcia <ezequiel@collabora.com>
+Thanks, the properties and the handling in the driver will be added in next
+version
 > 
-> Most -if not all- use-cases are expected to be covered by one of:
-> v4l2_async_notifier_add_fwnode_subdev,
-> v4l2_async_notifier_add_fwnode_remote_subdev or
-> v4l2_async_notifier_add_i2c_subdev.
+> --
+> Kind regards,
 > 
-> We'd like to discourage drivers from using v4l2_async_notifier_add_subdev,
-> so rename it as __v4l2_async_notifier_add_subdev. This is
-> typically a good hint for drivers to avoid using the function.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Sakari Ailus
 
-Reviewed-by: Helen Koike <helen.koike@collabora.com>
+Kind Regards,
+Martina
 
-> ---
->  drivers/media/v4l2-core/v4l2-async.c  | 8 ++++----
->  drivers/media/v4l2-core/v4l2-fwnode.c | 2 +-
->  include/media/v4l2-async.h            | 9 +++++++--
->  3 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-> index 1f2b7aa1fca6..bd1944c2d062 100644
-> --- a/drivers/media/v4l2-core/v4l2-async.c
-> +++ b/drivers/media/v4l2-core/v4l2-async.c
-> @@ -603,7 +603,7 @@ void v4l2_async_notifier_cleanup(struct v4l2_async_notifier *notifier)
->  }
->  EXPORT_SYMBOL_GPL(v4l2_async_notifier_cleanup);
->  
-> -int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
-> +int __v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
->  				   struct v4l2_async_subdev *asd)
->  {
->  	int ret;
-> @@ -620,7 +620,7 @@ int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
->  	mutex_unlock(&list_lock);
->  	return ret;
->  }
-> -EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_subdev);
-> +EXPORT_SYMBOL_GPL(__v4l2_async_notifier_add_subdev);
->  
->  struct v4l2_async_subdev *
->  v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
-> @@ -637,7 +637,7 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
->  	asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
->  	asd->match.fwnode = fwnode_handle_get(fwnode);
->  
-> -	ret = v4l2_async_notifier_add_subdev(notifier, asd);
-> +	ret = __v4l2_async_notifier_add_subdev(notifier, asd);
->  	if (ret) {
->  		fwnode_handle_put(fwnode);
->  		kfree(asd);
-> @@ -687,7 +687,7 @@ v4l2_async_notifier_add_i2c_subdev(struct v4l2_async_notifier *notifier,
->  	asd->match.i2c.adapter_id = adapter_id;
->  	asd->match.i2c.address = address;
->  
-> -	ret = v4l2_async_notifier_add_subdev(notifier, asd);
-> +	ret = __v4l2_async_notifier_add_subdev(notifier, asd);
->  	if (ret) {
->  		kfree(asd);
->  		return ERR_PTR(ret);
-> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-> index 5353e37eb950..919fde20032e 100644
-> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> @@ -833,7 +833,7 @@ v4l2_async_notifier_fwnode_parse_endpoint(struct device *dev,
->  	if (ret < 0)
->  		goto out_err;
->  
-> -	ret = v4l2_async_notifier_add_subdev(notifier, asd);
-> +	ret = __v4l2_async_notifier_add_subdev(notifier, asd);
->  	if (ret < 0) {
->  		/* not an error if asd already exists */
->  		if (ret == -EEXIST)
-> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-> index 25c9ebd3f963..ef4ac3559be9 100644
-> --- a/include/media/v4l2-async.h
-> +++ b/include/media/v4l2-async.h
-> @@ -138,17 +138,22 @@ void v4l2_async_debug_init(struct dentry *debugfs_dir);
->  void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
->  
->  /**
-> - * v4l2_async_notifier_add_subdev - Add an async subdev to the
-> + * __v4l2_async_notifier_add_subdev - Add an async subdev to the
->   *				notifier's master asd list.
->   *
->   * @notifier: pointer to &struct v4l2_async_notifier
->   * @asd: pointer to &struct v4l2_async_subdev
->   *
-> + * \warning: Drivers should avoid using this function and instead use one of:
-> + * @v4l2_async_notifier_add_fwnode_subdev,
-> + * @v4l2_async_notifier_add_fwnode_remote_subdev or
-> + * @v4l2_async_notifier_add_i2c_subdev.
-> + *
->   * Call this function before registering a notifier to link the provided @asd to
->   * the notifiers master @asd_list. The @asd must be allocated with k*alloc() as
->   * it will be freed by the framework when the notifier is destroyed.
->   */
-> -int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
-> +int __v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
->  				   struct v4l2_async_subdev *asd);
->  
->  /**
-> 
