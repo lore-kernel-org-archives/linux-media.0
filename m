@@ -2,72 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A3CC43381
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04947C432C3
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:22:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82CE422B2C
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:55:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B14412311B
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 19:22:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732316AbhAZRLA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 12:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S2388772AbhAZFqC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389427AbhAZHK6 (ORCPT
+        with ESMTP id S1729835AbhAYTeU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 02:10:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9968FC061756;
-        Mon, 25 Jan 2021 23:09:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Izeg7/5VyaxB5rz80jqoHfYzz5pDatI+gGF4pjJhArM=; b=JxGhOfyt5KZ0xAvheJfP/7LS2P
-        Y83ZDjEK8bQEjgBt/BpF0eamFtJcyEAfQHf/ElHxB1tIfSP3QeYgV0n1QNVE4BUdSaVGtVbjrYAMN
-        TuHlWJUH9tkJE60kuW5AJiqigJrcLYwrTGT9W4U217GGTP8ey+WqXQodrTV12q2K1VhdwTUV3zhVb
-        7zMIE9AxFA8z5T7uvGQ9XlXtnv8Fpdf6JRJwOXYYEXzC0M/snrp2CV1yu8pLmOl74fJ2W1EEVTmfn
-        CyeAbzzNZrnKe3A5Ia6Dir7ucISl11Letv7SUL4Ydbax5iEblm/IeoLTYWLeQRqjaM1T4AoJNCJ/t
-        SGODeicQ==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l4IS0-005E6W-9K; Tue, 26 Jan 2021 07:08:08 +0000
-Date:   Tue, 26 Jan 2021 07:07:44 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Minchan Kim <minchan@kernel.org>
+        Mon, 25 Jan 2021 14:34:20 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D693BC061573;
+        Mon, 25 Jan 2021 11:33:40 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id jx18so240511pjb.5;
+        Mon, 25 Jan 2021 11:33:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YmWxybprGkUlor/mN/GWW2ybyHD5q29LT4+P3EdRmnA=;
+        b=EBNKjZuKHxW5GWIdGLvLCZ7chWb4KO0MKVIhKt3fRdJvaAs9jxM6ETrjqjFSG+hOcx
+         h5S+VpQyEwXNQ8VtntSyf/SQoUXVvLP4lUyC58rkfp3tgs9J+paSQXGcEKa52yXy7J4O
+         kP52t1kBs6KlnhOIj6WaHmbBC1YtPBk5SI8JsAOBaK2UaPtHDIWJRnLdul8swrqRHAcZ
+         AMC+FX2sapcUnJovE0Mkmu6G5Nfa+gorBVc9MhFr6aALhEtVlXPUhBsjEg9FbMWzpXCR
+         o6nmbgOPQmeO7kXntbtATshiWQQcq3s3uvWEcDnIj69e25CCDifde3FwVj+PJJZx9BRN
+         1kUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=YmWxybprGkUlor/mN/GWW2ybyHD5q29LT4+P3EdRmnA=;
+        b=gVe9ZHO1X8TW5z8BrRz6Aofs1OITyH0hgNZ+JAHNBHNfjTUsvD1blRum1GoV6n6fuX
+         kGa5AGAnAnqYNkUdHCaorqO+ZZYp1pIdIU17i5N73iwjD/sqpIgYNkMZQKzOAcC89sKQ
+         ev62Mpy+yVptBQ18PBWqr0M1Y/zAyYEC9EdoBUel6jdZ2UsT2GG9CfGezEsrGhHhSxir
+         rCnGj1dtlb+znBKAiA8ceogvITjMr69Sz2TWjFr7CQfNhPkFk5VZZIl2HTKbrkmBMiAe
+         sY/+ElODlmH+Uv/5NPtHyF8F3cEFJ5PURco1i+NqBrp11xxogDaURSH57bHXsv7xf00n
+         +A4w==
+X-Gm-Message-State: AOAM531uaQZwr3hIBGA22GTmifO8X4XJL5TIQgrxj3PpoHjoDr/EAjsC
+        x5FAJXQOZJ+WNp5A7XphMJw=
+X-Google-Smtp-Source: ABdhPJzWAbofIoJoeR7THVK7Sebi8NYFmGlVyxvi0QBQ4bvwgYBN/qHKMW2JhCbBaw0rqz/r5kDC9g==
+X-Received: by 2002:a17:90a:be10:: with SMTP id a16mr1817662pjs.78.1611603220402;
+        Mon, 25 Jan 2021 11:33:40 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:e8b4:4688:79de:94f3])
+        by smtp.gmail.com with ESMTPSA id w19sm17535415pgf.23.2021.01.25.11.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 11:33:38 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Mon, 25 Jan 2021 11:33:36 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-mm <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, mhocko@suse.com, surenb@google.com,
-        pullip.cho@samsung.com, joaodias@google.com, hridya@google.com,
-        john.stultz@linaro.org, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        hch@infradead.org, robh+dt@kernel.org,
+        david@redhat.com, surenb@google.com, pullip.cho@samsung.com,
+        joaodias@google.com, hridya@google.com, john.stultz@linaro.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, hch@infradead.org, robh+dt@kernel.org,
         linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
-Message-ID: <20210126070744.GA1244507@infradead.org>
+Subject: Re: [PATCH v4 2/4] mm: failfast mode with __GFP_NORETRY in
+ alloc_contig_range
+Message-ID: <YA8dEFSrHBb9muFr@google.com>
 References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-5-minchan@kernel.org>
+ <20210121175502.274391-3-minchan@kernel.org>
+ <20210125131200.GG827@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210121175502.274391-5-minchan@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20210125131200.GG827@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> +config DMABUF_HEAPS_CHUNK
-> +	bool "DMA-BUF CHUNK Heap"
-> +	depends on DMABUF_HEAPS && DMA_CMA
-> +	help
-> +	  Choose this option to enable dma-buf CHUNK heap. This heap is backed
-> +	  by the Contiguous Memory Allocator (CMA) and allocates the buffers that
-> +	  are arranged into a list of fixed size chunks taken from CMA.
+On Mon, Jan 25, 2021 at 02:12:00PM +0100, Michal Hocko wrote:
+> On Thu 21-01-21 09:55:00, Minchan Kim wrote:
+> > Contiguous memory allocation can be stalled due to waiting
+> > on page writeback and/or page lock which causes unpredictable
+> > delay. It's a unavoidable cost for the requestor to get *big*
+> > contiguous memory but it's expensive for *small* contiguous
+> > memory(e.g., order-4) because caller could retry the request
+> > in different range where would have easy migratable pages
+> > without stalling.
+> > 
+> > This patch introduce __GFP_NORETRY as compaction gfp_mask in
+> > alloc_contig_range so it will fail fast without blocking
+> > when it encounters pages needed waiting.
+> 
+> I am not against controling how hard this allocator tries with gfp mask
+> but this changelog is rather void on any data and any user.
+> 
+> It is also rather dubious to have retries when then caller says to not
+> retry.
 
-Overly long line, which in text flowing text is really, really annoying.
+Since max_tries is 1 with ++tries, it shouldn't retry.
 
-Many more later.  Remember that > 80 chars are only allowed if they
-significantly improve readability.  
+> 
+> Also why didn't you consider GFP_NOWAIT semantic for non blocking mode?
+
+GFP_NOWAIT seems to be low(specific) flags rather than the one I want to
+express. Even though I said only page writeback/lock in the description,
+the goal is to avoid costly operations we might find later so such
+"failfast", I thought GFP_NORETRY would be good fit.
+
+> 
+> > Signed-off-by: Minchan Kim <minchan@kernel.org>
+> > ---
+> >  mm/page_alloc.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index b031a5ae0bd5..1cdc3ee0b22e 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -8491,12 +8491,16 @@ static int __alloc_contig_migrate_range(struct compact_control *cc,
+> >  	unsigned int nr_reclaimed;
+> >  	unsigned long pfn = start;
+> >  	unsigned int tries = 0;
+> > +	unsigned int max_tries = 5;
+> >  	int ret = 0;
+> >  	struct migration_target_control mtc = {
+> >  		.nid = zone_to_nid(cc->zone),
+> >  		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
+> >  	};
+> >  
+> > +	if (cc->alloc_contig && cc->mode == MIGRATE_ASYNC)
+> > +		max_tries = 1;
+> > +
+> >  	migrate_prep();
+> >  
+> >  	while (pfn < end || !list_empty(&cc->migratepages)) {
+> > @@ -8513,7 +8517,7 @@ static int __alloc_contig_migrate_range(struct compact_control *cc,
+> >  				break;
+> >  			}
+> >  			tries = 0;
+> > -		} else if (++tries == 5) {
+> > +		} else if (++tries == max_tries) {
+> >  			ret = ret < 0 ? ret : -EBUSY;
+> >  			break;
+> >  		}
+> > @@ -8564,7 +8568,7 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+> >  		.nr_migratepages = 0,
+> >  		.order = -1,
+> >  		.zone = page_zone(pfn_to_page(start)),
+> > -		.mode = MIGRATE_SYNC,
+> > +		.mode = gfp_mask & __GFP_NORETRY ? MIGRATE_ASYNC : MIGRATE_SYNC,
+> >  		.ignore_skip_hint = true,
+> >  		.no_set_skip_hint = true,
+> >  		.gfp_mask = current_gfp_context(gfp_mask),
+> > -- 
+> > 2.30.0.296.g2bfb1c46d8-goog
+> 
+> -- 
+> Michal Hocko
+> SUSE Labs
