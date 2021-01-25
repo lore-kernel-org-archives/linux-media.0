@@ -2,133 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BD9C43381
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 01:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F4FC433E9
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 02:54:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1F7523104
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 01:49:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F12D2310C
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 02:54:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729149AbhAZBZP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 20:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S1729201AbhAYOFB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 09:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731549AbhAYTnS (ORCPT
+        with ESMTP id S1729236AbhAYODz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:43:18 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44755C061573;
-        Mon, 25 Jan 2021 11:42:38 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id h15so5817742pli.8;
-        Mon, 25 Jan 2021 11:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5fVcl4vKZHTggDm2blzFERgcHQ62HSz/1Q2cJ06nrTg=;
-        b=LL0FJhwoQrn7tUXdzpAdVeTxvpcnKljV3FZHqFh2MW1Nn7kU9DyudKg56dc5WEr9b6
-         ELm2u/F2CynFbqQtnbVH2jrvb8lb1owWggFXMi984iR8HTHAcY72RwkpQdyg8kYvD0M1
-         RisgAaxjOP+vvR3/e714JnzZEN1qwfV0D1os8EX74vck3vQUmCO2GgBK9koYeN27koOW
-         Oq/LfzpLUKcvcfMc32E+juzk5/cvnCxX4FrhUoAcKQP0Bjh2fnlHpW4kRlYQMjxX55tt
-         +nQ1Esa8G7u99N3yLi5Bo5MB2j6DnvTMZuy699sUzV5zcXDX1JNVbLcKFO77mPxxlt2v
-         2tgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=5fVcl4vKZHTggDm2blzFERgcHQ62HSz/1Q2cJ06nrTg=;
-        b=i03k0fd5SFCR/P2q+aG2QbMbCD8RKiJUHNGbuyFrbAm6++jmxQe1ZRmU2eeeghOan5
-         vy6ZzLvsgil6LRMwKmJMXAznPxEzQJJRwwZtfflmpQ/zDILFxQqF+uw4JZPOAsOQhdjH
-         hrkXRPGUcmmlnySOqQRTh+L928sYPFBhh7GDoRmaCKJ0PXyCaGm59tYNxMYpFJ0NYcDV
-         mj+sJJUwtZBbMDfgcNM7TfQJ8uDmDE3XJtEIcJn1Z3vfmZTkciQE2pwFbpCsFZHVcFNb
-         i/9k33YRAqM83VsIhiuqVJXM1O4uTDsMxE/eE7mIzi4UByLtv3nLA2LCXljuB5fEBr28
-         REAg==
-X-Gm-Message-State: AOAM532LhUvSpwFa+3riBkTuRtv0iHP9331HZalQvq6Cq+EHHZjg3VKr
-        mhXPnppKPqmZ/u45M6dUks4=
-X-Google-Smtp-Source: ABdhPJwT/YZ72o8PzSOo3q/xaeqNAkBX8xQi8IOdnfyF1Y2kFh41Roa9xrm8PNLtM8E9l0D9llOWOA==
-X-Received: by 2002:a17:90a:7e90:: with SMTP id j16mr1784454pjl.163.1611603757872;
-        Mon, 25 Jan 2021 11:42:37 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:e8b4:4688:79de:94f3])
-        by smtp.gmail.com with ESMTPSA id h6sm17733599pfr.47.2021.01.25.11.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:42:36 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Mon, 25 Jan 2021 11:42:34 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, surenb@google.com, pullip.cho@samsung.com,
-        joaodias@google.com, hridya@google.com, john.stultz@linaro.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 1/4] mm: cma: introduce gfp flag in cma_alloc instead
- of no_warn
-Message-ID: <YA8fKgFLuOi/rSez@google.com>
-References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-2-minchan@kernel.org>
- <20210125130701.GF827@dhcp22.suse.cz>
+        Mon, 25 Jan 2021 09:03:55 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E92C06174A
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 06:03:13 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (dbd4xkyj7wcfw2k22jcct-3.rev.dnainternet.fi [IPv6:2001:14ba:8f1:3400:fb90:892b:22d6:3885])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4510A1B00258;
+        Mon, 25 Jan 2021 16:01:22 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1611583284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UausP13LEsLf+YIEEgLyQhDDEzp26zUfrhCoUEIYXcs=;
+        b=UKwN5spQvA+O1DavdHNGk2f87vVb4f+c3bZTcoHiW6tNilirDK96ldCzGHVycVyym4e0ZQ
+        nNCJ0skyDUnXgDK5pJdhQc5ct82B5fVOZ1ukmzRtW56Sj9H0HFl9HP6ePMKd0FKUOlIaRP
+        OZkGx3MMXN8PfUn8D9ekVnRP2+f/slQWekKbmgaaqnxCfJmcTJs07HqSWBAjRfjLoF2vn5
+        xMmzXFqxN0RWH6iYmZbOcn1AYaLSQgsRB3uzbOhNed0Z7Fz65mIVHH/xw4MFOud0ZWhiPr
+        nmV2pFgAwmRpsjewFWh2MyTxHZf6zcgIyLQXVLhAnOfIjSH6ei97D+/JEDFA/Q==
+Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id DFCE4634C87;
+        Mon, 25 Jan 2021 15:59:42 +0200 (EET)
+Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
+        by valkosipuli.localdomain with esmtp (Exim 4.92)
+        (envelope-from <sakari.ailus@iki.fi>)
+        id 1l42P8-0005JR-OV; Mon, 25 Jan 2021 15:59:42 +0200
+Date:   Mon, 25 Jan 2021 15:59:42 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: Re: [PATCH 07/14] media: marvell-ccic: Use
+ v4l2_async_notifier_add_*_subdev
+Message-ID: <20210125135942.GH3@valkosipuli.retiisi.org.uk>
+References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
+ <20210125132230.6600-7-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210125130701.GF827@dhcp22.suse.cz>
+In-Reply-To: <20210125132230.6600-7-sakari.ailus@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1611583284; a=rsa-sha256;
+        cv=none;
+        b=hE2l6ATrevaYdVarMOleQbfNVlPiDIqOODBLAcaC5KU+/VKskYDUp6dJYC1/fplBlF7rfv
+        mV+XG91UYd9D9XNFuvy1um8QFF7+LSEigOBUOQS/V2yPL/JLGFQHiNmlgKEmyye3mBYCEO
+        dIQLGZPjayrhSEHtTuELY3nXHGiTJXq+0i5iQCciZDMd//w65Q5XgVtALIylRAOiaU4cpT
+        JdUDsztjTXn8uSIc69DUJBlmghS/pf4OYTYQ4xr7ACdJIxjebFRUKZIPesgfiVXXHBPRxw
+        6E7MmU4PJSAkmkmjg+mBeqmjo8ApP2umRJaisWlv+A9ZEwZw9BYTvshI/rorNA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1611583284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UausP13LEsLf+YIEEgLyQhDDEzp26zUfrhCoUEIYXcs=;
+        b=Spd9aDxhAEb2ZBBcZGTuEyT7sGqILfnAiFmCkjjCyJ0C2bUjzJhTLW/iihSbsgjOdnb3fT
+        37KTCbeApCEfqboWtcc6ItLFq4KpE0s+0QTtxlJ/bS6STQd0mW8o7Vue9B7HQz78ykzb24
+        HR3UK41JCkAikoRtYcElHZBerMMSRkw1yjXfSs7LRDrjfF8ICIBJw0bIZ6t/nhW3j8/PHt
+        JefJY1S05X+i22ms7SZhpncM3BKY+xlZyQ/nZpf8/vzKkRqUwhJ82VM2KChfdC2ceUl64C
+        w/kZDAR/wxeUxC5qOSfaZGuOGfMMEgBBD0cY0Z8J/762hEanc8elADdk4stDAg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 02:07:01PM +0100, Michal Hocko wrote:
-> On Thu 21-01-21 09:54:59, Minchan Kim wrote:
-> > The upcoming patch will introduce __GFP_NORETRY semantic
-> > in alloc_contig_range which is a failfast mode of the API.
-> > Instead of adding a additional parameter for gfp, replace
-> > no_warn with gfp flag.
-> > 
-> > To keep old behaviors, it follows the rule below.
-> > 
-> >   no_warn 			gfp_flags
-> > 
-> >   false         		GFP_KERNEL
-> >   true          		GFP_KERNEL|__GFP_NOWARN
-> >   gfp & __GFP_NOWARN		GFP_KERNEL | (gfp & __GFP_NOWARN)
-> > 
-> > Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> > Signed-off-by: Minchan Kim <minchan@kernel.org>
-> [...]
-> > diff --git a/mm/cma.c b/mm/cma.c
-> > index 0ba69cd16aeb..d50627686fec 100644
-> > --- a/mm/cma.c
-> > +++ b/mm/cma.c
-> > @@ -419,13 +419,13 @@ static inline void cma_debug_show_areas(struct cma *cma) { }
-> >   * @cma:   Contiguous memory region for which the allocation is performed.
-> >   * @count: Requested number of pages.
-> >   * @align: Requested alignment of pages (in PAGE_SIZE order).
-> > - * @no_warn: Avoid printing message about failed allocation
-> > + * @gfp_mask: GFP mask to use during the cma allocation.
-> 
-> Call out supported gfp flags explicitly. Have a look at kvmalloc_node
-> for a guidance.
+On Mon, Jan 25, 2021 at 03:22:08PM +0200, Sakari Ailus wrote:
+> From: Ezequiel Garcia <ezequiel@collabora.com>
 
-How about this?
+Apologies for the spam. Please ignore these... I'll see if the proper v3
+set would get through vger.
 
-
-diff --git a/mm/cma.c b/mm/cma.c
-index d50627686fec..b94727b694d6 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -423,6 +423,10 @@ static inline void cma_debug_show_areas(struct cma *cma) { }
-  *
-  * This function allocates part of contiguous memory on specific
-  * contiguous memory area.
-+ *
-+ * For gfp_mask, GFP_KERNEL and __GFP_NORETRY are supported. __GFP_NORETRY
-+ * will avoid costly functions(e.g., waiting on page_writeback and locking)
-+ * at current implementaion during the page migration.
-  */
- struct page *cma_alloc(struct cma *cma, size_t count, unsigned int align,
-                       gfp_t gfp_mask)
-
+-- 
+Sakari Ailus
