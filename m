@@ -2,52 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B58C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 05:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5693EC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 05:57:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C825E22CA2
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 05:48:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18FD122581
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 05:57:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725960AbhAYFs2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 00:48:28 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:19708 "EHLO
+        id S1727003AbhAYFyH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 00:54:07 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:48970 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbhAYFs0 (ORCPT
+        with ESMTP id S1727063AbhAYFwt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 00:48:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=qti.qualcomm.com; i=@qti.qualcomm.com; q=dns/txt;
-  s=qcdkim; t=1611553706; x=1643089706;
-  h=from:to:cc:subject:date:message-id;
-  bh=Jc0pww2EeutSvXzzlyYPwaeU7Tg2Hh9IkScJ5YhJZCE=;
-  b=Cq6gSEqXXHKGOs/JJ7FTO8C2vFxr4TCsLFWXieaZv+6DES7LFFyz4IYy
-   hdDx4Wgl+X1B/tMzlZYj/pwB1ISLbLkqjy6skDoE4oVfpAJ85lAwT2CEr
-   SFOY4Sa2cJ1gblb/yCA+SMWr05vEjqPjSzovupblgQvdl2qOI38ZFwei2
-   E=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 24 Jan 2021 21:47:45 -0800
+        Mon, 25 Jan 2021 00:52:49 -0500
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 24 Jan 2021 21:52:09 -0800
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Jan 2021 21:47:44 -0800
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Jan 2021 21:52:07 -0800
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 25 Jan 2021 11:17:28 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 25 Jan 2021 11:22:03 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id EE43921578; Mon, 25 Jan 2021 11:17:27 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@qti.qualcomm.com>
+        id 62E8421578; Mon, 25 Jan 2021 11:22:02 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>
+        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
 Subject: [PATCH v6 0/2] Add encoder ctrls for long term reference
-Date:   Mon, 25 Jan 2021 11:16:56 +0530
-Message-Id: <1611553618-17224-1-git-send-email-dikshita@qti.qualcomm.com>
+Date:   Mon, 25 Jan 2021 11:21:57 +0530
+Message-Id: <1611553919-17919-1-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
