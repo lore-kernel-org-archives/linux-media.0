@@ -2,220 +2,166 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3CDBC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 20:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46EE2C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 20:46:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6748D22583
-	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 20:33:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11ECD21D79
+	for <linux-media@archiver.kernel.org>; Mon, 25 Jan 2021 20:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732288AbhAYU3D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Jan 2021 15:29:03 -0500
-Received: from mail-oo1-f53.google.com ([209.85.161.53]:37436 "EHLO
-        mail-oo1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbhAYU07 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Jan 2021 15:26:59 -0500
-Received: by mail-oo1-f53.google.com with SMTP id q3so3585528oog.4;
-        Mon, 25 Jan 2021 12:26:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FSg4INHSggtMiAtH0ajTU964cpIOeVyZUnN9S+EGu08=;
-        b=CmpCUDfpuRUSAmb6shFrFLKveQjc59AL0JcSWc2PMDavvQQrg4NDuh7BiQ7XG2RPO3
-         B67coYrR/7ydx8ez2pssBi3POHfDJo3tF+m/aaP0HlP8hwXDSmqivRnu3QQQVJxhmIaV
-         LQw3FQjrc7BO1B1URpF1mYYVaUTtl2NjLECG+DldC32CjTL5+uNbbSbMUvXzMr/Fd7RJ
-         9OM14TkiSQJYmGPefzNT3M665zg13iI58W5a4pbRpbXC+cLxwmJqnm0gT6KWTYC8EqoZ
-         ljMY15owpRbrw/0AQwtq5uRmp03h6Fu2s6jqwX3zok2dGN1RRzCHnUaqygAtvuN+oFhX
-         7waA==
-X-Gm-Message-State: AOAM533T7swLJVa4+9BBTYKQQO2gm3to+SfZkbuTdH5Nnv6uid4yI2fG
-        jgnImaMpv+aFJdnpj/GuEQ==
-X-Google-Smtp-Source: ABdhPJzL7dMxUvAQG2Fb/Nrbe0hA/9aUsmo+HOrMyQqwNhQHrIWJfmlR/OLuRmMavJvbMa+ChT92kg==
-X-Received: by 2002:a4a:4302:: with SMTP id k2mr1612446ooj.50.1611606377371;
-        Mon, 25 Jan 2021 12:26:17 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m15sm3682391otl.11.2021.01.25.12.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 12:26:16 -0800 (PST)
-Received: (nullmailer pid 919151 invoked by uid 1000);
-        Mon, 25 Jan 2021 20:26:15 -0000
-Date:   Mon, 25 Jan 2021 14:26:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org
-Subject: Re: [PATCH v4 2/2] media: dt-bindings: media: i2c: Add IMX300 CMOS
- sensor binding
-Message-ID: <20210125202615.GA912502@robh.at.kernel.org>
-References: <20210113182934.444727-1-angelogioacchino.delregno@somainline.org>
- <20210113182934.444727-3-angelogioacchino.delregno@somainline.org>
+        id S1732204AbhAYUqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Jan 2021 15:46:03 -0500
+Received: from mga11.intel.com ([192.55.52.93]:46456 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731970AbhAYUpi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Jan 2021 15:45:38 -0500
+IronPort-SDR: vvd36FN+yCDDkZIa8778ndDP30ncJhSQV+9ZhtC06C6UfjFOVqxL4kq+/aFZALlN1D3igOUyCJ
+ cTBOBVVaDnzQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="176287068"
+X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
+   d="scan'208";a="176287068"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 12:43:43 -0800
+IronPort-SDR: gvTEk14EDCgYuW6+wm7Pz35obCVpWzofVHQQKrjGDa8aub10FyNfJEHjrG0OWgCwvAL0+9j9Gd
+ kXwNIVmIGeYg==
+X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
+   d="scan'208";a="387533140"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 12:43:37 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 1EB902080B; Mon, 25 Jan 2021 22:43:35 +0200 (EET)
+Date:   Mon, 25 Jan 2021 22:43:35 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Helen Koike <helen.koike@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: Re: [PATCH v3 08/14] media: renesas-ceu: Use
+ v4l2_async_notifier_add_*_subdev
+Message-ID: <20210125204335.GC4233@paasikivi.fi.intel.com>
+References: <20210125132230.6600-1-sakari.ailus@linux.intel.com>
+ <20210125132230.6600-23-sakari.ailus@linux.intel.com>
+ <e58b42da-cb08-28c7-ec0a-fd3a07f76228@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210113182934.444727-3-angelogioacchino.delregno@somainline.org>
+In-Reply-To: <e58b42da-cb08-28c7-ec0a-fd3a07f76228@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 07:29:34PM +0100, AngeloGioacchino Del Regno wrote:
-> Add YAML device tree binding for IMX300 CMOS image sensor, and
-> the relevant MAINTAINERS entries.
+On Mon, Jan 25, 2021 at 01:50:25PM -0300, Helen Koike wrote:
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  .../bindings/media/i2c/sony,imx300.yaml       | 112 ++++++++++++++++++
->  MAINTAINERS                                   |   7 ++
->  2 files changed, 119 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
-> new file mode 100644
-> index 000000000000..4fa767feea80
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/sony,imx300.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sony 1/2.3-Inch 25Mpixel Stacked CMOS Digital Image Sensor
-> +
-> +maintainers:
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> +
-> +description: |-
-> +  The Sony IMX300 is a 1/2.3-inch Stacked CMOS (Exmor-RS) digital image
-> +  sensor with a pixel size of 1.08um and an active array size of
-> +  5948H x 4140V. It is programmable through I2C interface at address 0x10.
-> +  Image data is sent through MIPI CSI-2, which is configured as either 2 or
-> +  4 data lanes.
-> +
-> +properties:
-> +  compatible:
-> +    const: sony,imx300
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  vdig-supply:
-> +    description:
-> +      Digital I/O voltage supply, 1.15-1.20 volts
-> +
-> +  vana-supply:
-> +    description:
-> +      Analog voltage supply, 2.2 volts
-> +
-> +  vddl-supply:
-> +    description:
-> +      Digital core voltage supply, 1.8 volts
-> +
-> +  reset-gpios:
-> +    description: |-
-> +      Reference to the GPIO connected to the xclr pin, if any.
-> +      Must be released (set high) after all supplies are applied.
-> +
-> +  # See ../video-interfaces.txt for more details
-> +  port:
-> +    type: object
-> +    properties:
-> +      endpoint:
+> On 1/25/21 10:22 AM, Sakari Ailus wrote:
+> > From: Ezequiel Garcia <ezequiel@collabora.com>
+> > 
+> > The use of v4l2_async_notifier_add_subdev will be discouraged.
+> > Drivers are instead encouraged to use a helper such as
+> > v4l2_async_notifier_add_i2c_subdev.
+> > 
+> > This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+> > should get a kmalloc'ed struct v4l2_async_subdev,
+> > removing some boilerplate code while at it.
+> > 
+> > Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
+> > or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
+> > the needed setup, instead of open-coding it.
+> > 
+> > Using v4l2-async to allocate the driver-specific structs,
+> > requires to change struct ceu_subdev so the embedded
+> > struct v4l2_async_subdev is now the first element.
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  drivers/media/platform/renesas-ceu.c | 60 +++++++++++++---------------
+> >  1 file changed, 27 insertions(+), 33 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
+> > index 4a633ad0e8fa..0298d08b39e4 100644
+> > --- a/drivers/media/platform/renesas-ceu.c
+> > +++ b/drivers/media/platform/renesas-ceu.c
+> > @@ -152,8 +152,8 @@ static inline struct ceu_buffer *vb2_to_ceu(struct vb2_v4l2_buffer *vbuf)
+> >   * ceu_subdev - Wraps v4l2 sub-device and provides async subdevice.
+> >   */
+> >  struct ceu_subdev {
+> > -	struct v4l2_subdev *v4l2_sd;
+> >  	struct v4l2_async_subdev asd;
+> > +	struct v4l2_subdev *v4l2_sd;
+> >  
+> >  	/* per-subdevice mbus configuration options */
+> >  	unsigned int mbus_flags;
+> > @@ -174,7 +174,7 @@ struct ceu_device {
+> >  	struct v4l2_device	v4l2_dev;
+> >  
+> >  	/* subdevices descriptors */
+> > -	struct ceu_subdev	*subdevs;
+> > +	struct ceu_subdev	**subdevs;
+> >  	/* the subdevice currently in use */
+> >  	struct ceu_subdev	*sd;
+> >  	unsigned int		sd_index;
+> > @@ -1195,7 +1195,7 @@ static int ceu_enum_input(struct file *file, void *priv,
+> >  	if (inp->index >= ceudev->num_sd)
+> >  		return -EINVAL;
+> >  
+> > -	ceusd = &ceudev->subdevs[inp->index];
+> > +	ceusd = ceudev->subdevs[inp->index];
+> >  
+> >  	inp->type = V4L2_INPUT_TYPE_CAMERA;
+> >  	inp->std = 0;
+> > @@ -1230,7 +1230,7 @@ static int ceu_s_input(struct file *file, void *priv, unsigned int i)
+> >  		return 0;
+> >  
+> >  	ceu_sd_old = ceudev->sd;
+> > -	ceudev->sd = &ceudev->subdevs[i];
+> > +	ceudev->sd = ceudev->subdevs[i];
+> >  
+> >  	/*
+> >  	 * Make sure we can generate output image formats and apply
+> > @@ -1423,7 +1423,7 @@ static int ceu_notify_complete(struct v4l2_async_notifier *notifier)
+> >  	 * ceu formats.
+> >  	 */
+> >  	if (!ceudev->sd) {
+> > -		ceudev->sd = &ceudev->subdevs[0];
+> > +		ceudev->sd = ceudev->subdevs[0];
+> >  		ceudev->sd_index = 0;
+> >  	}
+> >  
+> > @@ -1467,8 +1467,8 @@ static const struct v4l2_async_notifier_operations ceu_notify_ops = {
+> >  
+> >  /*
+> >   * ceu_init_async_subdevs() - Initialize CEU subdevices and async_subdevs in
+> > - *			      ceu device. Both DT and platform data parsing use
+> > - *			      this routine.
+> > + *                           ceu device. Both DT and platform data parsing use
+> > + *                           this routine.
+> 
+> Maybe doc alignment fix should be sent in another patch.
+> 
+> With or without this:
+> 
+> Reviewed-by: Helen Koike <helen.koike@collabora.com>
 
-This now needs to reference the graph.yaml and video-interfaces.yaml 
-schemas. See the media tree or linux-next for examples.
+Thanks; I prefer keeping it here, not worth writing a patch just for this.
 
-> +        type: object
-> +
-> +        properties:
-> +          data-lanes:
-> +            description: |-
-> +              The driver only supports four-lane operation.
-> +            items:
-> +              - const: 0
-> +              - const: 1
-> +              - const: 2
-> +              - const: 3
-> +
-> +          clock-noncontinuous: true
-> +
-> +          link-frequencies:
-> +            $ref: /schemas/types.yaml#/definitions/uint64-array
-> +            description:
-> +              Allowed data bus frequencies. The driver currently needs
-> +              to switch between 780000000 and 480000000 Hz in order to
-> +              guarantee functionality of all modes.
-> +
-> +        required:
-> +          - data-lanes
-> +          - link-frequencies
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - vana-supply
-> +  - vdig-supply
-> +  - vddl-supply
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        imx300: sensor@10 {
-> +            compatible = "sony,imx300";
-> +            reg = <0x10>;
-> +            clocks = <&imx300_xclk>;
-> +            vana-supply = <&imx300_vana>;   /* 2.2v */
-> +            vdig-supply = <&imx300_vdig>;   /* 1.2v */
-> +            vddl-supply = <&imx300_vddl>;   /* 1.8v */
-> +
-> +            port {
-> +                imx300_0: endpoint {
-> +                    remote-endpoint = <&csi1_ep>;
-> +                    data-lanes = <0 1 2 3>;
-> +                    clock-noncontinuous;
-> +                    link-frequencies = /bits/ 64 <780000000 480000000>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ad9abb42f852..5e0f08f48d48 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16633,6 +16633,13 @@ T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/i2c/imx290.txt
->  F:	drivers/media/i2c/imx290.c
->  
-> +SONY IMX300 SENSOR DRIVER
-> +M:	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
-> +F:	drivers/media/i2c/imx300.c
-> +
->  SONY IMX319 SENSOR DRIVER
->  M:	Bingbu Cao <bingbu.cao@intel.com>
->  L:	linux-media@vger.kernel.org
-> -- 
-> 2.29.2
-> 
+-- 
+Sakari Ailus
