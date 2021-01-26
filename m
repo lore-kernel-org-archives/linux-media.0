@@ -2,97 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8210EC433E6
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39493C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:26:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3674E20759
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:24:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E519B2073A
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:26:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S314069AbhAZW4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 17:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S314059AbhAZW4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 17:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388685AbhAZT21 (ORCPT
+        with ESMTP id S2392798AbhAZT10 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 14:28:27 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66DAC061573;
-        Tue, 26 Jan 2021 11:27:39 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id a20so2595994pjs.1;
-        Tue, 26 Jan 2021 11:27:39 -0800 (PST)
+        Tue, 26 Jan 2021 14:27:26 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F18C0613ED
+        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 11:26:45 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id k8so17359648otr.8
+        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 11:26:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yle40tWleCzEixF2mwBGtJ3uB7QHbvhm1AXLk8kwIl8=;
-        b=ZlkSubWPggrXH8a/wycob6mIua6+s0/ZdLTa5t2I6px+/S/tLG/+v+PoRWMqckd3Ni
-         BJPh3o/DGMgDVUOglR6ENIVaJNdQqM/oKdsLbLHeXoYepAEFk5B8rcmSfC1hnzOUUrYq
-         VZ9Y1ym2Eh0F6YGyspyf/MN3K5cy+uFnmjrrLGVtji/T8W4ly5ZjxCKfgAg14sOQl0L0
-         uitV75YtyLO9mIJlv+RkIeftrpjh0vOQSBo4JQdKFGVUGSxee0vAnYHEz0aji5wTN7u4
-         LREA6AJs9iDrayFk5sObqrTAYVNLBwJfb1lZLEEIuR/B9/4tOCzqc4uk9dFaGg1XYaSM
-         McmA==
+        d=nextdimension-cc.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y4/anOXivGV6ZLOM5vHU2BQKpLVVHE4/9GWogoMUGnA=;
+        b=nbKgPCa4/lzHcM+83/zVQbo+M1QHFSMhwoAZfTIP7/zL6zrODVShk8o2e5rOSweL2C
+         ZD4cQ0x4SUAgg9aYK3ELykRwdn2q7tUkPUTuUQ+61JOwhsO1A41Ka5xHNoy8gnndJwzc
+         J323GrElvHKefgiJYgNAkBGSXs41o8XWyslEGr2DUkAmtnzjW4WEx/oYszbiFe0gCkEH
+         U0CLn5jWtu5GN9lho7Qv/N9SaOM0UL1cvBArg8Gwhf/CgyEV/sjZnoBJ1jGHw2o39iDk
+         yALGsVeB6gFotXjs8v1V5PzNVoP54od13C6EhMX5hjEGKo4lmrpcFa+MDHesbzlq4paC
+         ksgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yle40tWleCzEixF2mwBGtJ3uB7QHbvhm1AXLk8kwIl8=;
-        b=gXoXXGu7REQF7h0I/prTxhtGLYT1Pgi98gpZYzWqdR3Ry96a+/KVjo8nU8tHYrz2VE
-         YJCYfLD8DbewxwrU5tKDbJ//k16Tw9hPhTGWtYRQoqlLFF8MD3IQxdjo0pzQdwXSH38H
-         Ouw0H302fgZLLh2W5GbMAd1NoRd1Q1dcQTJxUrSfGCoAqYQ8LQ1Dfu08XU1yLP9AOuNB
-         fuSx6jVy++0yFSmPeayk2eiHoxtjTOTd4LldHwMkjjN4Q5qeb2DPe/l9S8dfmAVWwoLE
-         YmEp++VfMV1+7IeDpEecmlNQdD9axDi5bUFXZn1N8uLenE6GSby1ByTbR/s6IW+y8UBI
-         fIeg==
-X-Gm-Message-State: AOAM530o8ejiWZnfUyF3we+cyX7/hIoNCEkhLiin7isVmP/CS3Se+z3i
-        1W/iewqztUsXbE7LdnAYbe8=
-X-Google-Smtp-Source: ABdhPJy5XocxQ8cgnEM5TwBXCFWhCBkaorP2EB5WKTN9SCc+sxCX2AoMx3hY+M6rFYi7ZiCnMRZYdg==
-X-Received: by 2002:a17:90a:5793:: with SMTP id g19mr1418129pji.32.1611689259525;
-        Tue, 26 Jan 2021 11:27:39 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:9dd5:b47b:bb84:dede])
-        by smtp.gmail.com with ESMTPSA id w184sm20605882pgb.71.2021.01.26.11.27.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 11:27:38 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 26 Jan 2021 11:27:35 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, mhocko@suse.com, surenb@google.com,
-        pullip.cho@samsung.com, joaodias@google.com, hridya@google.com,
-        john.stultz@linaro.org, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
-Message-ID: <YBBtJ7zMrkdcNMuV@google.com>
-References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-5-minchan@kernel.org>
- <20210126070744.GA1244507@infradead.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y4/anOXivGV6ZLOM5vHU2BQKpLVVHE4/9GWogoMUGnA=;
+        b=KrhEn/mO85sHUUQoEwpOvLAjbASu4DkqnK7q0PK+49b3Cdkd/awwNweh146ae0MQCq
+         dKdgtSjB/8/td2qmld3RdnWGwewXz+AWplhVt6djrLM2PoAsmcURIQYeRKdVgCSK4xSo
+         af0nBKujgVjkCg3yv7xzSZdj9MyCAhrMMULhhaAss94D0sy1nVrL411VLBW9tSP2kn+4
+         NAnkN7m4YmE/DZnghJwKLuCV94tLkse5xGygG0QWrXlL0xL9oaWrfr6E3uNwXrT39MRM
+         WZLhUJolDyvdMtJUZWH82iSSSfaXfCMem40+M2/g7aqJfOOJV00hwPJzspg4vghZdNyl
+         kSaQ==
+X-Gm-Message-State: AOAM532XLWwEc4/1WWLevpHR1PYORDjEtMbMjOEzR1c8p+wMPxU0g45k
+        Kg3qDMSCu+ub8IrdUxlIAG93CYQpnNwTncZp
+X-Google-Smtp-Source: ABdhPJxEz8AKyfUXm1HW87VQ9YONgA4fLmvfPhpwN1IDdrakOFwAKg7QDkFmEttvOLJpZyCZAkhWQg==
+X-Received: by 2002:a9d:5544:: with SMTP id h4mr5229001oti.104.1611689204347;
+        Tue, 26 Jan 2021 11:26:44 -0800 (PST)
+Received: from localhost (66-90-181-52.dyn.grandenetworks.net. [66.90.181.52])
+        by smtp.gmail.com with ESMTPSA id t74sm2977986oih.17.2021.01.26.11.26.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Jan 2021 11:26:43 -0800 (PST)
+From:   Brad Love <brad@nextdimension.cc>
+To:     linux-media@vger.kernel.org, sean@mess.org
+Cc:     Brad Love <brad@nextdimension.cc>
+Subject: [PATCH 2/4] em28xx-core: Fix TS2 active led
+Date:   Mon, 25 Jan 2021 19:54:14 -0600
+Message-Id: <20210126015416.5622-3-brad@nextdimension.cc>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20210126015416.5622-1-brad@nextdimension.cc>
+References: <20200612183937.10952-1-3126054018@nextdimension.cc>
+ <20210126015416.5622-1-brad@nextdimension.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126070744.GA1244507@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 07:07:44AM +0000, Christoph Hellwig wrote:
-> > +config DMABUF_HEAPS_CHUNK
-> > +	bool "DMA-BUF CHUNK Heap"
-> > +	depends on DMABUF_HEAPS && DMA_CMA
-> > +	help
-> > +	  Choose this option to enable dma-buf CHUNK heap. This heap is backed
-> > +	  by the Contiguous Memory Allocator (CMA) and allocates the buffers that
-> > +	  are arranged into a list of fixed size chunks taken from CMA.
-> 
-> Overly long line, which in text flowing text is really, really annoying.
-> 
-> Many more later.  Remember that > 80 chars are only allowed if they
-> significantly improve readability.  
+TS2 active led is completely igored, fix that.
 
-Let me make it shorter than 80 chars in next revision.
-Thanks for the reivew, Christoph.
+Signed-off-by: Brad Love <brad@nextdimension.cc>
+---
+Since v1:
+- None
+
+ drivers/media/usb/em28xx/em28xx-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
+index 3daa64bb1e1d..584fa400cd7d 100644
+--- a/drivers/media/usb/em28xx/em28xx-core.c
++++ b/drivers/media/usb/em28xx/em28xx-core.c
+@@ -698,8 +698,10 @@ int em28xx_capture_start(struct em28xx *dev, int start)
+ 
+ 	if (dev->mode == EM28XX_ANALOG_MODE)
+ 		led = em28xx_find_led(dev, EM28XX_LED_ANALOG_CAPTURING);
+-	else
++	else if (dev->ts == PRIMARY_TS)
+ 		led = em28xx_find_led(dev, EM28XX_LED_DIGITAL_CAPTURING);
++	else
++		led = em28xx_find_led(dev, EM28XX_LED_DIGITAL_CAPTURING_TS2);
+ 
+ 	if (led)
+ 		em28xx_write_reg_bits(dev, led->gpio_reg,
+-- 
+2.28.0
+
