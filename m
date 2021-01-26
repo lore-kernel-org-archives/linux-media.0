@@ -2,97 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5106EC433DB
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 14:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A6E3C43381
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 14:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28C2F22B3B
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 14:12:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E433222EBD
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 14:36:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392685AbhAZOJu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 09:09:50 -0500
-Received: from relay08.th.seeweb.it ([5.144.164.169]:34853 "EHLO
-        relay08.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404788AbhAZOIO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 09:08:14 -0500
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7A49C3E7D4;
-        Tue, 26 Jan 2021 15:07:19 +0100 (CET)
-Subject: Re: [PATCH] venus: core: Parse firmware-name DT property
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-References: <20210126084252.238078-1-stanimir.varbanov@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <b2afcf41-5135-1ac0-c603-6394bb0ab492@somainline.org>
-Date:   Tue, 26 Jan 2021 15:07:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S2404634AbhAZOfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 09:35:40 -0500
+Received: from mout02.posteo.de ([185.67.36.66]:40775 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403818AbhAZOZy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 26 Jan 2021 09:25:54 -0500
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 17D072400FC
+        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 15:24:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1611671091; bh=XQaBgB9ImzrfT64vB/4eda285o7PeoMGRekj1zu4BsQ=;
+        h=To:From:Subject:Date:From;
+        b=Ah01tyuyXY3+rLr5sy6nOHp/6GCJnCRqBKJh3IlSDTFcjs31UkKX30rlkPSSPpYlh
+         B33nifwrwEM5lQOQOJHKztbXqtlbOGuDA40m+2y4VBRsJZOuILc/RdDsu5q2m5CSYJ
+         IrWfxAJmrEx0HAPAoHN0i96t+vsAicFmSAxuxKlIEJ6RfjTBh7xH2Ya9VY2xRg974G
+         JFNMEmX8+feaKBzBP0psX/g205Sjs533gDRgm2xNGkRTst/2A91VWXNP7TywcqlrYl
+         EUz6BLRrKUXlkuefYHc5XV1NU+TQpMLAh781Z/jdjBd5x66sH4AdkflIFdpudgsjuE
+         7SalP7yN2iSiQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4DQ8Bp5CFzz6tmF
+        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 15:24:50 +0100 (CET)
+To:     linux-media@vger.kernel.org
+From:   Max Schulze <max.schulze@posteo.de>
+Subject: [PATCH] v4l2-ctl: print delta to current clock in verbose mode
+Message-ID: <71a724ea-ffd4-25f5-b1ca-40802a625b62@posteo.de>
+Date:   Tue, 26 Jan 2021 15:24:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210126084252.238078-1-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 26/01/21 09:42, Stanimir Varbanov ha scritto:
-> On production devices the firmware could be located on different
-> places, this path could be provided by special firmware-name DT
-> property.
-> 
-> Here we check for existence of such DT property and if it exist
-> take the firmware path from there. Otherwise, if the property
-> is missing we fallback to the predefined path from driver resource
-> structure.
-> 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->   drivers/media/platform/qcom/venus/firmware.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-> index d03e2dd5808c..56c8fb5a019b 100644
-> --- a/drivers/media/platform/qcom/venus/firmware.c
-> +++ b/drivers/media/platform/qcom/venus/firmware.c
-> @@ -187,6 +187,7 @@ int venus_boot(struct venus_core *core)
->   {
->   	struct device *dev = core->dev;
->   	const struct venus_resources *res = core->res;
-> +	const char *fwpath = NULL;
->   	phys_addr_t mem_phys;
->   	size_t mem_size;
->   	int ret;
-> @@ -195,7 +196,12 @@ int venus_boot(struct venus_core *core)
->   	    (core->use_tz && !qcom_scm_is_available()))
->   		return -EPROBE_DEFER;
->   
-> -	ret = venus_load_fw(core, core->res->fwname, &mem_phys, &mem_size);
-> +	ret = of_property_read_string_index(dev->of_node, "firmware-name", 0,
-> +					    &fwpath);
-> +	if (ret)
-> +		fwpath = core->res->fwname;
-> +
-> +	ret = venus_load_fw(core, fwpath, &mem_phys, &mem_size);
->   	if (ret) {
->   		dev_err(dev, "fail to load video firmware\n");
->   		return -EINVAL;
-> 
+If the Buffer Timestamp Clock is _MONOTONIC, print the delta
+to the current clock time. Useful for debugging / insights.
 
-Super! As you surely know, I totally agree.
 
-It may not have huge value, but:
-Reviewed-By: AngeloGioacchino Del Regno 
-<angelogioacchino.delregno@somainline.org>
+Signed-off-by: Max Schuze <max.schulze@posteo.de>
+---
+  utils/v4l2-ctl/v4l2-ctl-streaming.cpp | 8 +++++++-
+  1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp 
+b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+index a3580595..d024f925 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+@@ -556,9 +556,15 @@ static void print_concise_buffer(FILE *f, 
+cv4l_buffer &buf, cv4l_fmt &fmt,
+          double ts = buf.g_timestamp().tv_sec + 
+buf.g_timestamp().tv_usec / 1000000.0;
+          fprintf(f, " ts: %.06f", ts);
+          if (last_ts <= 0.0)
+-            fprintf(f, " delta: %.03f ms", (ts - last_ts) * 1000.0);
++            fprintf(f, " delta last: %.03f ms", (ts - last_ts) * 1000.0);
+          last_ts = ts;
+
++        if ((buf.g_flags() & V4L2_BUF_FLAG_TIMESTAMP_MASK) == 
+V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC) {
++            timespec ts_clock;
++            clock_gettime(CLOCK_MONOTONIC, &ts_clock);
++            fprintf(f, " delta now: %+.03f ms", ((ts_clock.tv_sec + 
+ts_clock.tv_nsec / 1000000000.0) - ts) * 1000.0);
++        }
++
+          if (fps_ts.has_fps(true))
+              fprintf(stderr, " fps: %.02f", fps_ts.fps());
+
+-- 
+2.29.0
+
+
