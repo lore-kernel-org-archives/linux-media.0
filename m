@@ -4,104 +4,155 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B2AC433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9BA8C43381
 	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:54:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA8EE22228
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:54:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7759722A84
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:54:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730503AbhAZRMz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 12:12:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57470 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389618AbhAZHqI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 02:46:08 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611647092; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UxnV2Q2IfU/Q0fbAsdCetFfyoOedKL7i2YrptqeNa2E=;
-        b=lahMzuU+ag9/sX/CLQCQiREJf8LBSBH3CqFMSQM3RvfOQAMeUNABPAotP/f4l/cr4ZPbmL
-        wzy/E9KMfnniD6ACXw9yM/g0vTSlrj2mSsEW7MCIOfjsfM8A790QkDHlroNOAU1fUALtRm
-        AVqLpqVe+3af7gMLFvxf43dsbq1HCBE=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D5971ADC4;
-        Tue, 26 Jan 2021 07:44:51 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 08:44:49 +0100
-From:   Michal Hocko <mhocko@suse.com>
+        id S1729533AbhAZRMZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 12:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389615AbhAZHqG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 26 Jan 2021 02:46:06 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C2BC0617AA
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 23:33:10 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id m22so21469705lfg.5
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 23:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W32USTVMA4Na4R83P1ldiQToO8MF00oSxMXfGmTH1mg=;
+        b=iGGad8ZvGGCQxu9TMHL9veAeJhvUmkKrwjjKMwaNwfuM6xAnAIXUTRwKpHFa4HSTRx
+         KeLwL2AaM4YYKmMFkxUUIAjBjJ1lXLdFg7bTMbgQpY3t2/F7y1zx/+8I+17UEvgsQf9U
+         hb4wGQznDB3Has2Qt7crmDWfW3NkLi3VoHXXcZ3yOj8xzStYt3rajuw/v+hhfch2WAuP
+         UX/D0jb+Hgzg4/WnIvILyeVnI04EY8zOR1i7wnNHkbtvHlgmSZzrpLWh5Ziab6y5ZUoS
+         W8Wfi5503gqbWmfVrzYR7xOw37OYR258L7zhQPidFOK0I8WFj04u7Wv3BRwwDvqSdUqN
+         zl9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W32USTVMA4Na4R83P1ldiQToO8MF00oSxMXfGmTH1mg=;
+        b=eTWNzBogJajNX2buenLI9F1X0/5pKXqLJ7vxnmh7P2unGi272c438/CiL6K7Ggk3Y4
+         51qFmVGmMvsPEhfO93TqyfUy8RuRhugW5jUJ0gKYmx1HaSKyHzs47tfrntChvXgciQQM
+         I6R+OJYEmgQzN+5ZketQlqA9IkkjgJTZM2/jXD2CAIeyaxiwYfROSxWf5lr6Xi3mXNaF
+         t55GDZ0Yk9gShrlCRbTKO/QzI3bBfdS7M7ft3MjjhvO+L1fZ+IOJxlrfAmsoim24xuY1
+         oFm1WXuFHM9khLgOnm0ePSzxX5O2b5wk52PbYyN+XKJExKeI+KJdxZGN0qVENqheiW/o
+         bmEQ==
+X-Gm-Message-State: AOAM5319t2W/cYYSocwCLMoR1no+Y+jcEy7pDQpoJ51JZC1kSUIVrebN
+        uGXv49tsu5o7dauwwO4tHQWX+UEr1QKiG4TcTTqs/w==
+X-Google-Smtp-Source: ABdhPJwXsF0xWCBhNsrr3s7doyV+JBsu/u9FZtgybX1V7crrHD588JGqYQnNs8eBrkRozy2tjTrONdtwgSFuQwqnwis=
+X-Received: by 2002:a19:48d0:: with SMTP id v199mr2093711lfa.535.1611646389475;
+ Mon, 25 Jan 2021 23:33:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20210121175502.274391-1-minchan@kernel.org> <20210121175502.274391-5-minchan@kernel.org>
+In-Reply-To: <20210121175502.274391-5-minchan@kernel.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 25 Jan 2021 23:32:57 -0800
+Message-ID: <CALAqxLWJDo=pM8bvt9YWrzJ+VyK5gojoL-v7ch1fQC=cjGwJOw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] dma-buf: heaps: add chunk heap to dmabuf heaps
 To:     Minchan Kim <minchan@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, surenb@google.com, pullip.cho@samsung.com,
-        joaodias@google.com, hridya@google.com, john.stultz@linaro.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 2/4] mm: failfast mode with __GFP_NORETRY in
- alloc_contig_range
-Message-ID: <20210126074449.GA827@dhcp22.suse.cz>
-References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-3-minchan@kernel.org>
- <20210125131200.GG827@dhcp22.suse.cz>
- <YA8dEFSrHBb9muFr@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YA8dEFSrHBb9muFr@google.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>, david@redhat.com,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        KyongHo Cho <pullip.cho@samsung.com>,
+        John Dias <joaodias@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon 25-01-21 11:33:36, Minchan Kim wrote:
-> On Mon, Jan 25, 2021 at 02:12:00PM +0100, Michal Hocko wrote:
-> > On Thu 21-01-21 09:55:00, Minchan Kim wrote:
-> > > Contiguous memory allocation can be stalled due to waiting
-> > > on page writeback and/or page lock which causes unpredictable
-> > > delay. It's a unavoidable cost for the requestor to get *big*
-> > > contiguous memory but it's expensive for *small* contiguous
-> > > memory(e.g., order-4) because caller could retry the request
-> > > in different range where would have easy migratable pages
-> > > without stalling.
-> > > 
-> > > This patch introduce __GFP_NORETRY as compaction gfp_mask in
-> > > alloc_contig_range so it will fail fast without blocking
-> > > when it encounters pages needed waiting.
-> > 
-> > I am not against controling how hard this allocator tries with gfp mask
-> > but this changelog is rather void on any data and any user.
-> > 
-> > It is also rather dubious to have retries when then caller says to not
-> > retry.
-> 
-> Since max_tries is 1 with ++tries, it shouldn't retry.
+On Thu, Jan 21, 2021 at 9:55 AM Minchan Kim <minchan@kernel.org> wrote:
 
-OK, I have missed that. This is a tricky code. ASYNC mode should be
-completely orthogonal to the retries count. Those are different things.
-Page allocator does an explicit bail out based on __GFP_NORETRY. You
-should be doing the same.
+Hey Minchan,
+  Thanks for sending this out! I'm still working through testing with
+this patch set, so I may have some more feedback tomorrow, but a few
+quick items I did hit below.
 
-> > 
-> > Also why didn't you consider GFP_NOWAIT semantic for non blocking mode?
-> 
-> GFP_NOWAIT seems to be low(specific) flags rather than the one I want to
-> express. Even though I said only page writeback/lock in the description,
-> the goal is to avoid costly operations we might find later so such
-> "failfast", I thought GFP_NORETRY would be good fit.
+> +
+> +#define CHUNK_PREFIX "chunk-"
+> +
+> +static int register_chunk_heap(struct chunk_heap *chunk_heap_info)
+> +{
+> +       struct dma_heap_export_info exp_info;
+> +       const char *name = cma_get_name(chunk_heap_info->cma);
+> +       size_t len = strlen(CHUNK_PREFIX) + strlen(name) + 1;
+> +       char *buf = kmalloc(len, GFP_KERNEL);
+> +
+> +       if (!buf)
+> +               return -ENOMEM;
+> +
+> +       sprintf(buf, CHUNK_PREFIX"%s", cma_get_name(chunk_heap_info->cma));
+> +       buf[len] = '\0';
+> +
+> +       exp_info.name = buf;
+> +       exp_info.name = cma_get_name(chunk_heap_info->cma);
 
-I suspect you are too focused on implementation details here. Think
-about the indended semantic. Callers of this functionality will not
-think about those (I hope because if they rely on these details then the
-whole thing will become unmaintainable because any change would require
-an audit of all existing users). All you should be caring about is to
-control how expensive the call can be. GFP_NOWAIT is not really low
-level from that POV. It gives you a very lightweight non-sleeping
-attempt to allocate. GFP_NORETRY will give you potentially sleeping but
-an opportunistic-easy-to-fail attempt. And so on. See how that is
-absolutely free of any page writeback or any specific locking.
--- 
-Michal Hocko
-SUSE Labs
+I think you intended to delete this line, as it's overwriting your
+prefixed name.
+
+> +       exp_info.ops = &chunk_heap_ops;
+> +       exp_info.priv = chunk_heap_info;
+> +
+> +       chunk_heap_info->heap = dma_heap_add(&exp_info);
+> +       if (IS_ERR(chunk_heap_info->heap)) {
+> +               kfree(buf);
+> +               return PTR_ERR(chunk_heap_info->heap);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init chunk_heap_init(void)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i = 0; i < chunk_heap_count; i++)
+> +               register_chunk_heap(&chunk_heaps[i]);
+> +
+> +       return 0;
+> +}
+> +module_init(chunk_heap_init);
+> +
+> +#ifdef CONFIG_OF_EARLY_FLATTREE
+> +
+> +static int __init dmabuf_chunk_heap_area_init(struct reserved_mem *rmem)
+> +{
+> +       int ret;
+> +       struct cma *cma;
+> +       struct chunk_heap *chunk_heap_info;
+> +       const __be32 *chunk_order;
+> +
+> +       phys_addr_t align = PAGE_SIZE << max(MAX_ORDER - 1, pageblock_order);
+> +       phys_addr_t mask = align - 1;
+> +
+> +       if ((rmem->base & mask) || (rmem->size & mask)) {
+> +               pr_err("Incorrect alignment for CMA region\n");
+> +               return -EINVAL;
+
+Passing this check can be tough if you're using dynamically assigned
+rmem, so it might be helpful for debugging to print the base/size/mask
+values?
+
+thanks
+-john
