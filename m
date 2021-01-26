@@ -2,118 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CB4C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 17:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 982E3C433E6
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:51:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1F49230FD
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 17:14:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 567C622B3F
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 18:51:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389431AbhAZROs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 12:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390423AbhAZInt (ORCPT
+        id S1731124AbhAZRPW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 12:15:22 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:43126 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389961AbhAZJ1L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:43:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD18CC06174A
-        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 00:43:08 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id d2so15189023edz.3
-        for <linux-media@vger.kernel.org>; Tue, 26 Jan 2021 00:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t2z1NGbSv+92Iq3y3cHfX8r3rHSgzWMGOLngnUuImF8=;
-        b=HqvMQYpbjsMs5FO0qw8p+bYpP7RjH7vBlf6l0HF5VNPGglgnOsbLVfBqJljbCsIasF
-         NaYGE3B0ARKF9zXOk8iR5t9vxzgRRMOUE7jeQ4cqURu19xi64IpFfjsjuzIBdl51A+hC
-         kmyXKCuwFkg/seQLV8IzyJL2tsx1vEJpZJMh5o2b5n2r1ko4f3p5zXbHSOPZiwd68r+Y
-         EuLylY5VI4sLkTuc+4qAJhM/6vvPKW0T8NjQmIhBfqQ8EzuNyprvsXrov4AKw2qPm1ZO
-         eWgrDM2jc3tKXYPKcV11SGdwMUuRoBXLTR/iSN8Xl6lBGJSYDPLMJUv6bQ+lcwKpb08+
-         VXEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t2z1NGbSv+92Iq3y3cHfX8r3rHSgzWMGOLngnUuImF8=;
-        b=OERn1kQqI28yTLI99bWJsi5NN854AXlpARdRQuzv41drbLOIdpCSJsh6vdex++qkOW
-         PboI0Px1FXwSgMkO1Y+M0XLKJZQ6Enshvq6nb9Vw6wwZzWmo/ngvx9kysX8Xgl+G0koo
-         xVk6c6WPT0x2xjih1ByJZ4Nzgf99g1jZ8gmGNnk0W7d/mxfyjYIaOikyOSuZwZ/gLM2m
-         +Y3xL7skLPdd+onqafPeXglMPso8aRDmSysQtrvSo5jvczvd29vaAGsViAVNgamFtnEN
-         RRvm+qrJRMAUfnb2UJm8MkJd5bJmhLJulaFGOgT5P3SkDC09PfNWY67RS88xXK2a/vR3
-         S/CA==
-X-Gm-Message-State: AOAM53275zPKye2stfvN3CH6mkFyfwIcCyHDi434Kzj9L3FvzYEv8zxf
-        L/jBjK4KxQnJfjJeTkD0HXvdlWcGYi+92Dy+
-X-Google-Smtp-Source: ABdhPJwXmN0+EIt8RzL3ueMP/CCxmZVMUAxRmK9RWZ7CZYPhgMXX2MhPsEKA8AQcrWMlG54ahj8c1Q==
-X-Received: by 2002:aa7:cc98:: with SMTP id p24mr3854242edt.126.1611650587275;
-        Tue, 26 Jan 2021 00:43:07 -0800 (PST)
-Received: from localhost.localdomain (hst-221-9.medicom.bg. [84.238.221.9])
-        by smtp.gmail.com with ESMTPSA id i4sm9511524eje.90.2021.01.26.00.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 00:43:06 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH] venus: core: Parse firmware-name DT property
-Date:   Tue, 26 Jan 2021 10:42:52 +0200
-Message-Id: <20210126084252.238078-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 26 Jan 2021 04:27:11 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UMxxyMj_1611653142;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0UMxxyMj_1611653142)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 26 Jan 2021 17:25:49 +0800
+From:   Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+To:     mchehab@kernel.org
+Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+Subject: [PATCH] media: atomisp: Simplify the calculation of variables
+Date:   Tue, 26 Jan 2021 17:25:40 +0800
+Message-Id: <1611653140-76630-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On production devices the firmware could be located on different
-places, this path could be provided by special firmware-name DT
-property.
+Fix the following coccicheck warnings:
 
-Here we check for existence of such DT property and if it exist
-take the firmware path from there. Otherwise, if the property
-is missing we fallback to the predefined path from driver resource
-structure.
+./drivers/staging/media/atomisp/pci/sh_css_params.c:4652:24-26: WARNING
+!A || A && B is equivalent to !A || B.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
 ---
- drivers/media/platform/qcom/venus/firmware.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/sh_css_params.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-index d03e2dd5808c..56c8fb5a019b 100644
---- a/drivers/media/platform/qcom/venus/firmware.c
-+++ b/drivers/media/platform/qcom/venus/firmware.c
-@@ -187,6 +187,7 @@ int venus_boot(struct venus_core *core)
- {
- 	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
-+	const char *fwpath = NULL;
- 	phys_addr_t mem_phys;
- 	size_t mem_size;
- 	int ret;
-@@ -195,7 +196,12 @@ int venus_boot(struct venus_core *core)
- 	    (core->use_tz && !qcom_scm_is_available()))
- 		return -EPROBE_DEFER;
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index 24fc497..9eb02f4 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -4649,10 +4649,8 @@ struct ia_css_dvs_6axis_config *
+ 	params = stream->isp_params_configs;
  
--	ret = venus_load_fw(core, core->res->fwname, &mem_phys, &mem_size);
-+	ret = of_property_read_string_index(dev->of_node, "firmware-name", 0,
-+					    &fwpath);
-+	if (ret)
-+		fwpath = core->res->fwname;
-+
-+	ret = venus_load_fw(core, fwpath, &mem_phys, &mem_size);
- 	if (ret) {
- 		dev_err(dev, "fail to load video firmware\n");
- 		return -EINVAL;
+ 	/* Backward compatibility by default consider pipe as Video*/
+-	if (!params || (params &&
+-			!params->pipe_dvs_6axis_config[IA_CSS_PIPE_ID_VIDEO])) {
++	if (!params || !params->pipe_dvs_6axis_config[IA_CSS_PIPE_ID_VIDEO])
+ 		goto err;
+-	}
+ 
+ 	dvs_config = kvcalloc(1, sizeof(struct ia_css_dvs_6axis_config),
+ 			      GFP_KERNEL);
 -- 
-2.25.1
+1.8.3.1
 
