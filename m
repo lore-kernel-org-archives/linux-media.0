@@ -2,403 +2,164 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50961C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 15:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79421C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 17:12:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F260021E92
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 15:59:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45B0020848
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jan 2021 17:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390919AbhAZP7d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 10:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S1730300AbhAZRKX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jan 2021 12:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403926AbhAZP5a (ORCPT
+        with ESMTP id S2389345AbhAZHIp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:57:30 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37651C061D73;
-        Tue, 26 Jan 2021 07:56:50 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A6EB52C1;
-        Tue, 26 Jan 2021 16:56:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1611676608;
-        bh=Z8Ov8MmZWUEST4sah1yIUBto2TrDQaIcE0bvw50m0ik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pkCLG3WfJhSbhIfcbRanc5J+aneHPnpoNs/aRjb8B1PLdTNc0UBK4jY/rEYJlO3YU
-         csOmdQcjDGKKil9iExxBXwysFrI9cmMR7tW8wSkFKZDUw/iROBE9QXQwIp9P+3AxhM
-         YEOKVtC7Aq8H5DZ12e0MYvd6JA4rw+P3XG5B8t0k=
-Date:   Tue, 26 Jan 2021 17:56:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 06/12] media: uvcvideo: Implement UVC_EXT_GPIO_UNIT
-Message-ID: <YBA7rduUYr0I/KwJ@pendragon.ideasonboard.com>
-References: <20201223133528.55014-1-ribalda@chromium.org>
- <20201223133528.55014-7-ribalda@chromium.org>
- <YBA67sapYU3almJb@pendragon.ideasonboard.com>
+        Tue, 26 Jan 2021 02:08:45 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351FC06174A
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 23:07:35 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id e18so150410lja.12
+        for <linux-media@vger.kernel.org>; Mon, 25 Jan 2021 23:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kZn4RLcS22zFx/2DTlAuwltfIUf6VsTelsb0t+E6OVU=;
+        b=pE8xWIBoOLny7oXqvXpMfoJi7JvpcpxmDh8zm4lh6Uyvr7b7j2jJ7UZOS+MLQo/FQl
+         ubWzJy4Q9s96T7Xf5E4zjvCYdacNMNyt+STvwNBvFn+DFbK1IOa45QTNx0CK4tqt2MpE
+         9q6lIDbdd6oVcqVQ0kyJ3m+Pa4KmXb/GEkNs+DukdguxZPCCldWwxVUSFHBQY8TTXzaw
+         r84fbwLTu2moq87yE0Jn9wp0/Z/tqpyc8iNyG3SkbdlThnz5e02C5xiKzbm9LVhu0+50
+         1mKgeNkq8I0jWJozi9klT6Xk9zf53USHbrk6wyKE2duKkRFShkvcooM40NT48zxOfIeg
+         CSEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kZn4RLcS22zFx/2DTlAuwltfIUf6VsTelsb0t+E6OVU=;
+        b=CN+NwrWAOWkN/cnTxE8u+FXU7h51QMXkJXnSEXJ72pLasKccIn32oBRA9jk9iV1M+k
+         8ciqfgZViqgDQ6iJOXzZvgM4sdH9YtyM1FDTfbEv+ALqtyRkR2Ch9hkSuPv+XDIGOZaM
+         eBIjCfTwrcvbBu2/ST6chBLwEvGcJmvIfOKj+TPO2lms4wo/ieVcQshVRBRG6d2D1fgy
+         +HF21zJDbO3DQ5fsypvaLmVzypxLP0LTslVLJY2Dh/67NeZaiJ/ZYP3hqJu0OTqKbJoa
+         17r1812G2laT4ZZ7ZLJeFCr3CxBhsGe/3WED9/RxApk1qp+xwYuXRKuhLxx1FgMPWwQY
+         DrXw==
+X-Gm-Message-State: AOAM533PI15MHsqRUJ5sS92MaKiqmQ8EsG4qcXkNl7qZMfwyJI4tnIw6
+        Y4n3O/YIl1IMmRrg/9lFHL3CTSTEq4S67dAJ7O6ZRw==
+X-Google-Smtp-Source: ABdhPJwPrhIKzj8GZZNZJ8aPtOX3sEhjLT4uJM9gyulJIyHIGvl4KbrgVs2kwfOBdPjMvdI2rfwpFkVem0QwXxEa/PE=
+X-Received: by 2002:a2e:a554:: with SMTP id e20mr2151530ljn.128.1611644853468;
+ Mon, 25 Jan 2021 23:07:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YBA67sapYU3almJb@pendragon.ideasonboard.com>
+References: <20210121175502.274391-1-minchan@kernel.org> <20210121175502.274391-4-minchan@kernel.org>
+In-Reply-To: <20210121175502.274391-4-minchan@kernel.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 25 Jan 2021 23:07:21 -0800
+Message-ID: <CALAqxLU3yU8e006G0W-mSBLogWAru6jOJcBbuH5wFHoi1JitPA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] dt-bindings: reserved-memory: Make DMA-BUF CMA
+ heap DT-configurable
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>, david@redhat.com,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        KyongHo Cho <pullip.cho@samsung.com>,
+        John Dias <joaodias@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 05:53:19PM +0200, Laurent Pinchart wrote:
-> Hi Ricardo,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Dec 23, 2020 at 02:35:22PM +0100, Ricardo Ribalda wrote:
-> > Some devices can implement a physical switch to disable the input of the
-> > camera on demand. Think of it like an elegant privacy sticker.
-> > 
-> > The system can read the status of the privacy switch via a GPIO.
-> > 
-> > It is important to know the status of the switch, e.g. to notify the
-> > user when the camera will produce black frames and a videochat
-> > application is used.
-> > 
-> > In some systems, the GPIO is connected to main SoC instead of the
-> 
-> s/to main/to the main/
-> 
-> > camera controller, with the connection reported by the system firmware
-> > (ACPI or DT). In that case, the UVC device isn't aware of the GPIO. We
-> > need to implement a virtual entity to handle the GPIO fully on the
-> > driver side.
-> > 
-> > For example, for ACPI-based systems, the GPIO is reported in the USB
-> > device object:
-> > 
-> >   Scope (\_SB.PCI0.XHCI.RHUB.HS07)
-> >   {
-> > 
-> > 	  /.../
-> > 
-> >     Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-> >     {
-> >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-> >             "\\_SB.PCI0.GPIO", 0x00, ResourceConsumer, ,
-> >             )
-> >             {   // Pin list
-> >                 0x0064
-> >             }
-> >     })
-> >     Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
-> >     {
-> >         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device Properties for _DSD */,
-> >         Package (0x01)
-> >         {
-> >             Package (0x02)
-> >             {
-> >                 "privacy-gpio",
-> >                 Package (0x04)
-> >                 {
-> >                     \_SB.PCI0.XHCI.RHUB.HS07,
-> >                     Zero,
-> >                     Zero,
-> >                     One
-> >                 }
-> >             }
-> >         }
-> >     })
-> >   }
-> > 
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_ctrl.c   |   3 +
-> >  drivers/media/usb/uvc/uvc_driver.c | 127 +++++++++++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvc_entity.c |   1 +
-> >  drivers/media/usb/uvc/uvcvideo.h   |  16 ++++
-> >  4 files changed, 147 insertions(+)
-> > 
-> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > index 1a5e85368af4..e0ab55583dd8 100644
-> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > @@ -2291,6 +2291,9 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
-> >  		} else if (UVC_ENTITY_TYPE(entity) == UVC_ITT_CAMERA) {
-> >  			bmControls = entity->camera.bmControls;
-> >  			bControlSize = entity->camera.bControlSize;
-> > +		} else if (UVC_ENTITY_TYPE(entity) == UVC_EXT_GPIO_UNIT) {
-> > +			bmControls = entity->gpio.bmControls;
-> > +			bControlSize = entity->gpio.bControlSize;
-> >  		}
-> >  
-> >  		/* Remove bogus/blacklisted controls */
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index c0c5f75ade40..b0bf93c44999 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -7,6 +7,7 @@
-> >   */
-> >  
-> >  #include <linux/atomic.h>
-> > +#include <linux/gpio/consumer.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/list.h>
-> >  #include <linux/module.h>
-> > @@ -1020,6 +1021,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
-> >  }
-> >  
-> >  static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
-> > +static const u8 uvc_gpio_guid[16] = UVC_GUID_EXT_GPIO_CONTROLLER;
-> >  static const u8 uvc_media_transport_input_guid[16] =
-> >  	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
-> >  static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
-> > @@ -1051,6 +1053,9 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
-> >  	 * is initialized by the caller.
-> >  	 */
-> >  	switch (type) {
-> > +	case UVC_EXT_GPIO_UNIT:
-> > +		memcpy(entity->guid, uvc_gpio_guid, 16);
-> > +		break;
-> >  	case UVC_ITT_CAMERA:
-> >  		memcpy(entity->guid, uvc_camera_guid, 16);
-> >  		break;
-> > @@ -1464,6 +1469,108 @@ static int uvc_parse_control(struct uvc_device *dev)
-> >  	return 0;
-> >  }
-> >  
-> > +/* -----------------------------------------------------------------------------
-> > + * Privacy GPIO
-> > + */
-> > +
-> > +static void uvc_gpio_event(struct uvc_device *dev)
-> > +{
-> > +	struct uvc_entity *unit = dev->gpio_unit;
-> > +	struct uvc_video_chain *chain;
-> > +	u8 new_val;
-> > +
-> > +	if (!unit)
-> > +		return;
-> > +
-> > +	new_val = gpiod_get_value_cansleep(unit->gpio.gpio_privacy);
-> > +
-> > +	/* GPIO entities are always on the first chain. */
-> > +	chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
-> > +	uvc_ctrl_status_event(chain, unit->controls, &new_val);
-> > +}
-> > +
-> > +static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
-> > +			    u8 cs, void *data, u16 size)
-> > +{
-> > +	if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
-> > +		return -EINVAL;
-> > +
-> > +	*(u8 *)data = gpiod_get_value_cansleep(entity->gpio.gpio_privacy);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int uvc_gpio_get_info(struct uvc_device *dev, struct uvc_entity *entity,
-> > +			     u8 cs, u8 *caps)
-> > +{
-> > +	if (cs != UVC_CT_PRIVACY_CONTROL)
-> > +		return -EINVAL;
-> > +
-> > +	*caps = UVC_CONTROL_CAP_GET | UVC_CONTROL_CAP_AUTOUPDATE;
-> > +	return 0;
-> > +}
-> > +
-> > +static irqreturn_t uvc_gpio_irq(int irq, void *data)
-> > +{
-> > +	struct uvc_device *dev = data;
-> > +
-> > +	uvc_gpio_event(dev);
-> 
-> Should uvc_gpio_event() be inlined here ? If so I can make the
-> modification when applying, there's no need for a v8 just for this.
+On Thu, Jan 21, 2021 at 9:55 AM Minchan Kim <minchan@kernel.org> wrote:
+>  .../reserved-memory/dma_heap_chunk.yaml       | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+> new file mode 100644
+> index 000000000000..00db0ae6af61
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reserved-memory/dma_heap_chunk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Device tree binding for chunk heap on DMA HEAP FRAMEWORK
+> +
+> +description: |
+> +  The DMA chunk heap is backed by the Contiguous Memory Allocator (CMA) and
+> +  supports bulk allocation of fixed size pages.
+> +
+> +maintainers:
+> +  - Hyesoo Yu <hyesoo.yu@samsung.com>
+> +  - John Stultz <john.stultz@linaro.org>
+> +  - Minchan Kim <minchan@kernel.org>
+> +  - Hridya Valsaraju<hridya@google.com>
+> +
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - dma_heap,chunk
+> +
+> +  chunk-order:
+> +    description: |
+> +            order of pages that will get allocated from the chunk DMA heap.
+> +    maxItems: 1
+> +
+> +  size:
+> +    maxItems: 1
+> +
+> +  alignment:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - size
+> +  - alignment
+> +  - chunk-order
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    reserved-memory {
+> +        #address-cells = <2>;
+> +        #size-cells = <1>;
+> +
+> +        chunk_memory: chunk_memory {
+> +            compatible = "dma_heap,chunk";
+> +            size = <0x3000000>;
 
-I've seen the function is called in a different location later in this
-series, please ignore the noise.
+Hey Minchan,
+  Looking closer here, would it make more sense to document the "reg =
+<>" parameter here as well instead of just "size = <>"?
 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int uvc_gpio_parse(struct uvc_device *dev)
-> > +{
-> > +	struct uvc_entity *unit;
-> > +	struct gpio_desc *gpio_privacy;
-> > +	int irq;
-> > +
-> > +	gpio_privacy = devm_gpiod_get_optional(&dev->udev->dev, "privacy",
-> > +					       GPIOD_IN);
-> > +	if (IS_ERR_OR_NULL(gpio_privacy))
-> > +		return PTR_ERR_OR_ZERO(gpio_privacy);
-> > +
-> > +	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
-> > +	if (!unit)
-> > +		return -ENOMEM;
-> > +
-> > +	irq = gpiod_to_irq(gpio_privacy);
-> > +	if (irq < 0) {
-> > +		if (irq != EPROBE_DEFER)
-> > +			dev_err(&dev->udev->dev,
-> > +				"No IRQ for privacy GPIO (%d)\n", irq);
-> > +		return irq;
-> > +	}
-> > +
-> > +	unit->gpio.gpio_privacy = gpio_privacy;
-> > +	unit->gpio.irq = irq;
-> > +	unit->gpio.bControlSize = 1;
-> > +	unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
-> > +	unit->gpio.bmControls[0] = 1;
-> > +	unit->get_cur = uvc_gpio_get_cur;
-> > +	unit->get_info = uvc_gpio_get_info;
-> > +	strncpy(unit->name, "GPIO", sizeof(unit->name) - 1);
-> > +
-> > +	list_add_tail(&unit->list, &dev->entities);
-> > +
-> > +	dev->gpio_unit = unit;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int uvc_gpio_init_irq(struct uvc_device *dev)
-> > +{
-> > +	struct uvc_entity *unit = dev->gpio_unit;
-> > +
-> > +	if (!unit || unit->gpio.irq < 0)
-> > +		return 0;
-> > +
-> > +	return devm_request_threaded_irq(&dev->udev->dev, unit->gpio.irq, NULL,
-> > +					 uvc_gpio_irq,
-> > +					 IRQF_ONESHOT | IRQF_TRIGGER_FALLING |
-> > +					 IRQF_TRIGGER_RISING,
-> > +					 "uvc_privacy_gpio", dev);
-> > +}
-> > +
-> >  /* ------------------------------------------------------------------------
-> >   * UVC device scan
-> >   */
-> > @@ -1953,6 +2060,13 @@ static int uvc_scan_device(struct uvc_device *dev)
-> >  		return -1;
-> >  	}
-> >  
-> > +	/* Add GPIO entity to the first chain. */
-> > +	if (dev->gpio_unit) {
-> > +		chain = list_first_entry(&dev->chains,
-> > +					 struct uvc_video_chain, list);
-> > +		list_add_tail(&dev->gpio_unit->chain, &chain->entities);
-> > +	}
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > @@ -2285,6 +2399,12 @@ static int uvc_probe(struct usb_interface *intf,
-> >  		goto error;
-> >  	}
-> >  
-> > +	/* Parse the associated GPIOs. */
-> > +	if (uvc_gpio_parse(dev) < 0) {
-> > +		uvc_trace(UVC_TRACE_PROBE, "Unable to parse UVC GPIOs\n");
-> > +		goto error;
-> > +	}
-> > +
-> >  	uvc_printk(KERN_INFO, "Found UVC %u.%02x device %s (%04x:%04x)\n",
-> >  		dev->uvc_version >> 8, dev->uvc_version & 0xff,
-> >  		udev->product ? udev->product : "<unnamed>",
-> > @@ -2329,6 +2449,13 @@ static int uvc_probe(struct usb_interface *intf,
-> >  			"supported.\n", ret);
-> >  	}
-> >  
-> > +	ret = uvc_gpio_init_irq(dev);
-> > +	if (ret < 0) {
-> > +		dev_err(&dev->udev->dev,
-> > +			"Unable to request privacy GPIO IRQ (%d)\n", ret);
-> > +		goto error;
-> > +	}
-> > +
-> >  	uvc_trace(UVC_TRACE_PROBE, "UVC device initialized.\n");
-> >  	usb_enable_autosuspend(udev);
-> >  	return 0;
-> > diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-> > index ca3a9c2eec27..6a9ba5b498db 100644
-> > --- a/drivers/media/usb/uvc/uvc_entity.c
-> > +++ b/drivers/media/usb/uvc/uvc_entity.c
-> > @@ -105,6 +105,7 @@ static int uvc_mc_init_entity(struct uvc_video_chain *chain,
-> >  		case UVC_OTT_DISPLAY:
-> >  		case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
-> >  		case UVC_EXTERNAL_VENDOR_SPECIFIC:
-> > +		case UVC_EXT_GPIO_UNIT:
-> >  		default:
-> >  			function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
-> >  			break;
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index 6465711fe5bb..4211531a3558 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -6,6 +6,7 @@
-> >  #error "The uvcvideo.h header is deprecated, use linux/uvcvideo.h instead."
-> >  #endif /* __KERNEL__ */
-> >  
-> > +#include <linux/atomic.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/poll.h>
-> >  #include <linux/usb.h>
-> > @@ -37,6 +38,8 @@
-> >  	(UVC_ENTITY_IS_TERM(entity) && \
-> >  	((entity)->type & 0x8000) == UVC_TERM_OUTPUT)
-> >  
-> > +#define UVC_EXT_GPIO_UNIT		0x7ffe
-> > +#define UVC_EXT_GPIO_UNIT_ID		0x100
-> >  
-> >  /* ------------------------------------------------------------------------
-> >   * GUIDs
-> > @@ -56,6 +59,9 @@
-> >  #define UVC_GUID_UVC_SELECTOR \
-> >  	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-> >  	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
-> > +#define UVC_GUID_EXT_GPIO_CONTROLLER \
-> > +	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-> > +	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-> >  
-> >  #define UVC_GUID_FORMAT_MJPEG \
-> >  	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
-> > @@ -212,6 +218,7 @@
-> >   * Structures.
-> >   */
-> >  
-> > +struct gpio_desc;
-> >  struct uvc_device;
-> >  
-> >  /* TODO: Put the most frequently accessed fields at the beginning of
-> > @@ -353,6 +360,13 @@ struct uvc_entity {
-> >  			u8  *bmControls;
-> >  			u8  *bmControlsType;
-> >  		} extension;
-> > +
-> > +		struct {
-> > +			u8  bControlSize;
-> > +			u8  *bmControls;
-> > +			struct gpio_desc *gpio_privacy;
-> > +			int irq;
-> > +		} gpio;
-> >  	};
-> >  
-> >  	u8 bNrInPins;
-> > @@ -690,6 +704,8 @@ struct uvc_device {
-> >  		struct uvc_control *ctrl;
-> >  		const void *data;
-> >  	} async_ctrl;
-> > +
-> > +	struct uvc_entity *gpio_unit;
-> >  };
-> >  
-> >  enum uvc_handle_state {
+That way the address of the region could be explicitly specified (for
+instance, to ensure the CMA region created is 32bit addressable). And
+more practically, trying to satisfy the base address alignment checks
+in the final patch when its set dynamically may require a fair amount
+of luck  - I couldn't manage it in my own testing on the hikey960 w/o
+resorting to reg=  :)
 
--- 
-Regards,
+It does look like the RESERVEDMEM_OF_DECLARE() logic already supports
+this, so it's likely just a matter of documenting it here?
 
-Laurent Pinchart
+thanks
+-john
