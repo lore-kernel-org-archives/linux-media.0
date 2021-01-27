@@ -2,77 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B04C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C67EC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53A2A207CC
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:48:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F02A20781
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S314076AbhAZW4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jan 2021 17:56:23 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:37510 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728083AbhAZTtN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jan 2021 14:49:13 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l4UKE-00FAUM-Nw; Tue, 26 Jan 2021 19:48:30 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1l4UNk-00065s-Oq; Tue, 26 Jan 2021 19:52:08 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.12] Various fixes (#71091)
-Date:   Tue, 26 Jan 2021 19:52:08 +0000
-Message-Id: <20210126195208.23383-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <5660c371-6020-bae8-aa19-38e3ec4f09b9@xs4all.nl>
-References: 
+        id S237611AbhA0MEX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 07:04:23 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:42307 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237102AbhA0MBb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 07:01:31 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 4jV5lXiYsI2394jV8lhCJz; Wed, 27 Jan 2021 13:00:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611748847; bh=0AzF55Jm0IIRIMqXAMk5LEUSkHNmCZO64x7XOqGXwLY=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Dj/XSM8gWRVVYm9qfXtIKdHG+uGdDSmqxmLk+ZToFNBsse7DIFoCm7/txp2E/Mgg2
+         +cYN9Nq1XIGBaLcuw9kG1wUG1ywQ03yWVdNds1Wmla5jA3gbm7Cax1ozmbwlp36MBE
+         qOwmqm06XvaFCrq7Fwl3S9wl5Iu77s0ZNBiH8h/QeAcisto/daWbPl0GERI7Ur/Yt3
+         5/h04WiAg3bGeiOrK3/TbhclnPDJzg5n1MHSpOPNAUpawAxBd1/Hf+7vsRWhrAqsk3
+         EQWwt3A/MXViO4BdI/6Uo2XyD86T8fvEmx/sPahrU6tW6pnvGML3gMoBEjxwVJeDE/
+         EzxY2h8bQGBDg==
+Subject: Re: v4l2-ctl: Question on last_ts
+To:     Max Schulze <max.schulze@posteo.de>
+Cc:     linux-media@vger.kernel.org
+References: <de158cf3-5825-be21-f8ed-964cb9be6ec0@posteo.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <a8a31968-941b-ca44-3112-8d9f7c2215a4@xs4all.nl>
+Date:   Wed, 27 Jan 2021 13:00:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <de158cf3-5825-be21-f8ed-964cb9be6ec0@posteo.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGy5Uj4x1Q0vSUyLrv5+QtTYx8bo4reZHpkK+foKKMOeRyNJGzem1ZR12CL0IcrVn2XTA6daws3hb2ifgpY07tiFf+K9NLxdaTXuo5IVtlykrhNUf3Cu
+ uQKGD0vk7w/iBdzi6n88/UBsfeLZrFxb8fOF6Ij7bdBhJcstrs5ALglnRoRKWaYIY+5y2b0u/jVGLaISY5oR2jIhKgDS9i0jdES8JIjDZQmD2LvByzYlYjBB
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+On 27/01/2021 11:44, Max Schulze wrote:
+> Hello Hans,
+> 
+> 
+> I do not understand the concept on last_ts.
+> 
+>> cap dqbuf: 0 seq:      0 bytesused: 512000 ts: 137342.420951 delta 
+>> last: 137342420.951 ms (ts-monotonic, ts-src-soe)
+>> cap dqbuf: 1 seq:      2 bytesused: 512000 ts: 137342.484954 dropped: 
+>> 1 (ts-monotonic, ts-src-soe)
+> 
+> It seems to print the timestamp on the first frame, but then never again 
+> (how useful is it, to print the same timestamp twice?).
+> 
+> 
+>> if (last_ts <= 0.0)
+>>             fprintf(f, " delta last: %.03f ms", (ts - last_ts) * 1000.0);
+>>         last_ts = ts;
+> 
+> Might it be, that commit 222e1760c7 "utils: fix implicit float 
+> conversion" got the float conversion wrong and it should rather be
+> 
+>>         if (last_ts > 0.0)
+> 
+> To my understanding, this would yield a much-more useful output of 
+> printing the diff to the last frame _in every frame_
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/5660c371-6020-bae8-aa19-38e3ec4f09b9@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/87515/
-Build time: 00:06:51
-Link: https://lore.kernel.org/linux-media/5660c371-6020-bae8-aa19-38e3ec4f09b9@xs4all.nl
+Yep, you are correct. It's now fixed. I was wondering about that as well
+when I looked at the code.
 
-gpg: Signature made Mon 25 Jan 2021 12:09:15 PM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+Thanks for reporting this!
 
-Summary: got 2/9 patches with issues, being 0 at build time, plus one error when buinding PDF document
+	Hans
 
-Error/warnings:
-
-patches/0001-media-v4l2-ioctl-print-capabilities-in-v4l_print_cre.patch:
-
-   checkpatch.pl:
-	$ cat patches/0001-media-v4l2-ioctl-print-capabilities-in-v4l_print_cre.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:26: WARNING: Avoid logging continuation uses where feasible
-
-patches/0005-Fix-RTL2832-not-depending-on-REGMAP_I2C.patch:
-
-   checkpatch.pl:
-	$ cat patches/0005-Fix-RTL2832-not-depending-on-REGMAP_I2C.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:8: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-
-Error #512 when building PDF docs
+> 
+> 
+>> cap dqbuf: 0 seq:      0 bytesused: 512000 ts: 143215.916971 
+>> (ts-monotonic, ts-src-soe)
+>> cap dqbuf: 1 seq:      2 bytesused: 512000 ts: 143215.984995 delta 
+>> last: 68.024 ms dropped: 1 (ts-monotonic, ts-src-soe)
+>> cap dqbuf: 2 seq:      3 bytesused: 512000 ts: 143216.016956 delta 
+>> last: 31.961 ms (ts-monotonic, ts-src-soe)
+>> cap dqbuf: 3 seq:      4 bytesused: 512000 ts: 143216.052981 delta 
+>> last: 36.025 ms (ts-monotonic, ts-src-soe)
+>> cap dqbuf: 0 seq:      5 bytesused: 512000 ts: 143216.088920 delta 
+>> last: 35.939 ms fps: 29.08 (ts-monotonic, ts-src-soe)
+> 
 
