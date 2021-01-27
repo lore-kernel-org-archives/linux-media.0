@@ -2,201 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77BB7C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97C5EC433E9
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:47:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F92564DA5
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:21:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52C6B64DA3
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:47:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbhA0RVy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 12:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235599AbhA0RRP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 12:17:15 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62094C061788
-        for <linux-media@vger.kernel.org>; Wed, 27 Jan 2021 09:16:35 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id s23so746789pgh.11
-        for <linux-media@vger.kernel.org>; Wed, 27 Jan 2021 09:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eZkRAFReyCaCfsUebKjqhppx54eZqZXUA8gRquKcsPU=;
-        b=dimGUWBu88dX8OdBPtqV1K4RlZBNMOe3qLaj2DFeriW0zXGvfLXQdvpDQW90G+pq8w
-         p6xdN0AtXLBzz2oPtDzXqxZIr8psZaQU+lB+nDni6Zl/WIpcblkhLxycbxPAvV8te05i
-         KsVIp+ePdyQmOMOK1htw20UOkkjeFnjUvviVoIEY2ofKY9lhBjfLrheC8MM/6mQmKGDo
-         lgZrbx94cvm3t6pqu1kCexYTDa1cFG519/QRDEJtzXaZ7GklAYFE3S3JdLgmQXJO7Olf
-         5tbc9e9YBFuaJlg9N990aaa1pAzjhautowBMkQc84YuILgD85YeIKeYhHvbjucdynQoo
-         2yeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eZkRAFReyCaCfsUebKjqhppx54eZqZXUA8gRquKcsPU=;
-        b=qnQq2Bz7KBEEtgZSHqlLC3c2SUNyX3PrsnjiMGYxL0hbGqPsNqEsvyZt/dDcVofvp1
-         ywmznPb5BaVvNfRVn3Bl1tkiH0hjGmWfQbqoeqSPkrpnvjEcCexLHSy4YwgBz1yqGce6
-         Q+T3ynfdjb1CDopgfspEpQ9h4jrNzqG0jpI88wK7UFYra9ga13MaWsNr+TyxZcxle329
-         xDT0iD9TbETzTYlsFcD/h5A2RtEsD59MVhlxUvI7rllwcL09Bs5BxtMLz6E+eekrlvIT
-         zrlb8vz5jqlv0txSGmQwX4gjmeK4roKxOPNBUNVgKxEh/eK87DdXG1TAZacLCxRY/p8y
-         R3IA==
-X-Gm-Message-State: AOAM533Au1mDgV1/FwlkX1eVi+rpc5RjC4tk6govPJK80DEwaPyml0c2
-        Qhf/k9ayCEuvX12PZqBdQtSl3+OkN4CSeSCnRiMoNg==
-X-Google-Smtp-Source: ABdhPJxKQ8+LIsyyI6CfO9fy/6S4KtVkebVD7Kd1qkb+yv7kQN6fPglxpJCY+HhjUK+MV4uOLoP/VTT9u1mKmJvI5fg=
-X-Received: by 2002:a63:724a:: with SMTP id c10mr10790208pgn.124.1611767794770;
- Wed, 27 Jan 2021 09:16:34 -0800 (PST)
+        id S1344182AbhA0Rrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 12:47:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47176 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344015AbhA0RrY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 12:47:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 532D064DB1;
+        Wed, 27 Jan 2021 17:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611769603;
+        bh=awOKI+XahHrzKqFqIy2x/6lyBTxRkf5j29o/Rpfi+pg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=m3u3hMcND3YBEhX700GAcxV5KDOYlTcCV/ZXzAphI3eZ9DaKJ5Ec1kKCWWui/Fmey
+         POQ6Xi69PmNNsaYS09Az66I3HL5PM/gNbdJhzjySimKRPVQpSTajFm+6nIdNq87i8L
+         UOXJnaZ4Ujqsv+vPB/HwvAT/luuRXinFqeFA4JfUPdPZjZ8eFpQUIykD36V94uuu6k
+         6CNpipVaW0lWLsF9O+0A2U8uzS9WT/X+4b3Vxp7bPU8uHeLeGQFV+woLBtVk5WoWOS
+         MUQGy8IOf9lD64lvVaX6ONphinlM0CLhkF5D0jlybUvaGqUT4f5EJeCyUESCAKKewK
+         3cxXtZIfNfxGA==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 2/4] media: i2c: imx258: add support for binding via device tree
+Date:   Wed, 27 Jan 2021 18:46:33 +0100
+Message-Id: <20210127174635.3596-2-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210127174635.3596-1-krzk@kernel.org>
+References: <20210127174635.3596-1-krzk@kernel.org>
 MIME-Version: 1.0
-References: <20210126225138.1823266-1-kaleshsingh@google.com> <CAG48ez2tc_GSPYdgGqTRotUp6NqFoUKdoN_p978+BOLoD_Fdjw@mail.gmail.com>
-In-Reply-To: <CAG48ez2tc_GSPYdgGqTRotUp6NqFoUKdoN_p978+BOLoD_Fdjw@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 27 Jan 2021 12:16:23 -0500
-Message-ID: <CAC_TJvfuFiDSWD+ud_rJJ6zFQjYhcK1Rfqyrne4OBB4ZfJ0oMQ@mail.gmail.com>
-Subject: Re: [PATCH] procfs/dmabuf: Add /proc/<pid>/task/<tid>/dmabuf_fds
-To:     Jann Horn <jannh@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        kernel-team <kernel-team@android.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>,
-        Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        Andrei Vagin <avagin@gmail.com>,
-        Yafang Shao <laoar.shao@gmail.com>, Hui Su <sh_def@163.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 5:47 AM Jann Horn <jannh@google.com> wrote:
->
-> +jeffv from Android
->
-> On Tue, Jan 26, 2021 at 11:51 PM Kalesh Singh <kaleshsingh@google.com> wr=
-ote:
-> > In order to measure how much memory a process actually consumes, it is
-> > necessary to include the DMA buffer sizes for that process in the memor=
-y
-> > accounting. Since the handle to DMA buffers are raw FDs, it is importan=
-t
-> > to be able to identify which processes have FD references to a DMA buff=
-er.
->
-> Or you could try to let the DMA buffer take a reference on the
-> mm_struct and account its size into the mm_struct? That would probably
-> be nicer to work with than having to poke around in procfs separately
-> for DMA buffers.
->
-> > Currently, DMA buffer FDs can be accounted using /proc/<pid>/fd/* and
-> > /proc/<pid>/fdinfo -- both of which are only root readable, as follows:
->
-> That's not quite right. They can both also be accessed by the user
-> owning the process. Also, fdinfo is a standard interface for
-> inspecting process state that doesn't permit reading process memory or
-> manipulating process state - so I think it would be fine to permit
-> access to fdinfo under a PTRACE_MODE_READ_FSCRED check, just like the
-> interface you're suggesting.
+The IMX258 can be used also on embedded designs using device tree so
+allow the sensor to bind to a device tree node.
 
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Hi everyone. Thank you for the feedback.
+---
 
-I understand there is a deeper problem of accounting shared memory in
-the kernel, that=E2=80=99s not only specific to the DMA buffers. In this ca=
-se
-DMA buffers, I think Jann=E2=80=99s proposal is the cleanest way to attribu=
-te
-the shared buffers to processes. I can respin a patch modifying fdinfo
-as suggested, if this is not an issue from a security perspective.
+Changes since v1:
+1. None
+---
+ drivers/media/i2c/imx258.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks,
-Kalesh
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index df62c69a48c0..ba7f29622974 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -1291,11 +1291,18 @@ static const struct acpi_device_id imx258_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, imx258_acpi_ids);
+ #endif
+ 
++static const struct of_device_id imx258_dt_ids[] = {
++	{ .compatible = "sony,imx258" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, imx258_dt_ids);
++
+ static struct i2c_driver imx258_i2c_driver = {
+ 	.driver = {
+ 		.name = "imx258",
+ 		.pm = &imx258_pm_ops,
+ 		.acpi_match_table = ACPI_PTR(imx258_acpi_ids),
++		.of_match_table	= imx258_dt_ids,
+ 	},
+ 	.probe_new = imx258_probe,
+ 	.remove = imx258_remove,
+-- 
+2.25.1
 
->
->
-> >   1. Do a readlink on each FD.
-> >   2. If the target path begins with "/dmabuf", then the FD is a dmabuf =
-FD.
-> >   3. stat the file to get the dmabuf inode number.
-> >   4. Read/ proc/<pid>/fdinfo/<fd>, to get the DMA buffer size.
-> >
-> > Android captures per-process system memory state when certain low memor=
-y
-> > events (e.g a foreground app kill) occur, to identify potential memory
-> > hoggers. To include a process=E2=80=99s dmabuf usage as part of its mem=
-ory state,
-> > the data collection needs to be fast enough to reflect the memory state=
- at
-> > the time of such events.
-> >
-> > Since reading /proc/<pid>/fd/ and /proc/<pid>/fdinfo/ requires root
-> > privileges, this approach is not suitable for production builds.
->
-> It should be easy to add enough information to /proc/<pid>/fdinfo/ so
-> that you don't need to look at /proc/<pid>/fd/ anymore.
->
-> > Granting
-> > root privileges even to a system process increases the attack surface a=
-nd
-> > is highly undesirable. Additionally this is slow as it requires many
-> > context switches for searching and getting the dma-buf info.
->
-> What do you mean by "context switches"? Task switches or kernel/user
-> transitions (e.g. via syscall)?
->
-> > With the addition of per-buffer dmabuf stats in sysfs [1], the DMA buff=
-er
-> > details can be queried using their unique inode numbers.
-> >
-> > This patch proposes adding a /proc/<pid>/task/<tid>/dmabuf_fds interfac=
-e.
-> >
-> > /proc/<pid>/task/<tid>/dmabuf_fds contains a list of inode numbers for
-> > every DMA buffer FD that the task has. Entries with the same inode
-> > number can appear more than once, indicating the total FD references
-> > for the associated DMA buffer.
-> >
-> > If a thread shares the same files as the group leader then its
-> > dmabuf_fds file will be empty, as these dmabufs are reported by the
-> > group leader.
-> >
-> > The interface requires PTRACE_MODE_READ_FSCRED (same as /proc/<pid>/map=
-s)
-> > and allows the efficient accounting of per-process DMA buffer usage wit=
-hout
-> > requiring root privileges. (See data below)
->
-> I'm not convinced that introducing a new procfs file for this is the
-> right way to go. And the idea of having to poke into multiple
-> different files in procfs and in sysfs just to be able to compute a
-> proper memory usage score for a process seems weird to me. "How much
-> memory is this process using" seems like the kind of question the
-> kernel ought to be able to answer (and the kernel needs to be able to
-> answer somewhat accurately so that its own OOM killer can do its job
-> properly)?
