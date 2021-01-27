@@ -5,87 +5,81 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69AB7C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D10F7C433E6
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 18:02:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B3D564DA9
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 17:52:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F64964DAC
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 18:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344238AbhA0RwY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 12:52:24 -0500
-Received: from foss.arm.com ([217.140.110.172]:56914 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343743AbhA0R1j (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 12:27:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98ADD1474;
-        Wed, 27 Jan 2021 09:26:14 -0800 (PST)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57C753F66E;
-        Wed, 27 Jan 2021 09:26:12 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v5 11/20] dt-bindings: media: IR: Add H616 IR compatible string
-Date:   Wed, 27 Jan 2021 17:24:51 +0000
-Message-Id: <20210127172500.13356-12-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20210127172500.13356-1-andre.przywara@arm.com>
-References: <20210127172500.13356-1-andre.przywara@arm.com>
+        id S1344115AbhA0SCk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 13:02:40 -0500
+Received: from mail.v3.sk ([167.172.186.51]:48220 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344098AbhA0SCi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 13:02:38 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 0D0D8DF5E5;
+        Wed, 27 Jan 2021 17:57:49 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id gvktt2hGF6tH; Wed, 27 Jan 2021 17:57:48 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 9A24FE0AE3;
+        Wed, 27 Jan 2021 17:57:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hr2dETXlABTL; Wed, 27 Jan 2021 17:57:48 +0000 (UTC)
+Received: from localhost (unknown [109.183.109.54])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id 5FC65DF5E5;
+        Wed, 27 Jan 2021 17:57:48 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lubomir Rintel <lkundrak@v3.sk>, stable@vger.kernel.org
+Subject: [PATCH] media: marvell-ccic: power up the device on mclk enable
+Date:   Wed, 27 Jan 2021 19:01:43 +0100
+Message-Id: <20210127180143.43437-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the obvious compatible name to the existing IR binding, and pair
-it with the existing A31 fallback compatible string, as the devices
-are compatible.
+Writing to REG_CLKCTRL with the power off causes a hang. Enable the
+device first.
 
-On the way use enums to group all compatible devices together.
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Cc: stable@vger.kernel.org # 5.10+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- .../bindings/media/allwinner,sun4i-a10-ir.yaml   | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/media/platform/marvell-ccic/mcam-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-index 5fa19d4aeaf3..6d8395d6bca0 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-@@ -20,16 +20,12 @@ properties:
-       - const: allwinner,sun5i-a13-ir
-       - const: allwinner,sun6i-a31-ir
-       - items:
--          - const: allwinner,sun8i-a83t-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun8i-r40-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-a64-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-h6-ir
-+          - enum:
-+              - allwinner,sun8i-a83t-ir
-+              - allwinner,sun8i-r40-ir
-+              - allwinner,sun50i-a64-ir
-+              - allwinner,sun50i-h6-ir
-+              - allwinner,sun50i-h616-ir
-           - const: allwinner,sun6i-a31-ir
- 
-   reg:
--- 
-2.17.5
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/me=
+dia/platform/marvell-ccic/mcam-core.c
+index c012fd2e1d291..34266fba824f2 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -931,6 +931,7 @@ static int mclk_enable(struct clk_hw *hw)
+ 		mclk_div =3D 2;
+ 	}
+=20
++	pm_runtime_get_sync(cam->dev);
+ 	clk_enable(cam->clk[0]);
+ 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
+ 	mcam_ctlr_power_up(cam);
+@@ -944,6 +945,7 @@ static void mclk_disable(struct clk_hw *hw)
+=20
+ 	mcam_ctlr_power_down(cam);
+ 	clk_disable(cam->clk[0]);
++	pm_runtime_put(cam->dev);
+ }
+=20
+ static unsigned long mclk_recalc_rate(struct clk_hw *hw,
+--=20
+2.29.2
 
