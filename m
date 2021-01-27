@@ -2,465 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85FCC433DB
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 15:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA1D6C433E6
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 16:02:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F5682076B
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 15:30:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF429207E2
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 16:02:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343620AbhA0PaE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 10:30:04 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:45831 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235887AbhA0P3k (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 10:29:40 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 4mkMlGHncvfIs4mkPlw20B; Wed, 27 Jan 2021 16:28:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611761334; bh=ZAtN72BZA7Pf8Etxi3h2l4UcGQo1GFp5caZTulKRKI8=;
-        h=Subject:From:To:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=weef3i1tNasQLhGQshp8TLBDiyEsiAUIzgkSlFYVMM35Amv+0HXTHXaGpGjGD/LDA
-         zfUlCoWRxyoWMSKh5vppd+OWY9PlZfD+rI4TIkSqsQBbHwREl+KXl5uri4V6Fc/KAG
-         fxp2WdjDl3Ixr0w3JQcxs0ThaO2735wKBoVO46DpOROwWTWIacq2rKj15gQ1NaqaUk
-         FuJlUV/UrlOiqAU882wNdeBiIxnyyBFVGAnnX5752CMA80grwFOE7Vl2Kph2M/Agfy
-         mutFWxXeBxo/HqhLzU7UEcrlnyr8Sf0asj3kU4moA4ve0sB+pEJGNhYFiLpjOQuYqF
-         YM44S2NA5HXWQ==
-Subject: Re: [PATCH v2 00/15] drm/vc4: hdmi: Add CEC support for the BCM2711
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     Maxime Ripard <maxime@cerno.tech>, Eric Anholt <eric@anholt.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
+        id S236959AbhA0QCh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 11:02:37 -0500
+Received: from verein.lst.de ([213.95.11.211]:53502 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236827AbhA0P4x (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 10:56:53 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 5554C68AFE; Wed, 27 Jan 2021 16:56:08 +0100 (CET)
+Date:   Wed, 27 Jan 2021 16:56:08 +0100
+From:   ". Christoph Hellwig" <hch@lst.de>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     ". Christoph Hellwig" <hch@lst.de>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org
-References: <20210111142309.193441-1-maxime@cerno.tech>
- <5dda3c71-5faf-683b-c25a-37aa1849fb62@xs4all.nl>
- <c3cf85b8-7645-73ff-322a-dd95a1f02030@xs4all.nl>
-Message-ID: <e5af848c-6fb8-0423-5499-a8d33329209f@xs4all.nl>
-Date:   Wed, 27 Jan 2021 16:28:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        IOMMU DRIVERS <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sergey Senozhatsky <senozhatsky@google.com>
+Subject: Re: [PATCH v3 5/6] media: uvcvideo: Use dma_alloc_noncontiguos API
+Message-ID: <20210127155608.GA20272@lst.de>
+References: <20201201033658.GE3723071@google.com> <20201201144916.GA14682@lst.de> <CAAFQd5BBEbmENrrZ-vMK9cKOap19XWmfcxwrxKfjWx-wEew8rg@mail.gmail.com> <20201208071320.GA1667627@google.com> <20201209111639.GB22806@lst.de> <CANiDSCtsOdJUK3r_t8UNKhh7Px0ANNFJkuwM1fBgZ7wnVh0JFA@mail.gmail.com> <20210111083614.GA27589@lst.de> <CANiDSCvuvj47=nhoWhvzc5raMxM60w+JYRWjd0YepcbcbkrUjA@mail.gmail.com> <20210126170659.GA9104@lst.de> <CANiDSCsz+9DJesOTJ5C5HGEH-wwuTmEd3c8yLoHjnDz=2+ndJw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <c3cf85b8-7645-73ff-322a-dd95a1f02030@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfP/LrTvKWGX4dKlbU6z4crOyfPuIrbGEym3+jTFh8XfQPH1rC4WiMaaOII3HkWxfaTq4w3bVefbXRY0iK1wSWLfUsRAic/r7zpw4vaiU1cL2dfpI2HEF
- 33+QD1YJYhgWxkQ6V6/r5f0ktkhr48NhBp0kZ0K0pA337yc0ty3fGWqQX3CeJrVkXlsH2FKPjIcHsspRFJMkXGRle2Ov/4kl0WcPyvGHCVQ4aocekGnuVYsE
- kaKDfmD3PpYkPde2NCIRB7N1Ung4OKRNnzs2McvFhIliXBYJfTMGgiGCSFOXWRUPEjvSE1M+OZQTN9wrGZuqqexPVuOJo7qUJo50gku5R3nLux8V0OgOPjSX
- aH7LVFycSkYKzXANZ2KD0d3cdyjY+8DrEIpabV8PeP8yA96a2j4VlniMKpgSZrDXEHfgw0Sx7FyFQ74ZDKLmAfflCCimkwpgUeTyB2zoCVcQUgNEnO2mvZoA
- jG0Eb3Gt7rRagZOh3pFhvz7KXus/GtRPoSHWRKCT4cKvSX6XKudnr4m5WfaA8wVqqNHApAqsusWP9R6wcaaclztql139UQUFJO7UmKLL9sFoqiO7pK+oMCZl
- 74rHHc/SYgmik3pku51HxMLWxp90jDbo5dBzg+uLYpcGUBIBPyGDWOs650NoL7/G9u8C79g9q0H+/FpTfqDO/OqmVV9fYQa/I+f7H/I3EV5mXIlUX0g2Mfc0
- twJDrRCOqyI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCsz+9DJesOTJ5C5HGEH-wwuTmEd3c8yLoHjnDz=2+ndJw@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 18/01/2021 14:55, Hans Verkuil wrote:
-> On 12/01/2021 16:24, Hans Verkuil wrote:
->> Hi Maxime,
->>
->> On 11/01/2021 15:22, Maxime Ripard wrote:
->>> Hi,
->>>
->>> Here's a series introducing the CEC support for the BCM2711 found on the
->>> RaspberryPi4.
->>>
->>> The BCM2711 HDMI controller uses a similar layout for the CEC registers, the
->>> main difference being that the interrupt handling part is now shared between
->>> both HDMI controllers.
->>>
->>> This series is mainly about fixing a couple of bugs, reworking the driver to
->>> support having two different interrupts, one for each direction, provided by an
->>> external irqchip, and enables the irqchip driver for the controller we have.
->>>
->>> This has been tested on an RPi3 and RPi4, but requires the latest firmware.
->>> It's is based on the 10 and 12 bpc series.
->>
->> Thank you for this series, I plan to test this later this week.
-> 
-> Testing is delayed: my microHDMI to HDMI adapter has problems with the CEC pin
-> (possibly not connected at all). I've ordered adapter cables (hopefully of better
-> quality), but those haven't arrived yet. I expect them later this week.
+On Wed, Jan 27, 2021 at 12:29:08AM +0100, Ricardo Ribalda wrote:
+> - Is there any platform where dma_alloc_noncontiguos can fail?
+> This is, !ops->alloc_noncontiguous and !dev->coherent_dma_mask
+> If yes then we need to add a function to let the driver know in
+> advance that it has to use the coherent allocator (usb_alloc_coherent
+> for uvc)
 
-After testing this you can add my:
+dev->coherent_dma_mask is set by the driver.  So the only reason why
+dma_alloc_noncontiguos will fail is because is because it can't
+allocate any memory.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> - In dma_alloc_noncontiguos, on the dma_alloc_pages fallback. If we
+> have a device where the dma happens in only one direction, could not
+> get more performance with DMA_FROM/TO_DEVICE instead of
+> DMA_BIDIRECTIONAL ?
 
-for the patches in this series.
-
-Thank you for working on this!
-
-Regards,
-
-	Hans
+Yes, we could probably do that.
 
 > 
-> Regards,
 > 
-> 	Hans
+> Then I have tried to use the API, and I have encountered a problem: on
+> uvcvideo the device passed to the memory allocator is different for
+> DMA_PAGES and NON_CONTIGUOUS:
+> https://github.com/ribalda/linux/blob/042cd497739f71c8d4a83a67ee970369e2baca4a/drivers/media/usb/uvc/uvc_video.c#L1236
 > 
->>
->> Regards,
->>
->> 	Hans
->>
->>>
->>> Here is the cec-compliance output:
->>>
->>> pi@raspberrypi:~$ cec-ctl --tuner -p 1.0.0.0
->>> The CEC adapter doesn't allow setting the physical address manually, ignore this option.
->>>
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : 1.0.0.0
->>> 	Logical Address Mask       : 0x0008
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Tuner
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : 3 (Tuner 1)
->>> 	    Primary Device Type    : Tuner
->>> 	    Logical Address Type   : Tuner
->>> 	    All Device Types       : Tuner
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> pi@raspberrypi:~$ cec-compliance
->>> cec-compliance SHA                 : not available
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : 1.0.0.0
->>> 	Logical Address Mask       : 0x0008
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Tuner
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : 3 (Tuner 1)
->>> 	    Primary Device Type    : Tuner
->>> 	    Logical Address Type   : Tuner
->>> 	    All Device Types       : Tuner
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> Compliance test for device /dev/cec0:
->>>
->>>     The test results mean the following:
->>>         OK                  Supported correctly by the device.
->>>         OK (Not Supported)  Not supported and not mandatory for the device.
->>>         OK (Presumed)       Presumably supported.  Manually check to confirm.
->>>         OK (Unexpected)     Supported correctly but is not expected to be supported for this device.
->>>         OK (Refused)        Supported by the device, but was refused.
->>>         FAIL                Failed and was expected to be supported by this device.
->>>
->>> Find remote devices:
->>> 	Polling: OK
->>>
->>> Network topology:
->>> 	System Information for device 0 (TV) from device 3 (Tuner 1):
->>> 		CEC Version                : 2.0
->>> 		Physical Address           : 0.0.0.0
->>> 		Primary Device Type        : TV
->>> 		Vendor ID                  : 0x000c03
->>> 		OSD Name                   : 'TV  '
->>> 		Power Status               : Tx, OK, Rx, OK, Feature Abort
->>>
->>> Total: 1, Succeeded: 1, Failed: 0, Warnings: 0
->>>
->>> pi@raspberrypi:~$ cec-ctl -d1 --tuner -p 1.0.0.0
->>> The CEC adapter doesn't allow setting the physical address manually, ignore this option.
->>>
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : 1.0.0.0
->>> 	Logical Address Mask       : 0x0008
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Tuner
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : 3 (Tuner 1)
->>> 	    Primary Device Type    : Tuner
->>> 	    Logical Address Type   : Tuner
->>> 	    All Device Types       : Tuner
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> pi@raspberrypi:~$ cec-compliance -d1
->>> cec-compliance SHA                 : not available
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : 1.0.0.0
->>> 	Logical Address Mask       : 0x0008
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Tuner
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : 3 (Tuner 1)
->>> 	    Primary Device Type    : Tuner
->>> 	    Logical Address Type   : Tuner
->>> 	    All Device Types       : Tuner
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> Compliance test for device /dev/cec1:
->>>
->>>     The test results mean the following:
->>>         OK                  Supported correctly by the device.
->>>         OK (Not Supported)  Not supported and not mandatory for the device.
->>>         OK (Presumed)       Presumably supported.  Manually check to confirm.
->>>         OK (Unexpected)     Supported correctly but is not expected to be supported for this device.
->>>         OK (Refused)        Supported by the device, but was refused.
->>>         FAIL                Failed and was expected to be supported by this device.
->>>
->>> Find remote devices:
->>> 	Polling: OK
->>>
->>> Network topology:
->>> 	System Information for device 0 (TV) from device 3 (Tuner 1):
->>> 		CEC Version                : 2.0
->>> 		Physical Address           : 0.0.0.0
->>> 		Primary Device Type        : TV
->>> 		Vendor ID                  : 0x000c03
->>> 		OSD Name                   : 'TV  '
->>> 		Power Status               : Tx, OK, Rx, OK, Feature Abort
->>>
->>> Total: 1, Succeeded: 1, Failed: 0, Warnings: 0
->>>
->>> And for the hotplug detect test:
->>>
->>> pi@raspberrypi:~$ cec-ctl --playback
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : f.f.f.f
->>> 	Logical Address Mask       : 0x0000
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Playback
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : Not Allocated
->>> 	    Primary Device Type    : Playback
->>> 	    Logical Address Type   : Playback
->>> 	    All Device Types       : Playback
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> pi@raspberrypi:~$ cec-ctl -t0 --image-view-on
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : f.f.f.f
->>> 	Logical Address Mask       : 0x0000
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Playback
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : Not Allocated
->>> 	    Primary Device Type    : Playback
->>> 	    Logical Address Type   : Playback
->>> 	    All Device Types       : Playback
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> Transmit from Unregistered to TV (15 to 0):
->>> CEC_MSG_IMAGE_VIEW_ON (0x04)
->>> 	Sequence: 1 Tx Timestamp: 9182.611s
->>> pi@raspberrypi:~$ cec-ctl -d1 --playback
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : f.f.f.f
->>> 	Logical Address Mask       : 0x0000
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Playback
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : Not Allocated
->>> 	    Primary Device Type    : Playback
->>> 	    Logical Address Type   : Playback
->>> 	    All Device Types       : Playback
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> pi@raspberrypi:~$ cec-ctl -d1 -t0 --image-view-on
->>> Driver Info:
->>> 	Driver Name                : vc4_hdmi
->>> 	Adapter Name               : vc4
->>> 	Capabilities               : 0x0000010e
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 	Driver version             : 5.10.0
->>> 	Available Logical Addresses: 1
->>> 	Physical Address           : f.f.f.f
->>> 	Logical Address Mask       : 0x0000
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : Playback
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : Not Allocated
->>> 	    Primary Device Type    : Playback
->>> 	    Logical Address Type   : Playback
->>> 	    All Device Types       : Playback
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> Transmit from Unregistered to TV (15 to 0):
->>> CEC_MSG_IMAGE_VIEW_ON (0x04)
->>> 	Sequence: 1 Tx Timestamp: 9207.191s
->>>
->>> With the pulse-eight side reporting:
->>>
->>> $ sudo cec-ctl -M
->>> Driver Info:
->>> 	Driver Name                : pulse8-cec
->>> 	Adapter Name               : serio0
->>> 	Capabilities               : 0x0000003f
->>> 		Physical Address
->>> 		Logical Addresses
->>> 		Transmit
->>> 		Passthrough
->>> 		Remote Control Support
->>> 		Monitor All
->>> 	Driver version             : 5.9.16
->>> 	Available Logical Addresses: 1
->>> 	Connector Info             : None
->>> 	Physical Address           : 0.0.0.0
->>> 	Logical Address Mask       : 0x0001
->>> 	CEC Version                : 2.0
->>> 	Vendor ID                  : 0x000c03 (HDMI)
->>> 	OSD Name                   : 'TV  '
->>> 	Logical Addresses          : 1 (Allow RC Passthrough)
->>>
->>> 	  Logical Address          : 0 (TV)
->>> 	    Primary Device Type    : TV
->>> 	    Logical Address Type   : TV
->>> 	    All Device Types       : TV
->>> 	    RC TV Profile          : None
->>> 	    Device Features        :
->>> 		None
->>>
->>> Initial Event: State Change: PA: 0.0.0.0, LA mask: 0x0001, Conn Info: no
->>>
->>> Received from Unregistered to TV (15 to 0): IMAGE_VIEW_ON (0x04)
->>> Received from Unregistered to TV (15 to 0): IMAGE_VIEW_ON (0x04)
->>>
->>> Let me know what you think,
->>> Maxime
->>>
->>> Changes from v1:
->>>   - Removed the irqchip patch in favor of a select in mach-bcm
->>>   - Fixed HDMI1 interrupt numbers
->>>   - Removed redundant call to drm_connector_update_edid_property
->>>   - Fixed the condition in vc4_hdmi_connector_detect
->>>   - Added the tags
->>>   - Rebased on top of drm-misc-next-2021-01-06
->>>
->>> Dom Cobley (5):
->>>   drm/vc4: hdmi: Move hdmi reset to bind
->>>   drm/vc4: hdmi: Fix register offset with longer CEC messages
->>>   drm/vc4: hdmi: Fix up CEC registers
->>>   drm/vc4: hdmi: Restore cec physical address on reconnect
->>>   drm/vc4: hdmi: Remove cec_available flag
->>>
->>> Maxime Ripard (10):
->>>   ARM: bcm: Select BRCMSTB_L2_IRQ for bcm2835
->>>   drm/vc4: hdmi: Compute the CEC clock divider from the clock rate
->>>   drm/vc4: hdmi: Update the CEC clock divider on HSM rate change
->>>   drm/vc4: hdmi: Introduce a CEC clock
->>>   drm/vc4: hdmi: Split the interrupt handlers
->>>   drm/vc4: hdmi: Support BCM2711 CEC interrupt setup
->>>   drm/vc4: hdmi: Don't register the CEC adapter if there's no interrupts
->>>   dt-binding: display: bcm2711-hdmi: Add CEC and hotplug interrupts
->>>   ARM: dts: bcm2711: Add the BSC interrupt controller
->>>   ARM: dts: bcm2711: Add the CEC interrupt controller
->>>
->>>  .../bindings/display/brcm,bcm2711-hdmi.yaml   |  20 +-
->>>  arch/arm/boot/dts/bcm2711.dtsi                |  30 +++
->>>  arch/arm/mach-bcm/Kconfig                     |   1 +
->>>  arch/arm64/Kconfig.platforms                  |   1 +
->>>  drivers/gpu/drm/vc4/vc4_hdmi.c                | 223 ++++++++++++++----
->>>  drivers/gpu/drm/vc4/vc4_hdmi.h                |  11 +-
->>>  drivers/gpu/drm/vc4/vc4_hdmi_regs.h           |   4 +-
->>>  7 files changed, 234 insertions(+), 56 deletions(-)
->>>
->>
-> 
+> I need to dig a bit tomorrow to figure out why this is, I have
+> hardware to test both paths, so it should not be too difficult.
 
+I always found the USB dma alloc API a little weird, but we might have
+to follow the scheme of the usb coherent wrappers there.
