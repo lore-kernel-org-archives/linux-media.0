@@ -2,111 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1CF9C433DB
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4227C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:30:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 813CA20793
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:30:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9730220791
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 12:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbhA0M3z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 07:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbhA0M1h (ORCPT
+        id S1343502AbhA0M3j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 07:29:39 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:46339 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237728AbhA0M0v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 07:27:37 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ADDC06174A;
-        Wed, 27 Jan 2021 04:26:57 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id o18so1178541qtp.10;
-        Wed, 27 Jan 2021 04:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=wNeqy1eeb9t2veXPrSrcgYkXO41oWKgjj1xWqs7fT1c=;
-        b=bT5qFKL/FMCfuSZAYwivgiYjFfSVtz9v6C2G9I17avfiVA1USlROhQ9ow4v/IPjjQr
-         fdUOHgNWc58lCXO3F+nBrQYadnztfHbKVGoPe2PdWfipenKUoyqo+f5TIE6/MTHK3SlI
-         nkPcmuPtJi/adw9QVwZeAZkrmkEjS8XsYPjDvjlPLI8WFuu34fewXxupIq8TmYruU4Pf
-         MuuURUxCC3tjTqTyWCuTeiYC6+iTqV627BOUcN7jbaakJwb0taPm+1uisk44hlkusveF
-         Mt4KtKit9Vs1oFhrJIiCakgGcu09M9e73r6CuIic3FSE739GxhVegKyFzZP1JOYCnjP8
-         UgTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=wNeqy1eeb9t2veXPrSrcgYkXO41oWKgjj1xWqs7fT1c=;
-        b=JcYSrbdNMXDgvjcRlFKhKBhbfzngLzBh2T7f1rH9zvCDVzq1i1sYJWQ93FZpjAYcFq
-         L30vgAW5qSLh0iYC6nEPw7sd5ZQnPsUuAXM1FNF9nx/YP+oUXuqO7jIRsyJb1Ampnls/
-         P5eWDi30WVE7J20ob3NPNqa1mP6a1LnnHxju9QCnHQBq+KcKQzjwre76CfkrKmTOCJYF
-         +MiDk7cRRm/OpDiG2brVz5+glMeMWRGMluEElqX/4rL4NnxwA3Gm489CuICJgu74+UZh
-         eikhiPMVV+K0O6QoyZqhI/15YdYR7FGckBRaJbLAhVfsjSJoe/H2vDjqF4VitKOhSIDY
-         bVSw==
-X-Gm-Message-State: AOAM5317EebQ4HZRVyvExBPnqvno7wyFBdl6FCYRafL/6z24dNDwk4Pb
-        uZ7kV+7aW3zKg5slk8/lcM7LPvsxOX0xNQ==
-X-Google-Smtp-Source: ABdhPJwAPfMgibzBdxGcMRRj2Jsc+Ks+647ibyMoMELCOt9nutHYAQJkyIoQbkjN9/kbQd1527885Q==
-X-Received: by 2002:ac8:5942:: with SMTP id 2mr9410165qtz.117.1611750416415;
-        Wed, 27 Jan 2021 04:26:56 -0800 (PST)
-Received: from ?IPv6:2804:14d:72b1:8920:b057:7dfc:eb51:9d42? ([2804:14d:72b1:8920:b057:7dfc:eb51:9d42])
-        by smtp.gmail.com with ESMTPSA id b72sm1038900qkc.60.2021.01.27.04.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jan 2021 04:26:55 -0800 (PST)
-Subject: Re: [PATCH 3/3] media: vidtv: add initial debugfs interface
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.o,
-        linux-kernel@vger.kernel.org
-References: <20201224150402.1945788-3-dwlsalmeida@gmail.com>
- <20210127120623.7f018471@coco.lan>
-From:   Daniel Almeida <dwlsalmeida@gmail.com>
-Message-ID: <ded2b580-be92-e309-28ca-fc6635a3af4f@gmail.com>
-Date:   Wed, 27 Jan 2021 09:26:52 -0300
+        Wed, 27 Jan 2021 07:26:51 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 4jtUlXs0TI2394jtYlhI1h; Wed, 27 Jan 2021 13:26:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1611750360; bh=qSlszqB0O1piuaM6c1hXzd8CpL/mh8jhsF6rOIoDLcU=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=GStSguRQStfiDZCSk15DvRNqhtywlqJykOK6gWvB87ms/FzgYTj8VdtsZKWo3PPuc
+         y40bIfALvYeAEyNxoPtDQoFblpS4LDLhv5ptO+i6SgpA2gWFNWVIz+Bm2bAAX4ppn0
+         7Up5qv4ykmcoJ7q152T6d1msxjUwwSdOe3tYDfNOMwmADk3SQa1zG94M9OMoejrOam
+         ThigzFMRUwC6qaV5ueK0keQnk9qo0tHQpOVc5aB4/nIh1RIYnXT8S+DJzUwLCjSmGn
+         hmYjRDYL4GMAk1PMJuvv4mj7/UWBvXm+e2SBRowlEuyLGSZ4dCjVpJh/1p+MkkheGr
+         sDhzv/Q1HJPiQ==
+Subject: Re: [PATCH v2 4/4] docs: Deprecate mfc display delay controls
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20210115092607.29849-1-stanimir.varbanov@linaro.org>
+ <20210115092607.29849-5-stanimir.varbanov@linaro.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <acd7cd1f-607c-5901-07b7-c661a12d0c60@xs4all.nl>
+Date:   Wed, 27 Jan 2021 13:25:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210127120623.7f018471@coco.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210115092607.29849-5-stanimir.varbanov@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKMCZr7OSd0aI+BYzO+vdtUjnnb/oFQndYbsiLiLwf00BwQMB0SjO5o1Z9pTnVfKKNNBeV+2gvGPz0/TS+bLG98V33owhH7Vc+uFgDNyQhI4Or1FtCfX
+ KxhfkuKafXrvOmOlVs7DCUAJilfDOXfxM5qzTZYdfZt4BLVSVmxPOQgkKivmIdCPpUSNfVDJ7kytReDKtgBYVtULHQrSlKhG1LKpvLcD9A2PR3t+kSo9noTN
+ OrgK+5/BWHdq8gg7FCQi2whKX8f+K9Dnc1I4hLCRFIV2IqcqPYxosGu/ih/ach/tFKMNevFGk6YYUXrEz37ZxfUQZ3asPcmPP+axPckP9T3bVwR5JBsTe2Zy
+ o1DxlyfxCez9+kIEVRRgsf8r8jQjkg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro! Thanks for the review.
+On 15/01/2021 10:26, Stanimir Varbanov wrote:
+> Deprecate mfc private display delay and display enable controls for
+> new clients and use the standard controls instead.
+> 
+> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Just one more thing though: what did you think about the way I chose to 
-inject the errors? (e.g. drop packet, shift bytes, create 
-discontinuity...etc etc)
+Thanks!
 
-I was just trying out a few ideas in this patch so if you also have any 
-input on this please let me know.
+	Hans
 
-As of now writing to any of these files will cause a myriad of errors on 
-dvbinspector.
-
-
->> +
->> +#. dynamically inject errors at runtime by interacting with the files at /sys/kernel/debug/vidtv/*
->> +
->> +#. read some dvbv5 statistics from userspace more easily
->> +
->> +.. note::
->> +	This is entirely optional and the driver will work without this option selected.
-> Please keep lines <= 80 columns, except when there's a strong reason to
-> use longer lines. The same applies to other parts of this patch.
->
-I was under the assumption that this had been bumped to 100 recently.
-
-
--- thanks
-
--- Daniel
-
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst        | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 5d7c47837035..815c6eb4a0d0 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -2111,6 +2111,11 @@ MFC 5.1 Control IDs
+>      feature can be used for example for generating thumbnails of videos.
+>      Applicable to the H264 decoder.
+>  
+> +    .. note::
+> +
+> +       This control is deprecated. Use the standard
+> +       ``V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE`` control instead.
+> +
+>  ``V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY (integer)``
+>      Display delay value for H264 decoder. The decoder is forced to
+>      return a decoded frame after the set 'display delay' number of
+> @@ -2118,6 +2123,11 @@ MFC 5.1 Control IDs
+>      of display order, in addition the hardware may still be using the
+>      returned buffer as a reference picture for subsequent frames.
+>  
+> +    .. note::
+> +
+> +       This control is deprecated. Use the standard
+> +       ``V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY`` control instead.
+> +
+>  ``V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P (integer)``
+>      The number of reference pictures used for encoding a P picture.
+>      Applicable to the H264 encoder.
+> 
 
