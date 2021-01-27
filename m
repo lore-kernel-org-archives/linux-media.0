@@ -2,98 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C09B0C433E9
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DEA7C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:09:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9530C2076D
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:06:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C74D2073A
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 11:09:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbhA0LFl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 06:05:41 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49958 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236307AbhA0LDE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 06:03:04 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611745336; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ju2N1jG53lMFxxVc2NAYc72E2pl8QR5olvZUsyDkBak=;
-        b=AA9bvWk5QA70wiw6O1ZPSDKUoqyu0AVXkgupz7DWubfXYLwjZdranJNQOeXK67PiHXNqrP
-        Ps2F1OxikIKZssE6h1Vs7SpZUjh9ufNGMSdPAtlyTn6XVfb1YJ4Z/8o58VS3Q7PIRxtVnv
-        O6qDC/79DfVs86Id/zmCKilWMrRYH9M=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 82B07AD2B;
-        Wed, 27 Jan 2021 11:02:16 +0000 (UTC)
-Date:   Wed, 27 Jan 2021 12:02:08 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>, surenb@google.com,
-        minchan@kernel.org, gregkh@linuxfoundation.org, hridya@google.com,
-        jannh@google.com, kernel-team@android.com,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>,
-        Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        Andrei Vagin <avagin@gmail.com>,
-        Yafang Shao <laoar.shao@gmail.com>, Hui Su <sh_def@163.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH] procfs/dmabuf: Add /proc/<pid>/task/<tid>/dmabuf_fds
-Message-ID: <YBFIMIR2FXoYDd+0@dhcp22.suse.cz>
-References: <20210126225138.1823266-1-kaleshsingh@google.com>
- <20210127090526.GB827@dhcp22.suse.cz>
- <6b314cf2-99f0-8e63-acc7-edebe2ca97d7@amd.com>
+        id S236451AbhA0LJK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 06:09:10 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:55715 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236327AbhA0LBt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 06:01:49 -0500
+Received: from [192.168.1.150] (unknown [78.199.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 748B3200018;
+        Wed, 27 Jan 2021 11:00:32 +0000 (UTC)
+Message-ID: <49e63342365d49eaac72a4ac7beddaf582dc9862.camel@hadess.net>
+Subject: Re: Firefly X10 mouse mode?
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-media@vger.kernel.org
+Cc:     Anssi Hannula <anssi.hannula@iki.fi>
+Date:   Wed, 27 Jan 2021 12:00:31 +0100
+In-Reply-To: <7fdd2459bd00c631c976cd1414842eae3f89417b.camel@hadess.net>
+References: <7fdd2459bd00c631c976cd1414842eae3f89417b.camel@hadess.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2 (3.38.2-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6b314cf2-99f0-8e63-acc7-edebe2ca97d7@amd.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed 27-01-21 11:53:55, Christian König wrote:
-[...]
-> In general processes are currently not held accountable for memory they
-> reference through their file descriptors. DMA-buf is just one special case.
-
-True
-
-> In other words you can currently do something like this
+On Mon, 2021-01-25 at 14:33 +0100, Bastien Nocera wrote:
+> Hey,
 > 
-> fd = memfd_create("test", 0);
-> while (1)
->     write(fd, buf, 1024);
-> 
-> and the OOM killer will terminate random processes, but never the one
-> holding the memfd reference.
+> I have a SnapStream Firefly[1] X10 remote and couldn't figure out how
+> to make the "mouse" buttons work the same way it does using the
+> original software.
 
-memfd is just shmem under cover, no? And that means that the memory gets
-accounted to MM_SHMEMPAGES. But you are right that this in its own
-doesn't help much if the fd is shared and the memory stays behind a
-killed victim.
+Filed this bug against libinput:
+https://gitlab.freedesktop.org/libinput/libinput/-/issues/567
 
-But I do agree with you that there are resources which are bound to a
-process life time but the oom killer has no idea about those as they are
-not accounted on a per process level and/or oom_badness doesn't take
-them into consideration.
--- 
-Michal Hocko
-SUSE Labs
+I'm not sure how prevalent this functionality is on remotes, but
+supporting this properly likely would require some work in the kernel
+as well as in user-space.
+
+Cheers
+
