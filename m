@@ -2,311 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8E48C433DB
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 09:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC58C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 09:29:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BE7320770
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 09:29:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E545220770
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jan 2021 09:29:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbhA0J3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jan 2021 04:29:14 -0500
-Received: from mail-vi1eur05on2058.outbound.protection.outlook.com ([40.107.21.58]:20960
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234859AbhA0JEU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jan 2021 04:04:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nv/jf/2VDtUaFkRPlsdJzvBcChslqTyp8O5sOUfZ1KV8Y2N1+vcKCsrhL5Nv2kyg03FS0jKt9YOIv+rwpUcMJjms4oPwqu132Qy16H/vJR0XXmQAGfYgKdPrz+govfPjWcTaUZh4ePzLL/ROyTvL4TTqqD5ItifrXP+SnoIxxSj/Sr/IcITWPrko50YiL5QA+VqFiZaBxPl7bxQYSB6VL7Xz0mtfAB3nygqMQZLgg5IgviAuhdDHTDnevoAp5M1etEIumYO/e+eBlQ+/hWY5rSSz3cIRLR/cO0NkDBPS3hQD39m9iuMpY+k0lrtLvm4RrJA9Ku30pb7jEjfqOZN78g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K15mBtnRnlVhzeXRe6+V42y/axZrQX4RArbQmgb3gWA=;
- b=PBytOkvykbA73wATXx6M5exK9TXlIVSNbinPGBFviePutfFJ2vPf18oYSQihe9U7yy9z5IHghLfPzb8TtGUFYmpK5nFVJ3RzP/r/aPVo+4/WLw1sQ/KRmoCnEg6/AMFWw9hwFx7jq2SULso7A9WTBjg1D9pUFFWDhsHHSZ0HEQ+CrHRQ2tZRi541YUtydLaHY803l/gspZANauATT9ydBGsc5ubhh56gVxM2LckXVdAgmNubVq/c5lGAPbMVy9qzEz+PXBVylvm+6CMY6yakv3fLzUrzCVIvEG0oDk3xcOiD0inVICv8VVt4tOQX5Jgdlb3+tnObFupoioTbnYh2iA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K15mBtnRnlVhzeXRe6+V42y/axZrQX4RArbQmgb3gWA=;
- b=kQ4O/Aewpuhi4flVlJBjLCY19YCEY83xnt9QUeHs3bQa+wL2/L/zQQELFWPNraPkcWgwpXdFp4l9FXoisNOUs+eWoNHw5czVKQ/lr2BRBNxbkO8YmAQ6cst2Om6r1TBU2AF5qRuISpEr8vTz32aNRgVuoiJJxux/qk1lq1geBdo=
-Authentication-Results: lists.freedesktop.org; dkim=none (message not signed)
- header.d=none;lists.freedesktop.org; dmarc=none action=none
- header.from=nxp.com;
-Received: from VI1PR04MB3983.eurprd04.prod.outlook.com (2603:10a6:803:4c::16)
- by VI1PR04MB2975.eurprd04.prod.outlook.com (2603:10a6:802:9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.13; Wed, 27 Jan
- 2021 09:02:36 +0000
-Received: from VI1PR04MB3983.eurprd04.prod.outlook.com
- ([fe80::2564:cacc:2da5:52d0]) by VI1PR04MB3983.eurprd04.prod.outlook.com
- ([fe80::2564:cacc:2da5:52d0%5]) with mapi id 15.20.3805.016; Wed, 27 Jan 2021
- 09:02:36 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, mchehab@kernel.org,
-        a.hajda@samsung.com, narmstrong@baylibre.com,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@siol.net, kishon@ti.com, vkoul@kernel.org
-Subject: [PATCH v3 03/14] media: docs: Add some RGB bus formats for i.MX8qm/qxp pixel combiner
-Date:   Wed, 27 Jan 2021 16:51:17 +0800
-Message-Id: <1611737488-2791-4-git-send-email-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1611737488-2791-1-git-send-email-victor.liu@nxp.com>
-References: <1611737488-2791-1-git-send-email-victor.liu@nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR02CA0049.apcprd02.prod.outlook.com
- (2603:1096:4:54::13) To VI1PR04MB3983.eurprd04.prod.outlook.com
- (2603:10a6:803:4c::16)
+        id S231229AbhA0J3X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jan 2021 04:29:23 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:37000 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235169AbhA0J1A (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Jan 2021 04:27:00 -0500
+Received: by mail-ot1-f54.google.com with SMTP id h14so1048068otr.4;
+        Wed, 27 Jan 2021 01:26:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JOR2jYarZAIULssGyJXJ6uS2/Gf8KvvXT6ay380s3Ag=;
+        b=P3vODpL3LJy+mA7y7tvSnzL91S51TJDsZX6Keex3VquiVtO5/d0os510su+UFP3X/m
+         b7oL3hJCx0ywu1ibTdrt80euywM3NW57YQxBTDkIqjtOW765grUee49wNaH9FVpMOWCs
+         SxcvtMP6T6Ks/hr+J02LwNneP5wG50R3EaLzG6NmObg31n7GhriE7tFeukTbzSjVD/m9
+         EqJW8387hRuGeoedfho/WKA37tb6QzAIx88DBQrnzFpByHEjuYin8l8XWQZm4f31YQs8
+         CXXMYC+1Ojs+1WdebNt6tzcRT1cFVOYPhhY1kd3MGna1+odM4FbNAxRyZkmjVHf1jGbH
+         Jq1g==
+X-Gm-Message-State: AOAM532WBpj2OfXmq7WfjnOxGFmYYuj+ye15cffjTSnP9/3IvMQSGa8T
+        5Hh01tHQLADKCamAC+HBOF4yCU8qdZR7B6veLeDHtNo6D/4=
+X-Google-Smtp-Source: ABdhPJx9wJlEQ4bnaLtYPehzxPxnjlaJ6trXP1x3dKBZE4OYrUy+xad415g1cXWG3k2gGvossTKBceVLJwdKmFxzdJo=
+X-Received: by 2002:a05:6830:1489:: with SMTP id s9mr6268270otq.250.1611739561257;
+ Wed, 27 Jan 2021 01:26:01 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR02CA0049.apcprd02.prod.outlook.com (2603:1096:4:54::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 09:02:30 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3d10bfa1-7a3f-485c-9cb3-08d8c2a24a38
-X-MS-TrafficTypeDiagnostic: VI1PR04MB2975:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR04MB297548D4E3CBADEE12517F7A98BB0@VI1PR04MB2975.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1201;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M7GyieVA3pi0/LeoZRNOHAtZWJAhTkF5uQPXKgENcHWdStTouftDWYt3AcTBuzEVbAHoIO1RkKrL8t7TXN0wgnKJ0S7uvp7p+NPdF+zTxnq8gvhojAQPr7LSvK2nhzh9KolAg6AlNqDo+yOzXhWXM7DxFhgB1MVu0jw1KUGjH1v6YOrWSpBipBSJBKz6LKxJUItWzgbenWGoRs6z3BAP3V7MUz1LHD7h5lTsjLZZSv58rTgmWBF0XpDQmm5d5FTqPEMEIbMQHXYcVDpb2MHWfcsvYrIMohYosmckj7Nvk3ZqivZDmFcZ28t7f4Zd5aEkOremnVORsjpw0drPg4smMaekJQCKbdDcuPGYHU+3Dr9PGAXzV8bnB8JxjZKkjg/UaA+iVDZfWeFUg6CHkS/WiRY0A2WVOT57YGCMd1q6HFdqKSUhD8umQjl69iy2adz7/d3Pns7orUlfo58VCsHgNldOdNbI+ocTUL5AdLbmF93Y+sDjEiKv374kfnugooq4/5z/+cZLdliUXu6mNo8/VIyuZwCNsI+8grGLybG+TIt3HnfFrYmLGvehyG5KcsUAuiE533iX8WBBKYbZtMD9DA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB3983.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(8936002)(2616005)(6486002)(66946007)(186003)(6666004)(956004)(7416002)(4326008)(36756003)(69590400011)(6506007)(8676002)(316002)(5660300002)(16526019)(86362001)(478600001)(6512007)(2906002)(52116002)(66556008)(26005)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?zcgWR3rY67V0yLOKqtI5OblI12emwy6JMBumLMup/Jq9Tfb0+nPMbY+RpPzP?=
- =?us-ascii?Q?sNZXm4cx9hdY23Gk6upxOuYI8W9q6ln802sCbWAp46BZXyUA8sGUDu6hX/TC?=
- =?us-ascii?Q?FVtqZ+72qpPDovWDCW3Vi55bcss/KWhdHQz2tBq/dLhsyPw3sESZv5jmGWBV?=
- =?us-ascii?Q?ltGIst7qQGdpN+jcw7IjpSbbehPLje3lCqqFbFbCe2lfzWPpCAnatdZ5/0zU?=
- =?us-ascii?Q?3VjuOho+sbrdQAGS33plOXcMheqGQMdc71sdyeGVM/ckPAaTH8DyOZZogrFa?=
- =?us-ascii?Q?05ERbbMjzJHhsPchk4LQ+hjw0NIdRu8B5Zv49ktQ8Sstj3i4qOiI5h6qJuAc?=
- =?us-ascii?Q?IIUdkgugfi8WIbrU7QZh63/9er8uIEaGtrTxZ2y8MRBactkUfttyOUk+BDKe?=
- =?us-ascii?Q?LxfRObFd/Oc0FhJIw10Sh5J9mYiCBektbl4+W1G8Su1zN+nCsVwZ7B841XOk?=
- =?us-ascii?Q?HT/W7yUo1D/uW8NNz0uX6EL+AUj1gYQVdEpmJSkaOAkIq/T+Cmb4E9O3VcQV?=
- =?us-ascii?Q?xhyh5brSQsT+nZI4Zm8MeoZB21xxLb3D80ovg/agBSSIcHRG3PfNTKeKTcgw?=
- =?us-ascii?Q?TdxX0gp0NJZsTmg/T1J6wZAKy4nS1VZBjx2u8TA8f3YOsCjf4ak/CgXaevO6?=
- =?us-ascii?Q?azjlO8zSezGg5a2fIZCZudfqtb/UeYdEfIr8898i5rA/B3aCRB9cv2i/9Im6?=
- =?us-ascii?Q?wRQEWoo0huLYsHCjjzp3BwY3kWYFFy/L8vwwBGJNp2noxo6ldRcchb81QdQJ?=
- =?us-ascii?Q?NZ/3Lt3nFPPYHZIL+Q9oYKl2pgppnSaXrBFVWpLVQImtqtW3hH93PStLTtcO?=
- =?us-ascii?Q?A/DRAUIwQcpHEbSjA9Kw84QfQdY/G4DDIyOomA6BOyywVKnNmCt5ULu6ZgQw?=
- =?us-ascii?Q?gLhM/49mSCSrGY6YdFYa1/FCLujhXT2kDQ0NvgsKgLgt8xkg5uYFnPKItusv?=
- =?us-ascii?Q?U/Alo31IlBRQtivJFOX1L2JvZywf2b9s0s2mS3H49ojGvbNMIsVdl93E6KgR?=
- =?us-ascii?Q?a/a3EumKowaSfs0FnBk2CWRe3Nl19tlTIKSyb66YSKhG7Yx+KdCmG5QL9vde?=
- =?us-ascii?Q?mwhwovrO?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d10bfa1-7a3f-485c-9cb3-08d8c2a24a38
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB3983.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 09:02:36.2417
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ul+OgVyAsysttYPy4az5ERZGYq5wDo2qKvHqpwPc/4qnw1tCS378bjElVIz2td7J0Z4WebigD4fspaFvI7fWPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB2975
+References: <20210107132838.396641-1-djrscally@gmail.com> <20210107132838.396641-10-djrscally@gmail.com>
+ <X/kOYeZtkCspoAC5@pendragon.ideasonboard.com> <20210113132309.GK11878@paasikivi.fi.intel.com>
+In-Reply-To: <20210113132309.GK11878@paasikivi.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Jan 2021 10:25:50 +0100
+Message-ID: <CAMuHMdWxjNcWqj_O1JyQb3Q0eAgYk1Ki3Ji6rs00Sk-YvfSm4g@mail.gmail.com>
+Subject: Re: [PATCH v5 09/15] lib/test_printf.c: Use helper function to unwind
+ array of software_nodes
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devel@acpica.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds documentations for RGB666_1X30_CPADLO, RGB888_1X30_CPADLO,
-RGB666_1X36_CPADLO and RGB888_1X36_CPADLO bus formats used by i.MX8qm/qxp
-pixel combiner.  The RGB pixels with padding low per component are
-transmitted on a 30-bit input bus(10-bit per component) from a display
-controller or a 36-bit output bus(12-bit per component) to a pixel link.
+Hi Sakari, Mauro,
 
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v2->v3:
-* No change.
+On Wed, Jan 13, 2021 at 2:26 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+> On Sat, Jan 09, 2021 at 04:01:05AM +0200, Laurent Pinchart wrote:
+> > Could you please let us know if you're fine with this patch getting
+> > merged in v5.12 through the linux-media tree ? The cover letter contains
+> > additional details (in a nutshell, this is a cross-tree series and we
+> > would like to avoid topic branches if possible).
+>
+> I'll proceed to merge this patch through the media tree.
 
-v1->v2:
-* No change.
+Prefixing this patch with "media:"[1] when committing is confusing.
 
- .../userspace-api/media/v4l/subdev-formats.rst     | 156 +++++++++++++++++++++
- 1 file changed, 156 insertions(+)
+[1] commit f0328be57568c795 ("media: lib/test_printf.c: Use helper
+function to unwind array of software_nodes").
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 7f16cbe..201c16d 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -1488,6 +1488,80 @@ The following tables list existing packed RGB formats.
-       - b\ :sub:`2`
-       - b\ :sub:`1`
-       - b\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-RGB666-1X30-CPADLO:
-+
-+      - MEDIA_BUS_FMT_RGB666_1X30-CPADLO
-+      - 0x101e
-+      -
-+      - 0
-+      - 0
-+      - r\ :sub:`5`
-+      - r\ :sub:`4`
-+      - r\ :sub:`3`
-+      - r\ :sub:`2`
-+      - r\ :sub:`1`
-+      - r\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - b\ :sub:`5`
-+      - b\ :sub:`4`
-+      - b\ :sub:`3`
-+      - b\ :sub:`2`
-+      - b\ :sub:`1`
-+      - b\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+    * .. _MEDIA-BUS-FMT-RGB888-1X30-CPADLO:
-+
-+      - MEDIA_BUS_FMT_RGB888_1X30-CPADLO
-+      - 0x101f
-+      -
-+      - 0
-+      - 0
-+      - r\ :sub:`7`
-+      - r\ :sub:`6`
-+      - r\ :sub:`5`
-+      - r\ :sub:`4`
-+      - r\ :sub:`3`
-+      - r\ :sub:`2`
-+      - r\ :sub:`1`
-+      - r\ :sub:`0`
-+      - 0
-+      - 0
-+      - g\ :sub:`7`
-+      - g\ :sub:`6`
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+      - 0
-+      - 0
-+      - b\ :sub:`7`
-+      - b\ :sub:`6`
-+      - b\ :sub:`5`
-+      - b\ :sub:`4`
-+      - b\ :sub:`3`
-+      - b\ :sub:`2`
-+      - b\ :sub:`1`
-+      - b\ :sub:`0`
-+      - 0
-+      - 0
-     * .. _MEDIA-BUS-FMT-ARGB888-1X32:
- 
-       - MEDIA_BUS_FMT_ARGB888_1X32
-@@ -1665,6 +1739,88 @@ The following table list existing packed 36bit wide RGB formats.
-       - 2
-       - 1
-       - 0
-+    * .. _MEDIA-BUS-FMT-RGB666-1X36-CPADLO:
-+
-+      - MEDIA_BUS_FMT_RGB666_1X36_CPADLO
-+      - 0x1020
-+      -
-+      - r\ :sub:`5`
-+      - r\ :sub:`4`
-+      - r\ :sub:`3`
-+      - r\ :sub:`2`
-+      - r\ :sub:`1`
-+      - r\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - b\ :sub:`5`
-+      - b\ :sub:`4`
-+      - b\ :sub:`3`
-+      - b\ :sub:`2`
-+      - b\ :sub:`1`
-+      - b\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+    * .. _MEDIA-BUS-FMT-RGB888-1X36-CPADLO:
-+
-+      - MEDIA_BUS_FMT_RGB888_1X36_CPADLO
-+      - 0x1021
-+      -
-+      - r\ :sub:`7`
-+      - r\ :sub:`6`
-+      - r\ :sub:`5`
-+      - r\ :sub:`4`
-+      - r\ :sub:`3`
-+      - r\ :sub:`2`
-+      - r\ :sub:`1`
-+      - r\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - g\ :sub:`7`
-+      - g\ :sub:`6`
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-+      - b\ :sub:`7`
-+      - b\ :sub:`6`
-+      - b\ :sub:`5`
-+      - b\ :sub:`4`
-+      - b\ :sub:`3`
-+      - b\ :sub:`2`
-+      - b\ :sub:`1`
-+      - b\ :sub:`0`
-+      - 0
-+      - 0
-+      - 0
-+      - 0
-     * .. _MEDIA-BUS-FMT-RGB121212-1X36:
- 
-       - MEDIA_BUS_FMT_RGB121212_1X36
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
