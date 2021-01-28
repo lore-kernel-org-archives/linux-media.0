@@ -2,105 +2,144 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04194C433DB
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 07:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 737E6C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 07:58:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9821764DD8
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 07:54:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2039064DD6
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 07:58:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbhA1Hyc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jan 2021 02:54:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49972 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232173AbhA1HyN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jan 2021 02:54:13 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611820406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xSK7HTq3+bwPr5/ZmeHgDam4Owbrz6XJGaTagKZ9+Sc=;
-        b=JBFgrFCavxvgBNIvYnVReaCc/L1j5MxrQZNythF4AUSJ25X5TtF5VN1jumotZkagat0tSo
-        pwk7RC9SU5eAz9zppnc8tAmzpbNjvBDAksxhBTmbk1WJs10RbLoc8ga6FwjNo1cFuEFnEU
-        8lDAPhWlIxmT0d8GZB5YZZwLPPAeHoc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id AD9F3AC45;
-        Thu, 28 Jan 2021 07:53:26 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 08:53:25 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, surenb@google.com, pullip.cho@samsung.com,
-        joaodias@google.com, hridya@google.com, john.stultz@linaro.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, hch@infradead.org, robh+dt@kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 2/4] mm: failfast mode with __GFP_NORETRY in
- alloc_contig_range
-Message-ID: <YBJtdT5Tf5mRsE9U@dhcp22.suse.cz>
-References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-3-minchan@kernel.org>
- <20210125131200.GG827@dhcp22.suse.cz>
- <YA8dEFSrHBb9muFr@google.com>
- <20210126074449.GA827@dhcp22.suse.cz>
- <YBHQRY8kw8/wjFK8@google.com>
+        id S231626AbhA1H5W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jan 2021 02:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231336AbhA1HFi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Jan 2021 02:05:38 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99512C061797
+        for <linux-media@vger.kernel.org>; Wed, 27 Jan 2021 23:04:28 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id h11so2489519vsa.10
+        for <linux-media@vger.kernel.org>; Wed, 27 Jan 2021 23:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8+5dcejhRaQpDCwiyEVn753oCGrTihEzoxoKOU9kwWA=;
+        b=ZRaEUkWxALHTVzsipCFQj35joZ7/P6/xdlQtefyyRmxLlAGo8gHta0a7fC8kj3x5r+
+         GxclBFXoUJx51nRjfo+V34nIRM63VqC/CQshNpy3h2dCgg8646a+2U4jrEa/dypNRyfO
+         ZzJFbe98NYDv4NAT5C9qLzoTHoB78A3YTmV/7UZbnOQjoHOPMZ63eCQc9UurepxD2ksp
+         Qhi0d9fpObvKbsfnqNPTho1MZsOnUbK5865rJz/INF/EsZplNtp0r68tFpIzxJ3TRz1a
+         IsJZaR/mrnNzbZgwxEb+QCC6k/kAWhsb4OndU91f+iluj6lJFf8tpaglkzhUZHz7qT7g
+         GD+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8+5dcejhRaQpDCwiyEVn753oCGrTihEzoxoKOU9kwWA=;
+        b=lkdgcxzc7bFy/128Qcv8l4mOO4wA/gHHVC233dJX0flygsH6Bf5J6Tv6yzYomRxkbN
+         eUZDtLksbhE306+ysIa7CkPpb5F2/m0XnoHd3gVdcEzPP0NXt518QLZNPAI1O4jT54ps
+         fEnAKW7Bb2fkaFet3gOpiXBuiE2mw3XG5It4ovD37FedF5w+wZJExguj7Pr1Lr5y6Gbw
+         RnGTgmMc63d303CgBeVN22gD15xECpoyLb8aKHLWnWnf7Vy9d8mS20/lapAHTR6rAsOq
+         d1Au6ga2Y8m7njx8wVGS0M8TTyC/Itxj1uf3Q5Bm71EKJk2E4xhqLup4lOSa+qdwGxk4
+         oNzg==
+X-Gm-Message-State: AOAM531CCZMAt6QHunvRyjiMOiC2b/bl7rCcPZTw9IJDYXUMkSFIjx1D
+        9dMGbWWtz/VpoyKAGR5NQyFv+dOpNr4R7f+/Zq/LWQ==
+X-Google-Smtp-Source: ABdhPJwSIFhyRLM20J+i0UEgD++xaYJdmbeJOtujr1vKiolKVw9/Eda+jgrZU0PTyDT5E6na4d2MivXZJp3MV5R/2I0=
+X-Received: by 2002:a05:6102:199:: with SMTP id r25mr10592240vsq.56.1611817467057;
+ Wed, 27 Jan 2021 23:04:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBHQRY8kw8/wjFK8@google.com>
+References: <20210123034655.102813-1-john.stultz@linaro.org>
+ <20210123034655.102813-2-john.stultz@linaro.org> <CAE2F3rA3a-MWBHPZhGP9dMhEUqMkkvm6wXYYh6LDZ1zF9CAyUg@mail.gmail.com>
+ <CALAqxLWkTQwQ8Xqnc+PAMWUO_C84jaGzOLqKFqkuk3=AFNHD6g@mail.gmail.com>
+In-Reply-To: <CALAqxLWkTQwQ8Xqnc+PAMWUO_C84jaGzOLqKFqkuk3=AFNHD6g@mail.gmail.com>
+From:   Daniel Mentz <danielmentz@google.com>
+Date:   Wed, 27 Jan 2021 23:04:15 -0800
+Message-ID: <CAE2F3rAvg1-jtpsJdgzmBkZ5CDnGG4S0-oVxw74LY3O+N=0JZA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dma-buf: system_heap: Add pagepool support to
+ system heap
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed 27-01-21 12:42:45, Minchan Kim wrote:
-> On Tue, Jan 26, 2021 at 08:44:49AM +0100, Michal Hocko wrote:
-> > On Mon 25-01-21 11:33:36, Minchan Kim wrote:
-> > > On Mon, Jan 25, 2021 at 02:12:00PM +0100, Michal Hocko wrote:
-> > > > On Thu 21-01-21 09:55:00, Minchan Kim wrote:
-> > > > > Contiguous memory allocation can be stalled due to waiting
-> > > > > on page writeback and/or page lock which causes unpredictable
-> > > > > delay. It's a unavoidable cost for the requestor to get *big*
-> > > > > contiguous memory but it's expensive for *small* contiguous
-> > > > > memory(e.g., order-4) because caller could retry the request
-> > > > > in different range where would have easy migratable pages
-> > > > > without stalling.
-> > > > > 
-> > > > > This patch introduce __GFP_NORETRY as compaction gfp_mask in
-> > > > > alloc_contig_range so it will fail fast without blocking
-> > > > > when it encounters pages needed waiting.
-> > > > 
-> > > > I am not against controling how hard this allocator tries with gfp mask
-> > > > but this changelog is rather void on any data and any user.
-> > > > 
-> > > > It is also rather dubious to have retries when then caller says to not
-> > > > retry.
-> > > 
-> > > Since max_tries is 1 with ++tries, it shouldn't retry.
-> > 
-> > OK, I have missed that. This is a tricky code. ASYNC mode should be
-> > completely orthogonal to the retries count. Those are different things.
-> > Page allocator does an explicit bail out based on __GFP_NORETRY. You
-> > should be doing the same.
-> 
-> Before sending next revision, let me check this part again.
-> 
-> I want to use __GFP_NORETRY to indicate "opportunistic-easy-to-fail attempt"
-> and I want to use ASYNC migrate_mode to help the goal.
-> 
-> Do you see the problem?
+On Wed, Jan 27, 2021 at 9:10 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Wed, Jan 27, 2021 at 12:21 PM Daniel Mentz <danielmentz@google.com> wrote:
+> >
+> > On Fri, Jan 22, 2021 at 7:47 PM John Stultz <john.stultz@linaro.org> wrote:
+> > > +static int system_heap_clear_pages(struct page **pages, int num, pgprot_t pgprot)
+> > > +{
+> > > +       void *addr = vmap(pages, num, VM_MAP, pgprot);
+> > > +
+> > > +       if (!addr)
+> > > +               return -ENOMEM;
+> > > +       memset(addr, 0, PAGE_SIZE * num);
+> > > +       vunmap(addr);
+> > > +       return 0;
+> > > +}
+> >
+> > I thought that vmap/vunmap are expensive, and I am wondering if
+> > there's a faster way that avoids vmap.
+> >
+> > How about lifting this code from lib/iov_iter.c
+> > static void memzero_page(struct page *page, size_t offset, size_t len)
+> > {
+> >         char *addr = kmap_atomic(page);
+> >         memset(addr + offset, 0, len);
+> >         kunmap_atomic(addr);
+> > }
+> >
+> > Or what about lifting that code from the old ion_cma_heap.c
+> >
+> > if (PageHighMem(pages)) {
+> >         unsigned long nr_clear_pages = nr_pages;
+> >         struct page *page = pages;
+> >
+> >         while (nr_clear_pages > 0) {
+> >                 void *vaddr = kmap_atomic(page);
+> >
+> >                 memset(vaddr, 0, PAGE_SIZE);
+> >                 kunmap_atomic(vaddr);
+> >                 page++;
+> >                 nr_clear_pages--;
+> >         }
+> > } else {
+> >         memset(page_address(pages), 0, size);
+> > }
+>
+> Though, this last memset only works since CMA is contiguous, so it
+> probably needs to always do the kmap_atomic for each page, right?
 
-No, as I've said. This is a normal NORETRY policy. And ASYNC migration
-is a mere implementation detail you do not have bother your users about.
-This is the semantic view. From the implementation POV it should be the
-gfp mask to drive decisions rather than a random (ASYNC) flag to control
-retries as you did here.
+Yeah, but with the system heap page pool, some of these pages might be
+64KB or 1MB large. kmap_atomic(page) just maps to page_address(page)
+in most cases. I think iterating over all pages individually in this
+manner might still be faster than using vmap.
 
--- 
-Michal Hocko
-SUSE Labs
+>
+> I'm still a little worried if this is right, as the current
+> implementation with the vmap comes from the old ion_heap_sglist_zero
+> logic, which similarly tries to batch the vmaps  32 pages at at time,
+> but I'll give it a try.
