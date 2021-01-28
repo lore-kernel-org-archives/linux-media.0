@@ -2,145 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAEF4C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97F2DC433E6
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:28:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9174F6024A
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:08:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45C0264DCE
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:28:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbhA1KIl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jan 2021 05:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbhA1KIJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jan 2021 05:08:09 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4517C061788
-        for <linux-media@vger.kernel.org>; Thu, 28 Jan 2021 02:07:07 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id j12so3661533pfj.12
-        for <linux-media@vger.kernel.org>; Thu, 28 Jan 2021 02:07:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FS3sXlWa1a9CJeGm7yuJDVISGCvP2szSJ0Qe9lOwid0=;
-        b=sIVf3EmrBQVyo69/ikM3B14VNYgALXDSfENkZeCmczqXizbbIRBtHtEv2h3cU4kIsb
-         zrtfI+WVyYpF/fuqGjVRDSD7zeWefsyQYS862TXrX0JGsTowQVfCO/jf3Hl10pTuTua2
-         5fyQylydnjbaIVGtTewY+Q7soCRuuOCltdYyPHeC/hYyOQyukLW1woDzLySCVDQygL4i
-         7ycFGeoM8PtmNXJCI9K+H0Ka2IajDL1H6WW+MQSzoG56f1FzZxaajYNWa4x5pFXHTAmr
-         e4Q+iyZNe+VI+3QvkREjSeRXwamEbEdtqkQLBWvX3WPRX4QTFXUmiNbPOt2EqYUkooxJ
-         NAdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FS3sXlWa1a9CJeGm7yuJDVISGCvP2szSJ0Qe9lOwid0=;
-        b=ePqZ/r14rImxn1xJAduOcsAzxPOyoNW2QoE/9LIXB2Zm1D//6lK8zbAmy3tuNLzLxT
-         7kVA5mp9D7bn+bVteFbaxG7VGYNO6eI8tkjOzbBBQACGrGRUIpu9KIMnNJUd1gYrBlET
-         piIb/nP800Lkw9sOKjGqmFHhJnnuluwj3t8HSB3GkJpA0Sa1tQgj/hJ6sNtBXQU+wAB6
-         /XqikOa7BBQYcLncjmtltUDFjYX/Uw+6qFZ1Y2Du1uWVD2cdT6RSeD18wQJvIg4bv9EC
-         nP+6r/Z6ljp96Mr/CUCyfNAFGCKriR/RsK9gXHvnNZAa+noaRVrjvXttVINdBLZLivrI
-         /PGA==
-X-Gm-Message-State: AOAM532RXmNxPFlfQZRGpNbiPg4z3YfhcNbLHu7u6MkCoBf9HcayusNR
-        jS1cbpzcQnxZeyvF48SjEEBddGL6x45fIAAZ/Ntvfw==
-X-Google-Smtp-Source: ABdhPJxPbc4H2Su8ybjWXQk/Og3L8DQf6PlhyWKLU2HLctWQaqk8uS5XrfuSX3qH9kdI+DowIQXusQJeaAyMO6EXVcQ=
-X-Received: by 2002:a63:5b4f:: with SMTP id l15mr5187293pgm.339.1611828427188;
- Thu, 28 Jan 2021 02:07:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20210127144930.2158242-1-robert.foss@linaro.org>
- <20210127144930.2158242-6-robert.foss@linaro.org> <CANMq1KCUUg3rozY3=snz7YCNwPbbxZtJftCj-a=QPLp2XFSXwA@mail.gmail.com>
-In-Reply-To: <CANMq1KCUUg3rozY3=snz7YCNwPbbxZtJftCj-a=QPLp2XFSXwA@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 28 Jan 2021 11:06:56 +0100
-Message-ID: <CAG3jFyse7+s+FQ_R+dOkkAmMggLMYouuZ0oePLc-8nc00+CN8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 05/22] media: camss: Refactor VFE HW version support
-To:     Nicolas Boichat <drinkcat@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, shawnguo@kernel.org,
-        leoyang.li@nxp.com, Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>, Anson.Huang@nxp.com,
-        michael@walle.cc, agx@sigxcpu.org, max.oss.09@gmail.com,
-        angelogioacchino.delregno@somainline.org,
-        MSM <linux-arm-msm@vger.kernel.org>,
+        id S231463AbhA1K2b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jan 2021 05:28:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231322AbhA1K23 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Jan 2021 05:28:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B72D264DCC;
+        Thu, 28 Jan 2021 10:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611829667;
+        bh=wwU8OFYVzVt6se2+5ttQHLkgGL1oe+PguRgfDyMdE8U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=r6s7h71cZEf8v0T33BJHaYr8sEWAa5f+39oqWVHc+YY/VhQsjDXNcX/LcROuqXYat
+         ovuT9Mc598WuBQDHdQSWQ42FhEm4FtWphQmhU6tlghWyVy/1b85ue9oo838pSzNinB
+         SZ4nFfS9omPLPMg4b9Uc8QZog6ejSYRYhHUvqOVZiz9jQxS8FZWYmrBHwJOck3vq8w
+         /6V2xQr5CN9Nj9ahn6IXatOzdpi8ALTaM79YnaBqBvioo3e4rUSGRORUofRivPCfZC
+         G/W6P/F/cFSBiUt+ubwkF8q9ehQt0fitWSdWi3SWWSakDsHGUoqoL3zAAXiXvVWUcR
+         Sgx/CA0Z7C3yg==
+Date:   Thu, 28 Jan 2021 11:27:38 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v5.11-rc6] media fixes
+Message-ID: <20210128112738.67242607@coco.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Nicolas,
+Hi Linus,
 
-Thanks for the review!
+Please pull from:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.11-2
 
-On Thu, 28 Jan 2021 at 01:19, Nicolas Boichat <drinkcat@chromium.org> wrote:
->
-> On Wed, Jan 27, 2021 at 10:56 PM Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > In order to support Qualcomm ISP hardware architectures that diverge
-> > from older architectures, the VFE subdevice driver needs to be refactored
-> > to better abstract the different ISP architectures.
-> >
-> > Gen1 represents the CAMSS ISP architecture. The ISP architecture developed
-> > after CAMSS, Titan, will be referred to as Gen2.
-> >
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > ---
-> > [snip]
-> > diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
-> > new file mode 100644
-> > index 000000000000..153e0e20664e
-> > --- /dev/null
-> > +++ b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
-> > [snip]
-> > +/*
-> > + * vfe_isr - VFE module interrupt handler
-> > + * @irq: Interrupt line
-> > + * @dev: VFE device
-> > + *
-> > + * Return IRQ_HANDLED on success
-> > + */
-> > +static irqreturn_t vfe_isr(int irq, void *dev)
-> > +{
-> > +       struct vfe_device *vfe = dev;
-> > +       u32 value0, value1;
-> > +       int i, j;
-> > +
-> > +       vfe->ops->isr_read(vfe, &value0, &value1);
-> > +
-> > +       trace_printk("VFE: status0 = 0x%08x, status1 = 0x%08x\n",
-> > +                    value0, value1);
->
-> Please do not use trace_printk in production code [1,2], it is only
-> meant for debug use. Consider using trace events, or dev_dbg.
+For:
+  - a V4L2 core regression at videobuf2 when checking for single-plane
+    dmabuf;
+  - a change at uAPI header v4l2-subdev.h, fixing a breakage
+    as BIT() macro is not available in userspace;
+  - fix some regressions at RC core due to the usage of microseconds
+    everywhere on it;
+  - a fix for a race condition at RC core;
+  - a rename on a newly-introduced kAPI symbol (v4l2_get_link_rate),
+    currently used only by a single driver.
+  - Regression fixes at rcar-vin, cedrus, ite-cir, hantro, css, venus 
+    and cec drivers.
 
-Ack, this is a copy paste error, I'll add a commit fixing all
-occurrences of this in the driver
+Regards,
+Mauro
 
->
-> [1] https://elixir.bootlin.com/linux/v5.8/source/kernel/trace/trace.c#L3158
-> [2] https://elixir.bootlin.com/linux/v5.8/source/include/linux/kernel.h#L766
->
-> > [snip]
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.11-2
+
+for you to fetch changes up to e081863ab48d9b2eee9e899cbd05752a2a30308d:
+
+  media: hantro: Fix reset_raw_fmt initialization (2021-01-26 19:16:27 +0100)
+
+----------------------------------------------------------------
+media fixes for v5.11-rc6
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      media: rcar-vin: fix return, use ret instead of zero
+
+Hans Verkuil (1):
+      media: v4l2-subdev.h: BIT() is not available in userspace
+
+Jernej Skrabec (1):
+      media: cedrus: Fix H264 decoding
+
+Matthias Reichl (2):
+      media: rc: fix timeout handling after switch to microsecond durations
+      media: rc: ite-cir: fix min_timeout calculation
+
+Naushir Patuck (1):
+      media: Revert "media: videobuf2: Fix length check for single plane dmabuf queueing"
+
+Ricardo Ribalda (1):
+      media: hantro: Fix reset_raw_fmt initialization
+
+Sakari Ailus (3):
+      media: ccs-pll: Fix link frequency for C-PHY
+      media: ccs: Get static data version minor correctly
+      media: v4l: common: Fix naming of v4l2_get_link_rate
+
+Sean Young (1):
+      media: rc: ensure that uevent can be read directly after rc device register
+
+Stanimir Varbanov (1):
+      media: venus: core: Fix platform driver shutdown
+
+Yannick Fertre (1):
+      media: cec: add stm32 driver
+
+ drivers/media/cec/platform/Makefile              | 1 +
+ drivers/media/common/videobuf2/videobuf2-v4l2.c  | 3 +--
+ drivers/media/i2c/ccs-pll.c                      | 8 +-------
+ drivers/media/i2c/ccs/ccs-data.c                 | 2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c         | 2 +-
+ drivers/media/platform/qcom/venus/core.c         | 2 ++
+ drivers/media/platform/rcar-vin/rcar-core.c      | 2 +-
+ drivers/media/rc/ir-mce_kbd-decoder.c            | 2 +-
+ drivers/media/rc/ite-cir.c                       | 2 +-
+ drivers/media/rc/rc-main.c                       | 8 ++++----
+ drivers/media/rc/serial_ir.c                     | 2 +-
+ drivers/media/v4l2-core/v4l2-common.c            | 4 ++--
+ drivers/staging/media/hantro/hantro_v4l2.c       | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
+ include/media/v4l2-common.h                      | 4 ++--
+ include/uapi/linux/v4l2-subdev.h                 | 2 +-
+ 16 files changed, 22 insertions(+), 26 deletions(-)
+
