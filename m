@@ -2,202 +2,255 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A63BC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10EB8C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:48:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C295864E00
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:32:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC70B64DFC
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbhA1Xb6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jan 2021 18:31:58 -0500
-Received: from mga04.intel.com ([192.55.52.120]:11312 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229530AbhA1Xam (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jan 2021 18:30:42 -0500
-IronPort-SDR: HaSICEI2CDsE/bkTGRt+rpy2uKzq21rV/zm0+QITh7kxbUuK2A3qnlBT+iDeAjGMqZ3OOWJqVT
- wAMDA5TSA/xg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9878"; a="177768135"
-X-IronPort-AV: E=Sophos;i="5.79,383,1602572400"; 
-   d="scan'208";a="177768135"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:27:33 -0800
-IronPort-SDR: 2W9D+xilxzq2zjjp4Ijo7ih+AgkQcGcKKAMfRkI2/LhQP+R8HpnbszpbY2Dl1DYuBZTbnJZABV
- 2Aeq8V4Dasng==
-X-IronPort-AV: E=Sophos;i="5.79,383,1602572400"; 
-   d="scan'208";a="357611616"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:27:29 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id C1E1D218AC;
-        Fri, 29 Jan 2021 01:27:27 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1l5GhF-0004FC-NR; Fri, 29 Jan 2021 01:27:29 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v9 2/7] i2c: Allow an ACPI driver to manage the device's power state during probe
-Date:   Fri, 29 Jan 2021 01:27:24 +0200
-Message-Id: <20210128232729.16064-2-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
-References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+        id S229832AbhA1XsG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jan 2021 18:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229825AbhA1XsD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Jan 2021 18:48:03 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A9CC061573
+        for <linux-media@vger.kernel.org>; Thu, 28 Jan 2021 15:47:23 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id dj23so8575830edb.13
+        for <linux-media@vger.kernel.org>; Thu, 28 Jan 2021 15:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=liddicott-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxF95Zt/GG7qY57hm1gODfTs0qW6vbXTUyTv/KspY6s=;
+        b=HkRToUHrzqUD5jy+52VFi6KiXs8Ro2FdmP3IA0EmtNsvY3BRCvW0x8SlWUxpdVzw7i
+         QsomK4NBNXvECG5l1LmxhtAGzvh3XNdU55mcxW0rdyGy+FYOdMZXSFjfkK/XsTotPjyO
+         5H+TJsUmIAvIG9MG7ZSUyoAxqV6P7E3qKGEn6OoTc7X214zBBMEJGI/Aop0cj6a5H0kE
+         CQIQbbVPwS7QBjPeY/PomLtLWdumHEMgVtq4plBlmZmQ4ytZkpYxd+aeylC/hbjtSps6
+         3FncIKHIYIR8xi2tixITiIMwyLuDznl1Op2xYxt5wwtxMhZ67Ncbb5D7/2BvYJg4uayR
+         Q9fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxF95Zt/GG7qY57hm1gODfTs0qW6vbXTUyTv/KspY6s=;
+        b=WFQ9ppu4TGzkC3YtxF9d9yAfA0phaqLzFLQwWppNoMQ2ImEsDZ5rUUzJSpVqcWFEgd
+         S8BfwPTUjplzHhKrMvGqypCFreZZW6kdKhh0Wu5KN+1ry1exhRwiDEgFek+VITo9DzZA
+         yEnVXN3joSqbyvc1T5+YuUzeJ4gGucPcrdY3jvTRd1p0YZspLKncUSa03HjZnYHmCDaW
+         IFseQUu8u83AMagBSfzIVChEmTKIub6lsLSAvC7ubfDZHPINKz9tW7IxYEA63WBTZFrK
+         W8hFwP7QNqgU2GC/Ne0m0GI0TSBZUsAdtjHqa0K5dHIZbN+QFCnTunhR2gxzm1UTCccw
+         4mrQ==
+X-Gm-Message-State: AOAM531O/JavnRjWFkVM/PbYEUwh9bb1E68IPNK1ZZ4HoanN15FIzo5k
+        801G+vgo5Xo2xUm7CaNrKZ86H7UhogwJGctn
+X-Google-Smtp-Source: ABdhPJyNXDun+awvMdFbWUjosaE0T0+6l/Ae1vuWgUmRn3MGpzn1aLJaLiqMxJk44KnhPKs/jhxDrQ==
+X-Received: by 2002:aa7:df0c:: with SMTP id c12mr2327599edy.304.1611877641691;
+        Thu, 28 Jan 2021 15:47:21 -0800 (PST)
+Received: from localhost.localdomain ([90.254.100.128])
+        by smtp.gmail.com with ESMTPSA id gj9sm2988857ejb.107.2021.01.28.15.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jan 2021 15:47:20 -0800 (PST)
+From:   Simon Liddicott <simon@liddicott.com>
+To:     linux-media@vger.kernel.org, sean@mess.org
+Cc:     Simon Liddicott <simon@liddicott.com>
+Subject: [PATCH] dtv-scan-tables: latest UK changes
+Date:   Thu, 28 Jan 2021 23:46:22 +0000
+Message-Id: <20210128234622.75009-1-simon@liddicott.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable drivers to tell ACPI that there's no need to power on a device for
-probe. Drivers should still perform this by themselves if there's a need
-to. In some cases powering on the device during probe is undesirable, and
-this change enables a driver to choose what fits best for it.
+only includes transmitters where there have been changes
 
-Add a field called "flags" into struct i2c_driver for driver flags, and a
-flag I2C_DRV_FL_ALLOW_LOW_POWER_PROBE to tell a driver supports probe in
-low power state.
-
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Simon Liddicott <simon@liddicott.com>
 ---
- drivers/i2c/i2c-core-acpi.c | 10 ++++++++++
- drivers/i2c/i2c-core-base.c |  9 ++++++---
- include/linux/i2c.h         | 19 +++++++++++++++++++
- 3 files changed, 35 insertions(+), 3 deletions(-)
+ dvb-t/uk-MoelyParc   |  6 +++---
+ dvb-t/uk-Saddleworth | 14 +++++++-------
+ dvb-t/uk-Storeton    | 10 +++++-----
+ dvb-t/uk-WinterHill  | 18 +++++++++---------
+ 4 files changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 8ceaa88dd78fb..045d344dd0cb3 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -493,6 +493,16 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- }
- EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
+diff --git a/dvb-t/uk-MoelyParc b/dvb-t/uk-MoelyParc
+index 39655a0..6f7b23d 100644
+--- a/dvb-t/uk-MoelyParc
++++ b/dvb-t/uk-MoelyParc
+@@ -3,7 +3,7 @@
+ # <https://www.freeview.co.uk/help/coverage-checker/detailed-view/download/CH7 5UU>
+ #----------------------------------------------------------------------------------------------
+ # location and provider: UK, Moel y Parc
+-# date (yyyy-mm-dd)    : 2020-07-10
++# date (yyyy-mm-dd)    : 2021-01-28
+ #
+ #----------------------------------------------------------------------------------------------
+ [C45 BBC A]
+@@ -43,9 +43,9 @@
+ 	STREAM_ID = 0
+ 	INVERSION = AUTO
  
-+bool i2c_acpi_allow_low_power_probe(struct device *dev)
-+{
-+	struct i2c_driver *driver = to_i2c_driver(dev->driver);
-+	struct acpi_device *adev = ACPI_COMPANION(dev);
-+
-+	return driver->flags & I2C_DRV_FL_ALLOW_LOW_POWER_PROBE &&
-+		adev && adev->power.flags.allow_low_power_probe;
-+}
-+EXPORT_SYMBOL_GPL(i2c_acpi_allow_low_power_probe);
-+
- #ifdef CONFIG_ACPI_I2C_OPREGION
- static int acpi_gsb_i2c_read_bytes(struct i2c_client *client,
- 		u8 cmd, u8 *data, u8 data_len)
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 63ebf722a4248..87b84eee01da6 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -514,7 +514,8 @@ static int i2c_device_probe(struct device *dev)
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
+-[C51- SDN]
++[C33 SDN]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 713833000
++	FREQUENCY = 570000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+diff --git a/dvb-t/uk-Saddleworth b/dvb-t/uk-Saddleworth
+index f1c9ec2..56e70f5 100644
+--- a/dvb-t/uk-Saddleworth
++++ b/dvb-t/uk-Saddleworth
+@@ -3,7 +3,7 @@
+ # <https://www.freeview.co.uk/help/coverage-checker/detailed-view/download/OL3 5RU>
+ #----------------------------------------------------------------------------------------------
+ # location and provider: UK, Saddleworth
+-# date (yyyy-mm-dd)    : 2020-07-10
++# date (yyyy-mm-dd)    : 2021-01-28
+ #
+ #----------------------------------------------------------------------------------------------
+ [C45 BBC A]
+@@ -18,9 +18,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
--	status = dev_pm_domain_attach(&client->dev, true);
-+	status = dev_pm_domain_attach(&client->dev,
-+				      !i2c_acpi_allow_low_power_probe(dev));
- 	if (status)
- 		goto err_clear_wakeup_irq;
+-[C39+ D3&4]
++[C39 D3&4]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 618167000
++	FREQUENCY = 618000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 2/3
+ 	CODE_RATE_LP = NONE
+@@ -43,9 +43,9 @@
+ 	STREAM_ID = 0
+ 	INVERSION = AUTO
  
-@@ -536,7 +537,8 @@ static int i2c_device_probe(struct device *dev)
- 	return 0;
+-[C51- SDN]
++[C33 SDN]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 713833000
++	FREQUENCY = 570000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+@@ -55,9 +55,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
- err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev,
-+			     !i2c_acpi_allow_low_power_probe(dev));
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -563,7 +565,8 @@ static int i2c_device_remove(struct device *dev)
- 			dev_warn(dev, "remove failed (%pe), will be ignored\n", ERR_PTR(status));
- 	}
+-[C52+ ARQ A]
++[C36 ARQ A]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 722167000
++	FREQUENCY = 594000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+diff --git a/dvb-t/uk-Storeton b/dvb-t/uk-Storeton
+index 5d51e4e..ce31b72 100644
+--- a/dvb-t/uk-Storeton
++++ b/dvb-t/uk-Storeton
+@@ -3,7 +3,7 @@
+ # <https://www.freeview.co.uk/help/coverage-checker/detailed-view/download/CH63 2RH>
+ #----------------------------------------------------------------------------------------------
+ # location and provider: UK, Storeton
+-# date (yyyy-mm-dd)    : 2020-07-10
++# date (yyyy-mm-dd)    : 2021-01-28
+ #
+ #----------------------------------------------------------------------------------------------
+ [C28 BBC A]
+@@ -67,9 +67,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev,
-+			     !i2c_acpi_allow_low_power_probe(dev));
+-[C29 ARQ B]
++[C30 ARQ B]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 538000000
++	FREQUENCY = 546000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+@@ -79,9 +79,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 56622658b2158..1a103c5933d2f 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -11,6 +11,7 @@
- #define _LINUX_I2C_H
+-[C30 L-LIV]
++[C43 L-LIV]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 546000000
++	FREQUENCY = 650000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+diff --git a/dvb-t/uk-WinterHill b/dvb-t/uk-WinterHill
+index 97895b5..13dc78f 100644
+--- a/dvb-t/uk-WinterHill
++++ b/dvb-t/uk-WinterHill
+@@ -3,7 +3,7 @@
+ # <https://www.freeview.co.uk/help/coverage-checker/detailed-view/download/BL6 6SL>
+ #----------------------------------------------------------------------------------------------
+ # location and provider: UK, Winter Hill
+-# date (yyyy-mm-dd)    : 2020-07-10
++# date (yyyy-mm-dd)    : 2021-01-28
+ #
+ #----------------------------------------------------------------------------------------------
+ [C32 BBC A]
+@@ -18,9 +18,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
- #include <linux/acpi.h>		/* for acpi_handle */
-+#include <linux/bits.h>
- #include <linux/mod_devicetable.h>
- #include <linux/device.h>	/* for struct device */
- #include <linux/sched.h>	/* for completion */
-@@ -217,6 +218,16 @@ enum i2c_alert_protocol {
- 	I2C_PROTOCOL_SMBUS_HOST_NOTIFY,
- };
+-[C59 D3&4]
++[C34 D3&4]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 778000000
++	FREQUENCY = 578000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 2/3
+ 	CODE_RATE_LP = NONE
+@@ -30,9 +30,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
-+/**
-+ * enum i2c_driver_flags - Flags for an I2C device driver
-+ *
-+ * @I2C_DRV_FL_ALLOW_LOW_POWER_PROBE: Let the ACPI driver manage the device's
-+ *				      power state during probe and remove
-+ */
-+enum i2c_driver_flags {
-+	I2C_DRV_FL_ALLOW_LOW_POWER_PROBE = BIT(0),
-+};
-+
- /**
-  * struct i2c_driver - represent an I2C device driver
-  * @class: What kind of i2c device we instantiate (for detect)
-@@ -231,6 +242,7 @@ enum i2c_alert_protocol {
-  * @detect: Callback for device detection
-  * @address_list: The I2C addresses to probe (for detect)
-  * @clients: List of detected clients we created (for i2c-core use only)
-+ * @flags: A bitmask of flags defined in &enum i2c_driver_flags
-  *
-  * The driver.owner field should be set to the module owner of this driver.
-  * The driver.name field should be set to the name of this driver.
-@@ -289,6 +301,8 @@ struct i2c_driver {
- 	int (*detect)(struct i2c_client *client, struct i2c_board_info *info);
- 	const unsigned short *address_list;
- 	struct list_head clients;
-+
-+	u32 flags;
- };
- #define to_i2c_driver(d) container_of(d, struct i2c_driver, driver)
+-[C54- BBC B HD]
++[C35 BBC B HD]
+ 	DELIVERY_SYSTEM = DVBT2
+-	FREQUENCY = 737833000
++	FREQUENCY = 586000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 2/3
+ 	CODE_RATE_LP = NONE
+@@ -43,9 +43,9 @@
+ 	STREAM_ID = 0
+ 	INVERSION = AUTO
  
-@@ -996,6 +1010,7 @@ u32 i2c_acpi_find_bus_speed(struct device *dev);
- struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- 				       struct i2c_board_info *info);
- struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
-+bool i2c_acpi_allow_low_power_probe(struct device *dev);
- #else
- static inline bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
- 					     struct acpi_resource_i2c_serialbus **i2c)
-@@ -1015,6 +1030,10 @@ static inline struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle ha
- {
- 	return NULL;
- }
-+static inline bool i2c_acpi_allow_low_power_probe(struct device *dev)
-+{
-+	return false;
-+}
- #endif /* CONFIG_ACPI */
+-[C58 SDN]
++[C29 SDN]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 770000000
++	FREQUENCY = 538000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
+@@ -55,9 +55,9 @@
+ 	HIERARCHY = NONE
+ 	INVERSION = AUTO
  
- #endif /* _LINUX_I2C_H */
+-[C49 ARQ A]
++[C31 ARQ A]
+ 	DELIVERY_SYSTEM = DVBT
+-	FREQUENCY = 698000000
++	FREQUENCY = 554000000
+ 	BANDWIDTH_HZ = 8000000
+ 	CODE_RATE_HP = 3/4
+ 	CODE_RATE_LP = NONE
 -- 
-2.20.1
+2.30.0
 
