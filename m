@@ -5,39 +5,39 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B10C4C4332B
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95ADFC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:31:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79FC864DEF
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:30:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6041664DFD
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 23:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbhA1XaN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jan 2021 18:30:13 -0500
-Received: from mga03.intel.com ([134.134.136.65]:43776 "EHLO mga03.intel.com"
+        id S231209AbhA1XbA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jan 2021 18:31:00 -0500
+Received: from mga11.intel.com ([192.55.52.93]:4524 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231823AbhA1X3z (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jan 2021 18:29:55 -0500
-IronPort-SDR: 3WBZ1Nu8sYrVQR2msFLGIfKO1hYQRNs9rAb/mwLizMT38NU5FKOg6DTLiCzkMwtylvNWR5yv0e
- qbQTxB6m30Qg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9878"; a="180409646"
+        id S231310AbhA1X3S (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Jan 2021 18:29:18 -0500
+IronPort-SDR: shD4p6NIhhDYysjMOHVHh5S6pluVZI9JCxZsyDK4Hxw6NgEBIjEk05jhKaplqSoZrLDdWz6SI4
+ G+K7y+RAXlrA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9878"; a="176824524"
 X-IronPort-AV: E=Sophos;i="5.79,383,1602572400"; 
-   d="scan'208";a="180409646"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:28:09 -0800
-IronPort-SDR: PKcTIpeDHXll7OPFhTlejycM7e3qTfiK+uA8wLFUo3qvu5KdbmgUtH+37NTcCZasi+1RpZRyd2
- 4m/CRPeg5LKQ==
+   d="scan'208";a="176824524"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:27:33 -0800
+IronPort-SDR: +ZI6vXBLOqRjUcuHT/LG/VTH07moeD/Zdy9kQBygbrtWx9TEZE9zLp7UchICfQpI7U7kqq5+zu
+ e91yvUuuJz/w==
 X-IronPort-AV: E=Sophos;i="5.79,383,1602572400"; 
-   d="scan'208";a="573829749"
+   d="scan'208";a="354359314"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:28:04 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 15:27:29 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id DC25821FFD;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id BB510211D8;
         Fri, 29 Jan 2021 01:27:27 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1l5GhF-0004FQ-Qr; Fri, 29 Jan 2021 01:27:29 +0200
+        id 1l5GhF-0004F8-MI; Fri, 29 Jan 2021 01:27:29 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
@@ -50,9 +50,9 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Hyungwoo Yang <hyungwoo.yang@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v9 6/7] media: i2c: imx319: Support probe while the device is off
-Date:   Fri, 29 Jan 2021 01:27:28 +0200
-Message-Id: <20210128232729.16064-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v9 1/7] ACPI: scan: Obtain device's desired enumeration power state
+Date:   Fri, 29 Jan 2021 01:27:23 +0200
+Message-Id: <20210128232729.16064-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
 References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
@@ -62,150 +62,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rajmohan Mani <rajmohan.mani@intel.com>
+Store a device's desired enumeration power state in struct
+acpi_device_power_flags during acpi_device object's initialisation.
 
-Tell ACPI device PM code that the driver supports the device being powered
-off when the driver's probe function is entered.
-
-Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/imx319.c | 72 +++++++++++++++++++++++---------------
- 1 file changed, 44 insertions(+), 28 deletions(-)
+ drivers/acpi/scan.c     | 6 ++++++
+ include/acpi/acpi_bus.h | 3 ++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
-index 8473c0bbb35d6..e0b22e9318fed 100644
---- a/drivers/media/i2c/imx319.c
-+++ b/drivers/media/i2c/imx319.c
-@@ -140,6 +140,8 @@ struct imx319 {
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 1d7a02ee45e05..b077c645c9845 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -987,6 +987,8 @@ static void acpi_bus_init_power_state(struct acpi_device *device, int state)
  
- 	/* Streaming on/off */
- 	bool streaming;
-+	/* True if the device has been identified */
-+	bool identified;
- };
- 
- static const struct imx319_reg imx319_global_regs[] = {
-@@ -2084,6 +2086,31 @@ imx319_set_pad_format(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+/* Verify chip ID */
-+static int imx319_identify_module(struct imx319 *imx319)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
-+	int ret;
-+	u32 val;
-+
-+	if (imx319->identified)
-+		return 0;
-+
-+	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != IMX319_CHIP_ID) {
-+		dev_err(&client->dev, "chip id mismatch: %x!=%x",
-+			IMX319_CHIP_ID, val);
-+		return -EIO;
-+	}
-+
-+	imx319->identified = true;
-+
-+	return 0;
-+}
-+
- /* Start streaming */
- static int imx319_start_streaming(struct imx319 *imx319)
+ static void acpi_bus_get_power_flags(struct acpi_device *device)
  {
-@@ -2091,6 +2118,10 @@ static int imx319_start_streaming(struct imx319 *imx319)
- 	const struct imx319_reg_list *reg_list;
- 	int ret;
- 
-+	ret = imx319_identify_module(imx319);
-+	if (ret)
-+		return ret;
-+
- 	/* Global Setting */
- 	reg_list = &imx319_global_setting;
- 	ret = imx319_write_regs(imx319, reg_list->regs, reg_list->num_of_regs);
-@@ -2208,26 +2239,6 @@ static int __maybe_unused imx319_resume(struct device *dev)
- 	return ret;
- }
- 
--/* Verify chip ID */
--static int imx319_identify_module(struct imx319 *imx319)
--{
--	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
--	int ret;
--	u32 val;
--
--	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
--	if (ret)
--		return ret;
--
--	if (val != IMX319_CHIP_ID) {
--		dev_err(&client->dev, "chip id mismatch: %x!=%x",
--			IMX319_CHIP_ID, val);
--		return -EIO;
--	}
--
--	return 0;
--}
--
- static const struct v4l2_subdev_core_ops imx319_subdev_core_ops = {
- 	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
- 	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-@@ -2422,6 +2433,7 @@ static struct imx319_hwcfg *imx319_get_hwcfg(struct device *dev)
- static int imx319_probe(struct i2c_client *client)
- {
- 	struct imx319 *imx319;
-+	bool low_power;
- 	int ret;
++	unsigned long long pre;
++	acpi_status status;
  	u32 i;
  
-@@ -2434,11 +2446,14 @@ static int imx319_probe(struct i2c_client *client)
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&imx319->sd, client, &imx319_subdev_ops);
+ 	/* Presence of _PS0|_PR0 indicates 'power manageable' */
+@@ -1008,6 +1010,10 @@ static void acpi_bus_get_power_flags(struct acpi_device *device)
+ 	if (acpi_has_method(device->handle, "_DSW"))
+ 		device->power.flags.dsw_present = 1;
  
--	/* Check module identity */
--	ret = imx319_identify_module(imx319);
--	if (ret) {
--		dev_err(&client->dev, "failed to find sensor: %d", ret);
--		goto error_probe;
-+	low_power = acpi_dev_state_low_power(&client->dev);
-+	if (!low_power) {
-+		/* Check module identity */
-+		ret = imx319_identify_module(imx319);
-+		if (ret) {
-+			dev_err(&client->dev, "failed to find sensor: %d", ret);
-+			goto error_probe;
-+		}
- 	}
- 
- 	imx319->hwcfg = imx319_get_hwcfg(&client->dev);
-@@ -2491,10 +2506,10 @@ static int imx319_probe(struct i2c_client *client)
- 		goto error_media_entity;
- 
++	status = acpi_evaluate_integer(device->handle, "_PRE", NULL, &pre);
++	if (ACPI_SUCCESS(status) && !pre)
++		device->power.flags.allow_low_power_probe = 1;
++
  	/*
--	 * Device is already turned on by i2c-core with ACPI domain PM.
--	 * Enable runtime PM and turn off the device.
-+	 * Don't set the device's state to active if it's in a low power state.
+ 	 * Enumerate supported power management states
  	 */
--	pm_runtime_set_active(&client->dev);
-+	if (!low_power)
-+		pm_runtime_set_active(&client->dev);
- 	pm_runtime_enable(&client->dev);
- 	pm_runtime_idle(&client->dev);
- 
-@@ -2547,6 +2562,7 @@ static struct i2c_driver imx319_i2c_driver = {
- 	},
- 	.probe_new = imx319_probe,
- 	.remove = imx319_remove,
-+	.flags = I2C_DRV_FL_ALLOW_LOW_POWER_PROBE,
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 02a716a0af5d4..020b850120883 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -258,7 +258,8 @@ struct acpi_device_power_flags {
+ 	u32 power_removed:1;	/* Optimize Dx->D0 */
+ 	u32 ignore_parent:1;	/* Power is independent of parent power state */
+ 	u32 dsw_present:1;	/* _DSW present? */
+-	u32 reserved:26;
++	u32 allow_low_power_probe:1; /* Allow low power state in device probe */
++	u32 reserved:25;
  };
- module_i2c_driver(imx319_i2c_driver);
  
+ struct acpi_device_power_state {
 -- 
 2.20.1
 
