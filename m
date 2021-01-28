@@ -2,169 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DAD0C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 09:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61370C433E9
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:03:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BDA064DD1
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 09:54:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26A0264DD6
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jan 2021 10:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbhA1Jyj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:54:39 -0500
-Received: from retiisi.eu ([95.216.213.190]:38636 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231745AbhA1Jyf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:54:35 -0500
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D2B24634C87
-        for <linux-media@vger.kernel.org>; Thu, 28 Jan 2021 11:50:55 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 1/1] dt-bindings: Remove old ov5647.yaml file, update ovti,ov5647.yaml
-Date:   Thu, 28 Jan 2021 11:47:59 +0200
-Message-Id: <20210128094759.31172-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S232364AbhA1KCn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jan 2021 05:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231267AbhA1KCS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Jan 2021 05:02:18 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E641AC061573;
+        Thu, 28 Jan 2021 02:01:36 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id a8so6798090lfi.8;
+        Thu, 28 Jan 2021 02:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=w7zs4vtlCOUzPk4JPVodMGjOwCX7vvMr8Eyh0CtBlKY=;
+        b=aBdiFZ6Y4Kp+nOhlgpCK6Z6WTIvAH7uPf6Dw5GNH8lHwqAWrTPwgv7vL2KYjq02Vzf
+         shdsv89u8LsaAAr4C9B70PX49KyEWjk11sBOUQy5cKQC7sAnotKMqxOnFd5pwGXnuYyy
+         l4f3pSmC2a8RsLkHnRek405USQ2daHF00hHJonK1HWU4GiqNMZaAeTUGMoThii0wUOzP
+         NDy6YjY8kZgEdVBQIdn4njsH+p0ACV44wG9Nd5DeSV8KqfTab60BZgHhtRoUq+xmcC5v
+         I+zA3q+ohcTZQbquqDT8HBeN8YzAWKtplRBAFKkGxorn+I+YQQvbBqrzdDKBAsHw2dtU
+         037A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=w7zs4vtlCOUzPk4JPVodMGjOwCX7vvMr8Eyh0CtBlKY=;
+        b=oQ8AleDfmz1mLGLP5QEKKcjP/PUKYwB+aS7fH3FwnANGjxJFk7GvskSnTPfULf4l6G
+         ckKJ7Mnh0jaD/gwNb+CTdSUR5v/Cs3yfzNVTCfRdG8HbpyVAn13ImK/J2cmSCu8Tqdpm
+         gD5PxQvVwLS5plNfehibC80jKLpAkPNsUGnjVKMnUJwolZVhlQxNtqjmv4csky1H+o5k
+         qj9ZVP3niZKz/dvjz3+CK8AcdU/qPB4tHRz0M6vhNK+IiSXxg84PfQfIkv+1z08DqtQO
+         GdlLd0NmJGDUDgl6mDfhOau77PJav3tMhP7bIOG6gzP8GuERcpIS5OdI+ZtlESzo0pZQ
+         g+5A==
+X-Gm-Message-State: AOAM532suIXNBBI2/3FAc6Z+AeTGtDhMDdeT/CaiQSSmcLpYu6P25wRr
+        oBSb/FOBW/dHJs1kJzJnpvA=
+X-Google-Smtp-Source: ABdhPJzKkeFNRZJelT7Yxb3Qx2K7wJW+lwf6EmPqVdUlg7UlihZ29bW2xvQP6sUABgj7ntHv7PIcuQ==
+X-Received: by 2002:a19:7507:: with SMTP id y7mr6874145lfe.334.1611828094763;
+        Thu, 28 Jan 2021 02:01:34 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id y20sm1830647ljh.124.2021.01.28.02.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jan 2021 02:01:34 -0800 (PST)
+Date:   Thu, 28 Jan 2021 12:01:30 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        dri-devel@lists.freedesktop.org, Andrei Vagin <avagin@gmail.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Hui Su <sh_def@163.com>,
+        Michel Lespinasse <walken@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jeffrey Vander Stoep <jeffv@google.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        kernel-team <kernel-team@android.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linaro-mm-sig@lists.linaro.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Bernd Edlinger <bernd.edlinger@hotmail.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH] procfs/dmabuf: Add /proc/<pid>/task/<tid>/dmabuf_fds
+Message-ID: <20210128120130.50aa9a74@eldfell>
+In-Reply-To: <ea04b552-7345-b7d5-60fe-7a22515ea63a@amd.com>
+References: <20210126225138.1823266-1-kaleshsingh@google.com>
+        <CAG48ez2tc_GSPYdgGqTRotUp6NqFoUKdoN_p978+BOLoD_Fdjw@mail.gmail.com>
+        <YBFG/zBxgnapqLAK@dhcp22.suse.cz>
+        <ea04b552-7345-b7d5-60fe-7a22515ea63a@amd.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/EjrvI7yGo=jgR=BTk/_==YI"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Recently ov5647.yaml got renamed as ovti,ov5647.yaml. As part of the
-video-interfaces DT schema conversion that was unintentionally brought
-back. Fix this by applying the schema changes to the new file and removing
-the old one.
+--Sig_/EjrvI7yGo=jgR=BTk/_==YI
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 066a94e28a23 ("media: dt-bindings: media: Use graph and video-interfaces schemas")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../devicetree/bindings/media/i2c/ov5647.yaml | 76 -------------------
- .../bindings/media/i2c/ovti,ov5647.yaml       | 20 +----
- 2 files changed, 4 insertions(+), 92 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.yaml
+On Wed, 27 Jan 2021 12:01:55 +0100
+Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov5647.yaml b/Documentation/devicetree/bindings/media/i2c/ov5647.yaml
-deleted file mode 100644
-index 3b1ea9da437a..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/ov5647.yaml
-+++ /dev/null
-@@ -1,76 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/media/i2c/ov5647.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Omnivision OV5647 raw image sensor
--
--maintainers:
--  - Dave Stevenson <dave.stevenson@raspberrypi.com>
--  - Jacopo Mondi <jacopo@jmondi.org>
--
--description: |-
--  The OV5647 is a raw image sensor with MIPI CSI-2 and CCP2 image data
--  interfaces and CCI (I2C compatible) control bus.
--
--properties:
--  compatible:
--    const: ovti,ov5647
--
--  reg:
--    description: I2C device address.
--    maxItems: 1
--
--  clocks:
--    description: Reference to the xclk clock.
--    maxItems: 1
--
--  pwdn-gpios:
--    description: Reference to the GPIO connected to the pwdn pin. Active high.
--    maxItems: 1
--
--  port:
--    $ref: /schemas/graph.yaml#/$defs/port-base
--
--    properties:
--      endpoint:
--        $ref: /schemas/media/video-interfaces.yaml#
--        unevaluatedProperties: false
--
--        properties:
--          clock-noncontinuous: true
--
--    additionalProperties: false
--
--required:
--  - compatible
--  - reg
--  - clocks
--  - port
--
--additionalProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/gpio/gpio.h>
--
--    i2c {
--        #address-cells = <1>;
--        #size-cells = <0>;
--
--        ov5647: camera@36 {
--            compatible = "ovti,ov5647";
--            reg = <0x36>;
--            clocks = <&camera_clk>;
--            pwdn-gpios = <&pioE 29 GPIO_ACTIVE_HIGH>;
--
--            port {
--                camera_out: endpoint {
--                    remote-endpoint = <&csi1_ep1>;
--                };
--            };
--        };
--    };
--
--...
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
-index 429566c9ee1d..1ab22e75d3c6 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
-@@ -31,27 +31,15 @@ properties:
-     maxItems: 1
- 
-   port:
--    type: object
--    description: |-
--      Should contain one endpoint sub-node used to model connection to the
--      video receiver according to the specification defined in
--      Documentation/devicetree/bindings/media/video-interfaces.txt.
-+    $ref: /schemas/graph.yaml#/$defs/port-base
- 
-     properties:
-       endpoint:
--        type: object
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
- 
-         properties:
--          remote-endpoint:
--            description: |-
--              phandle to the video receiver input port.
--
--          clock-noncontinuous:
--            type: boolean
--            description: |-
--              Set to true to allow MIPI CSI-2 non-continuous clock operations.
--
--        additionalProperties: false
-+          clock-noncontinuous: true
- 
-     additionalProperties: false
- 
--- 
-2.29.2
+> Somewhat correct. This interface here really doesn't make sense since=20
+> the file descriptor representation of DMA-buf is only meant to be used=20
+> for short term usage.
+>=20
+> E.g. the idea is that you can export a DMA-buf fd from your device=20
+> driver, transfer that to another process and then import it again into a=
+=20
+> device driver.
+>=20
+> Keeping a long term reference to a DMA-buf fd sounds like a design bug=20
+> in userspace to me.
 
+Except keeping the fd is exactly what userspace must do if it wishes to
+re-use the buffer without passing a new fd over IPC again. Particularly
+Wayland compositors need to keep the client buffer dmabuf fd open after
+receiving it, so that they can re-import it to EGL to ensure updated
+contents are correctly flushed as EGL has no other API for it.
+
+That is my vague understanding, and what Weston implements. You can say
+it's a bad userspace API design in EGL, but what else can we do?
+
+However, in the particular case of Wayland, the shared dmabufs should
+be accounted to the Wayland client process. OOM-killing the client
+process will eventually free the dmabuf, also the Wayland server
+references to it. Killing the Wayland server (compositor, display
+server) OTOH is something that should not be done as long as there are
+e.g. Wayland clients to be killed.
+
+Unfortunately(?), Wayland clients do not have a reason to keep the
+dmabuf fd open themselves, so they probably close it as soon as it has
+been sent to a display server. So the process that should be OOM-killed
+does not have an open fd for the dmabuf (but probably has something
+else, but not an mmap for CPU). Buffer re-use in Wayland does not
+require re-sending the dmabuf fd over IPC.
+
+(In general, dmabufs are never mmapped for CPU. They are accessed by
+devices.)
+
+
+Thanks,
+pq
+
+--Sig_/EjrvI7yGo=jgR=BTk/_==YI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmASi3oACgkQI1/ltBGq
+qqdcrA//X9uN75QyHDm8jqei3p8rmD/duy0jDCn6W2DbNy+6VM79pp8ZjqqdpeEp
+ZLe9ivqRVUOCUclKfiG2d0/vdgYwU2xnkWYSz0KUNP5pVE+4nZY3O/SA+SQcefkg
+KwfFhyM0XXm8eTVLVl5h+1dMMQ8tWkXpEwXqed4l0/478wepY8srMWoH3YRBxpiE
+q/PSkaWrRegUA8nYHp65kLVAAgP2kOeylAO/DmmtGye12AGMlNESNJHYuHPyc/wT
+Aos56muFTYYGhkICx+eqTsJBCr8mk32rFyIj/dinUcXUyvbj+sUt9eTZVAazsjjx
+NLC3zr3OSnKjQz2+kkXeGIHqTBCEWXFw3VHsPQLv7pf6XPqxJVoWtgHvzvTVduzo
+3Oxff1eYaBN54Evn1xLWLdEGhqc7wqH6RFYDnKhbOxWmBujXHpdF8Ge5xNfPauBP
+gFAtgtHJIyyu/j+CCCo1z25ToKsGTuiJnbXalIrlmWNeIq8m7XKZ3JjhR3WYZOJU
+MEOXDkeVcodCfo0ZueGvTj5meY6eJ1LIBdWBmT0h1/xA/fBocbRADBFgez42NN5s
+ro5soi7B49KRuSygUPsaSMnjpr32NwCIrQIzGtZQzgJVfRPSdke9ZD1wNle9jAXY
+B7ZbDZmlD1St8rxL+usyhRjZdUoKXjfG8d72ss37EHIhch+3CEQ=
+=oEE0
+-----END PGP SIGNATURE-----
+
+--Sig_/EjrvI7yGo=jgR=BTk/_==YI--
