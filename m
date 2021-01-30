@@ -2,160 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44B08C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 Jan 2021 04:44:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12DE9C433E0
+	for <linux-media@archiver.kernel.org>; Sat, 30 Jan 2021 09:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09AC264E13
-	for <linux-media@archiver.kernel.org>; Sat, 30 Jan 2021 04:43:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9D7064E0B
+	for <linux-media@archiver.kernel.org>; Sat, 30 Jan 2021 09:10:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbhA3EnA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Jan 2021 23:43:00 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:55707 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233585AbhA3Eic (ORCPT
+        id S233319AbhA3JKl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Jan 2021 04:10:41 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39573 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231213AbhA3JJa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Jan 2021 23:38:32 -0500
+        Sat, 30 Jan 2021 04:09:30 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 5i0almpo1W4yN5i0clR5Gd; Sat, 30 Jan 2021 05:37:18 +0100
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 5mFGlj9hsefbk5mFJlbRmZ; Sat, 30 Jan 2021 10:08:45 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1611981438; bh=PPGcnEduBcASHkX7k0OWQtVDTdB4Yy6VQc5dEFcr2a0=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=Cn+HxWLJe4EEwKKoy22JFrECILe9utDYe/Xhk1T2zQ3wdtrEenWIKIVZdtVirhAb8
-         BphdbOA8xR1rl7wA8UnoaFWt/az0d3g0hurAIVmAnzUZbkBMsA9OIqQ5reNvwAea82
-         yGHIdTcJOdtKfbpt/wbdiQgHV/Jtk3gaDSOsRZBrls21WkDfzLexFcckW2HwXF6L6x
-         FTclYZYVpxRYmGe8bpSVgQn7+Wa00LHSKYyR1kqZQPeixk3KsdG17cGu6c+SbtcXQe
-         Q9A8C6bsdqcNLdjvWZbe8xsfg+1ReUxXjXwrWeKS5DcVXMMX4S8VYJWYGux/EeraYp
-         aD5Gsp23DZE2Q==
-Message-ID: <a5dd3ab128de4f56ebd9b651bd884bd6@smtp-cloud8.xs4all.net>
-Date:   Sat, 30 Jan 2021 05:37:16 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4xfMFoQcCwvcAll5ZiZXLbTvtqzWl9xJG63rvwzcZ1Qr2GXKtUnu+ELmEXc5P4TDgrK9U/xEzoi6xJlqMgOrjma9CcuLUsG+QqnyzeP4ns2G2HOhAkq/K4
- JEmgdYddWcp/9uhvvkCT2yEhM0ndaECcodvdHzanR1DizZ/lYWtpeXsib3nAHp7KrC9runHQjfCT83+B2li/XVet8zauZn+CzgnBicZi6ZD0DrxSxhC69UfM
- hv1W5XyRT9AZKEz3e+v5pg==
+        t=1611997725; bh=kFzR3Clz9QcOHzi8a7nlXc/7LsUzBp8DYhCKlQawG3A=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=P5ABR4OWQM6SgWc3UxJ2qmUL/uKDoQ9tGOfWn6bXMMXAoEUO9g5ZBu+Acb27QSClH
+         u8Fk4G9WeLnSNem3RGS0LAdh7xGKaezRHsRRT9j0R3n05BcyQP0UhzYRTR2eG0yHSf
+         S1g6Q2K3v000AijT5oT5qBeUZxdZBMySwxEAZ8vgC4CistuTWqq9UktOmfXxCrpjFk
+         gemwZeU7VaBODKazfWeml/8bF8tbsvPeWKAIu9ayRRoft8mZOtXQgDqnUKd/UvBio8
+         RCux7k1nKumDgqXq8ZCyZpYb7SdtUBSXlMSw/1h3tfBkjuL/5rlfQZBLJp5yKaf1L8
+         gCfbj2LDC3cig==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] media/dvb/dvbstb.svg: Antena -> Antenna
+Message-ID: <f02492bd-8003-f08c-e3da-848a4ee455f7@xs4all.nl>
+Date:   Sat, 30 Jan 2021 10:08:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfP6N7fQV1DXpwm5UJV+RvWCbkCI2ou6rhCBh21H58i6rd+2+IX9wa973y37Jpl7LUoBqqG8hCeoD4FYGScqJN6vh/iZIYuWSxaHhikAxmHW3yjk4CfFI
+ U34UMuRvn2kufOBrAR/bJvsWI6JNS9KeqmiY3jEyQKwEzCz6JgNaL7S1Ge60xYRlZMv1u4gTaTofRxxjFhECmIu7q9QnWMjcgp0=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Fix typo.
 
-Results of the daily build of media_tree:
-
-date:			Sat Jan 30 05:00:09 CET 2021
-media-tree git hash:	f0ddb4e9911665b9ad68fe94e0faaaff5953902e
-media_build git hash:	e980c694ef8ab2b472ecc26edaf97af214e587aa
-v4l-utils git hash:	70404b870f12165278fe9ee9b3d6c7932478eb83
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 10.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		v0.6.3-1-g58d3c1ca
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		v0.5.0-7087-gdbdb27615
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: e7b822fdb96cb4ba52d3c0c7445d3401649bacd6
-host hardware:		x86_64
-host os:		5.7.0-1-amd64
-
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: WARNINGS: found 0 strcpy(), 1 strncpy(), 0 strlcpy()
-linux-4.4.238-i686: OK
-linux-4.4.238-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.238-i686: OK
-linux-4.9.238-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.200-i686: OK
-linux-4.14.200-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.149-i686: OK
-linux-4.19.149-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.69-i686: OK
-linux-5.4.69-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.13-i686: OK
-linux-5.8.13-x86_64: OK
-linux-5.9.1-i686: OK
-linux-5.9.1-x86_64: OK
-linux-5.10.1-i686: OK
-linux-5.10.1-x86_64: OK
-linux-5.11-rc1-i686: OK
-linux-5.11-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/Documentation/userspace-api/media/dvb/dvbstb.svg b/Documentation/userspace-api/media/dvb/dvbstb.svg
+index 87e68baa056b..6f0ba98f9bf9 100644
+--- a/Documentation/userspace-api/media/dvb/dvbstb.svg
++++ b/Documentation/userspace-api/media/dvb/dvbstb.svg
+@@ -2,7 +2,7 @@
+ <!-- SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later -->
+ <svg id="svg2" width="15.847cm" height="8.4187cm" fill-rule="evenodd" stroke-linejoin="round" stroke-width="28.222"
+preserveAspectRatio="xMidYMid" version="1.2" viewBox="0 0 23770.123 12628.122" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><defs id="defs142"><marker id="Arrow1Lend" overflow="visible" orient="auto"><path
+id="path954" transform="matrix(-.8 0 0 -.8 -10 0)" d="m0 0 5-5-17.5 5 17.5 5z" fill-rule="evenodd" stroke="#000"
+stroke-width="1pt"/></marker><marker id="marker1243" overflow="visible" orient="auto"><path id="path1241" transform="matrix(-.8 0 0 -.8 -10
+0)" d="m0 0 5-5-17.5 5 17.5 5z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/></marker></defs><metadata
+id="metadata519"><rdf:RDF><cc:Work
+ rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><rect id="rect197" class="BoundingBox"
+x="5355.1" y="13.122" width="18403" height="9603" fill="none"/><path id="path199" d="m14556 9614.1h-9200v-9600h18400v9600z"
+fill="#fff"/><path id="path201" d="m14556 9614.1h-9200v-9600h18400v9600z" fill="none" stroke="#000"/><rect id="rect206" class="BoundingBox"
+x="13.122" y="4013.1" width="4544" height="2403" fill="none"/><path id="path208" d="m2285.1 6414.1h-2271v-2400h4541v2400z"
+fill="#fff"/><path id="path210" d="m2285.1 6414.1h-2271v-2400h4541v2400z" fill="none" stroke="#000"/><text id="text212" class="TextShape"
+x="-2443.8779" y="-4585.8779"><tspan id="tspan214" class="TextParagraph" font-family="sans-serif" font-size="635px" font-weight="400"><tspan
+id="tspan216" class="TextPosition"
+-x="1281.1219" y="5435.1221"><tspan id="tspan218" fill="#000000">Antena</tspan></tspan></tspan></text>
++x="1013.1317" y="5435.1221"><tspan id="tspan218" fill="#000000">Antenna</tspan></tspan></tspan></text>
+ <rect id="rect223" class="BoundingBox" x="6213.1" y="1813.1" width="4544" height="2403" fill="none"/><path id="path225" d="m8485.1
+4214.1h-2271v-2400h4541v2400z" fill="#fff"/><path id="path227" d="m8485.1 4214.1h-2271v-2400h4541v2400z" fill="none" stroke="#000"/><text
+id="text229" class="TextShape" x="-2443.8779" y="-4585.8779"><tspan id="tspan231" class="TextParagraph" font-family="sans-serif"
+font-size="635px" font-weight="400"><tspan id="tspan233" class="TextPosition" x="7217.1221" y="3235.1221"><tspan id="tspan235"
+fill="#000000">Frontend</tspan></tspan></tspan></text>
+ <rect id="rect240" class="BoundingBox" x="12113" y="1813.1" width="4544" height="2403" fill="none"/><path id="path242" d="m14385
+4214.1h-2271v-2400h4541v2400z" fill="#fff"/><path id="path244" d="m14385 4214.1h-2271v-2400h4541v2400z" fill="none" stroke="#000"/><text
+id="text246" class="TextShape" x="-2443.8779" y="-4585.8779"><tspan id="tspan248" class="TextParagraph" font-family="sans-serif"
+font-size="635px" font-weight="400"><tspan id="tspan250" class="TextPosition" x="13944.122" y="3235.1221"><tspan id="tspan252"
+fill="#000000">CA</tspan></tspan></tspan></text>
+ <rect id="rect257" class="BoundingBox" x="18113" y="1813.1" width="4544" height="2403" fill="none"/><path id="path259" d="m20385
+4214.1h-2271v-2400h4541v2400z" fill="#fff"/><path id="path261" d="m20385 4214.1h-2271v-2400h4541v2400z" fill="none" stroke="#000"/><text
+id="text263" class="TextShape" x="-2443.8779" y="-4585.8779"><tspan id="tspan265" class="TextParagraph" font-family="sans-serif"
+font-size="635px" font-weight="400"><tspan id="tspan267" class="TextPosition" x="19384.123" y="3235.1221"><tspan id="tspan269"
+fill="#000000">Demux</tspan></tspan></tspan></text>
