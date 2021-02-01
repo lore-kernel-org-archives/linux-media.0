@@ -2,94 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C48C433DB
-	for <linux-media@archiver.kernel.org>; Sun, 31 Jan 2021 20:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24725C433DB
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 01:29:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9E5064E24
-	for <linux-media@archiver.kernel.org>; Sun, 31 Jan 2021 20:11:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D26D564E2B
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 01:29:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbhAaULT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 31 Jan 2021 15:11:19 -0500
-Received: from smtprelay0146.hostedemail.com ([216.40.44.146]:54868 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231764AbhAaUJM (ORCPT
+        id S231149AbhBAB3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 31 Jan 2021 20:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230134AbhBAB3K (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 31 Jan 2021 15:09:12 -0500
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id 18F5A181CB158;
-        Sun, 31 Jan 2021 17:39:54 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id D3FA018006AE7;
-        Sun, 31 Jan 2021 17:39:53 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: box41_5e0a4fe275bb
-X-Filterd-Recvd-Size: 2345
-Received: from [192.168.1.159] (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf13.hostedemail.com (Postfix) with ESMTPA;
-        Sun, 31 Jan 2021 17:39:52 +0000 (UTC)
-Message-ID: <004fa2c0c74bb26d6144198552c8bae33a57be2e.camel@perches.com>
-Subject: Re: [PATCH 08/29] dma-buf: Avoid comma separated statements
-From:   Joe Perches <joe@perches.com>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jiri Kosina <trivial@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Date:   Sun, 31 Jan 2021 09:39:51 -0800
-In-Reply-To: <4d5891b7-ea87-974e-d260-f78c3af326bc@amd.com>
-References: <cover.1598331148.git.joe@perches.com>
-         <990bf6f33ccaf73ad56eb4bea8bd2c0db5e90a31.1598331148.git.joe@perches.com>
-         <a87b95d11c22d997ebc423bba71cabef15ca0bac.camel@perches.com>
-         <4d5891b7-ea87-974e-d260-f78c3af326bc@amd.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        Sun, 31 Jan 2021 20:29:10 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E998CC061573
+        for <linux-media@vger.kernel.org>; Sun, 31 Jan 2021 17:28:29 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9CB74556;
+        Mon,  1 Feb 2021 02:28:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1612142906;
+        bh=e49V97/JGvAkXHuM3RgAN0QOb5KjVlBzT2JcgJQ2yfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TcsgxbpuL3JDl0F4lg+R+eds4aIqm5+AXLnI53IKMGSXcogYR4xH/BSsuuf1+ecCN
+         XdxLD5/KDYq/5X4cLClLmtBzHmnwMP7z2BWhrazOKe97kbMR2qMG0aNvhg9fQP02mR
+         kbbskWCHfashAzqou6ovLupfquHREdK+tZmq1NHg=
+Date:   Mon, 1 Feb 2021 03:28:06 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Adrian Fiergolski <adrian.fiergolski@fastree3d.com>,
+        niklas.soderlund+renesas@ragnatech.se, linux-media@vger.kernel.org,
+        vishal.sagar@xilinx.com
+Subject: Re: v4l: status of 'add support for multiplexed streams' patch
+Message-ID: <YBdZJpTfgiipt3IK@pendragon.ideasonboard.com>
+References: <ad1f038f-f067-89f6-9dc6-4b423d719fc5@fastree3d.com>
+ <20210129222654.GL32460@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210129222654.GL32460@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2021-02-03 at 14:26 +0100, Christian König wrote:
-> Am 30.01.21 um 19:47 schrieb Joe Perches:
-> > On Mon, 2020-08-24 at 21:56 -0700, Joe Perches wrote:
-> > > Use semicolons and braces.
-> > Ping?
-> > > Signed-off-by: Joe Perches <joe@perches.com>
-> Reviewed-by: Christian König <christian.koenig@amd.com>
-> 
-> Do you have commit rights to drm-misc-next?
+Hello,
 
-No.
-
-> > > ---
-> > >   drivers/dma-buf/st-dma-fence.c | 7 +++++--
-> > >   1 file changed, 5 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fence.c
-> > > index e593064341c8..c8a12d7ad71a 100644
-> > > --- a/drivers/dma-buf/st-dma-fence.c
-> > > +++ b/drivers/dma-buf/st-dma-fence.c
-> > > @@ -471,8 +471,11 @@ static int thread_signal_callback(void *arg)
-> > >   			dma_fence_signal(f1);
-> > > 
-> > >   		smp_store_mb(cb.seen, false);
-> > > -		if (!f2 || dma_fence_add_callback(f2, &cb.cb, simple_callback))
-> > > -			miss++, cb.seen = true;
-> > > +		if (!f2 ||
-> > > +		    dma_fence_add_callback(f2, &cb.cb, simple_callback)) {
-> > > +			miss++;
-> > > +			cb.seen = true;
-> > > +		}
-> > > 
-> > >   		if (!t->before)
-> > >   			dma_fence_signal(f1);
+On Sat, Jan 30, 2021 at 12:26:54AM +0200, Sakari Ailus wrote:
+> On Mon, Jan 25, 2021 at 03:08:56PM +0100, Adrian Fiergolski wrote:
+> > Dear Niklas,
 > > 
+> > Thank you for your 'v4l: add support for multiplexed streams' patch [1].
+> > 
+> > What is the status of merging your development with v4l-utils? Version
+> > 1.16.5 doesn't provide --get/set-routing options. Also in the master of
+> > v4l-utils I haven't found your code.
+> > 
+> > What is the current way of changing routing the video switches (e.g.
+> > xilinx-axis-swtich which is not yet in the mainstream kernel)?
+> > 
+> > [1] https://lwn.net/Articles/782479/
 > 
+> I seem to have something here:
+> 
+> <URL:https://git.retiisi.eu/?p=~sailus/v4l-utils.git;a=shortlog;h=refs/heads/routing>
+> 
+> It hasn't been tested for some time though. The header update patches need
+> to be reworked but the media-ctl + libv4l2subdev patches probably rebase
+> just fine.
 
+I've recently rebased the latest version of the patches (exclusing the
+changes to the Renesas drivers) that was posted to the linux-media
+mailing list, and have pushed the result to 
 
+	git://linuxtv.org/pinchartl/media.git muxed-streams
+
+This has only been compile-tested so far, and I hope to test it on real
+hardware soon.
+
+-- 
+Regards,
+
+Laurent Pinchart
