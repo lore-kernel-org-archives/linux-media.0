@@ -2,118 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D9EC433DB
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 17:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F01A2C433DB
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 17:48:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E2EE64EB8
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 17:27:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEBA664E2A
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 17:48:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhBAR1N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Feb 2021 12:27:13 -0500
-Received: from mga05.intel.com ([192.55.52.43]:30392 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231417AbhBAR0g (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Feb 2021 12:26:36 -0500
-IronPort-SDR: ckb1o7kTFJUa8wBrvEdB5nn8t27vZt/OCijad38rWGOxG+e0uVt9Dj2e+GyoS9GJ1g2NDWVvoW
- DBXCtAohw12Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="265552653"
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="265552653"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 09:24:51 -0800
-IronPort-SDR: Wmcj+LS7ydY41SRV0tgwXKw/KY4Mf34WnVd+y3CDKXK2xuxtgtnXG+/UAu56b9FoqK8gwZRCTf
- cdPGRTZUMGkw==
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="391007220"
-Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.80.35])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 09:24:48 -0800
-From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        sakari.ailus@linux.intel.com,
-        daniele.alessandrelli@linux.intel.com,
-        paul.j.murphy@linux.intel.com,
-        gjorgjix.rosikopulos@linux.intel.com,
-        martinax.krasteva@linux.intel.com
-Subject: [PATCH v5 0/2] IMX334 Camera Sensor Driver
-Date:   Mon,  1 Feb 2021 17:24:43 +0000
-Message-Id: <20210201172445.164-1-martinax.krasteva@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S232530AbhBARsV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Feb 2021 12:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbhBARsP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Feb 2021 12:48:15 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1622FC06174A
+        for <linux-media@vger.kernel.org>; Mon,  1 Feb 2021 09:47:33 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id w20so10664495qta.0
+        for <linux-media@vger.kernel.org>; Mon, 01 Feb 2021 09:47:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AgfUeIVe1jpb/M6F0P7bbhlcNBnqRJlGtPeSWlWrNwg=;
+        b=H3FaZxxzyZuwtJZDw+X2VKJudCQdCMJ2ygYLi0Qf5V//mVWO6L7WqlcwQ9U8E9ond5
+         RUDoDd46ns28Shvs5MmoCtde6j5hHJ8Rvk7xGfNqpMMeePmV6Q/98InzgoTcUVbVfEBi
+         3HV9cQ6j/cTZM1ylVBX6OIA/aYVXfC5kUr2sh8swHJiuN7SOrhRitf9VHgyq4m8Mxmdr
+         I1/lArVNRLNw0LfAk+Zce4cLwosv1bpImH2f2WQFNnVEMz5WS8LigXq7/PvsCEua1ofq
+         4Ezuedv9Dm5gK6d7zUQvV6d3N4IjLBqaHWNK3+qVtk1QTWLB6DsmEdChP31AH4xxmITJ
+         ZeZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AgfUeIVe1jpb/M6F0P7bbhlcNBnqRJlGtPeSWlWrNwg=;
+        b=n8S09q/Ndc1LcfClIsmdHOxWdtvlXhoNyUJiuGS6PUbKigyQVRFMiwH/DZwMaQujpj
+         GQOQA2vswhRBbO4Nr+3Ywtl8OPvnSWjd65JnmdDARerAH/VQvPtxa7EV/qEIGp+caaSP
+         HowswUmlixGI+Lb0lUXE9qIDzXSSudpxzbdKD0anrh0n1HyjbnuuBjmMpfitQLahG5dd
+         TFOfyGAF+jApqkFMLoxc1Dmfxn2mzNcyHvVuNJOsjy8Qa2x1hwPLHqlv4bfDmBuutJb2
+         bO+9L//eF9qOVopQfsHVQBUvmHELTSrpdOXXA0ymT0aQ/QXVum/rrJwrfg3YRy0i6Fur
+         m3bQ==
+X-Gm-Message-State: AOAM533UplyRO7Qp/kVP2Ue/WdGjNhp6WF/rFHEUUggInm1cUAoNSOLt
+        x6p/dTIRvEvKbBhilJxoDxnUcJ3DOQD29rGva8P9hQ==
+X-Google-Smtp-Source: ABdhPJxMOaZ0yLi1yAK38wxAgfwraVY6iPAY9diM58gAjj5k0njFutl/YoK2inviAy8R2Ly4etp6FDp3dTzQV9acQjM=
+X-Received: by 2002:ac8:6f0f:: with SMTP id g15mr2486401qtv.322.1612201652050;
+ Mon, 01 Feb 2021 09:47:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20210126204240.418297-1-hridya@google.com> <YBFXPbePURupbe+y@kroah.com>
+ <CAO_48GHrpi9XxPhP2evwH_ZJmbVSWqxCvsYg6S2Syh-mrWBHzA@mail.gmail.com>
+ <c0684400-c1e2-0ebd-ad09-cb7b24db5764@gmail.com> <CAO_48GGsOTLdqAQMO9vrLtWAKG6spByMC-GXwDv_f3ENvpemfA@mail.gmail.com>
+ <Fu3J-fHQvkd_umZraMnhxQhFJR_JCDmgUssMBA4GJgRwo4UpIPKvVSh51Os9FQkABkhSL6tmEAV4vwBZa7hFWFTgujmjaBmrgqJJ75KM8ZU=@emersion.fr>
+ <CAO_48GEzi2b5M8Gv2E2L1s76VcPksA812ZqY1ihbpxkDkwb5_A@mail.gmail.com>
+In-Reply-To: <CAO_48GEzi2b5M8Gv2E2L1s76VcPksA812ZqY1ihbpxkDkwb5_A@mail.gmail.com>
+From:   Hridya Valsaraju <hridya@google.com>
+Date:   Mon, 1 Feb 2021 09:46:54 -0800
+Message-ID: <CA+wgaPPfUcNGnW-GKZxtkzniMZcM=sNG7AHS+tUu=B2jCStOzw@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH v3] dmabuf: Add the capability to expose
+ DMA-BUF stats in sysfs
+To:     Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     Simon Ser <contact@emersion.fr>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        kernel test robot <lkp@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        Linaro MM SIG <linaro-mm-sig@lists.linaro.org>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Martina Krasteva <mkrasteva@mm-sol.com>
+On Thu, Jan 28, 2021 at 6:35 AM Sumit Semwal <sumit.semwal@linaro.org> wrote:
+>
+> Hi Simon,
+>
+> On Thu, 28 Jan 2021 at 20:01, Simon Ser <contact@emersion.fr> wrote:
+> >
+> > On Thursday, January 28th, 2021 at 1:03 PM, Sumit Semwal <sumit.semwal@linaro.org> wrote:
+> >
+> > > Since he didn't comment over Hridya's last clarification about the
+> > > tracepoints to track total GPU memory allocations being orthogonal to
+> > > this series, I assumed he agreed with it.
+> >
+> > IIRC he's away this week. (I don't remember when he comes back.)
+> >
+> > > Daniel, do you still have objections around adding this patch in?
+> >
+> > (Adding him explicitly in CC)
+> Thanks for doing this!
+>
+> Best,
+> Sumit.
 
-Hello,
+Thank you all for the help :)
 
-This patch series contains Sony imx334 sensor driver and device tree binding document.
-
-A v4l2 sub-device driver for the Sony imx334 image sensor is added.
-This is a camera sensor using the i2c bus for control and the
-csi-2 bus for data.
-
-The following features are supported:
-- manual exposure and analog gain control support
-- vblank/hblank/pixel rate control support
-- supported resolution:
-    - 3840x2160 @ 60fps
-- supported bayer order output:
-    - SRGGB12
-
-v1: https://patchwork.kernel.org/project/linux-media/list/?series=388393
-
-v1->v2:
-- dt-bindings doc fixes
-- minor cosmetic changes
-- improvement in write_reg()
-- set all media bus format fields to pass v4l2-compliance test
-- remove link_validate from source entity
-
-v2: https://patchwork.kernel.org/project/linux-media/list/?series=396393
-
-v2->v3:
-- small cosmetic changes
-
-v3: https://patchwork.kernel.org/project/linux-media/list/?series=397689
-
-v3->v4:
-- fix read/write_reg() functions
-
-v4: https://patchwork.kernel.org/project/linux-media/list/?series=400459
-
-v4->v5:
-- add link-frequencies in dt-bindings doc
-- edit required properties in db-bindings doc
-- fix data_buf overrun in read_reg()
-- add function to parse dt configuration
-- allow cahnging vblank in power off state
-- change lpfr and ppln with vblank and hblank in mode description
-
-Best Regards,
-Martina
-
-
-Martina Krasteva (2):
-  dt-bindings: media: Add bindings for imx334
-  media: i2c: Add imx334 camera sensor driver
-
- .../devicetree/bindings/media/i2c/sony,imx334.yaml |   77 ++
- MAINTAINERS                                        |    9 +
- drivers/media/i2c/Kconfig                          |   14 +
- drivers/media/i2c/Makefile                         |    1 +
- drivers/media/i2c/imx334.c                         | 1097 ++++++++++++++++++++
- 5 files changed, 1198 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
- create mode 100644 drivers/media/i2c/imx334.c
-
-
-base-commit: fd821bf0ed9a7db09d2e007df697f4d9ecfda99a
--- 
-2.11.0
-
+Regards,
+Hridya
