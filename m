@@ -7,111 +7,61 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A222BC433DB
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B45BC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:48:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54B5B64EAA
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:44:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA5B864EA4
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:48:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbhBAJon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Feb 2021 04:44:43 -0500
-Received: from smtp2.macqel.be ([109.135.2.61]:26097 "EHLO smtp2.macqel.be"
+        id S232593AbhBAJsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Feb 2021 04:48:47 -0500
+Received: from retiisi.eu ([95.216.213.190]:60090 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231598AbhBAJon (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Feb 2021 04:44:43 -0500
-X-Greylist: delayed 554 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Feb 2021 04:44:42 EST
-Received: from localhost (localhost [127.0.0.1])
-        by smtp2.macqel.be (Postfix) with ESMTP id 8B168158AC7;
-        Mon,  1 Feb 2021 10:34:42 +0100 (CET)
-X-Virus-Scanned: amavisd-new at macqel.be
-Received: from smtp2.macqel.be ([127.0.0.1])
-        by localhost (mail.macqel.be [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VgeHPe7ClAmH; Mon,  1 Feb 2021 10:34:40 +0100 (CET)
-Received: from perdita.MACQEL (perdita.macqel [10.1.40.53])
-        by smtp2.macqel.be (Postfix) with ESMTP id C6540158AC3;
-        Mon,  1 Feb 2021 10:34:40 +0100 (CET)
-Received: from perdita.MACQEL (localhost [127.0.0.1])
-        by perdita.MACQEL (8.14.4/8.14.4/SuSE Linux 0.8) with ESMTP id 1119YcYJ028880;
-        Mon, 1 Feb 2021 10:34:40 +0100
-Received: (from p6@localhost)
-        by perdita.MACQEL (8.14.4/8.14.4/Submit) id 1119YcdU028868;
-        Mon, 1 Feb 2021 10:34:38 +0100
-X-Authentication-Warning: perdita.MACQEL: p6 set sender to phdm@macq.eu using -f
-From:   Philippe De Muyter <phdm@macqel.be>
+        id S232290AbhBAJsr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Feb 2021 04:48:47 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 7B5EE634C92;
+        Mon,  1 Feb 2021 11:46:47 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Cc:     Philippe De Muyter <phdm@macqel.be>
-Subject: [PATCH] media: add V4L2_BUF_FLAG_TIMESTAMP_UTC and V4L2_BUF_FLAG_TIMESTAMP_TAI.
-Date:   Mon,  1 Feb 2021 10:34:08 +0100
-Message-Id: <1612172048-28830-1-git-send-email-phdm@macqel.be>
-X-Mailer: git-send-email 1.8.4
+Cc:     djrscally@gmail.com
+Subject: [PATCH 1/1] Documentation: media: camera-sensor: The unit of hblank is pixels
+Date:   Mon,  1 Feb 2021 11:39:14 +0200
+Message-Id: <20210201093914.12994-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN and
-V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC were added long ago, no other flag
-was introduced to indicate precisely the reference clock used for
-timestamps associated to v4l2 buffers.  Add here the ability for drivers
-to use the realtime (= UTC) or TAI clock.
+The unit of the horizontal blanking control on raw sensors is pixels, not
+lines. Document this correctly.
 
-Signed-off-by: Philippe De Muyter <phdm@macqel.be>
+Fixes: e4cf8c58af75 ("media: Documentation: media: Document how to write camera sensor drivers")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/userspace-api/media/v4l/buffer.rst | 14 ++++++++++++++
- include/trace/events/v4l2.h                      |  2 ++
- include/uapi/linux/videodev2.h                   |  2 ++
- 3 files changed, 18 insertions(+)
+ Documentation/driver-api/media/camera-sensor.rst | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-index 1b0fdc1..44cb59b 100644
---- a/Documentation/userspace-api/media/v4l/buffer.rst
-+++ b/Documentation/userspace-api/media/v4l/buffer.rst
-@@ -637,6 +637,20 @@ Buffer Flags
-       - The buffer timestamp has been taken from the ``CLOCK_MONOTONIC``
- 	clock. To access the same clock outside V4L2, use
- 	:c:func:`clock_gettime`.
-+    * .. _`V4L2-BUF-FLAG-TIMESTAMP-UTC`:
-+
-+      - ``V4L2_BUF_FLAG_TIMESTAMP_UTC``
-+      - 0x00008000
-+      - The buffer timestamp has been taken from the ``CLOCK_REALTIME``
-+	clock. To access the same clock outside V4L2, use
-+	:c:func:`clock_gettime`.
-+    * .. _`V4L2-BUF-FLAG-TIMESTAMP-TAI`:
-+
-+      - ``V4L2_BUF_FLAG_TIMESTAMP_TAI``
-+      - 0x0000a000
-+      - The buffer timestamp has been taken from the ``CLOCK_TAI``
-+	clock. To access the same clock outside V4L2, use
-+	:c:func:`clock_gettime`.
-     * .. _`V4L2-BUF-FLAG-TIMESTAMP-COPY`:
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index 3fc378b3b269..9c863e3a79ba 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -94,9 +94,10 @@ large variety of devices beyond camera sensors. Devices that have no analogue
+ crop, use the full source image size, i.e. pixel array size.
  
-       - ``V4L2_BUF_FLAG_TIMESTAMP_COPY``
-diff --git a/include/trace/events/v4l2.h b/include/trace/events/v4l2.h
-index 248bc09..ce93c88 100644
---- a/include/trace/events/v4l2.h
-+++ b/include/trace/events/v4l2.h
-@@ -88,6 +88,8 @@
- 		{ V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN,   "TIMESTAMP_UNKNOWN" },   \
- 		{ V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC, "TIMESTAMP_MONOTONIC" }, \
- 		{ V4L2_BUF_FLAG_TIMESTAMP_COPY,	     "TIMESTAMP_COPY" },      \
-+		{ V4L2_BUF_FLAG_TIMESTAMP_UTC,	     "TIMESTAMP_UTC" },       \
-+		{ V4L2_BUF_FLAG_TIMESTAMP_TAI,	     "TIMESTAMP_TAI" },       \
- 		{ V4L2_BUF_FLAG_LAST,                "LAST" })
+ Horizontal and vertical blanking are specified by ``V4L2_CID_HBLANK`` and
+-``V4L2_CID_VBLANK``, respectively. The unit of these controls are lines. The
+-pixel rate is specified by ``V4L2_CID_PIXEL_RATE`` in the same sub-device. The
+-unit of that control is Hz.
++``V4L2_CID_VBLANK``, respectively. The unit of the ``V4L2_CID_HBLANK`` control
++is pixels and the unit of the ``V4L2_CID_VBLANK`` is lines. The pixel rate is
++specified by ``V4L2_CID_PIXEL_RATE`` in the same sub-device. The unit of that
++control is Hz.
  
- #define show_timecode_flags(flags)					  \
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 79dbde3..87502ab 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1101,6 +1101,8 @@ static inline __u64 v4l2_timeval_to_ns(const struct timeval *tv)
- #define V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN		0x00000000
- #define V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC	0x00002000
- #define V4L2_BUF_FLAG_TIMESTAMP_COPY		0x00004000
-+#define V4L2_BUF_FLAG_TIMESTAMP_UTC		0x00008000
-+#define V4L2_BUF_FLAG_TIMESTAMP_TAI		0x0000a000
- /* Timestamp sources. */
- #define V4L2_BUF_FLAG_TSTAMP_SRC_MASK		0x00070000
- #define V4L2_BUF_FLAG_TSTAMP_SRC_EOF		0x00000000
+ Register list based drivers need to implement read-only sub-device nodes for the
+ purpose. Devices that are not register list based need these to configure the
 -- 
-1.8.4
+2.29.2
 
