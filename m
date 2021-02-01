@@ -2,109 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C6DDC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A222BC433DB
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:44:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C90164E3A
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:42:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54B5B64EAA
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 09:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbhBAJma (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Feb 2021 04:42:30 -0500
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:40119 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232850AbhBAJm3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Feb 2021 04:42:29 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 6ViJludMeefbk6ViMlfwZu; Mon, 01 Feb 2021 10:41:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1612172507; bh=tPosW/k/pWCj/QgMFMzdRDXjw+W9gGArNvQheHav0FA=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=MiIpMN2QPD1dayOkyR9DNxLwXMzmG/H9fHIdhQp4xXshMqMy+mx6sOj04VB731Wqp
-         txTP6tsXO8w8i6o368foIKcCpXlmLPHhWQSiO7l9Y6lmEZvwrXEcZsXFOGc5supp5Z
-         eaqAD1AH0uVKX9DAp4OKV8LpdOjPymqErxNpEHeY5tOqVOXA+0MXV3lRDdQHiOyX1t
-         F/C5bQntyqGKTKdiNn66OJJhJ3zMY/aGuIq9OOHGdW6VhJcMUNkDwygAMco45mXg/3
-         5yZQSYAEiiHrsQaN/Cm40+gdsLPAxzVvOP71VJ+Cx7TLGcJUTQHhISzIxEkBtFS3ju
-         ZlTBw4h8A0tqQ==
-Subject: Re: Failing V4l2-compliance test with a sensor driver
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <1821bd61-818f-5e1b-156a-3c72b2bca800@xs4all.nl>
- <20210115183449.xrkl6u2sk2su7zgp@basti-TUXEDO-Book-XA1510>
- <b4a9a516-88bb-c278-0088-d652ec588556@collabora.com>
- <20210118071500.x7e2pdszql44ncba@basti-TUXEDO-Book-XA1510>
- <bea28ee9-0cb4-4849-5e73-96e6ef1f945a@xs4all.nl>
- <20210118180306.aai3zfo5xpcr3y32@basti-TUXEDO-Book-XA1510>
- <cb50dc5e-33c6-d002-a31a-af91bbec6d6e@collabora.com>
- <7b77875c-5339-1c90-a6d8-304d56097861@xs4all.nl>
- <20210119191634.nolxxbisfdgm4gj7@basti-TUXEDO-Book-XA1510>
- <06878d92-70c2-ca24-b6c7-032becb0a0f6@xs4all.nl>
- <20210120183054.5ltnjdtrmumplevt@basti-TUXEDO-Book-XA1510>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <57a70cb9-c3b6-7de1-2109-f017284196a2@xs4all.nl>
-Date:   Mon, 1 Feb 2021 10:41:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210120183054.5ltnjdtrmumplevt@basti-TUXEDO-Book-XA1510>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfPLJvjPvavhxHM8/WcqHc+bGNqjw2wcoe6sPpWwqpFEPhRmSuCPFwjaVl3KZ0Bcc/2sGgQEO+phEkuG6vWtm08xRh3/6UAI82mPSSiybzH0nAgLxmBBJ
- n5S8vm2PR+IGS8tfh1dqoW4YgiWUeKTYhUNNWc7X6jehfpq1hFHzMT2Vzl5dysTmDixviqc7VAQ5k3IWHx1emcINDO7RqkAGG7KQwJfSVwwkG12UNO3/3pGl
- kRIT/XQowq+3rpGaQ2Jyax9rAa61KVRwhDgEMPtYclcqjF/TLdkhEHARKIhdZkCmbvTfxyh5I98c/YMe+xKjig==
+        id S232363AbhBAJon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Feb 2021 04:44:43 -0500
+Received: from smtp2.macqel.be ([109.135.2.61]:26097 "EHLO smtp2.macqel.be"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231598AbhBAJon (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Feb 2021 04:44:43 -0500
+X-Greylist: delayed 554 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Feb 2021 04:44:42 EST
+Received: from localhost (localhost [127.0.0.1])
+        by smtp2.macqel.be (Postfix) with ESMTP id 8B168158AC7;
+        Mon,  1 Feb 2021 10:34:42 +0100 (CET)
+X-Virus-Scanned: amavisd-new at macqel.be
+Received: from smtp2.macqel.be ([127.0.0.1])
+        by localhost (mail.macqel.be [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VgeHPe7ClAmH; Mon,  1 Feb 2021 10:34:40 +0100 (CET)
+Received: from perdita.MACQEL (perdita.macqel [10.1.40.53])
+        by smtp2.macqel.be (Postfix) with ESMTP id C6540158AC3;
+        Mon,  1 Feb 2021 10:34:40 +0100 (CET)
+Received: from perdita.MACQEL (localhost [127.0.0.1])
+        by perdita.MACQEL (8.14.4/8.14.4/SuSE Linux 0.8) with ESMTP id 1119YcYJ028880;
+        Mon, 1 Feb 2021 10:34:40 +0100
+Received: (from p6@localhost)
+        by perdita.MACQEL (8.14.4/8.14.4/Submit) id 1119YcdU028868;
+        Mon, 1 Feb 2021 10:34:38 +0100
+X-Authentication-Warning: perdita.MACQEL: p6 set sender to phdm@macq.eu using -f
+From:   Philippe De Muyter <phdm@macqel.be>
+To:     linux-media@vger.kernel.org
+Cc:     Philippe De Muyter <phdm@macqel.be>
+Subject: [PATCH] media: add V4L2_BUF_FLAG_TIMESTAMP_UTC and V4L2_BUF_FLAG_TIMESTAMP_TAI.
+Date:   Mon,  1 Feb 2021 10:34:08 +0100
+Message-Id: <1612172048-28830-1-git-send-email-phdm@macqel.be>
+X-Mailer: git-send-email 1.8.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sebastian,
+Since V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN and
+V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC were added long ago, no other flag
+was introduced to indicate precisely the reference clock used for
+timestamps associated to v4l2 buffers.  Add here the ability for drivers
+to use the realtime (= UTC) or TAI clock.
 
-On 20/01/2021 19:30, Sebastian Fricke wrote:
-> Hello Hans,
-> 
-> On 20.01.2021 11:16, Hans Verkuil wrote:
->> On 19/01/2021 20:16, Sebastian Fricke wrote:
->>
->> <snip>
->>
->>> I gathered all the information you require within this paste-bin:
->>> https://paste.debian.net/1181807/
->>
->> Hmm, the problem is that v4l2-compliance can't find the media controller
->> that the subdev is part of.
->>
->> What is the output of:
->>
->> ls -l /sys/class/video4linux/v4l-subdev3
->>
->> There should be a 'device' link listed.
->>
->> Please also show the output of:
->>
->> ls -l /sys/class/video4linux/v4l-subdev3/device/
->>
->> If I compare this with the vimc test driver (using v4l-subdev0) there is a
->> media0 directory in /sys/class/video4linux/v4l-subdev0/device/ which is
->> the media controller that the subdev is associated with.
-> 
-> There is no `media0` folder for the ov13850 subdevice :/ I have captured
-> the output for all of the subdevices as comparision.
-> 
-> https://paste.debian.net/1181951/
+Signed-off-by: Philippe De Muyter <phdm@macqel.be>
+---
+ Documentation/userspace-api/media/v4l/buffer.rst | 14 ++++++++++++++
+ include/trace/events/v4l2.h                      |  2 ++
+ include/uapi/linux/videodev2.h                   |  2 ++
+ 3 files changed, 18 insertions(+)
 
-I figured out why this no longer works and I proposed a better mechanism:
+diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
+index 1b0fdc1..44cb59b 100644
+--- a/Documentation/userspace-api/media/v4l/buffer.rst
++++ b/Documentation/userspace-api/media/v4l/buffer.rst
+@@ -637,6 +637,20 @@ Buffer Flags
+       - The buffer timestamp has been taken from the ``CLOCK_MONOTONIC``
+ 	clock. To access the same clock outside V4L2, use
+ 	:c:func:`clock_gettime`.
++    * .. _`V4L2-BUF-FLAG-TIMESTAMP-UTC`:
++
++      - ``V4L2_BUF_FLAG_TIMESTAMP_UTC``
++      - 0x00008000
++      - The buffer timestamp has been taken from the ``CLOCK_REALTIME``
++	clock. To access the same clock outside V4L2, use
++	:c:func:`clock_gettime`.
++    * .. _`V4L2-BUF-FLAG-TIMESTAMP-TAI`:
++
++      - ``V4L2_BUF_FLAG_TIMESTAMP_TAI``
++      - 0x0000a000
++      - The buffer timestamp has been taken from the ``CLOCK_TAI``
++	clock. To access the same clock outside V4L2, use
++	:c:func:`clock_gettime`.
+     * .. _`V4L2-BUF-FLAG-TIMESTAMP-COPY`:
+ 
+       - ``V4L2_BUF_FLAG_TIMESTAMP_COPY``
+diff --git a/include/trace/events/v4l2.h b/include/trace/events/v4l2.h
+index 248bc09..ce93c88 100644
+--- a/include/trace/events/v4l2.h
++++ b/include/trace/events/v4l2.h
+@@ -88,6 +88,8 @@
+ 		{ V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN,   "TIMESTAMP_UNKNOWN" },   \
+ 		{ V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC, "TIMESTAMP_MONOTONIC" }, \
+ 		{ V4L2_BUF_FLAG_TIMESTAMP_COPY,	     "TIMESTAMP_COPY" },      \
++		{ V4L2_BUF_FLAG_TIMESTAMP_UTC,	     "TIMESTAMP_UTC" },       \
++		{ V4L2_BUF_FLAG_TIMESTAMP_TAI,	     "TIMESTAMP_TAI" },       \
+ 		{ V4L2_BUF_FLAG_LAST,                "LAST" })
+ 
+ #define show_timecode_flags(flags)					  \
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 79dbde3..87502ab 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1101,6 +1101,8 @@ static inline __u64 v4l2_timeval_to_ns(const struct timeval *tv)
+ #define V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN		0x00000000
+ #define V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC	0x00002000
+ #define V4L2_BUF_FLAG_TIMESTAMP_COPY		0x00004000
++#define V4L2_BUF_FLAG_TIMESTAMP_UTC		0x00008000
++#define V4L2_BUF_FLAG_TIMESTAMP_TAI		0x0000a000
+ /* Timestamp sources. */
+ #define V4L2_BUF_FLAG_TSTAMP_SRC_MASK		0x00070000
+ #define V4L2_BUF_FLAG_TSTAMP_SRC_EOF		0x00000000
+-- 
+1.8.4
 
-https://patchwork.linuxtv.org/project/linux-media/cover/20210201093659.2945449-1-hverkuil-cisco@xs4all.nl/
-
-Regards,
-
-	Hans
