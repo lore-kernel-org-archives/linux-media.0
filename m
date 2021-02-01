@@ -2,231 +2,151 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74AC3C433E0
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 13:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC683C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 13:59:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E9F864E8F
-	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 13:41:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9843364E97
+	for <linux-media@archiver.kernel.org>; Mon,  1 Feb 2021 13:59:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbhBANk5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Feb 2021 08:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S231657AbhBAN67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Feb 2021 08:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbhBANk4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Feb 2021 08:40:56 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65EDC061573;
-        Mon,  1 Feb 2021 05:40:15 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dbd4xkyj7wcfw2k22jcct-3.rev.dnainternet.fi [IPv6:2001:14ba:8f1:3400:fb90:892b:22d6:3885])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id DB8BD1B0039A;
-        Mon,  1 Feb 2021 15:40:10 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1612186811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OkI1JNtw0Xal9WHkoR/QpG6O9dg+7qJWczM5eRfGy7g=;
-        b=NONgVykmpdi7vvXK2PO4MjqG0OKypiZPV+ty4N01GBLCG4iy2h4fQjbZ9BE8WfCgcyFtqc
-        2n9T28JJGegO2qLTvcQADL4bILhyiPKp9TeGtnf6V7+BhERZRNGftimewd1l3gxW3PSQ/K
-        v3y0+5tgpE90Y1zZCJAEciscT+E5GKdXQRwF5ezIRqBH8ajYyjUTuDOj/2osenI/uC00k4
-        KVfbxGrK5iltbFX+P8+44Kbj1c70XBPVRVC0fsxPH4Fm8p3hfH+aW8BlZMm45SaXnpoZQp
-        6wINeSuaQMOLuOU52LUX5Y3adSes/T/+XmV8BOjIcSIW2NxN8mjsZ/Y+IDjfWA==
-Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id B63A6634C92;
-        Mon,  1 Feb 2021 15:39:55 +0200 (EET)
-Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
-        by valkosipuli.localdomain with esmtp (Exim 4.92)
-        (envelope-from <sakari.ailus@iki.fi>)
-        id 1l6ZR1-0000hG-Tn; Mon, 01 Feb 2021 15:40:07 +0200
-Date:   Mon, 1 Feb 2021 15:40:07 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, todor.too@gmail.com,
-        mchehab@kernel.org, robh+dt@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com,
-        geert+renesas@glider.be, arnd@arndb.de, Anson.Huang@nxp.com,
-        michael@walle.cc, agx@sigxcpu.org, max.oss.09@gmail.com,
-        angelogioacchino.delregno@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonathan Marek <jonathan@marek.ca>
-Subject: Re: [PATCH v3 10/22] media: camss: Add support for CSIPHY hardware
- version Titan 170
-Message-ID: <20210201134007.GE3@valkosipuli.retiisi.org.uk>
-References: <20210127144930.2158242-1-robert.foss@linaro.org>
- <20210127144930.2158242-11-robert.foss@linaro.org>
+        with ESMTP id S232444AbhBAN6y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Feb 2021 08:58:54 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62F8C061573
+        for <linux-media@vger.kernel.org>; Mon,  1 Feb 2021 05:58:13 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id u25so22818175lfc.2
+        for <linux-media@vger.kernel.org>; Mon, 01 Feb 2021 05:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cFnUc2+nrNornwjK6mmZjlPqDUzEfZSeHySFLBDmG3Y=;
+        b=G5XP4HecoigwGqVzmXdnnW+DYCJcpfFRbidDzUZNrFq7DZ840yF00CBVXuHTehIZRr
+         dlk1YlGMAw8k4UWzaLaV2hB/H5ZgLFD/lBR2tnLZHC7rpEPOFNoLeYj8c28BbS2naYXW
+         K4WZ5WpiZgayVPGLPf4UgtvTiTgIyg+zKUlhU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cFnUc2+nrNornwjK6mmZjlPqDUzEfZSeHySFLBDmG3Y=;
+        b=T0TWOmerZFx+UrVCRo/lX+Kt7K7tZ+sXetbMRkYLtL5lCotYN364FLvka2SNsB9XRX
+         +KANDWLyVKdANV6fEiHq9ynmxeQzmmM2OsJW9T/f3eqtQdC8Sj/7lkt3a3b4lnvN0bDy
+         /1ITytqq0azHE14NH2kC9oR0gZssvRJ7sXu1wsBIGTmX5GVrDGSdcpUct0nYg59U2AUr
+         XkTZVmtJDDk114mg8DlTyU38Hu84Enxi2bUgX+jwIVPNy63xry2OWoQ+Jcc6YqHaVfrj
+         ONGI+YQj2kqhnXAZ6zkSkzjzlBCESSTHdCqcJnOQoRpJGBV1kCIx2pOilX1iC6MHg40M
+         Co/w==
+X-Gm-Message-State: AOAM533J1NWu1Z6GRWFUOtU3y9BQbWTbyzZnZ/6PXDyljPPmXYQJqV82
+        Yqn7RCwl8dLSEesRec82ZBvYu1Swpc4DjA==
+X-Google-Smtp-Source: ABdhPJz4Usp/cggz3rU//kHVoH0TN03xkGRjgpd4mMif0VVzosxFG28g/ZkWMIDB1VXA60ZnpRu2nQ==
+X-Received: by 2002:a05:6512:310:: with SMTP id t16mr9120149lfp.598.1612187891933;
+        Mon, 01 Feb 2021 05:58:11 -0800 (PST)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id x4sm3011488lfe.255.2021.02.01.05.58.11
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Feb 2021 05:58:11 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id l12so19692331ljc.3
+        for <linux-media@vger.kernel.org>; Mon, 01 Feb 2021 05:58:11 -0800 (PST)
+X-Received: by 2002:a2e:a54f:: with SMTP id e15mr10332278ljn.441.1612187890843;
+ Mon, 01 Feb 2021 05:58:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210127144930.2158242-11-robert.foss@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1612186811; a=rsa-sha256;
-        cv=none;
-        b=RyJQBLcGrJOWPEu11MLWf1AV/oztOT08Kz2Dlya9hefcHpvFLZo5b8SDGG7YjfPZO87eT1
-        QEnEzauOPfXiiTijuivyMbE3jG3OYHblOngw27Xj4Vf6h24Rpvf7QgBhq5rYng5iO+Cmhu
-        0VQE87Z7Seks7IUJq6frZSSg3A0uBMwVpzRmV59QNjjQmO3pp4s1YwVROkagoi0+Kx1xB7
-        2s10C0J+qYa2c0nYmKekWMGOxlTzYNJqnmJUP9pWAosS6+VRC8VxOcZhnPm2LfwxIGOq+s
-        /L4lk5poUEJqsHs6YEtl8gvYSQL3zH/TE9LEPHUqXIqWr7+tbGUxEPyYqPTMTQ==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1612186811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OkI1JNtw0Xal9WHkoR/QpG6O9dg+7qJWczM5eRfGy7g=;
-        b=LlPD+zgot2cSVqfLenc/LZaVyiQN7fGYOOhE+DChsJgMr6iMrj/DMIl8VZrVmRjjBmfRyz
-        QoAPyBpC8Bq0CyfbxJva+HU+O92v0kk78GdQZFnpPvu5YUEyAL1vt+ejSUABB1/5xCFE/q
-        sc/7yEifKWGje9LrBjPa+RsTpRP59a2W9xovihjctQWdR85DVvaP9kEEw6U58TkOXX8Lhc
-        Ee/tZdJzsIB2DWYgSZnG0NVqIebJ4WBk2wrko5b0bFJTHizKdoFe5c8JbaZJFGaMQOYmd5
-        ciSN7Ccg4utoXlCsFXrIDCfLW3CM7k43NR9f3gQiAgJZxf7qz5pV/jLOY/y1/g==
+References: <CAPY8ntCzAMsfujidsLKcL=f61T7WmioWSeaHL2hKmEn1jrnZ=A@mail.gmail.com>
+In-Reply-To: <CAPY8ntCzAMsfujidsLKcL=f61T7WmioWSeaHL2hKmEn1jrnZ=A@mail.gmail.com>
+From:   Alexandre Courbot <acourbot@chromium.org>
+Date:   Mon, 1 Feb 2021 22:57:59 +0900
+X-Gmail-Original-Message-ID: <CAPBb6MVj9QT+NrWjt+c2uFKWSzveMCBt4YJfnOz_MN0hDemcpw@mail.gmail.com>
+Message-ID: <CAPBb6MVj9QT+NrWjt+c2uFKWSzveMCBt4YJfnOz_MN0hDemcpw@mail.gmail.com>
+Subject: Re: Stateful Video Decoder interface vs M2M framework
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Robert,
+Hi,
 
-On Wed, Jan 27, 2021 at 03:49:18PM +0100, Robert Foss wrote:
-> Add register definitions for version 170 of the Titan architecture
-> and implement support for the CSIPHY subdevice.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
->  .../qcom/camss/camss-csiphy-3ph-1-0.c         | 182 ++++++++++++++++--
->  .../media/platform/qcom/camss/camss-csiphy.c  |  66 +++++--
->  drivers/media/platform/qcom/camss/camss.c     |  74 +++++++
->  3 files changed, 290 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> index 97cb9de85031..8cf1440b7d70 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> @@ -47,6 +47,105 @@
->  #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID	BIT(1)
->  #define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(n)	(0x8b0 + 0x4 * (n))
->  
-> +#define CSIPHY_DEFAULT_PARAMS            0
-> +#define CSIPHY_LANE_ENABLE               1
-> +#define CSIPHY_SETTLE_CNT_LOWER_BYTE     2
-> +#define CSIPHY_SETTLE_CNT_HIGHER_BYTE    3
-> +#define CSIPHY_DNP_PARAMS                4
-> +#define CSIPHY_2PH_REGS                  5
-> +#define CSIPHY_3PH_REGS                  6
-> +
-> +struct csiphy_reg_t {
-> +	int32_t  reg_addr;
-> +	int32_t  reg_data;
-> +	int32_t  delay;
-> +	uint32_t csiphy_param_type;
-> +};
-> +
-> +static struct
+On Mon, Feb 1, 2021 at 9:49 PM Dave Stevenson
+<dave.stevenson@raspberrypi.com> wrote:
+>
+> Hi All.
+>
+> I'm currently doing battle with the stateful video decoder API for
+> video decode on the Raspberry Pi.
+>
+> Reading the descriptive docs[1] there is no obligation to
+> STREAMON(CAPTURE) before feeding in OUTPUT buffers and waiting for
+> V4L2_EVENT_SOURCE_CHANGE to configure the CAPTURE queue. Great! It
+> makes my colleague who is working on the userspace side happy as it
+> saves a config step of allocating buffers that are never needed.
+>
+> I have been using the v4l2_mem2mem framework, same as some other
+> decoders. We use v4l2_m2m in the buffered mode as it's actually
+> remoted over to the VPU via the MMAL API, and so the src and dest are
+> asynchronous from V4L2's perspective.
+>
+> Said colleague then complained that he couldn't follow the flow
+> described in the docs linked above as it never produced the
+> V4L2_EVENT_SOURCE_CHANGE event.
+>
+> Digging into it, it's the v4l2_mem2mem framework stopping me.
+> __v4l2_m2m_try_queue[2] has
+>     if (!m2m_ctx->out_q_ctx.q.streaming
+>         || !m2m_ctx->cap_q_ctx.q.streaming) {
+>         dprintk("Streaming needs to be on for both queues\n");
+>         return;
+>     }
+> So I'm never going to get any of the OUTPUT buffers even queued to my
+> driver until STREAMON(CAPTURE). That contradicts the documentation :-(
+>
+> Now I can see that on a non-buffered M2M device you have to have both
+> OUTPUT and CAPTURE enabled because it wants to produce a CAPTURE
+> buffer for every OUTPUT buffer on a 1:1 basis. On a buffered codec
+> tweaking that one clause to
+>     if (!m2m_ctx->out_q_ctx.buffered &&
+>         (!m2m_ctx->out_q_ctx.q.streaming ||
+>          !m2m_ctx->cap_q_ctx.q.streaming)) {
+> solves the problem, but is that a generic solution? I don't have any
+> other platforms to test against.
 
-This should be const.
+As you said you cannot rely on the v4l2_m2m_try_schedule() to run the
+jobs until both queues are streaming. This is one point where stateful
+decoders do not fit with the expectation from M2M that 1 input buffer
+== 1 output buffer. How to work around this limitation depends on the
+design of the underlying hardware, but for example the mtk-vcodec
+driver passes the OUTPUT buffers to its hardware in its vb2 buf_queue
+hook:
 
-> +csiphy_reg_t lane_regs_sdm845[5][14] = {
-> +	{
-> +		{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x002C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0034, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x001C, 0x0A, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0014, 0x60, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0028, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x003C, 0xB8, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0000, 0x91, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0008, 0x00, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +		{0x000c, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x0010, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0038, 0xFE, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0060, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0064, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	},
-> +	{
-> +		{0x0704, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x072C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0734, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x071C, 0x0A, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0714, 0x60, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0728, 0x04, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x073C, 0xB8, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0700, 0x80, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0708, 0x14, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +		{0x070C, 0xA5, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0710, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0738, 0x1F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0760, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0764, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	},
-> +	{
-> +		{0x0204, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x022C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0234, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x021C, 0x0A, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0214, 0x60, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0228, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x023C, 0xB8, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0200, 0x91, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0208, 0x00, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +		{0x020C, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x0210, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0238, 0xFE, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0260, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0264, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	},
-> +	{
-> +		{0x0404, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x042C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0434, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x041C, 0x0A, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0414, 0x60, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0428, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x043C, 0xB8, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0400, 0x91, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0408, 0x00, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +		{0x040C, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x0410, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0438, 0xFE, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0460, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0464, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	},
-> +	{
-> +		{0x0604, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x062C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0634, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x061C, 0x0A, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0614, 0x60, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0628, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x063C, 0xB8, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0600, 0x91, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0608, 0x00, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +		{0x060C, 0x00, 0x00, CSIPHY_DNP_PARAMS},
-> +		{0x0610, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0638, 0xFE, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0660, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +		{0x0664, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	},
-> +};
+https://elixir.bootlin.com/linux/latest/source/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c#L1220
 
--- 
-Sakari Ailus
+This allows the hardware to start processing the stream until it
+reports the expected resolution, after which the CAPTURE buffers can
+be allocated and the CAPTURE queue started.
+
+Queueing OUTPUT buffers in the buf_queue hook can be done as a general
+rule if the hardware expects input and output buffers to be queued
+independently. You can also switch to a more traditional M2M scheme
+once both queues are running if this fits the driver better.
+
+>
+> However it poses a larger question for my colleague as to what
+> behaviour he can rely on in userspace. Is there a way for userspace to
+> know whether it is permitted on a specific codec implementation to
+> follow the docs and not STREAMON(CAPTURE) until
+> V4L2_EVENT_SOURCE_CHANGE? If not then the documentation is invalid for
+> many devices.
+
+The documentation should be correct for most if not all stateful
+decoders in the tree. I know firsthand that at least mtk-vcodec and
+venus are compliant.
+
+Cheers,
+Alex.
