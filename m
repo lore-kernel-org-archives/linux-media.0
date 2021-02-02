@@ -2,287 +2,181 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D19CC433E6
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 18:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE94BC433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 18:55:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E246B64E36
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 18:46:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3CBA64F4B
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 18:55:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238947AbhBBSqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 13:46:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56267 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233601AbhBBSmR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Feb 2021 13:42:17 -0500
-IronPort-SDR: 7+Ebp8P/sCdQbkZqj41cQh/oySY3OuH3IXlfb8/kmsiIHZLfl3LWMkXhBzyUfZOOXIAFf67KmH
- XFsHSefpf1AA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="199839406"
-X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="199839406"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 10:41:25 -0800
-IronPort-SDR: gvzDX6HxqwkR7FM9pX3K5Xq1CNIsxbpH7uoEGUDqxQwXZcvWzGFzg9Iz9roBC59JZ1eMA13SRW
- DQ9jF20g6B0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,396,1602572400"; 
-   d="scan'208";a="582138180"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2021 10:41:23 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l70c6-0009bJ-WD; Tue, 02 Feb 2021 18:41:22 +0000
-Date:   Wed, 03 Feb 2021 02:40:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [ragnatech:media-tree] BUILD SUCCESS
- 0b9112a58836ad6a7e84eebec06a2de9778b7573
-Message-ID: <60199cbb.B1baTbUktQAxZoIC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S239141AbhBBSy5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 13:54:57 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45906 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233679AbhBBOCO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 09:02:14 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 2DC1A1F44D83
+Subject: Re: [PATCH v5 13/13] media: Clarify v4l2-async subdevice addition API
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+References: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
+ <20210202135611.13920-14-sakari.ailus@linux.intel.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <969fb716-9d0b-cc44-1b5a-9def016c8f6b@collabora.com>
+Date:   Tue, 2 Feb 2021 11:01:21 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20210202135611.13920-14-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://git.ragnatech.se/linux media-tree
-branch HEAD: 0b9112a58836ad6a7e84eebec06a2de9778b7573  Merge tag 'v5.11-rc6' into patchwork
+Hi Sakari,
 
-elapsed time: 1999m
+On 2/2/21 10:56 AM, Sakari Ailus wrote:
+> From: Ezequiel Garcia <ezequiel@collabora.com>
+> 
+> Now that most users of v4l2_async_notifier_add_subdev have been converted,
+> let's fix the documentation so it's more clear how the v4l2-async API
+> should be used.
+> 
+> Document functions that drivers should use, and their purpose.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../driver-api/media/v4l2-subdev.rst          | 48 +++++++++++++++----
+>  include/media/v4l2-async.h                    | 15 ++++--
+>  2 files changed, 50 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+> index 0e82c77cf3e2..8b53da2f9c74 100644
+> --- a/Documentation/driver-api/media/v4l2-subdev.rst
+> +++ b/Documentation/driver-api/media/v4l2-subdev.rst
+> @@ -197,15 +197,45 @@ unregister the notifier the driver has to call
+>  takes two arguments: a pointer to struct :c:type:`v4l2_device` and a
+>  pointer to struct :c:type:`v4l2_async_notifier`.
+>  
+> -Before registering the notifier, bridge drivers must do two things:
+> -first, the notifier must be initialized using the
+> -:c:func:`v4l2_async_notifier_init`. Second, bridge drivers can then
+> -begin to form a list of subdevice descriptors that the bridge device
+> -needs for its operation. Subdevice descriptors are added to the notifier
+> -using the :c:func:`v4l2_async_notifier_add_subdev` call. This function
+> -takes two arguments: a pointer to struct :c:type:`v4l2_async_notifier`,
+> -and a pointer to the subdevice descripter, which is of type struct
+> -:c:type:`v4l2_async_subdev`.
+> +Before registering the notifier, bridge drivers must do two things: first, the
+> +notifier must be initialized using the :c:func:`v4l2_async_notifier_init`.
+> +Second, bridge drivers can then begin to form a list of subdevice descriptors
+> +that the bridge device needs for its operation. Several functions are available
+> +to add subdevice descriptors to a notifier, depending on the type of device and
+> +the needs of the driver.
+> +
+> +:c:func:`v4l2_async_notifier_add_fwnode_remote_subdev` and
+> +:c:func:`v4l2_async_notifier_add_i2c_subdev` are for bridge and ISP drivers for
+> +registering their async sub-devices with the notifier.
+> +
+> +:c:func:`v4l2_async_register_subdev_sensor_common` is a helper function for
+> +sensor drivers registering their own async sub-device, but it also registers a
+> +notifier and further registers async sub-devices for lens and flash devices
+> +found in firmware. The notifier for the sub-device is unregistered with the
+> +async sub-device.
+> +
+> +These functions allocate an async sub-device descriptor which is of type struct
+> +:c:type:`v4l2_async_subdev` embedded in a driver-specific struct. The &struct
+> +:c:type:`v4l2_async_subdev` shall be the first member of this struct:
+> +
+> +.. code-block:: c
+> +
+> +	struct my_async_subdev {
+> +		struct v4l2_async_subdev asd;
+> +		...
+> +	};
+> +
+> +	struct my_async_subdev *my_asd;
+> +	struct fwnode_handle *ep;
+> +
+> +	...
+> +
+> +	my_asd = v4l2_async_notifier_add_fwnode_remote_subdev(&notifier, ep,
+> +							      struct my_async_subdev);
+> +	fwnode_handle_put(ep);
+> +
+> +	if (IS_ERR(asd))
+> +		return PTR_ERR(asd);
+>  
+>  The V4L2 core will then use these descriptors to match asynchronously
+>  registered subdevices to them. If a match is detected the ``.bound()``
+> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> index 192a11bdc4ad..6dac6cb6290f 100644
+> --- a/include/media/v4l2-async.h
+> +++ b/include/media/v4l2-async.h
+> @@ -128,7 +128,12 @@ void v4l2_async_debug_init(struct dentry *debugfs_dir);
+>   * @notifier: pointer to &struct v4l2_async_notifier
+>   *
+>   * This function initializes the notifier @asd_list. It must be called
+> - * before the first call to @v4l2_async_notifier_add_subdev.
+> + * before adding a subdevice to a notifier, using one of:
+> + * @v4l2_async_notifier_add_fwnode_remote_subdev,
+> + * @v4l2_async_notifier_add_fwnode_subdev,
+> + * @v4l2_async_notifier_add_i2c_subdev,
+> + * @v4l2_async_notifier_add_subdev or
 
-configs tested: 217
-configs skipped: 3
+s/v4l2_async_notifier_add_subdev/__v4l2_async_notifier_add_subdev no? Since
+it got renamed on patch 11/13, or am I missing something?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> + * @v4l2_async_notifier_parse_fwnode_endpoints.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      tqm8xx_defconfig
-powerpc                     redwood_defconfig
-arm                        shmobile_defconfig
-arm                           sama5_defconfig
-sparc64                             defconfig
-mips                 decstation_r4k_defconfig
-m68k                       m5208evb_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    klondike_defconfig
-m68k                         amcore_defconfig
-powerpc                      ppc64e_defconfig
-arc                        vdk_hs38_defconfig
-powerpc                          g5_defconfig
-arm                          iop32x_defconfig
-powerpc                   currituck_defconfig
-riscv                          rv32_defconfig
-m68k                            q40_defconfig
-m68k                             allmodconfig
-powerpc                  storcenter_defconfig
-arm                           h5000_defconfig
-sh                           se7619_defconfig
-m68k                         apollo_defconfig
-csky                                defconfig
-c6x                        evmc6472_defconfig
-um                            kunit_defconfig
-sh                               allmodconfig
-sh                          rsk7203_defconfig
-powerpc                    adder875_defconfig
-powerpc                 mpc8313_rdb_defconfig
-m68k                          amiga_defconfig
-arm                       versatile_defconfig
-s390                             alldefconfig
-arm                          exynos_defconfig
-sh                              ul2_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                      footbridge_defconfig
-arm                       multi_v4t_defconfig
-sh                           sh2007_defconfig
-mips                malta_kvm_guest_defconfig
-powerpc                        fsp2_defconfig
-m68k                          sun3x_defconfig
-sh                             shx3_defconfig
-m68k                        m5272c3_defconfig
-i386                             allyesconfig
-mips                            ar7_defconfig
-sh                   secureedge5410_defconfig
-mips                         mpc30x_defconfig
-m68k                          hp300_defconfig
-powerpc                    mvme5100_defconfig
-arm                          gemini_defconfig
-arc                        nsim_700_defconfig
-arm                         palmz72_defconfig
-mips                  decstation_64_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                     powernv_defconfig
-mips                          rb532_defconfig
-powerpc                     tqm8540_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    amigaone_defconfig
-sh                          r7780mp_defconfig
-arm                             ezx_defconfig
-powerpc                         ps3_defconfig
-sh                          kfr2r09_defconfig
-nios2                         10m50_defconfig
-arm                      pxa255-idp_defconfig
-arm                        mini2440_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                            mmp2_defconfig
-powerpc                     tqm8555_defconfig
-arm                            hisi_defconfig
-m68k                            mac_defconfig
-m68k                           sun3_defconfig
-riscv                            allmodconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc64                        alldefconfig
-sh                     magicpanelr2_defconfig
-h8300                            allyesconfig
-sh                           se7206_defconfig
-arc                         haps_hs_defconfig
-mips                        qi_lb60_defconfig
-ia64                            zx1_defconfig
-m68k                        stmark2_defconfig
-arm                       aspeed_g4_defconfig
-sh                           se7712_defconfig
-um                             i386_defconfig
-arm                          pxa910_defconfig
-xtensa                         virt_defconfig
-arm                      tct_hammer_defconfig
-powerpc                     tqm5200_defconfig
-mips                         db1xxx_defconfig
-powerpc                     tqm8560_defconfig
-arm                           h3600_defconfig
-arm                            pleb_defconfig
-mips                        maltaup_defconfig
-arm                           tegra_defconfig
-arm                     davinci_all_defconfig
-powerpc                     taishan_defconfig
-arm                        neponset_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                        keystone_defconfig
-sh                          lboxre2_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                            mps2_defconfig
-mips                        bcm63xx_defconfig
-sh                        sh7763rdp_defconfig
-arm                         s5pv210_defconfig
-ia64                         bigsur_defconfig
-mips                      maltaaprp_defconfig
-powerpc                    socrates_defconfig
-arm                         s3c6400_defconfig
-ia64                          tiger_defconfig
-powerpc                      pmac32_defconfig
-mips                       lemote2f_defconfig
-c6x                        evmc6457_defconfig
-mips                           ip27_defconfig
-arm                        realview_defconfig
-arm                      integrator_defconfig
-s390                       zfcpdump_defconfig
-alpha                            alldefconfig
-mips                        omega2p_defconfig
-mips                      bmips_stb_defconfig
-xtensa                  audio_kc705_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210201
-i386                 randconfig-a005-20210201
-i386                 randconfig-a003-20210201
-i386                 randconfig-a006-20210201
-i386                 randconfig-a002-20210201
-i386                 randconfig-a004-20210201
-i386                 randconfig-a001-20210202
-i386                 randconfig-a005-20210202
-i386                 randconfig-a003-20210202
-i386                 randconfig-a006-20210202
-i386                 randconfig-a002-20210202
-i386                 randconfig-a004-20210202
-x86_64               randconfig-a013-20210202
-x86_64               randconfig-a014-20210202
-x86_64               randconfig-a015-20210202
-x86_64               randconfig-a016-20210202
-x86_64               randconfig-a011-20210202
-x86_64               randconfig-a012-20210202
-x86_64               randconfig-a006-20210201
-x86_64               randconfig-a001-20210201
-x86_64               randconfig-a005-20210201
-x86_64               randconfig-a002-20210201
-x86_64               randconfig-a004-20210201
-x86_64               randconfig-a003-20210201
-i386                 randconfig-a013-20210202
-i386                 randconfig-a016-20210202
-i386                 randconfig-a014-20210202
-i386                 randconfig-a012-20210202
-i386                 randconfig-a015-20210202
-i386                 randconfig-a011-20210202
-i386                 randconfig-a013-20210201
-i386                 randconfig-a016-20210201
-i386                 randconfig-a014-20210201
-i386                 randconfig-a012-20210201
-i386                 randconfig-a015-20210201
-i386                 randconfig-a011-20210201
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Should we mention this is deprecated? maybe just a parenthesis "(deprecated)"
 
-clang tested configs:
-x86_64               randconfig-a006-20210202
-x86_64               randconfig-a001-20210202
-x86_64               randconfig-a005-20210202
-x86_64               randconfig-a002-20210202
-x86_64               randconfig-a004-20210202
-x86_64               randconfig-a003-20210202
-x86_64               randconfig-a013-20210201
-x86_64               randconfig-a014-20210201
-x86_64               randconfig-a015-20210201
-x86_64               randconfig-a016-20210201
-x86_64               randconfig-a011-20210201
-x86_64               randconfig-a012-20210201
+>   */
+>  void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+>  
+> @@ -262,9 +267,11 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
+>   * sub-devices allocated for the purposes of the notifier but not the notifier
+>   * itself. The user is responsible for calling this function to clean up the
+>   * notifier after calling
+> - * @v4l2_async_notifier_add_subdev,
+> - * @v4l2_async_notifier_parse_fwnode_endpoints or
+> - * @v4l2_fwnode_reference_parse_sensor_common.
+> + * @v4l2_async_notifier_add_fwnode_remote_subdev,
+> + * @v4l2_async_notifier_add_fwnode_subdev,
+> + * @v4l2_async_notifier_add_i2c_subdev,
+> + * @v4l2_async_notifier_add_subdev or
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Same here.
+
+Regards,
+Helen
+
+> + * @v4l2_async_notifier_parse_fwnode_endpoints.
+>   *
+>   * There is no harm from calling v4l2_async_notifier_cleanup in other
+>   * cases as long as its memory has been zeroed after it has been
+> 
