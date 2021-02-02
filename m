@@ -2,194 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 806B8C433E6
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 01:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBFFC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 04:36:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 411CE64ED9
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 01:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88CC964EDE
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 04:36:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbhBBBI4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Feb 2021 20:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhBBBIz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Feb 2021 20:08:55 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF55C06174A
-        for <linux-media@vger.kernel.org>; Mon,  1 Feb 2021 17:08:15 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id c127so850074wmf.5
-        for <linux-media@vger.kernel.org>; Mon, 01 Feb 2021 17:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RndNhAUPEtKb/UpdxEGQ4FR5gEglHekd7o0mVZRrBqQ=;
-        b=otCvhmypBIsU0J/onWHBK+g2qEX0OxWIhiVfNvjAUaHwhT+ibJG+RaYiLpZ4TJyqmi
-         DdZq19Q3SPbdn5aBZf8+AsCdYBGuPkn8epCg2pdmaNFOqakpsJSEbCIbdtZXqIIWkJvw
-         bR7L4z770xZfS8N4HIPZJ7gQaQJfolmpybmdiMYDyEBe8U61fIp0/5Rr3ZFZob9kEXuq
-         X37WyIlu6xyWlRb0+xpJHTgVA9sgfB646kpTpUK6Ty0tMmS+D8JxtjcuGYCc1s5TtpEg
-         8BtJaDPbNBf1QOhhhalJ/yreI5AaQDA5s9vwf+9M5EcazIKaLfT9apknEvGrShR5jCQW
-         hd+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RndNhAUPEtKb/UpdxEGQ4FR5gEglHekd7o0mVZRrBqQ=;
-        b=Mu0rcEt6rdaFlLJgDM6eWbeqvpEANZDCPvScUeqbd2XGa8VHsh9Qm9gCAUFlvFionA
-         +ufOeZ0PnNaLMLkHPS3y9UrlRE4ohJGyu35pSFbyjDNjVoYdizDJ/LlNAohaAeEYOtGA
-         A8le2zdB8+juQklfkeme3HsqfHSP64spvsUCBuuQ7dge9p5kw+6D84GZ6V9THtxXXWE/
-         VwQFRtIAqPcF7zEipdWA0q+CC27RW0SstXiVSITDfgqx25+uxe+Vd0AHQBIdoHux8rmU
-         P3DGXjj2j08XpeKsdlSjEHwZSQ9wS/Z1GgCzYrplBaUExyhBjMqriTzU81WuI/gCU9wo
-         a2Sg==
-X-Gm-Message-State: AOAM533O0wZ+GHpaTdG7BrSDNhnfUngE3tQ71T81VIsBZFJrflhK7nQm
-        6wwkzf+bdtvmaA4S6GsWU6DUcBIkVYqSlUOmdZvU4g==
-X-Google-Smtp-Source: ABdhPJxyhZPweyEZdtVS8pbzENesvAgQg7GA6UjMKqYygX8k02wcRUHVoGOMkAll0W7ToHbbz9juQ18x6KIdTBOcux8=
-X-Received: by 2002:a05:600c:4fcb:: with SMTP id o11mr1232051wmq.88.1612228093600;
- Mon, 01 Feb 2021 17:08:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20210128083817.314315-1-surenb@google.com> <20210128091348.GA1962975@infradead.org>
- <CAJuCfpFUhJozS98WJpH0KQKBzyGXvqS1fitu-mgSyhaJ1xL8SQ@mail.gmail.com>
- <YBMAGRIwcbPF17cU@google.com> <CAJuCfpF78RYedBoAgkDdgMdfSmNwC2AQk-zZxAqkhCdtBB9gtQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpF78RYedBoAgkDdgMdfSmNwC2AQk-zZxAqkhCdtBB9gtQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 1 Feb 2021 17:08:02 -0800
-Message-ID: <CAJuCfpH5nwvtMR+32G0-xa_hY-b_Hnw=Figqq9xcsTGgJhOiww@mail.gmail.com>
-Subject: Re: [PATCH 1/1] dma-buf: heaps: Map system heap pages as managed by
- linux vm
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "(Exiting) Benjamin Gaignard" <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>, labbott@redhat.com,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Jones <jajones@nvidia.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S231756AbhBBEfw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Feb 2021 23:35:52 -0500
+Received: from mga12.intel.com ([192.55.52.136]:50389 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231747AbhBBEfq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Feb 2021 23:35:46 -0500
+IronPort-SDR: NTmQBTYFj4pzla/iuKIpuu8tN5pY8sQgWJSvDQ7WRtR4ZQOfccquhpcX+Q57YJxu8ZeTsB9WVP
+ d3HlV43RkN1g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="159962693"
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="159962693"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 20:34:53 -0800
+IronPort-SDR: 1CsSq5tEDkOngwM0H6tVxP6un+nQT6pqAceGkMclu1R4yWTKY0Sx5ai0bnFG2DEPFGYq6MdpJI
+ mn66z9CgsazQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="413014992"
+Received: from server-intel-chrome-camera.itwn.intel.com ([10.5.215.143])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Feb 2021 20:34:51 -0800
+From:   Shawnx Tu <shawnx.tu@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
+        shawnx.tu@intel.com, jim.lai@intel.com, bingbu.cao@intel.com
+Subject: [PATCH v1] ov5675: fix vflip/hflip control
+Date:   Tue,  2 Feb 2021 12:35:01 +0800
+Message-Id: <20210202043501.26660-1-shawnx.tu@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 11:00 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Jan 28, 2021 at 10:19 AM Minchan Kim <minchan@kernel.org> wrote:
-> >
-> > On Thu, Jan 28, 2021 at 09:52:59AM -0800, Suren Baghdasaryan wrote:
-> > > On Thu, Jan 28, 2021 at 1:13 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > > >
-> > > > On Thu, Jan 28, 2021 at 12:38:17AM -0800, Suren Baghdasaryan wrote:
-> > > > > Currently system heap maps its buffers with VM_PFNMAP flag using
-> > > > > remap_pfn_range. This results in such buffers not being accounted
-> > > > > for in PSS calculations because vm treats this memory as having no
-> > > > > page structs. Without page structs there are no counters representing
-> > > > > how many processes are mapping a page and therefore PSS calculation
-> > > > > is impossible.
-> > > > > Historically, ION driver used to map its buffers as VM_PFNMAP areas
-> > > > > due to memory carveouts that did not have page structs [1]. That
-> > > > > is not the case anymore and it seems there was desire to move away
-> > > > > from remap_pfn_range [2].
-> > > > > Dmabuf system heap design inherits this ION behavior and maps its
-> > > > > pages using remap_pfn_range even though allocated pages are backed
-> > > > > by page structs.
-> > > > > Clear VM_IO and VM_PFNMAP flags when mapping memory allocated by the
-> > > > > system heap and replace remap_pfn_range with vm_insert_page, following
-> > > > > Laura's suggestion in [1]. This would allow correct PSS calculation
-> > > > > for dmabufs.
-> > > > >
-> > > > > [1] https://driverdev-devel.linuxdriverproject.narkive.com/v0fJGpaD/using-ion-memory-for-direct-io
-> > > > > [2] http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2018-October/127519.html
-> > > > > (sorry, could not find lore links for these discussions)
-> > > > >
-> > > > > Suggested-by: Laura Abbott <labbott@kernel.org>
-> > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > > ---
-> > > > >  drivers/dma-buf/heaps/system_heap.c | 6 ++++--
-> > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-> > > > > index 17e0e9a68baf..0e92e42b2251 100644
-> > > > > --- a/drivers/dma-buf/heaps/system_heap.c
-> > > > > +++ b/drivers/dma-buf/heaps/system_heap.c
-> > > > > @@ -200,11 +200,13 @@ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-> > > > >       struct sg_page_iter piter;
-> > > > >       int ret;
-> > > > >
-> > > > > +     /* All pages are backed by a "struct page" */
-> > > > > +     vma->vm_flags &= ~VM_PFNMAP;
-> > > >
-> > > > Why do we clear this flag?  It shouldn't even be set here as far as I
-> > > > can tell.
-> > >
-> > > Thanks for the question, Christoph.
-> > > I tracked down that flag being set by drm_gem_mmap_obj() which DRM
-> > > drivers use to "Set up the VMA to prepare mapping of the GEM object"
-> > > (according to drm_gem_mmap_obj comments). I also see a pattern in
-> > > several DMR drivers to call drm_gem_mmap_obj()/drm_gem_mmap(), then
-> > > clear VM_PFNMAP and then map the VMA (for example here:
-> > > https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/rockchip/rockchip_drm_gem.c#L246).
-> > > I thought that dmabuf allocator (in this case the system heap) would
-> > > be the right place to set these flags because it controls how memory
-> > > is allocated before mapping. However it's quite possible that I'm
-> >
-> > However, you're not setting but removing a flag under the caller.
-> > It's different with appending more flags(e.g., removing condition
-> > vs adding more conditions). If we should remove the flag, caller
-> > didn't need to set it from the beginning. Hiding it under this API
-> > continue to make wrong usecase in future.
->
-> Which takes us back to the question of why VM_PFNMAP is being set by
-> the caller in the first place.
->
-> >
-> > > missing the real reason for VM_PFNMAP being set in drm_gem_mmap_obj()
-> > > before dma_buf_mmap() is called. I could not find the answer to that,
-> > > so I hope someone here can clarify that.
-> >
-> > Guess DRM had used carved out pure PFN memory long time ago and
-> > changed to use dmabuf since somepoint.
->
-> It would be really good to know the reason for sure to address the
-> issue properly.
->
-> > Whatever there is a history, rather than removing the flag
-> > under them, let's add WARN_ON(vma->vm_flags & VM_PFNMAP) so
-> > we could clean up catching them and start discussion.
->
-> The issue with not clearing the flag here is that vm_insert_page() has
-> a BUG_ON(vma->vm_flags & VM_PFNMAP). If we do not clear this flag I
-> suspect we will get many angry developers :)
-> If your above guess is correct and we can mandate dmabuf heap users
-> not to use VM_PFNMAP then I think the following code might be the best
-> way forward:
->
-> +       bool pfn_requested = !!(vma->vm_flags & VM_PFNMAP);
-> +.      WARN_ON_ONCE(pfn_requested);
->
->         for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
->                 struct page *page = sg_page_iter_page(&piter);
->
-> -               ret = remap_pfn_range(vma, addr, page_to_pfn(page), PAGE_SIZE,
-> -                                     vma->vm_page_prot);
-> +               ret = pfn_requested ?
-> +.                      remap_pfn_range(vma, addr, page_to_pfn(page), PAGE_SIZE,
-> +                                     vma->vm_page_prot) :
-> +                       vm_insert_page(vma, addr, page);
+From: Shawn Tu <shawnx.tu@intel.com>
 
-Folks, any objections to the approach above?
+Set/clear the bits to configure the register to expected value
+to assume the v/hflip state.
+
+Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+---
+ drivers/media/i2c/ov5675.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index 5e35808037ad..ae00d717e599 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -624,7 +624,7 @@ static int ov5675_set_ctrl_hflip(struct ov5675 *ov5675, u32 ctrl_val)
+ 
+ 	return ov5675_write_reg(ov5675, OV5675_REG_FORMAT1,
+ 				OV5675_REG_VALUE_08BIT,
+-				ctrl_val ? val & ~BIT(3) : val);
++				ctrl_val ? val & ~BIT(3) : val | BIT(3));
+ }
+ 
+ static int ov5675_set_ctrl_vflip(struct ov5675 *ov5675, u8 ctrl_val)
+@@ -639,7 +639,7 @@ static int ov5675_set_ctrl_vflip(struct ov5675 *ov5675, u8 ctrl_val)
+ 
+ 	ret = ov5675_write_reg(ov5675, OV5675_REG_FORMAT1,
+ 			       OV5675_REG_VALUE_08BIT,
+-			       ctrl_val ? val | BIT(4) | BIT(5)  : val);
++			       ctrl_val ? val | BIT(4) | BIT(5)  : val & ~BIT(4) & ~BIT(5));
+ 
+ 	if (ret)
+ 		return ret;
+@@ -652,7 +652,7 @@ static int ov5675_set_ctrl_vflip(struct ov5675 *ov5675, u8 ctrl_val)
+ 
+ 	return ov5675_write_reg(ov5675, OV5675_REG_FORMAT2,
+ 				OV5675_REG_VALUE_08BIT,
+-				ctrl_val ? val | BIT(1) : val);
++				ctrl_val ? val | BIT(1) : val & ~BIT(1));
+ }
+ 
+ static int ov5675_set_ctrl(struct v4l2_ctrl *ctrl)
+-- 
+2.17.1
+
