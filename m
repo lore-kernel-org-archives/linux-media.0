@@ -2,366 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9513FC433DB
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 07:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 346D9C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 08:36:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 50A2E64EE8
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 07:43:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E425A64F53
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 08:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbhBBHnc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 02:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S232464AbhBBIfh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 03:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbhBBHmz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 02:42:55 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB053C061573
-        for <linux-media@vger.kernel.org>; Mon,  1 Feb 2021 23:41:55 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id m6so13783027pfk.1
-        for <linux-media@vger.kernel.org>; Mon, 01 Feb 2021 23:41:55 -0800 (PST)
+        with ESMTP id S232253AbhBBIe2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 03:34:28 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D5BC06174A;
+        Tue,  2 Feb 2021 00:33:45 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id f14so4348899ejc.8;
+        Tue, 02 Feb 2021 00:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oQykFoC4igzaAGN1smzA1eOO+ArdBSIk2jifTuAEeJw=;
-        b=tmm5Bw1jGh2jTml0072qcFXEYMfN3AjX6VDSh0KZG4d2CMkzMAfAvs9VJNLN4O88am
-         1gGYne0IOTvMyVOHnsP0HJpX1YdBb3WSC6YZJ6Yard8Yg3yqt3yHt1UXcbQtji/rzEWd
-         oUedGHboNdNxCvIHIJbINhP6tKVNzYI/jTdxkev2bPkmOompHWoj/SxMeP9itIN3iJH+
-         4p9Aa6QCKaEwHSM50gVdMJrFV1JD2Lu5X+aBpWsfrxKyKQACjOKusuQUbhpWhdc0dLQp
-         3v961aMXeV0W0Bv5K+1K4wIS26adYr3Eg/L+ew9T0jZS1HQTf37XyAmM6tb4RgXK4t2S
-         qtlw==
+        d=gmail.com; s=20161025;
+        h=reply-to:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=lgrmCKn7fa8BZQSBnv8N1P+Cvs3u32JT2Mm/OzoKs+0=;
+        b=t+fWg0vAwx5ufrwZKcMvat8HOg68VhwiqVfrZQQW4H64LWXOPDnoGUraWGjkq2DLDq
+         QLcFd/Lm7Ezl5DlNjLXXzTzdJB0mggMuj+NzctFSz+DpnVh6UswTwClRO3jKh0vLrZm/
+         YeD0FWr+o2jYc9nZp8Czk+hbSGzo5mY5gfo55zgUjTmvOVpIXpxOHI7P7vFgkOf4RCmM
+         KCMAuM0uwL4X9CLvhfo/pckIfVxsN9QLHiKEGWiEALrdGTEAilbwzpL7+MDp58Y0sjE8
+         pmceePGlgiIsoEOhVcaeYOXB4cETjV/RP2aPcHEWDEnySS7P9FT0p8hn9nbDw+EQPvDY
+         EEdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oQykFoC4igzaAGN1smzA1eOO+ArdBSIk2jifTuAEeJw=;
-        b=KbDLcIJgiNZG6vhiGOVkU0RhOEhYfANOQeACGe37evM18Mvduf76yoQdSNypBphRAl
-         vUV2hgX3opyfeo7cHQhJkiMnbtkOtkWMJohjbny4qUcBoruAcQYSGpkZkRW7Gscxi541
-         qVeDqb4DAiXInnuxpeiwQu/sMNVuq/e7VKW8fW+yy4Wuph/JO3kM7daE8V7DNzH9Zt7N
-         wJWuX+XEjC37ErsgyD7Y07yrDc4oPWrMQjltrL/W8OZk9Xah/+rJHIB9XCeLsI2naMCf
-         Ya78QDa6ZCy9OCfHFpbtQS/M8S6wZ8FxeyqqYmT6gg89+MSmdh0Mcpsu3KdoCpURWsif
-         c/DQ==
-X-Gm-Message-State: AOAM533+vmAOn0HBbPRniQ7a0W5b6rMK6yhVEWQrKIOpHbiXr3ouzCK6
-        UBj005480YJWOv0AU26NIT6FXQ==
-X-Google-Smtp-Source: ABdhPJzDgJOLWf+tVIAedqm6oCCLfpNPjJ4lQXYga18A04NkAioq9UoO9JJUUMlo4PR6/2fsiYMHqQ==
-X-Received: by 2002:a63:700f:: with SMTP id l15mr20368287pgc.214.1612251715334;
-        Mon, 01 Feb 2021 23:41:55 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id k9sm9410666pgh.94.2021.02.01.23.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 23:41:54 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v4 1/3] dma-buf: heaps: Add deferred-free-helper library code
-Date:   Tue,  2 Feb 2021 07:41:49 +0000
-Message-Id: <20210202074151.3146795-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=lgrmCKn7fa8BZQSBnv8N1P+Cvs3u32JT2Mm/OzoKs+0=;
+        b=BSMut05VRi7ve+3HamztdDvyRLEj8ZZgSTdjIWP7A82qyPRaEFusqum7PQqdw6yuxk
+         LHKK8xGXxoQTuM1mJ/lC90qQO1GTRbCCMHvubec61r2sHcn+rXoz2YtNKt+6Lp3mJWMZ
+         a/eLMySYjRzEdy+lpnUHpL1IGp9XcQQkhurzAzdrgSGz6/DxFQJJNz0GkxbXn3KIq5x5
+         XqEY4JgUalKy+vfjb5HzdkPUJDtoeCoBenma1Tz0KLhd+VTGR9RFZoME5sA/QP7tvQNC
+         qeKcduPy/a1YkgO1XZC5yT5lcALEJZt+IXHfVA2TZ2T0bxLa+rTBtgMntVtptPFGyILL
+         9vTQ==
+X-Gm-Message-State: AOAM532R8InkoQwfRieDPjWQiVVNDjlX956l8fwRLr62AXbATyIKi7iM
+        XA4WYHm3+Uf8gkyaeNfy/uTCbtNT3To=
+X-Google-Smtp-Source: ABdhPJxm7JcawV6X0WgZcSOHtcFQbGQTHlwGpTNi24TTZued12CJDBGns027oBVSU3dhbviuAQ4vxQ==
+X-Received: by 2002:a17:906:30cd:: with SMTP id b13mr21330941ejb.336.1612254824483;
+        Tue, 02 Feb 2021 00:33:44 -0800 (PST)
+Received: from ?IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7? ([2a02:908:1252:fb60:be8a:bd56:1f94:86e7])
+        by smtp.gmail.com with ESMTPSA id u23sm9727370edt.87.2021.02.02.00.33.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Feb 2021 00:33:43 -0800 (PST)
+Reply-To: christian.koenig@amd.com
+Subject: Re: [Linaro-mm-sig] [PATCH 08/29] dma-buf: Avoid comma separated
+ statements
+To:     lyude@redhat.com,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Joe Perches <joe@perches.com>,
+        Jiri Kosina <trivial@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+References: <cover.1598331148.git.joe@perches.com>
+ <990bf6f33ccaf73ad56eb4bea8bd2c0db5e90a31.1598331148.git.joe@perches.com>
+ <a87b95d11c22d997ebc423bba71cabef15ca0bac.camel@perches.com>
+ <4d5891b7-ea87-974e-d260-f78c3af326bc@amd.com>
+ <4266568da0437ea605bfb2810ead2b05475bfbb8.camel@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Message-ID: <ad79432b-9c83-ce5a-f8ca-ec45bb55fb2c@gmail.com>
+Date:   Tue, 2 Feb 2021 09:33:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <4266568da0437ea605bfb2810ead2b05475bfbb8.camel@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch provides infrastructure for deferring buffer frees.
+Yeah, known issue.
 
-This is a feature ION provided which when used with some form
-of a page pool, provides a nice performance boost in an
-allocation microbenchmark. The reason it helps is it allows the
-page-zeroing to be done out of the normal allocation/free path,
-and pushed off to a kthread.
+An NTP server which I don't have access to has gone bananas and 
+sometimes spits out invalid time stamps.
 
-As not all heaps will find this useful, its implemented as
-a optional helper library that heaps can utilize.
+Only thing I can do is wait for an admin to take care of this.
 
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Liam Mark <lmark@codeaurora.org>
-Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
-Cc: Laura Abbott <labbott@kernel.org>
-Cc: Brian Starkey <Brian.Starkey@arm.com>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Daniel Mentz <danielmentz@google.com>
-Cc: Ørjan Eide <orjan.eide@arm.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Ezequiel Garcia <ezequiel@collabora.com>
-Cc: Simon Ser <contact@emersion.fr>
-Cc: James Jones <jajones@nvidia.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
-v2:
-* Fix sleep in atomic issue from using a mutex, by switching
-  to a spinlock as Reported-by: kernel test robot <oliver.sang@intel.com>
-* Cleanup API to use a reason enum for clarity and add some documentation
-  comments as suggested by Suren Baghdasaryan.
+Christian.
 
-v3:
-* Minor tweaks so it can be built as a module
-* A few small fixups suggested by Daniel Mentz
-
-v4:
-* Tweak from Daniel Mentz to make sure the shrinker
-  count/freed values are tracked in pages not bytes
----
- drivers/dma-buf/heaps/Kconfig                |   3 +
- drivers/dma-buf/heaps/Makefile               |   1 +
- drivers/dma-buf/heaps/deferred-free-helper.c | 138 +++++++++++++++++++
- drivers/dma-buf/heaps/deferred-free-helper.h |  55 ++++++++
- 4 files changed, 197 insertions(+)
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.c
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.h
-
-diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index a5eef06c4226..f7aef8bc7119 100644
---- a/drivers/dma-buf/heaps/Kconfig
-+++ b/drivers/dma-buf/heaps/Kconfig
-@@ -1,3 +1,6 @@
-+config DMABUF_HEAPS_DEFERRED_FREE
-+	tristate
-+
- config DMABUF_HEAPS_SYSTEM
- 	bool "DMA-BUF System Heap"
- 	depends on DMABUF_HEAPS
-diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-buf/heaps/Makefile
-index 974467791032..4e7839875615 100644
---- a/drivers/dma-buf/heaps/Makefile
-+++ b/drivers/dma-buf/heaps/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_DMABUF_HEAPS_DEFERRED_FREE) += deferred-free-helper.o
- obj-$(CONFIG_DMABUF_HEAPS_SYSTEM)	+= system_heap.o
- obj-$(CONFIG_DMABUF_HEAPS_CMA)		+= cma_heap.o
-diff --git a/drivers/dma-buf/heaps/deferred-free-helper.c b/drivers/dma-buf/heaps/deferred-free-helper.c
-new file mode 100644
-index 000000000000..0ba02de9dc1c
---- /dev/null
-+++ b/drivers/dma-buf/heaps/deferred-free-helper.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Deferred dmabuf freeing helper
-+ *
-+ * Copyright (C) 2020 Linaro, Ltd.
-+ *
-+ * Based on the ION page pool code
-+ * Copyright (C) 2011 Google, Inc.
-+ */
-+
-+#include <linux/freezer.h>
-+#include <linux/list.h>
-+#include <linux/slab.h>
-+#include <linux/swap.h>
-+#include <linux/sched/signal.h>
-+
-+#include "deferred-free-helper.h"
-+
-+static LIST_HEAD(free_list);
-+static size_t list_size_pages;
-+wait_queue_head_t freelist_waitqueue;
-+struct task_struct *freelist_task;
-+static DEFINE_SPINLOCK(free_list_lock);
-+
-+void deferred_free(struct deferred_freelist_item *item,
-+		   void (*free)(struct deferred_freelist_item*,
-+				enum df_reason),
-+		   size_t size)
-+{
-+	unsigned long flags;
-+
-+	INIT_LIST_HEAD(&item->list);
-+	item->size = size;
-+	item->free = free;
-+
-+	spin_lock_irqsave(&free_list_lock, flags);
-+	list_add(&item->list, &free_list);
-+	list_size_pages += size >> PAGE_SHIFT;
-+	spin_unlock_irqrestore(&free_list_lock, flags);
-+	wake_up(&freelist_waitqueue);
-+}
-+EXPORT_SYMBOL_GPL(deferred_free);
-+
-+static size_t free_one_item(enum df_reason reason)
-+{
-+	unsigned long flags;
-+	size_t size = 0;
-+	struct deferred_freelist_item *item;
-+
-+	spin_lock_irqsave(&free_list_lock, flags);
-+	if (list_empty(&free_list)) {
-+		spin_unlock_irqrestore(&free_list_lock, flags);
-+		return 0;
-+	}
-+	item = list_first_entry(&free_list, struct deferred_freelist_item, list);
-+	list_del(&item->list);
-+	size = item->size;
-+	list_size_pages -= size >> PAGE_SHIFT;
-+	spin_unlock_irqrestore(&free_list_lock, flags);
-+
-+	item->free(item, reason);
-+	return size >> PAGE_SHIFT;
-+}
-+
-+static unsigned long get_freelist_size_pages(void)
-+{
-+	unsigned long size;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&free_list_lock, flags);
-+	size = list_size_pages;
-+	spin_unlock_irqrestore(&free_list_lock, flags);
-+	return size;
-+}
-+
-+static unsigned long freelist_shrink_count(struct shrinker *shrinker,
-+					   struct shrink_control *sc)
-+{
-+	return get_freelist_size_pages();
-+}
-+
-+static unsigned long freelist_shrink_scan(struct shrinker *shrinker,
-+					  struct shrink_control *sc)
-+{
-+	unsigned long total_freed = 0;
-+
-+	if (sc->nr_to_scan == 0)
-+		return 0;
-+
-+	while (total_freed < sc->nr_to_scan) {
-+		size_t pages_freed = free_one_item(DF_UNDER_PRESSURE);
-+
-+		if (!pages_freed)
-+			break;
-+
-+		total_freed += pages_freed;
-+	}
-+
-+	return total_freed;
-+}
-+
-+static struct shrinker freelist_shrinker = {
-+	.count_objects = freelist_shrink_count,
-+	.scan_objects = freelist_shrink_scan,
-+	.seeks = DEFAULT_SEEKS,
-+	.batch = 0,
-+};
-+
-+static int deferred_free_thread(void *data)
-+{
-+	while (true) {
-+		wait_event_freezable(freelist_waitqueue,
-+				     get_freelist_size_pages() > 0);
-+
-+		free_one_item(DF_NORMAL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int deferred_freelist_init(void)
-+{
-+	list_size_pages = 0;
-+
-+	init_waitqueue_head(&freelist_waitqueue);
-+	freelist_task = kthread_run(deferred_free_thread, NULL,
-+				    "%s", "dmabuf-deferred-free-worker");
-+	if (IS_ERR(freelist_task)) {
-+		pr_err("Creating thread for deferred free failed\n");
-+		return -1;
-+	}
-+	sched_set_normal(freelist_task, 19);
-+
-+	return register_shrinker(&freelist_shrinker);
-+}
-+module_init(deferred_freelist_init);
-+MODULE_LICENSE("GPL v2");
-+
-diff --git a/drivers/dma-buf/heaps/deferred-free-helper.h b/drivers/dma-buf/heaps/deferred-free-helper.h
-new file mode 100644
-index 000000000000..18b44ac86ef6
---- /dev/null
-+++ b/drivers/dma-buf/heaps/deferred-free-helper.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef DEFERRED_FREE_HELPER_H
-+#define DEFERRED_FREE_HELPER_H
-+
-+/**
-+ * df_reason - enum for reason why item was freed
-+ *
-+ * This provides a reason for why the free function was called
-+ * on the item. This is useful when deferred_free is used in
-+ * combination with a pagepool, so under pressure the page can
-+ * be immediately freed.
-+ *
-+ * DF_NORMAL:         Normal deferred free
-+ *
-+ * DF_UNDER_PRESSURE: Free was called because the system
-+ *                    is under memory pressure. Usually
-+ *                    from a shrinker. Avoid allocating
-+ *                    memory in the free call, as it may
-+ *                    fail.
-+ */
-+enum df_reason {
-+	DF_NORMAL,
-+	DF_UNDER_PRESSURE,
-+};
-+
-+/**
-+ * deferred_freelist_item - item structure for deferred freelist
-+ *
-+ * This is to be added to the structure for whatever you want to
-+ * defer freeing on.
-+ *
-+ * @size: size of the item to be freed
-+ * @free: function pointer to be called when freeing the item
-+ * @list: list entry for the deferred list
-+ */
-+struct deferred_freelist_item {
-+	size_t size;
-+	void (*free)(struct deferred_freelist_item *i,
-+		     enum df_reason reason);
-+	struct list_head list;
-+};
-+
-+/**
-+ * deferred_free - call to add item to the deferred free list
-+ *
-+ * @item: Pointer to deferred_freelist_item field of a structure
-+ * @free: Function pointer to the free call
-+ * @size: Size of the item to be freed
-+ */
-+void deferred_free(struct deferred_freelist_item *item,
-+		   void (*free)(struct deferred_freelist_item *i,
-+				enum df_reason reason),
-+		   size_t size);
-+#endif
--- 
-2.25.1
+Am 01.02.21 um 22:54 schrieb Lyude Paul:
+> This is entirely unrelated to this thread, but I noticed when going through dri-
+> devel that this email is somehow dated two days in the future from now.
+>
+> On Wed, 2021-02-03 at 14:26 +0100, Christian König wrote:
+>> Am 30.01.21 um 19:47 schrieb Joe Perches:
+>>> On Mon, 2020-08-24 at 21:56 -0700, Joe Perches wrote:
+>>>> Use semicolons and braces.
+>>> Ping?
+>>>    
+>>>> Signed-off-by: Joe Perches <joe@perches.com>
+>> Reviewed-by: Christian König <christian.koenig@amd.com>
+>>
+>> Do you have commit rights to drm-misc-next?
+>>
+>>>> ---
+>>>>    drivers/dma-buf/st-dma-fence.c | 7 +++++--
+>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-
+>>>> fence.c
+>>>> index e593064341c8..c8a12d7ad71a 100644
+>>>> --- a/drivers/dma-buf/st-dma-fence.c
+>>>> +++ b/drivers/dma-buf/st-dma-fence.c
+>>>> @@ -471,8 +471,11 @@ static int thread_signal_callback(void *arg)
+>>>>                          dma_fence_signal(f1);
+>>>>    
+>>>>
+>>>>                  smp_store_mb(cb.seen, false);
+>>>> -               if (!f2 || dma_fence_add_callback(f2, &cb.cb,
+>>>> simple_callback))
+>>>> -                       miss++, cb.seen = true;
+>>>> +               if (!f2 ||
+>>>> +                   dma_fence_add_callback(f2, &cb.cb, simple_callback)) {
+>>>> +                       miss++;
+>>>> +                       cb.seen = true;
+>>>> +               }
+>>>>    
+>>>>
+>>>>                  if (!t->before)
+>>>>                          dma_fence_signal(f1);
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 
