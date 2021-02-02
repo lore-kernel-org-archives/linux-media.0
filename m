@@ -2,100 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41860C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6277CC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:22:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C46E64E0A
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:15:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DB5564E49
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:22:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhBBTPZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 14:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S239430AbhBBTVo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 14:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239364AbhBBTNH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 14:13:07 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68968C0613D6
-        for <linux-media@vger.kernel.org>; Tue,  2 Feb 2021 11:12:52 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id s107so307408otb.8
-        for <linux-media@vger.kernel.org>; Tue, 02 Feb 2021 11:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nextdimension-cc.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l8faAN7oTgmPtV8H52j7f3C55BE2mtxHSAraHHaV/ro=;
-        b=MhCZLnQgaKd1wPCzLlUTsRkvxJqdZdw0X161uosokxc1mxfAzPrOy2hkF8Rd6jl4Lb
-         XhkMelGi2LE+Sx6MGFxHHoPCgF8+e+17cYxlDxN7WUBBeUGMiN0YAIiNuOnhhFHxNBbp
-         aLy4AiQsKhDXp25DkImAoT8Gfgoun64mo+BC4ezVE2AAluePAN2VSnrGqUBr7G6L6sUh
-         JJKnWE/uMD0+VHH+CDNMf/HyWALcBCed6xzsO8AxHTzfYUlp+OpPL5CJgCm3GRtfhxn3
-         CR5ZfvT+qu6bObjCkm4gwebbinPdTWjWiw2F8TmlJnZAPJsRNlsJuZB4YEVWGWE3Axgt
-         hCkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l8faAN7oTgmPtV8H52j7f3C55BE2mtxHSAraHHaV/ro=;
-        b=bKIL1vEFMf2VFICYH4Bs8FrRjRi/YwDllqpoRp2K1bSy6nDRTUgqMWDGpuSvtaiMAR
-         T5Ra/2jB3MMC2rcuc25PC3BvAiBze3tjjJkOw1vmFEs+ufBMPblXpHBsmUeJ8lMkXnAS
-         yJFCw40McUbJzAz1VMf/DQuHWmbG2Qk98YbYxZ/7wKdltaBU1SvkuQL4dE85uB4fqSD7
-         oEj/vSUk6JMM57kpw83q2/EwWZckROqn2fJFc9LKZ0VP4+JApNkEq0XKRO0DWoiRoBcO
-         fih9yVzsRnwSrVXgpfuhqZQ+HNY7jGk1umV/ocZQZWoIR01NGcJLfgWm9qpUp5XMLiHW
-         02WA==
-X-Gm-Message-State: AOAM5313ph6oUNdrS14hKJA2pM/L6T2LJqzp7A5Gopf0yCGgnAJHE46Z
-        QpHhqapLFqjI/B0mzIc+Qp1A0WeYLIvc7ANt
-X-Google-Smtp-Source: ABdhPJxR17rmNc4ZnGUrwkYnEBLno45luverq5v9FqLUP4oqrQGig7u2urHhFLmoi7tIwGS4+tvBHg==
-X-Received: by 2002:a9d:7452:: with SMTP id p18mr16722010otk.49.1612293171751;
-        Tue, 02 Feb 2021 11:12:51 -0800 (PST)
-Received: from localhost (66-90-181-52.dyn.grandenetworks.net. [66.90.181.52])
-        by smtp.gmail.com with ESMTPSA id g195sm5249548oib.10.2021.02.02.11.12.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Feb 2021 11:12:51 -0800 (PST)
-From:   Brad Love <brad@nextdimension.cc>
-To:     linux-media@vger.kernel.org, sean@mess.org, mchehab@kernel.org
-Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH 2/2] em28xx: Add pid for bulk revision of Hauppauge 461eV2
-Date:   Mon,  1 Feb 2021 19:40:30 -0600
-Message-Id: <20210202014030.27466-3-brad@nextdimension.cc>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210202014030.27466-1-brad@nextdimension.cc>
-References: <20210202014030.27466-1-brad@nextdimension.cc>
+        with ESMTP id S233467AbhBBOBe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 09:01:34 -0500
+X-Greylist: delayed 213 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Feb 2021 05:59:48 PST
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA6EC0613ED
+        for <linux-media@vger.kernel.org>; Tue,  2 Feb 2021 05:59:48 -0800 (PST)
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 054A2634CA3;
+        Tue,  2 Feb 2021 15:56:09 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v5 06/13] media: cadence: Use v4l2_async_notifier_add_fwnode_remote_subdev
+Date:   Tue,  2 Feb 2021 15:56:04 +0200
+Message-Id: <20210202135611.13920-7-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
+References: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Manufacturing has switched from ISOC to bulk transport,
-the pid has accordingly changed to signify this.
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-0x2013:0x0461 is an ISOC 461e v2
+The use of v4l2_async_notifier_add_subdev will be discouraged.
+Drivers are instead encouraged to use a helper such as
+v4l2_async_notifier_add_fwnode_remote_subdev.
 
-0x2013:0x8461 is a bulk transport 461e v2
+This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
+should get a kmalloc'ed struct v4l2_async_subdev,
+removing some boilerplate code while at it.
 
+Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
+which handles the needed setup, instead of open-coding it.
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Helen Koike <helen.koike@collabora.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index 786978e7a59a..ba9292e2a587 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -2782,6 +2782,8 @@ struct usb_device_id em28xx_id_table[] = {
- 			.driver_info = EM28178_BOARD_PCTV_461E },
- 	{ USB_DEVICE(0x2013, 0x0461),
- 			.driver_info = EM28178_BOARD_PCTV_461E_V2 },
-+	{ USB_DEVICE(0x2013, 0x8461), /* Bulk transport 461e v2 */
-+			.driver_info = EM28178_BOARD_PCTV_461E_V2 },
- 	{ USB_DEVICE(0x2013, 0x0259),
- 			.driver_info = EM28178_BOARD_PCTV_461E_V2 },
- 	{ USB_DEVICE(0x2013, 0x025f),
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index be9ec59774d6..7d299cacef8c 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -81,7 +81,6 @@ struct csi2rx_priv {
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
+ 
+ 	/* Remote source */
+-	struct v4l2_async_subdev	asd;
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
+@@ -362,6 +361,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ {
+ 	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
++	struct v4l2_async_subdev *asd;
+ 	struct fwnode_handle *fwh;
+ 	struct device_node *ep;
+ 	int ret;
+@@ -395,17 +395,13 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 		return -EINVAL;
+ 	}
+ 
+-	csi2rx->asd.match.fwnode = fwnode_graph_get_remote_port_parent(fwh);
+-	csi2rx->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	of_node_put(ep);
+-
+ 	v4l2_async_notifier_init(&csi2rx->notifier);
+ 
+-	ret = v4l2_async_notifier_add_subdev(&csi2rx->notifier, &csi2rx->asd);
+-	if (ret) {
+-		fwnode_handle_put(csi2rx->asd.match.fwnode);
+-		return ret;
+-	}
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(&csi2rx->notifier,
++							   fwh, sizeof(*asd));
++	of_node_put(ep);
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
+ 
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
+ 
 -- 
-2.28.0
+2.29.2
 
