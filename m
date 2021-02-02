@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2949FC43381
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 15:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B2EC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 15:06:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF1E464F68
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 15:01:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 439C864F5F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 15:06:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbhBBPB2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 10:01:28 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:48850 "EHLO gloria.sntech.de"
+        id S235069AbhBBPFs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 10:05:48 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:48868 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234879AbhBBO5o (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S234891AbhBBO5o (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 2 Feb 2021 09:57:44 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1l6x6n-00020V-HB; Tue, 02 Feb 2021 15:56:49 +0100
+        id 1l6x6o-00020V-MV; Tue, 02 Feb 2021 15:56:50 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     dri-devel@lists.freedesktop.org
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -33,9 +33,9 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, cmuellner@linux.com,
         Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH 4/6] arm64: dts: rockchip: add #phy-cells to mipi-dsi1
-Date:   Tue,  2 Feb 2021 15:56:30 +0100
-Message-Id: <20210202145632.1263136-5-heiko@sntech.de>
+Subject: [PATCH 6/6] arm64: dts: rockchip: add isp1 node on rk3399
+Date:   Tue,  2 Feb 2021 15:56:32 +0100
+Message-Id: <20210202145632.1263136-7-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210202145632.1263136-1-heiko@sntech.de>
 References: <20210202145632.1263136-1-heiko@sntech.de>
@@ -47,27 +47,52 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-The dsi controller includes access to the dphy which might be used
-not only for dsi output but also for csi input on dsi1, so add the
-necessary #phy-cells to allow it to be used as phy.
+ISP1 is supplied by the tx1rx1 dphy, that is controlled from
+inside the dsi1 controller, so include the necessary phy-link
+for it.
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 26 ++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index edbbf35fe19e..5d2178cb3e38 100644
+index 7c661d84df25..98cec9387300 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1865,6 +1865,7 @@ mipi_dsi1: mipi@ff968000 {
- 		rockchip,grf = <&grf>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		#phy-cells = <0>;
- 		status = "disabled";
+@@ -1756,6 +1756,32 @@ isp0_mmu: iommu@ff914000 {
+ 		rockchip,disable-mmu-reset;
+ 	};
  
- 		ports {
++	isp1: isp1@ff920000 {
++		compatible = "rockchip,rk3399-cif-isp";
++		reg = <0x0 0xff920000 0x0 0x4000>;
++		interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru SCLK_ISP1>,
++			 <&cru ACLK_ISP1_WRAPPER>,
++			 <&cru HCLK_ISP1_WRAPPER>;
++		clock-names = "isp", "aclk", "hclk";
++		iommus = <&isp1_mmu>;
++		phys = <&mipi_dsi1>;
++		phy-names = "dphy";
++		power-domains = <&power RK3399_PD_ISP1>;
++		status = "disabled";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++	};
++
+ 	isp1_mmu: iommu@ff924000 {
+ 		compatible = "rockchip,iommu";
+ 		reg = <0x0 0xff924000 0x0 0x100>, <0x0 0xff925000 0x0 0x100>;
 -- 
 2.29.2
 
