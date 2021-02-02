@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F24C433E9
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F21BC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:02:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31B8164F65
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:00:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1631964E7B
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:02:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbhBBOA1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 09:00:27 -0500
-Received: from retiisi.eu ([95.216.213.190]:45388 "EHLO hillosipuli.retiisi.eu"
+        id S233384AbhBBOCg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 09:02:36 -0500
+Received: from retiisi.eu ([95.216.213.190]:45566 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233486AbhBBN6D (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Feb 2021 08:58:03 -0500
+        id S233518AbhBBOBh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Feb 2021 09:01:37 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id C8263634C99;
-        Tue,  2 Feb 2021 15:56:08 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 53738634CA9;
+        Tue,  2 Feb 2021 15:56:09 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
@@ -39,9 +39,9 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Robert Foss <robert.foss@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 04/13] media: exynos4-is: Use v4l2_async_notifier_add_fwnode_remote_subdev
-Date:   Tue,  2 Feb 2021 15:56:02 +0200
-Message-Id: <20210202135611.13920-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 09/13] media: pxa-camera: Use v4l2_async_notifier_add_*_subdev
+Date:   Tue,  2 Feb 2021 15:56:07 +0200
+Message-Id: <20210202135611.13920-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
 References: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
@@ -58,105 +58,136 @@ Drivers are instead encouraged to use a helper such as
 v4l2_async_notifier_add_fwnode_remote_subdev.
 
 This fixes a misuse of the API, as v4l2_async_notifier_add_subdev
-should get a kmalloc'ed struct v4l2_async_subdev,
-removing some boilerplate code while at it.
+should get a kmalloc'ed struct v4l2_async_subdev.
 
-Use the appropriate helper v4l2_async_notifier_add_fwnode_remote_subdev,
-which handles the needed setup, instead of open-coding it.
+Use the appropriate helper: v4l2_async_notifier_add_i2c_subdev
+or v4l2_async_notifier_add_fwnode_remote_subdev, which handles
+the needed setup, instead of open-coding it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Reviewed-by: Helen Koike <helen.koike@collabora.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/exynos4-is/media-dev.c | 24 ++++++++++---------
- drivers/media/platform/exynos4-is/media-dev.h |  2 +-
- 2 files changed, 14 insertions(+), 12 deletions(-)
+ drivers/media/platform/pxa_camera.c | 57 ++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-index e636c33e847b..f4687b0cbd65 100644
---- a/drivers/media/platform/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/exynos4-is/media-dev.c
-@@ -401,6 +401,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
- 	int index = fmd->num_sensors;
- 	struct fimc_source_info *pd = &fmd->sensor[index].pdata;
- 	struct device_node *rem, *np;
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index 75fad9689c90..b579ce2e93b6 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -656,8 +656,6 @@ struct pxa_camera_dev {
+ 	const struct pxa_camera_format_xlate *current_fmt;
+ 	struct v4l2_pix_format	current_pix;
+ 
+-	struct v4l2_async_subdev asd;
+-
+ 	/*
+ 	 * PXA27x is only supposed to handle one camera on its Quick Capture
+ 	 * interface. If anyone ever builds hardware to enable more than
+@@ -2202,11 +2200,11 @@ static int pxa_camera_resume(struct device *dev)
+ }
+ 
+ static int pxa_camera_pdata_from_dt(struct device *dev,
+-				    struct pxa_camera_dev *pcdev,
+-				    struct v4l2_async_subdev *asd)
++				    struct pxa_camera_dev *pcdev)
+ {
+ 	u32 mclk_rate;
+-	struct device_node *remote, *np = dev->of_node;
 +	struct v4l2_async_subdev *asd;
- 	struct v4l2_fwnode_endpoint endpoint = { .bus_type = 0 };
- 	int ret;
++	struct device_node *np = dev->of_node;
+ 	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
+ 	int err = of_property_read_u32(np, "clock-frequency",
+ 				       &mclk_rate);
+@@ -2258,13 +2256,12 @@ static int pxa_camera_pdata_from_dt(struct device *dev,
+ 	if (ep.bus.parallel.flags & V4L2_MBUS_PCLK_SAMPLE_FALLING)
+ 		pcdev->platform_flags |= PXA_CAMERA_PCLK_EN;
  
-@@ -418,10 +419,10 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
- 	pd->mux_id = (endpoint.base.port - 1) & 0x1;
- 
- 	rem = of_graph_get_remote_port_parent(ep);
--	of_node_put(ep);
- 	if (rem == NULL) {
- 		v4l2_info(&fmd->v4l2_dev, "Remote device at %pOF not found\n",
- 							ep);
-+		of_node_put(ep);
- 		return 0;
- 	}
- 
-@@ -450,6 +451,7 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
- 	 * checking parent's node name.
- 	 */
- 	np = of_get_parent(rem);
-+	of_node_put(rem);
- 
- 	if (of_node_name_eq(np, "i2c-isp"))
- 		pd->fimc_bus_type = FIMC_BUS_TYPE_ISP_WRITEBACK;
-@@ -458,20 +460,19 @@ static int fimc_md_parse_one_endpoint(struct fimc_md *fmd,
+-	asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	remote = of_graph_get_remote_port_parent(np);
+-	if (remote)
+-		asd->match.fwnode = of_fwnode_handle(remote);
+-	else
+-		dev_notice(dev, "no remote for %pOF\n", np);
+-
++	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
++				&pcdev->notifier,
++				of_fwnode_handle(np),
++				sizeof(*asd));
++	if (IS_ERR(asd))
++		err = PTR_ERR(asd);
+ out:
  	of_node_put(np);
  
- 	if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor))) {
--		of_node_put(rem);
-+		of_node_put(ep);
- 		return -EINVAL;
- 	}
+@@ -2300,18 +2297,23 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	if (IS_ERR(pcdev->clk))
+ 		return PTR_ERR(pcdev->clk);
  
--	fmd->sensor[index].asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
--	fmd->sensor[index].asd.match.fwnode = of_fwnode_handle(rem);
-+	asd = v4l2_async_notifier_add_fwnode_remote_subdev(
-+		&fmd->subdev_notifier, of_fwnode_handle(ep), sizeof(*asd));
- 
--	ret = v4l2_async_notifier_add_subdev(&fmd->subdev_notifier,
--					     &fmd->sensor[index].asd);
--	if (ret) {
--		of_node_put(rem);
--		return ret;
--	}
-+	of_node_put(ep);
++	v4l2_async_notifier_init(&pcdev->notifier);
+ 	pcdev->res = res;
+-
+ 	pcdev->pdata = pdev->dev.platform_data;
+ 	if (pcdev->pdata) {
++		struct v4l2_async_subdev *asd;
 +
-+	if (IS_ERR(asd))
-+		return PTR_ERR(asd);
+ 		pcdev->platform_flags = pcdev->pdata->flags;
+ 		pcdev->mclk = pcdev->pdata->mclk_10khz * 10000;
+-		pcdev->asd.match_type = V4L2_ASYNC_MATCH_I2C;
+-		pcdev->asd.match.i2c.adapter_id =
+-			pcdev->pdata->sensor_i2c_adapter_id;
+-		pcdev->asd.match.i2c.address = pcdev->pdata->sensor_i2c_address;
++		asd = v4l2_async_notifier_add_i2c_subdev(
++				&pcdev->notifier,
++				pcdev->pdata->sensor_i2c_adapter_id,
++				pcdev->pdata->sensor_i2c_address,
++				sizeof(*asd));
++		if (IS_ERR(asd))
++			err = PTR_ERR(asd);
+ 	} else if (pdev->dev.of_node) {
+-		err = pxa_camera_pdata_from_dt(&pdev->dev, pcdev, &pcdev->asd);
++		err = pxa_camera_pdata_from_dt(&pdev->dev, pcdev);
+ 	} else {
+ 		return -ENODEV;
+ 	}
+@@ -2403,27 +2405,15 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto exit_deactivate;
  
-+	fmd->sensor[index].asd = asd;
- 	fmd->num_sensors++;
+-	v4l2_async_notifier_init(&pcdev->notifier);
+-
+-	err = v4l2_async_notifier_add_subdev(&pcdev->notifier, &pcdev->asd);
+-	if (err) {
+-		fwnode_handle_put(pcdev->asd.match.fwnode);
+-		goto exit_free_v4l2dev;
+-	}
+-
+-	pcdev->notifier.ops = &pxa_camera_sensor_ops;
+-
+-	if (!of_have_populated_dt())
+-		pcdev->asd.match_type = V4L2_ASYNC_MATCH_I2C;
+-
+ 	err = pxa_camera_init_videobuf2(pcdev);
+ 	if (err)
+ 		goto exit_notifier_cleanup;
  
- 	return 0;
-@@ -1381,7 +1382,8 @@ static int subdev_notifier_bound(struct v4l2_async_notifier *notifier,
+ 	v4l2_clk_name_i2c(clk_name, sizeof(clk_name),
+-			  pcdev->asd.match.i2c.adapter_id,
+-			  pcdev->asd.match.i2c.address);
++			  pcdev->pdata->sensor_i2c_adapter_id,
++			  pcdev->pdata->sensor_i2c_address);
  
- 	/* Find platform data for this sensor subdev */
- 	for (i = 0; i < ARRAY_SIZE(fmd->sensor); i++)
--		if (fmd->sensor[i].asd.match.fwnode ==
-+		if (fmd->sensor[i].asd &&
-+		    fmd->sensor[i].asd->match.fwnode ==
- 		    of_fwnode_handle(subdev->dev->of_node))
- 			si = &fmd->sensor[i];
- 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.h b/drivers/media/platform/exynos4-is/media-dev.h
-index 9447fafe23c6..a3876d668ea6 100644
---- a/drivers/media/platform/exynos4-is/media-dev.h
-+++ b/drivers/media/platform/exynos4-is/media-dev.h
-@@ -83,7 +83,7 @@ struct fimc_camclk_info {
-  */
- struct fimc_sensor_info {
- 	struct fimc_source_info pdata;
--	struct v4l2_async_subdev asd;
-+	struct v4l2_async_subdev *asd;
- 	struct v4l2_subdev *subdev;
- 	struct fimc_dev *host;
- };
++	pcdev->notifier.ops = &pxa_camera_sensor_ops;
+ 	pcdev->mclk_clk = v4l2_clk_register(&pxa_camera_mclk_ops, clk_name, NULL);
+ 	if (IS_ERR(pcdev->mclk_clk)) {
+ 		err = PTR_ERR(pcdev->mclk_clk);
+@@ -2439,7 +2429,6 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	v4l2_clk_unregister(pcdev->mclk_clk);
+ exit_notifier_cleanup:
+ 	v4l2_async_notifier_cleanup(&pcdev->notifier);
+-exit_free_v4l2dev:
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ exit_deactivate:
+ 	pxa_camera_deactivate(pcdev);
 -- 
 2.29.2
 
