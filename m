@@ -2,103 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 472F8C433DB
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B788C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:15:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C04A64F5D
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:10:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FFE864E3D
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 19:15:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239556AbhBBTKn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 14:10:43 -0500
-Received: from meesny.iki.fi ([195.140.195.201]:52244 "EHLO meesny.iki.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239491AbhBBTIp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Feb 2021 14:08:45 -0500
-Received: from hillosipuli.retiisi.eu (213-243-181-26.bb.dnainternet.fi [213.243.181.26])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 153C520168;
-        Tue,  2 Feb 2021 21:07:58 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1612292878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iED9/bsv62xclPHCgDTFayfsix4RS/oy4XGwwbCpS70=;
-        b=iL0uADKOLImuTf97sPdS8rAAaavCcdwB+tFn727545Uir3pJS0ktnz/4+kpQzNWvdV0IBk
-        c/4aEDqLlnqY+NIDOMbGYA7bp9Vv/uIeilR7xHTbPKFIrSKZApfCRj3Mxl7f5VFGMGQwUE
-        /+9sW7+aD1zmKCpEWCXuFQK5O/J3pKE=
-Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 8137C634C96;
-        Tue,  2 Feb 2021 21:07:53 +0200 (EET)
-Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
-        by valkosipuli.localdomain with esmtp (Exim 4.92)
-        (envelope-from <sakari.ailus@iki.fi>)
-        id 1l711o-0000Z5-W4; Tue, 02 Feb 2021 21:07:57 +0200
-Date:   Tue, 2 Feb 2021 21:07:56 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
-        Petr Cvek <petrcvekcz@gmail.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Daniel Mack <zonque@gmail.com>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Subject: Re: [PATCH v2 2/6] media: pxa_camera: Drop the v4l2-clk clock
- register
-Message-ID: <20210202190756.GD3@valkosipuli.retiisi.org.uk>
-References: <20210112194919.50176-1-ezequiel@collabora.com>
- <20210112194919.50176-3-ezequiel@collabora.com>
+        id S239427AbhBBTPF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 14:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239366AbhBBTNG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 14:13:06 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAD6C06174A
+        for <linux-media@vger.kernel.org>; Tue,  2 Feb 2021 11:12:51 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id x71so23928944oia.9
+        for <linux-media@vger.kernel.org>; Tue, 02 Feb 2021 11:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nextdimension-cc.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W7/wumPYaDXvrSfz/foNT7RLqvBay6ohSxkvP2fI/GE=;
+        b=LD4Qw462baxXGEU3S/8E3w0DSkXbO8+ahRmmhb+Bd0nlFWdmvu5jdkZERmHdHF2Fxo
+         LUV+WXGjavjrhYoLNRp/Qc9lh1+fgFl1b62GeEiCmifZcxEBq8EnYYILAMspM+MK6LTm
+         cEaIG7gdIfwsFU4I4gG9k3M7o0YzsgIeJCYcpW3kidFniHkXqrTHrKB/oNb2iP9TWDky
+         AcGZwWT8HPCZcmKxMdmdhRWWWkCC9WDOhc+w+azQFWkeVM8Bfw9fCJ04DmByu9whO5c9
+         u4t8io7YWrAbF5CmDx5hXoV67MmXlClJFMdjRAYwtWGNB4kDppvNH2LR3s7m2wsptBWU
+         DSrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=W7/wumPYaDXvrSfz/foNT7RLqvBay6ohSxkvP2fI/GE=;
+        b=L+CQCARYxHQMtOEoudWpi0+BWX/mtIjqFOcoX2QwY7O2vs2kJTm/QF3KygOA0LPmst
+         kVumKM2YoWjPiWZTmdRQe10N4X7NCNmKNG5wcKMVvOt7RC/l2ISz4o8hhpdLgztWcOac
+         3MxHc2HnkSY2TkiJBBDOc9Z58WHHxt+3HmU0UJRw6KJCY0c7ClxUQfY0FOAQMA4WiwEb
+         J+zGnFKsTeAjnJDU/XZLiGttL4EVI6fPYsWy9h9a9VnIDsyS+AmTtS3ni7KAAP0GaiiX
+         w6wepL6uAxdNoBpdMIYH5s14iOr7jeicowMbh3Cshmymzsee3Z34lOcXfFSQ/lwd9EvF
+         Xopg==
+X-Gm-Message-State: AOAM532KWgOiBYnfjUJ2MEnG4hTThmaSfADKpKtySb2XgDZ60fyG/au6
+        zK80hCE8+PqH/slV8Uqb6vvdcEORsC/eOIA1
+X-Google-Smtp-Source: ABdhPJz2DR+CR++gNI/avmDpYULd15MQq4uP1DJPWTnymax9pcn7tNx/0heE7eFK8ZeQFFAG0FvL0A==
+X-Received: by 2002:aca:c484:: with SMTP id u126mr3787287oif.107.1612293170684;
+        Tue, 02 Feb 2021 11:12:50 -0800 (PST)
+Received: from localhost (66-90-181-52.dyn.grandenetworks.net. [66.90.181.52])
+        by smtp.gmail.com with ESMTPSA id e20sm4774844otr.14.2021.02.02.11.12.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Feb 2021 11:12:50 -0800 (PST)
+From:   Brad Love <brad@nextdimension.cc>
+To:     linux-media@vger.kernel.org, sean@mess.org, mchehab@kernel.org
+Cc:     Brad Love <brad@nextdimension.cc>
+Subject: [PATCH 1/2] em28xx: Add pid for bulk revision of Hauppauge 461e
+Date:   Mon,  1 Feb 2021 19:40:29 -0600
+Message-Id: <20210202014030.27466-2-brad@nextdimension.cc>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20210202014030.27466-1-brad@nextdimension.cc>
+References: <20210202014030.27466-1-brad@nextdimension.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210112194919.50176-3-ezequiel@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1612292878; a=rsa-sha256; cv=none;
-        b=V+7Tvhny7wzLuCrYocZb4CbfpLmTBvccB3m8SBEc7gdliUNQbEmOfCZ1fGDwit/02nYpep
-        4hR/T1np+Lh546onpW+Allh058SM2MOGW7NjrTgvJum14EMuHs5RtNpSv6UPAy4GaHskY7
-        2NEVWaOe/nw/mgF+KiyivO8MZpoQpZM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1612292878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iED9/bsv62xclPHCgDTFayfsix4RS/oy4XGwwbCpS70=;
-        b=JgnA25G0SB/K+2rg22su9fddHW+7FR54NxRe+MGjdHtDAQCk++uiicjmH12AJPu4W9NG3e
-        iLS9/6fQzzf93UgRLorfueO1D/nyIi9MJNaO02GQXvEzPxO5pgQndfR49ij5xWvvTk9UHM
-        OHaGbS+7ds94LKYPeeD7OUE3I/jIv8A=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 04:49:15PM -0300, Ezequiel Garcia wrote:
-> Now that mach-based PXA platforms are registering proper
-> fixed-rate clocks through the CCF, the v4l2-clk clock
-> is no longer required.
-> 
-> Drop this clock, so the driver no longer depends on the
-> legacy v4l2-clk API.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Manufacturing has switched from ISOC to bulk transport,
+the pid has accordingly changed to signify this.
 
-There was a minor conflict with the recently merged patches. I resolved it
-(second last chunk) here:
+0x2013:0x0258 is an ISOC 461e
 
-<URL:https://git.linuxtv.org/sailus/media_tree.git/commit/?id=2bd3c6097aaac76c0a7846456820de1ccf48194e>
+0x2013:0x8258 is a bulk transport 461e
 
+
+Signed-off-by: Brad Love <brad@nextdimension.cc>
+---
+ drivers/media/usb/em28xx/em28xx-cards.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index d6c8ae213914..786978e7a59a 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -2778,6 +2778,8 @@ struct usb_device_id em28xx_id_table[] = {
+ 			.driver_info = EM2765_BOARD_SPEEDLINK_VAD_LAPLACE },
+ 	{ USB_DEVICE(0x2013, 0x0258),
+ 			.driver_info = EM28178_BOARD_PCTV_461E },
++	{ USB_DEVICE(0x2013, 0x8258), /* Bulk transport 461e */
++			.driver_info = EM28178_BOARD_PCTV_461E },
+ 	{ USB_DEVICE(0x2013, 0x0461),
+ 			.driver_info = EM28178_BOARD_PCTV_461E_V2 },
+ 	{ USB_DEVICE(0x2013, 0x0259),
 -- 
-Sakari Ailus
+2.28.0
+
