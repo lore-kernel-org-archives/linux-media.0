@@ -2,207 +2,341 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB6EAC433E9
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 16:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7979C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 17:43:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8CC764F98
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 16:50:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBE2B64DA3
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 17:43:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbhBBQuw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 11:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S237792AbhBBRm5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 12:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236849AbhBBQsi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 11:48:38 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F73C0613ED
-        for <linux-media@vger.kernel.org>; Tue,  2 Feb 2021 08:48:21 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id u20so20419666qku.7
-        for <linux-media@vger.kernel.org>; Tue, 02 Feb 2021 08:48:21 -0800 (PST)
+        with ESMTP id S234089AbhBBOMQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Feb 2021 09:12:16 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655FC061573
+        for <linux-media@vger.kernel.org>; Tue,  2 Feb 2021 06:11:34 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j11so1779078wmi.3
+        for <linux-media@vger.kernel.org>; Tue, 02 Feb 2021 06:11:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=z/EBW3lSMJRuUM6KhWPFizjlNyp9yXPemx5mx5O0kPo=;
-        b=DyjnsqgOeraM6uqiEo/I2HIVwCcOt8bYyWJ2FKt48gdpWmtQPVIz5sxPlfwIfzMLeC
-         ytg2IqvZLjAjLtPkgrxolTiVyU02tcd5Y2a644WFoyT6O7+Cz2CfE+C0/pxReRxHJVHj
-         t1MmmakKMVeSsfR7KpT7DAXDwCvVUTYvIJOr183zftIP0+/VONwhwuVElnNVzFw/d8eT
-         1SsFi/qnyUnwLrqA+zbufi6ZSHjfZsDAJhusdP1ot4CmS42DErFF13l0E1b81WiGUZDv
-         Z2kjAswLOeFryTQc4Dwg0kEgILXr3YgMBrImmmlqC0AwaNk8qU4+J1MAZkh6liCKxmzR
-         m9TA==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nNUotO5RGkqjnMAKfih0mDKNZwfN8WA2MKXbQdWQwII=;
+        b=gXHqLI0koSbEE8gy/dWeNdoPMKa6qwjJp/K27iGcTda8+4K1udNDzYV4UCHXqvfiEe
+         8STPzP5aLZCDibLuuyYZMusSRgXxr8fwj9vs4vYfcQREMnrUvG2HXxacNrVXl9hst3Ld
+         nWRrHi9f242PVwqKR5XMY0Ms7ad4a0HJtIpb8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=z/EBW3lSMJRuUM6KhWPFizjlNyp9yXPemx5mx5O0kPo=;
-        b=tvrNHNB94DGlydQZwDgxy1q8xU9n7dNH3DOBCzVVg4R9EMrbLop1kyCbNakdE6tr8b
-         jI5wWo47OY64CvW8hqRgchZwRxNH3GXbdinjU7DtAj0MSovlTWeF8Rfw8uFsTOUOZ1tX
-         SpugEAsCl+cZKu/l2DTkOPlKRSY5srW0KcPUKBt014zfYMrCUyAJbYv3AL2X7dx8eodh
-         k/qPymdzKdEyS77LBLhAqBL2/9u8H5Cc4vMNbO3BtkDG3mYswjlVJFVzYr1uqS/ML4uL
-         4/tbNaeGERwn4tSk5TBGj0e4wk6szUV5MEV+CJ+xxYOlqgWZU79AV5IVU/vzZwkYv9iT
-         RMaA==
-X-Gm-Message-State: AOAM533hf5FMfViSnzjqlt81+atvslt/KuHV4ebQb6ipzP8vEZ6iYv2A
-        KDNWyjlcxpZKebRUHJnT6lYwGmpIMR71bK0Q
-X-Google-Smtp-Source: ABdhPJwkM+P2BngWlR685lQOcS7zKmhHslXyOvJBo33Jlv9DEtpZYwfzKvFQ/XC58NXuV7KxOVzTBQ==
-X-Received: by 2002:a05:620a:64d:: with SMTP id a13mr20217278qka.383.1612284501074;
-        Tue, 02 Feb 2021 08:48:21 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id l22sm17293573qtl.96.2021.02.02.08.48.19
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nNUotO5RGkqjnMAKfih0mDKNZwfN8WA2MKXbQdWQwII=;
+        b=EZTGShjbg9E/FlienCFwWTkKWTLUb5//KBRhLC29lhAOe4kUKix/9EaFiLPFXVu8SW
+         WXtWxOKmlwHPCPimoy1UhWGSemsl5cjVE6xkEUjYK4V+rlZGMiBZxGHZSATYjTQsi87X
+         39Cd8QDqaIx/O4r1W55FK3VbCSbnN+1v/kFkAnIrcW5NDr42llkhsGfscuOnEz1Zlhbc
+         ZXM+aKPvkC4OIFlsb6eGtY/nl9dh2XTSZmA49OLFnJHVO3VPJmvnwQYwUtWa1MU6nYqi
+         jfdbhEHW4nWSZOMLU5qiHxEaQAxtSVeNuvIRa0mK2RpB+hMCVs+YrshrfB7+5SLOtrAG
+         soig==
+X-Gm-Message-State: AOAM533ci4PWJao6CgoRmRP3xlxXfutvU5FPzjAf4ECajZq7LUkS7PSm
+        b4eFb/V4TsHen0gWc9o0sAfVvA==
+X-Google-Smtp-Source: ABdhPJyKbCZyvz/F7BjnngYPMyYGLYOF0G/H26ZKHIgPG3MddYAgM4IDB8oQ1Wh+DC6w7Sd+YiS7JQ==
+X-Received: by 2002:a1c:2c89:: with SMTP id s131mr3841413wms.176.1612275093141;
+        Tue, 02 Feb 2021 06:11:33 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id u10sm3201892wmj.40.2021.02.02.06.11.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 08:48:19 -0800 (PST)
-Message-ID: <15b60100bbcf709fd8856d7ad5f2cdf525cc059b.camel@ndufresne.ca>
-Subject: Re: Stateful Video Decoder interface vs M2M framework
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Alexandre Courbot <acourbot@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Date:   Tue, 02 Feb 2021 11:48:17 -0500
-In-Reply-To: <CAPY8ntDZ1uPwvz9Yz5yLaByU45cocuHmTbUheraTEUK7R-Jz8Q@mail.gmail.com>
-References: <CAPY8ntCzAMsfujidsLKcL=f61T7WmioWSeaHL2hKmEn1jrnZ=A@mail.gmail.com>
-         <CAPBb6MVj9QT+NrWjt+c2uFKWSzveMCBt4YJfnOz_MN0hDemcpw@mail.gmail.com>
-         <CAPY8ntDZ1uPwvz9Yz5yLaByU45cocuHmTbUheraTEUK7R-Jz8Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3 (3.38.3-1.fc33) 
+        Tue, 02 Feb 2021 06:11:32 -0800 (PST)
+Date:   Tue, 2 Feb 2021 15:11:30 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, sam@ravnborg.org,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        linaro-mm-sig@lists.linaro.org, hdegoede@redhat.com,
+        kraxel@redhat.com, airlied@redhat.com,
+        virtualization@lists.linux-foundation.org, sean@poorly.run,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 04/13] drm/shmem-helper: Provide a vmap function for
+ short-term mappings
+Message-ID: <YBldkhUXF+SFPaSy@phenom.ffwll.local>
+References: <20210108094340.15290-1-tzimmermann@suse.de>
+ <20210108094340.15290-5-tzimmermann@suse.de>
+ <X/yB3LC79f/zWTwG@phenom.ffwll.local>
+ <006b7d47-e7dd-8fa6-6cf1-eff194d7b30f@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <006b7d47-e7dd-8fa6-6cf1-eff194d7b30f@suse.de>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le lundi 01 février 2021 à 17:09 +0000, Dave Stevenson a écrit :
-> Hi Alex
+On Wed, Jan 27, 2021 at 01:08:05PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> Thanks for the response.
-> 
-> On Mon, 1 Feb 2021 at 13:58, Alexandre Courbot <acourbot@chromium.org> wrote:
+> Am 11.01.21 um 17:50 schrieb Daniel Vetter:
+> > On Fri, Jan 08, 2021 at 10:43:31AM +0100, Thomas Zimmermann wrote:
+> > > Implementations of the vmap/vunmap GEM callbacks may perform pinning
+> > > of the BO and may acquire the associated reservation object's lock.
+> > > Callers that only require a mapping of the contained memory can thus
+> > > interfere with other tasks that require exact pinning, such as scanout.
+> > > This is less of an issue with private SHMEM buffers, but may happen
+> > > with imported ones.
+> > > 
+> > > Therefore provide the new interfaces drm_gem_shmem_vmap_local() and
+> > > drm_gem_shmem_vunmap_local(), which only perform the vmap/vunmap
+> > > operations. Callers have to hold the reservation lock while the mapping
+> > > persists.
+> > > 
+> > > This patch also connects GEM SHMEM helpers to GEM object functions with
+> > > equivalent functionality.
+> > > 
+> > > v4:
+> > > 	* call dma_buf_{vmap,vunmap}_local() where necessary (Daniel)
+> > > 	* move driver changes into separate patches (Daniel)
+> > > 
+> > > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> > > ---
+> > >   drivers/gpu/drm/drm_gem_shmem_helper.c | 90 +++++++++++++++++++++++---
+> > >   include/drm/drm_gem_shmem_helper.h     |  2 +
+> > >   2 files changed, 84 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> > > index 9825c378dfa6..298832b2b43b 100644
+> > > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> > > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> > > @@ -32,6 +32,8 @@ static const struct drm_gem_object_funcs drm_gem_shmem_funcs = {
+> > >   	.get_sg_table = drm_gem_shmem_get_sg_table,
+> > >   	.vmap = drm_gem_shmem_vmap,
+> > >   	.vunmap = drm_gem_shmem_vunmap,
+> > > +	.vmap_local = drm_gem_shmem_vmap_local,
+> > > +	.vunmap_local = drm_gem_shmem_vunmap_local,
+> > >   	.mmap = drm_gem_shmem_mmap,
+> > >   };
+> > > @@ -261,7 +263,8 @@ void drm_gem_shmem_unpin(struct drm_gem_object *obj)
+> > >   }
+> > >   EXPORT_SYMBOL(drm_gem_shmem_unpin);
+> > > -static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem, struct dma_buf_map *map)
+> > > +static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem, struct dma_buf_map *map,
+> > > +				     bool local)
 > > 
-> > Hi,
+> > This is a bit spaghetti and also has the problem that we're not changing
+> > shmem->vmap_use_count under different locks, depending upon which path
+> > we're taking.
 > > 
-> > On Mon, Feb 1, 2021 at 9:49 PM Dave Stevenson
-> > <dave.stevenson@raspberrypi.com> wrote:
-> > > 
-> > > Hi All.
-> > > 
-> > > I'm currently doing battle with the stateful video decoder API for
-> > > video decode on the Raspberry Pi.
-> > > 
-> > > Reading the descriptive docs[1] there is no obligation to
-> > > STREAMON(CAPTURE) before feeding in OUTPUT buffers and waiting for
-> > > V4L2_EVENT_SOURCE_CHANGE to configure the CAPTURE queue. Great! It
-> > > makes my colleague who is working on the userspace side happy as it
-> > > saves a config step of allocating buffers that are never needed.
-> > > 
-> > > I have been using the v4l2_mem2mem framework, same as some other
-> > > decoders. We use v4l2_m2m in the buffered mode as it's actually
-> > > remoted over to the VPU via the MMAL API, and so the src and dest are
-> > > asynchronous from V4L2's perspective.
-> > > 
-> > > Said colleague then complained that he couldn't follow the flow
-> > > described in the docs linked above as it never produced the
-> > > V4L2_EVENT_SOURCE_CHANGE event.
-> > > 
-> > > Digging into it, it's the v4l2_mem2mem framework stopping me.
-> > > __v4l2_m2m_try_queue[2] has
-> > >     if (!m2m_ctx->out_q_ctx.q.streaming
-> > >         || !m2m_ctx->cap_q_ctx.q.streaming) {
-> > >         dprintk("Streaming needs to be on for both queues\n");
-> > >         return;
-> > >     }
-> > > So I'm never going to get any of the OUTPUT buffers even queued to my
-> > > driver until STREAMON(CAPTURE). That contradicts the documentation :-(
-> > > 
-> > > Now I can see that on a non-buffered M2M device you have to have both
-> > > OUTPUT and CAPTURE enabled because it wants to produce a CAPTURE
-> > > buffer for every OUTPUT buffer on a 1:1 basis. On a buffered codec
-> > > tweaking that one clause to
-> > >     if (!m2m_ctx->out_q_ctx.buffered &&
-> > >         (!m2m_ctx->out_q_ctx.q.streaming ||
-> > >          !m2m_ctx->cap_q_ctx.q.streaming)) {
-> > > solves the problem, but is that a generic solution? I don't have any
-> > > other platforms to test against.
+> > I think the cleanest would be if we pull the if (import_attach) case out
+> > of the _locked() version completely, for all cases, and also outside of
+> > the shmem->vmap_lock. This means no caching of vmaps in the shmem layer
+> > anymore for imported buffers, but this is no longer a problem: We cache
+> > them in the exporters instead (I think at least, if not maybe need to fix
+> > that where it's expensive).
+> 
+> There's no vmap refcounting in amdgpu AFAICT. So importing pages from there
+> into an SHMEM object has the potential of breaking. IIRC same fro radeon and
+> nouveau.
+
+As long as the pinning is refcounted I think it should be fine, it's just
+that if you have multiple vmaps (e.g. 2 udl devices plugged in) we'll set
+up 2 vmaps. Which is a point pointless, but not really harmful. At least
+on 64bit where there's enough virtual address space.
+
+> So I'm somewhat reluctant to making this change. I guess I'll look elsewhere
+> first to fix some of the locking issues (e.g., my recent ast cursor
+> patches).
+
+If this would break for amdgpu/radeon/nouveau then we already have a bug,
+since 2 udl devices can provoke this issue already as-is. So I don't think
+this should be a blocker.
+-Daniel
+
+> 
+> Best regards
+> Thomas
+> 
 > > 
-> > As you said you cannot rely on the v4l2_m2m_try_schedule() to run the
-> > jobs until both queues are streaming. This is one point where stateful
-> > decoders do not fit with the expectation from M2M that 1 input buffer
-> > == 1 output buffer. How to work around this limitation depends on the
-> > design of the underlying hardware, but for example the mtk-vcodec
-> > driver passes the OUTPUT buffers to its hardware in its vb2 buf_queue
-> > hook:
+> > Other option would be to unly pull it out for the _vmap_local case, but
+> > that's a bit ugly because no longer symmetrical in the various paths.
 > > 
-> > https://elixir.bootlin.com/linux/latest/source/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c#L1220
+> > >   {
+> > >   	struct drm_gem_object *obj = &shmem->base;
+> > >   	int ret = 0;
+> > > @@ -272,7 +275,10 @@ static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem, struct
+> > >   	}
+> > >   	if (obj->import_attach) {
+> > > -		ret = dma_buf_vmap(obj->import_attach->dmabuf, map);
+> > > +		if (local)
+> > > +			ret = dma_buf_vmap_local(obj->import_attach->dmabuf, map);
+> > > +		else
+> > > +			ret = dma_buf_vmap(obj->import_attach->dmabuf, map);
+> > >   		if (!ret) {
+> > >   			if (WARN_ON(map->is_iomem)) {
+> > >   				ret = -EIO;
+> > > @@ -313,7 +319,7 @@ static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem, struct
+> > >   	return ret;
+> > >   }
+> > > -/*
+> > > +/**
+> > >    * drm_gem_shmem_vmap - Create a virtual mapping for a shmem GEM object
+> > >    * @shmem: shmem GEM object
+> > >    * @map: Returns the kernel virtual address of the SHMEM GEM object's backing
+> > > @@ -339,15 +345,53 @@ int drm_gem_shmem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
+> > >   	ret = mutex_lock_interruptible(&shmem->vmap_lock);
+> > >   	if (ret)
+> > >   		return ret;
+> > > -	ret = drm_gem_shmem_vmap_locked(shmem, map);
+> > > +	ret = drm_gem_shmem_vmap_locked(shmem, map, false);
+> > >   	mutex_unlock(&shmem->vmap_lock);
+> > >   	return ret;
+> > >   }
+> > >   EXPORT_SYMBOL(drm_gem_shmem_vmap);
+> > > +/**
+> > > + * drm_gem_shmem_vmap_local - Create a virtual mapping for a shmem GEM object
+> > > + * @shmem: shmem GEM object
+> > > + * @map: Returns the kernel virtual address of the SHMEM GEM object's backing
+> > > + *       store.
+> > > + *
+> > > + * This function makes sure that a contiguous kernel virtual address mapping
+> > > + * exists for the buffer backing the shmem GEM object.
+> > > + *
+> > > + * The function is called with the BO's reservation object locked. Callers must
+> > > + * hold the lock until after unmapping the buffer.
+> > > + *
+> > > + * This function can be used to implement &drm_gem_object_funcs.vmap_local. But
+> > > + * it can also be called by drivers directly, in which case it will hide the
+> > > + * differences between dma-buf imported and natively allocated objects.
 > > 
-> > This allows the hardware to start processing the stream until it
-> > reports the expected resolution, after which the CAPTURE buffers can
-> > be allocated and the CAPTURE queue started.
+> > So for the other callbacks I tried to make sure we have different entry
+> > points for this, since it's not really the same thing and because of the
+> > locking mess we have with dma_resv_lock vs various pre-existing local
+> > locking scheme, it's easy to get a mess.
 > > 
-> > Queueing OUTPUT buffers in the buf_queue hook can be done as a general
-> > rule if the hardware expects input and output buffers to be queued
-> > independently. You can also switch to a more traditional M2M scheme
-> > once both queues are running if this fits the driver better.
-> 
-> Is it deliberate that v4l2_m2m_try_schedule enforces both queues being
-> active in buffered mode, or an oversight?
-> 
-> I'm happy to switch to a custom qbuf on the OUTPUT queue if we must,
-> but at least for drivers using the buffered mode of v4l2_m2m it seems
-> unnecessary except for this one conditional.
-> 
+> > I think the super clean version here would be to also export just the
+> > internal stuff for the ->v(un)map_local hooks, but that's maybe a bit too
+> > much boilerplate for no real gain.
+> > -Daniel
+> > 
+> > > + *
+> > > + * Acquired mappings should be cleaned up by calling drm_gem_shmem_vunmap_local().
+> > > + *
+> > > + * Returns:
+> > > + * 0 on success or a negative error code on failure.
+> > > + */
+> > > +int drm_gem_shmem_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map)
+> > > +{
+> > > +	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+> > > +	int ret;
+> > > +
+> > > +	dma_resv_assert_held(obj->resv);
+> > > +
+> > > +	ret = mutex_lock_interruptible(&shmem->vmap_lock);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +	ret = drm_gem_shmem_vmap_locked(shmem, map, true);
+> > > +	mutex_unlock(&shmem->vmap_lock);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +EXPORT_SYMBOL(drm_gem_shmem_vmap_local);
+> > > +
+> > >   static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem,
+> > > -					struct dma_buf_map *map)
+> > > +					struct dma_buf_map *map, bool local)
+> > >   {
+> > >   	struct drm_gem_object *obj = &shmem->base;
+> > > @@ -358,7 +402,10 @@ static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem,
+> > >   		return;
+> > >   	if (obj->import_attach)
+> > > -		dma_buf_vunmap(obj->import_attach->dmabuf, map);
+> > > +		if (local)
+> > > +			dma_buf_vunmap_local(obj->import_attach->dmabuf, map);
+> > > +		else
+> > > +			dma_buf_vunmap(obj->import_attach->dmabuf, map);
+> > >   	else
+> > >   		vunmap(shmem->vaddr);
+> > > @@ -366,7 +413,7 @@ static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem,
+> > >   	drm_gem_shmem_put_pages(shmem);
+> > >   }
+> > > -/*
+> > > +/**
+> > >    * drm_gem_shmem_vunmap - Unmap a virtual mapping fo a shmem GEM object
+> > >    * @shmem: shmem GEM object
+> > >    * @map: Kernel virtual address where the SHMEM GEM object was mapped
+> > > @@ -384,11 +431,38 @@ void drm_gem_shmem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map)
+> > >   	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+> > >   	mutex_lock(&shmem->vmap_lock);
+> > > -	drm_gem_shmem_vunmap_locked(shmem, map);
+> > > +	drm_gem_shmem_vunmap_locked(shmem, map, false);
+> > >   	mutex_unlock(&shmem->vmap_lock);
+> > >   }
+> > >   EXPORT_SYMBOL(drm_gem_shmem_vunmap);
+> > > +/**
+> > > + * drm_gem_shmem_vunmap_local - Unmap a virtual mapping fo a shmem GEM object
+> > > + * @shmem: shmem GEM object
+> > > + * @map: Kernel virtual address where the SHMEM GEM object was mapped
+> > > + *
+> > > + * This function cleans up a kernel virtual address mapping acquired by
+> > > + * drm_gem_shmem_vmap_local(). The mapping is only removed when the use count
+> > > + * drops to zero.
+> > > + *
+> > > + * The function is called with the BO's reservation object locked.
+> > > + *
+> > > + * This function can be used to implement &drm_gem_object_funcs.vmap_local.
+> > > + * But it can also be called by drivers directly, in which case it will hide
+> > > + * the differences between dma-buf imported and natively allocated objects.
+> > > + */
+> > > +void drm_gem_shmem_vunmap_local(struct drm_gem_object *obj, struct dma_buf_map *map)
+> > > +{
+> > > +	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+> > > +
+> > > +	dma_resv_assert_held(obj->resv);
+> > > +
+> > > +	mutex_lock(&shmem->vmap_lock);
+> > > +	drm_gem_shmem_vunmap_locked(shmem, map, true);
+> > > +	mutex_unlock(&shmem->vmap_lock);
+> > > +}
+> > > +EXPORT_SYMBOL(drm_gem_shmem_vunmap_local);
+> > > +
+> > >   struct drm_gem_shmem_object *
+> > >   drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
+> > >   				 struct drm_device *dev, size_t size,
+> > > diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
+> > > index 434328d8a0d9..3f59bdf749aa 100644
+> > > --- a/include/drm/drm_gem_shmem_helper.h
+> > > +++ b/include/drm/drm_gem_shmem_helper.h
+> > > @@ -114,7 +114,9 @@ void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem);
+> > >   int drm_gem_shmem_pin(struct drm_gem_object *obj);
+> > >   void drm_gem_shmem_unpin(struct drm_gem_object *obj);
+> > >   int drm_gem_shmem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
+> > > +int drm_gem_shmem_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map);
+> > >   void drm_gem_shmem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map);
+> > > +void drm_gem_shmem_vunmap_local(struct drm_gem_object *obj, struct dma_buf_map *map);
+> > >   int drm_gem_shmem_madvise(struct drm_gem_object *obj, int madv);
+> > > -- 
+> > > 2.29.2
 > > > 
-> > > However it poses a larger question for my colleague as to what
-> > > behaviour he can rely on in userspace. Is there a way for userspace to
-> > > know whether it is permitted on a specific codec implementation to
-> > > follow the docs and not STREAMON(CAPTURE) until
-> > > V4L2_EVENT_SOURCE_CHANGE? If not then the documentation is invalid for
-> > > many devices.
 > > 
-> > The documentation should be correct for most if not all stateful
-> > decoders in the tree. I know firsthand that at least mtk-vcodec and
-> > venus are compliant.
 > 
-> mtk-vcodec I can see as being compliant now - thanks for your explanation.
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N�rnberg, Germany
+> (HRB 36809, AG N�rnberg)
+> Gesch�ftsf�hrer: Felix Imend�rffer
 > 
-> venus appears to ignore the v4l2_m2m job scheduling side (device_run
-> is empty), has a good rummage in the v4l2_m2m buffer queues from
-> venus_helper_process_initial_out_bufs, and then has a custom vb2_ops
-> buf_queue to queue the buffer with v4l2_m2m and then immediately kick
-> the processing thread.
-> 
-> Now knowing where to look, coda appears to have a custom code path in
-> coda_buf_queue to handle the startup phase, and then drops into a more
-> generic path once initialised.
-
-Just a warning, CODA does not really implement the source-change event the way
-it should. The other did not have the specification hence didn't know how to get
-the frame resolution from the HW. At the moment, it only work for special
-userspace that passed the resolution at setup time (which by spec should be
-ignored in favour of HW reported sizes).
-
-You might not be aware that this event driven mechanism was added much after
-most of drivers were merged into staging. The legacy method, which I don't
-recommand was that userspace would queue on OUTPUT the initial header data, and
-then it would call G_FMT which would block till the data was processed. If I
-remember right, MFC driver (the first of this type of driver) was starting the
-proecessing right inside the G_FMT call.
-
-I'm currently working on general support for source-change on GStreamer side
-(not only for codecs), that should allow reviving:
-
-https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/merge_requests/240
-
-Which is a left behind attempt to implement compliance to the recent spec in
-GStreamer, which I know is available software on RPi.
-
-> 
-> v4l2_m2m seems to be so close to doing what is needed for the
-> stateless decoders that it seems odd that it's requiring what looks
-> like bodging to all stateless decoders. I guess it's just the way
-> things have evolved over time.
-> 
-> Thanks again.
->   Dave
 
 
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
