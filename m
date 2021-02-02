@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 972C5C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06913C433E9
 	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:51:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6101364F53
-	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:51:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6D2D64F5D
+	for <linux-media@archiver.kernel.org>; Tue,  2 Feb 2021 14:51:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbhBBOvD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Feb 2021 09:51:03 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:48399 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234833AbhBBOu0 (ORCPT
+        id S234853AbhBBOvA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Feb 2021 09:51:00 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:48815 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234831AbhBBOu0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 2 Feb 2021 09:50:26 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id 6wzel32bSefbk6wzilkQkd; Tue, 02 Feb 2021 15:49:30 +0100
+        id 6wzel32bSefbk6wzilkQkK; Tue, 02 Feb 2021 15:49:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1612277370; bh=VO6+AXb+Nercoa8KoJR2JJWDUrCSDX7GwlJX/EvE4J4=;
+        t=1612277370; bh=7fv3oSjetGMiecAfJ8yFAEP1Zr8uuFlogaKHZOSilug=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=aJDJFZ63SckH3Yx6KFmacso/D2ncNsUYiRUsUxM88aI3DHbBVzvYZPxgl2+xm0SUk
-         pme75OUxSi1nayRX+yF57hltDinOCivS0q4+cltjnneXi4bsRO3EQeLMIzbsgQQJb9
-         qy/mw4q1GcCJs2l6nGggNz/VppgPcAq8TPOhyo4hzyiN3tiopWQcyqu0eS1xz/BF9N
-         1WM35WomVWapdMsZBNM6rRH/smsWCbAUtOwRCniBagkf8d50Ef772kyvr6AxXkiGW5
-         Hgj98hg51XDqRUhCi33b3f3hNRN5yLBPS8GmNCoMIHopQ9gddIg8DccmiNhZmdcRP2
-         XzEjPZ7xYfpIw==
+        b=QFNkZgkGV+RMkj2IxfH4nMXaf22kJdEE3toYQ14cq7j3tMEX/x0UpB9XyUB+5S7UR
+         oEelsO/KlDiCBGWV8mp/OtFKO3jUD25ltX15vow6ofe59m0khXss5u4ghLKP33Hziv
+         /DXPJXw6BKiocEwqNd6nRvWIjbFh1BMA/oRrE8xE0u45EGhS1BTiHKaokilP7CKbpb
+         n9d/rwGgdjWLBlq5EhE93wmkSgGJ8wmQyu9Z6Nt4xc0coBQtt5rSOvk4G98vExc13d
+         xvOILWQsy/VRGeGUBwgfPpIyog/nwygoYBVebf00NWdGDTZeqCbCEN8dYunTMTJYHE
+         2TzFdbC+eKmLQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 3/4] v4l2-dev: add /sys media_dev attr for V4L2 devices
-Date:   Tue,  2 Feb 2021 15:49:25 +0100
-Message-Id: <20210202144926.620104-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 1/4] vim2m: intialize the media device earlier
+Date:   Tue,  2 Feb 2021 15:49:23 +0100
+Message-Id: <20210202144926.620104-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210202144926.620104-1-hverkuil-cisco@xs4all.nl>
 References: <20210202144926.620104-1-hverkuil-cisco@xs4all.nl>
@@ -52,86 +52,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For each V4L2 device node create a media_dev attribute in /sys
-which contains the media device major and minor number.
-
-It is not created if the CONFIG_MEDIA_CONTROLLER is not
-defined or if there is no associated media device.
-
-This makes it possible for applications like v4l2-compliance
-to find the associated media controller of a V4L2 device node.
+Before the video device node is registered, the v4l2_dev.mdev
+pointer must be set in order to correctly associate the video
+device with the media device. Move the initialization of the
+media device up.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-dev.c | 49 +++++++++++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 1 deletion(-)
+ drivers/media/test-drivers/vim2m.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index b6a72d297775..7a38176259ad 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -87,13 +87,60 @@ static ssize_t name_show(struct device *cd,
- }
- static DEVICE_ATTR_RO(name);
+diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
+index 331a9053a0ed..a24624353f9e 100644
+--- a/drivers/media/test-drivers/vim2m.c
++++ b/drivers/media/test-drivers/vim2m.c
+@@ -1339,12 +1339,6 @@ static int vim2m_probe(struct platform_device *pdev)
+ 		goto error_dev;
+ 	}
  
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+static ssize_t media_dev_show(struct device *cd,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct video_device *vdev = to_video_device(cd);
-+	struct v4l2_device *v4l2_dev = vdev->v4l2_dev;
-+	dev_t devt = 0;
-+
-+	buf[0] = '\0';
-+	if (v4l2_dev)
-+		devt = media_device_devt(v4l2_dev->mdev);
-+	if (!devt)
-+		return 0;
-+	return sprintf(buf, "%u:%u\n", MAJOR(devt), MINOR(devt));
-+}
-+
-+static DEVICE_ATTR_RO(media_dev);
+-	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
+-	if (ret) {
+-		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
+-		goto error_m2m;
+-	}
+-
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	dev->mdev.dev = &pdev->dev;
+ 	strscpy(dev->mdev.model, "vim2m", sizeof(dev->mdev.model));
+@@ -1353,7 +1347,15 @@ static int vim2m_probe(struct platform_device *pdev)
+ 	media_device_init(&dev->mdev);
+ 	dev->mdev.ops = &m2m_media_ops;
+ 	dev->v4l2_dev.mdev = &dev->mdev;
 +#endif
-+
-+static umode_t video_device_attr_is_visible(struct kobject *kobj,
-+					    struct attribute *attr, int n)
-+{
-+	struct video_device *vdev = to_video_device(kobj_to_dev(kobj));
-+
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+	if (attr == &dev_attr_media_dev.attr) {
-+		struct v4l2_device *v4l2_dev = vdev->v4l2_dev;
-+
-+		if (!v4l2_dev->mdev)
-+			return 0;
+ 
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
++		goto error_m2m;
 +	}
-+#endif
-+	return attr->mode;
-+}
 +
- static struct attribute *video_device_attrs[] = {
- 	&dev_attr_name.attr,
- 	&dev_attr_dev_debug.attr,
- 	&dev_attr_index.attr,
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+	&dev_attr_media_dev.attr,
-+#endif
- 	NULL,
- };
--ATTRIBUTE_GROUPS(video_device);
-+
-+static const struct attribute_group video_device_group = {
-+	.is_visible = video_device_attr_is_visible,
-+	.attrs = video_device_attrs,
-+};
-+
-+static const struct attribute_group *video_device_groups[] = {
-+	&video_device_group,
-+	NULL
-+};
- 
- /*
-  *	Active devices
++#ifdef CONFIG_MEDIA_CONTROLLER
+ 	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
+ 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
+ 	if (ret) {
 -- 
 2.29.2
 
