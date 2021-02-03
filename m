@@ -2,114 +2,115 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1229C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 08:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A780C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 08:53:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CE5464E46
-	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 08:40:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA0D164F76
+	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 08:53:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbhBCIjj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Feb 2021 03:39:39 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:53953 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232949AbhBCIjb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Feb 2021 03:39:31 -0500
-X-UUID: d86ab703ba6c4f02b062ab686072fe31-20210203
-X-UUID: d86ab703ba6c4f02b062ab686072fe31-20210203
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1878262360; Wed, 03 Feb 2021 16:38:47 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 3 Feb 2021 16:38:03 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 3 Feb 2021 16:38:03 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>
-CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 3/5] dt-bindings: media: mtk-vcodec: Add binding for MT8192 VENC
-Date:   Wed, 3 Feb 2021 16:37:50 +0800
-Message-ID: <20210203083752.12586-4-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210203083752.12586-1-irui.wang@mediatek.com>
-References: <20210203083752.12586-1-irui.wang@mediatek.com>
+        id S233090AbhBCIxU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Feb 2021 03:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232970AbhBCIxN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Feb 2021 03:53:13 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61E3C06174A
+        for <linux-media@vger.kernel.org>; Wed,  3 Feb 2021 00:52:33 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id f6so22602597ots.9
+        for <linux-media@vger.kernel.org>; Wed, 03 Feb 2021 00:52:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gXUrCQnAejSUnzy7G5KQj25VP/AJcEkhVg3Q+PK8vz4=;
+        b=h89NNkJ28dLA7gdauHFsbCLgf6ShwELHkxmLj9kk3FjCsOPPRSFu5NoS75J7NXyryC
+         AnUfyRIg5e9tkqHC6oD1I2yEEZn92J7PRB0ijtGjwLJswlozN8neKq3iV/DJEG8czCN9
+         nMTjMXEZmZc7MnsH32Y4HaCC9Qg5+gP1bAYds=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gXUrCQnAejSUnzy7G5KQj25VP/AJcEkhVg3Q+PK8vz4=;
+        b=oCncSk82tzTCfQsDuCNPMH9MzcJNPrCjlSWkGyvSsTUT+DLPXA2pDE2r0Vi8qHVDDY
+         SgQ97XdFx9oRiEuQsTDSvlSImZxziTNUDAr8R7H9WkTBOA/4gCinAv+QJyvZoGygfK+U
+         bwakqGnmmfD3QoOtL1xkKwZQfJpCcwyo0SYPVAmldjb1wZ5UhFCoB/rnz9sUUZKSRwjj
+         4R8lgk8D6MQeUq/9ysD+VDOYRUVlTghvN2bBfVgqr8BGoB1EU7EvFefCxg5CSYpSGCN0
+         bvJhdmcAj9LGyNmnhIRVaAmnfv1CdpgM2Y73fEj7JD3gqoG2g7xTEbL1d/mxKHa/M3wU
+         ZpnA==
+X-Gm-Message-State: AOAM5330GjZwhK8yf+NWerNh6oiKs6YNHHVDA5j1bxTkl+TRKFRNlViS
+        /82aYIcsCz0BJm2cjJ87jN2GzS38HY4nFmmhUhDKew==
+X-Google-Smtp-Source: ABdhPJxq0ZEI6IC6j0hBli9D1xyK0kKminNBfdIJ8J0cuKUE95JWskdN1yRslq7D4jprmId2dxKIg9w+bU/AkYBdsjY=
+X-Received: by 2002:a9d:2265:: with SMTP id o92mr1340983ota.188.1612342353066;
+ Wed, 03 Feb 2021 00:52:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20210203003134.2422308-1-surenb@google.com> <20210203015553.GX308988@casper.infradead.org>
+In-Reply-To: <20210203015553.GX308988@casper.infradead.org>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Wed, 3 Feb 2021 09:52:22 +0100
+Message-ID: <CAKMK7uHnNdjOYX5Rhj=uGMz7hSz12JhgkZJCfiqgkpjXnMfL4A@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] mm: replace BUG_ON in vm_insert_page
+ with a return of an error
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Sandeep Patil <sspatil@google.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        James Jones <jajones@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        John Stultz <john.stultz@linaro.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Updates binding document for mt8192 encoder driver.
+On Wed, Feb 3, 2021 at 2:57 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Feb 02, 2021 at 04:31:33PM -0800, Suren Baghdasaryan wrote:
+> > Replace BUG_ON(vma->vm_flags & VM_PFNMAP) in vm_insert_page with
+> > WARN_ON_ONCE and returning an error. This is to ensure users of the
+> > vm_insert_page that set VM_PFNMAP are notified of the wrong flag usage
+> > and get an indication of an error without panicing the kernel.
+> > This will help identifying drivers that need to clear VM_PFNMAP before
+> > using dmabuf system heap which is moving to use vm_insert_page.
+>
+> NACK.
+>
+> The system may not _panic_, but it is clearly now _broken_.  The device
+> doesn't work, and so the system is useless.  You haven't really improved
+> anything here.  Just bloated the kernel with yet another _ONCE variable
+> that in a normal system will never ever ever be triggered.
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- .../bindings/media/mediatek-vcodec.txt        | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Also, what the heck are you doing with your drivers? dma-buf mmap must
+call dma_buf_mmap(), even for forwarded/redirected mmaps from driver
+char nodes. If that doesn't work we have some issues with the calling
+contract for that function, not in vm_insert_page.
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-index e4644f8caee9..c7fac557006f 100644
---- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-@@ -9,6 +9,7 @@ Required properties:
-   "mediatek,mt8173-vcodec-avc-enc" for mt8173 avc encoder.
-   "mediatek,mt8183-vcodec-enc" for MT8183 encoder.
-   "mediatek,mt8173-vcodec-dec" for MT8173 decoder.
-+  "mediatek,mt8192-vcodec-enc" for MT8192 encoder.
- - reg : Physical base address of the video codec registers and length of
-   memory mapped region.
- - interrupts : interrupt number to the cpu.
-@@ -128,3 +129,28 @@ vcodec_enc_lt: vcodec@19002000 {
-     assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-     assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL_370P5>;
-   };
-+
-+vcodec_enc: vcodec@0x17020000 {
-+    compatible = "mediatek,mt8192-vcodec-enc";
-+    reg = <0 0x17020000 0 0x2000>;
-+    iommus = <&iommu0 M4U_PORT_L7_VENC_RCPU>,
-+             <&iommu0 M4U_PORT_L7_VENC_REC>,
-+             <&iommu0 M4U_PORT_L7_VENC_BSDMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_SV_COMV>,
-+             <&iommu0 M4U_PORT_L7_VENC_RD_COMV>,
-+             <&iommu0 M4U_PORT_L7_VENC_CUR_LUMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_CUR_CHROMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_REF_LUMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_REF_CHROMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_SUB_R_LUMA>,
-+             <&iommu0 M4U_PORT_L7_VENC_SUB_W_LUMA>;
-+    interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH 0>;
-+    dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+    mediatek,scp = <&scp>;
-+    power-domains = <&scpsys MT8192_POWER_DOMAIN_VENC>;
-+    clocks = <&vencsys CLK_VENC_SET1_VENC>;
-+    clock-names = "venc-set1";
-+    assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
-+    assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+};
-+
+Finally why exactly do we need to make this switch for system heap?
+I've recently looked at gup usage by random drivers, and found a lot
+of worrying things there. gup on dma-buf is really bad idea in
+general.
+-Daniel
 -- 
-2.25.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
