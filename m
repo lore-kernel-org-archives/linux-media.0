@@ -2,104 +2,151 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C258C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 07:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95127C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 07:46:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA1C264F55
-	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 07:24:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AD2564E2B
+	for <linux-media@archiver.kernel.org>; Wed,  3 Feb 2021 07:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhBCHXw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Feb 2021 02:23:52 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:34219 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231465AbhBCHXv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Feb 2021 02:23:51 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0UNkEs0-_1612336976;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UNkEs0-_1612336976)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 03 Feb 2021 15:23:04 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] drm/amdgpu:  convert sysfs sprintf/snprintf family to sysfs_emit
-Date:   Wed,  3 Feb 2021 15:22:53 +0800
-Message-Id: <1612336973-70151-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S232213AbhBCHqY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Feb 2021 02:46:24 -0500
+Received: from mga01.intel.com ([192.55.52.88]:29215 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231840AbhBCHqW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Feb 2021 02:46:22 -0500
+IronPort-SDR: a1YvkBoyRLlqprdRYQGpSQfNnFv9Yjw3Rlo6pp/C2D1hAENGEPbS93bG5PYP/S1RfJkusvR0no
+ 6ihDTL2zpRPQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="199952323"
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="199952323"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 23:45:42 -0800
+IronPort-SDR: fF5rkfoPZ3vH4cAOnZJ93QU6teDZbRms7Gt+k1nvmnpa++aDyxq6/NwE96jfVzVUQztYdFwicu
+ 7WyTItDCs/3w==
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="433280695"
+Received: from vkasired-desk2.fm.intel.com ([10.105.128.127])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 23:45:41 -0800
+From:   Vivek Kasireddy <vivek.kasireddy@intel.com>
+To:     virtualization@lists.linux-foundation.org,
+        dri-devel@lists.freedesktop.org
+Cc:     kraxel@redhat.com, daniel.vetter@intel.com, daniel.vetter@ffwll.ch,
+        dongwon.kim@intel.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, linux-media@vger.kernel.org,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: [RFC v3 1/3] kvm: Add a notifier for create and destroy VM events
+Date:   Tue,  2 Feb 2021 23:35:15 -0800
+Message-Id: <20210203073517.1908882-2-vivek.kasireddy@intel.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210203073517.1908882-1-vivek.kasireddy@intel.com>
+References: <20210203073517.1908882-1-vivek.kasireddy@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix the following coccicheck warning:
+After registering with this notifier, other drivers that are dependent
+on KVM can get notified whenever a VM is created or destroyed. This
+also provides a way for sharing the KVM instance pointer with other
+drivers.
 
-./drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:207:8-16: WARNING: use
-scnprintf or sprintf.
-
- ./drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:185:8-16: WARNING: use
-scnprintf or sprintf.
-
-./drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:163:8-16: WARNING: use
-scnprintf or sprintf.
-
-./drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:139:8-16: WARNING: use
-scnprintf or sprintf.
-
-Reported-by: Abaci Robot<abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/kvm_host.h |  5 +++++
+ virt/kvm/kvm_main.c      | 20 ++++++++++++++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index cab1eba..89b5e7c 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -136,7 +136,7 @@ static ssize_t amdgpu_device_get_pcie_replay_count(struct device *dev,
- 	struct amdgpu_device *adev = drm_to_adev(ddev);
- 	uint64_t cnt = amdgpu_asic_get_pcie_replay_count(adev);
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index f3b1013fb22c..fc1a688301a0 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -88,6 +88,9 @@
+ #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
+ #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
  
--	return snprintf(buf, PAGE_SIZE, "%llu\n", cnt);
-+	return sysfs_emit(buf, "%llu\n", cnt);
++#define KVM_EVENT_CREATE_VM 0
++#define KVM_EVENT_DESTROY_VM 1
++
+ /*
+  * error pfns indicate that the gfn is in slot but faild to
+  * translate it to pfn on host.
+@@ -1494,5 +1497,7 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+ 
+ /* Max number of entries allowed for each kvm dirty ring */
+ #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
++int kvm_vm_register_notifier(struct notifier_block *nb);
++int kvm_vm_unregister_notifier(struct notifier_block *nb);
+ 
+ #endif
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 5f260488e999..8a0e8bb02a5f 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -101,6 +101,8 @@ DEFINE_MUTEX(kvm_lock);
+ static DEFINE_RAW_SPINLOCK(kvm_count_lock);
+ LIST_HEAD(vm_list);
+ 
++static struct blocking_notifier_head kvm_vm_notifier;
++
+ static cpumask_var_t cpus_hardware_enabled;
+ static int kvm_usage_count;
+ static atomic_t hardware_enable_failed;
+@@ -148,12 +150,20 @@ static void kvm_io_bus_destroy(struct kvm_io_bus *bus);
+ __visible bool kvm_rebooting;
+ EXPORT_SYMBOL_GPL(kvm_rebooting);
+ 
+-#define KVM_EVENT_CREATE_VM 0
+-#define KVM_EVENT_DESTROY_VM 1
+ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm);
+ static unsigned long long kvm_createvm_count;
+ static unsigned long long kvm_active_vms;
+ 
++inline int kvm_vm_register_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&kvm_vm_notifier, nb);
++}
++
++inline int kvm_vm_unregister_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&kvm_vm_notifier, nb);
++}
++
+ __weak void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+ 						   unsigned long start, unsigned long end)
+ {
+@@ -808,6 +818,8 @@ static struct kvm *kvm_create_vm(unsigned long type)
+ 
+ 	preempt_notifier_inc();
+ 
++	blocking_notifier_call_chain(&kvm_vm_notifier,
++				     KVM_EVENT_CREATE_VM, kvm);
+ 	return kvm;
+ 
+ out_err:
+@@ -886,6 +898,8 @@ static void kvm_destroy_vm(struct kvm *kvm)
+ 	preempt_notifier_dec();
+ 	hardware_disable_all();
+ 	mmdrop(mm);
++	blocking_notifier_call_chain(&kvm_vm_notifier,
++				     KVM_EVENT_DESTROY_VM, kvm);
  }
  
- static DEVICE_ATTR(pcie_replay_count, S_IRUGO,
-@@ -160,7 +160,7 @@ static ssize_t amdgpu_device_get_product_name(struct device *dev,
- 	struct drm_device *ddev = dev_get_drvdata(dev);
- 	struct amdgpu_device *adev = drm_to_adev(ddev);
+ void kvm_get_kvm(struct kvm *kvm)
+@@ -4968,6 +4982,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+ 	r = kvm_vfio_ops_init();
+ 	WARN_ON(r);
  
--	return snprintf(buf, PAGE_SIZE, "%s\n", adev->product_name);
-+	return sysfs_emit(buf, "%s\n", adev->product_name);
- }
++	BLOCKING_INIT_NOTIFIER_HEAD(&kvm_vm_notifier);
++
+ 	return 0;
  
- static DEVICE_ATTR(product_name, S_IRUGO,
-@@ -182,7 +182,7 @@ static ssize_t amdgpu_device_get_product_number(struct device *dev,
- 	struct drm_device *ddev = dev_get_drvdata(dev);
- 	struct amdgpu_device *adev = drm_to_adev(ddev);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", adev->product_number);
-+	return sysfs_emit(buf, "%s\n", adev->product_number);
- }
- 
- static DEVICE_ATTR(product_number, S_IRUGO,
-@@ -204,7 +204,7 @@ static ssize_t amdgpu_device_get_serial_number(struct device *dev,
- 	struct drm_device *ddev = dev_get_drvdata(dev);
- 	struct amdgpu_device *adev = drm_to_adev(ddev);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", adev->serial);
-+	return sysfs_emit(buf, "%s\n", adev->serial);
- }
- 
- static DEVICE_ATTR(serial_number, S_IRUGO,
+ out_unreg:
 -- 
-1.8.3.1
+2.26.2
 
