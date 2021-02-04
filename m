@@ -2,175 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F45C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 22:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D62C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 23:07:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35BB264F95
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 22:25:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19E1064D9D
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 23:07:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbhBDWYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Feb 2021 17:24:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33222 "EHLO mail.kernel.org"
+        id S230037AbhBDXHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Feb 2021 18:07:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229534AbhBDWYv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Feb 2021 17:24:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A10F664FAA;
-        Thu,  4 Feb 2021 22:24:09 +0000 (UTC)
+        id S229787AbhBDXG6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Feb 2021 18:06:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E14A64D9D;
+        Thu,  4 Feb 2021 23:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612477449;
-        bh=JutpsfoRnwZiwX9WSRX+9vPCxj9lG7YuiARSCN/pfb8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R4EZehMHVo5fn0vaQZAo7gB2GbIMgL9Qiush/t7IxMNPcsOg65YtqQLWvt4bMJG5r
-         9lA0cGGOXqj2x+6Sp6C+nsCP9UpoVG7H2Kxadl5eCcGEWjM0L1VWnTD+yhLy8bbnsj
-         U4aqcqXxREXCmyDZNMlany8b0SXougiBRi6sN4iQGcB5bfs1R3oWkHK+yVzaMfmSXq
-         rZsWXNB+48T84kW+wWsLjJRqtCcgMiozGaAzlgcOvMHWIqJm9nQDeLygHVBngpqhMd
-         m0VgANBrq/FqFnSDuQpzpaQ4th8XfYs1SbCzwN0SE6+YWLxM1aHUhPjKLibKF95OFJ
-         oFe7uv9RQ7SFw==
-Received: by pali.im (Postfix)
-        id 42B99736; Thu,  4 Feb 2021 23:24:07 +0100 (CET)
-Date:   Thu, 4 Feb 2021 23:24:07 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-samsung-soc@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, linux-mm@kvack.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [PATCH 1/2] PCI: also set up legacy files only after sysfs init
-Message-ID: <20210204222407.pkx7wvmcvugdwqdd@pali>
-References: <20210204165831.2703772-2-daniel.vetter@ffwll.ch>
- <20210204215019.GA104698@bjorn-Precision-5520>
+        s=k20201202; t=1612479977;
+        bh=2yrQoi07tSr3GqEztnm6rCdEQC9o4rSjgEng2ClYQak=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LgO4ASIb40EkgS5QUIrz31ZXO+KtNJO2DVty+vGFXrR25WNxSEfhpqgoDnW0Sc57M
+         +Okydb53JOlHovRe3gN96g8AAslzWF7U37VQg0HN9Ez81TcDR1OqShEnNRQiMsBqMN
+         0W10WBbhbPnqDUEbOgOt8QhlexG4IWMkMnbdKLkg1IyuaoDIv2opvy3hgMcehd0uyS
+         8iR1HPvmJ5beUeU1koXRIuo1Dhu9hZ3PDLszFoft2jRmZtVUmpit0OQ3CvCqxOUB/k
+         vlhvHVYsxhpNEz3Zo9s+DZl45xsyxY46dUw5kFvT8kN8lMB0CbeeZc2lmz1k1Jy+dP
+         jPPC/e3SA9Ugg==
+Received: by mail-ej1-f47.google.com with SMTP id hs11so8570181ejc.1;
+        Thu, 04 Feb 2021 15:06:17 -0800 (PST)
+X-Gm-Message-State: AOAM530tweY9P05wXLrWJgyXJ+faf8gpXs3zX4OJPV3R0S/eSi1ayXqt
+        PqeJaemH/MhNV21g06ELEmC/obLtTzO0ZsLPAw==
+X-Google-Smtp-Source: ABdhPJyPjFOTPT0jH+zG0qjs4Py4MMPiXwafYcoMdMZUPPpd+AV2YfCVLMo4epWY2VUqB7scUFvuB/IXyikfDLpQJwo=
+X-Received: by 2002:a17:906:57cd:: with SMTP id u13mr1304383ejr.341.1612479975730;
+ Thu, 04 Feb 2021 15:06:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210204215019.GA104698@bjorn-Precision-5520>
-User-Agent: NeoMutt/20180716
+References: <20210203135441.136-1-martinax.krasteva@linux.intel.com>
+ <20210203135441.136-2-martinax.krasteva@linux.intel.com> <1612452057.710530.452037.nullmailer@robh.at.kernel.org>
+ <20210204161654.GC32460@paasikivi.fi.intel.com>
+In-Reply-To: <20210204161654.GC32460@paasikivi.fi.intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 4 Feb 2021 17:06:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJDwtUQEe7RTaNsCkbLr+WO-RS5QuGsQwtAmmm5nkcw_Q@mail.gmail.com>
+Message-ID: <CAL_JsqJDwtUQEe7RTaNsCkbLr+WO-RS5QuGsQwtAmmm5nkcw_Q@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] dt-bindings: media: Add bindings for imx334
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Martina Krasteva <martinax.krasteva@linux.intel.com>,
+        gjorgjix.rosikopulos@linux.intel.com, devicetree@vger.kernel.org,
+        Daniele Alessandrelli <daniele.alessandrelli@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        paul.j.murphy@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thursday 04 February 2021 15:50:19 Bjorn Helgaas wrote:
-> [+cc Oliver, Pali, Krzysztof]
+On Thu, Feb 4, 2021 at 10:17 AM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Rob,
+>
+> On Thu, Feb 04, 2021 at 09:20:57AM -0600, Rob Herring wrote:
+> > On Wed, 03 Feb 2021 13:54:40 +0000, Martina Krasteva wrote:
+> > > From: Martina Krasteva <martinax.krasteva@intel.com>
+> > >
+> > > - Add dt-bindings documentation for Sony imx334 sensor driver.
+> > > - Add MAINTAINERS entry for Sony imx334 binding documentation.
+> > >
+> > > Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
+> > > Reviewed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+> > > Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> > > Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >  .../devicetree/bindings/media/i2c/sony,imx334.yaml | 90 ++++++++++++++++++++++
+> > >  MAINTAINERS                                        |  8 ++
+> > >  2 files changed, 98 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+> > >
+> >
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > Error: Documentation/devicetree/bindings/media/i2c/sony,imx334.example.dts:28.17-18 syntax error
+> > FATAL ERROR: Unable to parse input tree
 
-Just to note that extending or using sysfs_initialized introduces
-another race condition into kernel code which results in PCI fatal
-errors. Details are in email discussion which Bjorn already sent.
+That's usually a missing header for #defines.
 
-> s/also/Also/ in subject
-> 
-> On Thu, Feb 04, 2021 at 05:58:30PM +0100, Daniel Vetter wrote:
-> > We are already doing this for all the regular sysfs files on PCI
-> > devices, but not yet on the legacy io files on the PCI buses. Thus far
-> > now problem, but in the next patch I want to wire up iomem revoke
-> > support. That needs the vfs up an running already to make so that
-> > iomem_get_mapping() works.
-> 
-> s/now problem/no problem/
-> s/an running/and running/
-> s/so that/sure that/ ?
-> 
-> iomem_get_mapping() doesn't exist; I don't know what that should be.
-> 
-> > Wire it up exactly like the existing code. Note that
-> > pci_remove_legacy_files() doesn't need a check since the one for
-> > pci_bus->legacy_io is sufficient.
-> 
-> I'm not sure exactly what you mean by "the existing code."  I could
-> probably figure it out, but it would save time to mention the existing
-> function here.
-> 
-> This looks like another instance where we should really apply Oliver's
-> idea of converting these to attribute_groups [1].
-> 
-> The cover letter mentions options discussed with Greg in [2], but I
-> don't think the "sysfs_initialized" hack vs attribute_groups was part
-> of that discussion.
-> 
-> It's not absolutely a show-stopper, but it *is* a shame to extend the
-> sysfs_initialized hack if attribute_groups could do this more cleanly
-> and help solve more than one issue.
-> 
-> Bjorn
-> 
-> [1] https://lore.kernel.org/r/CAOSf1CHss03DBSDO4PmTtMp0tCEu5kScn704ZEwLKGXQzBfqaA@mail.gmail.com
-> [2] https://lore.kernel.org/dri-devel/CAKMK7uGrdDrbtj0OyzqQc0CGrQwc2F3tFJU9vLfm2jjufAZ5YQ@mail.gmail.com/
-> 
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Dan Williams <dan.j.williams@intel.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: John Hubbard <jhubbard@nvidia.com>
-> > Cc: Jérôme Glisse <jglisse@redhat.com>
-> > Cc: Jan Kara <jack@suse.cz>
-> > Cc: Dan Williams <dan.j.williams@intel.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-mm@kvack.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-samsung-soc@vger.kernel.org
-> > Cc: linux-media@vger.kernel.org
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: linux-pci@vger.kernel.org
-> > ---
-> >  drivers/pci/pci-sysfs.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > index fb072f4b3176..0c45b4f7b214 100644
-> > --- a/drivers/pci/pci-sysfs.c
-> > +++ b/drivers/pci/pci-sysfs.c
-> > @@ -927,6 +927,9 @@ void pci_create_legacy_files(struct pci_bus *b)
-> >  {
-> >  	int error;
-> >  
-> > +	if (!sysfs_initialized)
-> > +		return;
-> > +
-> >  	b->legacy_io = kcalloc(2, sizeof(struct bin_attribute),
-> >  			       GFP_ATOMIC);
-> >  	if (!b->legacy_io)
-> > @@ -1448,6 +1451,7 @@ void pci_remove_sysfs_dev_files(struct pci_dev *pdev)
-> >  static int __init pci_sysfs_init(void)
-> >  {
-> >  	struct pci_dev *pdev = NULL;
-> > +	struct pci_bus *pbus = NULL;
-> >  	int retval;
-> >  
-> >  	sysfs_initialized = 1;
-> > @@ -1459,6 +1463,9 @@ static int __init pci_sysfs_init(void)
-> >  		}
-> >  	}
-> >  
-> > +	while ((pbus = pci_find_next_bus(pbus)))
-> > +		pci_create_legacy_files(pbus);
-> > +
-> >  	return 0;
-> >  }
-> >  late_initcall(pci_sysfs_init);
-> > -- 
-> > 2.30.0
-> > 
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> > make[1]: *** [scripts/Makefile.lib:344: Documentation/devicetree/bindings/media/i2c/sony,imx334.example.dt.yaml] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1370: dt_binding_check] Error 2
+> >
+> > See https://patchwork.ozlabs.org/patch/1435383
+> >
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> >
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> >
+> > pip3 install dtschema --upgrade
+> >
+> > Please check and re-submit.
+>
+> Thanks for reporting this. The example was apparently missing the
+> assigned-clock-parents property. I'll squash the following change to the
+> patch:
+
+Doubtful. That would be a more specific schema error.
+
+>
+> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+> index 3145e94d043e7..4217fbea0735a 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+> @@ -76,6 +76,7 @@ examples:
+>              clocks = <&imx334_clk>
+>
+>              assigned-clocks = <&imx334_clk>;
+> +            assigned-clock-parents = <&imx334_clk_parent>;
+>              assigned-clock-rates = <24000000>;
+>
+>              port {
+>
+> --
+> Kind regards,
+>
+> Sakari Ailus
