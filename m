@@ -2,121 +2,273 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24124C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 16:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F68C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 16:21:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0A6264F46
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 16:19:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C89C964DEC
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 16:21:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237955AbhBDQTE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Feb 2021 11:19:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:38900 "EHLO mga14.intel.com"
+        id S237847AbhBDQVR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Feb 2021 11:21:17 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:47862 "EHLO meesny.iki.fi"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237934AbhBDQSt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Feb 2021 11:18:49 -0500
-IronPort-SDR: /w8vbgSSYIWoSY5MGqTjOUcd0gE1QCvdlXUMTMrq+CoJDdspGVJpIdfUJrCmKOf7nTmT6Fnx0u
- TxFgQJxkYDJA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="180497898"
-X-IronPort-AV: E=Sophos;i="5.79,401,1602572400"; 
-   d="scan'208";a="180497898"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 08:16:59 -0800
-IronPort-SDR: bzAzRLBD3+Ma5y2W74poWfZ7PPWgzQMrm8qKMrz/Axywk0bSiBkqyY8tOLS9ucZwXjTMDVbbx8
- Sq3C33R6PRUA==
-X-IronPort-AV: E=Sophos;i="5.79,401,1602572400"; 
-   d="scan'208";a="356576704"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 08:16:57 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 8915D206DC; Thu,  4 Feb 2021 18:16:54 +0200 (EET)
-Date:   Thu, 4 Feb 2021 18:16:54 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Martina Krasteva <martinax.krasteva@linux.intel.com>,
-        robh+dt@kernel.org, gjorgjix.rosikopulos@linux.intel.com,
-        devicetree@vger.kernel.org, daniele.alessandrelli@linux.intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        paul.j.murphy@linux.intel.com
-Subject: Re: [PATCH v7 1/2] dt-bindings: media: Add bindings for imx334
-Message-ID: <20210204161654.GC32460@paasikivi.fi.intel.com>
-References: <20210203135441.136-1-martinax.krasteva@linux.intel.com>
- <20210203135441.136-2-martinax.krasteva@linux.intel.com>
- <1612452057.710530.452037.nullmailer@robh.at.kernel.org>
+        id S237425AbhBDQUw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Feb 2021 11:20:52 -0500
+Received: from hillosipuli.retiisi.eu (dbd4xkyj7wcfw2k22jcct-3.rev.dnainternet.fi [IPv6:2001:14ba:8f1:3400:fb90:892b:22d6:3885])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 20EDC200E0
+        for <linux-media@vger.kernel.org>; Thu,  4 Feb 2021 18:20:06 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1612455606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=OcnhmdPRJAW5W9PSJhaVONtl+e8VkCK6jeDV1L1q48I=;
+        b=pr0OPmj7KR3oKrc/l9HOwcB9LiYzahBrof0QtIKpEeJY+POOPfJqxOY+Nok1MD9YAGqXH3
+        i1bi2kRZ2TX5/C4GpIH4Tfc1Z3XaH57ZLs8GPkIxxh2vPpX9T6shGfXLS9pXSveVrs8T3j
+        vUu7WavkTkJ/aolvHr5bpuLcwz4YU4k=
+Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 98C14634C89
+        for <linux-media@vger.kernel.org>; Thu,  4 Feb 2021 18:19:53 +0200 (EET)
+Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.org.uk)
+        by valkosipuli.localdomain with esmtp (Exim 4.92)
+        (envelope-from <sakari.ailus@iki.fi>)
+        id 1l7hMT-0000x4-H9
+        for linux-media@vger.kernel.org; Thu, 04 Feb 2021 18:20:05 +0200
+Date:   Thu, 4 Feb 2021 18:20:05 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL v3 for 5.12] More V4L2 patches
+Message-ID: <20210204162005.GD3@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1612452057.710530.452037.nullmailer@robh.at.kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1612455606; a=rsa-sha256; cv=none;
+        b=yQw5iUrl/mOAtoEErQDxi00XZcHI9cA2ldZIKGm0V8wpwIEAsjFE+g3zBZ8QOaYI05xQ2c
+        0XSco2r+Gk6H+KhCfi3jH3UEK/NydARy2bVLbEcxcX6Q0Arvz4yngdhC3yzpCtGjAk8B3H
+        3AfqsNJP5dirKA/v7ZWON0cW2NX+e2Y=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1612455606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=OcnhmdPRJAW5W9PSJhaVONtl+e8VkCK6jeDV1L1q48I=;
+        b=d0IC12PSn1kQLJ1Vx3LVDj5L5GoZeNTRtnD2Vrt9rKErFdy1gh9CXtlgalBYWYXvWKU2M9
+        EzWGblt8obSn9CrTRET9W0H0trcuNleU19D70sQ1VYVfC5QcnHqPnVztlO03lEnzMJz4Nl
+        4yI8petyl7Z7XQ0qmoDqsvKbZgBpIt0=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+Hi Mauro,
 
-On Thu, Feb 04, 2021 at 09:20:57AM -0600, Rob Herring wrote:
-> On Wed, 03 Feb 2021 13:54:40 +0000, Martina Krasteva wrote:
-> > From: Martina Krasteva <martinax.krasteva@intel.com>
-> > 
-> > - Add dt-bindings documentation for Sony imx334 sensor driver.
-> > - Add MAINTAINERS entry for Sony imx334 binding documentation.
-> > 
-> > Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
-> > Reviewed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
-> > Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-> > Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/media/i2c/sony,imx334.yaml | 90 ++++++++++++++++++++++
-> >  MAINTAINERS                                        |  8 ++
-> >  2 files changed, 98 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> > 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Error: Documentation/devicetree/bindings/media/i2c/sony,imx334.example.dts:28.17-18 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:344: Documentation/devicetree/bindings/media/i2c/sony,imx334.example.dt.yaml] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1370: dt_binding_check] Error 2
-> 
-> See https://patchwork.ozlabs.org/patch/1435383
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
+This pull request contains quite a bunch of different patches, but to name
+a few, there are:
 
-Thanks for reporting this. The example was apparently missing the
-assigned-clock-parents property. I'll squash the following change to the
-patch:
+- Ezequiel's V4L2 async cleanup and V4L2 clock removal serieses,
+- RDACM21 camera module driver,
+- Imx258 raw camera driver,
+- Nice improvement for V4L2 async subdev struct allocation by Laurent and
+- Random fixes here and there.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-index 3145e94d043e7..4217fbea0735a 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-@@ -76,6 +76,7 @@ examples:
-             clocks = <&imx334_clk>
- 
-             assigned-clocks = <&imx334_clk>;
-+            assigned-clock-parents = <&imx334_clk_parent>;
-             assigned-clock-rates = <24000000>;
- 
-             port {
+Since v1:
+
+- Add IMX334 driver + DT bindings
+- Add ov8856 driver fix
+- Add LINK_FREQ to IMX219 driver
+- Fix vflip/hflip in ov5675 driver
+- Dropped a minor documentation fix from me, merged with another bigger
+  patch not yet in this pull request
+
+Since v2:
+
+- Add missing assigned-clock-parents property in IMX334 binding example.
+
+Please pull.
+
+
+The following changes since commit 0b9112a58836ad6a7e84eebec06a2de9778b7573:
+
+  Merge tag 'v5.11-rc6' into patchwork (2021-02-01 10:03:45 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.12-5.2-signed
+
+for you to fetch changes up to d1c31eae25038c74328feff57054fcf4b88e388e:
+
+  media: i2c: Add imx334 camera sensor driver (2021-02-04 18:18:09 +0200)
+
+----------------------------------------------------------------
+More V4L2 patches
+
+----------------------------------------------------------------
+Andrey Konovalov (1):
+      media: i2c: imx219: Implement V4L2_CID_LINK_FREQ control
+
+Colin Ian King (1):
+      media: i2c: fix spelling mistakes: "enpoint" -> "endpoint"
+
+Dan Carpenter (1):
+      media: i2c: ov5648: remove unnecessary NULL check
+
+Ezequiel Garcia (19):
+      media: v4l2-async: Remove V4L2_ASYNC_MATCH_DEVNAME
+      media: v4l2-async: Clean v4l2_async_notifier_add_fwnode_remote_subdev
+      media: atmel: Use v4l2_async_notifier_add_fwnode_remote_subdev
+      media: stm32: Use v4l2_async_notifier_add_fwnode_remote_subdev
+      media: exynos4-is: Use v4l2_async_notifier_add_fwnode_remote_subdev
+      media: st-mipid02: Use v4l2_async_notifier_add_fwnode_remote_subdev
+      media: cadence: Use v4l2_async_notifier_add_fwnode_remote_subdev
+      media: marvell-ccic: Use v4l2_async_notifier_add_*_subdev
+      media: renesas-ceu: Use v4l2_async_notifier_add_*_subdev
+      media: pxa-camera: Use v4l2_async_notifier_add_*_subdev
+      media: davinci: vpif_display: Remove unused v4l2-async code
+      media: v4l2-async: Discourage use of v4l2_async_notifier_add_subdev
+      media: Clarify v4l2-async subdevice addition API
+      media: mach-pxa: Register the camera sensor fixed-rate clock
+      media: pxa_camera: Drop the v4l2-clk clock register
+      media: ov9640: Use the generic clock framework
+      media: mt9m111: Use the generic clock framework
+      media: ov6650: Use the generic clock framework
+      media: Remove the legacy v4l2-clk API
+
+Jacopo Mondi (5):
+      media: i2c: Add driver for RDACM21 camera module
+      dt-bindings: media: max9286: Document 'maxim,reverse-channel-microvolt'
+      media: i2c: max9286: Break-out reverse channel setup
+      media: i2c: max9286: Make channel amplitude programmable
+      media: i2c: max9286: Configure reverse channel amplitude
+
+Krzysztof Kozlowski (4):
+      dt-bindings: media: imx258: add bindings for IMX258 sensor
+      media: i2c: imx258: add support for binding via device tree
+      media: i2c: imx258: simplify getting state container
+      media: i2c: imx258: get clock from device properties and enable it via runtime PM
+
+Laurent Pinchart (1):
+      media: v4l2-async: Improve v4l2_async_notifier_add_*_subdev() API
+
+Lubomir Rintel (1):
+      media: marvell-ccic: power up the device on mclk enable
+
+Martina Krasteva (2):
+      dt-bindings: media: Add bindings for imx334
+      media: i2c: Add imx334 camera sensor driver
+
+Ricardo Ribalda (2):
+      media: ipu3-cio2: Do not zero reserved fields
+      media: staging/intel-ipu3: Do not zero reserved fields
+
+Rikard Falkeborn (1):
+      media: i2c: rdacm20: Constify static structs
+
+Robert Foss (1):
+      media: ov8856: Configure sensor for GRBG Bayer for all modes
+
+Sakari Ailus (2):
+      dt-bindings: Remove old ov5647.yaml file, update ovti,ov5647.yaml
+      ipu3-cio2: Build bridge only if ACPI is enabled
+
+Shawn Tu (1):
+      ov5675: fix vflip/hflip control
+
+Tomi Valkeinen (1):
+      media: i2c: max9286: fix access to unallocated memory
+
+ .../devicetree/bindings/media/i2c/imx258.yaml      |  134 +++
+ .../bindings/media/i2c/maxim,max9286.yaml          |   22 +
+ .../devicetree/bindings/media/i2c/ov5647.yaml      |   76 --
+ .../devicetree/bindings/media/i2c/ovti,ov5647.yaml |   20 +-
+ .../devicetree/bindings/media/i2c/sony,imx334.yaml |   91 ++
+ Documentation/driver-api/media/v4l2-clocks.rst     |   31 -
+ Documentation/driver-api/media/v4l2-core.rst       |    1 -
+ Documentation/driver-api/media/v4l2-subdev.rst     |   48 +-
+ MAINTAINERS                                        |   22 +
+ arch/arm/mach-pxa/devices.c                        |    8 +
+ drivers/media/i2c/Kconfig                          |   27 +
+ drivers/media/i2c/Makefile                         |    3 +
+ drivers/media/i2c/imx219.c                         |   15 +-
+ drivers/media/i2c/imx258.c                         |   82 +-
+ drivers/media/i2c/imx334.c                         | 1131 ++++++++++++++++++++
+ drivers/media/i2c/max9286.c                        |   74 +-
+ drivers/media/i2c/mt9m111.c                        |   17 +-
+ drivers/media/i2c/ov5648.c                         |    4 +-
+ drivers/media/i2c/ov5675.c                         |    6 +-
+ drivers/media/i2c/ov6650.c                         |   28 +-
+ drivers/media/i2c/ov8856.c                         |    4 +-
+ drivers/media/i2c/ov8865.c                         |    2 +-
+ drivers/media/i2c/ov9640.c                         |   15 +-
+ drivers/media/i2c/ov9640.h                         |    2 +-
+ drivers/media/i2c/rdacm20.c                        |    4 +-
+ drivers/media/i2c/rdacm21.c                        |  623 +++++++++++
+ drivers/media/i2c/st-mipid02.c                     |   21 +-
+ drivers/media/pci/intel/ipu3/Kconfig               |    2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c      |   18 +-
+ drivers/media/platform/am437x/am437x-vpfe.c        |    2 +-
+ drivers/media/platform/atmel/atmel-isc.h           |    1 +
+ drivers/media/platform/atmel/atmel-isi.c           |   46 +-
+ drivers/media/platform/atmel/atmel-sama5d2-isc.c   |   44 +-
+ drivers/media/platform/cadence/cdns-csi2rx.c       |   17 +-
+ drivers/media/platform/davinci/vpif_capture.c      |    2 +-
+ drivers/media/platform/davinci/vpif_display.c      |   86 +-
+ drivers/media/platform/davinci/vpif_display.h      |    1 -
+ drivers/media/platform/exynos4-is/media-dev.c      |   25 +-
+ drivers/media/platform/exynos4-is/media-dev.h      |    2 +-
+ drivers/media/platform/marvell-ccic/cafe-driver.c  |   14 +-
+ drivers/media/platform/marvell-ccic/mcam-core.c    |   12 +-
+ drivers/media/platform/marvell-ccic/mcam-core.h    |    1 -
+ drivers/media/platform/marvell-ccic/mmp-driver.c   |   11 +-
+ drivers/media/platform/omap3isp/isp.c              |   74 +-
+ drivers/media/platform/pxa_camera.c                |   83 +-
+ drivers/media/platform/qcom/camss/camss.c          |   11 +-
+ drivers/media/platform/rcar-vin/rcar-core.c        |    5 +-
+ drivers/media/platform/rcar-vin/rcar-csi2.c        |    2 +-
+ drivers/media/platform/rcar_drif.c                 |    2 +-
+ drivers/media/platform/renesas-ceu.c               |   56 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-dev.c    |   15 +-
+ drivers/media/platform/stm32/stm32-dcmi.c          |   87 +-
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c |    9 +-
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h |    1 -
+ drivers/media/platform/ti-vpe/cal.c                |   12 +-
+ drivers/media/platform/video-mux.c                 |   14 +-
+ drivers/media/platform/xilinx/xilinx-vipp.c        |   10 +-
+ drivers/media/v4l2-core/Makefile                   |    2 +-
+ drivers/media/v4l2-core/v4l2-async.c               |   95 +-
+ drivers/media/v4l2-core/v4l2-clk.c                 |  321 ------
+ drivers/media/v4l2-core/v4l2-fwnode.c              |    6 +-
+ drivers/staging/media/imx/imx-media-csi.c          |   14 +-
+ drivers/staging/media/imx/imx-media-of.c           |    2 +-
+ drivers/staging/media/imx/imx6-mipi-csi2.c         |   19 +-
+ drivers/staging/media/imx/imx7-media-csi.c         |   16 +-
+ drivers/staging/media/imx/imx7-mipi-csis.c         |   15 +-
+ drivers/staging/media/ipu3/ipu3-v4l2.c             |    3 -
+ drivers/staging/media/tegra-video/vi.c             |   10 +-
+ include/media/davinci/vpif_types.h                 |    2 -
+ include/media/v4l2-async.h                         |   89 +-
+ include/media/v4l2-clk.h                           |   73 --
+ 71 files changed, 2620 insertions(+), 1223 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/imx258.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+ delete mode 100644 Documentation/driver-api/media/v4l2-clocks.rst
+ create mode 100644 drivers/media/i2c/imx334.c
+ create mode 100644 drivers/media/i2c/rdacm21.c
+ delete mode 100644 drivers/media/v4l2-core/v4l2-clk.c
+ delete mode 100644 include/media/v4l2-clk.h
 
 -- 
 Kind regards,
