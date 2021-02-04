@@ -7,55 +7,56 @@ X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BA9BC433E6
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 20:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9A87C433DB
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 20:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD22264F45
-	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 20:02:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6321364F3F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Feb 2021 20:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239832AbhBDUCX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Feb 2021 15:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S239971AbhBDUUw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Feb 2021 15:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238594AbhBDUAw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Feb 2021 15:00:52 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E1C06178B
-        for <linux-media@vger.kernel.org>; Thu,  4 Feb 2021 12:00:12 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id w8so5038206oie.2
-        for <linux-media@vger.kernel.org>; Thu, 04 Feb 2021 12:00:12 -0800 (PST)
+        with ESMTP id S239969AbhBDUUt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Feb 2021 15:20:49 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D735C06178B
+        for <linux-media@vger.kernel.org>; Thu,  4 Feb 2021 12:20:09 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id k204so3489598oih.3
+        for <linux-media@vger.kernel.org>; Thu, 04 Feb 2021 12:20:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=90M/71bjC9CGs3ogusHe7Lln0a+4v/EBmrZ9cb/rWvE=;
-        b=D7GIO8jpHe/gkbaLe1baKOL9WZpSqRpl716zCmqa5VLl2L9Zpy3N8TgnimejTOU6HB
-         XvrWwU+YnHtkmzTov45MWoarwGWvCOpuiwJo24Z4f6M7OODaT86zF01Vw7MhaQz3fqhe
-         6d+LDr7ndJ1xlwpd8eVeUJz+/Ii+hqBbqeaUo=
+        bh=wpgT6Yz8SEv8X0iAsr6guPodAvl5pFjIWmhOvi/hibA=;
+        b=Xpi3ivwmVLdqOvs1N6dWfJPh+KUCL6ESv/15EWzkk0SYh5UrDZbnAFeuQ0LjKLDPJ7
+         De9JuaYPvilTUPbN7e/X9v+MAUVlzWXjljZf3QA9W/YfZZpTGY/2YH7tJ7fp5LhhaJ1E
+         TecADaHNqVMOJ3iZ/L1xhrSQ2gaVbYy3ceflA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=90M/71bjC9CGs3ogusHe7Lln0a+4v/EBmrZ9cb/rWvE=;
-        b=mqTNXTl0TmOHNT1JCfhfKSJpI0tPapuzu+eodCQ2fRZnYk1Yb+OJVw4T7Do3C5aRdg
-         sC0ow5zS1uBkTvtHib9e7mW+JwEeC9FMtJiAFb4/uEd7BvceBglUo+ox08dYDX7eAP1G
-         ZucELUi92FKlUbZl7/tBcYw55/K4ashPefBUhrJrBIDklIioLwac73e/5e1VV6XoRhPY
-         r0WlJ4cCbID1ef94/5gYfg+CX6CJr8cjE96R9n5g4At+rToB+l5EEYIgHHp5V3BdjxR+
-         Ly6Y4/79b0weG5cvdRLOKA5VQCIM3qt/x7uTIp3BSbhCogHOI5merBj8G+xnERdTxZaI
-         vyTw==
-X-Gm-Message-State: AOAM531hxgpAREgrlSOcdNVJGeCU7Esri9viIxMZ1qP/LHomiPMS4AJ3
-        0r2GsP25kWi/CwLgM2g4xDV+53kg2i4ou1fKhXLMJg==
-X-Google-Smtp-Source: ABdhPJwTuzNhAKxR0BkOyvj49dEx6Ja/iHwKoMWy60qW2EMYu8xTXD6u0yZN04biYADL17T3361IvWxlLPIJipMbnB4=
-X-Received: by 2002:aca:4ac5:: with SMTP id x188mr794397oia.14.1612468811660;
- Thu, 04 Feb 2021 12:00:11 -0800 (PST)
+        bh=wpgT6Yz8SEv8X0iAsr6guPodAvl5pFjIWmhOvi/hibA=;
+        b=HtXz8C4mjpYFIX0xdGXd6vr0bMeUUjXJBet/Sc8yEfbvswLagwOHDNG4LK329Wm20e
+         ksEpfoF8KbqJCCUtMCSwPOMFlgDtA9VJL+wFyWjS01zMkt9XUXTUGrL1eoK9j5B1WpMA
+         ZC1YB9jE41WIO1nPWHzumhu5RYNBFwCLz8QOfGBV9Ikk+1kZtDtoeYY51uZ2OrZ6D7/1
+         Ws/TtNgHuha9w/wzMwMJEd933Fnh1wXoNbfGXRQJBeHqAEuvJ5lkosighD+QecIWcETY
+         vvbnLD7L/LNX0qczCDXAIgHg524V8YtbYorf0EtThmmPXKaD75aDmfKxDnZoI911orOC
+         xEQw==
+X-Gm-Message-State: AOAM5307HHWNTDAz/0GBsKVFKtTcwprp/aQwCmQxiSQlfaK4AacVgThR
+        Dr0SHZ0tKFrkutiuFBTYx2Jms1sU75E7dP1xbJu+gw==
+X-Google-Smtp-Source: ABdhPJx/eLdhIzXnP9kqJ04S5q7V3UVm0UNcMndwh3kT46QCp6BCgQGHr/UZJ84rtpMCXuoIRTD3gtusKXypuS6WNDw=
+X-Received: by 2002:aca:4ac5:: with SMTP id x188mr845032oia.14.1612470008816;
+ Thu, 04 Feb 2021 12:20:08 -0800 (PST)
 MIME-Version: 1.0
 References: <20210203211948.2529297-1-daniel.vetter@ffwll.ch>
  <20210204161339.GX4718@ziepe.ca> <CAKMK7uEZvEEQXQeM=t-7uZEvga2GMhctp=WQgeSetG0GKTRsHA@mail.gmail.com>
- <20210204183808.GY4718@ziepe.ca>
-In-Reply-To: <20210204183808.GY4718@ziepe.ca>
+ <20210204183808.GY4718@ziepe.ca> <CAKMK7uFBzF00zTzAE5b7PJFUfmxp5ExbSQxfcOfd_P6dPm7k9A@mail.gmail.com>
+ <20210204200918.GA4718@ziepe.ca>
+In-Reply-To: <20210204200918.GA4718@ziepe.ca>
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Thu, 4 Feb 2021 20:59:59 +0100
-Message-ID: <CAKMK7uFBzF00zTzAE5b7PJFUfmxp5ExbSQxfcOfd_P6dPm7k9A@mail.gmail.com>
+Date:   Thu, 4 Feb 2021 21:19:57 +0100
+Message-ID: <CAKMK7uEU_TJEUF2go6WRuVn+=-DSD5kRw1beJhC_1Y4HTXbYVQ@mail.gmail.com>
 Subject: Re: [PATCH] RFC: dma-buf: Require VM_SPECIAL vma for mmap
 To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
@@ -75,65 +76,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 7:38 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+On Thu, Feb 4, 2021 at 9:09 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
-> On Thu, Feb 04, 2021 at 06:16:27PM +0100, Daniel Vetter wrote:
-> > On Thu, Feb 4, 2021 at 5:13 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > On Wed, Feb 03, 2021 at 10:19:48PM +0100, Daniel Vetter wrote:
-> > > > tldr; DMA buffers aren't normal memory, expecting that you can use
-> > > > them like that (like calling get_user_pages works, or that they're
-> > > > accounting like any other normal memory) cannot be guaranteed.
-> > > >
-> > > > Since some userspace only runs on integrated devices, where all
-> > > > buffers are actually all resident system memory, there's a huge
-> > > > temptation to assume that a struct page is always present and useable
-> > > > like for any more pagecache backed mmap. This has the potential to
-> > > > result in a uapi nightmare.
-> > > >
-> > > > To stop this gap require that DMA buffer mmaps are VM_SPECIAL, which
-> > > > blocks get_user_pages and all the other struct page based
-> > > > infrastructure for everyone. In spirit this is the uapi counterpart to
-> > > > the kernel-internal CONFIG_DMABUF_DEBUG.
-> > >
-> > > Fast gup needs the special flag set on the PTE as well.. Feels weird
-> > > to have a special VMA without also having special PTEs?
-> >
-> > There's kinda no convenient & cheap way to check for the pte_special
-> > flag. This here should at least catch accidental misuse, people
-> > building their own ptes we can't stop. Maybe we should exclude
-> > VM_MIXEDMAP to catch vm_insert_page in one of these.
-> >
-> > Hm looking at code I think we need to require VM_PFNMAP here to stop
-> > vm_insert_page. And looking at the various functions, that seems to be
-> > required (and I guess VM_IO is more for really funky architectures
-> > where io-space is somewhere else?). I guess I should check for
-> > VM_PFNMAP instead of VM_SPECIAL?
+> On Thu, Feb 04, 2021 at 08:59:59PM +0100, Daniel Vetter wrote:
 >
-> Well, you said the goal was to block GUP usage, that won't happen
-> without the PTE special flag, at least on x86
+> > So I think just checking for VM_PFNMAP after the vma is set up should
+> > be enough to guarantee we'll only have pte_special ptes in there,
+> > ever. But I'm not sure, this stuff all isn't really documented much
+> > and the code is sometimes a maze (to me at least).
 >
-> So, really, what you are saying is all dmabuf users should always use
-> vmf_insert_pfn_prot() or something similar - and never insert_page/etc?
+> Yes, that makes sense. VM_PFNMAP and !VM_MIXEDMAP seems like the right
+> check after the VMA is populated
 >
-> It might make sense to check the vma flags in all the insert paths, eg
-> vm_insert_page() can't work with VMAs that should not have struct
-> pages in them (eg VM_SPECIAl, VM_PFNMAP, !VM_MIXEMAP if I understand
-> it right)
+> But how do you stuff special pfns into a VMA outside the fault
+> handler?
 
-Well that's what I've done, and it /looks/ like all the checks are
-there already, as long as we use VM_PFNMAP. vm_insert_page tries to
-auto-add VM_MIXEDMAP, but bails out with a BUG_ON if VM_PFNMAP is set.
-And all the vm_insert_pfn_prot/remap_pfn_range functions require (or
-set) VM_PFNMAP.
+Many drivers we have don't have dynamic buffer management (kinda
+overkill for a few framebuffers on a display-only IP block), so the
+just remap_pfn_range on ->mmap, and don't have a fault handler at all.
 
-So I think just checking for VM_PFNMAP after the vma is set up should
-be enough to guarantee we'll only have pte_special ptes in there,
-ever. But I'm not sure, this stuff all isn't really documented much
-and the code is sometimes a maze (to me at least).
-
-> At least as some VM debug option
-
-Seems to be there already unconditionally.
+Or I'm not understanding what you're asking?
 -Daniel
 -- 
 Daniel Vetter
