@@ -2,279 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90848C433DB
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 13:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDEDC43381
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 13:33:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31EDF64E4E
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 13:28:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 187E364FD1
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 13:33:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbhBEN0o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 08:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhBENXu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 08:23:50 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F0FC0613D6
-        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 05:23:09 -0800 (PST)
-Received: from [IPv6:2003:c7:cf1c:ce00:c5f9:7f5:ebcd:ea47] (p200300c7cf1cce00c5f907f5ebcdea47.dip0.t-ipconnect.de [IPv6:2003:c7:cf1c:ce00:c5f9:7f5:ebcd:ea47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8131B1F466B9;
-        Fri,  5 Feb 2021 13:23:07 +0000 (GMT)
-Subject: Re: [PATCH RFC 06/11] media: rockchip: rkisp1: allow separate
- interrupts
-To:     Heiko Stuebner <heiko@sntech.de>, ezequiel@collabora.com,
-        helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com
-Cc:     linux-rockchip@lists.infradead.org,
-        christoph.muellner@theobroma-systems.com,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-References: <20210108193311.3423236-1-heiko@sntech.de>
- <20210108193311.3423236-7-heiko@sntech.de>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <584c3ef0-b7af-0c36-3747-ca3ebd0a0cca@collabora.com>
-Date:   Fri, 5 Feb 2021 14:23:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230090AbhBENcw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 08:32:52 -0500
+Received: from mga17.intel.com ([192.55.52.151]:27051 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229941AbhBEN2w (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:28:52 -0500
+IronPort-SDR: HMda+JDJ6wSQaig/Y66hxemEet48FqLM3w/x/zYpwarsGgvF0Jg1FJUaq5kwgE072slJ/2HMBb
+ fxIqNThzQ8Wg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="161185331"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="161185331"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:24:57 -0800
+IronPort-SDR: 8xB7uGNbhzbDEtmhZopEqMhzKsMzmDhzd70XXHPvml2U/KrUhlS+Pa6rErtslb1cKlfUN56Tx+
+ FKMAWbhLpY1g==
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="357699229"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:24:53 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 98A9820D41;
+        Fri,  5 Feb 2021 15:24:51 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1l816f-0005GO-Cw; Fri, 05 Feb 2021 15:25:05 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v10 4/7] ACPI: Add a convenience function to tell a device is in low power state
+Date:   Fri,  5 Feb 2021 15:25:02 +0200
+Message-Id: <20210205132505.20173-5-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
+References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210108193311.3423236-7-heiko@sntech.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+Add a convenience function to tell whether a device is in low power state,
+primarily for use in drivers' probe or remove functions on busses where
+the custom is to power on the device for the duration of both.
 
-Am 08.01.21 um 20:33 schrieb Heiko Stuebner:
-> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-> 
-> Depending on the per-soc implementation there can be one interrupt
-> for isp, mipi and capture events or separate per-event interrupts.
-> 
-> So simply check for the presence of a named "mi" interrupt
-> to differentiate between the two cases.
-> 
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-> ---
->   .../platform/rockchip/rkisp1/rkisp1-capture.c |  9 ++-
->   .../platform/rockchip/rkisp1/rkisp1-common.h  |  7 ++-
->   .../platform/rockchip/rkisp1/rkisp1-dev.c     | 58 ++++++++++++++-----
->   .../platform/rockchip/rkisp1/rkisp1-isp.c     | 16 +++--
->   4 files changed, 69 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> index 5f6c9d1623e4..f70c66c2a1d7 100644
-> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> @@ -685,12 +685,17 @@ static void rkisp1_handle_buffer(struct rkisp1_capture *cap)
->   	spin_unlock(&cap->buf.lock);
->   }
->   
-> -void rkisp1_capture_isr(struct rkisp1_device *rkisp1)
-> +irqreturn_t rkisp1_capture_isr(int irq, void *ctx)
->   {
-> +	struct device *dev = ctx;
-> +	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
->   	unsigned int i;
->   	u32 status;
->   
->   	status = rkisp1_read(rkisp1, RKISP1_CIF_MI_MIS);
-> +	if (!status)
-> +		return IRQ_NONE;
-> +
->   	rkisp1_write(rkisp1, status, RKISP1_CIF_MI_ICR);
->   
->   	for (i = 0; i < ARRAY_SIZE(rkisp1->capture_devs); ++i) {
-> @@ -718,6 +723,8 @@ void rkisp1_capture_isr(struct rkisp1_device *rkisp1)
->   		cap->is_streaming = false;
->   		wake_up(&cap->done);
->   	}
-> +
-> +	return IRQ_HANDLED;
->   }
->   
->   /* ----------------------------------------------------------------------------
-> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> index 038c303a8aed..44f333bf5d6a 100644
-> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> @@ -12,6 +12,7 @@
->   #define _RKISP1_COMMON_H
->   
->   #include <linux/clk.h>
-> +#include <linux/interrupt.h>
->   #include <linux/mutex.h>
->   #include <linux/rkisp1-config.h>
->   #include <media/media-device.h>
-> @@ -460,9 +461,9 @@ void rkisp1_params_configure(struct rkisp1_params *params,
->   void rkisp1_params_disable(struct rkisp1_params *params);
->   
->   /* irq handlers */
-> -void rkisp1_isp_isr(struct rkisp1_device *rkisp1);
-> -void rkisp1_mipi_isr(struct rkisp1_device *rkisp1);
-> -void rkisp1_capture_isr(struct rkisp1_device *rkisp1);
-> +irqreturn_t rkisp1_isp_isr(int irq, void *ctx);
-> +irqreturn_t rkisp1_mipi_isr(int irq, void *ctx);
-> +irqreturn_t rkisp1_capture_isr(int irq, void *ctx);
->   void rkisp1_stats_isr(struct rkisp1_stats *stats, u32 isp_ris);
->   void rkisp1_params_isr(struct rkisp1_device *rkisp1);
->   
-> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> index 68da1eed753d..96afc1d1a914 100644
-> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> @@ -389,18 +389,15 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
->   
->   static irqreturn_t rkisp1_isr(int irq, void *ctx)
->   {
-> -	struct device *dev = ctx;
-> -	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
-> -
->   	/*
->   	 * Call rkisp1_capture_isr() first to handle the frame that
->   	 * potentially completed using the current frame_sequence number before
->   	 * it is potentially incremented by rkisp1_isp_isr() in the vertical
->   	 * sync.
->   	 */
-> -	rkisp1_capture_isr(rkisp1);
-> -	rkisp1_isp_isr(rkisp1);
-> -	rkisp1_mipi_isr(rkisp1);
-> +	rkisp1_capture_isr(irq, ctx);
-> +	rkisp1_isp_isr(irq, ctx);
-> +	rkisp1_mipi_isr(irq, ctx);
->   
->   	return IRQ_HANDLED;
+Returns false on non-ACPI systems.
 
-I remember we had a patch that check if all the rkisp1_*_isr calls return IRQ_NONE then we also return IRQ_NONE from here
-instead of always returning IRQ_HANDLED. I think now it is the opportunity to add this.
-Maybe better in a separate patch before this one, where you only change the rkisp1_*_isr signatures and return
-the right value from rkisp1_isr
+Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+---
+ drivers/acpi/device_pm.c | 23 +++++++++++++++++++++++
+ include/linux/acpi.h     |  6 ++++++
+ 2 files changed, 29 insertions(+)
 
-Thanks,
-Dafna
+diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+index 096153761ebc3..5a58be779a8cd 100644
+--- a/drivers/acpi/device_pm.c
++++ b/drivers/acpi/device_pm.c
+@@ -1336,4 +1336,27 @@ int acpi_dev_pm_attach(struct device *dev, bool power_on)
+ 	return 1;
+ }
+ EXPORT_SYMBOL_GPL(acpi_dev_pm_attach);
++
++/**
++ * acpi_dev_state_low_power - Check the current ACPI power state of a device.
++ * @dev: Physical device the ACPI power state of which to check
++ *
++ * On a system without ACPI, return false. On a system with ACPI, return true if
++ * the current ACPI power state of the device is not D0, or false otherwise.
++ *
++ * Note that the power state of a device is not well-defined after it has been
++ * passed to acpi_device_set_power() and before that function returns, so it is
++ * not valid to ask for the ACPI power state of the device in that time frame.
++ */
++bool acpi_dev_state_low_power(struct device *dev)
++{
++	struct acpi_device *adev = ACPI_COMPANION(dev);
++
++	if (!adev)
++		return false;
++
++	return adev->power.state != ACPI_STATE_D0;
++}
++EXPORT_SYMBOL_GPL(acpi_dev_state_low_power);
++
+ #endif /* CONFIG_PM */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 4703daafcce9e..864786adb567c 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -982,6 +982,7 @@ int acpi_dev_resume(struct device *dev);
+ int acpi_subsys_runtime_suspend(struct device *dev);
+ int acpi_subsys_runtime_resume(struct device *dev);
+ int acpi_dev_pm_attach(struct device *dev, bool power_on);
++bool acpi_dev_state_low_power(struct device *dev);
+ #else
+ static inline int acpi_subsys_runtime_suspend(struct device *dev) { return 0; }
+ static inline int acpi_subsys_runtime_resume(struct device *dev) { return 0; }
+@@ -989,6 +990,11 @@ static inline int acpi_dev_pm_attach(struct device *dev, bool power_on)
+ {
+ 	return 0;
+ }
++
++static inline bool acpi_dev_state_low_power(struct device *dev)
++{
++	return false;
++}
+ #endif
+ 
+ #if defined(CONFIG_ACPI) && defined(CONFIG_PM_SLEEP)
+-- 
+2.20.1
 
->   }
-> @@ -481,15 +478,50 @@ static int rkisp1_probe(struct platform_device *pdev)
->   	if (IS_ERR(rkisp1->base_addr))
->   		return PTR_ERR(rkisp1->base_addr);
->   
-> -	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0)
-> +	irq = platform_get_irq_byname_optional(pdev, "mi");
-> +	if (irq == -EPROBE_DEFER) {
->   		return irq;
-> +	} else if (irq < 0) {
-> +		irq = platform_get_irq(pdev, 0);
-> +		if (irq < 0)
-> +			return irq;
-> +
-> +		ret = devm_request_irq(dev, irq, rkisp1_isr, IRQF_SHARED,
-> +				       dev_driver_string(dev), dev);
-> +		if (ret) {
-> +			dev_err(dev, "request irq failed: %d\n", ret);
-> +			return ret;
-> +		}
-> +	} else {
-> +		/* we test-got the MI (capture) interrupt */
-> +		ret = devm_request_irq(dev, irq, rkisp1_capture_isr, IRQF_SHARED,
-> +				       dev_driver_string(dev), dev);
-> +		if (ret) {
-> +			dev_err(dev, "request mi irq failed: %d\n", ret);
-> +			return ret;
-> +		}
->   
-> -	ret = devm_request_irq(dev, irq, rkisp1_isr, IRQF_SHARED,
-> -			       dev_driver_string(dev), dev);
-> -	if (ret) {
-> -		dev_err(dev, "request irq failed: %d\n", ret);
-> -		return ret;
-> +		irq = platform_get_irq_byname_optional(pdev, "mipi");
-> +		if (irq < 0)
-> +			return irq;
-> +
-> +		ret = devm_request_irq(dev, irq, rkisp1_mipi_isr, IRQF_SHARED,
-> +				       dev_driver_string(dev), dev);
-> +		if (ret) {
-> +			dev_err(dev, "request mipi irq failed: %d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		irq = platform_get_irq_byname_optional(pdev, "isp");
-> +		if (irq < 0)
-> +			return irq;
-> +
-> +		ret = devm_request_irq(dev, irq, rkisp1_isp_isr, IRQF_SHARED,
-> +				       dev_driver_string(dev), dev);
-> +		if (ret) {
-> +			dev_err(dev, "request isp irq failed: %d\n", ret);
-> +			return ret;
-> +		}
->   	}
->   
->   	rkisp1->irq = irq;
-> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> index 889982d8ca41..84440aa71210 100644
-> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> @@ -1056,13 +1056,15 @@ void rkisp1_isp_unregister(struct rkisp1_device *rkisp1)
->    * Interrupt handlers
->    */
->   
-> -void rkisp1_mipi_isr(struct rkisp1_device *rkisp1)
-> +irqreturn_t rkisp1_mipi_isr(int irq, void *ctx)
->   {
-> +	struct device *dev = ctx;
-> +	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
->   	u32 val, status;
->   
->   	status = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_MIS);
->   	if (!status)
-> -		return;
-> +		return IRQ_NONE;
->   
->   	rkisp1_write(rkisp1, status, RKISP1_CIF_MIPI_ICR);
->   
-> @@ -1097,6 +1099,8 @@ void rkisp1_mipi_isr(struct rkisp1_device *rkisp1)
->   	} else {
->   		rkisp1->debug.mipi_error++;
->   	}
-> +
-> +	return IRQ_HANDLED;
->   }
->   
->   static void rkisp1_isp_queue_event_sof(struct rkisp1_isp *isp)
-> @@ -1109,13 +1113,15 @@ static void rkisp1_isp_queue_event_sof(struct rkisp1_isp *isp)
->   	v4l2_event_queue(isp->sd.devnode, &event);
->   }
->   
-> -void rkisp1_isp_isr(struct rkisp1_device *rkisp1)
-> +irqreturn_t rkisp1_isp_isr(int irq, void *ctx)
->   {
-> +	struct device *dev = ctx;
-> +	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
->   	u32 status, isp_err;
->   
->   	status = rkisp1_read(rkisp1, RKISP1_CIF_ISP_MIS);
->   	if (!status)
-> -		return;
-> +		return IRQ_NONE;
->   
->   	rkisp1_write(rkisp1, status, RKISP1_CIF_ISP_ICR);
->   
-> @@ -1157,4 +1163,6 @@ void rkisp1_isp_isr(struct rkisp1_device *rkisp1)
->   		 */
->   		rkisp1_params_isr(rkisp1);
->   	}
-> +
-> +	return IRQ_HANDLED;
->   }
-> 
