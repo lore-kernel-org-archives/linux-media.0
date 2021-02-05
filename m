@@ -2,110 +2,236 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFAAC433E0
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 02:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22C4FC433DB
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 03:07:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81B5964F91
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 02:52:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B50A964FD3
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 03:07:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbhBFCwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 21:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S231691AbhBFDFU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 22:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbhBFCr6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 21:47:58 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF72AC08ECB4;
-        Fri,  5 Feb 2021 14:55:13 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id g10so9490029wrx.1;
-        Fri, 05 Feb 2021 14:55:13 -0800 (PST)
+        with ESMTP id S231905AbhBFCxb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 21:53:31 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B02C08ECAF
+        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 14:39:06 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id u14so7112308wmq.4
+        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 14:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ELbdu45E+fwWUalqR1cagJZao7VVOdmmwE0d8K0Emng=;
-        b=GrB/byZLS9lHFpP1Pz7KrqF3wSBFqdsQR4zD2yzxYP+8H3QIyj1R2zgKNcX4lz1uhx
-         8lVYR6Tf6WrsaRC4jwUjR4PC/0gk5DZyeimty+fPJ2psBFhcFTkqMkHX7hQrCIVujqmE
-         l3ns6PtJpcw2CHsnhh/6XvT+n/5LSjp964KaFK23xbiT263vl8mozu5TAZa//OYbMABW
-         CzePnac4DNgM/R/wH9Px7yFFf+GpxxPELMJpC7ts8Ri2+e4NudTgT28jSmR9Hu4+NfGo
-         cGfzAtThLT5KIE0dkFvE+ixxCVnImFPpLxU8j2MHjPCfm4ZT2kl5v8eLwmARX7OcKmN1
-         ERhQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=t5Gn3UKnHmz7y35xPv/AAaJUGOdlL1SVmYKp08hQa2A=;
+        b=AKkqkC46A7/1BRDDGxRGLEZxNtnADzQGWuquqnpFdYydocW8BHy39p41Ef8RbZGQPw
+         Fk64CTFRIqDAFE3KY7pnYz/E1CMMhZszPNA0PZrpq9pf5j3BMFf8K6qaiv6ISRN9rS0i
+         LrbC4G9p6XDtciagWCIb3aiH0HRLK8ZdbSeRRFaQnm0jSJXtMz0AqpUsaRnpyKJwrP+h
+         dDbw2Dycw2PlGIT3GSAGSGxZpyTtbxo17rO6TaKN//bfVmQtefgRk4Klajwl8FSeSvgt
+         pFoJwxy6/3m1AmAwBFY+lcrBwCL+mZzWdkT4EXQ6Wsz4XadkWUjx0Ww1kop1pMSsm4hn
+         w8sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ELbdu45E+fwWUalqR1cagJZao7VVOdmmwE0d8K0Emng=;
-        b=RRLiDqR1whO/wBt96/BUkHIzotrwDQyfQ8uX1xXDROdVFEbYSeO5ZH+MTUaMi06siM
-         YLFl0X9lwFUbYN36Det2rsePwfp88ckmjqYrg4d3m7tM0DhwFBm821sk1AiajApkeSzp
-         kCaIUglV8JexN1hXAsYTr+4CnmrdTWRQT6nrNz+lHjps0VGaXImLrYdVim6933PvuD6H
-         2+sNPYMBm3bgTfa1A7o3dVVXa8QfEQ2jGU8sBP+tWXykSNKrMDvMLog+kvfcWTP+fPlA
-         QooeZxugIKbvKZPIOgLvF3qhmpI/b0tZXfVLaG19L9VVMnxStpvgjmhh4F6ShaCfciSi
-         tInQ==
-X-Gm-Message-State: AOAM533SQXik1gRW3kkqGzJHETJnGutqmEHsaqBQr12gpRgue/dx7s3s
-        FLCIQ5YOgv8jQmVdfFc19bU=
-X-Google-Smtp-Source: ABdhPJz7Z7Vz0wo6DigSr85yDR3SxRtSvzarroagSWAz+ILQ3tjOZEE+g2NHGRLblsr/k3Ls2u2icQ==
-X-Received: by 2002:adf:9546:: with SMTP id 64mr92222wrs.247.1612565712393;
-        Fri, 05 Feb 2021 14:55:12 -0800 (PST)
-Received: from warrior.lan ([2a03:7380:2407:423c:1171:fd22:1b63:1bcd])
-        by smtp.gmail.com with ESMTPSA id z63sm10191489wme.8.2021.02.05.14.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 14:55:11 -0800 (PST)
-From:   Maxim Mikityanskiy <maxtram95@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Federico Simoncelli <fsimonce@redhat.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Maxim Mikityanskiy <maxtram95@gmail.com>
-Subject: [PATCH] media: usbtv: Fix deadlock on suspend
-Date:   Sat,  6 Feb 2021 00:51:39 +0200
-Message-Id: <20210205225139.7986-1-maxtram95@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=t5Gn3UKnHmz7y35xPv/AAaJUGOdlL1SVmYKp08hQa2A=;
+        b=P6IxHLowrv2wX4hfStgagVya/qT8Dhw/PCvRipXFiU5Q1vVoMzSjcpaidSGYVNB/xp
+         LQnXuDDxOaWHdZ+pMTHsEGqR4hYI6YhaeqNNvNJYMfuphauKlBeWkqLTMVpueiL6crQQ
+         mGPCP4/uKrbcfGil4IqlI1MR/E3SPf/BjhROXSnKaOIGsXUT2gRI+rk2DJI4iZE1jzZZ
+         Ys5MmodJP7g7qfxuvRN2JdbLokogJd3h4RAfdsQY2m+KYSyJTOce/pZPhkcBJNUG8S8r
+         pnEfUKjhYIm3ORX3VRJsNrCaKkMR38no1WN4W8F3yuZ2oTktz6YlO3k08hLypl3E/2uX
+         tagg==
+X-Gm-Message-State: AOAM531S/hfqVoOSbmYZdCH9i1pgmgsu863EfcUYK71izrs5TRXI+BbP
+        W3VsB2M33q9Tf10OcKYiQbg/U2XgSOrp8VN/qHvZ+w==
+X-Google-Smtp-Source: ABdhPJy0sTM7b46RxdYwLPh10drgFMSgljzItLlUxvVIt+nz3DMnRfObLWe428PmKlhcwdjP+4xBZrSJQPA0kUzdbuA=
+X-Received: by 2002:a05:600c:4e92:: with SMTP id f18mr5220472wmq.126.1612564745104;
+ Fri, 05 Feb 2021 14:39:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210205080621.3102035-1-john.stultz@linaro.org>
+ <20210205080621.3102035-2-john.stultz@linaro.org> <4471b3b0-603e-6dbb-8064-ff4a95afbba9@amd.com>
+ <CALAqxLWZkUFvJX5r2OU2erW4tU3j=+u==VTyzYkt+95LwwVCUA@mail.gmail.com>
+In-Reply-To: <CALAqxLWZkUFvJX5r2OU2erW4tU3j=+u==VTyzYkt+95LwwVCUA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 5 Feb 2021 14:38:53 -0800
+Message-ID: <CAJuCfpEkKfci_spdEAQKk1o_qoS53y-=i_zjqrDKeyW44AG+BQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH v6 1/7] drm: Add a sharable drm page-pool implementation
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-usbtv doesn't support power management, so on system suspend the
-.disconnect callback of the driver is called. The teardown sequence
-includes a call to snd_card_free. Its implementation waits until the
-refcount of the sound card device drops to zero, however, if its file is
-open, snd_card_file_add takes a reference, which can't be dropped during
-the suspend, because the userspace processes are already frozen at this
-point. snd_card_free waits for completion forever, leading to a hang on
-suspend.
+On Fri, Feb 5, 2021 at 12:47 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Fri, Feb 5, 2021 at 12:47 AM Christian K=C3=B6nig
+> <christian.koenig@amd.com> wrote:
+> > Am 05.02.21 um 09:06 schrieb John Stultz:
+> > > diff --git a/drivers/gpu/drm/page_pool.c b/drivers/gpu/drm/page_pool.=
+c
+> > > new file mode 100644
+> > > index 000000000000..2139f86e6ca7
+> > > --- /dev/null
+> > > +++ b/drivers/gpu/drm/page_pool.c
+> > > @@ -0,0 +1,220 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> >
+> > Please use a BSD/MIT compatible license if you want to copy this from
+> > the TTM code.
+>
+> Hrm. This may be problematic, as it's not just TTM code, but some of
+> the TTM logic integrated into a page-pool implementation I wrote based
+> on logic from the ION code (which was GPL-2.0 before it was dropped).
+> So I don't think I can just make it MIT.  Any extra context on the
+> need for MIT, or suggestions on how to best resolve this?
+>
+> > > +int drm_page_pool_get_size(struct drm_page_pool *pool)
+> > > +{
+> > > +     int ret;
+> > > +
+> > > +     spin_lock(&pool->lock);
+> > > +     ret =3D pool->count;
+> > > +     spin_unlock(&pool->lock);
+> >
+> > Maybe use an atomic for the count instead?
+> >
+>
+> I can do that, but am curious as to the benefit? We are mostly using
+> count where we already have to take the pool->lock anyway, and this
+> drm_page_pool_get_size() is only used for debugfs output so far, so I
+> don't expect it to be a hot path.
+>
+>
+> > > +void drm_page_pool_add(struct drm_page_pool *pool, struct page *page=
+)
+> > > +{
+> > > +     spin_lock(&pool->lock);
+> > > +     list_add_tail(&page->lru, &pool->items);
+> > > +     pool->count++;
+> > > +     atomic_long_add(1 << pool->order, &total_pages);
+> > > +     spin_unlock(&pool->lock);
+> > > +
+> > > +     mod_node_page_state(page_pgdat(page), NR_KERNEL_MISC_RECLAIMABL=
+E,
+> > > +                         1 << pool->order);
+> >
+> > Hui what? What should that be good for?
+>
+> This is a carryover from the ION page pool implementation:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/staging/android/ion/ion_page_pool.c?h=3Dv5.10#n28
+>
+> My sense is it helps with the vmstat/meminfo accounting so folks can
+> see the cached pages are shrinkable/freeable. This maybe falls under
+> other dmabuf accounting/stats discussions, so I'm happy to remove it
+> for now, or let the drivers using the shared page pool logic handle
+> the accounting themselves?
 
-This commit fixes this deadlock condition by replacing snd_card_free
-with snd_card_free_when_closed, that doesn't wait until all references
-are released, allowing suspend to progress.
+Yep, ION pools were accounted for as reclaimable kernel memory because
+they could be dropped when the system is under memory pressure.
 
-Fixes: 63ddf68de52e ("[media] usbtv: add audio support")
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
----
- drivers/media/usb/usbtv/usbtv-audio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/usbtv/usbtv-audio.c b/drivers/media/usb/usbtv/usbtv-audio.c
-index b57e94fb1977..333bd305a4f9 100644
---- a/drivers/media/usb/usbtv/usbtv-audio.c
-+++ b/drivers/media/usb/usbtv/usbtv-audio.c
-@@ -371,7 +371,7 @@ void usbtv_audio_free(struct usbtv *usbtv)
- 	cancel_work_sync(&usbtv->snd_trigger);
- 
- 	if (usbtv->snd && usbtv->udev) {
--		snd_card_free(usbtv->snd);
-+		snd_card_free_when_closed(usbtv->snd);
- 		usbtv->snd = NULL;
- 	}
- }
--- 
-2.30.0
-
+>
+>
+> > > +static struct page *drm_page_pool_remove(struct drm_page_pool *pool)
+> > > +{
+> > > +     struct page *page;
+> > > +
+> > > +     if (!pool->count)
+> > > +             return NULL;
+> >
+> > Better use list_first_entry_or_null instead of checking the count.
+> >
+> > This way you can also pull the lock into the function.
+>
+> Yea, that cleans a number of things up nicely. Thank you!
+>
+>
+> > > +struct drm_page_pool *drm_page_pool_create(unsigned int order,
+> > > +                                        int (*free_page)(struct page=
+ *p, unsigned int order))
+> > > +{
+> > > +     struct drm_page_pool *pool =3D kmalloc(sizeof(*pool), GFP_KERNE=
+L);
+> >
+> > Why not making this an embedded object? We should not see much dynamic
+> > pool creation.
+>
+> Yea, it felt cleaner at the time this way, but I think I will need to
+> switch to an embedded object in order to resolve the memory usage
+> issue you pointed out with growing the ttm_pool_dma, so thank you for
+> the suggestion!
+>
+>
+> > > +void drm_page_pool_destroy(struct drm_page_pool *pool)
+> > > +{
+> > > +     struct page *page;
+> > > +
+> > > +     /* Remove us from the pool list */
+> > > +     mutex_lock(&pool_list_lock);
+> > > +     list_del(&pool->list);
+> > > +     mutex_unlock(&pool_list_lock);
+> > > +
+> > > +     /* Free any remaining pages in the pool */
+> > > +     spin_lock(&pool->lock);
+> >
+> > Locking should be unnecessary when the pool is destroyed anyway.
+>
+> I guess if we've already pruned ourself from the pool list, then your
+> right, we can't race with the shrinker and it's maybe not necessary.
+> But it also seems easier to consistently follow the locking rules in a
+> very unlikely path rather than leaning on subtlety.  Either way, I
+> think this becomes moot if I make the improvements you suggest to
+> drm_page_pool_remove().
+>
+> > > +static int drm_page_pool_shrink_one(void)
+> > > +{
+> > > +     struct drm_page_pool *pool;
+> > > +     struct page *page;
+> > > +     int nr_freed =3D 0;
+> > > +
+> > > +     mutex_lock(&pool_list_lock);
+> > > +     pool =3D list_first_entry(&pool_list, typeof(*pool), list);
+> > > +
+> > > +     spin_lock(&pool->lock);
+> > > +     page =3D drm_page_pool_remove(pool);
+> > > +     spin_unlock(&pool->lock);
+> > > +
+> > > +     if (page)
+> > > +             nr_freed =3D drm_page_pool_free_pages(pool, page);
+> > > +
+> > > +     list_move_tail(&pool->list, &pool_list);
+> >
+> > Better to move this up, directly after the list_first_entry().
+>
+> Sounds good!
+>
+> Thanks so much for your review and feedback! I'll try to get some of
+> the easy suggestions integrated, and will have to figure out what to
+> do about the re-licensing request.
+>
+> thanks
+> -john
