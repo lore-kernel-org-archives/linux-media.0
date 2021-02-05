@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A21DC433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 545B6C433DB
 	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 08:07:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF2B764F87
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 08:07:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D72F64FBB
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 08:07:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbhBEIHT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 03:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S231269AbhBEIHj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 03:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbhBEIHG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 03:07:06 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0742C06178A
-        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 00:06:26 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id b21so3992043pgk.7
-        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 00:06:26 -0800 (PST)
+        with ESMTP id S231611AbhBEIHg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 03:07:36 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B703FC061793
+        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 00:06:29 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id j12so3804810pfj.12
+        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 00:06:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zKwoaw8bdzrF/FhsWPWtgeGzPvNKHujT195hYCj6ZCs=;
-        b=K0THtBNlTDmpc3F2F9qo3PXiSflivANjFuhFHO0/w0OQkh9BJFI2DLfQCg3umFdPRT
-         9DU5VNc7SfomsN45a3Kb9J3ZAcxuU/PcFTQaVK8roWSeawag+xcKSAwCs5/MQo8f2H3d
-         viFJJrrovEHFzeIeEu8FqgsGG29CWEPTETHs3GBuUPsPi0L7kJqZ/1FRq6mEPCH/5VDb
-         6V9juYaeCpzq6xCPRvBkXCRT98zvQdGItcWAQezWayHIaKbLl7aAMecJp3C2A6Upcqfq
-         CHJNQWQRiVgDzfcgpmshCIoa3TqUQKF+dkdYVW/++YTotTS02mqYGn3sGt4SqKPViMJ0
-         ULZQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bGslspb5ZylZ8O2t/OXWAgcgjW5wijqWH0egOe8ik7I=;
+        b=myIEhqRzrTikD8EItrnbeyf5x9l+O7Db+kYOX/uF/5YLTldD3qEiitvk/zymRNh1nf
+         UdidOIpR8pxH9oBWs0ZimTUW2/nA4Nd2oNrtZSb+ybMj+Ee5VVbJ2S0PDYSJgV+7V+ij
+         Y1xRIiFT8GDSh9M1dOyDVMcimak6xUOHE5hI3n6Ul8DMPdzK46MqqDIHXXS6d+IjwXDg
+         yVOSYtiDkxpppCcR273ZVLICDotzauJ/m5GpvMWT6IHnqo1q9RmfxhgKE+xVvjqB+OrX
+         iLbsppKzlvpOQ90V4hwOjKAwsWppvN+0Fra8i9u0M5rjaVbuPAjZWTSugG32ObW6kkoy
+         zb5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zKwoaw8bdzrF/FhsWPWtgeGzPvNKHujT195hYCj6ZCs=;
-        b=eMIKlOWAzvumg9x2Pd9tndfGIu+dsCs4NiwCg+VdhDyV6PYx7bxoRnl6N4kJPGG/HF
-         03kmiszUEJK5P0rvVfr3u4csTCTwsjlmJgn26k7h4vytmDyRsOG9d2f6ZUMTZG9sfUrK
-         0ZKWI7g25CuhMYrfiVo9QIcCKPnwQdiB2YiPL9AE8Sfus12ycJvWnbzoQksKwroNRHGW
-         WEzkTSIFuMvh5+JHQAw6zlImuNWMKX0Q2qlb6vQ1PT3YPPHLyX50DKzuha416FZ5WNtB
-         iMiqiBfW9Zh7S6gOlYN+4tfoOngfEN0ZLFDrQ7TKuXMvSuVfV4PldecDaLVffd4vofpU
-         09Tg==
-X-Gm-Message-State: AOAM531pXfKK4dFzEg46Lw+KmwwEwg89SZCN24pdFBDk96CgqgU7a4tF
-        n4i+VgkE6tgLKTp+6YU/ImOlRg==
-X-Google-Smtp-Source: ABdhPJyRH2+aPnRrC0zh854reLPDhJihnNvupmtnylhjqPZmslPnqqJCsTysj9OXBE675MNHWcjGGA==
-X-Received: by 2002:a63:bc02:: with SMTP id q2mr3217163pge.198.1612512385535;
-        Fri, 05 Feb 2021 00:06:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bGslspb5ZylZ8O2t/OXWAgcgjW5wijqWH0egOe8ik7I=;
+        b=lL3wmVSV48ArFp9/n1AW3qqwVd0PuNspqkXne5zxmdTu+h61l/hD6C6uPvZqroPf8f
+         obFUINhi5QksKQSD2gZo99Wk3grkoPp5wM86LoscXi0PpbQ2RHR8V1pE0sX8gVxvIiSg
+         l5Fz2oysOguadRxkYSsQgIktpWY8e6pVUEll0mvvi3IjpRLYjDXtVtesaTh+udL8yTaU
+         pyumXYw1s6IhGjdYveaMIMMXDJ5WB1OWih+FbGeRmf16TTZEr3ZyD6yjYDcLJJihsNJd
+         GT9ZDam4rygBIIE3n8xNEDiDSFafhkPvDWqluOFVFy6iyqsd3gX6K/mM6HNz85+UTKvX
+         YdGQ==
+X-Gm-Message-State: AOAM533xlIq6s5zUIIU5PK0feWbRfq4iJVXRB0YyyEBiZnULWuFRtKYc
+        sSp8y9XRMaMLNMoprRHhbfEQ4w==
+X-Google-Smtp-Source: ABdhPJzU4JdgWWY9tKHhmR96s6DGwgFRranOd/IzqxxC3jYaykmK4MxZFD94Gt6pxtBeA1R3QeiLbA==
+X-Received: by 2002:a62:19d1:0:b029:1d7:f8f2:7b04 with SMTP id 200-20020a6219d10000b02901d7f8f27b04mr1403660pfz.10.1612512389229;
+        Fri, 05 Feb 2021 00:06:29 -0800 (PST)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id 32sm9520070pgq.80.2021.02.05.00.06.23
+        by smtp.gmail.com with ESMTPSA id 32sm9520070pgq.80.2021.02.05.00.06.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 00:06:24 -0800 (PST)
+        Fri, 05 Feb 2021 00:06:28 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -75,10 +75,12 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Simon Ser <contact@emersion.fr>,
         James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [RFC][PATCH v6 0/7] Generic page pool & deferred freeing for system dmabuf heap
-Date:   Fri,  5 Feb 2021 08:06:14 +0000
-Message-Id: <20210205080621.3102035-1-john.stultz@linaro.org>
+Subject: [RFC][PATCH v6 2/7] drm: ttm_pool: Rename the ttm_pool_dma structure to ttm_pool_page_dat
+Date:   Fri,  5 Feb 2021 08:06:16 +0000
+Message-Id: <20210205080621.3102035-3-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210205080621.3102035-1-john.stultz@linaro.org>
+References: <20210205080621.3102035-1-john.stultz@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -86,50 +88,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series is starting to get long, so I figured I'd add a
-short cover letter for context.
-
-The point of this series is trying to add both deferred-freeing
-logic as well as a page pool to the DMA-BUF system heap.
-
-This is desired, as the combination of deferred freeing along
-with the page pool allows us to offload page-zeroing out of
-the allocation hot path. This was done originally with ION
-and this patch series allows the DMA-BUF system heap to match
-ION's system heap allocation performance in a simple
-microbenchmark [1] (ION re-added to the kernel for comparision,
-running on an x86 vm image):
-
-./dmabuf-heap-bench -i 0 1 system                     
-Testing dmabuf system vs ion heaptype 0 (flags: 0x1)
----------------------------------------------
-dmabuf heap: alloc 4096 bytes 5000 times in 86572223 ns          17314 ns/call
-ion heap:    alloc 4096 bytes 5000 times in 97442526 ns          19488 ns/call
-dmabuf heap: alloc 1048576 bytes 5000 times in 196635057 ns      39327 ns/call
-ion heap:    alloc 1048576 bytes 5000 times in 357323629 ns      71464 ns/call
-dmabuf heap: alloc 8388608 bytes 5000 times in 3165445534 ns     633089 ns/call
-ion heap:    alloc 8388608 bytes 5000 times in 3699591271 ns     739918 ns/call
-dmabuf heap: alloc 33554432 bytes 5000 times in 13327402517 ns   2665480 ns/call
-ion heap:    alloc 33554432 bytes 5000 times in 15292352796 ns   3058470 ns/call
-
-Daniel didn't like earlier attempts to re-use the network
-page-pool code to achieve this, and suggested the ttm_pool be
-used instead. This required pulling the fairly tightly knit
-ttm_pool logic apart, but after many failed attmempts I think
-I found a workable abstraction to split out shared logic.
-
-So this series contains a new generic drm_page_pool helper
-library, converts the ttm_pool to use it, and then adds the
-dmabuf deferred freeing and adds support to the dmabuf system
-heap to use both deferred freeing and the new drm_page_pool.
-
-Input would be greatly appreciated. Testing as well, as I don't
-have any development hardware that utilizes the ttm pool.
-
-thanks
--john
-
-[1] https://android.googlesource.com/platform/system/memory/libdmabufheap/+/refs/heads/master/tests/dmabuf_heap_bench.c
+This patch simply renames the ttm_pool_dma structure to
+ttm_pool_page_dat, as we will extend it to store more then just
+dma related info in it.
 
 Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Christian Koenig <christian.koenig@amd.com>
@@ -149,34 +110,129 @@ Cc: Simon Ser <contact@emersion.fr>
 Cc: James Jones <jajones@nvidia.com>
 Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+ drivers/gpu/drm/ttm/ttm_pool.c | 37 +++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
-John Stultz (7):
-  drm: Add a sharable drm page-pool implementation
-  drm: ttm_pool: Rename the ttm_pool_dma structure to ttm_pool_page_dat
-  drm: ttm_pool: Rework ttm_pool_free_page to allow us to use it as a
-    function pointer
-  drm: ttm_pool: Rework ttm_pool to use drm_page_pool
-  dma-buf: heaps: Add deferred-free-helper library code
-  dma-buf: system_heap: Add drm pagepool support to system heap
-  dma-buf: system_heap: Add deferred freeing to the system heap
-
- drivers/dma-buf/heaps/Kconfig                |   5 +
- drivers/dma-buf/heaps/Makefile               |   1 +
- drivers/dma-buf/heaps/deferred-free-helper.c | 145 ++++++++++
- drivers/dma-buf/heaps/deferred-free-helper.h |  55 ++++
- drivers/dma-buf/heaps/system_heap.c          |  77 ++++-
- drivers/gpu/drm/Kconfig                      |   5 +
- drivers/gpu/drm/Makefile                     |   1 +
- drivers/gpu/drm/page_pool.c                  | 220 +++++++++++++++
- drivers/gpu/drm/ttm/ttm_pool.c               | 278 ++++++-------------
- include/drm/page_pool.h                      |  54 ++++
- include/drm/ttm/ttm_pool.h                   |  23 +-
- 11 files changed, 639 insertions(+), 225 deletions(-)
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.c
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.h
- create mode 100644 drivers/gpu/drm/page_pool.c
- create mode 100644 include/drm/page_pool.h
-
+diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
+index 11e0313db0ea..c0274e256be3 100644
+--- a/drivers/gpu/drm/ttm/ttm_pool.c
++++ b/drivers/gpu/drm/ttm/ttm_pool.c
+@@ -37,18 +37,17 @@
+ #ifdef CONFIG_X86
+ #include <asm/set_memory.h>
+ #endif
+-
+ #include <drm/ttm/ttm_pool.h>
+ #include <drm/ttm/ttm_bo_driver.h>
+ #include <drm/ttm/ttm_tt.h>
+ 
+ /**
+- * struct ttm_pool_dma - Helper object for coherent DMA mappings
++ * struct ttm_pool_page_dat - Helper object for coherent DMA mappings
+  *
+  * @addr: original DMA address returned for the mapping
+  * @vaddr: original vaddr return for the mapping and order in the lower bits
+  */
+-struct ttm_pool_dma {
++struct ttm_pool_page_dat {
+ 	dma_addr_t addr;
+ 	unsigned long vaddr;
+ };
+@@ -75,7 +74,7 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+ 					unsigned int order)
+ {
+ 	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+-	struct ttm_pool_dma *dma;
++	struct ttm_pool_page_dat *dat;
+ 	struct page *p;
+ 	void *vaddr;
+ 
+@@ -94,15 +93,15 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+ 		return p;
+ 	}
+ 
+-	dma = kmalloc(sizeof(*dma), GFP_KERNEL);
+-	if (!dma)
++	dat = kmalloc(sizeof(*dat), GFP_KERNEL);
++	if (!dat)
+ 		return NULL;
+ 
+ 	if (order)
+ 		attr |= DMA_ATTR_NO_WARN;
+ 
+ 	vaddr = dma_alloc_attrs(pool->dev, (1ULL << order) * PAGE_SIZE,
+-				&dma->addr, gfp_flags, attr);
++				&dat->addr, gfp_flags, attr);
+ 	if (!vaddr)
+ 		goto error_free;
+ 
+@@ -114,12 +113,12 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+ 	else
+ 		p = virt_to_page(vaddr);
+ 
+-	dma->vaddr = (unsigned long)vaddr | order;
+-	p->private = (unsigned long)dma;
++	dat->vaddr = (unsigned long)vaddr | order;
++	p->private = (unsigned long)dat;
+ 	return p;
+ 
+ error_free:
+-	kfree(dma);
++	kfree(dat);
+ 	return NULL;
+ }
+ 
+@@ -128,7 +127,7 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+ 			       unsigned int order, struct page *p)
+ {
+ 	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+-	struct ttm_pool_dma *dma;
++	struct ttm_pool_page_dat *dat;
+ 	void *vaddr;
+ 
+ #ifdef CONFIG_X86
+@@ -147,11 +146,11 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+ 	if (order)
+ 		attr |= DMA_ATTR_NO_WARN;
+ 
+-	dma = (void *)p->private;
+-	vaddr = (void *)(dma->vaddr & PAGE_MASK);
+-	dma_free_attrs(pool->dev, (1UL << order) * PAGE_SIZE, vaddr, dma->addr,
++	dat = (void *)p->private;
++	vaddr = (void *)(dat->vaddr & PAGE_MASK);
++	dma_free_attrs(pool->dev, (1UL << order) * PAGE_SIZE, vaddr, dat->addr,
+ 		       attr);
+-	kfree(dma);
++	kfree(dat);
+ }
+ 
+ /* Apply a new caching to an array of pages */
+@@ -184,9 +183,9 @@ static int ttm_pool_map(struct ttm_pool *pool, unsigned int order,
+ 	unsigned int i;
+ 
+ 	if (pool->use_dma_alloc) {
+-		struct ttm_pool_dma *dma = (void *)p->private;
++		struct ttm_pool_page_dat *dat = (void *)p->private;
+ 
+-		addr = dma->addr;
++		addr = dat->addr;
+ 	} else {
+ 		size_t size = (1ULL << order) * PAGE_SIZE;
+ 
+@@ -324,9 +323,9 @@ static unsigned int ttm_pool_shrink(void)
+ static unsigned int ttm_pool_page_order(struct ttm_pool *pool, struct page *p)
+ {
+ 	if (pool->use_dma_alloc) {
+-		struct ttm_pool_dma *dma = (void *)p->private;
++		struct ttm_pool_page_dat *dat = (void *)p->private;
+ 
+-		return dma->vaddr & ~PAGE_MASK;
++		return dat->vaddr & ~PAGE_MASK;
+ 	}
+ 
+ 	return p->private;
 -- 
 2.25.1
 
