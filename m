@@ -2,226 +2,212 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E973C433DB
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7949C43381
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:41:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63CC864FF0
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B37BD64FEA
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:41:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbhBEW0b convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:26:31 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:44268 "EHLO gloria.sntech.de"
+        id S231139AbhBEWkI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 17:40:08 -0500
+Received: from mga09.intel.com ([134.134.136.24]:26783 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231708AbhBEOUM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:20:12 -0500
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1l82Wb-0002S7-Fm; Fri, 05 Feb 2021 15:55:57 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hjc@rock-chips.com, robh+dt@kernel.org,
-        linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        cmuellner@linux.com
-Subject: Re: [PATCH 0/6] Support second Image Signal Processor on rk3399
-Date:   Fri, 05 Feb 2021 15:55:56 +0100
-Message-ID: <5860385.iIbC2pHGDl@diego>
-In-Reply-To: <5271305.e9J7NaK4W3@diego>
-References: <20210202145632.1263136-1-heiko@sntech.de> <20210205064335.6c3gs3h3pgvhceku@basti-TUXEDO-Book-XA1510> <5271305.e9J7NaK4W3@diego>
+        id S229522AbhBEN2w (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:28:52 -0500
+IronPort-SDR: ftTHK/sOTyQ9MPA2pdg9ieH5kDU4lolvjPcKtw9jtMx5ECbHnvj2BdXHzE0+7Ls1yMhxZwbjU9
+ 5MyJteJAwjeQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="181578729"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="181578729"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:25:01 -0800
+IronPort-SDR: RpsqP7/ztACPjxsOHS3FQ9XjZLHVCCAvCC+t5NWps+rak3kd8IjSyGTSdAyU9NeIQUi4UOi4jF
+ CbskbWWBIORw==
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="581148954"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:24:58 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id A8082213E5;
+        Fri,  5 Feb 2021 15:24:51 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1l816f-0005GU-F0; Fri, 05 Feb 2021 15:25:05 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v10 6/7] media: i2c: imx319: Support probe while the device is off
+Date:   Fri,  5 Feb 2021 15:25:04 +0200
+Message-Id: <20210205132505.20173-7-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
+References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sebastian,
+From: Rajmohan Mani <rajmohan.mani@intel.com>
 
-I did some tests myself today as well and can confirm your
-hdmi related finding - at least when plugged in on boot.
+Tell ACPI device PM code that the driver supports the device being powered
+off when the driver's probe function is entered.
 
-I tried some combinations of camera vs. hdmi and it seems
-really only when hdmi is plugged in on boot
+Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ drivers/media/i2c/imx319.c | 72 +++++++++++++++++++++++---------------
+ 1 file changed, 44 insertions(+), 28 deletions(-)
 
-(1)
-- boot
-- camera
---> works
-
-(2)
-- boot
-- camera
-- hdmi plugged in
-- hdmi works
-- camera
---> works
-
-(3)
-- hdmi plugged in
-- boot
-- hdmi works
-- camera
---> camera doesn't work
-
-(4)
-- boot
-- hdmi plugged in
-- hdmi works
-- camera
--> camera works
-
-
-With a bit of brute-force [0] it seems the camera also works again even
-with hdmi connected on boot. So conclusion would be that some clock
-is misbehaving.
-
-Now we'll "only" need to find out which one that is.
-
-
-Heiko
-
-
-[0]
-Don't disable any clock gates
-
-diff --git a/drivers/clk/clk-gate.c b/drivers/clk/clk-gate.c
-index 070dc47e95a1..8daf1fc3388c 100644
---- a/drivers/clk/clk-gate.c
-+++ b/drivers/clk/clk-gate.c
-@@ -61,6 +61,9 @@ static void clk_gate_endisable(struct clk_hw *hw, int enable)
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index 8473c0bbb35d6..e0b22e9318fed 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -140,6 +140,8 @@ struct imx319 {
  
-        set ^= enable;
+ 	/* Streaming on/off */
+ 	bool streaming;
++	/* True if the device has been identified */
++	bool identified;
+ };
  
-+if (!enable)
-+return;
+ static const struct imx319_reg imx319_global_regs[] = {
+@@ -2084,6 +2086,31 @@ imx319_set_pad_format(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++/* Verify chip ID */
++static int imx319_identify_module(struct imx319 *imx319)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
++	int ret;
++	u32 val;
 +
-        if (gate->lock)
-                spin_lock_irqsave(gate->lock, flags);
-        else
-
-
-
-Am Freitag, 5. Februar 2021, 09:15:47 CET schrieb Heiko Stübner:
-> Hi Sebastian,
-> 
-> Am Freitag, 5. Februar 2021, 07:43:35 CET schrieb Sebastian Fricke:
-> > On 03.02.2021 20:54, Heiko Stübner wrote:
-> > >Am Mittwoch, 3. Februar 2021, 19:14:22 CET schrieb Sebastian Fricke:
-> > >> I have tested your patch set on my nanoPC-T4, here is a complete log
-> > >> with:
-> > >> - relevant kernel log entries
-> > >> - system information
-> > >> - media ctl output
-> > >> - sysfs entry information
-> > >>
-> > >> https://paste.debian.net/1183874/
-> > >>
-> > >> Additionally, to your patchset I have applied the following patches:
-> > >> https://github.com/initBasti/Linux_kernel_media_tree_fork/commits/dual_cam_setup
-> > >>
-> > >> And just to not cause confusion the `media_dev` entries come from this
-> > >> unmerged series:
-> > >> https://patchwork.kernel.org/project/linux-media/list/?series=426269
-> > >>
-> > >> I have actually been able to stream with both of my cameras at the same
-> > >> time using the libcamera cam command.
-> > >> I would like to thank you a lot for making this possible.
-> > >
-> > >Thanks for testing a dual camera setup. On my board I could only test
-> > >the second ISP. And really glad it works for you tool :-) .
-> > >
-> > >Out of curiosity, do you also see that green tint in the images the cameras
-> > >produce?
-> > 
-> > Yes, I do. Actually, I currently have two forms of a green tint, on my
-> > OV13850 everything is quite dark and greenish, which is caused by the
-> > missing 3A algorithms. On my OV4689, I have big patches of the image
-> > with bright green color and flickering, I investigated if this is
-> > connected to the 2nd ISP instance, but that doesn't seem to be the case
-> > as I have the same results when I switch the CSI ports of the cameras.
-> > 
-> > I have found another issue, while testing I discovered following
-> > issue:
-> > When I start the system with an HDMI monitor connected, then the camera
-> > on the 2nd port doesn't work. This is probably because the RX/TX is
-> > reserved as a TX.
-> > But it made me wonder because if the system has an RX, a TX, and
-> > an RX/TX, why isn't the pure TX used by the monitor and the
-> > cameras take RX and RX/TX?
-> > Or do you think that this is maybe a malfunction of this patch?
-> 
-> I don't think it is an issue with this specific series, but still puzzling.
-> 
-> I.e. the DPHYs are actually only relevant to the DSI controllers,
-> with TX0 being connected to DSI0 and TX1RX1 being connected
-> to DSI1. So having an hdmi display _in theory_ shouldn't matter at all.
-> 
-> Out of curiosity what happens, when you boot without hdmi connected
-> turn on the cameras, connect the hdmi after this, try the cameras again?
-> 
-> 
-> Heiko
-> 
-> > 
-> > >
-> > >Thanks
-> > >Heiko
-> > 
-> > Greetings,
-> > Sebastian
-> > 
-> > >
-> > >
-> > >> If you like to you can add:
-> > >> Tested-by: Sebastian Fricke <sebastian.fricke@posteo.net>
-> > >>
-> > >> On 02.02.2021 15:56, Heiko Stuebner wrote:
-> > >> >The rk3399 has two ISPs and right now only the first one is usable.
-> > >> >The second ISP is connected to the TXRX dphy on the soc.
-> > >> >
-> > >> >The phy of ISP1 is only accessible through the DSI controller's
-> > >> >io-memory, so this series adds support for simply using the dsi
-> > >> >controller is a phy if needed.
-> > >> >
-> > >> >That solution is needed at least on rk3399 and rk3288 but no-one
-> > >> >has looked at camera support on rk3288 at all, so right now
-> > >> >only implement the rk3399 specifics.
-> > >> >
-> > >> >
-> > >> >Heiko Stuebner (6):
-> > >> >  drm/rockchip: dsi: add own additional pclk handling
-> > >> >  dt-bindings: display: rockchip-dsi: add optional #phy-cells property
-> > >> >  drm/rockchip: dsi: add ability to work as a phy instead of full dsi
-> > >> >  arm64: dts: rockchip: add #phy-cells to mipi-dsi1
-> > >> >  arm64: dts: rockchip: add cif clk-control pinctrl for rk3399
-> > >> >  arm64: dts: rockchip: add isp1 node on rk3399
-> > >> >
-> > >> > .../display/rockchip/dw_mipi_dsi_rockchip.txt |   1 +
-> > >> > arch/arm64/boot/dts/rockchip/rk3399.dtsi      |  39 ++
-> > >> > drivers/gpu/drm/rockchip/Kconfig              |   2 +
-> > >> > .../gpu/drm/rockchip/dw-mipi-dsi-rockchip.c   | 342 ++++++++++++++++++
-> > >> > 4 files changed, 384 insertions(+)
-> > >> >
-> > >>
-> > >
-> > >
-> > >
-> > >
-> > 
-> 
-> 
-
-
-
++	if (imx319->identified)
++		return 0;
++
++	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
++	if (ret)
++		return ret;
++
++	if (val != IMX319_CHIP_ID) {
++		dev_err(&client->dev, "chip id mismatch: %x!=%x",
++			IMX319_CHIP_ID, val);
++		return -EIO;
++	}
++
++	imx319->identified = true;
++
++	return 0;
++}
++
+ /* Start streaming */
+ static int imx319_start_streaming(struct imx319 *imx319)
+ {
+@@ -2091,6 +2118,10 @@ static int imx319_start_streaming(struct imx319 *imx319)
+ 	const struct imx319_reg_list *reg_list;
+ 	int ret;
+ 
++	ret = imx319_identify_module(imx319);
++	if (ret)
++		return ret;
++
+ 	/* Global Setting */
+ 	reg_list = &imx319_global_setting;
+ 	ret = imx319_write_regs(imx319, reg_list->regs, reg_list->num_of_regs);
+@@ -2208,26 +2239,6 @@ static int __maybe_unused imx319_resume(struct device *dev)
+ 	return ret;
+ }
+ 
+-/* Verify chip ID */
+-static int imx319_identify_module(struct imx319 *imx319)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
+-	int ret;
+-	u32 val;
+-
+-	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
+-	if (ret)
+-		return ret;
+-
+-	if (val != IMX319_CHIP_ID) {
+-		dev_err(&client->dev, "chip id mismatch: %x!=%x",
+-			IMX319_CHIP_ID, val);
+-		return -EIO;
+-	}
+-
+-	return 0;
+-}
+-
+ static const struct v4l2_subdev_core_ops imx319_subdev_core_ops = {
+ 	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+ 	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
+@@ -2422,6 +2433,7 @@ static struct imx319_hwcfg *imx319_get_hwcfg(struct device *dev)
+ static int imx319_probe(struct i2c_client *client)
+ {
+ 	struct imx319 *imx319;
++	bool low_power;
+ 	int ret;
+ 	u32 i;
+ 
+@@ -2434,11 +2446,14 @@ static int imx319_probe(struct i2c_client *client)
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&imx319->sd, client, &imx319_subdev_ops);
+ 
+-	/* Check module identity */
+-	ret = imx319_identify_module(imx319);
+-	if (ret) {
+-		dev_err(&client->dev, "failed to find sensor: %d", ret);
+-		goto error_probe;
++	low_power = acpi_dev_state_low_power(&client->dev);
++	if (!low_power) {
++		/* Check module identity */
++		ret = imx319_identify_module(imx319);
++		if (ret) {
++			dev_err(&client->dev, "failed to find sensor: %d", ret);
++			goto error_probe;
++		}
+ 	}
+ 
+ 	imx319->hwcfg = imx319_get_hwcfg(&client->dev);
+@@ -2491,10 +2506,10 @@ static int imx319_probe(struct i2c_client *client)
+ 		goto error_media_entity;
+ 
+ 	/*
+-	 * Device is already turned on by i2c-core with ACPI domain PM.
+-	 * Enable runtime PM and turn off the device.
++	 * Don't set the device's state to active if it's in a low power state.
+ 	 */
+-	pm_runtime_set_active(&client->dev);
++	if (!low_power)
++		pm_runtime_set_active(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+ 	pm_runtime_idle(&client->dev);
+ 
+@@ -2547,6 +2562,7 @@ static struct i2c_driver imx319_i2c_driver = {
+ 	},
+ 	.probe_new = imx319_probe,
+ 	.remove = imx319_remove,
++	.flags = I2C_DRV_FL_ALLOW_LOW_POWER_PROBE,
+ };
+ module_i2c_driver(imx319_i2c_driver);
+ 
+-- 
+2.20.1
 
