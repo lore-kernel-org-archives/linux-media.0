@@ -2,87 +2,202 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80920C433DB
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 23:09:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87ED4C433E0
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 23:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39AF764FDE
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 23:09:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47B4B64FF1
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 23:09:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhBEXJM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 18:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbhBEMPb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 07:15:31 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0C9C06178C
-        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 04:14:50 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id 7so7512865wrz.0
-        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 04:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2sVpw/Ilm0KnpiFsmLHbM4e+ReVA/N71RFFlYJCi6Jc=;
-        b=BB7ALc7sbCHtH1mv+N60GaVRHeBWzmnWHyy9GHAu0+HnEZRTe2hDxu60TGg/CntGow
-         PXwmSKAren/fPwW78lkaDllUHZ2ZnCEkxXh4EQ+cVQTU39vLdkBJ2docqsa74xECOm5D
-         tHXU45AE03NZSQiVv6yl01GUf/2ux2ytvffYlNyWsJFm8/UyoRaaPwgU1/0U9LNLO6st
-         yQx0UYGMOs24EOf9Kk97ely+uuGzEgGL4/6CgLZ5ideldCoZbBsnvSgRhwsC2v02ptYi
-         HdHJKWu3/eKIzjqKey6BBl2ImTn/qy7CkWiluMVpeaKsmTF16UwiZGSe+xTNfJA3gWtt
-         H5SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2sVpw/Ilm0KnpiFsmLHbM4e+ReVA/N71RFFlYJCi6Jc=;
-        b=dFJWPQO4NuhS3pgmVPzDVAZVcvgm39H89oLvilxy9qCYSClk5lro9TJTtOcO/8EVo5
-         2hrJNTiVgZ+NAMOeI0uvcIf5KOi+ixECVvy/vZBI1LguxLgHgXOTE35/dQ2nAcUW7mNP
-         ek0gQu/jB2X3ku55ynJvfuDuRSxHGII3XW+UV1U0wtPUUbkQwS3FSelWyZ6lmhiZZ9Y0
-         MxmW01YT+lgonqVlHWEBnpm8LFKuKT9aSijq9MqXjeVUTAE/xvgmrz3gEMg9ZoGcPkyG
-         Eka1LRcACLak6aMn3/AQMu4vI0TNSQ8Qm8YKtTw61OKRqMHGKyIQA0UlmL1Rc8CQB8JK
-         5tWA==
-X-Gm-Message-State: AOAM532cxMFUc5TCTIUDf4H/uN82MeopwI9KG2Oo7+5wKujttNxAFV39
-        pa3S4zZ9aEbPM9ZZpvGUN7Ekrw==
-X-Google-Smtp-Source: ABdhPJzKK4p9VlSBCj/6RXVnS8gpIG2x+6hUraDqzjA2Wwgll9c+czXiR3yHJjjrNuwF8J5hBM5t/Q==
-X-Received: by 2002:a5d:414c:: with SMTP id c12mr4845606wrq.251.1612527288915;
-        Fri, 05 Feb 2021 04:14:48 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 23sm8549833wmo.47.2021.02.05.04.14.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Feb 2021 04:14:48 -0800 (PST)
-Subject: Re: [PATCH] media: venus: core, venc, vdec: Fix probe dependency
- error
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     dmitry.baryshkov@linaro.org
-References: <20210204125614.1453916-1-bryan.odonoghue@linaro.org>
- <836fac64-81b3-2048-c440-8c41cd185e94@linaro.org>
- <e2d89409-6691-e98c-1f68-fcdc63d26be4@linaro.org>
- <b0adc363-c5b0-e7f0-5e1c-ea4d33f6d0f7@linaro.org>
- <d7d114fe-6255-5672-e91c-2558d56da745@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <2a905877-9475-683b-7ecf-7328c1f6cfa4@linaro.org>
-Date:   Fri, 5 Feb 2021 12:16:09 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        id S230163AbhBEXJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 18:09:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230139AbhBEKFm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Feb 2021 05:05:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC7E464FD8;
+        Fri,  5 Feb 2021 10:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612519493;
+        bh=28PKurE22BswmWny+JOPpHCzycquk/wHe2fKb6YjBhI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GRMFjIMg0WDAfhXcZ/ESL0lo8tviyCl2qwH4O0+oHY8sHJdh09d/d8r86TI2w2Btj
+         AckC5f6l4QHWok0G1jdmoszO97+cmgVN713MWIYMgw2vkuaIDaHWCGvttlEO1nBM1d
+         iFfdBDb3IPsH7pdwJwNpm9a+7KmPQBsMJGsPATpNyWZIKOrs2jkNj/kAd9HLwi8qEM
+         9GpaACn2oT7I09+zOx27KRcy+SIThThBuonPZ6vcqCWA2FuWX12vrN9XhWD0NSmfWs
+         hHOUgvJQ00vjc0iZQUilD8KK+iphwnHHtlPVahgvJYwvFmE4BOkz8ylSK6T3OLuXdF
+         gmxHQk1GPOiiA==
+Received: by pali.im (Postfix)
+        id 3CEE18A2; Fri,  5 Feb 2021 11:04:50 +0100 (CET)
+Date:   Fri, 5 Feb 2021 11:04:49 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>, Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [PATCH 1/2] PCI: also set up legacy files only after sysfs init
+Message-ID: <20210205100449.w2vzqozgnolxqh4h@pali>
+References: <20210204165831.2703772-2-daniel.vetter@ffwll.ch>
+ <20210204215019.GA104698@bjorn-Precision-5520>
+ <20210204222407.pkx7wvmcvugdwqdd@pali>
+ <CAKMK7uFeZpc4oV2GNRdP_EXmYqacg5o3jPegqqaFZZYqqRutFA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <d7d114fe-6255-5672-e91c-2558d56da745@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKMK7uFeZpc4oV2GNRdP_EXmYqacg5o3jPegqqaFZZYqqRutFA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 05/02/2021 11:52, Stanimir Varbanov wrote:
-> Wait, venus_runtime_suspend|resume also relies on that
-> dev_get_drvdata(). Can we call v4l2_device_register() earlier in
-> venus_probe?
+On Friday 05 February 2021 10:59:50 Daniel Vetter wrote:
+> On Thu, Feb 4, 2021 at 11:24 PM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > On Thursday 04 February 2021 15:50:19 Bjorn Helgaas wrote:
+> > > [+cc Oliver, Pali, Krzysztof]
+> >
+> > Just to note that extending or using sysfs_initialized introduces
+> > another race condition into kernel code which results in PCI fatal
+> > errors. Details are in email discussion which Bjorn already sent.
+> 
+> Yeah I wondered why this doesn't race.
 
-I can give it a go
+It races, but with smaller probability. I have not seen this race
+condition on x86. But I was able to reproduce it with native PCIe
+drivers on ARM64 (Marvell Armada 3720; pci-aardvark). In mentioned
+discussion I wrote when this race condition happen. But I understand
+that it is hard to simulate it.
+
+> but since the history goes back
+> to pre-git times I figured it would have been addressed somehow
+> already if it indeed does race.
+> -Daniel
+> 
+> > > s/also/Also/ in subject
+> > >
+> > > On Thu, Feb 04, 2021 at 05:58:30PM +0100, Daniel Vetter wrote:
+> > > > We are already doing this for all the regular sysfs files on PCI
+> > > > devices, but not yet on the legacy io files on the PCI buses. Thus far
+> > > > now problem, but in the next patch I want to wire up iomem revoke
+> > > > support. That needs the vfs up an running already to make so that
+> > > > iomem_get_mapping() works.
+> > >
+> > > s/now problem/no problem/
+> > > s/an running/and running/
+> > > s/so that/sure that/ ?
+> > >
+> > > iomem_get_mapping() doesn't exist; I don't know what that should be.
+> > >
+> > > > Wire it up exactly like the existing code. Note that
+> > > > pci_remove_legacy_files() doesn't need a check since the one for
+> > > > pci_bus->legacy_io is sufficient.
+> > >
+> > > I'm not sure exactly what you mean by "the existing code."  I could
+> > > probably figure it out, but it would save time to mention the existing
+> > > function here.
+> > >
+> > > This looks like another instance where we should really apply Oliver's
+> > > idea of converting these to attribute_groups [1].
+> > >
+> > > The cover letter mentions options discussed with Greg in [2], but I
+> > > don't think the "sysfs_initialized" hack vs attribute_groups was part
+> > > of that discussion.
+> > >
+> > > It's not absolutely a show-stopper, but it *is* a shame to extend the
+> > > sysfs_initialized hack if attribute_groups could do this more cleanly
+> > > and help solve more than one issue.
+> > >
+> > > Bjorn
+> > >
+> > > [1] https://lore.kernel.org/r/CAOSf1CHss03DBSDO4PmTtMp0tCEu5kScn704ZEwLKGXQzBfqaA@mail.gmail.com
+> > > [2] https://lore.kernel.org/dri-devel/CAKMK7uGrdDrbtj0OyzqQc0CGrQwc2F3tFJU9vLfm2jjufAZ5YQ@mail.gmail.com/
+> > >
+> > > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > > > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > Cc: Dan Williams <dan.j.williams@intel.com>
+> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > > Cc: John Hubbard <jhubbard@nvidia.com>
+> > > > Cc: Jérôme Glisse <jglisse@redhat.com>
+> > > > Cc: Jan Kara <jack@suse.cz>
+> > > > Cc: Dan Williams <dan.j.williams@intel.com>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: linux-mm@kvack.org
+> > > > Cc: linux-arm-kernel@lists.infradead.org
+> > > > Cc: linux-samsung-soc@vger.kernel.org
+> > > > Cc: linux-media@vger.kernel.org
+> > > > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > > > Cc: linux-pci@vger.kernel.org
+> > > > ---
+> > > >  drivers/pci/pci-sysfs.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > >
+> > > > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> > > > index fb072f4b3176..0c45b4f7b214 100644
+> > > > --- a/drivers/pci/pci-sysfs.c
+> > > > +++ b/drivers/pci/pci-sysfs.c
+> > > > @@ -927,6 +927,9 @@ void pci_create_legacy_files(struct pci_bus *b)
+> > > >  {
+> > > >     int error;
+> > > >
+> > > > +   if (!sysfs_initialized)
+> > > > +           return;
+> > > > +
+> > > >     b->legacy_io = kcalloc(2, sizeof(struct bin_attribute),
+> > > >                            GFP_ATOMIC);
+> > > >     if (!b->legacy_io)
+> > > > @@ -1448,6 +1451,7 @@ void pci_remove_sysfs_dev_files(struct pci_dev *pdev)
+> > > >  static int __init pci_sysfs_init(void)
+> > > >  {
+> > > >     struct pci_dev *pdev = NULL;
+> > > > +   struct pci_bus *pbus = NULL;
+> > > >     int retval;
+> > > >
+> > > >     sysfs_initialized = 1;
+> > > > @@ -1459,6 +1463,9 @@ static int __init pci_sysfs_init(void)
+> > > >             }
+> > > >     }
+> > > >
+> > > > +   while ((pbus = pci_find_next_bus(pbus)))
+> > > > +           pci_create_legacy_files(pbus);
+> > > > +
+> > > >     return 0;
+> > > >  }
+> > > >  late_initcall(pci_sysfs_init);
+> > > > --
+> > > > 2.30.0
+> > > >
+> > > >
+> > > > _______________________________________________
+> > > > linux-arm-kernel mailing list
+> > > > linux-arm-kernel@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> 
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
