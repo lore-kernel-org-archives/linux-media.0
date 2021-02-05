@@ -2,78 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6ADC433DB
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 19:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B14C433E6
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 20:00:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DEF964E75
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 19:49:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99C6564FBA
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 20:00:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbhBESGk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 13:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        id S229590AbhBESRR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 13:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbhBEPU5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 10:20:57 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B68C06178B;
-        Fri,  5 Feb 2021 09:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=0/2zA/ADyjfnzZtoneWuo/iMnZWI+oIUh5vAI8TSf+o=; b=e6QN9UR8LxwF3qh1dohmBgkgqD
-        ZOx3nOTe1bD+b5NtriH8rZd/c7sU/akXkoos3ir3JybpwITbBSLoaQo0cUjO6URDXqR74kHJl5xGN
-        WOMU+zOSNkAzU2TFLUzgiZMK+lnZWmqubb18TSYHaVu1A4HfXxIxE1CLJGCXL6imYSr4yd1gBj27A
-        hAsBi/6udbKE+DMfM+gIv+D+WndT27eNRZonLWqn17YQoVyjhQ2kdXxAVwVOymqOdZeu1ompBdaoE
-        3+J6Jomoqztoh43sx3rujPOis0w/SNYBmgCzEJNjIVGZwNNcapq5bZqSVA+4BF1IkwR06cqr1c13S
-        ByJ+7xmg==;
-Received: from [2601:1c0:6280:3f0::aec2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l84Ux-0002GV-VX; Fri, 05 Feb 2021 17:02:24 +0000
-Subject: Re: [PATCH] include: media: davinci: Fixed up few trivial spellings
- in the file isif.h
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        prabhakar.csengg@gmail.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210205092117.551317-1-unixbhaskar@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <582f7b77-ba55-083e-9cd2-f4f0cb6dbbb7@infradead.org>
-Date:   Fri, 5 Feb 2021 09:02:20 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        with ESMTP id S233552AbhBESF4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 13:05:56 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A334C061786
+        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 11:47:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id h12so11507950lfp.9
+        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 11:47:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JpFQEtQj4C0OZQX0JhcEbS+mtM0J6361EvZ8pnT2TSE=;
+        b=L/O8FpF6LlQ1+mtrZtK+VtKD+UUwgDHsysQWj+/uvhSwZGo1Eh2QdS4GfGMzmkCV/L
+         dDZA9pKSv4B4myTCSTpIhhomB2+Z/K4c+q2WwpEg3Xwbj+ZBIPKawEHR0zlgnwaP1gAK
+         Z1x5iSvolMkSNC0wpljVeFY3ptOa5llNld5RUARcT8gw66Aed7NI/BbM+AczKGjIEqTz
+         r6wsUKUQaXnzMUvn6NGWqiMk7ykLYy/iHQGcyltHzQJo5Gl4qLat0QDAP/QPgZyuKIVv
+         RczfcHPCgoEYDvo3BXUC64rPEIgnPcyVpl9/7EgSRfq4SEZq8zOSlOBbcbSWxpBn8YVC
+         w/WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JpFQEtQj4C0OZQX0JhcEbS+mtM0J6361EvZ8pnT2TSE=;
+        b=TadI+1vnV3WfLc102r+qi8++5NpqszhLQzeHtaie1SiGs7PQPJaAiIpIX8gAbZhye5
+         iOKkJA/5PEqxNKHQNq+0ir/02nwFP5ZyLuLWx6oGa+l+KELs1t6L3z8BSIOazW1jx5h2
+         xHw3nIUa7f2aDSPuhtW5/EzjJD0YbpfzmHWEw4ByJvL+Yr6Q3hEkwuMUde10e4pyiYSQ
+         WjK/xGh0j8d/dqxthxAlAeDigMDmEkDNEo5djWU9uNMSDuwU/+q3o6G0DfD/Slle8nSc
+         Xs1J4OJl2R2V2EYaGrPUbV5HRJLRxXR2sY3VgNEd4RJl4HXGimdAgxecnxtgH/x5Oimy
+         Afsw==
+X-Gm-Message-State: AOAM531or0GtZvBvEeD6SFPUmaq2c7q3tK5cunUUVjwEBo85JAIfab4B
+        aJ6slBcgZ5PDJS2a517/V2+h7VwAQrjwhKGmfIMMHQ==
+X-Google-Smtp-Source: ABdhPJxYzWAehEnsDpGaws8y+Zfq5m5I1qYWKUBMjcHBCecyBa1VQDARHSmA2ubfIx1mf62FNZS+cAX6p5NtKrw7Vgg=
+X-Received: by 2002:ac2:5590:: with SMTP id v16mr3187334lfg.626.1612554458492;
+ Fri, 05 Feb 2021 11:47:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210205092117.551317-1-unixbhaskar@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210205080621.3102035-1-john.stultz@linaro.org>
+ <20210205080621.3102035-4-john.stultz@linaro.org> <8a4cacb7-3042-53c7-02fe-de18cc49fc0e@amd.com>
+In-Reply-To: <8a4cacb7-3042-53c7-02fe-de18cc49fc0e@amd.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 5 Feb 2021 11:47:25 -0800
+Message-ID: <CALAqxLX7KT8Zqv+qjpbiDzSLubvDgXz6Ayk_U_q5e0veweHcFw@mail.gmail.com>
+Subject: Re: [RFC][PATCH v6 3/7] drm: ttm_pool: Rework ttm_pool_free_page to
+ allow us to use it as a function pointer
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2/5/21 1:21 AM, Bhaskar Chowdhury wrote:
-> 
-> 
-> Several spelling fixes throughout the file.
-> 
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+On Fri, Feb 5, 2021 at 12:28 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+> Am 05.02.21 um 09:06 schrieb John Stultz:
+> > This refactors ttm_pool_free_page(), and by adding extra entries
+> > to ttm_pool_page_dat, we then use it for all allocations, which
+> > allows us to simplify the arguments needed to be passed to
+> > ttm_pool_free_page().
+>
+> This is a clear NAK since the peer page data is just a workaround for
+> the DMA-API hack to grab pages from there.
+>
+> Adding this to all pages would increase the memory footprint drastically.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Yea, that's a good point!  Hrm... bummer. I'll have to see if there's
+some other way I can get the needed context for the free from the
+generic page-pool side.
 
-> ---
->  include/media/davinci/isif.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/media/davinci/isif.h b/include/media/davinci/isif.h
-> index e66589c4022d..8369acd26e7e 100644
-> --- a/include/media/davinci/isif.h
-> +++ b/include/media/davinci/isif.h
-
-
--- 
-~Randy
-
+Thanks so much for the review!
+-john
