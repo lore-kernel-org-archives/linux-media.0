@@ -2,1636 +2,1577 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D03BC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15E04C433E0
 	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1571364F8C
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:26:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A629564FDC
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:26:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbhBEWZ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S232858AbhBEWYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 17:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbhBEOZQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 09:25:16 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91439C0617A7
-        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 08:03:23 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id p15so8213961wrq.8
-        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 08:03:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=kQjmRCry687xJesE3htX7kfPImS2CrcXvvbgMFlka/M=;
-        b=QIsh6RExDTBl+fSF+VjkNTdWY/E7wYpecdc9TiCol2cFMkVEml5iJ1+nNnbFaOZCpt
-         i4LgKYMFxYPbF1endWloOvbPFKPxHC0zbdYl4A1rhUp81K/yBJsiJN2aUfdWEd8TN7eZ
-         cdqOYN90+3Bxjda1lSjD9wjq9K/zCFaSh7xVA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kQjmRCry687xJesE3htX7kfPImS2CrcXvvbgMFlka/M=;
-        b=OHHl/sNZvJQFtf1MXhOjYgo1ZoMZP4vajgY1xQmecBszHstiFBrOe5ESI8+4f+dZDu
-         TIMzRePGLEi9QlBxvPb8rBcNa8nyPU4G9Cs/fIGLyA3eZmCcrXjfk1nNHRLIb64KjtOh
-         WdQYfE+6XilrDEAMZOAVhXi8wpGfZCdRgz72hmCZxUhMkmGMtOIWy8V93gfsowXzGKah
-         kZhKh3+HgbnqE4N7Ro311SNMaPi2hgKvXuJVUc1cgO3hMOfiRtq8z+LVjwjT7RxBg6nV
-         cG1I9V2pel7I3LVWA/A/LU22Phk+/KQ4dfZ6L8a8Hgz76we9HG1uk6SE6C0cZuX0tUkn
-         Gzdg==
-X-Gm-Message-State: AOAM531cqTV5f/lG+/0dH0xJ2HXEWUHKhBSoHbHdrFKitNj1FHypAH8j
-        DavEqboToz8icvvpWJDIvb/ia6Gg51UnX+6F
-X-Google-Smtp-Source: ABdhPJyeeaeZuv+ahQJ9nesselCfSOvx6oXeiTrSzXXxRHOsddRhA+IXdxAItsmCOnViOqCZqM9FWA==
-X-Received: by 2002:adf:f452:: with SMTP id f18mr5648414wrp.11.1612541002131;
-        Fri, 05 Feb 2021 08:03:22 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z8sm12348056wrh.83.2021.02.05.08.03.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 08:03:21 -0800 (PST)
-Date:   Fri, 5 Feb 2021 17:03:19 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        dri-devel@lists.freedesktop.org, kraxel@redhat.com,
-        daniel.vetter@intel.com, daniel.vetter@ffwll.ch,
-        dongwon.kim@intel.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-media@vger.kernel.org
-Subject: Re: [RFC v3 2/3] virtio: Introduce Vdmabuf driver
-Message-ID: <YB1sRx1GrT8rATEg@phenom.ffwll.local>
-References: <20210203073517.1908882-1-vivek.kasireddy@intel.com>
- <20210203073517.1908882-3-vivek.kasireddy@intel.com>
+        with ESMTP id S231463AbhBEOYM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 09:24:12 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6AAC061A30
+        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 07:51:50 -0800 (PST)
+Received: from [IPv6:2003:c7:cf1c:ce00:c5f9:7f5:ebcd:ea47] (p200300c7cf1cce00c5f907f5ebcdea47.dip0.t-ipconnect.de [IPv6:2003:c7:cf1c:ce00:c5f9:7f5:ebcd:ea47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 534A61F466F7;
+        Fri,  5 Feb 2021 14:04:37 +0000 (GMT)
+Subject: Re: [PATCH RFC 10/11] media: rockchip: rkisp1: add support for v12
+ isp variants
+To:     Heiko Stuebner <heiko@sntech.de>, ezequiel@collabora.com,
+        helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com
+Cc:     linux-rockchip@lists.infradead.org,
+        christoph.muellner@theobroma-systems.com,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+References: <20210108193311.3423236-1-heiko@sntech.de>
+ <20210108193311.3423236-11-heiko@sntech.de>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <ef2e1b43-7a31-c9e9-44ee-7d9b6a3a8fa3@collabora.com>
+Date:   Fri, 5 Feb 2021 15:04:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210203073517.1908882-3-vivek.kasireddy@intel.com>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+In-Reply-To: <20210108193311.3423236-11-heiko@sntech.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 11:35:16PM -0800, Vivek Kasireddy wrote:
-> This driver "transfers" a dmabuf created on the Guest to the Host.
-> A common use-case for such a transfer includes sharing the scanout
-> buffer created by a display server or a compositor running in the
-> Guest with Qemu UI -- running on the Host.
+
+
+Am 08.01.21 um 20:33 schrieb Heiko Stuebner:
+> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 > 
-> The "transfer" is accomplished by sharing the PFNs of all the pages
-> associated with the dmabuf and having a new dmabuf created on the
-> Host that is backed up by the pages mapped from the Guest.
+> The rkisp1 evolved over soc generations and the rk3326/px30 introduced
+> the so called v12 - probably meaning v1.2.
 > 
-> Signed-off-by: Dongwon Kim <dongwon.kim@intel.com>
-> Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+> Add the changed register definitions.
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 > ---
->  drivers/virtio/Kconfig              |    8 +
->  drivers/virtio/Makefile             |    1 +
->  drivers/virtio/virtio_vdmabuf.c     | 1090 +++++++++++++++++++++++++++
->  include/linux/virtio_vdmabuf.h      |  271 +++++++
->  include/uapi/linux/virtio_ids.h     |    1 +
->  include/uapi/linux/virtio_vdmabuf.h |   99 +++
->  6 files changed, 1470 insertions(+)
->  create mode 100644 drivers/virtio/virtio_vdmabuf.c
->  create mode 100644 include/linux/virtio_vdmabuf.h
->  create mode 100644 include/uapi/linux/virtio_vdmabuf.h
+>   .../platform/rockchip/rkisp1/rkisp1-common.h  |   1 +
+>   .../platform/rockchip/rkisp1/rkisp1-isp.c     |  13 +
+>   .../platform/rockchip/rkisp1/rkisp1-params.c  | 535 +++++++++++++++---
+>   .../platform/rockchip/rkisp1/rkisp1-regs.h    | 404 ++++++++-----
+>   .../platform/rockchip/rkisp1/rkisp1-stats.c   | 112 +++-
+>   5 files changed, 824 insertions(+), 241 deletions(-)
 > 
-> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-> index 7b41130d3f35..e563c12f711e 100644
-> --- a/drivers/virtio/Kconfig
-> +++ b/drivers/virtio/Kconfig
-> @@ -139,4 +139,12 @@ config VIRTIO_DMA_SHARED_BUFFER
->  	 This option adds a flavor of dma buffers that are backed by
->  	 virtio resources.
->  
-> +config VIRTIO_VDMABUF
-> +	bool "Enables Vdmabuf driver in guest os"
-> +	default n
-> +	depends on VIRTIO
-> +	help
-> +	 This driver provides a way to share the dmabufs created in
-> +	 the Guest with the Host.
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> index be0ae02165c9..9deb1ef1aa8b 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> @@ -61,6 +61,7 @@
+>   
+>   enum rkisp1_isp_ver {
+>   	RKISP1_V10 = 0,
+> +	RKISP1_V12,
+>   };
+>   
+>   /* enum for the resizer pads */
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> index 84440aa71210..306cc96f8230 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> @@ -408,6 +408,10 @@ static int rkisp1_config_mipi(struct rkisp1_device *rkisp1)
+>   
+>   	rkisp1_write(rkisp1, mipi_ctrl, RKISP1_CIF_MIPI_CTRL);
+>   
+> +	/* V12 could also use a newer csi2-host, but we don't want that yet */
+> +	if (rkisp1->isp_ver == RKISP1_V12)
+> +		rkisp1_write(rkisp1, 0, RKISP1_CIF_ISP_CSI0_CTRL0);
 > +
->  endif # VIRTIO_MENU
-> diff --git a/drivers/virtio/Makefile b/drivers/virtio/Makefile
-> index 591e6f72aa54..b4bb0738009c 100644
-> --- a/drivers/virtio/Makefile
-> +++ b/drivers/virtio/Makefile
-> @@ -9,3 +9,4 @@ obj-$(CONFIG_VIRTIO_INPUT) += virtio_input.o
->  obj-$(CONFIG_VIRTIO_VDPA) += virtio_vdpa.o
->  obj-$(CONFIG_VIRTIO_MEM) += virtio_mem.o
->  obj-$(CONFIG_VIRTIO_DMA_SHARED_BUFFER) += virtio_dma_buf.o
-> +obj-$(CONFIG_VIRTIO_VDMABUF) += virtio_vdmabuf.o
-> diff --git a/drivers/virtio/virtio_vdmabuf.c b/drivers/virtio/virtio_vdmabuf.c
-> new file mode 100644
-> index 000000000000..c28f144eb126
-> --- /dev/null
-> +++ b/drivers/virtio/virtio_vdmabuf.c
-> @@ -0,0 +1,1090 @@
-> +// SPDX-License-Identifier: (MIT OR GPL-2.0)
+>   	/* Configure Data Type and Virtual Channel */
+>   	rkisp1_write(rkisp1,
+>   		     RKISP1_CIF_MIPI_DATA_SEL_DT(sink_fmt->mipi_dt) |
+> @@ -527,6 +531,15 @@ static void rkisp1_config_clk(struct rkisp1_device *rkisp1)
+>   		  RKISP1_CIF_ICCL_DCROP_CLK;
+>   
+>   	rkisp1_write(rkisp1, val, RKISP1_CIF_ICCL);
 > +
-> +/*
-> + * Copyright © 2021 Intel Corporation
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a
-> + * copy of this software and associated documentation files (the "Software"),
-> + * to deal in the Software without restriction, including without limitation
-> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-> + * and/or sell copies of the Software, and to permit persons to whom the
-> + * Software is furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice (including the next
-> + * paragraph) shall be included in all copies or substantial portions of the
-> + * Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-> + * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> + * IN THE SOFTWARE.
-> + *
-> + * Authors:
-> + *    Dongwon Kim <dongwon.kim@intel.com>
-> + *    Mateusz Polrola <mateusz.polrola@gmail.com>
-> + *    Vivek Kasireddy <vivek.kasireddy@intel.com>
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/errno.h>
-> +#include <linux/module.h>
-> +#include <linux/device.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/delay.h>
-> +#include <linux/random.h>
-> +#include <linux/poll.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/dma-buf.h>
-> +#include <linux/virtio.h>
-> +#include <linux/virtio_ids.h>
-> +#include <linux/virtio_config.h>
-> +#include <linux/virtio_vdmabuf.h>
-> +
-> +#define VIRTIO_VDMABUF_MAX_ID INT_MAX
-> +#define REFS_PER_PAGE (PAGE_SIZE/sizeof(long))
-> +#define NEW_BUF_ID_GEN(vmid, cnt) (((vmid & 0xFFFFFFFF) << 32) | \
-> +				    ((cnt) & 0xFFFFFFFF))
-> +
-> +/* one global drv object */
-> +static struct virtio_vdmabuf_info *drv_info;
-> +
-> +struct virtio_vdmabuf {
-> +	/* virtio device structure */
-> +	struct virtio_device *vdev;
-> +
-> +	/* virtual queue array */
-> +	struct virtqueue *vqs[VDMABUF_VQ_MAX];
-> +
-> +	/* ID of guest OS */
-> +	u64 vmid;
-> +
-> +	/* spin lock that needs to be acquired before accessing
-> +	 * virtual queue
-> +	 */
-> +	spinlock_t vq_lock;
-> +	struct mutex recv_lock;
-> +	struct mutex send_lock;
-> +
-> +	struct list_head msg_list;
-> +
-> +	/* workqueue */
-> +	struct workqueue_struct *wq;
-> +	struct work_struct recv_work;
-> +	struct work_struct send_work;
-> +	struct work_struct send_msg_work;
-> +
-> +	struct virtio_vdmabuf_event_queue *evq;
-> +};
-> +
-> +static virtio_vdmabuf_buf_id_t get_buf_id(struct virtio_vdmabuf *vdmabuf)
-> +{
-> +	virtio_vdmabuf_buf_id_t buf_id = {0, {0, 0} };
-> +	static int count = 0;
-> +
-> +	count = count < VIRTIO_VDMABUF_MAX_ID ? count + 1 : 0;
-> +	buf_id.id = NEW_BUF_ID_GEN(vdmabuf->vmid, count);
-> +
-> +	/* random data embedded in the id for security */
-> +	get_random_bytes(&buf_id.rng_key[0], 8);
-> +
-> +	return buf_id;
-> +}
-> +
-> +/* sharing pages for original DMABUF with Host */
-> +static struct virtio_vdmabuf_shared_pages
-> +*virtio_vdmabuf_share_buf(struct page **pages, int nents,
-> +			  int first_ofst, int last_len)
-> +{
-> +	struct virtio_vdmabuf_shared_pages *pages_info;
-> +	int i;
-> +	int n_l2refs = nents/REFS_PER_PAGE +
-> +		       ((nents % REFS_PER_PAGE) ? 1 : 0);
-> +
-> +	pages_info = kvcalloc(1, sizeof(*pages_info), GFP_KERNEL);
-> +	if (!pages_info)
-> +		return NULL;
-> +
-> +	pages_info->pages = pages;
-> +	pages_info->nents = nents;
-> +	pages_info->first_ofst = first_ofst;
-> +	pages_info->last_len = last_len;
-> +	pages_info->l3refs = (gpa_t *)__get_free_page(GFP_KERNEL);
-> +
-> +	if (!pages_info->l3refs) {
-> +		kvfree(pages_info);
-> +		return NULL;
+> +	/* ensure sp and mp can run at the same time in V12 */
+> +	if (rkisp1->isp_ver == RKISP1_V12) {
+> +		val = RKISP1_CIF_CLK_CTRL_MI_Y12 | RKISP1_CIF_CLK_CTRL_MI_SP |
+> +		      RKISP1_CIF_CLK_CTRL_MI_RAW0 | RKISP1_CIF_CLK_CTRL_MI_RAW1 |
+> +		      RKISP1_CIF_CLK_CTRL_MI_READ | RKISP1_CIF_CLK_CTRL_MI_RAWRD |
+> +		      RKISP1_CIF_CLK_CTRL_CP | RKISP1_CIF_CLK_CTRL_IE;
+> +		rkisp1_write(rkisp1, val, RKISP1_CIF_VI_ISP_CLK_CTRL_V12);
 > +	}
-> +
-> +	pages_info->l2refs = (gpa_t **)__get_free_pages(GFP_KERNEL,
-> +					get_order(n_l2refs * PAGE_SIZE));
-> +
-> +	if (!pages_info->l2refs) {
-> +		free_page((gpa_t)pages_info->l3refs);
-> +		kvfree(pages_info);
-> +		return NULL;
+>   }
+>   
+>   static void rkisp1_isp_start(struct rkisp1_device *rkisp1)
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> index 008584caaad0..408fa33bdc30 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> @@ -185,8 +185,8 @@ static void rkisp1_bls_config(struct rkisp1_params *params,
+>   
+>   /* ISP LS correction interface function */
+>   static void
+> -rkisp1_lsc_matrix_config(struct rkisp1_params *params,
+> -			 const struct rkisp1_cif_isp_lsc_config *pconfig)
+> +rkisp1_lsc_matrix_config_v10(struct rkisp1_params *params,
+> +			     const struct rkisp1_cif_isp_lsc_config *pconfig)
+>   {
+>   	unsigned int isp_lsc_status, sram_addr, isp_lsc_table_sel, i, j, data;
+>   
+> @@ -212,39 +212,111 @@ rkisp1_lsc_matrix_config(struct rkisp1_params *params,
+>   		 * DWORDs (2nd value of last DWORD unused)
+>   		 */
+>   		for (j = 0; j < RKISP1_CIF_ISP_LSC_SAMPLES_MAX - 1; j += 2) {
+> -			data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->r_data_tbl[i][j],
+> -							     pconfig->r_data_tbl[i][j + 1]);
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->r_data_tbl[i][j],
+> +								 pconfig->r_data_tbl[i][j + 1]);
+>   			rkisp1_write(params->rkisp1, data,
+>   				     RKISP1_CIF_ISP_LSC_R_TABLE_DATA);
+>   
+> -			data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->gr_data_tbl[i][j],
+> -							     pconfig->gr_data_tbl[i][j + 1]);
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->gr_data_tbl[i][j],
+> +								 pconfig->gr_data_tbl[i][j + 1]);
+>   			rkisp1_write(params->rkisp1, data,
+>   				     RKISP1_CIF_ISP_LSC_GR_TABLE_DATA);
+>   
+> -			data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->gb_data_tbl[i][j],
+> -							     pconfig->gb_data_tbl[i][j + 1]);
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->gb_data_tbl[i][j],
+> +								 pconfig->gb_data_tbl[i][j + 1]);
+>   			rkisp1_write(params->rkisp1, data,
+>   				     RKISP1_CIF_ISP_LSC_GB_TABLE_DATA);
+>   
+> -			data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->b_data_tbl[i][j],
+> -							     pconfig->b_data_tbl[i][j + 1]);
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->b_data_tbl[i][j],
+> +								 pconfig->b_data_tbl[i][j + 1]);
+>   			rkisp1_write(params->rkisp1, data,
+>   				     RKISP1_CIF_ISP_LSC_B_TABLE_DATA);
+>   		}
+> -		data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->r_data_tbl[i][j], 0);
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->r_data_tbl[i][j], 0);
+>   		rkisp1_write(params->rkisp1, data,
+>   			     RKISP1_CIF_ISP_LSC_R_TABLE_DATA);
+>   
+> -		data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->gr_data_tbl[i][j], 0);
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->gr_data_tbl[i][j], 0);
+>   		rkisp1_write(params->rkisp1, data,
+>   			     RKISP1_CIF_ISP_LSC_GR_TABLE_DATA);
+>   
+> -		data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->gb_data_tbl[i][j], 0);
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->gb_data_tbl[i][j], 0);
+>   		rkisp1_write(params->rkisp1, data,
+>   			     RKISP1_CIF_ISP_LSC_GB_TABLE_DATA);
+>   
+> -		data = RKISP1_CIF_ISP_LSC_TABLE_DATA(pconfig->b_data_tbl[i][j], 0);
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(pconfig->b_data_tbl[i][j], 0);
+> +		rkisp1_write(params->rkisp1, data,
+> +			     RKISP1_CIF_ISP_LSC_B_TABLE_DATA);
 > +	}
+> +	isp_lsc_table_sel = (isp_lsc_status & RKISP1_CIF_ISP_LSC_ACTIVE_TABLE) ?
+> +			    RKISP1_CIF_ISP_LSC_TABLE_0 :
+> +			    RKISP1_CIF_ISP_LSC_TABLE_1;
+> +	rkisp1_write(params->rkisp1, isp_lsc_table_sel,
+> +		     RKISP1_CIF_ISP_LSC_TABLE_SEL);> +}
 > +
-> +	/* Share physical address of pages */
-> +	for (i = 0; i < nents; i++)
-> +		pages_info->l2refs[i] = (gpa_t *)page_to_phys(pages[i]);
-> +
-> +	for (i = 0; i < n_l2refs; i++)
-> +		pages_info->l3refs[i] =
-> +			virt_to_phys((void *)pages_info->l2refs +
-> +				     i * PAGE_SIZE);
-> +
-> +	pages_info->ref = (gpa_t)virt_to_phys(pages_info->l3refs);
-> +
-> +	return pages_info;
-> +}
-> +
-> +/* stop sharing pages */
 > +static void
-> +virtio_vdmabuf_free_buf(struct virtio_vdmabuf_shared_pages *pages_info)
+> +rkisp1_lsc_matrix_config_v12(struct rkisp1_params *params,
+> +			     const struct rkisp1_cif_isp_lsc_config *pconfig)
 > +{
-> +	int n_l2refs = (pages_info->nents/REFS_PER_PAGE +
-> +		       ((pages_info->nents % REFS_PER_PAGE) ? 1 : 0));
+> +	unsigned int isp_lsc_status, sram_addr, isp_lsc_table_sel, i, j, data;
 > +
-> +	free_pages((gpa_t)pages_info->l2refs, get_order(n_l2refs * PAGE_SIZE));
-> +	free_page((gpa_t)pages_info->l3refs);
+> +	isp_lsc_status = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_LSC_STATUS);
 > +
-> +	kvfree(pages_info);
+> +	/* RKISP1_CIF_ISP_LSC_TABLE_ADDRESS_153 = ( 17 * 18 ) >> 1 */
+> +	sram_addr = (isp_lsc_status & RKISP1_CIF_ISP_LSC_ACTIVE_TABLE) ?
+> +		     RKISP1_CIF_ISP_LSC_TABLE_ADDRESS_0 :
+> +		     RKISP1_CIF_ISP_LSC_TABLE_ADDRESS_153;
+> +	rkisp1_write(params->rkisp1, sram_addr, RKISP1_CIF_ISP_LSC_R_TABLE_ADDR);
+> +	rkisp1_write(params->rkisp1, sram_addr, RKISP1_CIF_ISP_LSC_GR_TABLE_ADDR);
+> +	rkisp1_write(params->rkisp1, sram_addr, RKISP1_CIF_ISP_LSC_GB_TABLE_ADDR);
+> +	rkisp1_write(params->rkisp1, sram_addr, RKISP1_CIF_ISP_LSC_B_TABLE_ADDR);
+> +
+> +	/* program data tables (table size is 9 * 17 = 153) */
+> +	for (i = 0; i < RKISP1_CIF_ISP_LSC_SAMPLES_MAX; i++) {
+> +		/*
+> +		 * 17 sectors with 2 values in one DWORD = 9
+> +		 * DWORDs (2nd value of last DWORD unused)
+> +		 */
+> +		for (j = 0; j < RKISP1_CIF_ISP_LSC_SAMPLES_MAX - 1; j += 2) {
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(
+> +					pconfig->r_data_tbl[i][j],
+> +					pconfig->r_data_tbl[i][j + 1]);
+> +			rkisp1_write(params->rkisp1, data,
+> +				     RKISP1_CIF_ISP_LSC_R_TABLE_DATA);
+> +
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(
+> +					pconfig->gr_data_tbl[i][j],
+> +					pconfig->gr_data_tbl[i][j + 1]);
+> +			rkisp1_write(params->rkisp1, data,
+> +				     RKISP1_CIF_ISP_LSC_GR_TABLE_DATA);
+> +
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(
+> +					pconfig->gb_data_tbl[i][j],
+> +					pconfig->gb_data_tbl[i][j + 1]);
+> +			rkisp1_write(params->rkisp1, data,
+> +				     RKISP1_CIF_ISP_LSC_GB_TABLE_DATA);
+> +
+> +			data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(
+> +					pconfig->b_data_tbl[i][j],
+> +					pconfig->b_data_tbl[i][j + 1]);
+> +			rkisp1_write(params->rkisp1, data,
+> +				     RKISP1_CIF_ISP_LSC_B_TABLE_DATA);
+> +		}
+> +
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(pconfig->r_data_tbl[i][j], 0);
+> +		rkisp1_write(params->rkisp1, data,
+> +			     RKISP1_CIF_ISP_LSC_R_TABLE_DATA);
+> +
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(pconfig->gr_data_tbl[i][j], 0);
+> +		rkisp1_write(params->rkisp1, data,
+> +			     RKISP1_CIF_ISP_LSC_GR_TABLE_DATA);
+> +
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(pconfig->gb_data_tbl[i][j], 0);
+> +		rkisp1_write(params->rkisp1, data,
+> +			     RKISP1_CIF_ISP_LSC_GB_TABLE_DATA);
+> +
+> +		data = RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(pconfig->b_data_tbl[i][j], 0);
+>   		rkisp1_write(params->rkisp1, data,
+>   			     RKISP1_CIF_ISP_LSC_B_TABLE_DATA);
+>   	}
+> @@ -382,18 +454,37 @@ static void rkisp1_sdg_config(struct rkisp1_params *params,
+>   }
+>   
+>   /* ISP GAMMA correction interface function */
+> -static void rkisp1_goc_config(struct rkisp1_params *params,
+> -			      const struct rkisp1_cif_isp_goc_config *arg)
+> +static void rkisp1_goc_config_v10(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_goc_config *arg)
+>   {
+>   	unsigned int i;
+>   
+>   	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_CTRL,
+>   				RKISP1_CIF_ISP_CTRL_ISP_GAMMA_OUT_ENA);
+> -	rkisp1_write(params->rkisp1, arg->mode, RKISP1_CIF_ISP_GAMMA_OUT_MODE);
+> +	rkisp1_write(params->rkisp1, arg->mode, RKISP1_CIF_ISP_GAMMA_OUT_MODE_V10);
+>   
+>   	for (i = 0; i < params->config->gamma_out_max_samples; i++)
+>   		rkisp1_write(params->rkisp1, arg->gamma_y[i],
+> -			     RKISP1_CIF_ISP_GAMMA_OUT_Y_0 + i * 4);
+> +			     RKISP1_CIF_ISP_GAMMA_OUT_Y_0_V10 + i * 4);
 > +}
 > +
-> +static int send_msg_to_host(enum virtio_vdmabuf_cmd cmd, int *op)
+> +static void rkisp1_goc_config_v12(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_goc_config *arg)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf = drv_info->priv;
-> +	struct virtio_vdmabuf_msg *msg;
 > +	int i;
-> +
-> +	switch (cmd) {
-> +	case VIRTIO_VDMABUF_CMD_NEED_VMID:
-> +		msg = kvcalloc(1, sizeof(struct virtio_vdmabuf_msg),
-> +			       GFP_KERNEL);
-> +		if (!msg)
-> +			return -ENOMEM;
-> +
-> +		if (op)
-> +			for (i = 0; i < 4; i++)
-> +				msg->op[i] = op[i];
-> +		break;
-> +
-> +	case VIRTIO_VDMABUF_CMD_EXPORT:
-> +		msg = kvcalloc(1, sizeof(struct virtio_vdmabuf_msg),
-> +			       GFP_KERNEL);
-> +		if (!msg)
-> +			return -ENOMEM;
-> +
-> +		memcpy(&msg->op[0], &op[0], 9 * sizeof(int) + op[9]);
-> +		break;
-> +
-> +	default:
-> +		/* no command found */
-> +		return -EINVAL;
-> +	}
-> +
-> +	msg->cmd = cmd;
-> +	list_add_tail(&msg->list, &vdmabuf->msg_list);
-> +	queue_work(vdmabuf->wq, &vdmabuf->send_msg_work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int add_event_buf_rel(struct virtio_vdmabuf_buf *buf_info)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf = drv_info->priv;
-> +	struct virtio_vdmabuf_event *e_oldest, *e_new;
-> +	struct virtio_vdmabuf_event_queue *eq = vdmabuf->evq;
-> +	unsigned long irqflags;
-> +
-> +	e_new = kvzalloc(sizeof(*e_new), GFP_KERNEL);
-> +	if (!e_new)
-> +		return -ENOMEM;
-> +
-> +	e_new->e_data.hdr.buf_id = buf_info->buf_id;
-> +	e_new->e_data.data = (void *)buf_info->priv;
-> +	e_new->e_data.hdr.size = buf_info->sz_priv;
-> +
-> +	spin_lock_irqsave(&eq->e_lock, irqflags);
-> +
-> +	/* check current number of events and if it hits the max num (32)
-> +	 * then remove the oldest event in the list
-> +	 */
-> +	if (eq->pending > 31) {
-> +		e_oldest = list_first_entry(&eq->e_list,
-> +					    struct virtio_vdmabuf_event, link);
-> +		list_del(&e_oldest->link);
-> +		eq->pending--;
-> +		kvfree(e_oldest);
-> +	}
-> +
-> +	list_add_tail(&e_new->link, &eq->e_list);
-> +
-> +	eq->pending++;
-> +
-> +	wake_up_interruptible(&eq->e_wait);
-> +	spin_unlock_irqrestore(&eq->e_lock, irqflags);
-> +
-> +	return 0;
-> +}
-> +
-> +static void virtio_vdmabuf_clear_buf(struct virtio_vdmabuf_buf *exp)
-> +{
-> +	/* Start cleanup of buffer in reverse order to exporting */
-> +	virtio_vdmabuf_free_buf(exp->pages_info);
-> +
-> +	dma_buf_unmap_attachment(exp->attach, exp->sgt,
-> +				 DMA_BIDIRECTIONAL);
-> +
-> +	if (exp->dma_buf) {
-> +		dma_buf_detach(exp->dma_buf, exp->attach);
-> +		/* close connection to dma-buf completely */
-> +		dma_buf_put(exp->dma_buf);
-> +		exp->dma_buf = NULL;
-> +	}
-> +}
-> +
-> +static int remove_buf(struct virtio_vdmabuf *vdmabuf,
-> +		      struct virtio_vdmabuf_buf *exp)
-> +{
-> +	int ret;
-> +
-> +	ret = add_event_buf_rel(exp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	virtio_vdmabuf_clear_buf(exp);
-> +
-> +	ret = virtio_vdmabuf_del_buf(drv_info, &exp->buf_id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (exp->sz_priv > 0 && !exp->priv)
-> +		kvfree(exp->priv);
-> +
-> +	kvfree(exp);
-> +	return 0;
-> +}
-> +
-> +static int parse_msg_from_host(struct virtio_vdmabuf *vdmabuf,
-> +		     	       struct virtio_vdmabuf_msg *msg)
-> +{
-> +	struct virtio_vdmabuf_buf *exp;
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	int ret;
-> +
-> +	switch (msg->cmd) {
-> +	case VIRTIO_VDMABUF_CMD_NEED_VMID:
-> +		vdmabuf->vmid = msg->op[0];
-> +
-> +		break;
-> +	case VIRTIO_VDMABUF_CMD_DMABUF_REL:
-> +		memcpy(&buf_id, msg->op, sizeof(buf_id));
-> +
-> +		exp = virtio_vdmabuf_find_buf(drv_info, &buf_id);
-> +		if (!exp) {
-> +			dev_err(drv_info->dev, "can't find buffer\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		ret = remove_buf(vdmabuf, exp);
-> +		if (ret)
-> +			return ret;
-> +
-> +		break;
-> +	case VIRTIO_VDMABUF_CMD_EXPORT:
-> +		break;
-> +	default:
-> +		dev_err(drv_info->dev, "empty cmd\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void virtio_vdmabuf_recv_work(struct work_struct *work)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf =
-> +		container_of(work, struct virtio_vdmabuf, recv_work);
-> +	struct virtqueue *vq = vdmabuf->vqs[VDMABUF_VQ_RECV];
-> +	struct virtio_vdmabuf_msg *msg;
-> +	int sz;
-> +
-> +	mutex_lock(&vdmabuf->recv_lock);
-> +
-> +	do {
-> +		virtqueue_disable_cb(vq);
-> +		for (;;) {
-> +			msg = virtqueue_get_buf(vq, &sz);
-> +			if (!msg)
-> +				break;
-> +
-> +			/* valid size */
-> +			if (sz == sizeof(struct virtio_vdmabuf_msg)) {
-> +				if (parse_msg_from_host(vdmabuf, msg))
-> +					dev_err(drv_info->dev,
-> +						"msg parse error\n");
-> +
-> +				kvfree(msg);
-> +			} else {
-> +				dev_err(drv_info->dev,
-> +					"received malformed message\n");
-> +			}
-> +		}
-> +	} while (!virtqueue_enable_cb(vq));
-> +
-> +	mutex_unlock(&vdmabuf->recv_lock);
-> +}
-> +
-> +static void virtio_vdmabuf_fill_recv_msg(struct virtio_vdmabuf *vdmabuf)
-> +{
-> +	struct virtqueue *vq = vdmabuf->vqs[VDMABUF_VQ_RECV];
-> +	struct scatterlist sg;
-> +	struct virtio_vdmabuf_msg *msg;
-> +	int ret;
-> +
-> +	msg = kvzalloc(sizeof(*msg), GFP_KERNEL);
-> +	if (!msg)
-> +		return;
-> +
-> +	sg_init_one(&sg, msg, sizeof(struct virtio_vdmabuf_msg));
-> +	ret = virtqueue_add_inbuf(vq, &sg, 1, msg, GFP_KERNEL);
-> +	if (ret)
-> +		return;
-> +
-> +	virtqueue_kick(vq);
-> +}
-> +
-> +static void virtio_vdmabuf_send_msg_work(struct work_struct *work)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf =
-> +		container_of(work, struct virtio_vdmabuf, send_msg_work);
-> +	struct virtqueue *vq = vdmabuf->vqs[VDMABUF_VQ_SEND];
-> +	struct scatterlist sg;
-> +	struct virtio_vdmabuf_msg *msg;
-> +	bool added = false;
-> +	int ret;
-> +
-> +	mutex_lock(&vdmabuf->send_lock);
-> +
-> +	for (;;) {
-> +		if (list_empty(&vdmabuf->msg_list))
-> +			break;
-> +
-> +		virtio_vdmabuf_fill_recv_msg(vdmabuf);
-> +
-> +		msg = list_first_entry(&vdmabuf->msg_list,
-> +				       struct virtio_vdmabuf_msg, list);
-> +		list_del_init(&msg->list);
-> +
-> +		sg_init_one(&sg, msg, sizeof(struct virtio_vdmabuf_msg));
-> +		ret = virtqueue_add_outbuf(vq, &sg, 1, msg, GFP_KERNEL);
-> +		if (ret < 0) {
-> +			dev_err(drv_info->dev,
-> +				"failed to add msg to vq\n");
-> +			break;
-> +		}
-> +
-> +		added = true;	
-> +	}
-> +
-> +	if (added)
-> +		virtqueue_kick(vq);
-> +
-> +	mutex_unlock(&vdmabuf->send_lock);
-> +}
-> +
-> +static void virtio_vdmabuf_send_work(struct work_struct *work)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf =
-> +		container_of(work, struct virtio_vdmabuf, send_work);
-> +	struct virtqueue *vq = vdmabuf->vqs[VDMABUF_VQ_SEND];
-> +	struct virtio_vdmabuf_msg *msg;
-> +	unsigned int sz;
-> +	bool added = false;
-> +
-> +	mutex_lock(&vdmabuf->send_lock);
-> +
-> +	do {
-> +		virtqueue_disable_cb(vq);
-> +
-> +		for (;;) {
-> +			msg = virtqueue_get_buf(vq, &sz);
-> +			if (!msg)
-> +				break;
-> +
-> +			if (parse_msg_from_host(vdmabuf, msg))
-> +				dev_err(drv_info->dev,
-> +					"msg parse error\n");
-> +
-> +			kvfree(msg);
-> +			added = true;
-> +		}
-> +	} while (!virtqueue_enable_cb(vq));
-> +
-> +	mutex_unlock(&vdmabuf->send_lock);
-> +
-> +	if (added)
-> +		queue_work(vdmabuf->wq, &vdmabuf->send_msg_work);
-> +}
-> +
-> +static void virtio_vdmabuf_recv_cb(struct virtqueue *vq)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf = vq->vdev->priv;
-> +
-> +	if (!vdmabuf)
-> +		return;
-> +
-> +	queue_work(vdmabuf->wq, &vdmabuf->recv_work);
-> +}
-> +
-> +static void virtio_vdmabuf_send_cb(struct virtqueue *vq)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf = vq->vdev->priv;
-> +
-> +	if (!vdmabuf)
-> +		return;
-> +
-> +	queue_work(vdmabuf->wq, &vdmabuf->send_work);
-> +}
-> +
-> +static int remove_all_bufs(struct virtio_vdmabuf *vdmabuf)
-> +{
-> +	struct virtio_vdmabuf_buf *found;
-> +	struct hlist_node *tmp;
-> +	int bkt;
-> +	int ret;
-> +
-> +	hash_for_each_safe(drv_info->buf_list, bkt, tmp, found, node) {
-> +		ret = remove_buf(vdmabuf, found);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int virtio_vdmabuf_open(struct inode *inode, struct file *filp)
-> +{
-> +	int ret;
-> +
-> +	if (!drv_info) {
-> +		pr_err("virtio vdmabuf driver is not ready\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = send_msg_to_host(VIRTIO_VDMABUF_CMD_NEED_VMID, 0);
-> +	if (ret < 0)
-> +		dev_err(drv_info->dev, "fail to receive vmid\n");
-> +
-> +	filp->private_data = drv_info->priv;
-> +
-> +	return 0;
-> +}
-> +
-> +static int virtio_vdmabuf_release(struct inode *inode, struct file *filp)
-> +{
-> +	return 0;
-> +}
-> +
-> +/* Notify Host about the new vdmabuf */
-> +static int export_notify(struct virtio_vdmabuf_buf *exp, struct page **pages)
-> +{
-> +	int *op;
-> +	int ret;
-> +
-> +	op = kvcalloc(1, sizeof(int) * 65, GFP_KERNEL);
-> +	if (!op)
-> +		return -ENOMEM;
-> +
-> +	memcpy(op, &exp->buf_id, sizeof(exp->buf_id));
-> +
-> +	/* if new pages are to be shared */
-> +	if (pages) {
-> +		op[4] = exp->pages_info->nents;
-> +		op[5] = exp->pages_info->first_ofst;
-> +		op[6] = exp->pages_info->last_len;
-> +
-> +		memcpy(&op[7], &exp->pages_info->ref, sizeof(gpa_t));
-> +	}
-> +
-> +	op[9] = exp->sz_priv;
-> +
-> +	/* driver/application specific private info */
-> +	memcpy(&op[10], exp->priv, op[9]);
-> +
-> +	ret = send_msg_to_host(VIRTIO_VDMABUF_CMD_EXPORT, op);
-> +
-> +	kvfree(op);
-> +	return ret;
-> +}
-> +
-> +/* return total number of pages referenced by a sgt
-> + * for pre-calculation of # of pages behind a given sgt
-> + */
-> +static int num_pgs(struct sg_table *sgt)
-> +{
-> +	struct scatterlist *sgl;
-> +	int len, i;
-> +	/* at least one page */
-> +	int n_pgs = 1;
-> +
-> +	sgl = sgt->sgl;
-> +
-> +	len = sgl->length - PAGE_SIZE + sgl->offset;
-> +
-> +	/* round-up */
-> +	n_pgs += ((len + PAGE_SIZE - 1)/PAGE_SIZE);
-> +
-> +	for (i = 1; i < sgt->nents; i++) {
-> +		sgl = sg_next(sgl);
-> +
-> +		/* round-up */
-> +		n_pgs += ((sgl->length + PAGE_SIZE - 1) /
-> +			  PAGE_SIZE); /* round-up */
-> +	}
-> +
-> +	return n_pgs;
-> +}
-> +
-> +/* extract pages referenced by sgt */
-> +static struct page **extr_pgs(struct sg_table *sgt, int *nents, int *last_len)
 
-Nack, this doesn't work on dma-buf. And it'll blow up at runtime when you
-enable the very recently merged CONFIG_DMABUF_DEBUG (would be good to test
-with that, just to make sure).
+unsigned int
 
-Aside from this, for virtio/kvm use-cases we've already merged the udmabuf
-driver. Does this not work for your usecase?
+> +	u32 value;
+> +
+> +	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_CTRL,
+> +				RKISP1_CIF_ISP_CTRL_ISP_GAMMA_OUT_ENA);
+> +	rkisp1_write(params->rkisp1, arg->mode, RKISP1_CIF_ISP_GAMMA_OUT_MODE_V12);
+> +
+> +	for (i = 0; i < params->config->gamma_out_max_samples / 2; i++) {
 
-Adding Gerd as the subject expert for this area.
+Since you already have two version for the 'goc_config; callback, there is no
+need for the config to get the gamma_out_max_samples you can use
+RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES_V* directly
 
-Thanks, Daniel
 
-> +{
-> +	struct scatterlist *sgl;
-> +	struct page **pages;
-> +	struct page **temp_pgs;
-> +	int i, j;
-> +	int len;
-> +
-> +	*nents = num_pgs(sgt);
-> +	pages =	kvmalloc_array(*nents, sizeof(struct page *), GFP_KERNEL);
-> +	if (!pages)
-> +		return NULL;
-> +
-> +	sgl = sgt->sgl;
-> +
-> +	temp_pgs = pages;
-> +	*temp_pgs++ = sg_page(sgl);
-> +	len = sgl->length - PAGE_SIZE + sgl->offset;
-> +
-> +	i = 1;
-> +	while (len > 0) {
-> +		*temp_pgs++ = nth_page(sg_page(sgl), i++);
-> +		len -= PAGE_SIZE;
+> +		value = RKISP1_CIF_ISP_GAMMA_VALUE_V12(
+> +			arg->gamma_y[2 * i + 1],
+> +			arg->gamma_y[2 * i]);
+> +		rkisp1_write(params->rkisp1, value,
+> +			     RKISP1_CIF_ISP_GAMMA_OUT_Y_0_V12 + i * 4);
 > +	}
-> +
-> +	for (i = 1; i < sgt->nents; i++) {
-> +		sgl = sg_next(sgl);
-> +		*temp_pgs++ = sg_page(sgl);
-> +		len = sgl->length - PAGE_SIZE;
-> +		j = 1;
-> +
-> +		while (len > 0) {
-> +			*temp_pgs++ = nth_page(sg_page(sgl), j++);
-> +			len -= PAGE_SIZE;
-> +		}
-> +	}
-> +
-> +	*last_len = len + PAGE_SIZE;
-> +
-> +	return pages;
+>   }
+>   
+>   /* ISP Cross Talk */
+> @@ -433,8 +524,8 @@ static void rkisp1_ctk_enable(struct rkisp1_params *params, bool en)
+>   }
+>   
+>   /* ISP White Balance Mode */
+> -static void rkisp1_awb_meas_config(struct rkisp1_params *params,
+> -				   const struct rkisp1_cif_isp_awb_meas_config *arg)
+> +static void rkisp1_awb_meas_config_v10(struct rkisp1_params *params,
+> +				       const struct rkisp1_cif_isp_awb_meas_config *arg)
+>   {
+>   	u32 reg_val = 0;
+>   	/* based on the mode,configure the awb module */
+> @@ -442,43 +533,82 @@ static void rkisp1_awb_meas_config(struct rkisp1_params *params,
+>   		/* Reference Cb and Cr */
+>   		rkisp1_write(params->rkisp1,
+>   			     RKISP1_CIF_ISP_AWB_REF_CR_SET(arg->awb_ref_cr) |
+> -			     arg->awb_ref_cb, RKISP1_CIF_ISP_AWB_REF);
+> +			     arg->awb_ref_cb, RKISP1_CIF_ISP_AWB_REF_V10);
+>   		/* Yc Threshold */
+>   		rkisp1_write(params->rkisp1,
+>   			     RKISP1_CIF_ISP_AWB_MAX_Y_SET(arg->max_y) |
+>   			     RKISP1_CIF_ISP_AWB_MIN_Y_SET(arg->min_y) |
+>   			     RKISP1_CIF_ISP_AWB_MAX_CS_SET(arg->max_csum) |
+> -			     arg->min_c, RKISP1_CIF_ISP_AWB_THRESH);
+> +			     arg->min_c, RKISP1_CIF_ISP_AWB_THRESH_V10);
+>   	}
+>   
+> -	reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP);
+> +	reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP_V10);
+>   	if (arg->enable_ymax_cmp)
+>   		reg_val |= RKISP1_CIF_ISP_AWB_YMAX_CMP_EN;
+>   	else
+>   		reg_val &= ~RKISP1_CIF_ISP_AWB_YMAX_CMP_EN;
+> -	rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP);
+> +	rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP_V10);
+>   
+>   	/* window offset */
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->awb_wnd.v_offs, RKISP1_CIF_ISP_AWB_WND_V_OFFS);
+> +		     arg->awb_wnd.v_offs, RKISP1_CIF_ISP_AWB_WND_V_OFFS_V10);
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->awb_wnd.h_offs, RKISP1_CIF_ISP_AWB_WND_H_OFFS);
+> +		     arg->awb_wnd.h_offs, RKISP1_CIF_ISP_AWB_WND_H_OFFS_V10);
+>   	/* AWB window size */
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->awb_wnd.v_size, RKISP1_CIF_ISP_AWB_WND_V_SIZE);
+> +		     arg->awb_wnd.v_size, RKISP1_CIF_ISP_AWB_WND_V_SIZE_V10);
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->awb_wnd.h_size, RKISP1_CIF_ISP_AWB_WND_H_SIZE);
+> +		     arg->awb_wnd.h_size, RKISP1_CIF_ISP_AWB_WND_H_SIZE_V10);
+>   	/* Number of frames */
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->frames, RKISP1_CIF_ISP_AWB_FRAMES);
+> +		     arg->frames, RKISP1_CIF_ISP_AWB_FRAMES_V10);
 > +}
 > +
-> +/* ioctl - exporting new vdmabuf
-> + *
-> + *	 int dmabuf_fd - File handle of original DMABUF
-> + *	 virtio_vdmabuf_buf_id_t buf_id - returned vdmabuf ID
-> + *	 int sz_priv - size of private data from userspace
-> + *	 char *priv - buffer of user private data
-> + *
-> + */
-> +static int export_ioctl(struct file *filp, void *data)
+> +static void rkisp1_awb_meas_config_v12(struct rkisp1_params *params,
+> +				       const struct rkisp1_cif_isp_awb_meas_config *arg)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf = drv_info->priv;
-> +	struct virtio_vdmabuf_export *attr = data;
-> +	struct dma_buf *dmabuf;
-> +	struct dma_buf_attachment *attach;
-> +	struct sg_table *sgt;
-> +	struct virtio_vdmabuf_buf *exp;
-> +	struct page **pages;
-> +	int nents, last_len;
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	int ret = 0;
-> +
-> +	if (vdmabuf->vmid <= 0)
-> +		return -EINVAL;
-> +
-> +	dmabuf = dma_buf_get(attr->fd);
-> +	if (IS_ERR(dmabuf))
-> +		return PTR_ERR(dmabuf);
-> +
-> +	mutex_lock(&drv_info->g_mutex);
-> +
-> +	buf_id = get_buf_id(vdmabuf);
-> +
-> +	attach = dma_buf_attach(dmabuf, drv_info->dev);
-> +	if (IS_ERR(attach)) {
-> +		ret = PTR_ERR(attach);
-> +		goto fail_attach;
+> +	u32 reg_val = 0;
+> +	/* based on the mode,configure the awb module */
+> +	if (arg->awb_mode == RKISP1_CIF_ISP_AWB_MODE_YCBCR) {
+> +		/* Reference Cb and Cr */
+> +		rkisp1_write(params->rkisp1,
+> +			     RKISP1_CIF_ISP_AWB_REF_CR_SET(arg->awb_ref_cr) |
+> +			     arg->awb_ref_cb, RKISP1_CIF_ISP_AWB_REF_V12);
+> +		/* Yc Threshold */
+> +		rkisp1_write(params->rkisp1,
+> +			     RKISP1_CIF_ISP_AWB_MAX_Y_SET(arg->max_y) |
+> +			     RKISP1_CIF_ISP_AWB_MIN_Y_SET(arg->min_y) |
+> +			     RKISP1_CIF_ISP_AWB_MAX_CS_SET(arg->max_csum) |
+> +			     arg->min_c, RKISP1_CIF_ISP_AWB_THRESH_V12);
 > +	}
 > +
-> +	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-> +	if (IS_ERR(sgt)) {
-> +		ret = PTR_ERR(sgt);
-> +		goto fail_map_attachment;
-> +	}
-> +
-> +	/* allocate a new exp */
-> +	exp = kvcalloc(1, sizeof(*exp), GFP_KERNEL);
-> +	if (!exp) {
-> +		ret = -ENOMEM;
-> +		goto fail_sgt_info_creation;
-> +	}
-> +
-> +	/* possible truncation */
-> +	if (attr->sz_priv > MAX_SIZE_PRIV_DATA)
-> +		exp->sz_priv = MAX_SIZE_PRIV_DATA;
+> +	reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP_V12);
+> +	if (arg->enable_ymax_cmp)
+> +		reg_val |= RKISP1_CIF_ISP_AWB_YMAX_CMP_EN;
 > +	else
-> +		exp->sz_priv = attr->sz_priv;
+> +		reg_val &= ~RKISP1_CIF_ISP_AWB_YMAX_CMP_EN;
+> +	reg_val &= ~RKISP1_CIF_ISP_AWB_SET_FRAMES_MASK_V12;
+> +	reg_val |= RKISP1_CIF_ISP_AWB_SET_FRAMES_V12(arg->frames);
+> +	rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP_V12);
 > +
-> +	/* creating buffer for private data */
-> +	if (exp->sz_priv != 0) {
-> +		exp->priv = kvcalloc(1, exp->sz_priv, GFP_KERNEL);
-> +		if (!exp->priv) {
-> +			ret = -ENOMEM;
-> +			goto fail_priv_creation;
-> +		}
+> +	/* window offset */
+> +	rkisp1_write(params->rkisp1,
+> +		     arg->awb_wnd.v_offs << 16 |
+> +		     arg->awb_wnd.h_offs,
+> +		     RKISP1_CIF_ISP_AWB_OFFS_V12);
+> +	/* AWB window size */
+> +	rkisp1_write(params->rkisp1,
+> +		     arg->awb_wnd.v_size << 16 |
+> +		     arg->awb_wnd.h_size,
+> +		     RKISP1_CIF_ISP_AWB_SIZE_V12);
+>   }
+>   
+>   static void
+> -rkisp1_awb_meas_enable(struct rkisp1_params *params,
+> -		       const struct rkisp1_cif_isp_awb_meas_config *arg,
+> -		       bool en)
+> +rkisp1_awb_meas_enable_v10(struct rkisp1_params *params,
+> +			   const struct rkisp1_cif_isp_awb_meas_config *arg,
+> +			   bool en)
+>   {
+> -	u32 reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP);
+> +	u32 reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP_V10);
+>   
+>   	/* switch off */
+>   	reg_val &= RKISP1_CIF_ISP_AWB_MODE_MASK_NONE;
+> @@ -489,34 +619,76 @@ rkisp1_awb_meas_enable(struct rkisp1_params *params,
+>   		else
+>   			reg_val |= RKISP1_CIF_ISP_AWB_MODE_YCBCR_EN;
+>   
+> -		rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP);
+> +		rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP_V10);
+>   
+>   		/* Measurements require AWB block be active. */
+>   		rkisp1_param_set_bits(params, RKISP1_CIF_ISP_CTRL,
+>   				      RKISP1_CIF_ISP_CTRL_ISP_AWB_ENA);
+>   	} else {
+>   		rkisp1_write(params->rkisp1,
+> -			     reg_val, RKISP1_CIF_ISP_AWB_PROP);
+> +			     reg_val, RKISP1_CIF_ISP_AWB_PROP_V10);
+>   		rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_CTRL,
+>   					RKISP1_CIF_ISP_CTRL_ISP_AWB_ENA);
+>   	}
+>   }
+>   
+>   static void
+> -rkisp1_awb_gain_config(struct rkisp1_params *params,
+> -		       const struct rkisp1_cif_isp_awb_gain_config *arg)
+> +rkisp1_awb_meas_enable_v12(struct rkisp1_params *params,
+> +			   const struct rkisp1_cif_isp_awb_meas_config *arg,
+> +			   bool en)
+> +{
+> +	u32 reg_val = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AWB_PROP_V12);
+> +
+> +	/* switch off */
+> +	reg_val &= RKISP1_CIF_ISP_AWB_MODE_MASK_NONE;
+> +
+> +	if (en) {
+> +		if (arg->awb_mode == RKISP1_CIF_ISP_AWB_MODE_RGB)
+> +			reg_val |= RKISP1_CIF_ISP_AWB_MODE_RGB_EN;
+> +		else
+> +			reg_val |= RKISP1_CIF_ISP_AWB_MODE_YCBCR_EN;
+> +
+> +		rkisp1_write(params->rkisp1, reg_val, RKISP1_CIF_ISP_AWB_PROP_V12);
+> +
+> +		/* Measurements require AWB block be active. */
+> +		rkisp1_param_set_bits(params, RKISP1_CIF_ISP_CTRL,
+> +				      RKISP1_CIF_ISP_CTRL_ISP_AWB_ENA);
+> +	} else {
+> +		rkisp1_write(params->rkisp1,
+> +			     reg_val, RKISP1_CIF_ISP_AWB_PROP_V12);
+> +		rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_CTRL,
+> +					RKISP1_CIF_ISP_CTRL_ISP_AWB_ENA);
 > +	}
-> +
-> +	exp->buf_id = buf_id;
-> +	exp->attach = attach;
-> +	exp->sgt = sgt;
-> +	exp->dma_buf = dmabuf;
-> +	exp->valid = 1;
-> +
-> +	if (exp->sz_priv) {
-> +		/* copy private data to sgt_info */
-> +		ret = copy_from_user(exp->priv, attr->priv, exp->sz_priv);
-> +		if (ret) {
-> +			ret = -EINVAL;
-> +			goto fail_exp;
-> +		}
-> +	}
-> +
-> +	pages = extr_pgs(sgt, &nents, &last_len);
-> +	if (pages == NULL) {
-> +		ret = -ENOMEM;
-> +		goto fail_exp;
-> +	}
-> +
-> +	exp->pages_info = virtio_vdmabuf_share_buf(pages, nents,
-> +						   sgt->sgl->offset,
-> +					 	   last_len);
-> +	if (!exp->pages_info) {
-> +		ret = -ENOMEM;
-> +		goto fail_create_pages_info;
-> +	}
-> +
-> +	attr->buf_id = exp->buf_id;
-> +	ret = export_notify(exp, pages);
-> +	if (ret < 0)
-> +		goto fail_send_request;
-> +
-> +	/* now register it to the export list */
-> +	virtio_vdmabuf_add_buf(drv_info, exp);
-> +
-> +	exp->filp = filp;
-> +
-> +	mutex_unlock(&drv_info->g_mutex);
-> +
-> +	return ret;
-> +
-> +/* Clean-up if error occurs */
-> +fail_send_request:
-> +	virtio_vdmabuf_free_buf(exp->pages_info);
-> +
-> +fail_create_pages_info:
-> +	kvfree(pages);
-> +
-> +fail_exp:
-> +	kvfree(exp->priv);
-> +
-> +fail_priv_creation:
-> +	kvfree(exp);
-> +
-> +fail_sgt_info_creation:
-> +	dma_buf_unmap_attachment(attach, sgt,
-> +				 DMA_BIDIRECTIONAL);
-> +
-> +fail_map_attachment:
-> +	dma_buf_detach(dmabuf, attach);
-> +
-> +fail_attach:
-> +	dma_buf_put(dmabuf);
-> +
-> +	mutex_unlock(&drv_info->g_mutex);
-> +
-> +	return ret;
 > +}
 > +
-> +static const struct virtio_vdmabuf_ioctl_desc virtio_vdmabuf_ioctls[] = {
-> +	VIRTIO_VDMABUF_IOCTL_DEF(VIRTIO_VDMABUF_IOCTL_EXPORT, export_ioctl, 0),
-> +};
-> +
-> +static long virtio_vdmabuf_ioctl(struct file *filp, unsigned int cmd,
-> +		       		 unsigned long param)
+> +static void
+> +rkisp1_awb_gain_config_v10(struct rkisp1_params *params,
+> +			   const struct rkisp1_cif_isp_awb_gain_config *arg)
 > +{
-> +	const struct virtio_vdmabuf_ioctl_desc *ioctl = NULL;
-> +	unsigned int nr = _IOC_NR(cmd);
-> +	int ret;
-> +	virtio_vdmabuf_ioctl_t func;
-> +	char *kdata;
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_AWB_GAIN_R_SET(arg->gain_green_r) |
+> +		     arg->gain_green_b, RKISP1_CIF_ISP_AWB_GAIN_G_V10);
 > +
-> +	if (nr >= ARRAY_SIZE(virtio_vdmabuf_ioctls)) {
-> +		dev_err(drv_info->dev, "invalid ioctl\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ioctl = &virtio_vdmabuf_ioctls[nr];
-> +
-> +	func = ioctl->func;
-> +
-> +	if (unlikely(!func)) {
-> +		dev_err(drv_info->dev, "no function\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	kdata = kvmalloc(_IOC_SIZE(cmd), GFP_KERNEL);
-> +	if (!kdata)
-> +		return -ENOMEM;
-> +
-> +	if (copy_from_user(kdata, (void __user *)param,
-> +			   _IOC_SIZE(cmd)) != 0) {
-> +		dev_err(drv_info->dev,
-> +			"failed to copy from user arguments\n");
-> +		ret = -EFAULT;
-> +		goto ioctl_error;
-> +	}
-> +
-> +	ret = func(filp, kdata);
-> +
-> +	if (copy_to_user((void __user *)param, kdata,
-> +			 _IOC_SIZE(cmd)) != 0) {
-> +		dev_err(drv_info->dev,
-> +			"failed to copy to user arguments\n");
-> +		ret = -EFAULT;
-> +		goto ioctl_error;
-> +	}
-> +
-> +ioctl_error:
-> +	kvfree(kdata);
-> +	return ret;
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_AWB_GAIN_R_SET(arg->gain_red) |
+> +		     arg->gain_blue, RKISP1_CIF_ISP_AWB_GAIN_RB_V10);
 > +}
 > +
-> +static unsigned int virtio_vdmabuf_event_poll(struct file *filp,
-> +			    	    	      struct poll_table_struct *wait)
-> +{
-> +	struct virtio_vdmabuf *vdmabuf = filp->private_data;
+> +static void
+> +rkisp1_awb_gain_config_v12(struct rkisp1_params *params,
+> +			   const struct rkisp1_cif_isp_awb_gain_config *arg)
+>   {
+>   	rkisp1_write(params->rkisp1,
+>   		     RKISP1_CIF_ISP_AWB_GAIN_R_SET(arg->gain_green_r) |
+> -		     arg->gain_green_b, RKISP1_CIF_ISP_AWB_GAIN_G);
+> +		     arg->gain_green_b, RKISP1_CIF_ISP_AWB_GAIN_G_V12);
+>   
+>   	rkisp1_write(params->rkisp1,
+>   		     RKISP1_CIF_ISP_AWB_GAIN_R_SET(arg->gain_red) |
+> -		     arg->gain_blue, RKISP1_CIF_ISP_AWB_GAIN_RB);
+> +		     arg->gain_blue, RKISP1_CIF_ISP_AWB_GAIN_RB_V12);
+>   }
+>   
+> -static void rkisp1_aec_config(struct rkisp1_params *params,
+> -			      const struct rkisp1_cif_isp_aec_config *arg)
+> +static void rkisp1_aec_config_v10(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_aec_config *arg)
+>   {
+>   	unsigned int block_hsize, block_vsize;
+>   	u32 exp_ctrl;
+> @@ -531,21 +703,55 @@ static void rkisp1_aec_config(struct rkisp1_params *params,
+>   	rkisp1_write(params->rkisp1, exp_ctrl, RKISP1_CIF_ISP_EXP_CTRL);
+>   
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->meas_window.h_offs, RKISP1_CIF_ISP_EXP_H_OFFSET);
+> +		     arg->meas_window.h_offs, RKISP1_CIF_ISP_EXP_H_OFFSET_V10);
+>   	rkisp1_write(params->rkisp1,
+> -		     arg->meas_window.v_offs, RKISP1_CIF_ISP_EXP_V_OFFSET);
+> +		     arg->meas_window.v_offs, RKISP1_CIF_ISP_EXP_V_OFFSET_V10);
+>   
+>   	block_hsize = arg->meas_window.h_size /
+> -		      RKISP1_CIF_ISP_EXP_COLUMN_NUM - 1;
+> +		      RKISP1_CIF_ISP_EXP_COLUMN_NUM_V10 - 1;
+>   	block_vsize = arg->meas_window.v_size /
+> -		      RKISP1_CIF_ISP_EXP_ROW_NUM - 1;
+> +		      RKISP1_CIF_ISP_EXP_ROW_NUM_V10 - 1;
 > +
-> +	poll_wait(filp, &vdmabuf->evq->e_wait, wait);
-> +
-> +	if (!list_empty(&vdmabuf->evq->e_list))
-> +		return POLLIN | POLLRDNORM;
-> +
-> +	return 0;
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_EXP_H_SIZE_SET_V10(block_hsize),
+> +		     RKISP1_CIF_ISP_EXP_H_SIZE_V10);
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_EXP_V_SIZE_SET_V10(block_vsize),
+> +		     RKISP1_CIF_ISP_EXP_V_SIZE_V10);
 > +}
 > +
-> +static ssize_t virtio_vdmabuf_event_read(struct file *filp, char __user *buf,
-> +			       		 size_t cnt, loff_t *ofst)
+> +static void rkisp1_aec_config_v12(struct rkisp1_params *params,
+> +			       const struct rkisp1_cif_isp_aec_config *arg)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf = filp->private_data;
-> +	int ret;
-> +
-> +	/* make sure user buffer can be written */
-> +	if (!access_ok(buf, sizeof (*buf))) {
-> +		dev_err(drv_info->dev, "user buffer can't be written.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = mutex_lock_interruptible(&vdmabuf->evq->e_readlock);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (;;) {
-> +		struct virtio_vdmabuf_event *e = NULL;
-> +
-> +		spin_lock_irq(&vdmabuf->evq->e_lock);
-> +		if (!list_empty(&vdmabuf->evq->e_list)) {
-> +			e = list_first_entry(&vdmabuf->evq->e_list,
-> +					     struct virtio_vdmabuf_event, link);
-> +			list_del(&e->link);
-> +		}
-> +		spin_unlock_irq(&vdmabuf->evq->e_lock);
-> +
-> +		if (!e) {
-> +			if (ret)
-> +				break;
-> +
-> +			if (filp->f_flags & O_NONBLOCK) {
-> +				ret = -EAGAIN;
-> +				break;
-> +			}
-> +
-> +			mutex_unlock(&vdmabuf->evq->e_readlock);
-> +			ret = wait_event_interruptible(vdmabuf->evq->e_wait,
-> +					!list_empty(&vdmabuf->evq->e_list));
-> +
-> +			if (ret == 0)
-> +				ret = mutex_lock_interruptible(
-> +						&vdmabuf->evq->e_readlock);
-> +
-> +			if (ret)
-> +				return ret;
-> +		} else {
-> +			unsigned int len = (sizeof(e->e_data.hdr) +
-> +					    e->e_data.hdr.size);
-> +
-> +			if (len > cnt - ret) {
-> +put_back_event:
-> +				spin_lock_irq(&vdmabuf->evq->e_lock);
-> +				list_add(&e->link, &vdmabuf->evq->e_list);
-> +				spin_unlock_irq(&vdmabuf->evq->e_lock);
-> +				break;
-> +			}
-> +
-> +			if (copy_to_user(buf + ret, &e->e_data.hdr,
-> +					 sizeof(e->e_data.hdr))) {
-> +				if (ret == 0)
-> +					ret = -EFAULT;
-> +
-> +				goto put_back_event;
-> +			}
-> +
-> +			ret += sizeof(e->e_data.hdr);
-> +
-> +			if (copy_to_user(buf + ret, e->e_data.data,
-> +					 e->e_data.hdr.size)) {
-> +				/* error while copying void *data */
-> +
-> +				struct virtio_vdmabuf_e_hdr dummy_hdr = {0};
-> +
-> +				ret -= sizeof(e->e_data.hdr);
-> +
-> +				/* nullifying hdr of the event in user buffer */
-> +				if (copy_to_user(buf + ret, &dummy_hdr,
-> +						 sizeof(dummy_hdr)))
-> +					dev_err(drv_info->dev,
-> +					   "fail to nullify invalid hdr\n");
-> +
-> +				ret = -EFAULT;
-> +
-> +				goto put_back_event;
-> +			}
-> +
-> +			ret += e->e_data.hdr.size;
-> +			vdmabuf->evq->pending--;
-> +			kvfree(e);
-> +		}
-> +	}
-> +
-> +	mutex_unlock(&vdmabuf->evq->e_readlock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct file_operations virtio_vdmabuf_fops = {
-> +	.owner = THIS_MODULE,
-> +	.open = virtio_vdmabuf_open,
-> +	.release = virtio_vdmabuf_release,
-> +	.read = virtio_vdmabuf_event_read,
-> +	.poll = virtio_vdmabuf_event_poll,
-> +	.unlocked_ioctl = virtio_vdmabuf_ioctl,
-> +};
-> +
-> +static struct miscdevice virtio_vdmabuf_miscdev = {
-> +	.minor = MISC_DYNAMIC_MINOR,
-> +	.name = "virtio-vdmabuf",
-> +	.fops = &virtio_vdmabuf_fops,
-> +};
-> +
-> +static int virtio_vdmabuf_probe(struct virtio_device *vdev)
-> +{
-> +	vq_callback_t *cbs[] = {
-> +		virtio_vdmabuf_recv_cb,
-> +		virtio_vdmabuf_send_cb,
+> +	u32 exp_ctrl;
+> +	u32 block_hsize, block_vsize;
+> +	u32 wnd_num_idx = 1;
+> +	const u32 ae_wnd_num[] = {
+> +		5, 9, 15, 15
 > +	};
-> +	static const char *const names[] = {
-> +		"recv",
-> +		"send",
+> +
+> +	/* avoid to override the old enable value */
+> +	exp_ctrl = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_EXP_CTRL);
+> +	exp_ctrl &= RKISP1_CIF_ISP_EXP_ENA;
+> +	if (arg->autostop)
+> +		exp_ctrl |= RKISP1_CIF_ISP_EXP_CTRL_AUTOSTOP;
+> +	if (arg->mode == RKISP1_CIF_ISP_EXP_MEASURING_MODE_1)
+> +		exp_ctrl |= RKISP1_CIF_ISP_EXP_CTRL_MEASMODE_1;
+> +	exp_ctrl |= RKISP1_CIF_ISP_EXP_CTRL_WNDNUM_SET_V12(wnd_num_idx);
+> +	rkisp1_write(params->rkisp1, exp_ctrl, RKISP1_CIF_ISP_EXP_CTRL);
+>   
+>   	rkisp1_write(params->rkisp1,
+> -		     RKISP1_CIF_ISP_EXP_H_SIZE_SET(block_hsize),
+> -		     RKISP1_CIF_ISP_EXP_H_SIZE);
+> +		     RKISP1_CIF_ISP_EXP_V_OFFSET_SET_V12(arg->meas_window.v_offs) |
+> +		     RKISP1_CIF_ISP_EXP_H_OFFSET_SET_V12(arg->meas_window.h_offs),
+> +		     RKISP1_CIF_ISP_EXP_OFFS_V12);
+> +
+> +	block_hsize = arg->meas_window.h_size / ae_wnd_num[wnd_num_idx] - 1;
+> +	block_vsize = arg->meas_window.v_size / ae_wnd_num[wnd_num_idx] - 1;
+> +
+>   	rkisp1_write(params->rkisp1,
+> -		     RKISP1_CIF_ISP_EXP_V_SIZE_SET(block_vsize),
+> -		     RKISP1_CIF_ISP_EXP_V_SIZE);
+> +		     RKISP1_CIF_ISP_EXP_V_SIZE_SET_V12(block_vsize) |
+> +		     RKISP1_CIF_ISP_EXP_H_SIZE_SET_V12(block_hsize),
+> +		     RKISP1_CIF_ISP_EXP_SIZE_V12);
+>   }
+>   
+>   static void rkisp1_cproc_config(struct rkisp1_params *params,
+> @@ -578,72 +784,154 @@ static void rkisp1_cproc_config(struct rkisp1_params *params,
+>   	}
+>   }
+>   
+> -static void rkisp1_hst_config(struct rkisp1_params *params,
+> -			      const struct rkisp1_cif_isp_hst_config *arg)
+> +static void rkisp1_hst_config_v10(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_hst_config *arg)
+>   {
+>   	unsigned int block_hsize, block_vsize;
+>   	static const u32 hist_weight_regs[] = {
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_00TO30,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_40TO21,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_31TO12,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34,
+> -		RKISP1_CIF_ISP_HIST_WEIGHT_44,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_00TO30_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_40TO21_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_31TO12_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_22TO03_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_13TO43_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_04TO34_V10,
+> +		RKISP1_CIF_ISP_HIST_WEIGHT_44_V10,
+>   	};
+>   	const u8 *weight;
+>   	unsigned int i;
+>   	u32 hist_prop;
+>   
+>   	/* avoid to override the old enable value */
+> -	hist_prop = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_HIST_PROP);
+> -	hist_prop &= RKISP1_CIF_ISP_HIST_PROP_MODE_MASK;
+> -	hist_prop |= RKISP1_CIF_ISP_HIST_PREDIV_SET(arg->histogram_predivider);
+> -	rkisp1_write(params->rkisp1, hist_prop, RKISP1_CIF_ISP_HIST_PROP);
+> +	hist_prop = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_HIST_PROP_V10);
+> +	hist_prop &= RKISP1_CIF_ISP_HIST_PROP_MODE_MASK_V10;
+> +	hist_prop |= RKISP1_CIF_ISP_HIST_PREDIV_SET_V10(arg->histogram_predivider);
+> +	rkisp1_write(params->rkisp1, hist_prop, RKISP1_CIF_ISP_HIST_PROP_V10);
+>   	rkisp1_write(params->rkisp1,
+>   		     arg->meas_window.h_offs,
+> -		     RKISP1_CIF_ISP_HIST_H_OFFS);
+> +		     RKISP1_CIF_ISP_HIST_H_OFFS_V10);
+>   	rkisp1_write(params->rkisp1,
+>   		     arg->meas_window.v_offs,
+> -		     RKISP1_CIF_ISP_HIST_V_OFFS);
+> +		     RKISP1_CIF_ISP_HIST_V_OFFS_V10);
+>   
+>   	block_hsize = arg->meas_window.h_size /
+> -		      RKISP1_CIF_ISP_HIST_COLUMN_NUM - 1;
+> -	block_vsize = arg->meas_window.v_size / RKISP1_CIF_ISP_HIST_ROW_NUM - 1;
+> +		      RKISP1_CIF_ISP_HIST_COLUMN_NUM_V10 - 1;
+> +	block_vsize = arg->meas_window.v_size / RKISP1_CIF_ISP_HIST_ROW_NUM_V10 - 1;
+>   
+> -	rkisp1_write(params->rkisp1, block_hsize, RKISP1_CIF_ISP_HIST_H_SIZE);
+> -	rkisp1_write(params->rkisp1, block_vsize, RKISP1_CIF_ISP_HIST_V_SIZE);
+> +	rkisp1_write(params->rkisp1, block_hsize, RKISP1_CIF_ISP_HIST_H_SIZE_V10);
+> +	rkisp1_write(params->rkisp1, block_vsize, RKISP1_CIF_ISP_HIST_V_SIZE_V10);
+>   
+>   	weight = arg->hist_weight;
+>   	for (i = 0; i < ARRAY_SIZE(hist_weight_regs); ++i, weight += 4)
+>   		rkisp1_write(params->rkisp1,
+> -			     RKISP1_CIF_ISP_HIST_WEIGHT_SET(weight[0],
+> +			     RKISP1_CIF_ISP_HIST_WEIGHT_SET_V10(weight[0],
+>   							    weight[1],
+>   							    weight[2],
+>   							    weight[3]),
+>   				 hist_weight_regs[i]);
+>   }
+>   
+> +static void rkisp1_hst_config_v12(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_hst_config *arg)
+> +{
+> +	u32 i, j;
+> +	u32 value;
+> +	u32 hist_ctrl;
+> +	u32 block_hsize, block_vsize;
+> +	u32 wnd_num_idx, hist_weight_num;
+> +	u8 weight15x15[RKISP1_CIF_ISP_HIST_WEIGHT_REG_SIZE_V12];
+> +	const u32 hist_wnd_num[] = {
+> +		5, 9, 15, 15
 > +	};
-> +	struct virtio_vdmabuf *vdmabuf;
-> +	int ret = 0;
 > +
-> +	if (!drv_info)
-> +		return -EINVAL;
+> +	/* now we just support 9x9 window */
+> +	wnd_num_idx = 1;
+> +	memset(weight15x15, 0x00, sizeof(weight15x15));
+> +	/* avoid to override the old enable value */
+> +	hist_ctrl = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_HIST_CTRL_V12);
+> +	hist_ctrl &= RKISP1_CIF_ISP_HIST_CTRL_MODE_MASK_V12 |
+> +		     RKISP1_CIF_ISP_HIST_CTRL_EN_MASK_V12;
+> +	hist_ctrl = hist_ctrl |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_INTRSEL_SET_V12(1) |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_DATASEL_SET_V12(0) |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_WATERLINE_SET_V12(0) |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_AUTOSTOP_SET_V12(0) |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_WNDNUM_SET_V12(1) |
+> +		    RKISP1_CIF_ISP_HIST_CTRL_STEPSIZE_SET_V12(arg->histogram_predivider);
+> +	rkisp1_write(params->rkisp1, hist_ctrl, RKISP1_CIF_ISP_HIST_CTRL_V12);
 > +
-> +	vdmabuf = drv_info->priv;
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_HIST_OFFS_SET_V12(arg->meas_window.h_offs,
+> +						      arg->meas_window.v_offs),
+> +		     RKISP1_CIF_ISP_HIST_OFFS_V12);
 > +
-> +	if (!vdmabuf)
-> +		return -EINVAL;
+> +	block_hsize = arg->meas_window.h_size / hist_wnd_num[wnd_num_idx] - 1;
+> +	block_vsize = arg->meas_window.v_size / hist_wnd_num[wnd_num_idx] - 1;
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_HIST_SIZE_SET_V12(block_hsize, block_vsize),
+> +		     RKISP1_CIF_ISP_HIST_SIZE_V12);
 > +
-> +	vdmabuf->vdev = vdev;
-> +	vdev->priv = vdmabuf;
-> +
-> +	/* initialize spinlock for synchronizing virtqueue accesses */
-> +	spin_lock_init(&vdmabuf->vq_lock);
-> +
-> +	ret = virtio_find_vqs(vdmabuf->vdev, VDMABUF_VQ_MAX, vdmabuf->vqs,
-> +			      cbs, names, NULL);
-> +	if (ret) {
-> +		dev_err(drv_info->dev, "Cannot find any vqs\n");
-> +		return ret;
+> +	for (i = 0; i < hist_wnd_num[wnd_num_idx]; i++) {
+> +		for (j = 0; j < hist_wnd_num[wnd_num_idx]; j++) {
+> +			weight15x15[i * RKISP1_CIF_ISP_HIST_ROW_NUM_V12 + j] =
+> +				arg->hist_weight[i * hist_wnd_num[wnd_num_idx] + j];
+> +		}
 > +	}
 > +
-> +	INIT_LIST_HEAD(&vdmabuf->msg_list);
-> +	INIT_WORK(&vdmabuf->recv_work, virtio_vdmabuf_recv_work);
-> +	INIT_WORK(&vdmabuf->send_work, virtio_vdmabuf_send_work);
-> +	INIT_WORK(&vdmabuf->send_msg_work, virtio_vdmabuf_send_msg_work);
-> +
-> +	return ret;
+> +	hist_weight_num = RKISP1_CIF_ISP_HIST_WEIGHT_REG_SIZE_V12;
+> +	for (i = 0; i < (hist_weight_num / 4); i++) {
+> +		value = RKISP1_CIF_ISP_HIST_WEIGHT_SET_V12(
+> +				 weight15x15[4 * i + 0],
+> +				 weight15x15[4 * i + 1],
+> +				 weight15x15[4 * i + 2],
+> +				 weight15x15[4 * i + 3]);
+> +		rkisp1_write(params->rkisp1, value,
+> +				 RKISP1_CIF_ISP_HIST_WEIGHT_V12 + 4 * i);
+> +	}
+> +	value = RKISP1_CIF_ISP_HIST_WEIGHT_SET_V12(weight15x15[4 * i + 0], 0, 0, 0);
+> +	rkisp1_write(params->rkisp1, value,
+> +				 RKISP1_CIF_ISP_HIST_WEIGHT_V12 + 4 * i);
 > +}
 > +
-> +static void virtio_vdmabuf_remove(struct virtio_device *vdev)
+>   static void
+> -rkisp1_hst_enable(struct rkisp1_params *params,
+> -		  const struct rkisp1_cif_isp_hst_config *arg, bool en)
+> +rkisp1_hst_enable_v10(struct rkisp1_params *params,
+> +		      const struct rkisp1_cif_isp_hst_config *arg, bool en)
+>   {
+>   	if (en)	{
+>   		u32 hist_prop = rkisp1_read(params->rkisp1,
+> -					    RKISP1_CIF_ISP_HIST_PROP);
+> +					    RKISP1_CIF_ISP_HIST_PROP_V10);
+>   
+> -		hist_prop &= ~RKISP1_CIF_ISP_HIST_PROP_MODE_MASK;
+> +		hist_prop &= ~RKISP1_CIF_ISP_HIST_PROP_MODE_MASK_V10;
+>   		hist_prop |= arg->mode;
+> -		rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_PROP,
+> +		rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_PROP_V10,
+>   				      hist_prop);
+>   	} else {
+> -		rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_HIST_PROP,
+> -					RKISP1_CIF_ISP_HIST_PROP_MODE_MASK);
+> +		rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_HIST_PROP_V10,
+> +					RKISP1_CIF_ISP_HIST_PROP_MODE_MASK_V10);
+> +	}
+> +}
+> +
+> +static void
+> +rkisp1_hst_enable_v12(struct rkisp1_params *params,
+> +		      const struct rkisp1_cif_isp_hst_config *arg, bool en)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf;
+> +	if (en) {
+> +		u32 hist_ctrl = rkisp1_read(params->rkisp1,
+> +					    RKISP1_CIF_ISP_HIST_CTRL_V12);
 > +
-> +	if (!drv_info)
-> +		return;
-> +
-> +	vdmabuf = drv_info->priv;
-> +	flush_work(&vdmabuf->recv_work);
-> +	flush_work(&vdmabuf->send_work);
-> +	flush_work(&vdmabuf->send_msg_work);
-> +
-> +	vdev->config->reset(vdev);
-> +	vdev->config->del_vqs(vdev);
-> +}
-> +
-> +static struct virtio_device_id id_table[] = {
-> +	{ VIRTIO_ID_VDMABUF, VIRTIO_DEV_ANY_ID },
-> +	{ 0 },
-> +};
-> +
-> +static struct virtio_driver virtio_vdmabuf_vdev_drv = {
-> +	.driver.name =  KBUILD_MODNAME,
-> +	.driver.owner = THIS_MODULE,
-> +	.id_table =     id_table,
-> +	.probe =        virtio_vdmabuf_probe,
-> +	.remove =       virtio_vdmabuf_remove,
-> +};
-> +
-> +static int __init virtio_vdmabuf_init(void)
+> +		hist_ctrl &= ~RKISP1_CIF_ISP_HIST_CTRL_MODE_MASK_V12;
+> +		hist_ctrl |= RKISP1_CIF_ISP_HIST_CTRL_MODE_SET_V12(arg->mode);
+> +		hist_ctrl |= RKISP1_CIF_ISP_HIST_CTRL_EN_SET_V12(1);
+> +		rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_CTRL_V12,
+> +				      hist_ctrl);
+> +	} else {
+> +		rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_HIST_CTRL_V12,
+> +					RKISP1_CIF_ISP_HIST_CTRL_MODE_MASK_V12 |
+> +					RKISP1_CIF_ISP_HIST_CTRL_EN_MASK_V12);
+>   	}
+>   }
+>   
+> -static void rkisp1_afm_config(struct rkisp1_params *params,
+> -			      const struct rkisp1_cif_isp_afc_config *arg)
+> +static void rkisp1_afm_config_v10(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_afc_config *arg)
+>   {
+>   	size_t num_of_win = min_t(size_t, ARRAY_SIZE(arg->afm_win),
+>   				  arg->num_afm_win);
+> @@ -673,6 +961,45 @@ static void rkisp1_afm_config(struct rkisp1_params *params,
+>   	rkisp1_write(params->rkisp1, afm_ctrl, RKISP1_CIF_ISP_AFM_CTRL);
+>   }
+>   
+> +static void rkisp1_afm_config_v12(struct rkisp1_params *params,
+> +				  const struct rkisp1_cif_isp_afc_config *arg)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf;
-> +	int ret = 0;
+> +	size_t num_of_win = min_t(size_t, ARRAY_SIZE(arg->afm_win),
+> +				  arg->num_afm_win);
+> +	u32 afm_ctrl = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_AFM_CTRL);
+> +	u32 lum_var_shift, afm_var_shift;
+> +	unsigned int i;
 > +
-> +	drv_info = NULL;
+> +	/* Switch off to configure. */
+> +	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_AFM_CTRL,
+> +				RKISP1_CIF_ISP_AFM_ENA);
 > +
-> +	ret = misc_register(&virtio_vdmabuf_miscdev);
-> +	if (ret) {
-> +		pr_err("virtio-vdmabuf misc driver can't be registered\n");
-> +		return ret;
+> +	for (i = 0; i < num_of_win; i++) {
+> +		rkisp1_write(params->rkisp1,
+> +			     RKISP1_CIF_ISP_AFM_WINDOW_X(arg->afm_win[i].h_offs) |
+> +			     RKISP1_CIF_ISP_AFM_WINDOW_Y(arg->afm_win[i].v_offs),
+> +			     RKISP1_CIF_ISP_AFM_LT_A + i * 8);
+> +		rkisp1_write(params->rkisp1,
+> +			     RKISP1_CIF_ISP_AFM_WINDOW_X(arg->afm_win[i].h_size +
+> +							 arg->afm_win[i].h_offs) |
+> +			     RKISP1_CIF_ISP_AFM_WINDOW_Y(arg->afm_win[i].v_size +
+> +							 arg->afm_win[i].v_offs),
+> +			     RKISP1_CIF_ISP_AFM_RB_A + i * 8);
 > +	}
+> +	rkisp1_write(params->rkisp1, arg->thres, RKISP1_CIF_ISP_AFM_THRES);
 > +
-> +	ret = dma_set_mask_and_coherent(virtio_vdmabuf_miscdev.this_device,
-> +					DMA_BIT_MASK(64));
-> +	if (ret < 0) {
-> +		misc_deregister(&virtio_vdmabuf_miscdev);
-> +		return -EINVAL;
-> +	}
+> +	lum_var_shift = RKISP1_CIF_ISP_AFM_GET_LUM_SHIFT_a_V12(arg->var_shift);
+> +	afm_var_shift = RKISP1_CIF_ISP_AFM_GET_AFM_SHIFT_a_V12(arg->var_shift);
+> +	rkisp1_write(params->rkisp1,
+> +		     RKISP1_CIF_ISP_AFM_SET_SHIFT_a_V12(lum_var_shift, afm_var_shift) |
+> +		     RKISP1_CIF_ISP_AFM_SET_SHIFT_b_V12(lum_var_shift, afm_var_shift) |
+> +		     RKISP1_CIF_ISP_AFM_SET_SHIFT_c_V12(lum_var_shift, afm_var_shift),
+> +		     RKISP1_CIF_ISP_AFM_VAR_SHIFT);
 > +
-> +	drv_info = kvcalloc(1, sizeof(*drv_info), GFP_KERNEL);
-> +	if (!drv_info) {
-> +		misc_deregister(&virtio_vdmabuf_miscdev);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	vdmabuf = kvcalloc(1, sizeof(*vdmabuf), GFP_KERNEL);
-> +	if (!vdmabuf) {
-> +		kvfree(drv_info);
-> +		misc_deregister(&virtio_vdmabuf_miscdev);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	vdmabuf->evq = kvcalloc(1, sizeof(*(vdmabuf->evq)), GFP_KERNEL);
-> +	if (!vdmabuf->evq) {
-> +		kvfree(drv_info);
-> +		kvfree(vdmabuf);
-> +		misc_deregister(&virtio_vdmabuf_miscdev);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	drv_info->priv = (void *)vdmabuf;
-> +	drv_info->dev = virtio_vdmabuf_miscdev.this_device;
-> +
-> +	mutex_init(&drv_info->g_mutex);
-> +
-> +	mutex_init(&vdmabuf->evq->e_readlock);
-> +	spin_lock_init(&vdmabuf->evq->e_lock);
-> +
-> +	INIT_LIST_HEAD(&vdmabuf->evq->e_list);
-> +	init_waitqueue_head(&vdmabuf->evq->e_wait);
-> +	hash_init(drv_info->buf_list);
-> +
-> +	vdmabuf->evq->pending = 0;
-> +	vdmabuf->wq = create_workqueue("virtio_vdmabuf_wq");
-> +
-> +	ret = register_virtio_driver(&virtio_vdmabuf_vdev_drv);
-> +	if (ret) {
-> +		dev_err(drv_info->dev, "vdmabuf driver can't be registered\n");
-> +		misc_deregister(&virtio_vdmabuf_miscdev);
-> +		kvfree(vdmabuf);
-> +		kvfree(drv_info);
-> +		return -EFAULT;
-> +	}
-> +
-> +	return 0;
+> +	/* restore afm status */
+> +	rkisp1_write(params->rkisp1, afm_ctrl, RKISP1_CIF_ISP_AFM_CTRL);
 > +}
 > +
-> +static void __exit virtio_vdmabuf_deinit(void)
+>   static void rkisp1_ie_config(struct rkisp1_params *params,
+>   			     const struct rkisp1_cif_isp_ie_config *arg)
+>   {
+> @@ -1286,8 +1613,8 @@ static void rkisp1_params_config_parameter(struct rkisp1_params *params)
+>   
+>   	memset(hst.hist_weight, 0x01, sizeof(hst.hist_weight));
+>   	params->ops->hst_config(params, &hst);
+> -	rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_PROP,
+> -			      ~RKISP1_CIF_ISP_HIST_PROP_MODE_MASK |
+> +	rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_PROP_V10,
+> +			      ~RKISP1_CIF_ISP_HIST_PROP_MODE_MASK_V10 |
+>   			      rkisp1_hst_params_default_config.mode);
+>   
+>   	/* set the  range */
+> @@ -1346,22 +1673,38 @@ void rkisp1_params_disable(struct rkisp1_params *params)
+>   				RKISP1_CIF_ISP_DPF_MODE_EN);
+>   }
+>   
+> -static struct rkisp1_params_ops rkisp1_params_ops = {
+> -	.lsc_matrix_config = rkisp1_lsc_matrix_config,
+> -	.goc_config = rkisp1_goc_config,
+> -	.awb_meas_config = rkisp1_awb_meas_config,
+> -	.awb_meas_enable = rkisp1_awb_meas_enable,
+> -	.awb_gain_config = rkisp1_awb_gain_config,
+> -	.aec_config = rkisp1_aec_config,
+> -	.hst_config = rkisp1_hst_config,
+> -	.hst_enable = rkisp1_hst_enable,
+> -	.afm_config = rkisp1_afm_config,
+> +static struct rkisp1_params_ops rkisp1_v10_params_ops = {
+> +	.lsc_matrix_config = rkisp1_lsc_matrix_config_v10,
+> +	.goc_config = rkisp1_goc_config_v10,
+> +	.awb_meas_config = rkisp1_awb_meas_config_v10,
+> +	.awb_meas_enable = rkisp1_awb_meas_enable_v10,
+> +	.awb_gain_config = rkisp1_awb_gain_config_v10,
+> +	.aec_config = rkisp1_aec_config_v10,
+> +	.hst_config = rkisp1_hst_config_v10,
+> +	.hst_enable = rkisp1_hst_enable_v10,
+> +	.afm_config = rkisp1_afm_config_v10,
+>   };
+>   
+> -static struct rkisp1_params_config rkisp1_params_config = {
+> +static struct rkisp1_params_config rkisp1_v10_params_config = {
+>   	.gamma_out_max_samples = 17,
+>   };
+>   
+> +static struct rkisp1_params_ops rkisp1_v12_params_ops = {
+> +	.lsc_matrix_config = rkisp1_lsc_matrix_config_v12,
+> +	.goc_config = rkisp1_goc_config_v12,
+> +	.awb_meas_config = rkisp1_awb_meas_config_v12,
+> +	.awb_meas_enable = rkisp1_awb_meas_enable_v12,
+> +	.awb_gain_config = rkisp1_awb_gain_config_v12,
+> +	.aec_config = rkisp1_aec_config_v12,
+> +	.hst_config = rkisp1_hst_config_v12,
+> +	.hst_enable = rkisp1_hst_enable_v12,
+> +	.afm_config = rkisp1_afm_config_v12,
+> +};
+> +
+> +static struct rkisp1_params_config rkisp1_v12_params_config = {
+> +	.gamma_out_max_samples = 34,
+> +};
+not needed
+
+Thanks,
+Dafna
+
+> +
+>   static int rkisp1_params_enum_fmt_meta_out(struct file *file, void *priv,
+>   					   struct v4l2_fmtdesc *f)
+>   {
+> @@ -1528,8 +1871,14 @@ static void rkisp1_init_params(struct rkisp1_params *params)
+>   		V4L2_META_FMT_RK_ISP1_PARAMS;
+>   	params->vdev_fmt.fmt.meta.buffersize =
+>   		sizeof(struct rkisp1_params_cfg);
+> -	params->ops = &rkisp1_params_ops;
+> -	params->config = &rkisp1_params_config;
+> +
+> +	if (params->rkisp1->isp_ver == RKISP1_V12) {
+> +		params->ops = &rkisp1_v12_params_ops;
+> +		params->config = &rkisp1_v12_params_config;
+> +	} else {
+> +		params->ops = &rkisp1_v10_params_ops;
+> +		params->config = &rkisp1_v10_params_config;
+> +	}
+>   }
+>   
+>   int rkisp1_params_register(struct rkisp1_device *rkisp1)
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
+> index 8a8d960a679c..388adee3beff 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
+> @@ -212,6 +212,35 @@
+>   
+>   /* CCL */
+>   #define RKISP1_CIF_CCL_CIF_CLK_DIS			BIT(2)
+> +/* VI_ISP_CLK_CTRL */
+> +#define RKISP1_CIF_CLK_CTRL_ISP_RAW			BIT(0)
+> +#define RKISP1_CIF_CLK_CTRL_ISP_RGB			BIT(1)
+> +#define RKISP1_CIF_CLK_CTRL_ISP_YUV			BIT(2)
+> +#define RKISP1_CIF_CLK_CTRL_ISP_3A			BIT(3)
+> +#define RKISP1_CIF_CLK_CTRL_MIPI_RAW			BIT(4)
+> +#define RKISP1_CIF_CLK_CTRL_ISP_IE			BIT(5)
+> +#define RKISP1_CIF_CLK_CTRL_RSZ_RAM			BIT(6)
+> +#define RKISP1_CIF_CLK_CTRL_JPEG_RAM			BIT(7)
+> +#define RKISP1_CIF_CLK_CTRL_ACLK_ISP			BIT(8)
+> +#define RKISP1_CIF_CLK_CTRL_MI_IDC			BIT(9)
+> +#define RKISP1_CIF_CLK_CTRL_MI_MP			BIT(10)
+> +#define RKISP1_CIF_CLK_CTRL_MI_JPEG			BIT(11)
+> +#define RKISP1_CIF_CLK_CTRL_MI_DP			BIT(12)
+> +#define RKISP1_CIF_CLK_CTRL_MI_Y12			BIT(13)
+> +#define RKISP1_CIF_CLK_CTRL_MI_SP			BIT(14)
+> +#define RKISP1_CIF_CLK_CTRL_MI_RAW0			BIT(15)
+> +#define RKISP1_CIF_CLK_CTRL_MI_RAW1			BIT(16)
+> +#define RKISP1_CIF_CLK_CTRL_MI_READ			BIT(17)
+> +#define RKISP1_CIF_CLK_CTRL_MI_RAWRD			BIT(18)
+> +#define RKISP1_CIF_CLK_CTRL_CP				BIT(19)
+> +#define RKISP1_CIF_CLK_CTRL_IE				BIT(20)
+> +#define RKISP1_CIF_CLK_CTRL_SI				BIT(21)
+> +#define RKISP1_CIF_CLK_CTRL_RSZM			BIT(22)
+> +#define RKISP1_CIF_CLK_CTRL_DPMUX			BIT(23)
+> +#define RKISP1_CIF_CLK_CTRL_JPEG			BIT(24)
+> +#define RKISP1_CIF_CLK_CTRL_RSZS			BIT(25)
+> +#define RKISP1_CIF_CLK_CTRL_MIPI			BIT(26)
+> +#define RKISP1_CIF_CLK_CTRL_MARVINMI			BIT(27)
+>   /* ICCL */
+>   #define RKISP1_CIF_ICCL_ISP_CLK				BIT(0)
+>   #define RKISP1_CIF_ICCL_CP_CLK				BIT(1)
+> @@ -346,25 +375,57 @@
+>   #define RKISP1_CIF_SUPER_IMP_CTRL_TRANSP_DIS		BIT(2)
+>   
+>   /* ISP HISTOGRAM CALCULATION : ISP_HIST_PROP */
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_DIS		(0 << 0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_RGB		BIT(0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_RED		(2 << 0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_GREEN		(3 << 0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_BLUE		(4 << 0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_LUM		(5 << 0)
+> -#define RKISP1_CIF_ISP_HIST_PROP_MODE_MASK		0x7
+> -#define RKISP1_CIF_ISP_HIST_PREDIV_SET(x)		(((x) & 0x7F) << 3)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_SET(v0, v1, v2, v3)	\
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_DIS_V10		(0 << 0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_RGB_V10		BIT(0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_RED_V10		(2 << 0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_GREEN_V10		(3 << 0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_BLUE_V10		(4 << 0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_LUM_V10		(5 << 0)
+> +#define RKISP1_CIF_ISP_HIST_PROP_MODE_MASK_V10		0x7
+> +#define RKISP1_CIF_ISP_HIST_PREDIV_SET_V10(x)		(((x) & 0x7F) << 3)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_SET_V10(v0, v1, v2, v3)	\
+>   				     (((v0) & 0x1F) | (((v1) & 0x1F) << 8)  |\
+>   				     (((v2) & 0x1F) << 16) | \
+>   				     (((v3) & 0x1F) << 24))
+>   
+> -#define RKISP1_CIF_ISP_HIST_WINDOW_OFFSET_RESERVED	0xFFFFF000
+> -#define RKISP1_CIF_ISP_HIST_WINDOW_SIZE_RESERVED	0xFFFFF800
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_RESERVED		0xE0E0E0E0
+> -#define RKISP1_CIF_ISP_MAX_HIST_PREDIVIDER		0x0000007F
+> -#define RKISP1_CIF_ISP_HIST_ROW_NUM			5
+> -#define RKISP1_CIF_ISP_HIST_COLUMN_NUM			5
+> +#define RKISP1_CIF_ISP_HIST_WINDOW_OFFSET_RESERVED_V10	0xFFFFF000
+> +#define RKISP1_CIF_ISP_HIST_WINDOW_SIZE_RESERVED_V10	0xFFFFF800
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_RESERVED_V10		0xE0E0E0E0
+> +#define RKISP1_CIF_ISP_MAX_HIST_PREDIVIDER_V10		0x0000007F
+> +#define RKISP1_CIF_ISP_HIST_ROW_NUM_V10			5
+> +#define RKISP1_CIF_ISP_HIST_COLUMN_NUM_V10		5
+> +
+> +/* ISP HISTOGRAM CALCULATION : CIF_ISP_HIST */
+> +#define RKISP1_CIF_ISP_HIST_CTRL_EN_SET_V12(x)		(((x) & 0x01) << 0)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_EN_MASK_V12		RKISP1_CIF_ISP_HIST_CTRL_EN_SET_V12(0x01)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_STEPSIZE_SET_V12(x)	(((x) & 0x7F) << 1)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_MODE_SET_V12(x)	(((x) & 0x07) << 8)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_MODE_MASK_V12		RKISP1_CIF_ISP_HIST_CTRL_MODE_SET_V12(0x07)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_AUTOSTOP_SET_V12(x)	(((x) & 0x01) << 11)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_WATERLINE_SET_V12(x)	(((x) & 0xFFF) << 12)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_DATASEL_SET_V12(x)	(((x) & 0x07) << 24)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_INTRSEL_SET_V12(x)	(((x) & 0x01) << 27)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_WNDNUM_SET_V12(x)	(((x) & 0x03) << 28)
+> +#define RKISP1_CIF_ISP_HIST_CTRL_DBGEN_SET_V12(x)	(((x) & 0x01) << 30)
+> +#define RKISP1_CIF_ISP_HIST_ROW_NUM_V12		15
+> +#define RKISP1_CIF_ISP_HIST_COLUMN_NUM_V12		15
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_REG_SIZE_V12	\
+> +				(RKISP1_CIF_ISP_HIST_ROW_NUM_V12 * RKISP1_CIF_ISP_HIST_COLUMN_NUM_V12)
+> +
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_SET_V12(v0, v1, v2, v3)	\
+> +				(((v0) & 0x3F) | (((v1) & 0x3F) << 8) |\
+> +				(((v2) & 0x3F) << 16) |\
+> +				(((v3) & 0x3F) << 24))
+> +
+> +#define RKISP1_CIF_ISP_HIST_OFFS_SET_V12(v0, v1)	\
+> +				(((v0) & 0x1FFF) | (((v1) & 0x1FFF) << 16))
+> +#define RKISP1_CIF_ISP_HIST_SIZE_SET_V12(v0, v1)	\
+> +				(((v0) & 0x7FF) | (((v1) & 0x7FF) << 16))
+> +
+> +#define RKISP1_CIF_ISP_HIST_GET_BIN0_V12(x)	\
+> +				((x) & 0xFFFF)
+> +#define RKISP1_CIF_ISP_HIST_GET_BIN1_V12(x)	\
+> +				(((x) >> 16) & 0xFFFF)
+>   
+>   /* AUTO FOCUS MEASUREMENT:  ISP_AFM_CTRL */
+>   #define RKISP1_ISP_AFM_CTRL_ENABLE			BIT(0)
+> @@ -400,6 +461,8 @@
+>   #define RKISP1_CIF_ISP_AWB_MODE_YCBCR_EN		((0 << 31) | (0x2 << 0))
+>   #define RKISP1_CIF_ISP_AWB_MODE_MASK_NONE		0xFFFFFFFC
+>   #define RKISP1_CIF_ISP_AWB_MODE_READ(x)			((x) & 3)
+> +#define RKISP1_CIF_ISP_AWB_SET_FRAMES_V12(x)		(((x) & 0x07) << 28)
+> +#define RKISP1_CIF_ISP_AWB_SET_FRAMES_MASK_V12		RKISP1_CIF_ISP_AWB_SET_FRAMES_V12(0x07)
+>   /* ISP_AWB_GAIN_RB, ISP_AWB_GAIN_G  */
+>   #define RKISP1_CIF_ISP_AWB_GAIN_R_SET(x)		(((x) & 0x3FF) << 16)
+>   #define RKISP1_CIF_ISP_AWB_GAIN_R_READ(x)		(((x) >> 16) & 0x3FF)
+> @@ -434,6 +497,7 @@
+>   /* ISP_EXP_CTRL */
+>   #define RKISP1_CIF_ISP_EXP_ENA				BIT(0)
+>   #define RKISP1_CIF_ISP_EXP_CTRL_AUTOSTOP		BIT(1)
+> +#define RKISP1_CIF_ISP_EXP_CTRL_WNDNUM_SET_V12(x)	(((x) & 0x03) << 2)
+>   /*
+>    *'1' luminance calculation according to  Y=(R+G+B) x 0.332 (85/256)
+>    *'0' luminance calculation according to Y=16+0.25R+0.5G+0.1094B
+> @@ -441,42 +505,76 @@
+>   #define RKISP1_CIF_ISP_EXP_CTRL_MEASMODE_1		BIT(31)
+>   
+>   /* ISP_EXP_H_SIZE */
+> -#define RKISP1_CIF_ISP_EXP_H_SIZE_SET(x)		((x) & 0x7FF)
+> -#define RKISP1_CIF_ISP_EXP_HEIGHT_MASK			0x000007FF
+> +#define RKISP1_CIF_ISP_EXP_H_SIZE_SET_V10(x)		((x) & 0x7FF)
+> +#define RKISP1_CIF_ISP_EXP_HEIGHT_MASK_V10			0x000007FF
+> +#define RKISP1_CIF_ISP_EXP_H_SIZE_SET_V12(x)		((x) & 0x7FF)
+> +#define RKISP1_CIF_ISP_EXP_HEIGHT_MASK_V12		0x000007FF
+>   /* ISP_EXP_V_SIZE : vertical size must be a multiple of 2). */
+> -#define RKISP1_CIF_ISP_EXP_V_SIZE_SET(x)		((x) & 0x7FE)
+> +#define RKISP1_CIF_ISP_EXP_V_SIZE_SET_V10(x)		((x) & 0x7FE)
+> +#define RKISP1_CIF_ISP_EXP_V_SIZE_SET_V12(x)		(((x) & 0x7FE) << 16)
+>   
+>   /* ISP_EXP_H_OFFSET */
+> -#define RKISP1_CIF_ISP_EXP_H_OFFSET_SET(x)		((x) & 0x1FFF)
+> -#define RKISP1_CIF_ISP_EXP_MAX_HOFFS			2424
+> +#define RKISP1_CIF_ISP_EXP_H_OFFSET_SET_V10(x)		((x) & 0x1FFF)
+> +#define RKISP1_CIF_ISP_EXP_MAX_HOFFS_V10		2424
+> +#define RKISP1_CIF_ISP_EXP_H_OFFSET_SET_V12(x)		((x) & 0x1FFF)
+> +#define RKISP1_CIF_ISP_EXP_MAX_HOFFS_V12		0x1FFF
+>   /* ISP_EXP_V_OFFSET */
+> -#define RKISP1_CIF_ISP_EXP_V_OFFSET_SET(x)		((x) & 0x1FFF)
+> -#define RKISP1_CIF_ISP_EXP_MAX_VOFFS			1806
+> -
+> -#define RKISP1_CIF_ISP_EXP_ROW_NUM			5
+> -#define RKISP1_CIF_ISP_EXP_COLUMN_NUM			5
+> -#define RKISP1_CIF_ISP_EXP_NUM_LUMA_REGS \
+> -	(RKISP1_CIF_ISP_EXP_ROW_NUM * RKISP1_CIF_ISP_EXP_COLUMN_NUM)
+> -#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE		516
+> -#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE		35
+> -#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE		390
+> -#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE		28
+> -#define RKISP1_CIF_ISP_EXP_MAX_HSIZE	\
+> -	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE * RKISP1_CIF_ISP_EXP_COLUMN_NUM + 1)
+> -#define RKISP1_CIF_ISP_EXP_MIN_HSIZE	\
+> -	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE * RKISP1_CIF_ISP_EXP_COLUMN_NUM + 1)
+> -#define RKISP1_CIF_ISP_EXP_MAX_VSIZE	\
+> -	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE * RKISP1_CIF_ISP_EXP_ROW_NUM + 1)
+> -#define RKISP1_CIF_ISP_EXP_MIN_VSIZE	\
+> -	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE * RKISP1_CIF_ISP_EXP_ROW_NUM + 1)
+> +#define RKISP1_CIF_ISP_EXP_V_OFFSET_SET_V10(x)		((x) & 0x1FFF)
+> +#define RKISP1_CIF_ISP_EXP_MAX_VOFFS_V10		1806
+> +#define RKISP1_CIF_ISP_EXP_V_OFFSET_SET_V12(x)		(((x) & 0x1FFF) << 16)
+> +#define RKISP1_CIF_ISP_EXP_MAX_VOFFS_V12		0x1FFF
+> +
+> +#define RKISP1_CIF_ISP_EXP_ROW_NUM_V10			5
+> +#define RKISP1_CIF_ISP_EXP_COLUMN_NUM_V10			5
+> +#define RKISP1_CIF_ISP_EXP_NUM_LUMA_REGS_V10 \
+> +	(RKISP1_CIF_ISP_EXP_ROW_NUM_V10 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V10)
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE_V10		516
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE_V10		35
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE_V10		390
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE_V10		28
+> +#define RKISP1_CIF_ISP_EXP_MAX_HSIZE_V10	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE_V10 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V10 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MIN_HSIZE_V10	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE_V10 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V10 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MAX_VSIZE_V10	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE_V10 * RKISP1_CIF_ISP_EXP_ROW_NUM_V10 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MIN_VSIZE_V10	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE_V10 * RKISP1_CIF_ISP_EXP_ROW_NUM_V10 + 1)
+> +
+> +#define RKISP1_CIF_ISP_EXP_ROW_NUM_V12			15
+> +#define RKISP1_CIF_ISP_EXP_COLUMN_NUM_V12		15
+> +#define RKISP1_CIF_ISP_EXP_NUM_LUMA_REGS_V12 \
+> +	(RKISP1_CIF_ISP_EXP_ROW_NUM_V12 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V12)
+> +
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE_V12		0x7FF
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE_V12		0xE
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE_V12		0x7FE
+> +#define RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE_V12		0xE
+> +#define RKISP1_CIF_ISP_EXP_MAX_HSIZE_V12	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_HSIZE_V12 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V12 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MIN_HSIZE_V12	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_HSIZE_V12 * RKISP1_CIF_ISP_EXP_COLUMN_NUM_V12 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MAX_VSIZE_V12	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MAX_VSIZE_V12 * RKISP1_CIF_ISP_EXP_ROW_NUM_V12 + 1)
+> +#define RKISP1_CIF_ISP_EXP_MIN_VSIZE_V12	\
+> +	(RKISP1_CIF_ISP_EXP_BLOCK_MIN_VSIZE_V12 * RKISP1_CIF_ISP_EXP_ROW_NUM_V12 + 1)
+> +
+> +#define RKISP1_CIF_ISP_EXP_GET_MEAN_xy0_V12(x)		((x) & 0xFF)
+> +#define RKISP1_CIF_ISP_EXP_GET_MEAN_xy1_V12(x)		(((x) >> 8) & 0xFF)
+> +#define RKISP1_CIF_ISP_EXP_GET_MEAN_xy2_V12(x)		(((x) >> 16) & 0xFF)
+> +#define RKISP1_CIF_ISP_EXP_GET_MEAN_xy3_V12(x)		(((x) >> 24) & 0xFF)
+>   
+>   /* LSC: ISP_LSC_CTRL */
+>   #define RKISP1_CIF_ISP_LSC_CTRL_ENA			BIT(0)
+>   #define RKISP1_CIF_ISP_LSC_SECT_SIZE_RESERVED		0xFC00FC00
+> -#define RKISP1_CIF_ISP_LSC_GRAD_RESERVED		0xF000F000
+> -#define RKISP1_CIF_ISP_LSC_SAMPLE_RESERVED		0xF000F000
+> -#define RKISP1_CIF_ISP_LSC_TABLE_DATA(v0, v1)     \
+> +#define RKISP1_CIF_ISP_LSC_GRAD_RESERVED_V10		0xF000F000
+> +#define RKISP1_CIF_ISP_LSC_SAMPLE_RESERVED_V10		0xF000F000
+> +#define RKISP1_CIF_ISP_LSC_GRAD_RESERVED_V12		0xE000E000
+> +#define RKISP1_CIF_ISP_LSC_SAMPLE_RESERVED_V12		0xE000E000
+> +#define RKISP1_CIF_ISP_LSC_TABLE_DATA_V10(v0, v1)     \
+>   	(((v0) & 0xFFF) | (((v1) & 0xFFF) << 12))
+> +#define RKISP1_CIF_ISP_LSC_TABLE_DATA_V12(v0, v1)     \
+> +	(((v0) & 0x1FFF) | (((v1) & 0x1FFF) << 13))
+>   #define RKISP1_CIF_ISP_LSC_SECT_SIZE(v0, v1)      \
+>   	(((v0) & 0xFFF) | (((v1) & 0xFFF) << 16))
+>   #define RKISP1_CIF_ISP_LSC_GRAD_SIZE(v0, v1)      \
+> @@ -549,6 +647,10 @@
+>   	(1 << 15) | (1 << 11) | (1 << 7) | (1 << 3))
+>   #define RKISP1_CIFISP_DEGAMMA_Y_RESERVED		0xFFFFF000
+>   
+> +/* GAMMA-OUT */
+> +#define RKISP1_CIF_ISP_GAMMA_VALUE_V12(x, y)	\
+> +	(((x) & 0xFFF) << 16 | ((y) & 0xFFF) << 0)
+> +
+>   /* AFM */
+>   #define RKISP1_CIF_ISP_AFM_ENA				BIT(0)
+>   #define RKISP1_CIF_ISP_AFM_THRES_RESERVED		0xFFFF0000
+> @@ -559,6 +661,11 @@
+>   #define RKISP1_CIF_ISP_AFM_WINDOW_Y_MIN			0x2
+>   #define RKISP1_CIF_ISP_AFM_WINDOW_X(x)			(((x) & 0x1FFF) << 16)
+>   #define RKISP1_CIF_ISP_AFM_WINDOW_Y(x)			((x) & 0x1FFF)
+> +#define RKISP1_CIF_ISP_AFM_SET_SHIFT_a_V12(x, y)	(((x) & 0x7) << 16 | ((y) & 0x7) << 0)
+> +#define RKISP1_CIF_ISP_AFM_SET_SHIFT_b_V12(x, y)	(((x) & 0x7) << 20 | ((y) & 0x7) << 4)
+> +#define RKISP1_CIF_ISP_AFM_SET_SHIFT_c_V12(x, y)	(((x) & 0x7) << 24 | ((y) & 0x7) << 8)
+> +#define RKISP1_CIF_ISP_AFM_GET_LUM_SHIFT_a_V12(x)	(((x) & 0x70000) >> 16)
+> +#define RKISP1_CIF_ISP_AFM_GET_AFM_SHIFT_a_V12(x)	((x) & 0x7)
+>   
+>   /* DPF */
+>   #define RKISP1_CIF_ISP_DPF_MODE_EN			BIT(0)
+> @@ -581,6 +688,7 @@
+>   #define RKISP1_CIF_CTRL_BASE			0x00000000
+>   #define RKISP1_CIF_CCL				(RKISP1_CIF_CTRL_BASE + 0x00000000)
+>   #define RKISP1_CIF_VI_ID			(RKISP1_CIF_CTRL_BASE + 0x00000008)
+> +#define RKISP1_CIF_VI_ISP_CLK_CTRL_V12		(RKISP1_CIF_CTRL_BASE + 0x0000000C)
+>   #define RKISP1_CIF_ICCL				(RKISP1_CIF_CTRL_BASE + 0x00000010)
+>   #define RKISP1_CIF_IRCL				(RKISP1_CIF_CTRL_BASE + 0x00000014)
+>   #define RKISP1_CIF_VI_DPCL			(RKISP1_CIF_CTRL_BASE + 0x00000018)
+> @@ -666,18 +774,35 @@
+>   #define RKISP1_CIF_ISP_GAMMA_B_Y14		(RKISP1_CIF_ISP_BASE + 0x000000E4)
+>   #define RKISP1_CIF_ISP_GAMMA_B_Y15		(RKISP1_CIF_ISP_BASE + 0x000000E8)
+>   #define RKISP1_CIF_ISP_GAMMA_B_Y16		(RKISP1_CIF_ISP_BASE + 0x000000EC)
+> -#define RKISP1_CIF_ISP_AWB_PROP			(RKISP1_CIF_ISP_BASE + 0x00000110)
+> -#define RKISP1_CIF_ISP_AWB_WND_H_OFFS		(RKISP1_CIF_ISP_BASE + 0x00000114)
+> -#define RKISP1_CIF_ISP_AWB_WND_V_OFFS		(RKISP1_CIF_ISP_BASE + 0x00000118)
+> -#define RKISP1_CIF_ISP_AWB_WND_H_SIZE		(RKISP1_CIF_ISP_BASE + 0x0000011C)
+> -#define RKISP1_CIF_ISP_AWB_WND_V_SIZE		(RKISP1_CIF_ISP_BASE + 0x00000120)
+> -#define RKISP1_CIF_ISP_AWB_FRAMES		(RKISP1_CIF_ISP_BASE + 0x00000124)
+> -#define RKISP1_CIF_ISP_AWB_REF			(RKISP1_CIF_ISP_BASE + 0x00000128)
+> -#define RKISP1_CIF_ISP_AWB_THRESH		(RKISP1_CIF_ISP_BASE + 0x0000012C)
+> -#define RKISP1_CIF_ISP_AWB_GAIN_G		(RKISP1_CIF_ISP_BASE + 0x00000138)
+> -#define RKISP1_CIF_ISP_AWB_GAIN_RB		(RKISP1_CIF_ISP_BASE + 0x0000013C)
+> -#define RKISP1_CIF_ISP_AWB_WHITE_CNT		(RKISP1_CIF_ISP_BASE + 0x00000140)
+> -#define RKISP1_CIF_ISP_AWB_MEAN			(RKISP1_CIF_ISP_BASE + 0x00000144)
+> +#define RKISP1_CIF_ISP_AWB_PROP_V10		(RKISP1_CIF_ISP_BASE + 0x00000110)
+> +#define RKISP1_CIF_ISP_AWB_WND_H_OFFS_V10	(RKISP1_CIF_ISP_BASE + 0x00000114)
+> +#define RKISP1_CIF_ISP_AWB_WND_V_OFFS_V10	(RKISP1_CIF_ISP_BASE + 0x00000118)
+> +#define RKISP1_CIF_ISP_AWB_WND_H_SIZE_V10	(RKISP1_CIF_ISP_BASE + 0x0000011C)
+> +#define RKISP1_CIF_ISP_AWB_WND_V_SIZE_V10	(RKISP1_CIF_ISP_BASE + 0x00000120)
+> +#define RKISP1_CIF_ISP_AWB_FRAMES_V10		(RKISP1_CIF_ISP_BASE + 0x00000124)
+> +#define RKISP1_CIF_ISP_AWB_REF_V10		(RKISP1_CIF_ISP_BASE + 0x00000128)
+> +#define RKISP1_CIF_ISP_AWB_THRESH_V10		(RKISP1_CIF_ISP_BASE + 0x0000012C)
+> +#define RKISP1_CIF_ISP_AWB_GAIN_G_V10		(RKISP1_CIF_ISP_BASE + 0x00000138)
+> +#define RKISP1_CIF_ISP_AWB_GAIN_RB_V10		(RKISP1_CIF_ISP_BASE + 0x0000013C)
+> +#define RKISP1_CIF_ISP_AWB_WHITE_CNT_V10	(RKISP1_CIF_ISP_BASE + 0x00000140)
+> +#define RKISP1_CIF_ISP_AWB_MEAN_V10		(RKISP1_CIF_ISP_BASE + 0x00000144)
+> +#define RKISP1_CIF_ISP_AWB_PROP_V12		(RKISP1_CIF_ISP_BASE + 0x00000110)
+> +#define RKISP1_CIF_ISP_AWB_SIZE_V12		(RKISP1_CIF_ISP_BASE + 0x00000114)
+> +#define RKISP1_CIF_ISP_AWB_OFFS_V12		(RKISP1_CIF_ISP_BASE + 0x00000118)
+> +#define RKISP1_CIF_ISP_AWB_REF_V12		(RKISP1_CIF_ISP_BASE + 0x0000011C)
+> +#define RKISP1_CIF_ISP_AWB_THRESH_V12		(RKISP1_CIF_ISP_BASE + 0x00000120)
+> +#define RKISP1_CIF_ISP_X_COOR12_V12		(RKISP1_CIF_ISP_BASE + 0x00000124)
+> +#define RKISP1_CIF_ISP_X_COOR34_V12		(RKISP1_CIF_ISP_BASE + 0x00000128)
+> +#define RKISP1_CIF_ISP_AWB_WHITE_CNT_V12	(RKISP1_CIF_ISP_BASE + 0x0000012C)
+> +#define RKISP1_CIF_ISP_AWB_MEAN_V12		(RKISP1_CIF_ISP_BASE + 0x00000130)
+> +#define RKISP1_CIF_ISP_DEGAIN_V12		(RKISP1_CIF_ISP_BASE + 0x00000134)
+> +#define RKISP1_CIF_ISP_AWB_GAIN_G_V12		(RKISP1_CIF_ISP_BASE + 0x00000138)
+> +#define RKISP1_CIF_ISP_AWB_GAIN_RB_V12		(RKISP1_CIF_ISP_BASE + 0x0000013C)
+> +#define RKISP1_CIF_ISP_REGION_LINE_V12		(RKISP1_CIF_ISP_BASE + 0x00000140)
+> +#define RKISP1_CIF_ISP_WP_CNT_REGION0_V12	(RKISP1_CIF_ISP_BASE + 0x00000160)
+> +#define RKISP1_CIF_ISP_WP_CNT_REGION1_V12	(RKISP1_CIF_ISP_BASE + 0x00000164)
+> +#define RKISP1_CIF_ISP_WP_CNT_REGION2_V12	(RKISP1_CIF_ISP_BASE + 0x00000168)
+> +#define RKISP1_CIF_ISP_WP_CNT_REGION3_V12	(RKISP1_CIF_ISP_BASE + 0x0000016C)
+>   #define RKISP1_CIF_ISP_CC_COEFF_0		(RKISP1_CIF_ISP_BASE + 0x00000170)
+>   #define RKISP1_CIF_ISP_CC_COEFF_1		(RKISP1_CIF_ISP_BASE + 0x00000174)
+>   #define RKISP1_CIF_ISP_CC_COEFF_2		(RKISP1_CIF_ISP_BASE + 0x00000178)
+> @@ -711,30 +836,32 @@
+>   #define RKISP1_CIF_ISP_CT_COEFF_6		(RKISP1_CIF_ISP_BASE + 0x000001E8)
+>   #define RKISP1_CIF_ISP_CT_COEFF_7		(RKISP1_CIF_ISP_BASE + 0x000001EC)
+>   #define RKISP1_CIF_ISP_CT_COEFF_8		(RKISP1_CIF_ISP_BASE + 0x000001F0)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_MODE		(RKISP1_CIF_ISP_BASE + 0x000001F4)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_0		(RKISP1_CIF_ISP_BASE + 0x000001F8)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_1		(RKISP1_CIF_ISP_BASE + 0x000001FC)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_2		(RKISP1_CIF_ISP_BASE + 0x00000200)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_3		(RKISP1_CIF_ISP_BASE + 0x00000204)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_4		(RKISP1_CIF_ISP_BASE + 0x00000208)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_5		(RKISP1_CIF_ISP_BASE + 0x0000020C)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_6		(RKISP1_CIF_ISP_BASE + 0x00000210)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_7		(RKISP1_CIF_ISP_BASE + 0x00000214)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_8		(RKISP1_CIF_ISP_BASE + 0x00000218)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_9		(RKISP1_CIF_ISP_BASE + 0x0000021C)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_10		(RKISP1_CIF_ISP_BASE + 0x00000220)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_11		(RKISP1_CIF_ISP_BASE + 0x00000224)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_12		(RKISP1_CIF_ISP_BASE + 0x00000228)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_13		(RKISP1_CIF_ISP_BASE + 0x0000022C)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_14		(RKISP1_CIF_ISP_BASE + 0x00000230)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_15		(RKISP1_CIF_ISP_BASE + 0x00000234)
+> -#define RKISP1_CIF_ISP_GAMMA_OUT_Y_16		(RKISP1_CIF_ISP_BASE + 0x00000238)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_MODE_V10	(RKISP1_CIF_ISP_BASE + 0x000001F4)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_0_V10	(RKISP1_CIF_ISP_BASE + 0x000001F8)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_1_V10	(RKISP1_CIF_ISP_BASE + 0x000001FC)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_2_V10	(RKISP1_CIF_ISP_BASE + 0x00000200)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_3_V10	(RKISP1_CIF_ISP_BASE + 0x00000204)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_4_V10	(RKISP1_CIF_ISP_BASE + 0x00000208)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_5_V10	(RKISP1_CIF_ISP_BASE + 0x0000020C)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_6_V10	(RKISP1_CIF_ISP_BASE + 0x00000210)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_7_V10	(RKISP1_CIF_ISP_BASE + 0x00000214)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_8_V10	(RKISP1_CIF_ISP_BASE + 0x00000218)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_9_V10	(RKISP1_CIF_ISP_BASE + 0x0000021C)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_10_V10	(RKISP1_CIF_ISP_BASE + 0x00000220)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_11_V10	(RKISP1_CIF_ISP_BASE + 0x00000224)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_12_V10	(RKISP1_CIF_ISP_BASE + 0x00000228)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_13_V10	(RKISP1_CIF_ISP_BASE + 0x0000022C)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_14_V10	(RKISP1_CIF_ISP_BASE + 0x00000230)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_15_V10	(RKISP1_CIF_ISP_BASE + 0x00000234)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_16_V10	(RKISP1_CIF_ISP_BASE + 0x00000238)
+>   #define RKISP1_CIF_ISP_ERR			(RKISP1_CIF_ISP_BASE + 0x0000023C)
+>   #define RKISP1_CIF_ISP_ERR_CLR			(RKISP1_CIF_ISP_BASE + 0x00000240)
+>   #define RKISP1_CIF_ISP_FRAME_COUNT		(RKISP1_CIF_ISP_BASE + 0x00000244)
+>   #define RKISP1_CIF_ISP_CT_OFFSET_R		(RKISP1_CIF_ISP_BASE + 0x00000248)
+>   #define RKISP1_CIF_ISP_CT_OFFSET_G		(RKISP1_CIF_ISP_BASE + 0x0000024C)
+>   #define RKISP1_CIF_ISP_CT_OFFSET_B		(RKISP1_CIF_ISP_BASE + 0x00000250)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_MODE_V12	(RKISP1_CIF_ISP_BASE + 0x00000300)
+> +#define RKISP1_CIF_ISP_GAMMA_OUT_Y_0_V12	(RKISP1_CIF_ISP_BASE + 0x00000304)
+>   
+>   #define RKISP1_CIF_ISP_FLASH_BASE		0x00000660
+>   #define RKISP1_CIF_ISP_FLASH_CMD		(RKISP1_CIF_ISP_FLASH_BASE + 0x00000000)
+> @@ -1004,36 +1131,35 @@
+>   #define RKISP1_CIF_ISP_IS_H_SIZE_SHD		(RKISP1_CIF_ISP_IS_BASE + 0x0000002C)
+>   #define RKISP1_CIF_ISP_IS_V_SIZE_SHD		(RKISP1_CIF_ISP_IS_BASE + 0x00000030)
+>   
+> -#define RKISP1_CIF_ISP_HIST_BASE		0x00002400
+> -
+> -#define RKISP1_CIF_ISP_HIST_PROP		(RKISP1_CIF_ISP_HIST_BASE + 0x00000000)
+> -#define RKISP1_CIF_ISP_HIST_H_OFFS		(RKISP1_CIF_ISP_HIST_BASE + 0x00000004)
+> -#define RKISP1_CIF_ISP_HIST_V_OFFS		(RKISP1_CIF_ISP_HIST_BASE + 0x00000008)
+> -#define RKISP1_CIF_ISP_HIST_H_SIZE		(RKISP1_CIF_ISP_HIST_BASE + 0x0000000C)
+> -#define RKISP1_CIF_ISP_HIST_V_SIZE		(RKISP1_CIF_ISP_HIST_BASE + 0x00000010)
+> -#define RKISP1_CIF_ISP_HIST_BIN_0		(RKISP1_CIF_ISP_HIST_BASE + 0x00000014)
+> -#define RKISP1_CIF_ISP_HIST_BIN_1		(RKISP1_CIF_ISP_HIST_BASE + 0x00000018)
+> -#define RKISP1_CIF_ISP_HIST_BIN_2		(RKISP1_CIF_ISP_HIST_BASE + 0x0000001C)
+> -#define RKISP1_CIF_ISP_HIST_BIN_3		(RKISP1_CIF_ISP_HIST_BASE + 0x00000020)
+> -#define RKISP1_CIF_ISP_HIST_BIN_4		(RKISP1_CIF_ISP_HIST_BASE + 0x00000024)
+> -#define RKISP1_CIF_ISP_HIST_BIN_5		(RKISP1_CIF_ISP_HIST_BASE + 0x00000028)
+> -#define RKISP1_CIF_ISP_HIST_BIN_6		(RKISP1_CIF_ISP_HIST_BASE + 0x0000002C)
+> -#define RKISP1_CIF_ISP_HIST_BIN_7		(RKISP1_CIF_ISP_HIST_BASE + 0x00000030)
+> -#define RKISP1_CIF_ISP_HIST_BIN_8		(RKISP1_CIF_ISP_HIST_BASE + 0x00000034)
+> -#define RKISP1_CIF_ISP_HIST_BIN_9		(RKISP1_CIF_ISP_HIST_BASE + 0x00000038)
+> -#define RKISP1_CIF_ISP_HIST_BIN_10		(RKISP1_CIF_ISP_HIST_BASE + 0x0000003C)
+> -#define RKISP1_CIF_ISP_HIST_BIN_11		(RKISP1_CIF_ISP_HIST_BASE + 0x00000040)
+> -#define RKISP1_CIF_ISP_HIST_BIN_12		(RKISP1_CIF_ISP_HIST_BASE + 0x00000044)
+> -#define RKISP1_CIF_ISP_HIST_BIN_13		(RKISP1_CIF_ISP_HIST_BASE + 0x00000048)
+> -#define RKISP1_CIF_ISP_HIST_BIN_14		(RKISP1_CIF_ISP_HIST_BASE + 0x0000004C)
+> -#define RKISP1_CIF_ISP_HIST_BIN_15		(RKISP1_CIF_ISP_HIST_BASE + 0x00000050)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_00TO30	(RKISP1_CIF_ISP_HIST_BASE + 0x00000054)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_40TO21	(RKISP1_CIF_ISP_HIST_BASE + 0x00000058)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_31TO12	(RKISP1_CIF_ISP_HIST_BASE + 0x0000005C)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_22TO03	(RKISP1_CIF_ISP_HIST_BASE + 0x00000060)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_13TO43	(RKISP1_CIF_ISP_HIST_BASE + 0x00000064)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_04TO34	(RKISP1_CIF_ISP_HIST_BASE + 0x00000068)
+> -#define RKISP1_CIF_ISP_HIST_WEIGHT_44		(RKISP1_CIF_ISP_HIST_BASE + 0x0000006C)
+> +#define RKISP1_CIF_ISP_HIST_BASE_V10		0x00002400
+> +#define RKISP1_CIF_ISP_HIST_PROP_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000000)
+> +#define RKISP1_CIF_ISP_HIST_H_OFFS_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000004)
+> +#define RKISP1_CIF_ISP_HIST_V_OFFS_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000008)
+> +#define RKISP1_CIF_ISP_HIST_H_SIZE_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000000C)
+> +#define RKISP1_CIF_ISP_HIST_V_SIZE_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000010)
+> +#define RKISP1_CIF_ISP_HIST_BIN_0_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000014)
+> +#define RKISP1_CIF_ISP_HIST_BIN_1_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000018)
+> +#define RKISP1_CIF_ISP_HIST_BIN_2_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000001C)
+> +#define RKISP1_CIF_ISP_HIST_BIN_3_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000020)
+> +#define RKISP1_CIF_ISP_HIST_BIN_4_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000024)
+> +#define RKISP1_CIF_ISP_HIST_BIN_5_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000028)
+> +#define RKISP1_CIF_ISP_HIST_BIN_6_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000002C)
+> +#define RKISP1_CIF_ISP_HIST_BIN_7_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000030)
+> +#define RKISP1_CIF_ISP_HIST_BIN_8_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000034)
+> +#define RKISP1_CIF_ISP_HIST_BIN_9_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000038)
+> +#define RKISP1_CIF_ISP_HIST_BIN_10_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000003C)
+> +#define RKISP1_CIF_ISP_HIST_BIN_11_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000040)
+> +#define RKISP1_CIF_ISP_HIST_BIN_12_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000044)
+> +#define RKISP1_CIF_ISP_HIST_BIN_13_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000048)
+> +#define RKISP1_CIF_ISP_HIST_BIN_14_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000004C)
+> +#define RKISP1_CIF_ISP_HIST_BIN_15_V10		(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000050)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_00TO30_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000054)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_40TO21_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000058)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_31TO12_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000005C)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_22TO03_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000060)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_13TO43_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000064)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_04TO34_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x00000068)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_44_V10	(RKISP1_CIF_ISP_HIST_BASE_V10 + 0x0000006C)
+>   
+>   #define RKISP1_CIF_ISP_FILT_BASE		0x00002500
+>   #define RKISP1_CIF_ISP_FILT_MODE		(RKISP1_CIF_ISP_FILT_BASE + 0x00000000)
+> @@ -1059,35 +1185,38 @@
+>   
+>   #define RKISP1_CIF_ISP_EXP_BASE			0x00002600
+>   #define RKISP1_CIF_ISP_EXP_CTRL			(RKISP1_CIF_ISP_EXP_BASE + 0x00000000)
+> -#define RKISP1_CIF_ISP_EXP_H_OFFSET		(RKISP1_CIF_ISP_EXP_BASE + 0x00000004)
+> -#define RKISP1_CIF_ISP_EXP_V_OFFSET		(RKISP1_CIF_ISP_EXP_BASE + 0x00000008)
+> -#define RKISP1_CIF_ISP_EXP_H_SIZE		(RKISP1_CIF_ISP_EXP_BASE + 0x0000000C)
+> -#define RKISP1_CIF_ISP_EXP_V_SIZE		(RKISP1_CIF_ISP_EXP_BASE + 0x00000010)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_00		(RKISP1_CIF_ISP_EXP_BASE + 0x00000014)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000018)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_20		(RKISP1_CIF_ISP_EXP_BASE + 0x0000001c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_30		(RKISP1_CIF_ISP_EXP_BASE + 0x00000020)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_40		(RKISP1_CIF_ISP_EXP_BASE + 0x00000024)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_01		(RKISP1_CIF_ISP_EXP_BASE + 0x00000028)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_11		(RKISP1_CIF_ISP_EXP_BASE + 0x0000002c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_21		(RKISP1_CIF_ISP_EXP_BASE + 0x00000030)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_31		(RKISP1_CIF_ISP_EXP_BASE + 0x00000034)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_41		(RKISP1_CIF_ISP_EXP_BASE + 0x00000038)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_02		(RKISP1_CIF_ISP_EXP_BASE + 0x0000003c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_12		(RKISP1_CIF_ISP_EXP_BASE + 0x00000040)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_22		(RKISP1_CIF_ISP_EXP_BASE + 0x00000044)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_32		(RKISP1_CIF_ISP_EXP_BASE + 0x00000048)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_42		(RKISP1_CIF_ISP_EXP_BASE + 0x0000004c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_03		(RKISP1_CIF_ISP_EXP_BASE + 0x00000050)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_13		(RKISP1_CIF_ISP_EXP_BASE + 0x00000054)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_23		(RKISP1_CIF_ISP_EXP_BASE + 0x00000058)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_33		(RKISP1_CIF_ISP_EXP_BASE + 0x0000005c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_43		(RKISP1_CIF_ISP_EXP_BASE + 0x00000060)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_04		(RKISP1_CIF_ISP_EXP_BASE + 0x00000064)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_14		(RKISP1_CIF_ISP_EXP_BASE + 0x00000068)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_24		(RKISP1_CIF_ISP_EXP_BASE + 0x0000006c)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_34		(RKISP1_CIF_ISP_EXP_BASE + 0x00000070)
+> -#define RKISP1_CIF_ISP_EXP_MEAN_44		(RKISP1_CIF_ISP_EXP_BASE + 0x00000074)
+> +#define RKISP1_CIF_ISP_EXP_H_OFFSET_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000004)
+> +#define RKISP1_CIF_ISP_EXP_V_OFFSET_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000008)
+> +#define RKISP1_CIF_ISP_EXP_H_SIZE_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000000C)
+> +#define RKISP1_CIF_ISP_EXP_V_SIZE_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000010)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_00_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000014)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_10_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000018)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_20_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000001c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_30_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000020)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_40_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000024)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_01_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000028)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_11_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000002c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_21_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000030)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_31_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000034)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_41_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000038)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_02_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000003c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_12_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000040)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_22_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000044)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_32_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000048)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_42_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000004c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_03_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000050)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_13_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000054)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_23_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000058)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_33_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000005c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_43_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000060)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_04_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000064)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_14_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000068)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_24_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x0000006c)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_34_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000070)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_44_V10		(RKISP1_CIF_ISP_EXP_BASE + 0x00000074)
+> +#define RKISP1_CIF_ISP_EXP_SIZE_V12		(RKISP1_CIF_ISP_EXP_BASE + 0x00000004)
+> +#define RKISP1_CIF_ISP_EXP_OFFS_V12		(RKISP1_CIF_ISP_EXP_BASE + 0x00000008)
+> +#define RKISP1_CIF_ISP_EXP_MEAN_V12		(RKISP1_CIF_ISP_EXP_BASE + 0x0000000c)
+>   
+>   #define RKISP1_CIF_ISP_BLS_BASE			0x00002700
+>   #define RKISP1_CIF_ISP_BLS_CTRL			(RKISP1_CIF_ISP_BLS_BASE + 0x00000000)
+> @@ -1248,6 +1377,16 @@
+>   #define RKISP1_CIF_ISP_WDR_TONECURVE_YM_31_SHD	(RKISP1_CIF_ISP_WDR_BASE + 0x0000012C)
+>   #define RKISP1_CIF_ISP_WDR_TONECURVE_YM_32_SHD	(RKISP1_CIF_ISP_WDR_BASE + 0x00000130)
+>   
+> +#define RKISP1_CIF_ISP_HIST_BASE_V12		0x00002C00
+> +#define RKISP1_CIF_ISP_HIST_CTRL_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x00000000)
+> +#define RKISP1_CIF_ISP_HIST_SIZE_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x00000004)
+> +#define RKISP1_CIF_ISP_HIST_OFFS_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x00000008)
+> +#define RKISP1_CIF_ISP_HIST_DBG1_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x0000000C)
+> +#define RKISP1_CIF_ISP_HIST_DBG2_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x0000001C)
+> +#define RKISP1_CIF_ISP_HIST_DBG3_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x0000002C)
+> +#define RKISP1_CIF_ISP_HIST_WEIGHT_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x0000003C)
+> +#define RKISP1_CIF_ISP_HIST_BIN_V12		(RKISP1_CIF_ISP_HIST_BASE_V12 + 0x00000120)
+> +
+>   #define RKISP1_CIF_ISP_VSM_BASE			0x00002F00
+>   #define RKISP1_CIF_ISP_VSM_MODE			(RKISP1_CIF_ISP_VSM_BASE + 0x00000000)
+>   #define RKISP1_CIF_ISP_VSM_H_OFFS		(RKISP1_CIF_ISP_VSM_BASE + 0x00000004)
+> @@ -1259,4 +1398,7 @@
+>   #define RKISP1_CIF_ISP_VSM_DELTA_H		(RKISP1_CIF_ISP_VSM_BASE + 0x0000001C)
+>   #define RKISP1_CIF_ISP_VSM_DELTA_V		(RKISP1_CIF_ISP_VSM_BASE + 0x00000020)
+>   
+> +#define RKISP1_CIF_ISP_CSI0_BASE		0x00007000
+> +#define RKISP1_CIF_ISP_CSI0_CTRL0		(RKISP1_CIF_ISP_CSI0_BASE + 0x00000000)
+> +
+>   #endif /* _RKISP1_REGS_H */
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
+> index 7136292039f6..5ce1a2974b55 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
+> @@ -175,18 +175,18 @@ rkisp1_stats_init_vb2_queue(struct vb2_queue *q, struct rkisp1_stats *stats)
+>   	return vb2_queue_init(q);
+>   }
+>   
+> -static void rkisp1_stats_get_awb_meas(struct rkisp1_stats *stats,
+> -				      struct rkisp1_stat_buffer *pbuf)
+> +static void rkisp1_stats_get_awb_meas_v10(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
+>   {
+>   	/* Protect against concurrent access from ISR? */
+>   	struct rkisp1_device *rkisp1 = stats->rkisp1;
+>   	u32 reg_val;
+>   
+>   	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_AWB;
+> -	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_WHITE_CNT);
+> +	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_WHITE_CNT_V10);
+>   	pbuf->params.awb.awb_mean[0].cnt =
+>   				RKISP1_CIF_ISP_AWB_GET_PIXEL_CNT(reg_val);
+> -	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_MEAN);
+> +	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_MEAN_V10);
+>   
+>   	pbuf->params.awb.awb_mean[0].mean_cr_or_r =
+>   				RKISP1_CIF_ISP_AWB_GET_MEAN_CR_R(reg_val);
+> @@ -196,8 +196,29 @@ static void rkisp1_stats_get_awb_meas(struct rkisp1_stats *stats,
+>   				RKISP1_CIF_ISP_AWB_GET_MEAN_Y_G(reg_val);
+>   }
+>   
+> -static void rkisp1_stats_get_aec_meas(struct rkisp1_stats *stats,
+> -				      struct rkisp1_stat_buffer *pbuf)
+> +static void rkisp1_stats_get_awb_meas_v12(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
 > +{
-> +	struct virtio_vdmabuf *vdmabuf = drv_info->priv;
-> +	struct virtio_vdmabuf_event *e, *et;
-> +	unsigned long irqflags;
+> +	/* Protect against concurrent access from ISR? */
+> +	struct rkisp1_device *rkisp1 = stats->rkisp1;
+> +	u32 reg_val;
 > +
-> +	misc_deregister(&virtio_vdmabuf_miscdev);
-> +	unregister_virtio_driver(&virtio_vdmabuf_vdev_drv);
+> +	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_AWB;
+> +	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_WHITE_CNT_V12);
+> +	pbuf->params.awb.awb_mean[0].cnt =
+> +				RKISP1_CIF_ISP_AWB_GET_PIXEL_CNT(reg_val);
+> +	reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AWB_MEAN_V12);
 > +
-> +	if (vdmabuf->wq)
-> +		destroy_workqueue(vdmabuf->wq);
-> +
-> +	spin_lock_irqsave(&vdmabuf->evq->e_lock, irqflags);
-> +
-> +	list_for_each_entry_safe(e, et, &vdmabuf->evq->e_list,
-> +				 link) {
-> +		list_del(&e->link);
-> +		kvfree(e);
-> +		vdmabuf->evq->pending--;
-> +	}
-> +
-> +	spin_unlock_irqrestore(&vdmabuf->evq->e_lock, irqflags);
-> +
-> +	/* freeing all exported buffers */
-> +	remove_all_bufs(vdmabuf);
-> +
-> +	kvfree(vdmabuf->evq);
-> +	kvfree(vdmabuf);
-> +	kvfree(drv_info);
+> +	pbuf->params.awb.awb_mean[0].mean_cr_or_r =
+> +				RKISP1_CIF_ISP_AWB_GET_MEAN_CR_R(reg_val);
+> +	pbuf->params.awb.awb_mean[0].mean_cb_or_b =
+> +				RKISP1_CIF_ISP_AWB_GET_MEAN_CB_B(reg_val);
+> +	pbuf->params.awb.awb_mean[0].mean_y_or_g =
+> +				RKISP1_CIF_ISP_AWB_GET_MEAN_Y_G(reg_val);
 > +}
 > +
-> +module_init(virtio_vdmabuf_init);
-> +module_exit(virtio_vdmabuf_deinit);
-> +
-> +MODULE_DEVICE_TABLE(virtio, virtio_vdmabuf_id_table);
-> +MODULE_DESCRIPTION("Virtio Vdmabuf frontend driver");
-> +MODULE_LICENSE("GPL and additional rights");
-> diff --git a/include/linux/virtio_vdmabuf.h b/include/linux/virtio_vdmabuf.h
-> new file mode 100644
-> index 000000000000..9500bf4a54ac
-> --- /dev/null
-> +++ b/include/linux/virtio_vdmabuf.h
-> @@ -0,0 +1,271 @@
-> +/* SPDX-License-Identifier: (MIT OR GPL-2.0) */
-> +
-> +/*
-> + * Copyright © 2021 Intel Corporation
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a
-> + * copy of this software and associated documentation files (the "Software"),
-> + * to deal in the Software without restriction, including without limitation
-> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-> + * and/or sell copies of the Software, and to permit persons to whom the
-> + * Software is furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice (including the next
-> + * paragraph) shall be included in all copies or substantial portions of the
-> + * Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-> + * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> + * IN THE SOFTWARE.
-> + *
-> + */
-> +
-> +#ifndef _LINUX_VIRTIO_VDMABUF_H 
-> +#define _LINUX_VIRTIO_VDMABUF_H 
-> +
-> +#include <uapi/linux/virtio_vdmabuf.h>
-> +#include <linux/hashtable.h>
-> +#include <linux/kvm_types.h>
-> +
-> +struct virtio_vdmabuf_shared_pages {
-> +	/* cross-VM ref addr for the buffer */
-> +	gpa_t ref;
-> +
-> +	/* page array */
-> +	struct page **pages;
-> +	gpa_t **l2refs;
-> +	gpa_t *l3refs;
-> +
-> +	/* data offset in the first page
-> +	 * and data length in the last page
-> +	 */
-> +	int first_ofst;
-> +	int last_len;
-> +
-> +	/* number of shared pages */
-> +	int nents;
-> +};
-> +
-> +struct virtio_vdmabuf_buf {
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +
-> +	struct dma_buf_attachment *attach;
-> +	struct dma_buf *dma_buf;
-> +	struct sg_table *sgt;
-> +	struct virtio_vdmabuf_shared_pages *pages_info;
-> +	int vmid;
-> +
-> +	/* validity of the buffer */
-> +	bool valid;
-> +
-> +	/* set if the buffer is imported via import_ioctl */
-> +	bool imported;
-> +
-> +	/* size of private */
-> +	size_t sz_priv;
-> +	/* private data associated with the exported buffer */
-> +	void *priv;
-> +
-> +	struct file *filp;
-> +	struct hlist_node node;
-> +};
-> +
-> +struct virtio_vdmabuf_event {
-> +	struct virtio_vdmabuf_e_data e_data;
-> +	struct list_head link;
-> +};
-> +
-> +struct virtio_vdmabuf_event_queue {
-> +	wait_queue_head_t e_wait;
-> +	struct list_head e_list;
-> +
-> +	spinlock_t e_lock;
-> +	struct mutex e_readlock;
-> +
-> +	/* # of pending events */
-> +	int pending;
-> +};
-> +
-> +/* driver information */
-> +struct virtio_vdmabuf_info {
-> +	struct device *dev;
-> +
-> +	struct list_head head_vdmabuf_list;
-> +	struct list_head kvm_instances;
-> +
-> +	DECLARE_HASHTABLE(buf_list, 7);
-> +
-> +	void *priv;
-> +	struct mutex g_mutex;
-> +	struct notifier_block kvm_notifier;
-> +};
-> +
-> +/* IOCTL definitions
-> + */
-> +typedef int (*virtio_vdmabuf_ioctl_t)(struct file *filp, void *data);
-> +
-> +struct virtio_vdmabuf_ioctl_desc {
-> +	unsigned int cmd;
-> +	int flags;
-> +	virtio_vdmabuf_ioctl_t func;
-> +	const char *name;
-> +};
-> +
-> +#define VIRTIO_VDMABUF_IOCTL_DEF(ioctl, _func, _flags)	\
-> +	[_IOC_NR(ioctl)] = {			\
-> +			.cmd = ioctl,		\
-> +			.func = _func,		\
-> +			.flags = _flags,	\
-> +			.name = #ioctl		\
+> +static void rkisp1_stats_get_aec_meas_v10(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
+>   {
+>   	struct rkisp1_device *rkisp1 = stats->rkisp1;
+>   	unsigned int i;
+> @@ -206,7 +227,31 @@ static void rkisp1_stats_get_aec_meas(struct rkisp1_stats *stats,
+>   	for (i = 0; i < stats->config->ae_mean_max; i++)
+>   		pbuf->params.ae.exp_mean[i] =
+>   			(u8)rkisp1_read(rkisp1,
+> -					RKISP1_CIF_ISP_EXP_MEAN_00 + i * 4);
+> +					RKISP1_CIF_ISP_EXP_MEAN_00_V10 + i * 4);
 > +}
 > +
-> +#define VIRTIO_VDMABUF_VMID(buf_id) ((((buf_id).id) >> 32) & 0xFFFFFFFF)
-> +
-> +/* Messages between Host and Guest */
-> +
-> +/* List of commands from Guest to Host:
-> + *
-> + * ------------------------------------------------------------------
-> + * A. NEED_VMID
-> + *
-> + *  guest asks the host to provide its vmid
-> + *
-> + * req:
-> + *
-> + * cmd: VIRTIO_VDMABUF_NEED_VMID
-> + *
-> + * ack:
-> + *
-> + * cmd: same as req
-> + * op[0] : vmid of guest
-> + *
-> + * ------------------------------------------------------------------
-> + * B. EXPORT
-> + *
-> + *  export dmabuf to host
-> + *
-> + * req:
-> + *
-> + * cmd: VIRTIO_VDMABUF_CMD_EXPORT
-> + * op0~op3 : HDMABUF ID
-> + * op4 : number of pages to be shared
-> + * op5 : offset of data in the first page
-> + * op6 : length of data in the last page
-> + * op7 : upper 32 bit of top-level ref of shared buf
-> + * op8 : lower 32 bit of top-level ref of shared buf
-> + * op9 : size of private data
-> + * op10 ~ op64: User private date associated with the buffer
-> + *	        (e.g. graphic buffer's meta info)
-> + *
-> + * ------------------------------------------------------------------
-> + *
-> + * List of commands from Host to Guest
-> + *
-> + * ------------------------------------------------------------------
-> + * A. RELEASE
-> + *
-> + *  notifying guest that the shared buffer is released by an importer
-> + *
-> + * req:
-> + *
-> + * cmd: VIRTIO_VDMABUF_CMD_DMABUF_REL
-> + * op0~op3 : VDMABUF ID
-> + *
-> + * ------------------------------------------------------------------
-> + */
-> +
-> +/* msg structures */
-> +struct virtio_vdmabuf_msg {
-> +	struct list_head list;
-> +	unsigned int cmd;
-> +	unsigned int op[64];
-> +};
-> +
-> +enum {
-> +	VDMABUF_VQ_RECV = 0,
-> +	VDMABUF_VQ_SEND = 1,
-> +	VDMABUF_VQ_MAX  = 2,
-> +};
-> +
-> +enum virtio_vdmabuf_cmd {
-> +	VIRTIO_VDMABUF_CMD_NEED_VMID,
-> +	VIRTIO_VDMABUF_CMD_EXPORT = 0x10,
-> +	VIRTIO_VDMABUF_CMD_DMABUF_REL
-> +};
-> +
-> +enum virtio_vdmabuf_ops {
-> +	VIRTIO_VDMABUF_HDMABUF_ID_ID = 0,
-> +	VIRTIO_VDMABUF_HDMABUF_ID_RNG_KEY0,
-> +	VIRTIO_VDMABUF_HDMABUF_ID_RNG_KEY1,
-> +	VIRTIO_VDMABUF_NUM_PAGES_SHARED = 4,
-> +	VIRTIO_VDMABUF_FIRST_PAGE_DATA_OFFSET,
-> +	VIRTIO_VDMABUF_LAST_PAGE_DATA_LENGTH,
-> +	VIRTIO_VDMABUF_REF_ADDR_UPPER_32BIT,
-> +	VIRTIO_VDMABUF_REF_ADDR_LOWER_32BIT,
-> +	VIRTIO_VDMABUF_PRIVATE_DATA_SIZE,
-> +	VIRTIO_VDMABUF_PRIVATE_DATA_START
-> +};
-> +
-> +/* adding exported/imported vdmabuf info to hash */
-> +static inline int
-> +virtio_vdmabuf_add_buf(struct virtio_vdmabuf_info *info,
-> +                       struct virtio_vdmabuf_buf *new)
+> +static void rkisp1_stats_get_aec_meas_v12(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
 > +{
-> +	hash_add(info->buf_list, &new->node, new->buf_id.id);
-> +	return 0;
-> +}
-> +
-> +/* comparing two vdmabuf IDs */
-> +static inline bool
-> +is_same_buf(virtio_vdmabuf_buf_id_t a,
-> +            virtio_vdmabuf_buf_id_t b)
-> +{
+> +	struct rkisp1_device *rkisp1 = stats->rkisp1;
+> +	u32 value;
 > +	int i;
 > +
-> +	if (a.id != b.id)
-> +		return 1;
-> +
-> +	/* compare keys */
-> +	for (i = 0; i < 2; i++) {
-> +		if (a.rng_key[i] != b.rng_key[i])
-> +			return false;
+> +	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_AUTOEXP;
+> +	for (i = 0; i < stats->config->ae_mean_max / 4; i++) {
+> +		value = rkisp1_read(rkisp1, RKISP1_CIF_ISP_EXP_MEAN_V12 + i * 4);
+> +		pbuf->params.ae.exp_mean[4 * i + 0] =
+> +				RKISP1_CIF_ISP_EXP_GET_MEAN_xy0_V12(value);
+> +		pbuf->params.ae.exp_mean[4 * i + 1] =
+> +				RKISP1_CIF_ISP_EXP_GET_MEAN_xy1_V12(value);
+> +		pbuf->params.ae.exp_mean[4 * i + 2] =
+> +				RKISP1_CIF_ISP_EXP_GET_MEAN_xy2_V12(value);
+> +		pbuf->params.ae.exp_mean[4 * i + 3] =
+> +				RKISP1_CIF_ISP_EXP_GET_MEAN_xy3_V12(value);
 > +	}
 > +
-> +	return true;
+> +	value = rkisp1_read(rkisp1, RKISP1_CIF_ISP_EXP_MEAN_V12 + i * 4);
+> +	pbuf->params.ae.exp_mean[4 * i + 0] = RKISP1_CIF_ISP_EXP_GET_MEAN_xy0_V12(value);
+>   }
+>   
+>   static void rkisp1_stats_get_afc_meas(struct rkisp1_stats *stats,
+> @@ -226,8 +271,8 @@ static void rkisp1_stats_get_afc_meas(struct rkisp1_stats *stats,
+>   	af->window[2].lum = rkisp1_read(rkisp1, RKISP1_CIF_ISP_AFM_LUM_C);
+>   }
+>   
+> -static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
+> -				      struct rkisp1_stat_buffer *pbuf)
+> +static void rkisp1_stats_get_hst_meas_v10(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
+>   {
+>   	struct rkisp1_device *rkisp1 = stats->rkisp1;
+>   	unsigned int i;
+> @@ -236,7 +281,24 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
+>   	for (i = 0; i < stats->config->hist_bin_n_max; i++)
+>   		pbuf->params.hist.hist_bins[i] =
+>   			(u8)rkisp1_read(rkisp1,
+> -					RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
+> +					RKISP1_CIF_ISP_HIST_BIN_0_V10 + i * 4);
 > +}
 > +
-> +/* find buf for given vdmabuf ID */
-> +static inline struct virtio_vdmabuf_buf
-> +*virtio_vdmabuf_find_buf(struct virtio_vdmabuf_info *info,
-> +			 virtio_vdmabuf_buf_id_t *buf_id)
+> +static void rkisp1_stats_get_hst_meas_v12(struct rkisp1_stats *stats,
+> +					  struct rkisp1_stat_buffer *pbuf)
 > +{
-> +	struct virtio_vdmabuf_buf *found;
+> +	struct rkisp1_device *rkisp1 = stats->rkisp1;
+> +	u32 value;
+> +	int i;
 > +
-> +	hash_for_each_possible(info->buf_list, found, node, buf_id->id)
-> +		if (is_same_buf(found->buf_id, *buf_id))
-> +			return found;
-> +
-> +	return NULL;
-> +}
-> +
-> +/* delete buf from hash */
-> +static inline int
-> +virtio_vdmabuf_del_buf(struct virtio_vdmabuf_info *info,
-> +                       virtio_vdmabuf_buf_id_t *buf_id)
-> +{
-> +	struct virtio_vdmabuf_buf *found;
-> +
-> +	found = virtio_vdmabuf_find_buf(info, buf_id);
-> +	if (!found)
-> +		return -ENOENT;
-> +
-> +	hash_del(&found->node);
-> +
-> +	return 0;
-> +}
-> +
-> +#endif
-> diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
-> index bc1c0621f5ed..39c94637ddee 100644
-> --- a/include/uapi/linux/virtio_ids.h
-> +++ b/include/uapi/linux/virtio_ids.h
-> @@ -54,5 +54,6 @@
->  #define VIRTIO_ID_FS			26 /* virtio filesystem */
->  #define VIRTIO_ID_PMEM			27 /* virtio pmem */
->  #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
-> +#define VIRTIO_ID_VDMABUF          	40 /* virtio vdmabuf */
->  
->  #endif /* _LINUX_VIRTIO_IDS_H */
-> diff --git a/include/uapi/linux/virtio_vdmabuf.h b/include/uapi/linux/virtio_vdmabuf.h
-> new file mode 100644
-> index 000000000000..7bddaa04ddd6
-> --- /dev/null
-> +++ b/include/uapi/linux/virtio_vdmabuf.h
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: (MIT OR GPL-2.0)
-> +
-> +/*
-> + * Copyright © 2021 Intel Corporation
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a
-> + * copy of this software and associated documentation files (the "Software"),
-> + * to deal in the Software without restriction, including without limitation
-> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-> + * and/or sell copies of the Software, and to permit persons to whom the
-> + * Software is furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice (including the next
-> + * paragraph) shall be included in all copies or substantial portions of the
-> + * Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-> + * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> + * IN THE SOFTWARE.
-> + *
-> + */
-> +
-> +#ifndef _UAPI_LINUX_VIRTIO_VDMABUF_H
-> +#define _UAPI_LINUX_VIRTIO_VDMABUF_H
-> +
-> +#define MAX_SIZE_PRIV_DATA 192
-> +
-> +typedef struct {
-> +	__u64 id;
-> +	/* 8B long Random number */
-> +	int rng_key[2];
-> +} virtio_vdmabuf_buf_id_t;
-> +
-> +struct virtio_vdmabuf_e_hdr {
-> +	/* buf_id of new buf */
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	/* size of private data */
-> +	int size;
+> +	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
+> +	for (i = 0; i < stats->config->hist_bin_n_max / 2; i++) {
+> +		value = rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_V12 + i * 4);
+> +		pbuf->params.hist.hist_bins[2 * i] =
+> +					RKISP1_CIF_ISP_HIST_GET_BIN0_V12(value);
+> +		pbuf->params.hist.hist_bins[2 * i + 1] =
+> +					RKISP1_CIF_ISP_HIST_GET_BIN1_V12(value);
+> +	}
+>   }
+>   
+>   static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
+> @@ -286,17 +348,28 @@ static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
+>   	}
+>   }
+>   
+> -static struct rkisp1_stats_ops rkisp1_stats_ops = {
+> -	.get_awb_meas = rkisp1_stats_get_awb_meas,
+> -	.get_aec_meas = rkisp1_stats_get_aec_meas,
+> -	.get_hst_meas = rkisp1_stats_get_hst_meas,
+> +static struct rkisp1_stats_ops rkisp1_v10_stats_ops = {
+> +	.get_awb_meas = rkisp1_stats_get_awb_meas_v10,
+> +	.get_aec_meas = rkisp1_stats_get_aec_meas_v10,
+> +	.get_hst_meas = rkisp1_stats_get_hst_meas_v10,
+>   };
+>   
+> -static struct rkisp1_stats_config rkisp1_stats_config = {
+> +static struct rkisp1_stats_config rkisp1_v10_stats_config = {
+>   	.ae_mean_max = 25,
+>   	.hist_bin_n_max = 16,
+>   };
+>   
+> +static struct rkisp1_stats_ops rkisp1_v12_stats_ops = {
+> +	.get_awb_meas = rkisp1_stats_get_awb_meas_v12,
+> +	.get_aec_meas = rkisp1_stats_get_aec_meas_v12,
+> +	.get_hst_meas = rkisp1_stats_get_hst_meas_v12,
 > +};
 > +
-> +struct virtio_vdmabuf_e_data {
-> +	struct virtio_vdmabuf_e_hdr hdr;
-> +	/* ptr to private data */
-> +	void __user *data;
+> +static struct rkisp1_stats_config rkisp1_v12_stats_config = {
+> +	.ae_mean_max = 81,
+> +	.hist_bin_n_max = 32,
 > +};
 > +
-> +#define VIRTIO_VDMABUF_IOCTL_IMPORT \
-> +_IOC(_IOC_NONE, 'G', 2, sizeof(struct virtio_vdmabuf_import))
-> +#define VIRTIO_VDMABUF_IOCTL_RELEASE \
-> +_IOC(_IOC_NONE, 'G', 3, sizeof(struct virtio_vdmabuf_import))
-> +struct virtio_vdmabuf_import {
-> +	/* IN parameters */
-> +	/* ahdb buf id to be imported */
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	/* flags */
-> +	int flags;
-> +	/* OUT parameters */
-> +	/* exported dma buf fd */
-> +	int fd;
-> +};
-> +
-> +#define VIRTIO_VDMABUF_IOCTL_EXPORT \
-> +_IOC(_IOC_NONE, 'G', 4, sizeof(struct virtio_vdmabuf_export))
-> +struct virtio_vdmabuf_export {
-> +	/* IN parameters */
-> +	/* DMA buf fd to be exported */
-> +	int fd;
-> +	/* exported dma buf id */
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	int sz_priv;
-> +	char *priv;
-> +};
-> +
-> +#define VIRTIO_VDMABUF_IOCTL_QUERY \
-> +_IOC(_IOC_NONE, 'G', 5, sizeof(struct virtio_vdmabuf_query))
-> +struct virtio_vdmabuf_query {
-> +	/* in parameters */
-> +	/* id of buf to be queried */
-> +	virtio_vdmabuf_buf_id_t buf_id;
-> +	/* item to be queried */
-> +	int item;
-> +	/* OUT parameters */
-> +	/* Value of queried item */
-> +	unsigned long info;
-> +};
-> +
-> +/* DMABUF query */
-> +enum virtio_vdmabuf_query_cmd {
-> +	VIRTIO_VDMABUF_QUERY_SIZE = 0x10,
-> +	VIRTIO_VDMABUF_QUERY_BUSY,
-> +	VIRTIO_VDMABUF_QUERY_PRIV_INFO_SIZE,
-> +	VIRTIO_VDMABUF_QUERY_PRIV_INFO,
-> +};
-> +
-> +#endif
-> -- 
-> 2.26.2
+>   static void
+>   rkisp1_stats_send_measurement(struct rkisp1_stats *stats, u32 isp_ris)
+>   {
+> @@ -365,8 +438,13 @@ static void rkisp1_init_stats(struct rkisp1_stats *stats)
+>   	stats->vdev_fmt.fmt.meta.buffersize =
+>   		sizeof(struct rkisp1_stat_buffer);
+>   
+> -	stats->ops = &rkisp1_stats_ops;
+> -	stats->config = &rkisp1_stats_config;
+> +	if (stats->rkisp1->isp_ver == RKISP1_V12) {
+> +		stats->ops = &rkisp1_v12_stats_ops;
+> +		stats->config = &rkisp1_v12_stats_config;
+> +	} else {
+> +		stats->ops = &rkisp1_v10_stats_ops;
+> +		stats->config = &rkisp1_v10_stats_config;
+> +	}
+>   }
+>   
+>   int rkisp1_stats_register(struct rkisp1_device *rkisp1)
 > 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
