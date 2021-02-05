@@ -2,93 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A885BC433DB
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 21:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E661DC4332D
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:03:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71FDB64FC6
-	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 21:28:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA04B64F92
+	for <linux-media@archiver.kernel.org>; Fri,  5 Feb 2021 22:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbhBEV1z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 16:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbhBEPAb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 10:00:31 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F642C0613D6;
-        Fri,  5 Feb 2021 08:38:31 -0800 (PST)
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:169:7140:5c7:913e:f5dc:1fa])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A1C45316;
-        Fri,  5 Feb 2021 17:38:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1612543109;
-        bh=VDeh1UbbOpEZAzYMYoSbEP32YFEiJpOEK8yXSrSc9gw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W+E11Et3FLdhV256GHjyFmVVALpAUYR2UTSWtLPJDEfe79OTqd/b5NBiMjrZTrBdi
-         gM8z6hM+IF0thk0bcB99GXRcKHwPYV4Ozqj1UzpvKVRpQHTrbtYw05c1m46L0rLHAQ
-         W/T/UtvdDjE+I4dAeGyYG/0nEBCdizLed0+BjoGE=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        rahul.blr97@gmail.com, gregkh@linuxfoundation.org,
-        mchehab@kernel.org, tian.shu.qiu@intel.com, bingbu.cao@intel.com,
-        sakari.ailus@linux.intel.com, jeanmichel.hautbois@ideasonboard.com
-Subject: [PATCH] media: intel-ipu3: Specify CCM values precision
-Date:   Fri,  5 Feb 2021 17:38:19 +0100
-Message-Id: <20210205163819.28439-1-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S232909AbhBEWC0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 17:02:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48170 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232864AbhBEO4T (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:56:19 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id C147CB131;
+        Fri,  5 Feb 2021 14:19:56 +0000 (UTC)
+Date:   Fri, 05 Feb 2021 15:19:56 +0100
+Message-ID: <s5htuqq38c3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: Re: [PATCH] media: pwc: Fix the URB buffer allocation
+In-Reply-To: <88c960d2-40b1-ab6c-c17b-863c803a54b0@xs4all.nl>
+References: <20210121202855.17400-1-tiwai@suse.de>
+        <7afd0612-de36-60b1-6650-6f8de24a7145@xs4all.nl>
+        <YB0/wTjYqE9IgtXZ@lunn.ch>
+        <s5h1rdu4qgo.wl-tiwai@suse.de>
+        <YB1EXirrstMlg/vA@lunn.ch>
+        <s5hy2g23a2o.wl-tiwai@suse.de>
+        <YB1NyX9QdBdV89bu@lunn.ch>
+        <88c960d2-40b1-ab6c-c17b-863c803a54b0@xs4all.nl>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When trying to convert a CCM matrix for IPU3, extreme values for the
-Color Correction Matrix.
-Specify the precision to ease userspace integration.
+On Fri, 05 Feb 2021 15:05:00 +0100,
+Hans Verkuil wrote:
+> 
+> On 05/02/2021 14:53, Andrew Lunn wrote:
+> > On Fri, Feb 05, 2021 at 02:42:23PM +0100, Takashi Iwai wrote:
+> >> On Fri, 05 Feb 2021 14:13:02 +0100,
+> >> Andrew Lunn wrote:
+> >>>
+> >>> Hi Takashi
+> >>>
+> >>>> Indeed, looks so.  In most cases, this doesn't matter since both point
+> >>>> to the same device object.  In some cases like xhci-plat HCD, they
+> >>>> differ.  And sysdev  might be a better choice from the consistency
+> >>>> POV.
+> >>>>
+> >>>> But this brought an interesting question, too.  eg. USB chipidea
+> >>>> HCD uses platform devices for both controller and sysdev, and I
+> >>>> couldn't find any DMA mask setup.  So, no matter what to use, the uwc
+> >>>> driver would be broken on this...  Maybe it's just not covered.
+> >>>
+> >>> Did you do a git bisect to see what actually broke it?  "1161db6776bd:
+> >>> media: usb: pwc: Don't use coherent DMA buffers for ISO transfer"
+> >>> introduced the code, not the regression. If we understand the
+> >>> regression, that might give us the answer about chipidea.
+> >>
+> >> It's the recent DMA core change, the commit f959dcd6ddfd ("dma-direct:
+> >> Fix potential NULL pointer dereference").  But basically it's a right
+> >> fix, and the driver hitting this "regression" has been already broken
+> >> but casually worked without setting a proper DMA mask.
+> > 
+> > So for the chipidea, it also just 'casually worked'. But now it
+> > probably does not. But that is a separate chipidea issue.  None of my
+> > ARM systems use the chipidea IP core, so i cannot test anything.
+> 
+> Since few people use the pwc driver anymore, and certainly not on non-intel
+> devices, I am happy with Matwey's patch as is merged in our media tree for
+> 5.12.
+> 
+> I'll mark Takashi's patch as Obsolete in patchwork as well.
+> 
+> I might have an SBC with a chipidea, if so, I'll give it a quick spin.
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- drivers/staging/media/ipu3/include/intel-ipu3.h | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Fair enough.
 
-diff --git a/drivers/staging/media/ipu3/include/intel-ipu3.h b/drivers/staging/media/ipu3/include/intel-ipu3.h
-index edd8edda0647..68f7d11ce52f 100644
---- a/drivers/staging/media/ipu3/include/intel-ipu3.h
-+++ b/drivers/staging/media/ipu3/include/intel-ipu3.h
-@@ -923,19 +923,21 @@ struct ipu3_uapi_dm_config {
- /**
-  * struct ipu3_uapi_ccm_mat_config - Color correction matrix
-  *
-- * @coeff_m11: CCM 3x3 coefficient, range [-65536, 65535]
-+ * @coeff_m11: CCM 3x3 coefficient, range [-32768, 32767]
-  * @coeff_m12: CCM 3x3 coefficient, range [-8192, 8191]
-- * @coeff_m13: CCM 3x3 coefficient, range [-32768, 32767]
-+ * @coeff_m13: CCM 3x3 coefficient, range [-8192, 8191]
-  * @coeff_o_r: Bias 3x1 coefficient, range [-8191, 8181]
-- * @coeff_m21: CCM 3x3 coefficient, range [-32767, 32767]
-- * @coeff_m22: CCM 3x3 coefficient, range [-8192, 8191]
-- * @coeff_m23: CCM 3x3 coefficient, range [-32768, 32767]
-+ * @coeff_m21: CCM 3x3 coefficient, range [-8192, 8191]
-+ * @coeff_m22: CCM 3x3 coefficient, range [-32768, 32767]
-+ * @coeff_m23: CCM 3x3 coefficient, range [-8192, 8191]
-  * @coeff_o_g: Bias 3x1 coefficient, range [-8191, 8181]
-- * @coeff_m31: CCM 3x3 coefficient, range [-32768, 32767]
-+ * @coeff_m31: CCM 3x3 coefficient, range [-8192, 8191]
-  * @coeff_m32: CCM 3x3 coefficient, range [-8192, 8191]
-  * @coeff_m33: CCM 3x3 coefficient, range [-32768, 32767]
-  * @coeff_o_b: Bias 3x1 coefficient, range [-8191, 8181]
-  *
-+ * Precision s3.13, range [-8, 8).
-+ *
-  * Transform sensor specific color space to standard sRGB by applying 3x3 matrix
-  * and adding a bias vector O. The transformation is basically a rotation and
-  * translation in the 3-dimensional color spaces. Here are the defaults:
--- 
-2.27.0
 
+Thanks!
+
+Takashi
