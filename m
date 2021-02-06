@@ -2,173 +2,155 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F8BFC433E6
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 03:23:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B0CC43381
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 04:40:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52DA964FD8
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 03:23:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3F0A64DD8
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 04:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbhBFDWj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Feb 2021 22:22:39 -0500
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:41990 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbhBFDPL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 22:15:11 -0500
-Received: by mail-yb1-f182.google.com with SMTP id b187so8721054ybg.9;
-        Fri, 05 Feb 2021 19:14:52 -0800 (PST)
+        id S230229AbhBFEj6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Feb 2021 23:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231311AbhBFEjc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Feb 2021 23:39:32 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ABFC061756
+        for <linux-media@vger.kernel.org>; Fri,  5 Feb 2021 20:38:51 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id i3so2847501uai.3
+        for <linux-media@vger.kernel.org>; Fri, 05 Feb 2021 20:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7tNqLsfYX9gzibf9LwB4HQxkaRZ+2tGUkdroBxSOk2A=;
+        b=jeSp4ZWDa+2AdP7dQ54QhQ4gHYklqrtRaIc6KBcRn6T9e2cVRq02Ci0Ua4KWN2Dig+
+         QXUR9aNriY9noKbl1c0FLmhZCNjx41o0W9Km6L8+l3H28qzvTIXR/Vt+VfQmlLdIF1l4
+         AglCrYVfTUI88jvaJHN5Ali1/jP5vX9C4P8oQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A/9Ih9622NVTzrZPwCYg0qngEXggsHsaO2OKN20W6PE=;
-        b=CfftJvEjfHC0NgoVCz928Q4tvUKaMf3r2cE8+sJW5eoiUo8z+pHVsHnrUHnw8miou/
-         abj6+ulWDeSoJKt5pFQZr4ceJYv2+WMvTK9gz0wEYfIFFlXbs+ytiNcZ7N+tDwbSXfJj
-         0ZDtd3dkImTElBL9qf4HX02A8wpV8tdvyMPjw0N18WnpE42nxF9p7zL+PiDVh8bzThSl
-         Uz+zIwieOQ0FT1eiB09O6u/ZtZOcXQuw7byLuwcBfMkxJE3inUVdcji22IqA9vETH9Sv
-         KoO1+Plo878rccXKdqycjqUAHhhcg7PZaQzWgM+U5ryvsjgUgcWYPwJs/o1VHoHpZ+cf
-         9urg==
-X-Gm-Message-State: AOAM530NFdzOREcL56BVUiuVNNpmRuMjRMPjEBVWAjpzvEcXllJfEMKJ
-        0M6QIOOiLb0u/Yc+2A9U5OIvZULUJA==
-X-Google-Smtp-Source: ABdhPJyOibYhklMZaYhw1NqTq4B3G/M82Lf2xbPpvAKKblvYXBpctsn3mrDEoKTpEDRl2i/3LBnClQ==
-X-Received: by 2002:a9d:7699:: with SMTP id j25mr4952858otl.202.1612565757307;
-        Fri, 05 Feb 2021 14:55:57 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q8sm1403961oth.65.2021.02.05.14.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 14:55:56 -0800 (PST)
-Received: (nullmailer pid 3912199 invoked by uid 1000);
-        Fri, 05 Feb 2021 22:55:54 -0000
-Date:   Fri, 5 Feb 2021 16:55:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, hyesoo.yu@samsung.com,
-        david@redhat.com, mhocko@suse.com, surenb@google.com,
-        pullip.cho@samsung.com, joaodias@google.com, hridya@google.com,
-        john.stultz@linaro.org, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        hch@infradead.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: reserved-memory: Make DMA-BUF CMA
- heap DT-configurable
-Message-ID: <20210205225554.GA3881594@robh.at.kernel.org>
-References: <20210121175502.274391-1-minchan@kernel.org>
- <20210121175502.274391-4-minchan@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7tNqLsfYX9gzibf9LwB4HQxkaRZ+2tGUkdroBxSOk2A=;
+        b=eFfA/V2eNPSAGVfFmnsLZZ8jEMJNnXPnnIbGK46URcUxqYHaA8Jz/wRxPuerNhI9KB
+         EL18YsfQROX6ayTg4KWBvBf5B+h46a23EKdkkLvFAFkmfEAidm65oSYpofvsbaP7DJG/
+         peO1zgxdjFH6+uV0J+fQGth53r5sBMJgjTWple52dMIQq3EVBdbz8biwQHf1AEOkS6HG
+         ZHPtOU68UMjQJ1bMaGosY/Dv0dqZyEuOtifl4sYWrXKRs6IJALjZJJ9Y2u+BFzPOwKDM
+         2O3CWdqxmLIbIGh/wA/ZH39UzBVumccOilqXurqdE8NKezxNpnCMg8AX+MJAISnMhkhu
+         S1ng==
+X-Gm-Message-State: AOAM5323GgTs53eE22FyjpamSdordSqRfrdzVnP3s0CkaNkBhZ7UB+7K
+        v7U4ZoFg3VfIe9QzKnv/1XRLGcUojNabOBGciuL58g==
+X-Google-Smtp-Source: ABdhPJxSHD2bpO8QMNrO1PfovadiW1b4ieesCYcbVLPKGrkZ6vddV0zbMaKl8blR8MYOamb7kehPbnr1ttSffkVpJlY=
+X-Received: by 2002:ab0:3043:: with SMTP id x3mr5342812ual.88.1612586330175;
+ Fri, 05 Feb 2021 20:38:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121175502.274391-4-minchan@kernel.org>
+References: <20210205104414.299732-1-robert.foss@linaro.org> <20210205104414.299732-4-robert.foss@linaro.org>
+In-Reply-To: <20210205104414.299732-4-robert.foss@linaro.org>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Sat, 6 Feb 2021 12:38:39 +0800
+Message-ID: <CANMq1KDN8TLhUPH2i_S3gCQAU0nM9b_aYnNs-o3rETYgp5-pHw@mail.gmail.com>
+Subject: Re: [PATCH v4 03/22] media: camss: Replace trace_printk() with dev_dbg()
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        angelogioacchino.delregno@somainline.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
+        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonathan Marek <jonathan@marek.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 09:55:01AM -0800, Minchan Kim wrote:
-> From: Hyesoo Yu <hyesoo.yu@samsung.com>
-> 
-> Document devicetree binding for chunk cma heap on dma heap framework.
-> 
-> The DMA chunk heap supports the bulk allocation of higher order pages.
-> 
-> The chunk heap's allocator allocates from the CMA area. It is optimized
-> to perform bulk allocation of higher order pages in an efficient manner.
-> For this purpose, the heap needs an exclusive CMA area that will only be
-> used for allocation by the heap. This is the reason why we need to use
-> the DT to create and configure a reserved memory region for use by the
-> chunk CMA heap driver. Since all allocation from DMA-BUF heaps happen
-> from the user-space, there is no other appropriate device-driver that
-> we can use to register the chunk CMA heap and configure the reserved
-> memory region for its use.
+On Fri, Feb 5, 2021 at 6:44 PM Robert Foss <robert.foss@linaro.org> wrote:
+>
+> trace_printk() should not be used in production code,
+> since extra memory is used for special buffers whenever
+> trace_puts() is used.
+>
+> Replace it with dev_dbg() which provides all of the desired
+> debugging functionality.
+>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Suggested-by: Nicolas Boichat <drinkcat@chromium.org>
 
-LWN tells me we don't need carve outs any more[1]: "CMA now relies on 
-compaction and no longer uses a carved-out memory region."
+Thanks!
 
-So why do we need this?
+Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
 
-[1] https://lwn.net/Articles/839216/
-
-> 
-> Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
-> Signed-off-by: Hridya Valsaraju <hridya@google.com>
 > ---
->  .../reserved-memory/dma_heap_chunk.yaml       | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
-> new file mode 100644
-> index 000000000000..00db0ae6af61
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reserved-memory/dma_heap_chunk.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reserved-memory/dma_heap_chunk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Device tree binding for chunk heap on DMA HEAP FRAMEWORK
-> +
-> +description: |
-> +  The DMA chunk heap is backed by the Contiguous Memory Allocator (CMA) and
-> +  supports bulk allocation of fixed size pages.
-> +
-> +maintainers:
-> +  - Hyesoo Yu <hyesoo.yu@samsung.com>
-> +  - John Stultz <john.stultz@linaro.org>
-> +  - Minchan Kim <minchan@kernel.org>
-> +  - Hridya Valsaraju<hridya@google.com>
-> +
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - dma_heap,chunk
-
-Convention is vendor,thing and 'dma_heap' is not a vendor. Also, '-' is 
-preferred over '_'.
-
-> +
-> +  chunk-order:
-> +    description: |
-> +            order of pages that will get allocated from the chunk DMA heap.
-
-Page size depends on Linux configuration. And 'order' is very much a 
-Linuxism.
-
-> +    maxItems: 1
-> +
-> +  size:
-> +    maxItems: 1
-> +
-> +  alignment:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - size
-> +  - alignment
-> +  - chunk-order
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <1>;
-> +
-> +        chunk_memory: chunk_memory {
-> +            compatible = "dma_heap,chunk";
-> +            size = <0x3000000>;
-> +            alignment = <0x0 0x00010000>;
-> +            chunk-order = <4>;
-> +        };
-> +    };
-> -- 
-> 2.30.0.296.g2bfb1c46d8-goog
-> 
+>
+> Changes since v3:
+>  - Nicolas: Create this patch
+>
+>
+>  drivers/media/platform/qcom/camss/camss-vfe-4-1.c | 5 +++--
+>  drivers/media/platform/qcom/camss/camss-vfe-4-7.c | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+> index a1b56b89130d..85b9bcbc7321 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>
+> +#include "camss.h"
+>  #include "camss-vfe.h"
+>
+>  #define VFE_0_HW_VERSION               0x000
+> @@ -936,8 +937,8 @@ static irqreturn_t vfe_isr(int irq, void *dev)
+>
+>         vfe->ops->isr_read(vfe, &value0, &value1);
+>
+> -       trace_printk("VFE: status0 = 0x%08x, status1 = 0x%08x\n",
+> -                    value0, value1);
+> +       dev_dbg(vfe->camss->dev, "VFE: status0 = 0x%08x, status1 = 0x%08x\n",
+> +               value0, value1);
+>
+>         if (value0 & VFE_0_IRQ_STATUS_0_RESET_ACK)
+>                 vfe->isr_ops.reset_ack(vfe);
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+> index 84c33b8f9fe3..f7e00a2de393 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>
+> +#include "camss.h"
+>  #include "camss-vfe.h"
+>
+>  #define VFE_0_HW_VERSION               0x000
+> @@ -1069,8 +1070,8 @@ static irqreturn_t vfe_isr(int irq, void *dev)
+>
+>         vfe->ops->isr_read(vfe, &value0, &value1);
+>
+> -       trace_printk("VFE: status0 = 0x%08x, status1 = 0x%08x\n",
+> -                    value0, value1);
+> +       dev_dbg(vfe->camss->dev, "VFE: status0 = 0x%08x, status1 = 0x%08x\n",
+> +               value0, value1);
+>
+>         if (value0 & VFE_0_IRQ_STATUS_0_RESET_ACK)
+>                 vfe->isr_ops.reset_ack(vfe);
+> --
+> 2.27.0
+>
