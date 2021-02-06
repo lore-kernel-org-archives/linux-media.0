@@ -2,144 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A809FC433DB
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 11:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54E17C433E0
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 18:53:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AE1964E5B
-	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 11:19:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 180D364DF0
+	for <linux-media@archiver.kernel.org>; Sat,  6 Feb 2021 18:53:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhBFLT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Feb 2021 06:19:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49500 "EHLO mail.kernel.org"
+        id S229626AbhBFSxa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Feb 2021 13:53:30 -0500
+Received: from mga06.intel.com ([134.134.136.31]:3168 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229529AbhBFLTZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Feb 2021 06:19:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A2BBC64E5F;
-        Sat,  6 Feb 2021 11:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612610325;
-        bh=cCUjBRR2xYapZbnU8xfy02aSLJ3iAyGXKpgpO78nfvA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TaV0GlEU469tPmzMwcc/hls4pIDUl52yC2n0QTrPKS0fV9cxO8GK7ie0+MMOSVkTj
-         G0N022OGvuxcoDiEsbA5my0+NopUfJoZHRPIXYdfwnAI0uVEiZfkPjChDvWthWR4aa
-         BjMzC1i9h2+2ns/qC5c68mLKNNe/4taK7kyBF8ox+dGj2TciHEomhVPVKX98GZLSKp
-         XONg0MueALTXQ22MF3rqQMKyoRTAtiP6bJyBF4aguLA36Iev0G8OIpJFESRaJ1h9oK
-         mv6v+P3XOKg7WW49+Hzt+/gYiu1xrp2QiFxiHDxOXGBf/WhMcvBXHvKxp7XAWC8mJb
-         iWNwEUKG5qSlA==
-Date:   Sat, 6 Feb 2021 12:18:39 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Jari Ruusu <jariruusu@protonmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Christoph Biedl <linux-kernel.bfrz@manchmal.in-ulm.de>,
-        linux-media@vger.kernel.org
-Subject: Re: Kernel version numbers after 4.9.255 and 4.4.255
-Message-ID: <20210206121604.4e9a10b9@coco.lan>
-In-Reply-To: <8220e22e-380f-5b4e-fa69-5c6fcace8535@xs4all.nl>
-References: <a85b7749-38b2-8ce9-c15a-8acb9a54c5b5@kernel.org>
-        <0b12bac9-1b4e-ec4a-8a45-5eb3f1dbbeca@cybernetics.com>
-        <20210205191105.128c6e48@coco.lan>
-        <YB5DTUiurAwqZbz1@kroah.com>
-        <20210206102402.2611b23f@coco.lan>
-        <YB5hZop6JZ2Lgv63@kroah.com>
-        <20210206104809.30c15609@coco.lan>
-        <8220e22e-380f-5b4e-fa69-5c6fcace8535@xs4all.nl>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S231320AbhBFSxN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 6 Feb 2021 13:53:13 -0500
+IronPort-SDR: L3m11PqJGQ9is2MU3SdPKBJ+037ODDlLYmBtqPLhBZAT3WINrbJ4WFH23sryMmFXwfMQ9jlnZX
+ 15XYK8uW4ckw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9887"; a="243058114"
+X-IronPort-AV: E=Sophos;i="5.81,158,1610438400"; 
+   d="scan'208";a="243058114"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2021 10:52:26 -0800
+IronPort-SDR: xWVzSq+CzCpNzfe1YNzzme6pG9bI0gomVeNfRur2OGV9o4+LnEVhMqDZRuZfAayl14BZc3Gy72
+ Wi/gV6mXLW1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,158,1610438400"; 
+   d="scan'208";a="410128929"
+Received: from lkp-server02.sh.intel.com (HELO 8b832f01bb9c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Feb 2021 10:52:25 -0800
+Received: from kbuild by 8b832f01bb9c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l8Sgy-0002Yy-V3; Sat, 06 Feb 2021 18:52:24 +0000
+Date:   Sun, 07 Feb 2021 02:51:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: [ragnatech:media-tree] BUILD SUCCESS
+ 063b811f34650bf88e24998eb9c094607cb3b53e
+Message-ID: <601ee52d.hECE63o4T/pg5OIc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Sat, 6 Feb 2021 11:18:15 +0100
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+tree/branch: git://git.ragnatech.se/linux media-tree
+branch HEAD: 063b811f34650bf88e24998eb9c094607cb3b53e  media: uvc: strncpy -> strscpy
 
-> >> Yes, driver "version" means nothing, so functionality is the correct way
-> >> to handle this.
-> >>
-> >> Any chance you all can just drop the kernel version stuff and just
-> >> report a static number that never goes up to allow people to use the
-> >> correct api for new stuff?  Pick a "modern" number, like 5.10 and leave
-> >> it there for forever.  
-> > 
-> > Good question. I like the idea of keeping it fixed, marking those fields
-> > as DEPRECATED at the uAPI documentation.
-> > 
-> > However, at least the v4l2-compliance tool (used for V4L2 
-> > development) currently requires it:
-> > 
-> > 	if (vcap.version >= 0x050900)  // Present from 5.9.0 onwards
-> > 		node->might_support_cache_hints = true;
-> > 
-> > Not sure if uname would work there, or if we would need, to use some
-> > Kconfig symbol to only return the real version on debug Kernels.
-> > 
-> > Hans,
-> > 
-> > What do you think?  
-> 
-> It could be replaced by uname, but if we fix the version number to something
-> >= 5.9 (which we will no doubt do), then there is no need to change anything here.
+elapsed time: 1191m
 
-Sure, but needing to check for a so recent Kernel version probably
-means that we should have an extra capability somewhere to the
-feature that it is enabled only if Kernel >= 5.9.
-  
-> But I was wondering if it wouldn't make sense to create a variant of
-> LINUX_VERSION_CODE that ignored the sublevel and just always leaves that
-> at 0. In practice, media API changes only happen at new kernel releases and
-> not in the stable series (there might be rare exceptions to that, but I'm
-> not aware of that).
+configs tested: 114
+configs skipped: 2
 
-I guess there were one or two exceptions of uAPI regressions that happened
-after a new version that were fixed at stable sublevel 1 or 2.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> And while we are using capability flags a lot more these days to ensure
-> userspace can discover what is and what is not available, we never did a full
-> analysis of that and I feel a bit uncomfortable about fixing the version
-> number.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      tqm8xx_defconfig
+m68k                            q40_defconfig
+powerpc                     tqm5200_defconfig
+openrisc                            defconfig
+sh                             shx3_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm64                            alldefconfig
+powerpc                       holly_defconfig
+mips                           xway_defconfig
+parisc                generic-64bit_defconfig
+arm                           u8500_defconfig
+arm                           tegra_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                         rt305x_defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                        bcm47xx_defconfig
+mips                          rm200_defconfig
+powerpc                     asp8347_defconfig
+arm                        realview_defconfig
+arm                  colibri_pxa270_defconfig
+m68k                          multi_defconfig
+sh                           se7206_defconfig
+arm                          exynos_defconfig
+powerpc                    amigaone_defconfig
+mips                         mpc30x_defconfig
+powerpc                     mpc512x_defconfig
+arm                          imote2_defconfig
+arm                       imx_v4_v5_defconfig
+sh                           se7619_defconfig
+sh                 kfr2r09-romimage_defconfig
+m68k                       m5475evb_defconfig
+powerpc                      bamboo_defconfig
+mips                      loongson3_defconfig
+powerpc                     stx_gp3_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210205
+i386                 randconfig-a005-20210205
+i386                 randconfig-a003-20210205
+i386                 randconfig-a006-20210205
+i386                 randconfig-a002-20210205
+i386                 randconfig-a004-20210205
+x86_64               randconfig-a013-20210204
+x86_64               randconfig-a014-20210204
+x86_64               randconfig-a015-20210204
+x86_64               randconfig-a011-20210204
+x86_64               randconfig-a016-20210204
+x86_64               randconfig-a012-20210204
+i386                 randconfig-a013-20210205
+i386                 randconfig-a016-20210205
+i386                 randconfig-a014-20210205
+i386                 randconfig-a012-20210205
+i386                 randconfig-a015-20210205
+i386                 randconfig-a011-20210205
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-We don't need a full analysis for past features. If the version gets
-fixed on, let's say, 6.0.0, if caps.version >= 0x060000, everything
-supported up to the present date will be there.
+clang tested configs:
+x86_64               randconfig-a006-20210204
+x86_64               randconfig-a001-20210204
+x86_64               randconfig-a005-20210204
+x86_64               randconfig-a002-20210204
+x86_64               randconfig-a004-20210204
+x86_64               randconfig-a003-20210204
 
-We'll just need to have an extra care of ensuring that every new
-feature added upstream will have a way for userspace to check if
-it is present.
-
-> I see more usages of LINUX_VERSION_CODE in the kernel that look like they do
-> something similar to what the media subsystem does, and that probably also
-> do not need the SUBLEVEL.
-
-Yeah, other subsystems seem to use it as well.
-
-> A LINUX_MAJOR_MINOR_CODE define (or whatever you want to call it) would solve
-> this problem for us.
-
-There are ways to minimize this problem on future stable Kernels.
-
-My main concern is if we should keep letting applications relying
-on caps.version. By keeping 
-
-	cap->version = LINUX_VERSION_CODE;
-
-(or any variant of that), applications may simply rely on it,
-instead of properly implementing a functionality probing code.
-
-To be clear: my main concern here is not about media development
-tools, like v4l2-compliance. It is about real applications that
-could end breaking on backports that won't be properly
-back-propagating cap->version.
-
-Thanks,
-Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
