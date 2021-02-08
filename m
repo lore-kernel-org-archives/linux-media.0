@@ -2,193 +2,143 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8864C433DB
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 14:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E433FC433E6
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 14:41:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BA6864E30
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 14:37:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FE3C64E26
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 14:41:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbhBHOhX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 09:37:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232268AbhBHOg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Feb 2021 09:36:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E96AE64E6C;
-        Mon,  8 Feb 2021 14:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612794243;
-        bh=+2jZcsz4qRSWrdOdRdftxckyCvDW6ZtMsnAEzPB9O4g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pwZjW85JzbULiqqJiERW4x8Qrmw2B2pTXbSnBUTDozfUT5qLHTIZT1iNlChXnyEvc
-         QcZPiswk2lNmtHalpMz2X6Th2vZUNOsCoQpYlEH4Z7hEk8+2ltFx8EgD9bIf+Qei29
-         T4fmts0a0zMpkSC5p8fztBqpDF6aUdw1hAEt2Qp+SmVyPlnYG2HUM1AcGe0qwYW3Uu
-         C9+g1S58LdqL74IpTxfzndaVtoI/HUEI2JrZP01kQaX9G51CzboOB9qgoYto80Fa5k
-         /IjxsnQ1O8yUYqaEuGQhy/JeVRKK3CBmsVSPtTt7nZNsEaiHVtKHzrZpaygiEVoaXs
-         LDfox+OlFTdlg==
-Date:   Mon, 8 Feb 2021 15:23:59 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: fix max9271 build dependencies
-Message-ID: <20210208152359.17831275@coco.lan>
-In-Reply-To: <YCE/OkSfIbxUB4XQ@pendragon.ideasonboard.com>
-References: <20210208072701.GI32460@paasikivi.fi.intel.com>
-        <20210208083616.3iulzo56mhn4ymmq@uno.localdomain>
-        <20210208084147.GN32460@paasikivi.fi.intel.com>
-        <20210208100822.76ca0c2e@coco.lan>
-        <20210208092424.GP32460@paasikivi.fi.intel.com>
-        <20210208110723.4859ddda@coco.lan>
-        <YCEhVrSFpqX1Th4x@pendragon.ideasonboard.com>
-        <20210208114142.skwc22xps5xiqdyo@uno.localdomain>
-        <20210208141102.3d5999dd@coco.lan>
-        <20210208143150.03974bca@coco.lan>
-        <YCE/OkSfIbxUB4XQ@pendragon.ideasonboard.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S232282AbhBHOlf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 09:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231286AbhBHOl0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Feb 2021 09:41:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DEEC061788
+        for <linux-media@vger.kernel.org>; Mon,  8 Feb 2021 06:40:46 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 5A5CB1F44D6A
+Message-ID: <35b53b6ce11b2365487b5860ce39ad75143cff70.camel@collabora.com>
+Subject: Re: [PATCH v5 11/13] media: v4l2-async: Discourage use of
+ v4l2_async_notifier_add_subdev
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Date:   Mon, 08 Feb 2021 11:40:34 -0300
+In-Reply-To: <20210208135403.68695519@coco.lan>
+References: <20210202135611.13920-1-sakari.ailus@linux.intel.com>
+         <20210202135611.13920-12-sakari.ailus@linux.intel.com>
+         <20210206091546.1497bbcb@coco.lan>
+         <20210208103244.GQ32460@paasikivi.fi.intel.com>
+         <20210208135403.68695519@coco.lan>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Mon, 8 Feb 2021 15:40:10 +0200
-Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
+Hi Mauro,
 
-> Hi Mauro,
+On Mon, 2021-02-08 at 13:54 +0100, Mauro Carvalho Chehab wrote:
+> Em Mon, 8 Feb 2021 12:32:44 +0200
+> Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
 > 
-> On Mon, Feb 08, 2021 at 02:31:50PM +0100, Mauro Carvalho Chehab wrote:
-> > Em Mon, 8 Feb 2021 14:11:02 +0100 Mauro Carvalho Chehab escreveu:  
-> > > Em Mon, 8 Feb 2021 12:41:42 +0100 Jacopo Mondi escreveu:
-> > >   
-> > > > > > If you do, instead:
-> > > > > >
-> > > > > >     if VIDEO_V4L2 && I2C
-> > > > > > 	config VIDEO_MAX9271_SERIALIZER
-> > > > > > 		tristate
-> > > > > >
-> > > > > > 	config VIDEO_RDACM20
-> > > > > > 		select VIDEO_MAX9271_SERIALIZER
-> > > > > > 		...
-> > > > > >
-> > > > > > 	config VIDEO_RDACM21
-> > > > > > 		select VIDEO_MAX9271_SERIALIZER
-> > > > > > 		...
-> > > > > >     endif
-> > > > > >
-> > > > > > Then you also won't need:
-> > > > > > 	depends on VIDEO_MAX9271_SERIALIZER || !VIDEO_MAX9271_SERIALIZER
-> > > > > >
-> > > > > > As select should do the right thing in this case, ensuring that MAX9271
-> > > > > > will be builtin either if RDACM20 or RDACM21 is builtin.    
-> > > > >
-> > > > > I also vote for usage of "select".
-> > > > >    
+> > Hi Mauro,
+> > 
+> > Thanks for the review.
+> > 
+> > On Sat, Feb 06, 2021 at 09:15:46AM +0100, Mauro Carvalho Chehab wrote:
+> > > Em Tue,  2 Feb 2021 15:56:09 +0200
+> > > Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
+> > >   
+> > > > From: Ezequiel Garcia <ezequiel@collabora.com>
 > > > > 
-> > > > I would prefer that too, I was concerned about possible un-met
-> > > > dependencies, as Sakari pointed out, but the current situation is no
-> > > > better, as the only Kconfig symbols where those can be listed are the
-> > > > camera modules one.  
+> > > > Most -if not all- use-cases are expected to be covered by one of:
+> > > > v4l2_async_notifier_add_fwnode_subdev,
+> > > > v4l2_async_notifier_add_fwnode_remote_subdev or
+> > > > v4l2_async_notifier_add_i2c_subdev.  
 > > > 
-> > > Works for me. I'll make a patch for it.  
+> > > Actually, all cases outside V4L2 core:
+> > > 
+> > > $ git grep v4l2_async_notifier_add_subdev
+> > > Documentation/driver-api/media/v4l2-subdev.rst:using the :c:func:`v4l2_async_notifier_add_subdev` call. This function
+> > > drivers/media/v4l2-core/v4l2-async.c:int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
+> > > drivers/media/v4l2-core/v4l2-async.c:EXPORT_SYMBOL_GPL(v4l2_async_notifier_add_subdev);
+> > > drivers/media/v4l2-core/v4l2-async.c:   ret = v4l2_async_notifier_add_subdev(notifier, asd);
+> > > drivers/media/v4l2-core/v4l2-async.c:   ret = v4l2_async_notifier_add_subdev(notifier, asd);
+> > > drivers/media/v4l2-core/v4l2-fwnode.c:  ret = v4l2_async_notifier_add_subdev(notifier, asd);
+> > > include/media/v4l2-async.h: * before the first call to @v4l2_async_notifier_add_subdev.
+> > > include/media/v4l2-async.h: * v4l2_async_notifier_add_subdev - Add an async subdev to the
+> > > include/media/v4l2-async.h:int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
+> > > include/media/v4l2-async.h: * @v4l2_async_notifier_add_subdev,
+> > > 
+> > >   
+> > > > 
+> > > > We'd like to discourage drivers from using v4l2_async_notifier_add_subdev,
+> > > > so rename it as __v4l2_async_notifier_add_subdev. This is
+> > > > typically a good hint for drivers to avoid using the function.  
+> > > 
+> > > IMO, the best here would be to create a header file:
+> > > 
+> > >         drivers/media/v4l2-core/v4l2-async-priv.h
+> > > 
+> > > and move v4l2_async_notifier_add_subdev from include/media/v4l2-async.h.
+> > > 
+> > > This will warrant that only the V4L2 core would have access to it.
+> > > Also, it is a lot better than adding something like this:  
 > > 
-> > Hmm... after taking a deeper look at the rcma20 drivers, and on its
-> > Kconfig help text:
+> > It'd be the first header in the directory. I suppose there are other
+> > functions that could have the prototype there.
 > > 
-> > 	config VIDEO_RDACM20
-> > 		tristate "IMI RDACM20 camera support"
-> > 		select V4L2_FWNODE
-> > 		select VIDEO_V4L2_SUBDEV_API
-> > 		select MEDIA_CONTROLLER
-> > 		help
-> > 		  This driver supports the IMI RDACM20 GMSL camera, used in
-> > 		  ADAS systems.
+> > I'll still see if there could be other options for this.
 > > 
-> > 		  This camera should be used in conjunction with a GMSL
-> > 		  deserialiser such as the MAX9286.
-> > 
-> > I'm starting to suspect that there's something very wrong here...
-> > 
-> > The help text mentions the MAX9286 driver, which is a complete
-> > driver, and not MAX9271, which seems to implement a set of PHY functions
-> > needed by those drivers, and which lacks a proper I2C binding code on it.
-> > 
-> > The I2C binding code is, instead, inside RDACM20 and RDACM21:
-> > 
-> > 	static int rdacm21_initialize(struct rdacm21_device *dev)
-> > 	{
-> > 		int ret;
-> > 
-> > 		/* Verify communication with the MAX9271: ping to wakeup. */
-> > 		dev->serializer.client->addr = MAX9271_DEFAULT_ADDR;
-> > 		i2c_smbus_read_byte(dev->serializer.client);
-> > 		usleep_range(3000, 5000);
-> > 
-> > 		/* Enable reverse channel and disable the serial link. */
-> > 		ret = max9271_set_serial_link(&dev->serializer, false);
-> > 		if (ret)
-> > 			return ret;
-> > 
-> > 		/* Configure I2C bus at 105Kbps speed and configure GMSL. */
-> > 		ret = max9271_configure_i2c(&dev->serializer,
-> > 					    MAX9271_I2CSLVSH_469NS_234NS |
-> > 					    MAX9271_I2CSLVTO_1024US |
-> > 					    MAX9271_I2CMSTBT_105KBPS);
-> > 
-> > 		/* Several other max9271-specific init code */
-> > 
-> > 		ret = ov490_initialize(dev);
-> > 		if (ret)
-> > 			return ret;
-> > 
-> > And, at max9271 "driver", there's just a bunch of exported functions.
-> > 
-> > This is all wrong.
-> > 
-> > I'm seriously considering to move all those 3 drivers to staging,
-> > while they're not fixed to use a proper I2C binding mechanism.  
+> > The topic of split into modules of v4l2-async and v4l2-fwnode was also
+> > discussed recently, and it's obviously related to this. The two are
+> > virtually always used together and so would make sense to be in the same
+> > module. In practice this would mean moving v4l2-async out of videodev2. The
+> > module wouldn't be large but the vast majority of regular laptop and
+> > desktop PC users are having this in memory needlessly.
 > 
-> They can't. The RDACM20 and RDACM21 are GMSL cameras, that are
-> internally made of a GMSL serializer (MAX9271 in both cases) and a
-> camera sensor (OV10625 for the RDACM20, OV10640 + OV490 ISP for the
-> RDAMC21). The sensor and serializer are tightly couple, so much so that
-> in the RDACM20, there's a microcontroller that configures both when
-> power is applied. In the RDACM21, the OV490 firmware has a similar role.
-> Due to the tight coupling and the presense of a device-specific
-> microcontroller, the cameras need to be handled as a whole, we can't
-> have one driver for the sensor and one driver for the serializer that
-> would work in isolation and be controlled separately from userspace. The
-> MAX9271, however, still needs to be configured from the host, and we've
-> thus moved common code to a common file instead of duplicating it.
+> IMO, splitting kAPI headers from v4l-core internal usage is a good
+> idea for the things that should be used only inside the core.
+> 
+> The RC core has one such header:
+> 
+>         drivers/media/rc/rc-core-priv.h
+> 
+> Several DVB frontend and tuner drivers also have things like that.
+> 
 
-I'm not saying that max9271 should expose a media-controller (or any
-other interface) to the userspace. It is perfectly fine to have the 
-RDACM20 and RDACM21 drivers fully controlling it. There are *lots of* 
-other media drivers that are implemented using multiple separate I2C
-chips. Several of them have internally micro-controller(s) that may
-control some I2C devices.
+This solution looks like the way to go. Thanks for bringing it up.
 
-There are even some DVB designs where there is a microcontroller
-(usually cypress) that it is connected to different I2C chips.
-
-For instance, 23 of them use a Cypress microcontroller:
-
-	$ git grep -li cypress drivers/media/|grep .c$|wc -l
-	23
-
-The problem here is that the max9271 probing code is at the wrong
-place. It belongs to max9271 driver, and should not be outside
-it.
+Specifically for v4l2-async, we were considering reorganizing the
+code, perhaps removing the need for a private/core API.
+We'll see how that goes.
 
 Thanks,
-Mauro
+Ezequiel
+
