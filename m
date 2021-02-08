@@ -5,32 +5,32 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 371DDC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B56B2C433E9
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:04:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E232B64EB6
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:01:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84CFA64E7D
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:04:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbhBHSAZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 13:00:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46608 "EHLO mail.kernel.org"
+        id S235198AbhBHSDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 13:03:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46602 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235139AbhBHR7r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:59:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE2B664EC6;
-        Mon,  8 Feb 2021 17:58:24 +0000 (UTC)
+        id S235255AbhBHSAW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Feb 2021 13:00:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F0FBA64EB7;
+        Mon,  8 Feb 2021 17:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612807105;
-        bh=Ft3y2cLhvPeVJQjkVPy7g6U6CuC59Gkyu2Hc4IHrVII=;
+        s=k20201202; t=1612807109;
+        bh=fZ0q/Z5Lh3LPbA+cPQP/1TqciNmcQO72beAeGZG/7fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iLL2rT37ISD+WSmUU/0KprA4MHeGxckp+cvjbu88UCXzRYx1fq1J+CyMPdfjLZQYA
-         hUTE+W1GoeQQPJW3BL+Q8i4q/ACTfXX5JvFXU/baAYIUnOQGhBZVKj1uXJsEe3vxX0
-         9iv3BUR7qGEtHy/BeENibVpYrlbg3iR9YRH6kres811QetnG5yKZiWYnUvvPh91k/c
-         CynAAGDQ8NscXHgEoaenaqyUmws7LYlckZOjuQuhu9LShuA3ZHnUbEx3sc0tFfuV+D
-         rDpo+spvvxEuxpFpVQuP/cbTf5EeUWNqrlSt2MzB1WiISu9V36fTi1FKoK52Fwxi3s
-         bH7ChHgf1YhJQ==
+        b=diVMDA2rm+01grMPXMSUp9vyWtJgF5b47eoDPgXt907fVqHKWGhPE1tRNCGxUi1jB
+         0Hix7BnbuAWL8Nlq8DIRl7MbkuZ5DVcfLTcZrgm7soXX1I0TkFdojZ4Sw0VPzYdn1b
+         hRJIlz8PpnHU9EAJlr6L5WxvWspPdhy6G86jpY5oOCfPAH7LF2yTBA1CO+z780XAy/
+         obfbIxyqQ8ux7MUKuyt2g4kZiGHSzwbTPYj19a58RDMKhfeYd2WvCuQBm//WgGJM9F
+         Db62m8X5Tggvx00nth2/NUg7FFf5JF71uCQfrHUaqiv1QKt64KYrU0z97PW8nR/H9A
+         Zo8LgWlNDK3Yw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
@@ -39,9 +39,9 @@ Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.10 14/36] media: rkisp1: uapi: change hist_bins array type from __u16 to __u32
-Date:   Mon,  8 Feb 2021 12:57:44 -0500
-Message-Id: <20210208175806.2091668-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 16/36] media: rkisp1: stats: mask the hist_bins values
+Date:   Mon,  8 Feb 2021 12:57:46 -0500
+Message-Id: <20210208175806.2091668-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210208175806.2091668-1-sashal@kernel.org>
 References: <20210208175806.2091668-1-sashal@kernel.org>
@@ -55,11 +55,10 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-[ Upstream commit 31f190e0ccac8b75d33fdc95a797c526cf9b149e ]
+[ Upstream commit a802a0430b863f03bc01aaea2d2bf6ff464f03e7 ]
 
-Each entry in the array is a 20 bits value composed of 16 bits unsigned
-integer and 4 bits fractional part. So the type should change to __u32.
-In addition add a documentation of how the measurements are done.
+hist_bins is an array of type __u32. Each entry represents
+a 20 bit value. So mask out the unused bits.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Acked-by: Helen Koike <helen.koike@collabora.com>
@@ -67,36 +66,41 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/staging/media/rkisp1/rkisp1-regs.h  | 1 +
+ drivers/staging/media/rkisp1/rkisp1-stats.c | 8 +++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-index 432cb6be55b47..c19fe059c2442 100644
---- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-+++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-@@ -848,13 +848,18 @@ struct rkisp1_cif_isp_af_stat {
- /**
-  * struct rkisp1_cif_isp_hist_stat - statistics histogram data
-  *
-- * @hist_bins: measured bin counters
-+ * @hist_bins: measured bin counters. Each bin is a 20 bits unsigned fixed point
-+ *	       type. Bits 0-4 are the fractional part and bits 5-19 are the
-+ *	       integer part.
-  *
-- * Measurement window divided into 25 sub-windows, set
-- * with ISP_HIST_XXX
-+ * The window of the measurements area is divided to 5x5 sub-windows. The
-+ * histogram is then computed for each sub-window independently and the final
-+ * result is a weighted average of the histogram measurements on all
-+ * sub-windows. The window of the measurements area and the weight of each
-+ * sub-window are configurable using struct @rkisp1_cif_isp_hst_config.
-  */
- struct rkisp1_cif_isp_hist_stat {
--	__u16 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
-+	__u32 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
- };
+diff --git a/drivers/staging/media/rkisp1/rkisp1-regs.h b/drivers/staging/media/rkisp1/rkisp1-regs.h
+index 049f6c3a11df5..5819e58b2e557 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-regs.h
++++ b/drivers/staging/media/rkisp1/rkisp1-regs.h
+@@ -365,6 +365,7 @@
+ #define RKISP1_CIF_ISP_MAX_HIST_PREDIVIDER		0x0000007F
+ #define RKISP1_CIF_ISP_HIST_ROW_NUM			5
+ #define RKISP1_CIF_ISP_HIST_COLUMN_NUM			5
++#define RKISP1_CIF_ISP_HIST_GET_BIN(x)			((x) & 0x000FFFFF)
  
- /**
+ /* AUTO FOCUS MEASUREMENT:  ISP_AFM_CTRL */
+ #define RKISP1_ISP_AFM_CTRL_ENABLE			BIT(0)
+diff --git a/drivers/staging/media/rkisp1/rkisp1-stats.c b/drivers/staging/media/rkisp1/rkisp1-stats.c
+index 8fdf646c4b75b..e52ba9b154e90 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-stats.c
++++ b/drivers/staging/media/rkisp1/rkisp1-stats.c
+@@ -251,9 +251,11 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
+ 	unsigned int i;
+ 
+ 	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
+-	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
+-		pbuf->params.hist.hist_bins[i] =
+-			rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
++	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++) {
++		u32 reg_val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
++
++		pbuf->params.hist.hist_bins[i] = RKISP1_CIF_ISP_HIST_GET_BIN(reg_val);
++	}
+ }
+ 
+ static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
 -- 
 2.27.0
 
