@@ -2,156 +2,145 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E90C433DB
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 21:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 102BEC433DB
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 22:28:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53E6964E50
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 21:07:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF15964EA4
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 22:28:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbhBHVHR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 16:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbhBHVGu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Feb 2021 16:06:50 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3A8C061786
-        for <linux-media@vger.kernel.org>; Mon,  8 Feb 2021 13:06:10 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id l19so4649576oih.6
-        for <linux-media@vger.kernel.org>; Mon, 08 Feb 2021 13:06:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vQz50O/ktJ04W7QSg0aQ+K5LizhyaY13N/jjRfnL8MQ=;
-        b=VrgGYFARM6Ani9Qes+VGPFt+MtqItSmYYxUeYwlIhRCQqMDqT5A5dW9uoAuc4n4Lmb
-         HOzyq4tL31RhQQ2JNHlodj/G4uJ9HJyq5nE93+DiaCDyo79ticWaFtY/q5J/LQvrS8Qq
-         tWCIL98eTNQBCIg5qB9ZFRe7q0paeE3NdXwbM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vQz50O/ktJ04W7QSg0aQ+K5LizhyaY13N/jjRfnL8MQ=;
-        b=dAfbI6x/6aIrncCg17beTZG92n1PB3C6/t3FrWbzUpIdCnSAO0A2izISeoGbRGDh5L
-         d3lTVfaA2qxQ00lTiCexIjFknsGP/+ITqH8vy2up3bAGLD4wYMK1rYsuHYTZfP+rNANN
-         dB09RMEvd+J8i/kI7uinodJoCiNv/LlBX6S4dxMnxHxBW2Z5mF+sne+bKUtO/LMNqBBt
-         n6spv1ByxL9v5D4BwwBeewhrc1ujgN9+uWhBvc4xKk5J8xAdwX5ME/9AKk/9uFcfCuuj
-         fMDYdxHVUqQS/jljk2hf0VjVh1IGuTAnSQUbJ9UXw4qt1oh4hjygFtEsNAhABnloaVox
-         fhGw==
-X-Gm-Message-State: AOAM531EElcI4D3wpmWeO+O3vtiEmXx5rxWKaMNEz4x/etAoSqo+dar1
-        wxtagdbk6TIQTYIiG5KT3gF5ohChw1sh9JBS7axffw==
-X-Google-Smtp-Source: ABdhPJxXb5B/81zAt68xBP4U4swR34xTMrllQbQD2cTBMCEgDgID6RHPJmVY8X+xFjUiEHTQz30hepiShmiZprp8dv8=
-X-Received: by 2002:aca:1906:: with SMTP id l6mr410002oii.101.1612818369680;
- Mon, 08 Feb 2021 13:06:09 -0800 (PST)
+        id S231991AbhBHW16 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 17:27:58 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:41356 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231778AbhBHW1m (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Feb 2021 17:27:42 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 926B83D7;
+        Mon,  8 Feb 2021 23:26:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1612823217;
+        bh=QWPBe4b7t4Qbl86pG4P2aQknuZ5To8weamOYJFtaBtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MGftqJw9+hRrW4HfNMhrrm27f4easyhCtFUccLY52O6QHLBKqOubZX7bDVY5UHVyz
+         QkBx4sj5bB5JzBhQBzEvAFAs4gZlaNdWDY3tGHft/i/r8fg/wc+RnsIIO4Q2tnkp6f
+         8qN0y5o7Xwq+jjf1xPl/lb9NgQ3JurR4PgbLVuqc=
+Date:   Tue, 9 Feb 2021 00:26:33 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
+Message-ID: <YCG6mV9v+KXT7K+W@pendragon.ideasonboard.com>
+References: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
+ <20210208202147.GZ32460@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-References: <20210206054748.378300-1-john.stultz@linaro.org>
- <20210206054748.378300-2-john.stultz@linaro.org> <YCENrGofdwVg2LMe@phenom.ffwll.local>
- <CALAqxLV2Sikxnr3-k94nqcF5vz+jsekhhUrmXEKkwzwwu4up8g@mail.gmail.com>
-In-Reply-To: <CALAqxLV2Sikxnr3-k94nqcF5vz+jsekhhUrmXEKkwzwwu4up8g@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 8 Feb 2021 22:05:58 +0100
-Message-ID: <CAKMK7uECMOO5jx4433uDuMq=MBaBEYaLe6ysrT_pshrr6Bf9dA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 2/2] dma-buf: heaps: Fix the name used when exporting
- dmabufs to be the actual heap name
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210208202147.GZ32460@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 9:51 PM John Stultz <john.stultz@linaro.org> wrote:
-> On Mon, Feb 8, 2021 at 2:08 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > On Sat, Feb 06, 2021 at 05:47:48AM +0000, John Stultz wrote:
-> > > By default dma_buf_export() sets the exporter name to be
-> > > KBUILD_MODNAME. Unfortunately this may not be identical to the
-> > > string used as the heap name (ie: "system" vs "system_heap").
-> > >
-> > > This can cause some minor confusion with tooling, and there is
-> > > the future potential where multiple heap types may be exported
-> > > by the same module (but would all have the same name).
-> > >
-> > > So to avoid all this, set the exporter exp_name to the heap name.
-> > >
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > > Cc: Liam Mark <lmark@codeaurora.org>
-> > > Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
-> > > Cc: Laura Abbott <labbott@kernel.org>
-> > > Cc: Brian Starkey <Brian.Starkey@arm.com>
-> > > Cc: Hridya Valsaraju <hridya@google.com>
-> > > Cc: Suren Baghdasaryan <surenb@google.com>
-> > > Cc: Sandeep Patil <sspatil@google.com>
-> > > Cc: Daniel Mentz <danielmentz@google.com>
-> > > Cc: =C3=98rjan Eide <orjan.eide@arm.com>
-> > > Cc: Robin Murphy <robin.murphy@arm.com>
-> > > Cc: Ezequiel Garcia <ezequiel@collabora.com>
-> > > Cc: Simon Ser <contact@emersion.fr>
-> > > Cc: James Jones <jajones@nvidia.com>
-> > > Cc: linux-media@vger.kernel.org
-> > > Cc: dri-devel@lists.freedesktop.org
-> > > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> >
-> > Looks reasonable to me.
-> >
-> > I guess the main worry is "does this mean heap names become uapi", in
-> > which case I'm maybe not so sure anymore how this will tie into the
-> > overall gpu memory accounting story.
-> >
-> > Since for dma-buf heaps one name per buffer is perfectly fine, since
-> > dma-buf heaps aren't very dynamic. But on discrete gpu drivers buffers
-> > move, so baking in the assumption that "exporter name =3D resource usag=
-e for
-> > this buffer" is broken.
->
-> I suspect I'm missing a subtlety in what you're describing. My sense
-> of the exporter name doesn't account for a buffer's usage, it just
-> describes what code allocated it and implicitly which dmabuf_ops
-> handles it.  Maybe could you give a more specific example of what
-> you're hoping to avoid?
+Hi Sakari and Jacopo,
 
-Just paranoia really - on the linux side where we allocate most
-buffers (even shared ones) with the driver, that allocator info isn't
-that meaningful, it really just tells you which code
-allocated/exported that dma-buf.
+On Mon, Feb 08, 2021 at 10:21:47PM +0200, Sakari Ailus wrote:
+> On Mon, Feb 08, 2021 at 07:20:06PM +0100, Jacopo Mondi wrote:
+> > With the introduction of the RDACM21 camera module support in
+> > commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+> > the symbols defined by the max9271 library were exported twice
+> > if multiple users of the library were compiled in at the same time.
+> > 
+> > In example:
+> > WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
+> > 'max9271_set_serial_link' exported twice. Previous export was in
+> > drivers/media/i2c/rdacm20-camera_module.ko
+> > 
+> > Fix this by making the rdacm21 file a module and have the driver
+> > using its functions select it.
+> > 
+> > Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > ---
+> >  drivers/media/i2c/Kconfig  | 5 +++++
+> >  drivers/media/i2c/Makefile | 7 +++----
+> >  2 files changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> > index 2d3dc0d82f9e..84645f751da3 100644
+> > --- a/drivers/media/i2c/Kconfig
+> > +++ b/drivers/media/i2c/Kconfig
+> > @@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
+> > 
+> >  source "drivers/media/i2c/m5mols/Kconfig"
+> > 
+> > +config VIDEO_MAX9271
+> 
+> How about calling this VIDEO_MAX9271_HELPER instead? It's not a driver in
+> the proper sense of the word.
 
-But on Android, where all shared buffers come from specific heaps, it
-is rather meaningful information. So I wondered whether e.g. the
-android dmabuf debug tool uses that to collect per-heap stats, but
-sounds like no right now. Plus with the chat we've had I think we have
-a long-term plan for how to expose that information properly.
+Not all Kconfig symbols refer to drivers. Should we rename V4L2_FWNODE
+to V4L2_FWNODE_HELPER ? :-)
 
-> To me this patch is mostly just a consistency/least-surprise thing, so
-> the heaps exporter name matches the string used for the heap's chardev
-> device (the interface used to allocate it) in output like
-> debugfs/dma_buf/bufinfo.
+Of course the MAX9271 name may lead someone to believe that the symbol
+refers to a driver. If you think we should really make this explicit,
+I'd have a preference for LIB instead of HELPER.
 
-Yeah for debug this makes sense. a-b: me if you want that somewhere on
-the patches.
--Daniel
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Either way,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> 
+> > +	tristate
+> > +
+> >  config VIDEO_RDACM20
+> >  	tristate "IMI RDACM20 camera support"
+> >  	depends on I2C
+> >  	select V4L2_FWNODE
+> >  	select VIDEO_V4L2_SUBDEV_API
+> >  	select MEDIA_CONTROLLER
+> > +	select VIDEO_MAX9271
+> >  	help
+> >  	  This driver supports the IMI RDACM20 GMSL camera, used in
+> >  	  ADAS systems.
+> > @@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
+> >  	select V4L2_FWNODE
+> >  	select VIDEO_V4L2_SUBDEV_API
+> >  	select MEDIA_CONTROLLER
+> > +	select VIDEO_MAX9271
+> >  	help
+> >  	  This driver supports the IMI RDACM21 GMSL camera, used in
+> >  	  ADAS systems.
+> > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> > index 6bd22d63e1a7..c34a7de3158b 100644
+> > --- a/drivers/media/i2c/Makefile
+> > +++ b/drivers/media/i2c/Makefile
+> > @@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
+> >  obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
+> >  obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+> >  obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
+> > -rdacm20-camera_module-objs	:= rdacm20.o max9271.o
+> > -obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
+> > -rdacm21-camera_module-objs	:= rdacm21.o max9271.o
+> > -obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
+> > +obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
+> > +obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
+> > +obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
+> >  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+> > 
+> >  obj-$(CONFIG_SDR_MAX2175) += max2175.o
+
+-- 
+Regards,
+
+Laurent Pinchart
