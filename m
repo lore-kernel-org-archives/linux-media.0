@@ -2,38 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.0 required=3.0 tests=BAYES_50,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A2F5C433E9
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 17:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9A6CC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:00:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3F1364E88
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 17:46:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8274B64EBA
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:00:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbhBHRpx convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 12:45:53 -0500
-Received: from [45.145.185.74] ([45.145.185.74]:59489 "EHLO willseal.com"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234449AbhBHRn4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:43:56 -0500
-X-Greylist: delayed 12067 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Feb 2021 12:43:52 EST
-Reply-To: brianiske@willseal.com
-From:   Bitcoin Guru <brianiske@willseal.com>
-To:     linux-media@vger.kernel.org
-Subject: Bitcoin Investment
-Date:   08 Feb 2021 09:42:43 -0800
-Message-ID: <20210208094243.A3A3945071129FFB@willseal.com>
+        id S235246AbhBHSAQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 13:00:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235140AbhBHR7p (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Feb 2021 12:59:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B64364EBA;
+        Mon,  8 Feb 2021 17:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612807107;
+        bh=x0WINOM8wqLpK+VRogvrxA6ZgYuqhW5zPtLG29kuWMM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aMN/fwBa9tPaQqN0X1QjiTo7PHMOfB+2gF2vxmTICkA7/SkwoAYyPAhGDBQ13xyM/
+         4PlhcGlKncVXLR7XkW1KIXXTI9T/dCWCd+vmfW64tkkgiH12GOmOt6C8rhwVch6QPI
+         dGxKsbmdQm+hy0z089oGw6pgECapsY3cPWojQspKCKwuCW5YrH8MCbVCruj+OFotts
+         DyuJsIWKnYa6CDejpBXrERPfFNYruDVCpkbbkeRFRchNX8MOxwyTWUqSTv1L+FzTVQ
+         BURXXlKdCWHaDZkjIukdcjjLqHx6Sy4KxGxVrPqfqpfV5FyPQo7SMGNVP9xDtKIdEp
+         L1i4fOJsQui5A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.10 15/36] media: rkisp1: stats: remove a wrong cast to u8
+Date:   Mon,  8 Feb 2021 12:57:45 -0500
+Message-Id: <20210208175806.2091668-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210208175806.2091668-1-sashal@kernel.org>
+References: <20210208175806.2091668-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Do you want 20% Daily Profit ?
-You can invest in Bitcoin now
-Kindly give me your response 
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+
+[ Upstream commit a76f8dc8be471028540df24749e99a3ec0ac7c94 ]
+
+hist_bins is an array of type __u32. Each entry represent
+a 20 bit fixed point value as documented inline.
+The cast to u8 when setting the values is wrong. Remove it.
+
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/staging/media/rkisp1/rkisp1-stats.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/staging/media/rkisp1/rkisp1-stats.c b/drivers/staging/media/rkisp1/rkisp1-stats.c
+index 51c64f75fe29a..8fdf646c4b75b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-stats.c
++++ b/drivers/staging/media/rkisp1/rkisp1-stats.c
+@@ -253,8 +253,7 @@ static void rkisp1_stats_get_hst_meas(struct rkisp1_stats *stats,
+ 	pbuf->meas_type |= RKISP1_CIF_ISP_STAT_HIST;
+ 	for (i = 0; i < RKISP1_CIF_ISP_HIST_BIN_N_MAX; i++)
+ 		pbuf->params.hist.hist_bins[i] =
+-			(u8)rkisp1_read(rkisp1,
+-					RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
++			rkisp1_read(rkisp1, RKISP1_CIF_ISP_HIST_BIN_0 + i * 4);
+ }
+ 
+ static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
+-- 
+2.27.0
+
