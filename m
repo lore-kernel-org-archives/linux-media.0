@@ -5,111 +5,214 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A05C433E9
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EAA4C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:11:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBE2364E88
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 18:22:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E50964DBD
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbhBHSWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 13:22:07 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:58371 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235544AbhBHSU4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Feb 2021 13:20:56 -0500
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2AFF8200008;
-        Mon,  8 Feb 2021 18:19:53 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
-Date:   Mon,  8 Feb 2021 19:20:06 +0100
-Message-Id: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.30.0
+        id S236694AbhBHULQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 15:11:16 -0500
+Received: from retiisi.eu ([95.216.213.190]:57136 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236674AbhBHUKw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Feb 2021 15:10:52 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id EE691634C8C;
+        Mon,  8 Feb 2021 22:08:33 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-media@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH v6 2/3] v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+Date:   Mon,  8 Feb 2021 22:09:02 +0200
+Message-Id: <20210208200903.28084-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210208200903.28084-1-sakari.ailus@linux.intel.com>
+References: <20210208200903.28084-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the introduction of the RDACM21 camera module support in
-commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-the symbols defined by the max9271 library were exported twice
-if multiple users of the library were compiled in at the same time.
+Now that we can print FourCC codes directly using printk, make use of the
+feature in V4L2 core.
 
-In example:
-WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
-'max9271_set_serial_link' exported twice. Previous export was in
-drivers/media/i2c/rdacm20-camera_module.ko
-
-Fix this by making the rdacm21 file a module and have the driver
-using its functions select it.
-
-Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/Kconfig  | 5 +++++
- drivers/media/i2c/Makefile | 7 +++----
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ drivers/media/v4l2-core/v4l2-ioctl.c | 85 +++++++---------------------
+ 1 file changed, 21 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 2d3dc0d82f9e..84645f751da3 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
-
- source "drivers/media/i2c/m5mols/Kconfig"
-
-+config VIDEO_MAX9271
-+	tristate
-+
- config VIDEO_RDACM20
- 	tristate "IMI RDACM20 camera support"
- 	depends on I2C
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
-+	select VIDEO_MAX9271
- 	help
- 	  This driver supports the IMI RDACM20 GMSL camera, used in
- 	  ADAS systems.
-@@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
-+	select VIDEO_MAX9271
- 	help
- 	  This driver supports the IMI RDACM21 GMSL camera, used in
- 	  ADAS systems.
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 6bd22d63e1a7..c34a7de3158b 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
- obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
- obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
- obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
--rdacm20-camera_module-objs	:= rdacm20.o max9271.o
--obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
--rdacm21-camera_module-objs	:= rdacm21.o max9271.o
--obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
-+obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
-+obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
-+obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
---
-2.30.0
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 31d1342e61e8..31662c3a8c9e 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -265,13 +265,9 @@ static void v4l_print_fmtdesc(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_fmtdesc *p = arg;
+ 
+-	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%c%c%c%c, mbus_code=0x%04x, description='%.*s'\n",
++	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%p4cc, mbus_code=0x%04x, description='%.*s'\n",
+ 		p->index, prt_names(p->type, v4l2_type_names),
+-		p->flags, (p->pixelformat & 0xff),
+-		(p->pixelformat >>  8) & 0xff,
+-		(p->pixelformat >> 16) & 0xff,
+-		(p->pixelformat >> 24) & 0xff,
+-		p->mbus_code,
++		p->flags, &p->pixelformat, p->mbus_code,
+ 		(int)sizeof(p->description), p->description);
+ }
+ 
+@@ -293,12 +289,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+ 		pix = &p->fmt.pix;
+-		pr_cont(", width=%u, height=%u, pixelformat=%c%c%c%c, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+-			pix->width, pix->height,
+-			(pix->pixelformat & 0xff),
+-			(pix->pixelformat >>  8) & 0xff,
+-			(pix->pixelformat >> 16) & 0xff,
+-			(pix->pixelformat >> 24) & 0xff,
++		pr_cont(", width=%u, height=%u, pixelformat=%p4cc, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
++			pix->width, pix->height, &pix->pixelformat,
+ 			prt_names(pix->field, v4l2_field_names),
+ 			pix->bytesperline, pix->sizeimage,
+ 			pix->colorspace, pix->flags, pix->ycbcr_enc,
+@@ -307,12 +299,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+ 		mp = &p->fmt.pix_mp;
+-		pr_cont(", width=%u, height=%u, format=%c%c%c%c, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+-			mp->width, mp->height,
+-			(mp->pixelformat & 0xff),
+-			(mp->pixelformat >>  8) & 0xff,
+-			(mp->pixelformat >> 16) & 0xff,
+-			(mp->pixelformat >> 24) & 0xff,
++		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
++			mp->width, mp->height, &mp->pixelformat,
+ 			prt_names(mp->field, v4l2_field_names),
+ 			mp->colorspace, mp->num_planes, mp->flags,
+ 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+@@ -337,13 +325,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VBI_CAPTURE:
+ 	case V4L2_BUF_TYPE_VBI_OUTPUT:
+ 		vbi = &p->fmt.vbi;
+-		pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%c%c%c%c, start=%u,%u, count=%u,%u\n",
++		pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%p4cc, start=%u,%u, count=%u,%u\n",
+ 			vbi->sampling_rate, vbi->offset,
+-			vbi->samples_per_line,
+-			(vbi->sample_format & 0xff),
+-			(vbi->sample_format >>  8) & 0xff,
+-			(vbi->sample_format >> 16) & 0xff,
+-			(vbi->sample_format >> 24) & 0xff,
++			vbi->samples_per_line, &vbi->sample_format,
+ 			vbi->start[0], vbi->start[1],
+ 			vbi->count[0], vbi->count[1]);
+ 		break;
+@@ -360,21 +344,13 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_SDR_CAPTURE:
+ 	case V4L2_BUF_TYPE_SDR_OUTPUT:
+ 		sdr = &p->fmt.sdr;
+-		pr_cont(", pixelformat=%c%c%c%c\n",
+-			(sdr->pixelformat >>  0) & 0xff,
+-			(sdr->pixelformat >>  8) & 0xff,
+-			(sdr->pixelformat >> 16) & 0xff,
+-			(sdr->pixelformat >> 24) & 0xff);
++		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+ 		break;
+ 	case V4L2_BUF_TYPE_META_CAPTURE:
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		meta = &p->fmt.meta;
+-		pr_cont(", dataformat=%c%c%c%c, buffersize=%u\n",
+-			(meta->dataformat >>  0) & 0xff,
+-			(meta->dataformat >>  8) & 0xff,
+-			(meta->dataformat >> 16) & 0xff,
+-			(meta->dataformat >> 24) & 0xff,
+-			meta->buffersize);
++		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
++			&meta->dataformat, meta->buffersize);
+ 		break;
+ 	}
+ }
+@@ -383,15 +359,10 @@ static void v4l_print_framebuffer(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_framebuffer *p = arg;
+ 
+-	pr_cont("capability=0x%x, flags=0x%x, base=0x%p, width=%u, height=%u, pixelformat=%c%c%c%c, bytesperline=%u, sizeimage=%u, colorspace=%d\n",
+-			p->capability, p->flags, p->base,
+-			p->fmt.width, p->fmt.height,
+-			(p->fmt.pixelformat & 0xff),
+-			(p->fmt.pixelformat >>  8) & 0xff,
+-			(p->fmt.pixelformat >> 16) & 0xff,
+-			(p->fmt.pixelformat >> 24) & 0xff,
+-			p->fmt.bytesperline, p->fmt.sizeimage,
+-			p->fmt.colorspace);
++	pr_cont("capability=0x%x, flags=0x%x, base=0x%p, width=%u, height=%u, pixelformat=%p4cc, bytesperline=%u, sizeimage=%u, colorspace=%d\n",
++		p->capability, p->flags, p->base, p->fmt.width, p->fmt.height,
++		&p->fmt.pixelformat, p->fmt.bytesperline, p->fmt.sizeimage,
++		p->fmt.colorspace);
+ }
+ 
+ static void v4l_print_buftype(const void *arg, bool write_only)
+@@ -761,13 +732,8 @@ static void v4l_print_frmsizeenum(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_frmsizeenum *p = arg;
+ 
+-	pr_cont("index=%u, pixelformat=%c%c%c%c, type=%u",
+-			p->index,
+-			(p->pixel_format & 0xff),
+-			(p->pixel_format >>  8) & 0xff,
+-			(p->pixel_format >> 16) & 0xff,
+-			(p->pixel_format >> 24) & 0xff,
+-			p->type);
++	pr_cont("index=%u, pixelformat=%p4cc, type=%u",
++		p->index, &p->pixel_format, p->type);
+ 	switch (p->type) {
+ 	case V4L2_FRMSIZE_TYPE_DISCRETE:
+ 		pr_cont(", wxh=%ux%u\n",
+@@ -793,13 +759,8 @@ static void v4l_print_frmivalenum(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_frmivalenum *p = arg;
+ 
+-	pr_cont("index=%u, pixelformat=%c%c%c%c, wxh=%ux%u, type=%u",
+-			p->index,
+-			(p->pixel_format & 0xff),
+-			(p->pixel_format >>  8) & 0xff,
+-			(p->pixel_format >> 16) & 0xff,
+-			(p->pixel_format >> 24) & 0xff,
+-			p->width, p->height, p->type);
++	pr_cont("index=%u, pixelformat=%p4cc, wxh=%ux%u, type=%u",
++		p->index, &p->pixel_format, p->width, p->height, p->type);
+ 	switch (p->type) {
+ 	case V4L2_FRMIVAL_TYPE_DISCRETE:
+ 		pr_cont(", fps=%d/%d\n",
+@@ -1459,12 +1420,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 				return;
+ 			WARN(1, "Unknown pixelformat 0x%08x\n", fmt->pixelformat);
+ 			flags = 0;
+-			snprintf(fmt->description, sz, "%c%c%c%c%s",
+-					(char)(fmt->pixelformat & 0x7f),
+-					(char)((fmt->pixelformat >> 8) & 0x7f),
+-					(char)((fmt->pixelformat >> 16) & 0x7f),
+-					(char)((fmt->pixelformat >> 24) & 0x7f),
+-					(fmt->pixelformat & (1UL << 31)) ? "-BE" : "");
++			snprintf(fmt->description, sz, "%p4cc",
++				 &fmt->pixelformat);
+ 			break;
+ 		}
+ 	}
+-- 
+2.29.2
 
