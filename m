@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3191C433DB
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B780BC433DB
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:12:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A05F64E5D
-	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:11:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78E4A64DBD
+	for <linux-media@archiver.kernel.org>; Mon,  8 Feb 2021 20:12:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbhBHULZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Feb 2021 15:11:25 -0500
-Received: from retiisi.eu ([95.216.213.190]:57072 "EHLO hillosipuli.retiisi.eu"
+        id S236671AbhBHULi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Feb 2021 15:11:38 -0500
+Received: from retiisi.eu ([95.216.213.190]:57162 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235241AbhBHUKw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S236676AbhBHUKw (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 8 Feb 2021 15:10:52 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B3728634C87;
-        Mon,  8 Feb 2021 22:08:33 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0F4AA634C8D;
+        Mon,  8 Feb 2021 22:08:34 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-media@vger.kernel.org,
@@ -35,56 +35,66 @@ Cc:     linux-media@vger.kernel.org,
         Joe Perches <joe@perches.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH v6 0/3] Add %p4cc printk modifier for V4L2 and DRM fourcc codes
-Date:   Mon,  8 Feb 2021 22:09:00 +0200
-Message-Id: <20210208200903.28084-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 3/3] drm/fourcc: Switch to %p4cc format modifier
+Date:   Mon,  8 Feb 2021 22:09:03 +0200
+Message-Id: <20210208200903.28084-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210208200903.28084-1-sakari.ailus@linux.intel.com>
+References: <20210208200903.28084-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Instead of constructing the FourCC code manually, use the %p4cc printk
+modifier to print it. Also leave a message to avoid using this function.
 
-This set adds support for %p4cc printk modifier for printing V4L2 and DRM
-fourcc codes. The codes are cumbersome to print manually and by adding the
-modifier, this task is saved from the V4L2 and DRM frameworks as well as
-related drivers. DRM actually had it handled in a way (see 3rd patch) but
-the printk modifier makes printing the format easier even there. On V4L2
-side it saves quite a few lines of repeating different implementations of
-printing the 4cc codes.
+The next step would be to convert the users to use %p4cc directly instead
+and removing the function.
 
-Further work will include converting the V4L2 drivers doing the same, as
-well as converting DRM drivers from drm_get_format_name() to plain %p4cc.
-I left these out from this version since individual drivers are easier
-changed without dealing with multiple trees.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/gpu/drm/drm_fourcc.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-If DRM folks would prefer to convert drivers to %p4cc directly instead I
-have no problem dropping the 3rd patch. Nearly all uses in DRM are in
-printk family of functions that can readily use %p4cc instead of the
-current arrangement that relies on caller-allocated temporary buffer.
-
-Since v5:
-
-- Added V4L2 core conversion to %p4cc, as well as change the DRM
-  fourcc printing function to use %p4cc.
-
-- Add missing checkpatch.pl checks for %p4cc modifier.
-
-Sakari Ailus (3):
-  lib/vsprintf: Add support for printing V4L2 and DRM fourccs
-  v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
-  drm/fourcc: Switch to %p4cc format modifier
-
- Documentation/core-api/printk-formats.rst | 16 +++++
- drivers/gpu/drm/drm_fourcc.c              | 16 +----
- drivers/media/v4l2-core/v4l2-ioctl.c      | 85 ++++++-----------------
- lib/test_printf.c                         | 17 +++++
- lib/vsprintf.c                            | 51 ++++++++++++++
- scripts/checkpatch.pl                     |  6 +-
- 6 files changed, 112 insertions(+), 79 deletions(-)
-
+diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+index 03262472059c..4ff40f2f27c0 100644
+--- a/drivers/gpu/drm/drm_fourcc.c
++++ b/drivers/gpu/drm/drm_fourcc.c
+@@ -30,11 +30,6 @@
+ #include <drm/drm_device.h>
+ #include <drm/drm_fourcc.h>
+ 
+-static char printable_char(int c)
+-{
+-	return isascii(c) && isprint(c) ? c : '?';
+-}
+-
+ /**
+  * drm_mode_legacy_fb_format - compute drm fourcc code from legacy description
+  * @bpp: bits per pixels
+@@ -134,17 +129,12 @@ EXPORT_SYMBOL(drm_driver_legacy_fb_format);
+  * drm_get_format_name - fill a string with a drm fourcc format's name
+  * @format: format to compute name of
+  * @buf: caller-supplied buffer
++ *
++ * Please use %p4cc printk format modifier instead of this function.
+  */
+ const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf)
+ {
+-	snprintf(buf->str, sizeof(buf->str),
+-		 "%c%c%c%c %s-endian (0x%08x)",
+-		 printable_char(format & 0xff),
+-		 printable_char((format >> 8) & 0xff),
+-		 printable_char((format >> 16) & 0xff),
+-		 printable_char((format >> 24) & 0x7f),
+-		 format & DRM_FORMAT_BIG_ENDIAN ? "big" : "little",
+-		 format);
++	snprintf(buf->str, sizeof(buf->str), "%p4cc", &format);
+ 
+ 	return buf->str;
+ }
 -- 
 2.29.2
 
