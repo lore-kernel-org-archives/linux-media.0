@@ -2,155 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F7BC433DB
-	for <linux-media@archiver.kernel.org>; Tue,  9 Feb 2021 09:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D53C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  9 Feb 2021 09:52:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C894A64E9D
-	for <linux-media@archiver.kernel.org>; Tue,  9 Feb 2021 09:49:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B282764E88
+	for <linux-media@archiver.kernel.org>; Tue,  9 Feb 2021 09:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbhBIJtO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Feb 2021 04:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S230476AbhBIJwG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Feb 2021 04:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbhBIJrJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Feb 2021 04:47:09 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E34C0617A9
-        for <linux-media@vger.kernel.org>; Tue,  9 Feb 2021 01:46:28 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id u14so2806322wmq.4
-        for <linux-media@vger.kernel.org>; Tue, 09 Feb 2021 01:46:28 -0800 (PST)
+        with ESMTP id S230491AbhBIJuE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Feb 2021 04:50:04 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1442C06178A
+        for <linux-media@vger.kernel.org>; Tue,  9 Feb 2021 01:49:23 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id u14so2815920wmq.4
+        for <linux-media@vger.kernel.org>; Tue, 09 Feb 2021 01:49:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1MJqHrGnM0dQu0DigyaEySsKOikDfnTwALiwB12s0IA=;
-        b=sdkcqo0A9Izowz51J/Xl+MxE07qepu1wSn5rnIPp42yTTyJ7qzmmNeOWlam7RKWHEC
-         nl/TbLDmBiFb8Cdjjc6V5UWn2uSK3dbTi8af6JvRi2g6AgQGTbzoUF3UrRHAPvSYzruc
-         OjyC4lCRLth7+k5RxxPWNOxs4iANp+M7rJM9xhCty8UocfdC9VjYEgeIHW9CzH95suKc
-         j2zPZscmfLgMQ0xAbeuMYSUyBcq8L9qBXxldj99Ae5UfBuT+HpOb7E+d5uz/puXKCW5e
-         a0NnmLBPbD2dV+U0lxvJXs3MEaCERp8l0klwOZpBP7hc6p2Pfv4a7QWHhqGn+JK33hrE
-         pXAw==
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iODsYL577vtiTZcS5AXU5f62AD5nWHRXTaswzxJRGpE=;
+        b=JBX1u8nYfJ2D17HCZU3bF64mR3tXNePMMbkujQwPzUB4EHhq0FLPs5OOM92rDCpHBF
+         4O9xTvVsnstE1b4IgRWf/cN/5JU2cy+inHw8TS2/FNMZeJNBStL7jnJ8ZcPrtCFvxPG4
+         V/4KyzneELW/HpkZBFhB9trOu3KvpkoWlsMbt5tVgBOMJdCNMuB/45CFP7unHH4zy3N2
+         NFahaB6yHkIYKLQFa/wTYu0dpNn78LVyWqe8lOs5wsRRZj5Dw2+AdWS4zVBv+s35utmv
+         HQfK/sg06HSj9kgzRvVI2EWfBGQTkY4bQKv9rmjLvOp2dFbUsZ/6hGhjOZ1SksYp8P8F
+         /Blg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1MJqHrGnM0dQu0DigyaEySsKOikDfnTwALiwB12s0IA=;
-        b=adVxr0E+9o8TWpGGi0OtRm5gRnSJITtwhkxmevLtwC+iCia1Rx+nH7rQE0IH5vX+1C
-         viINhFKve8dr4fZEL5TUv/QN0XzAhOtSSllRKmjCObzWIvJC39Rc+1lgZBkIzfb8Dlqr
-         DHZQTPbWMlwpCnQir0RLcj+HnlMdW9C5ID7r9+9ndFJ4t+bj12BMMN+BhR16oWG/EGiH
-         Qe5zcBzpV+y+eSTapI1yz3LG0FB/9hcqTcIVxigFxm4Ty4zUIre13bJgRQJWcOMFHrqU
-         LcsS4ddylJa7J8CLkO3yC72fpi7wEE8ND0j3aHeuAgad89Ph7U3GcvclI1OQM6oFJvKz
-         Be4w==
-X-Gm-Message-State: AOAM532oBEjK+ZQvH1PtOYiRiPpi4+8Meu95g9V5iaKOV4GHLLsogRAB
-        3yZXkMP9kpj3bzuifx6SNmArlq5gO/69fuYA
-X-Google-Smtp-Source: ABdhPJyCFtPzgL4IocQjeap4megCyaapFbNH9N5yl0YRFY/K7tFIs00hzQli+R5XfFKveYfMDI7sjw==
-X-Received: by 2002:a1c:e90d:: with SMTP id q13mr2581018wmc.136.1612863982243;
-        Tue, 09 Feb 2021 01:46:22 -0800 (PST)
-Received: from localhost.localdomain (hst-221-63.medicom.bg. [84.238.221.63])
-        by smtp.gmail.com with ESMTPSA id u14sm1509627wro.10.2021.02.09.01.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 01:46:21 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 1/2] v4l2-ctrl: Add decoder conceal color control
-Date:   Tue,  9 Feb 2021 11:45:26 +0200
-Message-Id: <20210209094527.2173690-2-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210209094527.2173690-1-stanimir.varbanov@linaro.org>
-References: <20210209094527.2173690-1-stanimir.varbanov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iODsYL577vtiTZcS5AXU5f62AD5nWHRXTaswzxJRGpE=;
+        b=D72yCsDXrGgatNxm2fPlPs+QVr+OYTINUdelSweWVrBaGbB4x5ilM9xP8vC8bnZWwX
+         BB8MQSvZ/L/lMnuJvgyQ8UYq+aYQ5R0hnvMi21Yh4wL/R6jI9qACoI46NXabDtloawzR
+         J8ZX1ZQBfrLA13h6YrEWtNpbOCG3mtBLUu0SBdlEFOaN7FYUd1bIbDhH1xuEYXNFIY/D
+         E6Hcwh44t9CydrISABDsOdFfid61IoVZYBusYznI2ISJGBPXvseYMlvDpg+FXEnD2BXW
+         pI3dScKDKYsWuUcVHZvBe7xFZgzu6FFWGk0oarDt7Xiw0iuHA9Ffppwz/phIb+9KHB/k
+         nR8A==
+X-Gm-Message-State: AOAM530kLHOVqZAnmPOPfeQVeyyFDLdRSo26s7J5LmcAPapbkbwP9fXq
+        zLLZChvuWY7UoIPLLaiJ6Hn73V0HMoWJEOvUoxpBNA==
+X-Google-Smtp-Source: ABdhPJwkXMO4uhvCsmyjxeJIJN/dMVthik8rV2agcLFH9W28tEatgkKRxyaLXGqmb/ZxKjwVzyOeJ3lIrOe3jbSNI4Y=
+X-Received: by 2002:a7b:ca57:: with SMTP id m23mr2607883wml.116.1612864162564;
+ Tue, 09 Feb 2021 01:49:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210111142309.193441-1-maxime@cerno.tech> <20210111142309.193441-15-maxime@cerno.tech>
+In-Reply-To: <20210111142309.193441-15-maxime@cerno.tech>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Tue, 9 Feb 2021 09:49:05 +0000
+Message-ID: <CAPY8ntC7U1BAVT8xe0emX19p4mCu-BQOeBeC-CDgKjE+asZKRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 14/15] ARM: dts: bcm2711: Add the BSC interrupt controller
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Eric Anholt <eric@anholt.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add decoder v4l2 control to set conceal color.
+Hi Maxime
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- .../media/v4l/ext-ctrls-codec.rst             | 20 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          |  9 +++++++++
- include/uapi/linux/v4l2-controls.h            |  1 +
- 3 files changed, 30 insertions(+)
+On Mon, 11 Jan 2021 at 14:23, Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> The BSC controllers used for the HDMI DDC have an interrupt controller
+> shared between both instances. Let's add it to avoid polling.
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 00944e97d638..994650052333 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -674,6 +674,26 @@ enum v4l2_mpeg_video_frame_skip_mode -
-     is currently displayed (decoded). This value is reset to 0 whenever
-     the decoder is started.
- 
-+``V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR (integer64)``
-+    This control sets conceal color in YUV color space. It describes the
-+    client preference of error conceal color in case of error where
-+    reference frame is missing. The decoder would paint the reference
-+    buffer with preferred color and use it for future decoding.
-+    Applicable to decoders.
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - Bit 0:15
-+      - Y luminance
-+    * - Bit 16:31
-+      - Cb chrominance
-+    * - Bit 32:47
-+      - Cr chrominance
-+    * - Bit 48:63
-+      - Must be zero
-+
- ``V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE (boolean)``
-     If enabled the decoder expects to receive a single slice per buffer,
-     otherwise the decoder expects a single frame in per buffer.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 016cf6204cbb..a3b9d28a00b7 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -945,6 +945,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_VBV_SIZE:			return "VBV Buffer Size";
- 	case V4L2_CID_MPEG_VIDEO_DEC_PTS:			return "Video Decoder PTS";
- 	case V4L2_CID_MPEG_VIDEO_DEC_FRAME:			return "Video Decoder Frame Count";
-+	case V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR:		return "Video Decoder Conceal Color";
- 	case V4L2_CID_MPEG_VIDEO_VBV_DELAY:			return "Initial Delay for VBV Control";
- 	case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:		return "Horizontal MV Search Range";
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:		return "Vertical MV Search Range";
-@@ -1430,6 +1431,14 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 		*max = 0x7fffffffffffffffLL;
- 		*step = 1;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR:
-+		*type = V4L2_CTRL_TYPE_INTEGER64;
-+		*min = 0;
-+		/* default for 8bit black, luma is 16, chroma is 128 */
-+		*def = 0x8000800010LL;
-+		*max = 0xffffffffffffLL;
-+		*step = 1;
-+		break;
- 	case V4L2_CID_PIXEL_RATE:
- 		*type = V4L2_CTRL_TYPE_INTEGER64;
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 039c0d7add1b..5e5a3068be2d 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -428,6 +428,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_CODEC_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_CODEC_BASE+229)
- #define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID	(V4L2_CID_CODEC_BASE+230)
-+#define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+231)
- 
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
--- 
-2.25.1
+This seems to have unintended side effects.
+GIC interrupt 117 is shared between the standard I2C controllers
+(i2c-bcm2835) and the l2-intc block handling the HDMI I2C interrupts.
 
+Whilst i2c-bcm2835 requests the interrupt with IRQF_SHARED, that
+doesn't appear to be an option for l2-intc registering as an interrupt
+controller. i2c-bcm2835 therefore loses out and fails to register for
+the interrupt.
+
+Is there an equivalent flag that an interrupt controller can add to
+say that the parent interrupt is shared? Is that even supported?
+
+Thanks
+  Dave
+
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  arch/arm/boot/dts/bcm2711.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+> index 4847dd305317..8bb46ae76a92 100644
+> --- a/arch/arm/boot/dts/bcm2711.dtsi
+> +++ b/arch/arm/boot/dts/bcm2711.dtsi
+> @@ -308,6 +308,14 @@ dvp: clock@7ef00000 {
+>                         #reset-cells = <1>;
+>                 };
+>
+> +               bsc_intr: interrupt-controller@7ef00040 {
+> +                       compatible = "brcm,bcm2711-l2-intc", "brcm,l2-intc";
+> +                       reg = <0x7ef00040 0x30>;
+> +                       interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-controller;
+> +                       #interrupt-cells = <1>;
+> +               };
+> +
+>                 hdmi0: hdmi@7ef00700 {
+>                         compatible = "brcm,bcm2711-hdmi0";
+>                         reg = <0x7ef00700 0x300>,
+> @@ -341,6 +349,8 @@ ddc0: i2c@7ef04500 {
+>                         reg = <0x7ef04500 0x100>, <0x7ef00b00 0x300>;
+>                         reg-names = "bsc", "auto-i2c";
+>                         clock-frequency = <97500>;
+> +                       interrupt-parent = <&bsc_intr>;
+> +                       interrupts = <0>;
+>                         status = "disabled";
+>                 };
+>
+> @@ -377,6 +387,8 @@ ddc1: i2c@7ef09500 {
+>                         reg = <0x7ef09500 0x100>, <0x7ef05b00 0x300>;
+>                         reg-names = "bsc", "auto-i2c";
+>                         clock-frequency = <97500>;
+> +                       interrupt-parent = <&bsc_intr>;
+> +                       interrupts = <1>;
+>                         status = "disabled";
+>                 };
+>         };
+> --
+> 2.29.2
+>
