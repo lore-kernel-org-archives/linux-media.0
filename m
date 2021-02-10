@@ -2,86 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B558C433E9
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B34C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:55:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6368464EBB
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:29:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1199364ECF
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:55:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbhBJW3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Feb 2021 17:29:22 -0500
-Received: from mga04.intel.com ([192.55.52.120]:13270 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233231AbhBJW3U (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Feb 2021 17:29:20 -0500
-IronPort-SDR: 6+RfduXYzluN3zFtHuKW2QgWX099b7aYUULdRsCK7udSE/CNPPvMpLU0WyXEJNgqBJJvwtlBAq
- iQjFKttJAH+g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9891"; a="179604665"
-X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
-   d="scan'208";a="179604665"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 14:27:28 -0800
-IronPort-SDR: nDXiYRkUJhAiSE75pYaCXSq6Um6G1p5XlHc+q8pJ4F24vpuu2T8A/3GQth18rtFulhkgZF982K
- GwRnHHgiW9TQ==
-X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
-   d="scan'208";a="489084676"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 14:27:25 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 10BD420488;
-        Thu, 11 Feb 2021 00:27:23 +0200 (EET)
-Date:   Thu, 11 Feb 2021 00:27:23 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v10 2/7] i2c: Allow an ACPI driver to manage the device's
- power state during probe
-Message-ID: <20210210222722.GF3@paasikivi.fi.intel.com>
-References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
- <20210205132505.20173-3-sakari.ailus@linux.intel.com>
- <20210209210410.GA2380@kunai>
+        id S233358AbhBJWzz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Feb 2021 17:55:55 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:44225 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232428AbhBJWzs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 10 Feb 2021 17:55:48 -0500
+Received: by mail-oi1-f172.google.com with SMTP id r75so3975322oie.11;
+        Wed, 10 Feb 2021 14:55:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RP/1fWgQSpnhyqyUYQC54WPzfZsZ61OQZSW7jfdfAz4=;
+        b=Ju6RTOTLROxombkS5TcBXA4s4RibtmG+t8CAbwrKTKj0oxu0uPlBg/GZwcJMmXyiJS
+         9lPjJU/D4H64lkhoSMg8qTZ8/0jRJNxIfRtM8E062dv0NqZje0JznJZ2vWT2/zWIVlEc
+         5BQxYkRHQtRmgZMaJVnYZtu+NfwP8RLyxPgXl/bcTd2dniCObncnmKlSTSY98/QKCno1
+         ClT0D7nVFZa6t3ZBTPrZBDdfnMvKT17ok5+EICEcb1WGHK9wyLw9sVzzhjQV+nPO3oCI
+         s8Vj0ZkRHAR7ddFKGkotMAI40i35tqJ570uRTla9o2gpur5HTBKHhkI3hl5g7+3iN1xT
+         cVpg==
+X-Gm-Message-State: AOAM531LWmPbXpqDIBGOQybYdj7g2wZ+dNQnj/6VtVPvcxFfNMYoSY2i
+        cfMFjunt92AeXDm25JkAnQ==
+X-Google-Smtp-Source: ABdhPJw/ziPtOmnTH37OtDhwg5KsWreepQYebmeB6EPWMZJ3RNDdWVHQ1zbiL7IyFGFQo3ItwY1yYA==
+X-Received: by 2002:aca:1903:: with SMTP id l3mr897629oii.133.1612997706959;
+        Wed, 10 Feb 2021 14:55:06 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id r4sm772458oig.52.2021.02.10.14.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 14:55:05 -0800 (PST)
+Received: (nullmailer pid 2966346 invoked by uid 1000);
+        Wed, 10 Feb 2021 22:53:23 -0000
+Date:   Wed, 10 Feb 2021 16:53:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/5] dt-bindings: media: mtk-vcodec: Add dma-ranges
+ property
+Message-ID: <20210210225323.GA2961490@robh.at.kernel.org>
+References: <20210203083752.12586-1-irui.wang@mediatek.com>
+ <20210203083752.12586-2-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210209210410.GA2380@kunai>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210203083752.12586-2-irui.wang@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Feb 09, 2021 at 10:04:10PM +0100, Wolfram Sang wrote:
+On Wed, Feb 03, 2021 at 04:37:48PM +0800, Irui Wang wrote:
+> Adds dma-ranges property for DMA addresses translation.
 > 
-> > + * @I2C_DRV_FL_ALLOW_LOW_POWER_PROBE: Let the ACPI driver manage the device's
-> > + *				      power state during probe and remove
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Well, for the functional change, I am happy if the ACPI guys are happy.
-> The only minor nit for me would be removing the "_FL" snipplet from the
+> diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+> index f85276e629bf..e4644f8caee9 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+> +++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+> @@ -23,6 +23,8 @@ Required properties:
+>  - iommus : should point to the respective IOMMU block with master port as
+>    argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+>    for details.
+> +- dma-ranges : describes how the physical address space of the IOMMU maps
+> +  to memory.
 
-I'm actually renaming this as I2C_DRV_ACPI_WAIVE_D0_PROBE, with similar
-changes to the function names. I opportunistically assume the ack holds
-still. :-) I'll post v11 soon.
+dma-ranges is supposed to be in a bus/parent node.
 
-> name of the define because I think it is clear enough that this is a
-> flag. If you need to resend anyhow, maybe it is worth a thought. It is
-> not a big issue, so anyway:
+>  One of the two following nodes:
+>  - mediatek,vpu : the node of the video processor unit, if using VPU.
+>  - mediatek,scp : the node of the SCP unit, if using SCP.
+> -- 
+> 2.25.1
 > 
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> 
-> because I assume this will go in via the ACPI tree?
-> 
-
--- 
-Sakari Ailus
