@@ -2,104 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 256E4C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 15:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60789C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 15:50:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9C5264E87
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 15:34:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 312F264DE8
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 15:50:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbhBJPea (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Feb 2021 10:34:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232058AbhBJPe0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Feb 2021 10:34:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B24CC64DDA;
-        Wed, 10 Feb 2021 15:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612971225;
-        bh=1zDAAQgiqsz5e7kAxXc8agDEwY/EwyxU60WtaFh/Uq8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o/GsAZvQcnLs2WQHEYNfj2ClbQ5/nmXaMuizM6V7Odl8NDQo0XEhUGKim+qKYMuit
-         9CqJ4fhlQAI8FmnOm0nBTnYurWYsEJNLcyidFDz+JvVhCpXVEybCKqRUdOzMZlUAjn
-         LwDyJXAymteP/Ciq5OPpXKIlgOPdcwpwQtVc2JxOV40W5PSmEv3YoFrUynzs8xf4mY
-         lhMXBxlV4LuDqEsG2VGHRlrruBXuGTMAB1BXTyZINNhv7IeejRL4SiSmkgL3zELGLG
-         QUSZOMYj1Ohhp0EBTh+jHY9CFEXTM7zDWE3JS0rX4AGjkfdtXaO8hERWOxoZkjHT9Q
-         0tEH9AB8tra4Q==
-Date:   Wed, 10 Feb 2021 10:33:43 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        devel@driverdev.osuosl.org,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 14/36] media: rkisp1: uapi: change hist_bins
- array type from __u16 to __u32
-Message-ID: <20210210153343.GD4035784@sasha-vm>
-References: <20210208175806.2091668-1-sashal@kernel.org>
- <20210208175806.2091668-14-sashal@kernel.org>
- <12c8f50e-3bba-5936-6e67-55bd928a75c7@xs4all.nl>
- <e086d0f4-c5f0-e38c-8937-593852ac0b50@collabora.com>
- <YCKH0HvTxeYKg1xf@kroah.com>
- <3413d0af-bc8e-4a9d-e0a2-eea98febd4e9@xs4all.nl>
- <YCKRsxE23f7zJtkO@kroah.com>
+        id S230048AbhBJPtp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Feb 2021 10:49:45 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:60865 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229888AbhBJPtp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 10 Feb 2021 10:49:45 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 534C34000C;
+        Wed, 10 Feb 2021 15:49:00 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] media: i2c: max9271: Add MODULE_* macros
+Date:   Wed, 10 Feb 2021 16:49:08 +0100
+Message-Id: <20210210154908.1227203-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YCKRsxE23f7zJtkO@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Feb 09, 2021 at 02:44:19PM +0100, Greg Kroah-Hartman wrote:
->On Tue, Feb 09, 2021 at 02:39:41PM +0100, Hans Verkuil wrote:
->> On 09/02/2021 14:02, Greg Kroah-Hartman wrote:
->> > On Tue, Feb 09, 2021 at 01:45:35PM +0100, Dafna Hirschfeld wrote:
->> >>
->> >>
->> >> Am 08.02.21 um 21:46 schrieb Hans Verkuil:
->> >>> On 08/02/2021 18:57, Sasha Levin wrote:
->> >>>> From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->> >>>>
->> >>>> [ Upstream commit 31f190e0ccac8b75d33fdc95a797c526cf9b149e ]
->> >>>>
->> >>>> Each entry in the array is a 20 bits value composed of 16 bits unsigned
->> >>>> integer and 4 bits fractional part. So the type should change to __u32.
->> >>>> In addition add a documentation of how the measurements are done.
->> >>>
->> >>> Dafna, Helen, does it make sense at all to backport these three patches to
->> >>> when rkisp1 was a staging driver?
->> >>>
->> >>> I would be inclined not to backport this.
->> >>
->> >> I also don't think it makes sense since this changes the uapi and it is not really a bug fix.
->> >
->> > Why was it ok to change the uapi in a newer kernel and not an older one?
->>
->> In the older kernels this was a staging driver and the driver API was not public.
->> It's debatable whether there is any benefit from trying to backport patches like
->> this to a staging driver like that.
->>
->> Also, these backports are incomplete, there are other patches that would need to
->> be applied to make this work. Applying just these three patches without the other
->> three (commits 66d81de7ea9d, fc672d806bd7 and ef357e02b6c4) makes it very messy
->> indeed.
->>
->> I'd just leave the staging driver in older kernels as-is. Certainly don't just
->> apply these three patches without the other three commits, that would make it
->> even worse.
->
->Fair enough, Sasha, can you drop these?
+Since commit 7f03d9fefcc5 ("media: i2c: Kconfig: Make MAX9271
+a module") the max9271 library is built as a module but no
+MODULE_*() attributes were specified, causing a build error
+due to missing license information.
 
-Yup.
+ERROR: modpost: missing MODULE_LICENSE() in drivers/media/i2c/max9271.o
 
--- 
-Thanks,
-Sasha
+Fix this by adding MODULE attributes to the driver.
+
+Fixes: 7f03d9fefcc5 ("media: i2c: Kconfig: Make MAX9271 a module")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/max9271.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/media/i2c/max9271.c b/drivers/media/i2c/max9271.c
+index c247db569bab..c495582dcff6 100644
+--- a/drivers/media/i2c/max9271.c
++++ b/drivers/media/i2c/max9271.c
+@@ -18,6 +18,7 @@
+
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
++#include <linux/module.h>
+
+ #include "max9271.h"
+
+@@ -339,3 +340,7 @@ int max9271_set_translation(struct max9271_device *dev, u8 source, u8 dest)
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(max9271_set_translation);
++
++MODULE_DESCRIPTION("Maxim MAX9271 GMSL Serializer");
++MODULE_AUTHOR("Jacopo Mondi");
++MODULE_LICENSE("GPL v2");
+--
+2.30.0
+
