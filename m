@@ -2,97 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4168C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D767C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 23:11:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A205264ED3
-	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 22:58:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02AA164EEC
+	for <linux-media@archiver.kernel.org>; Wed, 10 Feb 2021 23:11:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbhBJW6G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Feb 2021 17:58:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51874 "EHLO mail.kernel.org"
+        id S234213AbhBJXLm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Feb 2021 18:11:42 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19927 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233741AbhBJW6D (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Feb 2021 17:58:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D51F764EBB;
-        Wed, 10 Feb 2021 22:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612997842;
-        bh=UJfsvvn0ix5B2B8amG6o871cR0JpZNABhACiEZxCNac=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ufNE5DNDh1Nz18RJZvqyxD8pqzzCI4sLMwzCHcu7bd4gyZbGlSGs7hl1FGfbrLhCN
-         TTtlr0jUuqQoiHt2McjjzMx9UD+zdntHOEkwpDeHXgekdkKtEvrplPYebrNktNFrO7
-         t38XpKrUzE8xhGYENhtb7ByvdhqLzdpDCNSITuMfFrrquD3m8HIDOete+TTEXnKJpM
-         dLHzgQU5A4fpLVbxuoAmhTVJmSKpxq1Z5plbKZ60beAO4OW2i8GANro1lLM4530d48
-         xS1oTmKteX6WCMoBJSzTGGLuulB1ZYX+EISCVqdt6hzTMR6U9t7cDoll9in8HTKmVL
-         MJ+jlPlu0NbQQ==
-Date:   Wed, 10 Feb 2021 16:57:20 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] media: venus: hfi_cmds.h: Replace one-element array
- with flexible-array member
-Message-ID: <20210210225720.GA13710@embeddedor>
+        id S234108AbhBJXKR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 10 Feb 2021 18:10:17 -0500
+IronPort-SDR: CmIN2xGZouXvzddgL28oF1cS0+UV01IyA6/l3TI1fxm0Oq+ZLdygbjgpZq0MLqs9yEsIDiixP8
+ nvN9NBtxp2sA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9891"; a="169292253"
+X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
+   d="scan'208";a="169292253"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 15:08:06 -0800
+IronPort-SDR: wYuWBzrMm/LZF0wpYljnmXbhsaCdcxr3HGMwRpkFk/w7lskGeIoiQRkrFOoiPnPz0mEcPycj60
+ bIfObtbmOTZQ==
+X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
+   d="scan'208";a="420701005"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 15:08:03 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 5923C207C2;
+        Thu, 11 Feb 2021 01:08:01 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1l9yaX-0007tZ-0j; Thu, 11 Feb 2021 01:08:01 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v11 4/7] ACPI: Add a convenience function to tell a device is in D0 state
+Date:   Thu, 11 Feb 2021 01:07:57 +0200
+Message-Id: <20210210230800.30291-5-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210210230800.30291-1-sakari.ailus@linux.intel.com>
+References: <20210210230800.30291-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is a regular need in the kernel to provide a way to declare having
-a dynamically sized set of trailing elements in a structure. Kernel code
-should always use “flexible array members”[1] for these cases. The older
-style of one-element or zero-length arrays should no longer be used[2].
+Add a convenience function to tell whether a device is in D0 state,
+primarily for use in drivers' probe or remove functions on busses where
+the custom is to power on the device for the duration of both.
 
-Use flexible-array member in struct hfi_sys_set_property_pkt instead of
-one-element array.
+Returns false on non-ACPI systems.
 
-Also, this helps with the ongoing efforts to enable -Warray-bounds and
-fix the following warnings:
-
-drivers/media/platform/qcom/venus/hfi_cmds.c: In function ‘pkt_sys_coverage_config’:
-drivers/media/platform/qcom/venus/hfi_cmds.c:57:11: warning: array subscript 1 is above array bounds of ‘u32[1]’ {aka ‘unsigned int[1]’} [-Warray-bounds]
-   57 |  pkt->data[1] = mode;
-      |  ~~~~~~~~~^~~
-
-[1] https://en.wikipedia.org/wiki/Flexible_array_member
-[2] https://www.kernel.org/doc/html/v5.9/process/deprecated.html#zero-length-and-one-element-arrays
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/109
-Build-tested-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/602416da.iZqae7Dbk7nyl6OY%25lkp@intel.com/
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
 ---
- drivers/media/platform/qcom/venus/hfi_cmds.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/device_pm.c | 27 +++++++++++++++++++++++++++
+ include/linux/acpi.h     |  6 ++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
-index 83705e237f1c..327ed90a2788 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.h
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
-@@ -68,7 +68,7 @@ struct hfi_sys_release_resource_pkt {
- struct hfi_sys_set_property_pkt {
- 	struct hfi_pkt_hdr hdr;
- 	u32 num_properties;
--	u32 data[1];
-+	u32 data[];
- };
+diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+index 096153761ebc3..8be6daa9cb7dd 100644
+--- a/drivers/acpi/device_pm.c
++++ b/drivers/acpi/device_pm.c
+@@ -1336,4 +1336,31 @@ int acpi_dev_pm_attach(struct device *dev, bool power_on)
+ 	return 1;
+ }
+ EXPORT_SYMBOL_GPL(acpi_dev_pm_attach);
++
++/**
++ * acpi_dev_state_d0 - Tell if the device is in D0 power state
++ * @dev: Physical device the ACPI power state of which to check
++ *
++ * On a system without ACPI, return true. On a system with ACPI, return true if
++ * the current ACPI power state of the device is D0, or false otherwise.
++ *
++ * Note that the power state of a device is not well-defined after it has been
++ * passed to acpi_device_set_power() and before that function returns, so it is
++ * not valid to ask for the ACPI power state of the device in that time frame.
++ *
++ * This function is intended to be used in a driver's probe or remove
++ * function. See Documentation/firmware-guide/acpi/low-power-probe.rst for
++ * more information.
++ */
++bool acpi_dev_state_d0(struct device *dev)
++{
++	struct acpi_device *adev = ACPI_COMPANION(dev);
++
++	if (!adev)
++		return true;
++
++	return adev->power.state == ACPI_STATE_D0;
++}
++EXPORT_SYMBOL_GPL(acpi_dev_state_d0);
++
+ #endif /* CONFIG_PM */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index ea296289a94c8..4886692564453 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -992,6 +992,7 @@ int acpi_dev_resume(struct device *dev);
+ int acpi_subsys_runtime_suspend(struct device *dev);
+ int acpi_subsys_runtime_resume(struct device *dev);
+ int acpi_dev_pm_attach(struct device *dev, bool power_on);
++bool acpi_dev_state_d0(struct device *dev);
+ #else
+ static inline int acpi_subsys_runtime_suspend(struct device *dev) { return 0; }
+ static inline int acpi_subsys_runtime_resume(struct device *dev) { return 0; }
+@@ -999,6 +1000,11 @@ static inline int acpi_dev_pm_attach(struct device *dev, bool power_on)
+ {
+ 	return 0;
+ }
++
++static inline bool acpi_dev_state_d0(struct device *dev)
++{
++	return true;
++}
+ #endif
  
- struct hfi_sys_get_property_pkt {
+ #if defined(CONFIG_ACPI) && defined(CONFIG_PM_SLEEP)
 -- 
-2.27.0
+2.20.1
 
