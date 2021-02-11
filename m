@@ -2,191 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4DCC433E6
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 11:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC64C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 13:10:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 365DD64EC5
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 11:55:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2ABED64E2F
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 13:10:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbhBKLyo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Feb 2021 06:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbhBKLvB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Feb 2021 06:51:01 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E203C061788;
-        Thu, 11 Feb 2021 03:50:19 -0800 (PST)
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:94f7:2542:9eb3:b5ba])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5D9AE1F45972;
-        Thu, 11 Feb 2021 11:50:17 +0000 (GMT)
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     p.zabel@pengutronix.de, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, ezequiel@collabora.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com, benjamin.gaignard@collabora.com
-Subject: [PATCH 3/4] media: hantro: Use reset driver
-Date:   Thu, 11 Feb 2021 12:50:02 +0100
-Message-Id: <20210211115003.249367-4-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210211115003.249367-1-benjamin.gaignard@collabora.com>
-References: <20210211115003.249367-1-benjamin.gaignard@collabora.com>
+        id S231244AbhBKNKg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Feb 2021 08:10:36 -0500
+Received: from verein.lst.de ([213.95.11.211]:55322 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231868AbhBKNHS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 11 Feb 2021 08:07:18 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6F35F6736F; Thu, 11 Feb 2021 14:06:25 +0100 (CET)
+Date:   Thu, 11 Feb 2021 14:06:25 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sergey Senozhatsky <senozhatsky@google.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: add a new dma_alloc_noncontiguous API v2
+Message-ID: <20210211130625.GA20155@lst.de>
+References: <20210202095110.1215346-1-hch@lst.de> <20210207184855.GA27553@lst.de> <CAAFQd5BzAvgiTLGFse+ZWUrFtZ1Ysf+p+e-4rW8gq_iP0xhWEA@mail.gmail.com> <20210209082213.GA31902@lst.de> <CANiDSCuzKczCnAdC9b0r-6WVBFYXYnvQHKbxSeYq2QW1uVsDLQ@mail.gmail.com> <CANiDSCvPodsmcOi1fMwvZsyMxWsRQWNT7VkbZs4=XePYXfiXow@mail.gmail.com> <20210209170217.GA10199@lst.de> <CANiDSCs8dXVoWuwkVs=v+=s770MpzH1xiDuj-080-98ynuz97g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCs8dXVoWuwkVs=v+=s770MpzH1xiDuj-080-98ynuz97g@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rather use a reset like feature inside the driver use the reset
-controller API to get the same result.
+On Thu, Feb 11, 2021 at 10:08:18AM +0100, Ricardo Ribalda wrote:
+> Hi Christoph
+> 
+> What are your merge plans for the uvc change?
+> http://git.infradead.org/users/hch/dma-mapping.git/commit/3dc47131f8aacc2093f68a9971d24c754e435520
+> 
+> Are you going to remove the patch on your Merge request and then send
+> it for review to Laurent? or merge it through your tree with a S-o-B
+> him?
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/staging/media/hantro/Kconfig        |  1 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 61 ++++-----------------
- 2 files changed, 12 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
-index 5b6cf9f62b1a..dd1d4dde2658 100644
---- a/drivers/staging/media/hantro/Kconfig
-+++ b/drivers/staging/media/hantro/Kconfig
-@@ -20,6 +20,7 @@ config VIDEO_HANTRO_IMX8M
- 	bool "Hantro VPU i.MX8M support"
- 	depends on VIDEO_HANTRO
- 	depends on ARCH_MXC || COMPILE_TEST
-+	select RESET_VPU_IMX8MQ
- 	default y
- 	help
- 	  Enable support for i.MX8M SoCs.
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index c222de075ef4..d5b4312b9391 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -7,49 +7,12 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/reset.h>
- 
- #include "hantro.h"
- #include "hantro_jpeg.h"
- #include "hantro_g1_regs.h"
- 
--#define CTRL_SOFT_RESET		0x00
--#define RESET_G1		BIT(1)
--#define RESET_G2		BIT(0)
--
--#define CTRL_CLOCK_ENABLE	0x04
--#define CLOCK_G1		BIT(1)
--#define CLOCK_G2		BIT(0)
--
--#define CTRL_G1_DEC_FUSE	0x08
--#define CTRL_G1_PP_FUSE		0x0c
--#define CTRL_G2_DEC_FUSE	0x10
--
--static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
--{
--	u32 val;
--
--	/* Assert */
--	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
--	val &= ~reset_bits;
--	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
--
--	udelay(2);
--
--	/* Release */
--	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
--	val |= reset_bits;
--	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
--}
--
--static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
--{
--	u32 val;
--
--	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
--	val |= clock_bits;
--	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
--}
--
- static int imx8mq_runtime_resume(struct hantro_dev *vpu)
- {
- 	int ret;
-@@ -60,13 +23,10 @@ static int imx8mq_runtime_resume(struct hantro_dev *vpu)
- 		return ret;
- 	}
- 
--	imx8m_soft_reset(vpu, RESET_G1 | RESET_G2);
--	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
-+	ret = device_reset(vpu->dev);
-+	if (ret)
-+		dev_err(vpu->dev, "Failed to reset Hantro VPU\n");
- 
--	/* Set values of the fuse registers */
--	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
--	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
--	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
- 
- 	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
- 
-@@ -151,16 +111,17 @@ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	vpu->dec_base = vpu->reg_bases[0];
--	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
- 
- 	return 0;
- }
- 
--static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
-+static void imx8mq_vpu_reset(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-+	int ret = device_reset(vpu->dev);
- 
--	imx8m_soft_reset(vpu, RESET_G1);
-+	if (ret)
-+		dev_err(vpu->dev, "Failed to reset Hantro VPU\n");
- }
- 
- /*
-@@ -170,19 +131,19 @@ static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
- static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
- 	[HANTRO_MODE_MPEG2_DEC] = {
- 		.run = hantro_g1_mpeg2_dec_run,
--		.reset = imx8m_vpu_g1_reset,
-+		.reset = imx8mq_vpu_reset,
- 		.init = hantro_mpeg2_dec_init,
- 		.exit = hantro_mpeg2_dec_exit,
- 	},
- 	[HANTRO_MODE_VP8_DEC] = {
- 		.run = hantro_g1_vp8_dec_run,
--		.reset = imx8m_vpu_g1_reset,
-+		.reset = imx8mq_vpu_reset,
- 		.init = hantro_vp8_dec_init,
- 		.exit = hantro_vp8_dec_exit,
- 	},
- 	[HANTRO_MODE_H264_DEC] = {
- 		.run = hantro_g1_h264_dec_run,
--		.reset = imx8m_vpu_g1_reset,
-+		.reset = imx8mq_vpu_reset,
- 		.init = hantro_h264_dec_init,
- 		.exit = hantro_h264_dec_exit,
- 	},
--- 
-2.25.1
+I though I had all the ACKs to queue it up.  Is that not what was
+intended?  Queueing up the API without a user is generally a bad idea.
 
