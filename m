@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A96ABC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:42:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 156A1C4332B
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:42:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7456064E23
+	by mail.kernel.org (Postfix) with ESMTP id EDDA264E3B
 	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbhBKKl1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Feb 2021 05:41:27 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:58189 "EHLO
+        id S229714AbhBKKmJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Feb 2021 05:42:09 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:38235 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230355AbhBKKjU (ORCPT
+        by vger.kernel.org with ESMTP id S230362AbhBKKja (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Feb 2021 05:39:20 -0500
+        Thu, 11 Feb 2021 05:39:30 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id A9LMlXsw2Zvk6A9LRlud2N; Thu, 11 Feb 2021 11:37:09 +0100
+        id A9LMlXsw2Zvk6A9LRlud2r; Thu, 11 Feb 2021 11:37:10 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1613039829; bh=/RluaKkbRNT2NovseHLdwP2LHjAtvTSvmGfevXfdf8k=;
+        t=1613039830; bh=7vv8Zq5ueB4PQjpkMshes9HEfaPbs32Qu9KVZZjtkgA=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=Xx9Zy8qj/2qvTXI7KeJTjqbBhpFirb/Sp0fB83aUZOItnUhfMGLHLZvIzuEYLcVkW
-         Gom/KgD/3rwKj8/oDn+crYN8mXoYJKGA2Y2j8NuJfPsVYNtrDE5rf+0NgDERoogKuR
-         45801SRsnybeCZMFCP3m1oBppW3YmjijcZhvFGxrCSkkkQNZ9dkjTAWFsMRMFhs4If
-         lwNSR547gnX/51IhTEeByC7hmMDKHW0uJ4gwrKsImIHOQdAaaDLop3sgTJueYN4TPc
-         ccJOinboQ+MIazam0ArKWAiQqBkgCd/dr51ZuGrGuDPyYIcys2oxaZLfodPalcaayz
-         Vhrn9KhpgJfjA==
+        b=sqeJHknh0nE18+Vr9xLDCTkY7bhVZ1X/y0Q/KciAV+M7116HjxZlUi2ti5BjoO7cB
+         bG7bmuvTJo2zAflfWcO4I74d+TgtKVHvEMct9ddHIzX5H+mIhYWx8MGQQgPDpc3Dok
+         Fn55RQFyvVM5oLRCEODhZBV9sP5qNpcCkgGkc5nNv6mfGqKo6t0VSE5L/pWXAtXy0e
+         GLPM1Vf4HucbgTIV20akkwsyXuIj4JsUKemRJYlMvKb8iZddb4afzOc7bXN7KuSfYR
+         5+JA57tVdArfxcYynmxXB0JDUC+CcL0UvEH3A88j9iUqWzxSlKyf5eons0tY/7VSd9
+         S8xrqfDmJ55/w==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
@@ -39,107 +39,62 @@ Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
         Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/5] drm/omap: hdmi4: simplify CEC Phys Addr handling
-Date:   Thu, 11 Feb 2021 11:37:01 +0100
-Message-Id: <20210211103703.444625-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 5/5] ARM: dts: dra7/omap5: add cec clock
+Date:   Thu, 11 Feb 2021 11:37:03 +0100
+Message-Id: <20210211103703.444625-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
 References: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfMVufYRA30s44XrBb7euBEAQNI5/5ADL4UTGWENhEPzj1BFYGkaXvMAzCILkhgdqiEvezzzaB7alvVEsKWc9B88x5HTsVXcOAqHNIwxL+GgEGzmJzkmr
- jSfaU8y7Slnxk+eS9d0F2rEiadkHCYpBSaTxoZvsB9/szwrcx7r94iII37kpcbbj6e9W+fxiIke4l2k6la8Ajvhpyporg2A8oVTgSVc3AJ7JRJ1QJqhDK37Y
- F9h6T3vxvs8fGvB5rH3uKMVAsxNtXAALIfHFVXyM/gBKqrGH9jay1+EqicrPDRZlwJVmvJMRG80yzJtiXXK5OcHEMAGJ5SzNOUMgH468olz2F3m2EuiiCW4k
- x8fuVR2WFaZLPKWzWsdPh8eMgi3IYG8TDagsSyj0fOnzlCCjqy2990y+o88+yplSD3owzSTF2eJFhlwNWes/PI9IHmb7oIJ/9etlHTv5dNlIc28IGyo=
+X-CMAE-Envelope: MS4xfNEPV5trBOdUFJkU/q7gPA/oLKp4ICGDInS3lmKd/qbVi4uzGyZ0iHSVxDiSpXIdZ7AxLat7wXkpvTzKx3fz8gcShYjdQUcacCTQmLVvDm9+jfiFgHV6
+ auago6tub5JSEG94VylRbjLmpRYac+/jRq1z0lNkmw/GKwOyiGFwM9FiZZP9pyR2M4q//VvSrIR0LUEibJ6F5pRFRlZLd55mdYDy/r7DOA1Ts/IoIw3+2B3V
+ XnVqqdRTYgAb0b3R0/yWiaRQK7Vb4QyJlhLFmdxZnyDPl8XUbzjbP37cD7DNoBiW1icn1dBxhmXmDDFSthYgrm1oKNJnUGcUsTsBxPcVcqpJAFj75ELMH3gk
+ rvcj3BUp6Eb+AUaxmIevUSO4zzTUrZ0aQP6/tRCjczo1GGYdg4n8YKttXJR2AXmpVGUZjWN8Lj/OP0u7JIYgXKT6gTQREGuDWv7VGZd4yeAwH5JILm4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Switch to using cec_s_phys_addr_from_edid() instead of a two-step process
-of calling cec_get_edid_phys_addr() followed by cec_s_phys_addr().
+Add cec clock to the dra7 and omap5 device trees.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/gpu/drm/omapdrm/dss/hdmi4.c     | 13 ++-----------
- drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c |  4 ++--
- drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h |  5 +++--
- 3 files changed, 7 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/dra7.dtsi  | 5 +++--
+ arch/arm/boot/dts/omap5.dtsi | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4.c b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
-index 765379380d4b..ac142f870109 100644
---- a/drivers/gpu/drm/omapdrm/dss/hdmi4.c
-+++ b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
-@@ -432,7 +432,7 @@ static void hdmi4_bridge_hpd_notify(struct drm_bridge *bridge,
- 	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
- 
- 	if (status == connector_status_disconnected)
--		hdmi4_cec_set_phys_addr(&hdmi->core, CEC_PHYS_ADDR_INVALID);
-+		hdmi4_cec_set_phys_addr(&hdmi->core, NULL);
- }
- 
- static struct edid *hdmi4_bridge_get_edid(struct drm_bridge *bridge,
-@@ -440,7 +440,6 @@ static struct edid *hdmi4_bridge_get_edid(struct drm_bridge *bridge,
- {
- 	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
- 	struct edid *edid = NULL;
--	unsigned int cec_addr;
- 	bool need_enable;
- 	int r;
- 
-@@ -466,15 +465,7 @@ static struct edid *hdmi4_bridge_get_edid(struct drm_bridge *bridge,
- 	hdmi_runtime_put(hdmi);
- 	mutex_unlock(&hdmi->lock);
- 
--	if (edid && edid->extensions) {
--		unsigned int len = (edid->extensions + 1) * EDID_LENGTH;
--
--		cec_addr = cec_get_edid_phys_addr((u8 *)edid, len, NULL);
--	} else {
--		cec_addr = CEC_PHYS_ADDR_INVALID;
--	}
--
--	hdmi4_cec_set_phys_addr(&hdmi->core, cec_addr);
-+	hdmi4_cec_set_phys_addr(&hdmi->core, edid);
- 
- 	if (need_enable)
- 		hdmi4_core_disable(&hdmi->core);
-diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
-index 64f5ccd0f11b..68b4c84e1864 100644
---- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
-+++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
-@@ -329,9 +329,9 @@ static const struct cec_adap_ops hdmi_cec_adap_ops = {
- 	.adap_transmit = hdmi_cec_adap_transmit,
- };
- 
--void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
-+void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, struct edid *edid)
- {
--	cec_s_phys_addr(core->adap, pa, false);
-+	cec_s_phys_addr_from_edid(core->adap, edid);
- }
- 
- int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
-diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
-index b59a54c3040e..16bf259643b7 100644
---- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
-+++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
-@@ -26,13 +26,14 @@ struct platform_device;
- 
- /* HDMI CEC funcs */
- #ifdef CONFIG_OMAP4_DSS_HDMI_CEC
--void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa);
-+void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, struct edid *edid);
- void hdmi4_cec_irq(struct hdmi_core_data *core);
- int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
- 		   struct hdmi_wp_data *wp, struct drm_connector *conn);
- void hdmi4_cec_uninit(struct hdmi_core_data *core);
- #else
--static inline void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
-+static inline void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core,
-+					   struct edid *edid)
- {
- }
- 
+diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
+index ce1194744f84..efe579ddb324 100644
+--- a/arch/arm/boot/dts/dra7.dtsi
++++ b/arch/arm/boot/dts/dra7.dtsi
+@@ -879,8 +879,9 @@ hdmi: encoder@0 {
+ 						interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+ 						status = "disabled";
+ 						clocks = <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 9>,
+-							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 10>;
+-						clock-names = "fck", "sys_clk";
++							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 10>,
++							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 11>;
++						clock-names = "fck", "sys_clk", "cec";
+ 						dmas = <&sdma_xbar 76>;
+ 						dma-names = "audio_tx";
+ 					};
+diff --git a/arch/arm/boot/dts/omap5.dtsi b/arch/arm/boot/dts/omap5.dtsi
+index 5f1a8bd13880..2bb1000aeae9 100644
+--- a/arch/arm/boot/dts/omap5.dtsi
++++ b/arch/arm/boot/dts/omap5.dtsi
+@@ -580,8 +580,9 @@ hdmi: encoder@0 {
+ 						interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
+ 						status = "disabled";
+ 						clocks = <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 9>,
+-							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 10>;
+-						clock-names = "fck", "sys_clk";
++							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 10>,
++							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 11>;
++						clock-names = "fck", "sys_clk", "cec";
+ 						dmas = <&sdma 76>;
+ 						dma-names = "audio_tx";
+ 					};
 -- 
 2.30.0
 
