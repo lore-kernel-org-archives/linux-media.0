@@ -2,98 +2,146 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6808CC43381
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67954C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 11:54:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E96164E30
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:54:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E4A664DA5
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 11:54:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhBKKyU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Feb 2021 05:54:20 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:47097 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhBKKvw (ORCPT
+        id S230357AbhBKLxw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Feb 2021 06:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231591AbhBKLu5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Feb 2021 05:51:52 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lA9Yg-0000EO-CF; Thu, 11 Feb 2021 10:50:50 +0000
-Subject: Re: [PATCH][next] media: i2c: imx334: Fix a read of the uninitialized
- variable ret
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Martina Krasteva <martinax.krasteva@intel.com>,
-        Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210210190752.146631-1-colin.king@canonical.com>
- <20210210210303.GE3@paasikivi.fi.intel.com> <20210211104148.GE2696@kadam>
-From:   Colin Ian King <colin.king@canonical.com>
-Message-ID: <afe29495-6608-b0c3-de12-1b81980fac2d@canonical.com>
-Date:   Thu, 11 Feb 2021 10:50:49 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Thu, 11 Feb 2021 06:50:57 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6787EC0613D6;
+        Thu, 11 Feb 2021 03:50:17 -0800 (PST)
+Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:94f7:2542:9eb3:b5ba])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C44F11F45970;
+        Thu, 11 Feb 2021 11:50:13 +0000 (GMT)
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     p.zabel@pengutronix.de, robh+dt@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, ezequiel@collabora.com,
+        mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devel@driverdev.osuosl.org,
+        kernel@collabora.com, benjamin.gaignard@collabora.com
+Subject: [PATCH 1/4] dt-bindings: reset: IMX8MQ VPU reset
+Date:   Thu, 11 Feb 2021 12:50:00 +0100
+Message-Id: <20210211115003.249367-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210211115003.249367-1-benjamin.gaignard@collabora.com>
+References: <20210211115003.249367-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20210211104148.GE2696@kadam>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/02/2021 10:41, Dan Carpenter wrote:
-> On Wed, Feb 10, 2021 at 11:03:03PM +0200, Sakari Ailus wrote:
->> Hi Colin,
->>
->> On Wed, Feb 10, 2021 at 07:07:52PM +0000, Colin King wrote:
->>> From: Colin Ian King <colin.king@canonical.com>
->>>
->>> Currently there is a dev_err error message that is printing the
->>> error status in variable ret (that has not been set) instead of
->>> the correct error status from imx334->reset_gpio.  Fix this.
->>>
->>> Addresses-Coverity: ("Uninitialized scalar variable")
->>> Fixes: 9746b11715c3 ("media: i2c: Add imx334 camera sensor driver")
->>>
->>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->>> ---
->>>  drivers/media/i2c/imx334.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
->>> index 07e31bc2ef18..f8b1caf26c9b 100644
->>> --- a/drivers/media/i2c/imx334.c
->>> +++ b/drivers/media/i2c/imx334.c
->>> @@ -790,7 +790,8 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
->>>  	imx334->reset_gpio = devm_gpiod_get_optional(imx334->dev, "reset",
->>>  						     GPIOD_OUT_LOW);
->>>  	if (IS_ERR(imx334->reset_gpio)) {
->>> -		dev_err(imx334->dev, "failed to get reset gpio %d", ret);
->>> +		dev_err(imx334->dev, "failed to get reset gpio %ld",
->>> +			IS_ERR_VALUE(imx334->reset_gpio));
-> 
-> IS_ERR_VALUE() isn't right.  It would always print 1 here.  It should
-> just be PTR_ERR().
-> 
-> IS_ERR_VALUE() is like IS_ERR() but for when you're storing memory
-> addresses in an unsigned long variable.  get_unmapped_area(), for
-> example, returns unsigned longs.
-> 
-> regards,
-> dan carpenter
-> 
-Thanks, that was a brown paper bug mistake for sure :-/
+Document bindings for IMX8MQ VPU reset hardware block
 
-Colin
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../bindings/reset/fsl,imx8mq-vpu-reset.yaml  | 54 +++++++++++++++++++
+ include/dt-bindings/reset/imx8mq-vpu-reset.h  | 16 ++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/fsl,imx8mq-vpu-reset.yaml
+ create mode 100644 include/dt-bindings/reset/imx8mq-vpu-reset.h
+
+diff --git a/Documentation/devicetree/bindings/reset/fsl,imx8mq-vpu-reset.yaml b/Documentation/devicetree/bindings/reset/fsl,imx8mq-vpu-reset.yaml
+new file mode 100644
+index 000000000000..00020421c0e3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/fsl,imx8mq-vpu-reset.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reset/fsl,imx8mq-vpu-reset.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale i.MX8MQ VPU Reset Controller
++
++maintainers:
++  - Benjamin Gaignard <benjamin.gaignard@collabora.com>
++
++description: |
++  The VPU reset controller is used to reset the video processor
++  unit peripherals. Device nodes that need access to reset lines should
++  specify them as a reset phandle in their corresponding node as
++  specified in reset.txt.
++
++  For list of all valid reset indices see
++    <dt-bindings/reset/imx8mq-vpu-reset.h> for i.MX8MQ.
++
++properties:
++  compatible:
++    items:
++      - const: fsl,imx8mq-vpu-reset
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 3
++
++  '#reset-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#reset-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mq-clock.h>
++
++    vpu-reset@38320000 {
++        compatible = "fsl,imx8mq-vpu-reset", "syscon";
++        reg = <0x38320000 0x10000>;
++        clocks = <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
++        #reset-cells = <1>;
++    };
+diff --git a/include/dt-bindings/reset/imx8mq-vpu-reset.h b/include/dt-bindings/reset/imx8mq-vpu-reset.h
+new file mode 100644
+index 000000000000..efcbe18177fe
+--- /dev/null
++++ b/include/dt-bindings/reset/imx8mq-vpu-reset.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2021, Collabora
++ *
++ * i.MX7 System Reset Controller (SRC) driver
++ *
++ * Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
++ */
++
++#ifndef DT_BINDINGS_VPU_RESET_IMX8MQ
++#define DT_BINDINGS_VPU_RESET_IMX8MQ
++
++#define IMX8MQ_RESET_VPU_RESET_G1	0
++#define IMX8MQ_RESET_VPU_RESET_G2	1
++
++#endif
+-- 
+2.25.1
 
