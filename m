@@ -2,94 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 615BDC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 09:55:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7BB7C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:41:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D39364D73
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 09:55:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A666464E9C
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbhBKJzV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Feb 2021 04:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbhBKJwX (ORCPT
+        id S229954AbhBKKlD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Feb 2021 05:41:03 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:49981 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230242AbhBKKik (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Feb 2021 04:52:23 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C3DC06178A
-        for <linux-media@vger.kernel.org>; Thu, 11 Feb 2021 01:50:25 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id jj19so9106210ejc.4
-        for <linux-media@vger.kernel.org>; Thu, 11 Feb 2021 01:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B7GSnrM7B6crv8pKwIgz6vsLju5oSgUNsyvhwhxtSk0=;
-        b=AFqOYKAiQVjfJdddLl3PUYgeUj/DPJbKc+Ks6t7ycM1u3h3esGS8bu+Sb3NNunfKCU
-         60quMh3VjgLP/84CnylNGhuEk3SoeQGuE/rAEV56MOfKUc2cYpZVarp5iS/CLaTK0Zib
-         2BNXleo2gLc16cMWOdBMmOPUC08pK57eqs19KVIBQCI/MIt7FlopElXB5PVgzd1Jk2BO
-         NEcpTxeCT7p/RTt7qcqMkUkfFoq38ypovqbFUrixv3k5FcFLPcmLGhCyy7YZfOAwALzd
-         LOm8RJfeasr1tUtO+DHp2B/BTzs69shTTNQWVJ3oxL0fnkqJHQLs3i2gUQ0BIZH2uQAo
-         6FNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B7GSnrM7B6crv8pKwIgz6vsLju5oSgUNsyvhwhxtSk0=;
-        b=BKsgIEopAorvAUqORaPzqWBgTHaebzyC6fx+MzKBi72VzQmrbWFw7I90/32LVmco8G
-         CiyTvOFaHGyz4ep9t+qLh4wtVFLg4oouPgKApf6p8cY+owGJfOEp17xmK8bStLqDWVcL
-         d25a25PR3U/zyVs1zdXIpNZ1G16CLq86zWgovmCrRrAgBs1zUXkQGrPmNMXEMyfUwCJX
-         OHAwLcp2CjHF3CenT2Yu0g4oELmFsWaEcGrUtbquSo0eFVdXZ/iAFeh2HUy76528Vtfw
-         XDZdP/rReEmLUnojPGAAogeKtPEgyGOj3V+zQqPLR8HFOchMJov4/IcSsDmty/uwGEG6
-         0R8g==
-X-Gm-Message-State: AOAM5326ev7uNLJzYfrMK2/lJOVGMek7wgFRG+zA1cNvumKl10dTXbUq
-        Yp8tqASp6Gf3gEqc9xiYvsvNKg23bw8ov+pqLtCK3w==
-X-Google-Smtp-Source: ABdhPJzqkkQOSYy6alf0j16Q93rb52p9AEJKYyTDVXr843L8/xeXbztnPxJKzF6gVpV2miPa62v4zOn5yQABP5xncsM=
-X-Received: by 2002:a17:906:8053:: with SMTP id x19mr7497164ejw.470.1613037023687;
- Thu, 11 Feb 2021 01:50:23 -0800 (PST)
+        Thu, 11 Feb 2021 05:38:40 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id A9LMlXsw2Zvk6A9LQlud1p; Thu, 11 Feb 2021 11:37:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1613039828; bh=x8JlAVrn67xNpnzpy5vZ00tzTAjgy0qYQsD6Sh3UeoY=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=CLF44D2knSpMTOM5CFFDNJVJfbhGpoX2TwA9elpcpAr55XMNnySM0qrVPpQy/3SDg
+         Gz4nOgrEM7Asu/Rrlac5LtzOmRU1KfQ5VlChhz73D9X+w5iMYTPCOSSGZTTFzyM+Ph
+         Ie7KyUZ9QyAtTtQmsPtlN6gwVp1G5jsOXound5+NmD2VMb4/X4xxOjOlbgi/y2LjOE
+         NVeNj1NBjhJ2gjIZJ13+gad5VtYrLQ7Y9pJnVUrjeZxx3jJ3zTveasRYyWRyNIV4jV
+         09QimY0RuZJpB4AjgeWOFYJ7gDKhJ8gXF6JaOzyjo2v0DAfebfCiWw/WPLhtdbntdT
+         8Y5YPOudD9KxQ==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 1/5] drm: drm_bridge: add cec_init/exit bridge ops
+Date:   Thu, 11 Feb 2021 11:36:59 +0100
+Message-Id: <20210211103703.444625-2-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
+References: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-References: <20210210230800.30291-1-sakari.ailus@linux.intel.com> <20210210230800.30291-8-sakari.ailus@linux.intel.com>
-In-Reply-To: <20210210230800.30291-8-sakari.ailus@linux.intel.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 11 Feb 2021 10:50:13 +0100
-Message-ID: <CAMpxmJVfn034_4NxbhT3xh60vC9HCZpF7fCF4CGJ7-OiC7A6uw@mail.gmail.com>
-Subject: Re: [PATCH v11 7/7] at24: Support probing while in non-zero ACPI D state
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfEpPuZfHrv3ScUk8i5acH1/+xpv+JQkYulPlSP9klHaiTLJnvoGeqywczB9nhmp8NrXq89BNNgFFzgEWAY1NcrXoyx9ColwZ/pzFSOk7VMXGprxvTFo+
+ wZRrhBLye8ylSK5j5RqtmzqVCsL83Kbsq8EUNRh2D4zm8VxdCIKJWsoI2mth5FrfY0V6ewUxwErJfkJTHJ8XhV/nxcX1Ri7QDchpEVyEZ/Nn7+6h8cZ/l9z4
+ 7osf3nfUcY8gmKFinG0v6SKIPTCQ53wQtdiijoXrt7p8wqVUJoO0NPIyayDQ8rAXGip8MCB4yDMaiJAxCsVtLCn4X6HmnRtFMTRUGFFee0/LR8D0nMCJvH2i
+ L9us7GCFH6XaEZVhcj/8YogMVCxxuh68963Smdwn9aauaCCNAesdV6apOCb4ZU6yVaBdraCoVtwRVlckFMv5FyC+sV1m++A1WmMyseBvIwlGj/1CxTw=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 12:08 AM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> In certain use cases (where the chip is part of a camera module, and the
-> camera module is wired together with a camera privacy LED), powering on
-> the device during probe is undesirable. Add support for the at24 to
-> execute probe while being in ACPI D state other than 0 (which means fully
-> powered on).
->
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> ---
+Add bridge cec_init/exit ops. These ops will be responsible for
+creating and destroying the CEC adapter for the bridge that supports
+CEC.
 
-I like this much better now, thanks!
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/gpu/drm/drm_bridge_connector.c | 23 +++++++++++++++++++
+ include/drm/drm_bridge.h               | 31 ++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
+index 791379816837..2ff90f5e468c 100644
+--- a/drivers/gpu/drm/drm_bridge_connector.c
++++ b/drivers/gpu/drm/drm_bridge_connector.c
+@@ -84,6 +84,13 @@ struct drm_bridge_connector {
+ 	 * connector modes detection, if any (see &DRM_BRIDGE_OP_MODES).
+ 	 */
+ 	struct drm_bridge *bridge_modes;
++	/**
++	 * @bridge_cec:
++	 *
++	 * The last bridge in the chain (closest to the connector) that provides
++	 * cec adapter support, if any (see &DRM_BRIDGE_OP_CEC).
++	 */
++	struct drm_bridge *bridge_cec;
+ };
+ 
+ #define to_drm_bridge_connector(x) \
+@@ -204,6 +211,11 @@ static void drm_bridge_connector_destroy(struct drm_connector *connector)
+ 	struct drm_bridge_connector *bridge_connector =
+ 		to_drm_bridge_connector(connector);
+ 
++	if (bridge_connector->bridge_cec) {
++		struct drm_bridge *cec = bridge_connector->bridge_cec;
++
++		cec->funcs->cec_exit(cec);
++	}
+ 	if (bridge_connector->bridge_hpd) {
+ 		struct drm_bridge *hpd = bridge_connector->bridge_hpd;
+ 
+@@ -352,6 +364,8 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 			bridge_connector->bridge_detect = bridge;
+ 		if (bridge->ops & DRM_BRIDGE_OP_MODES)
+ 			bridge_connector->bridge_modes = bridge;
++		if (bridge->ops & DRM_BRIDGE_OP_CEC)
++			bridge_connector->bridge_cec = bridge;
+ 
+ 		if (!drm_bridge_get_next_bridge(bridge))
+ 			connector_type = bridge->type;
+@@ -374,6 +388,15 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	else if (bridge_connector->bridge_detect)
+ 		connector->polled = DRM_CONNECTOR_POLL_CONNECT
+ 				  | DRM_CONNECTOR_POLL_DISCONNECT;
++	if (bridge_connector->bridge_cec) {
++		struct drm_bridge *bridge = bridge_connector->bridge_cec;
++		int ret = bridge->funcs->cec_init(bridge, connector);
++
++		if (ret) {
++			drm_bridge_connector_destroy(connector);
++			return ERR_PTR(ret);
++		}
++	}
+ 
+ 	return connector;
+ }
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index 2195daa289d2..4c83c2657e87 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -629,6 +629,30 @@ struct drm_bridge_funcs {
+ 	 * the DRM_BRIDGE_OP_HPD flag in their &drm_bridge->ops.
+ 	 */
+ 	void (*hpd_disable)(struct drm_bridge *bridge);
++
++	/**
++	 * @cec_init:
++	 *
++	 * Initialize the CEC adapter.
++	 *
++	 * This callback is optional and shall only be implemented by bridges
++	 * that support a CEC adapter. Bridges that implement it shall also
++	 * implement the @cec_exit callback and set the DRM_BRIDGE_OP_CEC flag
++	 * in their &drm_bridge->ops.
++	 */
++	int (*cec_init)(struct drm_bridge *bridge, struct drm_connector *conn);
++
++	/**
++	 * @cec_exit:
++	 *
++	 * Terminate the CEC adapter.
++	 *
++	 * This callback is optional and shall only be implemented by bridges
++	 * that support a CEC adapter. Bridges that implement it shall also
++	 * implement the @cec_init callback and set the DRM_BRIDGE_OP_CEC flag
++	 * in their &drm_bridge->ops.
++	 */
++	void (*cec_exit)(struct drm_bridge *bridge);
+ };
+ 
+ /**
+@@ -698,6 +722,13 @@ enum drm_bridge_ops {
+ 	 * this flag shall implement the &drm_bridge_funcs->get_modes callback.
+ 	 */
+ 	DRM_BRIDGE_OP_MODES = BIT(3),
++	/**
++	 * @DRM_BRIDGE_OP_CEC: The bridge supports a CEC adapter.
++	 * Bridges that set this flag shall implement the
++	 * &drm_bridge_funcs->cec_init and &drm_bridge_funcs->cec_exit
++	 * callbacks.
++	 */
++	DRM_BRIDGE_OP_CEC = BIT(4),
+ };
+ 
+ /**
+-- 
+2.30.0
+
