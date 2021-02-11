@@ -2,102 +2,198 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA6E1C433DB
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD16C43381
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:42:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D14D64E79
-	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:41:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C40A664E23
+	for <linux-media@archiver.kernel.org>; Thu, 11 Feb 2021 10:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhBKKlL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Feb 2021 05:41:11 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:42843 "EHLO
+        id S229906AbhBKKmA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Feb 2021 05:42:00 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:47849 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230319AbhBKKjF (ORCPT
+        by vger.kernel.org with ESMTP id S230353AbhBKKjU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Feb 2021 05:39:05 -0500
+        Thu, 11 Feb 2021 05:39:20 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id A9LMlXsw2Zvk6A9LPlud1a; Thu, 11 Feb 2021 11:37:08 +0100
+        id A9LMlXsw2Zvk6A9LQlud25; Thu, 11 Feb 2021 11:37:09 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1613039828; bh=4+4N0PoDWgsVbg1mOoPtcBrFgTjs96ZvYYEmf7iiKU0=;
+        t=1613039829; bh=DKAvYOQO2RB//qRckCcr0j5nt7n6oMPWP4iQ2kreKlg=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=fsb/RaQ7pHAGpuumHgGX/00jeitAcU2lZ0Y9CSs4Kd7FhQvrwZQrWSQQxb2b5y6rH
-         R6OE9UexUCAON/ET1GHIFfOif3IQRG6c7AfJRNPe1N41A6xMLqP3ud4EoeRBza0wG4
-         GRUf7HQySs/8VElYxh8Sb1aALEK1Uvc4um+P/YDs7VnID15DjANCVNY0GX3KpJzqA+
-         +cZo1GMXMcQLG9qDuILCFAeCbfqX1mdg3yK1HWsY9C1VV1YYqC8y6pRyQ4q+E4RD8F
-         YBj0/NXHvHjJ2+S7xn2VZFds79mJGdzMLLXrB5yXZcMVQ61wxneLJYSLqPWwp0Vham
-         M/m38S8a3CJ/A==
+        b=tSzDpAXezqQ7+7GnvOcD2eGRSRTbtNsUAB0iii9V166L3T+c7zTjSAU7INMiyTxor
+         CzSxs9v4bqD9LkVLjM+5Ko5nPVUxgcAFyE4UW6x4ZrWib96Ox9ZOMV5hLe4wOO2gpi
+         32jgqSgPHRGfXhQNJt265KA72+xkuY7MqAdUzqNwt8JOQB6nEIWcjuJWCuH58TuKgq
+         SaPBlafQuB5tqbgBVDsTnGIgIVuSBPLo16jRIFm4YJNfBCGG3BZAqihZ0Xy1pdshMC
+         Md6xVIZoffYUtGlCe+lQyDPDWiDipRyZzKRpHFGrfjAbzYz2xou08G82mIxaoJJ1Lg
+         9neqO5k/N0JJw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>
-Subject: [PATCH 0/5] drm/omap: hdmi: improve hdmi4 CEC, add CEC for hdmi5
-Date:   Thu, 11 Feb 2021 11:36:58 +0100
-Message-Id: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
+        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/5] drm/omap: hdmi4: switch to the cec bridge ops
+Date:   Thu, 11 Feb 2021 11:37:00 +0100
+Message-Id: <20210211103703.444625-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
+References: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfEpPuZfHrv3ScUk8i5acH1/+xpv+JQkYulPlSP9klHaiTLJnvoGeqywczB9nhmp8NrXq89BNNgFFzgEWAY1NcrXoyx9ColwZ/pzFSOk7VMXGprxvTFo+
- wZRrhBLye8ylSEI4swbQsl3cygFiXC00BdqOyh28919lGwFsrA7hCo412J1045HK7FAuXhXeP0a65iscs+CXw06zy/nFRhKxJyVDTsNGAaiY+e44EwXg4mKB
- m45GVpOLBJqvcsYhtFUUas4Vpz3fN2GhS5jnIQcH7Q7bFT0Ur2sF12FAlxa53pd5OcCKK2nr3uLbB09yp/WJAN1/6XKw1YI+Cne9aeOOKCPxCeUNnRM4H1Bk
- C+OFUj/MMdUs9zt8LDJHtJO7ISEq4ntlKKUUdSSma0jrH0w9cix0Ax3LoZROJklQ0VciJgue
+X-CMAE-Envelope: MS4xfMVufYRA30s44XrBb7euBEAQNI5/5ADL4UTGWENhEPzj1BFYGkaXvMAzCILkhgdqiEvezzzaB7alvVEsKWc9B88x5HTsVXcOAqHNIwxL+GgEGzmJzkmr
+ jSfaU8y7Slnxk+eS9d0F2rEiadkHCYpBSaTxoZvsB9/szwrcx7r94iII37kpcbbj6e9W+fxiIke4l2k6la8Ajvhpyporg2A8oVTgSVc3AJ7JRJ1QJqhDK37Y
+ F9h6T3vxvs8fGvB5rH3uKMVAsxNtXAALIfHFVXyM/gBKqrGH9jay1+EqicrPDRZlwJVmvJMRG80yzJtiXXK5OcHEMAGJ5SzNOUMgH468olz2F3m2EuiiCW4k
+ x8fuVR2WFaZLPKWzWsdPh8eMgi3IYG8TDagsSyj0fOnzlCCjqy2990y+o88+yplSD3owzSTF2eJFhlwNWes/PI9IHmb7oIJ/9etlHTv5dNlIc28IGyo=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series improves the drm_bridge support for CEC by introducing two
-new bridge ops in the first patch, and using those in the second patch.
+Implement the new CEC bridge ops. This makes it possible to associate
+a CEC adapter with a drm connector, which helps userspace determine
+with cec device node belongs to which drm connector.
 
-This makes it possible to call cec_s_conn_info() and set
-CEC_CAP_CONNECTOR_INFO for the CEC adapter, so userspace can associate
-the CEC adapter with the corresponding DRM connector.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/gpu/drm/omapdrm/dss/hdmi4.c     | 28 +++++++++++++++++--------
+ drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c |  8 ++++---
+ drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h |  7 ++++---
+ 3 files changed, 28 insertions(+), 15 deletions(-)
 
-The third patch simplifies CEC physical address handling by using the
-cec_s_phys_addr_from_edid helper function that didn't exist when this
-code was originally written.
-
-The fourth patch adds CEC support to the OMAP5 driver and the last
-patch adds the missing cec clock to the dra7 and omap5 device tree.
-
-Tested with a Pandaboard and a Beagle X15 board.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (5):
-  drm: drm_bridge: add cec_init/exit bridge ops
-  drm/omap: hdmi4: switch to the cec bridge ops
-  drm/omap: hdmi4: simplify CEC Phys Addr handling
-  drm/omap: hdmi5: add CEC support
-  ARM: dts: dra7/omap5: add cec clock
-
- arch/arm/boot/dts/dra7.dtsi              |   5 +-
- arch/arm/boot/dts/omap5.dtsi             |   5 +-
- drivers/gpu/drm/drm_bridge_connector.c   |  23 +++
- drivers/gpu/drm/omapdrm/dss/Kconfig      |   8 +
- drivers/gpu/drm/omapdrm/dss/Makefile     |   1 +
- drivers/gpu/drm/omapdrm/dss/hdmi.h       |   1 +
- drivers/gpu/drm/omapdrm/dss/hdmi4.c      |  41 ++---
- drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c  |  12 +-
- drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h  |  12 +-
- drivers/gpu/drm/omapdrm/dss/hdmi5.c      |  63 +++++--
- drivers/gpu/drm/omapdrm/dss/hdmi5_cec.c  | 201 +++++++++++++++++++++++
- drivers/gpu/drm/omapdrm/dss/hdmi5_cec.h  |  42 +++++
- drivers/gpu/drm/omapdrm/dss/hdmi5_core.c |  28 +++-
- drivers/gpu/drm/omapdrm/dss/hdmi5_core.h |  33 +++-
- include/drm/drm_bridge.h                 |  31 ++++
- 15 files changed, 453 insertions(+), 53 deletions(-)
- create mode 100644 drivers/gpu/drm/omapdrm/dss/hdmi5_cec.c
- create mode 100644 drivers/gpu/drm/omapdrm/dss/hdmi5_cec.h
-
+diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4.c b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
+index 8de41e74e8f8..765379380d4b 100644
+--- a/drivers/gpu/drm/omapdrm/dss/hdmi4.c
++++ b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
+@@ -482,6 +482,21 @@ static struct edid *hdmi4_bridge_get_edid(struct drm_bridge *bridge,
+ 	return edid;
+ }
+ 
++static int hdmi4_bridge_cec_init(struct drm_bridge *bridge,
++				 struct drm_connector *conn)
++{
++	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
++
++	return hdmi4_cec_init(hdmi->pdev, &hdmi->core, &hdmi->wp, conn);
++}
++
++static void hdmi4_bridge_cec_exit(struct drm_bridge *bridge)
++{
++	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
++
++	hdmi4_cec_uninit(&hdmi->core);
++}
++
+ static const struct drm_bridge_funcs hdmi4_bridge_funcs = {
+ 	.attach = hdmi4_bridge_attach,
+ 	.mode_set = hdmi4_bridge_mode_set,
+@@ -492,13 +507,15 @@ static const struct drm_bridge_funcs hdmi4_bridge_funcs = {
+ 	.atomic_disable = hdmi4_bridge_disable,
+ 	.hpd_notify = hdmi4_bridge_hpd_notify,
+ 	.get_edid = hdmi4_bridge_get_edid,
++	.cec_init = hdmi4_bridge_cec_init,
++	.cec_exit = hdmi4_bridge_cec_exit,
+ };
+ 
+ static void hdmi4_bridge_init(struct omap_hdmi *hdmi)
+ {
+ 	hdmi->bridge.funcs = &hdmi4_bridge_funcs;
+ 	hdmi->bridge.of_node = hdmi->pdev->dev.of_node;
+-	hdmi->bridge.ops = DRM_BRIDGE_OP_EDID;
++	hdmi->bridge.ops = DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_CEC;
+ 	hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
+ 
+ 	drm_bridge_add(&hdmi->bridge);
+@@ -647,14 +664,10 @@ static int hdmi4_bind(struct device *dev, struct device *master, void *data)
+ 	if (r)
+ 		goto err_runtime_put;
+ 
+-	r = hdmi4_cec_init(hdmi->pdev, &hdmi->core, &hdmi->wp);
+-	if (r)
+-		goto err_pll_uninit;
+-
+ 	r = hdmi_audio_register(hdmi);
+ 	if (r) {
+ 		DSSERR("Registering HDMI audio failed\n");
+-		goto err_cec_uninit;
++		goto err_pll_uninit;
+ 	}
+ 
+ 	hdmi->debugfs = dss_debugfs_create_file(dss, "hdmi", hdmi_dump_regs,
+@@ -664,8 +677,6 @@ static int hdmi4_bind(struct device *dev, struct device *master, void *data)
+ 
+ 	return 0;
+ 
+-err_cec_uninit:
+-	hdmi4_cec_uninit(&hdmi->core);
+ err_pll_uninit:
+ 	hdmi_pll_uninit(&hdmi->pll);
+ err_runtime_put:
+@@ -682,7 +693,6 @@ static void hdmi4_unbind(struct device *dev, struct device *master, void *data)
+ 	if (hdmi->audio_pdev)
+ 		platform_device_unregister(hdmi->audio_pdev);
+ 
+-	hdmi4_cec_uninit(&hdmi->core);
+ 	hdmi_pll_uninit(&hdmi->pll);
+ }
+ 
+diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
+index 43592c1cf081..64f5ccd0f11b 100644
+--- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
++++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
+@@ -335,10 +335,10 @@ void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
+ }
+ 
+ int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+-		  struct hdmi_wp_data *wp)
++		   struct hdmi_wp_data *wp, struct drm_connector *conn)
+ {
+-	const u32 caps = CEC_CAP_TRANSMIT | CEC_CAP_LOG_ADDRS |
+-			 CEC_CAP_PASSTHROUGH | CEC_CAP_RC;
++	const u32 caps = CEC_CAP_DEFAULTS | CEC_CAP_CONNECTOR_INFO;
++	struct cec_connector_info conn_info;
+ 	int ret;
+ 
+ 	core->adap = cec_allocate_adapter(&hdmi_cec_adap_ops, core,
+@@ -346,6 +346,8 @@ int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+ 	ret = PTR_ERR_OR_ZERO(core->adap);
+ 	if (ret < 0)
+ 		return ret;
++	cec_fill_conn_info_from_drm(&conn_info, conn);
++	cec_s_conn_info(core->adap, &conn_info);
+ 	core->wp = wp;
+ 
+ 	/* Disable clock initially, hdmi_cec_adap_enable() manages it */
+diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
+index 0292337c97cc..b59a54c3040e 100644
+--- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
++++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
+@@ -29,7 +29,7 @@ struct platform_device;
+ void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa);
+ void hdmi4_cec_irq(struct hdmi_core_data *core);
+ int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+-		  struct hdmi_wp_data *wp);
++		   struct hdmi_wp_data *wp, struct drm_connector *conn);
+ void hdmi4_cec_uninit(struct hdmi_core_data *core);
+ #else
+ static inline void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
+@@ -41,8 +41,9 @@ static inline void hdmi4_cec_irq(struct hdmi_core_data *core)
+ }
+ 
+ static inline int hdmi4_cec_init(struct platform_device *pdev,
+-				struct hdmi_core_data *core,
+-				struct hdmi_wp_data *wp)
++				 struct hdmi_core_data *core,
++				 struct hdmi_wp_data *wp,
++				 struct drm_connector *conn)
+ {
+ 	return 0;
+ }
 -- 
 2.30.0
 
