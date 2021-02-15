@@ -7,29 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD347C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49BA4C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E37764E61
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BD1064E5E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbhBOEkD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:40:03 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46076 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbhBOEj6 (ORCPT
+        id S230026AbhBOEkJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhBOEkI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:39:58 -0500
+        Sun, 14 Feb 2021 23:40:08 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9CDC061574
+        for <linux-media@vger.kernel.org>; Sun, 14 Feb 2021 20:39:27 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88E672CDD;
-        Mon, 15 Feb 2021 05:29:06 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B82302702;
+        Mon, 15 Feb 2021 05:29:01 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363347;
-        bh=wR2H+fsbpySf42aL1wPZoGKLeUnNTo/sqIjH15Dp78g=;
+        s=mail; t=1613363342;
+        bh=YX6rc8Rheh/1WaUdItzZOB7LibYRaY3pc/tKYebuptE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uu3ygZybtTfOlPldykTIcqwXP/8Q86r7HDUU1TGGIBl2Sbcxp0vlEMue3Bh0xpCCN
-         IOhBU/MfzIbiNfR4SnCCOG8M6P22aG1m4O1JethSbEGEUO5z3yAtLU3XvHs/LnMx86
-         bmP+VdWay3HR8gTNFE7D+0PpsC43E1+jeW96ozDc=
+        b=r58lnHGykdn6Av304gkz3QM5Yf4hdF0qYiAaF9U0xl6LlzwL0xnXHlX20sHuUPz4R
+         Xz4ZvZYhHVYlVy+oeP5wLlKpxfApFeutKdgPn+EqkdaBDopYi6HJqOwkdZOclPMs10
+         Q0I/6cXDmwPVEcxFBJqYXNnt2qCtJGvQny1NbdBQ=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -37,9 +40,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 71/77] media: imx: imx7_mipi_csis: Turn register access macros into functions
-Date:   Mon, 15 Feb 2021 06:27:35 +0200
-Message-Id: <20210215042741.28850-72-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 66/77] media: imx: imx7_mipi_csis: Drop 10-bit YUV support
+Date:   Mon, 15 Feb 2021 06:27:30 +0200
+Message-Id: <20210215042741.28850-67-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -49,37 +52,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make it easier to instrument register access (for instance with
-printk-based logging) by turning the macros into inline functions.
+The data type specified for 10-bit YUV is the same as 8-bit YUV. This is
+wrong, and has thus clearly not been tested. Instead of fixing data type
+without being able to test it, drop it. It can be added back later when
+someone will have access to a 10-bit YUV source to this it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 4a51d2440b64..5e907ea46743 100644
+index 816650c438aa..e73efc7e99f9 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -358,8 +358,15 @@ static const struct csis_pix_format mipi_csis_formats[] = {
- 	}
- };
- 
--#define mipi_csis_write(__csis, __r, __v) writel(__v, (__csis)->regs + (__r))
--#define mipi_csis_read(__csis, __r) readl((__csis)->regs + (__r))
-+static inline void mipi_csis_write(struct csi_state *state, u32 reg, u32 val)
-+{
-+	writel(val, state->regs + reg);
-+}
-+
-+static inline u32 mipi_csis_read(struct csi_state *state, u32 reg)
-+{
-+	return readl(state->regs + reg);
-+}
- 
- static int mipi_csis_dump_regs(struct csi_state *state)
- {
+@@ -276,10 +276,6 @@ static const struct csis_pix_format mipi_csis_formats[] = {
+ 		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+ 		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
+ 		.width = 8,
+-	}, {
+-		.code = MEDIA_BUS_FMT_UYVY10_2X10,
+-		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
+-		.width = 10,
+ 	},
+ 	/* RAW (Bayer and greyscale) formats. */
+ 	{
 -- 
 Regards,
 
