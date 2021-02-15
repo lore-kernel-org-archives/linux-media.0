@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53764C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74CF3C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:34:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23A2A64E52
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:34:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EC6664E52
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbhBOEeE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:34:04 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45902 "EHLO
+        id S229960AbhBOEeX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:34:23 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45636 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbhBOEeC (ORCPT
+        with ESMTP id S229904AbhBOEeK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:34:02 -0500
+        Sun, 14 Feb 2021 23:34:10 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EA1491934;
-        Mon, 15 Feb 2021 05:28:31 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 362E21952;
+        Mon, 15 Feb 2021 05:28:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363312;
-        bh=+aHdLg8L6rJVSi90fEtONGGwDUElEHPHkSmAJIk0WlE=;
+        s=mail; t=1613363313;
+        bh=rLGIY23JWW4JTlN/e6tNeP7C20At9SydaHA0DHDwVjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCPabTJDfTqCzCbcumBerQKodtDi4N6ofybpXGN1ROWzK4ugblZH9X7wMWnJcgkXY
-         Kbx6E4ND8W8td/yfgxgTkY8IxPtgAoabXTo9wxcSuhSZ/zDvuoFDiWMNthrAiNZSLS
-         x/wzOA7DHnEdCWkrvLGXpxE0Aqm+mMhjtTKZmvyE=
+        b=SI5Sm3orqVTpbXWrSjt2v2qgMme44KQLcSxegWOQ4hc/uAGZ0mQNzXrleOKE0p3rM
+         QGMDZrG0INieHZULqDvk5tiii+yRZ2PLOuibuEfet64zqol8P+/02pyRVmnZ5it3l4
+         /dgNa2J+trpsXu/Q4YixlqVuZZT3V7lmFmQzI0Bs=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 28/77] media: imx: capture: Expose V4L2_CAP_IO_MC for the MC-centric API
-Date:   Mon, 15 Feb 2021 06:26:52 +0200
-Message-Id: <20210215042741.28850-29-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 30/77] media: imx: capture: Support creating immutable link to capture device
+Date:   Mon, 15 Feb 2021 06:26:54 +0200
+Message-Id: <20210215042741.28850-31-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -49,38 +49,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Report to userspace that the MC-centric API is MC-centric by exposing
-the V4L2_CAP_IO_MC. This requires adding support for mbus code filtering
-in format enumeration, as required by V4L2_CAP_IO_MC.
+When the subdevice connected to the capture device has a single possible
+sink, there's no point in making the link mutable. Support creating
+immutable links.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx-media-capture.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes since v1:
 
+- Pass link flags to imx_media_capture_device_register()
+---
+ drivers/staging/media/imx/imx-ic-prpencvf.c   | 2 +-
+ drivers/staging/media/imx/imx-media-capture.c | 7 +++++--
+ drivers/staging/media/imx/imx-media-csi.c     | 2 +-
+ drivers/staging/media/imx/imx-media.h         | 3 ++-
+ drivers/staging/media/imx/imx7-media-csi.c    | 2 +-
+ 5 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+index 88d69425e1b3..d990553de87b 100644
+--- a/drivers/staging/media/imx/imx-ic-prpencvf.c
++++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+@@ -1269,7 +1269,7 @@ static int prp_registered(struct v4l2_subdev *sd)
+ 	if (IS_ERR(priv->vdev))
+ 		return PTR_ERR(priv->vdev);
+ 
+-	ret = imx_media_capture_device_register(priv->vdev);
++	ret = imx_media_capture_device_register(priv->vdev, 0);
+ 	if (ret)
+ 		goto remove_vdev;
+ 
 diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 99133b7ffa5f..c4360866f7f6 100644
+index c4360866f7f6..93ba09236010 100644
 --- a/drivers/staging/media/imx/imx-media-capture.c
 +++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -96,7 +96,7 @@ static int capture_enum_fmt_vid_cap(struct file *file, void *fh,
- 				    struct v4l2_fmtdesc *f)
- {
- 	return imx_media_enum_pixel_formats(&f->pixelformat, f->index,
--					    PIXFMT_SEL_ANY, 0);
-+					    PIXFMT_SEL_ANY, f->mbus_code);
+@@ -898,7 +898,8 @@ static int capture_init_format(struct capture_priv *priv)
+ 	return 0;
  }
  
- static int capture_enum_framesizes(struct file *file, void *fh,
-@@ -986,7 +986,8 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
- 	vfd->release = video_device_release;
- 	vfd->vfl_dir = VFL_DIR_RX;
- 	vfd->tvnorms = V4L2_STD_NTSC | V4L2_STD_PAL | V4L2_STD_SECAM;
--	vfd->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+	vfd->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING
-+			 | (!legacy_api ? V4L2_CAP_IO_MC : 0);
- 	vfd->lock = &priv->mutex;
- 	vfd->queue = &priv->q;
+-int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
++int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
++				      u32 link_flags)
+ {
+ 	struct capture_priv *priv = to_capture_priv(vdev);
+ 	struct v4l2_subdev *sd = priv->src_sd;
+@@ -927,8 +928,10 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
+ 		 video_device_node_name(vfd));
+ 
+ 	/* Create the link from the src_sd devnode pad to device node. */
++	if (link_flags & MEDIA_LNK_FL_IMMUTABLE)
++		link_flags |= MEDIA_LNK_FL_ENABLED;
+ 	ret = media_create_pad_link(&sd->entity, priv->src_sd_pad,
+-				    &vfd->entity, 0, 0);
++				    &vfd->entity, 0, link_flags);
+ 	if (ret) {
+ 		dev_err(priv->dev, "failed to create link to device node\n");
+ 		video_unregister_device(vfd);
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index 45c92816facc..8d02939aaa23 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -1788,7 +1788,7 @@ static int csi_registered(struct v4l2_subdev *sd)
+ 		goto free_fim;
+ 	}
+ 
+-	ret = imx_media_capture_device_register(priv->vdev);
++	ret = imx_media_capture_device_register(priv->vdev, 0);
+ 	if (ret)
+ 		goto remove_vdev;
+ 
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index 2ea2e62ddf86..492d9a64e704 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -288,7 +288,8 @@ struct imx_media_video_dev *
+ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+ 			      int pad, bool legacy_api);
+ void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+-int imx_media_capture_device_register(struct imx_media_video_dev *vdev);
++int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
++				      u32 link_flags);
+ void imx_media_capture_device_unregister(struct imx_media_video_dev *vdev);
+ struct imx_media_buffer *
+ imx_media_capture_device_next_buf(struct imx_media_video_dev *vdev);
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 3bf2505de6a2..90cf4b889e23 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1104,7 +1104,7 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+ 	if (IS_ERR(csi->vdev))
+ 		return PTR_ERR(csi->vdev);
+ 
+-	ret = imx_media_capture_device_register(csi->vdev);
++	ret = imx_media_capture_device_register(csi->vdev, 0);
+ 	if (ret)
+ 		imx_media_capture_device_remove(csi->vdev);
  
 -- 
 Regards,
