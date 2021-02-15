@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65713C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1072C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:35:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3270C64E68
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:35:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDBFC64E68
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:35:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbhBOEfB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:35:01 -0500
+        id S229930AbhBOEfT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:35:19 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45928 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhBOEfB (ORCPT
+        with ESMTP id S229895AbhBOEfS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:35:01 -0500
+        Sun, 14 Feb 2021 23:35:18 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1949519B0;
-        Mon, 15 Feb 2021 05:28:35 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A9DE51AA4;
+        Mon, 15 Feb 2021 05:28:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363315;
-        bh=seunjfYU3PCoTXOLMaa6FHUvYgfDR3eVR4zmiIrXpJw=;
+        s=mail; t=1613363318;
+        bh=VZw8wvAFsbvJV8PdBSw1qMCp1Sd5MHAAjpnafQBOi4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M5yxgkwd82Cezmuu8gRm4YChGUOH3sBNTI4yAnNe3iWaeDansI/amt1bmzxaou8lN
-         qIjivDtLhuFyfRLJkJztoeZ1kM3Fzm32djIr0t4UR+Dc9TahE0GjTgmGHe2nmnYxHD
-         Bx7RMXXYWCPs6DjV5NLOEcsx/E/bfmy4glLj1nKY=
+        b=TpEqLBKlxwZEDDGWq6m+XcxwLV3ozltvs3xUtc0cX6wpa4mK62Myp7R7FfehLx1NG
+         Rpzk6WPatdvAkAtao/HmYey+QCRT12F6wnmLhqfBlZE2rFWwiixWJ51msIc3e3nkiN
+         t39eK/Mkqyihu+U3cpWCy7Cf9Em/tuQ1W6OSKEXo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 33/77] media: imx: imx7-media-csi: Create immutable link to capture device
-Date:   Mon, 15 Feb 2021 06:26:57 +0200
-Message-Id: <20210215042741.28850-34-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 37/77] media: imx: imx7-media-csi: Validate capture format in .link_validate()
+Date:   Mon, 15 Feb 2021 06:27:01 +0200
+Message-Id: <20210215042741.28850-38-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -49,67 +49,124 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX7 camera pipeline is simple, with the CSI connected directly to
-the capture device without any other option. There's thus no need to
-allow link configurable by userspace. Make it immutable.
+Move capture format validation from imx7_csi_configure() to
+.link_validate(). This simplifies error handling at stream on time, as
+imx7_csi_configure) now becomes a void function.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 45 +++++++++++++---------
+ 1 file changed, 26 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index bc3324a30824..174e608ededa 100644
+index 158b235476eb..de7b93317a47 100644
 --- a/drivers/staging/media/imx/imx7-media-csi.c
 +++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -166,8 +166,6 @@ struct imx7_csi {
+@@ -489,7 +489,7 @@ static void imx7_csi_dma_stop(struct imx7_csi *csi)
+ 	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
+ }
  
- 	struct v4l2_subdev *src_sd;
+-static int imx7_csi_configure(struct imx7_csi *csi)
++static void imx7_csi_configure(struct imx7_csi *csi)
+ {
+ 	struct imx_media_video_dev *vdev = csi->vdev;
+ 	struct v4l2_pix_format *out_pix = &vdev->fmt;
+@@ -518,7 +518,7 @@ static int imx7_csi_configure(struct imx7_csi *csi)
+ 			BIT_BASEADDR_CHG_ERR_EN);
+ 		imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
  
--	struct media_entity *sink;
--
- 	struct v4l2_mbus_framefmt format_mbus[IMX7_CSI_PADS_NUM];
- 	const struct imx_media_pixfmt *cc[IMX7_CSI_PADS_NUM];
- 	struct v4l2_fract frame_interval[IMX7_CSI_PADS_NUM];
-@@ -450,19 +448,6 @@ static int imx7_csi_link_setup(struct media_entity *entity,
- 		} else {
- 			csi->src_sd = NULL;
- 		}
--
--		goto unlock;
--	}
--
--	/* source pad */
--	if (flags & MEDIA_LNK_FL_ENABLED) {
--		if (csi->sink) {
--			ret = -EBUSY;
--			goto unlock;
--		}
--		csi->sink = remote->entity;
--	} else {
--		csi->sink = NULL;
+-		return 0;
++		return;
  	}
  
- unlock:
-@@ -842,7 +827,7 @@ static int imx7_csi_s_stream(struct v4l2_subdev *sd, int enable)
- 
- 	mutex_lock(&csi->lock);
- 
--	if (!csi->src_sd || !csi->sink) {
-+	if (!csi->src_sd) {
- 		ret = -EPIPE;
- 		goto out_unlock;
+ 	imx7_csi_set_imagpara(csi, width, out_pix->height);
+@@ -562,14 +562,10 @@ static int imx7_csi_configure(struct imx7_csi *csi)
+ 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
+ 		cr1 |= BIT_PIXEL_BIT;
+ 		break;
+-	default:
+-		return -EINVAL;
  	}
-@@ -1091,7 +1076,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
- 	if (IS_ERR(csi->vdev))
- 		return PTR_ERR(csi->vdev);
  
--	ret = imx_media_capture_device_register(csi->vdev, 0);
-+	ret = imx_media_capture_device_register(csi->vdev,
-+						MEDIA_LNK_FL_IMMUTABLE);
+ 	imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
+ 	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
+-
+-	return 0;
+ }
+ 
+ static int imx7_csi_init(struct imx7_csi *csi)
+@@ -622,18 +618,10 @@ static int imx7_csi_streaming_start(struct imx7_csi *csi)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = imx7_csi_configure(csi);
+-	if (ret < 0)
+-		goto dma_stop;
+-
++	imx7_csi_configure(csi);
+ 	imx7_csi_enable(csi);
+ 
+ 	return 0;
+-
+-dma_stop:
+-	imx7_csi_dma_stop(csi);
+-
+-	return ret;
+ }
+ 
+ static int imx7_csi_streaming_stop(struct imx7_csi *csi)
+@@ -1010,10 +998,16 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 				      struct v4l2_subdev_format *sink_fmt)
+ {
+ 	struct imx7_csi *csi = v4l2_get_subdevdata(sd);
++	struct imx_media_video_dev *vdev = csi->vdev;
++	const struct v4l2_pix_format *out_pix = &vdev->fmt;
+ 	struct media_entity *src;
+ 	struct media_pad *pad;
+ 	int ret;
+ 
++	/*
++	 * Validate the source link, and record whether the CSI mux selects the
++	 * parallel input or the CSI-2 receiver.
++	 */
+ 	ret = v4l2_subdev_link_validate_default(sd, link, source_fmt, sink_fmt);
  	if (ret)
- 		imx_media_capture_device_remove(csi->vdev);
+ 		return ret;
+@@ -1031,10 +1025,6 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 	    src->function != MEDIA_ENT_F_VID_MUX)
+ 		src = &csi->sd.entity;
+ 
+-	/*
+-	 * find the entity that is selected by the source. This is needed
+-	 * to distinguish between a parallel or CSI-2 pipeline.
+-	 */
+ 	pad = imx_media_pipeline_pad(src, 0, 0, true);
+ 	if (!pad)
+ 		return -ENODEV;
+@@ -1045,6 +1035,23 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 
+ 	mutex_unlock(&csi->lock);
+ 
++	/* Validate the sink link, ensure the pixel format is supported. */
++	switch (out_pix->pixelformat) {
++	case V4L2_PIX_FMT_UYVY:
++	case V4L2_PIX_FMT_YUYV:
++	case V4L2_PIX_FMT_GREY:
++	case V4L2_PIX_FMT_Y10:
++	case V4L2_PIX_FMT_Y12:
++	case V4L2_PIX_FMT_SBGGR8:
++	case V4L2_PIX_FMT_SBGGR16:
++		break;
++
++	default:
++		dev_dbg(csi->dev, "Invalid capture pixel format 0x%08x\n",
++			out_pix->pixelformat);
++		return -EINVAL;
++	}
++
+ 	return 0;
+ }
  
 -- 
 Regards,
