@@ -5,42 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9E0C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A0C7C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:39:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4990764E61
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:38:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1058164E61
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbhBOEiy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:38:54 -0500
+        id S229951AbhBOEjK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:39:10 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45928 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbhBOEit (ORCPT
+        with ESMTP id S229960AbhBOEjI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:38:49 -0500
+        Sun, 14 Feb 2021 23:39:08 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 39AF8743;
-        Mon, 15 Feb 2021 05:28:57 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D9C431B25;
+        Mon, 15 Feb 2021 05:28:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363337;
-        bh=zbyWW51wp6N4gVAbEmcAFDgfMaAFokmVToglG8dBvIA=;
+        s=mail; t=1613363340;
+        bh=06shbK39iihSN974oiHPWV+3z/RaALg8jKjgJBuKUI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mdVReQuMyTxvtQtGqwQkEwFvecJSwjd8PStasQJlmkIMdfmQtP94KSjkQSZtRYDwi
-         gbWzjHPyFYWyqaygKw0pmOG1bNryfX2eRMkwEQiLGijGGJq3Ie3jSht4FIOrbYFL2j
-         hSRKHK9VW73Csp3B11RE8Q6BS7Jdu37ZFob6JBxg=
+        b=uHhHhM/9uIukYcGlX5p9Fuspo16wVBaiEPE6ftqUFB8oAykdg7vpb43j6Xz2oi0zI
+         T5ia9VhabbKEH3QpZMjZkocnyapKb8eIU3KDan2VtAEZFl1/WabDxOtb0V5wXY1v14
+         JW4mM5YPB+34690gsZufB98WZIaggv81NypVT4pQ=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 60/77] dt-bindings: media: nxp,imx7-mipi-csi2: Indent example with 4 spaces
-Date:   Mon, 15 Feb 2021 06:27:24 +0200
-Message-Id: <20210215042741.28850-61-laurent.pinchart@ideasonboard.com>
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH v2 63/77] media: imx: imx7_mipi_csis: Fix input size alignment
+Date:   Mon, 15 Feb 2021 06:27:27 +0200
+Message-Id: <20210215042741.28850-64-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -50,86 +49,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DT bindings examples are customarily indented with 4 spaces.
+The alignments given to the v4l_bound_align_image() are expressed in
+bytes, while the function expects them to be expressed as a power of
+two. Fix it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 54 +++++++++----------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-index 74ff92b5baa3..76fcc8d80ee3 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-@@ -122,41 +122,41 @@ examples:
-     #include <dt-bindings/reset/imx7-reset.h>
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 36eabab22bfb..381eda94398a 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -831,25 +831,25 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
+ 	 */
+ 	switch (csis_fmt->width % 8) {
+ 	case 0:
+-		align = 1;
++		align = 0;
+ 		break;
+ 	case 4:
+-		align = 2;
++		align = 1;
+ 		break;
+ 	case 2:
+ 	case 6:
+-		align = 4;
++		align = 2;
+ 		break;
+ 	case 1:
+ 	case 3:
+ 	case 5:
+ 	case 7:
+-		align = 8;
++		align = 3;
+ 		break;
+ 	}
  
-     mipi_csi: mipi-csi@30750000 {
--            compatible = "fsl,imx7-mipi-csi2";
--            reg = <0x30750000 0x10000>;
--            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+        compatible = "fsl,imx7-mipi-csi2";
-+        reg = <0x30750000 0x10000>;
-+        interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+ 	v4l_bound_align_image(&fmt->width, 1, CSIS_MAX_PIX_WIDTH, align,
+-			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 1, 0);
++			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 0, 0);
  
--            clocks = <&clks IMX7D_IPG_ROOT_CLK>,
--                     <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
--                     <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
--            clock-names = "pclk", "wrap", "phy";
--            clock-frequency = <166000000>;
-+        clocks = <&clks IMX7D_IPG_ROOT_CLK>,
-+                 <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
-+                 <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
-+        clock-names = "pclk", "wrap", "phy";
-+        clock-frequency = <166000000>;
+ 	sdformat->format = *fmt;
  
--            power-domains = <&pgc_mipi_phy>;
--            phy-supply = <&reg_1p0d>;
--            resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
-+        power-domains = <&pgc_mipi_phy>;
-+        phy-supply = <&reg_1p0d>;
-+        resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
- 
--            ports {
--                    #address-cells = <1>;
--                    #size-cells = <0>;
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
- 
--                    port@0 {
--                            reg = <0>;
-+            port@0 {
-+                reg = <0>;
- 
--                            mipi_from_sensor: endpoint {
--                                    remote-endpoint = <&ov2680_to_mipi>;
--                                    data-lanes = <1>;
--                            };
--                    };
-+                mipi_from_sensor: endpoint {
-+                    remote-endpoint = <&ov2680_to_mipi>;
-+                    data-lanes = <1>;
-+                };
-+            };
- 
--                    port@1 {
--                            reg = <1>;
-+            port@1 {
-+                reg = <1>;
- 
--                            mipi_vc0_to_csi_mux: endpoint {
--                                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
--                            };
--                    };
-+                mipi_vc0_to_csi_mux: endpoint {
-+                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
-+                };
-             };
-+        };
-     };
- 
- ...
 -- 
 Regards,
 
