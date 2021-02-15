@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2C9CC433DB
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD347C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 932D764E61
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:39:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E37764E61
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:40:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbhBOEjo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:39:44 -0500
+        id S229934AbhBOEkD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:40:03 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:46076 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbhBOEjg (ORCPT
+        with ESMTP id S229977AbhBOEj6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:39:36 -0500
+        Sun, 14 Feb 2021 23:39:58 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E7CC1BFE;
-        Mon, 15 Feb 2021 05:29:01 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88E672CDD;
+        Mon, 15 Feb 2021 05:29:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363341;
-        bh=Q6z3h9gXpjPTijVBLareKJb/Swh9GmYatVa/7my3lgw=;
+        s=mail; t=1613363347;
+        bh=wR2H+fsbpySf42aL1wPZoGKLeUnNTo/sqIjH15Dp78g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7mHzY1noUiWWxIw0zqSjSHDQyTLy6UaQTXN6NUK0cqWnBs99hUm3d8kVYnpnrv16
-         Qhse6ikbZnzGS59aWZnRbJOjqNCsAuO+2TVRmi6ehOeUcGDPXcTQE1Egw/IkWPDfN2
-         6D56gHLg0Ap6ppawqlwXpLP0ZSfXLBLtzWpSZQWM=
+        b=Uu3ygZybtTfOlPldykTIcqwXP/8Q86r7HDUU1TGGIBl2Sbcxp0vlEMue3Bh0xpCCN
+         IOhBU/MfzIbiNfR4SnCCOG8M6P22aG1m4O1JethSbEGEUO5z3yAtLU3XvHs/LnMx86
+         bmP+VdWay3HR8gTNFE7D+0PpsC43E1+jeW96ozDc=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 65/77] media: imx: imx7_mipi_csis: Avoid double get of wrap clock
-Date:   Mon, 15 Feb 2021 06:27:29 +0200
-Message-Id: <20210215042741.28850-66-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 71/77] media: imx: imx7_mipi_csis: Turn register access macros into functions
+Date:   Mon, 15 Feb 2021 06:27:35 +0200
+Message-Id: <20210215042741.28850-72-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -49,92 +49,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The wrap clock is retrieved with the other clocks using
-devm_clk_bulk_get(), and retrieved independently with a specific
-devm_clk_get() call. The latter isn't needed, replace it with usage of
-the wrap clock from the bulk array.
-
-As the wrap clock is mandatory, simplify its usage further by removing
-conditionals.
+Make it easier to instrument register access (for instance with
+printk-based logging) by turning the macros into inline functions.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 31 +++++++++++-----------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index c153a77c3784..816650c438aa 100644
+index 4a51d2440b64..5e907ea46743 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -206,7 +206,17 @@ static const struct mipi_csis_event mipi_csis_events[] = {
- 
- #define MIPI_CSIS_NUM_EVENTS ARRAY_SIZE(mipi_csis_events)
- 
--static const char * const mipi_csis_clk_id[] = {"pclk", "wrap", "phy"};
-+enum mipi_csis_clk {
-+	MIPI_CSIS_CLK_PCLK,
-+	MIPI_CSIS_CLK_WRAP,
-+	MIPI_CSIS_CLK_PHY,
-+};
-+
-+static const char * const mipi_csis_clk_id[] = {
-+	"pclk",
-+	"wrap",
-+	"phy",
-+};
- 
- struct csis_hw_reset {
- 	struct regmap *src;
-@@ -229,7 +239,6 @@ struct csi_state {
- 	struct platform_device *pdev;
- 	struct phy *phy;
- 	void __iomem *regs;
--	struct clk *wrap_clk;
- 	int irq;
- 	u32 flags;
- 
-@@ -507,12 +516,7 @@ static void mipi_csis_set_params(struct csi_state *state)
- 	mipi_csis_write(state, MIPI_CSIS_ISPSYNC_CH0, val);
- 
- 	val = mipi_csis_read(state, MIPI_CSIS_CLK_CTRL);
--	val &= ~MIPI_CSIS_CLK_CTRL_WCLK_SRC;
--	if (state->wrap_clk)
--		val |= MIPI_CSIS_CLK_CTRL_WCLK_SRC;
--	else
--		val &= ~MIPI_CSIS_CLK_CTRL_WCLK_SRC;
--
-+	val |= MIPI_CSIS_CLK_CTRL_WCLK_SRC;
- 	val |= MIPI_CSIS_CLK_CTRL_CLKGATE_TRAIL_CH0(15);
- 	val &= ~MIPI_CSIS_CLK_CTRL_CLKGATE_EN_MSK;
- 	mipi_csis_write(state, MIPI_CSIS_CLK_CTRL, val);
-@@ -557,12 +561,9 @@ static int mipi_csis_clk_get(struct csi_state *state)
- 	if (ret < 0)
- 		return ret;
- 
--	state->wrap_clk = devm_clk_get(dev, "wrap");
--	if (IS_ERR(state->wrap_clk))
--		return PTR_ERR(state->wrap_clk);
--
- 	/* Set clock rate */
--	ret = clk_set_rate(state->wrap_clk, state->clk_frequency);
-+	ret = clk_set_rate(state->clks[MIPI_CSIS_CLK_WRAP].clk,
-+			   state->clk_frequency);
- 	if (ret < 0)
- 		dev_err(dev, "set rate=%d failed: %d\n", state->clk_frequency,
- 			ret);
-@@ -1149,9 +1150,9 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 			goto unregister_all;
+@@ -358,8 +358,15 @@ static const struct csis_pix_format mipi_csis_formats[] = {
  	}
+ };
  
--	dev_info(&pdev->dev, "lanes: %d, hs_settle: %d, wclk: %d, freq: %u\n",
-+	dev_info(&pdev->dev, "lanes: %d, hs_settle: %d, freq: %u\n",
- 		 state->bus.num_data_lanes, state->hs_settle,
--		 state->wrap_clk ? 1 : 0, state->clk_frequency);
-+		 state->clk_frequency);
+-#define mipi_csis_write(__csis, __r, __v) writel(__v, (__csis)->regs + (__r))
+-#define mipi_csis_read(__csis, __r) readl((__csis)->regs + (__r))
++static inline void mipi_csis_write(struct csi_state *state, u32 reg, u32 val)
++{
++	writel(val, state->regs + reg);
++}
++
++static inline u32 mipi_csis_read(struct csi_state *state, u32 reg)
++{
++	return readl(state->regs + reg);
++}
  
- 	return 0;
- 
+ static int mipi_csis_dump_regs(struct csi_state *state)
+ {
 -- 
 Regards,
 
