@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD5DAC43381
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 669F6C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:29:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DA3C64E9A
-	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:29:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A5D264EB6
+	for <linux-media@archiver.kernel.org>; Mon, 15 Feb 2021 04:29:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbhBOE26 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Feb 2021 23:28:58 -0500
+        id S229930AbhBOE3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:29:20 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45318 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbhBOE25 (ORCPT
+        with ESMTP id S229888AbhBOE3O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Feb 2021 23:28:57 -0500
+        Sun, 14 Feb 2021 23:29:14 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 96C15B23;
-        Mon, 15 Feb 2021 05:28:12 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08D0014C0;
+        Mon, 15 Feb 2021 05:28:13 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613363293;
-        bh=lz5+luCqSOqGMQjHDZW6HFX0ZIdiflJo3OC0wAx2Nkw=;
+        s=mail; t=1613363294;
+        bh=I8Svdrs+I5w29jhEhcMwEr7dqJKME+cuH1UYtODc+nc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=atuFDEmfCUsiOBbZ4K1FUEabeBAt/6HkzGACrb1po5gXYRRg02x0M0ctfy1+L3Jb8
-         IzUp9XKD+IWNxqX1TXfMMP6Nn9m+OGHumN/McqXjxi65p59z1+cCy1fsJ5/WvF2s4P
-         uz7eTnwTVmbcKUOw6tYF0SvUNK7mwUkoqJVBucWo=
+        b=rYvZca5T0U6w7hrUNj2FRwI5svdCWkMYrq/c0ABNq2pj0MAWm/uQn9xquhs/TF60w
+         sr3EiMLAGjpAk8Y7dI3QuE2rNdYq6nolQI9eCmx7iHJDwqf2HTmpbiA1BqsIdOC5GJ
+         ZvAI++vrnIU3aU8rKdZi4M4m0UmstnD8ETtanxMM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 02/77] media: imx: Move dependency on VIDEO_DEV to common Kconfig symbol
-Date:   Mon, 15 Feb 2021 06:26:26 +0200
-Message-Id: <20210215042741.28850-3-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 04/77] media: imx: Compile imx6-media-objs only for CONFIG_VIDEO_IMX_CSI
+Date:   Mon, 15 Feb 2021 06:26:28 +0200
+Message-Id: <20210215042741.28850-5-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
 References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
@@ -49,58 +49,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All the i.MX staging media drivers depend on VIDEO_DEV. Move the
-dependency to the common VIDEO_IMX_MEDIA symbol to avoid repeating it.
-
-While at it, sort the dependencies and selections alphabetically.
+imx6-media-objs contains a set of objects that are specific to the i.MX6
+IPU-based media subsystem. They're not needed for the i.MX7 CSI. Only
+compile them if CONFIG_VIDEO_IMX_CSI is selected.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/imx/Kconfig | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/staging/media/imx/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/imx/Kconfig b/drivers/staging/media/imx/Kconfig
-index 743e43742211..e3ca3c9d5d22 100644
---- a/drivers/staging/media/imx/Kconfig
-+++ b/drivers/staging/media/imx/Kconfig
-@@ -2,13 +2,14 @@
- config VIDEO_IMX_MEDIA
- 	tristate "i.MX5/6 V4L2 media core driver"
- 	depends on ARCH_MXC || COMPILE_TEST
-+	depends on HAS_DMA
-+	depends on VIDEO_DEV
- 	depends on VIDEO_V4L2
- 	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	depends on HAS_DMA
--	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_FWNODE
- 	select V4L2_MEM2MEM_DEV
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEO_V4L2_SUBDEV_API
- 	help
- 	  Say yes here to enable support for video4linux media controller
- 	  driver for the i.MX5/6 SOC.
-@@ -18,7 +19,7 @@ menu "i.MX5/6/7/8 Media Sub devices"
+diff --git a/drivers/staging/media/imx/Makefile b/drivers/staging/media/imx/Makefile
+index 69cc5da04a2e..6ac33275cc97 100644
+--- a/drivers/staging/media/imx/Makefile
++++ b/drivers/staging/media/imx/Makefile
+@@ -1,11 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
++imx-media-common-objs := imx-media-capture.o imx-media-dev-common.o \
++	imx-media-of.o imx-media-utils.o
++
+ imx6-media-objs := imx-media-dev.o imx-media-internal-sd.o \
+ 	imx-ic-common.o imx-ic-prp.o imx-ic-prpencvf.o imx-media-vdic.o \
+ 	imx-media-csc-scaler.o
  
- config VIDEO_IMX_CSI
- 	tristate "i.MX5/6 Camera Sensor Interface driver"
--	depends on VIDEO_IMX_MEDIA && VIDEO_DEV
-+	depends on VIDEO_IMX_MEDIA
- 	depends on IMX_IPUV3_CORE
- 	default y
- 	help
-@@ -26,7 +27,7 @@ config VIDEO_IMX_CSI
+-imx-media-common-objs := imx-media-capture.o imx-media-dev-common.o \
+-	imx-media-of.o imx-media-utils.o
+-
+ imx6-media-csi-objs := imx-media-csi.o imx-media-fim.o
  
- config VIDEO_IMX7_CSI
- 	tristate "i.MX6UL/L / i.MX7 / i.MX8M Camera Sensor Interface driver"
--	depends on VIDEO_IMX_MEDIA && VIDEO_DEV
-+	depends on VIDEO_IMX_MEDIA
- 	default y
- 	help
- 	  Enable support for video4linux camera sensor interface driver for
+ obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-common.o
 -- 
 Regards,
 
