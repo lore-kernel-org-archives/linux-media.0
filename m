@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C7FBC43332
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FD9CC433E6
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62CCD64E0F
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15D5E64E04
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbhBPRmY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 12:42:24 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:48205 "EHLO
+        id S231191AbhBPRm3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 12:42:29 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:44681 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbhBPRmQ (ORCPT
+        with ESMTP id S231145AbhBPRmS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Feb 2021 12:42:16 -0500
+        Tue, 16 Feb 2021 12:42:18 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2AC8A200002;
-        Tue, 16 Feb 2021 17:41:27 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 5540C200011;
+        Tue, 16 Feb 2021 17:41:35 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 01/16] media: i2c: rdacm20: Enable noise immunity
-Date:   Tue, 16 Feb 2021 18:41:31 +0100
-Message-Id: <20210216174146.106639-2-jacopo+renesas@jmondi.org>
+Subject: [PATCH 05/16] media: i2c: rdacm20: Check return values
+Date:   Tue, 16 Feb 2021 18:41:35 +0100
+Message-Id: <20210216174146.106639-6-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
 References: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
@@ -44,41 +44,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable the noise immunity threshold at the end of the rdacm20
-initialization routine.
-
-The rdcam20 camera module has been so far tested with a startup
-delay that allowed the embedded MCU to program the serializer. If
-the initialization routine is run before the MCU programs the
-serializer and the image sensor and their addresses gets changed
-by the rdacm20 driver it is required to manually enable the noise
-immunity threshold to make the communication on the control channel
-more reliable.
+The camera module initialization routine does not check the return
+value of a few functions. Fix that.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/rdacm20.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/i2c/rdacm20.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index 90eb73f0e6e9..f7fd5ae955d0 100644
+index 56406d82b5ac..e982373908f2 100644
 --- a/drivers/media/i2c/rdacm20.c
 +++ b/drivers/media/i2c/rdacm20.c
-@@ -541,7 +541,13 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+@@ -470,11 +470,16 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+ 	 *  Ensure that we have a good link configuration before attempting to
+ 	 *  identify the device.
+ 	 */
+-	max9271_configure_i2c(&dev->serializer, MAX9271_I2CSLVSH_469NS_234NS |
+-						MAX9271_I2CSLVTO_1024US |
+-						MAX9271_I2CMSTBT_105KBPS);
++	ret = max9271_configure_i2c(&dev->serializer,
++				    MAX9271_I2CSLVSH_469NS_234NS |
++				    MAX9271_I2CSLVTO_1024US |
++				    MAX9271_I2CMSTBT_105KBPS);
++	if (ret)
++		return ret;
  
- 	dev_info(dev->dev, "Identified MAX9271 + OV10635 device\n");
+-	max9271_configure_gmsl_link(&dev->serializer);
++	ret = max9271_configure_gmsl_link(&dev->serializer);
++	if (ret)
++		return ret;
  
--	return 0;
-+	/*
-+	 * Set reverse channel high threshold to increase noise immunity.
-+	 *
-+	 * This should be compensated by increasing the reverse channel
-+	 * amplitude on the remote deserializer side.
-+	 */
-+	return max9271_set_high_threshold(&dev->serializer, true);
- }
- 
- static int rdacm20_probe(struct i2c_client *client)
+ 	ret = max9271_verify_id(&dev->serializer);
+ 	if (ret < 0)
 -- 
 2.30.0
 
