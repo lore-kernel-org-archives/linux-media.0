@@ -2,147 +2,222 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED09BC433DB
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 09:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C013C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 10:21:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3D4564DCF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 09:26:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF7D564DAF
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 10:21:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbhBPJ0N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 04:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbhBPJ0I (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Feb 2021 04:26:08 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B634C061574
-        for <linux-media@vger.kernel.org>; Tue, 16 Feb 2021 01:25:28 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id a207so577993wmd.1
-        for <linux-media@vger.kernel.org>; Tue, 16 Feb 2021 01:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Exh3jg3n/TtKnZWGfFfDIiOa1Lq+MYGlC1ET8Iputzc=;
-        b=FChGD3IiT+eQbJpCR9t7O50n/LmrueYQUvA0eedPnhjL5FwTbBAttUChubzubHzzE+
-         TeFuh3DkLKYTv67VzE91ha47D+tgaEiPVy7rJ8lWsQfLHaZRVt0jwRWzxCBbPr4HwnVv
-         asszquvZj2WmDxHU3OWs1baFcapv1QK36SGy0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Exh3jg3n/TtKnZWGfFfDIiOa1Lq+MYGlC1ET8Iputzc=;
-        b=Ffy2DL6MCgDVvCcoE+Hti/Og1xMp29Qw0EIrUx3n7PII9r4eXA7ZcAqaC3u1HxF2x+
-         TmBt7wlMlGJLqKT+sv+7Ikjebe5gaIR0+ZuZrg6r1M1Cms95cL7I8p012JKm2LR7wk5+
-         S1n8VKOhjKK3Vm5z5xUaEtBCQjjqIcerOJplYjXnmJVetmAmJoaBDQ8GP76aiUOJErDT
-         jokIhAPbMJJoyTmQ8hbXTcnWzdCFmMdas7dypKXUxTU5FleDcBT/gwCzx/XrQuVetgMg
-         1YpsNCdVFcqndJQ22UD81cy1W9cVq1vkSLDKbd7IAWy5s2cYZH3/t2Ark1QtZgZ4JPhQ
-         gVBg==
-X-Gm-Message-State: AOAM532vh1LFfsLPHhJiuK3GwE4A4WEz1rj0pve4yym9WedXvMSYCiOI
-        4mA3LKNrx11Qi+qawP3mSJ4tPQ==
-X-Google-Smtp-Source: ABdhPJxCH8w9nrCrGj6DLgq7mUqO7jid+0L9+xJ/lCXaA3/b39BYFgNSlxIAXTKGgH2NqCvGcPhA6A==
-X-Received: by 2002:a7b:c010:: with SMTP id c16mr2501284wmb.134.1613467526735;
-        Tue, 16 Feb 2021 01:25:26 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id k11sm26838869wrv.51.2021.02.16.01.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 01:25:26 -0800 (PST)
-Date:   Tue, 16 Feb 2021 10:25:24 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
+        id S229956AbhBPKVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 05:21:22 -0500
+Received: from retiisi.eu ([95.216.213.190]:55344 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229744AbhBPKVV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Feb 2021 05:21:21 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D739D634C95;
+        Tue, 16 Feb 2021 12:18:29 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-media@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Daniel Vetter <daniel@ffwll.ch>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>
-Subject: Re: DMA-buf and uncached system memory
-Message-ID: <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v8 2/4] v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+Date:   Tue, 16 Feb 2021 12:19:29 +0200
+Message-Id: <20210216101931.2110-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210216101931.2110-1-sakari.ailus@linux.intel.com>
+References: <20210216101931.2110-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Feb 15, 2021 at 09:58:08AM +0100, Christian König wrote:
-> Hi guys,
-> 
-> we are currently working an Freesync and direct scan out from system memory
-> on AMD APUs in A+A laptops.
-> 
-> On problem we stumbled over is that our display hardware needs to scan out
-> from uncached system memory and we currently don't have a way to communicate
-> that through DMA-buf.
-> 
-> For our specific use case at hand we are going to implement something driver
-> specific, but the question is should we have something more generic for
-> this?
-> 
-> After all the system memory access pattern is a PCIe extension and as such
-> something generic.
+Now that we can print FourCC codes directly using printk, make use of the
+feature in V4L2 core.
 
-Yes it's a problem, and it's a complete mess. So the defacto rules are:
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/media/v4l2-core/v4l2-ioctl.c | 85 +++++++---------------------
+ 1 file changed, 21 insertions(+), 64 deletions(-)
 
-1. importer has to do coherent transactions to snoop cpu caches.
-
-This way both modes work:
-
-- if the buffer is cached, we're fine
-
-- if the buffer is not cached, but the exporter has flushed all the
-  caches, you're mostly just wasting time on inefficient bus cycles. Also
-  this doesn't work if your CPU doesn't just drop clean cachelines. Like I
-  thing some ARM are prone to do, not idea about AMD, Intel is guaranteed
-  to drop them which is why the uncached scanout for integrated Intel +
-  amd discrete "works".
-
-2. exporters picks the mode freely, and can even change it at runtime
-(i915 does this, since we don't have an "allocate for scanout" flag wired
-through consistently). This doesn't work on arm, there the rule is "all
-devices in the same system must use the same mode".
-
-3. This should be solved at the dma-buf layer, but the dma-api refuses to
-tell you this information (at least for dma_alloc_coherent). And I'm not
-going to deal with the bikeshed that would bring into my inbox. Or at
-least there's always been screaming that drivers shouldn't peek behind the
-abstraction.
-
-So I think if AMD also guarantees to drop clean cachelines just do the
-same thing we do right now for intel integrated + discrete amd, but in
-reserve. It's fragile, but it does work.
-
-What we imo shouldn't do is driver private interfaces here, that's just
-going to make the problem worse long term. Or at least driver-private
-interfaces that spawn across drivers behind dma-buf, because imo this is
-really a problem that dma-buf should solve.
-
-If you do want to solve this at the dma-buf level I can try and point you
-at the respective i915 and amdgpu code that makes the magic work - I've
-had to fix it a few times in the past. I'm not sure whether we'd need to
-pass the dynamic nature through though, i.e. whether we want to be able to
-scan out imported dma-buf and hence request they be used in uncached mode.
--Daniel
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 31d1342e61e8..31662c3a8c9e 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -265,13 +265,9 @@ static void v4l_print_fmtdesc(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_fmtdesc *p = arg;
+ 
+-	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%c%c%c%c, mbus_code=0x%04x, description='%.*s'\n",
++	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%p4cc, mbus_code=0x%04x, description='%.*s'\n",
+ 		p->index, prt_names(p->type, v4l2_type_names),
+-		p->flags, (p->pixelformat & 0xff),
+-		(p->pixelformat >>  8) & 0xff,
+-		(p->pixelformat >> 16) & 0xff,
+-		(p->pixelformat >> 24) & 0xff,
+-		p->mbus_code,
++		p->flags, &p->pixelformat, p->mbus_code,
+ 		(int)sizeof(p->description), p->description);
+ }
+ 
+@@ -293,12 +289,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+ 		pix = &p->fmt.pix;
+-		pr_cont(", width=%u, height=%u, pixelformat=%c%c%c%c, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+-			pix->width, pix->height,
+-			(pix->pixelformat & 0xff),
+-			(pix->pixelformat >>  8) & 0xff,
+-			(pix->pixelformat >> 16) & 0xff,
+-			(pix->pixelformat >> 24) & 0xff,
++		pr_cont(", width=%u, height=%u, pixelformat=%p4cc, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
++			pix->width, pix->height, &pix->pixelformat,
+ 			prt_names(pix->field, v4l2_field_names),
+ 			pix->bytesperline, pix->sizeimage,
+ 			pix->colorspace, pix->flags, pix->ycbcr_enc,
+@@ -307,12 +299,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+ 		mp = &p->fmt.pix_mp;
+-		pr_cont(", width=%u, height=%u, format=%c%c%c%c, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+-			mp->width, mp->height,
+-			(mp->pixelformat & 0xff),
+-			(mp->pixelformat >>  8) & 0xff,
+-			(mp->pixelformat >> 16) & 0xff,
+-			(mp->pixelformat >> 24) & 0xff,
++		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
++			mp->width, mp->height, &mp->pixelformat,
+ 			prt_names(mp->field, v4l2_field_names),
+ 			mp->colorspace, mp->num_planes, mp->flags,
+ 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+@@ -337,13 +325,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_VBI_CAPTURE:
+ 	case V4L2_BUF_TYPE_VBI_OUTPUT:
+ 		vbi = &p->fmt.vbi;
+-		pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%c%c%c%c, start=%u,%u, count=%u,%u\n",
++		pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%p4cc, start=%u,%u, count=%u,%u\n",
+ 			vbi->sampling_rate, vbi->offset,
+-			vbi->samples_per_line,
+-			(vbi->sample_format & 0xff),
+-			(vbi->sample_format >>  8) & 0xff,
+-			(vbi->sample_format >> 16) & 0xff,
+-			(vbi->sample_format >> 24) & 0xff,
++			vbi->samples_per_line, &vbi->sample_format,
+ 			vbi->start[0], vbi->start[1],
+ 			vbi->count[0], vbi->count[1]);
+ 		break;
+@@ -360,21 +344,13 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_SDR_CAPTURE:
+ 	case V4L2_BUF_TYPE_SDR_OUTPUT:
+ 		sdr = &p->fmt.sdr;
+-		pr_cont(", pixelformat=%c%c%c%c\n",
+-			(sdr->pixelformat >>  0) & 0xff,
+-			(sdr->pixelformat >>  8) & 0xff,
+-			(sdr->pixelformat >> 16) & 0xff,
+-			(sdr->pixelformat >> 24) & 0xff);
++		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+ 		break;
+ 	case V4L2_BUF_TYPE_META_CAPTURE:
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		meta = &p->fmt.meta;
+-		pr_cont(", dataformat=%c%c%c%c, buffersize=%u\n",
+-			(meta->dataformat >>  0) & 0xff,
+-			(meta->dataformat >>  8) & 0xff,
+-			(meta->dataformat >> 16) & 0xff,
+-			(meta->dataformat >> 24) & 0xff,
+-			meta->buffersize);
++		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
++			&meta->dataformat, meta->buffersize);
+ 		break;
+ 	}
+ }
+@@ -383,15 +359,10 @@ static void v4l_print_framebuffer(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_framebuffer *p = arg;
+ 
+-	pr_cont("capability=0x%x, flags=0x%x, base=0x%p, width=%u, height=%u, pixelformat=%c%c%c%c, bytesperline=%u, sizeimage=%u, colorspace=%d\n",
+-			p->capability, p->flags, p->base,
+-			p->fmt.width, p->fmt.height,
+-			(p->fmt.pixelformat & 0xff),
+-			(p->fmt.pixelformat >>  8) & 0xff,
+-			(p->fmt.pixelformat >> 16) & 0xff,
+-			(p->fmt.pixelformat >> 24) & 0xff,
+-			p->fmt.bytesperline, p->fmt.sizeimage,
+-			p->fmt.colorspace);
++	pr_cont("capability=0x%x, flags=0x%x, base=0x%p, width=%u, height=%u, pixelformat=%p4cc, bytesperline=%u, sizeimage=%u, colorspace=%d\n",
++		p->capability, p->flags, p->base, p->fmt.width, p->fmt.height,
++		&p->fmt.pixelformat, p->fmt.bytesperline, p->fmt.sizeimage,
++		p->fmt.colorspace);
+ }
+ 
+ static void v4l_print_buftype(const void *arg, bool write_only)
+@@ -761,13 +732,8 @@ static void v4l_print_frmsizeenum(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_frmsizeenum *p = arg;
+ 
+-	pr_cont("index=%u, pixelformat=%c%c%c%c, type=%u",
+-			p->index,
+-			(p->pixel_format & 0xff),
+-			(p->pixel_format >>  8) & 0xff,
+-			(p->pixel_format >> 16) & 0xff,
+-			(p->pixel_format >> 24) & 0xff,
+-			p->type);
++	pr_cont("index=%u, pixelformat=%p4cc, type=%u",
++		p->index, &p->pixel_format, p->type);
+ 	switch (p->type) {
+ 	case V4L2_FRMSIZE_TYPE_DISCRETE:
+ 		pr_cont(", wxh=%ux%u\n",
+@@ -793,13 +759,8 @@ static void v4l_print_frmivalenum(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_frmivalenum *p = arg;
+ 
+-	pr_cont("index=%u, pixelformat=%c%c%c%c, wxh=%ux%u, type=%u",
+-			p->index,
+-			(p->pixel_format & 0xff),
+-			(p->pixel_format >>  8) & 0xff,
+-			(p->pixel_format >> 16) & 0xff,
+-			(p->pixel_format >> 24) & 0xff,
+-			p->width, p->height, p->type);
++	pr_cont("index=%u, pixelformat=%p4cc, wxh=%ux%u, type=%u",
++		p->index, &p->pixel_format, p->width, p->height, p->type);
+ 	switch (p->type) {
+ 	case V4L2_FRMIVAL_TYPE_DISCRETE:
+ 		pr_cont(", fps=%d/%d\n",
+@@ -1459,12 +1420,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 				return;
+ 			WARN(1, "Unknown pixelformat 0x%08x\n", fmt->pixelformat);
+ 			flags = 0;
+-			snprintf(fmt->description, sz, "%c%c%c%c%s",
+-					(char)(fmt->pixelformat & 0x7f),
+-					(char)((fmt->pixelformat >> 8) & 0x7f),
+-					(char)((fmt->pixelformat >> 16) & 0x7f),
+-					(char)((fmt->pixelformat >> 24) & 0x7f),
+-					(fmt->pixelformat & (1UL << 31)) ? "-BE" : "");
++			snprintf(fmt->description, sz, "%p4cc",
++				 &fmt->pixelformat);
+ 			break;
+ 		}
+ 	}
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.29.2
+
