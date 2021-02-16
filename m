@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C03EBC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC29C432C3
 	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E86864E04
+	by mail.kernel.org (Postfix) with ESMTP id 7FDFE64DAF
 	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbhBPRnU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 12:43:20 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:58953 "EHLO
+        id S231300AbhBPRnR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 12:43:17 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:46653 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbhBPRnA (ORCPT
+        with ESMTP id S231224AbhBPRm7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Feb 2021 12:43:00 -0500
+        Tue, 16 Feb 2021 12:42:59 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7E00020000A;
-        Tue, 16 Feb 2021 17:41:53 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 51C28200012;
+        Tue, 16 Feb 2021 17:41:44 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 15/16] media: i2c: max9286: Rework comments in .bound()
-Date:   Tue, 16 Feb 2021 18:41:45 +0100
-Message-Id: <20210216174146.106639-16-jacopo+renesas@jmondi.org>
+Subject: [PATCH 10/16] media: i2c: max9286: Rename reverse_channel_mv
+Date:   Tue, 16 Feb 2021 18:41:40 +0100
+Message-Id: <20210216174146.106639-11-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
 References: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
@@ -44,54 +44,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Re-phrase a comment in .bound() callback to make it clear we register
-a subdev notifier and remove a redundant comment about disabling i2c
-auto-ack.
-
-No functional changes intended.
+Rename the reverse_channel_mv variable to init_rev_chan_mv as
+the next patches will cache the reverse channel amplitude in
+a new driver variable.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/max9286.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/media/i2c/max9286.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index c41284de89b6..aa01d5bb79ef 100644
+index 1d9951215868..1f14cd817fbf 100644
 --- a/drivers/media/i2c/max9286.c
 +++ b/drivers/media/i2c/max9286.c
-@@ -567,9 +567,9 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
- 	}
+@@ -163,7 +163,7 @@ struct max9286_priv {
+ 	unsigned int mux_channel;
+ 	bool mux_open;
  
- 	/*
--	 * We can only register v4l2_async_notifiers, which do not provide a
--	 * means to register a complete callback. bound_sources allows us to
--	 * identify when all remote serializers have completed their probe.
-+	 * As we register a subdev notifiers we won't get a .complete() callback
-+	 * here, so we have to use bound_sources to identify when all remote
-+	 * serializers have probed.
+-	u32 reverse_channel_mv;
++	u32 init_rev_chan_mv;
+ 
+ 	struct v4l2_ctrl_handler ctrls;
+ 	struct v4l2_ctrl *pixelrate;
+@@ -563,7 +563,7 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
+ 	 * - Disable auto-ack as communication on the control channel are now
+ 	 *   stable.
  	 */
- 	if (priv->bound_sources != priv->source_mask) {
- 		/*
-@@ -583,16 +583,12 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
- 	/*
- 	 * All enabled sources have probed and enabled their reverse control
- 	 * channels:
-+	 * - The reverse channel amplitude stays high
- 	 * - Verify all configuration links are properly detected
--	 * - Disable auto-ack as communication on the control channel are now
--	 *   stable.
-+	 * - Disable auto-ack as communications on the control channel are now
-+	 *   stable
- 	 */
+-	if (priv->reverse_channel_mv < 170)
++	if (priv->init_rev_chan_mv < 170)
+ 		max9286_reverse_channel_setup(priv, 170);
  	max9286_check_config_link(priv, priv->source_mask);
--
--	/*
--	 * Re-configure I2C with local acknowledge disabled after cameras have
--	 * probed.
--	 */
- 	max9286_configure_i2c(priv, false);
  
- 	return max9286_set_pixelrate(priv);
+@@ -971,7 +971,7 @@ static int max9286_setup(struct max9286_priv *priv)
+ 	 * only. This should be disabled after the mux is initialised.
+ 	 */
+ 	max9286_configure_i2c(priv, true);
+-	max9286_reverse_channel_setup(priv, priv->reverse_channel_mv);
++	max9286_reverse_channel_setup(priv, priv->init_rev_chan_mv);
+ 
+ 	/*
+ 	 * Enable GMSL links, mask unused ones and autodetect link
+@@ -1236,9 +1236,9 @@ static int max9286_parse_dt(struct max9286_priv *priv)
+ 	if (of_property_read_u32(dev->of_node,
+ 				 "maxim,reverse-channel-microvolt",
+ 				 &reverse_channel_microvolt))
+-		priv->reverse_channel_mv = 170;
++		priv->init_rev_chan_mv = 170;
+ 	else
+-		priv->reverse_channel_mv = reverse_channel_microvolt / 1000U;
++		priv->init_rev_chan_mv = reverse_channel_microvolt / 1000U;
+ 
+ 	priv->route_mask = priv->source_mask;
+ 
 -- 
 2.30.0
 
