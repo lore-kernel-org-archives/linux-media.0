@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6048C43381
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0156DC4332E
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74E4464DAF
+	by mail.kernel.org (Postfix) with ESMTP id BFA0364DA1
 	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:42:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbhBPRme (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 12:42:34 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:34421 "EHLO
+        id S230464AbhBPRmh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 12:42:37 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:40901 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbhBPRmU (ORCPT
+        with ESMTP id S231169AbhBPRmU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 16 Feb 2021 12:42:20 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id CDD21200009;
-        Tue, 16 Feb 2021 17:41:31 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1F17220000D;
+        Tue, 16 Feb 2021 17:41:36 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 03/16] media: i2c: rdacm20: Replace goto with a loop
-Date:   Tue, 16 Feb 2021 18:41:33 +0100
-Message-Id: <20210216174146.106639-4-jacopo+renesas@jmondi.org>
+Subject: [PATCH 06/16] media: i2c: rdacm20: Re-work ov10635 reset
+Date:   Tue, 16 Feb 2021 18:41:36 +0100
+Message-Id: <20210216174146.106639-7-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
 References: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
@@ -44,72 +44,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-During the camera module initialization the image sensor PID is read to
-verify it can correctly be identified. The current implementation is
-rather confused and uses a loop implemented with a label and a goto.
+The OV10635 image sensor embedded in the camera module is currently
+reset after the MAX9271 initialization with two long delays that were
+most probably not correctly characterized.
 
-Replace it with a more compact for() loop.
-
-No functional changes intended.
+Re-work the image sensor reset procedure by holding the chip in reset
+during the MAX9271 configuration, removing the long sleep delays and
+only wait after the chip exits from reset for 350-500 microseconds
+interval, which is larger than the minimum (2048 * (1 / XVCLK)) timeout
+characterized in the chip manual.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/rdacm20.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ drivers/media/i2c/rdacm20.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index 4d9bac87cba8..6504ed0bd3bc 100644
+index e982373908f2..ea30cc936531 100644
 --- a/drivers/media/i2c/rdacm20.c
 +++ b/drivers/media/i2c/rdacm20.c
-@@ -59,6 +59,8 @@
-  */
- #define OV10635_PIXEL_RATE		(44000000)
- 
-+#define OV10635_PID_TIMEOUT		3
-+
- static const struct ov10635_reg {
- 	u16	reg;
- 	u8	val;
-@@ -452,7 +454,7 @@ static const struct v4l2_subdev_ops rdacm20_subdev_ops = {
- 
- static int rdacm20_initialize(struct rdacm20_device *dev)
- {
--	unsigned int retry = 3;
-+	unsigned int i;
- 	int ret;
- 
- 	/* Verify communication with the MAX9271: ping to wakeup. */
-@@ -501,23 +503,14 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+@@ -477,6 +477,15 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+ 	if (ret)
  		return ret;
- 	usleep_range(10000, 15000);
  
--again:
--	ret = ov10635_read16(dev, OV10635_PID);
--	if (ret < 0) {
--		if (retry--)
--			goto again;
--
--		dev_err(dev->dev, "OV10635 ID read failed (%d)\n",
--			ret);
--		return -ENXIO;
-+	for (i = 0; i < OV10635_PID_TIMEOUT; ++i) {
-+		ret = ov10635_read16(dev, OV10635_PID);
-+		if (ret == OV10635_VERSION)
-+			break;
-+		usleep_range(1000, 2000);
- 	}
--
--	if (ret != OV10635_VERSION) {
--		if (retry--)
--			goto again;
--
--		dev_err(dev->dev, "OV10635 ID mismatch (0x%04x)\n",
--			ret);
-+	if (i == OV10635_PID_TIMEOUT) {
-+		dev_err(dev->dev, "OV10635 ID read failed (%d)\n", ret);
- 		return -ENXIO;
- 	}
++	/* Hold OV10635 in reset during max9271 configuration. */
++	ret = max9271_enable_gpios(&dev->serializer, MAX9271_GPIO1OUT);
++	if (ret)
++		return ret;
++
++	ret = max9271_clear_gpios(&dev->serializer, MAX9271_GPIO1OUT);
++	if (ret)
++		return ret;
++
+ 	ret = max9271_configure_gmsl_link(&dev->serializer);
+ 	if (ret)
+ 		return ret;
+@@ -490,23 +499,11 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+ 		return ret;
+ 	dev->serializer.client->addr = dev->addrs[0];
  
+-	/*
+-	 * Reset the sensor by cycling the OV10635 reset signal connected to the
+-	 * MAX9271 GPIO1 and verify communication with the OV10635.
+-	 */
+-	ret = max9271_enable_gpios(&dev->serializer, MAX9271_GPIO1OUT);
+-	if (ret)
+-		return ret;
+-
+-	ret = max9271_clear_gpios(&dev->serializer, MAX9271_GPIO1OUT);
+-	if (ret)
+-		return ret;
+-	usleep_range(10000, 15000);
+-
++	/* Release ov10635 from reset and initialize it. */
+ 	ret = max9271_set_gpios(&dev->serializer, MAX9271_GPIO1OUT);
+ 	if (ret)
+ 		return ret;
+-	usleep_range(10000, 15000);
++	usleep_range(350, 500);
+ 
+ 	for (i = 0; i < OV10635_PID_TIMEOUT; ++i) {
+ 		ret = ov10635_read16(dev, OV10635_PID);
 -- 
 2.30.0
 
