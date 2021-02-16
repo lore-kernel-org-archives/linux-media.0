@@ -2,29 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DACC433E0
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 15:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3327C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 15:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8501964DA5
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 15:59:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4F0764D9E
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 15:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbhBPP7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 10:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbhBPP7M (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Feb 2021 10:59:12 -0500
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF5C061788;
-        Tue, 16 Feb 2021 07:57:27 -0800 (PST)
+        id S230048AbhBPP7R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 10:59:17 -0500
+Received: from retiisi.eu ([95.216.213.190]:57494 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229699AbhBPP7N (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Feb 2021 10:59:13 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B8B31634CCC;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 288D3634CBF;
         Tue, 16 Feb 2021 17:56:20 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     dri-devel@lists.freedesktop.org
@@ -41,84 +37,161 @@ Cc:     linux-media@vger.kernel.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v9 4/4] drm: Remove drm_get_format_name()
-Date:   Tue, 16 Feb 2021 17:57:23 +0200
-Message-Id: <20210216155723.17109-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v9 0/4] Add %p4cc printk modifier for V4L2 and DRM fourcc codes
+Date:   Tue, 16 Feb 2021 17:57:19 +0200
+Message-Id: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
-References: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The %p4cc printk format modifier was recently added to print fourcc codes,
-replacing drm_get_format_name(). The function is no longer needed, so
-remove it.
+Hi all,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpu/drm/drm_fourcc.c | 25 -------------------------
- include/drm/drm_fourcc.h     |  1 -
- 2 files changed, 26 deletions(-)
+	On merging --- it would seem everyone is happy with merging this
+	through the drm-misc tree. The last patch should wait until all
+	users are gone for sure, probably to the next kernel release.
+	There are no users of drm_get_format_name() in linux-next
+	currently after the 3rd patch.
 
-diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-index 03262472059c..5cf45aa6eedc 100644
---- a/drivers/gpu/drm/drm_fourcc.c
-+++ b/drivers/gpu/drm/drm_fourcc.c
-@@ -30,11 +30,6 @@
- #include <drm/drm_device.h>
- #include <drm/drm_fourcc.h>
- 
--static char printable_char(int c)
--{
--	return isascii(c) && isprint(c) ? c : '?';
--}
--
- /**
-  * drm_mode_legacy_fb_format - compute drm fourcc code from legacy description
-  * @bpp: bits per pixels
-@@ -130,26 +125,6 @@ uint32_t drm_driver_legacy_fb_format(struct drm_device *dev,
- }
- EXPORT_SYMBOL(drm_driver_legacy_fb_format);
- 
--/**
-- * drm_get_format_name - fill a string with a drm fourcc format's name
-- * @format: format to compute name of
-- * @buf: caller-supplied buffer
-- */
--const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf)
--{
--	snprintf(buf->str, sizeof(buf->str),
--		 "%c%c%c%c %s-endian (0x%08x)",
--		 printable_char(format & 0xff),
--		 printable_char((format >> 8) & 0xff),
--		 printable_char((format >> 16) & 0xff),
--		 printable_char((format >> 24) & 0x7f),
--		 format & DRM_FORMAT_BIG_ENDIAN ? "big" : "little",
--		 format);
--
--	return buf->str;
--}
--EXPORT_SYMBOL(drm_get_format_name);
--
- /*
-  * Internal function to query information for a given format. See
-  * drm_format_info() for the public API.
-diff --git a/include/drm/drm_fourcc.h b/include/drm/drm_fourcc.h
-index 156b122c0ad5..3ea17b8a79d3 100644
---- a/include/drm/drm_fourcc.h
-+++ b/include/drm/drm_fourcc.h
-@@ -318,6 +318,5 @@ unsigned int drm_format_info_block_height(const struct drm_format_info *info,
- 					  int plane);
- uint64_t drm_format_info_min_pitch(const struct drm_format_info *info,
- 				   int plane, unsigned int buffer_width);
--const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf);
- 
- #endif /* __DRM_FOURCC_H__ */
+This set adds support for %p4cc printk modifier for printing V4L2 and DRM
+fourcc codes. The codes are cumbersome to print manually and by adding the
+modifier, this task is saved from the V4L2 and DRM frameworks as well as
+related drivers. DRM actually had it handled in a way (see 3rd patch) but
+the printk modifier makes printing the format easier even there. On V4L2
+side it saves quite a few lines of repeating different implementations of
+printing the 4cc codes.
+
+Further work will include converting the V4L2 drivers doing the same. I
+left these out from this version since individual drivers are easier
+changed without dealing with multiple trees.
+
+Since v8:
+
+- Reduce ternary conditionals in intel_plane_uapi_info().
+
+- Wrap a long line in intel_plane_hw_info().
+
+Since v7:
+
+- Add more examples, one with big endian and another with a space.
+
+- Add Y10 test format.
+
+- Use "0123" in the size string for temporary buffer.
+
+- Added acks.
+
+- Split the 3rd patch into two: driver changes and removal of
+  drm_get_format_name().
+
+Since v6:
+
+- Don't drop spaces in fourcc codes.
+
+- Print unprintable characters as dot ('.') instead of hexadecimal number
+  in parentheses.
+
+- Convert DRM from drm_get_format_name() to %p4cc. I wonder if this should
+  be merged through the DRM tree, albeit it's probably unlikely to
+  conflict with other changes. Further use of the function could be a
+  problem.
+
+- Make tests more realistic.
+
+Since v5:
+
+- Added V4L2 core conversion to %p4cc, as well as change the DRM
+  fourcc printing function to use %p4cc.
+
+- Add missing checkpatch.pl checks for %p4cc modifier.
+
+Sakari Ailus (4):
+  lib/vsprintf: Add support for printing V4L2 and DRM fourccs
+  v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+  drm: Switch to %p4cc format modifier
+  drm: Remove drm_get_format_name()
+
+ Documentation/core-api/printk-formats.rst     | 18 ++++
+ drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |  5 +-
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  5 +-
+ .../arm/display/komeda/komeda_format_caps.h   | 11 ---
+ .../arm/display/komeda/komeda_framebuffer.c   |  4 +-
+ .../gpu/drm/arm/display/komeda/komeda_plane.c |  6 +-
+ drivers/gpu/drm/arm/malidp_mw.c               |  7 +-
+ drivers/gpu/drm/drm_atomic.c                  |  8 +-
+ drivers/gpu/drm/drm_crtc.c                    |  7 +-
+ drivers/gpu/drm/drm_fourcc.c                  | 25 ------
+ drivers/gpu/drm/drm_framebuffer.c             | 11 +--
+ drivers/gpu/drm/drm_mipi_dbi.c                |  5 +-
+ drivers/gpu/drm/drm_plane.c                   |  8 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  5 +-
+ drivers/gpu/drm/i915/display/intel_display.c  | 14 +--
+ .../drm/i915/display/intel_display_debugfs.c  | 19 ++---
+ drivers/gpu/drm/i915/display/intel_sprite.c   |  6 +-
+ drivers/gpu/drm/mcde/mcde_display.c           |  6 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c      |  6 +-
+ drivers/gpu/drm/nouveau/nouveau_display.c     |  9 +-
+ drivers/gpu/drm/radeon/atombios_crtc.c        | 10 +--
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |  6 +-
+ drivers/gpu/drm/vkms/vkms_writeback.c         |  7 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           | 15 ++--
+ drivers/media/v4l2-core/v4l2-ioctl.c          | 85 +++++--------------
+ include/drm/drm_fourcc.h                      |  1 -
+ lib/test_printf.c                             | 18 ++++
+ lib/vsprintf.c                                | 39 +++++++++
+ scripts/checkpatch.pl                         |  6 +-
+ 32 files changed, 164 insertions(+), 223 deletions(-)
+
+-- 
+2.29.2
+
+*** BLURB HERE ***
+
+Sakari Ailus (4):
+  lib/vsprintf: Add support for printing V4L2 and DRM fourccs
+  v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+  drm: Switch to %p4cc format modifier
+  drm: Remove drm_get_format_name()
+
+ Documentation/core-api/printk-formats.rst     | 18 ++++
+ drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |  5 +-
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |  5 +-
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  5 +-
+ .../arm/display/komeda/komeda_format_caps.h   | 11 ---
+ .../arm/display/komeda/komeda_framebuffer.c   |  4 +-
+ .../gpu/drm/arm/display/komeda/komeda_plane.c |  6 +-
+ drivers/gpu/drm/arm/malidp_mw.c               |  7 +-
+ drivers/gpu/drm/drm_atomic.c                  |  8 +-
+ drivers/gpu/drm/drm_crtc.c                    |  7 +-
+ drivers/gpu/drm/drm_fourcc.c                  | 25 ------
+ drivers/gpu/drm/drm_framebuffer.c             | 11 +--
+ drivers/gpu/drm/drm_mipi_dbi.c                |  5 +-
+ drivers/gpu/drm/drm_plane.c                   |  8 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  5 +-
+ drivers/gpu/drm/i915/display/intel_display.c  | 14 +--
+ .../drm/i915/display/intel_display_debugfs.c  | 30 +++----
+ drivers/gpu/drm/i915/display/intel_sprite.c   |  6 +-
+ drivers/gpu/drm/mcde/mcde_display.c           |  6 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c      |  6 +-
+ drivers/gpu/drm/nouveau/nouveau_display.c     |  9 +-
+ drivers/gpu/drm/radeon/atombios_crtc.c        | 10 +--
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |  6 +-
+ drivers/gpu/drm/vkms/vkms_writeback.c         |  7 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           | 15 ++--
+ drivers/media/v4l2-core/v4l2-ioctl.c          | 85 +++++--------------
+ include/drm/drm_fourcc.h                      |  1 -
+ lib/test_printf.c                             | 18 ++++
+ lib/vsprintf.c                                | 39 +++++++++
+ scripts/checkpatch.pl                         |  6 +-
+ 32 files changed, 169 insertions(+), 229 deletions(-)
+
 -- 
 2.29.2
 
