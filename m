@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC29C432C3
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EDACC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FDFE64DAF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31CB864DAF
+	for <linux-media@archiver.kernel.org>; Tue, 16 Feb 2021 17:43:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbhBPRnR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Feb 2021 12:43:17 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:46653 "EHLO
+        id S231169AbhBPRnY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Feb 2021 12:43:24 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:45283 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbhBPRm7 (ORCPT
+        with ESMTP id S231272AbhBPRnA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Feb 2021 12:42:59 -0500
+        Tue, 16 Feb 2021 12:43:00 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 51C28200012;
-        Tue, 16 Feb 2021 17:41:44 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6CBCC20001B;
+        Tue, 16 Feb 2021 17:41:55 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/16] media: i2c: max9286: Rename reverse_channel_mv
-Date:   Tue, 16 Feb 2021 18:41:40 +0100
-Message-Id: <20210216174146.106639-11-jacopo+renesas@jmondi.org>
+Subject: [PATCH 16/16] media: i2c: gmsl: Use 339Kbps I2C bit-rate
+Date:   Tue, 16 Feb 2021 18:41:46 +0100
+Message-Id: <20210216174146.106639-17-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
 References: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
@@ -44,57 +44,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename the reverse_channel_mv variable to init_rev_chan_mv as
-the next patches will cache the reverse channel amplitude in
-a new driver variable.
+With the camera modules initialization routines now running with
+the noise immunity threshold enabled, it is possible to restore
+the bit rate of the I2C transactions transported on the GMSL control
+channel to 339 Kbps.
+
+The 339 Kbps bit rate represents the default setting for the serializer
+and the deserializer chips, and the setup/hold time and slave timeout
+time in use are calibrate to support that rate.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/max9286.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/media/i2c/max9286.c | 2 +-
+ drivers/media/i2c/rdacm20.c | 2 +-
+ drivers/media/i2c/rdacm21.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index 1d9951215868..1f14cd817fbf 100644
+index aa01d5bb79ef..0b620f2f8c41 100644
 --- a/drivers/media/i2c/max9286.c
 +++ b/drivers/media/i2c/max9286.c
-@@ -163,7 +163,7 @@ struct max9286_priv {
- 	unsigned int mux_channel;
- 	bool mux_open;
+@@ -330,7 +330,7 @@ static int max9286_i2c_mux_init(struct max9286_priv *priv)
+ static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
+ {
+ 	u8 config = MAX9286_I2CSLVSH_469NS_234NS | MAX9286_I2CSLVTO_1024US |
+-		    MAX9286_I2CMSTBT_105KBPS;
++		    MAX9286_I2CMSTBT_339KBPS;
  
--	u32 reverse_channel_mv;
-+	u32 init_rev_chan_mv;
+ 	if (localack)
+ 		config |= MAX9286_I2CLOCACK;
+diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
+index 0632ef98eea7..d45e8b0e52a0 100644
+--- a/drivers/media/i2c/rdacm20.c
++++ b/drivers/media/i2c/rdacm20.c
+@@ -450,7 +450,7 @@ static int rdacm20_init(struct v4l2_subdev *sd, unsigned int val)
+ 	ret = max9271_configure_i2c(&dev->serializer,
+ 				    MAX9271_I2CSLVSH_469NS_234NS |
+ 				    MAX9271_I2CSLVTO_1024US |
+-				    MAX9271_I2CMSTBT_105KBPS);
++				    MAX9271_I2CMSTBT_339KBPS);
+ 	if (ret)
+ 		return ret;
  
- 	struct v4l2_ctrl_handler ctrls;
- 	struct v4l2_ctrl *pixelrate;
-@@ -563,7 +563,7 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
- 	 * - Disable auto-ack as communication on the control channel are now
- 	 *   stable.
- 	 */
--	if (priv->reverse_channel_mv < 170)
-+	if (priv->init_rev_chan_mv < 170)
- 		max9286_reverse_channel_setup(priv, 170);
- 	max9286_check_config_link(priv, priv->source_mask);
- 
-@@ -971,7 +971,7 @@ static int max9286_setup(struct max9286_priv *priv)
- 	 * only. This should be disabled after the mux is initialised.
- 	 */
- 	max9286_configure_i2c(priv, true);
--	max9286_reverse_channel_setup(priv, priv->reverse_channel_mv);
-+	max9286_reverse_channel_setup(priv, priv->init_rev_chan_mv);
- 
- 	/*
- 	 * Enable GMSL links, mask unused ones and autodetect link
-@@ -1236,9 +1236,9 @@ static int max9286_parse_dt(struct max9286_priv *priv)
- 	if (of_property_read_u32(dev->of_node,
- 				 "maxim,reverse-channel-microvolt",
- 				 &reverse_channel_microvolt))
--		priv->reverse_channel_mv = 170;
-+		priv->init_rev_chan_mv = 170;
- 	else
--		priv->reverse_channel_mv = reverse_channel_microvolt / 1000U;
-+		priv->init_rev_chan_mv = reverse_channel_microvolt / 1000U;
- 
- 	priv->route_mask = priv->source_mask;
+diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
+index 80b6f16f87a8..552985026458 100644
+--- a/drivers/media/i2c/rdacm21.c
++++ b/drivers/media/i2c/rdacm21.c
+@@ -442,7 +442,7 @@ static int rdacm21_init(struct v4l2_subdev *sd, unsigned int val)
+ 	ret = max9271_configure_i2c(&dev->serializer,
+ 				    MAX9271_I2CSLVSH_469NS_234NS |
+ 				    MAX9271_I2CSLVTO_1024US |
+-				    MAX9271_I2CMSTBT_105KBPS);
++				    MAX9271_I2CMSTBT_339KBPS);
+ 	if (ret)
+ 		return ret;
  
 -- 
 2.30.0
