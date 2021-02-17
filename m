@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 168C0C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 08:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 817BDC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 08:07:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D230264E24
-	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 08:07:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39F2964E04
+	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 08:07:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbhBQIHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Feb 2021 03:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S231653AbhBQIHL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Feb 2021 03:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbhBQIFB (ORCPT
+        with ESMTP id S231819AbhBQIFE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Feb 2021 03:05:01 -0500
+        Wed, 17 Feb 2021 03:05:04 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFFC06178A;
-        Wed, 17 Feb 2021 00:04:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB30C061574;
+        Wed, 17 Feb 2021 00:04:24 -0800 (PST)
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:fd6e:12cd:95d7:3350])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B51451F45097;
-        Wed, 17 Feb 2021 08:04:08 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 418FA1F450A1;
+        Wed, 17 Feb 2021 08:04:14 +0000 (GMT)
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v1 14/18] media: hantro: add G2 support to postproc
-Date:   Wed, 17 Feb 2021 09:03:02 +0100
-Message-Id: <20210217080306.157876-15-benjamin.gaignard@collabora.com>
+Subject: [PATCH v1 18/18] arm64: dts: imx8mq: Add node to G2 hardware
+Date:   Wed, 17 Feb 2021 09:03:06 +0100
+Message-Id: <20210217080306.157876-19-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210217080306.157876-1-benjamin.gaignard@collabora.com>
 References: <20210217080306.157876-1-benjamin.gaignard@collabora.com>
@@ -55,79 +55,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-G2 doesn't have the same post processor feature than G1.
-Adapt post processor code for G2 requirements.
+Split VPU node in two: one for G1 and one for G2 since they are
+different hardware blocks.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 ---
- .../staging/media/hantro/hantro_postproc.c    | 35 ++++++++++++-------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 43 +++++++++++++++++------
+ 1 file changed, 33 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-index 050880f720d6..64eee936285d 100644
---- a/drivers/staging/media/hantro/hantro_postproc.c
-+++ b/drivers/staging/media/hantro/hantro_postproc.c
-@@ -74,12 +74,6 @@ void hantro_postproc_enable(struct hantro_ctx *ctx)
- 	u32 src_pp_fmt, dst_pp_fmt;
- 	dma_addr_t dst_dma;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index d9d9efc8592d..3cab3f0b9131 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -1287,17 +1287,16 @@ vpu_reset: vpu-reset@38320000 {
+ 			#reset-cells = <1>;
+ 		};
  
--	if (!vpu->variant->postproc_regs)
--		return;
--
--	/* Turn on pipeline mode. Must be done first. */
--	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x1);
--
- 	src_pp_fmt = VPU_PP_IN_NV12;
+-		vpu: video-codec@38300000 {
++		vpu_g1: video-codec@38300000 {
+ 			compatible = "nxp,imx8mq-vpu";
+-			reg = <0x38300000 0x10000>,
+-			      <0x38310000 0x10000>;
+-			reg-names = "g1", "g2";
+-			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+-				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "g1", "g2";
++			reg = <0x38300000 0x10000>;
++			reg-names = "g1";
++			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "g1";
+ 			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+-				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+-			clock-names = "g1", "g2";
++				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
++				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
++			clock-names = "g1", "g2", "bus";
+ 			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
+ 					  <&clk IMX8MQ_CLK_VPU_G2>,
+ 					  <&clk IMX8MQ_CLK_VPU_BUS>,
+@@ -1306,12 +1305,36 @@ vpu: video-codec@38300000 {
+ 						 <&clk IMX8MQ_VPU_PLL_OUT>,
+ 						 <&clk IMX8MQ_SYS1_PLL_800M>,
+ 						 <&clk IMX8MQ_VPU_PLL>;
+-			assigned-clock-rates = <600000000>, <600000000>,
++			assigned-clock-rates = <600000000>, <300000000>,
+ 					       <800000000>, <0>;
+ 			resets = <&vpu_reset IMX8MQ_RESET_VPU_RESET_G1>;
+ 			power-domains = <&pgc_vpu>;
+ 		};
  
- 	switch (ctx->vpu_dst_fmt->fourcc) {
-@@ -93,13 +87,32 @@ void hantro_postproc_enable(struct hantro_ctx *ctx)
- 		break;
- 	}
- 
-+	if (!vpu->variant->postproc_regs)
-+		return;
++		vpu_g2: video-codec@38310000 {
++			compatible = "nxp,imx8mq-vpu-g2";
++			reg = <0x38310000 0x10000>;
++			reg-names = "g2";
++			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "g2";
++			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
++				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
++				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
++			clock-names = "g1", "g2", "bus";
++			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
++					  <&clk IMX8MQ_CLK_VPU_G2>,
++					  <&clk IMX8MQ_CLK_VPU_BUS>,
++					  <&clk IMX8MQ_VPU_PLL_BYPASS>;
++			assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
++						 <&clk IMX8MQ_VPU_PLL_OUT>,
++						 <&clk IMX8MQ_SYS1_PLL_800M>,
++						 <&clk IMX8MQ_VPU_PLL>;
++			assigned-clock-rates = <600000000>, <300000000>,
++					       <800000000>, <0>;
++			resets = <&vpu_reset IMX8MQ_RESET_VPU_RESET_G2>;
++			power-domains = <&pgc_vpu>;
++		};
 +
-+	/* Turn on pipeline mode. Must be done first. */
-+	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x1);
-+
-+	switch (ctx->dev->core_hw_dec_rev) {
-+	case HANTRO_G1_REV:
-+		HANTRO_PP_REG_WRITE(vpu, clk_gate, 0x1);
-+		HANTRO_PP_REG_WRITE(vpu, out_endian, 0x1);
-+		HANTRO_PP_REG_WRITE(vpu, out_swap32, 0x1);
-+		HANTRO_PP_REG_WRITE(vpu, max_burst, 16);
-+
-+		HANTRO_PP_REG_WRITE(vpu, orig_width, MB_WIDTH(ctx->dst_fmt.width));
-+		HANTRO_PP_REG_WRITE(vpu, display_width, ctx->dst_fmt.width);
-+		break;
-+	default:
-+		vpu_err("PP does not recognize HW revision: %x, disabling\n",
-+			ctx->dev->core_hw_dec_rev);
-+		hantro_postproc_disable(ctx);
-+		return;
-+	}
-+
- 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
- 	dst_dma = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 
--	HANTRO_PP_REG_WRITE(vpu, clk_gate, 0x1);
--	HANTRO_PP_REG_WRITE(vpu, out_endian, 0x1);
--	HANTRO_PP_REG_WRITE(vpu, out_swap32, 0x1);
--	HANTRO_PP_REG_WRITE(vpu, max_burst, 16);
- 	HANTRO_PP_REG_WRITE(vpu, out_luma_base, dst_dma);
- 	HANTRO_PP_REG_WRITE(vpu, input_width, MB_WIDTH(ctx->dst_fmt.width));
- 	HANTRO_PP_REG_WRITE(vpu, input_height, MB_HEIGHT(ctx->dst_fmt.height));
-@@ -107,8 +120,6 @@ void hantro_postproc_enable(struct hantro_ctx *ctx)
- 	HANTRO_PP_REG_WRITE(vpu, output_fmt, dst_pp_fmt);
- 	HANTRO_PP_REG_WRITE(vpu, output_width, ctx->dst_fmt.width);
- 	HANTRO_PP_REG_WRITE(vpu, output_height, ctx->dst_fmt.height);
--	HANTRO_PP_REG_WRITE(vpu, orig_width, MB_WIDTH(ctx->dst_fmt.width));
--	HANTRO_PP_REG_WRITE(vpu, display_width, ctx->dst_fmt.width);
- }
- 
- void hantro_postproc_free(struct hantro_ctx *ctx)
+ 		pcie0: pcie@33800000 {
+ 			compatible = "fsl,imx8mq-pcie";
+ 			reg = <0x33800000 0x400000>,
 -- 
 2.25.1
 
