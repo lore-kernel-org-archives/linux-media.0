@@ -2,240 +2,237 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8F28C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 11:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7D34C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 12:15:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58CCC64E58
-	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 11:35:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B18464E0F
+	for <linux-media@archiver.kernel.org>; Wed, 17 Feb 2021 12:15:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbhBQLcf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Feb 2021 06:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbhBQL2y (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Feb 2021 06:28:54 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA5C0698DE
-        for <linux-media@vger.kernel.org>; Wed, 17 Feb 2021 03:22:32 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id do6so11021572ejc.3
-        for <linux-media@vger.kernel.org>; Wed, 17 Feb 2021 03:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=286RxVm6s4VDjxxxqjBmiZOHysbJWKqcglXnnU7P2aM=;
-        b=RT+TLiemYSV6Bdv01L3qpnE8UMbo+Ye/dyePdVd52B4MSJjWLz1MjQq8ouonPLP97e
-         iXKj3ICIQXFQc6JwE28xp9MBoGbrMSZ0U57SKisMqGy+76qOBmBvYQfxNwfFL2qqCSiA
-         a/PusaOEmficDbWnyrHPqWyVLYZQ6Nim3JaK/eJgFyMbjjuaz/vNhA2TtiCu/F03sJT6
-         EETixLedfd+D8it1ZZ0imHEynDsHRXMo+ILYov0GMtXDKDB/i85TOYqJm0xJ/gtymkAu
-         0LDOFPRNOLexAsRHcIjsdmSNP1O/cwMwBPTJBjVrCiWxNxBmTTBZEsZaS/ZsM4PDTehI
-         a1Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=286RxVm6s4VDjxxxqjBmiZOHysbJWKqcglXnnU7P2aM=;
-        b=HO2+W1rJimQRdA6w0wqEzZ/DmZJVW5hucDLkTgargydU5c4fY5SLIoYoDNqOZtYp8P
-         l7VqaWbrUj8gloDLWTudSExbScRVIsINWaqaVjHmmUBc3zpPAJ6AM9dwAnUyxydDrf84
-         ySB7KCBcrsmQ+svxSBcaZ2KNvkrq9zyUEyJ27+wqsFLDsUH/wIcGoBUoZUYUnkjOuQxQ
-         5fLn9w4V/tXb5lITNhQipnXX/1qCrU73fCGkSM6erWmUIzfYnbIzNzEhECE/rYUqISGh
-         GpFg5bobzpk6/gjosjzhV3QoWQc7PBCIlSENAcvqOjpwhwK/UAsP5wzZSUor8uROC0KH
-         2f3g==
-X-Gm-Message-State: AOAM531EYTBdbFlhBa8E2QGmv8FGOWVi7JDWU3NUsd+poRDYfVmJUSq/
-        pmcERo5+YXdBclWVaGEIrD7b8A==
-X-Google-Smtp-Source: ABdhPJzPT0tenMklKMMKJF6ZLYAaarjoI9roxnBybLWcY5X0oVtkBpx+aj8jh6FuIfYtujQg/bHxvA==
-X-Received: by 2002:a17:906:380b:: with SMTP id v11mr13515904ejc.183.1613560951201;
-        Wed, 17 Feb 2021 03:22:31 -0800 (PST)
-Received: from localhost.localdomain ([2a02:2450:102f:d6a:4815:d4dc:ff5a:704a])
-        by smtp.gmail.com with ESMTPSA id h10sm934344edk.45.2021.02.17.03.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 03:22:30 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
-        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
-        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonathan Marek <jonathan@marek.ca>
-Subject: [PATCH v5 20/22] arm64: dts: sdm845: Add CAMSS ISP node
-Date:   Wed, 17 Feb 2021 12:21:20 +0100
-Message-Id: <20210217112122.424236-21-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210217112122.424236-1-robert.foss@linaro.org>
-References: <20210217112122.424236-1-robert.foss@linaro.org>
+        id S231538AbhBQMPd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Feb 2021 07:15:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50566 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231336AbhBQMPc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Feb 2021 07:15:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 04A97B958;
+        Wed, 17 Feb 2021 12:14:50 +0000 (UTC)
+Subject: Re: [PATCH v9 0/4] Add %p4cc printk modifier for V4L2 and DRM fourcc
+ codes
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-media@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Message-ID: <9e279133-298d-433f-0694-5366861a6dbe@suse.de>
+Date:   Wed, 17 Feb 2021 13:14:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="HyUqrLrN2TqE8TEiCzyyAR5yf6EjGYvi5"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the camss dt node for sdm845.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--HyUqrLrN2TqE8TEiCzyyAR5yf6EjGYvi5
+Content-Type: multipart/mixed; boundary="2duiza1Wx6GqImBjDmg8HnMhbYyED8yYa";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+ dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, hverkuil@xs4all.nl,
+ laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+ Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Joe Perches <joe@perches.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Daniel Vetter <daniel@ffwll.ch>
+Message-ID: <9e279133-298d-433f-0694-5366861a6dbe@suse.de>
+Subject: Re: [PATCH v9 0/4] Add %p4cc printk modifier for V4L2 and DRM fourcc
+ codes
+References: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20210216155723.17109-1-sakari.ailus@linux.intel.com>
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 135 +++++++++++++++++++++++++++
- 1 file changed, 135 insertions(+)
+--2duiza1Wx6GqImBjDmg8HnMhbYyED8yYa
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index bcf888381f14..4fe93c69908a 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3911,6 +3911,141 @@ videocc: clock-controller@ab00000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		camss: camss@a00000 {
-+			compatible = "qcom,sdm845-camss";
-+
-+			reg = <0 0xacb3000 0 0x1000>,
-+				<0 0xacba000 0 0x1000>,
-+				<0 0xacc8000 0 0x1000>,
-+				<0 0xac65000 0 0x1000>,
-+				<0 0xac66000 0 0x1000>,
-+				<0 0xac67000 0 0x1000>,
-+				<0 0xac68000 0 0x1000>,
-+				<0 0xacaf000 0 0x4000>,
-+				<0 0xacb6000 0 0x4000>,
-+				<0 0xacc4000 0 0x4000>;
-+			reg-names = "csid0",
-+				"csid1",
-+				"csid2",
-+				"csiphy0",
-+				"csiphy1",
-+				"csiphy2",
-+				"csiphy3",
-+				"vfe0",
-+				"vfe1",
-+				"vfe_lite";
-+
-+			interrupts = <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 477 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 478 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 479 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "csid0",
-+				"csid1",
-+				"csid2",
-+				"csiphy0",
-+				"csiphy1",
-+				"csiphy2",
-+				"csiphy3",
-+				"vfe0",
-+				"vfe1",
-+				"vfe_lite";
-+
-+			power-domains = <&clock_camcc IFE_0_GDSC>,
-+				<&clock_camcc IFE_1_GDSC>,
-+				<&clock_camcc TITAN_TOP_GDSC>;
-+
-+			clocks = <&clock_camcc CAM_CC_CAMNOC_AXI_CLK>,
-+				<&clock_camcc CAM_CC_CPAS_AHB_CLK>,
-+				<&clock_camcc CAM_CC_CPHY_RX_CLK_SRC>,
-+				<&clock_camcc CAM_CC_IFE_0_CSID_CLK>,
-+				<&clock_camcc CAM_CC_IFE_0_CSID_CLK_SRC>,
-+				<&clock_camcc CAM_CC_IFE_1_CSID_CLK>,
-+				<&clock_camcc CAM_CC_IFE_1_CSID_CLK_SRC>,
-+				<&clock_camcc CAM_CC_IFE_LITE_CSID_CLK>,
-+				<&clock_camcc CAM_CC_IFE_LITE_CSID_CLK_SRC>,
-+				<&clock_camcc CAM_CC_CSIPHY0_CLK>,
-+				<&clock_camcc CAM_CC_CSI0PHYTIMER_CLK>,
-+				<&clock_camcc CAM_CC_CSI0PHYTIMER_CLK_SRC>,
-+				<&clock_camcc CAM_CC_CSIPHY1_CLK>,
-+				<&clock_camcc CAM_CC_CSI1PHYTIMER_CLK>,
-+				<&clock_camcc CAM_CC_CSI1PHYTIMER_CLK_SRC>,
-+				<&clock_camcc CAM_CC_CSIPHY2_CLK>,
-+				<&clock_camcc CAM_CC_CSI2PHYTIMER_CLK>,
-+				<&clock_camcc CAM_CC_CSI2PHYTIMER_CLK_SRC>,
-+				<&clock_camcc CAM_CC_CSIPHY3_CLK>,
-+				<&clock_camcc CAM_CC_CSI3PHYTIMER_CLK>,
-+				<&clock_camcc CAM_CC_CSI3PHYTIMER_CLK_SRC>,
-+				<&gcc GCC_CAMERA_AHB_CLK>,
-+				<&gcc GCC_CAMERA_AXI_CLK>,
-+				<&clock_camcc CAM_CC_SLOW_AHB_CLK_SRC>,
-+				<&clock_camcc CAM_CC_SOC_AHB_CLK>,
-+				<&clock_camcc CAM_CC_IFE_0_AXI_CLK>,
-+				<&clock_camcc CAM_CC_IFE_0_CLK>,
-+				<&clock_camcc CAM_CC_IFE_0_CPHY_RX_CLK>,
-+				<&clock_camcc CAM_CC_IFE_0_CLK_SRC>,
-+				<&clock_camcc CAM_CC_IFE_1_AXI_CLK>,
-+				<&clock_camcc CAM_CC_IFE_1_CLK>,
-+				<&clock_camcc CAM_CC_IFE_1_CPHY_RX_CLK>,
-+				<&clock_camcc CAM_CC_IFE_1_CLK_SRC>,
-+				<&clock_camcc CAM_CC_IFE_LITE_CLK>,
-+				<&clock_camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>,
-+				<&clock_camcc CAM_CC_IFE_LITE_CLK_SRC>;
-+			clock-names = "camnoc_axi",
-+				"cpas_ahb",
-+				"cphy_rx_src",
-+				"csi0",
-+				"csi0_src",
-+				"csi1",
-+				"csi1_src",
-+				"csi2",
-+				"csi2_src",
-+				"csiphy0",
-+				"csiphy0_timer",
-+				"csiphy0_timer_src",
-+				"csiphy1",
-+				"csiphy1_timer",
-+				"csiphy1_timer_src",
-+				"csiphy2",
-+				"csiphy2_timer",
-+				"csiphy2_timer_src",
-+				"csiphy3",
-+				"csiphy3_timer",
-+				"csiphy3_timer_src",
-+				"gcc_camera_ahb",
-+				"gcc_camera_axi",
-+				"slow_ahb_src",
-+				"soc_ahb",
-+				"vfe0_axi",
-+				"vfe0",
-+				"vfe0_cphy_rx",
-+				"vfe0_src",
-+				"vfe1_axi",
-+				"vfe1",
-+				"vfe1_cphy_rx",
-+				"vfe1_src",
-+				"vfe_lite",
-+				"vfe_lite_cphy_rx",
-+				"vfe_lite_src";
-+
-+			iommus = <&apps_smmu 0x0808 0x0>,
-+				 <&apps_smmu 0x0810 0x8>,
-+				 <&apps_smmu 0x0c08 0x0>,
-+				 <&apps_smmu 0x0c10 0x8>;
-+
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
-+		};
-+
- 		cci: cci@ac4a000 {
- 			compatible = "qcom,sdm845-cci";
- 			#address-cells = <1>;
--- 
-2.27.0
+Hi
 
+Am 16.02.21 um 16:57 schrieb Sakari Ailus:
+> Hi all,
+>=20
+> 	On merging --- it would seem everyone is happy with merging this
+> 	through the drm-misc tree. The last patch should wait until all
+> 	users are gone for sure, probably to the next kernel release.
+> 	There are no users of drm_get_format_name() in linux-next
+> 	currently after the 3rd patch.
+
+I've merged patches 1 to 3 into drm-misc-next. Patch 4 (and maybe some=20
+final fix-up patch) will land when all DRM trees have catched up the=20
+changes.
+
+Best regards
+Thomas
+
+>=20
+> This set adds support for %p4cc printk modifier for printing V4L2 and D=
+RM
+> fourcc codes. The codes are cumbersome to print manually and by adding =
+the
+> modifier, this task is saved from the V4L2 and DRM frameworks as well a=
+s
+> related drivers. DRM actually had it handled in a way (see 3rd patch) b=
+ut
+> the printk modifier makes printing the format easier even there. On V4L=
+2
+> side it saves quite a few lines of repeating different implementations =
+of
+> printing the 4cc codes.
+>=20
+> Further work will include converting the V4L2 drivers doing the same. I=
+
+> left these out from this version since individual drivers are easier
+> changed without dealing with multiple trees.
+>=20
+> Since v8:
+>=20
+> - Reduce ternary conditionals in intel_plane_uapi_info().
+>=20
+> - Wrap a long line in intel_plane_hw_info().
+>=20
+> Since v7:
+>=20
+> - Add more examples, one with big endian and another with a space.
+>=20
+> - Add Y10 test format.
+>=20
+> - Use "0123" in the size string for temporary buffer.
+>=20
+> - Added acks.
+>=20
+> - Split the 3rd patch into two: driver changes and removal of
+>    drm_get_format_name().
+>=20
+> Since v6:
+>=20
+> - Don't drop spaces in fourcc codes.
+>=20
+> - Print unprintable characters as dot ('.') instead of hexadecimal numb=
+er
+>    in parentheses.
+>=20
+> - Convert DRM from drm_get_format_name() to %p4cc. I wonder if this sho=
+uld
+>    be merged through the DRM tree, albeit it's probably unlikely to
+>    conflict with other changes. Further use of the function could be a
+>    problem.
+>=20
+> - Make tests more realistic.
+>=20
+> Since v5:
+>=20
+> - Added V4L2 core conversion to %p4cc, as well as change the DRM
+>    fourcc printing function to use %p4cc.
+>=20
+> - Add missing checkpatch.pl checks for %p4cc modifier.
+>=20
+> Sakari Ailus (4):
+>    lib/vsprintf: Add support for printing V4L2 and DRM fourccs
+>    v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+>    drm: Switch to %p4cc format modifier
+>    drm: Remove drm_get_format_name()
+>=20
+>   Documentation/core-api/printk-formats.rst     | 18 ++++
+>   drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |  5 +-
+>   drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |  5 +-
+>   drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |  5 +-
+>   drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |  5 +-
+>   .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  5 +-
+>   .../arm/display/komeda/komeda_format_caps.h   | 11 ---
+>   .../arm/display/komeda/komeda_framebuffer.c   |  4 +-
+>   .../gpu/drm/arm/display/komeda/komeda_plane.c |  6 +-
+>   drivers/gpu/drm/arm/malidp_mw.c               |  7 +-
+>   drivers/gpu/drm/drm_atomic.c                  |  8 +-
+>   drivers/gpu/drm/drm_crtc.c                    |  7 +-
+>   drivers/gpu/drm/drm_fourcc.c                  | 25 ------
+>   drivers/gpu/drm/drm_framebuffer.c             | 11 +--
+>   drivers/gpu/drm/drm_mipi_dbi.c                |  5 +-
+>   drivers/gpu/drm/drm_plane.c                   |  8 +-
+>   .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  5 +-
+>   drivers/gpu/drm/i915/display/intel_display.c  | 14 +--
+>   .../drm/i915/display/intel_display_debugfs.c  | 19 ++---
+>   drivers/gpu/drm/i915/display/intel_sprite.c   |  6 +-
+>   drivers/gpu/drm/mcde/mcde_display.c           |  6 +-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c      |  6 +-
+>   drivers/gpu/drm/nouveau/nouveau_display.c     |  9 +-
+>   drivers/gpu/drm/radeon/atombios_crtc.c        | 10 +--
+>   drivers/gpu/drm/sun4i/sun4i_backend.c         |  6 +-
+>   drivers/gpu/drm/vkms/vkms_writeback.c         |  7 +-
+>   drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           | 15 ++--
+>   drivers/media/v4l2-core/v4l2-ioctl.c          | 85 +++++-------------=
+-
+>   include/drm/drm_fourcc.h                      |  1 -
+>   lib/test_printf.c                             | 18 ++++
+>   lib/vsprintf.c                                | 39 +++++++++
+>   scripts/checkpatch.pl                         |  6 +-
+>   32 files changed, 164 insertions(+), 223 deletions(-)
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--2duiza1Wx6GqImBjDmg8HnMhbYyED8yYa--
+
+--HyUqrLrN2TqE8TEiCzyyAR5yf6EjGYvi5
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF4BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAtCLMFAwAAAAAACgkQlh/E3EQov+AY
+kw/3RFAkt2XQW6AGXYNJcGJ4bdXzGbp1aJ/k0FyEiHaoP5GuXFnJnGizaOfdRn+BG7J2moOYhU9u
+L3HCZpaWW7zGWd96gC8tw81685lf5eNFNHzFll7To8/bipzSuObsBU02WkGLgj7PGBJaoR206u9e
+SlWCWxlOFK9iQO+CT5Jfx3YzlW0FzHiuJwCMgZJhn7jqhPyHNtP2TdJPcLhmtERrFk4ZD4TgiLSK
+ReHmugCGUywD397rcFIg1FD5hYM9/QLchNX2mPP9B75l4Cbk/DuhnPOvnGzD8ccL5J94CaRthdeH
+EkjCeO+03A8hOCOP8p4382LMeVI723FzsrmI+GHJNhez6Vav7eEsFsVroWUlmSr8u4ZP1TTwtHaf
+APnm00Qt8sqb0ParG5spKT7eMjYIfa34VvgLnHzGjyM6C/Nhxkzj2Ll/a17staqR6NmIdnERlgvB
+7G+SpGpReLQRMLb6jGn4dF2cHaX6Dp5BmYWb9etnMf5otJzGU1KQ71JaNqqt4ySi4fhmELdJNyGU
+bdYIjcTYD9D2IuBxamAvWN6AQ5emllmgW+uPHuMMI+zWx3KP43RMYOa6mXdqK2KjjMPdGM299xdC
+1Wx983c0iMswmAAI/8DFJA5KNgJ/svA/t+SAEEfwPL/+KDE0K6M5KCpYvQMkr5gzmxUoeNjPNBix
+0w==
+=fadD
+-----END PGP SIGNATURE-----
+
+--HyUqrLrN2TqE8TEiCzyyAR5yf6EjGYvi5--
