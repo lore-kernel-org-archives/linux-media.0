@@ -8,45 +8,45 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E16CEC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 03:57:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 577B3C43381
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 03:57:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F62764E28
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 03:57:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2698C64DE8
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 03:57:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbhBRD5A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Feb 2021 22:57:00 -0500
-Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:49249
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S230382AbhBRD5a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Feb 2021 22:57:30 -0500
+Received: from mail-db8eur05on2045.outbound.protection.outlook.com ([40.107.20.45]:36480
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230310AbhBRD4v (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Feb 2021 22:56:51 -0500
+        id S230321AbhBRD4x (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Feb 2021 22:56:53 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KGtqkyBA/uNVD6ojXSj/XV22CRzjbA94byL+r4oLb79jhPK/QT6ayIPx8v5a8nspgPsx2u2bxx9zgZT0nsMxfZoOtANat5nA+NJjqfx0a42qUZLekw2f7b5VXKQlAoHOi779dsscAqdlLAEkQVfGUIMBGuT9y28/zj/XZ04bREIT9CJdmmyDMILOmCqgAOkBgLPwnZlJWBeuT0Ll5+EWPNgJBjiQwOtAXz99j1qOVqK9a2tNnPk5uI7CisSqakVQiiJ2b14bm2f+dcdLMdhIsm3oaBfDzMmDooJhZHNAcoMaGtGZvKvR4onjxtv8blXQaIOg8hblYU4+4VKMpGRWbQ==
+ b=CuAIJJS75Hm22IH2w382XBqlYDLC2SYqcgh9j2nrsr38wUlUcBmFLlzf38huAECjVS6MDwt1Ja9CjDNOEXtHIhnMw7ZQFnpKkwq6TYGAaaXnU1dE9/ryC7SeHdbFnw093Qw034o3t8uHCFi+nY5d7bWhQ3in1AP6slnJrmSmfGDZPQ4osht2kfgtO2c0u/FE3Lry/6TOZ9sgyvnYuBH3NpTpQMc693dJnTKkVMVqFGEghNwQgz4fGrXnaWc2aF5me+JfjKQCU6RkUtdVRphm/5bRleBWR4XUMxuqLbL4MsamnBCqqZ5WoV4y/M/zdGl8mjJjYzTwV3QWyCS/EyZrBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B5uVWVH6Z6t73/1mhIW228y8iiZYig0nvPY/B2Ajp8E=;
- b=DNPH4U4qF0yj4DMF5hRlVkpivhSyePS952IhwgPE5FJm6f8LtOa4DacKBFMMfNolPSkSdKn48+Og15XLHLeoUZa0lINYa/TBtOGUT94d3Y61izgB9TxP/WUufB4u3EJwGJij/jBv/q+6uEvXNxFs3yEpr9b6c9aCALuuKlK4KAopuhtf7OKagRU5tuP2oWqe5BVjMzHsDXoyXq8qn4Mj3i46IFw1wW3dHBS4/fxeindY5bfLSBgq1rMWNWatO2t04nMyKs3r/84HhIsaSgiDM7mVyxhSXRlnA0s3vrt+No8WysCK9WFzKqEyfmFQ7ZJVyli4xJ/ziEkpz6m+QBTtlg==
+ bh=c1FAawTRS5//5BJvZYZ0c0B8mPY4+tNQeamXe5zvyTk=;
+ b=jNQl2rwSjNYAoVd9NXrjw0EJ6GjnIxFDl7qOq/5rdYIXHBRa2nCQGcWsjFEiO6Vjy6bLM2Gl6u5G5DafWjmMOXq1wiLg/1KbWkZz0zrdQWhblbI2BerUnr3BI4pohYQm/gwb3KxvulBaK+6Gj7IrvfeBzOhPq5aKNzJ/8gsQ6usEDZOskegLcDgadACG0ODR/kXmkzIrKTdp+im9kU7CPIe2ygvKhNE5kW9C/YfIctYDQnbE96bapll//evhWji3TWRm/41qaUSTwi5v46PJJsytVjAcX/nMlFKbH4QCWrC110CqhPJQNPHqViyXXpGUy0vlB4/JeZ7/4nI7ZDxsbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B5uVWVH6Z6t73/1mhIW228y8iiZYig0nvPY/B2Ajp8E=;
- b=W1kr7bVN2bOKFQjANSWMi2145SWxAFEp8FcqspldA+Tg6vfeWUHmzdYhYfo0xeV327dSV3Uu6/6GHwHcgTaqku+WQ7XRyDswBRkIz4TD8nq5tczP8356b3u/+zWBInqUeEju6CjFGEmLs28JkDanKoAaOAXbO/FrSvWvAPSDndw=
+ bh=c1FAawTRS5//5BJvZYZ0c0B8mPY4+tNQeamXe5zvyTk=;
+ b=L+qM+EAUkeursmQkI9gy57rDNwMGdEI5Xv53MbB6i5Gm6XtBzyS3H0nH3prRqttmxCa5NKIg51GMcpHHmoLznM9uZ7FQ6+o+ctZbhCPPx7qs174MBXs4d057Yhghq/cM8vb7nNhQg07oIUakzMSOUsDtRxIxQlnQwlps/ex7B/s=
 Authentication-Results: lists.freedesktop.org; dkim=none (message not signed)
  header.d=none;lists.freedesktop.org; dmarc=none action=none
  header.from=nxp.com;
 Received: from VI1PR04MB3983.eurprd04.prod.outlook.com (2603:10a6:803:4c::16)
- by VI1PR0402MB3421.eurprd04.prod.outlook.com (2603:10a6:803:5::12) with
+ by VI1PR04MB5709.eurprd04.prod.outlook.com (2603:10a6:803:e3::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27; Thu, 18 Feb
- 2021 03:54:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27; Thu, 18 Feb
+ 2021 03:55:32 +0000
 Received: from VI1PR04MB3983.eurprd04.prod.outlook.com
  ([fe80::2564:cacc:2da5:52d0]) by VI1PR04MB3983.eurprd04.prod.outlook.com
  ([fe80::2564:cacc:2da5:52d0%5]) with mapi id 15.20.3868.027; Thu, 18 Feb 2021
- 03:54:55 +0000
+ 03:55:32 +0000
 From:   Liu Ying <victor.liu@nxp.com>
 To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -57,209 +57,106 @@ Cc:     airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
         a.hajda@samsung.com, narmstrong@baylibre.com,
         Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
         jernej.skrabec@siol.net, kishon@ti.com, vkoul@kernel.org
-Subject: [PATCH v4 08/14] dt-bindings: display: bridge: Add i.MX8qxp pixel link to DPI binding
-Date:   Thu, 18 Feb 2021 11:41:49 +0800
-Message-Id: <1613619715-28785-9-git-send-email-victor.liu@nxp.com>
+Subject: [PATCH v4 14/14] MAINTAINERS: add maintainer for DRM bridge drivers for i.MX SoCs
+Date:   Thu, 18 Feb 2021 11:41:55 +0800
+Message-Id: <1613619715-28785-15-git-send-email-victor.liu@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1613619715-28785-1-git-send-email-victor.liu@nxp.com>
 References: <1613619715-28785-1-git-send-email-victor.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
 X-ClientProxiedBy: SG2PR06CA0144.apcprd06.prod.outlook.com
  (2603:1096:1:1f::22) To VI1PR04MB3983.eurprd04.prod.outlook.com
  (2603:10a6:803:4c::16)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0144.apcprd06.prod.outlook.com (2603:1096:1:1f::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 03:54:49 +0000
+Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0144.apcprd06.prod.outlook.com (2603:1096:1:1f::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 03:55:26 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: bda27f97-e68b-419a-b537-08d8d3c0f3b0
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3421:
+X-MS-Office365-Filtering-Correlation-Id: fe0dd624-7f5e-4dfb-670e-08d8d3c109b7
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5709:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR0402MB3421DB44EEB51F42CE6E444D98859@VI1PR0402MB3421.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Microsoft-Antispam-PRVS: <VI1PR04MB5709A053062AB1F9DC2C48E098859@VI1PR04MB5709.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K2K21gH9kGfQdEOAGar4W9jfCK3eeMq6WkJ/LXsNggylotUlvC1T7itxraJNjwV1WQIXWd1hGU/2QWqW/a8yEQCHXLbs/KiWR0vOs9bIWj1HQsXl2A4bDWdrgsDlY0mq60M0FpSbrUt981rcNlRnDD4YkeTP4ynUvhT9vnFI+0TtgXjHpnUJZUjahd0O5+YLLan3fO7yMTgCyUXUOFkdOGcdXuMqhptTih4zd4uUQnbI9tMv2Dm8pZZFfHSA9/HqqdKnMqxkSwGqXYJzu5RsfxcYqaUtkTtmf3+/BKyVNkcJeanzXhdHRCbCS3nhExGX7z6JzkGL1AIa1DhUlUzwZrDoPfrurEuzQTlGzlLnkEoiIhCjlsu/PPgzxvYzP3dAcOjQZEp7YwZntt5QXMM4ws7oYHtB8xABQT93JQTX+E/Tw71xoArKLr27FXMWxOOCO91YlsMmjusbwndMaV56327P3YWztnsWesd+qLcA64QYaomO0cQ1kQYVBso7zXvuNXy1uiGFKQO6aYq09f0dKGrv+G298dJlI1AV8IZyyJC/hirVHEhzbR6mbCuKvaaUFNr+Mrzii/3PBeyGjedN7w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB3983.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(52116002)(478600001)(86362001)(5660300002)(6486002)(8936002)(956004)(186003)(26005)(7416002)(6512007)(2906002)(66946007)(2616005)(8676002)(316002)(66476007)(16526019)(36756003)(66556008)(966005)(4326008)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?aDVTM3R5OEdVZk9KNnVneXhsV3hFRWU2WjV6RjJkemZTays3ZG9lMFhWS3dM?=
- =?utf-8?B?Y2hVOHpvNkNNS2U5Nk9LdDBaV29iNGMzOHFnbmRTKzN4OVB3eTdKVXdIL05x?=
- =?utf-8?B?dFY3cXlrM2JENVhGVjAxcnVyVXlQSmtDQlBxNnBTTk1QaGxrbE56M01DUUVT?=
- =?utf-8?B?a1JkeWpIWnA4QlYzTncrNnBsdDFZbWJScXV4bmZQcUNscGk3RktvcWZTblV4?=
- =?utf-8?B?SXpaY0hZS3RWa2dQOUo3RENLL2hSV0tDT2JEZVFESWt3dkVBZUcxNzdLeGd3?=
- =?utf-8?B?bG9mYk00SmJRZStvK0VML0JrdDE2YitmeDR6STRPY29BU3p6dW1VTEw0Qlc5?=
- =?utf-8?B?dkNSMkhnNnZoTUhaZURoRmRLTXZKa2pRdHNKODBnRE9jQ1ZOWHRaUk1YMmVI?=
- =?utf-8?B?MmpPYUVnS2VLQ245TEtOM1lXbmtZcXRKZ1l3VmpJVndMamhSUTBkaE1LY3dw?=
- =?utf-8?B?OUdkT3ZaVnprZmdqQXFWa3prcC9GSW1uSjBTQ1pLNGxaL0RWWmNlQ1pRNHRv?=
- =?utf-8?B?dytDUG5XOTFBdEdoakpOZitFTTh5THlwRmhkSW93bTg3MUowaTRnM3ZSOHdD?=
- =?utf-8?B?dHVLWVNmUVN4RUVReDFralpxejhVVWNnT3JaR0FPVkJQNFc1aFNHOStnczN5?=
- =?utf-8?B?cE03T1kzSFh6ZkEvTUJGdVQvYWxUeWhBdUx5YUNoekJGdFlQZThWeUN1VUZv?=
- =?utf-8?B?ajBqZFBUL1RQT1BYaURNZ09LUHlFQmg3V0RKbDV1OXk0czgrTlhLOGViMHBj?=
- =?utf-8?B?M3NFVmkyMHJYcldFUmUvRk5Lek16azM0SlhqUUlKYWJNV2FPQ2kwZHVFZ083?=
- =?utf-8?B?RG9BVWg3MWYrSGJVQVBnb3ZqMEZUeVd1RmVoVTJlU2RLVXR6ck5MUTY2RXpG?=
- =?utf-8?B?Y0lkSGNsZjRlN1FkV1FpUnFsUGV0TkJob2tzcVl0c2twcDI4eERoNkkzamNp?=
- =?utf-8?B?Z3Q3SU13cWQ5ZXdwbHB1RFNmbW5DQkFRZ1dxaXAwcHBCUGVDUXlNOTMweFB1?=
- =?utf-8?B?NzUxK0w0VUpFMEgyZFlyYkNld3EvY2R0Q29ydVpPQThYWmFJYTh5STZhdGE4?=
- =?utf-8?B?dGtpeW9vRVdjYzJINU53S0JIVEJrT2lWdVd2QXlJQkVUdmt4UnVCT2piT1lG?=
- =?utf-8?B?SlpPdzdLZnE4MTZxdFRQUVVydlVERnJWV2p4UWZoVlh4YlZrQnhldGxmU0FU?=
- =?utf-8?B?NFI3bFBpVzIyNGpILytxdnZ5dEdnRHBFQlJaQ1IrYjE5WkdNMmthVGFRaDFQ?=
- =?utf-8?B?YXh0N2N6aVMvR1FkWnBuNGdvbHptL3BrNnNtS2RjbFpVUDFvU3d4c0JGRnRh?=
- =?utf-8?B?NDAzUFBQTWRhQ1NsY2RMNVFlU3FqUGQrOWhWeFc1TDFNT3NJT0RIbHpZQmdx?=
- =?utf-8?B?YXNXVDFRc2NSYUVVRjJiVEdFRG1VTldyOVhIaXJmbjZYcVRxUnBOWWpGTmow?=
- =?utf-8?B?Tnh5RmdLTFZNY1UvcFNaNmRKSkxFWUh4bWk0a2x6U3dkSWtyZmY0K0NMZDlq?=
- =?utf-8?B?M0xTaHNjeEhhaFp4clVzcmFaOWw5WEtBbm5xRHJPZ0dnRXpKQTFueG9UcllO?=
- =?utf-8?B?Y0pFSjhkU0JTaGgxY1BuMCtLTzlHMEpzejFYRXRvZGFQYnJJRm5sbjVKc29W?=
- =?utf-8?B?WlduaEY1RGYvR2h6N2N1d001ZkJ5TmYxSEFMcDQ5S3F2WmRhdGw5NFVyYUlm?=
- =?utf-8?B?cnlTVmRFMk5Mc3Fpd0FmRWRsVHRJaGVodG1CUWRYcXQxeXlJOEhQUXhRa1pQ?=
- =?utf-8?Q?SDqYS5gXQAvQ+P84xJlJPq7x4mP+twTNGhawc2l?=
+X-Microsoft-Antispam-Message-Info: ntflbRiHFVok3O8faSADbQNDOogmfVcu0xzU9spsqLYX/vAyYkfxjdQ1/FTlySEpXTLTJl7aEJUX2o4qdmB851RmxK+5N0fTlcYSVXS6PmnobCdZS6W6MI4VrAujZqu7GRihV8TQAhK6EYx8Cy1L+7GUuldlSy/uHd+DI6MH7/7CFabpswWS4kGbCa7Y9+Y+Y86L3DXud9C1vv1/OXKw9QthQRTb8I0pIxm8ORe5hrSpc/1UA6wQyl+Akfb/4Sa7VmU1015x1LQTqiYRH43p1cczfCw3JD0fzwNiUzNtzRtkj5zt6BbWil3zEG1HVxJ1/1swBQgYhjfStQkaoDl+MsAM1SfJT3K/RoYeJk/Z0D4DhwfuL+54on3lRTdIS441JiVeNdEhkTkrfgaco8lYtcSEj4pYMdYim7vCdOdFkN9HaJbjDUfKaU0RxCX4GeXfdff2ZFHjHmS7YiboowT3X3qpYAr8ZHNek8HSOYjALQlhUicAQ36sbpJWHj7cxl3TWnmpFduiVUCdZXrlbEBFmm0FYDJAhsnCf3qP3HseTaaEHbw5cbzM1fFimTP69VJ4L4xZxkeyyipuSs+j7sG4FA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB3983.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(4636009)(396003)(346002)(366004)(39860400002)(376002)(136003)(7416002)(956004)(2616005)(6666004)(52116002)(5660300002)(316002)(6506007)(2906002)(66946007)(6486002)(6512007)(66556008)(186003)(16526019)(26005)(66476007)(69590400012)(86362001)(478600001)(36756003)(4326008)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?l8oTLrGoQq2MaEiCCA2JL7tK9dAlIeBsRY2g3SPd1/Yp/lMXY9EdYcsNUGMq?=
+ =?us-ascii?Q?2maC6Y8Db+gmSKkI7w1PGJ2JQP4In2IRkWaC1tMGiQKIVnhjfZbdZVyj1M6M?=
+ =?us-ascii?Q?0b7VAvUgYaMtLI60Jai8wTsB0z8w9wAAtT0mhkNuxUceK9HsC6a3fZPZ2PK3?=
+ =?us-ascii?Q?FgCxoM8Tw3ZZwp41knSppB2j2kT/jkgcgKina6tbTgnPVVpU3EI4ZKTYjlzK?=
+ =?us-ascii?Q?wjYeP7Zb+r4IFBNh67xN38RJXsHlPKcw3OpfSJmFy+QTm2GPKZfROAWAKOAM?=
+ =?us-ascii?Q?5DgIyhqjJuGOadCf9LwuHzPKsNRQEcmaLElO8AiM59iZxPQeSyZKMKPdTVxG?=
+ =?us-ascii?Q?tzDbwu6xDqQBu+MiiY79DO6OHbyN3ALBRlb9O/hzVgpEGS3dMIQwOtZvh0v5?=
+ =?us-ascii?Q?AoU3TD1UdNfyR2EK1xCkFL33rKohadxI8nf4UMTl8mc4JjDRETHbL2LvzHyS?=
+ =?us-ascii?Q?VaM+v+WxP6/FZrPWTyEytLJ7Ouxs9iWQCuxS8H5R3yCT0J8LoVlksJ1jhfP2?=
+ =?us-ascii?Q?oXyVEcu6o/WhxpNkoQipNYtjAwdQ2JwWAZPO+Q6+S0bPyke/H0o3LRFo6c7Q?=
+ =?us-ascii?Q?w6Lpxmd91Q4565JPyteII8Mg+ujfQinGT3uPo5dkTvdzshAnZwcWZPBKdZ+d?=
+ =?us-ascii?Q?VhiTJfar5Zx2wI9WcsKx46BtVrf+2lTo0H3qZ3GszC92P0F70DzLCbOEsTWx?=
+ =?us-ascii?Q?/swX30BlPleTtG/ugQkwphs+Kl//VKBrLZHokydL9DAFnzP4QB7Vv8lyW1cm?=
+ =?us-ascii?Q?CV9YTrq9pQpr7wiYfWgoFtEMYUC835xNQoG3EQSWRSBKFRpps+Y4kT1bfql9?=
+ =?us-ascii?Q?SFVbGE4VsSb66jbfnPMc0yu7zA/N71ACfcr2QIpq9CPPxaC6n9H85VAfLqV7?=
+ =?us-ascii?Q?IR6Z9C27n5XkQGn9IxIlAYZMwJzQ9Szu3zaGmyXnmJrAMQn1k3Rj/6o9WBw/?=
+ =?us-ascii?Q?7b2bqKYeVBmwA/1BZiBqrJ4LzpGatAd43/nH/vskWpOF7MAGR2Y1eDGvD31F?=
+ =?us-ascii?Q?/9j/p8R7mjo4xzICH9Byvu2ruoAH1T6hGXw4XTXE7xsd23Ed32uKl9E2TBmL?=
+ =?us-ascii?Q?lwOgORVFhj1AzJPsR/+f/IALj4AsdsLWAop4ydVhylbegvvGmxIJEDhBdtLm?=
+ =?us-ascii?Q?JAsuXbKjumQ6mRu+uH7KroV9LVSXm4/rAp0gCou9LMe6fu1KJvzHBC7pxJm8?=
+ =?us-ascii?Q?pjHvgCQp7/SDv2mVLuwvCgNhBmBqgaqXUL5Wod1HmtOBorh7k3T20vBmwdV+?=
+ =?us-ascii?Q?uHqWp57xQBHpbaOoEYujZpz1sl1ckhDHjElOBRdDtZ/jbSVIXqA9B++8OFkl?=
+ =?us-ascii?Q?XfmBQDfZQOjv7OjA81fjLFTY?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bda27f97-e68b-419a-b537-08d8d3c0f3b0
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe0dd624-7f5e-4dfb-670e-08d8d3c109b7
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB3983.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 03:54:55.1549
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 03:55:32.1746
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fIVOokAddse2j2hgAnbn52YnykUrahxdr76syd9VlQDQ0o6/Zoozk3MuQqQ7WS6WfLZGLmItIrIaifNP43Q5Mg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3421
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4vRJfo0iicJ6OZYeU9HG4oH0AK/n5n2DRCAp6mvfGR7Yn0LbndGDuZmOxrRcvsMnIyc0RUHhhZbM6bkK1aNRQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5709
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds bindings for i.MX8qxp pixel link to DPI(PXL2DPI).
+Add myself as the maintainer of DRM bridge drivers for i.MX SoCs.
 
 Signed-off-by: Liu Ying <victor.liu@nxp.com>
 ---
 v3->v4:
-* Add 'fsl,sc-resource' property. (Rob)
+* No change.
 
 v2->v3:
-* Drop 'fsl,syscon' property. (Rob)
-* Mention the CSR module controls PXL2DPI.
+* No change.
 
 v1->v2:
-* Use graph schema. (Laurent)
+* No change.
 
- .../display/bridge/fsl,imx8qxp-pxl2dpi.yaml        | 108 +++++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml
-new file mode 100644
-index 00000000..e4e77fa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml
-@@ -0,0 +1,108 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/bridge/fsl,imx8qxp-pxl2dpi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9d241b8..d96c917 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5892,6 +5892,16 @@ F:	Documentation/devicetree/bindings/display/imx/
+ F:	drivers/gpu/drm/imx/
+ F:	drivers/gpu/ipu-v3/
+ 
++DRM DRIVERS FOR FREESCALE IMX BRIDGE
++M:	Liu Ying <victor.liu@nxp.com>
++L:	dri-devel@lists.freedesktop.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-ldb.yaml
++F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-combiner.yaml
++F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml
++F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml
++F:	drivers/gpu/drm/bridge/imx/
 +
-+title: Freescale i.MX8qxp Pixel Link to Display Pixel Interface
-+
-+maintainers:
-+  - Liu Ying <victor.liu@nxp.com>
-+
-+description: |
-+  The Freescale i.MX8qxp Pixel Link to Display Pixel Interface(PXL2DPI)
-+  interfaces the pixel link 36-bit data output and the DSI controller’s
-+  MIPI-DPI 24-bit data input, and inputs of LVDS Display Bridge(LDB) module
-+  used in LVDS mode, to remap the pixel color codings between those modules.
-+  This module is purely combinatorial.
-+
-+  The i.MX8qxp PXL2DPI is controlled by Control and Status Registers(CSR) module.
-+  The CSR module, as a system controller, contains the PXL2DPI's configuration
-+  register.
-+
-+properties:
-+  compatible:
-+    const: fsl,imx8qxp-pxl2dpi
-+
-+  fsl,sc-resource:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: The SCU resource ID associated with this PXL2DPI instance.
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  fsl,companion-pxl2dpi:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      A phandle which points to companion PXL2DPI which is used by downstream
-+      LVDS Display Bridge(LDB) in split mode.
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: The PXL2DPI input port node from pixel link.
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: The PXL2DPI output port node to downstream bridge.
-+
-+    required:
-+      - port@0
-+      - port@1
-+
-+required:
-+  - compatible
-+  - fsl,sc-resource
-+  - power-domains
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/firmware/imx/rsrc.h>
-+    pxl2dpi {
-+        compatible = "fsl,imx8qxp-pxl2dpi";
-+        fsl,sc-resource = <IMX_SC_R_MIPI_0>;
-+        power-domains = <&pd IMX_SC_R_MIPI_0>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@0 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0>;
-+
-+                mipi_lvds_0_pxl2dpi_dc_pixel_link0: endpoint@0 {
-+                    reg = <0>;
-+                    remote-endpoint = <&dc_pixel_link0_mipi_lvds_0_pxl2dpi>;
-+                };
-+
-+                mipi_lvds_0_pxl2dpi_dc_pixel_link1: endpoint@1 {
-+                     reg = <1>;
-+                     remote-endpoint = <&dc_pixel_link1_mipi_lvds_0_pxl2dpi>;
-+                };
-+            };
-+
-+            port@1 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <1>;
-+
-+                mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch0: endpoint@0 {
-+                    reg = <0>;
-+                    remote-endpoint = <&mipi_lvds_0_ldb_ch0_mipi_lvds_0_pxl2dpi>;
-+                };
-+
-+                mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch1: endpoint@1 {
-+                    reg = <1>;
-+                    remote-endpoint = <&mipi_lvds_0_ldb_ch1_mipi_lvds_0_pxl2dpi>;
-+                };
-+            };
-+        };
-+    };
+ DRM DRIVERS FOR GMA500 (Poulsbo, Moorestown and derivative chipsets)
+ M:	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+ L:	dri-devel@lists.freedesktop.org
 -- 
 2.7.4
 
