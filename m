@@ -2,186 +2,180 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6953AC432C3
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28DA7C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:01:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4557064EAF
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:00:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4E9564DFF
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:01:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbhBRQ7Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 11:59:25 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:49821 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233256AbhBRQOg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 11:14:36 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id ClvQlG3KUZvk6ClvUlAXi8; Thu, 18 Feb 2021 17:13:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1613664792; bh=UMs6ieNZxg5GE9x4Iz9tPbVgybqsI/TV4irkbj9RlK4=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=RtsipwUi8Tsh59craFIA8S88yqE72Rtr+rz8cidB5AuAds4Pf69Gk5qtYDx4QlzBC
-         3m6fQgnm12vFwDdMoCMMUJVtzMHOeeQHfkZYQgJVC8s6JeZF4StCVpTospk1R7BTk3
-         f36AG9dGqvGh748a3SJnOJCygmXiCpNPw7RP1YF3XdqX9nnwzUXZYkKVAEsx0D19nv
-         GQ6UQb9jRtxlYArkysrleaI5YgUg5U3sEZqA77ded4kBOdSxBDMmwK29ppPmb8UOq1
-         MnAjK1etxdu95sEEPBowAaCBboWli/VG3mevZ16e1NjJF7fpJZCVBeh4piK+vzA2Wn
-         S/8kbZw0HI+Fg==
-To:     Sean Young <sean@mess.org>,
+        id S234215AbhBRQ7y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Feb 2021 11:59:54 -0500
+Received: from gofer.mess.org ([88.97.38.141]:37089 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233800AbhBRQj3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Feb 2021 11:39:29 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id A522CC6393; Thu, 18 Feb 2021 16:38:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1613666313; bh=y0hbTtN+1Apb7h1OOsg2A72G+L+BIUNXQR5KSXaTIAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tbJERjJiXwastHt7/3QrYpJ5GObGydJcyrivSesGwwO05x9uv5pYbU4RQrmrHcksW
+         kahGD7wsISJxOhYtiSmY5Bk+gxFBb6epsNORmClJ9rglQ2jpae5yDYaAMni+wX94Z/
+         NGJ35NcmxN9xvgXj3cmdocpx4wBcwnji8cVw+MSbQ4yjTgjXRkMSHVo9H8Q9C1S0+P
+         aSjTckWqCwOFk4x7Q6yGawXT6mAaf5ApTWaq7mkbkpQIwt8uFi+JRK3N+wfQ4qUUWO
+         cFqYXASoMu+ClWxl2xndTTPYh2wq6ob6Q2dw0rmR6aWNtL6WyVc6dBawlwilTJwmSU
+         lZYZSRpCjMkIQ==
+Date:   Thu, 18 Feb 2021 16:38:33 +0000
+From:   Sean Young <sean@mess.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] media/rc: compile rc-cec.c into rc-core
-Message-ID: <c3b7bb19-a3a7-e954-80cf-a083b11ee69d@xs4all.nl>
-Date:   Thu, 18 Feb 2021 17:13:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.0
+Subject: Re: Issue with cec_register_adapter calling request_module() from an
+ async context when called from intel_dp_detect
+Message-ID: <20210218163833.GA15560@gofer.mess.org>
+References: <91b0f6c8-79ca-d04f-1ae0-66bf954dd421@redhat.com>
+ <8d24dad6-cb2a-da91-bd38-887a7aa3282f@xs4all.nl>
+ <20210217143223.GA28632@gofer.mess.org>
+ <1c081320-d040-12b7-fbd6-e6b8c03c2ae8@redhat.com>
+ <20210217151159.GA29680@gofer.mess.org>
+ <876e34f6-c39b-8e97-7ebb-79ae2c356e53@xs4all.nl>
+ <3e3c983f-b3bc-fe94-9247-69c8d97754df@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfEDkOORaURqlXDG/Y63YNUXKrhz0SRq2ss1Tr8NB3trq7oMlHi9Ly0vqEnhNEXS2UamSGgGDyHgFE6vUsmyHCGBKwmx/JSbl+gzHbm5RQlnCi1NxphjF
- 1li/zAQhHaFi00dy28k29MAVZjtPzWPw12R5s0wriv9aRNvhx/9cbXPjO/1g9KiSburmQ+YYCXmLQX0QxwggNDX8jVX5rbfyKPJK2TMsO5kAmY3v+0tOgQT7
- 6tRhyjtvqYkBjDS0CVoMpg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e3c983f-b3bc-fe94-9247-69c8d97754df@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The rc-cec keymap is unusual in that it can't be built as a module,
-instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
-is set. This is because it can be called from drm_dp_cec_set_edid() via
-cec_register_adapter() in an asynchronous context, and it is not
-allowed to use request_module() to load rc-cec.ko in that case. Trying to
-do so results in a 'WARN_ON_ONCE(wait && current_is_async())'.
+Hi Hans,
 
-Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
-just compile this keymap into the rc-core module and never as a
-separate module.
+On Thu, Feb 18, 2021 at 04:33:38PM +0100, Hans de Goede wrote:
+> On 2/17/21 5:29 PM, Hans Verkuil wrote:
+> > On 17/02/2021 16:11, Sean Young wrote:
+> >> Hi,
+> >>
+> >> On Wed, Feb 17, 2021 at 04:04:11PM +0100, Hans de Goede wrote:
+> >>> On 2/17/21 3:32 PM, Sean Young wrote:
+> >>>> On Wed, Feb 17, 2021 at 01:41:46PM +0100, Hans Verkuil wrote:
+> >>>>> Hi Hans,
+> >>>>>
+> >>>>> On 17/02/2021 13:24, Hans de Goede wrote:
+> >>>>>> <resend with the linux-media list added to the Cc>
+> >>>>>>
+> >>>>>> Hi Hans,
+> >>>>>>
+> >>>>>> Fedora has a (opt-in) system to automatically collect backtraces from software
+> >>>>>> crashing on users systems.
+> >>>>>>
+> >>>>>> This includes collecting kernel backtraces (including once triggered by
+> >>>>>> WARN macros) while looking a the top 10 of the most reported backtrace during the
+> >>>>>> last 2 weeks report from ABRT: https://retrace.fedoraproject.org/faf/problems/
+> >>>>>>
+> >>>>>> I noticed the following backtrace:
+> >>>>>> https://retrace.fedoraproject.org/faf/problems/8150/
+> >>>>>> which has been reported 170000 times by Fedora users who have opted-in during the
+> >>>>>> last 14 days.
+> >>>>>>
+> >>>>>> The issue here is that cec_register_adapter ends up calling request_module()
+> >>>>>> from an async context, triggering this warn in kernel/kmod.c __request_module():
+> >>>>>>
+> >>>>>>         /*
+> >>>>>>          * We don't allow synchronous module loading from async.  Module
+> >>>>>>          * init may invoke async_synchronize_full() which will end up
+> >>>>>>          * waiting for this task which already is waiting for the module
+> >>>>>>          * loading to complete, leading to a deadlock.
+> >>>>>>          */
+> >>>>>>         WARN_ON_ONCE(wait && current_is_async());
+> >>>>>>
+> >>>>>> The call-path leading to this goes like this:
+> >>>>>>
+> >>>>>>  ? kvasprintf+0x6d/0xa0
+> >>>>>>  ? kobject_set_name_vargs+0x6f/0x90
+> >>>>>>  rc_map_get+0x30/0x60
+> >>>>>
+> >>>>> It's not CEC, it is rc_map_get that calls request_module() for rc-cec.ko.
+> >>>>>
+> >>>>> I've added Sean Young to the CC list.
+> >>>>>
+> >>>>> Sean, is it possible to treat rc-cec as a built-in if MEDIA_CEC_RC is set?
+> >>>>>
+> >>>>> I think this issue is very specific to CEC. I would not expect to see this
+> >>>>> with any other rc keymap.
+> >>>>
+> >>>> So CEC creates an RC device with a keymap (cec keymap, of course) and then
+> >>>> the keymap needs to be loaded. We certainly don't want all keymaps as
+> >>>> builtins, that would be a waste.
+> >>>>
+> >>>> The cec keymap is scanned once to build a map from cec codes to linux
+> >>>> keycodes; making it builtin is not ideal, and makes the build system a
+> >>>> bit messy.
+> >>>>
+> >>>> I don't think we can load the keymap later, user space may start remapping
+> >>>> the keymap from udev.
+> >>>>
+> >>>> Possibly we could create the cec or rc device later but this could be a bit
+> >>>> messy.
+> >>>>
+> >>>> Could CEC specify:
+> >>>>
+> >>>> #if IS_ENABLED(CONFIG_MEDIA_CEC_RC)
+> >>>> MODULE_SOFTDEP("rc-cec")
+> >>>> #endif
+> >>>
+> >>> That would need to be:
+> >>>
+> >>> MODULE_SOFTDEP("pre: rc-cec")
+> >>>
+> >>> I see that the drm_kms_helper and i915 drivers both depend on the cec module already,
+> >>> so yes if that module will request for rc-cec to be loaded before it is loaded
+> >>> (and thus before i915 is loaded) then that should work around this.
+> >>>
+> >>> Assuming the user is using a module-loader which honors the softdep...
+> >>>
+> >>> Also this assumes that rc_map_get is smart enough to not call request_module()
+> >>> if the module is already loaded, is that the case ?
+> >>
+> >> Yes, see rc_map_get().
+> > 
+> > I tried this. It works if CONFIG_RC_CORE is set to m, but setting it to
+> > y resulted in the same problem. It looks like MODULE_SOFTDEP only works if rc_main
+> > is a module as well.
+> 
+> Yeah that is a known limit of module softdeps, they only work inside modules ...
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Fixes: 2c6d1fffa1d9 (drm: add support for DisplayPort CEC-Tunneling-over-AUX)
-Reported-by: Hans de Goede <hdegoede@redhat.com>
----
-Sean, I tested this both with RC_CORE=y and =m.
+Yes, I assume this is the problem.
 
-It looks reasonably clean to me, but I am not sure if this affects v4l-utils
-as well. Let me know what you think.
+> Still, assuming there is no easy other fix, we could still use this somehow.
+> 
+> I do see that at least Fedora actually has CONFIG_RC_CORE=y for some reason.
 
-Regards,
+This is to make BPF IR decoding possible.
 
-	Hans
----
-diff --git a/drivers/media/rc/Makefile b/drivers/media/rc/Makefile
-index 5bb2932ab119..ff6a8fc4c38e 100644
---- a/drivers/media/rc/Makefile
-+++ b/drivers/media/rc/Makefile
-@@ -5,6 +5,7 @@ obj-y += keymaps/
- obj-$(CONFIG_RC_CORE) += rc-core.o
- rc-core-y := rc-main.o rc-ir-raw.o
- rc-core-$(CONFIG_LIRC) += lirc_dev.o
-+rc-core-$(CONFIG_MEDIA_CEC_RC) += keymaps/rc-cec.o
- rc-core-$(CONFIG_BPF_LIRC_MODE2) += bpf-lirc.o
- obj-$(CONFIG_IR_NEC_DECODER) += ir-nec-decoder.o
- obj-$(CONFIG_IR_RC5_DECODER) += ir-rc5-decoder.o
-diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
-index b252a1d2ebd6..cc6662e1903f 100644
---- a/drivers/media/rc/keymaps/Makefile
-+++ b/drivers/media/rc/keymaps/Makefile
-@@ -21,7 +21,6 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-behold.o \
- 			rc-behold-columbus.o \
- 			rc-budget-ci-old.o \
--			rc-cec.o \
- 			rc-cinergy-1400.o \
- 			rc-cinergy.o \
- 			rc-d680-dmb.o \
-diff --git a/drivers/media/rc/keymaps/rc-cec.c b/drivers/media/rc/keymaps/rc-cec.c
-index 3e3bd11092b4..068e22aeac8c 100644
---- a/drivers/media/rc/keymaps/rc-cec.c
-+++ b/drivers/media/rc/keymaps/rc-cec.c
-@@ -1,5 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /* Keytable for the CEC remote control
-+ *
-+ * This keymap is unusual in that it can't be built as a module,
-+ * instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
-+ * is set. This is because it can be called from drm_dp_cec_set_edid() via
-+ * cec_register_adapter() in an asynchronous context, and it is not
-+ * allowed to use request_module() to load rc-cec.ko in that case.
-+ *
-+ * Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
-+ * just compile this keymap into the rc-core module and never as a
-+ * separate module.
-  *
-  * Copyright (c) 2015 by Kamil Debski
-  */
-@@ -152,7 +162,7 @@ static struct rc_map_table cec[] = {
- 	/* 0x77-0xff: Reserved */
- };
+> I guess we could maybe add the softdep to the CONFIG_RC_MAP module or
+> maybe to the module which contains the code enabled by CONFIG_DRM_DP_CEC ?
+> 
+> At least Fedora has all drm stuff as modules and also has CONFIG_RC_MAP=m,
+> 
+> I know this is not a real fix but a workaround to get rid of 170,000
+> backtraces / 14 days being reported by (opted-in) systems running the
+> Fedora generic kernel config would be welcome regardless of it being the
+> "perfect" fix.
 
--static struct rc_map_list cec_map = {
-+struct rc_map_list cec_map = {
- 	.map = {
- 		.scan		= cec,
- 		.size		= ARRAY_SIZE(cec),
-@@ -160,19 +170,3 @@ static struct rc_map_list cec_map = {
- 		.name		= RC_MAP_CEC,
- 	}
- };
--
--static int __init init_rc_map_cec(void)
--{
--	return rc_map_register(&cec_map);
--}
--
--static void __exit exit_rc_map_cec(void)
--{
--	rc_map_unregister(&cec_map);
--}
--
--module_init(init_rc_map_cec);
--module_exit(exit_rc_map_cec);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Kamil Debski");
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 1fd62c1dac76..4768b1e9ffd1 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -163,6 +163,10 @@ static struct rc_map_list empty_map = {
- 	}
- };
+Of course, I totally agree that a solution is needed.
 
-+#ifdef CONFIG_MEDIA_CEC_RC
-+extern struct rc_map_list cec_map;
-+#endif
-+
- /**
-  * scancode_to_u64() - converts scancode in &struct input_keymap_entry
-  * @ke: keymap entry containing scancode to be converted.
-@@ -2069,6 +2073,9 @@ static int __init rc_core_init(void)
+How about:
 
- 	led_trigger_register_simple("rc-feedback", &led_feedback);
- 	rc_map_register(&empty_map);
-+#ifdef CONFIG_MEDIA_CEC_RC
-+	rc_map_register(&cec_map);
-+#endif
+ 1) Use MODULE_SOFTDEP("rc-cec"); 
 
- 	return 0;
- }
-@@ -2078,6 +2085,9 @@ static void __exit rc_core_exit(void)
- 	lirc_dev_exit();
- 	class_unregister(&rc_class);
- 	led_trigger_unregister_simple(led_feedback);
-+#ifdef CONFIG_MEDIA_CEC_RC
-+	rc_map_register(&cec_map);
-+#endif
- 	rc_map_unregister(&empty_map);
- }
+ 2) If it's compiled as a module, rc-cec should be builtin
 
+
+Sean
