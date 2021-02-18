@@ -2,184 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23078C433DB
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 12:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A0C3C43381
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 12:45:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6F7464EAE
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 12:45:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D15A064EAF
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 12:45:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbhBRMnQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 07:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbhBRKpl (ORCPT
+        id S233212AbhBRMom (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Feb 2021 07:44:42 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:37338 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232387AbhBRKze (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 05:45:41 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B955AC061574;
-        Thu, 18 Feb 2021 02:43:49 -0800 (PST)
-Received: from [IPv6:2a01:e0a:4cb:a870:fd6e:12cd:95d7:3350] (unknown [IPv6:2a01:e0a:4cb:a870:fd6e:12cd:95d7:3350])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id F21B81F45A1F;
-        Thu, 18 Feb 2021 10:43:45 +0000 (GMT)
-Subject: Re: [PATCH v1 13/18] media: hantro: Introduce G2/HEVC decoder
-To:     Ezequiel Garcia <ezequiel@collabora.com>, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, gregkh@linuxfoundation.org, mripard@kernel.org,
+        Thu, 18 Feb 2021 05:55:34 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11IAosOx086946;
+        Thu, 18 Feb 2021 10:54:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=u+EbeWY0kC8yKqPJItRN34NJeUG7sw3ukrKrK2+AkTs=;
+ b=EgOO2Lbi1r9oydC78SZADWrrncDu6rXN8Sdfy/IAoWF/lig4EHku9CJ0b+PLv0MtowBK
+ J1qNK5QoMf60oUQzRs3q0/zGvexsq8X5mARzjYxmD8H1QHleptKmxy20mSMF/sIcJpN8
+ PiA7X0042KbGj1/zDRlKKXgMl9JwVYgxAvDz7b9FWLu4Z1E3JFH+AR8IsYEiHMBr/zin
+ Sv7rBWOdvEaMSUKMNObUng7AI3qm7mLUb4Owbj+cNm//xwe2hHNLpNzDxi8jD9U9Vw1C
+ 3C6VHDqb8l0M+dvevSoIujhBXMLs4B2FRh0czxJuyw3ykgJPTYB1CI21a7IoIkV6gWxd jw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 36p49bdpf0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Feb 2021 10:54:14 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11IAkQAJ188535;
+        Thu, 18 Feb 2021 10:54:13 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 36prbqm72c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Feb 2021 10:54:13 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 11IAs9TV015168;
+        Thu, 18 Feb 2021 10:54:09 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 18 Feb 2021 02:54:08 -0800
+Date:   Thu, 18 Feb 2021 13:53:52 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
         paul.kocialkowski@bootlin.com, wens@csie.org,
         jernej.skrabec@siol.net, krzk@kernel.org, shengjiu.wang@nxp.com,
         adrian.ratiu@collabora.com, aisheng.dong@nxp.com, peng.fan@nxp.com,
-        Anson.Huang@nxp.com, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com
+        Anson.Huang@nxp.com, hverkuil-cisco@xs4all.nl,
+        devel@driverdev.osuosl.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v1 06/18] media: hantro: Make sure that ctx->codex_ops is
+ set
+Message-ID: <20210218105352.GE2087@kadam>
 References: <20210217080306.157876-1-benjamin.gaignard@collabora.com>
- <20210217080306.157876-14-benjamin.gaignard@collabora.com>
- <bb410fde0a2f50cc34840e091c3d9c1395601514.camel@collabora.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Message-ID: <1fab0734-f1db-21ee-152c-4b289be31e4a@collabora.com>
-Date:   Thu, 18 Feb 2021 11:43:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20210217080306.157876-7-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <bb410fde0a2f50cc34840e091c3d9c1395601514.camel@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210217080306.157876-7-benjamin.gaignard@collabora.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9898 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102180095
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9898 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 phishscore=0 clxscore=1015 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102180095
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Wed, Feb 17, 2021 at 09:02:54AM +0100, Benjamin Gaignard wrote:
+> Do not try to call ctx->codec_ops->done if ctx->codec_ops is not set.
+> 
 
-Le 17/02/2021 à 21:45, Ezequiel Garcia a écrit :
-> Hi Benjamin,
->
-> Before I review the implementation in detail,
-> there's one thing that looks suspicious.
->
-> On Wed, 2021-02-17 at 09:03 +0100, Benjamin Gaignard wrote:
->> Implement all the logic to get G2 hardware decoding HEVC frames.
->> It support up level 5.1 HEVC stream.
->> It doesn't support yet 10 bits formats or scaling feature.
->>
->> Add HANTRO HEVC dedicated control to skip some bits at the beginning
->> of the slice header. That is very specific to this hardware so can't
->> go into uapi structures. Compute the needed value is complex and require
->> information from the stream that only the userland knows so let it
->> provide the correct value to the driver.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
->> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
->> ---
->>   drivers/staging/media/hantro/Makefile         |   2 +
->>   drivers/staging/media/hantro/hantro_drv.c     |  41 ++
->>   .../staging/media/hantro/hantro_g2_hevc_dec.c | 637 ++++++++++++++++++
->>   drivers/staging/media/hantro/hantro_g2_regs.h | 198 ++++++
->>   drivers/staging/media/hantro/hantro_hevc.c    | 274 ++++++++
->>   drivers/staging/media/hantro/hantro_hw.h      |  14 +
->>   6 files changed, 1166 insertions(+)
->>   create mode 100644 drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->>   create mode 100644 drivers/staging/media/hantro/hantro_g2_regs.h
->>   create mode 100644 drivers/staging/media/hantro/hantro_hevc.c
->>
->> diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
->> index 743ce08eb184..0357f1772267 100644
->> --- a/drivers/staging/media/hantro/Makefile
->> +++ b/drivers/staging/media/hantro/Makefile
->> @@ -9,12 +9,14 @@ hantro-vpu-y += \
->>                  hantro_h1_jpeg_enc.o \
->>                  hantro_g1_h264_dec.o \
->>                  hantro_g1_mpeg2_dec.o \
->> +               hantro_g2_hevc_dec.o \
->>                  hantro_g1_vp8_dec.o \
->>                  rk3399_vpu_hw_jpeg_enc.o \
->>                  rk3399_vpu_hw_mpeg2_dec.o \
->>                  rk3399_vpu_hw_vp8_dec.o \
->>                  hantro_jpeg.o \
->>                  hantro_h264.o \
->> +               hantro_hevc.o \
->>                  hantro_mpeg2.o \
->>                  hantro_vp8.o
->>   
->> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
->> index e1443c394f62..d171fb80876a 100644
->> --- a/drivers/staging/media/hantro/hantro_drv.c
->> +++ b/drivers/staging/media/hantro/hantro_drv.c
->> @@ -280,6 +280,20 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
->>          return 0;
->>   }
->>   
->> +static int hantro_extra_s_ctrl(struct v4l2_ctrl *ctrl)
->> +{
->> +       const struct hantro_hevc_extra_decode_params *extra_params;
->> +       struct hantro_ctx *ctx;
->> +
->> +       ctx = container_of(ctrl->handler,
->> +                          struct hantro_ctx, ctrl_handler);
->> +       extra_params = &ctx->hevc_dec.ctrls.extra_params;
->> +
->> +       memcpy((void *)extra_params, ctrl->p_new.p_u8, sizeof(extra_params));
->> +
->> +       return 0;
->> +}
->> +
->>   static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
->>          .try_ctrl = hantro_try_ctrl,
->>   };
->> @@ -288,6 +302,10 @@ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
->>          .s_ctrl = hantro_jpeg_s_ctrl,
->>   };
->>   
->> +static const struct v4l2_ctrl_ops hantro_extra_ctrl_ops = {
->> +       .s_ctrl = hantro_extra_s_ctrl,
->> +};
->> +
->>   static const struct hantro_ctrl controls[] = {
->>          {
->>                  .codec = HANTRO_JPEG_ENCODER,
->> @@ -413,6 +431,29 @@ static const struct hantro_ctrl controls[] = {
->>                  .cfg = {
->>                          .id = V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS,
->>                  },
->> +       }, {
->> +               .codec = HANTRO_HEVC_DECODER,
->> +               .cfg = {
->> +                       .id = V4L2_CID_HANTRO_HEVC_EXTRA_DECODE_PARAMS,
->> +                       .name = "HANTRO extra decode params",
->> +                       .type = V4L2_CTRL_TYPE_U8,
->> +                       .min = 0,
->> +                       .def = 0,
->> +                       .max = 255,
->> +                       .step = 1,
->> +                       .dims = { sizeof(struct hantro_hevc_extra_decode_params) },
->> +                       .ops = &hantro_extra_ctrl_ops,
->> +               },
->> +       }, {
->> +               .codec = HANTRO_JPEG_ENCODER | HANTRO_MPEG2_DECODER |
->> +                        HANTRO_VP8_DECODER | HANTRO_H264_DECODER |
->> +                        HANTRO_HEVC_DECODER,
->> +               .cfg = {
->> +                       .id = V4L2_CID_USER_CLASS,
-> Are you sure you need to expose the V4L2_CID_USER_CLASS?
-> Maybe I'm missing something, but this looks odd.
+When you're writing a patch like this please say in the commit message
+if this can happen or not.  Option 1:
 
-v4l2-compliance complains if this isn't exposed when adding V4L2_CID_HANTRO_HEVC_EXTRA_DECODE_PARAMS.
-Other drivers with dedicated control have duplicated this definition but I prefer use it directly.
+Option 1: sometimes this is NULL in <some situation>
+Option 2: this can't be NULL, but we are planning to allow that.
+Option 3: I don't know if this can be NULL but do it for consistency
 
-Benjamin
+As we review and packport patches we have to figure out why you are
+adding NULL checks so it really helps if you just tell us.
 
->
-> Thanks,
-> Ezequiel
->
->
+regards,
+dan carpenter
+
