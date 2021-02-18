@@ -2,180 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28DA7C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC586C433E6
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 19:06:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4E9564DFF
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:01:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A08064EBD
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 19:06:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbhBRQ7y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 11:59:54 -0500
-Received: from gofer.mess.org ([88.97.38.141]:37089 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233800AbhBRQj3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 11:39:29 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id A522CC6393; Thu, 18 Feb 2021 16:38:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1613666313; bh=y0hbTtN+1Apb7h1OOsg2A72G+L+BIUNXQR5KSXaTIAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tbJERjJiXwastHt7/3QrYpJ5GObGydJcyrivSesGwwO05x9uv5pYbU4RQrmrHcksW
-         kahGD7wsISJxOhYtiSmY5Bk+gxFBb6epsNORmClJ9rglQ2jpae5yDYaAMni+wX94Z/
-         NGJ35NcmxN9xvgXj3cmdocpx4wBcwnji8cVw+MSbQ4yjTgjXRkMSHVo9H8Q9C1S0+P
-         aSjTckWqCwOFk4x7Q6yGawXT6mAaf5ApTWaq7mkbkpQIwt8uFi+JRK3N+wfQ4qUUWO
-         cFqYXASoMu+ClWxl2xndTTPYh2wq6ob6Q2dw0rmR6aWNtL6WyVc6dBawlwilTJwmSU
-         lZYZSRpCjMkIQ==
-Date:   Thu, 18 Feb 2021 16:38:33 +0000
-From:   Sean Young <sean@mess.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: Issue with cec_register_adapter calling request_module() from an
- async context when called from intel_dp_detect
-Message-ID: <20210218163833.GA15560@gofer.mess.org>
-References: <91b0f6c8-79ca-d04f-1ae0-66bf954dd421@redhat.com>
- <8d24dad6-cb2a-da91-bd38-887a7aa3282f@xs4all.nl>
- <20210217143223.GA28632@gofer.mess.org>
- <1c081320-d040-12b7-fbd6-e6b8c03c2ae8@redhat.com>
- <20210217151159.GA29680@gofer.mess.org>
- <876e34f6-c39b-8e97-7ebb-79ae2c356e53@xs4all.nl>
- <3e3c983f-b3bc-fe94-9247-69c8d97754df@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e3c983f-b3bc-fe94-9247-69c8d97754df@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233737AbhBRTGU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Feb 2021 14:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233971AbhBRRR4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Feb 2021 12:17:56 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E9C061788
+        for <linux-media@vger.kernel.org>; Thu, 18 Feb 2021 09:17:03 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e17so6402726ljl.8
+        for <linux-media@vger.kernel.org>; Thu, 18 Feb 2021 09:17:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=X79/FL7O601ZV52yVZ6z02kzQq2OSMITFkO3ohwlxz0=;
+        b=B3uIqaD28vR4iHEhLwxCN3xwylIe+uY6SaHqX0Xdf8ay4gUV0Q+4H/RYxHe+zkVTRs
+         bZGMD0afv+Hw8bnFjOMBVYwmPKZqAEoQLP2bx9VA0bYA7hbaO5jZ+Gjupt/6GIOV7ZTD
+         LHWbKey4NLZu3qI2vFvUOUVa9oRrcPfFQmmfybgE5anEWhygFtOcPWTkM5haWTR3IavM
+         /dQnMD9Z7YeJDMB0M7c1TilPx7AOOJlh3QPRetB69WvT6VpTs/76CgsHuzuDNimKVguk
+         4SfaiSDk27mvwW0RK7gicuEm6Br5LKlBeUn7u+v4CSk7KA97CDOmZHP2Cxgq3SnYsQy4
+         sEpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=X79/FL7O601ZV52yVZ6z02kzQq2OSMITFkO3ohwlxz0=;
+        b=ff5Vwj459Te3gpUSQexTlYwEeG4HdwPrz11Yubp/m57NwEV6vj7H11ewNcX2QaYNmq
+         hU8Wfqkdsgv761ea3AB25eAHOjdWv5Z3pzF10UMejrDSqhhJhomDcCojivqQiq+UXsnW
+         Bd4StOZgst8I9ISyuIFbnZ7mgs3RFNhexTECyjyInIUyrXmbHyYW1+P0OkXChAnSzwM4
+         8nhsMHJSBXwCRI0WMwslPz7ZmQnWCzv77RTPWubzJbb3Me0lVCfMiC7GfpQldfuIS9RE
+         HrA17KNznuDRUbqeB2meueRctTwmytKSz8W4kqRlJGqGeSQHda/YLzpR2UZjj9/m/fYU
+         EeoQ==
+X-Gm-Message-State: AOAM5339CQ8DcNjGBuErXevOvwOjLohWsxIpSEIQ5PQvbFUi6E+s9R5X
+        CljqNIxzFiJwqa/6xeLHzQM6gQ==
+X-Google-Smtp-Source: ABdhPJwwSKqtxOOm03g09zExbpXmFZUpBTGn9nHJ44JFeuSpejew5EJQS/AiMMEqBzNiEtDm5WSocw==
+X-Received: by 2002:a05:6512:3607:: with SMTP id f7mr2813954lfs.245.1613668621899;
+        Thu, 18 Feb 2021 09:17:01 -0800 (PST)
+Received: from localhost.localdomain ([85.249.43.69])
+        by smtp.googlemail.com with ESMTPSA id l19sm650670ljj.107.2021.02.18.09.17.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Feb 2021 09:17:01 -0800 (PST)
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+To:     junak.pub@gmail.com, robert.foss@linaro.org,
+        sakari.ailus@linux.intel.com
+Cc:     todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
+        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        jacopo@jmondi.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andrey.konovalov@linaro.org>
+Subject: [PATCH v2.1 1/3] v4l: common: v4l2_get_link_freq: add printing a warning
+Date:   Thu, 18 Feb 2021 20:16:40 +0300
+Message-Id: <20210218171640.18764-1-andrey.konovalov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Print a warning if V4L2_CID_LINK_FREQ control is not implemented.
 
-On Thu, Feb 18, 2021 at 04:33:38PM +0100, Hans de Goede wrote:
-> On 2/17/21 5:29 PM, Hans Verkuil wrote:
-> > On 17/02/2021 16:11, Sean Young wrote:
-> >> Hi,
-> >>
-> >> On Wed, Feb 17, 2021 at 04:04:11PM +0100, Hans de Goede wrote:
-> >>> On 2/17/21 3:32 PM, Sean Young wrote:
-> >>>> On Wed, Feb 17, 2021 at 01:41:46PM +0100, Hans Verkuil wrote:
-> >>>>> Hi Hans,
-> >>>>>
-> >>>>> On 17/02/2021 13:24, Hans de Goede wrote:
-> >>>>>> <resend with the linux-media list added to the Cc>
-> >>>>>>
-> >>>>>> Hi Hans,
-> >>>>>>
-> >>>>>> Fedora has a (opt-in) system to automatically collect backtraces from software
-> >>>>>> crashing on users systems.
-> >>>>>>
-> >>>>>> This includes collecting kernel backtraces (including once triggered by
-> >>>>>> WARN macros) while looking a the top 10 of the most reported backtrace during the
-> >>>>>> last 2 weeks report from ABRT: https://retrace.fedoraproject.org/faf/problems/
-> >>>>>>
-> >>>>>> I noticed the following backtrace:
-> >>>>>> https://retrace.fedoraproject.org/faf/problems/8150/
-> >>>>>> which has been reported 170000 times by Fedora users who have opted-in during the
-> >>>>>> last 14 days.
-> >>>>>>
-> >>>>>> The issue here is that cec_register_adapter ends up calling request_module()
-> >>>>>> from an async context, triggering this warn in kernel/kmod.c __request_module():
-> >>>>>>
-> >>>>>>         /*
-> >>>>>>          * We don't allow synchronous module loading from async.  Module
-> >>>>>>          * init may invoke async_synchronize_full() which will end up
-> >>>>>>          * waiting for this task which already is waiting for the module
-> >>>>>>          * loading to complete, leading to a deadlock.
-> >>>>>>          */
-> >>>>>>         WARN_ON_ONCE(wait && current_is_async());
-> >>>>>>
-> >>>>>> The call-path leading to this goes like this:
-> >>>>>>
-> >>>>>>  ? kvasprintf+0x6d/0xa0
-> >>>>>>  ? kobject_set_name_vargs+0x6f/0x90
-> >>>>>>  rc_map_get+0x30/0x60
-> >>>>>
-> >>>>> It's not CEC, it is rc_map_get that calls request_module() for rc-cec.ko.
-> >>>>>
-> >>>>> I've added Sean Young to the CC list.
-> >>>>>
-> >>>>> Sean, is it possible to treat rc-cec as a built-in if MEDIA_CEC_RC is set?
-> >>>>>
-> >>>>> I think this issue is very specific to CEC. I would not expect to see this
-> >>>>> with any other rc keymap.
-> >>>>
-> >>>> So CEC creates an RC device with a keymap (cec keymap, of course) and then
-> >>>> the keymap needs to be loaded. We certainly don't want all keymaps as
-> >>>> builtins, that would be a waste.
-> >>>>
-> >>>> The cec keymap is scanned once to build a map from cec codes to linux
-> >>>> keycodes; making it builtin is not ideal, and makes the build system a
-> >>>> bit messy.
-> >>>>
-> >>>> I don't think we can load the keymap later, user space may start remapping
-> >>>> the keymap from udev.
-> >>>>
-> >>>> Possibly we could create the cec or rc device later but this could be a bit
-> >>>> messy.
-> >>>>
-> >>>> Could CEC specify:
-> >>>>
-> >>>> #if IS_ENABLED(CONFIG_MEDIA_CEC_RC)
-> >>>> MODULE_SOFTDEP("rc-cec")
-> >>>> #endif
-> >>>
-> >>> That would need to be:
-> >>>
-> >>> MODULE_SOFTDEP("pre: rc-cec")
-> >>>
-> >>> I see that the drm_kms_helper and i915 drivers both depend on the cec module already,
-> >>> so yes if that module will request for rc-cec to be loaded before it is loaded
-> >>> (and thus before i915 is loaded) then that should work around this.
-> >>>
-> >>> Assuming the user is using a module-loader which honors the softdep...
-> >>>
-> >>> Also this assumes that rc_map_get is smart enough to not call request_module()
-> >>> if the module is already loaded, is that the case ?
-> >>
-> >> Yes, see rc_map_get().
-> > 
-> > I tried this. It works if CONFIG_RC_CORE is set to m, but setting it to
-> > y resulted in the same problem. It looks like MODULE_SOFTDEP only works if rc_main
-> > is a module as well.
-> 
-> Yeah that is a known limit of module softdeps, they only work inside modules ...
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ drivers/media/v4l2-core/v4l2-common.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Yes, I assume this is the problem.
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 133d20e40f82..04af03285a20 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -469,6 +469,11 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 			return -ENOENT;
+ 
+ 		freq = div_u64(v4l2_ctrl_g_ctrl_int64(ctrl) * mul, div);
++
++		pr_warn("%s: Link frequency estimated using pixel rate: result might be inaccurate\n",
++			__func__);
++		pr_warn("%s: Consider implementing support for V4L2_CID_LINK_FREQ in the transmitter driver\n",
++			__func__);
+ 	}
+ 
+ 	return freq > 0 ? freq : -EINVAL;
+-- 
+2.17.1
 
-> Still, assuming there is no easy other fix, we could still use this somehow.
-> 
-> I do see that at least Fedora actually has CONFIG_RC_CORE=y for some reason.
-
-This is to make BPF IR decoding possible.
-
-> I guess we could maybe add the softdep to the CONFIG_RC_MAP module or
-> maybe to the module which contains the code enabled by CONFIG_DRM_DP_CEC ?
-> 
-> At least Fedora has all drm stuff as modules and also has CONFIG_RC_MAP=m,
-> 
-> I know this is not a real fix but a workaround to get rid of 170,000
-> backtraces / 14 days being reported by (opted-in) systems running the
-> Fedora generic kernel config would be welcome regardless of it being the
-> "perfect" fix.
-
-Of course, I totally agree that a solution is needed.
-
-How about:
-
- 1) Use MODULE_SOFTDEP("rc-cec"); 
-
- 2) If it's compiled as a module, rc-cec should be builtin
-
-
-Sean
