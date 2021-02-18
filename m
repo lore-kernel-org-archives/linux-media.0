@@ -2,133 +2,186 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADA06C43333
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6953AC432C3
 	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:00:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A56C64EB1
+	by mail.kernel.org (Postfix) with ESMTP id 4557064EAF
 	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 17:00:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbhBRQ7w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 11:59:52 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:39243 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233774AbhBRQiV (ORCPT
+        id S234198AbhBRQ7Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Feb 2021 11:59:25 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:49821 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233256AbhBRQOg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 11:38:21 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id DF1EFE1F;
-        Thu, 18 Feb 2021 11:35:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 18 Feb 2021 11:35:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=9glu1NqYQ89GMrISno2hyWbjb5g
-        /OTCuIq2T05YOits=; b=G6pm+BxV6Dh9oiD6SJUz1xXNJ7zPPCZpBW9AEchzgQY
-        SsCnHwIhIZleE9PczJeaxSABPuNfyZNS1u3Zj2kDGJdZzYOuF3md0m5GftSNoeev
-        ZavMKbuw+WSPSBcY4VpVTBkV/ddPDz1xHbCCETt+RAuJ3CD0g/aAsRM9ST0bJ2+t
-        +6ifUhzBy+1w+NmK0Bu03Ar0ji4npJeGmU9jySby/2b7puTSkKn/YECDpUC+LyuL
-        6Guj5EkOzfnyrZ7fuCEdeNrI7VmN9ZSWN6LpeNmu5/FnzVAUNcjxOj673ayo+RK2
-        5fiMH3d3rCy4RcepJW9kS8GD2lNioOxaP+2WrEFLkFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=9glu1N
-        qYQ89GMrISno2hyWbjb5g/OTCuIq2T05YOits=; b=F8tizhTRDZ1QmkV4IX/nKz
-        GFGeeljOv0nlv95ycFp0ze5k8JaZwhxcx+uGwtKUsVGuJaf3wBvlVHShQ6AEUuUa
-        nYa/M+CR3Q7nQv96fSu/CfaeIwuzJxRKrhn2B8yNMcGRvghgtZ0Vp/RbSek1ItaO
-        Huq8VE54K1HbMzSfgJ/qk4vTktg7KPqCaeXhHlIBqpyMVIsKqMHjMXcuPGS+ft/T
-        80Nr4qrm62gEv7vJ1wWgcbm6pcoegFAPfttgQ+bfSTEtA0b5vB4AgmFNGzLe9Jjp
-        2mDgst8VHznkjEYhvASc+FuMU+CJuXELKFptery4MIiY6qnvOy5wsWIYxYIQt8qA
-        ==
-X-ME-Sender: <xms:Q5cuYNHGf4DP6s5Yrk94g87bEt9maVsvZUvIZ5_OSwOa3ygXsvSckA>
-    <xme:Q5cuYCWJqVHxc0TBvW8RaM0wSdODYkxfn4yClOKahSKwcF7ZJMIFzdXO9brx_KJON
-    wVOak8LO-iBIzeTj3U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrjeeggdekjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:Q5cuYPL64pGtEXDOIjB2LytBtepgEjTDIlirUSWB4Z_2bk7CHwRyNw>
-    <xmx:Q5cuYDGxFYNq90q1Kozd9_sE8xI5mkNSdlmaFJwB_t_-qpDhKS53yA>
-    <xmx:Q5cuYDU83mA2iruvPx6pKrkqUS3fSvQrhe9kV_x71Rp0kdmagu5q-g>
-    <xmx:RpcuYHmzfxpDFq6rYEjERoNkSWa7GUcR73y9VFLtc6uo7hgIIot_W0suCF8>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id DE99E24005C;
-        Thu, 18 Feb 2021 11:35:14 -0500 (EST)
-Date:   Thu, 18 Feb 2021 17:35:12 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     airlied@linux.ie, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, dri-devel@lists.freedesktop.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2] drm/gem: Move drm_gem_fb_prepare_fb() to GEM atomic
- helpers
-Message-ID: <20210218163512.arnmixdkygysxrqk@gilmour>
-References: <20210211081636.28311-1-tzimmermann@suse.de>
+        Thu, 18 Feb 2021 11:14:36 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id ClvQlG3KUZvk6ClvUlAXi8; Thu, 18 Feb 2021 17:13:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1613664792; bh=UMs6ieNZxg5GE9x4Iz9tPbVgybqsI/TV4irkbj9RlK4=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=RtsipwUi8Tsh59craFIA8S88yqE72Rtr+rz8cidB5AuAds4Pf69Gk5qtYDx4QlzBC
+         3m6fQgnm12vFwDdMoCMMUJVtzMHOeeQHfkZYQgJVC8s6JeZF4StCVpTospk1R7BTk3
+         f36AG9dGqvGh748a3SJnOJCygmXiCpNPw7RP1YF3XdqX9nnwzUXZYkKVAEsx0D19nv
+         GQ6UQb9jRtxlYArkysrleaI5YgUg5U3sEZqA77ded4kBOdSxBDMmwK29ppPmb8UOq1
+         MnAjK1etxdu95sEEPBowAaCBboWli/VG3mevZ16e1NjJF7fpJZCVBeh4piK+vzA2Wn
+         S/8kbZw0HI+Fg==
+To:     Sean Young <sean@mess.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] media/rc: compile rc-cec.c into rc-core
+Message-ID: <c3b7bb19-a3a7-e954-80cf-a083b11ee69d@xs4all.nl>
+Date:   Thu, 18 Feb 2021 17:13:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qyrmapmaovukaths"
-Content-Disposition: inline
-In-Reply-To: <20210211081636.28311-1-tzimmermann@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfEDkOORaURqlXDG/Y63YNUXKrhz0SRq2ss1Tr8NB3trq7oMlHi9Ly0vqEnhNEXS2UamSGgGDyHgFE6vUsmyHCGBKwmx/JSbl+gzHbm5RQlnCi1NxphjF
+ 1li/zAQhHaFi00dy28k29MAVZjtPzWPw12R5s0wriv9aRNvhx/9cbXPjO/1g9KiSburmQ+YYCXmLQX0QxwggNDX8jVX5rbfyKPJK2TMsO5kAmY3v+0tOgQT7
+ 6tRhyjtvqYkBjDS0CVoMpg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The rc-cec keymap is unusual in that it can't be built as a module,
+instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
+is set. This is because it can be called from drm_dp_cec_set_edid() via
+cec_register_adapter() in an asynchronous context, and it is not
+allowed to use request_module() to load rc-cec.ko in that case. Trying to
+do so results in a 'WARN_ON_ONCE(wait && current_is_async())'.
 
---qyrmapmaovukaths
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
+just compile this keymap into the rc-core module and never as a
+separate module.
 
-Hi,
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 2c6d1fffa1d9 (drm: add support for DisplayPort CEC-Tunneling-over-AUX)
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+---
+Sean, I tested this both with RC_CORE=y and =m.
 
-On Thu, Feb 11, 2021 at 09:16:36AM +0100, Thomas Zimmermann wrote:
-> diff --git a/include/drm/drm_gem_framebuffer_helper.h b/include/drm/drm_gem_framebuffer_helper.h
-> index 6b013154911d..495d174d9989 100644
-> --- a/include/drm/drm_gem_framebuffer_helper.h
-> +++ b/include/drm/drm_gem_framebuffer_helper.h
-> @@ -9,9 +9,11 @@ struct drm_framebuffer;
->  struct drm_framebuffer_funcs;
->  struct drm_gem_object;
->  struct drm_mode_fb_cmd2;
-> +#if 0
->  struct drm_plane;
->  struct drm_plane_state;
->  struct drm_simple_display_pipe;
-> +#endif
+It looks reasonably clean to me, but I am not sure if this affects v4l-utils
+as well. Let me know what you think.
 
-That's probably not what you meant?
+Regards,
 
-With that fixed,
-Acked-by: Maxime Ripard <mripard@kernel.org>
+	Hans
+---
+diff --git a/drivers/media/rc/Makefile b/drivers/media/rc/Makefile
+index 5bb2932ab119..ff6a8fc4c38e 100644
+--- a/drivers/media/rc/Makefile
++++ b/drivers/media/rc/Makefile
+@@ -5,6 +5,7 @@ obj-y += keymaps/
+ obj-$(CONFIG_RC_CORE) += rc-core.o
+ rc-core-y := rc-main.o rc-ir-raw.o
+ rc-core-$(CONFIG_LIRC) += lirc_dev.o
++rc-core-$(CONFIG_MEDIA_CEC_RC) += keymaps/rc-cec.o
+ rc-core-$(CONFIG_BPF_LIRC_MODE2) += bpf-lirc.o
+ obj-$(CONFIG_IR_NEC_DECODER) += ir-nec-decoder.o
+ obj-$(CONFIG_IR_RC5_DECODER) += ir-rc5-decoder.o
+diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
+index b252a1d2ebd6..cc6662e1903f 100644
+--- a/drivers/media/rc/keymaps/Makefile
++++ b/drivers/media/rc/keymaps/Makefile
+@@ -21,7 +21,6 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+ 			rc-behold.o \
+ 			rc-behold-columbus.o \
+ 			rc-budget-ci-old.o \
+-			rc-cec.o \
+ 			rc-cinergy-1400.o \
+ 			rc-cinergy.o \
+ 			rc-d680-dmb.o \
+diff --git a/drivers/media/rc/keymaps/rc-cec.c b/drivers/media/rc/keymaps/rc-cec.c
+index 3e3bd11092b4..068e22aeac8c 100644
+--- a/drivers/media/rc/keymaps/rc-cec.c
++++ b/drivers/media/rc/keymaps/rc-cec.c
+@@ -1,5 +1,15 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /* Keytable for the CEC remote control
++ *
++ * This keymap is unusual in that it can't be built as a module,
++ * instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
++ * is set. This is because it can be called from drm_dp_cec_set_edid() via
++ * cec_register_adapter() in an asynchronous context, and it is not
++ * allowed to use request_module() to load rc-cec.ko in that case.
++ *
++ * Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
++ * just compile this keymap into the rc-core module and never as a
++ * separate module.
+  *
+  * Copyright (c) 2015 by Kamil Debski
+  */
+@@ -152,7 +162,7 @@ static struct rc_map_table cec[] = {
+ 	/* 0x77-0xff: Reserved */
+ };
 
-Thanks!
-Maxime
+-static struct rc_map_list cec_map = {
++struct rc_map_list cec_map = {
+ 	.map = {
+ 		.scan		= cec,
+ 		.size		= ARRAY_SIZE(cec),
+@@ -160,19 +170,3 @@ static struct rc_map_list cec_map = {
+ 		.name		= RC_MAP_CEC,
+ 	}
+ };
+-
+-static int __init init_rc_map_cec(void)
+-{
+-	return rc_map_register(&cec_map);
+-}
+-
+-static void __exit exit_rc_map_cec(void)
+-{
+-	rc_map_unregister(&cec_map);
+-}
+-
+-module_init(init_rc_map_cec);
+-module_exit(exit_rc_map_cec);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Kamil Debski");
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 1fd62c1dac76..4768b1e9ffd1 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -163,6 +163,10 @@ static struct rc_map_list empty_map = {
+ 	}
+ };
 
---qyrmapmaovukaths
-Content-Type: application/pgp-signature; name="signature.asc"
++#ifdef CONFIG_MEDIA_CEC_RC
++extern struct rc_map_list cec_map;
++#endif
++
+ /**
+  * scancode_to_u64() - converts scancode in &struct input_keymap_entry
+  * @ke: keymap entry containing scancode to be converted.
+@@ -2069,6 +2073,9 @@ static int __init rc_core_init(void)
 
------BEGIN PGP SIGNATURE-----
+ 	led_trigger_register_simple("rc-feedback", &led_feedback);
+ 	rc_map_register(&empty_map);
++#ifdef CONFIG_MEDIA_CEC_RC
++	rc_map_register(&cec_map);
++#endif
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYC6XQAAKCRDj7w1vZxhR
-xeYjAQDBp12JMmHuiBCHQBmWyl9fGbmCMg6R9psxq9edd+0vigD+MjBWZAmh8A1d
-2S0DtBQtnfgH07vDxZs1Eb8jJZ+x/QQ=
-=WmxA
------END PGP SIGNATURE-----
+ 	return 0;
+ }
+@@ -2078,6 +2085,9 @@ static void __exit rc_core_exit(void)
+ 	lirc_dev_exit();
+ 	class_unregister(&rc_class);
+ 	led_trigger_unregister_simple(led_feedback);
++#ifdef CONFIG_MEDIA_CEC_RC
++	rc_map_register(&cec_map);
++#endif
+ 	rc_map_unregister(&empty_map);
+ }
 
---qyrmapmaovukaths--
