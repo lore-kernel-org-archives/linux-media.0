@@ -2,30 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2AA5C433E6
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 19:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1703EC433DB
+	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 19:44:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E92264EAD
+	by mail.kernel.org (Postfix) with ESMTP id BAC9964E6F
 	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 19:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbhBRToh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 14:44:37 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42418 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbhBRTTj (ORCPT
+        id S232458AbhBRToq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Feb 2021 14:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234295AbhBRTTr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 14:19:39 -0500
+        Thu, 18 Feb 2021 14:19:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E1FC061756;
+        Thu, 18 Feb 2021 11:19:06 -0800 (PST)
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:851a:1dfb:a143:80e])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D94251F417F7;
-        Thu, 18 Feb 2021 19:18:52 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9D3941F454B8;
+        Thu, 18 Feb 2021 19:19:03 +0000 (GMT)
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -38,88 +41,72 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 0/9] Add HANTRO G2/HEVC decoder support for IMX8MQ
-Date:   Thu, 18 Feb 2021 20:18:35 +0100
-Message-Id: <20210218191844.297869-1-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 4/9] media: uapi: Add a control for HANTRO driver
+Date:   Thu, 18 Feb 2021 20:18:39 +0100
+Message-Id: <20210218191844.297869-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210218191844.297869-1-benjamin.gaignard@collabora.com>
+References: <20210218191844.297869-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IMX8MQ got two VPUs but until now only G1 has been enabled.
-This series aim to add the second VPU (aka G2) and provide basic 
-HEVC decoding support.
+The HEVC HANTRO driver needs to know the number of bits to skip at
+the beginning of the slice header.
+That is a hardware specific requirement so create a dedicated control
+that this purpose.
 
-To be able to decode HEVC it is needed to add/update some of the
-structures in the uapi. In addition of them one HANTRO dedicated
-control is required to inform the driver of the numbre of bits to skip
-at the beginning of the slice header.
-The hardware require to allocate few auxiliary buffers to store the
-references frame or tile size data.
-
-The driver has been tested with fluster test suite stream.
-For example with this command: ./fluster.py run -ts JCT-VC-HEVC_V1 -d GStreamer-H.265-V4L2SL-Gst1.0
- 
-This series depends of the reset rework posted here: https://www.spinics.net/lists/arm-kernel/msg875766.html
-
-Finally the both VPUs will have a node the device-tree and be
-independent from v4l2 point of view.
-
-A branch with all the dev is available here:
-https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/upstream_g2_v2
-
-version 2:
-- remove all change related to scaling
-- squash commits to a coherent split
-- be more verbose about the added fields
-- fix the comments done by Ezequiel about dma_alloc_coherent usage
-- fix Dan's comments about control copy, reverse the test logic
-in tile_buffer_reallocate, rework some goto and return cases.
-- be more verbose about why I change the bindings
-- remove all sign-off expect mime since it is confusing
-- remove useless clocks in VPUs nodes
-
-Benjamin
-
-Benjamin Gaignard (9):
-  media: hevc: Modify structures to follow H265 ITU spec
-  media: hantro: Define HEVC codec profiles and supported features
-  media: hantro: Add a field to distinguish the hardware versions
-  media: uapi: Add a control for HANTRO driver
-  media: hantro: Introduce G2/HEVC decoder
-  media: hantro: handle V4L2_PIX_FMT_HEVC_SLICE control
-  media: hantro: IMX8M: add variant for G2/HEVC codec
-  dt-bindings: media: nxp,imx8mq-vpu: Update bindings
-  arm64: dts: imx8mq: Add node to G2 hardware
-
- .../bindings/media/nxp,imx8mq-vpu.yaml        |  54 +-
- arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  41 +-
- drivers/media/v4l2-core/v4l2-ctrls.c          |  26 +-
- drivers/staging/media/hantro/Makefile         |   2 +
- drivers/staging/media/hantro/hantro.h         |  34 +-
- drivers/staging/media/hantro/hantro_drv.c     | 103 +++
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 587 ++++++++++++++++++
- drivers/staging/media/hantro/hantro_g2_regs.h | 198 ++++++
- drivers/staging/media/hantro/hantro_hevc.c    | 321 ++++++++++
- drivers/staging/media/hantro/hantro_hw.h      |  48 ++
- .../staging/media/hantro/hantro_postproc.c    |  17 +
- drivers/staging/media/hantro/hantro_v4l2.c    |   1 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c   |  95 ++-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |   6 +
- drivers/staging/media/sunxi/cedrus/cedrus.h   |   1 +
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   2 +
- .../staging/media/sunxi/cedrus/cedrus_h265.c  |   6 +-
- include/media/hevc-ctrls.h                    |  45 +-
- include/uapi/linux/hantro-v4l2-controls.h     |  20 +
- include/uapi/linux/v4l2-controls.h            |   5 +
- 20 files changed, 1557 insertions(+), 55 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_g2_hevc_dec.c
- create mode 100644 drivers/staging/media/hantro/hantro_g2_regs.h
- create mode 100644 drivers/staging/media/hantro/hantro_hevc.c
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ include/uapi/linux/hantro-v4l2-controls.h | 20 ++++++++++++++++++++
+ include/uapi/linux/v4l2-controls.h        |  5 +++++
+ 2 files changed, 25 insertions(+)
  create mode 100644 include/uapi/linux/hantro-v4l2-controls.h
 
+diff --git a/include/uapi/linux/hantro-v4l2-controls.h b/include/uapi/linux/hantro-v4l2-controls.h
+new file mode 100644
+index 000000000000..30b1999b7af3
+--- /dev/null
++++ b/include/uapi/linux/hantro-v4l2-controls.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++
++#ifndef __UAPI_HANTRO_V4L2_CONYTROLS_H__
++#define __UAPI_HANTRO_V4L2_CONYTROLS_H__
++
++#include <linux/v4l2-controls.h>
++#include <media/hevc-ctrls.h>
++
++#define V4L2_CID_HANTRO_HEVC_EXTRA_DECODE_PARAMS	(V4L2_CID_USER_HANTRO_BASE + 0)
++
++/**
++ * struct hantro_hevc_extra_decode_params - extra decode parameters for hantro driver
++ * @hevc_hdr_skip_lenght:	header first bits offset
++ */
++struct hantro_hevc_extra_decode_params {
++	__u32	hevc_hdr_skip_lenght;
++	__u8	padding[4];
++};
++
++#endif
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 039c0d7add1b..ced7486c7f46 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -209,6 +209,11 @@ enum v4l2_colorfx {
+  * We reserve 128 controls for this driver.
+  */
+ #define V4L2_CID_USER_CCS_BASE			(V4L2_CID_USER_BASE + 0x10f0)
++/*
++ * The base for HANTRO driver controls.
++ * We reserve 32 controls for this driver.
++ */
++#define V4L2_CID_USER_HANTRO_BASE		(V4L2_CID_USER_BASE + 0x1170)
+ 
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
 -- 
 2.25.1
 
