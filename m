@@ -2,121 +2,155 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1493DC433DB
-	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 10:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B52AC433E6
+	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 10:07:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1C4364EC0
-	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 10:04:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1920464E67
+	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 10:07:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhBSKD7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Feb 2021 05:03:59 -0500
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:34935 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229527AbhBSKD4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Feb 2021 05:03:56 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id D2cvlVHc35126D2cylppEN; Fri, 19 Feb 2021 11:03:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1613728992; bh=t0PnevyRqdnrV4VbPw/eC+8QfQhBYfXHrdTMX3DvHxA=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=I0JeTnQv95VDy3fz81vA8qsR/3QZY9j4NaOS+9P9hfEgia2WTgKeVedi0t60LyRz6
-         LG/YAfAg/XPRxD1d90EdviaxGFEE6BP3Gmd3ugI+uI993VamEJb6tIfXW3Js1vDzDm
-         F2HocACtiycixirw+tvMZ/G4OyHKjArD5h1/RRb4vtz7K0gfC9H4mozDqrNPd+MAeS
-         g8JvEkrceC5DjAD6P+WpGlVtYq5Wd+J6vd0jOPNTJMYDEqzA8rzOATDuihKfl4jOTE
-         vXxiakzxu7UB5gIGnrkTd64zC6StUQhzW9bKgwTArcAseuTsd5024lhdZOIERhwFdG
-         N3tZhgvQURStw==
-Subject: Re: [UNKNOWN IVTV CARD] Sony Vaio [4444:0016]
-To:     Nomeji <nomeji@emersion.fr>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-References: <9brq4bzh3iOdgN_xYdtatDjws7V_-dA4M-kqhL3VKMbp_u2tCKwqwmX_mnq9nGsjNQDzy82C11l017C1xOwgMe1gXa1eSnnXwGvd31xXIbQ=@emersion.fr>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <54a1560b-97b9-ae72-6f95-6e199c99fa9e@xs4all.nl>
-Date:   Fri, 19 Feb 2021 11:03:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.0
+        id S230221AbhBSKGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Feb 2021 05:06:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:63027 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229546AbhBSKGi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Feb 2021 05:06:38 -0500
+IronPort-SDR: vuvSrmcwugGRU2dcmeZWaiXmlRBZoUwTb2/DNKEcf/FjNCUE2C1aAVdks8Rts/UMynZQJEwjU9
+ mJ7Ci+vRJJMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9899"; a="268652356"
+X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
+   d="scan'208";a="268652356"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 02:05:58 -0800
+IronPort-SDR: eDSKrm5OR9Xfp9mGraN4lpP9IJ7gVYawLZFqjzIawswzu/uhXj6Y8z+F6gUtDcn+r5g3mYnWkj
+ f9ZHEqIOXoVQ==
+X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
+   d="scan'208";a="513624301"
+Received: from vkasired-desk2.fm.intel.com ([10.105.128.127])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 02:05:57 -0800
+From:   Vivek Kasireddy <vivek.kasireddy@intel.com>
+To:     virtualization@lists.linux-foundation.org,
+        dri-devel@lists.freedesktop.org
+Cc:     kraxel@redhat.com, daniel.vetter@intel.com, daniel.vetter@ffwll.ch,
+        dongwon.kim@intel.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, stevensd@chromium.org,
+        linux-media@vger.kernel.org,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: [RFC v4 0/3] Introduce Virtio based Dmabuf driver(s)
+Date:   Fri, 19 Feb 2021 01:55:20 -0800
+Message-Id: <20210219095523.2621884-1-vivek.kasireddy@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <9brq4bzh3iOdgN_xYdtatDjws7V_-dA4M-kqhL3VKMbp_u2tCKwqwmX_mnq9nGsjNQDzy82C11l017C1xOwgMe1gXa1eSnnXwGvd31xXIbQ=@emersion.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfPXW5l+O+x7PKgukpA6rLy0H1On//+PhD3OLp4/v2nRBbslIABgma4Fj/6DxODuJUXgL0JjCzSxEFO7bljbJgHW/QNivczTARBxPrzDiQsM2fQT9iRbT
- f6fFhKUXK6VA6oeEGUalfjKQLKk+cqSsJpZmAe9o83c8/YcT6kq6DOvghniB7baTleSj5pXQ4MHsiZXlf+KVEYkjmPByU+JoI/Ufl3zbLn9/DDXzAJcMd82p
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19/02/2021 10:16, Nomeji wrote:
-> I've found an old PCI TV Card gathered from a Sony Vaio desktop PC. It looks really similar to a Haupauge PVR-150 or PVR-250 except it's recognized as a Sony device in lspci.
-> ivtv default it to PVR-150 but it's probably more similar to a PVR-250. Is there a way to default it to PVR-250 instead of PVR-150?
+The Virtual Dmabuf or Virtio based Dmabuf (Vdmabuf) driver can be used
+to "transfer" a page-backed dmabuf created in the Guest to the Host
+without making any copies. This is mostly accomplished by recreating the
+dmabuf on the Host using the PFNs and other meta-data shared by the guest. 
+A use-case where this driver would be a good fit is a multi-GPU system 
+(perhaps one discrete and one integrated) where one of the GPUs does not 
+have access to the display/connectors/outputs. This could be an embedded 
+system design decision or a restriction made at the firmware/BIOS level
+or perhaps the device is setup in UPT (Universal Passthrough) mode. When 
+such a GPU is passthrough'd to a Guest OS, this driver can help in 
+transferring the scanout buffer(s) (rendered using the native rendering 
+stack) to the Host for the purpose of displaying them. Or, quite simply,
+this driver can be used to transfer a dmabuf created by an application
+running on the Guest to another application running on the Host.
 
-If you run 'modinfo ivtv' you'll see a cardtype module option.
+The userspace component running in the Guest that transfers the dmabuf
+is referred to as the producer or exporter and its counterpart running
+in the Host is referred to as importer or consumer. For instance, a
+Wayland compositor would potentially be a producer and Qemu UI would
+be a consumer. It is the producer's responsibility to not reuse or
+destroy the shared buffer while it is still being used by the consumer.
+The consumer would send a release cmd indicating that it is done after
+which the shared buffer can be safely used again by the producer. One
+way the producer can prevent accidental re-use of the shared buffer is
+to lock the buffer when it exports it and unlock it after it gets a 
+release cmd. As an example, the GBM API provides a simple way to lock 
+and unlock a surface's buffers.
 
-So you can load ivtv with 'modprobe ivtv cardtype=1' to have it select a PVR-250.
+For each dmabuf that is to be shared with the Host, a 128-bit unique
+ID is generated that identifies this buffer across the whole system.
+This ID is a combination of the Qemu process ID, a counter and a
+randomizer. We could potentially use UUID API but we currently use
+the above mentioned combination to identify the source of the buffer
+at any given time for potential bookkeeping.
 
-Note that there is support for a 'Sony VAIO Giga Pocket (ENX Kikyou)' (cardtype 28),
-which might match as well with your hardware.
+A typical cycle starts with the producer or exporter calling the
+alloc_fd IOCTL to get a new fd/dmabuf from Vdmabuf. It would then import
+and render to it and finally exports it by calling the export IOCTL. A 
+new unique ID is generated for this buffer and it gets registered with
+the Host. The Host then alerts the consumer or importer by raising an
+event and shares the ID. In response, the consumer calls the import IOCTL
+using the ID and gets a newly created dmabuf fd in return. After it is
+done using the dmabuf, the consumer finally calls the release IOCTL and
+the Guest is notified which in turn notifies the producer letting it know
+that the buffer is now safe to reuse. 
 
-Regards,
+v2:
+- Added a notifier mechanism for getting the kvm pointer.
+- Added start and stop routines in the Vhost backend.
+- Augmented the cover letter and made some minor improvements.
 
-	Hans
+v3:
+- Refactored the code to make it similar to vsock.
+- Used two virtqueues instead of one for efficient two-way
+  communication.
 
-> 
-> Here is dmesg log:
-> 
-> [   16.163433] ivtv: Start initialization, version 1.4.3
-> [   16.163486] ivtv0: Initializing card 0
-> [   16.163490] ivtv0: Unknown card: vendor/device: [4444:0016]
-> [   16.163491] ivtv0:               subsystem vendor/device: [104d:816d]
-> [   16.163492] ivtv0:               cx23416 based
-> [   16.163493] ivtv0: Defaulting to Hauppauge WinTV PVR-150 card
-> [   16.163494] ivtv0: Please mail the vendor/device and subsystem vendor/device IDs and what kind of
-> [   16.163495] ivtv0: card you have to the linux-media mailinglist (<a target="_blank" rel="noreferrer nofollow noopener" href="http://www.linuxtv.org">www.linuxtv.org</a>)
-> [   16.163496] ivtv0: Prefix your subject line with [UNKNOWN IVTV CARD].
-> [   16.221120] tveeprom: Encountered bad packet header [aa]. Corrupt or not a Hauppauge eeprom.
-> [   16.221125] ivtv0: Invalid EEPROM
-> [   16.286450] iTCO_vendor_support: vendor-support=0
-> [   16.287559] cx25840 10-0044: Unable to detect h/w, assuming cx23887
-> [   16.288569] cx25840 10-0044: cx23887 A/V decoder found @ 0x88 (ivtv i2c driver #0)
-> 
-> I2C mapping looks different:
-> 
-> [   16.486000] wm8775 10-001b: I2C: cannot write 000 to register R23
-> [   16.489015] wm8775 10-001b: I2C: cannot write 000 to register R7
-> [   16.492025] wm8775 10-001b: I2C: cannot write 021 to register R11
-> [   16.494767] ieee80211 phy0: rt2x00_set_rf: Info - RF chipset 0003 detected
-> [   16.494815] ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
-> [   16.495228] wm8775 10-001b: I2C: cannot write 102 to register R12
-> [   16.498773] wm8775 10-001b: I2C: cannot write 000 to register R13
-> [   16.501784] wm8775 10-001b: I2C: cannot write 1d4 to register R14
-> [   16.505141] wm8775 10-001b: I2C: cannot write 1d4 to register R15
-> [   16.508270] wm8775 10-001b: I2C: cannot write 1bf to register R16
-> [   16.511266] wm8775 10-001b: I2C: cannot write 185 to register R17
-> [   16.514249] wm8775 10-001b: I2C: cannot write 0a2 to register R18
-> [   16.517250] wm8775 10-001b: I2C: cannot write 005 to register R19
-> [   16.520254] wm8775 10-001b: I2C: cannot write 07a to register R20
-> [   16.523256] wm8775 10-001b: I2C: cannot write 102 to register R21
-> [   16.531703] ivtv0: Registered device video0 for encoder MPG (4096 kB)
-> [   16.531746] ivtv0: Registered device video32 for encoder YUV (2048 kB)
-> [   16.531893] ivtv0: Registered device vbi0 for encoder VBI (1024 kB)
-> [   16.531930] ivtv0: Registered device video24 for encoder PCM (320 kB)
-> [   16.531960] ivtv0: Registered device radio0 for encoder radio
-> [   16.531961] ivtv0: Initialized card: Hauppauge WinTV PVR-150
-> [   16.532019] ivtv: End initialization
-> 
-> As you can see in the log, card as a "cx23416" (same as PVR-250) but ivtv still load "cx25840". Could I get it to load "cx23416"?
-> 
-> Nomeji
-> 
-> 
-> 
-> 
-> 
+v4:
+- Made Vdmabuf guest driver allocate the dma-buf and backing
+  storage and exported it to Weston to be used as a render
+  target. (Gerd)
+
+The Vdmabuf driver was tested using Weston (headless) and Qemu from here:
+https://gitlab.freedesktop.org/Vivek/weston/-/blob/vdmabuf/libweston/backend-headless/headless.c#L522
+
+https://lists.nongnu.org/archive/html/qemu-devel/2021-02/msg02976.html
+
+TODO:
+- Use dma_fences to improve synchronization for multiple importers.
+- Ensure that a process other than Qemu can also be the importer on Host.
+
+Other Considerations:
+- Should virtio-gpu be augmented to provide the same functionality 
+  as vdmabuf?
+- How can virtio-gpu/vdmabuf work with a Windows Guest?
+- Should there be a Vhost backend for virtio-gpu to reduce overhead?
+- Should a transfer of a dma-buf from Guest to Host be dependent on a
+  DRM driver (virtio-gpu)?
+
+Vivek Kasireddy (3):
+  kvm: Add a notifier for create and destroy VM events
+  virtio: Introduce Vdmabuf driver
+  vhost: Add Vdmabuf backend
+
+ drivers/vhost/Kconfig               |    9 +
+ drivers/vhost/Makefile              |    3 +
+ drivers/vhost/vdmabuf.c             | 1372 +++++++++++++++++++++++++++
+ drivers/virtio/Kconfig              |    8 +
+ drivers/virtio/Makefile             |    1 +
+ drivers/virtio/virtio_vdmabuf.c     | 1105 +++++++++++++++++++++
+ include/linux/kvm_host.h            |    5 +
+ include/linux/virtio_vdmabuf.h      |  287 ++++++
+ include/uapi/linux/vhost.h          |    3 +
+ include/uapi/linux/virtio_ids.h     |    1 +
+ include/uapi/linux/virtio_vdmabuf.h |   87 ++
+ virt/kvm/kvm_main.c                 |   20 +-
+ 12 files changed, 2899 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/vhost/vdmabuf.c
+ create mode 100644 drivers/virtio/virtio_vdmabuf.c
+ create mode 100644 include/linux/virtio_vdmabuf.h
+ create mode 100644 include/uapi/linux/virtio_vdmabuf.h
+
+-- 
+2.26.2
 
