@@ -2,137 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86641C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 21:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51954C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 07:34:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EB2364EB2
-	for <linux-media@archiver.kernel.org>; Thu, 18 Feb 2021 21:45:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C52864EC7
+	for <linux-media@archiver.kernel.org>; Fri, 19 Feb 2021 07:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbhBRVpa convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Feb 2021 16:45:30 -0500
-Received: from mailoutvs11.siol.net ([185.57.226.202]:59298 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229620AbhBRVp3 (ORCPT
+        id S229656AbhBSHdw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Feb 2021 02:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhBSHdv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Feb 2021 16:45:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 962EC521DBF;
-        Thu, 18 Feb 2021 22:34:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at psrvmta11.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta11.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ej1WVbFCk5fB; Thu, 18 Feb 2021 22:34:56 +0100 (CET)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 33026521ECB;
-        Thu, 18 Feb 2021 22:34:56 +0100 (CET)
-Received: from kista.localnet (cpe-86-58-17-133.cable.triera.net [86.58.17.133])
-        (Authenticated sender: jernej.skrabec@siol.net)
-        by mail.siol.net (Postfix) with ESMTPA id A06FD521DBF;
-        Thu, 18 Feb 2021 22:34:51 +0100 (CET)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@siol.net>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, peng.fan@nxp.com,
-        hverkuil-cisco@xs4all.nl, dan.carpenter@oracle.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v2 4/9] media: uapi: Add a control for HANTRO driver
-Date:   Thu, 18 Feb 2021 22:34:51 +0100
-Message-ID: <2850677.34AhzSeaHW@kista>
-In-Reply-To: <20210218191844.297869-5-benjamin.gaignard@collabora.com>
-References: <20210218191844.297869-1-benjamin.gaignard@collabora.com> <20210218191844.297869-5-benjamin.gaignard@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+        Fri, 19 Feb 2021 02:33:51 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71729C061574
+        for <linux-media@vger.kernel.org>; Thu, 18 Feb 2021 23:33:11 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id o7so3209499pgl.1
+        for <linux-media@vger.kernel.org>; Thu, 18 Feb 2021 23:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=Tqte7oYMBTXiQMfoq9XswmEoJ3laET79y8vCsP5iY4k=;
+        b=gYDgtNfUQgk/+zGfkmgaDzF+6TGIBeh9I4f+7zI6k1HhKh1anTZh3oEGoMw46Qp4MN
+         bNlpxSZZYFJJB+Z8jm6ATElhE/37jzZMYI8RckkobVwDXmjebEwzPfn0DIokc+RCJ9up
+         aw39QIunD641e9lFVfs5BgwfeE5IeGFxohmTRgudnbdsxxAHnPNAqavlSAg7Mg2CRvQi
+         BhXx/OXPPrt/lqsfgQbcQtSDpuNgSavvzGlMKNOnoAWMV2kMWJhOI4tH1E6s7aPswb6F
+         P9I2ooo8QDap1Vplrqsejx8ZV6Wrf9s8hgsN0KuhdwHO9TcvarXP5sJOmgFITN4QnM3w
+         w8Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=Tqte7oYMBTXiQMfoq9XswmEoJ3laET79y8vCsP5iY4k=;
+        b=UtmfJNeG5Z6NELqdHn56A5Q+geG8Z9k3xyCaQum5po0Q+/BUM1dG9nsBshPmrw6han
+         GOfICUgmbDE1BrRnPiQoaFkKU56F+bMcS2uMRV/prOGEyd/noAzaku7aLYVNqvFC02dM
+         LwyGD574mwQPEkaLCiVsSlp50Tn7b7chcoHPtCFVYIqJhUQVLZjBT5dc5Fa4RK76DXiK
+         a3VkAn7CynvC1jfs5jgzudAWWhSp98q4GYVW/1w8R/5lVLJWBZcT27RoAQNhqR/MiyZo
+         EuK382MijTT8LlkjQG5lD++RHKY4glgDBuYDmFZe2XelBi2465f1ADLHfEe8O0Le7RAK
+         dppA==
+X-Gm-Message-State: AOAM531sw+pvoktPVftmB5EN1nfKticdGOHLzjOyQkAxfNwnLXtBz5ON
+        73a7GQ/iuvDwRHtdWJdvZ7SI1qEtmZA=
+X-Google-Smtp-Source: ABdhPJx1eFLhAmGwCtOMdQYxSHfuLOGPxev2XqLzPFuzMjTwvJITfVJT3jO4z8jfVmhLrxG1PuC2BQ==
+X-Received: by 2002:a63:1354:: with SMTP id 20mr7444140pgt.21.1613719990486;
+        Thu, 18 Feb 2021 23:33:10 -0800 (PST)
+Received: from [192.168.1.7] ([199.36.253.174])
+        by smtp.gmail.com with ESMTPSA id s18sm7194331pjr.14.2021.02.18.23.33.09
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Feb 2021 23:33:09 -0800 (PST)
+Message-ID: <43e1dd699a37c197af4cb14919d2fa41b9c3cbab.camel@gmail.com>
+Subject: Elgato Cam Link 4K
+From:   glen <glenjo@gmail.com>
+To:     linux-media@vger.kernel.org
+Date:   Thu, 18 Feb 2021 23:33:08 -0800
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi!
+All,
 
-Dne četrtek, 18. februar 2021 ob 20:18:39 CET je Benjamin Gaignard napisal(a):
-> The HEVC HANTRO driver needs to know the number of bits to skip at
-> the beginning of the slice header.
-> That is a hardware specific requirement so create a dedicated control
-> that this purpose.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  include/uapi/linux/hantro-v4l2-controls.h | 20 ++++++++++++++++++++
->  include/uapi/linux/v4l2-controls.h        |  5 +++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 include/uapi/linux/hantro-v4l2-controls.h
-> 
-> diff --git a/include/uapi/linux/hantro-v4l2-controls.h b/include/uapi/linux/
-hantro-v4l2-controls.h
-> new file mode 100644
-> index 000000000000..30b1999b7af3
-> --- /dev/null
-> +++ b/include/uapi/linux/hantro-v4l2-controls.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +
-> +#ifndef __UAPI_HANTRO_V4L2_CONYTROLS_H__
-> +#define __UAPI_HANTRO_V4L2_CONYTROLS_H__
-> +
-> +#include <linux/v4l2-controls.h>
-> +#include <media/hevc-ctrls.h>
-> +
-> +#define V4L2_CID_HANTRO_HEVC_EXTRA_DECODE_PARAMS	
-(V4L2_CID_USER_HANTRO_BASE + 0)
-> +
-> +/**
-> + * struct hantro_hevc_extra_decode_params - extra decode parameters for 
-hantro driver
-> + * @hevc_hdr_skip_lenght:	header first bits offset
-> + */
-> +struct hantro_hevc_extra_decode_params {
-> +	__u32	hevc_hdr_skip_lenght;
+I recently picked up an Elgato Cam Link 4K.  I have done limited use testing, but it seems to work.
+I'm using Archlinux, running kernel 5.10.16:
 
-typo: lenght -> length
 
-Same mistake in description above.
+Feb 18 23:23:59 honcho kernel: usb 4-4: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+Feb 18 23:23:59 honcho kernel: usb 4-4: LPM exit latency is zeroed, disabling LPM.
+Feb 18 23:23:59 honcho kernel: usb 4-4: New USB device found, idVendor=0fd9, idProduct=0066,
+bcdDevice= 0.00
+Feb 18 23:23:59 honcho kernel: usb 4-4: New USB device strings: Mfr=1, Product=2, SerialNumber=4
+Feb 18 23:23:59 honcho kernel: usb 4-4: Product: Cam Link 4K
+Feb 18 23:23:59 honcho kernel: usb 4-4: Manufacturer: Elgato
+Feb 18 23:23:59 honcho kernel: usb 4-4: SerialNumber: 00053D88CC000
+Feb 18 23:23:59 honcho kernel: hid-generic 0003:0FD9:0066.0006: hiddev97,hidraw5: USB HID v1.01
+Device [Elgato Cam Link 4K] on usb-0000:07:00.1-4/input2
 
-Best regards,
-Jernej
+You definitely have to be careful to ensure that you're plugging in and getting it to show up as a
+Superspeed device.  I had the device show up as USB 2.0 if I went through a hub.  
 
-> +	__u8	padding[4];
-> +};
-> +
-> +#endif
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-
-controls.h
-> index 039c0d7add1b..ced7486c7f46 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -209,6 +209,11 @@ enum v4l2_colorfx {
->   * We reserve 128 controls for this driver.
->   */
->  #define V4L2_CID_USER_CCS_BASE			(V4L2_CID_USER_BASE + 
-0x10f0)
-> +/*
-> + * The base for HANTRO driver controls.
-> + * We reserve 32 controls for this driver.
-> + */
-> +#define V4L2_CID_USER_HANTRO_BASE		(V4L2_CID_USER_BASE + 
-0x1170)
->  
->  /* MPEG-class control IDs */
->  /* The MPEG controls are applicable to all codec controls
-> -- 
-> 2.25.1
-> 
-> 
+It seems to work fine with the limited amount of testing I was able to perform since I was only
+using it to stream from Nikon D300s and D700 cameras.  It only functions properly if I have have the
+cameras not set to AUTO for HDMI output.  I have the cameras set to 720p and this works well.  I
+have used them with OBS Studio and VLC. Good job!
 
+If there is any testing you would like me to do - send a reply and I'll get it done!
+
+Thanks,
+
+Glen
 
