@@ -2,85 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_REPLYTO,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D42FC433DB
-	for <linux-media@archiver.kernel.org>; Sun, 21 Feb 2021 08:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2673FC433DB
+	for <linux-media@archiver.kernel.org>; Sun, 21 Feb 2021 10:45:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE4A664F03
-	for <linux-media@archiver.kernel.org>; Sun, 21 Feb 2021 08:21:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E681260C41
+	for <linux-media@archiver.kernel.org>; Sun, 21 Feb 2021 10:45:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbhBUIVb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 21 Feb 2021 03:21:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53972 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229502AbhBUIVa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 21 Feb 2021 03:21:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E94460C41;
-        Sun, 21 Feb 2021 08:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1613895649;
-        bh=fDoRyutdxwyp7zzQQ7I0wKt3Agq5SbU3ugt9v/IsMtc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tGgb4wvN0GYgO49/7TkQRXQIBt17Tg6GKA1GMhwhtJ2fsl8d/98c0fiLee3jFhD7r
-         LqXnEPIX8VEorI/d5buFHmJnFKDAhk4SlXy+6NKeyCRY5Y1H6TwK03FzLnkLTYQJVK
-         jkLI2Si+qmNG6S4O9mMVQw4RBcQEX6ErDDdcELKk=
-Date:   Sun, 21 Feb 2021 09:20:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nikolay Kyx <knv418@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        id S229844AbhBUKpc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 21 Feb 2021 05:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229634AbhBUKpb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 21 Feb 2021 05:45:31 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6DFC061574;
+        Sun, 21 Feb 2021 02:44:50 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id u4so46459439ljh.6;
+        Sun, 21 Feb 2021 02:44:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:mime-version
+         :content-disposition;
+        bh=STQfoSu8Rvq6MxU4djWNXK4UVlp2NhVlvz/bJOuJaYY=;
+        b=i4Mq6YVaJ26zIo120j9W13hsO/xTTMC1YxfPILWPUfHFlOk4bwRk3SQvlmQdCD11Pn
+         s/uSyTXMW7f6T6Da8StjpTrkTLeIyi/3Oq85avb/cj6CUaODdedYqEuvx4HCbvkod89b
+         zQ1jVLIt7ob8r3h1N/MzTEtN+Izl8iYbX65PLksYPdSdifJOlP9iHb7KhxBsvU6ejcbe
+         xdccCVbNtyc9lLOxLuDDHPXXC1rK77LRCvBM4pmQAZuo9qlUOrJeKf9Jyhqqv9LMu/NZ
+         VD+7Vyn3Ap+DIQkJm67xrABAhyxu4miIKLD/phwpJgRp0v5GW/rMaVqQ6OVtQeURBYE/
+         mQkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mime-version:content-disposition;
+        bh=STQfoSu8Rvq6MxU4djWNXK4UVlp2NhVlvz/bJOuJaYY=;
+        b=UIq0qMjrPqjgoc7TxhcWscLJcphKVmhXanfa75yXD7C1dDNQ/wpWHTYLUkrEJht5Ka
+         7N3Fa1zUk6o/eiS0UWq2gp8tty+Ytt4XDbbcnugKXtwB+VqAHZr46R9Ctt6XggQFXRDG
+         tVoNUQN7KwTiz9tlLMeJwSVeNkJFuSSSlN1xUcXS/ZLhKACQBZVoiVnE3WfOqINz624c
+         PSVHCxFj2NgXhKgGGFyWtvzUVIUpTNB82Dl5dDkJkLOANHnpTsYfU/zPMz1TemBnSBt4
+         SQ3NjsaXQbWgxBBcIQBri71izmOCGlFfv1uCUh7Qlu737EoKGhRwywJz7KzLjApljiIR
+         CQxw==
+X-Gm-Message-State: AOAM532FIKPNp2rOAARunNBkgF3ZNuhBTVsdV+MH4qylbD3Ez2nQKT8W
+        OVCC8SiK2/JcR+DWhx/MfMk=
+X-Google-Smtp-Source: ABdhPJzaCyp5/09lYkRIHrHIeSN4vDyRBkoJsxZ8R1znH7pifn0NYt+tlvkQ0XFYNlkl54JOBBXV1Q==
+X-Received: by 2002:a2e:5719:: with SMTP id l25mr11396464ljb.76.1613904289154;
+        Sun, 21 Feb 2021 02:44:49 -0800 (PST)
+Received: from msi.localdomain (vmpool.ut.mephi.ru. [85.143.112.90])
+        by smtp.gmail.com with ESMTPSA id t19sm1519248lfr.106.2021.02.21.02.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Feb 2021 02:44:48 -0800 (PST)
+Date:   Sun, 21 Feb 2021 13:42:58 +0300
+From:   "Nikolay K." <knv418@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/2] staging: media: ipu3: code style fix - missing a
  blank line after declarations
-Message-ID: <YDIX3Q0U8/PcVWgN@kroah.com>
-References: <20210221081236.9758-1-knv418@gmail.com>
- <20210221081236.9758-2-knv418@gmail.com>
+Message-ID: <YDI5MtxbNLjpSHwY@msi.localdomain>
+Reply-To: YDIX3Q0U8/PcVWgN@kroah.com
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210221081236.9758-2-knv418@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Feb 21, 2021 at 11:12:36AM +0300, Nikolay Kyx wrote:
-> This patch fixes the following checkpatch.pl warning:
-> 
-> WARNING: Missing a blank line after declarations
-> 
-> in file ipu3-css-fw.h
-> 
-> Signed-off-by: Nikolay Kyx <knv418@gmail.com>
-> ---
-> 
-> Additionally some style warnings remain valid here and could be fixed by
-> another patch.
-> 
->  drivers/staging/media/ipu3/ipu3-css-fw.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/staging/media/ipu3/ipu3-css-fw.h b/drivers/staging/media/ipu3/ipu3-css-fw.h
-> index 79ffa7045139..3c078f15a295 100644
-> --- a/drivers/staging/media/ipu3/ipu3-css-fw.h
-> +++ b/drivers/staging/media/ipu3/ipu3-css-fw.h
-> @@ -148,6 +148,7 @@ union imgu_fw_union {
->  struct imgu_fw_info {
->  	size_t header_size;	/* size of fw header */
->  	u32 type __aligned(8);	/* enum imgu_fw_type */
-> +
->  	union imgu_fw_union info;	/* Binary info */
->  	struct imgu_abi_blob_info blob;	/* Blob info */
->  	/* Dynamic part */
-
-With your knowledge of C, does this change look correct?
-
-thanks,
-
-greg k-h
+I can't find any change in struct imgu_fw_info layout after this patch.
+But warning is strange, because declarations don't actually end here.
+So I think this warning should be suppressed to reduce noise
+in checkpatch.pl output.
