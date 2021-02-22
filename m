@@ -2,173 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6E8FC433DB
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A670C433E6
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5ABC264E12
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:26:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 143CE64E34
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhBVK0Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 05:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbhBVKZs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 05:25:48 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C511AC06178A
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 02:25:07 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id c16so11519775otp.0
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 02:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8PN9lZns7J1+4nVNdLUsP5pZfABQHuCQh40cXC4mRVU=;
-        b=JjNqFK4gSzIei693IqlhBwRtfqfVLnXSE7H+WylDNcJ9iWnvn2v5HZQmr66dRaYaR2
-         1qy0ofXUQ9Sazr3OTMvKwxsLcc+bhw7lERWk030gGX0TSIV/TOasbs9/DKvt7XoHW5NV
-         X+rSaxHg9heK4QU/oT4mD4B0YbNGVJzrPs9c4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8PN9lZns7J1+4nVNdLUsP5pZfABQHuCQh40cXC4mRVU=;
-        b=RtvvrBFvUeLfQa9ECUzs40OkVADq9tXFlJUp7P/+HnZK5eSpkSUPqi2SXIKmqthsj0
-         8xWwoOp2KTPJpiTrlHIRfiMSJTwttFxH3lbPqaj9/F+GV4Xm4JcGLNmKefitRshyRxw5
-         GkOU5hT7ze63PC84QLPKW6OHyFpE0LVnPk3ByJ/QkgLlqEMNS2wRT7Wm9CgrH8BRdISJ
-         C/UxPXW8EoGoWlVzZaQ98oFKt8wOgx6Ps4YJEhpASvM9D+J9ZFHOjj6hJArzJDWk6fl9
-         3EaeJXKYoKKCIkK1VCcUHA3cEWKdj5E4m980yO8J+RJCrsUM4bKXP7kZev+Ywfl1KmO1
-         2HpQ==
-X-Gm-Message-State: AOAM531Oo+x45TKxmZ3fZObg9ZSmpAgYlnYqmH+xyebXz8sk0SMdHXH3
-        DH6PEnOm6RxflzQ8MNsXOpWua9rOeYdBijHDMrXheg==
-X-Google-Smtp-Source: ABdhPJz61isp2ETWeXwVtiL//SENHDycgJJ4PyNLSgD/N7s44pHwG+wgblzkTIqc5NrUKKhFiAtR7tjIdciUtZWmuUw=
-X-Received: by 2002:a9d:2265:: with SMTP id o92mr16080713ota.188.1613989507244;
- Mon, 22 Feb 2021 02:25:07 -0800 (PST)
+        id S230297AbhBVKoN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 05:44:13 -0500
+Received: from gofer.mess.org ([88.97.38.141]:54829 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230138AbhBVKoM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 05:44:12 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 53F21C6480; Mon, 22 Feb 2021 10:43:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1613990610; bh=l29aVxnxfxzqtcg2MM8RZ5w3zkSqUCbfa7eGqNUFfsw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Z94cm1KKml1u/krMtG/QyZiLoZsfBN8Shl7vMhO8KFzGB8HVVDZ6+a/QLt62gVaG/
+         tl9LMmg+2Sql6pFM1Re1W2vkenRtiCAKK1c6wE/zSfmsrviyCKnih0xB3oDcnurLFr
+         L5OUGJnaIDgBptg1PI7Fp9K9do5V7KJB8Wjw7jxAuiG46thkiv8JuGOjExrcxgff1N
+         p4EPHxqU/M5CIRk272H9DffUzFa9d+Rp/xy5qKZrmVT7tkqmUMWNNmRoN3DnxHoKo8
+         mL1KBIBiJP/eK61vsf77XcVEOo4u/e3+CycZU5S4oLD5xAYnl099hHvNqcYXD/t9rN
+         lJCH4e/v87Rng==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org, Matthias Reichl <hias@horus.com>,
+        =?UTF-8?q?Juan=20Jes=C3=BAs=20Garc=C3=ADa=20de=20Soria?= 
+        <skandalfo@gmail.com>
+Subject: [PATCH 4/6] media: ite-cir: carrier and duty cycle can be set via ioctl
+Date:   Mon, 22 Feb 2021 10:43:27 +0000
+Message-Id: <3cbd3f7f50d64bae20ae4f583a0402956e1c8591.1613989288.git.sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1613989288.git.sean@mess.org>
+References: <cover.1613989288.git.sean@mess.org>
 MIME-Version: 1.0
-References: <YDOGERvNuU3+2WWe@phenom.ffwll.local>
-In-Reply-To: <YDOGERvNuU3+2WWe@phenom.ffwll.local>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 22 Feb 2021 11:24:56 +0100
-Message-ID: <CAKMK7uHQ=6OJcRguCUtiB456RWdCfwSNEXV8pQsfsPodTJ6uxw@mail.gmail.com>
-Subject: Re: [PULL] fixes around VM_PFNMAP and follow_pfn for 5.12 merge window
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Cc all the mailing lists ... my usual script crashed and I had to
-hand-roll the email and screwed it up ofc :-/
--Daniel
+The lirc ioctls should be used for this, not module parameters.
 
-On Mon, Feb 22, 2021 at 11:23 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> Hi Linus,
->
-> Another small pull from you to ponder.
->
-> This is the first part of a patch series I've been working on for a while:
->
-> https://lore.kernel.org/dri-devel/20201127164131.2244124-1-daniel.vetter@ffwll.ch/
->
-> I've stumbled over this for my own learning and then realized there's a
-> bunch of races around VM_PFNMAP mappings vs follow pfn.
->
-> If you're happy with this then I'll follow up with the media patches to
-> mark their leftover use of follow_pfn as unsafe (it's uapi, so unfixable
-> issue, all we can do is a config option to harden the kernel). Plus
-> hopefully kvm and vfio are then fixed too (you've been on the recent kvm
-> thread where this popped up again) so that we can sunset follow_pfn usage
-> completely.
->
-> The last two patches have only been in linux-next in their current form
-> for a week, there was some issue for platforms with HAVE_PCI_LEGACY (not
-> that many) which took some sorting out. But looks all good now.
->
-> Cheers, Daniel
->
-> The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
->
->   Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
->
-> are available in the Git repository at:
->
->   git://anongit.freedesktop.org/drm/drm tags/topic/iomem-mmap-vs-gup-2021-02-22
->
-> for you to fetch changes up to 636b21b50152d4e203223ee337aca1cb3c1bfe53:
->
->   PCI: Revoke mappings like devmem (2021-02-11 15:59:19 +0100)
->
-> ----------------------------------------------------------------
-> Fixes around VM_FPNMAP and follow_pfn
->
-> - replace mm/frame_vector.c by get_user_pages in misc/habana and
->   drm/exynos drivers, then move that into media as it's sole user
-> - close race in generic_access_phys
-> - s390 pci ioctl fix of this series landed in 5.11 already
-> - properly revoke iomem mappings (/dev/mem, pci files)
->
-> ----------------------------------------------------------------
-> Daniel Vetter (13):
->       drm/exynos: Stop using frame_vector helpers
->       drm/exynos: Use FOLL_LONGTERM for g2d cmdlists
->       misc/habana: Stop using frame_vector helpers
->       misc/habana: Use FOLL_LONGTERM for userptr
->       mm/frame-vector: Use FOLL_LONGTERM
->       media: videobuf2: Move frame_vector into media subsystem
->       mm: Close race in generic_access_phys
->       PCI: Obey iomem restrictions for procfs mmap
->       /dev/mem: Only set filp->f_mapping
->       resource: Move devmem revoke code to resource framework
->       sysfs: Support zapping of binary attr mmaps
->       PCI: Also set up legacy files only after sysfs init
->       PCI: Revoke mappings like devmem
->
->  drivers/char/mem.c                                    | 86 +----------------------------------------------------------------
->  drivers/gpu/drm/exynos/Kconfig                        |  1 -
->  drivers/gpu/drm/exynos/exynos_drm_g2d.c               | 48 ++++++++++++++++---------------------
->  drivers/media/common/videobuf2/Kconfig                |  1 -
->  drivers/media/common/videobuf2/Makefile               |  1 +
->  {mm => drivers/media/common/videobuf2}/frame_vector.c | 55 +++++++++++++++---------------------------
->  drivers/media/common/videobuf2/videobuf2-memops.c     |  3 +--
->  drivers/media/platform/omap/Kconfig                   |  1 -
->  drivers/misc/habanalabs/Kconfig                       |  1 -
->  drivers/misc/habanalabs/common/habanalabs.h           |  6 +++--
->  drivers/misc/habanalabs/common/memory.c               | 52 +++++++++++++++-------------------------
->  drivers/pci/pci-sysfs.c                               | 11 +++++++++
->  drivers/pci/proc.c                                    |  6 +++++
->  fs/sysfs/file.c                                       | 11 +++++++++
->  include/linux/ioport.h                                |  6 +----
->  include/linux/mm.h                                    | 45 ++--------------------------------
->  include/linux/sysfs.h                                 |  2 ++
->  include/media/frame_vector.h                          | 47 ++++++++++++++++++++++++++++++++++++
->  include/media/videobuf2-core.h                        |  1 +
->  kernel/resource.c                                     | 98 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  mm/Kconfig                                            |  3 ---
->  mm/Makefile                                           |  1 -
->  mm/memory.c                                           | 46 ++++++++++++++++++++++++++++++++---
->  23 files changed, 287 insertions(+), 245 deletions(-)
->  rename {mm => drivers/media/common/videobuf2}/frame_vector.c (85%)
->  create mode 100644 include/media/frame_vector.h
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/media/rc/ite-cir.c | 32 --------------------------------
+ 1 file changed, 32 deletions(-)
 
-
-
+diff --git a/drivers/media/rc/ite-cir.c b/drivers/media/rc/ite-cir.c
+index c5c7631849d0..748788a43da5 100644
+--- a/drivers/media/rc/ite-cir.c
++++ b/drivers/media/rc/ite-cir.c
+@@ -33,26 +33,6 @@
+ 
+ /* module parameters */
+ 
+-/* low limit for RX carrier freq, Hz, 0 for no RX demodulation */
+-static int rx_low_carrier_freq;
+-module_param(rx_low_carrier_freq, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(rx_low_carrier_freq, "Override low RX carrier frequency, Hz, 0 for no RX demodulation");
+-
+-/* high limit for RX carrier freq, Hz, 0 for no RX demodulation */
+-static int rx_high_carrier_freq;
+-module_param(rx_high_carrier_freq, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(rx_high_carrier_freq, "Override high RX carrier frequency, Hz, 0 for no RX demodulation");
+-
+-/* override tx carrier frequency */
+-static int tx_carrier_freq;
+-module_param(tx_carrier_freq, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(tx_carrier_freq, "Override TX carrier frequency, Hz");
+-
+-/* override tx duty cycle */
+-static int tx_duty_cycle;
+-module_param(tx_duty_cycle, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(tx_duty_cycle, "Override TX duty cycle, 1-100");
+-
+ /* override default sample period */
+ static long sample_period;
+ module_param(sample_period, long, S_IRUGO | S_IWUSR);
+@@ -1410,18 +1390,6 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
+ 	if (sample_period > 0)
+ 		itdev->params.sample_period = sample_period;
+ 
+-	if (tx_carrier_freq > 0)
+-		itdev->params.tx_carrier_freq = tx_carrier_freq;
+-
+-	if (tx_duty_cycle > 0 && tx_duty_cycle <= 100)
+-		itdev->params.tx_duty_cycle = tx_duty_cycle;
+-
+-	if (rx_low_carrier_freq > 0)
+-		itdev->params.rx_low_carrier_freq = rx_low_carrier_freq;
+-
+-	if (rx_high_carrier_freq > 0)
+-		itdev->params.rx_high_carrier_freq = rx_high_carrier_freq;
+-
+ 	/* set up hardware initial state */
+ 	itdev->params.init_hardware(itdev);
+ 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.29.2
+
