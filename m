@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D63EC433DB
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0AA3C43381
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39C2C64E20
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91EAA64F10
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhBVMqu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 07:46:50 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36618 "EHLO mx2.suse.de"
+        id S231174AbhBVMrN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 07:47:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36550 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231460AbhBVMoP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:44:15 -0500
+        id S231436AbhBVMoO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 07:44:14 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 099C7B117;
-        Mon, 22 Feb 2021 12:43:33 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 92BBFB113;
+        Mon, 22 Feb 2021 12:43:31 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, airlied@linux.ie,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
@@ -32,10 +32,20 @@ To:     daniel@ffwll.ch, airlied@linux.ie,
         stern@rowland.harvard.edu
 Cc:     dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 3/3] drm/cma-helper: Implement struct drm_driver.gem_prime_create_object
-Date:   Mon, 22 Feb 2021 13:43:28 +0100
-Message-Id: <20210222124328.27340-4-tzimmermann@suse.de>
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Oliver Neukum <oneukum@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Felipe Balbi <balbi@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2 1/3] drm: Support importing dmabufs into drivers without DMA
+Date:   Mon, 22 Feb 2021 13:43:26 +0100
+Message-Id: <20210222124328.27340-2-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210222124328.27340-1-tzimmermann@suse.de>
 References: <20210222124328.27340-1-tzimmermann@suse.de>
@@ -45,220 +55,236 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Moves the scatter/gather-table setup from PRIME helpers into CMA
-helpers. No functional changes.
+USB devices cannot perform DMA and hence have no dma_mask set in their
+device structure. Importing dmabuf into a USB-based driver fails, which
+break joining and mirroring of display in X11. A corresponding error
+message is shown below.
+
+[   60.050199] ------------[ cut here ]------------
+[   60.055092] WARNING: CPU: 0 PID: 1403 at kernel/dma/mapping.c:190 dma_map_sg_attrs+0x8f/0xc0
+[   60.064331] Modules linked in: af_packet(E) rfkill(E) dmi_sysfs(E) intel_rapl_msr(E) intel_rapl_common(E) snd_hda_codec_realtek(E) snd_hda_codec_generic(E) ledtrig_audio(E) snd_hda_codec_hdmi(E) x86_pkg_temp_thermal(E) intel_powerclam)
+[   60.064801]  wmi(E) video(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_intel(E) xor(E) raid6_pq(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) msr(E) efivarfs(E)
+[   60.170778] CPU: 0 PID: 1403 Comm: Xorg.bin Tainted: G            E    5.11.0-rc5-1-default+ #747
+[   60.179841] Hardware name: Dell Inc. OptiPlex 9020/0N4YC8, BIOS A24 10/24/2018
+[   60.187145] RIP: 0010:dma_map_sg_attrs+0x8f/0xc0
+[   60.191822] Code: 4d 85 ff 75 2b 49 89 d8 44 89 e1 44 89 f2 4c 89 ee 48 89 ef e8 62 30 00 00 85 c0 78 36 5b 5d 41 5c 41 5d 41 5e 41 5f c3 0f 0b <0f> 0b 31 c0 eb ed 49 8d 7f 50 e8 72 f5 2a 00 49 8b 47 50 49 89 d8
+[   60.210770] RSP: 0018:ffffc90001d6fc18 EFLAGS: 00010246
+[   60.216062] RAX: 0000000000000000 RBX: 0000000000000020 RCX: ffffffffb31e677b
+[   60.223274] RDX: dffffc0000000000 RSI: ffff888212c10600 RDI: ffff8881b08a9488
+[   60.230501] RBP: ffff8881b08a9030 R08: 0000000000000020 R09: ffff888212c10600
+[   60.237710] R10: ffffed10425820df R11: 0000000000000001 R12: 0000000000000000
+[   60.244939] R13: ffff888212c10600 R14: 0000000000000008 R15: 0000000000000000
+[   60.252155] FS:  00007f08ac2b2f00(0000) GS:ffff8887cbe00000(0000) knlGS:0000000000000000
+[   60.260333] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   60.266150] CR2: 000055831c899be8 CR3: 000000015372e006 CR4: 00000000001706f0
+[   60.273369] Call Trace:
+[   60.275845]  drm_gem_map_dma_buf+0xb4/0x120
+[   60.280089]  dma_buf_map_attachment+0x15d/0x1e0
+[   60.284688]  drm_gem_prime_import_dev.part.0+0x5d/0x140
+[   60.289984]  drm_gem_prime_fd_to_handle+0x213/0x280
+[   60.294931]  ? drm_prime_destroy_file_private+0x30/0x30
+[   60.300224]  drm_ioctl_kernel+0x131/0x180
+[   60.304291]  ? drm_setversion+0x230/0x230
+[   60.308366]  ? drm_prime_destroy_file_private+0x30/0x30
+[   60.313659]  drm_ioctl+0x2f1/0x500
+[   60.317118]  ? drm_version+0x150/0x150
+[   60.320903]  ? lock_downgrade+0xa0/0xa0
+[   60.324806]  ? do_vfs_ioctl+0x5f4/0x680
+[   60.328694]  ? __fget_files+0x13e/0x210
+[   60.332591]  ? ioctl_fiemap.isra.0+0x1a0/0x1a0
+[   60.337102]  ? __fget_files+0x15d/0x210
+[   60.340990]  __x64_sys_ioctl+0xb9/0xf0
+[   60.344795]  do_syscall_64+0x33/0x80
+[   60.348427]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   60.353542] RIP: 0033:0x7f08ac7b53cb
+[   60.357168] Code: 89 d8 49 8d 3c 1c 48 f7 d8 49 39 c4 72 b5 e8 1c ff ff ff 85 c0 78 ba 4c 89 e0 5b 5d 41 5c c3 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 75 ba 0c 00 f7 d8 64 89 01 48
+[   60.376108] RSP: 002b:00007ffeabc89fc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[   60.383758] RAX: ffffffffffffffda RBX: 00007ffeabc8a00c RCX: 00007f08ac7b53cb
+[   60.390970] RDX: 00007ffeabc8a00c RSI: 00000000c00c642e RDI: 000000000000000d
+[   60.398221] RBP: 00000000c00c642e R08: 000055831c691d00 R09: 000055831b2ec010
+[   60.405446] R10: 00007f08acf6ada0 R11: 0000000000000246 R12: 000055831c691d00
+[   60.412667] R13: 000000000000000d R14: 00000000007e9000 R15: 0000000000000000
+[   60.419903] irq event stamp: 672893
+[   60.423441] hardirqs last  enabled at (672913): [<ffffffffb31b796d>] console_unlock+0x44d/0x500
+[   60.432230] hardirqs last disabled at (672922): [<ffffffffb31b7963>] console_unlock+0x443/0x500
+[   60.441021] softirqs last  enabled at (672940): [<ffffffffb46003dd>] __do_softirq+0x3dd/0x554
+[   60.449634] softirqs last disabled at (672931): [<ffffffffb44010f2>] asm_call_irq_on_stack+0x12/0x20
+[   60.458871] ---[ end trace f2f88696eb17806c ]---
+
+This patch introduces struct drm_driver.gem_prime_create_object, which
+creates a GEM object during the import. Drivers should implement this
+callback and handle DMA S/G table support by themselves. For USB-based
+drivers, the patch adds an implementation without DMA-related code.
+
+The original interface struct drm_driver.gem_prime_import_sg_table
+is deprecated. All drivers should switch over.
+
+Tested by joining/mirroring displays of udl and radeon un der Gnome/X11.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: 6eb0233ec2d0 ("usb: don't inherity DMA properties for USB devices")
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: "Ahmed S. Darwish" <a.darwish@linutronix.de>
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: <stable@vger.kernel.org> # v5.10+
 ---
- drivers/gpu/drm/drm_gem_cma_helper.c | 62 ++++++++++++++++------------
- drivers/gpu/drm/pl111/pl111_drv.c    |  8 ++--
- include/drm/drm_gem_cma_helper.h     | 12 ++----
- 3 files changed, 42 insertions(+), 40 deletions(-)
+ drivers/gpu/drm/drm_prime.c     | 43 +++++++++++++++++++++------------
+ drivers/gpu/drm/tiny/gm12u320.c |  7 ++++++
+ drivers/gpu/drm/udl/udl_drv.c   |  7 ++++++
+ include/drm/drm_drv.h           | 12 +++++++++
+ 4 files changed, 54 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index 7942cf05cd93..7200d0ae2e38 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -404,37 +404,44 @@ struct sg_table *drm_gem_cma_get_sg_table(struct drm_gem_object *obj)
- EXPORT_SYMBOL_GPL(drm_gem_cma_get_sg_table);
- 
- /**
-- * drm_gem_cma_prime_import_sg_table - produce a CMA GEM object from another
-- *     driver's scatter/gather table of pinned pages
-+ * drm_gem_cma_prime_create_object - produce a CMA GEM object from another
-+ *     driver's DMA-BUF attachment
-  * @dev: device to import into
-  * @attach: DMA-BUF attachment
-- * @sgt: scatter/gather table of pinned pages
-  *
-- * This function imports a scatter/gather table exported via DMA-BUF by
-- * another driver. Imported buffers must be physically contiguous in memory
-- * (i.e. the scatter/gather table must contain a single entry). Drivers that
-- * use the CMA helpers should set this as their
-- * &drm_driver.gem_prime_import_sg_table callback.
-+ * This function imports a DMA-BUF exported by another driver. It sets a
-+ * scatter/gather table of pinned pages. Imported buffers must be physically
-+ * contiguous in memory (i.e. the scatter/gather table must contain a single
-+ * entry). Drivers that use the CMA helpers should set this as their
-+ * &drm_driver.gem_prime_create_object callback.
-  *
-  * Returns:
-  * A pointer to a newly created GEM object or an ERR_PTR-encoded negative
-  * error code on failure.
-  */
- struct drm_gem_object *
--drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
--				  struct dma_buf_attachment *attach,
--				  struct sg_table *sgt)
-+drm_gem_cma_prime_create_object(struct drm_device *dev, struct dma_buf_attachment *attach)
- {
-+	struct sg_table *sgt;
- 	struct drm_gem_cma_object *cma_obj;
-+	int ret;
-+
-+	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-+	if (IS_ERR(sgt))
-+		return ERR_CAST(sgt);
- 
- 	/* check if the entries in the sg_table are contiguous */
--	if (drm_prime_get_contiguous_size(sgt) < attach->dmabuf->size)
--		return ERR_PTR(-EINVAL);
-+	if (drm_prime_get_contiguous_size(sgt) < attach->dmabuf->size) {
-+		ret = -EINVAL;
-+		goto err;
-+	}
- 
- 	/* Create a CMA GEM buffer. */
- 	cma_obj = __drm_gem_cma_create(dev, attach->dmabuf->size);
--	if (IS_ERR(cma_obj))
--		return ERR_CAST(cma_obj);
-+	if (IS_ERR(cma_obj)) {
-+		ret = PTR_ERR(cma_obj);
-+		goto err;
-+	}
- 
- 	cma_obj->paddr = sg_dma_address(sgt->sgl);
- 	cma_obj->sgt = sgt;
-@@ -442,8 +449,12 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
- 	DRM_DEBUG_PRIME("dma_addr = %pad, size = %zu\n", &cma_obj->paddr, attach->dmabuf->size);
- 
- 	return &cma_obj->base;
-+
-+err:
-+	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
-+	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(drm_gem_cma_prime_import_sg_table);
-+EXPORT_SYMBOL_GPL(drm_gem_cma_prime_create_object);
- 
- /**
-  * drm_gem_cma_vmap - map a CMA GEM object into the kernel's virtual
-@@ -509,18 +520,17 @@ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
- EXPORT_SYMBOL_GPL(drm_gem_cma_mmap);
- 
- /**
-- * drm_gem_cma_prime_import_sg_table_vmap - PRIME import another driver's
-- *	scatter/gather table and get the virtual address of the buffer
-+ * drm_gem_cma_prime_create_object_vmap - produce a CMA GEM object from another
-+ *     driver's DMA-BUF attachment and gets the virtual address of the buffer
-  * @dev: DRM device
-  * @attach: DMA-BUF attachment
-- * @sgt: Scatter/gather table of pinned pages
-  *
-- * This function imports a scatter/gather table using
-- * drm_gem_cma_prime_import_sg_table() and uses dma_buf_vmap() to get the kernel
-+ * This function imports a DMA-BUF using
-+ * drm_gem_cma_prime_create_object() and uses dma_buf_vmap() to get the kernel
-  * virtual address. This ensures that a CMA GEM object always has its virtual
-  * address set. This address is released when the object is freed.
-  *
-- * This function can be used as the &drm_driver.gem_prime_import_sg_table
-+ * This function can be used as the &drm_driver.gem_prime_create_object
-  * callback. The &DRM_GEM_CMA_DRIVER_OPS_VMAP macro provides a shortcut to set
-  * the necessary DRM driver operations.
-  *
-@@ -529,9 +539,7 @@ EXPORT_SYMBOL_GPL(drm_gem_cma_mmap);
-  * error code on failure.
-  */
- struct drm_gem_object *
--drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *dev,
--				       struct dma_buf_attachment *attach,
--				       struct sg_table *sgt)
-+drm_gem_cma_prime_create_object_vmap(struct drm_device *dev, struct dma_buf_attachment *attach)
- {
- 	struct drm_gem_cma_object *cma_obj;
- 	struct drm_gem_object *obj;
-@@ -544,7 +552,7 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *dev,
- 		return ERR_PTR(ret);
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index 2a54f86856af..9bb30e843a44 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -923,7 +923,8 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
+ 		}
  	}
  
--	obj = drm_gem_cma_prime_import_sg_table(dev, attach, sgt);
-+	obj = drm_gem_cma_prime_create_object(dev, attach);
- 	if (IS_ERR(obj)) {
- 		dma_buf_vunmap(attach->dmabuf, &map);
- 		return obj;
-@@ -555,4 +563,4 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *dev,
- 
- 	return obj;
- }
--EXPORT_SYMBOL(drm_gem_cma_prime_import_sg_table_vmap);
-+EXPORT_SYMBOL(drm_gem_cma_prime_create_object_vmap);
-diff --git a/drivers/gpu/drm/pl111/pl111_drv.c b/drivers/gpu/drm/pl111/pl111_drv.c
-index e4dcaef6c143..3dd6c7e46df0 100644
---- a/drivers/gpu/drm/pl111/pl111_drv.c
-+++ b/drivers/gpu/drm/pl111/pl111_drv.c
-@@ -194,9 +194,7 @@ static int pl111_modeset_init(struct drm_device *dev)
- }
- 
- static struct drm_gem_object *
--pl111_gem_import_sg_table(struct drm_device *dev,
--			  struct dma_buf_attachment *attach,
--			  struct sg_table *sgt)
-+pl111_gem_create_object(struct drm_device *dev, struct dma_buf_attachment *attach)
- {
- 	struct pl111_drm_dev_private *priv = dev->dev_private;
- 
-@@ -208,7 +206,7 @@ pl111_gem_import_sg_table(struct drm_device *dev,
- 	if (priv->use_device_memory)
+-	if (!dev->driver->gem_prime_import_sg_table)
++	if (!dev->driver->gem_prime_import_sg_table &&
++	    !dev->driver->gem_prime_create_object)
  		return ERR_PTR(-EINVAL);
  
--	return drm_gem_cma_prime_import_sg_table(dev, attach, sgt);
-+	return drm_gem_cma_prime_create_object(dev, attach);
- }
+ 	attach = dma_buf_attach(dma_buf, attach_dev);
+@@ -932,25 +933,37 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
  
- DEFINE_DRM_GEM_CMA_FOPS(drm_fops);
-@@ -227,7 +225,7 @@ static const struct drm_driver pl111_drm_driver = {
- 	.dumb_create = drm_gem_cma_dumb_create,
- 	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
- 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
--	.gem_prime_import_sg_table = pl111_gem_import_sg_table,
-+	.gem_prime_create_object = pl111_gem_create_object,
- 	.gem_prime_mmap = drm_gem_prime_mmap,
+ 	get_dma_buf(dma_buf);
  
- #if defined(CONFIG_DEBUG_FS)
-diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
-index 0a9711caa3e8..54d7f4b11225 100644
---- a/include/drm/drm_gem_cma_helper.h
-+++ b/include/drm/drm_gem_cma_helper.h
-@@ -95,9 +95,7 @@ void drm_gem_cma_print_info(struct drm_printer *p, unsigned int indent,
+-	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+-	if (IS_ERR(sgt)) {
+-		ret = PTR_ERR(sgt);
+-		goto fail_detach;
+-	}
++	if (dev->driver->gem_prime_create_object) {
++		obj = dev->driver->gem_prime_create_object(dev, attach);
++		if (IS_ERR(obj)) {
++			ret = PTR_ERR(obj);
++			goto fail_detach;
++		}
  
- struct sg_table *drm_gem_cma_get_sg_table(struct drm_gem_object *obj);
- struct drm_gem_object *
--drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
--				  struct dma_buf_attachment *attach,
--				  struct sg_table *sgt);
-+drm_gem_cma_prime_create_object(struct drm_device *dev, struct dma_buf_attachment *attach);
- int drm_gem_cma_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
- int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
+-	obj = dev->driver->gem_prime_import_sg_table(dev, attach, sgt);
+-	if (IS_ERR(obj)) {
+-		ret = PTR_ERR(obj);
+-		goto fail_unmap;
+-	}
++		if (!obj->import_attach)
++			obj->import_attach = attach;
++		if (!obj->resv)
++			obj->resv = dma_buf->resv;
++	} else {
++		sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
++		if (IS_ERR(sgt)) {
++			ret = PTR_ERR(sgt);
++			goto fail_detach;
++		}
  
-@@ -118,7 +116,7 @@ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
- 	.dumb_create		= (dumb_create_func), \
- 	.prime_handle_to_fd	= drm_gem_prime_handle_to_fd, \
- 	.prime_fd_to_handle	= drm_gem_prime_fd_to_handle, \
--	.gem_prime_import_sg_table = drm_gem_cma_prime_import_sg_table, \
-+	.gem_prime_create_object = drm_gem_cma_prime_create_object, \
- 	.gem_prime_mmap		= drm_gem_prime_mmap
+-	obj->import_attach = attach;
+-	obj->resv = dma_buf->resv;
++		obj = dev->driver->gem_prime_import_sg_table(dev, attach, sgt);
++		if (IS_ERR(obj)) {
++			ret = PTR_ERR(obj);
++			dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
++			goto fail_detach;
++		}
++
++		obj->import_attach = attach;
++		obj->resv = dma_buf->resv;
++	}
  
- /**
-@@ -156,7 +154,7 @@ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
- 	.dumb_create		= dumb_create_func, \
- 	.prime_handle_to_fd	= drm_gem_prime_handle_to_fd, \
- 	.prime_fd_to_handle	= drm_gem_prime_fd_to_handle, \
--	.gem_prime_import_sg_table = drm_gem_cma_prime_import_sg_table_vmap, \
-+	.gem_prime_create_object = drm_gem_cma_prime_create_object_vmap, \
- 	.gem_prime_mmap		= drm_gem_prime_mmap
+ 	return obj;
  
- /**
-@@ -178,8 +176,6 @@ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
- 	DRM_GEM_CMA_DRIVER_OPS_VMAP_WITH_DUMB_CREATE(drm_gem_cma_dumb_create)
+-fail_unmap:
+-	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
+ fail_detach:
+ 	dma_buf_detach(dma_buf, attach);
+ 	dma_buf_put(dma_buf);
+diff --git a/drivers/gpu/drm/tiny/gm12u320.c b/drivers/gpu/drm/tiny/gm12u320.c
+index 0b4f4f2af1ef..9f13a7c7c2da 100644
+--- a/drivers/gpu/drm/tiny/gm12u320.c
++++ b/drivers/gpu/drm/tiny/gm12u320.c
+@@ -601,6 +601,12 @@ static const uint64_t gm12u320_pipe_modifiers[] = {
  
- struct drm_gem_object *
--drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *drm,
--				       struct dma_buf_attachment *attach,
--				       struct sg_table *sgt);
-+drm_gem_cma_prime_create_object_vmap(struct drm_device *drm, struct dma_buf_attachment *attach);
+ DEFINE_DRM_GEM_FOPS(gm12u320_fops);
  
- #endif /* __DRM_GEM_CMA_HELPER_H__ */
++static struct drm_gem_object *gm12u320_gem_prime_create_object(struct drm_device *dev,
++							       struct dma_buf_attachment *attach)
++{
++	return drm_gem_shmem_prime_import_sg_table(dev, attach, NULL);
++}
++
+ static const struct drm_driver gm12u320_drm_driver = {
+ 	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
+ 
+@@ -612,6 +618,7 @@ static const struct drm_driver gm12u320_drm_driver = {
+ 
+ 	.fops		 = &gm12u320_fops,
+ 	DRM_GEM_SHMEM_DRIVER_OPS,
++	.gem_prime_create_object = gm12u320_gem_prime_create_object,
+ };
+ 
+ static const struct drm_mode_config_funcs gm12u320_mode_config_funcs = {
+diff --git a/drivers/gpu/drm/udl/udl_drv.c b/drivers/gpu/drm/udl/udl_drv.c
+index 9269092697d8..fdf37b44a956 100644
+--- a/drivers/gpu/drm/udl/udl_drv.c
++++ b/drivers/gpu/drm/udl/udl_drv.c
+@@ -34,12 +34,19 @@ static int udl_usb_resume(struct usb_interface *interface)
+ 
+ DEFINE_DRM_GEM_FOPS(udl_driver_fops);
+ 
++static struct drm_gem_object *udl_gem_prime_create_object(struct drm_device *dev,
++							  struct dma_buf_attachment *attach)
++{
++	return drm_gem_shmem_prime_import_sg_table(dev, attach, NULL);
++}
++
+ static const struct drm_driver driver = {
+ 	.driver_features = DRIVER_ATOMIC | DRIVER_GEM | DRIVER_MODESET,
+ 
+ 	/* GEM hooks */
+ 	.fops = &udl_driver_fops,
+ 	DRM_GEM_SHMEM_DRIVER_OPS,
++	.gem_prime_create_object = udl_gem_prime_create_object,
+ 
+ 	.name = DRIVER_NAME,
+ 	.desc = DRIVER_DESC,
+diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+index 827838e0a97e..77657d649ca6 100644
+--- a/include/drm/drm_drv.h
++++ b/include/drm/drm_drv.h
+@@ -369,11 +369,23 @@ struct drm_driver {
+ 	 */
+ 	struct drm_gem_object * (*gem_prime_import)(struct drm_device *dev,
+ 				struct dma_buf *dma_buf);
++	/**
++	 * @gem_prime_create_object:
++	 *
++	 * Optional hook used by the PRIME helper functions
++	 * drm_gem_prime_import() respectively drm_gem_prime_import_dev().
++	 */
++	struct drm_gem_object *(*gem_prime_create_object)(
++				struct drm_device *dev,
++				struct dma_buf_attachment *attach);
+ 	/**
+ 	 * @gem_prime_import_sg_table:
+ 	 *
+ 	 * Optional hook used by the PRIME helper functions
+ 	 * drm_gem_prime_import() respectively drm_gem_prime_import_dev().
++	 *
++	 * TODO: This function is deprecated in favor of @drm_driver.gem_prime_create_object.
++	 * Drivers should switch over and implement SG-table support by themselves.
+ 	 */
+ 	struct drm_gem_object *(*gem_prime_import_sg_table)(
+ 				struct drm_device *dev,
 -- 
 2.30.1
 
