@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAF90C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7B5BC4332D
 	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C2B864E77
+	by mail.kernel.org (Postfix) with ESMTP id A3D6764E4B
 	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbhBVKoR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 05:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S230316AbhBVKoS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 05:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhBVKoP (ORCPT
+        with ESMTP id S230310AbhBVKoP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Feb 2021 05:44:15 -0500
 Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E0BC061786
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 02:43:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1925C061574
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 02:43:33 -0800 (PST)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 7472CC648B; Mon, 22 Feb 2021 10:43:30 +0000 (GMT)
+        id 35AC1C6432; Mon, 22 Feb 2021 10:43:30 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1613990610; bh=kL2Ry70eFC5n24sjScMT1ZtpVn0wQjLJNyty4tmxStM=;
+        t=1613990610; bh=L8TPc5y+zD8Q8ni4ePE75yRF0Am5IvV8O+oef3m9x6Q=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DE3V5VWNZzKb9tn6RcLGv4FKR5fe1B2+rvqTsSr0PR1HY3X8RLv07l1//bGI5yya3
-         Cxb8e/GJ5U5ClbyykzYWuuCQtRNCLfazvxKR1WEP3lYjFgoxYRlRFYdKERvElx4WdG
-         1fCVHnM/RlvM0+EPGRZlfIzBoaqkuXxvmevZ4sz/q/fpWawxZ7y/Zs/cu1soPHmPE2
-         8dEpw7yCb2f4YmRqvt/LJ5YdA5wrGFs/CUAcSYjzVqsEYGp6FgRzADgEA3ezN9tYix
-         FbfQTCzSPpWkvY8IOV1GPjW7mNgIQb/7CiXJYQgV3tsQC4ld6orn2zHbAykAE+OkZd
-         E4lbqM8Sx+dMQ==
+        b=rI2oEWE4gMZlMhy5iKN3mV0mTzjhFBZz47c4ilAG07UORRF7ceyw32Cq+DZkanD0v
+         PCVN3DMuyvctKgdNuId+pqTnSRTsJ1G8uYuDcf3SP7gHLb6NbnEZZrQOJJsrwOBbRF
+         I+oy4skwTMgFPc9xLrm11IaoKktDec3TBJRwvLAXYGsE/DRHKegyBBMKtJ+fuqp1CX
+         LlXBD8ET+v7m6x8MY4nFicgT4zP4uTcQrd0IpCBlpJL/RQvgVbMDochHQbtFGEOfLx
+         msmac9zYbZy5ExudTw3diVXe76yi/j0QXAl5MpuUrsrf+54q4DSfk5hiYxYG0wFCU6
+         pKHB5NM9jgMEw==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org, Matthias Reichl <hias@horus.com>,
         =?UTF-8?q?Juan=20Jes=C3=BAs=20Garc=C3=ADa=20de=20Soria?= 
         <skandalfo@gmail.com>
-Subject: [PATCH 5/6] media: ite-cir: move runtime information into driver data
-Date:   Mon, 22 Feb 2021 10:43:28 +0000
-Message-Id: <9e3b0ad402274bf52e31d955367812597095a612.1613989288.git.sean@mess.org>
+Subject: [PATCH 3/6] media: ite-cir: use standard logging and reduce noise
+Date:   Mon, 22 Feb 2021 10:43:26 +0000
+Message-Id: <f07601a9d8681e2c0090379792ed44ed54b71818.1613989288.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1613989288.git.sean@mess.org>
 References: <cover.1613989288.git.sean@mess.org>
@@ -50,436 +50,637 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The carrier, duty cycle etc are not device dependent, and they can be
-changed at runtime. By moving them into the allocated struct, we can make
-the device specific structures smaller, and we no longer need to copy
-the struct.
+Remove lots of superfluous debug messages which just log the function
+name. Also, there is no need to announce the various parameters of the
+device. This can be discovered via lirc ioctl if needed.
 
 Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/media/rc/ite-cir.c | 127 ++++++++++++++-----------------------
- drivers/media/rc/ite-cir.h |  32 ++++------
- 2 files changed, 60 insertions(+), 99 deletions(-)
+ drivers/media/rc/ite-cir.c | 171 +++++--------------------------------
+ drivers/media/rc/ite-cir.h |  15 ----
+ 2 files changed, 22 insertions(+), 164 deletions(-)
 
 diff --git a/drivers/media/rc/ite-cir.c b/drivers/media/rc/ite-cir.c
-index 748788a43da5..cc0a70dcf93d 100644
+index 397e317d9726..c5c7631849d0 100644
 --- a/drivers/media/rc/ite-cir.c
 +++ b/drivers/media/rc/ite-cir.c
-@@ -33,10 +33,10 @@
+@@ -33,11 +33,6 @@
  
  /* module parameters */
  
--/* override default sample period */
--static long sample_period;
-+/* default sample period */
-+static long sample_period = NSEC_PER_SEC / 115200;
- module_param(sample_period, long, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(sample_period, "Override carrier sample period, us");
-+MODULE_PARM_DESC(sample_period, "sample period");
+-/* debug level */
+-static int debug;
+-module_param(debug, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(debug, "Enable debugging output");
+-
+ /* low limit for RX carrier freq, Hz, 0 for no RX demodulation */
+ static int rx_low_carrier_freq;
+ module_param(rx_low_carrier_freq, int, S_IRUGO | S_IWUSR);
+@@ -101,9 +96,7 @@ static u8 ite_get_carrier_freq_bits(unsigned int freq)
+ 			freq = ITE_LCF_MAX_CARRIER_FREQ;
  
- /* override detected model id */
- static int model_number = -1;
-@@ -134,7 +134,6 @@ static u8 ite_get_pulse_width_bits(unsigned int freq, int duty_cycle)
- static void ite_decode_bytes(struct ite_dev *dev, const u8 * data, int
- 			     length)
- {
--	u32 sample_period;
- 	unsigned long *ldata;
- 	unsigned int next_one, next_zero, size;
- 	struct ir_raw_event ev = {};
-@@ -142,7 +141,6 @@ static void ite_decode_bytes(struct ite_dev *dev, const u8 * data, int
- 	if (length == 0)
- 		return;
+ 		/* convert to kHz and subtract the base freq */
+-		freq =
+-		    DIV_ROUND_CLOSEST(freq - ITE_LCF_MIN_CARRIER_FREQ,
+-				      1000);
++		freq = DIV_ROUND_CLOSEST(freq - ITE_LCF_MIN_CARRIER_FREQ, 1000);
  
--	sample_period = dev->params.sample_period;
- 	ldata = (unsigned long *)data;
- 	size = length << 3;
+ 		return (u8) freq;
+ 	}
+@@ -175,8 +168,7 @@ static void ite_decode_bytes(struct ite_dev *dev, const u8 * data, int
  	next_one = find_next_bit_le(ldata, size, 0);
-@@ -184,12 +182,12 @@ static void ite_set_carrier_params(struct ite_dev *dev)
+ 	if (next_one > 0) {
+ 		ev.pulse = true;
+-		ev.duration =
+-		    ITE_BITS_TO_US(next_one, sample_period);
++		ev.duration = ITE_BITS_TO_US(next_one, sample_period);
+ 		ir_raw_event_store_with_filter(dev->rdev, &ev);
+ 	}
  
+@@ -187,23 +179,18 @@ static void ite_decode_bytes(struct ite_dev *dev, const u8 * data, int
+ 		ir_raw_event_store_with_filter(dev->rdev, &ev);
+ 
+ 		if (next_zero < size) {
+-			next_one =
+-			    find_next_bit_le(ldata,
+-						     size,
+-						     next_zero + 1);
++			next_one = find_next_bit_le(ldata, size, next_zero + 1);
+ 			ev.pulse = true;
+-			ev.duration =
+-			    ITE_BITS_TO_US(next_one - next_zero,
+-					   sample_period);
+-			ir_raw_event_store_with_filter
+-			    (dev->rdev, &ev);
++			ev.duration = ITE_BITS_TO_US(next_one - next_zero,
++						     sample_period);
++			ir_raw_event_store_with_filter(dev->rdev, &ev);
+ 		} else
+ 			next_one = size;
+ 	}
+ 
+ 	ir_raw_event_handle(dev->rdev);
+ 
+-	ite_dbg_verbose("decoded %d bytes.", length);
++	dev_dbg(&dev->rdev->dev, "decoded %d bytes\n", length);
+ }
+ 
+ /* set all the rx/tx carrier parameters; this must be called with the device
+@@ -215,8 +202,6 @@ static void ite_set_carrier_params(struct ite_dev *dev)
+ 	bool use_demodulator;
+ 	bool for_tx = dev->transmitting;
+ 
+-	ite_dbg("%s called", __func__);
+-
  	if (for_tx) {
  		/* we don't need no stinking calculations */
--		freq = dev->params.tx_carrier_freq;
-+		freq = dev->tx_carrier_freq;
- 		allowance = ITE_RXDCR_DEFAULT;
- 		use_demodulator = false;
- 	} else {
--		low_freq = dev->params.rx_low_carrier_freq;
--		high_freq = dev->params.rx_high_carrier_freq;
-+		low_freq = dev->rx_low_carrier_freq;
-+		high_freq = dev->rx_high_carrier_freq;
+ 		freq = dev->params.tx_carrier_freq;
+@@ -228,8 +213,7 @@ static void ite_set_carrier_params(struct ite_dev *dev)
  
  		if (low_freq == 0) {
  			/* don't demodulate */
-@@ -217,9 +215,9 @@ static void ite_set_carrier_params(struct ite_dev *dev)
- 	}
+-			freq =
+-			ITE_DEFAULT_CARRIER_FREQ;
++			freq = ITE_DEFAULT_CARRIER_FREQ;
+ 			allowance = ITE_RXDCR_DEFAULT;
+ 			use_demodulator = false;
+ 		} else {
+@@ -268,8 +252,6 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
+ 	int rx_bytes;
+ 	int iflags;
  
- 	/* set the carrier parameters in a device-dependent way */
--	dev->params.set_carrier_params(dev, ite_is_high_carrier_freq(freq),
-+	dev->params->set_carrier_params(dev, ite_is_high_carrier_freq(freq),
- 		 use_demodulator, ite_get_carrier_freq_bits(freq), allowance,
--		 ite_get_pulse_width_bits(freq, dev->params.tx_duty_cycle));
-+		 ite_get_pulse_width_bits(freq, dev->tx_duty_cycle));
- }
- 
- /* interrupt service routine for incoming and outgoing CIR data */
-@@ -236,12 +234,12 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
+-	ite_dbg_verbose("%s firing", __func__);
+-
+ 	/* grab the spinlock */
  	spin_lock_irqsave(&dev->lock, flags);
  
- 	/* read the interrupt flags */
--	iflags = dev->params.get_irq_causes(dev);
-+	iflags = dev->params->get_irq_causes(dev);
- 
+@@ -279,32 +261,29 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
  	/* check for the receive interrupt */
  	if (iflags & (ITE_IRQ_RX_FIFO | ITE_IRQ_RX_FIFO_OVERRUN)) {
  		/* read the FIFO bytes */
--		rx_bytes = dev->params.get_rx_bytes(dev, rx_buf,
-+		rx_bytes = dev->params->get_rx_bytes(dev, rx_buf,
- 						    ITE_RX_FIFO_LEN);
+-		rx_bytes =
+-			dev->params.get_rx_bytes(dev, rx_buf,
+-					     ITE_RX_FIFO_LEN);
++		rx_bytes = dev->params.get_rx_bytes(dev, rx_buf,
++						    ITE_RX_FIFO_LEN);
++
++		dev_dbg(&dev->rdev->dev, "interrupt %d RX bytes\n", rx_bytes);
  
- 		dev_dbg(&dev->rdev->dev, "interrupt %d RX bytes\n", rx_bytes);
-@@ -286,8 +284,8 @@ static int ite_set_rx_carrier_range(struct rc_dev *rcdev, u32 carrier_low, u32
- 	struct ite_dev *dev = rcdev->priv;
+ 		if (rx_bytes > 0) {
+ 			/* drop the spinlock, since the ir-core layer
+ 			 * may call us back again through
+ 			 * ite_s_idle() */
+-			spin_unlock_irqrestore(&dev->
+-									 lock,
+-									 flags);
++			spin_unlock_irqrestore(&dev->lock, flags);
  
- 	spin_lock_irqsave(&dev->lock, flags);
--	dev->params.rx_low_carrier_freq = carrier_low;
--	dev->params.rx_high_carrier_freq = carrier_high;
-+	dev->rx_low_carrier_freq = carrier_low;
-+	dev->rx_high_carrier_freq = carrier_high;
- 	ite_set_carrier_params(dev);
+ 			/* decode the data we've just received */
+-			ite_decode_bytes(dev, rx_buf,
+-								   rx_bytes);
++			ite_decode_bytes(dev, rx_buf, rx_bytes);
+ 
+ 			/* reacquire the spinlock */
+-			spin_lock_irqsave(&dev->lock,
+-								    flags);
++			spin_lock_irqsave(&dev->lock, flags);
+ 
+ 			/* mark the interrupt as serviced */
+ 			ret = IRQ_RETVAL(IRQ_HANDLED);
+ 		}
+ 	} else if (iflags & ITE_IRQ_TX_FIFO) {
+ 		/* FIFO space available interrupt */
+-		ite_dbg_verbose("got interrupt for TX FIFO");
++		dev_dbg(&dev->rdev->dev, "interrupt TX FIFO\n");
+ 
+ 		/* wake any sleeping transmitter */
+ 		wake_up_interruptible(&dev->tx_queue);
+@@ -316,8 +295,6 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
+ 	/* drop the spinlock */
  	spin_unlock_irqrestore(&dev->lock, flags);
  
-@@ -301,7 +299,7 @@ static int ite_set_tx_carrier(struct rc_dev *rcdev, u32 carrier)
- 	struct ite_dev *dev = rcdev->priv;
+-	ite_dbg_verbose("%s done returning %d", __func__, (int)ret);
+-
+ 	return ret;
+ }
  
- 	spin_lock_irqsave(&dev->lock, flags);
--	dev->params.tx_carrier_freq = carrier;
-+	dev->tx_carrier_freq = carrier;
- 	ite_set_carrier_params(dev);
- 	spin_unlock_irqrestore(&dev->lock, flags);
+@@ -379,8 +356,6 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
+ 	u8 last_sent[ITE_TX_FIFO_LEN];
+ 	u8 val;
  
-@@ -315,7 +313,7 @@ static int ite_set_tx_duty_cycle(struct rc_dev *rcdev, u32 duty_cycle)
- 	struct ite_dev *dev = rcdev->priv;
+-	ite_dbg("%s called", __func__);
+-
+ 	/* clear the array just in case */
+ 	memset(last_sent, 0, sizeof(last_sent));
  
- 	spin_lock_irqsave(&dev->lock, flags);
--	dev->params.tx_duty_cycle = duty_cycle;
-+	dev->tx_duty_cycle = duty_cycle;
- 	ite_set_carrier_params(dev);
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -349,17 +347,17 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
- 
- 	/* calculate how much time we can send in one byte */
- 	max_rle_us =
--	    (ITE_BAUDRATE_DIVISOR * dev->params.sample_period *
-+	    (ITE_BAUDRATE_DIVISOR * sample_period *
- 	     ITE_TX_MAX_RLE) / 1000;
- 
- 	/* disable the receiver */
--	dev->params.disable_rx(dev);
-+	dev->params->disable_rx(dev);
- 
- 	/* this is where we'll begin filling in the FIFO, until it's full.
+@@ -404,8 +379,7 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
  	 * then we'll just activate the interrupt, wait for it to wake us up
  	 * again, disable it, continue filling the FIFO... until everything
  	 * has been pushed out */
--	fifo_avail = ITE_TX_FIFO_LEN - dev->params.get_tx_used_slots(dev);
-+	fifo_avail = ITE_TX_FIFO_LEN - dev->params->get_tx_used_slots(dev);
+-	fifo_avail =
+-	    ITE_TX_FIFO_LEN - dev->params.get_tx_used_slots(dev);
++	fifo_avail = ITE_TX_FIFO_LEN - dev->params.get_tx_used_slots(dev);
  
  	while (n > 0 && dev->in_use) {
  		/* transmit the next sample */
-@@ -402,30 +400,29 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
- 			 * some other slot got freed
- 			 */
- 			if (fifo_avail <= 0)
--				fifo_avail = ITE_TX_FIFO_LEN - dev->params.get_tx_used_slots(dev);
-+				fifo_avail = ITE_TX_FIFO_LEN - dev->params->get_tx_used_slots(dev);
+@@ -413,10 +387,8 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
+ 		remaining_us = *(txbuf++);
+ 		n--;
  
- 			/* if it's still full */
- 			if (fifo_avail <= 0) {
- 				/* enable the tx interrupt */
--				dev->params.
--				enable_tx_interrupt(dev);
-+				dev->params->enable_tx_interrupt(dev);
+-		ite_dbg("%s: %ld",
+-				      ((is_pulse) ? "pulse" : "space"),
+-				      (long int)
+-				      remaining_us);
++		dev_dbg(&dev->rdev->dev, "%s: %d\n",
++			is_pulse ? "pulse" : "space", remaining_us);
  
- 				/* drop the spinlock */
- 				spin_unlock_irqrestore(&dev->lock, flags);
+ 		/* repeat while the pulse is non-zero length */
+ 		while (remaining_us > 0 && dev->in_use) {
+@@ -524,8 +496,6 @@ static void ite_s_idle(struct rc_dev *rcdev, bool enable)
+ 	unsigned long flags;
+ 	struct ite_dev *dev = rcdev->priv;
  
- 				/* wait for the FIFO to empty enough */
--				wait_event_interruptible(dev->tx_queue, (fifo_avail = ITE_TX_FIFO_LEN - dev->params.get_tx_used_slots(dev)) >= 8);
-+				wait_event_interruptible(dev->tx_queue,
-+					(fifo_avail = ITE_TX_FIFO_LEN - dev->params->get_tx_used_slots(dev)) >= 8);
- 
- 				/* get the spinlock again */
- 				spin_lock_irqsave(&dev->lock, flags);
- 
- 				/* disable the tx interrupt again. */
--				dev->params.
--				disable_tx_interrupt(dev);
-+				dev->params->disable_tx_interrupt(dev);
- 			}
- 
- 			/* now send the byte through the FIFO */
--			dev->params.put_tx_byte(dev, val);
-+			dev->params->put_tx_byte(dev, val);
- 			fifo_avail--;
- 		}
- 	}
-@@ -433,7 +430,7 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
- 	/* wait and don't return until the whole FIFO has been sent out;
- 	 * otherwise we could configure the RX carrier params instead of the
- 	 * TX ones while the transmission is still being performed! */
--	fifo_remaining = dev->params.get_tx_used_slots(dev);
-+	fifo_remaining = dev->params->get_tx_used_slots(dev);
- 	remaining_us = 0;
- 	while (fifo_remaining > 0) {
- 		fifo_remaining--;
-@@ -460,7 +457,7 @@ static int ite_tx_ir(struct rc_dev *rcdev, unsigned *txbuf, unsigned n)
- 
- 	/* re-enable the receiver */
- 	if (dev->in_use)
--		dev->params.enable_rx(dev);
-+		dev->params->enable_rx(dev);
- 
- 	/* notify transmission end */
- 	wake_up_interruptible(&dev->tx_ended);
-@@ -478,7 +475,7 @@ static void ite_s_idle(struct rc_dev *rcdev, bool enable)
- 
+-	ite_dbg("%s called", __func__);
+-
  	if (enable) {
  		spin_lock_irqsave(&dev->lock, flags);
--		dev->params.idle_rx(dev);
-+		dev->params->idle_rx(dev);
- 		spin_unlock_irqrestore(&dev->lock, flags);
- 	}
+ 		dev->params.idle_rx(dev);
+@@ -544,8 +514,6 @@ static int it87_get_irq_causes(struct ite_dev *dev)
+ 	u8 iflags;
+ 	int ret = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read the interrupt flags */
+ 	iflags = inb(dev->cir_addr + IT87_IIR) & IT87_II;
+ 
+@@ -572,8 +540,6 @@ static void it87_set_carrier_params(struct ite_dev *dev, bool high_freq,
+ {
+ 	u8 val;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* program the RCR register */
+ 	val = inb(dev->cir_addr + IT87_RCR)
+ 		& ~(IT87_HCFS | IT87_RXEND | IT87_RXDCR);
+@@ -599,8 +565,6 @@ static int it87_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+ {
+ 	int fifo, read = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read how many bytes are still in the FIFO */
+ 	fifo = inb(dev->cir_addr + IT87_RSR) & IT87_RXFBC;
+ 
+@@ -619,8 +583,6 @@ static int it87_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+  * empty; let's expect this won't be a problem */
+ static int it87_get_tx_used_slots(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	return inb(dev->cir_addr + IT87_TSR) & IT87_TXFBC;
  }
-@@ -1178,7 +1175,7 @@ static int ite_open(struct rc_dev *rcdev)
+ 
+@@ -634,8 +596,6 @@ static void it87_put_tx_byte(struct ite_dev *dev, u8 value)
+   pulse is detected; this must be called with the device spinlock held */
+ static void it87_idle_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable streaming by clearing RXACT writing it as 1 */
+ 	outb(inb(dev->cir_addr + IT87_RCR) | IT87_RXACT,
+ 		dev->cir_addr + IT87_RCR);
+@@ -648,8 +608,6 @@ static void it87_idle_rx(struct ite_dev *dev)
+ /* disable the receiver; this must be called with the device spinlock held */
+ static void it87_disable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the receiver interrupts */
+ 	outb(inb(dev->cir_addr + IT87_IER) & ~(IT87_RDAIE | IT87_RFOIE),
+ 		dev->cir_addr + IT87_IER);
+@@ -666,8 +624,6 @@ static void it87_disable_rx(struct ite_dev *dev)
+ /* enable the receiver; this must be called with the device spinlock held */
+ static void it87_enable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the receiver by setting RXEN */
+ 	outb(inb(dev->cir_addr + IT87_RCR) | IT87_RXEN,
+ 		dev->cir_addr + IT87_RCR);
+@@ -684,8 +640,6 @@ static void it87_enable_rx(struct ite_dev *dev)
+  * spinlock held */
+ static void it87_disable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the transmitter interrupts */
+ 	outb(inb(dev->cir_addr + IT87_IER) & ~IT87_TLDLIE,
+ 		dev->cir_addr + IT87_IER);
+@@ -695,8 +649,6 @@ static void it87_disable_tx_interrupt(struct ite_dev *dev)
+  * spinlock held */
+ static void it87_enable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the transmitter interrupts and master enable flag */
+ 	outb(inb(dev->cir_addr + IT87_IER) | IT87_TLDLIE | IT87_IEC,
+ 		dev->cir_addr + IT87_IER);
+@@ -705,8 +657,6 @@ static void it87_enable_tx_interrupt(struct ite_dev *dev)
+ /* disable the device; this must be called with the device spinlock held */
+ static void it87_disable(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* clear out all interrupt enable flags */
+ 	outb(inb(dev->cir_addr + IT87_IER) &
+ 		~(IT87_IEC | IT87_RFOIE | IT87_RDAIE | IT87_TLDLIE),
+@@ -723,8 +673,6 @@ static void it87_disable(struct ite_dev *dev)
+ /* initialize the hardware */
+ static void it87_init_hardware(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable just the baud rate divisor register,
+ 	disabling all the interrupts at the same time */
+ 	outb((inb(dev->cir_addr + IT87_IER) &
+@@ -761,8 +709,6 @@ static int it8708_get_irq_causes(struct ite_dev *dev)
+ 	u8 iflags;
+ 	int ret = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read the interrupt flags */
+ 	iflags = inb(dev->cir_addr + IT8708_C0IIR);
+ 
+@@ -784,8 +730,6 @@ static void it8708_set_carrier_params(struct ite_dev *dev, bool high_freq,
+ {
+ 	u8 val;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* program the C0CFR register, with HRAE=1 */
+ 	outb(inb(dev->cir_addr + IT8708_BANKSEL) | IT8708_HRAE,
+ 		dev->cir_addr + IT8708_BANKSEL);
+@@ -824,8 +768,6 @@ static int it8708_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+ {
+ 	int fifo, read = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read how many bytes are still in the FIFO */
+ 	fifo = inb(dev->cir_addr + IT8708_C0RFSR) & IT85_RXFBC;
+ 
+@@ -844,8 +786,6 @@ static int it8708_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+  * empty; let's expect this won't be a problem */
+ static int it8708_get_tx_used_slots(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	return inb(dev->cir_addr + IT8708_C0TFSR) & IT85_TXFBC;
+ }
+ 
+@@ -859,8 +799,6 @@ static void it8708_put_tx_byte(struct ite_dev *dev, u8 value)
+   pulse is detected; this must be called with the device spinlock held */
+ static void it8708_idle_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable streaming by clearing RXACT writing it as 1 */
+ 	outb(inb(dev->cir_addr + IT8708_C0RCR) | IT85_RXACT,
+ 		dev->cir_addr + IT8708_C0RCR);
+@@ -873,8 +811,6 @@ static void it8708_idle_rx(struct ite_dev *dev)
+ /* disable the receiver; this must be called with the device spinlock held */
+ static void it8708_disable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the receiver interrupts */
+ 	outb(inb(dev->cir_addr + IT8708_C0IER) &
+ 		~(IT85_RDAIE | IT85_RFOIE),
+@@ -892,8 +828,6 @@ static void it8708_disable_rx(struct ite_dev *dev)
+ /* enable the receiver; this must be called with the device spinlock held */
+ static void it8708_enable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the receiver by setting RXEN */
+ 	outb(inb(dev->cir_addr + IT8708_C0RCR) | IT85_RXEN,
+ 		dev->cir_addr + IT8708_C0RCR);
+@@ -911,8 +845,6 @@ static void it8708_enable_rx(struct ite_dev *dev)
+  * spinlock held */
+ static void it8708_disable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the transmitter interrupts */
+ 	outb(inb(dev->cir_addr + IT8708_C0IER) & ~IT85_TLDLIE,
+ 		dev->cir_addr + IT8708_C0IER);
+@@ -922,8 +854,6 @@ static void it8708_disable_tx_interrupt(struct ite_dev *dev)
+  * spinlock held */
+ static void it8708_enable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the transmitter interrupts and master enable flag */
+ 	outb(inb(dev->cir_addr + IT8708_C0IER)
+ 		|IT85_TLDLIE | IT85_IEC,
+@@ -933,8 +863,6 @@ static void it8708_enable_tx_interrupt(struct ite_dev *dev)
+ /* disable the device; this must be called with the device spinlock held */
+ static void it8708_disable(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* clear out all interrupt enable flags */
+ 	outb(inb(dev->cir_addr + IT8708_C0IER) &
+ 		~(IT85_IEC | IT85_RFOIE | IT85_RDAIE | IT85_TLDLIE),
+@@ -951,8 +879,6 @@ static void it8708_disable(struct ite_dev *dev)
+ /* initialize the hardware */
+ static void it8708_init_hardware(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable all the interrupts */
+ 	outb(inb(dev->cir_addr + IT8708_C0IER) &
+ 		~(IT85_IEC | IT85_RFOIE | IT85_RDAIE | IT85_TLDLIE),
+@@ -1058,8 +984,6 @@ static int it8709_get_irq_causes(struct ite_dev *dev)
+ 	u8 iflags;
+ 	int ret = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read the interrupt flags */
+ 	iflags = it8709_rm(dev, IT8709_IIR);
+ 
+@@ -1081,8 +1005,6 @@ static void it8709_set_carrier_params(struct ite_dev *dev, bool high_freq,
+ {
+ 	u8 val;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	val = (it8709_rr(dev, IT85_C0CFR)
+ 		     &~(IT85_HCFS | IT85_CFQ)) |
+ 	    carrier_freq_bits;
+@@ -1115,8 +1037,6 @@ static int it8709_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+ {
+ 	int fifo, read = 0;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	/* read how many bytes are still in the FIFO */
+ 	fifo = it8709_rm(dev, IT8709_RFSR) & IT85_RXFBC;
+ 
+@@ -1140,8 +1060,6 @@ static int it8709_get_rx_bytes(struct ite_dev *dev, u8 * buf, int buf_size)
+  * empty; let's expect this won't be a problem */
+ static int it8709_get_tx_used_slots(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	return it8709_rr(dev, IT85_C0TFSR) & IT85_TXFBC;
+ }
+ 
+@@ -1155,8 +1073,6 @@ static void it8709_put_tx_byte(struct ite_dev *dev, u8 value)
+   pulse is detected; this must be called with the device spinlock held */
+ static void it8709_idle_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable streaming by clearing RXACT writing it as 1 */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0RCR) | IT85_RXACT,
+ 			    IT85_C0RCR);
+@@ -1169,8 +1085,6 @@ static void it8709_idle_rx(struct ite_dev *dev)
+ /* disable the receiver; this must be called with the device spinlock held */
+ static void it8709_disable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the receiver interrupts */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0IER) &
+ 			    ~(IT85_RDAIE | IT85_RFOIE),
+@@ -1188,8 +1102,6 @@ static void it8709_disable_rx(struct ite_dev *dev)
+ /* enable the receiver; this must be called with the device spinlock held */
+ static void it8709_enable_rx(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the receiver by setting RXEN */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0RCR) | IT85_RXEN,
+ 			    IT85_C0RCR);
+@@ -1207,8 +1119,6 @@ static void it8709_enable_rx(struct ite_dev *dev)
+  * spinlock held */
+ static void it8709_disable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable the transmitter interrupts */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0IER) & ~IT85_TLDLIE,
+ 			    IT85_C0IER);
+@@ -1218,8 +1128,6 @@ static void it8709_disable_tx_interrupt(struct ite_dev *dev)
+  * spinlock held */
+ static void it8709_enable_tx_interrupt(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* enable the transmitter interrupts and master enable flag */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0IER)
+ 			    |IT85_TLDLIE | IT85_IEC,
+@@ -1229,8 +1137,6 @@ static void it8709_enable_tx_interrupt(struct ite_dev *dev)
+ /* disable the device; this must be called with the device spinlock held */
+ static void it8709_disable(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* clear out all interrupt enable flags */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0IER) &
+ 			~(IT85_IEC | IT85_RFOIE | IT85_RDAIE | IT85_TLDLIE),
+@@ -1247,8 +1153,6 @@ static void it8709_disable(struct ite_dev *dev)
+ /* initialize the hardware */
+ static void it8709_init_hardware(struct ite_dev *dev)
+ {
+-	ite_dbg("%s called", __func__);
+-
+ 	/* disable all the interrupts */
+ 	it8709_wr(dev, it8709_rr(dev, IT85_C0IER) &
+ 			~(IT85_IEC | IT85_RFOIE | IT85_RDAIE | IT85_TLDLIE),
+@@ -1290,8 +1194,6 @@ static int ite_open(struct rc_dev *rcdev)
+ 	struct ite_dev *dev = rcdev->priv;
+ 	unsigned long flags;
+ 
+-	ite_dbg("%s called", __func__);
+-
+ 	spin_lock_irqsave(&dev->lock, flags);
  	dev->in_use = true;
  
- 	/* enable the receiver */
--	dev->params.enable_rx(dev);
-+	dev->params->enable_rx(dev);
+@@ -1309,8 +1211,6 @@ static void ite_close(struct rc_dev *rcdev)
+ 	struct ite_dev *dev = rcdev->priv;
+ 	unsigned long flags;
  
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -1199,7 +1196,7 @@ static void ite_close(struct rc_dev *rcdev)
- 	wait_event_interruptible(dev->tx_ended, !dev->transmitting);
+-	ite_dbg("%s called", __func__);
+-
  	spin_lock_irqsave(&dev->lock, flags);
+ 	dev->in_use = false;
  
--	dev->params.disable(dev);
-+	dev->params->disable(dev);
+@@ -1449,8 +1349,6 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
+ 	int model_no;
+ 	int io_rsrc_no;
  
- 	spin_unlock_irqrestore(&dev->lock, flags);
- }
-@@ -1210,12 +1207,6 @@ static const struct ite_dev_params ite_dev_descs[] = {
- 	       .model = "ITE8704 CIR transceiver",
- 	       .io_region_size = IT87_IOREG_LENGTH,
- 	       .io_rsrc_no = 0,
--	       .hw_tx_capable = true,
--	       .sample_period = (u32) (1000000000ULL / 115200),
--	       .tx_carrier_freq = 38000,
--	       .tx_duty_cycle = 33,
--	       .rx_low_carrier_freq = 0,
--	       .rx_high_carrier_freq = 0,
- 
- 		/* operations */
- 	       .get_irq_causes = it87_get_irq_causes,
-@@ -1235,12 +1226,6 @@ static const struct ite_dev_params ite_dev_descs[] = {
- 	       .model = "ITE8713 CIR transceiver",
- 	       .io_region_size = IT87_IOREG_LENGTH,
- 	       .io_rsrc_no = 0,
--	       .hw_tx_capable = true,
--	       .sample_period = (u32) (1000000000ULL / 115200),
--	       .tx_carrier_freq = 38000,
--	       .tx_duty_cycle = 33,
--	       .rx_low_carrier_freq = 0,
--	       .rx_high_carrier_freq = 0,
- 
- 		/* operations */
- 	       .get_irq_causes = it87_get_irq_causes,
-@@ -1260,12 +1245,6 @@ static const struct ite_dev_params ite_dev_descs[] = {
- 	       .model = "ITE8708 CIR transceiver",
- 	       .io_region_size = IT8708_IOREG_LENGTH,
- 	       .io_rsrc_no = 0,
--	       .hw_tx_capable = true,
--	       .sample_period = (u32) (1000000000ULL / 115200),
--	       .tx_carrier_freq = 38000,
--	       .tx_duty_cycle = 33,
--	       .rx_low_carrier_freq = 0,
--	       .rx_high_carrier_freq = 0,
- 
- 		/* operations */
- 	       .get_irq_causes = it8708_get_irq_causes,
-@@ -1286,12 +1265,6 @@ static const struct ite_dev_params ite_dev_descs[] = {
- 	       .model = "ITE8709 CIR transceiver",
- 	       .io_region_size = IT8709_IOREG_LENGTH,
- 	       .io_rsrc_no = 2,
--	       .hw_tx_capable = true,
--	       .sample_period = (u32) (1000000000ULL / 115200),
--	       .tx_carrier_freq = 38000,
--	       .tx_duty_cycle = 33,
--	       .rx_low_carrier_freq = 0,
--	       .rx_high_carrier_freq = 0,
- 
- 		/* operations */
- 	       .get_irq_causes = it8709_get_irq_causes,
-@@ -1384,14 +1357,12 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
- 	init_waitqueue_head(&itdev->tx_ended);
- 
- 	/* copy model-specific parameters */
--	itdev->params = *dev_desc;
+-	ite_dbg("%s called", __func__);
 -
--	/* apply any overrides */
--	if (sample_period > 0)
--		itdev->params.sample_period = sample_period;
-+	itdev->params = dev_desc;
+ 	itdev = kzalloc(sizeof(struct ite_dev), GFP_KERNEL);
+ 	if (!itdev)
+ 		return ret;
+@@ -1465,16 +1363,15 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
  
+ 	/* get the model number */
+ 	model_no = (int)dev_id->driver_data;
+-	ite_pr(KERN_NOTICE, "Auto-detected model: %s\n",
++	dev_dbg(&pdev->dev, "Auto-detected model: %s\n",
+ 		ite_dev_descs[model_no].model);
+ 
+ 	if (model_number >= 0 && model_number < ARRAY_SIZE(ite_dev_descs)) {
+ 		model_no = model_number;
+-		ite_pr(KERN_NOTICE, "The model has been fixed by a module parameter.");
++		dev_info(&pdev->dev, "model has been forced to: %s",
++			 ite_dev_descs[model_no].model);
+ 	}
+ 
+-	ite_pr(KERN_NOTICE, "Using model: %s\n", ite_dev_descs[model_no].model);
+-
+ 	/* get the description for the device */
+ 	dev_desc = &ite_dev_descs[model_no];
+ 	io_rsrc_no = dev_desc->io_rsrc_no;
+@@ -1525,20 +1422,6 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
+ 	if (rx_high_carrier_freq > 0)
+ 		itdev->params.rx_high_carrier_freq = rx_high_carrier_freq;
+ 
+-	/* print out parameters */
+-	ite_pr(KERN_NOTICE, "TX-capable: %d\n", (int)
+-			 itdev->params.hw_tx_capable);
+-	ite_pr(KERN_NOTICE, "Sample period (ns): %ld\n", (long)
+-		     itdev->params.sample_period);
+-	ite_pr(KERN_NOTICE, "TX carrier frequency (Hz): %d\n", (int)
+-		     itdev->params.tx_carrier_freq);
+-	ite_pr(KERN_NOTICE, "TX duty cycle (%%): %d\n", (int)
+-		     itdev->params.tx_duty_cycle);
+-	ite_pr(KERN_NOTICE, "RX low carrier frequency (Hz): %d\n", (int)
+-		     itdev->params.rx_low_carrier_freq);
+-	ite_pr(KERN_NOTICE, "RX high carrier frequency (Hz): %d\n", (int)
+-		     itdev->params.rx_high_carrier_freq);
+-
  	/* set up hardware initial state */
--	itdev->params.init_hardware(itdev);
-+	itdev->tx_duty_cycle = 33;
-+	itdev->tx_carrier_freq = ITE_DEFAULT_CARRIER_FREQ;
-+	itdev->params->init_hardware(itdev);
+ 	itdev->params.init_hardware(itdev);
  
- 	/* set up ir-core props */
- 	rdev->priv = itdev;
-@@ -1403,20 +1374,16 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
- 	rdev->s_rx_carrier_range = ite_set_rx_carrier_range;
- 	/* FIFO threshold is 17 bytes, so 17 * 8 samples minimum */
- 	rdev->min_timeout = 17 * 8 * ITE_BAUDRATE_DIVISOR *
--			    itdev->params.sample_period / 1000;
-+			    sample_period / 1000;
- 	rdev->timeout = IR_DEFAULT_TIMEOUT;
- 	rdev->max_timeout = 10 * IR_DEFAULT_TIMEOUT;
--	rdev->rx_resolution = ITE_BAUDRATE_DIVISOR *
--				itdev->params.sample_period / 1000;
--	rdev->tx_resolution = ITE_BAUDRATE_DIVISOR *
--				itdev->params.sample_period / 1000;
+@@ -1589,8 +1472,6 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
+ 			ITE_DRIVER_NAME, (void *)itdev))
+ 		goto exit_release_cir_addr;
+ 
+-	ite_pr(KERN_NOTICE, "driver has been successfully loaded\n");
 -
--	/* set up transmitter related values if needed */
--	if (itdev->params.hw_tx_capable) {
--		rdev->tx_ir = ite_tx_ir;
--		rdev->s_tx_carrier = ite_set_tx_carrier;
--		rdev->s_tx_duty_cycle = ite_set_tx_duty_cycle;
--	}
-+	rdev->rx_resolution = ITE_BAUDRATE_DIVISOR * sample_period / 1000;
-+	rdev->tx_resolution = ITE_BAUDRATE_DIVISOR * sample_period / 1000;
-+
-+	/* set up transmitter related values */
-+	rdev->tx_ir = ite_tx_ir;
-+	rdev->s_tx_carrier = ite_set_tx_carrier;
-+	rdev->s_tx_duty_cycle = ite_set_tx_duty_cycle;
- 
- 	rdev->device_name = dev_desc->model;
- 	rdev->input_id.bustype = BUS_HOST;
-@@ -1443,7 +1410,7 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
  	return 0;
  
  exit_release_cir_addr:
--	release_region(itdev->cir_addr, itdev->params.io_region_size);
-+	release_region(itdev->cir_addr, itdev->params->io_region_size);
- exit_unregister_device:
- 	rc_unregister_device(rdev);
- 	rdev = NULL;
-@@ -1462,13 +1429,13 @@ static void ite_remove(struct pnp_dev *pdev)
+@@ -1610,8 +1491,6 @@ static void ite_remove(struct pnp_dev *pdev)
+ 	struct ite_dev *dev = pnp_get_drvdata(pdev);
+ 	unsigned long flags;
+ 
+-	ite_dbg("%s called", __func__);
+-
  	spin_lock_irqsave(&dev->lock, flags);
  
  	/* disable hardware */
--	dev->params.disable(dev);
-+	dev->params->disable(dev);
+@@ -1633,8 +1512,6 @@ static int ite_suspend(struct pnp_dev *pdev, pm_message_t state)
+ 	struct ite_dev *dev = pnp_get_drvdata(pdev);
+ 	unsigned long flags;
  
- 	spin_unlock_irqrestore(&dev->lock, flags);
+-	ite_dbg("%s called", __func__);
+-
+ 	/* wait for any transmission to end */
+ 	wait_event_interruptible(dev->tx_ended, !dev->transmitting);
  
- 	/* free resources */
- 	free_irq(dev->cir_irq, dev);
--	release_region(dev->cir_addr, dev->params.io_region_size);
-+	release_region(dev->cir_addr, dev->params->io_region_size);
+@@ -1653,8 +1530,6 @@ static int ite_resume(struct pnp_dev *pdev)
+ 	struct ite_dev *dev = pnp_get_drvdata(pdev);
+ 	unsigned long flags;
  
- 	rc_unregister_device(dev->rdev);
- 
-@@ -1486,7 +1453,7 @@ static int ite_suspend(struct pnp_dev *pdev, pm_message_t state)
- 	spin_lock_irqsave(&dev->lock, flags);
- 
- 	/* disable all interrupts */
--	dev->params.disable(dev);
-+	dev->params->disable(dev);
- 
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -1501,9 +1468,9 @@ static int ite_resume(struct pnp_dev *pdev)
+-	ite_dbg("%s called", __func__);
+-
  	spin_lock_irqsave(&dev->lock, flags);
  
  	/* reinitialize hardware config registers */
--	dev->params.init_hardware(dev);
-+	dev->params->init_hardware(dev);
- 	/* enable the receiver */
--	dev->params.enable_rx(dev);
-+	dev->params->enable_rx(dev);
+@@ -1672,8 +1547,6 @@ static void ite_shutdown(struct pnp_dev *pdev)
+ 	struct ite_dev *dev = pnp_get_drvdata(pdev);
+ 	unsigned long flags;
  
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -1518,7 +1485,7 @@ static void ite_shutdown(struct pnp_dev *pdev)
+-	ite_dbg("%s called", __func__);
+-
  	spin_lock_irqsave(&dev->lock, flags);
  
  	/* disable all interrupts */
--	dev->params.disable(dev);
-+	dev->params->disable(dev);
- 
- 	spin_unlock_irqrestore(&dev->lock, flags);
- }
 diff --git a/drivers/media/rc/ite-cir.h b/drivers/media/rc/ite-cir.h
-index 853001f67445..cb3dc4ca2b0a 100644
+index dfdc26ba976c..853001f67445 100644
 --- a/drivers/media/rc/ite-cir.h
 +++ b/drivers/media/rc/ite-cir.h
-@@ -31,24 +31,6 @@ struct ite_dev_params {
- 	/* IR pnp I/O resource number */
- 	int io_rsrc_no;
+@@ -8,21 +8,6 @@
+ /* platform driver name to register */
+ #define ITE_DRIVER_NAME "ite-cir"
  
--	/* true if the hardware supports transmission */
--	bool hw_tx_capable;
+-/* logging macros */
+-#define ite_pr(level, text, ...) \
+-	printk(level KBUILD_MODNAME ": " text, ## __VA_ARGS__)
+-#define ite_dbg(text, ...) do { \
+-	if (debug) \
+-		printk(KERN_DEBUG \
+-			KBUILD_MODNAME ": " text "\n" , ## __VA_ARGS__); \
+-} while (0)
 -
--	/* base sampling period, in ns */
--	u32 sample_period;
+-#define ite_dbg_verbose(text, ...) do {\
+-	if (debug > 1) \
+-		printk(KERN_DEBUG \
+-			KBUILD_MODNAME ": " text "\n" , ## __VA_ARGS__); \
+-} while (0)
 -
--	/* rx low carrier frequency, in Hz, 0 means no demodulation */
--	unsigned int rx_low_carrier_freq;
--
--	/* tx high carrier frequency, in Hz, 0 means no demodulation */
--	unsigned int rx_high_carrier_freq;
--
--	/* tx carrier frequency, in Hz */
--	unsigned int tx_carrier_freq;
--
--	/* duty cycle, 0-100 */
--	int tx_duty_cycle;
--
- 	/* hw-specific operation function pointers; most of these must be
- 	 * called while holding the spin lock, except for the TX FIFO length
- 	 * one */
-@@ -104,12 +86,24 @@ struct ite_dev {
- 	/* transmit support */
- 	wait_queue_head_t tx_queue, tx_ended;
- 
-+	/* rx low carrier frequency, in Hz, 0 means no demodulation */
-+	unsigned int rx_low_carrier_freq;
-+
-+	/* tx high carrier frequency, in Hz, 0 means no demodulation */
-+	unsigned int rx_high_carrier_freq;
-+
-+	/* tx carrier frequency, in Hz */
-+	unsigned int tx_carrier_freq;
-+
-+	/* duty cycle, 0-100 */
-+	int tx_duty_cycle;
-+
- 	/* hardware I/O settings */
- 	unsigned long cir_addr;
- 	int cir_irq;
- 
- 	/* overridable copy of model parameters */
--	struct ite_dev_params params;
-+	const struct ite_dev_params *params;
- };
- 
- /* common values for all kinds of hardware */
+ /* FIFO sizes */
+ #define ITE_TX_FIFO_LEN 32
+ #define ITE_RX_FIFO_LEN 32
 -- 
 2.29.2
 
