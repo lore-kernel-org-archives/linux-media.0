@@ -2,137 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A75F4C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 02:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35B60C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 06:01:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 738C564F06
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 02:08:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CF7664E09
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 06:01:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbhBVCIH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 21 Feb 2021 21:08:07 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55074 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbhBVCIG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 21 Feb 2021 21:08:06 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5AE13517;
-        Mon, 22 Feb 2021 03:07:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1613959640;
-        bh=N3aMmfIUEadOI2Iioow3EmeF/Ng+HvjdFDJWbVjH194=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wH/02blkfOHdWMcl1C5m7/PZWF8vIVCrvEFxlF3P+ll3s7E0bnLEHpQN3SqB+LNa5
-         rmscB6c8/B4XmfI4N5lBOVNDIJFqTjgZifk5y91EBN2zE159r0J8qn0aB60B1eb7DL
-         jm4no49nUlkkFR4Kt9FGhwYp1DnzGa2Q18NrPOMQ=
-Date:   Mon, 22 Feb 2021 04:06:48 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/16] media: i2c: gmsl: Use 339Kbps I2C bit-rate
-Message-ID: <YDMRuGL1HeKeYL18@pendragon.ideasonboard.com>
-References: <20210216174146.106639-1-jacopo+renesas@jmondi.org>
- <20210216174146.106639-17-jacopo+renesas@jmondi.org>
- <aa7d8a9c-93a0-8c14-4fe4-b831e7b45d88@ideasonboard.com>
+        id S229915AbhBVGBA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 01:01:00 -0500
+Received: from mga02.intel.com ([134.134.136.20]:58392 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229863AbhBVGA7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 01:00:59 -0500
+IronPort-SDR: OpqHGMKNLlFnlI7HvN245Y4yIYcBx/Gr9+bw9ezxfoFCOsONc4iPVFpoPpONP9DKmgiqv4o4Ew
+ tkKgLhMD5LQQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9902"; a="171479632"
+X-IronPort-AV: E=Sophos;i="5.81,196,1610438400"; 
+   d="scan'208";a="171479632"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2021 21:59:09 -0800
+IronPort-SDR: VSn6uHHpqohWQdn3J0H5wCf/mWtIR9QL67LE29WwX0xBL5jy7Y2gLAHdnPVDkGdciYuwG7uYE4
+ P46VkLA4fuWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,196,1610438400"; 
+   d="scan'208";a="379886377"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2021 21:59:07 -0800
+Subject: Re: [PATCH] media: staging: ipu3: uapi: Add "WITH Linux-syscall-note"
+ license
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20210207235610.15687-1-laurent.pinchart@ideasonboard.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <2e96698a-ddea-3d17-9454-ec44b916e88f@linux.intel.com>
+Date:   Mon, 22 Feb 2021 13:57:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aa7d8a9c-93a0-8c14-4fe4-b831e7b45d88@ideasonboard.com>
+In-Reply-To: <20210207235610.15687-1-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Laurent, thanks for your patch.
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 
-Thank you for the patch.
-
-On Thu, Feb 18, 2021 at 04:07:30PM +0000, Kieran Bingham wrote:
-> On 16/02/2021 17:41, Jacopo Mondi wrote:
-> > With the camera modules initialization routines now running with
-> > the noise immunity threshold enabled, it is possible to restore
-> > the bit rate of the I2C transactions transported on the GMSL control
-> > channel to 339 Kbps.
-> > 
-> > The 339 Kbps bit rate represents the default setting for the serializer
-> > and the deserializer chips, and the setup/hold time and slave timeout
-> > time in use are calibrate to support that rate.
+On 2/8/21 7:56 AM, Laurent Pinchart wrote:
+> All Linux headers licensed under the GPL-2.0 must include a "WITH
+> Linux-syscall-note" extension in their SPDX license identifier, as
+> enforced by the scripts/headers_install.sh script. Fix the Intel IPU3
+> UAPI header currently stored with the driver in staging.
 > 
-> s/calibrate/calibrated/
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  drivers/staging/media/ipu3/include/intel-ipu3.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Does that mean the setup/hold time and timeouts should be adjusted based
-> on the i2c speed? (which we have not been doing?)
+> diff --git a/drivers/staging/media/ipu3/include/intel-ipu3.h b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> index edd8edda0647..9b644fb23dde 100644
+> --- a/drivers/staging/media/ipu3/include/intel-ipu3.h
+> +++ b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> @@ -1,4 +1,4 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>  /* Copyright (C) 2017 - 2018 Intel Corporation */
+>  
+>  #ifndef __IPU3_UAPI_H
 > 
-> With all of your other reliability improvements, does *this* change
-> alone have any difference or impact on reliability?
-> 
-> I.e. if we go slower (stay at current speed) - would we be more reliable?
-> 
-> Is there a reliability improvement by making this speed faster?
-> 
-> I presume we don't have a way to convey the i2c bus speed between the
-> max9286 and the max9271 currently? Seems a bit like a bus parameter....
-
-There's a max bus speed DT parameter that we can use. And I think we
-should, as, in theory at least, there's no guarantee that all the
-devices behind the serializer can operate at 400kbps.
-
-> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > ---
-> >  drivers/media/i2c/max9286.c | 2 +-
-> >  drivers/media/i2c/rdacm20.c | 2 +-
-> >  drivers/media/i2c/rdacm21.c | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-> > index aa01d5bb79ef..0b620f2f8c41 100644
-> > --- a/drivers/media/i2c/max9286.c
-> > +++ b/drivers/media/i2c/max9286.c
-> > @@ -330,7 +330,7 @@ static int max9286_i2c_mux_init(struct max9286_priv *priv)
-> >  static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
-> >  {
-> >  	u8 config = MAX9286_I2CSLVSH_469NS_234NS | MAX9286_I2CSLVTO_1024US |
-> > -		    MAX9286_I2CMSTBT_105KBPS;
-> > +		    MAX9286_I2CMSTBT_339KBPS;
-> >  
-> >  	if (localack)
-> >  		config |= MAX9286_I2CLOCACK;
-> > diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-> > index 0632ef98eea7..d45e8b0e52a0 100644
-> > --- a/drivers/media/i2c/rdacm20.c
-> > +++ b/drivers/media/i2c/rdacm20.c
-> > @@ -450,7 +450,7 @@ static int rdacm20_init(struct v4l2_subdev *sd, unsigned int val)
-> >  	ret = max9271_configure_i2c(&dev->serializer,
-> >  				    MAX9271_I2CSLVSH_469NS_234NS |
-> >  				    MAX9271_I2CSLVTO_1024US |
-> > -				    MAX9271_I2CMSTBT_105KBPS);
-> > +				    MAX9271_I2CMSTBT_339KBPS);
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-> > index 80b6f16f87a8..552985026458 100644
-> > --- a/drivers/media/i2c/rdacm21.c
-> > +++ b/drivers/media/i2c/rdacm21.c
-> > @@ -442,7 +442,7 @@ static int rdacm21_init(struct v4l2_subdev *sd, unsigned int val)
-> >  	ret = max9271_configure_i2c(&dev->serializer,
-> >  				    MAX9271_I2CSLVSH_469NS_234NS |
-> >  				    MAX9271_I2CSLVTO_1024US |
-> > -				    MAX9271_I2CMSTBT_105KBPS);
-> > +				    MAX9271_I2CMSTBT_339KBPS);
-> >  	if (ret)
-> >  		return ret;
-> >  
 
 -- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Bingbu Cao
