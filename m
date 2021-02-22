@@ -2,187 +2,204 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08FCDC43381
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F04C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:12:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3C1064DD3
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:06:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68F2C64DD3
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:12:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbhBVQGB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 11:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        id S231210AbhBVQMB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 11:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbhBVQE2 (ORCPT
+        with ESMTP id S231698AbhBVQL0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:04:28 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7243C0698C2
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:02 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id u14so19655454wri.3
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:02 -0800 (PST)
+        Mon, 22 Feb 2021 11:11:26 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91347C061574
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:10:44 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id b16so12482582otq.1
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:10:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pfIMQmRvBRAsHIKgJ62jXmImUTOOwe3Pc0x2EfcpNSk=;
-        b=hEWXWKPhDeSfVWHshGNtOUU0iYsSSAJfvvHBAyhfWUaMFiktvGTYz9OPLIt00QnLGo
-         pVFoI6APUSXZ8xpc9YvJM6NoV9WepPewHba6D+1e5G0i2gegskNlHzLbRDgyTC4KfTSl
-         HkHfMi9I+jqtov1QFysGkz2QuWnHXA4VaQXriGk1nl+kyzcS+VHef7y/0yDBP06ylNkC
-         gRMEbKGt3P5k6aGnfExKr7x2ztgIJWJCeyWPNADEB+3TDH1Mm3AV2jcgCFOyp4SNmBL1
-         QFsuDbf1xTHpo8Esr5k4fP0yDvyRt2bnLoUiuSHyVEcu9ylf8ZAaEYZCL8tQcB1bj2cC
-         GawA==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nA2zu/27Qi+zi0Et6iwYKYiIXci1LR0Ph/voW46JRKs=;
+        b=Lvgt3D9Yk8J9R7i0e+I32K+s+wYx6UyRDEDWCE/bMJmCsH16gBXH2f83pXVXwYA96Z
+         n3yCZiWMm6g6WFxSl+Q9u8VB6i0eyG9fgRCRzFhb1I/MPcFlYSN+WXZbjQiuRyrm9E3t
+         rDsRaFCpFGVSjd3dF7FGcLMV0O+re3+VGBPtk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pfIMQmRvBRAsHIKgJ62jXmImUTOOwe3Pc0x2EfcpNSk=;
-        b=oyrtXnbxfKcjSBMoBebECYtWJMm2CWBjdhQZhnh5yt52WBrBmenbQ7hhIpi/h+Q4fY
-         OeXkdzwhT4fzpRm6RlW/18MKc9MV1Pj61cqOGdVQzmbqt6NkH4R0fX96PJEnay5ImLf7
-         yAMoJhoK9U/2eaq/4alvey96//suYnAL04SbBZUsU0tcXuXRjgWgbcf/tRme+/N+Xybs
-         n94W0BtAj9/ljI2qmdaax3monw/LW6WzlSHm9S1Um2cytdn1WibfNZne03L/VHT6g6d9
-         4Ei/eDU8LoFsaG4vF8PhA31fSxCfW1UYXnWJHCCAzT3vONIvvhb5WhHaAriLnEvyjisW
-         jp3g==
-X-Gm-Message-State: AOAM530UPGTDDnNZs66GIRIs/lQ92dP3pyoxjMQRhaUCSSg4oejZ8ub1
-        6JHbeugPFaW0IIxT8y4bR0hdyA==
-X-Google-Smtp-Source: ABdhPJxLn5XjxUZXLPTzoNobEktJl6yih4eCxQiU8JO4eWo93BogPLHqHN0uaifeVUsFRC1J2OtB5g==
-X-Received: by 2002:a5d:570a:: with SMTP id a10mr22778610wrv.70.1614009721696;
-        Mon, 22 Feb 2021 08:02:01 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 08:02:01 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     stanimir.varbanov@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
-        jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH 24/25] media: venus: helper: Decide work mode
-Date:   Mon, 22 Feb 2021 16:02:59 +0000
-Message-Id: <20210222160300.1811121-25-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
-References: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nA2zu/27Qi+zi0Et6iwYKYiIXci1LR0Ph/voW46JRKs=;
+        b=mDELfOv/nuDxvijwMXqlKv4CJ9znXwNNQrpbdSagvXSmrGKHQzgeLpMPBa5z2zZraj
+         B4HvtofGC1hudrf3tOaj4Uy+qfGTzvFqdk9HJaMHA8u/yGyzp1DyBbQjaR/FCzVnkhPw
+         Fc4UVcg8QB23GcrkhitDMGjQPmeaLUVBt+FRqTALXszw9h2lpF7g5A2/oHlfE8lv5Jnm
+         0cd5TvR6TBXOk8aYg9U9/PC6tF+R3IbO3JNxKrkft3LS8o0kAAkvRl1w8HUeSDHSdwag
+         Adp+7SMZP3EqDW7uahFiN7gfgi+ybrfIxKMfKoPyVwkXnatERoOPF+q5dbaTuFh65jQs
+         UJ4g==
+X-Gm-Message-State: AOAM531VMDiV3gnPax9Szboy7hbKgUUx+EBKul81KoWHpfnH39sr2+NQ
+        sKSeuzSxqMQX+KPUtzJ+AekCxG/YE65g3BIACHgHMw==
+X-Google-Smtp-Source: ABdhPJy5VMzYav92la4GbCVrRLqsfbuxuE4lRo22hdHDCFSLUd3Jl9Lu7Ldt3nTSfwxRv+k1huhJ5OLliDo8pDe3AfM=
+X-Received: by 2002:a9d:b85:: with SMTP id 5mr17812907oth.281.1614010242515;
+ Mon, 22 Feb 2021 08:10:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210222124328.27340-1-tzimmermann@suse.de> <b190801b-b8be-c9df-f203-3e42eb97cea4@amd.com>
+ <238ce852-730b-e31c-a6fe-a9ecaca497e3@suse.de>
+In-Reply-To: <238ce852-730b-e31c-a6fe-a9ecaca497e3@suse.de>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 22 Feb 2021 17:10:31 +0100
+Message-ID: <CAKMK7uE4QxaiGCAX6pYq=dCg5zzs9Jg9iRSjq893OmAZk=OrpA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] drm/prime: Only call dma_map_sgtable() for devices
+ with DMA support
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        "Anholt, Eric" <eric@anholt.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        lima@lists.freedesktop.org,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <dikshita@codeaurora.org>
+On Mon, Feb 22, 2021 at 2:24 PM Thomas Zimmermann <tzimmermann@suse.de> wro=
+te:
+>
+> Hi
+>
+> Am 22.02.21 um 14:09 schrieb Christian K=C3=B6nig:
+> >
+> >
+> > Am 22.02.21 um 13:43 schrieb Thomas Zimmermann:
+> >> USB-based drivers cannot use DMA, so the importing of dma-buf attachme=
+nts
+> >> currently fails for udl and gm12u320. This breaks joining/mirroring of
+> >> displays.
+> >>
+> >> The fix is now a little series. To solve the issue on the importer
+> >> side (i.e., the affected USB-based driver), patch 1 introduces a new
+> >> PRIME callback, struct drm_driver.gem_prime_create_object, which creat=
+es
+> >> an object and gives more control to the importing driver. Specifically=
+,
+> >> udl and gm12u320 can now avoid the creation of a scatter/gather table
+> >> for the imported pages. Patch 1 is self-contained in the sense that it
+> >> can be backported into older kernels.
+> >
+> > Mhm, that sounds like a little overkill to me.
+> >
+> > Drivers can already import the DMA-bufs all by them selves without the
+> > help of the DRM functions. See amdgpu for an example.
+> >
+> > Daniel also already noted to me that he sees the DRM helper as a bit
+> > questionable middle layer.
+>
+> And this bug proves that it is. :)
 
-Decide work mode for encoder and decoder based on different
-use-cases.
+The trouble here is actually gem_bo->import_attach, which isn't really
+part of the questionable midlayer, but fairly mandatory (only
+exception is vmwgfx because not using gem) caching to make sure we
+don't end up with duped imports and fun stuff like that.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/venus/helpers.c | 31 ++++++++++++++++++++-
- drivers/media/platform/qcom/venus/helpers.h |  2 +-
- drivers/media/platform/qcom/venus/vdec.c    |  2 +-
- drivers/media/platform/qcom/venus/venc.c    |  2 +-
- 4 files changed, 33 insertions(+), 4 deletions(-)
+And dma_buf_attach now implicitly creates the sg table already, so
+we're already in game over land. I think we'd need to make
+import_attach a union with import_buf or something like that, so that
+you can do attachment-less importing.
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 49c52ef1084a..49f2667ac5fa 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -18,6 +18,9 @@
- #include "hfi_platform.h"
- #include "hfi_parser.h"
- 
-+#define NUM_MBS_720P	(((1280 + 15) >> 4) * ((720 + 15) >> 4))
-+#define NUM_MBS_4K	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
-+
- struct intbuf {
- 	struct list_head list;
- 	u32 type;
-@@ -1100,14 +1103,40 @@ int venus_helper_set_output_resolution(struct venus_inst *inst,
- }
- EXPORT_SYMBOL_GPL(venus_helper_set_output_resolution);
- 
--int venus_helper_set_work_mode(struct venus_inst *inst, u32 mode)
-+static u32 venus_helper_get_work_mode(struct venus_inst *inst)
-+{
-+	u32 mode;
-+	u32 num_mbs;
-+
-+	mode = VIDC_WORK_MODE_2;
-+	if (IS_V6(inst->core)) {
-+		if (inst->session_type == VIDC_SESSION_TYPE_DEC) {
-+			num_mbs = (ALIGN(inst->height, 16) * ALIGN(inst->width, 16)) / 256;
-+			if (inst->hfi_codec == HFI_VIDEO_CODEC_MPEG2 ||
-+			    inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
-+			    num_mbs <= NUM_MBS_720P)
-+				mode = VIDC_WORK_MODE_1;
-+		} else {
-+			num_mbs = (ALIGN(inst->out_height, 16) * ALIGN(inst->out_width, 16)) / 256;
-+			if (inst->hfi_codec == HFI_VIDEO_CODEC_VP8 &&
-+			    num_mbs <= NUM_MBS_4K)
-+				mode = VIDC_WORK_MODE_1;
-+		}
-+	}
-+
-+	return mode;
-+}
-+
-+int venus_helper_set_work_mode(struct venus_inst *inst)
- {
- 	const u32 ptype = HFI_PROPERTY_PARAM_WORK_MODE;
- 	struct hfi_video_work_mode wm;
-+	u32 mode;
- 
- 	if (!IS_V4(inst->core) && !IS_V6(inst->core))
- 		return 0;
- 
-+	mode = venus_helper_get_work_mode(inst);
- 	wm.video_work_mode = mode;
- 	return hfi_session_set_property(inst, ptype, &wm);
- }
-diff --git a/drivers/media/platform/qcom/venus/helpers.h b/drivers/media/platform/qcom/venus/helpers.h
-index 98106e6eee85..e6269b4be3af 100644
---- a/drivers/media/platform/qcom/venus/helpers.h
-+++ b/drivers/media/platform/qcom/venus/helpers.h
-@@ -32,7 +32,7 @@ int venus_helper_set_input_resolution(struct venus_inst *inst,
- int venus_helper_set_output_resolution(struct venus_inst *inst,
- 				       unsigned int width, unsigned int height,
- 				       u32 buftype);
--int venus_helper_set_work_mode(struct venus_inst *inst, u32 mode);
-+int venus_helper_set_work_mode(struct venus_inst *inst);
- int venus_helper_set_format_constraints(struct venus_inst *inst);
- int venus_helper_set_num_bufs(struct venus_inst *inst, unsigned int input_bufs,
- 			      unsigned int output_bufs,
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 88ac40ce12e6..903443a7a757 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -647,7 +647,7 @@ static int vdec_output_conf(struct venus_inst *inst)
- 	u32 ptype;
- 	int ret;
- 
--	ret = venus_helper_set_work_mode(inst, VIDC_WORK_MODE_2);
-+	ret = venus_helper_set_work_mode(inst);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 6976ed553647..4b5ab0c790c9 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -550,7 +550,7 @@ static int venc_set_properties(struct venus_inst *inst)
- 	u32 profile, level;
- 	int ret;
- 
--	ret = venus_helper_set_work_mode(inst, VIDC_WORK_MODE_2);
-+	ret = venus_helper_set_work_mode(inst);
- 	if (ret)
- 		return ret;
- 
--- 
-2.29.2
+> > Have you thought about doing that instead?
+>
+> There appears to be some useful code in drm_gem_prime_import_dev(). But
+> if the general sentiment goes towards removing
+> gem_prime_import_sg_table, we can work towards that as well.
 
+I still think this part is a bit a silly midlayer for no good reason,
+but I think that's orthogonal to the issue at hand here.
+
+I'd suggest we first try to paper over the issue by using
+prime_import_dev with the host controller (which hopefully is
+dma-capable for most systems). And then, at leisure, try to untangle
+the obj->import_attach issue.
+-Daniel
+
+>
+> Best regards
+> Thomas
+>
+> >
+> > Christian.
+> >
+> >>
+> >> Patches 2 and 3 update SHMEM and CMA helpers to use the new callback.
+> >> Effectively this moves the sg table setup from the PRIME helpers into
+> >> the memory managers. SHMEM now supports devices without DMA support,
+> >> so custom code can be removed from udl and g12u320.
+> >>
+> >> Tested by joining/mirroring displays of udl and radeon under Gnome/X11=
+.
+> >>
+> >> v2:
+> >>     * move fix to importer side (Christian, Daniel)
+> >>     * update SHMEM and CMA helpers for new PRIME callbacks
+> >>
+> >> Thomas Zimmermann (3):
+> >>    drm: Support importing dmabufs into drivers without DMA
+> >>    drm/shmem-helper: Implement struct drm_driver.gem_prime_create_obje=
+ct
+> >>    drm/cma-helper: Implement struct drm_driver.gem_prime_create_object
+> >>
+> >>   drivers/gpu/drm/drm_gem_cma_helper.c    | 62 ++++++++++++++---------=
+--
+> >>   drivers/gpu/drm/drm_gem_shmem_helper.c  | 38 ++++++++++-----
+> >>   drivers/gpu/drm/drm_prime.c             | 43 +++++++++++------
+> >>   drivers/gpu/drm/lima/lima_drv.c         |  2 +-
+> >>   drivers/gpu/drm/panfrost/panfrost_drv.c |  2 +-
+> >>   drivers/gpu/drm/panfrost/panfrost_gem.c |  6 +--
+> >>   drivers/gpu/drm/panfrost/panfrost_gem.h |  4 +-
+> >>   drivers/gpu/drm/pl111/pl111_drv.c       |  8 ++--
+> >>   drivers/gpu/drm/v3d/v3d_bo.c            |  6 +--
+> >>   drivers/gpu/drm/v3d/v3d_drv.c           |  2 +-
+> >>   drivers/gpu/drm/v3d/v3d_drv.h           |  5 +-
+> >>   include/drm/drm_drv.h                   | 12 +++++
+> >>   include/drm/drm_gem_cma_helper.h        | 12 ++---
+> >>   include/drm/drm_gem_shmem_helper.h      |  6 +--
+> >>   14 files changed, 120 insertions(+), 88 deletions(-)
+> >>
+> >> --
+> >> 2.30.1
+> >>
+> >
+>
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+>
+
+
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
