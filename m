@@ -2,107 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A670C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43BAFC433E0
 	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 143CE64E34
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E38EC64E32
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 10:44:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhBVKoN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S230270AbhBVKoN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 22 Feb 2021 05:44:13 -0500
-Received: from gofer.mess.org ([88.97.38.141]:54829 "EHLO gofer.mess.org"
+Received: from gofer.mess.org ([88.97.38.141]:39585 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230138AbhBVKoM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S230141AbhBVKoM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Feb 2021 05:44:12 -0500
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 53F21C6480; Mon, 22 Feb 2021 10:43:30 +0000 (GMT)
+        id E0A1BC63BD; Mon, 22 Feb 2021 10:43:29 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1613990610; bh=l29aVxnxfxzqtcg2MM8RZ5w3zkSqUCbfa7eGqNUFfsw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Z94cm1KKml1u/krMtG/QyZiLoZsfBN8Shl7vMhO8KFzGB8HVVDZ6+a/QLt62gVaG/
-         tl9LMmg+2Sql6pFM1Re1W2vkenRtiCAKK1c6wE/zSfmsrviyCKnih0xB3oDcnurLFr
-         L5OUGJnaIDgBptg1PI7Fp9K9do5V7KJB8Wjw7jxAuiG46thkiv8JuGOjExrcxgff1N
-         p4EPHxqU/M5CIRk272H9DffUzFa9d+Rp/xy5qKZrmVT7tkqmUMWNNmRoN3DnxHoKo8
-         mL1KBIBiJP/eK61vsf77XcVEOo4u/e3+CycZU5S4oLD5xAYnl099hHvNqcYXD/t9rN
-         lJCH4e/v87Rng==
+        t=1613990609; bh=ot/DIU9x38hW1kJhEKp1VaEU+I211SSFhF5qW3ZBcg0=;
+        h=From:To:Subject:Date:From;
+        b=B+GrnYtvMFuWx7Z+kE7oaJ3nbaw6+RGUuXv0PrPEO9gqX9G2NGPngLAUOasUpZlQN
+         m48u79/I29BSckKa7czATNgH+rZWOpG8qtS2j/rIIPw3KXT+8lkUJb803yXIIwUa2G
+         dpqC9DpekwNuFpuaHDUnjw9wPZhQwndG92asP+K4ikJW0HYX9n9tJH48Qhi796RkAa
+         YAWgxZ411FOsSSeuCyUZd9FEOlN+CqNVlk+AuCTxmrzKMMy8JOxwo3TbJBWVnhNfFx
+         lp4IpiguglL7c+X5/kuz+62DNWfAH27jH49a7c5lboKSQ3FltaqC1NsSte82qLhkZK
+         bHTa3aE/jHj3A==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org, Matthias Reichl <hias@horus.com>,
         =?UTF-8?q?Juan=20Jes=C3=BAs=20Garc=C3=ADa=20de=20Soria?= 
         <skandalfo@gmail.com>
-Subject: [PATCH 4/6] media: ite-cir: carrier and duty cycle can be set via ioctl
-Date:   Mon, 22 Feb 2021 10:43:27 +0000
-Message-Id: <3cbd3f7f50d64bae20ae4f583a0402956e1c8591.1613989288.git.sean@mess.org>
+Subject: [PATCH 0/6] media: ite-cir driver cleanups
+Date:   Mon, 22 Feb 2021 10:43:23 +0000
+Message-Id: <cover.1613989288.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1613989288.git.sean@mess.org>
-References: <cover.1613989288.git.sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The lirc ioctls should be used for this, not module parameters.
+This should not be any functional changes, just various cleanups.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/ite-cir.c | 32 --------------------------------
- 1 file changed, 32 deletions(-)
+Sean Young (6):
+  media: ite-cir: remove unused fields
+  media: ite-cir: set parent device
+  media: ite-cir: use standard logging and reduce noise
+  media: ite-cir: carrier and duty cycle can be set via ioctl
+  media: ite-cir: move runtime information into driver data
+  media: ite-cir: check for receive overflow
 
-diff --git a/drivers/media/rc/ite-cir.c b/drivers/media/rc/ite-cir.c
-index c5c7631849d0..748788a43da5 100644
---- a/drivers/media/rc/ite-cir.c
-+++ b/drivers/media/rc/ite-cir.c
-@@ -33,26 +33,6 @@
- 
- /* module parameters */
- 
--/* low limit for RX carrier freq, Hz, 0 for no RX demodulation */
--static int rx_low_carrier_freq;
--module_param(rx_low_carrier_freq, int, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(rx_low_carrier_freq, "Override low RX carrier frequency, Hz, 0 for no RX demodulation");
--
--/* high limit for RX carrier freq, Hz, 0 for no RX demodulation */
--static int rx_high_carrier_freq;
--module_param(rx_high_carrier_freq, int, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(rx_high_carrier_freq, "Override high RX carrier frequency, Hz, 0 for no RX demodulation");
--
--/* override tx carrier frequency */
--static int tx_carrier_freq;
--module_param(tx_carrier_freq, int, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(tx_carrier_freq, "Override TX carrier frequency, Hz");
--
--/* override tx duty cycle */
--static int tx_duty_cycle;
--module_param(tx_duty_cycle, int, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(tx_duty_cycle, "Override TX duty cycle, 1-100");
--
- /* override default sample period */
- static long sample_period;
- module_param(sample_period, long, S_IRUGO | S_IWUSR);
-@@ -1410,18 +1390,6 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
- 	if (sample_period > 0)
- 		itdev->params.sample_period = sample_period;
- 
--	if (tx_carrier_freq > 0)
--		itdev->params.tx_carrier_freq = tx_carrier_freq;
--
--	if (tx_duty_cycle > 0 && tx_duty_cycle <= 100)
--		itdev->params.tx_duty_cycle = tx_duty_cycle;
--
--	if (rx_low_carrier_freq > 0)
--		itdev->params.rx_low_carrier_freq = rx_low_carrier_freq;
--
--	if (rx_high_carrier_freq > 0)
--		itdev->params.rx_high_carrier_freq = rx_high_carrier_freq;
--
- 	/* set up hardware initial state */
- 	itdev->params.init_hardware(itdev);
- 
+ drivers/media/rc/ite-cir.c | 341 +++++++++----------------------------
+ drivers/media/rc/ite-cir.h |  49 ++----
+ 2 files changed, 91 insertions(+), 299 deletions(-)
+
 -- 
 2.29.2
 
