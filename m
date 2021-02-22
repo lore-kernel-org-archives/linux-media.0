@@ -5,66 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2EE1C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D7BCC4332E
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96AD564DD3
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4195E64E61
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbhBVQFd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 11:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S229991AbhBVQFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 11:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbhBVQD6 (ORCPT
+        with ESMTP id S230509AbhBVQE2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:03:58 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70643C0611C2
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:50 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id b3so19624130wrj.5
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:50 -0800 (PST)
+        Mon, 22 Feb 2021 11:04:28 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C742C061D7E
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:00 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id m1so14869184wml.2
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=58IX7lQQO/xiRLO+o9gmDLJkWZs2hxFilBGny+gBS5k=;
-        b=dCXV9MBKBXkYUWUJwg1xHXjAeTxsyctxvc7mtofyqO7tDNjTpafD1+tks6BoPREUis
-         c+yzQsbe9NzCtES2knezsBp7FhjdhefWUOYZkTvuuAKKXVqH2HDGAw7Krlf8dQ2+DGtF
-         LVRSaoe7Yc65/UyCZDRWkzb8EbSorwtKV+Q7iuP5j44EIgOz1Wkqscqr6ipREBiS3vDV
-         dKmhQc555qjGwK4rS9lZ6i0lvtj+R1ZrBjn4yAvryvPvqUmL5kEH0ocDlZHn3gfu2+5F
-         mIF1k3wG7K1dS2GZ4SOXHc16UMGI3nDwxNXxvb7pAS2ReznzcOeChYKDkmrS3fEb0bks
-         Ee/w==
+        bh=a+OrwHZbF+yZUUA/s5BETsaXgiYWfCnPM+gSTxwgLG0=;
+        b=xkrMZEj8y98zWaYE/wurKOQrzN+pn0UsJTAiNQN4gimqUdIYemYiAtG0TMyP3boSUt
+         y8GPHQ0jIv6zxHpJW9CrFLmws1YKmq20vF0Rzjwb28jrCkgCuGseGK8Xs03Fok0FKJb/
+         elZIX4PgwkWRmxrA0DNRC5TJF1ZqLRjwhcBsOcI3KuSG3Qi+rukT1UR9aUvFW5vG1EuX
+         1G+1gaUtroYdK8mDAWZfvr4gfIyp8RF+4K1L+BWI33hIpjJ/IjSjFwLuU3JjdBlHUb7q
+         RCjViyMgBPqohxi055C0g0JoRwxKSRlq4kFmsXGdYeWT31UogmyAn0oGCGlFURJ8RA55
+         nJPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=58IX7lQQO/xiRLO+o9gmDLJkWZs2hxFilBGny+gBS5k=;
-        b=AMT/0eO+BXGtz4h3tn2R7Rl+GjmN12sSRkmbm//8+s57p42ME7iCnojSHIuxoWXJGV
-         X1ogzyRbY/3FFmlN3Pa08tr8k34TWN0gM30zS1mrnMi3eUOx2sLqrk6hMUPqtVxTDJac
-         urznCMT18ANISHp7VQ6L4v383PK/y6XQcWajvoFUCL4S1TZe6OCwfaMEBc3u0e3+owzK
-         T0DgH2i7Tvd16hJHePZTvADnjKT7SH+QUpQjGzloMBfdiuUAxvhH+elm4UHYJPJ0W7Qp
-         kK3EE6hK9m+51OFIBIJtN0HDtIgqBSughY6TOxD2mYV3oLU89r6jECS6pgOV33FJhKYP
-         gleg==
-X-Gm-Message-State: AOAM531WCHZ7ZUKmicqfaSTDB7CuuzlMGlhzHs9oUBpJnTyw+mtiPowF
-        UIfYvVJVroAsJZS5RiP6Q6vv3w==
-X-Google-Smtp-Source: ABdhPJxPISB1L5zOwH+yZdNn03BeAM6RWxfITGmxuBSjsBOvjaC4SahfRLg3sRTEYHSMDE5GBdWYlA==
-X-Received: by 2002:a5d:448c:: with SMTP id j12mr22935221wrq.63.1614009709263;
-        Mon, 22 Feb 2021 08:01:49 -0800 (PST)
+        bh=a+OrwHZbF+yZUUA/s5BETsaXgiYWfCnPM+gSTxwgLG0=;
+        b=LPG36LGL/+z4vGYEuPQcqW/0GHvLhZu9+ig+siNdub4+8GIpTsX4LKNCTX5Wt6SQOY
+         Fcq5tw7gJcMkdzA8VJtQgjxDGX34cnbi75GXLKH+vTEzYz2z+Df2IYhW4eZJIzubgGuV
+         gwk+YF6XDcWjLmemFGVDzw2smLDCZCDZXhmQbp5+rOwQHukwcito0x3zp4z6pcrx9c5N
+         GKTG7T8Rkdu1hDOWAUGJK6XqCzIh1k5wpTOZWX/EBxfE8MVV2ZQfsmtx/0QUj/KWVzG4
+         GPb6HSxxGwE1YFvXEHoxkzjFqTxlekyDrjKwrlVMxLy7Rt1kYOnLSDe+t8D2mD2GH/D6
+         lNMA==
+X-Gm-Message-State: AOAM533bMfUGyWXUnsv2YJ07j23ZWngqHMU+/YthjHt4vmABtPx5RlrX
+        CfDFIt+jeawgBS5cGGyWa36EZg==
+X-Google-Smtp-Source: ABdhPJyW9m03DbV76bt0ZH6hIrqSjB1KCpBPJ2Sznl8fpUQ+Dlz1OztLSXBBYudd5nniKNaMvd3vPw==
+X-Received: by 2002:a1c:2b05:: with SMTP id r5mr20661700wmr.179.1614009719318;
+        Mon, 22 Feb 2021 08:01:59 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.01.48
+        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.01.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 08:01:48 -0800 (PST)
+        Mon, 22 Feb 2021 08:01:58 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
         jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH 12/25] media: venus: core: Hook to V6 base registers when appropriate
-Date:   Mon, 22 Feb 2021 16:02:47 +0000
-Message-Id: <20210222160300.1811121-13-bryan.odonoghue@linaro.org>
+Subject: [PATCH 22/25] media: venus: helpers, hfi, vdec: Set actual plane constraints to FW
+Date:   Mon, 22 Feb 2021 16:02:57 +0000
+Message-Id: <20210222160300.1811121-23-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
 References: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
@@ -74,49 +74,106 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This commit points the IO base registers 6xx offsets when probing for 6xx
-hardware.
+From: Dikshita Agarwal <dikshita@codeaurora.org>
 
+Set actual plane alignments to FW with
+HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_CONSTRAINTS_INFO to calculate
+correct buffer size.
+
+bod: Fixed fall-through error in pkt_session_set_property_6xx() switch
+
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+ drivers/media/platform/qcom/venus/helpers.c  | 21 ++++++++++++++++++++
+ drivers/media/platform/qcom/venus/helpers.h  |  1 +
+ drivers/media/platform/qcom/venus/hfi_cmds.c | 13 ++++++++++++
+ drivers/media/platform/qcom/venus/vdec.c     |  4 ++++
+ 4 files changed, 39 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index dad597617961..e398d3bda65b 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -209,13 +209,23 @@ static int venus_enumerate_codecs(struct venus_core *core, u32 type)
- 
- static void venus_assign_register_offsets(struct venus_core *core)
- {
--	core->vbif_base = core->base + VBIF_BASE;
--	core->cpu_base = core->base + CPU_BASE;
--	core->cpu_cs_base = core->base + CPU_CS_BASE;
--	core->cpu_ic_base = core->base + CPU_IC_BASE;
--	core->wrapper_base = core->base + WRAPPER_BASE;
--	core->wrapper_tz_base = 0;
--	core->aon_base = 0;
-+	if (IS_V6(core)) {
-+		core->vbif_base = core->base + VBIF_BASE;
-+		core->cpu_base = core->base + CPU_BASE_V6;
-+		core->cpu_cs_base = core->base + CPU_CS_BASE_V6;
-+		core->cpu_ic_base = core->base + CPU_IC_BASE_V6;
-+		core->wrapper_base = core->base + WRAPPER_BASE_V6;
-+		core->wrapper_tz_base = core->base + WRAPPER_TZ_BASE_V6;
-+		core->aon_base = core->base + AON_BASE_V6;
-+	} else {
-+		core->vbif_base = core->base + VBIF_BASE;
-+		core->cpu_base = core->base + CPU_BASE;
-+		core->cpu_cs_base = core->base + CPU_CS_BASE;
-+		core->cpu_ic_base = core->base + CPU_IC_BASE;
-+		core->wrapper_base = core->base + WRAPPER_BASE;
-+		core->wrapper_tz_base = 0;
-+		core->aon_base = 0;
-+	}
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index f0413236a56f..49c52ef1084a 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -1113,6 +1113,27 @@ int venus_helper_set_work_mode(struct venus_inst *inst, u32 mode)
  }
+ EXPORT_SYMBOL_GPL(venus_helper_set_work_mode);
  
- static int venus_probe(struct platform_device *pdev)
++int venus_helper_set_format_constraints(struct venus_inst *inst)
++{
++	const u32 ptype = HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_CONSTRAINTS_INFO;
++	struct hfi_uncompressed_plane_actual_constraints_info pconstraint;
++
++	pconstraint.buffer_type = HFI_BUFFER_OUTPUT2;
++	pconstraint.num_planes = 2;
++	pconstraint.plane_format[0].stride_multiples = 128;
++	pconstraint.plane_format[0].max_stride = 8192;
++	pconstraint.plane_format[0].min_plane_buffer_height_multiple = 32;
++	pconstraint.plane_format[0].buffer_alignment = 256;
++
++	pconstraint.plane_format[1].stride_multiples = 128;
++	pconstraint.plane_format[1].max_stride = 8192;
++	pconstraint.plane_format[1].min_plane_buffer_height_multiple = 16;
++	pconstraint.plane_format[1].buffer_alignment = 256;
++
++	return hfi_session_set_property(inst, ptype, &pconstraint);
++}
++EXPORT_SYMBOL_GPL(venus_helper_set_format_constraints);
++
+ int venus_helper_set_num_bufs(struct venus_inst *inst, unsigned int input_bufs,
+ 			      unsigned int output_bufs,
+ 			      unsigned int output2_bufs)
+diff --git a/drivers/media/platform/qcom/venus/helpers.h b/drivers/media/platform/qcom/venus/helpers.h
+index 351093845499..98106e6eee85 100644
+--- a/drivers/media/platform/qcom/venus/helpers.h
++++ b/drivers/media/platform/qcom/venus/helpers.h
+@@ -33,6 +33,7 @@ int venus_helper_set_output_resolution(struct venus_inst *inst,
+ 				       unsigned int width, unsigned int height,
+ 				       u32 buftype);
+ int venus_helper_set_work_mode(struct venus_inst *inst, u32 mode);
++int venus_helper_set_format_constraints(struct venus_inst *inst);
+ int venus_helper_set_num_bufs(struct venus_inst *inst, unsigned int input_bufs,
+ 			      unsigned int output_bufs,
+ 			      unsigned int output2_bufs);
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index 4f7565834469..cc282b0df8c3 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -1249,6 +1249,19 @@ pkt_session_set_property_6xx(struct hfi_session_set_property_pkt *pkt,
+ 	pkt->data[0] = ptype;
+ 
+ 	switch (ptype) {
++	case HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_CONSTRAINTS_INFO: {
++		struct hfi_uncompressed_plane_actual_constraints_info *in = pdata;
++		struct hfi_uncompressed_plane_actual_constraints_info *info = prop_data;
++
++		info->buffer_type = in->buffer_type;
++		info->num_planes = in->num_planes;
++		info->plane_format[0] = in->plane_format[0];
++		if (in->num_planes > 1)
++			info->plane_format[1] = in->plane_format[1];
++
++		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*info);
++		break;
++	}
+ 	case HFI_PROPERTY_CONFIG_HEIC_FRAME_QUALITY: {
+ 		struct hfi_heic_frame_quality *in = pdata, *cq = prop_data;
+ 
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 84c16f33e01b..88ac40ce12e6 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -698,6 +698,10 @@ static int vdec_output_conf(struct venus_inst *inst)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = venus_helper_set_format_constraints(inst);
++	if (ret)
++		return ret;
++
+ 	if (inst->dpb_fmt) {
+ 		ret = venus_helper_set_multistream(inst, false, true);
+ 		if (ret)
 -- 
 2.29.2
 
