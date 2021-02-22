@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9698DC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 078D7C43381
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E4B864F3B
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D00C464F3B
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbhBVTNx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 14:13:53 -0500
-Received: from mail-am6eur05on2046.outbound.protection.outlook.com ([40.107.22.46]:61312
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S232785AbhBVTOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 14:14:36 -0500
+Received: from mail-eopbgr50048.outbound.protection.outlook.com ([40.107.5.48]:46215
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232822AbhBVTLe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 14:11:34 -0500
+        id S232905AbhBVTMJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 14:12:09 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HIf0QdKQisjqvoc+5qIBdLRcDsZKNXf3OdE30SO/wqT81unKag4WBH3wjSOlVYeNLHeaGPjsj2Dm2J7ja1RFL6+4npu7BKsRd1PypgHA6bVDukpujhyqhvvgcdLUKVzXcDBFihH374Zm3XOiZ/yoajqUIRvxvJaE1Xe8lKVTV6JcRwVpLQaHoUoxLNQN2qb6lMgz1WOTmbMzZ2ooUykM9Fdx8b8h7spZE80sS8EVnI/6igLo/5VDb22J1JcO5aV8uHxP0CXGSKPT9bQ/MjIifRYWv+JPGyMB3W1r1ZKk/Oj2KZ2+i6uN54x1V1FGvS7rHGfW4WpAPPvS/mx1lw2WrQ==
+ b=gxU1xOiDX3rJrk/9YTbSUOWMkQ0V0Yrmhk3vB2lj+3Y93jPwS1mVoiCr0dTW5YoVFlWY1/1YzbM8x08bdkyWWJBp9PvmZjArUo9u2nTNc1p7ZsejRa7fl2husM5YOZwjkMb2sQPk1kaaqnqfrF9zlMjWjTeaBQkYuAasWeWdDDZXrlDKihV74uNvQ9PczPBxTy4b59+0f3WAwKasWVdPMH1uc/FYdEktVwumGfVaoGl1BeuKYynyBZ39AXYr8gOPNf5/rdVnW3nbDX8+dhdnOUtj009CAMD5bqgpYW9XyQdt46qfY9JULsX/FW5qM7vxlv7B1f2BZwVPi9h0u/B7uw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3eQQ9KI5URQ8F+zUV1p12BhOStucOOJaEY88vao97+Q=;
- b=Ini98WCpO5oE89qWqwyvmefGetplYMbd+ubu/6exWS6dsSJknz9DJ7dIkABJyxb4pnJyX9VNQwPTTlMbwDeGLbiMXL8nXFD7C7+uudX+6rzOAxjPmGL8i0ZvvMMAWUiy4+kEY/01Nk2mFzxPt9L5Wf1EmW5nAHLUzHLOzJUr/3KW/+GrJDKDK0lCWWJ/H/U5VRStNItnl/7kcS4d6Xny7j0cJELE1c2NxCgO4p/2J6/74DLrp5NJFP9J8HD7uK3iaaVIYM4jNKyeIqOS9PCRbxnSXGlOMFEFXMFVdNxiCSLGO43An9/D/JsroplgQ73famPZzd0ItLSdNcJYXHaG5A==
+ bh=8/mQI0yvKPGOZAYO2J/OCVTnTx+xpDg11h0hg0Z2aVA=;
+ b=PIRBGaMvBXkEL19bJwQksSASlNhHe6G+1HiIyNE+H7EFoUaKoRYvku+ow6eOfa5RVTUyJOS+to2cJOpwFalw/kRAsd2M1fRMJSLG3CVfNM8eaiNLLLzBvLMymcBZiSM3wCN6NMMqfv9Rnz992VOxrH4O0iXXhq27XOVEZ9R4ethlUKJswM31pTKrUZwANEqzrTBYIlInuBe7ZI8O+dxMSsJpbiP+jFRhG2slQqLRVBNyFksssWCiOTNCUaB0uATPTYPqwG9VWHsktYVZ1jZ9NZA4PVtQbDQ3pyIB9ch8VQ9v4/d+GUb5xcdJnZnLHN9qMR8bmrhVRSt9ZoIRicJLSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3eQQ9KI5URQ8F+zUV1p12BhOStucOOJaEY88vao97+Q=;
- b=f+GhgdtU+kbQsLXljvWguVPEIze8Mzl4yw3JaK8MsU0j1yVq+qmo3YL3tfl09aANwjm2FhEb1Oy9gVsHq2qSj14wUGwjLpG271XC/wXei9GFdyz+mV+PtzreKJsfqrGxK6yv/w9/N/nJ54DNHSGcLbPvNTd42Y0lod4Sk7HHCKg=
+ bh=8/mQI0yvKPGOZAYO2J/OCVTnTx+xpDg11h0hg0Z2aVA=;
+ b=eXlIuW2Jb1DPd7sPDLkVJf7m9YiUwFUKIACmP+CjdKeesVvD8HPVNDjRtS5PaTpRxfxxfKuhXjbonsRlj7EqrOjgjb5wwWSdpe1ubVxxPdBHSpUDJvCd8UQMHR47XMfiFI2oDbgU2ZwaXy6/lAz8IIQC6TFGz1kur4C7J6hlPH0=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
  by AS8PR04MB7591.eurprd04.prod.outlook.com (2603:10a6:20b:297::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.26; Mon, 22 Feb
- 2021 19:08:17 +0000
+ 2021 19:08:20 +0000
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::618c:8b68:e3d9:a8c6]) by AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::618c:8b68:e3d9:a8c6%7]) with mapi id 15.20.3868.032; Mon, 22 Feb 2021
- 19:08:17 +0000
+ 19:08:20 +0000
 From:   Mirela Rabulea <mirela.rabulea@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
         robh+dt@kernel.org, p.zabel@pengutronix.de
@@ -58,9 +58,9 @@ Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
         laurent.pinchart+renesas@ideasonboard.com,
         niklas.soderlund+renesas@ragnatech.se,
         dafna.hirschfeld@collabora.com
-Subject: [PATCH v8 7/9] media: Quit parsing stream if doesn't start with SOI
-Date:   Mon, 22 Feb 2021 21:07:36 +0200
-Message-Id: <20210222190738.2346378-8-mirela.rabulea@oss.nxp.com>
+Subject: [PATCH v8 9/9] media: imx-jpeg: Use v4l2 jpeg helpers in mxc-jpeg
+Date:   Mon, 22 Feb 2021 21:07:38 +0200
+Message-Id: <20210222190738.2346378-10-mirela.rabulea@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210222190738.2346378-1-mirela.rabulea@oss.nxp.com>
 References: <20210222190738.2346378-1-mirela.rabulea@oss.nxp.com>
@@ -72,52 +72,52 @@ X-ClientProxiedBy: FR2P281CA0026.DEUP281.PROD.OUTLOOK.COM
  (2603:10a6:206:c::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (86.124.171.30) by FR2P281CA0026.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.8 via Frontend Transport; Mon, 22 Feb 2021 19:08:16 +0000
+Received: from localhost.localdomain (86.124.171.30) by FR2P281CA0026.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.8 via Frontend Transport; Mon, 22 Feb 2021 19:08:19 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f59dbe10-059f-4225-993c-08d8d765365d
+X-MS-Office365-Filtering-Correlation-Id: aeb3be2f-d7af-4a60-ff4d-08d8d7653820
 X-MS-TrafficTypeDiagnostic: AS8PR04MB7591:
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AS8PR04MB7591BC14C94FBCEEC6395758CE819@AS8PR04MB7591.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-Microsoft-Antispam-PRVS: <AS8PR04MB759151FC1C2FC2DA1D958AEACE819@AS8PR04MB7591.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cQ4Dl2Fy7DJrN0wb9jwgedbcAhY9kgzznfCFOC6i/uYMZk3J+TMgueQQTzR5d2eS3QjfIBpa8LLAtSfuU+RPc0via/ptaV4DsnaWfQ5oHXYWAngIt106eOj0wCH4c7mxZHIlpBp8AZqGQkHXoz7d6u45Fe0xZWPqwdVw45lR0Fb3bLgqbwVUot8suHUJJTthNH9009n5plbZQXMgsKS0LrD8FQaFdZdDRBJBdSmP3AS1HJFSMKCROzRF6tl3KxTFVMQJNrcZv1dceRJ2hzqLgpu53Rhc3lGAtsL3YtZBdKfHk0kY8GQ/2Atlu2q3MUfSlF3LeQMuTGIzez+SYTshBpJ3uO7mPMCYZM/Xbj4ljjw2IknKJ44RckrTnwQjmHVe3EcEHr6c1UP6CW5wyVIBr486wlb1apMIG5SFTDWzyWQhSmn3V1u2FaoeNkcJOS45r0ziLucmKtaCktUSORh0Fq+fSEdE+PdhxSfDUm0dqJybCUpYUZV8IFCgKtJLcFzPBzX12k5ev3L8On9ssqk4sfBi4FQu8u5IJ9FK1GuOTIU7LPZGw1xVXcBCjtoSKeltWLjQ7tcL6L4soa4XAu0xoQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(346002)(39850400004)(376002)(316002)(6666004)(2906002)(83380400001)(956004)(2616005)(52116002)(8936002)(186003)(69590400012)(1076003)(66476007)(6506007)(86362001)(44832011)(66946007)(5660300002)(478600001)(66556008)(6512007)(6486002)(7416002)(4326008)(16526019)(8676002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ZO5L3YeMPk8GPpGch+1ljO+LRGnN7mF4UZfvKEgWYi6hhUgiWQzCdUrb9NRu?=
- =?us-ascii?Q?i8+0NPziRF1fyaFq4OSgnxZQ/sutNQMDGoSYmLYaf4AkspnbYR+uJ5CjR9Gr?=
- =?us-ascii?Q?HVJgK0URCOreyeYlRFkeEZG1i6ULksJ9Rz8I0xNRL0wZaTJsQLTizwxr0id+?=
- =?us-ascii?Q?R8PtOSyZfYJIKvIKDRP8GEofsD7Qa9hHvsYiAi6Xksn3l15ywUl9mifj995t?=
- =?us-ascii?Q?pElmaoRHaXNKBVwpMxFPar+ftafqZ3L5lXn3M9A7bxvCIbxHbCUjsq6olvRY?=
- =?us-ascii?Q?8NCRyZlkqQf1uF4qx2UvEq7jAqizh5kjWPRgeFYU3TIy56ZIYHs4o8b0uWco?=
- =?us-ascii?Q?GdnIu+gU6eUW/MVrmhAq0oRI2+W7yzWAcpXJzElcP1jkQ37RAgnxipncqab7?=
- =?us-ascii?Q?Cq+zi2tZ0aQXRlOr6wLOcttNrKVOZIf47ZEKKULU7xvcmL3Et7P0bX0bIcPN?=
- =?us-ascii?Q?2HpjuypCJdxxGu9kUAo4ufxUjctdTXw1R0MA65gFJHqknb66HOeB4RTp07Lq?=
- =?us-ascii?Q?JSmcHP5e3wkgbX8t2JFeL+fhz4R25XNxt3DYQPkp2x4Mgd3hDYYZoM+tyXna?=
- =?us-ascii?Q?598o+acsC6Aylm9LRxn+SidDROGHbRmGX1GwXb3y2ASfRL/1ybQy8iiDgygA?=
- =?us-ascii?Q?lm/LUScdHqybzJPxC2P4zC0XqcQhAezQWQJ3hX9DBtmEnyGHE1o37ijUrob1?=
- =?us-ascii?Q?9PHRjLSm9U8aBQ6FE0w95Z+7zJ3srdNtwlO1KVsNetdWo5UMF/Sjx/bmGgWs?=
- =?us-ascii?Q?258EB5nL5kbLPMIqyD6K+c2LvfcbkotTkQBRiSAtbi4wpLhbLW+TuHPvwu1L?=
- =?us-ascii?Q?6jJPLCQZoAcPTlU47FLM9rgMQe7mrwvb6nZiRS0S5fs6PZ5toDn0BB5iU2uD?=
- =?us-ascii?Q?hEZ07FNFAO/fYcSJrymUkkZzmWou69g4T4Z9xWVZNWFCU33EJQ+C84NEKGeu?=
- =?us-ascii?Q?cJgOycI+7EkytUs75AthrGeqVjJo4/cAe+im5GG3I62okMP8suu9YIhV/nXh?=
- =?us-ascii?Q?SvvC0tDkyRt1VEQUroUKRz6oR57jSwD1hRpVw2wCJnVTPhX2h7QKT2Wxj0Kz?=
- =?us-ascii?Q?u94lxqRqFqmJVuZQR9Xa6sw1StOa3O3aDDFAPiuRSQ8xKFgc5xmCjapmitTY?=
- =?us-ascii?Q?rNhzkNdX6WrzP6DXkOIf0ROIpMSF83sn8cjXkYzHyjcah14yqc+bCer4gb8J?=
- =?us-ascii?Q?mKSiOxy3IZLmu1g0vv5VQIRZ1O3yqC8BE7ndJ3ZEyDdl2VMRWukegcd2JOso?=
- =?us-ascii?Q?bUDxcWl7ccMKzOZfctp7H2HhYEnFu6h3lcXBA0s2s5oUzht3pABICHDaWrH6?=
- =?us-ascii?Q?r049U9ZYCtdaKegJNxPafX0QQQu9oHkwsJabfY+sIrKEVw=3D=3D?=
+X-Microsoft-Antispam-Message-Info: Bp5J4zXtUZWkwjhyXN/whVEASCluZA+YF7k09g4YkG0Hs1p7rO0ZuU1itzwEHAArJSxK69FMGHql4JuM+Pa65ZH0JPkR/YynxZPYOijdD8Tkg0ISdMTeZHTgcHgsdKo1l5PcWsyPbHKH3UqEce1i7Zd1urZQ1fCGHLaYdGUWkYyZ6cBHUhOlN2mpkShs9j89jaYiJdL08SOT2x+6Id35pJ/jR02mqNVTJkSunnlamBZddJ+voaqQ9AJ305FQQG+sN6cEophN2cqn0WzxNfUvcBMKgrijHTf5ST31/uxA3mWBS69P6VGwXCJTRjhBL614aMQZDSyVIeTo0rY/x4WtW9HI2uTmUo8QGe4N8L7gIUJ3LqFHh0GKgFebuEt8C1f/9lVbs9Pa6q3xHeYD47aJJ0h9K7rQN2XXlEMuB3QTbys/jAXo6Rh1WpeBwh2+BEhoi++1gJwq8vDG8TIAmVbnM8BSYOFKITzz+rJzTSE559n6AVZr4kQ2+FJbWhXf/kU23HY6yWozqpwgvQNZG0/3Co4hqDPHepeuDWYTBtBf7a3cvkvF/prV+5LSs3gMmYiODXm6faKquRsfr1W4Sq3hHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(346002)(39850400004)(376002)(316002)(6666004)(2906002)(30864003)(83380400001)(956004)(2616005)(52116002)(8936002)(186003)(69590400012)(1076003)(66476007)(6506007)(86362001)(44832011)(66946007)(5660300002)(478600001)(66556008)(6512007)(6486002)(7416002)(4326008)(16526019)(8676002)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?/FGDOk1TxQZeWnepVQMZFqrEEWzEAip4JcmDfSRS+FTtPZ+jADWX8QbKn/nI?=
+ =?us-ascii?Q?niFJsghWaCBAnaHYdyjI852qK0IZiYI6rAJ2xBKwc93IvinfczNVaRzo0gbg?=
+ =?us-ascii?Q?7fNEkGl4moKAB0X7QwAi769djrdgXGi7pwXkN4XBcwmJH66hZUNhaikSeGPL?=
+ =?us-ascii?Q?+poUDIFewoPtQ/lRPVyv4MEHH6NotSRLPM0P77ScTsXOarAKVGFmfhOWrZwc?=
+ =?us-ascii?Q?0PK7N7CGq3D06hSS5H5KJRqMgI0oZNpbNHHwS5pb3A2EjoOye6pLkVAgJll7?=
+ =?us-ascii?Q?zFm8OSaQWb/Md5dvzbKg7GXK4eXOKl2wZr0k149Yv0ttu70za2xOJEKXoMOB?=
+ =?us-ascii?Q?OhvkZ1HR+ezQuOgicZrTLyYFBHlpRPCQKOAByv3Ez79TGl8X54S0SdakHA20?=
+ =?us-ascii?Q?GjP9wlGsuFgdlplJ37FlHNYiHZii3y8yj9cNyjLT1G9zMwjHm+RW8g/OPH39?=
+ =?us-ascii?Q?Nci6n/4F/bdgw0++3of0YSMLeCHOlpQpXOWWDjjmmnYSzoxqSKT0+WaCTuJQ?=
+ =?us-ascii?Q?qGe6T01NNUU53LvUwKhN99VsTq9379wF0d6mKMthI8iQchKpIboyB0/Gsdaz?=
+ =?us-ascii?Q?lIrGJZ2uo6VGk3BxYeQ8UpNSDq/vQHCVj3dZIsdXDocO2oPdAWr8uUg2xLEj?=
+ =?us-ascii?Q?g7WJaWOQw2cgMvXKKnnhMIcQKnywzMCDoTQrpAc0JxtvyU0hZWROHCpSF3up?=
+ =?us-ascii?Q?bObW/Y3BI9UmgxeUfty6MLZYyiGFMdietqPJoENWfTAl9y8Fth4R/nuW73Ld?=
+ =?us-ascii?Q?Wod4HXlWnaZ29tYIqZthCf20d0N+7qGlT3VmYBzLZdX6Gb2lo43i+HKymDEF?=
+ =?us-ascii?Q?Jdjl5t67RDxcpkSJs0hotmZOVl0LGFYfQWVzm8TPvlyL6RTBnzGsH4Co+p3S?=
+ =?us-ascii?Q?JPY9ZKL//7e27ph3+QNPyqdnQDH6q6qCqzqBz0LWol9B5bqtzjEFpSBlff9d?=
+ =?us-ascii?Q?tLhvBuI3QrCnJQB/LPBEiq8u6GLTLQZZcRYFKMCrPgFT9LkUPu2W1bFzjXPw?=
+ =?us-ascii?Q?0TUmj33Gya14rM7iWsYYLZfbIHIaeJFlbj2hFLJt2WsRH//x7oyJ2ZEi/fYn?=
+ =?us-ascii?Q?HhBu9Dgt9hjrG0WvR9s7uuQGtjj9v9szEuxXUCmfPLbNJ5ETRo7uFlOtHwWW?=
+ =?us-ascii?Q?epgV9hBfrJqO7hTCCwLPqpHsAWxVzokShImHv58Z87unJ4fTeyZwMYej7Lxt?=
+ =?us-ascii?Q?tMefADJF5huwb1F4eyyQxbwlDkZcXHB4fDvWhldkYQg8d3H1G+QaifZgz9VO?=
+ =?us-ascii?Q?8671ghyOayoS9bCqeVKYRli0TCVVE/hhrL6c40920mfzxJlDx0s0KXbTB5tr?=
+ =?us-ascii?Q?xopew/sELb8VHTN6WrVAjLfSB+ntTjR04Kkk34GuIKEJZw=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f59dbe10-059f-4225-993c-08d8d765365d
+X-MS-Exchange-CrossTenant-Network-Message-Id: aeb3be2f-d7af-4a60-ff4d-08d8d7653820
 X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2021 19:08:17.8436
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2021 19:08:20.7979
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JOfSuzh/FhFpUhix0MXyZEWlvxRRckP4Q6xgyM408IEJbkylIm7Gr5WgOYQMgfV472y+UqOQ7rhc53A8joQiXw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8SBbxSjHL8ad6buZVimpqYCstIGTQakzi2ur46fj7JuATuZA9e81VRloS8F8QgiC5la498z9Y1tqFrz/w75i+g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7591
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -125,36 +125,506 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-In the case we get an invalid stream, such as from v4l2-compliance
-streaming test, jpeg_next_marker will end up parsing the entire
-stream. The standard describes the high level syntax of a jpeg
-as starting with SOI, ending with EOI, so return error if the very
-first 2 bytes are not SOI.
+Use v4l2_jpeg_parse_header in mxc_jpeg_parse, remove the old
+parsing way, which was duplicated in other jpeg drivers.
 
 Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/v4l2-core/v4l2-jpeg.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Changes in v8:
+  Move the app14_tf fixup in mxc_jpeg_get_image_format() and let this function
+return the correct format
+  Print subsampling and number of components in case fourcc couldn't be identified
+  Added Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
-index ede40f2a5456..c4c0d6dd4577 100644
---- a/drivers/media/v4l2-core/v4l2-jpeg.c
-+++ b/drivers/media/v4l2-core/v4l2-jpeg.c
-@@ -503,11 +503,8 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
- 	out->num_dht = 0;
- 	out->num_dqt = 0;
+ drivers/media/platform/imx-jpeg/Kconfig    |   1 +
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 284 ++++++---------------
+ drivers/media/platform/imx-jpeg/mxc-jpeg.h |  26 +-
+ 3 files changed, 92 insertions(+), 219 deletions(-)
+
+diff --git a/drivers/media/platform/imx-jpeg/Kconfig b/drivers/media/platform/imx-jpeg/Kconfig
+index 7cc89e5eff90..d875f7c88cda 100644
+--- a/drivers/media/platform/imx-jpeg/Kconfig
++++ b/drivers/media/platform/imx-jpeg/Kconfig
+@@ -4,6 +4,7 @@ config VIDEO_IMX8_JPEG
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select V4L2_MEM2MEM_DEV
++	select V4L2_JPEG_HELPER
+ 	default m
+ 	help
+ 	  This is a video4linux2 driver for the i.MX8 QXP/QM integrated
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+index 109c04e222b4..65d30f30ed26 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+@@ -52,6 +52,7 @@
+ #include <linux/pm_domain.h>
+ #include <linux/string.h>
  
--	/* the first marker must be SOI */
--	marker = jpeg_next_marker(&stream);
--	if (marker < 0)
--		return marker;
--	if (marker != SOI)
-+	/* the first bytes must be SOI, B.2.1 High-level syntax */
-+	if (jpeg_get_word_be(&stream) != SOI)
++#include <media/v4l2-jpeg.h>
+ #include <media/v4l2-mem2mem.h>
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-common.h>
+@@ -65,12 +66,16 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "JPEG",
+ 		.fourcc		= V4L2_PIX_FMT_JPEG,
++		.subsampling	= -1,
++		.nc		= -1,
+ 		.colplanes	= 1,
+ 		.flags		= MXC_JPEG_FMT_TYPE_ENC,
+ 	},
+ 	{
+ 		.name		= "RGB", /*RGBRGB packed format*/
+ 		.fourcc		= V4L2_PIX_FMT_RGB24,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
++		.nc		= 3,
+ 		.depth		= 24,
+ 		.colplanes	= 1,
+ 		.h_align	= 3,
+@@ -80,6 +85,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "ARGB", /* ARGBARGB packed format */
+ 		.fourcc		= V4L2_PIX_FMT_ARGB32,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
++		.nc		= 4,
+ 		.depth		= 32,
+ 		.colplanes	= 1,
+ 		.h_align	= 3,
+@@ -89,6 +96,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
+ 		.fourcc		= V4L2_PIX_FMT_NV12,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
++		.nc		= 3,
+ 		.depth		= 12, /* 6 bytes (4Y + UV) for 4 pixels */
+ 		.colplanes	= 2, /* 1 plane Y, 1 plane UV interleaved */
+ 		.h_align	= 4,
+@@ -98,6 +107,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "YUV422", /* YUYV */
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_422,
++		.nc		= 3,
+ 		.depth		= 16,
+ 		.colplanes	= 1,
+ 		.h_align	= 4,
+@@ -107,6 +118,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "YUV444", /* YUVYUV */
+ 		.fourcc		= V4L2_PIX_FMT_YUV24,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
++		.nc		= 3,
+ 		.depth		= 24,
+ 		.colplanes	= 1,
+ 		.h_align	= 3,
+@@ -116,6 +129,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
+ 	{
+ 		.name		= "Gray", /* Gray (Y8/Y12) or Single Comp */
+ 		.fourcc		= V4L2_PIX_FMT_GREY,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_GRAY,
++		.nc		= 1,
+ 		.depth		= 8,
+ 		.colplanes	= 1,
+ 		.h_align	= 3,
+@@ -384,33 +399,6 @@ static enum mxc_jpeg_image_format mxc_jpeg_fourcc_to_imgfmt(u32 fourcc)
+ 	}
+ }
+ 
+-static int mxc_jpeg_imgfmt_to_fourcc(enum mxc_jpeg_image_format imgfmt,
+-				     u32 *fourcc)
+-{
+-	switch (imgfmt) {
+-	case MXC_JPEG_GRAY:
+-		*fourcc = V4L2_PIX_FMT_GREY;
+-		return 0;
+-	case MXC_JPEG_YUV422:
+-		*fourcc = V4L2_PIX_FMT_YUYV;
+-		return 0;
+-	case MXC_JPEG_YUV420:
+-		*fourcc =  V4L2_PIX_FMT_NV12;
+-		return 0;
+-	case MXC_JPEG_YUV444:
+-		*fourcc =  V4L2_PIX_FMT_YUV24;
+-		return 0;
+-	case MXC_JPEG_RGB:
+-		*fourcc =  V4L2_PIX_FMT_RGB24;
+-		return 0;
+-	case MXC_JPEG_ARGB:
+-		*fourcc =  V4L2_PIX_FMT_ARGB32;
+-		return 0;
+-	default:
+-		return 1;
+-	}
+-}
+-
+ static struct mxc_jpeg_q_data *mxc_jpeg_get_q_data(struct mxc_jpeg_ctx *ctx,
+ 						   enum v4l2_buf_type type)
+ {
+@@ -1093,45 +1081,6 @@ static void mxc_jpeg_stop_streaming(struct vb2_queue *q)
+ 	}
+ }
+ 
+-struct mxc_jpeg_stream {
+-	u8 *addr;
+-	u32 loc;
+-	u32 end;
+-};
+-
+-static int get_byte(struct mxc_jpeg_stream *stream)
+-{
+-	int ret;
+-
+-	if (stream->loc >= stream->end)
+-		return -1;
+-	ret = stream->addr[stream->loc];
+-	stream->loc++;
+-	return ret;
+-}
+-
+-static int get_sof(struct device *dev,
+-		   struct mxc_jpeg_stream *stream,
+-		   struct mxc_jpeg_sof *sof)
+-{
+-	int i;
+-
+-	if (stream->loc + sizeof(struct mxc_jpeg_sof) >= stream->end)
+-		return -1;
+-	memcpy(sof, &stream->addr[stream->loc], sizeof(struct mxc_jpeg_sof));
+-	_bswap16(&sof->length);
+-	_bswap16(&sof->height);
+-	_bswap16(&sof->width);
+-	dev_dbg(dev, "JPEG SOF: precision=%d\n", sof->precision);
+-	dev_dbg(dev, "JPEG SOF: height=%d, width=%d\n",
+-		sof->height, sof->width);
+-	for (i = 0; i < sof->components_no; i++) {
+-		dev_dbg(dev, "JPEG SOF: comp_id=%d, H=0x%x, V=0x%x\n",
+-			sof->comp[i].id, sof->comp[i].v, sof->comp[i].h);
+-	}
+-	return 0;
+-}
+-
+ static int mxc_jpeg_valid_comp_id(struct device *dev,
+ 				  struct mxc_jpeg_sof *sof,
+ 				  struct mxc_jpeg_sos *sos)
+@@ -1161,45 +1110,37 @@ static int mxc_jpeg_valid_comp_id(struct device *dev,
+ 	return valid;
+ }
+ 
+-static enum mxc_jpeg_image_format
+-mxc_jpeg_get_image_format(struct device *dev, const struct mxc_jpeg_sof *sof)
++static u32 mxc_jpeg_get_image_format(struct device *dev,
++				     const struct v4l2_jpeg_header header)
+ {
+-	if (sof->components_no == 1) {
+-		dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_GRAY\n");
+-		return MXC_JPEG_GRAY;
+-	}
+-	if (sof->components_no == 3) {
+-		if (sof->comp[0].h == 2 && sof->comp[0].v == 2 &&
+-		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
+-		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
+-			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV420\n");
+-			return MXC_JPEG_YUV420;
+-		}
+-		if (sof->comp[0].h == 2 && sof->comp[0].v == 1 &&
+-		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
+-		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
+-			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV422\n");
+-			return MXC_JPEG_YUV422;
+-		}
+-		if (sof->comp[0].h == 1 && sof->comp[0].v == 1 &&
+-		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
+-		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
+-			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV444\n");
+-			return MXC_JPEG_YUV444;
++	int i;
++	u32 fourcc = 0;
++
++	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++)
++		if (mxc_formats[i].subsampling == header.frame.subsampling &&
++		    mxc_formats[i].nc == header.frame.num_components) {
++			fourcc = mxc_formats[i].fourcc;
++			break;
+ 		}
++	if (fourcc == 0) {
++		dev_err(dev, "Could not identify image format nc=%d, subsampling=%d\n",
++			header.frame.num_components,
++			header.frame.subsampling);
++		return fourcc;
+ 	}
+-	if (sof->components_no == 4) {
+-		if (sof->comp[0].h == 1 && sof->comp[0].v == 1 &&
+-		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
+-		    sof->comp[2].h == 1 && sof->comp[2].v == 1 &&
+-		    sof->comp[3].h == 1 && sof->comp[3].v == 1){
+-			/* this is not tested */
+-			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_ARGB\n");
+-			return MXC_JPEG_ARGB;
+-		}
++	/*
++	 * If the transform flag from APP14 marker is 0, images that are
++	 * encoded with 3 components have RGB colorspace, see Recommendation
++	 * ITU-T T.872 chapter 6.5.3 APP14 marker segment for colour encoding
++	 */
++	if (fourcc == V4L2_PIX_FMT_YUV24 || fourcc == V4L2_PIX_FMT_RGB24) {
++		if (header.app14_tf == V4L2_JPEG_APP14_TF_CMYK_RGB)
++			fourcc = V4L2_PIX_FMT_RGB24;
++		else
++			fourcc = V4L2_PIX_FMT_YUV24;
+ 	}
+-	dev_err(dev, "Could not identify image format\n");
+-	return MXC_JPEG_INVALID;
++
++	return fourcc;
+ }
+ 
+ static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q,
+@@ -1253,146 +1194,81 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
+ 	struct device *dev = ctx->mxc_jpeg->dev;
+ 	struct mxc_jpeg_q_data *q_data_out, *q_data_cap;
+ 	enum v4l2_buf_type cap_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	struct mxc_jpeg_stream stream;
+-	bool notfound = true;
+-	bool app14 = false;
+ 	bool src_chg = false;
+-	u8 app14_transform = 0;
+-	struct mxc_jpeg_sof sof, *psof = NULL;
+-	struct mxc_jpeg_sos *psos = NULL;
+-	int byte;
+-	u8 *next = NULL;
+-	enum mxc_jpeg_image_format img_fmt;
+ 	u32 fourcc;
++	struct v4l2_jpeg_header header;
++	struct mxc_jpeg_sof *psof = NULL;
++	struct mxc_jpeg_sos *psos = NULL;
++	int ret;
+ 
+-	memset(&sof, 0, sizeof(struct mxc_jpeg_sof));
+-	stream.addr = src_addr;
+-	stream.end = size;
+-	stream.loc = 0;
+-	*dht_needed = true;
++	memset(&header, 0, sizeof(header));
++	ret = v4l2_jpeg_parse_header((void *)src_addr, size, &header);
++	if (ret < 0) {
++		dev_err(dev, "Error parsing JPEG stream markers\n");
++		return ret;
++	}
+ 
+-	/* check stream starts with SOI */
+-	byte = get_byte(&stream);
+-	if (byte == -1 || byte != 0xFF)
+-		return -EINVAL;
+-	byte = get_byte(&stream);
+-	if (byte == -1 || byte != 0xD8)
+-		return -EINVAL;
++	/* if DHT marker present, no need to inject default one */
++	*dht_needed = (header.num_dht == 0);
+ 
+-	while (notfound) {
+-		byte = get_byte(&stream);
+-		if (byte == -1)
+-			return -EINVAL;
+-		if (byte != 0xff)
+-			continue;
+-		do {
+-			byte = get_byte(&stream);
+-		} while (byte == 0xff);
+-		if (byte == -1)
+-			return false;
+-		if (byte == 0)
+-			continue;
+-		switch (byte) {
+-		case DHT:
+-			/* DHT marker present, no need to inject default one */
+-			*dht_needed = false;
+-			break;
+-		case SOF2: /* Progressive DCF frame definition */
+-			dev_err(dev,
+-				"Progressive JPEG not supported by hardware");
+-			return -EINVAL;
+-		case SOF1: /* Extended sequential DCF frame definition */
+-		case SOF0: /* Baseline sequential DCF frame definition */
+-			if (get_sof(dev, &stream, &sof) == -1)
+-				break;
+-			next = stream.addr + stream.loc;
+-			psof = (struct mxc_jpeg_sof *)next;
+-			break;
+-		case SOS:
+-			next = stream.addr + stream.loc;
+-			psos = (struct mxc_jpeg_sos *)next;
+-			notfound = false;
+-			break;
+-		case APP14:
+-			app14 = true;
+-			/*
+-			 * Application Data Syntax is:
+-			 * 2 bytes(APPn:0xFF,0xEE), 2 bytes(Lp), Ap1...ApLp-2
+-			 * The transform flag is in Ap12
+-			 * stream.loc is now on APPn-0xEE byte
+-			 */
+-			app14_transform = *(stream.addr + stream.loc + 12 + 1);
+-			break;
+-		default:
+-			notfound = true;
+-		}
+-	}
+ 	q_data_out = mxc_jpeg_get_q_data(ctx,
+ 					 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+ 	if (q_data_out->w == 0 && q_data_out->h == 0) {
+ 		dev_warn(dev, "Invalid user resolution 0x0");
+ 		dev_warn(dev, "Keeping resolution from JPEG: %dx%d",
+-			 sof.width, sof.height);
+-		q_data_out->w = sof.width;
+-		q_data_out->h = sof.height;
+-	} else if (sof.width != q_data_out->w || sof.height != q_data_out->h) {
++			 header.frame.width, header.frame.height);
++		 q_data_out->w = header.frame.width;
++		 q_data_out->h = header.frame.height;
++	} else if (header.frame.width != q_data_out->w ||
++		   header.frame.height != q_data_out->h) {
+ 		dev_err(dev,
+ 			"Resolution mismatch: %dx%d (JPEG) versus %dx%d(user)",
+-			sof.width, sof.height, q_data_out->w, q_data_out->h);
++			header.frame.width, header.frame.height,
++			q_data_out->w, q_data_out->h);
  		return -EINVAL;
+ 	}
+-	if (sof.width % 8 != 0 || sof.height % 8 != 0) {
++	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
+ 		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
+-			sof.width, sof.height);
++			header.frame.width, header.frame.height);
+ 		return -EINVAL;
+ 	}
+-	if (sof.width > MXC_JPEG_MAX_WIDTH ||
+-	    sof.height > MXC_JPEG_MAX_HEIGHT) {
++	if (header.frame.width > MXC_JPEG_MAX_WIDTH ||
++	    header.frame.height > MXC_JPEG_MAX_HEIGHT) {
+ 		dev_err(dev, "JPEG width or height should be <= 8192: %dx%d\n",
+-			sof.width, sof.height);
++			header.frame.width, header.frame.height);
+ 		return -EINVAL;
+ 	}
+-	if (sof.width < MXC_JPEG_MIN_WIDTH ||
+-	    sof.height < MXC_JPEG_MIN_HEIGHT) {
++	if (header.frame.width < MXC_JPEG_MIN_WIDTH ||
++	    header.frame.height < MXC_JPEG_MIN_HEIGHT) {
+ 		dev_err(dev, "JPEG width or height should be > 64: %dx%d\n",
+-			sof.width, sof.height);
++			header.frame.width, header.frame.height);
+ 		return -EINVAL;
+ 	}
+-	if (sof.components_no > MXC_JPEG_MAX_COMPONENTS) {
++	if (header.frame.num_components > V4L2_JPEG_MAX_COMPONENTS) {
+ 		dev_err(dev, "JPEG number of components should be <=%d",
+-			MXC_JPEG_MAX_COMPONENTS);
++			V4L2_JPEG_MAX_COMPONENTS);
+ 		return -EINVAL;
+ 	}
+ 	/* check and, if necessary, patch component IDs*/
++	psof = (struct mxc_jpeg_sof *)header.sof.start;
++	psos = (struct mxc_jpeg_sos *)header.sos.start;
+ 	if (!mxc_jpeg_valid_comp_id(dev, psof, psos))
+ 		dev_warn(dev, "JPEG component ids should be 0-3 or 1-4");
  
- 	/* init value to signal if this marker is not present */
+-	img_fmt = mxc_jpeg_get_image_format(dev, &sof);
+-	if (img_fmt == MXC_JPEG_INVALID)
+-		return -EINVAL;
+-
+-	/*
+-	 * If the transform flag from APP14 marker is 0, images that are
+-	 * encoded with 3 components have RGB colorspace, see Recommendation
+-	 * ITU-T T.872 chapter 6.5.3 APP14 marker segment for colour encoding
+-	 */
+-	if (img_fmt == MXC_JPEG_YUV444 && app14 && app14_transform == 0)
+-		img_fmt = MXC_JPEG_RGB;
+-
+-	if (mxc_jpeg_imgfmt_to_fourcc(img_fmt, &fourcc)) {
+-		dev_err(dev, "Fourcc not found for %d", img_fmt);
++	fourcc = mxc_jpeg_get_image_format(dev, header);
++	if (fourcc == 0)
+ 		return -EINVAL;
+-	}
+ 
+ 	/*
+ 	 * set-up the capture queue with the pixelformat and resolution
+ 	 * detected from the jpeg output stream
+ 	 */
+ 	q_data_cap = mxc_jpeg_get_q_data(ctx, cap_type);
+-	if (q_data_cap->w != sof.width || q_data_cap->h != sof.height)
++	if (q_data_cap->w != header.frame.width ||
++	    q_data_cap->h != header.frame.height)
+ 		src_chg = true;
+-	q_data_cap->w = sof.width;
+-	q_data_cap->h = sof.height;
++	q_data_cap->w = header.frame.width;
++	q_data_cap->h = header.frame.height;
+ 	q_data_cap->fmt = mxc_jpeg_find_format(ctx, fourcc);
+ 	q_data_cap->w_adjusted = q_data_cap->w;
+ 	q_data_cap->h_adjusted = q_data_cap->h;
+@@ -1418,7 +1294,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
+ 		(fourcc >> 24) & 0xff);
+ 
+ 	/* setup bytesperline/sizeimage for capture queue */
+-	mxc_jpeg_bytesperline(q_data_cap, sof.precision);
++	mxc_jpeg_bytesperline(q_data_cap, header.frame.precision);
+ 	mxc_jpeg_sizeimage(q_data_cap);
+ 
+ 	/*
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+index ef1670dafeb4..313b09f831a4 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.h
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+@@ -42,6 +42,8 @@ enum mxc_jpeg_mode {
+  * struct jpeg_fmt - driver's internal color format data
+  * @name:	format description
+  * @fourcc:	fourcc code, 0 if not applicable
++ * @subsampling subsampling of jpeg components
++ * @nc:		number of color components
+  * @depth:	number of bits per pixel
+  * @colplanes:	number of color planes (1 for packed formats)
+  * @h_align:	horizontal alignment order (align to 2^h_align)
+@@ -49,13 +51,15 @@ enum mxc_jpeg_mode {
+  * @flags:	flags describing format applicability
+  */
+ struct mxc_jpeg_fmt {
+-	char	*name;
+-	u32	fourcc;
+-	int	depth;
+-	int	colplanes;
+-	int	h_align;
+-	int	v_align;
+-	u32	flags;
++	char					*name;
++	u32					fourcc;
++	enum v4l2_jpeg_chroma_subsampling	subsampling;
++	int					nc;
++	int					depth;
++	int					colplanes;
++	int					h_align;
++	int					v_align;
++	u32					flags;
+ };
+ 
+ struct mxc_jpeg_desc {
+@@ -117,14 +121,6 @@ struct mxc_jpeg_dev {
+ 	struct device_link		**pd_link;
+ };
+ 
+-/* JPEG marker identifiers */
+-#define SOF0				0xC0
+-#define SOF1				0xC1
+-#define SOF2				0xC2
+-#define SOS				0xDA
+-#define DHT				0xC4
+-#define APP14				0xEE
+-
+ /**
+  * struct mxc_jpeg_sof_comp - JPEG Start Of Frame component fields
+  * @id:				component id
 -- 
 2.25.1
 
