@@ -2,289 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0AA3C43381
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD3A7C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 13:07:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91EAA64F10
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:47:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84EEE64E12
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 13:07:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbhBVMrN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 07:47:13 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36550 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231436AbhBVMoO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:44:14 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 92BBFB113;
-        Mon, 22 Feb 2021 12:43:31 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        yuq825@gmail.com, robh@kernel.org, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        eric@anholt.net, sumit.semwal@linaro.org, christian.koenig@amd.com,
-        stern@rowland.harvard.edu
-Cc:     dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Oliver Neukum <oneukum@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Felipe Balbi <balbi@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 1/3] drm: Support importing dmabufs into drivers without DMA
-Date:   Mon, 22 Feb 2021 13:43:26 +0100
-Message-Id: <20210222124328.27340-2-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210222124328.27340-1-tzimmermann@suse.de>
-References: <20210222124328.27340-1-tzimmermann@suse.de>
+        id S231837AbhBVNGq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 08:06:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231806AbhBVNE3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 08:04:29 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C8EC061786
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 05:03:42 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id g5so29257825ejt.2
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 05:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NlW7XnTvf80UJ2UJ2BIr+dCpf/fNb2YhvZlxuKGK+8w=;
+        b=iXJHz8iNMrs+0cRv74pIBMAisNBBDsB/6Sih+cPhatxrsQG8p2Y35qB/kZrmUNVj/b
+         R3LDmXnBr4iWvHf7dvG6C30ShvtlOGvIZLdLdSVTCJ1KdsbXhAyU06fI1ccJnwV5wO4H
+         xidhvUyRAPY8lDEH6+GQ2WFuFuxJAjORo0r/E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NlW7XnTvf80UJ2UJ2BIr+dCpf/fNb2YhvZlxuKGK+8w=;
+        b=GYU5kiaV9hU492eABlySLsaJj/V+1fayy2fYKgvFvgt0AXBHZPk+l2v6aEq9doXMPi
+         JQjOAKjerj9GC2hcZDex9vxHfFBM3BX4V/R9O9J4pifLQ7GJGUM24cQyVQcVkmvBkOT8
+         wrrU710BdA21hd+ZvcuKgbh+Vy8WprxNyFLUXEkt/2x4HRGrf3iVADgrv30V+9vUzs/z
+         bWnNeJk857ccj4X1WLV+le8yQda8NM1hgUUfMl+Sc2l9mgCo6EtXfkT/QF8Wq8mLDZqc
+         zw/uDTgGF36rmWDr2nhBcPfqpy+N12lK79FbGHbhpURLaRGFw/81IFTajTAZ1mJdhtKI
+         cEBA==
+X-Gm-Message-State: AOAM5335XYsSmM3a5pnrUhL80k+H5PDpsI5jOMucN294D+VUn0F8HfXb
+        HZKoJGBmlYYkqYysmvYyPrEtXNxsiZtNHw==
+X-Google-Smtp-Source: ABdhPJyGJueEVC8XQJljFjwDW6Qt5kfUsi3Oz6NMvD17D69hRjRnc6yz9ujmNqR6ty6ASvQzPLBjlQ==
+X-Received: by 2002:a17:906:a44:: with SMTP id x4mr20568713ejf.101.1613999021021;
+        Mon, 22 Feb 2021 05:03:41 -0800 (PST)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
+        by smtp.gmail.com with ESMTPSA id r6sm12133159edm.23.2021.02.22.05.03.38
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Feb 2021 05:03:38 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id z22so21749692edb.9
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 05:03:38 -0800 (PST)
+X-Received: by 2002:a05:6402:445:: with SMTP id p5mr23004309edw.20.1613999018242;
+ Mon, 22 Feb 2021 05:03:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210121061804.26423-1-irui.wang@mediatek.com>
+ <20210121061804.26423-3-irui.wang@mediatek.com> <CAPBb6MXqFU+-f4C=BaW9d_KyEUwZVTiBj-dqqxnGP-Zd7YkMVw@mail.gmail.com>
+ <1613804103.896.27.camel@mhfsdcap03>
+In-Reply-To: <1613804103.896.27.camel@mhfsdcap03>
+From:   Alexandre Courbot <acourbot@chromium.org>
+Date:   Mon, 22 Feb 2021 22:03:02 +0900
+X-Gmail-Original-Message-ID: <CAPBb6MVKAhdcc-r8cJyx5wz2qTHU5BB5FE939b5fepaze8N+ew@mail.gmail.com>
+Message-ID: <CAPBb6MVKAhdcc-r8cJyx5wz2qTHU5BB5FE939b5fepaze8N+ew@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: mtk-vcodec: Separating mtk encoder driver
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        srv_heupstream@mediatek.com,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-USB devices cannot perform DMA and hence have no dma_mask set in their
-device structure. Importing dmabuf into a USB-based driver fails, which
-break joining and mirroring of display in X11. A corresponding error
-message is shown below.
+On Sat, Feb 20, 2021 at 3:56 PM Irui Wang <irui.wang@mediatek.com> wrote:
+>
+> On Wed, 2021-02-03 at 19:44 +0900, Alexandre Courbot wrote:
+> > Hi Irui,
+> >
+> > Thanks for pushing this forward. I had two small conflicts when
+> > applying this patch to the media tree, so you may want to rebase
+> > before sending the next version. Please see the comments inline.
+> >
+> > On Thu, Jan 21, 2021 at 3:18 PM Irui Wang <irui.wang@mediatek.com> wrote:
+> > >
+> > > MTK H264 Encoder(VENC_SYS) and VP8 Encoder(VENC_LT_SYS) are two
+> > > independent hardware instance. They have their owner interrupt,
+> > > register mapping, and special clocks.
+> > >
+> > > This patch seperates them into two drivers:
+> >
+> > seperates -> separates
+> >
+> > Also the patch does not result in two drivers, but two devices.
+> >
+> > > User Call "VIDIOC_QUERYCAP":
+> > > H264 Encoder return driver name "mtk-vcodec-enc";
+> > > VP8 Encoder return driver name "mtk-venc-vp8.
+> >
+> > I wonder if we need to use two different names? The driver is the
+> > same, so it makes sense to me that both devices return
+> > "mtk-vcodec-enc". Userspace can then list the formats on the CAPTURE
+> > queue in order to query the supported codecs.
+> >
+> I'm afraid we can't, there is a symlink when chrome use the
+> encoder(50-media.rules):
+> ATTR{name} == "mtk-vcodec-enc", SYMLINK+="video-enc"
+> ATTR{name} == "mtk-venc-vp8", SYMLINK+="video-enc0"
+> if we use the same name,how userspace access the encoder? maybe there
+> will be some modifications are needed in VEA(for example)?
 
-[   60.050199] ------------[ cut here ]------------
-[   60.055092] WARNING: CPU: 0 PID: 1403 at kernel/dma/mapping.c:190 dma_map_sg_attrs+0x8f/0xc0
-[   60.064331] Modules linked in: af_packet(E) rfkill(E) dmi_sysfs(E) intel_rapl_msr(E) intel_rapl_common(E) snd_hda_codec_realtek(E) snd_hda_codec_generic(E) ledtrig_audio(E) snd_hda_codec_hdmi(E) x86_pkg_temp_thermal(E) intel_powerclam)
-[   60.064801]  wmi(E) video(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_intel(E) xor(E) raid6_pq(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) msr(E) efivarfs(E)
-[   60.170778] CPU: 0 PID: 1403 Comm: Xorg.bin Tainted: G            E    5.11.0-rc5-1-default+ #747
-[   60.179841] Hardware name: Dell Inc. OptiPlex 9020/0N4YC8, BIOS A24 10/24/2018
-[   60.187145] RIP: 0010:dma_map_sg_attrs+0x8f/0xc0
-[   60.191822] Code: 4d 85 ff 75 2b 49 89 d8 44 89 e1 44 89 f2 4c 89 ee 48 89 ef e8 62 30 00 00 85 c0 78 36 5b 5d 41 5c 41 5d 41 5e 41 5f c3 0f 0b <0f> 0b 31 c0 eb ed 49 8d 7f 50 e8 72 f5 2a 00 49 8b 47 50 49 89 d8
-[   60.210770] RSP: 0018:ffffc90001d6fc18 EFLAGS: 00010246
-[   60.216062] RAX: 0000000000000000 RBX: 0000000000000020 RCX: ffffffffb31e677b
-[   60.223274] RDX: dffffc0000000000 RSI: ffff888212c10600 RDI: ffff8881b08a9488
-[   60.230501] RBP: ffff8881b08a9030 R08: 0000000000000020 R09: ffff888212c10600
-[   60.237710] R10: ffffed10425820df R11: 0000000000000001 R12: 0000000000000000
-[   60.244939] R13: ffff888212c10600 R14: 0000000000000008 R15: 0000000000000000
-[   60.252155] FS:  00007f08ac2b2f00(0000) GS:ffff8887cbe00000(0000) knlGS:0000000000000000
-[   60.260333] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   60.266150] CR2: 000055831c899be8 CR3: 000000015372e006 CR4: 00000000001706f0
-[   60.273369] Call Trace:
-[   60.275845]  drm_gem_map_dma_buf+0xb4/0x120
-[   60.280089]  dma_buf_map_attachment+0x15d/0x1e0
-[   60.284688]  drm_gem_prime_import_dev.part.0+0x5d/0x140
-[   60.289984]  drm_gem_prime_fd_to_handle+0x213/0x280
-[   60.294931]  ? drm_prime_destroy_file_private+0x30/0x30
-[   60.300224]  drm_ioctl_kernel+0x131/0x180
-[   60.304291]  ? drm_setversion+0x230/0x230
-[   60.308366]  ? drm_prime_destroy_file_private+0x30/0x30
-[   60.313659]  drm_ioctl+0x2f1/0x500
-[   60.317118]  ? drm_version+0x150/0x150
-[   60.320903]  ? lock_downgrade+0xa0/0xa0
-[   60.324806]  ? do_vfs_ioctl+0x5f4/0x680
-[   60.328694]  ? __fget_files+0x13e/0x210
-[   60.332591]  ? ioctl_fiemap.isra.0+0x1a0/0x1a0
-[   60.337102]  ? __fget_files+0x15d/0x210
-[   60.340990]  __x64_sys_ioctl+0xb9/0xf0
-[   60.344795]  do_syscall_64+0x33/0x80
-[   60.348427]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[   60.353542] RIP: 0033:0x7f08ac7b53cb
-[   60.357168] Code: 89 d8 49 8d 3c 1c 48 f7 d8 49 39 c4 72 b5 e8 1c ff ff ff 85 c0 78 ba 4c 89 e0 5b 5d 41 5c c3 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 75 ba 0c 00 f7 d8 64 89 01 48
-[   60.376108] RSP: 002b:00007ffeabc89fc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[   60.383758] RAX: ffffffffffffffda RBX: 00007ffeabc8a00c RCX: 00007f08ac7b53cb
-[   60.390970] RDX: 00007ffeabc8a00c RSI: 00000000c00c642e RDI: 000000000000000d
-[   60.398221] RBP: 00000000c00c642e R08: 000055831c691d00 R09: 000055831b2ec010
-[   60.405446] R10: 00007f08acf6ada0 R11: 0000000000000246 R12: 000055831c691d00
-[   60.412667] R13: 000000000000000d R14: 00000000007e9000 R15: 0000000000000000
-[   60.419903] irq event stamp: 672893
-[   60.423441] hardirqs last  enabled at (672913): [<ffffffffb31b796d>] console_unlock+0x44d/0x500
-[   60.432230] hardirqs last disabled at (672922): [<ffffffffb31b7963>] console_unlock+0x443/0x500
-[   60.441021] softirqs last  enabled at (672940): [<ffffffffb46003dd>] __do_softirq+0x3dd/0x554
-[   60.449634] softirqs last disabled at (672931): [<ffffffffb44010f2>] asm_call_irq_on_stack+0x12/0x20
-[   60.458871] ---[ end trace f2f88696eb17806c ]---
+Chrome OS can use a different udev rule to differentiate the two
+nodes. Actually I already have a CL to support this:
 
-This patch introduces struct drm_driver.gem_prime_create_object, which
-creates a GEM object during the import. Drivers should implement this
-callback and handle DMA S/G table support by themselves. For USB-based
-drivers, the patch adds an implementation without DMA-related code.
+https://chromium-review.googlesource.com/c/chromiumos/overlays/board-overlays/+/2673592
 
-The original interface struct drm_driver.gem_prime_import_sg_table
-is deprecated. All drivers should switch over.
+So both nodes being named the same won't be a problem for Chrome OS,
+and makes more sense for an upstream merge anyway.
 
-Tested by joining/mirroring displays of udl and radeon un der Gnome/X11.
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: 6eb0233ec2d0 ("usb: don't inherity DMA properties for USB devices")
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: <stable@vger.kernel.org> # v5.10+
----
- drivers/gpu/drm/drm_prime.c     | 43 +++++++++++++++++++++------------
- drivers/gpu/drm/tiny/gm12u320.c |  7 ++++++
- drivers/gpu/drm/udl/udl_drv.c   |  7 ++++++
- include/drm/drm_drv.h           | 12 +++++++++
- 4 files changed, 54 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index 2a54f86856af..9bb30e843a44 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -923,7 +923,8 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
- 		}
- 	}
- 
--	if (!dev->driver->gem_prime_import_sg_table)
-+	if (!dev->driver->gem_prime_import_sg_table &&
-+	    !dev->driver->gem_prime_create_object)
- 		return ERR_PTR(-EINVAL);
- 
- 	attach = dma_buf_attach(dma_buf, attach_dev);
-@@ -932,25 +933,37 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
- 
- 	get_dma_buf(dma_buf);
- 
--	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
--	if (IS_ERR(sgt)) {
--		ret = PTR_ERR(sgt);
--		goto fail_detach;
--	}
-+	if (dev->driver->gem_prime_create_object) {
-+		obj = dev->driver->gem_prime_create_object(dev, attach);
-+		if (IS_ERR(obj)) {
-+			ret = PTR_ERR(obj);
-+			goto fail_detach;
-+		}
- 
--	obj = dev->driver->gem_prime_import_sg_table(dev, attach, sgt);
--	if (IS_ERR(obj)) {
--		ret = PTR_ERR(obj);
--		goto fail_unmap;
--	}
-+		if (!obj->import_attach)
-+			obj->import_attach = attach;
-+		if (!obj->resv)
-+			obj->resv = dma_buf->resv;
-+	} else {
-+		sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-+		if (IS_ERR(sgt)) {
-+			ret = PTR_ERR(sgt);
-+			goto fail_detach;
-+		}
- 
--	obj->import_attach = attach;
--	obj->resv = dma_buf->resv;
-+		obj = dev->driver->gem_prime_import_sg_table(dev, attach, sgt);
-+		if (IS_ERR(obj)) {
-+			ret = PTR_ERR(obj);
-+			dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
-+			goto fail_detach;
-+		}
-+
-+		obj->import_attach = attach;
-+		obj->resv = dma_buf->resv;
-+	}
- 
- 	return obj;
- 
--fail_unmap:
--	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
- fail_detach:
- 	dma_buf_detach(dma_buf, attach);
- 	dma_buf_put(dma_buf);
-diff --git a/drivers/gpu/drm/tiny/gm12u320.c b/drivers/gpu/drm/tiny/gm12u320.c
-index 0b4f4f2af1ef..9f13a7c7c2da 100644
---- a/drivers/gpu/drm/tiny/gm12u320.c
-+++ b/drivers/gpu/drm/tiny/gm12u320.c
-@@ -601,6 +601,12 @@ static const uint64_t gm12u320_pipe_modifiers[] = {
- 
- DEFINE_DRM_GEM_FOPS(gm12u320_fops);
- 
-+static struct drm_gem_object *gm12u320_gem_prime_create_object(struct drm_device *dev,
-+							       struct dma_buf_attachment *attach)
-+{
-+	return drm_gem_shmem_prime_import_sg_table(dev, attach, NULL);
-+}
-+
- static const struct drm_driver gm12u320_drm_driver = {
- 	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
- 
-@@ -612,6 +618,7 @@ static const struct drm_driver gm12u320_drm_driver = {
- 
- 	.fops		 = &gm12u320_fops,
- 	DRM_GEM_SHMEM_DRIVER_OPS,
-+	.gem_prime_create_object = gm12u320_gem_prime_create_object,
- };
- 
- static const struct drm_mode_config_funcs gm12u320_mode_config_funcs = {
-diff --git a/drivers/gpu/drm/udl/udl_drv.c b/drivers/gpu/drm/udl/udl_drv.c
-index 9269092697d8..fdf37b44a956 100644
---- a/drivers/gpu/drm/udl/udl_drv.c
-+++ b/drivers/gpu/drm/udl/udl_drv.c
-@@ -34,12 +34,19 @@ static int udl_usb_resume(struct usb_interface *interface)
- 
- DEFINE_DRM_GEM_FOPS(udl_driver_fops);
- 
-+static struct drm_gem_object *udl_gem_prime_create_object(struct drm_device *dev,
-+							  struct dma_buf_attachment *attach)
-+{
-+	return drm_gem_shmem_prime_import_sg_table(dev, attach, NULL);
-+}
-+
- static const struct drm_driver driver = {
- 	.driver_features = DRIVER_ATOMIC | DRIVER_GEM | DRIVER_MODESET,
- 
- 	/* GEM hooks */
- 	.fops = &udl_driver_fops,
- 	DRM_GEM_SHMEM_DRIVER_OPS,
-+	.gem_prime_create_object = udl_gem_prime_create_object,
- 
- 	.name = DRIVER_NAME,
- 	.desc = DRIVER_DESC,
-diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-index 827838e0a97e..77657d649ca6 100644
---- a/include/drm/drm_drv.h
-+++ b/include/drm/drm_drv.h
-@@ -369,11 +369,23 @@ struct drm_driver {
- 	 */
- 	struct drm_gem_object * (*gem_prime_import)(struct drm_device *dev,
- 				struct dma_buf *dma_buf);
-+	/**
-+	 * @gem_prime_create_object:
-+	 *
-+	 * Optional hook used by the PRIME helper functions
-+	 * drm_gem_prime_import() respectively drm_gem_prime_import_dev().
-+	 */
-+	struct drm_gem_object *(*gem_prime_create_object)(
-+				struct drm_device *dev,
-+				struct dma_buf_attachment *attach);
- 	/**
- 	 * @gem_prime_import_sg_table:
- 	 *
- 	 * Optional hook used by the PRIME helper functions
- 	 * drm_gem_prime_import() respectively drm_gem_prime_import_dev().
-+	 *
-+	 * TODO: This function is deprecated in favor of @drm_driver.gem_prime_create_object.
-+	 * Drivers should switch over and implement SG-table support by themselves.
- 	 */
- 	struct drm_gem_object *(*gem_prime_import_sg_table)(
- 				struct drm_device *dev,
--- 
-2.30.1
-
+Cheers,
+Alex.
