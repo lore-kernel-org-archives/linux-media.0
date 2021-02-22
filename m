@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0982C43331
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0554EC43332
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 862D464F03
+	by mail.kernel.org (Postfix) with ESMTP id C9FEE64F04
 	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 12:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbhBVM03 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 07:26:29 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57782 "EHLO
+        id S231274AbhBVM0e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 07:26:34 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57638 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhBVMZM (ORCPT
+        with ESMTP id S230308AbhBVMZM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Feb 2021 07:25:12 -0500
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:5956:412c:4850:9073])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 501831F44FFA;
-        Mon, 22 Feb 2021 12:24:28 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 808641F44FF1;
+        Mon, 22 Feb 2021 12:24:20 +0000 (GMT)
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -38,9 +38,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 9/9] arm64: dts: imx8mq: Add node to G2 hardware
-Date:   Mon, 22 Feb 2021 13:24:06 +0100
-Message-Id: <20210222122406.41782-10-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 3/9] media: hantro: Add a field to distinguish the hardware versions
+Date:   Mon, 22 Feb 2021 13:24:00 +0100
+Message-Id: <20210222122406.41782-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210222122406.41782-1-benjamin.gaignard@collabora.com>
 References: <20210222122406.41782-1-benjamin.gaignard@collabora.com>
@@ -50,83 +50,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Split VPU node in two: one for G1 and one for G2 since they are
-different hardware blocks.
+Decoders hardware blocks could exist in multiple versions: add
+a field to distinguish them at runtime.
+G2 hardware block doesn't have postprocessor hantro_needs_postproc
+function should always returns false in for this hardware.
+hantro_needs_postproc function becoming to much complex to
+stay inline in .h file move it to .c file.
+
+Keep the default behavoir to be G1 hardware.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
 version 2:
-- remove useless clocks in VPUs nodes
+- squash this commit with the post processor change
+to show one usage of core_hw_dec_rev
 
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 41 +++++++++++++++++------
- 1 file changed, 31 insertions(+), 10 deletions(-)
+ drivers/staging/media/hantro/hantro.h          | 13 +++++++------
+ drivers/staging/media/hantro/hantro_drv.c      |  2 ++
+ drivers/staging/media/hantro/hantro_postproc.c | 17 +++++++++++++++++
+ 3 files changed, 26 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index d9d9efc8592d..8358e214d696 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -1287,17 +1287,15 @@ vpu_reset: vpu-reset@38320000 {
- 			#reset-cells = <1>;
- 		};
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index bde65231f22f..352930bd49fc 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -36,6 +36,9 @@ struct hantro_codec_ops;
+ #define HANTRO_H264_DECODER	BIT(18)
+ #define HANTRO_DECODERS		0xffff0000
  
--		vpu: video-codec@38300000 {
-+		vpu_g1: video-codec@38300000 {
- 			compatible = "nxp,imx8mq-vpu";
--			reg = <0x38300000 0x10000>,
--			      <0x38310000 0x10000>;
--			reg-names = "g1", "g2";
--			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "g1", "g2";
-+			reg = <0x38300000 0x10000>;
-+			reg-names = "g1";
-+			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "g1";
- 			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
--				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
--			clock-names = "g1", "g2";
-+				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+			clock-names = "g1", "bus";
- 			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
- 					  <&clk IMX8MQ_CLK_VPU_G2>,
- 					  <&clk IMX8MQ_CLK_VPU_BUS>,
-@@ -1306,12 +1304,35 @@ vpu: video-codec@38300000 {
- 						 <&clk IMX8MQ_VPU_PLL_OUT>,
- 						 <&clk IMX8MQ_SYS1_PLL_800M>,
- 						 <&clk IMX8MQ_VPU_PLL>;
--			assigned-clock-rates = <600000000>, <600000000>,
-+			assigned-clock-rates = <600000000>, <300000000>,
- 					       <800000000>, <0>;
- 			resets = <&vpu_reset IMX8MQ_RESET_VPU_RESET_G1>;
- 			power-domains = <&pgc_vpu>;
- 		};
- 
-+		vpu_g2: video-codec@38310000 {
-+			compatible = "nxp,imx8mq-vpu-g2";
-+			reg = <0x38310000 0x10000>;
-+			reg-names = "g2";
-+			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "g2";
-+			clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+			clock-names = "g2",  "bus";
-+			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-+					  <&clk IMX8MQ_CLK_VPU_G2>,
-+					  <&clk IMX8MQ_CLK_VPU_BUS>,
-+					  <&clk IMX8MQ_VPU_PLL_BYPASS>;
-+			assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-+						 <&clk IMX8MQ_VPU_PLL_OUT>,
-+						 <&clk IMX8MQ_SYS1_PLL_800M>,
-+						 <&clk IMX8MQ_VPU_PLL>;
-+			assigned-clock-rates = <600000000>, <300000000>,
-+					       <800000000>, <0>;
-+			resets = <&vpu_reset IMX8MQ_RESET_VPU_RESET_G2>;
-+			power-domains = <&pgc_vpu>;
-+		};
++#define HANTRO_G1_REV		0x6731
++#define HANTRO_G2_REV		0x6732
 +
- 		pcie0: pcie@33800000 {
- 			compatible = "fsl,imx8mq-pcie";
- 			reg = <0x33800000 0x400000>,
+ /**
+  * struct hantro_irq - irq handler and name
+  *
+@@ -170,6 +173,7 @@ hantro_vdev_to_func(struct video_device *vdev)
+  * @enc_base:		Mapped address of VPU encoder register for convenience.
+  * @dec_base:		Mapped address of VPU decoder register for convenience.
+  * @ctrl_base:		Mapped address of VPU control block.
++ * @core_hw_dec_rev	Runtime detected HW decoder core revision
+  * @vpu_mutex:		Mutex to synchronize V4L2 calls.
+  * @irqlock:		Spinlock to synchronize access to data structures
+  *			shared with interrupt handlers.
+@@ -189,6 +193,7 @@ struct hantro_dev {
+ 	void __iomem *enc_base;
+ 	void __iomem *dec_base;
+ 	void __iomem *ctrl_base;
++	u32 core_hw_dec_rev;
+ 
+ 	struct mutex vpu_mutex;	/* video_device lock */
+ 	spinlock_t irqlock;
+@@ -411,12 +416,8 @@ hantro_get_dst_buf(struct hantro_ctx *ctx)
+ 	return v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
+ }
+ 
+-static inline bool
+-hantro_needs_postproc(const struct hantro_ctx *ctx,
+-		      const struct hantro_fmt *fmt)
+-{
+-	return !ctx->is_encoder && fmt->fourcc != V4L2_PIX_FMT_NV12;
+-}
++bool hantro_needs_postproc(const struct hantro_ctx *ctx,
++			   const struct hantro_fmt *fmt);
+ 
+ static inline dma_addr_t
+ hantro_get_dec_buf_addr(struct hantro_ctx *ctx, struct vb2_buffer *vb)
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index d86e322a5980..0a62beb0bfbd 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -834,6 +834,8 @@ static int hantro_probe(struct platform_device *pdev)
+ 	}
+ 	vpu->enc_base = vpu->reg_bases[0] + vpu->variant->enc_offset;
+ 	vpu->dec_base = vpu->reg_bases[0] + vpu->variant->dec_offset;
++	/* by default decoder is G1 */
++	vpu->core_hw_dec_rev = HANTRO_G1_REV;
+ 
+ 	ret = dma_set_coherent_mask(vpu->dev, DMA_BIT_MASK(32));
+ 	if (ret) {
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index 6d2a8f2a8f0b..050880f720d6 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -50,6 +50,23 @@ const struct hantro_postproc_regs hantro_g1_postproc_regs = {
+ 	.display_width = {G1_REG_PP_DISPLAY_WIDTH, 0, 0xfff},
+ };
+ 
++bool hantro_needs_postproc(const struct hantro_ctx *ctx,
++			   const struct hantro_fmt *fmt)
++{
++	struct hantro_dev *vpu = ctx->dev;
++
++	if (ctx->is_encoder)
++		return false;
++
++	if (vpu->core_hw_dec_rev == HANTRO_G1_REV)
++		return fmt->fourcc != V4L2_PIX_FMT_NV12;
++
++	if (vpu->core_hw_dec_rev == HANTRO_G2_REV)
++		return false;
++
++	return false;
++}
++
+ void hantro_postproc_enable(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
 -- 
 2.25.1
 
