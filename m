@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1009EC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5E4C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:03:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAC5964E74
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:03:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A703664D73
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbhBVQDa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 11:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S231289AbhBVQDh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 11:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbhBVQDU (ORCPT
+        with ESMTP id S231222AbhBVQDV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:03:20 -0500
+        Mon, 22 Feb 2021 11:03:21 -0500
 Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683B0C061222
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:47 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d11so268409wrj.7
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6669DC0611C0
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:49 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id c7so2883060wru.8
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:01:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1+CgN0nh2JSnbM9Feox54p0kdgx4CZZNK6cQ0ib5plk=;
-        b=WXL5BQlO+UjH/ToUwcMHmiCSQ3gGzRjFdRuhHLrbIIB+Cxy3OpsGsH5MvT94ufvxnc
-         rgmkbaMk5qtNE6YJ61Ia8ZXKuIX8O4tJAekMq4NGaVChowIlTzdeTd0uoxq08KC1QSj3
-         X8+ZPjIUEJFC58iwoD7nAJFGf/l3J1z1tm5FlZFmR0KjdLehMKyprt4XtOkjxF6unB4G
-         EIKrDKnt0DRPMcAYq3ni+61xow8bM1t9JYBYoOmkV+uXX+/809b0PicEP+AP2Lk8TOBs
-         fNZ25z9Itgmn7HCovq3arFEMANjr5SXiilp4jMlLPvDjuFy8TqKSo8POzBVcRmMuJpVd
-         denQ==
+        bh=X/puQRm1/H6m4WNnTmXYDqGRONSIKPTs3nt8rX8xbO0=;
+        b=JsrPjvI48UCnUWcuP6kDjhPGcfchsyx3j+jgOtVjCPp1dJ45HDghmtj7qRY1nD0M0r
+         fmP0dYUnZNY40WqEzedI9HkHlTo8vrDtTZsrA7Epd7oZPPXTKRhm8Q2T2vmYN+gZZ1d9
+         WaQspRKS+U3iZr/JV3wCFTbf7792BfDO39Xowbny/SPHjePPZPkuDKRhoKgeuv9WGQj6
+         3hskL28NJV1l+uxuMp7Y8sh5mB8012eXBW/AfqFy4VDemlmFsAgil0gF31CONM5jIcAF
+         V0hNer9rspphBWafHp9k9ex7C3posdCXaQoUt2g31G2unR6CfN0LNnaK7mHrXhFqe0EV
+         RK6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1+CgN0nh2JSnbM9Feox54p0kdgx4CZZNK6cQ0ib5plk=;
-        b=oAvOmAJNnf/sity8RVswqivRiXMHlsTdXCzXR3ksjgsU8BsCuyarJvWjYGf72zL0er
-         4OJDcTm+I7qAz3MyeWuRLehIOEEclSae8MWDlDLFiqLZ476AEZXFag7AO2TNXIwvmnxA
-         g+nxM0RMTTW7kJ928vsm4HdAu2ax+sL6fEtsgjQLBZjy+gyy7jgzInphF5j2wpWW+RxP
-         M8xtRu9aGtdIOLg2T5/TwNnHDEofBRzqrhgOs1nhEyTMcavEYepm/kvRbT5QuZyf3Nth
-         B05+etj/ebEz52AXPy4f+zPl9xH0ynP9Sj7HFsdHqt4zYiw3BcxHXLSE8GJ9NAKUkWlX
-         Ip8g==
-X-Gm-Message-State: AOAM533Mam0hELx8oRqOj31p5yEQ2vHFszgd7vp5sh5n1hr21x8EosLY
-        dBr73DuOprT7Gak735lfubmsGe+A79VL/Q==
-X-Google-Smtp-Source: ABdhPJzZ2BTSUQa9HprJfmL7ORnqrbg2mJ8XyEkeA7E/1pixQ19SD0uOtQnIXqoyjBdlAn+YVY0yxg==
-X-Received: by 2002:a5d:540d:: with SMTP id g13mr22185325wrv.143.1614009706184;
-        Mon, 22 Feb 2021 08:01:46 -0800 (PST)
+        bh=X/puQRm1/H6m4WNnTmXYDqGRONSIKPTs3nt8rX8xbO0=;
+        b=prw6lGIfwuc69Cu+xeT4gqtPRbnKfeO41YnYbmNdz3rWpkZObfXRoQ3KS9Ncu9wE4V
+         +cTycNnac4OKb7PUd3hc/6eC0I1Tse5BPHJtcLp18ek/A1svhh0ROPUV1NkY+pJDpJ8E
+         BUNrZs/EbPaPlG3JZx0dxZ589IxF3SGP3iDznsWMD7W4r8YxEI6DclDLcqft9R2qoIug
+         Pno+7jOY/8GXSf6lmAaJpsU0Qa2l5zHAxYdSm4oJ5J30Fyi5+eZ+G44ez3EL89fFtHdM
+         4YC55nh2tqSjZZw53vd3/fSTu+rNAewJLaomKD+0WqoFcBrA0HnogvqBxeVpnyaQjZf6
+         Y9AA==
+X-Gm-Message-State: AOAM5334a6mS/+PjQrbUUEvEFxtT2Vti0cdBkAZz9f3ujB5G7649T/fd
+        T5jK/HFFEOnUnA/GApMLigIkB3ddMlbR9w==
+X-Google-Smtp-Source: ABdhPJybu35JgJQhoZCTUtY+dXw8VjDCzpt9wbA+AYewBujd4tJjdUalMjbzl+yoEElrEloq6dH0Nw==
+X-Received: by 2002:adf:fb8a:: with SMTP id a10mr22035980wrr.365.1614009708206;
+        Mon, 22 Feb 2021 08:01:48 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.01.45
+        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.01.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 08:01:45 -0800 (PST)
+        Mon, 22 Feb 2021 08:01:47 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
         jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH 09/25] media: venus: core: Add differentiator IS_V6(core)
-Date:   Mon, 22 Feb 2021 16:02:44 +0000
-Message-Id: <20210222160300.1811121-10-bryan.odonoghue@linaro.org>
+Subject: [PATCH 11/25] media: venus: core: Add an io base for AON regs
+Date:   Mon, 22 Feb 2021 16:02:46 +0000
+Message-Id: <20210222160300.1811121-12-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
 References: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
@@ -74,26 +74,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This commit adds the macro helper IS_V6() which will be used to
-differentiate iris2/v6 silicon from previous versions.
+6xx silicon needs to access registers from a AON base address range.
+This commit defines the necessary variable for later use.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/venus/core.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/venus/core.c | 1 +
+ drivers/media/platform/qcom/venus/core.h | 2 ++
+ 2 files changed, 3 insertions(+)
 
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 35a8956fe969..dad597617961 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -215,6 +215,7 @@ static void venus_assign_register_offsets(struct venus_core *core)
+ 	core->cpu_ic_base = core->base + CPU_IC_BASE;
+ 	core->wrapper_base = core->base + WRAPPER_BASE;
+ 	core->wrapper_tz_base = 0;
++	core->aon_base = 0;
+ }
+ 
+ static int venus_probe(struct platform_device *pdev)
 diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 1be73c707d21..0c90f48323f2 100644
+index 54e6cd89b30a..8328f7210d6c 100644
 --- a/drivers/media/platform/qcom/venus/core.h
 +++ b/drivers/media/platform/qcom/venus/core.h
-@@ -417,6 +417,7 @@ struct venus_inst {
- #define IS_V1(core)	((core)->res->hfi_version == HFI_VERSION_1XX)
- #define IS_V3(core)	((core)->res->hfi_version == HFI_VERSION_3XX)
- #define IS_V4(core)	((core)->res->hfi_version == HFI_VERSION_4XX)
-+#define IS_V6(core)	((core)->res->hfi_version == HFI_VERSION_6XX)
- 
- #define ctrl_to_inst(ctrl)	\
- 	container_of((ctrl)->handler, struct venus_inst, ctrl_handler)
+@@ -96,6 +96,7 @@ struct venus_format {
+  * @cpu_ic_base	IO memory cpu_ic base address
+  * @wrapper_base	IO memory wrapper base address
+  * @wrapper_base	IO memory wrapper TZ base address
++ * @aon_base	AON base address
+  * @irq:		Venus irq
+  * @clks:	an array of struct clk pointers
+  * @vcodec0_clks: an array of vcodec0 struct clk pointers
+@@ -134,6 +135,7 @@ struct venus_core {
+ 	void __iomem *cpu_ic_base;
+ 	void __iomem *wrapper_base;
+ 	void __iomem *wrapper_tz_base;
++	void __iomem *aon_base;
+ 	int irq;
+ 	struct clk *clks[VIDC_CLKS_NUM_MAX];
+ 	struct clk *vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
 -- 
 2.29.2
 
