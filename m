@@ -2,166 +2,456 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC58CC433E6
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A29CDC433E6
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 20:02:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63B4F64E5C
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 19:14:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A82D64DF2
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 20:02:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbhBVTOk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 14:14:40 -0500
-Received: from mail-am6eur05on2053.outbound.protection.outlook.com ([40.107.22.53]:59872
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232902AbhBVTMG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 14:12:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=njUB281lBQ4bI0T0lf9q0ahDJ+psoy16KsFWs1DoT1vFeIlUO1ZhfqcIA5ezpwrVX6W5j4Ggrb8NsLo/lRB7LbIxknAtoZUIkUhD1wiqA9JtFteqyd8hqUCTaeTza5L+I177JiTM9xeHQLi+FtfMnbGNFsuxmiCZ5d20Xk3lkUgRBHVM8s5J3NGdeh0kcsq2ZUh9fbyACG596o8XkoGB9oe4amp6QCuQC5wUK0bVNb+FApBZofPZs+dEwCp7pL+tMwhppiZnrPRKMJYA55LKNPn4Z7sMfmADeJPUARsBkFY4WMFeJF/Y0f/pRp97j2neP2OcKDU4pZEcalHRlYZGkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uDKvzVdjGbMHVD1Z3uuw1Yz6DtptNqT1M4/zA6HEkfU=;
- b=MM1TvU1NBRWNsO/umhhDGi98ED+vZeiG9PPGYeuX9Hm+5Fr+YIdIyvd6VWBcC6AHLs4w+ryWi96paRdTHYeFAEiCId9HX4+Bz5QHcoXDWT5sH5DXKxaxukjnCIOpu7Tq4RjsQa/LFEY9+1NXaJ6mnwRGtlEu0tHoMpZtr0n11ps7dXQZkCJ5EONPaNZs83wH+zvitPyy9qsURa/mD2kOgpqGP9jrfjMMIYZGnmgVWjcucAVZ5P5mMuZNyB0gwrLWU2PeoRob3YuihnkJUJLgwaAn6uvtqMrIwXuPemMBqSXElQjnKWlkLUYORZHwtZYLzAhbwM8OeKz0PfdmsbcmlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uDKvzVdjGbMHVD1Z3uuw1Yz6DtptNqT1M4/zA6HEkfU=;
- b=gmCU6RZYzVsgssbPmbJLwom0xyrFZniErwmDLjPMNhN3SpG6xrLpp822iHPLQu9O2xUiKyePBK1ohgOfMj096zXsPXSQO3Js8oiVl784Ivdc3FydVGtxrL9AZ5ZyUsxsrYQdajxprXUDyrmv25J6t5HTK/taMX9s4CKTUwIvxkw=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
- by AS8PR04MB7591.eurprd04.prod.outlook.com (2603:10a6:20b:297::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.26; Mon, 22 Feb
- 2021 19:08:19 +0000
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::618c:8b68:e3d9:a8c6]) by AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::618c:8b68:e3d9:a8c6%7]) with mapi id 15.20.3868.032; Mon, 22 Feb 2021
- 19:08:19 +0000
-From:   Mirela Rabulea <mirela.rabulea@oss.nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
-        robh+dt@kernel.org, p.zabel@pengutronix.de
-Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
-        daniel.baluta@nxp.com, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, ezequiel@collabora.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se,
-        dafna.hirschfeld@collabora.com
-Subject: [PATCH v8 8/9] media: Avoid parsing quantization and huffman tables
-Date:   Mon, 22 Feb 2021 21:07:37 +0200
-Message-Id: <20210222190738.2346378-9-mirela.rabulea@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210222190738.2346378-1-mirela.rabulea@oss.nxp.com>
-References: <20210222190738.2346378-1-mirela.rabulea@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [86.124.171.30]
-X-ClientProxiedBy: FR2P281CA0026.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::13) To AM5PR04MB3137.eurprd04.prod.outlook.com
- (2603:10a6:206:c::18)
+        id S232128AbhBVUC1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 15:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231288AbhBVUCT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Feb 2021 15:02:19 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4745FC06174A;
+        Mon, 22 Feb 2021 12:01:39 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 0BA431F45319
+Message-ID: <d2a75e4ec469ae168f00bba241ade09f77453446.camel@collabora.com>
+Subject: Re: [PATCH v2 1/9] media: hevc: Modify structures to follow H265
+ ITU spec
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        John Cox <jc@kynesim.co.uk>
+Cc:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, peng.fan@nxp.com,
+        hverkuil-cisco@xs4all.nl, dan.carpenter@oracle.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Mon, 22 Feb 2021 15:01:25 -0500
+In-Reply-To: <4cd4a009-9552-03a5-a49d-de16c55c63da@collabora.com>
+References: <20210218191844.297869-1-benjamin.gaignard@collabora.com>
+         <20210218191844.297869-2-benjamin.gaignard@collabora.com>
+         <cam73g1am20fqav4bsoakml5natvtgq4qq@4ax.com>
+         <4cd4a009-9552-03a5-a49d-de16c55c63da@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3 (3.38.3-1.fc33) 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (86.124.171.30) by FR2P281CA0026.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.8 via Frontend Transport; Mon, 22 Feb 2021 19:08:18 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f0854a99-558a-4cbd-2e2b-08d8d765373b
-X-MS-TrafficTypeDiagnostic: AS8PR04MB7591:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AS8PR04MB7591C70B2F318820C58F7E5CCE819@AS8PR04MB7591.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lW6V6aAjnLRDD7Gk/rKjxR97T4c/VcGDihIANQ7xyKFnxGXC5+NXjXHLvUuPAnmkqv0sstx8iO3B0Wwbx2GC1Q9u16d3jBi+o2gdsIjFNzAV8nmqtbRKTM3NIoDlq9mqAG6DnaeIjotXVMiSBrWy93WTYt95humNNZn2auevyCvRDrvVy+Xx00JlDLBQ4GO/5dsxz2zFDpqmQ4kC5wbAbt0MIA/9DgUvoKeu+CRDv38YlzMMX/39fdDJOqscEn92DTxofF0ZwFuNnNUWbjfksn1Mx0sxP7fv1vMTVIni9lO4ykFtRyEkDwfO55gmG3XQsQniTDFsiJ0kf8db+TPil1+EvwxBbtyoj86+YlAEQ2zqZ/2qUJMLm6/5o5QQvPjHcDV2rtp/E8UxOtVx2bGdaCWVzlhAM36EWNL9PQSwFmqtZ94wLFQtiiZXoMd5NkFPB2RiwgGEzUafWyH5aF9htuVohZ5s3FUYMZd1yzpDR7JxYw1FjoHZ7hY8k9T7xjfDCi+6WFzc6AFd9PQzQflS/37WRe9CzJ2mqcC0Qpbt0vu/nXMB8JRPh1xgRjG5sLd8xnr0JUfmowsnDDP7A7O/Dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(346002)(39850400004)(376002)(316002)(6666004)(2906002)(83380400001)(956004)(2616005)(52116002)(8936002)(186003)(69590400012)(1076003)(66476007)(6506007)(86362001)(44832011)(66946007)(5660300002)(478600001)(66556008)(6512007)(6486002)(7416002)(4326008)(16526019)(8676002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?VE8dAb+VXi1hi1URLIocirsMhig2qtf3Z5slRMMYvmK3U8qjZgfteEEJ46R9?=
- =?us-ascii?Q?3UVjLJkNOypwZUfeSl/0Fb8X4LhYPaWYO+C+hnjsEIg3a6tTnuqE6eGPPcyp?=
- =?us-ascii?Q?UMa5rLhe6Xo5l0poW4tTAz5EKmZ5/5tM6W2C0qggot/cA2d0HOyr/+MSgIQu?=
- =?us-ascii?Q?TloCApHgmxCRveAaT9mQPCf78u67huoORoN4kAVqbqukiL7dRxTh7GJQlxVg?=
- =?us-ascii?Q?ktLF0aV6vi7XyW3QKzDRhljUDSYrEyI/wRWBF4m9BmaGbloHiqYEikxIo2Vi?=
- =?us-ascii?Q?6AyJ3TD0333vHNoSVpYXHOLOnjX44OBQdrkdC9lI21vbOq/nJR8RjyUJlrZi?=
- =?us-ascii?Q?xx7Z8Uc8K5VTshaH811jW6c8QszKFKCYa5GaAfGThYX/O6njf2LlHuh8dNDm?=
- =?us-ascii?Q?nIjRWy6Q1eR8da606D0ZjJYXmdcjc3NFB7NjbzyXdgBEwwIUGUlyO2p7b+oW?=
- =?us-ascii?Q?5a2jjrHq9tTujZMSCmI9ed0gpbvXNaFz9Qn/wU3bZ31F+3fa7esmUPEdMun8?=
- =?us-ascii?Q?23+SU3CVcOkb9Ay5R7LsyvUfqdhAvHhO5CEneTQA5DJdGpigs8SExEXCE4yq?=
- =?us-ascii?Q?5nhwR6+f1CBhqubV6RXqzf2NtppCDJLX2+DgFQHmXr5sHJDHZHb4WNxexkUk?=
- =?us-ascii?Q?yUP/5UreCllNRYC5kb+HIWZw+NWv1AIRciT0kC/tchOkkf3xOG/hLiMZzuxv?=
- =?us-ascii?Q?kjrvy9okwXiJvb3dsJTVIAmCxcdMbzzaHKh+pLh2CtB1WZLiUmi2ngJTKadW?=
- =?us-ascii?Q?2j+PJyaLNZNeA0Xhta0JJK92U/NhtwNCw6yoonMVq4KIHrV0uLqHXv2+KOae?=
- =?us-ascii?Q?3j4YRg5vS4pq5oRwVdVVnRy4JceaKX/V1Zkujr135hDZnUOxokmyrPXqXmqz?=
- =?us-ascii?Q?59mBv6fhGQjopMAbHpCM6b/o5jA+R417YOrVm+Gh5zPbRwQXP7ANN9whckwe?=
- =?us-ascii?Q?CH6EQb6FN0iHvVBtFc29vtcWKkc/s32RJWsZb91agQDXU46nyvijRzlV62aJ?=
- =?us-ascii?Q?RqxTgWm+nHRfDow7yALv1eJEKIm50/wRCF/0KgoQiOYozm/E4g+M5oSMomK5?=
- =?us-ascii?Q?pj8iAMEXs0n2zcRhSHAb2CBL4/FY3LDjIAcJBDhJcfkgxS7f+Q+moY1wiHWI?=
- =?us-ascii?Q?nkDjEXvfeJGrgQKp/7bgD6iwpVOa4FnZIOqLjBkAX8o3BEAQlFFG82jYzA2T?=
- =?us-ascii?Q?e849Gol1uq5sBDPOxgXr1S3J9ILemQkc51k/9vIZwvsnJHYO4R+1LCF0uJMc?=
- =?us-ascii?Q?O/pdoloWpyO2SS6xmnFRF3c16sJY7r/XckDEMQ9hERdug/97xFNpkZpPW3ZJ?=
- =?us-ascii?Q?PeTYpHAKfat678WuGRrVJWOVPtiRhKOh1+QB501i+FVcQg=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0854a99-558a-4cbd-2e2b-08d8d765373b
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2021 19:08:19.3068
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UGX48Xd+XunD+i2XOdBVr48DpdEoCuyPcwtVGrGwHoPl4VaexIWdHso9ce2ZjUdGruWxtzXNWLO3DQfQD8Jr8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7591
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@nxp.com>
+Hi John,
 
-These are optional in struct v4l2_jpeg_header, so skip DHT/DQT segment
-parsing if huffman_tables/quantization_tables were not requested by user,
-to save time.
-However, do count them (num_dht/num_dqt).
+Le lundi 22 février 2021 à 17:39 +0100, Benjamin Gaignard a écrit :
+> 
+> Le 22/02/2021 à 17:24, John Cox a écrit :
+> > > The H.265 ITU specification (section 7.4) define the general
+> > > slice segment header semantics.
+> > > Modified/added fields are:
+> > > - video_parameter_set_id: (7.4.3.1) identifies the VPS for
+> > > reference by other syntax elements.
+> > > - seq_parameter_set_id: (7.4.3.2.1) specifies the value of
+> > > the vps_video_parameter_set_id of the active VPS.
+> > > - chroma_format_idc: (7.4.3.2.1) specifies the chroma sampling
+> > > relative to the luma sampling
+> > > - pic_parameter_set_id: (7.4.3.3.1) identifies the PPS for
+> > > reference by other syntax elements
+> > > - num_ref_idx_l0_default_active_minus1: (7.4.3.3.1) specifies
+> > > the inferred value of num_ref_idx_l0_active_minus1
+> > > - num_ref_idx_l1_default_active_minus1: (7.4.3.3.1) specifies
+> > > the inferred value of num_ref_idx_l1_active_minus1
+> > > - slice_segment_addr: (7.4.7.1) specifies the address of
+> > > the first coding tree block in the slice segment
+> > > - num_entry_point_offsets: (7.4.7.1) specifies the number of
+> > > entry_point_offset_minus1[ i ] syntax elements in the slice header
+> > > 
+> > > Add HEVC decode params contains the information used in section
+> > > "8.3 Slice decoding process" of the specification to let the hardware
+> > > perform decoding of a slices.
+> > > 
+> > > Adapt Cedrus driver according to these changes.
+> > > 
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > ---
+> > > version 2:
+> > > - remove all change related to scaling
+> > > - squash commits to a coherent split
+> > > - be more verbose about the added fields
+> > > 
+> > > drivers/media/v4l2-core/v4l2-ctrls.c          | 26 ++++++++---
+> > > drivers/staging/media/sunxi/cedrus/cedrus.c   |  6 +++
+> > > drivers/staging/media/sunxi/cedrus/cedrus.h   |  1 +
+> > > .../staging/media/sunxi/cedrus/cedrus_dec.c   |  2 +
+> > > .../staging/media/sunxi/cedrus/cedrus_h265.c  |  6 ++-
+> > > include/media/hevc-ctrls.h                    | 45 +++++++++++++++----
+> > > 6 files changed, 69 insertions(+), 17 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-
+> > > core/v4l2-ctrls.c
+> > > index 016cf6204cbb..4060b5bcc3c0 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> > > @@ -1028,6 +1028,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_SPS:                      return
+> > > "HEVC Sequence Parameter Set";
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_PPS:                      return
+> > > "HEVC Picture Parameter Set";
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:             return
+> > > "HEVC Slice Parameters";
+> > > +       case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS:            return
+> > > "HEVC Decode Parameters";
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:              return
+> > > "HEVC Decode Mode";
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:               return
+> > > "HEVC Start Code";
+> > > 
+> > > @@ -1482,6 +1483,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
+> > > v4l2_ctrl_type *type,
+> > >         case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:
+> > >                 *type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
+> > >                 break;
+> > > +       case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS:
+> > > +               *type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+> > > +               break;
+> > >         case V4L2_CID_UNIT_CELL_SIZE:
+> > >                 *type = V4L2_CTRL_TYPE_AREA;
+> > >                 *flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > > @@ -1833,6 +1837,7 @@ static int std_validate_compound(const struct
+> > > v4l2_ctrl *ctrl, u32 idx,
+> > >         struct v4l2_ctrl_hevc_sps *p_hevc_sps;
+> > >         struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+> > >         struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
+> > > +       struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
+> > >         struct v4l2_area *area;
+> > >         void *p = ptr.p + idx * ctrl->elem_size;
+> > >         unsigned int i;
+> > > @@ -2108,23 +2113,27 @@ static int std_validate_compound(const struct
+> > > v4l2_ctrl *ctrl, u32 idx,
+> > >                 zero_padding(*p_hevc_pps);
+> > >                 break;
+> > > 
+> > > -       case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> > > -               p_hevc_slice_params = p;
+> > > +       case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
+> > > +               p_hevc_decode_params = p;
+> > > 
+> > > -               if (p_hevc_slice_params->num_active_dpb_entries >
+> > > +               if (p_hevc_decode_params->num_active_dpb_entries >
+> > >                     V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
+> > >                         return -EINVAL;
+> > > 
+> > > -               zero_padding(p_hevc_slice_params->pred_weight_table);
+> > > -
+> > > -               for (i = 0; i < p_hevc_slice_params-
+> > > >num_active_dpb_entries;
+> > > +               for (i = 0; i < p_hevc_decode_params-
+> > > >num_active_dpb_entries;
+> > >                      i++) {
+> > >                         struct v4l2_hevc_dpb_entry *dpb_entry =
+> > > -                               &p_hevc_slice_params->dpb[i];
+> > > +                               &p_hevc_decode_params->dpb[i];
+> > > 
+> > >                         zero_padding(*dpb_entry);
+> > >                 }
+> > > 
+> > > +               break;
+> > > +
+> > > +       case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> > > +               p_hevc_slice_params = p;
+> > > +
+> > > +               zero_padding(p_hevc_slice_params->pred_weight_table);
+> > >                 zero_padding(*p_hevc_slice_params);
+> > >                 break;
+> > > 
+> > > @@ -2821,6 +2830,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct
+> > > v4l2_ctrl_handler *hdl,
+> > >         case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> > >                 elem_size = sizeof(struct v4l2_ctrl_hevc_slice_params);
+> > >                 break;
+> > > +       case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
+> > > +               elem_size = sizeof(struct v4l2_ctrl_hevc_decode_params);
+> > > +               break;
+> > >         case V4L2_CTRL_TYPE_AREA:
+> > >                 elem_size = sizeof(struct v4l2_area);
+> > >                 break;
+> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > > b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > > index 7bd9291c8d5f..4cd3cab1a257 100644
+> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > > @@ -151,6 +151,12 @@ static const struct cedrus_control cedrus_controls[]
+> > > = {
+> > >                 },
+> > >                 .codec          = CEDRUS_CODEC_VP8,
+> > >         },
+> > > +       {
+> > > +               .cfg = {
+> > > +                       .id = V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS,
+> > > +               },
+> > > +               .codec          = CEDRUS_CODEC_H265,
+> > > +       },
+> > > };
+> > > 
+> > > #define CEDRUS_CONTROLS_COUNT   ARRAY_SIZE(cedrus_controls)
+> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > > b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > > index 251a6a660351..2ca33ac38b9a 100644
+> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > > @@ -76,6 +76,7 @@ struct cedrus_h265_run {
+> > >         const struct v4l2_ctrl_hevc_sps                 *sps;
+> > >         const struct v4l2_ctrl_hevc_pps                 *pps;
+> > >         const struct v4l2_ctrl_hevc_slice_params        *slice_params;
+> > > +       const struct v4l2_ctrl_hevc_decode_params       *decode_params;
+> > > };
+> > > 
+> > > struct cedrus_vp8_run {
+> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > > b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > > index a9090daf626a..cd821f417a14 100644
+> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > > @@ -68,6 +68,8 @@ void cedrus_device_run(void *priv)
+> > >                         V4L2_CID_MPEG_VIDEO_HEVC_PPS);
+> > >                 run.h265.slice_params = cedrus_find_control_data(ctx,
+> > >                         V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS);
+> > > +               run.h265.decode_params = cedrus_find_control_data(ctx,
+> > > +                       V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS);
+> > >                 break;
+> > > 
+> > >         case V4L2_PIX_FMT_VP8_FRAME:
+> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > index ce497d0197df..dce5db6be13a 100644
+> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> > > @@ -245,6 +245,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+> > >         const struct v4l2_ctrl_hevc_sps *sps;
+> > >         const struct v4l2_ctrl_hevc_pps *pps;
+> > >         const struct v4l2_ctrl_hevc_slice_params *slice_params;
+> > > +       const struct v4l2_ctrl_hevc_decode_params *decode_params;
+> > >         const struct v4l2_hevc_pred_weight_table *pred_weight_table;
+> > >         dma_addr_t src_buf_addr;
+> > >         dma_addr_t src_buf_end_addr;
+> > > @@ -256,6 +257,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+> > >         sps = run->h265.sps;
+> > >         pps = run->h265.pps;
+> > >         slice_params = run->h265.slice_params;
+> > > +       decode_params = run->h265.decode_params;
+> > >         pred_weight_table = &slice_params->pred_weight_table;
+> > > 
+> > >         /* MV column buffer size and allocation. */
+> > > @@ -487,7 +489,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+> > > 
+> > >         reg =
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_TC_OFFSET_DIV2(slice_params-
+> > > >slice_tc_offset_div2) |
+> > >              
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_BETA_OFFSET_DIV2(slice_params-
+> > > >slice_beta_offset_div2) |
+> > > -            
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_POC_BIGEST_IN_RPS_ST(slice_params-
+> > > >num_rps_poc_st_curr_after == 0) |
+> > > +            
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_POC_BIGEST_IN_RPS_ST(decode_params-
+> > > >num_rps_poc_st_curr_after == 0) |
+> > >              
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CR_QP_OFFSET(slice_params-
+> > > >slice_cr_qp_offset) |
+> > >              
+> > > VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CB_QP_OFFSET(slice_params-
+> > > >slice_cb_qp_offset) |
+> > >               VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_QP_DELTA(slice_params-
+> > > >slice_qp_delta);
+> > > @@ -528,7 +530,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+> > > 
+> > >         /* Write decoded picture buffer in pic list. */
+> > >         cedrus_h265_frame_info_write_dpb(ctx, slice_params->dpb,
+> > > -                                        slice_params-
+> > > >num_active_dpb_entries);
+> > > +                                        decode_params-
+> > > >num_active_dpb_entries);
+> > > 
+> > >         /* Output frame. */
+> > > 
+> > > diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> > > index b4cb2ef02f17..7fe704a08f77 100644
+> > > --- a/include/media/hevc-ctrls.h
+> > > +++ b/include/media/hevc-ctrls.h
+> > > @@ -19,6 +19,7 @@
+> > > #define V4L2_CID_MPEG_VIDEO_HEVC_SPS            (V4L2_CID_CODEC_BASE +
+> > > 1008)
+> > > #define V4L2_CID_MPEG_VIDEO_HEVC_PPS            (V4L2_CID_CODEC_BASE +
+> > > 1009)
+> > > #define V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS   (V4L2_CID_CODEC_BASE +
+> > > 1010)
+> > > +#define V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS (V4L2_CID_CODEC_BASE +
+> > > 1012)
+> > > #define V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE    (V4L2_CID_CODEC_BASE +
+> > > 1015)
+> > > #define V4L2_CID_MPEG_VIDEO_HEVC_START_CODE     (V4L2_CID_CODEC_BASE +
+> > > 1016)
+> > > 
+> > > @@ -26,6 +27,7 @@
+> > > #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> > > #define V4L2_CTRL_TYPE_HEVC_PPS 0x0121
+> > > #define V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS 0x0122
+> > > +#define V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS 0x0124
+> > > 
+> > > enum v4l2_mpeg_video_hevc_decode_mode {
+> > >         V4L2_MPEG_VIDEO_HEVC_DECODE_MODE_SLICE_BASED,
+> > > @@ -54,6 +56,9 @@ enum v4l2_mpeg_video_hevc_start_code {
+> > > /* The controls are not stable at the moment and will likely be reworked.
+> > > */
+> > > struct v4l2_ctrl_hevc_sps {
+> > >         /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
+> > > +       __u8    video_parameter_set_id;
+> > Whilst I don't object to the addition of vps id why do we need
+> > it if the VPS is never passed?
+> 
+> You are right I could remove it.
+> 
+> > 
+> > > +       __u8    seq_parameter_set_id;
+> > > +       __u8    chroma_format_idc;
+> > >         __u16   pic_width_in_luma_samples;
+> > >         __u16   pic_height_in_luma_samples;
+> > >         __u8    bit_depth_luma_minus8;
+> > > @@ -74,9 +79,9 @@ struct v4l2_ctrl_hevc_sps {
+> > >         __u8    log2_diff_max_min_pcm_luma_coding_block_size;
+> > >         __u8    num_short_term_ref_pic_sets;
+> > >         __u8    num_long_term_ref_pics_sps;
+> > > -       __u8    chroma_format_idc;
+> > > 
+> > > -       __u8    padding;
+> > > +       __u8    num_slices;
+> > > +       __u8    padding[6];
+> > > 
+> > >         __u64   flags;
+> > > };
+> > > @@ -100,10 +105,15 @@ struct v4l2_ctrl_hevc_sps {
+> > > #define V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER        (1ULL <<
+> > > 16)
+> > > #define V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT           (1ULL <<
+> > > 17)
+> > > #define V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT (1ULL <<
+> > > 18)
+> > > +#define V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT   (1ULL <<
+> > > 19)
+> > > +#define V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING                     (1ULL <<
+> > > 20)
+> > > 
+> > > struct v4l2_ctrl_hevc_pps {
+> > >         /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+> > > +       __u8    pic_parameter_set_id;
+> > >         __u8    num_extra_slice_header_bits;
+> > > +       __u8    num_ref_idx_l0_default_active_minus1;
+> > > +       __u8    num_ref_idx_l1_default_active_minus1;
+> > >         __s8    init_qp_minus26;
+> > >         __u8    diff_cu_qp_delta_depth;
+> > >         __s8    pps_cb_qp_offset;
+> > > @@ -116,7 +126,7 @@ struct v4l2_ctrl_hevc_pps {
+> > >         __s8    pps_tc_offset_div2;
+> > >         __u8    log2_parallel_merge_level_minus2;
+> > > 
+> > > -       __u8    padding[4];
+> > > +       __u8    padding;
+> > >         __u64   flags;
+> > > };
+> > > 
+> > > @@ -165,6 +175,10 @@ struct v4l2_ctrl_hevc_slice_params {
+> > >         __u32   bit_size;
+> > >         __u32   data_bit_offset;
+> > > 
+> > > +       /* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header
+> > > */
+> > > +       __u32   slice_segment_addr;
+> > > +       __u32   num_entry_point_offsets;
+> > > +
+> > >         /* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+> > >         __u8    nal_unit_type;
+> > >         __u8    nuh_temporal_id_plus1;
+> > > @@ -190,15 +204,13 @@ struct v4l2_ctrl_hevc_slice_params {
+> > >         __u8    pic_struct;
+> > > 
+> > >         /* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header
+> > > */
+> > > -       __u8    num_active_dpb_entries;
+> > >         __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > >         __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > 
+> > > -       __u8    num_rps_poc_st_curr_before;
+> > > -       __u8    num_rps_poc_st_curr_after;
+> > > -       __u8    num_rps_poc_lt_curr;
+> > > +       __u16   short_term_ref_pic_set_size;
+> > > +       __u16   long_term_ref_pic_set_size;
+> > > 
+> > > -       __u8    padding;
+> > > +       __u8    padding[5];
+> > > 
+> > >         /* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header
+> > > */
+> > >         struct v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > @@ -209,4 +221,21 @@ struct v4l2_ctrl_hevc_slice_params {
+> > >         __u64   flags;
+> > > };
+> > > 
+> > > +#define V4L2_HEVC_DECODE_PARAM_FLAG_IRAP_PIC           0x1
+> > > +#define V4L2_HEVC_DECODE_PARAM_FLAG_IDR_PIC            0x2
+> > > +#define V4L2_HEVC_DECODE_PARAM_FLAG_NO_OUTPUT_OF_PRIOR  0x4
+> > > +
+> > > +struct v4l2_ctrl_hevc_decode_params {
+> > > +       __s32   pic_order_cnt_val;
+> > > +       __u8    num_active_dpb_entries;
+> > > +       struct  v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > +       __u8    num_rps_poc_st_curr_before;
+> > > +       __u8    num_rps_poc_st_curr_after;
+> > > +       __u8    num_rps_poc_lt_curr;
+> > > +       __u8    rps_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > +       __u8    rps_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > +       __u8    rps_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> > > +       __u64   flags;
+> > > +};
+> > > +
+> > > #endif
+> > While you are adding stuff is there any chance you could also add:
+> > 
+> > #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT     (1ULL << 9)
+> > 
+> > to the slice flags?  The rpi H265 decoder needs it to deal with
+> > cases where dependant_slice_segment is set in the slice header.
+> 
+> Remarks on previous versions suggest to only add what it is used by driver
+> (like scaling feature) so I will wait to have an usage of this flag to
+> introduce it.
 
-Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- drivers/media/v4l2-core/v4l2-jpeg.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Any chance we can have a link to the related kernel code ? Userspace is already
+expected to fill the blank in the slice_params, but perhaps we missed something.
 
-diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
-index c4c0d6dd4577..c2513b775f6a 100644
---- a/drivers/media/v4l2-core/v4l2-jpeg.c
-+++ b/drivers/media/v4l2-core/v4l2-jpeg.c
-@@ -537,6 +537,10 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
- 					&out->dht[out->num_dht++ % 4]);
- 			if (ret < 0)
- 				return ret;
-+			if (!out->huffman_tables) {
-+				ret = jpeg_skip_segment(&stream);
-+				break;
-+			}
- 			ret = jpeg_parse_huffman_tables(&stream,
- 							out->huffman_tables);
- 			break;
-@@ -545,6 +549,10 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
- 					&out->dqt[out->num_dqt++ % 4]);
- 			if (ret < 0)
- 				return ret;
-+			if (!out->quantization_tables) {
-+				ret = jpeg_skip_segment(&stream);
-+				break;
-+			}
- 			ret = jpeg_parse_quantization_tables(&stream,
- 					out->frame.precision,
- 					out->quantization_tables);
--- 
-2.25.1
+> 
+> Benjamin
+> 
+> > 
+> > Thanks
+> > 
+> > John Cox
+> > 
+> 
+
 
