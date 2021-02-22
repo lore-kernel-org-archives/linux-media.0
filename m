@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74DC6C43331
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C77C433E6
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:06:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AC0C64E74
-	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:05:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73DFB64E40
+	for <linux-media@archiver.kernel.org>; Mon, 22 Feb 2021 16:06:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbhBVQFp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Feb 2021 11:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S231653AbhBVQF5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Feb 2021 11:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbhBVQE2 (ORCPT
+        with ESMTP id S231392AbhBVQEw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:04:28 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91058C0698C0
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:01 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id l12so19633673wry.2
-        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:01 -0800 (PST)
+        Mon, 22 Feb 2021 11:04:52 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B58C0698C4
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:03 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id b3so19625009wrj.5
+        for <linux-media@vger.kernel.org>; Mon, 22 Feb 2021 08:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uD6Ll3UJbUUhhLZHFuXMtl1QMIBqbo6mMrhSF9pYSkY=;
-        b=uBnedkvDB7342lXR2f5JiB8TO+1gniqpgOixNUpoHsLVAte5OV29I4KJyk6B8DPpLK
-         5t5ldjBbruyxfcJZs+OuwBLdAa7zOJKsXFjr6cDG/pFWCu+C4Uio1xasdJIbOLHA1zwX
-         hUqS4Ltvp8Caoccn8UlO2kKaoYEJl4oUV/k5JcZ/ulo729OIzB4zyKOk05NGtscG1WdP
-         nP7h8tKykKUsDFHSf4eaxyL/SX0dPKOMrbGli9GdtW/Wu0hncWcDL9kNvbEAnmr4gBi3
-         j33VjF5Oy8mZQAx2swLVJ5ZBOHxM/IpUQAeA02MrzPoxQ7+krttL+vx0uIRgOqY1sjvu
-         DdBg==
+        bh=mpQeOWIwxrnqUYF09ycSkk2SsgXNTv3iPduq13x2l1Y=;
+        b=MRz/MQ+sZNM8+7X2P1PkePpVmdDMq+djL+3uq3107kAI7MSiYwyLyNeWIGYIigR/Nd
+         Z3PORLom9TOIr8cvSACVQ9SbaCqqU2SoE22rMBpqps8qUxHHLsyBjsfuFNW8naJeLWaw
+         RpNPpbweJh80yIwVzF6X8Sv8AT+UJJmmyuhYHCLnVK7kDFKnZmrCQHEaSuoksl04A4oh
+         2KffzXxcKM0ZZ90Fs5XZzhXJwz8PkdwKdFzUCJZFP4VRoQGTUiz4aj35cJHlYt2WiCEx
+         ZkRzsWKzuka8igwerHeq3yi6GMqX2Pw879+EDaizWjEB+dkECM4QIviktigMvCB0hPJk
+         AO/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uD6Ll3UJbUUhhLZHFuXMtl1QMIBqbo6mMrhSF9pYSkY=;
-        b=uk7mU7AGKdfzcVSCfZ1HpIIOgjFY6MVrl6SaMR2jac7sLhOXs/LUEs1unZwpXByDT4
-         twXOqyAS/u9Fzte3tTWq86dQ/Obqr5TmZ7xYmcvdsV00Yrp+AsT5JteMHCZPXUy4Khpe
-         HQy/tApu2XtuIQsAvNbUoNkiDZwuRwOZr2BlkeCiKqHaL65KQC+zSaYALBJBt/LC2o/S
-         tEWL8Kc4w4UgabZf3PfeX1Jd+BvNxRxADIWWbhwm/U9XKExd6/BsRC9P5BKbUH/CX1GY
-         Frqv9DmacGYiMOLIQ8JEKBh/hCgrnezKRIsJmO0jQv5G5XrWDsI8TH/MkM3gAeJJoaOu
-         cgpQ==
-X-Gm-Message-State: AOAM531hKuA7L7hWeGwRo7wcfDAnM+ma0JTD05U7cKtc80C7Ru4P6Qql
-        gQ13MBARgoZrsTEgAQO54uKrvQ==
-X-Google-Smtp-Source: ABdhPJzgiclUaRS8AnLQjO9qMcBlNDlI4+W7zQLgvDO01q+HNjqhz5fv7+XZYMWcDM3/WexnDYdOOw==
-X-Received: by 2002:a05:6000:1184:: with SMTP id g4mr9242154wrx.322.1614009720380;
-        Mon, 22 Feb 2021 08:02:00 -0800 (PST)
+        bh=mpQeOWIwxrnqUYF09ycSkk2SsgXNTv3iPduq13x2l1Y=;
+        b=uDr0todgj4ROKhwethUX274SsflYJaEBFCBfga0mJQcMuDqDS7uw4kLVEHPz/f75Gb
+         iDHURKlfnjNQ3cGjTYekmlI8nJUTc8WhVaO6xeCYeL+qk4Ga7vffrJm2Sv+qCslEDJ1+
+         58xOz43QAV3mPr85VoN5vVV+TaL8ZmmnI+3OqNNtAyTHAEbRlO6gPX86C80EoTLlAKVl
+         6/G3CThPggcQWgbkJQ9N9tPV79Y+oxyJFdG3fen7Fd3X5PmTBt/wzosHy+pfjZk8JhmL
+         4ELaFw0caqV0/4vJJvYZKUz68cmTFgpHkdAFQXoYkbfcAt9W8oQ9lAPmqIwpAxnrFyT8
+         BK/g==
+X-Gm-Message-State: AOAM530AxSEj/MlsJQhnusnIDlgN54zwxtnLTPxqnYZY0peytXKav2fK
+        E+94B7uEguwph5kUf5O4gT1O9A==
+X-Google-Smtp-Source: ABdhPJwG6AJH4vVRD6OQKeKTxQDNn8aFd/KrY6Lakydrbc1lmxwYZWIp59hLD8s2EWtsTxXXL21sig==
+X-Received: by 2002:adf:e585:: with SMTP id l5mr21667227wrm.85.1614009722745;
+        Mon, 22 Feb 2021 08:02:02 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.01.59
+        by smtp.gmail.com with ESMTPSA id c3sm7373697wrw.80.2021.02.22.08.02.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 08:01:59 -0800 (PST)
+        Mon, 22 Feb 2021 08:02:02 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
         jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH 23/25] media: venus: hfi: Increase plat_buf_v6 o/p buffer count.
-Date:   Mon, 22 Feb 2021 16:02:58 +0000
-Message-Id: <20210222160300.1811121-24-bryan.odonoghue@linaro.org>
+Subject: [PATCH 25/25] media: venus: vdec: Fix decoder cmd STOP issue
+Date:   Mon, 22 Feb 2021 16:03:00 +0000
+Message-Id: <20210222160300.1811121-26-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
 References: <20210222160300.1811121-1-bryan.odonoghue@linaro.org>
@@ -74,31 +74,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <dikshita@codeaurora.org>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-Presently, minimum buffer count for output buffers for h264 &
-hevc codec is kept as 8 which might not be sufficient for
-few use cases so increasing the value to 18.
+Fixes an issue when issuing a stop command to the controller, negating the
+following firmware error.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+"SFR message from FW: Exception: TID = Unknown IP = 0x3b7dc FA = 0x0
+ cause = 0x6"
+
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
+ drivers/media/platform/qcom/venus/vdec.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-index d43d1a53e72d..075d9546b15e 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-@@ -1159,7 +1159,7 @@ static int output_buffer_count(u32 session_type, u32 codec)
- 		case V4L2_PIX_FMT_H264:
- 		case V4L2_PIX_FMT_HEVC:
- 		default:
--			output_min_count = 8;
-+			output_min_count = 18;
- 			break;
- 		}
- 	} else {
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index cc282b0df8c3..0a32bb44506c 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -254,7 +254,7 @@ int pkt_session_unset_buffers(struct hfi_session_release_buffer_pkt *pkt,
+ int pkt_session_etb_decoder(struct hfi_session_empty_buffer_compressed_pkt *pkt,
+ 			    void *cookie, struct hfi_frame_data *in_frame)
+ {
+-	if (!cookie || !in_frame->device_addr)
++	if (!cookie)
+ 		return -EINVAL;
+ 
+ 	pkt->shdr.hdr.size = sizeof(*pkt);
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 903443a7a757..9fbff40c4568 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -515,7 +515,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+ 
+ 		fdata.buffer_type = HFI_BUFFER_INPUT;
+ 		fdata.flags |= HFI_BUFFERFLAG_EOS;
+-		fdata.device_addr = 0xdeadb000;
++		fdata.device_addr = 0;
+ 
+ 		ret = hfi_session_process_buf(inst, &fdata);
+ 
 -- 
 2.29.2
 
