@@ -2,251 +2,181 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6465DC433DB
-	for <linux-media@archiver.kernel.org>; Tue, 23 Feb 2021 11:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D053CC433E9
+	for <linux-media@archiver.kernel.org>; Tue, 23 Feb 2021 12:05:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0684464E22
-	for <linux-media@archiver.kernel.org>; Tue, 23 Feb 2021 11:33:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 923D2601FF
+	for <linux-media@archiver.kernel.org>; Tue, 23 Feb 2021 12:05:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbhBWLdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Feb 2021 06:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbhBWLda (ORCPT
+        id S232520AbhBWMFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Feb 2021 07:05:19 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:36431 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232817AbhBWMCE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Feb 2021 06:33:30 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAAAC06174A
-        for <linux-media@vger.kernel.org>; Tue, 23 Feb 2021 03:32:50 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8BF1A58E;
-        Tue, 23 Feb 2021 12:32:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1614079966;
-        bh=DXmYHzXePvGRg7Bgjnl6qV1tBshCr5iduUYHoTFUeO0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T7M7FQxMZ7404DEFWo8NG7Bg9xSf+0hF0rLxv8zRN7fCWaegQOk/DKadjJAo9UXv6
-         OiDXgX3Y6JufV5RUHQdmb5cbuGTLrP3FJ5/HsFCdx91ops8EhPD0ao3BQ1ThYnh4Ex
-         RyEBMDJNYaCIMdEy6MzfrSjSjRuv0d61qe7xpBIU=
-Date:   Tue, 23 Feb 2021 13:32:19 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     "rogerio.silva@nxp.com" <rogerio.silva@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "slongerbeam@gmail.com" <slongerbeam@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-media@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        "kernel@puri.sm" <kernel@puri.sm>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: question: CSI on imx8mq with (any) CSI2 camera / experience with
- mx6s_capture?
-Message-ID: <YDTnw1SGG9LiNpQA@pendragon.ideasonboard.com>
-References: <9e09ca8b-d1bc-eaa9-d296-c4ee98882c06@puri.sm>
- <X9HpL/qlFxmZi9Vt@pendragon.ideasonboard.com>
- <X9IR7dXOkX2XBCtx@pendragon.ideasonboard.com>
- <195b62c5-5238-a75e-3206-c54efc309e94@puri.sm>
- <X9JG/d1le9xZlI4i@pendragon.ideasonboard.com>
- <c13b2f47-7e15-97b6-f523-93afc009ebdf@puri.sm>
- <X+ISOvor/SO55dKw@pendragon.ideasonboard.com>
- <1279ef68-cbed-dd60-fc2e-2e1d02319563@puri.sm>
- <21342432-09ae-a096-1d9f-35e4333e9783@puri.sm>
+        Tue, 23 Feb 2021 07:02:04 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id EWNHlxmb0fIMiEWNLluGpF; Tue, 23 Feb 2021 13:01:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1614081671; bh=1hLmo70e6QdzywjzHOXuJ1hUlzuPjRX05cJRBwMEB6I=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=FMCaBCmqpEBnU3Q9S/jXlcwisFIRrO1n6dtWcMQai0POjdZLnNfVQ+L9melF6apPF
+         fdTAJtLb1mG3bftbGTR1PL6HW5ghoRIsi6SJQaARvtoaAwU5K4eb3kg1tNWluwe5G7
+         iyK400JCQaCqA2SLekAe3Lqk5XOSK8gDBfbUaAztPwKTOczWVB9L2Lb+HaWbo/n00G
+         S4JR25FDp0hixtQwPX+SliWlolYnrZJsUxY5hFKibpC/dcjywWZqgf6T7OPqXOgID6
+         mtUc/o6IdN4HebQc3vQqL5kY8l9oIodDWB/lfRQ1l6j5/Ylrxb5hx/Gf6ExJmsgXk5
+         Q3cKPeWgG/E7Q==
+Subject: Re: [PATCH v2] media: i2c: adv7511: remove open coded version of
+ SMBus block read
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <bea536b1-9d81-3f41-8ca5-7fb075422290@xs4all.nl>
+Date:   Tue, 23 Feb 2021 13:01:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
+In-Reply-To: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <21342432-09ae-a096-1d9f-35e4333e9783@puri.sm>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKR18NfCtNTh2IebkSTudHoupJrjs8VOfJOF0Z3JLTiColv51DxZ8YAvJGv1w9wJqios3z5H6MotvoHhHMT+UJnj70vDYYbaT0GTm1gC9tEpsFeq5l27
+ hufbUMuV245wzUpQXHGwCY0gohgtJhK0K/VxEzbUcTJi4DnBOq4SfD4wtGhV3bELmiwmwjeLjKgN6+Eh+l0K1RahuV6HKl6UX1K1VU6bbqi0CcDl/KU1JJ5u
+ rdQnkNLnbohvBBhg3BIjDsghIHYZYEFV7YOL/BAV+IInTl8Ez5vQPJfEJ5GRuvb+FZFy0RTNtcD1qKUnl9YX58XCZkp2wuJMH1cHlZKd4f4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martin,
+Hi Wolfram,
 
-On Tue, Feb 23, 2021 at 10:04:44AM +0100, Martin Kepplinger wrote:
-> On 22.12.20 16:55, Martin Kepplinger wrote:
-> > On 22.12.20 16:35, Laurent Pinchart wrote:
-> >> On Tue, Dec 22, 2020 at 03:06:28PM +0100, Martin Kepplinger wrote:
-> >>> On 10.12.20 17:04, Laurent Pinchart wrote:
-> >>>> On Thu, Dec 10, 2020 at 02:12:30PM +0100, Martin Kepplinger wrote:
-> >>>>> On 10.12.20 13:17, Laurent Pinchart wrote:
-> >>>>>> On Thu, Dec 10, 2020 at 11:24:00AM +0200, Laurent Pinchart wrote:
-> >>>>>>> On Thu, Dec 10, 2020 at 09:17:48AM +0100, Martin Kepplinger wrote:
-> >>>>>>>> hi,
-> >>>>>>>>
-> >>>>>>>> TL;DR: did you use the NXP "mx6s_capture" csi bridge driver with 
-> >>>>>>>> other
-> >>>>>>>> cameras?
-> >>>>>>>
-> >>>>>>> I've recently worked on camera support for i.MX8MM (whose camera IP
-> >>>>>>> cores are, if not identical, very similar to the i.MX8MQ's). The 
-> >>>>>>> least I
-> >>>>>>> can say is that it was painful :-(
-> >>>>>>>
-> >>>>>>> I'm using an MT9M114 sensor, which can produce RAW8, RAW10 and 
-> >>>>>>> YUV and
-> >>>>>>> has a CSI-2 interface. My first use case is to capture RAW10, which
-> >>>>>>> isn't supported by the mx6s_capture driver.
-> >>>>>
-> >>>>> so did you successfully use the NXP mx6s_capture driver with that 
-> >>>>> sensor too?
-> >>>>
-> >>>> I haven't tried. The mx6s_capture driver and the mainline driver share a
-> >>>> similar architecture, as they came from the same code base. They have
-> >>>> diverged, with the  mainline driver receiving bug fixes and new
-> >>>> features, and my large no-yet-upstreamed patch series adds lots of fixes
-> >>>> that are required for the mt9m114 driver to work with the driver. For
-> >>>> that reason, I've considered that porting the mt9m114 driver to the NXP
-> >>>> mx6s_capture, and fixing the same issues in the mx6s_capture driver than
-> >>>> were present in the mainline driver, would require lots of time for
-> >>>> likely very little gain.
-> >>>>
-> >>>> That being said, I've compared the two drivers, and I haven't seen
-> >>>> anything in mx6s_capture that would address the specific issues I'm
-> >>>> facing. I've ordered yesterday an i.MX8MM EVK with an OV5640 camera
-> >>>> module, and I will test those with the mainline driver. If they don't
-> >>>> work, and assuming the NXP kernel driver works on that platform, I'll
-> >>>> have two code bases to compare.
-> >>>>
-> >>>>>>>> I try to use a CSI2 camera (hi846 I'm writing a driver for) on imx8mq:
-> >>>>>>>> Using NXP's CSI bridge driver
-> >>>>>>>> https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/media/platform/mxc/capture/mx6s_capture.c?h=imx_5.4.0_8dxlphantom_er 
-> >>>>>>>>
-> >>>>>>>> as well as the CSI driver itself:
-> >>>>>>>> https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/media/platform/imx8/mxc-mipi-csi2_yav.c?h=imx_5.4.0_8dxlphantom_er 
-> >>>>>>>>
-> >>>>>>>> works fine when using the ov5640 camera with this driver:
-> >>>>>>>> https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/media/platform/mxc/capture/ov5640_mipi_v2.c?h=imx_5.4.0_8dxlphantom_er 
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>> (I realize there is a CSI bridge driver in staging, but that need more
-> >>>>>>>> work to be actually used. Of course after this the goal is to fix and
-> >>>>>>>> use it; and mainline a CSI phy driver too.)
-> >>>>>>>
-> >>>>>>> I have lots of patches for this driver, which I've developed on i.MX7D
-> >>>>>>> for a separate project. I'd like to mainline them, but this is blocked
-> >>>>>>> by one last issue that I haven't been able to solve yet. In a nutshell,
-> >>>>>>> the CSI writes two consecutive frames in each buffer, overflowing the
-> >>>>>>> allocated memory. The registers that control the buffer size seem to be
-> >>>>>>> programmed correctly as far as I can tell. I've reported this issue to
-> >>>>>>> NXP but haven't received any feedback yet.
-> >>>>>
-> >>>>> that's different from where I am. So you don't get any interrupt (EOF or
-> >>>>> other) when only *one* frame is written into one buffer?
-> >>>>
-> >>>> I don't get any FB1_DMA_DONE or FB2_DMA_DONE interrupt at least. I
-> >>>> haven't checked other interrupts. I thus get half of the frame rate. If
-> >>>> I configure the CSI_CSIIMAG_PARA register with half of the actual image
-> >>>> height, buffers then contain a single image and the frame rate goes to
-> >>>> the expected value. That gives me a workaround, but without
-> >>>> understanding the root cause, I'm worried that just halving the height
-> >>>> would introduce other breakages.
-> >>>
-> >>> Hi Laurent,
-> >>>
-> >>> Thanks a lot, exchanging things this way alone is much appreciated. I'll
-> >>> give you detailed feedback on the staging drivers later - I tried
-> >>> running them, they probe but still a (gstreamer) stream would not start.
-> >>> But most all of your addition make a lot of sense.
-> >>>
-> >>> Just so you know, to emphasize that once more: I'm still on the nxp
-> >>> drivers (yes, they are very similar) just because the ov56 cam works
-> >>> with them over here.
-> >>
-> >> I've recently bought an i.MX8MM EVK, with the OV5647 camera module, and
-> >> when I try to capture images, with the NXP kernel, I just don't get any.
-> >> *sigh* I'll have to debug that.
-> > 
-> > oh you have it already. very good.
-> > 
-> > I guess the nxp kernel directly *should* work, but I use a kernel based 
-> > on v5.9.X and include the drivers like so:
-> > https://source.puri.sm/Librem5/linux-next/-/commit/ed8f567432d776d21cb7160c03e3272826a5f316 
-> > 
-> > https://source.puri.sm/Librem5/linux-next/-/commit/8d93a2cfd485d404741560dcb2f22da548f54ebc 
-> > 
-> >>> The main problem I have is that, as soon as I try
-> >>> to use a different pixelformat than V4L2_PIX_FMT_YUYV that basically
-> >>> nothing works anymore. userspace stops to "be interested" pretty soon.
-> >>>
-> >>> If I do (wrongly) use that pixelformat, I do get (only) one frame (dma)
-> >>> completed, the usual way.
-> >>>
-> >>> And when I break the ov56 by using a wrong pixelformat in mx6s_capture
-> >>> (nxp bridge driver), I get equally get only one frame (dma) completed 
-> >>> there.
-> >>>
-> >>> How can I make this thing use a different pixelformat (by setting the
-> >>> media bus format in the sensor driver)?
-> >>
-> >> All the components have to support the format you want to capture. This
-> >> includes the CSI driver, the MIPI_CSI driver, and the OV5647 driver. The
-> >> pixel format only matters in the CSI driver, for the other two it's the
-> >> media bus format that matters. To capture raw bayer data, you'll first
-> >> need to extend the OV5640 driver to support the corresponding media bus
-> >> format (and of course configure the sensor to output that format), then
-> >> the MIPI_CSI driver to support that media bus format as well, and
-> >> finally the CSI driver.
-> > 
-> > ok, the sensor I work with outputs raw bayer only, and that sounds like 
-> > I should pay more attention to the mipi csi driver.
-> > 
-> > that links to my experiments I occasionally update:
-> > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/hi846
-> > 
-> >>> thanks again for sharing your code early. have a nice rest of the year,
+On 27/01/2021 11:33, Wolfram Sang wrote:
+> The open coded version differs from the one in the core in one way: the
+> buffer will be always copied back, even when the transfer failed. Be
+> more robust: use the block read from the I2C core and propagate a
+> potential errno further to the sanity checks.
 > 
-> hi Laurent, how are you? Am I right in that you tried to run the ov5640 
-> mainline driver with the CSI bridge staging driver on imx8mq? Which mipi 
-> driver would you then use?
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I've run it with the staging driver on i.MX8MP, not i.MX8MQ. The MQ
-seems to have the same CSI bridge, but a different CSI-2 receiver (and
-PHY). It would be great if you could contribute a driver for that :-)
+This looks good.
 
-> Did you have progress in that area and in resolving things in order to
-> push some of your changes out?
+If you want to merge this, then you can add my:
 
-I've sent a large patch series recently, if you could review it it would
-speed up integration ;-)
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-> I'm still struggling with the different sensor I want to use on imx8mq 
-> (hi846) and I still use the nxp bsp drivers for mipi and csi bridge:
-> 
-> I was able to add and fix a few things and get some kind of image at 
-> least, but there's still definitely some sizes or timings wrong (in 
-> every resolution mode I think). 1280x720 shows it clearly as the image 
-> looks "almost" normal only when I resize it to 916 pixel width. Also, it 
-> "shifts" with later frames. For a few images of this, see
-> 
-> https://source.puri.sm/Librem5/linux-next/-/issues/43#note_143875
-> 
-> I just wanted to describe the above just in case you've seen something 
-> like that during your experiments with sensors and can point me to 
-> places to look at. I do think that the SoC side should be ok now (but 
-> still now 100% sure), but many sensors are similar and maybe you have 
-> ideas there too.
+If you want me to take it, then just let me know and I'll queue it up for 5.13.
 
-I've seen similar (but not identical) issues that were due to incorrect
-Ths_settle values in the D-PHY. You could start by trying different
-values there. This seems to be controlled on i.MX8MQ by
-CSI2_1_S_PRG_RXHS_SETTLE in IOMUXC_GPR_GPR34 or CSI2_2_S_PRG_RXHS_SETTLE
-in IOMUXC_GPR_GPR41, but the value of the fields are not properly
-documented :-S The i.MX8MM suffered from the same issue, but a table
-with register values for different clock frequencies was posted by NXP
-on their support forum. Maybe the same information could be available
-there for i.M8XMQ ?
-
-> anyways, thanks for looking at this and as soon as I have a satisfying 
-> image with my current setup, I'll switch to the staging csi driver. But 
-> there's no driver for the mipi ("phy") in staging for imx8mq, right?
-
--- 
 Regards,
 
-Laurent Pinchart
+	Hans
+
+> ---
+> 
+> Changes since v1:
+> * respect 'err' in more code paths
+> * updated comment
+> 
+>  drivers/media/i2c/adv7511-v4l2.c | 58 ++++++++++++++------------------
+>  1 file changed, 26 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+> index a3161d709015..9183003ae22d 100644
+> --- a/drivers/media/i2c/adv7511-v4l2.c
+> +++ b/drivers/media/i2c/adv7511-v4l2.c
+> @@ -214,36 +214,25 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
+>  	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
+>  }
+>  
+> -static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
+> -					 u8 command, unsigned length, u8 *values)
+> -{
+> -	union i2c_smbus_data data;
+> -	int ret;
+> -
+> -	if (length > I2C_SMBUS_BLOCK_MAX)
+> -		length = I2C_SMBUS_BLOCK_MAX;
+> -	data.block[0] = length;
+> -
+> -	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+> -			     I2C_SMBUS_READ, command,
+> -			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
+> -	memcpy(values, data.block + 1, length);
+> -	return ret;
+> -}
+> -
+> -static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+> +static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+>  {
+>  	struct adv7511_state *state = get_adv7511_state(sd);
+>  	int i;
+> -	int err = 0;
+>  
+>  	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
+>  
+> -	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
+> -		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
+> +	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
+> +		s32 ret;
+> +
+> +		ret = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
+>  						    I2C_SMBUS_BLOCK_MAX, buf + i);
+> -	if (err)
+> -		v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +		if (ret < 0) {
+> +			v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
+> @@ -1668,22 +1657,27 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
+>  	if (edidRdy & MASK_ADV7511_EDID_RDY) {
+>  		int segment = adv7511_rd(sd, 0xc4);
+>  		struct adv7511_edid_detect ed;
+> +		int err;
+>  
+>  		if (segment >= EDID_MAX_SEGM) {
+>  			v4l2_err(sd, "edid segment number too big\n");
+>  			return false;
+>  		}
+>  		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
+> -		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+> -		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
+> -		if (segment == 0) {
+> -			state->edid.blocks = state->edid.data[0x7e] + 1;
+> -			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
+> +		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+> +		if (!err) {
+> +			adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
+> +			if (segment == 0) {
+> +				state->edid.blocks = state->edid.data[0x7e] + 1;
+> +				v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n",
+> +					 __func__, state->edid.blocks);
+> +			}
+>  		}
+> -		if (!edid_verify_crc(sd, segment) ||
+> -		    !edid_verify_header(sd, segment)) {
+> -			/* edid crc error, force reread of edid segment */
+> -			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
+> +
+> +		if (err || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
+> +			/* Couldn't read EDID or EDID is invalid. Force retry! */
+> +			if (!err)
+> +				v4l2_err(sd, "%s: edid crc or header error\n", __func__);
+>  			state->have_monitor = false;
+>  			adv7511_s_power(sd, false);
+>  			adv7511_s_power(sd, true);
+> 
+
