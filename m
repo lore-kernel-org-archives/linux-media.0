@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDDAC433E6
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A02CC4332E
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 441BB64EFC
+	by mail.kernel.org (Postfix) with ESMTP id DEBAA64EF1
 	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbhBXO1K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Feb 2021 09:27:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58438 "EHLO mail.kernel.org"
+        id S235293AbhBXO2S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Feb 2021 09:28:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233607AbhBXNIh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Feb 2021 08:08:37 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B51364F99;
-        Wed, 24 Feb 2021 12:54:54 +0000 (UTC)
+        id S235324AbhBXNLR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Feb 2021 08:11:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CAE864FA0;
+        Wed, 24 Feb 2021 12:55:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171295;
-        bh=WVR7ZEEdctUFWw35chEKS8UARPxWGQ6zEVR3cUJTFnM=;
+        s=k20201202; t=1614171327;
+        bh=BMmT6/hWLV9+rdvo3ixw5fJP7Sbe3gl7300X0F+P8+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OG3Pc1BToATOqRf2KzSMfDnk2iFG09zfuCYtH1M9aDGx2RG6kKLXNx9gAro0oOTt/
-         UD1DbLZTLmNL4mpC9doxWf5JzFjTnh6//OtnxZyyVKKic7/055Pwn7/IFVONUTjo7G
-         MrAmNjbKGn5yfMwsR+BZSntstjLwcUKSfdCs9uMWbm+c5uRfe6ufFsvoyGjaeMCGzd
-         uvjhYui0cFr75Gy+0+PPCTvKf4sqcKCBaiLxevqM/m4aTJxXtuyBJ36kOvu8FHsd3V
-         JR/h1S0ftaPTCBiYtKPtHrZC/jz6lrAxdAuRRAKMqeet1uCRl4sWxMbj9URIUZETr3
-         +3bsA88T5rYOA==
+        b=Ptx2bI/l9hBdnAq4SBx9ULPgbfcW2ByGDrSTQq0Hos6gI9m52ibZGRx8cC7VgUXpT
+         PfmGWMIWTOoRxcnupDqXhq5xRL8p3OeGSwaTxwBqi9pWfZz+P+CVhu6LG2taKo/Gl4
+         FjfkfhoNu6zhOZ1OkaFncrF7dEvzFhPsHxG8me1k3nmA9+2bHW84c0RK0ZrzRsGNOt
+         K3nxNXyXNI1770KupfqTG9WlNXpg04p0jCXLulLi0ZiSqhlLJUfHolmaX6jK6iNGg2
+         fUe+k2gj8ptURiDxhYCdSyRzL6i3hqRZ5IpKCM3U+UL5OOQ40Ew5+mz7McsIahlgbx
+         CUOj1qxxm0yqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sean Young <sean@mess.org>,
         syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 15/26] media: mceusb: sanity check for prescaler value
-Date:   Wed, 24 Feb 2021 07:54:23 -0500
-Message-Id: <20210224125435.483539-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/16] media: mceusb: sanity check for prescaler value
+Date:   Wed, 24 Feb 2021 07:55:07 -0500
+Message-Id: <20210224125514.483935-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210224125435.483539-1-sashal@kernel.org>
-References: <20210224125435.483539-1-sashal@kernel.org>
+In-Reply-To: <20210224125514.483935-1-sashal@kernel.org>
+References: <20210224125514.483935-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
-index f1dfb84094328..845583e2af4d5 100644
+index bf7aaff3aa375..bbbbfd697f9c4 100644
 --- a/drivers/media/rc/mceusb.c
 +++ b/drivers/media/rc/mceusb.c
-@@ -685,11 +685,18 @@ static void mceusb_dev_printdata(struct mceusb_dev *ir, u8 *buf, int buf_len,
+@@ -630,11 +630,18 @@ static void mceusb_dev_printdata(struct mceusb_dev *ir, u8 *buf, int buf_len,
  				data[0], data[1]);
  			break;
  		case MCE_RSP_EQIRCFS:
