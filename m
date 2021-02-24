@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9D49C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7042FC4360C
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC89C64F03
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45D6564E60
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbhBXNEv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Feb 2021 08:04:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55000 "EHLO mail.kernel.org"
+        id S234479AbhBXNE4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Feb 2021 08:04:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232672AbhBXM7b (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Feb 2021 07:59:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B5B164F50;
-        Wed, 24 Feb 2021 12:52:52 +0000 (UTC)
+        id S232954AbhBXNAC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Feb 2021 08:00:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C537164F4B;
+        Wed, 24 Feb 2021 12:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171173;
-        bh=KEDINILQi3pz6Ke559AABCODkCCCuukFluJrY1hQkjc=;
+        s=k20201202; t=1614171175;
+        bh=gftKk1v/Nzl6DahF5lzpD5Z+bu6E7udThqN4RYyJWys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EzK+jRueg9QDpDKjNL3ox5J3nyb2dns8vXsXQ2DRHDG5E8lapsYo7qOLKzylSjehC
-         I8EfqcGUPv3+f5kE+cWifGiAI+quz5LJZPuey+smW6BByBIwaLnH7Zv89ql8VaZtef
-         syoblIAY+TJozH4TkYwsnC5h8KgxtKxO+oD3qQjffmwZkpbziXLEAm3NxCNWO/Ihuh
-         FNl1mQOEzC9rAt95OokvaNWHi1BX8hLvfdw2SlSAHsCATf+tNOjUkmetu7PcIfiPl9
-         Z4FYhDfvO4KqHvc57yWkfyUxB/Xl80jLgUs5XZzQ9s0hQOOfdIf4+ini8QoOXSAIR5
-         BFFQUB40HeTMQ==
+        b=a6tZivyMKNFOPBsITOg46PnsVz79FjVNh0HtLTnuL7nsHBqVGe+bys2j55CBxPmxb
+         IR7NANkD6KcJ1bEFOdOgLXdOwspAt1ylZfX1WIkA2BtAnJpKuVcxLsXowMv42Lc2mU
+         UzjxQu2+rsj+nkdKKe1nkHS78SesI189OlIK1irvQNhkbwM9urNHzUXKSgss+3eeQw
+         MTZmFhZsMK6m9xsqQ3/BVK75mfRW2mri7OLYJJxhuI0q1+uzNYN6NfnFiGTMSDUr6+
+         6b0hdXF+sylj1LRuM//diwmlHdLaPlaZSbWzsQ49mw/9I0d+EDWuQ3z+PMfzVP63+E
+         8BvIsuWFv2Abw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
-        syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com,
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 30/56] media: mceusb: sanity check for prescaler value
-Date:   Wed, 24 Feb 2021 07:51:46 -0500
-Message-Id: <20210224125212.482485-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 32/56] media: uvcvideo: Allow entities with no pads
+Date:   Wed, 24 Feb 2021 07:51:48 -0500
+Message-Id: <20210224125212.482485-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210224125212.482485-1-sashal@kernel.org>
 References: <20210224125212.482485-1-sashal@kernel.org>
@@ -51,45 +51,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-[ Upstream commit 9dec0f48a75e0dadca498002d25ef4e143e60194 ]
+[ Upstream commit 7532dad6634031d083df7af606fac655b8d08b5c ]
 
-prescaler larger than 8 would mean the carrier is at most 152Hz,
-which does not make sense for IR carriers.
+Avoid an underflow while calculating the number of inputs for entities
+with zero pads.
 
-Reported-by: syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/mceusb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_driver.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
-index f1dbd059ed087..43d356251d051 100644
---- a/drivers/media/rc/mceusb.c
-+++ b/drivers/media/rc/mceusb.c
-@@ -701,11 +701,18 @@ static void mceusb_dev_printdata(struct mceusb_dev *ir, u8 *buf, int buf_len,
- 				data[0], data[1]);
- 			break;
- 		case MCE_RSP_EQIRCFS:
-+			if (!data[0] && !data[1]) {
-+				dev_dbg(dev, "%s: no carrier", inout);
-+				break;
-+			}
-+			// prescaler should make sense
-+			if (data[0] > 8)
-+				break;
- 			period = DIV_ROUND_CLOSEST((1U << data[0] * 2) *
- 						   (data[1] + 1), 10);
- 			if (!period)
- 				break;
--			carrier = (1000 * 1000) / period;
-+			carrier = USEC_PER_SEC / period;
- 			dev_dbg(dev, "%s carrier of %u Hz (period %uus)",
- 				 inout, carrier, period);
- 			break;
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index ddb9eaa11be71..5ad5282641350 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1028,7 +1028,10 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 	unsigned int i;
+ 
+ 	extra_size = roundup(extra_size, sizeof(*entity->pads));
+-	num_inputs = (type & UVC_TERM_OUTPUT) ? num_pads : num_pads - 1;
++	if (num_pads)
++		num_inputs = type & UVC_TERM_OUTPUT ? num_pads : num_pads - 1;
++	else
++		num_inputs = 0;
+ 	size = sizeof(*entity) + extra_size + sizeof(*entity->pads) * num_pads
+ 	     + num_inputs;
+ 	entity = kzalloc(size, GFP_KERNEL);
+@@ -1044,7 +1047,7 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 
+ 	for (i = 0; i < num_inputs; ++i)
+ 		entity->pads[i].flags = MEDIA_PAD_FL_SINK;
+-	if (!UVC_ENTITY_IS_OTERM(entity))
++	if (!UVC_ENTITY_IS_OTERM(entity) && num_pads)
+ 		entity->pads[num_pads-1].flags = MEDIA_PAD_FL_SOURCE;
+ 
+ 	entity->bNrInPins = num_inputs;
 -- 
 2.27.0
 
