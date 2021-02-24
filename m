@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43B20C433E6
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51960C43331
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC08964F0D
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E2B564EF5
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235642AbhBXNDs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Feb 2021 08:03:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50148 "EHLO mail.kernel.org"
+        id S235665AbhBXNE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Feb 2021 08:04:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50150 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235317AbhBXMxY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Feb 2021 07:53:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D097064F16;
-        Wed, 24 Feb 2021 12:51:17 +0000 (UTC)
+        id S234143AbhBXMx0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:53:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A46AB64F1B;
+        Wed, 24 Feb 2021 12:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171078;
-        bh=ft1+jyJEByQFMktY6awt1dNLeoWTW6Oo1qBOu7mh04s=;
+        s=k20201202; t=1614171081;
+        bh=gftKk1v/Nzl6DahF5lzpD5Z+bu6E7udThqN4RYyJWys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QoFD3MOj7soTJ4pQ6s2FaiMDsW64uOOWmlsHNPdy3Qug/O8gFDOvSKcwq1WSFACDK
-         JSSHrAmUpxvEMYJezdCMQZlNXdlfoSe0eZRLakBqjdSF4o6HDY4MUUeo6f2tQjNK6V
-         Z4TubT8ipaF6DhJtQdyo8J6elaB+994+rD+wWzKmYu4+Pd8ZHS7SwMtqcPzMpkm7fW
-         7gbI4zGmTnnbgPed7zVNYAZeK3dtNcm852Yx3lZsjMPnG5RMsOUYBSyeN0AFSTBVwe
-         eKbLH7RDAG0sQ1Kn2coahZDSlGBHXJWvuQBqy7FXHyIaphRnFPVmlmyI5NQsX9qH8Z
-         epCL0kOXTKlaw==
+        b=FWDljO6DGPGLsAs969t2qExS4wK+dAPysib2vwKv3+mm240Jw2+wM4BXHg7zrarc4
+         h4PfnOU7S77MOyZwIT74J7TE9EIhZUBoy3a6JMgRtPPiPaQbem4ZO6YS3Pq5b7cSza
+         c8xCAAz5qWLHciumy/VC64P2t7bARHDTZ/pMAdPDdr8hI853EL6d7fdZim2nM5O0ts
+         hOEdeBNQ2cfXMwB4hLZMneLy9YMLHoJ7fejIsi8LRuSe/B5NNJcH5Y7q1y2xyIsEg+
+         miHAr1X+ONvFJb+bwc+fgLkIgonJs1asVDLAjA+VTKQCJL+LuaVGhjRffuN417AYTk
+         1ZUItz5FcV1cw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com,
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 38/67] media: v4l2-ctrls.c: fix shift-out-of-bounds in std_validate
-Date:   Wed, 24 Feb 2021 07:49:56 -0500
-Message-Id: <20210224125026.481804-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.11 40/67] media: uvcvideo: Allow entities with no pads
+Date:   Wed, 24 Feb 2021 07:49:58 -0500
+Message-Id: <20210224125026.481804-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
 References: <20210224125026.481804-1-sashal@kernel.org>
@@ -51,35 +51,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-[ Upstream commit 048c96e28674f15c0403deba2104ffba64544a06 ]
+[ Upstream commit 7532dad6634031d083df7af606fac655b8d08b5c ]
 
-If a menu has more than 64 items, then don't check menu_skip_mask
-for items 65 and up.
+Avoid an underflow while calculating the number of inputs for entities
+with zero pads.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: syzbot+42d8c7c3d3e594b34346@syzkaller.appspotmail.com
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_driver.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 5cbe0ffbf501f..9dc151431a5c6 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2165,7 +2165,8 @@ static int std_validate(const struct v4l2_ctrl *ctrl, u32 idx,
- 	case V4L2_CTRL_TYPE_INTEGER_MENU:
- 		if (ptr.p_s32[idx] < ctrl->minimum || ptr.p_s32[idx] > ctrl->maximum)
- 			return -ERANGE;
--		if (ctrl->menu_skip_mask & (1ULL << ptr.p_s32[idx]))
-+		if (ptr.p_s32[idx] < BITS_PER_LONG_LONG &&
-+		    (ctrl->menu_skip_mask & BIT_ULL(ptr.p_s32[idx])))
- 			return -EINVAL;
- 		if (ctrl->type == V4L2_CTRL_TYPE_MENU &&
- 		    ctrl->qmenu[ptr.p_s32[idx]][0] == '\0')
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index ddb9eaa11be71..5ad5282641350 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1028,7 +1028,10 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 	unsigned int i;
+ 
+ 	extra_size = roundup(extra_size, sizeof(*entity->pads));
+-	num_inputs = (type & UVC_TERM_OUTPUT) ? num_pads : num_pads - 1;
++	if (num_pads)
++		num_inputs = type & UVC_TERM_OUTPUT ? num_pads : num_pads - 1;
++	else
++		num_inputs = 0;
+ 	size = sizeof(*entity) + extra_size + sizeof(*entity->pads) * num_pads
+ 	     + num_inputs;
+ 	entity = kzalloc(size, GFP_KERNEL);
+@@ -1044,7 +1047,7 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 
+ 	for (i = 0; i < num_inputs; ++i)
+ 		entity->pads[i].flags = MEDIA_PAD_FL_SINK;
+-	if (!UVC_ENTITY_IS_OTERM(entity))
++	if (!UVC_ENTITY_IS_OTERM(entity) && num_pads)
+ 		entity->pads[num_pads-1].flags = MEDIA_PAD_FL_SOURCE;
+ 
+ 	entity->bNrInPins = num_inputs;
 -- 
 2.27.0
 
