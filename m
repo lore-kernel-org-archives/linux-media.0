@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D53BCC433E0
-	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0269AC433DB
+	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8053964EF1
+	by mail.kernel.org (Postfix) with ESMTP id A840A64EDD
 	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 14:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbhBXO3E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Feb 2021 09:29:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59880 "EHLO mail.kernel.org"
+        id S235475AbhBXO3S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Feb 2021 09:29:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43068 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236139AbhBXNOA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Feb 2021 08:14:00 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 414E564FB1;
-        Wed, 24 Feb 2021 12:55:53 +0000 (UTC)
+        id S236652AbhBXNqZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Feb 2021 08:46:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2D1964FB9;
+        Wed, 24 Feb 2021 12:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171354;
-        bh=/N/4xehBqJRcJQkTrxkQLd8I8UzldUf3l8vEzIEIYzI=;
+        s=k20201202; t=1614171373;
+        bh=Gj61W6SCBn79uBZTL+r1z1mv3nUY3GqC9fehAEkl9GU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b89TCFVoV+vdAVrMV05jyBJz3g2WVWEjNCZp8UEsWxo/vnxKvK/b/RrZpRJrevRtt
-         JkjncAomrf/5Mg+aEDskyv+98ylAdPAwS/t251R9k0q8H4QHZ3Vf+lm1WdnhJPQRoU
-         gaNL6DOOkU7TfCpTckS9mKdHxf610yorPQ8MxqD6lkdbxfu5aUadMLFffx3DwUHBSP
-         HqxWc7AHAJPzUT6z+YBbNVuEYUpZS+kIK+ooDAp9CJ3+x1fhlSyWM3HFagsxBucD/h
-         WrCsFi/1jn3Ui039El4YWryAU2RL41jha6Sy+Hnp7MfZSYfnETGBBo3lnOfgwKWiOo
-         0MDC22aJRDxjw==
+        b=AXUnTh68RX45Rr8E7c7byJQ6KHiKus88usQ75XywOI1w1JiHFNK4mTejEPyPDodxK
+         zFFLxvNDp99qJErh7HcoYVsy5KObZIWiu1voRCKRKX2/I0cpP43zLY88fuI6WhdSoy
+         5yg5xOOD0cU4jGygIHUDT4H0fH7tR/PRjcbi1i/Z2U4Ukl1I7cNdzHsvQUIHcWsaph
+         UOCWpI3UoCLQvS3b6uczc1SkHgw84ZBRcjKJd4o40toaie1djO97YCiQ0nrBHyluKg
+         5OvzkcJY7zxsbt9qnf+XSbUnOZZDfZU70zuxvmR/XTb+tuBOpI/E4mP6lhy3UUUE9m
+         NBQWH2l0e/TOg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 10/12] media: uvcvideo: Allow entities with no pads
-Date:   Wed, 24 Feb 2021 07:55:38 -0500
-Message-Id: <20210224125540.484221-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 10/11] media: uvcvideo: Allow entities with no pads
+Date:   Wed, 24 Feb 2021 07:55:58 -0500
+Message-Id: <20210224125600.484437-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210224125540.484221-1-sashal@kernel.org>
-References: <20210224125540.484221-1-sashal@kernel.org>
+In-Reply-To: <20210224125600.484437-1-sashal@kernel.org>
+References: <20210224125600.484437-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,7 +67,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9803135f2e593..96e9c25926e17 100644
+index f353ab569b8e4..def22b7fef9cb 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
 @@ -869,7 +869,10 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
