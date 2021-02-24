@@ -5,46 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0707C432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9D49C433E0
 	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E30F64E60
+	by mail.kernel.org (Postfix) with ESMTP id AC89C64F03
 	for <linux-media@archiver.kernel.org>; Wed, 24 Feb 2021 13:05:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbhBXNEm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Feb 2021 08:04:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50206 "EHLO mail.kernel.org"
+        id S235691AbhBXNEv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Feb 2021 08:04:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235318AbhBXMx2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Feb 2021 07:53:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E02B64E6F;
-        Wed, 24 Feb 2021 12:51:19 +0000 (UTC)
+        id S232672AbhBXM7b (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:59:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B5B164F50;
+        Wed, 24 Feb 2021 12:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171080;
-        bh=5FRFP9k1Mntu5LWmW8GwmTW4VHnH0q5xY7ZN85ANt3A=;
+        s=k20201202; t=1614171173;
+        bh=KEDINILQi3pz6Ke559AABCODkCCCuukFluJrY1hQkjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DekUo6Kjm9CId33VdXndc9qlGZNnK/ND0cq8ouZkEElOzIEGN7GKlgFR+KhL5bciX
-         6CQfVBivwBS9dlyTmvPFPQbQbVMzKQz6Eao31lQm4kOgTAQUbdpw+fDz2JOYW95TNH
-         ergV4r4t8xoNfT+8m+6XY8JHlFzxrNrpHN519srQax3RIx7l8LB9SWkmL1EHWkmvXi
-         8ZzxgJVmj/c2QAk4z4EsKJQR4s77LLxxkCm6T7dG/IktRf2ftIWB3Yk6ZvZ4vVBcEB
-         bxNSe9/hMnf0VazWAoz3g1vjqMnG8frtlHGK6q9igUKwPXneaIyfe2TSa5xTLEc6Xg
-         /soCgRHPV+Z8g==
+        b=EzK+jRueg9QDpDKjNL3ox5J3nyb2dns8vXsXQ2DRHDG5E8lapsYo7qOLKzylSjehC
+         I8EfqcGUPv3+f5kE+cWifGiAI+quz5LJZPuey+smW6BByBIwaLnH7Zv89ql8VaZtef
+         syoblIAY+TJozH4TkYwsnC5h8KgxtKxO+oD3qQjffmwZkpbziXLEAm3NxCNWO/Ihuh
+         FNl1mQOEzC9rAt95OokvaNWHi1BX8hLvfdw2SlSAHsCATf+tNOjUkmetu7PcIfiPl9
+         Z4FYhDfvO4KqHvc57yWkfyUxB/Xl80jLgUs5XZzQ9s0hQOOfdIf4+ini8QoOXSAIR5
+         BFFQUB40HeTMQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Sean Young <sean@mess.org>,
+        syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 39/67] media: zr364xx: fix memory leaks in probe()
-Date:   Wed, 24 Feb 2021 07:49:57 -0500
-Message-Id: <20210224125026.481804-39-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 30/56] media: mceusb: sanity check for prescaler value
+Date:   Wed, 24 Feb 2021 07:51:46 -0500
+Message-Id: <20210224125212.482485-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
-References: <20210224125026.481804-1-sashal@kernel.org>
+In-Reply-To: <20210224125212.482485-1-sashal@kernel.org>
+References: <20210224125212.482485-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,184 +51,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Sean Young <sean@mess.org>
 
-[ Upstream commit ea354b6ddd6f09be29424f41fa75a3e637fea234 ]
+[ Upstream commit 9dec0f48a75e0dadca498002d25ef4e143e60194 ]
 
-Syzbot discovered that the probe error handling doesn't clean up the
-resources allocated in zr364xx_board_init().  There are several
-related bugs in this code so I have re-written the error handling.
+prescaler larger than 8 would mean the carrier is at most 152Hz,
+which does not make sense for IR carriers.
 
-1)  Introduce a new function zr364xx_board_uninit() which cleans up
-    the resources in zr364xx_board_init().
-2)  In zr364xx_board_init() if the call to zr364xx_start_readpipe()
-    fails then release the "cam->buffer.frame[i].lpvbits" memory
-    before returning.  This way every function either allocates
-    everything successfully or it cleans up after itself.
-3)  Re-write the probe function so that each failure path goto frees
-    the most recent allocation.  That way we don't free anything
-    before it has been allocated and we can also verify that
-    everything is freed.
-4)  Originally, in the probe function the "cam->v4l2_dev.release"
-    pointer was set to "zr364xx_release" near the start but I moved
-    that assignment to the end, after everything had succeeded.  The
-    release function was never actually called during the probe cleanup
-    process, but with this change I wanted to make it clear that we
-    don't want to call zr364xx_release() until everything is
-    allocated successfully.
-
-Next I re-wrote the zr364xx_release() function.  Ideally this would
-have been a simple matter of copy and pasting the cleanup code from
-probe and adding an additional call to video_unregister_device().  But
-there are a couple quirks to note.
-
-1)  The probe function does not call videobuf_mmap_free() and I don't
-    know where the videobuf_mmap is allocated.  I left the code as-is to
-    avoid introducing a bug in code I don't understand.
-2)  The zr364xx_board_uninit() has a call to zr364xx_stop_readpipe()
-    which is a change from the original behavior with regards to
-    unloading the driver.  Calling zr364xx_stop_readpipe() on a stopped
-    pipe is not a problem so this is safe and is potentially a bugfix.
-
-Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/zr364xx/zr364xx.c | 49 ++++++++++++++++++-----------
- 1 file changed, 31 insertions(+), 18 deletions(-)
+ drivers/media/rc/mceusb.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 1e1c6b4d1874b..d29b861367ea7 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1181,15 +1181,11 @@ static int zr364xx_open(struct file *file)
- 	return err;
- }
- 
--static void zr364xx_release(struct v4l2_device *v4l2_dev)
-+static void zr364xx_board_uninit(struct zr364xx_camera *cam)
- {
--	struct zr364xx_camera *cam =
--		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
- 	unsigned long i;
- 
--	v4l2_device_unregister(&cam->v4l2_dev);
--
--	videobuf_mmap_free(&cam->vb_vidq);
-+	zr364xx_stop_readpipe(cam);
- 
- 	/* release sys buffers */
- 	for (i = 0; i < FRAMES; i++) {
-@@ -1200,9 +1196,19 @@ static void zr364xx_release(struct v4l2_device *v4l2_dev)
- 		cam->buffer.frame[i].lpvbits = NULL;
- 	}
- 
--	v4l2_ctrl_handler_free(&cam->ctrl_handler);
- 	/* release transfer buffer */
- 	kfree(cam->pipe->transfer_buffer);
-+}
-+
-+static void zr364xx_release(struct v4l2_device *v4l2_dev)
-+{
-+	struct zr364xx_camera *cam =
-+		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
-+
-+	videobuf_mmap_free(&cam->vb_vidq);
-+	v4l2_ctrl_handler_free(&cam->ctrl_handler);
-+	zr364xx_board_uninit(cam);
-+	v4l2_device_unregister(&cam->v4l2_dev);
- 	kfree(cam);
- }
- 
-@@ -1376,11 +1382,14 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/* start read pipe */
- 	err = zr364xx_start_readpipe(cam);
- 	if (err)
--		goto err_free;
-+		goto err_free_frames;
- 
- 	DBG(": board initialized\n");
- 	return 0;
- 
-+err_free_frames:
-+	for (i = 0; i < FRAMES; i++)
-+		vfree(cam->buffer.frame[i].lpvbits);
- err_free:
- 	kfree(cam->pipe->transfer_buffer);
- 	cam->pipe->transfer_buffer = NULL;
-@@ -1409,12 +1418,10 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (!cam)
- 		return -ENOMEM;
- 
--	cam->v4l2_dev.release = zr364xx_release;
- 	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
- 	if (err < 0) {
- 		dev_err(&udev->dev, "couldn't register v4l2_device\n");
--		kfree(cam);
--		return err;
-+		goto free_cam;
- 	}
- 	hdl = &cam->ctrl_handler;
- 	v4l2_ctrl_handler_init(hdl, 1);
-@@ -1423,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (hdl->error) {
- 		err = hdl->error;
- 		dev_err(&udev->dev, "couldn't register control\n");
--		goto fail;
-+		goto unregister;
- 	}
- 	/* save the init method used by this camera */
- 	cam->method = id->driver_info;
-@@ -1496,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (!cam->read_endpoint) {
- 		err = -ENOMEM;
- 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
--		goto fail;
-+		goto unregister;
- 	}
- 
- 	/* v4l */
-@@ -1507,10 +1514,11 @@ static int zr364xx_probe(struct usb_interface *intf,
- 
- 	/* load zr364xx board specific */
- 	err = zr364xx_board_init(cam);
--	if (!err)
--		err = v4l2_ctrl_handler_setup(hdl);
- 	if (err)
--		goto fail;
-+		goto unregister;
-+	err = v4l2_ctrl_handler_setup(hdl);
-+	if (err)
-+		goto board_uninit;
- 
- 	spin_lock_init(&cam->slock);
- 
-@@ -1525,16 +1533,21 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
- 	if (err) {
- 		dev_err(&udev->dev, "video_register_device failed\n");
--		goto fail;
-+		goto free_handler;
- 	}
-+	cam->v4l2_dev.release = zr364xx_release;
- 
- 	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
- 		 video_device_node_name(&cam->vdev));
- 	return 0;
- 
--fail:
-+free_handler:
- 	v4l2_ctrl_handler_free(hdl);
-+board_uninit:
-+	zr364xx_board_uninit(cam);
-+unregister:
- 	v4l2_device_unregister(&cam->v4l2_dev);
-+free_cam:
- 	kfree(cam);
- 	return err;
- }
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index f1dbd059ed087..43d356251d051 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -701,11 +701,18 @@ static void mceusb_dev_printdata(struct mceusb_dev *ir, u8 *buf, int buf_len,
+ 				data[0], data[1]);
+ 			break;
+ 		case MCE_RSP_EQIRCFS:
++			if (!data[0] && !data[1]) {
++				dev_dbg(dev, "%s: no carrier", inout);
++				break;
++			}
++			// prescaler should make sense
++			if (data[0] > 8)
++				break;
+ 			period = DIV_ROUND_CLOSEST((1U << data[0] * 2) *
+ 						   (data[1] + 1), 10);
+ 			if (!period)
+ 				break;
+-			carrier = (1000 * 1000) / period;
++			carrier = USEC_PER_SEC / period;
+ 			dev_dbg(dev, "%s carrier of %u Hz (period %uus)",
+ 				 inout, carrier, period);
+ 			break;
 -- 
 2.27.0
 
