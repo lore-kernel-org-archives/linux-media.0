@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-24.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C2FEC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 13:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EDF3C433E6
+	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 13:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1CCA64F03
-	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 13:36:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2428F64DE8
+	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 13:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbhBYNgi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Feb 2021 08:36:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37976 "EHLO mail.kernel.org"
+        id S230330AbhBYNlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Feb 2021 08:41:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229644AbhBYNge (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Feb 2021 08:36:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8B4C64EFA;
-        Thu, 25 Feb 2021 13:35:52 +0000 (UTC)
+        id S229886AbhBYNlu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 25 Feb 2021 08:41:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FB3664F0A;
+        Thu, 25 Feb 2021 13:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614260152;
-        bh=mukqVMzWgwgxxOpP5S6Onp0pDuX0uvFGOvM+gmG71qM=;
+        s=k20201202; t=1614260468;
+        bh=OLHurtP6Ne0yttuQ0+7xltIMjNV/3CiRbGnm+oDMM9o=;
         h=From:To:Cc:Subject:Date:From;
-        b=HMlYwmruCYPePp2XORRzR/Nt7DEoC1FWQniwV5saNBMd+hyP0MsEz2f9MWi5e54Vc
-         yE+cSSloud8B+PysIyUBPskmkCOzVRV7qTOYRGGpzmQyX7Z2BN2OydWnN3IycJpsr7
-         hNz/BKkjzIri+Ym8fGJAL5tH7pTxiN6Q6ghHA5n68G4wVeUopS1sef26SMlAc3VmoD
-         51/93ENX3qjXwdh99zyZsCPrlZHxFE92fuw8577TJrI9/eUMK5FA5xGKAcZBKlezeO
-         CBrhqXe7t4koy1QMtdipzQDW1/zzDi966IHqYG72xdGsnfzw3LX1HePI6Si7itOgQL
-         p5g4qw9+Esd0w==
+        b=Kt4oZf4s3swfF060dMUlGHlN/CS2bKG8oM2hzTw4UcDj5HykyBTOD3pxH6LAIyDRG
+         IUntebLUZlZ7BO5ceMU/+POfBsKlQ1DXA00XBdQf7rV1FAVE3rUjTN5zngZVHWJCf/
+         CyQ20MJbutJ25fZkA63FpIUV/Ojw7jBHu67HdNySUscDVIYm4Tj8UNpFmxC7rEOS4r
+         vGj+AwEqZztJxYQi90lrKJ9dLzC6HqRgsLB0vTgxP6QgyOSQQmL8/3F2xL+b4c1TJ4
+         nzdxzEdsvJ/HwTAEYK0WxKj2izej3Gm/1HpVn31A/3Aeswf6s0VdewpJKowy8pTa3h
+         CEu7sD0rKKPSw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lFGo1-001hNx-Us; Thu, 25 Feb 2021 14:35:49 +0100
+        id 1lFGt7-001hTl-OH; Thu, 25 Feb 2021 14:41:05 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
@@ -43,9 +43,9 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: add a subsystem profile documentation
-Date:   Thu, 25 Feb 2021 14:35:49 +0100
-Message-Id: <5a6ee216653295b409e6e1e3868cbf0e30d05b08.1614260135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2] media: add a subsystem profile documentation
+Date:   Thu, 25 Feb 2021 14:41:04 +0100
+Message-Id: <67c1aa1e5f29ef0cb4127e6303a5ffa1a391afc2.1614260439.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,10 +58,14 @@ Document the basic policies of the media subsystem profile.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
+
+v2: fix the Documentation/*/media directories
+
+
  Documentation/driver-api/media/index.rst      |   2 +
- .../media/maintainer-entry-profile.rst        | 159 ++++++++++++++++++
+ .../media/maintainer-entry-profile.rst        | 161 ++++++++++++++++++
  .../maintainer/maintainer-entry-profile.rst   |   1 +
- 3 files changed, 162 insertions(+)
+ 3 files changed, 164 insertions(+)
  create mode 100644 Documentation/driver-api/media/maintainer-entry-profile.rst
 
 diff --git a/Documentation/driver-api/media/index.rst b/Documentation/driver-api/media/index.rst
@@ -79,10 +83,10 @@ index c140692454b1..2ad71dfa8828 100644
      rc-core
 diff --git a/Documentation/driver-api/media/maintainer-entry-profile.rst b/Documentation/driver-api/media/maintainer-entry-profile.rst
 new file mode 100644
-index 000000000000..6393c1181757
+index 000000000000..6318be833bfb
 --- /dev/null
 +++ b/Documentation/driver-api/media/maintainer-entry-profile.rst
-@@ -0,0 +1,159 @@
+@@ -0,0 +1,161 @@
 +Media Subsystem Profile
 +=======================
 +
@@ -97,7 +101,9 @@ index 000000000000..6393c1181757
 +
 +  - drivers/media
 +  - drivers/staging/media
-+  - Documentation/media
++  - Documentation/admin-guide/media
++  - Documentation/driver-api/media
++  - Documentation/userspace-api/media
 +  - include/media
 +
 +Both media userspace and Kernel APIs are documented and should be kept in
@@ -253,4 +259,5 @@ index b7a627d6c97d..5d5cc3acdf85 100644
 +   ../driver-api/media/maintainer-entry-profile
 -- 
 2.29.2
+
 
