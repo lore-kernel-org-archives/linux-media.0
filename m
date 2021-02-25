@@ -2,198 +2,178 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEA3C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 10:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE0DC433DB
+	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 10:33:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E45C364EF1
-	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 10:25:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D11C64E4D
+	for <linux-media@archiver.kernel.org>; Thu, 25 Feb 2021 10:33:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhBYKYq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Feb 2021 05:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S234606AbhBYKcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Feb 2021 05:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235337AbhBYKSD (ORCPT
+        with ESMTP id S235199AbhBYK3W (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Feb 2021 05:18:03 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E409CC061222
-        for <linux-media@vger.kernel.org>; Thu, 25 Feb 2021 02:16:43 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id z7so2930960plk.7
-        for <linux-media@vger.kernel.org>; Thu, 25 Feb 2021 02:16:43 -0800 (PST)
+        Thu, 25 Feb 2021 05:29:22 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D89C061786
+        for <linux-media@vger.kernel.org>; Thu, 25 Feb 2021 02:28:34 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v22so6110649edx.13
+        for <linux-media@vger.kernel.org>; Thu, 25 Feb 2021 02:28:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rPds8Sv7GUEEyk1zAIR4OmJkrFu7mzc9HWc+V93Z198=;
-        b=CKCsGqiAB/HRbKsOO7yduvsdNknZ8XUSNFN//yKVMirfy2a2RDYD8QFKysTP49c9JN
-         MJfnyRH3fgCHajl3+wef+FuzDmmwE6GeU2X1USMZlwMVJpWK4jBGTes8e+WKuDJl39SN
-         gh08iC6o/idUnrGwqb5H2Hl1BmrYSJkXpPNz0=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=TVKAjWBFusaHyTtxALPIeACysl8qlhJqMmxF1Z/3BQc=;
+        b=KvT6uHV3ltQQhKNAxhivu1WaoQNP6hJd5KdyNGhOZzV3MFX5tYjNtdWuTP9AjxAm9u
+         t/N1MkyWh8kg69o8urHsk7zDck/zOgNio6qdWVGet3ki3S9ysgXQblGyreIP5Ph77p6y
+         EwPT8y17+qmJx8LH1tG6oiIcwq9Fj8SGseVhOB8JKtsFaRnNkB7NJBmnWgRjKcT2iIOk
+         S6xvGKbX/th/EYMn2UPD+kklrD1e3BQ7mEFUCSEdzwlviaulkxoq1JjKeX/we/Lid9ve
+         thgLqK+DQ3yQv6sdq63aRRPiPRh+ux2fQvmPwRS+Faz0MZaG7bKGu328voC0IKZamAvr
+         ujuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rPds8Sv7GUEEyk1zAIR4OmJkrFu7mzc9HWc+V93Z198=;
-        b=jOi4tM2L2DrcOOxyMxDy6fZTu3CM95eoPWGHFHCRf1kMJYUgubAsJE/clnmEnf760n
-         U06WBXy5CCA4HrezpUjAZ0wl7znc1UXxbRy/E0ARqOsCpCsKk3NGZNLlyuL2tH5aHRUR
-         EX+4CTDEVUXlaVqhfc5SGdMTPRSKlzMvDEYsL8woruaf8rvagSp+ivNXy3SRpGcyoqWs
-         H5V77QQjq5vNdE9zBbYCPiK2NVcRFSZvltiDp2JSKYzvkyEV+w3JDjHO38RN0jmUCAhI
-         2ByrI5TLQS/eBc/guo1BM4tFMc+7bzexnzwgSOnn64g9Dvg6E9DogAtrRCOAVjCPGh7o
-         qMAQ==
-X-Gm-Message-State: AOAM532z9djKQvFPJFio9+obEv3UsjKKnTLUJXc9SVZrwqWwUaVqQhqy
-        MRVfyIcXbtM6AfoMJ1NKcY1bYg==
-X-Google-Smtp-Source: ABdhPJzLvuKzJmtBTws3k3mugVhnelvdDoWGrtYgLJq0rmswBRVYtRxeXogQwxa3aUJPy3oiWm7jEg==
-X-Received: by 2002:a17:902:9304:b029:e4:12f4:bdb0 with SMTP id bc4-20020a1709029304b02900e412f4bdb0mr2483934plb.55.1614248203466;
-        Thu, 25 Feb 2021 02:16:43 -0800 (PST)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:2550:3154:2c53:b6e7])
-        by smtp.gmail.com with ESMTPSA id z2sm5848193pfc.8.2021.02.25.02.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Feb 2021 02:16:42 -0800 (PST)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v2 6/8] media: mtk-vcodec: vdec: add media device if using stateless api
-Date:   Thu, 25 Feb 2021 19:16:10 +0900
-Message-Id: <20210225101612.2832444-7-acourbot@chromium.org>
-X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-In-Reply-To: <20210225101612.2832444-1-acourbot@chromium.org>
-References: <20210225101612.2832444-1-acourbot@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=TVKAjWBFusaHyTtxALPIeACysl8qlhJqMmxF1Z/3BQc=;
+        b=Kq1MaboEcQGHzAxqQTt/EM/C45vCh0xf5+HKUrAcoC5idiIoFLkrvi+S0XdvtMAiXJ
+         OMdcQ8TDvre/1Cupwbx6AoR/k0f5nCoMVzL/X5zprnRLPJaPkRTTnnfGwFeIKhN940pU
+         drPewrga4iOAXd4FajSFPyjnUiaad8t1u2V7x0bEoaKzHgTs1uOk54strlHnaw0IBg+B
+         C4PEo0bka2KdrFVol43dFrdiXJjlbTV35k1m4KXLQThgjLB2q2htTeX0nkE+D/ZqZMSv
+         UNGNXWy0u/A8O9lqI/YBXufrz/2zPbxoWBE/ZzUyeeIYSDt9Vz91nwrQae2CrrwgBwQ8
+         +qTQ==
+X-Gm-Message-State: AOAM533pyhOLOhmxw86M9gfFWC7PNty9N9Fp+UdjqegrLekTQhzuGMBe
+        qMcKY4DyCPb5UeJLS3kgwKoiPc6reCrHvw==
+X-Google-Smtp-Source: ABdhPJxQxWpA8AILfgr1cKP4yfsCw8NTRfhgVfgrxKucOL6WpWcAlGS0EyTXuI5Jrm/OQ3hF+5Bjbw==
+X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr2140459edb.115.1614248913374;
+        Thu, 25 Feb 2021 02:28:33 -0800 (PST)
+Received: from ?IPv6:2a02:908:1252:fb60:fc8:43:f4c0:95af? ([2a02:908:1252:fb60:fc8:43:f4c0:95af])
+        by smtp.gmail.com with ESMTPSA id v11sm2635553eds.14.2021.02.25.02.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Feb 2021 02:28:32 -0800 (PST)
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf: Require VM_PFNMAP vma for
+ mmap
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        John Stultz <john.stultz@linaro.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+References: <20210223105951.912577-1-daniel.vetter@ffwll.ch>
+ <1a7c2295-6241-f2bf-4a78-6cadd43bc248@shipmail.org>
+ <CAKMK7uHzRb6Q_LgPUrrHn18sorYo7ysTgB+PNE36LDUUsJpHDg@mail.gmail.com>
+ <f43311c8-a02a-1a29-a53b-88e599c92187@shipmail.org>
+ <CAKMK7uE2UrOruQPWG9KPBQ781f9Bq9xpVRNserAC9BZ2VzDutQ@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Message-ID: <b30dacb0-edea-0a3c-6163-0f329e58ba61@gmail.com>
+Date:   Thu, 25 Feb 2021 11:28:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CAKMK7uE2UrOruQPWG9KPBQ781f9Bq9xpVRNserAC9BZ2VzDutQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+Am 24.02.21 um 10:31 schrieb Daniel Vetter:
+> On Wed, Feb 24, 2021 at 10:16 AM Thomas Hellström (Intel)
+> <thomas_os@shipmail.org> wrote:
+>>
+>> On 2/24/21 9:45 AM, Daniel Vetter wrote:
+>>> On Wed, Feb 24, 2021 at 8:46 AM Thomas Hellström (Intel)
+>>> <thomas_os@shipmail.org> wrote:
+>>>> On 2/23/21 11:59 AM, Daniel Vetter wrote:
+>>>>> tldr; DMA buffers aren't normal memory, expecting that you can use
+>>>>> them like that (like calling get_user_pages works, or that they're
+>>>>> accounting like any other normal memory) cannot be guaranteed.
+>>>>>
+>>>>> Since some userspace only runs on integrated devices, where all
+>>>>> buffers are actually all resident system memory, there's a huge
+>>>>> temptation to assume that a struct page is always present and useable
+>>>>> like for any more pagecache backed mmap. This has the potential to
+>>>>> result in a uapi nightmare.
+>>>>>
+>>>>> To stop this gap require that DMA buffer mmaps are VM_PFNMAP, which
+>>>>> blocks get_user_pages and all the other struct page based
+>>>>> infrastructure for everyone. In spirit this is the uapi counterpart to
+>>>>> the kernel-internal CONFIG_DMABUF_DEBUG.
+>>>>>
+>>>>> Motivated by a recent patch which wanted to swich the system dma-buf
+>>>>> heap to vm_insert_page instead of vm_insert_pfn.
+>>>>>
+>>>>> v2:
+>>>>>
+>>>>> Jason brought up that we also want to guarantee that all ptes have the
+>>>>> pte_special flag set, to catch fast get_user_pages (on architectures
+>>>>> that support this). Allowing VM_MIXEDMAP (like VM_SPECIAL does) would
+>>>>> still allow vm_insert_page, but limiting to VM_PFNMAP will catch that.
+>>>>>
+>>>>>    From auditing the various functions to insert pfn pte entires
+>>>>> (vm_insert_pfn_prot, remap_pfn_range and all it's callers like
+>>>>> dma_mmap_wc) it looks like VM_PFNMAP is already required anyway, so
+>>>>> this should be the correct flag to check for.
+>>>>>
+>>>> If we require VM_PFNMAP, for ordinary page mappings, we also need to
+>>>> disallow COW mappings, since it will not work on architectures that
+>>>> don't have CONFIG_ARCH_HAS_PTE_SPECIAL, (see the docs for vm_normal_page()).
+>>> Hm I figured everyone just uses MAP_SHARED for buffer objects since
+>>> COW really makes absolutely no sense. How would we enforce this?
+>> Perhaps returning -EINVAL on is_cow_mapping() at mmap time. Either that
+>> or allowing MIXEDMAP.
+>>
+>>>> Also worth noting is the comment in  ttm_bo_mmap_vma_setup() with
+>>>> possible performance implications with x86 + PAT + VM_PFNMAP + normal
+>>>> pages. That's a very old comment, though, and might not be valid anymore.
+>>> I think that's why ttm has a page cache for these, because it indeed
+>>> sucks. The PAT changes on pages are rather expensive.
+>> IIRC the page cache was implemented because of the slowness of the
+>> caching mode transition itself, more specifically the wbinvd() call +
+>> global TLB flush.
 
-The stateless API requires a media device for issuing requests. Add one
-if we are being instantiated as a stateless decoder.
+Yes, exactly that. The global TLB flush is what really breaks our neck 
+here from a performance perspective.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[acourbot: refactor, cleanup and split]
-Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
----
- drivers/media/platform/Kconfig                |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 39 +++++++++++++++++++
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  2 +
- 3 files changed, 42 insertions(+)
+>>> There is still an issue for iomem mappings, because the PAT validation
+>>> does a linear walk of the resource tree (lol) for every vm_insert_pfn.
+>>> But for i915 at least this is fixed by using the io_mapping
+>>> infrastructure, which does the PAT reservation only once when you set
+>>> up the mapping area at driver load.
+>> Yes, I guess that was the issue that the comment describes, but the
+>> issue wasn't there with vm_insert_mixed() + VM_MIXEDMAP.
+>>
+>>> Also TTM uses VM_PFNMAP right now for everything, so it can't be a
+>>> problem that hurts much :-)
+>> Hmm, both 5.11 and drm-tip appears to still use MIXEDMAP?
+>>
+>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/ttm/ttm_bo_vm.c#L554
+> Uh that's bad, because mixed maps pointing at struct page wont stop
+> gup. At least afaik.
 
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index c27db5643712..9d83b4223ecc 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -296,6 +296,7 @@ config VIDEO_MEDIATEK_VCODEC
- 	select VIDEO_MEDIATEK_VCODEC_VPU if VIDEO_MEDIATEK_VPU
- 	select VIDEO_MEDIATEK_VCODEC_SCP if MTK_SCP
- 	select V4L2_H264
-+	select MEDIA_CONTROLLER
- 	help
- 	  Mediatek video codec driver provides HW capability to
- 	  encode and decode in a range of video formats on MT8173
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 533781d4680a..e942e28f96fe 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -14,6 +14,7 @@
- #include <media/v4l2-event.h>
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
-+#include <media/v4l2-device.h>
- 
- #include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_dec.h"
-@@ -324,6 +325,31 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_event_workq;
- 	}
- 
-+	if (dev->vdec_pdata->uses_stateless_api) {
-+		dev->mdev_dec.dev = &pdev->dev;
-+		strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
-+				sizeof(dev->mdev_dec.model));
-+
-+		media_device_init(&dev->mdev_dec);
-+		dev->mdev_dec.ops = &mtk_vcodec_media_ops;
-+		dev->v4l2_dev.mdev = &dev->mdev_dec;
-+
-+		ret = v4l2_m2m_register_media_controller(dev->m2m_dev_dec,
-+			dev->vfd_dec, MEDIA_ENT_F_PROC_VIDEO_DECODER);
-+		if (ret) {
-+			mtk_v4l2_err("Failed to register media controller");
-+			goto err_reg_cont;
-+		}
-+
-+		ret = media_device_register(&dev->mdev_dec);
-+		if (ret) {
-+			mtk_v4l2_err("Failed to register media device");
-+			goto err_media_reg;
-+		}
-+
-+		mtk_v4l2_debug(0, "media registered as /dev/media%d",
-+			vfd_dec->num);
-+	}
- 	ret = video_register_device(vfd_dec, VFL_TYPE_VIDEO, 0);
- 	if (ret) {
- 		mtk_v4l2_err("Failed to register video device");
-@@ -336,6 +362,12 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_dec_reg:
-+	if (dev->vdec_pdata->uses_stateless_api)
-+		media_device_unregister(&dev->mdev_dec);
-+err_media_reg:
-+	if (dev->vdec_pdata->uses_stateless_api)
-+		v4l2_m2m_unregister_media_controller(dev->m2m_dev_dec);
-+err_reg_cont:
- 	destroy_workqueue(dev->decode_workqueue);
- err_event_workq:
- 	v4l2_m2m_release(dev->m2m_dev_dec);
-@@ -368,6 +400,13 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
- 
- 	flush_workqueue(dev->decode_workqueue);
- 	destroy_workqueue(dev->decode_workqueue);
-+
-+	if (media_devnode_is_registered(dev->mdev_dec.devnode)) {
-+		media_device_unregister(&dev->mdev_dec);
-+		v4l2_m2m_unregister_media_controller(dev->m2m_dev_dec);
-+		media_device_cleanup(&dev->mdev_dec);
-+	}
-+
- 	if (dev->m2m_dev_dec)
- 		v4l2_m2m_release(dev->m2m_dev_dec);
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 3b884a321883..79d6a1e6c916 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -384,6 +384,7 @@ struct mtk_vcodec_enc_pdata {
-  * struct mtk_vcodec_dev - driver data
-  * @v4l2_dev: V4L2 device to register video devices for.
-  * @vfd_dec: Video device for decoder
-+ * @mdev_dec: Media device for decoder
-  * @vfd_enc: Video device for encoder.
-  *
-  * @m2m_dev_dec: m2m device for decoder
-@@ -420,6 +421,7 @@ struct mtk_vcodec_enc_pdata {
- struct mtk_vcodec_dev {
- 	struct v4l2_device v4l2_dev;
- 	struct video_device *vfd_dec;
-+	struct media_device mdev_dec;
- 	struct video_device *vfd_enc;
- 
- 	struct v4l2_m2m_dev *m2m_dev_dec;
--- 
-2.30.0.617.g56c4b15f3c-goog
+Hui? I'm pretty sure MIXEDMAP stops gup as well. Otherwise we would have 
+already seen tons of problems with the page cache.
+
+Regards,
+Christian.
+
+> Christian, do we need to patch this up, and maybe fix up ttm fault
+> handler to use io_mapping so the vm_insert_pfn stuff is fast?
+> -Daniel
 
