@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91E04C433DB
-	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79375C433E6
+	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4837A64EED
-	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3125664EED
+	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhBZKF5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Feb 2021 05:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S231161AbhBZKGK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Feb 2021 05:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbhBZKEC (ORCPT
+        with ESMTP id S230503AbhBZKEG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:04:02 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01035C06121E
-        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:24 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id o63so5924121pgo.6
-        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:23 -0800 (PST)
+        Fri, 26 Feb 2021 05:04:06 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0FC061225
+        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:29 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id l2so5940961pgb.1
+        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bIALnHOxfqV79rmxtlQVLJ7XQLHlFw9MAesM3ioGoWo=;
-        b=SkE9wICXCgToe1dlplqubNyP3Uu5GyOznpHgFFUphOPxG5wwvYBb0L5gJicXqSTLTV
-         3Ac+tMUkSMIRQLMJ4lPq+6f0rjI56FUEhJU4ufbx9cBEjxf2BVXQC/r50iRbRiGR6grv
-         jTlnI/hQAkqHwBQMFsyay8yLJ1cjyL6RoAdwI=
+        bh=PcG87Nkjt5QbBleG5vxtSUtdpzRi3L5C7FtYOK30lrA=;
+        b=lMSZtP4FYUD2nm5CZRVJ0sR/tBAIEYwJOxYXgHQTg2i50hELRMDTRTTOtz4/f6eJGJ
+         XVeR7HrUDD2BpEPi+04FudIInSA3snmvscXcv73gUJlpqj4SA8a+k4qPP/UMnDnzKtt2
+         CL5rFK4SCUHmDm5HFws2yHW8poG9bz1W5NpIQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bIALnHOxfqV79rmxtlQVLJ7XQLHlFw9MAesM3ioGoWo=;
-        b=MP6N7gzRJTYzn0XxWU4YE3FBJ0Sdq69eplJvKqoCWBfQJNuDLybAo1iYQwFapSU0Mr
-         ulxZjPZTS+mxssKlwx+JmkSVLeZLs054RR3OvW6zW4ACPkla8IrdvSl6XG+A/T1/es7y
-         mmV1hiLBb4R2sIoheUDS7PCmU1DOYpGgTinRd4MNwVhkso+W20/p7A7lAVJShvuK3S38
-         0qi5L3QQRHB5CyRVlSo4Nw7wB/lHG5nHY/Ue6A+SB1X71eLRYYBdY+qbhoGQpJxpxNXU
-         eRfJhVsg9TOAxByzYRjJB4zwVP6SwEFYvsgViJgLB7EfGth1XEHEzqGrAcBSqHB1y9lj
-         3Lhg==
-X-Gm-Message-State: AOAM532DPbwDCKb8UfOzRSsf/9PHfdtSTwHA9Dg9/am2y/nwWyWb/mJz
-        f1LNm6BxdQ7xwA3BPrzH4vD4sg==
-X-Google-Smtp-Source: ABdhPJzjj+uNB0y4UHgKTmkt+simNCrzoE6UqpjKQRM99q9y53EZRAREXkmj/1w04TJOFK+adS8shA==
-X-Received: by 2002:a62:5344:0:b029:1df:c7d:3c3e with SMTP id h65-20020a6253440000b02901df0c7d3c3emr2531720pfb.11.1614333743609;
-        Fri, 26 Feb 2021 02:02:23 -0800 (PST)
+        bh=PcG87Nkjt5QbBleG5vxtSUtdpzRi3L5C7FtYOK30lrA=;
+        b=VoBJnDs5o4NIV+P9GGUGZxk/7woywuBZVxlMECTHGsncgL4mhcGPSqvtpOXBroUQF8
+         Y0W84dijuz8OZjCJEz5IKNcdJDIf+JWLtFAZaWW8lyOxWfxjPJjlxuyN5GcQZjVEDXHS
+         wAdWvobS2HJlE1knbi97cB9GLHuANmwAouEC6PH9Ux7RZMAMYI962bmYx0xbJnPNRihp
+         y7D0rukkSYake+p72k4G3C3EsuuyInTlDz3UxCpsnXCgbT+Jtuq+9BaA/QRfYWVe4+AD
+         +LZCaWiF1i3P8r+pA1Uh/Jdp0JSLeTtIvtKsPu0j40r1EaKPE0595Pj+52kC2ds5n6Rg
+         LRcg==
+X-Gm-Message-State: AOAM533YV9xt9UKBYRXZvHv/71Z57FwpCsO+BW7HI1KSfWXZxI///bfR
+        u4HhZB1hzKVb525yrqIs6325ZA==
+X-Google-Smtp-Source: ABdhPJxOVnAMqf31FI6FHypB/fD4gWwwatIP/m8f0M7R/TSznMR+445vQprjiAla28YWfDTWQziEjA==
+X-Received: by 2002:aa7:9a09:0:b029:1ed:9919:b989 with SMTP id w9-20020aa79a090000b02901ed9919b989mr2699134pfj.20.1614333749259;
+        Fri, 26 Feb 2021 02:02:29 -0800 (PST)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:5c91:233c:dd5b:b1b0])
-        by smtp.gmail.com with ESMTPSA id o23sm9201565pfp.89.2021.02.26.02.02.21
+        by smtp.gmail.com with ESMTPSA id o23sm9201565pfp.89.2021.02.26.02.02.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Feb 2021 02:02:23 -0800 (PST)
+        Fri, 26 Feb 2021 02:02:28 -0800 (PST)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -63,9 +63,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v3 08/15] dt-bindings: media: document mediatek,mt8183-vcodec-dec
-Date:   Fri, 26 Feb 2021 19:01:41 +0900
-Message-Id: <20210226100148.1663389-9-acourbot@chromium.org>
+Subject: [PATCH v3 10/15] media: mtk-vcodec: vdec: use helpers in VIDIOC_(TRY_)DECODER_CMD
+Date:   Fri, 26 Feb 2021 19:01:43 +0900
+Message-Id: <20210226100148.1663389-11-acourbot@chromium.org>
 X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
 In-Reply-To: <20210226100148.1663389-1-acourbot@chromium.org>
 References: <20210226100148.1663389-1-acourbot@chromium.org>
@@ -75,25 +75,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MT8183's decoder is instantiated similarly to MT8173's.
+Let's use the dedicated helpers to make sure we get the expected
+behavior on stateful decoders as well.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 1 +
- 1 file changed, 1 insertion(+)
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec.c   | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-index 8217424fd4bd..30c5888bf2d6 100644
---- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-@@ -7,6 +7,7 @@ Required properties:
- - compatible : "mediatek,mt8173-vcodec-enc" for MT8173 encoder
-   "mediatek,mt8183-vcodec-enc" for MT8183 encoder.
-   "mediatek,mt8173-vcodec-dec" for MT8173 decoder.
-+  "mediatek,mt8183-vcodec-dec" for MT8183 decoder.
- - reg : Physical base address of the video codec registers and length of
-   memory mapped region.
- - interrupts : interrupt number to the cpu.
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index c286cc0f239f..8bcff0b3626e 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -52,22 +52,10 @@ static int vidioc_try_decoder_cmd(struct file *file, void *priv,
+ 	if (ctx->dev->vdec_pdata->uses_stateless_api)
+ 		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
+ 								cmd);
+-
+-	switch (cmd->cmd) {
+-	case V4L2_DEC_CMD_STOP:
+-	case V4L2_DEC_CMD_START:
+-		if (cmd->flags != 0) {
+-			mtk_v4l2_err("cmd->flags=%u", cmd->flags);
+-			return -EINVAL;
+-		}
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	return 0;
++	else
++		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
+ }
+ 
+-
+ static int vidioc_decoder_cmd(struct file *file, void *priv,
+ 				struct v4l2_decoder_cmd *cmd)
+ {
 -- 
 2.30.1.766.gb4fecdf3b7-goog
 
