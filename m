@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEBF4C433DB
-	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EFCAC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96C2364EEE
+	by mail.kernel.org (Postfix) with ESMTP id EAD9264EED
 	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhBZKG3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Feb 2021 05:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S230525AbhBZKGf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Feb 2021 05:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhBZKE2 (ORCPT
+        with ESMTP id S231126AbhBZKEb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:04:28 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EE6C061222
-        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:26 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id n10so5902808pgl.10
-        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:26 -0800 (PST)
+        Fri, 26 Feb 2021 05:04:31 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96818C061226
+        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:32 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id t25so5929993pga.2
+        for <linux-media@vger.kernel.org>; Fri, 26 Feb 2021 02:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WQNDkU+500oaLNnr6/H87wLcS76179lgtjRrVGbRbo0=;
-        b=l2WhSkGpCkFNMw34fBmnRV9rSwS8Nn+50Rp/1Amx+5a3ZFCVm3W368JJVBq/7pUlK6
-         THRAyocynBiFi0dEZz83aA28m9Nu/XWbwo+ogouGmuTiZ+7HyWcxNAFW06Mp96/BuWXu
-         mqH/HshaCcS4iR0faPqQwNCNOFBDzqQq7M8DM=
+        bh=/m9GfFw0MzWCiAlloHYC1CIUxqu/1B3ra32N28sGndM=;
+        b=aScOQ4MRcOlglRBfncxwkth7ehHiLsqgplM12LYDfpJitm67IvT1WHUFAhl319dqjJ
+         xUcB5q/+OetxdpwVx2KyjHix5Yn3a8AnD9YgsyeH0iRnYpM1tCv8oQ7pNWuvIvfnvXzI
+         XDWDiS8e7uLrGVW/nWGrDHzTXTfXPhNxlIC2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WQNDkU+500oaLNnr6/H87wLcS76179lgtjRrVGbRbo0=;
-        b=i5IFu8053RBPIzuwHVHr8camilgW63nne/9st4ODzJ4OZ1Cci3qCJ7MbojmM+JXNyR
-         Itp97XCPf2LEn6IGYCQGpDP+GBf2gq12nAKbq/BUXBuRd2fboElyZgOm2/ytpsUMIF5x
-         vNi9tQA4hm0NmWE0rAzHI0dDaot51oOGCAk59+eCBw/x+eKjHqydkBr1Lr2+x0xyaOWk
-         AV0/QQbAfVI/fRn+smI0hjVdnu85kzh/pmQQz3EDqEP0aDUuJJ3tpJQvdUHAU8tbTs0A
-         bsExRoHAEeIos7OAbkXzrqwS5n7GVETQAbI9b1UZnhqSQkBrNdK1S7SRPplAyyFNQ8Pr
-         vFKw==
-X-Gm-Message-State: AOAM532FFNYIy2fBC7fLTntKZVkejnpiFPUBQVXOUoHW7VSZkDrcor2N
-        mKK3oI+vJ4jDqmcRTN0ZwEMGLw==
-X-Google-Smtp-Source: ABdhPJyjC694FGK1elv0PdV59eZd0IgHmTfbCH66cTKytZPmlOb1dIm1+gj/IenqpVaHvv3cs9lT1g==
-X-Received: by 2002:a63:4d52:: with SMTP id n18mr2177885pgl.237.1614333746419;
-        Fri, 26 Feb 2021 02:02:26 -0800 (PST)
+        bh=/m9GfFw0MzWCiAlloHYC1CIUxqu/1B3ra32N28sGndM=;
+        b=MYZeuvcnrxKovWZElPjK2QUpjBgxzeZXBRnwjOIroPFbp+ClpMMSuapsm7Y0ygG8e6
+         wyyB3LDQQnwTo/zfykUTA/We+aQ6/K1Xn/VyuIRYVLSvfdR9Cn8l3AqO7r9C94YuAsFQ
+         ZfnPPbCUoSUCD5ZjeboXeruS45dA+1dRcp3PGDUInceVtUOaYuGJXRWLeaxZa3kUw6lB
+         A7sw7w3a83hIWyo8A1R7ceiOqZTq0DWpcdxM6qcUy0YoUxYQVoTjm3eVrvCFcMinZdk8
+         czyzGZjPMPgI1Kc7+HuG1susr8pN/u9aypZMi2lxx+pdbSY3sTeZOKdzWOP45k3V3G8N
+         Vizw==
+X-Gm-Message-State: AOAM53338Xy+3p66WuFF6nLzfyo0LWMvh/46yEaz6kBdbqyOvwNpDGqg
+        5Pc9yqQ7rOgOXja2h92bSmFv0w==
+X-Google-Smtp-Source: ABdhPJzu+huZfKSj3BcpG4Sp46b2XI6By+Nh+9mV7RSGM8YSvyvupXS84VwTbmrHlv2tulwVuE4fMA==
+X-Received: by 2002:a63:f202:: with SMTP id v2mr2248344pgh.24.1614333752258;
+        Fri, 26 Feb 2021 02:02:32 -0800 (PST)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:5c91:233c:dd5b:b1b0])
-        by smtp.gmail.com with ESMTPSA id o23sm9201565pfp.89.2021.02.26.02.02.23
+        by smtp.gmail.com with ESMTPSA id o23sm9201565pfp.89.2021.02.26.02.02.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Feb 2021 02:02:25 -0800 (PST)
+        Fri, 26 Feb 2021 02:02:31 -0800 (PST)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -62,10 +62,11 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
+        Hirokazu Honda <hiroh@chromium.org>,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v3 09/15] media: mtk-vcodec: enable MT8183 decoder
-Date:   Fri, 26 Feb 2021 19:01:42 +0900
-Message-Id: <20210226100148.1663389-10-acourbot@chromium.org>
+Subject: [PATCH v3 11/15] media: mtk-vcodec: vdec: Support H264 profile control
+Date:   Fri, 26 Feb 2021 19:01:44 +0900
+Message-Id: <20210226100148.1663389-12-acourbot@chromium.org>
 X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
 In-Reply-To: <20210226100148.1663389-1-acourbot@chromium.org>
 References: <20210226100148.1663389-1-acourbot@chromium.org>
@@ -75,41 +76,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+From: Hirokazu Honda <hiroh@chromium.org>
 
-Now that all the supporting blocks are present, enable decoder for
-MT8183.
+Add H264 profiles supported by the MediaTek 8173 decoder.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[acourbot: refactor, cleanup and split]
-Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
+Signed-off-by: Hirokazu Honda <hiroh@chromium.org>
+[acourbot: fix commit log a bit]
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../platform/mtk-vcodec/mtk_vcodec_dec_stateful.c     | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index e942e28f96fe..e0526c0900c8 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -383,12 +383,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- }
- 
- extern const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata;
-+extern const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata;
- 
- static const struct of_device_id mtk_vcodec_match[] = {
- 	{
- 		.compatible = "mediatek,mt8173-vcodec-dec",
- 		.data = &mtk_vdec_8173_pdata,
- 	},
-+	{
-+		.compatible = "mediatek,mt8183-vcodec-dec",
-+		.data = &mtk_vdec_8183_pdata,
-+	},
- 	{},
- };
- 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+index f9db7ef19c28..3666c7e73bff 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+@@ -591,7 +591,16 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+ 				V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
+ 				V4L2_MPEG_VIDEO_VP9_PROFILE_0,
+ 				0, V4L2_MPEG_VIDEO_VP9_PROFILE_0);
+-
++	/*
++	 * H264. Baseline / Extended decoding is not supported.
++	 */
++	v4l2_ctrl_new_std_menu(&ctx->ctrl_hdl,
++			&mtk_vcodec_dec_ctrl_ops,
++			V4L2_CID_MPEG_VIDEO_H264_PROFILE,
++			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
++			BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++			BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
++			V4L2_MPEG_VIDEO_H264_PROFILE_MAIN);
+ 	if (ctx->ctrl_hdl.error) {
+ 		mtk_v4l2_err("Adding control failed %d",
+ 				ctx->ctrl_hdl.error);
 -- 
 2.30.1.766.gb4fecdf3b7-goog
 
