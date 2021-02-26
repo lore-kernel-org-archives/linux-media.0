@@ -2,211 +2,203 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC1A6C43381
-	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC04C433DB
+	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:44:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 700B264EE1
-	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:40:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 872B264ED2
+	for <linux-media@archiver.kernel.org>; Fri, 26 Feb 2021 10:44:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbhBZKjY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Feb 2021 05:39:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50144 "EHLO mail.kernel.org"
+        id S231237AbhBZKoG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Feb 2021 05:44:06 -0500
+Received: from gofer.mess.org ([88.97.38.141]:54141 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230495AbhBZKin (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:38:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD9D264F03;
-        Fri, 26 Feb 2021 10:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614335881;
-        bh=H8HVbdFoLD9aL64l9aoJCNHX5FsjhZMjzGatuz4+oiY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QEzn1ldtP7wH67ppM8NvuV87amu0rHg0D1u+B6QZ4lIV9oBTg9NOC69He8bmIrbgS
-         Ta8J7QUW0GfXDGsMZ7ciWvECtNClh5Dg2jBjYL/6Yh4pZ0zn+U/jcpcIxgoR1Xn0lk
-         4f0vn/+0UnOn0RwvPZQwdYRCUOgPDOcFbmEIT6YFeRKJl8RvpQcfQcY8mRoZiCvf9N
-         AeNzuoZM+b5gSAbI9XGj6n0ieGaiCQ27ZgyqmKRtWaA7T6B1Ffj/dUqokb1f5i3gA2
-         /UyJWwzH1+MLZ2fcJ5BNgEeI0jQNiJckpREvUIWdVlSJ9+wDXyYpUwr80mMyt//9Ez
-         YHPc7A9WJ3VYg==
-Received: by mail-oi1-f179.google.com with SMTP id i21so6989252oii.2;
-        Fri, 26 Feb 2021 02:38:01 -0800 (PST)
-X-Gm-Message-State: AOAM530Scdj2hnrMWz+Uo3CMkSO9pSg17VwA4c6AIwAh9M2NJNmlOdR3
-        zuu6rIUdVnS/52dPhAcm1lpTuL9cFte1bWnpw/c=
-X-Google-Smtp-Source: ABdhPJzDtvRb8oB8ob5YmR+oTzoRhnFpIQ/IS1/6V4Sn7sFm6upNUoFcX/x93JkRdU7mvaQexwcbcZSVhYYJLhBQiaU=
-X-Received: by 2002:aca:4a47:: with SMTP id x68mr1476692oia.67.1614335880815;
- Fri, 26 Feb 2021 02:38:00 -0800 (PST)
+        id S231216AbhBZKoB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Feb 2021 05:44:01 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 7C029C634E; Fri, 26 Feb 2021 10:43:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1614336197; bh=9mCopzb/sNigTBcqM3W+3YNKAxkhRWktsBYn11rZE/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gE5Ug2Eh5ikJbp9NFkP5QPRS1qHppr+0PDzy57Uap4EitnUoCzGniB9klzKpkca69
+         4ChcspbjfvVLj85eFpmwYgXsQrtXxNOO6bRNa3UXVHqRym1kui6sfIedHsIUJK9MFl
+         Td/RxnVsMVGIIjKJGW7DEe6Uh2Lcfp5dBaFFBdVfPlkggHoss2i4Ht14qh2lyssz7P
+         MvgiFaZmKvnbG/N/POhUEXpzsbpXClwAEgkd6xMwvMcTD+f/N1M0/hJ2ZeasAHsiSO
+         H9HjCCjSnqyMt7HtcHH72Idul2EejQpbWrtEsKoW+GZ5bjN0CxEBwkqscWcH7GVsk1
+         YrIOiyqKmQJNg==
+Date:   Fri, 26 Feb 2021 10:43:17 +0000
+From:   Sean Young <sean@mess.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCHv3] media/rc: compile rc-cec.c into rc-core
+Message-ID: <20210226104317.GA21366@gofer.mess.org>
+References: <8d2661f6-0b8e-13f0-cc89-025a82dd7564@xs4all.nl>
 MIME-Version: 1.0
-References: <20210225225147.29920-1-fabrizio.castro.jz@renesas.com> <20210225225147.29920-5-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20210225225147.29920-5-fabrizio.castro.jz@renesas.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 26 Feb 2021 11:37:44 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1+CZTAcR5T=gN565Q8=CdZnu5KYsAijKXLY8taofEpGg@mail.gmail.com>
-Message-ID: <CAK8P3a1+CZTAcR5T=gN565Q8=CdZnu5KYsAijKXLY8taofEpGg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] misc: Add driver for DAB IP found on Renesas R-Car devices
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Dirk Behme <Dirk.Behme@de.bosch.com>,
-        Peter Erben <Peter.Erben@de.bosch.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d2661f6-0b8e-13f0-cc89-025a82dd7564@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 11:51 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
->
-> The DAB hardware accelerator found on R-Car E3 and R-Car M3-N devices is
-> a hardware accelerator for software DAB demodulators.
-> It consists of one FFT (Fast Fourier Transform) module and one decoder
-> module, compatible with DAB specification (ETSI EN 300 401 and
-> ETSI TS 102 563).
-> The decoder module can perform FIC decoding and MSC decoding processing
-> from de-puncture to final decoded result.
->
-> This patch adds a device driver to support the FFT module only.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+On Fri, Feb 26, 2021 at 11:37:47AM +0100, Hans Verkuil wrote:
+> The rc-cec keymap is unusual in that it can't be built as a module,
+> instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
+> is set. This is because it can be called from drm_dp_cec_set_edid() via
+> cec_register_adapter() in an asynchronous context, and it is not
+> allowed to use request_module() to load rc-cec.ko in that case. Trying to
+> do so results in a 'WARN_ON_ONCE(wait && current_is_async())'.
+> 
+> Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
+> just compile this keymap into the rc-core module and never as a
+> separate module.
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Fixes: 2c6d1fffa1d9 (drm: add support for DisplayPort CEC-Tunneling-over-AUX)
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  MAINTAINERS                      |   7 ++
->  drivers/misc/Kconfig             |   1 +
->  drivers/misc/Makefile            |   1 +
->  drivers/misc/rcar_dab/Kconfig    |  11 ++
->  drivers/misc/rcar_dab/Makefile   |   8 ++
->  drivers/misc/rcar_dab/rcar_dev.c | 176 +++++++++++++++++++++++++++++++
->  drivers/misc/rcar_dab/rcar_dev.h | 116 ++++++++++++++++++++
->  drivers/misc/rcar_dab/rcar_fft.c | 160 ++++++++++++++++++++++++++++
->  include/uapi/linux/rcar_dab.h    |  35 ++++++
-
-Can you explain why this is not in drivers/media/?
-
-I don't think we want a custom ioctl interface for a device that implements
-a generic specification. My first feeling would be that this should not
-have a user-level API but instead get called by the DAB radio driver.
-
-What is the intended usage model here? I assume the idea is to
-use it in an application that receives audio or metadata from DAB.
-What driver do you use for that?
-
-> +static long rcar_dab_unlocked_ioctl(struct file *file, unsigned int cmd,
-> +                                   unsigned long arg)
-> +{
-> +       void __user *argp = (void __user *)arg;
-> +       struct rcar_dab *dab;
-> +       int ret;
+> Change since v2:
+> Move 'extern struct rc_map_list cec_map;' to rc-map.h to fix sparse warning.
+> 
+> Change since v1:
+> Fix copy-and-paste error: rc_core_exit() called rc_map_register() instead
+> of rc_map_unregister().
+> ---
+>  drivers/media/rc/Makefile         |  1 +
+>  drivers/media/rc/keymaps/Makefile |  1 -
+>  drivers/media/rc/keymaps/rc-cec.c | 28 +++++++++++-----------------
+>  drivers/media/rc/rc-main.c        |  6 ++++++
+>  include/media/rc-map.h            |  7 +++++++
+>  5 files changed, 25 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/media/rc/Makefile b/drivers/media/rc/Makefile
+> index 5bb2932ab119..ff6a8fc4c38e 100644
+> --- a/drivers/media/rc/Makefile
+> +++ b/drivers/media/rc/Makefile
+> @@ -5,6 +5,7 @@ obj-y += keymaps/
+>  obj-$(CONFIG_RC_CORE) += rc-core.o
+>  rc-core-y := rc-main.o rc-ir-raw.o
+>  rc-core-$(CONFIG_LIRC) += lirc_dev.o
+> +rc-core-$(CONFIG_MEDIA_CEC_RC) += keymaps/rc-cec.o
+>  rc-core-$(CONFIG_BPF_LIRC_MODE2) += bpf-lirc.o
+>  obj-$(CONFIG_IR_NEC_DECODER) += ir-nec-decoder.o
+>  obj-$(CONFIG_IR_RC5_DECODER) += ir-rc5-decoder.o
+> diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
+> index b252a1d2ebd6..cc6662e1903f 100644
+> --- a/drivers/media/rc/keymaps/Makefile
+> +++ b/drivers/media/rc/keymaps/Makefile
+> @@ -21,7 +21,6 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+>  			rc-behold.o \
+>  			rc-behold-columbus.o \
+>  			rc-budget-ci-old.o \
+> -			rc-cec.o \
+>  			rc-cinergy-1400.o \
+>  			rc-cinergy.o \
+>  			rc-d680-dmb.o \
+> diff --git a/drivers/media/rc/keymaps/rc-cec.c b/drivers/media/rc/keymaps/rc-cec.c
+> index 3e3bd11092b4..068e22aeac8c 100644
+> --- a/drivers/media/rc/keymaps/rc-cec.c
+> +++ b/drivers/media/rc/keymaps/rc-cec.c
+> @@ -1,5 +1,15 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /* Keytable for the CEC remote control
+> + *
+> + * This keymap is unusual in that it can't be built as a module,
+> + * instead it is registered directly in rc-main.c if CONFIG_MEDIA_CEC_RC
+> + * is set. This is because it can be called from drm_dp_cec_set_edid() via
+> + * cec_register_adapter() in an asynchronous context, and it is not
+> + * allowed to use request_module() to load rc-cec.ko in that case.
+> + *
+> + * Since this keymap is only used if CONFIG_MEDIA_CEC_RC is set, we
+> + * just compile this keymap into the rc-core module and never as a
+> + * separate module.
+>   *
+>   * Copyright (c) 2015 by Kamil Debski
+>   */
+> @@ -152,7 +162,7 @@ static struct rc_map_table cec[] = {
+>  	/* 0x77-0xff: Reserved */
+>  };
+> 
+> -static struct rc_map_list cec_map = {
+> +struct rc_map_list cec_map = {
+>  	.map = {
+>  		.scan		= cec,
+>  		.size		= ARRAY_SIZE(cec),
+> @@ -160,19 +170,3 @@ static struct rc_map_list cec_map = {
+>  		.name		= RC_MAP_CEC,
+>  	}
+>  };
+> -
+> -static int __init init_rc_map_cec(void)
+> -{
+> -	return rc_map_register(&cec_map);
+> -}
+> -
+> -static void __exit exit_rc_map_cec(void)
+> -{
+> -	rc_map_unregister(&cec_map);
+> -}
+> -
+> -module_init(init_rc_map_cec);
+> -module_exit(exit_rc_map_cec);
+> -
+> -MODULE_LICENSE("GPL");
+> -MODULE_AUTHOR("Kamil Debski");
+> diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+> index 1fd62c1dac76..8e88dc8ea6c5 100644
+> --- a/drivers/media/rc/rc-main.c
+> +++ b/drivers/media/rc/rc-main.c
+> @@ -2069,6 +2069,9 @@ static int __init rc_core_init(void)
+> 
+>  	led_trigger_register_simple("rc-feedback", &led_feedback);
+>  	rc_map_register(&empty_map);
+> +#ifdef CONFIG_MEDIA_CEC_RC
+> +	rc_map_register(&cec_map);
+> +#endif
+> 
+>  	return 0;
+>  }
+> @@ -2078,6 +2081,9 @@ static void __exit rc_core_exit(void)
+>  	lirc_dev_exit();
+>  	class_unregister(&rc_class);
+>  	led_trigger_unregister_simple(led_feedback);
+> +#ifdef CONFIG_MEDIA_CEC_RC
+> +	rc_map_unregister(&cec_map);
+> +#endif
+>  	rc_map_unregister(&empty_map);
+>  }
+> 
+> diff --git a/include/media/rc-map.h b/include/media/rc-map.h
+> index 999b750bc6b8..30f138ebab6f 100644
+> --- a/include/media/rc-map.h
+> +++ b/include/media/rc-map.h
+> @@ -175,6 +175,13 @@ struct rc_map_list {
+>  	struct rc_map map;
+>  };
+> 
+> +#ifdef CONFIG_MEDIA_CEC_RC
+> +/*
+> + * rc_map_list from rc-cec.c
+> + */
+> +extern struct rc_map_list cec_map;
+> +#endif
 > +
-> +       dab = container_of(file->private_data, struct rcar_dab, misc);
-> +
-> +       switch (cmd) {
-> +       case RCAR_DAB_IOC_FFT:
-> +               if (!access_ok(argp, sizeof(struct rcar_dab_fft_req)))
-> +                       return -EFAULT;
-> +               ret = rcar_dab_fft(dab, argp);
-> +               break;
-> +       default:
-> +               ret = -ENOTTY;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static const struct file_operations rcar_dab_fops = {
-> +       .owner          = THIS_MODULE,
-> +       .unlocked_ioctl = rcar_dab_unlocked_ioctl,
-> +};
 
-There should be a '.compat_ioctl = compat_ptr_ioctl'
-entry, provided that the arguments are compatible between
-32-bit and 64-bit user space.
+Maybe this belongs into rc-core-priv.h
 
-> +
-> +static int rcar_dab_fft_init(struct rcar_dab *dab, struct rcar_dab_fft_req *fft)
-> +{
-> +       u32 mode;
-> +
-> +       for (mode = 0; mode < ARRAY_SIZE(rcar_dab_fft_size_lut); mode++)
-> +               if (rcar_dab_fft_size_lut[mode] == fft->points)
-> +                       break;
-> +       if (mode == ARRAY_SIZE(rcar_dab_fft_size_lut))
-> +               return -EINVAL;
-> +       if (fft->ofdm_number == 0)
-> +               return -EINVAL;
-> +
-> +       rcar_dab_write(dab, RCAR_DAB_FFTSSR, mode);
-> +       rcar_dab_write(dab, RCAR_DAB_FFTNUMOFDMR, fft->ofdm_number);
-> +       rcar_dab_write(dab, RCAR_DAB_FFTINADDR, (u32)dab->fft.dma_input_buf);
-> +       rcar_dab_write(dab, RCAR_DAB_FFTOUTADDR, (u32)dab->fft.dma_output_buf);
+Sorry about all the complaints :-/
 
-Maybe use lower_32_bits() instead of the (u32) cast.
 
-For clarity, you may also want to specifically ask for a 32-bit DMA mask
-in the probe function, with a comment that describes what the hardware
-limitation is.
+Sean
 
-> +
-> +       if (copy_from_user(dab->fft.input_buffer, fft_req->input_address,
-> +                          buffer_size)) {
-> +               mutex_unlock(&dab->fft.lock);
-> +               return -EFAULT;
-> +       }
-> +
-> +       dab->fft.done = false;
-> +       ret = rcar_dab_fft_init(dab, fft_req);
-> +       if (ret) {
-> +               mutex_unlock(&dab->fft.lock);
-> +               return ret;
-> +       }
-> +
-> +       rcar_dab_fft_enable(dab);
-> +       wait_event_interruptible_timeout(dab->fft.wait, dab->fft.done, HZ);
-> +       if (!dab->fft.done) {
-> +               rcar_dab_fft_disable(dab);
-> +               ret = -EFAULT;
-
--EFAULT doesn't look like the right error for timeout or signal
-handling. Better check the return code from wait_event_interruptible_timeout()
-instead.
-
-> +
-> +struct rcar_dab_fft_req {
-> +       int points;                     /*
-> +                                        * The number of points to use.
-> +                                        * Legal values are 256, 512, 1024, and
-> +                                        * 2048.
-> +                                        */
-> +       unsigned char ofdm_number;      /*
-> +                                        * Orthogonal Frequency Division
-> +                                        * Multiplexing (OFDM).
-> +                                        * Minimum value is 1, maximum value is
-> +                                        * 255.
-> +                                        */
-> +       void __user *input_address;     /*
-> +                                        * User space address for the input
-> +                                        * buffer.
-> +                                        */
-> +       void __user *output_address;    /*
-> +                                        * User space address for the output
-> +                                        * buffer.
-> +                                        */
-> +};
-
-Please read Documentation/driver-api/ioctl.rst and make this a portable
-data structure.
-
-      Arnd
+>  /* Routines from rc-map.c */
+> 
+>  /**
+> -- 
+> 2.30.0
