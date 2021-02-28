@@ -2,191 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A09C433DB
-	for <linux-media@archiver.kernel.org>; Sun, 28 Feb 2021 13:27:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB219C433DB
+	for <linux-media@archiver.kernel.org>; Sun, 28 Feb 2021 22:07:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB3AD64E86
-	for <linux-media@archiver.kernel.org>; Sun, 28 Feb 2021 13:27:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9719F64E68
+	for <linux-media@archiver.kernel.org>; Sun, 28 Feb 2021 22:07:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbhB1N1K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Feb 2021 08:27:10 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56310 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbhB1N1K (ORCPT
+        id S231479AbhB1WH7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Feb 2021 17:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231469AbhB1WH6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Feb 2021 08:27:10 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 38A0680F;
-        Sun, 28 Feb 2021 14:26:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1614518787;
-        bh=Zt8FXY2hZTtyLqW0UGgR9kx+/Rk0n94J4q1YO9zMkug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RCdQmlyLHNa3POYwByzoPM2L0ucmklvp2nTnkM7ORdQfveRBgrYXRALHtnC8ebrsg
-         4Ep+tV0ANzROnGRDkDiIZPlyV5NEpRIUXG1Hmz+hrc8qWOXiojFqb3A7f47qAiEyAo
-         KJSfUwBbwG82MsjWcJJ4YK/c0OvMNRYx/FOPHUVA=
-Date:   Sun, 28 Feb 2021 15:25:57 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Zhengyang Feng <zyfeng97@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: An unsupported UVC device
-Message-ID: <YDuZ5T1vKjutGPgK@pendragon.ideasonboard.com>
-References: <CAK80=wMNP=1DPi=4G3ONxjLUm+5Kqv7YULcr85QHd85P_5aktA@mail.gmail.com>
- <CAHp75VftsNoroK3-fKaR5VGsbh-2dahPEM650+Sw880jPFD9dQ@mail.gmail.com>
- <20210228120630.75d98739@coco.lan>
+        Sun, 28 Feb 2021 17:07:58 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E83C06174A
+        for <linux-media@vger.kernel.org>; Sun, 28 Feb 2021 14:07:18 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id a4so10256775pgc.11
+        for <linux-media@vger.kernel.org>; Sun, 28 Feb 2021 14:07:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=penguintechs.org; s=google;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=VDm29ZQ3ND3S5WXLnP5x94ZreXBFcYdsGtUSCKzKxY0=;
+        b=S0QH2nQWvKnw8BPUVH+PML9M7t7tBAz7G/8Z/vaPDKcvn1o93saG1SlWyvj2fm1Zxu
+         SMF85Vtr59DdJH9mfkeW4qvg+klzmDzGtmy3pWn/ZsMKQa+lDvVCoqAplNAPdvW3JIB4
+         you4Pxwk03j+chC4Xwvux0nY75NNtO4CqDnl8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=VDm29ZQ3ND3S5WXLnP5x94ZreXBFcYdsGtUSCKzKxY0=;
+        b=RmW/CyzaKV1zjEZzb+KQxL6VYTLyokIQZ81ZyiWxdOgzVqJussFsO4BTBX7xjicujo
+         3KGy2oMutv6Wiuj362dp4Qi0mXHAup8KFSQq2DeeWOpBQcnZmWSLQNp18ice3ZNApMSB
+         pyc34J+1FY+mw0+VVeTUrauSLD5IoA+Nowcz7YrpWQq440cY+yG7oVdohysRxz379KTv
+         VtD06WdbPjmZbsbuslTo2sSKYjiXJXq8K7ERD/IBenowoC3lgFmfmD578O4e8mZSS7Dj
+         /OffLS8w0obSUpH9+apmcMZbcL2ahHMzj3O1hK0DFfWuV6PA0qyKtOaGRqQ687t7sI0N
+         L5RA==
+X-Gm-Message-State: AOAM532l6QcDoPPXu28jDpvJPx1nTFvlaG2DZLETem/JDj0yrKvJifSM
+        onJ2DJHFpTx/I7zHSqx0X46/1NAU/3aoDg==
+X-Google-Smtp-Source: ABdhPJwlgzsV3n8xx8KIVdXXiRdmQsp5IXjmvmIUarwhukHS80A4UpteJfo6N1l8VEbcIaZw+TXaxg==
+X-Received: by 2002:a05:6a00:80e:b029:1db:589f:332e with SMTP id m14-20020a056a00080eb02901db589f332emr12161140pfk.24.1614550037449;
+        Sun, 28 Feb 2021 14:07:17 -0800 (PST)
+Received: from braindead.localdomain (c-71-202-115-154.hsd1.ca.comcast.net. [71.202.115.154])
+        by smtp.gmail.com with ESMTPSA id b22sm15357253pfo.23.2021.02.28.14.07.16
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Feb 2021 14:07:16 -0800 (PST)
+To:     linux-media@vger.kernel.org
+From:   Wren Turkal <wt@penguintechs.org>
+Subject: v4l2loopback and v4l2-mem2mem framework
+Message-ID: <45cda97c-a0e4-eef2-ba8f-ddc7e33b40d5@penguintechs.org>
+Date:   Sun, 28 Feb 2021 14:07:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210228120630.75d98739@coco.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi there linux-media experts,
 
-On Sun, Feb 28, 2021 at 12:06:30PM +0100, Mauro Carvalho Chehab wrote:
-> Em Sun, 28 Feb 2021 11:38:32 +0200 Andy Shevchenko escreveu:
-> > On Sat, Feb 27, 2021 at 12:04 PM Zhengyang Feng <zyfeng97@gmail.com> wrote:
-> > >
-> > > Dear maintainers,
-> > >
-> > > I'm resending this because the previous email was not clear and should
-> > > be ignored. Sorry for the inconvenience caused.
-> > >
-> > > I was using HIK DS-U14 2K camera on Ubuntu 20.04 with built-in MIC
-> > > (but it has only one USB cable) but it seems unsupported. It
-> > > does not need a driver to be used on Windows (usable by just plugging
-> > > in).
-> > > I see no HIK devices on the support list
-> > > (http://www.ideasonboard.org/uvc/), but when I run lsusb -d 2bdf:0281
-> > > -v | grep "14 Video" it does output several lines like these:
-> > >
-> > > bFunctionClass         14 Video
-> > > bInterfaceClass        14 Video
-> > > bInterfaceClass        14 Video
-> > > bInterfaceClass        14 Video
-> > > bInterfaceClass        14 Video
-> > >
-> > > It also says "Couldn't open device, some information will be missing".
-> > > But it does not require a driver to work on Windows, so it should be a
-> > > normal UVC device right?
-> > >
-> > > I observed that it is not supported as a camera, because although I
-> > > see /dev/video0 and /dev/video1 (quite odd since it is only 1 camera),
-> > > it fails by either OpenCV (cv2.VideoCapture(id)) or `cheese`, where it
-> > > says "cannot open by index" (I tried both video0 and video1).
-> > > Then I got the logs with `cheese`, in the zip file attached. I think since the
-> > > device is quite new on the market, maybe you guys haven't tested it.
-> > >
-> > > BTW, I installed the latest from
-> > > https://git.linuxtv.org/media_build.git before I generated the logs.
-> > > The camera shows same behavior before and after I installed the latest
-> > > version. And the USB connection works fine (I can use other cameras on
-> > > this machine), also the camera itself is fine (tested on Windows machines).
-> > >
-> > > Feel free to tell me this is unrelated to the project/this mailing
-> > > list, in that case I'll just
-> > > get another camera.
-> 
-> It sounds to me that there's something broken on this camera's
-> descriptors, with the USB cable or with the USB stack.
-> 
-> It sounds very weird to my eyes to see errors when getting
-> the device descriptors like those:
-> 
-> 	Bus 001 Device 007: ID 2bdf:0281 SN0002 HIK 2K USB CAMERA
-> 	Device Descriptor:
-> 	  bLength                18
-> 	  bDescriptorType         1
-> 	  bcdUSB               2.00
-> 	  bDeviceClass          239 Miscellaneous Device
-> 	  bDeviceSubClass         2 
-> 	  bDeviceProtocol         1 Interface Association
-> 	  bMaxPacketSize0        64
-> 	  idVendor           0x2bdf 
-> 	  idProduct          0x0281 
-> 	  bcdDevice           11.00
-> 	  iManufacturer           1 (error)
-> 	  iProduct                2 (error)
-> 	  iSerial                 3 (error)
+I am working on the out-of-tree v4l2loopback module[1]. My
+current goal is to implement the videobuf2 api. However,
+it appears that I must use a different vbuf2_queue for the
+OUTPUT and CAPTURE types. It appears that the mem2mem
+framework has the ability to do just this. I came to this
+conclusion while looking at the vim2m test module's code.
+While trying to modify the loopback module, I have added
+some code to try to call v4l2_m2m_init. You can see my very
+WIP attempt at code here[2].
 
-Note that the descriptors can be read by the kernel:
+I have installed the kernel-devel package on Fedora, which.
+Unfortunately, I get he following error messages when trying
+to compile:
 
-[ 1013.137790] usb 1-1: new high-speed USB device number 7 using xhci_hcd
-[ 1013.287536] usb 1-1: New USB device found, idVendor=2bdf, idProduct=0281, bcdDevice=11.00
-[ 1013.287542] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[ 1013.287545] usb 1-1: Product: HIK 2K USB CAMERA
-[ 1013.287548] usb 1-1: Manufacturer: SN0002
-[ 1013.287550] usb 1-1: SerialNumber: SN0002
-[ 1013.289504] usb 1-1: Found UVC 1.00 device HIK 2K USB CAMERA (2bdf:0281)
-[ 1013.291886] input: HIK 2K USB CAMERA: HIK 2K USB C as /devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1:1.0/input/input21
+<errors>
+ERROR: modpost: "v4l2_m2m_release" 
+[/home/wt/projects/kernel/v4l2loopback/v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_m2m_init" 
+[/home/wt/projects/kernel/v4l2loopback/v4l2loopback.ko] undefined!
+</errors>
 
-This is immediately followed by
+So, I looked into it, and Module.symvers and /proc/kallsyms
+don't have those symbols listed, so I think the Fedora kernel
+was not compiled with those symbols exported.
 
-[ 1013.300287] usb 1-1: 3:1: cannot get freq at ep 0x89
-[ 1028.831102] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1033.951429] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1039.071697] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1044.191786] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1049.311948] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1054.432472] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1059.552484] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1064.672763] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1069.792953] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1074.912868] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1078.496721] uvcvideo 1-1:1.1: Failed to set UVC probe control : -110 (exp. 26).
-[ 1080.033398] usb 1-1: 3:1: usb_set_interface failed (-110)
-[ 1083.616960] uvcvideo 1-1:1.1: Failed to set UVC probe control : -110 (exp. 26).
-[ 1085.157405] usb 1-1: 3:1: usb_set_interface failed (-110)
-[...]
+Okay, so next I tried to build a custom kernel that does
+export those symbols. I managed to get it done by enabling
+the vim2m (VIDEO_VIM2M config option) module. The new
+Module.symvers includes the symbols; and the compile succeeds,
+which brings me to my final act.
 
-The "cannot get freq" message comes from the snd_usb_audio driver, and
-after that, the video device starts failing ("Failed to set UVC probe
-control...").
+I need to expose those symbols without enabling the vim2m
+module since it is a testing module. I do not see a way
+to do that explicitly. The config option in question
+appears to be V4L2_MEM2MEM_DEV. And I haven't found a
+way to enable it without enabling something that implicitly
+selects it (which vim2m does). Do y'all have any suggestions
+for how to get these symbols exported properly when vim2m is
+not enabled?
 
-I suspect that the device firmware has crashed, possibly as a
-consequence of requests related to the audio interface.
 
-Zhengyang, could you try to blacklist the snd_usb_audio driver to avoid
-it being automatically loaded, and see if the camera then works (after
-unplugging and replugging it) ? If it doesn't, please provide the
-contents of the kernel log.
+Thanks,
+Wren Turkal (wt)
 
-> The Kernel probe also has similar troubles:
-> 
-> 	[   31.553926] usb 1-1: Found UVC 1.00 device HIK 2K USB CAMERA (2bdf:0281)
-> 	[   32.065510] usb 1-1: Failed to query (GET_INFO) UVC control 11 on unit 1: -110 (exp. 1).
-> 	[   32.577665] usb 1-1: Failed to query (GET_INFO) UVC control 12 on unit 1: -110 (exp. 1).
-> 	[   33.089610] usb 1-1: Failed to query (GET_INFO) UVC control 2 on unit 2: -110 (exp. 1).
-> 	[   33.601620] usb 1-1: Failed to query (GET_INFO) UVC control 3 on unit 2: -110 (exp. 1).
-> 	[   34.113672] usb 1-1: Failed to query (GET_INFO) UVC control 7 on unit 2: -110 (exp. 1).
-> 	[   34.625635] usb 1-1: Failed to query (GET_INFO) UVC control 8 on unit 2: -110 (exp. 1).
-> 	[   35.137673] usb 1-1: Failed to query (GET_INFO) UVC control 10 on unit 2: -110 (exp. 1).
-> 	[   35.649581] usb 1-1: Failed to query (GET_INFO) UVC control 5 on unit 2: -110 (exp. 1).
-> 	[   36.161693] usb 1-1: Failed to query (GET_INFO) UVC control 11 on unit 2: -110 (exp. 1).
-> 	[   46.401833] usb 1-1: UVC non compliance - GET_DEF(PROBE) not supported. Enabling workaround.
-> 	[   51.460664] uvcvideo 1-1:1.1: Failed to query (129) UVC probe control : -110 (exp. 26).
-> 	[   51.460672] uvcvideo 1-1:1.1: Failed to initialize the device (-5).
-> 	[   61.656435] usb 1-1: 3:1: usb_set_interface failed (-110)
-> 	[   71.885237] usb 1-1: 3:1: usb_set_interface failed (-110)
-> 	[   77.003565] usb 1-1: 3:1: usb_set_interface failed (-110)
-> ...
-> 	[ 2022.115559] usb 1-1: 3:1: usb_set_interface failed (-110)
-> 
-> 
-> Are you using any proprietary driver or had applied any patch/driver
-> to the Kernel?
-> 
-> Can you try testing it with vanilla Kernel 5.10?
-
--- 
-Regards,
-
-Laurent Pinchart
+[1] https://github.com/umlaeute/v4l2loopback
+[2] https://github.com/wt/v4l2loopback/tree/m2m_try
