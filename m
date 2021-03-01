@@ -2,120 +2,216 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C89FC433E6
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 15:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8DB5C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 16:32:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27735600CC
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 15:20:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C06E64FA7
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 16:32:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237044AbhCAPTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Mar 2021 10:19:49 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60498 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237043AbhCAPTi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 10:19:38 -0500
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:39a1:f0e7:a696:18c8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8622D1F44E76;
-        Mon,  1 Mar 2021 15:18:10 +0000 (GMT)
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     p.zabel@pengutronix.de, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, ezequiel@collabora.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com, benjamin.gaignard@collabora.com
-Subject: [PATCH v3 5/5] arm64: dts: imx8mq: Use reset driver for VPU hardware block
-Date:   Mon,  1 Mar 2021 16:17:54 +0100
-Message-Id: <20210301151754.104749-6-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210301151754.104749-1-benjamin.gaignard@collabora.com>
-References: <20210301151754.104749-1-benjamin.gaignard@collabora.com>
+        id S232419AbhCAQbv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Mar 2021 11:31:51 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:44284 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231636AbhCAQ1r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 11:27:47 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1A7E341;
+        Mon,  1 Mar 2021 17:26:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1614616013;
+        bh=7hUdaUiRrdglhVmCUiThlN/qQNp6U/+SuEgfQgjrHC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n17p6rIeB2CudHo+y8UCMAyOySUskJ9VsO80P0N4tLa99K1yiima5qx9HYmIkvhp2
+         YagTgwpVyC9n9Ac8gDgIpWxy/Y82/0LZckGU+Ll22O6VjTQEThqiGlH/fJzfbmInhw
+         KhItlRY3/S6r6U4TGHYD6pl/Zf3/Q14hUEfMgrW0=
+Date:   Mon, 1 Mar 2021 18:26:25 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH 2/5] drm/omap: hdmi4: switch to the cec bridge ops
+Message-ID: <YD0VsX9QLni9mFHV@pendragon.ideasonboard.com>
+References: <20210211103703.444625-1-hverkuil-cisco@xs4all.nl>
+ <20210211103703.444625-3-hverkuil-cisco@xs4all.nl>
+ <YC+qFsroJl8+Oy3q@pendragon.ideasonboard.com>
+ <b0c9050b-099f-bf2b-a566-9f5893d1b417@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b0c9050b-099f-bf2b-a566-9f5893d1b417@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a vpu reset hardware block node.
+Hi Hans,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 31 ++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 6 deletions(-)
+On Mon, Mar 01, 2021 at 12:07:56PM +0100, Hans Verkuil wrote:
+> On 19/02/2021 13:07, Laurent Pinchart wrote:
+> > On Thu, Feb 11, 2021 at 11:37:00AM +0100, Hans Verkuil wrote:
+> >> Implement the new CEC bridge ops. This makes it possible to associate
+> >> a CEC adapter with a drm connector, which helps userspace determine
+> >> with cec device node belongs to which drm connector.
+> >>
+> >> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> >> ---
+> >>  drivers/gpu/drm/omapdrm/dss/hdmi4.c     | 28 +++++++++++++++++--------
+> >>  drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c |  8 ++++---
+> >>  drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h |  7 ++++---
+> >>  3 files changed, 28 insertions(+), 15 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4.c b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
+> >> index 8de41e74e8f8..765379380d4b 100644
+> >> --- a/drivers/gpu/drm/omapdrm/dss/hdmi4.c
+> >> +++ b/drivers/gpu/drm/omapdrm/dss/hdmi4.c
+> >> @@ -482,6 +482,21 @@ static struct edid *hdmi4_bridge_get_edid(struct drm_bridge *bridge,
+> >>  	return edid;
+> >>  }
+> >>  
+> >> +static int hdmi4_bridge_cec_init(struct drm_bridge *bridge,
+> >> +				 struct drm_connector *conn)
+> >> +{
+> >> +	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
+> >> +
+> >> +	return hdmi4_cec_init(hdmi->pdev, &hdmi->core, &hdmi->wp, conn);
+> >> +}
+> >> +
+> >> +static void hdmi4_bridge_cec_exit(struct drm_bridge *bridge)
+> >> +{
+> >> +	struct omap_hdmi *hdmi = drm_bridge_to_hdmi(bridge);
+> >> +
+> >> +	hdmi4_cec_uninit(&hdmi->core);
+> >> +}
+> >> +
+> >>  static const struct drm_bridge_funcs hdmi4_bridge_funcs = {
+> >>  	.attach = hdmi4_bridge_attach,
+> >>  	.mode_set = hdmi4_bridge_mode_set,
+> >> @@ -492,13 +507,15 @@ static const struct drm_bridge_funcs hdmi4_bridge_funcs = {
+> >>  	.atomic_disable = hdmi4_bridge_disable,
+> >>  	.hpd_notify = hdmi4_bridge_hpd_notify,
+> >>  	.get_edid = hdmi4_bridge_get_edid,
+> >> +	.cec_init = hdmi4_bridge_cec_init,
+> >> +	.cec_exit = hdmi4_bridge_cec_exit,
+> >>  };
+> >>  
+> >>  static void hdmi4_bridge_init(struct omap_hdmi *hdmi)
+> >>  {
+> >>  	hdmi->bridge.funcs = &hdmi4_bridge_funcs;
+> >>  	hdmi->bridge.of_node = hdmi->pdev->dev.of_node;
+> >> -	hdmi->bridge.ops = DRM_BRIDGE_OP_EDID;
+> >> +	hdmi->bridge.ops = DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_CEC;
+> >>  	hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
+> >>  
+> >>  	drm_bridge_add(&hdmi->bridge);
+> >> @@ -647,14 +664,10 @@ static int hdmi4_bind(struct device *dev, struct device *master, void *data)
+> >>  	if (r)
+> >>  		goto err_runtime_put;
+> >>  
+> >> -	r = hdmi4_cec_init(hdmi->pdev, &hdmi->core, &hdmi->wp);
+> >> -	if (r)
+> >> -		goto err_pll_uninit;
+> > 
+> > I'm wondering ifwe need to delay the creation of the CEC adapter until
+> > the DRM connector is ready, or if we could only delay its registration ?
+> > Catching errors related to adapter creation early could be nice, the
+> > more error we have to handle at DRM bridge connector creation time, the
+> > more complex the error handling will be for bridge support.
+> 
+> I feel that that is overkill, but if you really want this, just let me know.
+> Splitting it up would actually make it more complex for me since I would have
+> to check whether to call cec_unregister_adapter or cec_delete_adapter, depending
+> on whether the CEC registration was successful or not.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index a841a023e8e0..d9d9efc8592d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/imx8mq-clock.h>
- #include <dt-bindings/power/imx8mq-power.h>
- #include <dt-bindings/reset/imx8mq-reset.h>
-+#include <dt-bindings/reset/imx8mq-vpu-reset.h>
- #include <dt-bindings/gpio/gpio.h>
- #include "dt-bindings/input/input.h"
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-@@ -1267,19 +1268,36 @@ usb3_phy1: usb-phy@382f0040 {
- 			status = "disabled";
- 		};
- 
-+		vpu_reset: vpu-reset@38320000 {
-+			compatible = "fsl,imx8mq-vpu-reset", "syscon";
-+			reg = <0x38320000 0x10000>;
-+			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-+					  <&clk IMX8MQ_CLK_VPU_G2>,
-+					  <&clk IMX8MQ_CLK_VPU_BUS>,
-+					  <&clk IMX8MQ_VPU_PLL_BYPASS>;
-+			assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-+						 <&clk IMX8MQ_VPU_PLL_OUT>,
-+						 <&clk IMX8MQ_SYS1_PLL_800M>,
-+						 <&clk IMX8MQ_VPU_PLL>;
-+			assigned-clock-rates = <600000000>, <300000000>,
-+					       <800000000>, <0>;
-+			#reset-cells = <1>;
-+		};
-+
- 		vpu: video-codec@38300000 {
- 			compatible = "nxp,imx8mq-vpu";
- 			reg = <0x38300000 0x10000>,
--			      <0x38310000 0x10000>,
--			      <0x38320000 0x10000>;
--			reg-names = "g1", "g2", "ctrl";
-+			      <0x38310000 0x10000>;
-+			reg-names = "g1", "g2";
- 			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "g1", "g2";
- 			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
--				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
--				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
--			clock-names = "g1", "g2", "bus";
-+				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-+			clock-names = "g1", "g2";
- 			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
- 					  <&clk IMX8MQ_CLK_VPU_G2>,
- 					  <&clk IMX8MQ_CLK_VPU_BUS>,
-@@ -1290,6 +1308,7 @@ vpu: video-codec@38300000 {
- 						 <&clk IMX8MQ_VPU_PLL>;
- 			assigned-clock-rates = <600000000>, <600000000>,
- 					       <800000000>, <0>;
-+			resets = <&vpu_reset IMX8MQ_RESET_VPU_RESET_G1>;
- 			power-domains = <&pgc_vpu>;
- 		};
- 
+I don't insist if you think it's not worth it.
+
+> >> -
+> >>  	r = hdmi_audio_register(hdmi);
+> >>  	if (r) {
+> >>  		DSSERR("Registering HDMI audio failed\n");
+> >> -		goto err_cec_uninit;
+> >> +		goto err_pll_uninit;
+> >>  	}
+> >>  
+> >>  	hdmi->debugfs = dss_debugfs_create_file(dss, "hdmi", hdmi_dump_regs,
+> >> @@ -664,8 +677,6 @@ static int hdmi4_bind(struct device *dev, struct device *master, void *data)
+> >>  
+> >>  	return 0;
+> >>  
+> >> -err_cec_uninit:
+> >> -	hdmi4_cec_uninit(&hdmi->core);
+> >>  err_pll_uninit:
+> >>  	hdmi_pll_uninit(&hdmi->pll);
+> >>  err_runtime_put:
+> >> @@ -682,7 +693,6 @@ static void hdmi4_unbind(struct device *dev, struct device *master, void *data)
+> >>  	if (hdmi->audio_pdev)
+> >>  		platform_device_unregister(hdmi->audio_pdev);
+> >>  
+> >> -	hdmi4_cec_uninit(&hdmi->core);
+> >>  	hdmi_pll_uninit(&hdmi->pll);
+> >>  }
+> >>  
+> >> diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
+> >> index 43592c1cf081..64f5ccd0f11b 100644
+> >> --- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
+> >> +++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.c
+> >> @@ -335,10 +335,10 @@ void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
+> >>  }
+> >>  
+> >>  int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+> >> -		  struct hdmi_wp_data *wp)
+> >> +		   struct hdmi_wp_data *wp, struct drm_connector *conn)
+> >>  {
+> >> -	const u32 caps = CEC_CAP_TRANSMIT | CEC_CAP_LOG_ADDRS |
+> >> -			 CEC_CAP_PASSTHROUGH | CEC_CAP_RC;
+> >> +	const u32 caps = CEC_CAP_DEFAULTS | CEC_CAP_CONNECTOR_INFO;
+> >> +	struct cec_connector_info conn_info;
+> >>  	int ret;
+> >>  
+> >>  	core->adap = cec_allocate_adapter(&hdmi_cec_adap_ops, core,
+> >> @@ -346,6 +346,8 @@ int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+> >>  	ret = PTR_ERR_OR_ZERO(core->adap);
+> >>  	if (ret < 0)
+> >>  		return ret;
+> >> +	cec_fill_conn_info_from_drm(&conn_info, conn);
+> >> +	cec_s_conn_info(core->adap, &conn_info);
+> >>  	core->wp = wp;
+> >>  
+> >>  	/* Disable clock initially, hdmi_cec_adap_enable() manages it */
+> >> diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
+> >> index 0292337c97cc..b59a54c3040e 100644
+> >> --- a/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
+> >> +++ b/drivers/gpu/drm/omapdrm/dss/hdmi4_cec.h
+> >> @@ -29,7 +29,7 @@ struct platform_device;
+> >>  void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa);
+> >>  void hdmi4_cec_irq(struct hdmi_core_data *core);
+> >>  int hdmi4_cec_init(struct platform_device *pdev, struct hdmi_core_data *core,
+> >> -		  struct hdmi_wp_data *wp);
+> >> +		   struct hdmi_wp_data *wp, struct drm_connector *conn);
+> >>  void hdmi4_cec_uninit(struct hdmi_core_data *core);
+> >>  #else
+> >>  static inline void hdmi4_cec_set_phys_addr(struct hdmi_core_data *core, u16 pa)
+> >> @@ -41,8 +41,9 @@ static inline void hdmi4_cec_irq(struct hdmi_core_data *core)
+> >>  }
+> >>  
+> >>  static inline int hdmi4_cec_init(struct platform_device *pdev,
+> >> -				struct hdmi_core_data *core,
+> >> -				struct hdmi_wp_data *wp)
+> >> +				 struct hdmi_core_data *core,
+> >> +				 struct hdmi_wp_data *wp,
+> >> +				 struct drm_connector *conn)
+> >>  {
+> >>  	return 0;
+> >>  }
+> > 
+> 
+
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart
