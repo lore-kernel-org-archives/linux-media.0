@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4414BC433E6
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 12:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 156DEC433DB
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 12:03:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 147E464E2E
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 12:03:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9A7B64DBD
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 12:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbhCAMD1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Mar 2021 07:03:27 -0500
+        id S234349AbhCAMDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Mar 2021 07:03:51 -0500
 Received: from relmlor2.renesas.com ([210.160.252.172]:49131 "EHLO
         relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233966AbhCAMD0 (ORCPT
+        by vger.kernel.org with ESMTP id S233966AbhCAMDr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Mar 2021 07:03:26 -0500
+        Mon, 1 Mar 2021 07:03:47 -0500
 X-IronPort-AV: E=Sophos;i="5.81,215,1610377200"; 
-   d="scan'208";a="73495395"
+   d="scan'208";a="73495399"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Mar 2021 21:02:16 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 01 Mar 2021 21:02:19 +0900
 Received: from localhost.localdomain (unknown [172.29.52.32])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1464E40062A0;
-        Mon,  1 Mar 2021 21:02:13 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DF49340065CB;
+        Mon,  1 Mar 2021 21:02:16 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
@@ -37,9 +37,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 1/2] media: v4l: vsp1: Fix bru null pointer access
-Date:   Mon,  1 Mar 2021 12:02:07 +0000
-Message-Id: <20210301120208.6707-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 2/2] media: v4l: vsp1: Fix uif null pointer access
+Date:   Mon,  1 Mar 2021 12:02:08 +0000
+Message-Id: <20210301120208.6707-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210301120208.6707-1-biju.das.jz@bp.renesas.com>
 References: <20210301120208.6707-1-biju.das.jz@bp.renesas.com>
@@ -47,28 +47,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RZ/G2L SoC has only BRS. This patch fixes null pointer access,when only
-BRS is enabled.
+RZ/G2L SoC has no UIF. This patch fixes null pointer access, when UIF
+module is not used.
 
-Fixes: cbb7fa49c7466("media: v4l: vsp1: Rename BRU to BRx")
+Fixes: 5e824f989e6e8("media: v4l: vsp1: Integrate DISCOM in display pipeline")
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/media/platform/vsp1/vsp1_drm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/vsp1/vsp1_drm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index 86d5e3f4b1ff..f6d2f47a4058 100644
+index f6d2f47a4058..06f74d410973 100644
 --- a/drivers/media/platform/vsp1/vsp1_drm.c
 +++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -245,7 +245,7 @@ static int vsp1_du_pipeline_setup_brx(struct vsp1_device *vsp1,
- 		brx = &vsp1->bru->entity;
- 	else if (pipe->brx && !drm_pipe->force_brx_release)
- 		brx = pipe->brx;
--	else if (!vsp1->bru->entity.pipe)
-+	else if (vsp1_feature(vsp1, VSP1_HAS_BRU) && !vsp1->bru->entity.pipe)
- 		brx = &vsp1->bru->entity;
- 	else
- 		brx = &vsp1->brs->entity;
+@@ -462,9 +462,9 @@ static int vsp1_du_pipeline_setup_inputs(struct vsp1_device *vsp1,
+ 	 * make sure it is present in the pipeline's list of entities if it
+ 	 * wasn't already.
+ 	 */
+-	if (!use_uif) {
++	if (drm_pipe->uif && !use_uif) {
+ 		drm_pipe->uif->pipe = NULL;
+-	} else if (!drm_pipe->uif->pipe) {
++	} else if (drm_pipe->uif && !drm_pipe->uif->pipe) {
+ 		drm_pipe->uif->pipe = pipe;
+ 		list_add_tail(&drm_pipe->uif->list_pipe, &pipe->entities);
+ 	}
 -- 
 2.17.1
 
