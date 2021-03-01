@@ -2,339 +2,217 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEADC433DB
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 16:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E64FCC433E6
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 17:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 367B465055
-	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 16:47:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C375F651FE
+	for <linux-media@archiver.kernel.org>; Mon,  1 Mar 2021 17:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbhCAQrD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Mar 2021 11:47:03 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44452 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbhCAQmi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 11:42:38 -0500
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7C725332;
-        Mon,  1 Mar 2021 17:41:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1614616915;
-        bh=NRxUQysokQ0kdDveb2reU8gNfxsXXdN2xmScRovTJqA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpbmcGIBTAX3TdMNvZHfrfQqiWg/Gl/h11TllxrquD2fhOc6cm3qEqMmB6EkWHE/h
-         iQnZTcT10FGSjntQx95pkkcuos+OmSjWuO1YUlH3cZ609N78odltUpx9r10Eiu9HKq
-         mbqlDn7m1YHG3w2FO/4bHpiis+ghxbGs6OKA6Juo=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2.1 75/77] media: imx: imx7_mipi_csis: Rename register macros to match datasheet
-Date:   Mon,  1 Mar 2021 18:41:23 +0200
-Message-Id: <20210301164123.13146-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210215042741.28850-76-laurent.pinchart@ideasonboard.com>
-References: <20210215042741.28850-76-laurent.pinchart@ideasonboard.com>
+        id S235612AbhCARTv convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Mar 2021 12:19:51 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:58200 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237999AbhCARQ2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Mar 2021 12:16:28 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lGm8p-00El9O-NP; Mon, 01 Mar 2021 17:15:31 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lGmCa-0007Py-GJ; Mon, 01 Mar 2021 17:19:24 +0000
+Date:   Mon, 1 Mar 2021 17:19:24 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1649363910.6.1614619164496@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3415
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename several register macros to match the names from the
-documentation.
+See <https://builder.linuxtv.org/job/media-build/3415/display/redirect?page=changes>
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
----
-Changes since v2:
+Changes:
 
-- Fix indentation
-- Address SCLKS_MASK and SCLKS_OFFSET
----
- drivers/staging/media/imx/imx7-mipi-csis.c | 172 ++++++++++-----------
- 1 file changed, 86 insertions(+), 86 deletions(-)
+[hverkuil-cisco] Rename frame_vector functions.
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index de1bc0146e59..f57268fad99c 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -63,61 +63,61 @@
- #define MIPI_CSIS_CLK_CTRL_WCLK_SRC		BIT(0)
- 
- /* CSIS Interrupt mask */
--#define MIPI_CSIS_INTMSK			0x10
--#define MIPI_CSIS_INTMSK_EVEN_BEFORE		BIT(31)
--#define MIPI_CSIS_INTMSK_EVEN_AFTER		BIT(30)
--#define MIPI_CSIS_INTMSK_ODD_BEFORE		BIT(29)
--#define MIPI_CSIS_INTMSK_ODD_AFTER		BIT(28)
--#define MIPI_CSIS_INTMSK_FRAME_START		BIT(24)
--#define MIPI_CSIS_INTMSK_FRAME_END		BIT(20)
--#define MIPI_CSIS_INTMSK_ERR_SOT_HS		BIT(16)
--#define MIPI_CSIS_INTMSK_ERR_LOST_FS		BIT(12)
--#define MIPI_CSIS_INTMSK_ERR_LOST_FE		BIT(8)
--#define MIPI_CSIS_INTMSK_ERR_OVER		BIT(4)
--#define MIPI_CSIS_INTMSK_ERR_WRONG_CFG		BIT(3)
--#define MIPI_CSIS_INTMSK_ERR_ECC		BIT(2)
--#define MIPI_CSIS_INTMSK_ERR_CRC		BIT(1)
--#define MIPI_CSIS_INTMSK_ERR_UNKNOWN		BIT(0)
-+#define MIPI_CSIS_INT_MSK			0x10
-+#define MIPI_CSIS_INT_MSK_EVEN_BEFORE		BIT(31)
-+#define MIPI_CSIS_INT_MSK_EVEN_AFTER		BIT(30)
-+#define MIPI_CSIS_INT_MSK_ODD_BEFORE		BIT(29)
-+#define MIPI_CSIS_INT_MSK_ODD_AFTER		BIT(28)
-+#define MIPI_CSIS_INT_MSK_FRAME_START		BIT(24)
-+#define MIPI_CSIS_INT_MSK_FRAME_END		BIT(20)
-+#define MIPI_CSIS_INT_MSK_ERR_SOT_HS		BIT(16)
-+#define MIPI_CSIS_INT_MSK_ERR_LOST_FS		BIT(12)
-+#define MIPI_CSIS_INT_MSK_ERR_LOST_FE		BIT(8)
-+#define MIPI_CSIS_INT_MSK_ERR_OVER		BIT(4)
-+#define MIPI_CSIS_INT_MSK_ERR_WRONG_CFG		BIT(3)
-+#define MIPI_CSIS_INT_MSK_ERR_ECC		BIT(2)
-+#define MIPI_CSIS_INT_MSK_ERR_CRC		BIT(1)
-+#define MIPI_CSIS_INT_MSK_ERR_UNKNOWN		BIT(0)
- 
- /* CSIS Interrupt source */
--#define MIPI_CSIS_INTSRC			0x14
--#define MIPI_CSIS_INTSRC_EVEN_BEFORE		BIT(31)
--#define MIPI_CSIS_INTSRC_EVEN_AFTER		BIT(30)
--#define MIPI_CSIS_INTSRC_EVEN			BIT(30)
--#define MIPI_CSIS_INTSRC_ODD_BEFORE		BIT(29)
--#define MIPI_CSIS_INTSRC_ODD_AFTER		BIT(28)
--#define MIPI_CSIS_INTSRC_ODD			(0x3 << 28)
--#define MIPI_CSIS_INTSRC_NON_IMAGE_DATA		(0xf << 28)
--#define MIPI_CSIS_INTSRC_FRAME_START		BIT(24)
--#define MIPI_CSIS_INTSRC_FRAME_END		BIT(20)
--#define MIPI_CSIS_INTSRC_ERR_SOT_HS		BIT(16)
--#define MIPI_CSIS_INTSRC_ERR_LOST_FS		BIT(12)
--#define MIPI_CSIS_INTSRC_ERR_LOST_FE		BIT(8)
--#define MIPI_CSIS_INTSRC_ERR_OVER		BIT(4)
--#define MIPI_CSIS_INTSRC_ERR_WRONG_CFG		BIT(3)
--#define MIPI_CSIS_INTSRC_ERR_ECC		BIT(2)
--#define MIPI_CSIS_INTSRC_ERR_CRC		BIT(1)
--#define MIPI_CSIS_INTSRC_ERR_UNKNOWN		BIT(0)
--#define MIPI_CSIS_INTSRC_ERRORS			0xfffff
-+#define MIPI_CSIS_INT_SRC			0x14
-+#define MIPI_CSIS_INT_SRC_EVEN_BEFORE		BIT(31)
-+#define MIPI_CSIS_INT_SRC_EVEN_AFTER		BIT(30)
-+#define MIPI_CSIS_INT_SRC_EVEN			BIT(30)
-+#define MIPI_CSIS_INT_SRC_ODD_BEFORE		BIT(29)
-+#define MIPI_CSIS_INT_SRC_ODD_AFTER		BIT(28)
-+#define MIPI_CSIS_INT_SRC_ODD			(0x3 << 28)
-+#define MIPI_CSIS_INT_SRC_NON_IMAGE_DATA	(0xf << 28)
-+#define MIPI_CSIS_INT_SRC_FRAME_START		BIT(24)
-+#define MIPI_CSIS_INT_SRC_FRAME_END		BIT(20)
-+#define MIPI_CSIS_INT_SRC_ERR_SOT_HS		BIT(16)
-+#define MIPI_CSIS_INT_SRC_ERR_LOST_FS		BIT(12)
-+#define MIPI_CSIS_INT_SRC_ERR_LOST_FE		BIT(8)
-+#define MIPI_CSIS_INT_SRC_ERR_OVER		BIT(4)
-+#define MIPI_CSIS_INT_SRC_ERR_WRONG_CFG		BIT(3)
-+#define MIPI_CSIS_INT_SRC_ERR_ECC		BIT(2)
-+#define MIPI_CSIS_INT_SRC_ERR_CRC		BIT(1)
-+#define MIPI_CSIS_INT_SRC_ERR_UNKNOWN		BIT(0)
-+#define MIPI_CSIS_INT_SRC_ERRORS		0xfffff
- 
- /* D-PHY status control */
--#define MIPI_CSIS_DPHYSTATUS			0x20
--#define MIPI_CSIS_DPHYSTATUS_ULPS_DAT		BIT(8)
--#define MIPI_CSIS_DPHYSTATUS_STOPSTATE_DAT	BIT(4)
--#define MIPI_CSIS_DPHYSTATUS_ULPS_CLK		BIT(1)
--#define MIPI_CSIS_DPHYSTATUS_STOPSTATE_CLK	BIT(0)
-+#define MIPI_CSIS_DPHY_STATUS			0x20
-+#define MIPI_CSIS_DPHY_STATUS_ULPS_DAT		BIT(8)
-+#define MIPI_CSIS_DPHY_STATUS_STOPSTATE_DAT	BIT(4)
-+#define MIPI_CSIS_DPHY_STATUS_ULPS_CLK		BIT(1)
-+#define MIPI_CSIS_DPHY_STATUS_STOPSTATE_CLK	BIT(0)
- 
- /* D-PHY common control */
--#define MIPI_CSIS_DPHYCTRL			0x24
--#define MIPI_CSIS_DPHYCTRL_HSSETTLE(n)		((n) << 24)
--#define MIPI_CSIS_DPHYCTRL_HSSETTLE_MASK	GENMASK(31, 24)
--#define MIPI_CSIS_DPHYCTRL_SCLKS_MASK		(0x3 << 22)
--#define MIPI_CSIS_DPHYCTRL_SCLKS_OFFSET		22
--#define MIPI_CSIS_DPHYCTRL_DPDN_SWAP_CLK	BIT(6)
--#define MIPI_CSIS_DPHYCTRL_DPDN_SWAP_DAT	BIT(5)
--#define MIPI_CSIS_DPHYCTRL_ENABLE_DAT		BIT(1)
--#define MIPI_CSIS_DPHYCTRL_ENABLE_CLK		BIT(0)
--#define MIPI_CSIS_DPHYCTRL_ENABLE		(0x1f << 0)
-+#define MIPI_CSIS_DPHY_CMN_CTRL			0x24
-+#define MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(n)	((n) << 24)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE_MASK	GENMASK(31, 24)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE(n)	((n) << 22)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE_MASK	GENMASK(23, 22)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_DPDN_SWAP_CLK	BIT(6)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_DPDN_SWAP_DAT	BIT(5)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE_DAT	BIT(1)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE_CLK	BIT(0)
-+#define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE		(0x1f << 0)
- 
- /* D-PHY Master and Slave Control register Low */
- #define MIPI_CSIS_DPHY_BCTRL_L			0x30
-@@ -163,7 +163,7 @@
- #define MIPI_CSIS_DPHY_SCTRL_H			0x3c
- 
- /* ISP Configuration register */
--#define MIPI_CSIS_ISPCONFIG_CH(n)		(0x40 + (n) * 0x10)
-+#define MIPI_CSIS_ISP_CONFIG_CH(n)		(0x40 + (n) * 0x10)
- #define MIPI_CSIS_ISPCFG_MEM_FULL_GAP_MSK	(0xff << 24)
- #define MIPI_CSIS_ISPCFG_MEM_FULL_GAP(x)	((x) << 24)
- #define MIPI_CSIS_ISPCFG_DOUBLE_CMPNT		BIT(12)
-@@ -178,15 +178,15 @@
- #define MIPI_CSIS_ISPCFG_FMT_MASK		(0x3f << 2)
- 
- /* ISP Image Resolution register */
--#define MIPI_CSIS_ISPRESOL_CH(n)		(0x44 + (n) * 0x10)
-+#define MIPI_CSIS_ISP_RESOL_CH(n)		(0x44 + (n) * 0x10)
- #define CSIS_MAX_PIX_WIDTH			0xffff
- #define CSIS_MAX_PIX_HEIGHT			0xffff
- 
- /* ISP SYNC register */
--#define MIPI_CSIS_ISPSYNC_CH(n)			(0x48 + (n) * 0x10)
--#define MIPI_CSIS_ISPSYNC_HSYNC_LINTV_OFFSET	18
--#define MIPI_CSIS_ISPSYNC_VSYNC_SINTV_OFFSET	12
--#define MIPI_CSIS_ISPSYNC_VSYNC_EINTV_OFFSET	0
-+#define MIPI_CSIS_ISP_SYNC_CH(n)		(0x48 + (n) * 0x10)
-+#define MIPI_CSIS_ISP_SYNC_HSYNC_LINTV_OFFSET	18
-+#define MIPI_CSIS_ISP_SYNC_VSYNC_SINTV_OFFSET	12
-+#define MIPI_CSIS_ISP_SYNC_VSYNC_EINTV_OFFSET	0
- 
- /* Non-image packet data buffers */
- #define MIPI_CSIS_PKTDATA_ODD			0x2000
-@@ -209,22 +209,22 @@ struct mipi_csis_event {
- 
- static const struct mipi_csis_event mipi_csis_events[] = {
- 	/* Errors */
--	{ MIPI_CSIS_INTSRC_ERR_SOT_HS,	"SOT Error" },
--	{ MIPI_CSIS_INTSRC_ERR_LOST_FS,	"Lost Frame Start Error" },
--	{ MIPI_CSIS_INTSRC_ERR_LOST_FE,	"Lost Frame End Error" },
--	{ MIPI_CSIS_INTSRC_ERR_OVER,	"FIFO Overflow Error" },
--	{ MIPI_CSIS_INTSRC_ERR_WRONG_CFG, "Wrong Configuration Error" },
--	{ MIPI_CSIS_INTSRC_ERR_ECC,	"ECC Error" },
--	{ MIPI_CSIS_INTSRC_ERR_CRC,	"CRC Error" },
--	{ MIPI_CSIS_INTSRC_ERR_UNKNOWN,	"Unknown Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_SOT_HS,		"SOT Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_LOST_FS,	"Lost Frame Start Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_LOST_FE,	"Lost Frame End Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_OVER,		"FIFO Overflow Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_WRONG_CFG,	"Wrong Configuration Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_ECC,		"ECC Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_CRC,		"CRC Error" },
-+	{ MIPI_CSIS_INT_SRC_ERR_UNKNOWN,	"Unknown Error" },
- 	/* Non-image data receive events */
--	{ MIPI_CSIS_INTSRC_EVEN_BEFORE,	"Non-image data before even frame" },
--	{ MIPI_CSIS_INTSRC_EVEN_AFTER,	"Non-image data after even frame" },
--	{ MIPI_CSIS_INTSRC_ODD_BEFORE,	"Non-image data before odd frame" },
--	{ MIPI_CSIS_INTSRC_ODD_AFTER,	"Non-image data after odd frame" },
-+	{ MIPI_CSIS_INT_SRC_EVEN_BEFORE,	"Non-image data before even frame" },
-+	{ MIPI_CSIS_INT_SRC_EVEN_AFTER,		"Non-image data after even frame" },
-+	{ MIPI_CSIS_INT_SRC_ODD_BEFORE,		"Non-image data before odd frame" },
-+	{ MIPI_CSIS_INT_SRC_ODD_AFTER,		"Non-image data after odd frame" },
- 	/* Frame start/end */
--	{ MIPI_CSIS_INTSRC_FRAME_START,	"Frame Start" },
--	{ MIPI_CSIS_INTSRC_FRAME_END,	"Frame End" },
-+	{ MIPI_CSIS_INT_SRC_FRAME_START,	"Frame Start" },
-+	{ MIPI_CSIS_INT_SRC_FRAME_END,		"Frame End" },
- };
- 
- #define MIPI_CSIS_NUM_EVENTS ARRAY_SIZE(mipi_csis_events)
-@@ -444,7 +444,7 @@ static const struct csis_pix_format *find_csis_format(u32 code)
- 
- static void mipi_csis_enable_interrupts(struct csi_state *state, bool on)
- {
--	mipi_csis_write(state, MIPI_CSIS_INTMSK, on ? 0xffffffff : 0);
-+	mipi_csis_write(state, MIPI_CSIS_INT_MSK, on ? 0xffffffff : 0);
- }
- 
- static void mipi_csis_sw_reset(struct csi_state *state)
-@@ -486,13 +486,13 @@ static void mipi_csis_system_enable(struct csi_state *state, int on)
- 		val &= ~MIPI_CSIS_CMN_CTRL_ENABLE;
- 	mipi_csis_write(state, MIPI_CSIS_CMN_CTRL, val);
- 
--	val = mipi_csis_read(state, MIPI_CSIS_DPHYCTRL);
--	val &= ~MIPI_CSIS_DPHYCTRL_ENABLE;
-+	val = mipi_csis_read(state, MIPI_CSIS_DPHY_CMN_CTRL);
-+	val &= ~MIPI_CSIS_DPHY_CMN_CTRL_ENABLE;
- 	if (on) {
- 		mask = (1 << (state->bus.num_data_lanes + 1)) - 1;
--		val |= (mask & MIPI_CSIS_DPHYCTRL_ENABLE);
-+		val |= (mask & MIPI_CSIS_DPHY_CMN_CTRL_ENABLE);
- 	}
--	mipi_csis_write(state, MIPI_CSIS_DPHYCTRL, val);
-+	mipi_csis_write(state, MIPI_CSIS_DPHY_CMN_CTRL, val);
- }
- 
- /* Called with the state.lock mutex held */
-@@ -502,14 +502,14 @@ static void __mipi_csis_set_format(struct csi_state *state)
- 	u32 val;
- 
- 	/* Color format */
--	val = mipi_csis_read(state, MIPI_CSIS_ISPCONFIG_CH(0));
-+	val = mipi_csis_read(state, MIPI_CSIS_ISP_CONFIG_CH(0));
- 	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK);
- 	val |= state->csis_fmt->fmt_reg;
--	mipi_csis_write(state, MIPI_CSIS_ISPCONFIG_CH(0), val);
-+	mipi_csis_write(state, MIPI_CSIS_ISP_CONFIG_CH(0), val);
- 
- 	/* Pixel resolution */
- 	val = mf->width | (mf->height << 16);
--	mipi_csis_write(state, MIPI_CSIS_ISPRESOL_CH(0), val);
-+	mipi_csis_write(state, MIPI_CSIS_ISP_RESOL_CH(0), val);
- }
- 
- static int mipi_csis_calculate_params(struct csi_state *state)
-@@ -558,13 +558,13 @@ static void mipi_csis_set_params(struct csi_state *state)
- 
- 	__mipi_csis_set_format(state);
- 
--	mipi_csis_write(state, MIPI_CSIS_DPHYCTRL,
--			MIPI_CSIS_DPHYCTRL_HSSETTLE(state->hs_settle));
-+	mipi_csis_write(state, MIPI_CSIS_DPHY_CMN_CTRL,
-+			MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(state->hs_settle));
- 
--	val = (0 << MIPI_CSIS_ISPSYNC_HSYNC_LINTV_OFFSET) |
--		(0 << MIPI_CSIS_ISPSYNC_VSYNC_SINTV_OFFSET) |
--		(0 << MIPI_CSIS_ISPSYNC_VSYNC_EINTV_OFFSET);
--	mipi_csis_write(state, MIPI_CSIS_ISPSYNC_CH(0), val);
-+	val = (0 << MIPI_CSIS_ISP_SYNC_HSYNC_LINTV_OFFSET)
-+	    | (0 << MIPI_CSIS_ISP_SYNC_VSYNC_SINTV_OFFSET)
-+	    | (0 << MIPI_CSIS_ISP_SYNC_VSYNC_EINTV_OFFSET);
-+	mipi_csis_write(state, MIPI_CSIS_ISP_SYNC_CH(0), val);
- 
- 	val = mipi_csis_read(state, MIPI_CSIS_CLK_CTRL);
- 	val |= MIPI_CSIS_CLK_CTRL_WCLK_SRC;
-@@ -955,12 +955,12 @@ static irqreturn_t mipi_csis_irq_handler(int irq, void *dev_id)
- 	unsigned int i;
- 	u32 status;
- 
--	status = mipi_csis_read(state, MIPI_CSIS_INTSRC);
-+	status = mipi_csis_read(state, MIPI_CSIS_INT_SRC);
- 
- 	spin_lock_irqsave(&state->slock, flags);
- 
- 	/* Update the event/error counters */
--	if ((status & MIPI_CSIS_INTSRC_ERRORS) || state->debug) {
-+	if ((status & MIPI_CSIS_INT_SRC_ERRORS) || state->debug) {
- 		for (i = 0; i < MIPI_CSIS_NUM_EVENTS; i++) {
- 			if (!(status & state->events[i].mask))
- 				continue;
-@@ -969,7 +969,7 @@ static irqreturn_t mipi_csis_irq_handler(int irq, void *dev_id)
- 	}
- 	spin_unlock_irqrestore(&state->slock, flags);
- 
--	mipi_csis_write(state, MIPI_CSIS_INTSRC, status);
-+	mipi_csis_write(state, MIPI_CSIS_INT_SRC, status);
- 
- 	return IRQ_HANDLED;
- }
--- 
-Regards,
+[hverkuil-cisco] Add v5.11_isa.patch
 
-Laurent Pinchart
 
+------------------------------------------
+Started by an SCM change
+Running as SYSTEM
+Building remotely on slave1 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.20.1'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 15e45b4b4577c1d87159511c11a959fbd49d1671 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 15e45b4b4577c1d87159511c11a959fbd49d1671 # timeout=10
+Commit message: "Add v5.11_isa.patch"
+ > git rev-list --no-walk a236fddff61e8357f3070effdf23e9b5f20b26e6 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 15e45b4b4577c1d87159511c11a959fbd49d1671^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3414' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since 'a236fddff61e8357f3070effdf23e9b5f20b26e6'
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@15e83337'
+[GitCheckoutListener] -> Recorded 2 new commits
+[media-build] $ /bin/sh -xe /tmp/jenkins10845279509656475005.sh
++ ./build
+Checking if the needed tools for Debian GNU/Linux 10 (buster) are available
+Needed package dependencies are met.
+
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
+
+Not aborted. It means that the licence was agreed. Proceeding...
+
+****************************
+Updating the building system
+****************************
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2021-03-01 17:16:35--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2021-03-01 17:16:35--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
+
+     0K                                                       100%  176M=0s
+
+2021-03-01 17:16:36 (176 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 4.19.0-12-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+patch -s -f -N -p1 -i ../backports/debug.patch
+patch -s -f -N -p1 -i ../backports/drx39xxj.patch
+patch -s -f -N -p1 -i ../backports/ccs.patch
+patch -s -f -N -p1 -i ../backports/v5.11_isa.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:131: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:378: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
