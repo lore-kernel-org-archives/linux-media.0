@@ -2,123 +2,512 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE41DC433E0
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7931DC43381
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B9FF64F1A
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3836864F04
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349874AbhCBRhM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S1349889AbhCBRhV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447518AbhCBNl1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 08:41:27 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C0CC061756;
-        Tue,  2 Mar 2021 05:40:38 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id q25so11076955lfc.8;
-        Tue, 02 Mar 2021 05:40:38 -0800 (PST)
+        with ESMTP id S1351423AbhCBOXf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 09:23:35 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C03C0617AB
+        for <linux-media@vger.kernel.org>; Tue,  2 Mar 2021 06:22:55 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d12so11378699pfo.7
+        for <linux-media@vger.kernel.org>; Tue, 02 Mar 2021 06:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sy2937whkD36NnxmnEnOHu/2WmMpJHhESVIp923Q2ms=;
-        b=WR417b2TXL4XluWU3Q62QUJQT2KHPwbcPUhvSl9ZQVrVxjti1bnY0rVY28lskvQOQ9
-         Wd4ONpWLQsrq2U9ZfDpZJ9FfQ0enFUDeq957Rh8PhHNklfHjRCfh4w3CGHcGpKedn3JL
-         JU325/yJb/LyWrSRbGakExDJSSgUVg+qczoU+PFZZ2dZHklZkgt4nYBqwUHa/sX6A7Vq
-         KcMVXJKg88SR6oBSveZT8yEuJBNqlxOaa9sbDxhpRkGsJXaBT3wgy8o8QOEuUJEnZHii
-         cNSLUqZnaK/Zmp1Gtp5hNnFenxB8+j+e6Auapc+QBS0WcKBPGyzm5C2dO3+rub2odxvy
-         Guzw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=55CV5Uii01XlVoSozVXVyFoeTH+tff8OgWug04ZDhmY=;
+        b=WgE9mguXExxiweZEDJ5krszZiBSX73e4+IsDKu/0g8IGk18iHY3GRIBoQwrdaNgF3D
+         Wa/xmpjnhb4/HfNbReL3XTHexCzkh8r4AKvF3j5kovNVbRi8WDKzh6VFtKmB4tTAFjf0
+         ESB3enmEz0M/aERYjhI8QusT+qeh65eJEAhWaE6t0wjAaMEwrn73zxl/9NkKVfuhDG1r
+         2PpVB+4wt/Egz1oz16n2nI+TPyAZz3iLfFuxqn2RTL/xhLn8wksmLOUl9ryJZ2z36YsE
+         eiSsNnRE7BEhXZEiP8sJ1veF6MhmUse1OAGs4c1N2IyaBDhItrpKIgSqrQkZydYxNfJR
+         AvIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sy2937whkD36NnxmnEnOHu/2WmMpJHhESVIp923Q2ms=;
-        b=EhoMuAQ7DKnyEuzgvbgptxDcLLMmpunXnYHxlPxyQYlBX0OjfsollGtZPKjopFc4Lg
-         40uNKjaP3JVWNk8+DhBnFwh+LBgGeIjsGt1KOGWWPQ6QdlGquhp9IGcyncV8+zJ9+2f5
-         G8iTj7VRvZcK7Q2lH57ZD6t4xt7SuCdvGwj+LwntDW857ylrcIbL/0VPpgQHQjkEYJta
-         5Lo7y4tW9K19X3AOCHs7IMsOarZG9apGXTnCmJi+bn106t5rMpMZinFyvug+/mNeArqF
-         njguiz5NpnMpZqLrAVnYeMA/vQhlwJ7Ba2xQkbipd1eT1OAM52UoQc7J32a3skK9648c
-         92eQ==
-X-Gm-Message-State: AOAM531ECC0QCVft70Sjj/KRUzLAwuj20RwAe+0fj/VW89xsh5eOzvau
-        65n4IeFIMCeoXganNFUiRbwUBmbuuUo=
-X-Google-Smtp-Source: ABdhPJxRPWPVr1JuoC8bNRBtDqyUDprT1LYGiwQlldtoe/FBCoxaKt0EfpMAr+/aLHyNPv+Ih4vpaQ==
-X-Received: by 2002:ac2:4ecd:: with SMTP id p13mr5165188lfr.421.1614692436754;
-        Tue, 02 Mar 2021 05:40:36 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id 192sm2462749ljj.95.2021.03.02.05.40.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Mar 2021 05:40:36 -0800 (PST)
-Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
-        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        lukasz.luba@arm.com, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
-        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
-        marijn.suijten@somainline.org, gustavoars@kernel.org,
-        emil.velikov@collabora.com, jonathan@marek.ca,
-        akhilpo@codeaurora.org, smasetty@codeaurora.org,
-        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, ddavenport@chromium.org,
-        jsanka@codeaurora.org, rnayak@codeaurora.org,
-        tongtiangen@huawei.com, miaoqinglang@huawei.com,
-        khsieh@codeaurora.org, abhinavk@codeaurora.org,
-        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
-        mka@chromium.org, harigovi@codeaurora.org,
-        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
-        georgi.djakov@linaro.org, akashast@codeaurora.org,
-        parashar@codeaurora.org, dianders@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
-Message-ID: <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
-Date:   Tue, 2 Mar 2021 16:40:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=55CV5Uii01XlVoSozVXVyFoeTH+tff8OgWug04ZDhmY=;
+        b=czgOq8WNRSg08tzTDAsK3hGXmW66MdH5ZApOTilXrNKmI/f8dKfZwnuOEwhbrMyyMk
+         463jl5hD6835kzyhgdnfbJN9b83VoPwHvwxfd/xe+v/RB+m4FI9+XiA2dKoItnNW+t3Z
+         6JHgrmLD4qA5HwPFxxmMxww1oTzEtjGUFrq5Aj4IZIiXe8hzdPr9tB7i0NSHCCLu+nZT
+         d9FywsmCL+L8FFjMEAhA+fu/ebwtnp1ygjySvOY7ni1td5vuuxY9dPm4xfGLXP4b68U/
+         0mpxPMWBGRf0ciUUlA0fiiCX3ZAMwl0g37EDj7l9NwpInQIJ2an6Bjn60daWufZ4qK7q
+         s7uQ==
+X-Gm-Message-State: AOAM531NpiU7NihHW69O4cgHYc+ij/eDd/UvagYXVEv34Az8JnPSIsVo
+        hQr7tEhFvT/xGZgKM1+d1NZKz5m9UvnrGr+pwLTtvQ==
+X-Google-Smtp-Source: ABdhPJy/BjbThnIpDQtd/a3becT65unXymeQ8C8wxZH2PzyHCSTsV/lwnu7MyP+v6xCb3dzzHOo/t4f9Y+6sfPF8LPo=
+X-Received: by 2002:a65:5c42:: with SMTP id v2mr18455018pgr.339.1614694974868;
+ Tue, 02 Mar 2021 06:22:54 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1613619715-28785-1-git-send-email-victor.liu@nxp.com> <1613619715-28785-11-git-send-email-victor.liu@nxp.com>
+In-Reply-To: <1613619715-28785-11-git-send-email-victor.liu@nxp.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 2 Mar 2021 15:22:43 +0100
+Message-ID: <CAG3jFysTKXsmfx4x=XVdu3X0amE9EUOxN=bYo4eg+XjnqyFsVg@mail.gmail.com>
+Subject: Re: [PATCH v4 10/14] drm/bridge: imx: Add LDB driver helper support
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>, kishon@ti.com,
+        Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-20.01.2021 19:01, Dmitry Osipenko пишет:
-> 01.01.2021 19:54, Yangtao Li пишет:
->> Hi,
->>
->> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
->> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
->> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
->> devm_pm_opp_register_notifier.
-> 
-> Hello Yangtao,
-> 
-> Thank you for your effort, looking forward to v2!
+Hey Liu,
 
-Yangtao, could you please let me know what is the status of this series?
-Will you be able to make a v2 anytime soon?
+Thanks for submitting this patch.
+
+On Thu, 18 Feb 2021 at 04:59, Liu Ying <victor.liu@nxp.com> wrote:
+>
+> This patch adds a helper to support LDB drm bridge drivers for
+> i.MX SoCs.  Helper functions exported from this driver should
+> implement common logics for all LDB modules embedded in i.MX SoCs.
+>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v3->v4:
+> * No change.
+>
+> v2->v3:
+> * Call syscon_node_to_regmap() to get regmap instead of
+>   syscon_regmap_lookup_by_phandle().
+>
+> v1->v2:
+> * No change.
+>
+>  drivers/gpu/drm/bridge/imx/Kconfig          |   8 +
+>  drivers/gpu/drm/bridge/imx/Makefile         |   1 +
+>  drivers/gpu/drm/bridge/imx/imx-ldb-helper.c | 248 ++++++++++++++++++++++++++++
+>  include/drm/bridge/imx_ldb_helper.h         |  98 +++++++++++
+>  4 files changed, 355 insertions(+)
+>  create mode 100644 drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+>  create mode 100644 include/drm/bridge/imx_ldb_helper.h
+>
+> diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
+> index 1ea1ce7..23e24fd 100644
+> --- a/drivers/gpu/drm/bridge/imx/Kconfig
+> +++ b/drivers/gpu/drm/bridge/imx/Kconfig
+> @@ -1,3 +1,11 @@
+> +config DRM_IMX_LVDS_BRIDGE_HELPER
+> +       tristate "Freescale i.MX LVDS display bridge helper"
+> +       depends on OF
+> +       select DRM_PANEL_BRIDGE
+> +       help
+> +         Helper to support Freescale i.MX LVDS Display Bridge(LDB).
+> +         This bridge is embedded in a SoC.
+> +
+>  config DRM_IMX8QXP_PIXEL_COMBINER
+>         tristate "Freescale i.MX8QM/QXP pixel combiner"
+>         depends on OF
+> diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
+> index e74dd64..902b703 100644
+> --- a/drivers/gpu/drm/bridge/imx/Makefile
+> +++ b/drivers/gpu/drm/bridge/imx/Makefile
+> @@ -1,3 +1,4 @@
+> +obj-$(CONFIG_DRM_IMX_LVDS_BRIDGE_HELPER) += imx-ldb-helper.o
+>  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
+>  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
+>  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI) += imx8qxp-pxl2dpi.o
+> diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+> new file mode 100644
+> index 00000000..94d7f9e
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+> @@ -0,0 +1,248 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (C) 2012 Sascha Hauer, Pengutronix
+> + * Copyright 2019,2020 NXP
+> + */
+> +
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <drm/bridge/imx_ldb_helper.h>
+> +#include <drm/drm_of.h>
+> +#include <drm/drm_panel.h>
+> +#include <drm/drm_print.h>
+> +
+> +bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
+> +{
+> +       return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_channel_is_single_link);
+> +
+> +bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
+> +{
+> +       return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
+> +              ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_channel_is_split_link);
+> +
+> +int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+> +                                  struct drm_bridge_state *bridge_state,
+> +                                  struct drm_crtc_state *crtc_state,
+> +                                  struct drm_connector_state *conn_state)
+> +{
+> +       struct ldb_channel *ldb_ch = bridge->driver_private;
+> +
+> +       ldb_ch->in_bus_format = bridge_state->input_bus_cfg.format;
+> +       ldb_ch->out_bus_format = bridge_state->output_bus_cfg.format;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_bridge_atomic_check_helper);
+> +
+> +void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+> +                               const struct drm_display_mode *mode,
+> +                               const struct drm_display_mode *adjusted_mode)
+> +{
+> +       struct ldb_channel *ldb_ch = bridge->driver_private;
+> +       struct ldb *ldb = ldb_ch->ldb;
+> +       bool is_split = ldb_channel_is_split_link(ldb_ch);
+> +
+> +       if (is_split)
+> +               ldb->ldb_ctrl |= LDB_SPLIT_MODE_EN;
+> +
+> +       switch (ldb_ch->out_bus_format) {
+> +       case MEDIA_BUS_FMT_RGB666_1X7X3_SPWG:
+> +               break;
+> +       case MEDIA_BUS_FMT_RGB888_1X7X4_SPWG:
+> +               if (ldb_ch->chno == 0 || is_split)
+> +                       ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24;
+> +               if (ldb_ch->chno == 1 || is_split)
+> +                       ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24;
+> +               break;
+> +       case MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA:
+> +               if (ldb_ch->chno == 0 || is_split)
+> +                       ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24 |
+> +                                        LDB_BIT_MAP_CH0_JEIDA;
+> +               if (ldb_ch->chno == 1 || is_split)
+> +                       ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24 |
+> +                                        LDB_BIT_MAP_CH1_JEIDA;
+> +               break;
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_bridge_mode_set_helper);
+> +
+> +void ldb_bridge_enable_helper(struct drm_bridge *bridge)
+> +{
+> +       struct ldb_channel *ldb_ch = bridge->driver_private;
+> +       struct ldb *ldb = ldb_ch->ldb;
+> +
+> +       /*
+> +        * Platform specific bridge drivers should set ldb_ctrl properly
+> +        * for the enablement, so just write the ctrl_reg here.
+> +        */
+> +       regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_bridge_enable_helper);
+> +
+> +void ldb_bridge_disable_helper(struct drm_bridge *bridge)
+> +{
+> +       struct ldb_channel *ldb_ch = bridge->driver_private;
+> +       struct ldb *ldb = ldb_ch->ldb;
+> +       bool is_split = ldb_channel_is_split_link(ldb_ch);
+> +
+> +       if (ldb_ch->chno == 0 || is_split)
+> +               ldb->ldb_ctrl &= ~LDB_CH0_MODE_EN_MASK;
+> +       if (ldb_ch->chno == 1 || is_split)
+> +               ldb->ldb_ctrl &= ~LDB_CH1_MODE_EN_MASK;
+> +
+> +       regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_bridge_disable_helper);
+> +
+> +int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+> +                            enum drm_bridge_attach_flags flags)
+> +{
+> +       struct ldb_channel *ldb_ch = bridge->driver_private;
+> +       struct ldb *ldb = ldb_ch->ldb;
+> +
+> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
+> +               DRM_DEV_ERROR(ldb->dev,
+> +                             "do not support creating a drm_connector\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (!bridge->encoder) {
+> +               DRM_DEV_ERROR(ldb->dev, "missing encoder\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       return drm_bridge_attach(bridge->encoder,
+> +                               ldb_ch->next_bridge, bridge,
+> +                               DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_bridge_attach_helper);
+> +
+> +int ldb_init_helper(struct ldb *ldb)
+> +{
+> +       struct device *dev = ldb->dev;
+> +       struct device_node *np = dev->of_node;
+> +       struct device_node *child;
+> +       int ret;
+> +       u32 i;
+> +
+> +       ldb->regmap = syscon_node_to_regmap(np->parent);
+> +       if (IS_ERR(ldb->regmap)) {
+> +               ret = PTR_ERR(ldb->regmap);
+> +               if (ret != -EPROBE_DEFER)
+> +                       DRM_DEV_ERROR(dev, "failed to get regmap: %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       for_each_available_child_of_node(np, child) {
+> +               struct ldb_channel *ldb_ch;
+> +
+> +               ret = of_property_read_u32(child, "reg", &i);
+> +               if (ret || i > MAX_LDB_CHAN_NUM - 1) {
+> +                       ret = -EINVAL;
+> +                       DRM_DEV_ERROR(dev,
+> +                                     "invalid channel node address: %u\n", i);
+> +                       of_node_put(child);
+> +                       return ret;
+> +               }
+> +
+> +               ldb_ch = ldb->channel[i];
+> +               ldb_ch->ldb = ldb;
+> +               ldb_ch->chno = i;
+> +               ldb_ch->is_available = true;
+> +               ldb_ch->np = child;
+> +
+> +               ldb->available_ch_cnt++;
+> +       }
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_init_helper);
+> +
+> +int ldb_find_next_bridge_helper(struct ldb *ldb)
+> +{
+> +       struct device *dev = ldb->dev;
+> +       struct ldb_channel *ldb_ch;
+> +       int ret, i;
+> +
+> +       for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+> +               ldb_ch = ldb->channel[i];
+> +
+> +               if (!ldb_ch->is_available)
+> +                       continue;
+> +
+> +               ret = drm_of_find_panel_or_bridge(ldb_ch->np, 1, 0,
+> +                                                 &ldb_ch->panel,
+> +                                                 &ldb_ch->next_bridge);
+> +               if (ret) {
+> +                       if (ret != -EPROBE_DEFER)
+> +                               DRM_DEV_ERROR(dev,
+> +                                       "failed to find panel or bridge: %d\n",
+> +                                                                       ret);
+> +                       return ret;
+> +               }
+> +
+> +               if (ldb_ch->panel) {
+> +                       ldb_ch->next_bridge = devm_drm_panel_bridge_add(dev,
+> +                                                               ldb_ch->panel);
+> +                       if (IS_ERR(ldb_ch->next_bridge)) {
+> +                               ret = PTR_ERR(ldb_ch->next_bridge);
+> +                               DRM_DEV_ERROR(dev,
+> +                                       "failed to add panel bridge: %d\n",
+> +                                                                       ret);
+> +                               return ret;
+> +                       }
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_find_next_bridge_helper);
+> +
+> +void ldb_add_bridge_helper(struct ldb *ldb,
+> +                          const struct drm_bridge_funcs *bridge_funcs)
+> +{
+> +       struct ldb_channel *ldb_ch;
+> +       int i;
+> +
+> +       for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+> +               ldb_ch = ldb->channel[i];
+> +
+> +               if (!ldb_ch->is_available)
+> +                       continue;
+> +
+> +               ldb_ch->bridge.driver_private = ldb_ch;
+> +               ldb_ch->bridge.funcs = bridge_funcs;
+> +               ldb_ch->bridge.of_node = ldb_ch->np;
+> +
+> +               drm_bridge_add(&ldb_ch->bridge);
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_add_bridge_helper);
+> +
+> +void ldb_remove_bridge_helper(struct ldb *ldb)
+> +{
+> +       struct ldb_channel *ldb_ch;
+> +       int i;
+> +
+> +       for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+> +               ldb_ch = ldb->channel[i];
+> +
+> +               if (!ldb_ch->is_available)
+> +                       continue;
+> +
+> +               drm_bridge_remove(&ldb_ch->bridge);
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(ldb_remove_bridge_helper);
+> +
+> +MODULE_DESCRIPTION("Freescale i.MX LVDS Display Bridge driver helper");
+> +MODULE_AUTHOR("Liu Ying <victor.liu@nxp.com>");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:imx-ldb-helper");
+
+I'm not entirely sure why this set of helper functions should be a
+module. It's not a driver, but rather a toolbox for the LDB driver,
+which is fine, but there is no situation I can see where this module
+would be unloaded and the LDB driver would be loaded.
+
+> diff --git a/include/drm/bridge/imx_ldb_helper.h b/include/drm/bridge/imx_ldb_helper.h
+> new file mode 100644
+> index 00000000..2a7ba97
+> --- /dev/null
+> +++ b/include/drm/bridge/imx_ldb_helper.h
+
+This header is specific to this driver, and I would expect it to not
+be useful to other drivers. Additionally the filename has a different
+format than the .c file it corresponds to. I would change the name and
+path to "drivers/gpu/drm/bridge/imx/imx-ldb-helper.h".
+
+> @@ -0,0 +1,98 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +
+> +/*
+> + * Copyright 2019,2020 NXP
+> + */
+> +
+> +#ifndef __FSL_IMX_LDB__
+> +#define __FSL_IMX_LDB__
+> +
+> +#include <linux/device.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <drm/drm_atomic.h>
+> +#include <drm/drm_bridge.h>
+> +#include <drm/drm_device.h>
+> +#include <drm/drm_encoder.h>
+> +#include <drm/drm_modeset_helper_vtables.h>
+> +#include <drm/drm_panel.h>
+> +
+> +#define LDB_CH0_MODE_EN_TO_DI0         (1 << 0)
+> +#define LDB_CH0_MODE_EN_TO_DI1         (3 << 0)
+> +#define LDB_CH0_MODE_EN_MASK           (3 << 0)
+> +#define LDB_CH1_MODE_EN_TO_DI0         (1 << 2)
+> +#define LDB_CH1_MODE_EN_TO_DI1         (3 << 2)
+> +#define LDB_CH1_MODE_EN_MASK           (3 << 2)
+> +#define LDB_SPLIT_MODE_EN              (1 << 4)
+> +#define LDB_DATA_WIDTH_CH0_24          (1 << 5)
+> +#define LDB_BIT_MAP_CH0_JEIDA          (1 << 6)
+> +#define LDB_DATA_WIDTH_CH1_24          (1 << 7)
+> +#define LDB_BIT_MAP_CH1_JEIDA          (1 << 8)
+> +#define LDB_DI0_VS_POL_ACT_LOW         (1 << 9)
+> +#define LDB_DI1_VS_POL_ACT_LOW         (1 << 10)
+> +
+> +#define MAX_LDB_CHAN_NUM               2
+> +
+> +enum ldb_channel_link_type {
+> +       LDB_CH_SINGLE_LINK,
+> +       LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS,
+> +       LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS,
+> +};
+> +
+> +struct ldb;
+> +
+> +struct ldb_channel {
+> +       struct ldb *ldb;
+> +       struct drm_bridge bridge;
+> +       struct drm_panel *panel;
+> +       struct drm_bridge *next_bridge;
+> +       struct device_node *np;
+> +       u32 chno;
+> +       bool is_available;
+> +       u32 in_bus_format;
+> +       u32 out_bus_format;
+> +       enum ldb_channel_link_type link_type;
+> +};
+> +
+> +struct ldb {
+> +       struct regmap *regmap;
+> +       struct device *dev;
+> +       struct ldb_channel *channel[MAX_LDB_CHAN_NUM];
+> +       unsigned int ctrl_reg;
+> +       u32 ldb_ctrl;
+> +       unsigned int available_ch_cnt;
+> +};
+> +
+> +#define bridge_to_ldb_ch(b)    container_of(b, struct ldb_channel, bridge)
+> +
+> +bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch);
+> +bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch);
+> +
+> +int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+> +                                  struct drm_bridge_state *bridge_state,
+> +                                  struct drm_crtc_state *crtc_state,
+> +                                  struct drm_connector_state *conn_state);
+> +
+> +void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+> +                               const struct drm_display_mode *mode,
+> +                               const struct drm_display_mode *adjusted_mode);
+> +
+> +void ldb_bridge_enable_helper(struct drm_bridge *bridge);
+> +
+> +void ldb_bridge_disable_helper(struct drm_bridge *bridge);
+> +
+> +int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+> +                            enum drm_bridge_attach_flags flags);
+> +
+> +int ldb_init_helper(struct ldb *ldb);
+> +
+> +int ldb_find_next_bridge_helper(struct ldb *ldb);
+> +
+> +void ldb_add_bridge_helper(struct ldb *ldb,
+> +                          const struct drm_bridge_funcs *bridge_funcs);
+> +
+> +void ldb_remove_bridge_helper(struct ldb *ldb);
+> +
+> +#endif /* __FSL_IMX_LDB__ */
+> --
+> 2.7.4
+>
