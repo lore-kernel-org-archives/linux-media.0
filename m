@@ -2,584 +2,1019 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36549C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D65C4332D
 	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0808464F1A
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E9B264F14
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349882AbhCBRhQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448044AbhCBNyv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 08:54:51 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B13C061794
-        for <linux-media@vger.kernel.org>; Tue,  2 Mar 2021 05:54:11 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id i14so1974669pjz.4
-        for <linux-media@vger.kernel.org>; Tue, 02 Mar 2021 05:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8S7PNftm7oYv7qvavsxyYzrGV/rkszu4y/GO7OeWvEg=;
-        b=bxzW6pMr51AzquJih0X8bZaPUjfzWiPADUp9e+kdb5axkEnGjBS2CI25GqAxT/6ffY
-         r63uedqkPRSPfxKVpyllUVF8L+w8uOAVOkLP3Ow1r9vK8unzZFgmviov/ub2Y5KzYrEA
-         G9qs+Jqu/+/d5SFlpWzOn2jHv5KNK2zjXAmJ61/hl5rD5///MO1s86vO2lhHIsJ4qBhR
-         h1tWGhdliiFCTgbu5T1su+zyaGgmRc4kcC0THTuMiE8wgUELdFIiZPoLcFJ+uiSTGLOb
-         0uYGv3g3vMvPgbQ8R0nzRJVhA55nXPWia0YcUpuVwzwBl+3MJA6P+hLAI7r6PjwlpxKQ
-         NtlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8S7PNftm7oYv7qvavsxyYzrGV/rkszu4y/GO7OeWvEg=;
-        b=gA3mFjii3kI+0zRlBnfDAsFKf4sY4l2hPv+IVX9MM9+KlUQ5LIVj3YKAchSkz3ivP/
-         +CQ3GAOT0QBWCmuwYGIoTz5Pu3qNuAnL5unus6baWUF2hO/oyLBkbDfXaON+RM9KkUF4
-         g9F5IgJqJN0lNDFTJBTpLrrTbCDX1BSJngDGfoYJiDjwNq26JjcL1hHXiVuT4YUnPvE0
-         tfDHmMwRyntjdB0Z7sYZOdOoPPJNepou+nyOny1PGVIQhn208fcr/3CXuNix1MqhPDeR
-         cN8COKcKHWd1gPROv+qDyaYTXbW5Dh+4F6wOhOB3NzIcjAASXRukKqG/QOy+I1SNbqZl
-         hKeQ==
-X-Gm-Message-State: AOAM5314EcuJwRrFlenOHGLYfxMbNfVY2R0w7DHdB4uyVvsxzOUKElc0
-        N9BBevi8ko6KLqe/1rLbF/dicv8skBBUlDAlH3wDBw==
-X-Google-Smtp-Source: ABdhPJzZ0iYI7gvgGA4IoDxrHZcRchb0jzt0bcOnR+n6GvT95kY1Ch/XMromADk3mKac56sRh5VN4D3cNHreyWeaiNo=
-X-Received: by 2002:a17:902:f68a:b029:e5:b17f:9154 with SMTP id
- l10-20020a170902f68ab02900e5b17f9154mr4064607plg.28.1614693251072; Tue, 02
- Mar 2021 05:54:11 -0800 (PST)
+        id S1349896AbhCBRhY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:37:24 -0500
+Received: from aposti.net ([89.234.176.197]:37648 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1384421AbhCBPFY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Mar 2021 10:05:24 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     od@zcrc.me, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maarten ter Huurne <maarten@treewalker.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 2/2] media: radio: RDA5807: Added driver
+Date:   Tue,  2 Mar 2021 14:42:36 +0000
+Message-Id: <20210302144236.72824-2-paul@crapouillou.net>
+In-Reply-To: <20210302144236.72824-1-paul@crapouillou.net>
+References: <20210302144236.72824-1-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <1613619715-28785-1-git-send-email-victor.liu@nxp.com> <1613619715-28785-8-git-send-email-victor.liu@nxp.com>
-In-Reply-To: <1613619715-28785-8-git-send-email-victor.liu@nxp.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 2 Mar 2021 14:53:58 +0100
-Message-ID: <CAG3jFyuncs+BznKUV2M8zfMt_PCwyq+wps_wRB8QaOYxezXzOg@mail.gmail.com>
-Subject: Re: [PATCH v4 07/14] drm/bridge: imx: Add i.MX8qm/qxp display pixel
- link support
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>, kishon@ti.com,
-        Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Liu,
+From: Maarten ter Huurne <maarten@treewalker.org>
 
-Thanks for submitting this patch.
+Add a driver to support the RDA5807 FM radio I2C chip from Unisoc
+Communications.
 
-I only have one comment below. With that addressed, feel free to add my r-b.
+Tested and working with fmtools 2.x.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/media/radio/Kconfig         |  12 +
+ drivers/media/radio/Makefile        |   1 +
+ drivers/media/radio/radio-rda5807.c | 920 ++++++++++++++++++++++++++++
+ 3 files changed, 933 insertions(+)
+ create mode 100644 drivers/media/radio/radio-rda5807.c
 
-On Thu, 18 Feb 2021 at 04:59, Liu Ying <victor.liu@nxp.com> wrote:
->
-> This patch adds a drm bridge driver for i.MX8qm/qxp display pixel link.
-> The pixel link forms a standard asynchronous linkage between
-> pixel sources(display controller or camera module) and pixel
-> consumers(imaging or displays).  It consists of two distinct
-> functions, a pixel transfer function and a control interface.
->
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v3->v4:
-> * No change.
->
-> v2->v3:
-> * Drop two macros which help define functions and define them directly.
-> * Properly disable all pixel link controls to POR value by calling
->   imx8qxp_pixel_link_disable_all_controls() from
->   imx8qxp_pixel_link_bridge_probe().
->
-> v1->v2:
-> * Rewrite the function to find the next bridge by properly using OF APIs
->   and dropping unnecessary DT validation. (Rob)
->
->  drivers/gpu/drm/bridge/imx/Kconfig              |   8 +
->  drivers/gpu/drm/bridge/imx/Makefile             |   1 +
->  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c | 426 ++++++++++++++++++++++++
->  3 files changed, 435 insertions(+)
->  create mode 100644 drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
->
-> diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-> index f1c91b6..4d1f027 100644
-> --- a/drivers/gpu/drm/bridge/imx/Kconfig
-> +++ b/drivers/gpu/drm/bridge/imx/Kconfig
-> @@ -6,3 +6,11 @@ config DRM_IMX8QXP_PIXEL_COMBINER
->         help
->           Choose this to enable pixel combiner found in
->           Freescale i.MX8qm/qxp processors.
-> +
-> +config DRM_IMX8QXP_PIXEL_LINK
-> +       tristate "Freescale i.MX8QM/QXP display pixel link"
-> +       depends on OF
-> +       select DRM_KMS_HELPER
-> +       help
-> +         Choose this to enable display pixel link found in
-> +         Freescale i.MX8qm/qxp processors.
-> diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-> index 7d7c8d6..c15469f 100644
-> --- a/drivers/gpu/drm/bridge/imx/Makefile
-> +++ b/drivers/gpu/drm/bridge/imx/Makefile
-> @@ -1 +1,2 @@
->  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
-> +obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
-> diff --git a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
-> new file mode 100644
-> index 00000000..2e5ba4a
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
-> @@ -0,0 +1,426 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +/*
-> + * Copyright 2020 NXP
-> + */
-> +
-> +#include <linux/firmware/imx/svc/misc.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_graph.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <drm/drm_atomic_state_helper.h>
-> +#include <drm/drm_bridge.h>
-> +#include <drm/drm_print.h>
-> +
-> +#include <dt-bindings/firmware/imx/rsrc.h>
-> +
-> +#define DRIVER_NAME            "imx8qxp-display-pixel-link"
-> +#define PL_MAX_MST_ADDR                3
-> +#define PL_MAX_NEXT_BRIDGES    2
-> +
-> +struct imx8qxp_pixel_link {
-> +       struct drm_bridge bridge;
-> +       struct drm_bridge *next_bridge;
-> +       struct device *dev;
-> +       struct imx_sc_ipc *ipc_handle;
-> +       int id;
-> +       int stream_id;
-> +       int dc_id;
-> +       u32 sink_rsc;
-> +       u32 mst_addr;
-> +       u8 mst_addr_ctrl;
-> +       u8 mst_en_ctrl;
-> +       u8 mst_vld_ctrl;
-> +       u8 sync_ctrl;
-> +};
-> +
-> +static void imx8qxp_pixel_link_enable_mst_en(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->mst_en_ctrl, true);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +                       "failed to enable DC%d stream%d pixel link mst_en: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +}
-> +
-> +static void imx8qxp_pixel_link_enable_mst_vld(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->mst_vld_ctrl, true);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +               "failed to enable DC%d stream%d pixel link mst_vld: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +}
-> +
-> +static void imx8qxp_pixel_link_enable_sync(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->sync_ctrl, true);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +                       "failed to enable DC%d stream%d pixel link sync: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +}
-> +
-> +static int imx8qxp_pixel_link_disable_mst_en(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->mst_en_ctrl, false);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +               "failed to disable DC%d stream%d pixel link mst_en: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +
-> +       return ret;
-> +}
-> +
-> +static int imx8qxp_pixel_link_disable_mst_vld(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->mst_vld_ctrl, false);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +               "failed to disable DC%d stream%d pixel link mst_vld: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +
-> +       return ret;
-> +}
-> +
-> +static int imx8qxp_pixel_link_disable_sync(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,
-> +                                     pl->sync_ctrl, false);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +                       "failed to disable DC%d stream%d pixel link sync: %d\n",
-> +                                               pl->dc_id, pl->stream_id, ret);
-> +
-> +       return ret;
-> +}
-> +
-> +static void imx8qxp_pixel_link_set_mst_addr(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx_sc_misc_set_control(pl->ipc_handle,
-> +                                     pl->sink_rsc, pl->mst_addr_ctrl,
-> +                                     pl->mst_addr);
-> +       if (ret)
-> +               DRM_DEV_ERROR(pl->dev,
-> +                   "failed to set DC%d stream%d pixel link mst addr(%u): %d\n",
-> +                   pl->dc_id, pl->stream_id, pl->mst_addr, ret);
-> +}
-> +
-> +static int imx8qxp_pixel_link_bridge_attach(struct drm_bridge *bridge,
-> +                                           enum drm_bridge_attach_flags flags)
-> +{
-> +       struct imx8qxp_pixel_link *pl = bridge->driver_private;
-> +
-> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
-> +               DRM_DEV_ERROR(pl->dev,
-> +                             "do not support creating a drm_connector\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       if (!bridge->encoder) {
-> +               DRM_DEV_ERROR(pl->dev, "missing encoder\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       return drm_bridge_attach(bridge->encoder,
-> +                                pl->next_bridge, bridge,
-> +                                DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> +}
-> +
-> +static void
-> +imx8qxp_pixel_link_bridge_mode_set(struct drm_bridge *bridge,
-> +                                  const struct drm_display_mode *mode,
-> +                                  const struct drm_display_mode *adjusted_mode)
-> +{
-> +       struct imx8qxp_pixel_link *pl = bridge->driver_private;
-> +
-> +       imx8qxp_pixel_link_set_mst_addr(pl);
-> +}
-> +
-> +static void imx8qxp_pixel_link_bridge_atomic_enable(struct drm_bridge *bridge,
-> +                             struct drm_bridge_state *old_bridge_state)
-> +{
-> +       struct imx8qxp_pixel_link *pl = bridge->driver_private;
-> +
-> +       imx8qxp_pixel_link_enable_mst_en(pl);
-> +       imx8qxp_pixel_link_enable_mst_vld(pl);
-> +       imx8qxp_pixel_link_enable_sync(pl);
-> +}
-> +
-> +static void imx8qxp_pixel_link_bridge_atomic_disable(struct drm_bridge *bridge,
-> +                               struct drm_bridge_state *old_bridge_state)
-> +{
-> +       struct imx8qxp_pixel_link *pl = bridge->driver_private;
-> +
-> +       imx8qxp_pixel_link_disable_mst_en(pl);
-> +       imx8qxp_pixel_link_disable_mst_vld(pl);
-> +       imx8qxp_pixel_link_disable_sync(pl);
-> +}
-> +
-> +static const u32 imx8qxp_pixel_link_bus_output_fmts[] = {
-> +       MEDIA_BUS_FMT_RGB888_1X36_CPADLO,
-> +       MEDIA_BUS_FMT_RGB666_1X36_CPADLO,
-> +};
-> +
-> +static bool imx8qxp_pixel_link_bus_output_fmt_supported(u32 fmt)
-> +{
-> +       int i;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(imx8qxp_pixel_link_bus_output_fmts); i++) {
-> +               if (imx8qxp_pixel_link_bus_output_fmts[i] == fmt)
-> +                       return true;
-> +       }
-> +
-> +       return false;
-> +}
-> +
-> +static u32 *
-> +imx8qxp_pixel_link_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
-> +                                       struct drm_bridge_state *bridge_state,
-> +                                       struct drm_crtc_state *crtc_state,
-> +                                       struct drm_connector_state *conn_state,
-> +                                       u32 output_fmt,
-> +                                       unsigned int *num_input_fmts)
-> +{
-> +       u32 *input_fmts;
-> +
-> +       if (!imx8qxp_pixel_link_bus_output_fmt_supported(output_fmt))
-> +               return NULL;
-> +
-> +       *num_input_fmts = 1;
-> +
-> +       input_fmts = kmalloc(sizeof(*input_fmts), GFP_KERNEL);
-> +       if (!input_fmts)
-> +               return NULL;
-> +
-> +       input_fmts[0] = output_fmt;
-> +
-> +       return input_fmts;
-> +}
-> +
-> +static u32 *
-> +imx8qxp_pixel_link_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
-> +                                       struct drm_bridge_state *bridge_state,
-> +                                       struct drm_crtc_state *crtc_state,
-> +                                       struct drm_connector_state *conn_state,
-> +                                       unsigned int *num_output_fmts)
-> +{
-> +       *num_output_fmts = ARRAY_SIZE(imx8qxp_pixel_link_bus_output_fmts);
-> +       return kmemdup(imx8qxp_pixel_link_bus_output_fmts,
-> +                       sizeof(imx8qxp_pixel_link_bus_output_fmts), GFP_KERNEL);
-> +}
-> +
-> +static const struct drm_bridge_funcs imx8qxp_pixel_link_bridge_funcs = {
-> +       .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> +       .atomic_destroy_state   = drm_atomic_helper_bridge_destroy_state,
-> +       .atomic_reset           = drm_atomic_helper_bridge_reset,
-> +       .attach                 = imx8qxp_pixel_link_bridge_attach,
-> +       .mode_set               = imx8qxp_pixel_link_bridge_mode_set,
-> +       .atomic_enable          = imx8qxp_pixel_link_bridge_atomic_enable,
-> +       .atomic_disable         = imx8qxp_pixel_link_bridge_atomic_disable,
-> +       .atomic_get_input_bus_fmts =
-> +                       imx8qxp_pixel_link_bridge_atomic_get_input_bus_fmts,
-> +       .atomic_get_output_bus_fmts =
-> +                       imx8qxp_pixel_link_bridge_atomic_get_output_bus_fmts,
-> +};
-> +
-> +static int imx8qxp_pixel_link_disable_all_controls(struct imx8qxp_pixel_link *pl)
-> +{
-> +       int ret;
-> +
-> +       ret = imx8qxp_pixel_link_disable_mst_en(pl);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = imx8qxp_pixel_link_disable_mst_vld(pl);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return imx8qxp_pixel_link_disable_sync(pl);
-> +}
-> +
-> +static struct drm_bridge *
-> +imx8qxp_pixel_link_find_next_bridge(struct imx8qxp_pixel_link *pl)
-> +{
-> +       struct device_node *np = pl->dev->of_node;
-> +       struct device_node *port, *remote;
-> +       struct drm_bridge *next_bridge[PL_MAX_NEXT_BRIDGES];
-> +       u32 port_id;
-> +       bool found_port = false;
-> +       int reg, ep_cnt = 0;
-> +       int bridge_sel = 0;     /* select the first next bridge by default */
+diff --git a/drivers/media/radio/Kconfig b/drivers/media/radio/Kconfig
+index d29e29645e04..323faa7d3d52 100644
+--- a/drivers/media/radio/Kconfig
++++ b/drivers/media/radio/Kconfig
+@@ -81,6 +81,18 @@ config RADIO_MAXIRADIO
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called radio-maxiradio.
+ 
++config RADIO_RDA5807
++	tristate "RDA5807 I2C FM radio support"
++	depends on I2C && VIDEO_V4L2
++	select REGMAP_I2C
++	select PM
++	help
++	  Say Y here if you want to use the RDA5807 FM receiver connected to
++	  an I2C bus.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called radio-rda5807.
++
+ config RADIO_SHARK
+ 	tristate "Griffin radioSHARK USB radio receiver"
+ 	depends on USB
+diff --git a/drivers/media/radio/Makefile b/drivers/media/radio/Makefile
+index 53c7ae135460..a85ccab640b0 100644
+--- a/drivers/media/radio/Makefile
++++ b/drivers/media/radio/Makefile
+@@ -26,6 +26,7 @@ obj-$(CONFIG_RADIO_SI4713) += si4713/
+ obj-$(CONFIG_USB_MR800) += radio-mr800.o
+ obj-$(CONFIG_USB_KEENE) += radio-keene.o
+ obj-$(CONFIG_USB_MA901) += radio-ma901.o
++obj-$(CONFIG_RADIO_RDA5807) += radio-rda5807.o
+ obj-$(CONFIG_RADIO_TEA5764) += radio-tea5764.o
+ obj-$(CONFIG_RADIO_SAA7706H) += saa7706h.o
+ obj-$(CONFIG_RADIO_TEF6862) += tef6862.o
+diff --git a/drivers/media/radio/radio-rda5807.c b/drivers/media/radio/radio-rda5807.c
+new file mode 100644
+index 000000000000..0f7796ca2575
+--- /dev/null
++++ b/drivers/media/radio/radio-rda5807.c
+@@ -0,0 +1,920 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * radio-rda5807.c - Driver for using the RDA5807 FM tuner chip via I2C
++ *
++ * Copyright (c) 2011 Maarten ter Huurne <maarten@treewalker.org>
++ * Copyright (c) 2021 Paul Cercueil <paul@crapouillou.net>
++ *
++ * Many thanks to Jérôme Veres for his command line radio application that
++ * demonstrates how the chip can be controlled via I2C.
++ *
++ * Also thanks to Marcos Paulo de Souza for several patches to this driver.
++ *
++ * The RDA5807 has three ways of accessing registers:
++ * - I2C address 0x10: sequential access, RDA5800 style
++ * - I2C address 0x11: random access
++ * - I2C address 0x60: sequential access, TEA5767 compatible
++ *
++ * This driver only supports random access to the registers.
++ */
++
++
++#include <linux/bitops.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/videodev2.h>
++
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-dev.h>
++#include <media/v4l2-device.h>
++#include <media/v4l2-ioctl.h>
++
++
++enum rda5807_reg {
++	RDA5807_REG_CHIPID		= 0x00,
++	RDA5807_REG_CTRL		= 0x02,
++	RDA5807_REG_CHAN		= 0x03,
++	RDA5807_REG_IOCFG		= 0x04,
++	RDA5807_REG_INPUT		= 0x05,
++	RDA5807_REG_BAND		= 0x07,
++	RDA5807_REG_SEEKRES		= 0x0A,
++	RDA5807_REG_SIGNAL		= 0x0B,
++};
++
++#define RDA5807_CTRL_DHIZ		BIT(15)
++#define RDA5807_CTRL_DMUTE		BIT(14)
++#define RDA5807_CTRL_MONO		BIT(13)
++#define RDA5807_CTRL_BASS		BIT(12)
++#define RDA5807_CTRL_SEEKUP		BIT(9)
++#define RDA5807_CTRL_SEEK		BIT(8)
++#define RDA5807_CTRL_SKMODE		BIT(7)
++#define RDA5807_CTRL_CLKMODE		GENMASK(6, 4)
++#define RDA5807_CTRL_SOFTRESET		BIT(1)
++#define RDA5807_CTRL_ENABLE		BIT(0)
++
++#define RDA5807_CHAN_WRCHAN		GENMASK(15, 6)
++#define RDA5807_CHAN_TUNE		BIT(4)
++#define RDA5807_CHAN_BAND		GENMASK(3, 2)
++#define RDA5807_CHAN_SPACE		GENMASK(1, 0)
++
++#define RDA5807_IOCFG_DEEMPHASIS	BIT(11)
++#define RDA5807_IOCFG_I2S_EN		BIT(6)
++
++#define RDA5807_INPUT_LNA_PORT		GENMASK(7, 6)
++#define RDA5807_INPUT_LNA_ICSEL		GENMASK(5, 4)
++#define RDA5807_INPUT_VOLUME		GENMASK(3, 0)
++
++#define RDA5807_BAND_65M_BAND		BIT(9)
++
++#define RDA5807_SEEKRES_COMPLETE	BIT(14)
++#define RDA5807_SEEKRES_FAIL		BIT(13)
++#define RDA5807_SEEKRES_STEREO		BIT(10)
++#define RDA5807_SEEKRES_READCHAN	GENMASK(9, 0)
++
++#define RDA5807_SIGNAL_RSSI		GENMASK(15, 9)
++
++
++#define RDA5807_AUTOSUSPEND_DELAY_MS	5000
++
++
++struct rda5807_driver {
++	struct v4l2_ctrl_handler ctrl_handler;
++	struct video_device video_dev;
++	struct v4l2_device v4l2_dev;
++
++	struct device *dev;
++	struct regmap *map;
++	struct regulator *supply;
++
++	const struct v4l2_frequency_band *band;
++
++	bool unmuted;
++};
++
++enum rda5807_bands {
++	RDA5807_BAND_WORLDWIDE,
++	RDA5807_BAND_EAST_EUROPE,
++	RDA5807_BAND_UNKNOWN,
++};
++
++static const struct v4l2_frequency_band rda5807_bands[] = {
++	[RDA5807_BAND_WORLDWIDE] = {
++		.index = RDA5807_BAND_WORLDWIDE,
++		.type = V4L2_TUNER_RADIO,
++		.capability = V4L2_TUNER_CAP_STEREO | V4L2_TUNER_CAP_LOW |
++			V4L2_TUNER_CAP_FREQ_BANDS,
++		.rangelow = 1216000,   /* 76.0 MHz */
++		.rangehigh = 1728000,  /* 108.0 MHz */
++		.modulation = V4L2_BAND_MODULATION_FM,
++	},
++	[RDA5807_BAND_EAST_EUROPE] = {
++		.index = RDA5807_BAND_EAST_EUROPE,
++		.type = V4L2_TUNER_RADIO,
++		.capability = V4L2_TUNER_CAP_STEREO | V4L2_TUNER_CAP_LOW |
++			V4L2_TUNER_CAP_FREQ_BANDS,
++		.rangelow = 1040000,   /* 65.0 MHz */
++		.rangehigh = 1216000,  /* 76.0 MHz */
++		.modulation = V4L2_BAND_MODULATION_FM,
++	},
++	[RDA5807_BAND_UNKNOWN] = {
++		.index = RDA5807_BAND_UNKNOWN,
++		.type = V4L2_TUNER_RADIO,
++		.capability = V4L2_TUNER_CAP_STEREO | V4L2_TUNER_CAP_LOW |
++			V4L2_TUNER_CAP_FREQ_BANDS,
++		.rangelow = 800000,   /* 50.0 MHz */
++		.rangehigh = 1040000,  /* 65.0 MHz */
++		.modulation = V4L2_BAND_MODULATION_FM,
++	},
++};
++
++static const struct v4l2_frequency_band *rda5807_get_band(unsigned long min,
++							  unsigned long max)
++{
++	const struct v4l2_frequency_band *band;
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(rda5807_bands); i++) {
++		band = &rda5807_bands[i];
++
++		if (band->rangelow <= min && band->rangehigh >= max)
++			return band;
++	}
++
++	return NULL;
++}
++
++static int rda5807_set_band(struct rda5807_driver *radio,
++			    const struct v4l2_frequency_band *band)
++{
++	u16 val;
++	int err;
++
++	if (band->index == RDA5807_BAND_EAST_EUROPE)
++		err = regmap_set_bits(radio->map, RDA5807_REG_BAND,
++				      RDA5807_BAND_65M_BAND);
++	else
++		err = regmap_clear_bits(radio->map, RDA5807_REG_BAND,
++					RDA5807_BAND_65M_BAND);
++	if (err)
++		return err;
++
++	if (band->index == RDA5807_BAND_WORLDWIDE)
++		val = FIELD_PREP(RDA5807_CHAN_BAND, 2);
++	else
++		val = FIELD_PREP(RDA5807_CHAN_BAND, 3);
++
++	err = regmap_update_bits(radio->map, RDA5807_REG_CHAN,
++				 RDA5807_CHAN_BAND, val);
++	if (err)
++		return err;
++
++	radio->band = band;
++	return 0;
++}
++
++static int rda5807_set_mute(struct rda5807_driver *radio, int muted)
++{
++	u16 val = muted ? 0 : RDA5807_CTRL_DMUTE /* disable mute */;
++
++	dev_dbg(radio->dev, "set mute to %d\n", muted);
++
++	return regmap_update_bits(radio->map, RDA5807_REG_CTRL,
++				  RDA5807_CTRL_DMUTE, val);
++}
++
++static int rda5807_set_volume(struct rda5807_driver *radio, int volume)
++{
++	dev_dbg(radio->dev, "set volume to %d\n", volume);
++
++	return regmap_update_bits(radio->map, RDA5807_REG_INPUT,
++				  RDA5807_INPUT_VOLUME,
++				  FIELD_PREP(RDA5807_INPUT_VOLUME, volume));
++}
++
++static int rda5807_set_deemphasis(struct rda5807_driver *radio,
++				  enum v4l2_deemphasis deemp)
++{
++	int err;
++
++	if (deemp == V4L2_DEEMPHASIS_50_uS)
++		err = regmap_set_bits(radio->map, RDA5807_REG_IOCFG,
++				      RDA5807_IOCFG_DEEMPHASIS);
++	else
++		err = regmap_clear_bits(radio->map, RDA5807_REG_IOCFG,
++					RDA5807_IOCFG_DEEMPHASIS);
++
++	dev_dbg(radio->dev, "set deemphasis to %d\n", deemp);
++	return err;
++}
++
++static inline struct rda5807_driver *ctrl_to_radio(struct v4l2_ctrl *ctrl)
++{
++	return container_of(ctrl->handler, struct rda5807_driver, ctrl_handler);
++}
++
++static int rda5807_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct rda5807_driver *radio = ctrl_to_radio(ctrl);
++	int err;
++
++	switch (ctrl->id) {
++	case V4L2_CID_AUDIO_MUTE:
++		if (radio->unmuted == !ctrl->val)
++			break;
++
++		if (ctrl->val) {
++			pm_runtime_mark_last_busy(radio->dev);
++			err = pm_runtime_put_autosuspend(radio->dev);
++			if (err < 0)
++				return err;
++		} else {
++			err = pm_runtime_get_sync(radio->dev);
++			if (err < 0) {
++				pm_runtime_put_noidle(radio->dev);
++				return err;
++			}
++		}
++
++		err = rda5807_set_mute(radio, ctrl->val);
++		if (err)
++			return err;
++
++		radio->unmuted = !ctrl->val;
++		break;
++	case V4L2_CID_AUDIO_VOLUME:
++		return rda5807_set_volume(radio, ctrl->val);
++	case V4L2_CID_TUNE_DEEMPHASIS:
++		return rda5807_set_deemphasis(radio, ctrl->val);
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static const struct v4l2_ctrl_ops rda5807_ctrl_ops = {
++	.s_ctrl = rda5807_s_ctrl,
++};
++
++static int rda5807_vidioc_querycap(struct file *file, void *fh,
++				   struct v4l2_capability *cap)
++{
++	*cap = (struct v4l2_capability) {
++		.driver		= "rda5807",
++		.card		= "RDA5807 FM receiver",
++		.bus_info	= "I2C",
++		.device_caps	= V4L2_CAP_RADIO | V4L2_CAP_TUNER
++						 | V4L2_CAP_HW_FREQ_SEEK,
++	};
++	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
++
++	return 0;
++}
++
++static int rda5807_vidioc_g_audio(struct file *file, void *fh,
++				  struct v4l2_audio *a)
++{
++	if (a->index != 0)
++		return -EINVAL;
++
++	*a = (struct v4l2_audio) {
++		.name = "Radio",
++		.capability = V4L2_AUDCAP_STEREO,
++		.mode = 0,
++	};
++
++	return 0;
++}
++
++static int rda5807_vidioc_g_tuner(struct file *file, void *fh,
++				  struct v4l2_tuner *a)
++{
++	struct rda5807_driver *radio = video_drvdata(file);
++	unsigned int seekres, signal;
++	u32 rxsubchans;
++	int err, active;
++
++	if (a->index != 0)
++		return -EINVAL;
++
++	active = pm_runtime_get_if_in_use(radio->dev);
++	if (active < 0)
++		return active;
++
++	if (active == 0) {
++		signal = 0;
++		rxsubchans = V4L2_TUNER_SUB_MONO | V4L2_TUNER_SUB_STEREO;
++	} else {
++		err = regmap_read(radio->map, RDA5807_REG_SEEKRES, &seekres);
++		if (err < 0)
++			goto out_runtime_pm_put;
++
++		if (seekres & RDA5807_SEEKRES_COMPLETE &&
++		    !(seekres & RDA5807_SEEKRES_FAIL))
++			/* mono/stereo known */
++			rxsubchans = seekres & RDA5807_SEEKRES_STEREO
++				? V4L2_TUNER_SUB_STEREO : V4L2_TUNER_SUB_MONO;
++		else
++			/* mono/stereo unknown */
++			rxsubchans = V4L2_TUNER_SUB_MONO | V4L2_TUNER_SUB_STEREO;
++
++		err = regmap_read(radio->map, RDA5807_REG_SIGNAL, &signal);
++		if (err < 0)
++			goto out_runtime_pm_put;
++	}
++
++	*a = (struct v4l2_tuner) {
++		.name = "FM",
++		.type = V4L2_TUNER_RADIO,
++		.capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO,
++		/* unit is 1/16 kHz */
++		.rangelow   = 50000 * 16,
++		.rangehigh  = 108000 * 16,
++		.rxsubchans = rxsubchans,
++		/* TODO: Implement forced mono (RDA5807_CTRL_MONO). */
++		.audmode = V4L2_TUNER_MODE_STEREO,
++		.signal = signal & RDA5807_SIGNAL_RSSI,
++		.afc = 0, /* automatic frequency control */
++	};
++
++	err = 0;
++out_runtime_pm_put:
++	if (active > 0) {
++		pm_runtime_mark_last_busy(radio->dev);
++		pm_runtime_put_autosuspend(radio->dev);
++	}
++	return err;
++}
++
++static int rda5807_vidioc_g_frequency(struct file *file, void *fh,
++				      struct v4l2_frequency *a)
++{
++	struct rda5807_driver *radio = video_drvdata(file);
++	unsigned int val;
++	int err;
++
++	if (a->tuner != 0)
++		return -EINVAL;
++	if (!radio->band)
++		return -EINVAL;
++
++	err = regmap_read(radio->map, RDA5807_REG_SEEKRES, &val);
++	if (err < 0)
++		return err;
++
++	a->frequency = 400 * (val & RDA5807_SEEKRES_READCHAN) + radio->band->rangelow;
++	return 0;
++}
++
++static int rda5807_vidioc_s_frequency(struct file *file, void *fh,
++				      const struct v4l2_frequency *a)
++{
++	struct rda5807_driver *radio = video_drvdata(file);
++	const struct v4l2_frequency_band *band;
++	u16 mask = 0;
++	u16 val = 0;
++	int err, active;
++
++	if (a->tuner != 0)
++		return -EINVAL;
++	if (a->type != V4L2_TUNER_RADIO)
++		return -EINVAL;
++
++	band = rda5807_get_band(a->frequency, a->frequency);
++	if (!band)
++		return -ERANGE;
++
++	dev_dbg(radio->dev, "set freq to %u kHz\n", a->frequency / 16);
++
++	err = rda5807_set_band(radio, band);
++	if (err)
++		return err;
++
++	/* select 25 kHz channel spacing */
++	mask |= RDA5807_CHAN_SPACE;
++	val  |= FIELD_PREP(RDA5807_CHAN_SPACE, 0x3);
++
++	/* select frequency */
++	mask |= RDA5807_CHAN_WRCHAN;
++	val  |= FIELD_PREP(RDA5807_CHAN_WRCHAN, (a->frequency + 200) / 400);
++
++	err = regmap_update_bits(radio->map, RDA5807_REG_CHAN, mask, val);
++	if (err)
++		return err;
++
++	active = pm_runtime_get_if_in_use(radio->dev);
++	if (active <= 0)
++		return active;
++
++	/* start tune operation */
++	err = regmap_write_bits(radio->map, RDA5807_REG_CHAN,
++				RDA5807_CHAN_TUNE, RDA5807_CHAN_TUNE);
++
++	pm_runtime_mark_last_busy(radio->dev);
++	pm_runtime_put_autosuspend(radio->dev);
++
++	return err;
++}
++
++static int rda5807_vidioc_s_hw_freq_seek(struct file *file, void *fh,
++					 const struct v4l2_hw_freq_seek *a)
++{
++	struct rda5807_driver *radio = video_drvdata(file);
++	const struct v4l2_frequency_band *band;
++	unsigned int val = RDA5807_CTRL_SEEK;
++	unsigned int freq, spacing, increment;
++	int err;
++
++	if (a->tuner != 0)
++		return -EINVAL;
++	if (a->type != V4L2_TUNER_RADIO)
++		return -EINVAL;
++
++	switch (a->spacing) {
++	case 25000:
++		spacing = 0x3;
++		break;
++	case 50000:
++		spacing = 0x2;
++		break;
++	case 100000:
++		spacing = 0x0;
++		break;
++	case 200000:
++		spacing = 0x1;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	band = rda5807_get_band(a->rangelow, a->rangehigh);
++	if (!band)
++		return -ERANGE;
++
++	err = pm_runtime_get_sync(radio->dev);
++	if (err < 0) {
++		dev_err(radio->dev, "Unable to runtime get: %d\n", err);
++		pm_runtime_put_noidle(radio->dev);
++		return err;
++	}
++
++	/* Configure channel spacing */
++	err = regmap_update_bits(radio->map, RDA5807_REG_CHAN,
++				 RDA5807_CHAN_SPACE,
++				 FIELD_PREP(RDA5807_CHAN_SPACE, spacing));
++	if (err < 0)
++		goto out_runtime_pm_put;
++
++	err = rda5807_set_band(radio, band);
++	if (err < 0)
++		goto out_runtime_pm_put;
++
++	/* seek up or down? */
++	if (a->seek_upward)
++		val |= RDA5807_CTRL_SEEKUP;
++
++	/* wrap around at band limit? */
++	if (!a->wrap_around)
++		val |= RDA5807_CTRL_SKMODE;
++
++	/* Send seek command */
++	err = regmap_update_bits(radio->map, RDA5807_REG_CTRL,
++				 RDA5807_CTRL_SEEKUP |
++				 RDA5807_CTRL_SKMODE |
++				 RDA5807_CTRL_SEEK, val);
++	if (err < 0)
++		goto out_runtime_pm_put;
++
++	increment = a->spacing * 16 / 1000;
++
++	for (freq = a->rangelow; freq <= a->rangehigh; freq += increment) {
++		/*
++		 * The programming guide says we should wait for 35 ms for each
++		 * frequency tested.
++		 */
++		msleep(35);
++
++		err = regmap_read(radio->map, RDA5807_REG_SEEKRES, &val);
++		if (err < 0)
++			goto out_runtime_pm_put;
++
++		/* Seek done? */
++		if (val & RDA5807_SEEKRES_COMPLETE)
++			break;
++	}
++
++	err = regmap_clear_bits(radio->map, RDA5807_REG_CTRL,
++				RDA5807_CTRL_SEEK);
++	if (err)
++		goto out_runtime_pm_put;
++
++	if (freq > a->rangehigh)
++		err = -ETIMEDOUT;
++
++out_runtime_pm_put:
++	pm_runtime_mark_last_busy(radio->dev);
++	pm_runtime_put_autosuspend(radio->dev);
++	return err;
++}
++
++static int rda5807_vidioc_enum_freq_bands(struct file *file, void *priv,
++					  struct v4l2_frequency_band *band)
++{
++	if (band->index >= ARRAY_SIZE(rda5807_bands))
++		return -EINVAL;
++
++	*band = rda5807_bands[band->index];
++	return 0;
++}
++
++static const struct v4l2_ioctl_ops rda5807_ioctl_ops = {
++	.vidioc_querycap	= rda5807_vidioc_querycap,
++	.vidioc_g_audio		= rda5807_vidioc_g_audio,
++	.vidioc_g_tuner		= rda5807_vidioc_g_tuner,
++	.vidioc_g_frequency	= rda5807_vidioc_g_frequency,
++	.vidioc_s_frequency	= rda5807_vidioc_s_frequency,
++	.vidioc_s_hw_freq_seek  = rda5807_vidioc_s_hw_freq_seek,
++	.vidioc_enum_freq_bands	= rda5807_vidioc_enum_freq_bands,
++};
++
++static const u16 rda5807_lna_current[] = { 1800, 2100, 2500, 3000 };
++
++static int rda5807_setup(struct rda5807_driver *radio)
++{
++	struct device *dev = radio->dev;
++	u16 lna = 0, iocfg = 0, ctrl = 0;
++	u32 lna_current = 2500;
++	size_t i;
++	int err;
++
++	/* Configure chip inputs. */
++
++	if (device_property_read_bool(dev, "rda,lnan"))
++		lna |= 0x1;
++	if (device_property_read_bool(dev, "rda,lnap"))
++		lna |= 0x2;
++	if (!lna)
++		dev_warn(dev, "Both LNA inputs disabled\n");
++
++	device_property_read_u32(dev, "rda,lna-microamp", &lna_current);
++	for (i = 0; i < ARRAY_SIZE(rda5807_lna_current); i++)
++		if (rda5807_lna_current[i] == lna_current)
++			break;
++	if (i == ARRAY_SIZE(rda5807_lna_current)) {
++		dev_err(dev, "Invalid LNA current value\n");
++		return -EINVAL;
++	}
++
++	err = regmap_update_bits(radio->map, RDA5807_REG_INPUT,
++				 RDA5807_INPUT_LNA_ICSEL | RDA5807_INPUT_LNA_PORT,
++				 FIELD_PREP(RDA5807_INPUT_LNA_ICSEL, i) |
++				 FIELD_PREP(RDA5807_INPUT_LNA_PORT, lna));
++	if (err)
++		return err;
++
++	/* Configure chip outputs. */
++
++	if (device_property_read_bool(dev, "rda,i2s-out"))
++		iocfg |= RDA5807_IOCFG_I2S_EN;
++
++	if (device_property_read_bool(dev, "rda,analog-out"))
++		ctrl |= RDA5807_CTRL_DHIZ;
++
++	err = regmap_write(radio->map, RDA5807_REG_IOCFG, iocfg);
++	if (err)
++		return err;
++
++	err = regmap_write(radio->map, RDA5807_REG_CTRL, ctrl);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int rda5807_enable_regulator(struct rda5807_driver *radio)
++{
++	int err;
++
++	err = regulator_enable(radio->supply);
++	if (err)
++		return err;
++
++	/* A little sleep is needed before the registers can be accessed */
++	msleep(20);
++
++	return 0;
++}
++
++static const struct v4l2_file_operations rda5807_fops = {
++	.owner		= THIS_MODULE,
++	.unlocked_ioctl	= video_ioctl2,
++};
++
++static const struct regmap_range rda5807_no_write_ranges[] = {
++	{ RDA5807_REG_CHIPID, RDA5807_REG_CHIPID },
++	{ RDA5807_REG_SEEKRES, RDA5807_REG_SIGNAL },
++};
++
++static const struct regmap_access_table rda5807_write_table = {
++	.no_ranges = rda5807_no_write_ranges,
++	.n_no_ranges = ARRAY_SIZE(rda5807_no_write_ranges),
++};
++
++static const struct regmap_range rda5807_volatile_ranges[] = {
++	{ RDA5807_REG_SEEKRES, RDA5807_REG_SIGNAL },
++};
++
++
++static const struct regmap_access_table rda5807_volatile_table = {
++	.yes_ranges = rda5807_volatile_ranges,
++	.n_yes_ranges = ARRAY_SIZE(rda5807_volatile_ranges),
++};
++
++static const struct reg_default rda5807_reg_defaults[] = {
++	{ RDA5807_REG_CHIPID, 0x5804 },
++	{ RDA5807_REG_CTRL, 0x0 },
++	{ RDA5807_REG_CHAN, 0x4fc0 },
++	{ RDA5807_REG_IOCFG, 0x0400 },
++	{ RDA5807_REG_INPUT, 0x888b },
++	{ RDA5807_REG_BAND, 0x5ec6 },
++};
++
++static const struct regmap_config rda5807_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 16,
++	.max_register = RDA5807_REG_SIGNAL,
++
++	.wr_table = &rda5807_write_table,
++	.volatile_table = &rda5807_volatile_table,
++
++	.reg_defaults = rda5807_reg_defaults,
++	.num_reg_defaults = ARRAY_SIZE(rda5807_reg_defaults),
++
++	.cache_type = REGCACHE_FLAT,
++};
++
++static int rda5807_i2c_probe(struct i2c_client *client,
++			     const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct rda5807_driver *radio;
++	unsigned int chipid;
++	int err;
++
++	radio = devm_kzalloc(dev, sizeof(*radio), GFP_KERNEL);
++	if (!radio)
++		return -ENOMEM;
++
++	radio->dev = dev;
++
++	radio->map = devm_regmap_init_i2c(client, &rda5807_regmap_config);
++	if (IS_ERR(radio->map)) {
++		dev_err(dev, "Failed to create regmap\n");
++		return PTR_ERR(radio->map);
++	}
++
++	radio->supply = devm_regulator_get(dev, "power");
++	if (IS_ERR(radio->supply)) {
++		dev_err(dev, "Failed to get power supply\n");
++		return PTR_ERR(radio->supply);
++	}
++
++	err = rda5807_enable_regulator(radio);
++	if (err) {
++		dev_err(dev, "Failed to enable regulator\n");
++		return err;
++	}
++
++	/* Disable the regmap cache temporarily to force reading the chip ID */
++	regcache_cache_bypass(radio->map, true);
++	err = regmap_read(radio->map, RDA5807_REG_CHIPID, &chipid);
++	regcache_cache_bypass(radio->map, false);
++
++	regulator_disable(radio->supply);
++	if (err < 0) {
++		dev_err(dev, "Failed to read chip ID\n");
++		return err;
++	}
++
++	if ((chipid & 0xFF00) != 0x5800) {
++		dev_err(dev, "Chip ID mismatch: expected 58xx, got %04X\n",
++			chipid);
++		return -ENODEV;
++	}
++
++	dev_info(dev, "Found FM radio receiver\n");
++
++	pm_runtime_set_autosuspend_delay(dev, RDA5807_AUTOSUSPEND_DELAY_MS);
++	pm_runtime_use_autosuspend(dev);
++	pm_runtime_set_suspended(dev);
++	pm_runtime_enable(dev);
++
++	/* Only use regmap cache until the chip is brought up */
++	regcache_cache_only(radio->map, true);
++	regcache_mark_dirty(radio->map);
++
++	err = rda5807_setup(radio);
++	if (err) {
++		dev_err(dev, "Failed to setup registers\n");
++		return err;
++	}
++
++	/* Initialize controls. */
++	v4l2_ctrl_handler_init(&radio->ctrl_handler, 3);
++	v4l2_ctrl_new_std(&radio->ctrl_handler, &rda5807_ctrl_ops,
++			  V4L2_CID_AUDIO_MUTE, 0, 1, 1, 1);
++	v4l2_ctrl_new_std(&radio->ctrl_handler, &rda5807_ctrl_ops,
++			  V4L2_CID_AUDIO_VOLUME, 0, 15, 1, 8);
++
++	v4l2_ctrl_new_std_menu(&radio->ctrl_handler, &rda5807_ctrl_ops,
++			       V4L2_CID_TUNE_DEEMPHASIS,
++			       V4L2_DEEMPHASIS_75_uS,
++			       BIT(V4L2_DEEMPHASIS_DISABLED),
++			       V4L2_DEEMPHASIS_50_uS);
++	err = radio->ctrl_handler.error;
++	if (err) {
++		dev_err(dev, "Failed to init controls handler\n");
++		goto err_ctrl_free;
++	}
++
++	err = v4l2_device_register(dev, &radio->v4l2_dev);
++	if (err < 0) {
++		dev_err(dev, "Failed to register v4l2 device\n");
++		goto err_ctrl_free;
++	}
++
++	radio->video_dev = (struct video_device) {
++		.name = "RDA5807 FM receiver",
++		.v4l2_dev = &radio->v4l2_dev,
++		.ctrl_handler = &radio->ctrl_handler,
++		.fops = &rda5807_fops,
++		.ioctl_ops = &rda5807_ioctl_ops,
++		.release = video_device_release_empty,
++		.device_caps = V4L2_CAP_RADIO | V4L2_CAP_TUNER
++					      | V4L2_CAP_HW_FREQ_SEEK,
++	};
++
++	i2c_set_clientdata(client, radio);
++	video_set_drvdata(&radio->video_dev, radio);
++
++	err = v4l2_ctrl_handler_setup(&radio->ctrl_handler);
++	if (err < 0) {
++		dev_err(dev, "Failed to set default control values\n");
++		goto err_video_unreg;
++	}
++
++	err = video_register_device(&radio->video_dev, VFL_TYPE_RADIO, -1);
++	if (err < 0) {
++		dev_err(dev, "Failed to register video device\n");
++		goto err_ctrl_free;
++	}
++
++	return 0;
++
++err_video_unreg:
++	video_unregister_device(&radio->video_dev);
++err_ctrl_free:
++	v4l2_ctrl_handler_free(&radio->ctrl_handler);
++	video_device_release_empty(&radio->video_dev);
++
++	return err;
++}
++
++static int rda5807_i2c_remove(struct i2c_client *client)
++{
++	struct rda5807_driver *radio = i2c_get_clientdata(client);
++	struct device *dev = &client->dev;
++
++	pm_runtime_disable(dev);
++	pm_runtime_force_suspend(dev);
++	pm_runtime_dont_use_autosuspend(dev);
++
++	video_unregister_device(&radio->video_dev);
++	v4l2_ctrl_handler_free(&radio->ctrl_handler);
++	video_device_release_empty(&radio->video_dev);
++
++	return 0;
++}
++
++static int rda5807_suspend(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct rda5807_driver *radio = i2c_get_clientdata(client);
++	int err;
++
++	err = regmap_clear_bits(radio->map, RDA5807_REG_CTRL,
++				RDA5807_CTRL_ENABLE);
++	if (err)
++		return err;
++
++	regcache_cache_only(radio->map, true);
++	regcache_mark_dirty(radio->map);
++
++	err = regulator_disable(radio->supply);
++	if (err)
++		return err;
++
++	dev_dbg(radio->dev, "Disabled\n");
++
++	return 0;
++}
++
++static int rda5807_reset_chip(struct rda5807_driver *radio)
++{
++	int err;
++
++	err = regmap_write_bits(radio->map, RDA5807_REG_CTRL,
++				RDA5807_CTRL_SOFTRESET, RDA5807_CTRL_SOFTRESET);
++	if (err)
++		return err;
++
++	usleep_range(1000, 10000);
++
++	return regmap_write_bits(radio->map, RDA5807_REG_CTRL,
++				 RDA5807_CTRL_SOFTRESET, 0);
++}
++
++static int rda5807_resume(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct rda5807_driver *radio = i2c_get_clientdata(client);
++	int err;
++
++	err = rda5807_enable_regulator(radio);
++	if (err)
++		return err;
++
++	regcache_cache_only(radio->map, false);
++
++	err = rda5807_reset_chip(radio);
++	if (err)
++		return err;
++
++	/* Restore cached registers to hardware */
++	err = regcache_sync(radio->map);
++	if (err) {
++		dev_err(dev, "Failed to restore regs: %d\n", err);
++		goto err_regulator_disable;
++	}
++
++	err = regmap_set_bits(radio->map, RDA5807_REG_CTRL,
++			      RDA5807_CTRL_ENABLE);
++	if (err) {
++		dev_err(dev, "Failed to enable radio: %d\n", err);
++		goto err_regulator_disable;
++	}
++
++	err = regmap_write_bits(radio->map, RDA5807_REG_CHAN,
++				RDA5807_CHAN_TUNE, RDA5807_CHAN_TUNE);
++	if (err) {
++		dev_err(dev, "Failed to tune radio: %d\n", err);
++		goto err_radio_disable;
++	}
++
++	dev_dbg(radio->dev, "Enabled\n");
++
++	return 0;
++
++err_radio_disable:
++	regmap_clear_bits(radio->map, RDA5807_REG_CTRL,
++			  RDA5807_CTRL_ENABLE);
++err_regulator_disable:
++	regulator_disable(radio->supply);
++	return err;
++}
++
++static UNIVERSAL_DEV_PM_OPS(rda5807_pm_ops, rda5807_suspend, rda5807_resume, NULL);
++
++static const struct of_device_id rda5807_dt_ids[] = {
++	{ .compatible = "rda,rda5807" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, rda5807_dt_ids);
++
++static const struct i2c_device_id rda5807_id[] = {
++	{ "rda5807", 0 },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(i2c, rda5807_id);
++
++static struct i2c_driver rda5807_i2c_driver = {
++	.driver = {
++		.name = "radio-rda5807",
++		.of_match_table = of_match_ptr(rda5807_dt_ids),
++		.pm = &rda5807_pm_ops,
++	},
++	.probe = rda5807_i2c_probe,
++	.remove = rda5807_i2c_remove,
++	.id_table = rda5807_id,
++};
++module_i2c_driver(rda5807_i2c_driver);
++
++MODULE_AUTHOR("Maarten ter Huurne <maarten@treewalker.org>");
++MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
++MODULE_DESCRIPTION("RDA5807 FM tuner driver");
++MODULE_LICENSE("GPL");
+-- 
+2.30.1
 
-Is this comment on the wrong line?
-
-> +
-> +       for (port_id = 1; port_id <= PL_MAX_MST_ADDR + 1; port_id++) {
-> +               port = of_graph_get_port_by_id(np, port_id);
-> +               if (!port)
-> +                       continue;
-> +
-> +               if (of_device_is_available(port)) {
-> +                       found_port = true;
-> +                       of_node_put(port);
-> +                       break;
-> +               }
-> +
-> +               of_node_put(port);
-> +       }
-> +
-> +       if (!found_port) {
-> +               DRM_DEV_ERROR(pl->dev, "no available output port\n");
-> +               return ERR_PTR(-ENODEV);
-> +       }
-> +
-> +       for (reg = 0; reg < PL_MAX_NEXT_BRIDGES; reg++) {
-> +               remote = of_graph_get_remote_node(np, port_id, reg);
-> +               if (!remote)
-> +                       continue;
-> +
-> +               if (!of_device_is_available(remote->parent)) {
-> +                       DRM_DEV_DEBUG(pl->dev,
-> +                          "port%u endpoint%u remote parent is not available\n",
-> +                                                               port_id, reg);
-> +                       of_node_put(remote);
-> +                       continue;
-> +               }
-> +
-> +               next_bridge[ep_cnt] = of_drm_find_bridge(remote);
-> +               if (!next_bridge[ep_cnt]) {
-> +                       of_node_put(remote);
-> +                       return ERR_PTR(-EPROBE_DEFER);
-> +               }
-> +
-> +               /* specially select the next bridge with companion PXL2DPI */
-> +               if (of_find_property(remote, "fsl,companion-pxl2dpi", NULL))
-> +                       bridge_sel = ep_cnt;
-> +
-> +               ep_cnt++;
-> +
-> +               of_node_put(remote);
-> +       }
-> +
-> +       pl->mst_addr = port_id - 1;
-> +
-> +       return next_bridge[bridge_sel];
-> +}
-> +
-> +static int imx8qxp_pixel_link_bridge_probe(struct platform_device *pdev)
-> +{
-> +       struct imx8qxp_pixel_link *pl;
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *np = dev->of_node;
-> +       int ret;
-> +
-> +       pl = devm_kzalloc(dev, sizeof(*pl), GFP_KERNEL);
-> +       if (!pl)
-> +               return -ENOMEM;
-> +
-> +       ret = imx_scu_get_handle(&pl->ipc_handle);
-> +       if (ret) {
-> +               if (ret != -EPROBE_DEFER)
-> +                       DRM_DEV_ERROR(dev, "failed to get SCU ipc handle: %d\n",
-> +                                                                       ret);
-> +               return ret;
-> +       }
-> +
-> +       pl->id = of_alias_get_id(np, "dc_pl");
-> +       if (pl->id < 0) {
-> +               DRM_DEV_ERROR(dev,
-> +                             "failed to get pixel link node alias id: %d\n",
-> +                                                               pl->id);
-> +               return pl->id;
-> +       }
-> +
-> +       pl->dev = dev;
-> +
-> +       pl->dc_id = pl->id / 2;
-> +       pl->stream_id = pl->id % 2;
-> +
-> +       pl->sink_rsc = pl->dc_id ? IMX_SC_R_DC_1 : IMX_SC_R_DC_0;
-> +
-> +       if (pl->stream_id == 0) {
-> +               pl->mst_addr_ctrl = IMX_SC_C_PXL_LINK_MST1_ADDR;
-> +               pl->mst_en_ctrl   = IMX_SC_C_PXL_LINK_MST1_ENB;
-> +               pl->mst_vld_ctrl  = IMX_SC_C_PXL_LINK_MST1_VLD;
-> +               pl->sync_ctrl     = IMX_SC_C_SYNC_CTRL0;
-> +       } else {
-> +               pl->mst_addr_ctrl = IMX_SC_C_PXL_LINK_MST2_ADDR;
-> +               pl->mst_en_ctrl   = IMX_SC_C_PXL_LINK_MST2_ENB;
-> +               pl->mst_vld_ctrl  = IMX_SC_C_PXL_LINK_MST2_VLD;
-> +               pl->sync_ctrl     = IMX_SC_C_SYNC_CTRL1;
-> +       }
-> +
-> +       /* disable all controls to POR default */
-> +       ret = imx8qxp_pixel_link_disable_all_controls(pl);
-> +       if (ret)
-> +               return ret;
-> +
-> +       pl->next_bridge = imx8qxp_pixel_link_find_next_bridge(pl);
-> +       if (IS_ERR(pl->next_bridge)) {
-> +               ret = PTR_ERR(pl->next_bridge);
-> +               if (ret != -EPROBE_DEFER)
-> +                       DRM_DEV_ERROR(dev, "failed to find next bridge: %d\n",
-> +                                                                       ret);
-> +               return ret;
-> +       }
-> +
-> +       platform_set_drvdata(pdev, pl);
-> +
-> +       pl->bridge.driver_private = pl;
-> +       pl->bridge.funcs = &imx8qxp_pixel_link_bridge_funcs;
-> +       pl->bridge.of_node = np;
-> +
-> +       drm_bridge_add(&pl->bridge);
-> +
-> +       return ret;
-> +}
-> +
-> +static int imx8qxp_pixel_link_bridge_remove(struct platform_device *pdev)
-> +{
-> +       struct imx8qxp_pixel_link *pl = platform_get_drvdata(pdev);
-> +
-> +       drm_bridge_remove(&pl->bridge);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id imx8qxp_pixel_link_dt_ids[] = {
-> +       { .compatible = "fsl,imx8qm-dc-pixel-link", },
-> +       { .compatible = "fsl,imx8qxp-dc-pixel-link", },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, imx8qxp_pixel_link_dt_ids);
-> +
-> +static struct platform_driver imx8qxp_pixel_link_bridge_driver = {
-> +       .probe  = imx8qxp_pixel_link_bridge_probe,
-> +       .remove = imx8qxp_pixel_link_bridge_remove,
-> +       .driver = {
-> +               .of_match_table = imx8qxp_pixel_link_dt_ids,
-> +               .name = DRIVER_NAME,
-> +       },
-> +};
-> +module_platform_driver(imx8qxp_pixel_link_bridge_driver);
-> +
-> +MODULE_DESCRIPTION("i.MX8QXP/QM display pixel link bridge driver");
-> +MODULE_AUTHOR("Liu Ying <victor.liu@nxp.com>");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:" DRIVER_NAME);
-> --
-> 2.7.4
->
