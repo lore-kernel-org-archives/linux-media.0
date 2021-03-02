@@ -2,85 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70809C433DB
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E987C433E6
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2508A64F04
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 357F864F1A
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580258AbhCBRbF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:31:05 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:45209 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1578128AbhCBKfy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Mar 2021 05:35:54 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id H2MqlKlzoC40pH2Mulm6FC; Tue, 02 Mar 2021 11:35:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1614681308; bh=Mf4FvERrmB7aOcuSUJ9jm+bj73snwSpBgwlxWHt6h7s=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=asaY8W8PTw8J7052nlYqRH1tdoPOpvar8Bb2pfxdPkJOKuJJisbboiKEzWk28Zfas
-         UdKE7+apzZp5qGA5H6lkhBPv3YbHVIJ79aODQCRXYb8ojYLrtUl2m8p6ehWk3ombPY
-         4XREJgZX6bOjYAiQaWmOKbuJxbGPZTtFG7XnPBuO74ABCHHstsMDywg2jBaVHLQzR0
-         eiBcscCTPdGJjR8KpAHaBQhIdTMGUt7LSeZkCsBBWZob0HN60CC3pHmvwWa98FcNWI
-         4fcq+TouBA7+RH6D6p3vBShw39TvXBtJvSLz2Z3xBVUy9jF2csRvuwzbPGGpPNFuW/
-         /QjjAzXkoPiwg==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/2] configure.ac: add AM_GNU_GETTEXT_REQUIRE_VERSION
-Date:   Tue,  2 Mar 2021 11:34:57 +0100
-Message-Id: <20210302103458.819043-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302103458.819043-1-hverkuil-cisco@xs4all.nl>
-References: <20210302103458.819043-1-hverkuil-cisco@xs4all.nl>
+        id S1345842AbhCBRcO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1838368AbhCBKgG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 05:36:06 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5076DC061794;
+        Tue,  2 Mar 2021 02:35:26 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 510AAC6367; Tue,  2 Mar 2021 10:35:22 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1614681322; bh=3Og2/oTj0MpKaOPfTMdCr8ouIBHGGgvO2an7EUz1cZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bo9FFnhj96ftf24NNYw7LkEaEsN2OK1/kczBFrABRENP1QwLgl0OgX6I+LPA20zkS
+         zw76Tw3KBLMk4EuB9I6mMaeg5ghe25DGehnRKP2kuNr4SzGlh/Ak7ngK0BIMRAbGYX
+         +KgUTLW5ez4XlTINNwATki4I/xXFB+IHnQT9kv3DO0fn23P8BZA+55kAVpNnWqQ4Ep
+         s60YRpUo/tj13lu4umphLQxKzS9SMqhY0eQwqFr+YopgugljMnQGHtEw+HukQClcLa
+         g9PmZGcEaBLuGk6AR2lERLJaDH5XjuAze61MYCc3JVwRK19RXJ+FK6KqOjKb4aXjxH
+         AiAIRQ67PDlkg==
+Date:   Tue, 2 Mar 2021 10:35:22 +0000
+From:   Sean Young <sean@mess.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Jun Nie <jun.nie@linaro.org>, Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH 2/2] media: rc: remove zte zx ir driver
+Message-ID: <20210302103522.GA6999@gofer.mess.org>
+References: <20210120142542.4100741-1-arnd@kernel.org>
+ <20210120142542.4100741-3-arnd@kernel.org>
+ <20210301102522.GB25633@gofer.mess.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfOE/rhnHDjmszu4cYYwmvRspQ1M8KiVR7C7BhBrEKx4JcjRAQTTJIU3GBSZzk/x8zvymOl0uB8NiYFrhG8Z0ZMUWp/C9KFrFbU4PaOSrK0cdDLBFsxo8
- cjiWJQik0fqqZh7XBJcZWQFQCOys3/cWOT2sarWjTqCfF3eu8Xaq+1fGueyZlEx+cDXOLZfxlnrs5uP26Q3tY8aAGtvdy6ynHFDck8akbEPGP+rc1LG84q5I
- dmjJ/DO7cOxT2YqNGG0446C1kBpbv/mqcTjj2p/Af8U=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210301102522.GB25633@gofer.mess.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is needed for newer gettext versions (>= 0.20).
+Hi Arnd,
 
-It avoids this error:
+On Mon, Mar 01, 2021 at 10:25:22AM +0000, Sean Young wrote:
+> On Wed, Jan 20, 2021 at 03:25:42PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > The zte zx platform is getting removed, so this driver is no
+> > longer needed.
+> 
+> I think the keymap should go too.
+> 
+> drivers/media/rc/keymaps/rc-zx-irdec.c
+> 
+> Any references to RC_MAP_ZX_IRDEC or rc-zx-irdec
 
-Making all in v4l-utils-po
-*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.20 but the autoconf macros are from gettext version 0.19
+Come to think of it, removing the keymap doesn't make a whole lot of sense.
+There might still be users for the remote.
 
-The old AM_GNU_GETTEXT_VERSION is still needed for older (< 2.70)
-autoconf versions.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- configure.ac | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/configure.ac b/configure.ac
-index 5290fa01..62b12549 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -97,7 +97,10 @@ PKG_PROG_PKG_CONFIG
- DX_DOT_FEATURE(ON)
- DX_INIT_DOXYGEN($PACKAGE_NAME, doxygen_libdvbv5.cfg)
- ALL_LINGUAS=""
-+# AM_GNU_GETTEXT_VERSION kept for autoreconf versions that do
-+# not support AM_GNU_GETTEXT_REQUIRE_VERSION
- AM_GNU_GETTEXT_VERSION([0.19.8])
-+AM_GNU_GETTEXT_REQUIRE_VERSION([0.19.8])
- AM_GNU_GETTEXT([external])
- 
- LIBDVBV5_DOMAIN="libdvbv5"
--- 
-2.30.1
-
+Sean
