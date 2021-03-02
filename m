@@ -3,147 +3,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DCAC43331
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCBCBC43333
 	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 118AE64F23
+	by mail.kernel.org (Postfix) with ESMTP id 8EA1464F2A
 	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580205AbhCBRal (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S1580217AbhCBRao (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349450AbhCBILu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 03:11:50 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9525C061788
-        for <linux-media@vger.kernel.org>; Tue,  2 Mar 2021 00:01:29 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id d13so18976758edp.4
-        for <linux-media@vger.kernel.org>; Tue, 02 Mar 2021 00:01:29 -0800 (PST)
+        with ESMTP id S1577805AbhCBJym (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 04:54:42 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B7CC06178B
+        for <linux-media@vger.kernel.org>; Tue,  2 Mar 2021 01:54:01 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id mm21so33742246ejb.12
+        for <linux-media@vger.kernel.org>; Tue, 02 Mar 2021 01:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=entmvbZ8i681EpzN5mf9CCRSjm4HEIDRlW5kbwcaU3M=;
-        b=idELUY6CRBJ1OZND+CUSdd7nD3zXIycLJlx3qbuVVxA+wJSuT/H9vk0NOsYtrgkAtS
-         zfO+SNxzCHI9bwkoexVT+jJjI2DppPSkeDnqTYVvPHeLJUqhts2xNLWddP1Fr6fVKGqW
-         kApQbd0qROPZCCLzaPQt40M49mPH6HkX16OQCk2TOYU2Kj1WWllnEDL9JfEbYeS+mEFP
-         d6W2iEN7nPDV4hs/lHVuhDhtzQHaIrHmmwXz4d4OCcJ8k6G5QBJFQ+sdo1TF7tovJkCK
-         1pwOli0c8UGsZ83oOkJF5u7da4z6VRzwVMCHANKx5Y3FihJ4nm38nBMkgHuDvS3GG8U4
-         P8lw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7j7OEM/ymaPJfAqZdVgfn2Lno1HYW5rb20Fl48M4KC0=;
+        b=w0I0jEwBaURpdTtjfwqPY8SsrsFt+1IbGa5hPfPk1jVQHD7a3HTGX31iApDo+WzAcb
+         U2QaNp8FsSNSbBdiK2MgKweKoE9+rmH0tc8AXXlTxIYE24bpEiPdEr+InxUgfoE62KEc
+         Kb/mY+A8zsW4GP7lnOH+yRSo0WUDiuF+sfGz07AoiY4cPp5uLV7RylttFiBNqAh6cf/P
+         4i8uqf6ARpAAtEYkeS8JqNgyjQ38ASJcXr3YN56PVgC9PiscS3k/KHbdzwZ8Hdv1pn06
+         QrG1Csf9vhF+OM6QRvVHXuEzNXT3vgtvR5l15A6KWkES+Y8MzBlh1wbBlP5AQ8/mp3hI
+         m7wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=entmvbZ8i681EpzN5mf9CCRSjm4HEIDRlW5kbwcaU3M=;
-        b=WK9Fdj2sRTCiaPGc2konsTTbdBTAMkou7f9SdidvS3KECrMVUm2vjiyYVDYF6m55kw
-         YhewkhjB1ykjy1QwbdjEpmRVN1S56lwa31qbqpAVOOhHuROzO/+VsiTteZVXlXKw9R6C
-         IKHpWdrJe2EmSa6Z1iWwajsmy8L1Y6HR03sJdNlfTrcovQxCNA1YAr4whrM3mrN04DUZ
-         xKx+K5L6nF6HmwEovkRh1bjUN1r/F4gtBmhGXAT1WBsvDO8iuLRN8QGYxX3Hk+bl412Y
-         HCAy1Nw0vKY8SKx3txkma4+r9dPAX3iL2f4RAsGz9LU/UyiwYHLydAaDvKjQJCJ7biqf
-         WAsQ==
-X-Gm-Message-State: AOAM531uVjUwaTAziLzibhFSox0L+10TBm4Toz8gCr1MzW1VwmJiij47
-        w5I3DiPdbVqRe58YzZz+JakhhYrwQbqloDTgvy0uQFgONrUCUA==
-X-Google-Smtp-Source: ABdhPJwR2Td6Lrkz7TWuhSCAP4TraqjqPIb2RjyBHyuUqglXrHHRAwLOrqOWfN3E42U2XCRAIdG4zOGe8KHPRtwO3RQ=
-X-Received: by 2002:aa7:cf14:: with SMTP id a20mr5226991edy.49.1614672088286;
- Tue, 02 Mar 2021 00:01:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7j7OEM/ymaPJfAqZdVgfn2Lno1HYW5rb20Fl48M4KC0=;
+        b=cpqiNvdZULppyIckjkyCAt9oMrR59517RlxmIp6Tw56ZvZaJzT6QmG4MI2lGuu99DW
+         +WViZ7R3h6UxlpchLJw3cfC1ujnRLLKAixXKpUiiRx1R0q1MrYjW3T48JrSFQcFZN1wI
+         kK85kphmFnMvf+NOvZdR9B+hQ4P9e1LS42AkGF4HWbW6qMIY6P/4k+kvPqRp5slGFJAJ
+         c14ktvtLnlMDo5LEMDxs3hcMYdXYv0odDihGPKKcSlkPSa3Aryl0yK9uhC6tvE7lxnvm
+         VjXWSKWjxUl6a9zYLXQRiD4I4UYMlH13mA0dHrDqKF3TLRulZB5SpaUIL46GaEczjv79
+         zvVg==
+X-Gm-Message-State: AOAM532WbjAKehjKAfsGpfiGBQB33Kxlt9xJiAlmwpG36V8ptuP/DyIw
+        KxRfVfMpTDlwpsxcx6iklb7J+6BmrK5AWRWb
+X-Google-Smtp-Source: ABdhPJwGnIWYOZ6GGtyYRsVQX+UxoCX2/f1dF03MVr81u2TRpqq9+TEauPF2Vd6h1fUkxC2H/resAQ==
+X-Received: by 2002:a17:906:780b:: with SMTP id u11mr20085171ejm.492.1614678839966;
+        Tue, 02 Mar 2021 01:53:59 -0800 (PST)
+Received: from localhost.localdomain (hst-208-217.medicom.bg. [84.238.208.217])
+        by smtp.gmail.com with ESMTPSA id be27sm2530535edb.47.2021.03.02.01.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 01:53:59 -0800 (PST)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        nicolas.dufresne@collabora.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v3 0/2] Intra-refresh period control
+Date:   Tue,  2 Mar 2021 11:53:38 +0200
+Message-Id: <20210302095340.3584204-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <45cda97c-a0e4-eef2-ba8f-ddc7e33b40d5@penguintechs.org> <4cdd691f-dc55-fc6e-1830-ac0c24b8e96b@penguintechs.org>
-In-Reply-To: <4cdd691f-dc55-fc6e-1830-ac0c24b8e96b@penguintechs.org>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Tue, 2 Mar 2021 05:01:16 -0300
-Message-ID: <CAAEAJfAyuGwL==BHwyEwF0dMfrUQacEQyv8+zz82_P+BM-C5bw@mail.gmail.com>
-Subject: Re: v4l2loopback and v4l2-mem2mem framework
-To:     Wren Turkal <wt@penguintechs.org>
-Cc:     linux-media <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Wren,
+Hi,
 
-How about you submit the loopback driver for integration in mainline?
-We can review the driver, give feedback and help you get it merged.
+This series add a new intra-refresh period control for encoders. The
+series is a continuation of [1]. Comments addressed:
+ * A typo in .rst (Hans)
+ * Clarified the relationship with CYCLIC_INTRA_REFRESH_MB (Hans)
 
-Ezequiel
+Comments are welcome!
 
-On Mon, 1 Mar 2021 at 17:32, Wren Turkal <wt@penguintechs.org> wrote:
->
-> Okay, so I have found how to enable the option to be manually selected.
-> Would a patch like the following be acceptable? Or is there a better
-> way to do this?
->
-> diff --git a/drivers/media/v4l2-core/Kconfig
-> b/drivers/media/v4l2-core/Kconfig
-> index bf49f83cb86f..25004137a982 100644
-> --- a/drivers/media/v4l2-core/Kconfig
-> +++ b/drivers/media/v4l2-core/Kconfig
-> @@ -54,7 +54,7 @@ config V4L2_H264
->
->   # Used by drivers that need v4l2-mem2mem.ko
->   config V4L2_MEM2MEM_DEV
-> -       tristate
-> +       tristate "V4L2 mem2mem framework support"
->          depends on VIDEOBUF2_CORE
->
->   # Used by LED subsystem flash drivers
->
->
-> Thanks,
-> wt
->
-> On 2/28/21 2:07 PM, Wren Turkal wrote:
-> > Hi there linux-media experts,
-> >
-> > I am working on the out-of-tree v4l2loopback module[1]. My
-> > current goal is to implement the videobuf2 api. However,
-> > it appears that I must use a different vbuf2_queue for the
-> > OUTPUT and CAPTURE types. It appears that the mem2mem
-> > framework has the ability to do just this. I came to this
-> > conclusion while looking at the vim2m test module's code.
-> > While trying to modify the loopback module, I have added
-> > some code to try to call v4l2_m2m_init. You can see my very
-> > WIP attempt at code here[2].
-> >
-> > I have installed the kernel-devel package on Fedora, which.
-> > Unfortunately, I get he following error messages when trying
-> > to compile:
-> >
-> > <errors>
-> > ERROR: modpost: "v4l2_m2m_release"
-> > [/home/wt/projects/kernel/v4l2loopback/v4l2loopback.ko] undefined!
-> > ERROR: modpost: "v4l2_m2m_init"
-> > [/home/wt/projects/kernel/v4l2loopback/v4l2loopback.ko] undefined!
-> > </errors>
-> >
-> > So, I looked into it, and Module.symvers and /proc/kallsyms
-> > don't have those symbols listed, so I think the Fedora kernel
-> > was not compiled with those symbols exported.
-> >
-> > Okay, so next I tried to build a custom kernel that does
-> > export those symbols. I managed to get it done by enabling
-> > the vim2m (VIDEO_VIM2M config option) module. The new
-> > Module.symvers includes the symbols; and the compile succeeds,
-> > which brings me to my final act.
-> >
-> > I need to expose those symbols without enabling the vim2m
-> > module since it is a testing module. I do not see a way
-> > to do that explicitly. The config option in question
-> > appears to be V4L2_MEM2MEM_DEV. And I haven't found a
-> > way to enable it without enabling something that implicitly
-> > selects it (which vim2m does). Do y'all have any suggestions
-> > for how to get these symbols exported properly when vim2m is
-> > not enabled?
-> >
-> >
-> > Thanks,
-> > Wren Turkal (wt)
-> >
-> > [1] https://github.com/umlaeute/v4l2loopback
-> > [2] https://github.com/wt/v4l2loopback/tree/m2m_try
->
+regards,
+Stan
+
+[1] https://www.spinics.net/lists/linux-media/msg183019.html
+
+Stanimir Varbanov (2):
+  media: v4l2-ctrls: Add intra-refresh period control
+  venus: venc: Add support for intra-refresh period
+
+ .../media/v4l/ext-ctrls-codec.rst             | 12 ++++++++
+ drivers/media/platform/qcom/venus/core.h      |  1 +
+ drivers/media/platform/qcom/venus/venc.c      | 28 +++++++++++++++++++
+ .../media/platform/qcom/venus/venc_ctrls.c    | 13 ++++-----
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  2 ++
+ include/uapi/linux/v4l2-controls.h            |  1 +
+ 6 files changed, 50 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
