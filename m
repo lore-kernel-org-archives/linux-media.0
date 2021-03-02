@@ -2,93 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 527CCC433DB
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09E8EC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBACA64F32
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:22:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C209A64F3B
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:31:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244796AbhCBRNX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S1349746AbhCBRX7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239630AbhCBAGE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 19:06:04 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55B2C061788
-        for <linux-media@vger.kernel.org>; Mon,  1 Mar 2021 15:55:18 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id t9so658833pjl.5
-        for <linux-media@vger.kernel.org>; Mon, 01 Mar 2021 15:55:18 -0800 (PST)
+        with ESMTP id S1377435AbhCBArR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 19:47:17 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CEFC061756
+        for <linux-media@vger.kernel.org>; Mon,  1 Mar 2021 16:46:37 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id k22so10993154pll.6
+        for <linux-media@vger.kernel.org>; Mon, 01 Mar 2021 16:46:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=penguintechs.org; s=google;
+        d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2ml54oXLIB5Mp9Ylqx0Fhn+McHeW+ZcUXEybqqU9Jjw=;
-        b=Aa+tkRjV9izM9VtQwM6MC1sB3qdyNqD0pN3HzoMMk5G23bfGCGVFf9x+Klfj3w8TaX
-         tbpwkOKzfMB+FBNfD97kxyAejLcwGO6HLAqDoUBAl6EcrGcI2pCHCzOSSt53Gj4xgtmN
-         L52cYE1YRCgDv+ib2c2bdBSwsgdmjhSV4t2YA=
+        bh=xBIqUTlZOBZINOUNGtSn+xvDmEUXrSLVCj5Dld52WaA=;
+        b=WqKRU8G9m6+hjFzaQl0Ff4GENaIY/pOEomZeI+c8AzA2bLtUon8shJ5csfwJVEiJwE
+         ch/0LDkTjxzATPWXoqr1K14NBZ94Px7Tm8qIzfbG6HUkgKDLBUV94sZ9a5vGBSkrhRo5
+         Nzjr0MACCqZ7jRrM/SL1OwR+flF1VDZJ4+3eY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2ml54oXLIB5Mp9Ylqx0Fhn+McHeW+ZcUXEybqqU9Jjw=;
-        b=pDSw0KQu8md2lKaYN0LemXfyRkkz4PwfkxKhbA3dxePnLmc8JAo9+IKXw7xpnsHVsE
-         x4uBcXa//nyvqDd1YMBjid0mkVuovmttVpjRo3eD5c1b0kySMSzZ9o/fuqrsMYbDV0Dm
-         YLYnCb3ZNZK4Cs2Ovqj234pU2it8vh8zjeGY3TwJ89Wkc7q0v6oi7g0FD0O+/gs9MKtg
-         Vo6f4u8oHLQtP4Dy9/UFmMulkZJK3Z/Fg0cL368Md9UQvVCw/sAIJolVyx3HBOy4uCMZ
-         X1GebgRo2DKniDeljDFDc7oyi4cCzRO3EhibS8aQCiky0h6v7GNO8mXYDZ9cvcoLv93v
-         +94w==
-X-Gm-Message-State: AOAM5339V+99Y1e1CZkXwk3+k6D2NZR+OZUlUknLjE1vDPzwGtOROwvb
-        InZTVM3k2TuuKcd6Bj3/uJUTY+qtIgv9fA==
-X-Google-Smtp-Source: ABdhPJxggwAq8wUf+PP2CndsGT20aoTm0pLLoho94XqMp80Er1oRvjoNf4a2fR3dj3t4nV6wPFYhRg==
-X-Received: by 2002:a17:902:ea01:b029:e4:1caa:d200 with SMTP id s1-20020a170902ea01b02900e41caad200mr930235plg.73.1614642917874;
-        Mon, 01 Mar 2021 15:55:17 -0800 (PST)
-Received: from braindead.localdomain (c-71-202-115-154.hsd1.ca.comcast.net. [71.202.115.154])
-        by smtp.gmail.com with ESMTPSA id d16sm12821434pfq.203.2021.03.01.15.55.16
+        bh=xBIqUTlZOBZINOUNGtSn+xvDmEUXrSLVCj5Dld52WaA=;
+        b=j3giXTOnGHmSXdBoo7EwOWfBAm+VhSOEyo4/RSET2H3NjnHL76TBxMzU61Ytnsm/Bz
+         9XvRBYCxEgSvj8Jdb/BmBzLpFNzB02lm5l7L5Jhp3Z/e4d/3QMgqZ0Iw8/1CnF4OW50v
+         h0mAEnrpV3s5Yi+ZIBV+NfJBv2UEA07vEHe5b3rIa009EkApq9O+Tv7x0asmd5PYc0/z
+         mX0IlY1f8o3njVrbI6wT7OJuUqdBt0qbJ2o23Sh1cXCVoFPuxKmPUMME86f54oX32PgY
+         Rhh1lIXU0gq1ldj4KcoYiWgeOP2QemqbfrfVbJZyust2/U0pcW7MJZqloLE3qyjn/K8V
+         CYGg==
+X-Gm-Message-State: AOAM5309cj1qNiPGelwVLfMiw/0UO5eZYpv7JwAOjuzeojoU1E0d0zZn
+        v/A/gFFhO14D2Y71Tx2j6BWAUKhSXEn/sA==
+X-Google-Smtp-Source: ABdhPJwPHuB95QHizieojD4FLuANspU8EvNm9a6/omFjwCtr7WRgLl+jEJA5dU3+q7gvl1lZYp6UdA==
+X-Received: by 2002:a17:902:6ac7:b029:e4:28f8:b463 with SMTP id i7-20020a1709026ac7b02900e428f8b463mr17838026plt.62.1614645996583;
+        Mon, 01 Mar 2021 16:46:36 -0800 (PST)
+Received: from senozhatsky.flets-east.jp ([2409:10:2e40:5100:d5d7:1a61:2cdf:273c])
+        by smtp.gmail.com with ESMTPSA id b14sm678881pji.14.2021.03.01.16.46.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 15:55:17 -0800 (PST)
-From:   Wren Turkal <wt@penguintechs.org>
-To:     linux-media@vger.kernel.org
-Cc:     Wren Turkal <wt@penguintechs.org>
-Subject: [PATCH] Make V4L2_MEM2MEM_DEV manually selectable.
-Date:   Mon,  1 Mar 2021 15:52:16 -0800
-Message-Id: <20210301235216.81150-1-wt@penguintechs.org>
-X-Mailer: git-send-email 2.30.1
+        Mon, 01 Mar 2021 16:46:36 -0800 (PST)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH 0/8] videobuf2: support new noncontiguous DMA API
+Date:   Tue,  2 Mar 2021 09:46:16 +0900
+Message-Id: <20210302004624.31294-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The V4L2_MEM2MEM_DEV config item enables the mem2mem framework
-in the v4l2 core code. This framework is used by mem2mem drivers.
-I would like to be able to turn this feature on in order to
-expose the related symbols so that I can work on a module that
-is not yet ready to be submitted for inclusion itself.
+Hello,
 
-Signed-off-by: Wren Turkal <wt@penguintechs.org>
----
- drivers/media/v4l2-core/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	RFC
 
-diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
-index bf49f83cb86f..25004137a982 100644
---- a/drivers/media/v4l2-core/Kconfig
-+++ b/drivers/media/v4l2-core/Kconfig
-@@ -54,7 +54,7 @@ config V4L2_H264
- 
- # Used by drivers that need v4l2-mem2mem.ko
- config V4L2_MEM2MEM_DEV
--	tristate
-+	tristate "V4L2 mem2mem framework support"
- 	depends on VIDEOBUF2_CORE
- 
- # Used by LED subsystem flash drivers
+	The series adds support for new noncontiguous DMA API [0] and
+adds V4L2_FLAG_MEMORY_NON_COHERENT UAPI. This is similar to previous
+V4L2_FLAG_MEMORY_NON_CONSISTENT (which was renamed), but the patch set
+goes a bit further this time and also does some videobuf2 API
+refactroings along the way.
+
+A corresponding v4l2-compliance patch will be posted shortly.
+
+[0] https://lore.kernel.org/lkml/20210301085236.947011-2-hch@lst.de/
+
+Sergey Senozhatsky (8):
+  videobuf2: rework vb2_mem_ops API
+  videobuf2: inverse buffer cache_hints flags
+  videobuf2: split buffer cache_hints initialisation
+  videobuf2: move cache_hints handling to allocators
+  videobuf2: add V4L2_FLAG_MEMORY_NON_COHERENT flag
+  videobuf2: add queue memory coherency parameter
+  videobuf2: handle V4L2_FLAG_MEMORY_NON_COHERENT flag
+  videobuf2: handle non-contiguous DMA allocations
+
+ .../userspace-api/media/v4l/buffer.rst        |  40 +++-
+ .../media/v4l/vidioc-create-bufs.rst          |   7 +-
+ .../media/v4l/vidioc-reqbufs.rst              |  16 +-
+ .../media/common/videobuf2/videobuf2-core.c   | 135 +++++++++-----
+ .../common/videobuf2/videobuf2-dma-contig.c   | 175 ++++++++++++++----
+ .../media/common/videobuf2/videobuf2-dma-sg.c |  39 ++--
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  47 ++---
+ .../common/videobuf2/videobuf2-vmalloc.c      |  30 +--
+ drivers/media/dvb-core/dvb_vb2.c              |   2 +-
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c |   9 +-
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   5 +-
+ include/media/videobuf2-core.h                |  57 +++---
+ include/uapi/linux/videodev2.h                |  13 +-
+ 13 files changed, 396 insertions(+), 179 deletions(-)
+
 -- 
-2.30.1
+2.30.1.766.gb4fecdf3b7-goog
 
