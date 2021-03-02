@@ -2,334 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA6DC43381
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41B50C433E6
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A161B64F2A
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:32:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0949A64F2A
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580141AbhCBRaG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S1580169AbhCBRa1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377764AbhCBAsk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 19:48:40 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D252FC061221
-        for <linux-media@vger.kernel.org>; Mon,  1 Mar 2021 16:47:04 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id h4so12691697pgf.13
-        for <linux-media@vger.kernel.org>; Mon, 01 Mar 2021 16:47:04 -0800 (PST)
+        with ESMTP id S242526AbhCBCyS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Mar 2021 21:54:18 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D6AC061794
+        for <linux-media@vger.kernel.org>; Mon,  1 Mar 2021 18:51:22 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id m22so28975989lfg.5
+        for <linux-media@vger.kernel.org>; Mon, 01 Mar 2021 18:51:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ehy3NtZARWKqntzrYPlK6hSKlfy8OUUEgCoOD4fHSE=;
-        b=HWdXl+wGHfyAD0jSdQV4KKDcE36igEeT1w0wjKhgKk5SIvItzRKr1GujotMl+J0e82
-         PGhydmIoAsKJIeUM7230UpY9cZIH1i/4+9rm/Gu122fRJQd1Rl4w23h3kAWgCovzc5bY
-         SSkOGozVvcJT3+9oBThl0XJPf6O8tvBf9vwUU=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8E7jhhYaCr8C6xSxrpG64nSWDU98o0HEwhCAOn7PAok=;
+        b=CtAXWUOUEPDunoQwsrVEycASyIeLXdyliiw3gjDfZoPH+mu6HRFJOGnvR+MXDvPlDm
+         oJEoBKJceAIP2pSJHn+StAUkr8+FPr8L0aB9U0Vy1qM2/Mbuam3IoNYxT5pbkQ80CSz5
+         v+n7Dc+u4gZ3D8doFYnzRKlLYdu9QORdgOB+hiY2Y5a++SWfH2tQYDboAkTDYnDaSE0Z
+         JRvCN/hTYcNbxkcDEy80hNN15DwQWGSIOoLUUTwsvFme1NaGT/LGKe9KUqplff5A7xWE
+         XyhzBmSQ2tNJ2WB0xFUzwBEFK5UX42BcM70Ib0iGxM8OhzGOBsql/eZGL2c4DYIhUEFD
+         Xw2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ehy3NtZARWKqntzrYPlK6hSKlfy8OUUEgCoOD4fHSE=;
-        b=MmmIyJ6VgtwnPyuN9heVXoYVr3C5WCqHR+qk4Z/a6p6x33UiCFBxdiWWkWENjat69e
-         ilgq+lBHkOcsWRQ8rkyJBFMcxIPSxhF9/dmixPogRawitx+Yr5tlRP79gRzF8Yc8XMTn
-         51sK6HN8HYfoiq8wNNfN8+ITv6RAlrgUzZTkdR+x9ADqkQ8CzH6L0RKlfe/SezcMRyRI
-         9bZVVoROHs0nsMawqaJVwKPa2P+K3kqp3OxkYYXrWMyPfz3rljWuRLxTUfCuRv85TTuq
-         ivGLgfmHxn3c/DBqYlhr3Xnv5YpNyG0ooHHSVZXsSvb8gtHKb/zpQ8Rhvkj7ixbbcD7H
-         drEg==
-X-Gm-Message-State: AOAM533cFpoUo9trNsPC/IYK1MBWwNhQAPHEWr/wns1Uc5smLqZTE9xS
-        wpodidKTfBSR6T3cKzFrhljvIw==
-X-Google-Smtp-Source: ABdhPJxuPC6Un97/6i4LbPsWKyOZUv4BB/Ly+hLI8ZuL2VuI1/bEWIEH8k/aW6CxILcsZRx+k+Dr7g==
-X-Received: by 2002:a65:4c0b:: with SMTP id u11mr16102700pgq.409.1614646024411;
-        Mon, 01 Mar 2021 16:47:04 -0800 (PST)
-Received: from senozhatsky.flets-east.jp ([2409:10:2e40:5100:d5d7:1a61:2cdf:273c])
-        by smtp.gmail.com with ESMTPSA id b14sm678881pji.14.2021.03.01.16.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 16:47:04 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH 8/8] videobuf2: handle non-contiguous DMA allocations
-Date:   Tue,  2 Mar 2021 09:46:24 +0900
-Message-Id: <20210302004624.31294-9-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-In-Reply-To: <20210302004624.31294-1-senozhatsky@chromium.org>
-References: <20210302004624.31294-1-senozhatsky@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8E7jhhYaCr8C6xSxrpG64nSWDU98o0HEwhCAOn7PAok=;
+        b=ans/lqnV0CnY0WL6TPTVfJNgbvFPvovDNMQ2pVvE8OtyTrAUjdRMiWDHXvTsWgFoUJ
+         7GGCgoB4XSKnCeWjnh7a6uxUZT9+KVdLoYJhTYFwWdn34m33nqjfExUH9IqorgUMNZwS
+         X0Lxd6jGOeZRRtksqmTMpF9ROQZTDniOliI5+xaGVog3FNwopVxP6zCW0Iem6SDRf6r+
+         Z+yt+YdCDG0HedcsPg4+5FUzt4O8klMd9gH2AvzyB31DjvIX08bYYWir6J2oHbICbSP4
+         6AVLhaWl4aRwqMFp1Vyyn76SBrsZxHFK4JNILsoMMYf+snnKGdLOgH4GDLWgp+k9kbex
+         N4Jw==
+X-Gm-Message-State: AOAM533rtKGt8eALifyXUJfEZDbctD9+6XGf8NdABpRLTMdXWYtddzq5
+        EGxyqYI5w1WIi3EHUX8bnYP9x8SUvFFWz27ntP7FPw==
+X-Google-Smtp-Source: ABdhPJz39rZTCGPuL53OOyY7GEDe7aOcYzZlxQr263eEFf2vvM39BGGanu2WFzPxlDI0/hLiEweWlg9234LilyOgSj4=
+X-Received: by 2002:a05:6512:547:: with SMTP id h7mr11428172lfl.529.1614653480706;
+ Mon, 01 Mar 2021 18:51:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210226040908.3274666-1-john.stultz@linaro.org>
+ <CAKMK7uHGutJiZ879NAweTHka=gZQBw9zWQSDJn6bTLS6bJwvvg@mail.gmail.com> <20210227094436.GA3130571@infradead.org>
+In-Reply-To: <20210227094436.GA3130571@infradead.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 1 Mar 2021 18:51:09 -0800
+Message-ID: <CALAqxLUcbAWiwxqLRmr4Ve4ecSAJ-jsZy-RDC3jqDONgoRht9Q@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: heaps: Set VM_PFNMAP in mmap for system and cma heaps
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        "??rjan Eide" <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds support for new noncontiguous DMA API, which
-requires allocators to have two execution branches: one
-for the current API, and one for the new one.
+On Sat, Feb 27, 2021 at 1:44 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Fri, Feb 26, 2021 at 08:36:55AM +0100, Daniel Vetter wrote:
+> > Also given that both deal with struct page there's a ton of divergence
+> > between these two that doesn't make much sense. Maybe could even share
+> > the code fully, aside from how you allocate the struct pages.
+>
+> I've been saying that since the code was first submitted.  Once pages
+> are allocated from CMA they should be treated not different from normal
+> pages.
+>
+> Please take a look at how the DMA contigous allocator manages to share
+> all code for handling CMA vs alloc_pages pages.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-[hch: untested conversion to the ne API]
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- .../common/videobuf2/videobuf2-dma-contig.c   | 141 +++++++++++++++---
- 1 file changed, 117 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index 1e218bc440c6..d6a9f7b682f3 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -17,6 +17,7 @@
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/dma-mapping.h>
-+#include <linux/highmem.h>
- 
- #include <media/videobuf2-v4l2.h>
- #include <media/videobuf2-dma-contig.h>
-@@ -42,8 +43,14 @@ struct vb2_dc_buf {
- 	struct dma_buf_attachment	*db_attach;
- 
- 	struct vb2_buffer		*vb;
-+	unsigned int			non_coherent_mem:1;
- };
- 
-+static bool vb2_dc_is_coherent(struct vb2_dc_buf *buf)
-+{
-+	return !buf->non_coherent_mem;
-+}
-+
- /*********************************************/
- /*        scatterlist table functions        */
- /*********************************************/
-@@ -78,12 +85,21 @@ static void *vb2_dc_cookie(struct vb2_buffer *vb, void *buf_priv)
- static void *vb2_dc_vaddr(struct vb2_buffer *vb, void *buf_priv)
- {
- 	struct vb2_dc_buf *buf = buf_priv;
--	struct dma_buf_map map;
--	int ret;
- 
--	if (!buf->vaddr && buf->db_attach) {
--		ret = dma_buf_vmap(buf->db_attach->dmabuf, &map);
--		buf->vaddr = ret ? NULL : map.vaddr;
-+	if (buf->vaddr)
-+		return buf->vaddr;
-+
-+	if (buf->db_attach) {
-+		struct dma_buf_map map;
-+
-+		if (!dma_buf_vmap(buf->db_attach->dmabuf, &map))
-+			buf->vaddr = map.vaddr;
-+	}
-+
-+	if (!vb2_dc_is_coherent(buf)) {
-+		buf->vaddr = dma_vmap_noncontiguous(buf->dev,
-+						    buf->size,
-+						    buf->dma_sgt);
- 	}
- 
- 	return buf->vaddr;
-@@ -101,13 +117,26 @@ static void vb2_dc_prepare(void *buf_priv)
- 	struct vb2_dc_buf *buf = buf_priv;
- 	struct sg_table *sgt = buf->dma_sgt;
- 
-+	/* This takes care of DMABUF and user-enforced cache sync hint */
- 	if (buf->vb->skip_cache_sync_on_prepare)
- 		return;
- 
-+	/*
-+	 * Coherent MMAP buffers do not need to be synced, unlike coherent
-+	 * USERPTR and non-coherent MMAP buffers.
-+	 */
-+	if (buf->vb->memory == V4L2_MEMORY_MMAP && vb2_dc_is_coherent(buf))
-+		return;
-+
- 	if (!sgt)
- 		return;
- 
-+	/* For both USERPTR and non-coherent MMAP */
- 	dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
-+
-+	/* Non-coherrent MMAP only */
-+	if (!vb2_dc_is_coherent(buf) && buf->vaddr)
-+		flush_kernel_vmap_range(buf->vaddr, buf->size);
- }
- 
- static void vb2_dc_finish(void *buf_priv)
-@@ -115,19 +144,46 @@ static void vb2_dc_finish(void *buf_priv)
- 	struct vb2_dc_buf *buf = buf_priv;
- 	struct sg_table *sgt = buf->dma_sgt;
- 
-+	/* This takes care of DMABUF and user-enforced cache sync hint */
- 	if (buf->vb->skip_cache_sync_on_finish)
- 		return;
- 
-+	/*
-+	 * Coherent MMAP buffers do not need to be synced, unlike coherent
-+	 * USERPTR and non-coherent MMAP buffers.
-+	 */
-+	if (buf->vb->memory == V4L2_MEMORY_MMAP && vb2_dc_is_coherent(buf))
-+		return;
-+
- 	if (!sgt)
- 		return;
- 
-+	/* For both USERPTR and non-coherent MMAP */
- 	dma_sync_sgtable_for_cpu(buf->dev, sgt, buf->dma_dir);
-+
-+	/* Non-coherrent MMAP only */
-+	if (!vb2_dc_is_coherent(buf) && buf->vaddr)
-+		invalidate_kernel_vmap_range(buf->vaddr, buf->size);
- }
- 
- /*********************************************/
- /*        callbacks for MMAP buffers         */
- /*********************************************/
- 
-+static void __vb2_dc_put(struct vb2_dc_buf *buf)
-+{
-+	if (vb2_dc_is_coherent(buf)) {
-+		dma_free_attrs(buf->dev, buf->size, buf->cookie,
-+			       buf->dma_addr, buf->attrs);
-+		return;
-+	}
-+
-+	if (buf->vaddr)
-+		dma_vunmap_noncontiguous(buf->dev, buf->vaddr);
-+	dma_free_noncontiguous(buf->dev, buf->size,
-+			       buf->dma_sgt, buf->dma_addr);
-+}
-+
- static void vb2_dc_put(void *buf_priv)
- {
- 	struct vb2_dc_buf *buf = buf_priv;
-@@ -139,17 +195,47 @@ static void vb2_dc_put(void *buf_priv)
- 		sg_free_table(buf->sgt_base);
- 		kfree(buf->sgt_base);
- 	}
--	dma_free_attrs(buf->dev, buf->size, buf->cookie, buf->dma_addr,
--		       buf->attrs);
-+	__vb2_dc_put(buf);
- 	put_device(buf->dev);
- 	kfree(buf);
- }
- 
-+static int vb2_dc_alloc_coherent(struct vb2_dc_buf *buf)
-+{
-+	struct vb2_queue *q = buf->vb->vb2_queue;
-+
-+	buf->cookie = dma_alloc_attrs(buf->dev,
-+				      buf->size,
-+				      &buf->dma_addr,
-+				      GFP_KERNEL | q->gfp_flags,
-+				      buf->attrs);
-+	if (!buf->cookie)
-+		return -ENOMEM;
-+	if ((q->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING) == 0)
-+		buf->vaddr = buf->cookie;
-+	return 0;
-+}
-+
-+static int vb2_dc_alloc_non_coherent(struct vb2_dc_buf *buf)
-+{
-+	struct vb2_queue *q = buf->vb->vb2_queue;
-+
-+	buf->dma_sgt = dma_alloc_noncontiguous(buf->dev,
-+					       buf->size,
-+					       buf->dma_dir,
-+					       GFP_KERNEL | q->gfp_flags,
-+					       buf->attrs);
-+	if (!buf->dma_sgt)
-+		return -ENOMEM;
-+	return 0;
-+}
-+
- static void *vb2_dc_alloc(struct vb2_buffer *vb,
- 			  struct device *dev,
- 			  unsigned long size)
- {
- 	struct vb2_dc_buf *buf;
-+	int ret;
- 
- 	if (WARN_ON(!dev))
- 		return ERR_PTR(-EINVAL);
-@@ -159,27 +245,28 @@ static void *vb2_dc_alloc(struct vb2_buffer *vb,
- 		return ERR_PTR(-ENOMEM);
- 
- 	buf->attrs = vb->vb2_queue->dma_attrs;
--	buf->cookie = dma_alloc_attrs(dev, size, &buf->dma_addr,
--				      GFP_KERNEL | vb->vb2_queue->gfp_flags,
--				      buf->attrs);
--	if (!buf->cookie) {
--		dev_err(dev, "dma_alloc_coherent of size %ld failed\n", size);
--		kfree(buf);
--		return ERR_PTR(-ENOMEM);
--	}
--
--	if ((buf->attrs & DMA_ATTR_NO_KERNEL_MAPPING) == 0)
--		buf->vaddr = buf->cookie;
-+	buf->dma_dir = vb->vb2_queue->dma_dir;
-+	buf->vb = vb;
-+	buf->non_coherent_mem = vb->vb2_queue->non_coherent_mem;
- 
-+	buf->size = size;
- 	/* Prevent the device from being released while the buffer is used */
- 	buf->dev = get_device(dev);
--	buf->size = size;
--	buf->dma_dir = vb->vb2_queue->dma_dir;
-+
-+	if (vb2_dc_is_coherent(buf))
-+		ret = vb2_dc_alloc_coherent(buf);
-+	else
-+		ret = vb2_dc_alloc_non_coherent(buf);
-+
-+	if (ret) {
-+		dev_err(dev, "dma alloc of size %ld failed\n", size);
-+		kfree(buf);
-+		return ERR_PTR(-ENOMEM);
-+	}
- 
- 	buf->handler.refcount = &buf->refcount;
- 	buf->handler.put = vb2_dc_put;
- 	buf->handler.arg = buf;
--	buf->vb = vb;
- 
- 	refcount_set(&buf->refcount, 1);
- 
-@@ -196,9 +283,12 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
- 		return -EINVAL;
- 	}
- 
--	ret = dma_mmap_attrs(buf->dev, vma, buf->cookie,
--		buf->dma_addr, buf->size, buf->attrs);
--
-+	if (vb2_dc_is_coherent(buf))
-+		ret = dma_mmap_attrs(buf->dev, vma, buf->cookie, buf->dma_addr,
-+				     buf->size, buf->attrs);
-+	else
-+		ret = dma_mmap_noncontiguous(buf->dev, vma, buf->size,
-+					     buf->dma_sgt);
- 	if (ret) {
- 		pr_err("Remapping memory failed, error: %d\n", ret);
- 		return ret;
-@@ -390,6 +480,9 @@ static struct sg_table *vb2_dc_get_base_sgt(struct vb2_dc_buf *buf)
- 	int ret;
- 	struct sg_table *sgt;
- 
-+	if (!vb2_dc_is_coherent(buf))
-+		return buf->dma_sgt;
-+
- 	sgt = kmalloc(sizeof(*sgt), GFP_KERNEL);
- 	if (!sgt) {
- 		dev_err(buf->dev, "failed to alloc sg table\n");
--- 
-2.30.1.766.gb4fecdf3b7-goog
-
+I'll take a look at that! Thanks for the pointer!
+-john
