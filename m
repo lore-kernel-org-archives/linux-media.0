@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96FF2C4360C
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70809C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DD6C64F17
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:33:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2508A64F04
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:38:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580249AbhCBRa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:30:57 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:40851 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1578127AbhCBKfx (ORCPT
+        id S1580258AbhCBRbF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:31:05 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:45209 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1578128AbhCBKfy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Mar 2021 05:35:53 -0500
+        Tue, 2 Mar 2021 05:35:54 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id H2MqlKlzoC40pH2Mulm6FL; Tue, 02 Mar 2021 11:35:08 +0100
+        id H2MqlKlzoC40pH2Mulm6FC; Tue, 02 Mar 2021 11:35:08 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1614681308; bh=aywMBKj7XPMQut+SsneeNKnRjh+kRQd0wisobz4nOlQ=;
+        t=1614681308; bh=Mf4FvERrmB7aOcuSUJ9jm+bj73snwSpBgwlxWHt6h7s=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=BcxLJ/O+Bx+1zH0oQxKl4Y21GKnk7AjiZETeu+8Xh9G9zwlRflKA+k0HO+LXoX0Uy
-         SsLAtkouP3WPPRKKsjTPbVlE7rWzBMTQ/xynOJnGLGOz8F3Qs9f7Nd+WmS1/C0/K5T
-         A+2UVRRbyGrYwGlxQaOZETNnqoVitoUYU1e5hZmrrlITTG9YLjeQmS3G2ZoP1rOlaZ
-         sGTTJh9hN4vucc2qiOUf8Q9uVCqkWjj0veLfvyrJuuniWALAb6xkAvPE4OQ9efvmfC
-         GGJZw84B6Bf5JvaPh4naERrDg5y+aaTQpxsBoTe/sSOt78SI0pDu78S6VTn68fTKq8
-         yu8P9iVWeO4ng==
+        b=asaY8W8PTw8J7052nlYqRH1tdoPOpvar8Bb2pfxdPkJOKuJJisbboiKEzWk28Zfas
+         UdKE7+apzZp5qGA5H6lkhBPv3YbHVIJ79aODQCRXYb8ojYLrtUl2m8p6ehWk3ombPY
+         4XREJgZX6bOjYAiQaWmOKbuJxbGPZTtFG7XnPBuO74ABCHHstsMDywg2jBaVHLQzR0
+         eiBcscCTPdGJjR8KpAHaBQhIdTMGUt7LSeZkCsBBWZob0HN60CC3pHmvwWa98FcNWI
+         4fcq+TouBA7+RH6D6p3vBShw39TvXBtJvSLz2Z3xBVUy9jF2csRvuwzbPGGpPNFuW/
+         /QjjAzXkoPiwg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/2] bootstrap.sh: restore configure.ac
-Date:   Tue,  2 Mar 2021 11:34:58 +0100
-Message-Id: <20210302103458.819043-3-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 1/2] configure.ac: add AM_GNU_GETTEXT_REQUIRE_VERSION
+Date:   Tue,  2 Mar 2021 11:34:57 +0100
+Message-Id: <20210302103458.819043-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210302103458.819043-1-hverkuil-cisco@xs4all.nl>
 References: <20210302103458.819043-1-hverkuil-cisco@xs4all.nl>
@@ -51,44 +51,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-gettextize overwrites AM_GNU_GETTEXT_VERSION in configure.ac,
-which is not what we want since we want to support older gettext
-versions as well. Restore the original configure.ac on exit.
+This is needed for newer gettext versions (>= 0.20).
 
-Also add set -e to exit if one of the commands fails.
+It avoids this error:
+
+Making all in v4l-utils-po
+*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.20 but the autoconf macros are from gettext version 0.19
+
+The old AM_GNU_GETTEXT_VERSION is still needed for older (< 2.70)
+autoconf versions.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- bootstrap.sh | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ configure.ac | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/bootstrap.sh b/bootstrap.sh
-index 0e9eb2d4..52bb0165 100755
---- a/bootstrap.sh
-+++ b/bootstrap.sh
-@@ -1,6 +1,7 @@
- #!/bin/bash
+diff --git a/configure.ac b/configure.ac
+index 5290fa01..62b12549 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -97,7 +97,10 @@ PKG_PROG_PKG_CONFIG
+ DX_DOT_FEATURE(ON)
+ DX_INIT_DOXYGEN($PACKAGE_NAME, doxygen_libdvbv5.cfg)
+ ALL_LINGUAS=""
++# AM_GNU_GETTEXT_VERSION kept for autoreconf versions that do
++# not support AM_GNU_GETTEXT_REQUIRE_VERSION
+ AM_GNU_GETTEXT_VERSION([0.19.8])
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.19.8])
+ AM_GNU_GETTEXT([external])
  
--mkdir build-aux/ 2>/dev/null
-+set -e
-+mkdir -p build-aux/ 2>/dev/null
- touch build-aux/config.rpath libdvbv5-po/Makefile.in.in v4l-utils-po/Makefile.in.in
- autoreconf -vfi
- 
-@@ -13,6 +14,13 @@ if [ "GETTEXTIZE" != "" ]; then
- 	sed "s,read dummy < /dev/tty,," < $GETTEXTIZE > ./gettextize
- 	chmod 755 ./gettextize
- 
-+	# gettextize overwrites AM_GNU_GETTEXT_VERSION in
-+	# configure.ac, which is not what we want since we want to
-+	# support older gettext versions as well. Restore the
-+	# original configure.ac on exit.
-+	cp configure.ac configure.ac.orig
-+	trap "mv configure.ac.orig configure.ac" EXIT
-+
- 	echo "Generating locale v4l-utils-po build files for gettext version $VER"
- 	./gettextize --force --copy --no-changelog --po-dir=v4l-utils-po >/dev/null
- 
+ LIBDVBV5_DOMAIN="libdvbv5"
 -- 
 2.30.1
 
