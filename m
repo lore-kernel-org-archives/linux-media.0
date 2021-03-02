@@ -2,35 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0018C4332B
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7DD9C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7705764EBB
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:56:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6785864E58
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbhCCMKl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 07:10:41 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51786 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381309AbhCBU4F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 15:56:05 -0500
+        id S236570AbhCCMMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 07:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381407AbhCBU4R (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Mar 2021 15:56:17 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B69C0617A9;
+        Tue,  2 Mar 2021 12:54:30 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 91CCF1F4548C
+        with ESMTPSA id 997331F45497
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH 2/7] media: uapi: vp8: Rename v4l2_vp8_loopfilter to v4l2_vp8_loop_filter
-Date:   Tue,  2 Mar 2021 17:54:00 -0300
-Message-Id: <20210302205405.69538-3-ezequiel@collabora.com>
+Subject: [PATCH 6/7] media: controls: Log VP8 stateless control in .std_log
+Date:   Tue,  2 Mar 2021 17:54:04 -0300
+Message-Id: <20210302205405.69538-7-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210302205405.69538-1-ezequiel@collabora.com>
 References: <20210302205405.69538-1-ezequiel@collabora.com>
@@ -40,110 +43,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename to struct v4l2_vp8_loop_filter, which is closer to the
-VP8 syntax. This change is only cosmetics, but since this API
-is exposed to userspace, it's worth the trouble to get it consistent.
+Simply print the type of the control.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 12 ++++++------
- drivers/staging/media/hantro/hantro_g1_vp8_dec.c     |  2 +-
- drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c |  2 +-
- include/media/vp8-ctrls.h                            |  4 ++--
- 4 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 006301e88554..8bbfea44a2ca 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1774,7 +1774,7 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - struct :c:type:`v4l2_vp8_segment`
-       - ``seg``
-       - Structure with segment-based adjustments metadata.
--    * - struct :c:type:`v4l2_vp8_loopfilter`
-+    * - struct :c:type:`v4l2_vp8_loop_filter`
-       - ``lf``
-       - Structure with loop filter level adjustments metadata.
-     * - struct :c:type:`v4l2_vp8_quantization`
-@@ -1958,13 +1958,13 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-       - If is set, the segment feature data mode is delta-value.
-         If cleared, it's absolute-value.
- 
--.. c:type:: v4l2_vp8_loopfilter
-+.. c:type:: v4l2_vp8_loop_filter
- 
- .. cssclass:: longtable
- 
- .. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
- 
--.. flat-table:: struct v4l2_vp8_loopfilter
-+.. flat-table:: struct v4l2_vp8_loop_filter
-     :header-rows:  0
-     :stub-columns: 0
-     :widths:       1 1 2
-@@ -1986,11 +1986,11 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-       - Applications and drivers must set this to zero.
-     * - __u32
-       - ``flags``
--      - See :ref:`Loopfilter Flags <vp8_loopfilter_flags>`
-+      - See :ref:`Loop Filter Flags <vp8_loop_filter_flags>`
- 
--.. _vp8_loopfilter_flags:
-+.. _vp8_loop_filter_flags:
- 
--``Loopfilter Flags``
-+``Loop Filter Flags``
- 
- .. cssclass:: longtable
- 
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index 3f4311c1dab8..2de80fef07f4 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -136,7 +136,7 @@ static void cfg_lf(struct hantro_ctx *ctx,
- 		   const struct v4l2_ctrl_vp8_frame *hdr)
- {
- 	const struct v4l2_vp8_segment *seg = &hdr->seg;
--	const struct v4l2_vp8_loopfilter *lf = &hdr->lf;
-+	const struct v4l2_vp8_loop_filter *lf = &hdr->lf;
- 	struct hantro_dev *vpu = ctx->dev;
- 	unsigned int i;
- 	u32 reg;
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-index 5c43f59ad531..cbca123db746 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-@@ -277,7 +277,7 @@ static void cfg_lf(struct hantro_ctx *ctx,
- 		   const struct v4l2_ctrl_vp8_frame *hdr)
- {
- 	const struct v4l2_vp8_segment *seg = &hdr->seg;
--	const struct v4l2_vp8_loopfilter *lf = &hdr->lf;
-+	const struct v4l2_vp8_loop_filter *lf = &hdr->lf;
- 	struct hantro_dev *vpu = ctx->dev;
- 	unsigned int i;
- 	u32 reg;
-diff --git a/include/media/vp8-ctrls.h b/include/media/vp8-ctrls.h
-index 86bb6e774604..f20117e825ef 100644
---- a/include/media/vp8-ctrls.h
-+++ b/include/media/vp8-ctrls.h
-@@ -34,7 +34,7 @@ struct v4l2_vp8_segment {
- #define V4L2_VP8_LF_ADJ_ENABLE	0x01
- #define V4L2_VP8_LF_DELTA_UPDATE	0x02
- #define V4L2_VP8_LF_FILTER_TYPE_SIMPLE	0x04
--struct v4l2_vp8_loopfilter {
-+struct v4l2_vp8_loop_filter {
- 	__s8 ref_frm_delta[4];
- 	__s8 mb_mode_delta[4];
- 	__u8 sharpness_level;
-@@ -82,7 +82,7 @@ struct v4l2_vp8_entropy_coder_state {
- 
- struct v4l2_ctrl_vp8_frame {
- 	struct v4l2_vp8_segment seg;
--	struct v4l2_vp8_loopfilter lf;
-+	struct v4l2_vp8_loop_filter lf;
- 	struct v4l2_vp8_quantization quant;
- 	struct v4l2_vp8_entropy entropy;
- 	struct v4l2_vp8_entropy_coder_state coder_state;
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 1a683f4fa978..0fc7180a47e9 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1781,6 +1781,9 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
+ 		pr_cont("FWHT_PARAMS");
+ 		break;
++	case V4L2_CTRL_TYPE_VP8_FRAME:
++		pr_cont("VP8_FRAME");
++		break;
+ 	default:
+ 		pr_cont("unknown type %d", ctrl->type);
+ 		break;
 -- 
 2.30.0
 
