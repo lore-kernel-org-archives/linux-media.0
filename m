@@ -5,33 +5,33 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04DB9C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B197C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:42:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC342601FB
-	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF6F864F18
+	for <linux-media@archiver.kernel.org>; Tue,  2 Mar 2021 17:42:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351422AbhCBRh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Mar 2021 12:37:59 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:42843 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1835111AbhCBQhc (ORCPT
+        id S1351609AbhCBRiB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Mar 2021 12:38:01 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:34673 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1835113AbhCBQhd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Mar 2021 11:37:32 -0500
+        Tue, 2 Mar 2021 11:37:33 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id H7oZlNjwSOruFH7ojlAWNd; Tue, 02 Mar 2021 17:24:13 +0100
+        id H7oZlNjwSOruFH7oklAWO9; Tue, 02 Mar 2021 17:24:14 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1614702253; bh=nigcAZjwRtlVmPsFqbCkWkaOp6C34x3F16TTh+8uIO4=;
+        t=1614702254; bh=g4EqIicwlsCbluUsMLX/Juo9LDEWnCrvsgtLgDt/ZM8=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=k2tC4ZzjYuZ3M0eQX93PHBSoxyT/nxCbsPt213yTueDgHbJJCACgu0wvuao64Ayvk
-         u3rp2CmLK/aL34CjXSQr1LwIt3kHhNcDKlyKo8heo99ubVi2j6MGY7bapkNy4ls/TL
-         lna9h6FUptmQuEIllQc9SqW28dTEwIBg5J7TAFOwlTbUX9ji5jIkdSXFqJhTLq/Yf3
-         cHItGrfnA2j5BXljNFQ362DQQEEIoOMGWD2uKPEAiZms7nuCZVWJxvxlw/sR7o/9j7
-         F4n0TdblLm+1ACEOn17TDSQF5oMdzOXBnZTKQ/4Bv9OfMN8l1LRGZRevUuGFPxdRp8
-         xzLCQ2iOAF35w==
+        b=gmfWZKXxuct/TEtQ+b/UxHaeImqgniSdszKj9DFEFz9ouzzAmU7S2LVtUJkc1kwLL
+         Yf9AHFOgiEDhWr1xI84Ohcwzb32klIpYYRsZw3hjtSuXOgCYMMeXxHXjgF8MXQld2G
+         rH0nuprxBdF/ZNv2sZWnhJRgoRy6ahOaxKmeEnynJ4O3qif+4yB4w/E4WsFcAgNrgV
+         u9nzYcPPt5axjTrvVkJpEcChrRvOagarPoTRsolk3dSMarGy08bUH+8qXHni+Ch++L
+         PCYdtY9DQIFXaJnDizV9Z7uqFtuxXNa7eJfBcZMz3n22L6xfJz45KonjB0/QmnHkDZ
+         fllPQehCiokiw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -40,99 +40,46 @@ Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 1/6] drm: drm_bridge: add connector_attach/detach bridge ops
-Date:   Tue,  2 Mar 2021 17:23:58 +0100
-Message-Id: <20210302162403.983585-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 4/6] dt-bindings: display: ti: ti,omap5-dss.txt: add cec clock
+Date:   Tue,  2 Mar 2021 17:24:01 +0100
+Message-Id: <20210302162403.983585-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210302162403.983585-1-hverkuil-cisco@xs4all.nl>
 References: <20210302162403.983585-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfH1WztQd5puTGwx9jr7Qnb4a6LSVKsuJG9LXZaF/19eoi/zr0o+zEmykIrlunj4rGbDj3oLAAcpap3fmA4yi700pShKgsJ36UmKM8zK0vFiMwowA0McA
- p0X7zcRF1f0Bt+0TiMwZV69oE5p+edWDprPpFmNQSTufy0OnE/pQhC92xNtsLnqWVDfoZxiFtpAEvcC7/+KkUrstDwDV/M1SeLECy7LVFrVhs5vUwU4KnGGZ
- wNPMe4tXVnFU+jl0wKuYsOHJ7Cuozz3/FIm0BZtB3U74UIwhzitCO3SxTmRI7KJ8IlGcpVvNqtsjY3Gker1BwIfleBPvbm+oBjKwM97ip75SiLhsR/j6wuoy
- FSuLKjGs6uTuwyNBnpk965gvV2ayGJirHEoBuzo3qRK4kJPO50FFGWqbcWHauP12Of9frF5+Uq6vUeXHjagZry7XZKFS7H5XgG5IlIqkKWNVaiwNc7MO1hyj
- LVjo6Z5G+y/8Rv+pCmMoSJaVlYfFnG5ksHrCQHLCcaG8Rp/bCtrjct65LZc=
+X-CMAE-Envelope: MS4xfC3izUHoGEhUuhakLv2+dkIjeIDtYHJO1pPfWD8nhP0CbF8pP8lcKrrDjdGvxaxHQng+R8j+ekxirIIpQGQ0/8Le44tj2HOvxPeBSA/oVA8c20A3KlJI
+ qAwivk7ksrQFTk/ZGgDyWVboNo5Z3fy0f0Wcwgmrx1yeumIeRb9Ce3enmtGjOTVvYH9h3nnfjAzMEgPSXPOfVnMBMKXJaghj0zC1k/IgBSL57TXssDv7kADO
+ x7B0m73iHBAZJmlGeQOYVeauXwHYL0oGnIShi+kdnpkD/dLpOSM0VKOLRXOT1cufIH8REhhe0Py/sC9HHl+q12wS5a07+4bNz1CSD25AhU5Ik3ebj2swsi7U
+ xqEC/NeO80+yW2FWOFbj0vnkTPAUXH+BYT2UmY1t5qHG8s2S6w+QGwl+1008KMedN4h+Gu1Oc6M6nf1//gQvD6slMVqeQIJJonHCwaij0rcCr6SRQ43KDPBw
+ 1mYZXqz1cq+oZzKWp+p7gx5Mhhc80hGfiS0vJrua2C6Dy5XjG++fKgZ2bSw=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add bridge connector_attach/detach ops. These ops are called when a
-bridge is attached or detached to a drm_connector. These ops can be
-used to register and unregister an HDMI CEC adapter for a bridge that
-supports CEC.
+The cec clock is required as well in order to support HDMI CEC,
+document this.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/gpu/drm/drm_bridge_connector.c |  9 +++++++++
- include/drm/drm_bridge.h               | 27 ++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ Documentation/devicetree/bindings/display/ti/ti,omap5-dss.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-index 791379816837..07db71d4f5b3 100644
---- a/drivers/gpu/drm/drm_bridge_connector.c
-+++ b/drivers/gpu/drm/drm_bridge_connector.c
-@@ -203,6 +203,11 @@ static void drm_bridge_connector_destroy(struct drm_connector *connector)
- {
- 	struct drm_bridge_connector *bridge_connector =
- 		to_drm_bridge_connector(connector);
-+	struct drm_bridge *bridge;
-+
-+	drm_for_each_bridge_in_chain(bridge_connector->encoder, bridge)
-+		if (bridge->funcs->connector_detach)
-+			bridge->funcs->connector_detach(bridge, connector);
+diff --git a/Documentation/devicetree/bindings/display/ti/ti,omap5-dss.txt b/Documentation/devicetree/bindings/display/ti/ti,omap5-dss.txt
+index 20861218649f..c321c67472f0 100644
+--- a/Documentation/devicetree/bindings/display/ti/ti,omap5-dss.txt
++++ b/Documentation/devicetree/bindings/display/ti/ti,omap5-dss.txt
+@@ -89,8 +89,8 @@ Required properties:
+ - interrupts: the HDMI interrupt line
+ - ti,hwmods: "dss_hdmi"
+ - vdda-supply: vdda power supply
+-- clocks: handles to fclk and pll clock
+-- clock-names: "fck", "sys_clk"
++- clocks: handles to fclk, pll and cec clock
++- clock-names: "fck", "sys_clk", "cec"
  
- 	if (bridge_connector->bridge_hpd) {
- 		struct drm_bridge *hpd = bridge_connector->bridge_hpd;
-@@ -375,6 +380,10 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 		connector->polled = DRM_CONNECTOR_POLL_CONNECT
- 				  | DRM_CONNECTOR_POLL_DISCONNECT;
- 
-+	drm_for_each_bridge_in_chain(encoder, bridge)
-+		if (bridge->funcs->connector_attach)
-+			bridge->funcs->connector_attach(bridge, connector);
-+
- 	return connector;
- }
- EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
-diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-index 2195daa289d2..3320a6ebd253 100644
---- a/include/drm/drm_bridge.h
-+++ b/include/drm/drm_bridge.h
-@@ -629,6 +629,33 @@ struct drm_bridge_funcs {
- 	 * the DRM_BRIDGE_OP_HPD flag in their &drm_bridge->ops.
- 	 */
- 	void (*hpd_disable)(struct drm_bridge *bridge);
-+
-+	/**
-+	 * @connector_attach:
-+	 *
-+	 * This callback is invoked whenever our bridge is being attached to a
-+	 * &drm_connector. This is where an HDMI CEC adapter can be registered.
-+	 * Note that this callback expects that this op always succeeds. Since
-+	 * HDMI CEC support is an optional feature, any failure to register a
-+	 * CEC adapter must be ignored since video output will still work
-+	 * without CEC.
-+	 *
-+	 * The @connector_attach callback is optional.
-+	 */
-+	void (*connector_attach)(struct drm_bridge *bridge,
-+				 struct drm_connector *conn);
-+
-+	/**
-+	 * @connector_detach:
-+	 *
-+	 * This callback is invoked whenever our bridge is being detached from a
-+	 * &drm_connector. This is where an HDMI CEC adapter can be
-+	 * unregistered.
-+	 *
-+	 * The @connector_detach callback is optional.
-+	 */
-+	void (*connector_detach)(struct drm_bridge *bridge,
-+				 struct drm_connector *conn);
- };
- 
- /**
+ Optional nodes:
+ - Video port for HDMI output
 -- 
 2.30.1
 
