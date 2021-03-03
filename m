@@ -2,97 +2,178 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15A42C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B8AC43333
 	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAD046146D
+	by mail.kernel.org (Postfix) with ESMTP id F181E64E51
 	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355656AbhCDAcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S1355568AbhCDAa7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1838741AbhCCTBp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 14:01:45 -0500
-X-Greylist: delayed 1349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 Mar 2021 10:53:10 PST
-Received: from devnull.tasossah.com (devnull.tasossah.com [IPv6:2001:41d0:1:e60e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D9BC06175F
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 10:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=devnull.tasossah.com; s=vps; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AwCGWZ8aC+Ri0jKIqZjuo5FCnBS99NZn6Q3M+g694Bc=; b=kGtPNGVjCkwfSz6bnL4zPZUSSr
-        K6STyWmB82yrAg9qC5KRWIUcRhqCOZwpNGRqKMvZRisJqLQors2QSF7SJlofUJiSpgmCD4G2L/IAW
-        6c2gfQdbo0M3c/CHhm/g5ZH2LxhmZLAOHuv8WjGbrtDDeDf3UXXNfkkKrgFXhvLJlUnk=;
-Received: from [2a02:587:6a0e:4300::d54]
-        by devnull.tasossah.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <tasos@tasossah.com>)
-        id 1lHWcM-0007ng-0g; Wed, 03 Mar 2021 20:53:06 +0200
-To:     linux-media@vger.kernel.org
-Cc:     Tasos Sahanidis <tasos@tasossah.com>
-From:   Tasos Sahanidis <tasos@tasossah.com>
-Subject: [PATCH] media: saa7146: use sg_dma_len when building pgtable
-Message-ID: <7cb84acf-1bb5-9440-a97a-4c3e69d75760@tasossah.com>
-Date:   Wed, 3 Mar 2021 20:52:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S1447353AbhCCNsy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 08:48:54 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C683C061D7C
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 05:44:10 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id e23so5215559wmh.3
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 05:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yJ/EY0CpLytL31e4vbvBGoD9fXz/ITb5FniloFYVPls=;
+        b=fth9eihhtdzQbeSYvJf7E98nX3F1qwaKJid/2LAs8W8ejpmJFd5zCTTAu4t22jj694
+         4q5PYQxQxmsJL4MzqFOwHepz7BE3Ig0p+xL0EH0m3wXa7KowSJaYJrOmawSXWuNcjVo8
+         sPAf4GjUb7uB7kBrcejlHDObUvjzfH8jPeovCJ0/2uXTKy0bsQpNFjvrGPIqYZAljZQP
+         m3z4DKaEqxXv1osCoSW+anx0GtTEaeiBOA4hqedbmew4eadlIw0bhmrb6d/5j5b0FxSQ
+         wxrxxCwZY0uqH5JUbDmmLAYfrRMDknTei8gcYxkuRxquA/AGG3Xx8QvzLP8Zwg2CHACt
+         Fgvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yJ/EY0CpLytL31e4vbvBGoD9fXz/ITb5FniloFYVPls=;
+        b=LSEPzlsHJJVbh0iLMecDTGyNcaOCQXjmEamo5mXN3MBuMYgoAk6oYrKRB5scbdCrAy
+         /yddJ6CXxKImAkFDw/JbrskIZJPzHPzOAOzH/CecRjPgyld0jYNwvulEUmPKMVjNrFD2
+         dQDI2Xk5XWwLxMrAyLgW8wYohWCew4qU9cIT9YG+yziZl1TNNQW7CTuXOtvnfzMfMsCV
+         78W91FMyOsDcCUIjU5Og5x+ik6vFC7XYEr+GFRLuuN62+Wwzrtsl/0A0jIDKxlsIDWb9
+         2N0o7eEXu9PtznstRnAh/ENWX+xqhbaEVKE4wXmIJ/wKTIyOD0dM0kYWhcF/TgjGmd63
+         Hh7g==
+X-Gm-Message-State: AOAM530ycrOaFxknMsqJW/zriTOrZFCEPFtoCpOOlhrih+H9DNkR84Tt
+        wZuc1U9+G9S27IeYCV1EFmgAKA==
+X-Google-Smtp-Source: ABdhPJymPplH8CwKDFxrcRRiZiYA8Ux92xOTrZFP2tFVqN/jar/Y7KFcD5STbFd19rQ14V9vbUJFmQ==
+X-Received: by 2002:a1c:de05:: with SMTP id v5mr5495703wmg.25.1614779049321;
+        Wed, 03 Mar 2021 05:44:09 -0800 (PST)
+Received: from dell.default ([91.110.221.155])
+        by smtp.gmail.com with ESMTPSA id w18sm6109524wrr.7.2021.03.03.05.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 05:44:08 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        VMware Graphics <linux-graphics-maintainer@vmware.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, Zack Rusin <zackr@vmware.com>
+Subject: [PATCH 34/53] drm/vmwgfx/vmwgfx_fence: Add, remove and demote various documentation params/headers
+Date:   Wed,  3 Mar 2021 13:43:00 +0000
+Message-Id: <20210303134319.3160762-35-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210303134319.3160762-1-lee.jones@linaro.org>
+References: <20210303134319.3160762-1-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The new AMD IOMMU DMA implementation concatenates sglist entries under
-certain conditions, and because saa7146 accessed the length member
-directly, it did not support this scenario.
+Fixes the following W=1 kernel build warning(s):
 
-This fixes IO_PAGE_FAULTs by using the sg_dma_len macro.
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:82: warning: Function parameter or member 'event' not described in 'vmw_event_fence_action'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:113: warning: Function parameter or member 'f' not described in 'vmw_fence_obj_destroy'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:261: warning: Function parameter or member 'work' not described in 'vmw_fence_work_func'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:720: warning: Function parameter or member 'fman' not described in 'vmw_fence_fifo_down'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:963: warning: Function parameter or member 'fence' not described in 'vmw_fence_obj_add_action'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:963: warning: Function parameter or member 'action' not described in 'vmw_fence_obj_add_action'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:1021: warning: Function parameter or member 'tv_sec' not described in 'vmw_event_fence_action_queue'
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:1021: warning: Function parameter or member 'tv_usec' not described in 'vmw_event_fence_action_queue'
 
-Fixes: be62dbf554c5 ("iommu/amd: Convert AMD iommu driver to the dma-iommu api")
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
+Cc: VMware Graphics <linux-graphics-maintainer@vmware.com>
+Cc: Roland Scheidegger <sroland@vmware.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210115181313.3431493-27-lee.jones@linaro.org
 ---
- drivers/media/common/saa7146/saa7146_core.c  | 2 +-
- drivers/media/common/saa7146/saa7146_video.c | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
-index f2d13b71416c..e50fa0ff7c5d 100644
---- a/drivers/media/common/saa7146/saa7146_core.c
-+++ b/drivers/media/common/saa7146/saa7146_core.c
-@@ -253,7 +253,7 @@ int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt
- 			 i, sg_dma_address(list), sg_dma_len(list),
- 			 list->offset);
- */
--		for (p = 0; p * 4096 < list->length; p++, ptr++) {
-+		for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr++) {
- 			*ptr = cpu_to_le32(sg_dma_address(list) + p * 4096);
- 			nr_pages++;
- 		}
-diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index 7b8795eca589..66215d9106a4 100644
---- a/drivers/media/common/saa7146/saa7146_video.c
-+++ b/drivers/media/common/saa7146/saa7146_video.c
-@@ -247,9 +247,8 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+index 378ec7600154b..23523eb3cac2a 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+@@ -58,13 +58,11 @@ struct vmw_user_fence {
+ /**
+  * struct vmw_event_fence_action - fence action that delivers a drm event.
+  *
+- * @e: A struct drm_pending_event that controls the event delivery.
+  * @action: A struct vmw_fence_action to hook up to a fence.
++ * @event: A pointer to the pending event.
+  * @fence: A referenced pointer to the fence to keep it alive while @action
+  * hangs on it.
+  * @dev: Pointer to a struct drm_device so we can access the event stuff.
+- * @kref: Both @e and @action has destructors, so we need to refcount.
+- * @size: Size accounted for this object.
+  * @tv_sec: If non-null, the variable pointed to will be assigned
+  * current time tv_sec val when the fence signals.
+  * @tv_usec: Must be set if @tv_sec is set, and the variable pointed to will
+@@ -87,7 +85,7 @@ fman_from_fence(struct vmw_fence_obj *fence)
+ 	return container_of(fence->base.lock, struct vmw_fence_manager, lock);
+ }
  
- 		/* walk all pages, copy all page addresses to ptr1 */
- 		for (i = 0; i < length; i++, list++) {
--			for (p = 0; p * 4096 < list->length; p++, ptr1++) {
-+			for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr1++)
- 				*ptr1 = cpu_to_le32(sg_dma_address(list) - list->offset);
--			}
- 		}
- /*
- 		ptr1 = pt1->cpu;
+-/**
++/*
+  * Note on fencing subsystem usage of irqs:
+  * Typically the vmw_fences_update function is called
+  *
+@@ -250,7 +248,7 @@ static const struct dma_fence_ops vmw_fence_ops = {
+ };
+ 
+ 
+-/**
++/*
+  * Execute signal actions on fences recently signaled.
+  * This is done from a workqueue so we don't have to execute
+  * signal actions from atomic context.
+@@ -708,7 +706,7 @@ int vmw_wait_dma_fence(struct vmw_fence_manager *fman,
+ }
+ 
+ 
+-/**
++/*
+  * vmw_fence_fifo_down - signal all unsignaled fence objects.
+  */
+ 
+@@ -948,8 +946,8 @@ static void vmw_event_fence_action_cleanup(struct vmw_fence_action *action)
+ /**
+  * vmw_fence_obj_add_action - Add an action to a fence object.
+  *
+- * @fence - The fence object.
+- * @action - The action to add.
++ * @fence: The fence object.
++ * @action: The action to add.
+  *
+  * Note that the action callbacks may be executed before this function
+  * returns.
+@@ -1001,6 +999,10 @@ static void vmw_fence_obj_add_action(struct vmw_fence_obj *fence,
+  * @fence: The fence object on which to post the event.
+  * @event: Event to be posted. This event should've been alloced
+  * using k[mz]alloc, and should've been completely initialized.
++ * @tv_sec: If non-null, the variable pointed to will be assigned
++ * current time tv_sec val when the fence signals.
++ * @tv_usec: Must be set if @tv_sec is set, and the variable pointed to will
++ * be assigned the current time tv_usec val when the fence signals.
+  * @interruptible: Interruptible waits if possible.
+  *
+  * As a side effect, the object pointed to by @event may have been
 -- 
-2.25.1
+2.27.0
+
