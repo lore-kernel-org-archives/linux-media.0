@@ -2,168 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01998C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED14C4161F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9E7564E41
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D00264E62
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376701AbhCDAbT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359602AbhCCOty (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 09:49:54 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A833C0613B6
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 06:47:25 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id w7so5392087wmb.5
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 06:47:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2UGn20PQxJqEKTFAC3EFVHnHz1ZJw2m1WZDwhJNb+Iw=;
-        b=PfGdnhVOxPMdNIWrE0A3QNUF8gAe+nELjZltascoIWbJ5sLFj4YgG9ZrV3TBY3Csfp
-         fAxw0eBD/FkOX0adMzibZvBALKRq75aACSdkAdPizipYGqwQwCYvSXcQJVGDzaeHau1/
-         FptWixcWGpEV0obeZLxGaxXNWdwuiQbetD/cSPh0ZmNaOAGJJklXYnQkAyr84gh3bv9X
-         +pFwknfvv7+MonHIwCfnBlDiwPRVnjtNvcBECoCew1YPVEwwqt1B50V5ZAnqsnUjMn36
-         5jC6hZgwryg6sNFNYKLtEvf61M7YsFvDEzx7UD/qKwd73xQGEroM3du02S/x46WwP5Ty
-         /1Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2UGn20PQxJqEKTFAC3EFVHnHz1ZJw2m1WZDwhJNb+Iw=;
-        b=LoCabjwSK4QEzrjkm7oQ1wtmcCyDSHdnE+TasdeLLvgC22RIUfgpjgehKrF9Hj2MHH
-         io8+nca3Rryr+G06kJrjd7s3Cu4N8sLkmyhC8CdWdVo0zbh/sFCNhVc5xfFihWPVSNCM
-         40S+hPq46Bd/c+9OFSF4rE5lEj+lSNiYzs/KQtw+C9J3y3CA8FTCklcJYwTDPzxOpMCA
-         tcRmG3TV4gsTjtxWgExIS20thZ5V83xUPJGXPKT6Ywc6Ku0eL1kTBwwGYY1Pv3zewnoT
-         aMd2tdtEjUrdQ9/WcUT0T3H/xoNxiud+K9/zAY/BTVm2Tx6SIE52tut1/uuGrvQjVlvB
-         edog==
-X-Gm-Message-State: AOAM532UoXUq2MD/6FysVXDBHESbyNbCynPkEh2swWLO+z1GQbUJ3Xh9
-        rcrTVfSgeXjbZ4qIZnOWuA5S4w==
-X-Google-Smtp-Source: ABdhPJz+i6eb5nwXlp7WpWuXa9PrjDmdQa0kNy+e8ZT5cHAX5Gkl7tpL7+1lbOkBOjeMEV57c9Q4gQ==
-X-Received: by 2002:a1c:2017:: with SMTP id g23mr9338841wmg.126.1614782843814;
-        Wed, 03 Mar 2021 06:47:23 -0800 (PST)
-Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 06:47:23 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-scsi@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 17/30] scsi: lpfc: lpfc_sli: Fix a bunch of kernel-doc issues
-Date:   Wed,  3 Mar 2021 14:46:18 +0000
-Message-Id: <20210303144631.3175331-18-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210303144631.3175331-1-lee.jones@linaro.org>
-References: <20210303144631.3175331-1-lee.jones@linaro.org>
+        id S1353181AbhCDAbY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:31:24 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:33017 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243802AbhCCO4i (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Mar 2021 09:56:38 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id HStXlanbUqY4WHStalTVz5; Wed, 03 Mar 2021 15:54:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1614783278; bh=h8FTZVsg3tijCGkW+2bE/nPBB/8ibThbdxg4yhiWfls=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=rIGL/yaMYuoofNT9PqYg++CO5pTwhdHUzACZQM0yaJDl2Jlzf2xtJIOs6dBT/9q1+
+         Dz/GIhcR6GXdzrw8uTSVBNTMKxJzdU3kb8h/OaxqTsImYs1UGo39fcYpyayO/00S7Q
+         9mx+taq5Zm9hN6YOqBj/t0KKR6yFla8i71CmaB7m/F1DJe+VpBNitGFJmA0BLRU3l0
+         e+d+uhQsWJMnqZ2Uvk8FI9D70jkxYmuBBi1SHXPiBF4AV0F+u/UPESrH81lrZkGpE5
+         vaCIroE1kN0PcntZt/0UvEncIMQt3Ak3u6mCmnn0/FpMQxfjbnFxiiuuw7Z0jahkmM
+         keJ2Px7KnomXg==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.13] Various fixes
+Message-ID: <40c1ab80-c9c5-f784-ba54-457c6f21b3c2@xs4all.nl>
+Date:   Wed, 3 Mar 2021 15:54:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfDCTlyLXUcKjKR7isXjtkYoN32PzyqLnwUXigyLiR1EeHaS4SsRmY+TTjTxWM7CFavE9oyWMM5jXRhOahJAT+IGJOOOKzQJmXGYdpS+04QB6Z06UtZf8
+ LrApKqC3PqarZcxD4YG0s9Llj8EL1jGMEzYh0Wfg/+nt0MYezTpH/B8oU2jcn4mzCPrzP1DOheVyZqNznJVQ34eKZLbZCliayYg=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
- drivers/scsi/lpfc/lpfc_sli.c:9654: warning: expecting prototype for lpfc_sli_iocb2wqe(). Prototype was for lpfc_sli4_iocb2wqe() instead
- drivers/scsi/lpfc/lpfc_sli.c:10439: warning: Function parameter or member 'phba' not described in 'lpfc_sli_issue_fcp_io'
- drivers/scsi/lpfc/lpfc_sli.c:10439: warning: Function parameter or member 'ring_number' not described in 'lpfc_sli_issue_fcp_io'
- drivers/scsi/lpfc/lpfc_sli.c:10439: warning: Function parameter or member 'piocb' not described in 'lpfc_sli_issue_fcp_io'
- drivers/scsi/lpfc/lpfc_sli.c:10439: warning: Function parameter or member 'flag' not described in 'lpfc_sli_issue_fcp_io'
- drivers/scsi/lpfc/lpfc_sli.c:14189: warning: expecting prototype for lpfc_sli4_sp_process_cq(). Prototype was for __lpfc_sli4_sp_process_cq() instead
- drivers/scsi/lpfc/lpfc_sli.c:14754: warning: expecting prototype for lpfc_sli4_hba_process_cq(). Prototype was for lpfc_sli4_dly_hba_process_cq() instead
- drivers/scsi/lpfc/lpfc_sli.c:17230: warning: expecting prototype for lpfc_sli4_free_xri(). Prototype was for __lpfc_sli4_free_xri() instead
- drivers/scsi/lpfc/lpfc_sli.c:18950: warning: expecting prototype for lpfc_sli4_free_rpi(). Prototype was for __lpfc_sli4_free_rpi() instead
+  Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
 
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/lpfc/lpfc_sli.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index fa1a714a78f09..9801193983ff0 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -9635,7 +9635,7 @@ lpfc_sli4_bpl2sgl(struct lpfc_hba *phba, struct lpfc_iocbq *piocbq,
- }
- 
- /**
-- * lpfc_sli_iocb2wqe - Convert the IOCB to a work queue entry.
-+ * lpfc_sli4_iocb2wqe - Convert the IOCB to a work queue entry.
-  * @phba: Pointer to HBA context object.
-  * @iocbq: Pointer to command iocb.
-  * @wqe: Pointer to the work queue entry.
-@@ -10421,7 +10421,7 @@ __lpfc_sli_issue_iocb_s4(struct lpfc_hba *phba, uint32_t ring_number,
- 	return 0;
- }
- 
--/**
-+/*
-  * lpfc_sli_issue_fcp_io - Wrapper func for issuing fcp i/o
-  *
-  * This routine wraps the actual fcp i/o function for issusing WQE for sli-4
-@@ -14170,7 +14170,7 @@ __lpfc_sli4_process_cq(struct lpfc_hba *phba, struct lpfc_queue *cq,
- }
- 
- /**
-- * lpfc_sli4_sp_process_cq - Process a slow-path event queue entry
-+ * __lpfc_sli4_sp_process_cq - Process a slow-path event queue entry
-  * @cq: pointer to CQ to process
-  *
-  * This routine calls the cq processing routine with a handler specific
-@@ -14744,7 +14744,7 @@ lpfc_sli4_hba_process_cq(struct work_struct *work)
- }
- 
- /**
-- * lpfc_sli4_hba_process_cq - fast-path work handler when started by timer
-+ * lpfc_sli4_dly_hba_process_cq - fast-path work handler when started by timer
-  * @work: pointer to work element
-  *
-  * translates from the work handler and calls the fast-path handler.
-@@ -17218,7 +17218,7 @@ lpfc_sli4_alloc_xri(struct lpfc_hba *phba)
- }
- 
- /**
-- * lpfc_sli4_free_xri - Release an xri for reuse.
-+ * __lpfc_sli4_free_xri - Release an xri for reuse.
-  * @phba: pointer to lpfc hba data structure.
-  * @xri: xri to release.
-  *
-@@ -18938,7 +18938,7 @@ lpfc_sli4_alloc_rpi(struct lpfc_hba *phba)
- }
- 
- /**
-- * lpfc_sli4_free_rpi - Release an rpi for reuse.
-+ * __lpfc_sli4_free_rpi - Release an rpi for reuse.
-  * @phba: pointer to lpfc hba data structure.
-  * @rpi: rpi to free
-  *
--- 
-2.27.0
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.13a
 
+for you to fetch changes up to 7cfa5cec56956f488b1116fac53aab65df34e129:
+
+  media: cec-notifier: also search for HDMI devices on I2C (2021-03-03 15:37:38 +0100)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Andrey Konovalov (2):
+      v4l: common: v4l2_get_link_freq: add printing a warning
+      media: camss: use v4l2_get_link_freq() to calculate the relevant clocks
+
+Andrzej Pietrasiewicz (1):
+      media: uapi: Correct doc comment in H264 uAPI
+
+Arnd Bergmann (1):
+      media: mtk: fix mtk-smi dependency
+
+Bhaskar Chowdhury (4):
+      include: media: davinci: Fixed up few trivial spellings in the file isif.h
+      drivers/media/pci/cx18: Fix a spelling minimze to minimize in the file cx18-firmware.c
+      drivers: media: pci: cx18: Couple of spell fixes in the file cx18-av-core.c
+      drivers: media: pci: cx18: Spelling fix of minimze to minimize in the file cx18-av-audio.c
+
+Colin Ian King (1):
+      media: platform: sti: make a const arrays static, makes object smaller
+
+Dafna Hirschfeld (1):
+      media: rkisp1: params: remove extra 'if' conditions
+
+Johan Fjeldtvedt (1):
+      media: cec-notifier: also search for HDMI devices on I2C
+
+Julia Lawall (1):
+      media: use getter/setter functions
+
+Julian Braha (1):
+      drivers: media: pci: sta2x11: fix Kconfig dependency on GPIOLIB
+
+Nicolas Dufresne (1):
+      doc: h264/hevc: Clarify _START_CODE_NONE meaning
+
+Pavel Skripkin (1):
+      drivers/media/usb: fix memory leak in zr364xx_probe
+
+Rikard Falkeborn (1):
+      media: usbtv: constify static structs
+
+Vladimir Lypak (1):
+      media: qcom: camss: Fix overflows in clock rate calculations
+
+Yang Li (1):
+      media: solo6x10: Switch to using the new API kobj_to_dev()
+
+dingsenjie (2):
+      media/usb:Remove superfluous "breaks"
+      media/usb:Remove superfluous "breaks" in the ttusb_dec.c
+
+zuoqilin (1):
+      media/i2c: remove unneeded variable: "ret"
+
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst |   4 +-
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst           |   4 +-
+ drivers/media/cec/core/cec-notifier.c                               |  33 ++-
+ drivers/media/i2c/max2175.c                                         |   3 +-
+ drivers/media/pci/cx18/cx18-av-audio.c                              |   2 +-
+ drivers/media/pci/cx18/cx18-av-core.c                               |   4 +-
+ drivers/media/pci/cx18/cx18-firmware.c                              |   2 +-
+ drivers/media/pci/ivtv/ivtv-driver.c                                |   2 +-
+ drivers/media/pci/solo6x10/solo6x10-core.c                          |   2 +-
+ drivers/media/pci/sta2x11/Kconfig                                   |   1 +
+ drivers/media/platform/Kconfig                                      |   3 +
+ drivers/media/platform/fsl-viu.c                                    |   6 +-
+ drivers/media/platform/pxa_camera.c                                 |   4 +-
+ drivers/media/platform/qcom/camss/camss-csid.c                      |  20 +-
+ drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c            |  22 +-
+ drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c            |  22 +-
+ drivers/media/platform/qcom/camss/camss-csiphy.c                    |  36 ++-
+ drivers/media/platform/qcom/camss/camss-csiphy.h                    |   2 +-
+ drivers/media/platform/qcom/camss/camss-vfe.c                       |   4 +-
+ drivers/media/platform/qcom/camss/camss.c                           |  25 +-
+ drivers/media/platform/qcom/camss/camss.h                           |   4 +-
+ drivers/media/platform/rockchip/rkisp1/rkisp1-params.c              | 445 ++++++++++++++------------------
+ drivers/media/platform/sti/hva/hva-h264.c                           |  10 +-
+ drivers/media/radio/radio-maxiradio.c                               |   2 +-
+ drivers/media/spi/cxd2880-spi.c                                     |   4 +-
+ drivers/media/usb/pwc/pwc-if.c                                      |   8 -
+ drivers/media/usb/ttusb-dec/ttusb_dec.c                             |   4 -
+ drivers/media/usb/usbtv/usbtv-video.c                               |   6 +-
+ drivers/media/usb/zr364xx/zr364xx.c                                 |  13 +-
+ drivers/media/v4l2-core/v4l2-common.c                               |   5 +
+ include/media/davinci/isif.h                                        |   8 +-
+ include/uapi/linux/v4l2-controls.h                                  |   2 +-
+ 32 files changed, 342 insertions(+), 370 deletions(-)
