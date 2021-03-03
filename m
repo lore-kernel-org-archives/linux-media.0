@@ -2,125 +2,86 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EADEC001C7
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98989C433DB
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 679D764EE3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AC8064E62
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381109AbhCDAb6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:31:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56714 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345134AbhCCP6s (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Mar 2021 10:58:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 65CFC64EDB;
-        Wed,  3 Mar 2021 15:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614787084;
-        bh=GKrMTWwEh1kLtPzdDB87gc1HSZh5O2LMmCKt9KLcS9o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nnrvgGQ4NiILw1zfzLL4bQjkcZ1FKnZ6lrIZUWBIMVZw8A/jfK9HgmKc5JCz7O85s
-         DK4BIms+p/PM3cgwvpyW/lBpYSSgelOHbcUtDWiBDbEiAYcUs1G2SRJkKadCm2tkpw
-         lRj8ISpU0Zh7mfmGtUF8FR/Gtsy5jC32gFV8zT6tiU0m3+ZlhfREB9gpvtT20sOs+q
-         ifKkcciKrRsb/4xxQDql46pZOXDKn8/02jh6S1WycGUa+1xTq2pP2swe/nnfeiIsfj
-         l0gsXnb41nyeVXUaOK6e5WF6StdKT007adzrmld7NPq3PCViSGLSn1pKAswOHNFGTZ
-         hTgW8XMTgGTBg==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lHTsv-001iva-Tt; Wed, 03 Mar 2021 16:58:01 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: conf.py: adjust the LaTeX document output
-Date:   Wed,  3 Mar 2021 16:58:00 +0100
-Message-Id: <911fbac185dd09c7df715cf4153361b81f04b7ad.1614787053.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+        id S1355631AbhCDAcK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243190AbhCCSJb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 13:09:31 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E33C061756
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 10:08:49 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id 18so30039503lff.6
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 10:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=2k1x9/2F0daAc7yrdszjwMTF7JbwosGHgJc2YE+hxDA=;
+        b=xFq4hpxQkgQ86mv4veM42XCkH2N83AEvVG545IpdplaAI4dztfu2U1BdJ52nHLMUly
+         jrG44w4w6N+357xwuKnShymHRBSzfBTURmyb7/AskJ5tOFEDEEmT6CQLmaI8XG4QlzcR
+         /Hhpqan4khtcd2qi50Q3tEXpKkQ6aMFdlTonhrCkDbYUotpbBwOucpmFAR8Ct76pH/cj
+         LIIhfc5UfcXH21SjSgiMhstyWCoZ4ZKtdaAVeAKm+TSRiUMs8Vl1/JeFy8Rrwlt9jE3c
+         oC+TkXps6jJALbuhXANv4nukPpg2O0gjXs6mMA/7PnpsNii5DMBn1i3SDGiwjiCLTyuY
+         LTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=2k1x9/2F0daAc7yrdszjwMTF7JbwosGHgJc2YE+hxDA=;
+        b=EcIcJFbWY+tlwnBaWuxkjUc0F2S6Bg/e2dvHtU8MrRcmKtjjLgJYaFrEs+eRV1VDCD
+         RJpr2AHWBnMQpmDuwb3pvuPlXcgHpEK0mObGhxGhRSjcJ24KUHgEad3HOpqyUNdAXSqJ
+         /2kQMASyCtbNMXDOjB4q021ezB+XSx5qi7Wk9e4jHN1f3OiO0NnceOF0rOkSkPuD+7jd
+         ekQurOd/wE5UQZ8ZNg3NyWXf1Q7th5DGUVNpS6LB7oPx9z+FAe8MZRBbp1ZCWP0llAoo
+         bo57KTNXt51f5QGX+pjQQ48FPHan2uyaTs0qIqRMu0ROm++8ZCqNf2Ww2hssY7bUNUn/
+         DUdw==
+X-Gm-Message-State: AOAM532ICYUi3b7A21q2OD0g4wK3cZRJ/KKTeoL8QHm0qoew5ehj30ho
+        9dKTu2oL13U5VHm3y2CrUe7j0w==
+X-Google-Smtp-Source: ABdhPJyR0XwEhKlyzT4PSijQxFQZcXbIILQn2ErDLW/maMa0hknN87v5PkpzlPj+YAFsEnUDP6qUKA==
+X-Received: by 2002:a05:6512:696:: with SMTP id t22mr15458148lfe.631.1614794928297;
+        Wed, 03 Mar 2021 10:08:48 -0800 (PST)
+Received: from localhost.localdomain ([85.249.43.69])
+        by smtp.googlemail.com with ESMTPSA id j15sm2220990lfm.138.2021.03.03.10.08.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 10:08:47 -0800 (PST)
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, niklas.soderlund@ragnatech.se, bparrot@ti.com,
+        mickael.guene@st.com
+Subject: [RFC PATCH 0/4] use v4l2_get_link_freq() in CSI receiver drivers
+Date:   Wed,  3 Mar 2021 21:08:13 +0300
+Message-Id: <20210303180817.12285-1-andrey.konovalov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changeset f546ff0c0c07 ("Move our minimum Sphinx version to 1.7")
-cleaned up some compatibility issues with previous Sphinx
-versions, but it also dropped the PDF margin sets.
+This patchset continues the work discussed in the "[RFC] Repurpose
+V4L2_CID_PIXEL_RATE for the sampling rate in the pixel array" thread [1].
 
-Without that, the media documentation won't build fine, as
-the margins are too wide to display texts with monospaced
-fonts.
+This patchset follows up the patchset for camss driver [2] of the same
+purpose, and makes the rest of the receiver drivers in drivers/media
+and drivers/staging/media to use v4l2_get_link_freq() instead of
+V4L2_CID_PIXEL_RATE.
 
-While here, align the  "latex_elements = {" values, and add
-a few other sphinxsetup configs in order to allow Sphinx to
-wrap long lines on literal blocks.
+This patchset has been build tested only, as I don't have access to the
+hardware. Most of the changes are fairly straightforward except for the
+ones in the omap4iss driver. I would appreciate if people with better
+knowledge of the omap4iss driver reviewed the last patch in this series,
+and checked if I got the logic in the driver right.
 
-Fixes: f546ff0c0c07 ("Move our minimum Sphinx version to 1.7")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
- Documentation/conf.py | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index fd65168c10f8..879e86dbea66 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -331,27 +331,34 @@ htmlhelp_basename = 'TheLinuxKerneldoc'
- # -- Options for LaTeX output ---------------------------------------------
- 
- latex_elements = {
--# The paper size ('letterpaper' or 'a4paper').
--'papersize': 'a4paper',
-+    # The paper size ('letterpaper' or 'a4paper').
-+    'papersize': 'a4paper',
- 
--# The font size ('10pt', '11pt' or '12pt').
--'pointsize': '11pt',
-+    # The font size ('10pt', '11pt' or '12pt').
-+    'pointsize': '11pt',
- 
--# Latex figure (float) alignment
--#'figure_align': 'htbp',
-+    # Latex figure (float) alignment
-+    #'figure_align': 'htbp',
- 
--# Don't mangle with UTF-8 chars
--'inputenc': '',
--'utf8extra': '',
-+    # Don't mangle with UTF-8 chars
-+    'inputenc': '',
-+    'utf8extra': '',
- 
--# Additional stuff for the LaTeX preamble.
-+    # Set document margins
-+    'sphinxsetup': '''
-+        hmargin=0.5in, vmargin=1in,
-+        parsedliteralwraps=true,
-+        verbatimhintsturnover=false,
-+    ''',
-+
-+    # Additional stuff for the LaTeX preamble.
-     'preamble': '''
--	% Use some font with UTF-8 support with XeLaTeX
-+        % Use some font with UTF-8 support with XeLaTeX
-         \\usepackage{fontspec}
-         \\setsansfont{DejaVu Sans}
-         \\setromanfont{DejaVu Serif}
-         \\setmonofont{DejaVu Sans Mono}
--     '''
-+     ''',
- }
- 
- # At least one book (translations) may have Asian characters
--- 
-2.29.2
+[1] https://www.spinics.net/lists/linux-media/msg183183.html
+[2] "[PATCH v3 0/3] media: qcom: camss: V4L2_CID_PIXEL_RATE/LINK_FREQ fixes"
+    posted earlier today
 
 
