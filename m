@@ -2,81 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BABCC4332E
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72159C433E9
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CF2A64EE3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47F3F64EE3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240116AbhCDAbE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:31:04 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:46974 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347902AbhCCNxI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Mar 2021 08:53:08 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lHRTv-00HL3t-Er; Wed, 03 Mar 2021 13:24:03 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lHRXg-0008Vz-Fb; Wed, 03 Mar 2021 13:27:56 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.13] RC & DVB fixes (#71850)
-Date:   Wed,  3 Mar 2021 13:27:56 +0000
-Message-Id: <20210303132756.32690-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210303093331.GA21839@gofer.mess.org>
-References: 
+        id S1348024AbhCDAbV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359599AbhCCOty (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 09:49:54 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE88C0613B4
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 06:47:23 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id w7so5391998wmb.5
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 06:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cHGLMgmESXIFZCs0JUgZJMepuDsyuMDs79DqzpopOh4=;
+        b=lBZHN8bPn8ofPtdUDEJ9YHpgj9Y5X9y4JEPsFoxiXXsOoaBiEw7ABoTWgRRMkeTh4L
+         L8dYeKAZ04n2f2OIyrIhaHoY7l++4dm/3AUZLiFo2dfGV/iEuQZP55N6fRrjG8zYkTWU
+         euyHo8Yvjnd8bI0HMhSOOJI9oGLvDNM/A23TYmyn4Zmh2FrZzNSQ+nA0+5RQoe8eAUeL
+         fhsF9IePdsCJfsqQeTNpErqcHANrWkvpwGb82NRgFMln2r4vEAv9tdBiLA+q29a+zmKF
+         aX6v0Kc/1/Mg1A6sroXBtZSwvxYSDW6Xr7Qqts1qxZL5RY89YQppWO5OFg+1Zk2ctl/9
+         WjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cHGLMgmESXIFZCs0JUgZJMepuDsyuMDs79DqzpopOh4=;
+        b=MzU8IsGLnST/r0r3qBiByVnT9bEIoQPPTBTrc9apn0qeQNMmzT5oAQIwbZhTC1Jnn8
+         c28YG++gasa0FslDPRh5rT4hI/72iXFEDciIvdjUBVn8eJ9pEa0tT1hF1okWdPkCJS5Q
+         pmezJl+M04BrE9/pxaMI6Hogm9wjususRe5Pm1Ye6wMamwWkVhbhsXpEhAUTLLwFXo5j
+         /3kp0vp2gOzlrg8W2z5Lkqx1T5s+ghNK8jdiPKWiXZz+tn9nORAKiJY9BLwPwz83jcFd
+         wL0q3LJ072zCxRpQiZZy91849Y8CNUN7+3HunyEHmhT1Pex2PWmd0nu6/Nfi6+QksXjm
+         Py2w==
+X-Gm-Message-State: AOAM533l0LUA2DK6V3FfXQRr+SJ95FvhdDDNY1ntnWbLqxXjsDJ8XBZP
+        p6awy7VcsgKTPN5cs0K6wwZCAA==
+X-Google-Smtp-Source: ABdhPJwT5ycXh7v72pauBAfT/7F41M3dC7pMHTlOeEz2LNBHe69VWsAs12AKit5DPIkGD21Kk0wVyQ==
+X-Received: by 2002:a1c:2403:: with SMTP id k3mr9543941wmk.130.1614782842402;
+        Wed, 03 Mar 2021 06:47:22 -0800 (PST)
+Received: from dell.default ([91.110.221.155])
+        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 06:47:21 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "PMC-Sierra, Inc" <aacraid@pmc-sierra.com>,
+        linux-scsi@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 16/30] scsi: aacraid: commsup: Repair formatting issue in aac_handle_sa_aif()'s header
+Date:   Wed,  3 Mar 2021 14:46:17 +0000
+Message-Id: <20210303144631.3175331-17-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210303144631.3175331-1-lee.jones@linaro.org>
+References: <20210303144631.3175331-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Fixes the following W=1 kernel build warning(s):
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210303093331.GA21839@gofer.mess.org/
-Build log: https://builder.linuxtv.org/job/patchwork/92659/
-Build time: 00:12:11
-Link: https://lore.kernel.org/linux-media/20210303093331.GA21839@gofer.mess.org
+ drivers/scsi/aacraid/commsup.c:334: warning: expecting prototype for fib_deallocate(). Prototype was for fib_dealloc() instead
+ drivers/scsi/aacraid/commsup.c:1961: warning: expecting prototype for aac_handle_sa_aif       Handle a message from the firmware(). Prototype was for aac_handle_sa_aif() instead
 
-error: FETCH_HEAD: cannot verify a non-tag object of type commit.
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: "PMC-Sierra, Inc" <aacraid@pmc-sierra.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/scsi/aacraid/commsup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Summary: got 3/14 patches with issues, being 0 at build time, plus one error when buinding PDF document
-
-Error/warnings:
-
-patches/0006-media-ite-cir-move-runtime-information-into-driver-d.patch:
-
-   checkpatch.pl:
-	$ cat patches/0006-media-ite-cir-move-runtime-information-into-driver-d.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:164: WARNING: line length of 115 exceeds 100 columns
-	-:164: CHECK: Alignment should match open parenthesis
-
-patches/0009-media-rc-add-keymap-for-minix-neo-remote.patch:
-
-   checkpatch.pl:
-	$ cat patches/0009-media-rc-add-keymap-for-minix-neo-remote.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:31: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:44: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-	-:61: CHECK: Blank lines aren't necessary after an open brace '{'
-
-patches/0014-media-rc-add-keymap-for-Xbox-360-Universal-Media-rem.patch:
-
-   checkpatch.pl:
-	$ cat patches/0014-media-rc-add-keymap-for-Xbox-360-Universal-Media-rem.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:31: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:44: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-
-Error #512 when building PDF docs
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index 0ae0d1fa2b507..54eb4d41bc2c2 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -323,7 +323,7 @@ void aac_fib_init(struct fib *fibptr)
+ }
+ 
+ /**
+- *	fib_deallocate		-	deallocate a fib
++ *	fib_dealloc		-	deallocate a fib
+  *	@fibptr: fib to deallocate
+  *
+  *	Will deallocate and return to the free pool the FIB pointed to by the
+@@ -1950,7 +1950,7 @@ void aac_src_reinit_aif_worker(struct work_struct *work)
+ }
+ 
+ /**
+- *	aac_handle_sa_aif	Handle a message from the firmware
++ *	aac_handle_sa_aif -	Handle a message from the firmware
+  *	@dev: Which adapter this fib is from
+  *	@fibptr: Pointer to fibptr from adapter
+  *
+-- 
+2.27.0
 
