@@ -2,104 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2441AC43332
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C03A7C4160E
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB6E4601FF
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 929B064E58
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358539AbhCCMNr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 07:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S1358589AbhCCMOG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 07:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842738AbhCCILR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 03:11:17 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A6BC06121D;
-        Tue,  2 Mar 2021 23:49:39 -0800 (PST)
-Received: from [192.168.1.111] (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8247CED;
-        Wed,  3 Mar 2021 08:44:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1614757498;
-        bh=pgHJQLX6F904nkIj+cn7Uu3xGcm1E0oEGrQESFkz/DE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kPsp5/nlPDzmHvW04qUyNZLnyDW864u23vU7iZIB42BDutSOT/YRdY2nM77y6MC60
-         /qEy5LIvxRazzcgxQUsZXzL8s7ACj9cHeM7dyQOkITDL4A6nE18Pm5NtORpizITZ+r
-         RoeoV2CEpK54v9E4+VKDcaPnfWxPE3fbcbC1wY5k=
-Subject: Re: [PATCHv2 5/6] dra7.dtsi/omap5.dtsi: add cec clock
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210302162403.983585-1-hverkuil-cisco@xs4all.nl>
- <20210302162403.983585-6-hverkuil-cisco@xs4all.nl>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Message-ID: <700a6c8b-8448-051e-044c-0390b8a38ae4@ideasonboard.com>
-Date:   Wed, 3 Mar 2021 09:44:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S1843077AbhCCKZT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 05:25:19 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B37C034620
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 01:33:33 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 5A91CC63BE; Wed,  3 Mar 2021 09:33:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1614764011; bh=2JO4cvRR7z/zyCTetF5QSzXbgnWp6XLZ0MXqjc0lum4=;
+        h=Date:From:To:Subject:From;
+        b=c5WxUly0PAbT4Eb2v9f8seN+mXixace+0QMqPKZBJD0HA2kq1G390HzE0I/ud2AeI
+         BAEaeACYb7kwo5YL/XmKjC2WWresTkivfJloZj+H/4i8ulYfOOoWavoOGQn3rCe44w
+         7wfhzTqkNoHDlpCTEw/9ShM4GuScUz6J08DQAEug8vnP1P0hA94kfReC7coIyJdATk
+         qjfdFyCYNkJ20T73edlNB6FiIzFJhcoAQ1WmMHaGyc05tKgcNNEhFv5XGZ9cPVxEsy
+         wO0QLxaqIwbO/wrYNcR56yujJQiGDW4NBU4ZU/P+24006Rta5O9tl+vwyry09GxD0C
+         tDlwPz8gwU+tw==
+Date:   Wed, 3 Mar 2021 09:33:31 +0000
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.13] RC & DVB fixes
+Message-ID: <20210303093331.GA21839@gofer.mess.org>
 MIME-Version: 1.0
-In-Reply-To: <20210302162403.983585-6-hverkuil-cisco@xs4all.nl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 02/03/2021 18:24, Hans Verkuil wrote:
-> Add cec clock to the dra7 and omap5 device trees.
-> 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Acked-by: Tony Lindgren <tony@atomide.com>
-> ---
->   arch/arm/boot/dts/dra7.dtsi  | 5 +++--
->   arch/arm/boot/dts/omap5.dtsi | 5 +++--
->   2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
-> index ce1194744f84..efe579ddb324 100644
-> --- a/arch/arm/boot/dts/dra7.dtsi
-> +++ b/arch/arm/boot/dts/dra7.dtsi
-> @@ -879,8 +879,9 @@ hdmi: encoder@0 {
->   						interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
->   						status = "disabled";
->   						clocks = <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 9>,
-> -							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 10>;
-> -						clock-names = "fck", "sys_clk";
-> +							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 10>,
-> +							 <&dss_clkctrl DRA7_DSS_DSS_CORE_CLKCTRL 11>;
-> +						clock-names = "fck", "sys_clk", "cec";
->   						dmas = <&sdma_xbar 76>;
->   						dma-names = "audio_tx";
->   					};
-> diff --git a/arch/arm/boot/dts/omap5.dtsi b/arch/arm/boot/dts/omap5.dtsi
-> index e025b7c9a357..6726e1f1b07c 100644
-> --- a/arch/arm/boot/dts/omap5.dtsi
-> +++ b/arch/arm/boot/dts/omap5.dtsi
-> @@ -586,8 +586,9 @@ hdmi: encoder@0 {
->   						interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
->   						status = "disabled";
->   						clocks = <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 9>,
-> -							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 10>;
-> -						clock-names = "fck", "sys_clk";
-> +							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 10>,
-> +							 <&dss_clkctrl OMAP5_DSS_CORE_CLKCTRL 11>;
-> +						clock-names = "fck", "sys_clk", "cec";
->   						dmas = <&sdma 76>;
->   						dma-names = "audio_tx";
->   					};
-> 
+Hi Mauro,
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+First batch of rc & dvb fixes. 
 
-  Tomi
+Thanks
 
+Sean
+
+The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
+
+  Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/syoung/media_tree.git for-v5.13a
+
+for you to fetch changes up to d2698e1c31b1ed334e5c03d145f2179e43c4ceaa:
+
+  media: rc: add keymap for Xbox 360 Universal Media remote (2021-03-02 10:43:09 +0000)
+
+----------------------------------------------------------------
+Bastien Nocera (1):
+      media: rc: add keymap for Xbox 360 Universal Media remote
+
+Brad Love (2):
+      media: em28xx: Add pid for bulk revision of Hauppauge 461e
+      media: em28xx: Add pid for bulk revision of Hauppauge 461eV2
+
+Christian Hewitt (1):
+      media: rc: add keymap for minix-neo remote
+
+Daode Huang (1):
+      media: rc/ite-cir: replace spin_lock_irqsave by spin_lock in hard IRQ
+
+Sean Young (7):
+      media: ite-cir: remove unused fields
+      media: ite-cir: set parent device
+      media: ite-cir: use standard logging and reduce noise
+      media: ite-cir: carrier and duty cycle can be set via ioctl
+      media: ite-cir: move runtime information into driver data
+      media: ite-cir: check for receive overflow
+      media: ite-cir: in_use is not needed
+
+Takashi Iwai (2):
+      media: dvb-usb: Fix memory leak at error in dvb_usb_device_init()
+      media: dvb-usb: Fix use-after-free access
+
+ Documentation/devicetree/bindings/media/rc.yaml |   2 +
+ drivers/media/rc/ite-cir.c                      | 349 ++++++------------------
+ drivers/media/rc/ite-cir.h                      |  51 +---
+ drivers/media/rc/keymaps/Makefile               |   2 +
+ drivers/media/rc/keymaps/rc-minix-neo.c         |  55 ++++
+ drivers/media/rc/keymaps/rc-xbox-360.c          |  83 ++++++
+ drivers/media/usb/dvb-usb/dvb-usb-init.c        |  70 +++--
+ drivers/media/usb/em28xx/em28xx-cards.c         |   4 +
+ include/media/rc-map.h                          |   2 +
+ 9 files changed, 286 insertions(+), 332 deletions(-)
+ create mode 100644 drivers/media/rc/keymaps/rc-minix-neo.c
+ create mode 100644 drivers/media/rc/keymaps/rc-xbox-360.c
