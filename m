@@ -2,139 +2,151 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E192C4332D
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CB53C433E9
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47F4764EEE
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 155E664EBB
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355564AbhCDAa4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S1355675AbhCDAck (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383276AbhCCNqD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 08:46:03 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C50EC0611C0
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 05:43:45 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m1so6398800wml.2
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 05:43:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LL2CIStDBvdCQ2ilvl+8GEJmSghnQSGgGmDvpCxTU0Q=;
-        b=JAR371RMHMFvNknWC4hTcGuEAbhD8bdPwtV8wy/zEUaqExQqn49iQu+3FZE5JeJ482
-         TTxTOhGQXqFarSADpG3hoP9sVweTfSwdInfl4ijt+5NNYhYgK44aT6oWR0AHJYEjy/NW
-         63j4wlV4giSCXJZMusdcHGwj83XWUOM3WtrQJMgEDJfDXyDq4YtRQdhQZ/g926iBrhok
-         aTczenLvwexE8X+xuU8Zvz4M9PaqcOEwh7ohl+xI+weOigImuBmjT1S44SOWRe/BziJm
-         LxsHNW9IXmqiXjDhBPGZdGejytI0y1AcpsV0fAhpF/9Gj5rVWwsbJrNWCXuMbunOUnkz
-         koog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LL2CIStDBvdCQ2ilvl+8GEJmSghnQSGgGmDvpCxTU0Q=;
-        b=r9yriwX6IM0IyKDtWoNuv1SWD22aCTTHm2FRRP4HneS3RwMYO2HJ0phf04aRPnZcgJ
-         fLcpONcEWg0DuT2t2N2ShpzPMdG7md5RONaAanVmYeBGJ33MjehnV/vpzAeH2dAOJLBO
-         mqoGnst3V2rcVz79fP4s5iin/BlIpFCLvt28zhvfWP3gx/n5pBNoZh1/NNP/GHBV2C3s
-         nniecoFSL1KmNduqUeNIinKvMCcdp5gwc/A3MvoRzpDsmMAxqlwWIY0nj2rw80Lxq2pj
-         bDHOTvpXVJdWth/NVAw5DyXanhJS5g5dJgAr1ti8PEcLDr59hdqeNlqsM4AZGpys+eaj
-         H+Vw==
-X-Gm-Message-State: AOAM533jnBUN3V84bClfDYXVNjrFK586ex3LwppnU9qfrCNcvt80rPJ6
-        3quci6D4OHryhe87K3QfBAPSOg==
-X-Google-Smtp-Source: ABdhPJy3BEgPq8kDRUEDefnM1AmgmfYSo8HfYm0VdWVUkTu6qNsrubOKe7pD80qd1DLzjYlkm27t5Q==
-X-Received: by 2002:a7b:c755:: with SMTP id w21mr9451964wmk.89.1614779024289;
-        Wed, 03 Mar 2021 05:43:44 -0800 (PST)
-Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id w18sm6109524wrr.7.2021.03.03.05.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 05:43:43 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jeremy Kolb <jkolb@brandeis.edu>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 13/53] drm/nouveau/nouveau_bo: Remove unused variables 'dev'
-Date:   Wed,  3 Mar 2021 13:42:39 +0000
-Message-Id: <20210303134319.3160762-14-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210303134319.3160762-1-lee.jones@linaro.org>
-References: <20210303134319.3160762-1-lee.jones@linaro.org>
+        with ESMTP id S1388024AbhCCU2K (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 15:28:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652D2C06175F;
+        Wed,  3 Mar 2021 12:27:30 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 380091F46027
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
+Subject: [PATCH v2 2/8] media: uapi: vp8: Rename v4l2_vp8_loopfilter to v4l2_vp8_loop_filter
+Date:   Wed,  3 Mar 2021 17:27:08 -0300
+Message-Id: <20210303202714.212394-3-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210303202714.212394-1-ezequiel@collabora.com>
+References: <20210303202714.212394-1-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Rename to struct v4l2_vp8_loop_filter, which is closer to the
+VP8 syntax. This change is only cosmetics, but since this API
+is exposed to userspace, it's worth the trouble to get it consistent.
 
- drivers/gpu/drm/nouveau/nouveau_bo.c: In function ‘nouveau_ttm_tt_populate’:
- drivers/gpu/drm/nouveau/nouveau_bo.c:1228:17: warning: variable ‘dev’ set but not used [-Wunused-but-set-variable]
- drivers/gpu/drm/nouveau/nouveau_bo.c: In function ‘nouveau_ttm_tt_unpopulate’:
- drivers/gpu/drm/nouveau/nouveau_bo.c:1252:17: warning: variable ‘dev’ set but not used [-Wunused-but-set-variable]
-
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Jeremy Kolb <jkolb@brandeis.edu>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/gpu/drm/nouveau/nouveau_bo.c | 4 ----
- 1 file changed, 4 deletions(-)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 12 ++++++------
+ drivers/staging/media/hantro/hantro_g1_vp8_dec.c     |  2 +-
+ drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c |  2 +-
+ include/media/vp8-ctrls.h                            |  4 ++--
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c b/drivers/gpu/drm/nouveau/nouveau_bo.c
-index 2375711877cf3..0b94f8ae77291 100644
---- a/drivers/gpu/drm/nouveau/nouveau_bo.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
-@@ -1251,7 +1251,6 @@ nouveau_ttm_tt_populate(struct ttm_bo_device *bdev,
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 006301e88554..8bbfea44a2ca 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1774,7 +1774,7 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - struct :c:type:`v4l2_vp8_segment`
+       - ``seg``
+       - Structure with segment-based adjustments metadata.
+-    * - struct :c:type:`v4l2_vp8_loopfilter`
++    * - struct :c:type:`v4l2_vp8_loop_filter`
+       - ``lf``
+       - Structure with loop filter level adjustments metadata.
+     * - struct :c:type:`v4l2_vp8_quantization`
+@@ -1958,13 +1958,13 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+       - If is set, the segment feature data mode is delta-value.
+         If cleared, it's absolute-value.
+ 
+-.. c:type:: v4l2_vp8_loopfilter
++.. c:type:: v4l2_vp8_loop_filter
+ 
+ .. cssclass:: longtable
+ 
+ .. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
+ 
+-.. flat-table:: struct v4l2_vp8_loopfilter
++.. flat-table:: struct v4l2_vp8_loop_filter
+     :header-rows:  0
+     :stub-columns: 0
+     :widths:       1 1 2
+@@ -1986,11 +1986,11 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+       - Applications and drivers must set this to zero.
+     * - __u32
+       - ``flags``
+-      - See :ref:`Loopfilter Flags <vp8_loopfilter_flags>`
++      - See :ref:`Loop Filter Flags <vp8_loop_filter_flags>`
+ 
+-.. _vp8_loopfilter_flags:
++.. _vp8_loop_filter_flags:
+ 
+-``Loopfilter Flags``
++``Loop Filter Flags``
+ 
+ .. cssclass:: longtable
+ 
+diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+index 3f4311c1dab8..2de80fef07f4 100644
+--- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+@@ -136,7 +136,7 @@ static void cfg_lf(struct hantro_ctx *ctx,
+ 		   const struct v4l2_ctrl_vp8_frame *hdr)
  {
- 	struct ttm_tt *ttm_dma = (void *)ttm;
- 	struct nouveau_drm *drm;
--	struct device *dev;
- 	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
- 
- 	if (ttm_tt_is_populated(ttm))
-@@ -1264,7 +1263,6 @@ nouveau_ttm_tt_populate(struct ttm_bo_device *bdev,
- 	}
- 
- 	drm = nouveau_bdev(bdev);
--	dev = drm->dev->dev;
- 
- 	return ttm_pool_alloc(&drm->ttm.bdev.pool, ttm, ctx);
- }
-@@ -1274,14 +1272,12 @@ nouveau_ttm_tt_unpopulate(struct ttm_bo_device *bdev,
- 			  struct ttm_tt *ttm)
+ 	const struct v4l2_vp8_segment *seg = &hdr->seg;
+-	const struct v4l2_vp8_loopfilter *lf = &hdr->lf;
++	const struct v4l2_vp8_loop_filter *lf = &hdr->lf;
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	unsigned int i;
+ 	u32 reg;
+diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
+index 5c43f59ad531..cbca123db746 100644
+--- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
++++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
+@@ -277,7 +277,7 @@ static void cfg_lf(struct hantro_ctx *ctx,
+ 		   const struct v4l2_ctrl_vp8_frame *hdr)
  {
- 	struct nouveau_drm *drm;
--	struct device *dev;
- 	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
+ 	const struct v4l2_vp8_segment *seg = &hdr->seg;
+-	const struct v4l2_vp8_loopfilter *lf = &hdr->lf;
++	const struct v4l2_vp8_loop_filter *lf = &hdr->lf;
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	unsigned int i;
+ 	u32 reg;
+diff --git a/include/media/vp8-ctrls.h b/include/media/vp8-ctrls.h
+index 86bb6e774604..f20117e825ef 100644
+--- a/include/media/vp8-ctrls.h
++++ b/include/media/vp8-ctrls.h
+@@ -34,7 +34,7 @@ struct v4l2_vp8_segment {
+ #define V4L2_VP8_LF_ADJ_ENABLE	0x01
+ #define V4L2_VP8_LF_DELTA_UPDATE	0x02
+ #define V4L2_VP8_LF_FILTER_TYPE_SIMPLE	0x04
+-struct v4l2_vp8_loopfilter {
++struct v4l2_vp8_loop_filter {
+ 	__s8 ref_frm_delta[4];
+ 	__s8 mb_mode_delta[4];
+ 	__u8 sharpness_level;
+@@ -82,7 +82,7 @@ struct v4l2_vp8_entropy_coder_state {
  
- 	if (slave)
- 		return;
- 
- 	drm = nouveau_bdev(bdev);
--	dev = drm->dev->dev;
- 
- 	return ttm_pool_free(&drm->ttm.bdev.pool, ttm);
- }
+ struct v4l2_ctrl_vp8_frame {
+ 	struct v4l2_vp8_segment seg;
+-	struct v4l2_vp8_loopfilter lf;
++	struct v4l2_vp8_loop_filter lf;
+ 	struct v4l2_vp8_quantization quant;
+ 	struct v4l2_vp8_entropy entropy;
+ 	struct v4l2_vp8_entropy_coder_state coder_state;
 -- 
-2.27.0
+2.30.0
 
