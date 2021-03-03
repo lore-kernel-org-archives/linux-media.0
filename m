@@ -2,101 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7138EC4321A
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EADEC001C7
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4184264E51
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 679D764EE3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355610AbhCDAcH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386120AbhCCRql (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 12:46:41 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C6CC061763
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 09:43:23 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id e7so38508674lft.2
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 09:43:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=843Cqu10do3AOcdjRFPledKrGoMFl6vHJzmaFjeMBSM=;
-        b=zix6/HFrJghHi2HtjcVyWLj0N+uc6HhJDfNpB38u08KjESRVwSyspbvWr93KTIwSfl
-         4cbcUGdgY8NwVv5x/WJWPg/BDaMShLrKU+xdao/Sqsrk2WMrmhH1B2xMXh5h+UGckrms
-         JLmOflDgf8EGD3FsfoxRr/JupQHIkt2hkS3RFbkFWze5IyS8KmVpzFsHGxsO35F/JWni
-         i7Q/FSwCvrva4MASIHcRp4+t5ncbfkg0gB3ZYXNOWFoBgTKVlb5lVkOMAS6A0tLWM4iD
-         zfrgGoMRkbuF0wddNl5ovU0IlkSzfTFIZYZdRQjnPxl07z3KSSLeOlCpLwUSM9D4QQ9D
-         hXdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=843Cqu10do3AOcdjRFPledKrGoMFl6vHJzmaFjeMBSM=;
-        b=atp71rWWuRkOJEVmFksVTBmebflZizDbcldKJnwghkhIXpfyJyyl51qdeThlS6a0qy
-         lYTgdUGNca1OEid7CqPgb1LuTQ2rokRafvl+wMUZ2nBZKCXjiLuf4InEK7zjbaCF/Lyp
-         cjTQm/vun1Eq7l7l7CqjUqNXknXXZLRBn5umzVmKHdDtnQokldQDks1sbpO6CokNCPei
-         kQTzb2vWct0zPvVmAwailBjs1NFmrQO2K5cIn6J/u3IKG+SjLriaCWoRxbJuNTmWFSjn
-         tamUwpbmjIqBwiAT48e6ApCtKSfZvi1IQ7ExTiylZcTYr5i7xSlLZ4wvowK2eofI3anX
-         JEvw==
-X-Gm-Message-State: AOAM531+3x+boQ7d6sjus+dxaRJwm22Sm7i579RntLf/4Ahy0L0W/AtK
-        MMIDgqLDsdbU2vLar+70UGiSXg==
-X-Google-Smtp-Source: ABdhPJzaAvVl7zIW7ODmVHAFeI6Rkd3rf7v10ndmHfmNMb50G2CfnOjWagvTE+aUo0mJvzdSYzvKVA==
-X-Received: by 2002:a05:6512:3081:: with SMTP id z1mr15929096lfd.257.1614793401892;
-        Wed, 03 Mar 2021 09:43:21 -0800 (PST)
-Received: from localhost.localdomain ([85.249.43.69])
-        by smtp.googlemail.com with ESMTPSA id s7sm2101441lfi.140.2021.03.03.09.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 09:43:21 -0800 (PST)
-From:   Andrey Konovalov <andrey.konovalov@linaro.org>
-To:     junak.pub@gmail.com, robert.foss@linaro.org,
-        sakari.ailus@linux.intel.com
-Cc:     todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        jacopo@jmondi.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH v3 1/3] v4l: common: v4l2_get_link_freq: add printing a warning
-Date:   Wed,  3 Mar 2021 20:42:48 +0300
-Message-Id: <20210303174250.11405-2-andrey.konovalov@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210303174250.11405-1-andrey.konovalov@linaro.org>
-References: <20210303174250.11405-1-andrey.konovalov@linaro.org>
+        id S1381109AbhCDAb6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:31:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345134AbhCCP6s (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Mar 2021 10:58:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 65CFC64EDB;
+        Wed,  3 Mar 2021 15:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614787084;
+        bh=GKrMTWwEh1kLtPzdDB87gc1HSZh5O2LMmCKt9KLcS9o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nnrvgGQ4NiILw1zfzLL4bQjkcZ1FKnZ6lrIZUWBIMVZw8A/jfK9HgmKc5JCz7O85s
+         DK4BIms+p/PM3cgwvpyW/lBpYSSgelOHbcUtDWiBDbEiAYcUs1G2SRJkKadCm2tkpw
+         lRj8ISpU0Zh7mfmGtUF8FR/Gtsy5jC32gFV8zT6tiU0m3+ZlhfREB9gpvtT20sOs+q
+         ifKkcciKrRsb/4xxQDql46pZOXDKn8/02jh6S1WycGUa+1xTq2pP2swe/nnfeiIsfj
+         l0gsXnb41nyeVXUaOK6e5WF6StdKT007adzrmld7NPq3PCViSGLSn1pKAswOHNFGTZ
+         hTgW8XMTgGTBg==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lHTsv-001iva-Tt; Wed, 03 Mar 2021 16:58:01 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: conf.py: adjust the LaTeX document output
+Date:   Wed,  3 Mar 2021 16:58:00 +0100
+Message-Id: <911fbac185dd09c7df715cf4153361b81f04b7ad.1614787053.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Print a warning if V4L2_CID_LINK_FREQ control is not implemented.
+Changeset f546ff0c0c07 ("Move our minimum Sphinx version to 1.7")
+cleaned up some compatibility issues with previous Sphinx
+versions, but it also dropped the PDF margin sets.
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/v4l2-core/v4l2-common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Without that, the media documentation won't build fine, as
+the margins are too wide to display texts with monospaced
+fonts.
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 133d20e40f82..04af03285a20 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -469,6 +469,11 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
- 			return -ENOENT;
+While here, align the  "latex_elements = {" values, and add
+a few other sphinxsetup configs in order to allow Sphinx to
+wrap long lines on literal blocks.
+
+Fixes: f546ff0c0c07 ("Move our minimum Sphinx version to 1.7")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+ Documentation/conf.py | 31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index fd65168c10f8..879e86dbea66 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -331,27 +331,34 @@ htmlhelp_basename = 'TheLinuxKerneldoc'
+ # -- Options for LaTeX output ---------------------------------------------
  
- 		freq = div_u64(v4l2_ctrl_g_ctrl_int64(ctrl) * mul, div);
+ latex_elements = {
+-# The paper size ('letterpaper' or 'a4paper').
+-'papersize': 'a4paper',
++    # The paper size ('letterpaper' or 'a4paper').
++    'papersize': 'a4paper',
+ 
+-# The font size ('10pt', '11pt' or '12pt').
+-'pointsize': '11pt',
++    # The font size ('10pt', '11pt' or '12pt').
++    'pointsize': '11pt',
+ 
+-# Latex figure (float) alignment
+-#'figure_align': 'htbp',
++    # Latex figure (float) alignment
++    #'figure_align': 'htbp',
+ 
+-# Don't mangle with UTF-8 chars
+-'inputenc': '',
+-'utf8extra': '',
++    # Don't mangle with UTF-8 chars
++    'inputenc': '',
++    'utf8extra': '',
+ 
+-# Additional stuff for the LaTeX preamble.
++    # Set document margins
++    'sphinxsetup': '''
++        hmargin=0.5in, vmargin=1in,
++        parsedliteralwraps=true,
++        verbatimhintsturnover=false,
++    ''',
 +
-+		pr_warn("%s: Link frequency estimated using pixel rate: result might be inaccurate\n",
-+			__func__);
-+		pr_warn("%s: Consider implementing support for V4L2_CID_LINK_FREQ in the transmitter driver\n",
-+			__func__);
- 	}
++    # Additional stuff for the LaTeX preamble.
+     'preamble': '''
+-	% Use some font with UTF-8 support with XeLaTeX
++        % Use some font with UTF-8 support with XeLaTeX
+         \\usepackage{fontspec}
+         \\setsansfont{DejaVu Sans}
+         \\setromanfont{DejaVu Serif}
+         \\setmonofont{DejaVu Sans Mono}
+-     '''
++     ''',
+ }
  
- 	return freq > 0 ? freq : -EINVAL;
+ # At least one book (translations) may have Asian characters
 -- 
-2.17.1
+2.29.2
+
 
