@@ -5,175 +5,125 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B8AC43333
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B3D2C4361B
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F181E64E51
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E97464EE4
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355568AbhCDAa7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S1355650AbhCDAcR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447353AbhCCNsy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 08:48:54 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C683C061D7C
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 05:44:10 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id e23so5215559wmh.3
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 05:44:10 -0800 (PST)
+        with ESMTP id S243233AbhCCSJl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 13:09:41 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120D8C06175F
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 10:08:54 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id v5so38563918lft.13
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 10:08:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yJ/EY0CpLytL31e4vbvBGoD9fXz/ITb5FniloFYVPls=;
-        b=fth9eihhtdzQbeSYvJf7E98nX3F1qwaKJid/2LAs8W8ejpmJFd5zCTTAu4t22jj694
-         4q5PYQxQxmsJL4MzqFOwHepz7BE3Ig0p+xL0EH0m3wXa7KowSJaYJrOmawSXWuNcjVo8
-         sPAf4GjUb7uB7kBrcejlHDObUvjzfH8jPeovCJ0/2uXTKy0bsQpNFjvrGPIqYZAljZQP
-         m3z4DKaEqxXv1osCoSW+anx0GtTEaeiBOA4hqedbmew4eadlIw0bhmrb6d/5j5b0FxSQ
-         wxrxxCwZY0uqH5JUbDmmLAYfrRMDknTei8gcYxkuRxquA/AGG3Xx8QvzLP8Zwg2CHACt
-         Fgvg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=bSsDnS6dbLhvTy+AVlfdF3LogW8QXbBSHC6yrMiBxcc=;
+        b=eubOFCkwtk73peY4EPbEunGR/uk+5JCUWi3g2QGv85tqPZ3PNrVG8gXXANyHv0NmcI
+         K8W/I2nmnxLYCZwal7WUloHZciQ0TZBa+YkM51io8pPygVXfN4iEHPbEIkcloO1M+QdE
+         yp6KZrQ8JJvCWbb+a/iyFgVAQ5h/ZeAAnLpo4Lr8JwiQMJXyqU6ps1S4lYXkoo4SDcbY
+         SU3lDszVeY8JmB96TjpUU9ViKu8ZYRCHJboG9K7JKj5cw1kPbKWkxp/1BL+UUZxD4Mbw
+         w6jJiBjzRM4lnYSLrC05WxSwhXiUNQsQXGBfnFG5Qmgba/+sWnheE9s8JOl+zj6CcTzV
+         sB2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yJ/EY0CpLytL31e4vbvBGoD9fXz/ITb5FniloFYVPls=;
-        b=LSEPzlsHJJVbh0iLMecDTGyNcaOCQXjmEamo5mXN3MBuMYgoAk6oYrKRB5scbdCrAy
-         /yddJ6CXxKImAkFDw/JbrskIZJPzHPzOAOzH/CecRjPgyld0jYNwvulEUmPKMVjNrFD2
-         dQDI2Xk5XWwLxMrAyLgW8wYohWCew4qU9cIT9YG+yziZl1TNNQW7CTuXOtvnfzMfMsCV
-         78W91FMyOsDcCUIjU5Og5x+ik6vFC7XYEr+GFRLuuN62+Wwzrtsl/0A0jIDKxlsIDWb9
-         2N0o7eEXu9PtznstRnAh/ENWX+xqhbaEVKE4wXmIJ/wKTIyOD0dM0kYWhcF/TgjGmd63
-         Hh7g==
-X-Gm-Message-State: AOAM530ycrOaFxknMsqJW/zriTOrZFCEPFtoCpOOlhrih+H9DNkR84Tt
-        wZuc1U9+G9S27IeYCV1EFmgAKA==
-X-Google-Smtp-Source: ABdhPJymPplH8CwKDFxrcRRiZiYA8Ux92xOTrZFP2tFVqN/jar/Y7KFcD5STbFd19rQ14V9vbUJFmQ==
-X-Received: by 2002:a1c:de05:: with SMTP id v5mr5495703wmg.25.1614779049321;
-        Wed, 03 Mar 2021 05:44:09 -0800 (PST)
-Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id w18sm6109524wrr.7.2021.03.03.05.44.08
+         :references;
+        bh=bSsDnS6dbLhvTy+AVlfdF3LogW8QXbBSHC6yrMiBxcc=;
+        b=Zom6fkbTeYr4bhRrJCyPkzgqIyBsf79qXOndmhxg2Rj/xqP2nGBoDrY4/8r96tX/kn
+         bUvbM8MF03EIcbGNm28r/aSDsQWsY6WsiLbDNCssxc7I5zp4kfsc7OcFLRRA7uYTx6yp
+         jZn3NRQWcj1DpJNM0JRSo+pOYOvQyFO5QnzTUhCIFhzl9OEaTjkGRbcBB8EM3i77/HZM
+         h54XTt+xhTGWhD+QSRSnWFuzleO8CexCIwl+ytDZ/u82aiqVLU57EH1VrYeePO3Z28op
+         0izSY0P1deEqcOFmdIFbl7qIQKQMDzq42FbKB+gM6ruJ6qRuHuM/mC3sEx+tPRpGbBRV
+         Q6RA==
+X-Gm-Message-State: AOAM532tf4YSd4J4VfInlM36oTbRrLdIcgej7vysnEON5NZP8QWmi1Lc
+        sQaQumb4lC50fNsTqBrH4lodhQ==
+X-Google-Smtp-Source: ABdhPJy0ovoxjIHjD8PCduT0ojbEEFGT4iXC21oduORhhszKoXbyOpWTh6E4hh/eMLxk+A997Kk40Q==
+X-Received: by 2002:a05:6512:2208:: with SMTP id h8mr16310190lfu.636.1614794932537;
+        Wed, 03 Mar 2021 10:08:52 -0800 (PST)
+Received: from localhost.localdomain ([85.249.43.69])
+        by smtp.googlemail.com with ESMTPSA id j15sm2220990lfm.138.2021.03.03.10.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 05:44:08 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, Zack Rusin <zackr@vmware.com>
-Subject: [PATCH 34/53] drm/vmwgfx/vmwgfx_fence: Add, remove and demote various documentation params/headers
-Date:   Wed,  3 Mar 2021 13:43:00 +0000
-Message-Id: <20210303134319.3160762-35-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210303134319.3160762-1-lee.jones@linaro.org>
-References: <20210303134319.3160762-1-lee.jones@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        Wed, 03 Mar 2021 10:08:51 -0800 (PST)
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, niklas.soderlund@ragnatech.se, bparrot@ti.com,
+        mickael.guene@st.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>
+Subject: [RFC PATCH 1/4] media: rcar-vin: use v4l2_get_link_freq() to calculate phypll frequency
+Date:   Wed,  3 Mar 2021 21:08:14 +0300
+Message-Id: <20210303180817.12285-2-andrey.konovalov@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210303180817.12285-1-andrey.konovalov@linaro.org>
+References: <20210303180817.12285-1-andrey.konovalov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+To get the link frequency value, or to calculate a parameter depending on
+it the receiver driver should use V4L2_CID_LINK_FREQ. If V4L2_CID_LINK_FREQ
+control is not implemented in the remote subdevice, the link frequency
+can be calculated from V4L2_CID_PIXEL_RATE control value. But the latter
+may not give the correct link frequency, and should only be used as the
+last resort. v4l2_get_link_freq() does exactly that, so use it instead
+of reading V4L2_CID_PIXEL_RATE directly.
 
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:82: warning: Function parameter or member 'event' not described in 'vmw_event_fence_action'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:113: warning: Function parameter or member 'f' not described in 'vmw_fence_obj_destroy'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:261: warning: Function parameter or member 'work' not described in 'vmw_fence_work_func'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:720: warning: Function parameter or member 'fman' not described in 'vmw_fence_fifo_down'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:963: warning: Function parameter or member 'fence' not described in 'vmw_fence_obj_add_action'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:963: warning: Function parameter or member 'action' not described in 'vmw_fence_obj_add_action'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:1021: warning: Function parameter or member 'tv_sec' not described in 'vmw_event_fence_action_queue'
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c:1021: warning: Function parameter or member 'tv_usec' not described in 'vmw_event_fence_action_queue'
-
-Cc: VMware Graphics <linux-graphics-maintainer@vmware.com>
-Cc: Roland Scheidegger <sroland@vmware.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Zack Rusin <zackr@vmware.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210115181313.3431493-27-lee.jones@linaro.org
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
-index 378ec7600154b..23523eb3cac2a 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
-@@ -58,13 +58,11 @@ struct vmw_user_fence {
- /**
-  * struct vmw_event_fence_action - fence action that delivers a drm event.
-  *
-- * @e: A struct drm_pending_event that controls the event delivery.
-  * @action: A struct vmw_fence_action to hook up to a fence.
-+ * @event: A pointer to the pending event.
-  * @fence: A referenced pointer to the fence to keep it alive while @action
-  * hangs on it.
-  * @dev: Pointer to a struct drm_device so we can access the event stuff.
-- * @kref: Both @e and @action has destructors, so we need to refcount.
-- * @size: Size accounted for this object.
-  * @tv_sec: If non-null, the variable pointed to will be assigned
-  * current time tv_sec val when the fence signals.
-  * @tv_usec: Must be set if @tv_sec is set, and the variable pointed to will
-@@ -87,7 +85,7 @@ fman_from_fence(struct vmw_fence_obj *fence)
- 	return container_of(fence->base.lock, struct vmw_fence_manager, lock);
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index e06cd512aba2..eec8f9dd9060 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -455,29 +455,25 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+ 			   unsigned int lanes)
+ {
+ 	struct v4l2_subdev *source;
+-	struct v4l2_ctrl *ctrl;
+-	u64 mbps;
++	s64 mbps;
+ 
+ 	if (!priv->remote)
+ 		return -ENODEV;
+ 
+ 	source = priv->remote;
+ 
+-	/* Read the pixel rate control from remote. */
+-	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
+-	if (!ctrl) {
+-		dev_err(priv->dev, "no pixel rate control in subdev %s\n",
++	/* Read the link frequency from the remote subdev. */
++	mbps = v4l2_get_link_freq(source->ctrl_handler, bpp, 2 * lanes);
++	if (mbps < 0) {
++		dev_err(priv->dev, "failed to get link rate from subdev %s\n",
+ 			source->name);
+-		return -EINVAL;
++		return mbps;
+ 	}
+-
+ 	/*
+ 	 * Calculate the phypll in mbps.
+-	 * link_freq = (pixel_rate * bits_per_sample) / (2 * nr_of_lanes)
+ 	 * bps = link_freq * 2
+ 	 */
+-	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * bpp;
+-	do_div(mbps, lanes * 1000000);
++	do_div(mbps, 1000000 / 2);
+ 
+ 	return mbps;
  }
- 
--/**
-+/*
-  * Note on fencing subsystem usage of irqs:
-  * Typically the vmw_fences_update function is called
-  *
-@@ -250,7 +248,7 @@ static const struct dma_fence_ops vmw_fence_ops = {
- };
- 
- 
--/**
-+/*
-  * Execute signal actions on fences recently signaled.
-  * This is done from a workqueue so we don't have to execute
-  * signal actions from atomic context.
-@@ -708,7 +706,7 @@ int vmw_wait_dma_fence(struct vmw_fence_manager *fman,
- }
- 
- 
--/**
-+/*
-  * vmw_fence_fifo_down - signal all unsignaled fence objects.
-  */
- 
-@@ -948,8 +946,8 @@ static void vmw_event_fence_action_cleanup(struct vmw_fence_action *action)
- /**
-  * vmw_fence_obj_add_action - Add an action to a fence object.
-  *
-- * @fence - The fence object.
-- * @action - The action to add.
-+ * @fence: The fence object.
-+ * @action: The action to add.
-  *
-  * Note that the action callbacks may be executed before this function
-  * returns.
-@@ -1001,6 +999,10 @@ static void vmw_fence_obj_add_action(struct vmw_fence_obj *fence,
-  * @fence: The fence object on which to post the event.
-  * @event: Event to be posted. This event should've been alloced
-  * using k[mz]alloc, and should've been completely initialized.
-+ * @tv_sec: If non-null, the variable pointed to will be assigned
-+ * current time tv_sec val when the fence signals.
-+ * @tv_usec: Must be set if @tv_sec is set, and the variable pointed to will
-+ * be assigned the current time tv_usec val when the fence signals.
-  * @interruptible: Interruptible waits if possible.
-  *
-  * As a side effect, the object pointed to by @event may have been
 -- 
-2.27.0
+2.17.1
 
