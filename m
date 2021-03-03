@@ -2,66 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 980F9C28CC4
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D380C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44EE064ECF
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF945601FF
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358609AbhCCMOP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 07:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbhCCKa6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 05:30:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C071C06178A
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 02:30:16 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <uol@pengutronix.de>)
-        id 1lHOli-0001WG-R1; Wed, 03 Mar 2021 11:30:14 +0100
-Received: from uol by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <uol@pengutronix.de>)
-        id 1lHOli-0007uo-I2; Wed, 03 Mar 2021 11:30:14 +0100
-From:   =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
-Subject: [PATCH v4l-utils] keytable: fix typo
-Date:   Wed,  3 Mar 2021 11:30:12 +0100
-Message-Id: <20210303103012.30366-1-u.oelmann@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: uol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+        id S1358655AbhCCMO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 07:14:29 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:14288 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233918AbhCCL3O (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 06:29:14 -0500
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 03 Mar 2021 03:10:22 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 03 Mar 2021 03:10:20 -0800
+X-QCInternal: smtphost
+Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Mar 2021 16:39:58 +0530
+Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
+        id A255321308; Wed,  3 Mar 2021 16:39:56 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@codeaurora.org>
+To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+        stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
+Subject: [PATCH v7 0/2] Add encoder ctrls for long term reference
+Date:   Wed,  3 Mar 2021 16:39:45 +0530
+Message-Id: <1614769787-26922-1-git-send-email-dikshita@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Ulrich Ölmann <u.oelmann@pengutronix.de>
----
- utils/keytable/50-rc_keymap.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series add the encoder controls for long term reference (LTR)
+and support for the same in venus driver.
 
-diff --git a/utils/keytable/50-rc_keymap.conf b/utils/keytable/50-rc_keymap.conf
-index 6066c50c6476..dc871d739a39 100644
---- a/utils/keytable/50-rc_keymap.conf
-+++ b/utils/keytable/50-rc_keymap.conf
-@@ -1,3 +1,3 @@
--# ir-keytable needs access to bpf in order load BPF decoders
-+# ir-keytable needs access to bpf in order to load BPF decoders
- [Service]
- SystemCallFilter=bpf
+Dikshita Agarwal (2):
+  media: v4l2-ctrl: add controls for long term reference.
+  venus: venc: Add support for Long Term Reference (LTR) controls
+
+Changes since v6:
+- removed references of Request API from documentation.
+- addressed other comments.
+
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 17 ++++++++
+ drivers/media/platform/qcom/venus/venc_ctrls.c     | 49 +++++++++++++++++++++-
+ drivers/media/v4l2-core/v4l2-ctrls.c               | 14 +++++++
+ include/uapi/linux/v4l2-controls.h                 |  3 ++
+ 4 files changed, 82 insertions(+), 1 deletion(-)
+
 -- 
-2.29.2
+2.7.4
 
