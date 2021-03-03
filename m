@@ -2,185 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE01C433DB
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 999E4C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC99D64EBA
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 737FF64EEC
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346413AbhCDAcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:51 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39040 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388029AbhCCU2X (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 15:28:23 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 06BA31F46026
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v2 7/8] media: vp8: Rename V4L2 VP8 specific macro to V4L2_VP8_
-Date:   Wed,  3 Mar 2021 17:27:13 -0300
-Message-Id: <20210303202714.212394-8-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210303202714.212394-1-ezequiel@collabora.com>
-References: <20210303202714.212394-1-ezequiel@collabora.com>
+        id S1351793AbhCDAc4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:56 -0500
+Received: from out2-40.antispamcloud.com ([185.201.17.40]:46822 "EHLO
+        out2-40.antispamcloud.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381193AbhCCV34 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 16:29:56 -0500
+Received: from s114.servername.online ([204.44.192.29])
+        by mx136.antispamcloud.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <gwarnusz@lectorprep.org>)
+        id 1lHZ1l-000b6P-F5
+        for linux-media@vger.kernel.org; Wed, 03 Mar 2021 22:27:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lectorprep.org; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:References:In-Reply-To:Subject:To:From:Date:MIME-Version:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FIuO+TSQlFLuNvfi//HlvYBi2uocJ6i+mHrss3CETUw=; b=tVKN14PC/TVKAi6Zy83pXKRoYI
+        DcjY1cTwem1m7S2v/iu1gZtRGQOWIzvS4ZuFGyiuy23RMLMI26YHnc+2NfR0LqEw4Wzir9q1pdzXw
+        HBiID8ifJmAoFfUSSFIUYMvec2lGgKjFeOkd7/qmBY/BpDkvUEoixGyVeoif8TvKAz9ZxcPbNxy9O
+        w3VB54W8c0LiZ09RBzvFmsn6d9a/DsYOvfz27Mfe3TfVPDvTDJS/4BctY6h/KfRtVAwE0N1abnEy+
+        iY1rLYOEENdyxG2P++DlWp19IcVxWjluZ7tU0k475IZ4Ul8WeBLO8CvjMAqNsTylNXMTBu8U3x9yF
+        gdpwusdQ==;
+Received: from localhost ([127.0.0.1]:56806 helo=s114.servername.online)
+        by s114.servername.online with esmtpa (Exim 4.93)
+        (envelope-from <gwarnusz@lectorprep.org>)
+        id 1lHZ13-005dWi-7M
+        for linux-media@vger.kernel.org; Wed, 03 Mar 2021 13:26:46 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Wed, 03 Mar 2021 15:26:45 -0600
+From:   Greg Warnusz <gwarnusz@lectorprep.org>
+To:     linux-media@vger.kernel.org
+Subject: Support for the Logitech Brio webcam?
+In-Reply-To: <2d32b42777e171ebcc77a74c9a09caba@lectorprep.org>
+References: <2d32b42777e171ebcc77a74c9a09caba@lectorprep.org>
+User-Agent: Roundcube Webmail/1.4.10
+Message-ID: <0db861b4ea8c69239ac0fd7955891ebe@lectorprep.org>
+X-Sender: gwarnusz@lectorprep.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-OutGoing-Spam-Status: No, score=-1.0
+X-Get-Message-Sender-Via: s114.servername.online: authenticated_id: gwarnusz@lectorprep.org
+X-Authenticated-Sender: s114.servername.online: gwarnusz@lectorprep.org
+X-AuthUser: gwarnusz@lectorprep.org
+X-Originating-IP: 204.44.192.29
+X-Spampanel-Domain: outgoing-shared.hostpapa.com
+X-Spampanel-Username: outgoingshared
+Authentication-Results: antispamcloud.com; auth=pass (login) smtp.auth=outgoingshared@outgoing-shared.hostpapa.com
+X-Spampanel-Outgoing-Class: unsure
+X-Spampanel-Outgoing-Evidence: Combined (0.15)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9WLQux0N3HQm8ltz8rnu+BPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xwY1jvqTi5EZr/+c8MLY+n7sSvgVJKSSRgWR/YKjxme6vp
+ k7Vp2UXVHEQMIct0liI6NDTckWKcP1APPO0B0N9hswKQDamPN66SYe4XX4xmgLu+/Q+EGOe46wL6
+ iWxH/Xbdu0u3CuVxcPNtSp18GVgWe4obggepWXyRrGYzhXmsfNwQiNfoTSfh0RDGKTkvDxGDwIE7
+ VKe+bqpcdCns72R1fCJ2fu5SkY1N7SfTCXje8FkGmkkmkXBUxcWkbwA4DrhXQFOX0czP0M0FvfyK
+ B99wBvBArgsBAmswsDg7The/D4skBLPnZRl1CS1mfhnNPDZpZZHt2sx3SpskijVFUJeJ7ZVcZ20v
+ KiDu6LnR8m9k9VUOfMXv5a6okRmpSN2D7MTk6xV06FcgZkQoEFV+s1chVLvKs3jED+rkxy9HfVI3
+ 2P+TU3e0rv2i5tX/5w6O+ydWBb39uS1TjWG2Inx+Ts2Q3BuobEUGYgCIMPs/N+wKoF+3sCPHtYe0
+ SE4DdeAR5hlbf0XifTH4c85mykx+8CPRhFNbrTbJFADkQldlhWV9I1HiX1+RwyLEx/PT65L+whle
+ 5S10FHDQLMw7J6FDq9AYAXPFh8feVvv89z43H25pu+VGv0uBlL9S97gXMgUlg3fBhnKjs4WiKcLG
+ jj+fpj9YUcgZdOzladg/0vaIE/GiF/JnuqqtN/sW17e49r5QDo9cJYKAMBwX2icjkNUxFdTvBm9L
+ RlOM+5HQrqym6G1CSv8mtVxrnxNMVa7tgwmBfwFBpmzdcRGDcHNULk5SAO0CQzw6N6QyZVJUNuT2
+ rIyDCDyjXJLFVVZ8h2Mubjvq8q/rjuU3A3io6xJmD59iFVkby+Eb8M0PdCIiE3UNa/fdZ12w6Ap9
+ iYUatwP8aAOG2v3DM8R1qvg8173ajhScmRRAa8Mrc8quJ4btPpt/2FLuFFYnpIMsltzuUYZVC+vq
+ Q/rNVd9xQVzFFrv2FVrb855E+GdFjag2t+nf4qk/UVXVfaNcTLQtpepvK8Nt4SAKjj4=
+X-Report-Abuse-To: spam@quarantine10.antispamcloud.com
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Before we move the VP8 controls to a stable public header,
-rename this macro so it's clearly V4L2-specific.
+Dear open-sorcerers,
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- drivers/staging/media/hantro/hantro_g1_vp8_dec.c     |  6 +++---
- drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c |  6 +++---
- drivers/staging/media/sunxi/cedrus/cedrus_vp8.c      | 12 ++++++------
- include/media/vp8-ctrls.h                            |  2 +-
- 4 files changed, 13 insertions(+), 13 deletions(-)
+I run Ubuntu and would like to use the Logitech Brio. Most attractive is 
+its selectable 3 fields-of-view.
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index 2de80fef07f4..03360fdb9341 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -234,7 +234,7 @@ static void cfg_parts(struct hantro_ctx *ctx,
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *vb2_src;
--	u32 first_part_offset = VP8_FRAME_IS_KEY_FRAME(hdr) ? 10 : 3;
-+	u32 first_part_offset = V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) ? 10 : 3;
- 	u32 mb_size, mb_offset_bytes, mb_offset_bits, mb_start_bits;
- 	u32 dct_size_part_size, dct_part_offset;
- 	struct hantro_reg reg;
-@@ -442,7 +442,7 @@ void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- 		return;
- 
- 	/* Reset segment_map buffer in keyframe */
--	if (VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
-+	if (V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
- 		memset(ctx->vp8_dec.segment_map.cpu, 0,
- 		       ctx->vp8_dec.segment_map.size);
- 
-@@ -460,7 +460,7 @@ void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- 	vdpu_write_relaxed(vpu, reg, G1_REG_CONFIG);
- 
- 	reg = G1_REG_DEC_CTRL0_DEC_MODE(10);
--	if (!VP8_FRAME_IS_KEY_FRAME(hdr))
-+	if (!V4L2_VP8_FRAME_IS_KEY_FRAME(hdr))
- 		reg |= G1_REG_DEC_CTRL0_PIC_INTER_E;
- 	if (!(hdr->flags & V4L2_VP8_FRAME_FLAG_MB_NO_SKIP_COEFF))
- 		reg |= G1_REG_DEC_CTRL0_SKIP_MODE;
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-index cbca123db746..bb9f5d3c63c7 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-@@ -347,7 +347,7 @@ static void cfg_parts(struct hantro_ctx *ctx,
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *vb2_src;
--	u32 first_part_offset = VP8_FRAME_IS_KEY_FRAME(hdr) ? 10 : 3;
-+	u32 first_part_offset = V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) ? 10 : 3;
- 	u32 mb_size, mb_offset_bytes, mb_offset_bits, mb_start_bits;
- 	u32 dct_size_part_size, dct_part_offset;
- 	dma_addr_t src_dma;
-@@ -520,7 +520,7 @@ void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- 		return;
- 
- 	/* Reset segment_map buffer in keyframe */
--	if (VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
-+	if (V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
- 		memset(ctx->vp8_dec.segment_map.cpu, 0,
- 		       ctx->vp8_dec.segment_map.size);
- 
-@@ -537,7 +537,7 @@ void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- 
- 	reg = VDPU_REG_CONFIG_DEC_TIMEOUT_E
- 		| VDPU_REG_CONFIG_DEC_CLK_GATE_E;
--	if (!VP8_FRAME_IS_KEY_FRAME(hdr))
-+	if (!V4L2_VP8_FRAME_IS_KEY_FRAME(hdr))
- 		reg |= VDPU_REG_DEC_CTRL0_PIC_INTER_E;
- 	vdpu_write_relaxed(vpu, reg, VDPU_REG_EN_FLAGS);
- 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-index cab0770515c5..1e6f3086e400 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-@@ -526,7 +526,7 @@ static void cedrus_read_header(struct cedrus_dev *dev,
- {
- 	int i, j;
- 
--	if (VP8_FRAME_IS_KEY_FRAME(slice)) {
-+	if (V4L2_VP8_FRAME_IS_KEY_FRAME(slice)) {
- 		read_bits(dev, 1, VP8_PROB_HALF);
- 		read_bits(dev, 1, VP8_PROB_HALF);
- 	}
-@@ -550,12 +550,12 @@ static void cedrus_read_header(struct cedrus_dev *dev,
- 	for (i = 0; i < QUANT_DELTA_COUNT; i++)
- 		get_delta_q(dev);
- 
--	if (!VP8_FRAME_IS_KEY_FRAME(slice))
-+	if (!V4L2_VP8_FRAME_IS_KEY_FRAME(slice))
- 		process_ref_frame_info(dev);
- 
- 	read_bits(dev, 1, VP8_PROB_HALF);
- 
--	if (!VP8_FRAME_IS_KEY_FRAME(slice))
-+	if (!V4L2_VP8_FRAME_IS_KEY_FRAME(slice))
- 		read_bits(dev, 1, VP8_PROB_HALF);
- 
- 	cedrus_write(dev, VE_H264_TRIGGER_TYPE, VE_H264_TRIGGER_TYPE_VP8_UPDATE_COEF);
-@@ -565,7 +565,7 @@ static void cedrus_read_header(struct cedrus_dev *dev,
- 	if (read_bits(dev, 1, VP8_PROB_HALF))
- 		read_bits(dev, 8, VP8_PROB_HALF);
- 
--	if (!VP8_FRAME_IS_KEY_FRAME(slice)) {
-+	if (!V4L2_VP8_FRAME_IS_KEY_FRAME(slice)) {
- 		read_bits(dev, 8, VP8_PROB_HALF);
- 		read_bits(dev, 8, VP8_PROB_HALF);
- 		read_bits(dev, 8, VP8_PROB_HALF);
-@@ -672,7 +672,7 @@ static void cedrus_vp8_setup(struct cedrus_ctx *ctx,
- 	reg = slice->first_part_size * 8;
- 	cedrus_write(dev, VE_VP8_FIRST_DATA_PART_LEN, reg);
- 
--	header_size = VP8_FRAME_IS_KEY_FRAME(slice) ? 10 : 3;
-+	header_size = V4L2_VP8_FRAME_IS_KEY_FRAME(slice) ? 10 : 3;
- 
- 	reg = slice->first_part_size + header_size;
- 	cedrus_write(dev, VE_VP8_PART_SIZE_OFFSET, reg);
-@@ -850,7 +850,7 @@ static void cedrus_vp8_setup(struct cedrus_ctx *ctx,
- 		ctx->codec.vp8.last_filter_type =
- 			!!(slice->lf.flags & V4L2_VP8_LF_FILTER_TYPE_SIMPLE);
- 		ctx->codec.vp8.last_frame_p_type =
--			!VP8_FRAME_IS_KEY_FRAME(slice);
-+			!V4L2_VP8_FRAME_IS_KEY_FRAME(slice);
- 		ctx->codec.vp8.last_sharpness_level =
- 			slice->lf.sharpness_level;
- 	}
-diff --git a/include/media/vp8-ctrls.h b/include/media/vp8-ctrls.h
-index 051700f33863..2599f5fd38e6 100644
---- a/include/media/vp8-ctrls.h
-+++ b/include/media/vp8-ctrls.h
-@@ -146,7 +146,7 @@ struct v4l2_vp8_entropy_coder_state {
- #define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_GOLDEN	0x10
- #define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_ALT	0x20
- 
--#define VP8_FRAME_IS_KEY_FRAME(hdr) \
-+#define V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) \
- 	(!!((hdr)->flags & V4L2_VP8_FRAME_FLAG_KEY_FRAME))
- 
- /**
--- 
-2.30.0
+Here's the manufacturer's own blurb about its other abilities:
+
+Brio is a remarkable piece of technology that streams crystal-clear 
+video with superb resolution, frame rate, color and detail, including 
+autofocus and 5x HD zoom. Brio delivers 4K Ultra HD video at 30 fps, HD 
+1080p at either 30 or 60 fps, and HD 720p at 30, 60 or an ultra-smooth 
+90 fps for outstanding clarity, smoothness, and detail.
+
+More info: 
+https://www.logitech.com/en-us/products/webcams/brio-4k-hdr-webcam.960-001105.html?crid=34
+
+At US$200, it's still popular, as evidenced by its sold-out status at 
+many vendors.
+
+Is there a chance that developers smarter than I can make this work, 
+even with limited features, for Linux?
+
+Thank you.
+
+Greg Warnusz
+Saint Louis, Missouri, USA
 
