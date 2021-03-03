@@ -4,129 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23103C433DB
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5911DC433E6
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D86A1601FF
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13B9964E58
+	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358663AbhCCMOc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 07:14:32 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:62405 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbhCCL3O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 06:29:14 -0500
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 03 Mar 2021 03:10:20 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 03 Mar 2021 03:10:18 -0800
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Mar 2021 16:40:06 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id E667521308; Wed,  3 Mar 2021 16:40:04 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v7 1/2] media: v4l2-ctrl: add controls for long term reference.
-Date:   Wed,  3 Mar 2021 16:39:46 +0530
-Message-Id: <1614769787-26922-2-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1614769787-26922-1-git-send-email-dikshita@codeaurora.org>
-References: <1614769787-26922-1-git-send-email-dikshita@codeaurora.org>
+        id S1358671AbhCCMOd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 07:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233599AbhCCLmu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 06:42:50 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAA8C061788;
+        Wed,  3 Mar 2021 03:40:19 -0800 (PST)
+Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:2035:1dcd:21c7:b3af])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 74CEC1F45C2A;
+        Wed,  3 Mar 2021 11:40:03 +0000 (GMT)
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, peng.fan@nxp.com,
+        hverkuil-cisco@xs4all.nl, dan.carpenter@oracle.com
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 01/11] media: hevc: Add fields and flags for hevc PPS
+Date:   Wed,  3 Mar 2021 12:39:42 +0100
+Message-Id: <20210303113952.178519-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210303113952.178519-1-benjamin.gaignard@collabora.com>
+References: <20210303113952.178519-1-benjamin.gaignard@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Long Term Reference (LTR) frames are the frames that are encoded
-sometime in the past and stored in the DPB buffer list to be used
-as reference to encode future frames.
-This change adds controls to enable this feature.
+Add fields and flags as they are defined in
+7.4.3.3.1 "General picture parameter set RBSP semantics of the
+H.265 ITU specification.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst         | 17 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                    | 14 ++++++++++++++
- include/uapi/linux/v4l2-controls.h                      |  3 +++
- 3 files changed, 34 insertions(+)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 14 ++++++++++++++
+ include/media/hevc-ctrls.h                         |  4 ++++
+ 2 files changed, 18 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 00944e9..21fa9a5 100644
+index 00944e97d638..d62e8e423f3b 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3646,3 +3646,20 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     so this has to come from client.
-     This is applicable to H264 and valid Range is from 0 to 63.
-     Source Rec. ITU-T H.264 (06/2019); G.7.4.1.1, G.8.8.1.
-+
-+``V4L2_CID_MPEG_VIDEO_LTR_COUNT (integer)``
-+    Specifies the maximum number of Long Term Reference (LTR) frames at any
-+    given time that the encoder can keep.
-+    This is applicable to the H264 and HEVC encoders.
-+
-+``V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX (integer)``
-+    The current frame is marked as a Long Term Reference (LTR) frame
-+    and given this LTR index which ranges from 0 to LTR_COUNT-1.
-+    This is applicable to the H264 and HEVC encoders.
-+    Source Rec. ITU-T H.264 (06/2019); Table 7.9
-+
-+``V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES (bitmask)``
-+    Specifies the Long Term Reference (LTR) frame(s) to be used for
-+    encoding the current frame.
-+    This provides a bitmask which consists of bits [0, LTR_COUNT-1].
-+    This is applicable to the H264 and HEVC encoders.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 016cf62..4d444de 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -951,6 +951,9 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER:		return "Repeat Sequence Header";
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:		return "Force Key Frame";
- 	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID:		return "Base Layer Priority ID";
-+	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:			return "LTR Count";
-+	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:		return "Frame LTR Index";
-+	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:		return "Use LTR Frames";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_FWHT_I_FRAME_QP:				return "FWHT I-Frame QP Value";
-@@ -1278,6 +1281,17 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:
-+		*type = V4L2_CTRL_TYPE_INTEGER;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:
-+		*type = V4L2_CTRL_TYPE_INTEGER;
-+		*flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:
-+		*type = V4L2_CTRL_TYPE_BITMASK;
-+		*flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+		break;
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
- 	case V4L2_CID_PAN_RESET:
- 	case V4L2_CID_TILT_RESET:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 039c0d7..fedbb54 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -428,6 +428,9 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_CODEC_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_CODEC_BASE+229)
- #define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID	(V4L2_CID_CODEC_BASE+230)
-+#define V4L2_CID_MPEG_VIDEO_LTR_COUNT			(V4L2_CID_CODEC_BASE+231)
-+#define V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX		(V4L2_CID_CODEC_BASE+232)
-+#define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+233)
+@@ -3234,6 +3234,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``num_extra_slice_header_bits``
+       -
++    * - __u8
++      - ``num_ref_idx_l0_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l0_active_minus1
++    * - __u8
++      - ``num_ref_idx_l1_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l1_active_minus1
+     * - __s8
+       - ``init_qp_minus26``
+       -
+@@ -3342,6 +3348,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - ``V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT``
+       - 0x00040000
+       -
++    * - ``V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT``
++      - 0x00080000
++      - Specifies the presence of deblocking filter control syntax elements in
++        the PPS
++    * - ``V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING``
++      - 0x00100000
++      - Specifies that tile column boundaries and likewise tile row boundaries
++        are distributed uniformly across the picture
  
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+ ``V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS (struct)``
+     Specifies various slice-specific parameters, especially from the NAL unit
+diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+index b4cb2ef02f17..003f819ecb26 100644
+--- a/include/media/hevc-ctrls.h
++++ b/include/media/hevc-ctrls.h
+@@ -100,10 +100,14 @@ struct v4l2_ctrl_hevc_sps {
+ #define V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER	(1ULL << 16)
+ #define V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT		(1ULL << 17)
+ #define V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT (1ULL << 18)
++#define V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT	(1ULL << 19)
++#define V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING			(1ULL << 20)
+ 
+ struct v4l2_ctrl_hevc_pps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+ 	__u8	num_extra_slice_header_bits;
++	__u8	num_ref_idx_l0_default_active_minus1;
++	__u8	num_ref_idx_l1_default_active_minus1;
+ 	__s8	init_qp_minus26;
+ 	__u8	diff_cu_qp_delta_depth;
+ 	__s8	pps_cb_qp_offset;
 -- 
-2.7.4
+2.25.1
 
