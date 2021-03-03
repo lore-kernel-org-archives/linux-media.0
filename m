@@ -2,116 +2,179 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B603DC41620
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F50C43332
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F5B164EE4
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DEE664EE4
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355607AbhCDAcF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S1348233AbhCDAcQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243084AbhCCRoX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 12:44:23 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E162C061761
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 09:43:15 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id m11so28916674lji.10
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 09:43:15 -0800 (PST)
+        with ESMTP id S243239AbhCCSJl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 13:09:41 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988F5C061760
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 10:08:56 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id n16so21664971lfb.4
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 10:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=+dhB3YrJVlTSxFCA6Z/e42UCJspJWfH2abZXmJ1XC4M=;
-        b=i7iOOBQrYR1nHjFHl9efeWLvpEwwqWdbDME3Hb1qx60ZFDs24dYf79cH5Dh7sQgXx3
-         i2djTXa+lgkuwyUjYXCCfpehzZO5T5Hsc6n42jFgT2iZwXDO5DUaxBuE3LerIEPGnUIN
-         rprCzy8t4HugYBS5SeJoK4TuGQS7mcciQh3spAy0rAv/rGOiQylsDqM0xhgT7iX4ScyN
-         hbbFtDROXGZC9mLCWtPfEUEh/srEC+WnKIxms9E+udmlNtcl9uwdQENHAOYNogEpfZVu
-         G9mgyRF1tn0XH1GG64WSYaZJz0woNEhbBmVokhLvmP8rJlUg69N3BTfthYXW97klvqub
-         GBcw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=1IYGjcV64ZDmP6/oFTMyIZJ2q3HMCbj9wNdpmV4JDRE=;
+        b=VQ/YuyhIZqmF1yC8GPojGmr9NebO70jd2OK0VyIxjrG3rLVITW+Zfkx7tKCB96x2nF
+         e5SKdQX+3IVNh4LMsXs5o15PZKOChmr/yM9fKIx3iefGrIAXI5afFNas4ZQ71NY0rC5N
+         9v+drrLoEiVoVOICt3FPW7PMBe96YfbZsNBtw6fw0oYlcmqb38piC8y81HwaJ58vqD9N
+         PB93/qqBC9Ar8Vh6TiekXSFkT8/vRhJIGtP7fgWc+WF3bppNHwZ56Uvy0W8Pe4BOx5lG
+         j/tU9t8+JR7XIZ5qwkrCHqYouMNzBuIPPDLmbNHdMndm93Lvj2Bo7AYH6qiXq/Tp09Pa
+         zjvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+dhB3YrJVlTSxFCA6Z/e42UCJspJWfH2abZXmJ1XC4M=;
-        b=RKRr0KwdCKaDIpjOb7opDBoK5ERYViIYRGLU/cubqcJM0WqMQ5LcOKWu870GXZAMU3
-         A+l4K2xlWjAs3uKVfStEB2NuRwbo3R8eqOQsLsJ+dVbK/6alNddxdsiemTnK/YNpos3t
-         nWlrPO2kzcuk1NoDu9YFWykDRjcs3Nn2VFbSjpmUYul5RRJElhjwUfITsNQfjNz+CnkR
-         KWJn5ELq1+ZF3B+L3MXt0oK4jBt+ox8yt4FdKRSUBmWNuCkMzvZUjQjUUrcD+Bssc3Cb
-         tLvYRJnhuqBAsrmozUqmEnKQ55yUcsl6NhVI3fU5psczqxKqDeI9ryI9EAf12URaiyVS
-         F9Dw==
-X-Gm-Message-State: AOAM533/hhLqrqoZv1buCg2CKjJafZGvQ6BKheJmUTjZsVXHtvQ1iM92
-        9Eb+5TMVUPP5KUyCL6X8EX3Ytg==
-X-Google-Smtp-Source: ABdhPJzuDUOJRhDvWgdy8lAlBYZ0zeNkinZA/knIsk7X9BzWhHaJ1dZ8YYTA5DmS6Eg7a4h8cRYlcQ==
-X-Received: by 2002:a2e:9047:: with SMTP id n7mr15373ljg.291.1614793393677;
-        Wed, 03 Mar 2021 09:43:13 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=1IYGjcV64ZDmP6/oFTMyIZJ2q3HMCbj9wNdpmV4JDRE=;
+        b=OQGxYf++6m+Nn0XBAi3w+3tcKyVZzc1WehkJUGJ0u5nCSWlAGnkm7npCm5HdlRqEUp
+         UmVZpFCMSgbwnfNM7v+4LFPZiizKROm/PFlc2XwN3/nOpAtecGBhjHvhsRxTO4fHPGg+
+         KdNypyRTSGlZyamz0LykxVmQOhRMMomAcQAXHldKe51GWOgrrbyqCDLO/I0uwfYg4lyu
+         sjLn5UhLqHiHT5809cdcLqMLa732jnZS9toEiMHueEYZGm4je6ij7hUqZsjL6AnQlo+Y
+         3Su7BwQcxbtJCJEc/XkNsBVam2peSMApgVQODaQrPe3F8Ef68Bwot50ebuspDZaGO5eS
+         Z19Q==
+X-Gm-Message-State: AOAM531gC0+vh881245SrLfPBqBUHQXK32d3/nLRzSmf/U9MPIzDbi0P
+        5XZPA4vWVG/j5uTl4jPRSfPmaA==
+X-Google-Smtp-Source: ABdhPJx5Ws/0LXMqkGyu6MSVlqs46UwMtx7hO3jPKnkhPXrM3hYnc9iNJ56M6CyyrDilMOhw6yXfQg==
+X-Received: by 2002:a05:6512:3188:: with SMTP id i8mr15911438lfe.121.1614794935020;
+        Wed, 03 Mar 2021 10:08:55 -0800 (PST)
 Received: from localhost.localdomain ([85.249.43.69])
-        by smtp.googlemail.com with ESMTPSA id s7sm2101441lfi.140.2021.03.03.09.43.11
+        by smtp.googlemail.com with ESMTPSA id j15sm2220990lfm.138.2021.03.03.10.08.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 09:43:12 -0800 (PST)
+        Wed, 03 Mar 2021 10:08:54 -0800 (PST)
 From:   Andrey Konovalov <andrey.konovalov@linaro.org>
-To:     junak.pub@gmail.com, robert.foss@linaro.org,
-        sakari.ailus@linux.intel.com
-Cc:     todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        jacopo@jmondi.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/3] media: qcom: camss: V4L2_CID_PIXEL_RATE/LINK_FREQ fixes
-Date:   Wed,  3 Mar 2021 20:42:47 +0300
-Message-Id: <20210303174250.11405-1-andrey.konovalov@linaro.org>
+To:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, niklas.soderlund@ragnatech.se, bparrot@ti.com,
+        mickael.guene@st.com,
+        Andrey Konovalov <andrey.konovalov@linaro.org>
+Subject: [RFC PATCH 2/4] media: ti-vpe: cal: use v4l2_get_link_freq() for DPHY timing configuration
+Date:   Wed,  3 Mar 2021 21:08:15 +0300
+Message-Id: <20210303180817.12285-3-andrey.konovalov@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210303180817.12285-1-andrey.konovalov@linaro.org>
+References: <20210303180817.12285-1-andrey.konovalov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first patch adds printing a warning in v4l2_get_link_freq() if
-V4L2_CID_LINK_FREQ isn't implemented (this is a mandatory control for
-CSI-2 transmitter drivers [1], but many sensor drivers don't have it
-currently).
+To configure DPHY properly the driver needs to know CSI-2 link frequency.
+Instead of calculating it from the value of V4L2_CID_PIXEL_RATE control
+(which can give wrong link frequency value for some sensors) call
+v4l2_get_link_freq(). It uses V4L2_CID_LINK_FREQ if this control is
+implemented in the sensor driver, and falls back to calculating it from
+V4L2_CID_PIXEL_RATE otherwise.
 
-The second patch is the start of the work discussed in the "[RFC] Repurpose
-V4L2_CID_PIXEL_RATE for the sampling rate in the pixel array" thread [2].
-I'll send the similar patches for the rest of CSI receiver drivers which
-use V4L2_CID_PIXEL_RATE to calculate the link frequency as a separate
-patchset following this one: I don't have the hardware to test the changes
-to these drivers, so the second patchset will be build tested only.
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+---
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 47 +++++++-------------
+ 1 file changed, 17 insertions(+), 30 deletions(-)
 
-The third patch in this series is the patch by Vladimir Lypak [3] rebased
-onto the changes done by the second patch. By replacing getting the pixel
-clock with v4l2_get_link_freq() the second patch also fixes the integer
-overflow which Vladimir's patch addresses. So the third patch only needs
-to fix drivers/media/platform/qcom/camss/camss-vfe.c which the second patch
-doesn't touch.
-
-The resulting patchset is free from the "undefined reference to `__udivdi3'"
-issue [4] as the u64 value is only divided by a power of 2, which doesn't
-need do_div().
-
-This patchset has been tested on db410c board with imx219 and ov5647
-sensors (RPi camera modules v2 and v1) attached to AISTARVISION MIPI
-Adapter V2.0.
-
-[1] https://linuxtv.org/downloads/v4l-dvb-apis-new/driver-api/csi2.html
-[2] https://www.spinics.net/lists/linux-media/msg183183.html
-[3] https://www.spinics.net/lists/linux-media/msg186875.html
-[4] https://www.spinics.net/lists/linux-media/msg186918.html
-
-Changes in v2:
-
-* Added [PATCH 1/3] v4l: common: v4l2_get_link_freq: add printing a warning
-
-* camss_get_link_freq() changed to take the actual number of lanes as the
-  third arg vs the number of lanes multiplied by 2 in the first version
-
-* Fixed checkpatch warnings and bad indentation
-
-Changes in v3:
-
-* The warning message in v4l2_get_link_freq() improved as suggested by
-  Jacopo Mondi
-
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index dd48017859cd..0c1046a1fea4 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -45,22 +45,20 @@ static inline void camerarx_write(struct cal_camerarx *phy, u32 offset, u32 val)
+  * ------------------------------------------------------------------
+  */
+ 
+-static s64 cal_camerarx_get_external_rate(struct cal_camerarx *phy)
++static s64 cal_camerarx_get_link_freq(struct cal_camerarx *phy)
+ {
+-	struct v4l2_ctrl *ctrl;
+-	s64 rate;
++	u32 num_lanes = phy->endpoint.bus.mipi_csi2.num_data_lanes;
++	s64 freq;
+ 
+-	ctrl = v4l2_ctrl_find(phy->sensor->ctrl_handler, V4L2_CID_PIXEL_RATE);
+-	if (!ctrl) {
+-		phy_err(phy, "no pixel rate control in subdev: %s\n",
++	freq = v4l2_get_link_freq(phy->sensor->ctrl_handler, phy->fmtinfo->bpp,
++				  num_lanes * 2);
++	if (freq < 0)
++		phy_err(phy, "failed to get link frequency from subdev: %s\n",
+ 			phy->sensor->name);
+-		return -EPIPE;
+-	}
+-
+-	rate = v4l2_ctrl_g_ctrl_int64(ctrl);
+-	phy_dbg(3, phy, "sensor Pixel Rate: %llu\n", rate);
++	else
++		phy_dbg(3, phy, "sensor link frequency: %lld\n", freq);
+ 
+-	return rate;
++	return freq;
+ }
+ 
+ static void cal_camerarx_lane_config(struct cal_camerarx *phy)
+@@ -116,25 +114,14 @@ void cal_camerarx_disable(struct cal_camerarx *phy)
+ #define TCLK_MISS	1
+ #define TCLK_SETTLE	14
+ 
+-static void cal_camerarx_config(struct cal_camerarx *phy, s64 external_rate)
++static void cal_camerarx_config(struct cal_camerarx *phy, s64 link_freq)
+ {
+ 	unsigned int reg0, reg1;
+ 	unsigned int ths_term, ths_settle;
+ 	unsigned int csi2_ddrclk_khz;
+-	struct v4l2_fwnode_bus_mipi_csi2 *mipi_csi2 =
+-			&phy->endpoint.bus.mipi_csi2;
+-	u32 num_lanes = mipi_csi2->num_data_lanes;
+ 
+ 	/* DPHY timing configuration */
+-
+-	/*
+-	 * CSI-2 is DDR and we only count used lanes.
+-	 *
+-	 * csi2_ddrclk_khz = external_rate / 1000
+-	 *		   / (2 * num_lanes) * phy->fmtinfo->bpp;
+-	 */
+-	csi2_ddrclk_khz = div_s64(external_rate * phy->fmtinfo->bpp,
+-				  2 * num_lanes * 1000);
++	csi2_ddrclk_khz = div_s64(link_freq, 1000);
+ 
+ 	phy_dbg(1, phy, "csi2_ddrclk_khz: %d\n", csi2_ddrclk_khz);
+ 
+@@ -270,14 +257,14 @@ static void cal_camerarx_ppi_disable(struct cal_camerarx *phy)
+ 
+ static int cal_camerarx_start(struct cal_camerarx *phy)
+ {
+-	s64 external_rate;
++	s64 link_freq;
+ 	u32 sscounter;
+ 	u32 val;
+ 	int ret;
+ 
+-	external_rate = cal_camerarx_get_external_rate(phy);
+-	if (external_rate < 0)
+-		return external_rate;
++	link_freq = cal_camerarx_get_link_freq(phy);
++	if (link_freq < 0)
++		return link_freq;
+ 
+ 	ret = v4l2_subdev_call(phy->sensor, core, s_power, 1);
+ 	if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV) {
+@@ -325,7 +312,7 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
+ 	camerarx_read(phy, CAL_CSI2_PHY_REG0);
+ 
+ 	/* Program the PHY timing parameters. */
+-	cal_camerarx_config(phy, external_rate);
++	cal_camerarx_config(phy, link_freq);
+ 
+ 	/*
+ 	 *    b. Assert the FORCERXMODE signal.
+-- 
+2.17.1
 
