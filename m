@@ -2,269 +2,200 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E2B5C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4065C433E6
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E42C864E62
+	by mail.kernel.org (Postfix) with ESMTP id A96A864EEC
 	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349972AbhCDAaz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S239937AbhCDAa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349093AbhCCNoK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 08:44:10 -0500
+        with ESMTP id S1444526AbhCCNqh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 08:46:37 -0500
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D400C061793
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 05:43:30 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m1so6398088wml.2
-        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 05:43:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2853BC061A2B
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 05:43:57 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m1so6399346wml.2
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 05:43:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QBm1TtnSOgkIdE+poP2XHRBabvEfYrHEJwcqomHGK4I=;
-        b=CobjywY2f31xvahThtnf+1J/tPkCZZLUOzDN9k925p+K3ljoBNUuwGN6Z04oqnMIPI
-         WS1MUrwyT0+HPr+bF9JgzQWmvgClLWJo5rzB40dMh9V5sv/Yq8nYX3E/F1e9qb0ufBpc
-         5R8UsMIhy7JVlgVo1/18XfYf+wP4uLAb+RWHY37577RbXX6pd5jXuE34eefan1RAvX/m
-         GvImGq+2Q4Rmx4plYwdwDh6zhOaXjXOA9Dhsa/U9Qym0hc8ELB2Y8W5EzXNViMZFdKHL
-         jm+T25PBHcD0TK81K8m8O8oDvH2G4UqZTtjl3pd1izvptFsGjlScPG2R+aJxykccdEAg
-         zjyA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sFatDrTTk8QqhpQrxXr3ebT1Fq28H33Kmdp2vbOtLEY=;
+        b=JN+pNUBNmoRVzmyxYCjZbYRzO+sgBe9ntzqJZE5KsicmUm686iLD/gtmxYujDKuJFG
+         EdpRwSuIDzKvMWWzXFpuVyMc0Z/8oUsNVwiD+Y/98rL1O3nZEEKacuG5oLnsEkg7UI32
+         i/CCJxLvq75MhT+jqReyFzFhOcB3Ylyl7+og6zurPtuI4vzr+pKkdbhT4YWhZroN0g9W
+         QEpW44HNpHbO0XdwwhQPRYfcZ0zLnpSBGGVbFjs6xMKu1KcDzu6p2/SaXzYgDREiY++R
+         DCboisRRX6fh4D+fEPxrtkhtVJvaSJO2vW3gA4YJgiU93YagoCJzCGGfPssKAzZTYNmx
+         vCyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QBm1TtnSOgkIdE+poP2XHRBabvEfYrHEJwcqomHGK4I=;
-        b=NdAIbijNcCML+LDLWHwIDqk4qqlG47CHEQP0rsvn5PL6tDffuF36kQk1QHrJttp+g3
-         9gUn2RIujka7NDmy/f6TxZk+y1vBkCW/OQcP7nprnAO78gwispJE0q1XBaXb7Axm+Dy6
-         6ccd5A7uwGU9CvktHJTWy0qLwRTyVlSz0dSRWc/pU3cQx+pedI8OAct7U+SlYQR0chdw
-         KjUxJsbfpMJ6nY5z6UCQfKWyP80/zKYQ8dnbBI1A1PPbY0VeGUJT3VePXmbNP8JyvEd4
-         vJxDhlzmPpsAEHZci9tVJcttEQZKNUHo0Zx9fy7bRdO2hix3y00eqg6iV6PE+RMyU0eW
-         3KXA==
-X-Gm-Message-State: AOAM530+ukK2jQg36hr83qpp338/7bmwNDbLewZRQCg43Rv72A7eJytf
-        CA3R1zB2I7eT3kdGdAaL7oe4tA==
-X-Google-Smtp-Source: ABdhPJxDWAS0QekMYikPudJ4qNiYAhq/iWdMPZuZl8uyYTy6BkFNsfoxpNYhdQ/7ZfCkCJrNbg2EpA==
-X-Received: by 2002:a1c:a98a:: with SMTP id s132mr9567391wme.12.1614779009161;
-        Wed, 03 Mar 2021 05:43:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sFatDrTTk8QqhpQrxXr3ebT1Fq28H33Kmdp2vbOtLEY=;
+        b=TrD9P6hRifzz20nJirLanVIO6i/0fr4LPAw6OKG5ztqpY1f3K0bCOcFRvmvFpEiS8+
+         kmzomr1TB3IjinJ0/f0bZ540pir6hIiXf0u/LW7JKtjbLlSJVt6WYiHVl0L+ywxWy5bl
+         KKdHLfbTMVwkbyHc923O1UvlC+LqeKUZjJhnQYHmbD7TE3bp0lLOsj7QH0AG7eSSueTp
+         UnfBEZZ7gUVxoHs8Z44UOeW7smRuZ/0bGkJpnSnf7DlhFiQ86nsHVm9IHQgoHPmvtq65
+         8dLbu5hJ2pbpK8b5wj2VgVRGoO5Zfqg3b4OF32MNrqRp3tMFQKVziFs65n59lsHw+Zjx
+         303A==
+X-Gm-Message-State: AOAM531qKTd3g/tQkS9RoN5UsEzL+CnXSzcAJWwMr5WueEL44BLeI7GV
+        sd3BVSnBUxskbnWD929vm+OcDw==
+X-Google-Smtp-Source: ABdhPJylT1iR2h2Lg9leQR27Gb9vT9nE553qKmYJDPgCQk3GqVw1z9r9EffVmzICn+nguOeafP4RiQ==
+X-Received: by 2002:a1c:2288:: with SMTP id i130mr9151603wmi.62.1614779035907;
+        Wed, 03 Mar 2021 05:43:55 -0800 (PST)
 Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id w18sm6109524wrr.7.2021.03.03.05.43.26
+        by smtp.gmail.com with ESMTPSA id w18sm6109524wrr.7.2021.03.03.05.43.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 05:43:28 -0800 (PST)
+        Wed, 03 Mar 2021 05:43:55 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, Anthony Koo <Anthony.Koo@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jeremy Kolb <jkolb@brandeis.edu>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        Leo Li <sunpeng.li@amd.com>, linaro-mm-sig@lists.linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        nouveau@lists.freedesktop.org,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Rob Clark <rob.clark@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Sean Paul <sean@poorly.run>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Zack Rusin <zackr@vmware.com>
-Subject: [RESEND 00/53] Rid GPU from W=1 warnings
-Date:   Wed,  3 Mar 2021 13:42:26 +0000
-Message-Id: <20210303134319.3160762-1-lee.jones@linaro.org>
+        Roland Scheidegger <sroland@vmware.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, Zack Rusin <zackr@vmware.com>
+Subject: [PATCH 23/53] drm/vmwgfx/vmwgfx_execbuf: Fix some kernel-doc related issues
+Date:   Wed,  3 Mar 2021 13:42:49 +0000
+Message-Id: <20210303134319.3160762-24-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210303134319.3160762-1-lee.jones@linaro.org>
+References: <20210303134319.3160762-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a resend.  All of these patches have been sent before.
+Fixes the following W=1 kernel build warning(s):
 
-The vmwgfx ones were even applied, but were dropped for some reason.
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:89: warning: Enum value 'vmw_res_rel_max' not described in enum 'vmw_resource_relocation_type'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:136: warning: Function parameter or member 'func' not described in 'vmw_cmd_entry'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:136: warning: Function parameter or member 'cmd_name' not described in 'vmw_cmd_entry'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:212: warning: Function parameter or member 'res' not described in 'vmw_cmd_ctx_first_setup'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:523: warning: Function parameter or member 'sw_context' not described in 'vmw_resource_relocation_add'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:523: warning: Excess function parameter 'list' description in 'vmw_resource_relocation_add'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:653: warning: Function parameter or member 'p_res' not described in 'vmw_cmd_res_check'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:653: warning: Excess function parameter 'p_val' description in 'vmw_cmd_res_check'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:1716: warning: Function parameter or member 'res' not described in 'vmw_cmd_res_switch_backup'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:1716: warning: Excess function parameter 'val_node' description in 'vmw_cmd_res_switch_backup'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:3757: warning: Function parameter or member 'file_priv' not described in 'vmw_execbuf_fence_commands'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:3757: warning: Function parameter or member 'dev_priv' not described in 'vmw_execbuf_fence_commands'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:3757: warning: Function parameter or member 'p_fence' not described in 'vmw_execbuf_fence_commands'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:3757: warning: Function parameter or member 'p_handle' not described in 'vmw_execbuf_fence_commands'
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c:3954: warning: Function parameter or member 'kernel_commands' not described in 'vmw_execbuf_cmdbuf'
 
-Lee Jones (53):
-  drm/nouveau/nvkm/subdev/bios/init: Demote obvious abuse of kernel-doc
-  drm/nouveau/dispnv50/disp: Remove unused variable 'ret'
-  drm/msm/dp/dp_display: Remove unused variable 'hpd'
-  drm/amd/display/dc/bios/command_table: Remove unused variable
-  include: drm: drm_atomic: Make use of 'new_plane_state'
-  drm/nouveau/nvkm/subdev/volt/gk20a: Demote non-conformant kernel-doc
-    headers
-  drm/amd/display/dc/bios/command_table: Remove unused variable and
-    associated comment
-  drm/amd/display/dc/calcs/dce_calcs: Move some large variables from the
-    stack to the heap
-  drm/amd/display/dc/calcs/dce_calcs: Remove some large variables from
-    the stack
-  drm/amd/display/dc/dce/dce_aux: Remove duplicate line causing 'field
-    overwritten' issue
-  drm/amd/display/dc/dce80/dce80_resource: Make local functions static
-  drm/nouveau/nvkm/engine/gr/gf100: Demote non-conformant kernel-doc
-    header
-  drm/nouveau/nouveau_bo: Remove unused variables 'dev'
-  drm/nouveau/nouveau_display: Remove set but unused variable 'width'
-  drm/nouveau/dispnv04/crtc: Demote non-conforming kernel-doc headers
-  drm/nouveau/dispnv50/disp: Remove unused variable 'ret' from function
-    returning void
-  drm/nouveau/dispnv50/headc57d: Make local function 'headc57d_olut'
-    static
-  drm/nouveau/nv50_display: Remove superfluous prototype for local
-    static functions
-  drm/nouveau/dispnv50/disp: Include header containing our prototypes
-  drm/nouveau/nouveau_ioc32: File headers are not good candidates for
-    kernel-doc
-  drm/nouveau/nouveau_svm: Remove unused variable 'ret' from void
-    function
-  drm/nouveau/nouveau_ioc32: Demote kernel-doc abuse to standard comment
-    block
-  drm/vmwgfx/vmwgfx_execbuf: Fix some kernel-doc related issues
-  drm/vmwgfx/vmwgfx_kms: Remove unused variable 'ret' from
-    'vmw_du_primary_plane_atomic_check()'
-  drm/vmwgfx/vmwgfx_kms: Mark vmw_{cursor,primary}_plane_formats as
-    __maybe_unused
-  drm/vmwgfx/vmwgfx_drv: Fix some kernel-doc misdemeanours
-  drm/vmwgfx/vmwgfx_ioctl: Provide missing '@' sign required by
-    kernel-doc
-  drm/vmwgfx/vmwgfx_resource: Fix worthy function headers demote some
-    others
-  drm/vmwgfx/vmwgfx_ttm_buffer: Supply some missing parameter
-    descriptions
-  drm/vmwgfx/vmwgfx_fifo: Demote non-conformant kernel-doc header
-  drm/vmwgfx/vmwgfx_ldu: Supply descriptions for 'state' function
-    parameter
-  drm/vmwgfx/vmwgfx_kms: Update worthy function headers and demote
-    others
-  drm/vmwgfx/vmwgfx_overlay: Demote kernel-doc abuses to standard
-    comment blocks
-  drm/vmwgfx/vmwgfx_fence: Add, remove and demote various documentation
-    params/headers
-  drm/vmwgfx/vmwgfx_bo: Remove superfluous param description and supply
-    another
-  drm/vmwgfx/vmwgfx_context: Demote kernel-doc abuses
-  drm/vmwgfx/vmwgfx_scrn: Demote unworthy kernel-doc headers and update
-    others
-  drm/vmwgfx/vmwgfx_surface: Fix some kernel-doc related issues
-  drm/vmwgfx/vmwgfx_cmdbuf_res: Rename param description and remove
-    another
-  drm/vmwgfx/vmwgfx_shader: Demote kernel-doc abuses and fix-up worthy
-    headers
-  drm/vmwgfx/vmwgfx_cmdbuf: Fix a bunch of missing or incorrectly
-    formatted/named params
-  drm/vmwgfx/vmwgfx_cmdbuf_res: Remove unused variable 'ret'
-  drm/vmwgfx/vmwgfx_stdu: Add some missing param/member descriptions
-  drm/vmwgfx/vmwgfx_cmdbuf: Fix misnaming of 'headers' should be plural
-  drm/vmwgfx/vmwgfx_cotable: Fix a couple of simple documentation
-    problems
-  drm/vmwgfx/vmwgfx_so: Add description for 'vmw_view's 'rcu' member
-  drm/vmwgfx/vmwgfx_binding: Provide some missing param descriptions and
-    remove others
-  drm/vmwgfx/vmwgfx_msg: Fix misspelling of 'msg'
-  drm/vmwgfx/vmwgfx_blit: Add description for 'vmw_bo_cpu_blit's 'diff'
-    param
-  drm/vmwgfx/vmwgfx_validation: Add some missing struct member/function
-    param descriptions
-  drm/vmwgfx/ttm_object: Demote half-assed headers and fix-up another
-  drm/vmwgfx/vmwgfx_thp: Add description for 'vmw_thp_manager's member
-    'manager'
-  drm/vmwgfx/ttm_object: Reorder header to immediately precede its
-    struct
-
- .../drm/amd/display/dc/bios/command_table.c   |   16 +-
- .../gpu/drm/amd/display/dc/calcs/dce_calcs.c  | 1151 +++++++++--------
- drivers/gpu/drm/amd/display/dc/dce/dce_aux.h  |    1 -
- .../drm/amd/display/dc/dce80/dce80_resource.c |   16 +-
- drivers/gpu/drm/msm/dp/dp_display.c           |    3 -
- drivers/gpu/drm/nouveau/dispnv04/crtc.c       |    4 +-
- drivers/gpu/drm/nouveau/dispnv50/disp.c       |   10 +-
- drivers/gpu/drm/nouveau/dispnv50/headc57d.c   |    2 +-
- drivers/gpu/drm/nouveau/nouveau_bo.c          |    4 -
- drivers/gpu/drm/nouveau/nouveau_display.c     |    8 +-
- drivers/gpu/drm/nouveau/nouveau_ioc32.c       |    4 +-
- drivers/gpu/drm/nouveau/nouveau_svm.c         |    5 +-
- drivers/gpu/drm/nouveau/nv50_display.h        |    3 -
- .../gpu/drm/nouveau/nvkm/engine/gr/gf100.c    |    2 +-
- .../gpu/drm/nouveau/nvkm/subdev/bios/init.c   |  204 +--
- .../gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c  |    4 +-
- drivers/gpu/drm/vmwgfx/ttm_object.c           |   25 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_binding.c       |    9 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_blit.c          |    1 +
- drivers/gpu/drm/vmwgfx/vmwgfx_bo.c            |    2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c           |    2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_cmdbuf.c        |   14 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_cmdbuf_res.c    |    8 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_context.c       |    6 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_cotable.c       |    3 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_drv.c           |    8 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c       |   20 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c         |   18 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_ioctl.c         |    2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           |   16 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.h           |    4 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_ldu.c           |    4 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_msg.c           |    2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c       |   16 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_resource.c      |   10 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c          |   10 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_shader.c        |   10 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_so.c            |    1 +
- drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c          |    9 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_surface.c       |   17 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_thp.c           |    1 +
- drivers/gpu/drm/vmwgfx/vmwgfx_ttm_buffer.c    |    2 +
- drivers/gpu/drm/vmwgfx/vmwgfx_validation.c    |    5 +-
- include/drm/drm_atomic.h                      |    3 +-
- 44 files changed, 818 insertions(+), 847 deletions(-)
-
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: Anthony Koo <Anthony.Koo@amd.com>
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Colin Ian King <colin.king@canonical.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Dave Airlie <airlied@redhat.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: dri-devel@lists.freedesktop.org
-Cc: freedreno@lists.freedesktop.org
-Cc: Harry Wentland <harry.wentland@amd.com>
-Cc: Jeremy Kolb <jkolb@brandeis.edu>
-Cc: Kuogee Hsieh <khsieh@codeaurora.org>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Leo Li <sunpeng.li@amd.com>
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: nouveau@lists.freedesktop.org
-Cc: Qinglang Miao <miaoqinglang@huawei.com>
-Cc: Rob Clark <rob.clark@linaro.org>
-Cc: Rob Clark <robdclark@gmail.com>
-Cc: Roland Scheidegger <sroland@vmware.com>
-Cc: Sean Paul <sean@poorly.run>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
 Cc: VMware Graphics <linux-graphics-maintainer@vmware.com>
-Cc: Zack Rusin <zackr@vmware.com>
+Cc: Roland Scheidegger <sroland@vmware.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210115181313.3431493-4-lee.jones@linaro.org
+---
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+index 462f173207085..7a24196f92c38 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+@@ -80,7 +80,8 @@ struct vmw_relocation {
+  * with a NOP.
+  * @vmw_res_rel_cond_nop: Conditional NOP relocation. If the resource id after
+  * validation is -1, the command is replaced with a NOP. Otherwise no action.
+- */
++ * @vmw_res_rel_max: Last value in the enum - used for error checking
++*/
+ enum vmw_resource_relocation_type {
+ 	vmw_res_rel_normal,
+ 	vmw_res_rel_nop,
+@@ -122,9 +123,11 @@ struct vmw_ctx_validation_info {
+ /**
+  * struct vmw_cmd_entry - Describe a command for the verifier
+  *
++ * @func: Call-back to handle the command.
+  * @user_allow: Whether allowed from the execbuf ioctl.
+  * @gb_disable: Whether disabled if guest-backed objects are available.
+  * @gb_enable: Whether enabled iff guest-backed objects are available.
++ * @cmd_name: Name of the command.
+  */
+ struct vmw_cmd_entry {
+ 	int (*func) (struct vmw_private *, struct vmw_sw_context *,
+@@ -203,6 +206,7 @@ static void vmw_bind_dx_query_mob(struct vmw_sw_context *sw_context)
+  *
+  * @dev_priv: Pointer to the device private:
+  * @sw_context: The command submission context
++ * @res: Pointer to the resource
+  * @node: The validation node holding the context resource metadata
+  */
+ static int vmw_cmd_ctx_first_setup(struct vmw_private *dev_priv,
+@@ -509,7 +513,7 @@ static int vmw_resource_context_res_add(struct vmw_private *dev_priv,
+ /**
+  * vmw_resource_relocation_add - Add a relocation to the relocation list
+  *
+- * @list: Pointer to head of relocation list.
++ * @sw_context: Pointer to the software context.
+  * @res: The resource.
+  * @offset: Offset into the command buffer currently being parsed where the id
+  * that needs fixup is located. Granularity is one byte.
+@@ -639,7 +643,7 @@ static int vmw_resources_reserve(struct vmw_sw_context *sw_context)
+  * @converter: User-space visisble type specific information.
+  * @id_loc: Pointer to the location in the command buffer currently being parsed
+  * from where the user-space resource id handle is located.
+- * @p_val: Pointer to pointer to resource validalidation node. Populated on
++ * @p_res: Pointer to pointer to resource validalidation node. Populated on
+  * exit.
+  */
+ static int
+@@ -1700,7 +1704,7 @@ static int vmw_cmd_check_define_gmrfb(struct vmw_private *dev_priv,
+  *
+  * @dev_priv: Pointer to a device private struct.
+  * @sw_context: The software context being used for this batch.
+- * @val_node: The validation node representing the resource.
++ * @res: Pointer to the resource.
+  * @buf_id: Pointer to the user-space backup buffer handle in the command
+  * stream.
+  * @backup_offset: Offset of backup into MOB.
+@@ -3739,7 +3743,7 @@ static int vmw_resize_cmd_bounce(struct vmw_sw_context *sw_context,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * vmw_execbuf_fence_commands - create and submit a command stream fence
+  *
+  * Creates a fence object and submits a command stream marker.
+@@ -3939,9 +3943,9 @@ static int vmw_execbuf_submit_cmdbuf(struct vmw_private *dev_priv,
+  * On successful return, the function returns a pointer to the data in the
+  * command buffer and *@header is set to non-NULL.
+  *
+- * If command buffers could not be used, the function will return the value of
+- * @kernel_commands on function call. That value may be NULL. In that case, the
+- * value of *@header will be set to NULL.
++ * @kernel_commands: If command buffers could not be used, the function will
++ * return the value of @kernel_commands on function call. That value may be
++ * NULL. In that case, the value of *@header will be set to NULL.
+  *
+  * If an error is encountered, the function will return a pointer error value.
+  * If the function is interrupted by a signal while sleeping, it will return
 -- 
 2.27.0
 
