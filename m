@@ -4,79 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B3B5C433DB
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A8FC433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC4F164EEF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7175F64EF8
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381134AbhCDAcX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350228AbhCCTFJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 14:05:09 -0500
-Received: from devnull.tasossah.com (devnull.tasossah.com [IPv6:2001:41d0:1:e60e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898DCC061756
-        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 11:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=devnull.tasossah.com; s=vps; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UlMoiVgb/fwb1dp9Hzc1d4Nl0vZkDRFUZwwX8YdFMeI=; b=BJWXNC783VC1gpZskShVqKHXk4
-        1eYjE6Gajc4UjVe+OauCqBLZ+vnr7O5czVpRHbXPIRrIH8zYVkdQKIJCy9UY4hWnn+9MTHEBufU0T
-        qtLgqFbJS1ytdd4XW6otRpEOygJPKQUdbkKp6RFHqynRwB7Cla6sIDMf97bh2EElwr7A=;
-Received: from [2a02:587:6a0e:4300::d54]
-        by devnull.tasossah.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <tasos@tasossah.com>)
-        id 1lHWGV-0006js-1H; Wed, 03 Mar 2021 20:30:31 +0200
-To:     linux-media@vger.kernel.org
-Cc:     Tasos Sahanidis <tasos@tasossah.com>
-From:   Tasos Sahanidis <tasos@tasossah.com>
-Subject: [PATCH] media: saa7134: use sg_dma_len when building pgtable
-Message-ID: <6fe62d6e-b366-16f9-faa5-990d284e9656@tasossah.com>
-Date:   Wed, 3 Mar 2021 20:30:18 +0200
+        id S1380616AbhCDAc0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:26 -0500
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:56004 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244083AbhCCTV1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 14:21:27 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id DE02B3F4D9;
+        Wed,  3 Mar 2021 20:07:56 +0100 (CET)
+Authentication-Results: pio-pvt-msa2.bahnhof.se;
+        dkim=pass (1024-bit key; unprotected) header.d=shipmail.org header.i=@shipmail.org header.b=K3jxx52L;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WWAsjB0nZGID; Wed,  3 Mar 2021 20:07:55 +0100 (CET)
+Received: by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 8A7E93F2DC;
+        Wed,  3 Mar 2021 20:07:53 +0100 (CET)
+Received: from [192.168.0.209] (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id ED2D1360057;
+        Wed,  3 Mar 2021 20:07:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1614798473; bh=nKupVD6Xba+2uKQHTUnVnHc3sylFOHvp30xUyrZ7/AU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=K3jxx52L2803o5MEVtLNblLXmNDqm9f9fB2aegV1Y5Y3ayfcYcOPumRfxAqWSqA4T
+         HLnvLLZzf3rQq74nnomUpdnh2f0sTSKk6VYVaOF5T+Zb26ZifxmuVF/6EOOJrKLj62
+         dbS6RKPwjMoGEgPlfRiLXT6LrtC/dIbqiBLzZ2Mk=
+Subject: Re: [Linaro-mm-sig] [PATCH] dma-fence: Document recoverable page
+ fault implications
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Felix Kuehling <felix.kuehling@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linaro-mm-sig@lists.linaro.org, Jerome Glisse <jglisse@redhat.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas.hellstrom@intel.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org
+References: <20210203152921.2429937-1-daniel.vetter@ffwll.ch>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Message-ID: <d285bb0a-a226-21d6-ab0f-922b566c7532@shipmail.org>
+Date:   Wed, 3 Mar 2021 20:07:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20210203152921.2429937-1-daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The new AMD IOMMU DMA implementation concatenates sglist entries under
-certain conditions, and because saa7134 accessed the length member
-directly, it did not support this scenario.
 
-This fixes IO_PAGE_FAULTs and choppy DMA audio by using the
-sg_dma_len macro.
+On 2/3/21 4:29 PM, Daniel Vetter wrote:
+> Recently there was a fairly long thread about recoreable hardware page
+> faults, how they can deadlock, and what to do about that.
+>
+> While the discussion is still fresh I figured good time to try and
+> document the conclusions a bit. This documentation section explains
+> what's the potential problem, and the remedies we've discussed,
+> roughly ordered from best to worst.
+>
+> v2: Linus -> Linux typoe (Dave)
+>
+> v3:
+> - Make it clear drivers only need to implement one option (Christian)
+> - Make it clearer that implicit sync is out the window with exclusive
+>    fences (Christian)
+> - Add the fairly theoretical option of segementing the memory (either
+>    statically or through dynamic checks at runtime for which piece of
+>    memory is managed how) and explain why it's not a great idea (Felix)
+>
+> References: https://lore.kernel.org/dri-devel/20210107030127.20393-1-Felix.Kuehling@amd.com/
+> Cc: Dave Airlie <airlied@gmail.com>
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Thomas Hellström <thomas.hellstrom@intel.com>
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: Jerome Glisse <jglisse@redhat.com>
+> Cc: Felix Kuehling <felix.kuehling@amd.com>
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linaro-mm-sig@lists.linaro.org
+> ---
+>   Documentation/driver-api/dma-buf.rst | 76 ++++++++++++++++++++++++++++
+>   1 file changed, 76 insertions(+)
+>
+Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 
-Fixes: be62dbf554c5 ("iommu/amd: Convert AMD iommu driver to the dma-iommu api")
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
----
- drivers/media/pci/saa7134/saa7134-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-core.c b/drivers/media/pci/saa7134/saa7134-core.c
-index 391572a6ec76..efb757d5168a 100644
---- a/drivers/media/pci/saa7134/saa7134-core.c
-+++ b/drivers/media/pci/saa7134/saa7134-core.c
-@@ -243,7 +243,7 @@ int saa7134_pgtable_build(struct pci_dev *pci, struct saa7134_pgtable *pt,
- 
- 	ptr = pt->cpu + startpage;
- 	for (i = 0; i < length; i++, list = sg_next(list)) {
--		for (p = 0; p * 4096 < list->length; p++, ptr++)
-+		for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr++)
- 			*ptr = cpu_to_le32(sg_dma_address(list) +
- 						list->offset + p * 4096);
- 	}
--- 
-2.25.1
