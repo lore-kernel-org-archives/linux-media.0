@@ -2,317 +2,445 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F820C4332E
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 900D7C433DB
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BE30601FF
-	for <linux-media@archiver.kernel.org>; Wed,  3 Mar 2021 12:57:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AB1B64E62
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:31:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443517AbhCCMOn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 07:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238728AbhCCLqR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 06:46:17 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04C3C06121F;
-        Wed,  3 Mar 2021 03:45:19 -0800 (PST)
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:2035:1dcd:21c7:b3af])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 463131F45C2B;
-        Wed,  3 Mar 2021 11:40:19 +0000 (GMT)
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, peng.fan@nxp.com,
-        hverkuil-cisco@xs4all.nl, dan.carpenter@oracle.com
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v4 03/11] media: hantro: change hantro_codec_ops run prototype to return errors
-Date:   Wed,  3 Mar 2021 12:39:44 +0100
-Message-Id: <20210303113952.178519-4-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210303113952.178519-1-benjamin.gaignard@collabora.com>
-References: <20210303113952.178519-1-benjamin.gaignard@collabora.com>
+        id S1346316AbhCDAar (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:30:47 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:36457 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240710AbhCCM4W (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Mar 2021 07:56:22 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id HR1ylTVCoOruFHR21lClPk; Wed, 03 Mar 2021 13:55:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1614776113; bh=qxe7wI6Vu5yYgxBN/K4xqmsCYsz4hGVmURmFN9tXqIY=;
+        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=lnGi1Jos49pnentcsCKh/zE3FZXXGyiIRHp+pDHFp2JlIMktUtpEfWG0Pd2/A4w8c
+         I05UECFlrbc06EQWyevtlgDF3n1ZGBRWqtwHZPMUr/9pyGO5KXqYKmKha6ZTPMnE2Z
+         XrHLU+xzyi9FGp+UGfNelFl5w6/bQJO1JYYqmywvTzES6a8CqgGQzco6Xowv6dernO
+         PAWKcggLYmIRyRbhrMv94qZxXMHCREgkRjWoTwTWg3+qMrYYTL2fxys05DqWxDheDr
+         pD5wk018jSLzvgOH1n841bWn6fBFV+B3f2s9q8NzNBua1RPNa4VLv2/loB7AfWFOaF
+         RAUUWJSSaIbYQ==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] media: fix incorrect kernel doc usages
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Message-ID: <ab62fabc-a56e-3213-d523-4a07e13c8e45@xs4all.nl>
+Date:   Wed, 3 Mar 2021 13:55:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfEZjdhWcH5CTk2t2F5t7s4oBR/YTkrORn/HfN8xMgQNtT9lN05vVl6BmZojH7kFVVNNGkoVB0KtDGfup2Tjh7/v4UoqhjUsB5qDd7EuCIxWz9ONIyKiz
+ +68JCU0ZhmLfL/iCE5KTd/KSCKpIG0OEUJ4yhmkJduMqPUg+A4EiboQCgEgSOifTC7T1s4i8xsUINDudirq+wQotQmIavduqtfU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change hantro_codec_ops run prototype from 'void' to 'int'.
-This allow to cancel the job if an error occur while configuring
-the hardware.
+This patch fixes the following trivial warnings w.r.t. kernel-doc usage:
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+drivers/media/common/videobuf2/frame_vector.c:38: warning: Excess function parameter 'gup_flags' description in 'get_vaddr_frames'
+drivers/media/dvb-core/dvb_ca_en50221.c:193: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1014: warning: expecting prototype for Wake up the DVB CA thread(). Prototype was for
+dvb_ca_en50221_thread_wakeup() instead
+drivers/media/dvb-core/dvb_ca_en50221.c:1023: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1081: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1112: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1327: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1411: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1426: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1582: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1693: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1743: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1772: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1830: warning: wrong kernel-doc identifier on line:
+drivers/media/dvb-core/dvb_ca_en50221.c:1922: warning: wrong kernel-doc identifier on line:
+drivers/media/rc/img-ir/img-ir-hw.c:628: warning: expecting prototype for img_ir_decoder_compatable(). Prototype was for
+img_ir_decoder_compatible() instead
+drivers/media/v4l2-core/v4l2-jpeg.c:461: warning: expecting prototype for jpeg_parse_header(). Prototype was for v4l2_jpeg_parse_header()
+instead
+drivers/media/platform/vsp1/vsp1_dl.c:166: warning: expecting prototype for struct vsp1_cmd_pool. Prototype was for struct vsp1_dl_cmd_pool
+instead
+drivers/media/platform/mtk-vpu/mtk_vpu.c:28: warning: expecting prototype for is a tiny processor controlling video hardware(). Prototype
+was for INIT_TIMEOUT_MS() instead
+drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c:73: warning: expecting prototype for struct vp9_fb_info. Prototype was for struct
+vp9_ref_buf instead
+drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c:85: warning: expecting prototype for struct vp9_fb_info. Prototype was for struct
+vp9_sf_ref_fb instead
+drivers/media/tuners/mt2063.c:1404: warning: expecting prototype for fLO_FractionalTerm(). Prototype was for MT2063_fLO_FractionalTerm() instead
+drivers/media/tuners/mt2063.c:1465: warning: expecting prototype for CalcLO2Mult(). Prototype was for MT2063_CalcLO2Mult() instead
+drivers/media/usb/pwc/pwc-dec23.c:640: warning: wrong kernel-doc identifier on line:
+drivers/media/platform/exynos4-is/media-dev.c:820: warning: expecting prototype for __fimc_md_create_fimc_links(). Prototype was for
+__fimc_md_create_fimc_sink_links() instead
+drivers/media/i2c/s5k6aa.c:426: warning: expecting prototype for s5k6aa_configure_pixel_clock(). Prototype was for
+s5k6aa_configure_pixel_clocks() instead
+drivers/media/i2c/imx274.c:700: warning: wrong kernel-doc identifier on line:
+drivers/media/i2c/imx274.c:735: warning: wrong kernel-doc identifier on line:
+drivers/media/i2c/imx274.c:983: warning: wrong kernel-doc identifier on line:
+
+Most are missing or mistyped function names.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/staging/media/hantro/hantro_drv.c     |  4 +++-
- .../staging/media/hantro/hantro_g1_h264_dec.c |  6 ++++--
- .../media/hantro/hantro_g1_mpeg2_dec.c        |  4 +++-
- .../staging/media/hantro/hantro_g1_vp8_dec.c  |  6 ++++--
- .../staging/media/hantro/hantro_h1_jpeg_enc.c |  4 +++-
- drivers/staging/media/hantro/hantro_hw.h      | 19 ++++++++++---------
- .../media/hantro/rk3399_vpu_hw_jpeg_enc.c     |  4 +++-
- .../media/hantro/rk3399_vpu_hw_mpeg2_dec.c    |  4 +++-
- .../media/hantro/rk3399_vpu_hw_vp8_dec.c      |  6 ++++--
- 9 files changed, 37 insertions(+), 20 deletions(-)
+ drivers/media/common/videobuf2/frame_vector.c |  1 -
+ drivers/media/dvb-core/dvb_ca_en50221.c       | 32 ++++++++++---------
+ drivers/media/i2c/imx274.c                    |  7 ++--
+ drivers/media/i2c/s5k6aa.c                    |  2 +-
+ drivers/media/platform/exynos4-is/media-dev.c |  2 +-
+ .../platform/mtk-vcodec/vdec/vdec_vp9_if.c    |  4 +--
+ drivers/media/platform/mtk-vpu/mtk_vpu.c      |  4 +--
+ drivers/media/platform/vsp1/vsp1_dl.c         |  2 +-
+ drivers/media/rc/img-ir/img-ir-hw.c           |  2 +-
+ drivers/media/tuners/mt2063.c                 |  6 ++--
+ drivers/media/usb/pwc/pwc-dec23.c             |  2 +-
+ drivers/media/v4l2-core/v4l2-jpeg.c           |  2 +-
+ 12 files changed, 34 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index e5f200e64993..ac1429f00b33 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -161,7 +161,9 @@ static void device_run(void *priv)
- 
- 	v4l2_m2m_buf_copy_metadata(src, dst, true);
- 
--	ctx->codec_ops->run(ctx);
-+	if (ctx->codec_ops->run(ctx))
-+		goto err_cancel_job;
-+
- 	return;
- 
- err_cancel_job:
-diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-index 845bef73d218..fcd4db13c9fe 100644
---- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-@@ -273,13 +273,13 @@ static void set_buffers(struct hantro_ctx *ctx)
- 	vdpu_write_relaxed(vpu, ctx->h264_dec.priv.dma, G1_REG_ADDR_QTABLE);
- }
- 
--void hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
-+int hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 
- 	/* Prepare the H264 decoder context. */
- 	if (hantro_h264_dec_prepare_run(ctx))
--		return;
-+		return -EINVAL;
- 
- 	/* Configure hardware registers. */
- 	set_params(ctx);
-@@ -301,4 +301,6 @@ void hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
- 			   G1_REG_CONFIG_DEC_CLK_GATE_E,
- 			   G1_REG_CONFIG);
- 	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_E, G1_REG_INTERRUPT);
-+
-+	return 0;
- }
-diff --git a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-index 6386a3989bfe..5e8943d31dc5 100644
---- a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-@@ -155,7 +155,7 @@ hantro_g1_mpeg2_dec_set_buffers(struct hantro_dev *vpu, struct hantro_ctx *ctx,
- 	vdpu_write_relaxed(vpu, backward_addr, G1_REG_REFER3_BASE);
- }
- 
--void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
-+int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-@@ -248,4 +248,6 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
- 
- 	reg = G1_REG_DEC_E(1);
- 	vdpu_write(vpu, reg, G1_SWREG(1));
-+
-+	return 0;
- }
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index a5cdf150cd16..d665df026546 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -426,7 +426,7 @@ static void cfg_buffers(struct hantro_ctx *ctx,
- 	vdpu_write_relaxed(vpu, dst_dma, G1_REG_ADDR_DST);
- }
- 
--void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
-+int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- {
- 	const struct v4l2_ctrl_vp8_frame_header *hdr;
- 	struct hantro_dev *vpu = ctx->dev;
-@@ -439,7 +439,7 @@ void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- 
- 	hdr = hantro_get_ctrl(ctx, V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER);
- 	if (WARN_ON(!hdr))
--		return;
-+		return -EINVAL;
- 
- 	/* Reset segment_map buffer in keyframe */
- 	if (VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
-@@ -499,4 +499,6 @@ void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- 	hantro_end_prepare_run(ctx);
- 
- 	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_E, G1_REG_INTERRUPT);
-+
-+	return 0;
- }
-diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-index b88dc4ed06db..56cf261a8e95 100644
---- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-+++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-@@ -88,7 +88,7 @@ hantro_h1_jpeg_enc_set_qtable(struct hantro_dev *vpu,
- 	}
- }
- 
--void hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
-+int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-@@ -136,6 +136,8 @@ void hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
- 	hantro_end_prepare_run(ctx);
- 
- 	vepu_write(vpu, reg, H1_REG_ENC_CTRL);
-+
-+	return 0;
- }
- 
- void hantro_jpeg_enc_done(struct hantro_ctx *ctx)
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34c9e4649a25..4e2e7a5ed283 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -126,14 +126,15 @@ struct hantro_postproc_ctx {
-  *		Optional and called from process context.
-  * @run:	Start single {en,de)coding job. Called from atomic context
-  *		to indicate that a pair of buffers is ready and the hardware
-- *		should be programmed and started.
-+ *		should be programmed and started. Returns zero if OK, a
-+ *		negative value in error cases.
-  * @done:	Read back processing results and additional data from hardware.
-  * @reset:	Reset the hardware in case of a timeout.
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index a0e65481a201..381158320a90 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -14,7 +14,6 @@
+  * get_vaddr_frames() - map virtual addresses to pfns
+  * @start:	starting user address
+  * @nr_frames:	number of pages / pfns from start to map
+- * @gup_flags:	flags modifying lookup behaviour
+  * @vec:	structure which receives pages / pfns of the addresses mapped.
+  *		It should have space for at least nr_frames entries.
+  *
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index cfc27629444f..b7e4a3371176 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -190,7 +190,7 @@ static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int slot,
+ 				     u8 *ebuf, int ecount);
+
+ /**
+- * Safely find needle in haystack.
++ * findstr - Safely find needle in haystack.
+  *
+  * @haystack: Buffer to look in.
+  * @hlen: Number of bytes in haystack.
+@@ -1006,7 +1006,7 @@ EXPORT_SYMBOL(dvb_ca_en50221_frda_irq);
+ /* EN50221 thread functions */
+
+ /**
+- * Wake up the DVB CA thread
++ * dvb_ca_en50221_thread_wakeup - Wake up the DVB CA thread
+  *
+  * @ca: CA instance.
   */
- struct hantro_codec_ops {
- 	int (*init)(struct hantro_ctx *ctx);
- 	void (*exit)(struct hantro_ctx *ctx);
--	void (*run)(struct hantro_ctx *ctx);
-+	int (*run)(struct hantro_ctx *ctx);
- 	void (*done)(struct hantro_ctx *ctx);
- 	void (*reset)(struct hantro_ctx *ctx);
+@@ -1020,7 +1020,7 @@ static void dvb_ca_en50221_thread_wakeup(struct dvb_ca_private *ca)
+ }
+
+ /**
+- * Update the delay used by the thread.
++ * dvb_ca_en50221_thread_update_delay - Update the delay used by the thread.
+  *
+  * @ca: CA instance.
+  */
+@@ -1078,7 +1078,7 @@ static void dvb_ca_en50221_thread_update_delay(struct dvb_ca_private *ca)
+ }
+
+ /**
+- * Poll if the CAM is gone.
++ * dvb_ca_en50221_poll_cam_gone - Poll if the CAM is gone.
+  *
+  * @ca: CA instance.
+  * @slot: Slot to process.
+@@ -1109,7 +1109,8 @@ static int dvb_ca_en50221_poll_cam_gone(struct dvb_ca_private *ca, int slot)
+ }
+
+ /**
+- * Thread state machine for one CA slot to perform the data transfer.
++ * dvb_ca_en50221_thread_state_machine - Thread state machine for one CA slot
++ *	to perform the data transfer.
+  *
+  * @ca: CA instance.
+  * @slot: Slot to process.
+@@ -1324,13 +1325,14 @@ static int dvb_ca_en50221_thread(void *data)
+ /* EN50221 IO interface functions */
+
+ /**
+- * Real ioctl implementation.
+- * NOTE: CA_SEND_MSG/CA_GET_MSG ioctls have userspace buffers passed to them.
++ * dvb_ca_en50221_io_do_ioctl - Real ioctl implementation.
+  *
+  * @file: File concerned.
+  * @cmd: IOCTL command.
+  * @parg: Associated argument.
+  *
++ * NOTE: CA_SEND_MSG/CA_GET_MSG ioctls have userspace buffers passed to them.
++ *
+  * return: 0 on success, <0 on error.
+  */
+ static int dvb_ca_en50221_io_do_ioctl(struct file *file,
+@@ -1408,7 +1410,7 @@ static int dvb_ca_en50221_io_do_ioctl(struct file *file,
+ }
+
+ /**
+- * Wrapper for ioctl implementation.
++ * dvb_ca_en50221_io_ioctl - Wrapper for ioctl implementation.
+  *
+  * @file: File concerned.
+  * @cmd: IOCTL command.
+@@ -1423,7 +1425,7 @@ static long dvb_ca_en50221_io_ioctl(struct file *file,
+ }
+
+ /**
+- * Implementation of write() syscall.
++ * dvb_ca_en50221_io_write - Implementation of write() syscall.
+  *
+  * @file: File structure.
+  * @buf: Source buffer.
+@@ -1579,7 +1581,7 @@ static int dvb_ca_en50221_io_read_condition(struct dvb_ca_private *ca,
+ }
+
+ /**
+- * Implementation of read() syscall.
++ * dvb_ca_en50221_io_read - Implementation of read() syscall.
+  *
+  * @file: File structure.
+  * @buf: Destination buffer.
+@@ -1690,7 +1692,7 @@ static ssize_t dvb_ca_en50221_io_read(struct file *file, char __user *buf,
+ }
+
+ /**
+- * Implementation of file open syscall.
++ * dvb_ca_en50221_io_open - Implementation of file open syscall.
+  *
+  * @inode: Inode concerned.
+  * @file: File concerned.
+@@ -1740,7 +1742,7 @@ static int dvb_ca_en50221_io_open(struct inode *inode, struct file *file)
+ }
+
+ /**
+- * Implementation of file close syscall.
++ * dvb_ca_en50221_io_release - Implementation of file close syscall.
+  *
+  * @inode: Inode concerned.
+  * @file: File concerned.
+@@ -1769,7 +1771,7 @@ static int dvb_ca_en50221_io_release(struct inode *inode, struct file *file)
+ }
+
+ /**
+- * Implementation of poll() syscall.
++ * dvb_ca_en50221_io_poll - Implementation of poll() syscall.
+  *
+  * @file: File concerned.
+  * @wait: poll wait table.
+@@ -1827,7 +1829,7 @@ static const struct dvb_device dvbdev_ca = {
+ /* Initialisation/shutdown functions */
+
+ /**
+- * Initialise a new DVB CA EN50221 interface device.
++ * dvb_ca_en50221_init - Initialise a new DVB CA EN50221 interface device.
+  *
+  * @dvb_adapter: DVB adapter to attach the new CA device to.
+  * @pubca: The dvb_ca instance.
+@@ -1919,7 +1921,7 @@ int dvb_ca_en50221_init(struct dvb_adapter *dvb_adapter,
+ EXPORT_SYMBOL(dvb_ca_en50221_init);
+
+ /**
+- * Release a DVB CA EN50221 interface device.
++ * dvb_ca_en50221_release - Release a DVB CA EN50221 interface device.
+  *
+  * @pubca: The associated dvb_ca instance.
+  */
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 54642d5f2d5b..a9305077be45 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -697,7 +697,7 @@ static inline int imx274_write_reg(struct stimx274 *priv, u16 addr, u8 val)
+ }
+
+ /**
+- * Read a multibyte register.
++ * imx274_read_mbreg - Read a multibyte register.
+  *
+  * Uses a bulk read where possible.
+  *
+@@ -732,7 +732,7 @@ static int imx274_read_mbreg(struct stimx274 *priv, u16 addr, u32 *val,
+ }
+
+ /**
+- * Write a multibyte register.
++ * imx274_write_mbreg - Write a multibyte register.
+  *
+  * Uses a bulk write where possible.
+  *
+@@ -980,7 +980,8 @@ static int imx274_binning_goodness(struct stimx274 *imx274,
+ }
+
+ /**
+- * Helper function to change binning and set both compose and format.
++ * __imx274_change_compose - Helper function to change binning and set both
++ *	compose and format.
+  *
+  * We have two entry points to change binning: set_fmt and
+  * set_selection(COMPOSE). Both have to compute the new output size
+diff --git a/drivers/media/i2c/s5k6aa.c b/drivers/media/i2c/s5k6aa.c
+index 72439fae7968..038e38500760 100644
+--- a/drivers/media/i2c/s5k6aa.c
++++ b/drivers/media/i2c/s5k6aa.c
+@@ -416,7 +416,7 @@ static int s5k6aa_set_ahb_address(struct i2c_client *client)
+ }
+
+ /**
+- * s5k6aa_configure_pixel_clock - apply ISP main clock/PLL configuration
++ * s5k6aa_configure_pixel_clocks - apply ISP main clock/PLL configuration
+  * @s5k6aa: pointer to &struct s5k6aa describing the device
+  *
+  * Configure the internal ISP PLL for the required output frequency.
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index 8e1e892085ec..1e5a28f32195 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -806,7 +806,7 @@ static void fimc_md_unregister_entities(struct fimc_md *fmd)
+ }
+
+ /**
+- * __fimc_md_create_fimc_links - create links to all FIMC entities
++ * __fimc_md_create_fimc_sink_links - create links to all FIMC entities
+  * @fmd: fimc media device
+  * @source: the source entity to create links to all fimc entities from
+  * @sensor: sensor subdev linked to FIMC[fimc_id] entity, may be null
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+index d9880210b2ab..71cdc3ddafcb 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+@@ -61,7 +61,7 @@ struct vp9_ref_cnt_buf {
  };
-@@ -164,8 +165,8 @@ void hantro_irq_done(struct hantro_dev *vpu,
- void hantro_start_prepare_run(struct hantro_ctx *ctx);
- void hantro_end_prepare_run(struct hantro_ctx *ctx);
- 
--void hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx);
--void rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx);
-+int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx);
-+int rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx);
- int hantro_jpeg_enc_init(struct hantro_ctx *ctx);
- void hantro_jpeg_enc_exit(struct hantro_ctx *ctx);
- void hantro_jpeg_enc_done(struct hantro_ctx *ctx);
-@@ -173,7 +174,7 @@ void hantro_jpeg_enc_done(struct hantro_ctx *ctx);
- dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- 				   unsigned int dpb_idx);
- int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx);
--void hantro_g1_h264_dec_run(struct hantro_ctx *ctx);
-+int hantro_g1_h264_dec_run(struct hantro_ctx *ctx);
- int hantro_h264_dec_init(struct hantro_ctx *ctx);
- void hantro_h264_dec_exit(struct hantro_ctx *ctx);
- 
-@@ -204,15 +205,15 @@ hantro_h264_mv_size(unsigned int width, unsigned int height)
- 	return 64 * MB_WIDTH(width) * MB_WIDTH(height) + 32;
+
+ /**
+- * struct vp9_fb_info - contains current frame's reference buffer information
++ * struct vp9_ref_buf - contains current frame's reference buffer information
+  * @buf : reference buffer
+  * @idx : reference buffer index to frm_bufs
+  * @reserved : reserved field used by vpu
+@@ -73,7 +73,7 @@ struct vp9_ref_buf {
+ };
+
+ /**
+- * struct vp9_fb_info - contains frame buffer info
++ * struct vp9_sf_ref_fb - contains frame buffer info
+  * @fb : super frame reference frame buffer
+  * @used : this reference frame info entry is used
+  * @padding : for 64 bytes size align
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+index 043894f7188c..c8a56271b259 100644
+--- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
++++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+@@ -19,11 +19,11 @@
+
+ #include "mtk_vpu.h"
+
+-/**
++/*
+  * VPU (video processor unit) is a tiny processor controlling video hardware
+  * related to video codec, scaling and color format converting.
+  * VPU interfaces with other blocks by share memory and interrupt.
+- **/
++ */
+
+ #define INIT_TIMEOUT_MS		2000U
+ #define IPI_TIMEOUT_MS		2000U
+diff --git a/drivers/media/platform/vsp1/vsp1_dl.c b/drivers/media/platform/vsp1/vsp1_dl.c
+index e07b135613eb..ad3fa1c9cc73 100644
+--- a/drivers/media/platform/vsp1/vsp1_dl.c
++++ b/drivers/media/platform/vsp1/vsp1_dl.c
+@@ -142,7 +142,7 @@ struct vsp1_dl_body_pool {
+ };
+
+ /**
+- * struct vsp1_cmd_pool - Display List commands pool
++ * struct vsp1_dl_cmd_pool - Display List commands pool
+  * @dma: DMA address of the entries
+  * @size: size of the full DMA memory pool in bytes
+  * @mem: CPU memory pointer for the pool
+diff --git a/drivers/media/rc/img-ir/img-ir-hw.c b/drivers/media/rc/img-ir/img-ir-hw.c
+index d3af7bca26f5..5da7479c1793 100644
+--- a/drivers/media/rc/img-ir/img-ir-hw.c
++++ b/drivers/media/rc/img-ir/img-ir-hw.c
+@@ -617,7 +617,7 @@ static void img_ir_set_decoder(struct img_ir_priv *priv,
  }
- 
--void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
--void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx);
-+int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
-+int rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
- 	const struct v4l2_ctrl_mpeg2_quantization *ctrl);
- int hantro_mpeg2_dec_init(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_exit(struct hantro_ctx *ctx);
- 
--void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx);
--void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx);
-+int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx);
-+int rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx);
- int hantro_vp8_dec_init(struct hantro_ctx *ctx);
- void hantro_vp8_dec_exit(struct hantro_ctx *ctx);
- void hantro_vp8_prob_update(struct hantro_ctx *ctx,
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_jpeg_enc.c b/drivers/staging/media/hantro/rk3399_vpu_hw_jpeg_enc.c
-index 3498e6124acd..3a27ebef4f38 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_jpeg_enc.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_jpeg_enc.c
-@@ -118,7 +118,7 @@ rk3399_vpu_jpeg_enc_set_qtable(struct hantro_dev *vpu,
- 	}
+
+ /**
+- * img_ir_decoder_compatable() - Find whether a decoder will work with a device.
++ * img_ir_decoder_compatible() - Find whether a decoder will work with a device.
+  * @priv:	IR private data.
+  * @dec:	Decoder to check.
+  *
+diff --git a/drivers/media/tuners/mt2063.c b/drivers/media/tuners/mt2063.c
+index d105431a2e2d..6afef11a49cb 100644
+--- a/drivers/media/tuners/mt2063.c
++++ b/drivers/media/tuners/mt2063.c
+@@ -1383,7 +1383,7 @@ static u32 MT2063_Round_fLO(u32 f_LO, u32 f_LO_Step, u32 f_ref)
  }
- 
--void rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx)
-+int rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-@@ -168,4 +168,6 @@ void rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx)
- 	/* Kick the watchdog and start encoding */
- 	hantro_end_prepare_run(ctx);
- 	vepu_write(vpu, reg, VEPU_REG_ENCODE_START);
-+
-+	return 0;
+
+ /**
+- * fLO_FractionalTerm() - Calculates the portion contributed by FracN / denom.
++ * MT2063_fLO_FractionalTerm - Calculates the portion contributed by FracN / denom.
+  *                        This function preserves maximum precision without
+  *                        risk of overflow.  It accurately calculates
+  *                        f_ref * num / denom to within 1 HZ with fixed math.
+@@ -1411,7 +1411,7 @@ static u32 MT2063_fLO_FractionalTerm(u32 f_ref, u32 num, u32 denom)
  }
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-index f610fa5b4335..4bd3080abbc1 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-@@ -157,7 +157,7 @@ rk3399_vpu_mpeg2_dec_set_buffers(struct hantro_dev *vpu,
- 	vdpu_write_relaxed(vpu, backward_addr, VDPU_REG_REFER3_BASE);
+
+ /*
+- * CalcLO1Mult()- Calculates Integer divider value and the numerator
++ * MT2063_CalcLO1Mult - Calculates Integer divider value and the numerator
+  *                value for a FracN PLL.
+  *
+  *                This function assumes that the f_LO and f_Ref are
+@@ -1444,7 +1444,7 @@ static u32 MT2063_CalcLO1Mult(u32 *Div,
  }
- 
--void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx)
-+int rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-@@ -254,4 +254,6 @@ void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx)
- 
- 	reg = vdpu_read(vpu, VDPU_SWREG(57)) | VDPU_REG_DEC_E(1);
- 	vdpu_write(vpu, reg, VDPU_SWREG(57));
-+
-+	return 0;
+
+ /**
+- * CalcLO2Mult() - Calculates Integer divider value and the numerator
++ * MT2063_CalcLO2Mult - Calculates Integer divider value and the numerator
+  *                 value for a FracN PLL.
+  *
+  *                  This function assumes that the f_LO and f_Ref are
+diff --git a/drivers/media/usb/pwc/pwc-dec23.c b/drivers/media/usb/pwc/pwc-dec23.c
+index 4e26ada87f7b..a3aa8c7174b9 100644
+--- a/drivers/media/usb/pwc/pwc-dec23.c
++++ b/drivers/media/usb/pwc/pwc-dec23.c
+@@ -637,7 +637,7 @@ static void DecompressBand23(struct pwc_dec23_private *pdec,
  }
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-index a4a792f00b11..755571e16fcd 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-@@ -504,7 +504,7 @@ static void cfg_buffers(struct hantro_ctx *ctx,
- 	vdpu_write_relaxed(vpu, dst_dma, VDPU_REG_ADDR_DST);
+
+ /**
+- * Uncompress a pwc23 buffer.
++ * pwc_dec23_decompress - Uncompress a pwc23 buffer.
+  * @pdev: pointer to pwc device's internal struct
+  * @src: raw data
+  * @dst: image output
+diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
+index 8947fd95c6f1..9071b6cc6d0e 100644
+--- a/drivers/media/v4l2-core/v4l2-jpeg.c
++++ b/drivers/media/v4l2-core/v4l2-jpeg.c
+@@ -445,7 +445,7 @@ static int jpeg_skip_segment(struct jpeg_stream *stream)
  }
- 
--void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
-+int rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- {
- 	const struct v4l2_ctrl_vp8_frame_header *hdr;
- 	struct hantro_dev *vpu = ctx->dev;
-@@ -517,7 +517,7 @@ void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- 
- 	hdr = hantro_get_ctrl(ctx, V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER);
- 	if (WARN_ON(!hdr))
--		return;
-+		return -EINVAL;
- 
- 	/* Reset segment_map buffer in keyframe */
- 	if (VP8_FRAME_IS_KEY_FRAME(hdr) && ctx->vp8_dec.segment_map.cpu)
-@@ -590,4 +590,6 @@ void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- 	hantro_end_prepare_run(ctx);
- 
- 	hantro_reg_write(vpu, &vp8_dec_start_dec, 1);
-+
-+	return 0;
- }
+
+ /**
+- * jpeg_parse_header - locate marker segments and optionally parse headers
++ * v4l2_jpeg_parse_header - locate marker segments and optionally parse headers
+  * @buf: address of the JPEG buffer, should start with a SOI marker
+  * @len: length of the JPEG buffer
+  * @out: returns marker segment positions and optionally parsed headers
 -- 
-2.25.1
+2.30.1
 
