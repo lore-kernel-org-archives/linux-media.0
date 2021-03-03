@@ -2,1375 +2,504 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 080D5C4332B
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4827C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:33:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D684664EBA
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:32:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BA7364EE3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 00:33:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbhCDAcy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S1351844AbhCDAc6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Mar 2021 19:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388030AbhCCU2y (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 15:28:54 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AACC061763;
-        Wed,  3 Mar 2021 12:27:45 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 8D00E1F46027
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v2 8/8] media: uapi: move VP8 stateless controls out of staging
-Date:   Wed,  3 Mar 2021 17:27:14 -0300
-Message-Id: <20210303202714.212394-9-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210303202714.212394-1-ezequiel@collabora.com>
-References: <20210303202714.212394-1-ezequiel@collabora.com>
+        with ESMTP id S1388986AbhCCVbi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Mar 2021 16:31:38 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350FEC061760
+        for <linux-media@vger.kernel.org>; Wed,  3 Mar 2021 13:30:26 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id lr13so45119816ejb.8
+        for <linux-media@vger.kernel.org>; Wed, 03 Mar 2021 13:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gz6/fn0MA6ieuQdfGlLO0r7rhZF3LTjYPpwbfwdmdwQ=;
+        b=0/BAuiqJixT2tW+jYrcnO5pt2xRPDpV9QCp+A1R2IzaJgxIu4BFJkrie+yVeZzjtTI
+         cZfvxJ7SUK0pb1hc9Vl7AaAq8KLl/+6Y0pWIJTJ1kv0rqlC86g8Y/qZtp6qlMALvsC2J
+         0Z/SMpAloe64Lghu8e/ZQKg6YwOktzoZqS49wyRMitMyZ8NSgBs+dROcnsER3jygypR6
+         4rILBQNOLN3kfMMMa8WI/e9RUsjbht0okpVSYKf0tBfK/PnPDnqgaBcnuQEqmjL9NAIv
+         WaxXSGfY41AMctmM7S3iIZMLlfr/wwYmhECOH86QI1MGMtsSRhSya/jJ+RIhTpGr9fG5
+         iXpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gz6/fn0MA6ieuQdfGlLO0r7rhZF3LTjYPpwbfwdmdwQ=;
+        b=Hu/LVl+8Yt+FBRVOnGtQE81AqxlUqR5ynikjoO077jgKzii7JWNVB3gsXxc9bEmbSD
+         G33bWeGIbF/OLoG9cF9J1yq7Z0j/FZ53PB7wWjkBBpMc3Kj75WjyE3HIU5zHAMUinN4j
+         D/9u8cLJZrdy5FeNiN3a3N1KMNtgj90DBgN/wjyTVAh22NVJ2NLOD/iNLYrNy6FP64yu
+         ahYACgmam39FH3KOEQhuOjWITlxs/KnV7wHXhRH4cc5Tif6c+uvrPQTdpQ3FEq7GNc4g
+         4b+/LP0sU1sq0ZNBZvDoC0tAMJqNJJLWITo//MoGXwM9HH4IqI3n5IlXqJolcfAOToEy
+         7FKQ==
+X-Gm-Message-State: AOAM531gQzy2W6mDcdpwhVldx9tgY8aqziqsdbMHZURmFMe48DuucY2r
+        B47LqIUX8AejyTcLZpY+gcPh3o/Qwaw5gULiz1aPHA==
+X-Google-Smtp-Source: ABdhPJx/Ww50xcbxMCXAhqIJNlvSZj5dJOIGwmT9jDly92NvUIWsVDsivQ7xXU33zDPntqx83j2iB/DewF93ye2XQ84=
+X-Received: by 2002:a17:906:a3d1:: with SMTP id ca17mr765839ejb.92.1614807024886;
+ Wed, 03 Mar 2021 13:30:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210226100148.1663389-1-acourbot@chromium.org> <20210226100148.1663389-6-acourbot@chromium.org>
+In-Reply-To: <20210226100148.1663389-6-acourbot@chromium.org>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Wed, 3 Mar 2021 18:30:12 -0300
+Message-ID: <CAAEAJfDyHYGf+J6WDHchVATOvj5AJpO8dkAStiNGNobJ9Uz8Yw@mail.gmail.com>
+Subject: Re: [PATCH v3 05/15] media: mtk-vcodec: vdec: support stateless API
+To:     Alexandre Courbot <acourbot@chromium.org>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Until now, the VP8 V4L2 API was not exported as a public API,
-and only defined in a private media header (media/vp8-ctrls.h).
+Hello Alex,
 
-The reason for this was a concern about the API not complete
-and ready to support VP8 decoding hardware accelerators.
+Thanks for the patch.
 
-After reviewing the VP8 specification in detail, and now
-that the API is able to support Cedrus and Hantro G1,
-we can consider this ready.
+On Fri, 26 Feb 2021 at 07:06, Alexandre Courbot <acourbot@chromium.org> wrote:
+>
+> From: Yunfei Dong <yunfei.dong@mediatek.com>
+>
+> Support the stateless codec API that will be used by MT8183.
+>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> [acourbot: refactor, cleanup and split]
+> Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
+> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+> ---
+>  drivers/media/platform/mtk-vcodec/Makefile    |   1 +
+>  .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  66 ++-
+>  .../platform/mtk-vcodec/mtk_vcodec_dec.h      |   9 +-
+>  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 427 ++++++++++++++++++
+>  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |   3 +
+>  5 files changed, 503 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+>
+[..]
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- .../media/v4l/ext-ctrls-codec-stateless.rst   | 318 +++++++++++++++++
- .../media/v4l/ext-ctrls-codec.rst             | 323 ------------------
- .../media/v4l/pixfmt-compressed.rst           |  10 +-
- .../media/v4l/vidioc-g-ext-ctrls.rst          |   4 +
- .../media/v4l/vidioc-queryctrl.rst            |   6 +
- .../media/videodev2.h.rst.exceptions          |   1 +
- drivers/media/v4l2-core/v4l2-ctrls.c          |   4 +-
- drivers/staging/media/hantro/hantro_drv.c     |   2 +-
- .../staging/media/hantro/hantro_g1_vp8_dec.c  |   3 +-
- .../media/hantro/rk3399_vpu_hw_vp8_dec.c      |   3 +-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_vp8.c   |   3 +-
- include/media/v4l2-ctrls.h                    |   1 -
- include/media/vp8-ctrls.h                     | 210 ------------
- include/uapi/linux/v4l2-controls.h            | 195 +++++++++++
- include/uapi/linux/videodev2.h                |   1 +
- 17 files changed, 539 insertions(+), 549 deletions(-)
- delete mode 100644 include/media/vp8-ctrls.h
+> +
+> +static const struct mtk_stateless_control mtk_stateless_controls[] = {
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_STATELESS_H264_SPS,
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +               .needed_in_request = true,
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-index 01e3b1a3fb99..62147b1d341e 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-@@ -791,3 +791,321 @@ FWHT Flags
-     * - ``V4L2_FWHT_FL_PIXENC_HSV``
-       - 0x00180000
-       - Set if the pixel encoding is HSV.
-+
-+.. _v4l2-codec-stateless-vp8:
-+
-+``V4L2_CID_STATELESS_VP8_FRAME (struct)``
-+    Specifies the frame parameters for the associated VP8 parsed frame data.
-+    This includes the necessary parameters for
-+    configuring a stateless hardware decoding pipeline for VP8.
-+    The bitstream parameters are defined according to :ref:`vp8`.
-+
-+.. c:type:: v4l2_ctrl_vp8_frame
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{5.8cm}|p{4.8cm}|p{6.6cm}|
-+
-+.. flat-table:: struct v4l2_ctrl_vp8_frame
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - struct :c:type:`v4l2_vp8_segment`
-+      - ``seg``
-+      - Structure with segment-based adjustments metadata.
-+    * - struct :c:type:`v4l2_vp8_loop_filter`
-+      - ``lf``
-+      - Structure with loop filter level adjustments metadata.
-+    * - struct :c:type:`v4l2_vp8_quantization`
-+      - ``quant``
-+      - Structure with VP8 dequantization indices metadata.
-+    * - struct :c:type:`v4l2_vp8_entropy`
-+      - ``entropy``
-+      - Structure with VP8 entropy coder probabilities metadata.
-+    * - struct :c:type:`v4l2_vp8_entropy_coder_state`
-+      - ``coder_state``
-+      - Structure with VP8 entropy coder state.
-+    * - __u16
-+      - ``width``
-+      - The width of the frame. Must be set for all frames.
-+    * - __u16
-+      - ``height``
-+      - The height of the frame. Must be set for all frames.
-+    * - __u8
-+      - ``horizontal_scale``
-+      - Horizontal scaling factor.
-+    * - __u8
-+      - ``vertical_scaling factor``
-+      - Vertical scale.
-+    * - __u8
-+      - ``version``
-+      - Bitstream version.
-+    * - __u8
-+      - ``prob_skip_false``
-+      - Indicates the probability that the macroblock is not skipped.
-+    * - __u8
-+      - ``prob_intra``
-+      - Indicates the probability that a macroblock is intra-predicted.
-+    * - __u8
-+      - ``prob_last``
-+      - Indicates the probability that the last reference frame is used
-+        for inter-prediction
-+    * - __u8
-+      - ``prob_gf``
-+      - Indicates the probability that the golden reference frame is used
-+        for inter-prediction
-+    * - __u8
-+      - ``num_dct_parts``
-+      - Number of DCT coefficients partitions. Must be one of: 1, 2, 4, or 8.
-+    * - __u32
-+      - ``first_part_size``
-+      - Size of the first partition, i.e. the control partition.
-+    * - __u32
-+      - ``first_part_header_bits``
-+      - Size in bits of the first partition header portion.
-+    * - __u32
-+      - ``dct_part_sizes[8]``
-+      - DCT coefficients sizes.
-+    * - __u64
-+      - ``last_frame_ts``
-+      - Timestamp for the V4L2 capture buffer to use as last reference frame, used
-+        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
-+	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+	function to convert the struct :c:type:`timeval` in struct
-+	:c:type:`v4l2_buffer` to a __u64.
-+    * - __u64
-+      - ``golden_frame_ts``
-+      - Timestamp for the V4L2 capture buffer to use as last reference frame, used
-+        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
-+	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+	function to convert the struct :c:type:`timeval` in struct
-+	:c:type:`v4l2_buffer` to a __u64.
-+    * - __u64
-+      - ``alt_frame_ts``
-+      - Timestamp for the V4L2 capture buffer to use as alternate reference frame, used
-+        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
-+	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+	function to convert the struct :c:type:`timeval` in struct
-+	:c:type:`v4l2_buffer` to a __u64.
-+    * - __u64
-+      - ``flags``
-+      - See :ref:`Frame Flags <vp8_frame_flags>`
-+
-+.. _vp8_frame_flags:
-+
-+``Frame Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_VP8_FRAME_FLAG_KEY_FRAME``
-+      - 0x01
-+      - Indicates if the frame is a key frame.
-+    * - ``V4L2_VP8_FRAME_FLAG_EXPERIMENTAL``
-+      - 0x02
-+      - Experimental bitstream.
-+    * - ``V4L2_VP8_FRAME_FLAG_SHOW_FRAME``
-+      - 0x04
-+      - Show frame flag, indicates if the frame is for display.
-+    * - ``V4L2_VP8_FRAME_FLAG_MB_NO_SKIP_COEFF``
-+      - 0x08
-+      - Enable/disable skipping of macroblocks with no non-zero coefficients.
-+    * - ``V4L2_VP8_FRAME_FLAG_SIGN_BIAS_GOLDEN``
-+      - 0x10
-+      - Sign of motion vectors when the golden frame is referenced.
-+    * - ``V4L2_VP8_FRAME_FLAG_SIGN_BIAS_ALT``
-+      - 0x20
-+      - Sign of motion vectors when the alt frame is referenced.
-+
-+.. c:type:: v4l2_vp8_entropy_coder_state
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp8_entropy_coder_state
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``range``
-+      - coder state value for "Range"
-+    * - __u8
-+      - ``value``
-+      - coder state value for "Value"-
-+    * - __u8
-+      - ``bit_count``
-+      - number of bits left.
-+    * - __u8
-+      - ``padding``
-+      - Applications and drivers must set this to zero.
-+
-+.. c:type:: v4l2_vp8_segment
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp8_segment
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __s8
-+      - ``quant_update[4]``
-+      - Signed quantizer value update.
-+    * - __s8
-+      - ``lf_update[4]``
-+      - Signed loop filter level value update.
-+    * - __u8
-+      - ``segment_probs[3]``
-+      - Segment probabilities.
-+    * - __u8
-+      - ``padding``
-+      - Applications and drivers must set this to zero.
-+    * - __u32
-+      - ``flags``
-+      - See :ref:`Segment Flags <vp8_segment_flags>`
-+
-+.. _vp8_segment_flags:
-+
-+``Segment Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_VP8_SEGMENT_FLAG_ENABLED``
-+      - 0x01
-+      - Enable/disable segment-based adjustments.
-+    * - ``V4L2_VP8_SEGMENT_FLAG_UPDATE_MAP``
-+      - 0x02
-+      - Indicates if the macroblock segmentation map is updated in this frame.
-+    * - ``V4L2_VP8_SEGMENT_FLAG_UPDATE_FEATURE_DATA``
-+      - 0x04
-+      - Indicates if the segment feature data is updated in this frame.
-+    * - ``V4L2_VP8_SEGMENT_FLAG_DELTA_VALUE_MODE``
-+      - 0x08
-+      - If is set, the segment feature data mode is delta-value.
-+        If cleared, it's absolute-value.
-+
-+.. c:type:: v4l2_vp8_loop_filter
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp8_loop_filter
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __s8
-+      - ``ref_frm_delta[4]``
-+      - Reference adjustment (signed) delta value.
-+    * - __s8
-+      - ``mb_mode_delta[4]``
-+      - Macroblock prediction mode adjustment (signed) delta value.
-+    * - __u8
-+      - ``sharpness_level``
-+      - Sharpness level
-+    * - __u8
-+      - ``level``
-+      - Filter level
-+    * - __u16
-+      - ``padding``
-+      - Applications and drivers must set this to zero.
-+    * - __u32
-+      - ``flags``
-+      - See :ref:`Loop Filter Flags <vp8_loop_filter_flags>`
-+
-+.. _vp8_loop_filter_flags:
-+
-+``Loop Filter Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_VP8_LF_ADJ_ENABLE``
-+      - 0x01
-+      - Enable/disable macroblock-level loop filter adjustment.
-+    * - ``V4L2_VP8_LF_DELTA_UPDATE``
-+      - 0x02
-+      - Indicates if the delta values used in an adjustment are updated.
-+    * - ``V4L2_VP8_LF_FILTER_TYPE_SIMPLE``
-+      - 0x04
-+      - If set, indicates the filter type is simple.
-+        If cleared, the filter type is normal.
-+
-+.. c:type:: v4l2_vp8_quantization
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp8_quantization
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``y_ac_qi``
-+      - Luma AC coefficient table index.
-+    * - __s8
-+      - ``y_dc_delta``
-+      - Luma DC delta vaue.
-+    * - __s8
-+      - ``y2_dc_delta``
-+      - Y2 block DC delta value.
-+    * - __s8
-+      - ``y2_ac_delta``
-+      - Y2 block AC delta value.
-+    * - __s8
-+      - ``uv_dc_delta``
-+      - Chroma DC delta value.
-+    * - __s8
-+      - ``uv_ac_delta``
-+      - Chroma AC delta value.
-+    * - __u16
-+      - ``padding``
-+      - Applications and drivers must set this to zero.
-+
-+.. c:type:: v4l2_vp8_entropy
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp8_entropy
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``coeff_probs[4][8][3][11]``
-+      - Coefficient update probabilities.
-+    * - __u8
-+      - ``y_mode_probs[4]``
-+      - Luma mode update probabilities.
-+    * - __u8
-+      - ``uv_mode_probs[3]``
-+      - Chroma mode update probabilities.
-+    * - __u8
-+      - ``mv_probs[2][19]``
-+      - MV decoding update probabilities.
-+    * - __u8
-+      - ``padding[3]``
-+      - Applications and drivers must set this to zero.
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 8bbfea44a2ca..0289fc0b0180 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1747,329 +1747,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     Quantization parameter for a P frame for FWHT. Valid range: from 1
-     to 31.
- 
--.. _v4l2-mpeg-vp8:
--
--``V4L2_CID_MPEG_VIDEO_VP8_FRAME (struct)``
--    Specifies the frame parameters for the associated VP8 parsed frame data.
--    This includes the necessary parameters for
--    configuring a stateless hardware decoding pipeline for VP8.
--    The bitstream parameters are defined according to :ref:`vp8`.
--
--    .. note::
--
--       This compound control is not yet part of the public kernel API and
--       it is expected to change.
--
--.. c:type:: v4l2_ctrl_vp8_frame
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{5.8cm}|p{4.8cm}|p{6.6cm}|
--
--.. flat-table:: struct v4l2_ctrl_vp8_frame
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - struct :c:type:`v4l2_vp8_segment`
--      - ``seg``
--      - Structure with segment-based adjustments metadata.
--    * - struct :c:type:`v4l2_vp8_loop_filter`
--      - ``lf``
--      - Structure with loop filter level adjustments metadata.
--    * - struct :c:type:`v4l2_vp8_quantization`
--      - ``quant``
--      - Structure with VP8 dequantization indices metadata.
--    * - struct :c:type:`v4l2_vp8_entropy`
--      - ``entropy``
--      - Structure with VP8 entropy coder probabilities metadata.
--    * - struct :c:type:`v4l2_vp8_entropy_coder_state`
--      - ``coder_state``
--      - Structure with VP8 entropy coder state.
--    * - __u16
--      - ``width``
--      - The width of the frame. Must be set for all frames.
--    * - __u16
--      - ``height``
--      - The height of the frame. Must be set for all frames.
--    * - __u8
--      - ``horizontal_scale``
--      - Horizontal scaling factor.
--    * - __u8
--      - ``vertical_scaling factor``
--      - Vertical scale.
--    * - __u8
--      - ``version``
--      - Bitstream version.
--    * - __u8
--      - ``prob_skip_false``
--      - Indicates the probability that the macroblock is not skipped.
--    * - __u8
--      - ``prob_intra``
--      - Indicates the probability that a macroblock is intra-predicted.
--    * - __u8
--      - ``prob_last``
--      - Indicates the probability that the last reference frame is used
--        for inter-prediction
--    * - __u8
--      - ``prob_gf``
--      - Indicates the probability that the golden reference frame is used
--        for inter-prediction
--    * - __u8
--      - ``num_dct_parts``
--      - Number of DCT coefficients partitions. Must be one of: 1, 2, 4, or 8.
--    * - __u32
--      - ``first_part_size``
--      - Size of the first partition, i.e. the control partition.
--    * - __u32
--      - ``first_part_header_bits``
--      - Size in bits of the first partition header portion.
--    * - __u32
--      - ``dct_part_sizes[8]``
--      - DCT coefficients sizes.
--    * - __u64
--      - ``last_frame_ts``
--      - Timestamp for the V4L2 capture buffer to use as last reference frame, used
--        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
--	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
--	function to convert the struct :c:type:`timeval` in struct
--	:c:type:`v4l2_buffer` to a __u64.
--    * - __u64
--      - ``golden_frame_ts``
--      - Timestamp for the V4L2 capture buffer to use as last reference frame, used
--        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
--	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
--	function to convert the struct :c:type:`timeval` in struct
--	:c:type:`v4l2_buffer` to a __u64.
--    * - __u64
--      - ``alt_frame_ts``
--      - Timestamp for the V4L2 capture buffer to use as alternate reference frame, used
--        with inter-coded frames. The timestamp refers to the ``timestamp`` field in
--	struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
--	function to convert the struct :c:type:`timeval` in struct
--	:c:type:`v4l2_buffer` to a __u64.
--    * - __u64
--      - ``flags``
--      - See :ref:`Frame Flags <vp8_frame_flags>`
--
--.. _vp8_frame_flags:
--
--``Frame Flags``
--
--.. cssclass:: longtable
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - ``V4L2_VP8_FRAME_FLAG_KEY_FRAME``
--      - 0x01
--      - Indicates if the frame is a key frame.
--    * - ``V4L2_VP8_FRAME_FLAG_EXPERIMENTAL``
--      - 0x02
--      - Experimental bitstream.
--    * - ``V4L2_VP8_FRAME_FLAG_SHOW_FRAME``
--      - 0x04
--      - Show frame flag, indicates if the frame is for display.
--    * - ``V4L2_VP8_FRAME_FLAG_MB_NO_SKIP_COEFF``
--      - 0x08
--      - Enable/disable skipping of macroblocks with no non-zero coefficients.
--    * - ``V4L2_VP8_FRAME_FLAG_SIGN_BIAS_GOLDEN``
--      - 0x10
--      - Sign of motion vectors when the golden frame is referenced.
--    * - ``V4L2_VP8_FRAME_FLAG_SIGN_BIAS_ALT``
--      - 0x20
--      - Sign of motion vectors when the alt frame is referenced.
--
--.. c:type:: v4l2_vp8_entropy_coder_state
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
--
--.. flat-table:: struct v4l2_vp8_entropy_coder_state
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - __u8
--      - ``range``
--      -
--    * - __u8
--      - ``value``
--      -
--    * - __u8
--      - ``bit_count``
--      -
--    * - __u8
--      - ``padding``
--      - Applications and drivers must set this to zero.
--
--.. c:type:: v4l2_vp8_segment
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
--
--.. flat-table:: struct v4l2_vp8_segment
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - __s8
--      - ``quant_update[4]``
--      - Signed quantizer value update.
--    * - __s8
--      - ``lf_update[4]``
--      - Signed loop filter level value update.
--    * - __u8
--      - ``segment_probs[3]``
--      - Segment probabilities.
--    * - __u8
--      - ``padding``
--      - Applications and drivers must set this to zero.
--    * - __u32
--      - ``flags``
--      - See :ref:`Segment Flags <vp8_segment_flags>`
--
--.. _vp8_segment_flags:
--
--``Segment Flags``
--
--.. cssclass:: longtable
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - ``V4L2_VP8_SEGMENT_FLAG_ENABLED``
--      - 0x01
--      - Enable/disable segment-based adjustments.
--    * - ``V4L2_VP8_SEGMENT_FLAG_UPDATE_MAP``
--      - 0x02
--      - Indicates if the macroblock segmentation map is updated in this frame.
--    * - ``V4L2_VP8_SEGMENT_FLAG_UPDATE_FEATURE_DATA``
--      - 0x04
--      - Indicates if the segment feature data is updated in this frame.
--    * - ``V4L2_VP8_SEGMENT_FLAG_DELTA_VALUE_MODE``
--      - 0x08
--      - If is set, the segment feature data mode is delta-value.
--        If cleared, it's absolute-value.
--
--.. c:type:: v4l2_vp8_loop_filter
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
--
--.. flat-table:: struct v4l2_vp8_loop_filter
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - __s8
--      - ``ref_frm_delta[4]``
--      - Reference adjustment (signed) delta value.
--    * - __s8
--      - ``mb_mode_delta[4]``
--      - Macroblock prediction mode adjustment (signed) delta value.
--    * - __u8
--      - ``sharpness_level``
--      - Sharpness level
--    * - __u8
--      - ``level``
--      - Filter level
--    * - __u16
--      - ``padding``
--      - Applications and drivers must set this to zero.
--    * - __u32
--      - ``flags``
--      - See :ref:`Loop Filter Flags <vp8_loop_filter_flags>`
--
--.. _vp8_loop_filter_flags:
--
--``Loop Filter Flags``
--
--.. cssclass:: longtable
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - ``V4L2_VP8_LF_ADJ_ENABLE``
--      - 0x01
--      - Enable/disable macroblock-level loop filter adjustment.
--    * - ``V4L2_VP8_LF_DELTA_UPDATE``
--      - 0x02
--      - Indicates if the delta values used in an adjustment are updated.
--    * - ``V4L2_VP8_LF_FILTER_TYPE_SIMPLE``
--      - 0x04
--      - If set, indicates the filter type is simple.
--        If cleared, the filter type is normal.
--
--.. c:type:: v4l2_vp8_quantization
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
--
--.. flat-table:: struct v4l2_vp8_quantization
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - __u8
--      - ``y_ac_qi``
--      - Luma AC coefficient table index.
--    * - __s8
--      - ``y_dc_delta``
--      - Luma DC delta vaue.
--    * - __s8
--      - ``y2_dc_delta``
--      - Y2 block DC delta value.
--    * - __s8
--      - ``y2_ac_delta``
--      - Y2 block AC delta value.
--    * - __s8
--      - ``uv_dc_delta``
--      - Chroma DC delta value.
--    * - __s8
--      - ``uv_ac_delta``
--      - Chroma AC delta value.
--    * - __u16
--      - ``padding``
--      - Applications and drivers must set this to zero.
--
--.. c:type:: v4l2_vp8_entropy
--
--.. cssclass:: longtable
--
--.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
--
--.. flat-table:: struct v4l2_vp8_entropy
--    :header-rows:  0
--    :stub-columns: 0
--    :widths:       1 1 2
--
--    * - __u8
--      - ``coeff_probs[4][8][3][11]``
--      - Coefficient update probabilities.
--    * - __u8
--      - ``y_mode_probs[4]``
--      - Luma mode update probabilities.
--    * - __u8
--      - ``uv_mode_probs[3]``
--      - Chroma mode update probabilities.
--    * - __u8
--      - ``mv_probs[2][19]``
--      - MV decoding update probabilities.
--    * - __u8
--      - ``padding[3]``
--      - Applications and drivers must set this to zero.
--
- .. raw:: latex
- 
-     \normalsize
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index e91bc54fa286..c0232690dbe9 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -147,12 +147,12 @@ Compressed Formats
- 
-       - ``V4L2_PIX_FMT_VP8_FRAME``
-       - 'VP8F'
--      - VP8 parsed frame, as extracted from the container.
--	This format is adapted for stateless video decoders that implement a
--	VP8 pipeline (using the :ref:`mem2mem` and :ref:`media-request-api`).
-+      - VP8 parsed frame, including the frame header, as extracted from the container.
-+	This format is adapted for stateless video decoders that implement an
-+	VP8 pipeline with the :ref:`stateless_decoder`.
- 	Metadata associated with the frame to decode is required to be passed
--	through the ``V4L2_CID_MPEG_VIDEO_VP8_FRAME`` control.
--	See the :ref:`associated Codec Control IDs <v4l2-mpeg-vp8>`.
-+	through the ``V4L2_CID_STATELESS_VP8_FRAME`` control.
-+	See the :ref:`associated Codec Control IDs <v4l2-codec-stateless-vp8>`.
- 	Exactly one output and one capture buffer must be provided for use with
- 	this pixel format. The output buffer must contain the appropriate number
- 	of macroblocks to decode a full corresponding frame to the matching
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index b9c62affbb5a..6c4b7c18cec7 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -212,6 +212,10 @@ still cause this situation.
-       - ``p_fwht_params``
-       - A pointer to a struct :c:type:`v4l2_ctrl_fwht_params`. Valid if this control is
-         of type ``V4L2_CTRL_TYPE_FWHT_PARAMS``.
-+    * - struct :c:type:`v4l2_ctrl_vp8_frame` *
-+      - ``p_vp8_frame``
-+      - A pointer to a struct :c:type:`v4l2_ctrl_vp8_frame`. Valid if this control is
-+        of type ``V4L2_CTRL_TYPE_VP8_FRAME``.
-     * - void *
-       - ``ptr``
-       - A pointer to a compound type which can be an N-dimensional array
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 82f61f1e2fb8..bf4525103fab 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -486,6 +486,12 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_hevc_slice_params`, containing HEVC
- 	slice parameters for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_VP8_FRAME``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_ctrl_vp8_frame`, containing VP8
-+	frame parameters for stateless video decoders.
- 
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
- 
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 0ed170c6e720..afb1552b2d39 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -147,6 +147,7 @@ replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_AREA :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_FWHT_PARAMS :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_VP8_FRAME :c:type:`v4l2_ctrl_type`
- 
- # V4L2 capability defines
- replace define V4L2_CAP_VIDEO_CAPTURE device-capabilities
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 0fc7180a47e9..ac3bfc9f9891 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -971,7 +971,6 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:			return "VP8 Profile";
- 	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:			return "VP9 Profile";
- 	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:			return "VP9 Level";
--	case V4L2_CID_MPEG_VIDEO_VP8_FRAME:			return "VP8 Frame Parameters";
- 
- 	/* HEVC controls */
- 	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:		return "HEVC I-Frame QP Value";
-@@ -1201,6 +1200,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_STATELESS_H264_SLICE_PARAMS:		return "H264 Slice Parameters";
- 	case V4L2_CID_STATELESS_H264_DECODE_PARAMS:		return "H264 Decode Parameters";
- 	case V4L2_CID_STATELESS_FWHT_PARAMS:			return "FWHT Stateless Parameters";
-+	case V4L2_CID_STATELESS_VP8_FRAME:			return "VP8 Frame Parameters";
- 	default:
- 		return NULL;
- 	}
-@@ -1470,7 +1470,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_STATELESS_H264_PRED_WEIGHTS:
- 		*type = V4L2_CTRL_TYPE_H264_PRED_WEIGHTS;
- 		break;
--	case V4L2_CID_MPEG_VIDEO_VP8_FRAME:
-+	case V4L2_CID_STATELESS_VP8_FRAME:
- 		*type = V4L2_CTRL_TYPE_VP8_FRAME;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_HEVC_SPS:
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index f1e7f0732e27..595e82a82728 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -299,7 +299,7 @@ static const struct hantro_ctrl controls[] = {
- 	}, {
- 		.codec = HANTRO_VP8_DECODER,
- 		.cfg = {
--			.id = V4L2_CID_MPEG_VIDEO_VP8_FRAME,
-+			.id = V4L2_CID_STATELESS_VP8_FRAME,
- 		},
- 	}, {
- 		.codec = HANTRO_H264_DECODER,
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index 03360fdb9341..96790eba837f 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -10,7 +10,6 @@
-  */
- 
- #include <media/v4l2-mem2mem.h>
--#include <media/vp8-ctrls.h>
- 
- #include "hantro_hw.h"
- #include "hantro.h"
-@@ -437,7 +436,7 @@ void hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
- 
- 	hantro_start_prepare_run(ctx);
- 
--	hdr = hantro_get_ctrl(ctx, V4L2_CID_MPEG_VIDEO_VP8_FRAME);
-+	hdr = hantro_get_ctrl(ctx, V4L2_CID_STATELESS_VP8_FRAME);
- 	if (WARN_ON(!hdr))
- 		return;
- 
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-index bb9f5d3c63c7..f10dc0354848 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-@@ -13,7 +13,6 @@
-  */
- 
- #include <media/v4l2-mem2mem.h>
--#include <media/vp8-ctrls.h>
- 
- #include "hantro_hw.h"
- #include "hantro.h"
-@@ -515,7 +514,7 @@ void rk3399_vpu_vp8_dec_run(struct hantro_ctx *ctx)
- 
- 	hantro_start_prepare_run(ctx);
- 
--	hdr = hantro_get_ctrl(ctx, V4L2_CID_MPEG_VIDEO_VP8_FRAME);
-+	hdr = hantro_get_ctrl(ctx, V4L2_CID_STATELESS_VP8_FRAME);
- 	if (WARN_ON(!hdr))
- 		return;
- 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index e233feb49c9c..92812d1a39d4 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -147,7 +147,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 	},
- 	{
- 		.cfg = {
--			.id	= V4L2_CID_MPEG_VIDEO_VP8_FRAME,
-+			.id	= V4L2_CID_STATELESS_VP8_FRAME,
- 		},
- 		.codec		= CEDRUS_CODEC_VP8,
- 	},
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-index b0a0559cd0eb..d696b3ec70c0 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-@@ -72,7 +72,7 @@ void cedrus_device_run(void *priv)
- 
- 	case V4L2_PIX_FMT_VP8_FRAME:
- 		run.vp8.frame_params = cedrus_find_control_data(ctx,
--			V4L2_CID_MPEG_VIDEO_VP8_FRAME);
-+			V4L2_CID_STATELESS_VP8_FRAME);
- 		break;
- 
- 	default:
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-index 1e6f3086e400..44d0db667407 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
-@@ -423,7 +423,8 @@ static const u8 prob_table_init[] = {
-  * This table is a copy of k_mv_entropy_update_probs from the VP8
-  * specification.
-  *
-- * FIXME: If any other driver uses it, move this table to media/vp8-ctrls.h
-+ * FIXME: If any other driver uses it, we can consider moving
-+ * this table so it can be shared.
-  */
- static const u8 k_mv_entropy_update_probs[2][V4L2_VP8_MV_PROB_CNT] = {
- 	{ 237, 246, 253, 253, 254, 254, 254, 254, 254,
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index aa06ff1695fe..dea65c92e86b 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -18,7 +18,6 @@
-  * This will move to the public headers once this API is fully stable.
-  */
- #include <media/mpeg2-ctrls.h>
--#include <media/vp8-ctrls.h>
- #include <media/hevc-ctrls.h>
- 
- /* forward references */
-diff --git a/include/media/vp8-ctrls.h b/include/media/vp8-ctrls.h
-deleted file mode 100644
-index 2599f5fd38e6..000000000000
---- a/include/media/vp8-ctrls.h
-+++ /dev/null
-@@ -1,210 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * These are the VP8 state controls for use with stateless VP8
-- * codec drivers.
-- *
-- * It turns out that these structs are not stable yet and will undergo
-- * more changes. So keep them private until they are stable and ready to
-- * become part of the official public API.
-- */
--
--#ifndef _VP8_CTRLS_H_
--#define _VP8_CTRLS_H_
--
--#include <linux/types.h>
--
--#define V4L2_CID_MPEG_VIDEO_VP8_FRAME (V4L2_CID_CODEC_BASE + 2000)
--
--#define V4L2_VP8_SEGMENT_FLAG_ENABLED              0x01
--#define V4L2_VP8_SEGMENT_FLAG_UPDATE_MAP           0x02
--#define V4L2_VP8_SEGMENT_FLAG_UPDATE_FEATURE_DATA  0x04
--#define V4L2_VP8_SEGMENT_FLAG_DELTA_VALUE_MODE     0x08
--
--/**
-- * struct v4l2_vp8_segment - VP8 segment-based adjustments parameters
-- *
-- * @quant_update: update values for the segment quantizer.
-- * @lf_update: update values for the loop filter level.
-- * @segment_probs: branch probabilities of the segment_id decoding tree.
-- * @padding: padding field. Should be zeroed by applications.
-- * @flags: see V4L2_VP8_SEGMENT_FLAG_{}.
-- *
-- * This structure contains segment-based adjustments related parameters.
-- * See the 'update_segmentation()' part of the frame header syntax,
-- * and section '9.3. Segment-Based Adjustments' of the VP8 specification
-- * for more details.
-- */
--struct v4l2_vp8_segment {
--	__s8 quant_update[4];
--	__s8 lf_update[4];
--	__u8 segment_probs[3];
--	__u8 padding;
--	__u32 flags;
--};
--
--#define V4L2_VP8_LF_ADJ_ENABLE	0x01
--#define V4L2_VP8_LF_DELTA_UPDATE	0x02
--#define V4L2_VP8_LF_FILTER_TYPE_SIMPLE	0x04
--
--/**
-- * struct v4l2_vp8_loop_filter - VP8 loop filter parameters
-- *
-- * @ref_frm_delta: Reference frame signed delta values.
-- * @mb_mode_delta: MB prediction mode signed delta values.
-- * @sharpness_level: matches sharpness_level syntax element.
-- * @level: matches loop_filter_level syntax element.
-- * @padding: padding field. Should be zeroed by applications.
-- * @flags: see V4L2_VP8_LF_FLAG_{}.
-- *
-- * This structure contains loop filter related parameters.
-- * See the 'mb_lf_adjustments()' part of the frame header syntax,
-- * and section '9.4. Loop Filter Type and Levels' of the VP8 specification
-- * for more details.
-- */
--struct v4l2_vp8_loop_filter {
--	__s8 ref_frm_delta[4];
--	__s8 mb_mode_delta[4];
--	__u8 sharpness_level;
--	__u8 level;
--	__u16 padding;
--	__u32 flags;
--};
--
--/**
-- * struct v4l2_vp8_quantization - VP8 quantizattion indices
-- *
-- * @y_ac_qi: luma AC coefficient table index.
-- * @y_dc_delta: luma DC delta vaue.
-- * @y2_dc_delta: y2 block DC delta value.
-- * @y2_ac_delta: y2 block AC delta value.
-- * @uv_dc_delta: chroma DC delta value.
-- * @uv_ac_delta: chroma AC delta value.
-- * @padding: padding field. Should be zeroed by applications.
--
-- * This structure contains the quantization indices present
-- * in 'quant_indices()' part of the frame header syntax.
-- * See section '9.6. Dequantization Indices' of the VP8 specification
-- * for more details.
-- */
--struct v4l2_vp8_quantization {
--	__u8 y_ac_qi;
--	__s8 y_dc_delta;
--	__s8 y2_dc_delta;
--	__s8 y2_ac_delta;
--	__s8 uv_dc_delta;
--	__s8 uv_ac_delta;
--	__u16 padding;
--};
--
--#define V4L2_VP8_COEFF_PROB_CNT 11
--#define V4L2_VP8_MV_PROB_CNT 19
--
--/**
-- * struct v4l2_vp8_entropy - VP8 update probabilities
-- *
-- * @coeff_probs: coefficient probability update values.
-- * @y_mode_probs: luma intra-prediction probabilities.
-- * @uv_mode_probs: chroma intra-prediction probabilities.
-- * @mv_probs: mv decoding probability.
-- * @padding: padding field. Should be zeroed by applications.
-- *
-- * This structure contains the update probabilities present in
-- * 'token_prob_update()' and 'mv_prob_update()' part of the frame header.
-- * See section '17.2. Probability Updates' of the VP8 specification
-- * for more details.
-- */
--struct v4l2_vp8_entropy {
--	__u8 coeff_probs[4][8][3][V4L2_VP8_COEFF_PROB_CNT];
--	__u8 y_mode_probs[4];
--	__u8 uv_mode_probs[3];
--	__u8 mv_probs[2][V4L2_VP8_MV_PROB_CNT];
--	__u8 padding[3];
--};
--
--/**
-- * struct v4l2_vp8_entropy_coder_state - VP8 boolean coder state
-- *
-- * @range: coder state value for "Range"
-- * @value: coder state value for "Value"
-- * @bit_count: number of bits left in range "Value".
-- * @padding: padding field. Should be zeroed by applications.
-- *
-- * This structure contains the state for the boolean coder, as
-- * explained in section '7. Boolean Entropy Decoder' of the VP8 specification.
-- */
--struct v4l2_vp8_entropy_coder_state {
--	__u8 range;
--	__u8 value;
--	__u8 bit_count;
--	__u8 padding;
--};
--
--#define V4L2_VP8_FRAME_FLAG_KEY_FRAME		0x01
--#define V4L2_VP8_FRAME_FLAG_EXPERIMENTAL		0x02
--#define V4L2_VP8_FRAME_FLAG_SHOW_FRAME		0x04
--#define V4L2_VP8_FRAME_FLAG_MB_NO_SKIP_COEFF	0x08
--#define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_GOLDEN	0x10
--#define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_ALT	0x20
--
--#define V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) \
--	(!!((hdr)->flags & V4L2_VP8_FRAME_FLAG_KEY_FRAME))
--
--/**
-- * struct v4l2_vp8_frame - VP8 frame parameters
-- *
-- * @seg: segmentation parameters. See &v4l2_vp8_segment for more details
-- * @lf: loop filter parameters. See &v4l2_vp8_loop_filter for more details
-- * @quant: quantization parameters. See &v4l2_vp8_quantization for more details
-- * @probs: probabilities. See &v4l2_vp9_probabilities for more details
-- * @width: frame width.
-- * @height: frame height.
-- * @horizontal_scale: horizontal scaling factor.
-- * @vertical_scale: vertical scaling factor.
-- * @version: bitstream version.
-- * @prob_skip_false: frame header syntax element.
-- * @prob_intra: frame header syntax element.
-- * @prob_last: frame header syntax element.
-- * @prob_gf: frame header syntax element.
-- * @num_dct_parts: number of DCT coefficients partitions.
-- * @first_part_size: size of the first partition, i.e. the control partition.
-- * @first_part_header_bits: size in bits of the first partition header portion.
-- * @dct_part_sizes: DCT coefficients sizes.
-- * @last_frame_ts: "last" reference buffer timestamp.
-- * The timestamp refers to the timestamp field in struct v4l2_buffer.
-- * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-- * @golden_frame_ts: "golden" reference buffer timestamp.
-- * @alt_frame_ts: "alt" reference buffer timestamp.
-- * @flags: see V4L2_VP8_FRAME_FLAG_{}.
-- */
--struct v4l2_ctrl_vp8_frame {
--	struct v4l2_vp8_segment seg;
--	struct v4l2_vp8_loop_filter lf;
--	struct v4l2_vp8_quantization quant;
--	struct v4l2_vp8_entropy entropy;
--	struct v4l2_vp8_entropy_coder_state coder_state;
--
--	__u16 width;
--	__u16 height;
--
--	__u8 horizontal_scale;
--	__u8 vertical_scale;
--
--	__u8 version;
--	__u8 prob_skip_false;
--	__u8 prob_intra;
--	__u8 prob_last;
--	__u8 prob_gf;
--	__u8 num_dct_parts;
--
--	__u32 first_part_size;
--	__u32 first_part_header_bits;
--	__u32 dct_part_sizes[8];
--
--	__u64 last_frame_ts;
--	__u64 golden_frame_ts;
--	__u64 alt_frame_ts;
--
--	__u64 flags;
--};
--
--#endif
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 039c0d7add1b..998198808b30 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1657,6 +1657,201 @@ struct v4l2_ctrl_fwht_params {
- 	__u32 quantization;
- };
- 
-+/* Stateless VP8 control */
-+
-+#define V4L2_VP8_SEGMENT_FLAG_ENABLED              0x01
-+#define V4L2_VP8_SEGMENT_FLAG_UPDATE_MAP           0x02
-+#define V4L2_VP8_SEGMENT_FLAG_UPDATE_FEATURE_DATA  0x04
-+#define V4L2_VP8_SEGMENT_FLAG_DELTA_VALUE_MODE     0x08
-+
-+/**
-+ * struct v4l2_vp8_segment - VP8 segment-based adjustments parameters
-+ *
-+ * @quant_update: update values for the segment quantizer.
-+ * @lf_update: update values for the loop filter level.
-+ * @segment_probs: branch probabilities of the segment_id decoding tree.
-+ * @padding: padding field. Should be zeroed by applications.
-+ * @flags: see V4L2_VP8_SEGMENT_FLAG_{}.
-+ *
-+ * This structure contains segment-based adjustments related parameters.
-+ * See the 'update_segmentation()' part of the frame header syntax,
-+ * and section '9.3. Segment-Based Adjustments' of the VP8 specification
-+ * for more details.
-+ */
-+struct v4l2_vp8_segment {
-+	__s8 quant_update[4];
-+	__s8 lf_update[4];
-+	__u8 segment_probs[3];
-+	__u8 padding;
-+	__u32 flags;
-+};
-+
-+#define V4L2_VP8_LF_ADJ_ENABLE	0x01
-+#define V4L2_VP8_LF_DELTA_UPDATE	0x02
-+#define V4L2_VP8_LF_FILTER_TYPE_SIMPLE	0x04
-+
-+/**
-+ * struct v4l2_vp8_loop_filter - VP8 loop filter parameters
-+ *
-+ * @ref_frm_delta: Reference frame signed delta values.
-+ * @mb_mode_delta: MB prediction mode signed delta values.
-+ * @sharpness_level: matches sharpness_level syntax element.
-+ * @level: matches loop_filter_level syntax element.
-+ * @padding: padding field. Should be zeroed by applications.
-+ * @flags: see V4L2_VP8_LF_FLAG_{}.
-+ *
-+ * This structure contains loop filter related parameters.
-+ * See the 'mb_lf_adjustments()' part of the frame header syntax,
-+ * and section '9.4. Loop Filter Type and Levels' of the VP8 specification
-+ * for more details.
-+ */
-+struct v4l2_vp8_loop_filter {
-+	__s8 ref_frm_delta[4];
-+	__s8 mb_mode_delta[4];
-+	__u8 sharpness_level;
-+	__u8 level;
-+	__u16 padding;
-+	__u32 flags;
-+};
-+
-+/**
-+ * struct v4l2_vp8_quantization - VP8 quantizattion indices
-+ *
-+ * @y_ac_qi: luma AC coefficient table index.
-+ * @y_dc_delta: luma DC delta vaue.
-+ * @y2_dc_delta: y2 block DC delta value.
-+ * @y2_ac_delta: y2 block AC delta value.
-+ * @uv_dc_delta: chroma DC delta value.
-+ * @uv_ac_delta: chroma AC delta value.
-+ * @padding: padding field. Should be zeroed by applications.
-+
-+ * This structure contains the quantization indices present
-+ * in 'quant_indices()' part of the frame header syntax.
-+ * See section '9.6. Dequantization Indices' of the VP8 specification
-+ * for more details.
-+ */
-+struct v4l2_vp8_quantization {
-+	__u8 y_ac_qi;
-+	__s8 y_dc_delta;
-+	__s8 y2_dc_delta;
-+	__s8 y2_ac_delta;
-+	__s8 uv_dc_delta;
-+	__s8 uv_ac_delta;
-+	__u16 padding;
-+};
-+
-+#define V4L2_VP8_COEFF_PROB_CNT 11
-+#define V4L2_VP8_MV_PROB_CNT 19
-+
-+/**
-+ * struct v4l2_vp8_entropy - VP8 update probabilities
-+ *
-+ * @coeff_probs: coefficient probability update values.
-+ * @y_mode_probs: luma intra-prediction probabilities.
-+ * @uv_mode_probs: chroma intra-prediction probabilities.
-+ * @mv_probs: mv decoding probability.
-+ * @padding: padding field. Should be zeroed by applications.
-+ *
-+ * This structure contains the update probabilities present in
-+ * 'token_prob_update()' and 'mv_prob_update()' part of the frame header.
-+ * See section '17.2. Probability Updates' of the VP8 specification
-+ * for more details.
-+ */
-+struct v4l2_vp8_entropy {
-+	__u8 coeff_probs[4][8][3][V4L2_VP8_COEFF_PROB_CNT];
-+	__u8 y_mode_probs[4];
-+	__u8 uv_mode_probs[3];
-+	__u8 mv_probs[2][V4L2_VP8_MV_PROB_CNT];
-+	__u8 padding[3];
-+};
-+
-+/**
-+ * struct v4l2_vp8_entropy_coder_state - VP8 boolean coder state
-+ *
-+ * @range: coder state value for "Range"
-+ * @value: coder state value for "Value"
-+ * @bit_count: number of bits left in range "Value".
-+ * @padding: padding field. Should be zeroed by applications.
-+ *
-+ * This structure contains the state for the boolean coder, as
-+ * explained in section '7. Boolean Entropy Decoder' of the VP8 specification.
-+ */
-+struct v4l2_vp8_entropy_coder_state {
-+	__u8 range;
-+	__u8 value;
-+	__u8 bit_count;
-+	__u8 padding;
-+};
-+
-+#define V4L2_VP8_FRAME_FLAG_KEY_FRAME		0x01
-+#define V4L2_VP8_FRAME_FLAG_EXPERIMENTAL		0x02
-+#define V4L2_VP8_FRAME_FLAG_SHOW_FRAME		0x04
-+#define V4L2_VP8_FRAME_FLAG_MB_NO_SKIP_COEFF	0x08
-+#define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_GOLDEN	0x10
-+#define V4L2_VP8_FRAME_FLAG_SIGN_BIAS_ALT	0x20
-+
-+#define V4L2_VP8_FRAME_IS_KEY_FRAME(hdr) \
-+	(!!((hdr)->flags & V4L2_VP8_FRAME_FLAG_KEY_FRAME))
-+
-+#define V4L2_CID_STATELESS_VP8_FRAME (V4L2_CID_CODEC_STATELESS_BASE + 200)
-+/**
-+ * struct v4l2_vp8_frame - VP8 frame parameters
-+ *
-+ * @seg: segmentation parameters. See &v4l2_vp8_segment for more details
-+ * @lf: loop filter parameters. See &v4l2_vp8_loop_filter for more details
-+ * @quant: quantization parameters. See &v4l2_vp8_quantization for more details
-+ * @probs: probabilities. See &v4l2_vp9_probabilities for more details
-+ * @width: frame width.
-+ * @height: frame height.
-+ * @horizontal_scale: horizontal scaling factor.
-+ * @vertical_scale: vertical scaling factor.
-+ * @version: bitstream version.
-+ * @prob_skip_false: frame header syntax element.
-+ * @prob_intra: frame header syntax element.
-+ * @prob_last: frame header syntax element.
-+ * @prob_gf: frame header syntax element.
-+ * @num_dct_parts: number of DCT coefficients partitions.
-+ * @first_part_size: size of the first partition, i.e. the control partition.
-+ * @first_part_header_bits: size in bits of the first partition header portion.
-+ * @dct_part_sizes: DCT coefficients sizes.
-+ * @last_frame_ts: "last" reference buffer timestamp.
-+ * The timestamp refers to the timestamp field in struct v4l2_buffer.
-+ * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-+ * @golden_frame_ts: "golden" reference buffer timestamp.
-+ * @alt_frame_ts: "alt" reference buffer timestamp.
-+ * @flags: see V4L2_VP8_FRAME_FLAG_{}.
-+ */
-+struct v4l2_ctrl_vp8_frame {
-+	struct v4l2_vp8_segment seg;
-+	struct v4l2_vp8_loop_filter lf;
-+	struct v4l2_vp8_quantization quant;
-+	struct v4l2_vp8_entropy entropy;
-+	struct v4l2_vp8_entropy_coder_state coder_state;
-+
-+	__u16 width;
-+	__u16 height;
-+
-+	__u8 horizontal_scale;
-+	__u8 vertical_scale;
-+
-+	__u8 version;
-+	__u8 prob_skip_false;
-+	__u8 prob_intra;
-+	__u8 prob_last;
-+	__u8 prob_gf;
-+	__u8 num_dct_parts;
-+
-+	__u32 first_part_size;
-+	__u32 first_part_header_bits;
-+	__u32 dct_part_sizes[8];
-+
-+	__u64 last_frame_ts;
-+	__u64 golden_frame_ts;
-+	__u64 alt_frame_ts;
-+
-+	__u64 flags;
-+};
-+
- /* MPEG-compression definitions kept for backwards compatibility */
- #ifndef __KERNEL__
- #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 611b75df7f17..ec2af5ddf7d7 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1738,6 +1738,7 @@ struct v4l2_ext_control {
- 		struct v4l2_ctrl_h264_slice_params __user *p_h264_slice_params;
- 		struct v4l2_ctrl_h264_decode_params __user *p_h264_decode_params;
- 		struct v4l2_ctrl_fwht_params __user *p_fwht_params;
-+		struct v4l2_ctrl_vp8_frame __user *p_vp8_frame;
- 		void __user *ptr;
- 	};
- } __attribute__ ((packed));
--- 
-2.30.0
+This "needed_in_request" is not really required, as controls
+are not volatile, and their value is stored per-context (per-fd).
 
+It's perfectly valid for an application to pass the SPS control
+at the beginning of the sequence, and then omit it
+in further requests.
+
+> +       },
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_STATELESS_H264_PPS,
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +               .needed_in_request = true,
+> +       },
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_STATELESS_H264_SCALING_MATRIX,
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +               .needed_in_request = true,
+> +       },
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_STATELESS_H264_DECODE_PARAMS,
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +               .needed_in_request = true,
+> +       },
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+> +                       .def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
+> +                       .max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+> +                       .menu_skip_mask =
+> +                               BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+> +                               BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +       },
+> +       {
+> +               .cfg = {
+> +                       .id = V4L2_CID_STATELESS_H264_DECODE_MODE,
+> +                       .min = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
+> +                       .def = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
+> +                       .max = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
+> +               },
+> +               .codec_type = V4L2_PIX_FMT_H264_SLICE,
+> +       },
+> +};
+
+Applications also need to know which V4L2_CID_STATELESS_H264_START_CODE
+the driver supports. From a next patch, this case seems to be
+V4L2_STATELESS_H264_START_CODE_ANNEX_B.
+
+> +#define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
+> +
+> +static const struct mtk_video_fmt mtk_video_formats[] = {
+> +       {
+> +               .fourcc = V4L2_PIX_FMT_H264_SLICE,
+> +               .type = MTK_FMT_DEC,
+> +               .num_planes = 1,
+> +       },
+> +       {
+> +               .fourcc = V4L2_PIX_FMT_MM21,
+> +               .type = MTK_FMT_FRAME,
+> +               .num_planes = 2,
+> +       },
+> +};
+> +#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
+> +#define DEFAULT_OUT_FMT_IDX    0
+> +#define DEFAULT_CAP_FMT_IDX    1
+> +
+> +static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
+> +       {
+> +               .fourcc = V4L2_PIX_FMT_H264_SLICE,
+> +               .stepwise = {
+> +                       MTK_VDEC_MIN_W, MTK_VDEC_MAX_W, 16,
+> +                       MTK_VDEC_MIN_H, MTK_VDEC_MAX_H, 16,
+> +               },
+> +       },
+> +};
+> +
+> +#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
+> +
+> +static void mtk_vdec_stateless_set_dst_payload(struct mtk_vcodec_ctx *ctx,
+> +                                              struct vdec_fb *fb)
+> +{
+> +       struct mtk_video_dec_buf *vdec_frame_buf =
+> +               container_of(fb, struct mtk_video_dec_buf, frame_buffer);
+> +       struct vb2_v4l2_buffer *vb = &vdec_frame_buf->m2m_buf.vb;
+> +       unsigned int cap_y_size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
+> +
+> +       vb2_set_plane_payload(&vb->vb2_buf, 0, cap_y_size);
+> +       if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
+> +               unsigned int cap_c_size =
+> +                       ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
+> +
+> +               vb2_set_plane_payload(&vb->vb2_buf, 1, cap_c_size);
+> +       }
+> +}
+> +
+> +static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx,
+> +                                          struct vb2_v4l2_buffer *vb2_v4l2)
+> +{
+> +       struct mtk_video_dec_buf *framebuf =
+> +               container_of(vb2_v4l2, struct mtk_video_dec_buf, m2m_buf.vb);
+> +       struct vdec_fb *pfb = &framebuf->frame_buffer;
+> +       struct vb2_buffer *dst_buf = &vb2_v4l2->vb2_buf;
+> +
+> +       pfb = &framebuf->frame_buffer;
+> +       pfb->base_y.va = vb2_plane_vaddr(dst_buf, 0);
+
+Are you sure you need a CPU mapping? It seems strange.
+I'll comment some more on the next patch(es).
+
+> +       pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(dst_buf, 0);
+> +       pfb->base_y.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
+> +
+> +       if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
+> +               pfb->base_c.va = vb2_plane_vaddr(dst_buf, 1);
+> +               pfb->base_c.dma_addr =
+> +                       vb2_dma_contig_plane_dma_addr(dst_buf, 1);
+> +               pfb->base_c.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
+> +       }
+> +       mtk_v4l2_debug(1,
+> +               "id=%d Framebuf  pfb=%p VA=%p Y_DMA=%pad C_DMA=%pad Size=%zx frame_count = %d",
+> +               dst_buf->index, pfb,
+> +               pfb->base_y.va, &pfb->base_y.dma_addr,
+> +               &pfb->base_c.dma_addr, pfb->base_y.size,
+> +               ctx->decoded_frame_cnt);
+> +
+> +       return pfb;
+> +}
+> +
+> +static void vb2ops_vdec_buf_request_complete(struct vb2_buffer *vb)
+> +{
+> +       struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+> +
+> +       v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_hdl);
+> +}
+> +
+> +static int fops_media_request_validate(struct media_request *mreq)
+> +{
+> +       const unsigned int buffer_cnt = vb2_request_buffer_cnt(mreq);
+> +       struct mtk_vcodec_ctx *ctx = NULL;
+> +       struct media_request_object *req_obj;
+> +       struct v4l2_ctrl_handler *parent_hdl, *hdl;
+> +       struct v4l2_ctrl *ctrl;
+> +       unsigned int i;
+> +
+> +       switch (buffer_cnt) {
+> +       case 1:
+> +               /* We expect exactly one buffer with the request */
+> +               break;
+> +       case 0:
+> +               mtk_v4l2_err("No buffer provided with the request");
+> +               return -ENOENT;
+> +       default:
+> +               mtk_v4l2_err("Too many buffers (%d) provided with the request",
+> +                            buffer_cnt);
+> +               return -EINVAL;
+> +       }
+> +
+> +       list_for_each_entry(req_obj, &mreq->objects, list) {
+> +               struct vb2_buffer *vb;
+> +
+> +               if (vb2_request_object_is_buffer(req_obj)) {
+> +                       vb = container_of(req_obj, struct vb2_buffer, req_obj);
+> +                       ctx = vb2_get_drv_priv(vb->vb2_queue);
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (!ctx) {
+> +               mtk_v4l2_err("Cannot find buffer for request");
+> +               return -ENOENT;
+> +       }
+> +
+> +       parent_hdl = &ctx->ctrl_hdl;
+> +
+> +       hdl = v4l2_ctrl_request_hdl_find(mreq, parent_hdl);
+> +       if (!hdl) {
+> +               mtk_v4l2_err("Cannot find control handler for request\n");
+> +               return -ENOENT;
+> +       }
+> +
+> +       for (i = 0; i < NUM_CTRLS; i++) {
+> +               if (mtk_stateless_controls[i].codec_type != ctx->current_codec)
+> +                       continue;
+> +               if (!mtk_stateless_controls[i].needed_in_request)
+> +                       continue;
+> +
+> +               ctrl = v4l2_ctrl_request_hdl_ctrl_find(hdl,
+> +                                         mtk_stateless_controls[i].cfg.id);
+> +               if (!ctrl) {
+> +                       mtk_v4l2_err("Missing required codec control\n");
+> +                       return -ENOENT;
+> +               }
+> +       }
+> +
+> +       v4l2_ctrl_request_hdl_put(hdl);
+> +
+> +       return vb2_request_validate(mreq);
+> +}
+> +
+> +static void mtk_vdec_worker(struct work_struct *work)
+> +{
+> +       struct mtk_vcodec_ctx *ctx =
+> +               container_of(work, struct mtk_vcodec_ctx, decode_work);
+> +       struct mtk_vcodec_dev *dev = ctx->dev;
+> +       struct vb2_v4l2_buffer *vb2_v4l2_src, *vb2_v4l2_dst;
+> +       struct vb2_buffer *vb2_src;
+> +       struct mtk_vcodec_mem *bs_src;
+> +       struct mtk_video_dec_buf *dec_buf_src;
+> +       struct media_request *src_buf_req;
+> +       struct vdec_fb *dst_buf;
+> +       bool res_chg = false;
+> +       int ret;
+> +
+> +       vb2_v4l2_src = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
+> +       if (vb2_v4l2_src == NULL) {
+> +               v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+> +               mtk_v4l2_debug(1, "[%d] no available source buffer", ctx->id);
+> +               return;
+> +       }
+> +
+> +       vb2_v4l2_dst = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
+> +       if (vb2_v4l2_dst == NULL) {
+> +               v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+> +               mtk_v4l2_debug(1, "[%d] no available destination buffer", ctx->id);
+> +               return;
+> +       }
+> +
+> +       vb2_src = &vb2_v4l2_src->vb2_buf;
+> +       dec_buf_src = container_of(vb2_v4l2_src, struct mtk_video_dec_buf,
+> +                                  m2m_buf.vb);
+> +       bs_src = &dec_buf_src->bs_buffer;
+> +
+> +       mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p buf_info = %p",
+> +                       ctx->id, src_buf->vb2_queue->type,
+> +                       src_buf->index, src_buf, src_buf_info);
+> +
+> +       bs_src->va = vb2_plane_vaddr(vb2_src, 0);
+> +       bs_src->dma_addr = vb2_dma_contig_plane_dma_addr(vb2_src, 0);
+> +       bs_src->size = (size_t)vb2_src->planes[0].bytesused;
+> +       if (!bs_src->va) {
+> +               v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+> +               mtk_v4l2_err("[%d] id=%d source buffer is NULL", ctx->id,
+> +                            vb2_src->index);
+> +               return;
+> +       }
+> +
+> +       mtk_v4l2_debug(3, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
+> +                       ctx->id, buf->va, &buf->dma_addr, buf->size, src_buf);
+> +       /* Apply request controls. */
+> +       src_buf_req = vb2_src->req_obj.req;
+> +       if (src_buf_req)
+> +               v4l2_ctrl_request_setup(src_buf_req, &ctx->ctrl_hdl);
+> +       else
+> +               mtk_v4l2_err("vb2 buffer media request is NULL");
+> +
+> +       dst_buf = vdec_get_cap_buffer(ctx, vb2_v4l2_dst);
+> +       v4l2_m2m_buf_copy_metadata(vb2_v4l2_src, vb2_v4l2_dst, true);
+> +       ret = vdec_if_decode(ctx, bs_src, dst_buf, &res_chg);
+> +       if (ret) {
+> +               mtk_v4l2_err(
+> +                       " <===[%d], src_buf[%d] sz=0x%zx pts=%llu vdec_if_decode() ret=%d res_chg=%d===>",
+> +                       ctx->id, vb2_src->index, bs_src->size,
+> +                       vb2_src->timestamp, ret, res_chg);
+> +               if (ret == -EIO) {
+> +                       mutex_lock(&ctx->lock);
+> +                       dec_buf_src->error = true;
+> +                       mutex_unlock(&ctx->lock);
+> +               }
+> +       }
+> +
+> +       mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
+> +
+> +       v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx,
+> +               ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
+> +
+> +       v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
+> +}
+> +
+> +static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
+> +{
+> +       struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+> +       struct vb2_v4l2_buffer *vb2_v4l2 = to_vb2_v4l2_buffer(vb);
+> +
+> +       mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p",
+> +                       ctx->id, vb->vb2_queue->type,
+> +                       vb->index, vb);
+> +
+> +       mutex_lock(&ctx->lock);
+> +       v4l2_m2m_buf_queue(ctx->m2m_ctx, vb2_v4l2);
+> +       mutex_unlock(&ctx->lock);
+> +       if (vb->vb2_queue->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+> +               return;
+> +
+> +       mtk_v4l2_debug(3, "(%d) id=%d, bs=%p",
+> +               vb->vb2_queue->type, vb->index, src_buf);
+> +
+> +       /* If an OUTPUT buffer, we may need to update the state */
+> +       if (ctx->state == MTK_STATE_INIT) {
+> +               ctx->state = MTK_STATE_HEADER;
+> +               mtk_v4l2_debug(1, "Init driver from init to header.");
+
+This state thing seems just something to make the rest
+of the stateful-based driver happy, right?
+
+Makes me wonder a bit if just splitting the stateless part to its
+own driver, wouldn't make your maintenance easier.
+
+What's the motivation for sharing the driver?
+
+> +       } else {
+> +               mtk_v4l2_debug(3, "[%d] already init driver %d",
+> +                               ctx->id, ctx->state);
+> +       }
+> +}
+> +
+> +static int mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
+> +{
+> +       bool res_chg;
+> +
+> +       return vdec_if_decode(ctx, NULL, NULL, &res_chg);
+> +}
+> +
+> +static const struct v4l2_ctrl_ops mtk_vcodec_dec_ctrl_ops = {
+> +       .g_volatile_ctrl = mtk_vdec_g_v_ctrl,
+> +};
+> +
+> +static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+> +{
+> +       struct v4l2_ctrl *ctrl;
+> +       unsigned int i;
+> +
+> +       v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS);
+> +       if (ctx->ctrl_hdl.error) {
+> +               mtk_v4l2_err("v4l2_ctrl_handler_init failed\n");
+> +               return ctx->ctrl_hdl.error;
+> +       }
+> +
+> +       ctrl = v4l2_ctrl_new_std(&ctx->ctrl_hdl,
+> +                               &mtk_vcodec_dec_ctrl_ops,
+> +                               V4L2_CID_MIN_BUFFERS_FOR_CAPTURE,
+> +                               0, 32, 1, 1);
+> +       ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+
+Hm, this volatile control for MIN_BUFFERS_FOR_CAPTURE seems
+to return the DPB size. However, isn't this something userspace already knows?
+
+> +
+> +       for (i = 0; i < NUM_CTRLS; i++) {
+> +               struct v4l2_ctrl_config cfg = mtk_stateless_controls[i].cfg;
+> +
+> +               v4l2_ctrl_new_custom(&ctx->ctrl_hdl, &cfg, NULL);
+> +               if (ctx->ctrl_hdl.error) {
+> +                       mtk_v4l2_err("Adding control %d failed %d",
+> +                                       i, ctx->ctrl_hdl.error);
+> +                       return ctx->ctrl_hdl.error;
+> +               }
+> +       }
+> +
+> +       v4l2_ctrl_handler_setup(&ctx->ctrl_hdl);
+> +
+> +       return 0;
+> +}
+> +
+> +const struct media_device_ops mtk_vcodec_media_ops = {
+> +       .req_validate   = fops_media_request_validate,
+> +       .req_queue      = v4l2_m2m_request_queue,
+> +};
+> +
+> +static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
+> +{
+> +       struct vb2_queue *src_vq;
+> +
+> +       src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
+> +                                V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+> +
+> +       /* Support request api for output plane */
+> +       src_vq->supports_requests = true;
+> +       src_vq->requires_requests = true;
+> +}
+> +
+> +static int vb2ops_vdec_out_buf_validate(struct vb2_buffer *vb)
+> +{
+
+I have to admit I do not remember exactly the reason,
+but this should set the buffer field to V4L2_FIELD_NONE.
+
+Thanks,
+Ezequiel
