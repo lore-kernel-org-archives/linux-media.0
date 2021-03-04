@@ -5,35 +5,35 @@ X-Spam-Level:
 X-Spam-Status: No, score=-24.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9648C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 12:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4EBEC433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 12:53:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B27D464F41
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 12:52:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A6E564F2B
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 12:53:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbhCDMwD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Mar 2021 07:52:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40586 "EHLO mail.kernel.org"
+        id S237135AbhCDMwe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Mar 2021 07:52:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235156AbhCDMvn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Mar 2021 07:51:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5E3A64F2B;
-        Thu,  4 Mar 2021 12:51:02 +0000 (UTC)
+        id S237058AbhCDMwJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Mar 2021 07:52:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85DFE64ED7;
+        Thu,  4 Mar 2021 12:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614862262;
+        s=k20201202; t=1614862288;
         bh=hYB8KjRMSUPg5XdsT7IDwqO40nOgdMlmnJxLiBmXIIs=;
         h=From:To:Cc:Subject:Date:From;
-        b=U1RN428i+N538p6c/4QnRdrXDaCEysLdqzPPxsH4YaI8r17p00O+cEBq/C+qISk52
-         +/GSULpAsXYPyGi/JXk1cMlyXeb2ZRdxjK0vJ1D1xzEcrYqxH4pfKrZ1whRZXxlruR
-         BNzr/uNWp9hdqs05Uf7JDuXTnUWgSo7lKFag1oDZoZPZCKdK7PJgEGUugbpLS9pQz0
-         CWZSF87a5ZuEhvDsaAxvbUppLO4g7BtNCL5HZB5HF7sOxWEO033s1vZmHuAXEyUziD
-         D7S1FPFYbvsTbM6Vnwvf38WCXKxaWPBT6VfgpQsHf78HYawybkdIzX8dgRI2Up1Amb
-         WWCx2CjoRICow==
+        b=TfvOfWDap3GXejpFi1utj+dirxBRXT1lyaVDBzaL4zEEfqdyoHObZYq6rpSBDSSTl
+         ipgSjcaJ7GfhJNcnx525fnfoi8d1053NJXJdUmF1puVV/Qui0U3TkaJH4bvtFNQ5Ol
+         lWsyQsoluoAdBUWIgr3kkXvgbBIt9WwcxctyNK3qOQL9dZSvhAZb/2qHZonkN7dVQS
+         5qh0MPOmd7T0mbpJTR+s4uhjKVDNnyYDSGx7/TSpJmD+z3MVX+ETBdN9GK8lZ5jwbW
+         bMnaIBQo85E5MMeIUYAhlu2yrs4wQSg0dNQghijex5ap+TdqVno790xmgBAP5T0SWJ
+         R7luITeWx4cEQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lHnRT-001zwW-QS; Thu, 04 Mar 2021 13:50:59 +0100
+        id 1lHnRu-001zxY-95; Thu, 04 Mar 2021 13:51:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
@@ -43,9 +43,9 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: add a subsystem profile documentation
-Date:   Thu,  4 Mar 2021 13:50:58 +0100
-Message-Id: <95af047a293d8209cf80c05be2b31261cf142853.1614862252.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v5] media: add a subsystem profile documentation
+Date:   Thu,  4 Mar 2021 13:51:25 +0100
+Message-Id: <95af047a293d8209cf80c05be2b31261cf142853.1614862282.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
