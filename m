@@ -2,89 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B27A1C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 13:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2731C433DB
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 13:47:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 802F964F21
-	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 13:25:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABA9364F39
+	for <linux-media@archiver.kernel.org>; Thu,  4 Mar 2021 13:47:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241280AbhCDNYf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Mar 2021 08:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        id S239098AbhCDNq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Mar 2021 08:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241314AbhCDNYY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Mar 2021 08:24:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B632C061574
-        for <linux-media@vger.kernel.org>; Thu,  4 Mar 2021 05:23:44 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <uol@pengutronix.de>)
-        id 1lHnx9-00042f-AG; Thu, 04 Mar 2021 14:23:43 +0100
-Received: from uol by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <uol@pengutronix.de>)
-        id 1lHnx9-0005HC-1j; Thu, 04 Mar 2021 14:23:43 +0100
-From:   =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
-Subject: [PATCH v4l-utils v2 1/2] configure.ac: autodetect availability of systemd
-Date:   Thu,  4 Mar 2021 14:23:39 +0100
-Message-Id: <20210304132340.17069-1-u.oelmann@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
+        with ESMTP id S234444AbhCDNqg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Mar 2021 08:46:36 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D88C061756
+        for <linux-media@vger.kernel.org>; Thu,  4 Mar 2021 05:45:56 -0800 (PST)
+Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 63FAC6F3;
+        Thu,  4 Mar 2021 14:45:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1614865553;
+        bh=VKLckr2ePQ55xCYtgHQ1s0DA0rMlJyooC8hvSMu2xrc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iRK9O5PXR47wDLBhDYJWHP1PROb97fxlG7dJ2UhIldFVCzvrsPuD0kJFk3waCpfni
+         wqgcJUir2qbdzb0XTJdUT6NHQkRS/YAF+YR/UPO4hH3+QEsROqj7559KDv7JaBJrZp
+         pWTZY+lbN9a4a3o720vvbyhHJboP5Lhk7NROtW6o=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Benoit Parrot <bparrot@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v4 1/3] media: ti-vpe: cal: remove unneeded assignment
+Date:   Thu,  4 Mar 2021 15:45:19 +0200
+Message-Id: <20210304134521.1825150-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210304134521.1825150-1-tomi.valkeinen@ideasonboard.com>
+References: <20210304134521.1825150-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: uol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Import systemd's official suggestion [1] how this should be handled in packages
-using autoconf. A side effect of this is the removal of the hardcoded fallback
-path "/lib/systemd/system" which leaks build host information when cross
-compiling v4l-utils and therefore defeats reproducible builds.
+v4l2_fill_pix_format() already copies mbus_fmt.field, so no need to do
+it again.
 
-[1] https://www.freedesktop.org/software/systemd/man/daemon.html#Installing%20systemd%20Service%20Files
-
-Signed-off-by: Ulrich Ölmann <u.oelmann@pengutronix.de>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
-v1 --> v2:
-  - fixed autodetection
-  - extended commit message
+ drivers/media/platform/ti-vpe/cal-video.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- configure.ac | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/configure.ac b/configure.ac
-index 727730c5ccf4..8470116df4b1 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -388,7 +388,15 @@ AC_ARG_WITH(udevdir,
- AC_ARG_WITH(systemdsystemunitdir,
- 	AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [set systemd system unit directory]),
- 	[],
--	[with_systemdsystemunitdir=`$PKG_CONFIG --variable=systemdsystemunitdir systemd || echo /lib/systemd/system`])
-+	[with_systemdsystemunitdir=auto])
-+AS_IF([test "x$with_systemdsystemunitdir" = "xyes" -o "x$with_systemdsystemunitdir" = "xauto"],
-+      [def_systemdsystemunitdir=$($PKG_CONFIG --variable=systemdsystemunitdir systemd)
-+       AS_IF([test "x$def_systemdsystemunitdir" = "x"],
-+             [AS_IF([test "x$with_systemdsystemunitdir" = "xyes"],
-+                    [AC_MSG_ERROR([systemd support requested but pkg-config unable to query systemd package])])
-+              with_systemdsystemunitdir=no],
-+             [with_systemdsystemunitdir="$def_systemdsystemunitdir"])])
-+AM_CONDITIONAL([HAVE_SYSTEMD], [test "x$with_systemdsystemunitdir" != "xno"])
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+index 779f1e1bc529..47bea40c64c2 100644
+--- a/drivers/media/platform/ti-vpe/cal-video.c
++++ b/drivers/media/platform/ti-vpe/cal-video.c
+@@ -640,7 +640,6 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
+ 	v4l2_fill_pix_format(&ctx->v_fmt.fmt.pix, &mbus_fmt);
+ 	ctx->v_fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	ctx->v_fmt.fmt.pix.pixelformat = fmtinfo->fourcc;
+-	ctx->v_fmt.fmt.pix.field = mbus_fmt.field;
+ 	cal_calc_format_size(ctx, fmtinfo, &ctx->v_fmt);
+ 	ctx->fmtinfo = fmtinfo;
  
- # Generic check: works with most distributions
- def_gconv_dir=`for i in /lib64 /usr/lib64 /usr/local/lib64 /lib /usr/lib /usr/local/lib; do if @<:@ -d \$i/gconv @:>@; then echo \$i/gconv; break; fi; done`
 -- 
-2.29.2
+2.25.1
 
