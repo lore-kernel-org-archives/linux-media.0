@@ -2,300 +2,381 @@ Return-Path: <SRS0=qIFk=ID=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75132C43332
-	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 18:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB4CC433E6
+	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 19:03:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B341650A4
-	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 18:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2C4E650AD
+	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 19:03:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbhCESkX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Mar 2021 13:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbhCESjy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Mar 2021 13:39:54 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF25C061765
-        for <linux-media@vger.kernel.org>; Fri,  5 Mar 2021 10:39:42 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id r17so5339610ejy.13
-        for <linux-media@vger.kernel.org>; Fri, 05 Mar 2021 10:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=A1F9ubxjj5JQ7XOnbTnhDg4oJuf5YvuizJOCT/vcunY=;
-        b=XLYKR5RUOC1kSxFpfjtgZbggqByY+f5KB4ppJdxH1oWHM8vSLpbqfmH5kLq5dYeW2H
-         yXCtg85OY57rEsr/qRasikzHpH/3fEL4AMhNwf1RsS7UcYYlHvkEq8IM6zGOHcuQs0IT
-         XVAFMap9kyXsTyavF9A9TC59TF2UlnBYN8YFjDRjKGZJNUD44IoZHfTS8D0wysmXNDtv
-         WHB25vdwj27MDbdX4vvzwYRs9beLydMejxiA06W7bIGND3TJWy+ervPXIJOXHmR6w8+W
-         F9NGX5A3SmSEwV3czeMnhkU+geTKEIbPr07zz277GgjQq2GCAAMCcuIHpG/nGrhFmRe1
-         wMEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A1F9ubxjj5JQ7XOnbTnhDg4oJuf5YvuizJOCT/vcunY=;
-        b=Oa3oypyuU2e/L62yuq1AR8dyb9ENF1aRPuLQ/RZvvNcPXr/CRYUpe3fndtAa4VFPja
-         8/rOFTvXZp3l0Pt3hGIBq+H4hSxehKCibDukd5jFftcbGbbWBdxou2QRuq8y4DjUmAYd
-         FDXgygdOVnB5Ou5W+isNApRIhIrmEuuUm3xVH1xTCJzWzDJewbOa3P1Be/LwU5tzPgwH
-         U9Vm39/TkwAgfmVAfhdDa5rQdkNy90BQdFRoetRsENqdaj9TIlkeI2y7YCqcFdcz9zv5
-         S1oCMNSF5fXCuBiYEv/zlAY6eCH3GpZB75+ohm9mht4fEg7MrYIATNGL2w9Ngq2BFE15
-         FLwA==
-X-Gm-Message-State: AOAM531FSoxu6CS55qDD9wHmTQTS3Hz7acG+Rv5MZtLX1BabM+izyU+1
-        deRnUE++dia2Mj7xIqDBX28=
-X-Google-Smtp-Source: ABdhPJwpKsptfl270UR7t8sBcTq0osd0vrvg5ITEvcVBxvxSAceLeOTszUkLpANHXoKSXGXjDzlq9A==
-X-Received: by 2002:a17:906:aac5:: with SMTP id kt5mr3665232ejb.548.1614969581543;
-        Fri, 05 Mar 2021 10:39:41 -0800 (PST)
-Received: from arch-x1c3.. (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with ESMTPSA id o1sm2121808eds.26.2021.03.05.10.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 10:39:40 -0800 (PST)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH 5/7] media: hantro: introduce hantro_g1.c for common API
-Date:   Fri,  5 Mar 2021 18:39:22 +0000
-Message-Id: <20210305183924.1754026-6-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210305183924.1754026-1-emil.l.velikov@gmail.com>
-References: <20210305183924.1754026-1-emil.l.velikov@gmail.com>
+        id S229669AbhCETCf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Mar 2021 14:02:35 -0500
+Received: from retiisi.eu ([95.216.213.190]:42830 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229843AbhCETCY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Mar 2021 14:02:24 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8AC9A634C8B;
+        Fri,  5 Mar 2021 21:00:02 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org
+Subject: [PATCH 2/3] v4l: fwnode: Rename v4l2_async_register_subdev_sensor_common
+Date:   Fri,  5 Mar 2021 21:02:17 +0200
+Message-Id: <20210305190218.28505-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210305190218.28505-1-sakari.ailus@linux.intel.com>
+References: <20210305190218.28505-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Emil Velikov <emil.velikov@collabora.com>
+Rename v4l2_async_register_subdev_sensor_common as
+v4l2_async_register_subdev_sensor. This is a part of the effort to make
+the long names present in V4L2 fwnode and async frameworks shorter.
 
-The Hantro G1 IRQ and reset handling it pretty standard. I was this
-close to duplicating it, yet again, before reconsidering and refactoring
-it to a separate file.
-
-Cc: Ezequiel Garcia <ezequiel@collabora.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-media@vger.kernel.org
-Cc: linux-rockchip@lists.infradead.org
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/staging/media/hantro/Makefile        |  1 +
- drivers/staging/media/hantro/hantro_g1.c     | 39 ++++++++++++++++++++
- drivers/staging/media/hantro/hantro_hw.h     |  3 ++
- drivers/staging/media/hantro/imx8m_vpu_hw.c  | 21 +----------
- drivers/staging/media/hantro/rk3288_vpu_hw.c | 36 ++----------------
- 5 files changed, 48 insertions(+), 52 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_g1.c
+ Documentation/driver-api/media/v4l2-subdev.rst |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c               |  2 +-
+ drivers/media/i2c/et8ek8/et8ek8_driver.c       |  2 +-
+ drivers/media/i2c/hi556.c                      |  2 +-
+ drivers/media/i2c/imx214.c                     |  2 +-
+ drivers/media/i2c/imx219.c                     |  2 +-
+ drivers/media/i2c/imx258.c                     |  2 +-
+ drivers/media/i2c/imx319.c                     |  2 +-
+ drivers/media/i2c/imx334.c                     |  2 +-
+ drivers/media/i2c/imx355.c                     |  2 +-
+ drivers/media/i2c/ov13858.c                    |  2 +-
+ drivers/media/i2c/ov2740.c                     |  2 +-
+ drivers/media/i2c/ov5640.c                     |  2 +-
+ drivers/media/i2c/ov5648.c                     |  2 +-
+ drivers/media/i2c/ov5670.c                     |  2 +-
+ drivers/media/i2c/ov5675.c                     |  2 +-
+ drivers/media/i2c/ov5695.c                     |  2 +-
+ drivers/media/i2c/ov8856.c                     |  2 +-
+ drivers/media/i2c/ov8865.c                     |  2 +-
+ drivers/media/i2c/ov9734.c                     |  2 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c          |  4 ++--
+ include/media/v4l2-async.h                     | 10 +++++-----
+ 22 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
-index 743ce08eb184..3747a32799b2 100644
---- a/drivers/staging/media/hantro/Makefile
-+++ b/drivers/staging/media/hantro/Makefile
-@@ -7,6 +7,7 @@ hantro-vpu-y += \
- 		hantro_v4l2.o \
- 		hantro_postproc.o \
- 		hantro_h1_jpeg_enc.o \
-+		hantro_g1.o \
- 		hantro_g1_h264_dec.o \
- 		hantro_g1_mpeg2_dec.o \
- 		hantro_g1_vp8_dec.o \
-diff --git a/drivers/staging/media/hantro/hantro_g1.c b/drivers/staging/media/hantro/hantro_g1.c
-new file mode 100644
-index 000000000000..0ab1cee62218
---- /dev/null
-+++ b/drivers/staging/media/hantro/hantro_g1.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hantro VPU codec driver
-+ *
-+ * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
-+ *	Jeffy Chen <jeffy.chen@rock-chips.com>
-+ * Copyright (C) 2019 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
-+ * Copyright (C) 2021 Collabora Ltd, Emil Velikov <emil.velikov@collabora.com>
-+ */
-+
-+#include "hantro.h"
-+#include "hantro_g1_regs.h"
-+
-+irqreturn_t hantro_g1_irq(int irq, void *dev_id)
-+{
-+	struct hantro_dev *vpu = dev_id;
-+	enum vb2_buffer_state state;
-+	u32 status;
-+
-+	status = vdpu_read(vpu, G1_REG_INTERRUPT);
-+	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
-+		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
-+
-+	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
-+	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
-+
-+	hantro_irq_done(vpu, state);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+void hantro_g1_reset(struct hantro_ctx *ctx)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
-+	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
-+	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
-+}
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34c9e4649a25..73c71bb2320c 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -164,6 +164,9 @@ void hantro_irq_done(struct hantro_dev *vpu,
- void hantro_start_prepare_run(struct hantro_ctx *ctx);
- void hantro_end_prepare_run(struct hantro_ctx *ctx);
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index 8b53da2f9c74..d257cb22ac2a 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -208,7 +208,7 @@ the needs of the driver.
+ :c:func:`v4l2_async_notifier_add_i2c_subdev` are for bridge and ISP drivers for
+ registering their async sub-devices with the notifier.
  
-+irqreturn_t hantro_g1_irq(int irq, void *dev_id);
-+void hantro_g1_reset(struct hantro_ctx *ctx);
-+
- void hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx);
- void rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx);
- int hantro_jpeg_enc_init(struct hantro_ctx *ctx);
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index f36c1bd681ba..9eb556460e52 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -9,7 +9,6 @@
- #include <linux/delay.h>
+-:c:func:`v4l2_async_register_subdev_sensor_common` is a helper function for
++:c:func:`v4l2_async_register_subdev_sensor` is a helper function for
+ sensor drivers registering their own async sub-device, but it also registers a
+ notifier and further registers async sub-devices for lens and flash devices
+ found in firmware. The notifier for the sub-device is unregistered with the
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 4505594996bd..9dc3f45da3dc 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3572,7 +3572,7 @@ static int ccs_probe(struct i2c_client *client)
+ 	pm_runtime_get_noresume(&client->dev);
+ 	pm_runtime_enable(&client->dev);
  
- #include "hantro.h"
--#include "hantro_g1_regs.h"
+-	rval = v4l2_async_register_subdev_sensor_common(&sensor->src->sd);
++	rval = v4l2_async_register_subdev_sensor(&sensor->src->sd);
+ 	if (rval < 0)
+ 		goto out_disable_runtime_pm;
  
- #define CTRL_SOFT_RESET		0x00
- #define RESET_G1		BIT(1)
-@@ -129,24 +128,6 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
- 	},
- };
+diff --git a/drivers/media/i2c/et8ek8/et8ek8_driver.c b/drivers/media/i2c/et8ek8/et8ek8_driver.c
+index 122af761c8e3..bb3eac5e005e 100644
+--- a/drivers/media/i2c/et8ek8/et8ek8_driver.c
++++ b/drivers/media/i2c/et8ek8/et8ek8_driver.c
+@@ -1443,7 +1443,7 @@ static int et8ek8_probe(struct i2c_client *client)
+ 		goto err_mutex;
+ 	}
  
--static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
--{
--	struct hantro_dev *vpu = dev_id;
--	enum vb2_buffer_state state;
--	u32 status;
--
--	status = vdpu_read(vpu, G1_REG_INTERRUPT);
--	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
--		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
--
--	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--
--	hantro_irq_done(vpu, state);
--
--	return IRQ_HANDLED;
--}
--
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
-@@ -191,7 +172,7 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
-  */
+-	ret = v4l2_async_register_subdev_sensor_common(&sensor->subdev);
++	ret = v4l2_async_register_subdev_sensor(&sensor->subdev);
+ 	if (ret < 0)
+ 		goto err_entity;
  
- static const struct hantro_irq imx8mq_irqs[] = {
--	{ "g1", imx8m_vpu_g1_irq },
-+	{ "g1", hantro_g1_irq },
- 	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
- };
+diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
+index c74736845d7a..6f05c1138e3b 100644
+--- a/drivers/media/i2c/hi556.c
++++ b/drivers/media/i2c/hi556.c
+@@ -1145,7 +1145,7 @@ static int hi556_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
  
-diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-index 7b299ee3e93d..fefd45269e52 100644
---- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-@@ -10,7 +10,6 @@
+-	ret = v4l2_async_register_subdev_sensor_common(&hi556->sd);
++	ret = v4l2_async_register_subdev_sensor(&hi556->sd);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+ 			ret);
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index cee1a4817af9..e8b281e432e8 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -1061,7 +1061,7 @@ static int imx214_probe(struct i2c_client *client)
  
- #include "hantro.h"
- #include "hantro_jpeg.h"
--#include "hantro_g1_regs.h"
- #include "hantro_h1_regs.h"
+ 	imx214_entity_init_cfg(&imx214->sd, NULL);
  
- #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
-@@ -127,24 +126,6 @@ static irqreturn_t rk3288_vepu_irq(int irq, void *dev_id)
- 	return IRQ_HANDLED;
+-	ret = v4l2_async_register_subdev_sensor_common(&imx214->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx214->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not register v4l2 device\n");
+ 		goto free_entity;
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index 6e3382b85a90..909e1d418f33 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -1528,7 +1528,7 @@ static int imx219_probe(struct i2c_client *client)
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&imx219->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx219->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
+ 		goto error_media_entity;
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 61d74b794582..61b2d87a9761 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -1289,7 +1289,7 @@ static int imx258_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto error_handler_free;
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&imx258->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx258->sd);
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index 8473c0bbb35d..38540323a156 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -2486,7 +2486,7 @@ static int imx319_probe(struct i2c_client *client)
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&imx319->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx319->sd);
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index ad530f0d338a..047aa7658d21 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -1057,7 +1057,7 @@ static int imx334_probe(struct i2c_client *client)
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&imx334->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx334->sd);
+ 	if (ret < 0) {
+ 		dev_err(imx334->dev,
+ 			"failed to register async subdev: %d", ret);
+diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
+index 700f7467fb31..ccedcd4c520a 100644
+--- a/drivers/media/i2c/imx355.c
++++ b/drivers/media/i2c/imx355.c
+@@ -1786,7 +1786,7 @@ static int imx355_probe(struct i2c_client *client)
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&imx355->sd);
++	ret = v4l2_async_register_subdev_sensor(&imx355->sd);
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index 2f3be7a80cef..4a2885ff0cbe 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -1738,7 +1738,7 @@ static int ov13858_probe(struct i2c_client *client,
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&ov13858->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov13858->sd);
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index b41a90c2aed5..0f3f17f3c426 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -1154,7 +1154,7 @@ static int ov2740_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&ov2740->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+ 			ret);
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 14f3afa7721a..5b9cc71df473 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -3162,7 +3162,7 @@ static int ov5640_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto entity_cleanup;
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&sensor->sd);
++	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
+ 	if (ret)
+ 		goto free_ctrls;
+ 
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index dfe38ab8224d..3ecb4a3e8773 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -2559,7 +2559,7 @@ static int ov5648_probe(struct i2c_client *client)
+ 
+ 	/* V4L2 subdev register */
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(subdev);
++	ret = v4l2_async_register_subdev_sensor(subdev);
+ 	if (ret)
+ 		goto error_pm;
+ 
+diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
+index 866c8c2e8f59..dee7df8dd100 100644
+--- a/drivers/media/i2c/ov5670.c
++++ b/drivers/media/i2c/ov5670.c
+@@ -2503,7 +2503,7 @@ static int ov5670_probe(struct i2c_client *client)
+ 	}
+ 
+ 	/* Async register for subdev */
+-	ret = v4l2_async_register_subdev_sensor_common(&ov5670->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov5670->sd);
+ 	if (ret < 0) {
+ 		err_msg = "v4l2_async_register_subdev() error";
+ 		goto error_entity_cleanup;
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index ae00d717e599..dea32859459a 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -1193,7 +1193,7 @@ static int ov5675_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&ov5675->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov5675->sd);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+ 			ret);
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index bbccb6f9582f..09bee57a241d 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -1336,7 +1336,7 @@ static int ov5695_probe(struct i2c_client *client,
+ 		goto err_power_off;
+ #endif
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(sd);
++	ret = v4l2_async_register_subdev_sensor(sd);
+ 	if (ret) {
+ 		dev_err(dev, "v4l2 async register subdev failed\n");
+ 		goto err_clean_entity;
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index b337f729d5e3..e3af3ea277af 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -1795,7 +1795,7 @@ static int ov8856_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&ov8856->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov8856->sd);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+ 			ret);
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index 36a60fbc211d..f09dad770fa5 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -2905,7 +2905,7 @@ static int ov8865_probe(struct i2c_client *client)
+ 
+ 	/* V4L2 subdev register */
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(subdev);
++	ret = v4l2_async_register_subdev_sensor(subdev);
+ 	if (ret)
+ 		goto error_pm;
+ 
+diff --git a/drivers/media/i2c/ov9734.c b/drivers/media/i2c/ov9734.c
+index e212465489e8..b7309a551cae 100644
+--- a/drivers/media/i2c/ov9734.c
++++ b/drivers/media/i2c/ov9734.c
+@@ -964,7 +964,7 @@ static int ov9734_probe(struct i2c_client *client)
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor_common(&ov9734->sd);
++	ret = v4l2_async_register_subdev_sensor(&ov9734->sd);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+ 			ret);
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 9c1b38919491..843259c304bb 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -1308,7 +1308,7 @@ v4l2_async_notifier_parse_fwnode_sensor(struct device *dev,
+ 	return 0;
  }
  
--static irqreturn_t rk3288_vdpu_irq(int irq, void *dev_id)
--{
--	struct hantro_dev *vpu = dev_id;
--	enum vb2_buffer_state state;
--	u32 status;
--
--	status = vdpu_read(vpu, G1_REG_INTERRUPT);
--	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
--		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
--
--	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--
--	hantro_irq_done(vpu, state);
--
--	return IRQ_HANDLED;
--}
--
- static int rk3288_vpu_hw_init(struct hantro_dev *vpu)
+-int v4l2_async_register_subdev_sensor_common(struct v4l2_subdev *sd)
++int v4l2_async_register_subdev_sensor(struct v4l2_subdev *sd)
  {
- 	/* Bump ACLK to max. possible freq. to improve performance. */
-@@ -161,15 +142,6 @@ static void rk3288_vpu_enc_reset(struct hantro_ctx *ctx)
- 	vepu_write(vpu, 0, H1_REG_AXI_CTRL);
+ 	struct v4l2_async_notifier *notifier;
+ 	int ret;
+@@ -1347,7 +1347,7 @@ int v4l2_async_register_subdev_sensor_common(struct v4l2_subdev *sd)
+ 
+ 	return ret;
  }
+-EXPORT_SYMBOL_GPL(v4l2_async_register_subdev_sensor_common);
++EXPORT_SYMBOL_GPL(v4l2_async_register_subdev_sensor);
  
--static void rk3288_vpu_dec_reset(struct hantro_ctx *ctx)
--{
--	struct hantro_dev *vpu = ctx->dev;
--
--	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
--}
--
- /*
-  * Supported codec ops.
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
+diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+index aee28c0e31ac..fa4901162663 100644
+--- a/include/media/v4l2-async.h
++++ b/include/media/v4l2-async.h
+@@ -286,10 +286,10 @@ void v4l2_async_notifier_cleanup(struct v4l2_async_notifier *notifier);
+ int v4l2_async_register_subdev(struct v4l2_subdev *sd);
+ 
+ /**
+- * v4l2_async_register_subdev_sensor_common - registers a sensor sub-device to
+- *					      the asynchronous sub-device
+- *					      framework and parse set up common
+- *					      sensor related devices
++ * v4l2_async_register_subdev_sensor - registers a sensor sub-device to the
++ *				       asynchronous sub-device framework and
++ *				       parse set up common sensor related
++ *				       devices
+  *
+  * @sd: pointer to struct &v4l2_subdev
+  *
+@@ -305,7 +305,7 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd);
+  * to register it.
   */
-@@ -184,19 +156,19 @@ static const struct hantro_codec_ops rk3288_vpu_codec_ops[] = {
- 	},
- 	[HANTRO_MODE_H264_DEC] = {
- 		.run = hantro_g1_h264_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_h264_dec_init,
- 		.exit = hantro_h264_dec_exit,
- 	},
- 	[HANTRO_MODE_MPEG2_DEC] = {
- 		.run = hantro_g1_mpeg2_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_mpeg2_dec_init,
- 		.exit = hantro_mpeg2_dec_exit,
- 	},
- 	[HANTRO_MODE_VP8_DEC] = {
- 		.run = hantro_g1_vp8_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_vp8_dec_init,
- 		.exit = hantro_vp8_dec_exit,
- 	},
-@@ -208,7 +180,7 @@ static const struct hantro_codec_ops rk3288_vpu_codec_ops[] = {
+ int __must_check
+-v4l2_async_register_subdev_sensor_common(struct v4l2_subdev *sd);
++v4l2_async_register_subdev_sensor(struct v4l2_subdev *sd);
  
- static const struct hantro_irq rk3288_irqs[] = {
- 	{ "vepu", rk3288_vepu_irq },
--	{ "vdpu", rk3288_vdpu_irq },
-+	{ "vdpu", hantro_g1_irq },
- };
- 
- static const char * const rk3288_clk_names[] = {
+ /**
+  * v4l2_async_unregister_subdev - unregisters a sub-device to the asynchronous
 -- 
-2.30.1
+2.29.2
 
