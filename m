@@ -2,72 +2,123 @@ Return-Path: <SRS0=qIFk=ID=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFCB2C433E0
-	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 15:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 072FBC433DB
+	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 18:40:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFC7064E6F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 15:43:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8BAE64EEE
+	for <linux-media@archiver.kernel.org>; Fri,  5 Mar 2021 18:40:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbhCEPnL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Mar 2021 10:43:11 -0500
-Received: from mga11.intel.com ([192.55.52.93]:47565 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230401AbhCEPml (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Mar 2021 10:42:41 -0500
-IronPort-SDR: IG43jqmOHLEAg5IXpOrfDeQrpqLLNCrKAVAxMlABlSUWPtshIDoCh6AKDlORbqWI74OIGVBQIJ
- 1T8ybUReymKg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9914"; a="184293761"
-X-IronPort-AV: E=Sophos;i="5.81,225,1610438400"; 
-   d="scan'208";a="184293761"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2021 07:42:40 -0800
-IronPort-SDR: dZr1nM+3wpKK7rwbZVOYsZxztWeY5VYkPdD55C23r0TIqdQZFC12thGNxORqdVK9V8ziZUEFGF
- CweRUjgCK4wg==
-X-IronPort-AV: E=Sophos;i="5.81,225,1610438400"; 
-   d="scan'208";a="401716362"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2021 07:42:38 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id AC77D202B5;
-        Fri,  5 Mar 2021 17:42:36 +0200 (EET)
-Date:   Fri, 5 Mar 2021 17:42:36 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        mchehab@kernel.org, niklas.soderlund@ragnatech.se, bparrot@ti.com,
-        mickael.guene@st.com
-Subject: Re: [RFC PATCH 0/4] use v4l2_get_link_freq() in CSI receiver drivers
-Message-ID: <20210305154236.GW3@paasikivi.fi.intel.com>
-References: <20210303180817.12285-1-andrey.konovalov@linaro.org>
+        id S230202AbhCESkT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Mar 2021 13:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230143AbhCESjr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Mar 2021 13:39:47 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF0FC061760
+        for <linux-media@vger.kernel.org>; Fri,  5 Mar 2021 10:39:37 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id p8so5364747ejb.10
+        for <linux-media@vger.kernel.org>; Fri, 05 Mar 2021 10:39:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bIJdIGKj6HKNSz+mFrNMaUm/bPZqpcnizzIMsRqYuoY=;
+        b=RiVWhR/OvXOcja8xhoQiGT5PENPEhs6J6857L37rppeYpLlOTH6et5xlvA4+/l13oB
+         IgaRlZNmLThTUY36AbheXvHSUyptu/w4y/kNgRcH8BW+s6CZe7PZdF95iLM6XL4YUwLu
+         bJ5qmvSmOLTEitH66jN4etv4LydMPbJeyRZJOiSrnoNQ87xaKYAOrt4ceqRRnsKCTuZn
+         PCbHjZbHpdMRs7LdBdfWzQ9cW2YM7fRq/AMFje8ieYX7bQmjk4zRyp8l84iR6+uMTHvU
+         X4J3apTH6S5zqMHdBsLR8zyjSlsmmzFgUGJmcjUv5/89r+kPcSIBo8ohwOm8mnurXhst
+         yoUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bIJdIGKj6HKNSz+mFrNMaUm/bPZqpcnizzIMsRqYuoY=;
+        b=axnpUKWQ4ixD7lJmydEv2+J+DrFijstIYYm7n7mLIbiKcIG0XZaCrOJPN7EP1hUv21
+         ybFChq+ka5AEsDlrGYXahv0Kh0mujF9uYwZebLGS3YE86C7CTI3tY9MtCWVPQVjJV7w+
+         vXorjB9gBHL/DUS0ABiilOZgQ/Xaknn1rKwo3WFkeOnbw0apgUV5XR3ppZSkHq8DMLHd
+         F0AoXQAGddLE72N1OvOvfCE8nga/lOFH2QJdTOGMWvI33Kk9dNzW/lzoZpMrrYC5wlfN
+         b9QYfOb0SgnGxqnw9HtHD+WWbd5AUot80+KsHCnA9w337SLpT/SomoJhJ6icccEtwAjU
+         9fxg==
+X-Gm-Message-State: AOAM531KH7y8Uz5BMgWtkZeFKMowoqyu/C2uJnMqX7DUE7kblGwwPOc8
+        8/X7/WZDljTVHm/g1+thXiQ=
+X-Google-Smtp-Source: ABdhPJyYrwPZqYJTonz4hUccXLXjyd7w2XNt8KWKQ+V7zyILnAlCiP4HpU6o6QjjEkD32oC9F2oRPg==
+X-Received: by 2002:a17:906:c210:: with SMTP id d16mr3539327ejz.187.1614969576258;
+        Fri, 05 Mar 2021 10:39:36 -0800 (PST)
+Received: from arch-x1c3.. (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
+        by smtp.gmail.com with ESMTPSA id o1sm2121808eds.26.2021.03.05.10.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Mar 2021 10:39:35 -0800 (PST)
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH 1/7] media: hantro: use G1_REG_INTERRUPT directly for the mpeg2
+Date:   Fri,  5 Mar 2021 18:39:18 +0000
+Message-Id: <20210305183924.1754026-2-emil.l.velikov@gmail.com>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210305183924.1754026-1-emil.l.velikov@gmail.com>
+References: <20210305183924.1754026-1-emil.l.velikov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210303180817.12285-1-andrey.konovalov@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 09:08:13PM +0300, Andrey Konovalov wrote:
-> This patchset continues the work discussed in the "[RFC] Repurpose
-> V4L2_CID_PIXEL_RATE for the sampling rate in the pixel array" thread [1].
-> 
-> This patchset follows up the patchset for camss driver [2] of the same
-> purpose, and makes the rest of the receiver drivers in drivers/media
-> and drivers/staging/media to use v4l2_get_link_freq() instead of
-> V4L2_CID_PIXEL_RATE.
-> 
-> This patchset has been build tested only, as I don't have access to the
-> hardware. Most of the changes are fairly straightforward except for the
-> ones in the omap4iss driver. I would appreciate if people with better
-> knowledge of the omap4iss driver reviewed the last patch in this series,
-> and checked if I got the logic in the driver right.
+From: Emil Velikov <emil.velikov@collabora.com>
 
-To me this looks good, hopefully people could test the set, too.
+Use the register directly over the existing SWREG().
 
+Ideally we'll port the driver away from the local registers, but for
+now this is enough. For context - I was reading through the IRQ register
+handling across the variants.
+
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-media@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
+---
+ drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
+index 6386a3989bfe..0fd306806f16 100644
+--- a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
+@@ -10,6 +10,7 @@
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro.h"
+ #include "hantro_hw.h"
++#include "hantro_g1_regs.h"
+ 
+ #define G1_SWREG(nr)			((nr) * 4)
+ 
+@@ -20,7 +21,6 @@
+ #define G1_REG_REFER2_BASE		G1_SWREG(16)
+ #define G1_REG_REFER3_BASE		G1_SWREG(17)
+ #define G1_REG_QTABLE_BASE		G1_SWREG(40)
+-#define G1_REG_DEC_E(v)			((v) ? BIT(0) : 0)
+ 
+ #define G1_REG_DEC_AXI_RD_ID(v)		(((v) << 24) & GENMASK(31, 24))
+ #define G1_REG_DEC_TIMEOUT_E(v)		((v) ? BIT(23) : 0)
+@@ -246,6 +246,5 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
+ 
+ 	hantro_end_prepare_run(ctx);
+ 
+-	reg = G1_REG_DEC_E(1);
+-	vdpu_write(vpu, reg, G1_SWREG(1));
++	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_E, G1_REG_INTERRUPT);
+ }
 -- 
-Sakari Ailus
+2.30.1
+
