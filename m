@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AB75C43142
-	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A86E9C4321A
+	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C78E651FD
-	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 662A165218
+	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbhCHKwl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Mar 2021 05:52:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S230271AbhCHKwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Mar 2021 05:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbhCHKw3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Mar 2021 05:52:29 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99FBC061761
-        for <linux-media@vger.kernel.org>; Mon,  8 Mar 2021 02:52:28 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id d13so14015963edp.4
-        for <linux-media@vger.kernel.org>; Mon, 08 Mar 2021 02:52:28 -0800 (PST)
+        with ESMTP id S230519AbhCHKw0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Mar 2021 05:52:26 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E506C061760
+        for <linux-media@vger.kernel.org>; Mon,  8 Mar 2021 02:52:26 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id lr13so19388652ejb.8
+        for <linux-media@vger.kernel.org>; Mon, 08 Mar 2021 02:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ed2ZmyjgMuArkep/x+pkAPo7evPjB1BAFOc6v5tfSJ4=;
-        b=i5DDN26Aj7bY9aXwfNceG+NhoTZBh+NU6hUF/EKYDC6mCxMGzFyBmTzQESYeydRhCA
-         uSppQ2DS3VpD/t8ejN/f5KIMxoOycbCeLS7IaBOgNqXDUgugs+voyYawCtnzH67M/ljq
-         gTXTmn3PPxpyM59Z2m+JcIR1DnUMZHx18wo2nCpUbnSkTytm9ZiSTbUb911czkyVzO67
-         DANktJwG/D6nddWMppt8f8xEVQUNV/sUlvpDceE5Mp8koEzSsUU5hbke/Ic3bJWOGSl2
-         TjanvsUTbskjUfVkwh7k/Si2eOOI7kZWsy7e16I/bOwNHsb5mKhdiKVsUi2FYTpI2v4i
-         mLVQ==
+        bh=a1XuaInoR0tuPlY8Xeovw7fyTewNoHYbnAtL2fQF1jw=;
+        b=B6EOG3eEDx+Oq57f8XKABz8GGzN0l2eN6WPn8VX6m4aDlgPmjORd1DkwyCup85xFv9
+         md/fvXE7/rZ/ZdyT+mHt4QU7hohPSHIQ4PSd5RVHkBwZg3Mg76shM8kQizn/2IJNQaTi
+         4DHbm2JTmTy/uQqdiT0IO8iv2s7BZLf90C0HEZkWInFBREhFnQlhZkaaoj/51mVu3jVB
+         hycNuaCsudNIvFqSITsfzDXS4mmVXbyJDTAJOSqG9SNtfjXosX0VWtQslSH3cn2Kwc6i
+         ObkYDgZd6oJKcQjbQ4PnAKIR7Ul8GBJk6PLXa0B60m1DKWyylB76nCigzyzvfbY/kAUg
+         fdEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ed2ZmyjgMuArkep/x+pkAPo7evPjB1BAFOc6v5tfSJ4=;
-        b=bMNWh66Les0uNWzajknaC6KDJtm4b/B2KOoAmINtLjp2VpYt/rOGsoRBf83Hscn+Fq
-         JBQPVe5XoIF0fNjkSzT6GbWSYNqaBht2VMkzzHweu8kyKr2o/8nZ270Gw6djM0XyEH3j
-         owWhqG+61HSMqcm6u+8y7oDCnRPAAiWfjWOkOji2UBpakmozdj5ug01g91Ht+cBap2xO
-         +WyrAllZH+suaj9yeBA6xjG6BQr+7Lr1K4sHug2y8EyQaFVgPBtBJXb+rS5VVcVVSzDx
-         SD73Jcn/hGQycBNuncvMgsku/ihCaI7k8bCC+N+53o+s9a+7rvYcWsi0IO2VQraDGxOq
-         Y9DA==
-X-Gm-Message-State: AOAM531x94ZfFa08mYtwpxMHARiiRFAz+c3k6UupB4Oke9zdhbajZFRv
-        OTeBPu7vkMEKRIkoGSPIDm3EzpdfnN9TPw==
-X-Google-Smtp-Source: ABdhPJyA2a7BfNZBhViBq6dW6JSDMhqhNtugGFPTO4MeabFG/qITeFF3eCs6Tg/FY40GGWPkVRMnow==
-X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr2366106edb.189.1615200747272;
-        Mon, 08 Mar 2021 02:52:27 -0800 (PST)
+        bh=a1XuaInoR0tuPlY8Xeovw7fyTewNoHYbnAtL2fQF1jw=;
+        b=KJzQpS3lKTNmiBWLhQtfkgkHgBbcxMaolC2l+2WNW3/6vUu5AilLf0cHNP7nNorZ/F
+         gnaYmkbMuLJrMIM1heUD7R50bekQAVO/B4nuo3D95j8MpDxCCprSaGOm0rdufTh5C03T
+         HRvdQMqQ4ocrkSRYBH37QzTz6/9VM6uHg+VZifeRLBBapTO34g4GFEk7Hr7weqCU+jte
+         CmD8Au6CjFZwGZS7S0ip8E7Q0bpBUokhuxRWBGFWyl87IXYN0v8LGoC6AiNZ7AUH+CcU
+         Hic2sv6xtTucsMdS/35ywboTxslZtTYAd218pZl9oSE2Q6Rz37lCaqLqBV5J+4f/xVDp
+         Y7QA==
+X-Gm-Message-State: AOAM5300czm0tz1iuvFEG9WKUtJaW7thTNZ5FVUlH4hImjch6YrhcWSK
+        DnpBI1TYRFsP4e8ShGMk0JRHiGEmVgyz7w==
+X-Google-Smtp-Source: ABdhPJwAT03k6S7nPPPaEoZ+Fs2kpfuYEdKNlGrqGsE7fYDSqIWjGpZBmRsVOPoduIbqSbkoI4QahA==
+X-Received: by 2002:a17:906:e84:: with SMTP id p4mr14252657ejf.30.1615200743927;
+        Mon, 08 Mar 2021 02:52:23 -0800 (PST)
 Received: from localhost.localdomain (95-43-196-84.ip.btc-net.bg. [95.43.196.84])
-        by smtp.gmail.com with ESMTPSA id y9sm6386297ejd.110.2021.03.08.02.52.26
+        by smtp.gmail.com with ESMTPSA id y9sm6386297ejd.110.2021.03.08.02.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 02:52:27 -0800 (PST)
+        Mon, 08 Mar 2021 02:52:23 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         stable@vger.kernel.org
-Subject: [PATCH 5/5] venus: hfi_cmds: Support plane-actual-info property from v1
-Date:   Mon,  8 Mar 2021 12:52:05 +0200
-Message-Id: <20210308105205.445148-6-stanimir.varbanov@linaro.org>
+Subject: [PATCH 1/5] venus: hfi_parser: Don't initialize parser on v1
+Date:   Mon,  8 Mar 2021 12:52:01 +0200
+Message-Id: <20210308105205.445148-2-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210308105205.445148-1-stanimir.varbanov@linaro.org>
 References: <20210308105205.445148-1-stanimir.varbanov@linaro.org>
@@ -73,58 +73,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The property is supported from v1 and upwards. So move it to
-set_property_1x.
+The Venus v1 behaves differently comparing with the other Venus
+version in respect to capability parsing and when they are send
+to the driver. So we don't need to initialize hfi parser for
+multiple invocations like what we do for > v1 Venus versions.
 
-Fixes: 01e869e78756 ("media: venus: venc: fix handlig of S_SELECTION and G_SELECTION")
-Cc: stable@vger.kernel.org # v5.12+
+Fixes: 10865c98986b ("media: venus: parser: Prepare parser for multiple invocations")
+Cc: stable@vger.kernel.org # v5.10+
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_cmds.c | 24 ++++++++++----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/media/platform/qcom/venus/hfi_parser.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-index 4f7565834469..558510a8dfc8 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-@@ -1039,6 +1039,18 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
- 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*hierp);
- 		break;
- 	}
-+	case HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_INFO: {
-+		struct hfi_uncompressed_plane_actual_info *in = pdata;
-+		struct hfi_uncompressed_plane_actual_info *info = prop_data;
-+
-+		info->buffer_type = in->buffer_type;
-+		info->num_planes = in->num_planes;
-+		info->plane_format[0] = in->plane_format[0];
-+		if (in->num_planes > 1)
-+			info->plane_format[1] = in->plane_format[1];
-+		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*info);
-+		break;
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+index 7263c0c32695..ce230974761d 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -277,8 +277,10 @@ u32 hfi_parser(struct venus_core *core, struct venus_inst *inst, void *buf,
+ 
+ 	parser_init(inst, &codecs, &domain);
+ 
+-	core->codecs_count = 0;
+-	memset(core->caps, 0, sizeof(core->caps));
++	if (core->res->hfi_version > HFI_VERSION_1XX) {
++		core->codecs_count = 0;
++		memset(core->caps, 0, sizeof(core->caps));
 +	}
  
- 	/* FOLLOWING PROPERTIES ARE NOT IMPLEMENTED IN CORE YET */
- 	case HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS:
-@@ -1205,18 +1217,6 @@ pkt_session_set_property_4xx(struct hfi_session_set_property_pkt *pkt,
- 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*cu);
- 		break;
- 	}
--	case HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_INFO: {
--		struct hfi_uncompressed_plane_actual_info *in = pdata;
--		struct hfi_uncompressed_plane_actual_info *info = prop_data;
--
--		info->buffer_type = in->buffer_type;
--		info->num_planes = in->num_planes;
--		info->plane_format[0] = in->plane_format[0];
--		if (in->num_planes > 1)
--			info->plane_format[1] = in->plane_format[1];
--		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*info);
--		break;
--	}
- 	case HFI_PROPERTY_CONFIG_VENC_MAX_BITRATE:
- 	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER:
- 	case HFI_PROPERTY_PARAM_BUFFER_ALLOC_MODE:
+ 	while (words_count) {
+ 		data = word + 1;
 -- 
 2.25.1
 
