@@ -2,98 +2,110 @@ Return-Path: <SRS0=qtPK=IG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3012BC433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FD3C4332D
 	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D197965204
-	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CEDC651FD
+	for <linux-media@archiver.kernel.org>; Mon,  8 Mar 2021 10:53:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbhCHKwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Mar 2021 05:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S231292AbhCHKwi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Mar 2021 05:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbhCHKwZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Mar 2021 05:52:25 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D0C061760
-        for <linux-media@vger.kernel.org>; Mon,  8 Mar 2021 02:52:24 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id jt13so19420857ejb.0
-        for <linux-media@vger.kernel.org>; Mon, 08 Mar 2021 02:52:24 -0800 (PST)
+        with ESMTP id S230495AbhCHKw0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Mar 2021 05:52:26 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E10BC06175F
+        for <linux-media@vger.kernel.org>; Mon,  8 Mar 2021 02:52:26 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id v13so13954183edw.9
+        for <linux-media@vger.kernel.org>; Mon, 08 Mar 2021 02:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYie2gy4LBAjfH0NJDaBUMncDB/ZASqwSK42u9AehpQ=;
-        b=SZC8mBf01mL6f9Kbtkr5U4Z7AJeOm0y15kJJodT2O8oPurnZua/9p6j5t4j3F4/RgN
-         QzQcLKXPB30IHBpQG59+VEFQE+oRU33mE7EHqoKaZ3qgELyr4qqR6Apnu+gEnVozSq/k
-         USbxXhhUzNDT2asiGReQCKEmpotIcrV+dL4jRQ0foPtDwaKXfrBjBlICmO6T1liRQv33
-         jO+FEwcxqgECxKkv5PFO/BgA2m8cFOJWwnkhSTyqe1FGEMud7K0AmTdka9o6pw/LnqH5
-         y+G/CdhUokw4B4Y8HuDaPl/zjruMmj5MHjEuRXNppGaX8gUr7G/5tiSL0VZ5ZjD7OEgt
-         KvgA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Nu5tkdFsaHazmRd4/55M771FR4RELHyaxuVaBLaaiaE=;
+        b=nPiYOkvqpxOFvenVXbshjw+7ue8UcdngITP3Sc2q0OMxuvLvE1iLAgDD0kEXI1Oi2X
+         iVoxHCNlKRcZ1UDTmVoy1EddhAVFAXQp7fDPOHnQ5rVwN4uOtw0Ios0vhPRiioS4LjDT
+         UQT7+jt3RP9nIau/UNZKAey75BzkItjF/yEYXERQWRE34VICWmsEGMjSlS5MQkPrANDz
+         zl47MnYwfHTb2utiHgCFg/PxM7bfqBuUp/VF1/Nb1zVPQf5prUFWFooMVBpEC5U07K07
+         Ic0wQxw9y7463ThW4pGK2htYBvJ/foc/0VtJM+z35a0/EVsfiiQ5CPeMVL69WjVW1B6Y
+         K8EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYie2gy4LBAjfH0NJDaBUMncDB/ZASqwSK42u9AehpQ=;
-        b=uW7KxnPNoT7KYCMm6wFm55/xnTEIa8i7H+v2zHZ4MMrAZ4h3iPm8rfib4HCudsxKkU
-         H4AcK9Ux9XVUt3NLgHmGOvRASKV5689dDPT+xx1BNkhGgKfjy0jNAySIUNGCL6LiGMbw
-         tw2TYEJi5Fs6kKPWhgqWnUbGMwv410WBPhY2GrLUzWpr77/sq6ObiCgCx3Tipk9ffGal
-         oJUrG5kzyXYRMuxld9BcZ6hF/OtGskPHBgvA77elrjL634SoMvFuY7cLdhT5y57rb0iz
-         B71exW7VWWYHSmUSnoFuFDv6JiFQooxMCgv+49eNTf8IWPiv+L+6XFVPaQ9YueKNwmlr
-         hwCw==
-X-Gm-Message-State: AOAM532HaQz7F7ovqVBXJ1BHYxUtC8G1ASsf0N7lFWt1mNY4roeHQjbZ
-        GhFrc1lh8C5JoQPYxXiUijQqlVsBhIc2fA==
-X-Google-Smtp-Source: ABdhPJxvO6oGUKdllXFprRSw4t59d5jbgYx6b66WVsCTqL0uyZgnce/9LEpWYbhPgmFFf1iT+n9Bzg==
-X-Received: by 2002:a17:906:828e:: with SMTP id h14mr14531226ejx.529.1615200743125;
-        Mon, 08 Mar 2021 02:52:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Nu5tkdFsaHazmRd4/55M771FR4RELHyaxuVaBLaaiaE=;
+        b=IbOnaVGnbWakiaZnlEkLvf9zTeXyWB/d1ZTXDoD5H3Og1y6iqkUEEc3S7K57rCKah+
+         cWd35/CkkQ2zaLF/BwCg2RuRTmG6m1mCYE5sU2YNcNKru2zyOnsSyeoQpPRvSgDv8TSl
+         1UeFrabE9dpOnw8PP6DG5kwzH96VRd3sdjKbfe4vByPLDM8CYiYhD/dt/BP40fHf2lLk
+         ABVltARDiRptYTcuF2ym9ylVf2txkeJBOEbTEoA5g8go+j86FDuKhivYPk9BFE6gFYae
+         OJlbV88b4GBXEe/BYRAPWa5K8/oD8mJFzudiZ/W80aXwWxhZE1jc9LZXmxmbLGanaWxU
+         k8mw==
+X-Gm-Message-State: AOAM532ASDAhSTiIn0hjI5NU7zeIl3L07VJIg/UkShubYxhAZQGRj4e8
+        YoxuLDxmyJ5p8QqzXkp7dss5nr0m5FFd2g==
+X-Google-Smtp-Source: ABdhPJwtB41uQgy6Aa0WZYDSOeWQN28nOY9y1x3RwRq26SVOFIPISX2rp1z0BBMxNVTeul4+0cePHw==
+X-Received: by 2002:aa7:cb8f:: with SMTP id r15mr21684254edt.130.1615200744772;
+        Mon, 08 Mar 2021 02:52:24 -0800 (PST)
 Received: from localhost.localdomain (95-43-196-84.ip.btc-net.bg. [95.43.196.84])
-        by smtp.gmail.com with ESMTPSA id y9sm6386297ejd.110.2021.03.08.02.52.22
+        by smtp.gmail.com with ESMTPSA id y9sm6386297ejd.110.2021.03.08.02.52.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 02:52:22 -0800 (PST)
+        Mon, 08 Mar 2021 02:52:24 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 0/5] Venus msm8916 fixes
-Date:   Mon,  8 Mar 2021 12:52:00 +0200
-Message-Id: <20210308105205.445148-1-stanimir.varbanov@linaro.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 2/5] venus: hfi_parser: Check for instance after hfi platform get
+Date:   Mon,  8 Mar 2021 12:52:02 +0200
+Message-Id: <20210308105205.445148-3-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210308105205.445148-1-stanimir.varbanov@linaro.org>
+References: <20210308105205.445148-1-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The inst function argument is != NULL only for Venus v1 and
+we did not migrate v1 to a hfi_platform abstraction yet. So
+check for instance != NULL only after hfi_platform_get returns
+no error.
 
-Here are few fixes for msm8916 (Venus v1x):
- * Two fixes in hfi_parser
- * One fix related to opp_set_clk_rate
- * Default header-mode for encoder is changed to join-with-1st-frame
- * Added support for actual-plane-info for v1x too
+Fixes: e29929266be1 ("media: venus: Get codecs and capabilities from hfi platform")
+Cc: stable@vger.kernel.org # v5.12+
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/hfi_parser.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-regards,
-Stan
-
-Stanimir Varbanov (5):
-  venus: hfi_parser: Don't initialize parser on v1
-  venus: hfi_parser: Check for instance after hfi platform get
-  venus: pm_helpers: Set opp clock name for v1
-  venus: venc_ctrls: Change default header mode
-  venus: hfi_cmds: Support plane-actual-info property from v1
-
- drivers/media/platform/qcom/venus/hfi_cmds.c  | 24 +++++++++----------
- .../media/platform/qcom/venus/hfi_parser.c    | 12 ++++++----
- .../media/platform/qcom/venus/pm_helpers.c    | 20 +++++++++++++++-
- .../media/platform/qcom/venus/venc_ctrls.c    |  2 +-
- 4 files changed, 39 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+index ce230974761d..5b8389b98299 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -235,13 +235,13 @@ static int hfi_platform_parser(struct venus_core *core, struct venus_inst *inst)
+ 	u32 enc_codecs, dec_codecs, count = 0;
+ 	unsigned int entries;
+ 
+-	if (inst)
+-		return 0;
+-
+ 	plat = hfi_platform_get(core->res->hfi_version);
+ 	if (!plat)
+ 		return -EINVAL;
+ 
++	if (inst)
++		return 0;
++
+ 	if (plat->codecs)
+ 		plat->codecs(&enc_codecs, &dec_codecs, &count);
+ 
 -- 
 2.25.1
 
