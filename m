@@ -2,99 +2,96 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B261EC433DB
-	for <linux-media@archiver.kernel.org>; Tue,  9 Mar 2021 16:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 175D6C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  9 Mar 2021 20:52:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DB2865237
-	for <linux-media@archiver.kernel.org>; Tue,  9 Mar 2021 16:44:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDAD065243
+	for <linux-media@archiver.kernel.org>; Tue,  9 Mar 2021 20:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbhCIQoS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Mar 2021 11:44:18 -0500
-Received: from mga17.intel.com ([192.55.52.151]:14008 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbhCIQoH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Mar 2021 11:44:07 -0500
-IronPort-SDR: ITM4nVZfIi3kjUW/mTBMXIaKaOwoXlH+xHeZG9ftc82uV/JFiIKhDNo+0WwD7r1AQwqKdLaIUn
- Wa3kG88ir9Uw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="168189280"
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="168189280"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2021 08:44:06 -0800
-IronPort-SDR: tLqRxPfsQ4ayHmwBHR9QmVWRZcMJ+Gv44Fw9E8vQNISMoxrr47qKaTsANVlJd2yN/QFcziNzKt
- dASRy4EaMOKg==
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="409806959"
-Received: from yoojae-mobl.amr.corp.intel.com (HELO [10.251.3.100]) ([10.251.3.100])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2021 08:44:06 -0800
-Subject: Re: [PATCH 3/3] aspeed-video: add COMP_READY to VE_SPURIOUS_IRQS
-To:     Joel Stanley <joel@jms.id.au>, Zev Weiss <zev@bewilderbeest.net>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Cc:     Eddie James <eajames@linux.ibm.com>,
+        id S231790AbhCIUvi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Mar 2021 15:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231864AbhCIUvN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Mar 2021 15:51:13 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4223FC06174A
+        for <linux-media@vger.kernel.org>; Tue,  9 Mar 2021 12:51:13 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so23169581edx.1
+        for <linux-media@vger.kernel.org>; Tue, 09 Mar 2021 12:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=q+LXPS2g/C2kk8K3V/x2NSnGympAYYgTq9AwkJ/pVJg=;
+        b=K1IwR7nekABeEPYTpc4sfCNOmMmM69FNHkZxRzFj0qH5RZWU9XImYZzmlE0RnWRh03
+         F0CTTqCA0DSvbgqIBvUzbrZXpvHL1YQJEs9xGLp83Z5EbjgQjwPiEVTTuLNLmFa9QNmh
+         PhaCKqXzEEY5ATbSploSh7okQTotlAOa7D8ro=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=q+LXPS2g/C2kk8K3V/x2NSnGympAYYgTq9AwkJ/pVJg=;
+        b=L+DIuxlwB+Ks+o5Ate8WADG730IGySypcLLZTFXAZdGIQ+G1WEVfQzoWxVxbI4Nz9T
+         tVwVShPdxYLYGa9bjm+Hy+dZKHIDxIVkW7MadxQpFk+rJh5yS76OsDNpzJTB+12vbSvc
+         elyblUUro5bfGqPmvC8ATrOCzIJwTAQdDyfy0mJFv6gKxN2AQQkSXBSoed9EqijnZuSp
+         ScSG3IBbW44Dk2qHm+Drm63TrL5drcZJMF/KdmD9JcQ7PPzmjtzBIV2E4EvW3BaRSbVB
+         mAzR9QVBCoeckzckh8shEkWhPjBYvomOCdLxEpH3+rsqVXpYxJOAsU1j5VCJ1FRr8IAv
+         Zxtw==
+X-Gm-Message-State: AOAM532nwFTb2zfuilHhsxEbQb5sPzBbrQaRv2vp7OeroMb6begGdlay
+        96ik81XQrNDjBL6HK1dzbRkM+Q==
+X-Google-Smtp-Source: ABdhPJxnRoBhZTMo7aEzAdv4A87Pfu3GiwuHUGUxLoppCuiln29NC3PVmEVw94505C+/DTTrS7jsCQ==
+X-Received: by 2002:aa7:c6da:: with SMTP id b26mr6426641eds.254.1615323072076;
+        Tue, 09 Mar 2021 12:51:12 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id mc10sm8861190ejb.56.2021.03.09.12.51.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Mar 2021 12:51:11 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20201215024542.18888-1-zev@bewilderbeest.net>
- <20201215024542.18888-4-zev@bewilderbeest.net>
- <CACPK8XdAfYaAPeyDL4nsG+04xgr-u3+CQKNNdpHAQb4vG7=54g@mail.gmail.com>
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <e2f23365-53c6-3526-4544-7d36300c2bea@linux.intel.com>
-Date:   Tue, 9 Mar 2021 08:43:58 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH 2/2] media: videobuf2: Exit promptly if size = 0
+Date:   Tue,  9 Mar 2021 21:51:08 +0100
+Message-Id: <20210309205108.997166-2-ribalda@chromium.org>
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+In-Reply-To: <20210309205108.997166-1-ribalda@chromium.org>
+References: <20210309205108.997166-1-ribalda@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <CACPK8XdAfYaAPeyDL4nsG+04xgr-u3+CQKNNdpHAQb4vG7=54g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 12/21/2020 8:49 PM, Joel Stanley wrote:
-> On Tue, 15 Dec 2020 at 02:46, Zev Weiss <zev@bewilderbeest.net> wrote:
->>
->> This joins CAPTURE_COMPLETE and FRAME_COMPLETE in the set of interrupts
->> that have been seen asserted by the hardware even when disabled, leading
->> to the interrupt eventually getting disabled as described in commit
->> 65d270acb2d662c3346793663ac3a759eb4491b8.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> 
-> I have less experience with this part of the chip, so I defer to Jae
-> or Ryan for an ack.
+Exit as soon as possible if a driver wants to allocate a buffer of
+size 0, and print a warning to help fixing the issue.
 
-I didn't see unexpected VE_INTERRUPT_COMP_READY events in my system but
-it seems a fix good to have.
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/common/videobuf2/videobuf2-dma-sg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 030e48218687..c5b06a509566 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -105,7 +105,7 @@ static void *vb2_dma_sg_alloc(struct device *dev, unsigned long dma_attrs,
+ 	int ret;
+ 	int num_pages;
+ 
+-	if (WARN_ON(!dev))
++	if (WARN_ON(!dev) || WARN_ON(!size))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	buf = kzalloc(sizeof *buf, GFP_KERNEL);
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
->> ---
->>   drivers/media/platform/aspeed-video.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
->> index 218aae3be809..48c52bf91a1b 100644
->> --- a/drivers/media/platform/aspeed-video.c
->> +++ b/drivers/media/platform/aspeed-video.c
->> @@ -564,7 +564,8 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
->>    * register.
->>    */
->>   #define VE_SPURIOUS_IRQS \
->> -       (VE_INTERRUPT_CAPTURE_COMPLETE | VE_INTERRUPT_FRAME_COMPLETE)
->> +       (VE_INTERRUPT_CAPTURE_COMPLETE | VE_INTERRUPT_FRAME_COMPLETE \
->> +        | VE_INTERRUPT_COMP_READY)
->>
->>   static irqreturn_t aspeed_video_irq(int irq, void *arg)
->>   {
->> --
->> 2.29.2
->>
