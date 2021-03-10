@@ -2,92 +2,155 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72E7FC4332E
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4BA9C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 17:07:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46AA964FCA
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 729FB64FC6
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 17:07:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbhCJQqS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Mar 2021 11:46:18 -0500
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:47453 "EHLO
-        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbhCJQpv (ORCPT
+        id S233134AbhCJRHI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Mar 2021 12:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233135AbhCJRGz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Mar 2021 11:45:51 -0500
-X-Halon-ID: 105b08c4-81c0-11eb-a542-005056917a89
-Authorized-sender: niklas.soderlund@fsdn.se
-Received: from bismarck.berto.se (p54ac5521.dip0.t-ipconnect.de [84.172.85.33])
-        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 105b08c4-81c0-11eb-a542-005056917a89;
-        Wed, 10 Mar 2021 17:45:47 +0100 (CET)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v3 1/2] rcar-vin: Stop stream when subdevice signal EOS
-Date:   Wed, 10 Mar 2021 17:45:26 +0100
-Message-Id: <20210310164527.3631395-2-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210310164527.3631395-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20210310164527.3631395-1-niklas.soderlund+renesas@ragnatech.se>
+        Wed, 10 Mar 2021 12:06:55 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD50BC061760;
+        Wed, 10 Mar 2021 09:06:54 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id v192so12280922oia.5;
+        Wed, 10 Mar 2021 09:06:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ckay+pu+4QlnhlTMgneWcMsMH2vmyeEkqCVZ+1F2Jt4=;
+        b=BuuvW328vUQyFQCiJB0ex0uqb6U68KYKwLjkoH74TeY9hzeTIH0PaOKJBUAr2mXLMt
+         MkM0F9QEc8VKhIJrp/u6cwdFERONDunEnM5xrxlh+ghjBJ2ZDhWbxUY54rpAhZ8cwF0u
+         zqeYW8Dbf/pX7ThZqdr9kpLYKDYYYPSR0lJXFxB46+DXiVnLZfv987kERgE4FwFClnxz
+         C8tvL38uZOfxD6eDCA5DUTBB+bj8MIl0A4XrQieClIFxVrR+4lmJ0WvZSc+sY/R1vgXO
+         4fn44UllvjIPs7YvP7j8iD/IyKeU1IdBiQX2DC2dazSwflbLnCOvhbwNgqNcFp2ZEugB
+         M9GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ckay+pu+4QlnhlTMgneWcMsMH2vmyeEkqCVZ+1F2Jt4=;
+        b=PXwkowQumpGCaqOvshevXvtB2Ey7z2bSb2JTAGhCj9yXE/RzyNvY2OKs8eVNC+C8gP
+         Qm12SkZ0PjxGspZCGtc2miqSLk9E77/Ifc/ez63B6zrEawRJN1i8DJ6IxY3sswOctrVa
+         q4aLqeN43HfRRyvzTU3hW7u+Dol2uF4zL5uooAHtesgWrCXMNx/l9sY6v8O+Ejk10gX1
+         SPG8VZXkFIoKD5fZMLw9+2ROkbh7mMEY4rDZaPI91brRqqkjFHEZNkLigdkT/hbrSNak
+         UkcMfXN4LbmRpxZOfYZ0R16RJC23uyRHE5L58hHya9R8d4VIy+5BtwuvHiWA1CYCLuic
+         dYJQ==
+X-Gm-Message-State: AOAM533gehqNfv4T326ZdjtjRvbZybcqpvI0fMnW6GshMs4yP4wNjJUW
+        mh1CDUHc/ElyY2vOAf/zt8/tJ4wKOqUkmiWYtgZScr4O
+X-Google-Smtp-Source: ABdhPJz+N++ipstT7fwx8AeHyiwcCQ4oNiFfp1L623ZgZtgNubYgLNBkODDj1YHjtonmpx8CpU3NaDX2TXdxUWQG8ZE=
+X-Received: by 2002:aca:af10:: with SMTP id y16mr3086498oie.120.1615396014280;
+ Wed, 10 Mar 2021 09:06:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210310163655.2591893-1-daniel@qtec.com>
+In-Reply-To: <20210310163655.2591893-1-daniel@qtec.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 10 Mar 2021 12:06:43 -0500
+Message-ID: <CADnq5_PmbXBaziCEqRODb_DvtKaw9ucXXjkdmdj9N_R8P-9Jcw@mail.gmail.com>
+Subject: Re: [PATCH]] drm/amdgpu/gfx9: add gfxoff quirk
+To:     Daniel Gomez <daniel@qtec.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Huang Rui <ray.huang@amd.com>, Nirmoy Das <nirmoy.das@amd.com>,
+        Dennis Li <Dennis.Li@amd.com>, Monk Liu <Monk.Liu@amd.com>,
+        Yintian Tao <yttao@amd.com>, Guchun Chen <guchun.chen@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When a subdevice signals end of stream stop the VIN in addition to
-informing user-space of the event.
+On Wed, Mar 10, 2021 at 11:37 AM Daniel Gomez <daniel@qtec.com> wrote:
+>
+> Disabling GFXOFF via the quirk list fixes a hardware lockup in
+> Ryzen V1605B, RAVEN 0x1002:0x15DD rev 0x83.
+>
+> Signed-off-by: Daniel Gomez <daniel@qtec.com>
+> ---
+>
+> This patch is a continuation of the work here:
+> https://lkml.org/lkml/2021/2/3/122 where a hardware lockup was discussed and
+> a dma_fence deadlock was provoke as a side effect. To reproduce the issue
+> please refer to the above link.
+>
+> The hardware lockup was introduced in 5.6-rc1 for our particular revision as it
+> wasn't part of the new blacklist. Before that, in kernel v5.5, this hardware was
+> working fine without any hardware lock because the GFXOFF was actually disabled
+> by the if condition for the CHIP_RAVEN case. So this patch, adds the 'Radeon
+> Vega Mobile Series [1002:15dd] (rev 83)' to the blacklist to disable the GFXOFF.
+>
+> But besides the fix, I'd like to ask from where this revision comes from. Is it
+> an ASIC revision or is it hardcoded in the VBIOS from our vendor? From what I
+> can see, it comes from the ASIC and I wonder if somehow we can get an APU in the
+> future, 'not blacklisted', with the same problem. Then, should this table only
+> filter for the vendor and device and not the revision? Do you know if there are
+> any revisions for the 1002:15dd validated, tested and functional?
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
-* Changes since v2
-- Log using vin_dbg() instead of v4l2_info().
----
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+The pci revision id (RID) is used to specify the specific SKU within a
+family.  GFXOFF is supposed to be working on all raven variants.  It
+was tested and functional on all reference platforms and any OEM
+platforms that launched with Linux support.  There are a lot of
+dependencies on sbios in the early raven variants (0x15dd), so it's
+likely more of a specific platform issue, but there is not a good way
+to detect this so we use the DID/SSID/RID as a proxy.  The newer raven
+variants (0x15d8) have much better GFXOFF support since they all
+shipped with newer firmware and sbios.
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 457a65bf6b664f05..76f6f46799e95791 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -969,9 +969,23 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
- static void rvin_notify_video_device(struct rvin_dev *vin,
- 				     unsigned int notification, void *arg)
- {
-+	const struct v4l2_event *event;
-+
- 	switch (notification) {
- 	case V4L2_DEVICE_NOTIFY_EVENT:
--		v4l2_event_queue(&vin->vdev, arg);
-+		event = arg;
-+
-+		switch (event->type) {
-+		case V4L2_EVENT_EOS:
-+			rvin_stop_streaming(vin);
-+			vin_dbg(vin,
-+				"Subdevice signaled end of stream, stopping.\n");
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		v4l2_event_queue(&vin->vdev, event);
- 		break;
- 	default:
- 		break;
--- 
-2.30.1
+Alex
 
+
+>
+> Logs:
+> [   27.708348] [drm] initializing kernel modesetting (RAVEN
+> 0x1002:0x15DD 0x1002:0x15DD 0x83).
+> [   27.789156] amdgpu: ATOM BIOS: 113-RAVEN-115
+>
+> Thanks in advance,
+> Daniel
+>
+>  drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+> index 65db88bb6cbc..319d4b99aec8 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+> @@ -1243,6 +1243,8 @@ static const struct amdgpu_gfxoff_quirk amdgpu_gfxoff_quirk_list[] = {
+>         { 0x1002, 0x15dd, 0x103c, 0x83e7, 0xd3 },
+>         /* GFXOFF is unstable on C6 parts with a VBIOS 113-RAVEN-114 */
+>         { 0x1002, 0x15dd, 0x1002, 0x15dd, 0xc6 },
+> +       /* GFXOFF provokes a hw lockup on 83 parts with a VBIOS 113-RAVEN-115 */
+> +       { 0x1002, 0x15dd, 0x1002, 0x15dd, 0x83 },
+>         { 0, 0, 0, 0, 0 },
+>  };
+>
+> --
+> 2.30.1
+>
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
