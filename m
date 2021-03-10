@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0EFBC433E6
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72E7FC4332E
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D983B64FC3
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46AA964FCA
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 16:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbhCJQqS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232437AbhCJQqS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 10 Mar 2021 11:46:18 -0500
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:31371 "EHLO
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:47453 "EHLO
         vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbhCJQpv (ORCPT
+        with ESMTP id S230488AbhCJQpv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 10 Mar 2021 11:45:51 -0500
-X-Halon-ID: 11160e3f-81c0-11eb-a542-005056917a89
+X-Halon-ID: 105b08c4-81c0-11eb-a542-005056917a89
 Authorized-sender: niklas.soderlund@fsdn.se
 Received: from bismarck.berto.se (p54ac5521.dip0.t-ipconnect.de [84.172.85.33])
         by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 11160e3f-81c0-11eb-a542-005056917a89;
-        Wed, 10 Mar 2021 17:45:49 +0100 (CET)
+        id 105b08c4-81c0-11eb-a542-005056917a89;
+        Wed, 10 Mar 2021 17:45:47 +0100 (CET)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -34,9 +34,9 @@ Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v3 2/2] rcar-csi2: Do not try to recover after transfer error
-Date:   Wed, 10 Mar 2021 17:45:27 +0100
-Message-Id: <20210310164527.3631395-3-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v3 1/2] rcar-vin: Stop stream when subdevice signal EOS
+Date:   Wed, 10 Mar 2021 17:45:26 +0100
+Message-Id: <20210310164527.3631395-2-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210310164527.3631395-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20210310164527.3631395-1-niklas.soderlund+renesas@ragnatech.se>
@@ -47,52 +47,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of restarting the R-Car CSI-2 receiver if a transmission error
-is detected, inform the R-Car VIN driver of the error so it can stop the
-whole pipeline and inform user-space. This is done to reflect a updated
-usage recommendation in later versions of the datasheet.
+When a subdevice signals end of stream stop the VIN in addition to
+informing user-space of the event.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
 * Changes since v2
-- Update spelling in commit message.
+- Log using vin_dbg() instead of v4l2_info().
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index e06cd512aba207a4..594d583921df2495 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -773,21 +773,19 @@ static irqreturn_t rcsi2_irq(int irq, void *data)
- 
- 	rcsi2_write(priv, INTERRSTATE_REG, err_status);
- 
--	dev_info(priv->dev, "Transfer error, restarting CSI-2 receiver\n");
--
- 	return IRQ_WAKE_THREAD;
- }
- 
- static irqreturn_t rcsi2_irq_thread(int irq, void *data)
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 457a65bf6b664f05..76f6f46799e95791 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -969,9 +969,23 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
+ static void rvin_notify_video_device(struct rvin_dev *vin,
+ 				     unsigned int notification, void *arg)
  {
- 	struct rcar_csi2 *priv = data;
-+	struct v4l2_event event = {
-+		.type = V4L2_EVENT_EOS,
-+	};
- 
--	mutex_lock(&priv->lock);
--	rcsi2_stop(priv);
--	usleep_range(1000, 2000);
--	if (rcsi2_start(priv))
--		dev_warn(priv->dev, "Failed to restart CSI-2 receiver\n");
--	mutex_unlock(&priv->lock);
-+	dev_err(priv->dev, "Transfer error detected.\n");
++	const struct v4l2_event *event;
 +
-+	v4l2_subdev_notify_event(&priv->subdev, &event);
- 
- 	return IRQ_HANDLED;
- }
+ 	switch (notification) {
+ 	case V4L2_DEVICE_NOTIFY_EVENT:
+-		v4l2_event_queue(&vin->vdev, arg);
++		event = arg;
++
++		switch (event->type) {
++		case V4L2_EVENT_EOS:
++			rvin_stop_streaming(vin);
++			vin_dbg(vin,
++				"Subdevice signaled end of stream, stopping.\n");
++			break;
++		default:
++			break;
++		}
++
++		v4l2_event_queue(&vin->vdev, event);
+ 		break;
+ 	default:
+ 		break;
 -- 
 2.30.1
 
