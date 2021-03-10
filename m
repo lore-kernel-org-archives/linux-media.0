@@ -2,163 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E030C4321A
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 04:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB836C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 07:41:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC9E564F7D
-	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 04:44:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C5F164FF6
+	for <linux-media@archiver.kernel.org>; Wed, 10 Mar 2021 07:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232236AbhCJEnc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Mar 2021 23:43:32 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:38177 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231135AbhCJEnX (ORCPT
+        id S230488AbhCJHkn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Mar 2021 02:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhCJHkb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Mar 2021 23:43:23 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id JqgnlC4WdqY4WJqgolfk1X; Wed, 10 Mar 2021 05:43:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615351398; bh=MYYYDbdchE+feRI6USH8hffOPXQjvHp5fUNc9dmseJM=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=Cg7QCEjV6vCKlUILvkIAzzCilf4VpzJJlYkFmk8t1IUaYVS7GXe/e358+yl2CSw4x
-         5u7UPia/ZqVm0rutmrgJ9JoW2GlzaE1ADAm6WDRIChzKw2sic17OUfEh/2mzNE7UJg
-         O/FiuhQ9xWRIqUduyCw6O9B28Z9EIuSpJD6zbBQyYwQ130Kzsf5losRPCzH+7k+wh3
-         PCxaJaWemetX/ZukzoGwo+wjUC6zIK1JS6Oo8PFpyts6ZO7EI/5Binh3/B8gmGu//J
-         /xtS876/4ZG5KTq4hEJG+KEn16d3+fRtstCqdWL44SqFeqQ3EIEh9bkjAKGsxzYI3f
-         FOgueqAAAZavw==
-Message-ID: <1f693c38c7b91197fbacf20fef08a692@smtp-cloud8.xs4all.net>
-Date:   Wed, 10 Mar 2021 05:43:17 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4xfILOurkAsvb4kD6cGD1x3nA9ohIW2rj3C6xqSw7Ho1LKDTD5HBoab4miWjRnS9ye7DcCAJpehvQ8LxkU8TCml3FJJb5q502Zmqu/df3QYgeXgGsapj0G
- inpF4ngwEwhAqZo2K3hMQfUJe3C7B+CR/BnPxFpdlYwe4pZ65C+9oBPA0guRjYU0mtC9XTm0ZQNqgmew0AR+AnZ71KgSOE3dkTKw/kQa6Vx25ffsbs01FJEd
- d0BXTNPnVKMQ8aS94p1PLA==
+        Wed, 10 Mar 2021 02:40:31 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49494C06174A
+        for <linux-media@vger.kernel.org>; Tue,  9 Mar 2021 23:40:31 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p7so25137305eju.6
+        for <linux-media@vger.kernel.org>; Tue, 09 Mar 2021 23:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7htfKEWj4A1mHYbOJujhEP8fr6drS4OtZ91jlFV3ApY=;
+        b=lc1dhv1vlFR8xg17tISMV9ljgonYRYnKCI/dV2TYIoLjzvNOCNBnM2dcg6GR99RUV7
+         6olqwk9R6ELu+/8U7cxQSYQFhTp2YEHQ67u9v4N45SJR2Gr9705iihIiaWE1MY65yLEv
+         1kJgIT1Du4xtvS4SsKPll30rFeGxpvFFPkg4s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7htfKEWj4A1mHYbOJujhEP8fr6drS4OtZ91jlFV3ApY=;
+        b=VLRTnWj9SimqwngMfr3rO0G4lrX0VlHIN0+ZC+BNWGoicutNpC+E8nXjhGGaxFs593
+         cHayM0i88d3CPG0On54jLIQP1vJsjLxQ5nq7eDdJin6/t+QHwAyRi086848NYzDFwreY
+         wbr9ZiVrR6EADd9rdWf84lRV4NY1nm6oQ3bKWnTtMU9OBI7zRUvNU7PpPuLvBZbduv52
+         ofJanmQ7/VGp+q+heo58A8d1tzHQLPzJULyJdwlWei2j01YV7Jp5B7NiM89hln2ft02j
+         Bvjt9F0BWm92VEC5w1+UmCtUZqtk32Dg6M0rF58JnasemGqbICKHkvNwzQJPHBcKRUlI
+         XlqQ==
+X-Gm-Message-State: AOAM532BwJX4PdLDmBbLBe3h6Aoz/zzLuQlzPvl0OY8Bjn6qrCMNnfys
+        mU2gB3h9D8kpeonceBwTzWEC5Q==
+X-Google-Smtp-Source: ABdhPJwIhNo0p77nmtL5NmTaAsBp68g+mGOKFQRYDcHVyhZbKylB7G6jH6lPNhXHMRN8oSrGbY7I1w==
+X-Received: by 2002:a17:906:cd05:: with SMTP id oz5mr2232468ejb.345.1615362029874;
+        Tue, 09 Mar 2021 23:40:29 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id a12sm10253646edx.91.2021.03.09.23.40.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Mar 2021 23:40:29 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] media: videobuf2: Fix integer overrun in vb2_mmap
+Date:   Wed, 10 Mar 2021 08:40:28 +0100
+Message-Id: <20210310074028.1042475-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+The plane_length is an unsigned integer. So, if we have a size of
+0xffffffff bytes we incorrectly allocate 0 bytes instead of 1 << 32.
 
-Results of the daily build of media_tree:
+Suggested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: stable@vger.kernel.org
+Fixes: 7f8414594e47 ("[media] media: videobuf2: fix the length check for mmap")
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/common/videobuf2/videobuf2-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-date:			Wed Mar 10 05:00:12 CET 2021
-media-tree git hash:	1c5ab1e2286f4ca6347744e9d4cace5fad5ffa39
-media_build git hash:	069192365e2cec8b47f6e6701fb2aa50f763c602
-v4l-utils git hash:	242ad0b774c726cabaced873864a03a52e99e315
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 10.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		v0.6.3-1-g58d3c1ca
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		v0.5.0-7413-g9bb66fa2d
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 3ce9a878c7e648b006568e3fa69a2c4fcd251925
-host hardware:		x86_64
-host os:		5.7.0-1-amd64
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 543da515c761..876db5886867 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -2256,7 +2256,7 @@ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
+ 	 * The buffer length was page_aligned at __vb2_buf_mem_alloc(),
+ 	 * so, we need to do the same here.
+ 	 */
+-	length = PAGE_ALIGN(vb->planes[plane].length);
++	length = PAGE_ALIGN((unsigned int)vb->planes[plane].length);
+ 	if (length < (vma->vm_end - vma->vm_start)) {
+ 		dprintk(q, 1,
+ 			"MMAP invalid, as it would overflow buffer length\n");
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
-linux-git-sh: OK
-linux-git-arm-stm32: OK
-linux-git-arm-davinci: OK
-linux-git-arm-at91: OK
-linux-git-powerpc64: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-arm-multi: OK
-linux-git-x86_64: OK
-linux-git-i686: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.258-i686: OK
-linux-4.4.258-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.258-i686: OK
-linux-4.9.258-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.222-i686: OK
-linux-4.14.222-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.177-i686: OK
-linux-4.19.177-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.100-i686: OK
-linux-5.4.100-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.13-i686: OK
-linux-5.8.13-x86_64: OK
-linux-5.9.1-i686: OK
-linux-5.9.1-x86_64: OK
-linux-5.10.18-i686: OK
-linux-5.10.18-x86_64: OK
-linux-5.11.1-i686: OK
-linux-5.11.1-x86_64: OK
-linux-5.12-rc1-i686: OK
-linux-5.12-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: ERRORS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
