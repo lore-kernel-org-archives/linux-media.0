@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 144C0C28E82
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 771B9C41621
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E066D65002
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B39965027
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbhCKSKl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 13:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S230397AbhCKSKh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 13:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbhCKSK3 (ORCPT
+        with ESMTP id S230346AbhCKSKP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:10:29 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349A4C061762
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:29 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id mj10so48150892ejb.5
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:29 -0800 (PST)
+        Thu, 11 Mar 2021 13:10:15 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEBBC061574
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:15 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id bm21so48153423ejb.4
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=93vc5QaAMdRgHIiVVHfVfwBR93dvk1kpN7nAMFeUN6A=;
-        b=gT5+RrLDUKck4H3rz7otG3XNVlmjxPIF8+bCAnCA2BqwF5Sma2NyDmlRutH1OYh5BH
-         dfB4Kw/SGOKe6lJd8EJmJoyezswtkbYd0A9g52ynj7d+pH2XjKMN0nrhRd+ZP6k6Su4s
-         CLdqenG1LRy8mmfarwjxFOhc3k6GZ1OGV4xhwjz+ivZkpQkH392RhgBH8cbQnB9qclqG
-         XycnqACxrVU0VuHmqQtR7yU4zuhcKJ7aks0YJJ8FHyUh2NLwQCscC3Sxy8eOWxjt/qG+
-         cyIWovCt7lLrATl5g19wH0/rAxS6DT4SMkZq50SnEuerYc/RIK/XLwGPUrzGKEzgUwfm
-         UGrw==
+        bh=VtXr3oXm0wgVQMUiGrGfZNpgRgGo1LjL7qIdHsd4NTM=;
+        b=aoreN1Z/3a4xED9NRFg5fitOabQdhHpeHuym96aFdQn3TcJztit9qnBpZ87pzr/zjj
+         e9vG5+TqHWJp6AmTj7JPFMkhV5f42jLeoakfdXcJJsh0/QJ6KqQvfg4pHfppo65lQnXF
+         S6tNEXZk6LonPpX7AbWVt+8ZA0BUQFv0XYjYowORHrCi8ZmIpTxvzZXT54BqgoiaMMOP
+         pzd+9Fi7cjpDf6iCGzhEX162jegXatfeqJGQD5KByuAg5ARHNeH3GJYe9GVaT08MBh7u
+         AfC2YP6A0ZftxszHSqpFc6RHmEZQyzdW8lLs9QtHikNRsoNms7bX2OqT1vqEgpcTWRPw
+         7THA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=93vc5QaAMdRgHIiVVHfVfwBR93dvk1kpN7nAMFeUN6A=;
-        b=lP3+zgvjnY8qk9bL9eokuQ5YNVvRNVI/f2xPSM1ll66hqH9dlVfqMUy9AdK7aqPqkW
-         53ATKkTWIj0i9JEFc0kYqBZ/CRTtrytNKFlbLQVvCAFEbg/o+z47tCY5f6xai3Km6EZr
-         MMaDCmViaTAe46Z3LH5NjtHstnGa2D7KvozYsXR2o4Ip7TpVUTd0APn5Y2aJq2MQC37G
-         bbM5h/M5WvK52UGp1P3HW8qpZmctkbrcRommL629SZohW8+1oi2oSmt0Y8331oFMoJM7
-         FcV8t+nS3VbiE2CZPL3iRATsInVGcZ9uurXY2DchNfOPzh62wi6R56uTValTLcQEbK+O
-         iwfQ==
-X-Gm-Message-State: AOAM533nDw7s39pDZNmEbFESHLS5G6xsqACk4bFfjKrzF2yps9S3HLCE
-        RjknnYqyBQqynEL3ztHU2Oe3Fg==
-X-Google-Smtp-Source: ABdhPJxoCuuZxWBivMsft92wIDzMrnA02tcYfC64taGdZC4hSvcgdp0G0Jx1OSS7iphznyUG+JeRYA==
-X-Received: by 2002:a17:907:971a:: with SMTP id jg26mr4408614ejc.317.1615486227731;
-        Thu, 11 Mar 2021 10:10:27 -0800 (PST)
+        bh=VtXr3oXm0wgVQMUiGrGfZNpgRgGo1LjL7qIdHsd4NTM=;
+        b=oQ5NePmW/fT/2dvDftNDvZAusXE3lBj6fulFaPVRbkulacfCatc1+i1cy1tXEcJO43
+         YJIOMpPf5w1ml/+KbDeZpYNi+ZlXdFU1XvzG5eLKKuUNDFVur9Za2wjHPo/0V2jQ36MC
+         74cjXpZPcAGSSRyzxtVdrK5T2csNQ1fTedd1Et+p6LfldkST5cr1fyaKyKzvgPbLV6A5
+         3iK1NgFHHNM78g/7N1GobMmwNXp2zcrpSOiG4NyTjGlAZlcNN78jFVfnLZg00c6bXIFz
+         hw75Bx6kwmf7OmtnAc12auGFQ+BxCUHoL6mgw068iWDxs4k3ngTaNCWx7nDTcOjva0qy
+         xMIQ==
+X-Gm-Message-State: AOAM531ad4RonR4k4zouwA2iiROoM/+ZD1cW01EnC96iSEHmC8bdWG8g
+        rOP+olamG7XetpTIrgR+6doT+A==
+X-Google-Smtp-Source: ABdhPJyaXuU1N/fL0ZhvTf3BW8uDDY3ZGIgvxhmwQDT5D7jzewZq1Me4X5m3hxihLhjXIfe2Be1gcA==
+X-Received: by 2002:a17:906:86c6:: with SMTP id j6mr4152808ejy.197.1615486213967;
+        Thu, 11 Mar 2021 10:10:13 -0800 (PST)
 Received: from localhost.localdomain ([2a02:2454:3e3:5f00:8e01:34c:da50:eb7e])
-        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.26
+        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 10:10:27 -0800 (PST)
+        Thu, 11 Mar 2021 10:10:13 -0800 (PST)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
@@ -71,9 +71,9 @@ Cc:     Rob Herring <robh@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
         Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jonathan Marek <jonathan@marek.ca>
-Subject: [PATCH v7 15/22] dt-bindings: media: camss: Add qcom,msm8996-camss binding
-Date:   Thu, 11 Mar 2021 19:09:41 +0100
-Message-Id: <20210311180948.268343-16-robert.foss@linaro.org>
+Subject: [PATCH v7 08/22] media: camss: Add missing format identifiers
+Date:   Thu, 11 Mar 2021 19:09:34 +0100
+Message-Id: <20210311180948.268343-9-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210311180948.268343-1-robert.foss@linaro.org>
 References: <20210311180948.268343-1-robert.foss@linaro.org>
@@ -83,425 +83,203 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add bindings for qcom,msm8996-camss in order to support the camera
-subsystem on MSM8996.
+The CSI-2 spec defines format identifier for Data Type (DT),
+and how the Decode Format (DF) & Encode Format (EF) are implemented.
+The spec does however not define the DF, EF or Plain Format (PF)
+identifiers, as those are vendor specific.
+
+Plain formats describe the size of the pixels written by the RDI
+units to memory. PLAIN8 for example has the size 8 bits, and
+PLAIN32 32 bits. The appropriate Plain Format is determined by
+the Decode Format used. The smallest Plain Format that is able
+to contain a pixel of the used Decode Format is the appropriate
+one to use.
+
+As the vendor specific identifiers differ between hardware
+generations, split them out into separate headers.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
 
 
-Changes since v2
- - Rob: Add new line at end of file
- - Rob: Remove redundant descriptions
- - Rob: Add power domain description
- - Rob: Make clock-lanes a constant
- - Rob: Rework to conform to new port schema
- - Add max & minItems to data-lanes
- - Remove ports requirement - endpoint & reg
+Changes since v5
+ - Andrey: Gen 1 & Gen2 devices have different decode/encode/plain
+           format definitions, list in separate headers
+ - Andrey: Make commit msg more clear about what is in MIPI spec or not
 
-Changes since v4
- - Rob: Added r-b
+Changes since v6
+ - Andrey: Add r-b
 
 
+ .../platform/qcom/camss/camss-csid-gen1.h     | 27 +++++++++++++
+ .../platform/qcom/camss/camss-csid-gen2.h     | 39 +++++++++++++++++++
+ .../media/platform/qcom/camss/camss-csid.c    | 20 ++--------
+ .../media/platform/qcom/camss/camss-csid.h    | 24 ++++++++++++
+ 4 files changed, 94 insertions(+), 16 deletions(-)
+ create mode 100644 drivers/media/platform/qcom/camss/camss-csid-gen1.h
+ create mode 100644 drivers/media/platform/qcom/camss/camss-csid-gen2.h
 
- .../bindings/media/qcom,msm8996-camss.yaml    | 387 ++++++++++++++++++
- 1 file changed, 387 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen1.h b/drivers/media/platform/qcom/camss/camss-csid-gen1.h
 new file mode 100644
-index 000000000000..38be41e932f0
+index 000000000000..80a2bc6efff6
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-@@ -0,0 +1,387 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen1.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * camss-csid-gen1.h
++ *
++ * Qualcomm MSM Camera Subsystem - CSID (CSI Decoder) Module Generation 1
++ *
++ * Copyright (C) 2021 Linaro Ltd.
++ */
++#ifndef QC_MSM_CAMSS_CSID_GEN1_H
++#define QC_MSM_CAMSS_CSID_GEN1_H
 +
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/qcom,msm8996-camss.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++#define DECODE_FORMAT_UNCOMPRESSED_6_BIT	0x0
++#define DECODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
++#define DECODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
++#define DECODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
++#define DECODE_FORMAT_DPCM_10_6_10		0x4
++#define DECODE_FORMAT_DPCM_10_8_10		0x5
++#define DECODE_FORMAT_DPCM_12_6_12		0x6
++#define DECODE_FORMAT_DPCM_12_8_12		0x7
++#define DECODE_FORMAT_UNCOMPRESSED_14_BIT	0x8
++#define DECODE_FORMAT_DPCM_14_8_14		0x9
++#define DECODE_FORMAT_DPCM_14_10_14		0xa
 +
-+title: Qualcomm CAMSS ISP
++#define PLAIN_FORMAT_PLAIN8	0x0 /* supports DPCM, UNCOMPRESSED_6/8_BIT */
++#define PLAIN_FORMAT_PLAIN16	0x1 /* supports DPCM, UNCOMPRESSED_10/16_BIT */
 +
-+maintainers:
-+  - Robert Foss <robert.foss@linaro.org>
-+  - Todor Tomov <todor.too@gmail.com>
++#endif /* QC_MSM_CAMSS_CSID_GEN1_H */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.h b/drivers/media/platform/qcom/camss/camss-csid-gen2.h
+new file mode 100644
+index 000000000000..3a8ad001b3e8
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * camss-csid-gen1.h
++ *
++ * Qualcomm MSM Camera Subsystem - CSID (CSI Decoder) Module Generation 1
++ *
++ * Copyright (C) 2021 Linaro Ltd.
++ */
++#ifndef QC_MSM_CAMSS_CSID_GEN2_H
++#define QC_MSM_CAMSS_CSID_GEN2_H
 +
-+description: |
-+  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms
++#define DECODE_FORMAT_UNCOMPRESSED_6_BIT	0x0
++#define DECODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
++#define DECODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
++#define DECODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
++#define DECODE_FORMAT_UNCOMPRESSED_14_BIT	0x4
++#define DECODE_FORMAT_UNCOMPRESSED_16_BIT	0x5
++#define DECODE_FORMAT_UNCOMPRESSED_20_BIT	0x6
++#define DECODE_FORMAT_DPCM_10_6_10		0x7
++#define DECODE_FORMAT_DPCM_10_8_10		0x8
++#define DECODE_FORMAT_DPCM_12_6_12		0x9
++#define DECODE_FORMAT_DPCM_12_8_12		0xa
++#define DECODE_FORMAT_DPCM_14_8_14		0xb
++#define DECODE_FORMAT_DPCM_14_10_14		0xc
++#define DECODE_FORMAT_DPCM_12_10_12		0xd
++#define DECODE_FORMAT_USER_DEFINED		0xe
++#define DECODE_FORMAT_PAYLOAD_ONLY		0xf
 +
-+properties:
-+  compatible:
-+    const: qcom,msm8996-camss
++#define ENCODE_FORMAT_RAW_8_BIT		0x1
++#define ENCODE_FORMAT_RAW_10_BIT	0x2
++#define ENCODE_FORMAT_RAW_12_BIT	0x3
++#define ENCODE_FORMAT_RAW_14_BIT	0x4
++#define ENCODE_FORMAT_RAW_16_BIT	0x5
 +
-+  clocks:
-+    minItems: 36
-+    maxItems: 36
++#define PLAIN_FORMAT_PLAIN8	0x0 /* supports DPCM, UNCOMPRESSED_6/8_BIT */
++#define PLAIN_FORMAT_PLAIN16	0x1 /* supports DPCM, UNCOMPRESSED_10/16_BIT */
++#define PLAIN_FORMAT_PLAIN32	0x2 /* supports UNCOMPRESSED_20_BIT */
 +
-+  clock-names:
-+    items:
-+      - const: top_ahb
-+      - const: ispif_ahb
-+      - const: csiphy0_timer
-+      - const: csiphy1_timer
-+      - const: csiphy2_timer
-+      - const: csi0_ahb
-+      - const: csi0
-+      - const: csi0_phy
-+      - const: csi0_pix
-+      - const: csi0_rdi
-+      - const: csi1_ahb
-+      - const: csi1
-+      - const: csi1_phy
-+      - const: csi1_pix
-+      - const: csi1_rdi
-+      - const: csi2_ahb
-+      - const: csi2
-+      - const: csi2_phy
-+      - const: csi2_pix
-+      - const: csi2_rdi
-+      - const: csi3_ahb
-+      - const: csi3
-+      - const: csi3_phy
-+      - const: csi3_pix
-+      - const: csi3_rdi
-+      - const: ahb
-+      - const: vfe0
-+      - const: csi_vfe0
-+      - const: vfe0_ahb
-+      - const: vfe0_stream
-+      - const: vfe1
-+      - const: csi_vfe1
-+      - const: vfe1_ahb
-+      - const: vfe1_stream
-+      - const: vfe_ahb
-+      - const: vfe_axi
++#endif /* QC_MSM_CAMSS_CSID_GEN2_H */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index cff9759c9158..e432d983c58a 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -22,6 +22,7 @@
+ #include <media/v4l2-subdev.h>
+ 
+ #include "camss-csid.h"
++#include "camss-csid-gen1.h"
+ #include "camss.h"
+ 
+ #define MSM_CSID_NAME "msm_csid"
+@@ -37,8 +38,8 @@
+ #define CAMSS_CSID_CID_n_CFG_ISPIF_EN	BIT(0)
+ #define CAMSS_CSID_CID_n_CFG_RDI_EN	BIT(1)
+ #define CAMSS_CSID_CID_n_CFG_DECODE_FORMAT_SHIFT	4
+-#define CAMSS_CSID_CID_n_CFG_PLAIN_FORMAT_8		(0 << 8)
+-#define CAMSS_CSID_CID_n_CFG_PLAIN_FORMAT_16		(1 << 8)
++#define CAMSS_CSID_CID_n_CFG_PLAIN_FORMAT_8		(PLAIN_FORMAT_PLAIN8 << 8)
++#define CAMSS_CSID_CID_n_CFG_PLAIN_FORMAT_16		(PLAIN_FORMAT_PLAIN16 << 8)
+ #define CAMSS_CSID_CID_n_CFG_PLAIN_ALIGNMENT_LSB	(0 << 9)
+ #define CAMSS_CSID_CID_n_CFG_PLAIN_ALIGNMENT_MSB	(1 << 9)
+ #define CAMSS_CSID_CID_n_CFG_RDI_MODE_RAW_DUMP		(0 << 10)
+@@ -59,22 +60,9 @@
+ #define CAMSS_CSID_TG_DT_n_CGG_2(v, n)	\
+ 			(((v) == CAMSS_8x16 ? 0x0b4 : 0x0bc) + 0xc * (n))
+ 
+-#define DATA_TYPE_EMBEDDED_DATA_8BIT	0x12
+-#define DATA_TYPE_YUV422_8BIT		0x1e
+-#define DATA_TYPE_RAW_6BIT		0x28
+-#define DATA_TYPE_RAW_8BIT		0x2a
+-#define DATA_TYPE_RAW_10BIT		0x2b
+-#define DATA_TYPE_RAW_12BIT		0x2c
+-#define DATA_TYPE_RAW_14BIT		0x2d
+-
+-#define DECODE_FORMAT_UNCOMPRESSED_6_BIT	0x0
+-#define DECODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
+-#define DECODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
+-#define DECODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
+-#define DECODE_FORMAT_UNCOMPRESSED_14_BIT	0x8
+-
+ #define CSID_RESET_TIMEOUT_MS 500
+ 
 +
-+  interrupts:
-+    minItems: 10
-+    maxItems: 10
+ struct csid_format {
+ 	u32 code;
+ 	u8 data_type;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 1824b3745e10..318c19bb26c9 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -21,6 +21,30 @@
+ #define MSM_CSID_PAD_SRC 1
+ #define MSM_CSID_PADS_NUM 2
+ 
++#define DATA_TYPE_EMBEDDED_DATA_8BIT	0x12
++#define DATA_TYPE_YUV420_8BIT		0x18
++#define DATA_TYPE_YUV420_10BIT		0x19
++#define DATA_TYPE_YUV420_8BIT_LEGACY	0x1a
++#define DATA_TYPE_YUV420_8BIT_SHIFTED	0x1c /* Chroma Shifted Pixel Sampling */
++#define DATA_TYPE_YUV420_10BIT_SHIFTED	0x1d /* Chroma Shifted Pixel Sampling */
++#define DATA_TYPE_YUV422_8BIT		0x1e
++#define DATA_TYPE_YUV422_10BIT		0x1f
++#define DATA_TYPE_RGB444		0x20
++#define DATA_TYPE_RGB555		0x21
++#define DATA_TYPE_RGB565		0x22
++#define DATA_TYPE_RGB666		0x23
++#define DATA_TYPE_RGB888		0x24
++#define DATA_TYPE_RAW_24BIT		0x27
++#define DATA_TYPE_RAW_6BIT		0x28
++#define DATA_TYPE_RAW_7BIT		0x29
++#define DATA_TYPE_RAW_8BIT		0x2a
++#define DATA_TYPE_RAW_10BIT		0x2b
++#define DATA_TYPE_RAW_12BIT		0x2c
++#define DATA_TYPE_RAW_14BIT		0x2d
++#define DATA_TYPE_RAW_16BIT		0x2e
++#define DATA_TYPE_RAW_20BIT		0x2f
 +
-+  interrupt-names:
-+    items:
-+      - const: csiphy0
-+      - const: csiphy1
-+      - const: csiphy2
-+      - const: csid0
-+      - const: csid1
-+      - const: csid2
-+      - const: csid3
-+      - const: ispif
-+      - const: vfe0
-+      - const: vfe1
 +
-+  iommus:
-+    maxItems: 4
-+
-+  power-domains:
-+    items:
-+      - description: VFE0 GDSC - Video Front End, Global Distributed Switch Controller.
-+      - description: VFE1 GDSC - Video Front End, Global Distributed Switch Controller.
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    description:
-+      CSI input ports.
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port for receiving CSI data.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                items:
-+                  - const: 7
-+
-+              data-lanes:
-+                description:
-+                  An array of physical data lanes indexes.
-+                  Position of an entry determines the logical
-+                  lane number, while the value of an entry
-+                  indicates physical lane index. Lane swapping
-+                  is supported. Physical lane indexes are;
-+                  0, 1, 2, 3
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - clock-lanes
-+              - data-lanes
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port for receiving CSI data.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                items:
-+                  - const: 7
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - clock-lanes
-+              - data-lanes
-+
-+      port@2:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port for receiving CSI data.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                items:
-+                  - const: 7
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - clock-lanes
-+              - data-lanes
-+
-+      port@3:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port for receiving CSI data.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              clock-lanes:
-+                items:
-+                  - const: 7
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - clock-lanes
-+              - data-lanes
-+
-+  reg:
-+    minItems: 14
-+    maxItems: 14
-+
-+  reg-names:
-+    items:
-+      - const: csiphy0
-+      - const: csiphy0_clk_mux
-+      - const: csiphy1
-+      - const: csiphy1_clk_mux
-+      - const: csiphy2
-+      - const: csiphy2_clk_mux
-+      - const: csid0
-+      - const: csid1
-+      - const: csid2
-+      - const: csid3
-+      - const: ispif
-+      - const: csi_clk_mux
-+      - const: vfe0
-+      - const: vfe1
-+
-+  vdda-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+required:
-+  - clock-names
-+  - clocks
-+  - compatible
-+  - interrupt-names
-+  - interrupts
-+  - iommus
-+  - power-domains
-+  - reg
-+  - reg-names
-+  - vdda-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/qcom,gcc-msm8996.h>
-+    #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
-+
-+    camss: camss@a00000 {
-+      compatible = "qcom,msm8996-camss";
-+
-+      clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
-+        <&mmcc CAMSS_ISPIF_AHB_CLK>,
-+        <&mmcc CAMSS_CSI0PHYTIMER_CLK>,
-+        <&mmcc CAMSS_CSI1PHYTIMER_CLK>,
-+        <&mmcc CAMSS_CSI2PHYTIMER_CLK>,
-+        <&mmcc CAMSS_CSI0_AHB_CLK>,
-+        <&mmcc CAMSS_CSI0_CLK>,
-+        <&mmcc CAMSS_CSI0PHY_CLK>,
-+        <&mmcc CAMSS_CSI0PIX_CLK>,
-+        <&mmcc CAMSS_CSI0RDI_CLK>,
-+        <&mmcc CAMSS_CSI1_AHB_CLK>,
-+        <&mmcc CAMSS_CSI1_CLK>,
-+        <&mmcc CAMSS_CSI1PHY_CLK>,
-+        <&mmcc CAMSS_CSI1PIX_CLK>,
-+        <&mmcc CAMSS_CSI1RDI_CLK>,
-+        <&mmcc CAMSS_CSI2_AHB_CLK>,
-+        <&mmcc CAMSS_CSI2_CLK>,
-+        <&mmcc CAMSS_CSI2PHY_CLK>,
-+        <&mmcc CAMSS_CSI2PIX_CLK>,
-+        <&mmcc CAMSS_CSI2RDI_CLK>,
-+        <&mmcc CAMSS_CSI3_AHB_CLK>,
-+        <&mmcc CAMSS_CSI3_CLK>,
-+        <&mmcc CAMSS_CSI3PHY_CLK>,
-+        <&mmcc CAMSS_CSI3PIX_CLK>,
-+        <&mmcc CAMSS_CSI3RDI_CLK>,
-+        <&mmcc CAMSS_AHB_CLK>,
-+        <&mmcc CAMSS_VFE0_CLK>,
-+        <&mmcc CAMSS_CSI_VFE0_CLK>,
-+        <&mmcc CAMSS_VFE0_AHB_CLK>,
-+        <&mmcc CAMSS_VFE0_STREAM_CLK>,
-+        <&mmcc CAMSS_VFE1_CLK>,
-+        <&mmcc CAMSS_CSI_VFE1_CLK>,
-+        <&mmcc CAMSS_VFE1_AHB_CLK>,
-+        <&mmcc CAMSS_VFE1_STREAM_CLK>,
-+        <&mmcc CAMSS_VFE_AHB_CLK>,
-+        <&mmcc CAMSS_VFE_AXI_CLK>;
-+
-+      clock-names = "top_ahb",
-+        "ispif_ahb",
-+        "csiphy0_timer",
-+        "csiphy1_timer",
-+        "csiphy2_timer",
-+        "csi0_ahb",
-+        "csi0",
-+        "csi0_phy",
-+        "csi0_pix",
-+        "csi0_rdi",
-+        "csi1_ahb",
-+        "csi1",
-+        "csi1_phy",
-+        "csi1_pix",
-+        "csi1_rdi",
-+        "csi2_ahb",
-+        "csi2",
-+        "csi2_phy",
-+        "csi2_pix",
-+        "csi2_rdi",
-+        "csi3_ahb",
-+        "csi3",
-+        "csi3_phy",
-+        "csi3_pix",
-+        "csi3_rdi",
-+        "ahb",
-+        "vfe0",
-+        "csi_vfe0",
-+        "vfe0_ahb",
-+        "vfe0_stream",
-+        "vfe1",
-+        "csi_vfe1",
-+        "vfe1_ahb",
-+        "vfe1_stream",
-+        "vfe_ahb",
-+        "vfe_axi";
-+
-+      interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 296 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 297 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 298 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 299 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 309 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 314 IRQ_TYPE_EDGE_RISING>,
-+        <GIC_SPI 315 IRQ_TYPE_EDGE_RISING>;
-+
-+      interrupt-names = "csiphy0",
-+        "csiphy1",
-+        "csiphy2",
-+        "csid0",
-+        "csid1",
-+        "csid2",
-+        "csid3",
-+        "ispif",
-+        "vfe0",
-+        "vfe1";
-+
-+      iommus = <&vfe_smmu 0>,
-+         <&vfe_smmu 1>,
-+         <&vfe_smmu 2>,
-+         <&vfe_smmu 3>;
-+
-+      power-domains = <&mmcc VFE0_GDSC>,
-+        <&mmcc VFE1_GDSC>;
-+
-+      reg = <0x00a34000 0x1000>,
-+        <0x00a00030 0x4>,
-+        <0x00a35000 0x1000>,
-+        <0x00a00038 0x4>,
-+        <0x00a36000 0x1000>,
-+        <0x00a00040 0x4>,
-+        <0x00a30000 0x100>,
-+        <0x00a30400 0x100>,
-+        <0x00a30800 0x100>,
-+        <0x00a30c00 0x100>,
-+        <0x00a31000 0x500>,
-+        <0x00a00020 0x10>,
-+        <0x00a10000 0x1000>,
-+        <0x00a14000 0x1000>;
-+
-+      reg-names = "csiphy0",
-+        "csiphy0_clk_mux",
-+        "csiphy1",
-+        "csiphy1_clk_mux",
-+        "csiphy2",
-+        "csiphy2_clk_mux",
-+        "csid0",
-+        "csid1",
-+        "csid2",
-+        "csid3",
-+        "ispif",
-+        "csi_clk_mux",
-+        "vfe0",
-+        "vfe1";
-+
-+      vdda-supply = <&reg_2v8>;
-+
-+      ports {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+      };
-+    };
+ enum csid_payload_mode {
+ 	CSID_PAYLOAD_MODE_INCREMENTING = 0,
+ 	CSID_PAYLOAD_MODE_ALTERNATING_55_AA = 1,
 -- 
 2.27.0
 
