@@ -2,175 +2,248 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F61BC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 13:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136C6C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 13:30:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 238B564ED1
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 13:20:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB0E964FC9
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 13:30:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbhCKNUR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 08:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbhCKNUA (ORCPT
+        id S233680AbhCKNa0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 08:30:26 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:37811 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233725AbhCKNaU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 08:20:00 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51033C061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 05:20:00 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id g9so18883914ilc.3
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 05:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0GXHl9fSxcmQzeK9YqZgNEbOFQ9SXnwQZIJnbEdymJw=;
-        b=fThld/2qZpymVzdehyxtMMrK5ejB7jGm9VZgUGkt2fcv7w7iNJF4+3+08Qjf4dmzo5
-         N+dh3vv48LnQIkNT3ua5YJoxotrr7ABpNpIKo7FGxpdIEWHt6mBqdyhl3X7Dxnp/htPr
-         qcQkuOmnvI6TwnEixe9+2azTjcDL7Bbu0wjX8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0GXHl9fSxcmQzeK9YqZgNEbOFQ9SXnwQZIJnbEdymJw=;
-        b=KCVxYSJmu14pSj/Lp8Ektwa3bntOx7rRoRG57mMIRgAGsgXnr1hPpXPD327P4QF4dg
-         mexJ36ev5Ro0Ll/09Gnq8h4tm6tj2YXFmFK0jxY68/bz1g5YkhQZjx7NpPWpq/f1ysYT
-         kcZgzG0JTp1+Wu3ek6YmN+SXbzcQnRXSnSpwlOVmT9ZTMxGs9XkHQA9ND5nMCMfZEOOh
-         ebjnCK5iNS8vKCcjXWDpWa4jttKsYooLLPtl1HhYgylqwGEP5Uc9XPu6Vf8CPDfRZMUU
-         OGLSi/4AmwGrPRxyQ04Pbu85OZJnteBojNsIH1HzuURP/wb4F+tF6+EXVR1xZWeveF+2
-         KGYg==
-X-Gm-Message-State: AOAM533aWXv14ueBR3La3oIOFWcT0HurA2am3yau0T+S87ypC7y8qEpW
-        sP/oDwXf3WjVM68qQVOimETdBdHMl0wr30gI
-X-Google-Smtp-Source: ABdhPJwcmBDRRRpLJMkBg9x+Wvvs3qOG/tRzmInbyBV6XuMBk6m3OxIgB5HssRQzWWExOVS2Wuas7g==
-X-Received: by 2002:a05:6e02:1a49:: with SMTP id u9mr6635404ilv.140.1615468799560;
-        Thu, 11 Mar 2021 05:19:59 -0800 (PST)
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
-        by smtp.gmail.com with ESMTPSA id b19sm1363075ioj.50.2021.03.11.05.19.59
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 05:19:59 -0800 (PST)
-Received: by mail-io1-f48.google.com with SMTP id o11so21901514iob.1
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 05:19:59 -0800 (PST)
-X-Received: by 2002:a05:6602:26c6:: with SMTP id g6mr6120811ioo.150.1615468798723;
- Thu, 11 Mar 2021 05:19:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20210310212450.1220416-1-ribalda@chromium.org>
- <cbabd1db-5fda-309b-50bc-8398e8d1580c@xs4all.nl> <CANiDSCuCvbYJp8CDKZV7_8dsxxzgUTG--insgLiEwqh2RrQ7Qw@mail.gmail.com>
- <a1021cbe-1ae6-a5bf-c890-21bb1b48d6d0@xs4all.nl>
-In-Reply-To: <a1021cbe-1ae6-a5bf-c890-21bb1b48d6d0@xs4all.nl>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 11 Mar 2021 14:19:47 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtBFrEXWmM_AGznnV27qXZWoNjBxCCSDYAosbBKZpoM4g@mail.gmail.com>
-Message-ID: <CANiDSCtBFrEXWmM_AGznnV27qXZWoNjBxCCSDYAosbBKZpoM4g@mail.gmail.com>
-Subject: Re: [PATCH] v4l2-compliance: Fix V4L2_CTRL_WHICH_DEF_VAL in multi_classes
+        Thu, 11 Mar 2021 08:30:20 -0500
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id C5A143E554D;
+        Thu, 11 Mar 2021 13:10:28 +0000 (UTC)
+X-Originating-IP: 90.55.106.192
+Received: from bootlin.com (atoulouse-258-1-35-192.w90-55.abo.wanadoo.fr [90.55.106.192])
+        (Authenticated sender: maxime.chevallier@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id AD6DEC0004;
+        Thu, 11 Mar 2021 13:10:03 +0000 (UTC)
+Date:   Thu, 11 Mar 2021 14:09:59 +0100
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH v4 3/3] media: i2c: Introduce a driver for the Techwell
+ TW9900 decoder
+Message-ID: <20210311140959.5a7b27e7@bootlin.com>
+In-Reply-To: <abe4486e-9d32-226e-36ab-162f7d882bdd@xs4all.nl>
+References: <20210219081514.1592033-1-maxime.chevallier@bootlin.com>
+        <20210219081514.1592033-4-maxime.chevallier@bootlin.com>
+        <abe4486e-9d32-226e-36ab-162f7d882bdd@xs4all.nl>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 2:17 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
-> On 11/03/2021 14:06, Ricardo Ribalda wrote:
-> > Hi Hans
-> >
-> > Thanks for your review!
-> >
-> >
-> > On Thu, Mar 11, 2021 at 1:57 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
-> >>
-> >> On 10/03/2021 22:24, Ricardo Ribalda wrote:
-> >>> If there are multiple classes, the ioctl should fail.
-> >>
-> >> It shouldn't matter if there are multiple classes or not, it should
-> >> work.
-> >
-> > I believe this is the part of the kernel that is triggering the issue:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/v4l2-core/v4l2-ioctl.c#n929
-> >
-> > I can send a patch if that is not the intended behaviour ;)
-> >
-> > /* Check that all controls are from the same control class. */
-> > for (i = 0; i < c->count; i++) {
-> > if (V4L2_CTRL_ID2WHICH(c->controls[i].id) != c->which) {
-> > c->error_idx = i;
-> > return 0;
->
-> Ah, and this is only called for drivers that do not use the control framework.
->
-> This is a bug, just before that for-loop it says:
->
->         if (!c->which)
->                 return 1;
->
-> This should be:
->
->         if (!c->which || c->which == V4L2_CTRL_WHICH_DEF_VAL)
->                 return 1;
->         if (c->which == V4L2_CTRL_WHICH_REQUEST_VAL)
->                 return 0;
+Hi Hans, and thanks for the review.
 
-Can I send a patch for that?
+On Thu, 4 Mar 2021 16:37:53 +0100
+Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 
+>Hi Maxime,
 >
-> Regards,
->
->         Hans
->
-> >
-> >>
-> >> What is the exact error you get with which driver?
-> >
-> > I am trying to fix uvc compliance
-> >
-> >  fail: v4l2-test-controls.cpp(813): doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls)
-> > test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
-> >
-> >
-> >>
-> >> Regards,
-> >
-> > Best regards!
-> >
-> >>
-> >>         Hans
-> >>
-> >>>
-> >>> Fixes: 0884b19adada ("v4l2-compliance: add test for V4L2_CTRL_WHICH_DEF_VAL")
-> >>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> >>> ---
-> >>>  utils/v4l2-compliance/v4l2-test-controls.cpp | 5 ++++-
-> >>>  1 file changed, 4 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/utils/v4l2-compliance/v4l2-test-controls.cpp b/utils/v4l2-compliance/v4l2-test-controls.cpp
-> >>> index 9a68b7e847b0..79982bc15054 100644
-> >>> --- a/utils/v4l2-compliance/v4l2-test-controls.cpp
-> >>> +++ b/utils/v4l2-compliance/v4l2-test-controls.cpp
-> >>> @@ -793,7 +793,10 @@ int testExtendedControls(struct node *node)
-> >>>       ctrls.which = V4L2_CTRL_WHICH_DEF_VAL;
-> >>>       fail_on_test(!doioctl(node, VIDIOC_S_EXT_CTRLS, &ctrls));
-> >>>       fail_on_test(!doioctl(node, VIDIOC_TRY_EXT_CTRLS, &ctrls));
-> >>> -     fail_on_test(doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls));
-> >>> +     if (multiple_classes)
-> >>> +             fail_on_test(!doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls));
-> >>> +     else
-> >>> +             fail_on_test(doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls));
-> >>>       return 0;
-> >>>  }
-> >>>
-> >>>
-> >>
-> >
-> >
+>Some more code review comments:
 >
 
+>> +static int tw9900_set_fmt(struct v4l2_subdev *sd,
+>> +			  struct v4l2_subdev_pad_config *cfg,
+>> +			  struct v4l2_subdev_format *fmt)
+>> +{
+>> +	struct tw9900 *tw9900 = to_tw9900(sd);
+>> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
+>> +
+>> +	tw9900_fill_fmt(tw9900->cur_mode, mbus_fmt);
+>> +
+>> +	mbus_fmt->width = tw9900->cur_mode->width;
+>> +	mbus_fmt->height = tw9900->cur_mode->height;  
+>
+>These two lines are already done in tw9900_fill_fmt.
 
--- 
-Ricardo Ribalda
+Yes right, I'll remove that
+
+[...]
+
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int tw9900_get_fmt(struct v4l2_subdev *sd,
+>> +			  struct v4l2_subdev_pad_config *cfg,
+>> +			  struct v4l2_subdev_format *fmt)
+>> +{
+>> +	struct tw9900 *tw9900 = to_tw9900(sd);
+>> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
+>> +
+>> +	tw9900_fill_fmt(tw9900->cur_mode, mbus_fmt);
+>> +
+>> +	return 0;
+>> +}  
+>
+>In fact, tw9900_set_fmt is identical to tw9900_get_fmt. I would just drop
+>tw9900_set_fmt and point both .get_fmt and .set_fmt to the same function.
+
+OK, that will be cleaner indeed
+
+[...]
+
+>> +
+>> +static int tw9900_enum_mbus_code(struct v4l2_subdev *sd,
+>> +				 struct v4l2_subdev_pad_config *cfg,
+>> +				 struct v4l2_subdev_mbus_code_enum *code)
+>> +{
+>> +	if (code->index >= 1)
+>> +		return -EINVAL;
+>> +
+>> +	code->code = MEDIA_BUS_FMT_UYVY8_2X8;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int tw9900_enum_frame_sizes(struct v4l2_subdev *sd,
+>> +				   struct v4l2_subdev_pad_config *cfg,
+>> +				   struct v4l2_subdev_frame_size_enum *fse)
+>> +{
+>> +	u32 index = fse->index;
+>> +
+>> +	if (index >= 1)
+>> +		return -EINVAL;
+>> +
+>> +	fse->code = MEDIA_BUS_FMT_UYVY8_2X8;
+>> +
+>> +	fse->min_width  = supported_modes[index].width;
+>> +	fse->max_width  = supported_modes[index].width;
+>> +	fse->max_height = supported_modes[index].height;
+>> +	fse->min_height = supported_modes[index].height;
+>> +
+>> +	return 0;
+>> +}  
+>
+>This function is not typically used by video receivers since the framesize is
+>fixed depending on the standard. So there is nothing to enumerate.
+>
+>It is wrong in any case since it reports just supported_modes[0] (i.e. PAL)
+>even if the current mode is NTSC. But it can just be dropped for video receivers.
+
+Ok thanks, I'll drop that then.
+
+[...]
+
+>> +		/* Wait for VSync lock */
+>> +		for (i = 0; i < VSYNC_WAIT_MAX_POLLS; i++) {
+>> +			u8 status = tw9900_read_reg(tw9900->client,
+>> +						    TW9900_REG_CHIP_STATUS);
+>> +			if (!(status & TW9900_REG_CHIP_STATUS_VDLOSS) &&
+>> +			    (status & TW9900_REG_CHIP_STATUS_VLOCK))
+>> +				break;
+>> +
+>> +			msleep(VSYNC_POLL_INTERVAL_MS);
+>> +		}  
+>
+>Why do you have to wait for a vsync lock?
+>
+>Most drivers just start regardless of lock. If there is no lock, then there
+>is either no data being streamed (so the DMA of the video bridge will be idle
+>as well) or it is just transmitting noise (typical for SDTV receivers). At least
+>until a valid signal appears eventually.
+
+In this case, it will transmit noise.
+
+As stated a bit below, this was implemented because this decoder
+actually supports automatic standard detection, but the reported
+standard can only be read once the vsync lock is acquired.
+
+So this is a remainder of what I implemented to try to get the standard
+detection work, but I can drop that for now.
+
+[...]
+
+>> +static int tw9900_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+>> +{
+>> +	struct tw9900 *tw9900 = to_tw9900(sd);
+>> +	struct v4l2_mbus_framefmt *try_fmt;
+>> +
+>> +	try_fmt = v4l2_subdev_get_try_format(sd, fh->pad, 0);
+>> +
+>> +	/* Initialize try_fmt */
+>> +	tw9900_fill_fmt(tw9900->cur_mode, try_fmt);
+>> +
+>> +	return 0;
+>> +}  
+>
+>Since the format is fixed based on the current standard, there is no point
+>in initializing try_fmt as it won't be used. So just drop tw9900_open altogether.
+
+Ok I'll drop that :)
+
+[...]
+
+>> +static const struct v4l2_subdev_video_ops tw9900_video_ops = {
+>> +	.s_std		= tw9900_s_std,
+>> +	.g_std		= tw9900_g_std,  
+>
+>Can the tw9900 detect the standard? (I.e. PAL, SECAM, NTSC)
+>
+>If so, you should implement querystd. I see that none of the other tw*.c drivers
+>support this, so I suspect there is no hardware support for this.
+
+So, there's hardware support for this, and I've been trying to get this
+to work for a while. I've come to a point where the standard detection
+"almost" works, but detects the wrong standard about once every 10
+occurences. I don't know if this is due to the hardware I'm testing
+this on, my setup, or the decoder itself.
+
+This is in a setup where the standard can change on the fly (I have 2
+cameras, one that streams PAL, one that streams NTSC, that are connected
+to the TW9900 through a switch, and I have to make so that we can
+detect a standard change (due to switching a camera) on the fly while
+the stream is started.
+
+The standard detection is also a process that is quite long and that
+has to be manually started, and then checked regularly to see if the
+decoder successfully identified a standard.
+
+I do have a followup question, which is when querystd() would be called
+in a "normal" scenarion (I feel that my usecase seems a bit off-track
+compared to classic usecases). Is it when the stream is started, or
+stopped ?
+
+>You also must implement g_tvnorms to report the TV standards that the hardware
+>can understand.
+
+Ok I didn't know about that, I'll implement that then.
+
+[...]
+
+>> +
+>> +	tw9900->subdev.internal_ops = &tw9900_internal_ops;
+>> +	tw9900->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;  
+>
+>This is a duplicate of a similar '|=' above.
+
+My bad, I'll remove that line.
+
+
+>
+>Regards,
+>
+>	Hans
+
+Thanks,
+
+Maxime
