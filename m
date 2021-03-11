@@ -2,70 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 952D8C4332B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A36A1C43332
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDAF564FF7
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 654976500C
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbhCKPlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S234322AbhCKPl0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbhCKPlH (ORCPT
+        with ESMTP id S234241AbhCKPlK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:07 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8B5C061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:07 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v15so2394321wrx.4
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:07 -0800 (PST)
+        Thu, 11 Mar 2021 10:41:10 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F906C061574;
+        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c76-20020a1c9a4f0000b029010c94499aedso13484830wme.0;
+        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ssl1iA7M+yjQgL0tdJM6ww1IB2abRHT8PVziTs2Mluc=;
-        b=uV0pMhDzaz1GVXPWhNOl4ltw/m0ib3QSPlmU13jsCAD8j6S3lXnGvfQ3eAZyyPWSvs
-         MZf7igUMPMyehp6+5cD6v0XPVuQkjMta4RMSEWyq+3EtU0Y67Ruhi7hiQdXKSYfvFcWE
-         qQk4sShgwwtyLz3koVtF7pOqfSv82Ds1bRNbHGFHzGnjDjTZcRLdWIov1YOK40/S/PAJ
-         DAq50hONyoJBazW7n+ByyIklAD4ZFqntEDTbMQzp7ktvcJRnbUSjCT/qc8ug3bJt31XN
-         SDb8c5VBi2xTTIxzQI1eFWTPpGJwaZpeGhkgZqfM3CKk9PYU/ihJAcN+2xg4QL5IRrVw
-         uiaw==
+        bh=JAdbjBxh26QNVrsqvgxFW6fvmPfYqMNJOexCayrJvA0=;
+        b=uuybCdyj+rOshkXU3o4qNqYMwBcqtV3lj/6PDOQyuRHZ48YZTr9k5oCCOqjBU/c6Z1
+         5xgWkzqgYAfI0mJmUDkpKlv/8V4Kc9VsJ1woX20xOOT7hjIs1booPCi8Ub1ksYQm7QB3
+         kZft9+79hFe7g0xMDEUKgek+9VHc4l8x26FL0di3BcAbsWrHFL/KdwCj1LgtFrtr5O4e
+         0uf7pLSUfedXmF/eifRJB4qEp2aibPOLJ/RMf/KVP2vicuUcny04om5qBWOqitXPbLJ+
+         VoIK8gg1NdeLdN7QlvXAiczLFqkNbx75NNwDszOJdOfBXYm3IOW6EfdDJm/n4tDVjMOG
+         tu2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ssl1iA7M+yjQgL0tdJM6ww1IB2abRHT8PVziTs2Mluc=;
-        b=UmvPlu1H4IwuD4/DF6K8kpbthe/oOBkRrmaTbWihVb3st8f9EvZitjVd4dztgdsuLn
-         YApwEcHLX2HfMIoNe/yM3Z2J2WOmLwmGRUYv0Zx0hpNpAAI26qEnDZT0u6Tc6CHn/phN
-         rB8ZWtXFdRoOhyJR2rjc73FmGbvAnNKgSFeSMvOGHGv0xEqMGZIQKMlYqA5Xvy96jrXq
-         Zv+85jLcB/Awrxkjq8bRTO0KLSpmnnGz0p5J4DJCE/AUTt9Edidzh5w1oVrdJ59b105M
-         tFHk7jWE9L+7wJ2iqApOtMd34XyCNU2YlBMRrtPyO5oBkO3mn/wcZVGAgqCgzizQhRE7
-         cvjw==
-X-Gm-Message-State: AOAM5316oxs+lX5Qp6EqmXCuiyKO0MYJBQPzySxFARNzhykjMyQ5fntE
-        4fOYzhJmOP08MZ1BBK90kWA=
-X-Google-Smtp-Source: ABdhPJykA0Zp7nDR2YtIXj7sKTeSrV/YQpNVe+k/BleazGZ0VeBDADL8vXMQnpYVTVzI+rrkLkkD/Q==
-X-Received: by 2002:adf:ce8a:: with SMTP id r10mr9340135wrn.17.1615477265973;
-        Thu, 11 Mar 2021 07:41:05 -0800 (PST)
+        bh=JAdbjBxh26QNVrsqvgxFW6fvmPfYqMNJOexCayrJvA0=;
+        b=a3TuqWjWhIr9eWNK5nG7bpSBmV3Jt4BAGnV80UgIb/XNWG/IP7D+tP5o6YWbdguCxT
+         T9L9YewhKei1V0Os4eD6efXYfPsWKOR0LXXVXrWER0ovdRpkiGFhkINkS8AK2VShRSbe
+         ngRd5hs3pI1wOQFBwgKuAyldl9pcU8rWJxGr0n94D9JjCg5BxZzUv7AQCruifPx8vx5F
+         sXkzOLuuYZnp3l60vDUgWY67rD4mhVwS3wwLibqZeWcs9wgbCP1qwdeF7N+FKfGC2ew2
+         Xue3geP3sPNDDgkQcScjtXT0IR69tS2NTh2bbRwSDnJWe52msn+EAtUrCdCsahabc+Wj
+         F+JQ==
+X-Gm-Message-State: AOAM530l8OfEckXBGvbzNRmypkDzHhndezTYuK8lZEAkdJlictjL8EP3
+        Nh1lAluktdz9+Pl7c7f+rzM=
+X-Google-Smtp-Source: ABdhPJx5nbz+p6EpPXuNactxgx8F8NdBvmhgFLIsXilxrXXL05ZdvxkShyrzRVGKm1nAUScJBhLF2Q==
+X-Received: by 2002:a1c:6605:: with SMTP id a5mr9029615wmc.85.1615477269074;
+        Thu, 11 Mar 2021 07:41:09 -0800 (PST)
 Received: from arch-x1c3.. ([2a00:5f00:102:0:b16d:9752:8f38:7d6b])
-        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.04
+        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:41:05 -0800 (PST)
+        Thu, 11 Mar 2021 07:41:08 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH v2 03/10] media: hantro: imx: remove duplicate dec_base init
-Date:   Thu, 11 Mar 2021 15:40:48 +0000
-Message-Id: <20210311154055.3496076-4-emil.l.velikov@gmail.com>
+Cc:     emil.l.velikov@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 06/10] media: dt-bindings: Document SAMA5D4 VDEC bindings
+Date:   Thu, 11 Mar 2021 15:40:51 +0000
+Message-Id: <20210311154055.3496076-7-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
 References: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
@@ -77,27 +79,88 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-The vpu->dec_base is already set by the hantro driver itself.
+Add devicetree binding documentation for the Hantro G1/G2 VDEC on
+the Microchip SAMAS5D4 SoC.
 
-Fixes: 8e4aaa687863 ("media: hantro: add initial i.MX8MQ support")
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: devicetree@vger.kernel.org>
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 1 -
- 1 file changed, 1 deletion(-)
+v2
+ - Newly introduced
+ - s/Atmel/Microchip/ (Nicolas)
+ - Drop leading 0 in node name/address
+---
+ .../media/microchip,sama5d4-vdec.yaml         | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
 
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index 1f48c1956cd2..cb1ac02c03d2 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -150,7 +150,6 @@ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- 
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
--	vpu->dec_base = vpu->reg_bases[0];
- 	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
- 
- 	return 0;
+diff --git a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
+new file mode 100644
+index 000000000000..9cb2c0295d54
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Hantro G1 VPU codec implemented on Microchip SAMA5D4 SoCs
++
++maintainers:
++  - Emil Velikov <emil.velikov@collabora.com>
++
++description:
++  Hantro G1 video decode accelerator present on Microchip SAMA5D4 SoCs.
++
++properties:
++  compatible:
++    const: microchip,sama5d4-vdec
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-names:
++    items:
++      - const: vdec
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: vdec_clk
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++        #include <dt-bindings/clock/at91.h>
++        #include <dt-bindings/interrupt-controller/irq.h>
++
++        vdec0: vdec@300000 {
++                compatible = "microchip,sama5d4-vdec";
++                reg = <0x00300000 0x100000>;
++                interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
++                interrupt-names = "vdec";
++                clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
++                clock-names = "vdec_clk";
++        };
 -- 
 2.30.1
 
