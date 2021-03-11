@@ -4,117 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE2B7C43333
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBFB3C43331
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FEBA64FC3
+	by mail.kernel.org (Postfix) with ESMTP id 7938264FAE
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbhCKKUu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 05:20:50 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:51799 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232287AbhCKKUc (ORCPT
+        id S232285AbhCKKUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 05:20:49 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:58135 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232283AbhCKKUa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 05:20:32 -0500
+        Thu, 11 Mar 2021 05:20:30 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id KIQYlPLX0C40pKIQglKo6U; Thu, 11 Mar 2021 11:20:32 +0100
+        id KIQYlPLX0C40pKIQflKo5s; Thu, 11 Mar 2021 11:20:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615458032; bh=zD8DZonyIpHWHuwKQFh3ozi+YfAWMvfDvdzCBPVNJp4=;
+        t=1615458029; bh=Wissy2MsR+SgOH+XIcE7jTChpQ/w6A1FjkheFCd20z4=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=pRmCqVly3T9NrdE2AmyG3o0P/BVdWb21s/GCFSyoBAoqurez8638DgE4wRq2U7RKz
-         HQJopZjNfkEj4kO8pWVJTQpJF5zEUynWPFtPlxia5PvfXHOf5haB2AFHtRjW14leAv
-         ZrNhgHa7vmqw5dOFGGyjDMdYe6yjZZi7OfniJKCdZOhqHYSznnKlTaaTbyCJXUR4rT
-         9bKGovbBl+JvMfoKUNERldg37RBIl66sRvqjC0NrTV0OfHzA0HdBI1t9rhfrSYgdlX
-         ZkS3ZEEJDBKvlrXjtB1HXfRlYZxGYTcJsGoZid5VmSOOGS5mkHOlVNkGUvud/ve/Xx
-         23wyEZenaS7Mw==
+        b=QBOdFVNy9j+61Wb3xDuP1USlx5ixvgwLae8H7ZEIBBE8jCFy+6HeyFjfI+cXOxuKN
+         gYcQkiwfPqWcUGqxyEftvwCPbbHWvdgfnpkcaoKYpQZn+PVEmEIvujANbbei1EJWPK
+         Oe7dUmEeKpWVhUnIR/bKej3fE4+OZHqpbAIp4g1KDsIqtDPOrrBxXJtFogVP646f45
+         ZsgzSg6h3dPOFxUvRakkebv8/oFTc7sJ/EnJrj5Qy5RpUP46+XxCbamFKByLvJVD4o
+         pwMTg6Ctq/rEPwwgZBpVQilYWgqjLHAgMnTtZUVlTSNqgZ0EWkUgb8VbEdTLvtAU0P
+         nOu+Z16U0ReGQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Xia Jiang <xia.jiang@mediatek.com>
-Subject: [PATCH 10/13] mtk-jpeg/mtk_jpeg_core.h: fix kernel-doc warnings
-Date:   Thu, 11 Mar 2021 11:20:19 +0100
-Message-Id: <20210311102022.96954-11-hverkuil-cisco@xs4all.nl>
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH 07/13] staging: media: hantro: fix kernel-doc formatting
+Date:   Thu, 11 Mar 2021 11:20:16 +0100
+Message-Id: <20210311102022.96954-8-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 References: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfLx/wZwxglH1uzuHex+D9yPTHmOkKy+SuzZvsDHT2L6/ezlgzzQVdjD+PlAAZMzllcKYQ5c4qUTmHj2G4OkzL98CahcH21lsSFDzFqVOF2Z2y/Q3o1jb
- dcAA34jTR3cGFqG4XbtvsAHrspmJ3CLeBG2MJ/QqLES/llMOot1TY3H8wAbM8esS7N7aONHeRdAe9obEZTObpS6wpAxCbPdMq0mBPRHwHpF6aDXbLG4xY1RQ
- wl+J5osHj35C8CqT42oZbqN3iD8+qhpDDdjVHao/ds8=
+X-CMAE-Envelope: MS4xfJ2t2hEZx/QeWjdRyHoE/3o+ITKtl1JBIhvi1AKPJPEiDGao1h+/Sg4NVx25QIPjhcgyHLu1I1hUODliM2dBLTwkxpqIEab/wIQCIgAQ2SGffk2RzLw3
+ SZrOEPdycO75DKE/yJCc4p4985KciOw7LYIZCDmCG0e4qJVMAz90hpx3JUkY8J4zuAZauMq8VeSLTeR7bLVra2uBFD3eLj8JZyHrE6LOX03IMIlDj6Wsh6rJ
+ 6J+9Sjqmx7weACyLCsjazTqcoV16LTq6ZS2A5tkt0ZI=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add missing 'struct' keywords and fix typos in two struct member
-names.
+- @h264_dec was not documented, add that trivial change
+- it is not possible to document a global variable in kernel-doc,
+  change to use 'DOC:' instead
+- fix mismatched struct name (hantro_vp8d_hw_ctx -> hantro_vp8_dec_hw_ctx)
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Xia Jiang <xia.jiang@mediatek.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/staging/media/hantro/hantro.h    | 3 ++-
+ drivers/staging/media/hantro/hantro_hw.h | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-index 68e634f02e00..595f7f10c9fd 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-@@ -45,11 +45,11 @@ enum mtk_jpeg_ctx_state {
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 65f9f7ea7dcf..6c1b888abe75 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -214,6 +214,7 @@ struct hantro_dev {
+  *
+  * @codec_ops:		Set of operations related to codec mode.
+  * @postproc:		Post-processing context.
++ * @h264_dec:		H.264-decoding context.
+  * @jpeg_enc:		JPEG-encoding context.
+  * @mpeg2_dec:		MPEG-2-decoding context.
+  * @vp8_dec:		VP8-decoding context.
+@@ -293,7 +294,7 @@ struct hantro_postproc_regs {
+ /* Logging helpers */
+ 
+ /**
+- * debug - Module parameter to control level of debugging messages.
++ * DOC: hantro_debug: Module parameter to control level of debugging messages.
+  *
+  * Level of debugging messages can be controlled by bits of
+  * module parameter called "debug". Meaning of particular
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 34c9e4649a25..65a9eaf5bb18 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -99,7 +99,7 @@ struct hantro_mpeg2_dec_hw_ctx {
  };
  
  /**
-- * mtk_jpeg_variant - mtk jpeg driver variant
-+ * struct mtk_jpeg_variant - mtk jpeg driver variant
-  * @clks:			clock names
-  * @num_clks:			numbers of clock
-- * @format:			jpeg driver's internal color format
-- * @num_format:			number of format
-+ * @formats:			jpeg driver's internal color format
-+ * @num_formats:		number of formats
-  * @qops:			the callback of jpeg vb2_ops
-  * @irq_handler:		jpeg irq handler callback
-  * @hw_reset:			jpeg hardware reset callback
-@@ -75,7 +75,7 @@ struct mtk_jpeg_variant {
- };
- 
- /**
-- * struct mt_jpeg - JPEG IP abstraction
-+ * struct mtk_jpeg_dev - JPEG IP abstraction
-  * @lock:		the mutex protecting this structure
-  * @hw_lock:		spinlock protecting the hw device resource
-  * @workqueue:		decode work queue
-@@ -105,7 +105,7 @@ struct mtk_jpeg_dev {
- };
- 
- /**
-- * struct jpeg_fmt - driver's internal color format data
-+ * struct mtk_jpeg_fmt - driver's internal color format data
-  * @fourcc:	the fourcc code, 0 if not applicable
-  * @hw_format:	hardware format value
-  * @h_sample:	horizontal sample count of plane in 4 * 4 pixel image
-@@ -127,7 +127,7 @@ struct mtk_jpeg_fmt {
- };
- 
- /**
-- * mtk_jpeg_q_data - parameters of one queue
-+ * struct mtk_jpeg_q_data - parameters of one queue
-  * @fmt:	  driver-specific format of this queue
-  * @pix_mp:	  multiplanar format
-  * @enc_crop_rect:	jpeg encoder crop information
-@@ -139,7 +139,7 @@ struct mtk_jpeg_q_data {
- };
- 
- /**
-- * mtk_jpeg_ctx - the device context data
-+ * struct mtk_jpeg_ctx - the device context data
-  * @jpeg:		JPEG IP device for this context
-  * @out_q:		source (output) queue information
-  * @cap_q:		destination (capture) queue queue information
+- * struct hantro_vp8d_hw_ctx
++ * struct hantro_vp8_dec_hw_ctx
+  * @segment_map:	Segment map buffer.
+  * @prob_tbl:		Probability table buffer.
+  */
 -- 
 2.30.1
 
