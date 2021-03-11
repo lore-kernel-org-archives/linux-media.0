@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE761C43619
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B30BC4360C
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A88065031
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 787A864FF9
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbhCKSKf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 13:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S230215AbhCKSKj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 13:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbhCKSKJ (ORCPT
+        with ESMTP id S230405AbhCKSKY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:10:09 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EC6C061762
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:08 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id lr13so48201811ejb.8
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:08 -0800 (PST)
+        Thu, 11 Mar 2021 13:10:24 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BDAC061760
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:23 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id z1so4206705edb.8
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oI5L2jod65aUY+FcrIuvwk99iIBoy2Yj0U+LOKNeS8g=;
-        b=UKlcRzrCOXLiUBRrrTut6iOZ/aLEN9NVLmCeU5ZcJOG3WwW+aI3k0HK1YHHl17Gdqv
-         P8oXbFGolYfEbvTfhhWbrddCEDuquO35t/3/7O6a1HRxQ8tDhgxW1IUUBZf76Bn159EO
-         2CqJ/wjjzRvzCe82sfzIGdARrDsrs4/do/l5JYpBI1AakWMuh40iardZB1zf3fDhk7RA
-         47UT8xbSltiq2QGA3JSqy/bHq0FgnxG9SFqb6bgoNTkBUQJb4NTNeJb+ESAFG9Cu0bKw
-         ZG7zSKMi17D3eS6t+GgrtqktKMPUD4fhuwWtHQc7yf7pQMHCpv3iXoBY05zv/h8OaqPW
-         IXqw==
+        bh=1AfdIZTqpGrnF71coA6YZPrrGqzYFO27hUk38aGGU4s=;
+        b=T/blYpNpDrArp53wwEkelGLm+j9b/jutSbrKNlvV7kUj7Xukn0o7bAF/rDnM7g5cSP
+         X5+B8k1t9mOYDN+dvXGmCWI2e/6ShpEKdagIRfLkL/MroO2hfIWa7fJ5Gq2T+OXGMQ8l
+         KHTBreHYE2D9F5gQt7owFPMjw8WXELyMB7bMMOD11A1XK9PR33CuQIay1hFYPwUioFNr
+         5TsWC/1mMK1Yf3wbboW5F395j/EqZiAwFxZ6Pj8QtgCZjxEnLa7GcEZuvj/GUEAOtkcJ
+         QbKx7E7MgsFUfmE6Xaz8YBtUtL7kMMjMyRnDnIk70Qr8R9stFrD9upr9J7vTQRPPZUXJ
+         jegw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oI5L2jod65aUY+FcrIuvwk99iIBoy2Yj0U+LOKNeS8g=;
-        b=jSyRBp5m7nKLVJ5D4yVSPZvweNIxmKHpVUAs5x150K4pfrldaFrev+K7gG9w2EfuT7
-         QMD5l7zCwxvVI3c1Sfc0p4bv9MeVMqKArClT2Zd2k81+Xy6FfH3wkzHJBXsJVPSoQbBT
-         JK1y1LIPIMRv42Vx4fKQFvzMxVc6vDyK2/OczUw02lKO8WnvPxAKfKXRA2ZlE9sq/Nrr
-         pzKJ1olTJygGw+yPrtyTtDc4OCBf18PgkfZbSIGIv14ZTxWkHx+p418k9EIjnc6R7j+e
-         NRRI/kuXtd75QJ7AXDfxLwuHlcLTBs6U3mNLFRfG8v2tAYwdetoHyrCaMEEMroTpnFnw
-         RMiQ==
-X-Gm-Message-State: AOAM533yB0C7uZ49eTFwCvDzGY84gnvbsTvh5KXYT1868yR1cUbpFPER
-        /NvANxGUucx+w9IlbzC7JjNvdA==
-X-Google-Smtp-Source: ABdhPJwgvYew5tsT7Y2hCz+ZCEEkjTd/Ze1IvcFByHtIIzcDtth0v3W3nkjcZY0/+kxAJ4aBHJPckA==
-X-Received: by 2002:a17:907:216a:: with SMTP id rl10mr4298674ejb.365.1615486207157;
-        Thu, 11 Mar 2021 10:10:07 -0800 (PST)
+        bh=1AfdIZTqpGrnF71coA6YZPrrGqzYFO27hUk38aGGU4s=;
+        b=HKkktXdcI8g7fjctQb1oWKGR17fBeJZ3nvjDHkMh62PNxX8NiSgdrMwykJVXqkNXL9
+         8bk8PAVEpjp2YQpSb3Bq2vm7tj5Q2lUpQ8VxB4R1wBKNIINsuvstBAwjhEj0JGW1u1iW
+         CORvq1+/VI2dLPWYuLd7OVSg1jG85/LyXcO3bprndLtgKvpZQr+3TbwlFPYKPq74MD9L
+         YHOWYDu81xnSdyST8uCxmDcL0qw5hUZk9d783OJNYQ+RNqpvDyvK5fMXqFNG28cGHV8S
+         0dzllio0Y5W2ozg0FoPxbfDXg7UWJdpqY/y3sOpC5QonSM8VDmnzg+sRnPlokICiInOS
+         rlBQ==
+X-Gm-Message-State: AOAM532Fs/0Mh3tCaDYvhWniOK48vtKIZelyDj32i6TTccfLXUXdntkK
+        zdRHYusRNoHn1YSw20Nq46SbPQ==
+X-Google-Smtp-Source: ABdhPJxPh5ei6/tQ0J+Eqj3GDGN0eeybOJtZK8aDtJS+u4j+23Yh3UKdpUvO0T3CwCfji1ati+zSKQ==
+X-Received: by 2002:a05:6402:32d:: with SMTP id q13mr9824044edw.17.1615486222171;
+        Thu, 11 Mar 2021 10:10:22 -0800 (PST)
 Received: from localhost.localdomain ([2a02:2454:3e3:5f00:8e01:34c:da50:eb7e])
-        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.05
+        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 10:10:06 -0800 (PST)
+        Thu, 11 Mar 2021 10:10:21 -0800 (PST)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
@@ -71,582 +71,464 @@ Cc:     Rob Herring <robh@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
         Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jonathan Marek <jonathan@marek.ca>
-Subject: [PATCH v7 05/22] media: camss: Make ISPIF subdevice optional
-Date:   Thu, 11 Mar 2021 19:09:31 +0100
-Message-Id: <20210311180948.268343-6-robert.foss@linaro.org>
+Subject: [PATCH v7 12/22] media: camss: Refactor VFE power domain toggling
+Date:   Thu, 11 Mar 2021 19:09:38 +0100
+Message-Id: <20210311180948.268343-13-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210311180948.268343-1-robert.foss@linaro.org>
 References: <20210311180948.268343-1-robert.foss@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This driver supports multiple architecture versions of the Qualcomm ISP.
-The CAMSS architecure which this driver is name after, and with the
-introduction of this series, the Titan architecture.
+For Titan ISPs clocks fail to re-enable during vfe_get()
+after any vfe has been halted and its corresponding power
+domain power has been detached.
 
-The ISPIF is an IP-block that is only present in the CAMSS generation of
-the architecture. In order to support the Titan generation, make the
-ISPIF an optional subdevice.
+Since all of the clocks depend on all of the PDs, per
+VFE PD detaching is no option for Gen2 HW.
+
+In order to not have regressions on for Gen1 HW, refactor
+the power domain management into hardware version specific
+code paths.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
 Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
 
-Changes since v1:
- - Björn: Improved commit message
- - Björn: Use local 'dev' ptr instead of 'camss->dev'
- - Björn: Remove res/ispif NULL checks
- - Björn: Remove ispif NULL checks before calling
-   msm_ispif_unregister_entities()
- - Andrey: Fixed incorrect allocation size
-
-Changes since v4:
- - Andrey: Remove !camss->ispif conditional from camss.c
- - Andrey: Fix !camss->ispif in camss-ispif.c
- - Move !camss->ispif check to msm_ispif_subdev_init()
 
 Changes since v5:
- - Andrey: Added r-b
+ - Andrey: Bifurcated PD support into Gen1 & Gen2 paths
 
- .../media/platform/qcom/camss/camss-ispif.c   | 119 +++++++++++-------
- .../media/platform/qcom/camss/camss-ispif.h   |   3 +-
- drivers/media/platform/qcom/camss/camss.c     |  99 ++++++++++-----
- drivers/media/platform/qcom/camss/camss.h     |   2 +-
- 4 files changed, 139 insertions(+), 84 deletions(-)
+Changes since v6:
+ - Andrey: Add r-b
+ - Improved commit msg
 
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-index adeb92808998..fc121da4ab0c 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.c
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-@@ -161,6 +161,7 @@ static const u32 ispif_formats_8x96[] = {
- static irqreturn_t ispif_isr_8x96(int irq, void *dev)
- {
- 	struct ispif_device *ispif = dev;
-+	struct camss *camss = ispif->camss;
- 	u32 value0, value1, value2, value3, value4, value5;
- 
- 	value0 = readl_relaxed(ispif->base + ISPIF_VFE_m_IRQ_STATUS_0(0));
-@@ -186,34 +187,34 @@ static irqreturn_t ispif_isr_8x96(int irq, void *dev)
- 		complete(&ispif->reset_complete[1]);
- 
- 	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 pix0 overflow\n");
- 
- 	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi0 overflow\n");
- 
- 	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 pix1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 pix1 overflow\n");
- 
- 	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi1 overflow\n");
- 
- 	if (unlikely(value2 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi2 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi2 overflow\n");
- 
- 	if (unlikely(value3 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE1 pix0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE1 pix0 overflow\n");
- 
- 	if (unlikely(value3 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE1 rdi0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE1 rdi0 overflow\n");
- 
- 	if (unlikely(value4 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE1 pix1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE1 pix1 overflow\n");
- 
- 	if (unlikely(value4 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE1 rdi1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE1 rdi1 overflow\n");
- 
- 	if (unlikely(value5 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE1 rdi2 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE1 rdi2 overflow\n");
- 
- 	return IRQ_HANDLED;
+
+
+ .../media/platform/qcom/camss/camss-vfe-170.c | 21 +++++
+ .../media/platform/qcom/camss/camss-vfe-4-1.c | 19 ++++
+ .../media/platform/qcom/camss/camss-vfe-4-7.c | 39 ++++++++
+ .../media/platform/qcom/camss/camss-vfe-4-8.c | 34 +++++++
+ drivers/media/platform/qcom/camss/camss-vfe.c |  6 +-
+ drivers/media/platform/qcom/camss/camss-vfe.h |  2 +
+ drivers/media/platform/qcom/camss/camss.c     | 94 +++++++++++++------
+ drivers/media/platform/qcom/camss/camss.h     | 10 +-
+ 8 files changed, 189 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index ce1130108e01..99f27124ad3b 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -714,6 +714,25 @@ static void vfe_isr_wm_done(struct vfe_device *vfe, u8 wm)
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
  }
-@@ -228,6 +229,7 @@ static irqreturn_t ispif_isr_8x96(int irq, void *dev)
- static irqreturn_t ispif_isr_8x16(int irq, void *dev)
- {
- 	struct ispif_device *ispif = dev;
-+	struct camss *camss = ispif->camss;
- 	u32 value0, value1, value2;
  
- 	value0 = readl_relaxed(ispif->base + ISPIF_VFE_m_IRQ_STATUS_0(0));
-@@ -244,30 +246,32 @@ static irqreturn_t ispif_isr_8x16(int irq, void *dev)
- 		complete(&ispif->reset_complete[0]);
- 
- 	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 pix0 overflow\n");
- 
- 	if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_RDI0_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi0 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi0 overflow\n");
- 
- 	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_PIX1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 pix1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 pix1 overflow\n");
- 
- 	if (unlikely(value1 & ISPIF_VFE_m_IRQ_STATUS_1_RDI1_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi1 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi1 overflow\n");
- 
- 	if (unlikely(value2 & ISPIF_VFE_m_IRQ_STATUS_2_RDI2_OVERFLOW))
--		dev_err_ratelimited(to_device(ispif), "VFE0 rdi2 overflow\n");
-+		dev_err_ratelimited(camss->dev, "VFE0 rdi2 overflow\n");
- 
++/*
++ * vfe_pm_domain_off - Disable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static void vfe_pm_domain_off(struct vfe_device *vfe)
++{
++
++}
++
++
++/*
++ * vfe_pm_domain_on - Enable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static int vfe_pm_domain_on(struct vfe_device *vfe)
++{
++	return 0;
++}
++
+ /*
+  * vfe_queue_buffer - Add empty buffer
+  * @vid: Video device structure
+@@ -775,6 +794,8 @@ const struct vfe_hw_ops vfe_ops_170 = {
+ 	.hw_version_read = vfe_hw_version_read,
+ 	.isr_read = vfe_isr_read,
+ 	.isr = vfe_isr,
++	.pm_domain_off = vfe_pm_domain_off,
++	.pm_domain_on = vfe_pm_domain_on,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.reg_update = vfe_reg_update,
+ 	.subdev_init = vfe_subdev_init,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+index 81756d7fd5c2..9fc44be3ccb8 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
+@@ -938,6 +938,23 @@ static irqreturn_t vfe_isr(int irq, void *dev)
  	return IRQ_HANDLED;
  }
  
- static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
- {
-+	struct camss *camss = ispif->camss;
++/*
++ * vfe_pm_domain_off - Disable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static void vfe_pm_domain_off(struct vfe_device *vfe)
++{
 +
- 	unsigned long time;
- 	u32 val;
++}
++
++/*
++ * vfe_pm_domain_on - Enable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static int vfe_pm_domain_on(struct vfe_device *vfe)
++{
++	return 0;
++}
  
--	if (vfe_id > (to_camss(ispif)->vfe_num - 1)) {
--		dev_err(to_device(ispif),
-+	if (vfe_id > (camss->vfe_num - 1)) {
-+		dev_err(camss->dev,
- 			"Error: asked reset for invalid VFE%d\n", vfe_id);
- 		return -ENOENT;
- 	}
-@@ -300,7 +304,7 @@ static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
- 	time = wait_for_completion_timeout(&ispif->reset_complete[vfe_id],
- 		msecs_to_jiffies(ISPIF_RESET_TIMEOUT_MS));
- 	if (!time) {
--		dev_err(to_device(ispif),
-+		dev_err(camss->dev,
- 			"ISPIF for VFE%d reset timeout\n", vfe_id);
- 		return -EIO;
- 	}
-@@ -316,30 +320,31 @@ static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
+ const struct vfe_hw_ops_gen1 vfe_ops_gen1_4_1 = {
+ 	.bus_connect_wm_to_rdi = vfe_bus_connect_wm_to_rdi,
+@@ -990,6 +1007,8 @@ const struct vfe_hw_ops vfe_ops_4_1 = {
+ 	.hw_version_read = vfe_hw_version_read,
+ 	.isr_read = vfe_isr_read,
+ 	.isr = vfe_isr,
++	.pm_domain_off = vfe_pm_domain_off,
++	.pm_domain_on = vfe_pm_domain_on,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.reg_update = vfe_reg_update,
+ 	.subdev_init = vfe_subdev_init,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+index 5ecb87f1b047..41cf150d9efe 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 2015-2018 Linaro Ltd.
   */
- static int ispif_reset(struct ispif_device *ispif, u8 vfe_id)
- {
-+	struct camss *camss = ispif->camss;
- 	int ret;
  
--	ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE0);
-+	ret = camss_pm_domain_on(camss, PM_DOMAIN_VFE0);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE1);
-+	ret = camss_pm_domain_on(camss, PM_DOMAIN_VFE1);
- 	if (ret < 0)
- 		return ret;
- 
- 	ret = camss_enable_clocks(ispif->nclocks_for_reset,
- 				  ispif->clock_for_reset,
--				  to_device(ispif));
-+				  camss->dev);
- 	if (ret < 0)
- 		return ret;
- 
- 	ret = ispif_vfe_reset(ispif, vfe_id);
- 	if (ret)
--		dev_dbg(to_device(ispif), "ISPIF Reset failed\n");
-+		dev_dbg(camss->dev, "ISPIF Reset failed\n");
- 
- 	camss_disable_clocks(ispif->nclocks_for_reset, ispif->clock_for_reset);
- 
--	camss_pm_domain_off(to_camss(ispif), PM_DOMAIN_VFE0);
--	camss_pm_domain_off(to_camss(ispif), PM_DOMAIN_VFE1);
-+	camss_pm_domain_off(camss, PM_DOMAIN_VFE0);
-+	camss_pm_domain_off(camss, PM_DOMAIN_VFE1);
- 
- 	return ret;
++#include <linux/device.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -1104,6 +1105,42 @@ static void vfe_isr_read(struct vfe_device *vfe, u32 *value0, u32 *value1)
+ 	writel_relaxed(VFE_0_IRQ_CMD_GLOBAL_CLEAR, vfe->base + VFE_0_IRQ_CMD);
  }
-@@ -355,7 +360,7 @@ static int ispif_set_power(struct v4l2_subdev *sd, int on)
- {
- 	struct ispif_line *line = v4l2_get_subdevdata(sd);
- 	struct ispif_device *ispif = line->ispif;
--	struct device *dev = to_device(ispif);
-+	struct device *dev = ispif->camss->dev;
- 	int ret = 0;
  
- 	mutex_lock(&ispif->power_lock);
-@@ -505,7 +510,7 @@ static int ispif_validate_intf_status(struct ispif_device *ispif,
- 	}
- 
- 	if ((val & 0xf) != 0xf) {
--		dev_err(to_device(ispif), "%s: ispif is busy: 0x%x\n",
-+		dev_err(ispif->camss->dev, "%s: ispif is busy: 0x%x\n",
- 			__func__, val);
- 		ret = -EBUSY;
- 	}
-@@ -552,7 +557,7 @@ static int ispif_wait_for_stop(struct ispif_device *ispif,
- 				 ISPIF_TIMEOUT_SLEEP_US,
- 				 ISPIF_TIMEOUT_ALL_US);
- 	if (ret < 0)
--		dev_err(to_device(ispif), "%s: ispif stop timeout\n",
-+		dev_err(ispif->camss->dev, "%s: ispif stop timeout\n",
- 			__func__);
- 
- 	return ret;
-@@ -800,6 +805,7 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct ispif_line *line = v4l2_get_subdevdata(sd);
- 	struct ispif_device *ispif = line->ispif;
-+	struct camss *camss = ispif->camss;
- 	enum ispif_intf intf = line->interface;
- 	u8 csid = line->csid_id;
- 	u8 vfe = line->vfe_id;
-@@ -825,8 +831,8 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
- 		ispif_select_csid(ispif, intf, csid, vfe, 1);
- 		ispif_select_cid(ispif, intf, cid, vfe, 1);
- 		ispif_config_irq(ispif, intf, vfe, 1);
--		if (to_camss(ispif)->version == CAMSS_8x96 ||
--		    to_camss(ispif)->version == CAMSS_660)
-+		if (camss->version == CAMSS_8x96 ||
-+		    camss->version == CAMSS_660)
- 			ispif_config_pack(ispif,
- 					  line->fmt[MSM_ISPIF_PAD_SINK].code,
- 					  intf, cid, vfe, 1);
-@@ -843,8 +849,8 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
- 			return ret;
- 
- 		mutex_lock(&ispif->config_lock);
--		if (to_camss(ispif)->version == CAMSS_8x96 ||
--		    to_camss(ispif)->version == CAMSS_660)
-+		if (camss->version == CAMSS_8x96 ||
-+		    camss->version == CAMSS_660)
- 			ispif_config_pack(ispif,
- 					  line->fmt[MSM_ISPIF_PAD_SINK].code,
- 					  intf, cid, vfe, 0);
-@@ -1088,26 +1094,32 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-  *
-  * Return 0 on success or a negative error code otherwise
-  */
--int msm_ispif_subdev_init(struct ispif_device *ispif,
-+int msm_ispif_subdev_init(struct camss *camss,
- 			  const struct resources_ispif *res)
- {
--	struct device *dev = to_device(ispif);
-+	struct device *dev = camss->dev;
-+	struct ispif_device *ispif = camss->ispif;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct resource *r;
- 	int i;
- 	int ret;
- 
-+	if (!camss->ispif)
-+		return 0;
-+
-+	ispif->camss = camss;
-+
- 	/* Number of ISPIF lines - same as number of CSID hardware modules */
--	if (to_camss(ispif)->version == CAMSS_8x16)
-+	if (camss->version == CAMSS_8x16)
- 		ispif->line_num = 2;
--	else if (to_camss(ispif)->version == CAMSS_8x96 ||
--		 to_camss(ispif)->version == CAMSS_660)
-+	else if (camss->version == CAMSS_8x96 ||
-+		 camss->version == CAMSS_660)
- 		ispif->line_num = 4;
- 	else
- 		return -EINVAL;
- 
--	ispif->line = devm_kcalloc(dev, ispif->line_num, sizeof(*ispif->line),
--				   GFP_KERNEL);
-+	ispif->line = devm_kcalloc(dev, ispif->line_num,
-+			sizeof(*ispif->line), GFP_KERNEL);
- 	if (!ispif->line)
- 		return -ENOMEM;
- 
-@@ -1115,12 +1127,12 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
- 		ispif->line[i].ispif = ispif;
- 		ispif->line[i].id = i;
- 
--		if (to_camss(ispif)->version == CAMSS_8x16) {
-+		if (camss->version == CAMSS_8x16) {
- 			ispif->line[i].formats = ispif_formats_8x16;
- 			ispif->line[i].nformats =
- 					ARRAY_SIZE(ispif_formats_8x16);
--		} else if (to_camss(ispif)->version == CAMSS_8x96 ||
--			   to_camss(ispif)->version == CAMSS_660) {
-+		} else if (camss->version == CAMSS_8x96 ||
-+			   camss->version == CAMSS_660) {
- 			ispif->line[i].formats = ispif_formats_8x96;
- 			ispif->line[i].nformats =
- 					ARRAY_SIZE(ispif_formats_8x96);
-@@ -1157,15 +1169,16 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
- 	ispif->irq = r->start;
- 	snprintf(ispif->irq_name, sizeof(ispif->irq_name), "%s_%s",
- 		 dev_name(dev), MSM_ISPIF_NAME);
--	if (to_camss(ispif)->version == CAMSS_8x16)
-+	if (camss->version == CAMSS_8x16)
- 		ret = devm_request_irq(dev, ispif->irq, ispif_isr_8x16,
- 			       IRQF_TRIGGER_RISING, ispif->irq_name, ispif);
--	else if (to_camss(ispif)->version == CAMSS_8x96 ||
--		 to_camss(ispif)->version == CAMSS_660)
-+	else if (camss->version == CAMSS_8x96 ||
-+		 camss->version == CAMSS_660)
- 		ret = devm_request_irq(dev, ispif->irq, ispif_isr_8x96,
- 			       IRQF_TRIGGER_RISING, ispif->irq_name, ispif);
- 	else
- 		ret = -EINVAL;
-+
- 	if (ret < 0) {
- 		dev_err(dev, "request_irq failed: %d\n", ret);
- 		return ret;
-@@ -1331,10 +1344,15 @@ static const struct media_entity_operations ispif_media_ops = {
- int msm_ispif_register_entities(struct ispif_device *ispif,
- 				struct v4l2_device *v4l2_dev)
- {
--	struct device *dev = to_device(ispif);
++/*
++ * vfe_pm_domain_off - Disable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static void vfe_pm_domain_off(struct vfe_device *vfe)
++{
 +	struct camss *camss;
- 	int ret;
- 	int i;
- 
-+	if (!ispif)
-+		return 0;
 +
-+	camss = ispif->camss;
-+
- 	for (i = 0; i < ispif->line_num; i++) {
- 		struct v4l2_subdev *sd = &ispif->line[i].subdev;
- 		struct media_pad *pads = ispif->line[i].pads;
-@@ -1348,7 +1366,7 @@ int msm_ispif_register_entities(struct ispif_device *ispif,
- 
- 		ret = ispif_init_formats(sd, NULL);
- 		if (ret < 0) {
--			dev_err(dev, "Failed to init format: %d\n", ret);
-+			dev_err(camss->dev, "Failed to init format: %d\n", ret);
- 			goto error;
- 		}
- 
-@@ -1360,13 +1378,15 @@ int msm_ispif_register_entities(struct ispif_device *ispif,
- 		ret = media_entity_pads_init(&sd->entity, MSM_ISPIF_PADS_NUM,
- 					     pads);
- 		if (ret < 0) {
--			dev_err(dev, "Failed to init media entity: %d\n", ret);
-+			dev_err(camss->dev, "Failed to init media entity: %d\n",
-+				ret);
- 			goto error;
- 		}
- 
- 		ret = v4l2_device_register_subdev(v4l2_dev, sd);
- 		if (ret < 0) {
--			dev_err(dev, "Failed to register subdev: %d\n", ret);
-+			dev_err(camss->dev, "Failed to register subdev: %d\n",
-+				ret);
- 			media_entity_cleanup(&sd->entity);
- 			goto error;
- 		}
-@@ -1393,6 +1413,9 @@ void msm_ispif_unregister_entities(struct ispif_device *ispif)
- {
- 	int i;
- 
-+	if (!ispif)
++	if (!vfe)
 +		return;
 +
- 	mutex_destroy(&ispif->power_lock);
- 	mutex_destroy(&ispif->config_lock);
++	camss = vfe->camss;
++
++	device_link_del(camss->genpd_link[vfe->id]);
++}
++
++/*
++ * vfe_pm_domain_on - Enable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static int vfe_pm_domain_on(struct vfe_device *vfe)
++{
++	struct camss *camss = vfe->camss;
++	enum vfe_line_id id = vfe->id;
++
++	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id], DL_FLAG_STATELESS |
++						DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
++
++	if (!camss->genpd_link[id]) {
++		dev_err(vfe->camss->dev, "Failed to add VFE#%d to power domain\n", id);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static void vfe_violation_read(struct vfe_device *vfe)
+ {
+ 	u32 violation = readl_relaxed(vfe->base + VFE_0_VIOLATION_STATUS);
+@@ -1162,6 +1199,8 @@ const struct vfe_hw_ops vfe_ops_4_7 = {
+ 	.hw_version_read = vfe_hw_version_read,
+ 	.isr_read = vfe_isr_read,
+ 	.isr = vfe_isr,
++	.pm_domain_off = vfe_pm_domain_off,
++	.pm_domain_on = vfe_pm_domain_on,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.reg_update = vfe_reg_update,
+ 	.subdev_init = vfe_subdev_init,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
+index 732b93b365d3..f368870ae36d 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-8.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 2015-2021 Linaro Ltd.
+  */
  
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
-index 4132174f7ea1..fdf28e68cc7d 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.h
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.h
-@@ -63,11 +63,12 @@ struct ispif_device {
- 	struct mutex config_lock;
- 	unsigned int line_num;
- 	struct ispif_line *line;
-+	struct camss *camss;
- };
++#include <linux/device.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -1098,6 +1099,37 @@ static void vfe_isr_read(struct vfe_device *vfe, u32 *value0, u32 *value1)
+ 	writel_relaxed(VFE_0_IRQ_CMD_GLOBAL_CLEAR, vfe->base + VFE_0_IRQ_CMD);
+ }
  
- struct resources_ispif;
++/*
++ * vfe_pm_domain_off - Disable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static void vfe_pm_domain_off(struct vfe_device *vfe)
++{
++	struct camss *camss = vfe->camss;
++
++	device_link_del(camss->genpd_link[vfe->id]);
++}
++
++/*
++ * vfe_pm_domain_on - Enable power domains specific to this VFE.
++ * @vfe: VFE Device
++ */
++static int vfe_pm_domain_on(struct vfe_device *vfe)
++{
++	struct camss *camss = vfe->camss;
++	enum vfe_line_id id = vfe->id;
++
++	camss->genpd_link[id] = device_link_add(camss->dev, camss->genpd[id], DL_FLAG_STATELESS |
++						DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
++
++	if (!camss->genpd_link[id]) {
++		dev_err(vfe->camss->dev, "Failed to add VFE#%d to power domain\n", id);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static void vfe_violation_read(struct vfe_device *vfe)
+ {
+ 	u32 violation = readl_relaxed(vfe->base + VFE_0_VIOLATION_STATUS);
+@@ -1156,6 +1188,8 @@ const struct vfe_hw_ops vfe_ops_4_8 = {
+ 	.hw_version_read = vfe_hw_version_read,
+ 	.isr_read = vfe_isr_read,
+ 	.isr = vfe_isr,
++	.pm_domain_off = vfe_pm_domain_off,
++	.pm_domain_on = vfe_pm_domain_on,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.reg_update = vfe_reg_update,
+ 	.subdev_init = vfe_subdev_init,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index c4b2c8edb760..15695fd466c4 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -580,7 +580,7 @@ static int vfe_get(struct vfe_device *vfe)
+ 	mutex_lock(&vfe->power_lock);
  
--int msm_ispif_subdev_init(struct ispif_device *ispif,
-+int msm_ispif_subdev_init(struct camss *camss,
- 			  const struct resources_ispif *res);
+ 	if (vfe->power_count == 0) {
+-		ret = camss_pm_domain_on(vfe->camss, vfe->id);
++		ret = vfe->ops->pm_domain_on(vfe);
+ 		if (ret < 0)
+ 			goto error_pm_domain;
  
- int msm_ispif_register_entities(struct ispif_device *ispif,
+@@ -620,7 +620,7 @@ static int vfe_get(struct vfe_device *vfe)
+ 
+ error_pm_runtime_get:
+ 	pm_runtime_put_sync(vfe->camss->dev);
+-	camss_pm_domain_off(vfe->camss, vfe->id);
++	vfe->ops->pm_domain_off(vfe);
+ 
+ error_pm_domain:
+ 	mutex_unlock(&vfe->power_lock);
+@@ -646,7 +646,7 @@ static void vfe_put(struct vfe_device *vfe)
+ 		}
+ 		camss_disable_clocks(vfe->nclocks, vfe->clock);
+ 		pm_runtime_put_sync(vfe->camss->dev);
+-		camss_pm_domain_off(vfe->camss, vfe->id);
++		vfe->ops->pm_domain_off(vfe);
+ 	}
+ 
+ 	vfe->power_count--;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index 29b3d930ffc6..05839a9f60f6 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -106,6 +106,8 @@ struct vfe_hw_ops {
+ 	void (*hw_version_read)(struct vfe_device *vfe, struct device *dev);
+ 	irqreturn_t (*isr)(int irq, void *dev);
+ 	void (*isr_read)(struct vfe_device *vfe, u32 *value0, u32 *value1);
++	void (*pm_domain_off)(struct vfe_device *vfe);
++	int (*pm_domain_on)(struct vfe_device *vfe);
+ 	void (*reg_update)(struct vfe_device *vfe, enum vfe_line_id line_id);
+ 	void (*reg_update_clear)(struct vfe_device *vfe,
+ 				 enum vfe_line_id line_id);
 diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index d82bbc2213a6..c8d1735e9d80 100644
+index 9bf83cef01af..4ea1f251950b 100644
 --- a/drivers/media/platform/qcom/camss/camss.c
 +++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -768,10 +768,10 @@ static int camss_init_subdevices(struct camss *camss)
+@@ -799,24 +799,24 @@ int camss_get_pixel_clock(struct media_entity *entity, u64 *pixel_clock)
+ 
+ int camss_pm_domain_on(struct camss *camss, int id)
+ {
+-	if (camss->version == CAMSS_8x96 ||
+-	    camss->version == CAMSS_660) {
+-		camss->genpd_link[id] = device_link_add(camss->dev,
+-				camss->genpd[id], DL_FLAG_STATELESS |
+-				DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
++	int ret = 0;
++
++	if (id < camss->vfe_num) {
++		struct vfe_device *vfe = &camss->vfe[id];
+ 
+-		if (!camss->genpd_link[id])
+-			return -EINVAL;
++		ret = vfe->ops->pm_domain_on(vfe);
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ void camss_pm_domain_off(struct camss *camss, int id)
+ {
+-	if (camss->version == CAMSS_8x96 ||
+-	    camss->version == CAMSS_660)
+-		device_link_del(camss->genpd_link[id]);
++	if (id < camss->vfe_num) {
++		struct vfe_device *vfe = &camss->vfe[id];
++
++		vfe->ops->pm_domain_off(vfe);
++	}
+ }
+ 
+ /*
+@@ -1230,6 +1230,48 @@ static const struct media_device_ops camss_media_ops = {
+ 	.link_notify = v4l2_pipeline_link_notify,
+ };
+ 
++
++static int camss_configure_pd(struct camss *camss)
++{
++	int nbr_pm_domains = 0;
++	int last_pm_domain = 0;
++	int i;
++	int ret;
++
++	if (camss->version == CAMSS_8x96 ||
++	    camss->version == CAMSS_660)
++		nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
++
++	for (i = 0; i < nbr_pm_domains; i++) {
++		camss->genpd[i] = dev_pm_domain_attach_by_id(camss->dev, i);
++		if (IS_ERR(camss->genpd[i])) {
++			ret = PTR_ERR(camss->genpd[i]);
++			goto fail_pm;
++		}
++
++		camss->genpd_link[i] = device_link_add(camss->dev, camss->genpd[i],
++			DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
++
++		if (!camss->genpd_link[i]) {
++			dev_pm_domain_detach(camss->genpd[i], true);
++			ret = -EINVAL;
++			goto fail_pm;
++		}
++
++		last_pm_domain = i;
++	}
++
++	return 0;
++
++fail_pm:
++	for (i = 0; i < last_pm_domain; i++) {
++		device_link_del(camss->genpd_link[i]);
++		dev_pm_domain_detach(camss->genpd[i], true);
++	}
++
++	return ret;
++}
++
+ /*
+  * camss_probe - Probe CAMSS platform device
+  * @pdev: Pointer to CAMSS platform device
+@@ -1362,20 +1404,10 @@ static int camss_probe(struct platform_device *pdev)
  		}
  	}
  
--	ret = msm_ispif_subdev_init(&camss->ispif, ispif_res);
-+	ret = msm_ispif_subdev_init(camss, ispif_res);
- 	if (ret < 0) {
- 		dev_err(camss->dev, "Failed to init ispif sub-device: %d\n",
--			ret);
-+		ret);
- 		return ret;
- 	}
- 
-@@ -821,10 +821,11 @@ static int camss_register_entities(struct camss *camss)
- 		}
- 	}
- 
--	ret = msm_ispif_register_entities(&camss->ispif, &camss->v4l2_dev);
-+	ret = msm_ispif_register_entities(camss->ispif,
-+					  &camss->v4l2_dev);
- 	if (ret < 0) {
- 		dev_err(camss->dev, "Failed to register ispif entities: %d\n",
--			ret);
-+		ret);
- 		goto err_reg_ispif;
- 	}
- 
-@@ -858,43 +859,64 @@ static int camss_register_entities(struct camss *camss)
- 		}
- 	}
- 
--	for (i = 0; i < camss->csid_num; i++) {
--		for (j = 0; j < camss->ispif.line_num; j++) {
--			ret = media_create_pad_link(
--				&camss->csid[i].subdev.entity,
--				MSM_CSID_PAD_SRC,
--				&camss->ispif.line[j].subdev.entity,
--				MSM_ISPIF_PAD_SINK,
--				0);
--			if (ret < 0) {
--				dev_err(camss->dev,
--					"Failed to link %s->%s entities: %d\n",
--					camss->csid[i].subdev.entity.name,
--					camss->ispif.line[j].subdev.entity.name,
--					ret);
--				goto err_link;
--			}
--		}
--	}
+-	if (camss->version == CAMSS_8x96 ||
+-	    camss->version == CAMSS_660) {
+-		camss->genpd[PM_DOMAIN_VFE0] = dev_pm_domain_attach_by_id(
+-						camss->dev, PM_DOMAIN_VFE0);
+-		if (IS_ERR(camss->genpd[PM_DOMAIN_VFE0]))
+-			return PTR_ERR(camss->genpd[PM_DOMAIN_VFE0]);
 -
--	for (i = 0; i < camss->ispif.line_num; i++)
--		for (k = 0; k < camss->vfe_num; k++)
--			for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
-+	if (camss->ispif) {
-+		for (i = 0; i < camss->csid_num; i++) {
-+			for (j = 0; j < camss->ispif->line_num; j++) {
- 				ret = media_create_pad_link(
--					&camss->ispif.line[i].subdev.entity,
--					MSM_ISPIF_PAD_SRC,
--					&camss->vfe[k].line[j].subdev.entity,
--					MSM_VFE_PAD_SINK,
-+					&camss->csid[i].subdev.entity,
-+					MSM_CSID_PAD_SRC,
-+					&camss->ispif->line[j].subdev.entity,
-+					MSM_ISPIF_PAD_SINK,
- 					0);
- 				if (ret < 0) {
- 					dev_err(camss->dev,
- 						"Failed to link %s->%s entities: %d\n",
--						camss->ispif.line[i].subdev.entity.name,
--						camss->vfe[k].line[j].subdev.entity.name,
-+						camss->csid[i].subdev.entity.name,
-+						camss->ispif->line[j].subdev.entity.name,
- 						ret);
- 					goto err_link;
- 				}
- 			}
-+		}
-+
-+		for (i = 0; i < camss->ispif->line_num; i++)
-+			for (k = 0; k < camss->vfe_num; k++)
-+				for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
-+					ret = media_create_pad_link(
-+						&camss->ispif->line[i].subdev.entity,
-+						MSM_ISPIF_PAD_SRC,
-+						&camss->vfe[k].line[j].subdev.entity,
-+						MSM_VFE_PAD_SINK,
-+						0);
-+					if (ret < 0) {
-+						dev_err(camss->dev,
-+							"Failed to link %s->%s entities: %d\n",
-+							camss->ispif->line[i].subdev.entity.name,
-+							camss->vfe[k].line[j].subdev.entity.name,
-+							ret);
-+						goto err_link;
-+					}
-+				}
-+	} else {
-+		for (i = 0; i < camss->csid_num; i++)
-+			for (k = 0; k < camss->vfe_num; k++)
-+				for (j = 0; j < ARRAY_SIZE(camss->vfe[k].line); j++) {
-+					ret = media_create_pad_link(
-+						&camss->csid[i].subdev.entity,
-+						MSM_CSID_PAD_SRC,
-+						&camss->vfe[k].line[j].subdev.entity,
-+						MSM_VFE_PAD_SINK,
-+						0);
-+					if (ret < 0) {
-+						dev_err(camss->dev,
-+							"Failed to link %s->%s entities: %d\n",
-+							camss->csid[i].subdev.entity.name,
-+							camss->vfe[k].line[j].subdev.entity.name,
-+							ret);
-+						goto err_link;
-+					}
-+				}
-+	}
- 
- 	return 0;
- 
-@@ -904,8 +926,8 @@ static int camss_register_entities(struct camss *camss)
- 	for (i--; i >= 0; i--)
- 		msm_vfe_unregister_entities(&camss->vfe[i]);
- 
--	msm_ispif_unregister_entities(&camss->ispif);
- err_reg_ispif:
-+	msm_ispif_unregister_entities(camss->ispif);
- 
- 	i = camss->csid_num;
- err_reg_csid:
-@@ -936,7 +958,7 @@ static void camss_unregister_entities(struct camss *camss)
- 	for (i = 0; i < camss->csid_num; i++)
- 		msm_csid_unregister_entity(&camss->csid[i]);
- 
--	msm_ispif_unregister_entities(&camss->ispif);
-+	msm_ispif_unregister_entities(camss->ispif);
- 
- 	for (i = 0; i < camss->vfe_num; i++)
- 		msm_vfe_unregister_entities(&camss->vfe[i]);
-@@ -1067,6 +1089,15 @@ static int camss_probe(struct platform_device *pdev)
- 		goto err_free;
+-		camss->genpd[PM_DOMAIN_VFE1] = dev_pm_domain_attach_by_id(
+-						camss->dev, PM_DOMAIN_VFE1);
+-		if (IS_ERR(camss->genpd[PM_DOMAIN_VFE1])) {
+-			dev_pm_domain_detach(camss->genpd[PM_DOMAIN_VFE0],
+-					     true);
+-			return PTR_ERR(camss->genpd[PM_DOMAIN_VFE1]);
+-		}
++	ret = camss_configure_pd(camss);
++	if (ret < 0) {
++		dev_err(dev, "Failed to configure power domains: %d\n", ret);
++		return ret;
  	}
  
-+	if (camss->version == CAMSS_8x16 ||
-+	    camss->version == CAMSS_8x96) {
-+		camss->ispif = devm_kcalloc(dev, 1, sizeof(*camss->ispif), GFP_KERNEL);
-+		if (!camss->ispif) {
-+			ret = -ENOMEM;
-+			goto err_free;
-+		}
-+	}
+ 	pm_runtime_enable(dev);
+@@ -1396,6 +1428,9 @@ static int camss_probe(struct platform_device *pdev)
+ 
+ void camss_delete(struct camss *camss)
+ {
++	int nbr_pm_domains = 0;
++	int i;
 +
- 	camss->vfe = devm_kcalloc(dev, camss->vfe_num, sizeof(*camss->vfe),
- 				  GFP_KERNEL);
- 	if (!camss->vfe) {
+ 	v4l2_device_unregister(&camss->v4l2_dev);
+ 	media_device_unregister(&camss->media_dev);
+ 	media_device_cleanup(&camss->media_dev);
+@@ -1403,9 +1438,12 @@ void camss_delete(struct camss *camss)
+ 	pm_runtime_disable(camss->dev);
+ 
+ 	if (camss->version == CAMSS_8x96 ||
+-	    camss->version == CAMSS_660) {
+-		dev_pm_domain_detach(camss->genpd[PM_DOMAIN_VFE0], true);
+-		dev_pm_domain_detach(camss->genpd[PM_DOMAIN_VFE1], true);
++	    camss->version == CAMSS_660)
++		nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
++
++	for (i = 0; i < nbr_pm_domains; i++) {
++		device_link_del(camss->genpd_link[i]);
++		dev_pm_domain_detach(camss->genpd[i], true);
+ 	}
+ 
+ 	kfree(camss);
 diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index 63b35ea2ca36..0f8f77801001 100644
+index 0f8f77801001..33ed16ab821d 100644
 --- a/drivers/media/platform/qcom/camss/camss.h
 +++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -79,7 +79,7 @@ struct camss {
- 	struct csiphy_device *csiphy;
- 	int csid_num;
- 	struct csid_device *csid;
--	struct ispif_device ispif;
-+	struct ispif_device *ispif;
+@@ -57,9 +57,9 @@ struct resources_ispif {
+ };
+ 
+ enum pm_domain {
+-	PM_DOMAIN_VFE0,
+-	PM_DOMAIN_VFE1,
+-	PM_DOMAIN_COUNT
++	PM_DOMAIN_VFE0 = 0,
++	PM_DOMAIN_VFE1 = 1,
++	PM_DOMAIN_GEN1_COUNT = 2,	/* CAMSS series of ISPs */
+ };
+ 
+ enum camss_version {
+@@ -83,8 +83,8 @@ struct camss {
  	int vfe_num;
  	struct vfe_device *vfe;
  	atomic_t ref_count;
+-	struct device *genpd[PM_DOMAIN_COUNT];
+-	struct device_link *genpd_link[PM_DOMAIN_COUNT];
++	struct device *genpd[PM_DOMAIN_GEN1_COUNT];
++	struct device_link *genpd_link[PM_DOMAIN_GEN1_COUNT];
+ };
+ 
+ struct camss_camera_interface {
 -- 
 2.27.0
 
