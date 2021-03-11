@@ -2,154 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD6CEC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 21:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44211C4332B
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 22:20:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7206D64F6F
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 21:57:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BC7D64F91
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 22:20:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbhCKV5F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 16:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S229756AbhCKWT5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 17:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbhCKV4m (ORCPT
+        with ESMTP id S229585AbhCKWT4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:56:42 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D58FC061574;
-        Thu, 11 Mar 2021 13:56:42 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id u20so4136429lja.13;
-        Thu, 11 Mar 2021 13:56:42 -0800 (PST)
+        Thu, 11 Mar 2021 17:19:56 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A75C061574
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 14:19:56 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id lr13so49516501ejb.8
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 14:19:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GWm0wKkXQwN2wluhR+JEh82ryi4ERiPiZTL62C5iNLE=;
-        b=D0sGPmc8ut4NgyybrDcApICctWyDw+dtiu1w9POpd7XkPydnwtHE1jJz/ImGsWSG98
-         fzwrdW6DIrzhrsJsXi/XBcpcnkDs/yLxt+bngA9zq9AQwkAQ0VXj+KLSSW4FR5s/7+tZ
-         u5U6leDdbmcYrJtBAAMj5VTGZUTx+cYN/J7Xrc8TIhZslrCg4MH3S8hfCb3wIkaYzd7l
-         nyeFDbI6Cnyik0CMPv/bLp4H1ViyhhemrCiVuQ3zxgzleMVHvYx06fFkImgC6Uy606et
-         By/dm3/+MUBfwNj1TTtttURcm9ZtCdPvpy3Z7IQRWt9utxw0irZD52Wamw32rUoMdnPo
-         ZvoA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Q1DGKsTr9REpSe+LIHgT2CR/kX2zCTaPdy5dQ7gbqsY=;
+        b=VyGTzG3UDxX2AVr/ENSs72dd1Xpbh/janpCSJN1eZp+E6uer3fLRgARDoZJ+5ZwiYv
+         vzqBpH6PYgtZ7YSKTsxEnxQqpOeF6dwNDSqN2NsmcIxPK8e1RUSMGEGp+8XjtF+WRRHn
+         uzHw65F1WA9YUAsU1WevX+GWCDlLrUChJmIsk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GWm0wKkXQwN2wluhR+JEh82ryi4ERiPiZTL62C5iNLE=;
-        b=FOsQlT5GNV7OlvyqCG1JrFXFhF77XLAZWuDglEESn03k/1u1gdx0um30wwQdvxQVPA
-         ilkVYl70dqSxea5nvvzOa9u8zJmv3jhAlY3n9w/6HhC1DA6WEIsEjOoixrN3BWlqX4SJ
-         3gG17B/dlgUuxbX8uu3OcgRqOUtNIF3aSiNsAAMuk8N1qJ3VN7AYU+ral6c6bdSlcMKQ
-         vp5NBGvyIsb1LZdFLHRdjfSH2LCn3jQBHmCeLmFxdnTi6trQuU1CPB/pSmesrVQGO9wd
-         yVP60uizzlz/I1yy3v7SlQyqJpQRTP42idauhzJF5KfKFBy2wDJsIzqHPeed2ASeuVtK
-         DacQ==
-X-Gm-Message-State: AOAM533QZPfWIB8QdO+Ade87SKVK7JvEGTqMSRQVnGmde4KtMkMi1EMK
-        iXxvbf/s0eWgEF9x9PRnmOYM9SsS0r8Gmq9VHteE1UwwcdQ=
-X-Google-Smtp-Source: ABdhPJy7V6Xx2odgQ34tdZANKTdrzPe5fNy8bzrJylql/8t1anaeqHlGoGIlNv6HreSyq2OGY0ZRlJLr63t50NbtAyk=
-X-Received: by 2002:a2e:b88b:: with SMTP id r11mr523355ljp.495.1615499798776;
- Thu, 11 Mar 2021 13:56:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20210311122040.1264410-1-ribalda@chromium.org>
- <20210311122040.1264410-5-ribalda@chromium.org> <CANiDSCtw2q7UxMoZSMeE545WCxMs-WSHR2xbjG+xWL9CaBE3Aw@mail.gmail.com>
- <YEo95GqO0XEX4Cg0@pendragon.ideasonboard.com>
-In-Reply-To: <YEo95GqO0XEX4Cg0@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
-Date:   Thu, 11 Mar 2021 22:56:22 +0100
-Message-ID: <CAPybu_2k8DQ2aT0eZUo39XMiiYZWQUw1mTc0Ji08aYNY_mUGGQ@mail.gmail.com>
-Subject: Re: [PATCH 03/10] media: uvcvideo: Return -EIO for control errors
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Q1DGKsTr9REpSe+LIHgT2CR/kX2zCTaPdy5dQ7gbqsY=;
+        b=dR3CsqFi21cNHoFAMaf47wXpCr1qC01acHbRBt/QJaRulSxR+t3OjST9RBDCKy/oW9
+         Qj9Bd9Y+jr1/Mv/SGilW3n+f6xINWGo8wGmUbw9pxoB7BNO5xO0WkHxzOxkwEztnqzwb
+         RjnXd/uPx4DiAai89Y6BPXVWChTH3MXO/209L8oUZrrXn0nK5VtBOCTb9k/F6mmw25TF
+         ptco0JmM8ynFFmYcQB6ggAe4SZtbcblweoI1Cbj+SIyFrOZh27Lbo9wjY1tm8mNNaHCj
+         krEP0FaRgjlaUS1+UCMvJqjFk0K5GtFZKJSkgNBDkHzh2qAhqUHfh1Yfw2+qii/Lq8ss
+         IMqg==
+X-Gm-Message-State: AOAM532GbWpAEpl8Lssfi9oYIuM915+46heXExX+R7hbFDZdTPGyvo8r
+        nbmLAF3RISGVSzHtK9GOmidqZQ==
+X-Google-Smtp-Source: ABdhPJwqUWbm4aX6+ZLzkvDNfelWe4g7YJZNCrItVs9vWeFw0IfFuqck7yySaJCTWIHYnSY0SgokJw==
+X-Received: by 2002:a17:906:ad85:: with SMTP id la5mr5256074ejb.37.1615501194661;
+        Thu, 11 Mar 2021 14:19:54 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id b18sm1942174ejb.77.2021.03.11.14.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 14:19:54 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, senozhatsky@chromium.org,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v2 1/6] media: v4l2-ioctl: Fix check_ext_ctrls
+Date:   Thu, 11 Mar 2021 23:19:41 +0100
+Message-Id: <20210311221946.1319924-2-ribalda@chromium.org>
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+In-Reply-To: <20210311221946.1319924-1-ribalda@chromium.org>
+References: <20210311221946.1319924-1-ribalda@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+Drivers that do not use the ctrl-framework use this function instead.
 
-On Thu, Mar 11, 2021 at 4:59 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> Thank you for the patch.
->
-> On Thu, Mar 11, 2021 at 03:08:22PM +0100, Ricardo Ribalda wrote:
-> > As discussed in the IRC with Hans
-> >
-> > We need to specify in the commit message that this is most likely due
-> > to hw error.
-> >
-> > On Thu, Mar 11, 2021 at 1:20 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
-> > >
-> > > Fixes v4l2-compliance:
-> > >
-> > > Control ioctls (Input 0):
-> > >                 fail: v4l2-test-controls.cpp(448): s_ctrl returned an error (22)
-> > >         test VIDIOC_G/S_CTRL: FAIL
-> > >                 fail: v4l2-test-controls.cpp(698): s_ext_ctrls returned an error (22)
-> > >         test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
->
-> As this isn't supposed to happen, how do you reproduce this ?
+- Return error when handling of REQUEST_VAL.
+- Do not check for multiple classes when getting the DEF_VAL.
 
-Just run v4l2-compliance in my notebook camera.
+Fixes v4l2-compliance:
+Control ioctls (Input 0):
+		fail: v4l2-test-controls.cpp(813): doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls)
+	test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
 
->
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_video.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > > index f2f565281e63..5442e9be1c55 100644
-> > > --- a/drivers/media/usb/uvc/uvc_video.c
-> > > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > > @@ -113,7 +113,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
-> > >         case 6: /* Invalid control */
-> > >         case 7: /* Invalid Request */
->
-> For cases 5-7 I think -EIO is fine, as the driver should really not call
-> this function with an invalid unit, control or request. If it does, it's
-> a bug in the driver (we can check the units and controls the device
-> claims to support, and the requests are defined by the UVC
-> specification), if it doesn't and the device still returns this error,
-> it's a bug on the device side.
->
-> > >         case 8: /* Invalid value within range */
->
-> For this case, however, isn't it valid for a device to return an error
-> if the control value isn't valid ? There's one particular code path I'm
-> concerned about, uvc_ioctl_default(UVCIOC_CTRL_QUERY) ->
-> uvc_xu_ctrl_query() -> uvc_query_ctrl(), where it could be useful for
-> userspace to know that the value it sets isn't valid.
->
+Cc: stable@vger.kernel.org
+Fixes: 6fa6f831f095 ("media: v4l2-ctrls: add core request support")
+Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/v4l2-core/v4l2-ioctl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Will fix in v2
-
-Thanks!
-
-> > > -               return -EINVAL;
-> > > +               return -EIO;
-> > >         default: /* reserved or unknown */
-> > >                 break;
-> > >         }
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
-
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 31d1342e61e8..6f6b310e2802 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -924,8 +924,10 @@ static int check_ext_ctrls(struct v4l2_ext_controls *c, int allow_priv)
+ 	 */
+ 	if (!allow_priv && c->which == V4L2_CID_PRIVATE_BASE)
+ 		return 0;
+-	if (!c->which)
++	if (!c->which || c->which == V4L2_CTRL_WHICH_DEF_VAL)
+ 		return 1;
++	if (c->which == V4L2_CTRL_WHICH_REQUEST_VAL)
++		return 0;
+ 	/* Check that all controls are from the same control class. */
+ 	for (i = 0; i < c->count; i++) {
+ 		if (V4L2_CTRL_ID2WHICH(c->controls[i].id) != c->which) {
 -- 
-Ricardo Ribalda
+2.31.0.rc2.261.g7f71774620-goog
+
