@@ -2,70 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCC51C4321A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C48FEC43603
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D1B865000
+	by mail.kernel.org (Postfix) with ESMTP id 96F1564FE0
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbhCKPl2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S234331AbhCKPl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234239AbhCKPlJ (ORCPT
+        with ESMTP id S234245AbhCKPlL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:09 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87877C061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:09 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id y124-20020a1c32820000b029010c93864955so13484011wmy.5
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:09 -0800 (PST)
+        Thu, 11 Mar 2021 10:41:11 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409BDC061760;
+        Thu, 11 Mar 2021 07:41:11 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id d139-20020a1c1d910000b029010b895cb6f2so13062973wmd.5;
+        Thu, 11 Mar 2021 07:41:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rZ+UT/0DYLpJdWHcgpT9su7amjefBZUCNnN6zoLBwO4=;
-        b=WvxGEE2SB/V9cLac6+iZMUPtoKQ5HXuGo/57HrU68Uo/rKPCfOgTVJ6dqERuPNCRFD
-         nkwe/cNqEtQhXc/2H9YgXEc/5zCJIwelkj8LAxtoy85wrZdQgfxiFQnbeKHxJGArPfIu
-         zqDdpB5hHMehX1Ur8MKrbiLgpRq0kl7VxwqAYF/QX8so6fqTxHRk9Y9MCbvup29ZKvsR
-         /i2LZLHjFa06J9WjCV1TfZfxFPBgh3W5SwsGGypwB6rJVhxE1aXWaOI+P4SmbEesqYJP
-         mJgHztbV+qXqD30Gg94FPtfDxwEf/Pcmrvmr9QdygeYfOUZLbJlwWOEHEkAqL6ApdIW6
-         EX6g==
+        bh=xAXG6ZA5Y2HE3m+oHpL1iaPFBMdmoorVW3rcbcNGpAc=;
+        b=QI2RhaXaXoLThUOBvp6jXj/Nqah5umuf6W4X4J5HIGNNTPn3Jz5i8eHtW0EMAxfH53
+         T57rt98KDm9PM0+OdlQNwRwH0Wh18SxdReu+RmJga1uJX0yZ6e4RJtLDVS5G8xrrOZXp
+         LtboAqLpz1BRq4cC27OWQsdb+DnkSGk2wdoOdlJilybsY9Mxg2B2JXZGxcYmkghyaDQp
+         xfLL5jWptdc6IKvRQjXMTHDY9sx+RuyclOrp/tZ1V5JtibQY7B7Im1x94JvHjGHQnmpH
+         T/bNxOI8haKo1qXu2OODdiA6AcG/+F8LdZf0hKvbkngUW0J0eBPA38mOB/XQpncFZQ/1
+         d1Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rZ+UT/0DYLpJdWHcgpT9su7amjefBZUCNnN6zoLBwO4=;
-        b=XQoHDeiHqRCNsrBNIJFtWAiu057hYtIzYPmhECUmX6qKUpdon3r0QHRzvpxziGNXRo
-         +XYNvI09FjiFx16MUhNik9UREFZXHO/qJUGZE63T1WHSKsn/qnzoeYSgR6PdQDQW4xvX
-         ZxClv27wXI1btVa1HCynH2WMovuVU8vDeLbdTKF9ahzNqjNICw3RLLCd6zb6qH84qyNL
-         1ZfbWy71HRtWGoyk0sXJvUIfDeKgtmHfVOgsH7rZVCseXvBDrL2EwwCiQTka9s0jJmUE
-         mYHsCMRT7y0IgAE99BXPekE3PD5jyPlTQVw6g84lkRuUgVPfJgXApYuWAdm7O8svXl8p
-         qWDA==
-X-Gm-Message-State: AOAM533aHQf3NadwN0GwcILqfmEVKOirVHSjkCfPgKQ+bQTM5mMzXrZU
-        EBFfPxnAtf4NsB/sWpkC/CI3Zopx8MT03w==
-X-Google-Smtp-Source: ABdhPJxrq/gB+g5WtQNkF+vq9GerPLUREkB99UrEXcmY45OE3zj4lkDdkeOKqiwN9BjIqB/MbdxgLQ==
-X-Received: by 2002:a05:600c:26d2:: with SMTP id 18mr8800081wmv.41.1615477268247;
-        Thu, 11 Mar 2021 07:41:08 -0800 (PST)
+        bh=xAXG6ZA5Y2HE3m+oHpL1iaPFBMdmoorVW3rcbcNGpAc=;
+        b=Eq4nlQR1XmeHiIowNAMmXVvaiGMZTM5aXaptHSKv7zW96tWIan51HnshpISAyIL8cp
+         BB7XV/Eq90MvlZt91VRtYpOO8mHPo5h0HKSWKK7UWpgBtMmCCLDiotEkONgo0egIU0CE
+         9hX5oDaPfeXAeN68kWkzWexqnSnYTY2/U9pG8uchV4a21z5LDux7ZbyiE480D1Nor2gz
+         NcASqTH2FgZJyZmQ/bIBwVjBOF4QWTvgeLewxNUHq+42jibLOuU1vQQHdx3VaHwNb305
+         r8Ko7H/8IdhlriO+AvWwO1xIUam4RwlylsnipMCXdXkiuiY2eFmMJH+Rzsc+fw1MvCGF
+         wT1A==
+X-Gm-Message-State: AOAM533cIGeWocvF8Ae47FbZ/fD28m1BzUMcV0iyvXjIi/XHDikJ8MRO
+        x4UHuIgj3799DjCqdN3IiCw=
+X-Google-Smtp-Source: ABdhPJwuz3nP2YREPz0nQBizO+XbjVBcsDxYKqYIiux+SwS/8io3xaehqemQUS9UUA6hAuNztk8KKQ==
+X-Received: by 2002:a7b:c34a:: with SMTP id l10mr8824624wmj.46.1615477269969;
+        Thu, 11 Mar 2021 07:41:09 -0800 (PST)
 Received: from arch-x1c3.. ([2a00:5f00:102:0:b16d:9752:8f38:7d6b])
-        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.06
+        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:41:07 -0800 (PST)
+        Thu, 11 Mar 2021 07:41:09 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH v2 05/10] media: hantro: introduce hantro_g1.c for common API
-Date:   Thu, 11 Mar 2021 15:40:50 +0000
-Message-Id: <20210311154055.3496076-6-emil.l.velikov@gmail.com>
+Cc:     emil.l.velikov@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 07/10] media: hantro: add initial SAMA5D4 support
+Date:   Thu, 11 Mar 2021 15:40:52 +0000
+Message-Id: <20210311154055.3496076-8-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
 References: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
@@ -77,223 +79,219 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-The Hantro G1 IRQ and reset handling it pretty standard. I was this
-close to duplicating it, yet again, before reconsidering and refactoring
-it to a separate file.
+The SoC features a Hantro G1 compatible video decoder, supporting the
+MPEG-2, VP8 and H264 codecs with resolutions up-to 1280x720.
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Post-processing core is also available on the SoC.
+
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: devicetree@vger.kernel.org>
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
- drivers/staging/media/hantro/Makefile        |  1 +
- drivers/staging/media/hantro/hantro_g1.c     | 39 ++++++++++++++++++++
- drivers/staging/media/hantro/hantro_hw.h     |  3 ++
- drivers/staging/media/hantro/imx8m_vpu_hw.c  | 21 +----------
- drivers/staging/media/hantro/rk3288_vpu_hw.c | 36 ++----------------
- 5 files changed, 48 insertions(+), 52 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_g1.c
+v2
+ - Split DT and defconfig changes to separate patches (Eze)
+ - s/Atmel/Microchip/ (Nicolas)
+---
+ drivers/staging/media/hantro/Kconfig          |  10 +-
+ drivers/staging/media/hantro/Makefile         |   3 +
+ drivers/staging/media/hantro/hantro_drv.c     |   3 +
+ drivers/staging/media/hantro/hantro_hw.h      |   1 +
+ .../staging/media/hantro/sama5d4_vdec_hw.c    | 117 ++++++++++++++++++
+ 5 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/staging/media/hantro/sama5d4_vdec_hw.c
 
+diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
+index 5b6cf9f62b1a..20b1f6d7b69c 100644
+--- a/drivers/staging/media/hantro/Kconfig
++++ b/drivers/staging/media/hantro/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config VIDEO_HANTRO
+ 	tristate "Hantro VPU driver"
+-	depends on ARCH_MXC || ARCH_ROCKCHIP || COMPILE_TEST
++	depends on ARCH_MXC || ARCH_ROCKCHIP || ARCH_AT91 || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	select MEDIA_CONTROLLER
+ 	select MEDIA_CONTROLLER_REQUEST_API
+@@ -24,6 +24,14 @@ config VIDEO_HANTRO_IMX8M
+ 	help
+ 	  Enable support for i.MX8M SoCs.
+ 
++config VIDEO_HANTRO_SAMA5D4
++	bool "Hantro VDEC SAMA5D4 support"
++	depends on VIDEO_HANTRO
++	depends on ARCH_AT91 || COMPILE_TEST
++	default y
++	help
++	  Enable support for Microchip SAMA5D4 SoCs.
++
+ config VIDEO_HANTRO_ROCKCHIP
+ 	bool "Hantro VPU Rockchip support"
+ 	depends on VIDEO_HANTRO
 diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
-index 743ce08eb184..3747a32799b2 100644
+index 3747a32799b2..f4b99901eeee 100644
 --- a/drivers/staging/media/hantro/Makefile
 +++ b/drivers/staging/media/hantro/Makefile
-@@ -7,6 +7,7 @@ hantro-vpu-y += \
- 		hantro_v4l2.o \
- 		hantro_postproc.o \
- 		hantro_h1_jpeg_enc.o \
-+		hantro_g1.o \
- 		hantro_g1_h264_dec.o \
- 		hantro_g1_mpeg2_dec.o \
- 		hantro_g1_vp8_dec.o \
-diff --git a/drivers/staging/media/hantro/hantro_g1.c b/drivers/staging/media/hantro/hantro_g1.c
+@@ -22,6 +22,9 @@ hantro-vpu-y += \
+ hantro-vpu-$(CONFIG_VIDEO_HANTRO_IMX8M) += \
+ 		imx8m_vpu_hw.o
+ 
++hantro-vpu-$(CONFIG_VIDEO_HANTRO_SAMA5D4) += \
++		sama5d4_vdec_hw.o
++
+ hantro-vpu-$(CONFIG_VIDEO_HANTRO_ROCKCHIP) += \
+ 		rk3288_vpu_hw.o \
+ 		rk3399_vpu_hw.o
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index e5f200e64993..a530c0eda595 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -478,6 +478,9 @@ static const struct of_device_id of_hantro_match[] = {
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+ 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
++#endif
++#ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
++	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+ #endif
+ 	{ /* sentinel */ }
+ };
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 73c71bb2320c..4d39da1d1581 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -152,6 +152,7 @@ extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant rk3328_vpu_variant;
+ extern const struct hantro_variant rk3288_vpu_variant;
+ extern const struct hantro_variant imx8mq_vpu_variant;
++extern const struct hantro_variant sama5d4_vdec_variant;
+ 
+ extern const struct hantro_postproc_regs hantro_g1_postproc_regs;
+ 
+diff --git a/drivers/staging/media/hantro/sama5d4_vdec_hw.c b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
 new file mode 100644
-index 000000000000..0ab1cee62218
+index 000000000000..58ae72c2b723
 --- /dev/null
-+++ b/drivers/staging/media/hantro/hantro_g1.c
-@@ -0,0 +1,39 @@
++++ b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
+@@ -0,0 +1,117 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Hantro VPU codec driver
++ * Hantro VDEC driver
 + *
-+ * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
-+ *	Jeffy Chen <jeffy.chen@rock-chips.com>
-+ * Copyright (C) 2019 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
 + * Copyright (C) 2021 Collabora Ltd, Emil Velikov <emil.velikov@collabora.com>
 + */
 +
 +#include "hantro.h"
-+#include "hantro_g1_regs.h"
 +
-+irqreturn_t hantro_g1_irq(int irq, void *dev_id)
++/*
++ * Supported formats.
++ */
++
++static const struct hantro_fmt sama5d4_vdec_postproc_fmts[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_YUYV,
++		.codec_mode = HANTRO_MODE_NONE,
++	},
++};
++
++static const struct hantro_fmt sama5d4_vdec_fmts[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_NV12,
++		.codec_mode = HANTRO_MODE_NONE,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_MPEG2_SLICE,
++		.codec_mode = HANTRO_MODE_MPEG2_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 1280,
++			.step_width = MB_DIM,
++			.min_height = 48,
++			.max_height = 720,
++			.step_height = MB_DIM,
++		},
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_VP8_FRAME,
++		.codec_mode = HANTRO_MODE_VP8_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 1280,
++			.step_width = MB_DIM,
++			.min_height = 48,
++			.max_height = 720,
++			.step_height = MB_DIM,
++		},
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_H264_SLICE,
++		.codec_mode = HANTRO_MODE_H264_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 1280,
++			.step_width = MB_DIM,
++			.min_height = 48,
++			.max_height = 720,
++			.step_height = MB_DIM,
++		},
++	},
++};
++
++static int sama5d4_hw_init(struct hantro_dev *vpu)
 +{
-+	struct hantro_dev *vpu = dev_id;
-+	enum vb2_buffer_state state;
-+	u32 status;
-+
-+	status = vdpu_read(vpu, G1_REG_INTERRUPT);
-+	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
-+		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
-+
-+	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
-+	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
-+
-+	hantro_irq_done(vpu, state);
-+
-+	return IRQ_HANDLED;
++	return 0;
 +}
 +
-+void hantro_g1_reset(struct hantro_ctx *ctx)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
++/*
++ * Supported codec ops.
++ */
 +
-+	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
-+	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
-+	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
-+}
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34c9e4649a25..73c71bb2320c 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -164,6 +164,9 @@ void hantro_irq_done(struct hantro_dev *vpu,
- void hantro_start_prepare_run(struct hantro_ctx *ctx);
- void hantro_end_prepare_run(struct hantro_ctx *ctx);
- 
-+irqreturn_t hantro_g1_irq(int irq, void *dev_id);
-+void hantro_g1_reset(struct hantro_ctx *ctx);
++static const struct hantro_codec_ops sama5d4_vdec_codec_ops[] = {
++	[HANTRO_MODE_MPEG2_DEC] = {
++		.run = hantro_g1_mpeg2_dec_run,
++		.reset = hantro_g1_reset,
++		.init = hantro_mpeg2_dec_init,
++		.exit = hantro_mpeg2_dec_exit,
++	},
++	[HANTRO_MODE_VP8_DEC] = {
++		.run = hantro_g1_vp8_dec_run,
++		.reset = hantro_g1_reset,
++		.init = hantro_vp8_dec_init,
++		.exit = hantro_vp8_dec_exit,
++	},
++	[HANTRO_MODE_H264_DEC] = {
++		.run = hantro_g1_h264_dec_run,
++		.reset = hantro_g1_reset,
++		.init = hantro_h264_dec_init,
++		.exit = hantro_h264_dec_exit,
++	},
++};
 +
- void hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx);
- void rk3399_vpu_jpeg_enc_run(struct hantro_ctx *ctx);
- int hantro_jpeg_enc_init(struct hantro_ctx *ctx);
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index f36c1bd681ba..9eb556460e52 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -9,7 +9,6 @@
- #include <linux/delay.h>
- 
- #include "hantro.h"
--#include "hantro_g1_regs.h"
- 
- #define CTRL_SOFT_RESET		0x00
- #define RESET_G1		BIT(1)
-@@ -129,24 +128,6 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
- 	},
- };
- 
--static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
--{
--	struct hantro_dev *vpu = dev_id;
--	enum vb2_buffer_state state;
--	u32 status;
--
--	status = vdpu_read(vpu, G1_REG_INTERRUPT);
--	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
--		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
--
--	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--
--	hantro_irq_done(vpu, state);
--
--	return IRQ_HANDLED;
--}
--
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
-@@ -191,7 +172,7 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
-  */
- 
- static const struct hantro_irq imx8mq_irqs[] = {
--	{ "g1", imx8m_vpu_g1_irq },
-+	{ "g1", hantro_g1_irq },
- 	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
- };
- 
-diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-index 7b299ee3e93d..fefd45269e52 100644
---- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-@@ -10,7 +10,6 @@
- 
- #include "hantro.h"
- #include "hantro_jpeg.h"
--#include "hantro_g1_regs.h"
- #include "hantro_h1_regs.h"
- 
- #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
-@@ -127,24 +126,6 @@ static irqreturn_t rk3288_vepu_irq(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static irqreturn_t rk3288_vdpu_irq(int irq, void *dev_id)
--{
--	struct hantro_dev *vpu = dev_id;
--	enum vb2_buffer_state state;
--	u32 status;
--
--	status = vdpu_read(vpu, G1_REG_INTERRUPT);
--	state = (status & G1_REG_INTERRUPT_DEC_RDY_INT) ?
--		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
--
--	vdpu_write(vpu, 0, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--
--	hantro_irq_done(vpu, state);
--
--	return IRQ_HANDLED;
--}
--
- static int rk3288_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	/* Bump ACLK to max. possible freq. to improve performance. */
-@@ -161,15 +142,6 @@ static void rk3288_vpu_enc_reset(struct hantro_ctx *ctx)
- 	vepu_write(vpu, 0, H1_REG_AXI_CTRL);
- }
- 
--static void rk3288_vpu_dec_reset(struct hantro_ctx *ctx)
--{
--	struct hantro_dev *vpu = ctx->dev;
--
--	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
--	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
--}
--
- /*
-  * Supported codec ops.
-  */
-@@ -184,19 +156,19 @@ static const struct hantro_codec_ops rk3288_vpu_codec_ops[] = {
- 	},
- 	[HANTRO_MODE_H264_DEC] = {
- 		.run = hantro_g1_h264_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_h264_dec_init,
- 		.exit = hantro_h264_dec_exit,
- 	},
- 	[HANTRO_MODE_MPEG2_DEC] = {
- 		.run = hantro_g1_mpeg2_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_mpeg2_dec_init,
- 		.exit = hantro_mpeg2_dec_exit,
- 	},
- 	[HANTRO_MODE_VP8_DEC] = {
- 		.run = hantro_g1_vp8_dec_run,
--		.reset = rk3288_vpu_dec_reset,
-+		.reset = hantro_g1_reset,
- 		.init = hantro_vp8_dec_init,
- 		.exit = hantro_vp8_dec_exit,
- 	},
-@@ -208,7 +180,7 @@ static const struct hantro_codec_ops rk3288_vpu_codec_ops[] = {
- 
- static const struct hantro_irq rk3288_irqs[] = {
- 	{ "vepu", rk3288_vepu_irq },
--	{ "vdpu", rk3288_vdpu_irq },
-+	{ "vdpu", hantro_g1_irq },
- };
- 
- static const char * const rk3288_clk_names[] = {
++static const struct hantro_irq sama5d4_irqs[] = {
++	{ "vdec", hantro_g1_irq },
++};
++
++static const char * const sama5d4_clk_names[] = { "vdec_clk" };
++
++const struct hantro_variant sama5d4_vdec_variant = {
++	.dec_fmts = sama5d4_vdec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(sama5d4_vdec_fmts),
++	.postproc_fmts = sama5d4_vdec_postproc_fmts,
++	.num_postproc_fmts = ARRAY_SIZE(sama5d4_vdec_postproc_fmts),
++	.postproc_regs = &hantro_g1_postproc_regs,
++	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
++		 HANTRO_H264_DECODER,
++	.codec_ops = sama5d4_vdec_codec_ops,
++	.init = sama5d4_hw_init,
++	.irqs = sama5d4_irqs,
++	.num_irqs = ARRAY_SIZE(sama5d4_irqs),
++	.clk_names = sama5d4_clk_names,
++	.num_clocks = ARRAY_SIZE(sama5d4_clk_names),
++};
 -- 
 2.30.1
 
