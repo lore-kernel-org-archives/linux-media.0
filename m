@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 760D8C41518
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17AA8C28E85
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5677A64FEF
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBD2365011
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 18:11:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhCKSLL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 13:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S231289AbhCKSLJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 13:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbhCKSKn (ORCPT
+        with ESMTP id S229784AbhCKSKl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:10:43 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5A2C061760
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:42 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ox4so32541558ejb.11
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:42 -0800 (PST)
+        Thu, 11 Mar 2021 13:10:41 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE49C061574
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:40 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id lr13so48205589ejb.8
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 10:10:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v9ovWZgFAlWGGQ1sxyZ9+Em1R2VKteToFFiptWzU7k4=;
-        b=gcDGTvBujfFZRgC/WdDFBpjH9uaBhx31fYT2zDELYY74u7Iarug+JmeDQDr9StlIZv
-         /Vwqy5WWpWD9Mz2z8S1uw78VCaBOk4J9BiJtSwwCRt/DBg8mLdtRa5MNNYNflYwUCY53
-         iCPaTrdFnNti+4yV5obwLmOpVMQyjDtzVV3jS0DoTVcJceV7X2hfno5jKccoUGLVgA4Z
-         My8iJ9UZXUFaa5QNKvDsWfpg3JdZXPOraGFQ004U0AvzOXZxXgntIjbjLpJPrgcOGGcT
-         RjhCjmINOEqzOsvDWWU/SgxOWgGvdQOkaPoqwGtqLDvCgFEQ3Fpc9VspyZ5CL+ymnyDe
-         bp3g==
+        bh=iW1Mo0snzu57fgRZmoRiaaFH2x3HHvb/t9DylSyqSd4=;
+        b=Yu4nO4UwRPguKAePAMzbMPgsQLguQby44EycxETxUYd46e3KHe9AhxBG6JnrKPobU8
+         g6PmQqLfPtKzS9TbzOMsj8XsmyQUsNu3FJWz2gpPIJxJmMfMqjfYOdElJD7JbMczA2AR
+         uSBo8EB4DkqdrT1poalnxmXuRXvJYZZ3WJ1AD9aqe0pWb6+wx+wyxZxt+2yd22pbzlRs
+         Gii0buk4QCdS2cnyLmLHXyv1mXihFCbvaeTIVkJYmPLcKa2y0Aj5jc6Rtll4WEdYmHIS
+         1mHUBLClxzwtAOQdmxi/Hq3U/KFaNH4rbANA0/Z5ZI+9ZZNitE4atIZn0wJp/7otaiWy
+         ynCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v9ovWZgFAlWGGQ1sxyZ9+Em1R2VKteToFFiptWzU7k4=;
-        b=uKJslFO28+r6Hbi9o3Xz5Jt3KNsriG3/0vpOgphsCofG0AhT5JF9TgdPRYdbeWAU8p
-         bERhn+viUI5YqL5/eGIjQRS04fjvLTdoKRMdXPxFJ0axZiOSKswHMgtsQ8V/5vBAsReg
-         EzI5LtSnohwq6FDbHG4CaMh6LQCnLZuJsElUtZ2Mm5gV/a423C66d/FAkS0NIBrt6JRX
-         F00YOXxX3Dd89aN29TKT1alD7uZdI9XVvCi5UvS/XhiR+SEwchq7EGS2d9hq4BCPTk1U
-         kc1JVT5nbcXiTcszVkc/Vt5ktyFUMjz1GHOAEkpagF+bJSxW/ymlDNXId+FY+tpSIxIT
-         r7lQ==
-X-Gm-Message-State: AOAM532E4Ija63BnGIbIPVVJL1jTUEsqaGAJFEpPr69U19us/8dSSRXW
-        rcqfOSxkMtV3LQDJLf/7WuLnOg==
-X-Google-Smtp-Source: ABdhPJxpnyNz+lZqsEVQ8JyNg53Lql0Z7S1212PUFiT/HK26y1BgNFm2X07rGryMW9f9V3UHpjaDAA==
-X-Received: by 2002:a17:907:2054:: with SMTP id pg20mr4285492ejb.213.1615486241362;
-        Thu, 11 Mar 2021 10:10:41 -0800 (PST)
+        bh=iW1Mo0snzu57fgRZmoRiaaFH2x3HHvb/t9DylSyqSd4=;
+        b=ZJaF9WQ96teZ8LhqOWer+X0vq8gYEG+1hVx4m7VQ706X3U74VB/o1OI7fZepvZA6k3
+         me8xmzkkNOtmIjH/f6qgeGLnxFUule5ovmZceBytpl+L5BnNuO47AFmm4xHr328Mp/9c
+         bwd2/dbHJeJNfbXwTiYEiDUi9kBTStsb8bzhBvzccWidHDm4WdgpW8bR6XCX0jb1o0jc
+         ly3us1nbSLbPCEVwVY6fmaCSuq8BwcTVEDfNH9+ukLplUUIwuJH6S9v7QAEy2FCXy9Wl
+         SZUV03ku0+ZRMy7zC7bQoK2lATEaU7Q7T7VCof90o3MdpNbbiQE6Wa+4tuFBSRIwJwjp
+         lcqw==
+X-Gm-Message-State: AOAM530/tLtS4nZ08qVGo1LuTAiO55IrRKEebSQgD8oRucQ9O5dKB5Qd
+        yf+yic+k0U4gjb0wakENaJyg0g==
+X-Google-Smtp-Source: ABdhPJyZMnQHJoHqKoYgpKxMkhvlU4sQ/DL95jlfMZF3xK+zNp8mxRAH29j6wSf7XWBOQq6h/XR3rw==
+X-Received: by 2002:a17:906:30d9:: with SMTP id b25mr4297529ejb.348.1615486239536;
+        Thu, 11 Mar 2021 10:10:39 -0800 (PST)
 Received: from localhost.localdomain ([2a02:2454:3e3:5f00:8e01:34c:da50:eb7e])
-        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.39
+        by smtp.gmail.com with ESMTPSA id a22sm1741290ejr.89.2021.03.11.10.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 10:10:40 -0800 (PST)
+        Thu, 11 Mar 2021 10:10:39 -0800 (PST)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         robert.foss@linaro.org, todor.too@gmail.com, mchehab@kernel.org,
@@ -71,9 +71,9 @@ Cc:     Rob Herring <robh@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
         Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jonathan Marek <jonathan@marek.ca>
-Subject: [PATCH v7 22/22] arm64: dts: sdm845-db845c: Enable ov8856 sensor and connect to ISP
-Date:   Thu, 11 Mar 2021 19:09:48 +0100
-Message-Id: <20210311180948.268343-23-robert.foss@linaro.org>
+Subject: [PATCH v7 21/22] arm64: dts: sdm845-db845c: Configure regulators for camss node
+Date:   Thu, 11 Mar 2021 19:09:47 +0100
+Message-Id: <20210311180948.268343-22-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210311180948.268343-1-robert.foss@linaro.org>
 References: <20210311180948.268343-1-robert.foss@linaro.org>
@@ -83,66 +83,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable camss & ov8856 DT nodes.
+Add regulator to camss device tree node.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
 Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
 
 
-Changes since v5
+Changes since v5:
  - Andrey: Add r-b
- - Change CSI clock & data pins
 
 
 
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index 7e3c9fe4955d..e5a693c8dc42 100644
+index c4ac6f5dc008..7e3c9fe4955d 100644
 --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
 +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -1110,6 +1110,21 @@ &cci {
- 
- &camss {
- 	vdda-supply = <&vreg_l1a_0p875>;
-+
-+	status = "ok";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		port@0 {
-+			reg = <0>;
-+			csiphy0_ep: endpoint {
-+				clock-lanes = <7>;
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&ov8856_ep>;
-+			};
-+		};
-+	};
+@@ -1108,6 +1108,10 @@ &cci {
+ 	status = "okay";
  };
  
++&camss {
++	vdda-supply = <&vreg_l1a_0p875>;
++};
++
  &cci_i2c0 {
-@@ -1141,7 +1156,7 @@ camera@10 {
- 		avdd-supply = <&cam0_avdd_2v8>;
- 		dvdd-supply = <&cam0_dvdd_1v2>;
- 
--		status = "disable";
-+		status = "ok";
- 
- 		port {
- 			ov8856_ep: endpoint {
-@@ -1149,7 +1164,7 @@ ov8856_ep: endpoint {
- 				link-frequencies = /bits/ 64
- 					<360000000 180000000>;
- 				data-lanes = <1 2 3 4>;
--//				remote-endpoint = <&csiphy0_ep>;
-+				remote-endpoint = <&csiphy0_ep>;
- 			};
- 		};
- 	};
+ 	camera@10 {
+ 		compatible = "ovti,ov8856";
 -- 
 2.27.0
 
