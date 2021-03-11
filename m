@@ -2,70 +2,70 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 632EDC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BED6C433E9
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07FC164FE0
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9944A64FFA
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbhCKPlX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S234315AbhCKPlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbhCKPlF (ORCPT
+        with ESMTP id S234118AbhCKPlI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:05 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369E4C061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:05 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id f12so2378181wrx.8
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:05 -0800 (PST)
+        Thu, 11 Mar 2021 10:41:08 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C70C061574
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:08 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id b2-20020a7bc2420000b029010be1081172so13067349wmj.1
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 07:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=A9gilAFWqX+sAkYfLFghCBaHM+ZlkbP8jMbwAPT3w7E=;
-        b=pektPEun0KxdsEnbuwQz9hjNCrAy48V2ZNCQIjBl8zQKyJmPRrOr08idB06H8UqfO8
-         9vwUJAEaHuSJyBg89IHWMNkBvx8Mwo7YTkY5nlcVXbXxKwzXwv/V5AgBnW04fCDIrxj/
-         HGiXtvnpCBoQeiIx6ef6DU3Gdt59i9ugc7OCZF1JfnB/JFixmoY2dmBKGRVrnjsDi1R7
-         NpvOUzJxgw+QCRi9M33+WSkb+Dm3L3pttaRgGATOt4ojG61iC5KzRLj6Qe6l2S3xG57F
-         +1N/6iwOgZ8R1BR2n99gE2TW7767qemdnUZAQAZRefY0Ak/7dVYp5YYmjTtmwd+wWZzB
-         DBuA==
+        bh=/r3aZbcoQSdd2XlNz/UGKekZlF4ttbt76qWK9B/aFNk=;
+        b=UqPLiW74XyVzX+/8i1wFG4KYZv4JtNlR+POcaYks2dw73DeibmIKY+eAfxocTv4QAh
+         m9w9FOgQIXx2pUE9rEwweK+GY755VQKjBGotptkRCyy8y/l3JDsvEICCZy0is/lshXts
+         25Fkooa49fmVuLkqtZO/QxcRnmnBLdeEstgwA4AStWv8aLNj2GsICxNApRrUPj0+BrSt
+         TUJWmeRncmVYDie3V5+U9UuCLewznQfsnKDauWAqvXyMVM6VvPoobxp6YVC6aAw/TqVN
+         Xh6IMh1C+9cxKO47tOV9FxhK2NTLgubFMJiYVQEju+0SA+LVZ/6gljVO2LMjljWhksl7
+         3lbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=A9gilAFWqX+sAkYfLFghCBaHM+ZlkbP8jMbwAPT3w7E=;
-        b=qxuiyB94GDh96QkGqYLV+PpI5yxg5ozfJoZVybotwb/+mR3MxQG0Xi7Ro6DITVpniT
-         t5iO8I3upZohGbKq3T7Yj4TuvIFf3rAaxh1VmSlq2ZoN87TTanT5K+oqV/mOYVeLZp6Y
-         fKu+XXJlBkwG/iS1855NBCxWpIp/4MIViCQqg++ya7MicfgAr2xLHx7zL1kzpIC/CNTO
-         2H8kl5uWLHxv1ZTDACbesztnUm8pMQ+IFCG6INA+IspW6wxSoLMgl6QaK28Tw2EkV3Ss
-         6Mq14uwWjQRtOTC7r6hnjlRGUbuEO1zWXwDHq5gZwoaDeEV47jKO5bHRdje/1XCp41cf
-         9vbQ==
-X-Gm-Message-State: AOAM530qTAvsA6ias3RHc4FrBT15s896srhkN8pZx4vvwfQL316q55XU
-        rmaHYKV/FeSp0XuTPRUd0GDSHhFr+od+/w==
-X-Google-Smtp-Source: ABdhPJxgud3NIWFBRry4m06fLMiqJrSLDu4S+lxYccZpRNN/gnJmAyCbf6lWujooctTG6oQNOz4cNA==
-X-Received: by 2002:adf:f351:: with SMTP id e17mr9282127wrp.416.1615477263932;
-        Thu, 11 Mar 2021 07:41:03 -0800 (PST)
+        bh=/r3aZbcoQSdd2XlNz/UGKekZlF4ttbt76qWK9B/aFNk=;
+        b=dAMETHGW7tkP0+3UgsQZln1ArkUwgKqTR2Lv4nnKloZPxXieDXIfMWj09vdj+lGV86
+         Kc1iZsOF0TBV2i3dsSrse8iigqY7Dld8rdGY/8BCrI3ie/KB+cHocDG648+q/6u4Nya9
+         ahzUdblixEXEBndddfCCcWfYgp8vi73vFeYgRv2m+fWHHMPCaBqvGW1eXZpJzRZtRsJJ
+         t5wL3cBOra7u2eN0zyV8lKIxGrYmFM+iLnqAcdcpViOyLJ2OZhUACC7BLxjJ5RsTjb4s
+         bbIDH5sqXs/pSNcbEvSVtTP1yCOWC61Hw99+odlSpTf+2/9HarUTC2/LNApddfg3Znz5
+         bvpg==
+X-Gm-Message-State: AOAM531RY5YH//kvdjGlHf8F8YnhpMI9IggN+PAwD8U1OKeTYoXVdoLr
+        AQN8lvInMjvtCiYtvmVxQiA=
+X-Google-Smtp-Source: ABdhPJwZaFjAOAqytix5m62/UG9vW5dE/VZ2CndcnxU4JL0UkXJxjs5A40JB6/bpCXjBwhvuJunELw==
+X-Received: by 2002:a1c:a306:: with SMTP id m6mr8517880wme.13.1615477266868;
+        Thu, 11 Mar 2021 07:41:06 -0800 (PST)
 Received: from arch-x1c3.. ([2a00:5f00:102:0:b16d:9752:8f38:7d6b])
-        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.03
+        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:41:03 -0800 (PST)
+        Thu, 11 Mar 2021 07:41:06 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         Nicolas Ferre <nicolas.ferre@microchip.com>
 Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH v2 01/10] media: hantro: use G1_REG_INTERRUPT directly for the mpeg2
-Date:   Thu, 11 Mar 2021 15:40:46 +0000
-Message-Id: <20210311154055.3496076-2-emil.l.velikov@gmail.com>
+Subject: [PATCH v2 04/10] media: hantro: imx: remove unused include
+Date:   Thu, 11 Mar 2021 15:40:49 +0000
+Message-Id: <20210311154055.3496076-5-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
 References: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
@@ -77,45 +77,28 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-Use the register directly over the existing SWREG().
+The current imx8 code does not use the jpeg encoder. Remove the
+unnecessary include.
 
-Ideally we'll port the driver away from the local registers, but for
-now this is enough. For context - I was reading through the IRQ register
-handling across the variants.
-
+Fixes: 8e4aaa687863 ("media: hantro: add initial i.MX8MQ support")
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/staging/media/hantro/imx8m_vpu_hw.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-index 6386a3989bfe..0fd306806f16 100644
---- a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-@@ -10,6 +10,7 @@
- #include <media/v4l2-mem2mem.h>
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index cb1ac02c03d2..f36c1bd681ba 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -9,7 +9,6 @@
+ #include <linux/delay.h>
+ 
  #include "hantro.h"
- #include "hantro_hw.h"
-+#include "hantro_g1_regs.h"
+-#include "hantro_jpeg.h"
+ #include "hantro_g1_regs.h"
  
- #define G1_SWREG(nr)			((nr) * 4)
- 
-@@ -20,7 +21,6 @@
- #define G1_REG_REFER2_BASE		G1_SWREG(16)
- #define G1_REG_REFER3_BASE		G1_SWREG(17)
- #define G1_REG_QTABLE_BASE		G1_SWREG(40)
--#define G1_REG_DEC_E(v)			((v) ? BIT(0) : 0)
- 
- #define G1_REG_DEC_AXI_RD_ID(v)		(((v) << 24) & GENMASK(31, 24))
- #define G1_REG_DEC_TIMEOUT_E(v)		((v) ? BIT(23) : 0)
-@@ -246,6 +246,5 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
- 
- 	hantro_end_prepare_run(ctx);
- 
--	reg = G1_REG_DEC_E(1);
--	vdpu_write(vpu, reg, G1_SWREG(1));
-+	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_E, G1_REG_INTERRUPT);
- }
+ #define CTRL_SOFT_RESET		0x00
 -- 
 2.30.1
 
