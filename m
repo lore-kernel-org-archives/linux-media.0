@@ -8,66 +8,64 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A36A1C43332
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C31DC43619
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 654976500C
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD80564FDE
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 15:41:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhCKPl0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S234339AbhCKPl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbhCKPlK (ORCPT
+        with ESMTP id S234246AbhCKPlM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:10 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F906C061574;
-        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c76-20020a1c9a4f0000b029010c94499aedso13484830wme.0;
-        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
+        Thu, 11 Mar 2021 10:41:12 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F0BC061574;
+        Thu, 11 Mar 2021 07:41:12 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id l11so2386712wrp.7;
+        Thu, 11 Mar 2021 07:41:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JAdbjBxh26QNVrsqvgxFW6fvmPfYqMNJOexCayrJvA0=;
-        b=uuybCdyj+rOshkXU3o4qNqYMwBcqtV3lj/6PDOQyuRHZ48YZTr9k5oCCOqjBU/c6Z1
-         5xgWkzqgYAfI0mJmUDkpKlv/8V4Kc9VsJ1woX20xOOT7hjIs1booPCi8Ub1ksYQm7QB3
-         kZft9+79hFe7g0xMDEUKgek+9VHc4l8x26FL0di3BcAbsWrHFL/KdwCj1LgtFrtr5O4e
-         0uf7pLSUfedXmF/eifRJB4qEp2aibPOLJ/RMf/KVP2vicuUcny04om5qBWOqitXPbLJ+
-         VoIK8gg1NdeLdN7QlvXAiczLFqkNbx75NNwDszOJdOfBXYm3IOW6EfdDJm/n4tDVjMOG
-         tu2g==
+        bh=2LSJdNzI10Uzadt8Nfbff+p/pjnmY6eCoDYVHbZS0BI=;
+        b=jk4TUDGTRQb0WrtAIBIrDEGB+N+EHoOx/CWb1rrpdeCt9/+QQflENTvHgSGb4cCidG
+         45D5yr7yxWIDSvPnNksRdGovpxpIpXyzJBazRLXF9y0xZBdLdYWYTNOP/ER07fgNJl4z
+         a70DcFB+R6uwCyEMM6QDo4iXZ348n63WaDmx2A9ZwutNi1ScGXomGHen+GJSEJv836jC
+         WzzjuiM2UL2ZbxW9ZIOw275PCQsofz5BKkcW15plxb9F3mNi6jXYruO34wM47Am8VJMZ
+         pC86kmi/7jj0Thw76590R6mByJ1KSwR+nwqCHtbQO9tRS1KYQGq1jzlHl/kDn7vbLusw
+         qKHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JAdbjBxh26QNVrsqvgxFW6fvmPfYqMNJOexCayrJvA0=;
-        b=a3TuqWjWhIr9eWNK5nG7bpSBmV3Jt4BAGnV80UgIb/XNWG/IP7D+tP5o6YWbdguCxT
-         T9L9YewhKei1V0Os4eD6efXYfPsWKOR0LXXVXrWER0ovdRpkiGFhkINkS8AK2VShRSbe
-         ngRd5hs3pI1wOQFBwgKuAyldl9pcU8rWJxGr0n94D9JjCg5BxZzUv7AQCruifPx8vx5F
-         sXkzOLuuYZnp3l60vDUgWY67rD4mhVwS3wwLibqZeWcs9wgbCP1qwdeF7N+FKfGC2ew2
-         Xue3geP3sPNDDgkQcScjtXT0IR69tS2NTh2bbRwSDnJWe52msn+EAtUrCdCsahabc+Wj
-         F+JQ==
-X-Gm-Message-State: AOAM530l8OfEckXBGvbzNRmypkDzHhndezTYuK8lZEAkdJlictjL8EP3
-        Nh1lAluktdz9+Pl7c7f+rzM=
-X-Google-Smtp-Source: ABdhPJx5nbz+p6EpPXuNactxgx8F8NdBvmhgFLIsXilxrXXL05ZdvxkShyrzRVGKm1nAUScJBhLF2Q==
-X-Received: by 2002:a1c:6605:: with SMTP id a5mr9029615wmc.85.1615477269074;
-        Thu, 11 Mar 2021 07:41:09 -0800 (PST)
+        bh=2LSJdNzI10Uzadt8Nfbff+p/pjnmY6eCoDYVHbZS0BI=;
+        b=fREJO2kEj2h3THTU0KtOAQG8+Zt7ovvOAOV7HaGj22z21QFo3SaLeUl3WItVc72IJj
+         lB1EMI6Mfz3qPpzJoC5uigxEQ3jHc+XSnIgvlCuOsCw4O+YTDVtiVg0exlCYN+boraTZ
+         6wXoqYdqgMkbRswBaEFZ0TAC6R9+Je+pnVMBLX9KqNPa2rgqrTynatrh0ZphuD2URY04
+         99bvj7WXXwiI5nT9/iiYkfTMh8OSVwBqEa5pg32EWfk7YcT/XAWQmFtoIYBhewT+slml
+         oMnSY5ERoePmK6dtbnPTKkpe1jGEr/PRDzr1Y7CWgqN6ZVn/fJAZW0iHr1yE07Vy59yM
+         s/Lg==
+X-Gm-Message-State: AOAM532M1xnq4N+aV4UsbgIqqhpYEfF+MrTNNdYohCde0gP69Zh4z9mM
+        y32eCzRsFa/JhFsEIgJRJ64=
+X-Google-Smtp-Source: ABdhPJx85w5D5mT/Nq0DQGWDwzHjyIlxwrp8M2xgn2lGZFx7xp6QayXKc3+tZBKXpfRtukgCNlNfrQ==
+X-Received: by 2002:a5d:4445:: with SMTP id x5mr9570311wrr.30.1615477270720;
+        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
 Received: from arch-x1c3.. ([2a00:5f00:102:0:b16d:9752:8f38:7d6b])
-        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.08
+        by smtp.gmail.com with ESMTPSA id a17sm4008547wmj.9.2021.03.11.07.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:41:08 -0800 (PST)
+        Thu, 11 Mar 2021 07:41:10 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     emil.l.velikov@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 06/10] media: dt-bindings: Document SAMA5D4 VDEC bindings
-Date:   Thu, 11 Mar 2021 15:40:51 +0000
-Message-Id: <20210311154055.3496076-7-emil.l.velikov@gmail.com>
+Cc:     emil.l.velikov@gmail.com, devicetree@vger.kernel.org
+Subject: [PATCH v2 08/10] ARM: dts: sama5d4: enable Hantro G1 VDEC
+Date:   Thu, 11 Mar 2021 15:40:53 +0000
+Message-Id: <20210311154055.3496076-9-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
 References: <20210311154055.3496076-1-emil.l.velikov@gmail.com>
@@ -79,88 +77,42 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-Add devicetree binding documentation for the Hantro G1/G2 VDEC on
-the Microchip SAMAS5D4 SoC.
+Add the SAMA5D4 VDEC module which comprises Hantro G1 video decoder
+core.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: devicetree@vger.kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org
+Cc: Frank Rowand <frowand.list@gmail.com
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
 v2
- - Newly introduced
+ - Split out of larger patch (Eze)
  - s/Atmel/Microchip/ (Nicolas)
  - Drop leading 0 in node name/address
 ---
- .../media/microchip,sama5d4-vdec.yaml         | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
+ arch/arm/boot/dts/sama5d4.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-new file mode 100644
-index 000000000000..9cb2c0295d54
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
+index 05c55875835d..88284f60feb1 100644
+--- a/arch/arm/boot/dts/sama5d4.dtsi
++++ b/arch/arm/boot/dts/sama5d4.dtsi
+@@ -101,6 +101,15 @@ nfc_sram: sram@100000 {
+ 			ranges = <0 0x100000 0x2400>;
+ 		};
+ 
++		vdec0: vdec@300000 {
++			compatible = "microchip,sama5d4-vdec";
++			reg = <0x00300000 0x100000>;
++			interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
++			interrupt-names = "vdec";
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
++			clock-names = "vdec_clk";
++		};
 +
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Hantro G1 VPU codec implemented on Microchip SAMA5D4 SoCs
-+
-+maintainers:
-+  - Emil Velikov <emil.velikov@collabora.com>
-+
-+description:
-+  Hantro G1 video decode accelerator present on Microchip SAMA5D4 SoCs.
-+
-+properties:
-+  compatible:
-+    const: microchip,sama5d4-vdec
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: vdec
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: vdec_clk
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        #include <dt-bindings/clock/at91.h>
-+        #include <dt-bindings/interrupt-controller/irq.h>
-+
-+        vdec0: vdec@300000 {
-+                compatible = "microchip,sama5d4-vdec";
-+                reg = <0x00300000 0x100000>;
-+                interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
-+                interrupt-names = "vdec";
-+                clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
-+                clock-names = "vdec_clk";
-+        };
+ 		usb0: gadget@400000 {
+ 			compatible = "atmel,sama5d3-udc";
+ 			reg = <0x00400000 0x100000
 -- 
 2.30.1
 
