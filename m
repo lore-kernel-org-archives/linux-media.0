@@ -2,143 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC7DDC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:13:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B0CDC433DB
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:21:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76C3864FE8
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:13:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCAC664FD9
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:21:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbhCKMM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 07:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S232853AbhCKMU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 07:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbhCKMMr (ORCPT
+        with ESMTP id S233114AbhCKMUo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 07:12:47 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173CEC061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:12:47 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x4so32685626lfu.7
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:12:47 -0800 (PST)
+        Thu, 11 Mar 2021 07:20:44 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62714C061574
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:20:44 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id p8so45764768ejb.10
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=kvwXqCTx0SGVfiPg3HS6siiZVcDh6aLobC7a2/gPeo0=;
-        b=QZcN4tPl1qHa0z0nH4Ygxxjqz5dvyQ3tjLSinN6rK4jz2xZqDOwFalfnkL+heA+1+e
-         45pTzAw3Cl/J4cLkC5UT7d9ZkGgOB7u2uy36rUos84OgbevS7r8qC/6WAaUIMtQsfNNv
-         XfBIdycn9WT38kK8mVLEHdvgMg1HEtyNLXDUbbXIeVkduF+TKlbW04+OTMb3Yc5nvrVa
-         Y3pj5MEgeSkwEeBxOxW/N9XjpweMbqFvlKO4ctI1HUCJbkU2cAZ31qmJB6COs9zZgYIB
-         1y6sB02g4JUQcDfhzpIBy7J6ACbxUXnnGTiXYYCOh2qh02Ucxi5AFvJC2ne34UgCPtnk
-         xAIA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EYGFrEW02KUhIrzCGk6j2y1DSBi0VEvJiIGApiPKgfI=;
+        b=TyoGQkrwpHdv/lBARJpZfrijdU2O8+MCDuhgh5lx3pNzaKF8z3/1RIh3bbpQ8dvFV9
+         CWFbmvHewQd1NNb5IGRk/JBn2/4bTHHXKYYoMMyI2l++6uoCg+nmo60W6y8RFOzzvN1V
+         WvuotfLz4U5ryDk7SNlIumi6A2y+ZCrSRcU3o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kvwXqCTx0SGVfiPg3HS6siiZVcDh6aLobC7a2/gPeo0=;
-        b=me1N9ZRjyps2ibd0friDQ8m4Yb78bS8kmt+F7YHCSxl1kMAuGfVx39V0Smp/uiqnBH
-         g9xqFLhRf6jhj82WoxOrWxPH0qf6Rnum8nOR7cWBOH/11wWeTCUWGm8CzowUGyRMfgsk
-         BRGrj1Z/xY/KZWeI+TXhjqg8Px5aycLo/WWms28NHu1FgI+W1LxYFjB7ns3FQS6In3ox
-         Zo3+E+Lbd9vblGMKfgWjPGNFhhJZ/lW43915ZG+d5m0BZpWrzbqSp2KuoPnYi3BXAUt+
-         wEy5yHAmjPZbGsabRifSnjTYhhHUj3KiDH+WWyk230IkWAw9LlAb111XSWs/Q7jxw8Xy
-         utZg==
-X-Gm-Message-State: AOAM532xpo4E7FonGUJ9aC2zOuYqFfYnilW8bpn22dQZhX7SzQyh53VJ
-        5kmxa50JpDOMBLNAeLERt+fjUw==
-X-Google-Smtp-Source: ABdhPJydIOzObbnEJHMkSpDdxkO6r1p8jZya6ro801U39KAOgQnAr+fgpxN9YhKKZU8Ows2RrqCQWQ==
-X-Received: by 2002:a05:6512:6ca:: with SMTP id u10mr2050469lff.107.1615464765534;
-        Thu, 11 Mar 2021 04:12:45 -0800 (PST)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id d2sm785939lfl.89.2021.03.11.04.12.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EYGFrEW02KUhIrzCGk6j2y1DSBi0VEvJiIGApiPKgfI=;
+        b=VAQLRc/ZxZEsx6f6523mfrhEGVVEDJYe7GBthjsdoG/uqFhy7RiHxmFhcYsu/2MRPp
+         UwKChNwFgWkldWwQqQzTaRCoP7Equv4R14vAplUZldLCX72CpLcPRW4DmbLvMgqg8uXO
+         A+tl4x/BCAlYECLzigErYtK86sENJZGg4bHGRM78TCEWQS6+sWbZWNlulHN1Wya1Fj6C
+         QYffHC3iDUefVrSx7LS6z2ekWwPSTF0envs/U498ZqJhIxzHFwyqeDG5JxFaAUpZLyH4
+         x5XGOt75Fhy2QxF9FeWE2PllwxC1xaWQEay6WztfolORGztbNmYYCJxkLLbANd0GCGaf
+         uStA==
+X-Gm-Message-State: AOAM53008HA/fv3XqVsmzQCwb/Hn9f/u9wUzTcq04+dS7VvkU+yR2ENR
+        tcTTjKr4am0dUsWpzkXgwTCZ4g==
+X-Google-Smtp-Source: ABdhPJy7bhbwfcyIHHrbJaVpNHOyI4lk2ai/ZsUE5g7/tTa7JvpDxHhjLUm/S3pqzbNR/qp+NFRv1Q==
+X-Received: by 2002:a17:907:2093:: with SMTP id pv19mr2851780ejb.134.1615465243068;
+        Thu, 11 Mar 2021 04:20:43 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id u13sm1264126ejy.31.2021.03.11.04.20.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 04:12:45 -0800 (PST)
-Date:   Thu, 11 Mar 2021 13:12:44 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 04/13] rcar-vin/rcar-vin.h: fix kernel-doc formatting
-Message-ID: <YEoJPFVMqMpjsQPv@oden.dyn.berto.se>
-References: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
- <20210311102022.96954-5-hverkuil-cisco@xs4all.nl>
+        Thu, 11 Mar 2021 04:20:42 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, senozhatsky@chromium.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH 01/10] media: uvcvideo: Return -EINVAL for REQUEST API
+Date:   Thu, 11 Mar 2021 13:20:30 +0100
+Message-Id: <20210311122040.1264410-2-ribalda@chromium.org>
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+In-Reply-To: <20210311122040.1264410-1-ribalda@chromium.org>
+References: <20210311122040.1264410-1-ribalda@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210311102022.96954-5-hverkuil-cisco@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+The driver does not support it.
 
-Thanks for your patch.
+Fixes v4l2-compliance:
 
-On 2021-03-11 11:20:13 +0100, Hans Verkuil wrote:
-> Fix formatting of two enums and one struct.
-> 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Cc: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Buffer ioctls (Input 0):
+                fail: v4l2-test-buffers.cpp(1925): ret != EINVAL && ret != EBADR && ret != ENOTTY
+        test Requests: FAIL
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_v4l2.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> ---
->  drivers/media/platform/rcar-vin/rcar-vin.h | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-> index 0ee9d402f5ac..b263ead4db2b 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-vin.h
-> +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-> @@ -49,11 +49,12 @@ enum rvin_csi_id {
->  };
->  
->  /**
-> - * STOPPED   - No operation in progress
-> - * STARTING  - Capture starting up
-> - * RUNNING   - Operation in progress have buffers
-> - * STOPPING  - Stopping operation
-> - * SUSPENDED - Capture is suspended
-> + * enum rvin_dma_state - DMA states
-> + * @STOPPED:   No operation in progress
-> + * @STARTING:  Capture starting up
-> + * @RUNNING:   Operation in progress have buffers
-> + * @STOPPING:  Stopping operation
-> + * @SUSPENDED: Capture is suspended
->   */
->  enum rvin_dma_state {
->  	STOPPED = 0,
-> @@ -70,9 +71,9 @@ enum rvin_dma_state {
->   * to capture SEQ_TB/BT it's needed to capture to the same vb2
->   * buffer twice so the type of buffer needs to be kept.
->   *
-> - * FULL - One capture fills the whole vb2 buffer
-> - * HALF_TOP - One capture fills the top half of the vb2 buffer
-> - * HALF_BOTTOM - One capture fills the bottom half of the vb2 buffer
-> + * @FULL: One capture fills the whole vb2 buffer
-> + * @HALF_TOP: One capture fills the top half of the vb2 buffer
-> + * @HALF_BOTTOM: One capture fills the bottom half of the vb2 buffer
->   */
->  enum rvin_buffer_type {
->  	FULL,
-> @@ -191,7 +192,7 @@ struct rvin_info {
->   * @state:		keeps track of operation state
->   *
->   * @is_csi:		flag to mark the VIN as using a CSI-2 subdevice
-> - * @chsel		Cached value of the current CSI-2 channel selection
-> + * @chsel:		Cached value of the current CSI-2 channel selection
->   *
->   * @mbus_code:		media bus format code
->   * @format:		active V4L2 pixel format
-> -- 
-> 2.30.1
-> 
-
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 252136cc885c..5e3ec4a376e4 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -1046,6 +1046,9 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+ 	unsigned int i;
+ 	int ret;
+ 
++	if (ctrls->which == V4L2_CTRL_WHICH_REQUEST_VAL)
++		return -EINVAL;
++
+ 	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL) {
+ 		for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+ 			struct v4l2_queryctrl qc = { .id = ctrl->id };
 -- 
-Regards,
-Niklas Söderlund
+2.31.0.rc2.261.g7f71774620-goog
+
