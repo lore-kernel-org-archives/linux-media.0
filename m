@@ -2,162 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79FCAC43142
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9636C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:36:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5280A64FE6
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:21:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5998264FE0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 12:36:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbhCKMVB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 07:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbhCKMUr (ORCPT
+        id S232976AbhCKMgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 07:36:25 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:44587 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233369AbhCKMgG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 07:20:47 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7938FC061574
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:20:47 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id z1so2431837edb.8
-        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 04:20:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H9SEgVG4eW/6G+FzcssVlXUnq9VbXCnxHNhzrfDeXOM=;
-        b=oHho/dq2Er/TJG1cYRUOtK84ZV08O0m7lIIdCOL1I2yXh17pJGwEl7cvnU4QwwgRcv
-         xUM4G0jILvbk6r3Ubw77aan4OXB+uTBERPPPLB0LEf9cVMlJ12CwYr1ByDExbFsjxgb2
-         e/BhlZqNtu/41CK9Sf+rNG6ljbKCXvc7QtouM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H9SEgVG4eW/6G+FzcssVlXUnq9VbXCnxHNhzrfDeXOM=;
-        b=iQ7JN1N/sGeW2Sme2QMVh5x+MDRo+lQznICV6JPZl4RmUY7femMUytcgD4qEH/pDW3
-         vW19tcSXaw8+i6i4XioMtx/h+HPoxGAQOBEDwNW52rTuNqUTwCrnFBihiIC0etlp1bo+
-         G6oqDfR843vtH2YSqFDNCeoCIASI3mV+bdZLsCfRwvgtN5bKoQu3/y6Y04O5WuXXxoKt
-         PyE5aH6nJNH5mA71+OUKH3HKWDGlp8Ajv3TmyLr3HtxOTwK5shmazjhADKLk+5VWwS56
-         sVINUpwbQXWMGi7iEUY8tUyL+noYIiJCHYQ8Cu8OcbzNnNTq0Uv9VFfEEUX6fUG8SC/j
-         cnBg==
-X-Gm-Message-State: AOAM530iU08q2LrDF/E0IZkD6C1ieAWw85pKzk2y4ez2hmJWjYScZf9v
-        dVDlRNJrHb1U9PlPQa9teh4BdQ==
-X-Google-Smtp-Source: ABdhPJwoSMMiTwOlh9Fxqgpc06dFU06j7T75nybumv1yhnimMHvjmzrSOodv0w+ZUj3w9nU93NS/gQ==
-X-Received: by 2002:a50:cdd1:: with SMTP id h17mr8278139edj.178.1615465246224;
-        Thu, 11 Mar 2021 04:20:46 -0800 (PST)
-Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id u13sm1264126ejy.31.2021.03.11.04.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 04:20:45 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, senozhatsky@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH 05/10] media: uvcvideo: Define Control and GUIDs for class ctrls
-Date:   Thu, 11 Mar 2021 13:20:35 +0100
-Message-Id: <20210311122040.1264410-7-ribalda@chromium.org>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-In-Reply-To: <20210311122040.1264410-1-ribalda@chromium.org>
-References: <20210311122040.1264410-1-ribalda@chromium.org>
+        Thu, 11 Mar 2021 07:36:06 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id KKXnlOuiM5C8yKKXrleSpt; Thu, 11 Mar 2021 13:36:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1615466163; bh=TUlMrkPWURG6SaN7sDAOZM/NJtu2oCrlq6DkC6AA3H0=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Q8sZ3mJrvfvigW+Q1a7cST6piKqEEDhjd+DuOtOi9a3LSZctFjNqG71w1FJy04Q0b
+         TtkKK27YmWbPazP/WEqfwel4mFFtcuritwG3q3tJrCrR6/ZXN4IC9Wpkn4ACKv17h7
+         HJ+c44F1PL35AbE2lMMsqiONRCE6YNFlA7RB4VlNAsaoIsBYEezpa8HqrXYY9hrTXL
+         mS7ICWZJGkfm/PrY3qRj4RghAqEa+nFuiorxvGVX22bXqLLFJ4IPdJhEfwNMiaXpDp
+         td3Vveb27dKSP1l0emaEDSdGloRf8vrtcL8qxXoQ82hW25V4DkwkFLtxABo5UGA13S
+         lkXB/yonz+KQQ==
+Subject: Re: [PATCH 06/13] vsp1/vsp1_drm.h: add missing 'struct' kernel-doc
+ keyword
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org
+References: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
+ <20210311102022.96954-7-hverkuil-cisco@xs4all.nl>
+ <YEoJIZp2MKe3hTgp@pendragon.ideasonboard.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <39a60b00-9ba6-076b-fa24-32fd724ff69c@xs4all.nl>
+Date:   Thu, 11 Mar 2021 13:35:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YEoJIZp2MKe3hTgp@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfPyqFKmYlbKuvJN925FZx/mrk8xq+WbUG0RnkSZ2LRcTByNxDo5CeSWIu/QqwrU2razI3CA59+kQZO+0xIVMq1XZO6eff69g1zZb7Iu8qmsL0G5fjQfe
+ 8U1PaSWQ/Zww290KLap26ojDmjd+kOEnuukdm9zixq598VU8jJDR7ZeFCuiTsignhjXUF2PN9TSJAef36h0B1iHKmdc6aUeu+tfzvRbwVt5Giue2sjASOL6P
+ rC0vi4Rl/Ug+h9u9QAx4Gw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new bindings for class controls. This controls will be implemented
-by a virtual entity.
+On 11/03/2021 13:12, Laurent Pinchart wrote:
+> Hi Hans,
+> 
+> Thank you for the patch.
+> 
+> On Thu, Mar 11, 2021 at 11:20:15AM +0100, Hans Verkuil wrote:
+>> The kernel-doc documentation for two structs was missing the
+>> 'struct' keyword.
+>>
+>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Should I take this in my tree, or will you merge them with your series ?
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_ctrl.c | 34 ++++++++++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h |  8 ++++++++
- 2 files changed, 42 insertions(+)
+I'll take it.
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 08877897dc5a..fd4d5ad098b9 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -355,6 +355,20 @@ static const struct uvc_control_info uvc_ctrls[] = {
- 		.flags		= UVC_CTRL_FLAG_GET_CUR
- 				| UVC_CTRL_FLAG_AUTO_UPDATE,
- 	},
-+	{
-+		.entity		= UVC_GUID_CTRL_CLASS,
-+		.selector	= UVC_CC_CAMERA_CLASS,
-+		.index		= 0,
-+		.size		= 1,
-+		.flags		= 0,
-+	},
-+	{
-+		.entity		= UVC_GUID_CTRL_CLASS,
-+		.selector	= UVC_CC_USER_CLASS,
-+		.index		= 1,
-+		.size		= 1,
-+		.flags		= 0,
-+	},
- };
- 
- static const struct uvc_menu_info power_line_frequency_controls[] = {
-@@ -753,6 +767,26 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
- 	},
-+	{
-+		.id		= V4L2_CID_CAMERA_CLASS,
-+		.name		= "Camera Controls",
-+		.entity		= UVC_GUID_CTRL_CLASS,
-+		.selector	= UVC_CC_CAMERA_CLASS,
-+		.size		= 1,
-+		.offset		= 0,
-+		.v4l2_type	= V4L2_CTRL_TYPE_CTRL_CLASS,
-+		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-+	},
-+	{
-+		.id		= V4L2_CID_USER_CLASS,
-+		.name		= "User Controls",
-+		.entity		= UVC_GUID_CTRL_CLASS,
-+		.selector	= UVC_CC_USER_CLASS,
-+		.size		= 1,
-+		.offset		= 0,
-+		.v4l2_type	= V4L2_CTRL_TYPE_CTRL_CLASS,
-+		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
-+	},
- };
- 
- /* ------------------------------------------------------------------------
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 97df5ecd66c9..5792232ed312 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -62,6 +62,9 @@
- #define UVC_GUID_EXT_GPIO_CONTROLLER \
- 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
- 	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-+#define UVC_GUID_CTRL_CLASS \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x04}
- 
- #define UVC_GUID_FORMAT_MJPEG \
- 	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
-@@ -175,6 +178,11 @@
- 	{ 'H',  'E',  'V',  'C', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
- 
-+/* ------------------------------------------------------------------------
-+ * Control Class Constants
-+ */
-+#define UVC_CC_CAMERA_CLASS	0
-+#define UVC_CC_USER_CLASS	1
- 
- /* ------------------------------------------------------------------------
-  * Driver specific constants.
--- 
-2.31.0.rc2.261.g7f71774620-goog
+Regards,
+
+	Hans
+
+> 
+>> ---
+>>  drivers/media/platform/vsp1/vsp1_drm.h | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/vsp1/vsp1_drm.h b/drivers/media/platform/vsp1/vsp1_drm.h
+>> index e85ad4366fbb..ab8b7e3161a2 100644
+>> --- a/drivers/media/platform/vsp1/vsp1_drm.h
+>> +++ b/drivers/media/platform/vsp1/vsp1_drm.h
+>> @@ -18,7 +18,7 @@
+>>  #include "vsp1_pipe.h"
+>>  
+>>  /**
+>> - * vsp1_drm_pipeline - State for the API exposed to the DRM driver
+>> + * struct vsp1_drm_pipeline - State for the API exposed to the DRM driver
+>>   * @pipe: the VSP1 pipeline used for display
+>>   * @width: output display width
+>>   * @height: output display height
+>> @@ -47,7 +47,7 @@ struct vsp1_drm_pipeline {
+>>  };
+>>  
+>>  /**
+>> - * vsp1_drm - State for the API exposed to the DRM driver
+>> + * struct vsp1_drm - State for the API exposed to the DRM driver
+>>   * @pipe: the VSP1 DRM pipeline used for display
+>>   * @lock: protects the BRU and BRS allocation
+>>   * @inputs: source crop rectangle, destination compose rectangle and z-order
+> 
 
