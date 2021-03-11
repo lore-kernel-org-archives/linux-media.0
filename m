@@ -2,62 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1418AC4332E
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 11:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FDE8C433E6
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 11:52:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD16264F90
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 11:26:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBE2364FEC
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 11:52:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbhCKLZ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 06:25:58 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:31885 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbhCKLZa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 06:25:30 -0500
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 11 Mar 2021 03:25:31 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Mar 2021 03:25:29 -0800
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Mar 2021 16:55:08 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 457D2212F0; Thu, 11 Mar 2021 16:55:07 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v8 0/2] Add encoder ctrls for long term reference
-Date:   Thu, 11 Mar 2021 16:54:59 +0530
-Message-Id: <1615461901-16675-1-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S232632AbhCKLvg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 06:51:36 -0500
+Received: from mga07.intel.com ([134.134.136.100]:40596 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232904AbhCKLvb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 11 Mar 2021 06:51:31 -0500
+IronPort-SDR: l6PnxQOkloR2CqaYUQa9h9HGTIoawUBnp+eXQ6Kx3GRgnKV5uSQSoUikCeX+HtDL/nfscvd1pd
+ qX0xXxSTzY0w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="252671196"
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="252671196"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 03:51:30 -0800
+IronPort-SDR: OMIFnPAwLXaU8xCWMniOJSkf4O0oOAU8mNYxMrki9aNs7ZNKAfLlMaaVKDugjhY+AtU3YjkNoZ
+ reJ1F4yhC+QA==
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="438176732"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 03:51:29 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 8E54B201A2;
+        Thu, 11 Mar 2021 13:51:27 +0200 (EET)
+Date:   Thu, 11 Mar 2021 13:51:27 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] media: v4l2-fwnode: Simplify
+ v4l2_async_notifier_parse_fwnode_endpoints()
+Message-ID: <20210311115127.GR3@paasikivi.fi.intel.com>
+References: <20210310153743.3556385-1-niklas.soderlund+renesas@ragnatech.se>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210310153743.3556385-1-niklas.soderlund+renesas@ragnatech.se>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series add the encoder controls for long term reference (LTR)
-and support for the same in venus driver.
+Hi Niklas,
 
-Dikshita Agarwal (2):
-  media: v4l2-ctrl: add controls for long term reference.
-  venus: venc: Add support for Long Term Reference (LTR) controls
+On Wed, Mar 10, 2021 at 04:37:43PM +0100, Niklas Söderlund wrote:
+> There are only one user left of __v4l2_async_notifier_parse_fwnode_ep()
+> since [1], v4l2_async_notifier_parse_fwnode_endpoints(). Merge the two
+> and remove some dead code.
+> 
+> 1. commit 0ae426ebd0dcef81 ("media: v4l2-fwnode: Remove v4l2_async_notifier_parse_fwnode_endpoints_by_port()")
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-Changes since v7:
-- addressed comments regarding documentation.
+This and the rcar-vin patch no longer apply after my patches related to
+V4L2 async. Could you rebase these on them? I've pushed them to the master
+branch in my V4L2 git tree.
 
- .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 18 ++++++++
- drivers/media/platform/qcom/venus/venc_ctrls.c     | 49 +++++++++++++++++++++-
- drivers/media/v4l2-core/v4l2-ctrls.c               | 14 +++++++
- include/uapi/linux/v4l2-controls.h                 |  3 ++
- 4 files changed, 83 insertions(+), 1 deletion(-)
+Thanks.
 
 -- 
-2.7.4
+Kind regards,
 
+Sakari Ailus
