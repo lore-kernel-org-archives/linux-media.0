@@ -7,108 +7,81 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96122C43381
-	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2EBC43332
+	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59C2F64FBA
+	by mail.kernel.org (Postfix) with ESMTP id A534B64FB6
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhCKKUr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 05:20:47 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:58621 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232280AbhCKKU3 (ORCPT
+        id S232281AbhCKKUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 05:20:49 -0500
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:45183 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232284AbhCKKUb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 05:20:29 -0500
+        Thu, 11 Mar 2021 05:20:31 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id KIQYlPLX0C40pKIQelKo4w; Thu, 11 Mar 2021 11:20:28 +0100
+        id KIQYlPLX0C40pKIQglKo61; Thu, 11 Mar 2021 11:20:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615458028; bh=uGvVBeq6ycOp13ZyFtQ3jaXCLHTR2CD+mwr8VWIvX24=;
+        t=1615458030; bh=PjHoSp9WjFCgsd+a/BY6fGrZQV6HYpnqUG49Ry5B0gk=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=QwyTz0LjYQS90nRQ8HerYdkzYHz8X/7ZhkFNJKUCcY47JkkCXLeWFA0OAa/ogx3E6
-         QEOAINjZfCVr891wgxdeKPbuj8LKnRT1hST4ke4t+d57BysrvCYR97aklxif+84Zos
-         9YmWZ5uJLlHYvrRZTJzIqvNHFPuUylLUa6frtRl/sxViee6ngH+EW223G1SaILqTYA
-         tVMA09536ciIWsuzrzr/oDv5mKqCW+ptJK3V7wuXT7OF00fzhmc7fvyB7RWbShG/F8
-         s9SPWwrfoAvtzztnsE0+0EqhfZLZXu7RlNBEByXwS6VlPUOAtQB+46EwrkFA98Jevm
-         vNE8mTkccaGXg==
+        b=rqums34P5ItPC2cBkJ9jcsyURXkrSUOB6pU5GZmkaotcIS0cFwgxsIx9hmdIpC8+H
+         oUxNyBn9xrGu5tDjZrSdmlK6SBbf+HY4H9FZsv5WrkavK9AUdMWyQJ26vCywR2/sWB
+         LdUW8O8R/VsUv9/LnBYFb8Y48R1p2NaKi6HyoPxVrxD5JDrJy/FpqrG+1HGRfd+V1f
+         WgFvxZewiASFbAL+8ZIUBVpTf3FZgpOAIulUHvhHrR5Ng8UZGYG0KxfBojQ4LJVxnW
+         wpBUb9jDV36mwre7L7UqAJIsQTYd/EUixgcDDGdiQzmdwnKh9BFkLumkOu60FBqwmd
+         QcFoUb8V3w4Yg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 03/13] ti-vpe/cal.h: fix kernel-doc formatting
-Date:   Thu, 11 Mar 2021 11:20:12 +0100
-Message-Id: <20210311102022.96954-4-hverkuil-cisco@xs4all.nl>
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH 08/13] staging: media: ipu3: add missing kernel-doc 'struct' keywords
+Date:   Thu, 11 Mar 2021 11:20:17 +0100
+Message-Id: <20210311102022.96954-9-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 References: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfI2xPb/zUiB1u72ER64GdeqlP5VATSz1rK0PzXa8A/OqDFQ+9I+MEpAR3WYnAs21EYlBUZ6IxwHRH6xiF5pUwmHqHeW73aKBo1Cd+mE10150Hj0IjQg7
- ecQCpfUlobofQ4V2L0ZWzyWiBBpQFk0AB9QJ8+ZMYGJf2IQyv28zB5+HYc8rqQ7O6rPCkoVzKowBnfff9HGYHvNFMbYHTFG1bmMHgsyUq0hf0LvkLpZKHvIc
- gcFN6BeL+mporyfigEU2lOd7XyR5QGu+zrW9aTbDGESxUHE7UdyxaBkTeK7JjytN
+X-CMAE-Envelope: MS4xfM8yx7Q0zYBgI78gf6DyJZMcQ66lh5YEGp98nH9CnoCAbWJlbuxRjXen4cBJQX+PUu4IESiIp0JiVH3JVdiVsiDb940nzFhs6TlLLYNUCQFKIqMt//NC
+ PbyB23VCWqFlcCX4osLD8P6H07FxWW2a+sFVlyCi3erMQ/ZBGIqWsYG2H8HYmK1SqT2dQESB6Pl3SGdm16KTJSJEMIEAiYux9fo4EPeRqRTxck9sRGwR0Pmh
+ zogjep1c7XsvjO8R38iwcJJqt1O1/5rli16K6Wl9HoQ3gCDFkdJp4zpg0tUmZYHw
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix inline struct member documentation, was missing the
-'@memb:' prefix.
+Two structs where missing the kernel-doc 'struct' keyword
+in their kernel-doc documentation.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/ti-vpe/cal.h | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/staging/media/ipu3/ipu3-css-pool.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index d471b7f82519..7aaea82c6b42 100644
---- a/drivers/media/platform/ti-vpe/cal.h
-+++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -84,35 +84,34 @@ struct cal_buffer {
+diff --git a/drivers/staging/media/ipu3/ipu3-css-pool.h b/drivers/staging/media/ipu3/ipu3-css-pool.h
+index a8ccd4f70320..35519a08c08c 100644
+--- a/drivers/staging/media/ipu3/ipu3-css-pool.h
++++ b/drivers/staging/media/ipu3/ipu3-css-pool.h
+@@ -10,7 +10,7 @@ struct imgu_device;
+ #define IPU3_CSS_POOL_SIZE		4
  
  /**
-  * struct cal_dmaqueue - Queue of DMA buffers
-- * @active: Buffer being DMA'ed to for the current frame
-  */
- struct cal_dmaqueue {
- 	/**
--	 * Protects all fields in the cal_dmaqueue.
-+	 * @lock: Protects all fields in the cal_dmaqueue.
- 	 */
- 	spinlock_t		lock;
- 
- 	/**
--	 * Buffers queued to the driver and waiting for DMA processing.
-+	 * @queue: Buffers queued to the driver and waiting for DMA processing.
- 	 * Buffers are added to the list by the vb2 .buffer_queue() operation,
- 	 * and move to @pending when they are scheduled for the next frame.
- 	 */
- 	struct list_head	queue;
- 	/**
--	 * Buffer provided to the hardware to DMA the next frame. Will move to
--	 * @active at the end of the current frame.
-+	 * @pending: Buffer provided to the hardware to DMA the next frame.
-+	 * Will move to @active at the end of the current frame.
- 	 */
- 	struct cal_buffer	*pending;
- 	/**
--	 * Buffer being DMA'ed to for the current frame. Will be retired and
--	 * given back to vb2 at the end of the current frame if a @pending
--	 * buffer has been scheduled to replace it.
-+	 * @active: Buffer being DMA'ed to for the current frame. Will be
-+	 * retired and given back to vb2 at the end of the current frame if
-+	 * a @pending buffer has been scheduled to replace it.
- 	 */
- 	struct cal_buffer	*active;
- 
--	/** State of the DMA engine. */
-+	/** @state: State of the DMA engine. */
- 	enum cal_dma_state	state;
--	/** Wait queue to signal a @state transition to CAL_DMA_STOPPED. */
-+	/** @wait: Wait queue to signal a @state transition to CAL_DMA_STOPPED. */
- 	struct wait_queue_head	wait;
+- * imgu_css_map - store DMA mapping info for buffer
++ * struct imgu_css_map - store DMA mapping info for buffer
+  *
+  * @size:		size of the buffer in bytes.
+  * @vaddr:		kernel virtual address.
+@@ -24,7 +24,7 @@ struct imgu_css_map {
  };
  
+ /**
+- * imgu_css_pool - circular buffer pool definition
++ * struct imgu_css_pool - circular buffer pool definition
+  *
+  * @entry:		array with IPU3_CSS_POOL_SIZE elements.
+  * @entry.param:	a &struct imgu_css_map for storing the mem mapping.
 -- 
 2.30.1
 
