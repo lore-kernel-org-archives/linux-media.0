@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2EBC43332
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E63F2C4332E
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A534B64FB6
+	by mail.kernel.org (Postfix) with ESMTP id C715864FBA
 	for <linux-media@archiver.kernel.org>; Thu, 11 Mar 2021 10:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbhCKKUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Mar 2021 05:20:49 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:45183 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232284AbhCKKUb (ORCPT
+        id S232278AbhCKKUs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Mar 2021 05:20:48 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:38309 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232281AbhCKKUa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Mar 2021 05:20:31 -0500
+        Thu, 11 Mar 2021 05:20:30 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id KIQYlPLX0C40pKIQglKo61; Thu, 11 Mar 2021 11:20:30 +0100
+        id KIQYlPLX0C40pKIQflKo5j; Thu, 11 Mar 2021 11:20:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615458030; bh=PjHoSp9WjFCgsd+a/BY6fGrZQV6HYpnqUG49Ry5B0gk=;
+        t=1615458029; bh=x+/ZbTt23p/+dac52j/JFWmgQXhbMZVNHj84EAsXDMs=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=rqums34P5ItPC2cBkJ9jcsyURXkrSUOB6pU5GZmkaotcIS0cFwgxsIx9hmdIpC8+H
-         oUxNyBn9xrGu5tDjZrSdmlK6SBbf+HY4H9FZsv5WrkavK9AUdMWyQJ26vCywR2/sWB
-         LdUW8O8R/VsUv9/LnBYFb8Y48R1p2NaKi6HyoPxVrxD5JDrJy/FpqrG+1HGRfd+V1f
-         WgFvxZewiASFbAL+8ZIUBVpTf3FZgpOAIulUHvhHrR5Ng8UZGYG0KxfBojQ4LJVxnW
-         wpBUb9jDV36mwre7L7UqAJIsQTYd/EUixgcDDGdiQzmdwnKh9BFkLumkOu60FBqwmd
-         QcFoUb8V3w4Yg==
+        b=QyAhZUHtARYbrQtwiMjNpO2lS5F2TwyWzj7DND5zsOuc7SQblzfNNHcoJCIk4Pq/z
+         4sPlC3MSojlnREKmJyhNY9y7HU8HrMo1LGwZJsEzrt1rPG0tFWd7SnwWBUvR/jUTwz
+         9y+T6jAh9kKtRIDXWCpBps5HqNZbmOD7DwCv4jI/Qn7LuEvsA1dDc832r+mNTttEME
+         2FIWnD3XeZPXb+Ma70ovh7WQNbp0KjH6wTIkn8N6f5fjFLE8AOL21EveboFrnO7FAm
+         47uoj0qKqtQV2fbZvClvjGUQJalav/pn5vqhfLbWP928MAHBAYHyZBowPM4SLONZaF
+         aeEGHgKLWoCUA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH 08/13] staging: media: ipu3: add missing kernel-doc 'struct' keywords
-Date:   Thu, 11 Mar 2021 11:20:17 +0100
-Message-Id: <20210311102022.96954-9-hverkuil-cisco@xs4all.nl>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 06/13] vsp1/vsp1_drm.h: add missing 'struct' kernel-doc keyword
+Date:   Thu, 11 Mar 2021 11:20:15 +0100
+Message-Id: <20210311102022.96954-7-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 References: <20210311102022.96954-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfM8yx7Q0zYBgI78gf6DyJZMcQ66lh5YEGp98nH9CnoCAbWJlbuxRjXen4cBJQX+PUu4IESiIp0JiVH3JVdiVsiDb940nzFhs6TlLLYNUCQFKIqMt//NC
- PbyB23VCWqFlcCX4osLD8P6H07FxWW2a+sFVlyCi3erMQ/ZBGIqWsYG2H8HYmK1SqT2dQESB6Pl3SGdm16KTJSJEMIEAiYux9fo4EPeRqRTxck9sRGwR0Pmh
- zogjep1c7XsvjO8R38iwcJJqt1O1/5rli16K6Wl9HoQ3gCDFkdJp4zpg0tUmZYHw
+X-CMAE-Envelope: MS4xfJ2t2hEZx/QeWjdRyHoE/3o+ITKtl1JBIhvi1AKPJPEiDGao1h+/Sg4NVx25QIPjhcgyHLu1I1hUODliM2dBLTwkxpqIEab/wIQCIgAQ2SGffk2RzLw3
+ SZrOEPdycO75DKE/yJCc4p4985KciOw7LYIZCDmCG0e4qJVMAz90hpx3JUkY8J4zuAZauMq8VeSLTeR7bLVra2uBFD3eLj8JZyEassPQc6SygCtyBkJLb5wM
+ GRoEEne9GUTFoE6mUwgcyCyWnKHwlSkHTQNXH+j4WT1FOTyYiXqPluKQ1a4G0RBA
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Two structs where missing the kernel-doc 'struct' keyword
-in their kernel-doc documentation.
+The kernel-doc documentation for two structs was missing the
+'struct' keyword.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/ipu3/ipu3-css-pool.h | 4 ++--
+ drivers/media/platform/vsp1/vsp1_drm.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/ipu3/ipu3-css-pool.h b/drivers/staging/media/ipu3/ipu3-css-pool.h
-index a8ccd4f70320..35519a08c08c 100644
---- a/drivers/staging/media/ipu3/ipu3-css-pool.h
-+++ b/drivers/staging/media/ipu3/ipu3-css-pool.h
-@@ -10,7 +10,7 @@ struct imgu_device;
- #define IPU3_CSS_POOL_SIZE		4
+diff --git a/drivers/media/platform/vsp1/vsp1_drm.h b/drivers/media/platform/vsp1/vsp1_drm.h
+index e85ad4366fbb..ab8b7e3161a2 100644
+--- a/drivers/media/platform/vsp1/vsp1_drm.h
++++ b/drivers/media/platform/vsp1/vsp1_drm.h
+@@ -18,7 +18,7 @@
+ #include "vsp1_pipe.h"
  
  /**
-- * imgu_css_map - store DMA mapping info for buffer
-+ * struct imgu_css_map - store DMA mapping info for buffer
-  *
-  * @size:		size of the buffer in bytes.
-  * @vaddr:		kernel virtual address.
-@@ -24,7 +24,7 @@ struct imgu_css_map {
+- * vsp1_drm_pipeline - State for the API exposed to the DRM driver
++ * struct vsp1_drm_pipeline - State for the API exposed to the DRM driver
+  * @pipe: the VSP1 pipeline used for display
+  * @width: output display width
+  * @height: output display height
+@@ -47,7 +47,7 @@ struct vsp1_drm_pipeline {
  };
  
  /**
-- * imgu_css_pool - circular buffer pool definition
-+ * struct imgu_css_pool - circular buffer pool definition
-  *
-  * @entry:		array with IPU3_CSS_POOL_SIZE elements.
-  * @entry.param:	a &struct imgu_css_map for storing the mem mapping.
+- * vsp1_drm - State for the API exposed to the DRM driver
++ * struct vsp1_drm - State for the API exposed to the DRM driver
+  * @pipe: the VSP1 DRM pipeline used for display
+  * @lock: protects the BRU and BRS allocation
+  * @inputs: source crop rectangle, destination compose rectangle and z-order
 -- 
 2.30.1
 
