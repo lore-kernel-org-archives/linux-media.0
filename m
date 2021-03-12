@@ -5,66 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3291C4332D
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CD17C4321A
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96EB06501D
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A4A964F6E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbhCLR35 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232878AbhCLR35 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 12 Mar 2021 12:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbhCLR31 (ORCPT
+        with ESMTP id S232741AbhCLR33 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Mar 2021 12:29:27 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B2C061761
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:27 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a18so5212076wrc.13
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:27 -0800 (PST)
+        Fri, 12 Mar 2021 12:29:29 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F451C061761
+        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:29 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id e9so2204880wrw.10
+        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PZHJdY8fakNaK6P7dFBhgcz/Bbfh/JsCZheBpgT33jI=;
-        b=RoEk2PkcxJb2qKkIaTXJ4Z54Ghie9qdl9peDZj2azFnqAO4R3XWmHTukWoTTHg5Kme
-         +2d/QP3LPrq9NynIQflNdRwFkyxOUyVkVYo1pxXRxU1NYGRCjhGjFSTWuft50DjRrFoQ
-         hfsS4/tBe99SVdz2vCwimyh3AK90eAcqPyAcMkXCpCOaqUfw3pJJLee4SUIRr3rb+YEs
-         5yAhYa/WenkU6OfffeSC0/rP0b68KNJykXZP3reL8Nb6PKEvZC3gRgPoXPyEmmu5zd82
-         TqpyNzrNTf8nKkKDRXhol4TWW5N1vlSt33B8jYpOfXc7+lnyZYF77yR7t+DAy2H7BFKb
-         RWUA==
+        bh=dfKzSN7+Nwky50p4GObh/puW54LZxKNtaiAf8zHXxqY=;
+        b=UTILWxAojBI4i7OA9bANtCbOjR0Ok8XmQrTreL4Va8DignTMtqNoQhRh859mIyLJ5V
+         Jct2uMyx9JTZLmaQhozGkq8ScYu96b5G8SLCmVwrjOaXanazrKIbYgY7HN+0nUSUT8Np
+         0EPNG1D7nB9TSRh4G3d93rVrdmtPuaRAldc0NYtu98PKZ5bSGoR1QdZDKYPBL8KFCD5c
+         NgHjN4e/vqiEDhyFMbFDvATIZJT9q3BY5Rbxd3uovdHJhAXrciwHJHdQNCKFeP1mpfkt
+         rgUv1XN2kuA6o6Gc4pW2kvDAw92HBiXhBj4rojWp/DvzeU8A9wovOq8ja2hJilHu3Xrs
+         a6Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PZHJdY8fakNaK6P7dFBhgcz/Bbfh/JsCZheBpgT33jI=;
-        b=M3RBvLHgnIf5+QRMQp2GAH5a7/NzN1sCg/GFMTy43S1a0LhfddgbQwh3tALpRbaS01
-         YXIOibsQw3aEJgNCyfwS+UPB6WsXg62FTSi6+hA7AdH0AmhzZz2Vp8i/1ERjpwG1aLld
-         tr1htJS6sCPrjEf2I/EqzR2DdfFRw0+AL7ClbJe1Iyv0VS0zrk3q2AzKcb3L8xtEzxkM
-         R7Kf42+jHN5fMxMNRm0aR8moVCjS5Xf0MRtFz/QdDFKKGPoYGTiPG5CDrO9L3MiE2D27
-         1l63s4rFh5I3/gZbUGs4rAke8RJyLVXoTH1g19mmCNWItoDBQmtzLRKSvmrc6X7IFtZW
-         3eVg==
-X-Gm-Message-State: AOAM532uN/J1KzL9SGhc0wFe4kS+0qVoBknBxdlfL0HyKigCdZ7fwF+3
-        Tfyt7q6kI5C8p6f2zRHLPfa7dA==
-X-Google-Smtp-Source: ABdhPJy1QPyjZvvwjTUYPdK3eSIvAxLPXI+sxqn1GOx3QMNJkH3YSTOfncj/myrWEQpIBijNYl+eBg==
-X-Received: by 2002:adf:9261:: with SMTP id 88mr14795224wrj.270.1615570165868;
-        Fri, 12 Mar 2021 09:29:25 -0800 (PST)
+        bh=dfKzSN7+Nwky50p4GObh/puW54LZxKNtaiAf8zHXxqY=;
+        b=oJ2roiGBZiXHvqlsSoalmRS/E5Yw+zjnc2QQBBomzgn92nD2jCyiTwIX0I21JRqS1N
+         asXtfSyTGWjRwGh3/DIhzZQ9zHR310WA/MT5mEZKcznmwKix6nHLZ4L5FpsT6lX77RvJ
+         5jpsHo0ISW0s+0d4oYbmdHYOKgGvTZtaCllHfO1BRfZ2VGLoLbCkzJWOUdSWMuAy1NjU
+         duXg5hFUccaWeeNbIdHOZ0+59t4YWMLbZ3Uy+WX1nEV8XX36todeeF/bebeHWbC//qsb
+         oLZPI9EXb2m9TxBeIK8+czTt9g/rVgJF3UNnMjqzVl/2nQrAPge1F6wbJFrPh7gk5D2v
+         XgIw==
+X-Gm-Message-State: AOAM533dWnwGkU+SDI9XuXt/MgLSF9WXicLACTRMhY0cpCNE6TMh1FOu
+        oe+gfeowFCpoFCD0W6KLW7sWTurZDxhxgwG3
+X-Google-Smtp-Source: ABdhPJyC5BlVWRFSwDteAZc40VH6Y+s/28q3LNk7ERP9T72MaOS3W4FJZLVamiFpkBxoLEXK79B7Pg==
+X-Received: by 2002:adf:e391:: with SMTP id e17mr15028152wrm.285.1615570167825;
+        Fri, 12 Mar 2021 09:29:27 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 18sm2876375wmj.21.2021.03.12.09.29.24
+        by smtp.gmail.com with ESMTPSA id 18sm2876375wmj.21.2021.03.12.09.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 09:29:25 -0800 (PST)
+        Fri, 12 Mar 2021 09:29:27 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
         jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH v2 14/25] media: venus: hfi: Read WRAPPER_TZ_CPU_STATUS_V6 on 6xx
-Date:   Fri, 12 Mar 2021 17:30:28 +0000
-Message-Id: <20210312173039.1387617-15-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 16/25] media: venus: pm: Hook 6xx pm ops into 4xx pm ops
+Date:   Fri, 12 Mar 2021 17:30:30 +0000
+Message-Id: <20210312173039.1387617-17-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210312173039.1387617-1-bryan.odonoghue@linaro.org>
 References: <20210312173039.1387617-1-bryan.odonoghue@linaro.org>
@@ -74,53 +74,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 6xx we should read wrapper cpu status from the wrapper TZ register set.
+At this time there is no need to differentiate between the two, we can
+reuse the 4xx pm ops callback structure for 6xx.
 
-Co-developed-by: Jonathan Marek <jonathan@marek.ca>
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Co-developed-by: Dikshita Agarwal <dikshita@codeaurora.org>
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/venus/pm_helpers.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 09fc81da0645..dabff8654f97 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -1472,10 +1472,14 @@ static int venus_suspend_1xx(struct venus_core *core)
- static bool venus_cpu_and_video_core_idle(struct venus_hfi_device *hdev)
- {
- 	void __iomem *wrapper_base = hdev->core->wrapper_base;
-+	void __iomem *wrapper_tz_base = hdev->core->wrapper_tz_base;
- 	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
- 	u32 ctrl_status, cpu_status;
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index ccbbac2036d2..a23e490b6139 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -1122,6 +1122,7 @@ const struct venus_pm_ops *venus_pm_get(enum hfi_version version)
+ 	case HFI_VERSION_3XX:
+ 		return &pm_ops_v3;
+ 	case HFI_VERSION_4XX:
++	case HFI_VERSION_6XX:
+ 		return &pm_ops_v4;
+ 	}
  
--	cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
-+	if (IS_V6(hdev->core))
-+		cpu_status = readl(wrapper_tz_base + WRAPPER_TZ_CPU_STATUS_V6);
-+	else
-+		cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
- 	ctrl_status = readl(cpu_cs_base + CPU_CS_SCIACMDARG0);
- 
- 	if (cpu_status & WRAPPER_CPU_STATUS_WFI &&
-@@ -1488,10 +1492,14 @@ static bool venus_cpu_and_video_core_idle(struct venus_hfi_device *hdev)
- static bool venus_cpu_idle_and_pc_ready(struct venus_hfi_device *hdev)
- {
- 	void __iomem *wrapper_base = hdev->core->wrapper_base;
-+	void __iomem *wrapper_tz_base = hdev->core->wrapper_tz_base;
- 	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
- 	u32 ctrl_status, cpu_status;
- 
--	cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
-+	if (IS_V6(hdev->core))
-+		cpu_status = readl(wrapper_tz_base + WRAPPER_TZ_CPU_STATUS_V6);
-+	else
-+		cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
- 	ctrl_status = readl(cpu_cs_base + CPU_CS_SCIACMDARG0);
- 
- 	if (cpu_status & WRAPPER_CPU_STATUS_WFI &&
 -- 
 2.30.1
 
