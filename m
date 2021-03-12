@@ -2,118 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0867C4160E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E08AC43381
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 08:51:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 822D564FC1
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:57:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB2CA64FCE
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 08:50:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbhCLH4c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Mar 2021 02:56:32 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:56555 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231690AbhCLH4F (ORCPT
+        id S232487AbhCLIu2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Mar 2021 03:50:28 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:38933 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232344AbhCLIuA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Mar 2021 02:56:05 -0500
-X-UUID: 4acb5c40dd684ba0a0c4c2b0d4fe31b8-20210312
-X-UUID: 4acb5c40dd684ba0a0c4c2b0d4fe31b8-20210312
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1666184384; Fri, 12 Mar 2021 15:55:57 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 12 Mar 2021 15:55:55 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 12 Mar 2021 15:55:54 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>, <yong.wu@mediatek.com>
-CC:     Irui Wang <irui.wang@mediatek.com>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2,4/5] media: mtk-vcodec: Add MT8192 H264 venc driver
-Date:   Fri, 12 Mar 2021 15:55:41 +0800
-Message-ID: <20210312075542.5503-5-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210312075542.5503-1-irui.wang@mediatek.com>
-References: <20210312075542.5503-1-irui.wang@mediatek.com>
+        Fri, 12 Mar 2021 03:50:00 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id KdUZlzNNh4ywlKdUcl2Tqt; Fri, 12 Mar 2021 09:49:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1615538998; bh=NGK2EPESfCiclfH5XrDNBvTY5/wvFk2zHhR9JTyxkes=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=C8k8S7bVh4fDjkT6jgZrVooZADvbOtJcJH0I+6/I14Ab1PCxjqyWC7OKE8N8/apiw
+         mahhJpdV8Xs2STR47xDSkSqu6L/9UGKricApz7/p/dB4iKVSDoG9W8QUoU1wSAfbLe
+         Pye82ca5ACDklaGeg+kxRzNQJpmwb2gCOX/elHgLTHpzIAeAj3sV+p38LQe/AP2PYD
+         pNlPozWf1kt61owrlZY5qq1pHgpHMHj00n4nbmx3B+YgrfCVbEbnAhmtYZNSoCaP6v
+         O3Y9J057Qh72aKjoNNySCDt5/Xgku/D4XFXuwScvWGXfaxqGOb5Q9yglwo6u+g7vEt
+         7wumlC1/so+sQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] v4l2-ctrls.c: initialize flags field of p_fwht_params
+Message-ID: <2b0585f5-672c-3a67-b38d-d47ce9e5473e@xs4all.nl>
+Date:   Fri, 12 Mar 2021 09:49:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfC6rWS+5JyM7qXXrm9Oxz67GOI6r6PHBq7irY5PC9yfRB64JgErgtMaRjzrKNrj1wqa29GXBbOxpif+ioJf+PrZVz6Nm7i6PtmfVNc3+rwuYHbVImDsr
+ Sh051W/IzI9e1sqx7J9Q6euU/JWHMdik84WSW4uztSEn7OhT+atZde+JXQn8N0RwPz6YtwnpJDfT3x8H7iJFgKiykvub5wvOcI8=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MT8192 venc driver's compatible and device private data.
+The V4L2_CID_STATELESS_FWHT_PARAMS compound control was missing a
+proper initialization of the flags field, so after loading the vicodec
+module for the first time, running v4l2-compliance for the stateless
+decoder would fail on this control because the initial control value
+was considered invalid by the vicodec driver.
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+Initializing the flags field to sane values fixes this.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/platform/mtk-vcodec/mtk_vcodec_drv.h    |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c      | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 869d958d2b99..39e78aa670a3 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -302,6 +302,7 @@ struct mtk_vcodec_ctx {
- enum mtk_chip {
- 	MTK_MT8173,
- 	MTK_MT8183,
-+	MTK_MT8192,
- };
- 
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 26b089e81213..981299a44c4a 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -425,12 +425,27 @@ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
- 	.core_id = VENC_SYS,
- };
- 
-+static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
-+	.chip = MTK_MT8192,
-+	.uses_ext = true,
-+	/* MT8192 supports the same capture formats as MT8183*/
-+	.capture_formats = mtk_video_formats_capture_mt8183,
-+	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8183),
-+	/* MT8192 supports the same output formats as MT8173 */
-+	.output_formats = mtk_video_formats_output_mt8173,
-+	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
-+	.min_bitrate = 64,
-+	.max_bitrate = 100000000,
-+	.core_id = VENC_SYS,
-+};
-+
- static const struct of_device_id mtk_vcodec_enc_match[] = {
- 	{.compatible = "mediatek,mt8173-vcodec-enc",
- 			.data = &mt8173_avc_pdata},
- 	{.compatible = "mediatek,mt8173-vcodec-enc-vp8",
- 			.data = &mt8173_vp8_pdata},
- 	{.compatible = "mediatek,mt8183-vcodec-enc", .data = &mt8183_pdata},
-+	{.compatible = "mediatek,mt8192-vcodec-enc", .data = &mt8192_pdata},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
--- 
-2.18.0
-
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 016cf6204cbb..77f63773096e 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1675,6 +1675,8 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 		p_fwht_params->version = V4L2_FWHT_VERSION;
+ 		p_fwht_params->width = 1280;
+ 		p_fwht_params->height = 720;
++		p_fwht_params->flags = V4L2_FWHT_FL_PIXENC_YUV |
++			(2 << V4L2_FWHT_FL_COMPONENTS_NUM_OFFSET);
+ 		break;
+ 	}
+ }
