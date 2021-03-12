@@ -2,163 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A208BC4332E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 805FDC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:47:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 629E964F80
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:36:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DA8A64F82
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 07:47:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbhCLHgK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Mar 2021 02:36:10 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:39964 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231503AbhCLHf7 (ORCPT
+        id S231752AbhCLHq2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Mar 2021 02:46:28 -0500
+Received: from gw.atmark-techno.com ([13.115.124.170]:45786 "EHLO
+        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231480AbhCLHqA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Mar 2021 02:35:59 -0500
-X-UUID: f991653cdd4f47119d17cc45a90c6f8c-20210312
-X-UUID: f991653cdd4f47119d17cc45a90c6f8c-20210312
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1763726278; Fri, 12 Mar 2021 15:35:54 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 12 Mar 2021 15:35:53 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 12 Mar 2021 15:35:51 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Fri, 12 Mar 2021 02:46:00 -0500
+X-Greylist: delayed 570 seconds by postgrey-1.27 at vger.kernel.org; Fri, 12 Mar 2021 02:46:00 EST
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 7B2DF8036B
+        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 16:36:27 +0900 (JST)
+Received: by mail-pg1-f199.google.com with SMTP id c30so12794686pgl.15
+        for <linux-media@vger.kernel.org>; Thu, 11 Mar 2021 23:36:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ni/mHNWDgJgCkV2Qov8K8m4Vof33qd0Q1DF+vfmUdJw=;
+        b=f4r6huINRfGV54BAr7h/1seCdhnJL+GZTnDou7jTnytKnv04BYt3o5xBJRN7x8q3Zu
+         vO8nfQqRI8uaqgTZyek8YNnz6lGK0kPpZvqs5Nd/K3zARC4PtAVKDniC0x3gRByB3+uG
+         T/Le65EnWhYr3LalryHgAjtNicwDvk97DdFS91RHFtrUn0tILv8ZGCwdB00/mRMrhHsX
+         HzSsQw5R0G2o/Cz9VYK2sQN/0kEjIu0aSckUUcRrClP9PeWRJsKbUER0euB6rAhvi6G7
+         0djKQc6AYkYMhK1z6Kz/qOvUEPvTpayihfk5kD+98VB2YUcgSEZZmsXwH0kWV3nfByBa
+         7Tdw==
+X-Gm-Message-State: AOAM5321jVW5b2G9TfVyRtcMaj9K4HYEU8pEQFhMJz1bp4atEPsumcz6
+        LhFij9jqUgQ1Z2TxSjG2BWuS5M+CbNyZ17IEqGb7BxZf7dZbY/PrFcpsFFRLMybti+Vj0GNi72F
+        eHS/iuYOTeM/RvlQOf0mVeGmeFsY=
+X-Received: by 2002:a63:5924:: with SMTP id n36mr10949130pgb.183.1615534586545;
+        Thu, 11 Mar 2021 23:36:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPIbKeb6psvpJsnHpQF8t4zkciEeez16xtGwuvrFudffyi1swnWFKsq/aprlUbvp4R5h1Ymg==
+X-Received: by 2002:a63:5924:: with SMTP id n36mr10949118pgb.183.1615534586316;
+        Thu, 11 Mar 2021 23:36:26 -0800 (PST)
+Received: from pc-0115 (35.112.198.104.bc.googleusercontent.com. [104.198.112.35])
+        by smtp.gmail.com with ESMTPSA id e131sm4680920pfh.176.2021.03.11.23.36.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Mar 2021 23:36:25 -0800 (PST)
+Received: from martinet by pc-0115 with local (Exim 4.94)
+        (envelope-from <martinet@pc-0115>)
+        id 1lKcLQ-0010Se-An; Fri, 12 Mar 2021 16:36:24 +0900
+Date:   Fri, 12 Mar 2021 16:36:14 +0900
+From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>, <yong.wu@mediatek.com>
-CC:     Irui Wang <irui.wang@mediatek.com>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <linux-mediatek@lists.infradead.org>
-Subject: [v3,PATCH 2/3] arm64: dts: mt8173: Separating mtk-vcodec-enc device node
-Date:   Fri, 12 Mar 2021 15:35:39 +0800
-Message-ID: <20210312073540.4922-2-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210312073540.4922-1-irui.wang@mediatek.com>
-References: <20210312073540.4922-1-irui.wang@mediatek.com>
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
+Message-ID: <YEsZ7qnSRv0EkJGG@atmark-techno.com>
+References: <20200917022547.198090-1-linux@roeck-us.net>
+ <20200917124714.GD3969@pendragon.ideasonboard.com>
+ <990652f1-b6e4-211c-7a96-8c3fc3ea6efd@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <990652f1-b6e4-211c-7a96-8c3fc3ea6efd@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are two separate hardware encoder blocks inside MT8173.
-Split the current mtk-vcodec-enc node to match the hardware architecture.
+Hi,
 
-Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8173.dtsi | 60 ++++++++++++------------
- 1 file changed, 31 insertions(+), 29 deletions(-)
+Guenter Roeck wrote on Thu, Sep 17, 2020 at 07:16:17PM -0700:
+> On 9/17/20 5:47 AM, Laurent Pinchart wrote:
+> > On Wed, Sep 16, 2020 at 07:25:42PM -0700, Guenter Roeck wrote:
+> >> Something seems to have gone wrong with v3 of this patch series.
+> >> I am sure I sent it out, but I don't find it anywhere.
+> >> Resending. Sorry for any duplicates.
+> > 
+> > I haven't checked the mailing list, but I've found it in my inbox :-)
+> > I'm not forgetting about you, just been fairly busy recently. I still
+> > plan to try and provide an alternative implementation in the V4L2 core
+> > (in a form that I think should even be moved to the cdev core) that
+> > would fix this for all drivers.
+> > 
+> Thanks for letting me know. As it turns out, this problem is responsible
+> for about 2% of all Chromebook crashes, so I'll probably not wait for
+> the series to be accepted upstream but apply it as-is to the various
+> ChromeOS kernel branches.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index 7fa870e4386a..f5950e9fc51d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -1458,14 +1458,11 @@
- 			clock-names = "apb", "smi";
- 		};
- 
--		vcodec_enc: vcodec@18002000 {
-+		vcodec_enc_avc: vcodec@18002000 {
- 			compatible = "mediatek,mt8173-vcodec-enc";
--			reg = <0 0x18002000 0 0x1000>,	/* VENC_SYS */
--			      <0 0x19002000 0 0x1000>;	/* VENC_LT_SYS */
--			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>,
--				     <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larb = <&larb3>,
--					<&larb5>;
-+			reg = <0 0x18002000 0 0x1000>;	/* VENC_SYS */
-+			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>;
-+			mediatek,larb = <&larb3>;
- 			iommus = <&iommu M4U_PORT_VENC_RCPU>,
- 				 <&iommu M4U_PORT_VENC_REC>,
- 				 <&iommu M4U_PORT_VENC_BSDMA>,
-@@ -1476,29 +1473,12 @@
- 				 <&iommu M4U_PORT_VENC_REF_LUMA>,
- 				 <&iommu M4U_PORT_VENC_REF_CHROMA>,
- 				 <&iommu M4U_PORT_VENC_NBM_RDMA>,
--				 <&iommu M4U_PORT_VENC_NBM_WDMA>,
--				 <&iommu M4U_PORT_VENC_RCPU_SET2>,
--				 <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
--				 <&iommu M4U_PORT_VENC_BSDMA_SET2>,
--				 <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
--				 <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
--				 <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
--				 <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
--				 <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
--				 <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
-+				 <&iommu M4U_PORT_VENC_NBM_WDMA>;
- 			mediatek,vpu = <&vpu>;
--			clocks = <&topckgen CLK_TOP_VENCPLL_D2>,
--				 <&topckgen CLK_TOP_VENC_SEL>,
--				 <&topckgen CLK_TOP_UNIVPLL1_D2>,
--				 <&topckgen CLK_TOP_VENC_LT_SEL>;
--			clock-names = "venc_sel_src",
--				      "venc_sel",
--				      "venc_lt_sel_src",
--				      "venc_lt_sel";
--			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>,
--					  <&topckgen CLK_TOP_VENC_LT_SEL>;
--			assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>,
--						 <&topckgen CLK_TOP_VCODECPLL_370P5>;
-+			clocks = <&topckgen CLK_TOP_VENC_SEL>;
-+			clock-names = "venc_sel";
-+			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
- 		};
- 
- 		jpegdec: jpegdec@18004000 {
-@@ -1530,5 +1510,27 @@
- 				 <&vencltsys CLK_VENCLT_CKE0>;
- 			clock-names = "apb", "smi";
- 		};
-+
-+		vcodec_enc_vp8: vcodec@19002000 {
-+			compatible = "mediatek,mt8173-vcodec-enc-vp8";
-+			reg =  <0 0x19002000 0 0x1000>; /* VENC_LT_SYS */
-+			interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
-+			iommus = <&iommu M4U_PORT_VENC_RCPU_SET2>,
-+				 <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
-+				 <&iommu M4U_PORT_VENC_BSDMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
-+				 <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
-+			mediatek,larb = <&larb5>;
-+			mediatek,vpu = <&vpu>;
-+			clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-+			clock-names = "venc_lt_sel";
-+			assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-+			assigned-clock-parents =
-+				 <&topckgen CLK_TOP_VCODECPLL_370P5>;
-+		};
- 	};
- };
+We have a customer who reported the same issue recently, has there been
+any development?
+
+I don't see anything in either uvc nor v4l2 that would address the race
+since this mail half a year ago (well, I could have missed it ;))
+
+
+If nothing happened I'll probably backport this series as well, at which
+point it might make more sense to take it in until a better fix gets
+here then revert it...
+
+
+Thanks!
 -- 
-2.18.0
-
+Dominique
