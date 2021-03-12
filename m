@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE6F6C28E87
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0521AC4151A
+	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D889964FD9
+	by mail.kernel.org (Postfix) with ESMTP id E8AE564FF5
 	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 17:30:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbhCLRaB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Mar 2021 12:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S232904AbhCLRaD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Mar 2021 12:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbhCLR3e (ORCPT
+        with ESMTP id S232867AbhCLR3i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Mar 2021 12:29:34 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1CDC061761
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id k8so2201159wrc.3
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:34 -0800 (PST)
+        Fri, 12 Mar 2021 12:29:38 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B67C061574
+        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:37 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id u5-20020a7bcb050000b029010e9316b9d5so12671267wmj.2
+        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 09:29:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=H+VWOzX67+CEjyIdRpA0ujBUTlfl5OrO0AA2YdHipuU=;
-        b=mM19z4gyGVmoJQgOPOL3LtyrsrXFCUog79ECvDECuO0J6xLzCKAXkq8EgKxyMuQhan
-         vSAgum4M7EH46L90EAHiQ3eTUUbbukcXHP5Gzn7LXTJRoosRY6lGLDs5uq+nry2SCNCU
-         UE+LiyStqY+wYXjAIMQFlLXS70tQ9DFxb1GJO+y+eCQWPsL04UWfmadRGtmnQ2BzWngi
-         P7uJfIQiYXuTakuwkZ90Sy3jePAYFCD1SMMBDahKzBhzdwz51pNfaGSuQZA7Zi2d5E1K
-         4FGss8rpli7Kff+mV8xKUR09uN2uC7U4E5PVVR3n+yoa30q418smgdIQSJJiNLKzvYt5
-         i5Rg==
+        bh=ougCNlrbgb2ZXt+39o0iaCSMx7oFooc901KKp5lUaLE=;
+        b=c0Y5NkwJz7kyCDJwHHk0VCXWQlUkjJWdjFsk8owQiLrZOoiQYwu5c97yyJzRe0PlAN
+         nWF5vO7X7Aq1oo6uo1JpI8SfUXbMsWvbmurH/40oReBvsIj1YWlmlM2njkXwZ5WRzHtS
+         VAMDKGHVEE/W2iyVHbW6VfentILYj+hxt8hcWgzacsJvx97GyBblW8Fm829ZARRyox84
+         EZTFHZu1Ftu1Rym4O+bj7OpcDv1w5fYWV6yFK8p15j52opCQs+DPpnS1qFs0Ac+X8I9Y
+         2o0DWfoarO4qxXFbw6JVSrDLIF5kIdzrZB3uRr6mah79YV9SKuczXegC2s4PMFvnkFr1
+         w0ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=H+VWOzX67+CEjyIdRpA0ujBUTlfl5OrO0AA2YdHipuU=;
-        b=cmAmRChGIPAOqdRPzSOJyuRJNDZwJCfBtZZEdDS8esrImS1yh2TcJo6ZGeWZKXBepP
-         AtuxDLmnUyIaZ5dgcpEOmOuUGi0Y97fTzEZRrb0g/T8KRkQoEc8Pfz55h+4eSCIK06d5
-         YtaFwf9ebOM49DZRg0iG5uQKQs9bugQ7FFRuU4X7yQNO/Gb62QLvaRT48ZyZVmYfLsjp
-         Bis/J1NLFsPXuCyx/xSKOVhlxq61N5U49pqn2hCChGUTy2G2bOWTrKsNc7n9/Olbs5sX
-         nivYGMsjxkFDaZ3FyUoEpKeGJKJQrOIcJMQiXn45lN/FUxJt8n6yWcowU9BptbRisezx
-         khJg==
-X-Gm-Message-State: AOAM530Xf+eDJ2+gJlWwkhuArGbRIixo+52gbeb+v+D0VhNGpJWdXJC/
-        HelVNFbw17CiU9ykNvJrMKoshQ==
-X-Google-Smtp-Source: ABdhPJzyxsGnagBqaGVi977ydCKKdQ5pYkOAhhVCPN6AVDRqnye6KZL9A9IuwhDKwD/0WaimS2pzWA==
-X-Received: by 2002:a5d:65cd:: with SMTP id e13mr15369274wrw.334.1615570172914;
-        Fri, 12 Mar 2021 09:29:32 -0800 (PST)
+        bh=ougCNlrbgb2ZXt+39o0iaCSMx7oFooc901KKp5lUaLE=;
+        b=ZcdqIm40xWqqIWODuCYWjFSG5mXzu05ph8gTPUmlNhy7WCOtYbD44Ah/UbDC3t5enL
+         WkmqbkziclXI4xD5RIrQilaho5rR84q7sNxd/GiH+Gi5LOE/7aJqYnJV/QxBtEYyvOzB
+         QeDxmdl+6K142VuAtWgK/GiE0CfoInwo7gBL96ICthB2i9Uq24XSSqlF3mwUc4M2MYWc
+         vTK2xFo+/piE0PZV0qfHWjFNpcGkX2cD3kewkmMVEz6x8XXSMDYjbeTlO/Yuf5g5U9eI
+         CNCHwCEJg5zDm5hE18d4kwazeLuZh1ahAyZTPEdDfPQqiEe86LKBOAX17uCQmDxy4PjY
+         t/ng==
+X-Gm-Message-State: AOAM531dsXVp0dcINPyttBVFZyujs6KgOHo3KmDt+rQa6Lr3xHIJ2o5F
+        uuTNOWvfATFlEDThbDNgPGsgrQ==
+X-Google-Smtp-Source: ABdhPJwzRBW1snNLri8JYrWLmFJFoORT0KxsMxWIa8vQLvNhvSCkSP/7ag4R126+OyAv23dwBrL20A==
+X-Received: by 2002:a1c:7d4e:: with SMTP id y75mr14209387wmc.168.1615570176757;
+        Fri, 12 Mar 2021 09:29:36 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 18sm2876375wmj.21.2021.03.12.09.29.32
+        by smtp.gmail.com with ESMTPSA id 18sm2876375wmj.21.2021.03.12.09.29.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 09:29:32 -0800 (PST)
+        Fri, 12 Mar 2021 09:29:36 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
         jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH v2 21/25] media: venus: helpers: Add internal buffer list for v6
-Date:   Fri, 12 Mar 2021 17:30:35 +0000
-Message-Id: <20210312173039.1387617-22-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 25/25] media: venus: vdec: Fix decoder cmd STOP issue
+Date:   Fri, 12 Mar 2021 17:30:39 +0000
+Message-Id: <20210312173039.1387617-26-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210312173039.1387617-1-bryan.odonoghue@linaro.org>
 References: <20210312173039.1387617-1-bryan.odonoghue@linaro.org>
@@ -74,71 +74,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <dikshita@codeaurora.org>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-- Internal buffers required by v6 are different than v4,
-  add new list of internal buffers for v6.
-- Differentiate encoder/decoder buffers for 6xx
+Fixes an issue when issuing a stop command to the controller, negating the
+following firmware error.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+"SFR message from FW: Exception: TID = Unknown IP = 0x3b7dc FA = 0x0
+ cause = 0x6"
+
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c    | 13 ++++++++++++-
- drivers/media/platform/qcom/venus/hfi_helper.h |  9 ++++++---
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
+ drivers/media/platform/qcom/venus/vdec.c     | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 2515a2225614..8b08632b0296 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -279,13 +279,24 @@ static const unsigned int intbuf_types_4xx[] = {
- 	HFI_BUFFER_INTERNAL_PERSIST_1,
- };
- 
-+static const unsigned int intbuf_types_6xx[] = {
-+	HFI_BUFFER_INTERNAL_SCRATCH(HFI_VERSION_6XX),
-+	HFI_BUFFER_INTERNAL_SCRATCH_1(HFI_VERSION_6XX),
-+	HFI_BUFFER_INTERNAL_SCRATCH_2(HFI_VERSION_6XX),
-+	HFI_BUFFER_INTERNAL_PERSIST,
-+	HFI_BUFFER_INTERNAL_PERSIST_1,
-+};
-+
- int venus_helper_intbufs_alloc(struct venus_inst *inst)
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index 0bcd434e7876..fb64046d1e35 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -254,7 +254,7 @@ int pkt_session_unset_buffers(struct hfi_session_release_buffer_pkt *pkt,
+ int pkt_session_etb_decoder(struct hfi_session_empty_buffer_compressed_pkt *pkt,
+ 			    void *cookie, struct hfi_frame_data *in_frame)
  {
- 	const unsigned int *intbuf;
- 	size_t arr_sz, i;
- 	int ret;
+-	if (!cookie || !in_frame->device_addr)
++	if (!cookie)
+ 		return -EINVAL;
  
--	if (IS_V4(inst->core)) {
-+	if (IS_V6(inst->core)) {
-+		arr_sz = ARRAY_SIZE(intbuf_types_6xx);
-+		intbuf = intbuf_types_6xx;
-+	} else if (IS_V4(inst->core)) {
- 		arr_sz = ARRAY_SIZE(intbuf_types_4xx);
- 		intbuf = intbuf_types_4xx;
- 	} else {
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index 6b524c7cde5f..f367f43c9fb7 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -395,11 +395,14 @@
- #define HFI_BUFFER_INTERNAL_PERSIST		0x4
- #define HFI_BUFFER_INTERNAL_PERSIST_1		0x5
- #define HFI_BUFFER_INTERNAL_SCRATCH(ver)	\
--	(((ver) == HFI_VERSION_4XX) ? 0x6 : 0x1000001)
-+	(((ver) == HFI_VERSION_4XX ||		\
-+	(ver) == HFI_VERSION_6XX) ? 0x6 : 0x1000001)
- #define HFI_BUFFER_INTERNAL_SCRATCH_1(ver)	\
--	(((ver) == HFI_VERSION_4XX) ? 0x7 : 0x1000005)
-+	(((ver) == HFI_VERSION_4XX ||		\
-+	(ver) == HFI_VERSION_6XX) ? 0x7 : 0x1000005)
- #define HFI_BUFFER_INTERNAL_SCRATCH_2(ver)	\
--	(((ver) == HFI_VERSION_4XX) ? 0x8 : 0x1000006)
-+	(((ver) == HFI_VERSION_4XX ||		\
-+	(ver) == HFI_VERSION_6XX) ? 0x8 : 0x1000006)
- #define HFI_BUFFER_EXTRADATA_INPUT(ver)		\
- 	(((ver) == HFI_VERSION_4XX) ? 0xc : 0x1000002)
- #define HFI_BUFFER_EXTRADATA_OUTPUT(ver)	\
+ 	pkt->shdr.hdr.size = sizeof(*pkt);
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 0fe4863371e2..04f457cbf631 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -515,7 +515,10 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+ 
+ 		fdata.buffer_type = HFI_BUFFER_INPUT;
+ 		fdata.flags |= HFI_BUFFERFLAG_EOS;
+-		fdata.device_addr = 0xdeadb000;
++		if (IS_V6(inst->core))
++			fdata.device_addr = 0;
++		else
++			fdata.device_addr = 0xdeadb000;
+ 
+ 		ret = hfi_session_process_buf(inst, &fdata);
+ 
 -- 
 2.30.1
 
