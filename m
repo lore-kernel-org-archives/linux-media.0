@@ -2,310 +2,202 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A874EC433DB
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D7B9C433E6
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:58:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 826726023B
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:03:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A13864EE5
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbhCMVDQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Mar 2021 16:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbhCMVDG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Mar 2021 16:03:06 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47352C061574;
-        Sat, 13 Mar 2021 13:03:06 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id v14so11165089pgq.2;
-        Sat, 13 Mar 2021 13:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mruL969bTEYw5xPnPEYmD8m2voUctfbse3Wear1t0ag=;
-        b=h/2BZuqI6IqnWqf0z6fzYRxRySS42dsOxQ5lJFtQ4DJlvOpjFHHPr9OkcF//VXUPB/
-         ltRCgI9QSUAU22gf9XPmAZzyzof1eK19GJbgU5XLnNbhyWNphgDopecPIrS8uAKg2AA4
-         7v76h64ubNzhP3WNJKkbP2NTceCsEJ18rSdUQlBOyYSc6IjDOipNSYuMVnU9S14nQ6+V
-         9Vo/A2Y/HzckuuRMFEif0ltwC1OwG88r+1uaOcwWqswiW0JgQjplSZdicaY87LImiZ5c
-         ZlUgzLXUpmI35vrj2h9o9v9VtFeYFR7ovQqnQJol/l1Ozu6EJ3/Sy38RfuoWIJUrLyhJ
-         2/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mruL969bTEYw5xPnPEYmD8m2voUctfbse3Wear1t0ag=;
-        b=gm9p2lMoonMprpyHV0yYPERZf9f02kWR4tXAPMvH7X98bQrMXOCqEaGC2ymk/fDIM2
-         9eVLVX7l5w6fIY99RBH9zGI5LUdhJcd1jvh0RhinHZoY0dQryYlraYXWgNwUilyXycOz
-         XrUdYp29ptKHxPpBgOGFFzEIyFkWFUz5KV//5rVbREPR8pBXgZDb4X7EwsOPcZa3J6lN
-         uiawc5bRmpP9mvDpgIGRTOa/Tg9ic9Z9CIKND0e5cJw2IklOFhlqxThWbVsOxAUbnbxr
-         prRP8MqUIdyYnf2g1W2G4ZhJ44TA3AkdkZ/w6DIkoBmsuTEqvRrUr3IKgsJAo7u8BuUX
-         M8kQ==
-X-Gm-Message-State: AOAM531b754MAJvOF/4x/amNkcRg645HEJLPrGNBQHcLtQs7NbaZRIrU
-        yXNttX43oACJNEs3IOBF42G1uUn9iN+/uN26OvY=
-X-Google-Smtp-Source: ABdhPJzf+Ui9vnm7QFydgJaI4mW/ZW3bip6wM88P4fHWeRrT75Q2D6ZmHAqPb9JIvtpS1ZCW+ODJCmbZJ8sNufk87cc=
-X-Received: by 2002:aa7:8001:0:b029:1ee:6e01:f54 with SMTP id
- j1-20020aa780010000b02901ee6e010f54mr4069855pfi.48.1615669385250; Sat, 13 Mar
- 2021 13:03:05 -0800 (PST)
+        id S234794AbhCMV6L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 16:58:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234182AbhCMV5t (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 13 Mar 2021 16:57:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 919DF64DE1;
+        Sat, 13 Mar 2021 21:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615672668;
+        bh=ibgxwZyW7rbp39bHV36ZaJ/Ipg69CnJHlj1o0MvjNjc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jDUWhyX0MJVWi+H7CSxvDWFptcdVNuvMCTKwYp/ka/auZZp7f+ZmSIu6GyPKqSgHp
+         tywbwRmQHdkihvj5Kyk/gbg5uCeIYV65F+CE9rmOH7aR9hKgQJgiXJKjTeF9pczV+i
+         iUd/wCq6xo/9rXPWaYYQf6yRHa3kO8eoLiiNZpsqGfxKTAL09MNKRVf1/g3eXcYPGi
+         xrWIyS8WK3ysdewU0arcPWlrR4M+ajkrTGCW6QpuW0CWUIdr9GVNRORGiWKQ8hanPn
+         MFh2OLscEoozgVjruQhP+ntpJFqG7QHc0cvPb4pr1baLzb3YZXS9V/iO9dwwCpS5PW
+         j3ZB9Xr+JVsHw==
+Date:   Sat, 13 Mar 2021 15:57:47 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-samsung-soc@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pci@vger.kernel.org,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-mm@kvack.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Oliver O'Halloran <oohall@gmail.com>
+Subject: Re: [PATCH 2/2] PCI: Revoke mappings like devmem
+Message-ID: <20210313215747.GA2394467@bjorn-Precision-5520>
 MIME-Version: 1.0
-References: <CAHCN7xJUnMP-uA03a5x4djp4_RPbiMnSWXMdconpAxV7pwgTGw@mail.gmail.com>
- <YEuAGoeoi0X0KwfH@oden.dyn.berto.se> <CAHCN7xLNO5wFHxEJ8Qcdw57M=d25bi-uCcuV1rdMSheh3jvE3g@mail.gmail.com>
- <YE0Vs0I6i5R5ngZ4@oden.dyn.berto.se>
-In-Reply-To: <YE0Vs0I6i5R5ngZ4@oden.dyn.berto.se>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 13 Mar 2021 15:02:54 -0600
-Message-ID: <CAHCN7x+Fk3qNk_ntWLYyQywpP02M1r9US8AR6pSw-cxJZbwraw@mail.gmail.com>
-Subject: Re: Renesas RZ/G2M + Sony IMX290 Camera questions/issues
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>, mani@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210204165831.2703772-3-daniel.vetter@ffwll.ch>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Mar 13, 2021 at 1:42 PM Niklas S=C3=B6derlund
-<niklas.soderlund@ragnatech.se> wrote:
->
-> Hi Adam,
->
-> Thanks for reporting your results.
->
-> On 2021-03-13 11:47:16 -0600, Adam Ford wrote:
-> > On Fri, Mar 12, 2021 at 8:52 AM Niklas S=C3=B6derlund
-> > <niklas.soderlund@ragnatech.se> wrote:
-> > >
-> > > Hi Adam,
-> > >
-> > > There are many possibility's that result in an -EPIPE when validating
-> > > formats and unfortunately V4L2 is not always as very helpfull when
-> > > diagnosing the problem. What I usually do is to,
-> > >
-> > > 1. Inspect rvin_mc_validate_format() in
-> > >    drivers/media/platform/rcar-vin/rcar-dma.c
-> > >
-> > >    This will give you a clear view of how the format between the CSI-=
-2
-> > >    and VIN is validated.
-> > >
-> > > 2. Increase the log level for drivers/media/v4l2-core/v4l2-subdev.c
-> > >    specially for v4l2_subdev_link_validate_default().
-> > >
-> > >    This will give you insight into all formats from the CSI-2 receive=
-r
-> > >    towards the camera.
-> > >
-> > > By doing these two things you will see in the system log which part o=
-f
-> > > the format validation that is missmatched.
-> >
-> > Thanks for the suggestion.  It turns out the camera sensor is not
-> > capable of UYVY, and the RZ/G2M doesn't appear to support RAW10 or
-> > RAW12 over CSI2.
->
-> If I *tried* to create patches to add support for RAW10 would you be
-> able to test them? I have no video source to test RAW formats with so
-> maybe we can solve this together.
+[+cc Krzysztof, Pali, Oliver]
 
-I would love to test them, but looking at the datasheet for the RZ/G2
-N/M/H, it doesn't appear as if RAW10 supported at all, and RAW12 looks
-like it may only be supported over digital pins and not CSI2.  If you
-have thoughts, I'm willing to discuss it and try.
+On Thu, Feb 04, 2021 at 05:58:31PM +0100, Daniel Vetter wrote:
+> Since 3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims
+> the region") /dev/kmem zaps ptes when the kernel requests exclusive
+> acccess to an iomem region. And with CONFIG_IO_STRICT_DEVMEM, this is
+> the default for all driver uses.
+> 
+> Except there's two more ways to access PCI BARs: sysfs and proc mmap
+> support. Let's plug that hole.
 
-adam
+IIUC, the idea is that if a driver calls request_mem_region() on a PCI
+BAR, we prevent access to the BAR via sysfs.  I guess I'm OK with that
+if it's a real security improvement or something.
 
->
-> >
-> > adam
-> >
-> > >
-> > > There is also a wiki page for capture using R-Car VIN that may be
-> > > helpful for you.
-> > >
-> > >     https://elinux.org/R-Car/Tests:rcar-vin
-> > >
-> > > On 2021-03-12 08:28:41 -0600, Adam Ford wrote:
-> > > > I have an IMX290 camera connected to an RZ/G2M SoC via the 4-channe=
-l CSI.
-> > > >
-> > > > &csi40 {
-> > > >     status =3D "okay";
-> > > >
-> > > >     ports {
-> > > >         port@0 {
-> > > >             reg =3D <0>;
-> > > >             csi40_in: endpoint {
-> > > >                 clock-lanes =3D <0>;
-> > > >                 data-lanes =3D <1 2 3 4>;
-> > > >                 remote-endpoint =3D <&imx290_ep>;
-> > > >             };
-> > > >         };
-> > > >     };
-> > > > };
-> > > >
-> > > > On the I2C bus, I have
-> > > >
-> > > > imx290: camera-sensor@1a {
-> > > >     compatible =3D "sony,imx290";
-> > > >     reg =3D <0x1a>;
-> > > >     reset-gpios =3D <&gpio_exp2 0 GPIO_ACTIVE_LOW>;
-> > > >     clocks =3D <&versaclock6_bb 1>;
-> > > >     clock-names =3D "xclk";
-> > > >     clock-frequency =3D <37125000>;
-> > > >     vdddo-supply =3D <&reg_cam0_en0>;
-> > > >     vdda-supply =3D <&reg_cam0_en1>;
-> > > >     vddd-supply =3D <&reg_cam0_en0>;
-> > > >
-> > > >     port {
-> > > >         imx290_ep: endpoint {
-> > > >             data-lanes =3D <1 2 3 4>;
-> > > >             link-frequencies =3D /bits/ 64 <148500000 222750000>;
-> > > >             remote-endpoint =3D <&csi40_in>;
-> > > >         };
-> > > >     };
-> > > > };
-> > > >
-> > > > I configure the pipeline with:
-> > > >
-> > > > media-ctl -l "'rcar_csi2 feaa0000.csi2':1 -> 'VIN0 output':0[1]"
-> > > >
-> > > > I also have tried configuring the video formats in several differen=
-t ways
-> > > >
-> > > > media-ctl --set-v4l2 "'imx290 2-001a':0[fmt:SRGGB12_1X12/1920x1080 =
-field:none]"
-> > > > media-ctl --set-v4l2 "'rcar_csi2
-> > > > feaa0000.csi2':0[fmt:SRGGB12_1X12/1920x1080 field:none]"
-> > > > media-ctl --set-v4l2 "'rcar_csi2
-> > > > feaa0000.csi2':1[fmt:SRGGB12_1X12/1920x1080 field:none]"
-> > > >
-> > > > or
-> > > >
-> > > > media-ctl --set-v4l2 "'rcar_csi2
-> > > > feaa0000.csi2':0[fmt:UYVY8_2X8/1920x1080 field:none]"
-> > > > media-ctl --set-v4l2 "'rcar_csi2
-> > > > feaa0000.csi2':1[fmt:UYVY8_2X8/1920x1080 field:none]"
-> > > > media-ctl --set-v4l2 "'imx290 2-001a':0[fmt:UYVY8_2X8/1920x1080 fie=
-ld:non
-> > > >
-> > > > but no matter what I do when I attempt to stream, I get a broken pi=
-pe,
-> > > > even when I use fakesink as the target.
-> > > >
-> > > > root@beacon-rzg2h:~# GST_DEBUG=3D2 gst-launch-1.0 -v v4l2src
-> > > > device=3D/dev/video1 ! video/x-raw,width=3D1920,height=3D1080 ! fak=
-esink
-> > > > Setting pipeline to PAUSED ...
-> > > > Pipeline is live and does not need PREROLL ...
-> > > > Setting pipeline to PLAYING ...
-> > > > New clock: GstSystemClock
-> > > > 0:00:03.727500390   501     0x10efd4f0 ERROR                v4l2src
-> > > > gstv4l2src.c:337:gst_v4l2src_get_input_size_info:<v4l2src0> Cropcap
-> > > > fail, CROPCAP has not supported
-> > > > /GstPipeline:pipeline0/GstV4l2Src:v4l2src0.GstPad:src: caps =3D
-> > > > video/x-raw, width=3D(int)1920, height=3D(int)1080, format=3D(strin=
-g)YUY2,
-> > > > framerate=3D(fraction)100/1, interlace-mode=3D(s1
-> > > > /GstPipeline:pipeline0/GstCapsFilter:capsfilter0.GstPad:src: caps =
-=3D
-> > > > video/x-raw, width=3D(int)1920, height=3D(int)1080, format=3D(strin=
-g)YUY2,
-> > > > framerate=3D(fraction)100/1, interlace-m1
-> > > > /GstPipeline:pipeline0/GstFakeSink:fakesink0.GstPad:sink: caps =3D
-> > > > video/x-raw, width=3D(int)1920, height=3D(int)1080, format=3D(strin=
-g)YUY2,
-> > > > framerate=3D(fraction)100/1, interlace-mode1
-> > > > /GstPipeline:pipeline0/GstCapsFilter:capsfilter0.GstPad:sink: caps =
-=3D
-> > > > video/x-raw, width=3D(int)1920, height=3D(int)1080, format=3D(strin=
-g)YUY2,
-> > > > framerate=3D(fraction)100/1, interlace-1
-> > > > 0:00:03.737388309   501     0x10efd4f0 WARN          v4l2bufferpool
-> > > > gstv4l2bufferpool.c:870:gst_v4l2_buffer_pool_start:<v4l2src0:pool:s=
-rc>
-> > > > Uncertain or not enough buffers, enad
-> > > > 0:00:03.740266641   501     0x10efd4f0 ERROR         v4l2bufferpool
-> > > > gstv4l2bufferpool.c:757:gst_v4l2_buffer_pool_streamon:<v4l2src0:poo=
-l:src>
-> > > > error with STREAMON 32 (Broken pi)
-> > > > 0:00:03.740474842   501     0x10efd4f0 WARN          v4l2bufferpool
-> > > > gstv4l2bufferpool.c:1188:gst_v4l2_buffer_pool_poll:<v4l2src0> error=
-:
-> > > > poll error 1: Broken pipe (32)
-> > > > 0:00:03.740693123   501     0x10efd4f0 WARN                 v4l2src
-> > > > gstv4l2src.c:1020:gst_v4l2src_create:<v4l2src0> error: Failed to
-> > > > allocate a buffer
-> > > > 0:00:03.740791643   501     0x10efd4f0 WARN                 basesrc
-> > > > gstbasesrc.c:2939:gst_base_src_loop:<v4l2src0> error: Internal data
-> > > > stream error.
-> > > > 0:00:03.740822843   501     0x10efd4f0 WARN                 basesrc
-> > > > gstbasesrc.c:2939:gst_base_src_loop:<v4l2src0> error: streaming
-> > > > stopped, reason error (-5)
-> > > > ERROR: from element /GstPipeline:pipeline0/GstV4l2Src:v4l2src0: Cou=
-ld
-> > > > not read from resource.
-> > > > Additional debug info:
-> > > > ../../../git/sys/v4l2/gstv4l2bufferpool.c(1188):
-> > > > gst_v4l2_buffer_pool_poll ():
-> > > > /GstPipeline:pipeline0/GstV4l2Src:v4l2src0:
-> > > > poll error 1: Broken pipe (32)
-> > > > Execution ended after 0:00:00.013644415
-> > > > Setting pipeline to PAUSED ...
-> > > > Setting pipeline to READY ...
-> > > > 0:00:03.741392965   501     0x10ec96c0 WARN          v4l2bufferpool
-> > > > gstv4l2bufferpool.c:1042:gst_v4l2_buffer_pool_stop:<v4l2src0:pool:s=
-rc>
-> > > > some buffers are still outstanding
-> > > > 0:00:03.741428005   501     0x10ec96c0 WARN              bufferpool
-> > > > gstbufferpool.c:567:gst_buffer_pool_set_active:<v4l2src0:pool:src>
-> > > > stop failed
-> > > > 0:00:03.743868095   501     0x10ec96c0 ERROR         v4l2bufferpool
-> > > > gstv4l2bufferpool.c:757:gst_v4l2_buffer_pool_streamon:<v4l2src0:poo=
-l:src>
-> > > > error with STREAMON 32 (Broken pi)
-> > > > 0:00:03.744090576   501     0x10ec96c0 WARN          v4l2bufferpool
-> > > > gstv4l2bufferpool.c:1042:gst_v4l2_buffer_pool_stop:<v4l2src0:pool:s=
-rc>
-> > > > some buffers are still outstanding
-> > > > 0:00:03.744123936   501     0x10ec96c0 WARN              bufferpool
-> > > > gstbufferpool.c:567:gst_buffer_pool_set_active:<v4l2src0:pool:src>
-> > > > stop failed
-> > > > 0:00:03.744152376   501     0x10ec96c0 WARN          v4l2bufferpool
-> > > > gstv4l2bufferpool.c:1042:gst_v4l2_buffer_pool_stop:<v4l2src0:pool:s=
-rc>
-> > > > some buffers are still outstanding
-> > > > 0:00:03.744178296   501     0x10ec96c0 WARN              bufferpool
-> > > > gstbufferpool.c:567:gst_buffer_pool_set_active:<v4l2src0:pool:src>
-> > > > stop failed
-> > > > Setting pipeline to NULL ...
-> > > > Total time: 0.013650 seconds
-> > > > Freeing pipeline ...
-> > > >
-> > > >
-> > > > I was hoping someone might have a suggestion as to what I might be =
-missing.
-> > > > Ideally, I'd like to get two IMX290 cameras operational with one in
-> > > > 4-lane mode and one in 2-lane mode.
-> > > >
-> > > > Might anyone have any suggestions?  According to the media-ctl
-> > > > --print-dot, the pipeline appears correct, but there is clearly
-> > > > something I am missing.
-> > > >
-> > > > thanks for any suggestions,
-> > > >
-> > > > adam
-> > >
-> > > --
-> > > Regards,
-> > > Niklas S=C3=B6derlund
->
-> --
-> Regards,
-> Niklas S=C3=B6derlund
+But the downside of this implementation is that it depends on
+iomem_get_mapping(), which doesn't work until after fs_initcalls,
+which means the sysfs files cannot be static attributes of devices
+added before that.  PCI devices are typically enumerated in
+subsys_initcall.
+
+Krzysztof is converting PCI sysfs files (config, rom, reset, vpd, etc)
+to static attributes.  This is a major improvement that could get rid
+of pci_create_sysfs_dev_files(), the late_initcall pci_sysfs_init(),
+and the "sysfs_initialized" hack.  This would fix a race reported by
+Pali [1] (thanks to Oliver for the idea [2]).
+
+EXCEPT that this revoke change means the "resource%d", "legacy_io",
+and "legacy_mem" files cannot be static attributes because of
+iomem_get_mapping().
+
+Any ideas on how to deal with this?  Having to keep the
+pci_sysfs_init() initcall just for these few files seems like the tail
+wagging the dog.
+
+[1] https://lore.kernel.org/r/20200716110423.xtfyb3n6tn5ixedh@pali
+[2] https://lore.kernel.org/r/CAOSf1CHss03DBSDO4PmTtMp0tCEu5kScn704ZEwLKGXQzBfqaA@mail.gmail.com
+
+> For revoke_devmem() to work we need to link our vma into the same
+> address_space, with consistent vma->vm_pgoff. ->pgoff is already
+> adjusted, because that's how (io_)remap_pfn_range works, but for the
+> mapping we need to adjust vma->vm_file->f_mapping. The cleanest way is
+> to adjust this at at ->open time:
+> 
+> - for sysfs this is easy, now that binary attributes support this. We
+>   just set bin_attr->mapping when mmap is supported
+> - for procfs it's a bit more tricky, since procfs pci access has only
+>   one file per device, and access to a specific resources first needs
+>   to be set up with some ioctl calls. But mmap is only supported for
+>   the same resources as sysfs exposes with mmap support, and otherwise
+>   rejected, so we can set the mapping unconditionally at open time
+>   without harm.
+> 
+> A special consideration is for arch_can_pci_mmap_io() - we need to
+> make sure that the ->f_mapping doesn't alias between ioport and iomem
+> space. There's only 2 ways in-tree to support mmap of ioports: generic
+> pci mmap (ARCH_GENERIC_PCI_MMAP_RESOURCE), and sparc as the single
+> architecture hand-rolling. Both approach support ioport mmap through a
+> special pfn range and not through magic pte attributes. Aliasing is
+> therefore not a problem.
+> 
+> The only difference in access checks left is that sysfs PCI mmap does
+> not check for CAP_RAWIO. I'm not really sure whether that should be
+> added or not.
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: Jérôme Glisse <jglisse@redhat.com>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: linux-pci@vger.kernel.org
+> ---
+>  drivers/pci/pci-sysfs.c | 4 ++++
+>  drivers/pci/proc.c      | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 0c45b4f7b214..f8afd54ca3e1 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -942,6 +942,7 @@ void pci_create_legacy_files(struct pci_bus *b)
+>  	b->legacy_io->read = pci_read_legacy_io;
+>  	b->legacy_io->write = pci_write_legacy_io;
+>  	b->legacy_io->mmap = pci_mmap_legacy_io;
+> +	b->legacy_io->mapping = iomem_get_mapping();
+>  	pci_adjust_legacy_attr(b, pci_mmap_io);
+>  	error = device_create_bin_file(&b->dev, b->legacy_io);
+>  	if (error)
+> @@ -954,6 +955,7 @@ void pci_create_legacy_files(struct pci_bus *b)
+>  	b->legacy_mem->size = 1024*1024;
+>  	b->legacy_mem->attr.mode = 0600;
+>  	b->legacy_mem->mmap = pci_mmap_legacy_mem;
+> +	b->legacy_io->mapping = iomem_get_mapping();
+>  	pci_adjust_legacy_attr(b, pci_mmap_mem);
+>  	error = device_create_bin_file(&b->dev, b->legacy_mem);
+>  	if (error)
+> @@ -1169,6 +1171,8 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
+>  			res_attr->mmap = pci_mmap_resource_uc;
+>  		}
+>  	}
+> +	if (res_attr->mmap)
+> +		res_attr->mapping = iomem_get_mapping();
+>  	res_attr->attr.name = res_attr_name;
+>  	res_attr->attr.mode = 0600;
+>  	res_attr->size = pci_resource_len(pdev, num);
+> diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
+> index 3a2f90beb4cb..9bab07302bbf 100644
+> --- a/drivers/pci/proc.c
+> +++ b/drivers/pci/proc.c
+> @@ -298,6 +298,7 @@ static int proc_bus_pci_open(struct inode *inode, struct file *file)
+>  	fpriv->write_combine = 0;
+>  
+>  	file->private_data = fpriv;
+> +	file->f_mapping = iomem_get_mapping();
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.30.0
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
