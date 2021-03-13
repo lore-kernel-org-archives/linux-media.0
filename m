@@ -2,50 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6256FC433E0
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 12:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36C45C433E6
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D09864EE3
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 12:52:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 066B964F26
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhCMMvw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Mar 2021 07:51:52 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:45337 "EHLO
+        id S234051AbhCMOnt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 09:43:49 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:39887 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229615AbhCMMvY (ORCPT
+        by vger.kernel.org with ESMTP id S234014AbhCMOn2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Mar 2021 07:51:24 -0500
+        Sat, 13 Mar 2021 09:43:28 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id L3jjljHF2C40pL3jmlUlso; Sat, 13 Mar 2021 13:51:22 +0100
+        id L5UBljyoWC40pL5UFlV5cV; Sat, 13 Mar 2021 15:43:27 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615639882; bh=r18wkOvp1Q9imyq1OcwnhjWzp5umQ3ptkBvhLOJ20Bc=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=hqVRAEB3ujUp+ogjCUj4YTokFx0UE3iN4fAMh0ewoNIWYCiRZ4q1H92jcv1JGacAk
-         7g21z59aEiJZaKVF/vMmrCmGs4FsOhqvJTRjPCUE5oh23Frvy03epc3FXitzxj6jTH
-         b9sf7zPWySxWMsn7hk8e5noiIulPqlACXoSI7CtF9wUXbfnV8KFqKDuo0ehHgGiD8Q
-         AWJBkSPXdwCuvhFvuCfnNW3BjySKn3NrSWSYhLDwKb320nIoqVt+Vjc0DCefXbVJtt
-         JfMsqtaIi/AtJt0jOsICWMYThjLvY12LcbXK9cOAheVlOreVCrw2fWvDS885seDGCp
-         kv3IljNShf1Rw==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] ext-ctrls-codec.rst: fix typos
-Message-ID: <54b9d790-5672-8f08-b34c-1689933795ad@xs4all.nl>
-Date:   Sat, 13 Mar 2021 13:51:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        t=1615646607; bh=jKdVJI+q0U6oMvWn83VF0vu1qbM3ykBj/enzfRyJLoE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=PfTbscATwPWZAkf19lPJwrcpL1ZS6+beCHBbhoov46LBqtjDMwYNeIxe8ydP3LUv6
+         FcXOj3cQmB6XjZq9PiFzCWGRy+Kvf5vtlsbH1TQ/GSV5zjgA2TAptlr/Ou84prUBJM
+         ZPhteBvjFjVJFaTilx2wjML4nRzGJMgE3WsiIukB7pQyuDZ7xmed1XCDYEW2s3a5xY
+         gJZ+nIgS5/BDojw3tg4kI4wwo0x2wlxb7+2kYjDf5HwJk/+Q+NAEphMLSBt4dF4GL1
+         lJ5IYt1RWjVl+ldfWzkYJb2uZXHZau5rVPErNg9/QYF7y8iRJfIpT+xTonI44HA4qg
+         v4f+d327mGrwQ==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 01/15] ext-ctrls-codec.rst: fix typos
+Date:   Sat, 13 Mar 2021 15:43:09 +0100
+Message-Id: <20210313144323.143600-2-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
+References: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfHsfug4062cEOqGdzP58xEj79+OGPfheNL2rm+twV2+1KYlKMSt2qwntGmVSF0RjhvpiAoeq5M1Zlxd26mK4jwwbDyhSco1ZGJBemnIZrSLoLU6CItP3
- Qi4/X1/0QBQlaGPc12U1yoL7qfzRXD4b7vb4BJXEhvmKfb1P0F59/WDdKq2z/cqiCtRKmP91wkREQQgNxCyGOsahjh7JuyaY4sk=
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfC6oyS35tArlVT3Tnt89cA2C4XNyiVAN7tzIh2jmRj56uarUG0Tiv/X88SAJj0ej6pZYerU9UVVbFdMNCl+eVw8QIESNcP7LB7Y4odaF7qNzoRGvPBO2
+ 3fujnFXXO2XzoCVsZVR3qlBIucI5Q6rHGdSuG9u7riMOpBaUAQmGJzw3YSXkcWU3TzNhpNWPYGruNR+B0BuDzk88WrNbFEf5Ddzqm2l/1iXQ/Ers2/swnYaV
+ A4lja3B5a4mCB3vk6mEHS/qoDF44xmpJB9YTFZXTYojTbI3o+ltxWrrBPU982DNTLFoq6UuUmmyfAoYEqOPnuwxg12YW9xL7iexvbNmw2k4CCsPQnSAt8jOV
+ uR1TxR/woqu3Yw/Ky/q78yWBikpEYw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -54,6 +59,9 @@ The _FRAME_SKIP_ enums were missing the _VIDEO prefix.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 index 7ee8ae073b91..e2d7c4a87fea 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
@@ -61,7 +69,7 @@ index 7ee8ae073b91..e2d7c4a87fea 100644
 @@ -615,12 +615,12 @@ enum v4l2_mpeg_video_frame_skip_mode -
      :header-rows:  0
      :stub-columns: 0
-
+ 
 -    * - ``V4L2_MPEG_FRAME_SKIP_MODE_DISABLED``
 +    * - ``V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED``
        - Frame skip mode is disabled.
@@ -77,7 +85,7 @@ index 7ee8ae073b91..e2d7c4a87fea 100644
 @@ -2244,12 +2244,12 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
      :header-rows:  0
      :stub-columns: 0
-
+ 
 -    * - ``V4L2_MPEG_MFC51_FRAME_SKIP_MODE_DISABLED``
 +    * - ``V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED``
        - Frame skip mode is disabled.
@@ -89,4 +97,7 @@ index 7ee8ae073b91..e2d7c4a87fea 100644
 +    * - ``V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT``
        - Frame skip mode enabled and buffer limit is set by the VBV
  	(MPEG1/2/4) or CPB (H264) buffer size control.
+ 
+-- 
+2.30.1
 
