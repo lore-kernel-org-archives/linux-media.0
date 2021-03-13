@@ -2,202 +2,247 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D7B9C433E6
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F422BC433DB
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 22:00:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A13864EE5
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 21:58:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCDB464ED7
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 22:00:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbhCMV6L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Mar 2021 16:58:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
+        id S234772AbhCMV7x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 16:59:53 -0500
+Received: from jpvw.nl ([80.127.100.2]:36106 "EHLO jpvw.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234182AbhCMV5t (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Mar 2021 16:57:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 919DF64DE1;
-        Sat, 13 Mar 2021 21:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615672668;
-        bh=ibgxwZyW7rbp39bHV36ZaJ/Ipg69CnJHlj1o0MvjNjc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jDUWhyX0MJVWi+H7CSxvDWFptcdVNuvMCTKwYp/ka/auZZp7f+ZmSIu6GyPKqSgHp
-         tywbwRmQHdkihvj5Kyk/gbg5uCeIYV65F+CE9rmOH7aR9hKgQJgiXJKjTeF9pczV+i
-         iUd/wCq6xo/9rXPWaYYQf6yRHa3kO8eoLiiNZpsqGfxKTAL09MNKRVf1/g3eXcYPGi
-         xrWIyS8WK3ysdewU0arcPWlrR4M+ajkrTGCW6QpuW0CWUIdr9GVNRORGiWKQ8hanPn
-         MFh2OLscEoozgVjruQhP+ntpJFqG7QHc0cvPb4pr1baLzb3YZXS9V/iO9dwwCpS5PW
-         j3ZB9Xr+JVsHw==
-Date:   Sat, 13 Mar 2021 15:57:47 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-samsung-soc@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-mm@kvack.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH 2/2] PCI: Revoke mappings like devmem
-Message-ID: <20210313215747.GA2394467@bjorn-Precision-5520>
+        id S234838AbhCMV7o (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 13 Mar 2021 16:59:44 -0500
+X-Greylist: delayed 1324 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 16:59:44 EST
+Received: from [127.0.0.1] (helo=jpvw.nl)
+        by jpvw.nl with esmtp (Exim 4.94)
+        (envelope-from <jp@jpvw.nl>)
+        id 1lLBx5-0002oX-OH; Sat, 13 Mar 2021 22:37:39 +0100
+Subject: Re: [PATCH] Backport MYGICA T230A adapter
+To:     Vincent Fortier <th0ma7@gmail.com>, linux-media@vger.kernel.org,
+        Sean Young <sean@mess.org>
+References: <e57634b4-b6f3-fcbd-2e43-cfed3a429918@gmail.com>
+From:   JP <jp@jpvw.nl>
+Message-ID: <d411edd5-f6ee-3af5-4bfa-27a107cd9b17@jpvw.nl>
+Date:   Sat, 13 Mar 2021 22:37:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <e57634b4-b6f3-fcbd-2e43-cfed3a429918@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210204165831.2703772-3-daniel.vetter@ffwll.ch>
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-[+cc Krzysztof, Pali, Oliver]
+{added Sean Young)
 
-On Thu, Feb 04, 2021 at 05:58:31PM +0100, Daniel Vetter wrote:
-> Since 3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims
-> the region") /dev/kmem zaps ptes when the kernel requests exclusive
-> acccess to an iomem region. And with CONFIG_IO_STRICT_DEVMEM, this is
-> the default for all driver uses.
-> 
-> Except there's two more ways to access PCI BARs: sysfs and proc mmap
-> support. Let's plug that hole.
-
-IIUC, the idea is that if a driver calls request_mem_region() on a PCI
-BAR, we prevent access to the BAR via sysfs.  I guess I'm OK with that
-if it's a real security improvement or something.
-
-But the downside of this implementation is that it depends on
-iomem_get_mapping(), which doesn't work until after fs_initcalls,
-which means the sysfs files cannot be static attributes of devices
-added before that.  PCI devices are typically enumerated in
-subsys_initcall.
-
-Krzysztof is converting PCI sysfs files (config, rom, reset, vpd, etc)
-to static attributes.  This is a major improvement that could get rid
-of pci_create_sysfs_dev_files(), the late_initcall pci_sysfs_init(),
-and the "sysfs_initialized" hack.  This would fix a race reported by
-Pali [1] (thanks to Oliver for the idea [2]).
-
-EXCEPT that this revoke change means the "resource%d", "legacy_io",
-and "legacy_mem" files cannot be static attributes because of
-iomem_get_mapping().
-
-Any ideas on how to deal with this?  Having to keep the
-pci_sysfs_init() initcall just for these few files seems like the tail
-wagging the dog.
-
-[1] https://lore.kernel.org/r/20200716110423.xtfyb3n6tn5ixedh@pali
-[2] https://lore.kernel.org/r/CAOSf1CHss03DBSDO4PmTtMp0tCEu5kScn704ZEwLKGXQzBfqaA@mail.gmail.com
-
-> For revoke_devmem() to work we need to link our vma into the same
-> address_space, with consistent vma->vm_pgoff. ->pgoff is already
-> adjusted, because that's how (io_)remap_pfn_range works, but for the
-> mapping we need to adjust vma->vm_file->f_mapping. The cleanest way is
-> to adjust this at at ->open time:
-> 
-> - for sysfs this is easy, now that binary attributes support this. We
->   just set bin_attr->mapping when mmap is supported
-> - for procfs it's a bit more tricky, since procfs pci access has only
->   one file per device, and access to a specific resources first needs
->   to be set up with some ioctl calls. But mmap is only supported for
->   the same resources as sysfs exposes with mmap support, and otherwise
->   rejected, so we can set the mapping unconditionally at open time
->   without harm.
-> 
-> A special consideration is for arch_can_pci_mmap_io() - we need to
-> make sure that the ->f_mapping doesn't alias between ioport and iomem
-> space. There's only 2 ways in-tree to support mmap of ioports: generic
-> pci mmap (ARCH_GENERIC_PCI_MMAP_RESOURCE), and sparc as the single
-> architecture hand-rolling. Both approach support ioport mmap through a
-> special pfn range and not through magic pte attributes. Aliasing is
-> therefore not a problem.
-> 
-> The only difference in access checks left is that sysfs PCI mmap does
-> not check for CAP_RAWIO. I'm not really sure whether that should be
-> added or not.
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: J�r�me Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linux-pci@vger.kernel.org
+On 3/13/21 1:36 PM, Vincent Fortier wrote:
+> Hi all,
+>
+> (first patch posting so don't hesitate to let me know where to find 
+> additional info to improve next time)
+>
+> The following patch is a manual backport based on crazycat69 / 
+> linux_media git repository:
+>
+> https://github.com/crazycat69/linux_media/commit/e1ef47d604775c550a8f0d1bda276c113f882c9b?branch=e1ef47d604775c550a8f0d1bda276c113f882c9b&diff=unified 
+>
+>
+>
+> MYGICA T230A support was found on the following thread:
+> https://forum.libreelec.tv/thread/23142-mygica-t230a/?pageNo=2
+>
+> Built successfully over commit 
+> 069192365e2cec8b47f6e6701fb2aa50f763c602 (March 9th) on media_build 
+> git tree with driver snapshot from 2021-03-07-1c5ab1e2286f over 
+> Synology 4.4.59 / 4.4.60 kernels. Also built successfully over 
+> 3.10.105 using latest compatible snapshot from 2021-01-13 using driver 
+> version 2021-01-08-321af22a3d2f (as sadly pre-4.4 support was removed 
+> recently).
+>
+> User thread confirming it to work under Synology NAS under 4.4.59 
+> kernel available here:
+>
+> https://github.com/th0ma7/synology/issues/9
+>
+> Much thnx in advance.
+>
+> - vin
+>
 > ---
->  drivers/pci/pci-sysfs.c | 4 ++++
->  drivers/pci/proc.c      | 1 +
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index 0c45b4f7b214..f8afd54ca3e1 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -942,6 +942,7 @@ void pci_create_legacy_files(struct pci_bus *b)
->  	b->legacy_io->read = pci_read_legacy_io;
->  	b->legacy_io->write = pci_write_legacy_io;
->  	b->legacy_io->mmap = pci_mmap_legacy_io;
-> +	b->legacy_io->mapping = iomem_get_mapping();
->  	pci_adjust_legacy_attr(b, pci_mmap_io);
->  	error = device_create_bin_file(&b->dev, b->legacy_io);
->  	if (error)
-> @@ -954,6 +955,7 @@ void pci_create_legacy_files(struct pci_bus *b)
->  	b->legacy_mem->size = 1024*1024;
->  	b->legacy_mem->attr.mode = 0600;
->  	b->legacy_mem->mmap = pci_mmap_legacy_mem;
-> +	b->legacy_io->mapping = iomem_get_mapping();
->  	pci_adjust_legacy_attr(b, pci_mmap_mem);
->  	error = device_create_bin_file(&b->dev, b->legacy_mem);
->  	if (error)
-> @@ -1169,6 +1171,8 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
->  			res_attr->mmap = pci_mmap_resource_uc;
->  		}
->  	}
-> +	if (res_attr->mmap)
-> +		res_attr->mapping = iomem_get_mapping();
->  	res_attr->attr.name = res_attr_name;
->  	res_attr->attr.mode = 0600;
->  	res_attr->size = pci_resource_len(pdev, num);
-> diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
-> index 3a2f90beb4cb..9bab07302bbf 100644
-> --- a/drivers/pci/proc.c
-> +++ b/drivers/pci/proc.c
-> @@ -298,6 +298,7 @@ static int proc_bus_pci_open(struct inode *inode, struct file *file)
->  	fpriv->write_combine = 0;
->  
->  	file->private_data = fpriv;
-> +	file->f_mapping = iomem_get_mapping();
->  
->  	return 0;
->  }
-> -- 
-> 2.30.0
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> diff -uprN ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
+> ./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c
+> --- ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
+> 2020-11-06 05:40:16.000000000 +0000
+> +++ ./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c    2021-02-19 
+> 14:31:34.405091839 +0000
+> @@ -529,7 +529,7 @@ static int dvbsky_t330_attach(struct dvb
+>      return 0;
+>  }
+>
+> -static int dvbsky_mygica_t230c_attach(struct dvb_usb_adapter *adap)
+> +static int dvbsky_mygica_t230_attach(struct dvb_usb_adapter *adap)
+>  {
+>      struct dvbsky_state *state = adap_to_priv(adap);
+>      struct dvb_usb_device *d = adap_to_d(adap);
+> @@ -541,7 +541,9 @@ static int dvbsky_mygica_t230c_attach(st
+>      si2168_config.i2c_adapter = &i2c_adapter;
+>      si2168_config.fe = &adap->fe[0];
+>      si2168_config.ts_mode = SI2168_TS_PARALLEL;
+> -    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230C2)
+> +    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230C2 ||
+> +        le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230C2_LITE ||
+> +        le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230A)
+>          si2168_config.ts_mode |= SI2168_TS_CLK_MANUAL;
+>      si2168_config.ts_clock_inv = 1;
+>
+> @@ -553,19 +555,26 @@ static int dvbsky_mygica_t230c_attach(st
+>
+>      /* attach tuner */
+>      si2157_config.fe = adap->fe[0];
+> -    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230) {
+> -        si2157_config.if_port = 1;
+> -        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
+> +    switch (le16_to_cpu(d->udev->descriptor.idProduct)) {
+> +    case USB_PID_MYGICA_T230C:
+> +    case USB_PID_MYGICA_T230C2:
+> +    case USB_PID_MYGICA_T230C2_LITE:
+> +    case USB_PID_MYGICA_T230A: {
+> +        si2157_config.if_port = 0;
+> +        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
+>                                 i2c_adapter,
+>                                 0x60,
+>                                 &si2157_config);
+> -    } else {
+> -        si2157_config.if_port = 0;
+> -        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
+> +        break;
+> +    }
+> +    default: {
+> +        si2157_config.if_port = 1;
+> +        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
+>                                 i2c_adapter,
+>                                 0x60,
+>                                 &si2157_config);
+>      }
+> +    }
+>      if (!state->i2c_client_tuner) {
+>          dvb_module_release(state->i2c_client_demod);
+>          return -ENODEV;
+> @@ -577,14 +586,24 @@ static int dvbsky_mygica_t230c_attach(st
+>
+>  static int dvbsky_identify_state(struct dvb_usb_device *d, const char 
+> **name)
+>  {
+> -    dvbsky_gpio_ctrl(d, 0x04, 1);
+> -    msleep(20);
+> -    dvbsky_gpio_ctrl(d, 0x83, 0);
+> -    dvbsky_gpio_ctrl(d, 0xc0, 1);
+> -    msleep(100);
+> -    dvbsky_gpio_ctrl(d, 0x83, 1);
+> -    dvbsky_gpio_ctrl(d, 0xc0, 0);
+> -    msleep(50);
+> +    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+> USB_PID_MYGICA_T230A) {
+> +        dvbsky_gpio_ctrl(d, 0x87, 0);
+> +        msleep(20);
+> +        dvbsky_gpio_ctrl(d, 0x86, 1);
+> +        dvbsky_gpio_ctrl(d, 0x80, 0);
+> +        msleep(100);
+> +        dvbsky_gpio_ctrl(d, 0x80, 1);
+> +        msleep(50);
+> +    } else {
+> +        dvbsky_gpio_ctrl(d, 0x04, 1);
+> +        msleep(20);
+> +        dvbsky_gpio_ctrl(d, 0x83, 0);
+> +        dvbsky_gpio_ctrl(d, 0xc0, 1);
+> +        msleep(100);
+> +        dvbsky_gpio_ctrl(d, 0x83, 1);
+> +        dvbsky_gpio_ctrl(d, 0xc0, 0);
+> +        msleep(50);
+> +    }
+>
+>      return WARM;
+>  }
+> @@ -719,7 +738,7 @@ static struct dvb_usb_device_properties
+>      }
+>  };
+>
+> -static struct dvb_usb_device_properties mygica_t230c_props = {
+> +static struct dvb_usb_device_properties mygica_t230_props = {
+>      .driver_name = KBUILD_MODNAME,
+>      .owner = THIS_MODULE,
+>      .adapter_nr = adapter_nr,
+> @@ -730,7 +749,7 @@ static struct dvb_usb_device_properties
+>      .generic_bulk_ctrl_delay = DVBSKY_MSG_DELAY,
+>
+>      .i2c_algo         = &dvbsky_i2c_algo,
+> -    .frontend_attach  = dvbsky_mygica_t230c_attach,
+> +    .frontend_attach  = dvbsky_mygica_t230_attach,
+>      .frontend_detach  = dvbsky_frontend_detach,
+>      .init             = dvbsky_init,
+>      .get_rc_config    = dvbsky_get_rc_config,
+> @@ -778,16 +797,22 @@ static const struct usb_device_id dvbsky
+>          &dvbsky_s960_props, "Terratec Cinergy S2 Rev.4",
+>          RC_MAP_DVBSKY) },
+>      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230,
+> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
+> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
+>          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+>      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C,
+> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
+> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
+>          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+>      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C_LITE,
+> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick 
+> T230C Lite",
+> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
+> Lite",
+>          NULL) },
+>      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2,
+> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick 
+> T230C v2",
+> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
+> v2",
+> +        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+> +     { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2_LITE,
+> +        &mygica_t230_props, "MyGica Mini DVB-T2 USB Stick T230C Lite 
+> v2",
+> +        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+> +    { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230A,
+> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230A",
+>          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+>      { }
+>  };
+> diff -uprN ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 
+> ./linux/include/media/dvb-usb-ids.h
+> --- ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 2020-05-26 
+> 05:40:21.000000000 +0000
+> +++ ./linux/include/media/dvb-usb-ids.h    2021-02-19 
+> 14:27:21.459391941 +0000
+> @@ -394,6 +394,8 @@
+>  #define USB_PID_MYGICA_T230C                0xc689
+>  #define USB_PID_MYGICA_T230C2                0xc68a
+>  #define USB_PID_MYGICA_T230C_LITE            0xc699
+> +#define USB_PID_MYGICA_T230C2_LITE            0xc69a
+> +#define USB_PID_MYGICA_T230A                0x689a
+>  #define USB_PID_ELGATO_EYETV_DIVERSITY            0x0011
+>  #define USB_PID_ELGATO_EYETV_DTT            0x0021
+>  #define USB_PID_ELGATO_EYETV_DTT_2            0x003f
+>
+>
+
