@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9226BC4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 999A0C43332
 	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 562E964F21
+	by mail.kernel.org (Postfix) with ESMTP id 7CFA564F19
 	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbhCMOnu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Mar 2021 09:43:50 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:58243 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234019AbhCMOn3 (ORCPT
+        id S234065AbhCMOnw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 09:43:52 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:39887 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234034AbhCMOnb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Mar 2021 09:43:29 -0500
+        Sat, 13 Mar 2021 09:43:31 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id L5UBljyoWC40pL5UFlV5d0; Sat, 13 Mar 2021 15:43:28 +0100
+        id L5UBljyoWC40pL5UIlV5eX; Sat, 13 Mar 2021 15:43:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615646608; bh=eS0c2i6pG9mlnDwOALMpxpc1i3HkuI9BSF+0nAO5sLo=;
+        t=1615646610; bh=Q7QiQVmH8VVhnSJZxvkP8BuPJlLvE+U9lNHKjTbZ3/U=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=CcsENmZtYDANHZ+o5zM9mlwuptj2LSr8urwg7fPZhN94jLDq69yj4x2cgdto4twbg
-         LPPX00TItphlw+qOLlH1udWHJ5x4etLW4gTZNNUx0/tLVXym+p9a2GtQZcgafbd1p6
-         cugZau9yMqc/hRVTO5EqkkO4sn4V8CCVQGBqQrgg0k26I1YLwZwg+8a6kGld1A2ka9
-         hdbVElBo4OGZTPQs6vs3CzUzABty3YLQoVG5xIW9P6QGPOvLn3qAa9YTsMy11GNHG2
-         D84n6nfUfQq38wd1qly6oAyEc8IUjfaK1X1ijFAX091KOeoUjJchPrjPbVWftFXdmO
-         IqmlLbT+6op9A==
+        b=OLmm0SXOHINpoCcculWtqKYpDRaEH+fvm4bXOyl3ki/M+hta9Bq/1Ku0A0fLim4d8
+         ldLns/Gqs0J8VKDpvxt3A4XKwZfFIuD6tAUF54lrtAnojU4Z5UxoHEE1TdOdoZnxD2
+         UcPGkxPziY8KORjK/ZkZtONOMRxfjYQEwGF60ttvA9ibA4n5pz8AN/4Ta8J+qTI287
+         gwRp+HYSXCdekRlGho4c7eYScsLnwdfY3n66jAKD/LQygln8yjJMlDT5XpR587fpvf
+         avNH/iHx1mh4x6bhXnmYnIWt4Xc80U9H38UxorodmAW6LN2G8VyX5w1uU0NQ0inhcv
+         ZoGFccvfOGkNw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
@@ -39,18 +39,18 @@ Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         Tomasz Figa <tfiga@chromium.org>,
         Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 03/15] Documentation/*/media: rename MPEG to CODEC
-Date:   Sat, 13 Mar 2021 15:43:11 +0100
-Message-Id: <20210313144323.143600-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 09/15] media/platform: rename MPEG to CODEC
+Date:   Sat, 13 Mar 2021 15:43:17 +0100
+Message-Id: <20210313144323.143600-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
 References: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfLSx1V09vdOsiIy3BaNZdQmR/AETmlTZLgNQ9scdnGUt0EyBA5i0DQ6Ct0+d9egLK+97qvH87Wx78NNmwDGQSId51MO4xwmSM4nX0MFUXNzHT4mEtDo5
- FedObq0D2z1LmGMi8iAH3j1/wChCPGUS+GNnSpfyMSicQMH4O6MZhu6GlpsUE6rY+K+RhwCmBIXUpWwW3CBWhGxjIlqHy1QnLG5cg1al5i+JvOMijy214ozU
- moQjxHrL4nUZhoDqmrKNTv/6lBm39Dvwv/3dqOs4j4iFKXyW9BmCRzEo05tIjgAoix2BCxj68IvhCYVAKve93f2bxsyXAPFPRDAcCsvJSYLNR4LRq68oCZk1
- VwLXYKFU31VmWtxk87Ldo6kNGQwopg==
+X-CMAE-Envelope: MS4xfIh2kl1GkjNDZ839RU89rU7JIlz/Dpg9Ug6+sf1vZ9aM0wB9FTrQXLWmvRXqms0kreacuBi5YkmdKj8bnJ7Us4Gy4qoOzqpcs4oOLhG6c8fl+fqFphUO
+ 1TZh4fS6XwQ55u2ThsAxwVG6eSvUBoa++FhjYoPSEXsZ9IW4dbt/w40or9IiDT8zCwxsthOKeQpMVFDUd5ev739T3PfS5/CVs4/drG+I1k3ijeMjLpPblhXY
+ xUOk0qRK6etC493qrR/4UOfwre0isvld9zigxomdadiZfqxJU+X6o54Kyhh5zz+avLBwf84TfGR8iOwbDAlosIPHZfK/A+gTaafjHx68aEr8EiLULp9tnanO
+ aPnx8e2oupAaJjV3ZgzBcUbkVZvpqQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -61,3194 +61,5316 @@ that the MPEG prefix isn't MPEG specific.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../driver-api/media/v4l2-controls.rst        |    2 +-
- .../media/drivers/cx2341x-uapi.rst            |    8 +-
- .../dvb/audio-bilingual-channel-select.rst    |    2 +-
- .../media/dvb/audio-channel-select.rst        |    2 +-
- .../media/dvb/video-get-frame-count.rst       |    2 +-
- .../userspace-api/media/dvb/video-get-pts.rst |    2 +-
- .../media/v4l/dev-sliced-vbi.rst              |   14 +-
- .../media/v4l/ext-ctrls-codec.rst             | 1250 ++++++++---------
- .../userspace-api/media/v4l/hist-v4l2.rst     |    6 +-
- .../media/v4l/pixfmt-compressed.rst           |   18 +-
- .../userspace-api/media/v4l/v4l2.rst          |    4 +-
- 11 files changed, 655 insertions(+), 655 deletions(-)
+ .../media/platform/allegro-dvt/allegro-core.c | 348 ++++----
+ drivers/media/platform/allegro-dvt/nal-h264.c |  52 +-
+ drivers/media/platform/allegro-dvt/nal-h264.h |   4 +-
+ drivers/media/platform/allegro-dvt/nal-hevc.c |  42 +-
+ drivers/media/platform/allegro-dvt/nal-hevc.h |   6 +-
+ drivers/media/platform/coda/coda-bit.c        |   8 +-
+ drivers/media/platform/coda/coda-common.c     | 218 ++---
+ drivers/media/platform/coda/coda-h264.c       |  40 +-
+ drivers/media/platform/coda/coda-mpeg2.c      |  18 +-
+ drivers/media/platform/coda/coda-mpeg4.c      |  22 +-
+ drivers/media/platform/coda/coda.h            |   2 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   6 +-
+ .../platform/mtk-vcodec/mtk_vcodec_enc.c      |  80 +-
+ .../platform/mtk-vcodec/venc/venc_h264_if.c   |  38 +-
+ drivers/media/platform/qcom/venus/helpers.c   | 154 ++--
+ .../media/platform/qcom/venus/vdec_ctrls.c    |  92 +--
+ drivers/media/platform/qcom/venus/venc.c      |  26 +-
+ .../media/platform/qcom/venus/venc_ctrls.c    | 294 +++----
+ .../media/platform/s5p-mfc/s5p_mfc_common.h   |  28 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |  16 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  | 764 +++++++++---------
+ .../media/platform/s5p-mfc/s5p_mfc_opr_v5.c   |  12 +-
+ .../media/platform/s5p-mfc/s5p_mfc_opr_v6.c   |  38 +-
+ drivers/media/platform/sti/hva/hva-debugfs.c  |  10 +-
+ drivers/media/platform/sti/hva/hva-h264.c     |  48 +-
+ drivers/media/platform/sti/hva/hva-v4l2.c     | 100 +--
+ drivers/media/platform/sti/hva/hva.h          |  14 +-
+ 27 files changed, 1240 insertions(+), 1240 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-controls.rst b/Documentation/driver-api/media/v4l2-controls.rst
-index b2e91804829b..3f89d8d5a3ce 100644
---- a/Documentation/driver-api/media/v4l2-controls.rst
-+++ b/Documentation/driver-api/media/v4l2-controls.rst
-@@ -456,7 +456,7 @@ Driver specific controls can be created using v4l2_ctrl_new_custom():
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index 887b492e4ad1..1601ae01dfda 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -496,13 +496,13 @@ static unsigned int estimate_stream_size(unsigned int width,
+ 	return round_up(offset + num_blocks * pcm_size + partition_table, 32);
+ }
  
- 	static const struct v4l2_ctrl_config ctrl_filter = {
- 		.ops = &ctrl_custom_ops,
--		.id = V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER,
-+		.id = V4L2_CID_CODEC_CX2341X_VIDEO_SPATIAL_FILTER,
- 		.name = "Spatial Filter",
+-static enum v4l2_mpeg_video_h264_level
++static enum v4l2_codec_video_h264_level
+ select_minimum_h264_level(unsigned int width, unsigned int height)
+ {
+ 	unsigned int pic_width_in_mb = DIV_ROUND_UP(width, SIZE_MACROBLOCK);
+ 	unsigned int frame_height_in_mb = DIV_ROUND_UP(height, SIZE_MACROBLOCK);
+ 	unsigned int frame_size_in_mb = pic_width_in_mb * frame_height_in_mb;
+-	enum v4l2_mpeg_video_h264_level level = V4L2_MPEG_VIDEO_H264_LEVEL_4_0;
++	enum v4l2_codec_video_h264_level level = V4L2_CODEC_VIDEO_H264_LEVEL_4_0;
+ 
+ 	/*
+ 	 * The level limits are specified in Rec. ITU-T H.264 Annex A.3.1 and
+@@ -512,183 +512,183 @@ select_minimum_h264_level(unsigned int width, unsigned int height)
+ 	 * Level 5.1 allows up to 4k video resolution.
+ 	 */
+ 	if (frame_size_in_mb <= 99)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_1_0;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_1_0;
+ 	else if (frame_size_in_mb <= 396)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_1_1;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_1_1;
+ 	else if (frame_size_in_mb <= 792)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_2_1;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_2_1;
+ 	else if (frame_size_in_mb <= 1620)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_2_2;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_2_2;
+ 	else if (frame_size_in_mb <= 3600)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_3_1;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_3_1;
+ 	else if (frame_size_in_mb <= 5120)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_3_2;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_3_2;
+ 	else if (frame_size_in_mb <= 8192)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_4_0;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_4_0;
+ 	else if (frame_size_in_mb <= 8704)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_4_2;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_4_2;
+ 	else if (frame_size_in_mb <= 22080)
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_5_0;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_5_0;
+ 	else
+-		level = V4L2_MPEG_VIDEO_H264_LEVEL_5_1;
++		level = V4L2_CODEC_VIDEO_H264_LEVEL_5_1;
+ 
+ 	return level;
+ }
+ 
+-static unsigned int h264_maximum_bitrate(enum v4l2_mpeg_video_h264_level level)
++static unsigned int h264_maximum_bitrate(enum v4l2_codec_video_h264_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_0:
+ 		return 64000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1B:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1B:
+ 		return 128000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_1:
+ 		return 192000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_2:
+ 		return 384000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_3:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_3:
+ 		return 768000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_0:
+ 		return 2000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_1:
+ 		return 4000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_2:
+ 		return 4000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_0:
+ 		return 10000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_1:
+ 		return 14000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_2:
+ 		return 20000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_0:
+ 		return 20000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_1:
+ 		return 50000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_2:
+ 		return 50000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_0:
+ 		return 135000000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_1:
+ 	default:
+ 		return 240000000;
+ 	}
+ }
+ 
+-static unsigned int h264_maximum_cpb_size(enum v4l2_mpeg_video_h264_level level)
++static unsigned int h264_maximum_cpb_size(enum v4l2_codec_video_h264_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_0:
+ 		return 175;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1B:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1B:
+ 		return 350;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_1:
+ 		return 500;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_2:
+ 		return 1000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_3:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_3:
+ 		return 2000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_0:
+ 		return 2000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_1:
+ 		return 4000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_2:
+ 		return 4000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_0:
+ 		return 10000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_1:
+ 		return 14000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_2:
+ 		return 20000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_0:
+ 		return 25000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_1:
+ 		return 62500;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_2:
+ 		return 62500;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_0:
+ 		return 135000;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_1:
+ 	default:
+ 		return 240000;
+ 	}
+ }
+ 
+-static enum v4l2_mpeg_video_hevc_level
++static enum v4l2_codec_video_hevc_level
+ select_minimum_hevc_level(unsigned int width, unsigned int height)
+ {
+ 	unsigned int luma_picture_size = width * height;
+-	enum v4l2_mpeg_video_hevc_level level;
++	enum v4l2_codec_video_hevc_level level;
+ 
+ 	if (luma_picture_size <= 36864)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_1;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_1;
+ 	else if (luma_picture_size <= 122880)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_2;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_2;
+ 	else if (luma_picture_size <= 245760)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1;
+ 	else if (luma_picture_size <= 552960)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_3;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_3;
+ 	else if (luma_picture_size <= 983040)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1;
+ 	else if (luma_picture_size <= 2228224)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_4;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_4;
+ 	else if (luma_picture_size <= 8912896)
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_5;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_5;
+ 	else
+-		level = V4L2_MPEG_VIDEO_HEVC_LEVEL_6;
++		level = V4L2_CODEC_VIDEO_HEVC_LEVEL_6;
+ 
+ 	return level;
+ }
+ 
+-static unsigned int hevc_maximum_bitrate(enum v4l2_mpeg_video_hevc_level level)
++static unsigned int hevc_maximum_bitrate(enum v4l2_codec_video_hevc_level level)
+ {
+ 	/*
+ 	 * See Rec. ITU-T H.265 v5 (02/2018), A.4.2 Profile-specific level
+ 	 * limits for the video profiles.
+ 	 */
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_1:
+ 		return 128;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2:
+ 		return 1500;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1:
+ 		return 3000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3:
+ 		return 6000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1:
+ 		return 10000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4:
+ 		return 12000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1:
+ 		return 20000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5:
+ 		return 25000;
+ 	default:
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1:
+ 		return 40000;
+ 	}
+ }
+ 
+-static unsigned int hevc_maximum_cpb_size(enum v4l2_mpeg_video_hevc_level level)
++static unsigned int hevc_maximum_cpb_size(enum v4l2_codec_video_hevc_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_1:
+ 		return 350;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2:
+ 		return 1500;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1:
+ 		return 3000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3:
+ 		return 6000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1:
+ 		return 10000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4:
+ 		return 12000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1:
+ 		return 20000;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5:
+ 		return 25000;
+ 	default:
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1:
+ 		return 40000;
+ 	}
+ }
+@@ -970,108 +970,108 @@ static u32 v4l2_colorspace_to_mcu_colorspace(enum v4l2_colorspace colorspace)
+ 	}
+ }
+ 
+-static u8 v4l2_profile_to_mcu_profile(enum v4l2_mpeg_video_h264_profile profile)
++static u8 v4l2_profile_to_mcu_profile(enum v4l2_codec_video_h264_profile profile)
+ {
+ 	switch (profile) {
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE:
+ 	default:
+ 		return 66;
+ 	}
+ }
+ 
+-static u16 v4l2_level_to_mcu_level(enum v4l2_mpeg_video_h264_level level)
++static u16 v4l2_level_to_mcu_level(enum v4l2_codec_video_h264_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_0:
+ 		return 10;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_1:
+ 		return 11;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_2:
+ 		return 12;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_3:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_3:
+ 		return 13;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_0:
+ 		return 20;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_1:
+ 		return 21;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_2:
+ 		return 22;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_0:
+ 		return 30;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_1:
+ 		return 31;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_2:
+ 		return 32;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_0:
+ 		return 40;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_1:
+ 		return 41;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_2:
+ 		return 42;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_0:
+ 		return 50;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_1:
+ 	default:
+ 		return 51;
+ 	}
+ }
+ 
+-static u8 hevc_profile_to_mcu_profile(enum v4l2_mpeg_video_hevc_profile profile)
++static u8 hevc_profile_to_mcu_profile(enum v4l2_codec_video_hevc_profile profile)
+ {
+ 	switch (profile) {
+ 	default:
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN:
+ 		return 1;
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10:
+ 		return 2;
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
+ 		return 3;
+ 	}
+ }
+ 
+-static u16 hevc_level_to_mcu_level(enum v4l2_mpeg_video_hevc_level level)
++static u16 hevc_level_to_mcu_level(enum v4l2_codec_video_hevc_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_1:
+ 		return 10;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2:
+ 		return 20;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1:
+ 		return 21;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3:
+ 		return 30;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1:
+ 		return 31;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4:
+ 		return 40;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1:
+ 		return 41;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5:
+ 		return 50;
+ 	default:
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1:
+ 		return 51;
+ 	}
+ }
+ 
+-static u8 hevc_tier_to_mcu_tier(enum v4l2_mpeg_video_hevc_tier tier)
++static u8 hevc_tier_to_mcu_tier(enum v4l2_codec_video_hevc_tier tier)
+ {
+ 	switch (tier) {
+ 	default:
+-	case V4L2_MPEG_VIDEO_HEVC_TIER_MAIN:
++	case V4L2_CODEC_VIDEO_HEVC_TIER_MAIN:
+ 		return 0;
+-	case V4L2_MPEG_VIDEO_HEVC_TIER_HIGH:
++	case V4L2_CODEC_VIDEO_HEVC_TIER_HIGH:
+ 		return 1;
+ 	}
+ }
+ 
+ static u32
+-v4l2_bitrate_mode_to_mcu_mode(enum v4l2_mpeg_video_bitrate_mode mode)
++v4l2_bitrate_mode_to_mcu_mode(enum v4l2_codec_video_bitrate_mode mode)
+ {
+ 	switch (mode) {
+-	case V4L2_MPEG_VIDEO_BITRATE_MODE_VBR:
++	case V4L2_CODEC_VIDEO_BITRATE_MODE_VBR:
+ 		return 2;
+-	case V4L2_MPEG_VIDEO_BITRATE_MODE_CBR:
++	case V4L2_CODEC_VIDEO_BITRATE_MODE_CBR:
+ 	default:
+ 		return 1;
+ 	}
+@@ -1084,7 +1084,7 @@ static u32 v4l2_cpb_size_to_mcu(unsigned int cpb_size, unsigned int bitrate)
+ 
+ 	/*
+ 	 * The mcu expects the CPB size in units of a 90 kHz clock, but the
+-	 * channel follows the V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE and stores
++	 * channel follows the V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE and stores
+ 	 * the CPB size in kilobytes.
+ 	 */
+ 	cpb_size_kbit = cpb_size * BITS_PER_BYTE;
+@@ -1131,8 +1131,8 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 
+ 	param->codec = channel->codec;
+ 	if (channel->codec == V4L2_PIX_FMT_H264) {
+-		enum v4l2_mpeg_video_h264_profile profile;
+-		enum v4l2_mpeg_video_h264_level level;
++		enum v4l2_codec_video_h264_profile profile;
++		enum v4l2_codec_video_h264_level level;
+ 
+ 		profile = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_profile);
+ 		level = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_level);
+@@ -1141,9 +1141,9 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 		param->constraint_set_flags = BIT(1);
+ 		param->level = v4l2_level_to_mcu_level(level);
+ 	} else {
+-		enum v4l2_mpeg_video_hevc_profile profile;
+-		enum v4l2_mpeg_video_hevc_level level;
+-		enum v4l2_mpeg_video_hevc_tier tier;
++		enum v4l2_codec_video_hevc_profile profile;
++		enum v4l2_codec_video_hevc_level level;
++		enum v4l2_codec_video_hevc_tier tier;
+ 
+ 		profile = v4l2_ctrl_g_ctrl(channel->mpeg_video_hevc_profile);
+ 		level = v4l2_ctrl_g_ctrl(channel->mpeg_video_hevc_level);
+@@ -1497,8 +1497,8 @@ static ssize_t allegro_h264_write_sps(struct allegro_channel *channel,
+ 	/* Calculation of crop units in Rec. ITU-T H.264 (04/2017) p. 76 */
+ 	unsigned int crop_unit_x = 2;
+ 	unsigned int crop_unit_y = 2;
+-	enum v4l2_mpeg_video_h264_profile profile;
+-	enum v4l2_mpeg_video_h264_level level;
++	enum v4l2_codec_video_h264_profile profile;
++	enum v4l2_codec_video_h264_level level;
+ 	unsigned int cpb_size;
+ 	unsigned int cpb_size_scale;
+ 
+@@ -2797,9 +2797,9 @@ static int allegro_clamp_qp(struct allegro_channel *channel,
+ {
+ 	struct v4l2_ctrl *next_ctrl;
+ 
+-	if (ctrl->id == V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP)
++	if (ctrl->id == V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP)
+ 		next_ctrl = channel->mpeg_video_h264_p_frame_qp;
+-	else if (ctrl->id == V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP)
++	else if (ctrl->id == V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP)
+ 		next_ctrl = channel->mpeg_video_h264_b_frame_qp;
+ 	else
+ 		return 0;
+@@ -2816,7 +2816,7 @@ static int allegro_clamp_bitrate(struct allegro_channel *channel,
+ 	struct v4l2_ctrl *ctrl_bitrate = channel->mpeg_video_bitrate;
+ 	struct v4l2_ctrl *ctrl_bitrate_peak = channel->mpeg_video_bitrate_peak;
+ 
+-	if (ctrl->val == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR &&
++	if (ctrl->val == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR &&
+ 	    ctrl_bitrate_peak->val < ctrl_bitrate->val)
+ 		ctrl_bitrate_peak->val = ctrl_bitrate->val;
+ 
+@@ -2830,7 +2830,7 @@ static int allegro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 						       ctrl_handler);
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		allegro_clamp_bitrate(channel, ctrl);
+ 		break;
+ 	}
+@@ -2849,18 +2849,18 @@ static int allegro_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		 "s_ctrl: %s = %d\n", v4l2_ctrl_get_name(ctrl->id), ctrl->val);
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE:
+ 		channel->frame_rc_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		channel->bitrate = channel->mpeg_video_bitrate->val;
+ 		channel->bitrate_peak = channel->mpeg_video_bitrate_peak->val;
+ 		v4l2_ctrl_activate(channel->mpeg_video_bitrate_peak,
+-				   ctrl->val == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
++				   ctrl->val == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
+-	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP:
+ 		allegro_clamp_qp(channel, ctrl);
+ 		break;
+ 	}
+@@ -2905,123 +2905,123 @@ static int allegro_open(struct file *file)
+ 	v4l2_ctrl_handler_init(handler, 0);
+ 	channel->mpeg_video_h264_profile = v4l2_ctrl_new_std_menu(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-			V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
+-			V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
+-	mask = 1 << V4L2_MPEG_VIDEO_H264_LEVEL_1B;
++			V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++			V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE, 0x0,
++			V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE);
++	mask = 1 << V4L2_CODEC_VIDEO_H264_LEVEL_1B;
+ 	channel->mpeg_video_h264_level = v4l2_ctrl_new_std_menu(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-			V4L2_MPEG_VIDEO_H264_LEVEL_5_1, mask,
+-			V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
++			V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++			V4L2_CODEC_VIDEO_H264_LEVEL_5_1, mask,
++			V4L2_CODEC_VIDEO_H264_LEVEL_5_1);
+ 	channel->mpeg_video_h264_i_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 	channel->mpeg_video_h264_max_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
++				  V4L2_CID_CODEC_VIDEO_H264_MAX_QP,
+ 				  0, 51, 1, 51);
+ 	channel->mpeg_video_h264_min_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
++				  V4L2_CID_CODEC_VIDEO_H264_MIN_QP,
+ 				  0, 51, 1, 0);
+ 	channel->mpeg_video_h264_p_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 	channel->mpeg_video_h264_b_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 
+ 	channel->mpeg_video_hevc_profile =
+ 		v4l2_ctrl_new_std_menu(handler,
+ 				       &allegro_ctrl_ops,
+-				       V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
+-				       V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN, 0x0,
+-				       V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN);
++				       V4L2_CID_CODEC_VIDEO_HEVC_PROFILE,
++				       V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN, 0x0,
++				       V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN);
+ 	channel->mpeg_video_hevc_level =
+ 		v4l2_ctrl_new_std_menu(handler,
+ 				       &allegro_ctrl_ops,
+-				       V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
+-				       V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1, 0x0,
+-				       V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1);
++				       V4L2_CID_CODEC_VIDEO_HEVC_LEVEL,
++				       V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1, 0x0,
++				       V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1);
+ 	channel->mpeg_video_hevc_tier =
+ 		v4l2_ctrl_new_std_menu(handler,
+ 				       &allegro_ctrl_ops,
+-				       V4L2_CID_MPEG_VIDEO_HEVC_TIER,
+-				       V4L2_MPEG_VIDEO_HEVC_TIER_HIGH, 0x0,
+-				       V4L2_MPEG_VIDEO_HEVC_TIER_MAIN);
++				       V4L2_CID_CODEC_VIDEO_HEVC_TIER,
++				       V4L2_CODEC_VIDEO_HEVC_TIER_HIGH, 0x0,
++				       V4L2_CODEC_VIDEO_HEVC_TIER_MAIN);
+ 	channel->mpeg_video_hevc_i_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 	channel->mpeg_video_hevc_max_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP,
++				  V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP,
+ 				  0, 51, 1, 51);
+ 	channel->mpeg_video_hevc_min_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
++				  V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
+ 				  0, 51, 1, 0);
+ 	channel->mpeg_video_hevc_p_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 	channel->mpeg_video_hevc_b_frame_qp =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
++				  V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP,
+ 				  0, 51, 1, 30);
+ 
+ 	channel->mpeg_video_frame_rc_enable =
+ 		v4l2_ctrl_new_std(handler,
+ 				  &allegro_ctrl_ops,
+-				  V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE,
++				  V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE,
+ 				  false, 0x1,
+ 				  true, false);
+ 	channel->mpeg_video_bitrate_mode = v4l2_ctrl_new_std_menu(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
+-			V4L2_MPEG_VIDEO_BITRATE_MODE_CBR, 0,
+-			V4L2_MPEG_VIDEO_BITRATE_MODE_CBR);
++			V4L2_CID_CODEC_VIDEO_BITRATE_MODE,
++			V4L2_CODEC_VIDEO_BITRATE_MODE_CBR, 0,
++			V4L2_CODEC_VIDEO_BITRATE_MODE_CBR);
+ 
+ 	if (channel->codec == V4L2_PIX_FMT_H264) {
+-		bitrate_max = h264_maximum_bitrate(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
+-		bitrate_def = h264_maximum_bitrate(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
+-		cpb_size_max = h264_maximum_cpb_size(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
+-		cpb_size_def = h264_maximum_cpb_size(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
++		bitrate_max = h264_maximum_bitrate(V4L2_CODEC_VIDEO_H264_LEVEL_5_1);
++		bitrate_def = h264_maximum_bitrate(V4L2_CODEC_VIDEO_H264_LEVEL_5_1);
++		cpb_size_max = h264_maximum_cpb_size(V4L2_CODEC_VIDEO_H264_LEVEL_5_1);
++		cpb_size_def = h264_maximum_cpb_size(V4L2_CODEC_VIDEO_H264_LEVEL_5_1);
+ 	} else {
+-		bitrate_max = hevc_maximum_bitrate(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1);
+-		bitrate_def = hevc_maximum_bitrate(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1);
+-		cpb_size_max = hevc_maximum_cpb_size(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1);
+-		cpb_size_def = hevc_maximum_cpb_size(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1);
++		bitrate_max = hevc_maximum_bitrate(V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1);
++		bitrate_def = hevc_maximum_bitrate(V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1);
++		cpb_size_max = hevc_maximum_cpb_size(V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1);
++		cpb_size_def = hevc_maximum_cpb_size(V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1);
+ 	}
+ 	channel->mpeg_video_bitrate = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_BITRATE,
++			V4L2_CID_CODEC_VIDEO_BITRATE,
+ 			0, bitrate_max, 1, bitrate_def);
+ 	channel->mpeg_video_bitrate_peak = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_BITRATE_PEAK,
++			V4L2_CID_CODEC_VIDEO_BITRATE_PEAK,
+ 			0, bitrate_max, 1, bitrate_def);
+ 	channel->mpeg_video_cpb_size = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE,
++			V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE,
+ 			0, cpb_size_max, 1, cpb_size_def);
+ 	channel->mpeg_video_gop_size = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_GOP_SIZE,
++			V4L2_CID_CODEC_VIDEO_GOP_SIZE,
+ 			0, ALLEGRO_GOP_SIZE_MAX,
+ 			1, ALLEGRO_GOP_SIZE_DEFAULT);
+ 	v4l2_ctrl_new_std(handler,
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.c b/drivers/media/platform/allegro-dvt/nal-h264.c
+index 94dd9266d850..b6494994ae7f 100644
+--- a/drivers/media/platform/allegro-dvt/nal-h264.c
++++ b/drivers/media/platform/allegro-dvt/nal-h264.c
+@@ -36,23 +36,23 @@ enum nal_unit_type {
+ 
+ /**
+  * nal_h264_profile_from_v4l2() - Get profile_idc for v4l2 h264 profile
+- * @profile: the profile as &enum v4l2_mpeg_video_h264_profile
++ * @profile: the profile as &enum v4l2_codec_video_h264_profile
+  *
+- * Convert the &enum v4l2_mpeg_video_h264_profile to profile_idc as specified
++ * Convert the &enum v4l2_codec_video_h264_profile to profile_idc as specified
+  * in Rec. ITU-T H.264 (04/2017) A.2.
+  *
+  * Return: the profile_idc for the passed level
+  */
+-int nal_h264_profile_from_v4l2(enum v4l2_mpeg_video_h264_profile profile)
++int nal_h264_profile_from_v4l2(enum v4l2_codec_video_h264_profile profile)
+ {
+ 	switch (profile) {
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE:
+ 		return 66;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_MAIN:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_MAIN:
+ 		return 77;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_EXTENDED:
+ 		return 88;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_HIGH:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_HIGH:
+ 		return 100;
+ 	default:
+ 		return -EINVAL;
+@@ -61,47 +61,47 @@ int nal_h264_profile_from_v4l2(enum v4l2_mpeg_video_h264_profile profile)
+ 
+ /**
+  * nal_h264_level_from_v4l2() - Get level_idc for v4l2 h264 level
+- * @level: the level as &enum v4l2_mpeg_video_h264_level
++ * @level: the level as &enum v4l2_codec_video_h264_level
+  *
+- * Convert the &enum v4l2_mpeg_video_h264_level to level_idc as specified in
++ * Convert the &enum v4l2_codec_video_h264_level to level_idc as specified in
+  * Rec. ITU-T H.264 (04/2017) A.3.2.
+  *
+  * Return: the level_idc for the passed level
+  */
+-int nal_h264_level_from_v4l2(enum v4l2_mpeg_video_h264_level level)
++int nal_h264_level_from_v4l2(enum v4l2_codec_video_h264_level level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_0:
+ 		return 10;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1B:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1B:
+ 		return 9;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_1:
+ 		return 11;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_2:
+ 		return 12;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_3:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_3:
+ 		return 13;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_0:
+ 		return 20;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_1:
+ 		return 21;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_2:
+ 		return 22;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_0:
+ 		return 30;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_1:
+ 		return 31;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_2:
+ 		return 32;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_0:
+ 		return 40;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_1:
+ 		return 41;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_2:
+ 		return 42;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_0:
+ 		return 50;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_5_1:
+ 		return 51;
+ 	default:
+ 		return -EINVAL;
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.h b/drivers/media/platform/allegro-dvt/nal-h264.h
+index 2ba7cbced7a5..bebee9bc6328 100644
+--- a/drivers/media/platform/allegro-dvt/nal-h264.h
++++ b/drivers/media/platform/allegro-dvt/nal-h264.h
+@@ -187,8 +187,8 @@ struct nal_h264_pps {
+ 	};
+ };
+ 
+-int nal_h264_profile_from_v4l2(enum v4l2_mpeg_video_h264_profile profile);
+-int nal_h264_level_from_v4l2(enum v4l2_mpeg_video_h264_level level);
++int nal_h264_profile_from_v4l2(enum v4l2_codec_video_h264_profile profile);
++int nal_h264_level_from_v4l2(enum v4l2_codec_video_h264_level level);
+ 
+ ssize_t nal_h264_write_sps(const struct device *dev,
+ 			   void *dest, size_t n, struct nal_h264_sps *sps);
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.c b/drivers/media/platform/allegro-dvt/nal-hevc.c
+index 5db540c69bfe..73fc3db1c3b1 100644
+--- a/drivers/media/platform/allegro-dvt/nal-hevc.c
++++ b/drivers/media/platform/allegro-dvt/nal-hevc.c
+@@ -35,14 +35,14 @@ enum nal_unit_type {
+ 	FD_NUT = 38,
+ };
+ 
+-int nal_hevc_profile_from_v4l2(enum v4l2_mpeg_video_hevc_profile profile)
++int nal_hevc_profile_from_v4l2(enum v4l2_codec_video_hevc_profile profile)
+ {
+ 	switch (profile) {
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN:
+ 		return 1;
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10:
+ 		return 2;
+-	case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
++	case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
+ 		return 3;
+ 	default:
+ 		return -EINVAL;
+@@ -50,12 +50,12 @@ int nal_hevc_profile_from_v4l2(enum v4l2_mpeg_video_hevc_profile profile)
+ }
+ EXPORT_SYMBOL_GPL(nal_hevc_profile_from_v4l2);
+ 
+-int nal_hevc_tier_from_v4l2(enum v4l2_mpeg_video_hevc_tier tier)
++int nal_hevc_tier_from_v4l2(enum v4l2_codec_video_hevc_tier tier)
+ {
+ 	switch (tier) {
+-	case V4L2_MPEG_VIDEO_HEVC_TIER_MAIN:
++	case V4L2_CODEC_VIDEO_HEVC_TIER_MAIN:
+ 		return 0;
+-	case V4L2_MPEG_VIDEO_HEVC_TIER_HIGH:
++	case V4L2_CODEC_VIDEO_HEVC_TIER_HIGH:
+ 		return 1;
+ 	default:
+ 		return -EINVAL;
+@@ -63,7 +63,7 @@ int nal_hevc_tier_from_v4l2(enum v4l2_mpeg_video_hevc_tier tier)
+ }
+ EXPORT_SYMBOL_GPL(nal_hevc_tier_from_v4l2);
+ 
+-int nal_hevc_level_from_v4l2(enum v4l2_mpeg_video_hevc_level level)
++int nal_hevc_level_from_v4l2(enum v4l2_codec_video_hevc_level level)
+ {
+ 	/*
+ 	 * T-Rec-H.265 p. 280: general_level_idc and sub_layer_level_idc[ i ]
+@@ -73,31 +73,31 @@ int nal_hevc_level_from_v4l2(enum v4l2_mpeg_video_hevc_level level)
+ 	int factor = 30 / 10;
+ 
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_1:
+ 		return factor * 10;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2:
+ 		return factor * 20;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1:
+ 		return factor * 21;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3:
+ 		return factor * 30;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1:
+ 		return factor * 31;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4:
+ 		return factor * 40;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1:
+ 		return factor * 41;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5:
+ 		return factor * 50;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1:
+ 		return factor * 51;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_5_2:
+ 		return factor * 52;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_6:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_6:
+ 		return factor * 60;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_6_1:
+ 		return factor * 61;
+-	case V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2:
++	case V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2:
+ 		return factor * 62;
+ 	default:
+ 		return -EINVAL;
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.h b/drivers/media/platform/allegro-dvt/nal-hevc.h
+index fc994d4242d8..16d9e7931de1 100644
+--- a/drivers/media/platform/allegro-dvt/nal-hevc.h
++++ b/drivers/media/platform/allegro-dvt/nal-hevc.h
+@@ -318,9 +318,9 @@ struct nal_hevc_pps {
+ 	};
+ };
+ 
+-int nal_hevc_profile_from_v4l2(enum v4l2_mpeg_video_hevc_profile profile);
+-int nal_hevc_tier_from_v4l2(enum v4l2_mpeg_video_hevc_tier tier);
+-int nal_hevc_level_from_v4l2(enum v4l2_mpeg_video_hevc_level level);
++int nal_hevc_profile_from_v4l2(enum v4l2_codec_video_hevc_profile profile);
++int nal_hevc_tier_from_v4l2(enum v4l2_codec_video_hevc_tier tier);
++int nal_hevc_level_from_v4l2(enum v4l2_codec_video_hevc_level level);
+ 
+ int nal_range_from_v4l2(enum v4l2_quantization quantization);
+ int nal_color_primaries_from_v4l2(enum v4l2_colorspace colorspace);
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index 2f42808c43a4..30bd468f7f95 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -680,14 +680,14 @@ static u32 coda_slice_mode(struct coda_ctx *ctx)
+ 	int size, unit;
+ 
+ 	switch (ctx->params.slice_mode) {
+-	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE:
++	case V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE:
+ 	default:
+ 		return 0;
+-	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB:
++	case V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB:
+ 		size = ctx->params.slice_max_mb;
+ 		unit = 1;
+ 		break;
+-	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES:
++	case V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES:
+ 		size = ctx->params.slice_max_bits;
+ 		unit = 0;
+ 		break;
+@@ -1834,7 +1834,7 @@ static bool coda_reorder_enable(struct coda_ctx *ctx)
+ 			  ctx->params.h264_profile_idc);
+ 
+ 	/* Baseline profile does not support reordering */
+-	return profile > V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE;
++	return profile > V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE;
+ }
+ 
+ static void coda_decoder_drop_used_metas(struct coda_ctx *ctx)
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 995e95272e51..a6e41ebdf168 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1791,8 +1791,8 @@ void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
+ 	switch (ctx->codec->src_fourcc) {
+ 	case V4L2_PIX_FMT_H264:
+ 		codec_name = "H264";
+-		profile_cid = V4L2_CID_MPEG_VIDEO_H264_PROFILE;
+-		level_cid = V4L2_CID_MPEG_VIDEO_H264_LEVEL;
++		profile_cid = V4L2_CID_CODEC_VIDEO_H264_PROFILE;
++		level_cid = V4L2_CID_CODEC_VIDEO_H264_LEVEL;
+ 		profile_ctrl = ctx->h264_profile_ctrl;
+ 		level_ctrl = ctx->h264_level_ctrl;
+ 		profile = coda_h264_profile(profile_idc);
+@@ -1800,8 +1800,8 @@ void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
+ 		break;
+ 	case V4L2_PIX_FMT_MPEG2:
+ 		codec_name = "MPEG-2";
+-		profile_cid = V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE;
+-		level_cid = V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL;
++		profile_cid = V4L2_CID_CODEC_VIDEO_MPEG2_PROFILE;
++		level_cid = V4L2_CID_CODEC_VIDEO_MPEG2_LEVEL;
+ 		profile_ctrl = ctx->mpeg2_profile_ctrl;
+ 		level_ctrl = ctx->mpeg2_level_ctrl;
+ 		profile = coda_mpeg2_profile(profile_idc);
+@@ -1809,8 +1809,8 @@ void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
+ 		break;
+ 	case V4L2_PIX_FMT_MPEG4:
+ 		codec_name = "MPEG-4";
+-		profile_cid = V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE;
+-		level_cid = V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL;
++		profile_cid = V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE;
++		level_cid = V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL;
+ 		profile_ctrl = ctx->mpeg4_profile_ctrl;
+ 		level_ctrl = ctx->mpeg4_level_ctrl;
+ 		profile = coda_mpeg4_profile(profile_idc);
+@@ -2189,86 +2189,86 @@ static int coda_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		else
+ 			ctx->params.rot_mode &= ~CODA_MIR_VER;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE:
+ 		ctx->params.bitrate = ctrl->val / 1000;
+ 		ctx->params.bitrate_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
++	case V4L2_CID_CODEC_VIDEO_GOP_SIZE:
+ 		ctx->params.gop_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP:
+ 		ctx->params.h264_intra_qp = ctrl->val;
+ 		ctx->params.h264_intra_qp_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP:
+ 		ctx->params.h264_inter_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MIN_QP:
+ 		ctx->params.h264_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MAX_QP:
+ 		ctx->params.h264_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA:
+ 		ctx->params.h264_slice_alpha_c0_offset_div2 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA:
+ 		ctx->params.h264_slice_beta_offset_div2 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE:
+ 		ctx->params.h264_disable_deblocking_filter_idc = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION:
++	case V4L2_CID_CODEC_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION:
+ 		ctx->params.h264_constrained_intra_pred_flag = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE:
+ 		ctx->params.frame_rc_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE:
+ 		ctx->params.mb_rc_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET:
++	case V4L2_CID_CODEC_VIDEO_H264_CHROMA_QP_INDEX_OFFSET:
+ 		ctx->params.h264_chroma_qp_index_offset = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
+ 		/* TODO: switch between baseline and constrained baseline */
+ 		if (ctx->inst_type == CODA_INST_ENCODER)
+ 			ctx->params.h264_profile_idc = 66;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
+ 		/* nothing to do, this is set by the encoder */
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_I_FRAME_QP:
+ 		ctx->params.mpeg4_intra_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_P_FRAME_QP:
+ 		ctx->params.mpeg4_inter_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG2_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG2_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL:
+ 		/* nothing to do, these are fixed */
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE:
+ 		ctx->params.slice_mode = ctrl->val;
+ 		ctx->params.slice_mode_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB:
+ 		ctx->params.slice_max_mb = ctrl->val;
+ 		ctx->params.slice_mode_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES:
+ 		ctx->params.slice_max_bits = ctrl->val * 8;
+ 		ctx->params.slice_mode_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
++	case V4L2_CID_CODEC_VIDEO_HEADER_MODE:
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:
++	case V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB:
+ 		ctx->params.intra_refresh = ctrl->val;
+ 		ctx->params.intra_refresh_changed = true;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
++	case V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME:
+ 		ctx->params.force_ipicture = true;
+ 		break;
+ 	case V4L2_CID_JPEG_COMPRESSION_QUALITY:
+@@ -2277,10 +2277,10 @@ static int coda_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_JPEG_RESTART_INTERVAL:
+ 		ctx->params.jpeg_restart_interval = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VBV_DELAY:
++	case V4L2_CID_CODEC_VIDEO_VBV_DELAY:
+ 		ctx->params.vbv_delay = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VBV_SIZE:
++	case V4L2_CID_CODEC_VIDEO_VBV_SIZE:
+ 		ctx->params.vbv_size = min(ctrl->val * 8192, 0x7fffffff);
+ 		break;
+ 	default:
+@@ -2301,103 +2301,103 @@ static void coda_encode_ctrls(struct coda_ctx *ctx)
+ 	int max_gop_size = (ctx->dev->devtype->product == CODA_DX6) ? 60 : 99;
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE, 0, 32767000, 1000, 0);
++		V4L2_CID_CODEC_VIDEO_BITRATE, 0, 32767000, 1000, 0);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_GOP_SIZE, 0, max_gop_size, 1, 16);
++		V4L2_CID_CODEC_VIDEO_GOP_SIZE, 0, max_gop_size, 1, 16);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP, 0, 51, 1, 25);
++		V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP, 0, 51, 1, 25);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP, 0, 51, 1, 25);
++		V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP, 0, 51, 1, 25);
+ 	if (ctx->dev->devtype->product != CODA_960) {
+ 		v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_MIN_QP, 0, 51, 1, 12);
++			V4L2_CID_CODEC_VIDEO_H264_MIN_QP, 0, 51, 1, 12);
+ 	}
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_MAX_QP, 0, 51, 1, 51);
++		V4L2_CID_CODEC_VIDEO_H264_MAX_QP, 0, 51, 1, 51);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA, -6, 6, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA, -6, 6, 1, 0);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA, -6, 6, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA, -6, 6, 1, 0);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
+-		V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
+-		0x0, V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED);
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE,
++		V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
++		0x0, V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_ENABLED);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION, 0, 1, 1,
++		V4L2_CID_CODEC_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION, 0, 1, 1,
+ 		0);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE, 0, 1, 1, 1);
++		V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE, 0, 1, 1, 1);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE, 0, 1, 1, 1);
++		V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE, 0, 1, 1, 1);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
++		V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++		V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE, 0x0,
++		V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE);
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-			V4L2_MPEG_VIDEO_H264_LEVEL_3_1,
+-			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_1)),
+-			V4L2_MPEG_VIDEO_H264_LEVEL_3_1);
++			V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++			V4L2_CODEC_VIDEO_H264_LEVEL_3_1,
++			~((1 << V4L2_CODEC_VIDEO_H264_LEVEL_2_0) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_3_0) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_3_1)),
++			V4L2_CODEC_VIDEO_H264_LEVEL_3_1);
+ 	}
+ 	if (ctx->dev->devtype->product == CODA_960) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-			V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
+-			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
+-			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
+-			V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
++			V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++			V4L2_CODEC_VIDEO_H264_LEVEL_4_0,
++			~((1 << V4L2_CODEC_VIDEO_H264_LEVEL_2_0) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_3_0) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_3_1) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_3_2) |
++			  (1 << V4L2_CODEC_VIDEO_H264_LEVEL_4_0)),
++			V4L2_CODEC_VIDEO_H264_LEVEL_4_0);
+ 	}
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP, 1, 31, 1, 2);
++		V4L2_CID_CODEC_VIDEO_MPEG4_I_FRAME_QP, 1, 31, 1, 2);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP, 1, 31, 1, 2);
++		V4L2_CID_CODEC_VIDEO_MPEG4_P_FRAME_QP, 1, 31, 1, 2);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE, 0x0,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE);
++		V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE, 0x0,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE);
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541 ||
+ 	    ctx->dev->devtype->product == CODA_960) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-			V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL,
+-			V4L2_MPEG_VIDEO_MPEG4_LEVEL_5,
+-			~(1 << V4L2_MPEG_VIDEO_MPEG4_LEVEL_5),
+-			V4L2_MPEG_VIDEO_MPEG4_LEVEL_5);
++			V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL,
++			V4L2_CODEC_VIDEO_MPEG4_LEVEL_5,
++			~(1 << V4L2_CODEC_VIDEO_MPEG4_LEVEL_5),
++			V4L2_CODEC_VIDEO_MPEG4_LEVEL_5);
+ 	}
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
+-		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES, 0x0,
+-		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE);
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE,
++		V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES, 0x0,
++		V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB, 1, 0x3fffffff, 1, 1);
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB, 1, 0x3fffffff, 1, 1);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES, 1, 0x3fffffff, 1,
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES, 1, 0x3fffffff, 1,
+ 		500);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
+-		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
+-		(1 << V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE),
+-		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME);
++		V4L2_CID_CODEC_VIDEO_HEADER_MODE,
++		V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
++		(1 << V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE),
++		V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB, 0,
++		V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB, 0,
+ 		1920 * 1088 / 256, 1, 0);
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_VBV_DELAY, 0, 0x7fff, 1, 0);
++		V4L2_CID_CODEC_VIDEO_VBV_DELAY, 0, 0x7fff, 1, 0);
+ 	/*
+ 	 * The maximum VBV size value is 0x7fffffff bits,
+ 	 * one bit less than 262144 KiB
+ 	 */
+ 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_VBV_SIZE, 0, 262144, 1, 0);
++		V4L2_CID_CODEC_VIDEO_VBV_SIZE, 0, 262144, 1, 0);
+ }
+ 
+ static void coda_jpeg_encode_ctrls(struct coda_ctx *ctx)
+@@ -2413,52 +2413,52 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
+ 	u8 max;
+ 
+ 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
+-		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++		V4L2_CODEC_VIDEO_H264_PROFILE_HIGH,
++		~((1 << V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MAIN) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_HIGH)),
++		V4L2_CODEC_VIDEO_H264_PROFILE_HIGH);
+ 	if (ctx->h264_profile_ctrl)
+ 		ctx->h264_profile_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541)
+-		max = V4L2_MPEG_VIDEO_H264_LEVEL_4_0;
++		max = V4L2_CODEC_VIDEO_H264_LEVEL_4_0;
+ 	else if (ctx->dev->devtype->product == CODA_960)
+-		max = V4L2_MPEG_VIDEO_H264_LEVEL_4_1;
++		max = V4L2_CODEC_VIDEO_H264_LEVEL_4_1;
+ 	else
+ 		return;
+ 	ctx->h264_level_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_LEVEL, max, 0, max);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_H264_LEVEL, max, 0, max);
+ 	if (ctx->h264_level_ctrl)
+ 		ctx->h264_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	ctx->mpeg2_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE,
+-		V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH, 0,
+-		V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_MPEG2_PROFILE,
++		V4L2_CODEC_VIDEO_MPEG2_PROFILE_HIGH, 0,
++		V4L2_CODEC_VIDEO_MPEG2_PROFILE_HIGH);
+ 	if (ctx->mpeg2_profile_ctrl)
+ 		ctx->mpeg2_profile_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	ctx->mpeg2_level_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL,
+-		V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH, 0,
+-		V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_MPEG2_LEVEL,
++		V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH, 0,
++		V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH);
+ 	if (ctx->mpeg2_level_ctrl)
+ 		ctx->mpeg2_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	ctx->mpeg4_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY, 0,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY, 0,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY);
+ 	if (ctx->mpeg4_profile_ctrl)
+ 		ctx->mpeg4_profile_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	ctx->mpeg4_level_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+-		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL,
+-		V4L2_MPEG_VIDEO_MPEG4_LEVEL_5, 0,
+-		V4L2_MPEG_VIDEO_MPEG4_LEVEL_5);
++		&coda_ctrl_ops, V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL,
++		V4L2_CODEC_VIDEO_MPEG4_LEVEL_5, 0,
++		V4L2_CODEC_VIDEO_MPEG4_LEVEL_5);
+ 	if (ctx->mpeg4_level_ctrl)
+ 		ctx->mpeg4_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ }
+diff --git a/drivers/media/platform/coda/coda-h264.c b/drivers/media/platform/coda/coda-h264.c
+index 8bd0aa8af114..852307f30c80 100644
+--- a/drivers/media/platform/coda/coda-h264.c
++++ b/drivers/media/platform/coda/coda-h264.c
+@@ -81,10 +81,10 @@ int coda_h264_padding(int size, char *p)
+ int coda_h264_profile(int profile_idc)
+ {
+ 	switch (profile_idc) {
+-	case 66: return V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE;
+-	case 77: return V4L2_MPEG_VIDEO_H264_PROFILE_MAIN;
+-	case 88: return V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED;
+-	case 100: return V4L2_MPEG_VIDEO_H264_PROFILE_HIGH;
++	case 66: return V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE;
++	case 77: return V4L2_CODEC_VIDEO_H264_PROFILE_MAIN;
++	case 88: return V4L2_CODEC_VIDEO_H264_PROFILE_EXTENDED;
++	case 100: return V4L2_CODEC_VIDEO_H264_PROFILE_HIGH;
+ 	default: return -EINVAL;
+ 	}
+ }
+@@ -92,22 +92,22 @@ int coda_h264_profile(int profile_idc)
+ int coda_h264_level(int level_idc)
+ {
+ 	switch (level_idc) {
+-	case 10: return V4L2_MPEG_VIDEO_H264_LEVEL_1_0;
+-	case 9:  return V4L2_MPEG_VIDEO_H264_LEVEL_1B;
+-	case 11: return V4L2_MPEG_VIDEO_H264_LEVEL_1_1;
+-	case 12: return V4L2_MPEG_VIDEO_H264_LEVEL_1_2;
+-	case 13: return V4L2_MPEG_VIDEO_H264_LEVEL_1_3;
+-	case 20: return V4L2_MPEG_VIDEO_H264_LEVEL_2_0;
+-	case 21: return V4L2_MPEG_VIDEO_H264_LEVEL_2_1;
+-	case 22: return V4L2_MPEG_VIDEO_H264_LEVEL_2_2;
+-	case 30: return V4L2_MPEG_VIDEO_H264_LEVEL_3_0;
+-	case 31: return V4L2_MPEG_VIDEO_H264_LEVEL_3_1;
+-	case 32: return V4L2_MPEG_VIDEO_H264_LEVEL_3_2;
+-	case 40: return V4L2_MPEG_VIDEO_H264_LEVEL_4_0;
+-	case 41: return V4L2_MPEG_VIDEO_H264_LEVEL_4_1;
+-	case 42: return V4L2_MPEG_VIDEO_H264_LEVEL_4_2;
+-	case 50: return V4L2_MPEG_VIDEO_H264_LEVEL_5_0;
+-	case 51: return V4L2_MPEG_VIDEO_H264_LEVEL_5_1;
++	case 10: return V4L2_CODEC_VIDEO_H264_LEVEL_1_0;
++	case 9:  return V4L2_CODEC_VIDEO_H264_LEVEL_1B;
++	case 11: return V4L2_CODEC_VIDEO_H264_LEVEL_1_1;
++	case 12: return V4L2_CODEC_VIDEO_H264_LEVEL_1_2;
++	case 13: return V4L2_CODEC_VIDEO_H264_LEVEL_1_3;
++	case 20: return V4L2_CODEC_VIDEO_H264_LEVEL_2_0;
++	case 21: return V4L2_CODEC_VIDEO_H264_LEVEL_2_1;
++	case 22: return V4L2_CODEC_VIDEO_H264_LEVEL_2_2;
++	case 30: return V4L2_CODEC_VIDEO_H264_LEVEL_3_0;
++	case 31: return V4L2_CODEC_VIDEO_H264_LEVEL_3_1;
++	case 32: return V4L2_CODEC_VIDEO_H264_LEVEL_3_2;
++	case 40: return V4L2_CODEC_VIDEO_H264_LEVEL_4_0;
++	case 41: return V4L2_CODEC_VIDEO_H264_LEVEL_4_1;
++	case 42: return V4L2_CODEC_VIDEO_H264_LEVEL_4_2;
++	case 50: return V4L2_CODEC_VIDEO_H264_LEVEL_5_0;
++	case 51: return V4L2_CODEC_VIDEO_H264_LEVEL_5_1;
+ 	default: return -EINVAL;
+ 	}
+ }
+diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/coda/coda-mpeg2.c
+index 6f3f6721d286..277614f68f4b 100644
+--- a/drivers/media/platform/coda/coda-mpeg2.c
++++ b/drivers/media/platform/coda/coda-mpeg2.c
+@@ -13,15 +13,15 @@ int coda_mpeg2_profile(int profile_idc)
+ {
+ 	switch (profile_idc) {
+ 	case 5:
+-		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE;
++		return V4L2_CODEC_VIDEO_MPEG2_PROFILE_SIMPLE;
+ 	case 4:
+-		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN;
++		return V4L2_CODEC_VIDEO_MPEG2_PROFILE_MAIN;
+ 	case 3:
+-		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE;
++		return V4L2_CODEC_VIDEO_MPEG2_PROFILE_SNR_SCALABLE;
+ 	case 2:
+-		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE;
++		return V4L2_CODEC_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE;
+ 	case 1:
+-		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH;
++		return V4L2_CODEC_VIDEO_MPEG2_PROFILE_HIGH;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -31,13 +31,13 @@ int coda_mpeg2_level(int level_idc)
+ {
+ 	switch (level_idc) {
+ 	case 10:
+-		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW;
++		return V4L2_CODEC_VIDEO_MPEG2_LEVEL_LOW;
+ 	case 8:
+-		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN;
++		return V4L2_CODEC_VIDEO_MPEG2_LEVEL_MAIN;
+ 	case 6:
+-		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440;
++		return V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH_1440;
+ 	case 4:
+-		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH;
++		return V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/media/platform/coda/coda-mpeg4.c b/drivers/media/platform/coda/coda-mpeg4.c
+index 483a4fba1b4f..159eff42026e 100644
+--- a/drivers/media/platform/coda/coda-mpeg4.c
++++ b/drivers/media/platform/coda/coda-mpeg4.c
+@@ -14,15 +14,15 @@ int coda_mpeg4_profile(int profile_idc)
+ {
+ 	switch (profile_idc) {
+ 	case 0:
+-		return V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE;
++		return V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE;
+ 	case 15:
+-		return V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE;
++		return V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE;
+ 	case 2:
+-		return V4L2_MPEG_VIDEO_MPEG4_PROFILE_CORE;
++		return V4L2_CODEC_VIDEO_MPEG4_PROFILE_CORE;
+ 	case 1:
+-		return V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE_SCALABLE;
++		return V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE_SCALABLE;
+ 	case 11:
+-		return V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY;
++		return V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -32,17 +32,17 @@ int coda_mpeg4_level(int level_idc)
+ {
+ 	switch (level_idc) {
+ 	case 0:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_0;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_0;
+ 	case 1:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_1;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_1;
+ 	case 2:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_2;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_2;
+ 	case 3:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_3;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_3;
+ 	case 4:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_4;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_4;
+ 	case 5:
+-		return V4L2_MPEG_VIDEO_MPEG4_LEVEL_5;
++		return V4L2_CODEC_VIDEO_MPEG4_LEVEL_5;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
+index dcf35641c603..125b5f126e6c 100644
+--- a/drivers/media/platform/coda/coda.h
++++ b/drivers/media/platform/coda/coda.h
+@@ -143,7 +143,7 @@ struct coda_params {
+ 	struct coda_huff_tab	*jpeg_huff_tab;
+ 	int			codec_mode;
+ 	int			codec_mode_aux;
+-	enum v4l2_mpeg_video_multi_slice_mode slice_mode;
++	enum v4l2_codec_video_multi_slice_mode slice_mode;
+ 	u32			framerate;
+ 	u16			bitrate;
+ 	u16			vbv_delay;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index 56d86e59421e..967dfba10af4 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -1418,9 +1418,9 @@ int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+ 	ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_hdl,
+ 				&mtk_vcodec_dec_ctrl_ops,
+-				V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
+-				V4L2_MPEG_VIDEO_VP9_PROFILE_0,
+-				0, V4L2_MPEG_VIDEO_VP9_PROFILE_0);
++				V4L2_CID_CODEC_VIDEO_VP9_PROFILE,
++				V4L2_CODEC_VIDEO_VP9_PROFILE_0,
++				0, V4L2_CODEC_VIDEO_VP9_PROFILE_0);
+ 
+ 	if (ctx->ctrl_hdl.error) {
+ 		mtk_v4l2_err("Adding control failed %d",
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 8c917969c2f1..eb2d3ff6aa07 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -43,61 +43,61 @@ static int vidioc_venc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret = 0;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_BITRATE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_BITRATE val = %d",
++	case V4L2_CID_CODEC_VIDEO_BITRATE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_BITRATE val = %d",
+ 			       ctrl->val);
+ 		p->bitrate = ctrl->val;
+ 		ctx->param_change |= MTK_ENCODE_PARAM_BITRATE;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_B_FRAMES:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_B_FRAMES val = %d",
++	case V4L2_CID_CODEC_VIDEO_B_FRAMES:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_B_FRAMES val = %d",
+ 			       ctrl->val);
+ 		p->num_b_frame = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE val = %d",
++	case V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE val = %d",
+ 			       ctrl->val);
+ 		p->rc_frame = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_MAX_QP val = %d",
++	case V4L2_CID_CODEC_VIDEO_H264_MAX_QP:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_H264_MAX_QP val = %d",
+ 			       ctrl->val);
+ 		p->h264_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_HEADER_MODE val = %d",
++	case V4L2_CID_CODEC_VIDEO_HEADER_MODE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_HEADER_MODE val = %d",
+ 			       ctrl->val);
+ 		p->seq_hdr_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE val = %d",
++	case V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE val = %d",
+ 			       ctrl->val);
+ 		p->rc_mb = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_PROFILE val = %d",
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_H264_PROFILE val = %d",
+ 			       ctrl->val);
+ 		p->h264_profile = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_LEVEL val = %d",
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_H264_LEVEL val = %d",
+ 			       ctrl->val);
+ 		p->h264_level = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_PERIOD:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_H264_I_PERIOD val = %d",
++	case V4L2_CID_CODEC_VIDEO_H264_I_PERIOD:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_H264_I_PERIOD val = %d",
+ 			       ctrl->val);
+ 		p->intra_period = ctrl->val;
+ 		ctx->param_change |= MTK_ENCODE_PARAM_INTRA_PERIOD;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_GOP_SIZE val = %d",
++	case V4L2_CID_CODEC_VIDEO_GOP_SIZE:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_GOP_SIZE val = %d",
+ 			       ctrl->val);
+ 		p->gop_size = ctrl->val;
+ 		ctx->param_change |= MTK_ENCODE_PARAM_GOP_SIZE;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
+-		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME");
++	case V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME:
++		mtk_v4l2_debug(2, "V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME");
+ 		p->force_intra = 1;
+ 		ctx->param_change |= MTK_ENCODE_PARAM_FORCE_INTRA;
+ 		break;
+@@ -810,7 +810,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 
+ 	if ((ctx->q_data[MTK_Q_DATA_DST].fmt->fourcc == V4L2_PIX_FMT_H264) &&
+ 	    (ctx->enc_params.seq_hdr_mode !=
+-				V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE)) {
++				V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE)) {
+ 		ret = venc_if_set_param(ctx,
+ 					VENC_SET_PARAM_PREPEND_HEADER,
+ 					NULL);
+@@ -1207,33 +1207,33 @@ int mtk_vcodec_enc_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+ 
+ 	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
+ 			  1, 1, 1, 1);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_BITRATE,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_BITRATE,
+ 			  ctx->dev->venc_pdata->min_bitrate,
+ 			  ctx->dev->venc_pdata->max_bitrate, 1, 4000000);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_B_FRAMES,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_B_FRAMES,
+ 			0, 2, 1, 0);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE,
+ 			0, 1, 1, 1);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_H264_MAX_QP,
+ 			0, 51, 1, 51);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_H264_I_PERIOD,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_H264_I_PERIOD,
+ 			0, 65535, 1, 0);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_GOP_SIZE,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_GOP_SIZE,
+ 			0, 65535, 1, 0);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE,
+ 			0, 1, 1, 0);
+-	v4l2_ctrl_new_std(handler, ops, V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME,
++	v4l2_ctrl_new_std(handler, ops, V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME,
+ 			0, 0, 0, 0);
+ 	v4l2_ctrl_new_std_menu(handler, ops,
+-			V4L2_CID_MPEG_VIDEO_HEADER_MODE,
+-			V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
+-			0, V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
+-	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-			0, V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
+-	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-			V4L2_MPEG_VIDEO_H264_LEVEL_4_2,
+-			0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
++			V4L2_CID_CODEC_VIDEO_HEADER_MODE,
++			V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
++			0, V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE);
++	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++			V4L2_CODEC_VIDEO_H264_PROFILE_HIGH,
++			0, V4L2_CODEC_VIDEO_H264_PROFILE_HIGH);
++	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++			V4L2_CODEC_VIDEO_H264_LEVEL_4_2,
++			0, V4L2_CODEC_VIDEO_H264_LEVEL_4_0);
+ 	if (handler->error) {
+ 		mtk_v4l2_err("Init control handler fail %d",
+ 				handler->error);
+diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+index d0123dfc5f93..1633791bb780 100644
+--- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+@@ -164,16 +164,16 @@ static unsigned int h264_get_profile(struct venc_h264_inst *inst,
+ 				     unsigned int profile)
+ {
+ 	switch (profile) {
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE:
+ 		return 66;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_MAIN:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_MAIN:
+ 		return 77;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_HIGH:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_HIGH:
+ 		return 100;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE:
+ 		mtk_vcodec_err(inst, "unsupported CONSTRAINED_BASELINE");
+ 		return 0;
+-	case V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED:
++	case V4L2_CODEC_VIDEO_H264_PROFILE_EXTENDED:
+ 		mtk_vcodec_err(inst, "unsupported EXTENDED");
+ 		return 0;
+ 	default:
+@@ -186,34 +186,34 @@ static unsigned int h264_get_level(struct venc_h264_inst *inst,
+ 				   unsigned int level)
+ {
+ 	switch (level) {
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1B:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1B:
+ 		mtk_vcodec_err(inst, "unsupported 1B");
+ 		return 0;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_0:
+ 		return 10;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_1:
+ 		return 11;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_2:
+ 		return 12;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_1_3:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_1_3:
+ 		return 13;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_0:
+ 		return 20;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_1:
+ 		return 21;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_2_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_2_2:
+ 		return 22;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_0:
+ 		return 30;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_1:
+ 		return 31;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_3_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_3_2:
+ 		return 32;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_0:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_0:
+ 		return 40;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_1:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_1:
+ 		return 41;
+-	case V4L2_MPEG_VIDEO_H264_LEVEL_4_2:
++	case V4L2_CODEC_VIDEO_H264_LEVEL_4_2:
+ 		return 42;
+ 	default:
+ 		mtk_vcodec_debug(inst, "unsupported level %d", level);
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index 76ece2ff8d39..441aa4c8e498 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -590,7 +590,7 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
+ 		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_out->pixfmt);
+ 		params.enc.work_mode = VIDC_WORK_MODE_2;
+ 		params.enc.rc_type = HFI_RATE_CONTROL_OFF;
+-		if (enc_ctr->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CQ)
++		if (enc_ctr->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_CQ)
+ 			params.enc.rc_type = HFI_RATE_CONTROL_CQ;
+ 		params.enc.num_b_frames = enc_ctr->num_b_frames;
+ 		params.enc.is_tenbit = inst->bit_depth == VIDC_BITDEPTH_10;
+@@ -640,112 +640,112 @@ struct id_mapping {
+ };
+ 
+ static const struct id_mapping mpeg4_profiles[] = {
+-	{ HFI_MPEG4_PROFILE_SIMPLE, V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE },
+-	{ HFI_MPEG4_PROFILE_ADVANCEDSIMPLE, V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE },
++	{ HFI_MPEG4_PROFILE_SIMPLE, V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE },
++	{ HFI_MPEG4_PROFILE_ADVANCEDSIMPLE, V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE },
+ };
+ 
+ static const struct id_mapping mpeg4_levels[] = {
+-	{ HFI_MPEG4_LEVEL_0, V4L2_MPEG_VIDEO_MPEG4_LEVEL_0 },
+-	{ HFI_MPEG4_LEVEL_0b, V4L2_MPEG_VIDEO_MPEG4_LEVEL_0B },
+-	{ HFI_MPEG4_LEVEL_1, V4L2_MPEG_VIDEO_MPEG4_LEVEL_1 },
+-	{ HFI_MPEG4_LEVEL_2, V4L2_MPEG_VIDEO_MPEG4_LEVEL_2 },
+-	{ HFI_MPEG4_LEVEL_3, V4L2_MPEG_VIDEO_MPEG4_LEVEL_3 },
+-	{ HFI_MPEG4_LEVEL_4, V4L2_MPEG_VIDEO_MPEG4_LEVEL_4 },
+-	{ HFI_MPEG4_LEVEL_5, V4L2_MPEG_VIDEO_MPEG4_LEVEL_5 },
++	{ HFI_MPEG4_LEVEL_0, V4L2_CODEC_VIDEO_MPEG4_LEVEL_0 },
++	{ HFI_MPEG4_LEVEL_0b, V4L2_CODEC_VIDEO_MPEG4_LEVEL_0B },
++	{ HFI_MPEG4_LEVEL_1, V4L2_CODEC_VIDEO_MPEG4_LEVEL_1 },
++	{ HFI_MPEG4_LEVEL_2, V4L2_CODEC_VIDEO_MPEG4_LEVEL_2 },
++	{ HFI_MPEG4_LEVEL_3, V4L2_CODEC_VIDEO_MPEG4_LEVEL_3 },
++	{ HFI_MPEG4_LEVEL_4, V4L2_CODEC_VIDEO_MPEG4_LEVEL_4 },
++	{ HFI_MPEG4_LEVEL_5, V4L2_CODEC_VIDEO_MPEG4_LEVEL_5 },
+ };
+ 
+ static const struct id_mapping mpeg2_profiles[] = {
+-	{ HFI_MPEG2_PROFILE_SIMPLE, V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE },
+-	{ HFI_MPEG2_PROFILE_MAIN, V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN },
+-	{ HFI_MPEG2_PROFILE_SNR, V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE },
+-	{ HFI_MPEG2_PROFILE_SPATIAL, V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE },
+-	{ HFI_MPEG2_PROFILE_HIGH, V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH },
++	{ HFI_MPEG2_PROFILE_SIMPLE, V4L2_CODEC_VIDEO_MPEG2_PROFILE_SIMPLE },
++	{ HFI_MPEG2_PROFILE_MAIN, V4L2_CODEC_VIDEO_MPEG2_PROFILE_MAIN },
++	{ HFI_MPEG2_PROFILE_SNR, V4L2_CODEC_VIDEO_MPEG2_PROFILE_SNR_SCALABLE },
++	{ HFI_MPEG2_PROFILE_SPATIAL, V4L2_CODEC_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE },
++	{ HFI_MPEG2_PROFILE_HIGH, V4L2_CODEC_VIDEO_MPEG2_PROFILE_HIGH },
+ };
+ 
+ static const struct id_mapping mpeg2_levels[] = {
+-	{ HFI_MPEG2_LEVEL_LL, V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW },
+-	{ HFI_MPEG2_LEVEL_ML, V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN },
+-	{ HFI_MPEG2_LEVEL_H14, V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440 },
+-	{ HFI_MPEG2_LEVEL_HL, V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH },
++	{ HFI_MPEG2_LEVEL_LL, V4L2_CODEC_VIDEO_MPEG2_LEVEL_LOW },
++	{ HFI_MPEG2_LEVEL_ML, V4L2_CODEC_VIDEO_MPEG2_LEVEL_MAIN },
++	{ HFI_MPEG2_LEVEL_H14, V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH_1440 },
++	{ HFI_MPEG2_LEVEL_HL, V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH },
+ };
+ 
+ static const struct id_mapping h264_profiles[] = {
+-	{ HFI_H264_PROFILE_BASELINE, V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE },
+-	{ HFI_H264_PROFILE_MAIN, V4L2_MPEG_VIDEO_H264_PROFILE_MAIN },
+-	{ HFI_H264_PROFILE_HIGH, V4L2_MPEG_VIDEO_H264_PROFILE_HIGH },
+-	{ HFI_H264_PROFILE_STEREO_HIGH, V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH },
+-	{ HFI_H264_PROFILE_MULTIVIEW_HIGH, V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH },
+-	{ HFI_H264_PROFILE_CONSTRAINED_BASE, V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE },
+-	{ HFI_H264_PROFILE_CONSTRAINED_HIGH, V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH },
++	{ HFI_H264_PROFILE_BASELINE, V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE },
++	{ HFI_H264_PROFILE_MAIN, V4L2_CODEC_VIDEO_H264_PROFILE_MAIN },
++	{ HFI_H264_PROFILE_HIGH, V4L2_CODEC_VIDEO_H264_PROFILE_HIGH },
++	{ HFI_H264_PROFILE_STEREO_HIGH, V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH },
++	{ HFI_H264_PROFILE_MULTIVIEW_HIGH, V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH },
++	{ HFI_H264_PROFILE_CONSTRAINED_BASE, V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE },
++	{ HFI_H264_PROFILE_CONSTRAINED_HIGH, V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_HIGH },
+ };
+ 
+ static const struct id_mapping h264_levels[] = {
+-	{ HFI_H264_LEVEL_1, V4L2_MPEG_VIDEO_H264_LEVEL_1_0 },
+-	{ HFI_H264_LEVEL_1b, V4L2_MPEG_VIDEO_H264_LEVEL_1B },
+-	{ HFI_H264_LEVEL_11, V4L2_MPEG_VIDEO_H264_LEVEL_1_1 },
+-	{ HFI_H264_LEVEL_12, V4L2_MPEG_VIDEO_H264_LEVEL_1_2 },
+-	{ HFI_H264_LEVEL_13, V4L2_MPEG_VIDEO_H264_LEVEL_1_3 },
+-	{ HFI_H264_LEVEL_2, V4L2_MPEG_VIDEO_H264_LEVEL_2_0 },
+-	{ HFI_H264_LEVEL_21, V4L2_MPEG_VIDEO_H264_LEVEL_2_1 },
+-	{ HFI_H264_LEVEL_22, V4L2_MPEG_VIDEO_H264_LEVEL_2_2 },
+-	{ HFI_H264_LEVEL_3, V4L2_MPEG_VIDEO_H264_LEVEL_3_0 },
+-	{ HFI_H264_LEVEL_31, V4L2_MPEG_VIDEO_H264_LEVEL_3_1 },
+-	{ HFI_H264_LEVEL_32, V4L2_MPEG_VIDEO_H264_LEVEL_3_2 },
+-	{ HFI_H264_LEVEL_4, V4L2_MPEG_VIDEO_H264_LEVEL_4_0 },
+-	{ HFI_H264_LEVEL_41, V4L2_MPEG_VIDEO_H264_LEVEL_4_1 },
+-	{ HFI_H264_LEVEL_42, V4L2_MPEG_VIDEO_H264_LEVEL_4_2 },
+-	{ HFI_H264_LEVEL_5, V4L2_MPEG_VIDEO_H264_LEVEL_5_0 },
+-	{ HFI_H264_LEVEL_51, V4L2_MPEG_VIDEO_H264_LEVEL_5_1 },
+-	{ HFI_H264_LEVEL_52, V4L2_MPEG_VIDEO_H264_LEVEL_5_1 },
++	{ HFI_H264_LEVEL_1, V4L2_CODEC_VIDEO_H264_LEVEL_1_0 },
++	{ HFI_H264_LEVEL_1b, V4L2_CODEC_VIDEO_H264_LEVEL_1B },
++	{ HFI_H264_LEVEL_11, V4L2_CODEC_VIDEO_H264_LEVEL_1_1 },
++	{ HFI_H264_LEVEL_12, V4L2_CODEC_VIDEO_H264_LEVEL_1_2 },
++	{ HFI_H264_LEVEL_13, V4L2_CODEC_VIDEO_H264_LEVEL_1_3 },
++	{ HFI_H264_LEVEL_2, V4L2_CODEC_VIDEO_H264_LEVEL_2_0 },
++	{ HFI_H264_LEVEL_21, V4L2_CODEC_VIDEO_H264_LEVEL_2_1 },
++	{ HFI_H264_LEVEL_22, V4L2_CODEC_VIDEO_H264_LEVEL_2_2 },
++	{ HFI_H264_LEVEL_3, V4L2_CODEC_VIDEO_H264_LEVEL_3_0 },
++	{ HFI_H264_LEVEL_31, V4L2_CODEC_VIDEO_H264_LEVEL_3_1 },
++	{ HFI_H264_LEVEL_32, V4L2_CODEC_VIDEO_H264_LEVEL_3_2 },
++	{ HFI_H264_LEVEL_4, V4L2_CODEC_VIDEO_H264_LEVEL_4_0 },
++	{ HFI_H264_LEVEL_41, V4L2_CODEC_VIDEO_H264_LEVEL_4_1 },
++	{ HFI_H264_LEVEL_42, V4L2_CODEC_VIDEO_H264_LEVEL_4_2 },
++	{ HFI_H264_LEVEL_5, V4L2_CODEC_VIDEO_H264_LEVEL_5_0 },
++	{ HFI_H264_LEVEL_51, V4L2_CODEC_VIDEO_H264_LEVEL_5_1 },
++	{ HFI_H264_LEVEL_52, V4L2_CODEC_VIDEO_H264_LEVEL_5_1 },
+ };
+ 
+ static const struct id_mapping hevc_profiles[] = {
+-	{ HFI_HEVC_PROFILE_MAIN, V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN },
+-	{ HFI_HEVC_PROFILE_MAIN_STILL_PIC, V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE },
+-	{ HFI_HEVC_PROFILE_MAIN10, V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10 },
++	{ HFI_HEVC_PROFILE_MAIN, V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN },
++	{ HFI_HEVC_PROFILE_MAIN_STILL_PIC, V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE },
++	{ HFI_HEVC_PROFILE_MAIN10, V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10 },
+ };
+ 
+ static const struct id_mapping hevc_levels[] = {
+-	{ HFI_HEVC_LEVEL_1, V4L2_MPEG_VIDEO_HEVC_LEVEL_1 },
+-	{ HFI_HEVC_LEVEL_2, V4L2_MPEG_VIDEO_HEVC_LEVEL_2 },
+-	{ HFI_HEVC_LEVEL_21, V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1 },
+-	{ HFI_HEVC_LEVEL_3, V4L2_MPEG_VIDEO_HEVC_LEVEL_3 },
+-	{ HFI_HEVC_LEVEL_31, V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1 },
+-	{ HFI_HEVC_LEVEL_4, V4L2_MPEG_VIDEO_HEVC_LEVEL_4 },
+-	{ HFI_HEVC_LEVEL_41, V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1 },
+-	{ HFI_HEVC_LEVEL_5, V4L2_MPEG_VIDEO_HEVC_LEVEL_5 },
+-	{ HFI_HEVC_LEVEL_51, V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1 },
+-	{ HFI_HEVC_LEVEL_52, V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2 },
+-	{ HFI_HEVC_LEVEL_6, V4L2_MPEG_VIDEO_HEVC_LEVEL_6 },
+-	{ HFI_HEVC_LEVEL_61, V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1 },
+-	{ HFI_HEVC_LEVEL_62, V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2 },
++	{ HFI_HEVC_LEVEL_1, V4L2_CODEC_VIDEO_HEVC_LEVEL_1 },
++	{ HFI_HEVC_LEVEL_2, V4L2_CODEC_VIDEO_HEVC_LEVEL_2 },
++	{ HFI_HEVC_LEVEL_21, V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1 },
++	{ HFI_HEVC_LEVEL_3, V4L2_CODEC_VIDEO_HEVC_LEVEL_3 },
++	{ HFI_HEVC_LEVEL_31, V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1 },
++	{ HFI_HEVC_LEVEL_4, V4L2_CODEC_VIDEO_HEVC_LEVEL_4 },
++	{ HFI_HEVC_LEVEL_41, V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1 },
++	{ HFI_HEVC_LEVEL_5, V4L2_CODEC_VIDEO_HEVC_LEVEL_5 },
++	{ HFI_HEVC_LEVEL_51, V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1 },
++	{ HFI_HEVC_LEVEL_52, V4L2_CODEC_VIDEO_HEVC_LEVEL_5_2 },
++	{ HFI_HEVC_LEVEL_6, V4L2_CODEC_VIDEO_HEVC_LEVEL_6 },
++	{ HFI_HEVC_LEVEL_61, V4L2_CODEC_VIDEO_HEVC_LEVEL_6_1 },
++	{ HFI_HEVC_LEVEL_62, V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2 },
+ };
+ 
+ static const struct id_mapping vp8_profiles[] = {
+-	{ HFI_VPX_PROFILE_VERSION_0, V4L2_MPEG_VIDEO_VP8_PROFILE_0 },
+-	{ HFI_VPX_PROFILE_VERSION_1, V4L2_MPEG_VIDEO_VP8_PROFILE_1 },
+-	{ HFI_VPX_PROFILE_VERSION_2, V4L2_MPEG_VIDEO_VP8_PROFILE_2 },
+-	{ HFI_VPX_PROFILE_VERSION_3, V4L2_MPEG_VIDEO_VP8_PROFILE_3 },
++	{ HFI_VPX_PROFILE_VERSION_0, V4L2_CODEC_VIDEO_VP8_PROFILE_0 },
++	{ HFI_VPX_PROFILE_VERSION_1, V4L2_CODEC_VIDEO_VP8_PROFILE_1 },
++	{ HFI_VPX_PROFILE_VERSION_2, V4L2_CODEC_VIDEO_VP8_PROFILE_2 },
++	{ HFI_VPX_PROFILE_VERSION_3, V4L2_CODEC_VIDEO_VP8_PROFILE_3 },
+ };
+ 
+ static const struct id_mapping vp9_profiles[] = {
+-	{ HFI_VP9_PROFILE_P0, V4L2_MPEG_VIDEO_VP9_PROFILE_0 },
+-	{ HFI_VP9_PROFILE_P2_10B, V4L2_MPEG_VIDEO_VP9_PROFILE_2 },
++	{ HFI_VP9_PROFILE_P0, V4L2_CODEC_VIDEO_VP9_PROFILE_0 },
++	{ HFI_VP9_PROFILE_P2_10B, V4L2_CODEC_VIDEO_VP9_PROFILE_2 },
+ };
+ 
+ static const struct id_mapping vp9_levels[] = {
+-	{ HFI_VP9_LEVEL_1, V4L2_MPEG_VIDEO_VP9_LEVEL_1_0 },
+-	{ HFI_VP9_LEVEL_11, V4L2_MPEG_VIDEO_VP9_LEVEL_1_1 },
+-	{ HFI_VP9_LEVEL_2, V4L2_MPEG_VIDEO_VP9_LEVEL_2_0},
+-	{ HFI_VP9_LEVEL_21, V4L2_MPEG_VIDEO_VP9_LEVEL_2_1 },
+-	{ HFI_VP9_LEVEL_3, V4L2_MPEG_VIDEO_VP9_LEVEL_3_0},
+-	{ HFI_VP9_LEVEL_31, V4L2_MPEG_VIDEO_VP9_LEVEL_3_1 },
+-	{ HFI_VP9_LEVEL_4, V4L2_MPEG_VIDEO_VP9_LEVEL_4_0 },
+-	{ HFI_VP9_LEVEL_41, V4L2_MPEG_VIDEO_VP9_LEVEL_4_1 },
+-	{ HFI_VP9_LEVEL_5, V4L2_MPEG_VIDEO_VP9_LEVEL_5_0 },
+-	{ HFI_VP9_LEVEL_51, V4L2_MPEG_VIDEO_VP9_LEVEL_5_1 },
+-	{ HFI_VP9_LEVEL_6, V4L2_MPEG_VIDEO_VP9_LEVEL_6_0 },
+-	{ HFI_VP9_LEVEL_61, V4L2_MPEG_VIDEO_VP9_LEVEL_6_1 },
++	{ HFI_VP9_LEVEL_1, V4L2_CODEC_VIDEO_VP9_LEVEL_1_0 },
++	{ HFI_VP9_LEVEL_11, V4L2_CODEC_VIDEO_VP9_LEVEL_1_1 },
++	{ HFI_VP9_LEVEL_2, V4L2_CODEC_VIDEO_VP9_LEVEL_2_0},
++	{ HFI_VP9_LEVEL_21, V4L2_CODEC_VIDEO_VP9_LEVEL_2_1 },
++	{ HFI_VP9_LEVEL_3, V4L2_CODEC_VIDEO_VP9_LEVEL_3_0},
++	{ HFI_VP9_LEVEL_31, V4L2_CODEC_VIDEO_VP9_LEVEL_3_1 },
++	{ HFI_VP9_LEVEL_4, V4L2_CODEC_VIDEO_VP9_LEVEL_4_0 },
++	{ HFI_VP9_LEVEL_41, V4L2_CODEC_VIDEO_VP9_LEVEL_4_1 },
++	{ HFI_VP9_LEVEL_5, V4L2_CODEC_VIDEO_VP9_LEVEL_5_0 },
++	{ HFI_VP9_LEVEL_51, V4L2_CODEC_VIDEO_VP9_LEVEL_5_1 },
++	{ HFI_VP9_LEVEL_6, V4L2_CODEC_VIDEO_VP9_LEVEL_6_0 },
++	{ HFI_VP9_LEVEL_61, V4L2_CODEC_VIDEO_VP9_LEVEL_6_1 },
+ };
+ 
+ static u32 find_v4l2_id(u32 hfi_id, const struct id_mapping *array, unsigned int array_sz)
+diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+index 974110b75b93..e6dd79af10af 100644
+--- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
++++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+@@ -16,18 +16,18 @@ static int vdec_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct vdec_controls *ctr = &inst->controls.dec;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
++	case V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
+ 		ctr->post_loop_deb_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP8_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP9_PROFILE:
+ 		ctr->profile = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+-	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_VP9_LEVEL:
+ 		ctr->level = ctrl->val;
+ 		break;
+ 	default:
+@@ -47,24 +47,24 @@ static int vdec_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
+-	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP8_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP9_PROFILE:
+ 		ret = venus_helper_get_profile_level(inst, &profile, &level);
+ 		if (!ret)
+ 			ctr->profile = profile;
+ 		ctrl->val = ctr->profile;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+-	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_VP9_LEVEL:
+ 		ret = venus_helper_get_profile_level(inst, &profile, &level);
+ 		if (!ret)
+ 			ctr->level = level;
+ 		ctrl->val = ctr->level;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
++	case V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
+ 		ctrl->val = ctr->post_loop_deb_mode;
+ 		break;
+ 	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
+@@ -94,64 +94,64 @@ int vdec_ctrl_init(struct venus_inst *inst)
+ 		return ret;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY,
+-		~((1 << V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE) |
+-		  (1 << V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE)),
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE);
++		V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY,
++		~((1 << V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE) |
++		  (1 << V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE)),
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-				      V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL,
+-				      V4L2_MPEG_VIDEO_MPEG4_LEVEL_5,
+-				      0, V4L2_MPEG_VIDEO_MPEG4_LEVEL_0);
++				      V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL,
++				      V4L2_CODEC_VIDEO_MPEG4_LEVEL_5,
++				      0, V4L2_CODEC_VIDEO_MPEG4_LEVEL_0);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH)),
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
++		V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++		V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
++		~((1 << V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MAIN) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_HIGH) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH)),
++		V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-				      V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-				      V4L2_MPEG_VIDEO_H264_LEVEL_5_1,
+-				      0, V4L2_MPEG_VIDEO_H264_LEVEL_1_0);
++				      V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++				      V4L2_CODEC_VIDEO_H264_LEVEL_5_1,
++				      0, V4L2_CODEC_VIDEO_H264_LEVEL_1_0);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-				      V4L2_CID_MPEG_VIDEO_VP8_PROFILE,
+-				      V4L2_MPEG_VIDEO_VP8_PROFILE_3,
+-				      0, V4L2_MPEG_VIDEO_VP8_PROFILE_0);
++				      V4L2_CID_CODEC_VIDEO_VP8_PROFILE,
++				      V4L2_CODEC_VIDEO_VP8_PROFILE_3,
++				      0, V4L2_CODEC_VIDEO_VP8_PROFILE_0);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-				      V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
+-				      V4L2_MPEG_VIDEO_VP9_PROFILE_3,
+-				      0, V4L2_MPEG_VIDEO_VP9_PROFILE_0);
++				      V4L2_CID_CODEC_VIDEO_VP9_PROFILE,
++				      V4L2_CODEC_VIDEO_VP9_PROFILE_3,
++				      0, V4L2_CODEC_VIDEO_VP9_PROFILE_0);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	ctrl = v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &vdec_ctrl_ops,
+-				      V4L2_CID_MPEG_VIDEO_VP9_LEVEL,
+-				      V4L2_MPEG_VIDEO_VP9_LEVEL_6_2,
+-				      0, V4L2_MPEG_VIDEO_VP9_LEVEL_1_0);
++				      V4L2_CID_CODEC_VIDEO_VP9_LEVEL,
++				      V4L2_CODEC_VIDEO_VP9_LEVEL_6_2,
++				      0, V4L2_CODEC_VIDEO_VP9_LEVEL_1_0);
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER, 0, 1, 1, 0);
++		V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER, 0, 1, 1, 0);
+ 
+ 	ctrl = v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
+ 		V4L2_CID_MIN_BUFFERS_FOR_CAPTURE, 1, 32, 1, 1);
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 6976ed553647..16251e662b64 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -113,22 +113,22 @@ find_format_by_index(struct venus_inst *inst, unsigned int index, u32 type)
+ static int venc_v4l2_to_hfi(int id, int value)
+ {
+ 	switch (id) {
+-	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE:
+ 		switch (value) {
+-		case V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC:
++		case V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC:
+ 		default:
+ 			return HFI_H264_ENTROPY_CAVLC;
+-		case V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC:
++		case V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC:
+ 			return HFI_H264_ENTROPY_CABAC;
+ 		}
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE:
+ 		switch (value) {
+-		case V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED:
++		case V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_ENABLED:
+ 		default:
+ 			return HFI_H264_DB_MODE_ALL_BOUNDARY;
+-		case V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED:
++		case V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED:
+ 			return HFI_H264_DB_MODE_DISABLE;
+-		case V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY:
++		case V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY:
+ 			return HFI_H264_DB_MODE_SKIP_SLICE_BOUNDARY;
+ 		}
+ 	}
+@@ -578,7 +578,7 @@ static int venc_set_properties(struct venus_inst *inst)
+ 
+ 		ptype = HFI_PROPERTY_PARAM_VENC_H264_ENTROPY_CONTROL;
+ 		entropy.entropy_mode = venc_v4l2_to_hfi(
+-					  V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
++					  V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE,
+ 					  ctr->h264_entropy_mode);
+ 		entropy.cabac_model = HFI_H264_CABAC_MODEL_0;
+ 
+@@ -588,7 +588,7 @@ static int venc_set_properties(struct venus_inst *inst)
+ 
+ 		ptype = HFI_PROPERTY_PARAM_VENC_H264_DEBLOCK_CONTROL;
+ 		deblock.mode = venc_v4l2_to_hfi(
+-				      V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
++				      V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE,
+ 				      ctr->h264_loop_filter_mode);
+ 		deblock.slice_alpha_offset = ctr->h264_loop_filter_alpha;
+ 		deblock.slice_beta_offset = ctr->h264_loop_filter_beta;
+@@ -631,13 +631,13 @@ static int venc_set_properties(struct venus_inst *inst)
+ 
+ 	if (!ctr->rc_enable)
+ 		rate_control = HFI_RATE_CONTROL_OFF;
+-	else if (ctr->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR)
++	else if (ctr->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR)
+ 		rate_control = ctr->frame_skip_mode ? HFI_RATE_CONTROL_VBR_VFR :
+ 						      HFI_RATE_CONTROL_VBR_CFR;
+-	else if (ctr->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CBR)
++	else if (ctr->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_CBR)
+ 		rate_control = ctr->frame_skip_mode ? HFI_RATE_CONTROL_CBR_VFR :
+ 						      HFI_RATE_CONTROL_CBR_CFR;
+-	else if (ctr->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CQ)
++	else if (ctr->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_CQ)
+ 		rate_control = HFI_RATE_CONTROL_CQ;
+ 
+ 	ptype = HFI_PROPERTY_PARAM_VENC_RATE_CONTROL;
+@@ -671,7 +671,7 @@ static int venc_set_properties(struct venus_inst *inst)
+ 	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_H264 ||
+ 	    inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
+ 		ptype = HFI_PROPERTY_CONFIG_VENC_SYNC_FRAME_SEQUENCE_HEADER;
+-		if (ctr->header_mode == V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE)
++		if (ctr->header_mode == V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE)
+ 			en.enable = 0;
+ 		else
+ 			en.enable = 1;
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index a52b80055173..cf0943ee5be0 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -19,7 +19,7 @@
+ #define SLICE_MB_SIZE_MAX	300
+ #define INTRA_REFRESH_MBS_MAX	300
+ #define AT_SLICE_BOUNDARY	\
+-	V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY
++	V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY
+ 
+ static int venc_calc_bpframes(u32 gop_size, u32 conseq_b, u32 *bf, u32 *pf)
+ {
+@@ -77,10 +77,10 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		ctr->bitrate_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE:
+ 		ctr->bitrate = ctrl->val;
+ 		mutex_lock(&inst->lock);
+ 		if (inst->streamon_out && inst->streamon_cap) {
+@@ -96,122 +96,122 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
+ 		mutex_unlock(&inst->lock);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_PEAK:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_PEAK:
+ 		ctr->bitrate_peak = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE:
+ 		ctr->h264_entropy_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE:
+ 		ctr->profile.mpeg4 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
+ 		ctr->profile.h264 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_PROFILE:
+ 		ctr->profile.hevc = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP8_PROFILE:
+ 		ctr->profile.vp8 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL:
+ 		ctr->level.mpeg4 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
+ 		ctr->level.h264 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LEVEL:
+ 		ctr->level.hevc = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP:
+ 		ctr->h264_i_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP:
+ 		ctr->h264_p_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP:
+ 		ctr->h264_b_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MIN_QP:
+ 		ctr->h264_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MIN_QP:
+ 		ctr->h264_i_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MIN_QP:
+ 		ctr->h264_p_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MIN_QP:
+ 		ctr->h264_b_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MAX_QP:
+ 		ctr->h264_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MAX_QP:
+ 		ctr->h264_i_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MAX_QP:
+ 		ctr->h264_p_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MAX_QP:
+ 		ctr->h264_b_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP:
+ 		ctr->hevc_i_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP:
+ 		ctr->hevc_p_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP:
+ 		ctr->hevc_b_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP:
+ 		ctr->hevc_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MIN_QP:
+ 		ctr->hevc_i_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MIN_QP:
+ 		ctr->hevc_p_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MIN_QP:
+ 		ctr->hevc_b_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP:
+ 		ctr->hevc_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MAX_QP:
+ 		ctr->hevc_i_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MAX_QP:
+ 		ctr->hevc_p_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MAX_QP:
+ 		ctr->hevc_b_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE:
+ 		ctr->multi_slice_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES:
+ 		ctr->multi_slice_max_bytes = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB:
+ 		ctr->multi_slice_max_mb = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA:
+ 		ctr->h264_loop_filter_alpha = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA:
+ 		ctr->h264_loop_filter_beta = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE:
+ 		ctr->h264_loop_filter_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
++	case V4L2_CID_CODEC_VIDEO_HEADER_MODE:
+ 		ctr->header_mode = ctrl->val;
+ 		mutex_lock(&inst->lock);
+ 		if (inst->streamon_out && inst->streamon_cap) {
+-			if (ctrl->val == V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE)
++			if (ctrl->val == V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE)
+ 				en.enable = 0;
+ 			else
+ 				en.enable = 1;
+@@ -224,9 +224,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
+ 		mutex_unlock(&inst->lock);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:
++	case V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB:
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
++	case V4L2_CID_CODEC_VIDEO_GOP_SIZE:
+ 		ret = venc_calc_bpframes(ctrl->val, ctr->num_b_frames, &bframes,
+ 					 &ctr->num_p_frames);
+ 		if (ret)
+@@ -234,16 +234,16 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 		ctr->gop_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_PERIOD:
++	case V4L2_CID_CODEC_VIDEO_H264_I_PERIOD:
+ 		ctr->h264_i_period = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_MIN_QP:
+ 		ctr->vp8_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_MAX_QP:
+ 		ctr->vp8_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_B_FRAMES:
++	case V4L2_CID_CODEC_VIDEO_B_FRAMES:
+ 		ret = venc_calc_bpframes(ctr->gop_size, ctrl->val, &bframes,
+ 					 &ctr->num_p_frames);
+ 		if (ret)
+@@ -251,7 +251,7 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 		ctr->num_b_frames = bframes;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
++	case V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME:
+ 		mutex_lock(&inst->lock);
+ 		if (inst->streamon_out && inst->streamon_cap) {
+ 			ptype = HFI_PROPERTY_CONFIG_VENC_REQUEST_SYNC_FRAME;
+@@ -264,16 +264,16 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
+ 		mutex_unlock(&inst->lock);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE:
+ 		ctr->rc_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY:
++	case V4L2_CID_CODEC_VIDEO_CONSTANT_QUALITY:
+ 		ctr->const_quality = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE:
+ 		ctr->frame_skip_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID:
++	case V4L2_CID_CODEC_VIDEO_BASELAYER_PRIORITY_ID:
+ 		ctr->base_priority_id = ctrl->val;
+ 		break;
+ 	default:
+@@ -296,206 +296,206 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 		return ret;
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
+-		V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
+-		~((1 << V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
+-		  (1 << V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) |
+-		  (1 << V4L2_MPEG_VIDEO_BITRATE_MODE_CQ)),
+-		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
++		V4L2_CID_CODEC_VIDEO_BITRATE_MODE,
++		V4L2_CODEC_VIDEO_BITRATE_MODE_CBR,
++		~((1 << V4L2_CODEC_VIDEO_BITRATE_MODE_VBR) |
++		  (1 << V4L2_CODEC_VIDEO_BITRATE_MODE_CBR) |
++		  (1 << V4L2_CODEC_VIDEO_BITRATE_MODE_CQ)),
++		V4L2_CODEC_VIDEO_BITRATE_MODE_VBR);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
+-		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
+-		0, V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC);
++		V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE,
++		V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC,
++		0, V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY,
+-		~((1 << V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE) |
+-		  (1 << V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE)),
+-		V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE);
++		V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE,
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY,
++		~((1 << V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE) |
++		  (1 << V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE)),
++		V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL,
+-		V4L2_MPEG_VIDEO_MPEG4_LEVEL_5,
+-		0, V4L2_MPEG_VIDEO_MPEG4_LEVEL_0);
++		V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL,
++		V4L2_CODEC_VIDEO_MPEG4_LEVEL_5,
++		0, V4L2_CODEC_VIDEO_MPEG4_LEVEL_0);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
+-		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
+-		~((1 << V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN) |
+-		  (1 << V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE) |
+-		  (1 << V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10)),
+-		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN);
++		V4L2_CID_CODEC_VIDEO_HEVC_PROFILE,
++		V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10,
++		~((1 << V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN) |
++		  (1 << V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE) |
++		  (1 << V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10)),
++		V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
+-		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
+-		0, V4L2_MPEG_VIDEO_HEVC_LEVEL_1);
++		V4L2_CID_CODEC_VIDEO_HEVC_LEVEL,
++		V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2,
++		0, V4L2_CODEC_VIDEO_HEVC_LEVEL_1);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH) |
+-		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH)),
+-		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
++		V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++		V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
++		~((1 << V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MAIN) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_HIGH) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH) |
++		  (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH)),
++		V4L2_CODEC_VIDEO_H264_PROFILE_HIGH);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-		V4L2_MPEG_VIDEO_H264_LEVEL_5_1,
+-		0, V4L2_MPEG_VIDEO_H264_LEVEL_1_0);
++		V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++		V4L2_CODEC_VIDEO_H264_LEVEL_5_1,
++		0, V4L2_CODEC_VIDEO_H264_LEVEL_1_0);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE,
+ 		AT_SLICE_BOUNDARY,
+-		0, V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED);
++		0, V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
+-		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
+-		~((1 << V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) |
+-		(1 << V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME)),
+-		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
++		V4L2_CID_CODEC_VIDEO_HEADER_MODE,
++		V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
++		~((1 << V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE) |
++		(1 << V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME)),
++		V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
+-		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
+-		0, V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE);
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE,
++		V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
++		0, V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_VP8_PROFILE,
+-		V4L2_MPEG_VIDEO_VP8_PROFILE_3,
+-		0, V4L2_MPEG_VIDEO_VP8_PROFILE_0);
++		V4L2_CID_CODEC_VIDEO_VP8_PROFILE,
++		V4L2_CODEC_VIDEO_VP8_PROFILE_3,
++		0, V4L2_CODEC_VIDEO_VP8_PROFILE_0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE, BITRATE_MIN, BITRATE_MAX,
++		V4L2_CID_CODEC_VIDEO_BITRATE, BITRATE_MIN, BITRATE_MAX,
+ 		BITRATE_STEP, BITRATE_DEFAULT);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE_PEAK, BITRATE_MIN, BITRATE_MAX,
++		V4L2_CID_CODEC_VIDEO_BITRATE_PEAK, BITRATE_MIN, BITRATE_MAX,
+ 		BITRATE_STEP, BITRATE_DEFAULT_PEAK);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP, 1, 51, 1, 26);
++			  V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP, 1, 51, 1, 26);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP, 1, 51, 1, 28);
++			  V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP, 1, 51, 1, 28);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP, 1, 51, 1, 30);
++			  V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP, 1, 51, 1, 30);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_MIN_QP, 1, 51, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_H264_MIN_QP, 1, 51, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP, 1, 51, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MIN_QP, 1, 51, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_MAX_QP, 1, 51, 1, 51);
++			  V4L2_CID_CODEC_VIDEO_H264_MAX_QP, 1, 51, 1, 51);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP, 1, 51, 1, 51);
++			  V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MAX_QP, 1, 51, 1, 51);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP, 1, 51, 1, 51);
++			  V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MAX_QP, 1, 51, 1, 51);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP, 1, 51, 1, 51);
++			  V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MAX_QP, 1, 51, 1, 51);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP, 1, 63, 1, 26);
++			  V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP, 1, 63, 1, 26);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP, 1, 63, 1, 28);
++			  V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP, 1, 63, 1, 28);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP, 1, 63, 1, 30);
++			  V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP, 1, 63, 1, 30);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP, 1, 63, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP, 1, 63, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP, 1, 63, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MIN_QP, 1, 63, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP, 1, 63, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MIN_QP, 1, 63, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP, 1, 63, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MIN_QP, 1, 63, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP, 1, 63, 1, 63);
++			  V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP, 1, 63, 1, 63);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP, 1, 63, 1, 63);
++			  V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MAX_QP, 1, 63, 1, 63);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP, 1, 63, 1, 63);
++			  V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MAX_QP, 1, 63, 1, 63);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP, 1, 63, 1, 63);
++			  V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MAX_QP, 1, 63, 1, 63);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES, SLICE_BYTE_SIZE_MIN,
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES, SLICE_BYTE_SIZE_MIN,
+ 		SLICE_BYTE_SIZE_MAX, 1, SLICE_BYTE_SIZE_MIN);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB, 1,
++		V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB, 1,
+ 		SLICE_MB_SIZE_MAX, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA, -6, 6, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA, -6, 6, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA, -6, 6, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA, -6, 6, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB,
++		V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB,
+ 		0, INTRA_REFRESH_MBS_MAX, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_GOP_SIZE, 0, (1 << 16) - 1, 1, 30);
++		V4L2_CID_CODEC_VIDEO_GOP_SIZE, 0, (1 << 16) - 1, 1, 30);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_VPX_MIN_QP, 1, 128, 1, 1);
++		V4L2_CID_CODEC_VIDEO_VPX_MIN_QP, 1, 128, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_VPX_MAX_QP, 1, 128, 1, 128);
++		V4L2_CID_CODEC_VIDEO_VPX_MAX_QP, 1, 128, 1, 128);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_B_FRAMES, 0, 4, 1, 0);
++		V4L2_CID_CODEC_VIDEO_B_FRAMES, 0, 4, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_H264_I_PERIOD, 0, (1 << 16) - 1, 1, 0);
++		V4L2_CID_CODEC_VIDEO_H264_I_PERIOD, 0, (1 << 16) - 1, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME, 0, 0, 0, 0);
++			  V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME, 0, 0, 0, 0);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE, 0, 1, 1, 1);
++			  V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE, 0, 1, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY, 0, 100, 1, 0);
++			  V4L2_CID_CODEC_VIDEO_CONSTANT_QUALITY, 0, 100, 1, 0);
+ 
+ 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
+-			       V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
+-			       ~((1 << V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED) |
+-			       (1 << V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT)),
+-			       V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED);
++			       V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE,
++			       V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
++			       ~((1 << V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_DISABLED) |
++			       (1 << V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT)),
++			       V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_DISABLED);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID, 0,
++			  V4L2_CID_CODEC_VIDEO_BASELAYER_PRIORITY_ID, 0,
+ 			  6, 1, 0);
+ 
+ 	ret = inst->ctrl_handler.error;
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
+index 96d1ecd1521b..6739fbab4c00 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
+@@ -346,11 +346,11 @@ struct s5p_mfc_dev {
+  * struct s5p_mfc_h264_enc_params - encoding parameters for h264
+  */
+ struct s5p_mfc_h264_enc_params {
+-	enum v4l2_mpeg_video_h264_profile profile;
+-	enum v4l2_mpeg_video_h264_loop_filter_mode loop_filter_mode;
++	enum v4l2_codec_video_h264_profile profile;
++	enum v4l2_codec_video_h264_loop_filter_mode loop_filter_mode;
+ 	s8 loop_filter_alpha;
+ 	s8 loop_filter_beta;
+-	enum v4l2_mpeg_video_h264_entropy_mode entropy_mode;
++	enum v4l2_codec_video_h264_entropy_mode entropy_mode;
+ 	u8 max_ref_pic;
+ 	u8 num_ref_pic_4p;
+ 	int _8x8_transform;
+@@ -369,7 +369,7 @@ struct s5p_mfc_h264_enc_params {
+ 	u8 rc_max_qp;
+ 	u8 rc_p_frame_qp;
+ 	u8 rc_b_frame_qp;
+-	enum v4l2_mpeg_video_h264_level level_v4l2;
++	enum v4l2_codec_video_h264_level level_v4l2;
+ 	int level;
+ 	u16 cpb_size;
+ 	int interlace;
+@@ -396,7 +396,7 @@ struct s5p_mfc_h264_enc_params {
+  */
+ struct s5p_mfc_mpeg4_enc_params {
+ 	/* MPEG4 Only */
+-	enum v4l2_mpeg_video_mpeg4_profile profile;
++	enum v4l2_codec_video_mpeg4_profile profile;
+ 	int quarter_pixel;
+ 	/* Common for MPEG4, H263 */
+ 	u16 vop_time_res;
+@@ -406,7 +406,7 @@ struct s5p_mfc_mpeg4_enc_params {
+ 	u8 rc_max_qp;
+ 	u8 rc_p_frame_qp;
+ 	u8 rc_b_frame_qp;
+-	enum v4l2_mpeg_video_mpeg4_level level_v4l2;
++	enum v4l2_codec_video_mpeg4_level level_v4l2;
+ 	int level;
+ };
+ 
+@@ -431,9 +431,9 @@ struct s5p_mfc_vp8_enc_params {
+ };
+ 
+ struct s5p_mfc_hevc_enc_params {
+-	enum v4l2_mpeg_video_hevc_profile profile;
++	enum v4l2_codec_video_hevc_profile profile;
+ 	int level;
+-	enum v4l2_mpeg_video_h264_level level_v4l2;
++	enum v4l2_codec_video_h264_level level_v4l2;
+ 	u8 tier;
+ 	u32 rc_framerate;
+ 	u8 rc_min_qp;
+@@ -462,7 +462,7 @@ struct s5p_mfc_hevc_enc_params {
+ 	u8 wavefront_enable;
+ 	u8 enable_ltr;
+ 	u8 hier_qp_enable;
+-	enum v4l2_mpeg_video_hevc_hier_coding_type hier_qp_type;
++	enum v4l2_codec_video_hevc_hier_coding_type hier_qp_type;
+ 	u8 num_hier_layer;
+ 	u8 hier_qp_layer[7];
+ 	u32 hier_bit_layer[7];
+@@ -489,7 +489,7 @@ struct s5p_mfc_enc_params {
+ 	u32 mv_v_range;
+ 
+ 	u16 gop_size;
+-	enum v4l2_mpeg_video_multi_slice_mode slice_mode;
++	enum v4l2_codec_video_multi_slice_mode slice_mode;
+ 	u16 slice_mb;
+ 	u32 slice_bit;
+ 	u16 intra_refresh_mb;
+@@ -504,8 +504,8 @@ struct s5p_mfc_enc_params {
+ 	u16 vbv_size;
+ 	u32 vbv_delay;
+ 
+-	enum v4l2_mpeg_video_header_mode seq_hdr_mode;
+-	enum v4l2_mpeg_mfc51_video_frame_skip_mode frame_skip_mode;
++	enum v4l2_codec_video_header_mode seq_hdr_mode;
++	enum v4l2_codec_mfc51_video_frame_skip_mode frame_skip_mode;
+ 	int fixed_target_bit;
+ 
+ 	u8 num_b_frame;
+@@ -694,12 +694,12 @@ struct s5p_mfc_ctx {
+ 	size_t me_buffer_size;
+ 	size_t tmv_buffer_size;
+ 
+-	enum v4l2_mpeg_mfc51_video_force_frame_type force_frame_type;
++	enum v4l2_codec_mfc51_video_force_frame_type force_frame_type;
+ 
+ 	struct list_head ref_queue;
+ 	unsigned int ref_queue_cnt;
+ 
+-	enum v4l2_mpeg_video_multi_slice_mode slice_mode;
++	enum v4l2_codec_video_multi_slice_mode slice_mode;
+ 	union {
+ 		unsigned int mb;
+ 		unsigned int bits;
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
+index a71753d459ba..4aa6735a7202 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
+@@ -159,7 +159,7 @@ static struct s5p_mfc_fmt *find_format(struct v4l2_format *f, unsigned int t)
+ 
+ static struct mfc_control controls[] = {
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY,
  		.type = V4L2_CTRL_TYPE_INTEGER,
- 		.flags = V4L2_CTRL_FLAG_SLIDER,
-diff --git a/Documentation/userspace-api/media/drivers/cx2341x-uapi.rst b/Documentation/userspace-api/media/drivers/cx2341x-uapi.rst
-index 8a7977af79d5..49d19ab70abd 100644
---- a/Documentation/userspace-api/media/drivers/cx2341x-uapi.rst
-+++ b/Documentation/userspace-api/media/drivers/cx2341x-uapi.rst
-@@ -129,13 +129,13 @@ Raw format c example
+ 		.name = "H264 Display Delay",
+ 		.minimum = 0,
+@@ -168,7 +168,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "H264 Display Delay Enable",
+ 		.minimum = 0,
+@@ -177,7 +177,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER,
++		.id = V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "Mpeg4 Loop Filter Enable",
+ 		.minimum = 0,
+@@ -186,7 +186,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE,
++		.id = V4L2_CID_CODEC_VIDEO_DECODER_SLICE_INTERFACE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "Slice Interface Enable",
+ 		.minimum = 0,
+@@ -689,16 +689,16 @@ static int s5p_mfc_dec_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct s5p_mfc_ctx *ctx = ctrl_to_ctx(ctrl);
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY:
++	case V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY:
+ 		ctx->display_delay = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE:
++	case V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE:
+ 		ctx->display_delay_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
++	case V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
+ 		ctx->loop_filter_mpeg4 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
++	case V4L2_CID_CODEC_VIDEO_DECODER_SLICE_INTERFACE:
+ 		ctx->slice_interface = ctrl->val;
+ 		break;
+ 	default:
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
+index 1fad99edb091..d3401828b73c 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
+@@ -111,7 +111,7 @@ static struct s5p_mfc_fmt *find_format(struct v4l2_format *f, unsigned int t)
+ 
+ static struct mfc_control controls[] = {
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_GOP_SIZE,
++		.id = V4L2_CID_CODEC_VIDEO_GOP_SIZE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -119,15 +119,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 12,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
+-		.maximum = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
+-		.default_value = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
++		.minimum = V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE,
++		.maximum = V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
++		.default_value = V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB,
++		.id = V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 1,
+ 		.maximum = (1 << 16) - 1,
+@@ -135,7 +135,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES,
++		.id = V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 1900,
+ 		.maximum = (1 << 30) - 1,
+@@ -143,7 +143,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1900,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB,
++		.id = V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -151,7 +151,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_PADDING,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_PADDING,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "Padding Control Enable",
+ 		.minimum = 0,
+@@ -160,7 +160,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_PADDING_YUV,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_PADDING_YUV,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "Padding Color YUV Value",
+ 		.minimum = 0,
+@@ -169,7 +169,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE,
++		.id = V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -177,7 +177,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_BITRATE,
++		.id = V4L2_CID_CODEC_VIDEO_BITRATE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 1,
+ 		.maximum = (1 << 30) - 1,
+@@ -185,7 +185,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_RC_REACTION_COEFF,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_RC_REACTION_COEFF,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "Rate Control Reaction Coeff.",
+ 		.minimum = 1,
+@@ -194,16 +194,16 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+ 		.name = "Force frame type",
+-		.minimum = V4L2_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE_DISABLED,
+-		.maximum = V4L2_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE_NOT_CODED,
+-		.default_value = V4L2_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE_DISABLED,
++		.minimum = V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_DISABLED,
++		.maximum = V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_NOT_CODED,
++		.default_value = V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_DISABLED,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME,
++		.id = V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME,
+ 		.type = V4L2_CTRL_TYPE_BUTTON,
+ 		.minimum = 0,
+ 		.maximum = 0,
+@@ -211,7 +211,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VBV_SIZE,
++		.id = V4L2_CID_CODEC_VIDEO_VBV_SIZE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -219,7 +219,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE,
++		.id = V4L2_CID_CODEC_VIDEO_MV_H_SEARCH_RANGE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "Horizontal MV Search Range",
+ 		.minimum = 16,
+@@ -228,7 +228,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 32,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE,
++		.id = V4L2_CID_CODEC_VIDEO_MV_V_SEARCH_RANGE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "Vertical MV Search Range",
+ 		.minimum = 16,
+@@ -237,7 +237,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 32,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE,
++		.id = V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -245,30 +245,30 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEADER_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_HEADER_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
+-		.maximum = V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
+-		.default_value = V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
++		.minimum = V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE,
++		.maximum = V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
++		.default_value = V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+ 		.name = "Frame Skip Enable",
+-		.minimum = V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED,
+-		.maximum = V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
++		.minimum = V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED,
++		.maximum = V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
+ 		.menu_skip_mask = 0,
+-		.default_value = V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED,
++		.default_value = V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.maximum = V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
+-		.default_value = V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
++		.maximum = V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
++		.default_value = V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_DISABLED,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_RC_FIXED_TARGET_BIT,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "Fixed Target Bit Enable",
+ 		.minimum = 0,
+@@ -278,7 +278,7 @@ static struct mfc_control controls[] = {
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_B_FRAMES,
++		.id = V4L2_CID_CODEC_VIDEO_B_FRAMES,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 2,
+@@ -286,42 +286,42 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
++		.id = V4L2_CID_CODEC_VIDEO_H264_PROFILE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
+-		.maximum = V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
+-		.default_value = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
++		.minimum = V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE,
++		.maximum = V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH,
++		.default_value = V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE,
+ 		.menu_skip_mask = ~(
+-				(1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-				(1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-				(1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)
++				(1 << V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE) |
++				(1 << V4L2_CODEC_VIDEO_H264_PROFILE_MAIN) |
++				(1 << V4L2_CODEC_VIDEO_H264_PROFILE_HIGH)
+ 				),
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_LEVEL,
++		.id = V4L2_CID_CODEC_VIDEO_H264_LEVEL,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
+-		.maximum = V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
+-		.default_value = V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
++		.minimum = V4L2_CODEC_VIDEO_H264_LEVEL_1_0,
++		.maximum = V4L2_CODEC_VIDEO_H264_LEVEL_4_0,
++		.default_value = V4L2_CODEC_VIDEO_H264_LEVEL_1_0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_MPEG4_LEVEL_0,
+-		.maximum = V4L2_MPEG_VIDEO_MPEG4_LEVEL_5,
+-		.default_value = V4L2_MPEG_VIDEO_MPEG4_LEVEL_0,
++		.minimum = V4L2_CODEC_VIDEO_MPEG4_LEVEL_0,
++		.maximum = V4L2_CODEC_VIDEO_MPEG4_LEVEL_5,
++		.default_value = V4L2_CODEC_VIDEO_MPEG4_LEVEL_0,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
+-		.maximum = V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
+-		.default_value = V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
++		.minimum = V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
++		.maximum = V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
++		.default_value = V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_ENABLED,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA,
++		.id = V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = -6,
+ 		.maximum = 6,
+@@ -329,7 +329,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA,
++		.id = V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = -6,
+ 		.maximum = 6,
+@@ -337,15 +337,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
+-		.maximum = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
+-		.default_value = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
++		.minimum = V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC,
++		.maximum = V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC,
++		.default_value = V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "The Number of Ref. Pic for P",
+ 		.minimum = 1,
+@@ -354,7 +354,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM,
++		.id = V4L2_CID_CODEC_VIDEO_H264_8X8_TRANSFORM,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -362,7 +362,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE,
++		.id = V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -370,7 +370,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -378,7 +378,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H264_MIN_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -386,7 +386,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H264_MAX_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -394,7 +394,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 51,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -402,7 +402,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -410,7 +410,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H263_I_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "H263 I-Frame QP value",
+ 		.minimum = 1,
+@@ -419,7 +419,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H263_MIN_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H263_MIN_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "H263 Minimum QP value",
+ 		.minimum = 1,
+@@ -428,7 +428,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H263_MAX_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H263_MAX_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "H263 Maximum QP value",
+ 		.minimum = 1,
+@@ -437,7 +437,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 31,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H263_P_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "H263 P frame QP value",
+ 		.minimum = 1,
+@@ -446,7 +446,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_H263_B_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "H263 B frame QP value",
+ 		.minimum = 1,
+@@ -455,7 +455,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_I_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "MPEG4 I-Frame QP value",
+ 		.minimum = 1,
+@@ -464,7 +464,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_MIN_QP,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_MIN_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "MPEG4 Minimum QP value",
+ 		.minimum = 1,
+@@ -473,7 +473,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_MAX_QP,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_MAX_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "MPEG4 Maximum QP value",
+ 		.minimum = 0,
+@@ -482,7 +482,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 51,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_P_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "MPEG4 P frame QP value",
+ 		.minimum = 1,
+@@ -491,7 +491,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_B_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "MPEG4 B frame QP value",
+ 		.minimum = 1,
+@@ -500,7 +500,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "H264 Dark Reg Adaptive RC",
+ 		.minimum = 0,
+@@ -509,7 +509,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "H264 Smooth Reg Adaptive RC",
+ 		.minimum = 0,
+@@ -518,7 +518,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "H264 Static Reg Adaptive RC",
+ 		.minimum = 0,
+@@ -527,7 +527,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY,
++		.id = V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.name = "H264 Activity Reg Adaptive RC",
+ 		.minimum = 0,
+@@ -536,7 +536,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE,
++		.id = V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_ENABLE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -544,15 +544,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC,
++		.id = V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED,
+-		.maximum = V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_EXTENDED,
+-		.default_value = V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED,
++		.minimum = V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED,
++		.maximum = V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_EXTENDED,
++		.default_value = V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_WIDTH,
++		.id = V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_WIDTH,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -560,7 +560,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_HEIGHT,
++		.id = V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_HEIGHT,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -568,7 +568,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_GOP_CLOSURE,
++		.id = V4L2_CID_CODEC_VIDEO_GOP_CLOSURE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -576,7 +576,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_H264_I_PERIOD,
++		.id = V4L2_CID_CODEC_VIDEO_H264_I_PERIOD,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -584,15 +584,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE,
+-		.maximum = V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE,
+-		.default_value = V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE,
++		.minimum = V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE,
++		.maximum = V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE,
++		.default_value = V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_MPEG4_QPEL,
++		.id = V4L2_CID_CODEC_VIDEO_MPEG4_QPEL,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -600,14 +600,14 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_NUM_PARTITIONS,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_NUM_PARTITIONS,
+ 		.type = V4L2_CTRL_TYPE_INTEGER_MENU,
+-		.maximum = V4L2_CID_MPEG_VIDEO_VPX_8_PARTITIONS,
+-		.default_value = V4L2_CID_MPEG_VIDEO_VPX_1_PARTITION,
++		.maximum = V4L2_CID_CODEC_VIDEO_VPX_8_PARTITIONS,
++		.default_value = V4L2_CID_CODEC_VIDEO_VPX_1_PARTITION,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_IMD_DISABLE_4X4,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_IMD_DISABLE_4X4,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -615,14 +615,14 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_NUM_REF_FRAMES,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_NUM_REF_FRAMES,
+ 		.type = V4L2_CTRL_TYPE_INTEGER_MENU,
+-		.maximum = V4L2_CID_MPEG_VIDEO_VPX_2_REF_FRAME,
+-		.default_value = V4L2_CID_MPEG_VIDEO_VPX_1_REF_FRAME,
++		.maximum = V4L2_CID_CODEC_VIDEO_VPX_2_REF_FRAME,
++		.default_value = V4L2_CID_CODEC_VIDEO_VPX_1_REF_FRAME,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_FILTER_LEVEL,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_FILTER_LEVEL,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 63,
+@@ -630,7 +630,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_FILTER_SHARPNESS,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_FILTER_SHARPNESS,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 7,
+@@ -638,7 +638,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -646,15 +646,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_SEL,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_SEL,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_USE_PREV,
+-		.maximum = V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_USE_REF_PERIOD,
+-		.default_value = V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_USE_PREV,
++		.minimum = V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_USE_PREV,
++		.maximum = V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_USE_REF_PERIOD,
++		.default_value = V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_USE_PREV,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_MAX_QP,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_MAX_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 127,
+@@ -662,7 +662,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 127,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_MIN_QP,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_MIN_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 11,
+@@ -670,7 +670,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_I_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_I_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 127,
+@@ -678,7 +678,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 10,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VPX_P_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_VPX_P_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 127,
+@@ -686,15 +686,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 10,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_VP8_PROFILE,
++		.id = V4L2_CID_CODEC_VIDEO_VP8_PROFILE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_VP8_PROFILE_0,
+-		.maximum = V4L2_MPEG_VIDEO_VP8_PROFILE_3,
+-		.default_value = V4L2_MPEG_VIDEO_VP8_PROFILE_0,
++		.minimum = V4L2_CODEC_VIDEO_VP8_PROFILE_0,
++		.maximum = V4L2_CODEC_VIDEO_VP8_PROFILE_3,
++		.default_value = V4L2_CODEC_VIDEO_VP8_PROFILE_0,
+ 		.menu_skip_mask = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "HEVC I Frame QP Value",
+ 		.minimum = 0,
+@@ -703,7 +703,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.name = "HEVC P Frame QP Value",
+ 		.minimum = 0,
+@@ -712,7 +712,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -720,7 +720,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -728,7 +728,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -736,31 +736,31 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_PROFILE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_LEVEL,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_LEVEL_1,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_LEVEL_1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_TIER,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_TIER,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_TIER_MAIN,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_TIER_MAIN,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_TIER_HIGH,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_TIER_MAIN,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_TIER_MAIN,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_FRAME_RATE_RESOLUTION,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_FRAME_RATE_RESOLUTION,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 1,
+ 		.maximum = (1 << 16) - 1,
+@@ -768,7 +768,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_MAX_PARTITION_DEPTH,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_MAX_PARTITION_DEPTH,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -776,7 +776,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES,
++		.id = V4L2_CID_CODEC_VIDEO_REF_NUMBER_FOR_PFRAMES,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 1,
+ 		.maximum = 2,
+@@ -784,15 +784,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 1,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_TYPE,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_TYPE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_REFRESH_NONE,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_REFRESH_IDR,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_REFRESH_NONE,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_REFRESH_IDR,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_REFRESH_NONE,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_REFRESH_NONE,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_CONST_INTRA_PRED,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_CONST_INTRA_PRED,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -800,7 +800,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_LOSSLESS_CU,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_LOSSLESS_CU,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -808,7 +808,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_WAVEFRONT,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_WAVEFRONT,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -816,15 +816,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_QP,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -832,15 +832,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_TYPE,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_HIERARCHICAL_CODING_B,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_HIERARCHICAL_CODING_P,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_HIERARCHICAL_CODING_B,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_LAYER,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 6,
+@@ -848,7 +848,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -856,7 +856,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -864,7 +864,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -872,7 +872,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -880,7 +880,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -888,7 +888,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -896,7 +896,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_QP,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_QP,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 51,
+@@ -904,7 +904,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -912,7 +912,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -920,7 +920,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -928,7 +928,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -936,7 +936,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -944,7 +944,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -952,7 +952,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_BR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = INT_MIN,
+ 		.maximum = INT_MAX,
+@@ -960,7 +960,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_GENERAL_PB,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_GENERAL_PB,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -968,7 +968,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_TEMPORAL_ID,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_TEMPORAL_ID,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -976,7 +976,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_STRONG_SMOOTHING,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_STRONG_SMOOTHING,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -984,7 +984,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_INTRA_PU_SPLIT,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_INTRA_PU_SPLIT,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -992,7 +992,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_TMV_PREDICTION,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_TMV_PREDICTION,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -1000,7 +1000,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 4,
+@@ -1008,7 +1008,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_WITHOUT_STARTCODE,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_WITHOUT_STARTCODE,
+ 		.type = V4L2_CTRL_TYPE_BOOLEAN,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -1016,7 +1016,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_PERIOD,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_PERIOD,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = (1 << 16) - 1,
+@@ -1024,7 +1024,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_LF_BETA_OFFSET_DIV2,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_LF_BETA_OFFSET_DIV2,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = -6,
+ 		.maximum = 6,
+@@ -1032,7 +1032,7 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_LF_TC_OFFSET_DIV2,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_LF_TC_OFFSET_DIV2,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = -6,
+ 		.maximum = 6,
+@@ -1040,15 +1040,15 @@ static struct mfc_control controls[] = {
+ 		.default_value = 0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD,
++		.id = V4L2_CID_CODEC_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD,
+ 		.type = V4L2_CTRL_TYPE_MENU,
+-		.minimum = V4L2_MPEG_VIDEO_HEVC_SIZE_0,
+-		.maximum = V4L2_MPEG_VIDEO_HEVC_SIZE_4,
++		.minimum = V4L2_CODEC_VIDEO_HEVC_SIZE_0,
++		.maximum = V4L2_CODEC_VIDEO_HEVC_SIZE_4,
+ 		.step = 1,
+-		.default_value = V4L2_MPEG_VIDEO_HEVC_SIZE_0,
++		.default_value = V4L2_CODEC_VIDEO_HEVC_SIZE_0,
+ 	},
+ 	{
+-		.id = V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR,
++		.id = V4L2_CID_CODEC_VIDEO_PREPEND_SPSPPS_TO_IDR,
+ 		.type = V4L2_CTRL_TYPE_INTEGER,
+ 		.minimum = 0,
+ 		.maximum = 1,
+@@ -1083,9 +1083,9 @@ static const char * const *mfc51_get_menu(u32 id)
+ 		NULL,
+ 	};
+ 	switch (id) {
+-	case V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE:
++	case V4L2_CID_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE:
+ 		return mfc51_video_frame_skip;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE:
++	case V4L2_CID_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE:
+ 		return mfc51_video_force_frame;
+ 	}
+ 	return NULL;
+@@ -1152,7 +1152,7 @@ static int enc_post_seq_start(struct s5p_mfc_ctx *ctx)
+ 	struct s5p_mfc_buf *dst_mb;
+ 	unsigned int enc_pb_count;
+ 
+-	if (p->seq_hdr_mode == V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) {
++	if (p->seq_hdr_mode == V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE) {
+ 		if (!list_empty(&ctx->dst_queue)) {
+ 			dst_mb = list_entry(ctx->dst_queue.next,
+ 					struct s5p_mfc_buf, list);
+@@ -1677,103 +1677,103 @@ static int vidioc_streamoff(struct file *file, void *priv,
+ 	return -EINVAL;
+ }
+ 
+-static inline int h264_level(enum v4l2_mpeg_video_h264_level lvl)
++static inline int h264_level(enum v4l2_codec_video_h264_level lvl)
+ {
+-	static unsigned int t[V4L2_MPEG_VIDEO_H264_LEVEL_4_0 + 1] = {
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_1_0   */ 10,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_1B    */ 9,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_1_1   */ 11,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_1_2   */ 12,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_1_3   */ 13,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_2_0   */ 20,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_2_1   */ 21,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_2_2   */ 22,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_3_0   */ 30,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_3_1   */ 31,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_3_2   */ 32,
+-		/* V4L2_MPEG_VIDEO_H264_LEVEL_4_0   */ 40,
++	static unsigned int t[V4L2_CODEC_VIDEO_H264_LEVEL_4_0 + 1] = {
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_1_0   */ 10,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_1B    */ 9,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_1_1   */ 11,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_1_2   */ 12,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_1_3   */ 13,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_2_0   */ 20,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_2_1   */ 21,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_2_2   */ 22,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_3_0   */ 30,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_3_1   */ 31,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_3_2   */ 32,
++		/* V4L2_CODEC_VIDEO_H264_LEVEL_4_0   */ 40,
+ 	};
+ 	return t[lvl];
+ }
+ 
+-static inline int mpeg4_level(enum v4l2_mpeg_video_mpeg4_level lvl)
++static inline int mpeg4_level(enum v4l2_codec_video_mpeg4_level lvl)
+ {
+-	static unsigned int t[V4L2_MPEG_VIDEO_MPEG4_LEVEL_5 + 1] = {
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_0    */ 0,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_0B   */ 9,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_1    */ 1,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_2    */ 2,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_3    */ 3,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_3B   */ 7,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_4    */ 4,
+-		/* V4L2_MPEG_VIDEO_MPEG4_LEVEL_5    */ 5,
++	static unsigned int t[V4L2_CODEC_VIDEO_MPEG4_LEVEL_5 + 1] = {
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_0    */ 0,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_0B   */ 9,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_1    */ 1,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_2    */ 2,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_3    */ 3,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_3B   */ 7,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_4    */ 4,
++		/* V4L2_CODEC_VIDEO_MPEG4_LEVEL_5    */ 5,
+ 	};
+ 	return t[lvl];
+ }
+ 
+-static inline int hevc_level(enum v4l2_mpeg_video_hevc_level lvl)
++static inline int hevc_level(enum v4l2_codec_video_hevc_level lvl)
+ {
+ 	static unsigned int t[] = {
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_1    */ 10,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_2    */ 20,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1  */ 21,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_3    */ 30,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1  */ 31,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_4    */ 40,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1  */ 41,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_5    */ 50,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1  */ 51,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2  */ 52,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_6    */ 60,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1  */ 61,
+-		/* V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2  */ 62,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_1    */ 10,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_2    */ 20,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1  */ 21,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_3    */ 30,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1  */ 31,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_4    */ 40,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1  */ 41,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_5    */ 50,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1  */ 51,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_5_2  */ 52,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_6    */ 60,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_6_1  */ 61,
++		/* V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2  */ 62,
+ 	};
+ 	return t[lvl];
+ }
+ 
+-static inline int vui_sar_idc(enum v4l2_mpeg_video_h264_vui_sar_idc sar)
++static inline int vui_sar_idc(enum v4l2_codec_video_h264_vui_sar_idc sar)
+ {
+-	static unsigned int t[V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_EXTENDED + 1] = {
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED     */ 0,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_1x1             */ 1,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_12x11           */ 2,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_10x11           */ 3,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_16x11           */ 4,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_40x33           */ 5,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_24x11           */ 6,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_20x11           */ 7,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_32x11           */ 8,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_80x33           */ 9,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_18x11           */ 10,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_15x11           */ 11,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_64x33           */ 12,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_160x99          */ 13,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_4x3             */ 14,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_3x2             */ 15,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_2x1             */ 16,
+-		/* V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_EXTENDED        */ 255,
++	static unsigned int t[V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_EXTENDED + 1] = {
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED     */ 0,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_1x1             */ 1,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_12x11           */ 2,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_10x11           */ 3,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_16x11           */ 4,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_40x33           */ 5,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_24x11           */ 6,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_20x11           */ 7,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_32x11           */ 8,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_80x33           */ 9,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_18x11           */ 10,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_15x11           */ 11,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_64x33           */ 12,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_160x99          */ 13,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_4x3             */ 14,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_3x2             */ 15,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_2x1             */ 16,
++		/* V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_EXTENDED        */ 255,
+ 	};
+ 	return t[sar];
+ }
+ 
+ /*
+  * Update range of all HEVC quantization parameter controls that depend on the
+- * V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP, V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP controls.
++ * V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP, V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP controls.
+  */
+ static void __enc_update_hevc_qp_ctrls_range(struct s5p_mfc_ctx *ctx,
+ 					     int min, int max)
+ {
+ 	static const int __hevc_qp_ctrls[] = {
+-		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_QP,
+-		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_QP,
++		V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_QP,
+ 	};
+ 	struct v4l2_ctrl *ctrl = NULL;
+ 	int i, j;
+@@ -1800,85 +1800,85 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret = 0;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
++	case V4L2_CID_CODEC_VIDEO_GOP_SIZE:
+ 		p->gop_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE:
+ 		p->slice_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB:
+ 		p->slice_mb = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES:
++	case V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES:
+ 		p->slice_bit = ctrl->val * 8;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:
++	case V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB:
+ 		p->intra_refresh_mb = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_PADDING:
++	case V4L2_CID_CODEC_MFC51_VIDEO_PADDING:
+ 		p->pad = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_PADDING_YUV:
++	case V4L2_CID_CODEC_MFC51_VIDEO_PADDING_YUV:
+ 		p->pad_luma = (ctrl->val >> 16) & 0xff;
+ 		p->pad_cb = (ctrl->val >> 8) & 0xff;
+ 		p->pad_cr = (ctrl->val >> 0) & 0xff;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE:
+ 		p->rc_frame = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE:
+ 		p->rc_bitrate = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_RC_REACTION_COEFF:
++	case V4L2_CID_CODEC_MFC51_VIDEO_RC_REACTION_COEFF:
+ 		p->rc_reaction_coeff = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE:
++	case V4L2_CID_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE:
+ 		ctx->force_frame_type = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
++	case V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME:
+ 		ctx->force_frame_type =
+-			V4L2_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE_I_FRAME;
++			V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_I_FRAME;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VBV_SIZE:
++	case V4L2_CID_CODEC_VIDEO_VBV_SIZE:
+ 		p->vbv_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:
++	case V4L2_CID_CODEC_VIDEO_MV_H_SEARCH_RANGE:
+ 		p->mv_h_range = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
++	case V4L2_CID_CODEC_VIDEO_MV_V_SEARCH_RANGE:
+ 		p->mv_v_range = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE:
++	case V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE:
+ 		p->codec.h264.cpb_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
++	case V4L2_CID_CODEC_VIDEO_HEADER_MODE:
+ 		p->seq_hdr_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE:
+-	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
++	case V4L2_CID_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE:
++	case V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE:
+ 		p->frame_skip_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT:
++	case V4L2_CID_CODEC_MFC51_VIDEO_RC_FIXED_TARGET_BIT:
+ 		p->fixed_target_bit = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_B_FRAMES:
++	case V4L2_CID_CODEC_VIDEO_B_FRAMES:
+ 		p->num_b_frame = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
+ 		switch (ctrl->val) {
+-		case V4L2_MPEG_VIDEO_H264_PROFILE_MAIN:
++		case V4L2_CODEC_VIDEO_H264_PROFILE_MAIN:
+ 			p->codec.h264.profile =
+ 					S5P_FIMV_ENC_PROFILE_H264_MAIN;
+ 			break;
+-		case V4L2_MPEG_VIDEO_H264_PROFILE_HIGH:
++		case V4L2_CODEC_VIDEO_H264_PROFILE_HIGH:
+ 			p->codec.h264.profile =
+ 					S5P_FIMV_ENC_PROFILE_H264_HIGH;
+ 			break;
+-		case V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE:
++		case V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE:
+ 			p->codec.h264.profile =
+ 				S5P_FIMV_ENC_PROFILE_H264_BASELINE;
+ 			break;
+-		case V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE:
++		case V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE:
+ 			if (IS_MFCV6_PLUS(dev))
+ 				p->codec.h264.profile =
+ 				S5P_FIMV_ENC_PROFILE_H264_CONSTRAINED_BASELINE;
+@@ -1889,7 +1889,7 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			ret = -EINVAL;
+ 		}
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
+ 		p->codec.h264.level_v4l2 = ctrl->val;
+ 		p->codec.h264.level = h264_level(ctrl->val);
+ 		if (p->codec.h264.level < 0) {
+@@ -1897,7 +1897,7 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			ret = p->codec.h264.level;
+ 		}
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL:
+ 		p->codec.mpeg4.level_v4l2 = ctrl->val;
+ 		p->codec.mpeg4.level = mpeg4_level(ctrl->val);
+ 		if (p->codec.mpeg4.level < 0) {
+@@ -1905,99 +1905,99 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			ret = p->codec.mpeg4.level;
+ 		}
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE:
+ 		p->codec.h264.loop_filter_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA:
+ 		p->codec.h264.loop_filter_alpha = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA:
++	case V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA:
+ 		p->codec.h264.loop_filter_beta = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE:
+ 		p->codec.h264.entropy_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P:
++	case V4L2_CID_CODEC_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P:
+ 		p->codec.h264.num_ref_pic_4p = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
++	case V4L2_CID_CODEC_VIDEO_H264_8X8_TRANSFORM:
+ 		p->codec.h264._8x8_transform = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE:
+ 		p->rc_mb = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP:
+ 		p->codec.h264.rc_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MIN_QP:
+ 		p->codec.h264.rc_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MAX_QP:
+ 		p->codec.h264.rc_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP:
+ 		p->codec.h264.rc_p_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP:
+ 		p->codec.h264.rc_b_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:
+-	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H263_I_FRAME_QP:
+ 		p->codec.mpeg4.rc_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_MIN_QP:
+-	case V4L2_CID_MPEG_VIDEO_H263_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H263_MIN_QP:
+ 		p->codec.mpeg4.rc_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_MAX_QP:
+-	case V4L2_CID_MPEG_VIDEO_H263_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H263_MAX_QP:
+ 		p->codec.mpeg4.rc_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:
+-	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H263_P_FRAME_QP:
+ 		p->codec.mpeg4.rc_p_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP:
+-	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_H263_B_FRAME_QP:
+ 		p->codec.mpeg4.rc_b_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK:
++	case V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK:
+ 		p->codec.h264.rc_mb_dark = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH:
++	case V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH:
+ 		p->codec.h264.rc_mb_smooth = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC:
++	case V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC:
+ 		p->codec.h264.rc_mb_static = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY:
++	case V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY:
+ 		p->codec.h264.rc_mb_activity = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_ENABLE:
+ 		p->codec.h264.vui_sar = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC:
+ 		p->codec.h264.vui_sar_idc = vui_sar_idc(ctrl->val);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_WIDTH:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_WIDTH:
+ 		p->codec.h264.vui_ext_sar_width = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_HEIGHT:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_HEIGHT:
+ 		p->codec.h264.vui_ext_sar_height = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_CLOSURE:
++	case V4L2_CID_CODEC_VIDEO_GOP_CLOSURE:
+ 		p->codec.h264.open_gop = !ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_I_PERIOD:
++	case V4L2_CID_CODEC_VIDEO_H264_I_PERIOD:
+ 		p->codec.h264.open_gop_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE:
+ 		switch (ctrl->val) {
+-		case V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE:
++		case V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE:
+ 			p->codec.mpeg4.profile =
+ 				S5P_FIMV_ENC_PROFILE_MPEG4_SIMPLE;
+ 			break;
+-		case V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE:
++		case V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE:
+ 			p->codec.mpeg4.profile =
+ 			S5P_FIMV_ENC_PROFILE_MPEG4_ADVANCED_SIMPLE;
+ 			break;
+@@ -2005,194 +2005,194 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			ret = -EINVAL;
+ 		}
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
++	case V4L2_CID_CODEC_VIDEO_MPEG4_QPEL:
+ 		p->codec.mpeg4.quarter_pixel = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_NUM_PARTITIONS:
++	case V4L2_CID_CODEC_VIDEO_VPX_NUM_PARTITIONS:
+ 		p->codec.vp8.num_partitions = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_IMD_DISABLE_4X4:
++	case V4L2_CID_CODEC_VIDEO_VPX_IMD_DISABLE_4X4:
+ 		p->codec.vp8.imd_4x4 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_NUM_REF_FRAMES:
++	case V4L2_CID_CODEC_VIDEO_VPX_NUM_REF_FRAMES:
+ 		p->codec.vp8.num_ref = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_FILTER_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_VPX_FILTER_LEVEL:
+ 		p->codec.vp8.filter_level = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_FILTER_SHARPNESS:
++	case V4L2_CID_CODEC_VIDEO_VPX_FILTER_SHARPNESS:
+ 		p->codec.vp8.filter_sharpness = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD:
++	case V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD:
+ 		p->codec.vp8.golden_frame_ref_period = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_SEL:
++	case V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_SEL:
+ 		p->codec.vp8.golden_frame_sel = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_MIN_QP:
+ 		p->codec.vp8.rc_min_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_MAX_QP:
+ 		p->codec.vp8.rc_max_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_I_FRAME_QP:
+ 		p->codec.vp8.rc_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_VPX_P_FRAME_QP:
+ 		p->codec.vp8.rc_p_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_VP8_PROFILE:
+ 		p->codec.vp8.profile = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP:
+ 		p->codec.hevc.rc_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP:
+ 		p->codec.hevc.rc_p_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP:
+ 		p->codec.hevc.rc_b_frame_qp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_FRAME_RATE_RESOLUTION:
++	case V4L2_CID_CODEC_VIDEO_HEVC_FRAME_RATE_RESOLUTION:
+ 		p->codec.hevc.rc_framerate = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP:
+ 		p->codec.hevc.rc_min_qp = ctrl->val;
+ 		__enc_update_hevc_qp_ctrls_range(ctx, ctrl->val,
+ 						 p->codec.hevc.rc_max_qp);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP:
+ 		p->codec.hevc.rc_max_qp = ctrl->val;
+ 		__enc_update_hevc_qp_ctrls_range(ctx, p->codec.hevc.rc_min_qp,
+ 						 ctrl->val);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LEVEL:
+ 		p->codec.hevc.level_v4l2 = ctrl->val;
+ 		p->codec.hevc.level = hevc_level(ctrl->val);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_PROFILE:
+ 		switch (ctrl->val) {
+-		case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN:
++		case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN:
+ 			p->codec.hevc.profile =
+-				V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN;
++				V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN;
+ 			break;
+-		case V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
++		case V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE:
+ 			p->codec.hevc.profile =
+-			V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE;
++			V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE;
+ 			break;
+ 		default:
+ 			ret = -EINVAL;
+ 		}
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_TIER:
++	case V4L2_CID_CODEC_VIDEO_HEVC_TIER:
+ 		p->codec.hevc.tier = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_PARTITION_DEPTH:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MAX_PARTITION_DEPTH:
+ 		p->codec.hevc.max_partition_depth = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES:
++	case V4L2_CID_CODEC_VIDEO_REF_NUMBER_FOR_PFRAMES:
+ 		p->codec.hevc.num_refs_for_p = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_TYPE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_TYPE:
+ 		p->codec.hevc.refreshtype = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_CONST_INTRA_PRED:
++	case V4L2_CID_CODEC_VIDEO_HEVC_CONST_INTRA_PRED:
+ 		p->codec.hevc.const_intra_period_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LOSSLESS_CU:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LOSSLESS_CU:
+ 		p->codec.hevc.lossless_cu_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_WAVEFRONT:
++	case V4L2_CID_CODEC_VIDEO_HEVC_WAVEFRONT:
+ 		p->codec.hevc.wavefront_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE:
+ 		p->codec.hevc.loopfilter = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_QP:
+ 		p->codec.hevc.hier_qp_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_TYPE:
+ 		p->codec.hevc.hier_qp_type = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_LAYER:
+ 		p->codec.hevc.num_hier_layer = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_QP:
+ 		p->codec.hevc.hier_qp_layer[0] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_QP:
+ 		p->codec.hevc.hier_qp_layer[1] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_QP:
+ 		p->codec.hevc.hier_qp_layer[2] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_QP:
+ 		p->codec.hevc.hier_qp_layer[3] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_QP:
+ 		p->codec.hevc.hier_qp_layer[4] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_QP:
+ 		p->codec.hevc.hier_qp_layer[5] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_QP:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_QP:
+ 		p->codec.hevc.hier_qp_layer[6] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_BR:
+ 		p->codec.hevc.hier_bit_layer[0] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_BR:
+ 		p->codec.hevc.hier_bit_layer[1] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_BR:
+ 		p->codec.hevc.hier_bit_layer[2] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_BR:
+ 		p->codec.hevc.hier_bit_layer[3] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_BR:
+ 		p->codec.hevc.hier_bit_layer[4] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_BR:
+ 		p->codec.hevc.hier_bit_layer[5] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR:
++	case V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_BR:
+ 		p->codec.hevc.hier_bit_layer[6] = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_GENERAL_PB:
++	case V4L2_CID_CODEC_VIDEO_HEVC_GENERAL_PB:
+ 		p->codec.hevc.general_pb_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_TEMPORAL_ID:
++	case V4L2_CID_CODEC_VIDEO_HEVC_TEMPORAL_ID:
+ 		p->codec.hevc.temporal_id_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_STRONG_SMOOTHING:
++	case V4L2_CID_CODEC_VIDEO_HEVC_STRONG_SMOOTHING:
+ 		p->codec.hevc.strong_intra_smooth = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_INTRA_PU_SPLIT:
++	case V4L2_CID_CODEC_VIDEO_HEVC_INTRA_PU_SPLIT:
+ 		p->codec.hevc.intra_pu_split_disable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_TMV_PREDICTION:
++	case V4L2_CID_CODEC_VIDEO_HEVC_TMV_PREDICTION:
+ 		p->codec.hevc.tmv_prediction_disable = !ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1:
++	case V4L2_CID_CODEC_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1:
+ 		p->codec.hevc.max_num_merge_mv = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_WITHOUT_STARTCODE:
++	case V4L2_CID_CODEC_VIDEO_HEVC_WITHOUT_STARTCODE:
+ 		p->codec.hevc.encoding_nostartcode_enable = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_PERIOD:
++	case V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_PERIOD:
+ 		p->codec.hevc.refreshperiod = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LF_BETA_OFFSET_DIV2:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LF_BETA_OFFSET_DIV2:
+ 		p->codec.hevc.lf_beta_offset_div2 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_LF_TC_OFFSET_DIV2:
++	case V4L2_CID_CODEC_VIDEO_HEVC_LF_TC_OFFSET_DIV2:
+ 		p->codec.hevc.lf_tc_offset_div2 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD:
++	case V4L2_CID_CODEC_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD:
+ 		p->codec.hevc.size_of_length_field = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR:
++	case V4L2_CID_CODEC_VIDEO_PREPEND_SPSPPS_TO_IDR:
+ 		p->codec.hevc.prepend_sps_pps_to_idr = ctrl->val;
+ 		break;
+ 	default:
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
+index 49503c20d320..cecb8b669c76 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
+@@ -692,9 +692,9 @@ static int s5p_mfc_set_enc_params(struct s5p_mfc_ctx *ctx)
+ 	/* multi-slice control */
+ 	/* multi-slice MB number or bit size */
+ 	mfc_write(dev, p->slice_mode, S5P_FIMV_ENC_MSLICE_CTRL);
+-	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
++	if (p->slice_mode == V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
+ 		mfc_write(dev, p->slice_mb, S5P_FIMV_ENC_MSLICE_MB);
+-	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
++	} else if (p->slice_mode == V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
+ 		mfc_write(dev, p->slice_bit, S5P_FIMV_ENC_MSLICE_BIT);
+ 	} else {
+ 		mfc_write(dev, 0, S5P_FIMV_ENC_MSLICE_MB);
+@@ -804,7 +804,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 	}
+ 	mfc_write(dev, reg, S5P_FIMV_ENC_BETA_OFF);
+ 	/* entropy coding mode */
+-	if (p_264->entropy_mode == V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC)
++	if (p_264->entropy_mode == V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC)
+ 		mfc_write(dev, 1, S5P_FIMV_ENC_H264_ENTROPY_MODE);
+ 	else
+ 		mfc_write(dev, 0, S5P_FIMV_ENC_H264_ENTROPY_MODE);
+@@ -903,7 +903,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 	shm = s5p_mfc_read_info_v5(ctx, EXT_ENC_CONTROL);
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		shm &= ~(0xFFFF << 16);
+ 		shm |= (p_264->cpb_size << 16);
+ 	}
+@@ -982,7 +982,7 @@ static int s5p_mfc_set_enc_params_mpeg4(struct s5p_mfc_ctx *ctx)
+ 	shm = s5p_mfc_read_info_v5(ctx, EXT_ENC_CONTROL);
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		shm &= ~(0xFFFF << 16);
+ 		shm |= (p->vbv_size << 16);
+ 	}
+@@ -1031,7 +1031,7 @@ static int s5p_mfc_set_enc_params_h263(struct s5p_mfc_ctx *ctx)
+ 	shm = s5p_mfc_read_info_v5(ctx, EXT_ENC_CONTROL);
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		shm &= ~(0xFFFF << 16);
+ 		shm |= (p->vbv_size << 16);
+ 	}
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
+index a1453053e31a..1422a0b84d7d 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
+@@ -733,10 +733,10 @@ static int s5p_mfc_set_slice_mode(struct s5p_mfc_ctx *ctx)
+ 	/* multi-slice control */
+ 	/* multi-slice MB number or bit size */
+ 	writel(ctx->slice_mode, mfc_regs->e_mslice_mode);
+-	if (ctx->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
++	if (ctx->slice_mode == V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
+ 		writel(ctx->slice_size.mb, mfc_regs->e_mslice_size_mb);
+ 	} else if (ctx->slice_mode ==
+-			V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
++			V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
+ 		writel(ctx->slice_size.bits, mfc_regs->e_mslice_size_bits);
+ 	} else {
+ 		writel(0x0, mfc_regs->e_mslice_size_mb);
+@@ -776,11 +776,11 @@ static int s5p_mfc_set_enc_params(struct s5p_mfc_ctx *ctx)
+ 	/* multi-slice MB number or bit size */
+ 	ctx->slice_mode = p->slice_mode;
+ 	reg = 0;
+-	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
++	if (p->slice_mode == V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
+ 		reg |= (0x1 << 3);
+ 		writel(reg, mfc_regs->e_enc_options);
+ 		ctx->slice_size.mb = p->slice_mb;
+-	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
++	} else if (p->slice_mode == V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
+ 		reg |= (0x1 << 3);
+ 		writel(reg, mfc_regs->e_enc_options);
+ 		ctx->slice_size.bits = p->slice_bit;
+@@ -978,7 +978,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		writel(p_h264->cpb_size & 0xFFFF,
+ 				mfc_regs->e_vbv_buffer_size);
+ 
+@@ -1149,7 +1149,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 
+ 	if (p_h264->fmo) {
+ 		switch (p_h264->fmo_map_type) {
+-		case V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_INTERLEAVED_SLICES:
++		case V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_INTERLEAVED_SLICES:
+ 			if (p_h264->fmo_slice_grp > 4)
+ 				p_h264->fmo_slice_grp = 4;
+ 			for (i = 0; i < (p_h264->fmo_slice_grp & 0xF); i++)
+@@ -1157,12 +1157,12 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 					mfc_regs->e_h264_fmo_run_length_minus1_0
+ 					+ i * 4);
+ 			break;
+-		case V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_SCATTERED_SLICES:
++		case V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_SCATTERED_SLICES:
+ 			if (p_h264->fmo_slice_grp > 4)
+ 				p_h264->fmo_slice_grp = 4;
+ 			break;
+-		case V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_RASTER_SCAN:
+-		case V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_WIPE_SCAN:
++		case V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_RASTER_SCAN:
++		case V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_WIPE_SCAN:
+ 			if (p_h264->fmo_slice_grp > 2)
+ 				p_h264->fmo_slice_grp = 2;
+ 			writel(p_h264->fmo_chg_dir & 0x1,
+@@ -1258,7 +1258,7 @@ static int s5p_mfc_set_enc_params_mpeg4(struct s5p_mfc_ctx *ctx)
+ 
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		writel(p->vbv_size & 0xFFFF, mfc_regs->e_vbv_buffer_size);
+ 
+ 		if (p->rc_frame)
+@@ -1332,7 +1332,7 @@ static int s5p_mfc_set_enc_params_h263(struct s5p_mfc_ctx *ctx)
+ 
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		writel(p->vbv_size & 0xFFFF, mfc_regs->e_vbv_buffer_size);
+ 
+ 		if (p->rc_frame)
+@@ -1404,7 +1404,7 @@ static int s5p_mfc_set_enc_params_vp8(struct s5p_mfc_ctx *ctx)
+ 
+ 	/* vbv buffer size */
+ 	if (p->frame_skip_mode ==
+-			V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
++			V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT) {
+ 		writel(p->vbv_size & 0xFFFF, mfc_regs->e_vbv_buffer_size);
+ 
+ 		if (p->rc_frame)
+@@ -1415,16 +1415,16 @@ static int s5p_mfc_set_enc_params_vp8(struct s5p_mfc_ctx *ctx)
+ 	reg = 0;
+ 	reg |= (p_vp8->imd_4x4 & 0x1) << 10;
+ 	switch (p_vp8->num_partitions) {
+-	case V4L2_CID_MPEG_VIDEO_VPX_1_PARTITION:
++	case V4L2_CID_CODEC_VIDEO_VPX_1_PARTITION:
+ 		val = 0;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_2_PARTITIONS:
++	case V4L2_CID_CODEC_VIDEO_VPX_2_PARTITIONS:
+ 		val = 2;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_4_PARTITIONS:
++	case V4L2_CID_CODEC_VIDEO_VPX_4_PARTITIONS:
+ 		val = 4;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_VPX_8_PARTITIONS:
++	case V4L2_CID_CODEC_VIDEO_VPX_8_PARTITIONS:
+ 		val = 8;
+ 		break;
+ 	}
+@@ -1476,14 +1476,14 @@ static int s5p_mfc_set_enc_params_hevc(struct s5p_mfc_ctx *ctx)
+ 	writel(reg, mfc_regs->e_picture_profile);
+ 
+ 	switch (p_hevc->loopfilter) {
+-	case V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED:
++	case V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED:
+ 		p_hevc->loopfilter_disable = 1;
+ 		break;
+-	case V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED:
++	case V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED:
+ 		p_hevc->loopfilter_disable = 0;
+ 		p_hevc->loopfilter_across = 1;
+ 		break;
+-	case V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY:
++	case V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY:
+ 		p_hevc->loopfilter_disable = 0;
+ 		p_hevc->loopfilter_across = 0;
+ 		break;
+diff --git a/drivers/media/platform/sti/hva/hva-debugfs.c b/drivers/media/platform/sti/hva/hva-debugfs.c
+index a86a07b6fbc7..9841eaaf22c0 100644
+--- a/drivers/media/platform/sti/hva/hva-debugfs.c
++++ b/drivers/media/platform/sti/hva/hva-debugfs.c
+@@ -41,8 +41,8 @@ static void format_ctx(struct seq_file *s, struct hva_ctx *ctx)
+ 		      stream->width, stream->height,
+ 		      stream->profile, stream->level);
+ 
+-	bitrate_mode = V4L2_CID_MPEG_VIDEO_BITRATE_MODE;
+-	aspect = V4L2_CID_MPEG_VIDEO_ASPECT;
++	bitrate_mode = V4L2_CID_CODEC_VIDEO_BITRATE_MODE;
++	aspect = V4L2_CID_CODEC_VIDEO_ASPECT;
+ 	seq_puts(s, "  |-[parameters]\n");
+ 	seq_printf(s, "  | |- %s\n"
+ 		      "  | |- bitrate=%d bps\n"
+@@ -56,9 +56,9 @@ static void format_ctx(struct seq_file *s, struct hva_ctx *ctx)
+ 		      ctrls->time_per_frame.denominator,
+ 		      ctrls->time_per_frame.numerator);
+ 
+-	entropy = V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE;
+-	vui_sar = V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC;
+-	sei_fp =  V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE;
++	entropy = V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE;
++	vui_sar = V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC;
++	sei_fp =  V4L2_CID_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE;
+ 	if (stream->streamformat == V4L2_PIX_FMT_H264) {
+ 		seq_printf(s, "  | |- %s entropy mode\n"
+ 			      "  | |- CPB size=%d kB\n"
+diff --git a/drivers/media/platform/sti/hva/hva-h264.c b/drivers/media/platform/sti/hva/hva-h264.c
+index 98cb00d2d868..8b910e660ffd 100644
+--- a/drivers/media/platform/sti/hva/hva-h264.c
++++ b/drivers/media/platform/sti/hva/hva-h264.c
+@@ -48,7 +48,7 @@
+ #define H264_FILLER_DATA_SIZE 6
+ 
+ struct h264_profile {
+-	enum v4l2_mpeg_video_h264_level level;
++	enum v4l2_codec_video_h264_level level;
+ 	u32 max_mb_per_seconds;
+ 	u32 max_frame_size;
+ 	u32 max_bitrate;
+@@ -57,22 +57,22 @@ struct h264_profile {
+ };
+ 
+ static const struct h264_profile h264_infos_list[] = {
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_1_0, 1485, 99, 64, 175, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_1B, 1485, 99, 128, 350, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_1_1, 3000, 396, 192, 500, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_1_2, 6000, 396, 384, 1000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_1_3, 11880, 396, 768, 2000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_2_0, 11880, 396, 2000, 2000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_2_1, 19800, 792, 4000, 4000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_2_2, 20250, 1620, 4000, 4000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_3_0, 40500, 1620, 10000, 10000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_3_1, 108000, 3600, 14000, 14000, 4},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_3_2, 216000, 5120, 20000, 20000, 4},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_4_0, 245760, 8192, 20000, 25000, 4},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_4_1, 245760, 8192, 50000, 62500, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_4_2, 522240, 8704, 50000, 62500, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_5_0, 589824, 22080, 135000, 135000, 2},
+-	{V4L2_MPEG_VIDEO_H264_LEVEL_5_1, 983040, 36864, 240000, 240000, 2}
++	{V4L2_CODEC_VIDEO_H264_LEVEL_1_0, 1485, 99, 64, 175, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_1B, 1485, 99, 128, 350, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_1_1, 3000, 396, 192, 500, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_1_2, 6000, 396, 384, 1000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_1_3, 11880, 396, 768, 2000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_2_0, 11880, 396, 2000, 2000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_2_1, 19800, 792, 4000, 4000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_2_2, 20250, 1620, 4000, 4000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_3_0, 40500, 1620, 10000, 10000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_3_1, 108000, 3600, 14000, 14000, 4},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_3_2, 216000, 5120, 20000, 20000, 4},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_4_0, 245760, 8192, 20000, 25000, 4},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_4_1, 245760, 8192, 50000, 62500, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_4_2, 522240, 8704, 50000, 62500, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_5_0, 589824, 22080, 135000, 135000, 2},
++	{V4L2_CODEC_VIDEO_H264_LEVEL_5_1, 983040, 36864, 240000, 240000, 2}
+ };
+ 
+ enum hva_brc_type {
+@@ -427,7 +427,7 @@ static int hva_h264_fill_slice_header(struct hva_ctx *pctx,
+ 	 * The part of host is precomputed and available through this array.
+ 	 */
+ 	struct device *dev = ctx_to_dev(pctx);
+-	int  cabac = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC;
++	int  cabac = V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC;
+ 	static const unsigned char slice_header[] = {
+ 		0x00, 0x00, 0x00, 0x01,
+ 		0x41, 0x34, 0x07, 0x00
+@@ -598,10 +598,10 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
+ 	struct hva_h264_td *td = &task->td;
+ 	struct hva_controls *ctrls = &pctx->ctrls;
+ 	struct v4l2_fract *time_per_frame = &pctx->ctrls.time_per_frame;
+-	int cavlc =  V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC;
++	int cavlc =  V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC;
+ 	u32 frame_num = pctx->stream_num;
+ 	u32 addr_esram = hva->esram_addr;
+-	enum v4l2_mpeg_video_h264_level level;
++	enum v4l2_codec_video_h264_level level;
+ 	dma_addr_t paddr = 0;
+ 	u8 *slice_header_vaddr;
+ 	u32 frame_width = frame->info.aligned_width;
+@@ -641,7 +641,7 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
+ 
+ 	/* useConstrainedIntraFlag set to false for better coding efficiency */
+ 	td->use_constrained_intra_flag = false;
+-	td->brc_type = (ctrls->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CBR)
++	td->brc_type = (ctrls->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_CBR)
+ 			? BRC_TYPE_CBR : BRC_TYPE_VBR;
+ 
+ 	td->entropy_coding_mode = (ctrls->entropy_mode == cavlc) ? CAVLC :
+@@ -674,7 +674,7 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
  	}
  
- 
--Format of embedded V4L2_MPEG_STREAM_VBI_FMT_IVTV VBI data
-----------------------------------------------------------
-+Format of embedded V4L2_CODEC_STREAM_VBI_FMT_IVTV VBI data
-+----------------------------------------------------------
- 
- Author: Hans Verkuil <hverkuil@xs4all.nl>
- 
- 
--This section describes the V4L2_MPEG_STREAM_VBI_FMT_IVTV format of the VBI data
-+This section describes the V4L2_CODEC_STREAM_VBI_FMT_IVTV format of the VBI data
- embedded in an MPEG-2 program stream. This format is in part dictated by some
- hardware limitations of the ivtv driver (the driver for the Conexant cx23415/6
- chips), in particular a maximum size for the VBI data. Anything longer is cut
-@@ -149,7 +149,7 @@ The stream ID of the VBI data is 0xBD. The maximum size of the embedded data is
- header and a 42 bytes payload each. Anything beyond this limit is cut off by
- the cx23415/6 firmware. Besides the data for the VBI lines we also need 36 bits
- for a bitmask determining which lines are captured and 4 bytes for a magic cookie,
--signifying that this data package contains V4L2_MPEG_STREAM_VBI_FMT_IVTV VBI data.
-+signifying that this data package contains V4L2_CODEC_STREAM_VBI_FMT_IVTV VBI data.
- If all lines are used, then there is no longer room for the bitmask. To solve this
- two different magic numbers were introduced:
- 
-diff --git a/Documentation/userspace-api/media/dvb/audio-bilingual-channel-select.rst b/Documentation/userspace-api/media/dvb/audio-bilingual-channel-select.rst
-index 33b5363317f1..5bcc22196329 100644
---- a/Documentation/userspace-api/media/dvb/audio-bilingual-channel-select.rst
-+++ b/Documentation/userspace-api/media/dvb/audio-bilingual-channel-select.rst
-@@ -44,7 +44,7 @@ Description
- -----------
- 
- This ioctl is obsolete. Do not use in new drivers. It has been replaced
--by the V4L2 ``V4L2_CID_MPEG_AUDIO_DEC_MULTILINGUAL_PLAYBACK`` control
-+by the V4L2 ``V4L2_CID_CODEC_AUDIO_DEC_MULTILINGUAL_PLAYBACK`` control
- for MPEG decoders controlled through V4L2.
- 
- This ioctl call asks the Audio Device to select the requested channel
-diff --git a/Documentation/userspace-api/media/dvb/audio-channel-select.rst b/Documentation/userspace-api/media/dvb/audio-channel-select.rst
-index 74093df92a68..13c761ad539e 100644
---- a/Documentation/userspace-api/media/dvb/audio-channel-select.rst
-+++ b/Documentation/userspace-api/media/dvb/audio-channel-select.rst
-@@ -44,7 +44,7 @@ Description
- -----------
- 
- This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
--V4L2 ``V4L2_CID_MPEG_AUDIO_DEC_PLAYBACK`` control instead.
-+V4L2 ``V4L2_CID_CODEC_AUDIO_DEC_PLAYBACK`` control instead.
- 
- This ioctl call asks the Audio Device to select the requested channel if
- possible.
-diff --git a/Documentation/userspace-api/media/dvb/video-get-frame-count.rst b/Documentation/userspace-api/media/dvb/video-get-frame-count.rst
-index b48ac8c58a41..aaa97912528b 100644
---- a/Documentation/userspace-api/media/dvb/video-get-frame-count.rst
-+++ b/Documentation/userspace-api/media/dvb/video-get-frame-count.rst
-@@ -51,7 +51,7 @@ Description
- -----------
- 
- This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
--this ioctl has been replaced by the ``V4L2_CID_MPEG_VIDEO_DEC_FRAME``
-+this ioctl has been replaced by the ``V4L2_CID_CODEC_VIDEO_DEC_FRAME``
- control.
- 
- This ioctl call asks the Video Device to return the number of displayed
-diff --git a/Documentation/userspace-api/media/dvb/video-get-pts.rst b/Documentation/userspace-api/media/dvb/video-get-pts.rst
-index fedaff41be0b..b3b12ea942d4 100644
---- a/Documentation/userspace-api/media/dvb/video-get-pts.rst
-+++ b/Documentation/userspace-api/media/dvb/video-get-pts.rst
-@@ -55,7 +55,7 @@ Description
- -----------
- 
- This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
--this ioctl has been replaced by the ``V4L2_CID_MPEG_VIDEO_DEC_PTS``
-+this ioctl has been replaced by the ``V4L2_CID_CODEC_VIDEO_DEC_PTS``
- control.
- 
- This ioctl call asks the Video Device to return the current PTS
-diff --git a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
-index 97ec2b115c71..8fb01605990e 100644
---- a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
-@@ -380,17 +380,17 @@ providing
- :ref:`negotiated sliced VBI services <sliced-vbi-format-negotitation>`
- as data embedded in the MPEG stream. Users or applications control this
- sliced VBI data insertion with the
--:ref:`V4L2_CID_MPEG_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CID_CODEC_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
- control.
- 
- If the driver does not provide the
--:ref:`V4L2_CID_MPEG_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CID_CODEC_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
- control, or only allows that control to be set to
--:ref:`V4L2_MPEG_STREAM_VBI_FMT_NONE <v4l2-mpeg-stream-vbi-fmt>`,
-+:ref:`V4L2_CODEC_STREAM_VBI_FMT_NONE <v4l2-mpeg-stream-vbi-fmt>`,
- then the device cannot embed sliced VBI data in the MPEG stream.
- 
- The
--:ref:`V4L2_CID_MPEG_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CID_CODEC_STREAM_VBI_FMT <v4l2-mpeg-stream-vbi-fmt>`
- control does not implicitly set the device driver to capture nor cease
- capturing sliced VBI data. The control only indicates to embed sliced
- VBI data in the MPEG stream, if an application has negotiated sliced VBI
-@@ -410,7 +410,7 @@ MPEG Stream Embedded, Sliced VBI Data Format: NONE
- --------------------------------------------------
- 
- The
--:ref:`V4L2_MPEG_STREAM_VBI_FMT_NONE <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CODEC_STREAM_VBI_FMT_NONE <v4l2-mpeg-stream-vbi-fmt>`
- embedded sliced VBI format shall be interpreted by drivers as a control
- to cease embedding sliced VBI data in MPEG streams. Neither the device
- nor driver shall insert "empty" embedded sliced VBI data packets in the
-@@ -421,7 +421,7 @@ MPEG Stream Embedded, Sliced VBI Data Format: IVTV
- --------------------------------------------------
- 
- The
--:ref:`V4L2_MPEG_STREAM_VBI_FMT_IVTV <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CODEC_STREAM_VBI_FMT_IVTV <v4l2-mpeg-stream-vbi-fmt>`
- embedded sliced VBI format, when supported, indicates to the driver to
- embed up to 36 lines of sliced VBI data per frame in an MPEG-2 *Private
- Stream 1 PES* packet encapsulated in an MPEG-2 *Program Pack* in the
-@@ -444,7 +444,7 @@ this format as well.
- 
- The following definitions specify the payload of the MPEG-2 *Private
- Stream 1 PES* packets that contain sliced VBI data when
--:ref:`V4L2_MPEG_STREAM_VBI_FMT_IVTV <v4l2-mpeg-stream-vbi-fmt>`
-+:ref:`V4L2_CODEC_STREAM_VBI_FMT_IVTV <v4l2-mpeg-stream-vbi-fmt>`
- is set. (The MPEG-2 *Private Stream 1 PES* packet header and
- encapsulating MPEG-2 *Program Pack* header are not detailed here. Please
- refer to the MPEG-2 specifications for details on those packet headers.)
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index e2d7c4a87fea..34884a785d76 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -34,10 +34,10 @@ Codec Control IDs
- 
- .. _v4l2-mpeg-stream-type:
- 
--``V4L2_CID_MPEG_STREAM_TYPE``
-+``V4L2_CID_CODEC_STREAM_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_stream_type -
-+enum v4l2_codec_stream_type -
-     The MPEG-1, -2 or -4 output stream type. One cannot assume anything
-     here. Each hardware MPEG encoder tends to support different subsets
-     of the available MPEG stream types. This control is specific to
-@@ -49,47 +49,47 @@ enum v4l2_mpeg_stream_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG2_PS``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG2_PS``
-       - MPEG-2 program stream
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG2_TS``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG2_TS``
-       - MPEG-2 transport stream
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG1_SS``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG1_SS``
-       - MPEG-1 system stream
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG2_DVD``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG2_DVD``
-       - MPEG-2 DVD-compatible stream
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG1_VCD``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG1_VCD``
-       - MPEG-1 VCD-compatible stream
--    * - ``V4L2_MPEG_STREAM_TYPE_MPEG2_SVCD``
-+    * - ``V4L2_CODEC_STREAM_TYPE_MPEG2_SVCD``
-       - MPEG-2 SVCD-compatible stream
- 
- 
- 
--``V4L2_CID_MPEG_STREAM_PID_PMT (integer)``
-+``V4L2_CID_CODEC_STREAM_PID_PMT (integer)``
-     Program Map Table Packet ID for the MPEG transport stream (default
-     16)
- 
--``V4L2_CID_MPEG_STREAM_PID_AUDIO (integer)``
-+``V4L2_CID_CODEC_STREAM_PID_AUDIO (integer)``
-     Audio Packet ID for the MPEG transport stream (default 256)
- 
--``V4L2_CID_MPEG_STREAM_PID_VIDEO (integer)``
-+``V4L2_CID_CODEC_STREAM_PID_VIDEO (integer)``
-     Video Packet ID for the MPEG transport stream (default 260)
- 
--``V4L2_CID_MPEG_STREAM_PID_PCR (integer)``
-+``V4L2_CID_CODEC_STREAM_PID_PCR (integer)``
-     Packet ID for the MPEG transport stream carrying PCR fields (default
-     259)
- 
--``V4L2_CID_MPEG_STREAM_PES_ID_AUDIO (integer)``
-+``V4L2_CID_CODEC_STREAM_PES_ID_AUDIO (integer)``
-     Audio ID for MPEG PES
- 
--``V4L2_CID_MPEG_STREAM_PES_ID_VIDEO (integer)``
-+``V4L2_CID_CODEC_STREAM_PES_ID_VIDEO (integer)``
-     Video ID for MPEG PES
- 
- .. _v4l2-mpeg-stream-vbi-fmt:
- 
--``V4L2_CID_MPEG_STREAM_VBI_FMT``
-+``V4L2_CID_CODEC_STREAM_VBI_FMT``
-     (enum)
- 
--enum v4l2_mpeg_stream_vbi_fmt -
-+enum v4l2_codec_stream_vbi_fmt -
-     Some cards can embed VBI data (e. g. Closed Caption, Teletext) into
-     the MPEG stream. This control selects whether VBI data should be
-     embedded, and if so, what embedding method should be used. The list
-@@ -104,9 +104,9 @@ enum v4l2_mpeg_stream_vbi_fmt -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_STREAM_VBI_FMT_NONE``
-+    * - ``V4L2_CODEC_STREAM_VBI_FMT_NONE``
-       - No VBI in the MPEG stream
--    * - ``V4L2_MPEG_STREAM_VBI_FMT_IVTV``
-+    * - ``V4L2_CODEC_STREAM_VBI_FMT_IVTV``
-       - VBI in private packets, IVTV format (documented in the kernel
- 	sources in the file
- 	``Documentation/userspace-api/media/drivers/cx2341x-uapi.rst``)
-@@ -115,10 +115,10 @@ enum v4l2_mpeg_stream_vbi_fmt -
- 
- .. _v4l2-mpeg-audio-sampling-freq:
- 
--``V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ``
-+``V4L2_CID_CODEC_AUDIO_SAMPLING_FREQ``
-     (enum)
- 
--enum v4l2_mpeg_audio_sampling_freq -
-+enum v4l2_codec_audio_sampling_freq -
-     MPEG Audio sampling frequency. Possible values are:
- 
- 
-@@ -127,21 +127,21 @@ enum v4l2_mpeg_audio_sampling_freq -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_SAMPLING_FREQ_44100``
-+    * - ``V4L2_CODEC_AUDIO_SAMPLING_FREQ_44100``
-       - 44.1 kHz
--    * - ``V4L2_MPEG_AUDIO_SAMPLING_FREQ_48000``
-+    * - ``V4L2_CODEC_AUDIO_SAMPLING_FREQ_48000``
-       - 48 kHz
--    * - ``V4L2_MPEG_AUDIO_SAMPLING_FREQ_32000``
-+    * - ``V4L2_CODEC_AUDIO_SAMPLING_FREQ_32000``
-       - 32 kHz
- 
- 
- 
- .. _v4l2-mpeg-audio-encoding:
- 
--``V4L2_CID_MPEG_AUDIO_ENCODING``
-+``V4L2_CID_CODEC_AUDIO_ENCODING``
-     (enum)
- 
--enum v4l2_mpeg_audio_encoding -
-+enum v4l2_codec_audio_encoding -
-     MPEG Audio encoding. This control is specific to multiplexed MPEG
-     streams. Possible values are:
- 
-@@ -151,25 +151,25 @@ enum v4l2_mpeg_audio_encoding -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_ENCODING_LAYER_1``
-+    * - ``V4L2_CODEC_AUDIO_ENCODING_LAYER_1``
-       - MPEG-1/2 Layer I encoding
--    * - ``V4L2_MPEG_AUDIO_ENCODING_LAYER_2``
-+    * - ``V4L2_CODEC_AUDIO_ENCODING_LAYER_2``
-       - MPEG-1/2 Layer II encoding
--    * - ``V4L2_MPEG_AUDIO_ENCODING_LAYER_3``
-+    * - ``V4L2_CODEC_AUDIO_ENCODING_LAYER_3``
-       - MPEG-1/2 Layer III encoding
--    * - ``V4L2_MPEG_AUDIO_ENCODING_AAC``
-+    * - ``V4L2_CODEC_AUDIO_ENCODING_AAC``
-       - MPEG-2/4 AAC (Advanced Audio Coding)
--    * - ``V4L2_MPEG_AUDIO_ENCODING_AC3``
-+    * - ``V4L2_CODEC_AUDIO_ENCODING_AC3``
-       - AC-3 aka ATSC A/52 encoding
- 
- 
- 
- .. _v4l2-mpeg-audio-l1-bitrate:
- 
--``V4L2_CID_MPEG_AUDIO_L1_BITRATE``
-+``V4L2_CID_CODEC_AUDIO_L1_BITRATE``
-     (enum)
- 
--enum v4l2_mpeg_audio_l1_bitrate -
-+enum v4l2_codec_audio_l1_bitrate -
-     MPEG-1/2 Layer I bitrate. Possible values are:
- 
- 
-@@ -178,43 +178,43 @@ enum v4l2_mpeg_audio_l1_bitrate -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_32K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_32K``
-       - 32 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_64K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_64K``
-       - 64 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_96K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_96K``
-       - 96 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_128K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_128K``
-       - 128 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_160K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_160K``
-       - 160 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_192K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_192K``
-       - 192 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_224K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_224K``
-       - 224 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_256K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_256K``
-       - 256 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_288K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_288K``
-       - 288 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_320K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_320K``
-       - 320 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_352K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_352K``
-       - 352 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_384K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_384K``
-       - 384 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_416K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_416K``
-       - 416 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L1_BITRATE_448K``
-+    * - ``V4L2_CODEC_AUDIO_L1_BITRATE_448K``
-       - 448 kbit/s
- 
- 
- 
- .. _v4l2-mpeg-audio-l2-bitrate:
- 
--``V4L2_CID_MPEG_AUDIO_L2_BITRATE``
-+``V4L2_CID_CODEC_AUDIO_L2_BITRATE``
-     (enum)
- 
--enum v4l2_mpeg_audio_l2_bitrate -
-+enum v4l2_codec_audio_l2_bitrate -
-     MPEG-1/2 Layer II bitrate. Possible values are:
- 
- 
-@@ -223,43 +223,43 @@ enum v4l2_mpeg_audio_l2_bitrate -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_32K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_32K``
-       - 32 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_48K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_48K``
-       - 48 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_56K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_56K``
-       - 56 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_64K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_64K``
-       - 64 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_80K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_80K``
-       - 80 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_96K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_96K``
-       - 96 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_112K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_112K``
-       - 112 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_128K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_128K``
-       - 128 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_160K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_160K``
-       - 160 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_192K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_192K``
-       - 192 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_224K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_224K``
-       - 224 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_256K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_256K``
-       - 256 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_320K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_320K``
-       - 320 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L2_BITRATE_384K``
-+    * - ``V4L2_CODEC_AUDIO_L2_BITRATE_384K``
-       - 384 kbit/s
- 
- 
- 
- .. _v4l2-mpeg-audio-l3-bitrate:
- 
--``V4L2_CID_MPEG_AUDIO_L3_BITRATE``
-+``V4L2_CID_CODEC_AUDIO_L3_BITRATE``
-     (enum)
- 
--enum v4l2_mpeg_audio_l3_bitrate -
-+enum v4l2_codec_audio_l3_bitrate -
-     MPEG-1/2 Layer III bitrate. Possible values are:
- 
- 
-@@ -268,46 +268,46 @@ enum v4l2_mpeg_audio_l3_bitrate -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_32K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_32K``
-       - 32 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_40K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_40K``
-       - 40 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_48K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_48K``
-       - 48 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_56K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_56K``
-       - 56 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_64K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_64K``
-       - 64 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_80K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_80K``
-       - 80 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_96K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_96K``
-       - 96 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_112K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_112K``
-       - 112 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_128K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_128K``
-       - 128 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_160K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_160K``
-       - 160 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_192K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_192K``
-       - 192 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_224K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_224K``
-       - 224 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_256K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_256K``
-       - 256 kbit/s
--    * - ``V4L2_MPEG_AUDIO_L3_BITRATE_320K``
-+    * - ``V4L2_CODEC_AUDIO_L3_BITRATE_320K``
-       - 320 kbit/s
- 
- 
- 
--``V4L2_CID_MPEG_AUDIO_AAC_BITRATE (integer)``
-+``V4L2_CID_CODEC_AUDIO_AAC_BITRATE (integer)``
-     AAC bitrate in bits per second.
- 
- .. _v4l2-mpeg-audio-ac3-bitrate:
- 
--``V4L2_CID_MPEG_AUDIO_AC3_BITRATE``
-+``V4L2_CID_CODEC_AUDIO_AC3_BITRATE``
-     (enum)
- 
--enum v4l2_mpeg_audio_ac3_bitrate -
-+enum v4l2_codec_audio_ac3_bitrate -
-     AC-3 bitrate. Possible values are:
- 
- 
-@@ -316,53 +316,53 @@ enum v4l2_mpeg_audio_ac3_bitrate -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_32K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_32K``
-       - 32 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_40K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_40K``
-       - 40 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_48K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_48K``
-       - 48 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_56K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_56K``
-       - 56 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_64K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_64K``
-       - 64 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_80K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_80K``
-       - 80 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_96K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_96K``
-       - 96 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_112K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_112K``
-       - 112 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_128K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_128K``
-       - 128 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_160K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_160K``
-       - 160 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_192K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_192K``
-       - 192 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_224K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_224K``
-       - 224 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_256K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_256K``
-       - 256 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_320K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_320K``
-       - 320 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_384K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_384K``
-       - 384 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_448K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_448K``
-       - 448 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_512K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_512K``
-       - 512 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_576K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_576K``
-       - 576 kbit/s
--    * - ``V4L2_MPEG_AUDIO_AC3_BITRATE_640K``
-+    * - ``V4L2_CODEC_AUDIO_AC3_BITRATE_640K``
-       - 640 kbit/s
- 
- 
- 
- .. _v4l2-mpeg-audio-mode:
- 
--``V4L2_CID_MPEG_AUDIO_MODE``
-+``V4L2_CID_CODEC_AUDIO_MODE``
-     (enum)
- 
--enum v4l2_mpeg_audio_mode -
-+enum v4l2_codec_audio_mode -
-     MPEG Audio mode. Possible values are:
- 
- 
-@@ -371,23 +371,23 @@ enum v4l2_mpeg_audio_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_MODE_STEREO``
-+    * - ``V4L2_CODEC_AUDIO_MODE_STEREO``
-       - Stereo
--    * - ``V4L2_MPEG_AUDIO_MODE_JOINT_STEREO``
-+    * - ``V4L2_CODEC_AUDIO_MODE_JOINT_STEREO``
-       - Joint Stereo
--    * - ``V4L2_MPEG_AUDIO_MODE_DUAL``
-+    * - ``V4L2_CODEC_AUDIO_MODE_DUAL``
-       - Bilingual
--    * - ``V4L2_MPEG_AUDIO_MODE_MONO``
-+    * - ``V4L2_CODEC_AUDIO_MODE_MONO``
-       - Mono
- 
- 
- 
- .. _v4l2-mpeg-audio-mode-extension:
- 
--``V4L2_CID_MPEG_AUDIO_MODE_EXTENSION``
-+``V4L2_CID_CODEC_AUDIO_MODE_EXTENSION``
-     (enum)
- 
--enum v4l2_mpeg_audio_mode_extension -
-+enum v4l2_codec_audio_mode_extension -
-     Joint Stereo audio mode extension. In Layer I and II they indicate
-     which subbands are in intensity stereo. All other subbands are coded
-     in stereo. Layer III is not (yet) supported. Possible values are:
-@@ -398,23 +398,23 @@ enum v4l2_mpeg_audio_mode_extension -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_MODE_EXTENSION_BOUND_4``
-+    * - ``V4L2_CODEC_AUDIO_MODE_EXTENSION_BOUND_4``
-       - Subbands 4-31 in intensity stereo
--    * - ``V4L2_MPEG_AUDIO_MODE_EXTENSION_BOUND_8``
-+    * - ``V4L2_CODEC_AUDIO_MODE_EXTENSION_BOUND_8``
-       - Subbands 8-31 in intensity stereo
--    * - ``V4L2_MPEG_AUDIO_MODE_EXTENSION_BOUND_12``
-+    * - ``V4L2_CODEC_AUDIO_MODE_EXTENSION_BOUND_12``
-       - Subbands 12-31 in intensity stereo
--    * - ``V4L2_MPEG_AUDIO_MODE_EXTENSION_BOUND_16``
-+    * - ``V4L2_CODEC_AUDIO_MODE_EXTENSION_BOUND_16``
-       - Subbands 16-31 in intensity stereo
- 
- 
- 
- .. _v4l2-mpeg-audio-emphasis:
- 
--``V4L2_CID_MPEG_AUDIO_EMPHASIS``
-+``V4L2_CID_CODEC_AUDIO_EMPHASIS``
-     (enum)
- 
--enum v4l2_mpeg_audio_emphasis -
-+enum v4l2_codec_audio_emphasis -
-     Audio Emphasis. Possible values are:
- 
- 
-@@ -423,21 +423,21 @@ enum v4l2_mpeg_audio_emphasis -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_EMPHASIS_NONE``
-+    * - ``V4L2_CODEC_AUDIO_EMPHASIS_NONE``
-       - None
--    * - ``V4L2_MPEG_AUDIO_EMPHASIS_50_DIV_15_uS``
-+    * - ``V4L2_CODEC_AUDIO_EMPHASIS_50_DIV_15_uS``
-       - 50/15 microsecond emphasis
--    * - ``V4L2_MPEG_AUDIO_EMPHASIS_CCITT_J17``
-+    * - ``V4L2_CODEC_AUDIO_EMPHASIS_CCITT_J17``
-       - CCITT J.17
- 
- 
- 
- .. _v4l2-mpeg-audio-crc:
- 
--``V4L2_CID_MPEG_AUDIO_CRC``
-+``V4L2_CID_CODEC_AUDIO_CRC``
-     (enum)
- 
--enum v4l2_mpeg_audio_crc -
-+enum v4l2_codec_audio_crc -
-     CRC method. Possible values are:
- 
- 
-@@ -446,14 +446,14 @@ enum v4l2_mpeg_audio_crc -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_CRC_NONE``
-+    * - ``V4L2_CODEC_AUDIO_CRC_NONE``
-       - None
--    * - ``V4L2_MPEG_AUDIO_CRC_CRC16``
-+    * - ``V4L2_CODEC_AUDIO_CRC_CRC16``
-       - 16 bit parity check
- 
- 
- 
--``V4L2_CID_MPEG_AUDIO_MUTE (boolean)``
-+``V4L2_CID_CODEC_AUDIO_MUTE (boolean)``
-     Mutes the audio when capturing. This is not done by muting audio
-     hardware, which can still produce a slight hiss, but in the encoder
-     itself, guaranteeing a fixed and reproducible audio bitstream. 0 =
-@@ -461,10 +461,10 @@ enum v4l2_mpeg_audio_crc -
- 
- .. _v4l2-mpeg-audio-dec-playback:
- 
--``V4L2_CID_MPEG_AUDIO_DEC_PLAYBACK``
-+``V4L2_CID_CODEC_AUDIO_DEC_PLAYBACK``
-     (enum)
- 
--enum v4l2_mpeg_audio_dec_playback -
-+enum v4l2_codec_audio_dec_playback -
-     Determines how monolingual audio should be played back. Possible
-     values are:
- 
-@@ -476,35 +476,35 @@ enum v4l2_mpeg_audio_dec_playback -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_AUTO``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_AUTO``
-       - Automatically determines the best playback mode.
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_STEREO``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_STEREO``
-       - Stereo playback.
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_LEFT``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_LEFT``
-       - Left channel playback.
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_RIGHT``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_RIGHT``
-       - Right channel playback.
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_MONO``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_MONO``
-       - Mono playback.
--    * - ``V4L2_MPEG_AUDIO_DEC_PLAYBACK_SWAPPED_STEREO``
-+    * - ``V4L2_CODEC_AUDIO_DEC_PLAYBACK_SWAPPED_STEREO``
-       - Stereo playback with swapped left and right channels.
- 
- 
- 
- .. _v4l2-mpeg-audio-dec-multilingual-playback:
- 
--``V4L2_CID_MPEG_AUDIO_DEC_MULTILINGUAL_PLAYBACK``
-+``V4L2_CID_CODEC_AUDIO_DEC_MULTILINGUAL_PLAYBACK``
-     (enum)
- 
--enum v4l2_mpeg_audio_dec_playback -
-+enum v4l2_codec_audio_dec_playback -
-     Determines how multilingual audio should be played back.
- 
- .. _v4l2-mpeg-video-encoding:
- 
--``V4L2_CID_MPEG_VIDEO_ENCODING``
-+``V4L2_CID_CODEC_VIDEO_ENCODING``
-     (enum)
- 
--enum v4l2_mpeg_video_encoding -
-+enum v4l2_codec_video_encoding -
-     MPEG Video encoding method. This control is specific to multiplexed
-     MPEG streams. Possible values are:
- 
-@@ -514,21 +514,21 @@ enum v4l2_mpeg_video_encoding -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_ENCODING_MPEG_1``
-+    * - ``V4L2_CODEC_VIDEO_ENCODING_MPEG_1``
-       - MPEG-1 Video encoding
--    * - ``V4L2_MPEG_VIDEO_ENCODING_MPEG_2``
-+    * - ``V4L2_CODEC_VIDEO_ENCODING_MPEG_2``
-       - MPEG-2 Video encoding
--    * - ``V4L2_MPEG_VIDEO_ENCODING_MPEG_4_AVC``
-+    * - ``V4L2_CODEC_VIDEO_ENCODING_MPEG_4_AVC``
-       - MPEG-4 AVC (H.264) Video encoding
- 
- 
- 
- .. _v4l2-mpeg-video-aspect:
- 
--``V4L2_CID_MPEG_VIDEO_ASPECT``
-+``V4L2_CID_CODEC_VIDEO_ASPECT``
-     (enum)
- 
--enum v4l2_mpeg_video_aspect -
-+enum v4l2_codec_video_aspect -
-     Video aspect. Possible values are:
- 
- 
-@@ -537,31 +537,31 @@ enum v4l2_mpeg_video_aspect -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_ASPECT_1x1``
--    * - ``V4L2_MPEG_VIDEO_ASPECT_4x3``
--    * - ``V4L2_MPEG_VIDEO_ASPECT_16x9``
--    * - ``V4L2_MPEG_VIDEO_ASPECT_221x100``
-+    * - ``V4L2_CODEC_VIDEO_ASPECT_1x1``
-+    * - ``V4L2_CODEC_VIDEO_ASPECT_4x3``
-+    * - ``V4L2_CODEC_VIDEO_ASPECT_16x9``
-+    * - ``V4L2_CODEC_VIDEO_ASPECT_221x100``
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_B_FRAMES (integer)``
-+``V4L2_CID_CODEC_VIDEO_B_FRAMES (integer)``
-     Number of B-Frames (default 2)
- 
--``V4L2_CID_MPEG_VIDEO_GOP_SIZE (integer)``
-+``V4L2_CID_CODEC_VIDEO_GOP_SIZE (integer)``
-     GOP size (default 12)
- 
--``V4L2_CID_MPEG_VIDEO_GOP_CLOSURE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_GOP_CLOSURE (boolean)``
-     GOP closure (default 1)
- 
--``V4L2_CID_MPEG_VIDEO_PULLDOWN (boolean)``
-+``V4L2_CID_CODEC_VIDEO_PULLDOWN (boolean)``
-     Enable 3:2 pulldown (default 0)
- 
- .. _v4l2-mpeg-video-bitrate-mode:
- 
--``V4L2_CID_MPEG_VIDEO_BITRATE_MODE``
-+``V4L2_CID_CODEC_VIDEO_BITRATE_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_bitrate_mode -
-+enum v4l2_codec_video_bitrate_mode -
-     Video bitrate mode. Possible values are:
- 
- 
-@@ -570,35 +570,35 @@ enum v4l2_mpeg_video_bitrate_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_BITRATE_MODE_VBR``
-+    * - ``V4L2_CODEC_VIDEO_BITRATE_MODE_VBR``
-       - Variable bitrate
--    * - ``V4L2_MPEG_VIDEO_BITRATE_MODE_CBR``
-+    * - ``V4L2_CODEC_VIDEO_BITRATE_MODE_CBR``
-       - Constant bitrate
--    * - ``V4L2_MPEG_VIDEO_BITRATE_MODE_CQ``
-+    * - ``V4L2_CODEC_VIDEO_BITRATE_MODE_CQ``
-       - Constant quality
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_BITRATE (integer)``
-+``V4L2_CID_CODEC_VIDEO_BITRATE (integer)``
-     Video bitrate in bits per second.
- 
--``V4L2_CID_MPEG_VIDEO_BITRATE_PEAK (integer)``
-+``V4L2_CID_CODEC_VIDEO_BITRATE_PEAK (integer)``
-     Peak video bitrate in bits per second. Must be larger or equal to
-     the average video bitrate. It is ignored if the video bitrate mode
-     is set to constant bitrate.
- 
--``V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY (integer)``
-+``V4L2_CID_CODEC_VIDEO_CONSTANT_QUALITY (integer)``
-     Constant quality level control. This control is applicable when
--    ``V4L2_CID_MPEG_VIDEO_BITRATE_MODE`` value is
--    ``V4L2_MPEG_VIDEO_BITRATE_MODE_CQ``. Valid range is 1 to 100
-+    ``V4L2_CID_CODEC_VIDEO_BITRATE_MODE`` value is
-+    ``V4L2_CODEC_VIDEO_BITRATE_MODE_CQ``. Valid range is 1 to 100
-     where 1 indicates lowest quality and 100 indicates highest quality.
-     Encoder will decide the appropriate quantization parameter and
-     bitrate to produce requested frame quality.
- 
- 
--``V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE (enum)``
-+``V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE (enum)``
- 
--enum v4l2_mpeg_video_frame_skip_mode -
-+enum v4l2_codec_video_frame_skip_mode -
-     Indicates in what conditions the encoder should skip frames. If
-     encoding a frame would cause the encoded stream to be larger then a
-     chosen data limit then the frame will be skipped. Possible values
-@@ -615,12 +615,12 @@ enum v4l2_mpeg_video_frame_skip_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED``
-+    * - ``V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_DISABLED``
-       - Frame skip mode is disabled.
--    * - ``V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT``
-+    * - ``V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT``
-       - Frame skip mode enabled and buffer limit is set by the chosen
-         level and is defined by the standard.
--    * - ``V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT``
-+    * - ``V4L2_CODEC_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT``
-       - Frame skip mode enabled and buffer limit is set by the
-         :ref:`VBV (MPEG1/2/4) <v4l2-mpeg-video-vbv-size>` or
-         :ref:`CPB (H264) buffer size <v4l2-mpeg-video-h264-cpb-size>` control.
-@@ -629,16 +629,16 @@ enum v4l2_mpeg_video_frame_skip_mode -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_TEMPORAL_DECIMATION (integer)``
-+``V4L2_CID_CODEC_VIDEO_TEMPORAL_DECIMATION (integer)``
-     For every captured frame, skip this many subsequent frames (default
-     0).
- 
--``V4L2_CID_MPEG_VIDEO_MUTE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_MUTE (boolean)``
-     "Mutes" the video to a fixed color when capturing. This is useful
-     for testing, to produce a fixed video bitstream. 0 = unmuted, 1 =
-     muted.
- 
--``V4L2_CID_MPEG_VIDEO_MUTE_YUV (integer)``
-+``V4L2_CID_CODEC_VIDEO_MUTE_YUV (integer)``
-     Sets the "mute" color of the video. The supplied 32-bit integer is
-     interpreted as follows (bit 0 = least significant bit):
- 
-@@ -661,7 +661,7 @@ enum v4l2_mpeg_video_frame_skip_mode -
- 
- .. _v4l2-mpeg-video-dec-pts:
- 
--``V4L2_CID_MPEG_VIDEO_DEC_PTS (integer64)``
-+``V4L2_CID_CODEC_VIDEO_DEC_PTS (integer64)``
-     This read-only control returns the 33-bit video Presentation Time
-     Stamp as defined in ITU T-REC-H.222.0 and ISO/IEC 13818-1 of the
-     currently displayed frame. This is the same PTS as is used in
-@@ -669,26 +669,26 @@ enum v4l2_mpeg_video_frame_skip_mode -
- 
- .. _v4l2-mpeg-video-dec-frame:
- 
--``V4L2_CID_MPEG_VIDEO_DEC_FRAME (integer64)``
-+``V4L2_CID_CODEC_VIDEO_DEC_FRAME (integer64)``
-     This read-only control returns the frame counter of the frame that
-     is currently displayed (decoded). This value is reset to 0 whenever
-     the decoder is started.
- 
--``V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_DECODER_SLICE_INTERFACE (boolean)``
-     If enabled the decoder expects to receive a single slice per buffer,
-     otherwise the decoder expects a single frame in per buffer.
-     Applicable to the decoder, all codecs.
- 
--``V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_ENABLE (boolean)``
-     Enable writing sample aspect ratio in the Video Usability
-     Information. Applicable to the H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-vui-sar-idc:
- 
--``V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC``
-+``V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_vui_sar_idc -
-+enum v4l2_codec_video_h264_vui_sar_idc -
-     VUI sample aspect ratio indicator for H.264 encoding. The value is
-     defined in the table E-1 in the standard. Applicable to the H264
-     encoder.
-@@ -699,59 +699,59 @@ enum v4l2_mpeg_video_h264_vui_sar_idc -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_UNSPECIFIED``
-       - Unspecified
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_1x1``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_1x1``
-       - 1x1
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_12x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_12x11``
-       - 12x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_10x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_10x11``
-       - 10x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_16x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_16x11``
-       - 16x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_40x33``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_40x33``
-       - 40x33
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_24x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_24x11``
-       - 24x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_20x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_20x11``
-       - 20x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_32x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_32x11``
-       - 32x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_80x33``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_80x33``
-       - 80x33
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_18x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_18x11``
-       - 18x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_15x11``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_15x11``
-       - 15x11
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_64x33``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_64x33``
-       - 64x33
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_160x99``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_160x99``
-       - 160x99
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_4x3``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_4x3``
-       - 4x3
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_3x2``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_3x2``
-       - 3x2
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_2x1``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_2x1``
-       - 2x1
--    * - ``V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_EXTENDED``
-+    * - ``V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_EXTENDED``
-       - Extended SAR
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_WIDTH (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_WIDTH (integer)``
-     Extended sample aspect ratio width for H.264 VUI encoding.
-     Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_HEIGHT (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_VUI_EXT_SAR_HEIGHT (integer)``
-     Extended sample aspect ratio height for H.264 VUI encoding.
-     Applicable to the H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-level:
- 
--``V4L2_CID_MPEG_VIDEO_H264_LEVEL``
-+``V4L2_CID_CODEC_VIDEO_H264_LEVEL``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_level -
-+enum v4l2_codec_video_h264_level -
-     The level information for the H264 video elementary stream.
-     Applicable to the H264 encoder. Possible values are:
- 
-@@ -761,55 +761,55 @@ enum v4l2_mpeg_video_h264_level -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_1_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_1_0``
-       - Level 1.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_1B``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_1B``
-       - Level 1B
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_1_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_1_1``
-       - Level 1.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_1_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_1_2``
-       - Level 1.2
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_1_3``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_1_3``
-       - Level 1.3
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_2_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_2_0``
-       - Level 2.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_2_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_2_1``
-       - Level 2.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_2_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_2_2``
-       - Level 2.2
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_3_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_3_0``
-       - Level 3.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_3_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_3_1``
-       - Level 3.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_3_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_3_2``
-       - Level 3.2
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_4_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_4_0``
-       - Level 4.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_4_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_4_1``
-       - Level 4.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_4_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_4_2``
-       - Level 4.2
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_5_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_5_0``
-       - Level 5.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_5_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_5_1``
-       - Level 5.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_5_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_5_2``
-       - Level 5.2
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_6_0``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_6_0``
-       - Level 6.0
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_6_1``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_6_1``
-       - Level 6.1
--    * - ``V4L2_MPEG_VIDEO_H264_LEVEL_6_2``
-+    * - ``V4L2_CODEC_VIDEO_H264_LEVEL_6_2``
-       - Level 6.2
- 
- 
- 
- .. _v4l2-mpeg-video-mpeg2-level:
- 
--``V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL``
-+``V4L2_CID_CODEC_VIDEO_MPEG2_LEVEL``
-     (enum)
- 
--enum v4l2_mpeg_video_mpeg2_level -
-+enum v4l2_codec_video_mpeg2_level -
-     The level information for the MPEG2 elementary stream. Applicable to
-     MPEG2 codecs. Possible values are:
- 
-@@ -819,23 +819,23 @@ enum v4l2_mpeg_video_mpeg2_level -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_LEVEL_LOW``
-       - Low Level (LL)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_LEVEL_MAIN``
-       - Main Level (ML)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH_1440``
-       - High-1440 Level (H-14)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_LEVEL_HIGH``
-       - High Level (HL)
- 
- 
- 
- .. _v4l2-mpeg-video-mpeg4-level:
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_LEVEL``
-     (enum)
- 
--enum v4l2_mpeg_video_mpeg4_level -
-+enum v4l2_codec_video_mpeg4_level -
-     The level information for the MPEG4 elementary stream. Applicable to
-     the MPEG4 encoder. Possible values are:
- 
-@@ -845,31 +845,31 @@ enum v4l2_mpeg_video_mpeg4_level -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_0``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_0``
-       - Level 0
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_0B``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_0B``
-       - Level 0b
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_1``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_1``
-       - Level 1
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_2``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_2``
-       - Level 2
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_3``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_3``
-       - Level 3
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_3B``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_3B``
-       - Level 3b
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_4``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_4``
-       - Level 4
--    * - ``V4L2_MPEG_VIDEO_MPEG4_LEVEL_5``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_LEVEL_5``
-       - Level 5
- 
- 
- 
- .. _v4l2-mpeg-video-h264-profile:
- 
--``V4L2_CID_MPEG_VIDEO_H264_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_H264_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_profile -
-+enum v4l2_codec_video_h264_profile -
-     The profile information for H264. Applicable to the H264 encoder.
-     Possible values are:
- 
-@@ -883,41 +883,41 @@ enum v4l2_mpeg_video_h264_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE``
-       - Baseline profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE``
-       - Constrained Baseline profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_MAIN``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_MAIN``
-       - Main profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_EXTENDED``
-       - Extended profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH``
-       - High profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_10``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_10``
-       - High 10 profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_422``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_422``
-       - High 422 profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_444_PREDICTIVE``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_444_PREDICTIVE``
-       - High 444 Predictive profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_10_INTRA``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_10_INTRA``
-       - High 10 Intra profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_422_INTRA``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_422_INTRA``
-       - High 422 Intra profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_HIGH_444_INTRA``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_HIGH_444_INTRA``
-       - High 444 Intra profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_CAVLC_444_INTRA``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_CAVLC_444_INTRA``
-       - CAVLC 444 Intra profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_SCALABLE_BASELINE``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_SCALABLE_BASELINE``
-       - Scalable Baseline profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_SCALABLE_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_SCALABLE_HIGH``
-       - Scalable High profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_SCALABLE_HIGH_INTRA``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_SCALABLE_HIGH_INTRA``
-       - Scalable High Intra profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH``
-       - Stereo High profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_MULTIVIEW_HIGH``
-       - Multiview High profile
--    * - ``V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_H264_PROFILE_CONSTRAINED_HIGH``
-       - Constrained High profile
- 
- .. raw:: latex
-@@ -926,10 +926,10 @@ enum v4l2_mpeg_video_h264_profile -
- 
- .. _v4l2-mpeg-video-mpeg2-profile:
- 
--``V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_MPEG2_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_mpeg2_profile -
-+enum v4l2_codec_video_mpeg2_profile -
-     The profile information for MPEG2. Applicable to MPEG2 codecs.
-     Possible values are:
- 
-@@ -943,17 +943,17 @@ enum v4l2_mpeg_video_mpeg2_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_SIMPLE``
-       - Simple profile (SP)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_MAIN``
-       - Main profile (MP)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_SNR_SCALABLE``
-       - SNR Scalable profile (SNR)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE``
-       - Spatially Scalable profile (Spt)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_HIGH``
-       - High profile (HP)
--    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW``
-+    * - ``V4L2_CODEC_VIDEO_MPEG2_PROFILE_MULTIVIEW``
-       - Multi-view profile (MVP)
- 
- 
-@@ -963,10 +963,10 @@ enum v4l2_mpeg_video_mpeg2_profile -
- 
- .. _v4l2-mpeg-video-mpeg4-profile:
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_mpeg4_profile -
-+enum v4l2_codec_video_mpeg4_profile -
-     The profile information for MPEG4. Applicable to the MPEG4 encoder.
-     Possible values are:
- 
-@@ -980,31 +980,31 @@ enum v4l2_mpeg_video_mpeg4_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE``
-       - Simple profile
--    * - ``V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_SIMPLE``
-       - Advanced Simple profile
--    * - ``V4L2_MPEG_VIDEO_MPEG4_PROFILE_CORE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_PROFILE_CORE``
-       - Core profile
--    * - ``V4L2_MPEG_VIDEO_MPEG4_PROFILE_SIMPLE_SCALABLE``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_PROFILE_SIMPLE_SCALABLE``
-       - Simple Scalable profile
--    * - ``V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY``
-+    * - ``V4L2_CODEC_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY``
-       - Advanced Coding Efficiency profile
- 
- .. raw:: latex
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_MAX_REF_PIC (integer)``
-+``V4L2_CID_CODEC_VIDEO_MAX_REF_PIC (integer)``
-     The maximum number of reference pictures used for encoding.
-     Applicable to the encoder.
- 
- .. _v4l2-mpeg-video-multi-slice-mode:
- 
--``V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE``
-+``V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_multi_slice_mode -
-+enum v4l2_codec_video_multi_slice_mode -
-     Determines how the encoder should handle division of frame into
-     slices. Applicable to the encoder. Possible values are:
- 
-@@ -1016,33 +1016,33 @@ enum v4l2_mpeg_video_multi_slice_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE``
-+    * - ``V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_SINGLE``
-       - Single slice per frame.
--    * - ``V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB``
-+    * - ``V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB``
-       - Multiple slices with set maximum number of macroblocks per slice.
--    * - ``V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES``
-+    * - ``V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES``
-       - Multiple slice with set maximum size in bytes per slice.
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB (integer)``
-+``V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_MB (integer)``
-     The maximum number of macroblocks in a slice. Used when
--    ``V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE`` is set to
--    ``V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB``. Applicable to the
-+    ``V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE`` is set to
-+    ``V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_MB``. Applicable to the
-     encoder.
- 
--``V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES (integer)``
-+``V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MAX_BYTES (integer)``
-     The maximum size of a slice in bytes. Used when
--    ``V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE`` is set to
--    ``V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES``. Applicable to the
-+    ``V4L2_CID_CODEC_VIDEO_MULTI_SLICE_MODE`` is set to
-+    ``V4L2_CODEC_VIDEO_MULTI_SLICE_MODE_MAX_BYTES``. Applicable to the
-     encoder.
- 
- .. _v4l2-mpeg-video-h264-loop-filter-mode:
- 
--``V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_MODE``
-+``V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_loop_filter_mode -
-+enum v4l2_codec_video_h264_loop_filter_mode -
-     Loop filter mode for H264 encoder. Possible values are:
- 
- .. raw:: latex
-@@ -1055,11 +1055,11 @@ enum v4l2_mpeg_video_h264_loop_filter_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_ENABLED``
-+    * - ``V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_ENABLED``
-       - Loop filter is enabled.
--    * - ``V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED``
-+    * - ``V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED``
-       - Loop filter is disabled.
--    * - ``V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY``
-+    * - ``V4L2_CODEC_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY``
-       - Loop filter is disabled at the slice boundary.
- 
- .. raw:: latex
-@@ -1067,14 +1067,14 @@ enum v4l2_mpeg_video_h264_loop_filter_mode -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_ALPHA (integer)``
-     Loop filter alpha coefficient, defined in the H264 standard.
-     This value corresponds to the slice_alpha_c0_offset_div2 slice header
-     field, and should be in the range of -6 to +6, inclusive. The actual alpha
-     offset FilterOffsetA is twice this value.
-     Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_LOOP_FILTER_BETA (integer)``
-     Loop filter beta coefficient, defined in the H264 standard.
-     This corresponds to the slice_beta_offset_div2 slice header field, and
-     should be in the range of -6 to +6, inclusive. The actual beta offset
-@@ -1083,10 +1083,10 @@ enum v4l2_mpeg_video_h264_loop_filter_mode -
- 
- .. _v4l2-mpeg-video-h264-entropy-mode:
- 
--``V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE``
-+``V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_entropy_mode -
-+enum v4l2_codec_video_h264_entropy_mode -
-     Entropy coding mode for H264 - CABAC/CAVALC. Applicable to the H264
-     encoder. Possible values are:
- 
-@@ -1098,142 +1098,142 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC``
-+    * - ``V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC``
-       - Use CAVLC entropy coding.
--    * - ``V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC``
-+    * - ``V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC``
-       - Use CABAC entropy coding.
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_8X8_TRANSFORM (boolean)``
-     Enable 8X8 transform for H264. Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION (boolean)``
-     Enable constrained intra prediction for H264. Applicable to the H264
-     encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_CHROMA_QP_INDEX_OFFSET (integer)``
-     Specify the offset that should be added to the luma quantization
-     parameter to determine the chroma quantization parameter. Applicable
-     to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB (integer)``
-+``V4L2_CID_CODEC_VIDEO_CYCLIC_INTRA_REFRESH_MB (integer)``
-     Cyclic intra macroblock refresh. This is the number of continuous
-     macroblocks refreshed every frame. Each frame a successive set of
-     macroblocks is refreshed until the cycle completes and starts from
-     the top of the frame. Applicable to H264, H263 and MPEG4 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_FRAME_RC_ENABLE (boolean)``
-     Frame level rate control enable. If this control is disabled then
-     the quantization parameter for each frame type is constant and set
-     with appropriate controls (e.g.
--    ``V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP``). If frame rate control is
-+    ``V4L2_CID_CODEC_VIDEO_H263_I_FRAME_QP``). If frame rate control is
-     enabled then quantization parameter is adjusted to meet the chosen
-     bitrate. Minimum and maximum value for the quantization parameter
-     can be set with appropriate controls (e.g.
--    ``V4L2_CID_MPEG_VIDEO_H263_MIN_QP``). Applicable to encoders.
-+    ``V4L2_CID_CODEC_VIDEO_H263_MIN_QP``). Applicable to encoders.
- 
--``V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE (boolean)``
-     Macroblock level rate control enable. Applicable to the MPEG4 and
-     H264 encoders.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_QPEL (boolean)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_QPEL (boolean)``
-     Quarter pixel motion estimation for MPEG4. Applicable to the MPEG4
-     encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H263_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for H263. Valid range: from 1
-     to 31.
- 
--``V4L2_CID_MPEG_VIDEO_H263_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H263_MIN_QP (integer)``
-     Minimum quantization parameter for H263. Valid range: from 1 to 31.
- 
--``V4L2_CID_MPEG_VIDEO_H263_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H263_MAX_QP (integer)``
-     Maximum quantization parameter for H263. Valid range: from 1 to 31.
- 
--``V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H263_P_FRAME_QP (integer)``
-     Quantization parameter for an P frame for H263. Valid range: from 1
-     to 31.
- 
--``V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H263_B_FRAME_QP (integer)``
-     Quantization parameter for an B frame for H263. Valid range: from 1
-     to 31.
- 
--``V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for H264. Valid range: from 0
-     to 51.
- 
--``V4L2_CID_MPEG_VIDEO_H264_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_MIN_QP (integer)``
-     Minimum quantization parameter for H264. Valid range: from 0 to 51.
- 
--``V4L2_CID_MPEG_VIDEO_H264_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_MAX_QP (integer)``
-     Maximum quantization parameter for H264. Valid range: from 0 to 51.
- 
--``V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_P_FRAME_QP (integer)``
-     Quantization parameter for an P frame for H264. Valid range: from 0
-     to 51.
- 
--``V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_B_FRAME_QP (integer)``
-     Quantization parameter for an B frame for H264. Valid range: from 0
-     to 51.
- 
--``V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the H264 I frame to limit I frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MIN_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_I_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the H264 I frame to limit I frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MAX_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the H264 P frame to limit P frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MIN_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_P_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the H264 P frame to limit P frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MAX_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the H264 B frame to limit B frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MIN_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_B_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the H264 B frame to limit B frame
-     quality to a range. Valid range: from 0 to 51. If
--    V4L2_CID_MPEG_VIDEO_H264_MAX_QP is also set, the quantization parameter
-+    V4L2_CID_CODEC_VIDEO_H264_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for MPEG4. Valid range: from 1
-     to 31.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_MIN_QP (integer)``
-     Minimum quantization parameter for MPEG4. Valid range: from 1 to 31.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_MAX_QP (integer)``
-     Maximum quantization parameter for MPEG4. Valid range: from 1 to 31.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_P_FRAME_QP (integer)``
-     Quantization parameter for an P frame for MPEG4. Valid range: from 1
-     to 31.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_B_FRAME_QP (integer)``
-     Quantization parameter for an B frame for MPEG4. Valid range: from 1
-     to 31.
- 
- .. _v4l2-mpeg-video-vbv-size:
- 
--``V4L2_CID_MPEG_VIDEO_VBV_SIZE (integer)``
-+``V4L2_CID_CODEC_VIDEO_VBV_SIZE (integer)``
-     The Video Buffer Verifier size in kilobytes, it is used as a
-     limitation of frame skip. The VBV is defined in the standard as a
-     mean to verify that the produced stream will be successfully
-@@ -1245,12 +1245,12 @@ enum v4l2_mpeg_video_h264_entropy_mode -
- 
- .. _v4l2-mpeg-video-vbv-delay:
- 
--``V4L2_CID_MPEG_VIDEO_VBV_DELAY (integer)``
-+``V4L2_CID_CODEC_VIDEO_VBV_DELAY (integer)``
-     Sets the initial delay in milliseconds for VBV buffer control.
- 
- .. _v4l2-mpeg-video-hor-search-range:
- 
--``V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE (integer)``
-+``V4L2_CID_CODEC_VIDEO_MV_H_SEARCH_RANGE (integer)``
-     Horizontal search range defines maximum horizontal search area in
-     pixels to search and match for the present Macroblock (MB) in the
-     reference picture. This V4L2 control macro is used to set horizontal
-@@ -1258,7 +1258,7 @@ enum v4l2_mpeg_video_h264_entropy_mode -
- 
- .. _v4l2-mpeg-video-vert-search-range:
- 
--``V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE (integer)``
-+``V4L2_CID_CODEC_VIDEO_MV_V_SEARCH_RANGE (integer)``
-     Vertical search range defines maximum vertical search area in pixels
-     to search and match for the present Macroblock (MB) in the reference
-     picture. This V4L2 control macro is used to set vertical search
-@@ -1266,19 +1266,19 @@ enum v4l2_mpeg_video_h264_entropy_mode -
- 
- .. _v4l2-mpeg-video-force-key-frame:
- 
--``V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME (button)``
-+``V4L2_CID_CODEC_VIDEO_FORCE_KEY_FRAME (button)``
-     Force a key frame for the next queued buffer. Applicable to
-     encoders. This is a general, codec-agnostic keyframe control.
- 
- .. _v4l2-mpeg-video-h264-cpb-size:
- 
--``V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE (integer)``
-     The Coded Picture Buffer size in kilobytes, it is used as a
-     limitation of frame skip. The CPB is defined in the H264 standard as
-     a mean to verify that the produced stream will be successfully
-     decoded. Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_I_PERIOD (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_I_PERIOD (integer)``
-     Period between I-frames in the open GOP for H264. In case of an open
-     GOP this is the period between two I-frames. The period between IDR
-     (Instantaneous Decoding Refresh) frames is taken from the GOP_SIZE
-@@ -1290,10 +1290,10 @@ enum v4l2_mpeg_video_h264_entropy_mode -
- 
- .. _v4l2-mpeg-video-header-mode:
- 
--``V4L2_CID_MPEG_VIDEO_HEADER_MODE``
-+``V4L2_CID_CODEC_VIDEO_HEADER_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_header_mode -
-+enum v4l2_codec_video_header_mode -
-     Determines whether the header is returned as the first buffer or is
-     it returned together with the first frame. Applicable to encoders.
-     Possible values are:
-@@ -1308,9 +1308,9 @@ enum v4l2_mpeg_video_header_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE``
-+    * - ``V4L2_CODEC_VIDEO_HEADER_MODE_SEPARATE``
-       - The stream header is returned separately in the first buffer.
--    * - ``V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME``
-+    * - ``V4L2_CODEC_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME``
-       - The stream header is returned together with the first encoded
- 	frame.
- 
-@@ -1319,39 +1319,39 @@ enum v4l2_mpeg_video_header_mode -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER (boolean)``
-+``V4L2_CID_CODEC_VIDEO_REPEAT_SEQ_HEADER (boolean)``
-     Repeat the video sequence headers. Repeating these headers makes
-     random access to the video stream easier. Applicable to the MPEG1, 2
-     and 4 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER (boolean)``
-+``V4L2_CID_CODEC_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER (boolean)``
-     Enabled the deblocking post processing filter for MPEG4 decoder.
-     Applicable to the MPEG4 decoder.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_VOP_TIME_RES (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_VOP_TIME_RES (integer)``
-     vop_time_increment_resolution value for MPEG4. Applicable to the
-     MPEG4 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_MPEG4_VOP_TIME_INC (integer)``
-+``V4L2_CID_CODEC_VIDEO_MPEG4_VOP_TIME_INC (integer)``
-     vop_time_increment value for MPEG4. Applicable to the MPEG4
-     encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_SEI_FRAME_PACKING (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_SEI_FRAME_PACKING (boolean)``
-     Enable generation of frame packing supplemental enhancement
-     information in the encoded bitstream. The frame packing SEI message
-     contains the arrangement of L and R planes for 3D viewing.
-     Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_SEI_FP_CURRENT_FRAME_0 (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_SEI_FP_CURRENT_FRAME_0 (boolean)``
-     Sets current frame as frame0 in frame packing SEI. Applicable to the
-     H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-sei-fp-arrangement-type:
- 
--``V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE``
-+``V4L2_CID_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_sei_fp_arrangement_type -
-+enum v4l2_codec_video_h264_sei_fp_arrangement_type -
-     Frame packing arrangement type for H264 SEI. Applicable to the H264
-     encoder. Possible values are:
- 
-@@ -1365,17 +1365,17 @@ enum v4l2_mpeg_video_h264_sei_fp_arrangement_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_CHEKERBOARD``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_CHEKERBOARD``
-       - Pixels are alternatively from L and R.
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_COLUMN``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_COLUMN``
-       - L and R are interlaced by column.
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_ROW``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_ROW``
-       - L and R are interlaced by row.
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_SIDE_BY_SIDE``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_SIDE_BY_SIDE``
-       - L is on the left, R on the right.
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TOP_BOTTOM``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TOP_BOTTOM``
-       - L is on top, R on bottom.
--    * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TEMPORAL``
-+    * - ``V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TEMPORAL``
-       - One view per frame.
- 
- .. raw:: latex
-@@ -1384,17 +1384,17 @@ enum v4l2_mpeg_video_h264_sei_fp_arrangement_type -
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO (boolean)``
-     Enables flexible macroblock ordering in the encoded bitstream. It is
-     a technique used for restructuring the ordering of macroblocks in
-     pictures. Applicable to the H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-fmo-map-type:
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO_MAP_TYPE``
-    (enum)
- 
--enum v4l2_mpeg_video_h264_fmo_map_type -
-+enum v4l2_codec_video_h264_fmo_map_type -
-     When using FMO, the map type divides the image in different scan
-     patterns of macroblocks. Applicable to the H264 encoder. Possible
-     values are:
-@@ -1409,21 +1409,21 @@ enum v4l2_mpeg_video_h264_fmo_map_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_INTERLEAVED_SLICES``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_INTERLEAVED_SLICES``
-       - Slices are interleaved one after other with macroblocks in run
- 	length order.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_SCATTERED_SLICES``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_SCATTERED_SLICES``
-       - Scatters the macroblocks based on a mathematical function known to
- 	both encoder and decoder.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_FOREGROUND_WITH_LEFT_OVER``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_FOREGROUND_WITH_LEFT_OVER``
-       - Macroblocks arranged in rectangular areas or regions of interest.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_BOX_OUT``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_BOX_OUT``
-       - Slice groups grow in a cyclic way from centre to outwards.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_RASTER_SCAN``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_RASTER_SCAN``
-       - Slice groups grow in raster scan pattern from left to right.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_WIPE_SCAN``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_WIPE_SCAN``
-       - Slice groups grow in wipe scan pattern from top to bottom.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_EXPLICIT``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_MAP_TYPE_EXPLICIT``
-       - User defined map type.
- 
- .. raw:: latex
-@@ -1432,15 +1432,15 @@ enum v4l2_mpeg_video_h264_fmo_map_type -
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO_SLICE_GROUP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO_SLICE_GROUP (integer)``
-     Number of slice groups in FMO. Applicable to the H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-fmo-change-direction:
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO_CHANGE_DIRECTION``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO_CHANGE_DIRECTION``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_fmo_change_dir -
-+enum v4l2_codec_video_h264_fmo_change_dir -
-     Specifies a direction of the slice group change for raster and wipe
-     maps. Applicable to the H264 encoder. Possible values are:
- 
-@@ -1450,26 +1450,26 @@ enum v4l2_mpeg_video_h264_fmo_change_dir -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_CHANGE_DIR_RIGHT``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_CHANGE_DIR_RIGHT``
-       - Raster scan or wipe right.
--    * - ``V4L2_MPEG_VIDEO_H264_FMO_CHANGE_DIR_LEFT``
-+    * - ``V4L2_CODEC_VIDEO_H264_FMO_CHANGE_DIR_LEFT``
-       - Reverse raster scan or wipe left.
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO_CHANGE_RATE (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO_CHANGE_RATE (integer)``
-     Specifies the size of the first slice group for raster and wipe map.
-     Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_FMO_RUN_LENGTH (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_FMO_RUN_LENGTH (integer)``
-     Specifies the number of consecutive macroblocks for the interleaved
-     map. Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_ASO (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_ASO (boolean)``
-     Enables arbitrary slice ordering in encoded bitstream. Applicable to
-     the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_ASO_SLICE_ORDER (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_ASO_SLICE_ORDER (integer)``
-     Specifies the slice order in ASO. Applicable to the H264 encoder.
-     The supplied 32-bit integer is interpreted as follows (bit 0 = least
-     significant bit):
-@@ -1487,15 +1487,15 @@ enum v4l2_mpeg_video_h264_fmo_change_dir -
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING (boolean)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIERARCHICAL_CODING (boolean)``
-     Enables H264 hierarchical coding. Applicable to the H264 encoder.
- 
- .. _v4l2-mpeg-video-h264-hierarchical-coding-type:
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_TYPE``
-+``V4L2_CID_CODEC_VIDEO_H264_HIERARCHICAL_CODING_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-+enum v4l2_codec_video_h264_hierarchical_coding_type -
-     Specifies the hierarchical coding type. Applicable to the H264
-     encoder. Possible values are:
- 
-@@ -1505,18 +1505,18 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B``
-+    * - ``V4L2_CODEC_VIDEO_H264_HIERARCHICAL_CODING_B``
-       - Hierarchical B coding.
--    * - ``V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P``
-+    * - ``V4L2_CODEC_VIDEO_H264_HIERARCHICAL_CODING_P``
-       - Hierarchical P coding.
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIERARCHICAL_CODING_LAYER (integer)``
-     Specifies the number of hierarchical coding layers. Applicable to
-     the H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIERARCHICAL_CODING_LAYER_QP (integer)``
-     Specifies a user defined QP for each layer. Applicable to the H264
-     encoder. The supplied 32-bit integer is interpreted as follows (bit
-     0 = least significant bit):
-@@ -1532,30 +1532,30 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - Bit 16:32
-       - Layer number
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L0_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 0 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L1_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 1 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L2_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 2 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L3_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 3 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L4_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 4 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L5_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 5 for H264 encoder.
- 
--``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_H264_HIER_CODING_L6_BR (integer)``
-     Indicates bit rate (bps) for hierarchical coding layer 6 for H264 encoder.
- 
- .. _v4l2-mpeg-mpeg2:
- 
--``V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS (struct)``
-+``V4L2_CID_CODEC_VIDEO_MPEG2_SLICE_PARAMS (struct)``
-     Specifies the slice parameters (as extracted from the bitstream) for the
-     associated MPEG-2 slice data. This includes the necessary parameters for
-     configuring a stateless hardware decoding pipeline for MPEG-2.
-@@ -1702,7 +1702,7 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION (struct)``
-+``V4L2_CID_CODEC_VIDEO_MPEG2_QUANTIZATION (struct)``
-     Specifies quantization matrices (as extracted from the bitstream) for the
-     associated MPEG-2 slice data.
- 
-@@ -1780,7 +1780,7 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
- 
- .. _v4l2-mpeg-vp8:
- 
--``V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER (struct)``
-+``V4L2_CID_CODEC_VIDEO_VP8_FRAME_HEADER (struct)``
-     Specifies the frame parameters for the associated VP8 parsed frame data.
-     This includes the necessary parameters for
-     configuring a stateless hardware decoding pipeline for VP8.
-@@ -2135,30 +2135,30 @@ in the S5P family of SoCs by Samsung.
- MFC 5.1 Control IDs
- -------------------
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY_ENABLE (boolean)``
-     If the display delay is enabled then the decoder is forced to return
-     a CAPTURE buffer (decoded frame) after processing a certain number
-     of OUTPUT buffers. The delay can be set through
--    ``V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY``. This
-+    ``V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY``. This
-     feature can be used for example for generating thumbnails of videos.
-     Applicable to the H264 decoder.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY (integer)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY (integer)``
-     Display delay value for H264 decoder. The decoder is forced to
-     return a decoded frame after the set 'display delay' number of
-     frames. If this number is low it may result in frames returned out
-     of display order, in addition the hardware may still be using the
-     returned buffer as a reference picture for subsequent frames.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P (integer)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P (integer)``
-     The number of reference pictures used for encoding a P picture.
-     Applicable to the H264 encoder.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_PADDING (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_PADDING (boolean)``
-     Padding enable in the encoder - use a color instead of repeating
-     border pixels. Applicable to encoders.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_PADDING_YUV (integer)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_PADDING_YUV (integer)``
-     Padding color in the encoder. Applicable to encoders. The supplied
-     32-bit integer is interpreted as follows (bit 0 = least significant
-     bit):
-@@ -2180,7 +2180,7 @@ MFC 5.1 Control IDs
- 
- 
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_RC_REACTION_COEFF (integer)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_RC_REACTION_COEFF (integer)``
-     Reaction coefficient for MFC rate control. Applicable to encoders.
- 
-     .. note::
-@@ -2193,41 +2193,41 @@ MFC 5.1 Control IDs
-        #. It is not recommended to use the greater number than
- 	  FRAME_RATE * (10^9 / BIT_RATE).
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_DARK (boolean)``
-     Adaptive rate control for dark region. Valid only when H.264 and
-     macroblock level RC is enabled
--    (``V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-+    (``V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-     encoder.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_SMOOTH (boolean)``
-     Adaptive rate control for smooth region. Valid only when H.264 and
-     macroblock level RC is enabled
--    (``V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-+    (``V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-     encoder.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC (boolean)``
-     Adaptive rate control for static region. Valid only when H.264 and
-     macroblock level RC is enabled
--    (``V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-+    (``V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-     encoder.
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY (boolean)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_H264_ADAPTIVE_RC_ACTIVITY (boolean)``
-     Adaptive rate control for activity region. Valid only when H.264 and
-     macroblock level RC is enabled
--    (``V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-+    (``V4L2_CID_CODEC_VIDEO_MB_RC_ENABLE``). Applicable to the H264
-     encoder.
- 
- .. _v4l2-mpeg-mfc51-video-frame-skip-mode:
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE``
-+``V4L2_CID_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE``
-     (enum)
- 
-     .. note::
- 
-        This control is deprecated. Use the standard
--       ``V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE`` control instead.
-+       ``V4L2_CID_CODEC_VIDEO_FRAME_SKIP_MODE`` control instead.
- 
--enum v4l2_mpeg_mfc51_video_frame_skip_mode -
-+enum v4l2_codec_mfc51_video_frame_skip_mode -
-     Indicates in what conditions the encoder should skip frames. If
-     encoding a frame would cause the encoded stream to be larger then a
-     chosen data limit then the frame will be skipped. Possible values
-@@ -2244,12 +2244,12 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED``
-       - Frame skip mode is disabled.
--    * - ``V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT``
-       - Frame skip mode enabled and buffer limit is set by the chosen
- 	level and is defined by the standard.
--    * - ``V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT``
-       - Frame skip mode enabled and buffer limit is set by the VBV
- 	(MPEG1/2/4) or CPB (H264) buffer size control.
- 
-@@ -2257,7 +2257,7 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT (integer)``
-+``V4L2_CID_CODEC_MFC51_VIDEO_RC_FIXED_TARGET_BIT (integer)``
-     Enable rate-control with fixed target bit. If this setting is
-     enabled, then the rate control logic of the encoder will calculate
-     the average bitrate for a GOP and keep it below or equal the set
-@@ -2271,10 +2271,10 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
- 
- .. _v4l2-mpeg-mfc51-video-force-frame-type:
- 
--``V4L2_CID_MPEG_MFC51_VIDEO_FORCE_FRAME_TYPE``
-+``V4L2_CID_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_mfc51_video_force_frame_type -
-+enum v4l2_codec_mfc51_video_force_frame_type -
-     Force a frame type for the next queued buffer. Applicable to
-     encoders. Possible values are:
- 
-@@ -2284,11 +2284,11 @@ enum v4l2_mpeg_mfc51_video_force_frame_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_MFC51_FORCE_FRAME_TYPE_DISABLED``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_DISABLED``
-       - Forcing a specific frame type disabled.
--    * - ``V4L2_MPEG_MFC51_FORCE_FRAME_TYPE_I_FRAME``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_I_FRAME``
-       - Force an I-frame.
--    * - ``V4L2_MPEG_MFC51_FORCE_FRAME_TYPE_NOT_CODED``
-+    * - ``V4L2_CODEC_MFC51_VIDEO_FORCE_FRAME_TYPE_NOT_CODED``
-       - Force a non-coded frame.
- 
- 
-@@ -2306,10 +2306,10 @@ CX2341x Control IDs
- 
- .. _v4l2-mpeg-cx2341x-video-spatial-filter-mode:
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_SPATIAL_FILTER_MODE``
-     (enum)
- 
--enum v4l2_mpeg_cx2341x_video_spatial_filter_mode -
-+enum v4l2_codec_cx2341x_video_spatial_filter_mode -
-     Sets the Spatial Filter mode (default ``MANUAL``). Possible values
-     are:
- 
-@@ -2320,23 +2320,23 @@ enum v4l2_mpeg_cx2341x_video_spatial_filter_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE_MANUAL``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_SPATIAL_FILTER_MODE_MANUAL``
-       - Choose the filter manually
--    * - ``V4L2_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE_AUTO``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_SPATIAL_FILTER_MODE_AUTO``
-       - Choose the filter automatically
- 
- 
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER (integer (0-15))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_SPATIAL_FILTER (integer (0-15))``
-     The setting for the Spatial Filter. 0 = off, 15 = maximum. (Default
-     is 0.)
- 
- .. _luma-spatial-filter-type:
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_cx2341x_video_luma_spatial_filter_type -
-+enum v4l2_codec_cx2341x_video_luma_spatial_filter_type -
-     Select the algorithm to use for the Luma Spatial Filter (default
-     ``1D_HOR``). Possible values:
- 
-@@ -2350,15 +2350,15 @@ enum v4l2_mpeg_cx2341x_video_luma_spatial_filter_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_OFF``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_OFF``
-       - No filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_1D_HOR``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_1D_HOR``
-       - One-dimensional horizontal
--    * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_1D_VERT``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_1D_VERT``
-       - One-dimensional vertical
--    * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_2D_HV_SEPARABLE``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_2D_HV_SEPARABLE``
-       - Two-dimensional separable
--    * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_2D_SYM_NON_SEPARABLE``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_2D_SYM_NON_SEPARABLE``
-       - Two-dimensional symmetrical non-separable
- 
- .. raw:: latex
-@@ -2367,10 +2367,10 @@ enum v4l2_mpeg_cx2341x_video_luma_spatial_filter_type -
- 
- .. _chroma-spatial-filter-type:
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_cx2341x_video_chroma_spatial_filter_type -
-+enum v4l2_codec_cx2341x_video_chroma_spatial_filter_type -
-     Select the algorithm for the Chroma Spatial Filter (default
-     ``1D_HOR``). Possible values are:
- 
-@@ -2384,9 +2384,9 @@ enum v4l2_mpeg_cx2341x_video_chroma_spatial_filter_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE_OFF``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE_OFF``
-       - No filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE_1D_HOR``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE_1D_HOR``
-       - One-dimensional horizontal
- 
- .. raw:: latex
-@@ -2395,10 +2395,10 @@ enum v4l2_mpeg_cx2341x_video_chroma_spatial_filter_type -
- 
- .. _v4l2-mpeg-cx2341x-video-temporal-filter-mode:
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER_MODE``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_TEMPORAL_FILTER_MODE``
-     (enum)
- 
--enum v4l2_mpeg_cx2341x_video_temporal_filter_mode -
-+enum v4l2_codec_cx2341x_video_temporal_filter_mode -
-     Sets the Temporal Filter mode (default ``MANUAL``). Possible values
-     are:
- 
-@@ -2410,25 +2410,25 @@ enum v4l2_mpeg_cx2341x_video_temporal_filter_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER_MODE_MANUAL``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_TEMPORAL_FILTER_MODE_MANUAL``
-       - Choose the filter manually
--    * - ``V4L2_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER_MODE_AUTO``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_TEMPORAL_FILTER_MODE_AUTO``
-       - Choose the filter automatically
- 
- .. raw:: latex
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER (integer (0-31))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_TEMPORAL_FILTER (integer (0-31))``
-     The setting for the Temporal Filter. 0 = off, 31 = maximum. (Default
-     is 8 for full-scale capturing and 0 for scaled capturing.)
- 
- .. _v4l2-mpeg-cx2341x-video-median-filter-type:
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_cx2341x_video_median_filter_type -
-+enum v4l2_codec_cx2341x_video_median_filter_type -
-     Median Filter Type (default ``OFF``). Possible values are:
- 
- 
-@@ -2442,38 +2442,38 @@ enum v4l2_mpeg_cx2341x_video_median_filter_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_OFF``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_OFF``
-       - No filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_HOR``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_HOR``
-       - Horizontal filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_VERT``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_VERT``
-       - Vertical filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_HOR_VERT``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_HOR_VERT``
-       - Horizontal and vertical filter
--    * - ``V4L2_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_DIAG``
-+    * - ``V4L2_CODEC_CX2341X_VIDEO_MEDIAN_FILTER_TYPE_DIAG``
-       - Diagonal filter
- 
- .. raw:: latex
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_BOTTOM (integer (0-255))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_BOTTOM (integer (0-255))``
-     Threshold above which the luminance median filter is enabled
-     (default 0)
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_TOP (integer (0-255))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_TOP (integer (0-255))``
-     Threshold below which the luminance median filter is enabled
-     (default 255)
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_BOTTOM (integer (0-255))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_BOTTOM (integer (0-255))``
-     Threshold above which the chroma median filter is enabled (default
-     0)
- 
--``V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_TOP (integer (0-255))``
-+``V4L2_CID_CODEC_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_TOP (integer (0-255))``
-     Threshold below which the chroma median filter is enabled (default
-     255)
- 
--``V4L2_CID_MPEG_CX2341X_STREAM_INSERT_NAV_PACKETS (boolean)``
-+``V4L2_CID_CODEC_CX2341X_STREAM_INSERT_NAV_PACKETS (boolean)``
-     The CX2341X MPEG encoder can insert one empty MPEG-2 PES packet into
-     the stream between every four video frames. The packet size is 2048
-     bytes, including the packet_start_code_prefix and stream_id
-@@ -2496,7 +2496,7 @@ VPX Control IDs
- 
- .. _v4l2-vpx-num-partitions:
- 
--``V4L2_CID_MPEG_VIDEO_VPX_NUM_PARTITIONS``
-+``V4L2_CID_CODEC_VIDEO_VPX_NUM_PARTITIONS``
-     (enum)
- 
- enum v4l2_vp8_num_partitions -
-@@ -2509,23 +2509,23 @@ enum v4l2_vp8_num_partitions -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_1_PARTITION``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_1_PARTITION``
-       - 1 coefficient partition
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_2_PARTITIONS``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_2_PARTITIONS``
-       - 2 coefficient partitions
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_4_PARTITIONS``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_4_PARTITIONS``
-       - 4 coefficient partitions
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_8_PARTITIONS``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_8_PARTITIONS``
-       - 8 coefficient partitions
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_VPX_IMD_DISABLE_4X4 (boolean)``
-+``V4L2_CID_CODEC_VIDEO_VPX_IMD_DISABLE_4X4 (boolean)``
-     Setting this prevents intra 4x4 mode in the intra mode decision.
- 
- .. _v4l2-vpx-num-ref-frames:
- 
--``V4L2_CID_MPEG_VIDEO_VPX_NUM_REF_FRAMES``
-+``V4L2_CID_CODEC_VIDEO_VPX_NUM_REF_FRAMES``
-     (enum)
- 
- enum v4l2_vp8_num_ref_frames -
-@@ -2542,13 +2542,13 @@ enum v4l2_vp8_num_ref_frames -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_1_REF_FRAME``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_1_REF_FRAME``
-       - Last encoded frame will be searched
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_2_REF_FRAME``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_2_REF_FRAME``
-       - Two frames will be searched among the last encoded frame, the
- 	golden frame and the alternate reference (altref) frame. The
- 	encoder implementation will decide which two are chosen.
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_3_REF_FRAME``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_3_REF_FRAME``
-       - The last encoded frame, the golden frame and the altref frame will
- 	be searched.
- 
-@@ -2558,16 +2558,16 @@ enum v4l2_vp8_num_ref_frames -
- 
- 
- 
--``V4L2_CID_MPEG_VIDEO_VPX_FILTER_LEVEL (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_FILTER_LEVEL (integer)``
-     Indicates the loop filter level. The adjustment of the loop filter
-     level is done via a delta value against a baseline loop filter
-     value.
- 
--``V4L2_CID_MPEG_VIDEO_VPX_FILTER_SHARPNESS (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_FILTER_SHARPNESS (integer)``
-     This parameter affects the loop filter. Anything above zero weakens
-     the deblocking effect on the loop filter.
- 
--``V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD (integer)``
-     Sets the refresh period for the golden frame. The period is defined
-     in number of frames. For a value of 'n', every nth frame starting
-     from the first key frame will be taken as a golden frame. For eg.
-@@ -2577,7 +2577,7 @@ enum v4l2_vp8_num_ref_frames -
- 
- .. _v4l2-vpx-golden-frame-sel:
- 
--``V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_SEL``
-+``V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_SEL``
-     (enum)
- 
- enum v4l2_vp8_golden_frame_sel -
-@@ -2593,12 +2593,12 @@ enum v4l2_vp8_golden_frame_sel -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_USE_PREV``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_USE_PREV``
-       - Use the (n-2)th frame as a golden frame, current frame index being
- 	'n'.
--    * - ``V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_USE_REF_PERIOD``
-+    * - ``V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_USE_REF_PERIOD``
-       - Use the previous specific frame indicated by
--	``V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD`` as a
-+	``V4L2_CID_CODEC_VIDEO_VPX_GOLDEN_FRAME_REF_PERIOD`` as a
- 	golden frame.
- 
- .. raw:: latex
-@@ -2606,24 +2606,24 @@ enum v4l2_vp8_golden_frame_sel -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_VPX_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_MIN_QP (integer)``
-     Minimum quantization parameter for VP8.
- 
--``V4L2_CID_MPEG_VIDEO_VPX_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_MAX_QP (integer)``
-     Maximum quantization parameter for VP8.
- 
--``V4L2_CID_MPEG_VIDEO_VPX_I_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for VP8.
- 
--``V4L2_CID_MPEG_VIDEO_VPX_P_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_VPX_P_FRAME_QP (integer)``
-     Quantization parameter for a P frame for VP8.
- 
- .. _v4l2-mpeg-video-vp8-profile:
- 
--``V4L2_CID_MPEG_VIDEO_VP8_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_VP8_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_vp8_profile -
-+enum v4l2_codec_video_vp8_profile -
-     This control allows selecting the profile for VP8 encoder.
-     This is also used to enumerate supported profiles by VP8 encoder or decoder.
-     Possible values are:
-@@ -2632,21 +2632,21 @@ enum v4l2_mpeg_video_vp8_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_0``
-+    * - ``V4L2_CODEC_VIDEO_VP8_PROFILE_0``
-       - Profile 0
--    * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_1``
-+    * - ``V4L2_CODEC_VIDEO_VP8_PROFILE_1``
-       - Profile 1
--    * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_2``
-+    * - ``V4L2_CODEC_VIDEO_VP8_PROFILE_2``
-       - Profile 2
--    * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_3``
-+    * - ``V4L2_CODEC_VIDEO_VP8_PROFILE_3``
-       - Profile 3
- 
- .. _v4l2-mpeg-video-vp9-profile:
- 
--``V4L2_CID_MPEG_VIDEO_VP9_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_VP9_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_vp9_profile -
-+enum v4l2_codec_video_vp9_profile -
-     This control allows selecting the profile for VP9 encoder.
-     This is also used to enumerate supported profiles by VP9 encoder or decoder.
-     Possible values are:
-@@ -2655,20 +2655,20 @@ enum v4l2_mpeg_video_vp9_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_VP9_PROFILE_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_PROFILE_0``
-       - Profile 0
--    * - ``V4L2_MPEG_VIDEO_VP9_PROFILE_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_PROFILE_1``
-       - Profile 1
--    * - ``V4L2_MPEG_VIDEO_VP9_PROFILE_2``
-+    * - ``V4L2_CODEC_VIDEO_VP9_PROFILE_2``
-       - Profile 2
--    * - ``V4L2_MPEG_VIDEO_VP9_PROFILE_3``
-+    * - ``V4L2_CODEC_VIDEO_VP9_PROFILE_3``
-       - Profile 3
- 
- .. _v4l2-mpeg-video-vp9-level:
- 
--``V4L2_CID_MPEG_VIDEO_VP9_LEVEL (enum)``
-+``V4L2_CID_CODEC_VIDEO_VP9_LEVEL (enum)``
- 
--enum v4l2_mpeg_video_vp9_level -
-+enum v4l2_codec_video_vp9_level -
-     This control allows selecting the level for VP9 encoder.
-     This is also used to enumerate supported levels by VP9 encoder or decoder.
-     More information can be found at
-@@ -2678,33 +2678,33 @@ enum v4l2_mpeg_video_vp9_level -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_1_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_1_0``
-       - Level 1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_1_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_1_1``
-       - Level 1.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_2_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_2_0``
-       - Level 2
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_2_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_2_1``
-       - Level 2.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_3_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_3_0``
-       - Level 3
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_3_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_3_1``
-       - Level 3.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_4_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_4_0``
-       - Level 4
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_4_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_4_1``
-       - Level 4.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_5_0``
-       - Level 5
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_5_1``
-       - Level 5.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_2``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_5_2``
-       - Level 5.2
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_0``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_6_0``
-       - Level 6
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_1``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_6_1``
-       - Level 6.1
--    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_2``
-+    * - ``V4L2_CODEC_VIDEO_VP9_LEVEL_6_2``
-       - Level 6.2
- 
- 
-@@ -2720,66 +2720,66 @@ video codec.
- HEVC/H.265 Control IDs
- ----------------------
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP (integer)``
-     Minimum quantization parameter for HEVC.
-     Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP (integer)``
-     Maximum quantization parameter for HEVC.
-     Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for HEVC.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_QP (integer)``
-     Quantization parameter for a P frame for HEVC.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_QP (integer)``
-     Quantization parameter for a B frame for HEVC.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the HEVC I frame to limit I frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_I_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the HEVC I frame to limit I frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the HEVC P frame to limit P frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_P_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the HEVC P frame to limit P frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MIN_QP (integer)``
-     Minimum quantization parameter for the HEVC B frame to limit B frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_B_FRAME_MAX_QP (integer)``
-     Maximum quantization parameter for the HEVC B frame to limit B frame
-     quality to a range. Valid range: from 0 to 51 for 8 bit and from 0 to 63 for 10 bit.
--    If V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-+    If V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP is also set, the quantization parameter
-     should be chosen to meet both requirements.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_QP (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_QP (boolean)``
-     HIERARCHICAL_QP allows the host to specify the quantization parameter
-     values for each temporal layer through HIERARCHICAL_QP_LAYER. This is
-     valid only if HIERARCHICAL_CODING_LAYER is greater than 1. Setting the
-@@ -2787,10 +2787,10 @@ HEVC/H.265 Control IDs
- 
- .. _v4l2-hevc-hier-coding-type:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_hier_coding_type -
-+enum v4l2_codec_video_hevc_hier_coding_type -
-     Selects the hierarchical coding type for encoding. Possible values are:
- 
- .. raw:: latex
-@@ -2803,9 +2803,9 @@ enum v4l2_mpeg_video_hevc_hier_coding_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_HIERARCHICAL_CODING_B``
-       - Use the B frame for hierarchical coding.
--    * - ``V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_HIERARCHICAL_CODING_P``
-       - Use the P frame for hierarchical coding.
- 
- .. raw:: latex
-@@ -2813,53 +2813,53 @@ enum v4l2_mpeg_video_hevc_hier_coding_type -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_LAYER (integer)``
-     Selects the hierarchical coding layer. In normal encoding
-     (non-hierarchial coding), it should be zero. Possible values are [0, 6].
-     0 indicates HIERARCHICAL CODING LAYER 0, 1 indicates HIERARCHICAL CODING
-     LAYER 1 and so on.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 0.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 1.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 2.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 3.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 4.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 5.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_QP (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_QP (integer)``
-     Indicates quantization parameter for hierarchical coding layer 6.
--    Valid range: [V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
--    V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP].
-+    Valid range: [V4L2_CID_CODEC_VIDEO_HEVC_MIN_QP,
-+    V4L2_CID_CODEC_VIDEO_HEVC_MAX_QP].
- 
- .. _v4l2-hevc-profile:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_PROFILE``
-+``V4L2_CID_CODEC_VIDEO_HEVC_PROFILE``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_profile -
-+enum v4l2_codec_video_hevc_profile -
-     Select the desired profile for HEVC encoder.
- 
- .. raw:: latex
-@@ -2872,11 +2872,11 @@ enum v4l2_mpeg_video_hevc_profile -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN``
-       - Main profile.
--    * - ``V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE``
-       - Main still picture profile.
--    * - ``V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_PROFILE_MAIN_10``
-       - Main 10 profile.
- 
- .. raw:: latex
-@@ -2886,60 +2886,60 @@ enum v4l2_mpeg_video_hevc_profile -
- 
- .. _v4l2-hevc-level:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_LEVEL``
-+``V4L2_CID_CODEC_VIDEO_HEVC_LEVEL``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_level -
-+enum v4l2_codec_video_hevc_level -
-     Selects the desired level for HEVC encoder.
- 
--==================================	=========
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_1``	Level 1.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_2``	Level 2.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1``	Level 2.1
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_3``	Level 3.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1``	Level 3.1
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_4``	Level 4.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1``	Level 4.1
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_5``	Level 5.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1``	Level 5.1
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2``	Level 5.2
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_6``	Level 6.0
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1``	Level 6.1
--``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2``	Level 6.2
--==================================	=========
--
--``V4L2_CID_MPEG_VIDEO_HEVC_FRAME_RATE_RESOLUTION (integer)``
-+===================================	=========
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_1``	Level 1.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_2``	Level 2.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_2_1``	Level 2.1
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_3``	Level 3.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_3_1``	Level 3.1
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_4``	Level 4.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_4_1``	Level 4.1
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_5``	Level 5.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_5_1``	Level 5.1
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_5_2``	Level 5.2
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_6``	Level 6.0
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_6_1``	Level 6.1
-+``V4L2_CODEC_VIDEO_HEVC_LEVEL_6_2``	Level 6.2
-+===================================	=========
-+
-+``V4L2_CID_CODEC_VIDEO_HEVC_FRAME_RATE_RESOLUTION (integer)``
-     Indicates the number of evenly spaced subintervals, called ticks, within
-     one second. This is a 16 bit unsigned integer and has a maximum value up to
-     0xffff and a minimum value of 1.
- 
- .. _v4l2-hevc-tier:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_TIER``
-+``V4L2_CID_CODEC_VIDEO_HEVC_TIER``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_tier -
-+enum v4l2_codec_video_hevc_tier -
-     TIER_FLAG specifies tiers information of the HEVC encoded picture. Tier
-     were made to deal with applications that differ in terms of maximum bit
-     rate. Setting the flag to 0 selects HEVC tier as Main tier and setting
-     this flag to 1 indicates High tier. High tier is for applications requiring
-     high bit rates.
- 
--==================================	==========
--``V4L2_MPEG_VIDEO_HEVC_TIER_MAIN``	Main tier.
--``V4L2_MPEG_VIDEO_HEVC_TIER_HIGH``	High tier.
--==================================	==========
-+===================================	==========
-+``V4L2_CODEC_VIDEO_HEVC_TIER_MAIN``	Main tier.
-+``V4L2_CODEC_VIDEO_HEVC_TIER_HIGH``	High tier.
-+===================================	==========
- 
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_MAX_PARTITION_DEPTH (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_MAX_PARTITION_DEPTH (integer)``
-     Selects HEVC maximum coding unit depth.
- 
- .. _v4l2-hevc-loop-filter-mode:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE``
-+``V4L2_CID_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_loop_filter_mode -
-+enum v4l2_codec_video_hevc_loop_filter_mode -
-     Loop filter mode for HEVC encoder. Possible values are:
- 
- .. raw:: latex
-@@ -2952,11 +2952,11 @@ enum v4l2_mpeg_video_hevc_loop_filter_mode -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED``
-       - Loop filter is disabled.
--    * - ``V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_ENABLED``
-       - Loop filter is enabled.
--    * - ``V4L2_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY``
-       - Loop filter is disabled at the slice boundary.
- 
- .. raw:: latex
-@@ -2964,21 +2964,21 @@ enum v4l2_mpeg_video_hevc_loop_filter_mode -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_LF_BETA_OFFSET_DIV2 (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_LF_BETA_OFFSET_DIV2 (integer)``
-     Selects HEVC loop filter beta offset. The valid range is [-6, +6].
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_LF_TC_OFFSET_DIV2 (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_LF_TC_OFFSET_DIV2 (integer)``
-     Selects HEVC loop filter tc offset. The valid range is [-6, +6].
- 
- .. _v4l2-hevc-refresh-type:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_TYPE``
-+``V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_TYPE``
-     (enum)
- 
--enum v4l2_mpeg_video_hevc_hier_refresh_type -
-+enum v4l2_codec_video_hevc_hier_refresh_type -
-     Selects refresh type for HEVC encoder.
-     Host has to specify the period into
--    V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_PERIOD.
-+    V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_PERIOD.
- 
- .. raw:: latex
- 
-@@ -2990,11 +2990,11 @@ enum v4l2_mpeg_video_hevc_hier_refresh_type -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_REFRESH_NONE``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_REFRESH_NONE``
-       - Use the B frame for hierarchical coding.
--    * - ``V4L2_MPEG_VIDEO_HEVC_REFRESH_CRA``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_REFRESH_CRA``
-       - Use CRA (Clean Random Access Unit) picture encoding.
--    * - ``V4L2_MPEG_VIDEO_HEVC_REFRESH_IDR``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_REFRESH_IDR``
-       - Use IDR (Instantaneous Decoding Refresh) picture encoding.
- 
- .. raw:: latex
-@@ -3002,61 +3002,61 @@ enum v4l2_mpeg_video_hevc_hier_refresh_type -
-     \normalsize
- 
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_REFRESH_PERIOD (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_REFRESH_PERIOD (integer)``
-     Selects the refresh period for HEVC encoder.
-     This specifies the number of I pictures between two CRA/IDR pictures.
-     This is valid only if REFRESH_TYPE is not 0.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_LOSSLESS_CU (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_LOSSLESS_CU (boolean)``
-     Indicates HEVC lossless encoding. Setting it to 0 disables lossless
-     encoding. Setting it to 1 enables lossless encoding.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_CONST_INTRA_PRED (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_CONST_INTRA_PRED (boolean)``
-     Indicates constant intra prediction for HEVC encoder. Specifies the
-     constrained intra prediction in which intra largest coding unit (LCU)
-     prediction is performed by using residual data and decoded samples of
-     neighboring intra LCU only. Setting the value to 1 enables constant intra
-     prediction and setting the value to 0 disables constant intra prediction.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_WAVEFRONT (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_WAVEFRONT (boolean)``
-     Indicates wavefront parallel processing for HEVC encoder. Setting it to 0
-     disables the feature and setting it to 1 enables the wavefront parallel
-     processing.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_GENERAL_PB (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_GENERAL_PB (boolean)``
-     Setting the value to 1 enables combination of P and B frame for HEVC
-     encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_TEMPORAL_ID (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_TEMPORAL_ID (boolean)``
-     Indicates temporal identifier for HEVC encoder which is enabled by
-     setting the value to 1.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_STRONG_SMOOTHING (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_STRONG_SMOOTHING (boolean)``
-     Indicates bi-linear interpolation is conditionally used in the intra
-     prediction filtering process in the CVS when set to 1. Indicates bi-linear
-     interpolation is not used in the CVS when set to 0.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1 (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_MAX_NUM_MERGE_MV_MINUS1 (integer)``
-     Indicates maximum number of merge candidate motion vectors.
-     Values are from 0 to 4.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_TMV_PREDICTION (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_TMV_PREDICTION (boolean)``
-     Indicates temporal motion vector prediction for HEVC encoder. Setting it to
-     1 enables the prediction. Setting it to 0 disables the prediction.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_WITHOUT_STARTCODE (boolean)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_WITHOUT_STARTCODE (boolean)``
-     Specifies if HEVC generates a stream with a size of the length field
-     instead of start code pattern. The size of the length field is configurable
--    through the V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD control. Setting
-+    through the V4L2_CID_CODEC_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD control. Setting
-     the value to 0 disables encoding without startcode pattern. Setting the
-     value to 1 will enables encoding without startcode pattern.
- 
- .. _v4l2-hevc-size-of-length-field:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD``
-+``V4L2_CID_CODEC_VIDEO_HEVC_SIZE_OF_LENGTH_FIELD``
- (enum)
- 
--enum v4l2_mpeg_video_hevc_size_of_length_field -
-+enum v4l2_codec_video_hevc_size_of_length_field -
-     Indicates the size of length field.
-     This is valid when encoding WITHOUT_STARTCODE_ENABLE is enabled.
- 
-@@ -3070,52 +3070,52 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     :header-rows:  0
-     :stub-columns: 0
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_SIZE_0``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_SIZE_0``
-       - Generate start code pattern (Normal).
--    * - ``V4L2_MPEG_VIDEO_HEVC_SIZE_1``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_SIZE_1``
-       - Generate size of length field instead of start code pattern and length is 1.
--    * - ``V4L2_MPEG_VIDEO_HEVC_SIZE_2``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_SIZE_2``
-       - Generate size of length field instead of start code pattern and length is 2.
--    * - ``V4L2_MPEG_VIDEO_HEVC_SIZE_4``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_SIZE_4``
-       - Generate size of length field instead of start code pattern and length is 4.
- 
- .. raw:: latex
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L0_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 0 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L1_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 1 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L2_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 2 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L3_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 3 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L4_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 4 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L5_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 5 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR (integer)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_HIER_CODING_L6_BR (integer)``
-     Indicates bit rate for hierarchical coding layer 6 for HEVC encoder.
- 
--``V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES (integer)``
-+``V4L2_CID_CODEC_VIDEO_REF_NUMBER_FOR_PFRAMES (integer)``
-     Selects number of P reference pictures required for HEVC encoder.
-     P-Frame can use 1 or 2 frames for reference.
- 
--``V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR (integer)``
-+``V4L2_CID_CODEC_VIDEO_PREPEND_SPSPPS_TO_IDR (integer)``
-     Indicates whether to generate SPS and PPS at every IDR. Setting it to 0
-     disables generating SPS and PPS at every IDR. Setting it to one enables
-     generating SPS and PPS at every IDR.
- 
- .. _v4l2-mpeg-hevc:
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_SPS (struct)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_SPS (struct)``
-     Specifies the Sequence Parameter Set fields (as extracted from the
-     bitstream) for the associated HEVC slice data.
-     These bitstream parameters are defined according to :ref:`hevc`.
-@@ -3255,7 +3255,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_PPS (struct)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_PPS (struct)``
-     Specifies the Picture Parameter Set fields (as extracted from the
-     bitstream) for the associated HEVC slice data.
-     These bitstream parameters are defined according to :ref:`hevc`.
-@@ -3391,7 +3391,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS (struct)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_SLICE_PARAMS (struct)``
-     Specifies various slice-specific parameters, especially from the NAL unit
-     header, general slice segment header and weighted prediction parameter
-     parts of the bitstream.
-@@ -3651,7 +3651,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE (enum)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_DECODE_MODE (enum)``
-     Specifies the decoding mode to use. Currently exposes slice-based and
-     frame-based decoding but new modes might be added later on.
-     This control is used as a modifier for V4L2_PIX_FMT_HEVC_SLICE
-@@ -3666,7 +3666,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-        This menu control is not yet part of the public kernel API and
-        it is expected to change.
- 
--.. c:type:: v4l2_mpeg_video_hevc_decode_mode
-+.. c:type:: v4l2_codec_video_hevc_decode_mode
- 
- .. raw:: latex
- 
-@@ -3679,11 +3679,11 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     :stub-columns: 0
-     :widths:       1 1 2
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_DECODE_MODE_SLICE_BASED``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_DECODE_MODE_SLICE_BASED``
-       - 0
-       - Decoding is done at the slice granularity.
-         The OUTPUT buffer must contain a single slice.
--    * - ``V4L2_MPEG_VIDEO_HEVC_DECODE_MODE_FRAME_BASED``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_DECODE_MODE_FRAME_BASED``
-       - 1
-       - Decoding is done at the frame granularity.
-         The OUTPUT buffer must contain all slices needed to decode the
-@@ -3693,7 +3693,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
- 
-     \normalsize
- 
--``V4L2_CID_MPEG_VIDEO_HEVC_START_CODE (enum)``
-+``V4L2_CID_CODEC_VIDEO_HEVC_START_CODE (enum)``
-     Specifies the HEVC slice start code expected for each slice.
-     This control is used as a modifier for V4L2_PIX_FMT_HEVC_SLICE
-     pixel format. Applications that support V4L2_PIX_FMT_HEVC_SLICE
-@@ -3707,7 +3707,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-        This menu control is not yet part of the public kernel API and
-        it is expected to change.
- 
--.. c:type:: v4l2_mpeg_video_hevc_start_code
-+.. c:type:: v4l2_codec_video_hevc_start_code
- 
- .. tabularcolumns:: |p{9.2cm}|p{0.6cm}|p{7.5cm}|
- 
-@@ -3716,19 +3716,19 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     :stub-columns: 0
-     :widths:       1 1 2
- 
--    * - ``V4L2_MPEG_VIDEO_HEVC_START_CODE_NONE``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_START_CODE_NONE``
-       - 0
-       - Selecting this value specifies that HEVC slices are passed
-         to the driver without any start code. The bitstream data should be
-         according to :ref:`hevc` 7.3.1.1 General NAL unit syntax, hence
-         contains emulation prevention bytes when required.
--    * - ``V4L2_MPEG_VIDEO_HEVC_START_CODE_ANNEX_B``
-+    * - ``V4L2_CODEC_VIDEO_HEVC_START_CODE_ANNEX_B``
-       - 1
-       - Selecting this value specifies that HEVC slices are expected
-         to be prefixed by Annex B start codes. According to :ref:`hevc`
-         valid start codes can be 3-bytes 0x000001 or 4-bytes 0x00000001.
- 
--``V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID (integer)``
-+``V4L2_CID_CODEC_VIDEO_BASELAYER_PRIORITY_ID (integer)``
-     Specifies a priority identifier for the NAL unit, which will be applied to
-     the base layer. By default this value is set to 0 for the base layer,
-     and the next layer will have the priority ID assigned as 1, 2, 3 and so on.
-diff --git a/Documentation/userspace-api/media/v4l/hist-v4l2.rst b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-index 28a2750d5c8c..fe8f24d9c9f4 100644
---- a/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-+++ b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-@@ -941,10 +941,10 @@ V4L2 in Linux 2.6.27
- V4L2 in Linux 2.6.28
- ====================
- 
--1. Added ``V4L2_MPEG_AUDIO_ENCODING_AAC`` and
--   ``V4L2_MPEG_AUDIO_ENCODING_AC3`` MPEG audio encodings.
-+1. Added ``V4L2_CODEC_AUDIO_ENCODING_AAC`` and
-+   ``V4L2_CODEC_AUDIO_ENCODING_AC3`` MPEG audio encodings.
- 
--2. Added ``V4L2_MPEG_VIDEO_ENCODING_MPEG_4_AVC`` MPEG video encoding.
-+2. Added ``V4L2_CODEC_VIDEO_ENCODING_MPEG_4_AVC`` MPEG video encoding.
- 
- 3. The pixel formats ``V4L2_PIX_FMT_SGRBG10`` and
-    ``V4L2_PIX_FMT_SGRBG10DPCM8`` were added.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index ba6c0c961204..a50358da099d 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -34,7 +34,7 @@ Compressed Formats
-       - ``V4L2_PIX_FMT_MPEG``
-       - 'MPEG'
-       - MPEG multiplexed stream. The actual format is determined by
--	extended control ``V4L2_CID_MPEG_STREAM_TYPE``, see
-+	extended control ``V4L2_CID_CODEC_STREAM_TYPE``, see
- 	:ref:`mpeg-control-id`.
-     * .. _V4L2-PIX-FMT-H264:
- 
-@@ -114,9 +114,9 @@ Compressed Formats
- 	This format is adapted for stateless video decoders that implement a
- 	MPEG-2 pipeline (using the :ref:`mem2mem` and :ref:`media-request-api`).
- 	Metadata associated with the frame to decode is required to be passed
--	through the ``V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS`` control and
-+	through the ``V4L2_CID_CODEC_VIDEO_MPEG2_SLICE_PARAMS`` control and
- 	quantization matrices can optionally be specified through the
--	``V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION`` control.
-+	``V4L2_CID_CODEC_VIDEO_MPEG2_QUANTIZATION`` control.
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-mpeg2>`.
- 	Exactly one output and one capture buffer must be provided for use with
- 	this pixel format. The output buffer must contain the appropriate number
-@@ -157,7 +157,7 @@ Compressed Formats
- 	This format is adapted for stateless video decoders that implement a
- 	VP8 pipeline (using the :ref:`mem2mem` and :ref:`media-request-api`).
- 	Metadata associated with the frame to decode is required to be passed
--	through the ``V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER`` control.
-+	through the ``V4L2_CID_CODEC_VIDEO_VP8_FRAME_HEADER`` control.
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-vp8>`.
- 	Exactly one output and one capture buffer must be provided for use with
- 	this pixel format. The output buffer must contain the appropriate number
-@@ -194,13 +194,13 @@ Compressed Formats
- 	This format is adapted for stateless video decoders that implement a
- 	HEVC pipeline (using the :ref:`mem2mem` and :ref:`media-request-api`).
- 	This pixelformat has two modifiers that must be set at least once
--	through the ``V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE``
--        and ``V4L2_CID_MPEG_VIDEO_HEVC_START_CODE`` controls.
-+	through the ``V4L2_CID_CODEC_VIDEO_HEVC_DECODE_MODE``
-+        and ``V4L2_CID_CODEC_VIDEO_HEVC_START_CODE`` controls.
- 	Metadata associated with the frame to decode is required to be passed
- 	through the following controls:
--        ``V4L2_CID_MPEG_VIDEO_HEVC_SPS``,
--        ``V4L2_CID_MPEG_VIDEO_HEVC_PPS``, and
--        ``V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS``.
-+        ``V4L2_CID_CODEC_VIDEO_HEVC_SPS``,
-+        ``V4L2_CID_CODEC_VIDEO_HEVC_PPS``, and
-+        ``V4L2_CID_CODEC_VIDEO_HEVC_SLICE_PARAMS``.
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
- 	Buffers associated with this pixel format must contain the appropriate
- 	number of macroblocks to decode a full corresponding frame.
-diff --git a/Documentation/userspace-api/media/v4l/v4l2.rst b/Documentation/userspace-api/media/v4l/v4l2.rst
-index ad7a2bf0cf26..e474b7e76be0 100644
---- a/Documentation/userspace-api/media/v4l/v4l2.rst
-+++ b/Documentation/userspace-api/media/v4l/v4l2.rst
-@@ -89,7 +89,7 @@ Authors, in alphabetical order:
- 
- - Walls, Andy <awalls@md.metrocast.net>
- 
--  - Documented the fielded V4L2_MPEG_STREAM_VBI_FMT_IVTV MPEG stream embedded, sliced VBI data format in this specification.
-+  - Documented the fielded V4L2_CODEC_STREAM_VBI_FMT_IVTV MPEG stream embedded, sliced VBI data format in this specification.
- 
- - Verkuil, Hans <hverkuil@xs4all.nl>
- 
-@@ -315,7 +315,7 @@ Documented V4L2_PIX_FMT_RGB444.
- :revision: 0.18 / 2006-10-18 (*mhs*)
- 
- Added the description of extended controls by Hans Verkuil. Linked
--V4L2_PIX_FMT_MPEG to V4L2_CID_MPEG_STREAM_TYPE.
-+V4L2_PIX_FMT_MPEG to V4L2_CID_CODEC_STREAM_TYPE.
- 
- 
- :revision: 0.17 / 2006-10-12 (*mhs*)
+ 	/* compute maximum bitrate depending on profile */
+-	if (ctrls->profile >= V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)
++	if (ctrls->profile >= V4L2_CODEC_VIDEO_H264_PROFILE_HIGH)
+ 		max_bitrate = h264_infos_list[level].max_bitrate *
+ 			      H264_FACTOR_HIGH;
+ 	else
+@@ -693,7 +693,7 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
+ 	td->cpb_buffer_size = ctrls->cpb_size * 8000;
+ 
+ 	/* compute maximum cpb buffer size depending on profile */
+-	if (ctrls->profile >= V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)
++	if (ctrls->profile >= V4L2_CODEC_VIDEO_H264_PROFILE_HIGH)
+ 		max_cpb_buffer_size =
+ 		    h264_infos_list[level].max_cpb_size * H264_FACTOR_HIGH;
+ 	else
+@@ -712,7 +712,7 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
+ 	td->brc_no_skip = 0;
+ 
+ 	/* initial delay */
+-	if ((ctrls->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) &&
++	if ((ctrls->bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_CBR) &&
+ 	    td->bit_rate)
+ 		td->delay = 1000 * (td->cpb_buffer_size / td->bit_rate);
+ 	else
+diff --git a/drivers/media/platform/sti/hva/hva-v4l2.c b/drivers/media/platform/sti/hva/hva-v4l2.c
+index bb34d6997d99..2e24c8a8702a 100644
+--- a/drivers/media/platform/sti/hva/hva-v4l2.c
++++ b/drivers/media/platform/sti/hva/hva-v4l2.c
+@@ -623,57 +623,57 @@ static int hva_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		ctrl->id, ctrl->val);
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		ctx->ctrls.bitrate_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
++	case V4L2_CID_CODEC_VIDEO_GOP_SIZE:
+ 		ctx->ctrls.gop_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE:
+ 		ctx->ctrls.bitrate = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_ASPECT:
++	case V4L2_CID_CODEC_VIDEO_ASPECT:
+ 		ctx->ctrls.aspect = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_PROFILE:
++	case V4L2_CID_CODEC_VIDEO_H264_PROFILE:
+ 		ctx->ctrls.profile = ctrl->val;
+ 		snprintf(ctx->streaminfo.profile,
+ 			 sizeof(ctx->streaminfo.profile),
+ 			 "%s profile",
+ 			 v4l2_ctrl_get_menu(ctrl->id)[ctrl->val]);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
++	case V4L2_CID_CODEC_VIDEO_H264_LEVEL:
+ 		ctx->ctrls.level = ctrl->val;
+ 		snprintf(ctx->streaminfo.level,
+ 			 sizeof(ctx->streaminfo.level),
+ 			 "level %s",
+ 			 v4l2_ctrl_get_menu(ctrl->id)[ctrl->val]);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
++	case V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE:
+ 		ctx->ctrls.entropy_mode = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE:
++	case V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE:
+ 		ctx->ctrls.cpb_size = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
++	case V4L2_CID_CODEC_VIDEO_H264_8X8_TRANSFORM:
+ 		ctx->ctrls.dct8x8 = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MIN_QP:
+ 		ctx->ctrls.qpmin = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
++	case V4L2_CID_CODEC_VIDEO_H264_MAX_QP:
+ 		ctx->ctrls.qpmax = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_ENABLE:
+ 		ctx->ctrls.vui_sar = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
++	case V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC:
+ 		ctx->ctrls.vui_sar_idc = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_SEI_FRAME_PACKING:
++	case V4L2_CID_CODEC_VIDEO_H264_SEI_FRAME_PACKING:
+ 		ctx->ctrls.sei_fp = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
++	case V4L2_CID_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
+ 		ctx->ctrls.sei_fp_type = ctrl->val;
+ 		break;
+ 	default:
+@@ -694,88 +694,88 @@ static int hva_ctrls_setup(struct hva_ctx *ctx)
+ {
+ 	struct device *dev = ctx_to_dev(ctx);
+ 	u64 mask;
+-	enum v4l2_mpeg_video_h264_sei_fp_arrangement_type sei_fp_type =
+-		V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TOP_BOTTOM;
++	enum v4l2_codec_video_h264_sei_fp_arrangement_type sei_fp_type =
++		V4L2_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TOP_BOTTOM;
+ 
+ 	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 15);
+ 
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
+-			       V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
++			       V4L2_CID_CODEC_VIDEO_BITRATE_MODE,
++			       V4L2_CODEC_VIDEO_BITRATE_MODE_CBR,
+ 			       0,
+-			       V4L2_MPEG_VIDEO_BITRATE_MODE_CBR);
++			       V4L2_CODEC_VIDEO_BITRATE_MODE_CBR);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_GOP_SIZE,
++			  V4L2_CID_CODEC_VIDEO_GOP_SIZE,
+ 			  1, 60, 1, 16);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_BITRATE,
++			  V4L2_CID_CODEC_VIDEO_BITRATE,
+ 			  1000, 60000000, 1000, 20000000);
+ 
+-	mask = ~(1 << V4L2_MPEG_VIDEO_ASPECT_1x1);
++	mask = ~(1 << V4L2_CODEC_VIDEO_ASPECT_1x1);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_ASPECT,
+-			       V4L2_MPEG_VIDEO_ASPECT_1x1,
++			       V4L2_CID_CODEC_VIDEO_ASPECT,
++			       V4L2_CODEC_VIDEO_ASPECT_1x1,
+ 			       mask,
+-			       V4L2_MPEG_VIDEO_ASPECT_1x1);
++			       V4L2_CODEC_VIDEO_ASPECT_1x1);
+ 
+-	mask = ~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-		 (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-		 (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH) |
+-		 (1 << V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH));
++	mask = ~((1 << V4L2_CODEC_VIDEO_H264_PROFILE_BASELINE) |
++		 (1 << V4L2_CODEC_VIDEO_H264_PROFILE_MAIN) |
++		 (1 << V4L2_CODEC_VIDEO_H264_PROFILE_HIGH) |
++		 (1 << V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH));
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-			       V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH,
++			       V4L2_CID_CODEC_VIDEO_H264_PROFILE,
++			       V4L2_CODEC_VIDEO_H264_PROFILE_STEREO_HIGH,
+ 			       mask,
+-			       V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
++			       V4L2_CODEC_VIDEO_H264_PROFILE_HIGH);
+ 
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+-			       V4L2_MPEG_VIDEO_H264_LEVEL_4_2,
++			       V4L2_CID_CODEC_VIDEO_H264_LEVEL,
++			       V4L2_CODEC_VIDEO_H264_LEVEL_4_2,
+ 			       0,
+-			       V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
++			       V4L2_CODEC_VIDEO_H264_LEVEL_4_0);
+ 
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
+-			       V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
++			       V4L2_CID_CODEC_VIDEO_H264_ENTROPY_MODE,
++			       V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CABAC,
+ 			       0,
+-			       V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC);
++			       V4L2_CODEC_VIDEO_H264_ENTROPY_MODE_CAVLC);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE,
++			  V4L2_CID_CODEC_VIDEO_H264_CPB_SIZE,
+ 			  1, 10000, 1, 3000);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM,
++			  V4L2_CID_CODEC_VIDEO_H264_8X8_TRANSFORM,
+ 			  0, 1, 1, 0);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
++			  V4L2_CID_CODEC_VIDEO_H264_MIN_QP,
+ 			  0, 51, 1, 5);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
++			  V4L2_CID_CODEC_VIDEO_H264_MAX_QP,
+ 			  0, 51, 1, 51);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE,
++			  V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_ENABLE,
+ 			  0, 1, 1, 1);
+ 
+-	mask = ~(1 << V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_1x1);
++	mask = ~(1 << V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_1x1);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC,
+-			       V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_1x1,
++			       V4L2_CID_CODEC_VIDEO_H264_VUI_SAR_IDC,
++			       V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_1x1,
+ 			       mask,
+-			       V4L2_MPEG_VIDEO_H264_VUI_SAR_IDC_1x1);
++			       V4L2_CODEC_VIDEO_H264_VUI_SAR_IDC_1x1);
+ 
+ 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_SEI_FRAME_PACKING,
++			  V4L2_CID_CODEC_VIDEO_H264_SEI_FRAME_PACKING,
+ 			  0, 1, 1, 0);
+ 
+ 	mask = ~(1 << sei_fp_type);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrl_handler, &hva_ctrl_ops,
+-			       V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE,
++			       V4L2_CID_CODEC_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE,
+ 			       sei_fp_type,
+ 			       mask,
+ 			       sei_fp_type);
+diff --git a/drivers/media/platform/sti/hva/hva.h b/drivers/media/platform/sti/hva/hva.h
+index 1226d60cc367..4ba1fb9b3660 100644
+--- a/drivers/media/platform/sti/hva/hva.h
++++ b/drivers/media/platform/sti/hva/hva.h
+@@ -85,21 +85,21 @@ struct hva_streaminfo {
+  */
+ struct hva_controls {
+ 	struct v4l2_fract					time_per_frame;
+-	enum v4l2_mpeg_video_bitrate_mode			bitrate_mode;
++	enum v4l2_codec_video_bitrate_mode			bitrate_mode;
+ 	u32							gop_size;
+ 	u32							bitrate;
+-	enum v4l2_mpeg_video_aspect				aspect;
+-	enum v4l2_mpeg_video_h264_profile			profile;
+-	enum v4l2_mpeg_video_h264_level				level;
+-	enum v4l2_mpeg_video_h264_entropy_mode			entropy_mode;
++	enum v4l2_codec_video_aspect				aspect;
++	enum v4l2_codec_video_h264_profile			profile;
++	enum v4l2_codec_video_h264_level				level;
++	enum v4l2_codec_video_h264_entropy_mode			entropy_mode;
+ 	u32							cpb_size;
+ 	bool							dct8x8;
+ 	u32							qpmin;
+ 	u32							qpmax;
+ 	bool							vui_sar;
+-	enum v4l2_mpeg_video_h264_vui_sar_idc			vui_sar_idc;
++	enum v4l2_codec_video_h264_vui_sar_idc			vui_sar_idc;
+ 	bool							sei_fp;
+-	enum v4l2_mpeg_video_h264_sei_fp_arrangement_type	sei_fp_type;
++	enum v4l2_codec_video_h264_sei_fp_arrangement_type	sei_fp_type;
+ };
+ 
+ /**
 -- 
 2.30.1
 
