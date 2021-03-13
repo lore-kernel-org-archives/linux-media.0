@@ -2,413 +2,268 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97108C433DB
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 23:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6716DC433E0
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 12:39:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E19264F6A
-	for <linux-media@archiver.kernel.org>; Fri, 12 Mar 2021 23:56:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3021664F1C
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 12:39:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbhCLXzu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Mar 2021 18:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S230441AbhCMMhA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 07:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbhCLXzZ (ORCPT
+        with ESMTP id S229615AbhCMMg7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Mar 2021 18:55:25 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0667FC061574
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 15:55:25 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id e7so10307609edu.10
-        for <linux-media@vger.kernel.org>; Fri, 12 Mar 2021 15:55:24 -0800 (PST)
+        Sat, 13 Mar 2021 07:36:59 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60857C061574
+        for <linux-media@vger.kernel.org>; Sat, 13 Mar 2021 04:36:59 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id x10so27194794qkm.8
+        for <linux-media@vger.kernel.org>; Sat, 13 Mar 2021 04:36:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rzd7+ZoYoDpZEoFW2ukEyXWX/0rak66ElJiDi393MkE=;
-        b=VjoAQ0HV4kGAFzlCqfDZ5KjrjlpNhgisoLLO9q6dTfT7I1qoxP/qX5JtUjO+2jwh4S
-         L/OMVemBBR0n0UV5xSKHBWWMFojdGQOSu5TbP5iiODlndJBbZWc3kKzQAkR04L3p5Ya6
-         C8gMkQBB0Ch2QuZIP2k68eGuKVZb5zwIJ373A=
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=+7H2rNTR4Fe6gjKNL1zW2TCJUHMVHnt1p+FfTc9f2Y0=;
+        b=oDwko7Q7u9jJNANBq8vCjHwj4wvXX7CCh0CjuC0uMbbMYNfdojA2FYd/Xu9+FajNOB
+         +fohaL1gktasnUw7S2VDCemlyycpA4/XFjHKnk1kMfLE/eYdjfl7/texUdnzBVeeywq9
+         kd51Wyav1rdrRQX5XO769ADHtQFkUMSISLLST3UWXa6r7GTCfaTJz1F3VMraSF3zzK/O
+         mBZ8jterHMRjkV5lB5LZ1EmN7mbkCMonkj7e+38hlTADlRPv5qg8w1d0b4PmknRlw4w+
+         wrLG4VgRpfxd9VedkR2C9yruVvRBV7CvrH6LcPn5rmFsQGaFABJuIRkyu7xoiOR6KtrN
+         rY0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rzd7+ZoYoDpZEoFW2ukEyXWX/0rak66ElJiDi393MkE=;
-        b=FQ/NCV6mJo3fOWQWAhRS8kZhyHPtjsVXCYQYNkGEBvi9Z31pXD1KdiW8pQlLHAeRoK
-         VQhm7cdx5mwPQxYb9fnKG1OjRGmBT0jAFI89JKbgFl+F9JpR0rS6RPeixiTCjcl2pUa/
-         ueeHCoAETVbtq4EofeQt149EDZskJOttseD+V5cJ+U7P0K5kGqjroOp4kObmDu8qkm17
-         eOdOEnBFOFNNybjbqsgJcBrxsMiOA4hTmxchZvLXaPF27dQxY387uY8Jz2Ez5cHJy0+I
-         xSzsiJNz9HLkBlapCt5Zn7MSTGrqq7vPl0RANiyBx3LWnzv5zEGacrJnDo29qXJfaxc8
-         mi7A==
-X-Gm-Message-State: AOAM531CJ0etGdYiCRTbrh86bV8S8e1jeRgwZd7+xXLNkEr0TVSaDNPj
-        X9SJ+Q09FOFf93dx+n58pXaebQ==
-X-Google-Smtp-Source: ABdhPJzj7Jyoj3a/fwGAUOfnDN/rkgO3gX6tAfJgvW2k+UfN/O7/sMPST7A5m/0i6kGd1woPr14Hag==
-X-Received: by 2002:aa7:d687:: with SMTP id d7mr16771885edr.118.1615593323732;
-        Fri, 12 Mar 2021 15:55:23 -0800 (PST)
-Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hd37sm3225749ejc.114.2021.03.12.15.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 15:55:23 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        iommu@lists.linux-foundation.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 6/6] media: uvcvideo: Use dma_alloc_noncontiguous API
-Date:   Sat, 13 Mar 2021 00:55:20 +0100
-Message-Id: <20210312235521.1408503-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=+7H2rNTR4Fe6gjKNL1zW2TCJUHMVHnt1p+FfTc9f2Y0=;
+        b=NtJlYTP39EsrpXdyJOkc/JP8G9mRYl2RE8P4Npcb3qzVoIon6yP+Sy9Tyy53qN2NBH
+         vYyb88KomzWci0tCDXtDpiwPdpt5dGJ1g8/hHv3AxFEk0iutCfYf6Aulfh+tvsMFOky6
+         rkZ7qyTUKc+J24kaWXkogSWVTJ4dNmIWyRPnzA6om3FrFv1xIuA37Qi3LzuwjOKf1bw6
+         zA6h3SGfocXz8bbnDD6PZeA/3+5e+dAlG+jdf+4i2cgFl546I0RJ9ZPomjuAu/6H+tga
+         M3lRmUW23UttfmlGOYLJbPbzZWU7ouQRPa0oqSi+6J8NCOK7F4tAsmFe3XACZniu7ujD
+         iIQQ==
+X-Gm-Message-State: AOAM533s/yF5tEZSxI2PhlsQ1S3CUpa1hCA6y5b/42nSo+chxocg2ME7
+        /W5iXKNj49YuK+oPg5AvLq020oZexqpuXw==
+X-Google-Smtp-Source: ABdhPJwINygQvftnxI5fYR41ehH3Bgyf1NLAtONy3D79KFUrbHx9f6oP379JjMC17NKDwbsggwHJEw==
+X-Received: by 2002:a37:5007:: with SMTP id e7mr17127835qkb.184.1615639017306;
+        Sat, 13 Mar 2021 04:36:57 -0800 (PST)
+Received: from [192.168.80.12] ([24.105.64.120])
+        by smtp.gmail.com with ESMTPSA id h8sm6653173qkk.116.2021.03.13.04.36.56
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Mar 2021 04:36:56 -0800 (PST)
+To:     linux-media@vger.kernel.org
+From:   Vincent Fortier <th0ma7@gmail.com>
+Subject: [PATCH] Backport MYGICA T230A adapter
+Message-ID: <e57634b4-b6f3-fcbd-2e43-cfed3a429918@gmail.com>
+Date:   Sat, 13 Mar 2021 07:36:55 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On architectures where there is no coherent caching such as ARM use the
-dma_alloc_noncontiguous API and handle manually the cache flushing using
-dma_sync_sgtable().
+Hi all,
 
-If the architechture has coherent cache, the API falls back to
-alloc_dma_pages, so we can remove the coherent caching code-path from the
-driver, making it simpler.
+(first patch posting so don't hesitate to let me know where to find 
+additional info to improve next time)
 
-With this patch on the affected architectures we can measure up to 20x
-performance improvement in uvc_video_copy_data_work().
+The following patch is a manual backport based on crazycat69 / 
+linux_media git repository:
 
-Eg: aarch64 with an external usb camera
+https://github.com/crazycat69/linux_media/commit/e1ef47d604775c550a8f0d1bda276c113f882c9b?branch=e1ef47d604775c550a8f0d1bda276c113f882c9b&diff=unified
 
-NON_CONTIGUOUS
-frames:  999
-packets: 999
-empty:   0 (0 %)
-errors:  0
-invalid: 0
-pts: 0 early, 0 initial, 999 ok
-scr: 0 count ok, 0 diff ok
-sof: 2048 <= sof <= 0, freq 0.000 kHz
-bytes 67034480 : duration 33303
-FPS: 29.99
-URB: 523446/4993 uS/qty: 104.836 avg 132.532 std 13.230 min 831.094 max (uS)
-header: 76564/4993 uS/qty: 15.334 avg 15.229 std 3.438 min 186.875 max (uS)
-latency: 468945/4992 uS/qty: 93.939 avg 132.577 std 9.531 min 824.010 max (uS)
-decode: 54161/4993 uS/qty: 10.847 avg 6.313 std 1.614 min 111.458 max (uS)
-raw decode speed: 9.931 Gbits/s
-raw URB handling speed: 1.025 Gbits/s
-throughput: 16.102 Mbits/s
-URB decode CPU usage 0.162600 %
 
-COHERENT
-frames:  999
-packets: 999
-empty:   0 (0 %)
-errors:  0
-invalid: 0
-pts: 0 early, 0 initial, 999 ok
-scr: 0 count ok, 0 diff ok
-sof: 2048 <= sof <= 0, freq 0.000 kHz
-bytes 54683536 : duration 33302
-FPS: 29.99
-URB: 1478135/4000 uS/qty: 369.533 avg 390.357 std 22.968 min 3337.865 max (uS)
-header: 79761/4000 uS/qty: 19.940 avg 18.495 std 1.875 min 336.719 max (uS)
-latency: 281077/4000 uS/qty: 70.269 avg 83.102 std 5.104 min 735.000 max (uS)
-decode: 1197057/4000 uS/qty: 299.264 avg 318.080 std 1.615 min 2806.667 max (uS)
-raw decode speed: 365.470 Mbits/s
-raw URB handling speed: 295.986 Mbits/s
-throughput: 13.136 Mbits/s
-URB decode CPU usage 3.594500 %
+MYGICA T230A support was found on the following thread:
+https://forum.libreelec.tv/thread/23142-mygica-t230a/?pageNo=2
 
-In non-affected architectures we see no significant impact.
+Built successfully over commit 069192365e2cec8b47f6e6701fb2aa50f763c602 
+(March 9th) on media_build git tree with driver snapshot from 
+2021-03-07-1c5ab1e2286f over Synology 4.4.59 / 4.4.60 kernels. Also 
+built successfully over 3.10.105 using latest compatible snapshot from 
+2021-01-13 using driver version 2021-01-08-321af22a3d2f (as sadly 
+pre-4.4 support was removed recently).
 
-Eg: x86 with an external usb camera
+User thread confirming it to work under Synology NAS under 4.4.59 kernel 
+available here:
 
-NON_CONTIGUOUS
-frames:  999
-packets: 999
-empty:   0 (0 %)
-errors:  0
-invalid: 0
-pts: 0 early, 0 initial, 999 ok
-scr: 0 count ok, 0 diff ok
-sof: 2048 <= sof <= 0, freq 0.000 kHz
-bytes 70179056 : duration 33301
-FPS: 29.99
-URB: 288901/4897 uS/qty: 58.995 avg 26.022 std 4.319 min 253.853 max (uS)
-header: 54792/4897 uS/qty: 11.189 avg 6.218 std 0.620 min 61.750 max (uS)
-latency: 236602/4897 uS/qty: 48.315 avg 24.244 std 1.764 min 240.924 max (uS)
-decode: 52298/4897 uS/qty: 10.679 avg 8.299 std 1.638 min 108.861 max (uS)
-raw decode speed: 10.796 Gbits/s
-raw URB handling speed: 1.949 Gbits/s
-throughput: 16.859 Mbits/s
-URB decode CPU usage 0.157000 %
+https://github.com/th0ma7/synology/issues/9
 
-COHERENT
-frames:  999
-packets: 999
-empty:   0 (0 %)
-errors:  0
-invalid: 0
-pts: 0 early, 0 initial, 999 ok
-scr: 0 count ok, 0 diff ok
-sof: 2048 <= sof <= 0, freq 0.000 kHz
-bytes 71818320 : duration 33301
-FPS: 29.99
-URB: 321021/5000 uS/qty: 64.204 avg 23.001 std 10.430 min 268.837 max (uS)
-header: 54308/5000 uS/qty: 10.861 avg 5.104 std 0.778 min 54.736 max (uS)
-latency: 268799/5000 uS/qty: 53.759 avg 21.827 std 6.095 min 255.153 max (uS)
-decode: 52222/5000 uS/qty: 10.444 avg 7.137 std 1.874 min 71.103 max (uS)
-raw decode speed: 11.048 Gbits/s
-raw URB handling speed: 1.789 Gbits/s
-throughput: 17.253 Mbits/s
-URB decode CPU usage 0.156800 %
+Much thnx in advance.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+- vin
+
 ---
 
-Changelog from v3 (Thanks Laurent!):
+diff -uprN ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
+./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c
+--- ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
+2020-11-06 05:40:16.000000000 +0000
++++ ./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c    2021-02-19 
+14:31:34.405091839 +0000
+@@ -529,7 +529,7 @@ static int dvbsky_t330_attach(struct dvb
+      return 0;
+  }
 
-- Rename stream_dir and stream_to_dmadev to avoid collisions
-- Improve commit message
+-static int dvbsky_mygica_t230c_attach(struct dvb_usb_adapter *adap)
++static int dvbsky_mygica_t230_attach(struct dvb_usb_adapter *adap)
+  {
+      struct dvbsky_state *state = adap_to_priv(adap);
+      struct dvb_usb_device *d = adap_to_d(adap);
+@@ -541,7 +541,9 @@ static int dvbsky_mygica_t230c_attach(st
+      si2168_config.i2c_adapter = &i2c_adapter;
+      si2168_config.fe = &adap->fe[0];
+      si2168_config.ts_mode = SI2168_TS_PARALLEL;
+-    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+USB_PID_MYGICA_T230C2)
++    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+USB_PID_MYGICA_T230C2 ||
++        le16_to_cpu(d->udev->descriptor.idProduct) == 
+USB_PID_MYGICA_T230C2_LITE ||
++        le16_to_cpu(d->udev->descriptor.idProduct) == USB_PID_MYGICA_T230A)
+          si2168_config.ts_mode |= SI2168_TS_CLK_MANUAL;
+      si2168_config.ts_clock_inv = 1;
 
- drivers/media/usb/uvc/uvc_video.c | 94 +++++++++++++++++++++++--------
- drivers/media/usb/uvc/uvcvideo.h  |  5 +-
- 2 files changed, 73 insertions(+), 26 deletions(-)
+@@ -553,19 +555,26 @@ static int dvbsky_mygica_t230c_attach(st
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index f2f565281e63..cdd8eb500bb7 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -6,11 +6,14 @@
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-  */
- 
-+#include <linux/dma-mapping.h>
-+#include <linux/highmem.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
-+#include <linux/usb/hcd.h>
- #include <linux/videodev2.h>
- #include <linux/vmalloc.h>
- #include <linux/wait.h>
-@@ -1096,6 +1099,29 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
- 	return data[0];
- }
- 
-+static inline enum dma_data_direction uvc_stream_dir(
-+				struct uvc_streaming *stream)
-+{
-+	if (stream->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return DMA_FROM_DEVICE;
-+	else
-+		return DMA_TO_DEVICE;
-+}
-+
-+static inline struct device *uvc_stream_to_dmadev(struct uvc_streaming *stream)
-+{
-+	return bus_to_hcd(stream->dev->udev->bus)->self.sysdev;
-+}
-+
-+static int uvc_submit_urb(struct uvc_urb *uvc_urb, gfp_t mem_flags)
-+{
-+	/* Sync DMA. */
-+	dma_sync_sgtable_for_device(uvc_stream_to_dmadev(uvc_urb->stream),
-+				    uvc_urb->sgt,
-+				    uvc_stream_dir(uvc_urb->stream));
-+	return usb_submit_urb(uvc_urb->urb, GFP_KERNEL);
-+}
-+
- /*
-  * uvc_video_decode_data_work: Asynchronous memcpy processing
-  *
-@@ -1117,7 +1143,7 @@ static void uvc_video_copy_data_work(struct work_struct *work)
- 		uvc_queue_buffer_release(op->buf);
- 	}
- 
--	ret = usb_submit_urb(uvc_urb->urb, GFP_KERNEL);
-+	ret = uvc_submit_urb(uvc_urb, GFP_KERNEL);
- 	if (ret < 0)
- 		dev_err(&uvc_urb->stream->intf->dev,
- 			"Failed to resubmit video URB (%d).\n", ret);
-@@ -1537,6 +1563,12 @@ static void uvc_video_complete(struct urb *urb)
- 	/* Re-initialise the URB async work. */
- 	uvc_urb->async_operations = 0;
- 
-+	/* Sync DMA and invalidate vmap range. */
-+	dma_sync_sgtable_for_cpu(uvc_stream_to_dmadev(uvc_urb->stream),
-+				 uvc_urb->sgt, uvc_stream_dir(stream));
-+	invalidate_kernel_vmap_range(uvc_urb->buffer,
-+				     uvc_urb->stream->urb_size);
-+
- 	/*
- 	 * Process the URB headers, and optionally queue expensive memcpy tasks
- 	 * to be deferred to a work queue.
-@@ -1545,7 +1577,7 @@ static void uvc_video_complete(struct urb *urb)
- 
- 	/* If no async work is needed, resubmit the URB immediately. */
- 	if (!uvc_urb->async_operations) {
--		ret = usb_submit_urb(uvc_urb->urb, GFP_ATOMIC);
-+		ret = uvc_submit_urb(uvc_urb, GFP_ATOMIC);
- 		if (ret < 0)
- 			dev_err(&stream->intf->dev,
- 				"Failed to resubmit video URB (%d).\n", ret);
-@@ -1560,24 +1592,49 @@ static void uvc_video_complete(struct urb *urb)
-  */
- static void uvc_free_urb_buffers(struct uvc_streaming *stream)
- {
-+	struct device *dma_dev = uvc_stream_to_dmadev(stream);
- 	struct uvc_urb *uvc_urb;
- 
- 	for_each_uvc_urb(uvc_urb, stream) {
- 		if (!uvc_urb->buffer)
- 			continue;
- 
--#ifndef CONFIG_DMA_NONCOHERENT
--		usb_free_coherent(stream->dev->udev, stream->urb_size,
--				  uvc_urb->buffer, uvc_urb->dma);
--#else
--		kfree(uvc_urb->buffer);
--#endif
-+		dma_vunmap_noncontiguous(dma_dev, uvc_urb->buffer);
-+		dma_free_noncontiguous(dma_dev, stream->urb_size, uvc_urb->sgt,
-+				       uvc_stream_dir(stream));
-+
- 		uvc_urb->buffer = NULL;
-+		uvc_urb->sgt = NULL;
- 	}
- 
- 	stream->urb_size = 0;
- }
- 
-+static bool uvc_alloc_urb_buffer(struct uvc_streaming *stream,
-+				 struct uvc_urb *uvc_urb, gfp_t gfp_flags)
-+{
-+	struct device *dma_dev = uvc_stream_to_dmadev(stream);
-+
-+	uvc_urb->sgt = dma_alloc_noncontiguous(dma_dev, stream->urb_size,
-+					       uvc_stream_dir(stream),
-+					       gfp_flags, 0);
-+	if (!uvc_urb->sgt)
-+		return false;
-+	uvc_urb->dma = uvc_urb->sgt->sgl->dma_address;
-+
-+	uvc_urb->buffer = dma_vmap_noncontiguous(dma_dev, stream->urb_size,
-+						 uvc_urb->sgt);
-+	if (!uvc_urb->buffer) {
-+		dma_free_noncontiguous(dma_dev, stream->urb_size,
-+				       uvc_urb->sgt,
-+				       uvc_stream_dir(stream));
-+		uvc_urb->sgt = NULL;
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- /*
-  * Allocate transfer buffers. This function can be called with buffers
-  * already allocated when resuming from suspend, in which case it will
-@@ -1608,19 +1665,12 @@ static int uvc_alloc_urb_buffers(struct uvc_streaming *stream,
- 
- 	/* Retry allocations until one succeed. */
- 	for (; npackets > 1; npackets /= 2) {
-+		stream->urb_size = psize * npackets;
-+
- 		for (i = 0; i < UVC_URBS; ++i) {
- 			struct uvc_urb *uvc_urb = &stream->uvc_urb[i];
- 
--			stream->urb_size = psize * npackets;
--#ifndef CONFIG_DMA_NONCOHERENT
--			uvc_urb->buffer = usb_alloc_coherent(
--				stream->dev->udev, stream->urb_size,
--				gfp_flags | __GFP_NOWARN, &uvc_urb->dma);
--#else
--			uvc_urb->buffer =
--			    kmalloc(stream->urb_size, gfp_flags | __GFP_NOWARN);
--#endif
--			if (!uvc_urb->buffer) {
-+			if (!uvc_alloc_urb_buffer(stream, uvc_urb, gfp_flags)) {
- 				uvc_free_urb_buffers(stream);
- 				break;
- 			}
-@@ -1730,12 +1780,8 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
- 		urb->context = uvc_urb;
- 		urb->pipe = usb_rcvisocpipe(stream->dev->udev,
- 				ep->desc.bEndpointAddress);
--#ifndef CONFIG_DMA_NONCOHERENT
- 		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
- 		urb->transfer_dma = uvc_urb->dma;
--#else
--		urb->transfer_flags = URB_ISO_ASAP;
--#endif
- 		urb->interval = ep->desc.bInterval;
- 		urb->transfer_buffer = uvc_urb->buffer;
- 		urb->complete = uvc_video_complete;
-@@ -1795,10 +1841,8 @@ static int uvc_init_video_bulk(struct uvc_streaming *stream,
- 
- 		usb_fill_bulk_urb(urb, stream->dev->udev, pipe,	uvc_urb->buffer,
- 				  size, uvc_video_complete, uvc_urb);
--#ifndef CONFIG_DMA_NONCOHERENT
- 		urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP;
- 		urb->transfer_dma = uvc_urb->dma;
--#endif
- 
- 		uvc_urb->urb = urb;
- 	}
-@@ -1895,7 +1939,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
- 
- 	/* Submit the URBs. */
- 	for_each_uvc_urb(uvc_urb, stream) {
--		ret = usb_submit_urb(uvc_urb->urb, gfp_flags);
-+		ret = uvc_submit_urb(uvc_urb, gfp_flags);
- 		if (ret < 0) {
- 			dev_err(&stream->intf->dev,
- 				"Failed to submit URB %u (%d).\n",
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 97df5ecd66c9..cce5e38133cd 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -219,6 +219,7 @@
-  */
- 
- struct gpio_desc;
-+struct sg_table;
- struct uvc_device;
- 
- /* TODO: Put the most frequently accessed fields at the beginning of
-@@ -545,7 +546,8 @@ struct uvc_copy_op {
-  * @urb: the URB described by this context structure
-  * @stream: UVC streaming context
-  * @buffer: memory storage for the URB
-- * @dma: DMA coherent addressing for the urb_buffer
-+ * @dma: Allocated DMA handle
-+ * @sgt: sgt_table with the urb locations in memory
-  * @async_operations: counter to indicate the number of copy operations
-  * @copy_operations: work descriptors for asynchronous copy operations
-  * @work: work queue entry for asynchronous decode
-@@ -556,6 +558,7 @@ struct uvc_urb {
- 
- 	char *buffer;
- 	dma_addr_t dma;
-+	struct sg_table *sgt;
- 
- 	unsigned int async_operations;
- 	struct uvc_copy_op copy_operations[UVC_MAX_PACKETS];
--- 
-2.31.0.rc2.261.g7f71774620-goog
+      /* attach tuner */
+      si2157_config.fe = adap->fe[0];
+-    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+USB_PID_MYGICA_T230) {
+-        si2157_config.if_port = 1;
+-        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
++    switch (le16_to_cpu(d->udev->descriptor.idProduct)) {
++    case USB_PID_MYGICA_T230C:
++    case USB_PID_MYGICA_T230C2:
++    case USB_PID_MYGICA_T230C2_LITE:
++    case USB_PID_MYGICA_T230A: {
++        si2157_config.if_port = 0;
++        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
+                                 i2c_adapter,
+                                 0x60,
+                                 &si2157_config);
+-    } else {
+-        si2157_config.if_port = 0;
+-        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
++        break;
++    }
++    default: {
++        si2157_config.if_port = 1;
++        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
+                                 i2c_adapter,
+                                 0x60,
+                                 &si2157_config);
+      }
++    }
+      if (!state->i2c_client_tuner) {
+          dvb_module_release(state->i2c_client_demod);
+          return -ENODEV;
+@@ -577,14 +586,24 @@ static int dvbsky_mygica_t230c_attach(st
+
+  static int dvbsky_identify_state(struct dvb_usb_device *d, const char 
+**name)
+  {
+-    dvbsky_gpio_ctrl(d, 0x04, 1);
+-    msleep(20);
+-    dvbsky_gpio_ctrl(d, 0x83, 0);
+-    dvbsky_gpio_ctrl(d, 0xc0, 1);
+-    msleep(100);
+-    dvbsky_gpio_ctrl(d, 0x83, 1);
+-    dvbsky_gpio_ctrl(d, 0xc0, 0);
+-    msleep(50);
++    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
+USB_PID_MYGICA_T230A) {
++        dvbsky_gpio_ctrl(d, 0x87, 0);
++        msleep(20);
++        dvbsky_gpio_ctrl(d, 0x86, 1);
++        dvbsky_gpio_ctrl(d, 0x80, 0);
++        msleep(100);
++        dvbsky_gpio_ctrl(d, 0x80, 1);
++        msleep(50);
++    } else {
++        dvbsky_gpio_ctrl(d, 0x04, 1);
++        msleep(20);
++        dvbsky_gpio_ctrl(d, 0x83, 0);
++        dvbsky_gpio_ctrl(d, 0xc0, 1);
++        msleep(100);
++        dvbsky_gpio_ctrl(d, 0x83, 1);
++        dvbsky_gpio_ctrl(d, 0xc0, 0);
++        msleep(50);
++    }
+
+      return WARM;
+  }
+@@ -719,7 +738,7 @@ static struct dvb_usb_device_properties
+      }
+  };
+
+-static struct dvb_usb_device_properties mygica_t230c_props = {
++static struct dvb_usb_device_properties mygica_t230_props = {
+      .driver_name = KBUILD_MODNAME,
+      .owner = THIS_MODULE,
+      .adapter_nr = adapter_nr,
+@@ -730,7 +749,7 @@ static struct dvb_usb_device_properties
+      .generic_bulk_ctrl_delay = DVBSKY_MSG_DELAY,
+
+      .i2c_algo         = &dvbsky_i2c_algo,
+-    .frontend_attach  = dvbsky_mygica_t230c_attach,
++    .frontend_attach  = dvbsky_mygica_t230_attach,
+      .frontend_detach  = dvbsky_frontend_detach,
+      .init             = dvbsky_init,
+      .get_rc_config    = dvbsky_get_rc_config,
+@@ -778,16 +797,22 @@ static const struct usb_device_id dvbsky
+          &dvbsky_s960_props, "Terratec Cinergy S2 Rev.4",
+          RC_MAP_DVBSKY) },
+      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230,
+-        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
++        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
+          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C,
+-        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
++        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
+          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C_LITE,
+-        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
+Lite",
++        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
+Lite",
+          NULL) },
+      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2,
+-        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C v2",
++        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C v2",
++        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
++     { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2_LITE,
++        &mygica_t230_props, "MyGica Mini DVB-T2 USB Stick T230C Lite v2",
++        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
++    { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230A,
++        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230A",
+          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+      { }
+  };
+diff -uprN ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 
+./linux/include/media/dvb-usb-ids.h
+--- ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 2020-05-26 
+05:40:21.000000000 +0000
++++ ./linux/include/media/dvb-usb-ids.h    2021-02-19 14:27:21.459391941 
++0000
+@@ -394,6 +394,8 @@
+  #define USB_PID_MYGICA_T230C                0xc689
+  #define USB_PID_MYGICA_T230C2                0xc68a
+  #define USB_PID_MYGICA_T230C_LITE            0xc699
++#define USB_PID_MYGICA_T230C2_LITE            0xc69a
++#define USB_PID_MYGICA_T230A                0x689a
+  #define USB_PID_ELGATO_EYETV_DIVERSITY            0x0011
+  #define USB_PID_ELGATO_EYETV_DTT            0x0021
+  #define USB_PID_ELGATO_EYETV_DTT_2            0x003f
+
 
