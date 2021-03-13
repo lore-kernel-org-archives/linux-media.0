@@ -2,180 +2,338 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2537CC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA51C4332B
 	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3B3964F21
-	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D25364F19
+	for <linux-media@archiver.kernel.org>; Sat, 13 Mar 2021 14:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbhCMOnu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Mar 2021 09:43:50 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:36105 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234010AbhCMOn2 (ORCPT
+        id S234059AbhCMOnv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Mar 2021 09:43:51 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:39887 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234020AbhCMOn3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Mar 2021 09:43:28 -0500
+        Sat, 13 Mar 2021 09:43:29 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id L5UBljyoWC40pL5UElV5cA; Sat, 13 Mar 2021 15:43:27 +0100
+        id L5UBljyoWC40pL5UGlV5dP; Sat, 13 Mar 2021 15:43:28 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615646607; bh=O3MwNQhRNzqd8QxgPawHIeJJoZMJ70XulGV08rBp2qM=;
+        t=1615646608; bh=a748ORnM9/QTfJ2i54TMjx61l3IV0+MMa/JWC43JzhY=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=S0Enxly0b/Lw+ck17ZpatbYyGT+hXfS8LhjKmkGRSGg6ZRh90j5g3zeFXpaVfJJzJ
-         TprMPnYg6Urd92lAjLTDy30GAclZbjKknHGZMP3+trnAy8pDsZ53jEiMtp98sdrQgp
-         1KXGcqs4iEe+WllERL2SAoLwMnLtN9qRJ45MJ3d1n3/EkBlH9W9m4mC5IUr7dUTT9p
-         MxBsQBu6SHKaGts7EYET3yQmJipANSfUpRwdjrOJCrzWytZyE43XsSiR+hZRgdv0aC
-         S0YZGgmLu/5BqyniBL+izwxWcefwBENOl3nR5S1tN/rF1OixUPQNNbLt/bAwN1MycY
-         v8AgigiPt4BQw==
+        b=m/4p7hFcKa9XkVRKm6R2uHcg/Zfq0qaEbqM4GVvPTZfVFIMp1rlArUX7DTc9P4+JV
+         6vwvI1nCLxv1Z7sSvzLVpdVLy+sL5Pg1kc3S/IMjGjH+qdjNBQ1hFxbJKabbpQ6mfK
+         j0PelE7IUnXq8Em3zAnTACKX7VcI6wY5z0wp1V6dfC86iPp8Ob44laN4mstYGYLeu7
+         oB1sNZdvzm9o15n+gIzWO6Q4DOT7fmaN3oLIiCaoa/yubtCu+BiYUuNHLHSWnNq2QH
+         LVWPOOpqM3Qy0P5zW3TP8jOHfH5x48a6aLh3v4DL/wdv32HJJQtExKXNLCjqC4tcpH
+         90XI1xd9GG+mg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH 00/15] v4l2-controls.h: rename _MPEG_ to _CODEC_
-Date:   Sat, 13 Mar 2021 15:43:08 +0100
-Message-Id: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 05/15] media/i2c: rename MPEG to CODEC
+Date:   Sat, 13 Mar 2021 15:43:13 +0100
+Message-Id: <20210313144323.143600-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
+References: <20210313144323.143600-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfC6oyS35tArlVT3Tnt89cA2C4XNyiVAN7tzIh2jmRj56uarUG0Tiv/X88SAJj0ej6pZYerU9UVVbFdMNCl+eVw8QIESNcP7LB7Y4odaF7qNzoRGvPBO2
- 3fujnFXXO2XzoBlbnG6nLr+LveNYlpyD+p9//uy/mmLgh3IUGzadS5EZJCvxZyCEZlgQzTxTj5b7p3B2tIdB+ksQWQoNIgrgc6GzngBUNIIBPwyMKZL6+rhG
- zU26G4QZpzFXmLwQThCL3xlLg6Ofd6/MkoldDgg2v2zeiGJe0j2qLpiysYGRx1YOq4Hr1tJfqAGczYkMf5bqRvwLE85RiFBwUtKvxzxJzVU=
+X-CMAE-Envelope: MS4xfLSx1V09vdOsiIy3BaNZdQmR/AETmlTZLgNQ9scdnGUt0EyBA5i0DQ6Ct0+d9egLK+97qvH87Wx78NNmwDGQSId51MO4xwmSM4nX0MFUXNzHT4mEtDo5
+ FedObq0D2z1LmGMi8iAH3j1/wChCPGUS+GNnSpfyMSicQMH4O6MZhu6GlpsUE6rY+K+RhwCmBIXUpWwW3CBWhGxjIlqHy1QnLG5cg1al5i+JvOMijy214ozU
+ moQjxHrL4nUZhoDqmrKNTv/6lBm39Dvwv/3dqOs4j4iFKXyW9BmCRzEo05tIjgAoix2BCxj68IvhCYVAKve93f2bxsyXAPFPRDAcCsvJSYLNR4LRq68oCZk1
+ VwLXYKFU31VmWtxk87Ldo6kNGQwopg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first codec that was supported in V4L2 was the MPEG codec.
-As a result of that all codec controls and related data structures
-where all prefixed with MPEG. This is confusing and in fact makes
-it hard to find the MPEG-specific controls since all controls have
-'MPEG' in their name.
+Historically all codec-related data structures and defines used the
+MPEG prefix. This is confusing. Rename MPEG to CODEC to make it clear
+that the MPEG prefix isn't MPEG specific.
 
-This patch series renames all controls and data structures to use
-CODEC instead of MPEG, and adds defines for compatibility at the end.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/i2c/saa6752hs.c | 144 +++++++++++++++++-----------------
+ 1 file changed, 72 insertions(+), 72 deletions(-)
 
-The first patch fixes a typo in the documentation. I posted that
-as a seperate patch, but it makes sense to combine this in this series
-since it depends on this fix.
-
-Then v4l2-controls.h is modified, renaming MPEG to CODEC and creating
-aliases for the old names.
-
-Next the documentation is updated, followed by the drivers/media/*
-directories, drivers/staging/media, include/media, videodev2.h and
-staging/vc04_services.
-
-Finally the aliases in v4l2-controls.h are placed under #ifndef __KERNEL__
-to ensure that the kernel code can't use those anymore.
-
-This patch has no functional changes, only renames and the addition
-of compatibility defines at the end.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (15):
-  ext-ctrls-codec.rst: fix typos
-  v4l2-controls.h: rename _MPEG_ to _CODEC_
-  Documentation/*/media: rename MPEG to CODEC
-  media/common: rename MPEG to CODEC
-  media/i2c: rename MPEG to CODEC
-  media/v4l2-core: rename MPEG to CODEC
-  media/pci: rename MPEG to CODEC
-  media/usb: rename MPEG to CODEC
-  media/platform: rename MPEG to CODEC
-  media/test-drivers: rename MPEG to CODEC
-  staging/media: rename MPEG to CODEC
-  include/media: rename MPEG to CODEC
-  videodev2.h: rename MPEG to CODEC
-  staging/vc04_services: rename MPEG to CODEC
-  v4l2-controls.h: place all MPEG aliases under #ifndef __KERNEL__
-
- .../driver-api/media/v4l2-controls.rst        |    2 +-
- .../media/drivers/cx2341x-uapi.rst            |    8 +-
- .../dvb/audio-bilingual-channel-select.rst    |    2 +-
- .../media/dvb/audio-channel-select.rst        |    2 +-
- .../media/dvb/video-get-frame-count.rst       |    2 +-
- .../userspace-api/media/dvb/video-get-pts.rst |    2 +-
- .../media/v4l/dev-sliced-vbi.rst              |   14 +-
- .../media/v4l/ext-ctrls-codec.rst             | 1250 +++++------
- .../userspace-api/media/v4l/hist-v4l2.rst     |    6 +-
- .../media/v4l/pixfmt-compressed.rst           |   18 +-
- .../userspace-api/media/v4l/v4l2.rst          |    4 +-
- drivers/media/common/cx2341x.c                |  836 ++++----
- drivers/media/i2c/saa6752hs.c                 |  144 +-
- drivers/media/pci/cx18/cx18-controls.c        |   14 +-
- drivers/media/pci/ivtv/ivtv-controls.c        |   10 +-
- drivers/media/pci/ivtv/ivtv-driver.c          |   22 +-
- drivers/media/pci/ivtv/ivtv-ioctl.c           |    4 +-
- drivers/media/pci/saa7164/saa7164-api.c       |   12 +-
- drivers/media/pci/saa7164/saa7164-core.c      |    4 +-
- drivers/media/pci/saa7164/saa7164-encoder.c   |   52 +-
- drivers/media/pci/saa7164/saa7164.h           |    4 +-
- .../media/pci/solo6x10/solo6x10-v4l2-enc.c    |    8 +-
- drivers/media/pci/tw5864/tw5864-video.c       |    8 +-
- .../media/platform/allegro-dvt/allegro-core.c |  348 ++--
- drivers/media/platform/allegro-dvt/nal-h264.c |   52 +-
- drivers/media/platform/allegro-dvt/nal-h264.h |    4 +-
- drivers/media/platform/allegro-dvt/nal-hevc.c |   42 +-
- drivers/media/platform/allegro-dvt/nal-hevc.h |    6 +-
- drivers/media/platform/coda/coda-bit.c        |    8 +-
- drivers/media/platform/coda/coda-common.c     |  218 +-
- drivers/media/platform/coda/coda-h264.c       |   40 +-
- drivers/media/platform/coda/coda-mpeg2.c      |   18 +-
- drivers/media/platform/coda/coda-mpeg4.c      |   22 +-
- drivers/media/platform/coda/coda.h            |    2 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |    6 +-
- .../platform/mtk-vcodec/mtk_vcodec_enc.c      |   80 +-
- .../platform/mtk-vcodec/venc/venc_h264_if.c   |   38 +-
- drivers/media/platform/qcom/venus/helpers.c   |  154 +-
- .../media/platform/qcom/venus/vdec_ctrls.c    |   92 +-
- drivers/media/platform/qcom/venus/venc.c      |   26 +-
- .../media/platform/qcom/venus/venc_ctrls.c    |  294 +--
- .../media/platform/s5p-mfc/s5p_mfc_common.h   |   28 +-
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |   16 +-
- drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  |  764 +++----
- .../media/platform/s5p-mfc/s5p_mfc_opr_v5.c   |   12 +-
- .../media/platform/s5p-mfc/s5p_mfc_opr_v6.c   |   38 +-
- drivers/media/platform/sti/hva/hva-debugfs.c  |   10 +-
- drivers/media/platform/sti/hva/hva-h264.c     |   48 +-
- drivers/media/platform/sti/hva/hva-v4l2.c     |  100 +-
- drivers/media/platform/sti/hva/hva.h          |   14 +-
- .../media/test-drivers/vicodec/vicodec-core.c |    4 +-
- drivers/media/usb/cx231xx/cx231xx-417.c       |    2 +-
- drivers/media/usb/go7007/go7007-v4l2.c        |   22 +-
- drivers/media/usb/hdpvr/hdpvr-control.c       |    6 +-
- drivers/media/usb/hdpvr/hdpvr-core.c          |    4 +-
- drivers/media/usb/hdpvr/hdpvr-video.c         |   46 +-
- drivers/media/usb/hdpvr/hdpvr.h               |    4 +-
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c       |   72 +-
- drivers/media/v4l2-core/v4l2-ctrls.c          |  640 +++---
- drivers/staging/media/hantro/hantro_drv.c     |   16 +-
- .../media/hantro/hantro_g1_mpeg2_dec.c        |    4 +-
- .../staging/media/hantro/hantro_g1_vp8_dec.c  |    2 +-
- .../media/hantro/rk3399_vpu_hw_mpeg2_dec.c    |    4 +-
- .../media/hantro/rk3399_vpu_hw_vp8_dec.c      |    2 +-
- drivers/staging/media/rkvdec/rkvdec.c         |   16 +-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |   34 +-
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   12 +-
- .../bcm2835-camera/bcm2835-camera.c           |    4 +-
- .../bcm2835-camera/bcm2835-camera.h           |    4 +-
- .../vc04_services/bcm2835-camera/controls.c   |  126 +-
- include/media/drv-intf/cx2341x.h              |   36 +-
- include/media/hevc-ctrls.h                    |   22 +-
- include/media/mpeg2-ctrls.h                   |    4 +-
- include/media/vp8-ctrls.h                     |    2 +-
- include/uapi/linux/v4l2-controls.h            | 1824 +++++++++++------
- include/uapi/linux/videodev2.h                |    4 +-
- 76 files changed, 4195 insertions(+), 3629 deletions(-)
-
+diff --git a/drivers/media/i2c/saa6752hs.c b/drivers/media/i2c/saa6752hs.c
+index 6171ced809bb..8c4731495739 100644
+--- a/drivers/media/i2c/saa6752hs.c
++++ b/drivers/media/i2c/saa6752hs.c
+@@ -53,13 +53,13 @@ struct saa6752hs_mpeg_params {
+ 	__u16				ts_pid_pcr;
+ 
+ 	/* audio */
+-	enum v4l2_mpeg_audio_encoding    au_encoding;
+-	enum v4l2_mpeg_audio_l2_bitrate  au_l2_bitrate;
+-	enum v4l2_mpeg_audio_ac3_bitrate au_ac3_bitrate;
++	enum v4l2_codec_audio_encoding    au_encoding;
++	enum v4l2_codec_audio_l2_bitrate  au_l2_bitrate;
++	enum v4l2_codec_audio_ac3_bitrate au_ac3_bitrate;
+ 
+ 	/* video */
+-	enum v4l2_mpeg_video_aspect	vi_aspect;
+-	enum v4l2_mpeg_video_bitrate_mode vi_bitrate_mode;
++	enum v4l2_codec_video_aspect	vi_aspect;
++	enum v4l2_codec_video_bitrate_mode vi_bitrate_mode;
+ 	__u32				vi_bitrate;
+ 	__u32				vi_bitrate_peak;
+ };
+@@ -207,14 +207,14 @@ static const struct saa6752hs_mpeg_params param_defaults =
+ 	.ts_pid_audio    = 256,
+ 	.ts_pid_pcr      = 259,
+ 
+-	.vi_aspect       = V4L2_MPEG_VIDEO_ASPECT_4x3,
++	.vi_aspect       = V4L2_CODEC_VIDEO_ASPECT_4x3,
+ 	.vi_bitrate      = 4000,
+ 	.vi_bitrate_peak = 6000,
+-	.vi_bitrate_mode = V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
++	.vi_bitrate_mode = V4L2_CODEC_VIDEO_BITRATE_MODE_VBR,
+ 
+-	.au_encoding     = V4L2_MPEG_AUDIO_ENCODING_LAYER_2,
+-	.au_l2_bitrate   = V4L2_MPEG_AUDIO_L2_BITRATE_256K,
+-	.au_ac3_bitrate  = V4L2_MPEG_AUDIO_AC3_BITRATE_256K,
++	.au_encoding     = V4L2_CODEC_AUDIO_ENCODING_LAYER_2,
++	.au_l2_bitrate   = V4L2_CODEC_AUDIO_L2_BITRATE_256K,
++	.au_ac3_bitrate  = V4L2_CODEC_AUDIO_AC3_BITRATE_256K,
+ };
+ 
+ /* ---------------------------------------------------------------------- */
+@@ -314,10 +314,10 @@ static int saa6752hs_set_bitrate(struct i2c_client *client,
+ 
+ 	/* set the bitrate mode */
+ 	set_reg8(client, 0x71,
+-		params->vi_bitrate_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
++		params->vi_bitrate_mode != V4L2_CODEC_VIDEO_BITRATE_MODE_VBR);
+ 
+ 	/* set the video bitrate */
+-	if (params->vi_bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) {
++	if (params->vi_bitrate_mode == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR) {
+ 		/* set the target bitrate */
+ 		set_reg16(client, 0x80, params->vi_bitrate);
+ 
+@@ -332,13 +332,13 @@ static int saa6752hs_set_bitrate(struct i2c_client *client,
+ 
+ 	/* set the audio encoding */
+ 	set_reg8(client, 0x93,
+-			params->au_encoding == V4L2_MPEG_AUDIO_ENCODING_AC3);
++			params->au_encoding == V4L2_CODEC_AUDIO_ENCODING_AC3);
+ 
+ 	/* set the audio bitrate */
+-	if (params->au_encoding == V4L2_MPEG_AUDIO_ENCODING_AC3)
+-		is_384k = V4L2_MPEG_AUDIO_AC3_BITRATE_384K == params->au_ac3_bitrate;
++	if (params->au_encoding == V4L2_CODEC_AUDIO_ENCODING_AC3)
++		is_384k = V4L2_CODEC_AUDIO_AC3_BITRATE_384K == params->au_ac3_bitrate;
+ 	else
+-		is_384k = V4L2_MPEG_AUDIO_L2_BITRATE_384K == params->au_l2_bitrate;
++		is_384k = V4L2_CODEC_AUDIO_L2_BITRATE_384K == params->au_l2_bitrate;
+ 	set_reg8(client, 0x94, is_384k);
+ 	tot_bitrate += is_384k ? 384 : 256;
+ 
+@@ -361,9 +361,9 @@ static int saa6752hs_try_ctrl(struct v4l2_ctrl *ctrl)
+ 		container_of(ctrl->handler, struct saa6752hs_state, hdl);
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		/* peak bitrate shall be >= normal bitrate */
+-		if (ctrl->val == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR &&
++		if (ctrl->val == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR &&
+ 		    h->video_bitrate_peak->val < h->video_bitrate->val)
+ 			h->video_bitrate_peak->val = h->video_bitrate->val;
+ 		break;
+@@ -378,42 +378,42 @@ static int saa6752hs_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct saa6752hs_mpeg_params *params = &h->params;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_MPEG_STREAM_TYPE:
++	case V4L2_CID_CODEC_STREAM_TYPE:
+ 		break;
+-	case V4L2_CID_MPEG_STREAM_PID_PMT:
++	case V4L2_CID_CODEC_STREAM_PID_PMT:
+ 		params->ts_pid_pmt = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_STREAM_PID_AUDIO:
++	case V4L2_CID_CODEC_STREAM_PID_AUDIO:
+ 		params->ts_pid_audio = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_STREAM_PID_VIDEO:
++	case V4L2_CID_CODEC_STREAM_PID_VIDEO:
+ 		params->ts_pid_video = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_STREAM_PID_PCR:
++	case V4L2_CID_CODEC_STREAM_PID_PCR:
+ 		params->ts_pid_pcr = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_AUDIO_ENCODING:
++	case V4L2_CID_CODEC_AUDIO_ENCODING:
+ 		params->au_encoding = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_AUDIO_L2_BITRATE:
++	case V4L2_CID_CODEC_AUDIO_L2_BITRATE:
+ 		params->au_l2_bitrate = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_AUDIO_AC3_BITRATE:
++	case V4L2_CID_CODEC_AUDIO_AC3_BITRATE:
+ 		params->au_ac3_bitrate = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
++	case V4L2_CID_CODEC_AUDIO_SAMPLING_FREQ:
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_ENCODING:
++	case V4L2_CID_CODEC_VIDEO_ENCODING:
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_ASPECT:
++	case V4L2_CID_CODEC_VIDEO_ASPECT:
+ 		params->vi_aspect = ctrl->val;
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
++	case V4L2_CID_CODEC_VIDEO_BITRATE_MODE:
+ 		params->vi_bitrate_mode = ctrl->val;
+ 		params->vi_bitrate = h->video_bitrate->val / 1000;
+ 		params->vi_bitrate_peak = h->video_bitrate_peak->val / 1000;
+ 		v4l2_ctrl_activate(h->video_bitrate_peak,
+-				ctrl->val == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
++				ctrl->val == V4L2_CODEC_VIDEO_BITRATE_MODE_VBR);
+ 		break;
+ 	default:
+ 		return -EINVAL;
+@@ -469,7 +469,7 @@ static int saa6752hs_init(struct v4l2_subdev *sd, u32 leading_null_bytes)
+ 	localPAT[sizeof(PAT) - 1] = crc & 0xFF;
+ 
+ 	/* compute PMT */
+-	if (h->params.au_encoding == V4L2_MPEG_AUDIO_ENCODING_AC3) {
++	if (h->params.au_encoding == V4L2_CODEC_AUDIO_ENCODING_AC3) {
+ 		size = sizeof(PMT_AC3);
+ 		memcpy(localPMT, PMT_AC3, size);
+ 	} else {
+@@ -527,10 +527,10 @@ static int saa6752hs_init(struct v4l2_subdev *sd, u32 leading_null_bytes)
+ 	buf[4] = 0xB0;
+ 	buf[5] = buf2[0];
+ 	switch (h->params.vi_aspect) {
+-	case V4L2_MPEG_VIDEO_ASPECT_16x9:
++	case V4L2_CODEC_VIDEO_ASPECT_16x9:
+ 		buf[6] = buf2[1] | 0x40;
+ 		break;
+-	case V4L2_MPEG_VIDEO_ASPECT_4x3:
++	case V4L2_CODEC_VIDEO_ASPECT_4x3:
+ 	default:
+ 		buf[6] = buf2[1] & 0xBF;
+ 		break;
+@@ -690,67 +690,67 @@ static int saa6752hs_probe(struct i2c_client *client,
+ 	hdl = &h->hdl;
+ 	v4l2_ctrl_handler_init(hdl, 14);
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_AUDIO_ENCODING,
+-		h->has_ac3 ? V4L2_MPEG_AUDIO_ENCODING_AC3 :
+-			V4L2_MPEG_AUDIO_ENCODING_LAYER_2,
+-		0x0d, V4L2_MPEG_AUDIO_ENCODING_LAYER_2);
++		V4L2_CID_CODEC_AUDIO_ENCODING,
++		h->has_ac3 ? V4L2_CODEC_AUDIO_ENCODING_AC3 :
++			V4L2_CODEC_AUDIO_ENCODING_LAYER_2,
++		0x0d, V4L2_CODEC_AUDIO_ENCODING_LAYER_2);
+ 
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_AUDIO_L2_BITRATE,
+-		V4L2_MPEG_AUDIO_L2_BITRATE_384K,
+-		~((1 << V4L2_MPEG_AUDIO_L2_BITRATE_256K) |
+-		  (1 << V4L2_MPEG_AUDIO_L2_BITRATE_384K)),
+-		V4L2_MPEG_AUDIO_L2_BITRATE_256K);
++		V4L2_CID_CODEC_AUDIO_L2_BITRATE,
++		V4L2_CODEC_AUDIO_L2_BITRATE_384K,
++		~((1 << V4L2_CODEC_AUDIO_L2_BITRATE_256K) |
++		  (1 << V4L2_CODEC_AUDIO_L2_BITRATE_384K)),
++		V4L2_CODEC_AUDIO_L2_BITRATE_256K);
+ 
+ 	if (h->has_ac3)
+ 		v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-			V4L2_CID_MPEG_AUDIO_AC3_BITRATE,
+-			V4L2_MPEG_AUDIO_AC3_BITRATE_384K,
+-			~((1 << V4L2_MPEG_AUDIO_AC3_BITRATE_256K) |
+-			  (1 << V4L2_MPEG_AUDIO_AC3_BITRATE_384K)),
+-			V4L2_MPEG_AUDIO_AC3_BITRATE_256K);
++			V4L2_CID_CODEC_AUDIO_AC3_BITRATE,
++			V4L2_CODEC_AUDIO_AC3_BITRATE_384K,
++			~((1 << V4L2_CODEC_AUDIO_AC3_BITRATE_256K) |
++			  (1 << V4L2_CODEC_AUDIO_AC3_BITRATE_384K)),
++			V4L2_CODEC_AUDIO_AC3_BITRATE_256K);
+ 
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ,
+-		V4L2_MPEG_AUDIO_SAMPLING_FREQ_48000,
+-		~(1 << V4L2_MPEG_AUDIO_SAMPLING_FREQ_48000),
+-		V4L2_MPEG_AUDIO_SAMPLING_FREQ_48000);
++		V4L2_CID_CODEC_AUDIO_SAMPLING_FREQ,
++		V4L2_CODEC_AUDIO_SAMPLING_FREQ_48000,
++		~(1 << V4L2_CODEC_AUDIO_SAMPLING_FREQ_48000),
++		V4L2_CODEC_AUDIO_SAMPLING_FREQ_48000);
+ 
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_ENCODING,
+-		V4L2_MPEG_VIDEO_ENCODING_MPEG_2,
+-		~(1 << V4L2_MPEG_VIDEO_ENCODING_MPEG_2),
+-		V4L2_MPEG_VIDEO_ENCODING_MPEG_2);
++		V4L2_CID_CODEC_VIDEO_ENCODING,
++		V4L2_CODEC_VIDEO_ENCODING_MPEG_2,
++		~(1 << V4L2_CODEC_VIDEO_ENCODING_MPEG_2),
++		V4L2_CODEC_VIDEO_ENCODING_MPEG_2);
+ 
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_ASPECT,
+-		V4L2_MPEG_VIDEO_ASPECT_16x9, 0x01,
+-		V4L2_MPEG_VIDEO_ASPECT_4x3);
++		V4L2_CID_CODEC_VIDEO_ASPECT,
++		V4L2_CODEC_VIDEO_ASPECT_16x9, 0x01,
++		V4L2_CODEC_VIDEO_ASPECT_4x3);
+ 
+ 	h->video_bitrate_peak = v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE_PEAK,
++		V4L2_CID_CODEC_VIDEO_BITRATE_PEAK,
+ 		1000000, 27000000, 1000, 8000000);
+ 
+ 	v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_STREAM_TYPE,
+-		V4L2_MPEG_STREAM_TYPE_MPEG2_TS,
+-		~(1 << V4L2_MPEG_STREAM_TYPE_MPEG2_TS),
+-		V4L2_MPEG_STREAM_TYPE_MPEG2_TS);
++		V4L2_CID_CODEC_STREAM_TYPE,
++		V4L2_CODEC_STREAM_TYPE_MPEG2_TS,
++		~(1 << V4L2_CODEC_STREAM_TYPE_MPEG2_TS),
++		V4L2_CODEC_STREAM_TYPE_MPEG2_TS);
+ 
+ 	h->video_bitrate_mode = v4l2_ctrl_new_std_menu(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
+-		V4L2_MPEG_VIDEO_BITRATE_MODE_CBR, 0,
+-		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
++		V4L2_CID_CODEC_VIDEO_BITRATE_MODE,
++		V4L2_CODEC_VIDEO_BITRATE_MODE_CBR, 0,
++		V4L2_CODEC_VIDEO_BITRATE_MODE_VBR);
+ 	h->video_bitrate = v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_VIDEO_BITRATE, 1000000, 27000000, 1000, 6000000);
++		V4L2_CID_CODEC_VIDEO_BITRATE, 1000000, 27000000, 1000, 6000000);
+ 	v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_STREAM_PID_PMT, 0, (1 << 14) - 1, 1, 16);
++		V4L2_CID_CODEC_STREAM_PID_PMT, 0, (1 << 14) - 1, 1, 16);
+ 	v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_STREAM_PID_AUDIO, 0, (1 << 14) - 1, 1, 260);
++		V4L2_CID_CODEC_STREAM_PID_AUDIO, 0, (1 << 14) - 1, 1, 260);
+ 	v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_STREAM_PID_VIDEO, 0, (1 << 14) - 1, 1, 256);
++		V4L2_CID_CODEC_STREAM_PID_VIDEO, 0, (1 << 14) - 1, 1, 256);
+ 	v4l2_ctrl_new_std(hdl, &saa6752hs_ctrl_ops,
+-		V4L2_CID_MPEG_STREAM_PID_PCR, 0, (1 << 14) - 1, 1, 259);
++		V4L2_CID_CODEC_STREAM_PID_PCR, 0, (1 << 14) - 1, 1, 259);
+ 	sd->ctrl_handler = hdl;
+ 	if (hdl->error) {
+ 		int err = hdl->error;
 -- 
 2.30.1
 
