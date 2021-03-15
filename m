@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C62BC4161F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 13:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E50C7C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 13:16:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C9EF64F21
-	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 13:16:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C71364EF1
+	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 13:16:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbhCONPf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Mar 2021 09:15:35 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53273 "EHLO
+        id S231191AbhCONP6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Mar 2021 09:15:58 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:45213 "EHLO
         relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbhCONPT (ORCPT
+        with ESMTP id S230127AbhCONP3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Mar 2021 09:15:19 -0400
+        Mon, 15 Mar 2021 09:15:29 -0400
 X-Originating-IP: 79.22.58.175
 Received: from uno.homenet.telecomitalia.it (host-79-22-58-175.retail.telecomitalia.it [79.22.58.175])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 87F16FF807;
-        Mon, 15 Mar 2021 13:15:15 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 4CF98FF80E;
+        Mon, 15 Mar 2021 13:15:24 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -33,9 +33,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 09/18] media: i2c: max9271: Introduce wake_up() function
-Date:   Mon, 15 Mar 2021 14:15:03 +0100
-Message-Id: <20210315131512.133720-10-jacopo+renesas@jmondi.org>
+Subject: [PATCH v2 12/18] media: i2c: rdacm21: Give more time to OV490 to boot
+Date:   Mon, 15 Mar 2021 14:15:06 +0100
+Message-Id: <20210315131512.133720-13-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210315131512.133720-1-jacopo+renesas@jmondi.org>
 References: <20210315131512.133720-1-jacopo+renesas@jmondi.org>
@@ -45,94 +45,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The MAX9271 chip manual prescribes a delay of 5 milliseconds
-after the chip exists from low power state.
+It has been observed through repeated testing (250 boots) that in the
+10% of the cases the RDACM21 initialization sequence errors out due a
+timeout waiting for the OV490 firmware to complete its boot phase.
 
-Add a new function to the max9271 library driver that wakes up the chip
-with a dummy i2c transaction and implements the correct delay of 5
-milliseconds after the chip exits from low power state.
+Albeit being the current timeout relatively large (300-600 milliseconds),
+doubling it reduces the sporadic error rate down to 1 over an 80 boot
+sequences test run.
 
-Use the newly introduced function in the rdacm20 and rdacm21 camera
-drivers. The former was not respecting the required delay while the
-latter was waiting for a too-short timeout.
+The firmware boot delay is unfortunately not characterized in the camera
+module manual.
 
-Do not handle the initial i2c address configuration in the library
-driver function as the camera module drivers control address
-reprogramming.
-
+Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/max9271.c | 7 +++++++
- drivers/media/i2c/max9271.h | 9 +++++++++
- drivers/media/i2c/rdacm20.c | 2 +-
- drivers/media/i2c/rdacm21.c | 3 +--
- 4 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/media/i2c/rdacm21.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/max9271.c b/drivers/media/i2c/max9271.c
-index 2c7dc7fb9846..f7bfe7266763 100644
---- a/drivers/media/i2c/max9271.c
-+++ b/drivers/media/i2c/max9271.c
-@@ -80,6 +80,13 @@ static int max9271_pclk_detect(struct max9271_device *dev)
- 	return -EIO;
- }
- 
-+void max9271_wake_up(struct max9271_device *dev)
-+{
-+	i2c_smbus_read_byte(dev->client);
-+	usleep_range(5000, 8000);
-+}
-+EXPORT_SYMBOL_GPL(max9271_wake_up);
-+
- int max9271_set_serial_link(struct max9271_device *dev, bool enable)
- {
- 	int ret;
-diff --git a/drivers/media/i2c/max9271.h b/drivers/media/i2c/max9271.h
-index d78fb21441e9..dc5e4e70ba6f 100644
---- a/drivers/media/i2c/max9271.h
-+++ b/drivers/media/i2c/max9271.h
-@@ -85,6 +85,15 @@ struct max9271_device {
- 	struct i2c_client *client;
- };
- 
-+/**
-+ * max9271_wake_up() - Wake up the serializer by issuing an i2c transaction
-+ * @dev: The max9271 device
-+ *
-+ * This function shall be called before any other interaction with the
-+ * serializer.
-+ */
-+void max9271_wake_up(struct max9271_device *dev);
-+
- /**
-  * max9271_set_serial_link() - Enable/disable serial link
-  * @dev: The max9271 device
-diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index b9aaa0f7db42..2265ef7c65d4 100644
---- a/drivers/media/i2c/rdacm20.c
-+++ b/drivers/media/i2c/rdacm20.c
-@@ -459,7 +459,7 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
- 
- 	/* Verify communication with the MAX9271: ping to wakeup. */
- 	dev->serializer.client->addr = MAX9271_DEFAULT_ADDR;
--	i2c_smbus_read_byte(dev->serializer.client);
-+	max9271_wake_up(&dev->serializer);
- 
- 	/* Serial link disabled during config as it needs a valid pixel clock. */
- 	ret = max9271_set_serial_link(&dev->serializer, false);
 diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-index 179d107f494c..7bce55adfd7c 100644
+index 50a9b0d8255d..07cf077d8efd 100644
 --- a/drivers/media/i2c/rdacm21.c
 +++ b/drivers/media/i2c/rdacm21.c
-@@ -452,8 +452,7 @@ static int rdacm21_initialize(struct rdacm21_device *dev)
+@@ -53,7 +53,7 @@
+ #define OV490_PID			0x8080300a
+ #define OV490_VER			0x8080300b
+ #define OV490_PID_TIMEOUT		20
+-#define OV490_OUTPUT_EN_TIMEOUT		300
++#define OV490_OUTPUT_EN_TIMEOUT		600
  
- 	/* Verify communication with the MAX9271: ping to wakeup. */
- 	dev->serializer.client->addr = MAX9271_DEFAULT_ADDR;
--	i2c_smbus_read_byte(dev->serializer.client);
--	usleep_range(3000, 5000);
-+	max9271_wake_up(&dev->serializer);
- 
- 	/* Enable reverse channel and disable the serial link. */
- 	ret = max9271_set_serial_link(&dev->serializer, false);
+ #define OV490_GPIO0			BIT(0)
+ #define OV490_SPWDN0			BIT(0)
 -- 
 2.30.0
 
