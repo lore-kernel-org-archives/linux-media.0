@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F36C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BF9C433E9
 	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 17:37:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FEEE64F04
+	by mail.kernel.org (Postfix) with ESMTP id 7D04B64F04
 	for <linux-media@archiver.kernel.org>; Mon, 15 Mar 2021 17:37:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbhCORge (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Mar 2021 13:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S231604AbhCORgf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Mar 2021 13:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbhCORgN (ORCPT
+        with ESMTP id S233741AbhCORgO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Mar 2021 13:36:13 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73BCC06175F
-        for <linux-media@vger.kernel.org>; Mon, 15 Mar 2021 10:36:12 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id mm21so67601816ejb.12
-        for <linux-media@vger.kernel.org>; Mon, 15 Mar 2021 10:36:12 -0700 (PDT)
+        Mon, 15 Mar 2021 13:36:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256C6C06175F
+        for <linux-media@vger.kernel.org>; Mon, 15 Mar 2021 10:36:14 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bm21so67663345ejb.4
+        for <linux-media@vger.kernel.org>; Mon, 15 Mar 2021 10:36:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pfFjLIspJMD6JWhPLQLwaYmctbTWBrYbT3cxyzN10po=;
-        b=W+0qM46epmi/4IREYm3kaETWt2RjH/hJxIPDMLbTLeDDKfRErmpluus3BR+QU7YfdT
-         LroVhM/C+UzqdQuvXdYCykd4uTBqHcl2hQJ54H+EUYF56QVE5iP0/vX8aC/aRxBHFazj
-         Vn/4SIL1SUfpiYQ8gySAJMfwQPKfYVf74jGtc=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kGLUxRHfm3EIlGd4N+uEn8OSkXWMynAv8QMKM8OCTEg=;
+        b=XoBqXGw00b+nV7WXr92n0EdsVDmyBBbbt6UZfiZc91iF+dhWYj40r0p1dBj69bv2wm
+         m5O65up56g+rtsLwAaCZFnW+jbtEerOILhXss9ALl6UexQFweLZymGoq/cUisipf6rO9
+         k+q2jl7oz4EBEtGm8UsFQaHebvcWS6+Vzy3+w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pfFjLIspJMD6JWhPLQLwaYmctbTWBrYbT3cxyzN10po=;
-        b=oUrOC+WszMBeQgdOHD1hO+5dUXAen13FWWS3hV4NEnZ5RrsZBLonvRv+1f0ZDoSLN/
-         uxYEvAFIYlLzxPBUW+289wRdJoud7cKzEa6ILnyNdDsD3SVFtmlNXMCBGdJP887HzWj/
-         i0rNp9KDI8L5pyah2v6xxTsRX87wq5NZ8ZqJrfS3gWpdfrCHxQ+CMV5DWQu6C91Q0UJW
-         3m1besQEPr+DhVut6fIkU4KW2p4NI18rzjMgyY8mGgoa57udZ/I+jP7wDqgUPD0ABAsL
-         skqDE2bZBPAKohVDu3WCKKHTzBG3iAPUnsuWQwAGdEw05lvtvEXLhTZyh++Ff71Cb2Ag
-         VQtw==
-X-Gm-Message-State: AOAM533ib47FNYQLTDcfyt295ueZfVNAYApgB4F5nGRNJKCKxKKvUajK
-        NhGZgq12LT4Q4xms6qxHLUlCGQ==
-X-Google-Smtp-Source: ABdhPJyUtkTlZ+uiLxlSmxk7OCwopar9Tl1WIdJTld4H/1dwhZtBTa5FZ+gTEgd3xCBCnrTySPjSDg==
-X-Received: by 2002:a17:906:1a44:: with SMTP id j4mr25244493ejf.401.1615829771736;
-        Mon, 15 Mar 2021 10:36:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kGLUxRHfm3EIlGd4N+uEn8OSkXWMynAv8QMKM8OCTEg=;
+        b=IAwqNZZ0HQdhBchf8TLmrrdVW4J0lz6PTI2XlAxEU9P5zPlVnsgrM+XLSHuuUZyX9h
+         Q4uBPayRFxE52Zff6OPs8KWwvrDYXnWeJT3loFvQVdt6CzbMX7diyab0CdEfGg/OCdOH
+         8f15gTRQlltwIlvHGkmbUc0vgl++i+Ig6pz1reWtwNaG+Vm20DfnVa0VgSgSTES+NMuo
+         RilPlJsIPB+d+i6JVFsC4g/yck9cTIc3SWjIKwsd/GYfsS9qcsQpBCZ0xzFeoSHxCsMx
+         iTfxc5jrtzYDG6yl09W7VOcjehmpghdG7DgEoDqym61xwB/OOJHI/MCWfL6+hcZ3rFhw
+         5wmw==
+X-Gm-Message-State: AOAM533TyH1YxIcsz6bA95yatjMwQdioErwmTrq4bep14c8ViA53gtiv
+        MpanS5vkgPx/0seICun9X+SlvA==
+X-Google-Smtp-Source: ABdhPJxhr0bL1B8rtOBmIEPWSJulYD8sUtEQc75FYbnJbNufb4DVLqF+V6zZEnppOctDz1QkwiR31A==
+X-Received: by 2002:a17:906:2dda:: with SMTP id h26mr24655719eji.163.1615829772839;
+        Mon, 15 Mar 2021 10:36:12 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id a3sm8109239ejv.40.2021.03.15.10.36.11
+        by smtp.gmail.com with ESMTPSA id a3sm8109239ejv.40.2021.03.15.10.36.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 10:36:11 -0700 (PDT)
+        Mon, 15 Mar 2021 10:36:12 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -60,64 +60,51 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v4 00/11] uvcvideo: Fix v4l2-compliance errors
-Date:   Mon, 15 Mar 2021 18:35:58 +0100
-Message-Id: <20210315173609.1547857-1-ribalda@chromium.org>
+Subject: [PATCH v4 02/11] media: uvcvideo: Set capability in s_param
+Date:   Mon, 15 Mar 2021 18:36:00 +0100
+Message-Id: <20210315173609.1547857-3-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+In-Reply-To: <20210315173609.1547857-1-ribalda@chromium.org>
+References: <20210315173609.1547857-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2-compliance -m /dev/media0 -a -f
-Total for uvcvideo device /dev/media0: 8, Succeeded: 6, Failed: 2, Warnings: 0
-Total for uvcvideo device /dev/video0: 54, Succeeded: 50, Failed: 4, Warnings: 2
-Total for uvcvideo device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-Grand Total for uvcvideo device /dev/media0: 108, Succeeded: 102,
-Failed: 6, Warnings: 2
+Fixes v4l2-compliance:
 
-After fixing all of them we go down to:
+Format ioctls (Input 0):
+                warn: v4l2-test-formats.cpp(1339): S_PARM is supported but doesn't report V4L2_CAP_TIMEPERFRAME
+                fail: v4l2-test-formats.cpp(1241): node->has_frmintervals && !cap->capability
 
-Total for uvcvideo device /dev/media0: 8, Succeeded: 8, Failed: 0, Warnings: 0
-Total for uvcvideo device /dev/video0: 54, Succeeded: 54, Failed: 0, Warnings: 3
-Total for uvcvideo device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-Grand Total for uvcvideo device /dev/media0: 108, Succeeded: 108,
-Failed: 0, Warnings: 3
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_v4l2.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-With Hans patch we can also pass v4l2-compliance -s, but it is a WIP.
-
-Changelog v3 (Thanks to Hans and Laurent)
-
-- Return -EACCES on inactive controls
-- Change unique name of the entities
-- Increase metadata buffer size
-
-Hans Verkuil (1):
-  uvc: use vb2 ioctl and fop helpers
-
-Ricardo Ribalda (10):
-  media: v4l2-ioctl: Fix check_ext_ctrls
-  media: uvcvideo: Set capability in s_param
-  media: uvcvideo: Return -EIO for control errors
-  media: uvcvideo: set error_idx to count on EACCESS
-  media: uvcvideo: refactor __uvc_ctrl_add_mapping
-  media: uvcvideo: Add support for V4L2_CTRL_TYPE_CTRL_CLASS
-  media: uvcvideo: Use dev->name for querycap()
-  media: uvcvideo: Set unique vdev name based in type
-  media: uvcvideo: Increase the size of UVC_METADATA_BUF_SIZE
-  media: uvcvideo: Return -EACCES to inactive controls
-
- drivers/media/usb/uvc/uvc_ctrl.c     | 154 +++++++++++++--
- drivers/media/usb/uvc/uvc_driver.c   |  22 ++-
- drivers/media/usb/uvc/uvc_metadata.c |   8 +-
- drivers/media/usb/uvc/uvc_queue.c    | 131 -------------
- drivers/media/usb/uvc/uvc_v4l2.c     | 283 +++------------------------
- drivers/media/usb/uvc/uvc_video.c    |   5 +
- drivers/media/usb/uvc/uvcvideo.h     |  36 +---
- drivers/media/v4l2-core/v4l2-ioctl.c |  25 ++-
- 8 files changed, 210 insertions(+), 454 deletions(-)
-
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 252136cc885c..157310c0ca87 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -472,10 +472,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	uvc_simplify_fraction(&timeperframe.numerator,
+ 		&timeperframe.denominator, 8, 333);
+ 
+-	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+ 		parm->parm.capture.timeperframe = timeperframe;
+-	else
++		parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
++	} else {
+ 		parm->parm.output.timeperframe = timeperframe;
++		parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
