@@ -2,129 +2,265 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEAF4C4332E
-	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 18:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0554C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 18:08:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98E6265149
-	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 18:01:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA22564F83
+	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 18:08:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239645AbhCPSBV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Mar 2021 14:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239578AbhCPSAV (ORCPT
+        id S234552AbhCPSHe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Mar 2021 14:07:34 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35842 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236265AbhCPSFr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Mar 2021 14:00:21 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642D3C0613E0
-        for <linux-media@vger.kernel.org>; Tue, 16 Mar 2021 11:00:15 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id dx17so73729910ejb.2
-        for <linux-media@vger.kernel.org>; Tue, 16 Mar 2021 11:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VEHA0wDh2t06lBti+/CKy5TQQJ8gS0FLl9pl6QcZYKI=;
-        b=GSCUdaKKddn0P+JUnfqgXAmGvZnbOBtsQGdNms0pyNeLiuPWUKslqIlvheKIMmoDjv
-         GFtfr1R7h9339Q9RKI03TiFHnVAL6GxzQ+YBOewBSC5KCzHMywU92h5dX3LDUJDfcW4J
-         uH5IcXjDaXgLZUgL8VpPIn5Q2v+9zWYGpckGw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VEHA0wDh2t06lBti+/CKy5TQQJ8gS0FLl9pl6QcZYKI=;
-        b=c1K8GuBv/qa6D6vvuGB9FDovPXWzqxUslavPZhkco+mMifnZf0pZw88kjkS/nUARFV
-         5nG8W9hgAz4qdm9WW0O8SXSudUKdXFlE6N5QsFhb1O8y67HwIdorpLueLiYjZ5YJ6Nu8
-         FKwXrmAC3SPE9fmbVurspWGchFG++ZHHQhVFqOE6ZaHRs6YmmD0eyqSz6aRnlR7fSKB+
-         MDzXZkrt7+LAaNhi5V6DEJxL966p6+FJSqYLLtqbxczNdqy7Z8o95agv1bBK7eSx9J0O
-         dBw7h0bRJzX7H2IhZw/6KbWTJLv847u2Fjl59kANboYGOEN4LEh/wguiAPzBrLcHu/t4
-         T+Fw==
-X-Gm-Message-State: AOAM532yDNu0z+hB3j8X9na3YeonEGIUPkGZ3TCgFqvihrx2qMzjLB0t
-        /K4tGnS8gx4a99/QYVY8N8z7hA==
-X-Google-Smtp-Source: ABdhPJwuYvdcRXLFbAxCVfmlwMyWicHY+t8gLx1gsMVoS/OPAlaTb3WIMdYo3wy5Z8/LVi/cPyLj3A==
-X-Received: by 2002:a17:906:abcd:: with SMTP id kq13mr31862932ejb.477.1615917612312;
-        Tue, 16 Mar 2021 11:00:12 -0700 (PDT)
-Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id c19sm10953182edu.20.2021.03.16.11.00.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 11:00:12 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v5 08/13] media: uvcvideo: Set unique vdev name based in type
-Date:   Tue, 16 Mar 2021 18:59:58 +0100
-Message-Id: <20210316180004.1605727-9-ribalda@chromium.org>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-In-Reply-To: <20210316180004.1605727-1-ribalda@chromium.org>
-References: <20210316180004.1605727-1-ribalda@chromium.org>
+        Tue, 16 Mar 2021 14:05:47 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 967FF8C8;
+        Tue, 16 Mar 2021 19:05:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1615917943;
+        bh=b3H7xco2mtjXdf3pVzdPoH5EDV9IbI6hLidVHBvgGrI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TGpb6kWP+DiF01EVCBigDJ9lB4NNlOSXZAS/4uF4tiNJCZ1Kzt6walM9LvV+BTO+R
+         r1o+9FfAVnPYgVQg2A9hl4tZuCu7t5R6wEHox03xacAcz6gfwIbuaXHiFfCeHgLOl9
+         3URxnHPHU8caML82chzn8elOqYxIHwCDWnHjr6nU=
+Date:   Tue, 16 Mar 2021 20:05:06 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     ezequiel@collabora.com, festevam@gmail.com,
+        linux-media@vger.kernel.org, p.zabel@pengutronix.de,
+        rmfrfs@gmail.com, slongerbeam@gmail.com
+Subject: Re: [PATCH] imx7-media-csi: csi2 only
+Message-ID: <YFDzUpzZVrGbM793@pendragon.ideasonboard.com>
+References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
+ <20210316115635.4096574-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210316115635.4096574-1-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All the entities must have a unique name. We can have a descriptive and
-unique name by appending the function and the entity->id.
+Hi Martin,
 
-This is even resilent to multi chain devices.
+On Tue, Mar 16, 2021 at 12:56:35PM +0100, Martin Kepplinger wrote:
+> ---
+> 
+> hi Laurent,
+> 
+> thanks a lot for posting this series!
+> 
+> First: I only test imx7-media-csi (csi bridge) because I run it on imx8mq.
+> overall, I'm very happy with all of this and I get the same image out
+> of it as I get with the mx6s_capture nxp driver.
 
-Fixes v4l2-compliance:
-Media Controller ioctls:
-                fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-        test MEDIA_IOC_G_TOPOLOGY: FAIL
-                fail: v4l2-test-media.cpp(394): num_data_links != num_links
-	test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+That's good news :-)
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/usb/uvc/uvc_driver.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> one issue I have is with is_csi2, so I post this patch that I need in
+> order to test. It's obviously no solution, just to describe the issue:
+> 
+> I'm not sure why but imx7_csi_pad_link_validate() isn't called in my case
+> and is_csi2 doesn't get set, so I force it. Would it make sense to make
+> a dts property for this?
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 35873cf2773d..76ab6acecbc9 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2163,6 +2163,7 @@ int uvc_register_video_device(struct uvc_device *dev,
- 			      const struct v4l2_ioctl_ops *ioctl_ops)
- {
- 	int ret;
-+	const char *name;
- 
- 	/* Initialize the video buffers queue. */
- 	ret = uvc_queue_init(queue, type, !uvc_no_drop_param);
-@@ -2190,16 +2191,20 @@ int uvc_register_video_device(struct uvc_device *dev,
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
- 	default:
- 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+		name = "Video Capture";
- 		break;
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
- 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-+		name = "Video Output";
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
-+		name = "Metadata";
- 		break;
- 	}
- 
--	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
-+		 stream->header.bTerminalLink);
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
+Some platforms support both parallel and CSI-2 inputs, so we can't
+hardcode which one is used in DT. I'd advise trying to debug why the
+function is never called in your case, it's meant to be called with the
+following call stack
+
+- imx7_csi_pad_link_validate() (through v4l2_subdev_pad_ops.link_validate)
+- v4l2_subdev_link_validate() (through media_entity_operations.link_validate)
+- __media_pipeline_start()
+- imx_media_pipeline_set_stream()
+- capture_start_streaming()
+- ...
+
+> The other thing is that
+> v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=0
+> doesn't call the sensor drivers' set_fmt() pad function. That means that
+> only the one mode I hard-code as default will work. instead I just see this:
+
+That's expected. With a driver based on the media controller API, you
+have to configure the format on each subdev manually. You can use the
+media-ctl utility for that. The video node is only used to control the
+DMA engine, the kernel driver doesn't propagate the configuration to
+subdevices.
+
+> [  742.977677] imx7-csi 30a90000.csi1_bridge: begin graph walk at 'csi capture'
+> [  742.977702] imx7-csi 30a90000.csi1_bridge: walk: pushing 'csi' on stack
+> [  742.977709] imx7-csi 30a90000.csi1_bridge: walk: skipping entity 'csi capture' (already seen)
+> [  742.977714] imx7-csi 30a90000.csi1_bridge: walk: returning entity 'csi'
+> [  742.977720] imx7-csi 30a90000.csi1_bridge: walk: returning entity 'csi capture'
+> [  742.977985] imx7-csi 30a90000.csi1_bridge: begin graph walk at 'csi capture'
+> [  742.977992] imx7-csi 30a90000.csi1_bridge: walk: pushing 'csi' on stack
+> [  742.977997] imx7-csi 30a90000.csi1_bridge: walk: skipping entity 'csi capture' (already seen)
+> [  742.978002] imx7-csi 30a90000.csi1_bridge: walk: returning entity 'csi'
+> [  742.978008] imx7-csi 30a90000.csi1_bridge: walk: returning entity 'csi capture'
+> [  742.978025] mc: media_release: Media Release
+> 
+> Does anything come to your mind that would prevent the set_fmt call here?
+> That's what the (nxp) mipi driver looks like I'm running here:
+> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.12-rc3/librem5__integration_byzantium/drivers/media/platform/imx8/mxc-mipi-csi2_yav.c
+> 
+>  drivers/staging/media/imx/imx7-media-csi.c | 135 +++++++++------------
+>  1 file changed, 60 insertions(+), 75 deletions(-)
+> 
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 56b92ba97d25..95c359019725 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -435,82 +435,67 @@ static void imx7_csi_configure(struct imx7_csi *csi)
+>  		stride = out_pix->width;
+>  	}
+>  
+> -	if (!csi->is_csi2) {
+> -		dev_dbg(csi->dev, "%s: NOT is_csi2\n", __func__);
+> -		cr1 = BIT_SOF_POL | BIT_REDGE | BIT_GCLK_MODE | BIT_HSYNC_POL
+> -		    | BIT_FCC | BIT_MCLKDIV(1) | BIT_MCLKEN;
+> -
+> -		cr18 |= BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
+> -			BIT_BASEADDR_CHG_ERR_EN;
+> -
+> -		if (out_pix->pixelformat == V4L2_PIX_FMT_UYVY ||
+> -		    out_pix->pixelformat == V4L2_PIX_FMT_YUYV)
+> -			width *= 2;
+> -	} else {
+> -		dev_dbg(csi->dev, "%s: is_csi2\n", __func__);
+> -
+> -		cr1 = BIT_SOF_POL | BIT_REDGE | BIT_HSYNC_POL | BIT_FCC
+> -		    | BIT_MCLKDIV(1) | BIT_MCLKEN;
+> -
+> -		cr18 |= BIT_DATA_FROM_MIPI;
+> -
+> -		switch (csi->format_mbus[IMX7_CSI_PAD_SINK].code) {
+> -		case MEDIA_BUS_FMT_Y8_1X8:
+> -		case MEDIA_BUS_FMT_SBGGR8_1X8:
+> -		case MEDIA_BUS_FMT_SGBRG8_1X8:
+> -		case MEDIA_BUS_FMT_SGRBG8_1X8:
+> -		case MEDIA_BUS_FMT_SRGGB8_1X8:
+> -			cr18 |= BIT_MIPI_DATA_FORMAT_RAW8;
+> -			break;
+> -		case MEDIA_BUS_FMT_Y10_1X10:
+> -		case MEDIA_BUS_FMT_SBGGR10_1X10:
+> -		case MEDIA_BUS_FMT_SGBRG10_1X10:
+> -		case MEDIA_BUS_FMT_SGRBG10_1X10:
+> -		case MEDIA_BUS_FMT_SRGGB10_1X10:
+> -			dev_dbg(csi->dev, "%s: RAW10\n", __func__);
+> -			cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
+> -			break;
+> -		case MEDIA_BUS_FMT_Y12_1X12:
+> -		case MEDIA_BUS_FMT_SBGGR12_1X12:
+> -		case MEDIA_BUS_FMT_SGBRG12_1X12:
+> -		case MEDIA_BUS_FMT_SGRBG12_1X12:
+> -		case MEDIA_BUS_FMT_SRGGB12_1X12:
+> -			cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
+> -			break;
+> -		case MEDIA_BUS_FMT_Y14_1X14:
+> -		case MEDIA_BUS_FMT_SBGGR14_1X14:
+> -		case MEDIA_BUS_FMT_SGBRG14_1X14:
+> -		case MEDIA_BUS_FMT_SGRBG14_1X14:
+> -		case MEDIA_BUS_FMT_SRGGB14_1X14:
+> -			cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
+> -			break;
+> -		/*
+> -		 * CSI-2 sources are supposed to use the 1X16 formats, but not
+> -		 * all of them comply. Support both variants.
+> -		 */
+> -		case MEDIA_BUS_FMT_UYVY8_2X8:
+> -		case MEDIA_BUS_FMT_UYVY8_1X16:
+> -		case MEDIA_BUS_FMT_YUYV8_2X8:
+> -		case MEDIA_BUS_FMT_YUYV8_1X16:
+> -			cr18 |= BIT_MIPI_DATA_FORMAT_YUV422_8B;
+> -			break;
+> -		}
+> +	cr1 = BIT_SOF_POL | BIT_REDGE | BIT_HSYNC_POL | BIT_FCC
+> +	    | BIT_MCLKDIV(1) | BIT_MCLKEN;
+> +
+> +	cr18 |= BIT_DATA_FROM_MIPI;
+> +
+> +	switch (csi->format_mbus[IMX7_CSI_PAD_SINK].code) {
+> +	case MEDIA_BUS_FMT_Y8_1X8:
+> +	case MEDIA_BUS_FMT_SBGGR8_1X8:
+> +	case MEDIA_BUS_FMT_SGBRG8_1X8:
+> +	case MEDIA_BUS_FMT_SGRBG8_1X8:
+> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
+> +		cr18 |= BIT_MIPI_DATA_FORMAT_RAW8;
+> +		break;
+> +	case MEDIA_BUS_FMT_Y10_1X10:
+> +	case MEDIA_BUS_FMT_SBGGR10_1X10:
+> +	case MEDIA_BUS_FMT_SGBRG10_1X10:
+> +	case MEDIA_BUS_FMT_SGRBG10_1X10:
+> +	case MEDIA_BUS_FMT_SRGGB10_1X10:
+> +		dev_dbg(csi->dev, "%s: RAW10\n", __func__);
+> +		cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
+> +		break;
+> +	case MEDIA_BUS_FMT_Y12_1X12:
+> +	case MEDIA_BUS_FMT_SBGGR12_1X12:
+> +	case MEDIA_BUS_FMT_SGBRG12_1X12:
+> +	case MEDIA_BUS_FMT_SGRBG12_1X12:
+> +	case MEDIA_BUS_FMT_SRGGB12_1X12:
+> +		cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
+> +		break;
+> +	case MEDIA_BUS_FMT_Y14_1X14:
+> +	case MEDIA_BUS_FMT_SBGGR14_1X14:
+> +	case MEDIA_BUS_FMT_SGBRG14_1X14:
+> +	case MEDIA_BUS_FMT_SGRBG14_1X14:
+> +	case MEDIA_BUS_FMT_SRGGB14_1X14:
+> +		cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
+> +		break;
+> +	/*
+> +	 * CSI-2 sources are supposed to use the 1X16 formats, but not
+> +	 * all of them comply. Support both variants.
+> +	 */
+> +	case MEDIA_BUS_FMT_UYVY8_2X8:
+> +	case MEDIA_BUS_FMT_UYVY8_1X16:
+> +	case MEDIA_BUS_FMT_YUYV8_2X8:
+> +	case MEDIA_BUS_FMT_YUYV8_1X16:
+> +		cr18 |= BIT_MIPI_DATA_FORMAT_YUV422_8B;
+> +		break;
+> +	}
+>  
+> -		switch (out_pix->pixelformat) {
+> -		case V4L2_PIX_FMT_Y10:
+> -		case V4L2_PIX_FMT_Y12:
+> -		case V4L2_PIX_FMT_SBGGR8:
+> -		case V4L2_PIX_FMT_SGBRG8:
+> -		case V4L2_PIX_FMT_SGRBG8:
+> -		case V4L2_PIX_FMT_SRGGB8:
+> -		case V4L2_PIX_FMT_SBGGR16:
+> -		case V4L2_PIX_FMT_SGBRG16:
+> -		case V4L2_PIX_FMT_SGRBG16:
+> -		case V4L2_PIX_FMT_SRGGB16:
+> -			dev_dbg(csi->dev, "%s: PIXEL_BIT\n", __func__);
+> -			cr1 |= BIT_PIXEL_BIT;
+> -			break;
+> -		}
+> +	switch (out_pix->pixelformat) {
+> +	case V4L2_PIX_FMT_Y10:
+> +	case V4L2_PIX_FMT_Y12:
+> +	case V4L2_PIX_FMT_SBGGR8:
+> +	case V4L2_PIX_FMT_SGBRG8:
+> +	case V4L2_PIX_FMT_SGRBG8:
+> +	case V4L2_PIX_FMT_SRGGB8:
+> +	case V4L2_PIX_FMT_SBGGR16:
+> +	case V4L2_PIX_FMT_SGBRG16:
+> +	case V4L2_PIX_FMT_SGRBG16:
+> +	case V4L2_PIX_FMT_SRGGB16:
+> +		dev_dbg(csi->dev, "%s: PIXEL_BIT\n", __func__);
+> +		cr1 |= BIT_PIXEL_BIT;
+> +		break;
+>  	}
+>  
+>  	imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
+
 -- 
-2.31.0.rc2.261.g7f71774620-goog
+Regards,
 
+Laurent Pinchart
