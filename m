@@ -2,256 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ACBCC433E0
-	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 16:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6692EC433E6
+	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 17:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4754865111
-	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 16:56:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 425276512F
+	for <linux-media@archiver.kernel.org>; Tue, 16 Mar 2021 17:21:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbhCPQzh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Mar 2021 12:55:37 -0400
-Received: from jpvw.nl ([80.127.100.2]:60610 "EHLO jpvw.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236463AbhCPQzG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Mar 2021 12:55:06 -0400
-Received: from [127.0.0.1] (helo=jpvw.nl)
-        by jpvw.nl with esmtp (Exim 4.94)
-        (envelope-from <jp@jpvw.nl>)
-        id 1lMCyG-000GXt-NP; Tue, 16 Mar 2021 17:55:04 +0100
-Subject: Re: [PATCH] Backport MYGICA T230A adapter
-To:     Vincent Fortier <th0ma7@gmail.com>, linux-media@vger.kernel.org
-References: <e57634b4-b6f3-fcbd-2e43-cfed3a429918@gmail.com>
-From:   JP <jp@jpvw.nl>
-Message-ID: <f62ab424-7dc6-ee57-d098-fb5008c33cef@jpvw.nl>
-Date:   Tue, 16 Mar 2021 17:55:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S238777AbhCPRUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Mar 2021 13:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238782AbhCPRUJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:20:09 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FDCC0613D7
+        for <linux-media@vger.kernel.org>; Tue, 16 Mar 2021 10:20:08 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ci14so73317183ejc.7
+        for <linux-media@vger.kernel.org>; Tue, 16 Mar 2021 10:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=b2Yxcn9pIayZrG5IbORXfcFifUWLDIXNoqZkK9xbrmo=;
+        b=Rkm6MKZcVytPjrLJ6z6n4fqg1Je9JRLtajs8uQHdKyurfUT+udf94hdM/AeP+4J2tC
+         BeXQSmg2kh7fDTBp5BkopuDNPLtUiMxk8/yeC2gaBWHZjQx09n2Nv1elTjTZitE7siUx
+         Oh3GgbGc74MeGZYh90IsmSlQwyMLm+chfzyRvdF5ZBFY6O0yy5zcbYFySCxfPbFiOWrx
+         XRBVIcd83ykdpKEOa427BKcr5Zyfyhk8CUAatjbF5f+xr9p7F+CJwBkyux8wKFBfoHmP
+         zIBHjE/h5oxUv/ggUFvBKI1bcXlghssP8YajK3VrBHGR61Ndhbg2Rb7rKZFF940ye7vs
+         K60w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=b2Yxcn9pIayZrG5IbORXfcFifUWLDIXNoqZkK9xbrmo=;
+        b=N88EJ5FgzbNdTRGw1WNRCC8CUf6szDnhSJtsomgNxCIcJTNgQ91i4OzMmAwbUTuwwl
+         m9SAYiortTyfKQ73fPsFaIO0x7NdpiVDhJpyRUfvgIqeB7uSK1O7ADlGW2dvA/Zt2yjV
+         FO/ysWmGDZ1ScpEYP7dVTUal6os1TkPICHM6G8fogPzZ7lD28tWryILVoMEViExmyBYJ
+         VOBdCsT6hcx3jC88UJkfgaiwF3LQHz5GxgwCn8hXnzRwB++z3Uob9Sq4Q6LRMneIGaFQ
+         MW5rk0um3ITTYaNkz55vbnjSP6g4XbDGIghqqrfYuuLuqO2ZPr8l6/LMn7rWe7X3uQ92
+         GQSA==
+X-Gm-Message-State: AOAM530ioh2mfwS7adsIUswfDhlmoqVS0rnuCeaORmrVWt7FS6XMP8lc
+        YaJQYHIJ7lGDAKQ4Hy8kVxotpg==
+X-Google-Smtp-Source: ABdhPJxbpOBrnF7xZ8Xw5p13WWrU0ejEI8V9oBAS0uu/QVHWeQQrSHUXBvFxHhf+CurDO4gehB8HFQ==
+X-Received: by 2002:a17:906:5607:: with SMTP id f7mr30097440ejq.262.1615915207159;
+        Tue, 16 Mar 2021 10:20:07 -0700 (PDT)
+Received: from localhost.localdomain ([37.120.1.234])
+        by smtp.gmail.com with ESMTPSA id u1sm10571584edv.90.2021.03.16.10.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:20:06 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, mchehab@kernel.org, robh+dt@kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Rob Herring <robh@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
+        Azam Sadiq Pasha Kapatrala Syed <akapatra@quicinc.com>,
+        Sarvesh Sridutt <Sarvesh.Sridutt@smartwirelesscompute.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonathan Marek <jonathan@marek.ca>
+Subject: [PATCH v9 01/22] media: camss: Fix vfe_isr_comp_done() documentation
+Date:   Tue, 16 Mar 2021 18:19:10 +0100
+Message-Id: <20210316171931.812748-2-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210316171931.812748-1-robert.foss@linaro.org>
+References: <20210316171931.812748-1-robert.foss@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <e57634b4-b6f3-fcbd-2e43-cfed3a429918@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Vincent.
+Function name in comment is wrong, and was changed to be
+the same as the actual function name.
 
-On 3/13/21 1:36 PM, Vincent Fortier wrote:
-> Hi all,
->
-> (first patch posting so don't hesitate to let me know where to find 
-> additional info to improve next time)
+The comment was changed to kerneldoc format.
 
-My advice is to do this on newer kernel. 
-https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.11.6.tar.xz
-So we can share it with the world.
-I have all T230* receivers, so i can test t230a and also if it doesn't 
-break the others.
-
-Cheers,
-
-Jan Pieter.
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+---
 
 
-> The following patch is a manual backport based on crazycat69 / 
-> linux_media git repository:
->
-> https://github.com/crazycat69/linux_media/commit/e1ef47d604775c550a8f0d1bda276c113f882c9b?branch=e1ef47d604775c550a8f0d1bda276c113f882c9b&diff=unified 
->
->
->
-> MYGICA T230A support was found on the following thread:
-> https://forum.libreelec.tv/thread/23142-mygica-t230a/?pageNo=2
->
-> Built successfully over commit 
-> 069192365e2cec8b47f6e6701fb2aa50f763c602 (March 9th) on media_build 
-> git tree with driver snapshot from 2021-03-07-1c5ab1e2286f over 
-> Synology 4.4.59 / 4.4.60 kernels. Also built successfully over 
-> 3.10.105 using latest compatible snapshot from 2021-01-13 using driver 
-> version 2021-01-08-321af22a3d2f (as sadly pre-4.4 support was removed 
-> recently).
->
-> User thread confirming it to work under Synology NAS under 4.4.59 
-> kernel available here:
->
-> https://github.com/th0ma7/synology/issues/9
->
-> Much thnx in advance.
->
-> - vin
->
-> ---
->
-> diff -uprN ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
-> ./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c
-> --- ../linuxtv.orig/linux/drivers/media/usb/dvb-usb-v2/dvbsky.c 
-> 2020-11-06 05:40:16.000000000 +0000
-> +++ ./linux/drivers/media/usb/dvb-usb-v2/dvbsky.c    2021-02-19 
-> 14:31:34.405091839 +0000
-> @@ -529,7 +529,7 @@ static int dvbsky_t330_attach(struct dvb
->      return 0;
->  }
->
-> -static int dvbsky_mygica_t230c_attach(struct dvb_usb_adapter *adap)
-> +static int dvbsky_mygica_t230_attach(struct dvb_usb_adapter *adap)
->  {
->      struct dvbsky_state *state = adap_to_priv(adap);
->      struct dvb_usb_device *d = adap_to_d(adap);
-> @@ -541,7 +541,9 @@ static int dvbsky_mygica_t230c_attach(st
->      si2168_config.i2c_adapter = &i2c_adapter;
->      si2168_config.fe = &adap->fe[0];
->      si2168_config.ts_mode = SI2168_TS_PARALLEL;
-> -    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230C2)
-> +    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230C2 ||
-> +        le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230C2_LITE ||
-> +        le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230A)
->          si2168_config.ts_mode |= SI2168_TS_CLK_MANUAL;
->      si2168_config.ts_clock_inv = 1;
->
-> @@ -553,19 +555,26 @@ static int dvbsky_mygica_t230c_attach(st
->
->      /* attach tuner */
->      si2157_config.fe = adap->fe[0];
-> -    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230) {
-> -        si2157_config.if_port = 1;
-> -        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
-> +    switch (le16_to_cpu(d->udev->descriptor.idProduct)) {
-> +    case USB_PID_MYGICA_T230C:
-> +    case USB_PID_MYGICA_T230C2:
-> +    case USB_PID_MYGICA_T230C2_LITE:
-> +    case USB_PID_MYGICA_T230A: {
-> +        si2157_config.if_port = 0;
-> +        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
->                                 i2c_adapter,
->                                 0x60,
->                                 &si2157_config);
-> -    } else {
-> -        si2157_config.if_port = 0;
-> -        state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
-> +        break;
-> +    }
-> +    default: {
-> +        si2157_config.if_port = 1;
-> +        state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
->                                 i2c_adapter,
->                                 0x60,
->                                 &si2157_config);
->      }
-> +    }
->      if (!state->i2c_client_tuner) {
->          dvb_module_release(state->i2c_client_demod);
->          return -ENODEV;
-> @@ -577,14 +586,24 @@ static int dvbsky_mygica_t230c_attach(st
->
->  static int dvbsky_identify_state(struct dvb_usb_device *d, const char 
-> **name)
->  {
-> -    dvbsky_gpio_ctrl(d, 0x04, 1);
-> -    msleep(20);
-> -    dvbsky_gpio_ctrl(d, 0x83, 0);
-> -    dvbsky_gpio_ctrl(d, 0xc0, 1);
-> -    msleep(100);
-> -    dvbsky_gpio_ctrl(d, 0x83, 1);
-> -    dvbsky_gpio_ctrl(d, 0xc0, 0);
-> -    msleep(50);
-> +    if (le16_to_cpu(d->udev->descriptor.idProduct) == 
-> USB_PID_MYGICA_T230A) {
-> +        dvbsky_gpio_ctrl(d, 0x87, 0);
-> +        msleep(20);
-> +        dvbsky_gpio_ctrl(d, 0x86, 1);
-> +        dvbsky_gpio_ctrl(d, 0x80, 0);
-> +        msleep(100);
-> +        dvbsky_gpio_ctrl(d, 0x80, 1);
-> +        msleep(50);
-> +    } else {
-> +        dvbsky_gpio_ctrl(d, 0x04, 1);
-> +        msleep(20);
-> +        dvbsky_gpio_ctrl(d, 0x83, 0);
-> +        dvbsky_gpio_ctrl(d, 0xc0, 1);
-> +        msleep(100);
-> +        dvbsky_gpio_ctrl(d, 0x83, 1);
-> +        dvbsky_gpio_ctrl(d, 0xc0, 0);
-> +        msleep(50);
-> +    }
->
->      return WARM;
->  }
-> @@ -719,7 +738,7 @@ static struct dvb_usb_device_properties
->      }
->  };
->
-> -static struct dvb_usb_device_properties mygica_t230c_props = {
-> +static struct dvb_usb_device_properties mygica_t230_props = {
->      .driver_name = KBUILD_MODNAME,
->      .owner = THIS_MODULE,
->      .adapter_nr = adapter_nr,
-> @@ -730,7 +749,7 @@ static struct dvb_usb_device_properties
->      .generic_bulk_ctrl_delay = DVBSKY_MSG_DELAY,
->
->      .i2c_algo         = &dvbsky_i2c_algo,
-> -    .frontend_attach  = dvbsky_mygica_t230c_attach,
-> +    .frontend_attach  = dvbsky_mygica_t230_attach,
->      .frontend_detach  = dvbsky_frontend_detach,
->      .init             = dvbsky_init,
->      .get_rc_config    = dvbsky_get_rc_config,
-> @@ -778,16 +797,22 @@ static const struct usb_device_id dvbsky
->          &dvbsky_s960_props, "Terratec Cinergy S2 Rev.4",
->          RC_MAP_DVBSKY) },
->      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230,
-> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
-> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230",
->          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
->      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C,
-> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
-> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C",
->          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
->      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C_LITE,
-> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick 
-> T230C Lite",
-> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
-> Lite",
->          NULL) },
->      { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2,
-> -        &mygica_t230c_props, "MyGica Mini DVB-(T/T2/C) USB Stick 
-> T230C v2",
-> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230C 
-> v2",
-> +        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
-> +     { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2_LITE,
-> +        &mygica_t230_props, "MyGica Mini DVB-T2 USB Stick T230C Lite 
-> v2",
-> +        RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
-> +    { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230A,
-> +        &mygica_t230_props, "MyGica Mini DVB-(T/T2/C) USB Stick T230A",
->          RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
->      { }
->  };
-> diff -uprN ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 
-> ./linux/include/media/dvb-usb-ids.h
-> --- ../linuxtv.orig/linux/include/media/dvb-usb-ids.h 2020-05-26 
-> 05:40:21.000000000 +0000
-> +++ ./linux/include/media/dvb-usb-ids.h    2021-02-19 
-> 14:27:21.459391941 +0000
-> @@ -394,6 +394,8 @@
->  #define USB_PID_MYGICA_T230C                0xc689
->  #define USB_PID_MYGICA_T230C2                0xc68a
->  #define USB_PID_MYGICA_T230C_LITE            0xc699
-> +#define USB_PID_MYGICA_T230C2_LITE            0xc69a
-> +#define USB_PID_MYGICA_T230A                0x689a
->  #define USB_PID_ELGATO_EYETV_DIVERSITY            0x0011
->  #define USB_PID_ELGATO_EYETV_DTT            0x0021
->  #define USB_PID_ELGATO_EYETV_DTT_2            0x003f
->
->
+Changes since v1:
+ - Bjorn: Fix function doc name & use kerneldoc format
+
+Changes since v5:
+ - Nicolas: Fixed typo in commit message
+ - Andrey: Added r-b
+
+
+
+ drivers/media/platform/qcom/camss/camss-vfe.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index b2c95b46ce66..f50e08c4fd11 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1076,8 +1076,8 @@ static void vfe_isr_wm_done(struct vfe_device *vfe, u8 wm)
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+ }
+ 
+-/*
+- * vfe_isr_wm_done - Process composite image done interrupt
++/**
++ * vfe_isr_comp_done() - Process composite image done interrupt
+  * @vfe: VFE Device
+  * @comp: Composite image id
+  */
+-- 
+2.27.0
 
