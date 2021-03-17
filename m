@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C66DBC433E9
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 621D5C43332
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97D3E64F6C
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06C4D64F8F
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbhCQQpk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 12:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S232759AbhCQQpm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 12:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbhCQQpX (ORCPT
+        with ESMTP id S232674AbhCQQpY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:45:23 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C94C061760
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:23 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id u4so3075539edv.9
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:23 -0700 (PDT)
+        Wed, 17 Mar 2021 12:45:24 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3790FC061762
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:24 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h13so3087091eds.5
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LCfiO2M8eBv1nSfw6SX3LELyYme5LYmWED/jUeSNqLo=;
-        b=XiofJ4gOsO7WAp+jv8oHLjsQ8od5HRXQfPGgLrEunER+Bt1XtcgiH1nM+oUWKvYWS9
-         049HI5zEij5AS8++RWPc160JBbLeHoamnw0YJx43WQkUr0v6x8guSq4dItZvNGP7EIXe
-         XySuQwiBx+9e6CqnMsib+HQHE17noLBFTUIQM=
+        bh=zzWqp0WN2nki1gnKBZEBHM2Y+fAhcmJ2cklaVIUVHHk=;
+        b=jCZ5yBWrf/15BVC3QBvi+yHBT+mctWgN/yLXkNqzxA/ZaCtBjZDh2ihaCM8Avei3Du
+         7WiXuJ41D8WJ8ZySqeSLaJTskKEwImE1S+la18OIrT82UNizQaxde+tjAr8C6va/BbZu
+         B6Np+uUCWsmogWRT841p23uPhlcxv3EdGC840=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LCfiO2M8eBv1nSfw6SX3LELyYme5LYmWED/jUeSNqLo=;
-        b=D1Gajamb5afz1lHcFU7Gj9vgceydDPJ38lMVWxqsnq/DwKTs30on7AlX5FVH9r2VKb
-         hmdeih2jBygS0I65OSd5he1eDgDxVGXdt4SIjK3ihurljA5awl7AedMR4qGgpN8YJqWR
-         +74+MEQrwv9ZjFrOOX9WbCvS7ZSi9N8pnhfjjssEajSa+UyT08P7UeV4SGNr6oUq+xis
-         5J7w4d2b/xkGlPagj6hDigD3oAtPwnRsT7cprzBkFJYFBWjBRxXPWjMFHbNl8PAEM57v
-         drtd4AixsNvMea83IU2+KgPkDPHV5TVByjoB+hg7nMQ4KWZ17NB4ZH9CrrOK5LVSY8Dx
-         AzIg==
-X-Gm-Message-State: AOAM5336q9IsTrrDti7Bqoioi642Q5pkp14omuxPXcOjui8ASEfA5pfz
-        bL+ATbcSIYDPe3hCRhsZvlTnAg==
-X-Google-Smtp-Source: ABdhPJyr4+FDQhdh89BUmzSIjsRGqspGifOq9EFk98mTWNY5QzdbOWU/MzX74WAMHruIcCQ1orU0Hg==
-X-Received: by 2002:a05:6402:142:: with SMTP id s2mr42955620edu.2.1615999522029;
-        Wed, 17 Mar 2021 09:45:22 -0700 (PDT)
+        bh=zzWqp0WN2nki1gnKBZEBHM2Y+fAhcmJ2cklaVIUVHHk=;
+        b=HaZbgIhXQ8isOSMV/+DGtInUEbXg6sNEyK5Hlr/d0anOHrgMnhTwp+JmajLWDcccix
+         x6KCg23LdUwlitEZvjjRkCdERL2MDZGm21l4kV4f2T3QE/g9DJrEjQb/aD0VY/xufwZn
+         cMs3dJh2VM4X3KszBHu4NdbyPG9crWZ2iGGruIbrwUQRI4o7TDw09nf7vMECsi5Km1lS
+         TX8DbTFi1LotCKkqGk1r0+d0q1tY8LW9OXri2IpOBZmYOfG7E4264fnjjTCPJNHRYHVg
+         jKsws3iIZi9Wz/m2Utwdtvv2brHDK1cvU4CuROhvSKQvNIVlHqgr8hkpJmCwol4uGAe4
+         F5Rw==
+X-Gm-Message-State: AOAM532WAY3PxpY/lhVszjcgU86/nvbAzSwNjwzQhatKREmyYNOyu/Kz
+        wEuO+86Yg9CH/vwAbm/4Gh6OMg==
+X-Google-Smtp-Source: ABdhPJyAbW9e9NiKBIF1Gc0436+Sk9LhlhNJ36dvUzgve/1Tk8iY5vbVc0WfU3w7sCgWuEk0ohDPog==
+X-Received: by 2002:a05:6402:2076:: with SMTP id bd22mr42820575edb.378.1615999523005;
+        Wed, 17 Mar 2021 09:45:23 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.21
+        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 09:45:21 -0700 (PDT)
+        Wed, 17 Mar 2021 09:45:22 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 13/17] media: uvcvideo: Increase the size of UVC_METADATA_BUF_SIZE
-Date:   Wed, 17 Mar 2021 17:45:07 +0100
-Message-Id: <20210317164511.39967-14-ribalda@chromium.org>
+Subject: [PATCH v6 15/17] media: uvcvideo: Check controls flags before accessing them
+Date:   Wed, 17 Mar 2021 17:45:09 +0100
+Message-Id: <20210317164511.39967-16-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
 In-Reply-To: <20210317164511.39967-1-ribalda@chromium.org>
 References: <20210317164511.39967-1-ribalda@chromium.org>
@@ -73,55 +73,169 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hans has discovered that in his test device, for the H264 format
-bytesused goes up to about 570, for YUYV it will actually go up
-to a bit over 5000 bytes, and for MJPG up to about 2706 bytes.
+We can figure out if reading/writing a set of controls can fail without
+accessing them by checking their flags.
 
-We should also, according to V4L2_META_FMT_UVC docs, drop headers when
-the buffer is full.
+This way we can honor the API closer:
 
-Credit-to: Hans Verkuil <hverkuil@xs4all.nl>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+If an error is found when validating the list of controls passed with
+VIDIOC_G_EXT_CTRLS, then error_idx shall be set to ctrls->count to
+indicate to userspace that no actual hardware was touched.
+
+Fixes v4l2-compliance:
+Control ioctls (Input 0):
+		warn: v4l2-test-controls.cpp(765): g_ext_ctrls(0) invalid error_idx 0
+                fail: v4l2-test-controls.cpp(645): invalid error index write only control
+        test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 8 +++++---
- drivers/media/usb/uvc/uvcvideo.h  | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c | 21 +++++++++++++++++
+ drivers/media/usb/uvc/uvc_v4l2.c | 39 ++++++++++++++++++++++++++++----
+ drivers/media/usb/uvc/uvcvideo.h |  1 +
+ 3 files changed, 56 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 25fd8aa23529..ea2903dc3252 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1244,11 +1244,13 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
- 	if (!meta_buf || length == 2)
- 		return;
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 929e70dff11a..af1d4d9b8afb 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1046,6 +1046,27 @@ static int uvc_query_v4l2_class(struct uvc_video_chain *chain, u32 req_id,
+ 	return 0;
+ }
  
-+	/*
-+	 * According to V4L2_META_FMT_UVC docs, we should drop headers when
-+	 * the buffer is full.
-+	 */
- 	if (meta_buf->length - meta_buf->bytesused <
--	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
--		meta_buf->error = 1;
-+	    length + sizeof(meta->ns) + sizeof(meta->sof))
- 		return;
--	}
++int uvc_ctrl_is_accesible(struct uvc_video_chain *chain, u32 v4l2_id, bool read)
++{
++	struct uvc_control_mapping *mapping;
++	struct uvc_control *ctrl;
++
++	if (__uvc_query_v4l2_class(chain, v4l2_id, 0) >= 0)
++		return -EACCES;
++
++	ctrl = uvc_find_control(chain, v4l2_id, &mapping);
++	if (!ctrl)
++		return -EINVAL;
++
++	if (!(ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) && read)
++		return -EACCES;
++
++	if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) && !read)
++		return -EACCES;
++
++	return 0;
++}
++
+ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
+ {
+ 	const char *name;
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index ed262f61e6a6..ce55b4bff687 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -1045,6 +1045,26 @@ static int uvc_ioctl_s_ctrl(struct file *file, void *fh,
+ 	return 0;
+ }
  
- 	has_pts = mem[1] & UVC_STREAM_PTS;
- 	has_scr = mem[1] & UVC_STREAM_SCR;
++static int uvc_ctrl_check_access(struct uvc_video_chain *chain,
++				 struct v4l2_ext_controls *ctrls,
++				 unsigned long ioctl)
++{
++	struct v4l2_ext_control *ctrl = ctrls->controls;
++	unsigned int i;
++	int ret = 0;
++
++	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
++		ret = uvc_ctrl_is_accesible(chain, ctrl->id,
++					    ioctl == VIDIOC_G_EXT_CTRLS);
++		if (ret)
++			break;
++	}
++
++	ctrls->error_idx = ioctl == VIDIOC_TRY_EXT_CTRLS ? i : ctrls->count;
++
++	return ret;
++}
++
+ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+ 				 struct v4l2_ext_controls *ctrls)
+ {
+@@ -1054,6 +1074,10 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+ 	unsigned int i;
+ 	int ret;
+ 
++	ret = uvc_ctrl_check_access(chain, ctrls, VIDIOC_G_EXT_CTRLS);
++	if (ret < 0)
++		return ret;
++
+ 	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL) {
+ 		for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+ 			struct v4l2_queryctrl qc = { .id = ctrl->id };
+@@ -1090,13 +1114,17 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+ 
+ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+ 				     struct v4l2_ext_controls *ctrls,
+-				     bool commit)
++				     unsigned long ioctl)
+ {
+ 	struct v4l2_ext_control *ctrl = ctrls->controls;
+ 	struct uvc_video_chain *chain = handle->chain;
+ 	unsigned int i;
+ 	int ret;
+ 
++	ret = uvc_ctrl_check_access(chain, ctrls, ioctl);
++	if (ret < 0)
++		return ret;
++
+ 	ret = uvc_ctrl_begin(chain);
+ 	if (ret < 0)
+ 		return ret;
+@@ -1105,14 +1133,15 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+ 		ret = uvc_ctrl_set(handle, ctrl);
+ 		if (ret < 0) {
+ 			uvc_ctrl_rollback(handle);
+-			ctrls->error_idx = commit ? ctrls->count : i;
++			ctrls->error_idx = ioctl == VIDIOC_S_EXT_CTRLS ?
++						    ctrls->count : i;
+ 			return ret;
+ 		}
+ 	}
+ 
+ 	ctrls->error_idx = 0;
+ 
+-	if (commit)
++	if (ioctl == VIDIOC_S_EXT_CTRLS)
+ 		return uvc_ctrl_commit(handle, ctrls->controls, ctrls->count);
+ 	else
+ 		return uvc_ctrl_rollback(handle);
+@@ -1123,7 +1152,7 @@ static int uvc_ioctl_s_ext_ctrls(struct file *file, void *fh,
+ {
+ 	struct uvc_fh *handle = fh;
+ 
+-	return uvc_ioctl_s_try_ext_ctrls(handle, ctrls, true);
++	return uvc_ioctl_s_try_ext_ctrls(handle, ctrls, VIDIOC_S_EXT_CTRLS);
+ }
+ 
+ static int uvc_ioctl_try_ext_ctrls(struct file *file, void *fh,
+@@ -1131,7 +1160,7 @@ static int uvc_ioctl_try_ext_ctrls(struct file *file, void *fh,
+ {
+ 	struct uvc_fh *handle = fh;
+ 
+-	return uvc_ioctl_s_try_ext_ctrls(handle, ctrls, false);
++	return uvc_ioctl_s_try_ext_ctrls(handle, ctrls, VIDIOC_TRY_EXT_CTRLS);
+ }
+ 
+ static int uvc_ioctl_querymenu(struct file *file, void *fh,
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index b81d3f65e52e..a26bbec8d37b 100644
+index dc20021f7ee0..3288b118264e 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -527,7 +527,7 @@ struct uvc_stats_stream {
- 	unsigned int max_sof;		/* Maximum STC.SOF value */
- };
+@@ -902,6 +902,7 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
  
--#define UVC_METADATA_BUF_SIZE 1024
-+#define UVC_METADATA_BUF_SIZE 10240
+ int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
++int uvc_ctrl_is_accesible(struct uvc_video_chain *chain, u32 v4l2_id, bool read);
  
- /**
-  * struct uvc_copy_op: Context structure to schedule asynchronous memcpy
+ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 		      struct uvc_xu_control_query *xqry);
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
