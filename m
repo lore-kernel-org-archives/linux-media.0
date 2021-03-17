@@ -5,54 +5,54 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4A9C43333
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E066C43603
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 758C964F5E
+	by mail.kernel.org (Postfix) with ESMTP id D70EE64F44
 	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbhCQQpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232711AbhCQQpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 17 Mar 2021 12:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbhCQQpR (ORCPT
+        with ESMTP id S232644AbhCQQpT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:45:17 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C31C061763
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:17 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bm21so3699946ejb.4
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:17 -0700 (PDT)
+        Wed, 17 Mar 2021 12:45:19 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0256FC06174A
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:19 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id p7so3699451eju.6
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6LTbHcBkbhI/FZJhKqlMKcO/iXlDKvIfShPxPGQCwfU=;
-        b=h446286+JeMUfkpECC0Dvil4bzsjcvh9X8FbvNusKHX+x97NsTfbYQ1iGb2kmxbXXy
-         UzIQttGHFyOnQouYYkXoFiBlVtCi2qCSB9A2fZ5oy/kzl2KImL2CpEJfOvbrxGOmTcSl
-         frQTa9exOxNrMOk5NXg0141v2ce34vceXqC7c=
+        bh=rJ5EJL/W7wsb3M0P1LQ5UiKCaTfkRQ52nO+/XL2VvZw=;
+        b=X0W44EYgx8AezDHtB76FgGrfbV62VvK7RauGP6H+Sbzm83YV/cdCEigYPuWiaE/gDs
+         bO4dmle5eFCLGlE9uOm3afo5vGgg2uPnKV4D4Jl6BXcgiIqwtlP7gvPq3BrH9nOD4DXS
+         FtkmBbPuXmyQi+h5KhJRxr1/oKZE9QvvEPfEM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6LTbHcBkbhI/FZJhKqlMKcO/iXlDKvIfShPxPGQCwfU=;
-        b=ov0NsyvcVQFVvy6hLCCC4fyANkbYCh/IT55UcwAZZzo0Q4xNpbt+luFORpGPKoB/Tb
-         aKasvU6tkfvWuXuI2w8Y+Ct9KtZ+qH6IbgPKqvHauDc0lOF243WQKylo6vq1LSOauf8o
-         ar1tSfiCfO7PxkJ+mJemYzc+F4TKXRWkNJdcIxEp2+PjUHwU+CtojD7xMmaiGsU/ROFD
-         uz1wGcclPQpLugUeauLUWLIXJnw4AqsPxWXpob1y99/CLmajAxSiYfqmGBrCgzvZoZoj
-         bUCKrDLfAgrnexJv21rON4eIAcCc9eIQegADR9yFoYeKYvYaxc5pscUGDmofoc133/6I
-         /3Xg==
-X-Gm-Message-State: AOAM532Rat6bqu0mnsUlmdEUmicB04hVNlBPtrkElm63Z3Tqu9LaH/7Q
-        DVarFHeJnlOEg/jjDD2KBp1XlQ==
-X-Google-Smtp-Source: ABdhPJz6xT+6FSrpNmMsQ/x+ZrKh5p+Gr3i7+g/+7nwYL130KZTbLH7b9dgxPKD+mX7n3MXSupooYQ==
-X-Received: by 2002:a17:906:5e4a:: with SMTP id b10mr36514341eju.116.1615999515929;
-        Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
+        bh=rJ5EJL/W7wsb3M0P1LQ5UiKCaTfkRQ52nO+/XL2VvZw=;
+        b=JdNwfAq05nqIrYnVT6vQcZ1fF+LQWjFjm7TH6Q8LrqmELJAF8OczF4jp7E2ffsK5bp
+         /gQAxqddFdo17V26mnZjS4Bkrj/cE77teh/SKoCe/SlQoCpO+2wAxomP/e1DN/9b+F4O
+         3RLngV0VGP6P6JUykE+Wvq5WjV3cYphMSD1RBcYwruXU8c+17zl1bxYwYk9KAj8oInt9
+         QiKYLFv8MlRFdWlIxiI6tWabU7y5ukIOt4fqW1zPzm/PL2m8BtfbL+n+I0nY9A0bSI1y
+         5GK1dwSgRnDcVIDEUznpMyJP/ZBtRAEkFPPJdbpY0+Y0opJWqFTxqq27du8RdHSUCpHg
+         ZCwQ==
+X-Gm-Message-State: AOAM5308s6Z+SNPORa2ZmyTV4dMCMq4aWutB48YL+Yv5v/mR06AjP6Yu
+        5NRsnTaelcemcFMteYDkAd5JoA==
+X-Google-Smtp-Source: ABdhPJyZ+tTNXA/xjloRyMYiCx7/4ZA3QpEWeFqogKQep3jqdhmADWE4KsJf3ldZ06hT+7u2VB0Zig==
+X-Received: by 2002:a17:906:f0c8:: with SMTP id dk8mr36730843ejb.300.1615999517821;
+        Wed, 17 Mar 2021 09:45:17 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.15
+        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
+        Wed, 17 Mar 2021 09:45:17 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -60,10 +60,10 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH v6 03/17] media: v4l2-ioctl: check_ext_ctrls: Return the right error_idx
-Date:   Wed, 17 Mar 2021 17:44:57 +0100
-Message-Id: <20210317164511.39967-4-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v6 06/17] media: uvcvideo: Do not check for V4L2_CTRL_WHICH_DEF_VAL
+Date:   Wed, 17 Mar 2021 17:45:00 +0100
+Message-Id: <20210317164511.39967-7-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
 In-Reply-To: <20210317164511.39967-1-ribalda@chromium.org>
 References: <20210317164511.39967-1-ribalda@chromium.org>
@@ -73,50 +73,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drivers that do not use the ctrl-framework use this function instead.
+The framework already checks for us if V4L2_CTRL_WHICH_DEF_VAL is
+written.
 
-- Return the right error_idx
-
-If an error is found when validating the list of controls passed with
-VIDIOC_G_EXT_CTRLS, then error_idx shall be set to ctrls->count to
-indicate to userspace that no actual hardware was touched.
-
-It would have been much nicer of course if error_idx could point to the
-control index that failed the validation, but sadly that's not how the
-API was designed.
-
-Fixes v4l2-compliance:
-Control ioctls (Input 0):
-        warn: v4l2-test-controls.cpp(834): error_idx should be equal to count
-        warn: v4l2-test-controls.cpp(855): error_idx should be equal to count
-
-Cc: stable@vger.kernel.org
-Fixes: 6fa6f831f095 ("media: v4l2-ctrls: add core request support")
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_v4l2.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 76e2e595d88d..528eb5f420f6 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -932,13 +932,14 @@ static bool check_ext_ctrls(struct v4l2_ext_controls *c, unsigned long ioctl)
- 	case V4L2_CTRL_WHICH_CUR_VAL:
- 		return true;
- 	case V4L2_CTRL_WHICH_REQUEST_VAL:
-+		c->error_idx = c->count;
- 		return false;
- 	}
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 252136cc885c..47b0e3224205 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -1089,10 +1089,6 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+ 	unsigned int i;
+ 	int ret;
  
- 	/* Check that all controls are from the same control class. */
- 	for (i = 0; i < c->count; i++) {
- 		if (V4L2_CTRL_ID2WHICH(c->controls[i].id) != c->which) {
--			c->error_idx = i;
-+			c->error_idx = ioctl == VIDIOC_TRY_EXT_CTRLS ? i : c->count;
- 			return false;
- 		}
- 	}
+-	/* Default value cannot be changed */
+-	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL)
+-		return -EINVAL;
+-
+ 	ret = uvc_ctrl_begin(chain);
+ 	if (ret < 0)
+ 		return ret;
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
