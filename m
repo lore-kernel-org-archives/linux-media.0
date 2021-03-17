@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C06EC4332E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E40AC43331
 	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32C6364F97
+	by mail.kernel.org (Postfix) with ESMTP id 54F5F64F70
 	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbhCQQp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 12:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S232257AbhCQQpa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 12:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbhCQQpP (ORCPT
+        with ESMTP id S232580AbhCQQpQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:45:15 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F98BC06174A
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id lr13so3677642ejb.8
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
+        Wed, 17 Mar 2021 12:45:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904BAC06175F
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:16 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id lr13so3677760ejb.8
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h74gqB1Y/vuFqN5JHLgON2tiYeFodPESAJgeCk1Im4Y=;
-        b=gJl4CScQ5xxAjZ0Lb4AmNPPfRO8qaD9IM+FJqk8bYqKI/wFejsVJZX+t40qPurLJAT
-         2xQnYZII69UQ5p541vbJz4b1eQacLcWN+2MEyRBt8Zb12hWk8TEIT+hd+z4yKHDx1qkN
-         qnawKj/X/+WYlzPol61qd40Gm9hJnJKGZo/+Q=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RsUSbbA0uHXEjQnHfQBh5T5niyqZj1SUeATSCdO5Phc=;
+        b=jg6ZPj1GHBpg+UNu/STxxmogka909uzVVaw+ssSVXAdM/KMtvydNTh88SL+rFl8xMH
+         +QfuHHwPAzxYC2YmhThgtl813p63/Ry8nU/UskQir83ZmLPQXxSxACUDnkQC6eMNisRd
+         7QtVD6O7UFXWb4tsFPCVzueoAvMgOwjE9Uowo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h74gqB1Y/vuFqN5JHLgON2tiYeFodPESAJgeCk1Im4Y=;
-        b=GjVj6+t1jaEH58js8vUCmhVGf2AkeHravw4IyaMBv3cfbScO+eaDN4IkAJ/WZ8WfV2
-         bfLqZQsWDGzgLId8odqrcOuYNOx0eqaviNZ73khnjuW0Y8lbheh3RQ41t3MwMIzg2cWP
-         uw0yn0f0N9kPeIl/2KFf6wyrsmC6A0vRbneHlKJsPVIf8HhiSOnFPeXE9H2zTwB8an8E
-         1E/h+yvWPFsC497kohOGBDR8Tm2rL/guxz609i3wstw2WWj9EJxFKFI4vmLr6/uDIAyH
-         ZFXi+OjlDiMtMEIERSGN/NsL7Mmyb8q8j0Q/IdupMG8cc+TL49fDIxxZWDslyS/G0q/B
-         pRgg==
-X-Gm-Message-State: AOAM532fFQAO0I5fHXDnW4MdqbgvDvp/fpAeFOiMWypyp/dnRuLNd04+
-        OUg3BYOvhEUtmNxOr2J8bhoCJA==
-X-Google-Smtp-Source: ABdhPJyBQoQDFZpVtee0bSzCUPuTjmlERyAlp2jaQhvY4r9qfrMCw6x76qu4SBWxcoEVHEz8N2VSyQ==
-X-Received: by 2002:a17:906:f44:: with SMTP id h4mr35540656ejj.204.1615999514036;
-        Wed, 17 Mar 2021 09:45:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RsUSbbA0uHXEjQnHfQBh5T5niyqZj1SUeATSCdO5Phc=;
+        b=NjkV0A3/pbomSAUzF198u/SE1lSX1gUFSmUifD2IzYyTodlA1srOxjXizXGo4v09B0
+         wwf6aThPDYHVYaNI1zRYgE2MWvOfYWTHfkuNk546hsMMKVSsVngB6gDT5cPqkPNaC7AZ
+         0GH0TAVCy9GtjSvrfYjVIVNZCpfT56Bcxic16hPkReLHWHRHEvEWW9PBKwfsBWom+7vJ
+         y3XuTi3jdzSWn3uY01es9Yv/H3L0IhLefljLD3wl0OzxuYlksT0ZSluc0LMWI8/q06N0
+         NMOUsX7KpY69gJaLEOdfwAUEMKuQpg+nrzFKFSRf+oRzfWfrhyJqjmJ/VzXp9ApuhLhD
+         ZUgg==
+X-Gm-Message-State: AOAM531cbEEP3r1iNBJmJ/FoxQ7AjCFneHlXzlPqoVTZbXvfYEBejQNG
+        xYUQhOhHw4yEZoLtppe8vYvtGcEEeceRtN7ufkI=
+X-Google-Smtp-Source: ABdhPJynhE7YLiG6iyloZwjrJRRnijrWnDf9IIf390NyBfGxnbXR6RgActfTxqcn3/4CR4Vnj4aivw==
+X-Received: by 2002:a17:906:fc1c:: with SMTP id ov28mr36496205ejb.342.1615999515294;
+        Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.13
+        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 09:45:13 -0700 (PDT)
+        Wed, 17 Mar 2021 09:45:15 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -60,80 +60,48 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 00/17] uvcvideo: Fix v4l2-compliance errors
-Date:   Wed, 17 Mar 2021 17:44:54 +0100
-Message-Id: <20210317164511.39967-1-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH v6 02/17] media: v4l2-ioctl: check_ext_ctrls: Return -EINVAL on V4L2_CTRL_WHICH_REQUEST_VAL
+Date:   Wed, 17 Mar 2021 17:44:56 +0100
+Message-Id: <20210317164511.39967-3-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+In-Reply-To: <20210317164511.39967-1-ribalda@chromium.org>
+References: <20210317164511.39967-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2-compliance -m /dev/media0 -a -f
-Total for uvcvideo device /dev/media0: 8, Succeeded: 6, Failed: 2, Warnings: 0
-Total for uvcvideo device /dev/video0: 54, Succeeded: 50, Failed: 4, Warnings: 2
-Total for uvcvideo device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-Grand Total for uvcvideo device /dev/media0: 108, Succeeded: 102,
-Failed: 6, Warnings: 2
+Drivers that do not use the ctrl-framework use this function instead.
 
-After fixing all of them we go down to:
+- Return -EINVAL for request_api calls
 
-Total for uvcvideo device /dev/media0: 8, Succeeded: 8, Failed: 0, Warnings: 0
-Total for uvcvideo device /dev/video0: 54, Succeeded: 54, Failed: 0, Warnings: 0
-Total for uvcvideo device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
-Grand Total for uvcvideo device /dev/media0: 108, Succeeded: 108,
-Failed: 0, Warnings: 0
+Fixes v4l2-compliance:
+Buffer ioctls (Input 0):
+		fail: v4l2-test-buffers.cpp(1994): ret != EINVAL && ret != EBADR && ret != ENOTTY
+	test Requests: FAIL
 
-YES, NO MORE WARNINGS :)
+Cc: stable@vger.kernel.org
+Fixes: 6fa6f831f095 ("media: v4l2-ctrls: add core request support")
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Note that we depend on:
-https://patchwork.linuxtv.org/project/linux-media/patch/20210315172531.101694-1-ribalda@chromium.org/
-
-With Hans patch we can also pass v4l2-compliance -s.
-
-Changelog  from v5 (Thanks to Hans)
-- Move more checks to framework
-- Rewrite the framework check_ext_ctrls
-- Rewrite ctrl_is_inactive
-- Add function ctrl_is_accessible
-- Use ioctl name instead of boolean values
-
-Hans Verkuil (1):
-  uvc: use vb2 ioctl and fop helpers
-
-Ricardo Ribalda (16):
-  media: v4l2-ioctl: check_ext_ctrls: Fix multiclass
-    V4L2_CTRL_WHICH_DEF_VAL
-  media: v4l2-ioctl: check_ext_ctrls: Return -EINVAL on
-    V4L2_CTRL_WHICH_REQUEST_VAL
-  media: v4l2-ioctl: check_ext_ctrls: Return the right error_idx
-  media: v4l2-ioctl: check_ext_ctrls: Fix V4L2_CTRL_WHICH_DEF_VAL
-  media: pvrusb2: Do not check for V4L2_CTRL_WHICH_DEF_VAL
-  media: uvcvideo: Do not check for V4L2_CTRL_WHICH_DEF_VAL
-  media: uvcvideo: Set capability in s_param
-  media: uvcvideo: Return -EIO for control errors
-  media: uvcvideo: refactor __uvc_ctrl_add_mapping
-  media: uvcvideo: Add support for V4L2_CTRL_TYPE_CTRL_CLASS
-  media: uvcvideo: Use dev->name for querycap()
-  media: uvcvideo: Set unique vdev name based in type
-  media: uvcvideo: Increase the size of UVC_METADATA_BUF_SIZE
-  media: uvcvideo: Use control names from framework
-  media: uvcvideo: Check controls flags before accessing them
-  media: uvcvideo: Return -EACCES to inactive controls
-
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c |   4 -
- drivers/media/usb/uvc/uvc_ctrl.c         | 284 ++++++++++++++----
- drivers/media/usb/uvc/uvc_driver.c       |  22 +-
- drivers/media/usb/uvc/uvc_metadata.c     |   8 +-
- drivers/media/usb/uvc/uvc_queue.c        | 143 ---------
- drivers/media/usb/uvc/uvc_v4l2.c         | 352 +++++------------------
- drivers/media/usb/uvc/uvc_video.c        |  13 +-
- drivers/media/usb/uvc/uvcvideo.h         |  43 +--
- drivers/media/v4l2-core/v4l2-ioctl.c     |  59 ++--
- 9 files changed, 366 insertions(+), 562 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 403f957a1012..76e2e595d88d 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -931,6 +931,8 @@ static bool check_ext_ctrls(struct v4l2_ext_controls *c, unsigned long ioctl)
+ 	case V4L2_CTRL_WHICH_DEF_VAL:
+ 	case V4L2_CTRL_WHICH_CUR_VAL:
+ 		return true;
++	case V4L2_CTRL_WHICH_REQUEST_VAL:
++		return false;
+ 	}
+ 
+ 	/* Check that all controls are from the same control class. */
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
