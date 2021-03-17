@@ -2,148 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0568AC433E0
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 10:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B01B5C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 10:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BADCE64F5E
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 10:06:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FC0564F6A
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 10:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhCQKGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 06:06:07 -0400
-Received: from a0.mail.mailgun.net ([198.61.254.59]:42297 "EHLO
-        a0.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbhCQKFf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 06:05:35 -0400
-X-Greylist: delayed 340 seconds by postgrey-1.27 at vger.kernel.org; Wed, 17 Mar 2021 06:05:34 EDT
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1615975534; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=B6rCIClG88WIX0070GF43o2RDQ87mELfqaJlTc0lXQU=;
- b=utRPdKdElSH/XPZ3WS7eAq11v6JrHLhzae0PFOTanZKanMyzA+USwY2udVlCJbQwzFcfp06B
- MqYs2t4Ncp7N173k3VR+KfIllkEQKZemYUiEr1xGB/P6a70D8v7pRP/QS5IFPm6SMiP/YvI3
- y8WhyyE7fCm2dzJX9CA9UG/XEfU=
-X-Mailgun-Sending-Ip: 198.61.254.59
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 6051d3175d70193f88901656 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 17 Mar 2021 09:59:51
- GMT
-Sender: dikshita=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B0F56C4346A; Wed, 17 Mar 2021 09:59:50 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: dikshita)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2D661C43463;
-        Wed, 17 Mar 2021 09:59:48 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 17 Mar 2021 15:29:47 +0530
-From:   dikshita@codeaurora.org
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     stanimir.varbanov@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: Re: [PATCH v2 21/25] media: venus: helpers: Add internal buffer list
- for v6
-In-Reply-To: <20210312173039.1387617-22-bryan.odonoghue@linaro.org>
-References: <20210312173039.1387617-1-bryan.odonoghue@linaro.org>
- <20210312173039.1387617-22-bryan.odonoghue@linaro.org>
-Message-ID: <e0fac30ba39f35abff9262fa9538f790@codeaurora.org>
-X-Sender: dikshita@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        id S229545AbhCQKJv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 06:09:51 -0400
+Received: from comms.puri.sm ([159.203.221.185]:43250 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229717AbhCQKJd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Mar 2021 06:09:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id B34FCDF73F;
+        Wed, 17 Mar 2021 03:09:02 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VH9b-7_iegTu; Wed, 17 Mar 2021 03:09:01 -0700 (PDT)
+Message-ID: <9079ec9d39d48acbc3630db079b92dc223d6f1f4.camel@puri.sm>
+Subject: Re: [PATCH] imx7-media-csi: csi2 only
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     ezequiel@collabora.com, festevam@gmail.com,
+        linux-media@vger.kernel.org, p.zabel@pengutronix.de,
+        rmfrfs@gmail.com, slongerbeam@gmail.com
+Date:   Wed, 17 Mar 2021 11:08:57 +0100
+In-Reply-To: <YFDzUpzZVrGbM793@pendragon.ideasonboard.com>
+References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
+         <20210316115635.4096574-1-martin.kepplinger@puri.sm>
+         <YFDzUpzZVrGbM793@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2021-03-12 23:00, Bryan O'Donoghue wrote:
-> From: Dikshita Agarwal <dikshita@codeaurora.org>
+Am Dienstag, dem 16.03.2021 um 20:05 +0200 schrieb Laurent Pinchart:
+> Hi Martin,
 > 
-> - Internal buffers required by v6 are different than v4,
->   add new list of internal buffers for v6.
-> - Differentiate encoder/decoder buffers for 6xx
+> On Tue, Mar 16, 2021 at 12:56:35PM +0100, Martin Kepplinger wrote:
+> > ---
+> > 
+> > hi Laurent,
+> > 
+> > thanks a lot for posting this series!
+> > 
+> > First: I only test imx7-media-csi (csi bridge) because I run it on
+> > imx8mq.
+> > overall, I'm very happy with all of this and I get the same image
+> > out
+> > of it as I get with the mx6s_capture nxp driver.
 > 
-> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/media/platform/qcom/venus/helpers.c    | 13 ++++++++++++-
->  drivers/media/platform/qcom/venus/hfi_helper.h |  9 ++++++---
->  2 files changed, 18 insertions(+), 4 deletions(-)
+> That's good news :-)
 > 
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c
-> b/drivers/media/platform/qcom/venus/helpers.c
-> index 2515a2225614..8b08632b0296 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -279,13 +279,24 @@ static const unsigned int intbuf_types_4xx[] = {
->  	HFI_BUFFER_INTERNAL_PERSIST_1,
->  };
+> > one issue I have is with is_csi2, so I post this patch that I need
+> > in
+> > order to test. It's obviously no solution, just to describe the
+> > issue:
+> > 
+> > I'm not sure why but imx7_csi_pad_link_validate() isn't called in
+> > my case
+> > and is_csi2 doesn't get set, so I force it. Would it make sense to
+> > make
+> > a dts property for this?
 > 
-> +static const unsigned int intbuf_types_6xx[] = {
-> +	HFI_BUFFER_INTERNAL_SCRATCH(HFI_VERSION_6XX),
-> +	HFI_BUFFER_INTERNAL_SCRATCH_1(HFI_VERSION_6XX),
-> +	HFI_BUFFER_INTERNAL_SCRATCH_2(HFI_VERSION_6XX),
-> +	HFI_BUFFER_INTERNAL_PERSIST,
-> +	HFI_BUFFER_INTERNAL_PERSIST_1,
-> +};
-> +
+> Some platforms support both parallel and CSI-2 inputs, so we can't
+> hardcode which one is used in DT. I'd advise trying to debug why the
+> function is never called in your case, it's meant to be called with
+> the
+> following call stack
+> 
+> - imx7_csi_pad_link_validate() (through
+> v4l2_subdev_pad_ops.link_validate)
+> - v4l2_subdev_link_validate() (through
+> media_entity_operations.link_validate)
+> - __media_pipeline_start()
+> - imx_media_pipeline_set_stream()
+> - capture_start_streaming()
+> - ...
 
-Hi Bryan,
+possible the 2 issues are related. I have to say that media-ctl (and
+the api) is kind of new to me and this is not strictly related to the
+patchset anymore. The patchset is certainly required for us to have.
+this is just me trying to test it properly...
 
-this change will require additional handling in hfi_plat_buf_v6.c to
-return buffer_size as 0 for internal buffer type which is not applicable 
-for
-encoder or decoder, currently we return -EINVAL for the same.
 
-Thanks,
-Dikshita
+I tried to set what I know that my sensor driver sends to mipi:
 
->  int venus_helper_intbufs_alloc(struct venus_inst *inst)
->  {
->  	const unsigned int *intbuf;
->  	size_t arr_sz, i;
->  	int ret;
+media-ctl -V "'csi':0 [fmt:SBGGR10/640x480 colorspace:raw]"
+
+
+Device topology
+- entity 1: csi (2 pads, 1 link)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev0
+	pad0: Sink
+		[fmt:SBGGR10_1X10/640x480 field:none colorspace:raw
+xfer:none ycbcr:601 quantization:full-range]
+	pad1: Source
+		[fmt:SBGGR10_1X10/640x480 field:none colorspace:raw
+xfer:none ycbcr:601 quantization:full-range]
+		-> "csi capture":0 [ENABLED,IMMUTABLE]
+
+- entity 4: csi capture (1 pad, 1 link)
+            type Node subtype V4L flags 0
+            device node name /dev/video0
+	pad0: Sink
+		<- "csi":1 [ENABLED,IMMUTABLE]
+
+- entity 10: mxc-mipi-csi2.0 (0 pad, 0 link)
+             type V4L2 subdev subtype Unknown flags 0
+             device node name /dev/v4l-subdev1
+
+
+now the mipi and camera drivers don't seem to be a "media" drivers, but
+is that strictly necessary?
+
+anyways, capture_start_streaming() calls capture_validate_fmt() which
+fails due to the colorspace 0 it finds:
+
+[   77.754721] capture_start_streaming: starting
+[   77.759758] imx7-csi 30a90000.csi1_bridge: capture_validate_fmt:
+capture_find_format err
+[   77.768150] imx7-csi 30a90000.csi1_bridge: capture_validate_fmt:
+capture_find_format found colorspace 0x0 != 0x1
+[   77.778372] imx7-csi 30a90000.csi1_bridge: capture format not valid
+
+thanks so far,
+                                   martin
+
 > 
-> -	if (IS_V4(inst->core)) {
-> +	if (IS_V6(inst->core)) {
-> +		arr_sz = ARRAY_SIZE(intbuf_types_6xx);
-> +		intbuf = intbuf_types_6xx;
-> +	} else if (IS_V4(inst->core)) {
->  		arr_sz = ARRAY_SIZE(intbuf_types_4xx);
->  		intbuf = intbuf_types_4xx;
->  	} else {
-> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h
-> b/drivers/media/platform/qcom/venus/hfi_helper.h
-> index 6b524c7cde5f..f367f43c9fb7 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
-> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-> @@ -395,11 +395,14 @@
->  #define HFI_BUFFER_INTERNAL_PERSIST		0x4
->  #define HFI_BUFFER_INTERNAL_PERSIST_1		0x5
->  #define HFI_BUFFER_INTERNAL_SCRATCH(ver)	\
-> -	(((ver) == HFI_VERSION_4XX) ? 0x6 : 0x1000001)
-> +	(((ver) == HFI_VERSION_4XX ||		\
-> +	(ver) == HFI_VERSION_6XX) ? 0x6 : 0x1000001)
->  #define HFI_BUFFER_INTERNAL_SCRATCH_1(ver)	\
-> -	(((ver) == HFI_VERSION_4XX) ? 0x7 : 0x1000005)
-> +	(((ver) == HFI_VERSION_4XX ||		\
-> +	(ver) == HFI_VERSION_6XX) ? 0x7 : 0x1000005)
->  #define HFI_BUFFER_INTERNAL_SCRATCH_2(ver)	\
-> -	(((ver) == HFI_VERSION_4XX) ? 0x8 : 0x1000006)
-> +	(((ver) == HFI_VERSION_4XX ||		\
-> +	(ver) == HFI_VERSION_6XX) ? 0x8 : 0x1000006)
->  #define HFI_BUFFER_EXTRADATA_INPUT(ver)		\
->  	(((ver) == HFI_VERSION_4XX) ? 0xc : 0x1000002)
->  #define HFI_BUFFER_EXTRADATA_OUTPUT(ver)	\
+> > The other thing is that
+> > v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=0
+> > doesn't call the sensor drivers' set_fmt() pad function. That means
+> > that
+> > only the one mode I hard-code as default will work. instead I just
+> > see this:
+> 
+> That's expected. With a driver based on the media controller API, you
+> have to configure the format on each subdev manually. You can use the
+> media-ctl utility for that. The video node is only used to control
+> the
+> DMA engine, the kernel driver doesn't propagate the configuration to
+> subdevices.
+> 
+> > [  742.977677] imx7-csi 30a90000.csi1_bridge: begin graph walk at
+> > 'csi capture'
+> > [  742.977702] imx7-csi 30a90000.csi1_bridge: walk: pushing 'csi'
+> > on stack
+> > [  742.977709] imx7-csi 30a90000.csi1_bridge: walk: skipping entity
+> > 'csi capture' (already seen)
+> > [  742.977714] imx7-csi 30a90000.csi1_bridge: walk: returning
+> > entity 'csi'
+> > [  742.977720] imx7-csi 30a90000.csi1_bridge: walk: returning
+> > entity 'csi capture'
+> > [  742.977985] imx7-csi 30a90000.csi1_bridge: begin graph walk at
+> > 'csi capture'
+> > [  742.977992] imx7-csi 30a90000.csi1_bridge: walk: pushing 'csi'
+> > on stack
+> > [  742.977997] imx7-csi 30a90000.csi1_bridge: walk: skipping entity
+> > 'csi capture' (already seen)
+> > [  742.978002] imx7-csi 30a90000.csi1_bridge: walk: returning
+> > entity 'csi'
+> > [  742.978008] imx7-csi 30a90000.csi1_bridge: walk: returning
+> > entity 'csi capture'
+> > [  742.978025] mc: media_release: Media Release
+> > 
+> > Does anything come to your mind that would prevent the set_fmt call
+> > here?
+> > That's what the (nxp) mipi driver looks like I'm running here:
+> > https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.12-rc3/librem5__integration_byzantium/drivers/media/platform/imx8/mxc-mipi-csi2_yav.c
+> > 
+
+
