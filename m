@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A271C4360C
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C66DBC433E9
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 051E864F7B
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97D3E64F6C
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbhCQQpg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 12:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S232647AbhCQQpk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbhCQQpU (ORCPT
+        with ESMTP id S232665AbhCQQpX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:45:20 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6F8C061760
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:20 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bm21so3700157ejb.4
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:20 -0700 (PDT)
+        Wed, 17 Mar 2021 12:45:23 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C94C061760
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id u4so3075539edv.9
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=x7BfbRkZgKvyDVm8Db9Jrgj8gcrrUGA9hBYKQf9MVsw=;
-        b=AX65wNOoec086wfSe4poCGNVBOMmtrxUvp4lnsBJtWvPfIBdxMs8nmdWM8TZFMTJ+Y
-         xEFco9JGe4jam6eQIdqCKyorT/8kOjyjvD0lyes7Jo23y10W6jF4N70bxCKNLY1WE0Mr
-         j7taWweCbRqpmBUzjY7kIa8kMLZL90d8APBCc=
+        bh=LCfiO2M8eBv1nSfw6SX3LELyYme5LYmWED/jUeSNqLo=;
+        b=XiofJ4gOsO7WAp+jv8oHLjsQ8od5HRXQfPGgLrEunER+Bt1XtcgiH1nM+oUWKvYWS9
+         049HI5zEij5AS8++RWPc160JBbLeHoamnw0YJx43WQkUr0v6x8guSq4dItZvNGP7EIXe
+         XySuQwiBx+9e6CqnMsib+HQHE17noLBFTUIQM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x7BfbRkZgKvyDVm8Db9Jrgj8gcrrUGA9hBYKQf9MVsw=;
-        b=RsHaZKpFk3mgIYJkGIldO9fNGRQ8EX3nCoUSDEzQr4uf9bbeYU7Ug5Bkb1Wd3+9p8M
-         j/nHeAvNr6v+IxDoMtrPNQGVIwlGBK3As1XsqzBcv1x2RojjRbvTX9CCLsifQ4OP/Ll0
-         sOJII3++SAZLVoltHkrfLndhPkhEdIyMUM0LJirRcUS78fBs09ZcPjlEixnO7oBFVcmd
-         /+aO6tN6ahbTNz3aLBwoJhkzkBtyHDGiaCTyMR85fjI7XN9jNVV40itNh4MVBfiGx+UT
-         0T8mQFXgLIPIBi7gEnfq9KQOssj/exqv6UBOXKAL+edIXCCGx1bAFpfaD4pfGR+gkkjk
-         FL7w==
-X-Gm-Message-State: AOAM531S9IgzS4IMuCc8sptmFea4ZSWXF93DDdYd2N3tpFA6usaM4jVX
-        Fo9+gIw6gQ9CY+2Gfg9MVAq5yg==
-X-Google-Smtp-Source: ABdhPJxesE2LHKVrupx9CIvpViyNOdb0zgvX8mHwILjtMovcaKqgx3KxlomYYP4sLsLddb/F1CFe9Q==
-X-Received: by 2002:a17:906:75a:: with SMTP id z26mr36257622ejb.22.1615999518922;
-        Wed, 17 Mar 2021 09:45:18 -0700 (PDT)
+        bh=LCfiO2M8eBv1nSfw6SX3LELyYme5LYmWED/jUeSNqLo=;
+        b=D1Gajamb5afz1lHcFU7Gj9vgceydDPJ38lMVWxqsnq/DwKTs30on7AlX5FVH9r2VKb
+         hmdeih2jBygS0I65OSd5he1eDgDxVGXdt4SIjK3ihurljA5awl7AedMR4qGgpN8YJqWR
+         +74+MEQrwv9ZjFrOOX9WbCvS7ZSi9N8pnhfjjssEajSa+UyT08P7UeV4SGNr6oUq+xis
+         5J7w4d2b/xkGlPagj6hDigD3oAtPwnRsT7cprzBkFJYFBWjBRxXPWjMFHbNl8PAEM57v
+         drtd4AixsNvMea83IU2+KgPkDPHV5TVByjoB+hg7nMQ4KWZ17NB4ZH9CrrOK5LVSY8Dx
+         AzIg==
+X-Gm-Message-State: AOAM5336q9IsTrrDti7Bqoioi642Q5pkp14omuxPXcOjui8ASEfA5pfz
+        bL+ATbcSIYDPe3hCRhsZvlTnAg==
+X-Google-Smtp-Source: ABdhPJyr4+FDQhdh89BUmzSIjsRGqspGifOq9EFk98mTWNY5QzdbOWU/MzX74WAMHruIcCQ1orU0Hg==
+X-Received: by 2002:a05:6402:142:: with SMTP id s2mr42955620edu.2.1615999522029;
+        Wed, 17 Mar 2021 09:45:22 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.18
+        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 09:45:18 -0700 (PDT)
+        Wed, 17 Mar 2021 09:45:21 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 08/17] media: uvcvideo: Return -EIO for control errors
-Date:   Wed, 17 Mar 2021 17:45:02 +0100
-Message-Id: <20210317164511.39967-9-ribalda@chromium.org>
+Subject: [PATCH v6 13/17] media: uvcvideo: Increase the size of UVC_METADATA_BUF_SIZE
+Date:   Wed, 17 Mar 2021 17:45:07 +0100
+Message-Id: <20210317164511.39967-14-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
 In-Reply-To: <20210317164511.39967-1-ribalda@chromium.org>
 References: <20210317164511.39967-1-ribalda@chromium.org>
@@ -73,40 +73,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The device is doing something unspected with the control. Either because
-the protocol is not properly implemented or there has been a HW error.
+Hans has discovered that in his test device, for the H264 format
+bytesused goes up to about 570, for YUYV it will actually go up
+to a bit over 5000 bytes, and for MJPG up to about 2706 bytes.
 
-Fixes v4l2-compliance:
+We should also, according to V4L2_META_FMT_UVC docs, drop headers when
+the buffer is full.
 
-Control ioctls (Input 0):
-                fail: v4l2-test-controls.cpp(448): s_ctrl returned an error (22)
-        test VIDIOC_G/S_CTRL: FAIL
-                fail: v4l2-test-controls.cpp(698): s_ext_ctrls returned an error (22)
-        test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Credit-to: Hans Verkuil <hverkuil@xs4all.nl>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/uvc/uvc_video.c | 8 +++++---
+ drivers/media/usb/uvc/uvcvideo.h  | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index f2f565281e63..25fd8aa23529 100644
+index 25fd8aa23529..ea2903dc3252 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -112,6 +112,11 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	case 5: /* Invalid unit */
- 	case 6: /* Invalid control */
- 	case 7: /* Invalid Request */
-+		/*
-+		 * The firmware has not properly implemented
-+		 * the control or there has been a HW error.
-+		 */
-+		return -EIO;
- 	case 8: /* Invalid value within range */
- 		return -EINVAL;
- 	default: /* reserved or unknown */
+@@ -1244,11 +1244,13 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+ 	if (!meta_buf || length == 2)
+ 		return;
+ 
++	/*
++	 * According to V4L2_META_FMT_UVC docs, we should drop headers when
++	 * the buffer is full.
++	 */
+ 	if (meta_buf->length - meta_buf->bytesused <
+-	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
+-		meta_buf->error = 1;
++	    length + sizeof(meta->ns) + sizeof(meta->sof))
+ 		return;
+-	}
+ 
+ 	has_pts = mem[1] & UVC_STREAM_PTS;
+ 	has_scr = mem[1] & UVC_STREAM_SCR;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index b81d3f65e52e..a26bbec8d37b 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -527,7 +527,7 @@ struct uvc_stats_stream {
+ 	unsigned int max_sof;		/* Maximum STC.SOF value */
+ };
+ 
+-#define UVC_METADATA_BUF_SIZE 1024
++#define UVC_METADATA_BUF_SIZE 10240
+ 
+ /**
+  * struct uvc_copy_op: Context structure to schedule asynchronous memcpy
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
