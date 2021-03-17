@@ -2,129 +2,234 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 114EAC43381
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF9FC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 17:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFCB264F3E
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 16:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1087264EE7
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 17:23:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbhCQQpl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 12:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S231134AbhCQRWy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 13:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbhCQQpX (ORCPT
+        with ESMTP id S232078AbhCQRWm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:45:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD321C06174A
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:22 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id r17so3648451ejy.13
-        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 09:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VEHA0wDh2t06lBti+/CKy5TQQJ8gS0FLl9pl6QcZYKI=;
-        b=mgQTBMdiVpGU1c8bhyl7HeAbSBfBcnKwGFIsbaMnLGEArbGwaUrNW154yqFq+3oYg3
-         gyjvzFIXeA63PU1mc0FBsLbHa5eYEPF0MPISC6TnIn/YRiuU2+2juO2e5tuxMFgKEBUm
-         +R4KskFhh3ACtEQFBVEwqhZAtkG4nZ27cAsvk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VEHA0wDh2t06lBti+/CKy5TQQJ8gS0FLl9pl6QcZYKI=;
-        b=YDEg7fnvSZnWpMlC0kmxRBbHu+OGXxT9wdDun/G1lpA8mQRq3MRw3BsG/Rzpbwj23g
-         p5CJPrBL5470BAdqiiBUNmdQRZtBQ4cdpJH1i1YUZ1QSxCzmFymYF525UpC9j3vzaPfE
-         husaIyrhC+u1onGlhNzgyMH73h4POs99cbGTsKlD2aGvYWFNK9OXNZLwD2wA3/u5cHe3
-         9FJaqvh6JjG9BwbA3tEDtH5DIM56RNM7sx/AqwxBoRr5zoM056O6nLA8s29vkoifDH/0
-         ZTpi1IN32NwTuB3tyuOnB1dgWYnVwkb8aowfufcMc57pTeuWt3V/PAmodBLAve3ZtHDk
-         8/eQ==
-X-Gm-Message-State: AOAM531QETH4SgeztweKCG9nCkq6NziQQ6e84x0Ngt27WieaHjI+/nBW
-        bFBCw5b/9opPj1XyrxlLV95aZw==
-X-Google-Smtp-Source: ABdhPJwZT7QpP4sRlmOC/UBr9A2IKOvA97oOViqUgtTkafGPXJ+CcxqELLqJu0z5986oMv+qLN3NAg==
-X-Received: by 2002:a17:906:95d1:: with SMTP id n17mr35308578ejy.394.1615999521499;
-        Wed, 17 Mar 2021 09:45:21 -0700 (PDT)
-Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hy25sm12088128ejc.119.2021.03.17.09.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 09:45:21 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 12/17] media: uvcvideo: Set unique vdev name based in type
-Date:   Wed, 17 Mar 2021 17:45:06 +0100
-Message-Id: <20210317164511.39967-13-ribalda@chromium.org>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-In-Reply-To: <20210317164511.39967-1-ribalda@chromium.org>
-References: <20210317164511.39967-1-ribalda@chromium.org>
+        Wed, 17 Mar 2021 13:22:42 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D3EC06174A
+        for <linux-media@vger.kernel.org>; Wed, 17 Mar 2021 10:22:42 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 9F3B81F453ED
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, ezequiel@collabora.com,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com,
+        gjasny@googlemail.com, xavier.claessens@collabora.com,
+        nicolas.dufresne@collabora.com, user.vdr@gmail.com,
+        sakari.ailus@iki.fi, ariel.dalessandro@collabora.com
+Subject: [v4l-utils v4 0/5] Add support for meson building
+Date:   Wed, 17 Mar 2021 14:22:22 -0300
+Message-Id: <20210317172227.620584-1-ariel.dalessandro@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All the entities must have a unique name. We can have a descriptive and
-unique name by appending the function and the entity->id.
+Hi all,
 
-This is even resilent to multi chain devices.
+This patchset was developed on top of v4l-utils current master branch:
 
-Fixes v4l2-compliance:
-Media Controller ioctls:
-                fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-        test MEDIA_IOC_G_TOPOLOGY: FAIL
-                fail: v4l2-test-media.cpp(394): num_data_links != num_links
-	test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+    commit 3439c85d254774bd6debaedcfcb7fbab21d8a360
+    Author: Hans Verkuil <hans.verkuil@cisco.com>
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/usb/uvc/uvc_driver.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+        v4l2-compliance: don't warn about seq counter for metadata
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 35873cf2773d..76ab6acecbc9 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2163,6 +2163,7 @@ int uvc_register_video_device(struct uvc_device *dev,
- 			      const struct v4l2_ioctl_ops *ioctl_ops)
- {
- 	int ret;
-+	const char *name;
- 
- 	/* Initialize the video buffers queue. */
- 	ret = uvc_queue_init(queue, type, !uvc_no_drop_param);
-@@ -2190,16 +2191,20 @@ int uvc_register_video_device(struct uvc_device *dev,
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
- 	default:
- 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+		name = "Video Capture";
- 		break;
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
- 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-+		name = "Video Output";
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
-+		name = "Metadata";
- 		break;
- 	}
- 
--	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
-+		 stream->header.bTerminalLink);
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
+You can find the patchset pushed to the following branch:
+
+    https://gitlab.collabora.com/adalessandro/v4l-utils/-/tree/v4l-utils-meson-v4
+
+Any testing/comments/suggestions/complaints are welcome :-)
+
+Changes from v3:
+
+  * Split Doxygen support patch.
+  * Properly generate config.h configuration file.
+
+Changes from v2:
+
+  * Updated to current master branch.
+  * Moved README to markdown syntax.
+  * Documented meson build.
+  * Set PACKAGE_VERSION config macro as quoted.
+
+Changes from v1:
+
+  * Updated project version to 1.21.0.
+  * Fixed clang includes in keytable bpf compilation.
+  * Improved variable reutilization in meson scripts.        
+  * Set libraries version and soversion.                     
+  * Control symbol visibility.                  
+  * Install empty 'protocols' directory in keytable user dir.
+  * Fixed svg filenames in qv4l2 and qvidcap.                         
+  * Added support for Doxygen documentation (html and man).
+  * Updated required meson version to v0.53 (for fs module).       
+  * Added new files to EXTRA_DIST in each Makefile.am.              
+
+Regards,
+
+Ariel D'Alessandro (5):
+  Move README to markdown syntax
+  Add support for meson building
+  Copy Doxygen configuration file to doc/
+  meson: Add support for doxygen documentation
+  Makefile.am: Distribute meson related files
+
+ .gitignore                                    |    1 +
+ INSTALL.meson.md                              |  118 +
+ Makefile.am                                   |    5 +-
+ README                                        |  274 --
+ README.md                                     |  332 +++
+ contrib/Makefile.am                           |    3 +-
+ contrib/cobalt-ctl/Makefile.am                |    2 +
+ contrib/cobalt-ctl/meson.build                |    8 +
+ contrib/decode_tm6000/Makefile.am             |    2 +
+ contrib/decode_tm6000/meson.build             |   14 +
+ contrib/gconv/Makefile.am                     |    2 +-
+ contrib/gconv/meson.build                     |   44 +
+ contrib/meson.build                           |   13 +
+ contrib/rds-saa6588/Makefile.am               |    2 +
+ contrib/rds-saa6588/meson.build               |    7 +
+ contrib/test/Makefile.am                      |    3 +-
+ contrib/test/meson.build                      |  143 +
+ contrib/xc3028-firmware/Makefile.am           |    2 +-
+ contrib/xc3028-firmware/meson.build           |   11 +
+ doc/Doxyfile.in                               | 2352 +++++++++++++++++
+ doc/meson.build                               |   34 +
+ lib/Makefile.am                               |    2 +-
+ lib/libdvbv5/Makefile.am                      |    2 +-
+ lib/libdvbv5/meson.build                      |  158 ++
+ lib/libv4l-mplane/Makefile.am                 |    2 +
+ lib/libv4l-mplane/meson.build                 |   23 +
+ lib/libv4l1/Makefile.am                       |    2 +-
+ lib/libv4l1/meson.build                       |   61 +
+ lib/libv4l2/Makefile.am                       |    2 +-
+ lib/libv4l2/meson.build                       |   70 +
+ lib/libv4l2rds/Makefile.am                    |    2 +
+ lib/libv4l2rds/meson.build                    |   36 +
+ lib/libv4lconvert/Makefile.am                 |    2 +-
+ lib/libv4lconvert/meson.build                 |  117 +
+ lib/meson.build                               |   11 +
+ libdvbv5-po/meson.build                       |    3 +
+ meson.build                                   |  318 +++
+ meson_options.txt                             |   50 +
+ utils/Makefile.am                             |    2 +-
+ utils/cec-compliance/Makefile.am              |    2 +-
+ utils/cec-compliance/meson.build              |   22 +
+ utils/cec-ctl/Makefile.am                     |    2 +-
+ utils/cec-ctl/meson.build                     |   18 +
+ utils/cec-follower/Makefile.am                |    2 +-
+ utils/cec-follower/meson.build                |   19 +
+ utils/cx18-ctl/Makefile.am                    |    2 +
+ utils/cx18-ctl/meson.build                    |    8 +
+ utils/dvb/Makefile.am                         |    2 +-
+ utils/dvb/meson.build                         |   70 +
+ utils/gen_media_bus_format_codes.sh           |    7 +
+ utils/gen_media_bus_format_names.sh           |    7 +
+ utils/ir-ctl/Makefile.am                      |    2 +
+ utils/ir-ctl/meson.build                      |   23 +
+ utils/ivtv-ctl/Makefile.am                    |    2 +
+ utils/ivtv-ctl/meson.build                    |   13 +
+ utils/keytable/Makefile.am                    |    3 +-
+ utils/keytable/bpf_protocols/Makefile.am      |    3 +-
+ .../bpf_protocols/clang_sys_includes.sh       |    9 +
+ utils/keytable/bpf_protocols/meson.build      |   39 +
+ .../user_dir_protocols/README.md              |    1 +
+ utils/keytable/meson.build                    |   76 +
+ utils/keytable/rc_keymaps/meson.build         |  151 ++
+ utils/libcecutil/Makefile.am                  |    2 +-
+ utils/libcecutil/meson.build                  |   45 +
+ utils/libmedia_dev/Makefile.am                |    2 +-
+ utils/libmedia_dev/meson.build                |   14 +
+ utils/libv4l2util/Makefile.am                 |    2 +-
+ utils/libv4l2util/meson.build                 |   16 +
+ utils/media-ctl/Makefile.am                   |    2 +
+ utils/media-ctl/meson.build                   |   43 +
+ utils/meson.build                             |   46 +
+ utils/qv4l2/Makefile.am                       |    3 +-
+ utils/qv4l2/meson.build                       |   80 +
+ utils/qvidcap/Makefile.am                     |    3 +-
+ utils/qvidcap/meson.build                     |   82 +
+ utils/rds-ctl/Makefile.am                     |    1 +
+ utils/rds-ctl/meson.build                     |   13 +
+ utils/v4l2-compliance/Makefile.am             |    2 +-
+ utils/v4l2-compliance/meson.build             |   58 +
+ utils/v4l2-ctl/Makefile.am                    |    2 +-
+ utils/v4l2-ctl/meson.build                    |   75 +
+ utils/v4l2-dbg/Makefile.am                    |    2 +-
+ utils/v4l2-dbg/meson.build                    |   16 +
+ utils/v4l2-sysfs-path/Makefile.am             |    2 +
+ utils/v4l2-sysfs-path/meson.build             |   14 +
+ v4l-utils-po/meson.build                      |    3 +
+ 86 files changed, 4947 insertions(+), 299 deletions(-)
+ create mode 100644 INSTALL.meson.md
+ delete mode 100644 README
+ create mode 100644 README.md
+ create mode 100644 contrib/cobalt-ctl/meson.build
+ create mode 100644 contrib/decode_tm6000/meson.build
+ create mode 100644 contrib/gconv/meson.build
+ create mode 100644 contrib/meson.build
+ create mode 100644 contrib/rds-saa6588/meson.build
+ create mode 100644 contrib/test/meson.build
+ create mode 100644 contrib/xc3028-firmware/meson.build
+ create mode 100644 doc/Doxyfile.in
+ create mode 100644 doc/meson.build
+ create mode 100644 lib/libdvbv5/meson.build
+ create mode 100644 lib/libv4l-mplane/meson.build
+ create mode 100644 lib/libv4l1/meson.build
+ create mode 100644 lib/libv4l2/meson.build
+ create mode 100644 lib/libv4l2rds/meson.build
+ create mode 100644 lib/libv4lconvert/meson.build
+ create mode 100644 lib/meson.build
+ create mode 100644 libdvbv5-po/meson.build
+ create mode 100644 meson.build
+ create mode 100644 meson_options.txt
+ create mode 100644 utils/cec-compliance/meson.build
+ create mode 100644 utils/cec-ctl/meson.build
+ create mode 100644 utils/cec-follower/meson.build
+ create mode 100644 utils/cx18-ctl/meson.build
+ create mode 100644 utils/dvb/meson.build
+ create mode 100755 utils/gen_media_bus_format_codes.sh
+ create mode 100755 utils/gen_media_bus_format_names.sh
+ create mode 100644 utils/ir-ctl/meson.build
+ create mode 100644 utils/ivtv-ctl/meson.build
+ create mode 100755 utils/keytable/bpf_protocols/clang_sys_includes.sh
+ create mode 100644 utils/keytable/bpf_protocols/meson.build
+ create mode 100644 utils/keytable/bpf_protocols/user_dir_protocols/README.md
+ create mode 100644 utils/keytable/meson.build
+ create mode 100644 utils/keytable/rc_keymaps/meson.build
+ create mode 100644 utils/libcecutil/meson.build
+ create mode 100644 utils/libmedia_dev/meson.build
+ create mode 100644 utils/libv4l2util/meson.build
+ create mode 100644 utils/media-ctl/meson.build
+ create mode 100644 utils/meson.build
+ create mode 100644 utils/qv4l2/meson.build
+ create mode 100644 utils/qvidcap/meson.build
+ create mode 100644 utils/rds-ctl/meson.build
+ create mode 100644 utils/v4l2-compliance/meson.build
+ create mode 100644 utils/v4l2-ctl/meson.build
+ create mode 100644 utils/v4l2-dbg/meson.build
+ create mode 100644 utils/v4l2-sysfs-path/meson.build
+ create mode 100644 v4l-utils-po/meson.build
+
 -- 
-2.31.0.rc2.261.g7f71774620-goog
+2.30.2
 
