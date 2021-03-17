@@ -2,222 +2,158 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E196C4161F
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 17:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 483F1C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 18:05:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28FF664F69
-	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 17:33:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19A8464F37
+	for <linux-media@archiver.kernel.org>; Wed, 17 Mar 2021 18:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbhCQRdM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Mar 2021 13:33:12 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58852 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbhCQRc7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Mar 2021 13:32:59 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id A98361F4546E
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, lee.jones@linaro.org,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
-        emil.l.velikov@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 12/13] media: hantro: IMX8M: add variant for G2/HEVC codec
-Date:   Wed, 17 Mar 2021 18:32:01 +0100
-Message-Id: <20210317173202.107519-13-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210317173202.107519-1-benjamin.gaignard@collabora.com>
-References: <20210317173202.107519-1-benjamin.gaignard@collabora.com>
+        id S231398AbhCQSE4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Mar 2021 14:04:56 -0400
+Received: from mail-eopbgr70135.outbound.protection.outlook.com ([40.107.7.135]:49499
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232918AbhCQSEd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Mar 2021 14:04:33 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L55sRXHrqE0gfbksYSLKYufzeaPD1GgkJsxyI8JX9cMSR5kSHKX4mi1cmrJYyMhtXMQh3xXHc3crvPXk32tzaBcwl0hV0j91ndGl4lttOaczJGNG7BKCr4zeFAN29bNw8mpsNLACMMfy8GGXoa+T1YbiU3uR9v/4ETht0xojdMMBWPetxwhZfTxelmOGAIew5TiY0DqT6sUDqME4aIHprrVEiGiueIXhUjZwV4R/DYDePPqt03tKbfVozd8n6mRii86i1JIF4fklv9oU9oj7/2GbjVvJ8yD1R3k+ARnfb95pQ67RYhp2yN7Fr3rqwof0sxGRmwZnAJfn3eU4PQoZ7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DmTc63FzhYksu6fR/QCSq44AWDo5QXtl9JZghVb46dY=;
+ b=CIbAdYMcf1ytxhMnYdNej8EsgiB9fPRINANobbP8anJvyL/ufvjJuVHzDiWbBHmsMTdxVXUQilK5t23F8nG0epoK7HUD7Cfe3C8kY6Hf2KrcT/QDSO5dY4JDAvm78bcBt2C6yBcG8mf5eqfKonOvqUMIGw1vTzP7aRo879J/aiET2/+3hQHxl8XPh7EebCmiDZTsJKqGOqTsXEqdHNpfDIGPnapv7J+h/8nnIrU0W/m+/DGA9CnRkZw3XQsGVgw2Q1Ymbj4jJsfcAls65YUlxdihSKqbHKuWlZYI2AXihuafpOFYnqTFrx7eTtFsmr1ZHP+5wwXjMwUz+ZVpxMZyhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DmTc63FzhYksu6fR/QCSq44AWDo5QXtl9JZghVb46dY=;
+ b=LmFLw4521x7sVG46c4AG2cIusIajTG/+t4PneI8qd4t/L/AQJSW8P/jyrzwVs5vORhDTq5GfMEtgnyTHNhRuBFWknB0m0S8CwGcaIRAKYhUW5f1UdXZmXtJ2dHq37XD8gMHHCevYU6Y5vPQ+4leCL91HNtPKi9PpzjUiDcruC1M=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=kontron.de;
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
+ by AM0PR10MB2273.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Wed, 17 Mar
+ 2021 18:04:21 +0000
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::3d8a:f56b:3a0c:8a87]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::3d8a:f56b:3a0c:8a87%7]) with mapi id 15.20.3955.018; Wed, 17 Mar 2021
+ 18:04:21 +0000
+Subject: Re: [PATCH v2 00/77] media: imx: Miscellaneous fixes and cleanups for
+ i.MX7
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>
+References: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+Message-ID: <268621a5-03ab-4cd9-d95a-bf5b6a4b4f7b@kontron.de>
+Date:   Wed, 17 Mar 2021 19:04:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20210215042741.28850-1-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [89.247.32.67]
+X-ClientProxiedBy: AM6PR0202CA0069.eurprd02.prod.outlook.com
+ (2603:10a6:20b:3a::46) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:157::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.10.27] (89.247.32.67) by AM6PR0202CA0069.eurprd02.prod.outlook.com (2603:10a6:20b:3a::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend Transport; Wed, 17 Mar 2021 18:04:20 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2f20a2c6-1eed-49b4-5bba-08d8e96f16f7
+X-MS-TrafficTypeDiagnostic: AM0PR10MB2273:
+X-Microsoft-Antispam-PRVS: <AM0PR10MB2273F80EBAE58A4DA92B3FD4E96A9@AM0PR10MB2273.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +EpnsdcjgEW7UR3Q6JLv0Jk814I5fPjyVtw13U1mon1YDFf764UfeJZgorfC8lo7NykzCG8OwXr2BGCNTk2jOhZ5OEFTD36dmi3whzoPNP4u0MZHYUnUaKDkdUY7RMRfAIMG59gXZKi5z3YavtZsFjRmnPv5I8On719t2SB6fhGlGtQkjsOrc51R2rOjPA3ulKZuezV3byzy3s+gbX6SE33IupU0HeSKu6ro3G6mZKW6SWc+1oKbd+lAlhY0jInldEUBMrdv1ZLXcZU1daXrEi1oeO44U+cqYOOexXpmh2+iDeRfx28R4MrrCqGYNQgHzpUX406cIY1jJkzrxoCgfIQgOKCAc+AeF+3sDLpPPo2XAEhImJfjwuiQ9pq0FVwOKCFeTm0HzYH/DUmyCdD2EZXqlRLR1nRB6ZclcTwrScH4Dt5Hd9ewzZ3j7FpdBrt7IVaz7WEkrkgRiG+2+WcAvS78XN1Pl6hj0z1O1LGaOLhDMfFbxzLzgsHLIVi6jNZQ31lZCYmfflUfSJNT9WRTvbkSKjSE+FHgOsK0d4T1S4KJ7akLrw3e3fgVnrCtMq9kbenWBwhV/3PNSQGjTdxNxH/5SskfMAddGksbYsu2msA+dFv6thhNHqXZsE75OOfn1eDkikb85Efueoxi3+t2Jw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(346002)(39850400004)(396003)(4326008)(16526019)(8936002)(6486002)(53546011)(2616005)(956004)(66556008)(2906002)(54906003)(16576012)(26005)(86362001)(186003)(31686004)(316002)(8676002)(52116002)(478600001)(44832011)(5660300002)(66476007)(66946007)(83380400001)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?RVJURkdmV0RMNnNJMG41cG9wdGZQRXJPdC81SXYxdlp6bi9INFFSbWltdmd1?=
+ =?utf-8?B?Qmx3ZFR1ektqdVZ6Qkt4djcralU5R0lXUEo4dlFYMU0xbFo2bEtoSXlmYksr?=
+ =?utf-8?B?OGhvbjBWWHlBalY3QW5tRlNja2ZwYkFTNnUrcmxNSlhIKzMwNThJN0dNQmN4?=
+ =?utf-8?B?UzhZcG1KYVNDeTQ0VTlVeWhObzRUVHlUZDRKa2x2NW1BRjJXU0ljR0Z3NnpW?=
+ =?utf-8?B?UnlRNEt0UCtuSTZNNU03R0liZnFseDh2Y3E1K09RSnMvS2ZtWFliWXhzTFdU?=
+ =?utf-8?B?VEFqSWJFRitOa1NvNTFWZzBwNnQ5M0VtR28wMmE5cElrMzVBelQwenlPd2Ra?=
+ =?utf-8?B?V2dpTUQ1RkNkcUZad2NrUGFOWjhXNCtKTUhrdUxxS0hFS01aNG5kUExKWkw3?=
+ =?utf-8?B?d2hLQWRnenVGTEl2UEpCaGNvNVFBWFdVU1BHU2Uzb1RjeStUMjN6Y015WW91?=
+ =?utf-8?B?TjNvMThhelNkZjdXYWZMd1o2UUJEQWZZK1Byd1VGY3E0aUZ3V3Yxc2lnemtp?=
+ =?utf-8?B?M1h5UjVKMndqU09wWUQvR2tPczhkaVljTk9uYXBDNk9Bckc5ME5vS1hLQ0tS?=
+ =?utf-8?B?UGNrWk5GZ0xWcHNYbG1HbGFCcTBRbmR0dkwrazBEZXVxRHFIRXZ5b0JQTDZM?=
+ =?utf-8?B?cGxWRnV5MUgwd1R4ckZXbTVQcGhiOGwydXFERFhHbGxsd2Y0NHljTG1RN0lV?=
+ =?utf-8?B?UE9HWFhVRU9sUUk4a09OL1RZb28ybytnTERKd0g0Smg2VFpWbEVIaWZ6azNw?=
+ =?utf-8?B?Ty9QV0ZyZmRtd2ppZ0FYRVhDa1NQM3lmZEpXd2VBZkFpMkF2MmRaa1BpcUhR?=
+ =?utf-8?B?eXAwaEZQUkljWHZDcEltdDZyenh3Wko4VDVKU1FEdHduVHJqd0F4ZWpMNEtn?=
+ =?utf-8?B?TWh1NmxxUS9HRno2OS9leXNCSld6L1l1ckF2MUtRK1I3aUY3VDZjTVFsVW1F?=
+ =?utf-8?B?VUhKSnBBRFBKRVBnUG1jQWN2ZjdadGYvSllNQ1FpWXIxWnY0OGU5dG9VUmlo?=
+ =?utf-8?B?d0t5NkZDRDhCQTVhL2xwMkVjdDY0MkZ6WHJ0dUs2by9CbE9BOWFoY3I1M09W?=
+ =?utf-8?B?YklEdkcrdHhJbjU3ck55ZlZBTVUyNXp2S0VZcGdwUWVVZU9XVGxiejc1VlQ2?=
+ =?utf-8?B?M3hmc2JqUU42WmE0REZsTTg0dThsZENBeVNaR2V0ZEl1N3N0bkpqSmxtcHBv?=
+ =?utf-8?B?elQ0MmYzb3FVaDlUa09nNDRDbzI1b09vWDJOSjBGNG5DNzAxYjYwODVtOGNw?=
+ =?utf-8?B?UmtTTmVFU0QzM0xSVGQyNGR3UWoxYXRqd0JmWVBqTWRHYU0yVDJjRFo1K3Zy?=
+ =?utf-8?B?TmFHVUV0QzdhZlpmQS9BMENkV3JPK3ByeWI1dFFHVlpUdlhZejJMNkVHYmVZ?=
+ =?utf-8?B?Ulk3ZHdoelRlTEhvNUFoRVFxQlhVMHFtYkk4TXROR3oyQXBMUmhIbmJITHRG?=
+ =?utf-8?B?eGZTVWQxZkZGaTBNZHRCS3IrM25aKzB5aWRXb0llMGRLazRFbGJ4bnEyUkVR?=
+ =?utf-8?B?UlN1cnJSL0JQcDE4SEV1eUs5NEk4Uk1SSU03WGQ3N0dsZzZweFRXMU1sS21P?=
+ =?utf-8?B?WU1tUGd5SERDWThpZ0ZmSllzWG9kVy9iMys5bWoyK2t5UWljS2RsY3V0Sjhx?=
+ =?utf-8?B?S1Ird05IL3Y4Y3J3dDBzNnVMdnRwc2lxNkVXUDE4UUJITzRqSFhQMlZDaUFs?=
+ =?utf-8?B?NktLYzMzamhvUGlBSFV4akVLbDFEN2M3NVB1b0pIbXVubFJ6Q0M5SlRKclNE?=
+ =?utf-8?Q?uVcqCM5d+z6zUI/nAuPGojfRM1Kn/OxGVgGOHXO?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f20a2c6-1eed-49b4-5bba-08d8e96f16f7
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2021 18:04:21.1245
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jvdm3A6FmWporjHcz8yhfu0Y3n70WqshU5g4IXel4Jsi/yYlp9qStP9xm6qbQmulnJGPQt0KzPrBdqLFdD16yvyy/kXrLwq0pBrDoM3Nijs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2273
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add variant to IMX8M to enable G2/HEVC codec.
-Define the capabilities for the hardware up to 3840x2160.
-G2 doesn't have postprocessor, use the same clocks and got it
-own interruption.
+Hi Laurent,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
-version 5:
- - remove useless postproc fields for G2
+On 15.02.21 05:26, Laurent Pinchart wrote:
+> Hello,
+> 
+> This large patch series is a collection of miscellaneous fixes, cleanups
+> and enhancements for the i.MX7 camera support. Most notably, it
+> implements support for the Media Controller API in the driver.
+> 
+> Compared to v1, review comments have been taken into account, and the
+> patches have been rebased on top of the DT bindings and latest imx
+> changes as present in the linux-media tree. Patches 38/77, 39/77, 60/77
+> and 61/77 are new. For additional information, please see individual
+> patches.
+> 
+> I have successfully tested the code on an i.MX6ULL board (with an
+> MT9M114 sensor), an I.MX7D board (with an IMX296 sensor), and an i.MX8MM
+> board (with an OV5640 sensor, and additional patches for i.MX8MM
+> support).
 
-version 2:
-- remove useless clocks
+First of all, thanks for the great work!
 
- drivers/staging/media/hantro/hantro_drv.c   |  1 +
- drivers/staging/media/hantro/hantro_hw.h    |  1 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 76 ++++++++++++++++++++-
- 3 files changed, 76 insertions(+), 2 deletions(-)
+I'm currently trying to get a setup with CSI + MIPI + ADV7280 working on 
+an i.MX8MM system. Would you mind sharing the additional patches I need 
+for this?
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 13c197ca9ba3..659124a52e8a 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -574,6 +574,7 @@ static const struct of_device_id of_hantro_match[] = {
- #endif
- #ifdef CONFIG_VIDEO_HANTRO_IMX8M
- 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
-+	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
- #endif
- 	{ /* sentinel */ }
- };
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index dade3b0769c1..f61f58da05fe 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -193,6 +193,7 @@ extern const struct hantro_variant rk3399_vpu_variant;
- extern const struct hantro_variant rk3328_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
- extern const struct hantro_variant imx8mq_vpu_variant;
-+extern const struct hantro_variant imx8mq_vpu_g2_variant;
- 
- extern const struct hantro_postproc_regs hantro_g1_postproc_regs;
- 
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index bd9d135dd440..b2ddb1fce0e8 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -12,6 +12,7 @@
- #include "hantro.h"
- #include "hantro_jpeg.h"
- #include "hantro_g1_regs.h"
-+#include "hantro_g2_regs.h"
- 
- #define CTRL_SOFT_RESET		0x00
- #define RESET_G1		BIT(1)
-@@ -129,6 +130,26 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
- 	},
- };
- 
-+static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_NV12,
-+		.codec_mode = HANTRO_MODE_NONE,
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_HEVC_SLICE,
-+		.codec_mode = HANTRO_MODE_HEVC_DEC,
-+		.max_depth = 2,
-+		.frmsize = {
-+			.min_width = 48,
-+			.max_width = 3840,
-+			.step_width = MB_DIM,
-+			.min_height = 48,
-+			.max_height = 2160,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+};
-+
- static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- {
- 	struct hantro_dev *vpu = dev_id;
-@@ -147,6 +168,24 @@ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t imx8m_vpu_g2_irq(int irq, void *dev_id)
-+{
-+	struct hantro_dev *vpu = dev_id;
-+	enum vb2_buffer_state state;
-+	u32 status;
-+
-+	status = vdpu_read(vpu, HEVC_REG_INTERRUPT);
-+	state = (status & HEVC_REG_INTERRUPT_DEC_RDY_INT) ?
-+		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
-+
-+	vdpu_write(vpu, 0, HEVC_REG_INTERRUPT);
-+	vdpu_write(vpu, HEVC_REG_CONFIG_DEC_CLK_GATE_E, HEVC_REG_CONFIG);
-+
-+	hantro_irq_done(vpu, state);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	struct device_node *np = vpu->dev->of_node;
-@@ -176,6 +215,13 @@ static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
- 	imx8m_soft_reset(vpu, RESET_G1);
- }
- 
-+static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	imx8m_soft_reset(vpu, RESET_G2);
-+}
-+
- /*
-  * Supported codec ops.
-  */
-@@ -201,16 +247,28 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
- 	},
- };
- 
-+static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
-+	[HANTRO_MODE_HEVC_DEC] = {
-+		.run = hantro_g2_hevc_dec_run,
-+		.reset = imx8m_vpu_g2_reset,
-+		.init = hantro_hevc_dec_init,
-+		.exit = hantro_hevc_dec_exit,
-+	},
-+};
-+
- /*
-  * VPU variants.
-  */
- 
- static const struct hantro_irq imx8mq_irqs[] = {
- 	{ "g1", imx8m_vpu_g1_irq },
--	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
- };
- 
--static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
-+static const struct hantro_irq imx8mq_g2_irqs[] = {
-+	{ "g2", imx8m_vpu_g2_irq },
-+};
-+
-+static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus"};
- 
- const struct hantro_variant imx8mq_vpu_variant = {
- 	.dec_fmts = imx8m_vpu_dec_fmts,
-@@ -228,3 +286,17 @@ const struct hantro_variant imx8mq_vpu_variant = {
- 	.clk_names = imx8mq_clk_names,
- 	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
- };
-+
-+const struct hantro_variant imx8mq_vpu_g2_variant = {
-+	.dec_offset = 0x0,
-+	.dec_fmts = imx8m_vpu_g2_dec_fmts,
-+	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_g2_dec_fmts),
-+	.codec = HANTRO_HEVC_DECODER,
-+	.codec_ops = imx8mq_vpu_g2_codec_ops,
-+	.init = imx8mq_vpu_hw_init,
-+	.runtime_resume = imx8mq_runtime_resume,
-+	.irqs = imx8mq_g2_irqs,
-+	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
-+	.clk_names = imx8mq_clk_names,
-+	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
-+};
--- 
-2.25.1
+I guess you are referring to patches for the MIPI CSIS PHY and the 
+devicetree. Anything else, that I'm missing?
 
+Thanks
+Frieder
