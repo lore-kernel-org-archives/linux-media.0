@@ -2,115 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 794DDC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B67F9C4332E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:21:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 435FC6186A
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:06:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AA0A64F41
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhCRIGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 04:06:19 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:41447 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229598AbhCRIGA (ORCPT
+        id S229813AbhCRIVI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 04:21:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38714 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229654AbhCRIVE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 04:06:00 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id MnfHlHy7PDUxpMnfLli4dg; Thu, 18 Mar 2021 09:05:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1616054759; bh=RdJYgGZb1ss8zpa9ZBuyTNyrQQbIE+vh1EGEmNI/ULI=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=l1xwR68vdeY5DrASZ5I80IgXiL82V6Pf++H6F8e7Nhsb0OCHdYE+LKK+s+6h5dPFI
-         hE97P6+AcfKYPZDMMymb7FtCb0mR7hQoMtHZ3zgSrPQJamiGHUlg0L0Av7CA6rX7oM
-         bMXVH/6DpNTigv6BGAiyxLQ00dhIUcznehzFLpwEJ8vFC/pQVYHuPeBucIIu36yPTn
-         ACJbwycnZlZycNvGP+X6Yu/8MHW9HDZvSnmm+IKo/melHnjzoAbpM02HcIYqKpIhfV
-         d6kae1lw6g35FZoyTzRFIZT19UiyE5G4q7kouaS0WoZzDUQhaD9CvhmsFutGxwLFWF
-         WJ9m6SaefBYlw==
-Subject: Re: [PATCH v6 11/17] media: uvcvideo: Use dev->name for querycap()
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org
-References: <20210317164511.39967-1-ribalda@chromium.org>
- <20210317164511.39967-12-ribalda@chromium.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <a82e7b52-73fb-a439-902d-55b2edcc9b68@xs4all.nl>
-Date:   Thu, 18 Mar 2021 09:05:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        Thu, 18 Mar 2021 04:21:04 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id D9AB31F456D1
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, lee.jones@linaro.org,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
+        emil.l.velikov@gmail.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 01/13] dt-bindings: mfd: Add 'nxp,imx8mq-vpu-ctrl' to syscon list
+Date:   Thu, 18 Mar 2021 09:20:34 +0100
+Message-Id: <20210318082046.51546-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
+References: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20210317164511.39967-12-ribalda@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfIw/p+7eUtm/AqnpJWS3jH97NdjmjfPMhi2heJcWXYXU6QWHOL/SfU8Qm2hZqzZ0rXS+LPDu+e75YzEr77CTpYZX3pQtIa4rURRhYoLINLsFkli05dP/
- DQfGFOuPbU2CHVFBzkKA5y9ZRV3+Cu9ywEdRwNRL3N8MZj9EqtynVIz55pfxZBEwtAKb+J7k2uPdpgRfHgbtYbbP0qQ2IXz7l9KKD1HVxWfEcw23098Q5tey
- Zzhyacyuq5vjzmmrIEw6K529T71pSEPDXqhyaV3xVYdR5fczbYe/3IUphbdL50BkjmYP/c+o2fyfA1Fe7e5bWmlvHPM1hfFV8p2/x1mnz4oQcc3YV74Umkle
- Ag7X2TEx61vG5IHcfU3P8idPHG4ErFYlcWOxKLWcIa6kRlo46CiM81/dJYoiT69/NOkN9nIi
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 17/03/2021 17:45, Ricardo Ribalda wrote:
-> Use the device name for the card name instead of vdev->name.
-> 
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_v4l2.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 397217171bbb..dd10cb9361fa 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -617,13 +617,12 @@ static int uvc_v4l2_release(struct file *file)
->  static int uvc_ioctl_querycap(struct file *file, void *fh,
->  			      struct v4l2_capability *cap)
->  {
-> -	struct video_device *vdev = video_devdata(file);
->  	struct uvc_fh *handle = file->private_data;
->  	struct uvc_video_chain *chain = handle->chain;
->  	struct uvc_streaming *stream = handle->stream;
->  
->  	strscpy(cap->driver, "uvcvideo", sizeof(cap->driver));
-> -	strscpy(cap->card, vdev->name, sizeof(cap->card));
-> +	strscpy(cap->card, handle->stream->dev->name, sizeof(cap->card));
->  	usb_make_path(stream->dev->udev, cap->bus_info, sizeof(cap->bus_info));
->  	cap->capabilities = V4L2_CAP_DEVICE_CAPS | V4L2_CAP_STREAMING
->  			  | chain->caps;
-> 
+Add 'nxp,imx8mq-vpu-ctrl' in the list of possible syscon.
+It will used to access to the VPU control registers.
 
-You forgot to update querycap in uvc_metadata.c as well:
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
-index 849d8e5ab75d..d3aab22f91ce 100644
---- a/drivers/media/usb/uvc/uvc_metadata.c
-+++ b/drivers/media/usb/uvc/uvc_metadata.c
-@@ -30,7 +30,7 @@ static int uvc_meta_v4l2_querycap(struct file *file, void *fh,
- 	struct uvc_video_chain *chain = stream->chain;
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- 	strscpy(cap->driver, "uvcvideo", sizeof(cap->driver));
--	strscpy(cap->card, vfh->vdev->name, sizeof(cap->card));
-+	strscpy(cap->card, stream->dev->name, sizeof(cap->card));
- 	usb_make_path(stream->dev->udev, cap->bus_info, sizeof(cap->bus_info));
- 	cap->capabilities = V4L2_CAP_DEVICE_CAPS | V4L2_CAP_STREAMING
- 			  | chain->caps;
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index f14ae6da0068..ae22c4730613 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -44,6 +44,7 @@ properties:
+               - hisilicon,peri-subctrl
+               - microchip,sparx5-cpu-syscon
+               - mstar,msc313-pmsleep
++              - nxp,imx8mq-vpu-ctrl
+               - rockchip,px30-qos
+               - rockchip,rk3066-qos
+               - rockchip,rk3288-qos
+-- 
+2.25.1
 
-With this change both video and metadata card names are the same, as you would
-expect.
-
-Regards,
-
-	Hans
