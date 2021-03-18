@@ -2,81 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C683CC433E6
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 15:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CDD9C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 18:16:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93FA964F30
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 15:26:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E40ED64F2A
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 18:16:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbhCRPZf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 11:25:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50808 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231273AbhCRPZP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 11:25:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B31A64F18;
-        Thu, 18 Mar 2021 15:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616081114;
-        bh=HihjKqEhrP5P6vFacJJGrARtlnGZ5gZZpZuOqSLI2cc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F1WFzYnIxraLYCZAL4TXgElqsggT38r/au8/dUeEuu5fDMg1to/BT4HAuIzPZQY80
-         FQEdBJVYYGtpzDSmKbyVV2tB3Z0zj8tdUG4x/Qpt2sCQkN1t+SrR51fyHk6UtcfChC
-         yxv8f61dbvFoYCCKzlwv8yaFP6fhrMfbBz2xSilwXLed4nzulasAGfAo/gzwsmD+ws
-         6XsoQgSY09QzHH8+9ZrtDO596sgKK3nM/gBj+tQbidHIz+oVAeV9bamVJgQZzQjR5X
-         qPw73SvE91nOSmuhqC/6mmEn6sgNRLpHDopAO7osdypdiJxegdJ9vpYd+lMnxBS5nk
-         dmhQ/0pQuBocQ==
-Received: by mail-oo1-f47.google.com with SMTP id h3-20020a4ae8c30000b02901b68b39e2d3so1516124ooe.9;
-        Thu, 18 Mar 2021 08:25:14 -0700 (PDT)
-X-Gm-Message-State: AOAM532qyK8S3n+x4kdSFybpLagywVFQATlz6EtAoMVjVhpnC+fe4ln/
-        3Ey9atFjZMFa+qvNTsP4uWgVPUdu0Fzk/iOQ8ss=
-X-Google-Smtp-Source: ABdhPJwcb2nDKd3G289OksixUXQJZCdc7vKxZQiqIS1B6im73rTIZx9+cdiBpQC+E9Z84DONyIyCGCP46GgwlfXkSjo=
-X-Received: by 2002:a4a:8ed2:: with SMTP id c18mr8093461ool.66.1616081113899;
- Thu, 18 Mar 2021 08:25:13 -0700 (PDT)
+        id S232483AbhCRSPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 14:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232412AbhCRSPP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Mar 2021 14:15:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A2CC06174A;
+        Thu, 18 Mar 2021 11:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=8Fkbd93Aq1q97jNctPteNuHQ9DD1eBmwgRUQ35hJ0rA=; b=V0w6Kb4Fi43X4zYOIkAMdjTWsk
+        S9/vwlXjY6r4HCHXAEod+UTbZPkMX5fKjVvWVYOUjuNn03/jt6cXDp6ak6qm4VNCeaG/GiMiZPC3M
+        3IOkP8pCB7HSMBqq/6N9uBCJhEswE3SBi23EvX0mQl+/elBrvJkoAkpg4Yfk/mClpAXKprmfhZg/R
+        Z5QLOm4hyncuW1Seq0UZ2Tn2FwvaqduQXZNOcxYHn/WxVHgH7irSLMfQrLXEwtfvg69rjsJdlZDMM
+        1vapm1DHm6hQlhM4BWMwkuzdYWV3CeM/qvUkfbFjhJt3zbSLhlYMM3+t/Q+HMLPDbLYHT14t5JyLQ
+        HQhG7hRg==;
+Received: from [2601:1c0:6280:3f0::9757]
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lMxAm-003Kqs-Se; Thu, 18 Mar 2021 18:15:07 +0000
+Subject: Re: [PATCH] drm/i915/gt: A typo fix
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, airlied@linux.ie, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        chris@chris-wilson.co.uk, tvrtko.ursulin@intel.com,
+        mika.kuoppala@linux.intel.com, maarten.lankhorst@linux.intel.com,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20210318101932.19894-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <027de4bd-cefc-0988-bd3b-b0bcc12d93b0@infradead.org>
+Date:   Thu, 18 Mar 2021 11:15:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20210318134334.2933141-1-arnd@kernel.org> <YFNrF5ebp9QUvKQh@pendragon.ideasonboard.com>
-In-Reply-To: <YFNrF5ebp9QUvKQh@pendragon.ideasonboard.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 18 Mar 2021 16:24:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2VQaz4rLqSeEVu4V-RJ6W3nimo=6PbVymEWAKkEQCDOg@mail.gmail.com>
-Message-ID: <CAK8P3a2VQaz4rLqSeEVu4V-RJ6W3nimo=6PbVymEWAKkEQCDOg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] media: v4l2-core: ignore native time32 ioctls on 64-bit
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+142888ffec98ab194028@syzkaller.appspotmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210318101932.19894-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 4:00 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Thu, Mar 18, 2021 at 02:43:18PM +0100, Arnd Bergmann wrote:
->
-> v4l2_event vs. v4l2_event32 vs. v4l2_event_time32 vs.
-> v4l2_event32_time32 is a bit confusing. Do I understand correctly that
-> the code below runs for the non-compat path, thus native userspace
-> (32-bit on 32-bit machines, 64-bit on 64-bit machines), and handles the
-> case of a native userspace using a 32-bit time ? If so it indeed doesn't
-> make sense for 64-bit machines.
+On 3/18/21 3:19 AM, Bhaskar Chowdhury wrote:
+> 
+> s/bariers/barriers/
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-Yes, that's correct. The way the structures are defined, we have
-all four combinations of native/compat pointer and time64/time32
-timestamps, but the combination of native pointer with time32
-stamps only makes sense for 32-bit users.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  drivers/gpu/drm/i915/gt/intel_timeline.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_timeline.c b/drivers/gpu/drm/i915/gt/intel_timeline.c
+> index 037b0e3ccbed..25fc7f44fee0 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_timeline.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_timeline.c
+> @@ -435,7 +435,7 @@ void intel_timeline_exit(struct intel_timeline *tl)
+>  	spin_unlock(&timelines->lock);
+> 
+>  	/*
+> -	 * Since this timeline is idle, all bariers upon which we were waiting
+> +	 * Since this timeline is idle, all barriers upon which we were waiting
+>  	 * must also be complete and so we can discard the last used barriers
+>  	 * without loss of information.
+>  	 */
+> --
+> 2.26.2
+> 
 
-Thanks,
 
-        Arnd
+-- 
+~Randy
+
