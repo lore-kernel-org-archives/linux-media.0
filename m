@@ -7,116 +7,223 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF8DC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3B0C43381
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:30:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C313864F1B
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:23:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D57164F40
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:30:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbhCRUWf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 16:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S233097AbhCRU3g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 16:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbhCRUW1 (ORCPT
+        with ESMTP id S231769AbhCRU3c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 16:22:27 -0400
+        Thu, 18 Mar 2021 16:29:32 -0400
 Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17455C06174A
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:22:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id l18so53608edc.9
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:22:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0ABC06174A
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:32 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id bf3so8306519edb.6
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7uwOg1mQehd8syJ8ME8ZSJU0IvR4LW2SYhVYJj2Fhdo=;
-        b=lIk6Olmx3t+mVkP6jOI0haIsWbY/jZ7rq2PSrpK699hZaRDlxcyz9dAJvuyfOFsJ+O
-         kdIyGFFeJA0PRyprsDF7WRtCXzNIqvLjrzypPhRqd4xWqVAOgXwEPIC7dssCD+NaFGG+
-         2ENnVPe/ZfiKdiQtARz0elXT/GLJYbClb3wu4=
+        bh=FoTNLAOXFMQlhoehVNvrR3D+MbUba/aJhWEJ/3u+/wQ=;
+        b=Gy6lr22SSC6SHuKO3ZQL9boQrV+nP0bJNV43u7oKTPA/l/I7KFgSMPWesy+r3kc6rH
+         oQ/3ld5dd0taAQYxooaVdn81vhKNpwIJrDgleWUYgQzK1syv2po4prno0Jh62+fALIgr
+         3bQTIfY9JISvyyJb2h0UMOMSt+G9sl/N4RCpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7uwOg1mQehd8syJ8ME8ZSJU0IvR4LW2SYhVYJj2Fhdo=;
-        b=kZaSP4/xPRxxDoagL3j5KdDOHkDnpxvxkpewGxGydVHIVKdbButxI7FM14CLT34ftx
-         Zc0Btw80xSpuJKY6BMQ9iAvpbrSam+DVMJzuy3JXplDPiIG7bgBi8z4V3KNMCjyzcitE
-         uwFYGKaQ/i4Uu8uOHAoTKaKFOQaAqJPZ3I/zgQhY4pN3sCBwnTq2iikzV3FjsMo5mvf1
-         NKb+XKd83ZYk1EWqnPj2sna21zuj0aIHRWoQlFLoxZqFKGk7B+/kJd8RYfQoyhJJern/
-         axpdi53/uegaI07HDbZXZwRxkNzKa6b4zirRh8RThLyQtGjBj9dITof9F/5w14WGDvm7
-         w7kQ==
-X-Gm-Message-State: AOAM532Aynbz3pL3LexfoW9vd63mb5o/LqRzI7/HgBgeCtANDssh3sD6
-        un+hykuCyH76Y/FHlNrWDiJJHA==
-X-Google-Smtp-Source: ABdhPJyLMGaeXAtuWJUjCCl/7/HsAh0IYcm0EAkC+rWHMt+j1sCFW45WM2/+tNu4wDp2TbMBZV8xtw==
-X-Received: by 2002:aa7:cd63:: with SMTP id ca3mr5872545edb.265.1616098945849;
-        Thu, 18 Mar 2021 13:22:25 -0700 (PDT)
+        bh=FoTNLAOXFMQlhoehVNvrR3D+MbUba/aJhWEJ/3u+/wQ=;
+        b=If4txlU2PZxrh3ZyCJsNPUhq3iSITJhnG3s4zgaUSh4wPvArbRWm7NBTW/P+KAaf4s
+         FZJkVRaZunhwrSuf//qLtQCvG8AiLstNs/0DEf8Q3oWRJcmd0vIG+6lORc3zvhTa25/a
+         11CJb09j8EJ1JsWxZMLHv47g1QpBJpGtAg1x/++f5YSPBJ7eRdoOzpM2f7wK+shwsmh7
+         mLAZEQQBxAqL3ZvsbTcC2ZxzTKBBVLAyIM2C6RCsjrVu86MvE2xpGYvpQ1Bzf4nbZs/N
+         +myAIjg9u/GWbtyAN0Hacor5kBqNo1JWA/MZMi/ejLXTXb+BhNwGVrpkMnsZkoUgYQ87
+         hmYA==
+X-Gm-Message-State: AOAM533L+4pGw2m/fezEO0or2eGNMRW9qlEPlW7LNZn1TEnZDjTKPvG0
+        lNFhJpmIfBSJIyiTgQfQUFTtaWBaKY6tvnJ5b24=
+X-Google-Smtp-Source: ABdhPJxp2gIqEt5N7i9tItTvg0/F43kCTmNwNHAmErCyzvkRwK4BCSfphZoOITmmlp9v/zKS0QV2WA==
+X-Received: by 2002:a05:6402:12cf:: with SMTP id k15mr5718330edx.192.1616099370709;
+        Thu, 18 Mar 2021 13:29:30 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id e16sm2481120ejc.63.2021.03.18.13.22.25
+        by smtp.gmail.com with ESMTPSA id a22sm2533767ejr.89.2021.03.18.13.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Mar 2021 13:22:25 -0700 (PDT)
+        Thu, 18 Mar 2021 13:29:30 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     trivial@kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>, linux-media@vger.kernel.org
-Subject: [PATCH 2/9] media: atomisp: Fix typo "accesible"
-Date:   Thu, 18 Mar 2021 21:22:16 +0100
-Message-Id: <20210318202223.164873-2-ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH v7 01/17] media: v4l2-ioctl: Fix check_ext_ctrls
+Date:   Thu, 18 Mar 2021 21:29:12 +0100
+Message-Id: <20210318202928.166955-2-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-In-Reply-To: <20210318202223.164873-1-ribalda@chromium.org>
-References: <20210318202223.164873-1-ribalda@chromium.org>
+In-Reply-To: <20210318202928.166955-1-ribalda@chromium.org>
+References: <20210318202928.166955-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Trivial fix.
+Drivers that do not use the ctrl-framework use this function instead.
 
-Cc: linux-media@vger.kernel.org
+Fix the following issues:
+
+- Do not check for multiple classes when getting the DEF_VAL.
+- Return -EINVAL for request_api calls
+- Default value cannot be changed, return EINVAL as soon as possible.
+- Return the right error_idx
+[If an error is found when validating the list of controls passed with
+VIDIOC_G_EXT_CTRLS, then error_idx shall be set to ctrls->count to
+indicate to userspace that no actual hardware was touched.
+It would have been much nicer of course if error_idx could point to the
+control index that failed the validation, but sadly that's not how the
+API was designed.]
+
+Fixes v4l2-compliance:
+Control ioctls (Input 0):
+        warn: v4l2-test-controls.cpp(834): error_idx should be equal to count
+        warn: v4l2-test-controls.cpp(855): error_idx should be equal to count
+		fail: v4l2-test-controls.cpp(813): doioctl(node, VIDIOC_G_EXT_CTRLS, &ctrls)
+	test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
+Buffer ioctls (Input 0):
+		fail: v4l2-test-buffers.cpp(1994): ret != EINVAL && ret != EBADR && ret != ENOTTY
+	test Requests: FAIL
+
+Cc: stable@vger.kernel.org
+Fixes: 6fa6f831f095 ("media: v4l2-ctrls: add core request support")
+Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/staging/media/atomisp/pci/input_system_ctrl_defs.h | 2 +-
- drivers/staging/media/atomisp/pci/isp_acquisition_defs.h   | 2 +-
- drivers/staging/media/atomisp/pci/isp_capture_defs.h       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/v4l2-core/v4l2-ioctl.c | 59 ++++++++++++++++++----------
+ 1 file changed, 38 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/input_system_ctrl_defs.h b/drivers/staging/media/atomisp/pci/input_system_ctrl_defs.h
-index c801ddd71192..b2076a96987c 100644
---- a/drivers/staging/media/atomisp/pci/input_system_ctrl_defs.h
-+++ b/drivers/staging/media/atomisp/pci/input_system_ctrl_defs.h
-@@ -27,7 +27,7 @@
- // Number of registers
- #define ISYS_CTRL_NOF_REGS                              23
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 31d1342e61e8..ccd21b4d9c72 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -908,7 +908,7 @@ static void v4l_print_default(const void *arg, bool write_only)
+ 	pr_cont("driver-specific ioctl\n");
+ }
  
--// Register id's of MMIO slave accesible registers
-+// Register id's of MMIO slave accessible registers
- #define ISYS_CTRL_CAPT_START_ADDR_A_REG_ID              0
- #define ISYS_CTRL_CAPT_START_ADDR_B_REG_ID              1
- #define ISYS_CTRL_CAPT_START_ADDR_C_REG_ID              2
-diff --git a/drivers/staging/media/atomisp/pci/isp_acquisition_defs.h b/drivers/staging/media/atomisp/pci/isp_acquisition_defs.h
-index 8e4bddc3790d..7e8f6f2178aa 100644
---- a/drivers/staging/media/atomisp/pci/isp_acquisition_defs.h
-+++ b/drivers/staging/media/atomisp/pci/isp_acquisition_defs.h
-@@ -35,7 +35,7 @@
+-static int check_ext_ctrls(struct v4l2_ext_controls *c, int allow_priv)
++static bool check_ext_ctrls(struct v4l2_ext_controls *c, unsigned long ioctl)
+ {
+ 	__u32 i;
  
- #define NOF_ACQ_REGS                              12
+@@ -917,23 +917,40 @@ static int check_ext_ctrls(struct v4l2_ext_controls *c, int allow_priv)
+ 	for (i = 0; i < c->count; i++)
+ 		c->controls[i].reserved2[0] = 0;
  
--// Register id's of MMIO slave accesible registers
-+// Register id's of MMIO slave accessible registers
- #define ACQ_START_ADDR_REG_ID                     0
- #define ACQ_MEM_REGION_SIZE_REG_ID                1
- #define ACQ_NUM_MEM_REGIONS_REG_ID                2
-diff --git a/drivers/staging/media/atomisp/pci/isp_capture_defs.h b/drivers/staging/media/atomisp/pci/isp_capture_defs.h
-index 14cbb6390d3e..b9e5ed932702 100644
---- a/drivers/staging/media/atomisp/pci/isp_capture_defs.h
-+++ b/drivers/staging/media/atomisp/pci/isp_capture_defs.h
-@@ -33,7 +33,7 @@
- // Number of registers
- #define CAPT_NOF_REGS                             16
+-	/* V4L2_CID_PRIVATE_BASE cannot be used as control class
+-	   when using extended controls.
+-	   Only when passed in through VIDIOC_G_CTRL and VIDIOC_S_CTRL
+-	   is it allowed for backwards compatibility.
+-	 */
+-	if (!allow_priv && c->which == V4L2_CID_PRIVATE_BASE)
+-		return 0;
+-	if (!c->which)
+-		return 1;
++	switch (c->which) {
++	case V4L2_CID_PRIVATE_BASE:
++		/*
++		 * V4L2_CID_PRIVATE_BASE cannot be used as control class
++		 * when using extended controls.
++		 * Only when passed in through VIDIOC_G_CTRL and VIDIOC_S_CTRL
++		 * is it allowed for backwards compatibility.
++		 */
++		if (ioctl == VIDIOC_G_CTRL || ioctl == VIDIOC_S_CROP)
++			return false;
++		break;
++	case V4L2_CTRL_WHICH_DEF_VAL:
++		/* Default value cannot be changed */
++		if (ioctl == VIDIOC_S_EXT_CTRLS ||
++		    ioctl == VIDIOC_TRY_EXT_CTRLS) {
++			c->error_idx = c->count;
++			return false;
++		}
++		return true;
++	case V4L2_CTRL_WHICH_CUR_VAL:
++		return true;
++	case V4L2_CTRL_WHICH_REQUEST_VAL:
++		c->error_idx = c->count;
++		return false;
++	}
++
+ 	/* Check that all controls are from the same control class. */
+ 	for (i = 0; i < c->count; i++) {
+ 		if (V4L2_CTRL_ID2WHICH(c->controls[i].id) != c->which) {
+-			c->error_idx = i;
+-			return 0;
++			c->error_idx = ioctl == VIDIOC_TRY_EXT_CTRLS ? i : c->count;
++			return false;
+ 		}
+ 	}
+-	return 1;
++	return true;
+ }
  
--// Register id's of MMIO slave accesible registers
-+// Register id's of MMIO slave accessible registers
- #define CAPT_START_MODE_REG_ID                    0
- #define CAPT_START_ADDR_REG_ID                    1
- #define CAPT_MEM_REGION_SIZE_REG_ID               2
+ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+@@ -2229,7 +2246,7 @@ static int v4l_g_ctrl(const struct v4l2_ioctl_ops *ops,
+ 	ctrls.controls = &ctrl;
+ 	ctrl.id = p->id;
+ 	ctrl.value = p->value;
+-	if (check_ext_ctrls(&ctrls, 1)) {
++	if (check_ext_ctrls(&ctrls, VIDIOC_G_CTRL)) {
+ 		int ret = ops->vidioc_g_ext_ctrls(file, fh, &ctrls);
+ 
+ 		if (ret == 0)
+@@ -2263,7 +2280,7 @@ static int v4l_s_ctrl(const struct v4l2_ioctl_ops *ops,
+ 	ctrls.controls = &ctrl;
+ 	ctrl.id = p->id;
+ 	ctrl.value = p->value;
+-	if (check_ext_ctrls(&ctrls, 1))
++	if (check_ext_ctrls(&ctrls, VIDIOC_S_CTRL))
+ 		return ops->vidioc_s_ext_ctrls(file, fh, &ctrls);
+ 	return -EINVAL;
+ }
+@@ -2285,8 +2302,8 @@ static int v4l_g_ext_ctrls(const struct v4l2_ioctl_ops *ops,
+ 					vfd, vfd->v4l2_dev->mdev, p);
+ 	if (ops->vidioc_g_ext_ctrls == NULL)
+ 		return -ENOTTY;
+-	return check_ext_ctrls(p, 0) ? ops->vidioc_g_ext_ctrls(file, fh, p) :
+-					-EINVAL;
++	return check_ext_ctrls(p, VIDIOC_G_EXT_CTRLS) ?
++				ops->vidioc_g_ext_ctrls(file, fh, p) : -EINVAL;
+ }
+ 
+ static int v4l_s_ext_ctrls(const struct v4l2_ioctl_ops *ops,
+@@ -2306,8 +2323,8 @@ static int v4l_s_ext_ctrls(const struct v4l2_ioctl_ops *ops,
+ 					vfd, vfd->v4l2_dev->mdev, p);
+ 	if (ops->vidioc_s_ext_ctrls == NULL)
+ 		return -ENOTTY;
+-	return check_ext_ctrls(p, 0) ? ops->vidioc_s_ext_ctrls(file, fh, p) :
+-					-EINVAL;
++	return check_ext_ctrls(p, VIDIOC_S_EXT_CTRLS) ?
++				ops->vidioc_s_ext_ctrls(file, fh, p) : -EINVAL;
+ }
+ 
+ static int v4l_try_ext_ctrls(const struct v4l2_ioctl_ops *ops,
+@@ -2327,8 +2344,8 @@ static int v4l_try_ext_ctrls(const struct v4l2_ioctl_ops *ops,
+ 					  vfd, vfd->v4l2_dev->mdev, p);
+ 	if (ops->vidioc_try_ext_ctrls == NULL)
+ 		return -ENOTTY;
+-	return check_ext_ctrls(p, 0) ? ops->vidioc_try_ext_ctrls(file, fh, p) :
+-					-EINVAL;
++	return check_ext_ctrls(p, VIDIOC_TRY_EXT_CTRLS) ?
++			ops->vidioc_try_ext_ctrls(file, fh, p) : -EINVAL;
+ }
+ 
+ /*
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
