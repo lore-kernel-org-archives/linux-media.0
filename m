@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD33C432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7869AC43603
 	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:30:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A84964F6D
+	by mail.kernel.org (Postfix) with ESMTP id 61EE764F6D
 	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 20:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbhCRU3j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 16:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S233135AbhCRU3k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 16:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbhCRU3e (ORCPT
+        with ESMTP id S233082AbhCRU3f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 16:29:34 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EC9C06174A
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:33 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id bf3so8306627edb.6
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:33 -0700 (PDT)
+        Thu, 18 Mar 2021 16:29:35 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E897BC06175F
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id jy13so6007489ejc.2
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 13:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FSJfEMpG3gmvu/1zHkC5YrHmNIBqGbW9b1IfyrEOzZs=;
-        b=Rp4sh8SvTreezYaiDbX6nqPkn8WyaoqSz0zaebel9/imOxNHSoL9bthZuVHoVCkf71
-         7QJKS3y6fYrxXmTMdwt8qb3fklRMDFlaHtMM3LTvIvmf8e+PzAjM7I2eql6+jZHGOesl
-         vXlLQILAdwRyPAWp2JQObCuexRmNK1owoaOAw=
+        bh=Vbmq6DvAp8/As0foK4j0pVO4aWYaVi9swp3Py2nra/g=;
+        b=V2XumfmkI7vrBf711i8aTXQUpLI+NLRNS7EA4B4cA6OYTWnwpf9TsBHR+9hoOnOp1+
+         flUO6cxvLKySfJYtyVh57mrI4lyI3uFWhlzfS4H6STmnmxOpFTBl7u8lJUVES3v1jC3d
+         0GzkxIdzWijKhYybuFhQGXm2HEBcuQWRSa42w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FSJfEMpG3gmvu/1zHkC5YrHmNIBqGbW9b1IfyrEOzZs=;
-        b=NHao1qD+x2IIu7OpKGgUE6y2WvnK9OlM1+9wqfKbtkaqpoiKq5QGErFclxo9fyNdRW
-         Ws3fqLo4LfNzsdrZmQORMx/ykp4K73e7Euu+T7ZcoS3vmmsHPAxgBYtn3bjK6TYTbPrM
-         OKlW7AmkiZRS+OlUAlCBCep8JVmGRgAMQvZ3OicL+ro72HpCBNkrIH91vMX2zvt6I3og
-         YwxAI4THG4FJqwKyNsIQxBiBrHLiKNzU53eiFd1Uv0Zk1ulbu8T0kTeUHiQo5Zd1+5e+
-         lcZhbdUJ8IpPlEeB+wUThvg6JLt+IU3KUOZAAKAQsphwL8NrXJYqyqicWBzAIdzgY1+4
-         DILQ==
-X-Gm-Message-State: AOAM531768gci9pVZ68JKbvH8YBM6dk37lmuY4P4lPBWoF8Z8tSz4qEZ
-        1MX/isETtqMSx4soAqLAbmnmEA==
-X-Google-Smtp-Source: ABdhPJwqeVRPR+ciinoz7xoNyT/jTcke1zYbW8YkxRuNHCXr3JS6OFtIU7vU2KZjZB0pp7Zry+2baQ==
-X-Received: by 2002:a50:fe81:: with SMTP id d1mr6013551edt.308.1616099372499;
-        Thu, 18 Mar 2021 13:29:32 -0700 (PDT)
+        bh=Vbmq6DvAp8/As0foK4j0pVO4aWYaVi9swp3Py2nra/g=;
+        b=Aox45HcPapocllmHGk9mZoYRW1SYTsrqLVxOLxZmJEOA0E0R4uxVa4JI4694coqOXL
+         3LE5q8C9isNviCkti2eotijasVI/T3GBEHjTAqlteaqIsbvI33cVw3EQqW1W67V5D3K7
+         HAyLgrQkSRy0YDhG/0AJkRtN5BdxKkHxTF4WkOMB/WNwxkExNK3NLDxGz/dS2nQbmu4p
+         rYSGLqJP9BLpER/PlvQ6DtIUk/aI0NzKsqHwl+kHsYyHC7cvGeZ76exr2EBOMHcYQoUp
+         p22OaiOr8bzD4QpCjG2wxNmUmAE9TORJ9xR3Fm/9TQeW1J8gsCH06pO6tYi6lqPo5vKk
+         FusQ==
+X-Gm-Message-State: AOAM533ZTSPVZDaq/4EZH0RqYUxe2NIExi6FwIUb8h8zHCNMbKEjECW3
+        Tezz+0hW0U+snej3FA5+9VwZbKT0KcN+QjIAWD4=
+X-Google-Smtp-Source: ABdhPJyZ12v7pYp7mQANBVXHW1x5sE+ukl5KcND0Sn2d1KLf3twijjdgdjUaF87fQ1dRADTiACE2IA==
+X-Received: by 2002:a17:906:86c6:: with SMTP id j6mr381174ejy.197.1616099373675;
+        Thu, 18 Mar 2021 13:29:33 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id a22sm2533767ejr.89.2021.03.18.13.29.31
+        by smtp.gmail.com with ESMTPSA id a22sm2533767ejr.89.2021.03.18.13.29.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Mar 2021 13:29:32 -0700 (PDT)
+        Thu, 18 Mar 2021 13:29:33 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v7 04/17] media: uvcvideo: Set capability in s_param
-Date:   Thu, 18 Mar 2021 21:29:15 +0100
-Message-Id: <20210318202928.166955-5-ribalda@chromium.org>
+Subject: [PATCH v7 06/17] media: uvcvideo: refactor __uvc_ctrl_add_mapping
+Date:   Thu, 18 Mar 2021 21:29:17 +0100
+Message-Id: <20210318202928.166955-7-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
 In-Reply-To: <20210318202928.166955-1-ribalda@chromium.org>
 References: <20210318202928.166955-1-ribalda@chromium.org>
@@ -73,39 +73,170 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes v4l2-compliance:
+Pass the chain instead of the device. We want to keep the reference to
+the chain that controls belong to.
 
-Format ioctls (Input 0):
-                warn: v4l2-test-formats.cpp(1339): S_PARM is supported but doesn't report V4L2_CAP_TIMEPERFRAME
-                fail: v4l2-test-formats.cpp(1241): node->has_frmintervals && !cap->capability
+We need to delay the initialization of the controls after the chains
+have been initialized.
+
+This is a cleanup needed for the next patches.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c   | 41 ++++++++++++++++++++----------
+ drivers/media/usb/uvc/uvc_driver.c |  8 +++---
+ 2 files changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 47b0e3224205..397217171bbb 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -472,10 +472,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
- 	uvc_simplify_fraction(&timeperframe.numerator,
- 		&timeperframe.denominator, 8, 333);
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index b3dde98499f4..b75da65115ef 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2057,7 +2057,7 @@ static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+ /*
+  * Add a control mapping to a given control.
+  */
+-static int __uvc_ctrl_add_mapping(struct uvc_device *dev,
++static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+ 	struct uvc_control *ctrl, const struct uvc_control_mapping *mapping)
+ {
+ 	struct uvc_control_mapping *map;
+@@ -2086,7 +2086,7 @@ static int __uvc_ctrl_add_mapping(struct uvc_device *dev,
+ 		map->set = uvc_set_le_value;
  
--	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
- 		parm->parm.capture.timeperframe = timeperframe;
--	else
-+		parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
-+	} else {
- 		parm->parm.output.timeperframe = timeperframe;
-+		parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
-+	}
+ 	list_add_tail(&map->list, &ctrl->info.mappings);
+-	uvc_dbg(dev, CONTROL, "Adding mapping '%s' to control %pUl/%u\n",
++	uvc_dbg(chain->dev, CONTROL, "Adding mapping '%s' to control %pUl/%u\n",
+ 		map->name, ctrl->info.entity, ctrl->info.selector);
  
  	return 0;
+@@ -2168,7 +2168,7 @@ int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+ 		goto done;
+ 	}
+ 
+-	ret = __uvc_ctrl_add_mapping(dev, ctrl, mapping);
++	ret = __uvc_ctrl_add_mapping(chain, ctrl, mapping);
+ 	if (ret < 0)
+ 		atomic_dec(&dev->nmappings);
+ 
+@@ -2244,7 +2244,8 @@ static void uvc_ctrl_prune_entity(struct uvc_device *dev,
+  * Add control information and hardcoded stock control mappings to the given
+  * device.
+  */
+-static void uvc_ctrl_init_ctrl(struct uvc_device *dev, struct uvc_control *ctrl)
++static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
++			       struct uvc_control *ctrl)
+ {
+ 	const struct uvc_control_info *info = uvc_ctrls;
+ 	const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
+@@ -2263,14 +2264,14 @@ static void uvc_ctrl_init_ctrl(struct uvc_device *dev, struct uvc_control *ctrl)
+ 	for (; info < iend; ++info) {
+ 		if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+ 		    ctrl->index == info->index) {
+-			uvc_ctrl_add_info(dev, ctrl, info);
++			uvc_ctrl_add_info(chain->dev, ctrl, info);
+ 			/*
+ 			 * Retrieve control flags from the device. Ignore errors
+ 			 * and work with default flag values from the uvc_ctrl
+ 			 * array when the device doesn't properly implement
+ 			 * GET_INFO on standard controls.
+ 			 */
+-			uvc_ctrl_get_flags(dev, ctrl, &ctrl->info);
++			uvc_ctrl_get_flags(chain->dev, ctrl, &ctrl->info);
+ 			break;
+ 		 }
+ 	}
+@@ -2281,22 +2282,20 @@ static void uvc_ctrl_init_ctrl(struct uvc_device *dev, struct uvc_control *ctrl)
+ 	for (; mapping < mend; ++mapping) {
+ 		if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+ 		    ctrl->info.selector == mapping->selector)
+-			__uvc_ctrl_add_mapping(dev, ctrl, mapping);
++			__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+ 	}
  }
+ 
+ /*
+  * Initialize device controls.
+  */
+-int uvc_ctrl_init_device(struct uvc_device *dev)
++static int uvc_ctrl_init_chain(struct uvc_video_chain *chain)
+ {
+ 	struct uvc_entity *entity;
+ 	unsigned int i;
+ 
+-	INIT_WORK(&dev->async_ctrl.work, uvc_ctrl_status_event_work);
+-
+ 	/* Walk the entities list and instantiate controls */
+-	list_for_each_entry(entity, &dev->entities, list) {
++	list_for_each_entry(entity, &chain->entities, chain) {
+ 		struct uvc_control *ctrl;
+ 		unsigned int bControlSize = 0, ncontrols;
+ 		u8 *bmControls = NULL;
+@@ -2316,7 +2315,7 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ 		}
+ 
+ 		/* Remove bogus/blacklisted controls */
+-		uvc_ctrl_prune_entity(dev, entity);
++		uvc_ctrl_prune_entity(chain->dev, entity);
+ 
+ 		/* Count supported controls and allocate the controls array */
+ 		ncontrols = memweight(bmControls, bControlSize);
+@@ -2338,7 +2337,7 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ 			ctrl->entity = entity;
+ 			ctrl->index = i;
+ 
+-			uvc_ctrl_init_ctrl(dev, ctrl);
++			uvc_ctrl_init_ctrl(chain, ctrl);
+ 			ctrl++;
+ 		}
+ 	}
+@@ -2346,6 +2345,22 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ 	return 0;
+ }
+ 
++int uvc_ctrl_init_device(struct uvc_device *dev)
++{
++	struct uvc_video_chain *chain;
++	int ret;
++
++	INIT_WORK(&dev->async_ctrl.work, uvc_ctrl_status_event_work);
++
++	list_for_each_entry(chain, &dev->chains, list) {
++		ret = uvc_ctrl_init_chain(chain);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ /*
+  * Cleanup device controls.
+  */
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 30ef2a3110f7..35873cf2773d 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2423,14 +2423,14 @@ static int uvc_probe(struct usb_interface *intf,
+ 	if (v4l2_device_register(&intf->dev, &dev->vdev) < 0)
+ 		goto error;
+ 
+-	/* Initialize controls. */
+-	if (uvc_ctrl_init_device(dev) < 0)
+-		goto error;
+-
+ 	/* Scan the device for video chains. */
+ 	if (uvc_scan_device(dev) < 0)
+ 		goto error;
+ 
++	/* Initialize controls. */
++	if (uvc_ctrl_init_device(dev) < 0)
++		goto error;
++
+ 	/* Register video device nodes. */
+ 	if (uvc_register_chains(dev) < 0)
+ 		goto error;
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
