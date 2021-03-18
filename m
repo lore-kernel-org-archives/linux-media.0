@@ -2,122 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C90C4360C
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AFE1C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 09:04:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1177464F68
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:22:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 401BB64F10
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 09:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbhCRIVn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 04:21:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38782 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbhCRIVM (ORCPT
+        id S229634AbhCRJDc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 05:03:32 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:38847 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229540AbhCRJDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 04:21:12 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id BDAD21F456D3
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, lee.jones@linaro.org,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
-        emil.l.velikov@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 08/13] media: hantro: Only use postproc when post processed formats are defined
-Date:   Thu, 18 Mar 2021 09:20:41 +0100
-Message-Id: <20210318082046.51546-9-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
-References: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
+        Thu, 18 Mar 2021 05:03:12 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id MoYclIPqNDUxpMoYgliDxm; Thu, 18 Mar 2021 10:03:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1616058190; bh=PKajviO7uivJkmQG4FS31K3PvYrAPn9uHRQMzwJBBCw=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=s3iNO/bKPwnxAyaeji90458n9s+QN713PrePBHfW80yM58C76rjGtJ4vtZqlpYU0z
+         u9s/W9fFN4YW3hqSxzKABF4kKuMyFxS6oZy4ggc0p7Us+TiAv5Ll52622BjbScuK0I
+         WeB4T0Dn3D6atYH/L5YjIQKP50sa5za5zMP+RaZiKdpK/CBM8502/Q6M3ZsMNFETW5
+         yv3fU0YICbfdy7QP+kMnmtF2kYEEFUjsVLpKtvXUqzclPOK4CVtkPNFlcK2XaFi4xp
+         Fo13IJaiiZEl5VDJ3zXlrlbT2HjjebFO4nwTm7vyM7qrQaU5QAyvjtx8rB0BskfrqN
+         0iOc7P9RkDRJQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] vidioc-g-ext-ctrls.rst: reformat tables and clarify which vs
+ ctrl_class
+Message-ID: <1a94550f-41c6-feb0-6044-c60f764c832f@xs4all.nl>
+Date:   Thu, 18 Mar 2021 10:03:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfPiPe5xHU8RHqjTzEiRHZHCHURVXQ9kpm/EonT8IpSrk77ENnYzS42Y1pup/MF04HF8LJ8yeI3ss1OqB55TIxT4mlPf0sYBqAJde4mSNEsQMEZI4etGm
+ CNORJ8FclRsAob6fysJcuRktyuZ64WkeB7ujKIt6JsvYlFNtorqSQzI0SmqcOJyQd/3ooHE2J9z1MB+0WJXnA+W6HMeLcW5gWyU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the variant doesn't offert postprocessed formats make sure it will
-be ok.
+The VIDIOC_G/S/TRY_EXT_CTRLS documentation has large explanatory texts for
+some of the fields in a table. This makes it hard to read. Move those text to
+a new cell spanning the whole width of the table, similar to what was done
+for struct v4l2_pix_format. This makes it much more readable.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Also move the 'ctrl_class' description to below the 'which' description and
+just mention that it is deprecated and that 'which' should be used instead.
+
+Finally remove 'note::' for the V4L2_CTRL_WHICH_DEF_VAL description. It doesn't
+have to be marked as a note, it's just a simple paragraph.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/staging/media/hantro/hantro.h          |  8 ++------
- drivers/staging/media/hantro/hantro_postproc.c | 14 ++++++++++++++
- drivers/staging/media/hantro/hantro_v4l2.c     |  4 +++-
- 3 files changed, 19 insertions(+), 7 deletions(-)
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+index 01773f01c4a7..f2b4786721eb 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+@@ -138,11 +138,12 @@ still cause this situation.
+       - Identifies the control, set by the application.
+     * - __u32
+       - ``size``
+-      - The total size in bytes of the payload of this control. This is
+-	normally 0, but for pointer controls this should be set to the
+-	size of the memory containing the payload, or that will receive
+-	the payload. If :ref:`VIDIOC_G_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` finds that this value is
+-	less than is required to store the payload result, then it is set
++      - The total size in bytes of the payload of this control.
++    * - :cspan:`2` The ``size`` field is normally 0, but for pointer
++	controls this should be set to the size of the memory that contains
++	the payload or that will receive the payload.
++	If :ref:`VIDIOC_G_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` finds that this value
++	is less than is required to store the payload result, then it is set
+ 	to a value large enough to store the payload result and ``ENOSPC`` is
+ 	returned.
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index 4ae2071b3bfe..83299e8d3a6c 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -413,12 +413,8 @@ hantro_get_dst_buf(struct hantro_ctx *ctx)
- 	return v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
- }
- 
--static inline bool
--hantro_needs_postproc(const struct hantro_ctx *ctx,
--		      const struct hantro_fmt *fmt)
--{
--	return !ctx->is_encoder && fmt->fourcc != V4L2_PIX_FMT_NV12;
--}
-+bool hantro_needs_postproc(const struct hantro_ctx *ctx,
-+			   const struct hantro_fmt *fmt);
- 
- static inline dma_addr_t
- hantro_get_dec_buf_addr(struct hantro_ctx *ctx, struct vb2_buffer *vb)
-diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-index 6d2a8f2a8f0b..ed8916c950a4 100644
---- a/drivers/staging/media/hantro/hantro_postproc.c
-+++ b/drivers/staging/media/hantro/hantro_postproc.c
-@@ -50,6 +50,20 @@ const struct hantro_postproc_regs hantro_g1_postproc_regs = {
- 	.display_width = {G1_REG_PP_DISPLAY_WIDTH, 0, 0xfff},
- };
- 
-+bool hantro_needs_postproc(const struct hantro_ctx *ctx,
-+			   const struct hantro_fmt *fmt)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	if (ctx->is_encoder)
-+		return false;
-+
-+	if (!vpu->variant->postproc_fmts)
-+		return false;
-+
-+	return fmt->fourcc != V4L2_PIX_FMT_NV12;
-+}
-+
- void hantro_postproc_enable(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 1bc118e375a1..77d7fe62ce81 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -55,7 +55,9 @@ static const struct hantro_fmt *
- hantro_get_postproc_formats(const struct hantro_ctx *ctx,
- 			    unsigned int *num_fmts)
- {
--	if (ctx->is_encoder) {
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	if (ctx->is_encoder || !vpu->variant->postproc_fmts) {
- 		*num_fmts = 0;
- 		return NULL;
- 	}
--- 
-2.25.1
+@@ -242,30 +243,19 @@ still cause this situation.
 
+     * - union {
+       - (anonymous)
+-    * - __u32
+-      - ``ctrl_class``
+-      - The control class to which all controls belong, see
+-	:ref:`ctrl-class`. Drivers that use a kernel framework for
+-	handling controls will also accept a value of 0 here, meaning that
+-	the controls can belong to any control class. Whether drivers
+-	support this can be tested by setting ``ctrl_class`` to 0 and
+-	calling :ref:`VIDIOC_TRY_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` with a ``count`` of 0. If that
+-	succeeds, then the driver supports this feature.
+     * - __u32
+       - ``which``
+       - Which value of the control to get/set/try.
+-	``V4L2_CTRL_WHICH_CUR_VAL`` will return the current value of the
+-	control, ``V4L2_CTRL_WHICH_DEF_VAL`` will return the default
++    * - :cspan:`2` ``V4L2_CTRL_WHICH_CUR_VAL`` will return the current value of
++	the control, ``V4L2_CTRL_WHICH_DEF_VAL`` will return the default
+ 	value of the control and ``V4L2_CTRL_WHICH_REQUEST_VAL`` indicates that
+ 	these controls have to be retrieved from a request or tried/set for
+ 	a request. In the latter case the ``request_fd`` field contains the
+ 	file descriptor of the request that should be used. If the device
+ 	does not support requests, then ``EACCES`` will be returned.
+
+-	.. note::
+-
+-	   When using ``V4L2_CTRL_WHICH_DEF_VAL`` be aware that you can only
+-	   get the default value of the control, you cannot set or try it.
++	When using ``V4L2_CTRL_WHICH_DEF_VAL`` be aware that you can only
++	get the default value of the control, you cannot set or try it.
+
+ 	For backwards compatibility you can also use a control class here
+ 	(see :ref:`ctrl-class`). In that case all controls have to
+@@ -273,9 +263,12 @@ still cause this situation.
+ 	just use ``V4L2_CTRL_WHICH_CUR_VAL``. There are some very old
+ 	drivers that do not yet support ``V4L2_CTRL_WHICH_CUR_VAL`` and
+ 	that require a control class here. You can test for such drivers
+-	by setting ctrl_class to ``V4L2_CTRL_WHICH_CUR_VAL`` and calling
+-	VIDIOC_TRY_EXT_CTRLS with a count of 0. If that fails, then the
+-	driver does not support ``V4L2_CTRL_WHICH_CUR_VAL``.
++	by setting ``which`` to ``V4L2_CTRL_WHICH_CUR_VAL`` and calling
++	:ref:`VIDIOC_TRY_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` with a count of 0.
++	If that fails, then the driver does not support ``V4L2_CTRL_WHICH_CUR_VAL``.
++    * - __u32
++      - ``ctrl_class``
++      - Deprecated name kept for backwards compatibility. Use ``which`` instead.
+     * - }
+       -
+     * - __u32
+@@ -283,7 +276,8 @@ still cause this situation.
+       - The number of controls in the controls array. May also be zero.
+     * - __u32
+       - ``error_idx``
+-      - Set by the driver in case of an error. If the error is associated
++      - Index of the failing control. Set by the driver in case of an error.
++    * - :cspan:`2` If the error is associated
+ 	with a particular control, then ``error_idx`` is set to the index
+ 	of that control. If the error is not related to a specific
+ 	control, or the validation step failed (see below), then
