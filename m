@@ -7,25 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31207C432C3
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC05FC433E6
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:22:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B39F64F78
-	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:21:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F36264F30
+	for <linux-media@archiver.kernel.org>; Thu, 18 Mar 2021 08:22:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhCRIVI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Mar 2021 04:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhCRIVG (ORCPT
+        id S229884AbhCRIVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Mar 2021 04:21:38 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38782 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbhCRIVI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Mar 2021 04:21:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBDC06174A;
-        Thu, 18 Mar 2021 01:21:06 -0700 (PDT)
+        Thu, 18 Mar 2021 04:21:08 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 147791F456D3
+        with ESMTPSA id 7EE271F456DC
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -40,9 +37,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 02/13] dt-bindings: media: nxp,imx8mq-vpu: Update the bindings for G2 support
-Date:   Thu, 18 Mar 2021 09:20:35 +0100
-Message-Id: <20210318082046.51546-3-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 04/13] media: hevc: Add fields and flags for hevc PPS
+Date:   Thu, 18 Mar 2021 09:20:37 +0100
+Message-Id: <20210318082046.51546-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
 References: <20210318082046.51546-1-benjamin.gaignard@collabora.com>
@@ -52,120 +49,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introducing G2 hevc video decoder lead to modify the bindings to allow
-to get one node per VPUs.
-VPUs share one hardware control block which is provided as a phandle on
-an syscon.
-Each node got now one reg and one interrupt.
-Add a compatible for G2 hardware block: nxp,imx8mq-vpu-g2.
-
-To be compatible with older DT the driver is still capable to use 'ctrl'
-reg-name even if it is deprecated now.
+Add fields and flags as they are defined in
+7.4.3.3.1 "General picture parameter set RBSP semantics of the
+H.265 ITU specification.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-version 5:
-- This version doesn't break the backward compatibilty between kernel
-  and DT.
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 14 ++++++++++++++
+ include/media/hevc-ctrls.h                         |  4 ++++
+ 2 files changed, 18 insertions(+)
 
- .../bindings/media/nxp,imx8mq-vpu.yaml        | 53 ++++++++++++-------
- 1 file changed, 34 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-index 762be3f96ce9..79502fc8bde5 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-@@ -15,22 +15,18 @@ description:
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 00944e97d638..d62e8e423f3b 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -3234,6 +3234,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``num_extra_slice_header_bits``
+       -
++    * - __u8
++      - ``num_ref_idx_l0_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l0_active_minus1
++    * - __u8
++      - ``num_ref_idx_l1_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l1_active_minus1
+     * - __s8
+       - ``init_qp_minus26``
+       -
+@@ -3342,6 +3348,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - ``V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT``
+       - 0x00040000
+       -
++    * - ``V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT``
++      - 0x00080000
++      - Specifies the presence of deblocking filter control syntax elements in
++        the PPS
++    * - ``V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING``
++      - 0x00100000
++      - Specifies that tile column boundaries and likewise tile row boundaries
++        are distributed uniformly across the picture
  
- properties:
-   compatible:
--    const: nxp,imx8mq-vpu
-+    oneOf:
-+      - const: nxp,imx8mq-vpu
-+      - const: nxp,imx8mq-vpu-g2
+ ``V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS (struct)``
+     Specifies various slice-specific parameters, especially from the NAL unit
+diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+index b4cb2ef02f17..003f819ecb26 100644
+--- a/include/media/hevc-ctrls.h
++++ b/include/media/hevc-ctrls.h
+@@ -100,10 +100,14 @@ struct v4l2_ctrl_hevc_sps {
+ #define V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER	(1ULL << 16)
+ #define V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT		(1ULL << 17)
+ #define V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT (1ULL << 18)
++#define V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT	(1ULL << 19)
++#define V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING			(1ULL << 20)
  
-   reg:
--    maxItems: 3
--
--  reg-names:
--    items:
--      - const: g1
--      - const: g2
--      - const: ctrl
-+    maxItems: 1
- 
-   interrupts:
--    maxItems: 2
-+    maxItems: 1
- 
-   interrupt-names:
--    items:
-+    oneOf:
-       - const: g1
-       - const: g2
- 
-@@ -46,14 +42,18 @@ properties:
-   power-domains:
-     maxItems: 1
- 
-+  nxp,imx8mq-vpu-ctrl:
-+    description: Specifies a phandle to syscon VPU hardware control block
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+
- required:
-   - compatible
-   - reg
--  - reg-names
-   - interrupts
-   - interrupt-names
-   - clocks
-   - clock-names
-+  - nxp,imx8mq-vpu-ctrl
- 
- additionalProperties: false
- 
-@@ -62,18 +62,33 @@ examples:
-         #include <dt-bindings/clock/imx8mq-clock.h>
-         #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
--        vpu: video-codec@38300000 {
-+        vpu_ctrl: syscon@38320000 {
-+                 compatible = "nxp,imx8mq-vpu-ctrl", "syscon";
-+                 reg = <0x38320000 0x10000>;
-+        };
-+
-+        vpu_g1: video-codec@38300000 {
-                 compatible = "nxp,imx8mq-vpu";
--                reg = <0x38300000 0x10000>,
--                      <0x38310000 0x10000>,
--                      <0x38320000 0x10000>;
--                reg-names = "g1", "g2", "ctrl";
--                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
--                interrupt-names = "g1", "g2";
-+                reg = <0x38300000 0x10000>;
-+                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+                interrupt-names = "g1";
-+                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+                clock-names = "g1", "g2", "bus";
-+                power-domains = <&pgc_vpu>;
-+                nxp,imx8mq-vpu-ctrl = <&vpu_ctrl>;
-+        };
-+
-+        vpu_g2: video-codec@38310000 {
-+                compatible = "nxp,imx8mq-vpu-g2";
-+                reg = <0x38300000 0x10000>;
-+                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+                interrupt-names = "g2";
-                 clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-                          <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-                          <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-                 clock-names = "g1", "g2", "bus";
-                 power-domains = <&pgc_vpu>;
-+                nxp,imx8mq-vpu-ctrl = <&vpu_ctrl>;
-         };
+ struct v4l2_ctrl_hevc_pps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+ 	__u8	num_extra_slice_header_bits;
++	__u8	num_ref_idx_l0_default_active_minus1;
++	__u8	num_ref_idx_l1_default_active_minus1;
+ 	__s8	init_qp_minus26;
+ 	__u8	diff_cu_qp_delta_depth;
+ 	__s8	pps_cb_qp_offset;
 -- 
 2.25.1
 
