@@ -2,36 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FEAC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D96C433EC
 	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03E5D61990
+	by mail.kernel.org (Postfix) with ESMTP id 9BDE26199A
 	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbhCSSHZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S230319AbhCSSHZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 19 Mar 2021 14:07:25 -0400
 Received: from mga09.intel.com ([134.134.136.24]:57280 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230015AbhCSSG5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 14:06:57 -0400
-IronPort-SDR: 7H6IG7++OIkR1bWIgAd6OfVEzk46rlTi+rgDTV4BOCcqPCU6UnmVrLXG7PBPlIsMYzu1lN9rSY
- fYW9Wj9wJZPg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036027"
+        id S230304AbhCSSHD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Mar 2021 14:07:03 -0400
+IronPort-SDR: L+tcqYdtRlJz/RkfD63notuOlfN/S9PvWJHRMSzxNqSdshPc6hwK8y/cYiT+l1VMOGj0UwkmJw
+ /2Yvex7uQxkw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036047"
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="190036027"
+   d="scan'208";a="190036047"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:56 -0700
-IronPort-SDR: MPNZj1/5VtKPcxhKvhWQU1tDn0Je9mDtE0uYC3adD5xbv1Exuzidul+LZ90Xl8pn/sGfSYZb4V
- +cZ36EqFAslg==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:07:02 -0700
+IronPort-SDR: S8tOmrMQOO6vH8GTMpYUMoSWyUGX648XK8zHXferbUPBWaDMLLY9Rc+QVpg/lBtJBcipB+Hfga
+ xP0RXVDSQncg==
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="413605750"
+   d="scan'208";a="413605781"
 Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:53 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:07:00 -0700
 From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
@@ -40,686 +41,704 @@ Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
         paul.j.murphy@linux.intel.com,
         gjorgjix.rosikopulos@linux.intel.com,
         martinax.krasteva@linux.intel.com
-Subject: [PATCH 06/10] media: Keem Bay Camera: Add ISP sub-device
-Date:   Fri, 19 Mar 2021 18:06:28 +0000
-Message-Id: <20210319180632.585-7-martinax.krasteva@linux.intel.com>
+Subject: [PATCH 08/10] media: Keem Bay Camera: Add capture video node
+Date:   Fri, 19 Mar 2021 18:06:30 +0000
+Message-Id: <20210319180632.585-9-martinax.krasteva@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
 References: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+From: Martina Krasteva <martinax.krasteva@intel.com>
 
-ISP sub-device has two sink pads and two source pads.
-Sink pads are connected to sensor and metadata params output video node.
-Source pads are connected to capture video node and capture metadata.
-All links are immutable active and are required for streaming session.
-Isp sub-device implements v4l2 event interface, each event
-received on VPU ISP channel is also sent as event to userspace.
+Capture video node implements v4l2 capture
+interface and XLink VPU Camera buffer pool operations.
 
-ISP sub-device is managing ISP configuration buffers, the reason
-for that is they are sent through XLink ISP channel.
+Build and set stream pipeline operations are also executed
+from capture video node. Resolution depends on remote
+entity pad connected to this video node.
 
-ISP sub-device is also owner of VPU pipeline. It is responsible
-for the pipeline configuration, which is executed on set_fmt pad op
-called on sensor source pad.
-
-The source is started/stopped on s_stream video operation.
-
-Build/delete pipeline are executed on video nodes
-streaming operations. When all video nodes with active linked
-are in stream on state the pipeline is started.
-
-Isp sub-device is using metadata output video nodes for parameters
-and filling the statistics to metadata capture video node.
-The statistics can be matched with params using buffer sequence number.
-
-V4L2_EVENT_FRAME_SYNC is also support. frame_sequence is matching with
-metadata video buffer sequence number.
-
+Co-developed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
 Signed-off-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
-Co-developed-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Signed-off-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Co-developed-by: Martina Krasteva <martinax.krasteva@intel.com>
 Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
 Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
 Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
 ---
- drivers/media/platform/keembay-camera/Makefile     |    4 +-
- .../platform/keembay-camera/keembay-cam-xlink.c    |  140 ++
- .../platform/keembay-camera/keembay-cam-xlink.h    |   11 +
- .../media/platform/keembay-camera/keembay-isp.c    | 1348 +++++++++++++++++++-
- .../media/platform/keembay-camera/keembay-isp.h    |   66 +-
- .../platform/keembay-camera/keembay-metadata.c     |   45 +
- .../platform/keembay-camera/keembay-metadata.h     |  150 +++
- .../platform/keembay-camera/keembay-pipeline.c     |   76 ++
- .../platform/keembay-camera/keembay-pipeline.h     |   71 ++
- .../media/platform/keembay-camera/keembay-video.c  |   46 +
- .../media/platform/keembay-camera/keembay-video.h  |   85 ++
- 11 files changed, 2029 insertions(+), 13 deletions(-)
- create mode 100644 drivers/media/platform/keembay-camera/keembay-metadata.c
- create mode 100644 drivers/media/platform/keembay-camera/keembay-metadata.h
- create mode 100644 drivers/media/platform/keembay-camera/keembay-pipeline.c
- create mode 100644 drivers/media/platform/keembay-camera/keembay-pipeline.h
- create mode 100644 drivers/media/platform/keembay-camera/keembay-video.c
- create mode 100644 drivers/media/platform/keembay-camera/keembay-video.h
+ .../platform/keembay-camera/keembay-pipeline.c     | 192 +++++
+ .../platform/keembay-camera/keembay-pipeline.h     |   4 +
+ .../media/platform/keembay-camera/keembay-video.c  | 884 ++++++++++++++++++++-
+ .../media/platform/keembay-camera/keembay-video.h  |  51 +-
+ 4 files changed, 1096 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/media/platform/keembay-camera/Makefile b/drivers/media/platform/keembay-camera/Makefile
-index ea19b61e6469..8b3ad715c5c4 100644
---- a/drivers/media/platform/keembay-camera/Makefile
-+++ b/drivers/media/platform/keembay-camera/Makefile
-@@ -1,3 +1,5 @@
--keembay-cam-objs = keembay-camera.o keembay-cam-xlink.o keembay-isp.o
-+keembay-cam-objs = keembay-camera.o keembay-pipeline.o \
-+		      keembay-cam-xlink.o keembay-isp.o \
-+		      keembay-metadata.o keembay-video.o
+diff --git a/drivers/media/platform/keembay-camera/keembay-pipeline.c b/drivers/media/platform/keembay-camera/keembay-pipeline.c
+index 78b2fffa42ee..0050361ef3c0 100644
+--- a/drivers/media/platform/keembay-camera/keembay-pipeline.c
++++ b/drivers/media/platform/keembay-camera/keembay-pipeline.c
+@@ -60,6 +60,39 @@ static void kmb_pipe_print_config(struct kmb_pipeline *pipe)
+ 	dev_dbg(dev, "\tinternal_memory_size %u\n", cfg->internal_memory_size);
+ }
  
- obj-$(CONFIG_VIDEO_INTEL_KEEMBAY_CAMERA) += keembay-cam.o
-diff --git a/drivers/media/platform/keembay-camera/keembay-cam-xlink.c b/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
-index e34516de0ff9..49a0937bc9fc 100644
---- a/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
-+++ b/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
-@@ -6,8 +6,19 @@
-  */
- #include <linux/device.h>
- #include <linux/idr.h>
-+#include <linux/kernel.h>
-+#include <linux/xlink.h>
- 
- #include "keembay-cam-xlink.h"
-+#include "keembay-vpu-cmd.h"
++static unsigned int kmb_pipe_get_pending(struct media_entity *entity)
++{
++	struct media_device *mdev = entity->graph_obj.mdev;
++	unsigned int num_vdevs = 0;
++	struct media_entity *next;
++	struct media_graph graph;
++	int ret;
 +
-+/* Do not change: it is negotiated on both sides */
-+#define KMB_CAM_XLINK_CTRL_CHAN_ID	27
-+#define KMB_CAM_XLINK_CHAN_ID_BASE	28
++	/* Walk through graph to count the connected video node entities */
++	mutex_lock(&mdev->graph_mutex);
 +
-+/* Control channel */
-+#define KMB_CAM_XLINK_CH_MAX_DATA_SIZE	1024
-+#define KMB_CAM_XLINK_CH_TIMEOUT_MS	1000
- 
++	ret = media_graph_walk_init(&graph, mdev);
++	if (ret) {
++		mutex_unlock(&mdev->graph_mutex);
++		return -EINVAL;
++	}
++
++	media_graph_walk_start(&graph, entity);
++
++	while ((next = media_graph_walk_next(&graph))) {
++		if (!is_media_entity_v4l2_video_device(next))
++			continue;
++
++		num_vdevs++;
++	}
++
++	mutex_unlock(&mdev->graph_mutex);
++
++	media_graph_walk_cleanup(&graph);
++
++	return num_vdevs;
++}
++
  /**
-  * kmb_cam_xlink_init - Initialize xlink for VPU camera communication
-@@ -52,3 +63,132 @@ void kmb_cam_xlink_cleanup(struct kmb_xlink_cam *xlink_cam)
- 	xlink_disconnect(&xlink_cam->handle);
- 	ida_destroy(&xlink_cam->channel_ids);
+  * kmb_pipe_init - Initialize KMB Pipeline
+  * @pipe: pointer to pipeline object
+@@ -207,3 +240,162 @@ int kmb_pipe_config_src(struct kmb_pipeline *pipe,
+ 	mutex_unlock(&pipe->lock);
+ 	return ret;
  }
 +
 +/**
-+ * kmb_cam_xlink_alloc_channel - Allocate xlink camera channel id
-+ * @xlink_cam: Pointer to xlink camera handle
++ * kmb_pipe_prepare - Prepare VPU pipeline for streaming
++ * @pipe: pointer to pipeline object
 + *
-+ * Each xlink channel (except main control) should have unieque id
++ * Prepare pipeline for streaming by sending negotiated configuration to VPU
++ * and changing state to BUILT.
 + *
-+ * Return: Channel id, negative error otherwise
++ * Return: 0 if successful, error code otherwise.
 + */
-+int kmb_cam_xlink_alloc_channel(struct kmb_xlink_cam *xlink_cam)
++int kmb_pipe_prepare(struct kmb_pipeline *pipe)
 +{
-+	int chan_id;
++	int ret = 0;
 +
-+	chan_id = ida_alloc_range(&xlink_cam->channel_ids,
-+				  KMB_CAM_XLINK_CHAN_ID_BASE,
-+				  U16_MAX, GFP_KERNEL);
++	mutex_lock(&pipe->lock);
 +
-+	return chan_id;
-+}
-+
-+/**
-+ * kmb_cam_xlink_free_channel - Free xlink camera channel id
-+ * @xlink_cam: Pointer to xlink camera handle
-+ * @chan_id: XLink channel ID
-+ */
-+void kmb_cam_xlink_free_channel(struct kmb_xlink_cam *xlink_cam, int chan_id)
-+{
-+	ida_free(&xlink_cam->channel_ids, chan_id);
-+}
-+
-+/**
-+ * kmb_cam_xlink_open_channel - Open xlink channel for communication
-+ * @xlink_cam: Pointer to xlink camera handle
-+ * @chan_id: Xlink channel id to be opened
-+ *
-+ * Each xlink channel should be open first, to establish communication channel.
-+ *
-+ * Return: 0 if successful, error code otherwise
-+ */
-+int kmb_cam_xlink_open_channel(struct kmb_xlink_cam *xlink_cam, int chan_id)
-+{
-+	int ret;
-+
-+	ret = xlink_open_channel(&xlink_cam->handle,
-+				 chan_id, RXB_TXB,
-+				 KMB_CAM_XLINK_CH_MAX_DATA_SIZE,
-+				 KMB_CAM_XLINK_CH_TIMEOUT_MS);
-+	if (ret) {
-+		dev_err(xlink_cam->dev, "Failed to close xlink channel %d", ret);
-+		return -ENODEV;
++	/* build only if all outputs are configured */
++	switch (pipe->state) {
++	case KMB_PIPE_STATE_UNCONFIGURED:
++		/* Call config and continue */
++		ret = kmb_cam_xlink_write_ctrl_msg(pipe->xlink_cam,
++						   pipe->pipe_cfg_paddr,
++						   KMB_IC_EVENT_TYPE_CONFIG_ISP_PIPE,
++						   KMB_IC_EVENT_TYPE_SUCCESSFUL);
++		if (ret < 0) {
++			dev_err(pipe->dev, "Failed to reconfigure pipeline!");
++			break;
++		}
++		fallthrough;
++	case KMB_PIPE_STATE_CONFIGURED:
++		ret = kmb_cam_xlink_write_ctrl_msg(pipe->xlink_cam,
++						   pipe->pipe_cfg_paddr,
++						   KMB_IC_EVENT_TYPE_BUILD_ISP_PIPE,
++						   KMB_IC_EVENT_TYPE_SUCCESSFUL);
++		if (ret < 0) {
++			dev_err(pipe->dev, "Failed to build pipeline!");
++			break;
++		}
++		pipe->state = KMB_PIPE_STATE_BUILT;
++		break;
++	case KMB_PIPE_STATE_BUILT:
++		/* Pipeline is already built ignore */
++		break;
++	default:
++		dev_err(pipe->dev,
++			"Build pipe in invalid state %d", pipe->state);
++		ret = -EINVAL;
++		break;
 +	}
 +
-+	return 0;
++	mutex_unlock(&pipe->lock);
++
++	return ret;
 +}
 +
-+/**
-+ * kmb_cam_xlink_close_channel - Close xlink channel
-+ * @xlink_cam: Pointer to xlink camera handle
-+ * @chan_id: Xlink channel id to be closed
-+ *
-+ * Return: 0 if successful, error code otherwise
-+ */
-+int kmb_cam_xlink_close_channel(struct kmb_xlink_cam *xlink_cam, int chan_id)
++static int kmb_pipe_s_stream(struct kmb_pipeline *pipe,
++			     struct media_entity *entity, int enable)
 +{
++	struct v4l2_subdev *subdev;
++	struct media_pad *remote;
 +	int ret;
 +
-+	ret = xlink_close_channel(&xlink_cam->handle, chan_id);
-+	if (ret) {
-+		dev_err(xlink_cam->dev, "Failed to close xlink channel %d", ret);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * kmb_cam_xlink_write_msg - Write xlink message
-+ * @xlink_cam: Pointer to xlink camera handle
-+ * @chan_id: Xlink channel id where message should be writted
-+ * @message: Pointer to message to be written in to xlink channel
-+ * @msg_size: Size of the message
-+ *
-+ * Return: 0 if successful, error code otherwise
-+ */
-+int kmb_cam_xlink_write_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
-+			    u8 *message, u32 msg_size)
-+{
-+	int ret;
-+
-+	if (msg_size > KMB_CAM_XLINK_CH_MAX_DATA_SIZE)
++	remote = media_entity_remote_pad(entity->pads);
++	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
 +		return -EINVAL;
 +
-+	ret = xlink_write_volatile(&xlink_cam->handle, chan_id,
-+				   message, msg_size);
-+	if (ret) {
-+		dev_err(xlink_cam->dev, "Fail to write xlink message %d", ret);
-+		return -ENODEV;
-+	}
++	subdev = media_entity_to_v4l2_subdev(remote->entity);
++	if (!subdev)
++		return -EINVAL;
 +
-+	return 0;
++	ret = v4l2_subdev_call(subdev, video, s_stream, enable);
++	if (ret < 0 && ret != -ENOIOCTLCMD)
++		dev_err(pipe->dev, "Cannot set stream %d", enable);
++
++	return ret != -ENOIOCTLCMD ? ret : 0;
 +}
 +
 +/**
-+ * kmb_cam_xlink_read_msg - Read xlink message
-+ * @xlink_cam: Pointer to xlink camera handle
-+ * @chan_id: Xlink channel id from where message will be read
-+ * @message: Pointer to data where read message will be placed
-+ * @msg_size: Mas size of data to be read
-+ *
-+ * Return: Actual size read, negative error code otherwise
++ * kmb_pipe_stop - Set stream off and stop media pipeline
++ * @pipe: KMB pipeline object
++ * @entity: media entity
 + */
-+int kmb_cam_xlink_read_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
-+			   u8 *message, u32 msg_size)
++void kmb_pipe_stop(struct kmb_pipeline *pipe, struct media_entity *entity)
 +{
-+	u32 written_size = msg_size;
-+	int ret;
++	mutex_lock(&pipe->lock);
 +
-+	if (msg_size > KMB_CAM_XLINK_CH_MAX_DATA_SIZE)
-+		return -EINVAL;
-+
-+	ret = xlink_read_data_to_buffer(&xlink_cam->handle, chan_id,
-+					message, &written_size);
-+	if (ret) {
-+		dev_err(xlink_cam->dev, "Fail to read xlink message %d", ret);
-+		return -ENODEV;
++	if (WARN_ON(!pipe->streaming)) {
++		dev_err(pipe->dev, "Calling stop on already stopped pipeline");
++		mutex_unlock(&pipe->lock);
++		return;
 +	}
 +
-+	return written_size;
++	if (pipe->state == KMB_PIPE_STATE_STREAMING) {
++		kmb_pipe_s_stream(pipe, entity, 0);
++		media_pipeline_stop(entity);
++		pipe->state = KMB_PIPE_STATE_BUILT;
++	}
++
++	if (pipe->state == KMB_PIPE_STATE_BUILT ||
++	    pipe->state == KMB_PIPE_STATE_CONFIGURED) {
++		kmb_cam_xlink_write_ctrl_msg(pipe->xlink_cam,
++					     pipe->pipe_cfg_paddr,
++					     KMB_IC_EVENT_TYPE_DELETE_ISP_PIPE,
++					     KMB_IC_EVENT_TYPE_SUCCESSFUL);
++
++		pipe->state = KMB_PIPE_STATE_UNCONFIGURED;
++	}
++
++	pipe->streaming--;
++
++	mutex_unlock(&pipe->lock);
 +}
-diff --git a/drivers/media/platform/keembay-camera/keembay-cam-xlink.h b/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
-index d219d4298427..d9a78d847a4b 100644
---- a/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
-+++ b/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
-@@ -28,4 +28,15 @@ struct kmb_xlink_cam {
- int kmb_cam_xlink_init(struct kmb_xlink_cam *xlink_cam, struct device *dev);
- void kmb_cam_xlink_cleanup(struct kmb_xlink_cam *xlink_cam);
++
++/**
++ * kmb_pipe_run - Run media pipeline and start streaming
++ * @pipe: KMB pipeline object
++ * @entity: media entity
++ *
++ * Return: 0 if successful, error code otherwise.
++ */
++int kmb_pipe_run(struct kmb_pipeline *pipe, struct media_entity *entity)
++{
++	int ret = 0;
++
++	mutex_lock(&pipe->lock);
++
++	if (!pipe->streaming)
++		pipe->pending = kmb_pipe_get_pending(entity);
++
++	pipe->streaming++;
++
++	if (pipe->streaming != pipe->pending)
++		goto done_unlock;
++
++	if (pipe->state != KMB_PIPE_STATE_BUILT) {
++		ret = -EINVAL;
++		goto done_unlock;
++	}
++
++	ret = media_pipeline_start(entity, &pipe->media_pipe);
++	if (ret < 0) {
++		dev_err(pipe->dev, "Failed to start media pipeline");
++		goto done_unlock;
++	}
++
++	ret = kmb_pipe_s_stream(pipe, entity, 1);
++	if (ret < 0 && ret != -ENOIOCTLCMD) {
++		mutex_unlock(&pipe->lock);
++		kmb_pipe_stop(pipe, entity);
++		return ret;
++	}
++
++	pipe->state = KMB_PIPE_STATE_STREAMING;
++
++done_unlock:
++	mutex_unlock(&pipe->lock);
++
++	return ret;
++}
+diff --git a/drivers/media/platform/keembay-camera/keembay-pipeline.h b/drivers/media/platform/keembay-camera/keembay-pipeline.h
+index 83ff94d11b34..60ba99e9a73c 100644
+--- a/drivers/media/platform/keembay-camera/keembay-pipeline.h
++++ b/drivers/media/platform/keembay-camera/keembay-pipeline.h
+@@ -68,4 +68,8 @@ void kmb_pipe_config_dest(struct kmb_pipeline *pipe, unsigned int output_id,
+ int kmb_pipe_config_src(struct kmb_pipeline *pipe,
+ 			struct kmb_pipe_config_evs *pipe_cfg);
  
-+int kmb_cam_xlink_alloc_channel(struct kmb_xlink_cam *xlink_cam);
-+void kmb_cam_xlink_free_channel(struct kmb_xlink_cam *xlink_cam, int chan_id);
++int kmb_pipe_prepare(struct kmb_pipeline *pipe);
++int kmb_pipe_run(struct kmb_pipeline *pipe, struct media_entity *entity);
++void kmb_pipe_stop(struct kmb_pipeline *pipe, struct media_entity *entity);
 +
-+int kmb_cam_xlink_open_channel(struct kmb_xlink_cam *xlink_cam, int chan_id);
-+int kmb_cam_xlink_close_channel(struct kmb_xlink_cam *xlink_cam, int chan_id);
-+
-+int kmb_cam_xlink_write_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
-+			    u8 *message, u32 msg_size);
-+int kmb_cam_xlink_read_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
-+			   u8 *message, u32 msg_size);
-+
- #endif /* KEEMBAY_CAM_XLINK_H */
-diff --git a/drivers/media/platform/keembay-camera/keembay-isp.c b/drivers/media/platform/keembay-camera/keembay-isp.c
-index 79f6212e37d9..54e9c70cd46d 100644
---- a/drivers/media/platform/keembay-camera/keembay-isp.c
-+++ b/drivers/media/platform/keembay-camera/keembay-isp.c
-@@ -4,7 +4,1146 @@
+ #endif /* KEEMBAY_PIPELINE_H */
+diff --git a/drivers/media/platform/keembay-camera/keembay-video.c b/drivers/media/platform/keembay-camera/keembay-video.c
+index 02f4d97e16fb..a92cfbeffea9 100644
+--- a/drivers/media/platform/keembay-camera/keembay-video.c
++++ b/drivers/media/platform/keembay-camera/keembay-video.c
+@@ -2,9 +2,816 @@
+ /*
+  * Intel Keem Bay camera Video node.
   *
-  * Copyright (C) 2021 Intel Corporation
+- * Copyright (C) 2018-2020 Intel Corporation
++ * Copyright (C) 2021 Intel Corporation
   */
 +#include <linux/delay.h>
 +#include <linux/dma-mapping.h>
 +#include <linux/freezer.h>
-+#include <linux/keembay-isp-ctl.h>
 +#include <linux/kthread.h>
 +
-+#include <media/v4l2-ctrls.h>
 +#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
 +#include <media/v4l2-ioctl.h>
++#include <media/v4l2-mc.h>
++#include <media/videobuf2-dma-contig.h>
 +
- #include "keembay-isp.h"
 +#include "keembay-cam-xlink.h"
-+#include "keembay-vpu-cmd.h"
-+#include "keembay-vpu-pipe.h"
-+#include "keembay-vpu-src.h"
++#include "keembay-pipeline.h"
+ #include "keembay-video.h"
++#include "keembay-vpu-frame.h"
 +
-+#define KMB_ISP_DRV_NAME "keembay-camera-isp"
++#define KMB_CAM_VIDEO_NAME "keembay-video"
 +
-+/* Xlink channel configuration */
-+#define KMB_ISP_CH_DATA_SIZE	1024
-+#define KMB_ISP_CH_TIMEOUT_MS	5000
++/* Xlink data channel size and timeout */
++#define KMB_VID_CH_DATA_SIZE	1024
++#define KMB_VID_CH_TIMEOUT_MS	5000
 +
-+/* Predefined event queue length */
-+#define KMB_ISP_EVT_Q_LEN	8
++#define KMB_VID_MIN_WIDTH	16
++#define KMB_VID_MIN_HEIGHT	16
++#define KMB_VID_MAX_WIDTH	U16_MAX
++#define KMB_VID_MAX_HEIGHT	U16_MAX
++#define KMB_VID_STEP_WIDTH	8
++#define KMB_VID_STEP_HEIGHT	8
 +
-+/* Wait timeout for stopping isp source */
-+#define KMB_STOP_SOURCE_TIMEOUT_MS	1000
++#define to_kmb_video_buf(vbuf)	container_of(vbuf, struct kmb_frame_buffer, vb)
 +
-+enum kmb_isp_stop_method {
-+	KMB_ISP_STOP_SYNC = 0,
-+	KMB_ISP_STOP_FORCE = 1,
++/* Kmb video format info structure */
++struct kmb_video_fmt_info {
++	const char *description;
++	u32 code;
++	u32 pixelformat;
++	enum kmb_frame_types type;
++	u32 colorspace;
++	unsigned int planes;
++	unsigned int bpp;
++	unsigned int h_subsample;
++	unsigned int v_subsample;
++	bool contiguous_memory;
 +};
 +
-+static const struct kmb_isp_source_format source_fmts[] = {
++/* Supported video formats */
++static const struct kmb_video_fmt_info video_formats[] = {
 +	{
-+		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_RGGB,
-+		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_RAW_8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GRBG,
-+		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_RAW_8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GBRG,
-+		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_RAW_8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
-+		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_RAW_8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_RGGB,
-+		.bpp = 10,
-+		.rx_data_type = IC_IPIPE_RAW_10,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GRBG,
-+		.bpp = 10,
-+		.rx_data_type = IC_IPIPE_RAW_10,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GBRG,
-+		.bpp = 10,
-+		.rx_data_type = IC_IPIPE_RAW_10,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
-+		.bpp = 10,
-+		.rx_data_type = IC_IPIPE_RAW_10,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_RGGB,
-+		.bpp = 12,
-+		.rx_data_type = IC_IPIPE_RAW_12,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GRBG,
-+		.bpp = 12,
-+		.rx_data_type = IC_IPIPE_RAW_12,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_GBRG,
-+		.bpp = 12,
-+		.rx_data_type = IC_IPIPE_RAW_12,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
-+		.bpp = 12,
-+		.rx_data_type = IC_IPIPE_RAW_12,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
-+	},
-+	{
++		.description = "NV12",
 +		.code = MEDIA_BUS_FMT_YUYV8_1_5X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
++		.pixelformat = V4L2_PIX_FMT_NV12,
++		.type = KMB_FRAME_TYPE_NV12,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.planes = 2,
 +		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_YUV_420_B8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
++		.h_subsample = 1,
++		.v_subsample = 2,
++		.contiguous_memory = true,
 +	},
 +	{
++		.description = "Planar YUV 4:2:0",
 +		.code = MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
++		.pixelformat = V4L2_PIX_FMT_YUV420,
++		.type = KMB_FRAME_TYPE_YUV420P,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.planes = 3,
 +		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_YUV_420_B8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
++		.h_subsample = 2,
++		.v_subsample = 2,
++		.contiguous_memory = false,
 +	},
 +	{
++		.description = "Planar YUV 4:4:4",
 +		.code = MEDIA_BUS_FMT_YUV8_1X24,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
++		.pixelformat = V4L2_PIX_FMT_YUV444,
++		.type = KMB_FRAME_TYPE_YUV444P,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.planes = 3,
 +		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_YUV_420_B8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_YUYV8_1_5X8,
-+			MEDIA_BUS_FMT_UYYVYY8_0_5X24,
-+			MEDIA_BUS_FMT_YUV8_1X24,
-+		},
++		.h_subsample = 1,
++		.v_subsample = 1,
++		.contiguous_memory = false,
 +	},
 +	{
++		.description = "RAW 8 Garyscale",
 +		.code = MEDIA_BUS_FMT_Y8_1X8,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
++		.pixelformat = V4L2_PIX_FMT_GREY,
++		.type = KMB_FRAME_TYPE_RAW8,
++		.colorspace = V4L2_COLORSPACE_RAW,
++		.planes = 1,
 +		.bpp = 8,
-+		.rx_data_type = IC_IPIPE_RAW_8,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_Y8_1X8,
-+			MEDIA_BUS_FMT_Y10_1X10,
-+		},
++		.h_subsample = 1,
++		.v_subsample = 1,
++		.contiguous_memory = false,
 +	},
 +	{
++		.description = "RAW 10 Grayscale",
 +		.code = MEDIA_BUS_FMT_Y10_1X10,
-+		.bayer_pattern = KMB_IC_BAYER_FORMAT_BGGR,
++		.pixelformat = V4L2_PIX_FMT_Y10,
++		.type = KMB_FRAME_TYPE_RAW10,
++		.colorspace = V4L2_COLORSPACE_RAW,
++		.planes = 1,
 +		.bpp = 10,
-+		.rx_data_type = IC_IPIPE_RAW_10,
-+		.dest_fmts = {
-+			MEDIA_BUS_FMT_Y8_1X8,
-+			MEDIA_BUS_FMT_Y10_1X10,
-+		},
-+	},
++		.h_subsample = 1,
++		.v_subsample = 1,
++		.contiguous_memory = false,
++	}
 +};
 +
-+static inline const struct kmb_isp_source_format *
-+kmb_isp_get_src_fmt_by_code(u32 code)
++static const struct kmb_video_fmt_info *
++kmb_video_get_fmt_info_by_code(u32 code)
 +{
 +	unsigned int i;
 +
-+	for (i = 0; i < ARRAY_SIZE(source_fmts); i++) {
-+		if (source_fmts[i].code == code)
-+			return &source_fmts[i];
-+	}
++	for (i = 0; i < ARRAY_SIZE(video_formats); i++)
++		if (video_formats[i].code == code)
++			return &video_formats[i];
 +
 +	return NULL;
 +}
 +
-+static inline bool
-+kmb_isp_valid_destination_format(struct v4l2_mbus_framefmt *mbus_fmt, u32 code)
++static const struct kmb_video_fmt_info *
++kmb_video_get_fmt_info_by_pixfmt(u32 pix_fmt)
 +{
-+	const struct kmb_isp_source_format *src_fmt =
-+		kmb_isp_get_src_fmt_by_code(mbus_fmt->code);
 +	unsigned int i;
 +
-+	if (!src_fmt)
-+		return false;
-+
-+	for (i = 0; i < KMB_ISP_MAX_DEST_FMTS; i++)
-+		if (src_fmt->dest_fmts[i] == code)
-+			return true;
-+
-+	return false;
-+}
-+
-+static void kmb_isp_meta_buf_done(struct kmb_isp *kmb_isp,
-+				  struct kmb_metadata_buf *meta_buf,
-+				  enum vb2_buffer_state state)
-+{
-+	/* Remove isp config on buf done */
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_del(&meta_buf->list);
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+
-+	vb2_buffer_done(&meta_buf->vb.vb2_buf, state);
-+	dev_dbg(kmb_isp->dev, "Meta buf done %u state %d",
-+		meta_buf->vb.sequence, state);
-+}
-+
-+static struct kmb_metadata_buf *
-+kmb_isp_find_params_by_addr(struct kmb_isp *kmb_isp, dma_addr_t addr)
-+{
-+	struct kmb_metadata_buf *meta_buf;
-+	struct list_head *node = NULL;
-+
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+
-+	list_for_each(node, &kmb_isp->meta_params_process_q) {
-+		meta_buf = list_entry(node, struct kmb_metadata_buf, list);
-+		if (meta_buf->params.dma_addr_isp == addr) {
-+			mutex_unlock(&kmb_isp->meta_q_lock);
-+			return meta_buf;
-+		}
-+	}
-+
-+	mutex_unlock(&kmb_isp->meta_q_lock);
++	for (i = 0; i < ARRAY_SIZE(video_formats); i++)
++		if (video_formats[i].pixelformat == pix_fmt)
++			return &video_formats[i];
 +
 +	return NULL;
 +}
 +
-+static struct kmb_metadata_buf *
-+kmb_isp_find_stats_by_seq(struct kmb_isp *kmb_isp, u32 sequence)
++/* Buffer processing operations */
++static void kmb_video_insert_buf(struct kmb_video *kmb_vid,
++				 struct kmb_frame_buffer *buf)
 +{
-+	struct kmb_metadata_buf *meta_buf;
-+	struct list_head *node = NULL;
++	INIT_LIST_HEAD(&buf->list);
 +
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+
-+	list_for_each(node, &kmb_isp->meta_stats_process_q) {
-+		meta_buf = list_entry(node, struct kmb_metadata_buf, list);
-+		if (meta_buf->vb.sequence == sequence) {
-+			mutex_unlock(&kmb_isp->meta_q_lock);
-+			return meta_buf;
-+		}
-+	}
-+
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+
-+	return NULL;
++	mutex_lock(&kmb_vid->dma_lock);
++	list_add_tail(&buf->list, &kmb_vid->dma_queue);
++	mutex_unlock(&kmb_vid->dma_lock);
 +}
 +
-+static void kmb_isp_fill_stats_update_flags(struct kmb_metadata_buf *stats_buf,
-+					    struct kmb_metadata_buf *param_buf)
++static void __kmb_video_buf_discard(struct kmb_video *kmb_vid,
++				    struct kmb_frame_buffer *buf)
 +{
-+	struct kmb_isp_stats *user_stats =
-+		vb2_plane_vaddr(&stats_buf->vb.vb2_buf, 0);
++	lockdep_assert_held(&kmb_vid->dma_lock);
 +
-+	user_stats->update.ae_awb =
-+		param_buf->params.isp->raw.awb_stats_en;
-+	user_stats->update.af =
-+		param_buf->params.isp->raw.af_stats_en;
-+	user_stats->update.luma_hist =
-+		param_buf->params.isp->raw.luma_hist_en;
-+	user_stats->update.rgb_hist =
-+		param_buf->params.isp->raw.awb_rgb_hist_en;
-+	user_stats->update.flicker_rows =
-+		param_buf->params.isp->raw.flicker_accum_en;
-+	/* Dehaze stats is always enabled */
-+	user_stats->update.dehaze = true;
++	list_del(&buf->list);
++	vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
 +}
 +
-+static int kmb_isp_process_config(struct kmb_isp *kmb_isp)
++static int kmb_video_process_buf(struct kmb_video *kmb_vid,
++				 struct kmb_frame_buffer *buf)
 +{
-+	struct kmb_metadata_buf *param_buf;
-+	struct kmb_metadata_buf *stats_buf;
-+	struct kmb_ic_ev cfg_evt;
++	const struct kmb_video_fmt_info *info = kmb_vid->active_fmt.info;
++	struct v4l2_pix_format_mplane *pix = &kmb_vid->active_fmt.pix;
++	struct kmb_vpu_frame_buffer rt_frame_buf;
 +	int ret;
 +
-+	mutex_lock(&kmb_isp->meta_q_lock);
++	lockdep_assert_held(&kmb_vid->lock);
 +
-+	if (list_empty(&kmb_isp->meta_params_pending_q)) {
-+		mutex_unlock(&kmb_isp->meta_q_lock);
-+		return -EAGAIN;
-+	}
-+	param_buf = list_first_entry(&kmb_isp->meta_params_pending_q,
-+				     struct kmb_metadata_buf, list);
++	memset(&rt_frame_buf, 0, sizeof(rt_frame_buf));
++	rt_frame_buf.spec.bpp = info->bpp;
++	rt_frame_buf.spec.type = info->type;
++	rt_frame_buf.spec.width = pix->width;
++	rt_frame_buf.spec.height = pix->height;
++	rt_frame_buf.spec.stride = pix->plane_fmt[0].bytesperline;
++	rt_frame_buf.p1 = buf->addr[0];
 +
-+	if (list_empty(&kmb_isp->meta_stats_pending_q)) {
-+		mutex_unlock(&kmb_isp->meta_q_lock);
-+		return -EAGAIN;
-+	}
-+	stats_buf = list_first_entry(&kmb_isp->meta_stats_pending_q,
-+				     struct kmb_metadata_buf, list);
++	/* Planes not used by the VPU should be set with addr 0 */
++	if (pix->num_planes > 1)
++		rt_frame_buf.p2 = buf->addr[1];
++	if (pix->num_planes > 2)
++		rt_frame_buf.p3 = buf->addr[2];
 +
-+	list_del(&stats_buf->list);
-+	list_del(&param_buf->list);
-+
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+
-+	param_buf->vb.sequence = kmb_isp->sequence++;
-+	stats_buf->vb.sequence = param_buf->vb.sequence;
-+
-+	/* Update header version, user data key and image width */
-+	param_buf->params.isp->header_version = KMB_VPU_ISP_ABI_VERSION;
-+	param_buf->params.isp->num_exposures = 1;
-+	param_buf->params.isp->user_data_key =
-+		param_buf->vb.sequence;
-+	param_buf->params.isp->image_data_width =
-+		kmb_isp->source_fmt->bpp;
-+	param_buf->params.isp->bayer_order =
-+		kmb_isp->source_fmt->bayer_pattern;
-+
-+	/* Set stats addresses */
-+	memcpy(param_buf->params.isp->raw.stats, stats_buf->stats.raw,
-+	       sizeof(param_buf->params.isp->raw.stats));
-+	param_buf->params.isp->dehaze.stats_addr =
-+		stats_buf->stats.dehaze_stats_addr;
-+
-+	memset(&cfg_evt, 0, sizeof(cfg_evt));
-+	cfg_evt.ctrl = KMB_IC_EVENT_TYPE_CONFIG_ISP;
-+	cfg_evt.ev_info.seq_nr = param_buf->vb.sequence;
-+	cfg_evt.ev_info.user_data_base_addr01 = param_buf->params.dma_addr_isp;
-+	dev_dbg(kmb_isp->dev, "Process config addr %llx",
-+		param_buf->params.dma_addr_isp);
-+	ret = kmb_cam_xlink_write_msg(kmb_isp->xlink_cam,
-+				      kmb_isp->config_chan_id,
-+				      (u8 *)&cfg_evt, sizeof(cfg_evt));
++	ret = kmb_cam_xlink_write_msg(kmb_vid->xlink_cam,
++				      kmb_vid->chan_id,
++				      (u8 *)&rt_frame_buf,
++				      sizeof(rt_frame_buf));
 +	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Error on process config %d", ret);
-+		vb2_buffer_done(&param_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&stats_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++		dev_err(kmb_vid->dma_dev, "Error on buffer queue %d", ret);
 +		return ret;
 +	}
-+
-+	/* Update stats update flags */
-+	kmb_isp_fill_stats_update_flags(stats_buf, param_buf);
-+
-+	/* Add to items to the processing list */
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_add_tail(&param_buf->list, &kmb_isp->meta_params_process_q);
-+	list_add_tail(&stats_buf->list, &kmb_isp->meta_stats_process_q);
-+	mutex_unlock(&kmb_isp->meta_q_lock);
 +
 +	return 0;
 +}
 +
-+static int kmb_isp_worker_thread(void *isp)
++static void kmb_video_process_all_bufs(struct kmb_video *kmb_vid)
 +{
-+	struct kmb_metadata_buf *meta_params;
-+	struct kmb_metadata_buf *meta_stats;
-+	struct kmb_isp *kmb_isp = isp;
-+	struct v4l2_event v4l2_evt;
-+	struct kmb_ic_ev cfg_evt;
-+	bool stopped = false;
-+	u32 base_addr;
++	struct kmb_frame_buffer *buf;
++	struct list_head *next;
++	struct list_head *pos;
 +	int ret;
 +
-+	memset(&v4l2_evt, 0, sizeof(v4l2_evt));
++	mutex_lock(&kmb_vid->dma_lock);
++
++	/* Discard buf is removing buffer from the list */
++	list_for_each_safe(pos, next, &kmb_vid->dma_queue) {
++		buf = list_entry(pos, struct kmb_frame_buffer, list);
++
++		ret = kmb_video_process_buf(kmb_vid, buf);
++		if (ret) {
++			dev_err(&kmb_vid->video->dev,
++				"Cannot process output buf 0x%pad",
++				&buf->addr[0]);
++			__kmb_video_buf_discard(kmb_vid, buf);
++			continue;
++		}
++	}
++
++	mutex_unlock(&kmb_vid->dma_lock);
++}
++
++static int kmb_video_queue_output_buf(struct kmb_video *kmb_vid,
++				      struct kmb_frame_buffer *buf)
++{
++	int ret = 0;
++
++	kmb_video_insert_buf(kmb_vid, buf);
++
++	mutex_lock(&kmb_vid->dma_lock);
++
++	/* Process buffers only when device is streaming */
++	if (vb2_is_streaming(&kmb_vid->vb2_q)) {
++		ret = kmb_video_process_buf(kmb_vid, buf);
++		if (ret) {
++			dev_err(&kmb_vid->video->dev,
++				"Fail to process output buf 0x%pad",
++				&buf->addr[0]);
++			__kmb_video_buf_discard(kmb_vid, buf);
++		}
++	}
++
++	mutex_unlock(&kmb_vid->dma_lock);
++
++	return ret;
++}
++
++static void kmb_video_release_all_bufs(struct kmb_video *kmb_vid,
++				       enum vb2_buffer_state state)
++{
++	struct list_head *next = NULL;
++	struct list_head *pos = NULL;
++	struct kmb_frame_buffer *buf;
++
++	mutex_lock(&kmb_vid->dma_lock);
++	list_for_each_safe(pos, next, &kmb_vid->dma_queue) {
++		buf = list_entry(pos, struct kmb_frame_buffer, list);
++		list_del(&buf->list);
++		vb2_buffer_done(&buf->vb.vb2_buf, state);
++	}
++	mutex_unlock(&kmb_vid->dma_lock);
++}
++
++static void kmb_video_remove_buf(struct kmb_video *kmb_vid,
++				 struct kmb_frame_buffer *buf)
++{
++	mutex_lock(&kmb_vid->dma_lock);
++	list_del(&buf->list);
++	mutex_unlock(&kmb_vid->dma_lock);
++}
++
++static struct kmb_frame_buffer *
++kmb_video_find_buf_by_addr(struct kmb_video *kmb_vid, uint64_t addr)
++{
++	struct kmb_frame_buffer *buf = NULL;
++	struct list_head *node = NULL;
++
++	mutex_lock(&kmb_vid->dma_lock);
++
++	list_for_each(node, &kmb_vid->dma_queue) {
++		buf = list_entry(node, struct kmb_frame_buffer, list);
++		if (buf->addr[0] == addr) {
++			mutex_unlock(&kmb_vid->dma_lock);
++			return buf;
++		}
++	}
++
++	mutex_unlock(&kmb_vid->dma_lock);
++
++	return NULL;
++}
++
++static void kmb_video_fmt_info_to_pix(const struct kmb_video_fmt_info *info,
++				      struct v4l2_mbus_framefmt *mbus_fmt,
++				      struct v4l2_pix_format_mplane *pix)
++{
++	u32 bytesperline;
++	u32 sizeimage;
++	u32 v_sub = 1;
++	u32 h_sub = 1;
++	unsigned int i;
++
++	pix->width = mbus_fmt->width;
++	pix->height = mbus_fmt->height;
++
++	pix->pixelformat = info->pixelformat;
++	pix->colorspace = info->colorspace;
++	pix->num_planes = info->planes;
++
++	for (i = 0; i < pix->num_planes; i++) {
++		bytesperline = pix->width * info->bpp / 8 / h_sub;
++
++		if (pix->plane_fmt[i].bytesperline < bytesperline)
++			pix->plane_fmt[i].bytesperline = bytesperline;
++
++		sizeimage = pix->plane_fmt[i].bytesperline *
++			    pix->height / v_sub;
++
++		if (pix->plane_fmt[i].sizeimage < sizeimage)
++			pix->plane_fmt[i].sizeimage = sizeimage;
++
++		h_sub = info->h_subsample;
++		v_sub = info->v_subsample;
++	}
++}
++
++static int kmb_video_get_subdev_fmt(struct kmb_video *kmb_vid,
++				    struct v4l2_pix_format_mplane *pix)
++{
++	const struct kmb_video_fmt_info *fmt_info;
++	struct v4l2_subdev_format sd_fmt;
++	struct v4l2_subdev *subdev;
++	struct media_pad *remote;
++	int ret;
++
++	remote = media_entity_remote_pad(&kmb_vid->pad);
++	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
++		return -EINVAL;
++
++	subdev = media_entity_to_v4l2_subdev(remote->entity);
++	if (!subdev)
++		return -EINVAL;
++
++	memset(&sd_fmt, 0, sizeof(sd_fmt));
++	sd_fmt.pad = remote->index;
++	sd_fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
++	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &sd_fmt);
++	if (ret < 0)
++		return ret;
++
++	fmt_info = kmb_video_get_fmt_info_by_code(sd_fmt.format.code);
++	if (!fmt_info)
++		return -EINVAL;
++
++	kmb_video_fmt_info_to_pix(fmt_info,  &sd_fmt.format, pix);
++
++	return 0;
++}
++
++static int kmb_video_queue_setup(struct vb2_queue *q,
++				 unsigned int *num_buffers,
++				 unsigned int *num_planes,
++				 unsigned int sizes[],
++				 struct device *alloc_devs[])
++{
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(q);
++	struct v4l2_pix_format_mplane *pix = &kmb_vid->active_fmt.pix;
++	unsigned int i;
++
++	if (kmb_vid->active_fmt.info->contiguous_memory) {
++		*num_planes = 1;
++		for (i = 0; i < pix->num_planes; i++)
++			sizes[0] += pix->plane_fmt[i].sizeimage;
++	} else {
++		*num_planes = pix->num_planes;
++		for (i = 0; i < pix->num_planes; i++)
++			sizes[i] = pix->plane_fmt[i].sizeimage;
++	}
++
++	return 0;
++}
++
++static int kmb_video_buffer_prepare(struct vb2_buffer *vb)
++{
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(vb->vb2_queue);
++	struct v4l2_pix_format_mplane *pix = &kmb_vid->active_fmt.pix;
++	unsigned int size_image = 0;
++	unsigned int i;
++
++	if (kmb_vid->active_fmt.info->contiguous_memory) {
++		for (i = 0; i < pix->num_planes; i++)
++			size_image += pix->plane_fmt[i].sizeimage;
++
++		vb2_set_plane_payload(vb, 0, size_image);
++	} else {
++		for (i = 0; i < pix->num_planes; i++)
++			vb2_set_plane_payload(vb, i,
++					      pix->plane_fmt[i].sizeimage);
++	}
++
++	return 0;
++}
++
++static int kmb_video_buf_init(struct vb2_buffer *vb)
++{
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct kmb_frame_buffer *buf = to_kmb_video_buf(vbuf);
++	struct v4l2_pix_format_mplane *pix = &kmb_vid->active_fmt.pix;
++	unsigned int i;
++
++	if (kmb_vid->active_fmt.info->contiguous_memory) {
++		buf->addr[0] = vb2_dma_contig_plane_dma_addr(vb, 0);
++		for (i = 1; i < pix->num_planes; i++) {
++			buf->addr[i] = buf->addr[i - 1] +
++				pix->plane_fmt[i - 1].sizeimage;
++		}
++	} else {
++		for (i = 0; i < pix->num_planes; i++)
++			buf->addr[i] = vb2_dma_contig_plane_dma_addr(vb, i);
++	}
++
++	return 0;
++}
++
++static void kmb_video_buf_queue(struct vb2_buffer *vb)
++{
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct kmb_frame_buffer *buf = to_kmb_video_buf(vbuf);
++	int ret;
++
++	ret = kmb_video_queue_output_buf(kmb_vid, buf);
++	if (ret)
++		dev_err(kmb_vid->dma_dev, "Fail output buf queue %d", ret);
++}
++
++static int kmb_video_worker_thread(void *video)
++{
++	struct kmb_vpu_frame_buffer rt_frame_buf;
++	struct kmb_video *kmb_vid = video;
++	struct kmb_frame_buffer *buf = NULL;
++	bool stopped = false;
++	int ret;
 +
 +	set_freezable();
 +
@@ -732,1589 +751,553 @@ index 79f6212e37d9..54e9c70cd46d 100644
 +			continue;
 +		}
 +
-+		memset(&cfg_evt, 0x00, sizeof(cfg_evt));
-+		cfg_evt.ctrl = KMB_IC_EVENT_MAX;
-+		ret = kmb_cam_xlink_read_msg(kmb_isp->xlink_cam,
-+					     kmb_isp->config_chan_id,
-+					     (u8 *)&cfg_evt, sizeof(cfg_evt));
++		memset(&rt_frame_buf, 0, sizeof(rt_frame_buf));
++		ret = kmb_cam_xlink_read_msg(kmb_vid->xlink_cam,
++					     kmb_vid->chan_id,
++					     (u8 *)&rt_frame_buf,
++					     sizeof(rt_frame_buf));
 +		if (ret < 0) {
 +			stopped = true;
-+			complete_all(&kmb_isp->source_stopped);
++			/* Continue here to enter in freeze state */
 +			continue;
 +		}
-+		base_addr = cfg_evt.ev_info.user_data_base_addr01;
 +
-+		meta_params = kmb_isp_find_params_by_addr(kmb_isp, base_addr);
++		buf = kmb_video_find_buf_by_addr(kmb_vid, rt_frame_buf.p1);
++		if (buf) {
++			kmb_video_remove_buf(kmb_vid, buf);
 +
-+		switch (cfg_evt.ctrl) {
-+		case KMB_IC_EVENT_TYPE_READOUT_START:
-+			if (meta_params) {
-+				v4l2_evt.type = V4L2_EVENT_FRAME_SYNC;
-+				v4l2_evt.u.frame_sync.frame_sequence =
-+					meta_params->vb.sequence;
-+				v4l2_subdev_notify_event(&kmb_isp->subdev,
-+							 &v4l2_evt);
-+			} else {
-+				dev_err(kmb_isp->dev, "Ouch readout no buf");
-+			}
-+			/* Process next isp configuration on readout start */
-+			kmb_isp_process_config(kmb_isp);
-+			break;
-+		case KMB_IC_EVENT_TYPE_ISP_END:
-+			if (meta_params)
-+				kmb_isp_meta_buf_done(kmb_isp, meta_params,
-+						      VB2_BUF_STATE_DONE);
-+			else
-+				dev_err(kmb_isp->dev, "Ouch no params buf");
-+			break;
-+		case KMB_IC_EVENT_TYPE_STATS_READY:
-+			meta_stats = NULL;
-+			if (meta_params)
-+				meta_stats =
-+					kmb_isp_find_stats_by_seq(kmb_isp,
-+								  meta_params->vb.sequence);
-+
-+			if (meta_stats)
-+				kmb_isp_meta_buf_done(kmb_isp, meta_stats,
-+						      VB2_BUF_STATE_DONE);
-+			else
-+				dev_err(kmb_isp->dev, "Ouch no stats buf");
-+			break;
-+		case KMB_IC_ERROR_SRC_MIPI_CFG_SKIPPED:
-+			if (meta_params) {
-+				kmb_isp_meta_buf_done(kmb_isp, meta_params,
-+						      VB2_BUF_STATE_ERROR);
-+				meta_stats =
-+					kmb_isp_find_stats_by_seq(kmb_isp,
-+								  meta_params->vb.sequence);
-+				if (meta_stats)
-+					kmb_isp_meta_buf_done(kmb_isp,
-+							      meta_stats,
-+							      VB2_BUF_STATE_ERROR);
-+			}
-+			break;
-+		case KMB_IC_ERROR_SRC_MIPI_CFG_MISSING:
-+			/* Process new configuration when vpu is starving */
-+			kmb_isp_process_config(kmb_isp);
-+			break;
-+		case KMB_IC_EVENT_TYPE_SOURCE_STOPPED:
-+			complete_all(&kmb_isp->source_stopped);
-+			stopped = true;
-+			break;
-+		default:
-+			dev_dbg(kmb_isp->dev, "Received event %d",
-+				cfg_evt.ctrl);
-+			break;
++			buf->vb.vb2_buf.timestamp = rt_frame_buf.ts;
++			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++		} else {
++			dev_err(kmb_vid->dma_dev, "Ouch cannot find buff %llx",
++				rt_frame_buf.p1);
 +		}
 +	}
 +
 +	return 0;
 +}
 +
-+static int kmb_isp_configure_vpu_source(struct kmb_isp *kmb_isp)
++static int kmb_video_worker_start(struct kmb_video *kmb_vid)
 +{
-+	struct kmb_ic_source_config *src_cfg;
-+	struct v4l2_subdev_format *src_fmt;
-+	struct kmb_ic_ev mipi_cfg_evt;
-+	struct v4l2_subdev *subdev;
-+	struct media_pad *rpd;
-+	s64 link_freq;
 +	int ret;
 +
-+	if (WARN_ON(!kmb_isp->source_fmt))
-+		return -EINVAL;
-+
-+	/* Get sensor remote pad we need information for pixel clock */
-+	rpd = media_entity_remote_pad(&kmb_isp->pads[KMB_ISP_SINK_PAD_SENSOR]);
-+	if (!rpd || !is_media_entity_v4l2_subdev(rpd->entity))
-+		return -EINVAL;
-+
-+	subdev = media_entity_to_v4l2_subdev(rpd->entity);
-+	if (!subdev)
-+		return -EINVAL;
-+
-+	src_cfg = kmb_isp->msg_vaddr;
-+	memset(src_cfg, 0, sizeof(*src_cfg));
-+
-+	src_fmt = &kmb_isp->active_pad_fmt[KMB_ISP_SINK_PAD_SENSOR];
-+
-+	/* Full size isp destination is always set on first src pad */
-+	src_cfg->camera_output_size.w = src_fmt->format.width;
-+	src_cfg->camera_output_size.h = src_fmt->format.height;
-+	src_cfg->no_exposure = 1;
-+
-+	src_cfg->crop_window.x1 = 0;
-+	src_cfg->crop_window.x2 = src_cfg->camera_output_size.w;
-+	src_cfg->crop_window.y1 = 0;
-+	src_cfg->crop_window.y2 = src_cfg->camera_output_size.h;
-+
-+	src_cfg->bayer_format = kmb_isp->source_fmt->bayer_pattern;
-+	src_cfg->bpp = kmb_isp->source_fmt->bpp;
-+
-+	src_cfg->mipi_rx_data.no_controller = kmb_isp->csi2_config.rx_id;
-+	src_cfg->mipi_rx_data.data_mode = 1;
-+	src_cfg->mipi_rx_data.no_lanes = kmb_isp->csi2_config.num_lanes;
-+	src_cfg->mipi_rx_data.data_type = kmb_isp->source_fmt->rx_data_type;
-+
-+	link_freq = v4l2_get_link_freq(subdev->ctrl_handler, src_cfg->bpp,
-+				       src_cfg->mipi_rx_data.no_lanes * 2);
-+	if (link_freq < 0)
-+		return link_freq;
-+
-+	src_cfg->mipi_rx_data.lane_rate_mbps = link_freq * 2;
-+
-+	src_cfg->metadata_width = src_fmt->format.width;
-+	src_cfg->metadata_height = 0;
-+	src_cfg->metadata_data_type = IC_IPIPE_EMBEDDED_8BIT;
-+
-+	memset(&mipi_cfg_evt, 0, sizeof(mipi_cfg_evt));
-+	mipi_cfg_evt.ctrl = KMB_IC_EVENT_TYPE_CONFIG_SOURCE;
-+	mipi_cfg_evt.ev_info.user_data_base_addr01 = kmb_isp->msg_phy_addr;
-+	ret = kmb_cam_xlink_write_msg(kmb_isp->xlink_cam,
-+				      kmb_isp->config_chan_id,
-+				      (u8 *)&mipi_cfg_evt,
-+				      sizeof(mipi_cfg_evt));
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Error config source xlink msg %d", ret);
-+		return ret;
-+	}
-+
-+	ret = kmb_cam_xlink_read_msg(kmb_isp->xlink_cam,
-+				     kmb_isp->config_chan_id,
-+				     (u8 *)&mipi_cfg_evt,
-+				     sizeof(mipi_cfg_evt));
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Error source xlink msg ack %d", ret);
-+		return ret;
-+	}
-+	if (mipi_cfg_evt.ctrl != KMB_IC_EVENT_TYPE_SOURCE_CONFIGURED) {
-+		dev_err(kmb_isp->dev, "Error source configured %d",
-+			mipi_cfg_evt.ctrl);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int kmb_isp_start_source(struct kmb_isp *kmb_isp)
-+{
-+	struct kmb_ic_ev cfg_evt;
-+	int ret;
-+
-+	if (WARN_ON(kmb_isp->source_streaming))
-+		return -EINVAL;
-+
-+	memset(&cfg_evt, 0, sizeof(cfg_evt));
-+	cfg_evt.ctrl = KMB_IC_EVENT_TYPE_START_SOURCE;
-+	cfg_evt.ev_info.inst_id = 0;
-+	ret = kmb_cam_xlink_write_msg(kmb_isp->xlink_cam,
-+				      kmb_isp->config_chan_id,
-+				      (u8 *)&cfg_evt, sizeof(cfg_evt));
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Error start source xlink msg %d", ret);
-+		return ret;
-+	}
-+
-+	ret = kmb_cam_xlink_read_msg(kmb_isp->xlink_cam,
-+				     kmb_isp->config_chan_id,
-+				     (u8 *)&cfg_evt, sizeof(cfg_evt));
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Error start source msg ack %d", ret);
-+		return ret;
-+	}
-+	if (cfg_evt.ctrl != KMB_IC_EVENT_TYPE_SOURCE_STARTED) {
-+		dev_err(kmb_isp->dev, "Error source started ack %d",
-+			cfg_evt.ctrl);
-+		return -EINVAL;
-+	}
-+
-+	init_completion(&kmb_isp->source_stopped);
-+	kmb_isp->thread = kthread_run(kmb_isp_worker_thread, kmb_isp,
-+				      "kmb_isp_thread");
-+	if (IS_ERR(kmb_isp->thread)) {
-+		ret = PTR_ERR(kmb_isp->thread);
-+		kmb_isp->thread = NULL;
-+		dev_err(kmb_isp->dev, "Thread run failed %d", ret);
-+		return ret;
-+	}
-+
-+	kmb_isp->source_streaming = true;
-+
-+	return 0;
-+}
-+
-+static int kmb_isp_stop_source(struct kmb_isp *kmb_isp,
-+			       enum kmb_isp_stop_method method)
-+{
-+	struct kmb_ic_ev cfg_evt;
-+	unsigned long timeout;
-+	int ret;
-+
-+	if (WARN_ON(!kmb_isp->source_streaming))
-+		return -EINVAL;
-+
-+	switch (method) {
-+	case KMB_ISP_STOP_SYNC:
-+		memset(&cfg_evt, 0, sizeof(cfg_evt));
-+		cfg_evt.ctrl = KMB_IC_EVENT_TYPE_STOP_SOURCE;
-+		cfg_evt.ev_info.inst_id = 0;
-+
-+		ret = kmb_cam_xlink_write_msg(kmb_isp->xlink_cam,
-+					      kmb_isp->config_chan_id,
-+					      (u8 *)&cfg_evt,
-+					      sizeof(cfg_evt));
-+		if (ret < 0) {
-+			dev_err(kmb_isp->dev,
-+				"Error stop source xlink msg %d", ret);
-+			return ret;
-+		}
-+
-+		timeout = msecs_to_jiffies(KMB_STOP_SOURCE_TIMEOUT_MS);
-+		ret = wait_for_completion_timeout(&kmb_isp->source_stopped,
-+						  timeout);
-+		if (ret == 0) {
-+			dev_err(kmb_isp->dev, "Source stopped timeout");
-+			return -ETIMEDOUT;
-+		}
-+		break;
-+	case KMB_ISP_STOP_FORCE:
-+		/* Stop ISP without notifying VPU. */
-+		break;
-+	default:
-+		dev_err(kmb_isp->dev, "Invalid stop method %d", method);
-+		return -EINVAL;
-+	}
-+
-+	ret = kthread_stop(kmb_isp->thread);
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Thread stop failed %d", ret);
-+		return ret;
-+	}
-+	kmb_isp->thread = NULL;
-+
-+	kmb_isp->source_streaming = false;
-+
-+	return 0;
-+}
-+
-+static void kmb_isp_discard_all_params(struct kmb_isp *kmb_isp)
-+{
-+	struct kmb_metadata_buf *meta_buf;
-+	struct list_head *next = NULL;
-+	struct list_head *pos = NULL;
-+
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_for_each_safe(pos, next, &kmb_isp->meta_params_pending_q) {
-+		meta_buf = list_entry(pos, struct kmb_metadata_buf, list);
-+		list_del(&meta_buf->list);
-+		vb2_buffer_done(&meta_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+	}
-+	list_for_each_safe(pos, next, &kmb_isp->meta_params_process_q) {
-+		meta_buf = list_entry(pos, struct kmb_metadata_buf, list);
-+		list_del(&meta_buf->list);
-+		vb2_buffer_done(&meta_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+	}
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+}
-+
-+/* Params metadata buffer ops */
-+static int kmb_isp_queue_params_buf(void *priv, struct kmb_metadata_buf *meta_buf)
-+{
-+	struct kmb_isp *kmb_isp = priv;
-+
-+	if (WARN_ON(!priv || !meta_buf))
-+		return -EINVAL;
-+
-+	INIT_LIST_HEAD(&meta_buf->list);
-+
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_add_tail(&meta_buf->list, &kmb_isp->meta_params_pending_q);
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+
-+	return 0;
-+}
-+
-+static void kmb_isp_queue_params_flush(void *priv)
-+{
-+	struct kmb_isp *kmb_isp = priv;
-+
-+	kmb_isp_discard_all_params(kmb_isp);
-+}
-+
-+/* Statistics metadata buffer ops */
-+static const struct kmb_metabuf_queue_ops isp_params_queue_ops = {
-+	.queue = kmb_isp_queue_params_buf,
-+	.flush = kmb_isp_queue_params_flush,
-+};
-+
-+static void kmb_isp_discard_all_stats(struct kmb_isp *kmb_isp)
-+{
-+	struct kmb_metadata_buf *meta_buf;
-+	struct list_head *next = NULL;
-+	struct list_head *pos = NULL;
-+
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_for_each_safe(pos, next, &kmb_isp->meta_stats_pending_q) {
-+		meta_buf = list_entry(pos, struct kmb_metadata_buf, list);
-+		list_del(&meta_buf->list);
-+		vb2_buffer_done(&meta_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+	}
-+	list_for_each_safe(pos, next, &kmb_isp->meta_stats_process_q) {
-+		meta_buf = list_entry(pos, struct kmb_metadata_buf, list);
-+		list_del(&meta_buf->list);
-+		vb2_buffer_done(&meta_buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+	}
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+}
-+
-+static int kmb_isp_queue_stats_buf(void *priv, struct kmb_metadata_buf *meta_buf)
-+{
-+	struct kmb_isp *kmb_isp = priv;
-+
-+	if (WARN_ON(!priv || !meta_buf))
-+		return -EINVAL;
-+
-+	INIT_LIST_HEAD(&meta_buf->list);
-+
-+	mutex_lock(&kmb_isp->meta_q_lock);
-+	list_add_tail(&meta_buf->list, &kmb_isp->meta_stats_pending_q);
-+	mutex_unlock(&kmb_isp->meta_q_lock);
-+
-+	return 0;
-+}
-+
-+static void kmb_isp_queue_stats_flush(void *priv)
-+{
-+	struct kmb_isp *kmb_isp = priv;
-+
-+	kmb_isp_discard_all_stats(kmb_isp);
-+}
-+
-+static const struct kmb_metabuf_queue_ops isp_stats_queue_ops = {
-+	.queue = kmb_isp_queue_stats_buf,
-+	.flush = kmb_isp_queue_stats_flush,
-+};
-+
-+static int kmb_isp_subdev_get_fmt(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_format *fmt)
-+{
-+	struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
-+
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+	} else {
-+		mutex_lock(&kmb_isp->lock);
-+		fmt->format = kmb_isp->active_pad_fmt[fmt->pad].format;
-+		mutex_unlock(&kmb_isp->lock);
-+	}
-+
-+	return 0;
-+}
-+
-+static int kmb_isp_config_pipe_src(struct kmb_isp *kmb_isp,
-+				   struct kmb_pipeline *pipe,
-+				   struct v4l2_mbus_framefmt *mbus_fmt)
-+{
-+	const struct kmb_isp_source_format *fmt_info;
-+	int ret;
-+
-+	fmt_info = kmb_isp_get_src_fmt_by_code(mbus_fmt->code);
-+	if (!fmt_info) {
-+		dev_err(kmb_isp->dev, "Format code not supported %d",
-+			mbus_fmt->code);
-+		return -EINVAL;
-+	}
-+
-+	/* Clean any previous configurations */
-+	memset(&kmb_isp->pipe_cfg, 0x00, sizeof(kmb_isp->pipe_cfg));
-+	kmb_isp->pipe_cfg.pipe_type = PIPE_TYPE_ISP_ISP_ULL;
-+	kmb_isp->pipe_cfg.src_type = SRC_TYPE_ALLOC_VPU_DATA_MIPI;
-+	kmb_isp->pipe_cfg.pipe_trans_hub = PIPE_TRANSFORM_HUB_NONE;
-+
-+	kmb_isp->pipe_cfg.in_isp_res.w = mbus_fmt->width;
-+	kmb_isp->pipe_cfg.in_isp_res.h = mbus_fmt->height;
-+
-+	kmb_isp->pipe_cfg.in_data_width = fmt_info->bpp;
-+	kmb_isp->pipe_cfg.in_data_packed = 1;
-+
-+	kmb_isp->pipe_cfg.in_isp_stride = (kmb_isp->pipe_cfg.in_isp_res.w *
-+				kmb_isp->pipe_cfg.in_isp_res.h *
-+				kmb_isp->pipe_cfg.in_data_width) / 8;
-+
-+	/* Always set to 8 required by the vpu firmware */
-+	kmb_isp->pipe_cfg.out_data_width = 8;
-+
-+	/* Isp does not have scaler */
-+	kmb_isp->pipe_cfg.out_isp_res = kmb_isp->pipe_cfg.in_isp_res;
-+
-+	ret = kmb_pipe_config_src(pipe, &kmb_isp->pipe_cfg);
-+	if (ret < 0)
++	ret = kmb_cam_xlink_open_channel(kmb_vid->xlink_cam, kmb_vid->chan_id);
++	if (ret)
 +		return ret;
 +
-+	kmb_isp->source_fmt = fmt_info;
-+
-+	return 0;
-+}
-+
-+static int kmb_isp_subdev_set_fmt(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_format *sd_fmt)
-+{
-+	struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
-+	struct v4l2_mbus_framefmt *mbus_fmt;
-+	struct kmb_channel_cfg channel_cfg;
-+	struct kmb_pipeline *pipe;
-+	int ret;
-+
-+	mutex_lock(&kmb_isp->lock);
-+	if (sd_fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		pipe = &kmb_isp->try_pipe;
-+		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, sd_fmt->pad);
-+	} else {
-+		pipe = &kmb_isp->active_pipe;
-+		mbus_fmt = &kmb_isp->active_pad_fmt[sd_fmt->pad].format;
-+	}
-+	mutex_unlock(&kmb_isp->lock);
-+
-+	switch (sd_fmt->pad) {
-+	case KMB_ISP_SINK_PAD_SENSOR:
-+		ret = kmb_isp_config_pipe_src(kmb_isp, pipe, &sd_fmt->format);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Configure first isp control channel */
-+		channel_cfg.frm_res.w = sd_fmt->format.width;
-+		channel_cfg.frm_res.h = sd_fmt->format.height;
-+		channel_cfg.id = kmb_isp->config_chan_id;
-+		kmb_pipe_config_dest(pipe, PIPE_OUTPUT_ID_ISP_CTRL,
-+				     &channel_cfg);
-+
-+		/* Set default resolution of destination channel */
-+		channel_cfg.frm_res.w = sd_fmt->format.width;
-+		channel_cfg.frm_res.h = sd_fmt->format.height;
-+		channel_cfg.id = kmb_isp->capture_chan_id;
-+		kmb_pipe_config_dest(pipe, PIPE_OUTPUT_ID_0, &channel_cfg);
-+
-+		sd_fmt->format.width = channel_cfg.frm_res.w;
-+		sd_fmt->format.height = channel_cfg.frm_res.h;
-+		break;
-+	case KMB_ISP_SRC_PAD_VID: {
-+		struct v4l2_mbus_framefmt *mbus_src_fmt;
-+
-+		mutex_lock(&kmb_isp->lock);
-+		if (sd_fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-+			mbus_src_fmt =
-+				v4l2_subdev_get_try_format(sd, cfg,
-+							   KMB_ISP_SINK_PAD_SENSOR);
-+		else
-+			mbus_src_fmt =
-+				&kmb_isp->active_pad_fmt[KMB_ISP_SINK_PAD_SENSOR].format;
-+		mutex_unlock(&kmb_isp->lock);
-+
-+		if (!kmb_isp_valid_destination_format(mbus_src_fmt,
-+						      sd_fmt->format.code))
-+			return -EINVAL;
-+
-+		channel_cfg.frm_res.w = sd_fmt->format.width;
-+		channel_cfg.frm_res.h = sd_fmt->format.height;
-+		channel_cfg.id = kmb_isp->capture_chan_id;
-+		kmb_pipe_config_dest(pipe, PIPE_OUTPUT_ID_0, &channel_cfg);
-+
-+		sd_fmt->format.width = channel_cfg.frm_res.w;
-+		sd_fmt->format.height = channel_cfg.frm_res.h;
-+		break;
-+	}
-+	case KMB_ISP_SINK_PAD_PARAM:
-+	case KMB_ISP_SRC_PAD_STATS:
-+		/* Isp config metadata sink format can be just fixed */
-+		if (sd_fmt->format.code != MEDIA_BUS_FMT_FIXED)
-+			return -EINVAL;
-+		break;
-+	}
-+
-+	mutex_lock(&kmb_isp->lock);
-+	*mbus_fmt = sd_fmt->format;
-+	mutex_unlock(&kmb_isp->lock);
-+
-+	return 0;
-+}
-+
-+static int
-+kmb_isp_subdev_enum_mbus_code(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	switch (code->pad) {
-+	case KMB_ISP_SINK_PAD_SENSOR:
-+		if (code->index >= ARRAY_SIZE(source_fmts))
-+			return -EINVAL;
-+
-+		code->code = source_fmts[code->index].code;
-+		break;
-+	case KMB_ISP_SRC_PAD_VID: {
-+		struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
-+		const struct kmb_isp_source_format *src_fmt;
-+		struct v4l2_mbus_framefmt *mbus_src_fmt;
-+
-+		mutex_lock(&kmb_isp->lock);
-+
-+		if (code->which == V4L2_SUBDEV_FORMAT_TRY)
-+			mbus_src_fmt =
-+				v4l2_subdev_get_try_format(sd, cfg,
-+							   KMB_ISP_SINK_PAD_SENSOR);
-+		else
-+			mbus_src_fmt =
-+				&kmb_isp->active_pad_fmt[KMB_ISP_SINK_PAD_SENSOR].format;
-+
-+		mutex_unlock(&kmb_isp->lock);
-+
-+		src_fmt = kmb_isp_get_src_fmt_by_code(mbus_src_fmt->code);
-+		if (!src_fmt)
-+			return -EINVAL;
-+
-+		if (code->index >= ARRAY_SIZE(src_fmt->dest_fmts))
-+			return -EINVAL;
-+
-+		if (!src_fmt->dest_fmts[code->index])
-+			return -EINVAL;
-+
-+		code->code = src_fmt->dest_fmts[code->index];
-+		break;
-+	}
-+	case KMB_ISP_SINK_PAD_PARAM:
-+	case KMB_ISP_SRC_PAD_STATS:
-+		if (code->index > 0)
-+			return -EINVAL;
-+
-+		code->code = MEDIA_BUS_FMT_FIXED;
-+		break;
++	kmb_vid->thread = kthread_run(kmb_video_worker_thread,
++				      kmb_vid, "kmb_vnode_thread");
++	if (IS_ERR(kmb_vid->thread)) {
++		dev_err(&kmb_vid->video->dev, "Cannot start thread");
++		ret = -ENOMEM;
++		kmb_vid->thread = NULL;
++		goto error_close_xlink_channel;
 +	}
 +
 +	return 0;
-+}
 +
-+static int kmb_isp_src_s_stream(struct kmb_isp *kmb_isp, int enable)
-+{
-+	struct v4l2_subdev *subdev;
-+	struct media_pad *remote;
-+	int ret;
-+
-+	remote = media_entity_remote_pad(&kmb_isp->pads[KMB_ISP_SINK_PAD_SENSOR]);
-+	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
-+		return -EINVAL;
-+
-+	subdev = media_entity_to_v4l2_subdev(remote->entity);
-+	if (!subdev)
-+		return -EINVAL;
-+
-+	ret = v4l2_subdev_call(subdev, video, s_stream, enable);
-+	if (ret < 0 && ret != -ENOIOCTLCMD)
-+		dev_err(kmb_isp->dev, "Cannot set source stream %d", enable);
-+
-+	return ret != -ENOIOCTLCMD ? ret : 0;
-+}
-+
-+static int kmb_isp_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
-+	int ret;
-+
-+	mutex_lock(&kmb_isp->lock);
-+
-+	/* Don't send isp config on stream disable */
-+	if (enable) {
-+		ret = kmb_cam_xlink_open_channel(kmb_isp->xlink_cam,
-+						 kmb_isp->config_chan_id);
-+		if (ret < 0) {
-+			dev_err(kmb_isp->dev,
-+				"Fail to open xlink channel %d", ret);
-+			goto error_unlock;
-+		}
-+
-+		ret = kmb_isp_configure_vpu_source(kmb_isp);
-+		if (ret)
-+			goto error_close_xlink_channel;
-+
-+		/* Process first configuration on stream enable */
-+		ret = kmb_isp_process_config(kmb_isp);
-+		if (ret)
-+			goto error_close_xlink_channel;
-+
-+		ret = kmb_isp_start_source(kmb_isp);
-+		if (ret)
-+			goto error_discard_metadata;
-+
-+		ret = kmb_isp_src_s_stream(kmb_isp, enable);
-+		if (ret)
-+			goto error_isp_stop_source;
-+
-+		kmb_isp->isp_streaming = true;
-+	} else {
-+		/* Try top to stop the source synchronized */
-+		if (kmb_isp->source_streaming)
-+			kmb_isp_stop_source(kmb_isp, KMB_ISP_STOP_SYNC);
-+
-+		kmb_cam_xlink_close_channel(kmb_isp->xlink_cam,
-+					    kmb_isp->config_chan_id);
-+
-+		/* Force stop isp if still streaming after channel is closed */
-+		if (kmb_isp->source_streaming)
-+			kmb_isp_stop_source(kmb_isp, KMB_ISP_STOP_FORCE);
-+
-+		/* Discard all unprocessed params and statistics */
-+		kmb_isp_discard_all_params(kmb_isp);
-+		kmb_isp_discard_all_stats(kmb_isp);
-+
-+		kmb_isp_src_s_stream(kmb_isp, enable);
-+
-+		kmb_isp->isp_streaming = false;
-+		kmb_isp->sequence = 0;
-+	}
-+
-+	mutex_unlock(&kmb_isp->lock);
-+
-+	return 0;
-+
-+error_isp_stop_source:
-+	kmb_isp_stop_source(kmb_isp, KMB_ISP_STOP_FORCE);
-+error_discard_metadata:
-+	kmb_isp_discard_all_params(kmb_isp);
-+	kmb_isp_discard_all_stats(kmb_isp);
 +error_close_xlink_channel:
-+	xlink_close_channel(&kmb_isp->xlink_cam->handle,
-+			    kmb_isp->config_chan_id);
-+error_unlock:
-+	mutex_unlock(&kmb_isp->lock);
++	kmb_cam_xlink_close_channel(kmb_vid->xlink_cam, kmb_vid->chan_id);
 +
 +	return ret;
 +}
 +
-+static int kmb_isp_subscribe_event(struct v4l2_subdev *sd,
-+				   struct v4l2_fh *fh,
-+				   struct v4l2_event_subscription *sub)
++static int kmb_video_worker_stop(struct kmb_video *kmb_vid)
 +{
-+	return v4l2_event_subscribe(fh, sub, KMB_ISP_EVT_Q_LEN, NULL);
++	int ret;
++
++	/*
++	 * Xlink has no functionality to unblock read volatile function,
++	 * only way to unblock is to close the channel.
++	 */
++	kmb_cam_xlink_close_channel(kmb_vid->xlink_cam, kmb_vid->chan_id);
++	if (!kmb_vid->thread) {
++		dev_warn(&kmb_vid->video->dev, "No thread running");
++		return 0;
++	}
++
++	ret = kthread_stop(kmb_vid->thread);
++	if (ret < 0)
++		dev_err(&kmb_vid->video->dev, "Thread stop failed %d", ret);
++
++	kmb_vid->thread = NULL;
++
++	return ret;
 +}
 +
-+/* sub-device core operations */
-+static struct v4l2_subdev_core_ops kmb_isp_subdev_core_ops = {
-+	.subscribe_event = kmb_isp_subscribe_event,
-+	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-+};
-+
-+/* sub-device video operations */
-+static struct v4l2_subdev_video_ops kmb_isp_subdev_video_ops = {
-+	.s_stream = kmb_isp_s_stream,
-+};
-+
-+/* sub-device pad operations */
-+static struct v4l2_subdev_pad_ops kmb_isp_subdev_pad_ops = {
-+	.set_fmt = kmb_isp_subdev_set_fmt,
-+	.get_fmt = kmb_isp_subdev_get_fmt,
-+	.enum_mbus_code = kmb_isp_subdev_enum_mbus_code,
-+};
-+
-+/* sub-device operations */
-+static const struct v4l2_subdev_ops kmb_isp_subdev_ops = {
-+	.core = &kmb_isp_subdev_core_ops,
-+	.video = &kmb_isp_subdev_video_ops,
-+	.pad = &kmb_isp_subdev_pad_ops,
-+};
-+
-+/* sub-device internal operations */
-+static int kmb_isp_open(struct v4l2_subdev *sd,
-+			struct v4l2_subdev_fh *fh)
++static int kmb_video_capture_start_streaming(struct vb2_queue *q,
++					     unsigned int count)
 +{
-+	struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(q);
++	int ret;
 +
-+	return kmb_pipe_request(&kmb_isp->active_pipe);
++	ret = kmb_pipe_prepare(kmb_vid->pipe);
++	if (ret < 0)
++		goto error_discard_all_bufs;
++
++	ret = kmb_video_worker_start(kmb_vid);
++	if (ret < 0)
++		goto error_pipeline_stop;
++
++	/* Process all pending buffers after worker is started */
++	kmb_video_process_all_bufs(kmb_vid);
++
++	/*
++	 * Run the pipeline after all buffers are provided for processing,
++	 * the main reason is to not skip any frame from the source.
++	 */
++	ret = kmb_pipe_run(kmb_vid->pipe, &kmb_vid->video->entity);
++	if (ret < 0)
++		goto error_pipeline_stop;
++
++	return 0;
++
++error_pipeline_stop:
++	kmb_pipe_stop(kmb_vid->pipe, &kmb_vid->video->entity);
++error_discard_all_bufs:
++	kmb_video_release_all_bufs(kmb_vid, VB2_BUF_STATE_QUEUED);
++
++	return ret;
 +}
 +
-+static int kmb_isp_close(struct v4l2_subdev *sd,
-+			 struct v4l2_subdev_fh *fh)
++static void kmb_video_capture_stop_streaming(struct vb2_queue *q)
 +{
-+	struct kmb_isp *kmb_isp = v4l2_get_subdevdata(sd);
++	struct kmb_video *kmb_vid = vb2_get_drv_priv(q);
 +
-+	kmb_pipe_release(&kmb_isp->active_pipe);
++	kmb_pipe_stop(kmb_vid->pipe, &kmb_vid->video->entity);
++
++	kmb_video_worker_stop(kmb_vid);
++
++	kmb_video_release_all_bufs(kmb_vid, VB2_BUF_STATE_ERROR);
++}
++
++/* driver-specific operations */
++static const struct vb2_ops kmb_video_vb2_q_capture_ops = {
++	.queue_setup     = kmb_video_queue_setup,
++	.buf_prepare     = kmb_video_buffer_prepare,
++	.buf_init        = kmb_video_buf_init,
++	.buf_queue       = kmb_video_buf_queue,
++	.start_streaming = kmb_video_capture_start_streaming,
++	.stop_streaming  = kmb_video_capture_stop_streaming,
++};
++
++static int kmb_video_querycap(struct file *file, void *fh,
++			      struct v4l2_capability *cap)
++{
++	cap->bus_info[0] = 0;
++	strscpy(cap->driver, KMB_CAM_VIDEO_NAME, sizeof(cap->driver));
++	strscpy(cap->card, KMB_CAM_VIDEO_NAME, sizeof(cap->card));
 +
 +	return 0;
 +}
 +
-+static const struct v4l2_subdev_internal_ops kmb_isp_internal_ops = {
-+	.open = kmb_isp_open,
-+	.close = kmb_isp_close,
-+};
- 
- /**
-  * kmb_isp_init - Initialize Kmb isp subdevice
-@@ -19,7 +1158,90 @@ int kmb_isp_init(struct kmb_isp *kmb_isp, struct device *dev,
- 		 struct kmb_isp_csi2_config *csi2_config,
- 		 struct kmb_xlink_cam *xlink_cam)
- {
++static int kmb_video_enum_fmt(struct file *file, void *fh,
++			      struct v4l2_fmtdesc *f)
++{
++	const struct kmb_video_fmt_info *info;
++
++	if (!V4L2_TYPE_IS_MULTIPLANAR(f->type))
++		return -EINVAL;
++
++	if (f->mbus_code) {
++		if (f->index != 0)
++			return -EINVAL;
++
++		info = kmb_video_get_fmt_info_by_code(f->mbus_code);
++		if (!info)
++			return -EINVAL;
++	} else {
++		info = &video_formats[f->index];
++		if (!info)
++			return -EINVAL;
++	}
++
++	f->pixelformat = info->pixelformat;
++	f->mbus_code = info->code;
++	strscpy(f->description, info->description, sizeof(f->description));
++
++	return 0;
++}
++
++static int kmb_video_enum_framesizes(struct file *file, void *fh,
++				     struct v4l2_frmsizeenum *fsize)
++{
++	const struct kmb_video_fmt_info *info;
++
++	if (fsize->index != 0)
++		return -EINVAL;
++
++	info = kmb_video_get_fmt_info_by_pixfmt(fsize->pixel_format);
++	if (!info)
++		return -EINVAL;
++
++	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
++
++	fsize->stepwise.min_width = KMB_VID_MIN_WIDTH;
++	fsize->stepwise.max_width = KMB_VID_MAX_WIDTH;
++	fsize->stepwise.step_width = KMB_VID_STEP_WIDTH;
++	fsize->stepwise.min_height = KMB_VID_MIN_HEIGHT;
++	fsize->stepwise.max_height = KMB_VID_MAX_HEIGHT;
++	fsize->stepwise.step_height = KMB_VID_STEP_HEIGHT;
++
++	return 0;
++}
++
++static int kmb_video_try_fmt(struct file *file, void *fh,
++			     struct v4l2_format *f)
++{
++	const struct kmb_video_fmt_info *info;
++	struct v4l2_mbus_framefmt mbus_fmt;
++
++	info = kmb_video_get_fmt_info_by_pixfmt(f->fmt.pix_mp.pixelformat);
++	if (!info)
++		info = &video_formats[0];
++
++	mbus_fmt.width = f->fmt.pix_mp.width;
++	mbus_fmt.height = f->fmt.pix_mp.height;
++	kmb_video_fmt_info_to_pix(info, &mbus_fmt, &f->fmt.pix_mp);
++
++	return 0;
++}
++
++static int kmb_video_set_fmt(struct file *file, void *fh,
++			     struct v4l2_format *f)
++{
++	struct kmb_video *kmb_vid = video_drvdata(file);
++	const struct kmb_video_fmt_info *info;
++	struct v4l2_mbus_framefmt mbus_fmt;
++
++	info = kmb_video_get_fmt_info_by_pixfmt(f->fmt.pix_mp.pixelformat);
++	if (!info)
++		info = &video_formats[0];
++
++	mbus_fmt.width = f->fmt.pix_mp.width;
++	mbus_fmt.height = f->fmt.pix_mp.height;
++	kmb_video_fmt_info_to_pix(info, &mbus_fmt, &f->fmt.pix_mp);
++
++	kmb_vid->active_fmt.pix = f->fmt.pix_mp;
++	kmb_vid->active_fmt.info = info;
++
++	return 0;
++}
++
++static int kmb_video_get_fmt(struct file *file, void *fh,
++			     struct v4l2_format *f)
++{
++	struct kmb_video *kmb_vid = video_drvdata(file);
++
++	f->fmt.pix_mp = kmb_vid->active_fmt.pix;
++
++	return 0;
++}
++
++static int kmb_video_check_format(struct kmb_video *kmb_vid)
++{
 +	int ret;
++	struct v4l2_pix_format_mplane pix;
 +
-+	v4l2_subdev_init(&kmb_isp->subdev, &kmb_isp_subdev_ops);
-+	v4l2_set_subdevdata(&kmb_isp->subdev, kmb_isp);
-+
-+	ret = kmb_pipe_init(&kmb_isp->active_pipe, dev, xlink_cam);
++	ret = kmb_video_get_subdev_fmt(kmb_vid, &pix);
 +	if (ret < 0)
 +		return ret;
 +
-+	ret = kmb_pipe_init(&kmb_isp->try_pipe, dev, xlink_cam);
-+	if (ret < 0)
-+		goto error_cleanup_active_pipeline;
-+
-+	INIT_LIST_HEAD(&kmb_isp->meta_params_pending_q);
-+	INIT_LIST_HEAD(&kmb_isp->meta_params_process_q);
-+	INIT_LIST_HEAD(&kmb_isp->meta_stats_pending_q);
-+	INIT_LIST_HEAD(&kmb_isp->meta_stats_process_q);
-+
-+	kmb_isp->isp_streaming = false;
-+
-+	kmb_isp->dev = dev;
-+	kmb_isp->xlink_cam = xlink_cam;
-+
-+	ret = kmb_cam_xlink_alloc_channel(kmb_isp->xlink_cam);
-+	if (ret < 0)
-+		goto error_cleanup_try_pipeline;
-+
-+	kmb_isp->config_chan_id = ret;
-+
-+	/* Video nodes are connected only to active pipes */
-+	kmb_isp->params.dma_dev = dev;
-+	kmb_isp->params.pipe = &kmb_isp->active_pipe;
-+	kmb_isp->params.queue_ops = &isp_params_queue_ops;
-+	kmb_isp->params.priv = kmb_isp;
-+	kmb_isp->params.type = KMB_METADATA_PARAMS;
-+	ret = kmb_metadata_init(&kmb_isp->params);
-+	if (ret < 0)
-+		goto error_free_config_channel_id;
-+
-+	kmb_isp->stats.dma_dev = dev;
-+	kmb_isp->stats.pipe = &kmb_isp->active_pipe;
-+	kmb_isp->stats.queue_ops = &isp_stats_queue_ops;
-+	kmb_isp->stats.priv = kmb_isp;
-+	kmb_isp->stats.type = KMB_METADATA_STATS;
-+	ret = kmb_metadata_init(&kmb_isp->stats);
-+	if (ret < 0)
-+		goto error_metadata_params_cleanup;
-+
-+	ret = kmb_cam_xlink_alloc_channel(kmb_isp->xlink_cam);
-+	if (ret < 0)
-+		goto error_metadata_stats_cleanup;
-+
-+	kmb_isp->capture_chan_id = ret;
-+	kmb_isp->capture.dma_dev = dev;
-+	kmb_isp->capture.pipe = &kmb_isp->active_pipe;
-+	kmb_isp->capture.chan_id = kmb_isp->capture_chan_id;
-+	kmb_isp->capture.xlink_cam = kmb_isp->xlink_cam;
-+	ret = kmb_video_init(&kmb_isp->capture, "kmb-video-capture");
-+	if (ret < 0)
-+		goto error_free_capture_channel_id;
-+
-+	kmb_isp->csi2_config = *csi2_config;
-+
-+	mutex_init(&kmb_isp->lock);
-+	mutex_init(&kmb_isp->meta_q_lock);
-+
- 	return 0;
-+
-+error_free_capture_channel_id:
-+	kmb_cam_xlink_free_channel(kmb_isp->xlink_cam,
-+				   kmb_isp->capture_chan_id);
-+error_metadata_stats_cleanup:
-+	kmb_metadata_cleanup(&kmb_isp->stats);
-+error_metadata_params_cleanup:
-+	kmb_metadata_cleanup(&kmb_isp->params);
-+error_free_config_channel_id:
-+	kmb_cam_xlink_free_channel(kmb_isp->xlink_cam,
-+				   kmb_isp->config_chan_id);
-+error_cleanup_try_pipeline:
-+	kmb_pipe_cleanup(&kmb_isp->try_pipe);
-+error_cleanup_active_pipeline:
-+	kmb_pipe_cleanup(&kmb_isp->active_pipe);
++	if (kmb_vid->active_fmt.pix.pixelformat != pix.pixelformat ||
++	    kmb_vid->active_fmt.pix.height != pix.height ||
++	    kmb_vid->active_fmt.pix.width != pix.width ||
++	    kmb_vid->active_fmt.pix.num_planes != pix.num_planes) {
++		dev_err(&kmb_vid->video->dev, "Pix fmt mismatch:\n\t"
++			"pix_fmt %u %u\n\theight %u %u\n\twidth %u %u\n\t"
++			"num_planes %u %u",
++			kmb_vid->active_fmt.pix.pixelformat, pix.pixelformat,
++			kmb_vid->active_fmt.pix.height, pix.height,
++			kmb_vid->active_fmt.pix.width, pix.width,
++			kmb_vid->active_fmt.pix.num_planes, pix.num_planes);
++		ret =  -EINVAL;
++	}
 +
 +	return ret;
- }
- 
- /**
-@@ -27,7 +1249,20 @@ int kmb_isp_init(struct kmb_isp *kmb_isp, struct device *dev,
-  * @kmb_isp: Pointer to kmb isp sub-device
-  */
- void kmb_isp_cleanup(struct kmb_isp *kmb_isp)
--{ }
-+{
-+	kmb_video_cleanup(&kmb_isp->capture);
-+	kmb_cam_xlink_free_channel(kmb_isp->xlink_cam,
-+				   kmb_isp->capture_chan_id);
-+
-+	kmb_metadata_cleanup(&kmb_isp->stats);
-+	kmb_metadata_cleanup(&kmb_isp->params);
-+
-+	kmb_cam_xlink_free_channel(kmb_isp->xlink_cam,
-+				   kmb_isp->config_chan_id);
-+
-+	mutex_destroy(&kmb_isp->meta_q_lock);
-+	mutex_destroy(&kmb_isp->lock);
 +}
- 
- /**
-  * kmb_isp_register_entities - Register entities
-@@ -42,7 +1277,107 @@ void kmb_isp_cleanup(struct kmb_isp *kmb_isp)
- int kmb_isp_register_entities(struct kmb_isp *kmb_isp,
- 			      struct v4l2_device *v4l2_dev)
- {
-+	struct media_pad *pads = kmb_isp->pads;
-+	struct device *dev = kmb_isp->dev;
++
++static int kmb_video_streamon(struct file *file, void *fh,
++			      enum v4l2_buf_type type)
++{
++	struct kmb_video *kmb_vid = video_drvdata(file);
 +	int ret;
 +
-+	/* Memory for xlink messages */
-+	kmb_isp->msg_vaddr = NULL;
-+	kmb_isp->msg_phy_addr = 0;
-+	kmb_isp->msg_vaddr = dma_alloc_coherent(kmb_isp->dev,
-+						KMB_ISP_CH_DATA_SIZE,
-+						&kmb_isp->msg_phy_addr, 0);
-+	if (!kmb_isp->msg_vaddr) {
-+		dev_err(dev, "Fail to allocate msg dma memory");
++	if (type != kmb_vid->vb2_q.type)
++		return -EINVAL;
++
++	ret =  kmb_video_check_format(kmb_vid);
++	if (ret < 0)
++		return ret;
++
++	return vb2_streamon(&kmb_vid->vb2_q, type);
++}
++
++/* V4L2 ioctl operations */
++static const struct v4l2_ioctl_ops kmb_vid_ioctl_ops = {
++	.vidioc_querycap                 = kmb_video_querycap,
++	.vidioc_enum_fmt_vid_cap         = kmb_video_enum_fmt,
++	.vidioc_enum_framesizes          = kmb_video_enum_framesizes,
++	.vidioc_g_fmt_vid_cap_mplane     = kmb_video_get_fmt,
++	.vidioc_try_fmt_vid_cap_mplane   = kmb_video_try_fmt,
++	.vidioc_s_fmt_vid_cap_mplane     = kmb_video_set_fmt,
++	.vidioc_reqbufs                  = vb2_ioctl_reqbufs,
++	.vidioc_querybuf                 = vb2_ioctl_querybuf,
++	.vidioc_qbuf                     = vb2_ioctl_qbuf,
++	.vidioc_dqbuf                    = vb2_ioctl_dqbuf,
++	.vidioc_streamon                 = kmb_video_streamon,
++	.vidioc_streamoff                = vb2_ioctl_streamoff,
++	.vidioc_expbuf                   = vb2_ioctl_expbuf,
++};
++
++static int kmb_video_open(struct file *file)
++{
++	struct kmb_video *kmb_vid = video_drvdata(file);
++	struct v4l2_mbus_framefmt fmt;
++	int ret;
++
++	mutex_lock(&kmb_vid->lock);
++	ret = v4l2_fh_open(file);
++	if (ret) {
++		mutex_unlock(&kmb_vid->lock);
++		return ret;
++	}
++
++	INIT_LIST_HEAD(&kmb_vid->dma_queue);
++
++	ret = kmb_pipe_request(kmb_vid->pipe);
++	if (ret < 0)
++		goto error_fh_release;
++
++	/* Fill default format. */
++	memset(&fmt, 0, sizeof(fmt));
++	kmb_video_fmt_info_to_pix(&video_formats[0], &fmt,
++				  &kmb_vid->active_fmt.pix);
++	kmb_vid->active_fmt.info = &video_formats[0];
++
++	mutex_unlock(&kmb_vid->lock);
++
++	return 0;
++
++error_fh_release:
++	_vb2_fop_release(file, NULL);
++	mutex_unlock(&kmb_vid->lock);
++
++	return ret;
++}
++
++static int kmb_video_release(struct file *file)
++{
++	struct kmb_video *kmb_vid = video_drvdata(file);
++	int ret;
++
++	mutex_lock(&kmb_vid->lock);
++
++	kmb_pipe_release(kmb_vid->pipe);
++
++	ret = _vb2_fop_release(file, NULL);
++
++	mutex_unlock(&kmb_vid->lock);
++
++	return ret;
++}
++
++/* FS operations for V4L2 device */
++static const struct v4l2_file_operations kmb_vid_fops = {
++	.owner          = THIS_MODULE,
++	.unlocked_ioctl = video_ioctl2,
++	.open           = kmb_video_open,
++	.release        = kmb_video_release,
++	.poll           = vb2_fop_poll,
++	.mmap           = vb2_fop_mmap,
++};
+ 
+ /**
+  * kmb_video_init - Initialize entity
+@@ -15,7 +822,63 @@
+  */
+ int kmb_video_init(struct kmb_video *kmb_vid, const char *name)
+ {
++	int ret;
++
++	kmb_vid->video = video_device_alloc();
++	if (!kmb_vid->video) {
++		dev_err(&kmb_vid->video->dev,
++			"Failed to allocate video device");
 +		return -ENOMEM;
 +	}
 +
-+	kmb_isp->subdev.internal_ops = &kmb_isp_internal_ops;
-+	kmb_isp->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+				 V4L2_SUBDEV_FL_HAS_EVENTS;
-+	kmb_isp->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_ISP;
-+	strscpy(kmb_isp->subdev.name, KMB_ISP_DRV_NAME,
-+		sizeof(kmb_isp->subdev.name));
++	mutex_init(&kmb_vid->lock);
++	mutex_init(&kmb_vid->dma_lock);
 +
-+	pads[KMB_ISP_SINK_PAD_SENSOR].flags = MEDIA_PAD_FL_SINK;
-+	pads[KMB_ISP_SINK_PAD_PARAM].flags = MEDIA_PAD_FL_SINK;
-+	pads[KMB_ISP_SRC_PAD_STATS].flags = MEDIA_PAD_FL_SOURCE;
-+	pads[KMB_ISP_SRC_PAD_VID].flags = MEDIA_PAD_FL_SOURCE;
-+	ret = media_entity_pads_init(&kmb_isp->subdev.entity,
-+				     KMB_ISP_PADS_NUM, pads);
-+	if (ret < 0) {
-+		dev_err(dev, "Fail to init media entity");
-+		return ret;
-+	}
++	kmb_vid->video->fops  = &kmb_vid_fops;
++	kmb_vid->video->ioctl_ops = &kmb_vid_ioctl_ops;
++	kmb_vid->video->minor = -1;
++	kmb_vid->video->release  = video_device_release;
++	kmb_vid->video->vfl_type = VFL_TYPE_VIDEO;
++	kmb_vid->video->lock = &kmb_vid->lock;
++	kmb_vid->video->queue = &kmb_vid->vb2_q;
++	video_set_drvdata(kmb_vid->video, kmb_vid);
++	snprintf(kmb_vid->video->name, sizeof(kmb_vid->video->name),
++		 "kmb_video %s", name);
 +
-+	ret = v4l2_device_register_subdev(v4l2_dev, &kmb_isp->subdev);
-+	if (ret < 0) {
-+		dev_err(dev, "Fail to register media entity");
-+		return ret;
-+	}
++	kmb_vid->vb2_q.drv_priv = kmb_vid;
++	kmb_vid->vb2_q.ops = &kmb_video_vb2_q_capture_ops;
++	kmb_vid->vb2_q.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++	kmb_vid->vb2_q.buf_struct_size = sizeof(struct kmb_frame_buffer);
++	kmb_vid->vb2_q.io_modes = VB2_MMAP | VB2_DMABUF;
++	kmb_vid->vb2_q.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	kmb_vid->vb2_q.mem_ops = &vb2_dma_contig_memops;
++	kmb_vid->vb2_q.dev = kmb_vid->dma_dev;
++	kmb_vid->vb2_q.lock = &kmb_vid->lock;
++	kmb_vid->vb2_q.min_buffers_needed = 1;
 +
-+	/* Register video nodes */
-+	ret = kmb_metadata_register(&kmb_isp->params, v4l2_dev);
++	kmb_vid->pad.flags = MEDIA_PAD_FL_SINK;
++	kmb_vid->video->device_caps = V4L2_CAP_VIDEO_CAPTURE_MPLANE |
++				      V4L2_CAP_STREAMING | V4L2_CAP_IO_MC;
++
++	ret = media_entity_pads_init(&kmb_vid->video->entity, 1, &kmb_vid->pad);
 +	if (ret < 0)
-+		goto error_unregister_subdev;
++		goto error_mutex_destroy;
 +
-+	ret = media_create_pad_link(&kmb_isp->params.video.entity,
-+				    0,
-+				    &kmb_isp->subdev.entity,
-+				    KMB_ISP_SINK_PAD_PARAM,
-+				    MEDIA_LNK_FL_IMMUTABLE |
-+				    MEDIA_LNK_FL_ENABLED);
++	ret = vb2_queue_init(&kmb_vid->vb2_q);
 +	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Fail to link %s->%s entities",
-+			kmb_isp->params.video.entity.name,
-+			kmb_isp->subdev.entity.name);
-+		goto error_unregister_params;
-+	}
-+
-+	ret = kmb_metadata_register(&kmb_isp->stats, v4l2_dev);
-+	if (ret < 0)
-+		goto error_unregister_params;
-+
-+	ret = media_create_pad_link(&kmb_isp->subdev.entity,
-+				    KMB_ISP_SRC_PAD_STATS,
-+				    &kmb_isp->stats.video.entity, 0,
-+				    MEDIA_LNK_FL_IMMUTABLE |
-+				    MEDIA_LNK_FL_ENABLED);
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Fail to link %s->%s entities",
-+			kmb_isp->stats.video.entity.name,
-+			kmb_isp->subdev.entity.name);
-+		goto error_unregister_stats;
-+	}
-+
-+	ret = kmb_video_register(&kmb_isp->capture, v4l2_dev);
-+	if (ret < 0)
-+		goto error_unregister_stats;
-+
-+	ret = media_create_pad_link(&kmb_isp->subdev.entity,
-+				    KMB_ISP_SRC_PAD_VID,
-+				    &kmb_isp->capture.video->entity, 0,
-+				    MEDIA_LNK_FL_IMMUTABLE |
-+				    MEDIA_LNK_FL_ENABLED);
-+	if (ret < 0) {
-+		dev_err(kmb_isp->dev, "Fail to link %s->%s entities",
-+			kmb_isp->subdev.entity.name,
-+			kmb_isp->capture.video->entity.name);
-+		goto error_unregister_video;
++		dev_err(&kmb_vid->video->dev, "Failed to init vb2 queue");
++		goto error_video_cleanup;
 +	}
 +
  	return 0;
 +
-+error_unregister_video:
-+	kmb_video_unregister(&kmb_isp->capture);
-+error_unregister_stats:
-+	kmb_metadata_unregister(&kmb_isp->stats);
-+error_unregister_params:
-+	kmb_metadata_unregister(&kmb_isp->params);
-+error_unregister_subdev:
-+	v4l2_device_unregister_subdev(&kmb_isp->subdev);
++error_video_cleanup:
++	kmb_video_cleanup(kmb_vid);
++error_mutex_destroy:
++	mutex_destroy(&kmb_vid->lock);
++	mutex_destroy(&kmb_vid->dma_lock);
 +
 +	return ret;
  }
  
  /**
-@@ -50,4 +1385,13 @@ int kmb_isp_register_entities(struct kmb_isp *kmb_isp,
-  * @kmb_isp: pointer to kmb isp device
+@@ -23,7 +886,11 @@ int kmb_video_init(struct kmb_video *kmb_vid, const char *name)
+  * @kmb_vid: pointer to kmb video device
   */
- void kmb_isp_unregister_entities(struct kmb_isp *kmb_isp)
+ void kmb_video_cleanup(struct kmb_video *kmb_vid)
 -{ }
 +{
-+	dma_free_coherent(kmb_isp->dev, KMB_ISP_CH_DATA_SIZE,
-+			  kmb_isp->msg_vaddr, kmb_isp->msg_phy_addr);
-+
-+	kmb_video_unregister(&kmb_isp->capture);
-+	kmb_metadata_unregister(&kmb_isp->stats);
-+	kmb_metadata_unregister(&kmb_isp->params);
-+
-+	v4l2_device_unregister_subdev(&kmb_isp->subdev);
++	media_entity_cleanup(&kmb_vid->video->entity);
++	mutex_destroy(&kmb_vid->lock);
++	mutex_destroy(&kmb_vid->dma_lock);
 +}
-diff --git a/drivers/media/platform/keembay-camera/keembay-isp.h b/drivers/media/platform/keembay-camera/keembay-isp.h
-index 35af6c644676..883eafada164 100644
---- a/drivers/media/platform/keembay-camera/keembay-isp.h
-+++ b/drivers/media/platform/keembay-camera/keembay-isp.h
-@@ -10,12 +10,17 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-subdev.h>
- 
--#define KMB_ISP_DRV_NAME	"keembay-camera-isp"
-+#include "keembay-metadata.h"
-+#include "keembay-pipeline.h"
-+#include "keembay-video.h"
- 
- #define KMB_ISP_SINK_PAD_SENSOR	0
--#define KMB_ISP_SINK_PAD_CFG	1
--#define KMB_ISP_SRC_PAD_VID	2
--#define KMB_ISP_PADS_NUM	3
-+#define KMB_ISP_SINK_PAD_PARAM	1
-+#define KMB_ISP_SRC_PAD_STATS	2
-+#define KMB_ISP_SRC_PAD_VID	3
-+#define KMB_ISP_PADS_NUM	4
-+
-+#define KMB_ISP_MAX_DEST_FMTS	5
  
  /**
-  * struct kmb_isp_csi2_config - Isp csi2 configuration
-@@ -28,25 +33,52 @@ struct kmb_isp_csi2_config {
- };
+  * kmb_video_register - Register V4L2 device
+@@ -35,7 +902,14 @@ void kmb_video_cleanup(struct kmb_video *kmb_vid)
+ int kmb_video_register(struct kmb_video *kmb_vid,
+ 		       struct v4l2_device *v4l2_dev)
+ {
+-	return 0;
++	int ret;
++
++	kmb_vid->video->v4l2_dev = v4l2_dev;
++	ret = video_register_device(kmb_vid->video, VFL_TYPE_VIDEO, -1);
++	if (ret < 0)
++		dev_err(&kmb_vid->video->dev, "Failed to register video device");
++
++	return ret;
+ }
  
  /**
-+ * struct kmb_isp_source_format - Isp source format
-+ * @code: V4l2 media bus code for the format
-+ * @bayer_pattern: Bayer format
-+ * @bpp: Bits per pixel
-+ * @rx_data_type: Receiver data type
-+ * @dest_fmts: Supported destination formats
-+ */
-+struct kmb_isp_source_format {
-+	u32 code;
-+	u32 bayer_pattern;
-+	u32 bpp;
-+	enum kmb_ic_mipi_rx_data_type rx_data_type;
-+	u32 dest_fmts[KMB_ISP_MAX_DEST_FMTS];
-+};
-+
-+/**
-  * struct kmb_isp - Keem Bay camera ISP device structure
-  * @dev: Pointer to basic device structure
-  * @lock: Mutex serilizing access to ISP device
-  * @thread: Pointer to worker thread data
-- * @xlink_cam: Xlink camera communication handler
-+ * @xlink_cam: Pointer to xlink camera communication handler
-  * @msg_phy_addr: ISP channel physical CMA address
-  * @msg_vaddr: ISP channel virtual CMA address
-- * @cfg_q_lock: Mutex to serialize access to isp cfg bufferss queue
-- * @isp_cfgs_queue: Isp cfg buffers queue
-+ * @meta_q_lock: Mutex to protect metadata buffers queues
-+ * @meta_params_pending_q: Metadata params pending queue
-+ * @meta_params_process_q: Metadata params processing queue
-+ * @meta_stats_pending_q: Metadata statistics pending queue
-+ * @meta_stats_process_q: Metadata statistics processing queue
-  * @isp_streaming: Flag to indicate ISP state
-  * @source_streaming: Flag to indicate source state
-  * @source_stopped: Completion to wait until VPU source is stopped
-  * @subdev: V4L2 sub-device
-  * @pads: Array of supported isp pads
-+ * @active_pipe: VPU pipeline instance used for active format and streaming
-  * @active_pad_fmt: Array holding active pad formats
-+ * @try_pipe: VPU pipeline instance used for try format
-  * @try_pad_fmt: Array holding try pad formats
-  * @csi2_config: CSI2 configuration
-  * @source_fmt: Pointer to isp source format
-- * @sequence: frame sequence number
-+ * @pipe_cfg: VPU pipeline configuration structure
-+ * @config_chan_id: Isp config channel id
-+ * @stats: Statistics video node
-+ * @params: Params video node
-+ * @capture_chan_id: Capture xlink channel id
-+ * @capture: Isp capture video node
-+ * @sequence: Frame sequence number
+@@ -43,4 +917,6 @@ int kmb_video_register(struct kmb_video *kmb_vid,
+  * @kmb_vid: pointer to kmb video device
   */
- struct kmb_isp {
- 	struct device *dev;
-@@ -58,8 +90,11 @@ struct kmb_isp {
- 	dma_addr_t msg_phy_addr;
- 	void *msg_vaddr;
- 
--	struct mutex cfg_q_lock;
--	struct list_head isp_cfgs_queue;
-+	struct mutex meta_q_lock;
-+	struct list_head meta_params_pending_q;
-+	struct list_head meta_params_process_q;
-+	struct list_head meta_stats_pending_q;
-+	struct list_head meta_stats_process_q;
- 
- 	bool isp_streaming;
- 	bool source_streaming;
-@@ -68,13 +103,24 @@ struct kmb_isp {
- 	struct v4l2_subdev subdev;
- 	struct media_pad pads[KMB_ISP_PADS_NUM];
- 
-+	struct kmb_pipeline active_pipe;
- 	struct v4l2_subdev_format active_pad_fmt[KMB_ISP_PADS_NUM];
- 
-+	struct kmb_pipeline try_pipe;
- 	struct v4l2_subdev_format try_pad_fmt[KMB_ISP_PADS_NUM];
- 
- 	struct kmb_isp_csi2_config csi2_config;
- 	const struct kmb_isp_source_format *source_fmt;
- 
-+	struct kmb_pipe_config_evs pipe_cfg;
-+
-+	unsigned int config_chan_id;
-+	struct kmb_metadata stats;
-+	struct kmb_metadata params;
-+
-+	unsigned int capture_chan_id;
-+	struct kmb_video capture;
-+
- 	u32 sequence;
- };
- 
-diff --git a/drivers/media/platform/keembay-camera/keembay-metadata.c b/drivers/media/platform/keembay-camera/keembay-metadata.c
-new file mode 100644
-index 000000000000..a1df746d9582
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-metadata.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel Keem Bay camera ISP metadata video node.
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+#include "keembay-metadata.h"
-+
-+/**
-+ * kmb_video_init - Initialize entity
-+ * @kmb_meta: pointer to kmb isp config device
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_metadata_init(struct kmb_metadata *kmb_meta)
+ void kmb_video_unregister(struct kmb_video *kmb_vid)
+-{ }
 +{
-+	return 0;
++	video_unregister_device(kmb_vid->video);
 +}
-+
-+/**
-+ * kmb_metadata_cleanup - Free resources associated with entity
-+ * @kmb_meta: pointer to kmb isp config device
-+ */
-+void kmb_metadata_cleanup(struct kmb_metadata *kmb_meta)
-+{ }
-+
-+/**
-+ * kmb_metadata_register - Register V4L2 device
-+ * @kmb_meta: pointer to kmb isp config device
-+ * @v4l2_dev: pointer to V4L2 device drivers
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_metadata_register(struct kmb_metadata *kmb_meta,
-+			  struct v4l2_device *v4l2_dev)
-+{
-+	return 0;
-+}
-+
-+/**
-+ * kmb_metadata_unregister - Unregister V4L device
-+ * @kmb_meta: pointer to kmb isp config device
-+ */
-+void kmb_metadata_unregister(struct kmb_metadata *kmb_meta)
-+{ }
-diff --git a/drivers/media/platform/keembay-camera/keembay-metadata.h b/drivers/media/platform/keembay-camera/keembay-metadata.h
-new file mode 100644
-index 000000000000..88e85d3caba0
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-metadata.h
-@@ -0,0 +1,150 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Intel Keem Bay camera ISP metadata video node.
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+#ifndef KEEMBAY_METADATA_H
-+#define KEEMBAY_METADATA_H
-+
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-subdev.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "keembay-vpu-isp.h"
-+
-+/**
-+ * enum kmb_metadata_table_type - Keembay metadata table type
-+ * @KMB_METADATA_TABLE_LSC: Lens shading table
-+ * @KMB_METADATA_TABLE_SDEFECT: Static defect pixel table
-+ * @KMB_METADATA_TABLE_LCA:  Lateral цhroma аberration table
-+ * @KMB_METADATA_TABLE_HDR: HDR table
-+ * @KMB_METADATA_TABLE_SHARP: Shartpnes table
-+ * @KMB_METADATA_TABLE_COLOR_CUMB: Color combination table
-+ * @KMB_METADATA_TABLE_TNF0: Temporal denoise first table
-+ * @KMB_METADATA_TABLE_TNF1: Temporal denoise second table
-+ * @KMB_METADATA_TABLE_WARP: Warp mesh table
-+ */
-+enum kmb_metadata_table_type {
-+	KMB_METADATA_TABLE_LSC		= 0,
-+	KMB_METADATA_TABLE_SDEFECT	= 1,
-+	KMB_METADATA_TABLE_LCA		= 2,
-+	KMB_METADATA_TABLE_HDR		= 3,
-+	KMB_METADATA_TABLE_SHARP	= 4,
-+	KMB_METADATA_TABLE_COLOR_CUMB	= 5,
-+	KMB_METADATA_TABLE_LUT		= 6,
-+	KMB_METADATA_TABLE_TNF0		= 7,
-+	KMB_METADATA_TABLE_TNF1		= 8,
-+	KMB_METADATA_TABLE_WARP		= 10,
-+	KMB_METADATA_TABLE_MAX		= 11,
-+};
-+
-+/**
-+ * enum kmb_metadata_type - Keembay metadata type
-+ * @KMB_METADATA_PARAMS: Keembay metadata parameters
-+ * @KMB_METADATA_STATS: Keembay metadata statistics
-+ */
-+enum kmb_metadata_type {
-+	KMB_METADATA_PARAMS,
-+	KMB_METADATA_STATS,
-+};
-+
-+/**
-+ * struct kmb_metadata_table - Keembay metadata table
-+ * @refcount: Metadata table reference count
-+ * @dma_addr: Physical address of the table
-+ * @cpu_addr: Virtual address of the table
-+ * @pool: Dma pool from where table was allocated
-+ */
-+struct kmb_metadata_table {
-+	struct kref refcount;
-+	dma_addr_t dma_addr;
-+	void *cpu_addr;
-+	struct dma_pool *pool;
-+};
-+
-+/**
-+ * struct kmb_metadata_buf - Keembay metadata buffer handle
-+ * @vb: Video buffer for v4l2
-+ * @type: Metadata type
-+ * @stats: Statistics physical addresses
-+ *   @raw: VPU raw statistics physical addresses
-+ *   @dehaze_stats_addr: VPU dehaze statistics physical address
-+ * @params: VPU ISP parameters
-+ *   @isp: VPU ISP parameters virtual address
-+ *   @dma_addr_isp: VPU ISP parameters physical address
-+ *   @tab: Metadata tables
-+ * @list: List for buffer queue
-+ */
-+struct kmb_metadata_buf {
-+	struct vb2_v4l2_buffer vb;
-+	enum kmb_metadata_type type;
-+	union {
-+		struct {
-+			struct kmb_vpu_raw_stats raw[KMB_VPU_MAX_EXPOSURES];
-+			u64 dehaze_stats_addr;
-+		} stats;
-+		struct {
-+			struct kmb_vpu_isp_params *isp;
-+			dma_addr_t dma_addr_isp;
-+			struct kmb_metadata_table *tab[KMB_METADATA_TABLE_MAX];
-+		} params;
-+	};
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct kmb_metabuf_queue_ops - Keembay metadata queue operations
-+ * @queue: queue an metadata buffer
-+ * @flish: discard all metadata buffers
-+ */
-+struct kmb_metabuf_queue_ops {
-+	int (*queue)(void *priv, struct kmb_metadata_buf *buf);
-+	void (*flush)(void *priv);
-+};
-+
-+/**
-+ * struct kmb_metadata - Keembay metadata device
-+ * @lock: mutex to protect keembay metadata device
-+ * @video: pointer to V4L2 video device node
-+ * @dma_dev: pointer to dma device
-+ * @pad: media pad graph objects
-+ * @vb2_q: V4L2 Video buffer queue
-+ * @type: Metadata type
-+ * @pipe: pointer to KMB pipeline object
-+ * @priv: pointer to private data
-+ * @queue_ops: Metadata buffer queue operations
-+ * @table_pools_refcnt: Table pool reference count
-+ * @table_pool: ISP tables dma pool
-+ * @last_buf: Pointer to last enqueued buffer
-+ * @format: Active format
-+ */
-+struct kmb_metadata {
-+	struct mutex lock;
-+	struct video_device video;
-+	struct device *dma_dev;
-+	struct media_pad pad;
-+	struct vb2_queue vb2_q;
-+	enum kmb_metadata_type type;
-+
-+	struct kmb_pipeline *pipe;
-+
-+	void *priv;
-+	const struct kmb_metabuf_queue_ops *queue_ops;
-+
-+	unsigned int table_pools_refcnt;
-+	struct dma_pool *table_pool[KMB_METADATA_TABLE_MAX];
-+
-+	struct kmb_metadata_buf *last_buf;
-+
-+	struct v4l2_meta_format format;
-+};
-+
-+int kmb_metadata_init(struct kmb_metadata *kmb_meta);
-+void kmb_metadata_cleanup(struct kmb_metadata *kmb_meta);
-+
-+int kmb_metadata_register(struct kmb_metadata *kmb_meta,
-+			  struct v4l2_device *v4l2_dev);
-+void kmb_metadata_unregister(struct kmb_metadata *kmb_meta);
-+
-+#endif /* KEEMBAY_METADATA_H */
-diff --git a/drivers/media/platform/keembay-camera/keembay-pipeline.c b/drivers/media/platform/keembay-camera/keembay-pipeline.c
-new file mode 100644
-index 000000000000..1ebaa900e4dc
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-pipeline.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel Keem Bay camera pipeline.
-+ *
-+ * Copyright (C) 2020 Intel Corporation
-+ */
-+#include <media/v4l2-device.h>
-+
-+#include "keembay-pipeline.h"
-+#include "keembay-vpu-cmd.h"
-+
-+/**
-+ * kmb_pipe_init - Initialize KMB Pipeline
-+ * @pipe: pointer to pipeline object
-+ * @dev: pointer to device
-+ * @xlink_cam: pointer to xlink cam handle
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_pipe_init(struct kmb_pipeline *pipe, struct device *dev,
-+		  struct kmb_xlink_cam *xlink_cam)
-+{
-+	return 0;
-+}
-+
-+/**
-+ * kmb_pipe_cleanup - Cleanup KMB Pipeline
-+ * @pipe: pointer to pipeline object
-+ */
-+void kmb_pipe_cleanup(struct kmb_pipeline *pipe)
-+{ }
-+
-+/**
-+ * kmb_pipe_request - Request a pipeline
-+ * @pipe: pointer to pipeline object
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_pipe_request(struct kmb_pipeline *pipe)
-+{
-+	return 0;
-+}
-+
-+/**
-+ * kmb_pipe_release - Release a pipeline
-+ * @pipe: pointer to pipeline object
-+ */
-+void kmb_pipe_release(struct kmb_pipeline *pipe)
-+{ }
-+
-+/**
-+ * kmb_pipe_config_dest - Configure pipeline destination information
-+ * @pipe: pointer to pipeline object
-+ * @output_id: destination id
-+ * @channel_cfg: pointer to channel configuration
-+ */
-+void kmb_pipe_config_dest(struct kmb_pipeline *pipe, unsigned int output_id,
-+			  struct kmb_channel_cfg *channel_cfg)
-+{ }
-+
-+/**
-+ * kmb_pipe_config_src - Configure pipeline source information
-+ * @pipe: pointer to pipeline object
-+ * @pipe_cfg: pointer to pipeline configuration
-+ *
-+ * Configure pipeline source information. Sending source configuration and
-+ * getting destination restrictions. After this call all destination data is
-+ * initialized. Changing state to CONFIGURED.
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_pipe_config_src(struct kmb_pipeline *pipe,
-+			struct kmb_pipe_config_evs *pipe_cfg)
-+{
-+	return 0;
-+}
-diff --git a/drivers/media/platform/keembay-camera/keembay-pipeline.h b/drivers/media/platform/keembay-camera/keembay-pipeline.h
-new file mode 100644
-index 000000000000..83ff94d11b34
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-pipeline.h
-@@ -0,0 +1,71 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Intel Keem Bay camera pipeline.
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+#ifndef KEEMBAY_PIPELINE_H
-+#define KEEMBAY_PIPELINE_H
-+
-+#include "keembay-vpu-pipe.h"
-+
-+/**
-+ * enum kmb_pipe_state - KMB pipeline state
-+ * @KMB_PIPE_STATE_UNCONFIGURED: Pipeline is unconfigured only configure can be
-+ *                               called in this state
-+ * @KMB_PIPE_STATE_CONFIGURED: Pipeline is configured. Pipeline can be
-+ *                             re-configured, build or destroyed
-+ * @KMB_PIPE_STATE_BUILT: Pipeline is built and ready for streaming.
-+ *                        Pipeline destroy or start stream can be called
-+ * @KMB_PIPE_STATE_STREAMING: Pipeline is in streaming state only stop
-+ *                            stream can be called.
-+ */
-+enum kmb_pipe_state {
-+	KMB_PIPE_STATE_UNCONFIGURED,
-+	KMB_PIPE_STATE_CONFIGURED,
-+	KMB_PIPE_STATE_BUILT,
-+	KMB_PIPE_STATE_STREAMING,
-+};
-+
-+/**
-+ * struct kmb_pipeline - KMB Pipeline
-+ * @lock: Mutex to serialize access to kmb pipeline object
-+ * @dev: Pointer to device
-+ * @media_pipe: Media pipeline
-+ * @state: Pipeline state
-+ * @pipe_cfg: VPU pipeline configuration
-+ * @pipe_cfg_paddr: VPU pipeline configuration physical address
-+ * @pending: Number of media graph entities expected on streaming
-+ * @streaming: Number of entities in streaming state
-+ * @xlink_cam: Pointer to xlink camera communication handler
-+ */
-+struct kmb_pipeline {
-+	struct mutex lock;
-+	struct device *dev;
-+	struct media_pipeline media_pipe;
-+
-+	enum kmb_pipe_state state;
-+
-+	struct kmb_pipe_config_evs *pipe_cfg;
-+	dma_addr_t pipe_cfg_paddr;
-+
-+	unsigned int pending;
-+	unsigned int streaming;
-+
-+	struct kmb_xlink_cam *xlink_cam;
-+};
-+
-+int kmb_pipe_init(struct kmb_pipeline *pipe,
-+		  struct device *dev,
-+		  struct kmb_xlink_cam *xlink_cam);
-+void kmb_pipe_cleanup(struct kmb_pipeline *pipe);
-+
-+int kmb_pipe_request(struct kmb_pipeline *pipe);
-+void kmb_pipe_release(struct kmb_pipeline *pipe);
-+
-+void kmb_pipe_config_dest(struct kmb_pipeline *pipe, unsigned int output_id,
-+			  struct kmb_channel_cfg *channel_cfg);
-+int kmb_pipe_config_src(struct kmb_pipeline *pipe,
-+			struct kmb_pipe_config_evs *pipe_cfg);
-+
-+#endif /* KEEMBAY_PIPELINE_H */
-diff --git a/drivers/media/platform/keembay-camera/keembay-video.c b/drivers/media/platform/keembay-camera/keembay-video.c
-new file mode 100644
-index 000000000000..02f4d97e16fb
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-video.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel Keem Bay camera Video node.
-+ *
-+ * Copyright (C) 2018-2020 Intel Corporation
-+ */
-+#include "keembay-video.h"
-+
-+/**
-+ * kmb_video_init - Initialize entity
-+ * @kmb_vid: pointer to kmb video device
-+ * @name: entity name
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_video_init(struct kmb_video *kmb_vid, const char *name)
-+{
-+	return 0;
-+}
-+
-+/**
-+ * kmb_video_cleanup - Free resources associated with entity
-+ * @kmb_vid: pointer to kmb video device
-+ */
-+void kmb_video_cleanup(struct kmb_video *kmb_vid)
-+{ }
-+
-+/**
-+ * kmb_video_register - Register V4L2 device
-+ * @kmb_vid: pointer to kmb video device
-+ * @v4l2_dev: pointer to V4L2 device drivers
-+ *
-+ * Return: 0 if successful, error code otherwise.
-+ */
-+int kmb_video_register(struct kmb_video *kmb_vid,
-+		       struct v4l2_device *v4l2_dev)
-+{
-+	return 0;
-+}
-+
-+/**
-+ * kmb_video_unregister - Unregister V4L device
-+ * @kmb_vid: pointer to kmb video device
-+ */
-+void kmb_video_unregister(struct kmb_video *kmb_vid)
-+{ }
 diff --git a/drivers/media/platform/keembay-camera/keembay-video.h b/drivers/media/platform/keembay-camera/keembay-video.h
-new file mode 100644
-index 000000000000..2aebbb37424b
---- /dev/null
+index 2aebbb37424b..de25dfe3d684 100644
+--- a/drivers/media/platform/keembay-camera/keembay-video.h
 +++ b/drivers/media/platform/keembay-camera/keembay-video.h
-@@ -0,0 +1,85 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Intel Keem Bay camera video node.
-+ *
-+ * Copyright (C) 2020 Intel Corporation
-+ */
-+#ifndef KEEMBAY_VIDEO_H
-+#define KEEMBAY_VIDEO_H
+@@ -16,7 +16,7 @@
+ /**
+  * struct kmb_frame_buffer - KMB frame buffer structure
+  * @vb: Video buffer for v4l2
+- * @addr: Array of dma buffer plane address
++ * @addr: Array of dma buffer plane addresses
+  * @list: Frame buffer list
+  */
+ struct kmb_frame_buffer {
+@@ -28,50 +28,39 @@ struct kmb_frame_buffer {
+ /**
+  * struct kmb_video - KMB Video device structure
+  * @lock: Mutex serializing kmb video device ops
+- * @video_lock: Mutex serializing video operations
+  * @video: Pointer to V4L2 sub-device
++ * @vb2_q: Video buffer queue
+  * @pad: Media pad graph objects
+  * @dma_dev: Pointer to dma device
++ * @dma_queue: DMA buffers queue
++ * @dma_lock: Mutex serializing dma queue ops
++ * @active_fmt: Active format
++ * @active_fmt.pix: Mplane active pixel format
++ * @active_fmt.info: Active kmb format info
+  * @pipe: Pointer to kmb media pipeline
+- * @chan: Pointer to xlink channel
++ * @xlink_cam: Pointer to xlink camera communication handler
++ * @chan_id: Channel ID
++ * @thread: Pointer to worker thread data
+  */
+ struct kmb_video {
+-	struct mutex lock; /* Lock protecting kmb video device */
+-	struct mutex video_lock; /* Lock serializing video device operations */
++	struct mutex lock;
+ 	struct video_device *video;
++	struct vb2_queue vb2_q;
+ 	struct media_pad pad;
 +
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-subdev.h>
-+#include <media/videobuf2-v4l2.h>
+ 	struct device *dma_dev;
+-	struct kmb_pipeline *pipe;
+-	struct kmb_xlink_cam *xlink_cam;
+-	unsigned int chan_id;
+-};
++	struct list_head dma_queue;
++	struct mutex dma_lock;
+ 
+-/**
+- * struct kmb_video_fh - KMB video file handler
+- * @fh: V4L2 file handler
+- * @kmb_vid: Pointer to KMB video device
+- * @lock: Mutex serializing access to fh
+- * @vb2_lock: Mutex serializing access to vb2 queue
+- * @vb2_q: Video buffer queue
+- * @active_fmt: Active format
+-     @pix: Mplane active pixel format
+-     @info: Active kmb format info
+- * @contiguous_memory: Flag to enable contiguous memory allocation
+- * @dma_queue: DMA buffers queue
+- * @thread: Pointer to worker thread data
+- */
+-struct kmb_video_fh {
+-	struct v4l2_fh fh;
+-	struct kmb_video *kmb_vid;
+-	struct mutex lock; /* Lock protecting fh operations */
+-	struct mutex vb2_lock; /* Lock protecting video buffer queue */
+-	struct vb2_queue vb2_q;
+ 	struct {
+ 		struct v4l2_pix_format_mplane pix;
+ 		const struct kmb_video_fmt_info *info;
+ 	} active_fmt;
+-	bool contiguous_memory;
+-	struct list_head dma_queue;
 +
-+#include "keembay-cam-xlink.h"
-+
-+/**
-+ * struct kmb_frame_buffer - KMB frame buffer structure
-+ * @vb: Video buffer for v4l2
-+ * @addr: Array of dma buffer plane address
-+ * @list: Frame buffer list
-+ */
-+struct kmb_frame_buffer {
-+	struct vb2_v4l2_buffer vb;
-+	dma_addr_t addr[3];
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct kmb_video - KMB Video device structure
-+ * @lock: Mutex serializing kmb video device ops
-+ * @video_lock: Mutex serializing video operations
-+ * @video: Pointer to V4L2 sub-device
-+ * @pad: Media pad graph objects
-+ * @dma_dev: Pointer to dma device
-+ * @pipe: Pointer to kmb media pipeline
-+ * @chan: Pointer to xlink channel
-+ */
-+struct kmb_video {
-+	struct mutex lock; /* Lock protecting kmb video device */
-+	struct mutex video_lock; /* Lock serializing video device operations */
-+	struct video_device *video;
-+	struct media_pad pad;
-+	struct device *dma_dev;
 +	struct kmb_pipeline *pipe;
 +	struct kmb_xlink_cam *xlink_cam;
 +	unsigned int chan_id;
-+};
 +
-+/**
-+ * struct kmb_video_fh - KMB video file handler
-+ * @fh: V4L2 file handler
-+ * @kmb_vid: Pointer to KMB video device
-+ * @lock: Mutex serializing access to fh
-+ * @vb2_lock: Mutex serializing access to vb2 queue
-+ * @vb2_q: Video buffer queue
-+ * @active_fmt: Active format
-+     @pix: Mplane active pixel format
-+     @info: Active kmb format info
-+ * @contiguous_memory: Flag to enable contiguous memory allocation
-+ * @dma_queue: DMA buffers queue
-+ * @thread: Pointer to worker thread data
-+ */
-+struct kmb_video_fh {
-+	struct v4l2_fh fh;
-+	struct kmb_video *kmb_vid;
-+	struct mutex lock; /* Lock protecting fh operations */
-+	struct mutex vb2_lock; /* Lock protecting video buffer queue */
-+	struct vb2_queue vb2_q;
-+	struct {
-+		struct v4l2_pix_format_mplane pix;
-+		const struct kmb_video_fmt_info *info;
-+	} active_fmt;
-+	bool contiguous_memory;
-+	struct list_head dma_queue;
-+	struct task_struct *thread;
-+};
-+
-+int kmb_video_init(struct kmb_video *kmb_vid, const char *name);
-+void kmb_video_cleanup(struct kmb_video *kmb_vid);
-+
-+int kmb_video_register(struct kmb_video *kmb_vid,
-+		       struct v4l2_device *v4l2_dev);
-+void kmb_video_unregister(struct kmb_video *kmb_vid);
-+
-+#endif /* KEEMBAY_VIDEO_H */
+ 	struct task_struct *thread;
+ };
+ 
 -- 
 2.11.0
 
