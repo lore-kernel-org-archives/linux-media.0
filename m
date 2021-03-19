@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D9B9C433FB
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2D57C433C1
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:43:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70DA56197D
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:42:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A17896197D
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:43:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbhCSQmS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 12:42:18 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:60613 "EHLO
+        id S230300AbhCSQms (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 12:42:48 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:36899 "EHLO
         relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbhCSQlt (ORCPT
+        with ESMTP id S230253AbhCSQmR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:41:49 -0400
+        Fri, 19 Mar 2021 12:42:17 -0400
 X-Originating-IP: 5.92.35.220
 Received: from uno.localdomain (mob-5-92-35-220.net.vodafone.it [5.92.35.220])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 399A8C0004;
-        Fri, 19 Mar 2021 16:41:45 +0000 (UTC)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 4DCF9C0007;
+        Fri, 19 Mar 2021 16:42:13 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -33,9 +33,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 05/19] media: v4l2-subdev: De-deprecate init() subdev op
-Date:   Fri, 19 Mar 2021 17:41:34 +0100
-Message-Id: <20210319164148.199192-6-jacopo+renesas@jmondi.org>
+Subject: [PATCH v3 14/19] media: i2c: rdacm20: Enable noise immunity
+Date:   Fri, 19 Mar 2021 17:41:43 +0100
+Message-Id: <20210319164148.199192-15-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210319164148.199192-1-jacopo+renesas@jmondi.org>
 References: <20210319164148.199192-1-jacopo+renesas@jmondi.org>
@@ -45,80 +45,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The init() subdev core operation is deemed to be deprecated for new
-subdevice drivers. However it could prove useful for complex
-architectures to defer operation that require access to the
-communication bus if said bus is not available (or fully configured)
-at the time when the subdevice probe() function is run.
+Enable the noise immunity threshold at the end of the rdacm20
+initialization routine.
 
-As an example, the GMSL architecture requires the GMSL configuration
-link to be configured on the host side after the remote subdevice
-has completed its probe function. After the configuration on the host
-side has been performed, the subdevice registers can be accessed through
-the communication bus.
+The rdacm20 camera module has been so far tested with a startup
+delay that allowed the embedded MCU to program the serializer. If
+the initialization routine is run before the MCU programs the
+serializer and the image sensor and their addresses gets changed
+by the rdacm20 driver it is required to manually enable the noise
+immunity threshold to make the communication on the control channel
+more reliable.
 
-In particular:
-
-	HOST			REMOTE
-
-	probe()
-	   |
-	   ---------------------> |
-				  probe() {
-				     bus config()
-				  }
-	   |<--------------------|
-	v4l2 async bound {
-	    bus config()
-	    call subdev init()
-	   |-------------------->|
-				 init() {
-				     access register on the bus()
-				}
-	   |<-------------------
-	}
-
-In the GMSL use case the bus configuration requires the enablement of the
-noise immunity threshold on the remote side which ensures reliability
-of communications in electrically noisy environments. After the subdevice
-has enabled the threshold at the end of its probe() sequence the host
-side shall compensate it with an higher signal amplitude. Once this
-sequence has completed the bus can be accessed with noise protection
-enabled and all the operations that require a considerable number of
-transactions on the bus (such as the image sensor configuration
-sequence) are run in the subdevice init() operation implementation.
-
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- include/media/v4l2-subdev.h | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/media/i2c/rdacm20.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index d0e9a5bdb08b..3068d9940669 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -148,9 +148,18 @@ struct v4l2_subdev_io_pin_config {
-  *	each pin being configured.  This function could be called at times
-  *	other than just subdevice initialization.
-  *
-- * @init: initialize the sensor registers to some sort of reasonable default
-- *	values. Do not use for new drivers and should be removed in existing
-- *	drivers.
-+ * @init: initialize the subdevice registers to some sort of reasonable default
-+ *	values. Do not use for new drivers (and should be removed in existing
-+ *	ones) for regular architectures where the image sensor is connected to
-+ *	the host receiver. For more complex architectures where the subdevice
-+ *	initialization should be deferred to the completion of the probe
-+ *	sequence of some intermediate component, or the communication bus
-+ *	requires configurations on the host side that depend on the completion
-+ *	of the probe sequence of the remote subdevices, the usage of this
-+ *	operation could be considered to allow the devices along the pipeline to
-+ *	probe and register in the media graph and to defer any operation that
-+ *	require actual access to the communication bus to their init() function
-+ *	implementation.
-  *
-  * @load_fw: load firmware.
-  *
+diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
+index 2881e752efbe..554fd3b3ec3d 100644
+--- a/drivers/media/i2c/rdacm20.c
++++ b/drivers/media/i2c/rdacm20.c
+@@ -518,7 +518,19 @@ static int rdacm20_init(struct v4l2_subdev *sd, unsigned int val)
+ 
+ 	dev_info(dev->dev, "Identified MAX9271 + OV10635 device\n");
+ 
+-	return 0;
++	/*
++	 * Set reverse channel high threshold to increase noise immunity.
++	 *
++	 * This should be compensated by increasing the reverse channel
++	 * amplitude on the remote deserializer side.
++	 *
++	 * TODO Inspect the embedded MCU programming sequence to make sure
++	 * there are no conflicts with the configuration applied here.
++	 *
++	 * TODO Clarify the embedded MCU startup delay to avoid write
++	 * collisions on the I2C bus.
++	 */
++	return max9271_set_high_threshold(&dev->serializer, true);
+ }
+ 
+ static const struct v4l2_subdev_core_ops rdacm20_core_ops = {
 -- 
 2.30.0
 
