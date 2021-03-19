@@ -2,137 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 310D7C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A4BC433DB
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 17:10:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09A5A61985
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 16:58:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 931E461963
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 17:10:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbhCSQ6W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 12:58:22 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:35831 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230224AbhCSQ6E (ORCPT
+        id S230114AbhCSRJm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 13:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230146AbhCSRJM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:58:04 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id NIRjlNKM3GEYcNIRmlSGLW; Fri, 19 Mar 2021 17:58:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1616173082; bh=Xh4FQaO7gXbi7rOUuZ1pPbwXwXStL27rWL0VF4HMgkA=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=eVxw5OLXn/PzRy7/tZ0aD5Fyfvawr0niXiYhySkjWbWecyfF1Giafp8tULvdL3TPi
-         VGWjYk7Z1d7cfA8XM5jAXtN7IkIyN+41wDvuE5ghtYAXRLXrC/6N1oYB6DPnTVRigN
-         o9cbgvMrC2nJ91rav4qeaQ1hvpDg55y5ScigTDITGsG09ty0nCR57EolUy0iRMxBL2
-         hkOjkqcsU+glhb5NAt1YgxgHLHiziOtgSMWmUdyRvrePn04jhuMTr+rI4VxQWh4na+
-         X4BA8CHPCx5t2YKE7YttpcWSyJKorSGuDXK2nVBRbva45BGYISNyMIJ6wcMSZ6kHBa
-         0s/VfIFFUYGCA==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] adv7604: writing a one-block EDID failed
-Message-ID: <a7736e44-cb66-46fa-6c6b-30a96722daca@xs4all.nl>
-Date:   Fri, 19 Mar 2021 17:57:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        Fri, 19 Mar 2021 13:09:12 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EA5C061761
+        for <linux-media@vger.kernel.org>; Fri, 19 Mar 2021 10:09:12 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h13so11629742eds.5
+        for <linux-media@vger.kernel.org>; Fri, 19 Mar 2021 10:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AikJF0GK0ZzYGbwbgBUzJRLCgyMvlKF2iA5mDBYu/f0=;
+        b=atYHlbtsaqi04LfSg5Eox0I8qpNOjB6GEdi0psVT9m5ldSjyzg1eh67CmEdPjM6f2Q
+         p7AMVV4XhWzFgVxvstDqqYgicBPRljDxT+CFM0XG48Ck4uEAE1JXuRpZJ2h5YhVRLwj5
+         5QyesM2zRMk8xFbagNwTwnbdJLsikJ99YGPnc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AikJF0GK0ZzYGbwbgBUzJRLCgyMvlKF2iA5mDBYu/f0=;
+        b=EhsSkvcTJHPn01oE90YEOPMY1kD42ruceyfqcAPhpcTTB4RyF2Es5ycOeGse3MR2a6
+         pR2X9pHpomizP7ROVWRwOwGt1/q6sC8iSz55wwwD4woF5n3IfkIukRrVvxAPbcLDiDtM
+         UjV+Malg40/fJ/+Qb1OPpE+BSSQXcKFnMVpxud17x30VFZFPOKMNObhoK1t0lbjFujOy
+         ZufwlFGLcFVCAct4qAAvyz/qUNamKYw+S1jQhbJtZLNqGzk3T6SxYk2oB5wE2FdPuiai
+         MGRwU8tJOuC8tu2yVo7F6DYWCyaU2nlhzL2hIT/dtkTFp1VjwXeIREG1MEel9c3ExsDF
+         o7eg==
+X-Gm-Message-State: AOAM533GxkHnNFA9Aii+HiTT1MmqSTI/JOnyW3hGyIAIXVq5e5TAUiHK
+        TLwQj/9XT2DZxUfO8sg8RjlICP1i4AUQ0hecfm8=
+X-Google-Smtp-Source: ABdhPJxI99fkvrgLJHO5qGgSJ9AaOaaS/tK5beBYqpWjyq91Jv+kmUyBEqUN0D/QActs2iQvgwxihw==
+X-Received: by 2002:aa7:c447:: with SMTP id n7mr10623091edr.171.1616173750816;
+        Fri, 19 Mar 2021 10:09:10 -0700 (PDT)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id be27sm4506050edb.47.2021.03.19.10.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Mar 2021 10:09:10 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Mike Isely <isely@pobox.com>
+Subject: [PATCH v8 02/19] media: pvrusb2: Do not check for V4L2_CTRL_WHICH_DEF_VAL
+Date:   Fri, 19 Mar 2021 18:08:49 +0100
+Message-Id: <20210319170906.278238-3-ribalda@chromium.org>
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+In-Reply-To: <20210319170906.278238-1-ribalda@chromium.org>
+References: <20210319170906.278238-1-ribalda@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfDZjJjLAW7/BdZSOu97uD/9L9ArQOcG82HOiD1kwygjfVFqgF4RDIozgvbm/d7vR+UBJyxXAgvodWkhb9x/9dDcQLzvEFv7bRG8EfDiA1eTg3/egdoRL
- iXaEHeupc5dOL+SO/vgVd4eiUv4GclizAa0uJal3Ic8f0AgFNOia4Ei1BKCm6PtyYq8r27tHjqbZ7SiMIHTyT900G9AF1m24u3U=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The adv7604 refused to accept a one-block EDID, it required two blocks.
+The framework already checks for us if V4L2_CTRL_WHICH_DEF_VAL is
+written.
 
-Fix this.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Mike Isely <isely@pobox.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
-diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
-index 09004d928d11..18184297e2f0 100644
---- a/drivers/media/i2c/adv7604.c
-+++ b/drivers/media/i2c/adv7604.c
-@@ -2298,7 +2298,7 @@ static int adv76xx_set_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
- 	struct adv76xx_state *state = to_state(sd);
- 	const struct adv76xx_chip_info *info = state->info;
- 	unsigned int spa_loc;
--	u16 pa;
-+	u16 pa, parent_pa;
- 	int err;
- 	int i;
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-@@ -2332,7 +2332,7 @@ static int adv76xx_set_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
- 		return -E2BIG;
- 	}
- 	pa = v4l2_get_edid_phys_addr(edid->edid, edid->blocks * 128, &spa_loc);
--	err = v4l2_phys_addr_validate(pa, &pa, NULL);
-+	err = v4l2_phys_addr_validate(pa, &parent_pa, NULL);
- 	if (err)
- 		return err;
-
-@@ -2348,25 +2348,25 @@ static int adv76xx_set_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
- 	 * Return an error if no location of the source physical address
- 	 * was found.
- 	 */
--	if (spa_loc == 0)
-+	if (edid->blocks > 1 && spa_loc == 0)
- 		return -EINVAL;
-
- 	switch (edid->pad) {
- 	case ADV76XX_PAD_HDMI_PORT_A:
--		state->spa_port_a[0] = edid->edid[spa_loc];
--		state->spa_port_a[1] = edid->edid[spa_loc + 1];
-+		state->spa_port_a[0] = pa >> 8;
-+		state->spa_port_a[1] = pa & 0xff;
- 		break;
- 	case ADV7604_PAD_HDMI_PORT_B:
--		rep_write(sd, 0x70, edid->edid[spa_loc]);
--		rep_write(sd, 0x71, edid->edid[spa_loc + 1]);
-+		rep_write(sd, 0x70, pa >> 8);
-+		rep_write(sd, 0x71, pa & 0xff);
- 		break;
- 	case ADV7604_PAD_HDMI_PORT_C:
--		rep_write(sd, 0x72, edid->edid[spa_loc]);
--		rep_write(sd, 0x73, edid->edid[spa_loc + 1]);
-+		rep_write(sd, 0x72, pa >> 8);
-+		rep_write(sd, 0x73, pa & 0xff);
- 		break;
- 	case ADV7604_PAD_HDMI_PORT_D:
--		rep_write(sd, 0x74, edid->edid[spa_loc]);
--		rep_write(sd, 0x75, edid->edid[spa_loc + 1]);
-+		rep_write(sd, 0x74, pa >> 8);
-+		rep_write(sd, 0x75, pa & 0xff);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -2381,8 +2381,10 @@ static int adv76xx_set_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
- 		rep_write_clr_set(sd, 0x71, 0x01, (spa_loc & 0x100) >> 8);
- 	}
-
--	edid->edid[spa_loc] = state->spa_port_a[0];
--	edid->edid[spa_loc + 1] = state->spa_port_a[1];
-+	if (spa_loc) {
-+		edid->edid[spa_loc] = state->spa_port_a[0];
-+		edid->edid[spa_loc + 1] = state->spa_port_a[1];
-+	}
-
- 	memcpy(state->edid.edid, edid->edid, 128 * edid->blocks);
- 	state->edid.blocks = edid->blocks;
-@@ -2409,7 +2411,7 @@ static int adv76xx_set_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
- 		v4l2_err(sd, "error enabling edid (0x%x)\n", state->edid.present);
- 		return -EIO;
- 	}
--	cec_s_phys_addr(state->cec_adap, pa, false);
-+	cec_s_phys_addr(state->cec_adap, parent_pa, false);
-
- 	/* enable hotplug after 100 ms */
- 	schedule_delayed_work(&state->delayed_work_enable_hotplug, HZ / 10);
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+index 9657c1883311..c04ab7258d64 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+@@ -640,10 +640,6 @@ static int pvr2_s_ext_ctrls(struct file *file, void *priv,
+ 	unsigned int idx;
+ 	int ret;
+ 
+-	/* Default value cannot be changed */
+-	if (ctls->which == V4L2_CTRL_WHICH_DEF_VAL)
+-		return -EINVAL;
+-
+ 	ret = 0;
+ 	for (idx = 0; idx < ctls->count; idx++) {
+ 		ctrl = ctls->controls + idx;
+-- 
+2.31.0.rc2.261.g7f71774620-goog
 
