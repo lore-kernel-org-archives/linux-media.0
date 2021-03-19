@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C3FC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 05:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F4D4C43381
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 05:54:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACE2E60240
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 05:54:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1495260240
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 05:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbhCSFyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 01:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S233956AbhCSFyQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 01:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbhCSFxv (ORCPT
+        with ESMTP id S233936AbhCSFyB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 01:53:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FBCC06175F
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 22:53:51 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id ha17so4123888pjb.2
-        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 22:53:51 -0700 (PDT)
+        Fri, 19 Mar 2021 01:54:01 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCA8C06174A
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 22:54:00 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id l1so2955037pgb.5
+        for <linux-media@vger.kernel.org>; Thu, 18 Mar 2021 22:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=M8yI9pONKYY0sMtxSPqYhJCaoBpRMHpHxuKzPkbcKnw=;
-        b=a/Q+9zFOi/z88f5a29IjqDzLSR/ARlMu9Daw7AVTBSPe2vtRyniWR0+tbU1cc6Npnp
-         1YOrqlNzlf3ruak326Hvc3ywll+VpvFmMpqrxQ+/yCfMXaEirsJ9D8Ko2qBotoJFtIX2
-         sbyrDTRApMht6MyaMza4ebQVAtBaLfWoC3fp4=
+        bh=jyTPoXC+agDm6WJSaqjfD12BGhd0Fxr1GYMHe0K10zA=;
+        b=kxXuWcZJwRjoAmyd5MBMk+3mlZzONtdXDbWaBQUKYaFy6tm4Kao0LVcVdWL6waVb2d
+         UZq02baLfySUlSWCn69hYebwohAGySW/ztsDxc3x6C8a/pBGSb8UE3csE9C6ID3kIoaW
+         AGoo4IJy/5na8z2ZSDc1FgyqTSeBUsdvqYeqQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=M8yI9pONKYY0sMtxSPqYhJCaoBpRMHpHxuKzPkbcKnw=;
-        b=oN3FwEZQ8IkP05c+P0kef6P8OVQzd8MkzKH2YwlOflwz5M7AKtqPHhRwUoFbiTCGDW
-         j2QuLg+KlJMf3VkpjpAlmKYdZlFTlSrHvD/o3mN2GDSCGdcmMOitIw7r5kIYbvBtjNFl
-         1k9gkZDU1QcTXlpxExT3wlR0FbXQqj/6s5StVBZKmfcMOOQ5KeklR3kiKTgiSttG7Owp
-         qsuKKjypQCy/6B3Mm2azCDFz5c0qX8E+HnAGXjs7yJdSbo8TX6pBOF7Fewf8YIo4KjWV
-         lrDcGkoYIrwUaZNJ+sxZCbQJn9nR7W5qX9tcxfrjKyiPV/O2yoAU6SDFGak0kMDHC3g6
-         RzdQ==
-X-Gm-Message-State: AOAM533VafZ4rj0dMNGixgBhBi19DuR6FMmBac2yIsLxjUd7N40mG/pH
-        2nJxM/a3O5Bw40pkXFjV2yqjeA==
-X-Google-Smtp-Source: ABdhPJxLbOpxIyVOyEuInGFY94ZDdn7+DAxWKQOvTw3ngM5mq7Jp8WsvaEaU1LEU5QGO/xyViA5FSQ==
-X-Received: by 2002:a17:90b:1987:: with SMTP id mv7mr7819501pjb.152.1616133231281;
-        Thu, 18 Mar 2021 22:53:51 -0700 (PDT)
+        bh=jyTPoXC+agDm6WJSaqjfD12BGhd0Fxr1GYMHe0K10zA=;
+        b=dn34AZ355TEAWc2FGyXT/hUT5t89LMvMOjENCbQTY2HZmTzbDCYbOqjPUv1FrCksFo
+         J1KRqZ4ABecQpLjCZnO9IQm1l+Jd42E7DTFi/UUIL3NqgcLoiuWGSjIHb249W3mRPqNN
+         HivO0RWr5jvt7VhbPLpYVZiHdvurw39Ac7/jpyl3sMA4QWX63Goy7MlplgmHHw5AY22k
+         zkgeAWVAEeWkUwjEdIyzeN8My9BD1gU8LmrP2ZuL/4cqJ39BAqDS4d8KdindTywZQcb1
+         gcJVoluRpNfdSd7Wahs42LnJhAUirQRlQE8sZt+ir/6RKNdPI2WtEcTMVycgQW0tb810
+         ZqTw==
+X-Gm-Message-State: AOAM532Kf9SQnrcE0/NZtRewywXRIXTJyaV8/AoiLBzW+ZiTmXaSzgbm
+        jbSawYEAdFaCk+YEOGI/orsZog==
+X-Google-Smtp-Source: ABdhPJw9T2zzejTlLx3jjaqPgN9EwMOTRdXXODGEEtSe1op00FIxeX3UZGDXWLURWuLWgQ3wAeTgAw==
+X-Received: by 2002:a63:4658:: with SMTP id v24mr9973502pgk.258.1616133240492;
+        Thu, 18 Mar 2021 22:54:00 -0700 (PDT)
 Received: from senozhatsky.flets-east.jp ([2409:10:2e40:5100:6577:f83d:5865:dfac])
-        by smtp.gmail.com with ESMTPSA id o13sm4043704pgv.40.2021.03.18.22.53.48
+        by smtp.gmail.com with ESMTPSA id o13sm4043704pgv.40.2021.03.18.22.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Mar 2021 22:53:50 -0700 (PDT)
+        Thu, 18 Mar 2021 22:54:00 -0700 (PDT)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ricardo Ribalda <ribalda@chromium.org>
@@ -61,9 +61,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv3 1/6] media: v4l UAPI: add ROI selection targets
-Date:   Fri, 19 Mar 2021 14:53:37 +0900
-Message-Id: <20210319055342.127308-2-senozhatsky@chromium.org>
+Subject: [PATCHv3 4/6] media: v4l UAPI: document ROI auto-controls flags
+Date:   Fri, 19 Mar 2021 14:53:40 +0900
+Message-Id: <20210319055342.127308-5-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
 In-Reply-To: <20210319055342.127308-1-senozhatsky@chromium.org>
 References: <20210319055342.127308-1-senozhatsky@chromium.org>
@@ -73,35 +73,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-UVC 1.5 requires Region Of Interest control to implement
-GET_CUR, GET_DEF, GET_MIN and GET_MAX requests. This patch
-adds new V4L2 selection API targets that will implement
-those ROI requests.
+Document ROI auto controls.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- include/uapi/linux/v4l2-common.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../media/v4l/v4l2-selection-flags.rst        | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/include/uapi/linux/v4l2-common.h b/include/uapi/linux/v4l2-common.h
-index 7d21c1634b4d..3651ebb8cb23 100644
---- a/include/uapi/linux/v4l2-common.h
-+++ b/include/uapi/linux/v4l2-common.h
-@@ -78,6 +78,14 @@
- #define V4L2_SEL_TGT_COMPOSE_BOUNDS	0x0102
- /* Current composing area plus all padding pixels */
- #define V4L2_SEL_TGT_COMPOSE_PADDED	0x0103
-+/* Current Region of Interest area */
-+#define V4L2_SEL_TGT_ROI		0x0200
-+/* Default Region of Interest area */
-+#define V4L2_SEL_TGT_ROI_DEFAULT	0x0201
-+/* Region of Interest minimum values */
-+#define V4L2_SEL_TGT_ROI_BOUNDS_MIN	0x0202
-+/* Region of Interest maximum values */
-+#define V4L2_SEL_TGT_ROI_BOUNDS_MAX	0x0203
+diff --git a/Documentation/userspace-api/media/v4l/v4l2-selection-flags.rst b/Documentation/userspace-api/media/v4l/v4l2-selection-flags.rst
+index 1cb1531c1e52..536d29a6c4a5 100644
+--- a/Documentation/userspace-api/media/v4l/v4l2-selection-flags.rst
++++ b/Documentation/userspace-api/media/v4l/v4l2-selection-flags.rst
+@@ -48,6 +48,46 @@ Selection flags
+ 	inside the subdevice to all further processing steps.
+       - No
+       - Yes
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_EXPOSURE``
++      - (1 << 0)
++      - Auto Exposure.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_IRIS``
++      - (1 << 1)
++      - Auto Iris.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_WHITE_BALANCE``
++      - (1 << 2)
++      - Auto White Balance.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_FOCUS``
++      - (1 << 3)
++      - Auto Focus.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_FACE_DETECT``
++      - (1 << 4)
++      - Auto Face Detect.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_DETECT_AND_TRACK``
++      - (1 << 5)
++      - Auto Detect and Track.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_IMAGE_STABILIXATION``
++      - (1 << 6)
++      - Image Stabilization.
++      - Yes
++      - No
++    * - ``V4L2_SEL_FLAG_ROI_AUTO_HIGHER_QUALITY``
++      - (1 << 7)
++      - Higher Quality.
++      - Yes
++      - No
  
- /* Selection flags */
- #define V4L2_SEL_FLAG_GE		(1 << 0)
+ .. raw:: latex
+ 
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
