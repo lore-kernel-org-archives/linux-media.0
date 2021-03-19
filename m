@@ -2,201 +2,194 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD052C433C1
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 17:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C284EC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E18D61989
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 17:55:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CFA461990
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbhCSRz2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 13:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbhCSRzW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 13:55:22 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65777C06175F
-        for <linux-media@vger.kernel.org>; Fri, 19 Mar 2021 10:55:22 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id b2-20020a7bc2420000b029010be1081172so5702831wmj.1
-        for <linux-media@vger.kernel.org>; Fri, 19 Mar 2021 10:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H4E5zo6M+sGFb9jJfPuBMekAUt72xfRBAZEVdNXvosI=;
-        b=HkWCKtqano6hr83mTvHPNb1mTJD7j++xG4i3V1pZc+fMnH//eWACXOeqWIMYDAyiqD
-         CWBkqUiJ1zmtZ3OlxFIY9DcUS/euNcLz8nxn4AxgvZ1rE5qJAgMaRKnutzlS1iCHVLZf
-         S1ATj65HkMPVN9VP3K+xuo111cO9NYWhg1scM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=H4E5zo6M+sGFb9jJfPuBMekAUt72xfRBAZEVdNXvosI=;
-        b=fd0qGEOkfIDqWUGaF2K4QJGGqd66yzaEvHfb1boAf74jyAKA8jRwo9DzAd068s8+yn
-         KCbEVNRHqCxvvZvooFBxNAnNNt64W/PdpM9TpfDlLW+DEH0gHU5Hy375CblL4rcYlT8a
-         3ewCAfdpqtC22YE/D107pMexxsCuuYFA8XOZnPbEUykIRNJG0+cY5H5DrE43tPMYDxiC
-         9V37o4BlHZRJ2P3v531oG70/W/F+ZVFuNGdFJBevXvpKsbjBXe5Nc7iwx1I8c8XHVmiu
-         9o+DG3NcY8ZSEDNXHIP46rBNNub9bRj6n/EDo3MY0qf9JdJvn5R2+XyE9NEE5vyBavUE
-         Tx5g==
-X-Gm-Message-State: AOAM532LDRZk+MiLYE38x1RPJVFIxCV+2ZX6DDGRzJsm1t/Dr7hTGPjz
-        JwE00fGuP1hjQpGxf107F5WC4Q==
-X-Google-Smtp-Source: ABdhPJznH8/2o31By7revAgfT3dpRwhrdpC+rY/yFumwMUBtQGtz1iOu7IVxYDezg1HGlBR9UX23fg==
-X-Received: by 2002:a7b:c0c3:: with SMTP id s3mr4743813wmh.11.1616176521069;
-        Fri, 19 Mar 2021 10:55:21 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id s3sm7109143wmd.21.2021.03.19.10.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 10:55:20 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 18:55:18 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Anthony Koo <Anthony.Koo@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jeremy Kolb <jkolb@brandeis.edu>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        Leo Li <sunpeng.li@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Rob Clark <rob.clark@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Zack Rusin <zackr@vmware.com>
-Subject: Re: [RESEND 00/53] Rid GPU from W=1 warnings
-Message-ID: <YFTlhh1ZSFffO+Nr@phenom.ffwll.local>
-Mail-Followup-To: Lee Jones <lee.jones@linaro.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Anthony Koo <Anthony.Koo@amd.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Dave Airlie <airlied@redhat.com>, David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jeremy Kolb <jkolb@brandeis.edu>,
-        Kuogee Hsieh <khsieh@codeaurora.org>, Leo Li <sunpeng.li@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Rob Clark <rob.clark@linaro.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Zack Rusin <zackr@vmware.com>
-References: <20210303134319.3160762-1-lee.jones@linaro.org>
- <16d4300e-bf29-1e85-317b-53d257890cb9@vmware.com>
- <20210308091932.GB4931@dell>
- <YEobySvG0zPs9xhc@phenom.ffwll.local>
- <20210311135152.GT701493@dell>
- <20210317081729.GH701493@dell>
- <CAKMK7uEibsgXXTEM1d2CGSswp-koouPSouseP_rwLHTdpxfRpw@mail.gmail.com>
- <CAKMK7uHkJGDL8k3FfAqAM78honZR0euMcacW8UpdPZfS1J-7cA@mail.gmail.com>
- <20210319082407.GG2916463@dell>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210319082407.GG2916463@dell>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+        id S230296AbhCSSGt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 14:06:49 -0400
+Received: from mga09.intel.com ([134.134.136.24]:57280 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230294AbhCSSGn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Mar 2021 14:06:43 -0400
+IronPort-SDR: 43pE442BPGkLcen9E+TN2OMQCh+4VnbC8ZpzPOafB91+IcBmWbKtX5eakYUTIHxbTQdGBtOATr
+ AhQAwPP4GLTw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036002"
+X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
+   d="scan'208";a="190036002"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:42 -0700
+IronPort-SDR: 3TATCr0aMGc9/ye7O0+eCl1LkzqwKOQAIfZ5TIQ85BsnGX08H+kyWnHcVA7tvbFW3nKcRH8WPT
+ FhA/yD7JCEJQ==
+X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
+   d="scan'208";a="413605690"
+Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:39 -0700
+From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        sakari.ailus@linux.intel.com,
+        daniele.alessandrelli@linux.intel.com,
+        paul.j.murphy@linux.intel.com,
+        gjorgjix.rosikopulos@linux.intel.com,
+        martinax.krasteva@linux.intel.com
+Subject: [PATCH 01/10] dt-bindings: media: Add bindings for Keem Bay Camera
+Date:   Fri, 19 Mar 2021 18:06:23 +0000
+Message-Id: <20210319180632.585-2-martinax.krasteva@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
+References: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 08:24:07AM +0000, Lee Jones wrote:
-> On Thu, 18 Mar 2021, Daniel Vetter wrote:
-> 
-> > On Wed, Mar 17, 2021 at 9:32 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Wed, Mar 17, 2021 at 9:17 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > > >
-> > > > On Thu, 11 Mar 2021, Lee Jones wrote:
-> > > >
-> > > > > On Thu, 11 Mar 2021, Daniel Vetter wrote:
-> > > > >
-> > > > > > On Mon, Mar 08, 2021 at 09:19:32AM +0000, Lee Jones wrote:
-> > > > > > > On Fri, 05 Mar 2021, Roland Scheidegger wrote:
-> > > > > > >
-> > > > > > > > The vmwgfx ones look all good to me, so for
-> > > > > > > > 23-53: Reviewed-by: Roland Scheidegger <sroland@vmware.com>
-> > > > > > > > That said, they were already signed off by Zack, so not sure what
-> > > > > > > > happened here.
-> > > > > > >
-> > > > > > > Yes, they were accepted at one point, then dropped without a reason.
-> > > > > > >
-> > > > > > > Since I rebased onto the latest -next, I had to pluck them back out of
-> > > > > > > a previous one.
-> > > > > >
-> > > > > > They should show up in linux-next again. We merge patches for next merge
-> > > > > > window even during the current merge window, but need to make sure they
-> > > > > > don't pollute linux-next. Occasionally the cut off is wrong so patches
-> > > > > > show up, and then get pulled again.
-> > > > > >
-> > > > > > Unfortunately especially the 5.12 merge cycle was very wobbly due to some
-> > > > > > confusion here. But your patches should all be in linux-next again (they
-> > > > > > are queued up for 5.13 in drm-misc-next, I checked that).
-> > > > > >
-> > > > > > Sorry for the confusion here.
-> > > > >
-> > > > > Oh, I see.  Well so long as they don't get dropped, I'll be happy.
-> > > > >
-> > > > > Thanks for the explanation Daniel
-> > > >
-> > > > After rebasing today, all of my GPU patches have remained.  Would
-> > > > someone be kind enough to check that everything is still in order
-> > > > please?
-> > >
-> > > It's still broken somehow. I've kiced Maxime and Maarten again,
-> > > they're also on this thread.
-> > 
-> > You're patches have made it into drm-next meanwhile, so they should
-> > show up in linux-next through that tree at least. Except if that one
-> > also has some trouble.
-> 
-> Thanks for letting me know.
-> 
-> I see some patches made it back in, others didn't.
-> 
-> I'll resend the stragglers - bear with.
+From: Martina Krasteva <martinax.krasteva@intel.com>
 
-The vmwgfx ones should all be back, the others I guess just werent ever
-applied. I'll vacuum them all up if you resend. Apologies for the wobbly
-ride.
--Daniel
+- Add dt-bindings documentation for Intel Keem Bay Camera driver.
+- Add MAINTAINERS entry for Intel Keem Bay Camera binding
+  documentation.
+
+Co-developed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+Signed-off-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
+Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
+Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+---
+ .../bindings/media/intel,keembay-camera.yaml       | 98 ++++++++++++++++++++++
+ MAINTAINERS                                        |  8 ++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/intel,keembay-camera.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/intel,keembay-camera.yaml b/Documentation/devicetree/bindings/media/intel,keembay-camera.yaml
+new file mode 100644
+index 000000000000..78242b05228d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/intel,keembay-camera.yaml
+@@ -0,0 +1,98 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Intel Corporation
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/intel,keembay-camera.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Intel Keem Bay camera subsystem
++
++maintainers:
++  - Paul J. Murphy <paul.j.murphy@intel.com>
++  - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++
++properties:
++  compatible:
++    const: intel,keembay-camera
++  memory-region:
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++  ports:
++    type: object
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    "#address-cells":
++      const: 1
++    "#size-cells":
++      const: 0
++
++    properties:
++      port@[0-5]:
++        type: object
++        additionalProperties: false
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          The port number matches the D-PHY number (D-PHY#0 - D-PHY#5).
++
++        properties:
++          endpoint:
++            type: object
++
++            properties:
++              data-lanes:
++                $ref: video-interfaces.yaml#/properties/data-lanes
++                description:
++                  Six two-lane d-phys (D-PHY#0 - D-PHY#5) are available, which
++                  can be used by six RX controllers (RX-CTRL#0 - RX-CTRL#5).
++                  RX-CTRL#0, RX-CTRL#2, RX-CTRL#4 can be connected to two
++                  D-PHY's and will be able to work with 3 and 4 lanes. In this
++                  case the RX-CTRLs mapped to those D-PHYs cannot be used.
++
++                  Clock and data lanes are defined as follows
++                    D-PHY#0 - clock - 0, data - 1, 2
++                    D-PHY#1 - clock - 3, data - 4, 5
++                    D-PHY#2 - clock - 6, data - 7, 8
++                    D-PHY#3 - clock - 9, data - 10, 11
++                    D-PHY#4 - clock - 12, data - 13, 14
++                    D-PHY#5 - clock - 15, data - 16, 17
++
++            required:
++              - data-lanes
++
++      required:
++        - reg
++        - endpoint
++
++    required:
++      - "#address-cells"
++      - "#size-cells"
++      - port@[0-5]
++
++required:
++  - compatible
++  - ports
++
++
++additionalProperties: false
++
++examples:
++  - |
++    keembay_camera {
++        compatible = "intel,keembay-camera";
++        memory-region = <&mem>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@4 {
++                reg = <4>;
++
++                cam: endpoint {
++                    remote-endpoint = <&imx334>;
++                    data-lanes = <13 14 16 17>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 08f9c2b7f3b3..c3f583ef8e46 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1965,6 +1965,14 @@ M:	Lennert Buytenhek <kernel@wantstofly.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ 
++ARM/INTEL KEEM BAY CAMERA SUBSYSTEM
++M:	Paul J. Murphy <paul.j.murphy@intel.com>
++M:	Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/intel,keembay-camera.yaml
++
+ ARM/IP FABRICS DOUBLE ESPRESSO MACHINE SUPPORT
+ M:	Lennert Buytenhek <kernel@wantstofly.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.11.0
+
