@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F3BC433EA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0803C433ED
 	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58D5A61991
+	by mail.kernel.org (Postfix) with ESMTP id AF1F06198F
 	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbhCSSHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 14:07:24 -0400
+        id S230315AbhCSSHZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 14:07:25 -0400
 Received: from mga09.intel.com ([134.134.136.24]:57280 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230250AbhCSSGy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 14:06:54 -0400
-IronPort-SDR: ISvPl+V6o6hUDO7MRJxrntauoMQpReqSYevOSi3k8YjSV9jNQTRNLq/myqlbEHM+uvtWweIuoD
- yibEu1MVkRow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036023"
+        id S230028AbhCSSHA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Mar 2021 14:07:00 -0400
+IronPort-SDR: T2HQz3YArmexpOXgjLPMFs8CzOVSU0Y3nw/QqzTcy8NQqoj5YQuvJDnGfydr77N7a/H4FQGhDp
+ DTENcwVB4EPw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036036"
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="190036023"
+   d="scan'208";a="190036036"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:53 -0700
-IronPort-SDR: rBVbLq22eyXg2qKnSRIF3MXyjxr/wvS2G9ukeySjo5zzTvVHeywCRiHPFGugWXqFh1Ho4G+Tyl
- nC0jkSLhGSXQ==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:59 -0700
+IronPort-SDR: 17XftZ/KoeSdf/1ks/gh9Gm4ZqWCUhAgzadCU5i5ZatCznxgJ0e/JGFTptbCvzOBMVoSLvOrXH
+ W7nOBs24icYQ==
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="413605743"
+   d="scan'208";a="413605763"
 Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:50 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:06:56 -0700
 From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
         paul.j.murphy@linux.intel.com,
         gjorgjix.rosikopulos@linux.intel.com,
         martinax.krasteva@linux.intel.com
-Subject: [PATCH 05/10] media: v4l: Add Keem Bay Camera meta buffer formats
-Date:   Fri, 19 Mar 2021 18:06:27 +0000
-Message-Id: <20210319180632.585-6-martinax.krasteva@linux.intel.com>
+Subject: [PATCH 07/10] media: Keem Bay Camera: Add pipeline support
+Date:   Fri, 19 Mar 2021 18:06:29 +0000
+Message-Id: <20210319180632.585-8-martinax.krasteva@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
 References: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
@@ -50,173 +50,382 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+From: Martina Krasteva <martinax.krasteva@intel.com>
 
-Add Keem Bay Camera specific meta formats for processing
-parameters and statistics:
+Keem Bay pipeline object is responsible for handling
+of all pipeline management operations. It handles
+pipeline lifecycle states and configuration.
 
-    V4L2_META_FMT_KMB_PARAMS
-    V4L2_META_FMT_KMB_STATS
-
+Co-developed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
 Signed-off-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
-Co-developed-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Signed-off-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Co-developed-by: Martina Krasteva <martinax.krasteva@intel.com>
 Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
 Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
 Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
 ---
- .../userspace-api/media/v4l/meta-formats.rst       |  1 +
- .../media/v4l/pixfmt-meta-intel-kmb.rst            | 98 ++++++++++++++++++++++
- MAINTAINERS                                        |  2 +
- include/uapi/linux/videodev2.h                     |  4 +
- 4 files changed, 105 insertions(+)
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-intel-kmb.rst
+ .../platform/keembay-camera/keembay-cam-xlink.c    | 133 +++++++++++++++++++
+ .../platform/keembay-camera/keembay-cam-xlink.h    |   7 +
+ .../platform/keembay-camera/keembay-pipeline.c     | 145 ++++++++++++++++++++-
+ 3 files changed, 279 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-index fff25357fe86..cb85161dc1ae 100644
---- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-@@ -14,6 +14,7 @@ These formats are used for the :ref:`metadata` interface only.
+diff --git a/drivers/media/platform/keembay-camera/keembay-cam-xlink.c b/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
+index 49a0937bc9fc..5b403874c4a1 100644
+--- a/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
++++ b/drivers/media/platform/keembay-camera/keembay-cam-xlink.c
+@@ -192,3 +192,136 @@ int kmb_cam_xlink_read_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
  
-     pixfmt-meta-d4xx
-     pixfmt-meta-intel-ipu3
-+    pixfmt-meta-intel-kmb
-     pixfmt-meta-rkisp1
-     pixfmt-meta-uvc
-     pixfmt-meta-vsp1-hgo
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-kmb.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-kmb.rst
-new file mode 100644
-index 000000000000..99615bbed106
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-kmb.rst
-@@ -0,0 +1,98 @@
-+.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 	return written_size;
+ }
 +
-+.. _v4l2-meta-fmt-params:
-+.. _v4l2-meta-fmt-stats:
++/**
++ * kmb_cam_xlink_open_ctrl_channel - Open xlink control channel for communication
++ * @xlink_cam: Pointer to xlink camera handle
++ *
++ * There is only one control channel for xlink camera communication.
++ * NOTE: The channel is serialized and reference counted.
++ *
++ * Return: 0 if successful, error code otherwise
++ */
++int kmb_cam_xlink_open_ctrl_channel(struct kmb_xlink_cam *xlink_cam)
++{
++	int ret;
 +
-+*******************************************************************
-+V4L2_META_FMT_KMB_PARAMS ('kmbp'), V4L2_META_FMT_KMB_STATS ('kmbs')
-+*******************************************************************
++	mutex_lock(&xlink_cam->lock);
 +
-+.. kmb_isp_stats
++	if (xlink_cam->ctrl_chan_refcnt) {
++		xlink_cam->ctrl_chan_refcnt++;
++		mutex_unlock(&xlink_cam->lock);
++		return 0;
++	}
 +
-+ISP statistics
-+==============
++	ret = xlink_open_channel(&xlink_cam->handle,
++				 KMB_CAM_XLINK_CTRL_CHAN_ID, RXB_TXB,
++				 KMB_CAM_XLINK_CH_MAX_DATA_SIZE,
++				 KMB_CAM_XLINK_CH_TIMEOUT_MS);
++	if (ret) {
++		dev_err(xlink_cam->dev, "Failed to open xlink control channel %d", ret);
++		mutex_unlock(&xlink_cam->lock);
++		return -ENODEV;
++	}
 +
-+The Keembay ISP statistics blocks collect different statistics over
-+an input Bayer frame in non-HDR mode, or up to three input Bayer frames
-+in HDR mode. Those statistics are obtained from the "keembay-metadata-stats"
-+metadata capture video node, using the :c:type:`v4l2_meta_format` interface.
-+They are formatted as described by the :c:type:`kmb_isp_stats` structure.
++	xlink_cam->ctrl_chan_refcnt++;
 +
-+The statistics collected are AE/AWB (Auto-exposure/Auto-white balance),
-+AF (Auto-focus) filter response, luma histogram, rgb histograms and dehaze statistics.
-+Dehaze statistic are collected after HDR fusion in HDR mode.
++	mutex_unlock(&xlink_cam->lock);
 +
-+The struct :c:type:`kmb_isp_params` contain all configurable parameters for the
-+statistics:
++	return 0;
++}
 +
-+- The struct :c:type:`kmb_raw_params` contain enable flags for all
-+  statistics except dehaze (always enabled) and configuration for flicker rows
-+  statistics.
-+- The struct :c:type:`kmb_ae_awb_params` contain configuration parameters for AE/AWB
-+  statistics.
-+- The struct :c:type:`kmb_af_params` contain configuration for AF (Auto-focus) filter
-+  response statistics.
-+- The struct :c:type:`kmb_hist_params` contain configuration for luma and rgb histograms.
-+- The struct :c:type:`kmb_hist_params` contain configuration for luma and rgb histograms.
-+- The struct :c:type:`kmb_dehaze_params` contain configuration for dehaze statistics.
++/**
++ * kmb_cam_xlink_close_ctrl_channel - Close xlink control channel
++ * @xlink_cam: Pointer to xlink camera handle
++ *
++ * There is only one control channel for xlink camera communication.
++ * NOTE: The channel is serialized and reference counted.
++ *
++ * Return: 0 if successful, error code otherwise
++ */
++void kmb_cam_xlink_close_ctrl_channel(struct kmb_xlink_cam *xlink_cam)
++{
++	int ret;
 +
-+.. code-block:: c
++	mutex_lock(&xlink_cam->lock);
 +
-+	struct kmb_isp_stats {
-+		struct {
-+			__u8 ae_awb_stats[KMB_CAM_AE_AWB_STATS_SIZE];
-+			__u8 af_stats[KMB_CAM_AF_STATS_SIZE];
-+			__u8 hist_luma[KMB_CAM_HIST_LUMA_SIZE];
-+			__u8 hist_rgb[KMB_CAM_HIST_RGB_SIZE];
-+			__u8 flicker_rows[KMB_CAM_FLICKER_ROWS_SIZE];
-+		} exposure[KMB_CAM_MAX_EXPOSURES];
-+		__u8 dehaze[MAX_DHZ_AIRLIGHT_STATS_SIZE];
-+		struct kmb_isp_stats_flags update;
-+	};
++	if (WARN_ON(!xlink_cam->ctrl_chan_refcnt)) {
++		mutex_unlock(&xlink_cam->lock);
++		return;
++	}
 +
-+.. kmb_isp_stats
++	if (--xlink_cam->ctrl_chan_refcnt) {
++		mutex_unlock(&xlink_cam->lock);
++		return;
++	}
 +
-+ISP parameters
-+==============
++	ret = xlink_close_channel(&xlink_cam->handle, KMB_CAM_XLINK_CTRL_CHAN_ID);
++	if (ret)
++		dev_err(xlink_cam->dev, "Failed to close xlink channel %d", ret);
 +
-+The ISP parameters are passed to the "keembay-metadata-params" metadata
-+output video node, using the :c:type:`v4l2_meta_format` interface. They are
-+formatted as described by the :c:type:`kmb_isp_params` structure.
++	mutex_unlock(&xlink_cam->lock);
++}
 +
-+Both ISP statistics and ISP parameters described here are closely tied to
-+the underlying camera sub-system (VPU Camera) APIs. They are usually consumed
-+and produced by dedicated user space libraries that comprise the important
-+tuning tools, thus freeing the developers from being bothered with the low
-+level hardware and algorithm details.
++/**
++ * kmb_cam_xlink_write_ctrl_msg - Write xlink control message
++ * @xlink_cam: Pointer to xlink camera handle
++ * @ctrl_paddr: Physical address of the control message
++ * @ctrl_type: Control message type
++ * @expected_result: Control message expected result
++ *
++ * For each control message there is ack from the VPU camera.
++ * This function check the error against expected result.
++ * NOTE: Because there is only one control channel, the msg/ack
++ *       is sequence serliazed.
++ *
++ * Return: 0 if successful, error code otherwise
++ */
++int kmb_cam_xlink_write_ctrl_msg(struct kmb_xlink_cam *xlink_cam,
++				 dma_addr_t ctrl_paddr, u32 ctrl_type,
++				 u32 expected_result)
++{
++	size_t init_evt_size = sizeof(struct kmb_ic_ev);
++	struct kmb_ic_ev init_evt;
++	int ret;
 +
-+.. code-block:: c
++	mutex_lock(&xlink_cam->lock);
 +
-+	struct kmb_isp_params {
-+		struct kmb_isp_params_flags update;
-+		struct kmb_blc_params blc[KMB_CAM_MAX_EXPOSURES];
-+		struct kmb_sigma_dns_params sigma_dns[KMB_CAM_MAX_EXPOSURES];
-+		struct kmb_lsc_params lsc;
-+		struct kmb_raw_params raw;
-+		struct kmb_ae_awb_params ae_awb;
-+		struct kmb_af_params af;
-+		struct kmb_hist_params histogram;
-+		struct kmb_lca_params lca;
-+		struct kmb_debayer_params debayer;
-+		struct kmb_dog_dns_params dog_dns;
-+		struct kmb_luma_dns_params luma_dns;
-+		struct kmb_sharpen_params sharpen;
-+		struct kmb_chroma_gen_params chroma_gen;
-+		struct kmb_median_params median;
-+		struct kmb_chroma_dns_params chroma_dns;
-+		struct kmb_color_comb_params color_comb;
-+		struct kmb_hdr_params hdr;
-+		struct kmb_lut_params lut;
-+		struct kmb_tnf_params tnf;
-+		struct kmb_dehaze_params dehaze;
-+		struct kmb_warp_params warp;
-+	};
++	memset(&init_evt, 0, sizeof(init_evt));
++	init_evt.ctrl = ctrl_type;
++	init_evt.ev_info.user_data_base_addr01 = ctrl_paddr;
++	ret = xlink_write_volatile(&xlink_cam->handle,
++				   KMB_CAM_XLINK_CTRL_CHAN_ID,
++				   (u8 *)&init_evt,
++				   init_evt_size);
++	if (ret) {
++		dev_err(xlink_cam->dev, "Error ret %d ctrl type %d",
++			ret, ctrl_type);
++		ret = -ENODEV;
++		goto error_unlock;
++	}
 +
-+Keembay ISP uAPI data types
-+===============================
++	ret = xlink_read_data_to_buffer(&xlink_cam->handle,
++					KMB_CAM_XLINK_CTRL_CHAN_ID,
++					(u8 *)&init_evt,
++					(u32 *)&init_evt_size);
++	if (ret) {
++		dev_err(xlink_cam->dev, "Error read ack ret %d", ret);
++		ret = -ENODEV;
++		goto error_unlock;
++	}
++	if (init_evt.ctrl != expected_result) {
++		dev_err(xlink_cam->dev, "Error ctrl type %d evt ctrl %d",
++			ctrl_type, init_evt.ctrl);
++		ret = -EINVAL;
++		goto error_unlock;
++	}
 +
-+.. kernel-doc:: include/uapi/linux/keembay-isp-ctl.h
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 955f9f6a195d..d90eaf453012 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1972,6 +1972,8 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/intel,keembay-camera.yaml
-+F:	Documentation/media/uapi/v4l/meta-formats.rst
-+F:	Documentation/media/uapi/v4l/pixfmt-meta-intel-kmb.rst
- F:	drivers/media/platform/keembay-camera/
- F:	include/uapi/linux/keembay-isp-ctl.h
++	mutex_unlock(&xlink_cam->lock);
++
++	return 0;
++
++error_unlock:
++	mutex_unlock(&xlink_cam->lock);
++	return ret;
++}
+diff --git a/drivers/media/platform/keembay-camera/keembay-cam-xlink.h b/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
+index d9a78d847a4b..45e2c003cd33 100644
+--- a/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
++++ b/drivers/media/platform/keembay-camera/keembay-cam-xlink.h
+@@ -39,4 +39,11 @@ int kmb_cam_xlink_write_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
+ int kmb_cam_xlink_read_msg(struct kmb_xlink_cam *xlink_cam, int chan_id,
+ 			   u8 *message, u32 msg_size);
  
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 79dbde3bcf8d..0d32269638f6 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -769,6 +769,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
- #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
- 
-+/* Vendor specific - used for Keem Bay camera sub-system */
-+#define V4L2_META_FMT_KMB_PARAMS v4l2_fourcc('K', 'M', 'B', 'P') /* Keem Bay parameters */
-+#define V4L2_META_FMT_KMB_STATS  v4l2_fourcc('K', 'M', 'B', 'S') /* Keem Bay statistics */
++int kmb_cam_xlink_open_ctrl_channel(struct kmb_xlink_cam *xlink_cam);
++void kmb_cam_xlink_close_ctrl_channel(struct kmb_xlink_cam *xlink_cam);
 +
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
++int kmb_cam_xlink_write_ctrl_msg(struct kmb_xlink_cam *xlink_cam,
++				 dma_addr_t ctrl_paddr, u32 ctrl_type,
++				 u32 expected_result);
++
+ #endif /* KEEMBAY_CAM_XLINK_H */
+diff --git a/drivers/media/platform/keembay-camera/keembay-pipeline.c b/drivers/media/platform/keembay-camera/keembay-pipeline.c
+index 1ebaa900e4dc..78b2fffa42ee 100644
+--- a/drivers/media/platform/keembay-camera/keembay-pipeline.c
++++ b/drivers/media/platform/keembay-camera/keembay-pipeline.c
+@@ -2,13 +2,64 @@
+ /*
+  * Intel Keem Bay camera pipeline.
+  *
+- * Copyright (C) 2020 Intel Corporation
++ * Copyright (C) 2021 Intel Corporation
+  */
++#include <linux/dma-mapping.h>
++#include <linux/idr.h>
++#include <linux/kernel.h>
++#include <linux/xlink.h>
++
+ #include <media/v4l2-device.h>
  
++#include "keembay-cam-xlink.h"
+ #include "keembay-pipeline.h"
+ #include "keembay-vpu-cmd.h"
+ 
++static void kmb_pipe_print_config(struct kmb_pipeline *pipe)
++{
++	struct kmb_pipe_config_evs *cfg = pipe->pipe_cfg;
++	struct device *dev = pipe->dev;
++	unsigned int i;
++
++	dev_dbg(dev, "\tpipe_id %u\n", cfg->pipe_id);
++	dev_dbg(dev, "\tpipe_type %u\n", cfg->pipe_type);
++	dev_dbg(dev, "\tsrc_type %u\n", cfg->src_type);
++	dev_dbg(dev, "\tpipe_trans_hub %u\n", cfg->pipe_trans_hub);
++	dev_dbg(dev, "\tin_isp_res %ux%u\n",
++		cfg->in_isp_res.w, cfg->in_isp_res.h);
++	dev_dbg(dev, "\tout_isp_res %ux%u\n",
++		cfg->out_isp_res.w, cfg->out_isp_res.h);
++	dev_dbg(dev, "\tin_isp_stride %u\n", cfg->in_isp_stride);
++	dev_dbg(dev, "\tin_exp_offsets[0] %u\n\tin_exp_offsets[1] %u\n"
++		"\tin_exp_offsets[2] %u\n",
++		cfg->in_exp_offsets[0], cfg->in_exp_offsets[1],
++		cfg->in_exp_offsets[2]);
++
++	for (i = 0; i < PIPE_OUTPUT_ID_MAX; i++) {
++		dev_dbg(dev, "\tOUTPUT ID: %d\n", i);
++		dev_dbg(dev, "\t\tout_min_res %ux%u\n",
++			cfg->out_min_res[i].w, cfg->out_min_res[i].h);
++		dev_dbg(dev, "\t\tout_max_res %ux%u\n",
++			cfg->out_max_res[i].w, cfg->out_max_res[i].h);
++	}
++
++	for (i = 0; i < PIPE_OUTPUT_ID_MAX; i++) {
++		dev_dbg(dev, "\tpipe_xlink_chann: %d\n", i);
++		dev_dbg(dev, "\t\tid: %u %ux%u\n",
++			cfg->pipe_xlink_chann[i].id,
++			cfg->pipe_xlink_chann[i].frm_res.w,
++			cfg->pipe_xlink_chann[i].frm_res.h);
++	}
++
++	dev_dbg(dev, "\tkeep_aspect_ratio %u\n", cfg->keep_aspect_ratio);
++	dev_dbg(dev, "\tin_data_width %u\n", cfg->in_data_width);
++	dev_dbg(dev, "\tin_data_packed %u\n", cfg->in_data_packed);
++	dev_dbg(dev, "\tout_data_width %u\n", cfg->out_data_width);
++	dev_dbg(dev, "\tinternal_memory_addr 0x%llx\n",
++		cfg->internal_memory_addr);
++	dev_dbg(dev, "\tinternal_memory_size %u\n", cfg->internal_memory_size);
++}
++
+ /**
+  * kmb_pipe_init - Initialize KMB Pipeline
+  * @pipe: pointer to pipeline object
+@@ -20,6 +71,20 @@
+ int kmb_pipe_init(struct kmb_pipeline *pipe, struct device *dev,
+ 		  struct kmb_xlink_cam *xlink_cam)
+ {
++	pipe->pipe_cfg = dma_alloc_coherent(dev,
++					    sizeof(*pipe->pipe_cfg),
++					    &pipe->pipe_cfg_paddr, 0);
++	if (!pipe->pipe_cfg)
++		return -ENOMEM;
++
++	mutex_init(&pipe->lock);
++	pipe->pending = 0;
++	pipe->streaming = 0;
++	pipe->state = KMB_PIPE_STATE_UNCONFIGURED;
++
++	pipe->dev = dev;
++	pipe->xlink_cam = xlink_cam;
++
+ 	return 0;
+ }
+ 
+@@ -28,7 +93,10 @@ int kmb_pipe_init(struct kmb_pipeline *pipe, struct device *dev,
+  * @pipe: pointer to pipeline object
+  */
+ void kmb_pipe_cleanup(struct kmb_pipeline *pipe)
+-{ }
++{
++	dma_free_coherent(pipe->dev, sizeof(struct kmb_pipe_config_evs),
++			  pipe->pipe_cfg, pipe->pipe_cfg_paddr);
++}
+ 
+ /**
+  * kmb_pipe_request - Request a pipeline
+@@ -38,7 +106,13 @@ void kmb_pipe_cleanup(struct kmb_pipeline *pipe)
+  */
+ int kmb_pipe_request(struct kmb_pipeline *pipe)
+ {
+-	return 0;
++	int ret;
++
++	ret = kmb_cam_xlink_open_ctrl_channel(pipe->xlink_cam);
++	if (ret < 0)
++		dev_err(pipe->dev, "Failed to request control channel");
++
++	return ret;
+ }
+ 
+ /**
+@@ -46,7 +120,9 @@ int kmb_pipe_request(struct kmb_pipeline *pipe)
+  * @pipe: pointer to pipeline object
+  */
+ void kmb_pipe_release(struct kmb_pipeline *pipe)
+-{ }
++{
++	kmb_cam_xlink_close_ctrl_channel(pipe->xlink_cam);
++}
+ 
+ /**
+  * kmb_pipe_config_dest - Configure pipeline destination information
+@@ -56,7 +132,23 @@ void kmb_pipe_release(struct kmb_pipeline *pipe)
+  */
+ void kmb_pipe_config_dest(struct kmb_pipeline *pipe, unsigned int output_id,
+ 			  struct kmb_channel_cfg *channel_cfg)
+-{ }
++{
++	mutex_lock(&pipe->lock);
++
++	channel_cfg->frm_res.w =
++		clamp_val(channel_cfg->frm_res.w,
++			  pipe->pipe_cfg->out_min_res[output_id].w,
++			  pipe->pipe_cfg->out_max_res[output_id].w);
++
++	channel_cfg->frm_res.h =
++		clamp_val(channel_cfg->frm_res.h,
++			  pipe->pipe_cfg->out_min_res[output_id].h,
++			  pipe->pipe_cfg->out_max_res[output_id].h);
++
++	pipe->pipe_cfg->pipe_xlink_chann[output_id] = *channel_cfg;
++
++	mutex_unlock(&pipe->lock);
++}
+ 
+ /**
+  * kmb_pipe_config_src - Configure pipeline source information
+@@ -72,5 +164,46 @@ void kmb_pipe_config_dest(struct kmb_pipeline *pipe, unsigned int output_id,
+ int kmb_pipe_config_src(struct kmb_pipeline *pipe,
+ 			struct kmb_pipe_config_evs *pipe_cfg)
+ {
+-	return 0;
++	int ret = 0;
++
++	mutex_lock(&pipe->lock);
++
++	switch (pipe->state) {
++	case KMB_PIPE_STATE_CONFIGURED:
++	case KMB_PIPE_STATE_UNCONFIGURED:
++		/* Initialize pipeline configuration and counters */
++		pipe->pending = 0;
++		pipe->streaming = 0;
++
++		/* Store pipeline configuration */
++		*pipe->pipe_cfg = *pipe_cfg;
++
++		/*
++		 * For some reason vpu firmware is returning config pipe as
++		 * result for config pipe control.
++		 */
++		ret = kmb_cam_xlink_write_ctrl_msg(pipe->xlink_cam,
++						   pipe->pipe_cfg_paddr,
++						   KMB_IC_EVENT_TYPE_CONFIG_ISP_PIPE,
++						   KMB_IC_EVENT_TYPE_CONFIG_ISP_PIPE);
++		if (ret < 0) {
++			dev_err(pipe->dev, "Failed to reconfigure pipeline!");
++			break;
++		}
++		kmb_pipe_print_config(pipe);
++
++		pipe->state = KMB_PIPE_STATE_CONFIGURED;
++		break;
++	case KMB_PIPE_STATE_BUILT:
++		dev_err(pipe->dev, "Invalid state transition, already built");
++		break;
++	default:
++		dev_err(pipe->dev,
++			"Config pipe in invalid state %d", pipe->state);
++		ret = -EINVAL;
++		break;
++	}
++
++	mutex_unlock(&pipe->lock);
++	return ret;
+ }
 -- 
 2.11.0
 
