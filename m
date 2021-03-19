@@ -2,2391 +2,786 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A66BEC433EB
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1459BC433E2
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 21:00:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8182D61997
-	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 18:07:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8F986197B
+	for <linux-media@archiver.kernel.org>; Fri, 19 Mar 2021 21:00:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbhCSSH0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Mar 2021 14:07:26 -0400
-Received: from mga09.intel.com ([134.134.136.24]:57280 "EHLO mga09.intel.com"
+        id S230235AbhCSU7z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Mar 2021 16:59:55 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22890 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230285AbhCSSHG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Mar 2021 14:07:06 -0400
-IronPort-SDR: Nw6gXpnEF0tx2ue+mB2qSN+kw07pRLkWBPN4AzV+gXoKla50t7K0n0coJnBCWGv36N5d0FvlYX
- Xzx2dWOD8VpQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="190036056"
+        id S230145AbhCSU7d (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Mar 2021 16:59:33 -0400
+IronPort-SDR: QlBLYobvOpjqm0wO9Y2XvUmdpD6VNY+gm0uiOaodS0vxE6+EsB8a3MB5MFV/vI25AKSuJtuUsc
+ Cm67tsiucfqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9928"; a="189346917"
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="190036056"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:07:05 -0700
-IronPort-SDR: rElUgfs7LyiAKG9gI2du4OUNK+miMjJ2L7dDa8plhROo9cTNzDdWs1Ne9sxQZIsAYvj/CWtpAu
- b1ismd4+YYgA==
+   d="gz'50?scan'50,208,50";a="189346917"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 13:59:33 -0700
+IronPort-SDR: otq6VPNJWebsWw/HawvhAkMKA4cOiUid/XXcCtGD+eJqyB/i9yw/16Y+HUX+fPiKlTN7tHt/Sg
+ Xwv8nbGbut3A==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,262,1610438400"; 
-   d="scan'208";a="413605805"
-Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 11:07:02 -0700
-From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        sakari.ailus@linux.intel.com,
+   d="gz'50?scan'50,208,50";a="412410151"
+Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 Mar 2021 13:59:29 -0700
+Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lNMDR-000243-1M; Fri, 19 Mar 2021 20:59:29 +0000
+Date:   Sat, 20 Mar 2021 04:58:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martina Krasteva <martinax.krasteva@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, mchehab@kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, sakari.ailus@linux.intel.com,
         daniele.alessandrelli@linux.intel.com,
         paul.j.murphy@linux.intel.com,
         gjorgjix.rosikopulos@linux.intel.com,
         martinax.krasteva@linux.intel.com
-Subject: [PATCH 09/10] media: Keem Bay Camera: Add metadata video node
-Date:   Fri, 19 Mar 2021 18:06:31 +0000
-Message-Id: <20210319180632.585-10-martinax.krasteva@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
-References: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
+Subject: Re: [PATCH 04/10] uapi: Keem Bay ISP Parameters data types
+Message-ID: <202103200455.n6UFbXtN-lkp@intel.com>
+References: <20210319180632.585-5-martinax.krasteva@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="ReaqsoxgOBHFXBhH"
+Content-Disposition: inline
+In-Reply-To: <20210319180632.585-5-martinax.krasteva@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
 
-Metadata video node implements output and capture meta type
-interface.
+--ReaqsoxgOBHFXBhH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-- Output video node is used to provide isp parameters for processing.
+Hi Martina,
 
-Each buffer internally has real vpu isp params structure
-allocated. User space params are copied on every qbuf based on
-update flags. Since vpu need every time all parameters to be provided,
-params are copied on every qbuf. Based on update flags they are copied
-from userspace buffer or last buffer processed.
-To reduce coping of the tables, they are allocated separately
-in table buffer pool.
-The tables are copied only when there is update from the userspace,
-otherwise they are only reference from last processed frame.
-This is possible because vpu interface has separate address for each table.
+Thank you for the patch! Yet something to improve:
 
-- Capture video node is used to provide statistics to userspace.
-Capture video node statistics memory addresses are copied to isp
-params before processing, and corresponding update flags are set
-based on statistics availability.
+[auto build test ERROR on f00397ee41c79b6155b9b44abd0055b2c0621349]
 
-Signed-off-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
-Co-developed-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Signed-off-by: Ivan Dimitrov <ivanx.dimitrov@intel.com>
-Co-developed-by: Martina Krasteva <martinax.krasteva@intel.com>
-Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
-Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
-Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+url:    https://github.com/0day-ci/linux/commits/Martina-Krasteva/Keem-Bay-Camera-Subsystem/20210320-020904
+base:   f00397ee41c79b6155b9b44abd0055b2c0621349
+config: i386-randconfig-s002-20210318 (attached as .config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.3-277-gc089cd2d-dirty
+        # https://github.com/0day-ci/linux/commit/f90a61aa54b5ce4a5d3876ebf2a229ed7708af4e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Martina-Krasteva/Keem-Bay-Camera-Subsystem/20210320-020904
+        git checkout f90a61aa54b5ce4a5d3876ebf2a229ed7708af4e
+        # save the attached .config to linux build tree
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=i386 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from ./usr/include/linux/keembay-isp-ctl.h:11,
+                    from <command-line>:32:
+>> ./usr/include/linux/videodev2.h:2370:20: error: field 'timestamp' has incomplete type
+    2370 |  struct timespec   timestamp;
+         |                    ^~~~~~~~~
+
 ---
- drivers/media/platform/keembay-camera/Makefile     |    4 +-
- .../platform/keembay-camera/keembay-metadata.c     | 1823 +++++++++++++++++++-
- .../platform/keembay-camera/keembay-metadata.h     |   14 +-
- .../keembay-camera/keembay-params-defaults.c       |  326 ++++
- .../keembay-camera/keembay-params-defaults.h       |   38 +
- 5 files changed, 2194 insertions(+), 11 deletions(-)
- create mode 100644 drivers/media/platform/keembay-camera/keembay-params-defaults.c
- create mode 100644 drivers/media/platform/keembay-camera/keembay-params-defaults.h
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-diff --git a/drivers/media/platform/keembay-camera/Makefile b/drivers/media/platform/keembay-camera/Makefile
-index 8b3ad715c5c4..1b949cf009ef 100644
---- a/drivers/media/platform/keembay-camera/Makefile
-+++ b/drivers/media/platform/keembay-camera/Makefile
-@@ -1,5 +1,5 @@
- keembay-cam-objs = keembay-camera.o keembay-pipeline.o \
--		      keembay-cam-xlink.o keembay-isp.o \
--		      keembay-metadata.o keembay-video.o
-+		      keembay-cam-xlink.o keembay-params-defaults.o \
-+		      keembay-isp.o keembay-metadata.o keembay-video.o
- 
- obj-$(CONFIG_VIDEO_INTEL_KEEMBAY_CAMERA) += keembay-cam.o
-diff --git a/drivers/media/platform/keembay-camera/keembay-metadata.c b/drivers/media/platform/keembay-camera/keembay-metadata.c
-index a1df746d9582..8807e3f322c5 100644
---- a/drivers/media/platform/keembay-camera/keembay-metadata.c
-+++ b/drivers/media/platform/keembay-camera/keembay-metadata.c
-@@ -4,17 +4,1818 @@
-  *
-  * Copyright (C) 2021 Intel Corporation
-  */
-+
-+#include <linux/keembay-isp-ctl.h>
-+#include <linux/dmapool.h>
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/videobuf2-dma-contig.h>
-+#include <media/videobuf2-vmalloc.h>
-+
-+#include "keembay-pipeline.h"
- #include "keembay-metadata.h"
- 
-+#define KMB_CAM_METADATA_STATS_NAME "keembay-metadata-stats"
-+#define KMB_CAM_METADATA_PARAMS_NAME "keembay-metadata-params"
-+
-+#define KMB_TABLE_ALIGN 64
-+
-+/* Table names map */
-+static const char *table_name[KMB_METADATA_TABLE_MAX] = {
-+	"LSC",
-+	"StaticDefect",
-+	"LCA",
-+	"HDR",
-+	"Sharpness",
-+	"Color cumb",
-+	"LUT",
-+	"TNF1",
-+	"TNF2",
-+	"Dehaze",
-+	"Warp",
-+};
-+
-+static void
-+kmb_metadata_copy_blc(struct kmb_vpu_blc_params *dst,
-+		      struct kmb_blc_params *src)
-+{
-+	int i;
-+
-+	for (i = 0; i < KMB_CAM_MAX_EXPOSURES; i++) {
-+		dst[i].coeff1 = src[i].coeff1;
-+		dst[i].coeff2 = src[i].coeff2;
-+		dst[i].coeff3 = src[i].coeff3;
-+		dst[i].coeff4 = src[i].coeff4;
-+	}
-+}
-+
-+static void
-+kmb_metadata_copy_sigma_dns(struct kmb_vpu_sigma_dns_params *dst,
-+			    struct kmb_sigma_dns_params *src)
-+{
-+	int i;
-+
-+	for (i = 0; i < KMB_CAM_MAX_EXPOSURES; i++) {
-+		dst[i].noise = src[i].noise;
-+		dst[i].threshold1 = src[i].threshold1;
-+		dst[i].threshold2 = src[i].threshold2;
-+		dst[i].threshold3 = src[i].threshold3;
-+		dst[i].threshold4 = src[i].threshold4;
-+		dst[i].threshold5 = src[i].threshold5;
-+		dst[i].threshold6 = src[i].threshold6;
-+		dst[i].threshold7 = src[i].threshold7;
-+		dst[i].threshold8 = src[i].threshold8;
-+	}
-+}
-+
-+static void
-+kmb_metadata_copy_lsc(struct kmb_vpu_lsc_params *dst,
-+		      struct kmb_lsc_params *src)
-+{
-+	dst->threshold = src->threshold;
-+	dst->width = src->width;
-+	dst->height = src->height;
-+}
-+
-+static void
-+kmb_metadata_copy_raw(struct kmb_vpu_raw_params *dst,
-+		      struct kmb_raw_params *src)
-+{
-+	dst->awb_stats_en = src->awb_stats_en;
-+	dst->awb_rgb_hist_en = src->awb_rgb_hist_en;
-+	dst->af_stats_en = src->af_stats_en;
-+	dst->luma_hist_en = src->luma_hist_en;
-+	dst->flicker_accum_en = src->flicker_accum_en;
-+	dst->bad_pixel_fix_en = src->bad_pixel_fix_en;
-+	dst->grgb_imb_en = src->grgb_imb_en;
-+	dst->mono_imbalance_en = src->mono_imbalance_en;
-+	dst->gain1 = src->gain1;
-+	dst->gain2 = src->gain2;
-+	dst->gain3 = src->gain3;
-+	dst->gain4 = src->gain4;
-+	dst->stop1 = src->stop1;
-+	dst->stop2 = src->stop2;
-+	dst->stop3 = src->stop3;
-+	dst->stop4 = src->stop4;
-+	dst->threshold1 = src->threshold1;
-+	dst->alpha1 = src->alpha1;
-+	dst->alpha2 = src->alpha2;
-+	dst->alpha3 = src->alpha3;
-+	dst->alpha4 = src->alpha4;
-+	dst->threshold2 = src->threshold2;
-+	dst->static_defect_size = src->static_defect_size;
-+	dst->flicker_first_row_acc = src->start_row;
-+	dst->flicker_last_row_acc = src->end_row;
-+}
-+
-+static void
-+kmb_metadata_copy_ae_awb(struct kmb_vpu_ae_awb_params *dst,
-+			 struct kmb_ae_awb_params *src)
-+{
-+	dst->start_x = src->start_x;
-+	dst->start_y = src->start_y;
-+	dst->width = src->width;
-+	dst->height = src->height;
-+	dst->skip_x = src->skip_x;
-+	dst->skip_y = src->skip_y;
-+	dst->patches_x = src->patches_x;
-+	dst->patches_y = src->patches_y;
-+	dst->threshold1 = src->threshold1;
-+	dst->threshold2 = src->threshold2;
-+}
-+
-+static void
-+kmb_metadata_copy_af(struct kmb_vpu_af_params *dst,
-+		     struct kmb_af_params *src)
-+{
-+	int i;
-+
-+	dst->start_x = src->start_x;
-+	dst->start_y = src->start_y;
-+	dst->width = src->width;
-+	dst->height = src->height;
-+	dst->patches_x = src->patches_x;
-+	dst->patches_y = src->patches_y;
-+	dst->coeff = src->coeff;
-+	dst->threshold1 = src->threshold1;
-+	dst->threshold2 = src->threshold2;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->coeffs1); i++) {
-+		dst->coeffs1[i] = src->coeffs1[i];
-+		dst->coeffs2[i] = src->coeffs2[i];
-+	}
-+}
-+
-+static void
-+kmb_metadata_copy_histogram(struct kmb_vpu_hist_params *dst,
-+			    struct kmb_hist_params *src)
-+{
-+	int i;
-+
-+	dst->start_x = src->start_x;
-+	dst->start_y = src->start_y;
-+	dst->end_x = src->end_x;
-+	dst->end_y = src->end_y;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->matrix); i++)
-+		dst->matrix[i] = src->matrix[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->weight); i++)
-+		dst->weight[i] = src->weight[i];
-+}
-+
-+static void
-+kmb_metadata_copy_debayer(struct kmb_vpu_debayer_params *dst,
-+			  struct kmb_debayer_params *src)
-+{
-+	dst->coeff1 = src->coeff1;
-+	dst->multiplier1 = src->multiplier1;
-+	dst->multiplier2 = src->multiplier2;
-+	dst->coeff2 = src->coeff2;
-+	dst->coeff3 = src->coeff3;
-+	dst->coeff4 = src->coeff4;
-+}
-+
-+static void
-+kmb_metadata_copy_dog_dns(struct kmb_vpu_dog_dns_params *dst,
-+			  struct kmb_dog_dns_params *src)
-+{
-+	int i;
-+
-+	dst->threshold = src->threshold;
-+	dst->strength = src->strength;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->coeffs11); i++)
-+		dst->coeffs11[i] = src->coeffs11[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->coeffs15); i++)
-+		dst->coeffs15[i] = src->coeffs15[i];
-+}
-+
-+static void
-+kmb_metadata_copy_luma_dns(struct kmb_vpu_luma_dns_params *dst,
-+			   struct kmb_luma_dns_params *src)
-+{
-+	dst->threshold = src->threshold;
-+	dst->slope = src->slope;
-+	dst->shift = src->shift;
-+	dst->alpha = src->alpha;
-+	dst->weight = src->weight;
-+	dst->per_pixel_alpha_en = src->per_pixel_alpha_en;
-+	dst->gain_bypass_en = src->gain_bypass_en;
-+}
-+
-+static void
-+kmb_metadata_copy_sharpen(struct kmb_vpu_sharpen_params *dst,
-+			  struct kmb_sharpen_params *src)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->coeffs1); i++) {
-+		dst->coeffs1[i] = src->coeffs1[i];
-+		dst->coeffs2[i] = src->coeffs2[i];
-+		dst->coeffs3[i] = src->coeffs3[i];
-+	}
-+
-+	dst->shift = src->shift;
-+	dst->gain1 = src->gain1;
-+	dst->gain2 = src->gain2;
-+	dst->gain3 = src->gain3;
-+	dst->gain4 = src->gain4;
-+	dst->gain5 = src->gain5;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->stops1); i++) {
-+		dst->stops1[i] = src->stops1[i];
-+		dst->gains[i] = src->gains[i];
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->stops2); i++)
-+		dst->stops2[i] = src->stops2[i];
-+
-+	dst->overshoot = src->overshoot;
-+	dst->undershoot = src->undershoot;
-+	dst->alpha = src->alpha;
-+	dst->gain6 = src->gain6;
-+	dst->offset = src->offset;
-+}
-+
-+static void
-+kmb_metadata_copy_chroma_gen(struct kmb_vpu_chroma_gen_params *dst,
-+			     struct kmb_chroma_gen_params *src)
-+{
-+	int i;
-+
-+	dst->epsilon = src->epsilon;
-+	dst->coeff1 = src->coeff1;
-+	dst->coeff2 = src->coeff2;
-+	dst->coeff3 = src->coeff3;
-+	dst->coeff4 = src->coeff4;
-+	dst->coeff5 = src->coeff5;
-+	dst->coeff6 = src->coeff6;
-+	dst->strength1 = src->strength1;
-+	dst->strength2 = src->strength2;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->coeffs); i++)
-+		dst->coeffs[i] = src->coeffs[i];
-+
-+	dst->offset1 = src->offset1;
-+	dst->slope1 = src->slope1;
-+	dst->slope2 = src->slope2;
-+	dst->offset2 = src->offset2;
-+	dst->limit = src->limit;
-+}
-+
-+static void
-+kmb_metadata_copy_median(struct kmb_vpu_median_params *dst,
-+			 struct kmb_median_params *src)
-+{
-+	dst->size = src->size;
-+	dst->slope = src->slope;
-+	dst->offset = src->offset;
-+}
-+
-+static void
-+kmb_metadata_copy_chroma_dns(struct kmb_vpu_chroma_dns_params *dst,
-+			     struct kmb_chroma_dns_params *src)
-+{
-+	dst->limit = src->limit;
-+	dst->enable = src->enable;
-+	dst->threshold1 = src->threshold1;
-+	dst->threshold2 = src->threshold2;
-+	dst->threshold3 = src->threshold3;
-+	dst->threshold4 = src->threshold4;
-+	dst->threshold5 = src->threshold5;
-+	dst->threshold6 = src->threshold6;
-+	dst->threshold7 = src->threshold7;
-+	dst->threshold8 = src->threshold8;
-+	dst->slope1 = src->slope1;
-+	dst->offset1 = src->offset1;
-+	dst->slope2 = src->slope2;
-+	dst->offset2 = src->offset2;
-+	dst->grey1 = src->grey1;
-+	dst->grey2 = src->grey2;
-+	dst->grey3 = src->grey3;
-+	dst->coeff1 = src->coeff1;
-+	dst->coeff2 = src->coeff2;
-+	dst->coeff3 = src->coeff3;
-+}
-+
-+static void
-+kmb_metadata_copy_color_comb(struct kmb_vpu_color_comb_params *dst,
-+			     struct kmb_color_comb_params *src)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->matrix); i++)
-+		dst->matrix[i] = src->matrix[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->offsets); i++)
-+		dst->offsets[i] = src->offsets[i];
-+
-+	dst->coeff1 = src->coeff1;
-+	dst->coeff2 = src->coeff2;
-+	dst->coeff3 = src->coeff3;
-+	dst->enable = src->enable;
-+	dst->weight1 = src->weight1;
-+	dst->weight2 = src->weight2;
-+	dst->weight3 = src->weight3;
-+	dst->limit1 = src->limit1;
-+	dst->limit2 = src->limit2;
-+	dst->offset1 = src->offset1;
-+	dst->offset2 = src->offset2;
-+}
-+
-+static void
-+kmb_metadata_copy_hdr(struct kmb_vpu_hdr_params *dst,
-+		      struct kmb_hdr_params *src)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->ratio); i++)
-+		dst->ratio[i] = src->ratio[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->scale); i++)
-+		dst->scale[i] = src->scale[i];
-+
-+	dst->offset1 = src->offset1;
-+	dst->slope1 = src->slope1;
-+	dst->offset2 = src->offset2;
-+	dst->slope2 = src->slope2;
-+	dst->offset3 = src->offset3;
-+	dst->slope3 = src->slope3;
-+	dst->offset4 = src->offset4;
-+	dst->gain1 = src->gain1;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->blur1); i++)
-+		dst->blur1[i] = src->blur1[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->blur2); i++)
-+		dst->blur2[i] = src->blur2[i];
-+
-+	dst->contrast1 = src->contrast1;
-+	dst->contrast2 = src->contrast2;
-+	dst->enable1 = src->enable1;
-+	dst->enable2 = src->enable2;
-+	dst->offset5 = src->offset5;
-+	dst->gain2 = src->gain2;
-+	dst->offset6 = src->offset6;
-+	dst->strength = src->strength;
-+	dst->offset7 = src->offset7;
-+	dst->shift = src->shift;
-+	dst->field1 = src->field1;
-+	dst->field2 = src->field2;
-+	dst->gain3 = src->gain3;
-+	dst->min = src->min;
-+}
-+
-+static void
-+kmb_metadata_copy_lut(struct kmb_vpu_lut_params *dst,
-+		      struct kmb_lut_params *src)
-+{
-+	int i;
-+
-+	dst->size = src->size;
-+	for (i = 0; i < ARRAY_SIZE(dst->matrix); i++)
-+		dst->matrix[i] = src->matrix[i];
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->offsets); i++)
-+		dst->offsets[i] = src->offsets[i];
-+}
-+
-+static void
-+kmb_metadata_copy_tnf(struct kmb_vpu_tnf_params *dst,
-+		      struct kmb_tnf_params *src)
-+{
-+	dst->factor = src->factor;
-+	dst->gain = src->gain;
-+	dst->offset1 = src->offset1;
-+	dst->slope1 = src->slope1;
-+	dst->offset2 = src->offset2;
-+	dst->slope2 = src->slope2;
-+	dst->min1 = src->min1;
-+	dst->min2 = src->min2;
-+	dst->value = src->value;
-+	dst->enable = src->enable;
-+}
-+
-+static void
-+kmb_metadata_copy_dehaze(struct kmb_vpu_dehaze_params *dst,
-+			 struct kmb_dehaze_params *src)
-+{
-+	int i;
-+
-+	dst->gain1 = src->gain1;
-+	dst->min = src->min;
-+	dst->strength1 = src->strength1;
-+	dst->strength2 = src->strength2;
-+	dst->gain2 = src->gain2;
-+	dst->saturation = src->saturation;
-+	dst->value1 = src->value1;
-+	dst->value2 = src->value2;
-+	dst->value3 = src->value3;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->filter); i++)
-+		dst->filter[i] = src->filter[i];
-+}
-+
-+static void
-+kmb_metadata_copy_warp(struct kmb_vpu_warp_params *dst,
-+		       struct kmb_warp_params *src)
-+{
-+	int i;
-+
-+	dst->type = src->type;
-+	dst->relative = src->relative;
-+	dst->format = src->format;
-+	dst->position = src->position;
-+	dst->width = src->width;
-+	dst->height = src->height;
-+	dst->stride = src->stride;
-+	dst->enable = src->enable;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->matrix); i++)
-+		dst->matrix[i] = src->matrix[i];
-+
-+	dst->mode = src->mode;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst->values); i++)
-+		dst->values[i] = src->values[i];
-+}
-+
-+/* VPU Params tables  */
-+static struct kmb_metadata_table *
-+kmb_metadata_cpalloc_table(struct kmb_metadata *kmb_meta,
-+			   enum kmb_metadata_table_type type,
-+			   size_t src_table_size)
-+{
-+	struct kmb_metadata_table *table;
-+
-+	lockdep_assert_held(&kmb_meta->lock);
-+
-+	/* First create pool if needed  */
-+	if (!kmb_meta->table_pool[type]) {
-+		kmb_meta->table_pool[type] =
-+			dma_pool_create(table_name[type],
-+					kmb_meta->dma_dev,
-+					src_table_size + sizeof(*table),
-+					KMB_TABLE_ALIGN, 0);
-+		if (!kmb_meta->table_pool[type]) {
-+			dev_err(kmb_meta->dma_dev,
-+				"Fail to create %s pool", table_name[type]);
-+			return NULL;
-+		}
-+	}
-+
-+	table = kmalloc(sizeof(*table), GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	kref_init(&table->refcount);
-+	table->pool = kmb_meta->table_pool[type];
-+
-+	table->cpu_addr = dma_pool_alloc(kmb_meta->table_pool[type],
-+					 GFP_KERNEL,
-+					 &table->dma_addr);
-+	if (!table->cpu_addr) {
-+		kfree(table);
-+		return NULL;
-+	}
-+
-+	return table;
-+}
-+
-+static void kmb_metadata_free_table(struct kref *ref)
-+{
-+	struct kmb_metadata_table *table =
-+		container_of(ref, struct kmb_metadata_table, refcount);
-+
-+	dma_pool_free(table->pool, table->cpu_addr, table->dma_addr);
-+	kfree(table);
-+}
-+
-+static void
-+kmb_metadata_release_tables(struct kmb_metadata_buf *meta_buf)
-+{
-+	int i;
-+
-+	for (i = 0; i < KMB_METADATA_TABLE_MAX; i++) {
-+		if (meta_buf->params.tab[i]) {
-+			kref_put(&meta_buf->params.tab[i]->refcount,
-+				 kmb_metadata_free_table);
-+			meta_buf->params.tab[i] = NULL;
-+		}
-+	}
-+}
-+
-+static void
-+kmb_metadata_destroy_table_pools(struct kmb_metadata *kmb_meta)
-+{
-+	int i;
-+
-+	/* Release allocated pools during streaming */
-+	for (i = 0; i < KMB_METADATA_TABLE_MAX; i++) {
-+		dma_pool_destroy(kmb_meta->table_pool[i]);
-+		kmb_meta->table_pool[i] = NULL;
-+	}
-+}
-+
-+static dma_addr_t
-+kmb_metadata_get_table_addr(struct kmb_metadata_buf *meta_buf,
-+			    enum kmb_metadata_table_type type)
-+{
-+	struct kmb_metadata_table *table = meta_buf->params.tab[type];
-+
-+	if (!table)
-+		return 0;
-+
-+	return table->dma_addr;
-+}
-+
-+static struct kmb_metadata_table *
-+kmb_metadata_create_table(struct kmb_metadata *kmb_meta,
-+			  struct kmb_metadata_buf *meta_buf,
-+			  enum kmb_metadata_table_type type,
-+			  size_t user_table_size)
-+{
-+	struct kmb_metadata_table *table;
-+
-+	lockdep_assert_held(&kmb_meta->lock);
-+
-+	table = kmb_metadata_cpalloc_table(kmb_meta,
-+					   type,
-+					   user_table_size);
-+	if (!table)
-+		return NULL;
-+
-+	if (meta_buf->params.tab[type])
-+		kref_put(&meta_buf->params.tab[type]->refcount,
-+			 kmb_metadata_free_table);
-+
-+	meta_buf->params.tab[type] = table;
-+
-+	return table;
-+}
-+
-+static int
-+kmb_metadata_copy_table_usr(struct kmb_metadata *kmb_meta,
-+			    struct kmb_metadata_buf *meta_buf,
-+			    enum kmb_metadata_table_type type,
-+			    u8 *user_table, size_t user_table_size)
-+{
-+	struct kmb_metadata_table *table;
-+
-+	table = kmb_metadata_create_table(kmb_meta, meta_buf,
-+					  type, user_table_size);
-+	if (!table)
-+		return -ENOMEM;
-+
-+	memcpy(table->cpu_addr, user_table, user_table_size);
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_create_default_table(struct kmb_metadata *kmb_meta,
-+					     struct kmb_metadata_buf *meta_buf,
-+					     enum kmb_metadata_table_type type,
-+					     u8 *user_table,
-+					     size_t user_table_size)
-+{
-+	struct kmb_metadata_table *table;
-+
-+	table = kmb_metadata_create_table(kmb_meta, meta_buf,
-+					  type, user_table_size);
-+	if (!table)
-+		return -ENOMEM;
-+
-+	memset(table->cpu_addr, 0, user_table_size);
-+
-+	return 0;
-+}
-+
-+static void
-+kmb_metadata_copy_table_vpu(struct kmb_metadata_buf *meta_buf,
-+			    struct kmb_metadata_buf *last_meta_buf,
-+			    enum kmb_metadata_table_type type)
-+{
-+	/* Do nothing if params are the same */
-+	if (WARN_ON(meta_buf->params.isp == last_meta_buf->params.isp))
-+		return;
-+
-+	meta_buf->params.tab[type] = last_meta_buf->params.tab[type];
-+	if (meta_buf->params.tab[type])
-+		kref_get(&meta_buf->params.tab[type]->refcount);
-+}
-+
-+static void
-+kmb_metadata_fill_blc(struct kmb_vpu_isp_params *params,
-+		      struct kmb_isp_params *user_params,
-+		      struct kmb_vpu_isp_params *last_params,
-+		      struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.blc) {
-+		kmb_metadata_copy_blc(params->blc, user_params->blc);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(params->blc, last_params->blc,
-+			       sizeof(params->blc));
-+	} else {
-+		memcpy(params->blc, def_params->blc, sizeof(params->blc));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_signma_dns(struct kmb_vpu_isp_params *params,
-+			     struct kmb_isp_params *user_params,
-+			     struct kmb_vpu_isp_params *last_params,
-+			     struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.sigma_dns) {
-+		kmb_metadata_copy_sigma_dns(params->sigma_dns,
-+					    user_params->sigma_dns);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(params->sigma_dns, last_params->sigma_dns,
-+			       sizeof(params->sigma_dns));
-+	} else {
-+		memcpy(params->sigma_dns, def_params->sigma_dns,
-+		       sizeof(params->sigma_dns));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_ae_awb(struct kmb_vpu_isp_params *params,
-+			 struct kmb_isp_params *user_params,
-+			 struct kmb_vpu_isp_params *last_params,
-+			 struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.ae_awb) {
-+		kmb_metadata_copy_ae_awb(&params->ae_awb,
-+					 &user_params->ae_awb);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->ae_awb, &last_params->ae_awb,
-+			       sizeof(params->ae_awb));
-+	} else {
-+		memcpy(&params->ae_awb, def_params->ae_awb,
-+		       sizeof(params->ae_awb));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_af(struct kmb_vpu_isp_params *params,
-+		     struct kmb_isp_params *user_params,
-+		     struct kmb_vpu_isp_params *last_params,
-+		     struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.af) {
-+		kmb_metadata_copy_af(&params->af, &user_params->af);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->af, &last_params->af,
-+			       sizeof(params->af));
-+	} else {
-+		memcpy(&params->af, def_params->af, sizeof(params->af));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_histogram(struct kmb_vpu_isp_params *params,
-+			    struct kmb_isp_params *user_params,
-+			    struct kmb_vpu_isp_params *last_params,
-+			    struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.histogram) {
-+		kmb_metadata_copy_histogram(&params->histogram,
-+					    &user_params->histogram);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->histogram, &last_params->histogram,
-+			       sizeof(params->histogram));
-+	} else {
-+		memcpy(&params->histogram, def_params->histogram,
-+		       sizeof(params->histogram));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_debayer(struct kmb_vpu_isp_params *params,
-+			  struct kmb_isp_params *user_params,
-+			  struct kmb_vpu_isp_params *last_params,
-+			  struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.debayer) {
-+		kmb_metadata_copy_debayer(&params->debayer,
-+					  &user_params->debayer);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->debayer, &last_params->debayer,
-+			       sizeof(params->debayer));
-+	} else {
-+		memcpy(&params->debayer, def_params->debayer,
-+		       sizeof(params->debayer));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_dog_dns(struct kmb_vpu_isp_params *params,
-+			  struct kmb_isp_params *user_params,
-+			  struct kmb_vpu_isp_params *last_params,
-+			  struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.dog_dns) {
-+		kmb_metadata_copy_dog_dns(&params->dog_dns,
-+					  &user_params->dog_dns);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->dog_dns, &last_params->dog_dns,
-+			       sizeof(params->dog_dns));
-+	} else {
-+		memcpy(&params->dog_dns, def_params->dog_dns,
-+		       sizeof(params->dog_dns));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_luma_dns(struct kmb_vpu_isp_params *params,
-+			   struct kmb_isp_params *user_params,
-+			   struct kmb_vpu_isp_params *last_params,
-+			   struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.luma_dns) {
-+		kmb_metadata_copy_luma_dns(&params->luma_dns,
-+					   &user_params->luma_dns);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->luma_dns, &last_params->luma_dns,
-+			       sizeof(params->luma_dns));
-+	} else {
-+		memcpy(&params->luma_dns, def_params->luma_dns,
-+		       sizeof(params->luma_dns));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_chroma_gen(struct kmb_vpu_isp_params *params,
-+			     struct kmb_isp_params *user_params,
-+			     struct kmb_vpu_isp_params *last_params,
-+			     struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.chroma_gen) {
-+		kmb_metadata_copy_chroma_gen(&params->chroma_gen,
-+					     &user_params->chroma_gen);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->chroma_gen, &last_params->chroma_gen,
-+			       sizeof(params->chroma_gen));
-+	} else {
-+		memcpy(&params->chroma_gen, def_params->chroma_gen,
-+		       sizeof(params->chroma_gen));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_median(struct kmb_vpu_isp_params *params,
-+			 struct kmb_isp_params *user_params,
-+			 struct kmb_vpu_isp_params *last_params,
-+			 struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.median) {
-+		kmb_metadata_copy_median(&params->median,
-+					 &user_params->median);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->median, &last_params->median,
-+			       sizeof(params->median));
-+	} else {
-+		memcpy(&params->median, def_params->median,
-+		       sizeof(params->median));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_chroma_dns(struct kmb_vpu_isp_params *params,
-+			     struct kmb_isp_params *user_params,
-+			     struct kmb_vpu_isp_params *last_params,
-+			     struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.chroma_dns) {
-+		kmb_metadata_copy_chroma_dns(&params->chroma_dns,
-+					     &user_params->chroma_dns);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->chroma_dns, &last_params->chroma_dns,
-+			       sizeof(params->chroma_dns));
-+	} else {
-+		memcpy(&params->chroma_dns, def_params->chroma_dns,
-+		       sizeof(params->chroma_dns));
-+	}
-+}
-+
-+static void
-+kmb_metadata_fill_dehaze(struct kmb_vpu_isp_params *params,
-+			 struct kmb_isp_params *user_params,
-+			 struct kmb_vpu_isp_params *last_params,
-+			 struct kmb_vpu_isp_params_defaults *def_params)
-+{
-+	if (user_params->update.dehaze) {
-+		kmb_metadata_copy_dehaze(&params->dehaze,
-+					 &user_params->dehaze);
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->dehaze, &last_params->dehaze,
-+			       sizeof(params->dehaze));
-+	} else {
-+		memcpy(&params->dehaze, def_params->dehaze,
-+		       sizeof(params->dehaze));
-+	}
-+}
-+
-+static int
-+kmb_metadata_fill_lsc(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.lsc) {
-+		kmb_metadata_copy_lsc(&params->lsc,
-+				      &user_params->lsc);
-+		if (params->lsc.width && params->lsc.height) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_LSC,
-+							  user_params->lsc.gain_mesh,
-+							  params->lsc.width *
-+							  params->lsc.height);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->lsc, &last_params->lsc,
-+			       sizeof(params->lsc));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_LSC);
-+	} else {
-+		memcpy(&params->lsc, def_params->lsc, sizeof(params->lsc));
-+		kmb_metadata_create_default_table(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_LSC,
-+						  user_params->lsc.gain_mesh,
-+						  ARRAY_SIZE(user_params->lsc.gain_mesh));
-+	}
-+
-+	if (params->lsc.width && params->lsc.height) {
-+		params->lsc.addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_LSC);
-+		if (!params->lsc.addr)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_raw(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.raw) {
-+		kmb_metadata_copy_raw(&params->raw,
-+				      &user_params->raw);
-+		if (params->raw.static_defect_size) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_SDEFECT,
-+							  user_params->raw.static_defect_map,
-+							  params->raw.static_defect_size);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->raw, &last_params->raw,
-+			       sizeof(params->raw));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_SDEFECT);
-+	} else {
-+		memcpy(&params->raw, def_params->raw, sizeof(params->raw));
-+		kmb_metadata_create_default_table(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_SDEFECT,
-+						  user_params->raw.static_defect_map,
-+						  ARRAY_SIZE(user_params->raw.static_defect_map));
-+	}
-+
-+	if (params->raw.static_defect_size) {
-+		params->raw.static_defect_addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_SDEFECT);
-+		if (!params->raw.static_defect_addr)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_lca(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.lca) {
-+		ret = kmb_metadata_copy_table_usr(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_LCA,
-+						  user_params->lca.coeff,
-+						  ARRAY_SIZE(user_params->lca.coeff));
-+		if (ret < 0)
-+			return ret;
-+	} else if (last_params) {
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_LCA);
-+	} else {
-+		kmb_metadata_create_default_table(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_LCA,
-+						  user_params->lca.coeff,
-+						  ARRAY_SIZE(user_params->lca.coeff));
-+	}
-+
-+	params->lca.addr = kmb_metadata_get_table_addr(meta_buf,
-+						       KMB_METADATA_TABLE_LCA);
-+	if (!params->lca.addr)
-+		ret = -EINVAL;
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_sharpen(struct kmb_metadata *kmb_meta,
-+			  struct kmb_metadata_buf *meta_buf,
-+			  struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.sharpen) {
-+		kmb_metadata_copy_sharpen(&params->sharpen,
-+					  &user_params->sharpen);
-+		ret = kmb_metadata_copy_table_usr(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_SHARP,
-+						  user_params->sharpen.radial_lut,
-+						  ARRAY_SIZE(user_params->sharpen.radial_lut));
-+		if (ret < 0)
-+			return ret;
-+
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->sharpen, &last_params->sharpen,
-+			       sizeof(params->sharpen));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_SHARP);
-+	} else {
-+		memcpy(&params->sharpen, def_params->sharpen,
-+		       sizeof(params->sharpen));
-+
-+		kmb_metadata_create_default_table(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_SHARP,
-+						  user_params->sharpen.radial_lut,
-+						  ARRAY_SIZE(user_params->sharpen.radial_lut));
-+	}
-+
-+	params->sharpen.addr =
-+		kmb_metadata_get_table_addr(meta_buf,
-+					    KMB_METADATA_TABLE_SHARP);
-+	if (!params->sharpen.addr)
-+		ret = -EINVAL;
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_color_comb(struct kmb_metadata *kmb_meta,
-+			     struct kmb_metadata_buf *meta_buf,
-+			     struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	struct kmb_color_comb_params *col = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.color_comb) {
-+		col = &user_params->color_comb;
-+		kmb_metadata_copy_color_comb(&params->color_comb,
-+					     &user_params->color_comb);
-+		if (params->color_comb.enable) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_COLOR_CUMB,
-+							  col->lut_3d,
-+							  ARRAY_SIZE(col->lut_3d));
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->color_comb, &last_params->color_comb,
-+			       sizeof(params->color_comb));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_COLOR_CUMB);
-+	} else {
-+		memcpy(&params->color_comb, def_params->color_comb,
-+		       sizeof(params->color_comb));
-+	}
-+
-+	if (params->color_comb.enable) {
-+		params->color_comb.addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_COLOR_CUMB);
-+		if (!params->color_comb.addr)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_hdr(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.hdr) {
-+		kmb_metadata_copy_hdr(&params->hdr,
-+				      &user_params->hdr);
-+		if (params->hdr.enable1 || params->hdr.enable2) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_HDR,
-+							  user_params->hdr.tm_lut,
-+							  ARRAY_SIZE(user_params->hdr.tm_lut));
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->hdr, &last_params->hdr,
-+			       sizeof(params->hdr));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_HDR);
-+	} else {
-+		memcpy(&params->hdr, def_params->hdr, sizeof(params->hdr));
-+	}
-+
-+	if (params->hdr.enable1 || params->hdr.enable2) {
-+		params->hdr.luts_addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_HDR);
-+		if (!params->hdr.luts_addr)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_lut(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.lut) {
-+		kmb_metadata_copy_lut(&params->lut, &user_params->lut);
-+		if (params->lut.size) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_LUT,
-+							  user_params->lut.table,
-+							  ARRAY_SIZE(user_params->lut.table));
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->lut, &last_params->lut,
-+			       sizeof(params->lut));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_LUT);
-+	} else {
-+		memcpy(&params->lut, def_params->lut, sizeof(params->lut));
-+		kmb_metadata_create_default_table(kmb_meta,
-+						  meta_buf,
-+						  KMB_METADATA_TABLE_LUT,
-+						  user_params->lut.table,
-+						  ARRAY_SIZE(user_params->lut.table));
-+	}
-+
-+	if (params->lut.size) {
-+		params->lut.addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_LUT);
-+		if (!params->lut.size)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_warp(struct kmb_metadata *kmb_meta,
-+		       struct kmb_metadata_buf *meta_buf,
-+		       struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.warp) {
-+		kmb_metadata_copy_warp(&params->warp, &user_params->warp);
-+		if (params->warp.enable) {
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_WARP,
-+							  user_params->warp.mesh_grid,
-+							  ARRAY_SIZE(user_params->warp.mesh_grid));
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->warp, &last_params->warp,
-+			       sizeof(params->warp));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf)
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_WARP);
-+	} else {
-+		memcpy(&params->warp, def_params->warp, sizeof(params->warp));
-+	}
-+
-+	if (params->warp.enable) {
-+		params->warp.addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_WARP);
-+		if (!params->warp.addr)
-+			ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+kmb_metadata_fill_tnf(struct kmb_metadata *kmb_meta,
-+		      struct kmb_metadata_buf *meta_buf,
-+		      struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	struct kmb_tnf_params *tnf = NULL;
-+	int ret = 0;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	if (user_params->update.tnf) {
-+		kmb_metadata_copy_tnf(&params->tnf, &user_params->tnf);
-+		if (params->tnf.enable) {
-+			tnf = &user_params->tnf;
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_TNF0,
-+							  tnf->chroma_lut0,
-+							  ARRAY_SIZE(tnf->chroma_lut0));
-+			if (ret < 0)
-+				return ret;
-+
-+			ret = kmb_metadata_copy_table_usr(kmb_meta,
-+							  meta_buf,
-+							  KMB_METADATA_TABLE_TNF1,
-+							  tnf->chroma_lut1,
-+							  ARRAY_SIZE(tnf->chroma_lut1));
-+			if (ret < 0)
-+				return ret;
-+		}
-+	} else if (last_params) {
-+		if (last_params != params)
-+			memcpy(&params->tnf, &last_params->tnf,
-+			       sizeof(params->tnf));
-+
-+		if (kmb_meta->last_buf && meta_buf != kmb_meta->last_buf) {
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_TNF0);
-+			kmb_metadata_copy_table_vpu(meta_buf, last_buf,
-+						    KMB_METADATA_TABLE_TNF1);
-+		}
-+	} else {
-+		memcpy(&params->tnf, def_params->tnf, sizeof(params->tnf));
-+	}
-+
-+	if (params->tnf.enable) {
-+		params->tnf.lut0_addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_TNF0);
-+		if (!params->tnf.lut0_addr)
-+			return -EINVAL;
-+
-+		params->tnf.lut1_addr =
-+			kmb_metadata_get_table_addr(meta_buf,
-+						    KMB_METADATA_TABLE_TNF1);
-+		if (!params->tnf.lut1_addr)
-+			return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+/* Fill static functions for conversions here */
-+static int kmb_metadata_fill_isp_params(struct kmb_metadata *kmb_meta,
-+					struct kmb_metadata_buf *meta_buf,
-+					struct kmb_isp_params *user_params)
-+{
-+	struct kmb_vpu_isp_params *params = meta_buf->params.isp;
-+	struct kmb_metadata_buf *last_buf = kmb_meta->last_buf;
-+	struct kmb_vpu_isp_params *last_params = NULL;
-+	struct kmb_vpu_isp_params_defaults *def_params = &kmb_meta->def;
-+	int ret;
-+
-+	if (last_buf)
-+		last_params = last_buf->params.isp;
-+
-+	kmb_metadata_fill_blc(params, user_params, last_params, def_params);
-+
-+	kmb_metadata_fill_signma_dns(params, user_params, last_params,
-+				     def_params);
-+
-+	kmb_metadata_fill_ae_awb(params, user_params, last_params, def_params);
-+
-+	kmb_metadata_fill_af(params, user_params, last_params, def_params);
-+
-+	kmb_metadata_fill_histogram(params, user_params, last_params,
-+				    def_params);
-+
-+	kmb_metadata_fill_debayer(params, user_params, last_params,
-+				  def_params);
-+
-+	kmb_metadata_fill_dog_dns(params, user_params, last_params,
-+				  def_params);
-+
-+	kmb_metadata_fill_luma_dns(params, user_params, last_params,
-+				   def_params);
-+
-+	kmb_metadata_fill_chroma_gen(params, user_params, last_params,
-+				     def_params);
-+
-+	kmb_metadata_fill_median(params, user_params, last_params, def_params);
-+
-+	kmb_metadata_fill_chroma_dns(params, user_params, last_params,
-+				     def_params);
-+
-+	kmb_metadata_fill_dehaze(params, user_params, last_params, def_params);
-+
-+	/* Copy params with tables */
-+	ret = kmb_metadata_fill_lsc(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_raw(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_lca(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_sharpen(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_color_comb(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_hdr(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_lut(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_warp(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	ret = kmb_metadata_fill_tnf(kmb_meta, meta_buf, user_params);
-+	if (ret < 0)
-+		goto error_release_tables;
-+
-+	/* Store last buffer */
-+	kmb_meta->last_buf = meta_buf;
-+
-+	return 0;
-+
-+error_release_tables:
-+	kmb_metadata_release_tables(meta_buf);
-+	return ret;
-+}
-+
-+static int kmb_metadata_queue_setup(struct vb2_queue *q,
-+				    unsigned int *num_buffers,
-+				    unsigned int *num_planes,
-+				    unsigned int sizes[],
-+				    struct device *alloc_devs[])
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(q);
-+
-+	*num_planes = 1;
-+	sizes[0] = kmb_meta->format.buffersize;
-+
-+	return 0;
-+}
-+
-+#define to_kmb_meta_buf(vbuf) container_of(vbuf, struct kmb_metadata_buf, vb)
-+
-+static int kmb_metadata_buf_params_init(struct vb2_buffer *vb)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(vb->vb2_queue);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct kmb_metadata_buf *buf = to_kmb_meta_buf(vbuf);
-+
-+	buf->type = KMB_METADATA_PARAMS;
-+	buf->params.isp = dma_alloc_coherent(kmb_meta->dma_dev,
-+					     sizeof(*buf->params.isp),
-+					     &buf->params.dma_addr_isp, 0);
-+	if (!buf->params.isp)
-+		return -ENOMEM;
-+
-+	memset(buf->params.isp, 0, sizeof(*buf->params.isp));
-+	/*
-+	 * Table pools will be allocated per need.
-+	 * The pools need to be released when last buffer is finished.
-+	 * Use table reference count for that purpose
-+	 */
-+	kmb_meta->table_pools_refcnt++;
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_buf_params_prepare(struct vb2_buffer *vb)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(vb->vb2_queue);
-+	struct kmb_isp_params *user_params = vb2_plane_vaddr(vb, 0);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct kmb_metadata_buf *buf = to_kmb_meta_buf(vbuf);
-+
-+	vb2_set_plane_payload(vb, 0, kmb_meta->format.buffersize);
-+	return kmb_metadata_fill_isp_params(kmb_meta, buf, user_params);
-+}
-+
-+static void kmb_metadata_buf_params_cleanup(struct vb2_buffer *vb)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(vb->vb2_queue);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct kmb_metadata_buf *buf = to_kmb_meta_buf(vbuf);
-+
-+	if (buf == kmb_meta->last_buf)
-+		kmb_meta->last_buf = NULL;
-+
-+	kmb_metadata_release_tables(buf);
-+	dma_free_coherent(kmb_meta->dma_dev, sizeof(*buf->params.isp),
-+			  buf->params.isp, buf->params.dma_addr_isp);
-+
-+	/* Destroy allocated table pools on last finish */
-+	if (kmb_meta->table_pools_refcnt-- == 1)
-+		kmb_metadata_destroy_table_pools(kmb_meta);
-+}
-+
-+static int kmb_metadata_buf_stats_init(struct vb2_buffer *vb)
-+{
-+	dma_addr_t stats_addr = vb2_dma_contig_plane_dma_addr(vb, 0);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct kmb_metadata_buf *buf = to_kmb_meta_buf(vbuf);
-+	int i;
-+
-+	buf->type = KMB_METADATA_STATS;
-+	memset(&buf->stats.raw, 0, sizeof(buf->stats.raw));
-+	buf->stats.dehaze_stats_addr = 0;
-+
-+	/* Fill statistics addresses */
-+	for (i = 0; i < KMB_CAM_MAX_EXPOSURES; i++) {
-+		buf->stats.raw[i].ae_awb_stats_addr = stats_addr +
-+			offsetof(struct kmb_isp_stats,
-+				 exposure[i].ae_awb_stats[0]);
-+
-+		buf->stats.raw[i].af_stats_addr = stats_addr +
-+			offsetof(struct kmb_isp_stats,
-+				 exposure[i].af_stats[0]);
-+
-+		buf->stats.raw[i].hist_luma_addr = stats_addr +
-+			offsetof(struct kmb_isp_stats,
-+				 exposure[i].hist_luma[0]);
-+
-+		buf->stats.raw[i].hist_rgb_addr = stats_addr +
-+			offsetof(struct kmb_isp_stats,
-+				 exposure[i].hist_rgb[0]);
-+
-+		buf->stats.raw[i].flicker_rows_addr = stats_addr +
-+			offsetof(struct kmb_isp_stats,
-+				 exposure[i].flicker_rows[0]);
-+	}
-+
-+	buf->stats.dehaze_stats_addr = stats_addr +
-+		offsetof(struct kmb_isp_stats, dehaze);
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_buf_stats_prepare(struct vb2_buffer *vb)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(vb->vb2_queue);
-+
-+	vb2_set_plane_payload(vb, 0, kmb_meta->format.buffersize);
-+
-+	return 0;
-+}
-+
-+static void kmb_metadata_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(vb->vb2_queue);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct kmb_metadata_buf *buf = to_kmb_meta_buf(vbuf);
-+	int ret;
-+
-+	ret = kmb_meta->queue_ops->queue(kmb_meta->priv, buf);
-+	if (ret)
-+		dev_err(&kmb_meta->video.dev, "Fail metadata queue %d", ret);
-+}
-+
-+static int kmb_metadata_start_streaming(struct vb2_queue *q,
-+					unsigned int count)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(q);
-+	int ret;
-+
-+	ret = kmb_pipe_prepare(kmb_meta->pipe);
-+	if (ret < 0)
-+		goto error_discard_all_bufs;
-+
-+	ret = kmb_pipe_run(kmb_meta->pipe, &kmb_meta->video.entity);
-+	if (ret < 0)
-+		goto error_pipeline_stop;
-+
-+	return 0;
-+
-+error_pipeline_stop:
-+	kmb_pipe_stop(kmb_meta->pipe, &kmb_meta->video.entity);
-+error_discard_all_bufs:
-+	kmb_meta->queue_ops->flush(kmb_meta->priv);
-+	return 0;
-+}
-+
-+static void kmb_metadata_stop_streaming(struct vb2_queue *q)
-+{
-+	struct kmb_metadata *kmb_meta = vb2_get_drv_priv(q);
-+
-+	kmb_pipe_stop(kmb_meta->pipe, &kmb_meta->video.entity);
-+
-+	kmb_meta->queue_ops->flush(kmb_meta->priv);
-+}
-+
-+/* driver-specific operations */
-+static struct vb2_ops kmb_meta_params_vb2_q_ops = {
-+	.queue_setup     = kmb_metadata_queue_setup,
-+	.buf_init        = kmb_metadata_buf_params_init,
-+	.buf_prepare     = kmb_metadata_buf_params_prepare,
-+	.buf_cleanup	 = kmb_metadata_buf_params_cleanup,
-+	.start_streaming = kmb_metadata_start_streaming,
-+	.stop_streaming  = kmb_metadata_stop_streaming,
-+	.buf_queue       = kmb_metadata_buf_queue,
-+};
-+
-+static struct vb2_ops kmb_meta_stats_vb2_q_ops = {
-+	.queue_setup     = kmb_metadata_queue_setup,
-+	.buf_init        = kmb_metadata_buf_stats_init,
-+	.buf_prepare     = kmb_metadata_buf_stats_prepare,
-+	.start_streaming = kmb_metadata_start_streaming,
-+	.stop_streaming  = kmb_metadata_stop_streaming,
-+	.buf_queue       = kmb_metadata_buf_queue,
-+};
-+
-+#define to_kmb_meta_dev(vdev) container_of(vdev, struct kmb_metadata, video)
-+
-+static int kmb_metadata_querycap(struct file *file, void *fh,
-+				 struct v4l2_capability *cap)
-+{
-+	struct v4l2_fh *vfh = file->private_data;
-+	struct kmb_metadata *kmb_meta =
-+		to_kmb_meta_dev(vfh->vdev);
-+
-+	cap->bus_info[0] = 0;
-+	strscpy(cap->driver, kmb_meta->video.name, sizeof(cap->driver));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
-+		 kmb_meta->video.name);
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_get_fmt(struct file *file, void *fh,
-+				struct v4l2_format *f)
-+{
-+	struct v4l2_fh *vfh = file->private_data;
-+	struct kmb_metadata *kmb_meta =
-+		to_kmb_meta_dev(vfh->vdev);
-+
-+	f->fmt.meta = kmb_meta->format;
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_try_fmt_cap(struct file *file, void *fh,
-+				    struct v4l2_format *f)
-+{
-+	f->fmt.meta.dataformat = V4L2_META_FMT_KMB_STATS;
-+	if (f->fmt.meta.buffersize < sizeof(struct kmb_isp_stats))
-+		f->fmt.meta.buffersize = sizeof(struct kmb_isp_stats);
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_set_fmt_cap(struct file *file, void *fh,
-+				    struct v4l2_format *f)
-+{
-+	struct v4l2_fh *vfh = file->private_data;
-+	struct kmb_metadata *kmb_meta =
-+		to_kmb_meta_dev(vfh->vdev);
-+	int ret;
-+
-+	ret = kmb_metadata_try_fmt_cap(file, fh, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	kmb_meta->format = f->fmt.meta;
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_try_fmt_out(struct file *file, void *fh,
-+				    struct v4l2_format *f)
-+{
-+	f->fmt.meta.dataformat = V4L2_META_FMT_KMB_PARAMS;
-+	if (f->fmt.meta.buffersize < sizeof(struct kmb_isp_params))
-+		f->fmt.meta.buffersize = sizeof(struct kmb_isp_params);
-+
-+	return 0;
-+}
-+
-+static int kmb_metadata_set_fmt_out(struct file *file, void *fh,
-+				    struct v4l2_format *f)
-+{
-+	struct v4l2_fh *vfh = file->private_data;
-+	struct kmb_metadata *kmb_meta =
-+		to_kmb_meta_dev(vfh->vdev);
-+	int ret;
-+
-+	ret = kmb_metadata_try_fmt_out(file, fh, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	kmb_meta->format = f->fmt.meta;
-+
-+	return 0;
-+}
-+
-+/* V4L2 ioctl operations */
-+static const struct v4l2_ioctl_ops kmb_vid_ioctl_ops = {
-+	.vidioc_querycap	 = kmb_metadata_querycap,
-+	.vidioc_g_fmt_meta_out   = kmb_metadata_get_fmt,
-+	.vidioc_s_fmt_meta_out   = kmb_metadata_set_fmt_out,
-+	.vidioc_try_fmt_meta_out = kmb_metadata_try_fmt_out,
-+	.vidioc_g_fmt_meta_cap   = kmb_metadata_get_fmt,
-+	.vidioc_s_fmt_meta_cap	 = kmb_metadata_set_fmt_cap,
-+	.vidioc_try_fmt_meta_cap = kmb_metadata_try_fmt_cap,
-+	.vidioc_reqbufs		 = vb2_ioctl_reqbufs,
-+	.vidioc_querybuf	 = vb2_ioctl_querybuf,
-+	.vidioc_qbuf		 = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf		 = vb2_ioctl_dqbuf,
-+	.vidioc_streamon	 = vb2_ioctl_streamon,
-+	.vidioc_streamoff	 = vb2_ioctl_streamoff,
-+};
-+
-+static int kmb_metadata_open(struct file *file)
-+{
-+	struct kmb_metadata *kmb_meta = video_drvdata(file);
-+	int ret;
-+
-+	mutex_lock(&kmb_meta->lock);
-+
-+	ret = v4l2_fh_open(file);
-+	if (ret) {
-+		mutex_unlock(&kmb_meta->lock);
-+		return ret;
-+	}
-+
-+	ret = kmb_pipe_request(kmb_meta->pipe);
-+	if (ret < 0)
-+		goto error_fh_release;
-+
-+	mutex_unlock(&kmb_meta->lock);
-+
-+	return 0;
-+
-+error_fh_release:
-+	_vb2_fop_release(file, NULL);
-+	mutex_unlock(&kmb_meta->lock);
-+	return ret;
-+}
-+
-+static int kmb_metadata_release(struct file *file)
-+{
-+	struct kmb_metadata *kmb_meta = video_drvdata(file);
-+	int ret;
-+
-+	mutex_lock(&kmb_meta->lock);
-+
-+	kmb_pipe_release(kmb_meta->pipe);
-+
-+	ret = _vb2_fop_release(file, NULL);
-+
-+	mutex_unlock(&kmb_meta->lock);
-+
-+	return ret;
-+}
-+
-+/* V4L2 file operations */
-+static const struct v4l2_file_operations kmb_vid_output_fops = {
-+	.owner		= THIS_MODULE,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.open		= kmb_metadata_open,
-+	.release	= kmb_metadata_release,
-+	.poll		= vb2_fop_poll,
-+	.mmap		= vb2_fop_mmap,
-+};
-+
- /**
-- * kmb_video_init - Initialize entity
-+ * kmb_metadata_init - Initialize entity
-  * @kmb_meta: pointer to kmb isp config device
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- int kmb_metadata_init(struct kmb_metadata *kmb_meta)
- {
-+	int ret;
-+
-+	mutex_init(&kmb_meta->lock);
-+
-+	kmb_meta->table_pools_refcnt = 0;
-+	memset(kmb_meta->table_pool, 0, sizeof(kmb_meta->table_pool));
-+
-+	kmb_meta->video.fops  = &kmb_vid_output_fops;
-+	kmb_meta->video.ioctl_ops = &kmb_vid_ioctl_ops;
-+	kmb_meta->video.minor = -1;
-+	kmb_meta->video.release  = video_device_release;
-+	kmb_meta->video.vfl_type = VFL_TYPE_VIDEO;
-+	kmb_meta->video.lock = &kmb_meta->lock;
-+	kmb_meta->video.queue = &kmb_meta->vb2_q;
-+	video_set_drvdata(&kmb_meta->video, kmb_meta);
-+
-+	kmb_meta->vb2_q.drv_priv = kmb_meta;
-+	kmb_meta->vb2_q.buf_struct_size = sizeof(struct kmb_metadata_buf);
-+	kmb_meta->vb2_q.io_modes = VB2_DMABUF | VB2_MMAP;
-+	kmb_meta->vb2_q.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	kmb_meta->vb2_q.dev = kmb_meta->dma_dev;
-+	kmb_meta->vb2_q.lock = &kmb_meta->lock;
-+	kmb_meta->vb2_q.min_buffers_needed = 1;
-+
-+	/* Initialize per type variables */
-+	kmb_meta->video.device_caps = V4L2_CAP_STREAMING;
-+	if (kmb_meta->type == KMB_METADATA_PARAMS) {
-+		kmb_meta->video.device_caps |= V4L2_CAP_META_OUTPUT;
-+		kmb_meta->video.vfl_dir = VFL_DIR_TX;
-+		snprintf(kmb_meta->video.name, sizeof(kmb_meta->video.name),
-+			 KMB_CAM_METADATA_PARAMS_NAME);
-+
-+		kmb_meta->vb2_q.ops = &kmb_meta_params_vb2_q_ops;
-+		kmb_meta->vb2_q.mem_ops = &vb2_dma_contig_memops;
-+		kmb_meta->vb2_q.type = V4L2_BUF_TYPE_META_OUTPUT;
-+
-+		kmb_meta->pad.flags = MEDIA_PAD_FL_SOURCE;
-+
-+		kmb_meta->format.dataformat = V4L2_META_FMT_KMB_PARAMS;
-+		kmb_meta->format.buffersize = sizeof(struct kmb_isp_params);
-+	} else {
-+		kmb_meta->video.device_caps |= V4L2_CAP_META_CAPTURE;
-+		kmb_meta->video.vfl_dir = VFL_DIR_RX;
-+
-+		snprintf(kmb_meta->video.name, sizeof(kmb_meta->video.name),
-+			 KMB_CAM_METADATA_STATS_NAME);
-+
-+		kmb_meta->vb2_q.ops = &kmb_meta_stats_vb2_q_ops;
-+		kmb_meta->vb2_q.mem_ops = &vb2_dma_contig_memops;
-+		kmb_meta->vb2_q.type = V4L2_BUF_TYPE_META_CAPTURE;
-+
-+		kmb_meta->pad.flags = MEDIA_PAD_FL_SINK;
-+
-+		kmb_meta->format.dataformat = V4L2_META_FMT_KMB_STATS;
-+		kmb_meta->format.buffersize = sizeof(struct kmb_isp_stats);
-+	}
-+
-+	ret = media_entity_pads_init(&kmb_meta->video.entity,
-+				     1, &kmb_meta->pad);
-+	if (ret < 0)
-+		goto error_mutex_destroy;
-+
-+	ret = vb2_queue_init(&kmb_meta->vb2_q);
-+	if (ret < 0) {
-+		dev_err(&kmb_meta->video.dev, "Error vb2 queue init");
-+		goto error_metadata_cleanup;
-+	}
-+
-+	kmb_params_get_defaults(&kmb_meta->def);
-+
- 	return 0;
-+
-+error_metadata_cleanup:
-+	kmb_metadata_cleanup(kmb_meta);
-+error_mutex_destroy:
-+	mutex_destroy(&kmb_meta->lock);
-+
-+	return ret;
- }
- 
- /**
-@@ -22,7 +1823,10 @@ int kmb_metadata_init(struct kmb_metadata *kmb_meta)
-  * @kmb_meta: pointer to kmb isp config device
-  */
- void kmb_metadata_cleanup(struct kmb_metadata *kmb_meta)
--{ }
-+{
-+	media_entity_cleanup(&kmb_meta->video.entity);
-+	mutex_destroy(&kmb_meta->lock);
-+}
- 
- /**
-  * kmb_metadata_register - Register V4L2 device
-@@ -34,7 +1838,15 @@ void kmb_metadata_cleanup(struct kmb_metadata *kmb_meta)
- int kmb_metadata_register(struct kmb_metadata *kmb_meta,
- 			  struct v4l2_device *v4l2_dev)
- {
--	return 0;
-+	int ret;
-+
-+	kmb_meta->video.v4l2_dev = v4l2_dev;
-+
-+	ret = video_register_device(&kmb_meta->video, VFL_TYPE_VIDEO, -1);
-+	if (ret < 0)
-+		dev_err(&kmb_meta->video.dev, "Failed to register video device");
-+
-+	return ret;
- }
- 
- /**
-@@ -42,4 +1854,7 @@ int kmb_metadata_register(struct kmb_metadata *kmb_meta,
-  * @kmb_meta: pointer to kmb isp config device
-  */
- void kmb_metadata_unregister(struct kmb_metadata *kmb_meta)
--{ }
-+{
-+	mutex_destroy(&kmb_meta->lock);
-+	video_unregister_device(&kmb_meta->video);
-+}
-diff --git a/drivers/media/platform/keembay-camera/keembay-metadata.h b/drivers/media/platform/keembay-camera/keembay-metadata.h
-index 88e85d3caba0..ab77ed11bd15 100644
---- a/drivers/media/platform/keembay-camera/keembay-metadata.h
-+++ b/drivers/media/platform/keembay-camera/keembay-metadata.h
-@@ -12,6 +12,7 @@
- #include <media/videobuf2-v4l2.h>
- 
- #include "keembay-vpu-isp.h"
-+#include "keembay-params-defaults.h"
- 
- /**
-  * enum kmb_metadata_table_type - Keembay metadata table type
-@@ -68,12 +69,12 @@ struct kmb_metadata_table {
-  * @vb: Video buffer for v4l2
-  * @type: Metadata type
-  * @stats: Statistics physical addresses
-- *   @raw: VPU raw statistics physical addresses
-- *   @dehaze_stats_addr: VPU dehaze statistics physical address
-+ * @stats.raw: VPU raw statistics physical addresses
-+ * @stats.dehaze_stats_addr: VPU dehaze statistics physical address
-  * @params: VPU ISP parameters
-- *   @isp: VPU ISP parameters virtual address
-- *   @dma_addr_isp: VPU ISP parameters physical address
-- *   @tab: Metadata tables
-+ * @params.isp: VPU ISP parameters virtual address
-+ * @params.dma_addr_isp: VPU ISP parameters physical address
-+ * @params.tab: Metadata tables
-  * @list: List for buffer queue
-  */
- struct kmb_metadata_buf {
-@@ -118,6 +119,7 @@ struct kmb_metabuf_queue_ops {
-  * @table_pool: ISP tables dma pool
-  * @last_buf: Pointer to last enqueued buffer
-  * @format: Active format
-+ * @def: Default ISP params
-  */
- struct kmb_metadata {
- 	struct mutex lock;
-@@ -138,6 +140,8 @@ struct kmb_metadata {
- 	struct kmb_metadata_buf *last_buf;
- 
- 	struct v4l2_meta_format format;
-+
-+	struct kmb_vpu_isp_params_defaults def;
- };
- 
- int kmb_metadata_init(struct kmb_metadata *kmb_meta);
-diff --git a/drivers/media/platform/keembay-camera/keembay-params-defaults.c b/drivers/media/platform/keembay-camera/keembay-params-defaults.c
-new file mode 100644
-index 000000000000..a2dd7888375e
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-params-defaults.c
-@@ -0,0 +1,326 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel Keem Bay camera ISP parameter defaults.
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+#include <linux/stddef.h>
-+#include <linux/types.h>
-+
-+#include "keembay-params-defaults.h"
-+
-+static const struct kmb_vpu_blc_params blc_default[KMB_VPU_MAX_EXPOSURES] = {
-+		{
-+			.coeff1 = 800,
-+			.coeff2 = 800,
-+			.coeff3 = 800,
-+			.coeff4 = 800,
-+		},
-+		{
-+			.coeff1 = 800,
-+			.coeff2 = 800,
-+			.coeff3 = 800,
-+			.coeff4 = 800,
-+		},
-+		{
-+			.coeff1 = 800,
-+			.coeff2 = 800,
-+			.coeff3 = 800,
-+			.coeff4 = 800,
-+		}
-+
-+};
-+
-+static const struct kmb_vpu_sigma_dns_params
-+	sigma_dns_default[KMB_VPU_MAX_EXPOSURES] = { 0 };
-+
-+static const struct kmb_vpu_lsc_params lsc_default = {
-+	.threshold = 2048,
-+	.width = 64,
-+	.height = 44,
-+	.reserved = { 0 },
-+};
-+
-+static const struct kmb_vpu_raw_params raw_default = {
-+	.awb_stats_en = 0,
-+	.awb_rgb_hist_en = 0,
-+	.af_stats_en = 0,
-+	.luma_hist_en = 0,
-+	.flicker_accum_en = 0,
-+	.bad_pixel_fix_en = 0,
-+	.grgb_imb_en = 1,
-+	.mono_imbalance_en = 0,
-+	.gain1 = 269,
-+	.gain2 = 452,
-+	.gain3 = 634,
-+	.gain4 = 269,
-+	.stop1 = 400,
-+	.stop2 = 450,
-+	.stop3 = 700,
-+	.stop4 = 800,
-+	.threshold1 = 128,
-+	.alpha1 = 12,
-+	.alpha2 = 12,
-+	.alpha3 = 12,
-+	.alpha4 = 12,
-+	.threshold2 = 53,
-+	.static_defect_size = 1,
-+	.reserved = { 0 },
-+	.flicker_first_row_acc = 0,
-+	.flicker_last_row_acc = 0,
-+};
-+
-+static const struct kmb_vpu_ae_awb_params ae_awb_default = {
-+	.start_x = 0,
-+	.start_y = 0,
-+	.width = 100,
-+	.height = 98,
-+	.skip_x = 100,
-+	.skip_y = 98,
-+	.patches_x = 38,
-+	.patches_y = 22,
-+	.threshold1 = 0,
-+	.threshold2 = 4095,
-+};
-+
-+static const struct kmb_vpu_af_params af_default = {
-+	.start_x = 0,
-+	.start_y = 0,
-+	.width = 192,
-+	.height = 144,
-+	.patches_x = 20,
-+	.patches_y = 15,
-+	.coeff = 0,
-+	.threshold1 = 0,
-+	.threshold2 = 0,
-+	.coeffs1 = {31, 19, -32, 31, 63, 31, -50, -35, 35, -70, 35},
-+	.coeffs2 = {35, 11, -29, 8, 17, 8, 78, -39, 119, -238, 119},
-+};
-+
-+static const struct kmb_vpu_hist_params histogram_default = {
-+	.start_x = 0,
-+	.start_y = 0,
-+	.end_x = 3839,
-+	.end_y = 2156,
-+	.matrix = {1719, 0, 0, 0, 1024, 0, 0, 0, 2414},
-+	.weight = {64, 128, 64},
-+};
-+
-+// only address - nothing to init...
-+static const struct kmb_vpu_lca_params lca_default = { 0 };
-+
-+static const struct kmb_vpu_debayer_params debayer_default = {
-+	.coeff1 = 51,
-+	.multiplier1 = 13107,
-+	.multiplier2 = 13107,
-+	.coeff2 = 77,
-+	.coeff3 = 150,
-+	.coeff4 = 29,
-+};
-+
-+static const struct kmb_vpu_dog_dns_params dog_dns_default = {
-+	.threshold = 0,
-+	.strength = 0,
-+	.coeffs11 = {0, 0, 0, 0, 0, 255},
-+	.coeffs15 = {0, 0, 0, 0, 0, 0, 0, 255},
-+	.reserved = { 0 },
-+};
-+
-+static const struct kmb_vpu_luma_dns_params luma_dns_default = {
-+	.threshold = 13094,
-+	.slope = 967,
-+	.shift = 7,
-+	.alpha = 50,
-+	.weight = 0,
-+	.per_pixel_alpha_en = 0,
-+	.gain_bypass_en = 0,
-+	.reserved = { 0 },
-+};
-+
-+static const struct kmb_vpu_sharpen_params sharpen_default =  {
-+	.coeffs1 = {0, 0, 0, 4, 182, 396},
-+	.coeffs2 = {0, 0, 0, 1, 141, 740},
-+	.coeffs3 = {0, 0, 2, 42, 246, 444},
-+	.shift = 15,
-+	.gain1 = 3396,
-+	.gain2 = 3378,
-+	.gain3 = 3270,
-+	.gain4 = 3400,
-+	.gain5 = 207,
-+	.stops1 = {20, 40, 605},
-+	.gains = {10, 120, 60},
-+	.stops2 = {11, 100, 2500, 4000},
-+	.overshoot = 359,
-+	.undershoot = 146,
-+	.alpha = 36,
-+	.gain6 = 128,
-+	.offset = 637,
-+};
-+
-+static const struct kmb_vpu_chroma_gen_params chroma_gen_default  = {
-+	.epsilon = 2,
-+	.coeff1 = 426,
-+	.coeff2 = 767,
-+	.coeff3 = 597,
-+	.coeff4 = 77,
-+	.coeff5 = 150,
-+	.coeff6 = 29,
-+	.strength1 = 0,
-+	.strength2 = 32,
-+	.coeffs = {33, 59, 71},
-+	.offset1 = 2,
-+	.slope1 = 230,
-+	.slope2 = 256,
-+	.offset2 = 0,
-+	.limit = 767,
-+};
-+
-+static const struct kmb_vpu_median_params median_default = {
-+	.size = 7,
-+	.slope = 32,
-+	.offset = -19,
-+};
-+
-+static const struct kmb_vpu_chroma_dns_params chroma_dns_default = {
-+	.limit = 255,
-+	.enable = 0,
-+	.threshold1 = 30,
-+	.threshold2 = 30,
-+	.threshold3 = 30,
-+	.threshold4 = 30,
-+	.threshold5 = 45,
-+	.threshold6 = 45,
-+	.threshold7 = 45,
-+	.threshold8 = 45,
-+	.slope1 = 77,
-+	.offset1 = -15,
-+	.slope2 = 255,
-+	.offset2 = 127,
-+	.grey1 = 421,
-+	.grey2 = 758,
-+	.grey3 = 590,
-+	.coeff1 = 52,
-+	.coeff2 = 32,
-+	.coeff3 = 19,
-+};
-+
-+static const struct kmb_vpu_color_comb_params color_comb_default = {
-+	.matrix = {1303, 65427, 65367, 65172, 1463, 65462, 55, 65034, 1459},
-+	.offsets = { 0 },
-+	.coeff1 = 615,
-+	.coeff2 = 342,
-+	.coeff3 = 439,
-+	.reserved = { 0 },
-+	.enable = 0,
-+	.weight1 = 85,
-+	.weight2 = 86,
-+	.weight3 = 85,
-+	.limit1 = 512,
-+	.limit2 = -8192,
-+	.offset1 = 0,
-+	.offset2 = 0,
-+};
-+
-+static const struct kmb_vpu_hdr_params hdr_default = {
-+	.ratio = {256, 256},
-+	.scale = {262143, 262143, 262143},
-+	.offset1 = -3275,
-+	.slope1 = 320,
-+	.offset2 = -3685,
-+	.slope2 = 641,
-+	.offset3 = -4054,
-+	.slope3 = 4095,
-+	.offset4 = 3686,
-+	.gain1 = 16,
-+	.blur1 = {0, 0, 255},
-+	.blur2 = {0, 0, 0, 0, 255},
-+	.contrast1 = 20,
-+	.contrast2 = 16,
-+	.enable1 = 0,
-+	.enable2 = 0,
-+	.offset5 = 0,
-+	.offset6 = 0,
-+	.strength = 0,
-+	.reserved1 = { 0 },
-+	.offset7 = 15,
-+	.shift = 1702133760,
-+	.field1 = 16,
-+	.field2 = 123,
-+	.gain3 = 0,
-+	.min = 0,
-+	.reserved2 = { 0 },
-+};
-+
-+static const struct kmb_vpu_lut_params lut_default = {
-+	.size = 512,
-+	.reserved = { 0 },
-+	.matrix = {262, 516, 100, 3945, 3799, 449, 449, 3720, 4023},
-+	.offsets = {256, 2048, 2048},
-+};
-+
-+static const struct kmb_vpu_tnf_params tnf_default = {
-+	.factor = 179,
-+	.gain = 0,
-+	.offset1 = 217,
-+	.slope1 = 162,
-+	.offset2 = 299,
-+	.slope2 = 121,
-+	.min1 = 0,
-+	.min2 = 40,
-+	.value = 128,
-+	.enable = 0,
-+};
-+
-+static const struct kmb_vpu_dehaze_params dehaze_default = {
-+	.gain1 = 512,
-+	.min = 70,
-+	.strength1 = 0,
-+	.strength2 = 0,
-+	.gain2 = 128,
-+	.saturation = 127,
-+	.value1 = 2048,
-+	.value2 = 2048,
-+	.value3 = 2048,
-+	.filter = {0, 0, 255},
-+};
-+
-+static const struct kmb_vpu_warp_params warp_default = {
-+	.type = 0,
-+	.relative = 0,
-+	.format = 0,
-+	.position = 0,
-+	.reserved = { 0 },
-+	.width = 8,
-+	.height = 4,
-+	.stride = 128,
-+	.enable = 0,
-+	.matrix = {1, 0, 0, 0, 1, 0, 0, 0, 1},
-+	.mode = 1,
-+	.values = {0, 128, 128},
-+};
-+
-+void kmb_params_get_defaults(struct kmb_vpu_isp_params_defaults *defaults)
-+{
-+	defaults->blc = blc_default;
-+	defaults->sigma_dns = sigma_dns_default;
-+	defaults->lsc = &lsc_default;
-+	defaults->raw = &raw_default;
-+	defaults->ae_awb = &ae_awb_default;
-+	defaults->af = &af_default;
-+	defaults->histogram = &histogram_default;
-+	defaults->lca = &lca_default;
-+	defaults->debayer = &debayer_default;
-+	defaults->dog_dns = &dog_dns_default;
-+	defaults->luma_dns = &luma_dns_default;
-+	defaults->sharpen = &sharpen_default;
-+	defaults->chroma_gen = &chroma_gen_default;
-+	defaults->median = &median_default;
-+	defaults->chroma_dns = &chroma_dns_default;
-+	defaults->color_comb = &color_comb_default;
-+	defaults->hdr = &hdr_default;
-+	defaults->lut = &lut_default;
-+	defaults->tnf = &tnf_default;
-+	defaults->dehaze = &dehaze_default;
-+	defaults->warp = &warp_default;
-+}
-+
-diff --git a/drivers/media/platform/keembay-camera/keembay-params-defaults.h b/drivers/media/platform/keembay-camera/keembay-params-defaults.h
-new file mode 100644
-index 000000000000..d6134d64be7c
---- /dev/null
-+++ b/drivers/media/platform/keembay-camera/keembay-params-defaults.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Intel Keem Bay camera ISP parameter defaults.
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+#ifndef KEEMBAY_DEFAULTS_H
-+#define KEEMBAY_DEFAULTS_H
-+
-+#include "keembay-vpu-isp.h"
-+
-+struct kmb_vpu_isp_params_defaults {
-+	const struct kmb_vpu_blc_params *blc;
-+	const struct kmb_vpu_sigma_dns_params *sigma_dns;
-+	const struct kmb_vpu_lsc_params *lsc;
-+	const struct kmb_vpu_raw_params *raw;
-+	const struct kmb_vpu_ae_awb_params *ae_awb;
-+	const struct kmb_vpu_af_params *af;
-+	const struct kmb_vpu_hist_params *histogram;
-+	const struct kmb_vpu_lca_params *lca;
-+	const struct kmb_vpu_debayer_params *debayer;
-+	const struct kmb_vpu_dog_dns_params *dog_dns;
-+	const struct kmb_vpu_luma_dns_params *luma_dns;
-+	const struct kmb_vpu_sharpen_params *sharpen;
-+	const struct kmb_vpu_chroma_gen_params *chroma_gen;
-+	const struct kmb_vpu_median_params *median;
-+	const struct kmb_vpu_chroma_dns_params *chroma_dns;
-+	const struct kmb_vpu_color_comb_params *color_comb;
-+	const struct kmb_vpu_hdr_params *hdr;
-+	const struct kmb_vpu_lut_params *lut;
-+	const struct kmb_vpu_tnf_params *tnf;
-+	const struct kmb_vpu_dehaze_params *dehaze;
-+	const struct kmb_vpu_warp_params *warp;
-+};
-+
-+void kmb_params_get_defaults(struct kmb_vpu_isp_params_defaults *defaults);
-+
-+#endif /* KEEMBAY_DEFAULTS_H */
--- 
-2.11.0
+--ReaqsoxgOBHFXBhH
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
+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
+SAIA
+
+--ReaqsoxgOBHFXBhH--
