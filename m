@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1BE6C433E5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9DACC433E1
 	for <linux-media@archiver.kernel.org>; Mon, 22 Mar 2021 15:47:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5BC4619A9
+	by mail.kernel.org (Postfix) with ESMTP id 8E8B7619A9
 	for <linux-media@archiver.kernel.org>; Mon, 22 Mar 2021 15:47:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhCVPrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Mar 2021 11:47:35 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:47445 "EHLO
+        id S230206AbhCVPr0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Mar 2021 11:47:26 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:59621 "EHLO
         lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230064AbhCVPrF (ORCPT
+        by vger.kernel.org with ESMTP id S230053AbhCVPrE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Mar 2021 11:47:05 -0400
+        Mon, 22 Mar 2021 11:47:04 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id OMlelxHbZ4XAGOMlilYPSg; Mon, 22 Mar 2021 16:47:02 +0100
+        id OMlelxHbZ4XAGOMlilYPSR; Mon, 22 Mar 2021 16:47:02 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1616428022; bh=COG8Xhq17cgDUjJsX3aFQTpkFW0BX45uWQoxhlv8Pp4=;
+        t=1616428022; bh=WZFzTYvoonInBM5u3kwPkOtI8L2CJyla85fZT4b4a7o=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=nkWsyOdSYvq4Qq8tsjDl97bKpppCMoLGOmsQyds3pWkzKsMqocEXwgUfF8Hk95wd2
-         B0fA6IZPG1s1JeoGiuhjp+39dfgslIE3C7xRYJJT3J+IMjfmP9uuD2a3Mmfz9HM2cU
-         VofXBoAomKBjZ+PGO47R2SetusW2h4Wqw+4I22GutXppFifmE8HIhHOroLrsbELjtN
-         YlnAn+Y1UOxHAHVy6n8U4tEdUvox+x58WHDpK2Mhmb9AZPe7pOtCFg1VfT/Av+RZ4E
-         m8m+MadqHeIUOD2sWAcqJHGf4E4X2GkzP1sYdM8ti8ZL51/8DfysyB+hAPz/1Jdlk0
-         frhuhq0xGBHOQ==
+        b=EML4GzJrHGycURP3iXyEm3cV5+Gr6npoNoHKXfpju+m3tMrq8bvgGmjCD0cq+twyE
+         gSZIm7Dirj03BNoKs9DQxVPQQCqiik14kfaPQBq0UN5XMsQ07lFklDAa7mNJt9IHGI
+         8kRZ1hXyW96dxL8Laqc2XANVg1Qvvrw7+UMeatbf+vfLBd6ZZe9R0CVnS79APOAa7F
+         maSQ8Up8Cv1b/ndk/rSloR9+21udQ+cH2WtJMR3I0Oqa3nxzyWI6qPgQHIHwcsYad/
+         lNeT52QbwC9DOvjlwU6W8HknqPRxWEmGzip2BTMcFsYPeJg0//SjruCREMG2ZJnLZM
+         2/XdU12AuO8sA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Edgar Thier <info@edgarthier.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCHv2 2/3] uvc: Add 12-bit raw bayer linear packed formats
-Date:   Mon, 22 Mar 2021 16:46:57 +0100
-Message-Id: <20210322154658.1409391-3-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 0/3] Rebased 3 uvc pix_fmt patches
+Date:   Mon, 22 Mar 2021 16:46:55 +0100
+Message-Id: <20210322154658.1409391-1-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210322154658.1409391-1-hverkuil-cisco@xs4all.nl>
-References: <20210322154658.1409391-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4xfKxNnVhm/ns9fQZY7nTtooHC/ljqR/ZbmX/1gBYkibWDC5s7UBNZ5LE+bC3WKMcOfiZlA6JvgrHssojvcEMJOplESQIw7uOn9mazApB5CuWKZWdVzQiL
@@ -51,78 +49,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Edgar Thier <info@edgarthier.net>
+This small series rebases three old patches that slipped through the
+cracks, but are otherwise fine.
 
-These formats are compressed 12-bit raw bayer formats with four different
-pixel orders. The pixel follow one another without any padding,
-thus are packed in a 'linear' fashion.
+Two from Edgar:
 
-Signed-off-by: Edgar Thier <info@edgarthier.net>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/usb/uvc/uvc_driver.c | 21 ++++++++++++++++++++-
- drivers/media/usb/uvc/uvcvideo.h   | 12 ++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
+https://patchwork.linuxtv.org/project/linux-media/list/?series=329
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 30ef2a3110f7..7ecd26be6353 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -175,6 +175,26 @@ static struct uvc_format_desc uvc_fmts[] = {
- 		.guid		= UVC_GUID_FORMAT_RW10,
- 		.fcc		= V4L2_PIX_FMT_SRGGB10P,
- 	},
-+	{
-+		.name		= "Bayer 12-bit linear packed (SBGGR12LP)",
-+		.guid		= UVC_GUID_FORMAT_BGCP,
-+		.fcc		= V4L2_PIX_FMT_SBGGR12LP,
-+	},
-+	{
-+		.name		= "Bayer 12-bit linear packed (SGBRG12LP)",
-+		.guid		= UVC_GUID_FORMAT_GBCP,
-+		.fcc		= V4L2_PIX_FMT_SGBRG12LP,
-+	},
-+	{
-+		.name		= "Bayer 12-bit linear packed (SRGGB12LP)",
-+		.guid		= UVC_GUID_FORMAT_RGCP,
-+		.fcc		= V4L2_PIX_FMT_SRGGB12LP,
-+	},
-+	{
-+		.name		= "Bayer 12-bit linear packed (SGRBG12LP)",
-+		.guid		= UVC_GUID_FORMAT_GRCP,
-+		.fcc		= V4L2_PIX_FMT_SGRBG12LP,
-+	},
- 	{
- 		.name		= "Bayer 16-bit (SBGGR16)",
- 		.guid		= UVC_GUID_FORMAT_BG16,
-@@ -3181,4 +3201,3 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- MODULE_VERSION(DRIVER_VERSION);
--
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 97df5ecd66c9..51cda67946d5 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -114,6 +114,18 @@
- #define UVC_GUID_FORMAT_RGGB \
- 	{ 'R',  'G',  'G',  'B', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_BGCP \
-+	{ 'B',  'G',  'C',  'p', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GBCP \
-+	{ 'G',  'B',  'C',  'p', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_RGCP \
-+	{ 'R',  'G',  'C',  'p', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GRCP \
-+	{ 'G',  'R',  'C',  'p', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
- #define UVC_GUID_FORMAT_BG16 \
- 	{ 'B',  'G',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+and one from me:
+
+https://patchwork.linuxtv.org/project/linux-media/patch/6e8bde09-7b47-5dec-6f21-c5156fbc9b10@xs4all.nl/
+
+Since my patch depends on the Edgar's patches I decided to just
+rebase the lot and repost. Hopefully it won't take two years for
+the v2 to be merged. :-)
+
+Regards,
+
+	Hans
+
+Edgar Thier (2):
+  v4l: Add 12-bit raw bayer linear packed formats
+  uvc: Add 12-bit raw bayer linear packed formats
+
+Hans Verkuil (1):
+  uvc: don't set description in ENUM_FMT
+
+ .../userspace-api/media/v4l/pixfmt-bayer.rst  |  1 +
+ .../media/v4l/pixfmt-srggb12lp.rst            | 74 +++++++++++++++++++
+ drivers/media/usb/uvc/uvc_driver.c            | 70 ++++--------------
+ drivers/media/usb/uvc/uvc_v4l2.c              |  9 ---
+ drivers/media/usb/uvc/uvcvideo.h              | 15 +++-
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  4 +
+ include/uapi/linux/videodev2.h                |  7 ++
+ 7 files changed, 114 insertions(+), 66 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-srggb12lp.rst
+
 -- 
 2.30.1
 
