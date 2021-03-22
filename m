@@ -7,191 +7,388 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8A4C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA112C433E3
 	for <linux-media@archiver.kernel.org>; Mon, 22 Mar 2021 15:47:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2CC3619AC
+	by mail.kernel.org (Postfix) with ESMTP id B4AF2619AB
 	for <linux-media@archiver.kernel.org>; Mon, 22 Mar 2021 15:47:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbhCVPr2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Mar 2021 11:47:28 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:56527 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230081AbhCVPrF (ORCPT
+        id S230053AbhCVPrb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Mar 2021 11:47:31 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:57339 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230056AbhCVPrF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Mar 2021 11:47:05 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id OMlelxHbZ4XAGOMlilYPSZ; Mon, 22 Mar 2021 16:47:02 +0100
+        id OMlelxHbZ4XAGOMlilYPSm; Mon, 22 Mar 2021 16:47:03 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1616428022; bh=ZtGd2IDDljQ+5itM9BmMHh09aoyixRB00HWqYQIOk3s=;
+        t=1616428023; bh=W/GLCTo+BZgqUavN9aVljNL0vwFlM4ZY4Ee0rCBizeY=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=NtvkPI5PTtlCCLuE+S2BXqtiYoAZx0+U5jw63DMF4f4+pHU+BkWAxddaNAhD5HNDN
-         5w2C7iDPgb2DjN6AIZq/SBijc72UiWOkiz6Evqzbu1JkMpnemzEP30+6Mk8DCO41CY
-         StfU0B9NvsVwBpMf08mslMlqOYVgXmHcBnR4bwFbcoRRiU9EldN7A06z20dTAepvAz
-         hV/+Ge0DZSvPnOGqAjWdJGyCs8iQZYMYfLiECkDsvr7y0E2CH3TMHT2wdsk3hxnZtN
-         MEzEuSWpl4Pztf1+py1lrfanZ2lsijM48bEECGdoqyI2FHHKE31iIDsYSFY2MzHtnn
-         8pji9hBY8BSxQ==
+        b=tyjyLH352r7TNWuS42SaPV4+H91+bsNh9Y7NABtPIr5ebBCXN/uAIHhO6QMb9f2Vx
+         n8k504UWpKWnJ9AS2cdR+oy5qhRcLinklfq6h86Ek+L4KFJ30p8a3zSzZX1cPFr5+r
+         yFUn6eLOJ9hpWmeLEAzRVCAtH5DYwS6ew+2Hy49tHFPOqSVqI0VSpfNH4bzGbyauaR
+         kfSwltWX97n03ihEmCMpnbZ8s1j2MPbV9LBn6WJNuN5TVamvUCuNs9UtU3WDMZNAPQ
+         6s+jqiTNbxtenvYETmwhMNG3d+k7YvXnE5hbrxqCZ/wsO2EqCkCrn5QlBW7gZtItis
+         n3efaJfqSqUhQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Edgar Thier <info@edgarthier.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCHv2 1/3] v4l: Add 12-bit raw bayer linear packed formats
-Date:   Mon, 22 Mar 2021 16:46:56 +0100
-Message-Id: <20210322154658.1409391-2-hverkuil-cisco@xs4all.nl>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 3/3] uvc: don't set description in ENUM_FMT
+Date:   Mon, 22 Mar 2021 16:46:58 +0100
+Message-Id: <20210322154658.1409391-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210322154658.1409391-1-hverkuil-cisco@xs4all.nl>
 References: <20210322154658.1409391-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfKxNnVhm/ns9fQZY7nTtooHC/ljqR/ZbmX/1gBYkibWDC5s7UBNZ5LE+bC3WKMcOfiZlA6JvgrHssojvcEMJOplESQIw7uOn9mazApB5CuWKZWdVzQiL
- yKmAIpR9G0bBBrcVeSJkubM8+nZ8fjV90Hj2WG8JtQ5QRwZOOugTXvOSs5AZntJhIviEdIp7desQe5bgjVZ3MyGDs7i1gKEjgY/kOsRIi3hL24jZc2Bvz0tz
- IU/B8r20i79dvAJGBVu9wFaoIDGSdzmtGNxBCHKSbjjHOiFoeVrnYRL4W4D9txmw
+X-CMAE-Envelope: MS4xfPcgbjJzaf+GKc4Ch6G9kBMchkYEymJde8v7Q8oyW2pYWSwFen1vcNA0NfQfvL75offDHfUKJNTuD7cP5FzGUEhX7vdf/kyM3xlkBvuStKgsd2yEEdEF
+ odwt4OV9hMkEvrVNuYf3Z8HwPOwf0jeKKPEC1Y31pcR/cCZMm6b6hrLU23NJO2tjfmGOfiY68YdwFL9QE8RozceRTEJuL3e3HjkSrtGCZu6VoB4Uvrlf6WCA
+ 05WfaDCZiMW8YxD93CdqX+hjZitlsklKOc0nvWfW9y81hyYgODpalSVooNVD8p6ychiW72qnLAAlG5HuxawlEvWd02HQk2OWpJD9BcVFFGc=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Edgar Thier <info@edgarthier.net>
+Leave it to the V4L2 core to set the description. In fact, that was
+already the case for a long time since v4l_fill_fmtdesc() overwrites
+the description.
 
-These formats are compressed 12-bit raw bayer formats with four different
-pixel orders. The pixels follow one another without any padding,
-thus are packed in a 'linear' fashion.
+So remove all description strings from the driver.
 
-Signed-off-by: Edgar Thier <info@edgarthier.net>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+uvc_ioctl_enum_fmt() was also cleaned up a bit since zeroed the
+v4l2_fmtdesc struct, when all fields after 'type' are already zeroed
+by the V4L2 core.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../userspace-api/media/v4l/pixfmt-bayer.rst  |  1 +
- .../media/v4l/pixfmt-srggb12lp.rst            | 74 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c          |  4 +
- include/uapi/linux/videodev2.h                |  7 ++
- 4 files changed, 86 insertions(+)
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-srggb12lp.rst
+ drivers/media/usb/uvc/uvc_driver.c | 57 ------------------------------
+ drivers/media/usb/uvc/uvc_v4l2.c   |  9 -----
+ drivers/media/usb/uvc/uvcvideo.h   |  3 --
+ 3 files changed, 69 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-bayer.rst b/Documentation/userspace-api/media/v4l/pixfmt-bayer.rst
-index 2500413e5f43..8bd9743d93c2 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-bayer.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-bayer.rst
-@@ -26,6 +26,7 @@ orders. See also `the Wikipedia article on Bayer filter
-     pixfmt-srggb10dpcm8
-     pixfmt-srggb10-ipu3
-     pixfmt-srggb12
-+    pixfmt-srggb12lp
-     pixfmt-srggb12p
-     pixfmt-srggb14
-     pixfmt-srggb14p
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb12lp.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb12lp.rst
-new file mode 100644
-index 000000000000..6aac60f0c995
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb12lp.rst
-@@ -0,0 +1,74 @@
-+.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+
-+.. _V4L2-PIX-FMT-SBGGR12LP:
-+.. _v4l2-pix-fmt-sgbrg12lp:
-+.. _v4l2-pix-fmt-sgrbg12lp:
-+.. _v4l2-pix-fmt-srggb12lp:
-+
-+**********************************************************************************************************************************
-+V4L2_PIX_FMT_SBGGR12LP ('BGCp'), V4L2_PIX_FMT_SGBRG12LP ('GBCp'), V4L2_PIX_FMT_SGRBG12LP ('GRCp'), V4L2_PIX_FMT_SRGGB12LP ('RGCp')
-+**********************************************************************************************************************************
-+
-+12-bit Linear Packed Bayer Formats
-+
-+Description
-+===========
-+
-+These packed Bayer formats are used by industrial cameras, often in conjunction
-+with UsbVision (see https://www.visiononline.org/userAssets/aiaUploads/file/USB3_Vision_Specification_v1-0-1.pdf).
-+
-+The formats are equal to the Genicam PFNC Bayer12p formats
-+(see https://www.emva.org/wp-content/uploads/GenICam_PFNC_2_3.pdf).
-+
-+They are raw sRGB / Bayer formats with 12 bits
-+per sample with 3 bytes for every 2 pixels.
-+
-+Below is an example of a small image in V4L2_PIX_FMT_SBGGR12LP format.
-+
-+**Byte Order.**
-+Each cell is one byte.
-+
-+.. tabularcolumns:: |p{0.8cm}|p{4.0cm}|p{4.0cm}|p{4.0cm}|p{4.0cm}|
-+
-+.. flat-table::
-+
-+    * - start + 0:
-+      - B\ :sub:`00low`
-+      - G\ :sub:`01low`\ (bits 7--4)
-+        B\ :sub:`00high`\ (bits 0--3)
-+      - G\ :sub:`01high`\
-+      - B\ :sub:`02low`
-+      - G\ :sub:`03low`\ (bits 7--4)
-+        B\ :sub:`02high`\ (bits 0--3)
-+      - G\ :sub:`03high`\
-+
-+    * - start + 6:
-+      - G\ :sub:`10low`
-+      - R\ :sub:`11low`\ (bits 7--4)
-+        G\ :sub:`10high`\ (bits 0--3)
-+      - R\ :sub:`11high`
-+      - G\ :sub:`12low`
-+      - R\ :sub:`13low`\ (bits 7--4)
-+        G\ :sub:`12high`\ (bits 0--3)
-+      - R\ :sub:`13high`
-+
-+    * - start + 12:
-+      - B\ :sub:`20low`
-+      - G\ :sub:`21low`\ (bits 7--4)
-+        B\ :sub:`20high`\ (bits 0--3)
-+      - G\ :sub:`21high`
-+      - B\ :sub:`22low`
-+      - G\ :sub:`21low`\ (bits 7--4)
-+        B\ :sub:`22high`\ (bits 0--3)
-+      - G\ :sub:`21high`
-+
-+    * - start + 18:
-+      - G\ :sub:`30low`
-+      - R\ :sub:`31low`\ (bits 7--4)
-+        G\ :sub:`30high`\ (bits 0--3)
-+      - R\ :sub:`31high`
-+      - G\ :sub:`32low`
-+      - R\ :sub:`33low`\ (bits 7--4)
-+        G\ :sub:`32high`\ (bits 0--3)
-+      - R\ :sub:`33high`
-+
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 6a5d1c6d11d6..9ac8a1512c6b 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1361,6 +1361,10 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_SGBRG12:	descr = "12-bit Bayer GBGB/RGRG"; break;
- 	case V4L2_PIX_FMT_SGRBG12:	descr = "12-bit Bayer GRGR/BGBG"; break;
- 	case V4L2_PIX_FMT_SRGGB12:	descr = "12-bit Bayer RGRG/GBGB"; break;
-+	case V4L2_PIX_FMT_SBGGR12LP:	descr = "12-bit Bayer BGGR Linear Packed"; break;
-+	case V4L2_PIX_FMT_SGBRG12LP:	descr = "12-bit Bayer GBRG Linear Packed"; break;
-+	case V4L2_PIX_FMT_SGRBG12LP:	descr = "12-bit Bayer GRBG Linear Packed"; break;
-+	case V4L2_PIX_FMT_SRGGB12LP:	descr = "12-bit Bayer RGGB Linear Packed"; break;
- 	case V4L2_PIX_FMT_SBGGR12P:	descr = "12-bit Bayer BGBG/GRGR Packed"; break;
- 	case V4L2_PIX_FMT_SGBRG12P:	descr = "12-bit Bayer GBGB/RGRG Packed"; break;
- 	case V4L2_PIX_FMT_SGRBG12P:	descr = "12-bit Bayer GRGR/BGBG Packed"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 8d15f6ccc4b4..233d952f90ec 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -655,6 +655,13 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_SGBRG12 v4l2_fourcc('G', 'B', '1', '2') /* 12  GBGB.. RGRG.. */
- #define V4L2_PIX_FMT_SGRBG12 v4l2_fourcc('B', 'A', '1', '2') /* 12  GRGR.. BGBG.. */
- #define V4L2_PIX_FMT_SRGGB12 v4l2_fourcc('R', 'G', '1', '2') /* 12  RGRG.. GBGB.. */
-+
-+	/* 12bit raw bayer linearly packed, 6 bytes for every 4 pixels */
-+#define V4L2_PIX_FMT_SBGGR12LP v4l2_fourcc('B', 'G', 'C', 'p')
-+#define V4L2_PIX_FMT_SGBRG12LP v4l2_fourcc('G', 'B', 'C', 'p')
-+#define V4L2_PIX_FMT_SGRBG12LP v4l2_fourcc('G', 'R', 'C', 'p')
-+#define V4L2_PIX_FMT_SRGGB12LP v4l2_fourcc('R', 'G', 'C', 'p')
-+
- 	/* 12bit raw bayer packed, 6 bytes for every 4 pixels */
- #define V4L2_PIX_FMT_SBGGR12P v4l2_fourcc('p', 'B', 'C', 'C')
- #define V4L2_PIX_FMT_SGBRG12P v4l2_fourcc('p', 'G', 'C', 'C')
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 7ecd26be6353..9bf066460699 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -41,202 +41,162 @@ unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
+ 
+ static struct uvc_format_desc uvc_fmts[] = {
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (NV12)",
+ 		.guid		= UVC_GUID_FORMAT_NV12,
+ 		.fcc		= V4L2_PIX_FMT_NV12,
+ 	},
+ 	{
+-		.name		= "MJPEG",
+ 		.guid		= UVC_GUID_FORMAT_MJPEG,
+ 		.fcc		= V4L2_PIX_FMT_MJPEG,
+ 	},
+ 	{
+-		.name		= "YVU 4:2:0 (YV12)",
+ 		.guid		= UVC_GUID_FORMAT_YV12,
+ 		.fcc		= V4L2_PIX_FMT_YVU420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (I420)",
+ 		.guid		= UVC_GUID_FORMAT_I420,
+ 		.fcc		= V4L2_PIX_FMT_YUV420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (M420)",
+ 		.guid		= UVC_GUID_FORMAT_M420,
+ 		.fcc		= V4L2_PIX_FMT_M420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:2 (UYVY)",
+ 		.guid		= UVC_GUID_FORMAT_UYVY,
+ 		.fcc		= V4L2_PIX_FMT_UYVY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y800)",
+ 		.guid		= UVC_GUID_FORMAT_Y800,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y8  )",
+ 		.guid		= UVC_GUID_FORMAT_Y8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (D3DFMT_L8)",
+ 		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "IR 8-bit (L8_IR)",
+ 		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_Y10,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "Greyscale 12-bit (Y12 )",
+ 		.guid		= UVC_GUID_FORMAT_Y12,
+ 		.fcc		= V4L2_PIX_FMT_Y12,
+ 	},
+ 	{
+-		.name		= "Greyscale 16-bit (Y16 )",
+ 		.guid		= UVC_GUID_FORMAT_Y16,
+ 		.fcc		= V4L2_PIX_FMT_Y16,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BY8 )",
+ 		.guid		= UVC_GUID_FORMAT_BY8,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BA81)",
+ 		.guid		= UVC_GUID_FORMAT_BA81,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "GBRG Bayer (GBRG)",
+ 		.guid		= UVC_GUID_FORMAT_GBRG,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG8,
+ 	},
+ 	{
+-		.name		= "GRBG Bayer (GRBG)",
+ 		.guid		= UVC_GUID_FORMAT_GRBG,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG8,
+ 	},
+ 	{
+-		.name		= "RGGB Bayer (RGGB)",
+ 		.guid		= UVC_GUID_FORMAT_RGGB,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB8,
+ 	},
+ 	{
+-		.name		= "RGB565",
+ 		.guid		= UVC_GUID_FORMAT_RGBP,
+ 		.fcc		= V4L2_PIX_FMT_RGB565,
+ 	},
+ 	{
+-		.name		= "BGR 8:8:8 (BGR3)",
+ 		.guid		= UVC_GUID_FORMAT_BGR3,
+ 		.fcc		= V4L2_PIX_FMT_BGR24,
+ 	},
+ 	{
+-		.name		= "H.264",
+ 		.guid		= UVC_GUID_FORMAT_H264,
+ 		.fcc		= V4L2_PIX_FMT_H264,
+ 	},
+ 	{
+-		.name		= "Greyscale 8 L/R (Y8I)",
+ 		.guid		= UVC_GUID_FORMAT_Y8I,
+ 		.fcc		= V4L2_PIX_FMT_Y8I,
+ 	},
+ 	{
+-		.name		= "Greyscale 12 L/R (Y12I)",
+ 		.guid		= UVC_GUID_FORMAT_Y12I,
+ 		.fcc		= V4L2_PIX_FMT_Y12I,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_Z16,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Bayer 10-bit (SRGGB10P)",
+ 		.guid		= UVC_GUID_FORMAT_RW10,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB10P,
+ 	},
+ 	{
+-		.name		= "Bayer 12-bit linear packed (SBGGR12LP)",
+ 		.guid		= UVC_GUID_FORMAT_BGCP,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR12LP,
+ 	},
+ 	{
+-		.name		= "Bayer 12-bit linear packed (SGBRG12LP)",
+ 		.guid		= UVC_GUID_FORMAT_GBCP,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG12LP,
+ 	},
+ 	{
+-		.name		= "Bayer 12-bit linear packed (SRGGB12LP)",
+ 		.guid		= UVC_GUID_FORMAT_RGCP,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB12LP,
+ 	},
+ 	{
+-		.name		= "Bayer 12-bit linear packed (SGRBG12LP)",
+ 		.guid		= UVC_GUID_FORMAT_GRCP,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG12LP,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SBGGR16)",
+ 		.guid		= UVC_GUID_FORMAT_BG16,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGBRG16)",
+ 		.guid		= UVC_GUID_FORMAT_GB16,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SRGGB16)",
+ 		.guid		= UVC_GUID_FORMAT_RG16,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGRBG16)",
+ 		.guid		= UVC_GUID_FORMAT_GR16,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG16,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_INVZ,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_INVI,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "IR:Depth 26-bit (INZI)",
+ 		.guid		= UVC_GUID_FORMAT_INZI,
+ 		.fcc		= V4L2_PIX_FMT_INZI,
+ 	},
+ 	{
+-		.name		= "4-bit Depth Confidence (Packed)",
+ 		.guid		= UVC_GUID_FORMAT_CNF4,
+ 		.fcc		= V4L2_PIX_FMT_CNF4,
+ 	},
+ 	{
+-		.name		= "HEVC",
+ 		.guid		= UVC_GUID_FORMAT_HEVC,
+ 		.fcc		= V4L2_PIX_FMT_HEVC,
+ 	},
+@@ -551,14 +511,10 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		fmtdesc = uvc_format_by_guid(&buffer[5]);
+ 
+ 		if (fmtdesc != NULL) {
+-			strscpy(format->name, fmtdesc->name,
+-				sizeof(format->name));
+ 			format->fcc = fmtdesc->fcc;
+ 		} else {
+ 			dev_info(&streaming->intf->dev,
+ 				 "Unknown video format %pUl\n", &buffer[5]);
+-			snprintf(format->name, sizeof(format->name), "%pUl\n",
+-				&buffer[5]);
+ 			format->fcc = 0;
+ 		}
+ 
+@@ -569,8 +525,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		 */
+ 		if (dev->quirks & UVC_QUIRK_FORCE_Y8) {
+ 			if (format->fcc == V4L2_PIX_FMT_YUYV) {
+-				strscpy(format->name, "Greyscale 8-bit (Y8  )",
+-					sizeof(format->name));
+ 				format->fcc = V4L2_PIX_FMT_GREY;
+ 				format->bpp = 8;
+ 				width_multiplier = 2;
+@@ -611,7 +565,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 			return -EINVAL;
+ 		}
+ 
+-		strscpy(format->name, "MJPEG", sizeof(format->name));
+ 		format->fcc = V4L2_PIX_FMT_MJPEG;
+ 		format->flags = UVC_FMT_FLAG_COMPRESSED;
+ 		format->bpp = 0;
+@@ -629,13 +582,8 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 
+ 		switch (buffer[8] & 0x7f) {
+ 		case 0:
+-			strscpy(format->name, "SD-DV", sizeof(format->name));
+-			break;
+ 		case 1:
+-			strscpy(format->name, "SDL-DV", sizeof(format->name));
+-			break;
+ 		case 2:
+-			strscpy(format->name, "HD-DV", sizeof(format->name));
+ 			break;
+ 		default:
+ 			uvc_dbg(dev, DESCR,
+@@ -645,9 +593,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 			return -EINVAL;
+ 		}
+ 
+-		strlcat(format->name, buffer[8] & (1 << 7) ? " 60Hz" : " 50Hz",
+-			sizeof(format->name));
+-
+ 		format->fcc = V4L2_PIX_FMT_DV;
+ 		format->flags = UVC_FMT_FLAG_COMPRESSED | UVC_FMT_FLAG_STREAM;
+ 		format->bpp = 0;
+@@ -674,8 +619,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		return -EINVAL;
+ 	}
+ 
+-	uvc_dbg(dev, DESCR, "Found format %s\n", format->name);
+-
+ 	buflen -= buffer[0];
+ 	buffer += buffer[0];
+ 
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 252136cc885c..1cfd081c2004 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -632,22 +632,13 @@ static int uvc_ioctl_enum_fmt(struct uvc_streaming *stream,
+ 			      struct v4l2_fmtdesc *fmt)
+ {
+ 	struct uvc_format *format;
+-	enum v4l2_buf_type type = fmt->type;
+-	u32 index = fmt->index;
+ 
+ 	if (fmt->type != stream->type || fmt->index >= stream->nformats)
+ 		return -EINVAL;
+ 
+-	memset(fmt, 0, sizeof(*fmt));
+-	fmt->index = index;
+-	fmt->type = type;
+-
+ 	format = &stream->format[fmt->index];
+-	fmt->flags = 0;
+ 	if (format->flags & UVC_FMT_FLAG_COMPRESSED)
+ 		fmt->flags |= V4L2_FMT_FLAG_COMPRESSED;
+-	strscpy(fmt->description, format->name, sizeof(fmt->description));
+-	fmt->description[sizeof(fmt->description) - 1] = 0;
+ 	fmt->pixelformat = format->fcc;
+ 	return 0;
+ }
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 51cda67946d5..8fff8b93def2 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -292,7 +292,6 @@ struct uvc_control {
+ };
+ 
+ struct uvc_format_desc {
+-	char *name;
+ 	u8 guid[16];
+ 	u32 fcc;
+ };
+@@ -416,8 +415,6 @@ struct uvc_format {
+ 	u32 fcc;
+ 	u32 flags;
+ 
+-	char name[32];
+-
+ 	unsigned int nframes;
+ 	struct uvc_frame *frame;
+ };
 -- 
 2.30.1
 
