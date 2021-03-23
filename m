@@ -2,134 +2,134 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 115C0C433F7
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE90AC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 16:05:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF740619E6
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8DD7619C5
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 16:05:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbhCWPzQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Mar 2021 11:55:16 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:23082 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbhCWPzA (ORCPT
+        id S232991AbhCWQFY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Mar 2021 12:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232917AbhCWQFJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Mar 2021 11:55:00 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 23 Mar 2021 08:55:00 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 23 Mar 2021 08:54:58 -0700
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 23 Mar 2021 21:24:39 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 7E6992168C; Tue, 23 Mar 2021 21:24:37 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v9 1/2] media: v4l2-ctrl: add controls for long term reference.
-Date:   Tue, 23 Mar 2021 21:24:26 +0530
-Message-Id: <1616514867-16496-2-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1616514867-16496-1-git-send-email-dikshita@codeaurora.org>
-References: <1616514867-16496-1-git-send-email-dikshita@codeaurora.org>
+        Tue, 23 Mar 2021 12:05:09 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25080C061763
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 09:05:09 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e8so18234749iok.5
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 09:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V2RrZIiiAXDjTWwS4GJM76K1p957k6O4aOC5f66VrG0=;
+        b=c9fONZ0pVanfBBnYSOpJiaySOx5hI94+NqD6CkppLs8GUQkeQhLzL0o3ReQ2IvDwJr
+         UZdPTqwjNh470mOQMHJW4y/avc/ojoI41u/icb2EMeqhwmKKZaB6hDtS0DODD+qHRfaC
+         WPciC6+yYWvSGsTj/ScLgLfSn94/6VvGLg+gY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V2RrZIiiAXDjTWwS4GJM76K1p957k6O4aOC5f66VrG0=;
+        b=qZVh+8x9m7ELw1XBcnZyIzEnbxELIj9VyI0IbOgJv+koC7aHP0gO/1uygV0YLzehh7
+         OoLd9W54CLMuNBbmtNXC2+Ok57KeGQI4DAoginhigxF3ygC6OZQDXKwSRC+T9mS9bU4e
+         EIRuPwJkCjgT16s4Bu4Zn7ZUOuzyg1SvYIDvG6n0aWLVhcB9zhRgEj0FNSomgRtQZ1WY
+         0DTl+JhOusz41tP/Vqza/zSls5UEiQsW9uv/+I9vwcXuhReSLRmAqSCkcgQyvRejnD7b
+         azxlOmED0FmlipV5Md8YF46kYAG+96e8ZRtDmQVT9BzS6ny2KFEkHxRsoG7BeTTIDDmc
+         QwiA==
+X-Gm-Message-State: AOAM5315XA6eJIKwg+4tspuxIOu59VZ/lumtz9+Ql9l12R2Zq0AOK0Ws
+        S+NZLmsbDpNqPMeMwMkR5Syl3OQl1Q2UrQ==
+X-Google-Smtp-Source: ABdhPJyrYVqKK0SCORoEbpM9hrBoSMOJzLjxSOkKv+4R4oNmWJ144P7mE+QwVfDalJuv/c7qR125tg==
+X-Received: by 2002:a05:6638:1648:: with SMTP id a8mr5111507jat.25.1616515508412;
+        Tue, 23 Mar 2021 09:05:08 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id c3sm6494240iln.76.2021.03.23.09.05.06
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 09:05:07 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id v26so18238478iox.11
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 09:05:06 -0700 (PDT)
+X-Received: by 2002:a05:6602:26c6:: with SMTP id g6mr4919501ioo.150.1616515506402;
+ Tue, 23 Mar 2021 09:05:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210319055342.127308-1-senozhatsky@chromium.org> <20210319055342.127308-4-senozhatsky@chromium.org>
+In-Reply-To: <20210319055342.127308-4-senozhatsky@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 23 Mar 2021 17:04:55 +0100
+X-Gmail-Original-Message-ID: <CANiDSCseJdKuPSZFDvc8VGp=PDqGEN42ZsLVGgkwhAz5hhVCQQ@mail.gmail.com>
+Message-ID: <CANiDSCseJdKuPSZFDvc8VGp=PDqGEN42ZsLVGgkwhAz5hhVCQQ@mail.gmail.com>
+Subject: Re: [PATCHv3 3/6] media: v4l UAPI: add ROI auto-controls flags
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Long Term Reference (LTR) frames are the frames that are encoded
-sometime in the past and stored in the DPB buffer list to be used
-as reference to encode future frames.
-This change adds controls to enable this feature.
+Hi Sergey
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../userspace-api/media/v4l/ext-ctrls-codec.rst        | 18 ++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                   | 14 ++++++++++++++
- include/uapi/linux/v4l2-controls.h                     |  3 +++
- 3 files changed, 35 insertions(+)
+On Fri, Mar 19, 2021 at 6:53 AM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> UVC 1.5 defines the following Region Of Interest auto controls:
+>
+> D0: Auto Exposure
+> D1: Auto Iris
+> D2: Auto White Balance
+> D3: Auto Focus
+> D4: Auto Face Detect
+> D5: Auto Detect and Track
+> D6: Image Stabilization
+> D7: Higher Quality
+> D8 =E2=80=93 D15: Reserved, set to zero
+>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  include/uapi/linux/v4l2-common.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/include/uapi/linux/v4l2-common.h b/include/uapi/linux/v4l2-c=
+ommon.h
+> index 3651ebb8cb23..34f1c262d6aa 100644
+> --- a/include/uapi/linux/v4l2-common.h
+> +++ b/include/uapi/linux/v4l2-common.h
+> @@ -92,6 +92,16 @@
+>  #define V4L2_SEL_FLAG_LE               (1 << 1)
+>  #define V4L2_SEL_FLAG_KEEP_CONFIG      (1 << 2)
+>
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 00944e9..be81bd9 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3646,3 +3646,21 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     so this has to come from client.
-     This is applicable to H264 and valid Range is from 0 to 63.
-     Source Rec. ITU-T H.264 (06/2019); G.7.4.1.1, G.8.8.1.
-+
-+``V4L2_CID_MPEG_VIDEO_LTR_COUNT (integer)``
-+    Specifies the maximum number of Long Term Reference (LTR) frames at any
-+    given time that the encoder can keep.
-+    This is applicable to the H264 and HEVC encoders.
-+
-+``V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX (integer)``
-+    After setting this control the frame that will be queued next
-+    will be marked as a Long Term Reference (LTR) frame
-+    and given this LTR index which ranges from 0 to LTR_COUNT-1.
-+    This is applicable to the H264 and HEVC encoders.
-+    Source Rec. ITU-T H.264 (06/2019); Table 7.9
-+
-+``V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES (bitmask)``
-+    Specifies the Long Term Reference (LTR) frame(s) to be used for
-+    encoding the next frame queued after setting this control.
-+    This provides a bitmask which consists of bits [0, LTR_COUNT-1].
-+    This is applicable to the H264 and HEVC encoders.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 016cf62..4d444de 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -951,6 +951,9 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER:		return "Repeat Sequence Header";
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:		return "Force Key Frame";
- 	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID:		return "Base Layer Priority ID";
-+	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:			return "LTR Count";
-+	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:		return "Frame LTR Index";
-+	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:		return "Use LTR Frames";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_FWHT_I_FRAME_QP:				return "FWHT I-Frame QP Value";
-@@ -1278,6 +1281,17 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:
-+		*type = V4L2_CTRL_TYPE_INTEGER;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:
-+		*type = V4L2_CTRL_TYPE_INTEGER;
-+		*flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:
-+		*type = V4L2_CTRL_TYPE_BITMASK;
-+		*flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+		break;
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
- 	case V4L2_CID_PAN_RESET:
- 	case V4L2_CID_TILT_RESET:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 039c0d7..fedbb54 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -428,6 +428,9 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_CODEC_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_CODEC_BASE+229)
- #define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID	(V4L2_CID_CODEC_BASE+230)
-+#define V4L2_CID_MPEG_VIDEO_LTR_COUNT			(V4L2_CID_CODEC_BASE+231)
-+#define V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX		(V4L2_CID_CODEC_BASE+232)
-+#define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+233)
- 
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
--- 
-2.7.4
+Are you sure that you do not want to start with 1<<3, there might be
+some hardware that support LE/SE
+> +/* ROI auto-controls flags */
+> +#define V4L2_SEL_FLAG_ROI_AUTO_EXPOSURE                (1 << 0)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_IRIS                    (1 << 1)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_WHITE_BALANCE           (1 << 2)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_FOCUS                   (1 << 3)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_FACE_DETECT             (1 << 4)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_DETECT_AND_TRACK        (1 << 5)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_IMAGE_STABILIXATION     (1 << 6)
+> +#define V4L2_SEL_FLAG_ROI_AUTO_HIGHER_QUALITY          (1 << 7)
+> +
+>  struct v4l2_edid {
+>         __u32 pad;
+>         __u32 start_block;
+> --
+> 2.31.0.rc2.261.g7f71774620-goog
+>
 
+
+--=20
+Ricardo Ribalda
