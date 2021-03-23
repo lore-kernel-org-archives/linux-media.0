@@ -2,79 +2,75 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 139FAC433DB
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 07:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE0FDC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 07:48:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8AB2619B7
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 07:25:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C286D619BB
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 07:48:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhCWHYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Mar 2021 03:24:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40508 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230096AbhCWHY3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Mar 2021 03:24:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BBC8C619B2;
-        Tue, 23 Mar 2021 07:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616484269;
-        bh=LwQRwWB1kiwBzsjF7W8rnkogSfH1nFFBz3L7fNZAikI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BEF7w1M16YcNFxOJbyD5FiYSDPlSjRrtjuxZAtP+tUHQoJ6AT1OrPCksqbnTUhG4f
-         z1b9D8OjFdhMF2qsA+YwaFxckU8ZFyquTjQzI51Ju5DS+Z6hALyWXNV9XFLsxgPdEy
-         BjOJMHF0r14sk9BLzoZjAKKlalBs2Ywa1zfsx4erq8KLBef0dEZQ72Z/TNp4hgClLR
-         Q+glCskaV3b2R+sXaIkvOnckJOKDoJ4a51JuVx+oHK6wCCNrqZUi1+u4pt0W8H4Zqr
-         AnlGglHHnzBFBwJOQt78akmQ9zbRhwyq8dMCQ6OyKCaYfVUvSKU/q+0EWRpSKHuNQ9
-         yiCmJqImpMkWA==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lObOr-009dYn-HP; Tue, 23 Mar 2021 08:24:25 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH] media: camera-sensor.rst: fix c:function build warning
-Date:   Tue, 23 Mar 2021 08:24:24 +0100
-Message-Id: <e4214991b7d59c0d7aa4e6e48833dc1809c47d47.1616484262.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S229670AbhCWHr2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Mar 2021 03:47:28 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:49203 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229592AbhCWHrT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Mar 2021 03:47:19 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id ObkuluK1PUzyrObkzlOa0w; Tue, 23 Mar 2021 08:47:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1616485637; bh=2k4vhuOX8l62X0dpwr/OE85yfKLo2dPyris5X4ng5v4=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=qLFKfO3FPYdIPAV1D/kgQAfMyaUPWDIB5NKINvZTkDFrIwJFAugcPk/kM8azrGbQn
+         6DKjOd3c7GpKdVYRgEaIxCGdmbtnEQzZG71s71fc7iuz1y3gy34FCFLw501OXDgDdx
+         8HVARhVfF25OpuhOyhDqH3nh3G5HuRa/sGiKZf9/y/UqQJKXMBzljwmZv+NsgNxFtZ
+         KUD6h7jncTa6WXyw7PUG2gniX0paudd2Lw/bXA+G/tNgDp+Uzue0+AqtoGUSMohtzA
+         tRjakXEKDViGD0FscTR/EJyTx8LK4jd+4fuYb8fvJGDHXshjoApk1Gsy1eeRP7vrKQ
+         Td1G+CRwpfwWg==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] ccs-data.h: fix kernel-doc typo
+Message-ID: <c0674449-c8f2-fb75-60ce-f6f178092a81@xs4all.nl>
+Date:   Tue, 23 Mar 2021 08:47:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfAIQK6ya+cWq/rRoN3605xfkoanMyDo0eLZDXTUu/4BkQSY4vYAHslp8P0sfdrEnmnCLpgSYDkRDEOiRArLZbL1JHr30QykLHQCQjtwirpIsSp4ob5UK
+ ROToj/VpJuYDeWVKh8GvXCO29bBJDekptIqwf1/hyhYjtiBoiNj5StgVmzHTmN1w9ulzUMh+FNEGMeK/Bwv6QlrT6HmT/UkZeVQb06Q+k/Yf/wNnNXkzKeE8
+ 3CcCUB4RTV5+MzGUOAeJnA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The :c:function: tag evaluation depends on Sphinx version 2 or 3.
-Use a syntax that should work with both versions.
+block -> pixel
 
-Fixes: c0e3bcb25390 ("media: camera-sensor.rst: fix a doc build warning")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes this warning:
+
+drivers/media/i2c/ccs/ccs-data.h:144: warning: expecting prototype for struct ccs_pdaf_pix_loc_block_desc. Prototype was for struct
+ccs_pdaf_pix_loc_pixel_desc instead
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- Documentation/driver-api/media/camera-sensor.rst | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+diff --git a/drivers/media/i2c/ccs/ccs-data.h b/drivers/media/i2c/ccs/ccs-data.h
+index c75d480c8792..d26db88937ea 100644
+--- a/drivers/media/i2c/ccs/ccs-data.h
++++ b/drivers/media/i2c/ccs/ccs-data.h
+@@ -132,7 +132,7 @@ struct ccs_pdaf_pix_loc_block_desc_group {
+ };
 
-diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-index cd5c989769a1..7160336aa475 100644
---- a/Documentation/driver-api/media/camera-sensor.rst
-+++ b/Documentation/driver-api/media/camera-sensor.rst
-@@ -144,9 +144,7 @@ of the device. This is because the power state of the device is only changed
- after the power state transition has taken place. The ``s_ctrl`` callback can be
- used to obtain device's power state after the power state transition:
- 
--.. c:function::
--
--	int pm_runtime_get_if_in_use(struct device *dev);
-+.. c:function:: int pm_runtime_get_if_in_use(struct device *dev);
- 
- The function returns a non-zero value if it succeeded getting the power count or
- runtime PM was disabled, in either of which cases the driver may proceed to
--- 
-2.30.2
-
+ /**
+- * struct ccs_pdaf_pix_loc_block_desc - PDAF pixel location block descriptor
++ * struct ccs_pdaf_pix_loc_pixel_desc - PDAF pixel location pixel descriptor
+  * @pixel_type: Type of the pixel; CCS_DATA_PDAF_PIXEL_TYPE_*
+  * @small_offset_x: offset X coordinate
+  * @small_offset_y: offset Y coordinate
