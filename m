@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A1AC433E5
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 13:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE3D2C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 13:41:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3432619C0
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 13:36:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE462619B9
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 13:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbhCWNgH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Mar 2021 09:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S231626AbhCWNlI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Mar 2021 09:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbhCWNff (ORCPT
+        with ESMTP id S231152AbhCWNk4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Mar 2021 09:35:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366AC061764
-        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 06:35:34 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ce10so27125470ejb.6
-        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 06:35:34 -0700 (PDT)
+        Tue, 23 Mar 2021 09:40:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A23BC061764
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 06:40:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id e14so8948846ejz.11
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 06:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ntjagxyS+LYabIumqt5awpwriDBPHPu/LFN1q/dlMqM=;
-        b=TqGjivAJb7F0P/srjBeMCJaPta0vld25XGxynx8tT96VQcBkepFegU4+lpcjSuBBGA
-         AHeIEEOwypx68YJCIlNTKKzCZmsE2monoECPNz5j0xVOdfzEfcKPG2ZNgdf84WiggpF5
-         l3li2arOaAAIj7SUAwr7p9IoSiQV+/vGkcot4rg7YqnKN5+eqgBZ7X3yeKnWfI4n8bQd
-         4Tczl/rQkSNdC3dmzvT4PxL5yBJ4II2KjJ4TtpnpOiFsHWGLeLuvaqYLp3Paya7WxGjj
-         lnjC+RHdcCIMVE9XMeS6vC8UyBOKp6qJiK5izzF5XdX2Mp/cprluWZHSjlmjxiaeIZjT
-         cQSw==
+        bh=WZGkiGKYA9UnQezkNRP1eOoZgt6WZ7BXwgSa/zEhxao=;
+        b=K4wSpV+JwtX2hLAPqtmQIRGPrAXazv+ZI2F0KH5RLVDI0aIcYNwjxsaATw9f51XcIy
+         TSZaACQ4uyGeQpXi2QI4FfCpGQa0L4zkwFmW9DR2J/08LSZ7rRySGduXlO6crl1bXJgA
+         c3XD3kWR0mH1M/cO6X40B2CTrDuo9f4iqdvv9tPUCoxaOo/ob0+1NlHH0qY0SoZUrq4R
+         p0JRcJAWEvxOPlX3NhNaA8cffrZMS/LrrWneFgPTGmjL+MetY2OFYGQPLbZvqXN5j/5E
+         pMQnloWXrd7y1jrp713Eun/yZcCdRe3kc4cxwXQmGZ9zFCitcDg61FWV1cu/hcv6xBzs
+         +evQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ntjagxyS+LYabIumqt5awpwriDBPHPu/LFN1q/dlMqM=;
-        b=e6oHKLTfUUY/d8NhIwqI28Scl//9godZoU+mAnH6E4WiFelmzyKXMaa/87KNVnTJwH
-         9RCvsHuFWs4feIT00Cq9wIPWynBDReRu/9d6iL1uCj/b2Kb6q6r8KBd605SGK5dpRiUx
-         BY7SG+T3h11AFKAaZuuNXXv72UG8cvLrCwydi2N5s5wXrtUukazpydTi8B87CIVtCQq/
-         ned/sKE4WI7++DPx8HYawVHpo/ZhDhDLC8i06WbMeXUq+MtomAed3TsmY+dou4Z7f9kw
-         pCaYo6alOAQWhOWhTpOjzY9lFotKak5fa69vxQXBJgYVWjmo157OhBqnBUgWXCHhJ1EC
-         oyyQ==
-X-Gm-Message-State: AOAM533Om4znu9G6kcgk7dUTaqujoeRom7v4QjiZLXqFNf4AdmzK5zuA
-        eOy3saMnaUc4rBflFUrRhdSJAmoPjQ9M3jZv
-X-Google-Smtp-Source: ABdhPJwUJqV6+cN+QRopOAqXtcnPEV0jSss4iauXIjAOmCxfRNpfW/HmkPPkwO01/Xtjo0ifs7vI/w==
-X-Received: by 2002:a17:906:e0d6:: with SMTP id gl22mr4925865ejb.444.1616506533482;
-        Tue, 23 Mar 2021 06:35:33 -0700 (PDT)
-Received: from localhost.localdomain (hst-221-103.medicom.bg. [84.238.221.103])
-        by smtp.gmail.com with ESMTPSA id m7sm12627104edp.81.2021.03.23.06.35.32
+        bh=WZGkiGKYA9UnQezkNRP1eOoZgt6WZ7BXwgSa/zEhxao=;
+        b=BWIjisGn0irx9/a+cjAGWk36IwDrDj7Vw5c7gcaYToxvIajIhWJqHD3q024MiEk8F8
+         HDgx3E6pT6vcLtK7kQxqA0Urs0zNRLjjnsbjpq/3Ea8B5PDYRrT4E+YgpYkWR/Nre1Ws
+         +DZDPNhYTcH/QmQPzAj0ixsWQiVwhhdSZWbTD3qBvbgC3ArRwf98YNR6odvtC+qZ+iGA
+         RBK4IfMqoe7D+1v+LY7+jUPiQbA3wqnS73ODR1o+OpfYs6FgVYnyH+OgmGqZ9XjYVSMZ
+         kpttLJ+VaI+muCBD/it91z3efU2Nh25q+SxNRsa5Deb5EaVXKIT27T0HoGAGZ2KLCjBo
+         wDLw==
+X-Gm-Message-State: AOAM530FE7QFZKCVrLIo9wDtdyrFu/MJj+5ztw1rHPgMmQPlCtfYivSx
+        bSijYg8WHcCR5BPL8ghpMkEEo/yfQWWv+N/7
+X-Google-Smtp-Source: ABdhPJxF31ITiySO5RmhXqWHsxzWsRM0pct2TbtSvn5qDWPEYLuZaXvnQVr5HZtySfkkLPRvUu/FPA==
+X-Received: by 2002:a17:906:558:: with SMTP id k24mr5043834eja.387.1616506854739;
+        Tue, 23 Mar 2021 06:40:54 -0700 (PDT)
+Received: from localhost.localdomain (hst-221-13.medicom.bg. [84.238.221.13])
+        by smtp.gmail.com with ESMTPSA id r10sm11207317eju.66.2021.03.23.06.40.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 06:35:33 -0700 (PDT)
+        Tue, 23 Mar 2021 06:40:54 -0700 (PDT)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Cc:     hverkuil-cisco@xs4all.nl,
+Cc:     hverkuil-cisco@xs4all.nl, ezequiel@collabora.com,
+        nicolas.dufresne@collabora.com,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v3 0/2] Add decoder conceal color ctrl
-Date:   Tue, 23 Mar 2021 15:35:18 +0200
-Message-Id: <20210323133520.943317-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH v6 0/5] HDR10 static metadata
+Date:   Tue, 23 Mar 2021 15:40:35 +0200
+Message-Id: <20210323134040.943757-1-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,28 +72,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hello,
 
-Changes since v2:
-
- * addressed Hans's comments 1/2 in documentation.
+Changes since v5:
+ * added Reviewed-by tags
+ * 3/5 - added a comment (Hans)
+ * 4/5 - drop "coded" word in documentation (Hans)
 
 regards,
 Stan
 
-Stanimir Varbanov (2):
-  v4l2-ctrl: Add decoder conceal color control
-  venus: vdec: Add support for conceal control
+Stanimir Varbanov (5):
+  v4l: Add new Colorimetry Class
+  docs: Document colorimetry class
+  v4l: Add HDR10 static metadata controls
+  docs: Document CLL and Mastering display colorimetry controls
+  venus: venc: Add support for CLL and Mastering display controls
 
- .../media/v4l/ext-ctrls-codec.rst             | 33 +++++++++++++++++++
- drivers/media/platform/qcom/venus/core.h      |  1 +
- drivers/media/platform/qcom/venus/hfi_cmds.c  | 18 ++++++++--
- .../media/platform/qcom/venus/hfi_helper.h    | 10 ++++++
- drivers/media/platform/qcom/venus/vdec.c      | 11 ++++++-
- .../media/platform/qcom/venus/vdec_ctrls.c    |  9 ++++-
- drivers/media/v4l2-core/v4l2-ctrls.c          |  9 +++++
- include/uapi/linux/v4l2-controls.h            |  1 +
- 8 files changed, 88 insertions(+), 4 deletions(-)
+ .../userspace-api/media/v4l/common.rst        |  1 +
+ .../media/v4l/ext-ctrls-colorimetry.rst       | 93 +++++++++++++++++++
+ .../media/v4l/vidioc-g-ext-ctrls.rst          | 12 +++
+ .../media/videodev2.h.rst.exceptions          |  2 +
+ drivers/media/platform/qcom/venus/core.h      |  2 +
+ drivers/media/platform/qcom/venus/hfi_cmds.c  |  8 ++
+ .../media/platform/qcom/venus/hfi_helper.h    | 20 ++++
+ drivers/media/platform/qcom/venus/venc.c      | 29 ++++++
+ .../media/platform/qcom/venus/venc_ctrls.c    | 16 +++-
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 75 ++++++++++++++-
+ include/media/v4l2-ctrls.h                    |  4 +
+ include/uapi/linux/v4l2-controls.h            | 35 +++++++
+ include/uapi/linux/videodev2.h                |  3 +
+ 13 files changed, 298 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-colorimetry.rst
 
 -- 
 2.25.1
