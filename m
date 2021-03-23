@@ -2,63 +2,153 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E04B3C433E3
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE677C433F2
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5E11619DB
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7C0D619CD
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 15:55:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbhCWPzN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Mar 2021 11:55:13 -0400
+        id S232937AbhCWPzO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Mar 2021 11:55:14 -0400
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:23082 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbhCWPy5 (ORCPT
+        with ESMTP id S232909AbhCWPy6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Mar 2021 11:54:57 -0400
+        Tue, 23 Mar 2021 11:54:58 -0400
 Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 23 Mar 2021 08:54:57 -0700
+  by alexa-out.qualcomm.com with ESMTP; 23 Mar 2021 08:54:58 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 23 Mar 2021 08:54:55 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 23 Mar 2021 08:54:56 -0700
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 23 Mar 2021 21:24:38 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 23 Mar 2021 21:24:41 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 9634B2168C; Tue, 23 Mar 2021 21:24:35 +0530 (IST)
+        id 3B6752168C; Tue, 23 Mar 2021 21:24:39 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v9 0/2] Add encoder ctrls for long term reference
-Date:   Tue, 23 Mar 2021 21:24:25 +0530
-Message-Id: <1616514867-16496-1-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH v9 2/2] venus: venc: Add support for Long Term Reference (LTR) controls
+Date:   Tue, 23 Mar 2021 21:24:27 +0530
+Message-Id: <1616514867-16496-3-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1616514867-16496-1-git-send-email-dikshita@codeaurora.org>
+References: <1616514867-16496-1-git-send-email-dikshita@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series add the encoder controls for long term reference (LTR)
-and support for the same in venus driver.
+Add support for below LTR controls in encoder:
+- V4L2_CID_MPEG_VIDEO_LTR_COUNT
+- V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX
+- V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES
 
-Dikshita Agarwal (2):
-  media: v4l2-ctrl: add controls for long term reference.
-  venus: venc: Add support for Long Term Reference (LTR) controls
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+---
+ drivers/media/platform/qcom/venus/venc_ctrls.c | 55 +++++++++++++++++++++++++-
+ 1 file changed, 54 insertions(+), 1 deletion(-)
 
-Changes since v8:
-- Update 2/2 patch to allow LTR MARK and USE control setting
-  only after stream on.
-
- .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 18 +++++++
- drivers/media/platform/qcom/venus/venc_ctrls.c     | 55 +++++++++++++++++++++-
- drivers/media/v4l2-core/v4l2-ctrls.c               | 14 ++++++
- include/uapi/linux/v4l2-controls.h                 |  3 ++
- 4 files changed, 89 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index a52b800..bb4261b 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -20,6 +20,7 @@
+ #define INTRA_REFRESH_MBS_MAX	300
+ #define AT_SLICE_BOUNDARY	\
+ 	V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY
++#define MAX_LTR_FRAME_COUNT 4
+ 
+ static int venc_calc_bpframes(u32 gop_size, u32 conseq_b, u32 *bf, u32 *pf)
+ {
+@@ -72,6 +73,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct venc_controls *ctr = &inst->controls.enc;
+ 	struct hfi_enable en = { .enable = 1 };
+ 	struct hfi_bitrate brate;
++	struct hfi_ltr_use ltr_use;
++	struct hfi_ltr_mark ltr_mark;
++	struct hfi_ltr_mode ltr_mode;
+ 	u32 bframes;
+ 	u32 ptype;
+ 	int ret;
+@@ -276,6 +280,43 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID:
+ 		ctr->base_priority_id = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:
++		ptype = HFI_PROPERTY_PARAM_VENC_LTRMODE;
++		ltr_mode.ltr_count = ctrl->val;
++		ltr_mode.ltr_mode = HFI_LTR_MODE_MANUAL;
++		ltr_mode.trust_mode = 1;
++		ret = hfi_session_set_property(inst, ptype, &ltr_mode);
++		if (ret)
++			return ret;
++		break;
++	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:
++		mutex_lock(&inst->lock);
++		if (inst->streamon_out && inst->streamon_cap) {
++			ptype = HFI_PROPERTY_CONFIG_VENC_MARKLTRFRAME;
++			ltr_mark.mark_frame = ctrl->val;
++			ret = hfi_session_set_property(inst, ptype, &ltr_mark);
++			if (ret) {
++				mutex_unlock(&inst->lock);
++				return ret;
++			}
++		}
++		mutex_unlock(&inst->lock);
++		break;
++	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:
++		mutex_lock(&inst->lock);
++		if (inst->streamon_out && inst->streamon_cap) {
++			ptype = HFI_PROPERTY_CONFIG_VENC_USELTRFRAME;
++			ltr_use.ref_ltr = ctrl->val;
++			ltr_use.use_constrnt = true;
++			ltr_use.frames = 0;
++			ret = hfi_session_set_property(inst, ptype, &ltr_use);
++			if (ret) {
++				mutex_unlock(&inst->lock);
++				return ret;
++			}
++		}
++		mutex_unlock(&inst->lock);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -291,7 +332,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+ {
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 51);
++	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 54);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -498,6 +539,18 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 			  V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID, 0,
+ 			  6, 1, 0);
+ 
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES, 0,
++			  (MAX_LTR_FRAME_COUNT - 1), 1, 0);
++
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_LTR_COUNT, 0,
++			  MAX_LTR_FRAME_COUNT, 1, 0);
++
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX, 0,
++			  (MAX_LTR_FRAME_COUNT - 1), 1, 0);
++
+ 	ret = inst->ctrl_handler.error;
+ 	if (ret)
+ 		goto err;
 -- 
 2.7.4
 
