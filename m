@@ -2,130 +2,248 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6A9C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 19:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64BE3C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 21:26:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36068619CB
-	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 19:28:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36E8D619CC
+	for <linux-media@archiver.kernel.org>; Tue, 23 Mar 2021 21:26:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbhCWT16 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Mar 2021 15:27:58 -0400
-Received: from mga01.intel.com ([192.55.52.88]:40450 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232742AbhCWT1q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Mar 2021 15:27:46 -0400
-IronPort-SDR: MX3vijo/tEQlDHm4lhQwA8s2RQxFqCT8TeU1YrwOvpqlI0q2eOCXHYebKJtaNqv1RLm1+qg5bk
- sCKUOBlk7qRQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="210638257"
-X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
-   d="scan'208";a="210638257"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 12:27:46 -0700
-IronPort-SDR: rA+QKtIDAHxoWazssGoA61xpXO85FBmRLbqsId+RciPE1bvLzd+R0pWKNEqh7LZsLbn3B/ybfH
- /1QyfobjlG6w==
-X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
-   d="scan'208";a="604406443"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 12:27:44 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id C705920168;
-        Tue, 23 Mar 2021 21:27:42 +0200 (EET)
-Date:   Tue, 23 Mar 2021 21:27:42 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, ezequiel.garcia@collabora.com
-Subject: Re: [PATCH v2 4/4] v4l: async, fwnode: Improve module organisation
-Message-ID: <20210323192742.GA3@paasikivi.fi.intel.com>
-References: <20210312125657.25442-1-sakari.ailus@linux.intel.com>
- <20210312125657.25442-5-sakari.ailus@linux.intel.com>
- <8f28218c90cdf22dd7f3d2cea259f4013ff263c4.camel@collabora.com>
+        id S233583AbhCWVZd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Mar 2021 17:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233444AbhCWVZ0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Mar 2021 17:25:26 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45E7C061574
+        for <linux-media@vger.kernel.org>; Tue, 23 Mar 2021 14:25:24 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1172BB1D;
+        Tue, 23 Mar 2021 22:25:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1616534722;
+        bh=KSkiZ1GIxPl09NbzpPhmE+greGwz5sRMd3QjegEv9Ho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hlLS3hLUvJXO0g31XzAsNSLkIBS4iQBHTGDS/h7SEdvAxIGmJGTZd82snRPAmG876
+         oAd0nJaTr7q81YJWcdjJ2dx3xlCJiBe3prU7pmPbyWduNiEiGJZHZUMY1OgrM5CgXV
+         UtGAaCDBWl1lIBEbDkRRi2gSuWzmYzMafuJcRywQ=
+Date:   Tue, 23 Mar 2021 23:24:40 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        linux-media@vger.kernel.org, mchehab@kernel.org, bparrot@ti.com,
+        mickael.guene@st.com
+Subject: Re: [RFC PATCH 1/4] media: rcar-vin: use v4l2_get_link_freq() to
+ calculate phypll frequency
+Message-ID: <YFpcmES87wcY78Xy@pendragon.ideasonboard.com>
+References: <20210303180817.12285-1-andrey.konovalov@linaro.org>
+ <20210303180817.12285-2-andrey.konovalov@linaro.org>
+ <YEYqzMEWjtGedMnV@oden.dyn.berto.se>
+ <20210323131041.GB3@paasikivi.fi.intel.com>
+ <YFnzsVjSoUsOtY/O@oden.dyn.berto.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8f28218c90cdf22dd7f3d2cea259f4013ff263c4.camel@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YFnzsVjSoUsOtY/O@oden.dyn.berto.se>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+Hi Niklas,
 
-On Tue, Mar 23, 2021 at 02:46:04PM -0300, Ezequiel Garcia wrote:
-> On Fri, 2021-03-12 at 14:56 +0200, Sakari Ailus wrote:
-> > The V4L2 async framework is generally used with the V4L2 fwnode, which
-> > also depends on the former. There is only one exception, the CAFE_CCIC
-> > driver, which uses V4L2 async but does not need V4L2 fwnode.
+On Tue, Mar 23, 2021 at 02:57:05PM +0100, Niklas SÃ¶derlund wrote:
+> On 2021-03-23 15:10:41 +0200, Sakari Ailus wrote:
+> > On Mon, Mar 08, 2021 at 02:46:52PM +0100, Niklas SÃ¶derlund wrote:
+> > > On 2021-03-03 21:08:14 +0300, Andrey Konovalov wrote:
+> > > > To get the link frequency value, or to calculate a parameter depending on
+> > > > it the receiver driver should use V4L2_CID_LINK_FREQ. If V4L2_CID_LINK_FREQ
+> > > > control is not implemented in the remote subdevice, the link frequency
+> > > > can be calculated from V4L2_CID_PIXEL_RATE control value. But the latter
+> > > > may not give the correct link frequency, and should only be used as the
+> > > > last resort. v4l2_get_link_freq() does exactly that, so use it instead
+> > > > of reading V4L2_CID_PIXEL_RATE directly.
+> > > 
+> > > I like the direction this patch is taking, but I'm a bit concerned about 
+> > > that V4L2_CID_LINK_FREQ is not able to replace V4L2_CID_PIXEL_RATE as it 
+> > > is designed today. Maybe my concern is unfounded and only reflects my 
+> > > own misunderstanding of the API.
+> > > 
+> > > When I wrote this code I tried to first do it using V4L2_CID_LINK_FREQ 
+> > > but I found no way to be able to express the wide rang of values needed 
+> > > for my use-case given that V4L2_CID_LINK_FREQ is a menu control. I had 
 > > 
-> > At the same time there is a vast number of systems that need videodev
-> > module, but have no use for v4l2-async that's now part of videodev.
-> > 
-> > In order to improve, build v4l2-async and v4l2-fwnode as a single module
-> > called v4l2-async (the v4l2-async.c file is renamed as v4l2-async-core.c).
-> > Also the menu item V4L2_FWNODE is renamed as V4L2_ASYNC.
-> > 
+> > I think we could make it alternatively a 64-bit integer control if that
+> > helps. The helper needs to be adjusted accordingly.
 > 
-> Seems this is not what this patch is doing: the symbol is not renamed,
-> and now we have two modules v4l2-fwnode.ko and v4l2-async.ko, unless
-> I'm confused.
-
-Oh, well, I changed what the patch does but forgot to update this. :-I
-
-Basically this now splits v4l2-async out of videodev.
-
+> That would solve my concern.
 > 
-> I personally was more fond of having just one v4l2-async.ko module,
-> but I'm not sure if you found any obstacles.
-> 
-> > This also moves the initialisation of the debufs entries for async subdevs
-> > to loading of the v4l2-async module. The directory is named as
-> > "v4l2-async".
+> > > to use V4L2_CID_PIXEL_RATE as it allowed me to at runtime calculate and 
+> > > report the link speed based on input formats. The Use-cases I need to 
+> > > address are where CSI-2 transmitter themself are a bridge in the video 
+> > > pipeline, for example
 > > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  drivers/media/i2c/Kconfig            |  8 ++++++++
-> >  drivers/media/v4l2-core/Kconfig      |  4 ++++
-> >  drivers/media/v4l2-core/Makefile     | 11 +++++++++--
-> >  drivers/media/v4l2-core/v4l2-async.c | 23 +++++++++++++++++++++--
-> >  drivers/media/v4l2-core/v4l2-dev.c   |  5 -----
-> >  5 files changed, 42 insertions(+), 9 deletions(-)
-> > 
-> [..]
-> > diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-> > index e4cd589b99a5..eb5ebb5461fd 100644
-> > --- a/drivers/media/v4l2-core/Makefile
-> > +++ b/drivers/media/v4l2-core/Makefile
-> > @@ -7,15 +7,22 @@ tuner-objs    :=      tuner-core.o
-> >  
-> >  videodev-objs  :=      v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
-> >                         v4l2-event.o v4l2-ctrls.o v4l2-subdev.o \
-> > -                       v4l2-async.o v4l2-common.o
-> > +                       v4l2-common.o
-> >  videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
-> >  videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
-> >  videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
-> >  videodev-$(CONFIG_SPI) += v4l2-spi.o
-> >  videodev-$(CONFIG_VIDEO_V4L2_I2C) += v4l2-i2c.o
-> >  
-> > -obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
-> >  obj-$(CONFIG_VIDEO_V4L2) += videodev.o
-> > +ifneq ($(findstring y,$(CONFIG_V4L2_ASYNC)$(CONFIG_V4L2_FWNODE)),)
+> > Is the actual bus frequency changed based on this?
 > 
-> Hm, to me this ifdefery is an indication that we are trying
-> to do something fishy.
+> Yes
+> 
+> > Depending on the system where this chip is being used, only certain
+> > frequencies may be allowed on that bus. It would be most straightforward to
+> > use only those, but on the other hand, if any frequency can be used and
+> > that is certain, then I have no objections to allowing that either. We
+> > simply would make the link-frequencies property optional.
+> 
+> The transmitter is a ADV748x and depending on the video input source 
+> (HDMI or CVBS) the output frequency changes. Failing to negotiate this 
+> of course results in the CSI-2 receiver never detecting LP-11.
+>
+> > > * Case 1 - HDMI video source
+> > > 
+> > > HDMI source -> ADV748x (HDMI-to-CSI-2) ->[CSI-2 bus]-> R-Car CSI-2 receiver
+> > > 
+> > > The R-Car CSI-2 receiver needs to know the CSI-2 link frequency and 
+> > > queries the ADV748x using V4L2_CID_PIXEL_RATE. The ADV748x reports the 
+> > > pixel rate based on the HDMI format detected on its sink pad.
+> > > 
+> > > This could be done using V4L2_CID_LINK_FREQ, but as it's a menu control 
+> > > it becomes rather tricky to populate it with all possible values, but I 
+> > > guess it could be doable?
 
-What's happening here is that v4l2-fwnode depends on v4l2-async, but for
-drivers to avoid selecting both, v4l2-async is built if only
-CONFIG_V4L2_FWNODE is set.
+There are, generally speaking, two different uses for this information
+on the receiver side. We need to configure the DPHY timings that depend
+on the link frequency, and we need to configure the functional clock of
+the receiver and downstream IP cores to ensure they have enough
+bandwidth to absorb all pixels. Those are two fundamentally different
+issues:
 
-So this perhaps isn't too pretty but it saves hassle in Kconfig files.
+- The DPHY timings depend on the link frequency, which is a well-defined
+  physical concept. We currently compute it from the pixel rate, which
+  is a more loosely defined concept (see below). Assuming the
+  V4L2_CID_LINK_FREQ control can be made to report the actual link
+  frequency (and given that this is the control's purpose, there's no
+  other option than making it work, otherwise the control would be
+  entirely pointless), possibly by turning it into an INT64 control,
+  then that's the right control to use for this purpose.
+
+- The functional clock of the video pipeline need to be able to absord
+  the incoming pixels. If the clock is configurable, it means that it
+  differs from the CSI-2 receiver clock (derived from the bus), which
+  normally implies a FIFO between the CSI-2 receiver and the downstream
+  blocks. The main constraint is that the FIFO shouldn't overflow, which
+  in practice means that the effective average pixel rate per line on
+  the input needs to be smaller or equal than on the output. This
+  however doesn't mean that the input clock needs to be higher than the
+  output clock, given that not only input and output bus widths can be
+  different, but horizontal blanking can also be used to perform timing
+  adjustements. For instance, if the input video stream has 1000 active
+  and 3000 blanking pixels per line, assuming identical bus widths on
+  the input and output side of the FIFO, we could have an output clock
+  frequency equal to half of the input clock frequency, as long as the
+  FIFO depth is at least 500 pixels. The output side would have a
+  horizontal blanking of 1000 pixels. The same applies on the
+  transmitter side, as there's often a FIFO between the pixel source
+  (the pixel array for a sensor for instance, with a sampling clock
+  rate) and the CSI-2 transmitter (running at the bus rate). The pixel
+  rate is thus a much more fuzzy concept, isn't well-defined in V4L2,
+  and can lead to all kind of interoperability issues. It should only be
+  used along with blanking information, in order to perform rate
+  adaptation calculations.
+
+> > > * Case 2 - Multiple video streams over a CSI-2 bus (GMSL)
+> > > 
+> > > Camera 1 -|
+> > > Camera 2 -|
+> > > Camera 3 -|---> MAX9286 (GMSL-to CSI-2) ->[CSI-2 bus]-> R-Car CSI-2 receiver
+> > > Camera 4 -|
+> > > 
+> > > The MAX9286 has 4 sink pads each connected to an independent camera and 
+> > > a single CSI-2 source pad. When streaming starts the MAX9286 computes 
+> > > the total CSI-2 link speed as V4L2_CID_PIXEL_RATE based on the format on 
+> > > each of it's 4 sink pads.
+> > > 
+> > > As in case 1 this could be reported by V4L2_CID_LINK_FREQ but I don't 
+> > > see it as feasible to populate the menu control with all possible 
+> > > frequencies before hand.
+
+As explained above, the CSI-2 frequency doesn't have to match the pixel
+rate of the sensor(s). I haven't checked exactly how the MAX9286 handles
+clock domains, but in general there source rate and the bus rate can be
+different. That's why the link frequency is often a menu control with a
+limited set of values (carefully selected by the system designer to
+accommodate EMC constraints), while the source rate can vary more
+freely. As long as the link frequency provides enough bandwidth, it
+doesn't have to be tightly coupled with the pixel rate. For source
+devices that have a single clock domain, and adjust the link frequency
+to follow the source rate, then turning the link frequency control into
+an INT64 would make sense.
+
+> > > Hopefully this is all easily solvable and I have only misunderstood how 
+> > > menu controls work. If not I think this needs to be considered as part 
+> > > of this series as otherwise it could leave the CSI-2 bridge drivers 
+> > > without a path forward.
+> > > 
+> > > > Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+> > > 
+> > > I tested this and it works as expected. Also as expected it prints lots 
+> > > of warnings about the usage of V4L2_CID_PIXEL_RATE :-) Once I understand 
+> > > how I can fix the CSI-2 transmitters used as bridges in the R-Car boards 
+> > > I will be happy to add my tag to this series as well as fix the bridge 
+> > > drivers.
+> > > 
+> > > > ---
+> > > >  drivers/media/platform/rcar-vin/rcar-csi2.c | 18 +++++++-----------
+> > > >  1 file changed, 7 insertions(+), 11 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > > > index e06cd512aba2..eec8f9dd9060 100644
+> > > > --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > > > +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > > > @@ -455,29 +455,25 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+> > > >  			   unsigned int lanes)
+> > > >  {
+> > > >  	struct v4l2_subdev *source;
+> > > > -	struct v4l2_ctrl *ctrl;
+> > > > -	u64 mbps;
+> > > > +	s64 mbps;
+> > > >  
+> > > >  	if (!priv->remote)
+> > > >  		return -ENODEV;
+> > > >  
+> > > >  	source = priv->remote;
+> > > >  
+> > > > -	/* Read the pixel rate control from remote. */
+> > > > -	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
+> > > > -	if (!ctrl) {
+> > > > -		dev_err(priv->dev, "no pixel rate control in subdev %s\n",
+> > > > +	/* Read the link frequency from the remote subdev. */
+> > > > +	mbps = v4l2_get_link_freq(source->ctrl_handler, bpp, 2 * lanes);
+> > > > +	if (mbps < 0) {
+> > > > +		dev_err(priv->dev, "failed to get link rate from subdev %s\n",
+> > > >  			source->name);
+> > > > -		return -EINVAL;
+> > > > +		return mbps;
+> > > >  	}
+> > > > -
+> > > >  	/*
+> > > >  	 * Calculate the phypll in mbps.
+> > > > -	 * link_freq = (pixel_rate * bits_per_sample) / (2 * nr_of_lanes)
+> > > >  	 * bps = link_freq * 2
+> > > >  	 */
+> > > > -	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * bpp;
+> > > > -	do_div(mbps, lanes * 1000000);
+> > > > +	do_div(mbps, 1000000 / 2);
+> > > >  
+> > > >  	return mbps;
+> > > >  }
 
 -- 
-Kind regards,
+Regards,
 
-Sakari Ailus
+Laurent Pinchart
