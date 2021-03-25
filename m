@@ -2,213 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1382BC433E1
-	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 12:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC281C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 12:27:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D268B61A1E
-	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 12:26:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F71D61A1B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 12:27:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbhCYM0Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Mar 2021 08:26:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229995AbhCYM0A (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Mar 2021 08:26:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C8A561A12;
-        Thu, 25 Mar 2021 12:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616675160;
-        bh=Mih9rLFk8Lu7pk6YCxhs8apnkDBsp2cbUA1ACAodMIQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DDKtCMprV/OhoLcd3P+g/Aw0mUf9X/xVj2DPCuXxz+KCn/uqmqYznjAZSjhmVc7r1
-         bXt3apPl8N3hTjkW6QlIAvIzAtcvNNuIDS+tjHt5jXXI3CqzWwLrBnZk68IkyxlzG9
-         bqavRHdOgvEgp9Zp/JsRanIRLds8iZMOB8luDCD/hBkx89VEKLHthFXBU317+XI+Fe
-         3t8UvOsTs+RGzTBzX+pMnL952KCWoQ+7cNsZkDPovSP6yv8o1IKo0gwdmcOWwg4qzw
-         T8dih66pOUhDamgN8ImikwqafSav3OB3ZW7lvhhc9oBbnyhje7DqUYgl4vDiyL0TxV
-         2t4Af/Wu09drA==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lPP3l-001Cdg-U6; Thu, 25 Mar 2021 13:25:57 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        id S230455AbhCYM0z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Mar 2021 08:26:55 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37834 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229995AbhCYM0g (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 25 Mar 2021 08:26:36 -0400
+X-UUID: dbf615899e7347d78df6d0869e75ad84-20210325
+X-UUID: dbf615899e7347d78df6d0869e75ad84-20210325
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 820482803; Thu, 25 Mar 2021 20:26:33 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 25 Mar 2021 20:26:32 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 25 Mar 2021 20:26:31 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3] docs: experimental: build PDF with rst2pdf
-Date:   Thu, 25 Mar 2021 13:25:56 +0100
-Message-Id: <e44c1b82b38a8568af1d38ee09edb46517f03ec2.1616675031.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>, <yong.wu@mediatek.com>
+CC:     Irui Wang <irui.wang@mediatek.com>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v4,2/3] arm64: dts: mt8173: Separating mtk-vcodec-enc device node
+Date:   Thu, 25 Mar 2021 20:26:24 +0800
+Message-ID: <20210325122625.15100-2-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210325122625.15100-1-irui.wang@mediatek.com>
+References: <20210325122625.15100-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add an experimental PDF builder using rst2pdf.
+There are two separate hardware encoder blocks inside MT8173.
+Split the current mtk-vcodec-enc node to match the hardware architecture.
 
-This extension is only enabled when "pdf" builder is selected.
-So, it won't interfere with normal documentation builds. I opted
-to not add a try..except block, as the message is already
-good enough if one tries to do a "make rst2pdf" but the extension
-is missed:
-
-	Extension error:
-	Could not import extension rst2pdf.pdfbuilder (exception: No module named 'rst2pdf')
-
-This won't affect "make pdfdocs", as it uses the "latex" builder
-instead.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 ---
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi | 60 ++++++++++++------------
+ 1 file changed, 31 insertions(+), 29 deletions(-)
 
-v3:
-- only enable the rst2pdf extension when required, e. g. when
-
-    $ make rst2pdf
-
-  is used.
-
- Documentation/Makefile                     |  5 +++++
- Documentation/conf.py                      | 25 ++++++++++++++++------
- Documentation/sphinx/load_config.py        | 12 +++++++++++
- Documentation/userspace-api/media/Makefile |  1 +
- Makefile                                   |  4 ++--
- 5 files changed, 39 insertions(+), 8 deletions(-)
-
-diff --git a/Documentation/Makefile b/Documentation/Makefile
-index 9c42dde97671..42b76f25681f 100644
---- a/Documentation/Makefile
-+++ b/Documentation/Makefile
-@@ -115,6 +115,10 @@ pdfdocs: latexdocs
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index 7fa870e4386a..f5950e9fc51d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -1458,14 +1458,11 @@
+ 			clock-names = "apb", "smi";
+ 		};
  
- endif # HAVE_PDFLATEX
+-		vcodec_enc: vcodec@18002000 {
++		vcodec_enc_avc: vcodec@18002000 {
+ 			compatible = "mediatek,mt8173-vcodec-enc";
+-			reg = <0 0x18002000 0 0x1000>,	/* VENC_SYS */
+-			      <0 0x19002000 0 0x1000>;	/* VENC_LT_SYS */
+-			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>,
+-				     <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
+-			mediatek,larb = <&larb3>,
+-					<&larb5>;
++			reg = <0 0x18002000 0 0x1000>;	/* VENC_SYS */
++			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>;
++			mediatek,larb = <&larb3>;
+ 			iommus = <&iommu M4U_PORT_VENC_RCPU>,
+ 				 <&iommu M4U_PORT_VENC_REC>,
+ 				 <&iommu M4U_PORT_VENC_BSDMA>,
+@@ -1476,29 +1473,12 @@
+ 				 <&iommu M4U_PORT_VENC_REF_LUMA>,
+ 				 <&iommu M4U_PORT_VENC_REF_CHROMA>,
+ 				 <&iommu M4U_PORT_VENC_NBM_RDMA>,
+-				 <&iommu M4U_PORT_VENC_NBM_WDMA>,
+-				 <&iommu M4U_PORT_VENC_RCPU_SET2>,
+-				 <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
+-				 <&iommu M4U_PORT_VENC_BSDMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
+-				 <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
++				 <&iommu M4U_PORT_VENC_NBM_WDMA>;
+ 			mediatek,vpu = <&vpu>;
+-			clocks = <&topckgen CLK_TOP_VENCPLL_D2>,
+-				 <&topckgen CLK_TOP_VENC_SEL>,
+-				 <&topckgen CLK_TOP_UNIVPLL1_D2>,
+-				 <&topckgen CLK_TOP_VENC_LT_SEL>;
+-			clock-names = "venc_sel_src",
+-				      "venc_sel",
+-				      "venc_lt_sel_src",
+-				      "venc_lt_sel";
+-			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>,
+-					  <&topckgen CLK_TOP_VENC_LT_SEL>;
+-			assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>,
+-						 <&topckgen CLK_TOP_VCODECPLL_370P5>;
++			clocks = <&topckgen CLK_TOP_VENC_SEL>;
++			clock-names = "venc_sel";
++			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
++			assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
+ 		};
  
-+rst2pdf:
-+	@$(srctree)/scripts/sphinx-pre-install --version-check
-+	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,pdf,$(var),pdf,$(var)))
+ 		jpegdec: jpegdec@18004000 {
+@@ -1530,5 +1510,27 @@
+ 				 <&vencltsys CLK_VENCLT_CKE0>;
+ 			clock-names = "apb", "smi";
+ 		};
 +
- epubdocs:
- 	@$(srctree)/scripts/sphinx-pre-install --version-check
- 	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,epub,$(var),epub,$(var)))
-@@ -140,6 +144,7 @@ dochelp:
- 	@echo  '  htmldocs        - HTML'
- 	@echo  '  latexdocs       - LaTeX'
- 	@echo  '  pdfdocs         - PDF'
-+	@echo  '  rst2pdf         - PDF, using experimental rst2pdf support'
- 	@echo  '  epubdocs        - EPUB'
- 	@echo  '  xmldocs         - XML'
- 	@echo  '  linkcheckdocs   - check for broken external links'
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 879e86dbea66..65e6afa2cf58 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -118,6 +118,16 @@ autosectionlabel_maxdepth = 2
- 
- extensions.append("sphinx.ext.imgmath")
- 
-+# Enable experimental rst2pdf, if available
-+
-+for i in range(1, len(sys.argv)):
-+    if sys.argv[i] == "pdf":
-+        try:
-+            import rst2pdf
-+            extensions.append('rst2pdf.pdfbuilder')
-+        except ModuleNotFoundError:
-+            raise SystemMessagePropagation("can't import rst2pdf extension")
-+
- # Add any paths that contain templates here, relative to this directory.
- templates_path = ['_templates']
- 
-@@ -553,12 +563,15 @@ epub_exclude_files = ['search.html']
- #
- # See the Sphinx chapter of https://ralsina.me/static/manual.pdf
- #
--# FIXME: Do not add the index file here; the result will be too big. Adding
--# multiple PDF files here actually tries to get the cross-referencing right
--# *between* PDF files.
--pdf_documents = [
--    ('kernel-documentation', u'Kernel', u'Kernel', u'J. Random Bozo'),
--]
-+
-+# Add all LaTeX files to PDF documents as well
-+pdf_documents = []
-+for l in latex_documents:
-+    doc = l[0]
-+    fn = l[1].replace(".tex", "")
-+    name = l[2]
-+    authors = l[3]
-+    pdf_documents.append((doc, fn, name, authors))
- 
- # kernel-doc extension configuration for running Sphinx directly (e.g. by Read
- # the Docs). In a normal build, these are supplied from the Makefile via command
-diff --git a/Documentation/sphinx/load_config.py b/Documentation/sphinx/load_config.py
-index eeb394b39e2c..8266afd438aa 100644
---- a/Documentation/sphinx/load_config.py
-+++ b/Documentation/sphinx/load_config.py
-@@ -43,6 +43,18 @@ def loadConfig(namespace):
- 
-             namespace['latex_documents'] = new_latex_docs
- 
-+            new_pdf_docs = []
-+            pdf_documents = namespace['pdf_documents']
-+
-+            for l in pdf_documents:
-+                if l[0].find(dir + '/') == 0:
-+                    has = True
-+                    fn = l[0][len(dir) + 1:]
-+                    new_pdf_docs.append((fn, l[1], l[2], l[3]))
-+                    break
-+
-+            namespace['pdf_documents'] = new_pdf_docs
-+
-         # If there is an extra conf.py file, load it
-         if os.path.isfile(config_file):
-             sys.stdout.write("load additional sphinx-config: %s\n" % config_file)
-diff --git a/Documentation/userspace-api/media/Makefile b/Documentation/userspace-api/media/Makefile
-index 81a4a1a53bce..8c6b3ac4ecb0 100644
---- a/Documentation/userspace-api/media/Makefile
-+++ b/Documentation/userspace-api/media/Makefile
-@@ -59,6 +59,7 @@ all: $(IMGDOT) $(BUILDDIR) ${TARGETS}
- html: all
- epub: all
- xml: all
-+pdf: all
- latex: $(IMGPDF) all
- linkcheck:
- 
-diff --git a/Makefile b/Makefile
-index 193ebb83c34a..741c580b3626 100644
---- a/Makefile
-+++ b/Makefile
-@@ -270,7 +270,7 @@ no-dot-config-targets := $(clean-targets) \
- 			 cscope gtags TAGS tags help% %docs check% coccicheck \
- 			 $(version_h) headers headers_% archheaders archscripts \
- 			 %asm-generic kernelversion %src-pkg dt_binding_check \
--			 outputmakefile rustfmt rustfmtcheck
-+			 outputmakefile rustfmt rustfmtcheck rst2pdf
- # Installation targets should not require compiler. Unfortunately, vdso_install
- # is an exception where build artifacts may be updated. This must be fixed.
- no-compiler-targets := $(no-dot-config-targets) install dtbs_install \
-@@ -1816,7 +1816,7 @@ $(help-board-dirs): help-%:
- 
- # Documentation targets
- # ---------------------------------------------------------------------------
--DOC_TARGETS := xmldocs latexdocs pdfdocs htmldocs epubdocs cleandocs \
-+DOC_TARGETS := xmldocs latexdocs pdfdocs rst2pdf htmldocs epubdocs cleandocs \
- 	       linkcheckdocs dochelp refcheckdocs
- PHONY += $(DOC_TARGETS)
- $(DOC_TARGETS):
++		vcodec_enc_vp8: vcodec@19002000 {
++			compatible = "mediatek,mt8173-vcodec-enc-vp8";
++			reg =  <0 0x19002000 0 0x1000>; /* VENC_LT_SYS */
++			interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
++			iommus = <&iommu M4U_PORT_VENC_RCPU_SET2>,
++				 <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
++				 <&iommu M4U_PORT_VENC_BSDMA_SET2>,
++				 <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
++				 <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
++				 <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
++				 <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
++				 <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
++				 <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
++			mediatek,larb = <&larb5>;
++			mediatek,vpu = <&vpu>;
++			clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
++			clock-names = "venc_lt_sel";
++			assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
++			assigned-clock-parents =
++				 <&topckgen CLK_TOP_VCODECPLL_370P5>;
++		};
+ 	};
+ };
 -- 
-2.30.2
-
+2.18.0
 
