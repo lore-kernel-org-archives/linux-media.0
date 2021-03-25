@@ -2,214 +2,174 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95375C433C1
-	for <linux-media@archiver.kernel.org>; Wed, 24 Mar 2021 22:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85B76C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 00:19:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 718E661A0A
-	for <linux-media@archiver.kernel.org>; Wed, 24 Mar 2021 22:46:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39DB561A19
+	for <linux-media@archiver.kernel.org>; Thu, 25 Mar 2021 00:19:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbhCXWqX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Mar 2021 18:46:23 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38830 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238899AbhCXWqG (ORCPT
+        id S239193AbhCYASw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Mar 2021 20:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239163AbhCYASf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Mar 2021 18:46:06 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7BF1F580;
-        Wed, 24 Mar 2021 23:46:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1616625964;
-        bh=42HY5uwZ1MbcmUVScEyI1EYtiX5bQBYXMVzT77DP95U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uqfMiK2Vr92pgvCfj8Wsr0mvn5xnHYACf5C6V07SW/bVDjTQpGE2Ec53wGwRsLptr
-         jAfFRR42m/l7MmXXHKptfJHacMpLTXtTO8wvzuNdKMrDwgFnZ1P/jBrQX0vWHbB3id
-         5lnaXX/qDxaRM5vYQuNfzuZIt3Ccbr9UrSg44NsU=
-Date:   Thu, 25 Mar 2021 00:45:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: media: video-interfaces: Drop the example
-Message-ID: <YFvBAazu5yrV6r5b@pendragon.ideasonboard.com>
-References: <20210324202253.3576798-1-robh@kernel.org>
+        Wed, 24 Mar 2021 20:18:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029CC06174A;
+        Wed, 24 Mar 2021 17:18:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 93A621F45EF9
+From:   Helen Koike <helen.koike@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, jc@kynesim.co.uk,
+        laurent.pinchart@ideasonboard.com, dave.stevenson@raspberrypi.org,
+        tfiga@chromium.org, Helen Koike <helen.koike@collabora.com>
+Subject: [PATCH 2/2] media: videobuf2: cleanup size argument from attach_dmabuf()
+Date:   Wed, 24 Mar 2021 21:17:12 -0300
+Message-Id: <20210325001712.197837-2-helen.koike@collabora.com>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210325001712.197837-1-helen.koike@collabora.com>
+References: <20210325001712.197837-1-helen.koike@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210324202253.3576798-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+Since we always use the size of the underlying buffer for dmabuf, remove
+the size parameter from the attach_dmabuf() callback.
 
-Thank you for the patch.
+Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+---
+ drivers/media/common/videobuf2/videobuf2-core.c       | 2 +-
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c | 7 ++-----
+ drivers/media/common/videobuf2/videobuf2-dma-sg.c     | 7 ++-----
+ drivers/media/common/videobuf2/videobuf2-vmalloc.c    | 7 ++-----
+ include/media/videobuf2-core.h                        | 1 -
+ 5 files changed, 7 insertions(+), 17 deletions(-)
 
-On Wed, Mar 24, 2021 at 02:22:53PM -0600, Rob Herring wrote:
-> The example in video-interfaces.yaml uses a bunch of undocumented
-> bindings which will cause warnings when undocumented compatible checks
-> are enabled. The example could be fixed to use documented bindings, but
-> doing so would just duplicate other examples. So let's just remove the
-> example.
-> 
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> v2: Drop instead of fixing the example
-> 
->  .../bindings/media/video-interfaces.yaml      | 127 ------------------
->  1 file changed, 127 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
-> index 0a7a73fd59f2..4391dce2caee 100644
-> --- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
-> +++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
-> @@ -215,130 +215,3 @@ properties:
->        CCP2, for instance.
->  
->  additionalProperties: true
-> -
-> -examples:
-> -  # The example snippet below describes two data pipelines.  ov772x and imx074
-> -  # are camera sensors with a parallel and serial (MIPI CSI-2) video bus
-> -  # respectively. Both sensors are on the I2C control bus corresponding to the
-> -  # i2c0 controller node.  ov772x sensor is linked directly to the ceu0 video
-> -  # host interface. imx074 is linked to ceu0 through the MIPI CSI-2 receiver
-> -  # (csi2). ceu0 has a (single) DMA engine writing captured data to memory.
-> -  # ceu0 node has a single 'port' node which may indicate that at any time
-> -  # only one of the following data pipelines can be active:
-> -  # ov772x -> ceu0 or imx074 -> csi2 -> ceu0.
-> -  - |
-> -    ceu@fe910000 {
-> -        compatible = "renesas,sh-mobile-ceu";
-> -        reg = <0xfe910000 0xa0>;
-> -        interrupts = <0x880>;
-> -
-> -        mclk: master_clock {
-> -            compatible = "renesas,ceu-clock";
-> -            #clock-cells = <1>;
-> -            clock-frequency = <50000000>;  /* Max clock frequency */
-> -            clock-output-names = "mclk";
-> -        };
-> -
-> -        port {
-> -            #address-cells = <1>;
-> -            #size-cells = <0>;
-> -
-> -            /* Parallel bus endpoint */
-> -            ceu0_1: endpoint@1 {
-> -                reg = <1>;    /* Local endpoint # */
-> -                remote-endpoint = <&ov772x_1_1>;  /* Remote phandle */
-> -                bus-width = <8>;  /* Used data lines */
-> -                data-shift = <2>;  /* Lines 9:2 are used */
-> -
-> -                /* If hsync-active/vsync-active are missing,
-> -                   embedded BT.656 sync is used */
-> -                hsync-active = <0>;  /* Active low */
-> -                vsync-active = <0>;  /* Active low */
-> -                data-active = <1>;  /* Active high */
-> -                pclk-sample = <1>;  /* Rising */
-> -            };
-> -
-> -            /* MIPI CSI-2 bus endpoint */
-> -            ceu0_0: endpoint@0 {
-> -                reg = <0>;
-> -                remote-endpoint = <&csi2_2>;
-> -            };
-> -        };
-> -    };
-> -
-> -    i2c {
-> -        #address-cells = <1>;
-> -        #size-cells = <0>;
-> -
-> -        camera@21 {
-> -            compatible = "ovti,ov772x";
-> -            reg = <0x21>;
-> -            vddio-supply = <&regulator1>;
-> -            vddcore-supply = <&regulator2>;
-> -
-> -            clock-frequency = <20000000>;
-> -            clocks = <&mclk 0>;
-> -            clock-names = "xclk";
-> -
-> -            port {
-> -                /* With 1 endpoint per port no need for addresses. */
-> -                ov772x_1_1: endpoint {
-> -                    bus-width = <8>;
-> -                    remote-endpoint = <&ceu0_1>;
-> -                    hsync-active = <1>;
-> -                    vsync-active = <0>; /* Who came up with an
-> -                               inverter here ?... */
-> -                    data-active = <1>;
-> -                    pclk-sample = <1>;
-> -                };
-> -            };
-> -        };
-> -
-> -        camera@1a {
-> -            compatible = "sony,imx074";
-> -            reg = <0x1a>;
-> -            vddio-supply = <&regulator1>;
-> -            vddcore-supply = <&regulator2>;
-> -
-> -            clock-frequency = <30000000>;  /* Shared clock with ov772x_1 */
-> -            clocks = <&mclk 0>;
-> -            clock-names = "sysclk";    /* Assuming this is the
-> -                       name in the datasheet */
-> -            port {
-> -                imx074_1: endpoint {
-> -                    clock-lanes = <0>;
-> -                    data-lanes = <1 2>;
-> -                    remote-endpoint = <&csi2_1>;
-> -                };
-> -            };
-> -        };
-> -    };
-> -
-> -    csi2: csi2@ffc90000 {
-> -        compatible = "renesas,sh-mobile-csi2";
-> -        reg = <0xffc90000 0x1000>;
-> -        interrupts = <0x17a0>;
-> -        #address-cells = <1>;
-> -        #size-cells = <0>;
-> -
-> -        port@1 {
-> -            compatible = "renesas,csi2c";  /* One of CSI2I and CSI2C. */
-> -            reg = <1>;      /* CSI-2 PHY #1 of 2: PHY_S,
-> -                       PHY_M has port address 0,
-> -                       is unused. */
-> -            csi2_1: endpoint {
-> -                clock-lanes = <0>;
-> -                data-lanes = <2 1>;
-> -                remote-endpoint = <&imx074_1>;
-> -            };
-> -        };
-> -        port@2 {
-> -            reg = <2>;      /* port 2: link to the CEU */
-> -
-> -            csi2_2: endpoint {
-> -                remote-endpoint = <&ceu0_0>;
-> -            };
-> -        };
-> -    };
-> -
-> -...
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 2cbde14af051..86af4f3c72eb 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -1266,7 +1266,7 @@ static int __prepare_dmabuf(struct vb2_buffer *vb)
+ 		/* Acquire each plane's memory */
+ 		mem_priv = call_ptr_memop(vb, attach_dmabuf,
+ 				q->alloc_devs[plane] ? : q->dev,
+-				dbuf, planes[plane].length, q->dma_dir);
++				dbuf, q->dma_dir);
+ 		if (IS_ERR(mem_priv)) {
+ 			dprintk(q, 1, "failed to attach dmabuf\n");
+ 			ret = PTR_ERR(mem_priv);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index a7f61ba85440..a26aa52f954b 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -661,14 +661,11 @@ static void vb2_dc_detach_dmabuf(void *mem_priv)
+ }
+ 
+ static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+-	unsigned long size, enum dma_data_direction dma_dir)
++				  enum dma_data_direction dma_dir)
+ {
+ 	struct vb2_dc_buf *buf;
+ 	struct dma_buf_attachment *dba;
+ 
+-	if (dbuf->size < size)
+-		return ERR_PTR(-EFAULT);
+-
+ 	if (WARN_ON(!dev))
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -686,7 +683,7 @@ static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+ 	}
+ 
+ 	buf->dma_dir = dma_dir;
+-	buf->size = size;
++	buf->size = dbuf->size;
+ 	buf->db_attach = dba;
+ 
+ 	return buf;
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index c5b06a509566..8c006f79bed4 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -606,7 +606,7 @@ static void vb2_dma_sg_detach_dmabuf(void *mem_priv)
+ }
+ 
+ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+-	unsigned long size, enum dma_data_direction dma_dir)
++				      enum dma_data_direction dma_dir)
+ {
+ 	struct vb2_dma_sg_buf *buf;
+ 	struct dma_buf_attachment *dba;
+@@ -614,9 +614,6 @@ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+ 	if (WARN_ON(!dev))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	if (dbuf->size < size)
+-		return ERR_PTR(-EFAULT);
+-
+ 	buf = kzalloc(sizeof(*buf), GFP_KERNEL);
+ 	if (!buf)
+ 		return ERR_PTR(-ENOMEM);
+@@ -631,7 +628,7 @@ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+ 	}
+ 
+ 	buf->dma_dir = dma_dir;
+-	buf->size = size;
++	buf->size = dmabuf->size;
+ 	buf->db_attach = dba;
+ 
+ 	return buf;
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index 83f95258ec8c..c2d41b375c10 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -404,20 +404,17 @@ static void vb2_vmalloc_detach_dmabuf(void *mem_priv)
+ }
+ 
+ static void *vb2_vmalloc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
+-	unsigned long size, enum dma_data_direction dma_dir)
++				       enum dma_data_direction dma_dir)
+ {
+ 	struct vb2_vmalloc_buf *buf;
+ 
+-	if (dbuf->size < size)
+-		return ERR_PTR(-EFAULT);
+-
+ 	buf = kzalloc(sizeof(*buf), GFP_KERNEL);
+ 	if (!buf)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	buf->dbuf = dbuf;
+ 	buf->dma_dir = dma_dir;
+-	buf->size = size;
++	buf->size = dbuf->size;
+ 
+ 	return buf;
+ }
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 12955cb460d2..db07001cada8 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -134,7 +134,6 @@ struct vb2_mem_ops {
+ 
+ 	void		*(*attach_dmabuf)(struct device *dev,
+ 					  struct dma_buf *dbuf,
+-					  unsigned long size,
+ 					  enum dma_data_direction dma_dir);
+ 	void		(*detach_dmabuf)(void *buf_priv);
+ 	int		(*map_dmabuf)(void *buf_priv);
 -- 
-Regards,
+2.30.1
 
-Laurent Pinchart
