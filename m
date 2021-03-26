@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF0F3C433F1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 401EDC433E9
 	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 10:00:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4F9F61A42
+	by mail.kernel.org (Postfix) with ESMTP id 1961561A50
 	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 10:00:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbhCZJ7v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Mar 2021 05:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S230321AbhCZJ7n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Mar 2021 05:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbhCZJ7B (ORCPT
+        with ESMTP id S230094AbhCZJ65 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Mar 2021 05:59:01 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DBC0613B1
-        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:59:00 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z1so5617731edb.8
-        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:59:00 -0700 (PDT)
+        Fri, 26 Mar 2021 05:58:57 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EC3C0613B1
+        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:57 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id j3so5580147edp.11
+        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bONtZGsS4XqAKxeuy/H43uHE8WmZWjf3WVxgmtV5zE8=;
-        b=W+Hm9SkjmsW0r45zVcLVwAM80sqfX6SfjfmMYq8EWW5OQf5aH5R+wL3veXe34hcJ29
-         QFIVN7Vp1P3ODMWodMitoNeSXTnKaVMGiICZqsy7FN900zkOsyRTxnQDqyZIoi0tZvb3
-         0T1V3yVIpWDhm2OAz12iHhJqJOuJYouV7Uyfw=
+        bh=U298rYjAJn0L1+zqib6+wctgA7KMqrT5dPHppU9NIJA=;
+        b=ZwtnL7gYMd3BCd6nvE80yX4oFyZmkNnPycNW8ZMb2OHLJQhiGn69io0BHtvSEDofge
+         X1bU18SrBQt+hc0jQUr4aVab4WeATFl/XmaoXs6EX87p4vaWj0wxTyn3YHGRcLsPDpLY
+         NEjBLZBNp5EOHLDEDjLjYCJqfbV9dJDPL21DY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bONtZGsS4XqAKxeuy/H43uHE8WmZWjf3WVxgmtV5zE8=;
-        b=NNMFNuStLAfXCAKmaVL0ESQLueqP0H8YmOmWv75IsNGsyb6PxYgGRsDUclE1V8YIvb
-         CbMCJJwyFXHMVLOuxWQ1GNmsuNEwqSOYn4gDwtabYIbfzFv6mUKKloZg1jCP0SGHZZ6Z
-         hUFDPGLCE8P+v8holXdsMxVEUWTPGK+Xw7GG8lKeGTGOTlyP+Bc39Q8ttMt3UiUEtGn/
-         aYcOTmLsCFFgXZVwqbDr4/VY4g5r+IEVGUvUN1TXGU0LnuTQn71LYF/dw5uSGNR6pwEJ
-         rH29AB3dKdiKU2a6dGaY+dldELHDhPuIhT2H7MuGE8QD1svToXAJ/fjNx/Dl1stf+agI
-         Zouw==
-X-Gm-Message-State: AOAM533a2K5zYZN4v5K29bXp/lFcNpqzv6DALI2HdES2fvpvGBzl1pMp
-        AtKWGYfUEwl2JK2waVDlBAGo1w==
-X-Google-Smtp-Source: ABdhPJwIbtASlZisUUvzHQbZuyZBqTk0Wn+fv19PofYh6AFM9f2DR2r4sbUNnDVTaw9CT+NleZJN8Q==
-X-Received: by 2002:aa7:c74a:: with SMTP id c10mr13750092eds.332.1616752739397;
-        Fri, 26 Mar 2021 02:58:59 -0700 (PDT)
+        bh=U298rYjAJn0L1+zqib6+wctgA7KMqrT5dPHppU9NIJA=;
+        b=kw6S+g4bLhoIb7yzXcv9/OZu8jx0GisAhoGeOrJQ+jlfpSvlP/9atEo5qR+BKzYYW0
+         i/Ug2gaDwLptTO06c+5OwcGtTk7M+f00jjf/xvHAtKXj/oKyWY7d6my9JpNfWyOxk9MN
+         NiIMrDKQ7bAl/OWcYZUTdwpFHlOxFSSGFdGqENQ5wptYw1nWcEJQ6mkEqQRwZmunILZt
+         tmf3SI6V4AsKu5/HO1LN7PQzrMlILdnVo/sTtLWzG8Re3/6Uc0W51E/A/qKuhnO8GsIt
+         ZImfKD32Dhl1MytDEUphKnz/HO9cFlJHq8fOqgWi5jY7Tw4Gt4FQlyBfAtNCaGyPIpJg
+         CbRg==
+X-Gm-Message-State: AOAM530dp3Q8wJEANkybMk20dFcChbYjnQamWSf9Oy3uYhnOnZM4hOif
+        xkj9OAEK13RjT7diWOSlKgCoEP+gOomiP4yw
+X-Google-Smtp-Source: ABdhPJzStos7JXr9MhMZG/mBlM5P25jaxM6iCVYVZbmBpuYaYUdFWD8Xfgc03hLuZShCs758SpOk1w==
+X-Received: by 2002:a05:6402:138f:: with SMTP id b15mr14026182edv.121.1616752736122;
+        Fri, 26 Mar 2021 02:58:56 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id h13sm4036658edz.71.2021.03.26.02.58.58
+        by smtp.gmail.com with ESMTPSA id h13sm4036658edz.71.2021.03.26.02.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 02:58:59 -0700 (PDT)
+        Fri, 26 Mar 2021 02:58:55 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -60,10 +60,10 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>
-Subject: [PATCH v9 21/22] uvcvideo: don't spam the log in uvc_ctrl_restore_values()
-Date:   Fri, 26 Mar 2021 10:58:39 +0100
-Message-Id: <20210326095840.364424-22-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v9 17/22] media: docs: Document the behaviour of uvcdriver
+Date:   Fri, 26 Mar 2021 10:58:35 +0100
+Message-Id: <20210326095840.364424-18-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
 In-Reply-To: <20210326095840.364424-1-ribalda@chromium.org>
 References: <20210326095840.364424-1-ribalda@chromium.org>
@@ -73,35 +73,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+The uvc driver relies on the camera firmware to keep the control states
+and therefore is not capable of changing an inactive control.
 
-Don't report the restored controls with dev_info, use dev_dbg instead.
-This prevents a lot of noise in the kernel log.
+Allow returning -EACESS in those cases.
 
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/userspace-api/media/v4l/vidioc-g-ctrl.rst      | 5 +++++
+ Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 6e7b904bc33d..df6c33932557 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -2182,10 +2182,10 @@ int uvc_ctrl_restore_values(struct uvc_device *dev)
- 			if (!ctrl->initialized || !ctrl->modified ||
- 			    (ctrl->info.flags & UVC_CTRL_FLAG_RESTORE) == 0)
- 				continue;
--			dev_info(&dev->udev->dev,
--				 "restoring control %pUl/%u/%u\n",
--				 ctrl->info.entity, ctrl->info.index,
--				 ctrl->info.selector);
-+			dev_dbg(&dev->udev->dev,
-+				"restoring control %pUl/%u/%u\n",
-+				ctrl->info.entity, ctrl->info.index,
-+				ctrl->info.selector);
- 			ctrl->dirty = 1;
- 		}
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ctrl.rst
+index 4f1bed53fad5..8c0a203385c2 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-ctrl.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-ctrl.rst
+@@ -95,3 +95,8 @@ EBUSY
  
+ EACCES
+     Attempt to set a read-only control or to get a write-only control.
++
++    Or if there is an attempt to set an inactive control and the driver is
++    not capable of keeping the new value until the control is active again.
++    This is the case for drivers that do not use the standard control
++    framework and rely purely on the hardware to keep the controls' state.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+index b9c62affbb5a..bb7de7a25241 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+@@ -438,3 +438,8 @@ EACCES
+ 
+     Or the ``which`` field was set to ``V4L2_CTRL_WHICH_REQUEST_VAL`` but the
+     device does not support requests.
++
++    Or if there is an attempt to set an inactive control and the driver is
++    not capable of keeping the new value until the control is active again.
++    This is the case for drivers that do not use the standard control
++    framework and rely purely on the hardware to keep the controls' state.
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
