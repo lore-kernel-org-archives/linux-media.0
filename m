@@ -2,214 +2,245 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 589DEC433DB
-	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 17:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 866DAC433C1
+	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 17:54:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F37F061A24
-	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 17:21:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 442D5619F8
+	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 17:54:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhCZRVJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Mar 2021 13:21:09 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:55500 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbhCZRUw (ORCPT
+        id S230274AbhCZRyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Mar 2021 13:54:22 -0400
+Received: from gateway22.websitewelcome.com ([192.185.47.48]:46608 "EHLO
+        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230236AbhCZRyJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Mar 2021 13:20:52 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210326172050euoutp014f3cdf07dc9bd41093c310cc07e70fb2~v9CmV10iI0878508785euoutp01v
-        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 17:20:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210326172050euoutp014f3cdf07dc9bd41093c310cc07e70fb2~v9CmV10iI0878508785euoutp01v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1616779250;
-        bh=5ycsHJieO61oyBDXB4dIHaMLQHU6SJHcz90jNt2n+vQ=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=KTbogjWF9BOKll5J78U0CG1Jt9Hze+wm96Jcfk9awuMQjKymqWLOkJBJWeCO5Emcu
-         Vgn7GF3k7HjXYYIzMFNzn3eYdLRZxK0oEA3ZdfZqQOusBSigSPe1Tf1aY6edlZ/+75
-         YN/805S9VW2yGYhAlHL+DHarepsh7h5NIc99KPNw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20210326172049eucas1p25e1407c7c9701d4d380bba9c71f66a42~v9ClmcWqD1892618926eucas1p2o;
-        Fri, 26 Mar 2021 17:20:49 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id C7.C7.09439.1F71E506; Fri, 26
-        Mar 2021 17:20:49 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210326172049eucas1p2209de36f9519a2adb488a3b9f18b7f89~v9ClLXM9q1893618936eucas1p2l;
-        Fri, 26 Mar 2021 17:20:49 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210326172049eusmtrp240d4b45b7f58f77da61ae30092d53ccf~v9ClKsnHF2876228762eusmtrp2G;
-        Fri, 26 Mar 2021 17:20:49 +0000 (GMT)
-X-AuditID: cbfec7f5-c03ff700000024df-cf-605e17f127a1
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 99.C9.08696.1F71E506; Fri, 26
-        Mar 2021 17:20:49 +0000 (GMT)
-Received: from AMDC3061.digital.local (unknown [106.120.51.75]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210326172049eusmtip249d286a2ddd1c14b07f0130b9c92cbed~v9Ck5i8mi0373103731eusmtip2S;
-        Fri, 26 Mar 2021 17:20:49 +0000 (GMT)
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH] media: s5p-mfc: Fix kernel-doc entries in s5p_mfc_common.h
-Date:   Fri, 26 Mar 2021 18:20:40 +0100
-Message-Id: <20210326172040.7674-1-s.nawrocki@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMIsWRmVeSWpSXmKPExsWy7djP87ofxeMSDD6f1bM4NfkZk0XPhq2s
-        FofftLM6MHv0bVnF6PF5k5zHqa+f2QOYo7hsUlJzMstSi/TtErgyZv44xFxwVL/iwa/TzA2M
-        p9S7GDk4JARMJLqmCHYxcnEICaxglOi6fJQZwvnCKPFow30o5zOjxMxjmxm7GDnBOqbtbmIC
-        sYUEljNKfL5aD9fRPuECC0iCTcBQovdoH1iDiIC8xJPeG2wgNrOAs8TjWX/AmoUFvCXmNS0C
-        q2ERUJXY+ncaO4jNK2AlsfrFDlaIZfISqzccALtCQuAau8S87x/YIRIuEitPPIQqEpZ4dXwL
-        VFxG4v/O+UwQDc2MEj27b7NDOBMYJe4fXwD1g7XEnXO/2EAhwCygKbF+lz5E2FHi1YLHrJCA
-        4ZO48VYQ4mg+iUnbpjNDhHklOtqEIKpVJH6vms4EYUtJdD/5zwJhe0gs/j+DDRJAsRL/rh9n
-        ncAoNwth1wJGxlWM4qmlxbnpqcXGeanlesWJucWleel6yfm5mxiB8Xz63/GvOxhXvPqod4iR
-        iYPxEKMEB7OSCC/r6dgEId6UxMqq1KL8+KLSnNTiQ4zSHCxK4ry7tq6JFxJITyxJzU5NLUgt
-        gskycXBKNTC1zmNJffxog8XnM3FBauGq4qfeBE2sDN246KtHzFHFvJ7aAzKyy/f3JgV/2eEm
-        zxZ/6tsZA/3ml46LvKcYKXts338l/GGM4JbVB9jOXIqa0W+15nRyus/C5Hvxti6uWo8l1nEv
-        XbmSzSv5vwKPYd6KaypNF19FTP+W0Gx+jiPyTot277ZHE7QbY1LP1oXenGeqdrAte63NNI2Q
-        183ap3ZoBAWVSzoEltm/f3Gx3F0jYnVewaUtRf61xtt4NsWd+5PFwZX+O+nnj9Z8CSXN1Wxr
-        ZFOXPzBdtHd5wz1+9viMJ99vCuw0YZ9+eu15q4WxNf3Hjjkem5dvnDiXp3C30xx3t1r+ymOL
-        dRd6zomU41JiKc5INNRiLipOBAAOJVszVgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJLMWRmVeSWpSXmKPExsVy+t/xe7ofxeMSDP5dE7U4NfkZk0XPhq2s
-        FofftLM6MHv0bVnF6PF5k5zHqa+f2QOYo/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyN
-        zWOtjEyV9O1sUlJzMstSi/TtEvQyZv44xFxwVL/iwa/TzA2Mp9S7GDk5JARMJKbtbmLqYuTi
-        EBJYyigxq3snexcjB1BCSmJ+ixJEjbDEn2tdbBA1nxglJvxfwAKSYBMwlOg92scIYosIyEs8
-        6b3BBmIzC7hKfDhxkwnEFhbwlpjXtAishkVAVWLr32nsIDavgJXE6hc7WCEWyEus3nCAeQIj
-        zwJGhlWMIqmlxbnpucVGesWJucWleel6yfm5mxiBYbTt2M8tOxhXvvqod4iRiYPxEKMEB7OS
-        CC/r6dgEId6UxMqq1KL8+KLSnNTiQ4ymQPsmMkuJJucDAzmvJN7QzMDU0MTM0sDU0sxYSZzX
-        5MiaeCGB9MSS1OzU1ILUIpg+Jg5OqQam7hNnJDf6cOd4P7KtymwtUPFc2fpLKmdBCavePfk/
-        so777MXnp4RO3Hnq6sN9dkUXO1Jvska3zN/VnKL/q6JJ9nfXHxGlpvnLy1f8X8ZRFMmj3tz3
-        MDbV3/xB6roPXhfiJWNnuc89I2ij8bLLufBX61OJJdb8kZbXfkyc/tjD+uyhT48ZxHmvORSl
-        Mfzck7fxauTVvhM/dtWe+LcwvpzLP03xqdDjgJZ1ibsMd1ac0Jrpe7e7Yk6we9bBi7uuiM7y
-        eRW80Ml76847G/9+cZ9zUv7U0cUJ0/S29s2f6ttygf9f0NX3BVIVDzuDXDSWFz9NSKj5d+5C
-        zHmv0PU6Z8QcH/ZLX18teHSW92MGtu0JSizFGYmGWsxFxYkAu4r8jKwCAAA=
-X-CMS-MailID: 20210326172049eucas1p2209de36f9519a2adb488a3b9f18b7f89
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20210326172049eucas1p2209de36f9519a2adb488a3b9f18b7f89
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210326172049eucas1p2209de36f9519a2adb488a3b9f18b7f89
-References: <CGME20210326172049eucas1p2209de36f9519a2adb488a3b9f18b7f89@eucas1p2.samsung.com>
+        Fri, 26 Mar 2021 13:54:09 -0400
+X-Greylist: delayed 1405 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Mar 2021 13:54:09 EDT
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id A79BC432D
+        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 12:30:27 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id PqHzlXyCxPkftPqHzl4xdq; Fri, 26 Mar 2021 12:30:27 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UGfVewA7lNLQUq9EGe9XYyV9f0fWBj8alRALG5rzVp0=; b=ZWiNNhL/CIqzObOueT6rUYl82F
+        qKwbglqLec+J1MHy7mSzlirgsz5aqNyD/STP1H0pRWKFfDO+jDedaF9b0FzcyluL0dZR4DLBg5DxZ
+        SkVMn1skZhtCgOBurpbWmp418I2qVPjA4Q3nfTUF/bLReMDiw4Rqg9b2R/aTSKjLDzG0/5fizYXxo
+        m9rBPnpKxf4qck5j0qKqTBc4hslGSTsxjjo1NDLIkpJfzhQuL0naVu6SUM8yn8f5GrPcIFSATKtkC
+        eBEe9FmLoy/StqXI6F/6D3HU0ugbAbKHD0Ylik+qMB2cIkTgRFafmyt03zIDoiWaVmSASnagEnFuy
+        fpJFZA9A==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:38142 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1lPqHz-001PZl-AN; Fri, 26 Mar 2021 12:30:27 -0500
+Subject: Re: [PATCH][next] media: siano: Fix multiple out-of-bounds warnings
+ in smscore_load_firmware_family2()
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20210311021947.GA129388@embeddedor>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <b0e46b46-db9a-7e3d-cadb-e3855c68373e@embeddedor.com>
+Date:   Fri, 26 Mar 2021 11:30:26 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210311021947.GA129388@embeddedor>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1lPqHz-001PZl-AN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:38142
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes scripts/kernel-doc warnings:
+Hi all,
 
-s5p_mfc_common.h:343: warning: Function parameter or member 'fw_buf' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'mem_size' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'mem_base' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'mem_bitmap' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'mem_virt' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'dma_base' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'watchdog_timer' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'fw_get_done' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:343: warning: Function parameter or member 'risc_on' not described in 's5p_mfc_dev'
-s5p_mfc_common.h:714: warning: Function parameter or member 'src_bufs_cnt' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'dst_bufs_cnt' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'pb_count' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'force_frame_type' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'slice_mode' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'slice_size' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'frame_tag' not described in 's5p_mfc_ctx'
-s5p_mfc_common.h:714: warning: Function parameter or member 'scratch_buf_size' not described in 's5p_mfc_ctx'
+Friendly ping: who can take this, please?
 
-Reported-by: Hans verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
----
-Depends on Hans' "s5p-mfc/s5p_mfc_common.h: fix kernel-doc warnings" patch.
----
- .../media/platform/s5p-mfc/s5p_mfc_common.h   | 23 +++++++++++++------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+Thanks
+--
+Gustavo
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-index 80851084bc83..c3ef4f6a42d2 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-@@ -273,14 +273,18 @@ struct s5p_mfc_priv_buf {
-  * @int_type:		type of last interrupt
-  * @int_err:		error number for last interrupt
-  * @queue:		waitqueue for waiting for completion of device commands
-- * @fw_size:		size of firmware
-- * @fw_virt_addr:	virtual firmware address
-- * @dma_base[]:		address of the beginning of memory banks
-+ * @fw_buf:		the firmware buffer data structure
-+ * @mem_size:		size of the firmware operation memory
-+ * @mem_base:		base DMA address of the firmware operation memory
-+ * @mem_bitmap:		bitmap for managing MFC internal buffer allocations
-+ * @mem_virt:		virtual address of the firmware operation memory
-+ * @dma_base:		address of the beginning of memory banks
-  * @hw_lock:		used for hardware locking
-  * @ctx:		array of driver contexts
-  * @curr_ctx:		number of the currently running context
-  * @ctx_work_bits:	used to mark which contexts are waiting for hardware
-  * @watchdog_cnt:	counter for the watchdog
-+ * @watchdog_timer:	timer for the watchdog
-  * @watchdog_workqueue:	workqueue for the watchdog
-  * @watchdog_work:	worker for the watchdog
-  * @enter_suspend:	flag set when entering suspend
-@@ -290,9 +294,9 @@ struct s5p_mfc_priv_buf {
-  * @mfc_cmds:		cmd structure holding HW commands function pointers
-  * @mfc_regs:		structure holding MFC registers
-  * @fw_ver:		loaded firmware sub-version
-- * @fw_get_done		flag set when request_firmware() is complete and
-+ * @fw_get_done:	flag set when request_firmware() is complete and
-  *			copied into fw_buf
-- * risc_on:		flag indicates RISC is on or off
-+ * @risc_on:		flag indicates RISC is on or off
-  *
-  */
- struct s5p_mfc_dev {
-@@ -579,7 +583,9 @@ struct s5p_mfc_codec_ops {
-  * @capture_state:	state of the capture buffers queue
-  * @output_state:	state of the output buffers queue
-  * @src_bufs:		information on allocated source buffers
-+ * @src_bufs_cnt:	number of allocated source buffers
-  * @dst_bufs:		information on allocated destination buffers
-+ * @dst_bufs_cnt:	number of allocated destination buffers
-  * @sequence:		counter for the sequence number for v4l2
-  * @dec_dst_flag:	flags for buffers queued in the hardware
-  * @dec_src_buf_size:	size of the buffer for source buffers in decoding
-@@ -591,7 +597,7 @@ struct s5p_mfc_codec_ops {
-  * @after_packed_pb:	flag used to track buffer when stream is in
-  *			Packed PB format
-  * @sei_fp_parse:	enable/disable parsing of frame packing SEI information
-- * @dpb_count:		count of the DPB buffers required by MFC hw
-+ * @pb_count:		count of the DPB buffers required by MFC hw
-  * @total_dpb_count:	count of DPB buffers with additional buffers
-  *			requested by the application
-  * @ctx:		context buffer information
-@@ -606,11 +612,15 @@ struct s5p_mfc_codec_ops {
-  * @tmv_buffer_size:	size of temporal predictor motion vector buffer
-  * @frame_type:		used to force the type of the next encoded frame
-  * @ref_queue:		list of the reference buffers for encoding
-+ * @force_frame_type:	encoder's frame type forcing control
-  * @ref_queue_cnt:	number of the buffers in the reference list
-+ * @slice_size:		slice size
-+ * @slice_mode:		mode of dividing frames into slices
-  * @c_ops:		ops for encoding
-  * @ctrls:		array of controls, used when adding controls to the
-  *			v4l2 control framework
-  * @ctrl_handler:	handler for v4l2 framework
-+ * @scratch_buf_size:	scratch buffer size
-  */
- struct s5p_mfc_ctx {
- 	struct s5p_mfc_dev *dev;
-@@ -709,7 +719,6 @@ struct s5p_mfc_ctx {
- 
- 	struct v4l2_ctrl *ctrls[MFC_MAX_CTRLS];
- 	struct v4l2_ctrl_handler ctrl_handler;
--	unsigned int frame_tag;
- 	size_t scratch_buf_size;
- };
- 
--- 
-2.25.1
-
+On 3/10/21 20:19, Gustavo A. R. Silva wrote:
+> Rename struct sms_msg_data4 to sms_msg_data5 and increase the size of
+> its msg_data array from 4 to 5 elements. Notice that at some point
+> the 5th element of msg_data is being accessed in function
+> smscore_load_firmware_family2():
+> 
+> 1006                 trigger_msg->msg_data[4] = 4; /* Task ID */
+> 
+> Also, there is no need for the object _trigger_msg_ of type struct
+> sms_msg_data *, when _msg_ can be used, directly. Notice that msg_data
+> in struct sms_msg_data is a one-element array, which causes multiple
+> out-of-bounds warnings when accessing beyond its first element
+> in function smscore_load_firmware_family2():
+> 
+>  992                 struct sms_msg_data *trigger_msg =                                                  
+>  993                         (struct sms_msg_data *) msg;                                                
+>  994                                                                                                     
+>  995                 pr_debug("sending MSG_SMS_SWDOWNLOAD_TRIGGER_REQ\n");                               
+>  996                 SMS_INIT_MSG(&msg->x_msg_header,                                                    
+>  997                                 MSG_SMS_SWDOWNLOAD_TRIGGER_REQ,                                     
+>  998                                 sizeof(struct sms_msg_hdr) +                                        
+>  999                                 sizeof(u32) * 5);                                                   
+> 1000                                                                                                     
+> 1001                 trigger_msg->msg_data[0] = firmware->start_address;                                 
+> 1002                                         /* Entry point */                                           
+> 1003                 trigger_msg->msg_data[1] = 6; /* Priority */                                        
+> 1004                 trigger_msg->msg_data[2] = 0x200; /* Stack size */                                  
+> 1005                 trigger_msg->msg_data[3] = 0; /* Parameter */                                       
+> 1006                 trigger_msg->msg_data[4] = 4; /* Task ID */ 
+> 
+> even when enough dynamic memory is allocated for _msg_:
+> 
+>  929         /* PAGE_SIZE buffer shall be enough and dma aligned */
+>  930         msg = kmalloc(PAGE_SIZE, GFP_KERNEL | coredev->gfp_buf_flags);
+> 
+> but as _msg_ is casted to (struct sms_msg_data *):
+> 
+>  992                 struct sms_msg_data *trigger_msg =
+>  993                         (struct sms_msg_data *) msg;
+> 
+> the out-of-bounds warnings are actually valid and should be addressed.
+> 
+> Fix this by declaring object _msg_ of type struct sms_msg_data5 *,
+> which contains a 5-elements array, instead of just 4. And use
+> _msg_ directly, instead of creating object trigger_msg.
+> 
+> This helps with the ongoing efforts to enable -Warray-bounds by fixing
+> the following warnings:
+> 
+>   CC [M]  drivers/media/common/siano/smscoreapi.o
+> drivers/media/common/siano/smscoreapi.c: In function ‘smscore_load_firmware_family2’:
+> drivers/media/common/siano/smscoreapi.c:1003:24: warning: array subscript 1 is above array bounds of ‘u32[1]’ {aka ‘unsigned int[1]’} [-Warray-bounds]
+>  1003 |   trigger_msg->msg_data[1] = 6; /* Priority */
+>       |   ~~~~~~~~~~~~~~~~~~~~~^~~
+> In file included from drivers/media/common/siano/smscoreapi.c:12:
+> drivers/media/common/siano/smscoreapi.h:619:6: note: while referencing ‘msg_data’
+>   619 |  u32 msg_data[1];
+>       |      ^~~~~~~~
+> drivers/media/common/siano/smscoreapi.c:1004:24: warning: array subscript 2 is above array bounds of ‘u32[1]’ {aka ‘unsigned int[1]’} [-Warray-bounds]
+>  1004 |   trigger_msg->msg_data[2] = 0x200; /* Stack size */
+>       |   ~~~~~~~~~~~~~~~~~~~~~^~~
+> In file included from drivers/media/common/siano/smscoreapi.c:12:
+> drivers/media/common/siano/smscoreapi.h:619:6: note: while referencing ‘msg_data’
+>   619 |  u32 msg_data[1];
+>       |      ^~~~~~~~
+> drivers/media/common/siano/smscoreapi.c:1005:24: warning: array subscript 3 is above array bounds of ‘u32[1]’ {aka ‘unsigned int[1]’} [-Warray-bounds]
+>  1005 |   trigger_msg->msg_data[3] = 0; /* Parameter */
+>       |   ~~~~~~~~~~~~~~~~~~~~~^~~
+> In file included from drivers/media/common/siano/smscoreapi.c:12:
+> drivers/media/common/siano/smscoreapi.h:619:6: note: while referencing ‘msg_data’
+>   619 |  u32 msg_data[1];
+>       |      ^~~~~~~~
+> drivers/media/common/siano/smscoreapi.c:1006:24: warning: array subscript 4 is above array bounds of ‘u32[1]’ {aka ‘unsigned int[1]’} [-Warray-bounds]
+>  1006 |   trigger_msg->msg_data[4] = 4; /* Task ID */
+>       |   ~~~~~~~~~~~~~~~~~~~~~^~~
+> In file included from drivers/media/common/siano/smscoreapi.c:12:
+> drivers/media/common/siano/smscoreapi.h:619:6: note: while referencing ‘msg_data’
+>   619 |  u32 msg_data[1];
+>       |      ^~~~~~~~
+> 
+> Fixes: 018b0c6f8acb ("[media] siano: make load firmware logic to work with newer firmwares")
+> Co-developed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/media/common/siano/smscoreapi.c | 22 +++++++++-------------
+>  drivers/media/common/siano/smscoreapi.h |  4 ++--
+>  2 files changed, 11 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/media/common/siano/smscoreapi.c b/drivers/media/common/siano/smscoreapi.c
+> index 410cc3ac6f94..bceaf91faa15 100644
+> --- a/drivers/media/common/siano/smscoreapi.c
+> +++ b/drivers/media/common/siano/smscoreapi.c
+> @@ -908,7 +908,7 @@ static int smscore_load_firmware_family2(struct smscore_device_t *coredev,
+>  					 void *buffer, size_t size)
+>  {
+>  	struct sms_firmware *firmware = (struct sms_firmware *) buffer;
+> -	struct sms_msg_data4 *msg;
+> +	struct sms_msg_data5 *msg;
+>  	u32 mem_address,  calc_checksum = 0;
+>  	u32 i, *ptr;
+>  	u8 *payload = firmware->payload;
+> @@ -989,24 +989,20 @@ static int smscore_load_firmware_family2(struct smscore_device_t *coredev,
+>  		goto exit_fw_download;
+>  
+>  	if (coredev->mode == DEVICE_MODE_NONE) {
+> -		struct sms_msg_data *trigger_msg =
+> -			(struct sms_msg_data *) msg;
+> -
+>  		pr_debug("sending MSG_SMS_SWDOWNLOAD_TRIGGER_REQ\n");
+>  		SMS_INIT_MSG(&msg->x_msg_header,
+>  				MSG_SMS_SWDOWNLOAD_TRIGGER_REQ,
+> -				sizeof(struct sms_msg_hdr) +
+> -				sizeof(u32) * 5);
+> +				sizeof(*msg));
+>  
+> -		trigger_msg->msg_data[0] = firmware->start_address;
+> +		msg->msg_data[0] = firmware->start_address;
+>  					/* Entry point */
+> -		trigger_msg->msg_data[1] = 6; /* Priority */
+> -		trigger_msg->msg_data[2] = 0x200; /* Stack size */
+> -		trigger_msg->msg_data[3] = 0; /* Parameter */
+> -		trigger_msg->msg_data[4] = 4; /* Task ID */
+> +		msg->msg_data[1] = 6; /* Priority */
+> +		msg->msg_data[2] = 0x200; /* Stack size */
+> +		msg->msg_data[3] = 0; /* Parameter */
+> +		msg->msg_data[4] = 4; /* Task ID */
+>  
+> -		rc = smscore_sendrequest_and_wait(coredev, trigger_msg,
+> -					trigger_msg->x_msg_header.msg_length,
+> +		rc = smscore_sendrequest_and_wait(coredev, msg,
+> +					msg->x_msg_header.msg_length,
+>  					&coredev->trigger_done);
+>  	} else {
+>  		SMS_INIT_MSG(&msg->x_msg_header, MSG_SW_RELOAD_EXEC_REQ,
+> diff --git a/drivers/media/common/siano/smscoreapi.h b/drivers/media/common/siano/smscoreapi.h
+> index 4a6b9f4c44ac..f8789ee0d554 100644
+> --- a/drivers/media/common/siano/smscoreapi.h
+> +++ b/drivers/media/common/siano/smscoreapi.h
+> @@ -624,9 +624,9 @@ struct sms_msg_data2 {
+>  	u32 msg_data[2];
+>  };
+>  
+> -struct sms_msg_data4 {
+> +struct sms_msg_data5 {
+>  	struct sms_msg_hdr x_msg_header;
+> -	u32 msg_data[4];
+> +	u32 msg_data[5];
+>  };
+>  
+>  struct sms_data_download {
+> 
