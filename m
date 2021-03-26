@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9149C433E6
-	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 09:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE21C433E8
+	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 10:00:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCC1361A50
-	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 09:59:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 398BF61A42
+	for <linux-media@archiver.kernel.org>; Fri, 26 Mar 2021 10:00:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbhCZJ7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Mar 2021 05:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S230333AbhCZJ7o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Mar 2021 05:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbhCZJ65 (ORCPT
+        with ESMTP id S230108AbhCZJ66 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Mar 2021 05:58:57 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC67DC0613AA
-        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:56 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id dm8so5646103edb.2
-        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:56 -0700 (PDT)
+        Fri, 26 Mar 2021 05:58:58 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452BCC0613B1
+        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id e7so5592648edu.10
+        for <linux-media@vger.kernel.org>; Fri, 26 Mar 2021 02:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zSZ2EkdJHOx24SFCkJIOCXa07CbkvnRSZh4lLvRcYLY=;
-        b=ScXucLqVwqH9fks5pCW0qnVCPzgyW9j7Sxpq/MCIMyOChDgp6rPMgSRrkA1gS18YRn
-         cPbUG+JpHx4kZ8TXxEAu+ASBdqHr0nfWvaYL5iar88FoSCVJv2xLwkhGxVVUS84rCwKl
-         mt08Xbtxvrzt7IWFSV+SYIw3462pnBxnFHg2k=
+        bh=2y2043uffVR+Axz3IQVPi3Ysoys/BWtFNPbRtzf1kL0=;
+        b=XgF63OA3iDsQinIPZBYEr8xo0HmgnBltM2VyBTZUJlrE7RvmQWTXVJ/bPDKAQgcbSr
+         hMzMUxoBPWavwexaFLyLHvsj9kuOGk4t4tYOfFeBHZREj7an3p7wF3sDIXq0RZ72q5BK
+         zWkAxBGo9khdo6tgVxlUUdVPNNA30QfR7Ynv4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zSZ2EkdJHOx24SFCkJIOCXa07CbkvnRSZh4lLvRcYLY=;
-        b=IeAg1OQYCgvAU1bepPiKMns+Nyzzhc8gxg2+bFvP9sK/vuqtKc5qJLw/Ie1h1Q3RRA
-         3PBtDUTWPToeOVKG0YbkXTJyP88iYpRk2XDItYzlc1XW7u12c+Ep1SiNgXqx7fYKppcc
-         Rhl7O+FP4z3nYHXJqri/p3NwldeUyJtG4BUvWrUeWoApkAXEH9nwSQM2olmWavbtYYUK
-         mvI7ebWZpytpZ31dQphNUYx1ri2MeaqQhvvyZMf4XCMtZiU71GBGvUr+dICz8SkIQTQF
-         mooS3nDSftwBrkEsxrq7ry+KN0ZpR2kks8o6qIBit34WGh8MogbaQZNMjtfIZP0D+aPA
-         /AMQ==
-X-Gm-Message-State: AOAM530Pc95LlLN9z+HqWz/ElszBdoyOkEou7YoWKEOxNOOSoGKJqrvx
-        ghcZZDdBrLqQ7P99lfteYQk4Pw==
-X-Google-Smtp-Source: ABdhPJzvwlhCTnCgWYNFzaiwu6HLMPX8onZCZwvZapgxXLffLK9dzMdv5yLYAE1SF5kZJoHA3PW2GA==
-X-Received: by 2002:aa7:d642:: with SMTP id v2mr14089314edr.257.1616752735626;
-        Fri, 26 Mar 2021 02:58:55 -0700 (PDT)
+        bh=2y2043uffVR+Axz3IQVPi3Ysoys/BWtFNPbRtzf1kL0=;
+        b=cZ5yrCOA4nPv+Im2XxImGXCA1N1vGV2NMRa5ggCgv2lCZDLO5m8rEyUpzzyH1WBLKA
+         LLcWXFQVLO75hVWwVZz/Q26jcP/ncK/Q518qfUNo1+5J9co+13EcdV9tnSpN2e4vTUmv
+         OHgTTrAwpIl1qCcrjbsWZ7urvZqKnZechmG2Bhnq3Z5/Dl2H1M32HE4osjIPFLhvlaYd
+         /c7AXgXL1QS+gn7humvuX3U51Au5b1uvoQFExKw+a/d0cOzERUY5IKWjJiFB3ZbEo12+
+         Pl+AFv1Pzb9r0yhCJnmPqhUPBLGe7Qiye1RCQiU221JusMRcVuaLsSzbIMbHt6ctgbXQ
+         7YZg==
+X-Gm-Message-State: AOAM533sc2o9YxhvyUknwYH6oauTjCnniflnkKxrMc92+E51GsyhOcPq
+        tndfG6xf/GN/Z++Lfj5JSlwlCA==
+X-Google-Smtp-Source: ABdhPJxvjIQgrOmedo0HpCzfT7PVy74zFLNCDZ0n2a5fez8hs/en3vpCIMntNMC2y9Q/wN+2rK09uA==
+X-Received: by 2002:a50:fd15:: with SMTP id i21mr13534405eds.384.1616752737079;
+        Fri, 26 Mar 2021 02:58:57 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id h13sm4036658edz.71.2021.03.26.02.58.54
+        by smtp.gmail.com with ESMTPSA id h13sm4036658edz.71.2021.03.26.02.58.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 02:58:54 -0700 (PDT)
+        Fri, 26 Mar 2021 02:58:56 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v9 16/22] media: uvcvideo: Return -EACCES to inactive controls
-Date:   Fri, 26 Mar 2021 10:58:34 +0100
-Message-Id: <20210326095840.364424-17-ribalda@chromium.org>
+Subject: [PATCH v9 18/22] media: uvcvideo: Downgrade control error messages
+Date:   Fri, 26 Mar 2021 10:58:36 +0100
+Message-Id: <20210326095840.364424-19-ribalda@chromium.org>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
 In-Reply-To: <20210326095840.364424-1-ribalda@chromium.org>
 References: <20210326095840.364424-1-ribalda@chromium.org>
@@ -73,136 +73,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a control is inactive return -EACCES to let the userspace know that
-the value will not be applied automatically when the control is active
-again.
+Convert the error into a debug message, so they are still valid for
+debugging but do not fill dmesg.
 
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 71 +++++++++++++++++++++-----------
- 1 file changed, 48 insertions(+), 23 deletions(-)
+ drivers/media/usb/uvc/uvc_video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index bcebf9d1a46f..d9d4add1e813 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1082,13 +1082,36 @@ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
- 	return "Unknown Control";
- }
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index ea2903dc3252..b63c073ec30e 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -76,7 +76,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+ 	if (likely(ret == size))
+ 		return 0;
  
-+static bool uvc_ctrl_is_inactive(struct uvc_video_chain *chain,
-+				 struct uvc_control *ctrl,
-+				 struct uvc_control_mapping *mapping)
-+{
-+	struct uvc_control_mapping *master_map = NULL;
-+	struct uvc_control *master_ctrl = NULL;
-+	s32 val;
-+	int ret;
-+
-+	if (!mapping->master_id)
-+		return false;
-+
-+	__uvc_find_control(ctrl->entity, mapping->master_id, &master_map,
-+			   &master_ctrl, 0);
-+
-+	if (!master_ctrl || !(master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR))
-+		return false;
-+
-+	ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
-+	if (ret < 0 || val == mapping->master_manual)
-+		return false;
-+
-+	return true;
-+}
-+
- static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 	struct uvc_control *ctrl,
- 	struct uvc_control_mapping *mapping,
- 	struct v4l2_queryctrl *v4l2_ctrl)
- {
--	struct uvc_control_mapping *master_map = NULL;
--	struct uvc_control *master_ctrl = NULL;
- 	const struct uvc_menu_info *menu;
- 	unsigned int i;
+-	dev_err(&dev->udev->dev,
++	dev_dbg(&dev->udev->dev,
+ 		"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
+ 		uvc_query_name(query), cs, unit, ret, size);
  
-@@ -1104,18 +1127,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 	if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR))
- 		v4l2_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
--	if (mapping->master_id)
--		__uvc_find_control(ctrl->entity, mapping->master_id,
--				   &master_map, &master_ctrl, 0);
--	if (master_ctrl && (master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR)) {
--		s32 val;
--		int ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
--		if (ret < 0)
--			return ret;
--
--		if (val != mapping->master_manual)
--				v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
--	}
-+	if (uvc_ctrl_is_inactive(chain, ctrl, mapping))
-+		v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
- 
- 	if (!ctrl->cached) {
- 		int ret = uvc_ctrl_populate_cache(chain, ctrl);
-@@ -1638,25 +1651,37 @@ static int uvc_ctrl_commit_entity(struct uvc_device *dev,
- 	return 0;
- }
- 
--static int uvc_ctrl_find_ctrlidx(struct uvc_entity *entity,
-+static int uvc_ctrl_commit_error(struct uvc_video_chain *chain,
-+				 struct uvc_entity *entity,
- 				 struct v4l2_ext_controls *ctrls,
--				 struct uvc_control *uvc_control)
-+				 struct uvc_control *err_control,
-+				 int ret)
- {
- 	struct uvc_control_mapping *mapping;
- 	struct uvc_control *ctrl_found;
- 	unsigned int i;
- 
--	if (!entity)
--		return ctrls->count;
-+	if (!entity) {
-+		ctrls->error_idx = ctrls->count;
-+		return ret;
-+	}
- 
- 	for (i = 0; i < ctrls->count; i++) {
- 		__uvc_find_control(entity, ctrls->controls[i].id, &mapping,
- 				   &ctrl_found, 0);
--		if (uvc_control == ctrl_found)
--			return i;
-+		if (err_control == ctrl_found)
-+			break;
- 	}
-+	ctrls->error_idx = i;
-+
-+	/* We could not find the control that failed. */
-+	if (i == ctrls->count)
-+		return ret;
- 
--	return ctrls->count;
-+	if (uvc_ctrl_is_inactive(chain, err_control, mapping))
-+		return -EACCES;
-+
-+	return ret;
- }
- 
- int __uvc_ctrl_commit(struct uvc_fh *handle, int rollback,
-@@ -1679,8 +1704,8 @@ int __uvc_ctrl_commit(struct uvc_fh *handle, int rollback,
- 		uvc_ctrl_send_events(handle, ctrls->controls, ctrls->count);
- done:
- 	if (ret < 0 && ctrls)
--		ctrls->error_idx = uvc_ctrl_find_ctrlidx(entity, ctrls,
--							 err_ctrl);
-+		ret = uvc_ctrl_commit_error(chain, entity, ctrls, err_ctrl,
-+					    ret);
- 	mutex_unlock(&chain->ctrl_mutex);
- 	return ret;
- }
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
