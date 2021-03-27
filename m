@@ -2,106 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C17A6C433C1
-	for <linux-media@archiver.kernel.org>; Sat, 27 Mar 2021 15:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C91F3C433E3
+	for <linux-media@archiver.kernel.org>; Sat, 27 Mar 2021 22:21:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8DA5761969
-	for <linux-media@archiver.kernel.org>; Sat, 27 Mar 2021 15:11:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94437619AB
+	for <linux-media@archiver.kernel.org>; Sat, 27 Mar 2021 22:21:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbhC0PLP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Mar 2021 11:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhC0PKp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Mar 2021 11:10:45 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE15BC0613B1;
-        Sat, 27 Mar 2021 08:10:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id f26so10764417ljp.8;
-        Sat, 27 Mar 2021 08:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3xfofQcDvN4J+tG1djpCVc7GNwqtmS+FRdc3V48y94c=;
-        b=g4xMcu9gaK87RePOaVte17/kJoqmPyPYDU8XeDvo5IrlKk9mVS90Pw3HsKodIfYNeG
-         msRcRaA6pUGv7nKFzQpq6pUOnDQOFU6tN71G25FCnIsfaXQCiTGPb5iU5FhyB+S8hvSa
-         5pxLDIGU13ItEW0tv3aqIDbaOkcAk3j5f53QLnS0RbOx3w1qtwkYCsomRrXXk6XNDjR9
-         dIK2KrzAG1z5YA4cK0GWEsao7ZY0JQkcA+Rm2iujwe0gRdGw6+vXEGNuC9FXDSUwlmG1
-         ArLgLZfBKwfTMAv7mOa4DKcHEgI14+ZVQYdNIAgMIohA25MIxGJNiXV5T0JML2hlz/le
-         a3Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3xfofQcDvN4J+tG1djpCVc7GNwqtmS+FRdc3V48y94c=;
-        b=eExvP63xOubT4UxkZXysdgQ17NpWU0IL8oEBWXVS1WQmazaYa84HPu+ImR8jgqkdIl
-         ZdnJbxF9tkUVcU2p3F0M+dkZr5QC+sXSvNYVm3PSmt/Gm8tOXQVlCdOdb9oTMjek5Xm4
-         GEKRXIOoBDeF7Q/sd6AmKbvXbGEWPulKQj7yzU1SlgPkHU26Q7gCnzZ17wn/j1glEkZi
-         hfDZKn2LLWRTX9+5b/cax2o+Zye1JxuAnGxIqvZy5stMZV+3Y13247Ui7WO1a6LAMQiX
-         dvQIMCpg2p8cnA3RQohK7v3hHbXm7r6IM8LlI4PPkqmLzu6Jp+Z34wQGBTTozlzPinUQ
-         nbBQ==
-X-Gm-Message-State: AOAM530sVz6xuzeUfQPDnGoFJdJn6YcKRtoYHlRzG0mcJ0Rw+8gAhB2B
-        le7msd+YceWhW1MnzGHEGp1gMSYmYuiPBEpWpso=
-X-Google-Smtp-Source: ABdhPJwafV4KNkPy1zHGiOqitY4kgFI/fQAcdR1EfGqZGLCO1GBSj03JQziROm1n/De278FX7mZzgg==
-X-Received: by 2002:a2e:9793:: with SMTP id y19mr11876186lji.374.1616857843167;
-        Sat, 27 Mar 2021 08:10:43 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.227.42])
-        by smtp.gmail.com with ESMTPSA id x13sm1590125ljj.4.2021.03.27.08.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Mar 2021 08:10:42 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     mchehab@kernel.org, andy.shevchenko@gmail.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+889397c820fa56adf25d@syzkaller.appspotmail.com
-Subject: [PATCH v2] media: usb: fix memory leak in em28xx_dvb_init
-Date:   Sat, 27 Mar 2021 18:09:16 +0300
-Message-Id: <20210327150916.31848-1-paskripkin@gmail.com>
+        id S231199AbhC0WUl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Mar 2021 18:20:41 -0400
+Received: from mga17.intel.com ([192.55.52.151]:30344 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231189AbhC0WUQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 27 Mar 2021 18:20:16 -0400
+IronPort-SDR: S/FeV6jDuC0WhUs6evgYV6ZuiWjmDfbiAh/U9C74peyXmnffOkFbCW+p5PQDflLoH+xyugpRT3
+ O6cjAVapJSYA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9936"; a="171343878"
+X-IronPort-AV: E=Sophos;i="5.81,284,1610438400"; 
+   d="scan'208";a="171343878"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2021 15:20:16 -0700
+IronPort-SDR: zQiDHXu7GDLDsku6wxtsgSBjXCscK30U39o3qbUErh4jkFkJNrGfZ8zbV5WpTbTKTNJn08D1sW
+ 1OsT1Qr+PZRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,284,1610438400"; 
+   d="scan'208";a="410447020"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Mar 2021 15:20:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D524C103; Sun, 28 Mar 2021 00:20:27 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH v1 2/8] software node: Introduce software_node_alloc()/software_node_free()
+Date:   Sun, 28 Mar 2021 00:20:06 +0200
+Message-Id: <20210327222012.54103-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210327082613.4702-1-paskripkin@gmail.com>
-References: <20210327082613.4702-1-paskripkin@gmail.com>
+In-Reply-To: <20210327222012.54103-1-andriy.shevchenko@linux.intel.com>
+References: <20210327222012.54103-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-syzbot reported memory leak in em28xx_dvb_init()[1]
-The problem was in wrong error handling after em28xx_alloc_urbs()[2] call.
-In case of error allocated urbs must be freed
+Introduce software_node_alloc() and software_node_free() helpers.
+This will help with code readability and maintenance.
 
-  backtrace:
-    [<ffffffff8304c141>] kmalloc_array.constprop.0+0x41/0x60 include/linux/slab.h:594
-    [<ffffffff8304dba2>] kcalloc include/linux/slab.h:623 [inline]
-    [<ffffffff8304dba2>] em28xx_alloc_urbs+0x102/0x550 drivers/media/usb/em28xx/em28xx-core.c:930 [2]
-    [<ffffffff84279fa7>] em28xx_dvb_init drivers/media/usb/em28xx/em28xx-dvb.c:1517 [inline]	  [1]
-
-Reported-by: syzbot+889397c820fa56adf25d@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/usb/em28xx/em28xx-dvb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/base/swnode.c | 47 ++++++++++++++++++++++---------------------
+ 1 file changed, 24 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-dvb.c b/drivers/media/usb/em28xx/em28xx-dvb.c
-index 526424279637..471bd74667e3 100644
---- a/drivers/media/usb/em28xx/em28xx-dvb.c
-+++ b/drivers/media/usb/em28xx/em28xx-dvb.c
-@@ -2010,6 +2010,7 @@ static int em28xx_dvb_init(struct em28xx *dev)
- 	return result;
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 456f5fe58b58..19aa44bc2628 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -720,19 +720,30 @@ software_node_find_by_name(const struct software_node *parent, const char *name)
+ }
+ EXPORT_SYMBOL_GPL(software_node_find_by_name);
  
- out_free:
-+	em28xx_uninit_usb_xfer(dev, EM28XX_DIGITAL_MODE);
- 	kfree(dvb);
- 	dev->dvb = NULL;
- 	goto ret;
+-static int
+-software_node_register_properties(struct software_node *node,
+-				  const struct property_entry *properties)
++static struct software_node *software_node_alloc(const struct property_entry *properties)
+ {
+ 	struct property_entry *props;
++	struct software_node *node;
+ 
+ 	props = property_entries_dup(properties);
+ 	if (IS_ERR(props))
+-		return PTR_ERR(props);
++		return ERR_CAST(props);
++
++	node = kzalloc(sizeof(*node), GFP_KERNEL);
++	if (!node) {
++		property_entries_free(props);
++		return ERR_PTR(-ENOMEM);
++	}
+ 
+ 	node->properties = props;
+ 
+-	return 0;
++	return node;
++}
++
++static void software_node_free(const struct software_node *node)
++{
++	property_entries_free(node->properties);
++	kfree(node);
+ }
+ 
+ static void software_node_release(struct kobject *kobj)
+@@ -746,10 +757,9 @@ static void software_node_release(struct kobject *kobj)
+ 		ida_simple_remove(&swnode_root_ids, swnode->id);
+ 	}
+ 
+-	if (swnode->allocated) {
+-		property_entries_free(swnode->node->properties);
+-		kfree(swnode->node);
+-	}
++	if (swnode->allocated)
++		software_node_free(swnode->node);
++
+ 	ida_destroy(&swnode->child_ids);
+ 	kfree(swnode);
+ }
+@@ -964,7 +974,6 @@ fwnode_create_software_node(const struct property_entry *properties,
+ 	struct fwnode_handle *fwnode;
+ 	struct software_node *node;
+ 	struct swnode *p = NULL;
+-	int ret;
+ 
+ 	if (parent) {
+ 		if (IS_ERR(parent))
+@@ -974,23 +983,15 @@ fwnode_create_software_node(const struct property_entry *properties,
+ 		p = to_swnode(parent);
+ 	}
+ 
+-	node = kzalloc(sizeof(*node), GFP_KERNEL);
+-	if (!node)
+-		return ERR_PTR(-ENOMEM);
+-
+-	ret = software_node_register_properties(node, properties);
+-	if (ret) {
+-		kfree(node);
+-		return ERR_PTR(ret);
+-	}
++	node = software_node_alloc(properties);
++	if (IS_ERR(node))
++		return ERR_CAST(node);
+ 
+ 	node->parent = p ? p->node : NULL;
+ 
+ 	fwnode = swnode_register(node, p, 1);
+-	if (IS_ERR(fwnode)) {
+-		property_entries_free(node->properties);
+-		kfree(node);
+-	}
++	if (IS_ERR(fwnode))
++		software_node_free(node);
+ 
+ 	return fwnode;
+ }
 -- 
 2.30.2
 
