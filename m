@@ -2,118 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE996C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:17:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B222C433C1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:58:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 852826195A
-	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:17:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1F6A61494
+	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:58:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhC2GRV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Mar 2021 02:17:21 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:38665 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229873AbhC2GRL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Mar 2021 02:17:11 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 4AD6E160060
-        for <linux-media@vger.kernel.org>; Mon, 29 Mar 2021 08:17:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1616998627; bh=9EnwysYBh+sNnu/q6P2kGnw+M54CVPXGlUSEDUC//eI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M15faMkGw1di3cvX/Q67n4OsrZBUI7TBawocjh6WoylIJT2hEyjDlR3d9+8zjh/uh
-         mCUnCuDIk/4xv1zoLwood75FXsW83S6o2ksPajymYSfOI3dqNk5Sea9cux4XWT2upo
-         nBBz741JbnYyP9W6SWwCRFghfdWqIXDWpLSfdY00Mekb50p/lkiI0Uw9Acoa4XYvI3
-         RjGZ7vyuJTHAUaICgKfZke8s3Bs5Itig1Jf4EwVvbgfm2xa6OJ0rpoA1Wy1TlVqKfJ
-         vj4CTZ7Q/3TUAAGiQ+BDtBVqUZfpxBthXZ9UCGOTPO22ZPH5kSidMHv9UxjQhO9LQo
-         1tV8Qvg1JDDOg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4F82RQ3WJzz6tmM;
-        Mon, 29 Mar 2021 08:17:06 +0200 (CEST)
-From:   Sebastian Fricke <sebastian.fricke@posteo.net>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, heiko@sntech.de,
-        Sebastian Fricke <sebastian.fricke@posteo.net>
-Subject: [PATCH v3] media: rkisp1: Increase ISP input resolution limit
-Date:   Mon, 29 Mar 2021 08:16:38 +0200
-Message-Id: <20210329061637.14921-1-sebastian.fricke@posteo.net>
+        id S230450AbhC2G60 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Mar 2021 02:58:26 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44992 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhC2G56 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Mar 2021 02:57:58 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id 9CE5D1F45B5B
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, lee.jones@linaro.org,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
+        emil.l.velikov@gmail.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 01/13] dt-bindings: mfd: Add 'nxp,imx8mq-vpu-ctrl' to syscon list
+Date:   Mon, 29 Mar 2021 08:57:31 +0200
+Message-Id: <20210329065743.11961-2-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210329065743.11961-1-benjamin.gaignard@collabora.com>
+References: <20210329065743.11961-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The current implementation limits the maximum sink pad resolution to
-4032x3024, which is mentioned by the Rockchip TRM as the maximum size
-to handle black level correction. But the ISP can actually set its
-sink pad format to a size of 4416x3312.
-Allow higher sink pad resolutions in order to allow a bigger range of
-sensor modes to be used with the RkISP1.
-Apply the previous limit to the sink pad crop instead of the format to
-satisfy the requirement of the ISP.
+Add 'nxp,imx8mq-vpu-ctrl' in the list of possible syscon.
+It will used to access to the VPU control registers.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Sebastian Fricke <sebastian.fricke@posteo.net>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- .../platform/rockchip/rkisp1/rkisp1-common.h   | 18 +++++++++++++-----
- .../platform/rockchip/rkisp1/rkisp1-isp.c      |  8 ++++++--
- 2 files changed, 19 insertions(+), 7 deletions(-)
+version 7:
+ - Add Rob ack
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 038c303a8aed..553a4b12becf 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -29,11 +29,19 @@
- #define RKISP1_ISP_SD_SRC BIT(0)
- #define RKISP1_ISP_SD_SINK BIT(1)
- 
--/* min and max values for the widths and heights of the entities */
--#define RKISP1_ISP_MAX_WIDTH		4032
--#define RKISP1_ISP_MAX_HEIGHT		3024
--#define RKISP1_ISP_MIN_WIDTH		32
--#define RKISP1_ISP_MIN_HEIGHT		32
-+/*
-+ * min and max values for the widths and heights of the entities
-+ * The ISP device accepts input resolutions of up to 4416x3312, but
-+ * it can only process resolutions of 4032x3024 internally.
-+ * Therefore the crop resolution is limited to 4032x3024, the
-+ * sink pad crop is applied automatically when the format is set.
-+ */
-+#define RKISP1_ISP_MAX_WIDTH			4416
-+#define RKISP1_ISP_MAX_HEIGHT			3312
-+#define RKISP1_ISP_MAX_WIDTH_CROP		4032
-+#define RKISP1_ISP_MAX_HEIGHT_CROP		3024
-+#define RKISP1_ISP_MIN_WIDTH			32
-+#define RKISP1_ISP_MIN_HEIGHT			32
- 
- #define RKISP1_RSZ_MP_SRC_MAX_WIDTH		4416
- #define RKISP1_RSZ_MP_SRC_MAX_HEIGHT		3312
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index 2e5b57e3aedc..a8274e84a64b 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -758,9 +758,13 @@ static void rkisp1_isp_set_sink_crop(struct rkisp1_isp *isp,
- 					  which);
- 
- 	sink_crop->left = ALIGN(r->left, 2);
--	sink_crop->width = ALIGN(r->width, 2);
-+	sink_crop->width = clamp_t(u32, ALIGN(r->width, 2),
-+				   RKISP1_ISP_MIN_WIDTH,
-+				   RKISP1_ISP_MAX_WIDTH_CROP);
- 	sink_crop->top = r->top;
--	sink_crop->height = r->height;
-+	sink_crop->height = clamp_t(u32, r->height,
-+				    RKISP1_ISP_MIN_HEIGHT,
-+				    RKISP1_ISP_MAX_HEIGHT_CROP);
- 	rkisp1_sd_adjust_crop(sink_crop, sink_fmt);
- 
- 	*r = *sink_crop;
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index f14ae6da0068..ae22c4730613 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -44,6 +44,7 @@ properties:
+               - hisilicon,peri-subctrl
+               - microchip,sparx5-cpu-syscon
+               - mstar,msc313-pmsleep
++              - nxp,imx8mq-vpu-ctrl
+               - rockchip,px30-qos
+               - rockchip,rk3066-qos
+               - rockchip,rk3288-qos
 -- 
 2.25.1
 
