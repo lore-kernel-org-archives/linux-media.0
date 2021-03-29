@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACB05C4345C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C46C43459
 	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:59:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8495F61494
+	by mail.kernel.org (Postfix) with ESMTP id 5032F61981
 	for <linux-media@archiver.kernel.org>; Mon, 29 Mar 2021 06:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhC2G6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Mar 2021 02:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S231201AbhC2G6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Mar 2021 02:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbhC2G6M (ORCPT
+        with ESMTP id S230322AbhC2G6I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Mar 2021 02:58:12 -0400
+        Mon, 29 Mar 2021 02:58:08 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A953C061574;
-        Sun, 28 Mar 2021 23:58:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196BBC061574;
+        Sun, 28 Mar 2021 23:58:08 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 5141E1F45C4B
+        with ESMTPSA id E371A1F45B96
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -40,9 +40,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v7 12/13] media: hantro: IMX8M: add variant for G2/HEVC codec
-Date:   Mon, 29 Mar 2021 08:57:42 +0200
-Message-Id: <20210329065743.11961-13-benjamin.gaignard@collabora.com>
+Subject: [PATCH v7 09/13] media: uapi: Add a control for HANTRO driver
+Date:   Mon, 29 Mar 2021 08:57:39 +0200
+Message-Id: <20210329065743.11961-10-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210329065743.11961-1-benjamin.gaignard@collabora.com>
 References: <20210329065743.11961-1-benjamin.gaignard@collabora.com>
@@ -52,179 +52,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add variant to IMX8M to enable G2/HEVC codec.
-Define the capabilities for the hardware up to 3840x2160.
-G2 doesn't have postprocessor, use the same clocks and got it
-own interruption.
+The HEVC HANTRO driver needs to know the number of bits to skip at
+the beginning of the slice header.
+That is a hardware specific requirement so create a dedicated control
+that this purpose.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
-version 7:
- - Add Philipp Reviewed-by tag.
-
 version 5:
- - remove useless postproc fields for G2
+ - Be even more verbose in control documentation.
+ - Do not create class for the control.
+version 4:
+- The control is now an integer which is enough to provide the numbers
+  of bits to skip.
+version 3:
+- Fix typo in field name
 
-version 2:
-- remove useless clocks
+ .../userspace-api/media/drivers/hantro.rst         | 14 ++++++++++++++
+ .../userspace-api/media/drivers/index.rst          |  1 +
+ include/uapi/linux/v4l2-controls.h                 | 13 +++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/drivers/hantro.rst
 
- drivers/staging/media/hantro/hantro_drv.c   |  1 +
- drivers/staging/media/hantro/hantro_hw.h    |  1 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 76 ++++++++++++++++++++-
- 3 files changed, 76 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 33b8bd38eac1..ed380a8bef93 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -574,6 +574,7 @@ static const struct of_device_id of_hantro_match[] = {
- #endif
- #ifdef CONFIG_VIDEO_HANTRO_IMX8M
- 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
-+	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
- #endif
- 	{ /* sentinel */ }
- };
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 5788188aae50..b4e7490bbe45 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -193,6 +193,7 @@ extern const struct hantro_variant rk3399_vpu_variant;
- extern const struct hantro_variant rk3328_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
- extern const struct hantro_variant imx8mq_vpu_variant;
-+extern const struct hantro_variant imx8mq_vpu_g2_variant;
+diff --git a/Documentation/userspace-api/media/drivers/hantro.rst b/Documentation/userspace-api/media/drivers/hantro.rst
+new file mode 100644
+index 000000000000..78dcd2a44a03
+--- /dev/null
++++ b/Documentation/userspace-api/media/drivers/hantro.rst
+@@ -0,0 +1,14 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Hantro video decoder driver
++===========================
++
++The Hantro video decoder driver implements the following driver-specific controls:
++
++``V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP (integer)``
++    Specifies to Hantro HEVC video decoder driver the number of data (in bits) to
++    skip in the slice segment header.
++    If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
++    to before syntax element "slice_temporal_mvp_enabled_flag".
++    If IDR, the skipped bits are just "pic_output_flag"
++    (separate_colour_plane_flag is not supported).
+diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+index 1a9038f5f9fa..12e3c512d718 100644
+--- a/Documentation/userspace-api/media/drivers/index.rst
++++ b/Documentation/userspace-api/media/drivers/index.rst
+@@ -33,6 +33,7 @@ For more details see the file COPYING in the source distribution of Linux.
  
- extern const struct hantro_postproc_regs hantro_g1_postproc_regs;
+ 	ccs
+ 	cx2341x-uapi
++        hantro
+ 	imx-uapi
+ 	max2175
+ 	meye-uapi
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index f3376aafea65..1dfb874b6272 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -869,6 +869,19 @@ enum v4l2_mpeg_mfc51_video_force_frame_type {
+ #define V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC		(V4L2_CID_CODEC_MFC51_BASE+53)
+ #define V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P		(V4L2_CID_CODEC_MFC51_BASE+54)
  
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index 8d0c3425234b..6de43e0edc36 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -12,6 +12,7 @@
- #include "hantro.h"
- #include "hantro_jpeg.h"
- #include "hantro_g1_regs.h"
-+#include "hantro_g2_regs.h"
++/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
++#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
++/*
++ * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
++ * the number of data (in bits) to skip in the
++ * slice segment header.
++ * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
++ * to before syntax element "slice_temporal_mvp_enabled_flag".
++ * If IDR, the skipped bits are just "pic_output_flag"
++ * (separate_colour_plane_flag is not supported).
++ */
++#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
++
+ /*  Camera class control IDs */
  
- #define CTRL_SOFT_RESET		0x00
- #define RESET_G1		BIT(1)
-@@ -129,6 +130,26 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
- 	},
- };
- 
-+static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_NV12,
-+		.codec_mode = HANTRO_MODE_NONE,
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_HEVC_SLICE,
-+		.codec_mode = HANTRO_MODE_HEVC_DEC,
-+		.max_depth = 2,
-+		.frmsize = {
-+			.min_width = 48,
-+			.max_width = 3840,
-+			.step_width = MB_DIM,
-+			.min_height = 48,
-+			.max_height = 2160,
-+			.step_height = MB_DIM,
-+		},
-+	},
-+};
-+
- static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- {
- 	struct hantro_dev *vpu = dev_id;
-@@ -147,6 +168,24 @@ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t imx8m_vpu_g2_irq(int irq, void *dev_id)
-+{
-+	struct hantro_dev *vpu = dev_id;
-+	enum vb2_buffer_state state;
-+	u32 status;
-+
-+	status = vdpu_read(vpu, HEVC_REG_INTERRUPT);
-+	state = (status & HEVC_REG_INTERRUPT_DEC_RDY_INT) ?
-+		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
-+
-+	vdpu_write(vpu, 0, HEVC_REG_INTERRUPT);
-+	vdpu_write(vpu, HEVC_REG_CONFIG_DEC_CLK_GATE_E, HEVC_REG_CONFIG);
-+
-+	hantro_irq_done(vpu, state);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
- {
- 	struct device_node *np = vpu->dev->of_node;
-@@ -176,6 +215,13 @@ static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
- 	imx8m_soft_reset(vpu, RESET_G1);
- }
- 
-+static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	imx8m_soft_reset(vpu, RESET_G2);
-+}
-+
- /*
-  * Supported codec ops.
-  */
-@@ -201,16 +247,28 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
- 	},
- };
- 
-+static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
-+	[HANTRO_MODE_HEVC_DEC] = {
-+		.run = hantro_g2_hevc_dec_run,
-+		.reset = imx8m_vpu_g2_reset,
-+		.init = hantro_hevc_dec_init,
-+		.exit = hantro_hevc_dec_exit,
-+	},
-+};
-+
- /*
-  * VPU variants.
-  */
- 
- static const struct hantro_irq imx8mq_irqs[] = {
- 	{ "g1", imx8m_vpu_g1_irq },
--	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
- };
- 
--static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
-+static const struct hantro_irq imx8mq_g2_irqs[] = {
-+	{ "g2", imx8m_vpu_g2_irq },
-+};
-+
-+static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus"};
- 
- const struct hantro_variant imx8mq_vpu_variant = {
- 	.dec_fmts = imx8m_vpu_dec_fmts,
-@@ -228,3 +286,17 @@ const struct hantro_variant imx8mq_vpu_variant = {
- 	.clk_names = imx8mq_clk_names,
- 	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
- };
-+
-+const struct hantro_variant imx8mq_vpu_g2_variant = {
-+	.dec_offset = 0x0,
-+	.dec_fmts = imx8m_vpu_g2_dec_fmts,
-+	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_g2_dec_fmts),
-+	.codec = HANTRO_HEVC_DECODER,
-+	.codec_ops = imx8mq_vpu_g2_codec_ops,
-+	.init = imx8mq_vpu_hw_init,
-+	.runtime_resume = imx8mq_runtime_resume,
-+	.irqs = imx8mq_g2_irqs,
-+	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
-+	.clk_names = imx8mq_clk_names,
-+	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
-+};
+ #define V4L2_CID_CAMERA_CLASS_BASE	(V4L2_CTRL_CLASS_CAMERA | 0x900)
 -- 
 2.25.1
 
