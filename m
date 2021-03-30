@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C94CC433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B32F4C433EA
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 14:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FC90619D3
+	by mail.kernel.org (Postfix) with ESMTP id 909F6619D4
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 14:21:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbhC3OUx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Mar 2021 10:20:53 -0400
+        id S231967AbhC3OU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Mar 2021 10:20:56 -0400
 Received: from mga03.intel.com ([134.134.136.65]:27451 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231344AbhC3OU3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Mar 2021 10:20:29 -0400
-IronPort-SDR: ns8lQ+HwQbB8kYUttXmlvaYV4y7GkOLlr+qdK2DWsLf2f12V7a+GG3ogNBtemWtqRM6NaaE3PF
- e9/3ZjDabrYg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="191805406"
+        id S231882AbhC3OUg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 30 Mar 2021 10:20:36 -0400
+IronPort-SDR: 6J4SObQKmW/+BTQRjpLMh7ATmlPeDuyEPAGB3KHyIbPcbEvNb+TLb9PuAd6936143bs4NIpqeL
+ 0IZimGYS0GqA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="191805436"
 X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
-   d="scan'208";a="191805406"
+   d="scan'208";a="191805436"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:28 -0700
-IronPort-SDR: 8yy3zgZeMOMOp/wksjhO4i+FNVdfl6apnVPDrZYyeszMvVqOkRjmPHL7miwTCo7GGWhptG/tcT
- SrPs6O6vLKug==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:36 -0700
+IronPort-SDR: hw5urY7p3Z8KQRK5LqSVIht1wIKfMlZbzuvDg5lSoknNWcjgZC/4ShjmE9xy088qh02UhljbcE
+ MWU/2cfHD0cA==
 X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
-   d="scan'208";a="418190171"
+   d="scan'208";a="418190233"
 Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.1])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:25 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:33 -0700
 From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
@@ -40,46 +40,145 @@ Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
         paul.j.murphy@linux.intel.com,
         gjorgjix.rosikopulos@linux.intel.com,
         martinax.krasteva@linux.intel.com
-Subject: [PATCH 0/6] Camera Sensor Drivers
-Date:   Tue, 30 Mar 2021 15:20:17 +0100
-Message-Id: <20210330142023.141-1-martinax.krasteva@linux.intel.com>
+Subject: [PATCH 3/6] dt-bindings: media: Add bindings for imx412
+Date:   Tue, 30 Mar 2021 15:20:20 +0100
+Message-Id: <20210330142023.141-4-martinax.krasteva@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210330142023.141-1-martinax.krasteva@linux.intel.com>
+References: <20210330142023.141-1-martinax.krasteva@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Martina Krasteva <martinax.krasteva@intel.com>
 
-Patch series contains Sony IMX335, Sony IMX412 and OmniVision OV9282
-camera sensor drivers and respective binding documentation.
+- Add dt-bindings documentation for Sony imx412 sensor driver
+- Add MAINTAINERS entry for Sony imx412 binding documentation
 
-Martina Krasteva (6):
-  dt-bindings: media: Add bindings for imx335
-  media: i2c: Add imx335 camera sensor driver
-  dt-bindings: media: Add bindings for imx412
-  media: i2c: Add imx412 camera sensor driver
-  dt-bindings: media: Add bindings for ov9282
-  media: i2c: Add ov9282 camera sensor driver
-
- .../devicetree/bindings/media/i2c/ovti,ov9282.yaml |   90 ++
- .../devicetree/bindings/media/i2c/sony,imx335.yaml |   90 ++
- .../devicetree/bindings/media/i2c/sony,imx412.yaml |   90 ++
- MAINTAINERS                                        |   27 +
- drivers/media/i2c/Kconfig                          |   42 +
- drivers/media/i2c/Makefile                         |    4 +-
- drivers/media/i2c/imx335.c                         | 1126 +++++++++++++++++
- drivers/media/i2c/imx412.c                         | 1269 ++++++++++++++++++++
- drivers/media/i2c/ov9282.c                         | 1134 +++++++++++++++++
- 9 files changed, 3871 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
+Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
+---
+ .../devicetree/bindings/media/i2c/sony,imx412.yaml | 90 ++++++++++++++++++++++
+ MAINTAINERS                                        |  8 ++
+ 2 files changed, 98 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
- create mode 100644 drivers/media/i2c/imx335.c
- create mode 100644 drivers/media/i2c/imx412.c
- create mode 100644 drivers/media/i2c/ov9282.c
 
-
-base-commit: 9d49ed9ca93b8c564033c1d6808017bc9052b5db
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
+new file mode 100644
+index 000000000000..ee2270e6c844
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
+@@ -0,0 +1,90 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Intel Corporation
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/sony,imx412.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sony IMX412 Sensor
++
++maintainers:
++  - Paul J. Murphy <paul.j.murphy@intel.com>
++  - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++
++description:
++  IMX412 sensor is a Sony CMOS active pixel digital image sensor with an active
++  array size of 4072H x 3176V. It is programmable through I2C interface. The
++  I2C client address is fixed to 0x1a as per sensor data sheet. Image data is
++  sent through MIPI CSI-2.
++
++properties:
++  compatible:
++    const: sony,imx412
++  reg:
++    description: I2C address
++    maxItems: 1
++
++  assigned-clocks: true
++  assigned-clock-parents: true
++  assigned-clock-rates: true
++
++  clocks:
++    description: Clock frequency 6MHz, 12MHz, 18MHz, 24MHz or 27MHz
++    maxItems: 1
++
++  reset-gpios:
++    description: Reference to the GPIO connected to the XCLR pin, if any.
++
++  port:
++    additionalProperties: false
++    $ref: /schemas/graph.yaml#/properties/port
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes: true
++          link-frequencies: true
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera@1a {
++            compatible = "sony,imx412";
++            reg = <0x1a>;
++            clocks = <&imx412_clk>;
++
++            assigned-clocks = <&imx412_clk>;
++            assigned-clock-parents = <&imx412_clk_parent>;
++            assigned-clock-rates = <24000000>;
++
++            port {
++                imx412: endpoint {
++                    remote-endpoint = <&cam>;
++                    data-lanes = <1 2 3 4>;
++                    link-frequencies = /bits/ 64 <600000000>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d462fa25369b..18a46ea47971 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16891,6 +16891,14 @@ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/i2c/imx355.c
+ 
++SONY IMX412 SENSOR DRIVER
++M:	Paul J. Murphy <paul.j.murphy@intel.com>
++M:	Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
++
+ SONY MEMORYSTICK SUBSYSTEM
+ M:	Maxim Levitsky <maximlevitsky@gmail.com>
+ M:	Alex Dubov <oakad@yahoo.com>
 -- 
 2.11.0
 
