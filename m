@@ -8,44 +8,44 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B34E9C433F4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 619D6C433EA
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 17:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0C2660235
+	by mail.kernel.org (Postfix) with ESMTP id 394F760235
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 17:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbhC3Rfx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Mar 2021 13:35:53 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53474 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhC3Rfm (ORCPT
+        id S232684AbhC3Rfs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Mar 2021 13:35:48 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59908 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232596AbhC3RfW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Mar 2021 13:35:42 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12UHZOJW081103;
-        Tue, 30 Mar 2021 12:35:24 -0500
+        Tue, 30 Mar 2021 13:35:22 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12UHZ5OJ057284;
+        Tue, 30 Mar 2021 12:35:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617125724;
-        bh=cY9S08RNNeNDgDIv/MVZU5KNIg3kNk5VaVrsGgk3Lls=;
+        s=ti-com-17Q1; t=1617125705;
+        bh=exPtfFP357uEoI265sBSxQidNZbHwCy+lm1TSU/QwUI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=yPAoIu1JqNqgeBkbtqtTAxWcL0R//of/rJ4jsuFZRwZoLJKGdy8gRTVYfjsL1L2PK
-         LxMKaZFQSu0/6lJz/B1i2ncWtgcPMWPwqBslw5oxfeNttVvORmcbICcyZHrFISe7Rn
-         Uset0hGtnheLGe5CvJhdzoIHYdrHqqLvOJYFsxXY=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12UHZOQb028145
+        b=klAWR/g0XSp2ekS+fjDS4+DVOXI4pDzmUIoimtLc7c0L+6GJkGkI4W5QVV4YyAdYq
+         nXuwWpMbVPfG4qZHoQi0QnX2MW9BGKQxHI2xvhdwrPA+r5w7CguUyusI6IMQA+BZGC
+         ISZjLeYLrwKpIce8XWLipZvfufACHZndR2k3KpLw=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12UHZ5CD041024
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Mar 2021 12:35:24 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 30 Mar 2021 12:35:05 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 30
- Mar 2021 12:35:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2021 12:35:05 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Tue, 30 Mar 2021 12:35:24 -0500
+ Frontend Transport; Tue, 30 Mar 2021 12:35:05 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12UHXmgv125244;
-        Tue, 30 Mar 2021 12:35:18 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12UHXmgs125244;
+        Tue, 30 Mar 2021 12:34:59 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,9 +68,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     Pratyush Yadav <p.yadav@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 14/16] dt-bindings: phy: Convert Cadence DPHY binding to YAML
-Date:   Tue, 30 Mar 2021 23:03:46 +0530
-Message-ID: <20210330173348.30135-15-p.yadav@ti.com>
+Subject: [PATCH 11/16] dmaengine: ti: k3-psil-j721e: Add entry for CSI2RX
+Date:   Tue, 30 Mar 2021 23:03:43 +0530
+Message-ID: <20210330173348.30135-12-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210330173348.30135-1-p.yadav@ti.com>
 References: <20210330173348.30135-1-p.yadav@ti.com>
@@ -82,99 +82,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert Cadence DPHY binding to YAML.
+The CSI2RX subsystem uses PSI-L DMA to transfer frames to memory. It can
+have up to 32 threads but the current driver only supports using one. So
+add an entry for that one thread.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- .../devicetree/bindings/phy/cdns,dphy.txt     | 20 --------
- .../devicetree/bindings/phy/cdns,dphy.yaml    | 51 +++++++++++++++++++
- 2 files changed, 51 insertions(+), 20 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.txt
- create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+ drivers/dma/ti/k3-psil-j721e.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.txt b/Documentation/devicetree/bindings/phy/cdns,dphy.txt
-deleted file mode 100644
-index 1095bc4e72d9..000000000000
---- a/Documentation/devicetree/bindings/phy/cdns,dphy.txt
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Cadence DPHY
--============
--
--Cadence DPHY block.
--
--Required properties:
--- compatible: should be set to "cdns,dphy".
--- reg: physical base address and length of the DPHY registers.
--- clocks: DPHY reference clocks.
--- clock-names: must contain "psm" and "pll_ref".
--- #phy-cells: must be set to 0.
--
--Example:
--	dphy0: dphy@fd0e0000{
--		compatible = "cdns,dphy";
--		reg = <0x0 0xfd0e0000 0x0 0x1000>;
--		clocks = <&psm_clk>, <&pll_ref_clk>;
--		clock-names = "psm", "pll_ref";
--		#phy-cells = <0>;
--	};
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-new file mode 100644
-index 000000000000..d1bbf96a8250
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/cdns,dphy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/dma/ti/k3-psil-j721e.c b/drivers/dma/ti/k3-psil-j721e.c
+index 7580870ed746..19ffa31e6dc6 100644
+--- a/drivers/dma/ti/k3-psil-j721e.c
++++ b/drivers/dma/ti/k3-psil-j721e.c
+@@ -58,6 +58,14 @@
+ 		},					\
+ 	}
+ 
++#define PSIL_CSI2RX(x)					\
++	{						\
++		.thread_id = x,				\
++		.ep_config = {				\
++			.ep_type = PSIL_EP_NATIVE,	\
++		},					\
++	}
 +
-+title: Cadence DPHY Device Tree Bindings
-+
-+maintainers:
-+  - Pratyush Yadav <p.yadav@ti.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: cdns,dphy
-+
-+  reg:
-+    maxItems: 1
-+    description: Physical base address and length of the DPHY registers.
-+
-+  clocks:
-+    maxItems: 2
-+    description: DPHY reference clocks.
-+
-+  clock-names:
-+    items:
-+      - const: psm
-+      - const: pll_ref
-+
-+  "#phy-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+
-+    dphy0: dphy@fd0e0000{
-+        compatible = "cdns,dphy";
-+        reg = <0xfd0e0000 0x1000>;
-+        clocks = <&psm_clk>, <&pll_ref_clk>;
-+        clock-names = "psm", "pll_ref";
-+        #phy-cells = <0>;
-+    };
+ /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
+ static struct psil_ep j721e_src_ep_map[] = {
+ 	/* SA2UL */
+@@ -138,6 +146,8 @@ static struct psil_ep j721e_src_ep_map[] = {
+ 	PSIL_PDMA_XY_PKT(0x4707),
+ 	PSIL_PDMA_XY_PKT(0x4708),
+ 	PSIL_PDMA_XY_PKT(0x4709),
++	/* CSI2RX */
++	PSIL_CSI2RX(0x4940),
+ 	/* CPSW9 */
+ 	PSIL_ETHERNET(0x4a00),
+ 	/* CPSW0 */
 -- 
 2.30.0
 
