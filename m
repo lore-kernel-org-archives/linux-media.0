@@ -2,72 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27242C433DB
-	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 13:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05AADC433DB
+	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 14:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2B6E619C7
-	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 13:02:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7F85619C8
+	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 14:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbhC3NCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Mar 2021 09:02:02 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15108 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbhC3NBj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Mar 2021 09:01:39 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8qKL0SFHz1BFPK;
-        Tue, 30 Mar 2021 20:59:34 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.498.0; Tue, 30 Mar 2021
- 21:01:33 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <mchehab@kernel.org>
-Subject: [PATCH -next] media: i2c: ov5648: fix wrong pointer passed to IS_ERR() and PTR_ERR()
-Date:   Tue, 30 Mar 2021 21:04:46 +0800
-Message-ID: <20210330130446.1053644-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-CFilter-Loop: Reflected
+        id S231622AbhC3OUz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Mar 2021 10:20:55 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27451 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231532AbhC3OUb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 30 Mar 2021 10:20:31 -0400
+IronPort-SDR: lZSUeanCsFMLjPQXX05sblPPHL25NdMq5h7PUVLdtV2628FG3mF1Y77zGgZNYIOJsaT+zavKBu
+ ldSy4efLM8eg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="191805418"
+X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
+   d="scan'208";a="191805418"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:30 -0700
+IronPort-SDR: FCfx3B6GcQxh9NHKwnnggcnrnvomr1+prz/VMD6HvpvPvwN14VhUBEbtY2yBIXLiBbVpbtWiTK
+ Hfiw2RsRDjAw==
+X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
+   d="scan'208";a="418190197"
+Received: from mkrastex-mobl.ger.corp.intel.com ([10.104.88.1])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 07:20:28 -0700
+From:   Martina Krasteva <martinax.krasteva@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        sakari.ailus@linux.intel.com,
+        daniele.alessandrelli@linux.intel.com,
+        paul.j.murphy@linux.intel.com,
+        gjorgjix.rosikopulos@linux.intel.com,
+        martinax.krasteva@linux.intel.com
+Subject: [PATCH 1/6] dt-bindings: media: Add bindings for imx335
+Date:   Tue, 30 Mar 2021 15:20:18 +0100
+Message-Id: <20210330142023.141-2-martinax.krasteva@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210330142023.141-1-martinax.krasteva@linux.intel.com>
+References: <20210330142023.141-1-martinax.krasteva@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-IS_ERR() and PTR_ERR() use wrong pointer, it should be
-sensor->dovdd, fix it.
+From: Martina Krasteva <martinax.krasteva@intel.com>
 
-Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+- Add dt-bindings documentation for Sony imx335 sensor driver
+- Add MAINTAINERS entry for Sony imx335 binding documentation
+
+Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
+Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
 ---
- drivers/media/i2c/ov5648.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/media/i2c/sony,imx335.yaml | 90 ++++++++++++++++++++++
+ MAINTAINERS                                        |  8 ++
+ 2 files changed, 98 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index dfe38ab8224d..db6f626f92fb 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2494,9 +2494,9 @@ static int ov5648_probe(struct i2c_client *client)
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+new file mode 100644
+index 000000000000..0e286226ad9b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+@@ -0,0 +1,90 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Intel Corporation
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/sony,imx335.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sony IMX335 Sensor
++
++maintainers:
++  - Paul J. Murphy <paul.j.murphy@intel.com>
++  - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++
++description:
++  IMX335 sensor is a Sony CMOS active pixel digital image sensor with an active
++  array size of 2592H x 1944V. It is programmable through I2C interface. The
++  I2C client address is fixed to 0x1a as per sensor data sheet. Image data is
++  sent through MIPI CSI-2.
++
++properties:
++  compatible:
++    const: sony,imx335
++  reg:
++    description: I2C address
++    maxItems: 1
++
++  assigned-clocks: true
++  assigned-clock-parents: true
++  assigned-clock-rates: true
++
++  clocks:
++    description: Clock frequency from 6 to 27 MHz, 37.125MHz, 74.25MHz
++    maxItems: 1
++
++  reset-gpios:
++    description: Reference to the GPIO connected to the XCLR pin, if any.
++
++  port:
++    additionalProperties: false
++    $ref: /schemas/graph.yaml#/properties/port
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes: true
++          link-frequencies: true
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera@1a {
++            compatible = "sony,imx335";
++            reg = <0x1a>;
++            clocks = <&imx335_clk>;
++
++            assigned-clocks = <&imx335_clk>;
++            assigned-clock-parents = <&imx335_clk_parent>;
++            assigned-clock-rates = <24000000>;
++
++            port {
++                imx335: endpoint {
++                    remote-endpoint = <&cam>;
++                    data-lanes = <1 2 3 4>;
++                    link-frequencies = /bits/ 64 <594000000>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cd988b258fe0..510e3c4a45b6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16875,6 +16875,14 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+ F:	drivers/media/i2c/imx334.c
  
- 	/* DOVDD: digital I/O */
- 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
--	if (IS_ERR(sensor->dvdd)) {
-+	if (IS_ERR(sensor->dovdd)) {
- 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
--		ret = PTR_ERR(sensor->dvdd);
-+		ret = PTR_ERR(sensor->dovdd);
- 		goto error_endpoint;
- 	}
- 
++SONY IMX335 SENSOR DRIVER
++M:	Paul J. Murphy <paul.j.murphy@intel.com>
++M:	Daniele Alessandrelli <daniele.alessandrelli@intel.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
++
+ SONY IMX355 SENSOR DRIVER
+ M:	Tianshu Qiu <tian.shu.qiu@intel.com>
+ L:	linux-media@vger.kernel.org
 -- 
-2.25.1
+2.11.0
 
