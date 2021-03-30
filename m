@@ -8,44 +8,44 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DBA6C433EB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B34E9C433F4
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 17:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53B97619DB
+	by mail.kernel.org (Postfix) with ESMTP id A0C2660235
 	for <linux-media@archiver.kernel.org>; Tue, 30 Mar 2021 17:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbhC3Rfu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Mar 2021 13:35:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53404 "EHLO
+        id S232622AbhC3Rfx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Mar 2021 13:35:53 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53474 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbhC3Rf3 (ORCPT
+        with ESMTP id S232057AbhC3Rfm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Mar 2021 13:35:29 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12UHZBR8081000;
-        Tue, 30 Mar 2021 12:35:11 -0500
+        Tue, 30 Mar 2021 13:35:42 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12UHZOJW081103;
+        Tue, 30 Mar 2021 12:35:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617125712;
-        bh=MPpPVeVWYZ+8y7/Bl7MCutZCIVpIdePmkSU7nZnIfkY=;
+        s=ti-com-17Q1; t=1617125724;
+        bh=cY9S08RNNeNDgDIv/MVZU5KNIg3kNk5VaVrsGgk3Lls=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=hDfIqO94uEz7SMUG0tdB1Mz+3+bjUhiL02eEMBnsV2XOg09ENAqu4e7ounaQ6Is5j
-         2fKpVpWDaxAKiKurEpuICFUpBgIPvFmHcWr0yucnff62RvLXnTU3amPoFZV4Pa/Toc
-         8GEoEf8R/NbRzzMA7yDcLmm/re0R+1vHyFOFqq3g=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12UHZB1C034207
+        b=yPAoIu1JqNqgeBkbtqtTAxWcL0R//of/rJ4jsuFZRwZoLJKGdy8gRTVYfjsL1L2PK
+         LxMKaZFQSu0/6lJz/B1i2ncWtgcPMWPwqBslw5oxfeNttVvORmcbICcyZHrFISe7Rn
+         Uset0hGtnheLGe5CvJhdzoIHYdrHqqLvOJYFsxXY=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12UHZOQb028145
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Mar 2021 12:35:11 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 30 Mar 2021 12:35:24 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 30
- Mar 2021 12:35:11 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2021 12:35:24 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Tue, 30 Mar 2021 12:35:11 -0500
+ Frontend Transport; Tue, 30 Mar 2021 12:35:24 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12UHXmgt125244;
-        Tue, 30 Mar 2021 12:35:05 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12UHXmgv125244;
+        Tue, 30 Mar 2021 12:35:18 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,9 +68,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     Pratyush Yadav <p.yadav@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 12/16] dt-bindings: media: Add DT bindings for TI CSI2RX driver
-Date:   Tue, 30 Mar 2021 23:03:44 +0530
-Message-ID: <20210330173348.30135-13-p.yadav@ti.com>
+Subject: [PATCH 14/16] dt-bindings: phy: Convert Cadence DPHY binding to YAML
+Date:   Tue, 30 Mar 2021 23:03:46 +0530
+Message-ID: <20210330173348.30135-15-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210330173348.30135-1-p.yadav@ti.com>
 References: <20210330173348.30135-1-p.yadav@ti.com>
@@ -82,29 +82,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
-capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
-parts together.
+Convert Cadence DPHY binding to YAML.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- .../devicetree/bindings/media/ti,csi2rx.yaml  | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/ti,csi2rx.yaml
+ .../devicetree/bindings/phy/cdns,dphy.txt     | 20 --------
+ .../devicetree/bindings/phy/cdns,dphy.yaml    | 51 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 20 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/ti,csi2rx.yaml b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.txt b/Documentation/devicetree/bindings/phy/cdns,dphy.txt
+deleted file mode 100644
+index 1095bc4e72d9..000000000000
+--- a/Documentation/devicetree/bindings/phy/cdns,dphy.txt
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Cadence DPHY
+-============
+-
+-Cadence DPHY block.
+-
+-Required properties:
+-- compatible: should be set to "cdns,dphy".
+-- reg: physical base address and length of the DPHY registers.
+-- clocks: DPHY reference clocks.
+-- clock-names: must contain "psm" and "pll_ref".
+-- #phy-cells: must be set to 0.
+-
+-Example:
+-	dphy0: dphy@fd0e0000{
+-		compatible = "cdns,dphy";
+-		reg = <0x0 0xfd0e0000 0x0 0x1000>;
+-		clocks = <&psm_clk>, <&pll_ref_clk>;
+-		clock-names = "psm", "pll_ref";
+-		#phy-cells = <0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
 new file mode 100644
-index 000000000000..ebd894364391
+index 000000000000..d1bbf96a8250
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
-@@ -0,0 +1,70 @@
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+@@ -0,0 +1,51 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/ti,csi2rx.yaml#
++$id: http://devicetree.org/schemas/phy/cdns,dphy.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: TI CSI2RX Wrapper Device Tree Bindings
++title: Cadence DPHY Device Tree Bindings
 +
 +maintainers:
 +  - Pratyush Yadav <p.yadav@ti.com>
@@ -112,61 +138,42 @@ index 000000000000..ebd894364391
 +properties:
 +  compatible:
 +    items:
-+      - const: ti,csi2rx
-+
-+  dmas:
-+    description: RX DMA Channel 0
-+
-+  dma-names:
-+    items:
-+      - const: rx0
++      - const: cdns,dphy
 +
 +  reg:
 +    maxItems: 1
-+    description: Base address and size of the TI wrapper registers.
++    description: Physical base address and length of the DPHY registers.
 +
-+  power-domains:
-+    maxItems: 1
-+    description:
-+      PM domain provider node and an args specifier containing
-+      the device id value.
++  clocks:
++    maxItems: 2
++    description: DPHY reference clocks.
 +
-+  ranges: true
++  clock-names:
++    items:
++      - const: psm
++      - const: pll_ref
 +
-+  "#address-cells":
-+    const: 2
-+
-+  "#size-cells":
-+    const: 2
-+
-+patternProperties:
-+  "csi-bridge@":
-+    type: object
-+    description: CSI2 bridge node.
++  "#phy-cells":
++    const: 0
 +
 +required:
 +  - compatible
 +  - reg
-+  - dmas
-+  - dma-names
-+  - power-domains
-+  - "#address-cells"
-+  - "#size-cells"
++  - clocks
++  - clock-names
++  - "#phy-cells"
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
 +
-+    ti_csi2rx0: ticsi2rx {
-+        compatible = "ti,csi2rx";
-+        dmas = <&main_udmap 0x4940>;
-+        dma-names = "rx0";
-+        reg = <0x0 0x4500000 0x0 0x1000>;
-+        power-domains = <&k3_pds 26 TI_SCI_PD_EXCLUSIVE>;
-+        #address-cells = <2>;
-+        #size-cells = <2>;
++    dphy0: dphy@fd0e0000{
++        compatible = "cdns,dphy";
++        reg = <0xfd0e0000 0x1000>;
++        clocks = <&psm_clk>, <&pll_ref_clk>;
++        clock-names = "psm", "pll_ref";
++        #phy-cells = <0>;
 +    };
 -- 
 2.30.0
