@@ -8,64 +8,64 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3873C433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C1FC43617
 	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 17:36:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD14961075
-	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 17:36:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4A5060BD3
+	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 17:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbhCaRf4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 Mar 2021 13:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        id S234531AbhCaRfw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 Mar 2021 13:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234472AbhCaRfj (ORCPT
+        with ESMTP id S234442AbhCaRfd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 31 Mar 2021 13:35:39 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276E4C061574;
-        Wed, 31 Mar 2021 10:35:39 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m20-20020a7bcb940000b029010cab7e5a9fso1535240wmi.3;
-        Wed, 31 Mar 2021 10:35:39 -0700 (PDT)
+        Wed, 31 Mar 2021 13:35:33 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D4C06174A;
+        Wed, 31 Mar 2021 10:35:33 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m20-20020a7bcb940000b029010cab7e5a9fso1535123wmi.3;
+        Wed, 31 Mar 2021 10:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=c9dnfwn3uUQXnRGTtGdPI5EXjcVR5rT5ZIvAQLeTWB0=;
-        b=WCzlqR6P/SJcQRG8ZJhW0JgDKZwNXWVNT0P8HMH4MCT5hPUS6PXalp4CoXzfamAgq+
-         zBQ1utZxjBRsVGd23sJ9ofKZbKQxv1krZ0EHv3gDMkzrsXFSdI2bx7/JT7+YPpajylsS
-         ugbM5qPu7Yzowim/m953+AXX1SK5CKZWA13mPgLMKqcyaat3wHKSNSGVL0cYtX30pNTU
-         sMzFUF2J3LMfVh8kLYG17BQSa8qrryJPyvLpbqmweoAnlaIXcKpFEm4DNCONU4+X/zCT
-         YQ2TE7NNoPS+AbhcKNB1j9HPw/3dLlUy8L6/Le1ESMnNKq+hd5m5c5rNr3gqMKbV3JZD
-         A/PA==
+        bh=RKzjLcplK3Qj6N++ugVsRlEJA8YUUn4W3Fexo0s7VWk=;
+        b=Y2kJKmF/QEmz1+0o48IS5Tb0knr0LPos4GWWgf3flr4f7Vinr2UFj65rRD9zQZ8AxU
+         ES3d1m308XPWizeyaHi0Rd8DpZ7wQ0Tn3QaDTtf0yZRckbCxgAdIcMYD8dxA4tLilcjP
+         spzCJ/XjFkJ08xXrn11ba5WuKKLsfBkvGyeB8wR1kmH7eXHYQBdKaBUdMhYpmLBJkuWv
+         BULfWxBlA69G5kWTqLso3NZMyQvl5A6JBlI1tOcypC5cLxv8tq885Xs/sHFWvEUdFpxX
+         9cJPGaTmoLTS+KVH3XmvTeR4Ze+KnDSJS6MPobSW77H/ns0B7HeZSavgR9y15B+kwNLG
+         lChQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=c9dnfwn3uUQXnRGTtGdPI5EXjcVR5rT5ZIvAQLeTWB0=;
-        b=ArL+H66Ck5Y6w2gKPYdAux4HKZ4wEiDiY9QhUPMO2VA919CobgK5i0Z8VteJd1jQMM
-         gE8VR6+yL+tLOkuU+xgnu21B3S4OrghScyZIRojs5dqaUnOTz+K4xk135QegqwrF3rVJ
-         55rrTRs+xC420ee6fD8OkloB6VHF9f45v8q5Ca7LOx3xlsbPfGJU9q/a/2KA4KShfFyF
-         Uh8DWE8fumupGsxdcPxYCydOSQ9FWG1meT0/MLtu5obmbIbracGu1N37ZNUM3NjPEWPh
-         3krmaiXn4aiK2OcppcrfbCoYyx894stJPZYYYD+kzYWenia2tIW/VfQiJtTp86cas/he
-         YHnw==
-X-Gm-Message-State: AOAM533LALX+RkrFwfQalrPiV3BWTJKO2MYEtdmmnOV3978SSOp6nZOb
-        5RPsVty0AN4tXNKFWQOo2tA=
-X-Google-Smtp-Source: ABdhPJxVIpTnZ6aBrQGee2qYidNtRG733Qb/IoI1wVPHki4azaPWSOVPcGbgOfhdcfiXWhpV4GfaVg==
-X-Received: by 2002:a1c:1f4c:: with SMTP id f73mr4183679wmf.25.1617212137932;
-        Wed, 31 Mar 2021 10:35:37 -0700 (PDT)
+        bh=RKzjLcplK3Qj6N++ugVsRlEJA8YUUn4W3Fexo0s7VWk=;
+        b=JDbk/k9yrSPkhge1P/+OHtg1/bV9qZCDeMuJp0RjZX2fQWLW8D1FRGJVZ+4+Zxa00T
+         08889owjf7EqsGxLhrPAgmGZkvIwFpnfdDyuonYbMQT+G3Bi+i3gfQi5saTYpq3OLRYx
+         Q+TXgvwFJzwm+3QohAsIU9yVIWQfv7VRDY40sfDU1+Y0wr+WCGRtSdQOLGLWOSSg+lcO
+         KYTqxEIYTni7uT0btDi58t5VWpm6SMeWr/IXtIX35T53D3ORo+B5oJ7u7cxy/7O7QDyO
+         IH2huP8JF4Lew2GnHqTwucCl4TNA3WiANLjs8UIC1NM3Yujpba9VDFt9qbJPl8e5TLOB
+         xJ7Q==
+X-Gm-Message-State: AOAM5307kuexm8pHlZScpSLz/qecrsCT2zkCCdHKRQHuCTc4FiErOEda
+        0JYYjKSlF14oUd6brrDf5HA=
+X-Google-Smtp-Source: ABdhPJykb1Gm/yG5gTGpyJoWqqGtDWKZ9GLEauQ0tzwUU0osQDKIEr317Nvq1XzoroUShjfr7aJ+kA==
+X-Received: by 2002:a05:600c:35cd:: with SMTP id r13mr4251681wmq.186.1617212131818;
+        Wed, 31 Mar 2021 10:35:31 -0700 (PDT)
 Received: from arch-x1c3.. ([2a00:5f00:102:0:6e1d:cfb9:fb12:552d])
-        by smtp.gmail.com with ESMTPSA id 12sm4714200wmw.43.2021.03.31.10.35.37
+        by smtp.gmail.com with ESMTPSA id 12sm4714200wmw.43.2021.03.31.10.35.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 10:35:37 -0700 (PDT)
+        Wed, 31 Mar 2021 10:35:31 -0700 (PDT)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     emil.l.velikov@gmail.com, Frank Rowand <frowand.list@gmail.com>
-Subject: [PATCH v3 9/9] ARM: dts: sama5d4: enable Hantro G1 VDEC
-Date:   Wed, 31 Mar 2021 18:35:20 +0100
-Message-Id: <20210331173520.184191-10-emil.l.velikov@gmail.com>
+Cc:     emil.l.velikov@gmail.com
+Subject: [PATCH v3 4/9] media: hantro: imx: remove unused include
+Date:   Wed, 31 Mar 2021 18:35:15 +0100
+Message-Id: <20210331173520.184191-5-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210331173520.184191-1-emil.l.velikov@gmail.com>
 References: <20210331173520.184191-1-emil.l.velikov@gmail.com>
@@ -77,44 +77,30 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-Add the SAMA5D4 VDEC module which comprises Hantro G1 video decoder
-core.
+The current imx8 code does not use the jpeg encoder. Remove the
+unnecessary include.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: devicetree@vger.kernel.org
+Fixes: 8e4aaa687863 ("media: hantro: add initial i.MX8MQ support")
 Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
-v2
- - Split out of larger patch (Eze)
- - s/Atmel/Microchip/ (Nicolas)
- - Drop leading 0 in node name/address
+ drivers/staging/media/hantro/imx8m_vpu_hw.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-v3
- - Drop the clk/irq names (RobH)
----
- arch/arm/boot/dts/sama5d4.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
-index 05c55875835d..e47e1ca63043 100644
---- a/arch/arm/boot/dts/sama5d4.dtsi
-+++ b/arch/arm/boot/dts/sama5d4.dtsi
-@@ -101,6 +101,13 @@ nfc_sram: sram@100000 {
- 			ranges = <0 0x100000 0x2400>;
- 		};
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index cb1ac02c03d2..f36c1bd681ba 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -9,7 +9,6 @@
+ #include <linux/delay.h>
  
-+		vdec0: vdec@300000 {
-+			compatible = "microchip,sama5d4-vdec";
-+			reg = <0x00300000 0x100000>;
-+			interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
-+		};
-+
- 		usb0: gadget@400000 {
- 			compatible = "atmel,sama5d3-udc";
- 			reg = <0x00400000 0x100000
+ #include "hantro.h"
+-#include "hantro_jpeg.h"
+ #include "hantro_g1_regs.h"
+ 
+ #define CTRL_SOFT_RESET		0x00
 -- 
 2.31.1
 
