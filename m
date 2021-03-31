@@ -2,149 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC655C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 16:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D8A6C43462
+	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 17:36:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9853261042
-	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 16:15:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31E986108D
+	for <linux-media@archiver.kernel.org>; Wed, 31 Mar 2021 17:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbhCaQPB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 Mar 2021 12:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S234492AbhCaRfv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 Mar 2021 13:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbhCaQOa (ORCPT
+        with ESMTP id S233867AbhCaRfa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 31 Mar 2021 12:14:30 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7105C061574
-        for <linux-media@vger.kernel.org>; Wed, 31 Mar 2021 09:14:29 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id b7so30920841ejv.1
-        for <linux-media@vger.kernel.org>; Wed, 31 Mar 2021 09:14:29 -0700 (PDT)
+        Wed, 31 Mar 2021 13:35:30 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A73C061574;
+        Wed, 31 Mar 2021 10:35:29 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id v4so20466048wrp.13;
+        Wed, 31 Mar 2021 10:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=vNxjeoAypk14qZeAB3I01j/gis4p3ugNWJgFdaxWU/Q=;
-        b=rg5lOMyrShuCinEw8rLg1MsMbFzvzNJwRuFTcf3XGfpPn5FbG2JucOeBmhTReuO94g
-         igE4CCbIp+DZq67I05uSrOoAesOyVuEfL3XqEF55K/N25Ivc2UIxoJtb9B8qJYhH/8WD
-         6DL6fW9FEF+zJz0EJeubyAFDFcm9DLfonWDc5JHt4KJvK+jhA0y4w2Pn3J/JuVJYjVcz
-         kL86TYYTYj447y6QGbbsW8vbFTGqBPrFVceKHbzWgIQ6cw4SXJTtg693JpLD5mhCy/xC
-         Wic4bnqpi6Sz3Ak6Amwhb95dFNN4b2BbL2uc7ITjeXI8KFau+K0Aj7o9ffYXH+zi//Bl
-         Ap7g==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=J7Mm6/g9DScNG5FEVhWNdLSdW972ryQCD27uTAegArs=;
+        b=LtN7G9r8/jl/2chD7ZXrYNlXLFyE+1lvHPSzInWwN4rBV3jMbLzdoLCcYqGFP7RmQD
+         tr3tNj/8FP3HOc1RRfLu5FJqSuE+8+RfTaVXmDgB6Cn4Bc9HLJicrgfBGSwMvBm6ADvI
+         fkTvDyHvX5Z16HcOtUY1O1BiAeJbK1TWtK4rvVlNnHq4ya9cmq5/c9IIvuLd/5Pj9q+X
+         Ht5q4jgJ7bG3/s5lu9yYdLWMnquXyYP83V/2GPTsQ5LV7sYAbKE6JqBuy0mAhu9yzMwH
+         2zAhow+XzuZIwjc2KIp9P/H51r6f8c1ZHNKY8QrN/B6wv0gljbt22ABz6yhtpk3nzLZM
+         E/Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vNxjeoAypk14qZeAB3I01j/gis4p3ugNWJgFdaxWU/Q=;
-        b=mw84qPCAJjRBSdBV53dNHgmFETVhUe3dmYbb0XxKB/YqW7Wm+2tbz1hACfa1MbvCbX
-         4nHpZqxYEGrzDdMzPMSkC+S913gGZxcpLJrHRuGHE3lldKsCaCaP4ibWAotRc2H3LIKW
-         HQxW1MO4+HvpJevLsiCQYQ63fg+TuQgmoqo2U/qp93mJvvjhigDfIhNn+su/X029Odef
-         QmMxtPj2R9E4MFPS4P5Yf2uc54y9K8cYmxExkZdbJDeCq4BXnNkgy4YxaX+c2vSuqfL0
-         uEl6HSxIKOIQWkM2YLrgQzrXdj1TClDJeh0W+YHGyn2Uz4oWzdC+we4juruhx3IaPUxZ
-         M06w==
-X-Gm-Message-State: AOAM532ElL1Uv69BLZ0wlfd8pn+z9JbS/6bRVYJOpKpx8u3xnpCutZqm
-        OdNajD3+tNTqT992Z46YaUz4oYFI37ue7AETZ+iElQ==
-X-Google-Smtp-Source: ABdhPJyCD57Hk7JN+3B03CkiyVtp0j4O0SewLISi/qF5v74Y9tYrClp8NL+kMqJYkabgyX1EXc87VOEKtqokYa2ngPE=
-X-Received: by 2002:a17:906:c099:: with SMTP id f25mr4446366ejz.141.1617207268482;
- Wed, 31 Mar 2021 09:14:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=J7Mm6/g9DScNG5FEVhWNdLSdW972ryQCD27uTAegArs=;
+        b=JETtnFMfINSSUbgUuwmiGrAwuwWw90pOkMqF8nN0e6Mrpz/hNOrx2+F0RyvzA4UouE
+         u64S27vWRHILvUgkpEZ7++CKFB2BBC6WRKi/gsdvniFzSe3ZlQ3qsU6Z8obhRptJ5nJt
+         LF4KhLzFUsPYC+T3aEdhlu4PnAJp838lv6dOFYRXhEKuEuoOE0PsQR2InszmEonZjrfl
+         zeUXdQdM5Ga4ky9vWIo154Io8hdsBxJXCPbKA0yivlhATUgN9xoem0CUtr4Kn+94I4P3
+         +cgJFEmXo5ycHGdedSr0inh1+SGy4XThkIjXRla+FX/w3mLpHu1eDNYJH/IDfpd4nyfi
+         SpQw==
+X-Gm-Message-State: AOAM5330CVhc6Ye8dmeDN3Al70SvJMcrTRnvVseceJtN7eXm3todmf6n
+        kOEYvgJaZDbYbyKGQBzy8Hs=
+X-Google-Smtp-Source: ABdhPJw52RKYcN4+cD5o9NRPGtnnTUTfKGBiYwXL6SNpac2aCdJFLiYtuSyEk+mnan+bhPp2J4+htQ==
+X-Received: by 2002:a5d:42ca:: with SMTP id t10mr4938431wrr.274.1617212128474;
+        Wed, 31 Mar 2021 10:35:28 -0700 (PDT)
+Received: from arch-x1c3.. ([2a00:5f00:102:0:6e1d:cfb9:fb12:552d])
+        by smtp.gmail.com with ESMTPSA id 12sm4714200wmw.43.2021.03.31.10.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 10:35:27 -0700 (PDT)
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+To:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc:     emil.l.velikov@gmail.com
+Subject: [PATCH v3 1/9] media: hantro: use G1_REG_INTERRUPT directly for the mpeg2
+Date:   Wed, 31 Mar 2021 18:35:12 +0100
+Message-Id: <20210331173520.184191-2-emil.l.velikov@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210331173520.184191-1-emil.l.velikov@gmail.com>
+References: <20210331173520.184191-1-emil.l.velikov@gmail.com>
 MIME-Version: 1.0
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 31 Mar 2021 13:14:17 -0300
-Message-ID: <CAAEAJfAQkocEX1Z32YwupQT1s+PMGUNQcpgrLhX9+yu+1v9czw@mail.gmail.com>
-Subject: NULL pointer dereference at v4l2_ctrl_request_complete
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+From: Emil Velikov <emil.velikov@collabora.com>
 
-We have found this crash in mainline:
+Use the register directly over the existing SWREG().
 
-[  258.174662] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000000
-[  258.182967] Mem abort info:
-[  258.187746]   ESR = 0x96000004
-[  258.192100]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  258.199108]   SET = 0, FnV = 0
-[  258.203732]   EA = 0, S1PTW = 0
-[  258.208389] Data abort info:
-[  258.212743]   ISV = 0, ISS = 0x00000004
-[  258.218322]   CM = 0, WnR = 0
-[  258.222760] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000444b0000
-[  258.230822] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[  258.239097] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[  258.246162] Modules linked in: hantro_vpu(C) videobuf2_vmalloc
-v4l2_h264 videobuf2_dma_contig videobuf2_memops v4l2_mem2mem
-videobuf2_v4l2 videobuf2_common videodev mc etnaviv fsl_imx8_ddr_perf
-gpu_sched fuse
-[  258.263431] CPU: 0 PID: 34 Comm: kworker/0:1 Tainted: G         C
-     5.12.0-rc2+ #106
-[  258.270312] Hardware name: NXP i.MX8MQ EVK (DT)
-[  258.273542] Workqueue: events v4l2_m2m_device_run_work [v4l2_mem2mem]
-[  258.278716] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-[  258.283426] pc : __memcpy+0x7c/0x180
-[  258.285709] lr : v4l2_ctrl_request_complete+0x7c/0x200 [videodev]
-[  258.290585] sp : ffff8000116fbc60
-[  258.292598] x29: ffff8000116fbc60 x28: ffff80001142b780
-[  258.296617] x27: ffff80001127bc80 x26: 00000000e9b00000
-[  258.300637] x25: 00000000e9a00000 x24: ffff0000067e2500
-[  258.304653] x23: ffff0000067e2538 x22: ffff00000387d238
-[  258.308671] x21: ffff0000067e2598 x20: ffff000004644e00
-[  258.312688] x19: ffff000006812a00 x18: 0000000000000000
-[  258.316708] x17: 0000000000000000 x16: 0000000000000000
-[  258.320724] x15: 0000000000000000 x14: 0000000000000000
-[  258.324744] x13: 0000000000000000 x12: 0000000000000000
-[  258.328761] x11: 0000000000000000 x10: 0000000000000000
-[  258.332776] x9 : 0000000000000000 x8 : 0000000000000000
-[  258.336793] x7 : 0000000000000000 x6 : ffff000006812a40
-[  258.340811] x5 : 0000000000000006 x4 : 0000000000000000
-[  258.344826] x3 : 0000000000000010 x2 : 0000000000000010
-[  258.348845] x1 : 0000000000000000 x0 : ffff000006812a40
-[  258.352864] Call trace:
-[  258.354010]  __memcpy+0x7c/0x180
-[  258.355941]  hantro_end_prepare_run+0x2c/0x60 [hantro_vpu]
-[  258.360150]  hantro_g1_mpeg2_dec_run+0x3b0/0x7f0 [hantro_vpu]
-[  258.364615]  device_run+0xa8/0xbc [hantro_vpu]
-[  258.367777]  v4l2_m2m_try_run+0x84/0x134 [v4l2_mem2mem]
-[  258.371723]  v4l2_m2m_device_run_work+0x14/0x20 [v4l2_mem2mem]
-[  258.376279]  process_one_work+0x1c0/0x484
-[  258.378995]  worker_thread+0x70/0x434
-[  258.381364]  kthread+0x158/0x160
-[  258.383296]  ret_from_fork+0x10/0x34
-[  258.385582] Code: a8c12027 a88120c7 a8c12027 a88120c7 (a8c12027)
-[  258.390377] ---[ end trace fea6ecb96dad642d ]---
+Ideally we'll port the driver away from the local registers, but for
+now this is enough. For context - I was reading through the IRQ register
+handling across the variants.
 
-This needs several concurrent streams to run at the same time,
-it doesn't happen with just one; it was reproduced in rkvdec
-and hantro drivers. The above stacktrace is on MPEG-2,
-but we have found it on H.264 as well.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
+---
+ drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I've traced this to:
+diff --git a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
+index 6386a3989bfe..0fd306806f16 100644
+--- a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
+@@ -10,6 +10,7 @@
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro.h"
+ #include "hantro_hw.h"
++#include "hantro_g1_regs.h"
+ 
+ #define G1_SWREG(nr)			((nr) * 4)
+ 
+@@ -20,7 +21,6 @@
+ #define G1_REG_REFER2_BASE		G1_SWREG(16)
+ #define G1_REG_REFER3_BASE		G1_SWREG(17)
+ #define G1_REG_QTABLE_BASE		G1_SWREG(40)
+-#define G1_REG_DEC_E(v)			((v) ? BIT(0) : 0)
+ 
+ #define G1_REG_DEC_AXI_RD_ID(v)		(((v) << 24) & GENMASK(31, 24))
+ #define G1_REG_DEC_TIMEOUT_E(v)		((v) ? BIT(23) : 0)
+@@ -246,6 +246,5 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
+ 
+ 	hantro_end_prepare_run(ctx);
+ 
+-	reg = G1_REG_DEC_E(1);
+-	vdpu_write(vpu, reg, G1_SWREG(1));
++	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_E, G1_REG_INTERRUPT);
+ }
+-- 
+2.31.1
 
-                v4l2_ctrl_lock(ctrl);
-                if (ref->req) {
-                        ptr_to_ptr(ctrl, ref->req->p_req, ref->p_req);
-
-And:
-
-static void ptr_to_ptr(struct v4l2_ctrl *ctrl,
-                       union v4l2_ctrl_ptr from, union v4l2_ctrl_ptr to)
-{
-        if (ctrl == NULL)
-                return;
-        memcpy(to.p, from.p_const, ctrl->elems * ctrl->elem_size);
-                               ^^^^^^^^^^^^
-                               This is NULL
-
-I've been staring at this file and trying to understand how this can happen
-but haven't been able to make any progress so far...
-
-Any ideas ?
-
-Thanks,
-Ezequiel
