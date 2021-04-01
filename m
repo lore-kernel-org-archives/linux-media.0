@@ -2,138 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E56BEC433B4
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F1DFC433B4
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C109E60FED
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6F7B60FED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbhDASg3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:36:29 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:60700 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240828AbhDASbi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:31:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617301899; x=1648837899;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jCzGB/5nxDRF5zHetU+FXH2sdCatrGHOQpHiMo1ettU=;
-  b=L8o+i2qhuQDJizr6T/wt27dF7as5umxGI0sZAMT0nmhF7wKOASQHYMeg
-   /Q8CRXpohm8AFv5Bszw07k2P1N72F85P5pmQ9+fNGFyVYOCLgnUk9zCfU
-   Nnqnx+9e+yiy44y/0q06TTDDZ+J8dN09nOkxYAJL/n+uc6+ctPETmXEzt
-   fmqUX9e+L24qUDcOwszyiwdYThKczdUYrDnHCmFZVYSosHNcKpUxU78I/
-   NzoHIaNggvApjFgwvu7gVCFOJMhC4wee71gpeoRlabGx1IZXU3WP+kGpb
-   ffL4JAkX+QobmePOcXzZdBdrFdH+KlvAptDpOuqm//GhHBqMbg6YC6QEx
-   Q==;
-IronPort-SDR: MeC3eHuwf+PoH+EQpHRmRP5z6lY02fAzawQm4i8a19dGak7j94eJ1tptfjm3UjCXd/L4JzbL+b
- R79mmxmrdbXAdTRs9B571ynkO/1OnwbEBzmXHC2bZOpo67G7LyKWI3BeKaJ/ZLaUZh9C0WG6dr
- 7RWLn/9M4suzK7uiIhbwuBcHoGLNSQ0DuR7h8Z1PlPXw5E6gFqV9j661F27PKKVvsg3Bk7ARRs
- jChCQacKNOb+FyYWm/hq+CHVbS+hXsN/O5BK+UNlgfnMTFsd764iH/UTtV9mpY9HIY2zsgbrEQ
- 2A8=
-X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="114976413"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:29:03 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:29:02 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:28:56 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 02/30] media: atmel: atmel-isc: specialize driver name constant
-Date:   Thu, 1 Apr 2021 14:26:55 +0300
-Message-ID: <20210401112723.189107-3-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
-References: <20210401112723.189107-1-eugen.hristev@microchip.com>
+        id S238036AbhDASgc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:36:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57612 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237177AbhDASdC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:33:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9321E61380;
+        Thu,  1 Apr 2021 16:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617293026;
+        bh=DDIhjfi1qYB8lYEU5sQDnqU44QrMSPnvKKTG/wBTR7E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n4bXsarivhKfpiMewB/SYgLxl+04RZj+PyAZrMOUXcU6zn1PWAA9jQX5WZdpLmqPH
+         dBUQaswpg1qgBbgH6FxTjjTSFGwbAy+XhvqNVrQxKINOwkyyHrfYIPT9looUFT9H3N
+         GM5FVKr8mFYIcQ8wmMQcy3tOI07QMjTvHmv45ea5J0NPGYhQG9eSpoik3apcq58Iz+
+         fSxSCpV+F26UwYK1Jj8FnUhwuYpSQGPlmvKA6dP512/Itee7gcB6OHC5ZoKHIlDdM3
+         XYqTIWNwO+QI1i5hlc0GOmW0GUYwGCkKtNlvzSe/xwIBNsAZookBPqwlrn8PMVySgC
+         2N0SS0M9EHXyw==
+Received: by mail-qk1-f170.google.com with SMTP id q3so2626324qkq.12;
+        Thu, 01 Apr 2021 09:03:46 -0700 (PDT)
+X-Gm-Message-State: AOAM533YWvRc38gFT8HNVRaeeTRY3bSb8N8MAt5sPsN3KAOaYiOhYuo7
+        D0P9qOtsyZ1+xjpcI8G6UoVceDTg5japknTalg==
+X-Google-Smtp-Source: ABdhPJwStHNYRy9pgsQh1o9wi8mUMc2/tEoZKnUVOsAiW6sjyZapwKzFBK6eZuazIzCCFNH9ne/QODq+UTX+o2r/Nm8=
+X-Received: by 2002:a37:6592:: with SMTP id z140mr9203928qkb.464.1617293025609;
+ Thu, 01 Apr 2021 09:03:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <1617172405-12962-1-git-send-email-victor.liu@nxp.com>
+ <1617172405-12962-8-git-send-email-victor.liu@nxp.com> <1617198059.605916.2074860.nullmailer@robh.at.kernel.org>
+ <2e6b0bdd03da30446448e86eff69182e417ce43f.camel@nxp.com>
+In-Reply-To: <2e6b0bdd03da30446448e86eff69182e417ce43f.camel@nxp.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 1 Apr 2021 11:03:34 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLn5simeQ20jHhvdWn54DdkVHJf-f1Q4ij-1ff=vHpi-w@mail.gmail.com>
+Message-ID: <CAL_JsqLn5simeQ20jHhvdWn54DdkVHJf-f1Q4ij-1ff=vHpi-w@mail.gmail.com>
+Subject: Re: [PATCH v7 07/14] dt-bindings: mfd: Add i.MX8qm/qxp Control and
+ Status Registers module binding
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>, Vinod <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver name constant must defined based on product driver, thus moving
-the constant directly where it's required. This will allow each ISC based
-product to define it's own name.
+On Thu, Apr 1, 2021 at 4:18 AM Liu Ying <victor.liu@nxp.com> wrote:
+>
+> On Wed, 2021-03-31 at 08:40 -0500, Rob Herring wrote:
+> > On Wed, 31 Mar 2021 14:33:18 +0800, Liu Ying wrote:
+> > > This patch adds bindings for i.MX8qm/qxp Control and Status Registers module.
+> > >
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > > ---
+> > > v6->v7:
+> > > * Add Rob's R-b tag.
+> > >
+> > > v5->v6:
+> > > * Drop 'select' schema. (Rob)
+> > >
+> > > v4->v5:
+> > > * Newly introduced in v5. (Rob)
+> > >
+> > >  .../devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml   | 192 +++++++++++++++++++++
+> > >  1 file changed, 192 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml
+> > >
+> >
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.example.dt.yaml:0:0: /example-0/syscon@56221000/pxl2dpi: failed to match any schema with compatible: ['fsl,imx8qxp-pxl2dpi']
+> > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.example.dt.yaml:0:0: /example-0/syscon@56221000/ldb: failed to match any schema with compatible: ['fsl,imx8qxp-ldb']
+> > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.example.dt.yaml:0:0: /example-0/phy@56228300: failed to match any schema with compatible: ['fsl,imx8qxp-mipi-dphy']
+> >
+>
+> Sorry for the errors.
+> But, my patch passes 'make dt_binding_check' locally upon
+> v5.12-rc1-dontuse at least.
+> My yamllint and dt-schema are up to date.
+>
+> Does your bot _additionally_ check all compatibles in example?
+> I guess I missed something?
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- drivers/media/platform/atmel/atmel-isc-base.c    | 4 ++--
- drivers/media/platform/atmel/atmel-isc.h         | 2 --
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 4 ++--
- 3 files changed, 4 insertions(+), 6 deletions(-)
+Yes, it now adds 'DT_CHECKER_FLAGS=-m' which is new and pending in
+linux-next. It's off by default until we get rid of the ~90 existing
+cases.
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 8b6c5e339cb8..277a8fd8b83d 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -896,7 +896,7 @@ static int isc_querycap(struct file *file, void *priv,
- {
- 	struct isc_device *isc = video_drvdata(file);
- 
--	strscpy(cap->driver, ATMEL_ISC_NAME, sizeof(cap->driver));
-+	strscpy(cap->driver, "microchip-isc", sizeof(cap->driver));
- 	strscpy(cap->card, "Atmel Image Sensor Controller", sizeof(cap->card));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info),
- 		 "platform:%s", isc->v4l2_dev.name);
-@@ -2246,7 +2246,7 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
- 	}
- 
- 	/* Register video device */
--	strscpy(vdev->name, ATMEL_ISC_NAME, sizeof(vdev->name));
-+	strscpy(vdev->name, "microchip-isc", sizeof(vdev->name));
- 	vdev->release		= video_device_release_empty;
- 	vdev->fops		= &isc_fops;
- 	vdev->ioctl_ops		= &isc_ioctl_ops;
-diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index f1df47a4655b..8d81d9967ad2 100644
---- a/drivers/media/platform/atmel/atmel-isc.h
-+++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -256,8 +256,6 @@ struct isc_device {
- 	u32		gamma_max;
- };
- 
--#define ATMEL_ISC_NAME "atmel-isc"
--
- extern struct isc_format formats_list[];
- extern const struct isc_format controller_formats[];
- extern const struct regmap_config isc_regmap_config;
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index c74f36245bd5..f45d8b96bfb8 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -185,7 +185,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 		return irq;
- 
- 	ret = devm_request_irq(dev, irq, isc_interrupt, 0,
--			       ATMEL_ISC_NAME, isc);
-+			       "atmel-sama5d2-isc", isc);
- 	if (ret < 0) {
- 		dev_err(dev, "can't register ISR for IRQ %u (ret=%i)\n",
- 			irq, ret);
-@@ -364,7 +364,7 @@ static struct platform_driver atmel_isc_driver = {
- 	.probe	= atmel_isc_probe,
- 	.remove	= atmel_isc_remove,
- 	.driver	= {
--		.name		= ATMEL_ISC_NAME,
-+		.name		= "atmel-sama5d2-isc",
- 		.pm		= &atmel_isc_dev_pm_ops,
- 		.of_match_table = of_match_ptr(atmel_isc_of_match),
- 	},
--- 
-2.25.1
-
+Rob
