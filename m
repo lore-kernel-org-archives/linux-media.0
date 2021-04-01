@@ -2,92 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 180EAC43618
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9997FC433ED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDC7561006
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BE26601FC
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239102AbhDAS3A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237320AbhDASTH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:19:07 -0400
-Received: from mail.tuxforce.de (mail.tuxforce.de [IPv6:2a00:5080:1:16d::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11FEC0F26D3
-        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 07:59:49 -0700 (PDT)
-Received: from [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d] (2001-4dd5-b099-0-19b2-6b8c-f4bb-b22d.ipv6dyn.netcologne.de [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d])
-        by mail.tuxforce.de (Postfix) with ESMTPSA id 0A22152007A;
-        Thu,  1 Apr 2021 16:59:48 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tuxforce.de 0A22152007A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxforce.de;
-        s=202009; t=1617289188;
-        bh=3a6WlI18tPbA5gRTLysYpeWkw8mZwnceMr/ns0Zzj1w=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=EfoCDaI0jR5YqXlG8sUTB9/OXuhCp/xJ3sDumLcZMYQWJ6dtRePXG86osxhpa375u
-         jlKUtBmN+xE1pKPDHIoSf/n/7ylPgD/Qd2hd1sCILzCJB1C7OFThwGpNQufTdXaSba
-         z9cAosTiPFT0dxbVdsDDFmTW1uOfwj1UnMAGQTRYXhX6TKY/1mXE5cnVJqt5PYpFGs
-         Ft1OiKiJRcalYM3pzDY5nRx+pxzTJD3vf7w8GJgRp9kcG9DVYYkvU5Pyc77puFU+rG
-         JFKy5ACNyNj6orNBnuDU/LBBoNBNA7mCuk61dc8mEMyNP/qSqjQdu0JOfQsubKUY02
-         h5p7uLPSAvtAw==
-Subject: Re: Is request_firmware() really safe to call in resume callback when
- /usr/lib/firmware is on btrfs?
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-btrfs@vger.kernel.org, Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Lukas Middendorf <kernel@tuxforce.de>
-References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
- <20200813163749.GV4332@42.do-not-panic.com>
- <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
- <20200813221348.GB4332@42.do-not-panic.com>
- <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
- <20200814163723.GC4332@42.do-not-panic.com>
- <a79f1a0c-012d-bebe-c9c7-b505f59079c2@tuxforce.de>
- <20200817152056.GD4332@42.do-not-panic.com>
- <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
- <20200818143715.GF4332@42.do-not-panic.com>
-From:   Lukas Middendorf <kernel@tuxforce.de>
-Message-ID: <6b61e549-42b8-8e71-ff57-43b7c5b4291f@tuxforce.de>
-Date:   Thu, 1 Apr 2021 16:59:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S236313AbhDASgY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:36:24 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:46540 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240057AbhDAS1B (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:27:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1617301621; x=1648837621;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GVvIsZVQNrPMN1hvtWjBMXJ1JLr9Fd87AOEdQTPgcIk=;
+  b=Rd7VLyWhf8ddys2AYPRgwdDKm0//R3wGiTs9qvO1NuTN6wE3lssmYleL
+   oNoaLZEgkGHFpWolM06i3Kfx+tZaaZbv4fE89a1p/6sn9tlBqdtmB5Pmf
+   JbvOCYzdt+h8ii8KFScAJxhT5klLEAvsLv6ERN0sbM0Ye3bM/9WuxzhVC
+   Aq5LbF5LanHEjgCVBlnVL8G9OtAq93/F0VG061hKktxiw/+0x88w+ILzI
+   4VrlDjKHUUupvVchR4o+RBSd1cTC5Xdw2PggEbGf2L8fNlZ133hst4QK5
+   GqDQS8eyXMflszwGKP6b1Pti9bFkRCIU1PQNBTFJ6qBG/z8k+tiy+aZH1
+   A==;
+IronPort-SDR: nHdQnCDb6C7TBFjD1RAlb/KXxyl/VTykt5tJfKvqnNkKKAcIebDSVCkx2k+Hy9fXYT+1QmIDz/
+ +OnYjdK6OpjDFXG/UIS6pP3y2Y3Vx79bg5Dmur+6OtzFuev8Mk9/qxmoDBAM8VPShKQFDt2WRe
+ 5UpnR87trs0vcCu45mIUsM5+TZDLE+VNqOcACP2pYRwhq5mGybXegLv3ZkzEOUvyUOJorEMfud
+ NUFEI32UACLNRISUHf/RAtc5Of2s8mGp6lDwnGPWT2JEJfSaNFSS0Tq6oBCr23e0fMxMRBmCAS
+ AvQ=
+X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
+   d="scan'208";a="121402132"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:33:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Apr 2021 04:33:40 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:33:30 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH 21/30] media: atmel: atmel-isc: create callback for DPC submodule product specific
+Date:   Thu, 1 Apr 2021 14:27:14 +0300
+Message-ID: <20210401112723.189107-22-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
+References: <20210401112723.189107-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20200818143715.GF4332@42.do-not-panic.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Luis,
+Create a product specific callback for initializing the DPC submodule
+of the pipeline.
+For sama5d2 product, this module does not exist, thus this function is a noop.
 
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ drivers/media/platform/atmel/atmel-isc-base.c    | 1 +
+ drivers/media/platform/atmel/atmel-isc.h         | 3 +++
+ drivers/media/platform/atmel/atmel-sama5d2-isc.c | 6 ++++++
+ 3 files changed, 10 insertions(+)
 
-On 18/08/2020 16:37, Luis Chamberlain wrote:
-> On Tue, Aug 18, 2020 at 12:04:51AM +0200, Lukas Middendorf wrote:
->> On 17/08/2020 17:20, Luis Chamberlain wrote:
->>> This helps, thanks so much, now we'll have to write a reproducer, thanks
->>> for the report!!
->>
->> Will you do it yourself or do you expect me to do anything for this?
-> 
-> I meant to imply that we'd do this, now that we understand the problem. Thanks
-> for your report!
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index 69952b6ac401..1f7116abc61a 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -651,6 +651,7 @@ static void isc_set_pipeline(struct isc_device *isc, u32 pipeline)
+ 	regmap_bulk_write(regmap, ISC_GAM_GENTRY, gamma, GAMMA_ENTRIES);
+ 	regmap_bulk_write(regmap, ISC_GAM_RENTRY, gamma, GAMMA_ENTRIES);
+ 
++	isc->config_dpc(isc);
+ 	isc->config_csc(isc);
+ 	isc->config_cbc(isc);
+ 	isc->config_cc(isc);
+diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+index eb549fadb1a8..d6cd85a4c3e9 100644
+--- a/drivers/media/platform/atmel/atmel-isc.h
++++ b/drivers/media/platform/atmel/atmel-isc.h
+@@ -221,6 +221,8 @@ struct isc_reg_offsets {
+  * @max_width:		maximum frame width, dependent on the internal RAM
+  * @max_height:		maximum frame height, dependent on the internal RAM
+  *
++ * @config_dpc:		pointer to a function that initializes product
++ *			specific DPC module
+  * @config_csc:		pointer to a function that initializes product
+  *			specific CSC module
+  * @config_cbc:		pointer to a function that initializes product
+@@ -300,6 +302,7 @@ struct isc_device {
+ 	u32		max_height;
+ 
+ 	struct {
++		void (*config_dpc)(struct isc_device *isc);
+ 		void (*config_csc)(struct isc_device *isc);
+ 		void (*config_cbc)(struct isc_device *isc);
+ 		void (*config_cc)(struct isc_device *isc);
+diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+index a8375961f97d..ae906126ffb8 100644
+--- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+@@ -107,6 +107,11 @@ void isc_sama5d2_config_ctrls(struct isc_device *isc,
+ 	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_CONTRAST, -2048, 2047, 1, 256);
+ }
+ 
++void isc_sama5d2_config_dpc(struct isc_device *isc)
++{
++	/* This module is not present on sama5d2 pipeline */
++}
++
+ /* Gamma table with gamma 1/2.2 */
+ const u32 isc_sama5d2_gamma_table[][GAMMA_ENTRIES] = {
+ 	/* 0 --> gamma 1/1.8 */
+@@ -252,6 +257,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	isc->max_width = ISC_SAMA5D2_MAX_SUPPORT_WIDTH;
+ 	isc->max_height = ISC_SAMA5D2_MAX_SUPPORT_HEIGHT;
+ 
++	isc->config_dpc = isc_sama5d2_config_dpc;
+ 	isc->config_csc = isc_sama5d2_config_csc;
+ 	isc->config_cbc = isc_sama5d2_config_cbc;
+ 	isc->config_cc = isc_sama5d2_config_cc;
+-- 
+2.25.1
 
-any news on this issue? Did you succeed with reproducing this at your end?
-
-I retested this with 5.12-rc5 and everything still seems unchanged. I 
-still get freezes on resume under the same circumstances described 
-previously if /usr/lib/firmware is on btrfs. My patches to si2168.c were 
-not merged.
-The documentation of request_firmware() seems unchanged and does not 
-reflect the fact that prerequisites exist for making it safe to call 
-during resume callbacks.
-
-Lukas
