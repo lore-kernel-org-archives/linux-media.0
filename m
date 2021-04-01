@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D17AC433ED
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC343C433B4
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B3FF610C7
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3CE36112E
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbhDASEB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:04:01 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:62179 "EHLO
+        id S237670AbhDASEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:04:06 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:44187 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237536AbhDASAW (ORCPT
+        with ESMTP id S237538AbhDASAW (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:00:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
   t=1617300022; x=1648836022;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JB3dr1U/DWt6qBqOVHSGXJCImGHTndPyXb9YXu64Mas=;
-  b=g3yN7yvGzDGSmfJXoZCnWPf6LMgPeYXsMQZVJ1x+uTkBdgQqbVlxWT6q
-   vL7KYnlHDS4kVY9RU/s/7qnHcXRZHlCKdfiu2PNM7VJ0Dx5jtzaYHBfOk
-   q+a8sZBLSM5HjsH6sogp2G6kUGCiSOsTscJRp5Y/0WbVapI9t0jOaMlJM
-   BWyUW8hVX+7uv3d/rlcilpcarI/o+oUdn0khBb6saG38aXNuMskqDCAu5
-   13/c4+hO4IGU5e+OHm/WH+hKnzk0OpuiFcfciOXQpf1QT1hElRzgkhKHF
-   bW2+MTJnV2IQUyxS+ZqzVRVF+oRFQJaCpeeAnM2SmC2NYdLCY4Z1AFHfO
-   w==;
-IronPort-SDR: Oei+FeSuQcleZaNtuSm08xLLIxw7ewRIe8osxtJtc4svklrg/d9AIynFsQ1GZR2FPEpEPJndWl
- rsS21FKOaHa0IXPqHACuiiLeI7bYcXB2KvjohX6pNuv70LWzJyOnklns92dKDHtukWKabNwhIl
- 3AhuWeurBsfVjnJe0aVrHh3SMn3Ul1x3wl55PodALTGQxRl+DJexknOzzOPZ/LZgrCuIzGYQsa
- EoFbJDO40sUmOlS7JMk4O9PEuDWmRm8if2SmV5FjsFkoGNQ7TNd8FVOzF0I48HjndjkRma7i3F
- Q48=
+  bh=eEFZK/hSf05itEILHRf197/MjzOOVQu1dFzDN6v4vnA=;
+  b=SCOZyRNMbITsB5eXVPZbtQ4++Pi/RbpHJO0OHiPSscZMsLVcHA8MOr/j
+   EL0prtc+n08rLxPP8NORG/pRejU11DQ+hMfGda7ZopikptM++0Y+y71dF
+   vdDg2gbj6u44Og2q5qmo+Jrj17AlF1aNYSugf28t1pw/P59W7KKFvhZ3N
+   OMZw1YeHmNIDWdOl4KxPGz7CTTMGSMVq7Qem/69BF0cQC0fQIdRu/DhfE
+   T71t6aV7OzajhamSMUoa6rXC4UWeTu1dy7/8pQT6lUEEbJDcZOxSDvdgB
+   uac25HnERIVYcLfbi3V1J/itbRuhOp8MtTsU7QuXr8Xew4uACOOxFond0
+   A==;
+IronPort-SDR: HXfZ9RMzmQjY7CuO+/qpFKoOhz+m28Oeg8dpY2G2rHfoLKAYBag7LxIp4ci6VTGpOCshYztolJ
+ AVukyjYm+Mm9D7b6DRwUiBZQ3JVcDjcnz1MT8ypGmZB11yTAMdhzu4oGLZhk3E+Amp5+vmzU0j
+ QVndBs0/7kPXOg8/BmyhFCSrDhMVyZLTg8y1MOh8qPo8J/X3g5M3ze2RPaKSNOokSmRt9lcu3k
+ ltl9hgts9btbSUl9KsBk1UqII7d/PCCpZPUcif7ZbHnM3OyFEILY8fw2Pq8QoHG5xF9EQ/bgiE
+ ma0=
 X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="112132857"
+   d="scan'208";a="112132659"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:34:17 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:32:02 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:34:17 -0700
+ 15.1.2176.2; Thu, 1 Apr 2021 04:32:02 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:34:15 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:31:46 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 26/30] media: atmel: atmel-isc-regs: add additional fields for sama7g5 type pipeline
-Date:   Thu, 1 Apr 2021 14:27:19 +0300
-Message-ID: <20210401112723.189107-27-eugen.hristev@microchip.com>
+Subject: [PATCH 17/30] media: atmel: atmel-isc: add register description for additional modules
+Date:   Thu, 1 Apr 2021 14:27:10 +0300
+Message-ID: <20210401112723.189107-18-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
 References: <20210401112723.189107-1-eugen.hristev@microchip.com>
@@ -66,55 +66,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add additional fields for registers present in sama7g5 type pipeline.
-Extend register masks for additional bits in sama7g5 type pipeline registers.
+Add register description for additional pipeline modules: the
+Defective Pixel Correction (DPC) and the Vertical and Horizontal Scaler(VHXS)
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- drivers/media/platform/atmel/atmel-isc-regs.h | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/media/platform/atmel/atmel-isc-regs.h | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
 diff --git a/drivers/media/platform/atmel/atmel-isc-regs.h b/drivers/media/platform/atmel/atmel-isc-regs.h
-index 457eed74cda9..5f99bf7717c1 100644
+index a15c13e1a833..457eed74cda9 100644
 --- a/drivers/media/platform/atmel/atmel-isc-regs.h
 +++ b/drivers/media/platform/atmel/atmel-isc-regs.h
-@@ -289,8 +289,18 @@
- #define ISC_RLP_CFG_MODE_ARGB32         0xa
- #define ISC_RLP_CFG_MODE_YYCC           0xb
- #define ISC_RLP_CFG_MODE_YYCC_LIMITED   0xc
-+#define ISC_RLP_CFG_MODE_YCYC           0xd
- #define ISC_RLP_CFG_MODE_MASK           GENMASK(3, 0)
+@@ -90,6 +90,46 @@
+ #define ISC_INT_DDONE		BIT(8)
+ #define ISC_INT_HISDONE		BIT(12)
  
-+#define ISC_RLP_CFG_LSH			BIT(5)
++/* ISC DPC Control Register */
++#define ISC_DPC_CTRL	0x40
 +
-+#define ISC_RLP_CFG_YMODE_YUYV		(3 << 6)
-+#define ISC_RLP_CFG_YMODE_YVYU		(2 << 6)
-+#define ISC_RLP_CFG_YMODE_VYUY		(0 << 6)
-+#define ISC_RLP_CFG_YMODE_UYVY		(1 << 6)
++#define ISC_DPC_CTRL_DPCEN	BIT(0)
++#define ISC_DPC_CTRL_GDCEN	BIT(1)
++#define ISC_DPC_CTRL_BLCEN	BIT(2)
 +
-+#define ISC_RLP_CFG_YMODE_MASK		GENMASK(7, 6)
++/* ISC DPC Config Register */
++#define ISC_DPC_CFG	0x44
 +
- /* Offset for HIS register specific to sama5d2 product */
- #define ISC_SAMA5D2_HIS_OFFSET	0
- /* Histogram Control Register */
-@@ -332,13 +342,15 @@
- #define ISC_DCFG_YMBSIZE_BEATS4         (0x1 << 4)
- #define ISC_DCFG_YMBSIZE_BEATS8         (0x2 << 4)
- #define ISC_DCFG_YMBSIZE_BEATS16        (0x3 << 4)
--#define ISC_DCFG_YMBSIZE_MASK           GENMASK(5, 4)
-+#define ISC_DCFG_YMBSIZE_BEATS32        (0x4 << 4)
-+#define ISC_DCFG_YMBSIZE_MASK           GENMASK(6, 4)
++#define ISC_DPC_CFG_BAYSEL_SHIFT	0
++
++#define ISC_DPC_CFG_EITPOL		BIT(4)
++
++#define ISC_DPC_CFG_TA_ENABLE		BIT(14)
++#define ISC_DPC_CFG_TC_ENABLE		BIT(13)
++#define ISC_DPC_CFG_TM_ENABLE		BIT(12)
++
++#define ISC_DPC_CFG_RE_MODE		BIT(17)
++
++#define ISC_DPC_CFG_GDCCLP_SHIFT	20
++#define ISC_DPC_CFG_GDCCLP_MASK		GENMASK(22, 20)
++
++#define ISC_DPC_CFG_BLOFF_SHIFT		24
++#define ISC_DPC_CFG_BLOFF_MASK		GENMASK(31, 24)
++
++#define ISC_DPC_CFG_BAYCFG_SHIFT	0
++#define ISC_DPC_CFG_BAYCFG_MASK		GENMASK(1, 0)
++/* ISC DPC Threshold Median Register */
++#define ISC_DPC_THRESHM	0x48
++
++/* ISC DPC Threshold Closest Register */
++#define ISC_DPC_THRESHC	0x4C
++
++/* ISC DPC Threshold Average Register */
++#define ISC_DPC_THRESHA	0x50
++
++/* ISC DPC STatus Register */
++#define ISC_DPC_SR	0x54
++
+ /* ISC White Balance Control Register */
+ #define ISC_WB_CTRL     0x00000058
  
- #define ISC_DCFG_CMBSIZE_SINGLE         (0x0 << 8)
- #define ISC_DCFG_CMBSIZE_BEATS4         (0x1 << 8)
- #define ISC_DCFG_CMBSIZE_BEATS8         (0x2 << 8)
- #define ISC_DCFG_CMBSIZE_BEATS16        (0x3 << 8)
--#define ISC_DCFG_CMBSIZE_MASK           GENMASK(9, 8)
-+#define ISC_DCFG_CMBSIZE_BEATS32        (0x4 << 8)
-+#define ISC_DCFG_CMBSIZE_MASK           GENMASK(10, 8)
+@@ -153,6 +193,33 @@
+ /* ISC_Gamma Correction Green Entry Register */
+ #define ISC_GAM_RENTRY	0x00000298
  
- /* DMA Control Register */
- #define ISC_DCTRL       0x000003e4
++/* ISC VHXS Control Register */
++#define ISC_VHXS_CTRL	0x398
++
++/* ISC VHXS Source Size Register */
++#define ISC_VHXS_SS	0x39C
++
++/* ISC VHXS Destination Size Register */
++#define ISC_VHXS_DS	0x3A0
++
++/* ISC Vertical Factor Register */
++#define ISC_VXS_FACT	0x3a4
++
++/* ISC Horizontal Factor Register */
++#define ISC_HXS_FACT	0x3a8
++
++/* ISC Vertical Config Register */
++#define ISC_VXS_CFG	0x3ac
++
++/* ISC Horizontal Config Register */
++#define ISC_HXS_CFG	0x3b0
++
++/* ISC Vertical Tap Register */
++#define ISC_VXS_TAP	0x3b4
++
++/* ISC Horizontal Tap Register */
++#define ISC_HXS_TAP	0x434
++
+ /* Offset for CSC register specific to sama5d2 product */
+ #define ISC_SAMA5D2_CSC_OFFSET	0
+ 
 -- 
 2.25.1
 
