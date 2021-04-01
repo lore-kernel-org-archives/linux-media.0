@@ -2,154 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB83BC43460
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03487C43461
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96B29611C9
+	by mail.kernel.org (Postfix) with ESMTP id BC413610A0
 	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbhDARll (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S234184AbhDARln (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbhDARhJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:37:09 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED32C0045ED;
-        Thu,  1 Apr 2021 07:43:53 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id bf3so2251077edb.6;
-        Thu, 01 Apr 2021 07:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zwsGjPkGaotb7ZsEBdVviG/LoubldrQow2Hx2iAHbwE=;
-        b=YK9lS4PpBN7LGEGrmVF8+znEyHLBPKMqx2R/SKS/iwLgZ5fXdYKxWw6+C5sTRtIcDn
-         3zXqJdCda3Lu9rx5y9nvU9/uV3eNxIayG5kPoh6NnMCf/BR/ayCBbvZ/y3Apm0Mbi+nL
-         cN9/DhcY6TjrCgSutBEjpzMGFYDXOUAdgJOJ2IefDsRlpFFkp4HjIMBljIa5NJ3L+zpY
-         Y342/+xjQ0Rn/LsQqvL5jkEOC4bUGlAZFaDBv5VmUkCEdVfy6OqlfhPnJLVh4//WGfxT
-         NF9WGSLJ+UNUjB1UTx4sCD1AEx6z3SO/Zw7FP6SxcB4iaI6uExqR8Lcb1yFGLjC3v3MU
-         3iJQ==
+        with ESMTP id S234565AbhDARiD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:38:03 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABE3C02D569;
+        Thu,  1 Apr 2021 08:53:04 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id c24-20020a9d6c980000b02902662e210895so2020039otr.9;
+        Thu, 01 Apr 2021 08:53:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zwsGjPkGaotb7ZsEBdVviG/LoubldrQow2Hx2iAHbwE=;
-        b=Rs5dhIIbduqG7C70ripkvzyhHcuObH5eRO32UQtfrrR4qzk0lfj+n5n/v5QIwFIuFr
-         oHyeVtODH2DcHytuI9OtOCzS3YHD/mgBPdigDVk7L5v1xW5/IC3zJOnXdsNhtkdDBnXF
-         +EOd7nz+BEJM3zYCYlOChFww+vV66hYg4aLHa6sDEecWWRjCUnz344W4y5gWYmEQV8YC
-         yOLqi8iF8RQZGU59jatsU8vs0joA+ZiiTNaTSfW4EkVWaulL/j0SLezCvwPRD5RGlOvP
-         EZbJPoyIm5LwQdvv9GUpxKN0OD7kfOfO1VkZCQ8vXPyAizrIlrHNRdVXDYMTjxybnolF
-         gMlg==
-X-Gm-Message-State: AOAM530v7rAidV9vDHlwnLMbAmqYaIpVtRABPa4RGBWOtLPSuWWL5zjI
-        zmoGPz6m6KUGe0UqGF8IU7xDhhRvS16gXA==
-X-Google-Smtp-Source: ABdhPJwBbLjtIbBVsJtEeHpWiTusAcMdb8YSew0NSa1mi5jvshz5skGyCYGE4G/achcpGOpDVB6+HQ==
-X-Received: by 2002:a05:6402:31e9:: with SMTP id dy9mr10423951edb.186.1617288232742;
-        Thu, 01 Apr 2021 07:43:52 -0700 (PDT)
-Received: from arch-x1c3.. (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with ESMTPSA id nd36sm2854950ejc.21.2021.04.01.07.43.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vkQJQ0O5X0ESy+J810FdCD0SpVEINsP0ZlnS7rJtykA=;
+        b=t7Dfd7aJiKBH3JXEyyEPFaogHg3o0Z0Arf+OEq24zx6z9Hb0+Fm0M403EmPBOXpd6D
+         /LWgM6PFhazklnzoCjeGaw+8qWFrfNc5c5ZW+80q2ZaLaQOfu6+uTSYHcEel7mfzjCD4
+         6xpywc8Degy7g+h5htBTBFhj98zy0cWqhXvGRiOhiPdUv3Pjz/1R/KBUn0NyC8giL2KT
+         x20UI0tx2XNS4qiMPM2FUBf2sa4/kdWagpfwO9sFvBe71Ntbhpcf/Xf7AwgN04eODwV5
+         5HZtEdny/D6EiKYLJjWwr4Pg4dSe3h/eiNJOp/PKTIbziIkdSRGPl6E7dOCsTOL076Og
+         dg9A==
+X-Gm-Message-State: AOAM530hq7XzTAxMZx5PS2a1GT+5o8sUigH/VT1f2n6FgkXYEsQmtdxr
+        oxljLbGw0/u/YwAskEmFIw==
+X-Google-Smtp-Source: ABdhPJxTYMWgRjWTTEUoN54xBzLN6y375nT/Dx7htqlExcUIh3M3GXE6xcxxoCnomOvmTM8L0T/+ZQ==
+X-Received: by 2002:a9d:7e8d:: with SMTP id m13mr7362910otp.54.1617292383853;
+        Thu, 01 Apr 2021 08:53:03 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d2sm1271592otl.48.2021.04.01.08.53.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 07:43:52 -0700 (PDT)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     emil.l.velikov@gmail.com, Frank Rowand <frowand.list@gmail.com>
-Subject: [PATCH v4 7/9] media: dt-bindings: Document SAMA5D4 VDEC bindings
-Date:   Thu,  1 Apr 2021 15:43:34 +0100
-Message-Id: <20210401144336.2495479-8-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
-References: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
+        Thu, 01 Apr 2021 08:53:02 -0700 (PDT)
+Received: (nullmailer pid 498399 invoked by uid 1000);
+        Thu, 01 Apr 2021 15:52:59 -0000
+Date:   Thu, 1 Apr 2021 10:52:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Benoit Parrot <bparrot@ti.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Peter Chen <peter.chen@nxp.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        dmaengine@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH 12/16] dt-bindings: media: Add DT bindings for TI CSI2RX
+ driver
+Message-ID: <20210401155259.GB488101@robh.at.kernel.org>
+References: <20210330173348.30135-1-p.yadav@ti.com>
+ <20210330173348.30135-13-p.yadav@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210330173348.30135-13-p.yadav@ti.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Emil Velikov <emil.velikov@collabora.com>
+On Tue, Mar 30, 2021 at 11:03:44PM +0530, Pratyush Yadav wrote:
+> TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
+> capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
+> parts together.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> ---
+>  .../devicetree/bindings/media/ti,csi2rx.yaml  | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/ti,csi2rx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/ti,csi2rx.yaml b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
+> new file mode 100644
+> index 000000000000..ebd894364391
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/ti,csi2rx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI CSI2RX Wrapper Device Tree Bindings
+> +
+> +maintainers:
+> +  - Pratyush Yadav <p.yadav@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: ti,csi2rx
 
-Add devicetree binding documentation for the Hantro G1/G2 VDEC on
-the Microchip SAMAS5D4 SoC.
+Also, needs an SoC specific compatible.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: devicetree@vger.kernel.org>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
----
-v2
- - Newly introduced
- - s/Atmel/Microchip/ (Nicolas)
- - Drop leading 0 in node name/address
-
-v3.5
- - Drop interrupt/clock names (RobH)
----
- .../media/microchip,sama5d4-vdec.yaml         | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-new file mode 100644
-index 000000000000..4b77103ca913
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Hantro G1 VPU codec implemented on Microchip SAMA5D4 SoCs
-+
-+maintainers:
-+  - Emil Velikov <emil.velikov@collabora.com>
-+
-+description:
-+  Hantro G1 video decode accelerator present on Microchip SAMA5D4 SoCs.
-+
-+properties:
-+  compatible:
-+    const: microchip,sama5d4-vdec
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        #include <dt-bindings/clock/at91.h>
-+        #include <dt-bindings/interrupt-controller/irq.h>
-+
-+        vdec0: vdec@300000 {
-+                compatible = "microchip,sama5d4-vdec";
-+                reg = <0x00300000 0x100000>;
-+                interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
-+                clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
-+        };
--- 
-2.31.1
-
+Rob
