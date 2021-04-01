@@ -2,146 +2,75 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B595C433B4
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2716CC433ED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:01:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0148E6112F
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:01:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E984F61139
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:01:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234207AbhDASBs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:01:48 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:19744 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236626AbhDAR6T (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:58:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617299900; x=1648835900;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XeaF4eWaLDP8UECnNygoHMfnBPpBZkWuK4VeDitjExs=;
-  b=uWBDjuGVnGupI3tSt2rc34qZKfxr3jpQAEVaIvnhAKHdBHYnXJ2kqDjD
-   mchzH5xcRXCRYGWTD5MafjCQqmo9ETFZAEw7VHKFGt64uRcFPYwX8nqTV
-   v7fUSOo/D917Kynf3CqxdY5DsfcWVG7FZIeMSGKOU2OIQXJBYCaNDejgM
-   Va2BIzUxC1fkazwFOzw9yqyNvyM+3wkF0j2AdFhXJl84xcZgfCCiPI/c0
-   jb3TulboaJNhezfxqYs2wqli9AHFOjEreL7oXeDYysB+kChHWv+gMwL3N
-   kfvsv2e8UtEs8M014UjPAuJfSIrI3yjPFpN2i2GY/IDPsqRG7hLY2vnOS
-   g==;
-IronPort-SDR: 5Xp65OnpDItby1PclhVcvOpXV4PBTBlrhnfxkvg0zUGs488fPh1nlWZE/d2wfMd5xgOULGTQBu
- dSEe3hhG/DaPrHs8pdJULyRzoZw9rd14h6BBCpXOWRepTgtPHczaw+QUpuZWNXIvKwJBGNaTbO
- VtDiGPKhjDaiOq+Rfm4Q9fbxcCfkEKx0vBAW81snti3YF7KyeybghBxw/8RtpF4z3bvQXLRqhz
- PmnxdcTV6kfmYeYAaya8qLD7pM8A50cUciznFbSpv66TxPz/Us+jY9Z+9odNsDgvEmkhP5H1Nz
- Ui0=
-X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="109338722"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:33:02 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:33:02 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:32:40 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 19/30] media: atmel: atmel-isc: add CC initialization function
-Date:   Thu, 1 Apr 2021 14:27:12 +0300
-Message-ID: <20210401112723.189107-20-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
-References: <20210401112723.189107-1-eugen.hristev@microchip.com>
+        id S235652AbhDASBx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236793AbhDAR6k (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:58:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC77C0225A8;
+        Thu,  1 Apr 2021 08:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Kha/E3uhoOiUrD0C/aeRnYYOJ8L7PhbQTFEePWXTQ9o=; b=GiF2UwUHIZnHkEkOlcxLLgluR7
+        syNox8h+RaBbuIUiOBghBF3CDGQNuaIbRzy7mWDoxwenL11iVarDDi6MmiRxTFuHb4kP13LZvn2f6
+        35thsXdGlyCG8MGNauINAug1BzBEFT4pbD4wIwaSunIPgfbfA8chATkAqldy2DO/PybrFImdLg0wO
+        mNCslbxOAuh01cjc+scg0jSBhcVB/IKtD58/f7a4sI5WIyiXdtrZHuStvqjyjgZ+eAffpU+zYNZVS
+        Hu1zZPxQtOxOmhNtAXhJ8AFMfHi/hVJ78H7v36FIrf0oQO/kkb9wcbdYgR1IsDDx2zA9fDFxDwcsV
+        kRF2tr4g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lRzFU-006IH7-5h; Thu, 01 Apr 2021 15:28:46 +0000
+Date:   Thu, 1 Apr 2021 16:28:44 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Beatriz Martins de Carvalho <martinsdecarvalhobeatriz@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy-kernel@googlegroups.com
+Subject: Re: [Outreachy kernel] [PATCH 1/2] staging: media: omap4iss: Ending
+ line with argument
+Message-ID: <20210401152844.GF351017@casper.infradead.org>
+References: <cover.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
+ <441d27060ff6477d0ad418f41e194b96373c1f7f.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <441d27060ff6477d0ad418f41e194b96373c1f7f.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement the color correction (CC) submodule initialization, as a product
-specific function, which currently configures the neutral point in color
-correction.
+On Thu, Apr 01, 2021 at 04:07:38PM +0100, Beatriz Martins de Carvalho wrote:
+> diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
+> index dae9073e7d3c..e8f724dbf810 100644
+> --- a/drivers/staging/media/omap4iss/iss.c
+> +++ b/drivers/staging/media/omap4iss/iss.c
+> @@ -559,9 +559,10 @@ static int iss_reset(struct iss_device *iss)
+>  	iss_reg_set(iss, OMAP4_ISS_MEM_TOP, ISS_HL_SYSCONFIG,
+>  		    ISS_HL_SYSCONFIG_SOFTRESET);
+>  
+> -	timeout = iss_poll_condition_timeout(
+> -		!(iss_reg_read(iss, OMAP4_ISS_MEM_TOP, ISS_HL_SYSCONFIG) &
+> -		ISS_HL_SYSCONFIG_SOFTRESET), 1000, 10, 100);
+> +	timeout = iss_poll_condition_timeout(!(iss_reg_read(iss,
+> +							    OMAP4_ISS_MEM_TOP, ISS_HL_SYSCONFIG)
+> +							    & ISS_HL_SYSCONFIG_SOFTRESET),
+> +							    1000, 10, 100);
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- drivers/media/platform/atmel/atmel-isc-base.c    |  1 +
- drivers/media/platform/atmel/atmel-isc.h         |  3 +++
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
-
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 66005cb3940f..182903803c05 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -653,6 +653,7 @@ static void isc_set_pipeline(struct isc_device *isc, u32 pipeline)
- 
- 	isc->config_csc(isc);
- 	isc->config_cbc(isc);
-+	isc->config_cc(isc);
- }
- 
- static int isc_update_profile(struct isc_device *isc)
-diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index f574bcc3ba67..a5f8d5001381 100644
---- a/drivers/media/platform/atmel/atmel-isc.h
-+++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -225,6 +225,8 @@ struct isc_reg_offsets {
-  *			specific CSC module
-  * @config_cbc:		pointer to a function that initializes product
-  *			specific CBC module
-+ * @config_cc:		pointer to a function that initializes product
-+ *			specific CC module
-  *
-  * @offsets:		struct holding the product specific register offsets
-  */
-@@ -298,6 +300,7 @@ struct isc_device {
- 	struct {
- 		void (*config_csc)(struct isc_device *isc);
- 		void (*config_cbc)(struct isc_device *isc);
-+		void (*config_cc)(struct isc_device *isc);
- 	};
- 
- 	struct isc_reg_offsets		offsets;
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index da516f2f5ca9..917d10baa525 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -83,6 +83,19 @@ void isc_sama5d2_config_cbc(struct isc_device *isc)
- 		     isc->ctrls.contrast);
- }
- 
-+void isc_sama5d2_config_cc(struct isc_device *isc)
-+{
-+	struct regmap *regmap = isc->regmap;
-+
-+	/* Configure each register at the neutral fixed point 1.0 or 0.0 */
-+	regmap_write(regmap, ISC_CC_RR_RG, (1 << 8));
-+	regmap_write(regmap, ISC_CC_RB_OR, 0);
-+	regmap_write(regmap, ISC_CC_GR_GG, (1 << 8) << 16);
-+	regmap_write(regmap, ISC_CC_GB_OG, 0);
-+	regmap_write(regmap, ISC_CC_BR_BG, 0);
-+	regmap_write(regmap, ISC_CC_BB_OB, (1 << 8));
-+}
-+
- /* Gamma table with gamma 1/2.2 */
- const u32 isc_sama5d2_gamma_table[][GAMMA_ENTRIES] = {
- 	/* 0 --> gamma 1/1.8 */
-@@ -230,6 +243,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 
- 	isc->config_csc = isc_sama5d2_config_csc;
- 	isc->config_cbc = isc_sama5d2_config_cbc;
-+	isc->config_cc = isc_sama5d2_config_cc;
- 
- 	isc->offsets.csc = ISC_SAMA5D2_CSC_OFFSET;
- 	isc->offsets.cbc = ISC_SAMA5D2_CBC_OFFSET;
--- 
-2.25.1
+This is not a readability improvment.  I would factor it out into its
+own function.
 
