@@ -2,63 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B46C433B4
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 805A6C433ED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D99960FED
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DB6B61029
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237751AbhDASg0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:36:26 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:46406 "EHLO
+        id S237889AbhDASg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:36:28 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:60700 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240056AbhDAS1B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:27:01 -0400
+        with ESMTP id S240278AbhDAS37 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:29:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617301621; x=1648837621;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mXosE0rlxsGKKT+7A7IfIECrJXlAhHskFLtgByoJ1l4=;
-  b=efSakvHrksLWq5HjQh3+76q+fvVawYgV/cp3lknUGloQ/9mZNzRqiyDs
-   y1kTi0UbE3XaiaPbADAF7gC01Y2INrtrLDMrDOmbhPrRw//Xuwt1Oikme
-   GlPBCUYx60eNmYZR6fNgCne1CkVgXikEKvRVMFd78t6EL9IBAZqYHkFQk
-   kJr2ip9EpxeyKLEWcWhmvHv40LmqksRBPkA6kZxG6MnyAsDqXzK2Jsa36
-   uizj1CDBh3umCGZuMhJi0xzEmViTw0L2SQ+2Ehrf8i8GDnW7c1RJRMZPt
-   b70GAAoPzF/5XVuYp8XsuXWeLUBmCbFK8GOAG6VU5m8p+5BTW8RADl2iY
-   A==;
-IronPort-SDR: yc3eAjuUufO/JSmkuIYIEuH6lv9BRw3KwhLpup6/ano0uzGSAwPTYfEbkZi35x366TEy0csPIa
- UjywuYxBBUnycNxv3uSUjWAi+S/SvS6cjW39UG5kdFHqclK/KiyTMnACOrEen2HHi0COBWcS45
- QsWnahfX4C/9nVqtTige9BCgLbvMHLpZn6oqZtP2YIyzuiuTyXm34mvnB6V6r0NrtO0kmaDxOR
- ibI6fJ56+/SNXvQCD2Lq1feCcMSnsto76Hpa81l4Ea8ZIiZwItOU76RcEeIs4Up4dcxPm94yqn
- GEs=
+  t=1617301800; x=1648837800;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ANYILC4KFHHPOqkn3Kt/JVVfmJ/GX8EhWAKE0t/gtX8=;
+  b=LhYzEU+8cuDHUQP9CfxBHw/dnVN+toKUzlAyzjLAPqpkNVXwtLvMukOJ
+   mKo3izcuXHV2CIHv2kQuEWdlDM3hN5cfwPaiuVKs7ZTA4cNq/R3FpvnSa
+   GgwBVwMuDlBehrdUZeGFAJJVrQ7+CbMkbDeju0rW0ln+hkxPWjEPYwMno
+   DQB2JVwc/nUScspDGh6NXEiEPfc2SR0EiG5ApUJp/CqevBwVSSoYMRD/m
+   jSPg3zVsio3bCqYBVp/vlUNvm2GBBTjc2+7H64UdSo5gWCXHnJeL0T/0G
+   Rz95ctVh7kVSAdfSUDgr8D8Ez3Gg6LX4UbDtOA4L4Pey/ct5dWQnqnMO9
+   g==;
+IronPort-SDR: Iz8F7oHxV6Abz+7VeBkfcXFpT9QpcizyiA6y8O6wWPqYn/JqBa179FmtHZefzDzRLk4Kw9bPN/
+ 4jKbh+sSl4eIQAN+I2Z6IhXnVUTf8LOvYq6WZhmtkACaVZPMoEAxymEQp/+fRK+XYT6FXcWI4q
+ sfWekB/xd4SM7tUURRDGtzqkViZ/RvNt9kq0TV6TEQ5lvWMa8hRGYv6XIl1xBf+2ziHGEc4yBk
+ DYE7g/prGfH64yQC0eQBvh5CeOA/UsNBhbyn4MQaaRWIuvFaAgCdMrwfFv4i+z5adsrXucamtS
+ 9YE=
 X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="121401837"
+   d="scan'208";a="114976396"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:29:08 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:28:25 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:29:08 -0700
+ 15.1.2176.2; Thu, 1 Apr 2021 04:28:23 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:29:04 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:28:06 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 04/30] media: atmel: atmel-isc: specialize max width and max height
-Date:   Thu, 1 Apr 2021 14:26:57 +0300
-Message-ID: <20210401112723.189107-5-eugen.hristev@microchip.com>
+Subject: [PATCH 00/30] media: atmel: atmel-isc: add support for xisc
+Date:   Thu, 1 Apr 2021 14:26:53 +0300
+Message-ID: <20210401112723.189107-1-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
-References: <20210401112723.189107-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -66,135 +64,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move the max width and max height constants to the product specific driver
-and have them in the device struct.
+Hello,
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- drivers/media/platform/atmel/atmel-isc-base.c | 28 +++++++++----------
- drivers/media/platform/atmel/atmel-isc.h      |  9 ++++--
- .../media/platform/atmel/atmel-sama5d2-isc.c  |  7 +++--
- 3 files changed, 25 insertions(+), 19 deletions(-)
+This series adds support for a variant of the ISC named XISC.
+This block is present in the product named sama7g5.
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 45fc8dbb7943..350076dd029a 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -1204,8 +1204,8 @@ static void isc_try_fse(struct isc_device *isc,
- 	 * just use the maximum ISC can receive.
- 	 */
- 	if (ret) {
--		pad_cfg->try_crop.width = ISC_MAX_SUPPORT_WIDTH;
--		pad_cfg->try_crop.height = ISC_MAX_SUPPORT_HEIGHT;
-+		pad_cfg->try_crop.width = isc->max_width;
-+		pad_cfg->try_crop.height = isc->max_height;
- 	} else {
- 		pad_cfg->try_crop.width = fse.max_width;
- 		pad_cfg->try_crop.height = fse.max_height;
-@@ -1282,10 +1282,10 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
- 	isc->try_config.sd_format = sd_fmt;
- 
- 	/* Limit to Atmel ISC hardware capabilities */
--	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
--		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
--	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
--		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
-+	if (pixfmt->width > isc->max_width)
-+		pixfmt->width = isc->max_width;
-+	if (pixfmt->height > isc->max_height)
-+		pixfmt->height = isc->max_height;
- 
- 	/*
- 	 * The mbus format is the one the subdev outputs.
-@@ -1327,10 +1327,10 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
- 	v4l2_fill_pix_format(pixfmt, &format.format);
- 
- 	/* Limit to Atmel ISC hardware capabilities */
--	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
--		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
--	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
--		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
-+	if (pixfmt->width > isc->max_width)
-+		pixfmt->width = isc->max_width;
-+	if (pixfmt->height > isc->max_height)
-+		pixfmt->height = isc->max_height;
- 
- 	pixfmt->field = V4L2_FIELD_NONE;
- 	pixfmt->bytesperline = (pixfmt->width * isc->try_config.bpp) >> 3;
-@@ -1368,10 +1368,10 @@ static int isc_set_fmt(struct isc_device *isc, struct v4l2_format *f)
- 		return ret;
- 
- 	/* Limit to Atmel ISC hardware capabilities */
--	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
--		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
--	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
--		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
-+	if (f->fmt.pix.width > isc->max_width)
-+		f->fmt.pix.width = isc->max_width;
-+	if (f->fmt.pix.height > isc->max_height)
-+		f->fmt.pix.height = isc->max_height;
- 
- 	isc->fmt = *f;
- 
-diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index 8d81d9967ad2..6becc6c3aaf0 100644
---- a/drivers/media/platform/atmel/atmel-isc.h
-+++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -10,9 +10,6 @@
-  */
- #ifndef _ATMEL_ISC_H_
- 
--#define ISC_MAX_SUPPORT_WIDTH   2592
--#define ISC_MAX_SUPPORT_HEIGHT  1944
--
- #define ISC_CLK_MAX_DIV		255
- 
- enum isc_clk_id {
-@@ -191,6 +188,9 @@ struct isc_ctrls {
-  * @gamma_table:	pointer to the table with gamma values, has
-  *			gamma_max sets of GAMMA_ENTRIES entries each
-  * @gamma_max:		maximum number of sets of inside the gamma_table
-+ *
-+ * @max_width:		maximum frame width, dependent on the internal RAM
-+ * @max_height:		maximum frame height, dependent on the internal RAM
-  */
- struct isc_device {
- 	struct regmap		*regmap;
-@@ -254,6 +254,9 @@ struct isc_device {
- 	/* pointer to the defined gamma table */
- 	const u32	(*gamma_table)[GAMMA_ENTRIES];
- 	u32		gamma_max;
-+
-+	u32		max_width;
-+	u32		max_height;
- };
- 
- extern struct isc_format formats_list[];
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index f45d8b96bfb8..f8d1c8ba99b3 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -49,8 +49,8 @@
- #include "atmel-isc-regs.h"
- #include "atmel-isc.h"
- 
--#define ISC_MAX_SUPPORT_WIDTH   2592
--#define ISC_MAX_SUPPORT_HEIGHT  1944
-+#define ISC_SAMA5D2_MAX_SUPPORT_WIDTH   2592
-+#define ISC_SAMA5D2_MAX_SUPPORT_HEIGHT  1944
- 
- #define ISC_CLK_MAX_DIV		255
- 
-@@ -195,6 +195,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	isc->gamma_table = isc_sama5d2_gamma_table;
- 	isc->gamma_max = 2;
- 
-+	isc->max_width = ISC_SAMA5D2_MAX_SUPPORT_WIDTH;
-+	isc->max_height = ISC_SAMA5D2_MAX_SUPPORT_HEIGHT;
-+
- 	ret = isc_pipeline_init(isc);
- 	if (ret)
- 		return ret;
+I started by moving code around, the code which was specialized for sama5d2
+type of ISC, to have it inside the dedicated sama5d2 file.
+
+I added several new pipeline elements to the code base, which would be common
+to sama5d2 and the new sama7g5, but only used by the new style pipeline.
+
+I separated the input and output formats on a per-product separate array.
+
+I added the new sama7g5 compatible driver for the xisc, which is similar with
+the sama5d2, but with differences in terms of DT, clocks and callbacks to
+specific operations.
+
+I added the binding for the xisc by copying and modifying the existing
+isc one. I know that it has to be converted to yaml, and I will do that if
+it looks good.
+
+Feedback is appreciated.
+Thanks,
+Eugen
+
+Eugen Hristev (30):
+  media: atmel: atmel-isc: specialize gamma table into product specific
+  media: atmel: atmel-isc: specialize driver name constant
+  media: atmel: atmel-isc: add checks for limiting frame sizes
+  media: atmel: atmel-isc: specialize max width and max height
+  media: atmel: atmel-isc: specialize dma cfg
+  media: atmel: atmel-isc: extract CSC submodule config into separate
+    function
+  media: atmel: atmel-isc-base: add id to clock debug message
+  media: atmel: atmel-isc: create register offsets struct
+  media: atmel: atmel-isc: extract CBC submodule config into separate
+    function
+  media: atmel: atmel-isc: add CBC to the reg offsets struct
+  media: atmel: atmel-isc: add SUB422 and SUB420 to register offsets
+  media: atmel: atmel-isc: add RLP to register offsets
+  media: atmel: atmel-isc: add HIS to register offsets
+  media: atmel: atmel-isc: add DMA to register offsets
+  media: atmel: atmel-isc: add support for version register
+  media: atmel: atmel-isc: add his_entry to register offsets
+  media: atmel: atmel-isc: add register description for additional
+    modules
+  media: atmel: atmel-isc: extend pipeline with extra modules
+  media: atmel: atmel-isc: add CC initialization function
+  media: atmel: atmel-isc: create product specific v4l2 controls config
+  media: atmel: atmel-isc: create callback for DPC submodule product
+    specific
+  media: atmel: atmel-isc: create callback for GAM submodule product
+    specific
+  media: atmel: atmel-isc: create callback for RLP submodule product
+    specific
+  media: atmel: atmel-isc: move the formats list into product specific
+    code
+  media: atmel: atmel-isc: create an adapt pipeline callback for product
+    specific
+  media: atmel: atmel-isc-regs: add additional fields for sama7g5 type
+    pipeline
+  media: atmel: atmel-isc-base: add support for more formats and
+    additional pipeline modules
+  dt-bindings: media: atmel: add microchip-xisc binding
+  media: atmel: atmel-isc-sama5d2: remove duplicate define
+  media: atmel: atmel-isc: add microchip-xisc driver
+
+ .../bindings/media/microchip-xisc.txt         |  64 ++
+ drivers/media/platform/Makefile               |   1 +
+ drivers/media/platform/atmel/Kconfig          |  11 +
+ drivers/media/platform/atmel/Makefile         |   2 +
+ drivers/media/platform/atmel/atmel-isc-base.c | 381 ++++-------
+ drivers/media/platform/atmel/atmel-isc-regs.h | 133 +++-
+ drivers/media/platform/atmel/atmel-isc.h      | 122 +++-
+ .../media/platform/atmel/atmel-sama5d2-isc.c  | 300 +++++++-
+ .../media/platform/atmel/atmel-sama7g5-isc.c  | 644 ++++++++++++++++++
+ 9 files changed, 1381 insertions(+), 277 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/microchip-xisc.txt
+ create mode 100644 drivers/media/platform/atmel/atmel-sama7g5-isc.c
+
 -- 
 2.25.1
 
