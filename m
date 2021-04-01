@@ -2,128 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A94ACC433ED
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 397C9C43462
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 682A961005
+	by mail.kernel.org (Postfix) with ESMTP id DEBDD61165
 	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbhDARlm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S234334AbhDARln (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbhDARhO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:37:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7766C02FE8E;
-        Thu,  1 Apr 2021 09:00:25 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id C57AC1F46894
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, lee.jones@linaro.org,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
-        emil.l.velikov@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v8 08/13] media: hantro: Only use postproc when post processed formats are defined
-Date:   Thu,  1 Apr 2021 17:59:58 +0200
-Message-Id: <20210401160003.88803-9-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401160003.88803-1-benjamin.gaignard@collabora.com>
-References: <20210401160003.88803-1-benjamin.gaignard@collabora.com>
+        with ESMTP id S234578AbhDARiK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:38:10 -0400
+Received: from mail.tuxforce.de (mail.tuxforce.de [IPv6:2a00:5080:1:16d::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8120DC001F78
+        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 07:52:27 -0700 (PDT)
+Received: from [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d] (2001-4dd5-b099-0-19b2-6b8c-f4bb-b22d.ipv6dyn.netcologne.de [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d])
+        by mail.tuxforce.de (Postfix) with ESMTPSA id 43D8352007A;
+        Thu,  1 Apr 2021 16:42:27 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tuxforce.de 43D8352007A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxforce.de;
+        s=202009; t=1617288147;
+        bh=2WRnwMjo59ewkSxtYMeKftTekMyYE+LpBO8wWmYbEqc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sZoulIKHGHDdbJL3ZMnvO5WdmBK3RtsjsROYOrK+NahJTsOBKq5ywgk0tlCrMwpkG
+         nKqBPaCSsTkoRYLieyusYEUKrLEg1oyBbp67pt33yhSchZaJLBgj1rno4SsooadMFz
+         w1lsAfurY07oYwNNetaTPcPubLaYrHL74/thhxD7vibnNwdfHGdej9mz6EYn1PW3um
+         yEGYZ2edlNz0PI4itP1wDPjAWQJxEtY2mwl2/XjZtGaXZv8V3qurdXmHJvKLdbqutP
+         yBVt6YgQeJKQwyNLOPlVSXXiXr7kvqV5xZE5xw/nvS2NiKX80MIy0dHzzsyJaOcDTT
+         hOmSLHdwUWQAw==
+Subject: Re: [PATCH 1/2] media: si2168: request caching of firmware to make it
+ available on resume
+To:     linux-media@vger.kernel.org
+Cc:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Lukas Middendorf <kernel@tuxforce.de>
+References: <20200813214538.8474-1-kernel@tuxforce.de>
+From:   Lukas Middendorf <kernel@tuxforce.de>
+Message-ID: <cec1f815-1505-869c-88ae-362c2a4bf0b4@tuxforce.de>
+Date:   Thu, 1 Apr 2021 16:42:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200813214538.8474-1-kernel@tuxforce.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the variant doesn't offert postprocessed formats make sure it will
-be ok.
+Hi,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
----
-version 8:
- - add Ezequiel review tag
+I see this (or a similar fix) has not yet been included in 5.12-rc5.
+Any further problems or comments regarding this patch? It still applies 
+cleanly to current git master and the problem is still relevant.
 
- drivers/staging/media/hantro/hantro.h          |  8 ++------
- drivers/staging/media/hantro/hantro_postproc.c | 14 ++++++++++++++
- drivers/staging/media/hantro/hantro_v4l2.c     |  4 +++-
- 3 files changed, 19 insertions(+), 7 deletions(-)
+Best regards
+Lukas
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index edb4561a6887..7a5ad93466c8 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -414,12 +414,8 @@ hantro_get_dst_buf(struct hantro_ctx *ctx)
- 	return v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
- }
- 
--static inline bool
--hantro_needs_postproc(const struct hantro_ctx *ctx,
--		      const struct hantro_fmt *fmt)
--{
--	return !ctx->is_encoder && fmt->fourcc != V4L2_PIX_FMT_NV12;
--}
-+bool hantro_needs_postproc(const struct hantro_ctx *ctx,
-+			   const struct hantro_fmt *fmt);
- 
- static inline dma_addr_t
- hantro_get_dec_buf_addr(struct hantro_ctx *ctx, struct vb2_buffer *vb)
-diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-index 6d2a8f2a8f0b..ed8916c950a4 100644
---- a/drivers/staging/media/hantro/hantro_postproc.c
-+++ b/drivers/staging/media/hantro/hantro_postproc.c
-@@ -50,6 +50,20 @@ const struct hantro_postproc_regs hantro_g1_postproc_regs = {
- 	.display_width = {G1_REG_PP_DISPLAY_WIDTH, 0, 0xfff},
- };
- 
-+bool hantro_needs_postproc(const struct hantro_ctx *ctx,
-+			   const struct hantro_fmt *fmt)
-+{
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	if (ctx->is_encoder)
-+		return false;
-+
-+	if (!vpu->variant->postproc_fmts)
-+		return false;
-+
-+	return fmt->fourcc != V4L2_PIX_FMT_NV12;
-+}
-+
- void hantro_postproc_enable(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 1bc118e375a1..77d7fe62ce81 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -55,7 +55,9 @@ static const struct hantro_fmt *
- hantro_get_postproc_formats(const struct hantro_ctx *ctx,
- 			    unsigned int *num_fmts)
- {
--	if (ctx->is_encoder) {
-+	struct hantro_dev *vpu = ctx->dev;
-+
-+	if (ctx->is_encoder || !vpu->variant->postproc_fmts) {
- 		*num_fmts = 0;
- 		return NULL;
- 	}
--- 
-2.25.1
-
+On 13/08/2020 23:45, Lukas Middendorf wrote:
+> even though request_firmware() is supposed to be safe to call during
+> resume, it might fail (or even hang the system) when the firmware
+> has not been loaded previously. Use firmware_request_cache() to
+> have it cached so it is available reliably on resume.
+> 
+> Signed-off-by: Lukas Middendorf <kernel@tuxforce.de>
+> ---
+>   drivers/media/dvb-frontends/si2168.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
+> index 14b93a7d3358..ea4b2d91697e 100644
+> --- a/drivers/media/dvb-frontends/si2168.c
+> +++ b/drivers/media/dvb-frontends/si2168.c
+> @@ -757,6 +757,17 @@ static int si2168_probe(struct i2c_client *client,
+>   		 dev->version >> 24 & 0xff, dev->version >> 16 & 0xff,
+>   		 dev->version >> 8 & 0xff, dev->version >> 0 & 0xff);
+>   
+> +	/* request caching of the firmware so it is available on resume after suspend.
+> +	 * The actual caching of the firmware file only occurs during suspend
+> +	 * The return value does not show whether the firmware file exists
+> +	 */
+> +	ret = firmware_request_cache(&client->dev, dev->firmware_name);
+> +	if (ret) {
+> +		dev_err(&client->dev,
+> +				"firmware caching for '%s' failed\n",
+> +				dev->firmware_name);
+> +	}
+> +
+>   	return 0;
+>   err_kfree:
+>   	kfree(dev);
+> 
