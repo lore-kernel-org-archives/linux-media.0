@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9997FC433ED
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B46C433B4
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BE26601FC
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D99960FED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:36:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbhDASgY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:36:24 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:46540 "EHLO
+        id S237751AbhDASg0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:36:26 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:46406 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240057AbhDAS1B (ORCPT
+        with ESMTP id S240056AbhDAS1B (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:27:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
   t=1617301621; x=1648837621;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GVvIsZVQNrPMN1hvtWjBMXJ1JLr9Fd87AOEdQTPgcIk=;
-  b=Rd7VLyWhf8ddys2AYPRgwdDKm0//R3wGiTs9qvO1NuTN6wE3lssmYleL
-   oNoaLZEgkGHFpWolM06i3Kfx+tZaaZbv4fE89a1p/6sn9tlBqdtmB5Pmf
-   JbvOCYzdt+h8ii8KFScAJxhT5klLEAvsLv6ERN0sbM0Ye3bM/9WuxzhVC
-   Aq5LbF5LanHEjgCVBlnVL8G9OtAq93/F0VG061hKktxiw/+0x88w+ILzI
-   4VrlDjKHUUupvVchR4o+RBSd1cTC5Xdw2PggEbGf2L8fNlZ133hst4QK5
-   GqDQS8eyXMflszwGKP6b1Pti9bFkRCIU1PQNBTFJ6qBG/z8k+tiy+aZH1
+  bh=mXosE0rlxsGKKT+7A7IfIECrJXlAhHskFLtgByoJ1l4=;
+  b=efSakvHrksLWq5HjQh3+76q+fvVawYgV/cp3lknUGloQ/9mZNzRqiyDs
+   y1kTi0UbE3XaiaPbADAF7gC01Y2INrtrLDMrDOmbhPrRw//Xuwt1Oikme
+   GlPBCUYx60eNmYZR6fNgCne1CkVgXikEKvRVMFd78t6EL9IBAZqYHkFQk
+   kJr2ip9EpxeyKLEWcWhmvHv40LmqksRBPkA6kZxG6MnyAsDqXzK2Jsa36
+   uizj1CDBh3umCGZuMhJi0xzEmViTw0L2SQ+2Ehrf8i8GDnW7c1RJRMZPt
+   b70GAAoPzF/5XVuYp8XsuXWeLUBmCbFK8GOAG6VU5m8p+5BTW8RADl2iY
    A==;
-IronPort-SDR: nHdQnCDb6C7TBFjD1RAlb/KXxyl/VTykt5tJfKvqnNkKKAcIebDSVCkx2k+Hy9fXYT+1QmIDz/
- +OnYjdK6OpjDFXG/UIS6pP3y2Y3Vx79bg5Dmur+6OtzFuev8Mk9/qxmoDBAM8VPShKQFDt2WRe
- 5UpnR87trs0vcCu45mIUsM5+TZDLE+VNqOcACP2pYRwhq5mGybXegLv3ZkzEOUvyUOJorEMfud
- NUFEI32UACLNRISUHf/RAtc5Of2s8mGp6lDwnGPWT2JEJfSaNFSS0Tq6oBCr23e0fMxMRBmCAS
- AvQ=
+IronPort-SDR: yc3eAjuUufO/JSmkuIYIEuH6lv9BRw3KwhLpup6/ano0uzGSAwPTYfEbkZi35x366TEy0csPIa
+ UjywuYxBBUnycNxv3uSUjWAi+S/SvS6cjW39UG5kdFHqclK/KiyTMnACOrEen2HHi0COBWcS45
+ QsWnahfX4C/9nVqtTige9BCgLbvMHLpZn6oqZtP2YIyzuiuTyXm34mvnB6V6r0NrtO0kmaDxOR
+ ibI6fJ56+/SNXvQCD2Lq1feCcMSnsto76Hpa81l4Ea8ZIiZwItOU76RcEeIs4Up4dcxPm94yqn
+ GEs=
 X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="121402132"
+   d="scan'208";a="121401837"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:33:40 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:29:08 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:33:40 -0700
+ 15.1.2176.2; Thu, 1 Apr 2021 04:29:08 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:33:30 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:29:04 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 21/30] media: atmel: atmel-isc: create callback for DPC submodule product specific
-Date:   Thu, 1 Apr 2021 14:27:14 +0300
-Message-ID: <20210401112723.189107-22-eugen.hristev@microchip.com>
+Subject: [PATCH 04/30] media: atmel: atmel-isc: specialize max width and max height
+Date:   Thu, 1 Apr 2021 14:26:57 +0300
+Message-ID: <20210401112723.189107-5-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
 References: <20210401112723.189107-1-eugen.hristev@microchip.com>
@@ -66,74 +66,135 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create a product specific callback for initializing the DPC submodule
-of the pipeline.
-For sama5d2 product, this module does not exist, thus this function is a noop.
+Move the max width and max height constants to the product specific driver
+and have them in the device struct.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c    | 1 +
- drivers/media/platform/atmel/atmel-isc.h         | 3 +++
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 6 ++++++
- 3 files changed, 10 insertions(+)
+ drivers/media/platform/atmel/atmel-isc-base.c | 28 +++++++++----------
+ drivers/media/platform/atmel/atmel-isc.h      |  9 ++++--
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  7 +++--
+ 3 files changed, 25 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 69952b6ac401..1f7116abc61a 100644
+index 45fc8dbb7943..350076dd029a 100644
 --- a/drivers/media/platform/atmel/atmel-isc-base.c
 +++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -651,6 +651,7 @@ static void isc_set_pipeline(struct isc_device *isc, u32 pipeline)
- 	regmap_bulk_write(regmap, ISC_GAM_GENTRY, gamma, GAMMA_ENTRIES);
- 	regmap_bulk_write(regmap, ISC_GAM_RENTRY, gamma, GAMMA_ENTRIES);
+@@ -1204,8 +1204,8 @@ static void isc_try_fse(struct isc_device *isc,
+ 	 * just use the maximum ISC can receive.
+ 	 */
+ 	if (ret) {
+-		pad_cfg->try_crop.width = ISC_MAX_SUPPORT_WIDTH;
+-		pad_cfg->try_crop.height = ISC_MAX_SUPPORT_HEIGHT;
++		pad_cfg->try_crop.width = isc->max_width;
++		pad_cfg->try_crop.height = isc->max_height;
+ 	} else {
+ 		pad_cfg->try_crop.width = fse.max_width;
+ 		pad_cfg->try_crop.height = fse.max_height;
+@@ -1282,10 +1282,10 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
+ 	isc->try_config.sd_format = sd_fmt;
  
-+	isc->config_dpc(isc);
- 	isc->config_csc(isc);
- 	isc->config_cbc(isc);
- 	isc->config_cc(isc);
+ 	/* Limit to Atmel ISC hardware capabilities */
+-	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
+-		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
+-	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
+-		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
++	if (pixfmt->width > isc->max_width)
++		pixfmt->width = isc->max_width;
++	if (pixfmt->height > isc->max_height)
++		pixfmt->height = isc->max_height;
+ 
+ 	/*
+ 	 * The mbus format is the one the subdev outputs.
+@@ -1327,10 +1327,10 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
+ 	v4l2_fill_pix_format(pixfmt, &format.format);
+ 
+ 	/* Limit to Atmel ISC hardware capabilities */
+-	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
+-		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
+-	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
+-		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
++	if (pixfmt->width > isc->max_width)
++		pixfmt->width = isc->max_width;
++	if (pixfmt->height > isc->max_height)
++		pixfmt->height = isc->max_height;
+ 
+ 	pixfmt->field = V4L2_FIELD_NONE;
+ 	pixfmt->bytesperline = (pixfmt->width * isc->try_config.bpp) >> 3;
+@@ -1368,10 +1368,10 @@ static int isc_set_fmt(struct isc_device *isc, struct v4l2_format *f)
+ 		return ret;
+ 
+ 	/* Limit to Atmel ISC hardware capabilities */
+-	if (pixfmt->width > ISC_MAX_SUPPORT_WIDTH)
+-		pixfmt->width = ISC_MAX_SUPPORT_WIDTH;
+-	if (pixfmt->height > ISC_MAX_SUPPORT_HEIGHT)
+-		pixfmt->height = ISC_MAX_SUPPORT_HEIGHT;
++	if (f->fmt.pix.width > isc->max_width)
++		f->fmt.pix.width = isc->max_width;
++	if (f->fmt.pix.height > isc->max_height)
++		f->fmt.pix.height = isc->max_height;
+ 
+ 	isc->fmt = *f;
+ 
 diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index eb549fadb1a8..d6cd85a4c3e9 100644
+index 8d81d9967ad2..6becc6c3aaf0 100644
 --- a/drivers/media/platform/atmel/atmel-isc.h
 +++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -221,6 +221,8 @@ struct isc_reg_offsets {
-  * @max_width:		maximum frame width, dependent on the internal RAM
-  * @max_height:		maximum frame height, dependent on the internal RAM
-  *
-+ * @config_dpc:		pointer to a function that initializes product
-+ *			specific DPC module
-  * @config_csc:		pointer to a function that initializes product
-  *			specific CSC module
-  * @config_cbc:		pointer to a function that initializes product
-@@ -300,6 +302,7 @@ struct isc_device {
- 	u32		max_height;
+@@ -10,9 +10,6 @@
+  */
+ #ifndef _ATMEL_ISC_H_
  
- 	struct {
-+		void (*config_dpc)(struct isc_device *isc);
- 		void (*config_csc)(struct isc_device *isc);
- 		void (*config_cbc)(struct isc_device *isc);
- 		void (*config_cc)(struct isc_device *isc);
+-#define ISC_MAX_SUPPORT_WIDTH   2592
+-#define ISC_MAX_SUPPORT_HEIGHT  1944
+-
+ #define ISC_CLK_MAX_DIV		255
+ 
+ enum isc_clk_id {
+@@ -191,6 +188,9 @@ struct isc_ctrls {
+  * @gamma_table:	pointer to the table with gamma values, has
+  *			gamma_max sets of GAMMA_ENTRIES entries each
+  * @gamma_max:		maximum number of sets of inside the gamma_table
++ *
++ * @max_width:		maximum frame width, dependent on the internal RAM
++ * @max_height:		maximum frame height, dependent on the internal RAM
+  */
+ struct isc_device {
+ 	struct regmap		*regmap;
+@@ -254,6 +254,9 @@ struct isc_device {
+ 	/* pointer to the defined gamma table */
+ 	const u32	(*gamma_table)[GAMMA_ENTRIES];
+ 	u32		gamma_max;
++
++	u32		max_width;
++	u32		max_height;
+ };
+ 
+ extern struct isc_format formats_list[];
 diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index a8375961f97d..ae906126ffb8 100644
+index f45d8b96bfb8..f8d1c8ba99b3 100644
 --- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
 +++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -107,6 +107,11 @@ void isc_sama5d2_config_ctrls(struct isc_device *isc,
- 	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_CONTRAST, -2048, 2047, 1, 256);
- }
+@@ -49,8 +49,8 @@
+ #include "atmel-isc-regs.h"
+ #include "atmel-isc.h"
  
-+void isc_sama5d2_config_dpc(struct isc_device *isc)
-+{
-+	/* This module is not present on sama5d2 pipeline */
-+}
+-#define ISC_MAX_SUPPORT_WIDTH   2592
+-#define ISC_MAX_SUPPORT_HEIGHT  1944
++#define ISC_SAMA5D2_MAX_SUPPORT_WIDTH   2592
++#define ISC_SAMA5D2_MAX_SUPPORT_HEIGHT  1944
+ 
+ #define ISC_CLK_MAX_DIV		255
+ 
+@@ -195,6 +195,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	isc->gamma_table = isc_sama5d2_gamma_table;
+ 	isc->gamma_max = 2;
+ 
++	isc->max_width = ISC_SAMA5D2_MAX_SUPPORT_WIDTH;
++	isc->max_height = ISC_SAMA5D2_MAX_SUPPORT_HEIGHT;
 +
- /* Gamma table with gamma 1/2.2 */
- const u32 isc_sama5d2_gamma_table[][GAMMA_ENTRIES] = {
- 	/* 0 --> gamma 1/1.8 */
-@@ -252,6 +257,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	isc->max_width = ISC_SAMA5D2_MAX_SUPPORT_WIDTH;
- 	isc->max_height = ISC_SAMA5D2_MAX_SUPPORT_HEIGHT;
- 
-+	isc->config_dpc = isc_sama5d2_config_dpc;
- 	isc->config_csc = isc_sama5d2_config_csc;
- 	isc->config_cbc = isc_sama5d2_config_cbc;
- 	isc->config_cc = isc_sama5d2_config_cc;
+ 	ret = isc_pipeline_init(isc);
+ 	if (ret)
+ 		return ret;
 -- 
 2.25.1
 
