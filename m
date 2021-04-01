@@ -2,164 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBF6C43461
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 406B7C4360C
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CF23610A0
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6D31610A0
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbhDARzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S234818AbhDARzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 1 Apr 2021 13:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236441AbhDARo4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:44:56 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB01C0045EC;
-        Thu,  1 Apr 2021 07:43:52 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id b7so3288755ejv.1;
-        Thu, 01 Apr 2021 07:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yig8wQrnDjVWOaduCo+gf0ULa0HF9/VzKj4q+s3NOg0=;
-        b=iA+jBF2AtdizxHuy6c1WTy36heCgpdHTHOf9wlsxGeKwSk0QQNSASMsUO7mCWDk787
-         8JpJFk+POrnc74pOlD/EjNy+B84xWf1phARmPuKUTqd4/nkgM096fBJXPHc+wU4OKmgd
-         6eOQMdiThCGfRHwcso19u/zOpf/S83/cwVKvly6BldkWSvJqzbpfuPUuW3UAcamoemOP
-         5TH1Q6BMRcE6Buf2ZPqrqiJLioBl4liOwcSa++y93XJG1it1yKDcYMKK9d4eVHHfRqpw
-         RlZgg74OEdMoFuePFswqUDrdKJPG3chO38RIJPVkBmvNnDbPa0yFyMvGXzurr62fUfx2
-         p2lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yig8wQrnDjVWOaduCo+gf0ULa0HF9/VzKj4q+s3NOg0=;
-        b=eKfekdlmSLcElMgn+TppKfE8Il9mSXG+puUms1g1oh/uN2Pf9+Kg1RRy/axTfK4jkZ
-         aop6cKME9WgnWo0rCnSbcv/FzCii2fyheXFamUgw5Jmm9uzGEPjyAXHSvSGqA17quN5b
-         0dP4Rm9bGL+BxZSgZli81nyGvJal6pWlyQr+rb1uBFX419ZxYgp1co2OLXDZs4U9twuZ
-         iNtPwnR4T7gEUGgpGKldcuA5ch3ELBxW8pYvZsXLs9vKvlBG9AT/lMiB1fmo/ozpnUzc
-         UyV65ETU1H3V0Z92T/EwHARnW7Jk/m/FZ60FhQEfqm9XLGOk34uffZW4wHZm4p86H2Ap
-         Wdtw==
-X-Gm-Message-State: AOAM531eWcuq0SHKU9Zc+rW446j9hf4X5SqA/JLImZ53dt6A5GFI80bU
-        UY1VubM+UL2qugVzmYYkNiE=
-X-Google-Smtp-Source: ABdhPJzFfoNll0q3Uy/syhJ58IU7DBgEtCbBIxOU1O6lmNSDG0VhWTV+qaqNKijHJgm81V4lUHRLOQ==
-X-Received: by 2002:a17:906:130c:: with SMTP id w12mr9410734ejb.253.1617288231693;
-        Thu, 01 Apr 2021 07:43:51 -0700 (PDT)
-Received: from arch-x1c3.. (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with ESMTPSA id nd36sm2854950ejc.21.2021.04.01.07.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 07:43:51 -0700 (PDT)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH v4 6/9] media: hantro: add fallback handling for single irq/clk
-Date:   Thu,  1 Apr 2021 15:43:33 +0100
-Message-Id: <20210401144336.2495479-7-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
-References: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
+        with ESMTP id S236458AbhDARpB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:45:01 -0400
+X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Apr 2021 07:46:59 PDT
+Received: from mail.tuxforce.de (mail.tuxforce.de [IPv6:2a00:5080:1:16d::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6980C0045F0
+        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 07:46:59 -0700 (PDT)
+Received: from [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d] (2001-4dd5-b099-0-19b2-6b8c-f4bb-b22d.ipv6dyn.netcologne.de [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d])
+        by mail.tuxforce.de (Postfix) with ESMTPSA id 00D0E52009B;
+        Thu,  1 Apr 2021 16:46:57 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tuxforce.de 00D0E52009B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxforce.de;
+        s=202009; t=1617288418;
+        bh=Jxez6pLabtpAgZZ/AWAS8AbpZ6WNQycgum780OEmucc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=vNDAfmMI1SOV8wZxB47N7VuIVlb80ouJ+EM7Z0h0OYG4Pk+I7+++AIDpCRu0TUBax
+         KXN82J09aISuH2+6ZUxnb44+P4jqTzV1CJhLGOApQ7lL0qI1Cj/P8elJYsa5+dgGN3
+         9J/YWAG/Ms0SdOkwQqdkwGHFE0hQcEVKFVG3mgtt+yDAk+gDb6gX+MY1srRnE1LuS4
+         xbeaPu2qmKHAG16cILJ/sRmBK2f58YJo3AmsNsULOKOpBHjWfGpqatqG2PiQx5H0ek
+         EpU00mqP5a8qIoarHv7ErVmLLhhHQhTkWofkQ8vpB7BhrhdW4Vrl8Qs3jz0BnPfbTG
+         H6KKFd59k5xGg==
+Subject: Re: [PATCH 2/2] media: si2168: also cache Si2168 B40 fallback
+ firmware
+To:     linux-media@vger.kernel.org
+Cc:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Lukas Middendorf <kernel@tuxforce.de>
+References: <20200813214538.8474-1-kernel@tuxforce.de>
+ <20200813214538.8474-2-kernel@tuxforce.de>
+From:   Lukas Middendorf <kernel@tuxforce.de>
+Message-ID: <8cf06089-ddb9-fe12-3362-be5accee7a54@tuxforce.de>
+Date:   Thu, 1 Apr 2021 16:46:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200813214538.8474-2-kernel@tuxforce.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Emil Velikov <emil.velikov@collabora.com>
+Hi,
 
-Currently the driver expects that each irq/clk will have a name
-specified.
+this second patch also is not yet in 5.12-rc5 and is still relevant for me.
+A second option would be to stop using the fallback firmware completely. 
+I think systems using a current kernel can be expected to also have the 
+firmware files with their current names.
 
-A valid point was raised by the DT maintainers - when there is a single
-interrupt line or clock - the names are not needed.
+Best regards
 
-Keep the names within the drivers themselves, but don't use them when
-only a single entry exists. Instead use:
- - num_clk == 1 - devm_clk_get(..., NULL)
- - num_irq == 1 - platform_get_irq(..., 0)
+Lukas
 
-Suggested-by: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
----
-v3
- - New patch
-
-v4
- - Drop WARN_ON, guard on num_{irq,clk} instead (Eze)
- - Drop Nicolas ack (Eze)
----
- drivers/staging/media/hantro/hantro_drv.c | 37 ++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index e5f200e64993..a51700a9e3b7 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -752,12 +752,23 @@ static int hantro_probe(struct platform_device *pdev)
- 	if (!vpu->clocks)
- 		return -ENOMEM;
- 
--	for (i = 0; i < vpu->variant->num_clocks; i++)
--		vpu->clocks[i].id = vpu->variant->clk_names[i];
--	ret = devm_clk_bulk_get(&pdev->dev, vpu->variant->num_clocks,
--				vpu->clocks);
--	if (ret)
--		return ret;
-+	if (vpu->variant->num_clocks > 1) {
-+		for (i = 0; i < vpu->variant->num_clocks; i++)
-+			vpu->clocks[i].id = vpu->variant->clk_names[i];
-+
-+		ret = devm_clk_bulk_get(&pdev->dev, vpu->variant->num_clocks,
-+					vpu->clocks);
-+		if (ret)
-+			return ret;
-+	} else {
-+		/*
-+		 * If the driver has a single clk, chances are there will be no
-+		 * actual name in the DT bindings.
-+		 */
-+		vpu->clocks[0].clk = devm_clk_get(&pdev->dev, NULL);
-+		if (IS_ERR(vpu->clocks))
-+			return PTR_ERR(vpu->clocks);
-+	}
- 
- 	num_bases = vpu->variant->num_regs ?: 1;
- 	vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
-@@ -785,13 +796,23 @@ static int hantro_probe(struct platform_device *pdev)
- 	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
- 
- 	for (i = 0; i < vpu->variant->num_irqs; i++) {
--		const char *irq_name = vpu->variant->irqs[i].name;
-+		const char *irq_name;
- 		int irq;
- 
- 		if (!vpu->variant->irqs[i].handler)
- 			continue;
- 
--		irq = platform_get_irq_byname(vpu->pdev, irq_name);
-+		if (vpu->variant->num_clocks > 1) {
-+			irq_name = vpu->variant->irqs[i].name;
-+			irq = platform_get_irq_byname(vpu->pdev, irq_name);
-+		} else {
-+			/*
-+			 * If the driver has a single IRQ, chances are there
-+			 * will be no actual name in the DT bindings.
-+			 */
-+			irq_name = "default";
-+			irq = platform_get_irq(vpu->pdev, 0);
-+		}
- 		if (irq <= 0)
- 			return -ENXIO;
- 
--- 
-2.31.1
-
+On 13/08/2020 23:45, Lukas Middendorf wrote:
+> we can not know beforehand whether we have to access that firmware
+> file during resume. We just request the caching so we don't run
+> into any problems later
+> 
+> Signed-off-by: Lukas Middendorf <kernel@tuxforce.de>
+> ---
+>   drivers/media/dvb-frontends/si2168.c | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
+> index ea4b2d91697e..f2dd1deb75ff 100644
+> --- a/drivers/media/dvb-frontends/si2168.c
+> +++ b/drivers/media/dvb-frontends/si2168.c
+> @@ -768,6 +768,19 @@ static int si2168_probe(struct i2c_client *client,
+>   				dev->firmware_name);
+>   	}
+>   
+> +	/* also request caching of fw for Si2168 B40 under its old file name.
+> +	 * Since we can't know now whether we might have to access that file,
+> +	 * we just make sure we have that covered
+> +	 */
+> +	if (dev->chip_id == SI2168_CHIP_ID_B40) {
+> +		ret = firmware_request_cache(&client->dev, SI2168_B40_FIRMWARE_FALLBACK);
+> +		if (ret) {
+> +			dev_err(&client->dev,
+> +					"firmware caching for '%s' failed\n",
+> +					SI2168_B40_FIRMWARE_FALLBACK);
+> +		}
+> +	}
+> +
+>   	return 0;
+>   err_kfree:
+>   	kfree(dev);
+> 
