@@ -2,79 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0C0C001BD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DC8C43461
 	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:17:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01C166024A
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:17:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 743F760201
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:17:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbhDASRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S236167AbhDASRw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbhDASLl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:11:41 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59849C02FE90;
-        Thu,  1 Apr 2021 09:00:28 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 352671F46896
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, lee.jones@linaro.org,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
-        emil.l.velikov@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v8 10/13] media: hantro: handle V4L2_PIX_FMT_HEVC_SLICE control
-Date:   Thu,  1 Apr 2021 18:00:00 +0200
-Message-Id: <20210401160003.88803-11-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401160003.88803-1-benjamin.gaignard@collabora.com>
-References: <20210401160003.88803-1-benjamin.gaignard@collabora.com>
+        with ESMTP id S237151AbhDASNr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:13:47 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ED8C0613AD
+        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 04:44:28 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id t20so868604plr.13
+        for <linux-media@vger.kernel.org>; Thu, 01 Apr 2021 04:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U32Xl3i+DvBGu9DIngpNbbKksxWeEgvCfpwavzhzq+M=;
+        b=U6k0aRtyT/YAqwZ9LCwDNUsQlw+SFxWmQ9bh45GG1kmLh9rU4+q0zApmYH+7u0K037
+         dgE/ybzBNXvCrXQRW1wQPS/ECzvh8JmmeKGrYDL3BA1tbx+kaHflL9TOlFgRJRr7JTzq
+         x7AL/rKBEaoxV4vUnCTHVFRlQTqUqCd2pAgTMd+rUvf5zK1gTZmTJ7xWKdzQ8dtjwFs/
+         bPXymJ5zhMO0yBSoj+IJCjC8+2Uy8yH/pc+jlNG0v3NjwVA/xP1QsczpLi3+L2VEenUD
+         PVnrPikzvh6JXVNZi7JGkVHMmU1YK1mEUyQmJxo/EDaW3br+1tWvrWHSOUEMp3LY336b
+         LAvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U32Xl3i+DvBGu9DIngpNbbKksxWeEgvCfpwavzhzq+M=;
+        b=f7ORCvY8PyVxB0kMy+zK09BWRx0hBkPHbsIFzaQ9y1eiAkxKyABVgZ3c+5zhMUKNQr
+         Qw2Kfnxew+KdWjQzgpjk3p1UaNXhmTqK0aZ4VgXNQtj7zktYQAc08akov9nfxXz41V+0
+         aRcUQ2AlSIko6zV21fK0nIXl5hnOnd53lJNvi+71y3pd5ffjrytIH9lNln3sofoR1BF+
+         7lZ0Lv1E0sAYw5oR4p3P/kDElukVZ6E3CKQZLJ0s4N7KCNFc6LISE4QJWqZTXY7QFGfQ
+         o7wBmpsixq9Ae86+P0emYuSzYz3NK1RyJkB6+4MKw7oGsVMhHHwcdfgpxAzvGxDi6tMY
+         Pz4g==
+X-Gm-Message-State: AOAM532aovEaigBYFVER07xvhdgfzE/KMyMO9aWZdWMXBgK8sRSHOJvb
+        tVuSQnzMMQlUwIgBTCKkhIVd4cQ/16rP4y9CIS+XJw==
+X-Google-Smtp-Source: ABdhPJwbu1LZT4NHxa6D/4UADQAFr2uPFpDu6MUnRoVyM5I3njWKwU7En/mUJvtnAV19sz3G1xPHaNXgEINtnmo/3Nw=
+X-Received: by 2002:a17:902:f68a:b029:e5:b17f:9154 with SMTP id
+ l10-20020a170902f68ab02900e5b17f9154mr7458337plg.28.1617277467431; Thu, 01
+ Apr 2021 04:44:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210401103500.1558058-1-yangyingliang@huawei.com>
+In-Reply-To: <20210401103500.1558058-1-yangyingliang@huawei.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 1 Apr 2021 13:44:15 +0200
+Message-ID: <CAG3jFyupb==xBb19wdv=TKheKuS_TEojhsvzmAATJsh1VUrdzg@mail.gmail.com>
+Subject: Re: [PATCH -next] media: camss: csiphy: Remove redundant dev_err call
+ in msm_csiphy_subdev_init()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure that V4L2_PIX_FMT_HEVC_SLICE is correctly handle by v4l2
-of the driver.
+Hey Yang,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
----
-version 8:
- - Add Ezequiel review tag
+Thanks for the patch, feel free to add my r-b.
 
- drivers/staging/media/hantro/hantro_v4l2.c | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 77d7fe62ce81..0655324fd0d4 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -392,6 +392,7 @@ hantro_update_requires_request(struct hantro_ctx *ctx, u32 fourcc)
- 	case V4L2_PIX_FMT_MPEG2_SLICE:
- 	case V4L2_PIX_FMT_VP8_FRAME:
- 	case V4L2_PIX_FMT_H264_SLICE:
-+	case V4L2_PIX_FMT_HEVC_SLICE:
- 		ctx->fh.m2m_ctx->out_q_ctx.q.requires_requests = true;
- 		break;
- 	default:
--- 
-2.25.1
-
+On Thu, 1 Apr 2021 at 12:33, Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+> There is an error message within devm_ioremap_resource
+> already, so remove the dev_err call to avoid redundant
+> error message.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/media/platform/qcom/camss/camss-csiphy.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> index 6ceb6d7d53d1..b3c3bf19e522 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> @@ -593,20 +593,16 @@ int msm_csiphy_subdev_init(struct camss *camss,
+>
+>         r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
+>         csiphy->base = devm_ioremap_resource(dev, r);
+> -       if (IS_ERR(csiphy->base)) {
+> -               dev_err(dev, "could not map memory\n");
+> +       if (IS_ERR(csiphy->base))
+>                 return PTR_ERR(csiphy->base);
+> -       }
+>
+>         if (camss->version == CAMSS_8x16 ||
+>             camss->version == CAMSS_8x96) {
+>                 r = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>                                                  res->reg[1]);
+>                 csiphy->base_clk_mux = devm_ioremap_resource(dev, r);
+> -               if (IS_ERR(csiphy->base_clk_mux)) {
+> -                       dev_err(dev, "could not map memory\n");
+> +               if (IS_ERR(csiphy->base_clk_mux))
+>                         return PTR_ERR(csiphy->base_clk_mux);
+> -               }
+>         } else {
+>                 csiphy->base_clk_mux = NULL;
+>         }
+> --
+> 2.25.1
+>
