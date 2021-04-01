@@ -2,146 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6713C43470
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 516AAC433B4
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B224061005
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3134961165
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234391AbhDARlp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S234986AbhDARlr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbhDARi2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:38:28 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7CFC0319DB;
-        Thu,  1 Apr 2021 10:34:20 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b9so2595119wrt.8;
-        Thu, 01 Apr 2021 10:34:20 -0700 (PDT)
+        with ESMTP id S234763AbhDARjq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:39:46 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C40C0045EF;
+        Thu,  1 Apr 2021 07:43:56 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id jy13so3281832ejc.2;
+        Thu, 01 Apr 2021 07:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rK2LdS6ODAydJkNJDKUimZKMnsbdOM3cvA6asgW0c80=;
-        b=fbPIbSHJtsRAZcXnsol7EI9DCaFJZ9nwvBGgXN7up6EJ+E7CAhF1Ocm4pX77zRlF+8
-         iKer8GP+EWclFlHSRplim3szwZeCqo9UrNPQK+ESFU3xZx/mVuM36sWFCBPU02kN8Uq0
-         DrqxAh9Yelt//O5VEqVWrdz94ICrGpecJ2+v7/UoVs3x95tlMaCNyEElnc+zC12GyHtt
-         3QOyMFLgzT9duhlCILmgOvPRQhwbHAQWQOicexLPIm89xw1ppK5cpSIp43+b9tOWE5kU
-         GrihkfBolOIcGBgdosfKtjs1FoGncRGD0YlOxjPzUrt1qVQnOvspWi4etXScsO+R2xt6
-         rDug==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c9dnfwn3uUQXnRGTtGdPI5EXjcVR5rT5ZIvAQLeTWB0=;
+        b=GDJXTN0HFj6eVKPH5TMDm6NIGcjzfywnofpIQvY30/bpMclQDTYXhbqaRs7Ct6+xEU
+         arM9lX4UMRhxGi5yCMBxEeObbwH76zyTY+uTeURueKMwawjX7uS1bs+z08TTfo25mqNL
+         u77h961Ii+Mq29Xzlj58mKsWMvLPpOzDc4AZTWVa36AS1/oS+L/vD7nw9mpz990Wh+ga
+         4a/5Qy5s1uXhMSPvTz08ISCpkiC+8QB7ngcorzxToBFRJ4U2crSuPDDiZMdzSsNn9n1y
+         8OQRxhEPiiuNFjM9G1vcuE8GMRICguqgOjbsVodi+yCBZHuHWwvNrYJwXkF5dOh8X49M
+         xpqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rK2LdS6ODAydJkNJDKUimZKMnsbdOM3cvA6asgW0c80=;
-        b=ZIr5ZSklDvEAgYwVG07300BdM5ck0HcVzAqhZScq8Li+BdpAcVsGrfWREjaY5ITD44
-         +5FulZbbHRfH4l6L8gNFl3ZIOSy5wA+eGjN5eWoc0HukWVsl8Wj0ue3cCw678hkVJjeu
-         2rOqdDOZ40hjWaBAx0FmM5iotUkkz2doZ2shxbWVPceVow11kvO31cho+OGnVzYggCCc
-         Rqrn84qp/wn06XI5hnX+3RdRjurhULmU+cmwfXsQ3bMpB1TuJuavv9yIARuKDMp+6ymS
-         ZYqpq8OfLNcmr2tsUchtFvEk/o5wug+mZf4ET4h3M60HdG/vfB0Wui4drI9pE1mXC2aW
-         CZYA==
-X-Gm-Message-State: AOAM5323/Lp/jaa6jnfzhjebjyRzbpGFxZKCFFmFKN0jF1rkVtLavFr3
-        CKnGetYVqXMtzZ40mT68eUYQo2D+MgJ58xb7vao=
-X-Google-Smtp-Source: ABdhPJzTzb75Zq5lVKxlXsLtahJ+rLK1yT4ChASxTdyK4VvEYKWc/dOfoDSRkP8SuHFCh33/CUU6oLC581EOnJ+bucE=
-X-Received: by 2002:adf:fb42:: with SMTP id c2mr11041823wrs.83.1617298459053;
- Thu, 01 Apr 2021 10:34:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c9dnfwn3uUQXnRGTtGdPI5EXjcVR5rT5ZIvAQLeTWB0=;
+        b=BcMbE8YNDA3LiKwjiBrvbtk1zmdfHE3CKtR00LlgXlITLt6IdRSSXw58EURE+kabB/
+         zZAlu5QwHEzzvH9kM1GbeFotP2wqRwfZs5hi/oQcQT1wWbg6zxB+4vZqNpMqdlCnLwBg
+         vsCguQOgH8/AZEbT5doxfTOr4K0YYj8XTdmOvL+qBE/+YpIzjv4WeALfZ3rNVugqmWUC
+         T2yoT6H6Eqt+bytRJkpUOSk45efJfqfF9lUeOqP6rBr6qjjBRYd8TMtJ5GVTIuFCZIj1
+         qe0poARiXM0gn46prEcJL9HKM/rAEIlE4py3973GNMWO9iSzwDOfyND7EWFzVYWoktNg
+         CNQA==
+X-Gm-Message-State: AOAM530n+XCanJKEVp+fhO5/9VsYR0EK72nr5FLfaF8j44Kh4aju+AFW
+        Ije+alCt0QDyyJqNnIDLh7DU0PDQqbWAgw==
+X-Google-Smtp-Source: ABdhPJwEdgYTRpOzaOCZ20hnOAYuVxYiUwWxcYARQTiQhaUcIT3j3xfkvUdqsKyHyPAV7qD+3Tda3A==
+X-Received: by 2002:a17:906:aed6:: with SMTP id me22mr9618958ejb.146.1617288234968;
+        Thu, 01 Apr 2021 07:43:54 -0700 (PDT)
+Received: from arch-x1c3.. (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
+        by smtp.gmail.com with ESMTPSA id nd36sm2854950ejc.21.2021.04.01.07.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 07:43:54 -0700 (PDT)
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+To:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc:     emil.l.velikov@gmail.com, Frank Rowand <frowand.list@gmail.com>
+Subject: [PATCH v4 9/9] ARM: dts: sama5d4: enable Hantro G1 VDEC
+Date:   Thu,  1 Apr 2021 15:43:36 +0100
+Message-Id: <20210401144336.2495479-10-emil.l.velikov@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
+References: <20210401144336.2495479-1-emil.l.velikov@gmail.com>
 MIME-Version: 1.0
-References: <20210331221630.488498-1-robdclark@gmail.com> <20210401012722.527712-1-robdclark@gmail.com>
- <20210401012722.527712-3-robdclark@gmail.com> <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
-In-Reply-To: <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 1 Apr 2021 10:37:44 -0700
-Message-ID: <CAF6AEGvQ3Ep4O_SKGiptq1BiMK0tUjJ=U84M2otvQtVfWHEzoQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] drm/msm: Avoid mutex in shrinker_count()
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <freedreno@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 1, 2021 at 8:34 AM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, Mar 31, 2021 at 6:24 PM Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > @@ -45,6 +30,9 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
-> >         list_for_each_entry(msm_obj, &priv->inactive_dontneed, mm_list) {
-> >                 if (freed >= sc->nr_to_scan)
-> >                         break;
-> > +               /* Use trylock, because we cannot block on a obj that
-> > +                * might be trying to acquire mm_lock
-> > +                */
->
-> nit: I thought the above multi-line commenting style was only for
-> "net" subsystem?
+From: Emil Velikov <emil.velikov@collabora.com>
 
-we do use the "net" style a fair bit already.. (OTOH I tend to not
-really care what checkpatch says)
+Add the SAMA5D4 VDEC module which comprises Hantro G1 video decoder
+core.
 
-> >                 if (!msm_gem_trylock(&msm_obj->base))
-> >                         continue;
-> >                 if (is_purgeable(msm_obj)) {
-> > @@ -56,8 +44,11 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
-> >
-> >         mutex_unlock(&priv->mm_lock);
-> >
-> > -       if (freed > 0)
-> > +       if (freed > 0) {
-> >                 trace_msm_gem_purge(freed << PAGE_SHIFT);
-> > +       } else {
-> > +               return SHRINK_STOP;
-> > +       }
->
-> It probably doesn't matter, but I wonder if we should still be
-> returning SHRINK_STOP if we got any trylock failures. It could
-> possibly be worth returning 0 in that case?
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: devicetree@vger.kernel.org
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
+---
+v2
+ - Split out of larger patch (Eze)
+ - s/Atmel/Microchip/ (Nicolas)
+ - Drop leading 0 in node name/address
 
-On the surface, you'd think that, but there be mm dragons.. we can hit
-shrinker from the submit path when the obj is locked already and we
-are trying to allocate backing pages.  We don't want to tell vmscan to
-keep trying, because we'll keep failing to grab that objects lock
+v3
+ - Drop the clk/irq names (RobH)
+---
+ arch/arm/boot/dts/sama5d4.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
->
-> > @@ -75,6 +66,9 @@ vmap_shrink(struct list_head *mm_list)
-> >         unsigned unmapped = 0;
-> >
-> >         list_for_each_entry(msm_obj, mm_list, mm_list) {
-> > +               /* Use trylock, because we cannot block on a obj that
-> > +                * might be trying to acquire mm_lock
-> > +                */
->
-> If you end up changing the commenting style above, should also be here.
->
-> At this point this seems fine to land to me. Though I'm not an expert
-> on every interaction in this code, I've spent enough time starting at
-> it that I'm comfortable with:
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
+index 05c55875835d..e47e1ca63043 100644
+--- a/arch/arm/boot/dts/sama5d4.dtsi
++++ b/arch/arm/boot/dts/sama5d4.dtsi
+@@ -101,6 +101,13 @@ nfc_sram: sram@100000 {
+ 			ranges = <0 0x100000 0x2400>;
+ 		};
+ 
++		vdec0: vdec@300000 {
++			compatible = "microchip,sama5d4-vdec";
++			reg = <0x00300000 0x100000>;
++			interrupts = <19 IRQ_TYPE_LEVEL_HIGH 4>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 19>;
++		};
++
+ 		usb0: gadget@400000 {
+ 			compatible = "atmel,sama5d3-udc";
+ 			reg = <0x00400000 0x100000
+-- 
+2.31.1
 
-thanks
-
-BR,
--R
