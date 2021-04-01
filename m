@@ -2,107 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 406B7C4360C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D09CFC43600
 	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6D31610A0
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FEB461159
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:55:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbhDARzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S234986AbhDARzw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbhDARpB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:45:01 -0400
-X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Apr 2021 07:46:59 PDT
-Received: from mail.tuxforce.de (mail.tuxforce.de [IPv6:2a00:5080:1:16d::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6980C0045F0
-        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 07:46:59 -0700 (PDT)
-Received: from [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d] (2001-4dd5-b099-0-19b2-6b8c-f4bb-b22d.ipv6dyn.netcologne.de [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d])
-        by mail.tuxforce.de (Postfix) with ESMTPSA id 00D0E52009B;
-        Thu,  1 Apr 2021 16:46:57 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tuxforce.de 00D0E52009B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxforce.de;
-        s=202009; t=1617288418;
-        bh=Jxez6pLabtpAgZZ/AWAS8AbpZ6WNQycgum780OEmucc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=vNDAfmMI1SOV8wZxB47N7VuIVlb80ouJ+EM7Z0h0OYG4Pk+I7+++AIDpCRu0TUBax
-         KXN82J09aISuH2+6ZUxnb44+P4jqTzV1CJhLGOApQ7lL0qI1Cj/P8elJYsa5+dgGN3
-         9J/YWAG/Ms0SdOkwQqdkwGHFE0hQcEVKFVG3mgtt+yDAk+gDb6gX+MY1srRnE1LuS4
-         xbeaPu2qmKHAG16cILJ/sRmBK2f58YJo3AmsNsULOKOpBHjWfGpqatqG2PiQx5H0ek
-         EpU00mqP5a8qIoarHv7ErVmLLhhHQhTkWofkQ8vpB7BhrhdW4Vrl8Qs3jz0BnPfbTG
-         H6KKFd59k5xGg==
-Subject: Re: [PATCH 2/2] media: si2168: also cache Si2168 B40 fallback
- firmware
-To:     linux-media@vger.kernel.org
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Lukas Middendorf <kernel@tuxforce.de>
-References: <20200813214538.8474-1-kernel@tuxforce.de>
- <20200813214538.8474-2-kernel@tuxforce.de>
-From:   Lukas Middendorf <kernel@tuxforce.de>
-Message-ID: <8cf06089-ddb9-fe12-3362-be5accee7a54@tuxforce.de>
-Date:   Thu, 1 Apr 2021 16:46:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        with ESMTP id S236616AbhDARt0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:49:26 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D53C00F7D9;
+        Thu,  1 Apr 2021 08:07:44 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z2so2168309wrl.5;
+        Thu, 01 Apr 2021 08:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=MbKLAGz4OO4bkaK2mn5gJbhDW+pmNyk19HFcUZTJdJg=;
+        b=GRr7eS+aFYlubvf1mPOYcVQQgMHnfQ0NegZX00k4kHoMYsIKZ4BVrmlZlAzofy5DWv
+         R95KUIOcwiQhJZXStFdhS6EGKVRwm0AYzLWs8C89sMpKtNfHNgts2zl68Mq3jekWTY21
+         3eORmfMoCBoLlha/R4Hcec0dxt6jUWvkHMFiKgMM5i/TJcGZP73R1SrM6m9Cu9Ahfgj4
+         J/qgd94AonllohzFWegDtH3E4+6geuEY7eZgVNSwvUsvdrwXTMUB9ZqcMMAbLYxGinnG
+         tVof+nifxAlS28roJ6tKUY1BQi+5nhjDaLWeqtpmo6oNgYTsV6WsRsRibSXCxOINXm6Y
+         Jl7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MbKLAGz4OO4bkaK2mn5gJbhDW+pmNyk19HFcUZTJdJg=;
+        b=NuRiNjLFyCqaG5Tj0kT/S+v1YtVLDa606YvhGZkVRpa/EW6tn90Wu5EMHNI8nmpmRf
+         7paudvIAgYICI/zcb0pZkSBsghlu0uXl9IzZljaumA4L+9Z4zZ3yQbIG+pRd2XNGSjig
+         wOkVxNxHnOJMtrCqF70rnKETJlPANGxlnv+tEPLQGZitX+lqq35YP6t3iztwvc9ezGVO
+         s6M328pXi1/28/kaMAWsPPiMFQN+O8HAm46xNCwnKeqC7mET9i61uv4bI7+SmR9Ivcp2
+         FljHdwOkFvm2Wanu6C+yOIdX9+UToQd8hzMQR43BcRw8Y5ptj/bHcGocRFAJCIDaGYpV
+         6LHg==
+X-Gm-Message-State: AOAM531axYhR8fc8A6dDXiVPGKm+Oxa7vHRGHoepq18MjRfPdz9mXG5A
+        R9NA8RLoktwZZ+Od4fjLjd0=
+X-Google-Smtp-Source: ABdhPJxQciKxKjLxekC/0FTunb06t06BDPKTfdhNYB9ydwv7ENmiHDDN+Ryg92CSwjPJcqAh3IswWg==
+X-Received: by 2002:a5d:5492:: with SMTP id h18mr10435295wrv.340.1617289663089;
+        Thu, 01 Apr 2021 08:07:43 -0700 (PDT)
+Received: from bcarvalho-Ubuntu.lan ([2001:818:de85:7e00:a182:b5f0:9f7c:c891])
+        by smtp.gmail.com with ESMTPSA id n8sm9710108wrm.70.2021.04.01.08.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 08:07:42 -0700 (PDT)
+From:   Beatriz Martins de Carvalho <martinsdecarvalhobeatriz@gmail.com>
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy-kernel@googlegroups.com
+Subject: [PATCH 2/2] staging: media: omap4iss: align arguments with open parenthesis
+Date:   Thu,  1 Apr 2021 16:07:39 +0100
+Message-Id: <475dbbe5774cbfed2d924807d8a3cfeb84b3d845.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
+References: <cover.1617287509.git.martinsdecarvalhobeatriz@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200813214538.8474-2-kernel@tuxforce.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Cleans up checks of "Alignment should match open parenthesis"
+in iss.c:96.
 
-this second patch also is not yet in 5.12-rc5 and is still relevant for me.
-A second option would be to stop using the fallback firmware completely. 
-I think systems using a current kernel can be expected to also have the 
-firmware files with their current names.
+Signed-off-by: Beatriz Martins de Carvalho <martinsdecarvalhobeatriz@gmail.com>
+---
+ drivers/staging/media/omap4iss/iss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards
+diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
+index e8f724dbf810..472f1837632e 100644
+--- a/drivers/staging/media/omap4iss/iss.c
++++ b/drivers/staging/media/omap4iss/iss.c
+@@ -963,7 +963,7 @@ iss_register_subdev_group(struct iss_device *iss,
+ 		}
+ 
+ 		subdev = v4l2_i2c_new_subdev_board(&iss->v4l2_dev, adapter,
+-				board_info->board_info, NULL);
++						   board_info->board_info, NULL);
+ 		if (!subdev) {
+ 			dev_err(iss->dev, "Unable to register subdev %s\n",
+ 				board_info->board_info->type);
+-- 
+2.25.1
 
-Lukas
-
-On 13/08/2020 23:45, Lukas Middendorf wrote:
-> we can not know beforehand whether we have to access that firmware
-> file during resume. We just request the caching so we don't run
-> into any problems later
-> 
-> Signed-off-by: Lukas Middendorf <kernel@tuxforce.de>
-> ---
->   drivers/media/dvb-frontends/si2168.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-> index ea4b2d91697e..f2dd1deb75ff 100644
-> --- a/drivers/media/dvb-frontends/si2168.c
-> +++ b/drivers/media/dvb-frontends/si2168.c
-> @@ -768,6 +768,19 @@ static int si2168_probe(struct i2c_client *client,
->   				dev->firmware_name);
->   	}
->   
-> +	/* also request caching of fw for Si2168 B40 under its old file name.
-> +	 * Since we can't know now whether we might have to access that file,
-> +	 * we just make sure we have that covered
-> +	 */
-> +	if (dev->chip_id == SI2168_CHIP_ID_B40) {
-> +		ret = firmware_request_cache(&client->dev, SI2168_B40_FIRMWARE_FALLBACK);
-> +		if (ret) {
-> +			dev_err(&client->dev,
-> +					"firmware caching for '%s' failed\n",
-> +					SI2168_B40_FIRMWARE_FALLBACK);
-> +		}
-> +	}
-> +
->   	return 0;
->   err_kfree:
->   	kfree(dev);
-> 
