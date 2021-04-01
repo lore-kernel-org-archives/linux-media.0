@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D869BC433B4
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93754C433ED
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81B3261001
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:03:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65CA36112E
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:04:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237492AbhDASDz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:03:55 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:1272 "EHLO
+        id S235615AbhDASEA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:04:00 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:65126 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbhDASAH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:00:07 -0400
+        with ESMTP id S237491AbhDASAI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:00:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617300007; x=1648836007;
+  t=1617300008; x=1648836008;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eW2KWb3ah7QJbnhIWY57Yzt2wHpYctXsGagdfidA/0A=;
-  b=gQ/nR/9936ZbiFHnfotUq3DYikw+lyHJYn0I2pMMHag7alK9LTWaF8fW
-   pWJzOMAC64hpU96eDD6KibZTKjYdwEck/ktMiiLFhJg0fq1618A0NtgeW
-   FL1OKN6IhvwCElceSmDPugVYMCrvcHxZzxga0xFihhsXlw4EttWP/UYXs
-   Vu5hvel0JHfj5+GbMuRw4QSEDxPYvVi7xNQIWbcPUJi0khTQW8pY7FHwJ
-   occClHEKvbnPLDPGNPuH/YKcVznY0mXNfchkSlD+IO0Z+9cKbU52dX7ch
-   5gXoStegvohJaWQRvNa1MSYaEIsh7D7W94fKFQAaGBuLfXYaZ3QZbfJn9
-   g==;
-IronPort-SDR: Du7ikSv1sIdLlY/CHKPibWhwE6UKcvEBgHx0Ynq1vZc1fJdYb9U8S97qIPE+6gtJIXDRFPaktw
- 5PpX9YOb1RnHeQ7QEDEDAaSg4x69+Y4sT58PwBPYcyU8WmYL876qhvIj0khbYRB8ngV0dBVXTG
- WESPPVXmF1a2Hvd79rFgVdAzbrZWgTm4lUXi81Way3EGm1R32mUkAPXY0pE2C/Or7lTJFkGimL
- 9MGSVqIf/+dLeLTHZAjSrjqPfb1gEWwdVVpxk3naTSyhZFSWGbQw91UJ1VDymoUbaFY0cYcpP0
- 8Cg=
+  bh=5CAS53/++Li9k7hQhqqVrVX32Fe/I7vzDF5LZE6z+Fw=;
+  b=tve5o87hYXhgcATGI3mARhMo3y4t4nZ9vDLe7xSvoAam25EnOVq6lKpL
+   1e95fpvXcDLO/W19Xqu69C0jjpMMZKOCy8ojMtCQAmt/CkXIgwmK4AgTN
+   JZx32NKN5NTe3aO4KXs1mJ/j5J4DSZ1CF1YmnESgFOQRFHMKV8hRGnywO
+   e9agsov45EPn1LjmJetrFr3vuQdByCPFxmYJg14GHX78cDRHHklwKLDKL
+   +wPr85gsRwvlKM1FYtgfLjVvhfU8CUJpN2iVdiGgS6ajRXFQzSnttrGBU
+   j2fag6cvlYngl2bEtp8DHx7o65d2iX58EbVMfysHNkdNzCBcxbAgtXcrJ
+   A==;
+IronPort-SDR: TEWygatqKULbCqx2GqeWXPLSHFjDohr7tQEH0FL4I+ISoX/q9wXmwXrcuMA+pjgWprAhc/8ckR
+ kAJabgLbicB6zDKEyY+774Xp+zgnQafhFhXxW/CxN7qoynLoO5lNTFEuxZWUrHQcx2PBMQBy9s
+ mWXBVwFLPt2XXcHUQjlzmV/tk6wqNDYWl3p3oOw+OGl5rGsBDaiG1Xp1vXMndvAlufFCosVlbs
+ HFnBqmSxnSJVV9dOJb87ihvS7JbmsmfjtS5JyEI3sB55MOYFjcFyUhvCuHIYmTph7iGEZiPfgP
+ RQ0=
 X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
-   d="scan'208";a="49670702"
+   d="scan'208";a="49670823"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:29:19 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 04:30:21 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 04:29:19 -0700
+ 15.1.2176.2; Thu, 1 Apr 2021 04:30:21 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:29:18 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 04:30:16 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH 06/30] media: atmel: atmel-isc: extract CSC submodule config into separate function
-Date:   Thu, 1 Apr 2021 14:26:59 +0300
-Message-ID: <20210401112723.189107-7-eugen.hristev@microchip.com>
+Subject: [PATCH 10/30] media: atmel: atmel-isc: add CBC to the reg offsets struct
+Date:   Thu, 1 Apr 2021 14:27:03 +0300
+Message-ID: <20210401112723.189107-11-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210401112723.189107-1-eugen.hristev@microchip.com>
 References: <20210401112723.189107-1-eugen.hristev@microchip.com>
@@ -66,93 +66,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CSC submodule should be initialized in the product specific driver
-as it's product specific. Other products can implement it differently.
+Add cbc to the reg offsets struct. This will allow different products
+to have a different reg offset for this particular module.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c    |  8 +-------
- drivers/media/platform/atmel/atmel-isc.h         |  7 +++++++
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 15 +++++++++++++++
- 3 files changed, 23 insertions(+), 7 deletions(-)
+ drivers/media/platform/atmel/atmel-isc-base.c    | 2 +-
+ drivers/media/platform/atmel/atmel-isc-regs.h    | 3 +++
+ drivers/media/platform/atmel/atmel-isc.h         | 2 ++
+ drivers/media/platform/atmel/atmel-sama5d2-isc.c | 7 +++++--
+ 4 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index ff40ee2e2759..31f63ba90c71 100644
+index 446fe232956b..d4bf7fd5929f 100644
 --- a/drivers/media/platform/atmel/atmel-isc-base.c
 +++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -646,13 +646,7 @@ static void isc_set_pipeline(struct isc_device *isc, u32 pipeline)
- 	regmap_bulk_write(regmap, ISC_GAM_GENTRY, gamma, GAMMA_ENTRIES);
- 	regmap_bulk_write(regmap, ISC_GAM_RENTRY, gamma, GAMMA_ENTRIES);
+@@ -2310,7 +2310,7 @@ int isc_pipeline_init(struct isc_device *isc)
+ 		REG_FIELD(ISC_GAM_CTRL, 2, 2),
+ 		REG_FIELD(ISC_GAM_CTRL, 3, 3),
+ 		REG_FIELD(ISC_CSC_CTRL + isc->offsets.csc, 0, 0),
+-		REG_FIELD(ISC_CBC_CTRL, 0, 0),
++		REG_FIELD(ISC_CBC_CTRL + isc->offsets.cbc, 0, 0),
+ 		REG_FIELD(ISC_SUB422_CTRL, 0, 0),
+ 		REG_FIELD(ISC_SUB420_CTRL, 0, 0),
+ 	};
+diff --git a/drivers/media/platform/atmel/atmel-isc-regs.h b/drivers/media/platform/atmel/atmel-isc-regs.h
+index 5a65600c5f88..a5e2fe01ba9f 100644
+--- a/drivers/media/platform/atmel/atmel-isc-regs.h
++++ b/drivers/media/platform/atmel/atmel-isc-regs.h
+@@ -177,6 +177,9 @@
+ /* Color Space Conversion CRB OCR Register */
+ #define ISC_CSC_CRB_OCR	0x000003b0
  
--	/* Convert RGB to YUV */
--	regmap_write(regmap, ISC_CSC_YR_YG, 0x42 | (0x81 << 16));
--	regmap_write(regmap, ISC_CSC_YB_OY, 0x19 | (0x10 << 16));
--	regmap_write(regmap, ISC_CSC_CBR_CBG, 0xFDA | (0xFB6 << 16));
--	regmap_write(regmap, ISC_CSC_CBB_OCB, 0x70 | (0x80 << 16));
--	regmap_write(regmap, ISC_CSC_CRR_CRG, 0x70 | (0xFA2 << 16));
--	regmap_write(regmap, ISC_CSC_CRB_OCR, 0xFEE | (0x80 << 16));
-+	isc->config_csc(isc);
++/* Offset for CBC register specific to sama5d2 product */
++#define ISC_SAMA5D2_CBC_OFFSET	0
++
+ /* Contrast And Brightness Control Register */
+ #define ISC_CBC_CTRL    0x000003b4
  
- 	regmap_write(regmap, ISC_CBC_BRIGHT, ctrls->brightness);
- 	regmap_write(regmap, ISC_CBC_CONTRAST, ctrls->contrast);
 diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index d14ae096fbf6..bb0b4419deff 100644
+index cb47932197b1..b1fe93c93c61 100644
 --- a/drivers/media/platform/atmel/atmel-isc.h
 +++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -192,6 +192,9 @@ struct isc_ctrls {
-  *
-  * @max_width:		maximum frame width, dependent on the internal RAM
-  * @max_height:		maximum frame height, dependent on the internal RAM
-+ *
-+ * @config_csc:		pointer to a function that initializes product
-+ *			specific CSC module
+@@ -147,9 +147,11 @@ struct isc_ctrls {
+ /*
+  * struct isc_reg_offsets - ISC device register offsets
+  * @csc:		Offset for the CSC register
++ * @cbc:		Offset for the CBC register
   */
- struct isc_device {
- 	struct regmap		*regmap;
-@@ -259,6 +262,10 @@ struct isc_device {
- 
- 	u32		max_width;
- 	u32		max_height;
-+
-+	struct {
-+		void (*config_csc)(struct isc_device *isc);
-+	};
+ struct isc_reg_offsets {
+ 	u32 csc;
++	u32 cbc;
  };
  
- extern struct isc_format formats_list[];
+ /*
 diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index 6d9942dcd7c1..d9f06daffdf8 100644
+index 36bf15a9607d..275999314e61 100644
 --- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
 +++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -54,6 +54,19 @@
+@@ -77,8 +77,10 @@ void isc_sama5d2_config_cbc(struct isc_device *isc)
+ {
+ 	struct regmap *regmap = isc->regmap;
  
- #define ISC_CLK_MAX_DIV		255
+-	regmap_write(regmap, ISC_CBC_BRIGHT, isc->ctrls.brightness);
+-	regmap_write(regmap, ISC_CBC_CONTRAST, isc->ctrls.contrast);
++	regmap_write(regmap, ISC_CBC_BRIGHT + isc->offsets.cbc,
++		     isc->ctrls.brightness);
++	regmap_write(regmap, ISC_CBC_CONTRAST + isc->offsets.cbc,
++		     isc->ctrls.contrast);
+ }
  
-+void isc_sama5d2_config_csc(struct isc_device *isc)
-+{
-+	struct regmap *regmap = isc->regmap;
-+
-+	/* Convert RGB to YUV */
-+	regmap_write(regmap, ISC_CSC_YR_YG, 0x42 | (0x81 << 16));
-+	regmap_write(regmap, ISC_CSC_YB_OY, 0x19 | (0x10 << 16));
-+	regmap_write(regmap, ISC_CSC_CBR_CBG, 0xFDA | (0xFB6 << 16));
-+	regmap_write(regmap, ISC_CSC_CBB_OCB, 0x70 | (0x80 << 16));
-+	regmap_write(regmap, ISC_CSC_CRR_CRG, 0x70 | (0xFA2 << 16));
-+	regmap_write(regmap, ISC_CSC_CRB_OCR, 0xFEE | (0x80 << 16));
-+}
-+
  /* Gamma table with gamma 1/2.2 */
- const u32 isc_sama5d2_gamma_table[][GAMMA_ENTRIES] = {
- 	/* 0 --> gamma 1/1.8 */
-@@ -198,6 +211,8 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	isc->max_width = ISC_SAMA5D2_MAX_SUPPORT_WIDTH;
- 	isc->max_height = ISC_SAMA5D2_MAX_SUPPORT_HEIGHT;
+@@ -229,6 +231,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	isc->config_cbc = isc_sama5d2_config_cbc;
  
-+	isc->config_csc = isc_sama5d2_config_csc;
-+
+ 	isc->offsets.csc = ISC_SAMA5D2_CSC_OFFSET;
++	isc->offsets.cbc = ISC_SAMA5D2_CBC_OFFSET;
+ 
  	/* sama5d2-isc - 8 bits per beat */
  	isc->dcfg = ISC_DCFG_YMBSIZE_BEATS8 | ISC_DCFG_CMBSIZE_BEATS8;
- 
 -- 
 2.25.1
 
