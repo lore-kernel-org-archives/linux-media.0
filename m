@@ -2,116 +2,146 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03487C43461
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6713C43470
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC413610A0
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B224061005
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 17:41:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbhDARln (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        id S234391AbhDARlp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbhDARiD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:38:03 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABE3C02D569;
-        Thu,  1 Apr 2021 08:53:04 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id c24-20020a9d6c980000b02902662e210895so2020039otr.9;
-        Thu, 01 Apr 2021 08:53:04 -0700 (PDT)
+        with ESMTP id S234626AbhDARi2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 13:38:28 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7CFC0319DB;
+        Thu,  1 Apr 2021 10:34:20 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b9so2595119wrt.8;
+        Thu, 01 Apr 2021 10:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rK2LdS6ODAydJkNJDKUimZKMnsbdOM3cvA6asgW0c80=;
+        b=fbPIbSHJtsRAZcXnsol7EI9DCaFJZ9nwvBGgXN7up6EJ+E7CAhF1Ocm4pX77zRlF+8
+         iKer8GP+EWclFlHSRplim3szwZeCqo9UrNPQK+ESFU3xZx/mVuM36sWFCBPU02kN8Uq0
+         DrqxAh9Yelt//O5VEqVWrdz94ICrGpecJ2+v7/UoVs3x95tlMaCNyEElnc+zC12GyHtt
+         3QOyMFLgzT9duhlCILmgOvPRQhwbHAQWQOicexLPIm89xw1ppK5cpSIp43+b9tOWE5kU
+         GrihkfBolOIcGBgdosfKtjs1FoGncRGD0YlOxjPzUrt1qVQnOvspWi4etXScsO+R2xt6
+         rDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vkQJQ0O5X0ESy+J810FdCD0SpVEINsP0ZlnS7rJtykA=;
-        b=t7Dfd7aJiKBH3JXEyyEPFaogHg3o0Z0Arf+OEq24zx6z9Hb0+Fm0M403EmPBOXpd6D
-         /LWgM6PFhazklnzoCjeGaw+8qWFrfNc5c5ZW+80q2ZaLaQOfu6+uTSYHcEel7mfzjCD4
-         6xpywc8Degy7g+h5htBTBFhj98zy0cWqhXvGRiOhiPdUv3Pjz/1R/KBUn0NyC8giL2KT
-         x20UI0tx2XNS4qiMPM2FUBf2sa4/kdWagpfwO9sFvBe71Ntbhpcf/Xf7AwgN04eODwV5
-         5HZtEdny/D6EiKYLJjWwr4Pg4dSe3h/eiNJOp/PKTIbziIkdSRGPl6E7dOCsTOL076Og
-         dg9A==
-X-Gm-Message-State: AOAM530hq7XzTAxMZx5PS2a1GT+5o8sUigH/VT1f2n6FgkXYEsQmtdxr
-        oxljLbGw0/u/YwAskEmFIw==
-X-Google-Smtp-Source: ABdhPJxTYMWgRjWTTEUoN54xBzLN6y375nT/Dx7htqlExcUIh3M3GXE6xcxxoCnomOvmTM8L0T/+ZQ==
-X-Received: by 2002:a9d:7e8d:: with SMTP id m13mr7362910otp.54.1617292383853;
-        Thu, 01 Apr 2021 08:53:03 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d2sm1271592otl.48.2021.04.01.08.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 08:53:02 -0700 (PDT)
-Received: (nullmailer pid 498399 invoked by uid 1000);
-        Thu, 01 Apr 2021 15:52:59 -0000
-Date:   Thu, 1 Apr 2021 10:52:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Benoit Parrot <bparrot@ti.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Peter Chen <peter.chen@nxp.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        dmaengine@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH 12/16] dt-bindings: media: Add DT bindings for TI CSI2RX
- driver
-Message-ID: <20210401155259.GB488101@robh.at.kernel.org>
-References: <20210330173348.30135-1-p.yadav@ti.com>
- <20210330173348.30135-13-p.yadav@ti.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rK2LdS6ODAydJkNJDKUimZKMnsbdOM3cvA6asgW0c80=;
+        b=ZIr5ZSklDvEAgYwVG07300BdM5ck0HcVzAqhZScq8Li+BdpAcVsGrfWREjaY5ITD44
+         +5FulZbbHRfH4l6L8gNFl3ZIOSy5wA+eGjN5eWoc0HukWVsl8Wj0ue3cCw678hkVJjeu
+         2rOqdDOZ40hjWaBAx0FmM5iotUkkz2doZ2shxbWVPceVow11kvO31cho+OGnVzYggCCc
+         Rqrn84qp/wn06XI5hnX+3RdRjurhULmU+cmwfXsQ3bMpB1TuJuavv9yIARuKDMp+6ymS
+         ZYqpq8OfLNcmr2tsUchtFvEk/o5wug+mZf4ET4h3M60HdG/vfB0Wui4drI9pE1mXC2aW
+         CZYA==
+X-Gm-Message-State: AOAM5323/Lp/jaa6jnfzhjebjyRzbpGFxZKCFFmFKN0jF1rkVtLavFr3
+        CKnGetYVqXMtzZ40mT68eUYQo2D+MgJ58xb7vao=
+X-Google-Smtp-Source: ABdhPJzTzb75Zq5lVKxlXsLtahJ+rLK1yT4ChASxTdyK4VvEYKWc/dOfoDSRkP8SuHFCh33/CUU6oLC581EOnJ+bucE=
+X-Received: by 2002:adf:fb42:: with SMTP id c2mr11041823wrs.83.1617298459053;
+ Thu, 01 Apr 2021 10:34:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210330173348.30135-13-p.yadav@ti.com>
+References: <20210331221630.488498-1-robdclark@gmail.com> <20210401012722.527712-1-robdclark@gmail.com>
+ <20210401012722.527712-3-robdclark@gmail.com> <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
+In-Reply-To: <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 1 Apr 2021 10:37:44 -0700
+Message-ID: <CAF6AEGvQ3Ep4O_SKGiptq1BiMK0tUjJ=U84M2otvQtVfWHEzoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] drm/msm: Avoid mutex in shrinker_count()
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <freedreno@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 11:03:44PM +0530, Pratyush Yadav wrote:
-> TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
-> capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
-> parts together.
-> 
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> ---
->  .../devicetree/bindings/media/ti,csi2rx.yaml  | 70 +++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/ti,csi2rx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/ti,csi2rx.yaml b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
-> new file mode 100644
-> index 000000000000..ebd894364391
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/ti,csi2rx.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/ti,csi2rx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI CSI2RX Wrapper Device Tree Bindings
-> +
-> +maintainers:
-> +  - Pratyush Yadav <p.yadav@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: ti,csi2rx
+On Thu, Apr 1, 2021 at 8:34 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Wed, Mar 31, 2021 at 6:24 PM Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > @@ -45,6 +30,9 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
+> >         list_for_each_entry(msm_obj, &priv->inactive_dontneed, mm_list) {
+> >                 if (freed >= sc->nr_to_scan)
+> >                         break;
+> > +               /* Use trylock, because we cannot block on a obj that
+> > +                * might be trying to acquire mm_lock
+> > +                */
+>
+> nit: I thought the above multi-line commenting style was only for
+> "net" subsystem?
 
-Also, needs an SoC specific compatible.
+we do use the "net" style a fair bit already.. (OTOH I tend to not
+really care what checkpatch says)
 
-Rob
+> >                 if (!msm_gem_trylock(&msm_obj->base))
+> >                         continue;
+> >                 if (is_purgeable(msm_obj)) {
+> > @@ -56,8 +44,11 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
+> >
+> >         mutex_unlock(&priv->mm_lock);
+> >
+> > -       if (freed > 0)
+> > +       if (freed > 0) {
+> >                 trace_msm_gem_purge(freed << PAGE_SHIFT);
+> > +       } else {
+> > +               return SHRINK_STOP;
+> > +       }
+>
+> It probably doesn't matter, but I wonder if we should still be
+> returning SHRINK_STOP if we got any trylock failures. It could
+> possibly be worth returning 0 in that case?
+
+On the surface, you'd think that, but there be mm dragons.. we can hit
+shrinker from the submit path when the obj is locked already and we
+are trying to allocate backing pages.  We don't want to tell vmscan to
+keep trying, because we'll keep failing to grab that objects lock
+
+>
+> > @@ -75,6 +66,9 @@ vmap_shrink(struct list_head *mm_list)
+> >         unsigned unmapped = 0;
+> >
+> >         list_for_each_entry(msm_obj, mm_list, mm_list) {
+> > +               /* Use trylock, because we cannot block on a obj that
+> > +                * might be trying to acquire mm_lock
+> > +                */
+>
+> If you end up changing the commenting style above, should also be here.
+>
+> At this point this seems fine to land to me. Though I'm not an expert
+> on every interaction in this code, I've spent enough time starting at
+> it that I'm comfortable with:
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+thanks
+
+BR,
+-R
