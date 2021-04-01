@@ -2,137 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E8DC43600
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 180EAC43618
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58FE06108F
-	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDC7561006
+	for <linux-media@archiver.kernel.org>; Thu,  1 Apr 2021 18:29:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239232AbhDAS3B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:29:01 -0400
+        id S239102AbhDAS3A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:29:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbhDASVK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:21:10 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38AAC0225AD
-        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 08:34:56 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id cx5so1167383qvb.10
-        for <linux-media@vger.kernel.org>; Thu, 01 Apr 2021 08:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aqivty0kItBvYGGyEFQ/9HO+WPoP9jtfr5ycsGY+FF8=;
-        b=ZvyGgtwhp/yzmDXIwQF7Mt/dKYhpq9jqpN/Cnmkg9DRciJnRa2ALWpEAjRCLwe8lAV
-         qWl8byzgnWQYAr1MqjqlLVnhlKVj0c5hXxssMCPFLTRoDUoUJsH0XGI8aV4bagRB5Z7H
-         WEBfBzo8GfeHg/lOq0EeaNJssHGA3k8vD/1Og=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aqivty0kItBvYGGyEFQ/9HO+WPoP9jtfr5ycsGY+FF8=;
-        b=sk/9guwL9g1vmpcEGgDAseVClUSd0TZiNKmk/Nten3fP2kMRFXyHuESUHBWL6LLBJu
-         3qSnCdO66O/r4m35lGz6q8dGjtdk/7YbAnmQswHzdSdn8xTpl6uzmwLtFMaOwK/sdSTd
-         hJA5XZ4bFAXPXWYn6VKk4zIpCtFduBNeCA/VyDDi9M3o1OtDDabVTTCuY5hpprN1gnx/
-         NogbrFKbxJdd1PfwUTuiqciawhW7w+HuZa6YA5cLYr1G58WWUUEMGbkhf6Vu8aIVZzOa
-         m5gKgH1Cm2u/gIbuW2fbCvHV5wMtQdr9CHZJJAsSB9NhAdmBuM7lQBo443tR3Pr2zCSy
-         gpzA==
-X-Gm-Message-State: AOAM5305/wYevChJKtFLc1CN/TH0EZITl8CYEnV6Qn7FNwy7czlshbTB
-        o6yrgqjj1qxXOR0HsvnSmXDHIT9W5sg9BQ==
-X-Google-Smtp-Source: ABdhPJxbZ9qOZ28eWDNnhET1JpPyjwRXqGoGkWKkCAyOqZz0fYDlGLXVZZEdOuHkJcyE3EM92CrSUg==
-X-Received: by 2002:a05:6214:2607:: with SMTP id gu7mr8741054qvb.18.1617291296054;
-        Thu, 01 Apr 2021 08:34:56 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id l6sm4253334qke.34.2021.04.01.08.34.55
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Apr 2021 08:34:55 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id z1so2201855ybf.6
-        for <linux-media@vger.kernel.org>; Thu, 01 Apr 2021 08:34:55 -0700 (PDT)
-X-Received: by 2002:a25:69c1:: with SMTP id e184mr12540453ybc.345.1617291294869;
- Thu, 01 Apr 2021 08:34:54 -0700 (PDT)
+        with ESMTP id S237320AbhDASTH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Apr 2021 14:19:07 -0400
+Received: from mail.tuxforce.de (mail.tuxforce.de [IPv6:2a00:5080:1:16d::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11FEC0F26D3
+        for <linux-media@vger.kernel.org>; Thu,  1 Apr 2021 07:59:49 -0700 (PDT)
+Received: from [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d] (2001-4dd5-b099-0-19b2-6b8c-f4bb-b22d.ipv6dyn.netcologne.de [IPv6:2001:4dd5:b099:0:19b2:6b8c:f4bb:b22d])
+        by mail.tuxforce.de (Postfix) with ESMTPSA id 0A22152007A;
+        Thu,  1 Apr 2021 16:59:48 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tuxforce.de 0A22152007A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxforce.de;
+        s=202009; t=1617289188;
+        bh=3a6WlI18tPbA5gRTLysYpeWkw8mZwnceMr/ns0Zzj1w=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=EfoCDaI0jR5YqXlG8sUTB9/OXuhCp/xJ3sDumLcZMYQWJ6dtRePXG86osxhpa375u
+         jlKUtBmN+xE1pKPDHIoSf/n/7ylPgD/Qd2hd1sCILzCJB1C7OFThwGpNQufTdXaSba
+         z9cAosTiPFT0dxbVdsDDFmTW1uOfwj1UnMAGQTRYXhX6TKY/1mXE5cnVJqt5PYpFGs
+         Ft1OiKiJRcalYM3pzDY5nRx+pxzTJD3vf7w8GJgRp9kcG9DVYYkvU5Pyc77puFU+rG
+         JFKy5ACNyNj6orNBnuDU/LBBoNBNA7mCuk61dc8mEMyNP/qSqjQdu0JOfQsubKUY02
+         h5p7uLPSAvtAw==
+Subject: Re: Is request_firmware() really safe to call in resume callback when
+ /usr/lib/firmware is on btrfs?
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-btrfs@vger.kernel.org, Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Lukas Middendorf <kernel@tuxforce.de>
+References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
+ <20200813163749.GV4332@42.do-not-panic.com>
+ <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
+ <20200813221348.GB4332@42.do-not-panic.com>
+ <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
+ <20200814163723.GC4332@42.do-not-panic.com>
+ <a79f1a0c-012d-bebe-c9c7-b505f59079c2@tuxforce.de>
+ <20200817152056.GD4332@42.do-not-panic.com>
+ <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
+ <20200818143715.GF4332@42.do-not-panic.com>
+From:   Lukas Middendorf <kernel@tuxforce.de>
+Message-ID: <6b61e549-42b8-8e71-ff57-43b7c5b4291f@tuxforce.de>
+Date:   Thu, 1 Apr 2021 16:59:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20210331221630.488498-1-robdclark@gmail.com> <20210401012722.527712-1-robdclark@gmail.com>
- <20210401012722.527712-3-robdclark@gmail.com>
-In-Reply-To: <20210401012722.527712-3-robdclark@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 1 Apr 2021 08:34:43 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
-Message-ID: <CAD=FV=XexfG9oQa8JndOgQ9JSNRmO4-xjmQdiA_9Rn9dJWxsow@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] drm/msm: Avoid mutex in shrinker_count()
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <freedreno@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200818143715.GF4332@42.do-not-panic.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-On Wed, Mar 31, 2021 at 6:24 PM Rob Clark <robdclark@gmail.com> wrote:
->
-> @@ -45,6 +30,9 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
->         list_for_each_entry(msm_obj, &priv->inactive_dontneed, mm_list) {
->                 if (freed >= sc->nr_to_scan)
->                         break;
-> +               /* Use trylock, because we cannot block on a obj that
-> +                * might be trying to acquire mm_lock
-> +                */
-
-nit: I thought the above multi-line commenting style was only for
-"net" subsystem?
-
->                 if (!msm_gem_trylock(&msm_obj->base))
->                         continue;
->                 if (is_purgeable(msm_obj)) {
-> @@ -56,8 +44,11 @@ msm_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
->
->         mutex_unlock(&priv->mm_lock);
->
-> -       if (freed > 0)
-> +       if (freed > 0) {
->                 trace_msm_gem_purge(freed << PAGE_SHIFT);
-> +       } else {
-> +               return SHRINK_STOP;
-> +       }
-
-It probably doesn't matter, but I wonder if we should still be
-returning SHRINK_STOP if we got any trylock failures. It could
-possibly be worth returning 0 in that case?
+Hello Luis,
 
 
-> @@ -75,6 +66,9 @@ vmap_shrink(struct list_head *mm_list)
->         unsigned unmapped = 0;
->
->         list_for_each_entry(msm_obj, mm_list, mm_list) {
-> +               /* Use trylock, because we cannot block on a obj that
-> +                * might be trying to acquire mm_lock
-> +                */
+On 18/08/2020 16:37, Luis Chamberlain wrote:
+> On Tue, Aug 18, 2020 at 12:04:51AM +0200, Lukas Middendorf wrote:
+>> On 17/08/2020 17:20, Luis Chamberlain wrote:
+>>> This helps, thanks so much, now we'll have to write a reproducer, thanks
+>>> for the report!!
+>>
+>> Will you do it yourself or do you expect me to do anything for this?
+> 
+> I meant to imply that we'd do this, now that we understand the problem. Thanks
+> for your report!
 
-If you end up changing the commenting style above, should also be here.
+any news on this issue? Did you succeed with reproducing this at your end?
 
-At this point this seems fine to land to me. Though I'm not an expert
-on every interaction in this code, I've spent enough time starting at
-it that I'm comfortable with:
+I retested this with 5.12-rc5 and everything still seems unchanged. I 
+still get freezes on resume under the same circumstances described 
+previously if /usr/lib/firmware is on btrfs. My patches to si2168.c were 
+not merged.
+The documentation of request_firmware() seems unchanged and does not 
+reflect the fact that prerequisites exist for making it safe to call 
+during resume callbacks.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Lukas
