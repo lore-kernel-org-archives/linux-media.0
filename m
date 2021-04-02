@@ -7,63 +7,64 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37129C43616
-	for <linux-media@archiver.kernel.org>; Fri,  2 Apr 2021 10:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25133C43611
+	for <linux-media@archiver.kernel.org>; Fri,  2 Apr 2021 10:05:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 180A96115C
+	by mail.kernel.org (Postfix) with ESMTP id 0057E61177
 	for <linux-media@archiver.kernel.org>; Fri,  2 Apr 2021 10:05:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbhDBKFm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Apr 2021 06:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S234904AbhDBKFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Apr 2021 06:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbhDBKFc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Apr 2021 06:05:32 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E81C061793
-        for <linux-media@vger.kernel.org>; Fri,  2 Apr 2021 03:05:30 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v11so4296365wro.7
-        for <linux-media@vger.kernel.org>; Fri, 02 Apr 2021 03:05:30 -0700 (PDT)
+        with ESMTP id S234901AbhDBKFg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Apr 2021 06:05:36 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77302C0617A9
+        for <linux-media@vger.kernel.org>; Fri,  2 Apr 2021 03:05:33 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v11so4296454wro.7
+        for <linux-media@vger.kernel.org>; Fri, 02 Apr 2021 03:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y/5HfECUb7Yb2RUuUn+bfs1jqYGDNUP7G7Wpew9vFFA=;
-        b=gdQmDDPyhFcnp3uUBDYzVn83ViKI8Z4Ye2HgHK56Ur6xT20FSkkhtlL35e5I6+PIWc
-         OHxrXLdkNNquMuREXDqwY+3Gmz4VCSB6TyhTK2Vpd49quPeqc9lyrrGXHjRAWCPACJE1
-         LahTuOr9hThntFaP1xrv3pFDPgyYwCngCgshnACdLk1gEHNlRx+62z/kCeeTGSK64vYq
-         DiCCNyeq5KKe3Lok3AZPK+X1UaiDDWGY8BGSaL3BkV/PsNRO/KMDWaAruQKywAk9N1QZ
-         v8kN4wBmqLBQEy5V4d9YVVa3BXcyLk+rFW2FkM6jLiSPH3N2GOVwhSJu5v8Dh9te/OE1
-         8d7w==
+        bh=BBliiiy6w7709FtBAKPmWC2L64XC00IR7DOPG3X207w=;
+        b=KG0MSbpvHxIrbY8EA1yY8buEVvgrlrGyIs4CiBQaFpFCsWG+u9U9U7yAmNv129NLcD
+         cNwHMh64MoPgmobr+poynU16c680ESRcmbm5LQOQCuX1UUPSp1/eRC/Ll6Dv1RmTYjBF
+         qCO3He1a3yYE1WJy+7SeejmIvcc2UvMWxCziYcbt9MokKBb7BrWPyjaF4x3ANn+U+xu8
+         mtFd3vuy55d5cIVdcOpy7Db5spndhuMvwJIOSaKTQZodOXXbfk3q6+Ybsx0LGm1Nv2jG
+         5k3e+YBOK8uHtQHiV+MUaohAB89veDvUI96i4Axwq4vMR0TXI2Hkd5ksSo61JOiaaKxe
+         1ISw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y/5HfECUb7Yb2RUuUn+bfs1jqYGDNUP7G7Wpew9vFFA=;
-        b=iJNm1DGcDfXZZeYQyk151NxG44gBCkNYcclXFdam6ojDVX94zOpg9+pzHYFWjvEf47
-         vTPSJJsipuNUltC8cwkqxGPtgtozUQZehbgIakgrV89S2awB1DIexhsK4F3yQdfGJJgx
-         NnrGYFxt0inI76KZyw/Cwfw10CkKrNx/IasCiSXMRIyFPftpCpC3g3zVDECI0h8aJDkl
-         ETUUJXvroa87zf9UOD+l54qDuLKx+hEyxpONzYOufe6pSdxY3WLileyLkITOb/eD0pQx
-         RDhU2F94n/fRQ1GHWKoNfIXTXYhoEiaDsija9Xi9ZvQFMSXP+704XwCkeGtUvXKI1Df3
-         suUQ==
-X-Gm-Message-State: AOAM531NU6vULc9dI4hs53R+ktTcTdPqp6tK1SQDHEuAXWlyYK5fKHkp
-        KRPmPlk6cCoHbZ+yvE7WL7mBQ19Mo3dn00nS
-X-Google-Smtp-Source: ABdhPJz16Ws/wAknBC3nhNBaGz1Qu05P7JAS1QIzc+3jfgiswtzAuzitNgu8qYi8JE12Lq629q6zrg==
-X-Received: by 2002:adf:ebcc:: with SMTP id v12mr14121499wrn.389.1617357929260;
-        Fri, 02 Apr 2021 03:05:29 -0700 (PDT)
+        bh=BBliiiy6w7709FtBAKPmWC2L64XC00IR7DOPG3X207w=;
+        b=YITvbCJUGMhPLqa0HwhbBJ3rLN+7Atyd57h6ljRRs0HqKKZZEvyzN6hpNCRGlLxGl4
+         jWv+9ufp9VKnu8428MVJTUZT0Sq1ajYHg/ncW3u6fsetnJMbq4AIgVVjWy2D3wYAgolU
+         w1A8DZacX3eswITRnVtq1vzhCTFgY+/ZnJvyIYDQPf7A0CAhWULOeRxGFuYFQs6zS13i
+         noNSIFI6fAfXtYSUnFS/khe/Z6k2xEAiePJOztdO28zR4Bl9ziwhSPV8pX75hmZu6Ur4
+         SsItPvCyz6y7V+WToq5dQvzkEZlN1erVNeWPaDGLcePlUkFNjSu7+8ENB2BsvoJM5DeO
+         u2Ow==
+X-Gm-Message-State: AOAM531Ah+u65ZHlTp57jl8RgOpl5wWeCnGYipzRSFDky6Ouue8CMymh
+        YVqmHENRjYc4k9a7JJ9KVLZaIQ==
+X-Google-Smtp-Source: ABdhPJw/VXStlt4TyQnG3hHqrPUAdTLeh3lDz5U9Cq+PJtegky2pPlshTj8IKNOtkW0ux+Bq2Bzkig==
+X-Received: by 2002:a5d:6dcc:: with SMTP id d12mr14096588wrz.136.1617357932182;
+        Fri, 02 Apr 2021 03:05:32 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v18sm15466618wrf.41.2021.04.02.03.05.28
+        by smtp.gmail.com with ESMTPSA id v18sm15466618wrf.41.2021.04.02.03.05.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 03:05:28 -0700 (PDT)
+        Fri, 02 Apr 2021 03:05:31 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     stanimir.varbanov@linaro.org, agross@kernel.org,
         bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org, dikshita@codeaurora.org,
-        jonathan@marek.ca, vgarodia@codeaurora.org
-Subject: [PATCH v3 12/25] media: venus: hfi: Add a 6xx boot logic
-Date:   Fri,  2 Apr 2021 11:06:35 +0100
-Message-Id: <20210402100648.1815854-13-bryan.odonoghue@linaro.org>
+        jonathan@marek.ca, vgarodia@codeaurora.org,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>
+Subject: [PATCH v3 15/25] media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations
+Date:   Fri,  2 Apr 2021 11:06:38 +0100
+Message-Id: <20210402100648.1815854-16-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210402100648.1815854-1-bryan.odonoghue@linaro.org>
 References: <20210402100648.1815854-1-bryan.odonoghue@linaro.org>
@@ -73,63 +74,93 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <dikshita@codeaurora.org>
+In various places in the venus codebase we have if (IS_V4()) which takes
+the code down paths for 4xx silicon. This logic is broadly applicable to
+6xx silicon also. In this patch we add IS_V6() to various IS_V4() decision
+locations.
 
-This patch adds a 6xx specific boot logic. The goal is to share as much
-code as possible between 3xx, 4xx and 6xx silicon.
-
-We need to do a different write to WRAPPER_INTR_MASK with an additional
-write to CPU_CS_H2XSOFTINTEN_V6 and CPU_CS_X2RPMh_V6.
-
-The other writes are the same for 6xx and non-6xx silicon albeit at
-different absolute relative locations to the base of the venus address
-space.
-
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Co-developed-by: Dikshita Agarwal <dikshita@qti.qualcomm.com>
+Signed-off-by: Dikshita Agarwal <dikshita@qti.qualcomm.com>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/venus/helpers.c   | 5 ++---
+ drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++--
+ drivers/media/platform/qcom/venus/vdec.c      | 6 +++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index 76ece2ff8d39..2515a2225614 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -488,7 +488,7 @@ static bool is_dynamic_bufmode(struct venus_inst *inst)
+ 	 * v4 doesn't send BUFFER_ALLOC_MODE_SUPPORTED property and supports
+ 	 * dynamic buffer mode by default for HFI_BUFFER_OUTPUT/OUTPUT2.
+ 	 */
+-	if (IS_V4(core))
++	if (IS_V4(core) || IS_V6(core))
+ 		return true;
+ 
+ 	caps = venus_caps_by_codec(core, inst->hfi_codec, inst->session_type);
+@@ -1084,11 +1084,10 @@ int venus_helper_set_work_mode(struct venus_inst *inst, u32 mode)
+ 	const u32 ptype = HFI_PROPERTY_PARAM_WORK_MODE;
+ 	struct hfi_video_work_mode wm;
+ 
+-	if (!IS_V4(inst->core))
++	if (!IS_V4(inst->core) && !IS_V6(inst->core))
+ 		return 0;
+ 
+ 	wm.video_work_mode = mode;
+-
+ 	return hfi_session_set_property(inst, ptype, &wm);
+ }
+ EXPORT_SYMBOL_GPL(venus_helper_set_work_mode);
 diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index f95cdd3d530c..5f9c8aa84cd0 100644
+index dabff8654f97..24cf20f76e7f 100644
 --- a/drivers/media/platform/qcom/venus/hfi_venus.c
 +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -442,14 +442,21 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
+@@ -897,7 +897,7 @@ static int venus_sys_set_default_properties(struct venus_hfi_device *hdev)
+ 	 * enable it explicitly in order to make suspend functional by checking
+ 	 * WFI (wait-for-interrupt) bit.
+ 	 */
+-	if (IS_V4(hdev->core))
++	if (IS_V4(hdev->core) || IS_V6(hdev->core))
+ 		venus_sys_idle_indicator = true;
+ 
+ 	ret = venus_sys_set_idle_message(hdev, venus_sys_idle_indicator);
+@@ -1577,7 +1577,7 @@ static int venus_suspend_3xx(struct venus_core *core)
+ 
+ static int venus_suspend(struct venus_core *core)
  {
- 	struct device *dev = hdev->core->dev;
- 	static const unsigned int max_tries = 100;
--	u32 ctrl_status = 0;
-+	u32 ctrl_status = 0, mask_val;
- 	unsigned int count = 0;
- 	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
- 	void __iomem *wrapper_base = hdev->core->wrapper_base;
- 	int ret = 0;
+-	if (IS_V3(core) || IS_V4(core))
++	if (IS_V3(core) || IS_V4(core) || IS_V6(core))
+ 		return venus_suspend_3xx(core);
  
- 	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
--	writel(WRAPPER_INTR_MASK_A2HVCODEC_MASK, wrapper_base + WRAPPER_INTR_MASK);
-+	if (IS_V6(hdev->core)) {
-+		mask_val = readl(wrapper_base + WRAPPER_INTR_MASK);
-+		mask_val &= ~(WRAPPER_INTR_MASK_A2HWD_BASK_V6 |
-+			      WRAPPER_INTR_MASK_A2HCPU_MASK);
-+	} else {
-+		mask_val = WRAPPER_INTR_MASK_A2HVCODEC_MASK;
-+	}
-+	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
- 	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
+ 	return venus_suspend_1xx(core);
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index c20496a14a55..5cefa396f2b5 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -670,8 +670,8 @@ static int vdec_output_conf(struct venus_inst *inst)
+ 	if (width > 1920 && height > ALIGN(1080, 32))
+ 		ubwc = true;
  
- 	while (!ctrl_status && count < max_tries) {
-@@ -467,6 +474,9 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	if (count >= max_tries)
- 		ret = -ETIMEDOUT;
+-	/* For Venus v4 UBWC format is mandatory */
+-	if (IS_V4(core))
++	/* For Venus v4/v6 UBWC format is mandatory */
++	if (IS_V4(core) || IS_V6(core))
+ 		ubwc = true;
  
-+	if (IS_V6(hdev->core))
-+		writel(0x0, cpu_cs_base + CPU_CS_X2RPMH_V6);
-+
- 	return ret;
- }
+ 	ret = venus_helper_get_out_fmts(inst, inst->fmt_cap->pixfmt, &out_fmt,
+@@ -722,7 +722,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+ 			return ret;
+ 	}
  
+-	if (IS_V3(core) || IS_V4(core)) {
++	if (IS_V3(core) || IS_V4(core) || IS_V6(core)) {
+ 		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
+ 		if (ret)
+ 			return ret;
 -- 
 2.30.1
 
