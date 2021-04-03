@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F17AC433B4
-	for <linux-media@archiver.kernel.org>; Sat,  3 Apr 2021 18:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B30A1C433ED
+	for <linux-media@archiver.kernel.org>; Sat,  3 Apr 2021 18:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2351061220
-	for <linux-media@archiver.kernel.org>; Sat,  3 Apr 2021 18:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8902E61264
+	for <linux-media@archiver.kernel.org>; Sat,  3 Apr 2021 18:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbhDCSJI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Apr 2021 14:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S236967AbhDCSJO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Apr 2021 14:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbhDCSJH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Apr 2021 14:09:07 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D557C0613E6;
-        Sat,  3 Apr 2021 11:09:04 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id r20so8684240ljk.4;
-        Sat, 03 Apr 2021 11:09:04 -0700 (PDT)
+        with ESMTP id S236954AbhDCSJL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Apr 2021 14:09:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C66C061788;
+        Sat,  3 Apr 2021 11:09:08 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id o126so11807314lfa.0;
+        Sat, 03 Apr 2021 11:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+zl2y4WcU4R0W3ITuE2QJIZQ00fTmDL+l8JpHXE4Pss=;
-        b=Ef4g5JV8ccGUQyQlk37yDwtMcWa7IICkX5aS3i5PlzDbvJwpzuRFqDQ5siaBKuyi9W
-         dveov30OlZGym6TCbh7yi8zp3gSVLpfV6QzL5zBZpwZaSB2nwszwCnyv/UVIsKhIu3mP
-         ch6Abac6Ir0239SFunFsDOhDBxKEHjB7RRTcMEXvphtPmSBL/fwuHBoRo9fk6PdkXM0h
-         ef2+OBKWNCaKjKuOQVBgurIOHfHw2YLKqLDxnlGIz82HmcmiGTeKL0fGF4PCta1Cvy3c
-         aY7KnSc06aUg0Q0+HH9m+KrtEpxTfEPo2adSud/KzaMenzb1gsD7N3jPGqI5L36suWtK
-         NX5g==
+        bh=bvM51z8cjqX/PN4QCJT3+RrZd+ouVe3FEK6NjdrSmdI=;
+        b=AF6mfDWcVrLIMbqyiZR8LuSuQqxOasPruw4me7RZORQceTtBgOEWeKVqNRSYU/pIyZ
+         HlPAqvGMNH1zCymtaEFDl/Lj+2S7DbrMpQIfbsMyHXNdm+UQlxZc2o5FP0w9ybMG9VHW
+         lov3Tk+BcVGlm1Lk3brc5REz6s9NlkHNvCBJdvdFsVDvFla1M3LXl8WWGhsYa9I8fItI
+         XS9DUlGT+/7J16HGvLSp7PfSi6xm8ZVonAHBDi5PUYk0PNdpB1d3SA4eFzKdSWnBTeKD
+         JFfaS8p+E0FGrXxhj5srbWsXoA1WOzDGHplq5AVKokkIPP5gq9wp5TqbruUrvXDMUBiu
+         q0Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+zl2y4WcU4R0W3ITuE2QJIZQ00fTmDL+l8JpHXE4Pss=;
-        b=gfPn0r02kHbOHbBs4vuC742aw/1iDWxcmfAbTysaOPJfW9CEhRRZ3NVC44ugT73K4q
-         FwjTnX+cWnxdV31Aj9amduVCbmHctpX2nkiM4DStlgsDa18k5eUVuhzmkTTRUVFjmuvY
-         Dwi6nDVeWImnb97aTVpu8dHOsZmWmkgzbD3YQ0vBwPaiBDo0D5CHlUt+Xi1P2K0lJYNO
-         UkB2HkdL+9VNfyQm/WkNJddlgHdoyPjjzJOCyl4xlSQTXQGovmliU1woRj/Ve359QPYK
-         EkZPb/5WACz6n7ncQPRiM25BdYth/cw7/d/G5cGRW+k22fR8amTUG4ydAZ+xlHUfYRNj
-         eA5g==
-X-Gm-Message-State: AOAM53027qYzFQvdksZykT+1boSDMtfm1FDNP7hrmYyJYx/EwFb76yBb
-        cEubuPGiI29WhFUf1VKvEX4=
-X-Google-Smtp-Source: ABdhPJwYgsFnK5tSAVhVtZgSGw+9HqINO1123L1juHBNuCIbsR/nJPfcyQ60/A7PJj2KmK0esZX2qA==
-X-Received: by 2002:a2e:b8d6:: with SMTP id s22mr11506253ljp.252.1617473342760;
-        Sat, 03 Apr 2021 11:09:02 -0700 (PDT)
+        bh=bvM51z8cjqX/PN4QCJT3+RrZd+ouVe3FEK6NjdrSmdI=;
+        b=m0CnGj15Hi5XGAUzjlfJ5GMrmYPI+naoegtPVbSJgwRVuLlgX0NXpdmtXlQtB6NSKY
+         8H/OCxU8KQkYyn0itv+RIBRp2zqifZ8CfqeX8ziCDjPCx8u/8KS4G9tv8ltLFAwvbowy
+         8q2A7IyMaVhUG1iH1qA6lTzvYbW5KMzqnvnnITewGBe/9J+FvmimuyFmEICxlI4XVm6T
+         pKeOUyfQeI+fwJk1iLItOxVu9k7lKnjmMVmjaj6YA/vLdusYmu9r0ZgIaD28tsMmDaHA
+         vcdtZmaxIIOoprRSS9FEASP9Tgz+dK8FJSHOKwcNMkvw2EdWpRDEklX2QLEJDOI+LWRO
+         1ZXg==
+X-Gm-Message-State: AOAM532gTe4zNrMuZsxPay/fV/ArXyRP5wFzQZFewbLtGD6BPgEUxHF5
+        DvncnGl9YtNS1CuCV92x9Ns=
+X-Google-Smtp-Source: ABdhPJwVSdQ08JwNMq4mL4O5W9L297HUhAK4aarWCNBqfJjOxlkY5ZMTj4rS/Rr6yAeuAwLEv9OiUQ==
+X-Received: by 2002:ac2:5091:: with SMTP id f17mr12690500lfm.660.1617473346707;
+        Sat, 03 Apr 2021 11:09:06 -0700 (PDT)
 Received: from zhans ([37.151.32.231])
-        by smtp.gmail.com with ESMTPSA id h62sm1201544lfd.234.2021.04.03.11.09.02
+        by smtp.gmail.com with ESMTPSA id e11sm1204585lfc.141.2021.04.03.11.09.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Apr 2021 11:09:02 -0700 (PDT)
-Date:   Sun, 4 Apr 2021 00:09:01 +0600
+        Sat, 03 Apr 2021 11:09:06 -0700 (PDT)
+Date:   Sun, 4 Apr 2021 00:09:04 +0600
 From:   Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
 To:     clabbe@baylibre.com, mchehab@kernel.org, gregkh@linuxfoundation.org
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com
-Subject: [PATCH 3/7] staging: media: zoran: Rename 'DispMode' to 'disp_mode'
-Message-ID: <0e31f8ef345b5972ea3f16ea29f962286ebab3e8.1617472411.git.zhansayabagdaulet@gmail.com>
+Subject: [PATCH 5/7] staging: media: zoran: Rename 'VidWinHt' to 'vid_win_ht'
+Message-ID: <652f88a0cd62b91ebbb1ccee153a73d8d8fd3fda.1617472411.git.zhansayabagdaulet@gmail.com>
 References: <cover.1617472411.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -72,47 +72,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename variable 'DispMode' to 'disp_mode' to eliminate camelcase.
+Rename 'VidWinHt' to 'vid_win_ht' to eliminate camelcase.
 Reported by checkpatch.pl.
 
 Signed-off-by: Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
 ---
- drivers/staging/media/zoran/zoran_device.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/staging/media/zoran/zoran_device.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index 6764b51fc595..8891f11f6276 100644
+index f0344f4a4727..49e0efcc0062 100644
 --- a/drivers/staging/media/zoran/zoran_device.c
 +++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -292,7 +292,7 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
- {
+@@ -293,7 +293,7 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
  	const struct tvnorm *tvn;
  	unsigned int h_start, h_end, v_start, v_end;
--	unsigned int DispMode;
-+	unsigned int disp_mode;
- 	unsigned int VidWinWid, VidWinHt;
+ 	unsigned int disp_mode;
+-	unsigned int vid_win_wid, VidWinHt;
++	unsigned int vid_win_wid, vid_win_ht;
  	unsigned int hcrop1, hcrop2, vcrop1, vcrop2;
  	unsigned int wa, We, ha, He;
-@@ -341,8 +341,8 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
- 	btwrite(reg, ZR36057_VFEHCR);
+ 	unsigned int X, Y, hor_dcm, ver_dcm;
+@@ -342,9 +342,9 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
  
  	/* Vertical */
--	DispMode = !(video_height > BUZ_MAX_HEIGHT / 2);
--	VidWinHt = DispMode ? video_height : video_height / 2;
-+	disp_mode = !(video_height > BUZ_MAX_HEIGHT / 2);
-+	VidWinHt = disp_mode ? video_height : video_height / 2;
- 	Y = DIV_ROUND_UP(VidWinHt * 64 * 2, tvn->ha);
- 	He = (VidWinHt * 64) / Y;
+ 	disp_mode = !(video_height > BUZ_MAX_HEIGHT / 2);
+-	VidWinHt = disp_mode ? video_height : video_height / 2;
+-	Y = DIV_ROUND_UP(VidWinHt * 64 * 2, tvn->ha);
+-	He = (VidWinHt * 64) / Y;
++	vid_win_ht = disp_mode ? video_height : video_height / 2;
++	Y = DIV_ROUND_UP(vid_win_ht * 64 * 2, tvn->ha);
++	He = (vid_win_ht * 64) / Y;
  	ver_dcm = 64 - Y;
-@@ -362,7 +362,7 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
- 	reg = 0;
- 	reg |= (hor_dcm << ZR36057_VFESPFR_HOR_DCM);
- 	reg |= (ver_dcm << ZR36057_VFESPFR_VER_DCM);
--	reg |= (DispMode << ZR36057_VFESPFR_DISP_MODE);
-+	reg |= (disp_mode << ZR36057_VFESPFR_DISP_MODE);
- 	/* RJ: I don't know, why the following has to be the opposite
- 	 * of the corresponding ZR36060 setting, but only this way
- 	 * we get the correct colors when uncompressing to the screen  */
+ 	vcrop1 = (tvn->ha / 2 - He) / 2;
+ 	vcrop2 = tvn->ha / 2 - He - vcrop1;
+@@ -383,7 +383,7 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
+ 
+ 	/* display configuration */
+ 	reg = (16 << ZR36057_VDCR_MIN_PIX)
+-	    | (VidWinHt << ZR36057_VDCR_VID_WIN_HT)
++	    | (vid_win_ht << ZR36057_VDCR_VID_WIN_HT)
+ 	    | (vid_win_wid << ZR36057_VDCR_VID_WIN_WID);
+ 	if (pci_pci_problems & PCIPCI_TRITON)
+ 		// || zr->revision < 1) // Revision 1 has also Triton support
 -- 
 2.25.1
 
