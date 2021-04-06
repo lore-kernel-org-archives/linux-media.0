@@ -2,347 +2,2606 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9849C433ED
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 12:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE015C433B4
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 13:13:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFEE161019
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 12:01:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70D15613B8
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 13:13:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbhDFMBq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Apr 2021 08:01:46 -0400
-Received: from alln-iport-5.cisco.com ([173.37.142.92]:54480 "EHLO
-        alln-iport-5.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235453AbhDFMBq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 08:01:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=6107; q=dns/txt; s=iport;
-  t=1617710498; x=1618920098;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=RKEe82fyy3x7Q6bBqZUQ4fQsgguLMYyPXrQ0idwnDR0=;
-  b=f3sEOeiA2OMtbgxUtqW6/FH1nG11jUqW4pVdBULywUQ/E9+6LS8w/J6G
-   3fUEcg+ktX6C+0z/zgkjdsRbmsNYnYLi7KRgRnmyV+nLGqIZjyfJassld
-   xIe2IiByXs01jNiALBJxuuZ/JYdWO79rvUc5ReeGTJ45WoGIAKA/xnws1
-   8=;
-X-IPAS-Result: =?us-ascii?q?A0AYAgB5S2xgmI9dJa1aHgEBCxIMQIFHC4FTUYFYNjGIC?=
- =?us-ascii?q?gOFOYhNA5k3gS6BJQNUCwEBAQ0BATICBAEBgRYBgzkCgXYCJTQJDgIDAQEBA?=
- =?us-ascii?q?wIDAQEBAQEFAQEBAgEGBBQBAQEBAQEBAWiFUA2GRAEBBAEnEwYBATcBEQEIG?=
- =?us-ascii?q?B5CJwQBDQUIgmmCVgMOIQGgFwKKH3WBATOBAYIEAQEGhR0YghMJgTmCdop9H?=
- =?us-ascii?q?IFJQoETQ4JfPoRAAoNKgiuCRAeBD4EwVCkCnRKeJwqDCp0bpHGVFZ5hhEgCB?=
- =?us-ascii?q?AIEBQIOAQEGgVQ4gVtwFYMkUBcCDo4fCRAJg06KWXM4AgYKAQEDCXyMTgEB?=
-IronPort-PHdr: A9a23:48e84RIHbBQ5RyOquNmcuZ0yDhhPgJ39IxIV55w7irlHbqWk+dH4M
- VfC4el25HfCWoHf4vhDkeOQuKflCiQM4peE5XYFdpEEFxoIkt4fkAFoBsmZQVb6I/jnY21ff
- oxCWVZp8mv9PR1TH8DzNFbVpnm75zkIE1P0Mg8mbujwE5TZ2sKw0e368pbPYgJO0Ty6Z746L
- Bi/oQjL8McMho43IacqwRyPqXxNKIxr
-IronPort-HdrOrdr: A9a23:cYk8OKrFRy8Eqpbj064ktLwaV5t7K9V00zAX/kB9WHVpW+SivY
- SHgOkb2RjoiDwYRXEnnpS6NLOdRG7HnKQV3aA4Bp3neAX9omOnIMVZ7YXkyyD9ACGWzIBg/I
- 9aWexFBNX0ZGIUse/T6gO1Cstl5dGB/ryhi+u29QYRcShBQchbnmBEIyycFVB7QxQDIJI/Go
- aV6MYvnUvdRV08aMOnCn4ZG9XZr9rQm578JTIADRgr6A6B5AnYp4LSOR6ewxsYTndz0a4vmF
- K13zDRy4eCl7WAyhHa33LO9Jg+orvc4/ZKGcDksLlvFhzCkQCtDb4RPoGqmBAQjKWR5E0xkN
- /Kyi1Qcfhbz3/KZGm6rV/M9mDboUwTwkTvw1OZnnfvyPaRLFlRZqYx5vM6TjLi90EisNtguZ
- g7uV6xiptNARvM2AT76tTYPisa7nacnHs4neYfy0FYSIsVAYUh1LA3wUU9KuZlIAvKrKQcVM
- V+BsDV4/hbNXmAaWrCg2VpyNuwGlwuAxavWCE5y42o+gkTuEo841oTxcQZkHtF3ok6UYN46+
- PNNbktvK1ST/URcbl2CI46MIuKI12IZSiJHHOZIFzhGq1CEWnKsYTL7LI84/zvX5AU0p0omt
- DkXElDvWA/P2LiYPf+n6Fjw1ToeiGQTD7twsZR69xSobvnXofmNiWFVRQgiM2lr/IDAtDKWv
- q6NZ5MasWTaFfGKMJs5UnTSpNSIX4RXIk+odAgQW+DpcrNN8nru4XgAbLuDYuoNQxhdnL0A3
- MFUjS2Dt5H9FqXVnjxhwWUX3vsf0f47I9hCaSyxZlV9KE9cql39iQFg1Ww4c+GbRdYtLYtQU
- d4KLT71qWhpWe3+m7M535zOgVUC1tU5LmIaQIJmSY6d2fPNZoTsdSWfm5fmFGdIAVkcs/QGA
- lD40hs9bmvNJyWzyA6A9ehOmaX5kFj4k6iftM5oOmu9M3lcpQ3AtIaQ6R3DxzMDAEwsx1tsn
- 1/ZAgNQVL/Gjvihb6+toEdAPjSerBH8V6WCP8RjUialE2H4ekzW3MQXleVILGqqDdrYwARu3
- pc3Os0hqGalTOmNG0l6d5ITmFkWSCwG7JJDAOMeYNOvKvkETsAFVuitHi9lww5fHbs+gE0gG
- HsRBfkI83jMx56pm1S1Lrs/RdPUlilO2h0anx8rORGZD/7k35uzO6GYbey2WONal0EhvoQKi
- 3BfCF6GHIe+/mnkBGSgzqMDnMg29EnOfHcFq0qd/XJ1mqqM5Dgr9BMI9ZEuJJkPsvpqOkFTK
- aWfBKUNirxD4oSqkWoj2dgPCl/s38/l/z0nBXj8WijxXY6Rf7fOk5vSb1eI9aS6QHfNr61+Y
- Q8idI+pu2rNGrtLtaA1KHMdjZGbgrJvnTedZBdlblE+aYp8LdjFZjSVjXFkHlBwRUlNc/x0E
- cTWr5y7rzNMpJmFvZiMR5x7x4sjpCCPUErugv5DqslcVYhg2TSMtmJ77DLwIBfdHGptU/1Ix
- 2S4idd9/DKU2+fzrYcEbs3OnkTZ04m6nhuldnyOrH4GUGvbaVE81W7OHPmL+MYR6iBBLkKrh
- F1p9uPhPSaciLk2AbW+Tt3S5g+gVqPUIe3GkaLH+UN7tmxfVKLiaGu6NSojDj2RSCgAn5o8r
- FtZAgVdIBbljImjIcrySC8Raz8v1I9nzJlkEJav0+o3pLj/XzSEk5HOxDIm5laXTFcNX6TkM
- TOmNLooUjV8XxCwpnMFEBZY9FIFZwRV+HMXldTFfQ=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.81,309,1610409600"; 
-   d="scan'208";a="692925700"
-Received: from rcdn-core-7.cisco.com ([173.37.93.143])
-  by alln-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 06 Apr 2021 11:54:32 +0000
-Received: from mail.cisco.com (xbe-aln-006.cisco.com [173.36.7.21])
-        by rcdn-core-7.cisco.com (8.15.2/8.15.2) with ESMTPS id 136BsW7q029701
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=OK);
-        Tue, 6 Apr 2021 11:54:32 GMT
-Received: from xfe-aln-003.cisco.com (173.37.135.123) by xbe-aln-006.cisco.com
- (173.36.7.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3; Tue, 6 Apr 2021
- 06:54:32 -0500
-Received: from xfe-aln-003.cisco.com (173.37.135.123) by xfe-aln-003.cisco.com
- (173.37.135.123) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3; Tue, 6 Apr 2021
- 06:54:31 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (173.37.151.57)
- by xfe-aln-003.cisco.com (173.37.135.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3
- via Frontend Transport; Tue, 6 Apr 2021 06:54:31 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gd4+RzbMWiQ1ML+ZYPF29XiUiINkri+dnMH+5RQIQSWkh6YiM8Jx4vpGNuAXbxq1mStaOx9UJjh9NfgOglTnaySiJUmcv8qlcqExKvK65m4YS9uzRZ2DjE1OLowsUKJ6ng2oMBizGeXTv6OaCck2hefpT/TnnSxsRkVRwV/DdPhvuv3LYGJhffhSYMjcG7zSdD7QQmsXRpGt6STDAHyBfQztd6P7brgDQ9OAtDfBhvNJx3Uqp4CbS/lr2k9Mnht8pKxg0iY/wApeg6xQPzSjkmB3xQw43ZyJ7h1LXPOTMAsMR2RQ3kTskJQe1rUSYam42omFSWs5xlZRUbd/YBgZ4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yGvp2R6ha8wPowl3eLex8vL/EBkdGpqg77r7ogpjHmc=;
- b=VoQ5vxP5OfX5m7c0F0WklN9gOPjIuNynquriKrjImq/D/S5Et3RoybiBO4NcH0rWaossAS+iFaNLNa6njTus6DPnX6pay7hE63ERBtd6OfaOlImmsV82SaVmyBc9l0o1ehwoalM87URl+ah+A2OrVB6HBf3P3j+pAQsuy/mSn9JYhLTzpaUqCBgmVrvImNcB3uTfBztXhdIWWasceBudU4OscgxmWW/LzigwLyN3YrikkmFteH8kXzOPXxcbKPfctbkAXdejJwFcRY+ZMEWysWwiQuWvAd10HII2WBdE0yn/T7Wh4FlYfCR4EIxM9faNDsSWZaXOUMfb6m4qSzr1nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
- dkim=pass header.d=cisco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.onmicrosoft.com;
- s=selector2-cisco-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yGvp2R6ha8wPowl3eLex8vL/EBkdGpqg77r7ogpjHmc=;
- b=h4VVU5uL4eZo1URQTmqVzsTJAsmff/f8jEQU/NzeFNfhPCQN190d6EqYr/s/cOhicKb77I7bIFKg6UU5l72pQEqBSVCRA4qPZIAGdE5HaxLmEwcT6+0ZSNvQfQXzVCVSeY9nokPSskyCTiBstn5+GtBhQq184xz38sCUxVi+3ss=
-Received: from DM6PR11MB4625.namprd11.prod.outlook.com (2603:10b6:5:2a8::24)
- by DM5PR1101MB2105.namprd11.prod.outlook.com (2603:10b6:4:51::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.32; Tue, 6 Apr
- 2021 11:54:30 +0000
-Received: from DM6PR11MB4625.namprd11.prod.outlook.com
- ([fe80::9cc6:4f97:456c:dc32]) by DM6PR11MB4625.namprd11.prod.outlook.com
- ([fe80::9cc6:4f97:456c:dc32%6]) with mapi id 15.20.3999.032; Tue, 6 Apr 2021
- 11:54:30 +0000
-From:   "Hans Verkuil (hansverk)" <hansverk@cisco.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>
-Subject: Re: [PATCH v8 11/13] media: hantro: Introduce G2/HEVC decoder
-Thread-Topic: [PATCH v8 11/13] media: hantro: Introduce G2/HEVC decoder
-Thread-Index: AQHXKtuabz2KHB59xEuRngzTxKesHA==
-Date:   Tue, 6 Apr 2021 11:54:30 +0000
-Message-ID: <DM6PR11MB4625B0908E8D8A1843404847DE769@DM6PR11MB4625.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: collabora.com; dkim=none (message not signed)
- header.d=none;collabora.com; dmarc=none action=none header.from=cisco.com;
-x-originating-ip: [2001:420:c0c0:1002::b2]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8bb56b2d-bfd8-49b9-7c3d-08d8f8f2bcde
-x-ms-traffictypediagnostic: DM5PR1101MB2105:
-x-microsoft-antispam-prvs: <DM5PR1101MB210517EE6FB73473F369EBA7DE769@DM5PR1101MB2105.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:321;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Gj1Y9abNKRISJZnGWI+4pyCuGmY1p5KGqOd2ioiGBGLAt76QZOnpWSxiamAizh1knvAkibE2jAb6EDBxoqMG3osVxC1yHdCIiFa3bU3lfRatSp4QZYaUwTLCBSe9+dgkek8VmC7xoErNbarhXm9sUmZTRvnEMWbWhpRs4SCiIVmq/1LrvVbsVwGxCQ5gJ2XUA6rysyOc2LgopSyLHtHjAxYomIQvRW/jFSDQdWTdJw1SI/VDkzBtN0/4PxRQqzzXP47INDQ6S1zb9lCcq96i4zp/ug09rBdqXiIuzn29gNXbWEbzwVwgL7F6ol1/Wk9rmAdAD9fyVdD1z/FRd8SNCRCLSr6voWqszfNbt4PZYEQMVPEPE8Xc2DdUDu+2/O4c1/3cRyK9fxwCHM/iXDqRaBCB0JPuiB5x8SNSXYSp9vMLOVd+S/X9Cxr40o4sjzYy37sQ0KHtDhuK2xKMXU6G5+BsDXt43FTu2Gnu2qqyiYgw+4ro3N8D7gL7dFSkQdermYgWT7Ij5lWOCfhB6Xd6oiH2WVIFQH77gMRmrDnuf9Ts9JOMYciN9crNLq4fj9XU+gsoJFVLEMv6x7mratM5GwIm7JnK5tJsr2rupAui3vEFUZYYPvgvZfMz7cEpsw7mW2KxnlZKLvslYDy8fvmg5AeN6tSJGmnWs9UROWaob4w=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(346002)(376002)(366004)(136003)(396003)(38100700001)(33656002)(7696005)(110136005)(9686003)(55016002)(478600001)(91956017)(54906003)(4326008)(8936002)(8676002)(5660300002)(66476007)(66446008)(64756008)(66946007)(316002)(186003)(76116006)(83380400001)(86362001)(53546011)(71200400001)(2906002)(6506007)(52536014)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?lZujUrY8otC1PHGEbT0gKSfPiR2Y6xilHH7fOYpf/6vOjFWkdFtjuLei8H3p?=
- =?us-ascii?Q?I9cnKkDB2xIQNebRnvFqGI3UEVwokG3paSDMD2GayQY7CGJOKuNPB4qyM87P?=
- =?us-ascii?Q?21GQK3+833rbMNq1Fm/sPfIw6hDZkkoXiTL+xhowDp5xFKsw6IlvgLNbcljL?=
- =?us-ascii?Q?xPu3LmbM2NdZlLplIT8ixTFPxj8rv2bMkeub6Er+VlL6eE5p4FK06ieN46nq?=
- =?us-ascii?Q?NiKJSeQfTVhhDUZGm2X8JUtWfwjXmXKLIhMMCPGmBXZ5Rk48s4hS+IToyyIM?=
- =?us-ascii?Q?jmNqRuHPG17ZCeKUmrvoCMJNXr2uvFpcRNg5CLWc46fYUT1iGAlsdVzntHTY?=
- =?us-ascii?Q?ucfqxyEQ9hm9jRmZg7JgSrJMl2ZoWY/IiDyNrdD7qy7lqQXGnd1jiIyMs+cP?=
- =?us-ascii?Q?Dp2/WK3a1BYPP4rhEVMrsN1+9FmN4jS22BwuNXCOwe8UJNJlSBR9/SyAQ+l3?=
- =?us-ascii?Q?UdTiDDVh5PanVnszIVX267TlM2vrpkLEgFgfzOEZKjjQB9P7h78eyLtga+dk?=
- =?us-ascii?Q?4fRx4Q98xkvKwYAhzlJaYlPyQCrcDCnD6+ht/9vMbXg4Z7xNXQSnPCqIn0iz?=
- =?us-ascii?Q?ulcvpFnIxYrVCohS7E/Ngwf+9wT/PjtliG/KRWQu4byTiAwJ3ZP2txm59oOe?=
- =?us-ascii?Q?iEmJD2/evAktBi9StqRj6ihjatq3JLVkWRR5YcE4FuPrOU0mFpJfHNm5OF5q?=
- =?us-ascii?Q?yyRf8Xpvl0+jycVvccF/yg20cHCQ/sUx4gtWhn15LgWDfP0B7uLRK+QkPqun?=
- =?us-ascii?Q?7nM9PkVB5usoBW4Cvbjldfu+gi73ut1V6NgYLR9OWypFIovpiRb6eY2THGcV?=
- =?us-ascii?Q?nOL35fzS6bj0yVm1UJX4yq3NQ6zpTx0N1yoYChoUdc14BoONs0xopxQKEqyX?=
- =?us-ascii?Q?Up5BgR6AGiFrXAN2+vJWKm6MzPLF9w2ojIJWy+INuTo7EM5vLyaJVS19Vp0u?=
- =?us-ascii?Q?LGEuIDvtRNhXzKBaDrfPD/TggUckGEayFauC5EzXwDdEZ89AnmtM1W4DIa1y?=
- =?us-ascii?Q?YSOG79awSpV9deiNPTm3RZDfly6C7vXBb+5u0i8cJu8sl+1uDOzCFT3KsgWr?=
- =?us-ascii?Q?X5UySLYkNeimLudqVNuUc+C8FwBZyAb7iNkfQ9T8RBe4Xs5xBqIitWOgOl5T?=
- =?us-ascii?Q?2n3ci+w8eqBWH9pY2NHV2Vb5U1a2XZKVX7HOiW1kykUzBaGzZeTkk6A1ls1T?=
- =?us-ascii?Q?KceED5G4wvvRpQ7pQWM3s5WllheDXgGXNv9RBR66O0h9r+G3V8CadW+3OOgV?=
- =?us-ascii?Q?MLDwo7o1rwHUQPGBmRP2b0oWFbWieI3vSUBk0/nckssTpPRgWuAluXbjOV2c?=
- =?us-ascii?Q?WxNBmUBhqzn+/Fft8VZ06kUcCZ5xIzaDgnBfrXLc+uEjzaeT4whQ9vg1x82q?=
- =?us-ascii?Q?Q/pRIgA=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1344364AbhDFNN3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Apr 2021 09:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234176AbhDFNNZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 09:13:25 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E464C06174A
+        for <linux-media@vger.kernel.org>; Tue,  6 Apr 2021 06:13:17 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id n138so22690142lfa.3
+        for <linux-media@vger.kernel.org>; Tue, 06 Apr 2021 06:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3MRZ9bscjRimKFEQa07/+KMf/9dkFkiYJDLXU9/ERxw=;
+        b=wzmBunFywi7gxRfrssKQ7SrSwag5fQBpOBmtfxAVk5UVZKn2Uf1t4IxfFvCtBK+KF2
+         EbSAcwlCDOyZP9J2DH/QZC3XlMQVbvI9GG2UHI9YjXpNlQEzjfRPcJviW5gKqV+6Ueeg
+         b1G7n+774/ihSp8tr+m/uy/IXF2lzoGAzWLe5QEK/VlloX9o0XNPrmMxl/a24CGLE+hw
+         OAZSAyPS9ZDlbwMBUijOhTcp4k5PVbdNhLNIppQpALuoBLG+HFskrylZxNik6M2UDgXe
+         zo6g64KsMqIcwfe2nZviG0E64Ul8V6koEYFVQLl5LCSmJOQnR1KDKbXXHZhbXdxeKVrX
+         Cf8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3MRZ9bscjRimKFEQa07/+KMf/9dkFkiYJDLXU9/ERxw=;
+        b=ONciDT4yyVhsbCX7ypfG2+eOVGVWA3QscTUvk8u6CxLfQbNu4O1wmijwRpIEGY9iNm
+         VBZmlKyslGk1vhUFLtKjuATh4jfvMChTQCytpNykwxZMa8YDy0egwmWP4FCfYVq2s8at
+         LUw2wcreVOdP7rdJvet0GHHWRHSe/A83lajM3lX6j3TEqnX1Vv+qCbIRwu1lMmm7Pmn6
+         fFYcBsAUYFp5Wwj6vl0IERabjyDQ+GYTV+HUkZjp5mixbqcocjctN5kvzzZXwZ0jIgfF
+         fW+tWWFzcjeK3W3XRfs9VRPl7SGlFOzI1lE9VqrMpJU2tr5CyK5LwQoK+iWHwRrLsRAH
+         9+mA==
+X-Gm-Message-State: AOAM533890egBmYuGAwqwDNwSrlu5YkBzlekRcKvLv+xJ+qeGkcEJIgk
+        f+RCjSFPLGeakOSPkBacAUfzRw==
+X-Google-Smtp-Source: ABdhPJwqieoXKcTwtj/LbxxrHKAaDxYB2rWwMttBejAEsdsTQSzhKJgxze1hehyXV7fRVC1Cm3zbbg==
+X-Received: by 2002:ac2:4250:: with SMTP id m16mr20114116lfl.40.1617714795563;
+        Tue, 06 Apr 2021 06:13:15 -0700 (PDT)
+Received: from [192.168.118.70] ([85.249.43.84])
+        by smtp.gmail.com with ESMTPSA id x27sm2157006lfn.95.2021.04.06.06.13.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Apr 2021 06:13:14 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] ov8856: Add support for 2 data lanes
+To:     Shawnx Tu <shawnx.tu@intel.com>, linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
+        jim.lai@intel.com, bingbu.cao@intel.com, senozhatsky@google.com,
+        tfiga@google.com
+References: <20210331091244.2142-1-shawnx.tu@intel.com>
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+Message-ID: <0a2753b5-922e-05ef-ac90-a0d783945663@linaro.org>
+Date:   Tue, 6 Apr 2021 16:13:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb56b2d-bfd8-49b9-7c3d-08d8f8f2bcde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2021 11:54:30.5953
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: so0MutRxllfHrzdKi/JzWaa/HZQtaBm0UwOGxqbsnZ7rrcCSCYkk3kGgPK+nOdhuccnVXx22br85hEP1sI/u8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2105
-X-OriginatorOrg: cisco.com
-X-Outbound-SMTP-Client: 173.36.7.21, xbe-aln-006.cisco.com
-X-Outbound-Node: rcdn-core-7.cisco.com
+In-Reply-To: <20210331091244.2142-1-shawnx.tu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 01/04/2021 18:00, Benjamin Gaignard wrote:=0A=
- > > Implement all the logic to get G2 hardware decoding HEVC frames.=0A=
- > > It support up level 5.1 HEVC stream.=0A=
-=0A=
-support -> supports=0A=
-=0A=
- > > It doesn't support yet 10 bits formats or scaling feature.=0A=
-=0A=
-scaling -> the scaling=0A=
-=0A=
- > >=0A=
- > > Add HANTRO HEVC dedicated control to skip some bits at the beginning=
-=0A=
- > > of the slice header. That is very specific to this hardware so can't=
-=0A=
- > > go into uapi structures. Compute the needed value is complex and =0A=
-require=0A=
-=0A=
-Compute -> Computing=0A=
-require -> requires=0A=
-=0A=
- > > information from the stream that only the userland knows so let it=0A=
- > > provide the correct value to the driver.=0A=
- > >=0A=
- > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>=0A=
- > > Co-developed-by: Adrian Ratiu <adrian.ratiu@collabora.com>=0A=
- > > Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>=0A=
- > > Co-developed-by: Ezequiel Garcia <ezequiel@collabora.com>=0A=
- > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>=0A=
- > > ---=0A=
- > > version 8:=0A=
- > >  - Fix compilation warnings=0A=
- > >=0A=
- > > version 7:=0A=
- > >  - Improve motion vectors requested memory size computation.=0A=
- > >=0A=
- > >  drivers/staging/media/hantro/Makefile         |   2 +=0A=
- > >  drivers/staging/media/hantro/hantro.h         |   2 +=0A=
- > >  drivers/staging/media/hantro/hantro_drv.c     |  36 ++=0A=
- > >  .../staging/media/hantro/hantro_g2_hevc_dec.c | 587 +++++++++++++++++=
-+=0A=
- > >  drivers/staging/media/hantro/hantro_g2_regs.h | 198 ++++++=0A=
- > >  drivers/staging/media/hantro/hantro_hevc.c    | 325 ++++++++++=0A=
- > >  drivers/staging/media/hantro/hantro_hw.h      |  49 ++=0A=
- > >  7 files changed, 1199 insertions(+)=0A=
- > >  create mode 100644 drivers/staging/media/hantro/hantro_g2_hevc_dec.c=
-=0A=
- > >  create mode 100644 drivers/staging/media/hantro/hantro_g2_regs.h=0A=
- > >  create mode 100644 drivers/staging/media/hantro/hantro_hevc.c=0A=
- > >=0A=
- > > diff --git a/drivers/staging/media/hantro/Makefile =0A=
-b/drivers/staging/media/hantro/Makefile=0A=
- > > index 743ce08eb184..0357f1772267 100644=0A=
- > > --- a/drivers/staging/media/hantro/Makefile=0A=
- > > +++ b/drivers/staging/media/hantro/Makefile=0A=
- > > @@ -9,12 +9,14 @@ hantro-vpu-y +=3D \=0A=
- > >  		hantro_h1_jpeg_enc.o \=0A=
- > >  		hantro_g1_h264_dec.o \=0A=
- > >  		hantro_g1_mpeg2_dec.o \=0A=
- > > +		hantro_g2_hevc_dec.o \=0A=
- > >  		hantro_g1_vp8_dec.o \=0A=
- > >  		rk3399_vpu_hw_jpeg_enc.o \=0A=
- > >  		rk3399_vpu_hw_mpeg2_dec.o \=0A=
- > >  		rk3399_vpu_hw_vp8_dec.o \=0A=
- > >  		hantro_jpeg.o \=0A=
- > >  		hantro_h264.o \=0A=
- > > +		hantro_hevc.o \=0A=
- > >  		hantro_mpeg2.o \=0A=
- > >  		hantro_vp8.o=0A=
- > >=0A=
- > > diff --git a/drivers/staging/media/hantro/hantro.h =0A=
-b/drivers/staging/media/hantro/hantro.h=0A=
- > > index 7a5ad93466c8..6a21d1e95b34 100644=0A=
- > > --- a/drivers/staging/media/hantro/hantro.h=0A=
- > > +++ b/drivers/staging/media/hantro/hantro.h=0A=
- > > @@ -222,6 +222,7 @@ struct hantro_dev {=0A=
- > >   * @jpeg_enc:		JPEG-encoding context.=0A=
- > >   * @mpeg2_dec:		MPEG-2-decoding context.=0A=
- > >   * @vp8_dec:		VP8-decoding context.=0A=
- > > + * @hevc_dec:		HEVC-decoding context.=0A=
- > >   */=0A=
- > >  struct hantro_ctx {=0A=
- > >  	struct hantro_dev *dev;=0A=
- > > @@ -248,6 +249,7 @@ struct hantro_ctx {=0A=
- > >  		struct hantro_jpeg_enc_hw_ctx jpeg_enc;=0A=
- > >  		struct hantro_mpeg2_dec_hw_ctx mpeg2_dec;=0A=
- > >  		struct hantro_vp8_dec_hw_ctx vp8_dec;=0A=
- > > +		struct hantro_hevc_dec_hw_ctx hevc_dec;=0A=
- > >  	};=0A=
- > >  };=0A=
- > >=0A=
- > > diff --git a/drivers/staging/media/hantro/hantro_drv.c =0A=
-b/drivers/staging/media/hantro/hantro_drv.c=0A=
- > > index d9a3a5ef9330..33b8bd38eac1 100644=0A=
- > > --- a/drivers/staging/media/hantro/hantro_drv.c=0A=
- > > +++ b/drivers/staging/media/hantro/hantro_drv.c=0A=
- > > @@ -281,6 +281,26 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl =
-=0A=
-*ctrl)=0A=
- > >  	return 0;=0A=
- > >  }=0A=
- > >=0A=
- > > +static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)=0A=
- > > +{=0A=
- > > +	struct hantro_ctx *ctx;=0A=
- > > +=0A=
- > > +	ctx =3D container_of(ctrl->handler,=0A=
- > > +			   struct hantro_ctx, ctrl_handler);=0A=
- > > +=0A=
- > > +	vpu_debug(1, "s_ctrl: id =3D %d, val =3D %d\n", ctrl->id, ctrl->val)=
-;=0A=
- > > +=0A=
- > > +	switch (ctrl->id) {=0A=
- > > +	case V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP:=0A=
- > > +		ctx->hevc_dec.ctrls.hevc_hdr_skip_length =3D ctrl->val;=0A=
- > > +		break;=0A=
- > > +	default:=0A=
- > > +		return -EINVAL;=0A=
- > > +	}=0A=
- > > +=0A=
- > > +	return 0;=0A=
- > > +}=0A=
- > > +=0A=
- > >  static const struct v4l2_ctrl_ops hantro_ctrl_ops =3D {=0A=
- > >  	.try_ctrl =3D hantro_try_ctrl,=0A=
- > >  };=0A=
- > > @@ -289,6 +309,10 @@ static const struct v4l2_ctrl_ops =0A=
-hantro_jpeg_ctrl_ops =3D {=0A=
- > >  	.s_ctrl =3D hantro_jpeg_s_ctrl,=0A=
- > >  };=0A=
- > >=0A=
- > > +static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops =3D {=0A=
- > > +	.s_ctrl =3D hantro_hevc_s_ctrl,=0A=
- > > +};=0A=
- > > +=0A=
- > >  static const struct hantro_ctrl controls[] =3D {=0A=
- > >  	{=0A=
- > >  		.codec =3D HANTRO_JPEG_ENCODER,=0A=
- > > @@ -409,6 +433,18 @@ static const struct hantro_ctrl controls[] =3D {=
-=0A=
- > >  		.cfg =3D {=0A=
- > >  			.id =3D V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS,=0A=
- > >  		},=0A=
- > > +	}, {=0A=
- > > +		.codec =3D HANTRO_HEVC_DECODER,=0A=
- > > +		.cfg =3D {=0A=
- > > +			.id =3D V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP,=0A=
- > > +			.name =3D "Hantro HEVC slice header skip bytes",=0A=
- > > +			.type =3D V4L2_CTRL_TYPE_INTEGER,=0A=
- > > +			.min =3D 0,=0A=
- > > +			.def =3D 0,=0A=
- > > +			.max =3D 0x7fffffff,=0A=
-=0A=
-This seems an insanely high number.=0A=
-=0A=
- > > +			.step =3D 1,=0A=
- > > +			.ops =3D &hantro_hevc_ctrl_ops,=0A=
- > > +		},=0A=
- > >  	},=0A=
- > >  };=0A=
-=0A=
-Regards,=0A=
-=0A=
-	Hans=0A=
-=0A=
+Oops.. It turned out that I replied to the previous version of this patch:
+https://lore.kernel.org/linux-media/dcc96c87-db10-821a-dcaa-2d9004b1d5c5@linaro.org/
+Sorry for that.
+But my concern still holds: the two new lane_2_mode_*x*[] tables mostly duplicate
+the lane_4_mode_*x*[] ones, and to switch between 2 and 4 lanes the driver needs
+to change 4 registers at most. So the number of lanes related values could be put
+into separate small tables similar to the mipi_data_rate_lane_N[] ones (or maybe
+added to those).
+
+On 31.03.2021 12:12, Shawnx Tu wrote:
+> From: Shawn Tu <shawnx.tu@intel.com>
+> 
+> The OV8856 sensor can output frames with 2/4 CSI2 data lanes.
+> This commit adds support for 2 lane mode in addition to the 4 lane
+> and also configuring the data lane settings in the driver based on
+> system configuration.
+> 
+> - Fix Bayer order output in 1640x1232 binning registers
+- that's a nice addition to the driver.
+
+Thanks,
+Andrey
+
+> - supported data lanes
+>    + 3280x2464 on 2 & 4 lanes
+>    + 1640x1232 on 2 & 4 lanes
+>    + 3264x2448 on 4 lanes
+>    + 1632x1224 on 4 lanes
+> 
+> Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+> ---
+>   drivers/media/i2c/ov8856.c | 2329 ++++++++++++++++++++++--------------
+>   1 file changed, 1428 insertions(+), 901 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+> index b337f729d5e3..502cc703f2a1 100644
+> --- a/drivers/media/i2c/ov8856.c
+> +++ b/drivers/media/i2c/ov8856.c
+> @@ -18,8 +18,6 @@
+>   #define OV8856_REG_VALUE_16BIT		2
+>   #define OV8856_REG_VALUE_24BIT		3
+>   
+> -#define OV8856_LINK_FREQ_360MHZ		360000000ULL
+> -#define OV8856_LINK_FREQ_180MHZ		180000000ULL
+>   #define OV8856_SCLK			144000000ULL
+>   #define OV8856_XVCLK_19_2		19200000
+>   #define OV8856_DATA_LANES		4
+> @@ -78,6 +76,10 @@
+>   #define OV8856_TEST_PATTERN_ENABLE	BIT(7)
+>   #define OV8856_TEST_PATTERN_BAR_SHIFT	2
+>   
+> +#define NUM_REGS				7
+> +#define NUM_MODE_REGS				187
+> +#define NUM_MODE_REGS_2				200
+> +
+>   #define to_ov8856(_sd)			container_of(_sd, struct ov8856, sd)
+>   
+>   static const char * const ov8856_supply_names[] = {
+> @@ -86,11 +88,6 @@ static const char * const ov8856_supply_names[] = {
+>   	"dvdd",		/* Digital core power */
+>   };
+>   
+> -enum {
+> -	OV8856_LINK_FREQ_720MBPS,
+> -	OV8856_LINK_FREQ_360MBPS,
+> -};
+> -
+>   struct ov8856_reg {
+>   	u16 address;
+>   	u8 val;
+> @@ -126,891 +123,1240 @@ struct ov8856_mode {
+>   
+>   	/* Sensor register settings for this resolution */
+>   	const struct ov8856_reg_list reg_list;
+> +
+> +	/* Number of data lanes */
+> +	u8 data_lanes;
+>   };
+>   
+> -static const struct ov8856_reg mipi_data_rate_720mbps[] = {
+> -	{0x0103, 0x01},
+> -	{0x0100, 0x00},
+> -	{0x0302, 0x4b},
+> -	{0x0303, 0x01},
+> -	{0x030b, 0x02},
+> -	{0x030d, 0x4b},
+> -	{0x031e, 0x0c},
+> +struct ov8856_mipi_data_rates {
+> +	const struct ov8856_reg regs_0[NUM_REGS];
+> +	const struct ov8856_reg regs_1[NUM_REGS];
+>   };
+>   
+> -static const struct ov8856_reg mipi_data_rate_360mbps[] = {
+> -	{0x0103, 0x01},
+> -	{0x0100, 0x00},
+> -	{0x0302, 0x4b},
+> -	{0x0303, 0x03},
+> -	{0x030b, 0x02},
+> -	{0x030d, 0x4b},
+> -	{0x031e, 0x0c},
+> +static const struct ov8856_mipi_data_rates mipi_data_rate_lane_2 = {
+> +	//mipi_data_rate_1440mbps
+> +	{
+> +		{0x0103, 0x01},
+> +		{0x0100, 0x00},
+> +		{0x0302, 0x43},
+> +		{0x0303, 0x00},
+> +		{0x030b, 0x02},
+> +		{0x030d, 0x4b},
+> +		{0x031e, 0x0c}
+> +	},
+> +	//mipi_data_rate_720mbps
+> +	{
+> +		{0x0103, 0x01},
+> +		{0x0100, 0x00},
+> +		{0x0302, 0x4b},
+> +		{0x0303, 0x01},
+> +		{0x030b, 0x02},
+> +		{0x030d, 0x4b},
+> +		{0x031e, 0x0c}
+> +	}
+>   };
+>   
+> -static const struct ov8856_reg mode_3280x2464_regs[] = {
+> -	{0x3000, 0x20},
+> -	{0x3003, 0x08},
+> -	{0x300e, 0x20},
+> -	{0x3010, 0x00},
+> -	{0x3015, 0x84},
+> -	{0x3018, 0x72},
+> -	{0x3021, 0x23},
+> -	{0x3033, 0x24},
+> -	{0x3500, 0x00},
+> -	{0x3501, 0x9a},
+> -	{0x3502, 0x20},
+> -	{0x3503, 0x08},
+> -	{0x3505, 0x83},
+> -	{0x3508, 0x01},
+> -	{0x3509, 0x80},
+> -	{0x350c, 0x00},
+> -	{0x350d, 0x80},
+> -	{0x350e, 0x04},
+> -	{0x350f, 0x00},
+> -	{0x3510, 0x00},
+> -	{0x3511, 0x02},
+> -	{0x3512, 0x00},
+> -	{0x3600, 0x72},
+> -	{0x3601, 0x40},
+> -	{0x3602, 0x30},
+> -	{0x3610, 0xc5},
+> -	{0x3611, 0x58},
+> -	{0x3612, 0x5c},
+> -	{0x3613, 0xca},
+> -	{0x3614, 0x20},
+> -	{0x3628, 0xff},
+> -	{0x3629, 0xff},
+> -	{0x362a, 0xff},
+> -	{0x3633, 0x10},
+> -	{0x3634, 0x10},
+> -	{0x3635, 0x10},
+> -	{0x3636, 0x10},
+> -	{0x3663, 0x08},
+> -	{0x3669, 0x34},
+> -	{0x366e, 0x10},
+> -	{0x3706, 0x86},
+> -	{0x370b, 0x7e},
+> -	{0x3714, 0x23},
+> -	{0x3730, 0x12},
+> -	{0x3733, 0x10},
+> -	{0x3764, 0x00},
+> -	{0x3765, 0x00},
+> -	{0x3769, 0x62},
+> -	{0x376a, 0x2a},
+> -	{0x376b, 0x30},
+> -	{0x3780, 0x00},
+> -	{0x3781, 0x24},
+> -	{0x3782, 0x00},
+> -	{0x3783, 0x23},
+> -	{0x3798, 0x2f},
+> -	{0x37a1, 0x60},
+> -	{0x37a8, 0x6a},
+> -	{0x37ab, 0x3f},
+> -	{0x37c2, 0x04},
+> -	{0x37c3, 0xf1},
+> -	{0x37c9, 0x80},
+> -	{0x37cb, 0x16},
+> -	{0x37cc, 0x16},
+> -	{0x37cd, 0x16},
+> -	{0x37ce, 0x16},
+> -	{0x3800, 0x00},
+> -	{0x3801, 0x00},
+> -	{0x3802, 0x00},
+> -	{0x3803, 0x06},
+> -	{0x3804, 0x0c},
+> -	{0x3805, 0xdf},
+> -	{0x3806, 0x09},
+> -	{0x3807, 0xa7},
+> -	{0x3808, 0x0c},
+> -	{0x3809, 0xd0},
+> -	{0x380a, 0x09},
+> -	{0x380b, 0xa0},
+> -	{0x380c, 0x07},
+> -	{0x380d, 0x88},
+> -	{0x380e, 0x09},
+> -	{0x380f, 0xb8},
+> -	{0x3810, 0x00},
+> -	{0x3811, 0x00},
+> -	{0x3812, 0x00},
+> -	{0x3813, 0x01},
+> -	{0x3814, 0x01},
+> -	{0x3815, 0x01},
+> -	{0x3816, 0x00},
+> -	{0x3817, 0x00},
+> -	{0x3818, 0x00},
+> -	{0x3819, 0x10},
+> -	{0x3820, 0x80},
+> -	{0x3821, 0x46},
+> -	{0x382a, 0x01},
+> -	{0x382b, 0x01},
+> -	{0x3830, 0x06},
+> -	{0x3836, 0x02},
+> -	{0x3862, 0x04},
+> -	{0x3863, 0x08},
+> -	{0x3cc0, 0x33},
+> -	{0x3d85, 0x17},
+> -	{0x3d8c, 0x73},
+> -	{0x3d8d, 0xde},
+> -	{0x4001, 0xe0},
+> -	{0x4003, 0x40},
+> -	{0x4008, 0x00},
+> -	{0x4009, 0x0b},
+> -	{0x400a, 0x00},
+> -	{0x400b, 0x84},
+> -	{0x400f, 0x80},
+> -	{0x4010, 0xf0},
+> -	{0x4011, 0xff},
+> -	{0x4012, 0x02},
+> -	{0x4013, 0x01},
+> -	{0x4014, 0x01},
+> -	{0x4015, 0x01},
+> -	{0x4042, 0x00},
+> -	{0x4043, 0x80},
+> -	{0x4044, 0x00},
+> -	{0x4045, 0x80},
+> -	{0x4046, 0x00},
+> -	{0x4047, 0x80},
+> -	{0x4048, 0x00},
+> -	{0x4049, 0x80},
+> -	{0x4041, 0x03},
+> -	{0x404c, 0x20},
+> -	{0x404d, 0x00},
+> -	{0x404e, 0x20},
+> -	{0x4203, 0x80},
+> -	{0x4307, 0x30},
+> -	{0x4317, 0x00},
+> -	{0x4503, 0x08},
+> -	{0x4601, 0x80},
+> -	{0x4800, 0x44},
+> -	{0x4816, 0x53},
+> -	{0x481b, 0x58},
+> -	{0x481f, 0x27},
+> -	{0x4837, 0x16},
+> -	{0x483c, 0x0f},
+> -	{0x484b, 0x05},
+> -	{0x5000, 0x57},
+> -	{0x5001, 0x0a},
+> -	{0x5004, 0x04},
+> -	{0x502e, 0x03},
+> -	{0x5030, 0x41},
+> -	{0x5780, 0x14},
+> -	{0x5781, 0x0f},
+> -	{0x5782, 0x44},
+> -	{0x5783, 0x02},
+> -	{0x5784, 0x01},
+> -	{0x5785, 0x01},
+> -	{0x5786, 0x00},
+> -	{0x5787, 0x04},
+> -	{0x5788, 0x02},
+> -	{0x5789, 0x0f},
+> -	{0x578a, 0xfd},
+> -	{0x578b, 0xf5},
+> -	{0x578c, 0xf5},
+> -	{0x578d, 0x03},
+> -	{0x578e, 0x08},
+> -	{0x578f, 0x0c},
+> -	{0x5790, 0x08},
+> -	{0x5791, 0x04},
+> -	{0x5792, 0x00},
+> -	{0x5793, 0x52},
+> -	{0x5794, 0xa3},
+> -	{0x5795, 0x02},
+> -	{0x5796, 0x20},
+> -	{0x5797, 0x20},
+> -	{0x5798, 0xd5},
+> -	{0x5799, 0xd5},
+> -	{0x579a, 0x00},
+> -	{0x579b, 0x50},
+> -	{0x579c, 0x00},
+> -	{0x579d, 0x2c},
+> -	{0x579e, 0x0c},
+> -	{0x579f, 0x40},
+> -	{0x57a0, 0x09},
+> -	{0x57a1, 0x40},
+> -	{0x59f8, 0x3d},
+> -	{0x5a08, 0x02},
+> -	{0x5b00, 0x02},
+> -	{0x5b01, 0x10},
+> -	{0x5b02, 0x03},
+> -	{0x5b03, 0xcf},
+> -	{0x5b05, 0x6c},
+> -	{0x5e00, 0x00}
+> +static const struct ov8856_mipi_data_rates mipi_data_rate_lane_4 = {
+> +	//mipi_data_rate_720mbps
+> +	{
+> +		{0x0103, 0x01},
+> +		{0x0100, 0x00},
+> +		{0x0302, 0x4b},
+> +		{0x0303, 0x01},
+> +		{0x030b, 0x02},
+> +		{0x030d, 0x4b},
+> +		{0x031e, 0x0c}
+> +	},
+> +	//mipi_data_rate_360mbps
+> +	{
+> +		{0x0103, 0x01},
+> +		{0x0100, 0x00},
+> +		{0x0302, 0x4b},
+> +		{0x0303, 0x03},
+> +		{0x030b, 0x02},
+> +		{0x030d, 0x4b},
+> +		{0x031e, 0x0c}
+> +	}
+>   };
+>   
+> -static const struct ov8856_reg mode_3264x2448_regs[] = {
+> -	{0x0103, 0x01},
+> -	{0x0302, 0x3c},
+> -	{0x0303, 0x01},
+> -	{0x031e, 0x0c},
+> -	{0x3000, 0x20},
+> -	{0x3003, 0x08},
+> -	{0x300e, 0x20},
+> -	{0x3010, 0x00},
+> -	{0x3015, 0x84},
+> -	{0x3018, 0x72},
+> -	{0x3021, 0x23},
+> -	{0x3033, 0x24},
+> -	{0x3500, 0x00},
+> -	{0x3501, 0x9a},
+> -	{0x3502, 0x20},
+> -	{0x3503, 0x08},
+> -	{0x3505, 0x83},
+> -	{0x3508, 0x01},
+> -	{0x3509, 0x80},
+> -	{0x350c, 0x00},
+> -	{0x350d, 0x80},
+> -	{0x350e, 0x04},
+> -	{0x350f, 0x00},
+> -	{0x3510, 0x00},
+> -	{0x3511, 0x02},
+> -	{0x3512, 0x00},
+> -	{0x3600, 0x72},
+> -	{0x3601, 0x40},
+> -	{0x3602, 0x30},
+> -	{0x3610, 0xc5},
+> -	{0x3611, 0x58},
+> -	{0x3612, 0x5c},
+> -	{0x3613, 0xca},
+> -	{0x3614, 0x60},
+> -	{0x3628, 0xff},
+> -	{0x3629, 0xff},
+> -	{0x362a, 0xff},
+> -	{0x3633, 0x10},
+> -	{0x3634, 0x10},
+> -	{0x3635, 0x10},
+> -	{0x3636, 0x10},
+> -	{0x3663, 0x08},
+> -	{0x3669, 0x34},
+> -	{0x366d, 0x00},
+> -	{0x366e, 0x10},
+> -	{0x3706, 0x86},
+> -	{0x370b, 0x7e},
+> -	{0x3714, 0x23},
+> -	{0x3730, 0x12},
+> -	{0x3733, 0x10},
+> -	{0x3764, 0x00},
+> -	{0x3765, 0x00},
+> -	{0x3769, 0x62},
+> -	{0x376a, 0x2a},
+> -	{0x376b, 0x30},
+> -	{0x3780, 0x00},
+> -	{0x3781, 0x24},
+> -	{0x3782, 0x00},
+> -	{0x3783, 0x23},
+> -	{0x3798, 0x2f},
+> -	{0x37a1, 0x60},
+> -	{0x37a8, 0x6a},
+> -	{0x37ab, 0x3f},
+> -	{0x37c2, 0x04},
+> -	{0x37c3, 0xf1},
+> -	{0x37c9, 0x80},
+> -	{0x37cb, 0x16},
+> -	{0x37cc, 0x16},
+> -	{0x37cd, 0x16},
+> -	{0x37ce, 0x16},
+> -	{0x3800, 0x00},
+> -	{0x3801, 0x00},
+> -	{0x3802, 0x00},
+> -	{0x3803, 0x0c},
+> -	{0x3804, 0x0c},
+> -	{0x3805, 0xdf},
+> -	{0x3806, 0x09},
+> -	{0x3807, 0xa3},
+> -	{0x3808, 0x0c},
+> -	{0x3809, 0xc0},
+> -	{0x380a, 0x09},
+> -	{0x380b, 0x90},
+> -	{0x380c, 0x07},
+> -	{0x380d, 0x8c},
+> -	{0x380e, 0x09},
+> -	{0x380f, 0xb2},
+> -	{0x3810, 0x00},
+> -	{0x3811, 0x04},
+> -	{0x3812, 0x00},
+> -	{0x3813, 0x01},
+> -	{0x3814, 0x01},
+> -	{0x3815, 0x01},
+> -	{0x3816, 0x00},
+> -	{0x3817, 0x00},
+> -	{0x3818, 0x00},
+> -	{0x3819, 0x10},
+> -	{0x3820, 0x80},
+> -	{0x3821, 0x46},
+> -	{0x382a, 0x01},
+> -	{0x382b, 0x01},
+> -	{0x3830, 0x06},
+> -	{0x3836, 0x02},
+> -	{0x3862, 0x04},
+> -	{0x3863, 0x08},
+> -	{0x3cc0, 0x33},
+> -	{0x3d85, 0x17},
+> -	{0x3d8c, 0x73},
+> -	{0x3d8d, 0xde},
+> -	{0x4001, 0xe0},
+> -	{0x4003, 0x40},
+> -	{0x4008, 0x00},
+> -	{0x4009, 0x0b},
+> -	{0x400a, 0x00},
+> -	{0x400b, 0x84},
+> -	{0x400f, 0x80},
+> -	{0x4010, 0xf0},
+> -	{0x4011, 0xff},
+> -	{0x4012, 0x02},
+> -	{0x4013, 0x01},
+> -	{0x4014, 0x01},
+> -	{0x4015, 0x01},
+> -	{0x4042, 0x00},
+> -	{0x4043, 0x80},
+> -	{0x4044, 0x00},
+> -	{0x4045, 0x80},
+> -	{0x4046, 0x00},
+> -	{0x4047, 0x80},
+> -	{0x4048, 0x00},
+> -	{0x4049, 0x80},
+> -	{0x4041, 0x03},
+> -	{0x404c, 0x20},
+> -	{0x404d, 0x00},
+> -	{0x404e, 0x20},
+> -	{0x4203, 0x80},
+> -	{0x4307, 0x30},
+> -	{0x4317, 0x00},
+> -	{0x4502, 0x50},
+> -	{0x4503, 0x08},
+> -	{0x4601, 0x80},
+> -	{0x4800, 0x44},
+> -	{0x4816, 0x53},
+> -	{0x481b, 0x50},
+> -	{0x481f, 0x27},
+> -	{0x4823, 0x3c},
+> -	{0x482b, 0x00},
+> -	{0x4831, 0x66},
+> -	{0x4837, 0x16},
+> -	{0x483c, 0x0f},
+> -	{0x484b, 0x05},
+> -	{0x5000, 0x77},
+> -	{0x5001, 0x0a},
+> -	{0x5003, 0xc8},
+> -	{0x5004, 0x04},
+> -	{0x5006, 0x00},
+> -	{0x5007, 0x00},
+> -	{0x502e, 0x03},
+> -	{0x5030, 0x41},
+> -	{0x5780, 0x14},
+> -	{0x5781, 0x0f},
+> -	{0x5782, 0x44},
+> -	{0x5783, 0x02},
+> -	{0x5784, 0x01},
+> -	{0x5785, 0x01},
+> -	{0x5786, 0x00},
+> -	{0x5787, 0x04},
+> -	{0x5788, 0x02},
+> -	{0x5789, 0x0f},
+> -	{0x578a, 0xfd},
+> -	{0x578b, 0xf5},
+> -	{0x578c, 0xf5},
+> -	{0x578d, 0x03},
+> -	{0x578e, 0x08},
+> -	{0x578f, 0x0c},
+> -	{0x5790, 0x08},
+> -	{0x5791, 0x04},
+> -	{0x5792, 0x00},
+> -	{0x5793, 0x52},
+> -	{0x5794, 0xa3},
+> -	{0x5795, 0x02},
+> -	{0x5796, 0x20},
+> -	{0x5797, 0x20},
+> -	{0x5798, 0xd5},
+> -	{0x5799, 0xd5},
+> -	{0x579a, 0x00},
+> -	{0x579b, 0x50},
+> -	{0x579c, 0x00},
+> -	{0x579d, 0x2c},
+> -	{0x579e, 0x0c},
+> -	{0x579f, 0x40},
+> -	{0x57a0, 0x09},
+> -	{0x57a1, 0x40},
+> -	{0x59f8, 0x3d},
+> -	{0x5a08, 0x02},
+> -	{0x5b00, 0x02},
+> -	{0x5b01, 0x10},
+> -	{0x5b02, 0x03},
+> -	{0x5b03, 0xcf},
+> -	{0x5b05, 0x6c},
+> -	{0x5e00, 0x00},
+> -	{0x5e10, 0xfc}
+> +static const struct ov8856_reg lane_2_mode_3280x2464[] = {
+> +	/* 3280x2464 resolution */
+> +		{0x3000, 0x00},
+> +		{0x300e, 0x00},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x32},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x9a},
+> +		{0x3502, 0x20},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x50},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366e, 0x10},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x23},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x04},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x06},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xa7},
+> +		{0x3808, 0x0c},
+> +		{0x3809, 0xd0},
+> +		{0x380a, 0x09},
+> +		{0x380b, 0xa0},
+> +		{0x380c, 0x07},
+> +		{0x380d, 0x88},
+> +		{0x380e, 0x09},
+> +		{0x380f, 0xb8},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x00},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x01},
+> +		{0x3814, 0x01},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x00},
+> +		{0x3820, 0x80},
+> +		{0x3821, 0x46},
+> +		{0x382a, 0x01},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3837, 0x10},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x14},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x0b},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x58},
+> +		{0x481f, 0x27},
+> +		{0x4837, 0x0c},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x57},
+> +		{0x5001, 0x0a},
+> +		{0x5004, 0x04},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5795, 0x02},
+> +		{0x5796, 0x20},
+> +		{0x5797, 0x20},
+> +		{0x5798, 0xd5},
+> +		{0x5799, 0xd5},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x50},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x2c},
+> +		{0x579e, 0x0c},
+> +		{0x579f, 0x40},
+> +		{0x57a0, 0x09},
+> +		{0x57a1, 0x40},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00}
+>   };
+>   
+> -static const struct ov8856_reg mode_1640x1232_regs[] = {
+> -	{0x3000, 0x20},
+> -	{0x3003, 0x08},
+> -	{0x300e, 0x20},
+> -	{0x3010, 0x00},
+> -	{0x3015, 0x84},
+> -	{0x3018, 0x72},
+> -	{0x3021, 0x23},
+> -	{0x3033, 0x24},
+> -	{0x3500, 0x00},
+> -	{0x3501, 0x4c},
+> -	{0x3502, 0xe0},
+> -	{0x3503, 0x08},
+> -	{0x3505, 0x83},
+> -	{0x3508, 0x01},
+> -	{0x3509, 0x80},
+> -	{0x350c, 0x00},
+> -	{0x350d, 0x80},
+> -	{0x350e, 0x04},
+> -	{0x350f, 0x00},
+> -	{0x3510, 0x00},
+> -	{0x3511, 0x02},
+> -	{0x3512, 0x00},
+> -	{0x3600, 0x72},
+> -	{0x3601, 0x40},
+> -	{0x3602, 0x30},
+> -	{0x3610, 0xc5},
+> -	{0x3611, 0x58},
+> -	{0x3612, 0x5c},
+> -	{0x3613, 0xca},
+> -	{0x3614, 0x20},
+> -	{0x3628, 0xff},
+> -	{0x3629, 0xff},
+> -	{0x362a, 0xff},
+> -	{0x3633, 0x10},
+> -	{0x3634, 0x10},
+> -	{0x3635, 0x10},
+> -	{0x3636, 0x10},
+> -	{0x3663, 0x08},
+> -	{0x3669, 0x34},
+> -	{0x366e, 0x08},
+> -	{0x3706, 0x86},
+> -	{0x370b, 0x7e},
+> -	{0x3714, 0x27},
+> -	{0x3730, 0x12},
+> -	{0x3733, 0x10},
+> -	{0x3764, 0x00},
+> -	{0x3765, 0x00},
+> -	{0x3769, 0x62},
+> -	{0x376a, 0x2a},
+> -	{0x376b, 0x30},
+> -	{0x3780, 0x00},
+> -	{0x3781, 0x24},
+> -	{0x3782, 0x00},
+> -	{0x3783, 0x23},
+> -	{0x3798, 0x2f},
+> -	{0x37a1, 0x60},
+> -	{0x37a8, 0x6a},
+> -	{0x37ab, 0x3f},
+> -	{0x37c2, 0x14},
+> -	{0x37c3, 0xf1},
+> -	{0x37c9, 0x80},
+> -	{0x37cb, 0x16},
+> -	{0x37cc, 0x16},
+> -	{0x37cd, 0x16},
+> -	{0x37ce, 0x16},
+> -	{0x3800, 0x00},
+> -	{0x3801, 0x00},
+> -	{0x3802, 0x00},
+> -	{0x3803, 0x06},
+> -	{0x3804, 0x0c},
+> -	{0x3805, 0xdf},
+> -	{0x3806, 0x09},
+> -	{0x3807, 0xa7},
+> -	{0x3808, 0x06},
+> -	{0x3809, 0x68},
+> -	{0x380a, 0x04},
+> -	{0x380b, 0xd0},
+> -	{0x380c, 0x0e},
+> -	{0x380d, 0xec},
+> -	{0x380e, 0x04},
+> -	{0x380f, 0xe8},
+> -	{0x3810, 0x00},
+> -	{0x3811, 0x00},
+> -	{0x3812, 0x00},
+> -	{0x3813, 0x01},
+> -	{0x3814, 0x03},
+> -	{0x3815, 0x01},
+> -	{0x3816, 0x00},
+> -	{0x3817, 0x00},
+> -	{0x3818, 0x00},
+> -	{0x3819, 0x10},
+> -	{0x3820, 0x90},
+> -	{0x3821, 0x67},
+> -	{0x382a, 0x03},
+> -	{0x382b, 0x01},
+> -	{0x3830, 0x06},
+> -	{0x3836, 0x02},
+> -	{0x3862, 0x04},
+> -	{0x3863, 0x08},
+> -	{0x3cc0, 0x33},
+> -	{0x3d85, 0x17},
+> -	{0x3d8c, 0x73},
+> -	{0x3d8d, 0xde},
+> -	{0x4001, 0xe0},
+> -	{0x4003, 0x40},
+> -	{0x4008, 0x00},
+> -	{0x4009, 0x05},
+> -	{0x400a, 0x00},
+> -	{0x400b, 0x84},
+> -	{0x400f, 0x80},
+> -	{0x4010, 0xf0},
+> -	{0x4011, 0xff},
+> -	{0x4012, 0x02},
+> -	{0x4013, 0x01},
+> -	{0x4014, 0x01},
+> -	{0x4015, 0x01},
+> -	{0x4042, 0x00},
+> -	{0x4043, 0x80},
+> -	{0x4044, 0x00},
+> -	{0x4045, 0x80},
+> -	{0x4046, 0x00},
+> -	{0x4047, 0x80},
+> -	{0x4048, 0x00},
+> -	{0x4049, 0x80},
+> -	{0x4041, 0x03},
+> -	{0x404c, 0x20},
+> -	{0x404d, 0x00},
+> -	{0x404e, 0x20},
+> -	{0x4203, 0x80},
+> -	{0x4307, 0x30},
+> -	{0x4317, 0x00},
+> -	{0x4503, 0x08},
+> -	{0x4601, 0x80},
+> -	{0x4800, 0x44},
+> -	{0x4816, 0x53},
+> -	{0x481b, 0x58},
+> -	{0x481f, 0x27},
+> -	{0x4837, 0x16},
+> -	{0x483c, 0x0f},
+> -	{0x484b, 0x05},
+> -	{0x5000, 0x57},
+> -	{0x5001, 0x0a},
+> -	{0x5004, 0x04},
+> -	{0x502e, 0x03},
+> -	{0x5030, 0x41},
+> -	{0x5780, 0x14},
+> -	{0x5781, 0x0f},
+> -	{0x5782, 0x44},
+> -	{0x5783, 0x02},
+> -	{0x5784, 0x01},
+> -	{0x5785, 0x01},
+> -	{0x5786, 0x00},
+> -	{0x5787, 0x04},
+> -	{0x5788, 0x02},
+> -	{0x5789, 0x0f},
+> -	{0x578a, 0xfd},
+> -	{0x578b, 0xf5},
+> -	{0x578c, 0xf5},
+> -	{0x578d, 0x03},
+> -	{0x578e, 0x08},
+> -	{0x578f, 0x0c},
+> -	{0x5790, 0x08},
+> -	{0x5791, 0x04},
+> -	{0x5792, 0x00},
+> -	{0x5793, 0x52},
+> -	{0x5794, 0xa3},
+> -	{0x5795, 0x00},
+> -	{0x5796, 0x10},
+> -	{0x5797, 0x10},
+> -	{0x5798, 0x73},
+> -	{0x5799, 0x73},
+> -	{0x579a, 0x00},
+> -	{0x579b, 0x28},
+> -	{0x579c, 0x00},
+> -	{0x579d, 0x16},
+> -	{0x579e, 0x06},
+> -	{0x579f, 0x20},
+> -	{0x57a0, 0x04},
+> -	{0x57a1, 0xa0},
+> -	{0x59f8, 0x3d},
+> -	{0x5a08, 0x02},
+> -	{0x5b00, 0x02},
+> -	{0x5b01, 0x10},
+> -	{0x5b02, 0x03},
+> -	{0x5b03, 0xcf},
+> -	{0x5b05, 0x6c},
+> -	{0x5e00, 0x00}
+> +static const struct ov8856_reg lane_2_mode_1640x1232[] = {
+> +	/* 1640x1232 resolution */
+> +		{0x3000, 0x00},
+> +		{0x300e, 0x00},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x32},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x4c},
+> +		{0x3502, 0xe0},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x50},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366e, 0x08},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x27},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x14},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x00},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xaf},
+> +		{0x3808, 0x06},
+> +		{0x3809, 0x68},
+> +		{0x380a, 0x04},
+> +		{0x380b, 0xd0},
+> +		{0x380c, 0x0c},
+> +		{0x380d, 0x60},
+> +		{0x380e, 0x05},
+> +		{0x380f, 0xea},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x04},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x05},
+> +		{0x3814, 0x03},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x00},
+> +		{0x3820, 0x90},
+> +		{0x3821, 0x67},
+> +		{0x382a, 0x03},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3837, 0x10},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x14},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x05},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x58},
+> +		{0x481f, 0x27},
+> +		{0x4837, 0x16},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x57},
+> +		{0x5001, 0x0a},
+> +		{0x5004, 0x04},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5795, 0x00},
+> +		{0x5796, 0x10},
+> +		{0x5797, 0x10},
+> +		{0x5798, 0x73},
+> +		{0x5799, 0x73},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x28},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x16},
+> +		{0x579e, 0x06},
+> +		{0x579f, 0x20},
+> +		{0x57a0, 0x04},
+> +		{0x57a1, 0xa0},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00}
+>   };
+>   
+> -static const struct ov8856_reg mode_1632x1224_regs[] = {
+> -	{0x0103, 0x01},
+> -	{0x0302, 0x3c},
+> -	{0x0303, 0x01},
+> -	{0x031e, 0x0c},
+> -	{0x3000, 0x20},
+> -	{0x3003, 0x08},
+> -	{0x300e, 0x20},
+> -	{0x3010, 0x00},
+> -	{0x3015, 0x84},
+> -	{0x3018, 0x72},
+> -	{0x3021, 0x23},
+> -	{0x3033, 0x24},
+> -	{0x3500, 0x00},
+> -	{0x3501, 0x4c},
+> -	{0x3502, 0xe0},
+> -	{0x3503, 0x08},
+> -	{0x3505, 0x83},
+> -	{0x3508, 0x01},
+> -	{0x3509, 0x80},
+> -	{0x350c, 0x00},
+> -	{0x350d, 0x80},
+> -	{0x350e, 0x04},
+> -	{0x350f, 0x00},
+> -	{0x3510, 0x00},
+> -	{0x3511, 0x02},
+> -	{0x3512, 0x00},
+> -	{0x3600, 0x72},
+> -	{0x3601, 0x40},
+> -	{0x3602, 0x30},
+> -	{0x3610, 0xc5},
+> -	{0x3611, 0x58},
+> -	{0x3612, 0x5c},
+> -	{0x3613, 0xca},
+> -	{0x3614, 0x60},
+> -	{0x3628, 0xff},
+> -	{0x3629, 0xff},
+> -	{0x362a, 0xff},
+> -	{0x3633, 0x10},
+> -	{0x3634, 0x10},
+> -	{0x3635, 0x10},
+> -	{0x3636, 0x10},
+> -	{0x3663, 0x08},
+> -	{0x3669, 0x34},
+> -	{0x366d, 0x00},
+> -	{0x366e, 0x08},
+> -	{0x3706, 0x86},
+> -	{0x370b, 0x7e},
+> -	{0x3714, 0x27},
+> -	{0x3730, 0x12},
+> -	{0x3733, 0x10},
+> -	{0x3764, 0x00},
+> -	{0x3765, 0x00},
+> -	{0x3769, 0x62},
+> -	{0x376a, 0x2a},
+> -	{0x376b, 0x30},
+> -	{0x3780, 0x00},
+> -	{0x3781, 0x24},
+> -	{0x3782, 0x00},
+> -	{0x3783, 0x23},
+> -	{0x3798, 0x2f},
+> -	{0x37a1, 0x60},
+> -	{0x37a8, 0x6a},
+> -	{0x37ab, 0x3f},
+> -	{0x37c2, 0x14},
+> -	{0x37c3, 0xf1},
+> -	{0x37c9, 0x80},
+> -	{0x37cb, 0x16},
+> -	{0x37cc, 0x16},
+> -	{0x37cd, 0x16},
+> -	{0x37ce, 0x16},
+> -	{0x3800, 0x00},
+> -	{0x3801, 0x00},
+> -	{0x3802, 0x00},
+> -	{0x3803, 0x0c},
+> -	{0x3804, 0x0c},
+> -	{0x3805, 0xdf},
+> -	{0x3806, 0x09},
+> -	{0x3807, 0xa3},
+> -	{0x3808, 0x06},
+> -	{0x3809, 0x60},
+> -	{0x380a, 0x04},
+> -	{0x380b, 0xc8},
+> -	{0x380c, 0x07},
+> -	{0x380d, 0x8c},
+> -	{0x380e, 0x09},
+> -	{0x380f, 0xb2},
+> -	{0x3810, 0x00},
+> -	{0x3811, 0x02},
+> -	{0x3812, 0x00},
+> -	{0x3813, 0x01},
+> -	{0x3814, 0x03},
+> -	{0x3815, 0x01},
+> -	{0x3816, 0x00},
+> -	{0x3817, 0x00},
+> -	{0x3818, 0x00},
+> -	{0x3819, 0x10},
+> -	{0x3820, 0x80},
+> -	{0x3821, 0x47},
+> -	{0x382a, 0x03},
+> -	{0x382b, 0x01},
+> -	{0x3830, 0x06},
+> -	{0x3836, 0x02},
+> -	{0x3862, 0x04},
+> -	{0x3863, 0x08},
+> -	{0x3cc0, 0x33},
+> -	{0x3d85, 0x17},
+> -	{0x3d8c, 0x73},
+> -	{0x3d8d, 0xde},
+> -	{0x4001, 0xe0},
+> -	{0x4003, 0x40},
+> -	{0x4008, 0x00},
+> -	{0x4009, 0x05},
+> -	{0x400a, 0x00},
+> -	{0x400b, 0x84},
+> -	{0x400f, 0x80},
+> -	{0x4010, 0xf0},
+> -	{0x4011, 0xff},
+> -	{0x4012, 0x02},
+> -	{0x4013, 0x01},
+> -	{0x4014, 0x01},
+> -	{0x4015, 0x01},
+> -	{0x4042, 0x00},
+> -	{0x4043, 0x80},
+> -	{0x4044, 0x00},
+> -	{0x4045, 0x80},
+> -	{0x4046, 0x00},
+> -	{0x4047, 0x80},
+> -	{0x4048, 0x00},
+> -	{0x4049, 0x80},
+> -	{0x4041, 0x03},
+> -	{0x404c, 0x20},
+> -	{0x404d, 0x00},
+> -	{0x404e, 0x20},
+> -	{0x4203, 0x80},
+> -	{0x4307, 0x30},
+> -	{0x4317, 0x00},
+> -	{0x4502, 0x50},
+> -	{0x4503, 0x08},
+> -	{0x4601, 0x80},
+> -	{0x4800, 0x44},
+> -	{0x4816, 0x53},
+> -	{0x481b, 0x50},
+> -	{0x481f, 0x27},
+> -	{0x4823, 0x3c},
+> -	{0x482b, 0x00},
+> -	{0x4831, 0x66},
+> -	{0x4837, 0x16},
+> -	{0x483c, 0x0f},
+> -	{0x484b, 0x05},
+> -	{0x5000, 0x77},
+> -	{0x5001, 0x0a},
+> -	{0x5003, 0xc8},
+> -	{0x5004, 0x04},
+> -	{0x5006, 0x00},
+> -	{0x5007, 0x00},
+> -	{0x502e, 0x03},
+> -	{0x5030, 0x41},
+> -	{0x5795, 0x00},
+> -	{0x5796, 0x10},
+> -	{0x5797, 0x10},
+> -	{0x5798, 0x73},
+> -	{0x5799, 0x73},
+> -	{0x579a, 0x00},
+> -	{0x579b, 0x28},
+> -	{0x579c, 0x00},
+> -	{0x579d, 0x16},
+> -	{0x579e, 0x06},
+> -	{0x579f, 0x20},
+> -	{0x57a0, 0x04},
+> -	{0x57a1, 0xa0},
+> -	{0x5780, 0x14},
+> -	{0x5781, 0x0f},
+> -	{0x5782, 0x44},
+> -	{0x5783, 0x02},
+> -	{0x5784, 0x01},
+> -	{0x5785, 0x01},
+> -	{0x5786, 0x00},
+> -	{0x5787, 0x04},
+> -	{0x5788, 0x02},
+> -	{0x5789, 0x0f},
+> -	{0x578a, 0xfd},
+> -	{0x578b, 0xf5},
+> -	{0x578c, 0xf5},
+> -	{0x578d, 0x03},
+> -	{0x578e, 0x08},
+> -	{0x578f, 0x0c},
+> -	{0x5790, 0x08},
+> -	{0x5791, 0x04},
+> -	{0x5792, 0x00},
+> -	{0x5793, 0x52},
+> -	{0x5794, 0xa3},
+> -	{0x59f8, 0x3d},
+> -	{0x5a08, 0x02},
+> -	{0x5b00, 0x02},
+> -	{0x5b01, 0x10},
+> -	{0x5b02, 0x03},
+> -	{0x5b03, 0xcf},
+> -	{0x5b05, 0x6c},
+> -	{0x5e00, 0x00},
+> -	{0x5e10, 0xfc}
+> +static const struct ov8856_reg lane_4_mode_3280x2464[] = {
+> +	/* 3280x2464 resolution */
+> +		{0x3000, 0x20},
+> +		{0x3003, 0x08},
+> +		{0x300e, 0x20},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x72},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x9a},
+> +		{0x3502, 0x20},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x20},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366e, 0x10},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x23},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x04},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x06},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xa7},
+> +		{0x3808, 0x0c},
+> +		{0x3809, 0xd0},
+> +		{0x380a, 0x09},
+> +		{0x380b, 0xa0},
+> +		{0x380c, 0x07},
+> +		{0x380d, 0x88},
+> +		{0x380e, 0x09},
+> +		{0x380f, 0xb8},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x00},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x01},
+> +		{0x3814, 0x01},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x10},
+> +		{0x3820, 0x80},
+> +		{0x3821, 0x46},
+> +		{0x382a, 0x01},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x17},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x0b},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x58},
+> +		{0x481f, 0x27},
+> +		{0x4837, 0x16},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x57},
+> +		{0x5001, 0x0a},
+> +		{0x5004, 0x04},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x5795, 0x02},
+> +		{0x5796, 0x20},
+> +		{0x5797, 0x20},
+> +		{0x5798, 0xd5},
+> +		{0x5799, 0xd5},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x50},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x2c},
+> +		{0x579e, 0x0c},
+> +		{0x579f, 0x40},
+> +		{0x57a0, 0x09},
+> +		{0x57a1, 0x40},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00}
+>   };
+>   
+> -static const char * const ov8856_test_pattern_menu[] = {
+> -	"Disabled",
+> -	"Standard Color Bar",
+> -	"Top-Bottom Darker Color Bar",
+> -	"Right-Left Darker Color Bar",
+> -	"Bottom-Top Darker Color Bar"
+> +static const struct ov8856_reg lane_4_mode_1640x1232[] = {
+> +	/* 1640x1232 resolution */
+> +		{0x3000, 0x20},
+> +		{0x3003, 0x08},
+> +		{0x300e, 0x20},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x72},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x4c},
+> +		{0x3502, 0xe0},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x20},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366e, 0x08},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x27},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x14},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x00},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xaf},
+> +		{0x3808, 0x06},
+> +		{0x3809, 0x68},
+> +		{0x380a, 0x04},
+> +		{0x380b, 0xd0},
+> +		{0x380c, 0x0e},
+> +		{0x380d, 0xec},
+> +		{0x380e, 0x04},
+> +		{0x380f, 0xe8},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x04},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x05},
+> +		{0x3814, 0x03},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x10},
+> +		{0x3820, 0x90},
+> +		{0x3821, 0x67},
+> +		{0x382a, 0x03},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x17},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x05},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x58},
+> +		{0x481f, 0x27},
+> +		{0x4837, 0x16},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x57},
+> +		{0x5001, 0x0a},
+> +		{0x5004, 0x04},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x5795, 0x00},
+> +		{0x5796, 0x10},
+> +		{0x5797, 0x10},
+> +		{0x5798, 0x73},
+> +		{0x5799, 0x73},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x28},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x16},
+> +		{0x579e, 0x06},
+> +		{0x579f, 0x20},
+> +		{0x57a0, 0x04},
+> +		{0x57a1, 0xa0},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00}
+>   };
+>   
+> -static const s64 link_freq_menu_items[] = {
+> -	OV8856_LINK_FREQ_360MHZ,
+> -	OV8856_LINK_FREQ_180MHZ
+> +static const struct ov8856_reg lane_4_mode_3264x2448[] = {
+> +	/* 3264x2448 resolution */
+> +		{0x0103, 0x01},
+> +		{0x0302, 0x3c},
+> +		{0x0303, 0x01},
+> +		{0x031e, 0x0c},
+> +		{0x3000, 0x20},
+> +		{0x3003, 0x08},
+> +		{0x300e, 0x20},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x72},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x9a},
+> +		{0x3502, 0x20},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x60},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366d, 0x00},
+> +		{0x366e, 0x10},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x23},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x04},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x0c},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xa3},
+> +		{0x3808, 0x0c},
+> +		{0x3809, 0xc0},
+> +		{0x380a, 0x09},
+> +		{0x380b, 0x90},
+> +		{0x380c, 0x07},
+> +		{0x380d, 0x8c},
+> +		{0x380e, 0x09},
+> +		{0x380f, 0xb2},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x04},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x01},
+> +		{0x3814, 0x01},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x10},
+> +		{0x3820, 0x80},
+> +		{0x3821, 0x46},
+> +		{0x382a, 0x01},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x17},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x0b},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4502, 0x50},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x50},
+> +		{0x481f, 0x27},
+> +		{0x4823, 0x3c},
+> +		{0x482b, 0x00},
+> +		{0x4831, 0x66},
+> +		{0x4837, 0x16},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x77},
+> +		{0x5001, 0x0a},
+> +		{0x5003, 0xc8},
+> +		{0x5004, 0x04},
+> +		{0x5006, 0x00},
+> +		{0x5007, 0x00},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x5795, 0x02},
+> +		{0x5796, 0x20},
+> +		{0x5797, 0x20},
+> +		{0x5798, 0xd5},
+> +		{0x5799, 0xd5},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x50},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x2c},
+> +		{0x579e, 0x0c},
+> +		{0x579f, 0x40},
+> +		{0x57a0, 0x09},
+> +		{0x57a1, 0x40},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00},
+> +		{0x5e10, 0xfc}
+>   };
+>   
+> -static const struct ov8856_link_freq_config link_freq_configs[] = {
+> -	[OV8856_LINK_FREQ_720MBPS] = {
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mipi_data_rate_720mbps),
+> -			.regs = mipi_data_rate_720mbps,
+> -		}
+> -	},
+> -	[OV8856_LINK_FREQ_360MBPS] = {
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mipi_data_rate_360mbps),
+> -			.regs = mipi_data_rate_360mbps,
+> -		}
+> -	}
+> +static const struct ov8856_reg lane_4_mode_1632x1224[] = {
+> +	/* 1632x1224 resolution */
+> +		{0x0103, 0x01},
+> +		{0x0302, 0x3c},
+> +		{0x0303, 0x01},
+> +		{0x031e, 0x0c},
+> +		{0x3000, 0x20},
+> +		{0x3003, 0x08},
+> +		{0x300e, 0x20},
+> +		{0x3010, 0x00},
+> +		{0x3015, 0x84},
+> +		{0x3018, 0x72},
+> +		{0x3021, 0x23},
+> +		{0x3033, 0x24},
+> +		{0x3500, 0x00},
+> +		{0x3501, 0x4c},
+> +		{0x3502, 0xe0},
+> +		{0x3503, 0x08},
+> +		{0x3505, 0x83},
+> +		{0x3508, 0x01},
+> +		{0x3509, 0x80},
+> +		{0x350c, 0x00},
+> +		{0x350d, 0x80},
+> +		{0x350e, 0x04},
+> +		{0x350f, 0x00},
+> +		{0x3510, 0x00},
+> +		{0x3511, 0x02},
+> +		{0x3512, 0x00},
+> +		{0x3600, 0x72},
+> +		{0x3601, 0x40},
+> +		{0x3602, 0x30},
+> +		{0x3610, 0xc5},
+> +		{0x3611, 0x58},
+> +		{0x3612, 0x5c},
+> +		{0x3613, 0xca},
+> +		{0x3614, 0x60},
+> +		{0x3628, 0xff},
+> +		{0x3629, 0xff},
+> +		{0x362a, 0xff},
+> +		{0x3633, 0x10},
+> +		{0x3634, 0x10},
+> +		{0x3635, 0x10},
+> +		{0x3636, 0x10},
+> +		{0x3663, 0x08},
+> +		{0x3669, 0x34},
+> +		{0x366d, 0x00},
+> +		{0x366e, 0x08},
+> +		{0x3706, 0x86},
+> +		{0x370b, 0x7e},
+> +		{0x3714, 0x27},
+> +		{0x3730, 0x12},
+> +		{0x3733, 0x10},
+> +		{0x3764, 0x00},
+> +		{0x3765, 0x00},
+> +		{0x3769, 0x62},
+> +		{0x376a, 0x2a},
+> +		{0x376b, 0x30},
+> +		{0x3780, 0x00},
+> +		{0x3781, 0x24},
+> +		{0x3782, 0x00},
+> +		{0x3783, 0x23},
+> +		{0x3798, 0x2f},
+> +		{0x37a1, 0x60},
+> +		{0x37a8, 0x6a},
+> +		{0x37ab, 0x3f},
+> +		{0x37c2, 0x14},
+> +		{0x37c3, 0xf1},
+> +		{0x37c9, 0x80},
+> +		{0x37cb, 0x16},
+> +		{0x37cc, 0x16},
+> +		{0x37cd, 0x16},
+> +		{0x37ce, 0x16},
+> +		{0x3800, 0x00},
+> +		{0x3801, 0x00},
+> +		{0x3802, 0x00},
+> +		{0x3803, 0x0c},
+> +		{0x3804, 0x0c},
+> +		{0x3805, 0xdf},
+> +		{0x3806, 0x09},
+> +		{0x3807, 0xa3},
+> +		{0x3808, 0x06},
+> +		{0x3809, 0x60},
+> +		{0x380a, 0x04},
+> +		{0x380b, 0xc8},
+> +		{0x380c, 0x07},
+> +		{0x380d, 0x8c},
+> +		{0x380e, 0x09},
+> +		{0x380f, 0xb2},
+> +		{0x3810, 0x00},
+> +		{0x3811, 0x02},
+> +		{0x3812, 0x00},
+> +		{0x3813, 0x01},
+> +		{0x3814, 0x03},
+> +		{0x3815, 0x01},
+> +		{0x3816, 0x00},
+> +		{0x3817, 0x00},
+> +		{0x3818, 0x00},
+> +		{0x3819, 0x10},
+> +		{0x3820, 0x80},
+> +		{0x3821, 0x47},
+> +		{0x382a, 0x03},
+> +		{0x382b, 0x01},
+> +		{0x3830, 0x06},
+> +		{0x3836, 0x02},
+> +		{0x3862, 0x04},
+> +		{0x3863, 0x08},
+> +		{0x3cc0, 0x33},
+> +		{0x3d85, 0x17},
+> +		{0x3d8c, 0x73},
+> +		{0x3d8d, 0xde},
+> +		{0x4001, 0xe0},
+> +		{0x4003, 0x40},
+> +		{0x4008, 0x00},
+> +		{0x4009, 0x05},
+> +		{0x400a, 0x00},
+> +		{0x400b, 0x84},
+> +		{0x400f, 0x80},
+> +		{0x4010, 0xf0},
+> +		{0x4011, 0xff},
+> +		{0x4012, 0x02},
+> +		{0x4013, 0x01},
+> +		{0x4014, 0x01},
+> +		{0x4015, 0x01},
+> +		{0x4042, 0x00},
+> +		{0x4043, 0x80},
+> +		{0x4044, 0x00},
+> +		{0x4045, 0x80},
+> +		{0x4046, 0x00},
+> +		{0x4047, 0x80},
+> +		{0x4048, 0x00},
+> +		{0x4049, 0x80},
+> +		{0x4041, 0x03},
+> +		{0x404c, 0x20},
+> +		{0x404d, 0x00},
+> +		{0x404e, 0x20},
+> +		{0x4203, 0x80},
+> +		{0x4307, 0x30},
+> +		{0x4317, 0x00},
+> +		{0x4502, 0x50},
+> +		{0x4503, 0x08},
+> +		{0x4601, 0x80},
+> +		{0x4800, 0x44},
+> +		{0x4816, 0x53},
+> +		{0x481b, 0x50},
+> +		{0x481f, 0x27},
+> +		{0x4823, 0x3c},
+> +		{0x482b, 0x00},
+> +		{0x4831, 0x66},
+> +		{0x4837, 0x16},
+> +		{0x483c, 0x0f},
+> +		{0x484b, 0x05},
+> +		{0x5000, 0x77},
+> +		{0x5001, 0x0a},
+> +		{0x5003, 0xc8},
+> +		{0x5004, 0x04},
+> +		{0x5006, 0x00},
+> +		{0x5007, 0x00},
+> +		{0x502e, 0x03},
+> +		{0x5030, 0x41},
+> +		{0x5795, 0x00},
+> +		{0x5796, 0x10},
+> +		{0x5797, 0x10},
+> +		{0x5798, 0x73},
+> +		{0x5799, 0x73},
+> +		{0x579a, 0x00},
+> +		{0x579b, 0x28},
+> +		{0x579c, 0x00},
+> +		{0x579d, 0x16},
+> +		{0x579e, 0x06},
+> +		{0x579f, 0x20},
+> +		{0x57a0, 0x04},
+> +		{0x57a1, 0xa0},
+> +		{0x5780, 0x14},
+> +		{0x5781, 0x0f},
+> +		{0x5782, 0x44},
+> +		{0x5783, 0x02},
+> +		{0x5784, 0x01},
+> +		{0x5785, 0x01},
+> +		{0x5786, 0x00},
+> +		{0x5787, 0x04},
+> +		{0x5788, 0x02},
+> +		{0x5789, 0x0f},
+> +		{0x578a, 0xfd},
+> +		{0x578b, 0xf5},
+> +		{0x578c, 0xf5},
+> +		{0x578d, 0x03},
+> +		{0x578e, 0x08},
+> +		{0x578f, 0x0c},
+> +		{0x5790, 0x08},
+> +		{0x5791, 0x04},
+> +		{0x5792, 0x00},
+> +		{0x5793, 0x52},
+> +		{0x5794, 0xa3},
+> +		{0x59f8, 0x3d},
+> +		{0x5a08, 0x02},
+> +		{0x5b00, 0x02},
+> +		{0x5b01, 0x10},
+> +		{0x5b02, 0x03},
+> +		{0x5b03, 0xcf},
+> +		{0x5b05, 0x6c},
+> +		{0x5e00, 0x00},
+> +		{0x5e10, 0xfc}
+>   };
+>   
+> -static const struct ov8856_mode supported_modes[] = {
+> -	{
+> -		.width = 3280,
+> -		.height = 2464,
+> -		.hts = 1928,
+> -		.vts_def = 2488,
+> -		.vts_min = 2488,
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mode_3280x2464_regs),
+> -			.regs = mode_3280x2464_regs,
+> -		},
+> -		.link_freq_index = OV8856_LINK_FREQ_720MBPS,
+> -	},
+> -	{
+> -		.width = 3264,
+> -		.height = 2448,
+> -		.hts = 1932,
+> -		.vts_def = 2482,
+> -		.vts_min = 2482,
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mode_3264x2448_regs),
+> -			.regs = mode_3264x2448_regs,
+> -		},
+> -		.link_freq_index = OV8856_LINK_FREQ_720MBPS,
+> -	},
+> -	{
+> -		.width = 1640,
+> -		.height = 1232,
+> -		.hts = 3820,
+> -		.vts_def = 1256,
+> -		.vts_min = 1256,
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mode_1640x1232_regs),
+> -			.regs = mode_1640x1232_regs,
+> -		},
+> -		.link_freq_index = OV8856_LINK_FREQ_360MBPS,
+> -	},
+> -	{
+> -		.width = 1632,
+> -		.height = 1224,
+> -		.hts = 1932,
+> -		.vts_def = 2482,
+> -		.vts_min = 2482,
+> -		.reg_list = {
+> -			.num_of_regs = ARRAY_SIZE(mode_1632x1224_regs),
+> -			.regs = mode_1632x1224_regs,
+> -		},
+> -		.link_freq_index = OV8856_LINK_FREQ_360MBPS,
+> -	}
+> +static const char * const ov8856_test_pattern_menu[] = {
+> +	"Disabled",
+> +	"Standard Color Bar",
+> +	"Top-Bottom Darker Color Bar",
+> +	"Right-Left Darker Color Bar",
+> +	"Bottom-Top Darker Color Bar"
+>   };
+>   
+>   struct ov8856 {
+> @@ -1037,20 +1383,173 @@ struct ov8856 {
+>   
+>   	/* Streaming on/off */
+>   	bool streaming;
+> +
+> +	/* lanes index */
+> +	u8 nlanes;
+> +
+> +	const struct ov8856_lane_cfg *priv_lane;
+> +	u8 modes_size;
+> +};
+> +
+> +struct ov8856_lane_cfg {
+> +	const s64 link_freq_menu_items[2];
+> +	const struct ov8856_link_freq_config link_freq_configs[2];
+> +	const struct ov8856_mode supported_modes[4];
+> +};
+> +
+> +static const struct ov8856_lane_cfg lane_cfg_2 = {
+> +	{
+> +		720000000,
+> +		360000000,
+> +	},
+> +	{{
+> +		.reg_list = {
+> +			.num_of_regs =
+> +			ARRAY_SIZE(mipi_data_rate_lane_2.regs_0),
+> +			.regs = mipi_data_rate_lane_2.regs_0,
+> +		}
+> +	},
+> +	{
+> +		.reg_list = {
+> +			.num_of_regs =
+> +			ARRAY_SIZE(mipi_data_rate_lane_2.regs_1),
+> +			.regs = mipi_data_rate_lane_2.regs_1,
+> +		}
+> +	}},
+> +	{{
+> +		.width = 3280,
+> +		.height = 2464,
+> +		.hts = 1928,
+> +		.vts_def = 2488,
+> +		.vts_min = 2488,
+> +		.reg_list = {
+> +			.num_of_regs =
+> +			ARRAY_SIZE(lane_2_mode_3280x2464),
+> +			.regs = lane_2_mode_3280x2464,
+> +		},
+> +		.link_freq_index = 0,
+> +		.data_lanes = 2,
+> +	},
+> +	{
+> +		.width = 1640,
+> +		.height = 1232,
+> +		.hts = 3168,
+> +		.vts_def = 1514,
+> +		.vts_min = 1514,
+> +		.reg_list = {
+> +			.num_of_regs =
+> +			ARRAY_SIZE(lane_2_mode_1640x1232),
+> +			.regs = lane_2_mode_1640x1232,
+> +		},
+> +		.link_freq_index = 1,
+> +		.data_lanes = 2,
+> +	}}
+>   };
+>   
+> -static u64 to_pixel_rate(u32 f_index)
+> +static const struct ov8856_lane_cfg lane_cfg_4 = {
+> +		{
+> +			360000000,
+> +			180000000,
+> +		},
+> +		{{
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(mipi_data_rate_lane_4.regs_0),
+> +				.regs = mipi_data_rate_lane_4.regs_0,
+> +			}
+> +		},
+> +		{
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(mipi_data_rate_lane_4.regs_1),
+> +				.regs = mipi_data_rate_lane_4.regs_1,
+> +			}
+> +		}},
+> +		{{
+> +			.width = 3280,
+> +			.height = 2464,
+> +			.hts = 1928,
+> +			.vts_def = 2488,
+> +			.vts_min = 2488,
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(lane_4_mode_3280x2464),
+> +				.regs = lane_4_mode_3280x2464,
+> +			},
+> +			.link_freq_index = 0,
+> +			.data_lanes = 4,
+> +		},
+> +		{
+> +			.width = 1640,
+> +			.height = 1232,
+> +			.hts = 3820,
+> +			.vts_def = 1256,
+> +			.vts_min = 1256,
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(lane_4_mode_1640x1232),
+> +				.regs = lane_4_mode_1640x1232,
+> +			},
+> +			.link_freq_index = 1,
+> +			.data_lanes = 4,
+> +		},
+> +		{
+> +			.width = 3264,
+> +			.height = 2448,
+> +			.hts = 1932,
+> +			.vts_def = 2482,
+> +			.vts_min = 2482,
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(lane_4_mode_3264x2448),
+> +				.regs = lane_4_mode_3264x2448,
+> +			},
+> +			.link_freq_index = 0,
+> +			.data_lanes = 4,
+> +		},
+> +		{
+> +			.width = 1632,
+> +			.height = 1224,
+> +			.hts = 1932,
+> +			.vts_def = 2482,
+> +			.vts_min = 2482,
+> +			.reg_list = {
+> +				.num_of_regs =
+> +				 ARRAY_SIZE(lane_4_mode_1632x1224),
+> +				.regs = lane_4_mode_1632x1224,
+> +			},
+> +			.link_freq_index = 1,
+> +			.data_lanes = 4,
+> +		}}
+> +};
+> +
+> +static unsigned int ov8856_modes_num(const struct ov8856 *ov8856)
+>   {
+> -	u64 pixel_rate = link_freq_menu_items[f_index] * 2 * OV8856_DATA_LANES;
+> +	unsigned int i, count = 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ov8856->priv_lane->supported_modes); i++) {
+> +		if (ov8856->priv_lane->supported_modes[i].width == 0)
+> +			break;
+> +		count++;
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static u64 to_rate(const s64 *link_freq_menu_items,
+> +		   u32 f_index, u8 nlanes)
+> +{
+> +	u64 pixel_rate = link_freq_menu_items[f_index] * 2 * nlanes;
+>   
+>   	do_div(pixel_rate, OV8856_RGB_DEPTH);
+>   
+>   	return pixel_rate;
+>   }
+>   
+> -static u64 to_pixels_per_line(u32 hts, u32 f_index)
+> +static u64 to_pixels_per_line(const s64 *link_freq_menu_items, u32 hts,
+> +			      u32 f_index, u8 nlanes)
+>   {
+> -	u64 ppl = hts * to_pixel_rate(f_index);
+> +	u64 ppl = hts * to_rate(link_freq_menu_items, f_index, nlanes);
+>   
+>   	do_div(ppl, OV8856_SCLK);
+>   
+> @@ -1229,23 +1728,32 @@ static int ov8856_init_controls(struct ov8856 *ov8856)
+>   	ctrl_hdlr->lock = &ov8856->mutex;
+>   	ov8856->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr, &ov8856_ctrl_ops,
+>   					   V4L2_CID_LINK_FREQ,
+> -					   ARRAY_SIZE(link_freq_menu_items) - 1,
+> -					   0, link_freq_menu_items);
+> +					   ARRAY_SIZE
+> +					   (ov8856->priv_lane->link_freq_menu_items)
+> +					   - 1,
+> +					   0, ov8856->priv_lane->link_freq_menu_items);
+>   	if (ov8856->link_freq)
+>   		ov8856->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+>   
+>   	ov8856->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &ov8856_ctrl_ops,
+>   				       V4L2_CID_PIXEL_RATE, 0,
+> -				       to_pixel_rate(OV8856_LINK_FREQ_720MBPS),
+> -				       1,
+> -				       to_pixel_rate(OV8856_LINK_FREQ_720MBPS));
+> +				       to_rate(ov8856->priv_lane->link_freq_menu_items,
+> +					       0,
+> +					       ov8856->cur_mode->data_lanes), 1,
+> +				       to_rate(ov8856->priv_lane->link_freq_menu_items,
+> +					       0,
+> +					       ov8856->cur_mode->data_lanes));
+>   	ov8856->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &ov8856_ctrl_ops,
+>   			  V4L2_CID_VBLANK,
+>   			  ov8856->cur_mode->vts_min - ov8856->cur_mode->height,
+>   			  OV8856_VTS_MAX - ov8856->cur_mode->height, 1,
+> -			  ov8856->cur_mode->vts_def - ov8856->cur_mode->height);
+> -	h_blank = to_pixels_per_line(ov8856->cur_mode->hts,
+> -		  ov8856->cur_mode->link_freq_index) - ov8856->cur_mode->width;
+> +			  ov8856->cur_mode->vts_def -
+> +			  ov8856->cur_mode->height);
+> +	h_blank = to_pixels_per_line(ov8856->priv_lane->link_freq_menu_items,
+> +				     ov8856->cur_mode->hts,
+> +				     ov8856->cur_mode->link_freq_index,
+> +				     ov8856->cur_mode->data_lanes) -
+> +				     ov8856->cur_mode->width;
+>   	ov8856->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &ov8856_ctrl_ops,
+>   					   V4L2_CID_HBLANK, h_blank, h_blank, 1,
+>   					   h_blank);
+> @@ -1292,7 +1800,8 @@ static int ov8856_start_streaming(struct ov8856 *ov8856)
+>   	int link_freq_index, ret;
+>   
+>   	link_freq_index = ov8856->cur_mode->link_freq_index;
+> -	reg_list = &link_freq_configs[link_freq_index].reg_list;
+> +	reg_list = &ov8856->priv_lane->link_freq_configs[link_freq_index].reg_list;
+> +
+>   	ret = ov8856_write_reg_list(ov8856, reg_list);
+>   	if (ret) {
+>   		dev_err(&client->dev, "failed to set plls");
+> @@ -1462,9 +1971,9 @@ static int ov8856_set_format(struct v4l2_subdev *sd,
+>   	const struct ov8856_mode *mode;
+>   	s32 vblank_def, h_blank;
+>   
+> -	mode = v4l2_find_nearest_size(supported_modes,
+> -				      ARRAY_SIZE(supported_modes), width,
+> -				      height, fmt->format.width,
+> +	mode = v4l2_find_nearest_size(ov8856->priv_lane->supported_modes,
+> +				      ov8856->modes_size,
+> +				      width, height, fmt->format.width,
+>   				      fmt->format.height);
+>   
+>   	mutex_lock(&ov8856->mutex);
+> @@ -1475,7 +1984,9 @@ static int ov8856_set_format(struct v4l2_subdev *sd,
+>   		ov8856->cur_mode = mode;
+>   		__v4l2_ctrl_s_ctrl(ov8856->link_freq, mode->link_freq_index);
+>   		__v4l2_ctrl_s_ctrl_int64(ov8856->pixel_rate,
+> -					 to_pixel_rate(mode->link_freq_index));
+> +					 to_rate(ov8856->priv_lane->link_freq_menu_items,
+> +						 mode->link_freq_index,
+> +						 ov8856->cur_mode->data_lanes));
+>   
+>   		/* Update limits and set FPS to default */
+>   		vblank_def = mode->vts_def - mode->height;
+> @@ -1484,8 +1995,11 @@ static int ov8856_set_format(struct v4l2_subdev *sd,
+>   					 OV8856_VTS_MAX - mode->height, 1,
+>   					 vblank_def);
+>   		__v4l2_ctrl_s_ctrl(ov8856->vblank, vblank_def);
+> -		h_blank = to_pixels_per_line(mode->hts, mode->link_freq_index) -
+> -			  mode->width;
+> +		h_blank = to_pixels_per_line(ov8856->priv_lane->link_freq_menu_items,
+> +					     mode->hts,
+> +					     mode->link_freq_index,
+> +					     ov8856->cur_mode->data_lanes)
+> +					     - mode->width;
+>   		__v4l2_ctrl_modify_range(ov8856->hblank, h_blank, h_blank, 1,
+>   					 h_blank);
+>   	}
+> @@ -1530,15 +2044,17 @@ static int ov8856_enum_frame_size(struct v4l2_subdev *sd,
+>   				  struct v4l2_subdev_pad_config *cfg,
+>   				  struct v4l2_subdev_frame_size_enum *fse)
+>   {
+> -	if (fse->index >= ARRAY_SIZE(supported_modes))
+> +	struct ov8856 *ov8856 = to_ov8856(sd);
+> +
+> +	if (fse->index >= ov8856->modes_size)
+>   		return -EINVAL;
+>   
+>   	if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
+>   		return -EINVAL;
+>   
+> -	fse->min_width = supported_modes[fse->index].width;
+> +	fse->min_width = ov8856->priv_lane->supported_modes[fse->index].width;
+>   	fse->max_width = fse->min_width;
+> -	fse->min_height = supported_modes[fse->index].height;
+> +	fse->min_height = ov8856->priv_lane->supported_modes[fse->index].height;
+>   	fse->max_height = fse->min_height;
+>   
+>   	return 0;
+> @@ -1549,7 +2065,7 @@ static int ov8856_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+>   	struct ov8856 *ov8856 = to_ov8856(sd);
+>   
+>   	mutex_lock(&ov8856->mutex);
+> -	ov8856_update_pad_format(&supported_modes[0],
+> +	ov8856_update_pad_format(&ov8856->priv_lane->supported_modes[0],
+>   				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
+>   	mutex_unlock(&ov8856->mutex);
+>   
+> @@ -1696,29 +2212,40 @@ static int ov8856_get_hwcfg(struct ov8856 *ov8856, struct device *dev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV8856_DATA_LANES) {
+> +	/* Get number of data lanes */
+> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 2 &&
+> +	    bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
+>   		dev_err(dev, "number of CSI2 data lanes %d is not supported",
+>   			bus_cfg.bus.mipi_csi2.num_data_lanes);
+>   		ret = -EINVAL;
+>   		goto check_hwcfg_error;
+>   	}
+>   
+> +	dev_dbg(dev, "Using %u data lanes\n", ov8856->cur_mode->data_lanes);
+> +
+> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes == 2)
+> +		ov8856->priv_lane = &lane_cfg_2;
+> +	else
+> +		ov8856->priv_lane = &lane_cfg_4;
+> +
+> +	ov8856->modes_size = ov8856_modes_num(ov8856);
+> +
+>   	if (!bus_cfg.nr_of_link_frequencies) {
+>   		dev_err(dev, "no link frequencies defined");
+>   		ret = -EINVAL;
+>   		goto check_hwcfg_error;
+>   	}
+>   
+> -	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(ov8856->priv_lane->link_freq_menu_items); i++) {
+>   		for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {
+> -			if (link_freq_menu_items[i] ==
+> -				bus_cfg.link_frequencies[j])
+> +			if (ov8856->priv_lane->link_freq_menu_items[i] ==
+> +			    bus_cfg.link_frequencies[j])
+>   				break;
+>   		}
+>   
+>   		if (j == bus_cfg.nr_of_link_frequencies) {
+>   			dev_err(dev, "no link frequency %lld supported",
+> -				link_freq_menu_items[i]);
+> +				ov8856->priv_lane->link_freq_menu_items[i]);
+>   			ret = -EINVAL;
+>   			goto check_hwcfg_error;
+>   		}
+> @@ -1777,7 +2304,7 @@ static int ov8856_probe(struct i2c_client *client)
+>   	}
+>   
+>   	mutex_init(&ov8856->mutex);
+> -	ov8856->cur_mode = &supported_modes[0];
+> +	ov8856->cur_mode = &ov8856->priv_lane->supported_modes[0];
+>   	ret = ov8856_init_controls(ov8856);
+>   	if (ret) {
+>   		dev_err(&client->dev, "failed to init controls: %d", ret);
+> 
