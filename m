@@ -2,168 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3207BC43462
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 15:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFCDC43460
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 063F761380
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 15:35:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62A76613CB
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243836AbhDFPfJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Apr 2021 11:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S1346174AbhDFQEr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Apr 2021 12:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345791AbhDFPdT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 11:33:19 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC2BC0613DF;
-        Tue,  6 Apr 2021 08:32:56 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a1so17006815ljp.2;
-        Tue, 06 Apr 2021 08:32:56 -0700 (PDT)
+        with ESMTP id S239349AbhDFQEr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 12:04:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F6AC06174A
+        for <linux-media@vger.kernel.org>; Tue,  6 Apr 2021 09:04:39 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id dd20so10017155edb.12
+        for <linux-media@vger.kernel.org>; Tue, 06 Apr 2021 09:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ezZNk4sv/EZWbQ+FrDDVFe1cGPk81iOpvFjH5bRIvIE=;
-        b=Q/fJsnOqdM/Luj+magEcEmdw1nOnRxNLtMR2wRRPmtFZmCufD35Qwr7VPofLH5GLNl
-         SinibKnUJJQ5SBShGafaQx1pejB1wTZYNnQiN09XeAbGfBR/rzRHcXW3koJip580045T
-         kYD5LjfwG687Hy1bPxNQ/R5QxGjBcfKmrM3Lvp8uI77ZPoHZYNHp3U1o6Vw8qbnY9bwf
-         c4tqwUfvaXwLQYC7x1+XdG6JVhpcsE5YAQw78xx8lYE9VyDU7dJgXYf+j708F42/hBcG
-         05dGvqvhTBPhdhF1VH3TWeFPNC1WsaqqK9ZUCeNpp4B40UQ33w0Ms6QMwlunMXH6Au8a
-         9d3Q==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y9UWeHSBoySzTHkOgKQzF5RiGebYchxO96+3Wf+rxXc=;
+        b=Xa3fFCTQCoUijqu6po9q3HjZRjXP27V6wL5ACYsFzPZbcSqjqqMU1RIM6ZZ7fDYhUg
+         inNmTU5i2JKGLgCVpqGzf5vmZ/SiLojWM338IOj+7vCfJ+o2ibNViO+2xg+rTQaCXNW6
+         n7jmS0tPAe4YlLmXaDge4BF8Tkua+GP0ZnJGA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ezZNk4sv/EZWbQ+FrDDVFe1cGPk81iOpvFjH5bRIvIE=;
-        b=Bb7zUQKSJinDwQLVYAXMfmmzsPpb3DDbv1dK2htY4j7y8rwM/QV36Io6ppFwLeKVRb
-         ffCjKQqIfU/CpcBo7fMJXLEs9CR/9p391+f7VA2vtD5PK29QPONLOqJb+qqDcebWAl/y
-         pHWzLBg9hQBP3E+K9DqYDTfuC/Gao8nF9rrrj2tVG5o0OvNChX9kPlVajg2XH3ECsY1i
-         IEoteh9+rDLo4HQMlRQVeTeJdygxs2WF5IANfzthnltzFnVlXIOBNXhaKrwLetEosulW
-         b64CkQi47SAq5U5hX5g8dXgiiGM95ACnyoDcjgqycqX/rhBCoU4W3AqcEu4oPDd/O1L5
-         I7Tg==
-X-Gm-Message-State: AOAM5333YFEcBHJ4iTT085FYZks16pebZpOQ/lRbi50GMNCn6LsOk6bK
-        kBQdpubKVjwy8qgwVIn54gw=
-X-Google-Smtp-Source: ABdhPJyFQnVLW01zqbivc9dqKMhXgYuxnkRmqSE5gT0eKQlOu9jOiBT2GBXa6Cu06NOk/lEW8XAefQ==
-X-Received: by 2002:a2e:9143:: with SMTP id q3mr19804523ljg.378.1617723175021;
-        Tue, 06 Apr 2021 08:32:55 -0700 (PDT)
-Received: from [10.0.0.42] (91-157-86-200.elisa-laajakaista.fi. [91.157.86.200])
-        by smtp.gmail.com with ESMTPSA id f11sm2251868lfm.230.2021.04.06.08.32.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 08:32:54 -0700 (PDT)
-Subject: Re: [PATCH 11/16] dmaengine: ti: k3-psil-j721e: Add entry for CSI2RX
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Benoit Parrot <bparrot@ti.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Peter Chen <peter.chen@nxp.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        dmaengine@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-References: <20210330173348.30135-1-p.yadav@ti.com>
- <20210330173348.30135-12-p.yadav@ti.com>
- <78a5983c-04c8-4a4c-04fe-bb1f31e87375@gmail.com>
- <20210406150942.4kyjh2ehsvklupjr@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Message-ID: <54b0846e-d633-2a03-2c64-f1f0a85c2410@gmail.com>
-Date:   Tue, 6 Apr 2021 18:33:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        bh=y9UWeHSBoySzTHkOgKQzF5RiGebYchxO96+3Wf+rxXc=;
+        b=jGWGePK66s3mkVYdFT/4IcwPEL/73hgOmzVLni5dTfTFXsOUXy4LnyZD5ZWtOek2Ai
+         gyjORnK030HYEiZfdWDiE5DHq/ZignxNFs6zgTzP/4KbXw3KepYYIVl2KEFIZeO9jQk8
+         jutQCEaERO09m77KD6YqThqmZhovMKox33sCeEgyiq6LQl2VFsre/siDBSWMO3R7cnUq
+         Mipj6fHPERl8DpndWzp8LahxR3KyREh3I7O3CkjH8psWajG+zMcydI/WX0Q/cslMID7h
+         YTqvvZ6Rr/hOhTOUIt6rVOfAtAy9RZdipiAS397kprVh91Yx8c24rHbvZezZ961Ayw8x
+         wYrA==
+X-Gm-Message-State: AOAM533Izi2RywiPK93EcoxC9uSyX8ydvY8Bk+Yw9yAVpw9+zPBov9N8
+        xMdU95TIKF1gaQNTyi/UUQWt5w==
+X-Google-Smtp-Source: ABdhPJyP6fqRB9nYYchphWa0F5/357LF8RkkaedmGdLVe2OQDDAEKML5Y1zJxywfpsUsfk80MJzHpA==
+X-Received: by 2002:a05:6402:c:: with SMTP id d12mr38059165edu.100.1617725078058;
+        Tue, 06 Apr 2021 09:04:38 -0700 (PDT)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id hz24sm6411140ejc.119.2021.04.06.09.04.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 09:04:37 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        iommu@lists.linux-foundation.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH RESEND] lib/scatterlist: Fix NULL pointer deference
+Date:   Tue,  6 Apr 2021 18:04:35 +0200
+Message-Id: <20210406160435.206115-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
 MIME-Version: 1.0
-In-Reply-To: <20210406150942.4kyjh2ehsvklupjr@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+When sg_alloc_table_from_pages is called with n_pages = 0, we write in a
+non-allocated page. Fix it by checking early the error condition.
 
+[    7.666801] BUG: kernel NULL pointer dereference, address: 0000000000000010
+[    7.667487] #PF: supervisor read access in kernel mode
+[    7.667970] #PF: error_code(0x0000) - not-present page
+[    7.668448] PGD 0 P4D 0
+[    7.668690] Oops: 0000 [#1] SMP NOPTI
+[    7.669037] CPU: 0 PID: 184 Comm: modprobe Not tainted 5.11.0+ #2
+[    7.669606] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+[    7.670378] RIP: 0010:__sg_alloc_table_from_pages+0x2c5/0x4a0
+[    7.670924] Code: c9 01 48 c7 40 08 00 00 00 00 48 89 08 8b 47 0c 41 8d 44 00 ff 89 47 0c 48 81 fa 00 f0 ff ff 0f 87 d4 01 00 00 49 8b 16 89 d8 <4a> 8b 74 fd 00 4c 89 d1 44 29 f8 c1 e0 0c 44 29 d8 4c 39 d0 48 0f
+[    7.672643] RSP: 0018:ffffba1e8028fb30 EFLAGS: 00010287
+[    7.673133] RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000002
+[    7.673791] RDX: 0000000000000002 RSI: ffffffffada6d0ba RDI: ffff9afe01fff820
+[    7.674448] RBP: 0000000000000010 R08: 0000000000000001 R09: 0000000000000001
+[    7.675100] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+[    7.675754] R13: 00000000fffff000 R14: ffff9afe01fff800 R15: 0000000000000000
+[    7.676409] FS:  00007fb0f448f540(0000) GS:ffff9afe07a00000(0000) knlGS:0000000000000000
+[    7.677151] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.677681] CR2: 0000000000000010 CR3: 0000000002184001 CR4: 0000000000370ef0
+[    7.678342] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    7.679019] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    7.680349] Call Trace:
+[    7.680605]  ? device_add+0x146/0x810
+[    7.681021]  sg_alloc_table_from_pages+0x11/0x30
+[    7.681511]  vb2_dma_sg_alloc+0x162/0x280 [videobuf2_dma_sg]
 
-On 4/6/21 6:09 PM, Pratyush Yadav wrote:
-> On 04/04/21 04:24PM, Péter Ujfalusi wrote:
->> Hi Pratyush,
->>
->> On 3/30/21 8:33 PM, Pratyush Yadav wrote:
->>> The CSI2RX subsystem uses PSI-L DMA to transfer frames to memory. It can
->>> have up to 32 threads but the current driver only supports using one. So
->>> add an entry for that one thread.
->>
->> If you are absolutely sure that the other threads are not going to be
->> used, then:
-> 
-> The opposite in fact. I do expect other threads to be used in the 
-> future. But the current driver can only use one so I figured it is 
-> better to add just the thread that is currently needed and then I can 
-> always add the rest later.
-> 
-> Why does this have to be a one-and-done deal? Is there anything wrong 
-> with adding the other threads when the driver can actually use them?
+Cc: stable@vger.kernel.org
+Fixes: efc42bc98058 ("scatterlist: add sg_alloc_table_from_pages function")
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ lib/scatterlist.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-You can skip CCing DMAengine (and me ;) ). Less subsystems is the better
-when sending patches...
-
-> 
->> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
->>
->> but I would consider adding the other threads if there is a chance that
->> the cs2rx will need to support it in the future.
->>
->>> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
->>> ---
->>>  drivers/dma/ti/k3-psil-j721e.c | 10 ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/dma/ti/k3-psil-j721e.c b/drivers/dma/ti/k3-psil-j721e.c
->>> index 7580870ed746..19ffa31e6dc6 100644
->>> --- a/drivers/dma/ti/k3-psil-j721e.c
->>> +++ b/drivers/dma/ti/k3-psil-j721e.c
->>> @@ -58,6 +58,14 @@
->>>  		},					\
->>>  	}
->>>  
->>> +#define PSIL_CSI2RX(x)					\
->>> +	{						\
->>> +		.thread_id = x,				\
->>> +		.ep_config = {				\
->>> +			.ep_type = PSIL_EP_NATIVE,	\
->>> +		},					\
->>> +	}
->>> +
->>>  /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
->>>  static struct psil_ep j721e_src_ep_map[] = {
->>>  	/* SA2UL */
->>> @@ -138,6 +146,8 @@ static struct psil_ep j721e_src_ep_map[] = {
->>>  	PSIL_PDMA_XY_PKT(0x4707),
->>>  	PSIL_PDMA_XY_PKT(0x4708),
->>>  	PSIL_PDMA_XY_PKT(0x4709),
->>> +	/* CSI2RX */
->>> +	PSIL_CSI2RX(0x4940),
->>>  	/* CPSW9 */
->>>  	PSIL_ETHERNET(0x4a00),
->>>  	/* CPSW0 */
->>>
->>
->> -- 
->> Péter
-> 
-
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index a59778946404..1e83b6a3d930 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -435,6 +435,9 @@ struct scatterlist *__sg_alloc_table_from_pages(struct sg_table *sgt,
+ 	unsigned int added_nents = 0;
+ 	struct scatterlist *s = prv;
+ 
++	if (n_pages == 0)
++		return ERR_PTR(-EINVAL);
++
+ 	/*
+ 	 * The algorithm below requires max_segment to be aligned to PAGE_SIZE
+ 	 * otherwise it can overshoot.
 -- 
-Péter
+2.31.0.208.g409f899ff0-goog
+
