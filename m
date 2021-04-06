@@ -2,81 +2,169 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_05,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E14C433ED
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1854C43461
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:56:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2727613CC
-	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:23:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 991AF613AD
+	for <linux-media@archiver.kernel.org>; Tue,  6 Apr 2021 16:56:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346371AbhDFQXb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Apr 2021 12:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbhDFQXb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 12:23:31 -0400
-X-Greylist: delayed 1134 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Apr 2021 09:23:23 PDT
-Received: from scc-mailout-kit-02.scc.kit.edu (scc-mailout-kit-02.scc.kit.edu [IPv6:2a00:1398:9:f712::810d:e752])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D71C06174A
-        for <linux-media@vger.kernel.org>; Tue,  6 Apr 2021 09:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kit.edu;
-        s=20190212; h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:
-        Message-ID:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=fbjM4hf2QketAOkBXeTui9DgzPvGyS3aT2uK+YRA/c8=; b=5p4yrSdcGBD1GRmrEw3/uJVV71
-        UvcfmBJjyqWCZEGtmJqONReYvSa7SjRPjJvMxOMLNzhY1U8QjBNbMGdCe4c3EYl6/Frffqj5jxWem
-        nr7HR5koubwROsnhur9TCYEEab81AyVEVBl4+nDZvMLHhxzKT7BXDmS5jjiVrvwBkOyI=;
-Received: from kit-msx-46.kit.edu ([2a00:1398:9:f612::146])
-        by scc-mailout-kit-02.scc.kit.edu with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (envelope-from <daniel.bacher@kit.edu>)
-        id 1lToBl-0004Tc-JY
-        for linux-media@vger.kernel.org; Tue, 06 Apr 2021 18:04:27 +0200
-Received: from kit-msx-51.kit.edu (2a00:1398:9:f612::151) by
- kit-msx-46.kit.edu (2a00:1398:9:f612::146) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 6 Apr 2021 18:04:25 +0200
-Received: from kit-msx-51.kit.edu ([fe80::ec99:94a8:b93c:7ef4]) by
- kit-msx-51.kit.edu ([fe80::ec99:94a8:b93c:7ef4%5]) with mapi id
- 15.02.0792.010; Tue, 6 Apr 2021 18:04:25 +0200
-From:   "Bacher, Daniel (IAI)" <daniel.bacher@kit.edu>
-To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Subject: Support for EM28281
-Thread-Topic: Support for EM28281
-Thread-Index: AQHXKv6D+L7FBqo0mEOkjAFL+hhOjw==
-Date:   Tue, 6 Apr 2021 16:04:25 +0000
-Message-ID: <AA59BE1B-6ED6-4F36-ADBD-9E40E8BB874F@kit.edu>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.60.0.2.21)
-x-originating-ip: [2a00:1398:9:fb01:2890:e31e:3cc6:8ade]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2E23091BF435E343A81D94DCCE6BF3FA@kit.edu>
-Content-Transfer-Encoding: quoted-printable
+        id S1346675AbhDFQ4c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Apr 2021 12:56:32 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:46230 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232598AbhDFQ40 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Apr 2021 12:56:26 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 136Gtw5h047850;
+        Tue, 6 Apr 2021 11:55:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1617728158;
+        bh=+9XjRgYfCOrNjdj1kkEqP/Q3v02FwLNYKDPldfbcuiI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=tjAN7lxASQ7GQgzBSfvPUAJVbed53QtBUL9oOxt1+Px6vCgCJYXJKr17FC9lKR7rS
+         oJwnUGUbf3qZ1to0kpE4KZPESWsmElTk4g34/qqHqGNT6PTMWOW6qTbBOTu8lbineW
+         KkEhEZ7bcZx3Sq/y1NYfjS6Iepw1ZCwLjlrx9lrU=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 136Gtwrb021543
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Apr 2021 11:55:58 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 6 Apr
+ 2021 11:55:58 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Tue, 6 Apr 2021 11:55:58 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 136Gtvuo052410;
+        Tue, 6 Apr 2021 11:55:57 -0500
+Date:   Tue, 6 Apr 2021 22:25:56 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@gmail.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Benoit Parrot <bparrot@ti.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Peter Chen <peter.chen@nxp.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <dmaengine@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH 11/16] dmaengine: ti: k3-psil-j721e: Add entry for CSI2RX
+Message-ID: <20210406165554.5mhn4u5enbf2tvaz@ti.com>
+References: <20210330173348.30135-1-p.yadav@ti.com>
+ <20210330173348.30135-12-p.yadav@ti.com>
+ <78a5983c-04c8-4a4c-04fe-bb1f31e87375@gmail.com>
+ <20210406150942.4kyjh2ehsvklupjr@ti.com>
+ <54b0846e-d633-2a03-2c64-f1f0a85c2410@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <54b0846e-d633-2a03-2c64-f1f0a85c2410@gmail.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-I have a Startech framegrabber (SVID2USB232) which has the chip EM28281.=20
-I would like to adapt the module EM28xx so that this chip can be used with =
-Linux. However, I do not know how to proceed.
+On 06/04/21 06:33PM, Péter Ujfalusi wrote:
+> 
+> 
+> On 4/6/21 6:09 PM, Pratyush Yadav wrote:
+> > On 04/04/21 04:24PM, Péter Ujfalusi wrote:
+> >> Hi Pratyush,
+> >>
+> >> On 3/30/21 8:33 PM, Pratyush Yadav wrote:
+> >>> The CSI2RX subsystem uses PSI-L DMA to transfer frames to memory. It can
+> >>> have up to 32 threads but the current driver only supports using one. So
+> >>> add an entry for that one thread.
+> >>
+> >> If you are absolutely sure that the other threads are not going to be
+> >> used, then:
+> > 
+> > The opposite in fact. I do expect other threads to be used in the 
+> > future. But the current driver can only use one so I figured it is 
+> > better to add just the thread that is currently needed and then I can 
+> > always add the rest later.
+> > 
+> > Why does this have to be a one-and-done deal? Is there anything wrong 
+> > with adding the other threads when the driver can actually use them?
+> 
+> You can skip CCing DMAengine (and me ;) ). Less subsystems is the better
+> when sending patches...
 
-What I have found out so far:
-Type: EM28281
-Data sheet: http://standwell.cn/Uploadfiles/20151022154755309.pdf
-USB ID: eb1a:8286
+I'm a bit confused here. If you are no longer interested in maintaining 
+the TI DMA drivers then that's fine, I can skip CCing you. But the patch 
+is still relevant to the dmaengine list so why should I skip CCing it? 
+And if I don't CC the dmaengine list then on which list would I get 
+comments/reviews for the patch?
 
-Can someone help me with this?
+> 
+> > 
+> >> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+> >>
+> >> but I would consider adding the other threads if there is a chance that
+> >> the cs2rx will need to support it in the future.
+> >>
+> >>> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> >>> ---
+> >>>  drivers/dma/ti/k3-psil-j721e.c | 10 ++++++++++
+> >>>  1 file changed, 10 insertions(+)
+> >>>
+> >>> diff --git a/drivers/dma/ti/k3-psil-j721e.c b/drivers/dma/ti/k3-psil-j721e.c
+> >>> index 7580870ed746..19ffa31e6dc6 100644
+> >>> --- a/drivers/dma/ti/k3-psil-j721e.c
+> >>> +++ b/drivers/dma/ti/k3-psil-j721e.c
+> >>> @@ -58,6 +58,14 @@
+> >>>  		},					\
+> >>>  	}
+> >>>  
+> >>> +#define PSIL_CSI2RX(x)					\
+> >>> +	{						\
+> >>> +		.thread_id = x,				\
+> >>> +		.ep_config = {				\
+> >>> +			.ep_type = PSIL_EP_NATIVE,	\
+> >>> +		},					\
+> >>> +	}
+> >>> +
+> >>>  /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
+> >>>  static struct psil_ep j721e_src_ep_map[] = {
+> >>>  	/* SA2UL */
+> >>> @@ -138,6 +146,8 @@ static struct psil_ep j721e_src_ep_map[] = {
+> >>>  	PSIL_PDMA_XY_PKT(0x4707),
+> >>>  	PSIL_PDMA_XY_PKT(0x4708),
+> >>>  	PSIL_PDMA_XY_PKT(0x4709),
+> >>> +	/* CSI2RX */
+> >>> +	PSIL_CSI2RX(0x4940),
+> >>>  	/* CPSW9 */
+> >>>  	PSIL_ETHERNET(0x4a00),
+> >>>  	/* CPSW0 */
+> >>>
+> >>
+> >> -- 
+> >> Péter
+> > 
+> 
+> -- 
+> Péter
 
-Greetings
-
-Daniel Bacher=
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
