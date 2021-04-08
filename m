@@ -2,157 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5AFEC433ED
-	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 13:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A131C433B4
+	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:09:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D268610FA
-	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 13:57:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A04F6113D
+	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:09:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbhDHN5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Apr 2021 09:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S232172AbhDHOJq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Apr 2021 10:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbhDHN5R (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Apr 2021 09:57:17 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBC7C061760;
-        Thu,  8 Apr 2021 06:57:06 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j5so1282682wrn.4;
-        Thu, 08 Apr 2021 06:57:06 -0700 (PDT)
+        with ESMTP id S232058AbhDHOIF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Apr 2021 10:08:05 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B60C061765;
+        Thu,  8 Apr 2021 07:07:49 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id h3so905203qvr.10;
+        Thu, 08 Apr 2021 07:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6miOsCN9DRTNbPpezNAybueDA0Yo59tqLPZxCeBa914=;
-        b=JSudo/YnP226VSlYgSaJSXG88wye+oZiMgoE00/4qim7e+dlKR7K6V6ix7W+6+n6Hp
-         ed3JEtXifz3iX3nDYS1Iq34YpurpO0LSYa7YuY1NVx8Fsf+YzKROjh2hXQNxyqjH0T1N
-         CPSlpcJlWh2UMoh3pjJdyey/23FU9nT/3oN9f36SLTPWzlsvp5onThBBCyXavJvm0yZ8
-         sOX+ZmH6wYeVUHr/a0sYO+OiS+ilNogSb2zStrHQxV/4DLlIF8zLWZrVNmHb+XbUgzku
-         GiBYdi7Ye3M6uDr/xfTk1Ir46f5uEcygEAHKdX0X9GUhq5XMtGvJMb1u5opLU+RtBizm
-         +GrA==
+         :content-disposition:in-reply-to:user-agent;
+        bh=6fSIQirtWShuMIqpJMly6hnk0nfAVM8QytarwMk1/LU=;
+        b=oHXWP2bGqx/WEx+RNKLuU6bEMQt589jw9z42sIvZwxkecxAYroGAJMwMfzU7F7U+J2
+         OuvQR0a5x0SfkcZBOqQoE03rwQK6v/OAFe7ckWiPCodFbKCPxEw9f6wpepmrCq8ehd/A
+         4rPN0M7qmkKQ2ZNjSclrlXWkNmXdhRPfdBe3wW4KGdiJGKugG4WWnbmO3Y2QmFEp4thI
+         1eHLH8vpeflGx3C3iNw4NBBgwL7yillA29nUnKxktcfXx799Kl5ExVkeEiMblWtucd2B
+         h8s7hJPzrmXutsRWj6SkNjafvQujSuKt61zZUE3fhx5R5YWAfC3c+DmilXoO78D0Slrl
+         Vk9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6miOsCN9DRTNbPpezNAybueDA0Yo59tqLPZxCeBa914=;
-        b=DL2Bw40Pwf10XLs4mxxziJpgoXjJoQM1AdEkEFPuQ3i+wA8KSCgMpNAWriaEJJelsn
-         JbM4jsw1Cg7H2MO3zS+8Vn563qgfLENyd12F7bd6ONwLJlCGdK+9qgLIC6omp6HLSbqw
-         nJiXRjmUO9C7ofMrvhZj16F2hdMAywIsGAqeiSzKkKxlYLijN8pR949CTDYFBLxSXNHr
-         hp1ZFp+jSztr1elB3EWaBQasBIZszRqIGRu4nliQeQFDmARFl0oiD854MYSYv7dlM+9h
-         /tESaCuUwIoc2TqmImaw3E4ib9Y4YtDO4ydK/zPQA7VKxdn/FqLJAVfZD+foKNhYnHr8
-         CKIQ==
-X-Gm-Message-State: AOAM532oDMy4X9Eo2CxpytwC4JlZgm3BFoVwdQRRBhXA2Ylwrv57eQv7
-        dacwxFss8W3x7h4XYjXy4ys=
-X-Google-Smtp-Source: ABdhPJxhaKRC1qDi9jJ08/j9F42mAUlrBUmL4jBRLa/LIuGqxEGrEWbA6s6xO9LKEurZxU2YK80quA==
-X-Received: by 2002:a5d:4683:: with SMTP id u3mr11585327wrq.358.1617890224964;
-        Thu, 08 Apr 2021 06:57:04 -0700 (PDT)
-Received: from arch-thunder.localdomain (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id 3sm10751500wma.45.2021.04.08.06.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 06:57:04 -0700 (PDT)
-Date:   Thu, 8 Apr 2021 14:57:02 +0100
-From:   Rui Miguel Silva <rmfrfs@gmail.com>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
-Cc:     kjlu@umn.edu, Steve Longerbeam <slongerbeam@gmail.com>,
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6fSIQirtWShuMIqpJMly6hnk0nfAVM8QytarwMk1/LU=;
+        b=QCqZ2FHRlnhCS/Fp2W/eeEusIA84quszu8zwwzcbFcQoPw0RfYM/8icNT1+iS94Y0W
+         wiCoiKXsDedev7tp1K9XsFaXnok4w0nltkgBH7LVHByXonU+CNPQ09/7lv77BFjz+ujn
+         Fq72jKygRCyUfLc+I75EVVj0r4Lq82Jh7pm7m2oSiUNJpdP9wYuduVPhpWLZtuE9VSfx
+         1AosU4qhseprxJPT6ubCUqyd5pKGS67+qYPlyaHiDYVhxo4lA0vjN8MqjUPqfzIJRpzd
+         fjlT5WR1IVMcXxoO3Fmqmyf4VIV8GPMTRFJ5/a2KIbfaksbvvq726SFTbwxb3GubNRy1
+         7geg==
+X-Gm-Message-State: AOAM531Imkl5aOAJfeE99v/Iyhmq5nb5YoDaLyIOWPpC/8y6gUhp1aHs
+        x5SCU/0aQYlAgxHaufGa//o=
+X-Google-Smtp-Source: ABdhPJz68eslT7UjXEATT3L19+JElDT/v5Keuk8rtceg9B2IqGxgBg3KFs5ciq+AkeTgrVZm0Z/URg==
+X-Received: by 2002:a0c:bd25:: with SMTP id m37mr5407569qvg.17.1617890868905;
+        Thu, 08 Apr 2021 07:07:48 -0700 (PDT)
+Received: from focaruja ([2001:1284:f013:b099:175e:8b29:c386:d20e])
+        by smtp.gmail.com with ESMTPSA id b9sm17761584qtx.38.2021.04.08.07.07.48
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 08 Apr 2021 07:07:48 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 11:07:46 -0300
+From:   Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: imx: imx7-mipi-csis: Fix runtime PM imbalance in
- mipi_csis_s_stream
-Message-ID: <20210408135702.f7ikjvwirvtzsarv@arch-thunder.localdomain>
-References: <20210408090827.32612-1-dinghao.liu@zju.edu.cn>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com
+Subject: [PATCH 2/2 v2] staging: media: hantro: Align line break to the open
+ parenthesis in file hantro_mpeg2.c
+Message-ID: <8209d15ab3a8391b74939cb942daffc556d72942.1617890467.git.alinesantanacordeiro@gmail.com>
+References: <cover.1617890467.git.alinesantanacordeiro@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210408090827.32612-1-dinghao.liu@zju.edu.cn>
+In-Reply-To: <cover.1617890467.git.alinesantanacordeiro@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Liu,
-Thanks for your patch.
+Aligns line break with the remaining function arguments
+to the open parenthesis. Issue found by checkpatch.
 
-On Thu, Apr 08, 2021 at 05:08:27PM +0800, Dinghao Liu wrote:
-> When v4l2_subdev_call() fails, a pairing PM usage counter
-> decrement is needed to keep the counter balanced. It's the
-> same for the following error paths in case 'enable' is on.
-> 
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-> ---
->  drivers/staging/media/imx/imx7-mipi-csis.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-> index a01a7364b4b9..2a3fff231a40 100644
-> --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> @@ -627,21 +627,26 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
->  			return ret;
->  		}
->  		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
-> -		if (ret < 0)
-> +		if (ret < 0) {
-> +			pm_runtime_put_noidle(&state->pdev->dev);
+Signed-off-by: Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>
+---
+ drivers/staging/media/hantro/hantro_mpeg2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think here we should go completely pm_runtime_put to call the
-mipi_csis_pm_suspend down the line, right?
+diff --git a/drivers/staging/media/hantro/hantro_mpeg2.c b/drivers/staging/media/hantro/hantro_mpeg2.c
+index 1d334e6..53a99a9 100644
+--- a/drivers/staging/media/hantro/hantro_mpeg2.c
++++ b/drivers/staging/media/hantro/hantro_mpeg2.c
+@@ -19,7 +19,7 @@ static const u8 zigzag[64] = {
+ };
+ 
+ void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
+-	const struct v4l2_ctrl_mpeg2_quantization *ctrl)
++				  const struct v4l2_ctrl_mpeg2_quantization *ctrl)
+ {
+ 	int i, n;
+ 
+-- 
+2.7.4
 
->  			return ret;
-> +		}
->  	}
->  
->  	mutex_lock(&state->lock);
->  	if (enable) {
->  		if (state->flags & ST_SUSPENDED) {
->  			ret = -EBUSY;
-> +			pm_runtime_put_noidle(&state->pdev->dev);
-
-since we are in ST_SUSPENDED state, for sure the pm counter was
-already 0.
-
->  			goto unlock;
->  		}
->  
->  		mipi_csis_start_stream(state);
->  		ret = v4l2_subdev_call(state->src_sd, video, s_stream, 1);
-> -		if (ret < 0)
-> +		if (ret < 0) {
-> +			pm_runtime_put_noidle(&state->pdev->dev);
-
-here also we need the pm_runtime_put, maybe just changing the unlock
-tag bellow from:
-    if (!enable)
-        pm_runtime_put(&state->pdev->dev);
-
-to 
-    if (!enable || (ret < 0))
-        pm_runtime_put(&state->pdev->dev);
-
-will not hurt the first case and will complete the suspend routine
-afterward in the second case.
-
-------
-Cheers,
-     Rui
->  			goto unlock;
-> +		}
->  
->  		mipi_csis_log_counters(state, true);
->  
-> -- 
-> 2.17.1
-> 
-> 
