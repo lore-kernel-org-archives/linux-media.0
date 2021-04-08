@@ -2,102 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4100C43460
-	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16620C433ED
+	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:13:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C94D661182
-	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0A5560FE6
+	for <linux-media@archiver.kernel.org>; Thu,  8 Apr 2021 14:13:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbhDHOJr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Apr 2021 10:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S231480AbhDHONa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Apr 2021 10:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbhDHOIF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Apr 2021 10:08:05 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C8BC061764;
-        Thu,  8 Apr 2021 07:07:46 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id o5so2326822qkb.0;
-        Thu, 08 Apr 2021 07:07:46 -0700 (PDT)
+        with ESMTP id S231370AbhDHON3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Apr 2021 10:13:29 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2C2C061760
+        for <linux-media@vger.kernel.org>; Thu,  8 Apr 2021 07:13:18 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id b4so4277279lfi.6
+        for <linux-media@vger.kernel.org>; Thu, 08 Apr 2021 07:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rBvCDlUD9+QrMvuUFtxmfpbAHHnvTaccTwMtx3DApDw=;
-        b=Oozl2fPn+qxC9SB8PVO+Mmcec6ecQ1nNUJL+42GibZJFjhqkkoVh16IIMtAKdo5NWB
-         nHJCyci2Sg8pq/uDnihvClvSIADUJd21eq0YcZX7m63GilZuaa0JlqzXTZdFSBwnl0Iy
-         1S/QxYArGZrXgaVSD+XGpekzl2n5+HO9/UKLhw8j71hoULuRDDzqR5sGSa/LrV8UDuJM
-         LGaUoFznTQjnMWtiNNwWxBUfu7mvH/5IZ4zn1nKnahtx3/Wt4PEY/DqbgIQEEXC9kTK6
-         l9sg6JHdMSOFeqqw2nVOtNMPf4Xsr5puzYtyfQhM5CMoEyU5KkH7fqQvIjzCPf1nwfDQ
-         Ch0Q==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=TTAheYFkvz4xaRUgxArJIxX9gF5vJl8p5ZSt40/QpZ0=;
+        b=GVwhx8igUUZ/wt5WgHzBQequvJM6XesCG49OkkgcwJzk4dLkDYrYXweLegC7NO4ZLy
+         9ziHpSrFFxImQ5Xmz3XR/Hg8LWH+UqDYmW24/FmIYLre5RPct8Y7O2ZVvPvZDREgFkcJ
+         qyKRR0VmZJkj7Q6a7MCTt8EFc8Xf8J2iqJwlXCLBnCr7HRvYO1vV06KBwnOSOcuG/6iC
+         a4kCLZNLba6HwAbd80fPmCQVPtHbQ5j9PsZhEA95fE190gx97OEAOC1lJOXdbqE9WTXU
+         l5udsBOyBlBrUkkLgLM8LDHB5JpNYOL2CJTSHRfcl34JkzuRn83FT93WrXwU024VS0sA
+         eV3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rBvCDlUD9+QrMvuUFtxmfpbAHHnvTaccTwMtx3DApDw=;
-        b=cAuH753K3ErQ/0tNesQdbUW9JuRbacCRFGT8i0oKoR9euAI38hQlS4DQJ390lPuYDo
-         uekg6kXUrECg0Qj7v6tW52PxYb2hN3dFsi2EcQGWybp2OyqPmVaHeNiWh11GmCoDdwA4
-         SgZQfgfQtAMnmwIQmKZ1219EGbugOcjYIvl2WOMyqeU9ZiD0YlY5XIvBFwTidvYjBYLq
-         DjOl5YnXYorQjuZ8Y3rV7FxAQS+75eGDILDYuZrArqAgCSJgBw6Te8MzOqwpY9agudTP
-         68y3TmS1kKVyrziVEyHeoB5XRQHWvYwCQXtmPytXE6YywJKdPqErBPAGLuwYWtuaeIEy
-         43wA==
-X-Gm-Message-State: AOAM530jvCbA5GtxvHC+s4gtOo0aV3EDRLIxKDox/gRmA40MKVkKQZlj
-        ua6zM8DYkYLgWwfigsxpxf0=
-X-Google-Smtp-Source: ABdhPJwotZWtb7+KCPZTivBDHuiJkoTNviXwcKLjpzrfIppVm10NHQ6NnqoyrVSO8paIZpiNqu2jVg==
-X-Received: by 2002:a37:b8b:: with SMTP id 133mr8407502qkl.401.1617890865340;
-        Thu, 08 Apr 2021 07:07:45 -0700 (PDT)
-Received: from focaruja ([2001:1284:f013:b099:175e:8b29:c386:d20e])
-        by smtp.gmail.com with ESMTPSA id l6sm19069760qkk.28.2021.04.08.07.07.44
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Thu, 08 Apr 2021 07:07:45 -0700 (PDT)
-Date:   Thu, 8 Apr 2021 11:07:42 -0300
-From:   Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com
-Subject: [PATCH 1/2 v2] staging: media: hantro: Align line break to the open
- parenthesis in file hantro_hw.h
-Message-ID: <1e6d73432d60dfb8bb3f7f2bd6bf3084091a2a39.1617890467.git.alinesantanacordeiro@gmail.com>
-References: <cover.1617890467.git.alinesantanacordeiro@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=TTAheYFkvz4xaRUgxArJIxX9gF5vJl8p5ZSt40/QpZ0=;
+        b=KNAN9C3sTsW1VzTOqDmFSarIbMGJtC9puDJZm1z6arkz8Ne7c5GL2Txj3RYAtIFvAV
+         9hGipDO3WqKcna9rbBus7PoWHqnK+xSiQSJ1wLuvCu8jz2sOhpYBPQ+MvxvkHLyhA6YB
+         ViuYuv09VrjGa2tL/LtZMAxEAmrS3ZPeh6ppiZB9gXuaJ9Pn/VhklsXhgQbObmFfJnqj
+         X5cd9dJuF6cm1uR3jNPwlBCo1Fc00Krz2chm9LL9Kab3xjCWDp+9m7Rs/pQaEUQQwpsl
+         fJqK4SOlFu/kPM2TgyaxHLgnQtyE7dbGX0asV6zN2HwC1rpfbbL0ba1FH0nD2SqbZx0d
+         95TA==
+X-Gm-Message-State: AOAM533uas7//rIZNhx0cvuR0TEXSG0msvLx72ZSlKf7j5fu7bF9vem1
+        S70zyo0e4X516njvsp7Q0lU=
+X-Google-Smtp-Source: ABdhPJwIaI6Yu4gSvrOV74h14X89tnY7tiKGx1w4insUvEDPhTa2XvRmh2nwlHA2+q8t4a8jrE+TZA==
+X-Received: by 2002:a05:6512:3e17:: with SMTP id i23mr6687392lfv.26.1617891196904;
+        Thu, 08 Apr 2021 07:13:16 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id m3sm2924641lfo.190.2021.04.08.07.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Apr 2021 07:13:15 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 17:13:11 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
+        wayland-devel@lists.freedesktop.org, xorg-devel@lists.x.org,
+        linux-media@vger.kernel.org
+Subject: Re: Call for an EDID parsing library
+Message-ID: <20210408171311.61f433bd@eldfell>
+In-Reply-To: <87r1jkj37y.fsf@intel.com>
+References: <20210407114404.13b41822@eldfell>
+        <7d8dc3ea-a935-5145-482c-42ea43dfd782@xs4all.nl>
+        <87mtuajshc.fsf@intel.com>
+        <33467672-b66a-7658-de04-7bc37153613f@xs4all.nl>
+        <87r1jkj37y.fsf@intel.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1617890467.git.alinesantanacordeiro@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/=vWgvOjA1xlCScNen0Sc=DR"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Aligns line break with the remaining function arguments
-to the open parenthesis. Issue found by checkpatch.
+--Sig_/=vWgvOjA1xlCScNen0Sc=DR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>
----
- drivers/staging/media/hantro/hantro_hw.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 08 Apr 2021 16:49:37 +0300
+Jani Nikula <jani.nikula@linux.intel.com> wrote:
 
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34c9e46..a650b9c 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -207,7 +207,7 @@ hantro_h264_mv_size(unsigned int width, unsigned int height)
- void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
- void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
--	const struct v4l2_ctrl_mpeg2_quantization *ctrl);
-+				  const struct v4l2_ctrl_mpeg2_quantization *ctrl);
- int hantro_mpeg2_dec_init(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_exit(struct hantro_ctx *ctx);
- 
--- 
-2.7.4
+> Anyway, this is only tangentially related to the library. I just think
+> we need to take DisplayID better into account also in the *users* of the
+> library, as they shouldn't really even look at the EDID if the plain
+> DisplayID is there, per E-DDC 1.3 section 3.1.
 
+That makes me wonder what the kernel DRM uAPI for getting a DisplayID
+block into userspace would be. A new read-only KMS connector property?
+
+Which means userspace (e.g. Weston) needs to know to read the new
+property. If it does that, then it already knows that it should favour
+DisplayID over EDID, and there is little the library could do to help
+with that.
+
+Unless you think the library should be making DRM ioctls, which doesn't
+sound good to me.
+
+
+Thanks,
+pq
+
+--Sig_/=vWgvOjA1xlCScNen0Sc=DR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmBvD3cACgkQI1/ltBGq
+qqd6Vw//WhzcNLTaOhUP/5Bujl/doTgEFKLDaFbcs9SXSYOhkBOfKxf7k64x/nLL
+mGKj4dPGiymkR4Bh2JrZNa3m0VD/SSDCnI7EJXZMYSlzQpxx0WYCdaZDOhA6C8Oh
+/MC63OwFa8jnwmCFwDQzgwQsOKaxGT2nOshSmVrDNy04hfeR1a75+A0iCCkrtgxc
+2f0R87HC75+wELTy2/bWeTFaLj9KvhHrW2X7K3ZiTupY2b64uwRa7RuVbQlBqq0r
+zQoh2NIVfz/gL+1nbXr8pwWic5a36txVOJA6YEN0C3v+JhkY9sPPpp7ScFvIOosB
+hxuA5rAU7T6merF6ZPt7FcmnygPEWrP/zAH2P7+5/KnmtGac+fHQFbzldWn2pAsD
+hLvaU6THzXJnDaJJs/ztlIIAs9vsBesPlx4lj3PJ2RYnrQJQ/8qKW3ff6gbtpRWq
+Rpla9I6VJMagXiGpp0h/WuDBcOBCUP3479mDtb5RaSRpWLr1jfxA2YDdmS9IOjFF
+qJC4n6gN5g6UQrMjOixSIt1M2WV94mftmzkm7kHA3pEAaBF/JqHlnHtXQidr9Rv4
+ePgNwcam41750+hB8rv0ZPv2hrp57GPg92YMV/GPmZC76sHzd+5Sm7Jast7YLHe7
+t1vHlamNe5u81Tf4U4vEqG+uN54tJGq0+AqTp2BUjB5whluhsLc=
+=LkAa
+-----END PGP SIGNATURE-----
+
+--Sig_/=vWgvOjA1xlCScNen0Sc=DR--
