@@ -2,131 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D16C43600
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 08:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 198A1C433ED
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 08:41:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E02976102A
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 08:33:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4315611AB
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 08:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbhDIIdc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Apr 2021 04:33:32 -0400
-Received: from mga14.intel.com ([192.55.52.115]:30497 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231904AbhDIIdb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 9 Apr 2021 04:33:31 -0400
-IronPort-SDR: w+Rlp9HQ1+2GuQyCvu9MG7UKotisN5UDou8mZWYujLtn7S625wh9PiFqAplBJeejIqEPf8/5rK
- 4z+d07kYqeQg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="193266697"
-X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
-   d="scan'208";a="193266697"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 01:33:18 -0700
-IronPort-SDR: y1rWW0xJe1WjbVDNwY6ORHuITfHxvhbE3REE/juvzdY+tUjNW2vlg2QQKCFM2WLUGNOK2g9eI7
- IuU4+JtpoVhA==
-X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
-   d="scan'208";a="442076842"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 01:31:52 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 72F7B201C0;
-        Fri,  9 Apr 2021 11:31:49 +0300 (EEST)
-Date:   Fri, 9 Apr 2021 11:31:49 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Martina Krasteva <martinax.krasteva@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        daniele.alessandrelli@linux.intel.com,
-        paul.j.murphy@linux.intel.com, gjorgjix.rosikopulos@linux.intel.com
-Subject: Re: [PATCH 06/10] media: Keem Bay Camera: Add ISP sub-device
-Message-ID: <20210409083149.GF3@paasikivi.fi.intel.com>
-References: <20210319180632.585-1-martinax.krasteva@linux.intel.com>
- <20210319180632.585-7-martinax.krasteva@linux.intel.com>
+        id S231474AbhDIIlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Apr 2021 04:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231280AbhDIIlw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Apr 2021 04:41:52 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE62C061760
+        for <linux-media@vger.kernel.org>; Fri,  9 Apr 2021 01:41:39 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id w3so7399871ejc.4
+        for <linux-media@vger.kernel.org>; Fri, 09 Apr 2021 01:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47rSkhialHM2SkOAJW3qv6IE9Jj4qc4uz5x78cVMkkI=;
+        b=UpChw+vWblnIE1lRR76D+GWDGGELmj/FSXOCCx3QtalAp1qiPp9/WSUfWlcde2VhEM
+         BbzMqh8sdrsX/S7MMqA4N88ZNKuqSXt3qRn3Ep3WYbEJJ3ZVtpg9U+f9UxD3ETtgy0tx
+         NRPEx6lR6T/p4Gm1QWgxA6O2FV/bs4eu5FjAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47rSkhialHM2SkOAJW3qv6IE9Jj4qc4uz5x78cVMkkI=;
+        b=h5IQPwMRANbk5IkCmre3zOFbOMUcuC/hqG7Xx7Ozlh8D2rpfoE37+qRPNo0R9ytdhS
+         ArRGV4swWyKz/r3dqZn6vNDM5mRExCiadbPLMU1oBFmRGGv1kXB1r/i7qhfyIzLUCoc0
+         46MPdQMfQerXDRd5VBez/HUVB3HNbFrL0nvgrLrF4fBrLKRTX/0rEcWD8SvRjBYlate0
+         AA6miDUHfNuPznbgpjAukmQBc5gTcyea0V0XPTZkZf2pXcuiS8k87tKiwBHReeqfL2ml
+         qSELzQzV2zjiP7g0DD0FA0pDnFmkx2pcF7JEjtqxZMX2ikj2BRxYjNwtwBuMzeB6Oeji
+         yUbA==
+X-Gm-Message-State: AOAM5317Nfws/YDrIvKXidqXdNcVMZiq9RcmpNJwwNbx/V+QlOKTntfo
+        PMekaXJfNpdbnaCXRHZ4I3rRtA==
+X-Google-Smtp-Source: ABdhPJylEnif/EoElZIuUbdw1UtT4BapfgR1YicH6LguGq7heSEtik7LMA6t5yhUJSCidE958p6BHw==
+X-Received: by 2002:a17:906:b296:: with SMTP id q22mr15004950ejz.161.1617957698361;
+        Fri, 09 Apr 2021 01:41:38 -0700 (PDT)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id sd21sm865758ejb.98.2021.04.09.01.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 01:41:38 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH] media: staging/intel-ipu3: Fix race condition during set_fmt
+Date:   Fri,  9 Apr 2021 10:41:35 +0200
+Message-Id: <20210409084135.384287-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210319180632.585-7-martinax.krasteva@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martina,
+Do not modify imgu_pipe->nodes[inode].vdev_fmt.fmt.pix_mp, until the
+format has been correctly validated.
 
-On Fri, Mar 19, 2021 at 06:06:28PM +0000, Martina Krasteva wrote:
-...
-> +/**
-> + * kmb_cam_xlink_alloc_channel - Allocate xlink camera channel id
-> + * @xlink_cam: Pointer to xlink camera handle
-> + *
-> + * Each xlink channel (except main control) should have unieque id
-> + *
-> + * Return: Channel id, negative error otherwise
-> + */
-> +int kmb_cam_xlink_alloc_channel(struct kmb_xlink_cam *xlink_cam)
-> +{
-> +	int chan_id;
-> +
-> +	chan_id = ida_alloc_range(&xlink_cam->channel_ids,
-> +				  KMB_CAM_XLINK_CHAN_ID_BASE,
-> +				  U16_MAX, GFP_KERNEL);
+Otherwise, even if we use a backup variable, there is a period of time
+where imgu_pipe->nodes[inode].vdev_fmt.fmt.pix_mp might have an invalid
+value that can be used by other functions.
 
-return ida_alloc_range(...);
+Cc: stable@vger.kernel.org
+Fixes: ad91849996f9 ("media: staging/intel-ipu3: Fix set_fmt error handling")
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/staging/media/ipu3/ipu3-v4l2.c | 30 ++++++++++++--------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-> +
-> +	return chan_id;
-> +}
-
-...
-
-> +
-> +/**
-> + * struct kmb_video_fh - KMB video file handler
-> + * @fh: V4L2 file handler
-> + * @kmb_vid: Pointer to KMB video device
-> + * @lock: Mutex serializing access to fh
-> + * @vb2_lock: Mutex serializing access to vb2 queue
-> + * @vb2_q: Video buffer queue
-> + * @active_fmt: Active format
-> +     @pix: Mplane active pixel format
-> +     @info: Active kmb format info
-
-@active_fmt.info: ...
-
-etc.
-
-> + * @contiguous_memory: Flag to enable contiguous memory allocation
-> + * @dma_queue: DMA buffers queue
-> + * @thread: Pointer to worker thread data
-> + */
-> +struct kmb_video_fh {
-> +	struct v4l2_fh fh;
-> +	struct kmb_video *kmb_vid;
-> +	struct mutex lock; /* Lock protecting fh operations */
-> +	struct mutex vb2_lock; /* Lock protecting video buffer queue */
-> +	struct vb2_queue vb2_q;
-> +	struct {
-> +		struct v4l2_pix_format_mplane pix;
-> +		const struct kmb_video_fmt_info *info;
-> +	} active_fmt;
-> +	bool contiguous_memory;
-> +	struct list_head dma_queue;
-> +	struct task_struct *thread;
-> +};
-> +
-> +int kmb_video_init(struct kmb_video *kmb_vid, const char *name);
-> +void kmb_video_cleanup(struct kmb_video *kmb_vid);
-> +
-> +int kmb_video_register(struct kmb_video *kmb_vid,
-> +		       struct v4l2_device *v4l2_dev);
-> +void kmb_video_unregister(struct kmb_video *kmb_vid);
-> +
-> +#endif /* KEEMBAY_VIDEO_H */
-
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index 9e8980b34547..6d9c49b39531 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -669,7 +669,6 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 	struct imgu_css_pipe *css_pipe = &imgu->css.pipes[pipe];
+ 	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
+ 	struct imgu_v4l2_subdev *imgu_sd = &imgu_pipe->imgu_sd;
+-	struct v4l2_pix_format_mplane fmt_backup;
+ 
+ 	dev_dbg(dev, "set fmt node [%u][%u](try = %u)", pipe, node, try);
+ 
+@@ -687,6 +686,7 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 
+ 	dev_dbg(dev, "IPU3 pipe %u pipe_id = %u", pipe, css_pipe->pipe_id);
+ 
++	css_q = imgu_node_to_queue(node);
+ 	for (i = 0; i < IPU3_CSS_QUEUES; i++) {
+ 		unsigned int inode = imgu_map_node(imgu, i);
+ 
+@@ -701,6 +701,11 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 			continue;
+ 		}
+ 
++		if (i == css_q) {
++			fmts[i] = &f->fmt.pix_mp;
++			continue;
++		}
++
+ 		if (try) {
+ 			fmts[i] = kmemdup(&imgu_pipe->nodes[inode].vdev_fmt.fmt.pix_mp,
+ 					  sizeof(struct v4l2_pix_format_mplane),
+@@ -729,39 +734,32 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 		rects[IPU3_CSS_RECT_GDC]->height = pad_fmt.height;
+ 	}
+ 
+-	/*
+-	 * imgu doesn't set the node to the value given by user
+-	 * before we return success from this function, so set it here.
+-	 */
+-	css_q = imgu_node_to_queue(node);
+ 	if (!fmts[css_q]) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+-	fmt_backup = *fmts[css_q];
+-	*fmts[css_q] = f->fmt.pix_mp;
+ 
+ 	if (try)
+ 		ret = imgu_css_fmt_try(&imgu->css, fmts, rects, pipe);
+ 	else
+ 		ret = imgu_css_fmt_set(&imgu->css, fmts, rects, pipe);
+ 
+-	if (try || ret < 0)
+-		*fmts[css_q] = fmt_backup;
+-
+ 	/* ret is the binary number in the firmware blob */
+ 	if (ret < 0)
+ 		goto out;
+ 
+-	if (try)
+-		f->fmt.pix_mp = *fmts[css_q];
+-	else
+-		f->fmt = imgu_pipe->nodes[node].vdev_fmt.fmt;
++	/*
++	 * imgu doesn't set the node to the value given by user
++	 * before we return success from this function, so set it here.
++	 */
++	if (!try)
++		imgu_pipe->nodes[node].vdev_fmt.fmt.pix_mp = f->fmt.pix_mp;
+ 
+ out:
+ 	if (try) {
+ 		for (i = 0; i < IPU3_CSS_QUEUES; i++)
+-			kfree(fmts[i]);
++			if (i != css_q)
++				kfree(fmts[i]);
+ 	}
+ 
+ 	return ret;
 -- 
-Kind regards,
+2.31.1.295.g9ea45b61b8-goog
 
-Sakari Ailus
