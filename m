@@ -2,97 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C106AC433B4
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29780C433B4
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:25:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76545610F7
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAF566115B
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:24:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbhDILPB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Apr 2021 07:15:01 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:57835 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233984AbhDILPB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:15:01 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id Up64lMJIA43ycUp67lV3It; Fri, 09 Apr 2021 13:14:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1617966887; bh=IaSZUvg07dYSJKcw5uzS8iPWp606TgsBGU0Pzt2ushA=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=FXluuVUDDebHs8NU0Hc/6oAYuHdLlHerJ+f/Xzb8+ICebHH6003vNuiWt9Z17BMp4
-         0rNw6MMT7sg0A8qm1uIG7Z6Bok1DoLLwym1pMsZ0mONU8hJO3PnjuJJuCPw+GNofxd
-         NsjxJJ7BKtK5GDDFf6/jBYbRGNgW0bfX7wjy0FoxNqsOBqHSIEQLff6wnXrp1LsOgf
-         ag+TB6iUwPJsscqN9DQhUcoWMmWfM+a4gq2Q0xyhLPOuFkMfx3gY5mp4EP89O3dvAH
-         wmEdQpGrLd4GvDGSM1tJOTqcYr80MnyiF05kgWY8vUuZYWVQ7U0sZoCiMVBMgUJ5Sj
-         /JHOu6Vk3DObA==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.13] Various fixes
-Message-ID: <66b2a895-33d1-539a-92b5-4ffe679a94fc@xs4all.nl>
-Date:   Fri, 9 Apr 2021 13:14:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.9.0
+        id S233974AbhDILZL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Apr 2021 07:25:11 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:52006 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233564AbhDILZC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 9 Apr 2021 07:25:02 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lUpFp-0016Dy-42; Fri, 09 Apr 2021 11:24:49 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lUpJp-00069U-QE; Fri, 09 Apr 2021 11:28:57 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.13] Various fixes (#73041)
+Date:   Fri,  9 Apr 2021 11:28:57 +0000
+Message-Id: <20210409112857.23607-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <66b2a895-33d1-539a-92b5-4ffe679a94fc@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfACh9Wy82r8k0b5Fd4qyDmN3jtn36PRiMw53FPLptkYpMO/8B8Fd/cen2hOGyVC7Nt60496FhUqOcKVBgK9aZiYajJkOx+m4CYKOQ5ESNujM2KcP545N
- 4srffqFpYzuyGOJe/NYo0GNnPK/UY5xzXBOHjYw5rWE1f4J0e+zxRqXMdC56OsLqtToU4zE6GqNJIg2636XiTRL3RzGFWEm+0Ao=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit dccfe2548746ca9cca3a20401ece4cf255d1f171:
+From: builder@linuxtv.org
 
-  media: staging/intel-ipu3: Fix race condition during set_fmt (2021-04-09 13:07:09 +0200)
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/66b2a895-33d1-539a-92b5-4ffe679a94fc@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/97968/
+Build time: 00:06:13
+Link: https://lore.kernel.org/linux-media/66b2a895-33d1-539a-92b5-4ffe679a94fc@xs4all.nl
 
-are available in the Git repository at:
+gpg: Signature made Fri 09 Apr 2021 11:13:56 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.13b
+Summary: got 0/8 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
-for you to fetch changes up to 0ba955d399761ca70ee4ee688c62dc76be058ad0:
+Error/warnings:
 
-  gscpa/stv06xx: fix memory leak (2021-04-09 13:08:43 +0200)
 
-----------------------------------------------------------------
-Tag branch
+Error #512 when building PDF docs
 
-----------------------------------------------------------------
-Hans Verkuil (4):
-      allegro: change kernel-doc comment blocks to normal comments
-      adv7842: configure all pads
-      adv7842: support 1 block EDIDs, fix clearing EDID
-      gscpa/stv06xx: fix memory leak
-
-Jacopo Mondi (1):
-      media: i2c: rdamc21: Fix warning on u8 cast
-
-Muhammad Usama Anjum (1):
-      staging: media/meson: remove redundant dev_err call
-
-Tian Tao (1):
-      media: cx25821: remove unused including <linux/version.h>
-
-Yang Yingliang (1):
-      media: camss: ispif: Remove redundant dev_err call in msm_ispif_subdev_init()
-
- drivers/media/i2c/adv7842.c                     | 81 +++++++++++++++++++++++++++++++++--------------------
- drivers/media/i2c/rdacm21.c                     |  2 +-
- drivers/media/pci/cx25821/cx25821.h             |  1 -
- drivers/media/platform/allegro-dvt/nal-h264.h   |  8 +++---
- drivers/media/platform/allegro-dvt/nal-hevc.h   |  6 ++--
- drivers/media/platform/qcom/camss/camss-ispif.c |  8 ++----
- drivers/media/usb/gspca/gspca.c                 |  2 ++
- drivers/media/usb/gspca/gspca.h                 |  1 +
- drivers/media/usb/gspca/stv06xx/stv06xx.c       |  9 ++++++
- drivers/staging/media/meson/vdec/vdec.c         |  8 ++----
- 10 files changed, 74 insertions(+), 52 deletions(-)
