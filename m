@@ -2,102 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CDF5C433ED
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C6EAC433B4
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 159AF61019
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:12:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24DC561105
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbhDILMp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Apr 2021 07:12:45 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:48844 "EHLO www.linuxtv.org"
+        id S233955AbhDILOw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Apr 2021 07:14:52 -0400
+Received: from ns.mm-sol.com ([37.157.136.199]:50394 "EHLO extserv.mm-sol.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232042AbhDILMp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:12:45 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lUp3v-0015EK-2z; Fri, 09 Apr 2021 11:12:31 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lUp7w-0004zS-1g; Fri, 09 Apr 2021 11:16:40 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.13] Various staging cleanups from the Outreachy (#73040)
-Date:   Fri,  9 Apr 2021 11:16:40 +0000
-Message-Id: <20210409111640.19141-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <c09890cf-9499-8a89-d616-9349733cdbe0@xs4all.nl>
-References: 
+        id S233940AbhDILOv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 9 Apr 2021 07:14:51 -0400
+X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Apr 2021 07:14:48 EDT
+Received: from [192.168.1.124] (hst-221-7.medicom.bg [84.238.221.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: svarbanov@mm-sol.com)
+        by extserv.mm-sol.com (Postfix) with ESMTPSA id EB5A5D150;
+        Fri,  9 Apr 2021 14:08:36 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
+        t=1617966517; bh=k6WYER5qAUxrnq97OeTOyOEqgbO9uezWvqO3n++Khy8=;
+        h=Subject:To:Cc:From:Date:From;
+        b=TdaSCt5pvGBTHcwOKMZScrbFhYeiLzQOP4SK3le4gvdAdrdQ3tA0OWBCqO+gyN/m+
+         5PyajX5L+JZvlBVP+g2TBD5t/Z95wySXWogAHbCAhfCmNmbe4cjCubr3ryyA+B0xu/
+         /Rk8yJqdF1+lUru5AWrUTFLLY4eFrVJT9BeWOIRZw4UHur1ELtWA8HW1bXmw2iSUmR
+         QaVKbg3Mq1i+btyLMNJTw25KibZLg53GW813TDROLpFML3JmuZC1kke011X4V64ZMJ
+         a9S6AJKTNKsMvy39p2p/GJjt3mh002/wmLP2Lw43LQ1Yw5FCyXLB6c9eEIBjr3BXM7
+         PG5DwvC82kAnQ==
+Subject: Re: [PATCH 1/3] media: venus: use NULL instead of zero for pointers
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <b6f139947e93fec1ade5faf3517dfb2b3b9bcd41.1617867599.git.mchehab+huawei@kernel.org>
+From:   Stanimir Varbanov <svarbanov@mm-sol.com>
+Message-ID: <8719c5f3-1c28-c099-6137-8bfff51106e9@mm-sol.com>
+Date:   Fri, 9 Apr 2021 14:08:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <b6f139947e93fec1ade5faf3517dfb2b3b9bcd41.1617867599.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Mauro,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/c09890cf-9499-8a89-d616-9349733cdbe0@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/97967/
-Build time: 00:05:09
-Link: https://lore.kernel.org/linux-media/c09890cf-9499-8a89-d616-9349733cdbe0@xs4all.nl
+On 4/8/21 10:40 AM, Mauro Carvalho Chehab wrote:
+> As reported by sparse:
+> 
+> 	drivers/media/platform/qcom/venus/core.c:227:41: warning: Using plain integer as NULL pointer
+> 	drivers/media/platform/qcom/venus/core.c:228:34: warning: Using plain integer as NULL pointer
+> 
+> Two vars are using zero instead of NULL for pointers. Not really
+> an issue, but using NULL makes it clearer that the init data is
+> expecting a pointer.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  drivers/media/platform/qcom/venus/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-gpg: Signature made Fri 09 Apr 2021 10:59:16 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-Summary: got 6/8 patches with issues, being 0 at build time, plus one error when buinding PDF document
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+> index f5b88b96f5f7..4451e3c11bc0 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -224,8 +224,8 @@ static void venus_assign_register_offsets(struct venus_core *core)
+>  		core->cpu_cs_base = core->base + CPU_CS_BASE;
+>  		core->cpu_ic_base = core->base + CPU_IC_BASE;
+>  		core->wrapper_base = core->base + WRAPPER_BASE;
+> -		core->wrapper_tz_base = 0;
+> -		core->aon_base = 0;
+> +		core->wrapper_tz_base = NULL;
+> +		core->aon_base = NULL;
+>  	}
+>  }
+>  
+> 
 
-Error/warnings:
-
-patches/0002-staging-media-zoran-Rename-HEnd-to-h_end.patch:
-
-   checkpatch.pl:
-	$ cat patches/0002-staging-media-zoran-Rename-HEnd-to-h_end.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:24: CHECK: Avoid CamelCase: <VEnd>
-
-patches/0003-staging-media-zoran-Rename-VEnd-to-v_end.patch:
-
-   checkpatch.pl:
-	$ cat patches/0003-staging-media-zoran-Rename-VEnd-to-v_end.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:33: WARNING: line length of 108 exceeds 100 columns
-
-patches/0004-staging-media-zoran-Rename-DispMode-to-disp_mode.patch:
-
-   checkpatch.pl:
-	$ cat patches/0004-staging-media-zoran-Rename-DispMode-to-disp_mode.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:35: CHECK: Avoid CamelCase: <VidWinHt>
-
-patches/0005-staging-media-zoran-Rename-VidWinWid-to-vid_win_wid.patch:
-
-   checkpatch.pl:
-	$ cat patches/0005-staging-media-zoran-Rename-VidWinWid-to-vid_win_wid.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:24: CHECK: Avoid CamelCase: <VidWinHt>
-	-:37: CHECK: Avoid CamelCase: <We>
-
-patches/0006-staging-media-zoran-Rename-VidWinHt-to-vid_win_ht.patch:
-
-   checkpatch.pl:
-	$ cat patches/0006-staging-media-zoran-Rename-VidWinHt-to-vid_win_ht.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:37: CHECK: Avoid CamelCase: <He>
-
-patches/0007-staging-media-zoran-Rename-We-to-we.patch:
-
-   checkpatch.pl:
-	$ cat patches/0007-staging-media-zoran-Rename-We-to-we.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:24: CHECK: Avoid CamelCase: <He>
-
-
-Error #512 when building PDF docs
-
+-- 
+regards,
+Stan
