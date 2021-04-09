@@ -2,137 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9094C43462
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C106AC433B4
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FCA261186
-	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76545610F7
+	for <linux-media@archiver.kernel.org>; Fri,  9 Apr 2021 11:14:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbhDILOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Apr 2021 07:14:54 -0400
-Received: from ns.mm-sol.com ([37.157.136.199]:50393 "EHLO extserv.mm-sol.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233939AbhDILOw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:14:52 -0400
-Received: from [192.168.1.124] (hst-221-7.medicom.bg [84.238.221.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: svarbanov@mm-sol.com)
-        by extserv.mm-sol.com (Postfix) with ESMTPSA id D3B4ED14D;
-        Fri,  9 Apr 2021 14:08:35 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
-        t=1617966516; bh=+4p1odBCiDXO+nqU80eVL0ylXtK4qmPWsCufUxMum30=;
-        h=Subject:To:Cc:From:Date:From;
-        b=gVpp9fyuSprSUbFJU7xK0atYRq6OLhO6S+HKMw1im3lJkm+M0e6Ga33nPL2mKqbFO
-         apFLfZaK7Mb1I1ApW1W8zX1STBtl3Lyan4SiBhFXoHD1iw73ljxIrHV9cbNsxemyg+
-         SmDPsgrOcEtj6IOmsOVbX5M1HCccEAWduv9P7Pt0MGhByW04b9ybrB298lzoEF8R0b
-         5KXJke2CNt//tLYnrUmnCtOz7Q+OUbdEn0gEQHb3qjaOZvBbdj3KLL3TCNzgu/IU7w
-         Takxd82UFDy1rKsuIevALtp2qhQGcagzbNN1U+LtYxXfq9/Jz1NORlftsimSc/55uR
-         RcM/Tbnj/kqeQ==
-Subject: Re: [PATCH 3/3] media: venus: don't de-reference NULL pointers at IRQ
- time
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <b6f139947e93fec1ade5faf3517dfb2b3b9bcd41.1617867599.git.mchehab+huawei@kernel.org>
- <73570a5dfe7b3411d256367d4a2a02169aa9b900.1617867599.git.mchehab+huawei@kernel.org>
-From:   Stanimir Varbanov <svarbanov@mm-sol.com>
-Message-ID: <4cfa9841-43cd-f3f8-8adb-a5868051b586@mm-sol.com>
-Date:   Fri, 9 Apr 2021 14:08:33 +0300
+        id S233978AbhDILPB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Apr 2021 07:15:01 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:57835 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233984AbhDILPB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 9 Apr 2021 07:15:01 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id Up64lMJIA43ycUp67lV3It; Fri, 09 Apr 2021 13:14:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1617966887; bh=IaSZUvg07dYSJKcw5uzS8iPWp606TgsBGU0Pzt2ushA=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=FXluuVUDDebHs8NU0Hc/6oAYuHdLlHerJ+f/Xzb8+ICebHH6003vNuiWt9Z17BMp4
+         0rNw6MMT7sg0A8qm1uIG7Z6Bok1DoLLwym1pMsZ0mONU8hJO3PnjuJJuCPw+GNofxd
+         NsjxJJ7BKtK5GDDFf6/jBYbRGNgW0bfX7wjy0FoxNqsOBqHSIEQLff6wnXrp1LsOgf
+         ag+TB6iUwPJsscqN9DQhUcoWMmWfM+a4gq2Q0xyhLPOuFkMfx3gY5mp4EP89O3dvAH
+         wmEdQpGrLd4GvDGSM1tJOTqcYr80MnyiF05kgWY8vUuZYWVQ7U0sZoCiMVBMgUJ5Sj
+         /JHOu6Vk3DObA==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.13] Various fixes
+Message-ID: <66b2a895-33d1-539a-92b5-4ffe679a94fc@xs4all.nl>
+Date:   Fri, 9 Apr 2021 13:14:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <73570a5dfe7b3411d256367d4a2a02169aa9b900.1617867599.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfACh9Wy82r8k0b5Fd4qyDmN3jtn36PRiMw53FPLptkYpMO/8B8Fd/cen2hOGyVC7Nt60496FhUqOcKVBgK9aZiYajJkOx+m4CYKOQ5ESNujM2KcP545N
+ 4srffqFpYzuyGOJe/NYo0GNnPK/UY5xzXBOHjYw5rWE1f4J0e+zxRqXMdC56OsLqtToU4zE6GqNJIg2636XiTRL3RzGFWEm+0Ao=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+The following changes since commit dccfe2548746ca9cca3a20401ece4cf255d1f171:
 
-On 4/8/21 10:40 AM, Mauro Carvalho Chehab wrote:
-> Smatch is warning that:
-> 	drivers/media/platform/qcom/venus/hfi_venus.c:1100 venus_isr() warn: variable dereferenced before check 'hdev' (see line 1097)
-> 
-> The logic basically does:
-> 	hdev = to_hfi_priv(core);
-> 
-> with is translated to:
-> 	hdev = core->priv;
-> 
-> If the IRQ code can receive a NULL pointer for hdev, there's
-> a bug there, as it will first try to de-reference the pointer,
-> and then check if it is null.
-> 
-> After looking at the code, it seems that this indeed can happen:
-> Basically, the venus IRQ thread is started with:
-> 	devm_request_threaded_irq()
-> So, it will only be freed after the driver unbinds.
-> 
-> In order to prevent the IRQ code to work with freed data,
-> the logic at venus_hfi_destroy() sets core->priv to NULL,
-> which would make the IRQ code to ignore any pending IRQs.
-> 
-> There is, however a race condition, as core->priv is set
-> to NULL only after being freed. So, we need also to move the
-> core->priv = NULL to happen earlier.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  drivers/media/platform/qcom/venus/hfi_venus.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+  media: staging/intel-ipu3: Fix race condition during set_fmt (2021-04-09 13:07:09 +0200)
 
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+are available in the Git repository at:
 
-> 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-> index cebb20cf371f..ce98c523b3c6 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-> @@ -1094,12 +1094,15 @@ static irqreturn_t venus_isr(struct venus_core *core)
->  {
->  	struct venus_hfi_device *hdev = to_hfi_priv(core);
->  	u32 status;
-> -	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
-> -	void __iomem *wrapper_base = hdev->core->wrapper_base;
-> +	void __iomem *cpu_cs_base;
-> +	void __iomem *wrapper_base;
->  
->  	if (!hdev)
->  		return IRQ_NONE;
->  
-> +	cpu_cs_base = hdev->core->cpu_cs_base;
-> +	wrapper_base = hdev->core->wrapper_base;
-> +
->  	status = readl(wrapper_base + WRAPPER_INTR_STATUS);
->  	if (IS_V6(core)) {
->  		if (status & WRAPPER_INTR_STATUS_A2H_MASK ||
-> @@ -1650,10 +1653,10 @@ void venus_hfi_destroy(struct venus_core *core)
->  {
->  	struct venus_hfi_device *hdev = to_hfi_priv(core);
->  
-> +	core->priv = NULL;
->  	venus_interface_queues_release(hdev);
->  	mutex_destroy(&hdev->lock);
->  	kfree(hdev);
-> -	core->priv = NULL;
->  	core->ops = NULL;
->  }
->  
-> 
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.13b
 
--- 
-regards,
-Stan
+for you to fetch changes up to 0ba955d399761ca70ee4ee688c62dc76be058ad0:
+
+  gscpa/stv06xx: fix memory leak (2021-04-09 13:08:43 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (4):
+      allegro: change kernel-doc comment blocks to normal comments
+      adv7842: configure all pads
+      adv7842: support 1 block EDIDs, fix clearing EDID
+      gscpa/stv06xx: fix memory leak
+
+Jacopo Mondi (1):
+      media: i2c: rdamc21: Fix warning on u8 cast
+
+Muhammad Usama Anjum (1):
+      staging: media/meson: remove redundant dev_err call
+
+Tian Tao (1):
+      media: cx25821: remove unused including <linux/version.h>
+
+Yang Yingliang (1):
+      media: camss: ispif: Remove redundant dev_err call in msm_ispif_subdev_init()
+
+ drivers/media/i2c/adv7842.c                     | 81 +++++++++++++++++++++++++++++++++--------------------
+ drivers/media/i2c/rdacm21.c                     |  2 +-
+ drivers/media/pci/cx25821/cx25821.h             |  1 -
+ drivers/media/platform/allegro-dvt/nal-h264.h   |  8 +++---
+ drivers/media/platform/allegro-dvt/nal-hevc.h   |  6 ++--
+ drivers/media/platform/qcom/camss/camss-ispif.c |  8 ++----
+ drivers/media/usb/gspca/gspca.c                 |  2 ++
+ drivers/media/usb/gspca/gspca.h                 |  1 +
+ drivers/media/usb/gspca/stv06xx/stv06xx.c       |  9 ++++++
+ drivers/staging/media/meson/vdec/vdec.c         |  8 ++----
+ 10 files changed, 74 insertions(+), 52 deletions(-)
