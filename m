@@ -2,71 +2,96 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D9CC433B4
-	for <linux-media@archiver.kernel.org>; Sun, 11 Apr 2021 18:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C2CC433B4
+	for <linux-media@archiver.kernel.org>; Sun, 11 Apr 2021 23:08:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBB38610A2
-	for <linux-media@archiver.kernel.org>; Sun, 11 Apr 2021 18:24:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16346611F0
+	for <linux-media@archiver.kernel.org>; Sun, 11 Apr 2021 23:08:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbhDKSZC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 11 Apr 2021 14:25:02 -0400
-Received: from mailoutvs20.siol.net ([185.57.226.211]:56003 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235842AbhDKSZB (ORCPT
+        id S235529AbhDKXIm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 11 Apr 2021 19:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235005AbhDKXIl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 11 Apr 2021 14:25:01 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Zimbra) with ESMTP id 362CC524A80;
-        Sun, 11 Apr 2021 20:16:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta12.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta12.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Yh0Hz7uPS1UE; Sun, 11 Apr 2021 20:16:26 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Zimbra) with ESMTPS id ED9E0524AA4;
-        Sun, 11 Apr 2021 20:16:25 +0200 (CEST)
-Received: from kista.localnet (cpe-86-58-17-133.cable.triera.net [86.58.17.133])
-        (Authenticated sender: jernej.skrabec@siol.net)
-        by mail.siol.net (Zimbra) with ESMTPA id E1BAE524A80;
-        Sun, 11 Apr 2021 20:16:24 +0200 (CEST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@siol.net>
-To:     xiangyang3@huawei.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Xiang Yang <xiangyang3@huawei.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH -next] media: sunxi: sun8i-rotate: fix PM reference leak in rotate_start_streaming()
-Date:   Sun, 11 Apr 2021 20:16:24 +0200
-Message-ID: <2001311.PWddzm8SjH@kista>
-In-Reply-To: <20210409064658.90493-1-xiangyang3@huawei.com>
-References: <20210409064658.90493-1-xiangyang3@huawei.com>
+        Sun, 11 Apr 2021 19:08:41 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0766C061574;
+        Sun, 11 Apr 2021 16:08:24 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q10so7941288pgj.2;
+        Sun, 11 Apr 2021 16:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=y3OO3ieVmLEwl+ife04UOYUCAMow1hzkBN//gQUlMpA=;
+        b=gZa1XQqOhnFshkh4twv2e6nHTxXyn50PCEHsmnHWoWb39ijE2/XeX619XzzQNi7wEU
+         nnLei4oEl36w7mpVVVdvD4Cs5Iczg7ESkuWAsWpq1J6+0HoBrUjbsbmLsDZjPw7Z7waY
+         2uJ79UX0oY8T32BCFUmRxsiTY7mY/+KsipeBnQHURXo2PVV2bUOOcHjBdM2mZ4VOEBOZ
+         Wr6wFxtm1+xdcNC7P8hiG3HF+KLyk7NcSIfe+Am5FWYugGNtVmGwu/7OkLg3u2rZ9eKh
+         xsmvg3a5ZhFato6XANJFOvF+snksG0vMWuy8mYpUr6UwTRdazoaMxhY27w/39lXCvKOs
+         w90Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=y3OO3ieVmLEwl+ife04UOYUCAMow1hzkBN//gQUlMpA=;
+        b=IHppcYRPDFCk8QR9syNc+2GMm8IEnY1vs0Qasyvp1s2IMq5kdKzy38J9pFqy534h7r
+         K7rF1vZa+whtaIgnRkqkz95Gg6qnQ52KAQDWYdHad5KzgE81VKDPekuJITGID4Jg8mFn
+         wsdtUmJsqjH1wGm5dT5NQ/KlcrZtJRT+lIkVd1mta/I/EdInpTKfZCL5wKnSfwF3XIgN
+         10Goo/wZccu5F+QCYTWEaAQ/BwepZawjX/vFJgCX158j5o+MQNrKSlBRzZMEzBYj41Wf
+         vWNh6CG5laQyffbhyToLhG1cl9E/7iIiR6A6YshYv587t0shBp2U/wJEWIIErEQyO7XO
+         RDLQ==
+X-Gm-Message-State: AOAM531S6p1/i19qXRbAAD6kvlfWRaElNhMGABlN2YfQt7dK5TfthPWR
+        4KaOS3ffWWOdbPzEWtN60WSor/InC0DCiw==
+X-Google-Smtp-Source: ABdhPJzSk70k6LM9VSsUsO9urpktgQ/uiFzNlIvQGx3TpOESw3ocvMlPyB6hVyVkuqDU/LIVc/QP3Q==
+X-Received: by 2002:a63:f91e:: with SMTP id h30mr24117266pgi.117.1618182504181;
+        Sun, 11 Apr 2021 16:08:24 -0700 (PDT)
+Received: from kali ([103.141.87.253])
+        by smtp.gmail.com with ESMTPSA id m14sm7492873pfh.89.2021.04.11.16.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Apr 2021 16:08:23 -0700 (PDT)
+Date:   Mon, 12 Apr 2021 04:38:15 +0530
+From:   Mitali Borkar <mitaliborkar810@gmail.com>
+To:     sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+        tian.shu.qiu@intel.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com,
+        mitali_s@me.iitr.ac.in
+Subject: [PATCH 0/6] staging: media: intel-ipu3: cleanup patchset for style
+ issues
+Message-ID: <YHOBXzA0Dk/yLfJY@kali>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dne petek, 09. april 2021 ob 08:46:58 CEST je Xiang Yang napisal(a):
-> pm_runtime_get_sync will increment pm usage counter even it failed.
-> Forgetting to putting operation will result in reference leak here.
-> Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-> counter balanced.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Xiang Yang <xiangyang3@huawei.com>
+tian.shu.qiu@intel.com, mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-media@vger.kernel.org, linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com, mitali_s@me.iitr.ac.in
+Subject: [PATCH 0/6] cleanup patchset for style issues
+Message-ID: <cover.1618180659.git.mitaliborkar810@gmail.com>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@siol.net>
+This pacthset fixes the style issues reported by checkpatch.pl
 
-Best regards,
-Jernej
+Mitali Borkar (6):
+  staging: media: intel-ipu3: replace bit shifts with BIT() macro
+  staging: media: intel-ipu3: preferred __aligned(size) over
+    __attribute__aligned(size)
+  staging: media: intel-ipu3: remove unnecessary blank line
+  staging: media: intel-ipu3: reduce length of line
+  staging: media: intel-ipu3: line should not end with '['
+  staging: media: intel-ipu3: remove space before tabs
 
+ .../staging/media/ipu3/include/intel-ipu3.h   | 91 ++++++++++---------
+ 1 file changed, 46 insertions(+), 45 deletions(-)
+
+-- 
+2.30.2
 
