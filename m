@@ -2,75 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 861A2C433B4
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 15:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4FC4C433B4
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 15:40:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C63B6128E
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 15:12:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC29661356
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 15:40:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242624AbhDLPNJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 11:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242495AbhDLPNI (ORCPT
+        id S242174AbhDLPkS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 11:40:18 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:61775 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240930AbhDLPkR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 11:13:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D81C061574;
-        Mon, 12 Apr 2021 08:12:50 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 67B923F0;
-        Mon, 12 Apr 2021 17:12:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618240367;
-        bh=Vz+OMcuaVIUWh/1V5VDfgCmz0MaadcYAni8v3UeFzEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYBZ+xuOtRSZiVxFnDNer1U5JH1VoI2j3hrHgR3tSGsE8T2LCGLtA/ItGDhhig7/6
-         IV3PuSJuBTmY7hOqGK3pTsOYaJitbvRoB+W7Z9JQvYsd3vh84rltHc0yOEhyKWboIQ
-         iR/lYBOkwE8QUuvDHDznHxbLb2j9e95K/syDs0sw=
-Date:   Mon, 12 Apr 2021 18:11:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     ascordeiro <alinesantanacordeiro@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com
-Subject: Re: [Outreachy kernel][PATCH 1/4 v2] staging: media: omap4iss:
- Replace macro function by static inline function in file iss.c
-Message-ID: <YHRjPpMVVrhTF7Tc@pendragon.ideasonboard.com>
-References: <cover.1618231618.git.alinesantanacordeiro@gmail.com>
- <e302566a3d9e5180ab27eb2c2824fd1b678a6d99.1618231618.git.alinesantanacordeiro@gmail.com>
- <YHRNzq3h3LEp3Dgc@pendragon.ideasonboard.com>
- <7457fd4eb5afbf66b3a6f2fed4dd1e440e6ed422.camel@gmail.com>
+        Mon, 12 Apr 2021 11:40:17 -0400
+X-Originating-IP: 24.194.32.49
+Received: from coplandos.local (cpe-24-194-32-49.nycap.res.rr.com [24.194.32.49])
+        (Authenticated sender: vrzh@vrzh.net)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 77C5540008;
+        Mon, 12 Apr 2021 15:39:57 +0000 (UTC)
+Date:   Mon, 12 Apr 2021 11:43:00 -0400
+From:   Martiros Shakhzadyan <vrzh@vrzh.net>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: Re: [PATCH] staging: media: atomisp: Removed a function entry log
+Message-ID: <YHRqhLWxZ2zqLXQq@coplandos.local>
+References: <20210412023558.360103-1-vrzh@vrzh.net>
+ <20210412023558.360103-3-vrzh@vrzh.net>
+ <e523c55b-9e5b-bbd1-73e8-a6c8dcd832f7@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7457fd4eb5afbf66b3a6f2fed4dd1e440e6ed422.camel@gmail.com>
+In-Reply-To: <e523c55b-9e5b-bbd1-73e8-a6c8dcd832f7@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Aline,
-
-On Mon, Apr 12, 2021 at 10:58:45AM -0300, ascordeiro wrote:
-> Em seg, 2021-04-12 às 16:40 +0300, Laurent Pinchart escreveu:
-> > While testing on a device isn't a requirement as you can't be expected
-> > to have the necessary hardware, changes are expected to be at least
-> > compile-tested before being submitted.
+On Mon, Apr 12, 2021 at 11:28:09AM +0200, Hans Verkuil wrote:
+> On 12/04/2021 04:35, Martiros Shakhzadyan wrote:
+> > Coding style fix.
 > 
-> Hi Laurent,
+> What exactly is the coding style issue? Please mention that.
 > 
-> I thought recompiling the kernel would be enough in this case.
-> I recompiled it in native Ubuntu 16.04 without errors.
+> Also, by removing the line you change the behavior (i.e. if debugging is
+> enabled, you no longer see this message). That's more than a coding style
+> fix...
+> 
+> Regards,
+> 
+> 	Hans
+> 
 
-Did it compile the driver you modified ?
+Thank you, Hans - I will resubmit the patch with a better commit
+message.
 
--- 
-Regards,
-
-Laurent Pinchart
+> > 
+> > Signed-off-by: Martiros Shakhzadyan <vrzh@vrzh.net>
+> > ---
+> >  drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> > index c017e9066b7a..912eadaffc44 100644
+> > --- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> > +++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> > @@ -1175,8 +1175,6 @@ static int ov2722_remove(struct i2c_client *client)
+> >  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> >  	struct ov2722_device *dev = to_ov2722_sensor(sd);
+> >  
+> > -	dev_dbg(&client->dev, "ov2722_remove...\n");
+> > -
+> >  	dev->platform_data->csi_cfg(sd, 0);
+> >  	v4l2_ctrl_handler_free(&dev->ctrl_handler);
+> >  	v4l2_device_unregister_subdev(sd);
+> > 
+> 
