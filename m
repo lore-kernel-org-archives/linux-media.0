@@ -4,26 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C590C433ED
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44D40C43462
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:37:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6316861209
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:36:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B4F261241
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:37:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241053AbhDLJgp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 05:36:45 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:56797 "EHLO
+        id S241207AbhDLJhO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 05:37:14 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:38635 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238829AbhDLJek (ORCPT
+        with ESMTP id S238501AbhDLJeo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 05:34:40 -0400
+        Mon, 12 Apr 2021 05:34:44 -0400
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 54084200007;
-        Mon, 12 Apr 2021 09:34:19 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id C55FC20000B;
+        Mon, 12 Apr 2021 09:34:23 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -33,9 +33,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 01/17] media: i2c: max9286: Adjust parameters indent
-Date:   Mon, 12 Apr 2021 11:34:35 +0200
-Message-Id: <20210412093451.14198-2-jacopo+renesas@jmondi.org>
+Subject: [PATCH v4 03/17] media: i2c: max9286: Cache channel amplitude
+Date:   Mon, 12 Apr 2021 11:34:37 +0200
+Message-Id: <20210412093451.14198-4-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210412093451.14198-1-jacopo+renesas@jmondi.org>
 References: <20210412093451.14198-1-jacopo+renesas@jmondi.org>
@@ -45,34 +45,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The parameters to max9286_i2c_mux_configure() fits on the previous
-line. Adjust it.
-
-Cosmetic change only.
+Cache the current channel amplitude in a driver variable
+to skip updating it if the newly requested value is the same
+as the currently configured one.
 
 Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/max9286.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/i2c/max9286.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index 6fd4d59fcc72..1d9951215868 100644
+index 82ec05e96cb7..ed1cdefe7c30 100644
 --- a/drivers/media/i2c/max9286.c
 +++ b/drivers/media/i2c/max9286.c
-@@ -287,9 +287,8 @@ static int max9286_i2c_mux_select(struct i2c_mux_core *muxc, u32 chan)
+@@ -165,6 +165,7 @@ struct max9286_priv {
  
- 	priv->mux_channel = chan;
+ 	/* The initial reverse control channel amplitude. */
+ 	u32 init_rev_chan_mv;
++	u32 rev_chan_mv;
  
--	max9286_i2c_mux_configure(priv,
--				  MAX9286_FWDCCEN(chan) |
--				  MAX9286_REVCCEN(chan));
-+	max9286_i2c_mux_configure(priv, MAX9286_FWDCCEN(chan) |
-+					MAX9286_REVCCEN(chan));
+ 	struct v4l2_ctrl_handler ctrls;
+ 	struct v4l2_ctrl *pixelrate;
+@@ -341,8 +342,15 @@ static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
+ static void max9286_reverse_channel_setup(struct max9286_priv *priv,
+ 					  unsigned int chan_amplitude)
+ {
++	u8 chan_config;
++
++	if (priv->rev_chan_mv == chan_amplitude)
++		return;
++
++	priv->rev_chan_mv = chan_amplitude;
++
+ 	/* Reverse channel transmission time: default to 1. */
+-	u8 chan_config = MAX9286_REV_TRF(1);
++	chan_config = MAX9286_REV_TRF(1);
  
- 	return 0;
- }
+ 	/*
+ 	 * Reverse channel setup.
+@@ -564,8 +572,7 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
+ 	 * - Disable auto-ack as communication on the control channel are now
+ 	 *   stable.
+ 	 */
+-	if (priv->init_rev_chan_mv < 170)
+-		max9286_reverse_channel_setup(priv, 170);
++	max9286_reverse_channel_setup(priv, 170);
+ 	max9286_check_config_link(priv, priv->source_mask);
+ 
+ 	/*
 -- 
 2.31.1
 
