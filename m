@@ -5,138 +5,89 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C00C4361A
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F9AC43619
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:31:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AC4161207
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:18:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D2266121F
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:31:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbhDLJSz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 05:18:55 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:35899 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242026AbhDLJR7 (ORCPT
+        id S239624AbhDLJbe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 05:31:34 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:58697 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242406AbhDLJ2c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 05:17:59 -0400
+        Mon, 12 Apr 2021 05:28:32 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id Vsh9l4ds1MxedVshClcWf2; Mon, 12 Apr 2021 11:17:37 +0200
+        id VsrZl4iYLMxedVsrclcZyt; Mon, 12 Apr 2021 11:28:13 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1618219057; bh=Q1WZNfMjfd81Sw0tEZCD6aKfvpmjF/TsYGs4OFIOV90=;
+        t=1618219693; bh=jIMXCtoK3i1fFvTqs9cxe9PYvmJVWGMSAAt45XYQ4aU=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=o+/G/vwvsxmiN6f9yPpXnexKz/biPXZQl/+q892dF7qwphl7qU7rMSNrkay5sYpmY
-         EiBXWrQ4kCGqRas76lMzhtLD84rQmBkKsY6jzbxOP8D43FEKi634GKRzFDUpp3Rnv9
-         v7l53TByppykUspP8DbzfNCTVzS+RSY70u2AKjW39vL4uqzY8b1nMYi13rfLAYGpFD
-         /vrSaVeIVi1j525TMHSY5pwjlNVrkiQunNBXLcrALw0J8AbD80AeYRjCvEU6pUO7/g
-         EnGxIn8SR6pfEWuI+k9aads8Cqqr5VgDgStsbvRBxNwfdiBcLyL0cGg7/Ep3UeMOup
-         sLwdMicOoo1jQ==
-Subject: Re: [PATCH v2] staging: media: meson: vdec: declare u32 as const and
- static const
-To:     Mitali Borkar <mitaliborkar810@gmail.com>, narmstrong@baylibre.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com,
-        mitali_s@me.iitr.ac.in, linux-amlogic@lists.infradead.org
-References: <YHIDufKhTEeuxyl5@kali>
+        b=hFOE3g4kmzXQzO+x7fhSTpmRmmCXF6vsFwlWJqtPDZbiG9ez4wijNCzDrKn0DFdg5
+         1L/a8zgxv8kSXRj8650Gr/Urqv8BZbxSzdveybSMYQNP3pwRKLxcLMaRi76UCn+p4a
+         544xSfuq0cEZkIDlX4onLbmbwYvieMiIfYVS/X9bP6As8aOcJazzSwVdkzyHYMEipc
+         pYx8qsKZhFDeVDD3WlT6j+q4Rxeh5CGQtm94eiUha5NMNzzJ1GWqMWtyvUoIcz3LU9
+         uybNOUKiRVtvbNOLH76tD1sIKGG+UYPTVsmSc1QPumWRA8u6JC5RMalUv2CVP/emH/
+         lKJ06PMEKepOg==
+Subject: Re: [PATCH] staging: media: atomisp: Removed a function entry log
+To:     Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+References: <20210412023558.360103-1-vrzh@vrzh.net>
+ <20210412023558.360103-3-vrzh@vrzh.net>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <88d04746-717d-5a7a-7ea7-67cf6c95aba9@xs4all.nl>
-Date:   Mon, 12 Apr 2021 11:17:22 +0200
+Message-ID: <e523c55b-9e5b-bbd1-73e8-a6c8dcd832f7@xs4all.nl>
+Date:   Mon, 12 Apr 2021 11:28:09 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <YHIDufKhTEeuxyl5@kali>
+In-Reply-To: <20210412023558.360103-3-vrzh@vrzh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfBXMnifIVjZ62y0VHvnBJNSP+hYxNbiNOZUfNetfEJgBcv5GMZ7getv0zN6yKyIx13mzQ7aTrYqwCmTTMLYyK7NQCiI56Mim4l4qN7U1OJEtPirTxTaG
- wAIJSK62f+3rEUKw6xbtNv93Z77fl7qctwlLxqDe/ABpVE3pcRpcNdMFZovtEeo+aq1rBpa/w26EwT0OhPBPZA4A8uyyVCN6U4t7nCy69kzZHrjV88ZyihYT
- nTWyeUBWznOsD99N+Dn/DWVtt+XGQ59EpzKaYyLvnG5kGOSdNGVCL4nZprNPI0dqkoZZQ+sVfCgFiaPDHfsipka8aV8WLWoP8V1WIlkZ8Ab62W7YsVYaQ3iO
- ansPPfKTP4dfu8bD+NIMZb6vWnjsNYwWo4faIFL1SSjvcpDCu/m82sq5S2aA0a2n/2G9W/t6z3cIkeyVMXyr/drugGue6ygTa3dtYumausj7yBx2EhGaj9LG
- EbX73dVXhEcsdkUwsESaJjcVx4quNChI25SjjPB3ol3wmWm6RbfO8xs6Zht/yWosh3ksT4xs9eE7f2tQ3uYfGa8XgXlY4iSeYdVzPpARdpFkuVXzsxTWaxX7
- hcsVUTO77rgfsjK0ekHUKUwzthrqK00iSKv2LEGjkA/6/YVG1NDn9tMCPbJVjKFqtgm5eKjBGTFcbJhOiVYIIUR2
+X-CMAE-Envelope: MS4xfHD6S4mDk0zHdpqUOGdPIk9IEDfWsA3/MtJdLAypttASFr100ER6wZwasjrAFjwtqqZItq/moNcXYeuLi/DDrgpOqe1xA2TEDdK/PIk/NC58X5LQ5ub3
+ 9YI5ozN+mRtPyHflj5INtvUeAgVWylltv9wdqHv2scMuf4po98UEorsRlQVuAo21GbTRnjajLZpH/R9wSP8mYXONBfOZvFnVqCPJa4NDSNY+eq72AhsjdV6N
+ PcaRBYk4dRj66B/l0Z2CGApETOGr1KnQ9na6t4z+i7u5QqU+Xo8c/8QqtxcT1YOp
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/04/2021 21:59, Mitali Borkar wrote:
-> Declared 32 bit unsigned int as static constant inside a function and
-> replaced u32[] {x,y} as canvas1, canvas2 in codec_mpeg12.c
-> This indicates the value of canvas indexes will remain constant throughout execution.
-> Replaced u32 reg_base and u32 reg_name with const u32 reg_base and const
-> u32 reg_name as it will contain data/registry bases to write static
-> const indexes declared above and will keep track of of contiguos
-> registers after each reg_base.
-> This makes code look better, neater. It improves readability.
-> 
-> Signed-off-by: Mitali Borkar <mitaliborkar810@gmail.com>
-> ---
->  drivers/staging/media/meson/vdec/codec_mpeg12.c | 5 +++--
+On 12/04/2021 04:35, Martiros Shakhzadyan wrote:
+> Coding style fix.
 
-Also change drivers/staging/media/meson/vdec/codec_h264.c.
+What exactly is the coding style issue? Please mention that.
 
-It's a nice improvement, so let's do this for both callers of amvdec_set_canvases().
+Also, by removing the line you change the behavior (i.e. if debugging is
+enabled, you no longer see this message). That's more than a coding style
+fix...
 
 Regards,
 
 	Hans
 
->  drivers/staging/media/meson/vdec/vdec_helpers.c | 2 +-
->  drivers/staging/media/meson/vdec/vdec_helpers.h | 2 +-
->  3 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/staging/media/meson/vdec/codec_mpeg12.c b/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> index 21e93a13356c..861d8584f22f 100644
-> --- a/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> +++ b/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> @@ -65,6 +65,8 @@ static int codec_mpeg12_start(struct amvdec_session *sess)
->  	struct amvdec_core *core = sess->core;
->  	struct codec_mpeg12 *mpeg12;
->  	int ret;
-> +	static const u32 canvas1[] = { AV_SCRATCH_0, 0 };
-> +	static const u32 canvas2[] = { 8, 0 }
+> Signed-off-by: Martiros Shakhzadyan <vrzh@vrzh.net>
+> ---
+>  drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> index c017e9066b7a..912eadaffc44 100644
+> --- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> +++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
+> @@ -1175,8 +1175,6 @@ static int ov2722_remove(struct i2c_client *client)
+>  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>  	struct ov2722_device *dev = to_ov2722_sensor(sd);
 >  
->  	mpeg12 = kzalloc(sizeof(*mpeg12), GFP_KERNEL);
->  	if (!mpeg12)
-> @@ -80,8 +82,7 @@ static int codec_mpeg12_start(struct amvdec_session *sess)
->  		goto free_mpeg12;
->  	}
->  
-> -	ret = amvdec_set_canvases(sess, (u32[]){ AV_SCRATCH_0, 0 },
-> -				  (u32[]){ 8, 0 });
-> +	ret = amvdec_set_canvases(sess, canvas1, canvas2);
->  	if (ret)
->  		goto free_workspace;
->  
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> index 7f07a9175815..df5c27266c44 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> @@ -177,7 +177,7 @@ static int set_canvas_nv12m(struct amvdec_session *sess,
->  }
->  
->  int amvdec_set_canvases(struct amvdec_session *sess,
-> -			u32 reg_base[], u32 reg_num[])
-> +			const u32 reg_base[], const u32 reg_num[])
->  {
->  	struct v4l2_m2m_buffer *buf;
->  	u32 pixfmt = sess->pixfmt_cap;
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> index cfaed52ab526..ace8897c34fe 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.h
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> @@ -17,7 +17,7 @@
->   * @reg_num: number of contiguous registers after each reg_base (including it)
->   */
->  int amvdec_set_canvases(struct amvdec_session *sess,
-> -			u32 reg_base[], u32 reg_num[]);
-> +			const u32 reg_base[], const u32 reg_num[]);
->  
->  /* Helpers to read/write to the various IPs (DOS, PARSER) */
->  u32 amvdec_read_dos(struct amvdec_core *core, u32 reg);
+> -	dev_dbg(&client->dev, "ov2722_remove...\n");
+> -
+>  	dev->platform_data->csi_cfg(sd, 0);
+>  	v4l2_ctrl_handler_free(&dev->ctrl_handler);
+>  	v4l2_device_unregister_subdev(sd);
 > 
 
