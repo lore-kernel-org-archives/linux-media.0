@@ -2,117 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EF2CC07318
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C73AFC433ED
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:45:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8C1B6120B
-	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:43:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 921B461261
+	for <linux-media@archiver.kernel.org>; Mon, 12 Apr 2021 09:45:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbhDLJnz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 05:43:55 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41649 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239055AbhDLJgq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 05:36:46 -0400
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 20BBF200018;
-        Mon, 12 Apr 2021 09:34:49 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 15/17] media: i2c: rdacm20: Re-work ov10635 reset
-Date:   Mon, 12 Apr 2021 11:34:49 +0200
-Message-Id: <20210412093451.14198-16-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210412093451.14198-1-jacopo+renesas@jmondi.org>
-References: <20210412093451.14198-1-jacopo+renesas@jmondi.org>
+        id S239235AbhDLJoE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 05:44:04 -0400
+Received: from mga04.intel.com ([192.55.52.120]:27906 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244083AbhDLJni (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 12 Apr 2021 05:43:38 -0400
+IronPort-SDR: 3VhcuKfuSGJ8nkhXrDfptN2zuo4cLCgjZk+ztq3LJasMmCjVEbEiPqr8gnpbmwJAmvy5YjdjC6
+ ng2MAoy9tkzQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9951"; a="192021293"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="192021293"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 02:43:06 -0700
+IronPort-SDR: c3qofnFRJu4y+V5m3FVtUxb1haaRQdz6XGFkubCHPk2VHDvvzoGGQsabXKRtntCKT63wT/g8lS
+ 2J3/coYr/TPA==
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="599915096"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 02:43:03 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 5DC89205AA;
+        Mon, 12 Apr 2021 12:42:30 +0300 (EEST)
+Date:   Mon, 12 Apr 2021 12:42:30 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Mitali Borkar <mitaliborkar810@gmail.com>
+Cc:     bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy-kernel@googlegroups.com, mitali_s@me.iitr.ac.in
+Subject: Re: [PATCH 1/6] staging: media: intel-ipu3: replace bit shifts with
+ BIT() macro
+Message-ID: <20210412094230.GI3@paasikivi.fi.intel.com>
+References: <cover.1618180659.git.mitaliborkar810@gmail.com>
+ <cc7b827a3264f08cedb76adddd16a34df48f935f.1618180659.git.mitaliborkar810@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc7b827a3264f08cedb76adddd16a34df48f935f.1618180659.git.mitaliborkar810@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The OV10635 image sensor embedded in the camera module is currently
-reset after the MAX9271 initialization with two long delays that were
-most probably not correctly characterized.
+Hi Mitali,
 
-Re-work the image sensor reset procedure by holding the chip in reset
-during the MAX9271 configuration, removing the long sleep delays and
-only wait after the chip exits from reset for 350-500 microseconds
-interval, which is larger than the minimum (2048 * (1 / XVCLK)) timeout
-characterized in the chip manual.
+On Mon, Apr 12, 2021 at 04:38:39AM +0530, Mitali Borkar wrote:
+> Added #include <linux/bitops.h> and replaced bit shifts by BIT() macro.
+> This BIT() macro from linux/bitops.h is used to define IPU3_UAPI_GRID_Y_START_EN
+> and IPU3_UAPI_AWB_RGBS_THR_B_* bitmask.
+> Use of macro is better and neater. It maintains consistency.
+> Reported by checkpatch.
+> 
+> Signed-off-by: Mitali Borkar <mitaliborkar810@gmail.com>
+> ---
+>  drivers/staging/media/ipu3/include/intel-ipu3.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/include/intel-ipu3.h b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> index edd8edda0647..589d5ccee3a7 100644
+> --- a/drivers/staging/media/ipu3/include/intel-ipu3.h
+> +++ b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> @@ -5,6 +5,7 @@
+>  #define __IPU3_UAPI_H
+>  
+>  #include <linux/types.h>
+> +#include <linux/bitops.h>
+>  
+>  /* from /drivers/staging/media/ipu3/include/videodev2.h */
+>  
+> @@ -22,11 +23,11 @@
+>  #define IPU3_UAPI_MAX_BUBBLE_SIZE			10
+>  
+>  #define IPU3_UAPI_GRID_START_MASK			((1 << 12) - 1)
+> -#define IPU3_UAPI_GRID_Y_START_EN			(1 << 15)
+> +#define IPU3_UAPI_GRID_Y_START_EN			BIT(15)
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/rdacm20.c | 29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+This header is used in user space where you don't have the BIT() macro.
 
-diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index e6fed86a3281..cb725c2778c0 100644
---- a/drivers/media/i2c/rdacm20.c
-+++ b/drivers/media/i2c/rdacm20.c
-@@ -473,6 +473,19 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Hold OV10635 in reset during max9271 configuration. The reset signal
-+	 * has to be asserted for at least 200 microseconds.
-+	 */
-+	ret = max9271_enable_gpios(&dev->serializer, MAX9271_GPIO1OUT);
-+	if (ret)
-+		return ret;
-+
-+	ret = max9271_clear_gpios(&dev->serializer, MAX9271_GPIO1OUT);
-+	if (ret)
-+		return ret;
-+	usleep_range(200, 500);
-+
- 	ret = max9271_configure_gmsl_link(&dev->serializer);
- 	if (ret)
- 		return ret;
-@@ -487,22 +500,14 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
- 	dev->serializer.client->addr = dev->addrs[0];
- 
- 	/*
--	 * Reset the sensor by cycling the OV10635 reset signal connected to the
--	 * MAX9271 GPIO1 and verify communication with the OV10635.
-+	 * Release ov10635 from reset and initialize it. The image sensor
-+	 * requires at least 2048 XVCLK cycles (85 micro-seconds at 24MHz)
-+	 * before being available. Stay safe and wait up to 500 micro-seconds.
- 	 */
--	ret = max9271_enable_gpios(&dev->serializer, MAX9271_GPIO1OUT);
--	if (ret)
--		return ret;
--
--	ret = max9271_clear_gpios(&dev->serializer, MAX9271_GPIO1OUT);
--	if (ret)
--		return ret;
--	usleep_range(10000, 15000);
--
- 	ret = max9271_set_gpios(&dev->serializer, MAX9271_GPIO1OUT);
- 	if (ret)
- 		return ret;
--	usleep_range(10000, 15000);
-+	usleep_range(100, 500);
- 
- again:
- 	ret = ov10635_read16(dev, OV10635_PID);
+>  
+>  /* controls generation of meta_data (like FF enable/disable) */
+> -#define IPU3_UAPI_AWB_RGBS_THR_B_EN			(1 << 14)
+> -#define IPU3_UAPI_AWB_RGBS_THR_B_INCL_SAT		(1 << 15)
+> +#define IPU3_UAPI_AWB_RGBS_THR_B_EN			BIT(14)
+> +#define IPU3_UAPI_AWB_RGBS_THR_B_INCL_SAT		BIT(15)
+>  
+>  /**
+>   * struct ipu3_uapi_grid_config - Grid plane config
+
 -- 
-2.31.1
+Kind regards,
 
+Sakari Ailus
