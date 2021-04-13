@@ -2,196 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7794C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60950C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:37:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9748661278
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:37:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D0C161278
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:37:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245735AbhDMKha (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 06:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245730AbhDMKh0 (ORCPT
+        id S245752AbhDMKh4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 06:37:56 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:39126 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245730AbhDMKh4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 06:37:26 -0400
-X-Greylist: delayed 441 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Apr 2021 03:37:06 PDT
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2E6C061756
-        for <linux-media@vger.kernel.org>; Tue, 13 Apr 2021 03:37:06 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2001:2003:f444:fb00:f814:8791:6dad:f550])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id C1AB52004E;
-        Tue, 13 Apr 2021 13:29:39 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1618309779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AJnAQTOzJ94G+5YjQeB99oUU+/Ys6+aosNTuhGE51aE=;
-        b=fKneOndYpUqBeB7MeEQ5RiU3RrWRcoiInJ6iSsvB0DbBZ+gsWwIT9Fy9EEMUIyNN9ydFi9
-        Q0AmiWRcbCYHCVPPyUvfevcZ+5XRiN87ykQ25Fr6r8Bc+0faFgcTtr9mXmyo9peeiao4gi
-        xgnMJgxlqwTW/mDdovXA5JDHkm0MZJ4=
-Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 7DC33634C87;
-        Tue, 13 Apr 2021 13:28:48 +0300 (EEST)
-Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.eu)
-        by valkosipuli.localdomain with esmtp (Exim 4.92)
-        (envelope-from <sakari.ailus@iki.fi>)
-        id 1lWGId-0002BA-Id; Tue, 13 Apr 2021 13:29:39 +0300
-Date:   Tue, 13 Apr 2021 13:29:39 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Bernhard Wimmer <be.wimm@gmail.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: ccs: Fix the op_pll_multiplier address
-Message-ID: <20210413102939.GM3@valkosipuli.retiisi.eu>
-References: <20210412164943.1849-1-be.wimm@gmail.com>
+        Tue, 13 Apr 2021 06:37:56 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13DAUYQ1191089;
+        Tue, 13 Apr 2021 10:37:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=a49XKfFDi2IaRm8HfCUDmWOG4oiQUmUQiFQeVHD9fXU=;
+ b=lK+8gYUHJxCxr3Wt4utJpoZxe4Em4dSi6d+g5OWQ8NJGikUmnJHiLLKsPM9h7UHEejcj
+ 9yidFKbOetiEm2L4jmQFXpn2L/JPdSafiMA6RcK0jMmMUJQqlhQHlgndmocBIAxPO/bd
+ b8/W/RTZ1vZcolulo3LGYPgTU8KEYamMSDAvjxllbPHu7PIRoFGdfynRLNUFtlKtd6Br
+ r71Sfyzqzwe4fCbzxi9Rse9zgaJmOc20ZHuBsi4S/I6AMlGiUop0W/LYK0Knsauk+m2o
+ yrp5I8xd3N33WUsh2YSUInCGcKgpUXT2X7Yk7MMUVmN6S+90PawHPsWN949iBiztYepH ng== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 37u3ymejg8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 10:37:29 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13DATee7002897;
+        Tue, 13 Apr 2021 10:37:27 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 37unwykww2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 10:37:27 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 13DAbKw7026411;
+        Tue, 13 Apr 2021 10:37:20 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 13 Apr 2021 03:37:19 -0700
+Date:   Tue, 13 Apr 2021 13:37:12 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] media: omap3isp: drop graph mutex on error path
+Message-ID: <YHV0WJWNQv5I6yqO@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210412164943.1849-1-be.wimm@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1618309779; a=rsa-sha256; cv=none;
-        b=Av4j5HRFEn44eUXoIoTX0UFXmXXVtRfRMwjTXaq7vMP/XXaJA4CDQ1NHFQGFZOyW17Lq8e
-        xsQj9OqiFSHaLN6V68V50+GApWd7YGt1/FdoNkPmYRkyAZsqXEEjf+0dseJU/dxpgA2YLL
-        SVPLavrIvo+nwV9Pk5HfTIFhClcrBuI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1618309779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AJnAQTOzJ94G+5YjQeB99oUU+/Ys6+aosNTuhGE51aE=;
-        b=BCRki8TT3ctKA4B1CAY+qnXhV/NnYMCTXxwAy+Jj69kRs21ZsGg/7MrNWQqnGufTGZBchy
-        3JSqyjObIo2A/yMrWsDfbRZswgJOFd9glmU3Wy0dJcALtaidHKBno8nLFsVCAHiDv9D0iw
-        X/bEAoeshPBqO3IRNrUgzHujUf53l+c=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9952 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104130072
+X-Proofpoint-GUID: rzwGE9aQ28t3hMVgb3rAaUnRnAxJbl89
+X-Proofpoint-ORIG-GUID: rzwGE9aQ28t3hMVgb3rAaUnRnAxJbl89
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9952 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104130072
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bernhard,
+Drop the "&isp->media_dev.graph_mutex" if media_entity_enum_init() fails.
 
-Thanks for the patch.
+Fixes: ba689d933361 ("media: omap3isp: Acquire graph mutex for graph traversal")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/media/platform/omap3isp/isp.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Mon, Apr 12, 2021 at 06:49:43PM +0200, Bernhard Wimmer wrote:
-> According to the CCS spec the op_pll_multiplier address is 0x030e, not 0x031e.
-
-Please wrap commit messages no later than at 75th column.
-
-> 
-> Signed-off-by: Bernhard Wimmer <be.wimm@gmail.com>
-> ---
->  Documentation/driver-api/media/drivers/ccs/ccs-regs.asc | 2 +-
->  Documentation/driver-api/media/drivers/ccs/mk-ccs-regs  | 5 +++--
->  drivers/media/i2c/ccs/ccs-limits.c                      | 1 +
->  drivers/media/i2c/ccs/ccs-limits.h                      | 1 +
->  drivers/media/i2c/ccs/ccs-regs.h                        | 3 ++-
->  5 files changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/media/drivers/ccs/ccs-regs.asc b/Documentation/driver-api/media/drivers/ccs/ccs-regs.asc
-> index f2042acc8a45..bbf9213c3388 100644
-> --- a/Documentation/driver-api/media/drivers/ccs/ccs-regs.asc
-> +++ b/Documentation/driver-api/media/drivers/ccs/ccs-regs.asc
-> @@ -210,7 +210,7 @@ pll_multiplier				0x0306	16
->  op_pix_clk_div				0x0308	16
->  op_sys_clk_div				0x030a	16
->  op_pre_pll_clk_div			0x030c	16
-> -op_pll_multiplier			0x031e	16
-> +op_pll_multiplier			0x030e	16
-
-Good find!
-
->  pll_mode				0x0310	8
->  - f					0	0
->  - e	single				0
-> diff --git a/Documentation/driver-api/media/drivers/ccs/mk-ccs-regs b/Documentation/driver-api/media/drivers/ccs/mk-ccs-regs
-> index 6668deaf2f19..807c0c14ec29 100755
-> --- a/Documentation/driver-api/media/drivers/ccs/mk-ccs-regs
-> +++ b/Documentation/driver-api/media/drivers/ccs/mk-ccs-regs
-> @@ -72,13 +72,14 @@ $uc_header =~ s/[^A-Z0-9]/_/g;
->  
->  my $copyright = "/* Copyright (C) 2019--2020 Intel Corporation */\n";
->  my $license = "SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause";
-> +my $note = "/* Generated by $0; do not modify. */\n";
-
-Could you make this a multi-line comment (wrap after ;) so this will stay
-under 80 characters per line? The path to the file is long. I.e.
-
-/*
- * Generated by ...;
- * do not modify.
- */
-
->  
->  for my $fh ($A, $LC) {
-> -	print $fh "// $license\n$copyright\n" if defined $fh;
-> +	print $fh "// $license\n$copyright$note\n" if defined $fh;
->  }
->  
->  for my $fh ($H, $LH) {
-> -	print $fh "/* $license */\n$copyright\n";
-> +	print $fh "/* $license */\n$copyright$note\n";
->  }
->  
->  sub bit_def($) {
-> diff --git a/drivers/media/i2c/ccs/ccs-limits.c b/drivers/media/i2c/ccs/ccs-limits.c
-> index f5511789ac83..e4b7127b88a1 100644
-> --- a/drivers/media/i2c/ccs/ccs-limits.c
-> +++ b/drivers/media/i2c/ccs/ccs-limits.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause
->  /* Copyright (C) 2019--2020 Intel Corporation */
-> +/* Generated by Documentation/driver-api/media/drivers/ccs/mk-ccs-regs; do not modify. */
->  
->  #include "ccs-limits.h"
->  #include "ccs-regs.h"
-> diff --git a/drivers/media/i2c/ccs/ccs-limits.h b/drivers/media/i2c/ccs/ccs-limits.h
-> index 1efa43c23a2e..40b067fc9a70 100644
-> --- a/drivers/media/i2c/ccs/ccs-limits.h
-> +++ b/drivers/media/i2c/ccs/ccs-limits.h
-> @@ -1,5 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
->  /* Copyright (C) 2019--2020 Intel Corporation */
-> +/* Generated by Documentation/driver-api/media/drivers/ccs/mk-ccs-regs; do not modify. */
->  
->  #ifndef __CCS_LIMITS_H__
->  #define __CCS_LIMITS_H__
-> diff --git a/drivers/media/i2c/ccs/ccs-regs.h b/drivers/media/i2c/ccs/ccs-regs.h
-> index 4b3e5df2121f..5de330bf8a89 100644
-> --- a/drivers/media/i2c/ccs/ccs-regs.h
-> +++ b/drivers/media/i2c/ccs/ccs-regs.h
-> @@ -1,5 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
->  /* Copyright (C) 2019--2020 Intel Corporation */
-> +/* Generated by Documentation/driver-api/media/drivers/ccs/mk-ccs-regs; do not modify. */
->  
->  #ifndef __CCS_REGS_H__
->  #define __CCS_REGS_H__
-> @@ -202,7 +203,7 @@
->  #define CCS_R_OP_PIX_CLK_DIV					(0x0308 | CCS_FL_16BIT)
->  #define CCS_R_OP_SYS_CLK_DIV					(0x030a | CCS_FL_16BIT)
->  #define CCS_R_OP_PRE_PLL_CLK_DIV				(0x030c | CCS_FL_16BIT)
-> -#define CCS_R_OP_PLL_MULTIPLIER					(0x031e | CCS_FL_16BIT)
-> +#define CCS_R_OP_PLL_MULTIPLIER					(0x030e | CCS_FL_16BIT)
->  #define CCS_R_PLL_MODE						0x0310
->  #define CCS_PLL_MODE_SHIFT					0U
->  #define CCS_PLL_MODE_MASK					0x1
-> -- 
-> 2.17.1
-> 
-
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index 53025c8c7531..20f59c59ff8a 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -2037,8 +2037,10 @@ static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
+ 	mutex_lock(&isp->media_dev.graph_mutex);
+ 
+ 	ret = media_entity_enum_init(&isp->crashed, &isp->media_dev);
+-	if (ret)
++	if (ret) {
++		mutex_unlock(&isp->media_dev.graph_mutex);
+ 		return ret;
++	}
+ 
+ 	list_for_each_entry(sd, &v4l2_dev->subdevs, list) {
+ 		if (sd->notifier != &isp->notifier)
 -- 
-Sakari Ailus
+2.30.2
+
