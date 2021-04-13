@@ -5,41 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3302FC43611
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B52DC43460
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1642B613B0
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E34F5613AD
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343630AbhDMCbm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:42 -0400
+        id S1343728AbhDMCbr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:47 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:35890 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343539AbhDMCbl (ORCPT
+        with ESMTP id S1343650AbhDMCbn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:41 -0400
+        Mon, 12 Apr 2021 22:31:43 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DCA788AF;
-        Tue, 13 Apr 2021 04:31:21 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5DC4E8B7;
+        Tue, 13 Apr 2021 04:31:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281082;
-        bh=XxqrVdeLQLW3M7ATDxLvLXeSubA4qYb6HDkhSspAruY=;
+        s=mail; t=1618281084;
+        bh=7ytDq6KpF8o3WqTgq8qwM1/A3Hhbol++cpYXBb3hg0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZM1ivtY4t8zDif8eofjVyGkYTUf3BolaRu+/8BqIXd16Obxqk004Q68ldlf2cN92e
-         fPB1Y+yRArsOpjLPTcGRUyGRop2gR8Ss8rlrwPI7++XSh9cBABGbhjVLgGfodoislY
-         KVoJNkXIAg9CEkchf8IJQ1+hgC3ttOFFhD5ANKTU=
+        b=gmAFrGb5pTDr4VhVG5Lef1/8bvcCLuV2Gl5vjMNrr+M+KruPqQjWSzvXEB0eB+Wu/
+         YotF64pJCB+sXl4n2sycU1XGPMi0T20eI2WNPtk973Y3yAFQ7D0sffumlCmMxROMGs
+         SCWcJJhaVxaC5dC6ojA5VITMukVZVkF3U/nHpCiM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 20/23] media: imx: imx7_mipi_csis: Reorganize mipi_csis_probe()
-Date:   Tue, 13 Apr 2021 05:30:11 +0300
-Message-Id: <20210413023014.28797-21-laurent.pinchart@ideasonboard.com>
+        Marek Vasut <marex@denx.de>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH 22/23] dt-bindings: media: nxp,imx7-mipi-csi2: Add i.MX8MM support
+Date:   Tue, 13 Apr 2021 05:30:13 +0300
+Message-Id: <20210413023014.28797-23-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -49,100 +50,202 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Group the operations performed in mipi_csis_probe() logically to improve
-readability.
+The i.MX8MM integrates a newer version of the CSIS CSI-2 receiver as the
+i.MX7 family. Differences in integration are are:
+
+- An additional clock is required
+- Up to 4 data lanes are supported
+- No reset or PHY supply is present
+
+Support it in the DT binding.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 30 ++++++++++++++--------
- 1 file changed, 19 insertions(+), 11 deletions(-)
+ .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 108 +++++++++++++++---
+ 1 file changed, 94 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 61da4db292ef..07b331667db7 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -1298,22 +1298,21 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 	if (!state)
- 		return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+index d8ed480482b9..97cf9c0968f9 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+@@ -4,15 +4,16 @@
+ $id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
-+	mutex_init(&state->lock);
- 	spin_lock_init(&state->slock);
+-title: NXP i.MX7 MIPI CSI-2 receiver
++title: NXP i.MX7 and i.MX8 MIPI CSI-2 receiver
  
- 	state->dev = dev;
+ maintainers:
+   - Rui Miguel Silva <rmfrfs@gmail.com>
  
-+	memcpy(state->events, mipi_csis_events, sizeof(state->events));
+ description: |-
+-  The NXP i.MX7 SoC family includes a MIPI CSI-2 receiver IP core, documented
+-  as "CSIS V3.3". The IP core seems to originate from Samsung, and may be
+-  compatible with some of the Exynos4 ad S5P SoCs.
++  The NXP i.MX7 and i.MX8 families contain SoCs that include a MIPI CSI-2
++  receiver IP core named CSIS. The IP core originates from Samsung, and may be
++  compatible with some of the Exynos4 and S5P SoCs. i.MX7 SoCs use CSIS version
++  3.3, and i.MX8 SoCs use CSIS version 3.6.3.
+ 
+   While the CSI-2 receiver is separate from the MIPI D-PHY IP core, the PHY is
+   completely wrapped by the CSIS and doesn't expose a control interface of its
+@@ -20,7 +21,9 @@ description: |-
+ 
+ properties:
+   compatible:
+-    const: fsl,imx7-mipi-csi2
++    enum:
++      - fsl,imx7-mipi-csi2
++      - fsl,imx8mm-mipi-csi2
+ 
+   reg:
+     maxItems: 1
+@@ -29,16 +32,20 @@ properties:
+     maxItems: 1
+ 
+   clocks:
++    minItems: 3
+     items:
+       - description: The peripheral clock (a.k.a. APB clock)
+       - description: The external clock (optionally used as the pixel clock)
+       - description: The MIPI D-PHY clock
++      - description: The AXI clock
+ 
+   clock-names:
++    minItems: 3
+     items:
+       - const: pclk
+       - const: wrap
+       - const: phy
++      - const: axi
+ 
+   power-domains:
+     maxItems: 1
+@@ -71,16 +78,30 @@ properties:
+ 
+             properties:
+               data-lanes:
+-                oneOf:
+-                  - items:
+-                      - const: 1
+-                  - items:
+-                      - const: 1
+-                      - const: 2
++                items:
++                  minItems: 1
++                  maxItems: 4
++                  items:
++                    - const: 1
++                    - const: 2
++                    - const: 3
++                    - const: 4
+ 
+             required:
+               - data-lanes
+ 
++            allOf:
++              - if:
++                  properties:
++                    compatible:
++                      contains:
++                        const: fsl,imx7-mipi-csi2
++                then:
++                  properties:
++                    data-lanes:
++                      items:
++                        maxItems: 2
 +
-+	/* Parse DT properties. */
- 	ret = mipi_csis_parse_dt(state);
- 	if (ret < 0) {
- 		dev_err(dev, "Failed to parse device tree: %d\n", ret);
- 		return ret;
- 	}
+       port@1:
+         $ref: /schemas/graph.yaml#/properties/port
+         description:
+@@ -93,12 +114,29 @@ required:
+   - clocks
+   - clock-names
+   - power-domains
+-  - phy-supply
+-  - resets
+   - ports
  
--	ret = mipi_csis_phy_init(state);
--	if (ret < 0)
--		return ret;
--
--	mipi_csis_phy_reset(state);
--
-+	/* Acquire resources. */
- 	state->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(state->regs))
- 		return PTR_ERR(state->regs);
-@@ -1322,16 +1321,24 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
+ additionalProperties: false
  
-+	ret = mipi_csis_phy_init(state);
-+	if (ret < 0)
-+		return ret;
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: fsl,imx7-mipi-csi2
++    then:
++      required:
++        - phy-supply
++        - resets
++    else:
++      properties:
++        clocks:
++          minItems: 4
++        clock-names:
++          minItems: 4
++        phy-supply: false
++        resets: false
 +
- 	ret = mipi_csis_clk_get(state);
- 	if (ret < 0)
- 		return ret;
+ examples:
+   - |
+     #include <dt-bindings/clock/imx7d-clock.h>
+@@ -106,7 +144,7 @@ examples:
+     #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/reset/imx7-reset.h>
  
-+	/* Reset PHY and enable the clocks. */
-+	mipi_csis_phy_reset(state);
+-    mipi_csi: mipi-csi@30750000 {
++    mipi-csi@30750000 {
+         compatible = "fsl,imx7-mipi-csi2";
+         reg = <0x30750000 0x10000>;
+         interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+@@ -144,4 +182,46 @@ examples:
+         };
+     };
+ 
++  - |
++    #include <dt-bindings/clock/imx8mm-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
 +
- 	ret = mipi_csis_clk_enable(state);
- 	if (ret < 0) {
- 		dev_err(state->dev, "failed to enable clocks: %d\n", ret);
- 		return ret;
- 	}
- 
-+	/* Now that the hardware is initialized, request the interrupt. */
- 	ret = devm_request_irq(dev, irq, mipi_csis_irq_handler, 0,
- 			       dev_name(dev), state);
- 	if (ret) {
-@@ -1339,22 +1346,23 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 		goto disable_clock;
- 	}
- 
--	platform_set_drvdata(pdev, &state->sd);
--
--	mutex_init(&state->lock);
-+	/* Initialize and register the subdev. */
- 	ret = mipi_csis_subdev_init(state);
- 	if (ret < 0)
- 		goto disable_clock;
- 
-+	platform_set_drvdata(pdev, &state->sd);
++    mipi-csi@32e30000 {
++        compatible = "fsl,imx8mm-mipi-csi2";
++        reg = <0x32e30000 0x1000>;
++        interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++        clock-frequency = <333000000>;
++        clocks = <&clk IMX8MM_CLK_DISP_APB_ROOT>,
++                 <&clk IMX8MM_CLK_CSI1_ROOT>,
++                 <&clk IMX8MM_CLK_CSI1_PHY_REF>,
++                 <&clk IMX8MM_CLK_DISP_AXI_ROOT>;
++        clock-names = "pclk", "wrap", "phy", "axi";
++        power-domains = <&mipi_pd>;
 +
- 	ret = mipi_csis_async_register(state);
- 	if (ret < 0) {
- 		dev_err(dev, "async register failed: %d\n", ret);
- 		goto cleanup;
- 	}
- 
--	memcpy(state->events, mipi_csis_events, sizeof(state->events));
--
-+	/* Initialize debugfs. */
- 	mipi_csis_debugfs_init(state);
++        status = "disabled";
 +
-+	/* Enable runtime PM. */
- 	pm_runtime_enable(dev);
- 	if (!pm_runtime_enabled(dev)) {
- 		ret = mipi_csis_pm_resume(dev, true);
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++
++                imx8mm_mipi_csi_in: endpoint {
++                    remote-endpoint = <&imx477_out>;
++                    data-lanes = <1 2 3 4>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++
++                imx8mm_mipi_csi_out: endpoint {
++                    remote-endpoint = <&csi_in>;
++                };
++            };
++        };
++    };
++
+ ...
 -- 
 Regards,
 
