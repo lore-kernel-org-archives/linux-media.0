@@ -2,102 +2,152 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D9A9C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 586D1C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:32:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6ACAB613BD
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:23:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B7F1613BC
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 10:32:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241408AbhDMKXy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 06:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbhDMKXv (ORCPT
+        id S245219AbhDMKc3 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 06:32:29 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:33960 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245194AbhDMKc2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 06:23:51 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D075BC061574;
-        Tue, 13 Apr 2021 03:23:29 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2001:2003:f444:fb00:f814:8791:6dad:f550])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 1FAA61B00348;
-        Tue, 13 Apr 2021 13:23:24 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1618309404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7kx6it9HR4h3rh5xEqXP9YVys6uySu3VVFrBBK0aRs=;
-        b=NzsrtbLG+ZRJL60z3ZIOGs0zIYNNBz3LOHkw6WlhnL9cE9rjGcPFg3OPUlkD+WnvHrf7Rn
-        Tkca+1R/yvdiVi/im+nyN4Q5tIYIsmQfGSfuLp8HpMiIvn0u3+c6F2l4YS82J8LpafB9S1
-        i05K/OENyEBoMyQPgMekaVlpZw9kg6ZC2K5y2ZGgD8aSdnRz0blxVFwphilMA4DUtVDD12
-        5vNp7Eu9bSR5CpzZ74f3fRUUJY9h1Wzz+xrIcbA/7xVyVjIZZqm/1DMocwbG8FrRE8aJyS
-        o5wd6IPvcUlbQdwxaS83YvH+4c8Vrcf3UOTI9wwbNbihSEKMsKYoEYeTVrVjGw==
-Received: from valkosipuli.localdomain (valkosipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 39EF4634C87;
-        Tue, 13 Apr 2021 13:22:31 +0300 (EEST)
-Received: from localhost ([127.0.0.1] helo=valkosipuli.retiisi.eu)
-        by valkosipuli.localdomain with esmtp (Exim 4.92)
-        (envelope-from <sakari.ailus@iki.fi>)
-        id 1lWGCY-0002B3-AB; Tue, 13 Apr 2021 13:23:22 +0300
-Date:   Tue, 13 Apr 2021 13:23:22 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     dev.dragon@bk.ru
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Staging: media: atomisp: pci: fixed a curly bracket
- coding style issue.
-Message-ID: <20210413102322.GL3@valkosipuli.retiisi.eu>
-References: <20210411134840.7184-1-dev.dragon@bk.ru>
+        Tue, 13 Apr 2021 06:32:28 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-111-z87EccfoNGWB0XIN9fdlag-1; Tue, 13 Apr 2021 11:32:06 +0100
+X-MC-Unique: z87EccfoNGWB0XIN9fdlag-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Tue, 13 Apr 2021 11:32:05 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.012; Tue, 13 Apr 2021 11:32:05 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'sakari.ailus@linux.intel.com'" <sakari.ailus@linux.intel.com>
+CC:     'Mitali Borkar' <mitaliborkar810@gmail.com>,
+        "bingbu.cao@intel.com" <bingbu.cao@intel.com>,
+        "tian.shu.qiu@intel.com" <tian.shu.qiu@intel.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "outreachy-kernel@googlegroups.com" 
+        <outreachy-kernel@googlegroups.com>,
+        "mitali_s@me.iitr.ac.in" <mitali_s@me.iitr.ac.in>
+Subject: RE: [PATCH 2/6] staging: media: intel-ipu3: preferred __aligned(size)
+ over __attribute__aligned(size)
+Thread-Topic: [PATCH 2/6] staging: media: intel-ipu3: preferred
+ __aligned(size) over __attribute__aligned(size)
+Thread-Index: AQHXLyewN18t7A08NkSuo10kWluH2aqyET/AgAAWMYCAABkZMA==
+Date:   Tue, 13 Apr 2021 10:32:05 +0000
+Message-ID: <249c86809f374e13ac0be28c279eae7e@AcuMS.aculab.com>
+References: <cover.1618180659.git.mitaliborkar810@gmail.com>
+ <f618f1fe2d13417ebed185da392fb48811593a9f.1618180660.git.mitaliborkar810@gmail.com>
+ <277be5f4da82449aaf0a635b60ad0728@AcuMS.aculab.com>
+ <20210413095621.GQ3@paasikivi.fi.intel.com>
+In-Reply-To: <20210413095621.GQ3@paasikivi.fi.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210411134840.7184-1-dev.dragon@bk.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1618309404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7kx6it9HR4h3rh5xEqXP9YVys6uySu3VVFrBBK0aRs=;
-        b=XKZMCZ9xRc5fvWswBb44cLhE/86zKwVqHWCp+50R8mNHIbv5eeOvBu/bzOn/Sqy8wXJeET
-        oD3RyVbnsshohNkp+H41vnvqtocqXFArQMwrWZPy7lrDyJ72smgFe20RROF61X1MRi8k0E
-        xj8+Rjt7HyCVIn58IVngnMgBrSZUnJAM5wmqNBnzwVTYk3dgHu4EbDhlOgvKnurzKdWhH9
-        o3jjlsEbuGCMY2i3GLF+kI27dYDzv6jJC1rlf9eMU+aws9X19IVvGPLHt+WfdtrMqGStpF
-        sAqo2u/ptsYcX4U0wEweWsev1Glcfd5CYsQeCM5hmHkoxyh2EweESYopnC50nA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1618309404; a=rsa-sha256;
-        cv=none;
-        b=Hz72SJ0klz0GEAIgrg5jEXvZOGRLc1HhIwRWtnVO0gHu01Q14AotnxCV+YzxpGA+E+Fo3b
-        sBaKy4qDln5IKvKq0au9XqQrCKXR6H8YONBlzWSUFS4p/C5LIgWcj1NLJ101jkNFabagnx
-        CGjkUWZ8jrhct+6NirBOuTMRCCn4EpjNb5rMhThEk3pGmatNDvz6DNE11S3tsnqdXY/8h0
-        XudPvFfZe7d1eg1EA7NCApqHOF6QDKNjrV2je98Bj8qW6at9XnkDhnUe0JEL1uVB5nx2wo
-        BIftP/QJ7+x7RRB78caOPa3KIlgIktVzzJI9jrbotx2rhvXVoYCe9troNLnljw==
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Apr 11, 2021 at 04:48:41PM +0300, dev.dragon@bk.ru wrote:
-> From: Dmitrii Wolf <dev.dragon@bk.ru>
+From: sakari.ailus@linux.intel.com
+> Sent: 13 April 2021 10:56
 > 
-> Fixed a coding style issue.
+> Hi David,
 > 
-> Signed-off-by: Dmitrii Wolf <dev.dragon@bk.ru>
+> On Tue, Apr 13, 2021 at 07:40:12AM +0000, David Laight wrote:
+> > From: Mitali Borkar
+> > > Sent: 12 April 2021 00:09
+> > >
+> > > This patch fixes the warning identified by checkpatch.pl by replacing
+> > > __attribute__aligned(size) with __aligned(size)
+> > >
+> > > Signed-off-by: Mitali Borkar <mitaliborkar810@gmail.com>
+> > > ---
+> > >  .../staging/media/ipu3/include/intel-ipu3.h   | 74 +++++++++----------
+> > >  1 file changed, 37 insertions(+), 37 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/media/ipu3/include/intel-ipu3.h
+> > > b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> > > index 589d5ccee3a7..d95ca9ebfafb 100644
+> > > --- a/drivers/staging/media/ipu3/include/intel-ipu3.h
+> > > +++ b/drivers/staging/media/ipu3/include/intel-ipu3.h
+> > > @@ -84,7 +84,7 @@ struct ipu3_uapi_grid_config {
+> > >   */
+> > >  struct ipu3_uapi_awb_raw_buffer {
+> > >  	__u8 meta_data[IPU3_UAPI_AWB_MAX_BUFFER_SIZE]
+> > > -		__attribute__((aligned(32)));
+> > > +		__aligned(32);
+> > >  } __packed;
+> >
+> > WTF?
+> >
+> > It either has 1-byte alignment because it is just __u8,
+> > 32-byte because of the aligned(32),
+> > or 1 byte because of the outer packed.
+> >
+> > What alignment does this (and all the other) structures
+> > actually need?
+> 
+> 32 as noted above. Here packed makes no difference though.
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Bollocks - it ought to override the __aligned(32);
 
--- 
-Sakari Ailus
+
+> Some of these structs are used embedded in other structs or alone. I
+> haven't checked this one.
+> 
+> It's also possible to have __packed and __aligned() conflict (in which case
+> a decent compiler would give you a warning) --- which does not happen
+> currently AFAIK.
+
+At least one compiler is objecting to some similar constructs.
+
+> >
+> > Specifying 'packed' isn't free.
+> 
+> It may be free if the packed alignment of the fields corresponds to
+> architecture's packing. Here __aligned() is used to satisfy
+> hardware alignment requirements and __packed is used to ensure the same
+> memory layout independently of ABI rules.
+
+No that isn't what packed is for.
+'packed' also tells the compiler that the structure may 'exist' at
+an unaligned address.
+On many architectures this requires the compiler use byte sized
+access and shifts for all members.
+
+If you are worried that the compiler/ABI might have inserted
+padding then add a compile-time assert on the structure size.
+But most kernel code assumes that structures where everything
+is on its natural boundary won't have any padding.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
