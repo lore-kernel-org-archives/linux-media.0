@@ -7,32 +7,29 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FADC433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EFD0C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 630BA613AA
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A334613AA
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241097AbhDMCbb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238797AbhDMCb3 (ORCPT
+        id S245576AbhDMCbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:33 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35892 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241194AbhDMCbc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E7C061574
-        for <linux-media@vger.kernel.org>; Mon, 12 Apr 2021 19:31:10 -0700 (PDT)
+        Mon, 12 Apr 2021 22:31:32 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3A7B8AF;
-        Tue, 13 Apr 2021 04:31:07 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DD250ACC;
+        Tue, 13 Apr 2021 04:31:09 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281068;
-        bh=W1ojoZEXI6LmEnmcTHQY0FgzOu8gh0aLc6z9ENTlm8M=;
+        s=mail; t=1618281070;
+        bh=lFtkgNNTxcEIgVqoHrvR4yOqSi0tw47YZcUHJJGbeOg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z1IPn2ecuA/1vkLahbYvUCxty8o9jyXO9Jv3eugaAcYmAdljuMlm52FLcl2A3UOFR
-         pBL117JLbIuW22ee6lA110MX9RdlFrIvNBdHYCpleKoU29CobRVljlIHp1ZB9B5DF9
-         e2/7HnV9HgcK3KGrmWIRudzQPw8M1Q2hlgBLr21s=
+        b=NNkqYn/WdD2/w0gwoyjdn7RqirjQqVt/pwaLsJQfayj8iY/GhbKxPI3LKQfS8FPwT
+         zLFfNXZ1coLcJwPl5mQuma61KbM0VHsb4ebNWF4ELpswT2mK9IqmZz9kb7XdSWkad/
+         PEfqi4ncajLvZAyTkNmLwvaWxDQWwN7mn7XB4H3Y=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -40,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>
-Subject: [PATCH 01/23] media: imx: imx7_mipi_csis: Fix logging of only error event counters
-Date:   Tue, 13 Apr 2021 05:29:52 +0300
-Message-Id: <20210413023014.28797-2-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 04/23] media: imx: imx7_mipi_csis: Move static data to top of mipi_csis_dump_regs()
+Date:   Tue, 13 Apr 2021 05:29:55 +0300
+Message-Id: <20210413023014.28797-5-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -52,37 +49,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The mipi_csis_events array ends with 6 non-error events, not 4. Update
-mipi_csis_log_counters() accordingly. While at it, log event counters in
-forward order, as there's no reason to log them backward.
+It's customary to declare static variables at the top of the function,
+with a blank line separating them from the non-static variables.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 025fdc488bd6..25d0f89b2e53 100644
+index f7c8b6d67e1c..25125e067aa7 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -666,13 +666,15 @@ static void mipi_csis_clear_counters(struct csi_state *state)
+@@ -429,9 +429,6 @@ static inline u32 mipi_csis_read(struct csi_state *state, u32 reg)
  
- static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
+ static int mipi_csis_dump_regs(struct csi_state *state)
  {
--	int i = non_errors ? MIPI_CSIS_NUM_EVENTS : MIPI_CSIS_NUM_EVENTS - 4;
-+	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
-+				: MIPI_CSIS_NUM_EVENTS - 6;
- 	struct device *dev = &state->pdev->dev;
- 	unsigned long flags;
+-	struct device *dev = &state->pdev->dev;
+-	unsigned int i;
+-	u32 cfg;
+ 	static const struct {
+ 		u32 offset;
+ 		const char * const name;
+@@ -450,6 +447,10 @@ static int mipi_csis_dump_regs(struct csi_state *state)
+ 		{ MIPI_CSIS_DBG_CTRL, "DBG_CTRL" },
+ 	};
+ 
++	struct device *dev = &state->pdev->dev;
 +	unsigned int i;
++	u32 cfg;
++
+ 	dev_info(dev, "--- REGISTERS ---\n");
  
- 	spin_lock_irqsave(&state->slock, flags);
- 
--	for (i--; i >= 0; i--) {
-+	for (i = 0; i < num_events; ++i) {
- 		if (state->events[i].counter > 0 || state->debug)
- 			dev_info(dev, "%s events: %d\n", state->events[i].name,
- 				 state->events[i].counter);
+ 	for (i = 0; i < ARRAY_SIZE(registers); i++) {
 -- 
 Regards,
 
