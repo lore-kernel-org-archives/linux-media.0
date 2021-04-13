@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADBE7C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 11:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06DE4C43461
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 11:02:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91DFD61249
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 11:02:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE685613B7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 11:02:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344841AbhDMLCW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 07:02:22 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:55046 "EHLO
+        id S1344884AbhDMLCt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 07:02:49 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:24175 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344668AbhDMLCJ (ORCPT
+        with ESMTP id S1344853AbhDMLCY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 07:02:09 -0400
+        Tue, 13 Apr 2021 07:02:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1618311711; x=1649847711;
+  t=1618311724; x=1649847724;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=o5N9TLF/8VIiB6ppxmt0MiLXjBE5Da5801HwpJMUPV4=;
-  b=DfUQu2+f7QzEBD273DoaRcO55JRSXGGZ7/H8zZK99YMdEnWQ3tR0AatM
-   M3U7EJVSDCOLPTVnPdJiGWdMx3Xy48KSUaPdn27A7J+g8gZyN2EIWX7Gc
-   txlz+5/899jME9oM3nMh7ULgH2BP7z6/BoBVqg1ISiz79+rZrNzbn7ScK
-   H8FjeJbvQsOCiSUbhoM/SF/k73M1OruBr/ea2HMoElh4mqnBJWxR14bcP
-   CASb/+Yi1nAGRO2ZODowMJHEij31rWQa/l5hewnpQg62rDs+QY1+wm8YT
-   h0pYzbyuNsxYf83b3Gqd4/Tm3jn98yp1D53Jkv1xtOReNn8e1HU84txn5
-   w==;
-IronPort-SDR: 0yRW8fMC7idxQmu2t5AHsOmeWO6WnMmNb9YHcfSMXX1wMddZTl6EhJixBeeDnfMSs85hszZ89X
- H2X9vOzJMs0oNvSwO+eNtVvkYg9lVaeYyLL2Mpcm70wWFhHhSyCR8XeoEGSX7kGO95C7FDYri9
- 3UO98VOgzt5R7ThIhCgVk/vLX84K/V+AMURxB9yXc4YV0XWA98Z+kXEE90nDORRGd+vf0F5GRo
- S+gJeUS5nLX9W8bXD/+TtKZXxYGVmKMURXWs1wWckhfdd5OJznF4NRZCivJgBPJPs+OWEnW7w3
- K7k=
+  bh=Nz2K1lpqGeTsaJJ5/JbHz6dYZwbhFbuGCzjN9yCEQnw=;
+  b=19gGGBV+PhSG28/4jBzVVMnS2CNxAWih/ibn6U+SlT5CwqHvQ0Lc93TO
+   BuDB4axhbOnFmqC05Do9bFOTv8V5bvIdvgfZ3aupaO22u+MTo5Pg09JNf
+   f1jy3ClxhxwQ0Oq3tkhW1l1HaZ76HpDMbdkT8zCQoumuOoHfuOJtaJ2gt
+   VUNMR/4S/Qg3uX47Kn1j3X08WEA+3+Pj/V1L3AsMdMUA1UpDE05kEsp6+
+   EGEFbYsjzBCQ+V7uivgpkp/W8VqH7hGurEWkXbujtSvebDHK/JkdT4sQB
+   KGIg0zI6UZzNpu8wdNSzjulD62t44+joI+/H5lJ/+k+APO2R9zBzPv26B
+   g==;
+IronPort-SDR: EPuOzF0yQ2YYc27r1O6hfq0/Wfo//ETyH1taHodGr1n1g9qHVGpM6GdK6frFF+Ng0binB08XNO
+ 4TfRNI6lC9IP5PfVdwFoxbMQL5Bq6p/bMiHzIym7ToP1OpQHHJbh+vmSe40VNfcnW+ZNJYd1n7
+ M7qjZduV1p23/h/kbvZXsDauwg409bQWUg8X0d5Bi1nfy3ARdfHzPEvBvXVZr+crVakEpNC7EX
+ +OKsiopxvopOxWVHZr0OYkAlAd9HUQgynDWoNVKq7gSFozNoks3D/6EnmEVa2/cEchqBx29STk
+ 0sY=
 X-IronPort-AV: E=Sophos;i="5.82,219,1613458800"; 
-   d="scan'208";a="116250540"
+   d="scan'208";a="110611976"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2021 04:01:50 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2021 04:02:04 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 13 Apr 2021 04:01:48 -0700
+ 15.1.2176.2; Tue, 13 Apr 2021 04:02:04 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 13 Apr 2021 04:01:36 -0700
+ 15.1.2176.2 via Frontend Transport; Tue, 13 Apr 2021 04:02:00 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <jacopo@jmondi.org>, <robh+dt@kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v3 13/33] media: atmel: atmel-isc: add HIS to register offsets
-Date:   Tue, 13 Apr 2021 13:57:11 +0300
-Message-ID: <20210413105731.610028-14-eugen.hristev@microchip.com>
+Subject: [PATCH v3 15/33] media: atmel: atmel-isc: add support for version register
+Date:   Tue, 13 Apr 2021 13:57:13 +0300
+Message-ID: <20210413105731.610028-16-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210413105731.610028-1-eugen.hristev@microchip.com>
 References: <20210413105731.610028-1-eugen.hristev@microchip.com>
@@ -68,109 +68,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HIS submodule is a part of the atmel-isc pipeline, and stands for
-Histogram. This module performs a color histogram that can be read and used
-by the main processor.
-Add his to the reg offsets struct.
-This will allow different products to have a different reg offset for this
-particular module.
+Add support for version register and print it at probe time.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
-Changes in v3:
-- added module description in commit message
+ drivers/media/platform/atmel/atmel-isc-regs.h    | 5 +++++
+ drivers/media/platform/atmel/atmel-isc.h         | 2 ++
+ drivers/media/platform/atmel/atmel-sama5d2-isc.c | 5 +++++
+ 3 files changed, 12 insertions(+)
 
- drivers/media/platform/atmel/atmel-isc-base.c    | 11 +++++++----
- drivers/media/platform/atmel/atmel-isc-regs.h    |  2 ++
- drivers/media/platform/atmel/atmel-isc.h         |  2 ++
- drivers/media/platform/atmel/atmel-sama5d2-isc.c |  1 +
- 4 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 317172959370..aa7a9a7ca0e6 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -678,12 +678,13 @@ static void isc_set_histogram(struct isc_device *isc, bool enable)
- 	struct isc_ctrls *ctrls = &isc->ctrls;
- 
- 	if (enable) {
--		regmap_write(regmap, ISC_HIS_CFG,
-+		regmap_write(regmap, ISC_HIS_CFG + isc->offsets.his,
- 			     ISC_HIS_CFG_MODE_GR |
- 			     (isc->config.sd_format->cfa_baycfg
- 					<< ISC_HIS_CFG_BAYSEL_SHIFT) |
- 					ISC_HIS_CFG_RAR);
--		regmap_write(regmap, ISC_HIS_CTRL, ISC_HIS_CTRL_EN);
-+		regmap_write(regmap, ISC_HIS_CTRL + isc->offsets.his,
-+			     ISC_HIS_CTRL_EN);
- 		regmap_write(regmap, ISC_INTEN, ISC_INT_HISDONE);
- 		ctrls->hist_id = ISC_HIS_CFG_MODE_GR;
- 		isc_update_profile(isc);
-@@ -692,7 +693,8 @@ static void isc_set_histogram(struct isc_device *isc, bool enable)
- 		ctrls->hist_stat = HIST_ENABLED;
- 	} else {
- 		regmap_write(regmap, ISC_INTDIS, ISC_INT_HISDONE);
--		regmap_write(regmap, ISC_HIS_CTRL, ISC_HIS_CTRL_DIS);
-+		regmap_write(regmap, ISC_HIS_CTRL + isc->offsets.his,
-+			     ISC_HIS_CTRL_DIS);
- 
- 		ctrls->hist_stat = HIST_DISABLED;
- 	}
-@@ -1821,7 +1823,8 @@ static void isc_awb_work(struct work_struct *w)
- 			ctrls->awb = ISC_WB_NONE;
- 		}
- 	}
--	regmap_write(regmap, ISC_HIS_CFG, hist_id | baysel | ISC_HIS_CFG_RAR);
-+	regmap_write(regmap, ISC_HIS_CFG + isc->offsets.his,
-+		     hist_id | baysel | ISC_HIS_CFG_RAR);
- 	isc_update_profile(isc);
- 	/* if awb has been disabled, we don't need to start another histogram */
- 	if (ctrls->awb)
 diff --git a/drivers/media/platform/atmel/atmel-isc-regs.h b/drivers/media/platform/atmel/atmel-isc-regs.h
-index 2205484e04fc..0ab280ab59ec 100644
+index 4940998c82a2..344668dcfcf4 100644
 --- a/drivers/media/platform/atmel/atmel-isc-regs.h
 +++ b/drivers/media/platform/atmel/atmel-isc-regs.h
-@@ -224,6 +224,8 @@
- #define ISC_RLP_CFG_MODE_YYCC_LIMITED   0xc
- #define ISC_RLP_CFG_MODE_MASK           GENMASK(3, 0)
+@@ -295,6 +295,11 @@
+ /* DMA Address 2 Register */
+ #define ISC_DAD2        0x000003fc
  
-+/* Offset for HIS register specific to sama5d2 product */
-+#define ISC_SAMA5D2_HIS_OFFSET	0
- /* Histogram Control Register */
- #define ISC_HIS_CTRL	0x000003d4
++/* Offset for version register specific to sama5d2 product */
++#define ISC_SAMA5D2_VERSION_OFFSET	0
++/* Version Register */
++#define ISC_VERSION	0x0000040c
++
+ /* Histogram Entry */
+ #define ISC_HIS_ENTRY	0x00000410
  
 diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index b7d4e7fab570..652285dc9f52 100644
+index 52a9199d65ee..676a5be1ee8c 100644
 --- a/drivers/media/platform/atmel/atmel-isc.h
 +++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -151,6 +151,7 @@ struct isc_ctrls {
-  * @sub422:		Offset for the SUB422 register
-  * @sub420:		Offset for the SUB420 register
+@@ -153,6 +153,7 @@ struct isc_ctrls {
   * @rlp:		Offset for the RLP register
-+ * @his:		Offset for the HIS related registers
+  * @his:		Offset for the HIS related registers
+  * @dma:		Offset for the DMA related registers
++ * @version:		Offset for the version register
   */
  struct isc_reg_offsets {
  	u32 csc;
-@@ -158,6 +159,7 @@ struct isc_reg_offsets {
- 	u32 sub422;
- 	u32 sub420;
+@@ -162,6 +163,7 @@ struct isc_reg_offsets {
  	u32 rlp;
-+	u32 his;
+ 	u32 his;
+ 	u32 dma;
++	u32 version;
  };
  
  /*
 diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index dd3f8e50a8d4..914de4ed63f3 100644
+index 12f56a71db40..10b70d4b04c4 100644
 --- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
 +++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -238,6 +238,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	isc->offsets.sub422 = ISC_SAMA5D2_SUB422_OFFSET;
- 	isc->offsets.sub420 = ISC_SAMA5D2_SUB420_OFFSET;
+@@ -192,6 +192,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	struct isc_subdev_entity *subdev_entity;
+ 	int irq;
+ 	int ret;
++	u32 ver;
+ 
+ 	isc = devm_kzalloc(dev, sizeof(*isc), GFP_KERNEL);
+ 	if (!isc)
+@@ -240,6 +241,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
  	isc->offsets.rlp = ISC_SAMA5D2_RLP_OFFSET;
-+	isc->offsets.his = ISC_SAMA5D2_HIS_OFFSET;
+ 	isc->offsets.his = ISC_SAMA5D2_HIS_OFFSET;
+ 	isc->offsets.dma = ISC_SAMA5D2_DMA_OFFSET;
++	isc->offsets.version = ISC_SAMA5D2_VERSION_OFFSET;
  
  	/* sama5d2-isc - 8 bits per beat */
  	isc->dcfg = ISC_DCFG_YMBSIZE_BEATS8 | ISC_DCFG_CMBSIZE_BEATS8;
+@@ -335,6 +337,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	pm_request_idle(dev);
+ 
++	regmap_read(isc->regmap, ISC_VERSION + isc->offsets.version, &ver);
++	dev_info(dev, "Microchip ISC version %x\n", ver);
++
+ 	return 0;
+ 
+ cleanup_subdev:
 -- 
 2.25.1
 
