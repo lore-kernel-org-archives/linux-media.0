@@ -2,34 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B92A1C43600
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98395C43470
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DBDC613B7
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C6D5613AE
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245555AbhDMCbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:33 -0400
+        id S245536AbhDMCbc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:32 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:35890 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbhDMCbc (ORCPT
+        with ESMTP id S240904AbhDMCba (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:32 -0400
+        Mon, 12 Apr 2021 22:31:30 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91F79AF3;
-        Tue, 13 Apr 2021 04:31:10 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7AEC78B7;
+        Tue, 13 Apr 2021 04:31:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281071;
-        bh=9w19Yz9qw3aZm4XFvImmkXuVqJ6OoWVHG08SGtxY/U8=;
+        s=mail; t=1618281069;
+        bh=PJlQK/KkqJHdRlLF8BzXDmisC9vdeVqMWzAtEHnLM0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G+nM0xwCuYALTA/UvwA5Sbu7P285Hm31oKsf7B+JEDoFYYW1W4dqaAPk/IYVDO+BL
-         falr9zNbtFgsPscJUuzSbE/lDUokuxGH/x78Jkg5LiqL+oUuoACQ4P3f3s/n5KlubY
-         EthstAkOfFmwbCHHQsl3L4Iu0XKUGB5oiM2X/BHE=
+        b=Q4QdWgY45wTkoZQ8jrJTSri1ZB6IwtobkkRkCXQqXrG4dZ6LJEyQZ3bO1P96r/y4d
+         brS3bOn3H8iW8zFp3UVuZt+nPAMFWrgyJdNDVjoufFNyfe5RmIyxBFxL+rba9OZ8Cw
+         etoCGar2RUYGXU4ICovm5dIA5Ihs3dKiDGUnUodY=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -37,9 +38,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>
-Subject: [PATCH 05/23] media: imx: imx7_mipi_csis: Minimize locking in get/set format
-Date:   Tue, 13 Apr 2021 05:29:56 +0300
-Message-Id: <20210413023014.28797-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 02/23] media: imx: imx7_mipi_csis: Count the CSI-2 debug interrupts
+Date:   Tue, 13 Apr 2021 05:29:53 +0300
+Message-Id: <20210413023014.28797-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -49,88 +50,146 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reduce the code sections that are run with the lock held in the get/set
-format handlers:
-
-- mipi_csis_get_format() retrieves a pointer to the format, and thus
-  doesn't need locking as long as the arguments passed to the function
-  don't require locking either.
-
-- sdformat is a structure passed by the caller, not an internal state,
-  and thus doesn't require locking.
+In addition to the main interrupts that flag errors and other events,
+the CSI-2 receiver has debug interrupt sources that flag various events
+useful for debugging. Add those sources to the event counter mechanism
+and print them when debugging is enabled.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 36 ++++++++++++----------
- 1 file changed, 20 insertions(+), 16 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 69 ++++++++++++++++------
+ 1 file changed, 51 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 25125e067aa7..bbcd39672f92 100644
+index 25d0f89b2e53..67911eb8761f 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -860,8 +860,9 @@ static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
- 	struct v4l2_mbus_framefmt *fmt;
+@@ -195,6 +195,24 @@
  
--	mutex_lock(&state->lock);
- 	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
+ /* Debug control register */
+ #define MIPI_CSIS_DBG_CTRL			0xc0
++#define MIPI_CSIS_DBG_INTR_MSK			0xc4
++#define MIPI_CSIS_DBG_INTR_MSK_DT_NOT_SUPPORT	BIT(25)
++#define MIPI_CSIS_DBG_INTR_MSK_DT_IGNORE	BIT(24)
++#define MIPI_CSIS_DBG_INTR_MSK_ERR_FRAME_SIZE	BIT(20)
++#define MIPI_CSIS_DBG_INTR_MSK_TRUNCATED_FRAME	BIT(16)
++#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FE		BIT(12)
++#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FS		BIT(8)
++#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_FALL	BIT(4)
++#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_RISE	BIT(0)
++#define MIPI_CSIS_DBG_INTR_SRC			0xc8
++#define MIPI_CSIS_DBG_INTR_SRC_DT_NOT_SUPPORT	BIT(25)
++#define MIPI_CSIS_DBG_INTR_SRC_DT_IGNORE	BIT(24)
++#define MIPI_CSIS_DBG_INTR_SRC_ERR_FRAME_SIZE	BIT(20)
++#define MIPI_CSIS_DBG_INTR_SRC_TRUNCATED_FRAME	BIT(16)
++#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FE		BIT(12)
++#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FS		BIT(8)
++#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_FALL	BIT(4)
++#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_RISE	BIT(0)
+ 
+ /* Non-image packet data buffers */
+ #define MIPI_CSIS_PKTDATA_ODD			0x2000
+@@ -210,6 +228,7 @@ enum {
+ };
+ 
+ struct mipi_csis_event {
++	bool debug;
+ 	u32 mask;
+ 	const char * const name;
+ 	unsigned int counter;
+@@ -217,22 +236,30 @@ struct mipi_csis_event {
+ 
+ static const struct mipi_csis_event mipi_csis_events[] = {
+ 	/* Errors */
+-	{ MIPI_CSIS_INT_SRC_ERR_SOT_HS,		"SOT Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_LOST_FS,	"Lost Frame Start Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_LOST_FE,	"Lost Frame End Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_OVER,		"FIFO Overflow Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_WRONG_CFG,	"Wrong Configuration Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_ECC,		"ECC Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_CRC,		"CRC Error" },
+-	{ MIPI_CSIS_INT_SRC_ERR_UNKNOWN,	"Unknown Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_SOT_HS,		"SOT Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_LOST_FS,		"Lost Frame Start Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_LOST_FE,		"Lost Frame End Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_OVER,		"FIFO Overflow Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_WRONG_CFG,	"Wrong Configuration Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_ECC,		"ECC Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_CRC,		"CRC Error" },
++	{ false, MIPI_CSIS_INT_SRC_ERR_UNKNOWN,		"Unknown Error" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_DT_NOT_SUPPORT,	"Data Type Not Supported" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_DT_IGNORE,	"Data Type Ignored" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_ERR_FRAME_SIZE,	"Frame Size Error" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_TRUNCATED_FRAME,	"Truncated Frame" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_EARLY_FE,	"Early Frame End" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_EARLY_FS,	"Early Frame Start" },
+ 	/* Non-image data receive events */
+-	{ MIPI_CSIS_INT_SRC_EVEN_BEFORE,	"Non-image data before even frame" },
+-	{ MIPI_CSIS_INT_SRC_EVEN_AFTER,		"Non-image data after even frame" },
+-	{ MIPI_CSIS_INT_SRC_ODD_BEFORE,		"Non-image data before odd frame" },
+-	{ MIPI_CSIS_INT_SRC_ODD_AFTER,		"Non-image data after odd frame" },
++	{ false, MIPI_CSIS_INT_SRC_EVEN_BEFORE,		"Non-image data before even frame" },
++	{ false, MIPI_CSIS_INT_SRC_EVEN_AFTER,		"Non-image data after even frame" },
++	{ false, MIPI_CSIS_INT_SRC_ODD_BEFORE,		"Non-image data before odd frame" },
++	{ false, MIPI_CSIS_INT_SRC_ODD_AFTER,		"Non-image data after odd frame" },
+ 	/* Frame start/end */
+-	{ MIPI_CSIS_INT_SRC_FRAME_START,	"Frame Start" },
+-	{ MIPI_CSIS_INT_SRC_FRAME_END,		"Frame End" },
++	{ false, MIPI_CSIS_INT_SRC_FRAME_START,		"Frame Start" },
++	{ false, MIPI_CSIS_INT_SRC_FRAME_END,		"Frame End" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_FALL,	"VSYNC Falling Edge" },
++	{ true, MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_RISE,	"VSYNC Rising Edge" },
+ };
+ 
+ #define MIPI_CSIS_NUM_EVENTS ARRAY_SIZE(mipi_csis_events)
+@@ -455,6 +482,7 @@ static const struct csis_pix_format *find_csis_format(u32 code)
+ static void mipi_csis_enable_interrupts(struct csi_state *state, bool on)
+ {
+ 	mipi_csis_write(state, MIPI_CSIS_INT_MSK, on ? 0xffffffff : 0);
++	mipi_csis_write(state, MIPI_CSIS_DBG_INTR_MSK, on ? 0xffffffff : 0);
+ }
+ 
+ static void mipi_csis_sw_reset(struct csi_state *state)
+@@ -667,7 +695,7 @@ static void mipi_csis_clear_counters(struct csi_state *state)
+ static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
+ {
+ 	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
+-				: MIPI_CSIS_NUM_EVENTS - 6;
++				: MIPI_CSIS_NUM_EVENTS - 8;
+ 	struct device *dev = &state->pdev->dev;
+ 	unsigned long flags;
+ 	unsigned int i;
+@@ -963,22 +991,27 @@ static irqreturn_t mipi_csis_irq_handler(int irq, void *dev_id)
+ 	unsigned long flags;
+ 	unsigned int i;
+ 	u32 status;
++	u32 dbg_status;
+ 
+ 	status = mipi_csis_read(state, MIPI_CSIS_INT_SRC);
++	dbg_status = mipi_csis_read(state, MIPI_CSIS_DBG_INTR_SRC);
+ 
+ 	spin_lock_irqsave(&state->slock, flags);
+ 
+ 	/* Update the event/error counters */
+ 	if ((status & MIPI_CSIS_INT_SRC_ERRORS) || state->debug) {
+ 		for (i = 0; i < MIPI_CSIS_NUM_EVENTS; i++) {
+-			if (!(status & state->events[i].mask))
+-				continue;
+-			state->events[i].counter++;
++			struct mipi_csis_event *event = &state->events[i];
 +
-+	mutex_lock(&state->lock);
- 	sdformat->format = *fmt;
- 	mutex_unlock(&state->lock);
- 
-@@ -919,24 +920,17 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
- 	if (sdformat->pad != CSIS_PAD_SINK)
- 		return -EINVAL;
- 
--	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
--
--	mutex_lock(&state->lock);
--
--	/* Validate the media bus code and clamp the size. */
--	csis_fmt = find_csis_format(sdformat->format.code);
--	if (!csis_fmt)
--		csis_fmt = &mipi_csis_formats[0];
--
--	fmt->code = csis_fmt->code;
--	fmt->width = sdformat->format.width;
--	fmt->height = sdformat->format.height;
--
- 	/*
-+	 * Validate the media bus code and clamp and align the size.
-+	 *
- 	 * The total number of bits per line must be a multiple of 8. We thus
- 	 * need to align the width for formats that are not multiples of 8
- 	 * bits.
- 	 */
-+	csis_fmt = find_csis_format(sdformat->format.code);
-+	if (!csis_fmt)
-+		csis_fmt = &mipi_csis_formats[0];
-+
- 	switch (csis_fmt->width % 8) {
- 	case 0:
- 		align = 0;
-@@ -956,8 +950,18 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
- 		break;
++			if ((!event->debug && (status & event->mask)) ||
++			    (event->debug && (dbg_status & event->mask)))
++				event->counter++;
+ 		}
  	}
+ 	spin_unlock_irqrestore(&state->slock, flags);
  
--	v4l_bound_align_image(&fmt->width, 1, CSIS_MAX_PIX_WIDTH, align,
--			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 0, 0);
-+	v4l_bound_align_image(&sdformat->format.width, 1,
-+			      CSIS_MAX_PIX_WIDTH, align,
-+			      &sdformat->format.height, 1,
-+			      CSIS_MAX_PIX_HEIGHT, 0, 0);
-+
-+	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
-+
-+	mutex_lock(&state->lock);
-+
-+	fmt->code = csis_fmt->code;
-+	fmt->width = sdformat->format.width;
-+	fmt->height = sdformat->format.height;
+ 	mipi_csis_write(state, MIPI_CSIS_INT_SRC, status);
++	mipi_csis_write(state, MIPI_CSIS_DBG_INTR_SRC, dbg_status);
  
- 	sdformat->format = *fmt;
- 
+ 	return IRQ_HANDLED;
+ }
 -- 
 Regards,
 
