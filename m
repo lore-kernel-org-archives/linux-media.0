@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D681C43619
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33F92C43603
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F45B613AE
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 179C3613AF
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343585AbhDMCbk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:40 -0400
+        id S1343518AbhDMCbi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:38 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:35892 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343551AbhDMCbj (ORCPT
+        with ESMTP id S245713AbhDMCbg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:39 -0400
+        Mon, 12 Apr 2021 22:31:36 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99BEFACC;
-        Tue, 13 Apr 2021 04:31:19 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A69A98AF;
+        Tue, 13 Apr 2021 04:31:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281080;
-        bh=IMIAIt7sZIv6xZY4PZxY+ntJfOAk3liPPGD8NNn1kWU=;
+        s=mail; t=1618281077;
+        bh=cqj84uzHR15SOybhDDJP9WSfm6hIaZdylu9rqjKit9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEzYKpvXHTMNyPSHPxG9wkvOeLV6VHDYG3bOfQImCXV92xt+Ung+G7+c7Pwzd/FeM
-         dxK8u2ttUGkXmsr4rvp5DstRMbCc+9D1mEXUFCMuU84gANsLlB7wSOcerbVKCOv7vq
-         z+e0EUg13m6mfHnWv7+rIJKRhFZsfEFHt/TqvrgM=
+        b=IT4xrelwR9X6F7g1C8XxmD2uTSzeYZEdjQ53DHgUsepE8sVY6l4suYv5Y7gzOHw73
+         NPMNHa34NdixQ/qWChhkqwQqMEI22sw53TwOjUlYamIDxEjUYjkRHxkI+ac2kZ/eUa
+         eiGXtNgpfFe5Ychtcm6DaFmvTdZDUYPcLXnVU6Ng=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>
-Subject: [PATCH 17/23] media: imx: imx7_mipi_csis: Drop csi_state pdev field
-Date:   Tue, 13 Apr 2021 05:30:08 +0300
-Message-Id: <20210413023014.28797-18-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 13/23] media: imx: imx7_mipi_csis: Rename csi_state flag field to state
+Date:   Tue, 13 Apr 2021 05:30:04 +0300
+Message-Id: <20210413023014.28797-14-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -49,146 +49,108 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pdev field of the csi_state structure is only used to access the
-device pointer, which is stored in a separate field. Drop the pdev
-field, as well as a few local dev variables.
+The flag field of the csi_state structure contains the device state.
+Rename it accordingly.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 32 ++++++++++------------
- 1 file changed, 14 insertions(+), 18 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 26 +++++++++++-----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 2548f6442619..1cb8eeb2fdac 100644
+index 6b9c05b1cdf3..49b8afc0f2f8 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -303,7 +303,6 @@ struct csi_state {
- 	struct v4l2_subdev *src_sd;
- 
- 	u8 index;
--	struct platform_device *pdev;
+@@ -306,7 +306,7 @@ struct csi_state {
+ 	struct platform_device *pdev;
  	void __iomem *regs;
- 	u32 state;
+ 	int irq;
+-	u32 flags;
++	u32 state;
  
-@@ -615,13 +614,12 @@ static void mipi_csis_clk_disable(struct csi_state *state)
+ 	struct dentry *debugfs_root;
+ 	bool debug;
+@@ -813,7 +813,7 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
+ 	mutex_lock(&state->lock);
  
- static int mipi_csis_clk_get(struct csi_state *state)
- {
--	struct device *dev = &state->pdev->dev;
- 	unsigned int i;
- 	int ret;
- 
- 	state->num_clks = ARRAY_SIZE(mipi_csis_clk_id);
--	state->clks = devm_kcalloc(dev, state->num_clks, sizeof(*state->clks),
--				   GFP_KERNEL);
-+	state->clks = devm_kcalloc(state->dev, state->num_clks,
-+				   sizeof(*state->clks), GFP_KERNEL);
- 
- 	if (!state->clks)
- 		return -ENOMEM;
-@@ -629,7 +627,7 @@ static int mipi_csis_clk_get(struct csi_state *state)
- 	for (i = 0; i < state->num_clks; i++)
- 		state->clks[i].id = mipi_csis_clk_id[i];
- 
--	ret = devm_clk_bulk_get(dev, state->num_clks, state->clks);
-+	ret = devm_clk_bulk_get(state->dev, state->num_clks, state->clks);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -637,8 +635,8 @@ static int mipi_csis_clk_get(struct csi_state *state)
- 	ret = clk_set_rate(state->clks[MIPI_CSIS_CLK_WRAP].clk,
- 			   state->clk_frequency);
- 	if (ret < 0)
--		dev_err(dev, "set rate=%d failed: %d\n", state->clk_frequency,
--			ret);
-+		dev_err(state->dev, "set rate=%d failed: %d\n",
-+			state->clk_frequency, ret);
- 
- 	return ret;
- }
-@@ -707,7 +705,6 @@ static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
- {
- 	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
- 				: MIPI_CSIS_NUM_EVENTS - 8;
--	struct device *dev = &state->pdev->dev;
- 	unsigned long flags;
- 	unsigned int i;
- 
-@@ -715,7 +712,8 @@ static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
- 
- 	for (i = 0; i < num_events; ++i) {
- 		if (state->events[i].counter > 0 || state->debug)
--			dev_info(dev, "%s events: %d\n", state->events[i].name,
-+			dev_info(state->dev, "%s events: %d\n",
-+				 state->events[i].name,
- 				 state->events[i].counter);
- 	}
- 	spin_unlock_irqrestore(&state->slock, flags);
-@@ -741,15 +739,14 @@ static int mipi_csis_dump_regs(struct csi_state *state)
- 		{ MIPI_CSIS_DBG_CTRL, "DBG_CTRL" },
- 	};
- 
--	struct device *dev = &state->pdev->dev;
- 	unsigned int i;
- 	u32 cfg;
- 
--	dev_info(dev, "--- REGISTERS ---\n");
-+	dev_info(state->dev, "--- REGISTERS ---\n");
- 
- 	for (i = 0; i < ARRAY_SIZE(registers); i++) {
- 		cfg = mipi_csis_read(state, registers[i].offset);
--		dev_info(dev, "%14s: 0x%08x\n", registers[i].name, cfg);
-+		dev_info(state->dev, "%14s: 0x%08x\n", registers[i].name, cfg);
- 	}
- 
- 	return 0;
-@@ -799,9 +796,9 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
- 
- 		mipi_csis_clear_counters(state);
- 
--		ret = pm_runtime_get_sync(&state->pdev->dev);
-+		ret = pm_runtime_get_sync(state->dev);
- 		if (ret < 0) {
--			pm_runtime_put_noidle(&state->pdev->dev);
-+			pm_runtime_put_noidle(state->dev);
- 			return ret;
+ 	if (enable) {
+-		if (state->flags & ST_SUSPENDED) {
++		if (state->state & ST_SUSPENDED) {
+ 			ret = -EBUSY;
+ 			goto unlock;
  		}
- 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
-@@ -841,7 +838,7 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -825,14 +825,14 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
  
- done:
- 	if (!enable || ret < 0)
--		pm_runtime_put(&state->pdev->dev);
-+		pm_runtime_put(state->dev);
+ 		mipi_csis_log_counters(state, true);
  
- 	return ret;
- }
-@@ -1310,7 +1307,6 @@ static int mipi_csis_probe(struct platform_device *pdev)
+-		state->flags |= ST_STREAMING;
++		state->state |= ST_STREAMING;
+ 	} else {
+ 		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
+ 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 0);
+ 		if (ret == -ENOIOCTLCMD)
+ 			ret = 0;
+ 		mipi_csis_stop_stream(state);
+-		state->flags &= ~ST_STREAMING;
++		state->state &= ~ST_STREAMING;
+ 		if (state->debug)
+ 			mipi_csis_log_counters(state, true);
+ 	}
+@@ -1028,7 +1028,7 @@ static int mipi_csis_log_status(struct v4l2_subdev *sd)
  
- 	spin_lock_init(&state->slock);
+ 	mutex_lock(&state->lock);
+ 	mipi_csis_log_counters(state, true);
+-	if (state->debug && (state->flags & ST_POWERED))
++	if (state->debug && (state->state & ST_POWERED))
+ 		mipi_csis_dump_regs(state);
+ 	mutex_unlock(&state->lock);
  
--	state->pdev = pdev;
- 	state->dev = dev;
+@@ -1178,15 +1178,15 @@ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
+ 	int ret = 0;
  
- 	ret = mipi_csis_parse_dt(state);
-@@ -1359,7 +1355,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 
- 	ret = mipi_csis_async_register(state);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "async register failed: %d\n", ret);
-+		dev_err(dev, "async register failed: %d\n", ret);
- 		goto cleanup;
+ 	mutex_lock(&state->lock);
+-	if (state->flags & ST_POWERED) {
++	if (state->state & ST_POWERED) {
+ 		mipi_csis_stop_stream(state);
+ 		ret = regulator_disable(state->mipi_phy_regulator);
+ 		if (ret)
+ 			goto unlock;
+ 		mipi_csis_clk_disable(state);
+-		state->flags &= ~ST_POWERED;
++		state->state &= ~ST_POWERED;
+ 		if (!runtime)
+-			state->flags |= ST_SUSPENDED;
++			state->state |= ST_SUSPENDED;
  	}
  
-@@ -1373,7 +1369,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 			goto unregister_all;
+ unlock:
+@@ -1202,21 +1202,21 @@ static int mipi_csis_pm_resume(struct device *dev, bool runtime)
+ 	int ret = 0;
+ 
+ 	mutex_lock(&state->lock);
+-	if (!runtime && !(state->flags & ST_SUSPENDED))
++	if (!runtime && !(state->state & ST_SUSPENDED))
+ 		goto unlock;
+ 
+-	if (!(state->flags & ST_POWERED)) {
++	if (!(state->state & ST_POWERED)) {
+ 		ret = regulator_enable(state->mipi_phy_regulator);
+ 		if (ret)
+ 			goto unlock;
+ 
+-		state->flags |= ST_POWERED;
++		state->state |= ST_POWERED;
+ 		mipi_csis_clk_enable(state);
  	}
+-	if (state->flags & ST_STREAMING)
++	if (state->state & ST_STREAMING)
+ 		mipi_csis_start_stream(state);
  
--	dev_info(&pdev->dev, "lanes: %d, freq: %u\n",
-+	dev_info(dev, "lanes: %d, freq: %u\n",
- 		 state->bus.num_data_lanes, state->clk_frequency);
+-	state->flags &= ~ST_SUSPENDED;
++	state->state &= ~ST_SUSPENDED;
  
- 	return 0;
+ unlock:
+ 	mutex_unlock(&state->lock);
 -- 
 Regards,
 
