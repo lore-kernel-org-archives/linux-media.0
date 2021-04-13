@@ -2,85 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B53FFC433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8BEFC43461
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:02:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 887DE610C8
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:00:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D07026113E
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:02:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbhDMQAt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 12:00:49 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:36527 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhDMQAr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 12:00:47 -0400
-Received: by mail-oi1-f175.google.com with SMTP id c16so17495453oib.3;
-        Tue, 13 Apr 2021 09:00:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hf71HnfjaYarecOimAnAmtORkCXf+7TlGhiC07dVSSk=;
-        b=RZENcQdYxQfRmvk0w9IXjVNRecnZsyLbcwXkDcHP4D44yvaixLIQwOxsC/zDtnGzWd
-         5UopLDBpxpixhKA9KMwM7RTCve1eUOPfMFeSgFTULOUUGsvpnRMZyh1VdSCVj23E7Znp
-         7RldkLuFzpZYOFed+54P3yuKu9UFoRKjGNJtwTREhK31gssA2uwWAXfCftwWWrpn3SMC
-         vjrNOSxBfWXRBuR4gtm6RwXFL8a72Y6DCn4EGCNR1KQqH8C8VCkH5tQ2+EN4PL2rbWJc
-         0SI1jrWSttRDx6sFdMrx5B91IQMgI0MqRx2UiQzjHx3zHcj0LFdRk7C8AgSz1exC4zEg
-         IDFg==
-X-Gm-Message-State: AOAM533Re44cNo8olWkrRe/j5tYn+mVPDFYBpltflzUDdToJaCEOj4qR
-        D+wZzjta6gLkINQdGh9f1QIWr4AZqQ==
-X-Google-Smtp-Source: ABdhPJymbM/isAJMJCc1wHnk+yvEtGmuDobqXx8udlWq6Wc6/HZpIfyPbj1/Zan303sALN4yTfl6Og==
-X-Received: by 2002:aca:3bc4:: with SMTP id i187mr508711oia.174.1618329627570;
-        Tue, 13 Apr 2021 09:00:27 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h28sm850702oof.47.2021.04.13.09.00.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 09:00:25 -0700 (PDT)
-Received: (nullmailer pid 1749085 invoked by uid 1000);
-        Tue, 13 Apr 2021 16:00:23 -0000
-Date:   Tue, 13 Apr 2021 11:00:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 22/23] dt-bindings: media: nxp,imx7-mipi-csi2: Add
- i.MX8MM support
-Message-ID: <20210413160023.GA1749037@robh.at.kernel.org>
-References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
- <20210413023014.28797-23-laurent.pinchart@ideasonboard.com>
+        id S1346740AbhDMQDE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 12:03:04 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:54812 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346710AbhDMQDE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Apr 2021 12:03:04 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lWLUw-0076Ta-SY; Tue, 13 Apr 2021 16:02:42 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lWLYz-0004Zq-LO; Tue, 13 Apr 2021 16:06:53 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.13] Three fixes (#73230)
+Date:   Tue, 13 Apr 2021 16:06:53 +0000
+Message-Id: <20210413160653.17553-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <1299bfaf-4d99-263c-53f0-bb00f8c63199@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210413023014.28797-23-laurent.pinchart@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 13 Apr 2021 05:30:13 +0300, Laurent Pinchart wrote:
-> The i.MX8MM integrates a newer version of the CSIS CSI-2 receiver as the
-> i.MX7 family. Differences in integration are are:
-> 
-> - An additional clock is required
-> - Up to 4 data lanes are supported
-> - No reset or PHY supply is present
-> 
-> Support it in the DT binding.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 108 +++++++++++++++---
->  1 file changed, 94 insertions(+), 14 deletions(-)
-> 
+From: builder@linuxtv.org
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/1299bfaf-4d99-263c-53f0-bb00f8c63199@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/98572/
+Build time: 00:05:18
+Link: https://lore.kernel.org/linux-media/1299bfaf-4d99-263c-53f0-bb00f8c63199@xs4all.nl
+
+gpg: Signature made Tue 13 Apr 2021 03:46:44 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+
+Summary: got 0/3 patches with issues, being 0 at build time, plus one error when buinding PDF document
+
+Error/warnings:
+
+
+Error #512 when building PDF docs
+
