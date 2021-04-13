@@ -2,430 +2,618 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D340C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 17:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEC4BC43461
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 17:36:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5779D613B1
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 17:27:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81E3B613B7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 17:36:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbhDMR15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 13:27:57 -0400
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:45737 "EHLO
-        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhDMR14 (ORCPT
+        id S1347244AbhDMRg0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 13:36:26 -0400
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:31669 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347213AbhDMRg0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 13:27:56 -0400
-Received: by mail-pg1-f181.google.com with SMTP id d10so12422166pgf.12;
-        Tue, 13 Apr 2021 10:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=P/nF+Bi9t9pQ6aC5jnW/oRn1P0rw0LcucwwKdVoOO7Q=;
-        b=AJ2+lRh++FAHgdAnQ+Nnkb5tqd304aC8IFqvS/AZJwhMOFKNZGBIZ1xp5qLno3pvvb
-         yWNI4+p/oB57IFT0Phcpoqf68LZyhNGuAODWXXThLqO0AcIUN6T989AlxuycqRGvAFMA
-         8vp9sJakGV4e1Z/e7oC9YjzMfKmn67FTnYjj6eSAkEytitLV6mmGgxel2LYmKh+5eSIb
-         MtZdIXpG2A/D8XrSvSKWhW8wjEj9Ezhm3pmaYv0updCZH/qVYueLPEZ7kLqZzoVDP+Ds
-         aD88/uzFpVzFRcc200B5wJ3043Pp9btDQzmIfMVq+1WDJ9HSlXfQ2v9M32RxgkGET6yW
-         bdFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=P/nF+Bi9t9pQ6aC5jnW/oRn1P0rw0LcucwwKdVoOO7Q=;
-        b=IsKbfm+e/dSAtT+q7He+XI9r8oI0rxmmA7rOaXRDVQkYO7hokF1s174bCrQCkqffd+
-         rPmzhz6uGY2qJCfHEVKeZXQ0ey8xRttPs0ApFZwsRW+R78a9+7w6vQVSdiHz5IwX1HmO
-         qnNaMoScAJvVmbSLsDfrZjDwTOIrGeq0lbYjh9Ooj30cz3WGrKe1oL2NETdTOlQsX5Zj
-         wtenVezTKmbfBayge8b7UkGjYSnvbVc/ZvDiba8vZK+J992vKNBIxBSh5BQopBiFG1BV
-         2HdJdGj4nURqNr5oojWp1Eb4KukwF1LfOGBfZ7THW4zJDj4LKuU08w9nR6pHi8eULOxW
-         pacg==
-X-Gm-Message-State: AOAM533t7sBQSdKyNK8dpsgKhbmOkI5SJa3TF/hruaaokcFgIdVLVWA+
-        1k9J/vm97aU4MGz18jPQSX0=
-X-Google-Smtp-Source: ABdhPJxdBLpF9F31J5skzz8GkLMLR9rnSXMHdjss7U8h16dDV1wHhfU210soWqKhBUxBINVPy8E4EA==
-X-Received: by 2002:a65:5c4d:: with SMTP id v13mr16355555pgr.161.1618334796257;
-        Tue, 13 Apr 2021 10:26:36 -0700 (PDT)
-Received: from kali ([103.141.87.254])
-        by smtp.gmail.com with ESMTPSA id k15sm13243834pfi.0.2021.04.13.10.26.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 10:26:35 -0700 (PDT)
-Date:   Tue, 13 Apr 2021 22:56:25 +0530
-From:   Mitali Borkar <mitaliborkar810@gmail.com>
-To:     clabbe@baylibre.com, mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy-kernel@googlegroups.com,
-        mitali_s@me.iitr.ac.in
-Subject: Subject: [PATCH v4]  staging: media: zoran: add '*' in
- long(multi-line) comments
-Message-ID: <YHXUQc+IgZ1y9TQu@kali>
+        Tue, 13 Apr 2021 13:36:26 -0400
+X-Halon-ID: b550a247-9c7e-11eb-a9ab-0050569116f7
+Authorized-sender: niklas.soderlund@fsdn.se
+Received: from bismarck.berto.se (p54ac5521.dip0.t-ipconnect.de [84.172.85.33])
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id b550a247-9c7e-11eb-a9ab-0050569116f7;
+        Tue, 13 Apr 2021 19:36:04 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] media: rcar-isp: Add Renesas R-Car Image Signal Processor driver
+Date:   Tue, 13 Apr 2021 19:35:52 +0200
+Message-Id: <20210413173552.2560222-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Added '*' before every line inside long(multi-line) comments. Removed
-'*/' from end of the comment line and added to next line as per linux
-kernel coding style. Aligned '*' accordingly to make code neater.
+Add a V4L2 driver for Renesas R-Car Image Signal Processor. The driver
+supports the R-Car V3U SoC where the ISP IP sits between the R-Car CSI-2
+receiver and VIN and filters the CSI-2 data based on VC/DT and directs
+the video stream to different VIN IPs.
 
-Signed-off-by: Mitali Borkar <mitaliborkar810@gmail.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
-Changes from v3:- Rebased this patch and made changes against mainline
-code. 
-Changes from v2:- made style changes in code according to linux kernel
-coding style for long comments.
-Changes from v1:- Changes made in code according to linux kernel coding
-style for long(multi-line) comments.
+ MAINTAINERS                       |   1 +
+ drivers/media/platform/Kconfig    |  16 +
+ drivers/media/platform/Makefile   |   1 +
+ drivers/media/platform/rcar-isp.c | 500 ++++++++++++++++++++++++++++++
+ 4 files changed, 518 insertions(+)
+ create mode 100644 drivers/media/platform/rcar-isp.c
 
- drivers/staging/media/zoran/zr36050.c | 192 +++++++++++++++-----------
- 1 file changed, 112 insertions(+), 80 deletions(-)
-
-diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
-index 2826f4e5d37b..a1084aa142e7 100644
---- a/drivers/staging/media/zoran/zr36050.c
-+++ b/drivers/staging/media/zoran/zr36050.c
-@@ -24,8 +24,11 @@
- /* codec io API */
- #include "videocodec.h"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e125d0eed7b021a0..0bd9a41f68191571 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11146,6 +11146,7 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,csi2.yaml
+ F:	Documentation/devicetree/bindings/media/renesas,isp.yaml
+ F:	Documentation/devicetree/bindings/media/renesas,vin.yaml
++F:	drivers/media/platform/rcar-isp.c
+ F:	drivers/media/platform/rcar-vin/
  
--/* it doesn't make sense to have more than 20 or so,
--  just to prevent some unwanted loops */
+ MEDIA DRIVERS FOR RENESAS - VSP1
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index b238a923d1b47f26..1643d8357f8caddd 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -200,6 +200,22 @@ config VIDEO_TI_CAL_MC
+ 
+ endif # VIDEO_TI_CAL
+ 
++config VIDEO_RCAR_ISP
++	tristate "R-Car Image Signal Processor (ISP)"
++	depends on VIDEO_V4L2 && OF
++	depends on ARCH_RENESAS || COMPILE_TEST
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select RESET_CONTROLLER
++	select V4L2_FWNODE
++	help
++	  Support for Renesas R-Car Image Signal Processor (ISP).
++	  Enable this to support the Renesas R-Car Image Signal
++	  Processor (ISP).
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called rcar-isp.
++
+ endif # V4L_PLATFORM_DRIVERS
+ 
+ menuconfig V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index eedc14aafb32c2fa..8ae543f6ef764c48 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -63,6 +63,7 @@ obj-$(CONFIG_VIDEO_AM437X_VPFE)		+= am437x/
+ 
+ obj-$(CONFIG_VIDEO_XILINX)		+= xilinx/
+ 
++obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
+ obj-$(CONFIG_VIDEO_RCAR_VIN)		+= rcar-vin/
+ 
+ obj-$(CONFIG_VIDEO_ATMEL_ISC)		+= atmel/
+diff --git a/drivers/media/platform/rcar-isp.c b/drivers/media/platform/rcar-isp.c
+new file mode 100644
+index 0000000000000000..0f4dfbd8d060d1ef
+--- /dev/null
++++ b/drivers/media/platform/rcar-isp.c
+@@ -0,0 +1,500 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * it doesn't make sense to have more than 20 or so,
-+ * just to prevent some unwanted loops
++ * Driver for Renesas R-Car ISP Channel Selector
++ *
++ * Copyright (C) 2021 Renesas Electronics Corp.
 + */
 +
- #define MAX_CODECS 20
- 
- /* amount of chips attached via this driver */
-@@ -43,10 +46,11 @@ MODULE_PARM_DESC(debug, "Debug level (0-4)");
- 	} while (0)
- 
- /* =========================================================================
--   Local hardware I/O functions:
--
--   read/write via codec layer (registers are located in the master device)
--   ========================================================================= */
-+ * Local hardware I/O functions:
-+ *
-+ * read/write via codec layer (registers are located in the master device)
-+ * =========================================================================
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/reset.h>
++
++#include <media/v4l2-subdev.h>
++
++#define ISPINPUTSEL0_REG				0x0008
++#define ISPINPUTSEL0_SEL_CSI0				BIT(31)
++
++#define ISPSTART_REG					0x0014
++#define ISPSTART_START					0xffff
++#define ISPSTART_STOP					0x0000
++
++#define ISPPROCMODE_DT_REG(n)				(0x1100 + (0x4 * n))
++#define ISPPROCMODE_DT_PROC_MODE_VC3(pm)		(((pm) & 0x3f) << 24)
++#define ISPPROCMODE_DT_PROC_MODE_VC2(pm)		(((pm) & 0x3f) << 16)
++#define ISPPROCMODE_DT_PROC_MODE_VC1(pm)		(((pm) & 0x3f) << 8)
++#define ISPPROCMODE_DT_PROC_MODE_VC0(pm)		((pm) & 0x3f)
++
++#define ISPCS_FILTER_ID_CH_REG(n)			(0x3000 + (0x0100 * n))
++
++#define ISPCS_DT_CODE03_CH_REG(n)			(0x3008 + (0x100 * n))
++#define ISPCS_DT_CODE03_EN3				BIT(31)
++#define ISPCS_DT_CODE03_DT3(dt)				(((dt) & 0x3f) << 24)
++#define ISPCS_DT_CODE03_EN2				BIT(23)
++#define ISPCS_DT_CODE03_DT2(dt)				(((dt) & 0x3f) << 16)
++#define ISPCS_DT_CODE03_EN1				BIT(15)
++#define ISPCS_DT_CODE03_DT1(dt)				(((dt) & 0x3f) << 8)
++#define ISPCS_DT_CODE03_EN0				BIT(7)
++#define ISPCS_DT_CODE03_DT0(dt)				((dt) & 0x3f)
++
++struct rcar_isp_format {
++	u32 code;
++	unsigned int datatype;
++	unsigned int procmode;
++};
++
++static const struct rcar_isp_format rcar_isp_formats[] = {
++	{ .code = MEDIA_BUS_FMT_RGB888_1X24,	.datatype = 0x24, .procmode = 0x15 },
++	{ .code = MEDIA_BUS_FMT_Y10_1X10,	.datatype = 0x2b, .procmode = 0x10 },
++	{ .code = MEDIA_BUS_FMT_UYVY8_1X16,	.datatype = 0x1e, .procmode = 0x0c },
++	{ .code = MEDIA_BUS_FMT_YUYV8_1X16,	.datatype = 0x1e, .procmode = 0x0c },
++	{ .code = MEDIA_BUS_FMT_UYVY8_2X8,	.datatype = 0x1e, .procmode = 0x0c },
++	{ .code = MEDIA_BUS_FMT_YUYV10_2X10,	.datatype = 0x1e, .procmode = 0x0c },
++};
++
++static const struct rcar_isp_format *risp_code_to_fmt(unsigned int code)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(rcar_isp_formats); i++)
++		if (rcar_isp_formats[i].code == code)
++			return &rcar_isp_formats[i];
++
++	return NULL;
++}
++
++enum rcar_isp_input {
++	RISP_CSI_INPUT0,
++	RISP_CSI_INPUT1,
++};
++
++enum rcar_isp_pads {
++	RCAR_ISP_SINK,
++	RCAR_ISP_PORT0,
++	RCAR_ISP_PORT1,
++	RCAR_ISP_PORT2,
++	RCAR_ISP_PORT3,
++	RCAR_ISP_PORT4,
++	RCAR_ISP_PORT5,
++	RCAR_ISP_PORT6,
++	RCAR_ISP_PORT7,
++	RCAR_ISP_MAX_PAD,
++};
++
++struct rcar_isp {
++	struct device *dev;
++	void __iomem *base;
++	struct reset_control *rstc;
++
++	enum rcar_isp_input csi_input;
++
++	struct v4l2_subdev subdev;
++	struct media_pad pads[RCAR_ISP_MAX_PAD];
++
++	struct v4l2_async_notifier notifier;
++	struct v4l2_subdev *remote;
++	unsigned int remote_pad;
++
++	struct v4l2_mbus_framefmt mf;
++
++	struct mutex lock;
++	int stream_count;
++};
++
++static inline struct rcar_isp *sd_to_isp(struct v4l2_subdev *sd)
++{
++	return container_of(sd, struct rcar_isp, subdev);
++}
++
++static inline struct rcar_isp *notifier_to_isp(struct v4l2_async_notifier *n)
++{
++	return container_of(n, struct rcar_isp, notifier);
++}
++
++static void risp_write(struct rcar_isp *isp, u32 offset, u32 value)
++{
++	iowrite32(value, isp->base + offset);
++}
++
++static u32 risp_read(struct rcar_isp *isp, u32 offset)
++{
++	return ioread32(isp->base + offset);
++}
++
++static int risp_s_power(struct v4l2_subdev *sd, int on)
++{
++	struct rcar_isp *isp = sd_to_isp(sd);
++	int ret;
++
++	if (on) {
++		ret = pm_runtime_get_sync(isp->dev);
++		if (ret < 0)
++			return ret;
++
++		ret = reset_control_deassert(isp->rstc);
++		if (ret < 0)
++			return ret;
++	} else {
++		reset_control_assert(isp->rstc);
++		pm_runtime_put(isp->dev);
++	}
++
++	return 0;
++}
++
++static const struct v4l2_subdev_core_ops risp_core_ops = {
++	.s_power = risp_s_power,
++};
++
++static int risp_remote_code(struct rcar_isp *isp)
++{
++	struct v4l2_subdev_format fmt = {
++		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
++	};
++
++	fmt.pad = isp->remote_pad;
++	if (v4l2_subdev_call(isp->remote, pad, get_fmt, NULL, &fmt))
++		return -EPIPE;
++
++	return fmt.format.code;
++}
++
++static int risp_start(struct rcar_isp *isp)
++{
++	const struct rcar_isp_format *format;
++	unsigned int vc;
++	u32 sel_csi = 0;
++
++	format = risp_code_to_fmt(risp_remote_code(isp));
++	if (!format) {
++		dev_err(isp->dev, "Unsupported bus format\n");
++		return -EINVAL;
++	}
++
++	/* Select CSI-2 input source. */
++	if (isp->csi_input == RISP_CSI_INPUT1)
++		sel_csi = ISPINPUTSEL0_SEL_CSI0;
++
++	risp_write(isp, ISPINPUTSEL0_REG,
++		   risp_read(isp, ISPINPUTSEL0_REG) | sel_csi);
++
++	/* Configure Channel Selector. */
++	for (vc = 0; vc < 4; vc++) {
++		u8 ch = vc + 4;
++		u8 dt = format->datatype;
++
++		risp_write(isp, ISPCS_FILTER_ID_CH_REG(ch), BIT(vc));
++		risp_write(isp, ISPCS_DT_CODE03_CH_REG(ch),
++			   ISPCS_DT_CODE03_EN3 | ISPCS_DT_CODE03_DT3(dt) |
++			   ISPCS_DT_CODE03_EN2 | ISPCS_DT_CODE03_DT2(dt) |
++			   ISPCS_DT_CODE03_EN1 | ISPCS_DT_CODE03_DT1(dt) |
++			   ISPCS_DT_CODE03_EN0 | ISPCS_DT_CODE03_DT0(dt));
++	}
++
++	/* Setup processing method. */
++	risp_write(isp, ISPPROCMODE_DT_REG(format->datatype),
++		   ISPPROCMODE_DT_PROC_MODE_VC3(format->procmode) |
++		   ISPPROCMODE_DT_PROC_MODE_VC2(format->procmode) |
++		   ISPPROCMODE_DT_PROC_MODE_VC1(format->procmode) |
++		   ISPPROCMODE_DT_PROC_MODE_VC0(format->procmode));
++
++	/* Start ISP. */
++	risp_write(isp, ISPSTART_REG, ISPSTART_START);
++
++	return v4l2_subdev_call(isp->remote, video, s_stream, 1);
++}
++
++static void risp_stop(struct rcar_isp *isp)
++{
++	v4l2_subdev_call(isp->remote, video, s_stream, 0);
++
++	/* Stop ISP. */
++	risp_write(isp, ISPSTART_REG, ISPSTART_STOP);
++}
++
++static int risp_s_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct rcar_isp *isp = sd_to_isp(sd);
++	int ret = 0;
++
++	mutex_lock(&isp->lock);
++
++	if (!isp->remote) {
++		ret = -ENODEV;
++		goto out;
++	}
++
++	if (enable && isp->stream_count == 0) {
++		ret = risp_start(isp);
++		if (ret)
++			goto out;
++	} else if (!enable && isp->stream_count == 1) {
++		risp_stop(isp);
++	}
++
++	isp->stream_count += enable ? 1 : -1;
++out:
++	mutex_unlock(&isp->lock);
++
++	return ret;
++}
++
++static const struct v4l2_subdev_video_ops risp_video_ops = {
++	.s_stream = risp_s_stream,
++};
++
++static int risp_set_pad_format(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_format *format)
++{
++	struct rcar_isp *isp = sd_to_isp(sd);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	if (!risp_code_to_fmt(format->format.code))
++		format->format.code = rcar_isp_formats[0].code;
++
++	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
++		isp->mf = format->format;
++	} else {
++		framefmt = v4l2_subdev_get_try_format(sd, cfg, 0);
++		*framefmt = format->format;
++	}
++
++	return 0;
++}
++
++static int risp_get_pad_format(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_format *format)
++{
++	struct rcar_isp *isp = sd_to_isp(sd);
++
++	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
++		format->format = isp->mf;
++	else
++		format->format = *v4l2_subdev_get_try_format(sd, cfg, 0);
++
++	return 0;
++}
++
++static const struct v4l2_subdev_pad_ops risp_pad_ops = {
++	.set_fmt = risp_set_pad_format,
++	.get_fmt = risp_get_pad_format,
++};
++
++static const struct v4l2_subdev_ops rcar_isp_subdev_ops = {
++	.core	= &risp_core_ops,
++	.video	= &risp_video_ops,
++	.pad	= &risp_pad_ops,
++};
++
++/* -----------------------------------------------------------------------------
++ * Async handling and registration of subdevices and links
 + */
- 
- /* read and write functions */
- static u8 zr36050_read(struct zr36050 *ptr, u16 reg)
-@@ -80,10 +84,11 @@ static void zr36050_write(struct zr36050 *ptr, u16 reg, u8 value)
- }
- 
- /* =========================================================================
--   Local helper function:
--
--   status read
--   ========================================================================= */
-+ * Local helper function:
-+ *
-+ * status read
-+ * =========================================================================
++
++static int risp_notify_bound(struct v4l2_async_notifier *notifier,
++			     struct v4l2_subdev *subdev,
++			     struct v4l2_async_subdev *asd)
++{
++	struct rcar_isp *isp = notifier_to_isp(notifier);
++	int pad;
++
++	pad = media_entity_get_fwnode_pad(&subdev->entity, asd->match.fwnode,
++					  MEDIA_PAD_FL_SOURCE);
++	if (pad < 0) {
++		dev_err(isp->dev, "Failed to find pad for %s\n", subdev->name);
++		return pad;
++	}
++
++	isp->remote = subdev;
++	isp->remote_pad = pad;
++
++	dev_dbg(isp->dev, "Bound %s pad: %d\n", subdev->name, pad);
++
++	return media_create_pad_link(&subdev->entity, pad,
++				     &isp->subdev.entity, 0,
++				     MEDIA_LNK_FL_ENABLED |
++				     MEDIA_LNK_FL_IMMUTABLE);
++}
++
++static void risp_notify_unbind(struct v4l2_async_notifier *notifier,
++			       struct v4l2_subdev *subdev,
++			       struct v4l2_async_subdev *asd)
++{
++	struct rcar_isp *isp = notifier_to_isp(notifier);
++
++	isp->remote = NULL;
++
++	dev_dbg(isp->dev, "Unbind %s\n", subdev->name);
++}
++
++static const struct v4l2_async_notifier_operations risp_notify_ops = {
++	.bound = risp_notify_bound,
++	.unbind = risp_notify_unbind,
++};
++
++static int risp_parse_dt(struct rcar_isp *isp)
++{
++	struct v4l2_async_subdev *asd;
++	struct fwnode_handle *fwnode;
++	struct fwnode_handle *ep;
++	unsigned int id;
++	int ret;
++
++	for (id = 0; id < 2; id++) {
++		ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(isp->dev),
++						     0, id, 0);
++		if (ep)
++			break;
++	}
++
++	if (!ep) {
++		dev_err(isp->dev, "Not connected to subdevice\n");
++		return -EINVAL;
++	}
++
++	if (id == 1)
++		isp->csi_input = RISP_CSI_INPUT1;
++
++	fwnode = fwnode_graph_get_remote_endpoint(ep);
++	fwnode_handle_put(ep);
++
++	dev_dbg(isp->dev, "Found '%pOF'\n", to_of_node(fwnode));
++
++	v4l2_async_notifier_init(&isp->notifier);
++	isp->notifier.ops = &risp_notify_ops;
++
++	asd = v4l2_async_notifier_add_fwnode_subdev(&isp->notifier, fwnode,
++						    struct v4l2_async_subdev);
++	fwnode_handle_put(fwnode);
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
++
++	ret = v4l2_async_subdev_notifier_register(&isp->subdev, &isp->notifier);
++	if (ret)
++		v4l2_async_notifier_cleanup(&isp->notifier);
++
++	return ret;
++}
++
++/* -----------------------------------------------------------------------------
++ * Platform Device Driver
 + */
- 
- /* status is kept in datastructure */
- static u8 zr36050_read_status1(struct zr36050 *ptr)
-@@ -95,10 +100,11 @@ static u8 zr36050_read_status1(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   Local helper function:
--
--   scale factor read
--   ========================================================================= */
-+ * Local helper function:
-+ *
-+ * scale factor read
-+ * =========================================================================
-+ */
- 
- /* scale factor is kept in datastructure */
- static u16 zr36050_read_scalefactor(struct zr36050 *ptr)
-@@ -112,10 +118,11 @@ static u16 zr36050_read_scalefactor(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   Local helper function:
--
--   wait if codec is ready to proceed (end of processing) or time is over
--   ========================================================================= */
-+ * Local helper function:
-+ *
-+ * wait if codec is ready to proceed (end of processing) or time is over
-+ * =========================================================================
-+ */
- 
- static void zr36050_wait_end(struct zr36050 *ptr)
- {
-@@ -133,10 +140,11 @@ static void zr36050_wait_end(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   Local helper function:
--
--   basic test of "connectivity", writes/reads to/from memory the SOF marker
--   ========================================================================= */
-+ * Local helper function:
-+ *
-+ * basic test of "connectivity", writes/reads to/from memory the SOF marker
-+ * =========================================================================
-+ */
- 
- static int zr36050_basic_test(struct zr36050 *ptr)
- {
-@@ -174,10 +182,11 @@ static int zr36050_basic_test(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   Local helper function:
--
--   simple loop for pushing the init datasets
--   ========================================================================= */
-+ * Local helper function:
-+ *
-+ * simple loop for pushing the init datasets
-+ * =========================================================================
-+ */
- 
- static int zr36050_pushit(struct zr36050 *ptr, u16 startreg, u16 len, const char *data)
- {
-@@ -192,15 +201,16 @@ static int zr36050_pushit(struct zr36050 *ptr, u16 startreg, u16 len, const char
- }
- 
- /* =========================================================================
--   Basic datasets:
--
--   jpeg baseline setup data (you find it on lots places in internet, or just
--   extract it from any regular .jpg image...)
--
--   Could be variable, but until it's not needed it they are just fixed to save
--   memory. Otherwise expand zr36050 structure with arrays, push the values to
--   it and initialize from there, as e.g. the linux zr36057/60 driver does it.
--   ========================================================================= */
-+ * Basic datasets:
-+ *
-+ * jpeg baseline setup data (you find it on lots places in internet, or just
-+ * extract it from any regular .jpg image...)
-+ *
-+ * Could be variable, but until it's not needed it they are just fixed to save
-+ * memory. Otherwise expand zr36050 structure with arrays, push the values to
-+ * it and initialize from there, as e.g. the linux zr36057/60 driver does it.
-+ * =========================================================================
-+ */
- 
- static const char zr36050_dqt[0x86] = {
- 	0xff, 0xdb,		//Marker: DQT
-@@ -294,16 +304,19 @@ static const char zr36050_decimation_h[8] = { 2, 1, 1, 0, 0, 0, 0, 0 };
- static const char zr36050_decimation_v[8] = { 1, 1, 1, 0, 0, 0, 0, 0 };
- 
- /* =========================================================================
--   Local helper functions:
--
--   calculation and setup of parameter-dependent JPEG baseline segments
--   (needed for compression only)
--   ========================================================================= */
-+ * Local helper functions:
-+ *
-+ * calculation and setup of parameter-dependent JPEG baseline segments
-+ * (needed for compression only)
-+ * =========================================================================
-+ */
- 
- /* ------------------------------------------------------------------------- */
- 
--/* SOF (start of frame) segment depends on width, height and sampling ratio
--			 of each color component */
-+/*
-+ * SOF (start of frame) segment depends on width, height and sampling ratio
-+ * of each color component
-+ */
- 
- static int zr36050_set_sof(struct zr36050 *ptr)
- {
-@@ -333,8 +346,10 @@ static int zr36050_set_sof(struct zr36050 *ptr)
- 
- /* ------------------------------------------------------------------------- */
- 
--/* SOS (start of scan) segment depends on the used scan components
--			of each color component */
-+/*
-+ * SOS (start of scan) segment depends on the used scan components
-+ * of each color component
-+ */
- 
- static int zr36050_set_sos(struct zr36050 *ptr)
- {
-@@ -378,13 +393,14 @@ static int zr36050_set_dri(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   Setup function:
--
--   Setup compression/decompression of Zoran's JPEG processor
--   ( see also zoran 36050 manual )
--
--   ... sorry for the spaghetti code ...
--   ========================================================================= */
-+ * Setup function:
-+ *
-+ * Setup compression/decompression of Zoran's JPEG processor
-+ * ( see also zoran 36050 manual )
-+ *
-+ * ... sorry for the spaghetti code ...
-+ * =========================================================================
-+ */
- static void zr36050_init(struct zr36050 *ptr)
- {
- 	int sum = 0;
-@@ -419,8 +435,10 @@ static void zr36050_init(struct zr36050 *ptr)
- 		sum += zr36050_set_sos(ptr);
- 		sum += zr36050_set_dri(ptr);
- 
--		/* setup the fixed jpeg tables - maybe variable, though -
--		 * (see table init section above) */
-+		/*
-+		 * setup the fixed jpeg tables - maybe variable, though -
-+		 * (see table init section above)
-+		 */
- 		dprintk(3, "%s: write DQT, DHT, APP\n", ptr->name);
- 		sum += zr36050_pushit(ptr, ZR050_DQT_IDX,
- 				      sizeof(zr36050_dqt), zr36050_dqt);
-@@ -531,13 +549,16 @@ static void zr36050_init(struct zr36050 *ptr)
- }
- 
- /* =========================================================================
--   CODEC API FUNCTIONS
--
--   this functions are accessed by the master via the API structure
--   ========================================================================= */
-+ * CODEC API FUNCTIONS
-+ *
-+ * this functions are accessed by the master via the API structure
-+ * =========================================================================
-+ */
- 
--/* set compression/expansion mode and launches codec -
--   this should be the last call from the master before starting processing */
-+/*
-+ * set compression/expansion mode and launches codec -
-+ * this should be the last call from the master before starting processing
-+ */
- static int zr36050_set_mode(struct videocodec *codec, int mode)
- {
- 	struct zr36050 *ptr = (struct zr36050 *)codec->data;
-@@ -564,9 +585,11 @@ static int zr36050_set_video(struct videocodec *codec, const struct tvnorm *norm
- 		ptr->name, norm->h_start, norm->v_start,
- 		cap->x, cap->y, cap->width, cap->height,
- 		cap->decimation, cap->quality);
--	/* if () return -EINVAL;
-+	/*
-+	 * if () return -EINVAL;
- 	 * trust the master driver that it knows what it does - so
--	 * we allow invalid startx/y and norm for now ... */
-+	 * we allow invalid startx/y and norm for now ...
-+	 */
- 	ptr->width = cap->width / (cap->decimation & 0xff);
- 	ptr->height = cap->height / ((cap->decimation >> 8) & 0xff);
- 
-@@ -585,8 +608,10 @@ static int zr36050_set_video(struct videocodec *codec, const struct tvnorm *norm
- 
- 	ptr->real_code_vol = size >> 3; /* in bytes */
- 
--	/* Set max_block_vol here (previously in zr36050_init, moved
-- * here for consistency with zr36060 code */
-+	/*
-+	 * Set max_block_vol here (previously in zr36050_init, moved
-+	 * here for consistency with zr36060 code
-+	 */
- 	zr36050_write(ptr, ZR050_MBCV, ptr->max_block_vol);
- 
- 	return 0;
-@@ -642,8 +667,10 @@ static int zr36050_control(struct videocodec *codec, int type, int size, void *d
- 		if (size != sizeof(int))
- 			return -EFAULT;
- 		ptr->total_code_vol = *ival;
--		/* (Kieran Morrissey)
--		 * code copied from zr36060.c to ensure proper bitrate */
-+		/*
-+		 * (Kieran Morrissey)
-+		 * code copied from zr36060.c to ensure proper bitrate
-+		 */
- 		ptr->real_code_vol = (ptr->total_code_vol * 6) >> 3;
- 		break;
- 
-@@ -707,10 +734,11 @@ static int zr36050_control(struct videocodec *codec, int type, int size, void *d
- }
- 
- /* =========================================================================
--   Exit and unregister function:
--
--   Deinitializes Zoran's JPEG processor
--   ========================================================================= */
-+ * Exit and unregister function:
-+ *
-+ * Deinitializes Zoran's JPEG processor
-+ * =========================================================================
-+ */
- 
- static int zr36050_unset(struct videocodec *codec)
- {
-@@ -732,13 +760,14 @@ static int zr36050_unset(struct videocodec *codec)
- }
- 
- /* =========================================================================
--   Setup and registry function:
--
--   Initializes Zoran's JPEG processor
--
--   Also sets pixel size, average code size, mode (compr./decompr.)
--   (the given size is determined by the processor with the video interface)
--   ========================================================================= */
-+ * Setup and registry function:
-+ *
-+ * Initializes Zoran's JPEG processor
-+ *
-+ * Also sets pixel size, average code size, mode (compr./decompr.)
-+ * (the given size is determined by the processor with the video interface)
-+ * =========================================================================
-+ */
- 
- static int zr36050_setup(struct videocodec *codec)
- {
-@@ -773,8 +802,10 @@ static int zr36050_setup(struct videocodec *codec)
- 	memcpy(ptr->h_samp_ratio, zr36050_decimation_h, 8);
- 	memcpy(ptr->v_samp_ratio, zr36050_decimation_v, 8);
- 
--	ptr->bitrate_ctrl = 0;	/* 0 or 1 - fixed file size flag
--				 * (what is the difference?) */
-+	ptr->bitrate_ctrl = 0;	/*
-+				 * 0 or 1 - fixed file size flag
-+				 * (what is the difference?)
-+				 */
- 	ptr->mode = CODEC_DO_COMPRESSION;
- 	ptr->width = 384;
- 	ptr->height = 288;
-@@ -813,8 +844,9 @@ static const struct videocodec zr36050_codec = {
- };
- 
- /* =========================================================================
--   HOOK IN DRIVER AS KERNEL MODULE
--   ========================================================================= */
-+ * HOOK IN DRIVER AS KERNEL MODULE
-+ * =========================================================================
-+ */
- 
- static int __init zr36050_init_module(void)
- {
++
++static const struct media_entity_operations risp_entity_ops = {
++	.link_validate = v4l2_subdev_link_validate,
++};
++
++static int risp_probe_resources(struct rcar_isp *isp,
++				struct platform_device *pdev)
++{
++	struct resource *res;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	isp->base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(isp->base))
++		return PTR_ERR(isp->base);
++
++	isp->rstc = devm_reset_control_get(&pdev->dev, NULL);
++
++	return PTR_ERR_OR_ZERO(isp->rstc);
++}
++
++static const struct of_device_id risp_of_id_table[] = {
++	{ .compatible = "renesas,isp-r8a779a0" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, risp_of_id_table);
++
++static int risp_probe(struct platform_device *pdev)
++{
++	struct rcar_isp *isp;
++	unsigned int i;
++	int ret;
++
++	isp = devm_kzalloc(&pdev->dev, sizeof(*isp), GFP_KERNEL);
++	if (!isp)
++		return -ENOMEM;
++
++	isp->dev = &pdev->dev;
++
++	mutex_init(&isp->lock);
++	isp->stream_count = 0;
++
++	ret = risp_probe_resources(isp, pdev);
++	if (ret) {
++		dev_err(isp->dev, "Failed to get resources\n");
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, isp);
++
++	ret = risp_parse_dt(isp);
++	if (ret)
++		return ret;
++
++	isp->subdev.owner = THIS_MODULE;
++	isp->subdev.dev = &pdev->dev;
++	v4l2_subdev_init(&isp->subdev, &rcar_isp_subdev_ops);
++	v4l2_set_subdevdata(&isp->subdev, &pdev->dev);
++	snprintf(isp->subdev.name, V4L2_SUBDEV_NAME_SIZE, "%s %s",
++		 KBUILD_MODNAME, dev_name(&pdev->dev));
++	isp->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
++
++	isp->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
++	isp->subdev.entity.ops = &risp_entity_ops;
++
++	isp->pads[RCAR_ISP_SINK].flags = MEDIA_PAD_FL_SINK;
++	for (i = RCAR_ISP_PORT0; i < RCAR_ISP_MAX_PAD; i++)
++		isp->pads[i].flags = MEDIA_PAD_FL_SOURCE;
++
++	ret = media_entity_pads_init(&isp->subdev.entity, RCAR_ISP_MAX_PAD,
++				     isp->pads);
++	if (ret)
++		goto error;
++
++	pm_runtime_enable(&pdev->dev);
++
++	ret = v4l2_async_register_subdev(&isp->subdev);
++	if (ret < 0)
++		goto error;
++
++	dev_info(isp->dev, "Using CSI-2 input: %u\n", isp->csi_input);
++
++	return 0;
++error:
++	v4l2_async_notifier_unregister(&isp->notifier);
++	v4l2_async_notifier_cleanup(&isp->notifier);
++
++	return ret;
++}
++
++static int risp_remove(struct platform_device *pdev)
++{
++	struct rcar_isp *isp = platform_get_drvdata(pdev);
++
++	v4l2_async_notifier_unregister(&isp->notifier);
++	v4l2_async_notifier_cleanup(&isp->notifier);
++	v4l2_async_unregister_subdev(&isp->subdev);
++
++	pm_runtime_disable(&pdev->dev);
++
++	return 0;
++}
++
++static struct platform_driver rcar_isp_driver = {
++	.driver = {
++		.name = "rcar-isp",
++		.of_match_table = risp_of_id_table,
++	},
++	.probe = risp_probe,
++	.remove = risp_remove,
++};
++
++module_platform_driver(rcar_isp_driver);
++
++MODULE_AUTHOR("Niklas Söderlund <niklas.soderlund@ragnatech.se>");
++MODULE_DESCRIPTION("Renesas R-Car ISP Channel Selector driver");
++MODULE_LICENSE("GPL");
 -- 
-2.30.2
+2.31.1
 
