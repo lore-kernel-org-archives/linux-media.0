@@ -2,150 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E09C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 462A7C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:16:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D407361153
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:06:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E8166124B
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 16:16:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346800AbhDMQGu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Apr 2021 12:06:50 -0400
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:34385 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346801AbhDMQGs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Apr 2021 12:06:48 -0400
-Received: by mail-lf1-f54.google.com with SMTP id n8so28276377lfh.1;
-        Tue, 13 Apr 2021 09:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UaQ/mAhPBWcVQ4YIzorH159V0qjCsRuD4zR9Ef1vsSA=;
-        b=Nhv26FjtTrKx18HWTKMiJfuFCpT2B+O8I/yPgaTyCHFTPcczkm/SCS1gWUXWj08Nsv
-         BKOxEJIrDVeMRef8F9lJA0eztz7TjDxZ2PHwiYhOk95VELWzgCZXlCSVQtM7DmARqADE
-         Dagx/xR8vGWH3nUBQWJLulDIC4mq+bnO2db/CSYwhNjHDEj28siMVeesLtBNZtcVuHqZ
-         AV66BSKIwwbnXfgxFHk+nPgaXq7lPpB8hMXCSz3JcOsbxuXfFVuVr+zsiHwHUgjd5w4o
-         AXov4DzX/tquDIoBZl8J4CGb0vwyb8vK6R4Vxp7zr57b6CUU/QCap2Vydu9/lXAjdqBQ
-         iS/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UaQ/mAhPBWcVQ4YIzorH159V0qjCsRuD4zR9Ef1vsSA=;
-        b=pMW83dE+XdxNNj0eWd+le1LBC7zg0Jp8dUkfKwxN3cJgLECAEQLsLySwzu4t089GXb
-         VXmE2qD+Vs05pwOHN4jg3W3Qn9e3q1sCSvkNCF/Zyk+erF1kXtBA22+oBLCzpAn93Upq
-         YelXduQhNIpNtmtNAbtmDY2qVdf948tIv8QycuzM5P0vXg5H9Xhkx4/h+B7aALsFWySi
-         oCWglk7H/eWJhwhiJxi3/PCr3DIfp2tYn3t7xuMAn32lKI9BMPBecCwiG5WaADzqMbr9
-         z2a3FvcWOiePGTdNteg+EAM+BH5b5sjStHxD9DRu8WWDE/ut3C//TZcX/UX4hZBdFHuy
-         6FYw==
-X-Gm-Message-State: AOAM531vxji6jwdiJQ19R51obgeNRTLvTgDQogPqUnB0TGMQ/nbL2Lzr
-        fnD0mjjEg6tkmT/WlR6fQf+u9DINFhmEK/DlxbA=
-X-Google-Smtp-Source: ABdhPJzG/dzN+9CmZhW9utOA2HH6JnupMHEYNxSG3cFNOVJZutOv1wrhYtTqU5Cu7lt+I3LkgLc5eFsZbFukbLKz86Y=
-X-Received: by 2002:ac2:4e43:: with SMTP id f3mr22802574lfr.206.1618329927516;
- Tue, 13 Apr 2021 09:05:27 -0700 (PDT)
+        id S231379AbhDMQRO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Apr 2021 12:17:14 -0400
+Received: from mga17.intel.com ([192.55.52.151]:50326 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229776AbhDMQRN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Apr 2021 12:17:13 -0400
+IronPort-SDR: r8m9em0NkVXxo5RcGBdGd0vmeSau9gh7sEjDnI38b383ogy3m6imq0MsExrACLyuRMvhNWi2fm
+ AE9IsXnJAM/A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="174547165"
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="174547165"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 09:10:33 -0700
+IronPort-SDR: ru4crNMreHoXQpsxGuzZMkdEosvf9+r3cFUPGuvreADT9tP6nftbq1raPDbxxsb2etlBCuEIfz
+ E+6gqYoUayfg==
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="452019778"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 09:10:25 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1lWLcM-003nnM-Az; Tue, 13 Apr 2021 19:10:22 +0300
+Date:   Tue, 13 Apr 2021 19:10:22 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v1 1/1] media: ipu3-cio2: Fix referece counting when
+ looping over ACPI devices
+Message-ID: <YHXCboJUF1VuZiKz@smile.fi.intel.com>
+References: <20210404181409.1451026-1-andy.shevchenko@gmail.com>
+ <1ab48622-be85-f1d7-caa4-8b04a4727d5d@gmail.com>
 MIME-Version: 1.0
-References: <20210412222040.GA13659@focaruja> <YHW5Fwl55c7NJAeo@orome.fritz.box>
-In-Reply-To: <YHW5Fwl55c7NJAeo@orome.fritz.box>
-From:   Dwaipayan Ray <dwaipayanray1@gmail.com>
-Date:   Tue, 13 Apr 2021 21:35:16 +0530
-Message-ID: <CABJPP5AEtg+615Q2d-d9aZf=CE7EFPKEbc7tr=gKo_H-XL+M5Q@mail.gmail.com>
-Subject: Re: [PATCH] staging: media: tegra-vde: Align line break to match with
- the open parenthesis in file trace.h
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        outreachy-kernel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ab48622-be85-f1d7-caa4-8b04a4727d5d@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 8:59 PM Thierry Reding <thierry.reding@gmail.com> wrote:
->
-> On Mon, Apr 12, 2021 at 07:20:40PM -0300, Aline Santana Cordeiro wrote:
-> > Align line break to match with the open parenthesis.
-> > Issue detected by checkpatch.pl.
-> > It consequently solved a few end lines with a '(',
-> > issue also detected by checkpatch.pl
+On Mon, Apr 05, 2021 at 09:37:28PM +0100, Daniel Scally wrote:
+> On 04/04/2021 19:14, Andy Shevchenko wrote:
+> > When we continue, due to device is disabled, loop we have to drop reference count.
+> > When we have an array full of devices we have to also drop the reference count.
+> > Note, in this case the cio2_bridge_unregister_sensors() is called by the caller.
 > >
-> > Signed-off-by: Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>
-> > ---
-> >  drivers/staging/media/tegra-vde/trace.h | 111 ++++++++++++++------------------
-> >  1 file changed, 50 insertions(+), 61 deletions(-)
->
-> Ugh... I'd say this is one case where checkpatch.pl really shouldn't be
-> complaining since this isn't a function call or declaration. It's more
-> like a code snippet written with macros, so I don't think the same rules
-> should apply.
->
-> Adding checkpatch folks (hence quoting in full): is there anything we
-> can do about this without too much effort? Or should we just accept this
-> the way it is?
->
+> > Fixes: 803abec64ef9 ("media: ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver")
+> > Cc: Daniel Scally <djrscally@gmail.com>
+> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> Ah; thanks for catching those, I'm annoyed to have missed the
+> acpi_dev_put() calls in particular
+> 
+> Reviewed-by: Daniel Scally <djrscally@gmail.com>
 
-While it may be possible to add exceptions for trace headers on the
-alignment rules, I don't know how many more such exceptions we will
-end up adding. Such fine grained checks might be unnecessarily complex.
-So I think we should just accept the way it is for now.
+Sakari, Mauro, can this be applied as v5.12 material, please?
 
-Joe might have a different opinion?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Dwaipayan.
 
-> Thierry
->
-> > diff --git a/drivers/staging/media/tegra-vde/trace.h b/drivers/staging/media/tegra-vde/trace.h
-> > index e571410..1fcc573 100644
-> > --- a/drivers/staging/media/tegra-vde/trace.h
-> > +++ b/drivers/staging/media/tegra-vde/trace.h
-> > @@ -11,79 +11,68 @@
-> >  #include "vde.h"
-> >
-> >  DECLARE_EVENT_CLASS(register_access,
-> > -     TP_PROTO(struct tegra_vde *vde, void __iomem *base,
-> > -              u32 offset, u32 value),
-> > -     TP_ARGS(vde, base, offset, value),
-> > -     TP_STRUCT__entry(
-> > -             __string(hw_name, tegra_vde_reg_base_name(vde, base))
-> > -             __field(u32, offset)
-> > -             __field(u32, value)
-> > -     ),
-> > -     TP_fast_assign(
-> > -             __assign_str(hw_name, tegra_vde_reg_base_name(vde, base));
-> > -             __entry->offset = offset;
-> > -             __entry->value = value;
-> > -     ),
-> > -     TP_printk("%s:0x%03x 0x%08x", __get_str(hw_name), __entry->offset,
-> > -               __entry->value)
-> > +                 TP_PROTO(struct tegra_vde *vde, void __iomem *base,
-> > +                          u32 offset, u32 value),
-> > +                 TP_ARGS(vde, base, offset, value),
-> > +                         TP_STRUCT__entry(__string(hw_name, tegra_vde_reg_base_name(vde, base))
-> > +                                          __field(u32, offset)
-> > +                                          __field(u32, value)
-> > +                         ),
-> > +                         TP_fast_assign(__assign_str(hw_name,
-> > +                                                     tegra_vde_reg_base_name(vde, base));
-> > +                                        __entry->offset = offset;
-> > +                                        __entry->value = value;
-> > +                         ),
-> > +                         TP_printk("%s:0x%03x 0x%08x", __get_str(hw_name), __entry->offset,
-> > +                                   __entry->value)
-> >  );
-> >
