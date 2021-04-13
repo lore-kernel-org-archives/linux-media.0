@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33F92C43603
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3302FC43611
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 179C3613AF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1642B613B0
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbhDMCbi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:38 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35892 "EHLO
+        id S1343630AbhDMCbm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:42 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35890 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245713AbhDMCbg (ORCPT
+        with ESMTP id S1343539AbhDMCbl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:36 -0400
+        Mon, 12 Apr 2021 22:31:41 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A69A98AF;
-        Tue, 13 Apr 2021 04:31:16 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DCA788AF;
+        Tue, 13 Apr 2021 04:31:21 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281077;
-        bh=cqj84uzHR15SOybhDDJP9WSfm6hIaZdylu9rqjKit9k=;
+        s=mail; t=1618281082;
+        bh=XxqrVdeLQLW3M7ATDxLvLXeSubA4qYb6HDkhSspAruY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IT4xrelwR9X6F7g1C8XxmD2uTSzeYZEdjQ53DHgUsepE8sVY6l4suYv5Y7gzOHw73
-         NPMNHa34NdixQ/qWChhkqwQqMEI22sw53TwOjUlYamIDxEjUYjkRHxkI+ac2kZ/eUa
-         eiGXtNgpfFe5Ychtcm6DaFmvTdZDUYPcLXnVU6Ng=
+        b=ZM1ivtY4t8zDif8eofjVyGkYTUf3BolaRu+/8BqIXd16Obxqk004Q68ldlf2cN92e
+         fPB1Y+yRArsOpjLPTcGRUyGRop2gR8Ss8rlrwPI7++XSh9cBABGbhjVLgGfodoislY
+         KVoJNkXIAg9CEkchf8IJQ1+hgC3ttOFFhD5ANKTU=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -37,9 +37,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>
-Subject: [PATCH 13/23] media: imx: imx7_mipi_csis: Rename csi_state flag field to state
-Date:   Tue, 13 Apr 2021 05:30:04 +0300
-Message-Id: <20210413023014.28797-14-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 20/23] media: imx: imx7_mipi_csis: Reorganize mipi_csis_probe()
+Date:   Tue, 13 Apr 2021 05:30:11 +0300
+Message-Id: <20210413023014.28797-21-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -49,108 +49,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The flag field of the csi_state structure contains the device state.
-Rename it accordingly.
+Group the operations performed in mipi_csis_probe() logically to improve
+readability.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 26 +++++++++++-----------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 30 ++++++++++++++--------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 6b9c05b1cdf3..49b8afc0f2f8 100644
+index 61da4db292ef..07b331667db7 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -306,7 +306,7 @@ struct csi_state {
- 	struct platform_device *pdev;
- 	void __iomem *regs;
- 	int irq;
--	u32 flags;
-+	u32 state;
+@@ -1298,22 +1298,21 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	if (!state)
+ 		return -ENOMEM;
  
- 	struct dentry *debugfs_root;
- 	bool debug;
-@@ -813,7 +813,7 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
- 	mutex_lock(&state->lock);
++	mutex_init(&state->lock);
+ 	spin_lock_init(&state->slock);
  
- 	if (enable) {
--		if (state->flags & ST_SUSPENDED) {
-+		if (state->state & ST_SUSPENDED) {
- 			ret = -EBUSY;
- 			goto unlock;
- 		}
-@@ -825,14 +825,14 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
+ 	state->dev = dev;
  
- 		mipi_csis_log_counters(state, true);
- 
--		state->flags |= ST_STREAMING;
-+		state->state |= ST_STREAMING;
- 	} else {
- 		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
- 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 0);
- 		if (ret == -ENOIOCTLCMD)
- 			ret = 0;
- 		mipi_csis_stop_stream(state);
--		state->flags &= ~ST_STREAMING;
-+		state->state &= ~ST_STREAMING;
- 		if (state->debug)
- 			mipi_csis_log_counters(state, true);
- 	}
-@@ -1028,7 +1028,7 @@ static int mipi_csis_log_status(struct v4l2_subdev *sd)
- 
- 	mutex_lock(&state->lock);
- 	mipi_csis_log_counters(state, true);
--	if (state->debug && (state->flags & ST_POWERED))
-+	if (state->debug && (state->state & ST_POWERED))
- 		mipi_csis_dump_regs(state);
- 	mutex_unlock(&state->lock);
- 
-@@ -1178,15 +1178,15 @@ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
- 	int ret = 0;
- 
- 	mutex_lock(&state->lock);
--	if (state->flags & ST_POWERED) {
-+	if (state->state & ST_POWERED) {
- 		mipi_csis_stop_stream(state);
- 		ret = regulator_disable(state->mipi_phy_regulator);
- 		if (ret)
- 			goto unlock;
- 		mipi_csis_clk_disable(state);
--		state->flags &= ~ST_POWERED;
-+		state->state &= ~ST_POWERED;
- 		if (!runtime)
--			state->flags |= ST_SUSPENDED;
-+			state->state |= ST_SUSPENDED;
++	memcpy(state->events, mipi_csis_events, sizeof(state->events));
++
++	/* Parse DT properties. */
+ 	ret = mipi_csis_parse_dt(state);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to parse device tree: %d\n", ret);
+ 		return ret;
  	}
  
- unlock:
-@@ -1202,21 +1202,21 @@ static int mipi_csis_pm_resume(struct device *dev, bool runtime)
- 	int ret = 0;
+-	ret = mipi_csis_phy_init(state);
+-	if (ret < 0)
+-		return ret;
+-
+-	mipi_csis_phy_reset(state);
+-
++	/* Acquire resources. */
+ 	state->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(state->regs))
+ 		return PTR_ERR(state->regs);
+@@ -1322,16 +1321,24 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
  
- 	mutex_lock(&state->lock);
--	if (!runtime && !(state->flags & ST_SUSPENDED))
-+	if (!runtime && !(state->state & ST_SUSPENDED))
- 		goto unlock;
++	ret = mipi_csis_phy_init(state);
++	if (ret < 0)
++		return ret;
++
+ 	ret = mipi_csis_clk_get(state);
+ 	if (ret < 0)
+ 		return ret;
  
--	if (!(state->flags & ST_POWERED)) {
-+	if (!(state->state & ST_POWERED)) {
- 		ret = regulator_enable(state->mipi_phy_regulator);
- 		if (ret)
- 			goto unlock;
- 
--		state->flags |= ST_POWERED;
-+		state->state |= ST_POWERED;
- 		mipi_csis_clk_enable(state);
++	/* Reset PHY and enable the clocks. */
++	mipi_csis_phy_reset(state);
++
+ 	ret = mipi_csis_clk_enable(state);
+ 	if (ret < 0) {
+ 		dev_err(state->dev, "failed to enable clocks: %d\n", ret);
+ 		return ret;
  	}
--	if (state->flags & ST_STREAMING)
-+	if (state->state & ST_STREAMING)
- 		mipi_csis_start_stream(state);
  
--	state->flags &= ~ST_SUSPENDED;
-+	state->state &= ~ST_SUSPENDED;
++	/* Now that the hardware is initialized, request the interrupt. */
+ 	ret = devm_request_irq(dev, irq, mipi_csis_irq_handler, 0,
+ 			       dev_name(dev), state);
+ 	if (ret) {
+@@ -1339,22 +1346,23 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 		goto disable_clock;
+ 	}
  
- unlock:
- 	mutex_unlock(&state->lock);
+-	platform_set_drvdata(pdev, &state->sd);
+-
+-	mutex_init(&state->lock);
++	/* Initialize and register the subdev. */
+ 	ret = mipi_csis_subdev_init(state);
+ 	if (ret < 0)
+ 		goto disable_clock;
+ 
++	platform_set_drvdata(pdev, &state->sd);
++
+ 	ret = mipi_csis_async_register(state);
+ 	if (ret < 0) {
+ 		dev_err(dev, "async register failed: %d\n", ret);
+ 		goto cleanup;
+ 	}
+ 
+-	memcpy(state->events, mipi_csis_events, sizeof(state->events));
+-
++	/* Initialize debugfs. */
+ 	mipi_csis_debugfs_init(state);
++
++	/* Enable runtime PM. */
+ 	pm_runtime_enable(dev);
+ 	if (!pm_runtime_enabled(dev)) {
+ 		ret = mipi_csis_pm_resume(dev, true);
 -- 
 Regards,
 
