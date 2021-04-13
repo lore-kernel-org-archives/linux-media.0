@@ -2,34 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08811C4360C
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A82C43616
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE021613AE
-	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4D01613AF
+	for <linux-media@archiver.kernel.org>; Tue, 13 Apr 2021 02:31:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245685AbhDMCbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Apr 2021 22:31:35 -0400
+        id S1343494AbhDMCbh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:31:37 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:35890 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245604AbhDMCbe (ORCPT
+        with ESMTP id S245697AbhDMCbg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Apr 2021 22:31:34 -0400
+        Mon, 12 Apr 2021 22:31:36 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B615C9F0;
-        Tue, 13 Apr 2021 04:31:13 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EDC666F2;
+        Tue, 13 Apr 2021 04:31:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618281074;
-        bh=iLFV4ogqlgFm0yTeXngYuQ7NGoxohvd5Q45T3wFIaW8=;
+        s=mail; t=1618281076;
+        bh=NurxvbOGl8vMVjzGufWRmMZjNMTvOMmJPql2VeE5inU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eZFfX8PI2zlhB2uqUABb30B/Ffxt0kU6ZyILyJiIERpnJdwSaQ57rbfaeehcp5/Mc
-         wTPE9wyTcLIQmMOlA4GM4muaWQdlA7TfwawHjiOyI9YZy6ckG+1AAfDWThjkbl2voa
-         OskgLxG8br5h3GKm/rwr5uptJFHa4Tr3TJ5SuCvE=
+        b=UwIGYy7TBouWDMZ+wDRO1V7ZMfEhkOJxkK2VRLvv46R/2oD/dStBNmdqDfxM/O/hr
+         kEM16sGetcAXEpTrijCiog760FFw7tDWgqmwlV+ezrE0Y3WhMw7tEf+OJ4I1F+kylO
+         8ps19W8px/N9+Rs+ts0SsohZJQgj25KW6G6kMwLI=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -37,9 +38,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>
-Subject: [PATCH 09/23] media: imx: imx7_mipi_csis: Drop unused csis_hw_reset structure
-Date:   Tue, 13 Apr 2021 05:30:00 +0300
-Message-Id: <20210413023014.28797-10-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 12/23] media: imx: imx7_mipi_csis: Rename mipi_sd to sd
+Date:   Tue, 13 Apr 2021 05:30:03 +0300
+Message-Id: <20210413023014.28797-13-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
 References: <20210413023014.28797-1-laurent.pinchart@ideasonboard.com>
@@ -49,38 +50,276 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The csis_hw_reset structure is instantiated as a member of csi_state,
-but that member is never used. Drop it.
+The CSIS is modelled as a single subdev, there's thus no ambiguity
+regarding which subdev the code refers to. Rename mipi_sd to sd.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 91 +++++++++++-----------
+ 1 file changed, 45 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 224d3ac9c9bf..695cb8aebcab 100644
+index 78014ae02d34..6b9c05b1cdf3 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -278,12 +278,6 @@ static const char * const mipi_csis_clk_id[] = {
- 	"phy",
- };
+@@ -298,7 +298,7 @@ struct csi_state {
+ 	spinlock_t slock;
+ 	struct device *dev;
+ 	struct media_pad pads[CSIS_PADS_NUM];
+-	struct v4l2_subdev mipi_sd;
++	struct v4l2_subdev sd;
+ 	struct v4l2_async_notifier notifier;
+ 	struct v4l2_subdev *src_sd;
  
--struct csis_hw_reset {
--	struct regmap *src;
--	u8 req_src;
--	u8 rst_bit;
--};
--
- struct csi_state {
- 	/* lock elements below */
- 	struct mutex lock;
-@@ -321,7 +315,6 @@ struct csi_state {
+@@ -785,12 +785,12 @@ static void mipi_csis_debugfs_exit(struct csi_state *state)
  
- 	struct mipi_csis_event events[MIPI_CSIS_NUM_EVENTS];
+ static struct csi_state *mipi_sd_to_csis_state(struct v4l2_subdev *sdev)
+ {
+-	return container_of(sdev, struct csi_state, mipi_sd);
++	return container_of(sdev, struct csi_state, sd);
+ }
  
--	struct csis_hw_reset hw_reset;
- 	struct regulator *mipi_phy_regulator;
- };
+-static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
++static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	int ret;
+ 
+ 	if (enable) {
+@@ -854,15 +854,15 @@ mipi_csis_get_format(struct csi_state *state,
+ 		     unsigned int pad)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&state->mipi_sd, cfg, pad);
++		return v4l2_subdev_get_try_format(&state->sd, cfg, pad);
+ 
+ 	return &state->format_mbus;
+ }
+ 
+-static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
++static int mipi_csis_init_cfg(struct v4l2_subdev *sd,
+ 			      struct v4l2_subdev_pad_config *cfg)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	struct v4l2_mbus_framefmt *fmt_sink;
+ 	struct v4l2_mbus_framefmt *fmt_source;
+ 	enum v4l2_subdev_format_whence which;
+@@ -896,11 +896,11 @@ static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
+ 	return 0;
+ }
+ 
+-static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
++static int mipi_csis_get_fmt(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_pad_config *cfg,
+ 			     struct v4l2_subdev_format *sdformat)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	struct v4l2_mbus_framefmt *fmt;
+ 
+ 	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
+@@ -912,11 +912,11 @@ static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
+ 	return 0;
+ }
+ 
+-static int mipi_csis_enum_mbus_code(struct v4l2_subdev *mipi_sd,
++static int mipi_csis_enum_mbus_code(struct v4l2_subdev *sd,
+ 				    struct v4l2_subdev_pad_config *cfg,
+ 				    struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 
+ 	/*
+ 	 * The CSIS can't transcode in any way, the source format is identical
+@@ -944,11 +944,11 @@ static int mipi_csis_enum_mbus_code(struct v4l2_subdev *mipi_sd,
+ 	return 0;
+ }
+ 
+-static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
++static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_pad_config *cfg,
+ 			     struct v4l2_subdev_format *sdformat)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	struct csis_pix_format const *csis_fmt;
+ 	struct v4l2_mbus_framefmt *fmt;
+ 	unsigned int align;
+@@ -958,7 +958,7 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
+ 	 * modified.
+ 	 */
+ 	if (sdformat->pad == CSIS_PAD_SOURCE)
+-		return mipi_csis_get_fmt(mipi_sd, cfg, sdformat);
++		return mipi_csis_get_fmt(sd, cfg, sdformat);
+ 
+ 	if (sdformat->pad != CSIS_PAD_SINK)
+ 		return -EINVAL;
+@@ -1022,9 +1022,9 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
+ 	return 0;
+ }
+ 
+-static int mipi_csis_log_status(struct v4l2_subdev *mipi_sd)
++static int mipi_csis_log_status(struct v4l2_subdev *sd)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 
+ 	mutex_lock(&state->lock);
+ 	mipi_csis_log_counters(state, true);
+@@ -1064,8 +1064,8 @@ static int mipi_csis_link_setup(struct media_entity *entity,
+ 				const struct media_pad *local_pad,
+ 				const struct media_pad *remote_pad, u32 flags)
+ {
+-	struct v4l2_subdev *mipi_sd = media_entity_to_v4l2_subdev(entity);
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	struct v4l2_subdev *remote_sd;
+ 
+ 	dev_dbg(state->dev, "link setup %s -> %s", remote_pad->entity->name,
+@@ -1110,7 +1110,7 @@ static int mipi_csis_notify_bound(struct v4l2_async_notifier *notifier,
+ 				  struct v4l2_async_subdev *asd)
+ {
+ 	struct csi_state *state = mipi_notifier_to_csis_state(notifier);
+-	struct media_pad *sink = &state->mipi_sd.entity.pads[CSIS_PAD_SINK];
++	struct media_pad *sink = &state->sd.entity.pads[CSIS_PAD_SINK];
+ 
+ 	return v4l2_create_fwnode_links_to_pad(sd, sink, 0);
+ }
+@@ -1155,12 +1155,11 @@ static int mipi_csis_async_register(struct csi_state *state)
+ 
+ 	state->notifier.ops = &mipi_csis_notify_ops;
+ 
+-	ret = v4l2_async_subdev_notifier_register(&state->mipi_sd,
+-						  &state->notifier);
++	ret = v4l2_async_subdev_notifier_register(&state->sd, &state->notifier);
+ 	if (ret)
+ 		return ret;
+ 
+-	return v4l2_async_register_subdev(&state->mipi_sd);
++	return v4l2_async_register_subdev(&state->sd);
+ 
+ err_parse:
+ 	fwnode_handle_put(ep);
+@@ -1174,8 +1173,8 @@ static int mipi_csis_async_register(struct csi_state *state)
+ 
+ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
+ {
+-	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	int ret = 0;
+ 
+ 	mutex_lock(&state->lock);
+@@ -1198,8 +1197,8 @@ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
+ 
+ static int mipi_csis_pm_resume(struct device *dev, bool runtime)
+ {
+-	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 	int ret = 0;
+ 
+ 	mutex_lock(&state->lock);
+@@ -1255,33 +1254,33 @@ static const struct dev_pm_ops mipi_csis_pm_ops = {
+  * Probe/remove & platform driver
+  */
+ 
+-static int mipi_csis_subdev_init(struct v4l2_subdev *mipi_sd,
++static int mipi_csis_subdev_init(struct v4l2_subdev *sd,
+ 				 struct platform_device *pdev,
+ 				 const struct v4l2_subdev_ops *ops)
+ {
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 
+-	v4l2_subdev_init(mipi_sd, ops);
+-	mipi_sd->owner = THIS_MODULE;
+-	snprintf(mipi_sd->name, sizeof(mipi_sd->name), "%s.%d",
++	v4l2_subdev_init(sd, ops);
++	sd->owner = THIS_MODULE;
++	snprintf(sd->name, sizeof(sd->name), "%s.%d",
+ 		 CSIS_SUBDEV_NAME, state->index);
+ 
+-	mipi_sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+-	mipi_sd->ctrl_handler = NULL;
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	sd->ctrl_handler = NULL;
+ 
+-	mipi_sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+-	mipi_sd->entity.ops = &mipi_csis_entity_ops;
++	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
++	sd->entity.ops = &mipi_csis_entity_ops;
+ 
+-	mipi_sd->dev = &pdev->dev;
++	sd->dev = &pdev->dev;
+ 
+ 	state->csis_fmt = &mipi_csis_formats[0];
+-	mipi_csis_init_cfg(mipi_sd, NULL);
++	mipi_csis_init_cfg(sd, NULL);
+ 
+ 	state->pads[CSIS_PAD_SINK].flags = MEDIA_PAD_FL_SINK
+ 					 | MEDIA_PAD_FL_MUST_CONNECT;
+ 	state->pads[CSIS_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
+ 					   | MEDIA_PAD_FL_MUST_CONNECT;
+-	return media_entity_pads_init(&mipi_sd->entity, CSIS_PADS_NUM,
++	return media_entity_pads_init(&sd->entity, CSIS_PADS_NUM,
+ 				      state->pads);
+ }
+ 
+@@ -1354,10 +1353,10 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 		goto disable_clock;
+ 	}
+ 
+-	platform_set_drvdata(pdev, &state->mipi_sd);
++	platform_set_drvdata(pdev, &state->sd);
+ 
+ 	mutex_init(&state->lock);
+-	ret = mipi_csis_subdev_init(&state->mipi_sd, pdev,
++	ret = mipi_csis_subdev_init(&state->sd, pdev,
+ 				    &mipi_csis_subdev_ops);
+ 	if (ret < 0)
+ 		goto disable_clock;
+@@ -1386,10 +1385,10 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ unregister_all:
+ 	mipi_csis_debugfs_exit(state);
+ cleanup:
+-	media_entity_cleanup(&state->mipi_sd.entity);
++	media_entity_cleanup(&state->sd.entity);
+ 	v4l2_async_notifier_unregister(&state->notifier);
+ 	v4l2_async_notifier_cleanup(&state->notifier);
+-	v4l2_async_unregister_subdev(&state->mipi_sd);
++	v4l2_async_unregister_subdev(&state->sd);
+ disable_clock:
+ 	mipi_csis_clk_disable(state);
+ 	mutex_destroy(&state->lock);
+@@ -1399,18 +1398,18 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 
+ static int mipi_csis_remove(struct platform_device *pdev)
+ {
+-	struct v4l2_subdev *mipi_sd = platform_get_drvdata(pdev);
+-	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
++	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
++	struct csi_state *state = mipi_sd_to_csis_state(sd);
+ 
+ 	mipi_csis_debugfs_exit(state);
+ 	v4l2_async_notifier_unregister(&state->notifier);
+ 	v4l2_async_notifier_cleanup(&state->notifier);
+-	v4l2_async_unregister_subdev(&state->mipi_sd);
++	v4l2_async_unregister_subdev(&state->sd);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	mipi_csis_pm_suspend(&pdev->dev, true);
+ 	mipi_csis_clk_disable(state);
+-	media_entity_cleanup(&state->mipi_sd.entity);
++	media_entity_cleanup(&state->sd.entity);
+ 	mutex_destroy(&state->lock);
+ 	pm_runtime_set_suspended(&pdev->dev);
  
 -- 
 Regards,
