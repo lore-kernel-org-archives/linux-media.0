@@ -2,78 +2,86 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF22C433B4
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 16:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B96C433B4
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 16:26:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAC7E60C3E
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 16:17:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B886C6117A
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 16:26:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbhDOQRX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Apr 2021 12:17:23 -0400
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:45005 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbhDOQRX (ORCPT
+        id S232648AbhDOQ0m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Apr 2021 12:26:42 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46477 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230056AbhDOQ0l (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Apr 2021 12:17:23 -0400
-Received: by mail-oi1-f176.google.com with SMTP id e66so9518499oif.11;
-        Thu, 15 Apr 2021 09:16:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g9UUN7RgYxjHjT9JtXqaWGYYxyRhaw5q4SuyKDfZ6ek=;
-        b=XZfWMa7bAT3JFrU92rnxTsK2c3eQKZVd4yPDt7tF2lFp+3r4m6tBV+XttE06W3IHXO
-         AoWFZuldOGAgNhuQapn/fcmrrmthIbsgneoYA1P5GX/GyhOtmt6ZwelzaPKJqNpxOlDx
-         m5/UMR0mLzhYPFEqwLH0t1Z7heiS71MFzFDWzFYkT91MIOaUpMBojxwXH32hlfIYW47/
-         6mmD4KpUbpPZRB/h3nliFFULrmJGfvazyDmryiSrmdufN6tGCEDOisZmKfHLTKtb/+kZ
-         +vZ+i/25zEm7deEi8WwytIY/dezGSyk6F2QbHmhnzZP2OWN9c8a3FH6gcshF8SypUe61
-         74yA==
-X-Gm-Message-State: AOAM531rEup42QRSr45iR8m/qGGNWxBFbXYUPhbMIyvqHLSWV/dV0Tsh
-        aWGmCosJaP+14tGPR1QSoQ==
-X-Google-Smtp-Source: ABdhPJzNJxWVs55Q1wP3ChKCv6l4X9x3mXUuNvql+J6KLClI+cT0xQKtpjOG0h1NiIJYB6zqUHKp8A==
-X-Received: by 2002:aca:c74a:: with SMTP id x71mr3063497oif.22.1618503418210;
-        Thu, 15 Apr 2021 09:16:58 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 3sm726662otw.58.2021.04.15.09.16.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 09:16:57 -0700 (PDT)
-Received: (nullmailer pid 1501918 invoked by uid 1000);
-        Thu, 15 Apr 2021 16:16:56 -0000
-Date:   Thu, 15 Apr 2021 11:16:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jacopo@jmondi.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v4 29/33] dt-bindings: media: atmel-isc: convert to yaml
-Message-ID: <20210415161656.GA1501812@robh.at.kernel.org>
-References: <20210413105731.610028-30-eugen.hristev@microchip.com>
- <20210415085530.824638-1-eugen.hristev@microchip.com>
+        Thu, 15 Apr 2021 12:26:41 -0400
+X-Originating-IP: 24.194.32.49
+Received: from coplandos.local (cpe-24-194-32-49.nycap.res.rr.com [24.194.32.49])
+        (Authenticated sender: vrzh@vrzh.net)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id ED7DF240003;
+        Thu, 15 Apr 2021 16:26:14 +0000 (UTC)
+Date:   Thu, 15 Apr 2021 12:29:18 -0400
+From:   Martiros Shakhzadyan <vrzh@vrzh.net>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, Martiros Shakhzadyan <vrzh@vrzh.net>
+Subject: Re: [PATCH] staging: media: atomisp: cleaning up sh_css.c
+Message-ID: <YHhp3vfF2KH9nKT0@coplandos.local>
+References: <20210415005106.530914-1-vrzh@vrzh.net>
+ <e7d21188-3f7e-1b8f-59b0-144713bd918d@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210415085530.824638-1-eugen.hristev@microchip.com>
+In-Reply-To: <e7d21188-3f7e-1b8f-59b0-144713bd918d@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 15 Apr 2021 11:55:30 +0300, Eugen Hristev wrote:
-> Convert the Atmel ISC to yaml binding format.
+On Thu, Apr 15, 2021 at 03:59:25PM +0200, Hans Verkuil wrote:
+> Hi Martiros,
 > 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v4:
-> - added '|' at description to maintain line breaks
+> If you look at other patch series, you'll see that they follow this pattern:
 > 
->  .../devicetree/bindings/media/atmel,isc.yaml  | 115 ++++++++++++++++++
->  .../devicetree/bindings/media/atmel-isc.txt   |  65 ----------
->  2 files changed, 115 insertions(+), 65 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/atmel,isc.yaml
->  delete mode 100644 Documentation/devicetree/bindings/media/atmel-isc.txt
+> [PATCH x/y]
 > 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+> and for the cover letter: [PATCH 0/y]
+> 
+> It's recommended to follow that rule.
+> 
+> On 15/04/2021 02:50, Martiros Shakhzadyan wrote:
+> > The following set of patches for sh_css.c aims to resolve coding style issues
+> > and remove redundancies.
+> > 
+> > Martiros Shakhzadyan (9):
+> >   staging: media: atomisp: [1/6] Fix sh_css.c brace coding style issues
+> >   staging: media: atomisp: [2/6] Fix sh_css.c brace coding style issues
+> >   staging: media: atomisp: [3/6] Fix sh_css.c brace coding style issues
+> >   staging: media: atomisp: [4/6] Fix sh_css.c brace coding style issues
+> >   staging: media: atomisp: [5/6] Fix sh_css.c brace coding style issues
+> >   staging: media: atomisp: [6/6] Fix sh_css.c brace coding style issues\
+> 
+> Why split this up in 6 patches? Just combine it in one. It's all the same thing
+> for the same source.
+> 
+> >   staging: media: atomisp: Use goto instead of return in ia_css_init()
+> >   staging: media: atomisp: [1/2] Remove redundant assertions in sh_css.c
+> >   staging: media: atomisp: [2/2] Remove redundant assertions in sh_css.c
+> 
+> Ditto for these two.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+Gotcha - will resubmit all following this rule (save for the rejected
+patch) - Thanks!
+> > 
+> >  drivers/staging/media/atomisp/pci/sh_css.c | 266 ++++++++-------------
+> >  1 file changed, 105 insertions(+), 161 deletions(-)
+> > 
+> 
