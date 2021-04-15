@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D50BFC433ED
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 00:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 417F8C433B4
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 00:49:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADCA06121E
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 00:49:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25EF961139
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 00:49:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbhDOAtt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Apr 2021 20:49:49 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:42713 "EHLO
+        id S229769AbhDOAtv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Apr 2021 20:49:51 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:60303 "EHLO
         relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhDOAtn (ORCPT
+        with ESMTP id S229612AbhDOAtu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Apr 2021 20:49:43 -0400
+        Wed, 14 Apr 2021 20:49:50 -0400
 X-Originating-IP: 24.194.32.49
 Received: from coplandos.local (cpe-24-194-32-49.nycap.res.rr.com [24.194.32.49])
         (Authenticated sender: vrzh@vrzh.net)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 03F6F20002;
-        Thu, 15 Apr 2021 00:49:19 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id DC26920002;
+        Thu, 15 Apr 2021 00:49:26 +0000 (UTC)
 From:   Martiros Shakhzadyan <vrzh@vrzh.net>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Martiros Shakhzadyan <vrzh@vrzh.net>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH] staging: media: atomisp: [6/6] Fix sh_css.c brace coding style issues
-Date:   Wed, 14 Apr 2021 20:51:03 -0400
-Message-Id: <20210415005106.530914-7-vrzh@vrzh.net>
+Subject: [PATCH] staging: media: atomisp: [1/2] Remove redundant assertions in sh_css.c
+Date:   Wed, 14 Apr 2021 20:51:05 -0400
+Message-Id: <20210415005106.530914-9-vrzh@vrzh.net>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415005106.530914-1-vrzh@vrzh.net>
 References: <20210415005106.530914-1-vrzh@vrzh.net>
@@ -42,97 +42,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix brace coding style issues.
+Remove assert() in places where the condition is already handled.
 
 Signed-off-by: Martiros Shakhzadyan <vrzh@vrzh.net>
 ---
- drivers/staging/media/atomisp/pci/sh_css.c | 30 ++++++++++------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+ drivers/staging/media/atomisp/pci/sh_css.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 0c9324684076..bb752d47457c 100644
+index 4e3ef68014ec..aebecf650967 100644
 --- a/drivers/staging/media/atomisp/pci/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -2161,10 +2161,10 @@ static const struct ia_css_yuvpp_settings yuvpp = IA_CSS_DEFAULT_YUVPP_SETTINGS;
- static int
- init_pipe_defaults(enum ia_css_pipe_mode mode,
- 		   struct ia_css_pipe *pipe,
--		   bool copy_pipe) {
-+		   bool copy_pipe)
-+{
- 
--	if (!pipe)
--	{
-+	if (!pipe) {
- 		IA_CSS_ERROR("NULL pipe parameter");
- 		return -EINVAL;
- 	}
-@@ -2173,18 +2173,17 @@ init_pipe_defaults(enum ia_css_pipe_mode mode,
- 	memcpy(pipe, &default_pipe, sizeof(default_pipe));
- 
- 	/* TODO: JB should not be needed, but temporary backward reference */
--	switch (mode)
--	{
-+	switch (mode) {
- 	case IA_CSS_PIPE_MODE_PREVIEW:
- 		pipe->mode = IA_CSS_PIPE_ID_PREVIEW;
- 		memcpy(&pipe->pipe_settings.preview, &preview, sizeof(preview));
- 		break;
- 	case IA_CSS_PIPE_MODE_CAPTURE:
--		if (copy_pipe) {
-+		if (copy_pipe)
- 			pipe->mode = IA_CSS_PIPE_ID_COPY;
--		} else {
-+		else
- 			pipe->mode = IA_CSS_PIPE_ID_CAPTURE;
--		}
-+
- 		memcpy(&pipe->pipe_settings.capture, &capture, sizeof(capture));
- 		break;
- 	case IA_CSS_PIPE_MODE_VIDEO:
-@@ -2214,27 +2213,25 @@ pipe_global_init(void)
- 	u8 i;
- 
- 	my_css.pipe_counter = 0;
--	for (i = 0; i < IA_CSS_PIPELINE_NUM_MAX; i++) {
-+	for (i = 0; i < IA_CSS_PIPELINE_NUM_MAX; i++)
- 		my_css.all_pipes[i] = NULL;
--	}
- }
- 
- static int
- pipe_generate_pipe_num(const struct ia_css_pipe *pipe,
--		       unsigned int *pipe_number) {
-+		       unsigned int *pipe_number)
-+{
- 	const u8 INVALID_PIPE_NUM = (uint8_t)~(0);
- 	u8 pipe_num = INVALID_PIPE_NUM;
- 	u8 i;
- 
--	if (!pipe)
--	{
-+	if (!pipe) {
- 		IA_CSS_ERROR("NULL pipe parameter");
- 		return -EINVAL;
- 	}
- 
- 	/* Assign a new pipe_num .... search for empty place */
--	for (i = 0; i < IA_CSS_PIPELINE_NUM_MAX; i++)
--	{
-+	for (i = 0; i < IA_CSS_PIPELINE_NUM_MAX; i++) {
- 		if (!my_css.all_pipes[i]) {
- 			/*position is reserved */
- 			my_css.all_pipes[i] = (struct ia_css_pipe *)pipe;
-@@ -2242,8 +2239,7 @@ pipe_generate_pipe_num(const struct ia_css_pipe *pipe,
- 			break;
+@@ -413,7 +413,6 @@ aspect_ratio_crop(struct ia_css_pipe *curr_pipe,
+ static void
+ sh_css_pipe_free_shading_table(struct ia_css_pipe *pipe)
+ {
+-	assert(pipe);
+ 	if (!pipe) {
+ 		IA_CSS_ERROR("NULL input parameter");
+ 		return;
+@@ -1080,7 +1079,6 @@ sh_css_config_input_network(struct ia_css_stream *stream)
  		}
  	}
--	if (pipe_num == INVALID_PIPE_NUM)
--	{
-+	if (pipe_num == INVALID_PIPE_NUM) {
- 		/* Max number of pipes already allocated */
- 		IA_CSS_ERROR("Max number of pipes already created");
- 		return -ENOSPC;
+ 
+-	assert(pipe);
+ 	if (!pipe)
+ 		return -EINVAL;
+ 
+@@ -1382,10 +1380,11 @@ start_copy_on_sp(struct ia_css_pipe *pipe,
+ 		 struct ia_css_frame *out_frame)
+ {
+ 	(void)out_frame;
+-	assert(pipe);
+-	assert(pipe->stream);
+ 
+-	if ((!pipe) || (!pipe->stream))
++	if (!pipe)
++		return -EINVAL;
++
++	if (!pipe->stream)
+ 		return -EINVAL;
+ 
+ #if !defined(ISP2401)
 -- 
 2.31.1
 
