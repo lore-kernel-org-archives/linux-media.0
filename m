@@ -2,112 +2,277 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6035EC433ED
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 06:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF369C433ED
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 08:55:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28DE0610E6
-	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 06:30:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC5D5611CD
+	for <linux-media@archiver.kernel.org>; Thu, 15 Apr 2021 08:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbhDOGa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Apr 2021 02:30:29 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34409 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhDOGa2 (ORCPT
+        id S231869AbhDOI4O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Apr 2021 04:56:14 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:46863 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231864AbhDOI4O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Apr 2021 02:30:28 -0400
-Received: from mail-ed1-f72.google.com ([209.85.208.72])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lWvVL-0008Gi-Is
-        for linux-media@vger.kernel.org; Thu, 15 Apr 2021 06:29:31 +0000
-Received: by mail-ed1-f72.google.com with SMTP id t11-20020aa7d4cb0000b0290382e868be07so4622293edr.20
-        for <linux-media@vger.kernel.org>; Wed, 14 Apr 2021 23:29:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NRLg7NrxywR7fBvgL6LMWlW/vNtrkaaP/eQxawyhh7I=;
-        b=mgnN/Ntr2eAorXT8n171TBnbOx0Wm3q67MhK9V2rGCrWNcYvKYvZrw2B8R45pJw/yc
-         FToU2bT/7j6hGN9Nnz4ItXGk8pqB8KFHiaIVsSOt+b1wS53T+rsaJBf4ARqxrRh8EFHt
-         3gSGPu5uMJQUDDHgnHNk4ngeFNFpHrEMfmMsBQ4KdTR27atJLgzeVxGLhIFW8gE4HRpl
-         DHIw/+MJ9p9I2aABKAUEtkMRaHuDUZHQhBjF+blQJJIwxOmYXvsvHVcWBfdYR34DLZPK
-         +nuWL5HcFrv5NdJKovBhPfHzWgi7DhHPitzrSb+ZogZf9m9OTpirihoTtA0a7rapDbyG
-         pj7Q==
-X-Gm-Message-State: AOAM531rp3taRnatZYRnAH2XnUTQemPqVf0tgUJnJ4qyqsYtcJyGEYrQ
-        FkAI+oY+uL8sW3md9Cu4qz5rzVYs5+Adla2evWqjTWVL6HY03g907RjdJSNl3VJO8BSsT7NHsTA
-        d5OB9PUefMbhOV/0oAJtg6JcPTbrZ9Z1FfjNOOwJf
-X-Received: by 2002:aa7:c1c9:: with SMTP id d9mr2170920edp.155.1618468171024;
-        Wed, 14 Apr 2021 23:29:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwBeiqLAbwOsnwGyW73gGOeryK5nX+9isdb0+CrOw9a347lzFKbg16hzMOnuydzGrUh1LIJpA==
-X-Received: by 2002:aa7:c1c9:: with SMTP id d9mr2170905edp.155.1618468170922;
-        Wed, 14 Apr 2021 23:29:30 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
-        by smtp.gmail.com with ESMTPSA id w2sm1259894edd.71.2021.04.14.23.29.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Apr 2021 23:29:30 -0700 (PDT)
-Subject: Re: [PATCH v3 2/4] dt-bindings: arm: imx: Add i.mx6q DaSheng COM-9XX
- SBC
-To:     dillon.minfei@gmail.com, robh+dt@kernel.org, shawnguo@kernel.org,
-        krzk@kernel.org, linux@rempel-privat.de, s.riedmueller@phytec.de,
-        matthias.schiffer@ew.tq-group.com, leoyang.li@nxp.com,
-        arnd@arndb.de, olof@lixom.net, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com,
-        prabhakar.csengg@gmail.com, mchehab@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-media@vger.kernel.org
-References: <1618459535-8141-1-git-send-email-dillon.minfei@gmail.com>
- <1618459535-8141-3-git-send-email-dillon.minfei@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <eb850981-e8bc-0cee-734e-475f79ea64e4@canonical.com>
-Date:   Thu, 15 Apr 2021 08:29:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Thu, 15 Apr 2021 04:56:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1618476952; x=1650012952;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Nyf5AssqNqTyNhoPZLV/aqdkykZq1hbIytCxJBNgp9g=;
+  b=xeIofJ3aSl8uMgnB365FpA3kW1XzgpbR7MbNB6+jUjJJ2dVxhv0MKSgN
+   x7xP6UjH9HfEJTTea4XHlN5LWkkdiUPearfEoJFTs4AzIrRZvy/Oh3EzC
+   Mt5pIXdqolhxJlp2bJGQ65r91AmvTenJlZtboCM+ObBO5/uaxg6TQNM4g
+   R4fkbcufRZamRkotdW2Z/hF1LNF2RA/jK5fmn1iyvbqB5w18UKUY+bu19
+   7incTxVRsdWclYn+siTWcbYgKMXrN16hN3QX8eiT10bACjKT7kC3oWTTe
+   v88xGCGMRF4xA8x/84LDo2obUXB89oW9G8/l3zE+iHfHJYykiTdwUZRKd
+   w==;
+IronPort-SDR: VGAJ1F9yrHUUwWVijfzQWesMku3gRc8+ncRJZprRe4SGT495JM2Wmh01eXwSpWdV7JS9PA9A4K
+ ccI7cvHEjrTRoid+ruu8JdbsY9yJqOhtyUUOJb3JkROM/fFv3VrjIp/bRrP0VSx39XMBecx7K5
+ 9VMNJpkjiPWsQNIejwefBOZ0d9Irfab8SocXDaDHOIRQX3STYO7Hf3GWMWAac5tY8csRoncHvp
+ 5/Toe7Da8HSuzfTWJabJDgiwfM608KR8pMNn/vKAdxFKIOJ4Ylx+BrYNAqK8kSrnmN6p5FpWvh
+ G3w=
+X-IronPort-AV: E=Sophos;i="5.82,223,1613458800"; 
+   d="scan'208";a="116538076"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Apr 2021 01:55:52 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 15 Apr 2021 01:55:49 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Thu, 15 Apr 2021 01:55:37 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <jacopo@jmondi.org>, <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v4 29/33] dt-bindings: media: atmel-isc: convert to yaml
+Date:   Thu, 15 Apr 2021 11:55:30 +0300
+Message-ID: <20210415085530.824638-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210413105731.610028-30-eugen.hristev@microchip.com>
+References: <20210413105731.610028-30-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <1618459535-8141-3-git-send-email-dillon.minfei@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 15/04/2021 06:05, dillon.minfei@gmail.com wrote:
-> From: dillon min <dillon.minfei@gmail.com>
-> 
-> The DaSheng Com-9xx is and ARM based signle board computer (SBC)
-> featuring:
-> - i.MX6Q
-> - 2GiB LPDDR3 DRAM
-> - 8GiB eMMC 5.0 FLASH
-> - 4MiB SPI Flash
-> - USB 2.0 Host/Device
-> - Multiple multi-protocol RS232/RS485 Serial ports
-> - microSD socket
-> - 5V DC power input
-> - HDMI1.4a,1080p@60
-> - RGMIIx1 Gigabit Ethernet
-> - CSI0x1, connect with ov2659
-> 
-> Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
-> v3: move 'ds,imx6q-sbc' after 'dmo,imx6q-edmqmx6' to follow the alphabetical
-> order.
-> 
->  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
->  1 file changed, 1 insertion(+)
+Convert the Atmel ISC to yaml binding format.
 
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+Changes in v4:
+- added '|' at description to maintain line breaks
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+ .../devicetree/bindings/media/atmel,isc.yaml  | 115 ++++++++++++++++++
+ .../devicetree/bindings/media/atmel-isc.txt   |  65 ----------
+ 2 files changed, 115 insertions(+), 65 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/atmel,isc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/atmel-isc.txt
 
+diff --git a/Documentation/devicetree/bindings/media/atmel,isc.yaml b/Documentation/devicetree/bindings/media/atmel,isc.yaml
+new file mode 100644
+index 000000000000..a29c11667c82
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/atmel,isc.yaml
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright (C) 2016-2021 Microchip Technology, Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/atmel,isc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Atmel Image Sensor Controller (ISC)
++
++maintainers:
++  - Eugen Hristev <eugen.hristev@microchip.com>
++
++description: |
++  The Image Sensor Controller (ISC) device provides the video input capabilities for the
++  Atmel/Microchip AT91 SAMA family of devices.
++
++  The ISC has a single parallel input that supports RAW Bayer, RGB or YUV video,
++  with both external synchronization and BT.656 synchronization for the latter.
++
++properties:
++  compatible:
++    const: atmel,sama5d2-isc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 3
++    maxItems: 3
++
++  clock-names:
++    items:
++      - const: hclock
++      - const: iscck
++      - const: gck
++
++  '#clock-cells':
++    const: 0
++
++  clock-output-names:
++    const: isc-mck
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description:
++      Input port node, single endpoint describing the input pad.
++
++    properties:
++      endpoint:
++        $ref: video-interfaces.yaml#
++
++        properties:
++          remote-endpoint: true
++
++          bus-width:
++            enum: [8, 9, 10, 11, 12]
++            default: 12
++
++          hsync-active:
++            enum: [0, 1]
++            default: 1
++
++          vsync-active:
++            enum: [0, 1]
++            default: 1
++
++          pclk-sample:
++            enum: [0, 1]
++            default: 1
++
++        required:
++          - remote-endpoint
++
++        additionalProperties: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - '#clock-cells'
++  - clock-output-names
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    isc: isc@f0008000 {
++        compatible = "atmel,sama5d2-isc";
++        reg = <0xf0008000 0x4000>;
++        interrupts = <46 IRQ_TYPE_LEVEL_HIGH 5>;
++        clocks = <&isc_clk>, <&iscck>, <&isc_gclk>;
++        clock-names = "hclock", "iscck", "gck";
++        #clock-cells = <0>;
++        clock-output-names = "isc-mck";
++
++        port {
++                isc_0: endpoint {
++                       remote-endpoint = <&ov7740_0>;
++                       hsync-active = <1>;
++                       vsync-active = <0>;
++                       pclk-sample = <1>;
++                       bus-width = <8>;
++                };
++        };
++    };
++
+diff --git a/Documentation/devicetree/bindings/media/atmel-isc.txt b/Documentation/devicetree/bindings/media/atmel-isc.txt
+deleted file mode 100644
+index bbe0e87c6188..000000000000
+--- a/Documentation/devicetree/bindings/media/atmel-isc.txt
++++ /dev/null
+@@ -1,65 +0,0 @@
+-Atmel Image Sensor Controller (ISC)
+-----------------------------------------------
+-
+-Required properties for ISC:
+-- compatible
+-	Must be "atmel,sama5d2-isc".
+-- reg
+-	Physical base address and length of the registers set for the device.
+-- interrupts
+-	Should contain IRQ line for the ISC.
+-- clocks
+-	List of clock specifiers, corresponding to entries in
+-	the clock-names property;
+-	Please refer to clock-bindings.txt.
+-- clock-names
+-	Required elements: "hclock", "iscck", "gck".
+-- #clock-cells
+-	Should be 0.
+-- clock-output-names
+-	Should be "isc-mck".
+-- pinctrl-names, pinctrl-0
+-	Please refer to pinctrl-bindings.txt.
+-
+-ISC supports a single port node with parallel bus. It should contain one
+-'port' child node with child 'endpoint' node. Please refer to the bindings
+-defined in Documentation/devicetree/bindings/media/video-interfaces.txt.
+-
+-Example:
+-isc: isc@f0008000 {
+-	compatible = "atmel,sama5d2-isc";
+-	reg = <0xf0008000 0x4000>;
+-	interrupts = <46 IRQ_TYPE_LEVEL_HIGH 5>;
+-	clocks = <&isc_clk>, <&iscck>, <&isc_gclk>;
+-	clock-names = "hclock", "iscck", "gck";
+-	#clock-cells = <0>;
+-	clock-output-names = "isc-mck";
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_isc_base &pinctrl_isc_data_8bit &pinctrl_isc_data_9_10 &pinctrl_isc_data_11_12>;
+-
+-	port {
+-		isc_0: endpoint {
+-			remote-endpoint = <&ov7740_0>;
+-			hsync-active = <1>;
+-			vsync-active = <0>;
+-			pclk-sample = <1>;
+-		};
+-	};
+-};
+-
+-i2c1: i2c@fc028000 {
+-	ov7740: camera@21 {
+-		compatible = "ovti,ov7740";
+-		reg = <0x21>;
+-		clocks = <&isc>;
+-		clock-names = "xvclk";
+-		assigned-clocks = <&isc>;
+-		assigned-clock-rates = <24000000>;
+-
+-		port {
+-			ov7740_0: endpoint {
+-				remote-endpoint = <&isc_0>;
+-			};
+-		};
+-	};
+-};
+-- 
+2.25.1
 
-Best regards,
-Krzysztof
