@@ -2,212 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 031C8C433ED
-	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB01C433ED
+	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBFD661166
-	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54389611BF
+	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240189AbhDPJ6u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Apr 2021 05:58:50 -0400
-Received: from mga11.intel.com ([192.55.52.93]:6783 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233612AbhDPJ6o (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Apr 2021 05:58:44 -0400
-IronPort-SDR: d+oxOVplzpGHJek0InDd8AWdIYoEbmcUGD0LuZotDRU5dUPnCu4/B/VcdrPPMhVchI0dfCsdLC
- buTGYTnIAUTQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="191828527"
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="191828527"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 02:58:20 -0700
-IronPort-SDR: neDDAdjcwtKGI9tWbiff+EgtPCdJY9yzMrwfaNpStX9UbT4iQl4Voz5ubRERltOCuXWQpYKTW9
- fH/owBvEe72w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="444454533"
-Received: from server-intel-chrome-camera.itwn.intel.com ([10.5.215.143])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Apr 2021 02:58:18 -0700
-From:   Shawnx Tu <shawnx.tu@intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
-        shawnx.tu@intel.com, jim.lai@intel.com, bingbu.cao@intel.com,
-        senozhatsky@google.com, tfiga@google.com
-Subject: [PATCH v4 2/2] ov8856: add vflip/hflip control support
-Date:   Fri, 16 Apr 2021 17:58:59 +0800
-Message-Id: <20210416095859.9562-2-shawnx.tu@intel.com>
+        id S240290AbhDPJ67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Apr 2021 05:58:59 -0400
+Received: from jptosegrel01.sonyericsson.com ([124.215.201.71]:15254 "EHLO
+        JPTOSEGREL01.sonyericsson.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233612AbhDPJ66 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 16 Apr 2021 05:58:58 -0400
+X-Greylist: delayed 1211 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Apr 2021 05:58:57 EDT
+From:   Peter Enderborg <peter.enderborg@sony.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mike Rapoport <rppt@kernel.org>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
+CC:     Peter Enderborg <peter.enderborg@sony.com>
+Subject: [PATCH] dma-buf: Add DmaBufTotal counter in meminfo
+Date:   Fri, 16 Apr 2021 11:37:19 +0200
+Message-ID: <20210416093719.6197-1-peter.enderborg@sony.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210416095859.9562-1-shawnx.tu@intel.com>
-References: <20210416095859.9562-1-shawnx.tu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=crzlbGwi c=1 sm=1 tr=0 a=9drRLWArJOlETflmpfiyCA==:117 a=3YhXtTcJ-WEA:10 a=z6gsHLkEAAAA:8 a=USQXLDy_ZNVIum19Oj8A:9 a=d-OLMTCWyvARjPbQ-enb:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shawn Tu <shawnx.tu@intel.com>
+This adds a total used dma-buf memory. Details
+can be found in debugfs, however it is not for everyone
+and not always available.
 
-Add V4L2 controls: horizontal/vertical flip,
-keep SGRBG10 Bayer order output (via change v/hflip)
-
-Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+Signed-off-by: Peter Enderborg <peter.enderborg@sony.com>
 ---
- drivers/media/i2c/ov8856.c | 118 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 118 insertions(+)
+ drivers/dma-buf/dma-buf.c | 12 ++++++++++++
+ fs/proc/meminfo.c         |  2 ++
+ include/linux/dma-buf.h   |  1 +
+ 3 files changed, 15 insertions(+)
 
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index ef5477cf899c..dfb80cbaf755 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -80,6 +80,25 @@
- #define NUM_MODE_REGS				187
- #define NUM_MODE_REGS_2				200
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index f264b70c383e..9f88171b394c 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -37,6 +37,7 @@ struct dma_buf_list {
+ };
  
-+/* Flip Mirror Controls from sensor */
-+#define OV8856_REG_FORMAT1			0x3820
-+#define OV8856_REG_FORMAT2			0x3821
-+#define OV8856_REG_FORMAT1_OP_1			BIT(1)
-+#define OV8856_REG_FORMAT1_OP_2			BIT(2)
-+#define OV8856_REG_FORMAT1_OP_3			BIT(6)
-+#define OV8856_REG_FORMAT2_OP_1			BIT(1)
-+#define OV8856_REG_FORMAT2_OP_2			BIT(2)
-+#define OV8856_REG_FORMAT2_OP_3			BIT(6)
-+#define OV8856_REG_FLIP_OPT_1			0x376b
-+#define OV8856_REG_FLIP_OPT_2			0x5001
-+#define OV8856_REG_FLIP_OPT_3			0x502e
-+#define OV8856_REG_MIRROR_OPT_1			0x5004
-+#define OV8856_REG_FLIP_OP_0			BIT(0)
-+#define OV8856_REG_FLIP_OP_1			BIT(1)
-+#define OV8856_REG_FLIP_OP_2			BIT(2)
-+#define OV8856_REG_MIRROR_OP_1			BIT(1)
-+#define OV8856_REG_MIRROR_OP_2			BIT(2)
-+
- #define to_ov8856(_sd)			container_of(_sd, struct ov8856, sd)
+ static struct dma_buf_list db_list;
++static atomic_long_t dma_buf_size;
  
- static const char * const ov8856_supply_names[] = {
-@@ -1653,6 +1672,93 @@ static int ov8856_test_pattern(struct ov8856 *ov8856, u32 pattern)
- 				OV8856_REG_VALUE_08BIT, pattern);
- }
- 
-+static int ov8856_set_ctrl_hflip(struct ov8856 *ov8856, u32 ctrl_val)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_MIRROR_OPT_1,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_MIRROR_OPT_1,
-+			       OV8856_REG_VALUE_08BIT,
-+			       ctrl_val ? val & ~OV8856_REG_MIRROR_OP_2 :
-+			       val | OV8856_REG_MIRROR_OP_2);
-+
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_FORMAT2,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	return ov8856_write_reg(ov8856, OV8856_REG_FORMAT2,
-+				OV8856_REG_VALUE_08BIT,
-+				ctrl_val ? val & ~OV8856_REG_FORMAT2_OP_1 &
-+				~OV8856_REG_FORMAT2_OP_2 &
-+				~OV8856_REG_FORMAT2_OP_3 :
-+				val | OV8856_REG_FORMAT2_OP_1 |
-+				OV8856_REG_FORMAT2_OP_2 |
-+				OV8856_REG_FORMAT2_OP_3);
-+}
-+
-+static int ov8856_set_ctrl_vflip(struct ov8856 *ov8856, u8 ctrl_val)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_FLIP_OPT_1,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_FLIP_OPT_1,
-+			       OV8856_REG_VALUE_08BIT,
-+			       ctrl_val ? val | OV8856_REG_FLIP_OP_1 |
-+			       OV8856_REG_FLIP_OP_2 :
-+			       val & ~OV8856_REG_FLIP_OP_1 &
-+			       ~OV8856_REG_FLIP_OP_2);
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_FLIP_OPT_2,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_FLIP_OPT_2,
-+			       OV8856_REG_VALUE_08BIT,
-+			       ctrl_val ? val | OV8856_REG_FLIP_OP_2 :
-+			       val & ~OV8856_REG_FLIP_OP_2);
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_FLIP_OPT_3,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_FLIP_OPT_3,
-+			       OV8856_REG_VALUE_08BIT,
-+			       ctrl_val ? val & ~OV8856_REG_FLIP_OP_0 &
-+			       ~OV8856_REG_FLIP_OP_1 :
-+			       val | OV8856_REG_FLIP_OP_0 |
-+			       OV8856_REG_FLIP_OP_1);
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_REG_FORMAT1,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	return ov8856_write_reg(ov8856, OV8856_REG_FORMAT1,
-+			       OV8856_REG_VALUE_08BIT,
-+			       ctrl_val ? val | OV8856_REG_FORMAT1_OP_1 |
-+			       OV8856_REG_FORMAT1_OP_3 |
-+			       OV8856_REG_FORMAT1_OP_2 :
-+			       val & ~OV8856_REG_FORMAT1_OP_1 &
-+			       ~OV8856_REG_FORMAT1_OP_3 &
-+			       ~OV8856_REG_FORMAT1_OP_2);
-+}
-+
- static int ov8856_set_ctrl(struct v4l2_ctrl *ctrl)
+ static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
  {
- 	struct ov8856 *ov8856 = container_of(ctrl->handler,
-@@ -1702,6 +1808,14 @@ static int ov8856_set_ctrl(struct v4l2_ctrl *ctrl)
- 		ret = ov8856_test_pattern(ov8856, ctrl->val);
- 		break;
+@@ -79,6 +80,7 @@ static void dma_buf_release(struct dentry *dentry)
+ 	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
+ 		dma_resv_fini(dmabuf->resv);
  
-+	case V4L2_CID_HFLIP:
-+		ret = ov8856_set_ctrl_hflip(ov8856, ctrl->val);
-+		break;
-+
-+	case V4L2_CID_VFLIP:
-+		ret = ov8856_set_ctrl_vflip(ov8856, ctrl->val);
-+		break;
-+
- 	default:
- 		ret = -EINVAL;
- 		break;
-@@ -1778,6 +1892,10 @@ static int ov8856_init_controls(struct ov8856 *ov8856)
- 				     V4L2_CID_TEST_PATTERN,
- 				     ARRAY_SIZE(ov8856_test_pattern_menu) - 1,
- 				     0, 0, ov8856_test_pattern_menu);
-+	v4l2_ctrl_new_std(ctrl_hdlr, &ov8856_ctrl_ops,
-+			  V4L2_CID_HFLIP, 0, 1, 1, 0);
-+	v4l2_ctrl_new_std(ctrl_hdlr, &ov8856_ctrl_ops,
-+			  V4L2_CID_VFLIP, 0, 1, 1, 0);
- 	if (ctrl_hdlr->error)
- 		return ctrl_hdlr->error;
++	atomic_long_sub(dmabuf->size, &dma_buf_size);
+ 	module_put(dmabuf->owner);
+ 	kfree(dmabuf->name);
+ 	kfree(dmabuf);
+@@ -586,6 +588,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+ 	mutex_lock(&db_list.lock);
+ 	list_add(&dmabuf->list_node, &db_list.head);
+ 	mutex_unlock(&db_list.lock);
++	atomic_long_add(dmabuf->size, &dma_buf_size);
  
+ 	return dmabuf;
+ 
+@@ -1346,6 +1349,15 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
+ }
+ EXPORT_SYMBOL_GPL(dma_buf_vunmap);
+ 
++/**
++ * dma_buf_get_size - Return the used nr pages by dma-buf
++ */
++long dma_buf_get_size(void)
++{
++	return atomic_long_read(&dma_buf_size) >> PAGE_SHIFT;
++}
++EXPORT_SYMBOL_GPL(dma_buf_get_size);
++
+ #ifdef CONFIG_DEBUG_FS
+ static int dma_buf_debug_show(struct seq_file *s, void *unused)
+ {
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 6fa761c9cc78..3c1a82b51a6f 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -16,6 +16,7 @@
+ #ifdef CONFIG_CMA
+ #include <linux/cma.h>
+ #endif
++#include <linux/dma-buf.h>
+ #include <asm/page.h>
+ #include "internal.h"
+ 
+@@ -145,6 +146,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	show_val_kb(m, "CmaFree:        ",
+ 		    global_zone_page_state(NR_FREE_CMA_PAGES));
+ #endif
++	show_val_kb(m, "DmaBufTotal:    ", dma_buf_get_size());
+ 
+ 	hugetlb_report_meminfo(m);
+ 
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index efdc56b9d95f..f6481315a377 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -507,4 +507,5 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
+ 		 unsigned long);
+ int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
+ void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
++long dma_buf_get_size(void);
+ #endif /* __DMA_BUF_H__ */
 -- 
 2.17.1
 
