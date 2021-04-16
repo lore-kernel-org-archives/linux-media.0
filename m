@@ -2,137 +2,297 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB01C433ED
-	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1072C43460
+	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 10:54:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54389611BF
-	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 09:58:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAF34610E7
+	for <linux-media@archiver.kernel.org>; Fri, 16 Apr 2021 10:54:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbhDPJ67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Apr 2021 05:58:59 -0400
-Received: from jptosegrel01.sonyericsson.com ([124.215.201.71]:15254 "EHLO
-        JPTOSEGREL01.sonyericsson.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233612AbhDPJ66 (ORCPT
+        id S242532AbhDPKzJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Apr 2021 06:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242497AbhDPKzJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Apr 2021 05:58:58 -0400
-X-Greylist: delayed 1211 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Apr 2021 05:58:57 EDT
-From:   Peter Enderborg <peter.enderborg@sony.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mike Rapoport <rppt@kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-CC:     Peter Enderborg <peter.enderborg@sony.com>
-Subject: [PATCH] dma-buf: Add DmaBufTotal counter in meminfo
-Date:   Fri, 16 Apr 2021 11:37:19 +0200
-Message-ID: <20210416093719.6197-1-peter.enderborg@sony.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 16 Apr 2021 06:55:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76AFC061756
+        for <linux-media@vger.kernel.org>; Fri, 16 Apr 2021 03:54:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1lXM7C-0004vQ-27; Fri, 16 Apr 2021 12:54:22 +0200
+Message-ID: <7bcbb787d82f21d42563d8fb7e3c2e7d40123932.camel@pengutronix.de>
+Subject: Re: [PATCH v9 03/13] media: hantro: Use syscon instead of 'ctrl'
+ register
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, lee.jones@linaro.org,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
+        emil.l.velikov@gmail.com, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>
+Cc:     devel@driverdev.osuosl.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, kernel@collabora.com,
+        cphealy@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Date:   Fri, 16 Apr 2021 12:54:16 +0200
+In-Reply-To: <20210407073534.376722-4-benjamin.gaignard@collabora.com>
+References: <20210407073534.376722-1-benjamin.gaignard@collabora.com>
+         <20210407073534.376722-4-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=crzlbGwi c=1 sm=1 tr=0 a=9drRLWArJOlETflmpfiyCA==:117 a=3YhXtTcJ-WEA:10 a=z6gsHLkEAAAA:8 a=USQXLDy_ZNVIum19Oj8A:9 a=d-OLMTCWyvARjPbQ-enb:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds a total used dma-buf memory. Details
-can be found in debugfs, however it is not for everyone
-and not always available.
+Am Mittwoch, dem 07.04.2021 um 09:35 +0200 schrieb Benjamin Gaignard:
+> In order to be able to share the control hardware block between
+> VPUs use a syscon instead a ioremap it in the driver.
+> To keep the compatibility with older DT if 'nxp,imx8mq-vpu-ctrl'
+> phandle is not found look at 'ctrl' reg-name.
+> With the method it becomes useless to provide a list of register
+> names so remove it.
 
-Signed-off-by: Peter Enderborg <peter.enderborg@sony.com>
----
- drivers/dma-buf/dma-buf.c | 12 ++++++++++++
- fs/proc/meminfo.c         |  2 ++
- include/linux/dma-buf.h   |  1 +
- 3 files changed, 15 insertions(+)
+Sorry for putting a spoke in the wheel after many iterations of the
+series.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index f264b70c383e..9f88171b394c 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -37,6 +37,7 @@ struct dma_buf_list {
- };
- 
- static struct dma_buf_list db_list;
-+static atomic_long_t dma_buf_size;
- 
- static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
- {
-@@ -79,6 +80,7 @@ static void dma_buf_release(struct dentry *dentry)
- 	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
- 		dma_resv_fini(dmabuf->resv);
- 
-+	atomic_long_sub(dmabuf->size, &dma_buf_size);
- 	module_put(dmabuf->owner);
- 	kfree(dmabuf->name);
- 	kfree(dmabuf);
-@@ -586,6 +588,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 	mutex_lock(&db_list.lock);
- 	list_add(&dmabuf->list_node, &db_list.head);
- 	mutex_unlock(&db_list.lock);
-+	atomic_long_add(dmabuf->size, &dma_buf_size);
- 
- 	return dmabuf;
- 
-@@ -1346,6 +1349,15 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- }
- EXPORT_SYMBOL_GPL(dma_buf_vunmap);
- 
-+/**
-+ * dma_buf_get_size - Return the used nr pages by dma-buf
-+ */
-+long dma_buf_get_size(void)
-+{
-+	return atomic_long_read(&dma_buf_size) >> PAGE_SHIFT;
-+}
-+EXPORT_SYMBOL_GPL(dma_buf_get_size);
-+
- #ifdef CONFIG_DEBUG_FS
- static int dma_buf_debug_show(struct seq_file *s, void *unused)
- {
-diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-index 6fa761c9cc78..3c1a82b51a6f 100644
---- a/fs/proc/meminfo.c
-+++ b/fs/proc/meminfo.c
-@@ -16,6 +16,7 @@
- #ifdef CONFIG_CMA
- #include <linux/cma.h>
- #endif
-+#include <linux/dma-buf.h>
- #include <asm/page.h>
- #include "internal.h"
- 
-@@ -145,6 +146,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
- 	show_val_kb(m, "CmaFree:        ",
- 		    global_zone_page_state(NR_FREE_CMA_PAGES));
- #endif
-+	show_val_kb(m, "DmaBufTotal:    ", dma_buf_get_size());
- 
- 	hugetlb_report_meminfo(m);
- 
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index efdc56b9d95f..f6481315a377 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -507,4 +507,5 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
- 		 unsigned long);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
- void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+long dma_buf_get_size(void);
- #endif /* __DMA_BUF_H__ */
--- 
-2.17.1
+We just discussed a way forward on how to handle the clocks and resets
+provided by the blkctl block on i.MX8MM and later and it seems there is
+a consensus on trying to provide virtual power domains from a blkctl
+driver, controlling clocks and resets for the devices in the power
+domain. I would like to avoid introducing yet another way of handling
+the blkctl and thus would like to align the i.MX8MQ VPU blkctl with
+what we are planning to do on the later chip generations.
+
+CC'ing Jacky Bai and Peng Fan from NXP, as they were going to give this
+virtual power domain thing a shot.
+
+Regards,
+Lucas
+
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+> version 9:
+>  - Corrections in commit message
+> 
+> version 7:
+>  - Add Philipp reviewed-by tag.
+>  - Change syscon phandle name.
+>  
+> 
+> 
+> 
+> version 5:
+>  - use syscon instead of VPU reset driver.
+>  - if DT doesn't provide syscon keep backward compatibilty by using
+>    'ctrl' reg-name.
+> 
+>  drivers/staging/media/hantro/hantro.h       |  5 +-
+>  drivers/staging/media/hantro/imx8m_vpu_hw.c | 52 ++++++++++++---------
+>  2 files changed, 34 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+> index 6c1b888abe75..37b9ce04bd4e 100644
+> --- a/drivers/staging/media/hantro/hantro.h
+> +++ b/drivers/staging/media/hantro/hantro.h
+> @@ -13,6 +13,7 @@
+>  #define HANTRO_H_
+>  
+> 
+> 
+> 
+>  #include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+>  #include <linux/videodev2.h>
+>  #include <linux/wait.h>
+>  #include <linux/clk.h>
+> @@ -167,7 +168,7 @@ hantro_vdev_to_func(struct video_device *vdev)
+>   * @reg_bases:		Mapped addresses of VPU registers.
+>   * @enc_base:		Mapped address of VPU encoder register for convenience.
+>   * @dec_base:		Mapped address of VPU decoder register for convenience.
+> - * @ctrl_base:		Mapped address of VPU control block.
+> + * @ctrl_base:		Regmap of VPU control block.
+>   * @vpu_mutex:		Mutex to synchronize V4L2 calls.
+>   * @irqlock:		Spinlock to synchronize access to data structures
+>   *			shared with interrupt handlers.
+> @@ -186,7 +187,7 @@ struct hantro_dev {
+>  	void __iomem **reg_bases;
+>  	void __iomem *enc_base;
+>  	void __iomem *dec_base;
+> -	void __iomem *ctrl_base;
+> +	struct regmap *ctrl_base;
+>  
+> 
+> 
+> 
+>  	struct mutex vpu_mutex;	/* video_device lock */
+>  	spinlock_t irqlock;
+> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> index c222de075ef4..8d0c3425234b 100644
+> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> @@ -7,6 +7,7 @@
+>  
+> 
+> 
+> 
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/mfd/syscon.h>
+>  
+> 
+> 
+> 
+>  #include "hantro.h"
+>  #include "hantro_jpeg.h"
+> @@ -24,30 +25,28 @@
+>  #define CTRL_G1_PP_FUSE		0x0c
+>  #define CTRL_G2_DEC_FUSE	0x10
+>  
+> 
+> 
+> 
+> +static const struct regmap_config ctrl_regmap_ctrl = {
+> +	.reg_bits = 32,
+> +	.val_bits = 32,
+> +	.reg_stride = 0x14,
+> +};
+> +
+>  static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
+>  {
+> -	u32 val;
+> -
+>  	/* Assert */
+> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+> -	val &= ~reset_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+> +	regmap_update_bits(vpu->ctrl_base, CTRL_SOFT_RESET, reset_bits, 0);
+>  
+> 
+> 
+> 
+>  	udelay(2);
+>  
+> 
+> 
+> 
+>  	/* Release */
+> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+> -	val |= reset_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+> +	regmap_update_bits(vpu->ctrl_base, CTRL_SOFT_RESET,
+> +			   reset_bits, reset_bits);
+>  }
+>  
+> 
+> 
+> 
+>  static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
+>  {
+> -	u32 val;
+> -
+> -	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+> -	val |= clock_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+> +	regmap_update_bits(vpu->ctrl_base, CTRL_CLOCK_ENABLE,
+> +			   clock_bits, clock_bits);
+>  }
+>  
+> 
+> 
+> 
+>  static int imx8mq_runtime_resume(struct hantro_dev *vpu)
+> @@ -64,9 +63,9 @@ static int imx8mq_runtime_resume(struct hantro_dev *vpu)
+>  	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
+>  
+> 
+> 
+> 
+>  	/* Set values of the fuse registers */
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
+> +	regmap_write(vpu->ctrl_base, CTRL_G1_DEC_FUSE, 0xffffffff);
+> +	regmap_write(vpu->ctrl_base, CTRL_G1_PP_FUSE, 0xffffffff);
+> +	regmap_write(vpu->ctrl_base, CTRL_G2_DEC_FUSE, 0xffffffff);
+>  
+> 
+> 
+> 
+>  	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
+>  
+> 
+> 
+> 
+> @@ -150,8 +149,22 @@ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
+>  
+> 
+> 
+> 
+>  static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
+>  {
+> -	vpu->dec_base = vpu->reg_bases[0];
+> -	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
+> +	struct device_node *np = vpu->dev->of_node;
+> +
+> +	vpu->ctrl_base = syscon_regmap_lookup_by_phandle(np, "nxp,imx8m-vpu-ctrl");
+> +	if (IS_ERR(vpu->ctrl_base)) {
+> +		struct resource *res;
+> +		void __iomem *ctrl;
+> +
+> +		res = platform_get_resource_byname(vpu->pdev, IORESOURCE_MEM, "ctrl");
+> +		ctrl = devm_ioremap_resource(vpu->dev, res);
+> +		if (IS_ERR(ctrl))
+> +			return PTR_ERR(ctrl);
+> +
+> +		vpu->ctrl_base = devm_regmap_init_mmio(vpu->dev, ctrl, &ctrl_regmap_ctrl);
+> +		if (IS_ERR(vpu->ctrl_base))
+> +			return PTR_ERR(vpu->ctrl_base);
+> +	}
+>  
+> 
+> 
+> 
+>  	return 0;
+>  }
+> @@ -198,7 +211,6 @@ static const struct hantro_irq imx8mq_irqs[] = {
+>  };
+>  
+> 
+> 
+> 
+>  static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
+> -static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
+>  
+> 
+> 
+> 
+>  const struct hantro_variant imx8mq_vpu_variant = {
+>  	.dec_fmts = imx8m_vpu_dec_fmts,
+> @@ -215,6 +227,4 @@ const struct hantro_variant imx8mq_vpu_variant = {
+>  	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
+>  	.clk_names = imx8mq_clk_names,
+>  	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
+> -	.reg_names = imx8mq_reg_names,
+> -	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
+>  };
+
 
