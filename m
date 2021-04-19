@@ -2,238 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72C10C43461
-	for <linux-media@archiver.kernel.org>; Mon, 19 Apr 2021 19:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 137A0C433B4
+	for <linux-media@archiver.kernel.org>; Mon, 19 Apr 2021 21:10:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DB8E61369
-	for <linux-media@archiver.kernel.org>; Mon, 19 Apr 2021 19:24:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F6F6611C9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Apr 2021 21:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241677AbhDSTYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Apr 2021 15:24:47 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:44749 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241735AbhDSTYA (ORCPT
+        id S234801AbhDSVLN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Apr 2021 17:11:13 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:46661 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234022AbhDSVLM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Apr 2021 15:24:00 -0400
-X-Originating-IP: 24.194.32.49
-Received: from coplandos.local (cpe-24-194-32-49.nycap.res.rr.com [24.194.32.49])
-        (Authenticated sender: vrzh@vrzh.net)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 115B760003;
-        Mon, 19 Apr 2021 19:23:27 +0000 (UTC)
-From:   Martiros Shakhzadyan <vrzh@vrzh.net>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Martiros Shakhzadyan <vrzh@vrzh.net>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 7/8] staging: media: atomisp: Fix line split style issues
-Date:   Mon, 19 Apr 2021 15:26:01 -0400
-Message-Id: <20210419192602.498815-8-vrzh@vrzh.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210419192602.498815-1-vrzh@vrzh.net>
-References: <20210419192602.498815-1-vrzh@vrzh.net>
+        Mon, 19 Apr 2021 17:11:12 -0400
+Received: from [192.168.2.10] ([84.202.3.209])
+        by smtp.xs4all.nl with ESMTPA
+        id YbADlTPrho2ggYbAGlhWlZ; Mon, 19 Apr 2021 23:10:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1618866641; bh=8PkbTnPUpMsi6npMBfZfbeaUkwP6jQ6Wu5Og+CNQBSs=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=kutMfO35E2uyZ1NngGsIYF95kmCyiLftjR6+QkRQTmgOgPiIhI2VBK1xYPpI8NKtt
+         XSGvZyr9hf60YqqCTi3HRNg5XQ+Bk76gwpFnsGyu4lno7C/oFAcBZAqPtbbkLNv273
+         VF1QpFn82cWvgQVPVh6tYAzvgnd/Q3kUMfFElQi8kZzCQ96KhF6/Cw5YTuDcg1Quwm
+         7Qc1TKVaAaIyTqAMvAdV9t9OM1ggyJLY9SQXBliQ0kduQrDWs4bllnUzCZTAWFbSUa
+         9RoBb0CuR9ViwdOisn14e+baqb1ZRUHKTbsb86IU9hXltJIV7f/MVLkjiu9WmP/gi8
+         dCgTdEHbtK+IA==
+Subject: Re: [PATCH] configure.ac: Resolve GIT_SHA even if repository is a
+ submodule
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     linux-media@vger.kernel.org
+References: <20210419182832.577010-1-niklas.soderlund@ragnatech.se>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <dd9a9dde-2c39-1472-a71b-f6039993fce2@xs4all.nl>
+Date:   Mon, 19 Apr 2021 23:10:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
+In-Reply-To: <20210419182832.577010-1-niklas.soderlund@ragnatech.se>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfI2Dpfjv9eGZIqg06AGI3W+eX1UH+Ftne0tBBoW2oH8dn+qjpGGhT46DGOX/eTRmPwnzvfUJEGWDy9efkoMhpdgdhtvqyWm120UT76WgUy8QBV/HdQth
+ fIrxPWk0/M1AVjWPMfJA8XYH5z61Svh6kuGsnGH6oKpMDYB/mtYIZFeOJ90xaEJqS9HywW/uTTwFwIneKix3td/LNHbdsPi5QyWetTQT7D5KHcfDhj0hXU+D
+ +6WPa4JVMJuhaHT+pvvwFA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix coding style issues
+On 19/04/2021 20:28, Niklas Söderlund wrote:
+> If the v4l-utils repository is a git submodule the $(top_srcdir)/.git is
+> a file and not a directory. Update the shell check to allow the test to
+> pass in both cases.
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+> ---
+>  configure.ac | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/configure.ac b/configure.ac
+> index f144a50d034fbda0..4ac4195cd6e4747e 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -588,7 +588,7 @@ fi
+>  CPPFLAGS="-I\$(top_srcdir)/lib/include -Wall -Wpointer-arith -D_GNU_SOURCE $CPPFLAGS"
+>  
+>  # Obtain git SHA of HEAD
+> -AC_SUBST(GIT_SHA, ["-DGIT_SHA=\$(shell if test -d \$(top_srcdir)/.git ; then git -C \$(top_srcdir) rev-parse --short=12 HEAD ; fi)"])
+> +AC_SUBST(GIT_SHA, ["-DGIT_SHA=\$(shell if test -e \$(top_srcdir)/.git ; then git -C \$(top_srcdir) rev-parse --short=12 HEAD ; fi)"])
+>  
+>  # Obtain git commit count of HEAD
+>  AC_SUBST(GIT_COMMIT_CNT, ["-DGIT_COMMIT_CNT=\$(shell if test -d \$(top_srcdir)/.git ; then printf '-'; git -C \$(top_srcdir) rev-list --count HEAD ; fi)"])
 
-Signed-off-by: Martiros Shakhzadyan <vrzh@vrzh.net>
----
- drivers/staging/media/atomisp/pci/sh_css.c | 76 ++++++++++------------
- 1 file changed, 34 insertions(+), 42 deletions(-)
+Isn't the same change needed here and in GIT_COMMIT_DATE as well?
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 3d58b9b3d50d..ea096e6f90e5 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -308,8 +308,7 @@ sh_css_pipeline_add_acc_stage(struct ia_css_pipeline *pipeline,
- 			      const void *acc_fw);
- 
- static int
--alloc_continuous_frames(
--    struct ia_css_pipe *pipe, bool init_time);
-+alloc_continuous_frames(struct ia_css_pipe *pipe, bool init_time);
- 
- static void
- pipe_global_init(void);
-@@ -2622,8 +2621,7 @@ static int load_copy_binary(
- }
- 
- static int
--alloc_continuous_frames(
--    struct ia_css_pipe *pipe, bool init_time)
-+alloc_continuous_frames(struct ia_css_pipe *pipe, bool init_time)
- {
- 	int err = 0;
- 	struct ia_css_frame_info ref_info;
-@@ -4080,11 +4078,11 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
- 		}
- 		ddr_buffer.kernel_ptr = HOST_ADDRESS(buffer->data.metadata);
- 		ddr_buffer.payload.metadata = *buffer->data.metadata;
--	} else if ((buf_type == IA_CSS_BUFFER_TYPE_INPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_SEC_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_SEC_VF_OUTPUT_FRAME)) {
-+	} else if ((buf_type == IA_CSS_BUFFER_TYPE_INPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_SEC_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_SEC_VF_OUTPUT_FRAME)) {
- 		if (!buffer->data.frame) {
- 			IA_CSS_LEAVE_ERR(-EINVAL);
- 			return -EINVAL;
-@@ -4124,9 +4122,9 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
- 	hmm_store(h_vbuf->vptr,
- 		   (void *)(&ddr_buffer),
- 		   sizeof(struct sh_css_hmm_buffer));
--	if ((buf_type == IA_CSS_BUFFER_TYPE_3A_STATISTICS)
--	    || (buf_type == IA_CSS_BUFFER_TYPE_DIS_STATISTICS)
--	    || (buf_type == IA_CSS_BUFFER_TYPE_LACE_STATISTICS)) {
-+	if ((buf_type == IA_CSS_BUFFER_TYPE_3A_STATISTICS) ||
-+	    (buf_type == IA_CSS_BUFFER_TYPE_DIS_STATISTICS) ||
-+	    (buf_type == IA_CSS_BUFFER_TYPE_LACE_STATISTICS)) {
- 		if (!pipeline) {
- 			ia_css_rmgr_rel_vbuf(hmm_buffer_pool, &h_vbuf);
- 			IA_CSS_LOG("pipeline is empty!");
-@@ -4144,12 +4142,12 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
- 									(uint32_t)h_vbuf->vptr);
- 			}
- 		}
--	} else if ((buf_type == IA_CSS_BUFFER_TYPE_INPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_SEC_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_SEC_VF_OUTPUT_FRAME)
--		   || (buf_type == IA_CSS_BUFFER_TYPE_METADATA)) {
-+	} else if ((buf_type == IA_CSS_BUFFER_TYPE_INPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_SEC_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_SEC_VF_OUTPUT_FRAME) ||
-+			(buf_type == IA_CSS_BUFFER_TYPE_METADATA)) {
- 		return_err = ia_css_bufq_enqueue_buffer(thread_id,
- 							queue_id,
- 							(uint32_t)h_vbuf->vptr);
-@@ -6197,8 +6195,7 @@ allocate_delay_frames(struct ia_css_pipe *pipe)
- 	return 0;
- }
- 
--static int load_advanced_binaries(
--    struct ia_css_pipe *pipe)
-+static int load_advanced_binaries(struct ia_css_pipe *pipe)
- {
- 	struct ia_css_frame_info pre_in_info, gdc_in_info,
- 			post_in_info, post_out_info,
-@@ -6315,8 +6312,7 @@ static int load_advanced_binaries(
- 	return err;
- }
- 
--static int load_bayer_isp_binaries(
--    struct ia_css_pipe *pipe)
-+static int load_bayer_isp_binaries(struct ia_css_pipe *pipe)
- {
- 	struct ia_css_frame_info pre_isp_in_info, *pipe_out_info;
- 	int err = 0;
-@@ -6345,8 +6341,7 @@ static int load_bayer_isp_binaries(
- 	return err;
- }
- 
--static int load_low_light_binaries(
--    struct ia_css_pipe *pipe)
-+static int load_low_light_binaries(struct ia_css_pipe *pipe)
- {
- 	struct ia_css_frame_info pre_in_info, anr_in_info,
- 			post_in_info, post_out_info,
-@@ -6484,8 +6479,7 @@ static bool copy_on_sp(struct ia_css_pipe *pipe)
- 	return rval;
- }
- 
--static int load_capture_binaries(
--    struct ia_css_pipe *pipe)
-+static int load_capture_binaries(struct ia_css_pipe *pipe)
- {
- 	int err = 0;
- 	bool must_be_raw;
-@@ -6560,7 +6554,8 @@ unload_capture_binaries(struct ia_css_pipe *pipe)
- 
- 	IA_CSS_ENTER_PRIVATE("pipe = %p", pipe);
- 
--	if ((!pipe) || ((pipe->mode != IA_CSS_PIPE_ID_CAPTURE) && (pipe->mode != IA_CSS_PIPE_ID_COPY))) {
-+	if ((!pipe) || ((pipe->mode != IA_CSS_PIPE_ID_CAPTURE) &&
-+			(pipe->mode != IA_CSS_PIPE_ID_COPY))) {
- 		IA_CSS_LEAVE_ERR_PRIVATE(-EINVAL);
- 		return -EINVAL;
- 	}
-@@ -6637,10 +6632,10 @@ need_yuv_scaler_stage(const struct ia_css_pipe *pipe)
- /* which has some hard-coded knowledge which prevents reuse of the function. */
- /* Later, merge this with ia_css_pipe_create_cas_scaler_desc */
- static int ia_css_pipe_create_cas_scaler_desc_single_output(
--    struct ia_css_frame_info *cas_scaler_in_info,
--    struct ia_css_frame_info *cas_scaler_out_info,
--    struct ia_css_frame_info *cas_scaler_vf_info,
--    struct ia_css_cas_binary_descr *descr)
-+	    struct ia_css_frame_info *cas_scaler_in_info,
-+	    struct ia_css_frame_info *cas_scaler_out_info,
-+	    struct ia_css_frame_info *cas_scaler_vf_info,
-+	    struct ia_css_cas_binary_descr *descr)
- {
- 	unsigned int i;
- 	unsigned int hor_ds_factor = 0, ver_ds_factor = 0;
-@@ -6757,9 +6752,8 @@ static int ia_css_pipe_create_cas_scaler_desc_single_output(
- }
- 
- /* FIXME: merge most of this and single output version */
--static int ia_css_pipe_create_cas_scaler_desc(
--    struct ia_css_pipe *pipe,
--    struct ia_css_cas_binary_descr *descr)
-+static int ia_css_pipe_create_cas_scaler_desc(struct ia_css_pipe *pipe,
-+					      struct ia_css_cas_binary_descr *descr)
- {
- 	struct ia_css_frame_info in_info = IA_CSS_BINARY_DEFAULT_FRAME_INFO;
- 	struct ia_css_frame_info *out_info[IA_CSS_PIPE_MAX_OUTPUT_STAGE];
-@@ -7926,7 +7920,9 @@ create_host_regular_capture_pipeline(struct ia_css_pipe *pipe)
- 	    * should not be considered as a clean solution. Proper
- 	    * investigation should be done to come up with the clean solution.
- 	    * */
--	if (mode != IA_CSS_CAPTURE_MODE_RAW && mode != IA_CSS_CAPTURE_MODE_BAYER && current_stage && vf_frame) {
-+	if (mode != IA_CSS_CAPTURE_MODE_RAW &&
-+	    mode != IA_CSS_CAPTURE_MODE_BAYER &&
-+	    current_stage && vf_frame) {
- 		in_frame = current_stage->args.out_vf_frame;
- 		err = add_vf_pp_stage(pipe, in_frame, vf_frame, vf_pp_binary,
- 					&current_stage);
-@@ -7964,8 +7960,7 @@ create_host_capture_pipeline(struct ia_css_pipe *pipe)
- 	return err;
- }
- 
--static int capture_start(
--    struct ia_css_pipe *pipe)
-+static int capture_start(struct ia_css_pipe *pipe)
- {
- 	struct ia_css_pipeline *me;
- 
-@@ -8366,11 +8361,8 @@ int ia_css_stream_capture_frame(struct ia_css_stream *stream,
-     * @brief Configure the continuous capture.
-     * Refer to "sh_css_internal.h" for details.
-     */
--int ia_css_stream_capture(
--    struct ia_css_stream *stream,
--    int num_captures,
--    unsigned int skip,
--    int offset)
-+int ia_css_stream_capture(struct ia_css_stream *stream, int num_captures,
-+			  unsigned int skip, int offset)
- {
- 	struct sh_css_tag_descr tag_descr;
- 	unsigned int encoded_tag_descr;
--- 
-2.31.1
+Regards,
+
+	Hans
+
+> 
 
