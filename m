@@ -2,111 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBCFC433ED
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B36ECC433B4
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:04:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0B626139A
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:57:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79B4961026
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:04:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbhDTK5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 06:57:49 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:2136 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231535AbhDTK5r (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 06:57:47 -0400
-X-Greylist: delayed 1747 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Apr 2021 06:57:47 EDT
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13KARIRk031344;
-        Tue, 20 Apr 2021 10:28:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=CBC0ziPweSVN+s576SbWo6o6RPOr+hWP6QgYWwVJdhc=;
- b=m42z1RaUhhvl+HnWHNt/YeF7dHLlr9NgCJSFcLpVEY/Lvi9yNq7luAIX5OEvc8Q7onvh
- WftN37mj6rbCfkMskYdz8kc/Jn/OG0abTEMvuMHJZBW5mhiDYeCRpuxPBrsoDHH6TJNN
- x0LsF635NNDIBcXRbukPIGbxIsA+WnrHou1lHiW4kWN0lqq+0NCTwAucKbhZNXmuXAOY
- dJRvQKomFbHq9G5DjhLwR/DJIfcI6G9DIL2mYwWgFTFiuBdjW+6r6a68GYHmW/GUSDE1
- Jb4YfCZ4mraXTDhAnOsHyP/pc0D2NCcxEAZd55qpB14LNRQNOWE7FWP8b17TyiyQw0KE yQ== 
-Received: from oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 381tw0g0u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Apr 2021 10:28:00 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.podrdrct (8.16.0.36/8.16.0.36) with SMTP id 13KARxA3009216;
-        Tue, 20 Apr 2021 10:27:59 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3809esdbpt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Apr 2021 10:27:59 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 13KARxL0009161;
-        Tue, 20 Apr 2021 10:27:59 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 3809esdbns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Apr 2021 10:27:59 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 13KARtpk017675;
-        Tue, 20 Apr 2021 10:27:56 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 20 Apr 2021 10:27:55 +0000
-Date:   Tue, 20 Apr 2021 13:27:47 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Mauro Carvalho Chehab'" <mchehab@kernel.org>,
-        Ashish Kalra <eashishkalra@gmail.com>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Subject: Re: [PATCH] media: atomisp: silence "dubious: !x | !y" warning
-Message-ID: <20210420102747.GB1981@kadam>
-References: <20210417153627.GA50228@ashish-NUC8i5BEH>
- <20210417205613.5c1aac74@coco.lan>
- <509f019decae433cab6cb367cdfa6fa9@AcuMS.aculab.com>
+        id S231651AbhDTLEi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 07:04:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51272 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231388AbhDTLEh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Apr 2021 07:04:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1618916645; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7c1umvuq5ELjSt4WwfRDq7eVQxePycuZSiMlUA0otrY=;
+        b=SsOPZ6h6g5IFGiSCAaRK5XTcbrpymneUn8n9gbjllBnAjMXd92IA+lg34lz88O+McxFKpK
+        1vsfWvClNffMWO2zU72LcnF+5csxyLIdbsqU4Z1MHoElWJXMqyPWY0p7RUTCOSMSH+HSgG
+        kFqffDHVPLarUvYpV16Xg5c1QEVdU1I=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 196FAAF27;
+        Tue, 20 Apr 2021 11:04:05 +0000 (UTC)
+Date:   Tue, 20 Apr 2021 13:04:04 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Peter.Enderborg@sony.com
+Cc:     christian.koenig@amd.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, sumit.semwal@linaro.org,
+        adobriyan@gmail.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, guro@fb.com, shakeelb@google.com,
+        neilb@suse.de, samitolvanen@google.com, rppt@kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, willy@infradead.org
+Subject: Re: [PATCH v4] dma-buf: Add DmaBufTotal counter in meminfo
+Message-ID: <YH61JJOlLwBwHqVL@dhcp22.suse.cz>
+References: <23aa041b-0e7c-6f82-5655-836899973d66@sony.com>
+ <d70efba0-c63d-b55a-c234-eb6d82ae813f@amd.com>
+ <YH2ru642wYfqK5ne@dhcp22.suse.cz>
+ <07ed1421-89f8-8845-b254-21730207c185@amd.com>
+ <YH59E15ztpTTUKqS@dhcp22.suse.cz>
+ <b89c84da-65d2-35df-7249-ea8edc0bee9b@amd.com>
+ <YH6GyThr2mPrM6h5@dhcp22.suse.cz>
+ <5efa2b11-850b-ad89-b518-b776247748a4@sony.com>
+ <YH6bASnaRIV4DGpI@dhcp22.suse.cz>
+ <532d6d7e-372c-1524-d015-e15d79fcf11c@sony.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <509f019decae433cab6cb367cdfa6fa9@AcuMS.aculab.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: ajAyLqlxgs9JqJzgjE3NUwOO8J1tKu7X
-X-Proofpoint-ORIG-GUID: ajAyLqlxgs9JqJzgjE3NUwOO8J1tKu7X
+In-Reply-To: <532d6d7e-372c-1524-d015-e15d79fcf11c@sony.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 17, 2021 at 09:31:32PM +0000, David Laight wrote:
-> From: Mauro Carvalho Chehab
-> > Sent: 17 April 2021 19:56
-> > 
-> > Em Sat, 17 Apr 2021 21:06:27 +0530
-> > Ashish Kalra <eashishkalra@gmail.com> escreveu:
-> > 
-> > > Upon running sparse, "warning: dubious: !x | !y" is brought to notice
-> > > for this file.  Logical and bitwise OR are basically the same in this
-> > > context so it doesn't cause a runtime bug.  But let's change it to
-> > > logical OR to make it cleaner and silence the Sparse warning.
+On Tue 20-04-21 09:25:51, Peter.Enderborg@sony.com wrote:
+> On 4/20/21 11:12 AM, Michal Hocko wrote:
+> > On Tue 20-04-21 09:02:57, Peter.Enderborg@sony.com wrote:
+> >>>> But that isn't really system memory at all, it's just allocated device
+> >>>> memory.
+> >>> OK, that was not really clear to me. So this is not really accounted to
+> >>> MemTotal? If that is really the case then reporting it into the oom
+> >>> report is completely pointless and I am not even sure /proc/meminfo is
+> >>> the right interface either. It would just add more confusion I am
+> >>> afraid.
+> >>>  
+> >> Why is it confusing? Documentation is quite clear:
+> > Because a single counter without a wider context cannot be put into any
+> > reasonable context. There is no notion of the total amount of device
+> > memory usable for dma-buf. As Christian explained some of it can be RAM
+> > based. So a single number is rather pointless on its own in many cases.
+> >
+> > Or let me just ask. What can you tell from dma-bud: $FOO kB in its
+> > current form?
 > 
-> The old code is very likely to by slightly more efficient.
-> 
-> It may not matter here, but it might in a really hot path.
-> 
-> Since !x | !y and !x || !y always have the same value
-> why is sparse complaining at all.
-> 
+> It is better to be blind?
 
-Smatch doesn't warn about | vs || if both sides are true/false.  But
-I've occasionally asked people if they were trying to do a fast path
-optimization but it's always just a typo.
-
-regards,
-dan carpenter
-
+No it is better to have a sensible counter that can be reasoned about.
+So far you are only claiming that having something is better than
+nothing and I would agree with you if that was a debugging one off
+interface. But /proc/meminfo and other proc files have to be maintained
+with future portability in mind. This is not a dumping ground for _some_
+counters that might be interesting at the _current_ moment. E.g. what
+happens if somebody wants to have a per device resp. memory based
+dma-buf data? Are you going to change the semantic or add another
+2 counters?
+-- 
+Michal Hocko
+SUSE Labs
