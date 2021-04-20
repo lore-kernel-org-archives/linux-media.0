@@ -2,111 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB81C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76E99C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99BDE613C2
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:04:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35D7C61042
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbhDTMEr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 08:04:47 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:35421 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230118AbhDTMEq (ORCPT
+        id S231718AbhDTMFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 08:05:43 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57958 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230118AbhDTMFn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 08:04:46 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id Yp6wlXcgL8K3KYp6zlzVd5; Tue, 20 Apr 2021 14:04:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1618920253; bh=hOjRdcVj/vhC8QEJJK2RYHYHr0CLQHqjNWi1pVmSYoA=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=fAPcB6T9UvBNirxHTMGn2rs0Rehy/FF3+NYIYI8wmk2pkMSpWBKuOicdnnYA922S7
-         RTfZ4cH+c0uNOHIZC/54UEX6jTJjiY0xVB6lXWCLXIYJSmGF0Fyu97UGTvvE1sHjrr
-         XZDf5XPFyl2ZN0H+Tpi0+RqN72kHLve/BcxBSEefg/N+urHtM3C3SQCoua1lKD0AgX
-         bI+JeayI4U/Wtv0ebtQfP7VLt2YavfSMJOBRUn7fSXpbQuUwsHfDVSSTpzJ6ZAKfzR
-         tE/8y76g+cOWGx4V639I9TVLBnbpk8mLXw+zznxkSNv3YB0mxhJAfAd1ddvnxfyW4/
-         ZvHaGKr9vv8cQ==
-Subject: Re: [PATCH] media: atomisp: silence "dubious: !x | !y" warning
-To:     Ashish Kalra <eashishkalra@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-References: <20210417153627.GA50228@ashish-NUC8i5BEH>
- <20210417205613.5c1aac74@coco.lan> <20210418012648.GA4821@ashish-NUC8i5BEH>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <5abf96ba-b73f-005f-f489-81c6e3a57648@xs4all.nl>
-Date:   Tue, 20 Apr 2021 14:04:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.9.0
+        Tue, 20 Apr 2021 08:05:43 -0400
+Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A6948470;
+        Tue, 20 Apr 2021 14:05:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1618920311;
+        bh=590xvBQw22P7+0NxfruSWTwc+eMu3HDv9jUHcEqhbHU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FgAkYpxvYPEglcHVEWDj4KT/qODBwk3WJQda3JYkVmqAEVhQQMWW1Ci1iLDSSeIMz
+         C+kLkwzXNANhbP/Q5ElGu8q0DFipPwuJFkDzEOOXB1MmEeQUtbWPHs8HRQfbsJg0sJ
+         oX5F0tisrKwsGZ6sxl4AJ1FfMX8m+gFWBSBem9zU=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Benoit Parrot <bparrot@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 00/35] media: ti-vpe: cal: prepare for multistream support
+Date:   Tue, 20 Apr 2021 15:03:58 +0300
+Message-Id: <20210420120433.902394-1-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210418012648.GA4821@ashish-NUC8i5BEH>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfCeDK+lIdYygSjSbwF3EraPHGthWBShAeXh/SHt0WbKm2m9F0LVGg2KktfY9PnncxcIPo5bQ/KhijIl50OKsO6rMgwQHUf/kbpoHmMNuRWeuPPiSHvY9
- ZRK48KJNCB+vSkr6Yo1TMgUjL5dhyxNCsAYsth61/Yf1HqKSj57PcdcQc4GD1Vr2q+Ig8CL6iwpFdFSpsz0u5g9Ua+lo30bxOV4gdxs1COPsRhYQVPH1hbRe
- 0FR7lq4R+SUDfes9sVxblffz45fKlHE711XuBukD9LIEjfPO691IguUK7JMMGNqyT+s/ApoN8vkeo724vgI/xiAmmpy3ic6WEJ9n6HNHqbEn4c/t0lOie/XY
- NxbAQwM7ie2+BPRhnLgQ3LFsry8ng6SCNAx3taeOsZyWP9A2x7S5VX98q9hBcuN5dAzh7fDK
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ashish,
+Hi,
 
-On 18/04/2021 03:26, Ashish Kalra wrote:
-> On Sat, Apr 17, 2021 at 08:56:13PM +0200, Mauro Carvalho Chehab wrote:
->> Em Sat, 17 Apr 2021 21:06:27 +0530
->> Ashish Kalra <eashishkalra@gmail.com> escreveu:
->>
->>> Upon running sparse, "warning: dubious: !x | !y" is brought to notice
->>> for this file.  Logical and bitwise OR are basically the same in this
->>> context so it doesn't cause a runtime bug.  But let's change it to
->>> logical OR to make it cleaner and silence the Sparse warning.
->>>
->>> Signed-off-by: Ashish Kalra <eashishkalra@gmail.com>
->>> ---
->>>  .../media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c    | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
->>> index 358cb7d2cd4c..3b850bb2d39d 100644
->>> --- a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
->>> +++ b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
->>> @@ -58,7 +58,7 @@ sh_css_vf_downscale_log2(
->>>  	unsigned int ds_log2 = 0;
->>>  	unsigned int out_width;
->>>  
->>> -	if ((!out_info) | (!vf_info))
->>> +	if ((!out_info) || (!vf_info))
->>
->>
->> While here, please get rid of the unneeded parenthesis:
->>
->> 	if (!out_info || !vf_info)
->>
->>
->>>  		return -EINVAL;
->>>  
->>>  	out_width = out_info->res.width;
->>
->>
->>
->> Thanks,
->> Mauro
-> Updated Patch as per your feedback
+v2 of the series. Changes to v1:
 
-Please don't post patches as an attachment. Just post it inline as you did the
-first time, but with Subject prefix [PATCHv2].
+- Addressed most of the comments from v1 review as discussed (or if I
+  didn't comment, I addressed them as suggested).
+- I didn't change the field handling, so (I believe) support for
+  interlace is effectively disabled. I think it's better to add the
+  field handling by someone who has a sensor that provides ilace frames,
+  or at least has a deep understanding of v4l2 interlace.
+- 7 new patches (the ones at the end of the series)
 
-Thanks!
+ Tomi
 
-	Hans
+Tomi Valkeinen (35):
+  media: ti-vpe: cal: add g/s_parm for legacy API
+  media: ti-vpe: cal: fix error handling in cal_camerarx_create
+  media: ti-vpe: cal: remove unused cal_camerarx->dev field
+  media: ti-vpe: cal: rename "sensor" to "source"
+  media: ti-vpe: cal: move global config from cal_ctx_wr_dma_config to
+    runtime resume
+  media: ti-vpe: cal: use v4l2_get_link_freq
+  media: ti-vpe: cal: add cal_ctx_prepare/unprepare
+  media: ti-vpe: cal: change index and cport to u8
+  media: ti-vpe: cal: Add CSI2 context
+  media: ti-vpe: cal: Add pixel processing context
+  media: ti-vpe: cal: rename cal_ctx->index to dma_ctx
+  media: ti-vpe: cal: rename CAL_HL_IRQ_MASK
+  media: ti-vpe: cal: clean up CAL_CSI2_VC_IRQ_* macros
+  media: ti-vpe: cal: catch VC errors
+  media: ti-vpe: cal: remove wait when stopping camerarx
+  media: ti-vpe: cal: disable csi2 ctx and pix proc at ctx_stop
+  media: ti-vpe: cal: allocate pix proc dynamically
+  media: ti-vpe: cal: add 'use_pix_proc' field
+  media: ti-vpe: cal: add cal_ctx_wr_dma_enable and fix a race
+  media: ti-vpe: cal: add vc and datatype fields to cal_ctx
+  media: ti-vpe: cal: handle cal_ctx_v4l2_register error
+  media: ti-vpe: cal: set field always to V4L2_FIELD_NONE
+  media: ti-vpe: cal: fix typo in a comment
+  media: ti-vpe: cal: add mbus_code support to cal_mc_enum_fmt_vid_cap
+  media: ti-vpe: cal: rename non-MC funcs to cal_legacy_*
+  media: ti-vpe: cal: init ctx->v_fmt correctly in MC mode
+  media: ti-vpe: cal: remove cal_camerarx->fmtinfo
+  media: ti-vpe: cal: support 8 DMA contexts
+  media: ti-vpe: cal: cleanup phy iteration in cal_remove
+  media: ti-vpe: cal: fix ctx uninitialization
+  media: ti-vpe: cal: fix queuing of the initial buffer
+  media: ti-vpe: cal: use CSI-2 frame number
+  media: ti-vpe: cal: add camerarx locking
+  media: ti-vpe: cal: add camerarx enable/disable refcounting
+  media: ti-vpe: cal: allow more than 1 source pads
+
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 248 ++++++++++--------
+ drivers/media/platform/ti-vpe/cal-video.c    | 176 +++++++++----
+ drivers/media/platform/ti-vpe/cal.c          | 256 +++++++++++++------
+ drivers/media/platform/ti-vpe/cal.h          |  62 +++--
+ drivers/media/platform/ti-vpe/cal_regs.h     |  53 +---
+ 5 files changed, 502 insertions(+), 293 deletions(-)
+
+-- 
+2.25.1
+
