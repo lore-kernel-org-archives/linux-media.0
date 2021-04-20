@@ -2,201 +2,241 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 658B2C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F789C43460
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:14:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E21961363
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:12:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 495E161354
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:14:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbhDTLND (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 07:13:03 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:57123 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231963AbhDTLMv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 07:12:51 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1618917138; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=hl8EUPn2bmfex04b3yPPF4NbgsG6QE0JOYL2gmZJ1/o=;
- b=rnbhEwUTg+wkTz+Ggxx3qu99ypZFbey/qNnC0vcvTLsqbyJxOo3XSNWOnqcw20RYwBev39GY
- k2zKCmndSDVPdrtQelbjfxWMVWPPhq4XvsY1PuJ95tGIZ7KGx84K4kvJpmImCgPbvGGSWY/U
- ps1kjKTWo4KcffEh/rGrc5xJMbk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 607eb710a817abd39ac8cede (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 20 Apr 2021 11:12:16
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 36DF1C43144; Tue, 20 Apr 2021 11:12:15 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03007C433D3;
-        Tue, 20 Apr 2021 11:12:13 +0000 (UTC)
+        id S231422AbhDTLOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 07:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230491AbhDTLOw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Apr 2021 07:14:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E650C06138A
+        for <linux-media@vger.kernel.org>; Tue, 20 Apr 2021 04:14:20 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id n2so57650082ejy.7
+        for <linux-media@vger.kernel.org>; Tue, 20 Apr 2021 04:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Typh3MhSkbyPMTThE0U2Q1ZO/12rDfMhvhLaVI/d1e8=;
+        b=KQVXC/pMQkblNXMVtLAj7SnpDWgtKhyIP7FvLpcFc3jKrVAILUkLPJk5INg+VNl2RO
+         wII2H98OwSqJVSwyaGuiBtgO0UCGsX6cUXbfvzUlK2megqFX5dMhq0eUPJyut/23j34l
+         2FpLrHrROB3lrJqNBrYTmdaqRxVXzqB0FdTWY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Typh3MhSkbyPMTThE0U2Q1ZO/12rDfMhvhLaVI/d1e8=;
+        b=oeWIe17bLXZ7JkxuDxUqsiNj4FEf23UpjDejLgUGxGJJREsgj9oWKi05S/8cuVSTA8
+         rThO46S+juPm/ASOQj6OJHK0lEyGPSUzv3JJwwheYQfPKos6vCJGqOdwoUQ7TIUKUQwK
+         8SN+Dmqbxp3dI3GwIi7m0DRFiXy0qjO828ZXWdY0OaW+E7A9vK0DHf7Ng0qa5tpyhSYV
+         Hal1fvQ1TrPU2TfoPx0y9HI6jBAnPxiS8vlIKTUPw6Xq5tCiS8WbxpZsrIwTg75qkXYP
+         89Q6aYWHQNVBOlJY9C/Bvr3DPlXsJI0eAhNSyI8tAuAQDWCTIa5gs/I81ic9Qszvga7I
+         CUNg==
+X-Gm-Message-State: AOAM533pWqtI8kOLgRS+2h3Fy8hY87BW7wuj2XtzAOyxXUCFBWuDSLfR
+        Ydom4fEngdWdgE1OLzMhiiC5DA==
+X-Google-Smtp-Source: ABdhPJy8I04sLJ6rISKUbY8p7EIy7J+0ccdspYtYAIEZfvYtprT2Z23ngxTun+fd5qbntXzHzXLbDA==
+X-Received: by 2002:a17:906:7fd3:: with SMTP id r19mr27643200ejs.286.1618917259038;
+        Tue, 20 Apr 2021 04:14:19 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id f1sm10639067edz.60.2021.04.20.04.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Apr 2021 04:14:18 -0700 (PDT)
+Date:   Tue, 20 Apr 2021 13:14:16 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Peter.Enderborg@sony.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        adobriyan@gmail.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, guro@fb.com, shakeelb@google.com,
+        mhocko@suse.com, neilb@suse.de, samitolvanen@google.com,
+        rppt@kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        willy@infradead.org
+Subject: Re: [PATCH v5] dma-buf: Add DmaBufTotal counter in meminfo
+Message-ID: <YH63iPzbGWzb676T@phenom.ffwll.local>
+Mail-Followup-To: Peter.Enderborg@sony.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, adobriyan@gmail.com,
+        akpm@linux-foundation.org, songmuchun@bytedance.com, guro@fb.com,
+        shakeelb@google.com, mhocko@suse.com, neilb@suse.de,
+        samitolvanen@google.com, rppt@kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, willy@infradead.org
+References: <20210417163835.25064-1-peter.enderborg@sony.com>
+ <YH6Xv00ddYfMA3Lg@phenom.ffwll.local>
+ <176e7e71-59b7-b288-9483-10e0f42a7a3f@sony.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 20 Apr 2021 16:42:13 +0530
-From:   rojay@codeaurora.org
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     wsa@kernel.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH V8 1/1] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-In-Reply-To: <161415039142.1254594.3043511127113195221@swboyd.mtv.corp.google.com>
-References: <20210108150545.2018-1-rojay@codeaurora.org>
- <20210108150545.2018-2-rojay@codeaurora.org>
- <161052087940.3661239.14609415796697267628@swboyd.mtv.corp.google.com>
- <9ec10130df230a0ff078d9eec47e94b2@codeaurora.org>
- <161415039142.1254594.3043511127113195221@swboyd.mtv.corp.google.com>
-Message-ID: <30d8e3661c37c7d2580ac1f03e254680@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <176e7e71-59b7-b288-9483-10e0f42a7a3f@sony.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stephen,
-
-On 2021-02-24 12:36, Stephen Boyd wrote:
-> Quoting rojay@codeaurora.org (2021-02-18 06:15:17)
->> Hi Stephen,
->> 
->> On 2021-01-13 12:24, Stephen Boyd wrote:
->> > Quoting Roja Rani Yarubandi (2021-01-08 07:05:45)
->> >> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c
->> >> b/drivers/i2c/busses/i2c-qcom-geni.c
->> >> index 214b4c913a13..c3f584795911 100644
->> >> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> >> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> >> @@ -375,6 +375,32 @@ static void geni_i2c_tx_msg_cleanup(struct
->> >> geni_i2c_dev *gi2c,
->> >>         }
->> >>  }
->> >>
->> >> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
->> >> +{
->> >> +       int ret;
->> >> +       u32 geni_status;
->> >> +       struct i2c_msg *cur;
->> >> +
->> >> +       /* Resume device, as runtime suspend can happen anytime during
->> >> transfer */
->> >> +       ret = pm_runtime_get_sync(gi2c->se.dev);
->> >> +       if (ret < 0) {
->> >> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n",
->> >> ret);
->> >> +               return;
->> >> +       }
->> >> +
->> >> +       geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
->> >> +       if (geni_status & M_GENI_CMD_ACTIVE) {
->> >> +               cur = gi2c->cur;
->> >
->> > Why don't we need to hold the spinlock gi2c::lock here?
->> >
->> 
->> I am not seeing any race here. May I know which race are you 
->> suspecting
->> here?
+On Tue, Apr 20, 2021 at 09:26:00AM +0000, Peter.Enderborg@sony.com wrote:
+> On 4/20/21 10:58 AM, Daniel Vetter wrote:
+> > On Sat, Apr 17, 2021 at 06:38:35PM +0200, Peter Enderborg wrote:
+> >> This adds a total used dma-buf memory. Details
+> >> can be found in debugfs, however it is not for everyone
+> >> and not always available. dma-buf are indirect allocated by
+> >> userspace. So with this value we can monitor and detect
+> >> userspace applications that have problems.
+> >>
+> >> Signed-off-by: Peter Enderborg <peter.enderborg@sony.com>
+> > So there have been tons of discussions around how to track dma-buf and
+> > why, and I really need to understand the use-cass here first I think. proc
+> > uapi is as much forever as anything else, and depending what you're doing
+> > this doesn't make any sense at all:
+> >
+> > - on most linux systems dma-buf are only instantiated for shared buffer.
+> >   So there this gives you a fairly meaningless number and not anything
+> >   reflecting gpu memory usage at all.
+> >
+> > - on Android all buffers are allocated through dma-buf afaik. But there
+> >   we've recently had some discussions about how exactly we should track
+> >   all this, and the conclusion was that most of this should be solved by
+> >   cgroups long term. So if this is for Android, then I don't think adding
+> >   random quick stop-gaps to upstream is a good idea (because it's a pretty
+> >   long list of patches that have come up on this).
+> >
+> > So what is this for?
 > 
-> Sorry there are long delays between posting and replies to my review
-> comments. It takes me some time to remember what we're talking about
-> because this patch has dragged on for many months.
+> For the overview. dma-buf today only have debugfs for info. Debugfs
+> is not allowed by google to use in andoid. So this aggregate the information
+> so we can get information on what going on on the system. 
 > 
+> And the LKML standard respond to that is "SHOW ME THE CODE".
 
-Sorry for the delayed responses.
+Yes. Except this extends to how exactly this is supposed to be used in
+userspace and acted upon.
 
-> So my understanding is that gi2c::lock protects the 'cur' pointer. I
-> imagine this scenario might go bad
+> When the top memgc has a aggregated information on dma-buf it is maybe
+> a better source to meminfo. But then it also imply that dma-buf requires memcg.
 > 
->   CPU0                      CPU1
->   ----                      ----
->   geni_i2c_stop_xfer()
->    ...                      geni_i2c_rx_one_msg()
-> 			     gi2c->cur = cur1;
->    cur = gi2c->cur;
->    ...                       geni_i2c_tx_one_msg()
-> 			     gi2c->cur = cur2;
->    geni_i2c_abort_xfer()
->     <uses cur2>
->    if (cur->flags & I2C_M_RD)
->     <uses cur1 for the condition and call; oops that's bad>
+> And I dont see any problem to replace this with something better with it is ready.
+
+The thing is, this is uapi. Once it's merged we cannot, ever, replace it.
+It must be kept around forever, or a very close approximation thereof. So
+merging this with the justification that we can fix it later on or replace
+isn't going to happen.
+-Daniel
+
 > 
-> It's almost like we should combine the geni_i2c_abort_xfer() logic with
-> the rx/tx message cleanup functions so that it's all done under one
-> lock. Unfortunately it's complicated by the fact that there are various
-> completion waiting timeouts involved. Fun!
+> > -Daniel
+> >
+> >> ---
+> >>  drivers/dma-buf/dma-buf.c | 12 ++++++++++++
+> >>  fs/proc/meminfo.c         |  5 ++++-
+> >>  include/linux/dma-buf.h   |  1 +
+> >>  3 files changed, 17 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> >> index f264b70c383e..4dc37cd4293b 100644
+> >> --- a/drivers/dma-buf/dma-buf.c
+> >> +++ b/drivers/dma-buf/dma-buf.c
+> >> @@ -37,6 +37,7 @@ struct dma_buf_list {
+> >>  };
+> >>  
+> >>  static struct dma_buf_list db_list;
+> >> +static atomic_long_t dma_buf_global_allocated;
+> >>  
+> >>  static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
+> >>  {
+> >> @@ -79,6 +80,7 @@ static void dma_buf_release(struct dentry *dentry)
+> >>  	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
+> >>  		dma_resv_fini(dmabuf->resv);
+> >>  
+> >> +	atomic_long_sub(dmabuf->size, &dma_buf_global_allocated);
+> >>  	module_put(dmabuf->owner);
+> >>  	kfree(dmabuf->name);
+> >>  	kfree(dmabuf);
+> >> @@ -586,6 +588,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+> >>  	mutex_lock(&db_list.lock);
+> >>  	list_add(&dmabuf->list_node, &db_list.head);
+> >>  	mutex_unlock(&db_list.lock);
+> >> +	atomic_long_add(dmabuf->size, &dma_buf_global_allocated);
+> >>  
+> >>  	return dmabuf;
+> >>  
+> >> @@ -1346,6 +1349,15 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(dma_buf_vunmap);
+> >>  
+> >> +/**
+> >> + * dma_buf_allocated_pages - Return the used nr of pages
+> >> + * allocated for dma-buf
+> >> + */
+> >> +long dma_buf_allocated_pages(void)
+> >> +{
+> >> +	return atomic_long_read(&dma_buf_global_allocated) >> PAGE_SHIFT;
+> >> +}
+> >> +
+> >>  #ifdef CONFIG_DEBUG_FS
+> >>  static int dma_buf_debug_show(struct seq_file *s, void *unused)
+> >>  {
+> >> diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> >> index 6fa761c9cc78..ccc7c40c8db7 100644
+> >> --- a/fs/proc/meminfo.c
+> >> +++ b/fs/proc/meminfo.c
+> >> @@ -16,6 +16,7 @@
+> >>  #ifdef CONFIG_CMA
+> >>  #include <linux/cma.h>
+> >>  #endif
+> >> +#include <linux/dma-buf.h>
+> >>  #include <asm/page.h>
+> >>  #include "internal.h"
+> >>  
+> >> @@ -145,7 +146,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+> >>  	show_val_kb(m, "CmaFree:        ",
+> >>  		    global_zone_page_state(NR_FREE_CMA_PAGES));
+> >>  #endif
+> >> -
+> >> +#ifdef CONFIG_DMA_SHARED_BUFFER
+> >> +	show_val_kb(m, "DmaBufTotal:    ", dma_buf_allocated_pages());
+> >> +#endif
+> >>  	hugetlb_report_meminfo(m);
+> >>  
+> >>  	arch_report_meminfo(m);
+> >> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> >> index efdc56b9d95f..5b05816bd2cd 100644
+> >> --- a/include/linux/dma-buf.h
+> >> +++ b/include/linux/dma-buf.h
+> >> @@ -507,4 +507,5 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
+> >>  		 unsigned long);
+> >>  int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
+> >>  void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
+> >> +long dma_buf_allocated_pages(void);
+> >>  #endif /* __DMA_BUF_H__ */
+> >> -- 
+> >> 2.17.1
+> >>
+> >> _______________________________________________
+> >> dri-devel mailing list
+> >> dri-devel@lists.freedesktop.org
+> >> https://urldefense.com/v3/__https://lists.freedesktop.org/mailman/listinfo/dri-devel__;!!JmoZiZGBv3RvKRSx!qW8kUOZyY4Dkew6OvqgfoM-5unQNVeF_M1biaIAyQQBR0KB7ksRzZjoh382ZdGGQR9k$ 
 > 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 
-Thanks for the explanation. Fixed this possible race by protecting 
-gi2c->cur
-and calling geni_i2c_abort_xfer() with adding another parameter to 
-differentiate
-from which sequence is the geni_i2c_abort_xfer() called and handle the
-spin_lock/spin_unlock accordingly inside geni_i2c_abort_xfer()
-
-> But even after all that, I don't see how the geni_i2c_stop_xfer() puts 
-> a
-> stop to future calls to geni_i2c_rx_one_msg() or geni_i2c_tx_one_msg().
-
-Now handled this by adding a bool variable "stop_xfer" in geni_i2c_dev 
-struct,
-used to put stop to upcoming geni_i2c_rx_one_msg() and 
-geni_i2c_tx_one_msg() calls
-once we receive the shutdown call.
-
-> The hardware isn't disabled from what I can tell. The irq isn't
-> disabled, the clks aren't turned off, etc. What is to stop an i2c 
-> device
-> from trying to use the bus after this shutdown function is called? If
-> anything, this function looks like a "flush", where we flush out any
-> pending transfer. Where's the "plug" operation that prevents any future
-> operations from following this call?
-> 
-
-We are turning off clocks and disabling irq in 
-geni_i2c_runtime_suspend().
-
-IIUC about shutdown sequence, during "remove" we will unplug the device 
-with opposite
-calls to "probe's" plug operations example i2c_del_adapter(). For 
-"shutdown", as system
-is going to shutdown, there is no need of unplug operations to be done.
-
-> BTW, I see this is merged upstream. That's great, but it seems broken.
-> Please fix it or revert it out.
-> 
->> 
->> >> +               geni_i2c_abort_xfer(gi2c);
->> >> +               if (cur->flags & I2C_M_RD)
->> >> +                       geni_i2c_rx_msg_cleanup(gi2c, cur);
->> >> +               else
->> >> +                       geni_i2c_tx_msg_cleanup(gi2c, cur);
->> >> +       }
->> >> +
->> >> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
->> >> +}
->> >> +
->> >>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct
->> >> i2c_msg *msg,
->> >>                                 u32 m_param)
->> >>  {
-
-Thanks,
-Roja
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
