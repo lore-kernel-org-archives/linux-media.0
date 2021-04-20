@@ -2,619 +2,143 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D9D2C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:30:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF3BC43460
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:35:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5E2F613AF
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:30:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67CFA61354
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 11:35:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbhDTLbL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 07:31:11 -0400
-Received: from mga17.intel.com ([192.55.52.151]:38058 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231589AbhDTLbI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 07:31:08 -0400
-IronPort-SDR: MAKa+lfd/Y1RpizojgBiM9BggBVmygaRYd9reZBmUDacSF75mHUpJo1yBw//uPJRVQ88muBM+P
- meZhzPBt7yjg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9959"; a="175595868"
-X-IronPort-AV: E=Sophos;i="5.82,236,1613462400"; 
-   d="scan'208";a="175595868"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 04:30:18 -0700
-IronPort-SDR: WEbIW26FYITbIOxJgmqTdyBSkNevflXWysaiPg1yhj9HGd6ynM+1PUDLM0joogOQ7Briv/G+6J
- d+9B2WLbjB2g==
-X-IronPort-AV: E=Sophos;i="5.82,236,1613462400"; 
-   d="scan'208";a="422991068"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 04:30:15 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 92325202EC;
-        Tue, 20 Apr 2021 14:30:13 +0300 (EEST)
-Date:   Tue, 20 Apr 2021 14:30:13 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH v5 03/24] media: entity: Walk the graph based on pads
-Message-ID: <20210420113013.GK3@paasikivi.fi.intel.com>
-References: <20210415130450.421168-1-tomi.valkeinen@ideasonboard.com>
- <20210415130450.421168-4-tomi.valkeinen@ideasonboard.com>
- <YHxwufORqZtAUvat@pendragon.ideasonboard.com>
+        id S231313AbhDTLg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 07:36:28 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:37037 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230290AbhDTLg1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Apr 2021 07:36:27 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id YofWlXS4Q8K3KYofZlzPTx; Tue, 20 Apr 2021 13:35:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1618918554; bh=doq2K2ciyiMrj6S2cEcZtlgv25cz/m88RRkxLWtesi0=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=MeQVxCP+HH56vApGqKbqC5wUCSSWQGP9mNawk6Mk02oGP56yK+tCBQnJtmVAI9mCH
+         TKeZA9gsE7s7v/jZJjdBi/p8sDDdMfgFUXldy7hOJVdugYNdylHPLXIhlc7GNgUOG0
+         LlS+Q4T9uZLsVGfm/kujA39HiHl9Ndtv+X0Zu4lBz2FwhP3YYVJKNnZNj9vV0983Fo
+         iT81rSskXhJWj0a62618wQduoFbNW8reougESlXqrPCo/JAXCxp/Vn6Mjz7IfRzcxc
+         X3GaRMKVXT9ENB6INQAxZ0CUdLjA/wL/cQGhnq4b00oGj3HrHAQHxEJWdIJ1vWKjEl
+         r3DdOOXYnszDw==
+Subject: Re: [PATCH v9 03/13] media: hantro: Use syscon instead of 'ctrl'
+ register
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Lucas Stach <l.stach@pengutronix.de>, ezequiel@collabora.com,
+        p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        lee.jones@linaro.org, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>
+Cc:     devel@driverdev.osuosl.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, kernel@collabora.com, cphealy@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20210407073534.376722-1-benjamin.gaignard@collabora.com>
+ <20210407073534.376722-4-benjamin.gaignard@collabora.com>
+ <7bcbb787d82f21d42563d8fb7e3c2e7d40123932.camel@pengutronix.de>
+ <ffe9b3f5-94f5-453e-73f0-4b42d0454b63@collabora.com>
+ <529b61b1b1e6030c92a7944c4864246521b2ccdd.camel@pengutronix.de>
+ <36008691-d075-203d-0cac-2a012773ea34@collabora.com>
+ <43a767f8-77f5-7937-c484-753a3123f6a2@xs4all.nl>
+ <e7064bb1-69e6-4214-380d-c464b7832da5@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <0f23d42e-b858-c57d-3bf7-32b511e919d1@xs4all.nl>
+Date:   Tue, 20 Apr 2021 13:35:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <e7064bb1-69e6-4214-380d-c464b7832da5@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YHxwufORqZtAUvat@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Envelope: MS4xfGZ13gHMa8gkiXjz8wgDyFzaYYCt9UUsYTPpCio4nZAkdDDxuKCKceeVqGxUSF/TqIr7N6FcI4GNAGxjmkU652ja4jvW2ByzAdmzDG7vM0WvbOQLToVt
+ +mr75r84cLP2CO6ycEvczdsIhyMbPGyivQMF81Dk1z1w/MCH2xL3B2Pj9yGE+uFHVqCVUwwL8EdHJyq6n//fRi3m0eHmoDIVrcSHRSTVk1wFs3Fab5YV2D97
+ 3YIkQKISbzqaJeYyogGdeE8knqEpiFk/fYwiuSc/aSTT0qfrh9qmLrAyryJvItbse7nIlANMWfkNVeIsK6b1Uoc1+9+Fm+o0CYFLIPzLAggTUFyerXuWgwqk
+ qqclmRbc7mo6E90K1AucAxaa9/s/LT8F/2to5S6UTEO63+spg6fMmDAI1YnCm/A2pW6lgtvsugovF2QKHfElcJuSLrY0X9whEo9a85W0qOD1bwFfpGwwf+H3
+ pK/KHHQPZo42GVN9sY2vNauHBtESUNXdSNA+lorJBkj7VlDwUJL+8jq1WPuGlLwV7YWemR0ZZSEOQ/1mj3TaSDVLmellT2q1F3PYn1qnpxIKtc+K2XWJnWWH
+ RAv9NS56n6kDsbfRKnYxZoeIpOh0psmezsRNAIvzUteOUMeJc9cFYX/6HzU3hbbYe3XdKTuqHXkAulupEOeRQ4xJnlXp0wPAQbSzWgJKz8pFvQEsPbXZO5gB
+ D1hA43gaNvPivGfQBPep8U3dmOFT8+cCk6xQr+YuoSPlabY0HB4B5OYO5uFUUPqb1rxxRjwGnmRGRBAzPlCAjRL9snvPaRXdMopeT+G4EQG9aAtMyHRAk833
+ MUi6eTmQAp4egsQoQk4yT50p3lAjq9eob2h/5HQtOxOs9GkQZer8sRzTfFp2dcRsqF25fIqkINBovF9M+QVjsZgAlULp9iRGXZxf00NjTsHW0ydseWWQQFxR
+ 3XqD/DPlAZmD4M3kUOuVTsa9LtHz1hsE5LKFNE89ZFuRfxMZ/IvuEsVNKFHv5GUrw18ATY4Eqrv9Q+gBgR+FlsbXPsI9xcBU3awWbqBxNp6YPjl1GBdnrSsQ
+ UY/sfRYqzyGfdLHP/JnPNstLKjv5MlYB0d5ZyRqzbAOatkYa6rOB/9psCaL+n/9XBfClrWaF/gH1jooXhq4zn+gol4qMoXEF1nM=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+On 20/04/2021 11:31, Benjamin Gaignard wrote:
+> 
+> Le 20/04/2021 à 11:16, Hans Verkuil a écrit :
+>> On 20/04/2021 11:10, Benjamin Gaignard wrote:
+>>> Le 16/04/2021 à 17:14, Lucas Stach a écrit :
+>>>> Am Freitag, dem 16.04.2021 um 15:08 +0200 schrieb Benjamin Gaignard:
+>>>>> Le 16/04/2021 à 12:54, Lucas Stach a écrit :
+>>>>>> Am Mittwoch, dem 07.04.2021 um 09:35 +0200 schrieb Benjamin Gaignard:
+>>>>>>> In order to be able to share the control hardware block between
+>>>>>>> VPUs use a syscon instead a ioremap it in the driver.
+>>>>>>> To keep the compatibility with older DT if 'nxp,imx8mq-vpu-ctrl'
+>>>>>>> phandle is not found look at 'ctrl' reg-name.
+>>>>>>> With the method it becomes useless to provide a list of register
+>>>>>>> names so remove it.
+>>>>>> Sorry for putting a spoke in the wheel after many iterations of the
+>>>>>> series.
+>>>>>>
+>>>>>> We just discussed a way forward on how to handle the clocks and resets
+>>>>>> provided by the blkctl block on i.MX8MM and later and it seems there is
+>>>>>> a consensus on trying to provide virtual power domains from a blkctl
+>>>>>> driver, controlling clocks and resets for the devices in the power
+>>>>>> domain. I would like to avoid introducing yet another way of handling
+>>>>>> the blkctl and thus would like to align the i.MX8MQ VPU blkctl with
+>>>>>> what we are planning to do on the later chip generations.
+>>>>>>
+>>>>>> CC'ing Jacky Bai and Peng Fan from NXP, as they were going to give this
+>>>>>> virtual power domain thing a shot.
+>>>>> That could replace the 3 first patches and Dt patche of this series
+>>>>> but that will not impact the hevc part, so I wonder if pure hevc patches
+>>>>> could be merged anyway ?
+>>>>> They are reviewed and don't depend of how the ctrl block is managed.
+>>>> I'm not really in a position to give any informed opinion about that
+>>>> hvec patches, as I only skimmed them, but I don't see any reason to
+>>>> delay patches 04-11 from this series until the i.MX8M platform issues
+>>>> are sorted. AFAICS those things are totally orthogonal.
+>>> Hi Hans,
+>>> What do you think about this proposal to split this series ?
+>>> Get hevc part merged could allow me to continue to add features
+>>> like scaling lists, compressed reference buffers and 10-bit supports.
+>> Makes sense to me!
+> 
+> Great !
+> If the latest version match your expectations how would you like to processed ?
+> Can you merged patches 4 to 12 ? or should I resend them in a new shorted series ?
 
-On Sun, Apr 18, 2021 at 08:47:37PM +0300, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Apr 15, 2021 at 04:04:29PM +0300, Tomi Valkeinen wrote:
-> > From: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> And thank you Sakari too.
+A separate patch series would be easier for me.
 
-Thank you for the review!
-
-> 
-> > Instead of iterating over graph entities during the walk, iterate the pads
-> > through which the entity was first reached. This is required in order to
-> > make the entity pipeline pad-based rather than entity based.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Reviewed-by: Niklas S�derlund <niklas.soderlund+renesas@ragnatech.se>
-> > Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > ---
-> >  Documentation/driver-api/media/mc-core.rst    |  7 ++-
-> >  drivers/media/mc/mc-entity.c                  | 49 +++++++++++--------
-> >  drivers/media/platform/exynos4-is/media-dev.c | 20 ++++----
-> >  drivers/media/platform/omap3isp/ispvideo.c    | 17 ++++---
-> >  drivers/media/platform/vsp1/vsp1_video.c      | 12 ++---
-> >  drivers/media/platform/xilinx/xilinx-dma.c    | 12 ++---
-> >  drivers/media/v4l2-core/v4l2-mc.c             | 24 ++++-----
-> >  drivers/staging/media/omap4iss/iss_video.c    | 34 +++++++------
-> >  include/media/media-entity.h                  |  7 +--
-> >  9 files changed, 99 insertions(+), 83 deletions(-)
-> > 
-> > diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
-> > index ba0aee982124..8a13640bed56 100644
-> > --- a/Documentation/driver-api/media/mc-core.rst
-> > +++ b/Documentation/driver-api/media/mc-core.rst
-> > @@ -169,8 +169,11 @@ Drivers initiate a graph traversal by calling
-> >  The graph structure, provided by the caller, is initialized to start graph
-> >  traversal at the given pad in an entity.
-> >  
-> > -Drivers can then retrieve the next entity by calling
-> > -:c:func:`media_graph_walk_next()`
-> > +Drivers can then retrieve the next pad by calling
-> > +:c:func:`media_graph_walk_next()`. Only the pad through which the entity
-> > +is first reached is returned. If the caller is interested in knowing which
-> > +further pads would be connected, the :c:func:`media_entity_has_route()`
-> > +function can be used for that.
-> >  
-> >  When the graph traversal is complete the function will return ``NULL``.
-> >  
-> > diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> > index 44a05806b589..401fddf320e7 100644
-> > --- a/drivers/media/mc/mc-entity.c
-> > +++ b/drivers/media/mc/mc-entity.c
-> > @@ -340,9 +340,9 @@ static void media_graph_walk_iter(struct media_graph *graph)
-> >  		next->entity->name, next->index);
-> >  }
-> >  
-> > -struct media_entity *media_graph_walk_next(struct media_graph *graph)
-> > +struct media_pad *media_graph_walk_next(struct media_graph *graph)
-> >  {
-> > -	struct media_entity *entity;
-> > +	struct media_pad *pad;
-> >  
-> >  	if (stack_top(graph) == NULL)
-> >  		return NULL;
-> > @@ -355,11 +355,11 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph)
-> >  	while (link_top(graph) != &stack_top(graph)->entity->links)
-> >  		media_graph_walk_iter(graph);
-> >  
-> > -	entity = stack_pop(graph)->entity;
-> > -	dev_dbg(entity->graph_obj.mdev->dev,
-> > -		"walk: returning entity '%s'\n", entity->name);
-> > +	pad = stack_pop(graph);
-> > +	dev_dbg(pad->graph_obj.mdev->dev,
-> > +		"walk: returning pad '%s':%u\n", pad->entity->name, pad->index);
-> >  
-> > -	return entity;
-> > +	return pad;
-> >  }
-> >  EXPORT_SYMBOL_GPL(media_graph_walk_next);
-> >  
-> > @@ -407,7 +407,8 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  {
-> >  	struct media_device *mdev = entity->graph_obj.mdev;
-> >  	struct media_graph *graph = &pipe->graph;
-> > -	struct media_entity *entity_err = entity;
-> > +	struct media_pad *pad = entity->pads;
-> > +	struct media_pad *pad_err = pad;
-> >  	struct media_link *link;
-> >  	int ret;
-> >  
-> > @@ -417,9 +418,11 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  			goto error_graph_walk_start;
-> >  	}
-> >  
-> > -	media_graph_walk_start(&pipe->graph, entity->pads);
-> > +	media_graph_walk_start(&pipe->graph, pad);
-> > +
-> > +	while ((pad = media_graph_walk_next(graph))) {
-> > +		struct media_entity *entity = pad->entity;
-> >  
-> > -	while ((entity = media_graph_walk_next(graph))) {
-> >  		DECLARE_BITMAP(active, MEDIA_ENTITY_MAX_PADS);
-> >  		DECLARE_BITMAP(has_no_links, MEDIA_ENTITY_MAX_PADS);
-> >  
-> > @@ -428,7 +431,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  		if (entity->pipe && entity->pipe != pipe) {
-> >  			pr_err("Pipe active for %s. Can't start for %s\n",
-> >  				entity->name,
-> > -				entity_err->name);
-> > +				pad_err->entity->name);
-> >  			ret = -EBUSY;
-> >  			goto error;
-> >  		}
-> > @@ -446,11 +449,12 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  		bitmap_fill(has_no_links, entity->num_pads);
-> >  
-> >  		list_for_each_entry(link, &entity->links, list) {
-> > -			struct media_pad *pad = link->sink->entity == entity
-> > -						? link->sink : link->source;
-> > +			struct media_pad *other_pad =
-> > +				link->sink->entity == entity ?
-> > +				link->sink : link->source;
-> >  
-> >  			/* Mark that a pad is connected by a link. */
-> > -			bitmap_clear(has_no_links, pad->index, 1);
-> > +			bitmap_clear(has_no_links, other_pad->index, 1);
-> >  
-> >  			/*
-> >  			 * Pads that either do not need to connect or
-> > @@ -459,13 +463,13 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  			 */
-> >  			if (!(pad->flags & MEDIA_PAD_FL_MUST_CONNECT) ||
-> 
-> Shouldn't this be other_pad->flags ?
-
-Correct. Nice find!
-
-> 
-> >  			    link->flags & MEDIA_LNK_FL_ENABLED)
-> > -				bitmap_set(active, pad->index, 1);
-> > +				bitmap_set(active, other_pad->index, 1);
-> >  
-> >  			/*
-> >  			 * Link validation will only take place for
-> >  			 * sink ends of the link that are enabled.
-> >  			 */
-> > -			if (link->sink != pad ||
-> > +			if (link->sink != other_pad ||
-> >  			    !(link->flags & MEDIA_LNK_FL_ENABLED))
-> >  				continue;
-> >  
-> > @@ -501,9 +505,11 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  	 * Link validation on graph failed. We revert what we did and
-> >  	 * return the error.
-> >  	 */
-> > -	media_graph_walk_start(graph, entity_err->pads);
-> > +	media_graph_walk_start(graph, pad_err);
-> > +
-> > +	while ((pad_err = media_graph_walk_next(graph))) {
-> > +		struct media_entity *entity_err = pad_err->entity;
-> >  
-> > -	while ((entity_err = media_graph_walk_next(graph))) {
-> >  		/* Sanity check for negative stream_count */
-> >  		if (!WARN_ON_ONCE(entity_err->stream_count <= 0)) {
-> >  			entity_err->stream_count--;
-> > @@ -515,7 +521,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
-> >  		 * We haven't increased stream_count further than this
-> >  		 * so we quit here.
-> >  		 */
-> > -		if (entity_err == entity)
-> > +		if (pad_err == pad)
-> >  			break;
-> >  	}
-> >  
-> > @@ -542,8 +548,9 @@ EXPORT_SYMBOL_GPL(media_pipeline_start);
-> >  
-> >  void __media_pipeline_stop(struct media_entity *entity)
-> >  {
-> > -	struct media_graph *graph = &entity->pipe->graph;
-> >  	struct media_pipeline *pipe = entity->pipe;
-> > +	struct media_graph *graph = &pipe->graph;
-> > +	struct media_pad *pad;
-> >  
-> >  	/*
-> >  	 * If the following check fails, the driver has performed an
-> > @@ -554,7 +561,9 @@ void __media_pipeline_stop(struct media_entity *entity)
-> >  
-> >  	media_graph_walk_start(graph, entity->pads);
-> >  
-> > -	while ((entity = media_graph_walk_next(graph))) {
-> > +	while ((pad = media_graph_walk_next(graph))) {
-> > +		struct media_entity *entity = pad->entity;
-> > +
-> >  		/* Sanity check for negative stream_count */
-> >  		if (!WARN_ON_ONCE(entity->stream_count <= 0)) {
-> >  			entity->stream_count--;
-> > diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-> > index d90663b65932..b910a23b7e23 100644
-> > --- a/drivers/media/platform/exynos4-is/media-dev.c
-> > +++ b/drivers/media/platform/exynos4-is/media-dev.c
-> > @@ -1166,7 +1166,7 @@ static int __fimc_md_modify_pipeline(struct media_entity *entity, bool enable)
-> >  static int __fimc_md_modify_pipelines(struct media_entity *entity, bool enable,
-> >  				      struct media_graph *graph)
-> >  {
-> > -	struct media_entity *entity_err = entity;
-> > +	struct media_pad *pad, *pad_err = entity->pads;
-> >  	int ret;
-> >  
-> >  	/*
-> > @@ -1175,13 +1175,13 @@ static int __fimc_md_modify_pipelines(struct media_entity *entity, bool enable,
-> >  	 * through active links. This is needed as we cannot power on/off the
-> >  	 * subdevs in random order.
-> >  	 */
-> > -	media_graph_walk_start(graph, entity->pads);
-> > +	media_graph_walk_start(graph, pad_err);
-> >  
-> > -	while ((entity = media_graph_walk_next(graph))) {
-> > -		if (!is_media_entity_v4l2_video_device(entity))
-> > +	while ((pad = media_graph_walk_next(graph))) {
-> > +		if (!is_media_entity_v4l2_video_device(pad->entity))
-> >  			continue;
-> >  
-> > -		ret  = __fimc_md_modify_pipeline(entity, enable);
-> > +		ret  = __fimc_md_modify_pipeline(pad->entity, enable);
-> >  
-> >  		if (ret < 0)
-> >  			goto err;
-> > @@ -1190,15 +1190,15 @@ static int __fimc_md_modify_pipelines(struct media_entity *entity, bool enable,
-> >  	return 0;
-> >  
-> >  err:
-> > -	media_graph_walk_start(graph, entity_err->pads);
-> > +	media_graph_walk_start(graph, pad_err);
-> >  
-> > -	while ((entity_err = media_graph_walk_next(graph))) {
-> > -		if (!is_media_entity_v4l2_video_device(entity_err))
-> > +	while ((pad_err = media_graph_walk_next(graph))) {
-> > +		if (!is_media_entity_v4l2_video_device(pad_err->entity))
-> >  			continue;
-> >  
-> > -		__fimc_md_modify_pipeline(entity_err, !enable);
-> > +		__fimc_md_modify_pipeline(pad_err->entity, !enable);
-> >  
-> > -		if (entity_err == entity)
-> > +		if (pad_err == pad)
-> >  			break;
-> >  	}
-> >  
-> > diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
-> > index 3c1485d59404..49cde04bfb21 100644
-> > --- a/drivers/media/platform/omap3isp/ispvideo.c
-> > +++ b/drivers/media/platform/omap3isp/ispvideo.c
-> > @@ -222,8 +222,8 @@ static int isp_video_get_graph_data(struct isp_video *video,
-> >  				    struct isp_pipeline *pipe)
-> >  {
-> >  	struct media_graph graph;
-> > -	struct media_entity *entity = &video->video.entity;
-> > -	struct media_device *mdev = entity->graph_obj.mdev;
-> > +	struct media_pad *pad = video->video.entity.pads;
-> > +	struct media_device *mdev = pad->entity->graph_obj.mdev;
-> 
-> Maybe video->video.entity.graph_obj.mdev ? Same below.
-
-Could be. That doesn't really matter though.
-
-> 
-> >  	struct isp_video *far_end = NULL;
-> >  	int ret;
-> >  
-> > @@ -234,23 +234,24 @@ static int isp_video_get_graph_data(struct isp_video *video,
-> >  		return ret;
-> >  	}
-> >  
-> > -	media_graph_walk_start(&graph, entity->pads);
-> > +	media_graph_walk_start(&graph, pad);
-> >  
-> > -	while ((entity = media_graph_walk_next(&graph))) {
-> > +	while ((pad = media_graph_walk_next(&graph))) {
-> >  		struct isp_video *__video;
-> >  
-> > -		media_entity_enum_set(&pipe->ent_enum, entity);
-> > +		media_entity_enum_set(&pipe->ent_enum, pad->entity);
-> >  
-> >  		if (far_end != NULL)
-> >  			continue;
-> >  
-> > -		if (entity == &video->video.entity)
-> > +		if (pad == video->video.entity.pads)
-> >  			continue;
-> >  
-> > -		if (!is_media_entity_v4l2_video_device(entity))
-> > +		if (!is_media_entity_v4l2_video_device(pad->entity))
-> >  			continue;
-> >  
-> > -		__video = to_isp_video(media_entity_to_video_device(entity));
-> > +		__video = to_isp_video(media_entity_to_video_device(
-> > +					       pad->entity));
-> >  		if (__video->type != video->type)
-> >  			far_end = __video;
-> >  	}
-> > diff --git a/drivers/media/platform/vsp1/vsp1_video.c b/drivers/media/platform/vsp1/vsp1_video.c
-> > index 61e4fbaba7b7..39dccf347ce1 100644
-> > --- a/drivers/media/platform/vsp1/vsp1_video.c
-> > +++ b/drivers/media/platform/vsp1/vsp1_video.c
-> > @@ -559,8 +559,8 @@ static int vsp1_video_pipeline_build(struct vsp1_pipeline *pipe,
-> >  				     struct vsp1_video *video)
-> >  {
-> >  	struct media_graph graph;
-> > -	struct media_entity *entity = &video->video.entity;
-> > -	struct media_device *mdev = entity->graph_obj.mdev;
-> > +	struct media_pad *pad = video->video.entity.pads;
-> > +	struct media_device *mdev = pad->entity->graph_obj.mdev;
-> >  	unsigned int i;
-> >  	int ret;
-> >  
-> > @@ -569,17 +569,17 @@ static int vsp1_video_pipeline_build(struct vsp1_pipeline *pipe,
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -	media_graph_walk_start(&graph, entity->pads);
-> > +	media_graph_walk_start(&graph, pad);
-> >  
-> > -	while ((entity = media_graph_walk_next(&graph))) {
-> > +	while ((pad = media_graph_walk_next(&graph))) {
-> >  		struct v4l2_subdev *subdev;
-> >  		struct vsp1_rwpf *rwpf;
-> >  		struct vsp1_entity *e;
-> >  
-> > -		if (!is_media_entity_v4l2_subdev(entity))
-> > +		if (!is_media_entity_v4l2_subdev(pad->entity))
-> >  			continue;
-> >  
-> > -		subdev = media_entity_to_v4l2_subdev(entity);
-> > +		subdev = media_entity_to_v4l2_subdev(pad->entity);
-> >  		e = to_vsp1_entity(subdev);
-> >  		list_add_tail(&e->list_pipe, &pipe->entities);
-> >  		e->pipe = pipe;
-> > diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
-> > index d64c3bee8b95..8df3c43aecbe 100644
-> > --- a/drivers/media/platform/xilinx/xilinx-dma.c
-> > +++ b/drivers/media/platform/xilinx/xilinx-dma.c
-> > @@ -175,8 +175,8 @@ static int xvip_pipeline_validate(struct xvip_pipeline *pipe,
-> >  				  struct xvip_dma *start)
-> >  {
-> >  	struct media_graph graph;
-> > -	struct media_entity *entity = &start->video.entity;
-> > -	struct media_device *mdev = entity->graph_obj.mdev;
-> > +	struct media_pad *pad = start->video.entity.pads;
-> > +	struct media_device *mdev = pad->entity->graph_obj.mdev;
-> >  	unsigned int num_inputs = 0;
-> >  	unsigned int num_outputs = 0;
-> >  	int ret;
-> > @@ -190,15 +190,15 @@ static int xvip_pipeline_validate(struct xvip_pipeline *pipe,
-> >  		return ret;
-> >  	}
-> >  
-> > -	media_graph_walk_start(&graph, entity->pads);
-> > +	media_graph_walk_start(&graph, pad);
-> >  
-> > -	while ((entity = media_graph_walk_next(&graph))) {
-> > +	while ((pad = media_graph_walk_next(&graph))) {
-> >  		struct xvip_dma *dma;
-> >  
-> > -		if (entity->function != MEDIA_ENT_F_IO_V4L)
-> > +		if (pad->entity->function != MEDIA_ENT_F_IO_V4L)
-> >  			continue;
-> >  
-> > -		dma = to_xvip_dma(media_entity_to_video_device(entity));
-> > +		dma = to_xvip_dma(media_entity_to_video_device(pad->entity));
-> >  
-> >  		if (dma->pad.flags & MEDIA_PAD_FL_SINK) {
-> >  			pipe->output = dma;
-> > diff --git a/drivers/media/v4l2-core/v4l2-mc.c b/drivers/media/v4l2-core/v4l2-mc.c
-> > index d215fe31b9a2..cbeb580c6754 100644
-> > --- a/drivers/media/v4l2-core/v4l2-mc.c
-> > +++ b/drivers/media/v4l2-core/v4l2-mc.c
-> > @@ -434,13 +434,14 @@ EXPORT_SYMBOL_GPL(v4l2_create_fwnode_links);
-> >  static int pipeline_pm_use_count(struct media_entity *entity,
-> >  	struct media_graph *graph)
-> >  {
-> > +	struct media_pad *pad;
-> >  	int use = 0;
-> >  
-> >  	media_graph_walk_start(graph, entity->pads);
-> >  
-> > -	while ((entity = media_graph_walk_next(graph))) {
-> > -		if (is_media_entity_v4l2_video_device(entity))
-> > -			use += entity->use_count;
-> > +	while ((pad = media_graph_walk_next(graph))) {
-> > +		if (is_media_entity_v4l2_video_device(pad->entity))
-> > +			use += pad->entity->use_count;
-> >  	}
-> >  
-> >  	return use;
-> > @@ -493,7 +494,7 @@ static int pipeline_pm_power_one(struct media_entity *entity, int change)
-> >  static int pipeline_pm_power(struct media_entity *entity, int change,
-> >  	struct media_graph *graph)
-> >  {
-> > -	struct media_entity *first = entity;
-> > +	struct media_pad *tmp_pad, *pad;
-> >  	int ret = 0;
-> >  
-> >  	if (!change)
-> > @@ -501,19 +502,18 @@ static int pipeline_pm_power(struct media_entity *entity, int change,
-> >  
-> >  	media_graph_walk_start(graph, entity->pads);
-> >  
-> > -	while (!ret && (entity = media_graph_walk_next(graph)))
-> > -		if (is_media_entity_v4l2_subdev(entity))
-> > -			ret = pipeline_pm_power_one(entity, change);
-> > +	while (!ret && (pad = media_graph_walk_next(graph)))
-> > +		if (is_media_entity_v4l2_subdev(pad->entity))
-> > +			ret = pipeline_pm_power_one(pad->entity, change);
-> >  
-> >  	if (!ret)
-> >  		return ret;
-> >  
-> > -	media_graph_walk_start(graph, first->pads);
-> > +	media_graph_walk_start(graph, entity->pads);
-> >  
-> > -	while ((first = media_graph_walk_next(graph))
-> > -	       && first != entity)
-> > -		if (is_media_entity_v4l2_subdev(first))
-> > -			pipeline_pm_power_one(first, -change);
-> > +	while ((tmp_pad = media_graph_walk_next(graph)) && tmp_pad != pad)
-> > +		if (is_media_entity_v4l2_subdev(tmp_pad->entity))
-> > +			pipeline_pm_power_one(tmp_pad->entity, -change);
-> >  
-> >  	return ret;
-> >  }
-> > diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
-> > index 77bf1b8a56f7..9f3ff5a37d90 100644
-> > --- a/drivers/staging/media/omap4iss/iss_video.c
-> > +++ b/drivers/staging/media/omap4iss/iss_video.c
-> > @@ -206,8 +206,8 @@ static struct iss_video *
-> >  iss_video_far_end(struct iss_video *video)
-> >  {
-> >  	struct media_graph graph;
-> > -	struct media_entity *entity = &video->video.entity;
-> > -	struct media_device *mdev = entity->graph_obj.mdev;
-> > +	struct media_pad *pad = video->video.entity.pads;
-> > +	struct media_device *mdev = pad->entity->graph_obj.mdev;
-> >  	struct iss_video *far_end = NULL;
-> >  
-> >  	mutex_lock(&mdev->graph_mutex);
-> > @@ -217,16 +217,17 @@ iss_video_far_end(struct iss_video *video)
-> >  		return NULL;
-> >  	}
-> >  
-> > -	media_graph_walk_start(&graph, entity->pads);
-> > +	media_graph_walk_start(&graph, pad);
-> >  
-> > -	while ((entity = media_graph_walk_next(&graph))) {
-> > -		if (entity == &video->video.entity)
-> > +	while ((pad = media_graph_walk_next(&graph))) {
-> > +		if (pad->entity == &video->video.entity)
-> >  			continue;
-> >  
-> > -		if (!is_media_entity_v4l2_video_device(entity))
-> > +		if (!is_media_entity_v4l2_video_device(pad->entity))
-> >  			continue;
-> >  
-> > -		far_end = to_iss_video(media_entity_to_video_device(entity));
-> > +		far_end = to_iss_video(media_entity_to_video_device(
-> > +						pad->entity));
-> >  		if (far_end->type != video->type)
-> >  			break;
-> >  
-> > @@ -853,7 +854,7 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
-> >  	struct iss_video_fh *vfh = to_iss_video_fh(fh);
-> >  	struct iss_video *video = video_drvdata(file);
-> >  	struct media_graph graph;
-> > -	struct media_entity *entity = &video->video.entity;
-> > +	struct media_pad *pad = video->video.entity.pads;
-> >  	enum iss_pipeline_state state;
-> >  	struct iss_pipeline *pipe;
-> >  	struct iss_video *far_end;
-> > @@ -869,30 +870,31 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
-> >  	 * Start streaming on the pipeline. No link touching an entity in the
-> >  	 * pipeline can be activated or deactivated once streaming is started.
-> >  	 */
-> > -	pipe = entity->pipe
-> > -	     ? to_iss_pipeline(entity) : &video->pipe;
-> > +	pipe = pad->entity->pipe
-> > +	     ? to_iss_pipeline(pad->entity) : &video->pipe;
-> >  	pipe->external = NULL;
-> >  	pipe->external_rate = 0;
-> >  	pipe->external_bpp = 0;
-> >  
-> > -	ret = media_entity_enum_init(&pipe->ent_enum, entity->graph_obj.mdev);
-> > +	ret = media_entity_enum_init(&pipe->ent_enum,
-> > +				     pad->entity->graph_obj.mdev);
-> >  	if (ret)
-> >  		goto err_graph_walk_init;
-> >  
-> > -	ret = media_graph_walk_init(&graph, entity->graph_obj.mdev);
-> > +	ret = media_graph_walk_init(&graph, pad->entity->graph_obj.mdev);
-> >  	if (ret)
-> >  		goto err_graph_walk_init;
-> >  
-> >  	if (video->iss->pdata->set_constraints)
-> >  		video->iss->pdata->set_constraints(video->iss, true);
-> >  
-> > -	ret = media_pipeline_start(entity, &pipe->pipe);
-> > +	ret = media_pipeline_start(pad->entity, &pipe->pipe);
-> >  	if (ret < 0)
-> >  		goto err_media_pipeline_start;
-> >  
-> > -	media_graph_walk_start(&graph, entity->pads);
-> > -	while ((entity = media_graph_walk_next(&graph)))
-> > -		media_entity_enum_set(&pipe->ent_enum, entity);
-> > +	media_graph_walk_start(&graph, pad);
-> > +	while ((pad = media_graph_walk_next(&graph)))
-> > +		media_entity_enum_set(&pipe->ent_enum, pad->entity);
-> >  
-> >  	/*
-> >  	 * Verify that the currently configured format matches the output of
-> > diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-> > index 97b170cf38eb..2d45344ca527 100644
-> > --- a/include/media/media-entity.h
-> > +++ b/include/media/media-entity.h
-> > @@ -921,10 +921,11 @@ void media_graph_walk_start(struct media_graph *graph, struct media_pad *pad);
-> >   * The graph structure must have been previously initialized with a call to
-> >   * media_graph_walk_start().
-> >   *
-> > - * Return: returns the next entity in the graph or %NULL if the whole graph
-> > - * have been traversed.
-> > + * Return: returns the next pad in the graph or %NULL if the whole
-> > + * graph have been traversed. The pad which is returned is the pad
-> > + * through which a new entity is reached when parsing the graph.
-> 
-> "next pad in the graph" is a bit confusing. The next sentence clarifies
-> it, but maybe we can do better:
-> 
->  * Return: returns the next entity in the graph, identified by the pad through
->  * which it has been reached. If the whole graph has been traversed, return
->  * %NULL.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Thanks!
-
-> 
-> >   */
-> > -struct media_entity *media_graph_walk_next(struct media_graph *graph);
-> > +struct media_pad *media_graph_walk_next(struct media_graph *graph);
-> >  
-> >  /**
-> >   * media_pipeline_start - Mark a pipeline as streaming
-> 
-
--- 
 Regards,
 
-Sakari Ailus
+	Hans
+
+> 
+> Regards,
+> Benjamin
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+
