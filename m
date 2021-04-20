@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 460A6C43470
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DD1C43462
 	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11597613C0
+	by mail.kernel.org (Postfix) with ESMTP id 7A818613C2
 	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbhDTMFv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232143AbhDTMFv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 20 Apr 2021 08:05:51 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:57972 "EHLO
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57980 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbhDTMFr (ORCPT
+        with ESMTP id S232118AbhDTMFt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 08:05:47 -0400
+        Tue, 20 Apr 2021 08:05:49 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0631C8AD;
-        Tue, 20 Apr 2021 14:05:14 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2EC0BE2E;
+        Tue, 20 Apr 2021 14:05:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618920315;
-        bh=a0F7GnXLHhYxK2/Wer+Z5NQTXkV30q8gWPVazU9DmK8=;
+        s=mail; t=1618920317;
+        bh=/gkVBS+9GUyxhBELfwBEuZ0OXe28THzi7so3Rwk9D+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rts2DHbML26eFH5EJ1AjB8edRYniiax4UWvKYK+fqlNLiyyDLVEfjoyIEDisy4+f/
-         LwcHuk4yUr5ND56t4ENxgifBeep5EAFZQsA2aIsp1jG4jCCRKJLrx53Qa9zf43Hnig
-         yDfT4vWyaBX1ND8lvuM3HT4t2yTOCcbWPnc1N2QI=
+        b=hICP+J02npJSKfkmHmgPn/XdvD7uyC0p7MqWS8gvmiljdjnpkr/NBTtnM6h70ZpBB
+         r/ojqIGQaOiZfXGFCLu9kzU+iqex/XOczxJItiYISNDCWjcQdYDQfut6aGPaCsmUfe
+         dTQJ5UBwGAIhCoc6DqCCnUKct/XXleeua/hG8Fts=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Benoit Parrot <bparrot@ti.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v2 06/35] media: ti-vpe: cal: use v4l2_get_link_freq
-Date:   Tue, 20 Apr 2021 15:04:04 +0300
-Message-Id: <20210420120433.902394-7-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 09/35] media: ti-vpe: cal: Add CSI2 context
+Date:   Tue, 20 Apr 2021 15:04:07 +0300
+Message-Id: <20210420120433.902394-10-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210420120433.902394-1-tomi.valkeinen@ideasonboard.com>
 References: <20210420120433.902394-1-tomi.valkeinen@ideasonboard.com>
@@ -48,123 +48,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CAL driver uses V4L2_CID_PIXEL_RATE to get the required pixel rate, and
-then changes that value to link rate before configuring the registers.
+CAL has 8 CSI2 contexts per PHY, which are used to tag the incoming
+data.  The current driver only uses the first context, but we need to
+support all of them to implement multi-stream support.
 
-Rewrite the code to use v4l2_get_link_freq(), which simplifies the code
-as we get the link rate directly, and it also adds support for
-V4L2_CID_LINK_FREQ.
+Add a csi2_ctx field to cal_ctx, which indicates which of the 8 CSI2
+contexts is used for the particular cal_ctx. Also clean up the context
+register macros to take the CSI2 context number as a parameter.
+
+Note that before this patch the CSI2 context used for both PHYs was
+always 0. This patch always uses cal_ctx index number as the CSI2
+context. There is no functional difference, but this approach will work
+also in the future when we use more than 1 CSI2 context per PHY.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal-camerarx.c | 52 +++++++-------------
- 1 file changed, 19 insertions(+), 33 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c      | 10 ++++++----
+ drivers/media/platform/ti-vpe/cal.h      |  1 +
+ drivers/media/platform/ti-vpe/cal_regs.h | 18 ++----------------
+ 3 files changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
-index 988a01529dbc..9591a0c8a215 100644
---- a/drivers/media/platform/ti-vpe/cal-camerarx.c
-+++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
-@@ -45,22 +45,23 @@ static inline void camerarx_write(struct cal_camerarx *phy, u32 offset, u32 val)
-  * ------------------------------------------------------------------
-  */
- 
--static s64 cal_camerarx_get_external_rate(struct cal_camerarx *phy)
-+static s64 cal_camerarx_get_ext_link_freq(struct cal_camerarx *phy)
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index 6d6dce8001b2..98739f9200ff 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -294,7 +294,7 @@ static void cal_ctx_csi2_config(struct cal_ctx *ctx)
  {
--	struct v4l2_ctrl *ctrl;
--	s64 rate;
-+	struct v4l2_fwnode_bus_mipi_csi2 *mipi_csi2 = &phy->endpoint.bus.mipi_csi2;
-+	u32 num_lanes = mipi_csi2->num_data_lanes;
-+	u32 bpp = phy->fmtinfo->bpp;
-+	s64 freq;
+ 	u32 val;
  
--	ctrl = v4l2_ctrl_find(phy->source->ctrl_handler, V4L2_CID_PIXEL_RATE);
--	if (!ctrl) {
--		phy_err(phy, "no pixel rate control in subdev: %s\n",
-+	freq = v4l2_get_link_freq(phy->source->ctrl_handler, bpp, 2 * num_lanes);
-+	if (freq < 0) {
-+		phy_err(phy, "failed to get link freq for subdev '%s'\n",
- 			phy->source->name);
--		return -EPIPE;
-+		return freq;
- 	}
- 
--	rate = v4l2_ctrl_g_ctrl_int64(ctrl);
--	phy_dbg(3, phy, "Source Pixel Rate: %llu\n", rate);
-+	phy_dbg(3, phy, "Source Link Freq: %llu\n", freq);
- 
--	return rate;
-+	return freq;
+-	val = cal_read(ctx->cal, CAL_CSI2_CTX0(ctx->index));
++	val = cal_read(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx));
+ 	cal_set_field(&val, ctx->cport, CAL_CSI2_CTX_CPORT_MASK);
+ 	/*
+ 	 * DT type: MIPI CSI-2 Specs
+@@ -310,9 +310,10 @@ static void cal_ctx_csi2_config(struct cal_ctx *ctx)
+ 	cal_set_field(&val, CAL_CSI2_CTX_ATT_PIX, CAL_CSI2_CTX_ATT_MASK);
+ 	cal_set_field(&val, CAL_CSI2_CTX_PACK_MODE_LINE,
+ 		      CAL_CSI2_CTX_PACK_MODE_MASK);
+-	cal_write(ctx->cal, CAL_CSI2_CTX0(ctx->index), val);
+-	ctx_dbg(3, ctx, "CAL_CSI2_CTX0(%d) = 0x%08x\n", ctx->index,
+-		cal_read(ctx->cal, CAL_CSI2_CTX0(ctx->index)));
++	cal_write(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx), val);
++	ctx_dbg(3, ctx, "CAL_CSI2_CTX(%u, %u) = 0x%08x\n",
++		ctx->phy->instance, ctx->csi2_ctx,
++		cal_read(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx)));
  }
  
- static void cal_camerarx_lane_config(struct cal_camerarx *phy)
-@@ -116,34 +117,19 @@ void cal_camerarx_disable(struct cal_camerarx *phy)
- #define TCLK_MISS	1
- #define TCLK_SETTLE	14
+ static void cal_ctx_pix_proc_config(struct cal_ctx *ctx)
+@@ -854,6 +855,7 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
+ 	ctx->cal = cal;
+ 	ctx->phy = cal->phy[inst];
+ 	ctx->index = inst;
++	ctx->csi2_ctx = inst;
+ 	ctx->cport = inst;
  
--static void cal_camerarx_config(struct cal_camerarx *phy, s64 external_rate)
-+static void cal_camerarx_config(struct cal_camerarx *phy, s64 link_freq)
- {
- 	unsigned int reg0, reg1;
- 	unsigned int ths_term, ths_settle;
--	unsigned int csi2_ddrclk_khz;
--	struct v4l2_fwnode_bus_mipi_csi2 *mipi_csi2 =
--			&phy->endpoint.bus.mipi_csi2;
--	u32 num_lanes = mipi_csi2->num_data_lanes;
+ 	ret = cal_ctx_v4l2_init(ctx);
+diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
+index 251bb0ba7b3b..bcc3378b6b41 100644
+--- a/drivers/media/platform/ti-vpe/cal.h
++++ b/drivers/media/platform/ti-vpe/cal.h
+@@ -219,6 +219,7 @@ struct cal_ctx {
+ 	struct vb2_queue	vb_vidq;
+ 	u8			index;
+ 	u8			cport;
++	u8			csi2_ctx;
+ };
  
- 	/* DPHY timing configuration */
+ extern unsigned int cal_debug;
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
+index f752096dcf7f..bf937919a1e9 100644
+--- a/drivers/media/platform/ti-vpe/cal_regs.h
++++ b/drivers/media/platform/ti-vpe/cal_regs.h
+@@ -72,22 +72,8 @@
+ #define CAL_CSI2_TIMING(m)		(0x314U + (m) * 0x80U)
+ #define CAL_CSI2_VC_IRQENABLE(m)	(0x318U + (m) * 0x80U)
+ #define CAL_CSI2_VC_IRQSTATUS(m)	(0x328U + (m) * 0x80U)
+-#define CAL_CSI2_CTX0(m)		(0x330U + (m) * 0x80U)
+-#define CAL_CSI2_CTX1(m)		(0x334U + (m) * 0x80U)
+-#define CAL_CSI2_CTX2(m)		(0x338U + (m) * 0x80U)
+-#define CAL_CSI2_CTX3(m)		(0x33cU + (m) * 0x80U)
+-#define CAL_CSI2_CTX4(m)		(0x340U + (m) * 0x80U)
+-#define CAL_CSI2_CTX5(m)		(0x344U + (m) * 0x80U)
+-#define CAL_CSI2_CTX6(m)		(0x348U + (m) * 0x80U)
+-#define CAL_CSI2_CTX7(m)		(0x34cU + (m) * 0x80U)
+-#define CAL_CSI2_STATUS0(m)		(0x350U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS1(m)		(0x354U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS2(m)		(0x358U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS3(m)		(0x35cU + (m) * 0x80U)
+-#define CAL_CSI2_STATUS4(m)		(0x360U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS5(m)		(0x364U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS6(m)		(0x368U + (m) * 0x80U)
+-#define CAL_CSI2_STATUS7(m)		(0x36cU + (m) * 0x80U)
++#define CAL_CSI2_CTX(phy, csi2_ctx)	(0x330U + (phy) * 0x80U + (csi2_ctx) * 4)
++#define CAL_CSI2_STATUS(phy, csi2_ctx)	(0x350U + (phy) * 0x80U + (csi2_ctx) * 4)
  
--	/*
--	 * CSI-2 is DDR and we only count used lanes.
--	 *
--	 * csi2_ddrclk_khz = external_rate / 1000
--	 *		   / (2 * num_lanes) * phy->fmtinfo->bpp;
--	 */
--	csi2_ddrclk_khz = div_s64(external_rate * phy->fmtinfo->bpp,
--				  2 * num_lanes * 1000);
--
--	phy_dbg(1, phy, "csi2_ddrclk_khz: %d\n", csi2_ddrclk_khz);
--
- 	/* THS_TERM: Programmed value = floor(20 ns/DDRClk period) */
--	ths_term = 20 * csi2_ddrclk_khz / 1000000;
-+	ths_term = div_s64(20 * link_freq, 1000 * 1000 * 1000);
- 	phy_dbg(1, phy, "ths_term: %d (0x%02x)\n", ths_term, ths_term);
- 
- 	/* THS_SETTLE: Programmed value = floor(105 ns/DDRClk period) + 4 */
--	ths_settle = (105 * csi2_ddrclk_khz / 1000000) + 4;
-+	ths_settle = div_s64(105 * link_freq, 1000 * 1000 * 1000) + 4;
- 	phy_dbg(1, phy, "ths_settle: %d (0x%02x)\n", ths_settle, ths_settle);
- 
- 	reg0 = camerarx_read(phy, CAL_CSI2_PHY_REG0);
-@@ -270,14 +256,14 @@ static void cal_camerarx_ppi_disable(struct cal_camerarx *phy)
- 
- static int cal_camerarx_start(struct cal_camerarx *phy)
- {
--	s64 external_rate;
-+	s64 link_freq;
- 	u32 sscounter;
- 	u32 val;
- 	int ret;
- 
--	external_rate = cal_camerarx_get_external_rate(phy);
--	if (external_rate < 0)
--		return external_rate;
-+	link_freq = cal_camerarx_get_ext_link_freq(phy);
-+	if (link_freq < 0)
-+		return link_freq;
- 
- 	ret = v4l2_subdev_call(phy->source, core, s_power, 1);
- 	if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV) {
-@@ -325,7 +311,7 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
- 	camerarx_read(phy, CAL_CSI2_PHY_REG0);
- 
- 	/* Program the PHY timing parameters. */
--	cal_camerarx_config(phy, external_rate);
-+	cal_camerarx_config(phy, link_freq);
- 
- 	/*
- 	 *    b. Assert the FORCERXMODE signal.
+ /* CAL CSI2 PHY register offsets */
+ #define CAL_CSI2_PHY_REG0		0x000
 -- 
 2.25.1
 
