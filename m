@@ -2,80 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F298C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBCFC433ED
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:57:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45B9F61354
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:51:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0B626139A
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 10:57:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbhDTKvi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 06:51:38 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48632 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbhDTKvC (ORCPT
+        id S231654AbhDTK5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 06:57:49 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:2136 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231535AbhDTK5r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 06:51:02 -0400
-Received: from [192.168.1.111] (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E9AB5470;
-        Tue, 20 Apr 2021 12:50:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618915829;
-        bh=6bdJ4DAkZ4X0Wr1m3FVHsd/9z2mAHvApsyLbmE0rmzg=;
-        h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
-        b=T0zmpmWPOqingkK3C6M5BlVXEBTTKq4ANvaI2Lof8gJbuxwAThSi5+uJBOnDXaPjJ
-         fRO0WRkNchpzJFlIhojtaT7nDEW2W7YM0R4jKiX2+n6+D318gp+yqgLyZX5T0WKo6C
-         qk20U43oJYS04Qt5k31w/jqH7eJZpPMeTScv5WG8=
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Benoit Parrot <bparrot@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
-References: <20210412113457.328012-1-tomi.valkeinen@ideasonboard.com>
- <20210412113457.328012-22-tomi.valkeinen@ideasonboard.com>
- <YHwvfL885Qm0iD0/@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH 21/28] media: ti-vpe: cal: fix cal_ctx_v4l2_register error
- handling
-Message-ID: <8fb0ee37-236e-3eaa-9e82-0d9bb8c94c39@ideasonboard.com>
-Date:   Tue, 20 Apr 2021 13:50:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Tue, 20 Apr 2021 06:57:47 -0400
+X-Greylist: delayed 1747 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Apr 2021 06:57:47 EDT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13KARIRk031344;
+        Tue, 20 Apr 2021 10:28:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=CBC0ziPweSVN+s576SbWo6o6RPOr+hWP6QgYWwVJdhc=;
+ b=m42z1RaUhhvl+HnWHNt/YeF7dHLlr9NgCJSFcLpVEY/Lvi9yNq7luAIX5OEvc8Q7onvh
+ WftN37mj6rbCfkMskYdz8kc/Jn/OG0abTEMvuMHJZBW5mhiDYeCRpuxPBrsoDHH6TJNN
+ x0LsF635NNDIBcXRbukPIGbxIsA+WnrHou1lHiW4kWN0lqq+0NCTwAucKbhZNXmuXAOY
+ dJRvQKomFbHq9G5DjhLwR/DJIfcI6G9DIL2mYwWgFTFiuBdjW+6r6a68GYHmW/GUSDE1
+ Jb4YfCZ4mraXTDhAnOsHyP/pc0D2NCcxEAZd55qpB14LNRQNOWE7FWP8b17TyiyQw0KE yQ== 
+Received: from oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 381tw0g0u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Apr 2021 10:28:00 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.podrdrct (8.16.0.36/8.16.0.36) with SMTP id 13KARxA3009216;
+        Tue, 20 Apr 2021 10:27:59 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3809esdbpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Apr 2021 10:27:59 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 13KARxL0009161;
+        Tue, 20 Apr 2021 10:27:59 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 3809esdbns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Apr 2021 10:27:59 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 13KARtpk017675;
+        Tue, 20 Apr 2021 10:27:56 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 20 Apr 2021 10:27:55 +0000
+Date:   Tue, 20 Apr 2021 13:27:47 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "'Mauro Carvalho Chehab'" <mchehab@kernel.org>,
+        Ashish Kalra <eashishkalra@gmail.com>,
+        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] media: atomisp: silence "dubious: !x | !y" warning
+Message-ID: <20210420102747.GB1981@kadam>
+References: <20210417153627.GA50228@ashish-NUC8i5BEH>
+ <20210417205613.5c1aac74@coco.lan>
+ <509f019decae433cab6cb367cdfa6fa9@AcuMS.aculab.com>
 MIME-Version: 1.0
-In-Reply-To: <YHwvfL885Qm0iD0/@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <509f019decae433cab6cb367cdfa6fa9@AcuMS.aculab.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-GUID: ajAyLqlxgs9JqJzgjE3NUwOO8J1tKu7X
+X-Proofpoint-ORIG-GUID: ajAyLqlxgs9JqJzgjE3NUwOO8J1tKu7X
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 18/04/2021 16:09, Laurent Pinchart wrote:
-> Hi Tomi,
+On Sat, Apr 17, 2021 at 09:31:32PM +0000, David Laight wrote:
+> From: Mauro Carvalho Chehab
+> > Sent: 17 April 2021 19:56
+> > 
+> > Em Sat, 17 Apr 2021 21:06:27 +0530
+> > Ashish Kalra <eashishkalra@gmail.com> escreveu:
+> > 
+> > > Upon running sparse, "warning: dubious: !x | !y" is brought to notice
+> > > for this file.  Logical and bitwise OR are basically the same in this
+> > > context so it doesn't cause a runtime bug.  But let's change it to
+> > > logical OR to make it cleaner and silence the Sparse warning.
 > 
-> Thank you for the patch.
+> The old code is very likely to by slightly more efficient.
 > 
-> On Mon, Apr 12, 2021 at 02:34:50PM +0300, Tomi Valkeinen wrote:
->> cal_ctx_v4l2_register() returns an error code, but the returned error
->> code is not handled anywhere. However, we can't really even handle the
->> error in any proper way, so lets just drop the return value and make
->> sure all error paths have an error print.
+> It may not matter here, but it might in a really hot path.
 > 
-> Ouch. Doesn't this call for registering the video node earlier, at probe
-> time, instead of in the async notifier complete callback ?
+> Since !x | !y and !x || !y always have the same value
+> why is sparse complaining at all.
+> 
 
-Shouldn't we only register uAPI access points after the kernel has 
-probed (succesfully) the hardware? If we register the video nodes at 
-probe time I presume we would have to add checks to all the cal ioctl 
-handlers to check if we have actually probed.
+Smatch doesn't warn about | vs || if both sides are true/false.  But
+I've occasionally asked people if they were trying to do a fast path
+optimization but it's always just a typo.
 
-v4l2_async_notifier_operations.complete can return an error, but it's 
-not quite clear to me what happens in that case and how the driver 
-should handle it.
+regards,
+dan carpenter
 
-I'll look at this a bit, maybe it's still better to handle the error in 
-complete callback and return the error from there, than ignoring the error.
-
-  Tomi
