@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64211C4360C
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2BEC43619
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27EB5613C2
-	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D128C61042
+	for <linux-media@archiver.kernel.org>; Tue, 20 Apr 2021 12:05:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbhDTMGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Apr 2021 08:06:07 -0400
+        id S232303AbhDTMGI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Apr 2021 08:06:08 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:57972 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbhDTMGF (ORCPT
+        with ESMTP id S232280AbhDTMGH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Apr 2021 08:06:05 -0400
+        Tue, 20 Apr 2021 08:06:07 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 765451172;
-        Tue, 20 Apr 2021 14:05:33 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 20E471936;
+        Tue, 20 Apr 2021 14:05:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1618920334;
-        bh=JMqTxdqAEL5s0SuX1mVd1lO4f5hjG2E5UIlIIW4lpA0=;
+        s=mail; t=1618920335;
+        bh=ZRnFcyznewzTYa2G76kxRYpPz0zu1LU5m/yJTK03JMQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pPcrqbZM6p8Af21NX2YQAdMsyg+5EAZezTIZBGse1GWubp8ye4MEQOBV+gjR9gfuy
-         iTLBLeBnq3gyv2RPDfMbHSpMubEwO7aycBiez5yYsa7O0kfkYkcE84SW3sg/Z6Js1D
-         14WM1HYGIn/OvdBnxEV80i9SE2QuO2qRZOoM/G/k=
+        b=Pfe0IsTr+RbeBDxvUQyKz6tIc7S8pYoE77KObb7vu3MI3s+fWggGnlURYSfD1DtXX
+         4NYG48DJ9ODQo19HrTQmW4mjw+v73neTd0GxCNiy9FGl/xtwJjb5jg7Otl4+wVnOY7
+         SK5Fqz7SU6YSkD8LIIehED7vjxSGYDMuyjJ9vKrQ=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Benoit Parrot <bparrot@ti.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v2 32/35] media: ti-vpe: cal: use CSI-2 frame number
-Date:   Tue, 20 Apr 2021 15:04:30 +0300
-Message-Id: <20210420120433.902394-33-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 34/35] media: ti-vpe: cal: add camerarx enable/disable refcounting
+Date:   Tue, 20 Apr 2021 15:04:32 +0300
+Message-Id: <20210420120433.902394-35-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210420120433.902394-1-tomi.valkeinen@ideasonboard.com>
 References: <20210420120433.902394-1-tomi.valkeinen@ideasonboard.com>
@@ -48,61 +48,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver fills buf->vb.sequence with an increasing number which is
-incremented by the driver. This feels a bit pointless, as the userspace
-could as well track that kind of number itself. Instead, lets use the
-frame number provided in the CSI-2 data from the sensor.
+The following patches add multistream support and we will have multiple
+video devices using the same camerarx instances. Thus we need
+enable/disable refcounting for the camerarx.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 7 +++++--
- drivers/media/platform/ti-vpe/cal.h | 1 -
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 10 ++++++++++
+ drivers/media/platform/ti-vpe/cal.h          |  2 ++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 888706187fd1..62c45add4efe 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -493,7 +493,6 @@ void cal_ctx_unprepare(struct cal_ctx *ctx)
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index 6f3d44d529b0..885946ae1140 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -285,6 +285,11 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
+ 	u32 val;
+ 	int ret;
  
- void cal_ctx_start(struct cal_ctx *ctx)
- {
--	ctx->sequence = 0;
- 	ctx->dma.state = CAL_DMA_RUNNING;
- 
- 	/* Configure the CSI-2, pixel processing and write DMA contexts. */
-@@ -586,6 +585,10 @@ static inline void cal_irq_wdma_start(struct cal_ctx *ctx)
- static inline void cal_irq_wdma_end(struct cal_ctx *ctx)
- {
- 	struct cal_buffer *buf = NULL;
-+	u32 frame_num;
++	if (phy->enable_count > 0) {
++		phy->enable_count++;
++		return 0;
++	}
 +
-+	frame_num = cal_read(ctx->cal, CAL_CSI2_STATUS(ctx->phy->instance,
-+						       ctx->csi2_ctx)) & 0xffff;
+ 	link_freq = cal_camerarx_get_ext_link_freq(phy);
+ 	if (link_freq < 0)
+ 		return link_freq;
+@@ -409,6 +414,8 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
+ 	/* Finally, enable the PHY Protocol Interface (PPI). */
+ 	cal_camerarx_ppi_enable(phy);
  
- 	spin_lock(&ctx->dma.lock);
- 
-@@ -607,7 +610,7 @@ static inline void cal_irq_wdma_end(struct cal_ctx *ctx)
- 	if (buf) {
- 		buf->vb.vb2_buf.timestamp = ktime_get_ns();
- 		buf->vb.field = ctx->v_fmt.fmt.pix.field;
--		buf->vb.sequence = ctx->sequence++;
-+		buf->vb.sequence = frame_num;
- 		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
- 	}
++	phy->enable_count++;
++
+ 	return 0;
  }
+ 
+@@ -416,6 +423,9 @@ static void cal_camerarx_stop(struct cal_camerarx *phy)
+ {
+ 	int ret;
+ 
++	if (--phy->enable_count > 0)
++		return;
++
+ 	cal_camerarx_ppi_disable(phy);
+ 
+ 	cal_camerarx_disable_irqs(phy);
 diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index 400f95485d7c..ad08c189ad3b 100644
+index 78bd2e041d9a..8608a2c6c01a 100644
 --- a/drivers/media/platform/ti-vpe/cal.h
 +++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -217,7 +217,6 @@ struct cal_ctx {
- 	const struct cal_format_info	**active_fmt;
- 	unsigned int		num_active_fmt;
+@@ -166,6 +166,8 @@ struct cal_camerarx {
  
--	unsigned int		sequence;
- 	struct vb2_queue	vb_vidq;
- 	u8			dma_ctx;
- 	u8			cport;
+ 	/* mutex for camerarx ops */
+ 	struct mutex		mutex;
++
++	unsigned int enable_count;
+ };
+ 
+ struct cal_dev {
 -- 
 2.25.1
 
