@@ -2,67 +2,67 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF3FC433B4
-	for <linux-media@archiver.kernel.org>; Wed, 21 Apr 2021 07:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 732D1C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 21 Apr 2021 07:20:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9873E61427
-	for <linux-media@archiver.kernel.org>; Wed, 21 Apr 2021 07:20:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57B9E61432
+	for <linux-media@archiver.kernel.org>; Wed, 21 Apr 2021 07:20:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236735AbhDUHVP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Apr 2021 03:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S236756AbhDUHVQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Apr 2021 03:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235548AbhDUHVO (ORCPT
+        with ESMTP id S236727AbhDUHVP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Apr 2021 03:21:14 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5F5C06174A
-        for <linux-media@vger.kernel.org>; Wed, 21 Apr 2021 00:20:41 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id y32so28914815pga.11
-        for <linux-media@vger.kernel.org>; Wed, 21 Apr 2021 00:20:41 -0700 (PDT)
+        Wed, 21 Apr 2021 03:21:15 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEB2C06174A
+        for <linux-media@vger.kernel.org>; Wed, 21 Apr 2021 00:20:42 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id v13so7532003ple.9
+        for <linux-media@vger.kernel.org>; Wed, 21 Apr 2021 00:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=PJ/S/k3FWC2OeQ4AWPZOkhr9dS9J8DY0WyKmH92BPIk=;
-        b=Yz2yAUt2dbiDAjVdKcZyr0rOkSZk7EfeRuZjXhl0bDX169BvXAzbUxY4Jj1jxZxvV5
-         85Yuilr3NUYf6yF6ACJUkH9RjjsA1sc9CXAqAfO9kjRQjMt1VLX0ZHT7+4E+y0BiSbWj
-         /WgMMfPAfg7NNHD9jUv1JmW8PBZWHSqT8gViBnFy0yYB8YukoGgLJT+0NaDyBrxAsGn4
-         E7nSS8pE0sCVj1tUbmb8T10zlisDHCyYQQQAhFAwhVDhMieCo93cxVey3jxLZt95ZWm4
-         wtOh0PydKVruaeEa1TmuJxQtA36dwZmjuFc62LP+yjUyvJTnh9YliOkydS8d0dPw/Fyu
-         Jiuw==
+        bh=L9QNhOfkitg4jDlWiEN6PC85EXYAfGnClF8IkWPpAEc=;
+        b=JtO5Rjwa8cbD+86EiUiucsmouoE4e1h48R9l9krY0A0ccAJjlU8MQ6GwLuS5FXS5Rd
+         4/JW0/I7nbt2E49KJvTyYmqHHLATL4zEOxRPGIEXtXlGpr8f4BIWVHNr/7VNZGcRgeO0
+         ZcqGVbogkXLHMgbhm3IV6Q/QqtJcZfxhmdAADJ4U4kHtISIpTMigqSwFV1iZ0/a6z0/3
+         SAEbzbu9pa0WX+tPu8oGNVo3WC91FFtqnM/zeNOGhSmRuQOw9fCUjyylUShFiQjhLnyG
+         p/G/bRA55gPC94AC7ig7ZAV6jSZjntJMxrjqCC1fa+cnFOHwlhsSCDOJ6tBt2LuhTYHw
+         VsTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PJ/S/k3FWC2OeQ4AWPZOkhr9dS9J8DY0WyKmH92BPIk=;
-        b=FLc5F9FB4CZHrg0wdZC+mDT5DgmsGKtRICUyJyWEDpZXvrM36fBV9Vu7jHa0QhGSOp
-         +Fk6yUbE/aHXUlnNqSo3AsfA4zg9Msded8VyOhHdUN0DNw2f8nEflWduNxt8NoNoZeCw
-         75ckyVuLMtAJLdbLjKqPX5OFtmb/kHaWn1c5nquxUktcDsSj/dBmZapeKqOFTYUr5AF8
-         eZWmPj33vKWf161DC4Coyb6SsCfsC1wnXiavQ7aO07NLIRV8D33fAvB+xiRaNzNKnknw
-         eKdADV4/9L0cg5AokmwuC0OQ7dchGzSCW122fEgIdxA5tCnFO/pTpkCj89FXsqLPTSMX
-         3IFQ==
-X-Gm-Message-State: AOAM531YOV1J2E0YjekrYegbTXAjgxsQ3nbTuZdD3yXLW9nGjNLAoLoj
-        5GxQxkiXlJnuNezawYIMGgxGQlzsp+8gzA==
-X-Google-Smtp-Source: ABdhPJzszYsazpVKpjg6+/GMxk902Qwt6qr9Bap/1RCtxaVcNoTshn6yn2J7F2KYtVQzCW7RQdzfbQ==
-X-Received: by 2002:a63:556:: with SMTP id 83mr20282469pgf.188.1618989640455;
-        Wed, 21 Apr 2021 00:20:40 -0700 (PDT)
+        bh=L9QNhOfkitg4jDlWiEN6PC85EXYAfGnClF8IkWPpAEc=;
+        b=MscTFaQoH2BJa5igXd+FV4NDAL8sBkva8KmM1Ibd0g3K3Weu/dp0r5wPAkuDYBje0P
+         dEOI8dS/EKyJbhmZPAaQPuS5D45Wg/asZgOitm7NF1D7ODsvGqyazd5jFElu60ry7tAb
+         siOAL/ZARdbn7T1QMLKKwkFoo0/08kHtRs4reBOHej7dakkdU7qutd+03wGC40esh4/7
+         xxdcy2yDYa8Vp1dERFdrqTUpOmQ+iXCKIOjgzBaBJxS9cjOmI3GINW1aBIVYa/ySHGXk
+         O8SWqXV8+JA5I0j/CmjW5+9ZXmYQ+oNjBh18cDx6jy5VWl/9oCFcfSeMuANtwVfTvKRS
+         ntQQ==
+X-Gm-Message-State: AOAM532vMmacMxD6EEecECJhUsjcmAyQW0ZK5p2+nlh/a+WcE9rxCzZB
+        vhDU642dWdBBNq7tZc4zKjMBnTS0v0q+pA==
+X-Google-Smtp-Source: ABdhPJwNVyEHbvFCHMgjGMgAlaUgy0mO4EgOWZBUy3Ku0Wub67Czc9o3Amjv0kkg9sOpI/mTmoKsAA==
+X-Received: by 2002:a17:902:6b81:b029:ea:dcc5:b841 with SMTP id p1-20020a1709026b81b02900eadcc5b841mr32379710plk.29.1618989641991;
+        Wed, 21 Apr 2021 00:20:41 -0700 (PDT)
 Received: from mangix-trapnet.lan ([2001:470:1f05:79e::a89])
-        by smtp.gmail.com with ESMTPSA id p10sm907815pfo.210.2021.04.21.00.20.39
+        by smtp.gmail.com with ESMTPSA id p10sm907815pfo.210.2021.04.21.00.20.41
         for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 00:20:39 -0700 (PDT)
+        Wed, 21 Apr 2021 00:20:41 -0700 (PDT)
 From:   Rosen Penev <rosenp@gmail.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 5/8] v4l2-info: remove a strange sizeof usage
-Date:   Wed, 21 Apr 2021 00:20:32 -0700
-Message-Id: <20210421072035.4188497-5-rosenp@gmail.com>
+Subject: [PATCH 7/8] v4l2-utils: turn mbus_names into const vector
+Date:   Wed, 21 Apr 2021 00:20:34 -0700
+Message-Id: <20210421072035.4188497-7-rosenp@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210421072035.4188497-1-rosenp@gmail.com>
 References: <20210421072035.4188497-1-rosenp@gmail.com>
@@ -72,75 +72,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The array has a nullptr and 0 member for some reason. Remove and convert
-loop to a for range one.
+Allows usage of a more standard for loop.
 
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- utils/common/v4l2-info.cpp | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
+ utils/v4l2-ctl/v4l2-ctl-subdev.cpp | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/utils/common/v4l2-info.cpp b/utils/common/v4l2-info.cpp
-index cb3cb91f7..0359cf137 100644
---- a/utils/common/v4l2-info.cpp
-+++ b/utils/common/v4l2-info.cpp
-@@ -3,6 +3,8 @@
-  * Copyright 2018 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
-  */
- 
-+#include <array>
+diff --git a/utils/v4l2-ctl/v4l2-ctl-subdev.cpp b/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
+index d0f391bba..f2be9442c 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
+@@ -1,3 +1,5 @@
++#include <vector>
 +
- #include <v4l2-info.h>
+ #include "v4l2-ctl.h"
  
- static std::string num2s(unsigned num, bool is_hex = true)
-@@ -411,21 +413,20 @@ std::string mbus2s(unsigned flags, bool is_hsv)
- 	return flags2s(flags, mbus_ycbcr_def);
- }
- 
--static const flag_def selection_targets_def[] = {
--	{ V4L2_SEL_TGT_CROP_ACTIVE, "crop" },
--	{ V4L2_SEL_TGT_CROP_DEFAULT, "crop_default" },
--	{ V4L2_SEL_TGT_CROP_BOUNDS, "crop_bounds" },
--	{ V4L2_SEL_TGT_COMPOSE_ACTIVE, "compose" },
--	{ V4L2_SEL_TGT_COMPOSE_DEFAULT, "compose_default" },
--	{ V4L2_SEL_TGT_COMPOSE_BOUNDS, "compose_bounds" },
--	{ V4L2_SEL_TGT_COMPOSE_PADDED, "compose_padded" },
--	{ V4L2_SEL_TGT_NATIVE_SIZE, "native_size" },
--	{ 0, nullptr }
-+static constexpr std::array<flag_def, 8> selection_targets_def{
-+	flag_def{ V4L2_SEL_TGT_CROP_ACTIVE, "crop" },
-+	flag_def{ V4L2_SEL_TGT_CROP_DEFAULT, "crop_default" },
-+	flag_def{ V4L2_SEL_TGT_CROP_BOUNDS, "crop_bounds" },
-+	flag_def{ V4L2_SEL_TGT_COMPOSE_ACTIVE, "compose" },
-+	flag_def{ V4L2_SEL_TGT_COMPOSE_DEFAULT, "compose_default" },
-+	flag_def{ V4L2_SEL_TGT_COMPOSE_BOUNDS, "compose_bounds" },
-+	flag_def{ V4L2_SEL_TGT_COMPOSE_PADDED, "compose_padded" },
-+	flag_def{ V4L2_SEL_TGT_NATIVE_SIZE, "native_size" },
+ struct mbus_name {
+@@ -5,10 +7,9 @@ struct mbus_name {
+ 	__u32 code;
  };
  
- bool valid_seltarget_at_idx(unsigned i)
- {
--	return i < sizeof(selection_targets_def) / sizeof(selection_targets_def[0]) - 1;
-+	return i < selection_targets_def.size();
- }
+-static struct mbus_name mbus_names[] = {
++static const std::vector<mbus_name> mbus_names{
+ 	{ "Fixed", MEDIA_BUS_FMT_FIXED },
+ #include "media-bus-format-names.h"
+-	{ nullptr, 0 }
+ };
  
- unsigned seltarget_at_idx(unsigned i)
-@@ -437,13 +438,9 @@ unsigned seltarget_at_idx(unsigned i)
- 
- std::string seltarget2s(__u32 target)
+ /* selection specified */
+@@ -343,9 +344,9 @@ static void print_framefmt(const struct v4l2_mbus_framefmt &fmt)
  {
--	int i = 0;
--
--	while (selection_targets_def[i].str != nullptr) {
--		if (selection_targets_def[i].flag == target)
--			return selection_targets_def[i].str;
--		i++;
--	}
-+	for (const auto &def : selection_targets_def)
-+		if (def.flag == target)
-+			return def.str;
- 	return std::string("Unknown (") + num2s(target) + ")";
- }
+ 	__u32 colsp = fmt.colorspace;
+ 	__u32 ycbcr_enc = fmt.ycbcr_enc;
+-	unsigned int i;
++	size_t i;
+ 
+-	for (i = 0; mbus_names[i].name; i++)
++	for (i = 0; i < mbus_names.size(); i++)
+ 		if (mbus_names[i].code == fmt.code)
+ 			break;
+ 	printf("\tWidth/Height      : %u/%u\n", fmt.width, fmt.height);
+@@ -554,9 +555,9 @@ void subdev_get(cv4l_fd &_fd)
+ 
+ static void print_mbus_code(__u32 code)
+ {
+-	unsigned int i;
++	size_t i;
+ 
+-	for (i = 0; mbus_names[i].name; i++)
++	for (i = 0; i < mbus_names.size(); i++)
+ 		if (mbus_names[i].code == code)
+ 			break;
+ 	if (mbus_names[i].name)
+@@ -568,9 +569,8 @@ static void print_mbus_code(__u32 code)
+ 
+ static void print_mbus_codes(int fd, __u32 pad)
+ {
+-	struct v4l2_subdev_mbus_code_enum mbus_code;
++	struct v4l2_subdev_mbus_code_enum mbus_code = {};
+ 
+-	memset(&mbus_code, 0, sizeof(mbus_code));
+ 	mbus_code.pad = pad;
+ 	mbus_code.which = V4L2_SUBDEV_FORMAT_TRY;
  
 -- 
 2.30.2
