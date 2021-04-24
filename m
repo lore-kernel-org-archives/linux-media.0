@@ -7,44 +7,51 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F878C4360C
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E71C43618
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89C5D61481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85C8861613
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237155AbhDXGqk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35724 "EHLO mail.kernel.org"
+        id S230178AbhDXGql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232629AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EDC2615FF;
-        Sat, 24 Apr 2021 06:45:32 +0000 (UTC)
+        id S232455AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DEEE6157F;
+        Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=ZOYDC8nizVOemN97ng0w67F2uxMXkIsqLhOdGgCw1ys=;
+        bh=Rq+16yz5e8SlR4lBpfokaa5W2Lfu4S58C8WlJJgkO5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sTEjoHB3r/sXo/uR7szBpdIiq8ULorEh9R69vi7fLX3rhi4KotL2r47F2klki9S4U
-         D418OSL/Yf7DEj2+vNrwYDRnDDt98IUSu5H/+AMLf7Pa86jiJGS9S4jhV2RhATOJif
-         eaHK08sBwQjvKYtmcdr/l97QmAnnGDqadhdmbZuRzQxaN6WGMmnBu4zw3U2kT2k7fe
-         CTfyoYnnTkqwaCWtgNLmlAQdOM3aJWHH8aNlEqkaRfVU0VoHMmoIFcvhgX5PCtQ+vD
-         JG4sjZPTOTBaPdYhjhmFbihDQuoedpJoSxfZrnUKvb5Nab+LsQghU0MI/opYI+c3LW
-         lVN6csL/o+BfQ==
+        b=kYIdg4OV1jct1026KcMw/JQaQTKIREfQPahmBEkCnjksQjgwD6leEnmpbV2TsIuEl
+         HwAG2v6KdNW/kvf/B3qmCc1Z46D+UiGos6lRhv98+/mMgBA9N/qTzgnC05HVkFYfgx
+         4MPKd+XjXEcUNWS7JpOru09dc9t+4PtlPl1JADDDbuNxS1IN6XsyCka7bbL659GGWE
+         XDxuaKQtHV+hjyvkrQc76icj1ij2zHyEtyc4flcA6qfh8WceXwI8wm/3dCMG/86GL1
+         9Hc+4lLvXQDFR9WWp8mO+m4cf8NVw5IjTGmmXt8nBjonoY2MjqG61s6Tifu747Sihz
+         9my6arjIfH0SA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004JeI-79; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004JeO-93; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 12/78] staging: media: atomisp_fops: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:22 +0200
-Message-Id: <7685b0dbded30b1243e0e708955b1a55c7830306.1619191723.git.mchehab+huawei@kernel.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 14/78] staging: media: imx7-mipi-csis: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:24 +0200
+Message-Id: <d5f5cb75e48ef7386f83ed023ec3dc1f5be5d08f.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -64,34 +71,28 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index f1e6b2597853..26d05474a035 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -837,7 +837,7 @@ static int atomisp_open(struct file *file)
- 	}
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 025fdc488bd6..1dc680d94a46 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
  
- 	/* runtime power management, turn on ISP */
--	ret = pm_runtime_get_sync(vdev->v4l2_dev->dev);
-+	ret = pm_runtime_resume_and_get(vdev->v4l2_dev->dev);
- 	if (ret < 0) {
- 		dev_err(isp->dev, "Failed to power on device\n");
- 		goto error;
-@@ -881,9 +881,9 @@ static int atomisp_open(struct file *file)
+ 		mipi_csis_clear_counters(state);
  
- css_error:
- 	atomisp_css_uninit(isp);
--error:
--	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
- 	pm_runtime_put(vdev->v4l2_dev->dev);
-+error:
-+	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
- 	rt_mutex_unlock(&isp->mutex);
- 	return ret;
- }
+-		ret = pm_runtime_get_sync(&state->pdev->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&state->pdev->dev);
++		ret = pm_runtime_resume_and_get(&state->pdev->dev);
++		if (ret < 0)
+ 			return ret;
+-		}
++
+ 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
+ 		if (ret < 0 && ret != -ENOIOCTLCMD)
+ 			goto done;
 -- 
 2.30.2
 
