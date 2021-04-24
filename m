@@ -4,45 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA20C433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDBCC433ED
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF2F9614A5
+	by mail.kernel.org (Postfix) with ESMTP id AA72A61494
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244302AbhDXGs0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36102 "EHLO mail.kernel.org"
+        id S233701AbhDXGsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237084AbhDXGqi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DF5A61977;
-        Sat, 24 Apr 2021 06:45:34 +0000 (UTC)
+        id S237056AbhDXGqg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C60556193B;
+        Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=kj4qeX96m5mkAS+YAPL7lF2a6B3Iu94jraRym6TAeEU=;
+        bh=2uz7aSLoagaiwsviWYHDbC8DuUarXl/FOpoWTSwsrxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iTdkyW+iIBhr0tT1A9wGp3W6yPko2GcnPWPlIw+YHkKdxBTXZOOCaqCh933O66sRS
-         5F58H78YDMJ53cmdLloV6Xg7k9wTJlF5O+2AjlOa5tzpT5oxzfnYzBYRZcEGLTeVBT
-         uIIEHK1+msLh8Jbkx/pOEgdFTiJu/XItj6pA1D+3QAVmOkQZlXM8yu2+HHP4WqWvAi
-         CKreol0VUJWp21kI5icqKF4kUjeEyzXPLKYw8VxxhgrZbuksy4TDKgp9ourpTK7zAO
-         NFIchOyVjdS4SVZuafLMmG2q/754Fl9LVOIsYuU/02RetdD51VtP0HpG7AAoEjkRjF
-         9866qxt28lJLQ==
+        b=sfBrwrmBfYoeC9NADSynMCkyG98jkY98bdc7U4ZsBiJMBL/l3I7AXj05SG+lFaNeb
+         N3HHg0UA3MzNjy9NihDfITuIcllJEQSuexWw4M/GzulVt9kDVxgfg+2IBOKoA9MZeZ
+         0WSFQ6zYWjracMUCPYZi3RyH5VCmOnIW7vVMouweoXMITHFt/F/PHN4gvkgshbn4NO
+         Pdmcdzyzy3rtCajmb6GxA+v2QdqHudW2YjLbNtJfLiAZsOwhTHomK2MulB9fX2GV1P
+         SHVp5OB6/ZIHXs5xi1tEOLduoMl1u8Un5b+D8AZwvQ9CEbjaOYhk/wqMxUdufAevKz
+         8XSCGkTXL5Hdg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jg5-9o; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2m-004Jgr-PS; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 49/78] media: i2c: ov7740: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:59 +0200
-Message-Id: <ec7514ee656a623807aab03b6b70f473c6c884c8.1619191723.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 65/78] media: pm_helpers: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:15 +0200
+Message-Id: <32f56f8ad0a25a075be28e129eac02bd2424b5ec.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,36 +65,45 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov7740.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/media/platform/qcom/venus/pm_helpers.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index 47a9003d29d6..849a1ce61cf7 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -624,11 +624,9 @@ static int ov7740_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index c7e1ebec47ee..9e32ec866af7 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -486,7 +486,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
+ 	int ret;
+ 
+ 	if (coreid_mask & VIDC_CORE_ID_1) {
+-		ret = pm_runtime_get_sync(core->pmdomains[1]);
++		ret = pm_runtime_resume_and_get(core->pmdomains[1]);
+ 		if (ret < 0)
+ 			return ret;
+ 
+@@ -504,7 +504,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
  	}
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
-+		if (ret < 0)
- 			goto err_unlock;
--		}
+ 	if (coreid_mask & VIDC_CORE_ID_2) {
+-		ret = pm_runtime_get_sync(core->pmdomains[2]);
++		ret = pm_runtime_resume_and_get(core->pmdomains[2]);
+ 		if (ret < 0)
+ 			return ret;
  
- 		ret = ov7740_start_streaming(ov7740);
- 		if (ret)
-@@ -1165,7 +1163,7 @@ static int ov7740_remove(struct i2c_client *client)
- 	v4l2_async_unregister_subdev(sd);
- 	ov7740_free_controls(ov7740);
+@@ -990,11 +990,9 @@ static int core_power_v4(struct venus_core *core, int on)
  
--	pm_runtime_get_sync(&client->dev);
-+	pm_runtime_resume_and_get(&client->dev);
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
- 	pm_runtime_put_noidle(&client->dev);
+ 	if (on == POWER_ON) {
+ 		if (pmctrl) {
+-			ret = pm_runtime_get_sync(pmctrl);
+-			if (ret < 0) {
+-				pm_runtime_put_noidle(pmctrl);
++			ret = pm_runtime_resume_and_get(pmctrl);
++			if (ret < 0)
+ 				return ret;
+-			}
+ 		}
+ 
+ 		ret = core_resets_reset(core);
 -- 
 2.30.2
 
