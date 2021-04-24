@@ -7,44 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A482AC433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC2B8C43461
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81AE561465
+	by mail.kernel.org (Postfix) with ESMTP id BC89B6120D
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbhDXGsG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35964 "EHLO mail.kernel.org"
+        id S244236AbhDXGsH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236588AbhDXGqc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E4F1761950;
+        id S233271AbhDXGqd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C56B56193A;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=umqdpGp1oSGyna8Ojn3AGfbapFLyE4ZVzg1c+rmxXd4=;
+        bh=IASdiN+9/AmiaDBWxGxldIhDXuTHq+MikfucyZPKlwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Avo5sE0Mqp/WrwoIieF4caEdOLfnvok5H4085NuPzlbLyTph36WypRLmkRK1j1JK8
-         aEvNpX9d+tvKyDHayD+V8Hd/W5qUOfb8UXLCINOHz4HpOOFKHrzuzKZk1/YzMmWNGG
-         xof32K80Xc2CzZezDfN74zNAWtULWAr+OmCXzGnDUCvRTVAz1JlL0w4z8KbLPIFIJ7
-         3D9n52CzF3V/SvfdJ83DaTVmL9JqYjD1P9Lo6xHI6M+sBcJjmKya/YvlgwtWaxaPAh
-         9u0cVbAJfQq+DHzfL4Dm86TFPK6Wgjzymhb+izuv4Y8lpO97yb03xgls0+Op6vZpo1
-         agXux4scp8TUQ==
+        b=QGVXq0zEfEkZQuXyLnQNSlYiPuhq9yLF2nh/YSKCwzW17oE6HLAGe321i0gSkurNY
+         +32Ae6lvlNPsCyMDg9bkXmFigFu+mytnPNfTpraZiKpB2fFpzGkpOTNvnp9CNGNdL4
+         cZyyU/Z+WWKgxmmFXOoafLtxOf6PqkqatrgYcmb1oh+axYc5AGW5WHV3NTCWobgiWY
+         B/Xnx8gEkLknLgmmWJXtrhTkKWcLPVGvtUGxMvccVUVGRsheHeum4a8hyoTxYfRtMK
+         htz7EuxlQWiIVLN2f8QU0V8jFkDjpum5M36HqMLz3JcdjSMO5/0YiwK+W13DsuImFG
+         uBLtwOY2pqeVQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jfn-4B; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2n-004Ji2-EV; Sat, 24 Apr 2021 08:45:33 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 43/78] media: i2c: ov2740: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:53 +0200
-Message-Id: <0a22901c5a3d29f5e45df239a122725332c6cce7.1619191723.git.mchehab+huawei@kernel.org>
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 76/78] media: sun4i_v4l2: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:26 +0200
+Message-Id: <19ff6114784154d1ce289b01bd22230a37b77a98.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -64,35 +65,35 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov2740.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 0f3f17f3c426..54779f720f9d 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -751,9 +751,8 @@ static int ov2740_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 4785faddf630..ed6ec41b9c2d 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -206,9 +206,9 @@ static int sun4i_csi_open(struct file *file)
+ 	if (ret)
+ 		return ret;
  
- 	mutex_lock(&ov2740->mutex);
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
- 		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
- 			mutex_unlock(&ov2740->mutex);
- 			return ret;
- 		}
-@@ -1049,9 +1048,8 @@ static int ov2740_nvmem_read(void *priv, unsigned int off, void *val,
- 		goto exit;
- 	}
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
+ 	if (ret < 0)
+-		goto err_pm_put;
++		goto err_unlock;
  
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
- 		goto exit;
- 	}
+ 	ret = v4l2_pipeline_pm_get(&csi->vdev.entity);
+ 	if (ret)
+@@ -225,8 +225,7 @@ static int sun4i_csi_open(struct file *file)
+ err_pipeline_pm_put:
+ 	v4l2_pipeline_pm_put(&csi->vdev.entity);
  
+-err_pm_put:
+-	pm_runtime_put(csi->dev);
++err_unlock:
+ 	mutex_unlock(&csi->lock);
+ 
+ 	return ret;
 -- 
 2.30.2
 
