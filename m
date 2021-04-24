@@ -4,49 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6FA5C43611
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B30C4360C
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A115261483
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCD8461483
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbhDXGqw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S237321AbhDXGqw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 24 Apr 2021 02:46:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232753AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233048AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D70361613;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 731FF616E9;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=ilbYi39Wp/s1IHEjQb8NZRh7PLiRnT42XXdFX8lFSpw=;
+        bh=0+qUTNue9hnyAq3YJfJJPyrh70EsjiwzWG3y47ywjxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l3foykFZ2MY43Kvt4KtXFCXyQ5CM7jCmtI5mmSAmnJujWdIuFKpWGSgTEvWmv4Lk9
-         1jAphyDs7NXlaxxXBkPlUXd8ocPz9e1qGqQSiEM913QBFPR10AlOekFk4HlqWA5XRK
-         BqUO8MrGp0FhwT4ipn84t0jyjSR+DUzkoYpe9iT+kUJWFUwnBD+H9EPzONRbb9Klh4
-         9L96EDmjk4fMxSaY9e45dOcD9iyuZjnyZ0oLdBpt3oE4qaLi7k3blLU2UBKFVUAvt3
-         2xT/anJ7dSxOTEquLyj/WMs2ES87SIaWdvYiDmp0VqzhzKaZPm/QR359ScUYA5Pah3
-         rrcmik1TPxhzg==
+        b=iYTceQj2r5AYgEH+uwH1IHT2pGFHqRwDLAb83lnwQyS3Us3nn6mnIQXss/PSwKzox
+         QFe7PD8QxysGlQkmBekOkoWJrl9z1bcXglaL1MTBbV5vdBESHFbFQpJKcYzxCKb1DY
+         5OfUHWjxre/q+l4jY/Q4b3NgQMMsTIZlduVSK5yaEwG0zsjbWTOk56vocGEHpoE6kw
+         fGf7fW0dHdV2ny76xZqiktIcLDwxmwDL1oBct4z2Qn6mI877eHWblLWAJcMIkI5hjA
+         nD4GIvLxaPvBcgmsEvoZx+lBRvoCd7XMfPfwTDQHXMCvqCrRWJpfKGhWXWyBUDukoU
+         LJmK95gI4jp1A==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jed-Dz; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Jf1-LY; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 19/78] staging: media: vi: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:29 +0200
-Message-Id: <d15b484f48e09ae9df2abc53c02616dcbdb450c7.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 27/78] media: i2c: dw9768: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:37 +0200
+Message-Id: <874a9df13fdcb7e271757f50aa7a65ac55a07423.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -66,25 +62,30 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/tegra-video/vi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/i2c/dw9768.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 7a09061cda57..1298740a9c6c 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -297,10 +297,9 @@ static int tegra_channel_start_streaming(struct vb2_queue *vq, u32 count)
- 	struct tegra_vi_channel *chan = vb2_get_drv_priv(vq);
- 	int ret;
+diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
+index 8b8cb4b077b5..c086580efac7 100644
+--- a/drivers/media/i2c/dw9768.c
++++ b/drivers/media/i2c/dw9768.c
+@@ -374,15 +374,7 @@ static const struct v4l2_ctrl_ops dw9768_ctrl_ops = {
  
--	ret = pm_runtime_get_sync(chan->vi->dev);
-+	ret = pm_runtime_resume_and_get(chan->vi->dev);
- 	if (ret < 0) {
- 		dev_err(chan->vi->dev, "failed to get runtime PM: %d\n", ret);
--		pm_runtime_put_noidle(chan->vi->dev);
- 		return ret;
- 	}
+ static int dw9768_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ {
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(sd->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(sd->dev);
+-		return ret;
+-	}
+-
+-	return 0;
++	return pm_runtime_resume_and_get(sd->dev);
+ }
  
+ static int dw9768_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
