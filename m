@@ -7,42 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CB6C4363E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB679C43600
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7577F6141C
+	by mail.kernel.org (Postfix) with ESMTP id A119F61462
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237275AbhDXGqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35962 "EHLO mail.kernel.org"
+        id S237279AbhDXGqr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232714AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232663AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E59561628;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18F7261574;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=asptFjthmpMSH40y9mihi2F9WNWJSxY/te/hCXNd4N0=;
+        bh=Y6FQgC9NsgxSbgFLPZRVR5o2rajl0boXLbSbZWHNz3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p1kFI7dNHSXKbUgS80WMhQC6LqhkxbCf1jUIwAk/BCInO9XdY17uh1tZzGG+5RGsG
-         I+a31BBjJzYlzijfv46g/nFcAuuPmaQnKqrjQlQrMxfhAkesYKbvFZFDC/vszGKDFn
-         0rTLsDcs1b1LR3Uf8Y58LCFpXj06icDaMYG+f1MRPe3V7rsdvY6h462w+k8sQzejnd
-         axVbg69mhPmjdR0+Io8erfCNUUDL7lgs3yW5MTiswR5+dLbQlaeFBM8iUarHwE2SsU
-         xy/NS5a4F++w80OLthwDrlq/NnSIrj3TAuSfkiEON4OPTBZb5NoNNruz6MPXQD6Xwe
-         /gmw5dQdzB0PQ==
+        b=LfnO816+/JhLoNHrA0xNpWPG1HfJiqF/yCnK01z4uCQsX1d3UCUufgPePJG4QI/ZW
+         cp51NpdBKYIGPOCUnEs6qS8RrTXHpnyjPoQ2rLTeP1qKdRvJPBgF8Q1ulDmPaio4uS
+         KJLv6e/+j18Ogmc+1UKUSjIcuTU2wlKQ2VPAAdcOF9jWaQWe+t5OruU+SgAC/OUPnE
+         TqvLXEpbR/++Elzb4EDfWWqIbFWJpktyfQmmxRHwPDOEnKEGgstp7E0V9BdQVMur2Q
+         FZ36Ns1RxZBaRRQeIWh1W2hyCD3HGzGjj3gAQ4ov8lgGYimhoCo6v1hutqXsssANMi
+         MwoFkEW4NypRg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jev-Jd; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2k-004Jdl-Ss; Sat, 24 Apr 2021 08:45:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 25/78] media: i2c: ccs-core: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:35 +0200
-Message-Id: <34da940f76da6c1d61a193409164070f47243b64.1619191723.git.mchehab+huawei@kernel.org>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 01/78] media: atmel: properly get pm_runtime
+Date:   Sat, 24 Apr 2021 08:44:11 +0200
+Message-Id: <cd5ded1d2ea82a0fb0e983d014ffcebfadffae31.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -54,47 +58,153 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+There are several issues in the way the atmel driver handles
+pm_runtime_get_sync():
 
-Use the new API, in order to cleanup the error check logic.
+- it doesn't check return codes;
+- it doesn't properly decrement the usage_count on all places;
+- it starts streaming even if pm_runtime_get_sync() fails.
+- while it tries to get pm_runtime at the clock enable logic,
+  it doesn't check if the operation was suceeded.
+
+Replace all occurrences of it to use the new kAPI:
+pm_runtime_resume_and_get(), which ensures that, if the
+return code is not negative, the usage_count was incremented.
+
+With that, add additional checks when this is called, in order
+to ensure that errors will be properly addressed.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/media/platform/atmel/atmel-isc-base.c | 26 ++++++++++++++-----
+ drivers/media/platform/atmel/atmel-isi.c      | 19 +++++++++++---
+ 2 files changed, 34 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 9dc3f45da3dc..1441ddcc9b35 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1880,12 +1880,11 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index fe3ec8d0eaee..db1be719192a 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -294,9 +294,13 @@ static int isc_wait_clk_stable(struct clk_hw *hw)
+ static int isc_clk_prepare(struct clk_hw *hw)
+ {
+ 	struct isc_clk *isc_clk = to_isc_clk(hw);
++	int ret;
  
--	rval = pm_runtime_get_sync(&client->dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(&client->dev);
+-	if (isc_clk->id == ISC_ISPCK)
+-		pm_runtime_get_sync(isc_clk->dev);
++	if (isc_clk->id == ISC_ISPCK) {
++		ret = pm_runtime_resume_and_get(isc_clk->dev);
++		if (ret < 0)
++			return 0;
++	}
+ 
+ 	return isc_wait_clk_stable(hw);
+ }
+@@ -353,9 +357,13 @@ static int isc_clk_is_enabled(struct clk_hw *hw)
+ {
+ 	struct isc_clk *isc_clk = to_isc_clk(hw);
+ 	u32 status;
++	int ret;
+ 
+-	if (isc_clk->id == ISC_ISPCK)
+-		pm_runtime_get_sync(isc_clk->dev);
++	if (isc_clk->id == ISC_ISPCK) {
++		ret = pm_runtime_resume_and_get(isc_clk->dev);
++		if (ret < 0)
++			return 0;
++	}
+ 
+ 	regmap_read(isc_clk->regmap, ISC_CLKSR, &status);
+ 
+@@ -807,7 +815,9 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		goto err_start_stream;
+ 	}
+ 
+-	pm_runtime_get_sync(isc->dev);
++	ret = pm_runtime_resume_and_get(isc->dev);
++	if (ret < 0)
++		goto err_pm_get;
+ 
+ 	ret = isc_configure(isc);
+ 	if (unlikely(ret))
+@@ -838,7 +848,7 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ err_configure:
+ 	pm_runtime_put_sync(isc->dev);
 -
-+	rval = pm_runtime_resume_and_get(&client->dev);
-+	if (rval < 0)
- 		return rval;
--	} else if (!rval) {
++err_pm_get:
+ 	v4l2_subdev_call(isc->current_subdev->sd, video, s_stream, 0);
+ 
+ err_start_stream:
+@@ -1831,7 +1841,9 @@ static void isc_awb_work(struct work_struct *w)
+ 	ctrls->hist_id = hist_id;
+ 	baysel = isc->config.sd_format->cfa_baycfg << ISC_HIS_CFG_BAYSEL_SHIFT;
+ 
+-	pm_runtime_get_sync(isc->dev);
++	ret = pm_runtime_resume_and_get(isc->dev);
++	if (ret < 0)
++		return;
+ 
+ 	/*
+ 	 * only update if we have all the required histograms and controls
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index 0514be6153df..6a433926726d 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -422,7 +422,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	struct frame_buffer *buf, *node;
+ 	int ret;
+ 
+-	pm_runtime_get_sync(isi->dev);
++	ret = pm_runtime_resume_and_get(isi->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* Enable stream on the sub device */
+ 	ret = v4l2_subdev_call(isi->entity.subdev, video, s_stream, 1);
+@@ -782,9 +784,10 @@ static int isi_enum_frameintervals(struct file *file, void *fh,
+ 	return 0;
+ }
+ 
+-static void isi_camera_set_bus_param(struct atmel_isi *isi)
++static int isi_camera_set_bus_param(struct atmel_isi *isi)
+ {
+ 	u32 cfg1 = 0;
++	int ret;
+ 
+ 	/* set bus param for ISI */
+ 	if (isi->pdata.hsync_act_low)
+@@ -801,12 +804,16 @@ static void isi_camera_set_bus_param(struct atmel_isi *isi)
+ 	cfg1 |= ISI_CFG1_THMASK_BEATS_16;
+ 
+ 	/* Enable PM and peripheral clock before operate isi registers */
+-	pm_runtime_get_sync(isi->dev);
++	ret = pm_runtime_resume_and_get(isi->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	isi_writel(isi, ISI_CTRL, ISI_CTRL_DIS);
+ 	isi_writel(isi, ISI_CFG1, cfg1);
+ 
+ 	pm_runtime_put(isi->dev);
 +
-+	if (!rval) {
- 		rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->
- 					       ctrl_handler);
- 		if (rval)
-@@ -3089,7 +3088,7 @@ static int __maybe_unused ccs_suspend(struct device *dev)
- 	bool streaming = sensor->streaming;
- 	int rval;
++	return 0;
+ }
  
--	rval = pm_runtime_get_sync(dev);
-+	rval = pm_runtime_resume_and_get(dev);
- 	if (rval < 0) {
- 		pm_runtime_put_noidle(dev);
+ /* -----------------------------------------------------------------------*/
+@@ -1085,7 +1092,11 @@ static int isi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+ 		dev_err(isi->dev, "No supported mediabus format found\n");
+ 		return ret;
+ 	}
+-	isi_camera_set_bus_param(isi);
++	ret = isi_camera_set_bus_param(isi);
++	if (ret) {
++		dev_err(isi->dev, "Can't wake up device\n");
++		return ret;
++	}
  
+ 	ret = isi_set_default_fmt(isi);
+ 	if (ret) {
 -- 
 2.30.2
 
