@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D6CC43460
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A00C43616
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6F4261483
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48B7F61490
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbhDXGqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35850 "EHLO mail.kernel.org"
+        id S236970AbhDXGqf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232511AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231921AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2653761584;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EF5B61581;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=9FSuKWFuUqPUC2dP9taAm5sC7kLWnC4fEOP9jl+QpYQ=;
+        bh=MOd3YN2iujeWfGs9BuWAFWWI6F9dHQCi3uqQZM46wqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1rlvfWICHzYQjAeRTWZGi1fek8JE31SKg6P3Ng3YeBzD7uQ0kL4JFugJmcA8+HeC
-         7ezVuETYnfrNuzsaCSzS7VlniCF5gfAc/o52ejMmVuqLZ+WhhJ93+OtiHkBmjXLgst
-         Wru9FQFEHDlwd5nKcN2UsvcmcBrfSy++XpuEEnCDrWE3UEeclMaHrIf/3LT9sa7ZIl
-         CNksrXcVYYlYLSiVABqo1YjlSHxsHKzpElve+Nw1ZLk3970A57yj5edAtzNoB7hGlU
-         PIWGLkJQTsIclDvQF8SXkRblltt4ZRn7lLam1HCghaGlbMc6AawBleHKkca0h//g50
-         DvTK196PQ2BXQ==
+        b=UXoy4Z/7ZCyLyH/yxUfWN+kckMgoPnt7Ekj4coXxi65oKnGaUXP+LXufCT5XAfgWM
+         J+RS3GuV6AQBcjIIQi88AJA+TvGBBtQ8ml4uGBL+afchY2j13EpCg0BFrY+NnAx0WR
+         cNEP9vIBOQaJPWyvn+ZIHTsKDqkLjNmcQWGumrZ0GYsT4Q8q507QNQCwK1G4+4PEps
+         4kvnPFXHHi+Qc9uKzLoefBa9PRyWDAuDUXTQvwebJzOiQKPZQ5HRFGkg4nz06bnt/Q
+         slFaqRKNuOW45p7E4NsFkw1j2/OH6Ae2sfU5xl0dQCHJDqkjT4X9+YoelVxX7iWk4p
+         NRNDPdyHCuNFA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004JeR-9z; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004JeL-87; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 15/78] staging: media: ipu3: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:25 +0200
-Message-Id: <568cb990e646be64c7d8017c1845621f66d1b9cc.1619191723.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH 13/78] staging: media: hantro_drv: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:23 +0200
+Message-Id: <0021158fb27035a56089683ee712fb3ed6f6032d.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -66,24 +65,21 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/ipu3/ipu3.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/media/hantro/hantro_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
-index ee1bba6bdcac..8e1e9e46e604 100644
---- a/drivers/staging/media/ipu3/ipu3.c
-+++ b/drivers/staging/media/ipu3/ipu3.c
-@@ -392,10 +392,9 @@ int imgu_s_stream(struct imgu_device *imgu, int enable)
- 	}
- 
- 	/* Set Power */
--	r = pm_runtime_get_sync(dev);
-+	r = pm_runtime_resume_and_get(dev);
- 	if (r < 0) {
- 		dev_err(dev, "failed to set imgu power\n");
--		pm_runtime_put(dev);
- 		return r;
- 	}
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 595e82a82728..3147dcbebeb9 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -155,7 +155,7 @@ static void device_run(void *priv)
+ 	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
+ 	if (ret)
+ 		goto err_cancel_job;
+-	ret = pm_runtime_get_sync(ctx->dev->dev);
++	ret = pm_runtime_resume_and_get(ctx->dev->dev);
+ 	if (ret < 0)
+ 		goto err_cancel_job;
  
 -- 
 2.30.2
