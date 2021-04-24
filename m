@@ -7,51 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E71C43618
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B2DC4361B
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85C8861613
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBE906141C
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbhDXGql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
+        id S237248AbhDXGqo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35870 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232455AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232588AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DEEE6157F;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 454076161E;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=Rq+16yz5e8SlR4lBpfokaa5W2Lfu4S58C8WlJJgkO5E=;
+        bh=+UVQLbAwUBo3UU1F0075Iv595HgVTLhRfgrIPgnhUE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYIdg4OV1jct1026KcMw/JQaQTKIREfQPahmBEkCnjksQjgwD6leEnmpbV2TsIuEl
-         HwAG2v6KdNW/kvf/B3qmCc1Z46D+UiGos6lRhv98+/mMgBA9N/qTzgnC05HVkFYfgx
-         4MPKd+XjXEcUNWS7JpOru09dc9t+4PtlPl1JADDDbuNxS1IN6XsyCka7bbL659GGWE
-         XDxuaKQtHV+hjyvkrQc76icj1ij2zHyEtyc4flcA6qfh8WceXwI8wm/3dCMG/86GL1
-         9Hc+4lLvXQDFR9WWp8mO+m4cf8NVw5IjTGmmXt8nBjonoY2MjqG61s6Tifu747Sihz
-         9my6arjIfH0SA==
+        b=BivJEy9zCCeSFE2A1Si3diboItZlT++oy90qX+KxcKQkZTg1bAseNAvYOofN81hYl
+         dR1InB4kajF5CZg2+ge2iwnBbI2deReU3cl0X065Pd+l5cDGTRIy+m1Kt0OjDQsRlb
+         hXCiHU2wyFG4zuzal3MP1r5EiHkoxySYiURx085NdoEqlLSxkdsZviXtd0tRl8RfRh
+         JK40nz4xHsnina8h8VZKSnxg6yx+Sc9zOKdsSAhHUyVGAAY2pNcElmFqARLieEhmFn
+         oZmw5DbtWSzvUGl72pCFsD06N4MncZ0TC7kAJTFj1B+Ioij9xx2JVAV4/7ymx0etuU
+         xHnQ+bIKIx8tA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004JeO-93; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Jeg-Eu; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 14/78] staging: media: imx7-mipi-csis: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:24 +0200
-Message-Id: <d5f5cb75e48ef7386f83ed023ec3dc1f5be5d08f.1619191723.git.mchehab+huawei@kernel.org>
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 20/78] media: mtk-vcodec: fix pm_runtime_get_sync() usage count
+Date:   Sat, 24 Apr 2021 08:44:30 +0200
+Message-Id: <f4906ceabe4bbc6a6b10c2409a44b7a14f5c0926.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -63,36 +57,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
-
-Use the new API, in order to cleanup the error check logic.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 025fdc488bd6..1dc680d94a46 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index ddee7046ce42..fe096fe61c9d 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -92,9 +92,9 @@ void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ {
+ 	int ret;
  
- 		mipi_csis_clear_counters(state);
+-	ret = pm_runtime_get_sync(pm->dev);
++	ret = pm_runtime_resume_and_get(pm->dev);
+ 	if (ret)
+-		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
++		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
+ }
  
--		ret = pm_runtime_get_sync(&state->pdev->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&state->pdev->dev);
-+		ret = pm_runtime_resume_and_get(&state->pdev->dev);
-+		if (ret < 0)
- 			return ret;
--		}
-+
- 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
- 		if (ret < 0 && ret != -ENOIOCTLCMD)
- 			goto done;
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
 -- 
 2.30.2
 
