@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD410C43460
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C79CEC433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A60EB61465
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACE8B61481
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241274AbhDXGra (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35994 "EHLO mail.kernel.org"
+        id S232082AbhDXGrb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233327AbhDXGqQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B382961931;
+        id S233337AbhDXGqR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 98D1261922;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=uVFbSBsOFTlNeqpthO6c96NJAUfPhbV6UvOttxV6+5A=;
+        bh=bbBhKTio+K3X9fPKV58F4G07rHzCE6SQVXwv0W77lPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MuVoKpleTd+o2AQVdMJ/Eel3LkxhdwtMotaGZrO2oHOfLNJqf2cNyBHm1wM90Sktk
-         NmKuLPAWMBeF4k+9H22EvOW7iW+zjvgZan0fJdo6wLu8VLAfCybzO4AtLK8FaHg4Kg
-         Vx61xfHD2gA9SOnq4hSL3N9FR0PfOKLp4ooZbwMIjTi3NWNRyTHlFtVTCus6u9cu2v
-         i6lsDvi3EEX5iM8OSU1ySjSf890O2lhZGpIAkMsEn075JoD/OHbB0S3CBlMa8Rsh63
-         ROEMWirDxRx7KbjYNfrdOXkygKbjQiiLj58U49zMquXNsilKCgTrtZEg094IDus5O1
-         pWnAxkJGasdow==
+        b=foXr9f7O0LkJT3c5Ng2mqf88EYYhcNnfyNtoW8vXGmu10JJXSbb6CPf03R9H3FXvN
+         mh7ghsAQZeTTfgsX6zhSUBPAwV70m0IC0yH2JN3IdULAO7b2+iHeCMO2YY0jNzsZzs
+         fFRMpM4eVa+t7hv9M23B6Ix6fNXPj29QBCeejmFQdK+T04SXuzR1hGfTwdrzA3b2ch
+         4PaeCWrTtqs5icw1oeAEjyUmlxFRHhUIRbQGZ8Va8+Lod4e58mDoBZW6fz3wTYEWVs
+         +5Wbl3WC6/Zprh6U39nKAxvNXRMKytS/TIfcPLSPiakRoT6IBo9SuoBmdqqh4uuA7/
+         lsRvpuP7rMhfA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004JfM-S5; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2n-004JhN-8M; Sat, 24 Apr 2021 08:45:33 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 34/78] media: i2c: imx290: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:44 +0200
-Message-Id: <eb5e3c326e83f0e26ffecafc14ab05a50328ea5e.1619191723.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 74/78] media: bdisp-v4l2: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:24 +0200
+Message-Id: <a99597bc47bb5e1e6084a2ee77934a21633bcb85.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,27 +62,43 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/imx290.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 6319a42057d2..06020e648a97 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -764,11 +764,9 @@ static int imx290_set_stream(struct v4l2_subdev *sd, int enable)
- 	int ret = 0;
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index 060ca85f64d5..85288da9d2ae 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct bdisp_ctx *ctx = q->drv_priv;
+ 	struct vb2_v4l2_buffer *buf;
+-	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
++	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(imx290->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(imx290->dev);
-+		ret = pm_runtime_resume_and_get(imx290->dev);
-+		if (ret < 0)
- 			goto unlock_and_return;
--		}
+ 	if (ret < 0) {
+ 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
+@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
  
- 		ret = imx290_start_streaming(imx290);
- 		if (ret) {
+ 	/* Power management */
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set PM\n");
+-		goto err_pm;
++		goto err_remove;
+ 	}
+ 
+ 	/* Filters */
+@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp_hw_free_filters(bdisp->dev);
+ err_pm:
+ 	pm_runtime_put(dev);
++err_remove:
+ 	bdisp_debugfs_remove(bdisp);
+ 	v4l2_device_unregister(&bdisp->v4l2_dev);
+ err_clk:
 -- 
 2.30.2
 
