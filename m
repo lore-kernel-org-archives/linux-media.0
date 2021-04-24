@@ -4,48 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDBCC433ED
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F9BC43460
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA72A61494
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 175C46120D
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbhDXGsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
+        id S229850AbhDXGs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36096 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237056AbhDXGqg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C60556193B;
+        id S237130AbhDXGqj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D6E0F61945;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=2uz7aSLoagaiwsviWYHDbC8DuUarXl/FOpoWTSwsrxw=;
+        bh=g3U42mTCX58vPHFzw5e1ALRdM6DIRlxQAAjJ/CS5BaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sfBrwrmBfYoeC9NADSynMCkyG98jkY98bdc7U4ZsBiJMBL/l3I7AXj05SG+lFaNeb
-         N3HHg0UA3MzNjy9NihDfITuIcllJEQSuexWw4M/GzulVt9kDVxgfg+2IBOKoA9MZeZ
-         0WSFQ6zYWjracMUCPYZi3RyH5VCmOnIW7vVMouweoXMITHFt/F/PHN4gvkgshbn4NO
-         Pdmcdzyzy3rtCajmb6GxA+v2QdqHudW2YjLbNtJfLiAZsOwhTHomK2MulB9fX2GV1P
-         SHVp5OB6/ZIHXs5xi1tEOLduoMl1u8Un5b+D8AZwvQ9CEbjaOYhk/wqMxUdufAevKz
-         8XSCGkTXL5Hdg==
+        b=ep+v57zmsmwNsCZzxBz83Nt0ye7KmeHxGupEj1EPkuJLCMe5JmH0Kx+g/YJVdjFJ1
+         ranNjMSngZaBhiqxld55EdgLZlsFYgWk8m9kr2BkZLxjAK1ZU5U4yqLMkNaB2UYbsl
+         PDygjW7h0lUOnciUMWE0LFH4JaoUeF7wkIPR3EWYQU65k8ArN//UHUR+yoa29QYRoN
+         ctlSP0sHwcqnryqUGu/7gv6DjZnKxlD6ARvPRQyNU/6AnsZETMaHxAlEkud4qN+Ejw
+         LUfReYxdQN1jV1pwpdj1X4v2IhZvk7awtx2IG1ZXIHAoHT9gQVwshMy/I/Q4FsAwme
+         Rc8WQqRMprmDQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jgr-PS; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2m-004JgQ-Gi; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 65/78] media: pm_helpers: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:15 +0200
-Message-Id: <32f56f8ad0a25a075be28e129eac02bd2424b5ec.1619191723.git.mchehab+huawei@kernel.org>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 56/78] media: coda: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:06 +0200
+Message-Id: <5102aef0e5d4ccfafed92087e3800ffaca4736ba.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -65,45 +62,22 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/pm_helpers.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/media/platform/coda/coda-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index c7e1ebec47ee..9e32ec866af7 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -486,7 +486,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	int ret;
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index bd666c858fa1..fea1c136a42c 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -2660,7 +2660,7 @@ static int coda_open(struct file *file)
+ 	ctx->use_vdoa = false;
  
- 	if (coreid_mask & VIDC_CORE_ID_1) {
--		ret = pm_runtime_get_sync(core->pmdomains[1]);
-+		ret = pm_runtime_resume_and_get(core->pmdomains[1]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -504,7 +504,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	}
- 
- 	if (coreid_mask & VIDC_CORE_ID_2) {
--		ret = pm_runtime_get_sync(core->pmdomains[2]);
-+		ret = pm_runtime_resume_and_get(core->pmdomains[2]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -990,11 +990,9 @@ static int core_power_v4(struct venus_core *core, int on)
- 
- 	if (on == POWER_ON) {
- 		if (pmctrl) {
--			ret = pm_runtime_get_sync(pmctrl);
--			if (ret < 0) {
--				pm_runtime_put_noidle(pmctrl);
-+			ret = pm_runtime_resume_and_get(pmctrl);
-+			if (ret < 0)
- 				return ret;
--			}
- 		}
- 
- 		ret = core_resets_reset(core);
+ 	/* Power up and upload firmware if necessary */
+-	ret = pm_runtime_get_sync(dev->dev);
++	ret = pm_runtime_resume_and_get(dev->dev);
+ 	if (ret < 0) {
+ 		v4l2_err(&dev->v4l2_dev, "failed to power up: %d\n", ret);
+ 		goto err_pm_get;
 -- 
 2.30.2
 
