@@ -4,45 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C79CEC433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BB9C433ED
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACE8B61481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09E9761482
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbhDXGrb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35972 "EHLO mail.kernel.org"
+        id S242459AbhDXGrg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233337AbhDXGqR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98D1261922;
+        id S233451AbhDXGqS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A1B69616EC;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=bbBhKTio+K3X9fPKV58F4G07rHzCE6SQVXwv0W77lPM=;
+        bh=jhFOuNkS8GXbkVzxvUoQK+5PtoGb2Bw8SlIbqUkTFTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=foXr9f7O0LkJT3c5Ng2mqf88EYYhcNnfyNtoW8vXGmu10JJXSbb6CPf03R9H3FXvN
-         mh7ghsAQZeTTfgsX6zhSUBPAwV70m0IC0yH2JN3IdULAO7b2+iHeCMO2YY0jNzsZzs
-         fFRMpM4eVa+t7hv9M23B6Ix6fNXPj29QBCeejmFQdK+T04SXuzR1hGfTwdrzA3b2ch
-         4PaeCWrTtqs5icw1oeAEjyUmlxFRHhUIRbQGZ8Va8+Lod4e58mDoBZW6fz3wTYEWVs
-         +5Wbl3WC6/Zprh6U39nKAxvNXRMKytS/TIfcPLSPiakRoT6IBo9SuoBmdqqh4uuA7/
-         lsRvpuP7rMhfA==
+        b=f0e1rGgjIIBj1g4o3qoPMHGh38ogpUaaRRj7LnyzkinsjZXhfgcyiyxpv3kt76jx8
+         c1D3lIFzvZ+KmClGOg+gG/lhoHi3TZoaSs8rPoY5aGXMEpXnktqKIPs1SdKkzsV79J
+         LyPl8TLyMAEkfHMLJm58Zagyr/NT0o8aZtLrNURNa6mC7UQEt+a6GQABrUJaBMKg3y
+         +/alcuHQ+0bf8Pv2F5WI+bncbc+hL2uxfadRkEDDett0iXhnGBoNVa7SP5+jayKVdC
+         Hn1Plrz7oFSUdaa1y10nGv+x02uzPDI4udauwEgVjlGjW4KATJjhBwuG3qtY0U3L2Y
+         yXHJpTOdX2/Aw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2n-004JhN-8M; Sat, 24 Apr 2021 08:45:33 +0200
+        id 1laC2m-004Jgo-OS; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@st.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 74/78] media: bdisp-v4l2: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:24 +0200
-Message-Id: <a99597bc47bb5e1e6084a2ee77934a21633bcb85.1619191723.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 64/78] media: core: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:14 +0200
+Message-Id: <1fb9919b1cb83dd6db934dab74442c981eeda7f0.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,43 +65,86 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-index 060ca85f64d5..85288da9d2ae 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct bdisp_ctx *ctx = q->drv_priv;
- 	struct vb2_v4l2_buffer *buf;
--	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
-+	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 54bac7ec14c5..c156320fa256 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -84,7 +84,7 @@ static void venus_sys_error_handler(struct work_struct *work)
+ 			container_of(work, struct venus_core, work.work);
+ 	int ret = 0;
  
- 	if (ret < 0) {
- 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
-@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
+-	pm_runtime_get_sync(core->dev);
++	pm_runtime_resume_and_get(core->dev);
  
- 	/* Power management */
+ 	hfi_core_deinit(core, true);
+ 
+@@ -106,7 +106,7 @@ static void venus_sys_error_handler(struct work_struct *work)
+ 
+ 	hfi_reinit(core);
+ 
+-	pm_runtime_get_sync(core->dev);
++	pm_runtime_resume_and_get(core->dev);
+ 
+ 	ret |= venus_boot(core);
+ 	ret |= hfi_core_resume(core, true);
+@@ -305,21 +305,21 @@ static int venus_probe(struct platform_device *pdev)
+ 
  	pm_runtime_enable(dev);
+ 
 -	ret = pm_runtime_get_sync(dev);
 +	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to set PM\n");
--		goto err_pm;
-+		goto err_remove;
- 	}
+ 	if (ret < 0)
+ 		goto err_runtime_disable;
  
- 	/* Filters */
-@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
- 	bdisp_hw_free_filters(bdisp->dev);
- err_pm:
- 	pm_runtime_put(dev);
-+err_remove:
- 	bdisp_debugfs_remove(bdisp);
- 	v4l2_device_unregister(&bdisp->v4l2_dev);
- err_clk:
+ 	ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
+ 	if (ret)
+-		goto err_runtime_disable;
++		goto err_pm;
+ 
+ 	ret = venus_firmware_init(core);
+ 	if (ret)
+-		goto err_runtime_disable;
++		goto err_pm;
+ 
+ 	ret = venus_boot(core);
+ 	if (ret)
+-		goto err_runtime_disable;
++		goto err_pm;
+ 
+ 	ret = hfi_core_resume(core, true);
+ 	if (ret)
+@@ -351,8 +351,9 @@ static int venus_probe(struct platform_device *pdev)
+ 	v4l2_device_unregister(&core->v4l2_dev);
+ err_venus_shutdown:
+ 	venus_shutdown(core);
+-err_runtime_disable:
++err_pm:
+ 	pm_runtime_put_noidle(dev);
++err_runtime_disable:
+ 	pm_runtime_set_suspended(dev);
+ 	pm_runtime_disable(dev);
+ 	hfi_destroy(core);
+@@ -371,7 +372,7 @@ static int venus_remove(struct platform_device *pdev)
+ 	struct device *dev = core->dev;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	WARN_ON(ret < 0);
+ 
+ 	ret = hfi_core_deinit(core, true);
+@@ -403,7 +404,7 @@ static void venus_core_shutdown(struct platform_device *pdev)
+ {
+ 	struct venus_core *core = platform_get_drvdata(pdev);
+ 
+-	pm_runtime_get_sync(core->dev);
++	pm_runtime_resume_and_get(core->dev);
+ 	venus_shutdown(core);
+ 	venus_firmware_deinit(core);
+ 	pm_runtime_put_sync(core->dev);
 -- 
 2.30.2
 
