@@ -7,45 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B2DC4361B
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:08 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBE906141C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11AFAC43616
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:07 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id EC2FD6141C
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbhDXGqo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35870 "EHLO mail.kernel.org"
+        id S237233AbhDXGqm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232588AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 454076161E;
+        id S232775AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 457106161F;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=+UVQLbAwUBo3UU1F0075Iv595HgVTLhRfgrIPgnhUE0=;
+        bh=WMp2TYCwNpx5gqoBY3FxSLCFIcbo/CZW59R5D62z+MU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BivJEy9zCCeSFE2A1Si3diboItZlT++oy90qX+KxcKQkZTg1bAseNAvYOofN81hYl
-         dR1InB4kajF5CZg2+ge2iwnBbI2deReU3cl0X065Pd+l5cDGTRIy+m1Kt0OjDQsRlb
-         hXCiHU2wyFG4zuzal3MP1r5EiHkoxySYiURx085NdoEqlLSxkdsZviXtd0tRl8RfRh
-         JK40nz4xHsnina8h8VZKSnxg6yx+Sc9zOKdsSAhHUyVGAAY2pNcElmFqARLieEhmFn
-         oZmw5DbtWSzvUGl72pCFsD06N4MncZ0TC7kAJTFj1B+Ioij9xx2JVAV4/7ymx0etuU
-         xHnQ+bIKIx8tA==
+        b=Pb0FEUVsstM+Ka+SkQXcxBAZ6ZpJMMXFngkYhhd6CadyNpITWzT76YSGBH3SAQCRl
+         9OX0YLcnJNWDMOrbkA4N0EI5dzjD/wSrI8UedQhXMPnK9kOhh+gmg0z/ujpIfYe97u
+         39QS+c8PGENgVvW0gbaKq14m3bpoo22M1yxXA8F8xIqGUYhBMM+oboHlllP3r7C28L
+         GVEDa9qF/hrRkuIsF4f9HEQF9JIcMNtua0OSLQa0yFWCyDJstDSrntL2LAumR7ZqSk
+         tYf8RJcrIpPB33Jl8uBbftVxQglMTmkm4uZO+A2DdXGb/lxzdX2DkTGxCdjhuteU6b
+         zWci+lF6KHNsw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jeg-Eu; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2m-004JgN-Fm; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Dan Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH 20/78] media: mtk-vcodec: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:30 +0200
-Message-Id: <f4906ceabe4bbc6a6b10c2409a44b7a14f5c0926.1619191723.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 55/78] media: ipu3: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:05 +0200
+Message-Id: <8c2efb8ac0ead829bbcc9a5586b1e12491048c2b.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -57,34 +58,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
+
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-index ddee7046ce42..fe096fe61c9d 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-@@ -92,9 +92,9 @@ void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
- {
- 	int ret;
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+index fecef85bd62e..ca8040d1a725 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+@@ -975,10 +975,9 @@ static int cio2_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	cio2->cur_queue = q;
+ 	atomic_set(&q->frame_sequence, 0);
  
--	ret = pm_runtime_get_sync(pm->dev);
-+	ret = pm_runtime_resume_and_get(pm->dev);
- 	if (ret)
--		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
-+		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
- }
+-	r = pm_runtime_get_sync(&cio2->pci_dev->dev);
++	r = pm_runtime_resume_and_get(&cio2->pci_dev->dev);
+ 	if (r < 0) {
+ 		dev_info(&cio2->pci_dev->dev, "failed to set power %d\n", r);
+-		pm_runtime_put_noidle(&cio2->pci_dev->dev);
+ 		return r;
+ 	}
  
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
 -- 
 2.30.2
 
