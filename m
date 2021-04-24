@@ -4,46 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 219B2C433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CEFC43470
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0279861482
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AA1A61481
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbhDXGqV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
+        id S234456AbhDXGqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231467AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231202AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 05D5861492;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0704761494;
         Sat, 24 Apr 2021 06:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=CEyymY4/rjVCo+aFrsQVbMV0NkXC9qbuhSIFfneK2dk=;
+        bh=Z6R4eC5Q3SwWmdTS9TKqbcAW+1YcSH8gzpQPRiOs6uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3cWwAl1vyVm77GVb6CNAu4mqCxFefBHk72chkY7qihZiy72NH46UMnelgEvu5DI9
-         orweLgePkbUar+wJ4mwLj+4FEKmMwxzKWFr2fs1Y0LBgxBBS9bd5wgRlpIy5f9Jbcj
-         C0iMThTi1fhA8tF56SlrMHiijR2aS1Heuc0805czBssKmZqJ5gTyX8H64riwlvbUoG
-         K9a7rRLNdDFk83BqoDqoR2aXZRlARvtGsvIWCN836H1YQtMk8jG1Apq9gLpMjn3+jD
-         DSwjNCpoeoJ+kCv7MJNlm40nyf+SNIPOoJDfUV0/upkieUhSd6H6TDaja86lBDDl29
-         4hcKAQpoMLHcA==
+        b=E60MZeLHd/O4FTxK+q0Wp7Ao/sS1av2z5NSMEgwb9eMnrleefz0a/8q8olnHXxyS2
+         rtfnH4CVigKfztrYRERlhs5NyX91utcGyaR02yFzGnKe0joyU7L54W8lduG9hUgRGD
+         afpZAcYbMI3/Chw4IkKMzbWyWp+6Z4MztE0Rd/ykH8Jt4qkXL/PWCzUJJC9h28xyOb
+         6QT+mbIxVVxXg1CZzgOpVwUOUMXBe9aisRUsgfJ91Z2/MkrfPVlS8hAkt5+g+fndV+
+         MvoRSZUseCKfW9/t9qLH9wlzCbhRgAp9rAJ6G5AZt7cHAfNCTr1te8sA2o3I0xi/BP
+         nWpYkJSkxUkXA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Je0-1X; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Je6-3O; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 06/78] media: renesas-ceu: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:16 +0200
-Message-Id: <29ba3fafde4d2643fae49789e6b378d6b1fd51f5.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 08/78] media: am437x:: fix pm_runtime_get_sync() usage count
+Date:   Sat, 24 Apr 2021 08:44:18 +0200
+Message-Id: <08ab4e29fa4ee0ac7102a7e130e5f14d4ee04440.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,29 +61,56 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-While here, check if the PM runtime was caught at open time.
+While here, ensure that the driver will check if PM runtime
+resumed at vpfe_initialize_device().
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/renesas-ceu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-index cd137101d41e..965a7259e707 100644
---- a/drivers/media/platform/renesas-ceu.c
-+++ b/drivers/media/platform/renesas-ceu.c
-@@ -1099,7 +1099,10 @@ static int ceu_open(struct file *file)
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+index 6cdc77dda0e4..c0997d603880 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/am437x/am437x-vpfe.c
+@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
+ 	if (ret)
+ 		return ret;
  
- 	mutex_lock(&ceudev->mlock);
- 	/* Causes soft-reset and sensor power on on first open */
--	pm_runtime_get_sync(ceudev->dev);
-+	ret = pm_runtime_resume_and_get(ceudev->dev);
+-	pm_runtime_get_sync(vpfe->pdev);
++	ret = pm_runtime_resume_and_get(vpfe->pdev);
 +	if (ret < 0)
 +		return ret;
-+
- 	mutex_unlock(&ceudev->mlock);
  
- 	return 0;
+ 	vpfe_config_enable(&vpfe->ccdc, 1);
+ 
+@@ -2443,7 +2445,7 @@ static int vpfe_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	/* for now just enable it here instead of waiting for the open */
+-	pm_runtime_get_sync(&pdev->dev);
++	pm_runtime_resume_and_get(&pdev->dev);
+ 
+ 	vpfe_ccdc_config_defaults(ccdc);
+ 
+@@ -2530,7 +2532,7 @@ static int vpfe_suspend(struct device *dev)
+ 
+ 	/* only do full suspend if streaming has started */
+ 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
+-		pm_runtime_get_sync(dev);
++		pm_runtime_resume_and_get(dev);
+ 		vpfe_config_enable(ccdc, 1);
+ 
+ 		/* Save VPFE context */
+@@ -2587,7 +2589,7 @@ static int vpfe_resume(struct device *dev)
+ 	/* only do full resume if streaming has started */
+ 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
+ 		/* Enable both master and slave clock */
+-		pm_runtime_get_sync(dev);
++		pm_runtime_resume_and_get(dev);
+ 		vpfe_config_enable(ccdc, 1);
+ 
+ 		/* Restore VPFE context */
 -- 
 2.30.2
 
