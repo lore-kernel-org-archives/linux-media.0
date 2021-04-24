@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D3CEC433ED
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 926C5C433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FC4161482
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74F6761465
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbhDXGsg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35726 "EHLO mail.kernel.org"
+        id S237584AbhDXGsj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36128 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237190AbhDXGql (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S229704AbhDXGql (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DE77661949;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DAA3661947;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=xpeO+TqQL6lcPMvPb2Bdk8szQoSs+InwQYAk6UJzVbA=;
+        bh=Luw8i8Wcr7RDhUVQIyKtJIy/TBYgdc1v0nBhRGIz5pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EojMO9FXSFHyxT7wcTLwfBO+LP3dFMh71/mr6tVQ86V0IDwOroL/JmtRbx5wF6QY1
-         V7DVxtNg9fsZyBvZV3/eNpaM+vNAspnats775oaSl46h0TDRVjAFN9rQzGwntE85rN
-         rCo5zwFSM1WSNxBfI7lsauwSHh34jIBG0OEdvMDAKsW8c5o/N71fHoX/ycyXCRrVdC
-         RsE1lYSG9Ub8rFzzziU1YnX6j22F8CvjYcFLqyrRYvsqJZJmlPDns5myNl+kEk8tue
-         Ho4SXO0gyrjQpF1QRkSLhJ3DRzB9nsgb9TkjvobMZVH84LqavWSOy0Bkblj5rYPkls
-         eDST0qplfsVig==
+        b=JJ/17EXdIaQo4vBdqcn8JHsGJHsoMw5jkwHxTd8RLhlkeCZAVlDKL4jNlzaLs6zMk
+         cj0bG8LnkmhW8S5GC1ZZuqLIUmdSxJX9He/1gjHyQRPUVhn+Kra6G0EBaKWOhGhzle
+         Yt+PQvyv8jUgLE+29ufR1Oj0O1C5zJP31ty8iLLdn3Y6Og3qVG6+uusqBuZ0G71rCq
+         qUlN1tmG/hoaAGBgaAkvRuXVEUvwk2fhX/enlHxkU/Imxl2NrlxGmrEWhx3NkiN+j+
+         d17kifflA8o2KmO0/Ki7VtRHwTKYRVvCc5pdLFCJ9MuB99GYHxTWWmCX+fCd8UzFVk
+         l60IDpBEO1rEg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004JgK-Eh; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2m-004Jh6-U4; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 54/78] media: i2c: video-i2c: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:04 +0200
-Message-Id: <3990190ef127055dc87cbc6b3f9065dd919b8508.1619191723.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH 70/78] media: rga-buf: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:20 +0200
+Message-Id: <d81e6df2d1a77dc70a4172b77fc15576010e05b3.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,50 +65,24 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/video-i2c.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/media/platform/rockchip/rga/rga-buf.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 0465832a4090..5cde7da698bd 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -286,11 +286,9 @@ static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
- 	__le16 buf;
- 	int tmp;
+diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
+index bf9a75b75083..81508ed5abf3 100644
+--- a/drivers/media/platform/rockchip/rga/rga-buf.c
++++ b/drivers/media/platform/rockchip/rga/rga-buf.c
+@@ -79,9 +79,8 @@ static int rga_buf_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct rockchip_rga *rga = ctx->rga;
+ 	int ret;
  
--	tmp = pm_runtime_get_sync(regmap_get_device(data->regmap));
--	if (tmp < 0) {
--		pm_runtime_put_noidle(regmap_get_device(data->regmap));
-+	tmp = pm_runtime_resume_and_get(regmap_get_device(data->regmap));
-+	if (tmp < 0)
- 		return tmp;
--	}
- 
- 	tmp = regmap_bulk_read(data->regmap, AMG88XX_REG_TTHL, &buf, 2);
- 	pm_runtime_mark_last_busy(regmap_get_device(data->regmap));
-@@ -512,11 +510,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
- 	if (data->kthread_vid_cap)
- 		return 0;
- 
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto error_del_list;
--	}
- 
- 	ret = data->chip->setup(data);
- 	if (ret)
-@@ -893,7 +889,7 @@ static int video_i2c_remove(struct i2c_client *client)
- {
- 	struct video_i2c_data *data = i2c_get_clientdata(client);
- 
--	pm_runtime_get_sync(&client->dev);
-+	pm_runtime_resume_and_get(&client->dev);
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
- 	pm_runtime_put_noidle(&client->dev);
+-	ret = pm_runtime_get_sync(rga->dev);
++	ret = pm_runtime_resume_and_get(rga->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(rga->dev);
+ 		rga_buf_return_buffers(q, VB2_BUF_STATE_QUEUED);
+ 		return ret;
+ 	}
 -- 
 2.30.2
 
