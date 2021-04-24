@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB679C43600
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B68B1C43460
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A119F61462
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DB9461462
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237279AbhDXGqr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S233588AbhDXGqr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 24 Apr 2021 02:46:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232663AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232649AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 18F7261574;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D03361585;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=Y6FQgC9NsgxSbgFLPZRVR5o2rajl0boXLbSbZWHNz3E=;
+        bh=eeb2tTMTeECwFCJsmdUEhrGisH5F5adY0i6Xu5Zdqhg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LfnO816+/JhLoNHrA0xNpWPG1HfJiqF/yCnK01z4uCQsX1d3UCUufgPePJG4QI/ZW
-         cp51NpdBKYIGPOCUnEs6qS8RrTXHpnyjPoQ2rLTeP1qKdRvJPBgF8Q1ulDmPaio4uS
-         KJLv6e/+j18Ogmc+1UKUSjIcuTU2wlKQ2VPAAdcOF9jWaQWe+t5OruU+SgAC/OUPnE
-         TqvLXEpbR/++Elzb4EDfWWqIbFWJpktyfQmmxRHwPDOEnKEGgstp7E0V9BdQVMur2Q
-         FZ36Ns1RxZBaRRQeIWh1W2hyCD3HGzGjj3gAQ4ov8lgGYimhoCo6v1hutqXsssANMi
-         MwoFkEW4NypRg==
+        b=D7m1+/YgiC8xIlMj7VWQHrs6KgWbpS1N8LJsp0D6XVY9HeH1QzcoilCL/b5uQkYAQ
+         oydnV4l4azslz8/ThhPR9qtwZ/427FYUCr/ElFFIkRn2jKl5txOY3rR2YpGsWXhPOt
+         pr23rFa6b3esb67KfLE6OG9aZG78cqfLOulOKYy70/4mVxYJ4Y5bBOjsrXbL7u0wdS
+         /FUFi9+ar03rkwidUt8goZYedmocf6LN/LYg87ig72ECKRLc0bynMkoCiFlLHjtqFD
+         v39wAgySVnGb1J8Pqgjf6qpjReJ4+fjRUUaEJ7rQMA8I+lf9AdO+6gwDe51OCsYXiE
+         xMuQr36IffuIA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2k-004Jdl-Ss; Sat, 24 Apr 2021 08:45:30 +0200
+        id 1laC2l-004JeX-Bw; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 01/78] media: atmel: properly get pm_runtime
-Date:   Sat, 24 Apr 2021 08:44:11 +0200
-Message-Id: <cd5ded1d2ea82a0fb0e983d014ffcebfadffae31.1619191723.git.mchehab+huawei@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH 17/78] staging: media: vde: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:27 +0200
+Message-Id: <0eeb886803679cd908cb4576d35b2314993abd2c.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -58,153 +58,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are several issues in the way the atmel driver handles
-pm_runtime_get_sync():
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-- it doesn't check return codes;
-- it doesn't properly decrement the usage_count on all places;
-- it starts streaming even if pm_runtime_get_sync() fails.
-- while it tries to get pm_runtime at the clock enable logic,
-  it doesn't check if the operation was suceeded.
-
-Replace all occurrences of it to use the new kAPI:
-pm_runtime_resume_and_get(), which ensures that, if the
-return code is not negative, the usage_count was incremented.
-
-With that, add additional checks when this is called, in order
-to ensure that errors will be properly addressed.
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 26 ++++++++++++++-----
- drivers/media/platform/atmel/atmel-isi.c      | 19 +++++++++++---
- 2 files changed, 34 insertions(+), 11 deletions(-)
+ drivers/staging/media/tegra-vde/vde.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index fe3ec8d0eaee..db1be719192a 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -294,9 +294,13 @@ static int isc_wait_clk_stable(struct clk_hw *hw)
- static int isc_clk_prepare(struct clk_hw *hw)
- {
- 	struct isc_clk *isc_clk = to_isc_clk(hw);
-+	int ret;
+diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
+index 28845b5bafaf..8936f140a246 100644
+--- a/drivers/staging/media/tegra-vde/vde.c
++++ b/drivers/staging/media/tegra-vde/vde.c
+@@ -775,9 +775,9 @@ static int tegra_vde_ioctl_decode_h264(struct tegra_vde *vde,
+ 	if (ret)
+ 		goto release_dpb_frames;
  
--	if (isc_clk->id == ISC_ISPCK)
--		pm_runtime_get_sync(isc_clk->dev);
-+	if (isc_clk->id == ISC_ISPCK) {
-+		ret = pm_runtime_resume_and_get(isc_clk->dev);
-+		if (ret < 0)
-+			return 0;
-+	}
- 
- 	return isc_wait_clk_stable(hw);
- }
-@@ -353,9 +357,13 @@ static int isc_clk_is_enabled(struct clk_hw *hw)
- {
- 	struct isc_clk *isc_clk = to_isc_clk(hw);
- 	u32 status;
-+	int ret;
- 
--	if (isc_clk->id == ISC_ISPCK)
--		pm_runtime_get_sync(isc_clk->dev);
-+	if (isc_clk->id == ISC_ISPCK) {
-+		ret = pm_runtime_resume_and_get(isc_clk->dev);
-+		if (ret < 0)
-+			return 0;
-+	}
- 
- 	regmap_read(isc_clk->regmap, ISC_CLKSR, &status);
- 
-@@ -807,7 +815,9 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		goto err_start_stream;
- 	}
- 
--	pm_runtime_get_sync(isc->dev);
-+	ret = pm_runtime_resume_and_get(isc->dev);
-+	if (ret < 0)
-+		goto err_pm_get;
- 
- 	ret = isc_configure(isc);
- 	if (unlikely(ret))
-@@ -838,7 +848,7 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- err_configure:
- 	pm_runtime_put_sync(isc->dev);
--
-+err_pm_get:
- 	v4l2_subdev_call(isc->current_subdev->sd, video, s_stream, 0);
- 
- err_start_stream:
-@@ -1831,7 +1841,9 @@ static void isc_awb_work(struct work_struct *w)
- 	ctrls->hist_id = hist_id;
- 	baysel = isc->config.sd_format->cfa_baycfg << ISC_HIS_CFG_BAYSEL_SHIFT;
- 
--	pm_runtime_get_sync(isc->dev);
-+	ret = pm_runtime_resume_and_get(isc->dev);
-+	if (ret < 0)
-+		return;
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0)
+-		goto put_runtime_pm;
++		goto unlock;
  
  	/*
- 	 * only update if we have all the required histograms and controls
-diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
-index 0514be6153df..6a433926726d 100644
---- a/drivers/media/platform/atmel/atmel-isi.c
-+++ b/drivers/media/platform/atmel/atmel-isi.c
-@@ -422,7 +422,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
- 	struct frame_buffer *buf, *node;
- 	int ret;
+ 	 * We rely on the VDE registers reset value, otherwise VDE
+@@ -843,6 +843,8 @@ static int tegra_vde_ioctl_decode_h264(struct tegra_vde *vde,
+ put_runtime_pm:
+ 	pm_runtime_mark_last_busy(dev);
+ 	pm_runtime_put_autosuspend(dev);
++
++unlock:
+ 	mutex_unlock(&vde->lock);
  
--	pm_runtime_get_sync(isi->dev);
-+	ret = pm_runtime_resume_and_get(isi->dev);
-+	if (ret < 0)
-+		return ret;
+ release_dpb_frames:
+@@ -1069,8 +1071,8 @@ static int tegra_vde_probe(struct platform_device *pdev)
+ 	 * power-cycle it in order to put hardware into a predictable lower
+ 	 * power state.
+ 	 */
+-	pm_runtime_get_sync(dev);
+-	pm_runtime_put(dev);
++	if (pm_runtime_resume_and_get(dev) >= 0)
++		pm_runtime_put(dev);
  
- 	/* Enable stream on the sub device */
- 	ret = v4l2_subdev_call(isi->entity.subdev, video, s_stream, 1);
-@@ -782,9 +784,10 @@ static int isi_enum_frameintervals(struct file *file, void *fh,
  	return 0;
- }
  
--static void isi_camera_set_bus_param(struct atmel_isi *isi)
-+static int isi_camera_set_bus_param(struct atmel_isi *isi)
+@@ -1088,8 +1090,9 @@ static int tegra_vde_remove(struct platform_device *pdev)
  {
- 	u32 cfg1 = 0;
+ 	struct tegra_vde *vde = platform_get_drvdata(pdev);
+ 	struct device *dev = &pdev->dev;
 +	int ret;
  
- 	/* set bus param for ISI */
- 	if (isi->pdata.hsync_act_low)
-@@ -801,12 +804,16 @@ static void isi_camera_set_bus_param(struct atmel_isi *isi)
- 	cfg1 |= ISI_CFG1_THMASK_BEATS_16;
+-	pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	pm_runtime_dont_use_autosuspend(dev);
+ 	pm_runtime_disable(dev);
  
- 	/* Enable PM and peripheral clock before operate isi registers */
--	pm_runtime_get_sync(isi->dev);
-+	ret = pm_runtime_resume_and_get(isi->dev);
-+	if (ret < 0)
-+		return ret;
+@@ -1097,7 +1100,8 @@ static int tegra_vde_remove(struct platform_device *pdev)
+ 	 * Balance RPM state, the VDE power domain is left ON and hardware
+ 	 * is clock-gated. It's safe to reboot machine now.
+ 	 */
+-	pm_runtime_put_noidle(dev);
++	if (ret >= 0)
++		pm_runtime_put_noidle(dev);
+ 	clk_disable_unprepare(vde->clk);
  
- 	isi_writel(isi, ISI_CTRL, ISI_CTRL_DIS);
- 	isi_writel(isi, ISI_CFG1, cfg1);
- 
- 	pm_runtime_put(isi->dev);
-+
-+	return 0;
- }
- 
- /* -----------------------------------------------------------------------*/
-@@ -1085,7 +1092,11 @@ static int isi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 		dev_err(isi->dev, "No supported mediabus format found\n");
- 		return ret;
- 	}
--	isi_camera_set_bus_param(isi);
-+	ret = isi_camera_set_bus_param(isi);
-+	if (ret) {
-+		dev_err(isi->dev, "Can't wake up device\n");
-+		return ret;
-+	}
- 
- 	ret = isi_set_default_fmt(isi);
- 	if (ret) {
+ 	misc_deregister(&vde->miscdev);
 -- 
 2.30.2
 
