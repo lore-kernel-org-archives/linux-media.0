@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BB9C433ED
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63975C433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09E9761482
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44D7A61465
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242459AbhDXGrg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35790 "EHLO mail.kernel.org"
+        id S242483AbhDXGri (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233451AbhDXGqS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A1B69616EC;
+        id S233626AbhDXGqU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA7606193F;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=jhFOuNkS8GXbkVzxvUoQK+5PtoGb2Bw8SlIbqUkTFTg=;
+        bh=XV1aFn/9IHvqaI3bNO5mEA5OXRMeQJuzMBPERWbm1lc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f0e1rGgjIIBj1g4o3qoPMHGh38ogpUaaRRj7LnyzkinsjZXhfgcyiyxpv3kt76jx8
-         c1D3lIFzvZ+KmClGOg+gG/lhoHi3TZoaSs8rPoY5aGXMEpXnktqKIPs1SdKkzsV79J
-         LyPl8TLyMAEkfHMLJm58Zagyr/NT0o8aZtLrNURNa6mC7UQEt+a6GQABrUJaBMKg3y
-         +/alcuHQ+0bf8Pv2F5WI+bncbc+hL2uxfadRkEDDett0iXhnGBoNVa7SP5+jayKVdC
-         Hn1Plrz7oFSUdaa1y10nGv+x02uzPDI4udauwEgVjlGjW4KATJjhBwuG3qtY0U3L2Y
-         yXHJpTOdX2/Aw==
+        b=YDufxags8Yy2ihXmzrgCGfQA5W3ONdMbGdY2XOLLwAjHtSUCGTDoT+jwb2CbNrQDB
+         gARYqH+DSBuMOJ6Eh0UYtXhQUmGnoQpKSzvQkqR4CHYlwYEw26HRaxm/Ofh51nR4gk
+         8NeqYiAVkrGib++ooyfu+VwFeXXfnmatNR91eSs2iwRgRb26vhZxQtLvf8vMCIxexU
+         tcT6Hxm27Rky05JLCeZ1jz4nGP/xeOPs0b0p11fN5zPuQq2Xv1fIr8t0tiENEA8URi
+         6DNVnGhKt4DXF2CZEWgCeTrSzqwHhZ0xmoTgeWyUmOw7gqAoVJymNDz8RuzFMUvdoK
+         lZux7sBo7Dy3Q==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jgo-OS; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2l-004JfY-Vi; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 64/78] media: core: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:14 +0200
-Message-Id: <1fb9919b1cb83dd6db934dab74442c981eeda7f0.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 38/78] media: i2c: mt9m001: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:48 +0200
+Message-Id: <beddb7295807f43a190f2add6c1665b7475cb154.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -65,86 +63,42 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/media/i2c/mt9m001.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 54bac7ec14c5..c156320fa256 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -84,7 +84,7 @@ static void venus_sys_error_handler(struct work_struct *work)
- 			container_of(work, struct venus_core, work.work);
- 	int ret = 0;
+diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
+index 3b0ba8ed5233..57e15a291ebd 100644
+--- a/drivers/media/i2c/mt9m001.c
++++ b/drivers/media/i2c/mt9m001.c
+@@ -217,9 +217,9 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
+ 		goto done;
  
--	pm_runtime_get_sync(core->dev);
-+	pm_runtime_resume_and_get(core->dev);
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(&client->dev);
++		ret = pm_runtime_resume_and_get(&client->dev);
+ 		if (ret < 0)
+-			goto put_unlock;
++			goto unlock;
  
- 	hfi_core_deinit(core, true);
+ 		ret = mt9m001_apply_selection(sd);
+ 		if (ret)
+@@ -247,6 +247,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
  
-@@ -106,7 +106,7 @@ static void venus_sys_error_handler(struct work_struct *work)
+ put_unlock:
+ 	pm_runtime_put(&client->dev);
++unlock:
+ 	mutex_unlock(&mt9m001->mutex);
  
- 	hfi_reinit(core);
- 
--	pm_runtime_get_sync(core->dev);
-+	pm_runtime_resume_and_get(core->dev);
- 
- 	ret |= venus_boot(core);
- 	ret |= hfi_core_resume(core, true);
-@@ -305,21 +305,21 @@ static int venus_probe(struct platform_device *pdev)
- 
- 	pm_runtime_enable(dev);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
- 		goto err_runtime_disable;
- 
- 	ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
- 	if (ret)
--		goto err_runtime_disable;
-+		goto err_pm;
- 
- 	ret = venus_firmware_init(core);
- 	if (ret)
--		goto err_runtime_disable;
-+		goto err_pm;
- 
- 	ret = venus_boot(core);
- 	if (ret)
--		goto err_runtime_disable;
-+		goto err_pm;
- 
- 	ret = hfi_core_resume(core, true);
- 	if (ret)
-@@ -351,8 +351,9 @@ static int venus_probe(struct platform_device *pdev)
- 	v4l2_device_unregister(&core->v4l2_dev);
- err_venus_shutdown:
- 	venus_shutdown(core);
--err_runtime_disable:
-+err_pm:
- 	pm_runtime_put_noidle(dev);
-+err_runtime_disable:
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_disable(dev);
- 	hfi_destroy(core);
-@@ -371,7 +372,7 @@ static int venus_remove(struct platform_device *pdev)
- 	struct device *dev = core->dev;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	WARN_ON(ret < 0);
- 
- 	ret = hfi_core_deinit(core, true);
-@@ -403,7 +404,7 @@ static void venus_core_shutdown(struct platform_device *pdev)
+ 	return ret;
+@@ -834,7 +835,7 @@ static int mt9m001_remove(struct i2c_client *client)
  {
- 	struct venus_core *core = platform_get_drvdata(pdev);
+ 	struct mt9m001 *mt9m001 = to_mt9m001(client);
  
--	pm_runtime_get_sync(core->dev);
-+	pm_runtime_resume_and_get(core->dev);
- 	venus_shutdown(core);
- 	venus_firmware_deinit(core);
- 	pm_runtime_put_sync(core->dev);
+-	pm_runtime_get_sync(&client->dev);
++	pm_runtime_resume_and_get(&client->dev);
+ 
+ 	v4l2_async_unregister_subdev(&mt9m001->subdev);
+ 	media_entity_cleanup(&mt9m001->subdev.entity);
 -- 
 2.30.2
 
