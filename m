@@ -4,45 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39018C433ED
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C586C433ED
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D6E261481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4240D61462
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbhDXGq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36102 "EHLO mail.kernel.org"
+        id S237403AbhDXGrA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36096 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233148AbhDXGqO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233135AbhDXGqO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84FD561883;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 654736162A;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=8oeNDL2f6ftikmJG74aEJuwd7JVkpDOtWW3l23y+D78=;
+        bh=K1pnGXdSmZk3xIP43jgrjSRkXQPJaoq5GvJcaE8AzVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bGdQ4g/gJyNCz0LQj8u6n88WF7b0S6Xu1onkMcimk0a8pYtXgt5y8lsdHl7CXibXW
-         WQ0sjPDTr5dBBuLUspweR54JOJ/T42D/qGzELI525e6tL2SnzGv18Q1xkpVdX4p+Px
-         q1VC8dwYBevkatfxeEgZWGGQYJmKdEU3tZOwlRFMysVkdxdply4b/3CT7c342vgbPy
-         QpYmYA2uAtPONuJVdElIVuoFZoVLsH50HPtvscqomyh49H9TTwNJGYgk/LbEXJiIhv
-         N5essxLY7swKsUZBTl3dVMXiPPOK2F3EsVASQ/kD7wb6cKv+3ITlDwuHscSdR1DIoK
-         4EDxQdVXqNA1A==
+        b=WaC6N38N36D/6kQYFhef7YtzyJvGaRXx8bNQIgl313jmXLJUtGq3Yv4LDyeYgnQ7r
+         oBw15fbTPSXyCzjEsV3jOUTp09Mna3rDpE7dvJLmMAszBUEz+2hxpB8xuLQNQYisYL
+         x3ZAEhSlU6rEYvrAPO00t0fa+bdSgRtIFdz7bbQJehMzn+Ste+iEfcINQH4vZw07dm
+         atYmh9REZQvpylHT++WGKDih/H40ph/4ehUKLS5xx+PX5460iMihhnMezuOcX9ybVp
+         sge6EfFPayzilwvFz8gOd1WwS6ZhMAnvPDbET7XjuEMa/SuvhT43toRSkfjPECOA6V
+         EzoPhXYZ/ZHxQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jf4-MS; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2n-004JhC-3C; Sat, 24 Apr 2021 08:45:33 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 28/78] media: i2c: dw9807-vcm: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:38 +0200
-Message-Id: <f8df9ced8328935403ed0449bdfc77e5b5145839.1619191723.git.mchehab+huawei@kernel.org>
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 72/78] media: s3c-camif: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:22 +0200
+Message-Id: <3cfe70dad65dc078a656458cb55087a5269e9cc3.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,30 +63,57 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/dw9807-vcm.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/media/platform/s3c-camif/camif-capture.c | 5 ++---
+ drivers/media/platform/s3c-camif/camif-core.c    | 5 +++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/i2c/dw9807-vcm.c b/drivers/media/i2c/dw9807-vcm.c
-index 438a44b76da8..95e06f13bc9e 100644
---- a/drivers/media/i2c/dw9807-vcm.c
-+++ b/drivers/media/i2c/dw9807-vcm.c
-@@ -130,15 +130,7 @@ static const struct v4l2_ctrl_ops dw9807_vcm_ctrl_ops = {
+diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
+index 9ca49af29542..01fa08065ebc 100644
+--- a/drivers/media/platform/s3c-camif/camif-capture.c
++++ b/drivers/media/platform/s3c-camif/camif-capture.c
+@@ -547,16 +547,15 @@ static int s3c_camif_open(struct file *file)
+ 	if (ret < 0)
+ 		goto unlock;
  
- static int dw9807_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	int rval;
--
--	rval = pm_runtime_get_sync(sd->dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(sd->dev);
--		return rval;
--	}
--
--	return 0;
-+	return pm_runtime_resume_and_get(sd->dev);
- }
+-	ret = pm_runtime_get_sync(camif->dev);
++	ret = pm_runtime_resume_and_get(camif->dev);
+ 	if (ret < 0)
+-		goto err_pm;
++		goto unlock;
  
- static int dw9807_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	ret = sensor_set_power(camif, 1);
+ 	if (!ret)
+ 		goto unlock;
+ 
+ 	pm_runtime_put(camif->dev);
+-err_pm:
+ 	v4l2_fh_release(file);
+ unlock:
+ 	mutex_unlock(&camif->lock);
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index 4c3c00d59c92..e1d51fd3e700 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -460,9 +460,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(dev);
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0)
+-		goto err_pm;
++		goto err_disable;
+ 
+ 	ret = camif_media_dev_init(camif);
+ 	if (ret < 0)
+@@ -502,6 +502,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	camif_unregister_media_entities(camif);
+ err_pm:
+ 	pm_runtime_put(dev);
++err_disable:
+ 	pm_runtime_disable(dev);
+ 	camif_clk_put(camif);
+ err_clk:
 -- 
 2.30.2
 
