@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64BA9C43470
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42B48C433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C6C96141C
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24FA861462
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237353AbhDXGqz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35850 "EHLO mail.kernel.org"
+        id S237369AbhDXGq4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233114AbhDXGqO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233128AbhDXGqO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D4336162E;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8359161878;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=m64ImWemcDvzoxNs/RTwo1kfQAMDPhZ/gqUqkdvzLdQ=;
+        bh=yvRexqPmybCXcMQCunEHPJjJgD+ZEwM3R67ntrsgrMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=stcu5bVIYFAopogZn2iuHhrvCzbn/FwqKsmEN5LeAF8k5TEaleUZc0QBlBCkRDq/s
-         CXsIOUSc7iSCUp0HN4wx6YYFjzGGmjpy4Cfiw0MVBSYaDbCaMcWDaLynlFihQEwfhp
-         98OGauaQaYZX3+wHXZJXw5p6kBLj47T0xMpNLbPCZ/nOZlmU2OI3L1MbFft0ZZz0nQ
-         kE+fpFkNSTryUthc8vkf9buV0fIAzyB7U/KHNH1y3lcppI/wSMmBM7RHJwK0CUanHh
-         K0FKOT2sC+Sy9gIeQoxBPmAXNoNJMmWKeH7U+lPXRVll47zLZL+fdw7vH/5KCfNPvo
-         K8T4dPPicO4kg==
+        b=hNl9sqH178teiiWgrTjfWa5xHG3JfnUN3Dz2hmxFOfkU1/zK+QtXs7LFSU0E9sENA
+         tQiRE3XhoRKuDhrBg4ierhr5oElupGaJMwg2EIFO1bfLDHGRoAqlKWTxJl9kGrSRmR
+         FguRzdbTFQdrFb/z0Os2ra2QW6qTcDOyMoa5NekaVJGMllXk5aZUG4xvl1BmszD2S3
+         hx+GWcuoYBGzSwkMNcdngJs5vwIkLoPce/vZYh6A/RLzF7ZwSCy6x2ln/LV5THMi/P
+         zvKSNhKC/w2fSzHGuqkLRDsH7p5tF/tqD1GEXVZkTBrT5XpECQ+zpdkNF6aihEYUV5
+         VRQJubbBRWRhg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jem-Gq; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Jey-Kd; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 22/78] media: delta-v4l2: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:32 +0200
-Message-Id: <daf1905dd8afe2b098ac2155c8ddf456c0fb53a7.1619191723.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 26/78] media: i2c: dw9714: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:36 +0200
+Message-Id: <df432c98bdc580aa0ae16a208270f054437ca35a.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -54,34 +54,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
+
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/dw9714.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c691b3d81549..9928b7c46a41 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
- 	int ret = 0;
+diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
+index 3f0b082f863f..c8b4292512dc 100644
+--- a/drivers/media/i2c/dw9714.c
++++ b/drivers/media/i2c/dw9714.c
+@@ -85,15 +85,7 @@ static const struct v4l2_ctrl_ops dw9714_vcm_ctrl_ops = {
  
- 	/* enable the hardware */
--	ret = pm_runtime_get_sync(delta->dev);
-+	ret = pm_runtime_resume_and_get(delta->dev);
- 	if (ret < 0) {
--		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-+		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
- 			__func__, ret);
- 		return ret;
- 	}
+ static int dw9714_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ {
+-	int rval;
+-
+-	rval = pm_runtime_get_sync(sd->dev);
+-	if (rval < 0) {
+-		pm_runtime_put_noidle(sd->dev);
+-		return rval;
+-	}
+-
+-	return 0;
++	return pm_runtime_resume_and_get(sd->dev);
+ }
+ 
+ static int dw9714_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
