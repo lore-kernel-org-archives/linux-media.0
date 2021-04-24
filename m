@@ -4,46 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE59C43603
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2034C4360C
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10A2461481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C671661482
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbhDXGq3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35724 "EHLO mail.kernel.org"
+        id S235689AbhDXGqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230471AbhDXGqL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 00F5561490;
-        Sat, 24 Apr 2021 06:45:32 +0000 (UTC)
+        id S231889AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C890614A7;
+        Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=vlWzPcglj3c5YNM8fjCOIG3b1giv6Ug3RyqxVuPOXCU=;
+        bh=YlEqY5pc+hA5phvy8MwyUatVyMBo1evkBwuBpSmvG/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o3EHnDj8lhhvnbL6MRbpHKQ/z5hcFwYB1uy5+C27DD6o3NjrCIAnM8ePevlYORY1E
-         vDCdRSv/aGJRGra5RwV34014Euwi8obXklrpKcV/B0nbgOrDzQJDukjCPF2dKYXtJx
-         aRb17bfiiUsJsB3ed19jypufTmKuczryK+6CX/Z5eAGEblROp19TX6LRptFxkMdhxw
-         SXgUcfLSF6tHZWkCs0N/w9Y40O6Bd1CjS+nfLgWiI+S6eJ7+oXwzkBBpXUPXzebuxA
-         yF/oLgT53PzqbltJZ5DQX8XNegGPKaC7G+ohOZmkSSpePo0goIgxJUgHV1Io+vzjb2
-         oDJCxo5PtSS2w==
+        b=eudcKq0s7hz/90ZTY5o/W+EkxN7U+wRN7i/h28mYwqD6m8UJjzKMHrwLoLyidK/y9
+         ElMN37xIFXzAyaZgJzXebfbCwOIR/ZZo/2kc1k6jPF595U1f/ez0HXFxdYpwbkx73w
+         SAVk37xTTYwFPFnKdMCcv0LNoDbw/StTPY6M2LAaFJ27A/vIW1uGf9EUPTT1bJdt8W
+         2ghHUDAnaamVx0OfxmNwHveQfG6dxEMG/kvcrG10rn3sRTMNWBzUolw5wRc1VBVDx9
+         eg+xDUyXdnbHR9wNhNZKRf0X5bsc13efOxO+Z9XfufX1WCipFpDii/isD684/T2cYq
+         pWkfE466X70Ug==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2k-004Jdu-Vn; Sat, 24 Apr 2021 08:45:30 +0200
+        id 1laC2k-004Jdp-Us; Sat, 24 Apr 2021 08:45:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 04/78] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:14 +0200
-Message-Id: <b9387e2fb2cbc2c9f0ba90ca8068e009de5fe007.1619191723.git.mchehab+huawei@kernel.org>
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 03/78] media: mdk-mdp: fix pm_runtime_get_sync() usage count
+Date:   Sat, 24 Apr 2021 08:44:13 +0200
+Message-Id: <8b84cb38beeac55b21c8cbc9dc16e1319c5dc960.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,45 +65,35 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-Also, right now, the driver is ignoring any troubles when
-trying to do PM resume. So, add the proper error handling
-for the code.
+While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
+as it doesn't make any sense to return 0 if the PM runtime failed
+to resume.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/rcar_fdp1.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 01c1fbb97bf6..c32d237af618 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -2140,7 +2140,13 @@ static int fdp1_open(struct file *file)
- 	}
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index ace4528cdc5e..f14779e7596e 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mtk_mdp_ctx *ctx = q->drv_priv;
+ 	int ret;
  
- 	/* Perform any power management required */
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0) {
-+		v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+		v4l2_ctrl_handler_free(&ctx->hdl);
-+		kfree(ctx);
-+		goto done;
-+	}
+-	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
+ 	if (ret < 0)
+-		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
++		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
+ 			    ctx->id, ret);
  
- 	v4l2_fh_add(&ctx->fh);
+-	return 0;
++	return ret;
+ }
  
-@@ -2351,7 +2357,9 @@ static int fdp1_probe(struct platform_device *pdev)
- 
- 	/* Power up the cells to read HW */
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0)
-+		return ret;
- 
- 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
- 	switch (hw_version) {
+ static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
