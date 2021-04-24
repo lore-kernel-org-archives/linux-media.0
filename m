@@ -4,48 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE01C433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6186AC433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A14B561465
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48F9A61482
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237123AbhDXGru (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36098 "EHLO mail.kernel.org"
+        id S244194AbhDXGrx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233881AbhDXGqV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233997AbhDXGqV (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE9596192C;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA30C6193E;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=phIvrsjCST0hqKSIzsjBL4/Aigr4NLUZL7GWQhPHYlY=;
+        bh=rXQEV5ur3+5U6VOB8wAB6dlcXqNLqRBsrKFm5rfs1io=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cxSFgyYt65X6dvnIBfiw6H7qS2vlKGvcmw4KHyHoUyxWnqX8L9c+gfIXD3Y3m8dbS
-         dq3aHWIJJKPyjS/0EPKp/khRcxjQeUxk/p8zK+oVFhiyovvh2SWpWxjkX2nR5CpDwu
-         T/0XhtG5aKGyjgo5GsfFENKinn+482sPhk4zhUL91BWV1GmT04j4Ny59LMAEhqy6+V
-         CRDBiXpbTc8TPJa9Tq/P+pPrbi/dd4GCBVQg4kPFvY0oE0U2I/3hs2GRn0QkE6HAbW
-         Vy55DDXf/pc8LP9gyW7iOVYetsYndvPgXRBxeU5CJdb/k56ofmI75MWWoSSyLrcSvf
-         T/hHbv1tgWt3A==
+        b=KIbr3SiiTvQRZ7RkL4yt6P99Y/WGlTlPtlFwzWn/sGZQlyMHrutQqWVIWqJr2dEP8
+         0V06/jXowg+wgkvxygqmwDdez7KLiiksMqEA6sY3Riz+oycEB/EwlWPT9YRhNZ5bBv
+         2mk80Pjh9i++OnQ1UQLSg6P5jAElktGg9E0qh24H+r9C97BDTPzHoMtvMFP98DP1A3
+         sUtawt6/73xO7B6ob8Iv9r9LlT5L2fea1JjUK7cg4/dl6Q6nPkfYGefr2srakB1UNt
+         QYUZEXroVZYR3ue8Y52rjTFEfupscnxGPV1BWQeUGOiZip6dKR2hVp+zunLN/zZvgd
+         jTkhuwGei51/A==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jgx-RJ; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2m-004Jfb-0N; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 67/78] media: venc: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:17 +0200
-Message-Id: <382afe29b3e860182d9c09579d11b8884a07414b.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 39/78] media: i2c: ov02a10: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:49 +0200
+Message-Id: <bc86e3047d9e09c3e2ca0f889a322c108a0a1d9f.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -65,33 +62,27 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/venc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov02a10.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 4a7291f934b6..8dd49d4f124c 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1205,9 +1205,9 @@ static int venc_open(struct file *file)
+diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
+index c47b1d45d8fd..a1d7314b20a9 100644
+--- a/drivers/media/i2c/ov02a10.c
++++ b/drivers/media/i2c/ov02a10.c
+@@ -540,11 +540,9 @@ static int ov02a10_s_stream(struct v4l2_subdev *sd, int on)
+ 	}
  
- 	venus_helper_init_instance(inst);
+ 	if (on) {
+-		ret = pm_runtime_get_sync(&client->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&client->dev);
++		ret = pm_runtime_resume_and_get(&client->dev);
++		if (ret < 0)
+ 			goto unlock_and_return;
+-		}
  
--	ret = pm_runtime_get_sync(core->dev_enc);
-+	ret = pm_runtime_resume_and_get(core->dev_enc);
- 	if (ret < 0)
--		goto err_put_sync;
-+		goto err_free;
- 
- 	ret = venc_ctrl_init(inst);
- 	if (ret)
-@@ -1252,6 +1252,7 @@ static int venc_open(struct file *file)
- 	venc_ctrl_deinit(inst);
- err_put_sync:
- 	pm_runtime_put_sync(core->dev_enc);
-+err_free:
- 	kfree(inst);
- 	return ret;
- }
+ 		ret = __ov02a10_start_stream(ov02a10);
+ 		if (ret) {
 -- 
 2.30.2
 
