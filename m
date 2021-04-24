@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E486C43470
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DA3FC433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FF696141C
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6755561465
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbhDXGqO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35590 "EHLO mail.kernel.org"
+        id S229826AbhDXGqQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230174AbhDXGqL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S230178AbhDXGqL (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E9C3E61483;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E67B861465;
         Sat, 24 Apr 2021 06:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=HLe4KX/Ouhc4/WYApYd3CynqFlO8CSujJDb9/8qfwSU=;
+        bh=SI6ASvXrwKssaCaDesHdO6M/J0SbTwTE6pmD5fN7U7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GBL4bWOnVTK1kJcRfLdnm0x7AaZqDixllJExz1LOznP0I/P4vYOO3De43EBSeUOqx
-         /6MF86gghR2iamcgjhxxnkW9CGyD+Ur1ZWVSEJF1WBi7WLPKVX2wqeztFx+PJ6gj8R
-         JY4PdMMMbGoSqoGHhmWsqqNrMGEF3yfXEhlcYPoZTBCdEn4/LOTwJ7dNGSCfR0zDIz
-         VgWWB4Bk0+XPmJkZ46eKeN3kZpoaTmzGsa0qXsD2sRL/G8u+S2XqGWLVYbvPpZ8lQ7
-         RGf87MupwMkPEh1KN+nTgYizLR/1huqaFbQk1pf4/KsDDG7Xfxxzyx1Yth6pG6UBzu
-         UtAfZgFl0dYlg==
+        b=MlvAJVdxYxdTiSmkV5piWLcfmZ7+vTiSrLw1ps3w8gNhBGD5Voq3MjTMnVDUljV/G
+         dqDVisj6scq5gMu+6xGvmbnT+uHd0+V0oHRw/x3n1hrxGMrs22N+hCF5VxDjhI5hA/
+         VM+kWm1D8lHh+0cS65zHwwvc6Sn8h3B0ClzC1YrFVU8RRL5JGIBtonqgT999a7nV86
+         gfeILM9cSmDu+tS3A3i98cpFpmC0y5v/nuE1FOyhpjQt5GJCK0iKX7mOs1UFhHSyVr
+         WwAIFr5ohLarof++aQWg8MVcuLLNXZkabz88Fl19DAMHJvXcfsiZ/OGzKnFhcdKaaz
+         3ua0iRxgMtkzA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Je3-2U; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Je9-4K; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 07/78] media: s5p: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:17 +0200
-Message-Id: <fa58c9a2230058116a30f682a03e496c732b9255.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 09/78] media: sh_vou: fix pm_runtime_get_sync() usage count
+Date:   Sat, 24 Apr 2021 08:44:19 +0200
+Message-Id: <c70b52a82da86bfc1b2e8b89a197b1f1f637d652.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -63,33 +63,30 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-While here, check if the PM runtime was caught at
-s5p_cec_adap_enable().
+While here, check if the PM runtime was caught at open time.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/cec/platform/s5p/s5p_cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/sh_vou.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
-index 2a3e7ffefe0a..2250c1cbc64e 100644
---- a/drivers/media/cec/platform/s5p/s5p_cec.c
-+++ b/drivers/media/cec/platform/s5p/s5p_cec.c
-@@ -35,10 +35,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
- 
- static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
- {
-+	int ret;
- 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
- 
- 	if (enable) {
--		pm_runtime_get_sync(cec->dev);
-+		ret = pm_runtime_resume_and_get(cec->dev);
-+		if (ret < 0)
-+			return ret;
- 
- 		s5p_cec_reset(cec);
- 
+diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
+index 4ac48441f22c..ca4310e26c49 100644
+--- a/drivers/media/platform/sh_vou.c
++++ b/drivers/media/platform/sh_vou.c
+@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
+ 	if (v4l2_fh_is_singular_file(file) &&
+ 	    vou_dev->status == SH_VOU_INITIALISING) {
+ 		/* First open */
+-		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
++		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
++		if (err < 0) {
++			v4l2_fh_release(file);
++			goto done_open;
++		}
+ 		err = sh_vou_hw_init(vou_dev);
+ 		if (err < 0) {
+ 			pm_runtime_put(vou_dev->v4l2_dev.dev);
 -- 
 2.30.2
 
