@@ -4,49 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 754B4C433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0047FC43461
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 553AD613B6
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D348E61465
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbhDXGsC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35724 "EHLO mail.kernel.org"
+        id S237297AbhDXGsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231836AbhDXGqY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4B0061938;
+        id S234473AbhDXGq1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D46B961943;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=SctF1EnznGEIIpIjxgpYNPSyfgvGAqEmSYB5mfWpmqw=;
+        bh=UPiG7WjyXSC7rjSk7XmxEwGay8JCnhR2MqRqUi6k0z0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=arwgI/cDLDju5CZsvLz/7iYTgKUDGxX9A+Kk8KAMtCPdRBDsaDwpqF+i50mMhZD5i
-         QIyFlokd9FKVUQd2NoUp2O7O1HysEp4aHcLWnJ/yzKRRf1jywxKFfcBXiQE/1tlTgE
-         rSqdu6+3CcLe3SNqlVyKKmKFMdvf9LCYlNQ+l9Vxs3gYFSPBinX/Dc2JLgT8fq70hm
-         WioKYLsPMR4AA+9xb63r6TMIe7Epexj3Lu9aZcxKxLsR3gcLsNVZWUFfntipsTVZ/e
-         KmDWrxUpldB372ZDyOmb45LEnlfX82lRSY1MSQqMR9tyqO35zucG5jLZohKuS5fQmS
-         uIXfBg+LKtWWA==
+        b=ptCG4hLUA7WpUVdM3fjbS9LgdHDMYl+UBbr8i/SGdbyQ3V5CP7xWc+6sBzit0enAe
+         ZN6fU5dW7dhZ/7DPsIds2VIuU0RHIvjXixgzb4t1Rq9hKYF+T2Vhx0cn3I58b56Agk
+         PsfZj/kiuHQt6/FW8vaIMrtSKh01Lid770t0jCTT0b78It/lTbazJtWxExAqm6D6P6
+         5N/D+JlQhvgQEVWDcGjwufa7ykIwPmS24kV/EYbwg6iOAYbrjFJrxm2VXO/pcdfjwO
+         WtgOLn+4JrME+7cgreOnj/hGcPZAjgKpJM3dc75eejotRd+3KrGY0ghp3N18yFBcH+
+         DdyEcF2qOnyQA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jgl-NU; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2l-004JfS-Tv; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 63/78] media: camss-vfe: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:13 +0200
-Message-Id: <925188c1bbe50a14b21bfcc8886e9419a55f9b62.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 36/78] media: i2c: imx334: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:46 +0200
+Message-Id: <07cca2da63bfe905e3c4dc9c51945ead79c63572.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -66,33 +63,33 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/camss/camss-vfe.c | 5 +++--
+ drivers/media/i2c/imx334.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 15695fd466c4..cf743e61f798 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -584,9 +584,9 @@ static int vfe_get(struct vfe_device *vfe)
- 		if (ret < 0)
- 			goto error_pm_domain;
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index 047aa7658d21..a5a03bb4a6ae 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -717,9 +717,9 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
+ 	}
  
--		ret = pm_runtime_get_sync(vfe->camss->dev);
-+		ret = pm_runtime_resume_and_get(vfe->camss->dev);
- 		if (ret < 0)
--			goto error_pm_runtime_get;
-+			goto error_domain_off;
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(imx334->dev);
++		ret = pm_runtime_resume_and_get(imx334->dev);
+ 		if (ret)
+-			goto error_power_off;
++			goto error_unlock;
  
- 		ret = vfe_set_clock_rates(vfe);
- 		if (ret < 0)
-@@ -620,6 +620,7 @@ static int vfe_get(struct vfe_device *vfe)
+ 		ret = imx334_start_streaming(imx334);
+ 		if (ret)
+@@ -737,6 +737,7 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
  
- error_pm_runtime_get:
- 	pm_runtime_put_sync(vfe->camss->dev);
-+error_domain_off:
- 	vfe->ops->pm_domain_off(vfe);
+ error_power_off:
+ 	pm_runtime_put(imx334->dev);
++error_unlock:
+ 	mutex_unlock(&imx334->mutex);
  
- error_pm_domain:
+ 	return ret;
 -- 
 2.30.2
 
