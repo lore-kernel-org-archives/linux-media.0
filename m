@@ -4,45 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6186AC433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70F68C43460
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48F9A61482
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 554CB61482
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244194AbhDXGrx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35726 "EHLO mail.kernel.org"
+        id S237185AbhDXGr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233997AbhDXGqV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA30C6193E;
+        id S234041AbhDXGqW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B521261932;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=rXQEV5ur3+5U6VOB8wAB6dlcXqNLqRBsrKFm5rfs1io=;
+        bh=SAhPriNR9qiCUHOpk5nwypqhByAWvaCmyWtxT8wI2LQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KIbr3SiiTvQRZ7RkL4yt6P99Y/WGlTlPtlFwzWn/sGZQlyMHrutQqWVIWqJr2dEP8
-         0V06/jXowg+wgkvxygqmwDdez7KLiiksMqEA6sY3Riz+oycEB/EwlWPT9YRhNZ5bBv
-         2mk80Pjh9i++OnQ1UQLSg6P5jAElktGg9E0qh24H+r9C97BDTPzHoMtvMFP98DP1A3
-         sUtawt6/73xO7B6ob8Iv9r9LlT5L2fea1JjUK7cg4/dl6Q6nPkfYGefr2srakB1UNt
-         QYUZEXroVZYR3ue8Y52rjTFEfupscnxGPV1BWQeUGOiZip6dKR2hVp+zunLN/zZvgd
-         jTkhuwGei51/A==
+        b=AH/aohbJTXkk53XxBSfIIzU/NIkaOH9jjmX2c+i2KMEyJV1KV3/i8PFVJyxAPtGUL
+         4Xkyh6U4UyE1ujNE8dVGSkmaSazpLqT37HZoXkQAfB2IaOjDasfMm0CZp1dgsGnOWJ
+         5yhiGl0Bv4z72NyVRNZbTSPpZmgHjpezLTzHJRyNXPUVYEzLyfvA2Plnbgo1DdCKkR
+         Qy+zlkWuGCjJBZBn1vTW6tqFg4sTVfB1dXVH6JpiYYMf6dPCfQP4GPS0TX7XEoVIeT
+         rBXM9LlPw3C91oiKsRuozxBMkFkhAmsVHJeRB0YYGn5RP2YGQhNSmSgH6iOa1PLqLp
+         oHZHxmwfBvzhw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jfb-0N; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2m-004Jh3-T5; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 39/78] media: i2c: ov02a10: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:44:49 +0200
-Message-Id: <bc86e3047d9e09c3e2ca0f889a322c108a0a1d9f.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 69/78] media: rcar-vin: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:19 +0200
+Message-Id: <dc7f4bc45cd6be79d19d1a4027fb6f35dfb45a03.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,27 +63,60 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov02a10.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 2 +-
+ drivers/media/platform/rcar-vin/rcar-dma.c  | 6 ++----
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 6 ++----
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-index c47b1d45d8fd..a1d7314b20a9 100644
---- a/drivers/media/i2c/ov02a10.c
-+++ b/drivers/media/i2c/ov02a10.c
-@@ -540,11 +540,9 @@ static int ov02a10_s_stream(struct v4l2_subdev *sd, int on)
- 	}
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index e06cd512aba2..85574765a11a 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -408,7 +408,7 @@ static void rcsi2_enter_standby(struct rcar_csi2 *priv)
  
- 	if (on) {
--		ret = pm_runtime_get_sync(&client->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
-+		if (ret < 0)
- 			goto unlock_and_return;
--		}
+ static void rcsi2_exit_standby(struct rcar_csi2 *priv)
+ {
+-	pm_runtime_get_sync(priv->dev);
++	pm_runtime_resume_and_get(priv->dev);
+ 	reset_control_deassert(priv->rstc);
+ }
  
- 		ret = __ov02a10_start_stream(ov02a10);
- 		if (ret) {
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index f30dafbdf61c..f5f722ab1d4e 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -1458,11 +1458,9 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
+ 	u32 vnmc;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(vin->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(vin->dev);
++	ret = pm_runtime_resume_and_get(vin->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	/* Make register writes take effect immediately. */
+ 	vnmc = rvin_read(vin, VNMC_REG);
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 457a65bf6b66..b1e9f86caa5c 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -870,11 +870,9 @@ static int rvin_open(struct file *file)
+ 	struct rvin_dev *vin = video_drvdata(file);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(vin->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(vin->dev);
++	ret = pm_runtime_resume_and_get(vin->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	ret = mutex_lock_interruptible(&vin->lock);
+ 	if (ret)
 -- 
 2.30.2
 
