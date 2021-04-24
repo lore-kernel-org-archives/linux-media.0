@@ -4,45 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CEFC43470
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE59C43603
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AA1A61481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10A2461481
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:45:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbhDXGqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35760 "EHLO mail.kernel.org"
+        id S235125AbhDXGq3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35724 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231202AbhDXGqM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 24 Apr 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0704761494;
+        id S230471AbhDXGqL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:46:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 00F5561490;
         Sat, 24 Apr 2021 06:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=Z6R4eC5Q3SwWmdTS9TKqbcAW+1YcSH8gzpQPRiOs6uQ=;
+        bh=vlWzPcglj3c5YNM8fjCOIG3b1giv6Ug3RyqxVuPOXCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E60MZeLHd/O4FTxK+q0Wp7Ao/sS1av2z5NSMEgwb9eMnrleefz0a/8q8olnHXxyS2
-         rtfnH4CVigKfztrYRERlhs5NyX91utcGyaR02yFzGnKe0joyU7L54W8lduG9hUgRGD
-         afpZAcYbMI3/Chw4IkKMzbWyWp+6Z4MztE0Rd/ykH8Jt4qkXL/PWCzUJJC9h28xyOb
-         6QT+mbIxVVxXg1CZzgOpVwUOUMXBe9aisRUsgfJ91Z2/MkrfPVlS8hAkt5+g+fndV+
-         MvoRSZUseCKfW9/t9qLH9wlzCbhRgAp9rAJ6G5AZt7cHAfNCTr1te8sA2o3I0xi/BP
-         nWpYkJSkxUkXA==
+        b=o3EHnDj8lhhvnbL6MRbpHKQ/z5hcFwYB1uy5+C27DD6o3NjrCIAnM8ePevlYORY1E
+         vDCdRSv/aGJRGra5RwV34014Euwi8obXklrpKcV/B0nbgOrDzQJDukjCPF2dKYXtJx
+         aRb17bfiiUsJsB3ed19jypufTmKuczryK+6CX/Z5eAGEblROp19TX6LRptFxkMdhxw
+         SXgUcfLSF6tHZWkCs0N/w9Y40O6Bd1CjS+nfLgWiI+S6eJ7+oXwzkBBpXUPXzebuxA
+         yF/oLgT53PzqbltJZ5DQX8XNegGPKaC7G+ohOZmkSSpePo0goIgxJUgHV1Io+vzjb2
+         oDJCxo5PtSS2w==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Je6-3O; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2k-004Jdu-Vn; Sat, 24 Apr 2021 08:45:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 08/78] media: am437x:: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:18 +0200
-Message-Id: <08ab4e29fa4ee0ac7102a7e130e5f14d4ee04440.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 04/78] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
+Date:   Sat, 24 Apr 2021 08:44:14 +0200
+Message-Id: <b9387e2fb2cbc2c9f0ba90ca8068e009de5fe007.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -61,56 +62,45 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-While here, ensure that the driver will check if PM runtime
-resumed at vpfe_initialize_device().
+Also, right now, the driver is ignoring any troubles when
+trying to do PM resume. So, add the proper error handling
+for the code.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/platform/rcar_fdp1.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 6cdc77dda0e4..c0997d603880 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 01c1fbb97bf6..c32d237af618 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -2140,7 +2140,13 @@ static int fdp1_open(struct file *file)
+ 	}
  
--	pm_runtime_get_sync(vpfe->pdev);
-+	ret = pm_runtime_resume_and_get(vpfe->pdev);
+ 	/* Perform any power management required */
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
++	if (ret < 0) {
++		v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++		v4l2_ctrl_handler_free(&ctx->hdl);
++		kfree(ctx);
++		goto done;
++	}
+ 
+ 	v4l2_fh_add(&ctx->fh);
+ 
+@@ -2351,7 +2357,9 @@ static int fdp1_probe(struct platform_device *pdev)
+ 
+ 	/* Power up the cells to read HW */
+ 	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
 +	if (ret < 0)
 +		return ret;
  
- 	vpfe_config_enable(&vpfe->ccdc, 1);
- 
-@@ -2443,7 +2445,7 @@ static int vpfe_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 
- 	/* for now just enable it here instead of waiting for the open */
--	pm_runtime_get_sync(&pdev->dev);
-+	pm_runtime_resume_and_get(&pdev->dev);
- 
- 	vpfe_ccdc_config_defaults(ccdc);
- 
-@@ -2530,7 +2532,7 @@ static int vpfe_suspend(struct device *dev)
- 
- 	/* only do full suspend if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
--		pm_runtime_get_sync(dev);
-+		pm_runtime_resume_and_get(dev);
- 		vpfe_config_enable(ccdc, 1);
- 
- 		/* Save VPFE context */
-@@ -2587,7 +2589,7 @@ static int vpfe_resume(struct device *dev)
- 	/* only do full resume if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
- 		/* Enable both master and slave clock */
--		pm_runtime_get_sync(dev);
-+		pm_runtime_resume_and_get(dev);
- 		vpfe_config_enable(ccdc, 1);
- 
- 		/* Restore VPFE context */
+ 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
+ 	switch (hw_version) {
 -- 
 2.30.2
 
