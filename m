@@ -4,49 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9102BC433ED
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72501C433B4
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 766E4613B6
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DB7461483
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237552AbhDXGrS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:47:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36128 "EHLO mail.kernel.org"
+        id S237564AbhDXGrV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:47:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233206AbhDXGqP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233222AbhDXGqP (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 736B2616EB;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 988E561921;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=zSIZIJdKOUAGnyfSOuoxDI+Bj1QIKcCsJeDd9evgSr0=;
+        bh=nPYpAR91E3rgdblnM1RIaAoqqFVi+fAvcFwJJ6A4j/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B62keZdvIxZEHCpDtpikVj6zVPW6jo6BxVQp9FjXZD7T6E/ex7SmLEELIGv/dq3cl
-         2OWKfTLZZPA56M6K5E91XC3sdEtWxfo1FxGkCZKMlh+hgVP3vUuEH3VgCO7i2R1kJX
-         KRTzOLvAj7Vl7Dat7wNwntP3zE6O1mXhZbWtBfFw5jR5d73ivRALa0Dte8tDso+C1L
-         7RJD+5aopP9t6aOjqIogpempFpiebJwjYsCEtlGw9YpoN4NH0chrtch3EmXCEwHziv
-         2KrtFLlj3SjWxuaCI8n49vhfbIHkvsy56LKRXKiLZ5RcGPEsE+D0Z9R6gwmINXlb7g
-         PsNyJoJbKsOKQ==
+        b=mHzW6qPLIQqB2uwPDJp/8R1VccrSiQvXRuCla39AS/M3blJ1oCDm1z3zn9/TlJvnr
+         /NC2/AnWDs4A8Inm1sFGkTqRVhRUZkKrYDwh/BeOLE6/iZZdy+bAgbMerPbRQ0GYD4
+         KdOWBdryMjstTkssIbgB0ei3ZMcmamu3F8/HR94bZStuXsQ9ZA3x+fUMPUtHeQQJFQ
+         xUDfCSZRkKbV7DhJioYfT9NpYsl1I5eRKL7XK7BmAbXJs5zWJ8HqgVjH990ySSMQiT
+         gUhtrioSoeSlV5YCZZfWxBrmwv87SoCpvsFVvH6HjMk464l66bACEHHEMcC8yS/V11
+         392srckTHkHBg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2m-004Jgc-Ke; Sat, 24 Apr 2021 08:45:32 +0200
+        id 1laC2l-004JfD-PD; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 60/78] media: camss-csid: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:10 +0200
-Message-Id: <080d8d9e0ff6c82cacf3bf728c7bc0f658b43ce6.1619191723.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 31/78] media: i2c: imx219: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:41 +0200
+Message-Id: <816d2715a45a20a491ade611d081123be271256e.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -66,27 +62,27 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/camss/camss-csid.c | 6 ++----
+ drivers/media/i2c/imx219.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index cc11fbfdae13..d2a7f2a64f26 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -156,11 +156,9 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index 1054ffedaefd..74a0bf9b088b 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -1035,11 +1035,9 @@ static int imx219_start_streaming(struct imx219 *imx219)
+ 	const struct imx219_reg_list *reg_list;
  	int ret;
  
- 	if (on) {
--		ret = pm_runtime_get_sync(dev);
--		if (ret < 0) {
--			pm_runtime_put_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
-+		if (ret < 0)
- 			return ret;
--		}
+-	ret = pm_runtime_get_sync(&client->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(&client->dev);
++	ret = pm_runtime_resume_and_get(&client->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
  
- 		ret = regulator_enable(csid->vdda);
- 		if (ret < 0) {
+ 	/* Apply default values of current mode */
+ 	reg_list = &imx219->mode->reg_list;
 -- 
 2.30.2
 
