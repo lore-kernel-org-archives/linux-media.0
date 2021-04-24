@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_NONE,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B27C43461
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6FA5C43611
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EC386141C
+	by mail.kernel.org (Postfix) with ESMTP id A115261483
 	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:46:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbhDXGqu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:46:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35972 "EHLO mail.kernel.org"
+        id S237314AbhDXGqw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:46:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232742AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232753AbhDXGqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57D6261626;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D70361613;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246733;
-        bh=qoORv18jmoZdLwiy2XtjoLyEheeVP14AOEUNQBQWQJ0=;
+        bh=ilbYi39Wp/s1IHEjQb8NZRh7PLiRnT42XXdFX8lFSpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ieDxBAbfFaxqZDSr+y9csJifDJsicJVEQJ0wjfRFLrBtUEf5xhPDf9t3dMZ+NzXzF
-         J3jyIVhgdw5MLa//cBQu53DmuRneAdy2MrtXu8J3K0WnGtgv64BnxrKP/a8xJBEbH/
-         sjuXjAqOtuSFABLUYt1CiN+OUI9DQCTIGihSXsVlA2wwnybntBsDprsMv+XRAnl8mu
-         STkF76aBxV2Bgturo3rIVJLeNT02rVnv8WP0fOkSrd94lZfiXAE+mbyS/sAiYL8OeA
-         qNE21qdWvcfAUNU43NSoT7NIRFlTRz6HbYH5KchIj3O/NrfV87aqbvxXq09vnMh5E8
-         HeKxOL8gjn+cg==
+        b=l3foykFZ2MY43Kvt4KtXFCXyQ5CM7jCmtI5mmSAmnJujWdIuFKpWGSgTEvWmv4Lk9
+         1jAphyDs7NXlaxxXBkPlUXd8ocPz9e1qGqQSiEM913QBFPR10AlOekFk4HlqWA5XRK
+         BqUO8MrGp0FhwT4ipn84t0jyjSR+DUzkoYpe9iT+kUJWFUwnBD+H9EPzONRbb9Klh4
+         9L96EDmjk4fMxSaY9e45dOcD9iyuZjnyZ0oLdBpt3oE4qaLi7k3blLU2UBKFVUAvt3
+         2xT/anJ7dSxOTEquLyj/WMs2ES87SIaWdvYiDmp0VqzhzKaZPm/QR359ScUYA5Pah3
+         rrcmik1TPxhzg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2l-004Jep-Hm; Sat, 24 Apr 2021 08:45:31 +0200
+        id 1laC2l-004Jed-Dz; Sat, 24 Apr 2021 08:45:31 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 23/78] media: sun8i_rotate: fix pm_runtime_get_sync() usage count
-Date:   Sat, 24 Apr 2021 08:44:33 +0200
-Message-Id: <4be9eda76abe0279438375abb0204bcf96aeb618.1619191723.git.mchehab+huawei@kernel.org>
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH 19/78] staging: media: vi: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:44:29 +0200
+Message-Id: <d15b484f48e09ae9df2abc53c02616dcbdb450c7.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -57,30 +58,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
+
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/tegra-video/vi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-index 3f81dd17755c..fbcca59a0517 100644
---- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-+++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-@@ -494,7 +494,7 @@ static int rotate_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		struct device *dev = ctx->dev->dev;
- 		int ret;
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 7a09061cda57..1298740a9c6c 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -297,10 +297,9 @@ static int tegra_channel_start_streaming(struct vb2_queue *vq, u32 count)
+ 	struct tegra_vi_channel *chan = vb2_get_drv_priv(vq);
+ 	int ret;
  
--		ret = pm_runtime_get_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0) {
- 			dev_err(dev, "Failed to enable module\n");
+-	ret = pm_runtime_get_sync(chan->vi->dev);
++	ret = pm_runtime_resume_and_get(chan->vi->dev);
+ 	if (ret < 0) {
+ 		dev_err(chan->vi->dev, "failed to get runtime PM: %d\n", ret);
+-		pm_runtime_put_noidle(chan->vi->dev);
+ 		return ret;
+ 	}
  
 -- 
 2.30.2
