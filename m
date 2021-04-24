@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D75FC433B4
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D3CEC433ED
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B85161481
-	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:47:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FC4161482
+	for <linux-media@archiver.kernel.org>; Sat, 24 Apr 2021 06:48:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244186AbhDXGsa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 24 Apr 2021 02:48:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36126 "EHLO mail.kernel.org"
+        id S237438AbhDXGsg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 24 Apr 2021 02:48:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237212AbhDXGql (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S237190AbhDXGql (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 24 Apr 2021 02:46:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E6F4B61951;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE77661949;
         Sat, 24 Apr 2021 06:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619246734;
-        bh=DzFwWWrx/K8GcHK3QK7SiLSCre5vWmnzlplRbKVIaVw=;
+        bh=xpeO+TqQL6lcPMvPb2Bdk8szQoSs+InwQYAk6UJzVbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dPGVuroMd6DrAOtFyKOEBFt/JC1qRHdmx6AHHo6feJIx/EqLkOtxXHWw9hFzB9AjX
-         Z4oaTWafsiHPTfJIjsZnB6e0yz1l6QpGbsKy3nBJMmfqbIdEnL2cbzGGYWhQdFm28z
-         aE2OANCIEi5by/bQ+nYnmVZDnmuIo1l6O3QQBTSOCrSrJXBqrsektw1kh6tzvdCv9v
-         jaoSl/+Ss5qSKW4cVgyNr34GuEJjYNMvGVRSk2yXo6xsYbaRjmUAlqxz/VoiGTcwLZ
-         7sPsZXCIr40CInCROrh6DR4qsyId9zdER1h83npwxVheEMM96o5/iisX1jTOOB81Oy
-         XmtWnHbVbUchw==
+        b=EojMO9FXSFHyxT7wcTLwfBO+LP3dFMh71/mr6tVQ86V0IDwOroL/JmtRbx5wF6QY1
+         V7DVxtNg9fsZyBvZV3/eNpaM+vNAspnats775oaSl46h0TDRVjAFN9rQzGwntE85rN
+         rCo5zwFSM1WSNxBfI7lsauwSHh34jIBG0OEdvMDAKsW8c5o/N71fHoX/ycyXCRrVdC
+         RsE1lYSG9Ub8rFzzziU1YnX6j22F8CvjYcFLqyrRYvsqJZJmlPDns5myNl+kEk8tue
+         Ho4SXO0gyrjQpF1QRkSLhJ3DRzB9nsgb9TkjvobMZVH84LqavWSOy0Bkblj5rYPkls
+         eDST0qplfsVig==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1laC2n-004JiK-Hf; Sat, 24 Apr 2021 08:45:33 +0200
+        id 1laC2m-004JgK-Eh; Sat, 24 Apr 2021 08:45:32 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Benoit Parrot <bparrot@ti.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 77/78] media: ti-vpe: use pm_runtime_resume_and_get()
-Date:   Sat, 24 Apr 2021 08:45:27 +0200
-Message-Id: <146e66bf95b404e149127c7eaf2313a431203e74.1619191723.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 54/78] media: i2c: video-i2c: use pm_runtime_resume_and_get()
+Date:   Sat, 24 Apr 2021 08:45:04 +0200
+Message-Id: <3990190ef127055dc87cbc6b3f9065dd919b8508.1619191723.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619191723.git.mchehab+huawei@kernel.org>
 References: <cover.1619191723.git.mchehab+huawei@kernel.org>
@@ -62,78 +62,50 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/ti-vpe/cal-video.c | 4 +++-
- drivers/media/platform/ti-vpe/cal.c       | 8 +++++---
- drivers/media/platform/ti-vpe/vpe.c       | 4 +---
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ drivers/media/i2c/video-i2c.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-index 7b7436a355ee..15fb5360cf13 100644
---- a/drivers/media/platform/ti-vpe/cal-video.c
-+++ b/drivers/media/platform/ti-vpe/cal-video.c
-@@ -700,7 +700,9 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index 0465832a4090..5cde7da698bd 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -286,11 +286,9 @@ static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
+ 	__le16 buf;
+ 	int tmp;
  
- 	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+-	tmp = pm_runtime_get_sync(regmap_get_device(data->regmap));
+-	if (tmp < 0) {
+-		pm_runtime_put_noidle(regmap_get_device(data->regmap));
++	tmp = pm_runtime_resume_and_get(regmap_get_device(data->regmap));
++	if (tmp < 0)
+ 		return tmp;
+-	}
  
--	pm_runtime_get_sync(ctx->cal->dev);
-+	ret = pm_runtime_resume_and_get(ctx->cal->dev);
+ 	tmp = regmap_bulk_read(data->regmap, AMG88XX_REG_TTHL, &buf, 2);
+ 	pm_runtime_mark_last_busy(regmap_get_device(data->regmap));
+@@ -512,11 +510,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (data->kthread_vid_cap)
+ 		return 0;
+ 
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
 +	if (ret < 0)
-+		goto error_pipeline;
+ 		goto error_del_list;
+-	}
  
- 	cal_ctx_set_dma_addr(ctx, addr);
- 	cal_ctx_start(ctx);
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 2e2bef91b2b0..76fe7a8b33f6 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1024,7 +1024,7 @@ static int cal_probe(struct platform_device *pdev)
- 
- 	/* Read the revision and hardware info to verify hardware access. */
- 	pm_runtime_enable(&pdev->dev);
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	ret = data->chip->setup(data);
  	if (ret)
- 		goto error_pm_runtime;
- 
-@@ -1098,10 +1098,11 @@ static int cal_remove(struct platform_device *pdev)
+@@ -893,7 +889,7 @@ static int video_i2c_remove(struct i2c_client *client)
  {
- 	struct cal_dev *cal = platform_get_drvdata(pdev);
- 	unsigned int i;
-+	int ret;
+ 	struct video_i2c_data *data = i2c_get_clientdata(client);
  
- 	cal_dbg(1, cal, "Removing %s\n", CAL_MODULE_NAME);
- 
--	pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
- 
- 	cal_media_unregister(cal);
- 
-@@ -1115,7 +1116,8 @@ static int cal_remove(struct platform_device *pdev)
- 	for (i = 0; i < cal->data->num_csi2_phy; i++)
- 		cal_camerarx_destroy(cal->phy[i]);
- 
--	pm_runtime_put_sync(&pdev->dev);
-+	if (ret >= 0)
-+		pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 10251b787674..07cb2c140295 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -2471,10 +2471,8 @@ static int vpe_runtime_get(struct platform_device *pdev)
- 
- 	dev_dbg(&pdev->dev, "vpe_runtime_get\n");
- 
--	r = pm_runtime_get_sync(&pdev->dev);
-+	r = pm_runtime_resume_and_get(&pdev->dev);
- 	WARN_ON(r < 0);
--	if (r)
--		pm_runtime_put_noidle(&pdev->dev);
- 	return r < 0 ? r : 0;
- }
- 
+-	pm_runtime_get_sync(&client->dev);
++	pm_runtime_resume_and_get(&client->dev);
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+ 	pm_runtime_put_noidle(&client->dev);
 -- 
 2.30.2
 
