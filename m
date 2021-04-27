@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D0DDC433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A1EC43470
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4AC2610FA
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64C51613C3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238316AbhD0K3J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48278 "EHLO mail.kernel.org"
+        id S238374AbhD0K3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235976AbhD0K2P (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 735A06140E;
+        id S237224AbhD0K2S (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8CA386141F;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=9XhzsT7qorzb0O8m+AZfDrHyIqnxWFrm1sswMUzcdRI=;
+        bh=TKtKuWw4arj9gE1QW5A97zHnmgQIngfUHjaR8gvLIr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tf914diWBrl8TDvXMl5MLXGnXhoS7XUaWw5QGfh55jhiWLbSpRdpvTzlw8J5UysaU
-         jBsXLJJNXnvdzEzd5UuC4JNMdgz4Apn3uggzXUulqA7iTvZjqMwLrpDUy+UTJpIQhv
-         CJat0sLmS/XVxjPR6B8gwIlB9aLieQI8PheQt35mTD0a1cGmLmk4t8ULtrwmgoC5IM
-         L2Kld2gSrXRUa4stHtOpUh71/ja/dRGVRGLemrB7h8mI4q9pGNcLH5eAlrasCDTiqe
-         h6f3S7+apWzvZimwh2HHitnK1E4i7y2E1fPmelY7kH7j9cnMhxgMb1CmXxl63Q928Q
-         l8vs9Z0HYh9ig==
+        b=rUr3XgQuedmLRMxjU5/vIt9xq3JpbinPSkcPt7Dz1Nr7mpIwQU54XeKkV2+9fauMg
+         UtwDc1uiaw4jUHBLclcuWpvNy7kKe/oIedeoS5hRLUKpLKCyQ0pFkMvOQH22vWhCTR
+         gtT9bNbpZuSJNag3ObXD/ra+CB3+kP2q9tBhMoTJfZscEh7B/A9HY42AXeKkfBYKgT
+         ZEZHvMbEEJq8/S9BMQAIv+ptY+MyDDODXUxs8X31QH1/1dLZixmyRieoCnXGGo8gXe
+         eJ1mFW1Si0KDKVNyKkvCfk/+hPAIwPie8MgfkJ91EGfb7sG8jysDUPg4Tus9jmR/DI
+         izVJtK3Pm7u9A==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvz-000o32-Tr; Tue, 27 Apr 2021 12:27:15 +0200
+        id 1lbKvy-000o2G-Hs; Tue, 27 Apr 2021 12:27:14 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 79/79] media: hantro: document the usage of pm_runtime_get_sync()
-Date:   Tue, 27 Apr 2021 12:27:09 +0200
-Message-Id: <230f22170db7fa57b49cff4570cef15bf11b2ad5.1619519080.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v3 63/79] media: exynos-gsc: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:53 +0200
+Message-Id: <5a8d3ca13956feb5e611cb1fe08195966be5edf2.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -57,46 +57,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Despite other *_get()/*_put() functions, where usage count is
-incremented only if not errors, the pm_runtime_get_sync() has
-a different behavior, incrementing the counter *even* on
-errors.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-That's an error prone behavior, as people often forget to
-decrement the usage counter.
-
-However, the hantro driver depends on this behavior, as it
-will decrement the usage_count unconditionally at the m2m
-job finish time, which makes sense.
-
-So, intead of using the pm_runtime_resume_and_get() that
-would decrement the counter on error, keep the current
-API, but add a documentation explaining the rationale for
-keep using pm_runtime_get_sync().
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_drv.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/platform/exynos-gsc/gsc-m2m.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 595e82a82728..96f940c1c85c 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -155,6 +155,13 @@ static void device_run(void *priv)
- 	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
- 	if (ret)
- 		goto err_cancel_job;
-+
-+	/*
-+	 * The pm_runtime_get_sync() will increment dev->power.usage_count,
-+	 * even on errors. That's the expected behavior here, since the
-+	 * hantro_job_finish() function at the error handling code
-+	 * will internally call pm_runtime_put_autosuspend().
-+	 */
- 	ret = pm_runtime_get_sync(ctx->dev->dev);
- 	if (ret < 0)
- 		goto err_cancel_job;
+diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+index 27a3c92c73bc..09551e96ac15 100644
+--- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
++++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+@@ -58,7 +58,7 @@ static int gsc_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct gsc_ctx *ctx = q->drv_priv;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(&ctx->gsc_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->gsc_dev->pdev->dev);
+ 	return ret > 0 ? 0 : ret;
+ }
+ 
 -- 
 2.30.2
 
