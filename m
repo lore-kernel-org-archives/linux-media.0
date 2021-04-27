@@ -4,46 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD83C43462
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C083AC433ED
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EA7860C3D
+	by mail.kernel.org (Postfix) with ESMTP id 9291F61185
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbhD0KQh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:16:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35420 "EHLO mail.kernel.org"
+        id S237852AbhD0KQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:16:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235766AbhD0KPK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235543AbhD0KPK (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:15:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BCE7E61951;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D8A3F6195B;
         Tue, 27 Apr 2021 10:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518433;
-        bh=ORhYQV8MaIIM9QGoq0fv1DmSrG26N8/lfMtTN/XnDlY=;
+        bh=bbBhKTio+K3X9fPKV58F4G07rHzCE6SQVXwv0W77lPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ggOlyf1YNtPBHjycx93XL7+9/FJpqcXn1RjwwVtuYy1ppTBb8ut9ATtgAjEu8VsMg
-         dWrKgO7UTs2MCJW1N6VISg4AC7FY/0wiaaiazic1WRTgT80Z/NS8jYHOO0qS2R31+J
-         hMOrgznyM+GpxW3q1+L5g7lEKn14q7QYELvGFeUy8HBkH4HuK7XV8+5TcHl1uA+z+9
-         hQI2tiIwFeUBNt1vKOwUZBhM6BRIlZcOp3khK6HiPYabOMGMay6v113afJvBRGMOX7
-         6iOvJKql8hN36/6AgC6NaA3+A2zKAW2C+ArY7/nJQlgsMmJe+zEzHkaQ0V02zK2NSB
-         qSnTGug2neRfA==
+        b=rLTfLIbrLBJ2cw0yC6O5y1QiYTLCWZRFzgjVDZ0X6Gc+TVikcfzOmRs3otKqPy8qG
+         FhfF3ATiNUHAIFMEFzYNruiTBKOtnZUZRDhsKozdaIxp4xGYq0s6BqJoldn5JJq9WO
+         ku4Edmpo+xTYboLWvBrU/BU4hV6dhMhu7dm3AXRPu4ETFW9MGs8SUX78Y2IYpNlziR
+         EOhSmH2nnhh88Mx9lzrj8OA0Hf3VoR/ssWdBA1EbspQPqMHOPl8zVe8bGQp9DisOyI
+         SGl7KKtTUht6GLvGCyTW0/AV9zT/yEkMXaRUkzE+Gww8p7y/+To61dMr3Q7Mxx2bek
+         CvZISc/Tm5SgQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKj1-000j81-UR; Tue, 27 Apr 2021 12:13:51 +0200
+        id 1lbKj2-000j87-1H; Tue, 27 Apr 2021 12:13:52 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 71/79] media: s3c-camif: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:13:38 +0200
-Message-Id: <77cb3497163bedc3a75555b4cca4cb980c7756b2.1619518193.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 73/79] media: bdisp-v4l2: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:13:40 +0200
+Message-Id: <5c243195eab766e74b783e9da91224d360869635.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -63,46 +62,42 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/s3c-camif/camif-capture.c | 2 +-
- drivers/media/platform/s3c-camif/camif-core.c    | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-index 9ca49af29542..62241ec3b978 100644
---- a/drivers/media/platform/s3c-camif/camif-capture.c
-+++ b/drivers/media/platform/s3c-camif/camif-capture.c
-@@ -547,7 +547,7 @@ static int s3c_camif_open(struct file *file)
- 	if (ret < 0)
- 		goto unlock;
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index 060ca85f64d5..85288da9d2ae 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct bdisp_ctx *ctx = q->drv_priv;
+ 	struct vb2_v4l2_buffer *buf;
+-	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
++	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
  
--	ret = pm_runtime_get_sync(camif->dev);
-+	ret = pm_runtime_resume_and_get(camif->dev);
- 	if (ret < 0)
- 		goto err_pm;
+ 	if (ret < 0) {
+ 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
+@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
  
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index 4c3c00d59c92..e1d51fd3e700 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -460,9 +460,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 
+ 	/* Power management */
  	pm_runtime_enable(dev);
- 
 -	ret = pm_runtime_get_sync(dev);
 +	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set PM\n");
 -		goto err_pm;
-+		goto err_disable;
++		goto err_remove;
+ 	}
  
- 	ret = camif_media_dev_init(camif);
- 	if (ret < 0)
-@@ -502,6 +502,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 	camif_unregister_media_entities(camif);
+ 	/* Filters */
+@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp_hw_free_filters(bdisp->dev);
  err_pm:
  	pm_runtime_put(dev);
-+err_disable:
- 	pm_runtime_disable(dev);
- 	camif_clk_put(camif);
++err_remove:
+ 	bdisp_debugfs_remove(bdisp);
+ 	v4l2_device_unregister(&bdisp->v4l2_dev);
  err_clk:
 -- 
 2.30.2
