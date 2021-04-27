@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 981E8C43460
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B55DC43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:16:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 684B9613E5
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C21EF613EA
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:16:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbhD0LQd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 07:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S235934AbhD0LQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 07:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235835AbhD0LQ2 (ORCPT
+        with ESMTP id S235911AbhD0LQi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 07:16:28 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF58C061574
-        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:45 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id h20so30686493plr.4
-        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:45 -0700 (PDT)
+        Tue, 27 Apr 2021 07:16:38 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DCAC061760
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so6926271pjh.1
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8c3lQ6Ig+7BLf+08Bn0c/e0llvAY8LJA+7xZwUYw4VU=;
-        b=BhjwcZH+gtk+Sx5PoZFo2H1P7vIWXRstinsxLjmJk90j3lmzIrSfAc6djN7YKmxNV0
-         5wcg8jq6Uyz2ASKGQJV6BRDDHV/oUZdcEhm7E0OdQoTbjIe9jZxL2rAPN8u4elnAlT8F
-         OTE+OnZZcqY8TXQujM9TDqnEqTHzS9xndn8Ls=
+        bh=cRq0blp3se/ilIdJZwQd7WRsiuAF/NmcRHZu3wNAIoI=;
+        b=XEZw0EavI6fTLqyYW5J94sLk9TRbnb77A3D+e+NUtRsyceqI7uNCsQgMD3Yp6xjb8Q
+         VGJAf1NGOUV+cb5GbtJ+i84aba8kD1wtqU9idQFn13DmngFwskF/DccZeF3tKYZKUOkA
+         RWyzO4ukwpUusdkSHlg/ZQOVrcp07SMORgR6Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8c3lQ6Ig+7BLf+08Bn0c/e0llvAY8LJA+7xZwUYw4VU=;
-        b=A4bkbkwMxib4n85a/BVhjJZ69HfhdENdIvLbBeg6v+Zm5v5gOJJ8H5TpsPueKOxRcW
-         NyvSjMWWpcnA7Ay3erj+LIiBsZHhbBn1IDN+6kvKBWhHifqGEYhKuwyyavquXhReIaj2
-         TbpaEJIo948PsAyBJuwhZX4sC+Tepoeuk2rZr4YMU3+tU1kiWuY2y/8lZrYpGKhytXYf
-         OnPOOal1emkKuaJCF+sgv1/N+CcHLS3pJNfypgK+K7ajk98VtggS+OKhuU7iWxcjng/5
-         NkT11h5wgWxjdj+LkKcTxrnb/ZVWL7oOpnc/4IOjPcpgITMRz0M2ROkXkzOlEhKraBam
-         sZ2Q==
-X-Gm-Message-State: AOAM533geb9s9yeW+b7vxK9s7rf2Gan++Z+x7HjtxYCYZ5bVfKr0o6vb
-        pNhwTAvO3GDb6mTrWrEJ0o88ug==
-X-Google-Smtp-Source: ABdhPJxQ/s/IDGETgz+RzGhkqjW4D9BbGwOcOqhMFHXFHYPnvqa3s7P75umaBg0ty+lSHJnGLjPz6g==
-X-Received: by 2002:a17:90a:8a12:: with SMTP id w18mr18652526pjn.26.1619522145117;
-        Tue, 27 Apr 2021 04:15:45 -0700 (PDT)
+        bh=cRq0blp3se/ilIdJZwQd7WRsiuAF/NmcRHZu3wNAIoI=;
+        b=oQMRsKXP+H6XoLFBYQTAPuKhqQhe6EYNNS+N2OVspgx41fI/nQ2VJk3tz7X7kjQ09b
+         q5d80VTPEz4xXnnmPQnx4+haVmzUELv/Ry8BIVdlmFxlpEixF14T9OTHEO9W8IOi3JC+
+         efHWzMhclsbUqkIIsS1OxC1cKr46FpnyiS49KLgo58p44P6JgyusEtIcuqvSNcvKbTk7
+         MZ/S8kufKN05q3TIY9eMdhvuX0YMNqRx0U6ljfadL9U5F651PuYeAz/KdWc6QQH1gRA+
+         7lAVQdQb17ak4khTZIdHsH+BGe2wY5Fi7jW4rrZUNNMVVD6Hgod6XzuCT+z8lMxD6A32
+         HHPA==
+X-Gm-Message-State: AOAM531oCIp6yW12EKVrVqZdPIiMiKo23ZSbMG4yNpnkFByuKBPptKsu
+        jGsuCMDIgl0+EZg5gyUC+gon19HYvCgOTw==
+X-Google-Smtp-Source: ABdhPJzzeqob2qX8OP8wsx7KK2TpokqKairifpuohH3enlCn1QNaGAO7WMOtWej69qQdiCteeZ3Dgg==
+X-Received: by 2002:a17:902:8344:b029:ed:4a5a:1953 with SMTP id z4-20020a1709028344b02900ed4a5a1953mr5800733pln.68.1619522150612;
+        Tue, 27 Apr 2021 04:15:50 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:b182:d363:32d0:53a2])
-        by smtp.gmail.com with ESMTPSA id c21sm2347210pfc.165.2021.04.27.04.15.42
+        by smtp.gmail.com with ESMTPSA id c21sm2347210pfc.165.2021.04.27.04.15.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Apr 2021 04:15:44 -0700 (PDT)
+        Tue, 27 Apr 2021 04:15:50 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -63,9 +63,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v4 03/15] media: mtk-vcodec: support version 2 of decoder firmware ABI
-Date:   Tue, 27 Apr 2021 20:15:14 +0900
-Message-Id: <20210427111526.1772293-4-acourbot@chromium.org>
+Subject: [PATCH v4 05/15] media: mtk-vcodec: vdec: support stateless API
+Date:   Tue, 27 Apr 2021 20:15:16 +0900
+Message-Id: <20210427111526.1772293-6-acourbot@chromium.org>
 X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 In-Reply-To: <20210427111526.1772293-1-acourbot@chromium.org>
 References: <20210427111526.1772293-1-acourbot@chromium.org>
@@ -75,162 +75,578 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for decoder firmware version 2, which makes the kernel
-responsible for managing the VSI context and is used for stateless
-codecs.
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
+Support the stateless codec API that will be used by MT8183.
+
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+[acourbot: refactor, cleanup and split]
+Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h  | 18 +++++++++---
- .../media/platform/mtk-vcodec/vdec_vpu_if.c   | 28 +++++++++++++++----
- .../media/platform/mtk-vcodec/vdec_vpu_if.h   |  5 ++++
- 3 files changed, 42 insertions(+), 9 deletions(-)
+ drivers/media/platform/mtk-vcodec/Makefile    |   1 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  66 +++-
+ .../platform/mtk-vcodec/mtk_vcodec_dec.h      |   9 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 370 ++++++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |   3 +
+ 5 files changed, 446 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-index eb66729fda63..a0e773ae3ab3 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-@@ -29,11 +29,15 @@ enum vdec_ipi_msgid {
- /**
-  * struct vdec_ap_ipi_cmd - generic AP to VPU ipi command format
-  * @msg_id	: vdec_ipi_msgid
-- * @vpu_inst_addr	: VPU decoder instance address
-+ * @vpu_inst_addr : VPU decoder instance address. Used if ABI version < 2.
-+ * @inst_id     : instance ID. Used if the ABI version >= 2.
-  */
- struct vdec_ap_ipi_cmd {
- 	uint32_t msg_id;
--	uint32_t vpu_inst_addr;
-+	union {
-+		uint32_t vpu_inst_addr;
-+		uint32_t inst_id;
-+	};
- };
+diff --git a/drivers/media/platform/mtk-vcodec/Makefile b/drivers/media/platform/mtk-vcodec/Makefile
+index 9c3cbb5b800e..4ba93d838ab6 100644
+--- a/drivers/media/platform/mtk-vcodec/Makefile
++++ b/drivers/media/platform/mtk-vcodec/Makefile
+@@ -12,6 +12,7 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
+ 		vdec_vpu_if.o \
+ 		mtk_vcodec_dec.o \
+ 		mtk_vcodec_dec_stateful.o \
++		mtk_vcodec_dec_stateless.o \
+ 		mtk_vcodec_dec_pm.o \
  
- /**
-@@ -63,7 +67,8 @@ struct vdec_ap_ipi_init {
- /**
-  * struct vdec_ap_ipi_dec_start - for AP_IPIMSG_DEC_START
-  * @msg_id	: AP_IPIMSG_DEC_START
-- * @vpu_inst_addr	: VPU decoder instance address
-+ * @vpu_inst_addr : VPU decoder instance address. Used if ABI version < 2.
-+ * @inst_id     : instance ID. Used if the ABI version >= 2.
-  * @data	: Header info
-  *	H264 decoder [0]:buf_sz [1]:nal_start
-  *	VP8 decoder  [0]:width/height
-@@ -72,7 +77,10 @@ struct vdec_ap_ipi_init {
-  */
- struct vdec_ap_ipi_dec_start {
- 	uint32_t msg_id;
--	uint32_t vpu_inst_addr;
-+	union {
-+		uint32_t vpu_inst_addr;
-+		uint32_t inst_id;
-+	};
- 	uint32_t data[3];
- 	uint32_t reserved;
- };
-@@ -87,6 +95,7 @@ struct vdec_ap_ipi_dec_start {
-  *			ensure that it is compatible with the firmware.
-  *			This field is not valid for MT8173 and must not be
-  *			accessed for this chip.
-+ * @inst_id     : instance ID. Valid only if the ABI version >= 2.
-  */
- struct vdec_vpu_ipi_init_ack {
- 	uint32_t msg_id;
-@@ -94,6 +103,7 @@ struct vdec_vpu_ipi_init_ack {
- 	uint64_t ap_inst_addr;
- 	uint32_t vpu_inst_addr;
- 	uint32_t vdec_abi_version;
-+	uint32_t inst_id;
- };
- 
- #endif
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-index 203089213e67..5dffc459a33d 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-@@ -25,18 +25,30 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
- 
- 	mtk_vcodec_debug(vpu, "- vpu_inst_addr = 0x%x", vpu->inst_addr);
- 
-+	/* Set default ABI version if dealing with unversioned firmware. */
-+	vpu->fw_abi_version = 0;
-+	/*
-+	 * Instance ID is only used if ABI version >= 2. Initialize it with
-+	 * garbage by default.
-+	 */
-+	vpu->inst_id = 0xdeadbeef;
+ mtk-vcodec-enc-y := venc/venc_vp8_if.o \
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index 4ad2662a43b2..01c5333d6cff 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -46,6 +46,13 @@ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
+ static int vidioc_try_decoder_cmd(struct file *file, void *priv,
+ 				struct v4l2_decoder_cmd *cmd)
+ {
++	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
 +
- 	/* Firmware version field does not exist on MT8173. */
- 	if (vpu->ctx->dev->vdec_pdata->chip == MTK_MT8173)
- 		return;
++	/* Use M2M stateless helper if relevant */
++	if (ctx->dev->vdec_pdata->uses_stateless_api)
++		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
++								cmd);
++
+ 	switch (cmd->cmd) {
+ 	case V4L2_DEC_CMD_STOP:
+ 	case V4L2_DEC_CMD_START:
+@@ -72,6 +79,10 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
+ 	if (ret)
+ 		return ret;
  
- 	/* Check firmware version. */
--	mtk_vcodec_debug(vpu, "firmware version 0x%x\n", msg->vdec_abi_version);
--	switch (msg->vdec_abi_version) {
-+	vpu->fw_abi_version = msg->vdec_abi_version;
-+	mtk_vcodec_debug(vpu, "firmware version 0x%x\n", vpu->fw_abi_version);
-+	switch (vpu->fw_abi_version) {
- 	case 1:
- 		break;
-+	case 2:
-+		vpu->inst_id = msg->inst_id;
-+		break;
- 	default:
- 		mtk_vcodec_err(vpu, "unhandled firmware version 0x%x\n",
--			       msg->vdec_abi_version);
-+			       vpu->fw_abi_version);
- 		vpu->failure = 1;
- 		break;
++	/* Use M2M stateless helper if relevant */
++	if (ctx->dev->vdec_pdata->uses_stateless_api)
++		return v4l2_m2m_ioctl_stateless_decoder_cmd(file, priv, cmd);
++
+ 	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
+ 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
+ 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+@@ -414,7 +425,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 	 * Setting OUTPUT format after OUTPUT buffers are allocated is invalid
+ 	 * if using the stateful API.
+ 	 */
+-	if ((f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) &&
++	if (!dec_pdata->uses_stateless_api &&
++	    (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) &&
+ 	    vb2_is_busy(&ctx->m2m_ctx->out_q_ctx.q)) {
+ 		mtk_v4l2_err("out_q_ctx buffers already requested");
+ 		ret = -EBUSY;
+@@ -457,6 +469,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 		ctx->quantization = pix_mp->quantization;
+ 		ctx->xfer_func = pix_mp->xfer_func;
+ 
++		ctx->current_codec = fmt->fourcc;
+ 		if (ctx->state == MTK_STATE_FREE) {
+ 			ret = vdec_if_init(ctx, q_data->fmt->fourcc);
+ 			if (ret) {
+@@ -468,6 +481,49 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 		}
  	}
-@@ -113,7 +125,10 @@ static int vcodec_send_ap_ipi(struct vdec_vpu_inst *vpu, unsigned int msg_id)
  
- 	memset(&msg, 0, sizeof(msg));
- 	msg.msg_id = msg_id;
--	msg.vpu_inst_addr = vpu->inst_addr;
-+	if (vpu->fw_abi_version < 2)
-+		msg.vpu_inst_addr = vpu->inst_addr;
++	/*
++	 * If using the stateless API, S_FMT should have the effect of setting
++	 * the CAPTURE queue resolution no matter which queue it was called on.
++	 */
++	if (dec_pdata->uses_stateless_api) {
++		ctx->picinfo.pic_w = pix_mp->width;
++		ctx->picinfo.pic_h = pix_mp->height;
++
++		ret = vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
++		if (ret) {
++			mtk_v4l2_err("[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail",
++				ctx->id);
++			return -EINVAL;
++		}
++
++		ctx->last_decoded_picinfo = ctx->picinfo;
++
++		if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 1) {
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0] =
++				ctx->picinfo.fb_sz[0] +
++				ctx->picinfo.fb_sz[1];
++			ctx->q_data[MTK_Q_DATA_DST].bytesperline[0] =
++				ctx->picinfo.buf_w;
++		} else {
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0] =
++				ctx->picinfo.fb_sz[0];
++			ctx->q_data[MTK_Q_DATA_DST].bytesperline[0] =
++				ctx->picinfo.buf_w;
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1] =
++				ctx->picinfo.fb_sz[1];
++			ctx->q_data[MTK_Q_DATA_DST].bytesperline[1] =
++				ctx->picinfo.buf_w;
++		}
++
++		ctx->q_data[MTK_Q_DATA_DST].coded_width = ctx->picinfo.buf_w;
++		ctx->q_data[MTK_Q_DATA_DST].coded_height = ctx->picinfo.buf_h;
++		mtk_v4l2_debug(2, "[%d] vdec_if_init() num_plane = %d wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
++			ctx->id, pix_mp->num_planes,
++			ctx->picinfo.buf_w, ctx->picinfo.buf_h,
++			ctx->picinfo.pic_w, ctx->picinfo.pic_h,
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
++	}
+ 	return 0;
+ }
+ 
+@@ -765,9 +821,15 @@ void vb2ops_vdec_stop_streaming(struct vb2_queue *q)
+ 		while ((src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx))) {
+ 			struct mtk_video_dec_buf *buf_info = container_of(
+ 				 src_buf, struct mtk_video_dec_buf, m2m_buf.vb);
+-			if (!buf_info->lastframe)
++			if (!buf_info->lastframe) {
++				struct media_request *req =
++					src_buf->vb2_buf.req_obj.req;
+ 				v4l2_m2m_buf_done(src_buf,
+ 						VB2_BUF_STATE_ERROR);
++				if (req)
++					v4l2_ctrl_request_complete(req,
++								&ctx->ctrl_hdl);
++			}
+ 		}
+ 		return;
+ 	}
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
+index 6a18cb3bfe07..6b29d7d9ae15 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
+@@ -45,6 +45,7 @@ struct vdec_fb {
+  * @lastframe:		Intput buffer is last buffer - EOS
+  * @error:		An unrecoverable error occurs on this buffer.
+  * @frame_buffer:	Decode status, and buffer information of Capture buffer
++ * @bs_buffer:	Output buffer info
+  *
+  * Note : These status information help us track and debug buffer state
+  */
+@@ -55,12 +56,18 @@ struct mtk_video_dec_buf {
+ 	bool	queued_in_vb2;
+ 	bool	queued_in_v4l2;
+ 	bool	lastframe;
++
+ 	bool	error;
+-	struct vdec_fb	frame_buffer;
++
++	union {
++		struct vdec_fb	frame_buffer;
++		struct mtk_vcodec_mem	bs_buffer;
++	};
+ };
+ 
+ extern const struct v4l2_ioctl_ops mtk_vdec_ioctl_ops;
+ extern const struct v4l2_m2m_ops mtk_vdec_m2m_ops;
++extern const struct media_device_ops mtk_vcodec_media_ops;
+ 
+ 
+ /*
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+new file mode 100644
+index 000000000000..75ddf53e2876
+--- /dev/null
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+@@ -0,0 +1,370 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "media/videobuf2-v4l2.h"
++#include <media/videobuf2-dma-contig.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-mem2mem.h>
++#include <linux/module.h>
++
++#include "mtk_vcodec_drv.h"
++#include "mtk_vcodec_dec.h"
++#include "mtk_vcodec_intr.h"
++#include "mtk_vcodec_util.h"
++#include "vdec_drv_if.h"
++#include "mtk_vcodec_dec_pm.h"
++
++/**
++ * struct mtk_stateless_control  - CID control type
++ * @cfg: control configuration
++ * @codec_type: codec type (V4L2 pixel format) for CID control type
++ */
++struct mtk_stateless_control {
++	struct v4l2_ctrl_config cfg;
++	int codec_type;
++};
++
++static const struct mtk_stateless_control mtk_stateless_controls[] = {
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_SPS,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_PPS,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_SCALING_MATRIX,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_DECODE_PARAMS,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
++			.def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
++			.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
++			.menu_skip_mask =
++				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_DECODE_MODE,
++			.min = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
++			.def = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
++			.max = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	},
++	{
++		.cfg = {
++			.id = V4L2_CID_STATELESS_H264_START_CODE,
++			.min = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
++			.def = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
++			.max = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
++		},
++		.codec_type = V4L2_PIX_FMT_H264_SLICE,
++	}
++};
++#define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
++
++static const struct mtk_video_fmt mtk_video_formats[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_H264_SLICE,
++		.type = MTK_FMT_DEC,
++		.num_planes = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_MM21,
++		.type = MTK_FMT_FRAME,
++		.num_planes = 2,
++	},
++};
++#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
++#define DEFAULT_OUT_FMT_IDX    0
++#define DEFAULT_CAP_FMT_IDX    1
++
++static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
++	{
++		.fourcc	= V4L2_PIX_FMT_H264_SLICE,
++		.stepwise = {  MTK_VDEC_MIN_W, MTK_VDEC_MAX_W, 16,
++				MTK_VDEC_MIN_H, MTK_VDEC_MAX_H, 16 },
++	},
++};
++
++#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
++
++static void mtk_vdec_stateless_set_dst_payload(struct mtk_vcodec_ctx *ctx,
++					       struct vdec_fb *fb)
++{
++	struct mtk_video_dec_buf *vdec_frame_buf =
++		container_of(fb, struct mtk_video_dec_buf, frame_buffer);
++	struct vb2_v4l2_buffer *vb = &vdec_frame_buf->m2m_buf.vb;
++	unsigned int cap_y_size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
++
++	vb2_set_plane_payload(&vb->vb2_buf, 0, cap_y_size);
++	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
++		unsigned int cap_c_size =
++			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
++
++		vb2_set_plane_payload(&vb->vb2_buf, 1, cap_c_size);
++	}
++}
++
++static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx,
++					   struct vb2_v4l2_buffer *vb2_v4l2)
++{
++	struct mtk_video_dec_buf *framebuf =
++		container_of(vb2_v4l2, struct mtk_video_dec_buf, m2m_buf.vb);
++	struct vdec_fb *pfb = &framebuf->frame_buffer;
++	struct vb2_buffer *dst_buf = &vb2_v4l2->vb2_buf;
++
++	pfb = &framebuf->frame_buffer;
++	pfb->base_y.va = NULL;
++	pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(dst_buf, 0);
++	pfb->base_y.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
++
++	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
++		pfb->base_c.va = NULL;
++		pfb->base_c.dma_addr =
++			vb2_dma_contig_plane_dma_addr(dst_buf, 1);
++		pfb->base_c.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
++	}
++	mtk_v4l2_debug(1,
++		"id=%d Framebuf  pfb=%p VA=%p Y_DMA=%pad C_DMA=%pad Size=%zx frame_count = %d",
++		dst_buf->index, pfb,
++		pfb->base_y.va, &pfb->base_y.dma_addr,
++		&pfb->base_c.dma_addr, pfb->base_y.size,
++		ctx->decoded_frame_cnt);
++
++	return pfb;
++}
++
++static void vb2ops_vdec_buf_request_complete(struct vb2_buffer *vb)
++{
++	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++
++	v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_hdl);
++}
++
++static int fops_media_request_validate(struct media_request *mreq)
++{
++	const unsigned int buffer_cnt = vb2_request_buffer_cnt(mreq);
++
++	switch (buffer_cnt) {
++	case 1:
++		/* We expect exactly one buffer with the request */
++		break;
++	case 0:
++		mtk_v4l2_err("No buffer provided with the request");
++		return -ENOENT;
++	default:
++		mtk_v4l2_err("Too many buffers (%d) provided with the request",
++			     buffer_cnt);
++		return -EINVAL;
++	}
++
++	return vb2_request_validate(mreq);
++}
++
++static void mtk_vdec_worker(struct work_struct *work)
++{
++	struct mtk_vcodec_ctx *ctx =
++		container_of(work, struct mtk_vcodec_ctx, decode_work);
++	struct mtk_vcodec_dev *dev = ctx->dev;
++	struct vb2_v4l2_buffer *vb2_v4l2_src, *vb2_v4l2_dst;
++	struct vb2_buffer *vb2_src;
++	struct mtk_vcodec_mem *bs_src;
++	struct mtk_video_dec_buf *dec_buf_src;
++	struct media_request *src_buf_req;
++	struct vdec_fb *dst_buf;
++	bool res_chg = false;
++	int ret;
++
++	vb2_v4l2_src = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
++	if (vb2_v4l2_src == NULL) {
++		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
++		mtk_v4l2_debug(1, "[%d] no available source buffer", ctx->id);
++		return;
++	}
++
++	vb2_v4l2_dst = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
++	if (vb2_v4l2_dst == NULL) {
++		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
++		mtk_v4l2_debug(1, "[%d] no available destination buffer", ctx->id);
++		return;
++	}
++
++	vb2_src = &vb2_v4l2_src->vb2_buf;
++	dec_buf_src = container_of(vb2_v4l2_src, struct mtk_video_dec_buf,
++				   m2m_buf.vb);
++	bs_src = &dec_buf_src->bs_buffer;
++
++	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p buf_info = %p",
++			ctx->id, src_buf->vb2_queue->type,
++			src_buf->index, src_buf, src_buf_info);
++
++	bs_src->va = NULL;
++	bs_src->dma_addr = vb2_dma_contig_plane_dma_addr(vb2_src, 0);
++	bs_src->size = (size_t)vb2_src->planes[0].bytesused;
++
++	mtk_v4l2_debug(3, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
++			ctx->id, buf->va, &buf->dma_addr, buf->size, src_buf);
++	/* Apply request controls. */
++	src_buf_req = vb2_src->req_obj.req;
++	if (src_buf_req)
++		v4l2_ctrl_request_setup(src_buf_req, &ctx->ctrl_hdl);
 +	else
-+		msg.inst_id = vpu->inst_id;
++		mtk_v4l2_err("vb2 buffer media request is NULL");
++
++	dst_buf = vdec_get_cap_buffer(ctx, vb2_v4l2_dst);
++	v4l2_m2m_buf_copy_metadata(vb2_v4l2_src, vb2_v4l2_dst, true);
++	ret = vdec_if_decode(ctx, bs_src, dst_buf, &res_chg);
++	if (ret) {
++		mtk_v4l2_err(
++			" <===[%d], src_buf[%d] sz=0x%zx pts=%llu vdec_if_decode() ret=%d res_chg=%d===>",
++			ctx->id, vb2_src->index, bs_src->size,
++			vb2_src->timestamp, ret, res_chg);
++		if (ret == -EIO) {
++			mutex_lock(&ctx->lock);
++			dec_buf_src->error = true;
++			mutex_unlock(&ctx->lock);
++		}
++	}
++
++	mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
++
++	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx,
++		ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
++
++	v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++}
++
++static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
++{
++	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vb2_v4l2 = to_vb2_v4l2_buffer(vb);
++
++	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p",
++			ctx->id, vb->vb2_queue->type,
++			vb->index, vb);
++
++	mutex_lock(&ctx->lock);
++	v4l2_m2m_buf_queue(ctx->m2m_ctx, vb2_v4l2);
++	mutex_unlock(&ctx->lock);
++	if (vb->vb2_queue->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
++		return;
++
++	mtk_v4l2_debug(3, "(%d) id=%d, bs=%p",
++		vb->vb2_queue->type, vb->index, src_buf);
++
++	/* If an OUTPUT buffer, we may need to update the state */
++	if (ctx->state == MTK_STATE_INIT) {
++		ctx->state = MTK_STATE_HEADER;
++		mtk_v4l2_debug(1, "Init driver from init to header.");
++	} else {
++		mtk_v4l2_debug(3, "[%d] already init driver %d",
++				ctx->id, ctx->state);
++	}
++}
++
++static int mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
++{
++	bool res_chg;
++
++	return vdec_if_decode(ctx, NULL, NULL, &res_chg);
++}
++
++static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
++{
++	unsigned int i;
++
++	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, NUM_CTRLS);
++	if (ctx->ctrl_hdl.error) {
++		mtk_v4l2_err("v4l2_ctrl_handler_init failed\n");
++		return ctx->ctrl_hdl.error;
++	}
++
++	for (i = 0; i < NUM_CTRLS; i++) {
++		struct v4l2_ctrl_config cfg = mtk_stateless_controls[i].cfg;
++
++		v4l2_ctrl_new_custom(&ctx->ctrl_hdl, &cfg, NULL);
++		if (ctx->ctrl_hdl.error) {
++			mtk_v4l2_err("Adding control %d failed %d",
++					i, ctx->ctrl_hdl.error);
++			return ctx->ctrl_hdl.error;
++		}
++	}
++
++	v4l2_ctrl_handler_setup(&ctx->ctrl_hdl);
++
++	return 0;
++}
++
++const struct media_device_ops mtk_vcodec_media_ops = {
++	.req_validate	= fops_media_request_validate,
++	.req_queue	= v4l2_m2m_request_queue,
++};
++
++static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
++{
++	struct vb2_queue *src_vq;
++
++	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
++				 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
++
++	/* Support request api for output plane */
++	src_vq->supports_requests = true;
++	src_vq->requires_requests = true;
++}
++
++static int vb2ops_vdec_out_buf_validate(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++
++	vbuf->field = V4L2_FIELD_NONE;
++	return 0;
++}
++
++static struct vb2_ops mtk_vdec_request_vb2_ops = {
++	.queue_setup	= vb2ops_vdec_queue_setup,
++	.buf_prepare	= vb2ops_vdec_buf_prepare,
++	.wait_prepare	= vb2_ops_wait_prepare,
++	.wait_finish	= vb2_ops_wait_finish,
++	.start_streaming	= vb2ops_vdec_start_streaming,
++
++	.buf_queue	= vb2ops_vdec_stateless_buf_queue,
++	.buf_out_validate = vb2ops_vdec_out_buf_validate,
++	.buf_init	= vb2ops_vdec_buf_init,
++	.buf_finish	= vb2ops_vdec_buf_finish,
++	.stop_streaming	= vb2ops_vdec_stop_streaming,
++	.buf_request_complete = vb2ops_vdec_buf_request_complete,
++};
++
++const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
++	.chip = MTK_MT8183,
++	.init_vdec_params = mtk_init_vdec_params,
++	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
++	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
++	.vdec_formats = mtk_video_formats,
++	.num_formats = NUM_FORMATS,
++	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
++	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
++	.vdec_framesizes = mtk_vdec_framesizes,
++	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
++	.uses_stateless_api = true,
++	.worker = mtk_vdec_worker,
++	.flush_decoder = mtk_vdec_flush_decoder,
++};
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index e5b8309785e1..78d4a7728ddf 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -250,6 +250,7 @@ struct vdec_pic_info {
+  * @encode_work: worker for the encoding
+  * @last_decoded_picinfo: pic information get from latest decode
+  * @empty_flush_buf: a fake size-0 capture buffer that indicates flush
++ * @current_codec: current set input codec, in V4L2 pixel format
+  *
+  * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
+  * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
+@@ -289,6 +290,8 @@ struct mtk_vcodec_ctx {
+ 	struct vdec_pic_info last_decoded_picinfo;
+ 	struct mtk_video_dec_buf *empty_flush_buf;
  
- 	err = vcodec_vpu_send_msg(vpu, &msg, sizeof(msg));
- 	mtk_vcodec_debug(vpu, "- id=%X ret=%d", msg_id, err);
-@@ -163,7 +178,10 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
- 
- 	memset(&msg, 0, sizeof(msg));
- 	msg.msg_id = AP_IPIMSG_DEC_START;
--	msg.vpu_inst_addr = vpu->inst_addr;
-+	if (vpu->fw_abi_version < 2)
-+		msg.vpu_inst_addr = vpu->inst_addr;
-+	else
-+		msg.inst_id = vpu->inst_id;
- 
- 	for (i = 0; i < len; i++)
- 		msg.data[i] = data[i];
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-index 85224eb7e34b..c2ed5b6cab8b 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-@@ -18,6 +18,9 @@ struct mtk_vcodec_ctx;
-  *                for control and info share
-  * @failure     : VPU execution result status, 0: success, others: fail
-  * @inst_addr	: VPU decoder instance address
-+ * @fw_abi_version : ABI version of the firmware.
-+ * @inst_id	: if fw_abi_version >= 2, contains the instance ID to be given
-+ *                in place of inst_addr in messages.
-  * @signaled    : 1 - Host has received ack message from VPU, 0 - not received
-  * @ctx         : context for v4l2 layer integration
-  * @dev		: platform device of VPU
-@@ -29,6 +32,8 @@ struct vdec_vpu_inst {
- 	void *vsi;
- 	int32_t failure;
- 	uint32_t inst_addr;
-+	uint32_t fw_abi_version;
-+	uint32_t inst_id;
- 	unsigned int signaled;
- 	struct mtk_vcodec_ctx *ctx;
- 	wait_queue_head_t wq;
++	u32 current_codec;
++
+ 	enum v4l2_colorspace colorspace;
+ 	enum v4l2_ycbcr_encoding ycbcr_enc;
+ 	enum v4l2_quantization quantization;
 -- 
 2.31.1.498.g6c1eba8ee3d-goog
 
