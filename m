@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E2DC43461
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 133AFC43603
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5D7D611C1
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D857D60FDC
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbhD0K2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47702 "EHLO mail.kernel.org"
+        id S235663AbhD0K2F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47814 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235353AbhD0K17 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:27:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E9EB6613B0;
+        id S235408AbhD0K2B (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E56C76127A;
         Tue, 27 Apr 2021 10:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619519236;
-        bh=cJmIogEt8DtaRrLuirE0smJSOENxo/aAnd7cgWYfYDc=;
+        s=k20201202; t=1619519235;
+        bh=5AHhx16DJL5gdJqgumKoh72s5QcxkeHszhw8tqlTmq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=an5zXV4X4Z3N7pCHC/a/6eYE7scIqU4vlkIl+I7UH2FlGFBDBxKWTw6XmhfMDOITS
-         VHft04reu6+NJE9JmenhS5NxnuekX3RtZ0ipRFGENclmNwHrveYuRGAo9cES6dQH9S
-         YF87XkXE25CYGMNoRznmrPZ5amfrFy6Qk3y8Q1ulo82EJgWa33cVg2d9IuE5Aci9e4
-         NJgU+orRAJb4ucqo86+R7URiJqIE9D25KyNAsmM7t7b8LZRpKbUt8w+ue7pu2lBBN8
-         FdFl6ZnFLoOO+DWqn2dLwfKiZloqt1IyvR7K/XTcrOvcT8fzRaITg30hlt7aDtcqqU
-         FYpkEtiYCZkHw==
+        b=m2GPWkxvHZOlWbkTSHetERhPlOy8zq3V4Lsk8pt7/i+GzudFxPpOpPRsRQSCogTMw
+         2afTeEMa5Se1g/uTW9W0DQsIOW38JynU/lWkj7ICwstHqBR0VfsgxrEZBXi4od3qGz
+         d+S3uc4YkRcZptKDixHYbD+ldvI9TTredPrNkaiKieDvYdaYwhaSphHZ/gcJdm2wSg
+         z3iascj+yvpxvbADuLWj+924GU+4g8v+X7/g4vRWv+Eh0VDBQLAliLgz4kF8vqojiP
+         jub5B3hXmkl6X46GX147HbJc2mA+UwiMpqu4QOqdpVmPa7IW9fLU5JPzt6RS1JMrIU
+         ahEsILICxWGCA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvv-000o02-PS; Tue, 27 Apr 2021 12:27:11 +0200
+        id 1lbKvu-000nzP-Vp; Tue, 27 Apr 2021 12:27:10 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3 17/79] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:26:07 +0200
-Message-Id: <7ef9d9ec7810a6d2ff53ba8685fcc91a952bbbb5.1619519080.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Songjun Wu <songjun.wu@microchip.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 04/79] media: i2c: ov7740: don't resume at remove time
+Date:   Tue, 27 Apr 2021 12:25:54 +0200
+Message-Id: <cf2c78bd35f9951508ae6e7aac1c8da7ce870e92.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -57,32 +56,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Calling pm_runtime_get_sync() at driver's removal time is
+not right, as this will resume PM runtime. This is clearly
+not what it is desired there, since it calls
+pm_runtime_set_suspended() afterwards.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+So, just remove pm runtime get/put logic from the device
+removal logic.
+
+Fixes: 39c5c4471b8d ("media: i2c: Add the ov7740 image sensor driver")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov7740.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 026111505f5a..c4f19418a460 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2568,7 +2568,7 @@ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret;
+diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+index 47a9003d29d6..ed6904b2e8f5 100644
+--- a/drivers/media/i2c/ov7740.c
++++ b/drivers/media/i2c/ov7740.c
+@@ -1165,10 +1165,8 @@ static int ov7740_remove(struct i2c_client *client)
+ 	v4l2_async_unregister_subdev(sd);
+ 	ov7740_free_controls(ov7740);
  
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
-+	ret = pm_runtime_resume_and_get(ctx->jpeg->dev);
+-	pm_runtime_get_sync(&client->dev);
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+-	pm_runtime_put_noidle(&client->dev);
  
- 	return ret > 0 ? 0 : ret;
- }
+ 	ov7740_set_power(ov7740, 0);
+ 	return 0;
 -- 
 2.30.2
 
