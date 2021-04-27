@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD81EC43461
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 459D7C43462
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACFA7613B0
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 091F2613C6
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbhD0K2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48148 "EHLO mail.kernel.org"
+        id S235790AbhD0K2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235488AbhD0K2C (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235435AbhD0K2C (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DFB3613D1;
-        Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 04262613C7;
+        Tue, 27 Apr 2021 10:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=XfZSeMotNFyXbfT608pw1ECU5JJkssXPopFyWbltzaE=;
+        bh=/e5UeIJiSAmhayjaD9UYfjSrnpizVQ2PnDpNxKl2/+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rpva4pFFX1xfT9Qib5p16t22Qy4kyDXU+xli54LmAHrWSU6MjllDO6dkdX6bUVwZ3
-         XoLxwUwncX8bHFaT1feMahtZ+mAAcCgw9eMbJTJMhv6vDhZT+n1hUnlfhyZNW6QpuX
-         uuxSjuz+fpGbgDKpIH37kIytUd/fGeWmhKhmQg5QFKDuY5Cmh1qS4tZGW0VvvUXxth
-         oriZ4yCj0cUbddMeU6OXQk9fijw0kueq02+0pTVgm7RzpgEpdKWiAgbCeANvwzjfBY
-         MamIJdt/Tc8Zb3cUxVSGkFcdxolaDIRv0mmt4Bm7h8EAvOgY/7VZPekBppXj6EqtwA
-         tJ+uYfo7qWX6Q==
+        b=KkykQfPooUdW8MA0VwbO7dz14rqXn1dm5gOHEOLQDuawdcXjO5xbUgaP+Y8iOQLhV
+         psz+0pguVumRSPLnBiZ67uXgvvVt310sGRRbHlWP+ctgzGkgDrQk1v1zwO6Q56cRGD
+         eeRpgu6PJFTQSZsKbxzxDREwWzL4XF2fSXMzRTKr8qd5AftNMhHOVneQh2L6aag6jH
+         cAckoUc83ZHnFUG61QCWJR788Urg6EEMDkc1AEARvq97cF1v2AL+zraQvR8juS9yH/
+         ukQIin8P3zAnAsRFJnGfJ9fbLIqfBmdvZFbTGsoRfQde7qGv/mayieWt99cRuaCY+L
+         etRezsYsMlM+A==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvv-000nze-9a; Tue, 27 Apr 2021 12:27:11 +0200
+        id 1lbKvu-000nzG-Ro; Tue, 27 Apr 2021 12:27:10 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 09/79] media: mdk-mdp: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:25:59 +0200
-Message-Id: <6f2e4b112f845f9be1de07cb8d73ff3173dec01a.1619519080.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 01/79] media: venus: fix PM runtime logic at venus_sys_error_handler()
+Date:   Tue, 27 Apr 2021 12:25:51 +0200
+Message-Id: <6d463d21f0dd55c3d84db0458c7a5c4e0d7c5bc1.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -58,42 +58,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+The venus_sys_error_handler() assumes that pm_runtime was
+able to resume, as it does things like:
 
-While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
-as it doesn't make any sense to return 0 if the PM runtime failed
-to resume.
+	while (pm_runtime_active(core->dev_dec) || pm_runtime_active(core->dev_enc))
+		msleep(10);
 
+Well, if, for whatever reason, this won't happen, the routine
+won't do what's expected. So, check for the returned error
+condition, warning if it returns an error.
+
+Fixes: af2c3834c8ca ("[media] media: venus: adding core part and helper functions")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index ace4528cdc5e..f14779e7596e 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mtk_mdp_ctx *ctx = q->drv_priv;
- 	int ret;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 54bac7ec14c5..c80c27c87ccc 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -84,7 +84,11 @@ static void venus_sys_error_handler(struct work_struct *work)
+ 			container_of(work, struct venus_core, work.work);
+ 	int ret = 0;
  
--	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
- 	if (ret < 0)
--		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
-+		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
- 			    ctx->id, ret);
+-	pm_runtime_get_sync(core->dev);
++	ret = pm_runtime_get_sync(core->dev);
++	if (WARN_ON(ret < 0)) {
++		pm_runtime_put_noidle(core->dev);
++		return;
++	}
  
--	return 0;
-+	return ret;
- }
+ 	hfi_core_deinit(core, true);
  
- static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
+@@ -106,9 +110,13 @@ static void venus_sys_error_handler(struct work_struct *work)
+ 
+ 	hfi_reinit(core);
+ 
+-	pm_runtime_get_sync(core->dev);
++	ret = pm_runtime_get_sync(core->dev);
++	if (WARN_ON(ret < 0)) {
++		pm_runtime_put_noidle(core->dev);
++		return;
++	}
+ 
+-	ret |= venus_boot(core);
++	ret = venus_boot(core);
+ 	ret |= hfi_core_resume(core, true);
+ 
+ 	enable_irq(core->irq);
 -- 
 2.30.2
 
