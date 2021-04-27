@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F47DC43462
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A087EC433ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6610E60FF1
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C412613E8
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236276AbhD0Mqv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 08:46:51 -0400
+        id S236445AbhD0Mqz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 08:46:55 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45230 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236204AbhD0Mqv (ORCPT
+        with ESMTP id S236197AbhD0Mqy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 08:46:51 -0400
+        Tue, 27 Apr 2021 08:46:54 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B86B3D3C;
-        Tue, 27 Apr 2021 14:46:06 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B9640D89;
+        Tue, 27 Apr 2021 14:46:10 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1619527567;
-        bh=7fR4JzssU6ZybYXSvkIfq8QlK5WtaQGH821wAcaAfzo=;
+        s=mail; t=1619527571;
+        bh=EvMD3pwE7Qm808oBNq42QE07jSm+O91pzrR/CW3Tzto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rQJXm5gkg4vCcrpLQJBezVePaphgIfqVFebt167MzYOReaRNytzIP+MEKzbpYzDDN
-         uCCz085GaFArxvuy8nFFw1SOVM5xYkULPYLe/hzkdpmFY4w4ErOiw6NEJFUvLfeA+/
-         g8Y6lj+U1qxWjrf4bi5ZeMnGwb12fqEeMRybgGOA=
+        b=RQz2Lt7MJwvk6NCSR3HvnQOI7YZEXiIJjeHhGu3/82517a1xp6pUioZXjjh11TwtB
+         1M21QqOxWbgZR0y4UQA5sXZ1hWpCI8xM/V02gQsIQ3vxTrJVX4NRzxFA7JA5Aeu+1e
+         UHJCxA9qk7anLAL4Hec/aj+ea1R4ghpSCg/GwZwM=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -37,122 +37,69 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v6 04/24] v4l: mc: Start walk from a specific pad in use count calculation
-Date:   Tue, 27 Apr 2021 15:45:03 +0300
-Message-Id: <20210427124523.990938-5-tomi.valkeinen@ideasonboard.com>
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH v6 08/24] media: entity: Add has_route entity operation
+Date:   Tue, 27 Apr 2021 15:45:07 +0300
+Message-Id: <20210427124523.990938-9-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
 References: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-With the addition of the recent has_route() media entity op, the pads of a
-media entity are no longer all interconnected. This has to be taken into
-account in power management.
+The optional operation can be used by entities to report whether two
+pads are internally connected.
 
-Prepare for the addition of a helper function supporting S_ROUTING.
+While at there, fix a Sphinx compiler warning in a comment block a few
+lines above.
 
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-mc.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ include/media/media-entity.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mc.c b/drivers/media/v4l2-core/v4l2-mc.c
-index cbeb580c6754..35d18ed89fa5 100644
---- a/drivers/media/v4l2-core/v4l2-mc.c
-+++ b/drivers/media/v4l2-core/v4l2-mc.c
-@@ -427,17 +427,16 @@ EXPORT_SYMBOL_GPL(v4l2_create_fwnode_links);
- 
- /*
-  * pipeline_pm_use_count - Count the number of users of a pipeline
-- * @entity: The entity
-+ * @pad: Any pad along the pipeline
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 17e460a50716..f262026bae1f 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -187,6 +187,7 @@ enum media_pad_signal_type {
+  * @flags:	Pad flags, as defined in
+  *		:ref:`include/uapi/linux/media.h <media_header>`
+  *		(seek for ``MEDIA_PAD_FL_*``)
++ *
+  * .. note::
   *
-  * Return the total number of users of all video device nodes in the pipeline.
-  */
--static int pipeline_pm_use_count(struct media_entity *entity,
--	struct media_graph *graph)
-+static int pipeline_pm_use_count(struct media_pad *pad,
-+				 struct media_graph *graph)
- {
--	struct media_pad *pad;
- 	int use = 0;
- 
--	media_graph_walk_start(graph, entity->pads);
-+	media_graph_walk_start(graph, pad);
- 
- 	while ((pad = media_graph_walk_next(graph))) {
- 		if (is_media_entity_v4l2_video_device(pad->entity))
-@@ -483,7 +482,7 @@ static int pipeline_pm_power_one(struct media_entity *entity, int change)
- 
- /*
-  * pipeline_pm_power - Apply power change to all entities in a pipeline
-- * @entity: The entity
-+ * @pad: Any pad along the pipeline
-  * @change: Use count change
+  *    @stream_count reference count must never be negative, but is a signed
+@@ -214,6 +215,10 @@ struct media_pad {
+  * @link_validate:	Return whether a link is valid from the entity point of
+  *			view. The media_pipeline_start() function
+  *			validates all links by calling this operation. Optional.
++ * @has_route:		Return whether a route exists inside the entity between
++ *			two given pads. Pads are passed to the operation ordered
++ *			by index. Optional: If the operation isn't implemented
++ *			all pads will be considered as connected.
   *
-  * Walk the pipeline to update the use count and the power state of all non-node
-@@ -491,16 +490,16 @@ static int pipeline_pm_power_one(struct media_entity *entity, int change)
+  * .. note::
   *
-  * Return 0 on success or a negative error code on failure.
-  */
--static int pipeline_pm_power(struct media_entity *entity, int change,
--	struct media_graph *graph)
-+static int pipeline_pm_power(struct media_pad *pad, int change,
-+			     struct media_graph *graph)
- {
--	struct media_pad *tmp_pad, *pad;
-+	struct media_pad *tmp_pad, *first = pad;
- 	int ret = 0;
+@@ -227,6 +232,8 @@ struct media_entity_operations {
+ 			  const struct media_pad *local,
+ 			  const struct media_pad *remote, u32 flags);
+ 	int (*link_validate)(struct media_link *link);
++	bool (*has_route)(struct media_entity *entity, unsigned int pad0,
++			  unsigned int pad1);
+ };
  
- 	if (!change)
- 		return 0;
- 
--	media_graph_walk_start(graph, entity->pads);
-+	media_graph_walk_start(graph, pad);
- 
- 	while (!ret && (pad = media_graph_walk_next(graph)))
- 		if (is_media_entity_v4l2_subdev(pad->entity))
-@@ -509,7 +508,7 @@ static int pipeline_pm_power(struct media_entity *entity, int change,
- 	if (!ret)
- 		return ret;
- 
--	media_graph_walk_start(graph, entity->pads);
-+	media_graph_walk_start(graph, first);
- 
- 	while ((tmp_pad = media_graph_walk_next(graph)) && tmp_pad != pad)
- 		if (is_media_entity_v4l2_subdev(tmp_pad->entity))
-@@ -531,7 +530,7 @@ static int v4l2_pipeline_pm_use(struct media_entity *entity, unsigned int use)
- 	WARN_ON(entity->use_count < 0);
- 
- 	/* Apply power change to connected non-nodes. */
--	ret = pipeline_pm_power(entity, change, &mdev->pm_count_walk);
-+	ret = pipeline_pm_power(entity->pads, change, &mdev->pm_count_walk);
- 	if (ret < 0)
- 		entity->use_count -= change;
- 
-@@ -557,8 +556,8 @@ int v4l2_pipeline_link_notify(struct media_link *link, u32 flags,
- 			      unsigned int notification)
- {
- 	struct media_graph *graph = &link->graph_obj.mdev->pm_count_walk;
--	struct media_entity *source = link->source->entity;
--	struct media_entity *sink = link->sink->entity;
-+	struct media_pad *source = link->source;
-+	struct media_pad *sink = link->sink;
- 	int source_use;
- 	int sink_use;
- 	int ret = 0;
+ /**
 -- 
 2.25.1
 
