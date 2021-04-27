@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A81BDC43462
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2423C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75451611F2
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FE2D611ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbhD0K3G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48136 "EHLO mail.kernel.org"
+        id S238308AbhD0K3H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236913AbhD0K2R (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C2176141E;
+        id S235372AbhD0K2P (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A00306142D;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=tu2hhB6CHAZbCfvPd96Qq+9zsUaGe3IxV7AH+2XbuEs=;
+        bh=73B6Lks3AupUDrJCPSyBZhCBhq2sPf760XjzihM5LGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pWCJ5+YzV+LcsvBasttI5OaUINWopbWyj5/ga5/WC9JOzN7NxnwTRnzkoR7yiIP3M
-         +PJcHT2kOzktyDUf+En6mdaLVD47HSRIUekSKGttv24KunrF/o7IWKUQgRHxBmRmxP
-         NAKUYCWxqb2ukUddcCcWJe/3opHkQSJ1dpwhkJOnO2HzTPUY/+PvRjKo7uC0AJ/lYE
-         mMICK4o0IugbeRbRrm+pqk6xcnDCcGjbzvzPuJxm4d09/tBaTO7XGgbv3oFX0coXZp
-         kXMCdv3dhLDoUl1ET24dOAze3Z4SUP89d10BaIGokgAoVe1ecYRQdNporXx9cbZbGy
-         UmAxT+47WFBhQ==
+        b=Fl9q1iE8eD01tbsHYEKRBJrPiuYXt3bYQA/8ySdxl389pDMPY+XfkkLCJNyMakTUH
+         FVzL1mkUOipL3CgBo7DkEmqCzVlCvI4OB/2+6w1u9G3tvr21JGUMESS1Fy6mY6f1Rn
+         GXHb16PBtHIUhiAuhasXCta12WJhvDME4nv0tz2yieLoiQn8sjhz8QVlIdBlmMfmFu
+         JV3l23Ef3l7DEYI2CcWn5JjMGnWoIJ5/FvYOP2M78BPSZDtnCbGDGI4l1RvCVQO9LY
+         vk22S0ah1EQCxe48r+LzsM8s+sKlaCAHWDTDuATsys9Pd54R7BlEhkeHUP92vESLXP
+         2MB+psIGAqjtw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvy-000o2J-Jt; Tue, 27 Apr 2021 12:27:14 +0200
+        id 1lbKvy-000o2S-TO; Tue, 27 Apr 2021 12:27:14 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rick Chang <rick.chang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 64/79] media: mtk-jpeg: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:54 +0200
-Message-Id: <a6fcf38f0add7f5ffc3b8d8b923c8dabf22738d7.1619519080.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 67/79] media: venus: vdec: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:57 +0200
+Message-Id: <ebd340da5076b63f7a1792cc5a8f37f8a82280ce.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -65,30 +65,30 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 4 ++--
+ drivers/media/platform/qcom/venus/vdec.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index 88a23bce569d..a89c7b206eef 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-@@ -920,7 +920,7 @@ static void mtk_jpeg_enc_device_run(void *priv)
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index ddb7cd39424e..347e533ea673 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -568,7 +568,7 @@ static int vdec_pm_get(struct venus_inst *inst)
+ 	int ret;
  
--	ret = pm_runtime_get_sync(jpeg->dev);
-+	ret = pm_runtime_resume_and_get(jpeg->dev);
- 	if (ret < 0)
- 		goto enc_end;
+ 	mutex_lock(&core->pm_lock);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	mutex_unlock(&core->pm_lock);
  
-@@ -973,7 +973,7 @@ static void mtk_jpeg_dec_device_run(void *priv)
- 		return;
- 	}
+ 	return ret < 0 ? ret : 0;
+@@ -601,7 +601,7 @@ static int vdec_pm_get_put(struct venus_inst *inst)
+ 	mutex_lock(&core->pm_lock);
  
--	ret = pm_runtime_get_sync(jpeg->dev);
-+	ret = pm_runtime_resume_and_get(jpeg->dev);
- 	if (ret < 0)
- 		goto dec_end;
+ 	if (pm_runtime_suspended(dev)) {
+-		ret = pm_runtime_get_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
+ 		if (ret < 0)
+ 			goto error;
  
 -- 
 2.30.2
