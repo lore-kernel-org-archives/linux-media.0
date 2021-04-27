@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D75C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD160C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0A42611F2
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A317360C3D
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236731AbhD0KQj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:16:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35440 "EHLO mail.kernel.org"
+        id S236805AbhD0KQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:16:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235790AbhD0KPL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:15:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCE406195E;
+        id S235567AbhD0KPM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:15:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EB84861949;
         Tue, 27 Apr 2021 10:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619518433;
-        bh=/R60wucnhMxzatTcaaq6aX+wA4KyHRrla+Ogrsx7GxU=;
+        s=k20201202; t=1619518434;
+        bh=oAi5YzlfFlQMfzPh3wYGQ2xjGcqBCgu57W3dE0PjRzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AZ9IAMfTbC6VCIWCPQlVZ4eZKImP4UuqT9UAattBwUeM/l8qVA4Noq1J7332fl49c
-         ug7YMVGmUJ0d1CgHbsv8SOYob4GcnKR1mdjUe128o5oRbp/PHT9sjwKcANpAzOt9GC
-         8TUDuldsBLF9F+f6rkbpa8VVrYGzLE9DM0AFV6pUGs/cV+trIcFZD1Q9tINtrZ29Ai
-         RU4FmZTlQdW+xhZ7w6ktbcDzef+/f7qc3xjYo31aaPkzZc4UdCCpmGPVTlnbGdjlBk
-         h0FBsIog30AT+u8t68xZs81J5kjlh94OMVu05Zc/tofpbeqZIjOiW5Rfw0XSpSrd3C
-         TtUvtp88E1l9w==
+        b=WlzE8JFKZcEaqtCedGI64mSq7Zxn6b2RQGKEV1UcH8M57TwJqZZJq0ZaTdnJG9Ynf
+         jbsu9fJuzDy7LLMnudgB5ChhqU99RMJratdZ3sLb/vKih+elx5ZK4LtgmJ+0E1+vE9
+         4XoiCXqQNU9WZUDQjAC8lcjbW/MU/Vv4mXhHhW3MAOzwrxsk3U+vaGBtwEEzAFnEeN
+         4vVZdUMbCXxwc68I2eoJAf+CQ8NBsqg8ZcPUPhQA9XxpaWD13ojwryu/nW571MJrTz
+         Iqta/mHUbeQ6+P/Pw/1dfH8jFNZnr36SQrwyFWl1R8fOXzk5QAWxTuQlj7g5fYqkvp
+         Y/0Vh1CTFMWOw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKj2-000j8A-3K; Tue, 27 Apr 2021 12:13:52 +0200
+        id 1lbKj1-000j7F-0M; Tue, 27 Apr 2021 12:13:51 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2 74/79] media: stm32: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:13:41 +0200
-Message-Id: <138647d154e523f6e0ff04af1dd94e8bd0facff3.1619518193.git.mchehab+huawei@kernel.org>
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 55/79] media: i2c: ov8865: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:13:22 +0200
+Message-Id: <ce3ead701c232be8d8a8c001a4217581ee5cc2d2.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -66,35 +67,27 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/stm32/stm32-dcmi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov8865.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index bbcc2254fa2e..5f4e1db8cfcd 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -723,11 +723,11 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	u32 val = 0;
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index 9ecf180635ee..3bf6ee4898a9 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -2497,11 +2497,9 @@ static int ov8865_s_stream(struct v4l2_subdev *subdev, int enable)
  	int ret;
  
--	ret = pm_runtime_get_sync(dcmi->dev);
-+	ret = pm_runtime_resume_and_get(dcmi->dev);
- 	if (ret < 0) {
- 		dev_err(dcmi->dev, "%s: Failed to start streaming, cannot get sync (%d)\n",
- 			__func__, ret);
--		goto err_pm_put;
-+		goto err_unlock;
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(sensor->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(sensor->dev);
++		ret = pm_runtime_resume_and_get(sensor->dev);
++		if (ret < 0)
+ 			return ret;
+-		}
  	}
  
- 	ret = media_pipeline_start(&dcmi->vdev->entity, &dcmi->pipeline);
-@@ -848,6 +848,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- err_pm_put:
- 	pm_runtime_put(dcmi->dev);
-+err_unlock:
- 	spin_lock_irq(&dcmi->irqlock);
- 	/*
- 	 * Return all buffers to vb2 in QUEUED state.
+ 	mutex_lock(&sensor->mutex);
 -- 
 2.30.2
 
