@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47FF7C43461
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C711CC433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19A8A613CA
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96F4A61185
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235364AbhD0KPP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:15:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35422 "EHLO mail.kernel.org"
+        id S236673AbhD0KPQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:15:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235430AbhD0KOg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:14:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C6D8161442;
-        Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
+        id S235448AbhD0KOh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:14:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1114461453;
+        Tue, 27 Apr 2021 10:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619518431;
-        bh=Brp5bgVOD7UqAef4tVuj+33Q8jgTwnd/UQoPNRzNrhM=;
+        s=k20201202; t=1619518432;
+        bh=uVFbSBsOFTlNeqpthO6c96NJAUfPhbV6UvOttxV6+5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2OZ6v1gRfGGO3OQiD+Tb33Z+AHzcj0dztciHtEW+Cj9G3+tjVJRzCZj37ejEPzSX
-         Yx0k7N7+rmSl/KYCFWqVXyGpWjkDpjBNkPBbblDdw3NBsrpHPzqJkppNx/oe6ehNMU
-         +Q8DOhs5J3NXnoERt5w9HJx0LhhmnE+eYkcWrbMlfyuRLFOwr8Tc07uAUtoEjQbeFv
-         byPg5AE34dheN24ErtSF/PxlJAskrJSTtdurfZ4INggqcjgx3EUap7qkH2SD+HqZ4I
-         SagYnZOXbevqX5QGortcxmfQw7bNYXfcntUgKgThtWzp+Sz+4BR7lLWAcSozrqF4ha
-         hPclnOX9XyxJw==
+        b=BMxx4QZ1wblnRax12rxqlfmVI6OonFUFIxBAwyWwJ3pz6pnkb6ruIebihD9aK+oFR
+         wvLCwbyLxVJz+4lF40kW5nJN1iomAGMJ7WKem1/CiL0+oEktecUTvccPNzyWm0wac+
+         FZSK3vOfTUh92K3MM8ZaSX5soUlr6+BiKwMWVkq7nWSFOhPackRsm9FfpGvLQ/bRcI
+         UZnWfEik1YYgpLTFb6KEL+3R0cG71I9gadY+nUZ1iRaGThbNFtoTT3jOV6EZBntv8w
+         UDBq8O59ua3xMUvjrhjyrHWjucEByB+MAJqbrwGfN1ZtFQRZw3Jtm5BoEA9kvZUzBJ
+         /7CvYQp+9EHoQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiz-000j5z-Fa; Tue, 27 Apr 2021 12:13:49 +0200
+        id 1lbKj0-000j6Q-1a; Tue, 27 Apr 2021 12:13:50 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 29/79] media: i2c: ccs-core: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:12:56 +0200
-Message-Id: <a533403112091df6c4eaffa5bd87c2af6afbbafa.1619518193.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 38/79] media: i2c: imx290: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:13:05 +0200
+Message-Id: <21ebf28de1f7f0cad8f6b2589aa1272d78a764d1.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -62,45 +62,27 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/media/i2c/imx290.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index b05f409014b2..8cce80557128 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1880,12 +1880,11 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 6319a42057d2..06020e648a97 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -764,11 +764,9 @@ static int imx290_set_stream(struct v4l2_subdev *sd, int enable)
+ 	int ret = 0;
  
--	rval = pm_runtime_get_sync(&client->dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(&client->dev);
--
-+	rval = pm_runtime_resume_and_get(&client->dev);
-+	if (rval < 0)
- 		return rval;
--	} else if (!rval) {
-+
-+	if (!rval) {
- 		rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->
- 					       ctrl_handler);
- 		if (rval)
-@@ -3089,12 +3088,9 @@ static int __maybe_unused ccs_suspend(struct device *dev)
- 	bool streaming = sensor->streaming;
- 	int rval;
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(imx290->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(imx290->dev);
++		ret = pm_runtime_resume_and_get(imx290->dev);
++		if (ret < 0)
+ 			goto unlock_and_return;
+-		}
  
--	rval = pm_runtime_get_sync(dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(dev);
--
-+	rval = pm_runtime_resume_and_get(dev);
-+	if (rval < 0)
- 		return rval;
--	}
- 
- 	if (sensor->streaming)
- 		ccs_stop_streaming(sensor);
+ 		ret = imx290_start_streaming(imx290);
+ 		if (ret) {
 -- 
 2.30.2
 
