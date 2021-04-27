@@ -7,51 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F784C43462
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E72CC43600
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A83C60FDC
+	by mail.kernel.org (Postfix) with ESMTP id E0930613B0
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238327AbhD0K3K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
+        id S238384AbhD0K3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235842AbhD0K2N (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B08056143C;
+        id S237505AbhD0K2X (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C88961405;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=WwdunTEPlspSuJNcgiz5VlTq6QqTmYyotSIBFOxVREY=;
+        bh=U3xPtY+HT1GPqKz+iC8qw5pPuPioh4afaqfdd0R7SD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NZm6zdW+FKzxb+LsjX/Lv3L7az1xSznYI/RONnb1cXePK21Nj4oLvZmIGqx+5LALk
-         +66OR7pZFcaY+DFAtLTiBLuo39vLrTjzoB4/nZSDLcNBE6YtqNjPB7JTGltmO6E18L
-         UchD071kXo4eZnoYnyjz80KsGTsBunYbSShzyOdI9WzwH5NKKyzGmV3mvlUC8vYfOk
-         aUWwBs2uJAkaGi0SZleGmhwU4AYdVPAnwOz43JpE9PTJ8a2DNCXD6vHpwFmBa2ByQS
-         j9PT5G/0kNVTmyL1H4ZA+0hDf8I1fRfltZiBcp9Nqh2pdLCAeCvQSw5t4ILDQE1qlD
-         eT8TShmndMtVw==
+        b=iXMAigZdnmTu5DSfhVBGfcBPGN3QF6ScmmR9U0f5Im+LPTYBWoyF4ySDewljMfoBD
+         DuxyJAJ1gMLQ6p55STB+KKwr+WrJSR7g3hnugClyn/E78d90b8STIoDxT3xQBiV/n6
+         uL9M9bbEpXbNuIQnbmAm5E6JIWT6+V0tJ8evbx22wxlqQiTfw0l7nXGaV0I87B1VBa
+         XKR/bd4QEFA1Zsi6T9nSKagVK4WUpXZx+4aEhq9gXp+buv8+jKMExd9Xs9e8eBkQTf
+         giDONGAEmXjeisYXz5b0fJau6kz4cBUwC005YzBRs308oiacNrkhIZWR3w4YC0Vp3Y
+         mLWQ5E/mVhnYQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvw-000o0H-2p; Tue, 27 Apr 2021 12:27:12 +0200
+        id 1lbKvv-000o05-RL; Tue, 27 Apr 2021 12:27:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 22/79] staging: media: imx7-mipi-csis: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:12 +0200
-Message-Id: <706a63dc9019ebea7904acedc6d40ae44cb706b6.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 18/79] media: delta-v4l2: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:26:08 +0200
+Message-Id: <364e0a87973ec4676f1aa16b3373a0c95f0366f0.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -63,37 +54,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-Use the new API, in order to cleanup the error check logic.
-
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 025fdc488bd6..1dc680d94a46 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
+diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
+index c691b3d81549..9928b7c46a41 100644
+--- a/drivers/media/platform/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/sti/delta/delta-v4l2.c
+@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
+ 	int ret = 0;
  
- 		mipi_csis_clear_counters(state);
- 
--		ret = pm_runtime_get_sync(&state->pdev->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&state->pdev->dev);
-+		ret = pm_runtime_resume_and_get(&state->pdev->dev);
-+		if (ret < 0)
- 			return ret;
--		}
-+
- 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
- 		if (ret < 0 && ret != -ENOIOCTLCMD)
- 			goto done;
+ 	/* enable the hardware */
+-	ret = pm_runtime_get_sync(delta->dev);
++	ret = pm_runtime_resume_and_get(delta->dev);
+ 	if (ret < 0) {
+-		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
++		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
+ 			__func__, ret);
+ 		return ret;
+ 	}
 -- 
 2.30.2
 
