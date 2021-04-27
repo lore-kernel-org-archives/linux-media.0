@@ -7,42 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D80CDC43470
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD81EC43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FF70611F2
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACFA7613B0
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbhD0K2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48140 "EHLO mail.kernel.org"
+        id S235763AbhD0K2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235486AbhD0K2C (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235488AbhD0K2C (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 019B5613C5;
-        Tue, 27 Apr 2021 10:27:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DFB3613D1;
+        Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=eHVLTLMHsH9CniLLDWRCODM0fRuiKeyCHa5RZsztWV8=;
+        bh=XfZSeMotNFyXbfT608pw1ECU5JJkssXPopFyWbltzaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8RlsyiNI1XktFOjf79d6zq4LYHZ5aQJV2v7egsNmkg2BtIcxlyPOZNbv1MrVFGvE
-         yJST7LaW53M2WUyas/djhW0xboDOevQzTmTEJFdIOOuaDvljjC11Xfq5C+aizkR1HC
-         Y8JjFTaHxHQz5T0FUx3ymdupbSLV1gholDEeN9OuXFPTVd+hWeFdy00I6p9rkqfa8M
-         iB2odU1mtFIQGe9TrmNYQgv2vzinGSuywtcVDll8uITzFLo8CYVTTbddtwEphJzfYZ
-         Id/t/QFcPeA8UmXXepaniD/aL2VCQ7PArYfqlDa0576nx4u9fr5Un09ILggRWmay6u
-         aIWSnvxxpK0Zw==
+        b=Rpva4pFFX1xfT9Qib5p16t22Qy4kyDXU+xli54LmAHrWSU6MjllDO6dkdX6bUVwZ3
+         XoLxwUwncX8bHFaT1feMahtZ+mAAcCgw9eMbJTJMhv6vDhZT+n1hUnlfhyZNW6QpuX
+         uuxSjuz+fpGbgDKpIH37kIytUd/fGeWmhKhmQg5QFKDuY5Cmh1qS4tZGW0VvvUXxth
+         oriZ4yCj0cUbddMeU6OXQk9fijw0kueq02+0pTVgm7RzpgEpdKWiAgbCeANvwzjfBY
+         MamIJdt/Tc8Zb3cUxVSGkFcdxolaDIRv0mmt4Bm7h8EAvOgY/7VZPekBppXj6EqtwA
+         tJ+uYfo7qWX6Q==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvw-000o0x-Tt; Tue, 27 Apr 2021 12:27:12 +0200
+        id 1lbKvv-000nze-9a; Tue, 27 Apr 2021 12:27:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 36/79] media: i2c: imx258: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:26 +0200
-Message-Id: <04e3ded737aa0c382385ff89239f0266dd72c70c.1619519080.git.mchehab+huawei@kernel.org>
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v3 09/79] media: mdk-mdp: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:25:59 +0200
+Message-Id: <6f2e4b112f845f9be1de07cb8d73ff3173dec01a.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -54,35 +58,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-Use the new API, in order to cleanup the error check logic.
+While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
+as it doesn't make any sense to return 0 if the PM runtime failed
+to resume.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/imx258.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index a017ec4e0f50..90529424d5b6 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1039,11 +1039,9 @@ static int imx258_set_stream(struct v4l2_subdev *sd, int enable)
- 	}
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index ace4528cdc5e..f14779e7596e 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mtk_mdp_ctx *ctx = q->drv_priv;
+ 	int ret;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
-+		if (ret < 0)
- 			goto err_unlock;
--		}
+-	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
+ 	if (ret < 0)
+-		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
++		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
+ 			    ctx->id, ret);
  
- 		/*
- 		 * Apply default & customized values
+-	return 0;
++	return ret;
+ }
+ 
+ static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
