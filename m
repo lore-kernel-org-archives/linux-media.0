@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27FE1C433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE45C43460
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2FFC611ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDDFF613C3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbhD0K2h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48270 "EHLO mail.kernel.org"
+        id S236047AbhD0K2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235596AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235600AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FCF161400;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B585613F4;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=WbRKhLLskO1RYUogcibQypEKrmLpBP5nHtIha3xX034=;
+        bh=LvHrsFJn6JLbIexuKZaI+hIEIjqhrM13uG8Z/t+ytHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pztCD5s6it4yKv4ZyOriU2MAs88ON/p9id0SD4J0Tv/V0rwdvq/zaEqKbRBaWYoiv
-         jHTFxaXZgY3iRvQhKTJA+vAYjyhGf7pfZlrhXom//FzC3+6uK3f+yzKcHg1esax10R
-         CvCe7j1/Qoqnl6ARzMIKRooVOYddGnFlrmRdkV+rxf8bMFFETm/uOozASatERWbTIg
-         Tgf7qAJLJ1APVWrgQu3bKUg79c/uc88aTjMYN/QUzJRXf+5vIEXLvQP4VANHKSSeBQ
-         eO6OsaIlojASKu99Xd22jSYdx3qon7LfKfCruGz9WSpZoy/z20QUJqTrUKvG7JR6pi
-         2cbQmW82b9jUw==
+        b=gizOl2AQe/jXLKmc+7i83jA+O0Wo1bF6j4oi46pMEcTl7/BWz6lVm/+PTT8Sv0cpO
+         tE5/VhfSYR4We5KtkO113SGvLMUzmduFSIHzuiuQBzef91tj88BXNlDkG6NUY4JBqB
+         VL8b7iCr5xf/1C9QdifZSnkYbv6fiIqCCeuB4dYEmt9p+MbUHovpznskbX07qJ81UM
+         25YLoBBo7WyY92slmjLh0f7EtDJwRU/OFoHvzqxUxfwwDWieX0AlZ73N/jq4mnSYzu
+         yb4V0aKvZfD2iBqVblPOy29YITyz96H9PvTVjgXmwX7SgOe1liq56ppEuzbr4JskMI
+         9vV/neCiQ/MIg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvw-000o0T-B0; Tue, 27 Apr 2021 12:27:12 +0200
+        id 1lbKvv-000o0B-VD; Tue, 27 Apr 2021 12:27:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v3 26/79] staging: media: csi: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:16 +0200
-Message-Id: <cd75876041417b2ac5c3496b88d2cace6c7243a7.1619519080.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v3 20/79] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:26:10 +0200
+Message-Id: <cb588379521b61d3728888c2522fc052e1bb2c91.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -58,33 +56,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-Use the new API, in order to cleanup the error check logic.
-
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/tegra-video/csi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-index 033a6935c26d..e938bf4c48b6 100644
---- a/drivers/staging/media/tegra-video/csi.c
-+++ b/drivers/staging/media/tegra-video/csi.c
-@@ -298,10 +298,9 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
- 	struct tegra_csi *csi = csi_chan->csi;
- 	int ret, err;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index d821661d30f3..8c17615f3a7a 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
+ 	if (WARN_ON(!desc))
+ 		return;
  
--	ret = pm_runtime_get_sync(csi->dev);
-+	ret = pm_runtime_resume_and_get(csi->dev);
+-	ret = pm_runtime_get_sync(rkvdec->dev);
++	ret = pm_runtime_resume_and_get(rkvdec->dev);
  	if (ret < 0) {
- 		dev_err(csi->dev, "failed to get runtime PM: %d\n", ret);
--		pm_runtime_put_noidle(csi->dev);
- 		return ret;
- 	}
- 
+ 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
+ 		return;
 -- 
 2.30.2
 
