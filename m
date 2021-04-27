@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1699C43461
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A81BDC43462
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEF30613D9
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75451611F2
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbhD0K3F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48158 "EHLO mail.kernel.org"
+        id S238294AbhD0K3G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237007AbhD0K2R (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S236913AbhD0K2R (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E4516142C;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C2176141E;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=xptLiLCkGNJuz7QvbfWAgofgWCEJyWuHFXhmxlDN2vI=;
+        bh=tu2hhB6CHAZbCfvPd96Qq+9zsUaGe3IxV7AH+2XbuEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZ3ZhFUjbTS1iMpeVcRn4Y9ddHEha8/IjDjXzCeJTgj8gJuYEIht+yvo559v2hl7z
-         6VtjihmxZOyRF2q/CtMG1YyXVDsYo/D2MJ5kTp46EI/t9Qb67Dewel0RikOKsq+i2p
-         4tX0X6aNe71mjqWBJ1IplJKlMm7JnKJplalklKyTbYBXGGjWrAp8H/df9Rgdzb5okL
-         jV3h4UCm48GAHsQmPbjc18kkIjBco2Nvl6P/AXhX9uKyabRrKpD1Js1LGD2pMgQTEB
-         j4a/9tIgTSJn5y9cVNkYUiRE42l1vXuajC4tN+2X0sY/apXbBIsqmdBBN/BK+ixdd3
-         hm+CZmNQ1nyDA==
+        b=pWCJ5+YzV+LcsvBasttI5OaUINWopbWyj5/ga5/WC9JOzN7NxnwTRnzkoR7yiIP3M
+         +PJcHT2kOzktyDUf+En6mdaLVD47HSRIUekSKGttv24KunrF/o7IWKUQgRHxBmRmxP
+         NAKUYCWxqb2ukUddcCcWJe/3opHkQSJ1dpwhkJOnO2HzTPUY/+PvRjKo7uC0AJ/lYE
+         mMICK4o0IugbeRbRrm+pqk6xcnDCcGjbzvzPuJxm4d09/tBaTO7XGgbv3oFX0coXZp
+         kXMCdv3dhLDoUl1ET24dOAze3Z4SUP89d10BaIGokgAoVe1ecYRQdNporXx9cbZbGy
+         UmAxT+47WFBhQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvy-000o2A-DU; Tue, 27 Apr 2021 12:27:14 +0200
+        id 1lbKvy-000o2J-Jt; Tue, 27 Apr 2021 12:27:14 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 61/79] media: coda: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:51 +0200
-Message-Id: <18b66005a971b96fd50fea61da138a1bcc68bd8c.1619519080.git.mchehab+huawei@kernel.org>
+        Rick Chang <rick.chang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v3 64/79] media: mtk-jpeg: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:54 +0200
+Message-Id: <a6fcf38f0add7f5ffc3b8d8b923c8dabf22738d7.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -62,34 +65,31 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index bd666c858fa1..13ff05e7d850 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2660,10 +2660,10 @@ static int coda_open(struct file *file)
- 	ctx->use_vdoa = false;
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index 88a23bce569d..a89c7b206eef 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -920,7 +920,7 @@ static void mtk_jpeg_enc_device_run(void *priv)
+ 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
  
- 	/* Power up and upload firmware if necessary */
--	ret = pm_runtime_get_sync(dev->dev);
-+	ret = pm_runtime_resume_and_get(dev->dev);
- 	if (ret < 0) {
- 		v4l2_err(&dev->v4l2_dev, "failed to power up: %d\n", ret);
--		goto err_pm_get;
-+		goto err_fh_del;
+-	ret = pm_runtime_get_sync(jpeg->dev);
++	ret = pm_runtime_resume_and_get(jpeg->dev);
+ 	if (ret < 0)
+ 		goto enc_end;
+ 
+@@ -973,7 +973,7 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 		return;
  	}
  
- 	ret = clk_prepare_enable(dev->clk_per);
-@@ -2709,6 +2709,7 @@ static int coda_open(struct file *file)
- 	clk_disable_unprepare(dev->clk_per);
- err_pm_get:
- 	pm_runtime_put_sync(dev->dev);
-+err_fh_del:
- 	v4l2_fh_del(&ctx->fh);
- 	v4l2_fh_exit(&ctx->fh);
- err_coda_name_init:
+-	ret = pm_runtime_get_sync(jpeg->dev);
++	ret = pm_runtime_resume_and_get(jpeg->dev);
+ 	if (ret < 0)
+ 		goto dec_end;
+ 
 -- 
 2.30.2
 
