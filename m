@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 688E0C43470
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF19AC43462
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 404A5613EF
+	by mail.kernel.org (Postfix) with ESMTP id 93D2F613EB
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbhD0MrB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S237784AbhD0MrB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 27 Apr 2021 08:47:01 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45230 "EHLO
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45348 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbhD0Mq7 (ORCPT
+        with ESMTP id S237759AbhD0MrA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 08:46:59 -0400
+        Tue, 27 Apr 2021 08:47:00 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E84CE1242;
-        Tue, 27 Apr 2021 14:46:14 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3446144C;
+        Tue, 27 Apr 2021 14:46:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1619527575;
-        bh=kToWsVi8/jk6eCdP3PqD2ZzFB2YJwXAYSFgcfvzOSTg=;
+        s=mail; t=1619527576;
+        bh=/HvJfRtGIUaJ33Enk9PhwOPcD/bDLYVcAdsyBwiJszo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t9OJwKa7VC5xL2B3uglwv8AE825Yrv1vtIdy4yOTqYh1uj2NxWUuRwXrqzIEDzSD7
-         eqvnw0lTr361ai4DAvr58MZzak3MGOdNnsNkd9xXdrXC0CljHLuoM0e6gVkJQk+Khp
-         GwVs/Ue4vn2hn3hTleeFIzdrQTPUM17MQKxCrKBM=
+        b=FYlEnWMXwf2XNu7LKKiY5KZ/qxmo0OuBEKSy74JlZ4Q04C8sAJ7tomc7antvNK3gG
+         CYT+hMTKbY8CUP8BY/qQzR/tCxWh8sF0+3xb6rTWKB+ivxSZV0vTlTqa028woL5qyq
+         IWZuDdBmLSaQaOfgwcCj4JKrQG3s1ii00bRWY84E=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -38,9 +38,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v6 13/24] media: entity: Add only connected pads to the pipeline
-Date:   Tue, 27 Apr 2021 15:45:12 +0300
-Message-Id: <20210427124523.990938-14-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v6 14/24] media: entity: Add debug information in graph walk route check
+Date:   Tue, 27 Apr 2021 15:45:13 +0300
+Message-Id: <20210427124523.990938-15-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
 References: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
@@ -53,55 +53,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-A single entity may contain multiple pipelines. Only add pads that were
-connected to the pad through which the entity was reached to the pipeline.
+Add debug printout in graph walk route check.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/mc/mc-entity.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/media/mc/mc-entity.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index a4cca53124b2..2b70ef97c56c 100644
+index 2b70ef97c56c..d62436cdd64f 100644
 --- a/drivers/media/mc/mc-entity.c
 +++ b/drivers/media/mc/mc-entity.c
-@@ -457,7 +457,7 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
- 		DECLARE_BITMAP(active, MEDIA_ENTITY_MAX_PADS);
- 		DECLARE_BITMAP(has_no_links, MEDIA_ENTITY_MAX_PADS);
+@@ -351,6 +351,9 @@ static void media_graph_walk_iter(struct media_graph *graph)
+ 	 */
+ 	if (!media_entity_has_route(pad->entity, pad->index, local->index)) {
+ 		link_top(graph) = link_top(graph)->next;
++		dev_dbg(pad->graph_obj.mdev->dev,
++			"walk: skipping \"%s\":%u -> %u (no route)\n",
++			pad->entity->name, pad->index, local->index);
+ 		return;
+ 	}
  
--		media_entity_for_each_pad(entity, iter) {
-+		media_entity_for_each_routed_pad(pad, iter) {
- 			if (iter->pipe && iter->pipe != pipe) {
- 				pr_err("Pipe active for %s. Can't start for %s\n",
- 				       entity->name, iter->entity->name);
-@@ -546,10 +546,9 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
- 	media_graph_walk_start(graph, pad_err);
- 
- 	while ((pad_err = media_graph_walk_next(graph))) {
--		struct media_entity *entity = pad_err->entity;
- 		struct media_pad *iter;
- 
--		media_entity_for_each_pad(entity, iter) {
-+		media_entity_for_each_routed_pad(pad_err, iter) {
- 			/* Sanity check for negative stream_count */
- 			if (!WARN_ON_ONCE(iter->stream_count <= 0)) {
- 				--iter->stream_count;
-@@ -602,10 +601,9 @@ void __media_pipeline_stop(struct media_pad *pad)
- 	media_graph_walk_start(graph, pad);
- 
- 	while ((pad = media_graph_walk_next(graph))) {
--		struct media_entity *entity = pad->entity;
- 		struct media_pad *iter;
- 
--		media_entity_for_each_pad(entity, iter) {
-+		media_entity_for_each_routed_pad(pad, iter) {
- 			/* Sanity check for negative stream_count */
- 			if (!WARN_ON_ONCE(iter->stream_count <= 0)) {
- 				iter->stream_count--;
 -- 
 2.25.1
 
