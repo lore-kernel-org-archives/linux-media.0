@@ -7,42 +7,50 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 975DBC433ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D03C43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66943613C7
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFD2D60FDC
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237364AbhD0K2T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48158 "EHLO mail.kernel.org"
+        id S235476AbhD0K2V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235516AbhD0K2D (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235528AbhD0K2D (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 10EFF613D3;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36D98613E2;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=zHjujpboN+Iu7V2XpqIB+1lLAb+rrUx5c1q69NYA2sw=;
+        bh=HuTLNsPcfIqbw1UtY6p4jIBErIihq3Y8I/97JFK7QN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cpUk7OdXgYMc5IxFKVspOY/n9g+I4nUGSMey5qsa3wWEc559DrPtBbsm+K8r+Hbk/
-         WF42f0JmmdMZe5XVH6ol6VtSjiiLkPDp+AKyZsb4MiCE8V4rCH2gSdp8d5YBciIPuT
-         q40QSgiqtReZx3wkywWmbWetKfJuhBctr8DLcqgjhlOn+0m8jdzvzsKanbPSJUYw65
-         sQG50kUWkFLmiBHMzPS4nMFkfmXhooeAmX/2Mrz/6bH5YJnV02vaHnGhZGbpCaJ6SU
-         VSOyvgYJTZ05UyNN3F3JWQt3RKZPymhLB3mcOwO5IXB9I3tvuh6JFtofihkUVzCEKw
-         oLgd7M14fh0Yw==
+        b=S0AznLAsZJV3COnj3iwHtvPXkVBkNsOlibh1fhyLtqkA7FFj1Rn1+SNjjUp1Cqu6r
+         15LG/DAYMBE80JwlE2IO0SlHVLFf3R20DV0TVKhDn8XrkUu6cf1mmEh2X8Os71VtXg
+         TZ1V71qoBHRGCSsSNKC5rkaBuo0XpwfzOvGXl4E6zOHgDoABOEolcIqFoEQwrWK0IY
+         hN/lCjSgLG6z06c3gwkZkol9JZgSsHKlJuhZwVWVYGyjXjHnbTz875azYwgC+nPMnF
+         XqbtOdAWUafdCNpPF6oqTHMTEebzipvyKBYvrI+YY4W9gpEfi6nYYy6qEcAnAyZ/x6
+         MzB/RgZl0zBhA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvx-000o1R-GX; Tue, 27 Apr 2021 12:27:13 +0200
+        id 1lbKvv-000nzb-7l; Tue, 27 Apr 2021 12:27:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Allen Pais <allen.lkml@gmail.com>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Helen Koike <helen.koike@collabora.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 46/79] media: i2c: ov2685: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:36 +0200
-Message-Id: <4cb7f925cb309c2e3bbb8e10d96b3faf9c62d54d.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 08/79] media: marvel-ccic: fix some issues when getting pm_runtime
+Date:   Tue, 27 Apr 2021 12:25:58 +0200
+Message-Id: <abbdc8880eb98741bd39cf78634a2b5556ad6ba7.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -54,36 +62,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+Calling pm_runtime_get_sync() is bad, since even when it
+returns an error, pm_runtime_put*() should be called.
+So, use instead pm_runtime_resume_and_get().
 
-Use the new API, in order to cleanup the error check logic.
+While here, ensure that the error condition will be checked
+during clock enable an media open() calls.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov2685.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/platform/marvell-ccic/mcam-core.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index 49a2dcedb347..2f3836dd8eed 100644
---- a/drivers/media/i2c/ov2685.c
-+++ b/drivers/media/i2c/ov2685.c
-@@ -456,11 +456,10 @@ static int ov2685_s_stream(struct v4l2_subdev *sd, int on)
- 		goto unlock_and_return;
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index 141bf5d97a04..ea87110d9073 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -918,6 +918,7 @@ static int mclk_enable(struct clk_hw *hw)
+ 	struct mcam_camera *cam = container_of(hw, struct mcam_camera, mclk_hw);
+ 	int mclk_src;
+ 	int mclk_div;
++	int ret;
  
- 	if (on) {
--		ret = pm_runtime_get_sync(&ov2685->client->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
-+		ret = pm_runtime_resume_and_get(&ov2685->client->dev);
+ 	/*
+ 	 * Clock the sensor appropriately.  Controller clock should
+@@ -931,7 +932,9 @@ static int mclk_enable(struct clk_hw *hw)
+ 		mclk_div = 2;
+ 	}
+ 
+-	pm_runtime_get_sync(cam->dev);
++	ret = pm_runtime_resume_and_get(cam->dev);
++	if (ret < 0)
++		return ret;
+ 	clk_enable(cam->clk[0]);
+ 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
+ 	mcam_ctlr_power_up(cam);
+@@ -1611,7 +1614,9 @@ static int mcam_v4l_open(struct file *filp)
+ 		ret = sensor_call(cam, core, s_power, 1);
+ 		if (ret)
+ 			goto out;
+-		pm_runtime_get_sync(cam->dev);
++		ret = pm_runtime_resume_and_get(cam->dev);
 +		if (ret < 0)
- 			goto unlock_and_return;
--		}
-+
- 		ret = __v4l2_ctrl_handler_setup(&ov2685->ctrl_handler);
- 		if (ret) {
- 			pm_runtime_put(&client->dev);
++			goto out;
+ 		__mcam_cam_reset(cam);
+ 		mcam_set_config_needed(cam, 1);
+ 	}
 -- 
 2.30.2
 
