@@ -7,46 +7,43 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F17C43460
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8928CC43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64F4A60FF1
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61B13613E4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235727AbhD0KPI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S235734AbhD0KPI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 27 Apr 2021 06:15:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35146 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35230 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235409AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:14:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6262661403;
+        id S235415AbhD0KOg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:14:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 918DE6141E;
         Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=WbRKhLLskO1RYUogcibQypEKrmLpBP5nHtIha3xX034=;
+        bh=WqKoYQevkaStNcKaOzNIvfyWSTMDPdaJk89Ynu0GOzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1M5s4+mTVC8LapJnRqHHVl6tIlFe8dMRzuurZ0JGjJF7/XQXAKwYv9WPelhIxukf
-         FfQTTpJmb5Gi2RqPEN31aaE9dS3j/Xg09vEGHw3MTW2tqquJwbXmKKdbKamp4LZ4kz
-         VxgWVyFtWEixuLf0en4L9G/x7quzDJek3hpTJ428+3yx7q/47OV9adcZvOrgxufyCx
-         6eE0qgYaRJsPV2Bci5FmTyctDigp+TOPyaYjV7xQOsCFVP4LVv/heYncsjh9cjk1h3
-         23EMTS9fk5hag+zh/BoJvN2kQaBMfLahY9rU53iOx5awmd4Bx2LuWlwk5TUQIDz25D
-         0AJLd1PTqCvtQ==
+        b=LoUuZ1TaQvQ5CxmEUPAH4lqIsqWPje2SWXVaMT/ZtNuDfR3nTI8ZWAsmwr41p2IMM
+         3z5seHicv+2UAiVd2MiUEchixXZRWwMB+hqJI78+10zMnyEU29EAhOhtUinvb8MGoq
+         ixDj4arF48KriUB2ZlDwz59DGcaI77Eb661OQ3kRbGm0dh27eMsHsnxTR5djV4sSx1
+         aa6pT5jaxD+42cb2avrORk2voD1zCEF+Gzm9xQh/g/wH5DZhiDbL4Axet3h3E08OuX
+         L/ZcTQiacEtoeseaM0YCvjBIStKyG5ImGvs+LialnnAcTyRvuiLvRUskwOkyICBiv0
+         O3Uc5it5DhGIg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiz-000j5q-9q; Tue, 27 Apr 2021 12:13:49 +0200
+        id 1lbKiy-000j5A-MC; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 26/79] staging: media: csi: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:12:53 +0200
-Message-Id: <bbeb44fefb291cefeaa248c4283dd083c6047a7f.1619518193.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 12/79] media: renesas-ceu: Properly check for PM errors
+Date:   Tue, 27 Apr 2021 12:12:39 +0200
+Message-Id: <442ba0816c3977dddf01212659443ee13f90bd5d.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -58,33 +55,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+Right now, the driver just assumes that PM runtime resume
+worked, but it may fail.
 
-Use the new API, in order to cleanup the error check logic.
+Well, the pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+
+So, using it is tricky. Let's replace it by the new
+pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+and return an error if something bad happens.
+
+This should ensure that the PM runtime usage_count will be
+properly decremented if an error happens at open time.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/tegra-video/csi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/renesas-ceu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-index 033a6935c26d..e938bf4c48b6 100644
---- a/drivers/staging/media/tegra-video/csi.c
-+++ b/drivers/staging/media/tegra-video/csi.c
-@@ -298,10 +298,9 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
- 	struct tegra_csi *csi = csi_chan->csi;
- 	int ret, err;
+diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
+index cd137101d41e..17f01b6e3fe0 100644
+--- a/drivers/media/platform/renesas-ceu.c
++++ b/drivers/media/platform/renesas-ceu.c
+@@ -1099,10 +1099,10 @@ static int ceu_open(struct file *file)
  
--	ret = pm_runtime_get_sync(csi->dev);
-+	ret = pm_runtime_resume_and_get(csi->dev);
- 	if (ret < 0) {
- 		dev_err(csi->dev, "failed to get runtime PM: %d\n", ret);
--		pm_runtime_put_noidle(csi->dev);
- 		return ret;
- 	}
+ 	mutex_lock(&ceudev->mlock);
+ 	/* Causes soft-reset and sensor power on on first open */
+-	pm_runtime_get_sync(ceudev->dev);
++	ret = pm_runtime_resume_and_get(ceudev->dev);
+ 	mutex_unlock(&ceudev->mlock);
  
+-	return 0;
++	return ret;
+ }
+ 
+ static int ceu_release(struct file *file)
 -- 
 2.30.2
 
