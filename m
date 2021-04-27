@@ -7,45 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5255DC43470
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5EB8C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 211AF613C6
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB83E6127A
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbhD0K2n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48136 "EHLO mail.kernel.org"
+        id S238157AbhD0K2o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235643AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235620AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3444B613DF;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 659AF61402;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=yher15YM7h61KHb/hY+EJ/RRJANP10wcnUo8G05kfG0=;
+        bh=0+qUTNue9hnyAq3YJfJJPyrh70EsjiwzWG3y47ywjxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZLOSHxxj6XFtyWy5SPFa4XFXyrPAz+FE3eZ13Vby4rnRpAJS8mxQ2fB061SOoe2g
-         4QdFJF14sJZoWHxdhfGkZPIBpqHjQfPaWBy1I0yDf/bt1t62s/NnmPWG82zX7Saa8v
-         0TB+MR3dqrNB3MJlWOjQSR/hyQSXqtWpSLk0OjYWAyooEvcKhLfOTEYGWWFwSE83bZ
-         8h8l8ZPMX0mPfktJvSRzCeFtyzoUjCQJluYhD0jpE0Fz+knRYKY2W4PhcdutSjybPJ
-         Cy52Kxc2vnSiBAWfsWC4NnPTUjOQ+W7oLci9njUD+Yu/su92K3hbfVH+eHHBnVJKpc
-         DmPhROin1UUEw==
+        b=CG6OQuMRDw4aL2HhzULba78FW659ajYzPkJNTcHUqo287goY+/lJ3wQBhkvs2X5eV
+         qpp6o/vZbM+/BzyQLcLujpLxk1gRqDGU3mpek3cYRVj+v/pkrktoIDZXaz2gscBFYU
+         5P2qxTopAlj2zc7c4DmRZIQ/OsEwaTXLcps8i+N1oo+8i8mA/diO315zfH8CLiH8z2
+         vDZGzJT3KiXtijUulAetuz4+NpzyDMt1OSJ3eZmjrrOTYB0zq+HhYXE7acR+QMOGcZ
+         8i3gmVMbmWEMN8knz+Fl6gGelGaxPU6EzE6p2sk1PbxCX1wcB6B3wM1g379vZ2qkk1
+         4xJQGRj1YURng==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvu-000nzL-Ug; Tue, 27 Apr 2021 12:27:10 +0200
+        id 1lbKvw-000o0i-KY; Tue, 27 Apr 2021 12:27:12 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 03/79] media: i2c: mt9m001: don't resume at remove time
-Date:   Tue, 27 Apr 2021 12:25:53 +0200
-Message-Id: <6e37d3c545d09222882881b7717379a9042e7005.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 31/79] media: i2c: dw9768: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:21 +0200
+Message-Id: <351643aad80075ea3bebcfa431479156d8b92ebf.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -57,39 +54,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Calling pm_runtime_get_sync() at driver's removal time is
-not right, as this will resume PM runtime. This is clearly
-not what it is desired there, since it calls
-pm_runtime_set_suspended() afterwards.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-So, just remove pm runtime get/put logic from the device
-removal logic.
+Use the new API, in order to cleanup the error check logic.
 
-Fixes: 8fcfc491c6ca ("media: mt9m001: switch s_power callback to runtime PM")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/mt9m001.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/media/i2c/dw9768.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
-index 3b0ba8ed5233..ac1b380e6c03 100644
---- a/drivers/media/i2c/mt9m001.c
-+++ b/drivers/media/i2c/mt9m001.c
-@@ -834,14 +834,11 @@ static int mt9m001_remove(struct i2c_client *client)
+diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
+index 8b8cb4b077b5..c086580efac7 100644
+--- a/drivers/media/i2c/dw9768.c
++++ b/drivers/media/i2c/dw9768.c
+@@ -374,15 +374,7 @@ static const struct v4l2_ctrl_ops dw9768_ctrl_ops = {
+ 
+ static int dw9768_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
  {
- 	struct mt9m001 *mt9m001 = to_mt9m001(client);
- 
--	pm_runtime_get_sync(&client->dev);
+-	int ret;
 -
- 	v4l2_async_unregister_subdev(&mt9m001->subdev);
- 	media_entity_cleanup(&mt9m001->subdev.entity);
+-	ret = pm_runtime_get_sync(sd->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(sd->dev);
+-		return ret;
+-	}
+-
+-	return 0;
++	return pm_runtime_resume_and_get(sd->dev);
+ }
  
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
--	pm_runtime_put_noidle(&client->dev);
- 	mt9m001_power_off(&client->dev);
- 
- 	v4l2_ctrl_handler_free(&mt9m001->hdl);
+ static int dw9768_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
