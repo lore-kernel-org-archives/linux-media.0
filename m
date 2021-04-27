@@ -7,43 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C63B1C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 950D4C43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:30:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8578B613B0
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:30:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57681610FA
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:30:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbhD0K3L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48142 "EHLO mail.kernel.org"
+        id S238459AbhD0K3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237122AbhD0K2S (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FFDF6140B;
+        id S237792AbhD0K21 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FA7661413;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=3LPMYGviydz+wxD+uX1CWPHMq2PRxZGRtXrIww4fEeI=;
+        bh=Q1WsziPcbnwAb2cpqQFZbO8zttZnZQq1oIpn6yJZI+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JfYMlpLkTE+a+U7DACSe3kqv79r4hpskaJ8xWggG5CTE731TOPRasVs5/XqeSjNuq
-         6pYjqA1qoaNCY8KCYavQsd5lDEJWqfkq63Nnd8wERXWS6oupupuIp4lhLZUBQpdE6r
-         N3jbGIJMAmN1nKIUNWQS6WVvhhFtNp2aZTpjJgEl5XPoT0KT5Tjze8mlOZYz6YPCUf
-         aVrS5hqV/Dp3+eL/zi56LrCA1CyRpRsKUlaHlZR2ScGgmxXtf+EmBPgK5ey8Kh8wnK
-         CHqS3wnp9XnXF7vPTWtS9rIgULno9+59Bh+TPTJ0zTcTQuvo3qt1oXC695RrkQP+3a
-         89rBlsrR6RR/g==
+        b=unDnKlP9o6a+vxQh5qp31nQEN88CtW9mWtX/Ua4La5wmjMW1KGY78blmf7pj1Wyzu
+         qOd5WCV5sohjttf/sTUtf/TFTmUB7bVJS60pepQ3fMX8QkcX166Y1a0xMCkZlVDm9g
+         6FK7Q97cE9jt2NrzFL1Znnbw60l7ea7hOWisMYSG1QCZV2IVSqS2r62lZ5FWloprq5
+         ubcfvLclPeOS5Cr6TkAs9PqHcykmOSm9xjyMvLsp+5caennZjML9l+hWjfMbDF2j0n
+         Z9vVkjalJG50mw6RGDcTxUSSfXV+z9OBGleyf9GzxMqu0VvA3W0f3PyAI7IG/GmKoN
+         x8KFr3FfvGuZw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvx-000o1F-97; Tue, 27 Apr 2021 12:27:13 +0200
+        id 1lbKvz-000o2q-KC; Tue, 27 Apr 2021 12:27:15 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 42/79] media: i2c: mt9m001: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:32 +0200
-Message-Id: <f7d2f9fe3e0314a7054ad9f2869017db8ab2caf7.1619519080.git.mchehab+huawei@kernel.org>
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 75/79] media: sunxi: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:27:05 +0200
+Message-Id: <f1901bc5c3e2a6e88e678f5763b97509cc706bf5.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -63,31 +65,32 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/mt9m001.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
-index ac1b380e6c03..2867f64e357d 100644
---- a/drivers/media/i2c/mt9m001.c
-+++ b/drivers/media/i2c/mt9m001.c
-@@ -217,9 +217,9 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- 		goto done;
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 4785faddf630..54b909987caa 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -206,9 +206,9 @@ static int sun4i_csi_open(struct file *file)
+ 	if (ret)
+ 		return ret;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
- 		if (ret < 0)
--			goto put_unlock;
-+			goto unlock;
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
+ 	if (ret < 0)
+-		goto err_pm_put;
++		goto err_unlock;
  
- 		ret = mt9m001_apply_selection(sd);
- 		if (ret)
-@@ -247,6 +247,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
+ 	ret = v4l2_pipeline_pm_get(&csi->vdev.entity);
+ 	if (ret)
+@@ -227,6 +227,8 @@ static int sun4i_csi_open(struct file *file)
  
- put_unlock:
- 	pm_runtime_put(&client->dev);
-+unlock:
- 	mutex_unlock(&mt9m001->mutex);
+ err_pm_put:
+ 	pm_runtime_put(csi->dev);
++
++err_unlock:
+ 	mutex_unlock(&csi->lock);
  
  	return ret;
 -- 
