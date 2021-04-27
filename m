@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0616C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F17C43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A786611F2
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64F4A60FF1
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235716AbhD0KPF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:15:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35166 "EHLO mail.kernel.org"
+        id S235727AbhD0KPI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:15:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235412AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235409AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 88BAA61002;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6262661403;
         Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=uJQR0czm+DeAW2PWQeBvZ4Rvzd+S5i8+90myFebensI=;
+        bh=WbRKhLLskO1RYUogcibQypEKrmLpBP5nHtIha3xX034=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NiQvYMF7OEWPJzkJcicJ7WcKvB0H3GERIgYfA5qd0WtSjnaR0/nAV3hMCadwmEBnt
-         4Q0sn828e2ClzSrXWAtUuIDkwINCzefQc5ICV1bguILEAdRR66cv/1jXdl9aEvRcRD
-         Bhx8pj/CKQr/EPlPqWchTGcwCLeQnx+qsO71Obg5pOpy0+39ert3POkP7ii32N1zeU
-         XveXVnKAn9x/663ekqaHhQLsC16Ik7jDuulgkWxnbnMOCpwuwSCaBDoZ6iUKIiOLGH
-         xkHRvRXlm6NGdmEAOPXnHv5P+44UCyanuBFz0MRONQIWQyeh8mwCBCsqWRTqxDSKDW
-         SKrNb8oYv9xlQ==
+        b=V1M5s4+mTVC8LapJnRqHHVl6tIlFe8dMRzuurZ0JGjJF7/XQXAKwYv9WPelhIxukf
+         FfQTTpJmb5Gi2RqPEN31aaE9dS3j/Xg09vEGHw3MTW2tqquJwbXmKKdbKamp4LZ4kz
+         VxgWVyFtWEixuLf0en4L9G/x7quzDJek3hpTJ428+3yx7q/47OV9adcZvOrgxufyCx
+         6eE0qgYaRJsPV2Bci5FmTyctDigp+TOPyaYjV7xQOsCFVP4LVv/heYncsjh9cjk1h3
+         23EMTS9fk5hag+zh/BoJvN2kQaBMfLahY9rU53iOx5awmd4Bx2LuWlwk5TUQIDz25D
+         0AJLd1PTqCvtQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j57-LA; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiz-000j5q-9q; Tue, 27 Apr 2021 12:13:49 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jacob Chen <jacob-chen@iotwrt.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 11/79] media: rga-buf: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:12:38 +0200
-Message-Id: <a0c6f5de9bbc9c28d2c39878a99a147cff95b3e9.1619518193.git.mchehab+huawei@kernel.org>
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v2 26/79] staging: media: csi: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:12:53 +0200
+Message-Id: <bbeb44fefb291cefeaa248c4283dd083c6047a7f.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -65,40 +66,25 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/rockchip/rga/rga-buf.c | 3 +--
- drivers/media/platform/rockchip/rga/rga.c     | 4 +++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/staging/media/tegra-video/csi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
-index bf9a75b75083..81508ed5abf3 100644
---- a/drivers/media/platform/rockchip/rga/rga-buf.c
-+++ b/drivers/media/platform/rockchip/rga/rga-buf.c
-@@ -79,9 +79,8 @@ static int rga_buf_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct rockchip_rga *rga = ctx->rga;
- 	int ret;
+diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+index 033a6935c26d..e938bf4c48b6 100644
+--- a/drivers/staging/media/tegra-video/csi.c
++++ b/drivers/staging/media/tegra-video/csi.c
+@@ -298,10 +298,9 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
+ 	struct tegra_csi *csi = csi_chan->csi;
+ 	int ret, err;
  
--	ret = pm_runtime_get_sync(rga->dev);
-+	ret = pm_runtime_resume_and_get(rga->dev);
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
  	if (ret < 0) {
--		pm_runtime_put_noidle(rga->dev);
- 		rga_buf_return_buffers(q, VB2_BUF_STATE_QUEUED);
+ 		dev_err(csi->dev, "failed to get runtime PM: %d\n", ret);
+-		pm_runtime_put_noidle(csi->dev);
  		return ret;
  	}
-diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 9d122429706e..bf3fd71ec3af 100644
---- a/drivers/media/platform/rockchip/rga/rga.c
-+++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -866,7 +866,9 @@ static int rga_probe(struct platform_device *pdev)
- 		goto unreg_video_dev;
- 	}
  
--	pm_runtime_get_sync(rga->dev);
-+	ret = pm_runtime_resume_and_get(rga->dev);
-+	if (ret < 0)
-+		goto unreg_video_dev;
- 
- 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
- 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
 -- 
 2.30.2
 
