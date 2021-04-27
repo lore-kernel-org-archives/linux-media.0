@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EDD3C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FFE2C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51924611F2
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3909460FDC
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238268AbhD0K3B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48138 "EHLO mail.kernel.org"
+        id S237977AbhD0K3D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235770AbhD0K2M (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235769AbhD0K2M (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 73FC66140F;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BF4161404;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=HzlriyHzqlZAHsYOJEVourXS9CSW2DolwRX6O+Dbyqk=;
+        bh=umqdpGp1oSGyna8Ojn3AGfbapFLyE4ZVzg1c+rmxXd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HxVP4KEkcKlNvIkQOkmBxLuatgvSRun1ZqFvIYnxgCB/3a7y570rBkCO09tODIHe3
-         ZE9I2P7BPtdg/pzsuKQ48T9XwJlMQ/RvX9MIHqQcjTlUnGR6ESI2k2CRiYxjbg7x33
-         SgNWhDzVC/jQ1yxmFFgrj4hGryrt0y+GFNjyI6n9YhGwtT5A7fHIR31ZlIv1FU1YE+
-         ZhUXWPCLN0eyqiW/xAARYZsg2AZzVNgQUQb7EqGjNNWSUstlHqHnt44+86lbmdUTLS
-         Pt/K5vVh6gI61Bpw+wJ8zDMOaJEtKZf1Z4zVwq005d9Uf2VHRk2kL9O8FnGl8YPutX
-         QYPVLG6GBYJLA==
+        b=KCiV1PbCI9tqPf+ESysh50sD/ZfeO4tgOQVcDzYxe/TZ3TwZrjh4pzIlg0RVGfXpj
+         yXkx4wsZ3Tv15FHs6m6JkjF/8bIuUZ4pri6b5IoF+6IPjbmRygndCU69LcnvCAieML
+         1DCSOcdb/7SRIKt53etmKf++okaqv3tUowLoF2PfoH+Eg6iFPK96IIaUzpU6UDseph
+         rxXnCW9beXrxBqb7l1AuiBCcm+/q27m4RC3PVHN/ZaDjsjrAZOE2d4EqP9ncb5sYzN
+         /s/0RB4tEGXfkj41XUDhzWBagKhH53kdLMhiHzZPKrLRAqONoPzES7TagWdaReyI/6
+         fIG30dhI5FU+Q==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvz-000o2w-P3; Tue, 27 Apr 2021 12:27:15 +0200
+        id 1lbKvx-000o1U-Ib; Tue, 27 Apr 2021 12:27:13 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 77/79] media: vsp1: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:27:07 +0200
-Message-Id: <a1470adef5eb86291f8fe72c9270ae54b84d6b28.1619519080.git.mchehab+huawei@kernel.org>
+        Shawn Tu <shawnx.tu@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 47/79] media: i2c: ov2740: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:37 +0200
+Message-Id: <ac2aac12f66180cd823e1517ef900256482b726a.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -64,27 +64,35 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/vsp1/vsp1_drv.c | 6 ++----
+ drivers/media/i2c/ov2740.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
-index aa66e4f5f3f3..c2bdb6629657 100644
---- a/drivers/media/platform/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/vsp1/vsp1_drv.c
-@@ -561,11 +561,9 @@ int vsp1_device_get(struct vsp1_device *vsp1)
- {
- 	int ret;
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 0f3f17f3c426..54779f720f9d 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -751,9 +751,8 @@ static int ov2740_set_stream(struct v4l2_subdev *sd, int enable)
  
--	ret = pm_runtime_get_sync(vsp1->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vsp1->dev);
-+	ret = pm_runtime_resume_and_get(vsp1->dev);
-+	if (ret < 0)
- 		return ret;
--	}
+ 	mutex_lock(&ov2740->mutex);
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(&client->dev);
++		ret = pm_runtime_resume_and_get(&client->dev);
+ 		if (ret < 0) {
+-			pm_runtime_put_noidle(&client->dev);
+ 			mutex_unlock(&ov2740->mutex);
+ 			return ret;
+ 		}
+@@ -1049,9 +1048,8 @@ static int ov2740_nvmem_read(void *priv, unsigned int off, void *val,
+ 		goto exit;
+ 	}
  
- 	return 0;
- }
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
+ 		goto exit;
+ 	}
+ 
 -- 
 2.30.2
 
