@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DEB8C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59BE1C43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C65C61002
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D55C613C8
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235517AbhD0KOn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34668 "EHLO mail.kernel.org"
+        id S235525AbhD0KOo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235314AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235353AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CB60613D8;
-        Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06263613D1;
+        Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=U3xPtY+HT1GPqKz+iC8qw5pPuPioh4afaqfdd0R7SD0=;
+        bh=dO1gD2vCTyNaQMmr4CD5RrufRsq5HOpPc9z13n0Rohk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SF3VGC81jsafrWSb4/+wRsXESNkqb6f087GFtYbL/2+Ajlc4mf6YsA6kWU+zFFinI
-         clmLzaWVwHQyOA9g2Fn2fNMdi1lddtkNBbDYHOuxwh1ge+ToyaS2OuwzS9W0x3E1Kf
-         yX7rHEMbwV1E0ZkvJmx26OP/OV3ssZIv/G2nBAGzyZQ78Pi5/mjJ2xfyybou4IWWnW
-         +ujwaT3KdQSYngxdcbauaCmrC3zSJOcf9AATfe4pYp6v0/T3KBGKFEsBNliHwsBptD
-         rvluOfKwrkg3UJr6ZYNEE0kBT1ZgVkJYgavWSXQUTP6tRYOfkvXEHQMPjcyBa952E6
-         hAd9Qgpx/b17Q==
+        b=kreVFPQyyC+gt6dxASA1KwIHM7ks8tRyxNcLuXn/lmMuigpR+ad9uCR0tmJJFUZOC
+         MPZLTG9gNZ2+lQzLNVApsxsJS+GTaIRD8vhzg8lXUqwGmjoQ8ZlOEqXoag/sjjtxWv
+         uO6jW1O6Sa57Xnj2KY8FgESId3A3y+jwy4eXq6/9wJvZbgM4+oxcre+ReRdGj3nqT4
+         0+CXXauGBWEmSZ/coF+VvxP7CJ3X23rxuQsVj6eisjF2AuBcf5L3Tc/79RcXEbzoBm
+         Kjp+Gm+nH3MSvIKCO98uEPJ1b/BSDX/cGVMzBC3CbcY+MX/F79B8L6xKXbcbrTUl3W
+         YLmslc9I4mHnQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j5S-Sd; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j5M-QV; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 18/79] media: delta-v4l2: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:12:45 +0200
-Message-Id: <9d65648bf69e2c7b2c59fdf06214153491d4cdf2.1619518193.git.mchehab+huawei@kernel.org>
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 16/79] media: mtk-vcodec: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:12:43 +0200
+Message-Id: <e91e271160c17f6dbfc99663c735cfc9533cd7c2.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -63,25 +66,25 @@ leaks.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c691b3d81549..9928b7c46a41 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
- 	int ret = 0;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index ddee7046ce42..fe096fe61c9d 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -92,9 +92,9 @@ void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ {
+ 	int ret;
  
- 	/* enable the hardware */
--	ret = pm_runtime_get_sync(delta->dev);
-+	ret = pm_runtime_resume_and_get(delta->dev);
- 	if (ret < 0) {
--		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-+		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
- 			__func__, ret);
- 		return ret;
- 	}
+-	ret = pm_runtime_get_sync(pm->dev);
++	ret = pm_runtime_resume_and_get(pm->dev);
+ 	if (ret)
+-		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
++		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
+ }
+ 
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
 -- 
 2.30.2
 
