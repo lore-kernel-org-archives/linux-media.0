@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD94C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CBDBC43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96225613E8
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED656613D0
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 11:15:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbhD0LQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 07:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S235835AbhD0LQf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 07:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbhD0LQ0 (ORCPT
+        with ESMTP id S235884AbhD0LQc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 07:16:26 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C09C061760
-        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id 20so26734687pll.7
-        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:42 -0700 (PDT)
+        Tue, 27 Apr 2021 07:16:32 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341F4C061756
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:48 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id b14-20020a17090a6e0eb0290155c7f6a356so97193pjk.0
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 04:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4qZsQRsGuCyk4j1C/e+zC2HYXSpPpt7+LRIVR6EvA1Q=;
-        b=MmztzcydDiCmIGZ5rBt4LY8NA386OT8abcppdLkMCrtROeyrELhMc+YEI6p+MbHyqw
-         skitkOULGsK8x+AZwLLnSb46mFvajphr/pzpLnRrnVkBADs881RIBMsjsFebdSzIdka1
-         wHteEOG6wARXDxF9nYgYratiLYwoewW65fmzc=
+        bh=rhS54utv1YzIbFPUPZVH1abgq1ro55v2mmnzFXetrAM=;
+        b=dmzIuyFPRC2KRTi15IBaYcLiR1g2yCRfSlDgP0mRgEv0OR3plonVKqxwOyrjQVQuaN
+         hUiRC7iZOrVb4Mvzzj5ALQQtU5ts7TMxRBg9kXrRU//93Cos8ksFOrBrex3AlrF5bEk5
+         kYNSj6LkCopCPG7hp4fUXO93VVrUN7webOF70=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4qZsQRsGuCyk4j1C/e+zC2HYXSpPpt7+LRIVR6EvA1Q=;
-        b=RDuTDvB13huLkCmsJoBxE7bxdnFaCLnH7wc39OcDTPJyMOteVmQZLe7xJ+Iw2/NeB2
-         M4OjENDxi9DQndLN8fdNyJE83M9VSFXn5uzN4KqZdlDM2u2ODH3D0/X9xXTt5Fb6BOZF
-         820/Y4vgAQouCgRXCHT5+0qV33BhApSDoE6dqLEPFq9G/yuq2h6jEDZKStUwjRhqvu1O
-         iRYTqVeX+IiWZuwptX2zu73Rezez0/dfkYjO7YWIFiGUUxfTzioxcKtIM8hU1SzrijvV
-         aDXrilFADzNytp/w/078s+ni4xEtNVub/iqq7k3ELRIlKz3KI7fjWcvQwOcFw1YwPCVt
-         RzzA==
-X-Gm-Message-State: AOAM530NCmjju0pnNJTqJp2Sj+Lb+/4yI/ow7hidb97txG9m+2gHlcLU
-        3Rhb9cgaL58JryRO2bf0T5uHVg==
-X-Google-Smtp-Source: ABdhPJx1C2iIDlsCOU3glRSJBL8B286p5e+lxgbowpxikjRFr5/iSS83yGB8JZ9mAXiUCoL9ig6FmA==
-X-Received: by 2002:a17:90b:190d:: with SMTP id mp13mr5060186pjb.156.1619522142415;
-        Tue, 27 Apr 2021 04:15:42 -0700 (PDT)
+        bh=rhS54utv1YzIbFPUPZVH1abgq1ro55v2mmnzFXetrAM=;
+        b=NvCStRIwxEpyW9koxwA4Am9lON7M7YH0fE0JdHU7UeP3/neEQj2qk9FIMJASVUHv4P
+         dPl0E87vDcAelnN/bRI6eqguHVn1ljc5TU7FiqKjyZIrciMIANl1u1BlEoUt8FtNLUNq
+         jEeSg/rEsyDW8UTsB39D6Q1RDCmktL10/jFhZrrMJwUOGKjnmkAvwN4lD1YOPl0Sh88K
+         7v0sIQnUmQDKjUkKR1c4efa1u8aQ023NRqU/gglVVLGfDS8PP27g9WwsnpvTMMqF4xMr
+         ccrKHg9EklrM5OLb7qlk69tlcDKLa6TLToAy+C+pTt8swxrGKAratRl8r4jAd7SGMu6/
+         okTw==
+X-Gm-Message-State: AOAM532uf0BGF0M+GcQeCZiSiEjJO3VWVQLQ1IsEx7l7ROmCCx10EZIK
+        miI/tgaRAjJvBDfSbOWAUDeWLQ==
+X-Google-Smtp-Source: ABdhPJyCcW9kLpLl2eDspunleRze6lqZixbd7S2gRrdMnoYGRuckAWazBnOKh9E0c1MjbLf70D4rrA==
+X-Received: by 2002:a17:90a:8548:: with SMTP id a8mr26549983pjw.48.1619522147830;
+        Tue, 27 Apr 2021 04:15:47 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:b182:d363:32d0:53a2])
-        by smtp.gmail.com with ESMTPSA id c21sm2347210pfc.165.2021.04.27.04.15.39
+        by smtp.gmail.com with ESMTPSA id c21sm2347210pfc.165.2021.04.27.04.15.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Apr 2021 04:15:42 -0700 (PDT)
+        Tue, 27 Apr 2021 04:15:47 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -63,9 +63,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v4 02/15] media: mtk-vcodec: vdec: handle firmware version field
-Date:   Tue, 27 Apr 2021 20:15:13 +0900
-Message-Id: <20210427111526.1772293-3-acourbot@chromium.org>
+Subject: [PATCH v4 04/15] media: add Mediatek's MM21 format
+Date:   Tue, 27 Apr 2021 20:15:15 +0900
+Message-Id: <20210427111526.1772293-5-acourbot@chromium.org>
 X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 In-Reply-To: <20210427111526.1772293-1-acourbot@chromium.org>
 References: <20210427111526.1772293-1-acourbot@chromium.org>
@@ -75,125 +75,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Firmwares for decoders newer than MT8173 will include an ABI version
-number in their initialization ack message. Add the capacity to manage
-it and make initialization fail if the firmware ABI is of a version that
-we don't support.
-
-For MT8173, this ABI version field does not exist ; thus ignore it on
-this chip. There should only be one firmware version available for it
-anyway.
+Add Mediatek's non-compressed 8 bit block video mode. This format is
+produced by the MT8183 codec and can be converted to a non-proprietary
+format by the MDP3 component.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  4 ++++
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  5 +++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.c   | 21 +++++++++++++++++--
- 4 files changed, 29 insertions(+), 2 deletions(-)
+ Documentation/userspace-api/media/v4l/pixfmt-reserved.rst | 7 +++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c                      | 1 +
+ include/uapi/linux/videodev2.h                            | 1 +
+ 3 files changed, 9 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-index f31f4f94001d..c5538fcfc9a5 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-@@ -640,6 +640,7 @@ static struct vb2_ops mtk_vdec_frame_vb2_ops = {
- };
- 
- const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
-+	.chip = MTK_MT8173,
- 	.init_vdec_params = mtk_init_vdec_params,
- 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
- 	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 85af0bffc7be..e5b8309785e1 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -321,6 +321,8 @@ enum mtk_chip {
-  * @vdec_framesizes: supported video decoder frame sizes
-  * @num_framesizes: count of video decoder frame sizes
-  *
-+ * @chip: chip this decoder is compatible with
-+ *
-  * @uses_stateless_api: whether the decoder uses the stateless API with requests
-  */
- 
-@@ -340,6 +342,8 @@ struct mtk_vcodec_dec_pdata {
- 	const struct mtk_codec_framesizes *vdec_framesizes;
- 	const int num_framesizes;
- 
-+	enum mtk_chip chip;
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+index 0b879c0da713..42357b0b3535 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+@@ -246,6 +246,13 @@ please make a proposal on the linux-media mailing list.
+ 	It is an opaque intermediate format and the MDP hardware must be
+ 	used to convert ``V4L2_PIX_FMT_MT21C`` to ``V4L2_PIX_FMT_NV12M``,
+ 	``V4L2_PIX_FMT_YUV420M`` or ``V4L2_PIX_FMT_YVU420``.
++    * .. _V4L2-PIX-FMT-MM21:
 +
- 	bool uses_stateless_api;
- };
++      - ``V4L2_PIX_FMT_MM21``
++      - 'MM21'
++      - Non-compressed, tiled two-planar format used by Mediatek MT8183.
++	This is an opaque intermediate format and the MDP3 hardware can be
++	used to convert it to other formats.
+     * .. _V4L2-PIX-FMT-SUNXI-TILED-NV12:
  
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-index 47a1c1c0fd04..eb66729fda63 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-@@ -83,12 +83,17 @@ struct vdec_ap_ipi_dec_start {
-  * @status	: VPU exeuction result
-  * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-  * @vpu_inst_addr	: VPU decoder instance address
-+ * @vdec_abi_version:	ABI version of the firmware. Kernel can use it to
-+ *			ensure that it is compatible with the firmware.
-+ *			This field is not valid for MT8173 and must not be
-+ *			accessed for this chip.
-  */
- struct vdec_vpu_ipi_init_ack {
- 	uint32_t msg_id;
- 	int32_t status;
- 	uint64_t ap_inst_addr;
- 	uint32_t vpu_inst_addr;
-+	uint32_t vdec_abi_version;
- };
- 
- #endif
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-index 58b0e6fa8fd2..203089213e67 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-@@ -24,6 +24,22 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
- 	vpu->inst_addr = msg->vpu_inst_addr;
- 
- 	mtk_vcodec_debug(vpu, "- vpu_inst_addr = 0x%x", vpu->inst_addr);
-+
-+	/* Firmware version field does not exist on MT8173. */
-+	if (vpu->ctx->dev->vdec_pdata->chip == MTK_MT8173)
-+		return;
-+
-+	/* Check firmware version. */
-+	mtk_vcodec_debug(vpu, "firmware version 0x%x\n", msg->vdec_abi_version);
-+	switch (msg->vdec_abi_version) {
-+	case 1:
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "unhandled firmware version 0x%x\n",
-+			       msg->vdec_abi_version);
-+		vpu->failure = 1;
-+		break;
-+	}
- }
- 
- /*
-@@ -44,6 +60,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 
- 	mtk_vcodec_debug(vpu, "+ id=%X", msg->msg_id);
- 
-+	vpu->failure = msg->status;
-+	vpu->signaled = 1;
-+
- 	if (msg->status == 0) {
- 		switch (msg->msg_id) {
- 		case VPU_IPIMSG_DEC_INIT_ACK:
-@@ -63,8 +82,6 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 	}
- 
- 	mtk_vcodec_debug(vpu, "- id=%X", msg->msg_id);
--	vpu->failure = msg->status;
--	vpu->signaled = 1;
- }
- 
- static int vcodec_vpu_send_msg(struct vdec_vpu_inst *vpu, void *msg, int len)
+       - ``V4L2_PIX_FMT_SUNXI_TILED_NV12``
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 6a5d1c6d11d6..608e3ddc0f42 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1385,6 +1385,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_TM6000:	descr = "A/V + VBI Mux Packet"; break;
+ 	case V4L2_PIX_FMT_CIT_YYVYUY:	descr = "GSPCA CIT YYVYUY"; break;
+ 	case V4L2_PIX_FMT_KONICA420:	descr = "GSPCA KONICA420"; break;
++	case V4L2_PIX_FMT_MM21:		descr = "Mediatek 8-bit block format"; break;
+ 	case V4L2_PIX_FMT_HSV24:	descr = "24-bit HSV 8-8-8"; break;
+ 	case V4L2_PIX_FMT_HSV32:	descr = "32-bit XHSV 8-8-8-8"; break;
+ 	case V4L2_SDR_FMT_CU8:		descr = "Complex U8"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 311a01cc5775..db04e37da1a8 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -733,6 +733,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_Y12I     v4l2_fourcc('Y', '1', '2', 'I') /* Greyscale 12-bit L/R interleaved */
+ #define V4L2_PIX_FMT_Z16      v4l2_fourcc('Z', '1', '6', ' ') /* Depth data 16-bit */
+ #define V4L2_PIX_FMT_MT21C    v4l2_fourcc('M', 'T', '2', '1') /* Mediatek compressed block mode  */
++#define V4L2_PIX_FMT_MM21     v4l2_fourcc('M', 'M', '2', '1') /* Mediatek 8-bit block mode, two non-contiguous planes */
+ #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
+ #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
+ #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
 -- 
 2.31.1.498.g6c1eba8ee3d-goog
 
