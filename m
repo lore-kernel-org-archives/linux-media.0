@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68372C43460
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DEB8C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A2A160FF1
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C65C61002
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbhD0KOm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34658 "EHLO mail.kernel.org"
+        id S235517AbhD0KOn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235268AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235314AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEC5E613CF;
-        Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CB60613D8;
+        Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=Dz4yuaAkE3G30hsowoZG+/b+CgXUAS8PpNDZLkNm+lU=;
+        bh=U3xPtY+HT1GPqKz+iC8qw5pPuPioh4afaqfdd0R7SD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBf4W9RKz5BBonSdEtXhxn5lmb/bEJ9yN6halpTLgkI/cMsCSJ8CJGFBoFe/6MlvK
-         uE4rOQO+oQW0k5nRlKLEvRnzgonMoScpGmuIutaGqH20jMZ7DrStIswhsI1cASeR28
-         Jv/xYkLc8h6i8BexaOtpohbUDmyWxG/wPEEcIge/2r9+GgCi5GUgKIa6xcNYc/SlNF
-         DQlXowrftBJUmHiuE1E0oHzAwC8Yn950smVVRaZ8nZlnC50VgEWon3RaRJuoTfBxy6
-         JG0BKJ/bNkObmaUnpmLrpcunepLNOlix4DB0d9DkBD5mbl3n2KefwNeJFNPQTJ++fQ
-         68AlL84UtPaTg==
+        b=SF3VGC81jsafrWSb4/+wRsXESNkqb6f087GFtYbL/2+Ajlc4mf6YsA6kWU+zFFinI
+         clmLzaWVwHQyOA9g2Fn2fNMdi1lddtkNBbDYHOuxwh1ge+ToyaS2OuwzS9W0x3E1Kf
+         yX7rHEMbwV1E0ZkvJmx26OP/OV3ssZIv/G2nBAGzyZQ78Pi5/mjJ2xfyybou4IWWnW
+         +ujwaT3KdQSYngxdcbauaCmrC3zSJOcf9AATfe4pYp6v0/T3KBGKFEsBNliHwsBptD
+         rvluOfKwrkg3UJr6ZYNEE0kBT1ZgVkJYgavWSXQUTP6tRYOfkvXEHQMPjcyBa952E6
+         hAd9Qgpx/b17Q==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j4f-9q; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j5S-Sd; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 02/79] media: i2c: ccs-core: return the right error code at suspend
-Date:   Tue, 27 Apr 2021 12:12:29 +0200
-Message-Id: <745502b8a3216c0607dcb2a9c401636f245c32ad.1619518193.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 18/79] media: delta-v4l2: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:12:45 +0200
+Message-Id: <9d65648bf69e2c7b2c59fdf06214153491d4cdf2.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -54,31 +54,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If pm_runtime resume logic fails, return the error code
-provided by it, instead of -EAGAIN, as, depending on what
-caused it to fail, it may not be something that would be
-recovered.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Fixes: cbba45d43631 ("[media] smiapp: Use runtime PM")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 9dc3f45da3dc..b05f409014b2 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3093,7 +3093,7 @@ static int __maybe_unused ccs_suspend(struct device *dev)
- 	if (rval < 0) {
- 		pm_runtime_put_noidle(dev);
+diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
+index c691b3d81549..9928b7c46a41 100644
+--- a/drivers/media/platform/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/sti/delta/delta-v4l2.c
+@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
+ 	int ret = 0;
  
--		return -EAGAIN;
-+		return rval;
+ 	/* enable the hardware */
+-	ret = pm_runtime_get_sync(delta->dev);
++	ret = pm_runtime_resume_and_get(delta->dev);
+ 	if (ret < 0) {
+-		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
++		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
+ 			__func__, ret);
+ 		return ret;
  	}
- 
- 	if (sensor->streaming)
 -- 
 2.30.2
 
