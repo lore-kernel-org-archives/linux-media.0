@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3BAC43461
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F784C43462
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B63C613DE
+	by mail.kernel.org (Postfix) with ESMTP id 2A83C60FDC
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238358AbhD0K3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48288 "EHLO mail.kernel.org"
+        id S238327AbhD0K3K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237270AbhD0K2T (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A2676142A;
+        id S235842AbhD0K2N (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B08056143C;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=phIvrsjCST0hqKSIzsjBL4/Aigr4NLUZL7GWQhPHYlY=;
+        bh=WwdunTEPlspSuJNcgiz5VlTq6QqTmYyotSIBFOxVREY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pAB0gi60sdZ9uYUw3agDuR9ReaHY+Z7UzbIXDbL2xV9MXGbg6lcJzDK7yQbtRT8tz
-         AETzY51R4DOm2qb5wHrqf8qTnDen3mBfPHoGPhdQSe7VfRtwOZpDi9H1n3MdKyHC0F
-         lbqsFUmuFWmR5oDnRXXCyRQswjJp08X4HB/p/cnMZwSSqHCofsfd6+OnP1zNAf2zhR
-         g3xZtqfOXc61u2q6KL47/h0POI8SR/CgbvDoC+SRiCwg9MPBPlB8fDmYK5ZWA3LdJi
-         h8hiYOLRPEZ97SaBJdy2UfeaqJfbE6vdPxBuVvwvsIQ6v4qN+EOQghS2gNQ+Iy5UjV
-         dkmQC2Utz3bMw==
+        b=NZm6zdW+FKzxb+LsjX/Lv3L7az1xSznYI/RONnb1cXePK21Nj4oLvZmIGqx+5LALk
+         +66OR7pZFcaY+DFAtLTiBLuo39vLrTjzoB4/nZSDLcNBE6YtqNjPB7JTGltmO6E18L
+         UchD071kXo4eZnoYnyjz80KsGTsBunYbSShzyOdI9WzwH5NKKyzGmV3mvlUC8vYfOk
+         aUWwBs2uJAkaGi0SZleGmhwU4AYdVPAnwOz43JpE9PTJ8a2DNCXD6vHpwFmBa2ByQS
+         j9PT5G/0kNVTmyL1H4ZA+0hDf8I1fRfltZiBcp9Nqh2pdLCAeCvQSw5t4ILDQE1qlD
+         eT8TShmndMtVw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvy-000o2V-WA; Tue, 27 Apr 2021 12:27:15 +0200
+        id 1lbKvw-000o0H-2p; Tue, 27 Apr 2021 12:27:12 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3 68/79] media: venus: venc: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:58 +0200
-Message-Id: <ba311b79afe835f10f22e16587fdcf5df9c4ff61.1619519080.git.mchehab+huawei@kernel.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 22/79] staging: media: imx7-mipi-csis: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:12 +0200
+Message-Id: <706a63dc9019ebea7904acedc6d40ae44cb706b6.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -63,35 +69,31 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/venc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 4a7291f934b6..8dd49d4f124c 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1205,9 +1205,9 @@ static int venc_open(struct file *file)
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 025fdc488bd6..1dc680d94a46 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
  
- 	venus_helper_init_instance(inst);
+ 		mipi_csis_clear_counters(state);
  
--	ret = pm_runtime_get_sync(core->dev_enc);
-+	ret = pm_runtime_resume_and_get(core->dev_enc);
- 	if (ret < 0)
--		goto err_put_sync;
-+		goto err_free;
- 
- 	ret = venc_ctrl_init(inst);
- 	if (ret)
-@@ -1252,6 +1252,7 @@ static int venc_open(struct file *file)
- 	venc_ctrl_deinit(inst);
- err_put_sync:
- 	pm_runtime_put_sync(core->dev_enc);
-+err_free:
- 	kfree(inst);
- 	return ret;
- }
+-		ret = pm_runtime_get_sync(&state->pdev->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&state->pdev->dev);
++		ret = pm_runtime_resume_and_get(&state->pdev->dev);
++		if (ret < 0)
+ 			return ret;
+-		}
++
+ 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
+ 		if (ret < 0 && ret != -ENOIOCTLCMD)
+ 			goto done;
 -- 
 2.30.2
 
