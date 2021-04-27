@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D6C5C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5255DC43470
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E278611ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 211AF613C6
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbhD0K2m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48172 "EHLO mail.kernel.org"
+        id S238127AbhD0K2n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235621AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235643AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57C9A613F9;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3444B613DF;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=9V28x/0yZtyv8nyV8uH7fSioPt4mARji1tVhL7JUs2c=;
+        bh=yher15YM7h61KHb/hY+EJ/RRJANP10wcnUo8G05kfG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CiUY3nJzfV3j0iV6EFclfxWEAThSe4t5YuwQ8FY9KB4/bxquN6WnmeciyH5t/NXOd
-         XYf/Dyb5T9eijcJO3X0Ez6ELMBsbWMgPTRNCBfih2vD86xE9j/be2y4cHo0xCF851b
-         5lYAd9/xDXxA7b0a/usGVy8NpBQlvpEfo5k+oQRoba/ujZPsXF4saCEHXSho2BAE5a
-         Y0SmiqxbiI30S/vkC9HEPqu0OUipvHOjzjhEv2UHQWGgfAVimC4kOk/gDC9Q8/EKOe
-         9mz+hyzhWFbVXwcm/IJ5zrGsw3OIjg/lTJkctRgWqNlQ8fXKHmhFaa26ZYWSthNbO7
-         fmcUxIkLVbtKg==
+        b=fZLOSHxxj6XFtyWy5SPFa4XFXyrPAz+FE3eZ13Vby4rnRpAJS8mxQ2fB061SOoe2g
+         4QdFJF14sJZoWHxdhfGkZPIBpqHjQfPaWBy1I0yDf/bt1t62s/NnmPWG82zX7Saa8v
+         0TB+MR3dqrNB3MJlWOjQSR/hyQSXqtWpSLk0OjYWAyooEvcKhLfOTEYGWWFwSE83bZ
+         8h8l8ZPMX0mPfktJvSRzCeFtyzoUjCQJluYhD0jpE0Fz+knRYKY2W4PhcdutSjybPJ
+         Cy52Kxc2vnSiBAWfsWC4NnPTUjOQ+W7oLci9njUD+Yu/su92K3hbfVH+eHHBnVJKpc
+         DmPhROin1UUEw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvx-000o1j-S8; Tue, 27 Apr 2021 12:27:13 +0200
+        id 1lbKvu-000nzL-Ug; Tue, 27 Apr 2021 12:27:10 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 52/79] media: i2c: ov5695: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:42 +0200
-Message-Id: <569f2a2139747b431ae73d24ef931aa01f4ec029.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 03/79] media: i2c: mt9m001: don't resume at remove time
+Date:   Tue, 27 Apr 2021 12:25:53 +0200
+Message-Id: <6e37d3c545d09222882881b7717379a9042e7005.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -54,35 +57,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+Calling pm_runtime_get_sync() at driver's removal time is
+not right, as this will resume PM runtime. This is clearly
+not what it is desired there, since it calls
+pm_runtime_set_suspended() afterwards.
 
-Use the new API, in order to cleanup the error check logic.
+So, just remove pm runtime get/put logic from the device
+removal logic.
 
+Fixes: 8fcfc491c6ca ("media: mt9m001: switch s_power callback to runtime PM")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov5695.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/i2c/mt9m001.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-index 09bee57a241d..469d941813c6 100644
---- a/drivers/media/i2c/ov5695.c
-+++ b/drivers/media/i2c/ov5695.c
-@@ -946,11 +946,9 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
- 		goto unlock_and_return;
+diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
+index 3b0ba8ed5233..ac1b380e6c03 100644
+--- a/drivers/media/i2c/mt9m001.c
++++ b/drivers/media/i2c/mt9m001.c
+@@ -834,14 +834,11 @@ static int mt9m001_remove(struct i2c_client *client)
+ {
+ 	struct mt9m001 *mt9m001 = to_mt9m001(client);
  
- 	if (on) {
--		ret = pm_runtime_get_sync(&client->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
-+		if (ret < 0)
- 			goto unlock_and_return;
--		}
+-	pm_runtime_get_sync(&client->dev);
+-
+ 	v4l2_async_unregister_subdev(&mt9m001->subdev);
+ 	media_entity_cleanup(&mt9m001->subdev.entity);
  
- 		ret = __ov5695_start_stream(ov5695);
- 		if (ret) {
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+-	pm_runtime_put_noidle(&client->dev);
+ 	mt9m001_power_off(&client->dev);
+ 
+ 	v4l2_ctrl_handler_free(&mt9m001->hdl);
 -- 
 2.30.2
 
