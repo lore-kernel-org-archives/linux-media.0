@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79695C43600
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7AF0C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FF90613C3
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A50E61185
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbhD0KOp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34660 "EHLO mail.kernel.org"
+        id S235570AbhD0KOq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235364AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:14:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE9A0613CB;
+        id S235351AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:14:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0708F613D3;
         Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=HuTLNsPcfIqbw1UtY6p4jIBErIihq3Y8I/97JFK7QN0=;
+        bh=cJmIogEt8DtaRrLuirE0smJSOENxo/aAnd7cgWYfYDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mf7eW9dP2TP0sjdkkPONBu0GYBayxwv2UnUXwRAYpWxdDjQ8GIpxeinjnavuWBVQ/
-         auG+nF0SZiLP04Id86GgOX7nUZZrxrxyf2NC5hMPMq6XLhD2zri/RnqdFA5EjhjpmA
-         qrPNgfsFSAD5okzqBGxa1qTECjE2dIPIE6waXWG4FhP2PSi1eU7rRHFUtrL2scSzwJ
-         L0BLpNQ5dUk52EqAuyQDsbXBBefVZKQkMXdiWqrmluIsBqAfsfpydZu/m6I7KmyXue
-         PYHjcdkKtptN8FN5PlIFaM63U2OkzP4jcekDeiptJar68dcUlC9EWi3RZRQYogo0lE
-         pDqGqHWYm2vPw==
+        b=KZp74C/N3xULsOG1NcjGyCnHrQUbBn7L4C6SjULa6jlIkjkwb4uQjAmyz7MBIatyJ
+         8aZXyLOROj+YrO2pBurSY+F68uEs1Jq7JH8uqCwePJcN1IGEgiLVpmyxerCcjGmQIf
+         ZTmIUdmWmE3sxwJyOEeTKlY2LM2tJP+uzh4xlcCEuQ3IuqdQWKS9j1AdkFOrYN6Vor
+         RafH87t0RcMEZ2XSQQBWv5wtqRM3l8dW6T/m2a2MOTN6eezeZbhPil2BAoyM/Z8ZFK
+         9q5GHr2H+784p6XQXO43aCpof7AgRGZF/J7/LD2TXJKgfIX/Wx5n9U0dNdaQ39pRd9
+         JuMWqXSUso+VQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j4y-HS; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j5P-RZ; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Allen Pais <allen.lkml@gmail.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Helen Koike <helen.koike@collabora.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 08/79] media: marvel-ccic: fix some issues when getting pm_runtime
-Date:   Tue, 27 Apr 2021 12:12:35 +0200
-Message-Id: <94d58e3b2323193deaa0f644da8fd0780f513827.1619518193.git.mchehab+huawei@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 17/79] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:12:44 +0200
+Message-Id: <b6a5ee6479e005c271849b27e752c10f0fd8a150.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -62,52 +57,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Calling pm_runtime_get_sync() is bad, since even when it
-returns an error, pm_runtime_put*() should be called.
-So, use instead pm_runtime_resume_and_get().
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-While here, ensure that the error condition will be checked
-during clock enable an media open() calls.
-
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/marvell-ccic/mcam-core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/platform/s5p-jpeg/jpeg-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
-index 141bf5d97a04..ea87110d9073 100644
---- a/drivers/media/platform/marvell-ccic/mcam-core.c
-+++ b/drivers/media/platform/marvell-ccic/mcam-core.c
-@@ -918,6 +918,7 @@ static int mclk_enable(struct clk_hw *hw)
- 	struct mcam_camera *cam = container_of(hw, struct mcam_camera, mclk_hw);
- 	int mclk_src;
- 	int mclk_div;
-+	int ret;
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+index 026111505f5a..c4f19418a460 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+@@ -2568,7 +2568,7 @@ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+ 	int ret;
  
- 	/*
- 	 * Clock the sensor appropriately.  Controller clock should
-@@ -931,7 +932,9 @@ static int mclk_enable(struct clk_hw *hw)
- 		mclk_div = 2;
- 	}
+-	ret = pm_runtime_get_sync(ctx->jpeg->dev);
++	ret = pm_runtime_resume_and_get(ctx->jpeg->dev);
  
--	pm_runtime_get_sync(cam->dev);
-+	ret = pm_runtime_resume_and_get(cam->dev);
-+	if (ret < 0)
-+		return ret;
- 	clk_enable(cam->clk[0]);
- 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
- 	mcam_ctlr_power_up(cam);
-@@ -1611,7 +1614,9 @@ static int mcam_v4l_open(struct file *filp)
- 		ret = sensor_call(cam, core, s_power, 1);
- 		if (ret)
- 			goto out;
--		pm_runtime_get_sync(cam->dev);
-+		ret = pm_runtime_resume_and_get(cam->dev);
-+		if (ret < 0)
-+			goto out;
- 		__mcam_cam_reset(cam);
- 		mcam_set_config_needed(cam, 1);
- 	}
+ 	return ret > 0 ? 0 : ret;
+ }
 -- 
 2.30.2
 
