@@ -7,44 +7,43 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE45C43460
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 587D6C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDDFF613C3
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 200E8611ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbhD0K2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
+        id S235891AbhD0K2l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235600AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235613AbhD0K2F (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:28:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B585613F4;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5925E613FE;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=LvHrsFJn6JLbIexuKZaI+hIEIjqhrM13uG8Z/t+ytHI=;
+        bh=Q0bHrDKjUOjsdiFC7y51wKhz9eviTnP6n0iV74l2LA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gizOl2AQe/jXLKmc+7i83jA+O0Wo1bF6j4oi46pMEcTl7/BWz6lVm/+PTT8Sv0cpO
-         tE5/VhfSYR4We5KtkO113SGvLMUzmduFSIHzuiuQBzef91tj88BXNlDkG6NUY4JBqB
-         VL8b7iCr5xf/1C9QdifZSnkYbv6fiIqCCeuB4dYEmt9p+MbUHovpznskbX07qJ81UM
-         25YLoBBo7WyY92slmjLh0f7EtDJwRU/OFoHvzqxUxfwwDWieX0AlZ73N/jq4mnSYzu
-         yb4V0aKvZfD2iBqVblPOy29YITyz96H9PvTVjgXmwX7SgOe1liq56ppEuzbr4JskMI
-         9vV/neCiQ/MIg==
+        b=ONLvm551PXN4wdOfSePFx78XwTlfDQKJG71nnYWcye9pm0Dt33drJjYT04cJxL46C
+         RRqRvqBeq40PuhlGiZXiAjWsSS3C8+vP682ozSZv2MLlzYxDcr7RkgDEshhxY6lfvU
+         ue3lvil3AfJJbLjLdRiwr7TyKgRTLZtZUPhCZs9jphqkgj/k6ow6A67FVKvmWcw9hi
+         oaOtCuotIBH59TuSRFhD75aYxw//6PnSB7YSDgavXLe1ALzG1tk4UTDzk7e2PlHi9r
+         2A2HDfHS9lcMo53z4XthDeABGNrH85oNlwF4/3t/QfcQ5b+Uwgkzlg7gbBs8rM6o0p
+         Iwho8OjtWNNxw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvv-000o0B-VD; Tue, 27 Apr 2021 12:27:11 +0200
+        id 1lbKvx-000o19-5J; Tue, 27 Apr 2021 12:27:13 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 20/79] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:26:10 +0200
-Message-Id: <cb588379521b61d3728888c2522fc052e1bb2c91.1619519080.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 40/79] media: i2c: imx334: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:30 +0200
+Message-Id: <e1c4375e9f9a79c3cf9df152ea63cce97c3ad636.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -56,32 +55,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Use the new API, in order to cleanup the error check logic.
+
+Reviewed-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/imx334.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index d821661d30f3..8c17615f3a7a 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
- 	if (WARN_ON(!desc))
- 		return;
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index 047aa7658d21..a5a03bb4a6ae 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -717,9 +717,9 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
+ 	}
  
--	ret = pm_runtime_get_sync(rkvdec->dev);
-+	ret = pm_runtime_resume_and_get(rkvdec->dev);
- 	if (ret < 0) {
- 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
- 		return;
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(imx334->dev);
++		ret = pm_runtime_resume_and_get(imx334->dev);
+ 		if (ret)
+-			goto error_power_off;
++			goto error_unlock;
+ 
+ 		ret = imx334_start_streaming(imx334);
+ 		if (ret)
+@@ -737,6 +737,7 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
+ 
+ error_power_off:
+ 	pm_runtime_put(imx334->dev);
++error_unlock:
+ 	mutex_unlock(&imx334->mutex);
+ 
+ 	return ret;
 -- 
 2.30.2
 
