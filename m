@@ -7,42 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FF3C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E043C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D26760FF3
+	by mail.kernel.org (Postfix) with ESMTP id DE8A2613C3
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:27:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbhD0K2C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:28:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47650 "EHLO mail.kernel.org"
+        id S235426AbhD0K2D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:28:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230341AbhD0K17 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235304AbhD0K17 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:27:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E1CB0610FA;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E24CB611F2;
         Tue, 27 Apr 2021 10:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519235;
-        bh=YsKm6VExyywU3b8QQMpE5e+1XH7hFzOYFX2Hhhvq5XQ=;
+        bh=euIQLwDaPDSgWFx6NM45FK2bpju26XjkPQY0ICj4Fck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/jSXaeignl5yQptqhqn6VFiVIyxAcohR9PcwKFr49o5PfzpcVyfoZ9Dk4RIYzLrD
-         +4KNqMpJJtVsxeB2hQ+SQBi2GuYYoobs6t7ofORvrvIQ6fxgFk8p/+dO2Z/T0hjkLE
-         LSTBiYAk8pdIZ5D83wHg53iuZLgHEMvCA2tsCMO11lZKQTThqzqzynTDcsCh5oQsyp
-         fhpqFQZhhUf4V7OTPCZIJKYH8l29Er78iUGNc7nRWQskaKA73QLFVSSRYa5qIHXt6p
-         ibXygGUxh/ZxlX/GDaFQrC/J4zsymW3NEtPUJi6lIbVsfK4WdhdxLQ9cufpSMFXr6e
-         doL2c+hplSkPQ==
+        b=P5fSA5LOibNGMYPA1Zp+9c/obPnU5Jakea77X+sfyVZD1AbcxM+wz45KtcseD8bNm
+         4KD7oFM2gDFXeB3CAvy7Vp4Z1Pvd4kNk/u2KHTVriRp55zVTWvp4hO/9aVgPIfULYH
+         ek2JL00/fnm68LMnquJI1vcAo7Gx9eAQdu8YNAzWx2TZeN4luu0iPPxUiKt2YbsqQq
+         Ey26ocTLTDuHk/PokhKcaFxFQE3lrLtjATLKqFusiPHjGUafuSxFdDDFqZXZU/oLbx
+         zuKhsEgsojEcGmBQ8OlPk2v72wytbr9pfV8V9DoryqOg//I833iMiR8AwXZUx3+tWK
+         AqYGEAlMoFq+Q==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvx-000o1O-Ee; Tue, 27 Apr 2021 12:27:13 +0200
+        id 1lbKvv-000nzw-LS; Tue, 27 Apr 2021 12:27:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 45/79] media: i2c: ov2659: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:35 +0200
-Message-Id: <8a210791fe9934553e17fa87f7dda955c6c2a03f.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 15/79] media: sh_vou: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:26:05 +0200
+Message-Id: <3d2ef55f0ca6f4f58804b402d0d1bf176bcf9791.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -54,35 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-Use the new API, in order to cleanup the error check logic.
+While here, check if the PM runtime error was caught at open time.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov2659.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/sh_vou.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index 42f64175a6df..a3c8eae68486 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -1186,11 +1186,9 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
- 		goto unlock;
- 	}
- 
--	ret = pm_runtime_get_sync(&client->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(&client->dev);
-+	ret = pm_runtime_resume_and_get(&client->dev);
-+	if (ret < 0)
- 		goto unlock;
--	}
- 
- 	ret = ov2659_init(sd, 0);
- 	if (!ret)
+diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
+index 4ac48441f22c..ca4310e26c49 100644
+--- a/drivers/media/platform/sh_vou.c
++++ b/drivers/media/platform/sh_vou.c
+@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
+ 	if (v4l2_fh_is_singular_file(file) &&
+ 	    vou_dev->status == SH_VOU_INITIALISING) {
+ 		/* First open */
+-		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
++		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
++		if (err < 0) {
++			v4l2_fh_release(file);
++			goto done_open;
++		}
+ 		err = sh_vou_hw_init(vou_dev);
+ 		if (err < 0) {
+ 			pm_runtime_put(vou_dev->v4l2_dev.dev);
 -- 
 2.30.2
 
