@@ -7,42 +7,49 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E72CC43600
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC35C4360C
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0930613B0
+	by mail.kernel.org (Postfix) with ESMTP id F1433613C3
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238384AbhD0K3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48148 "EHLO mail.kernel.org"
+        id S238417AbhD0K3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237505AbhD0K2X (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C88961405;
+        id S237565AbhD0K2Y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AF13D61439;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=U3xPtY+HT1GPqKz+iC8qw5pPuPioh4afaqfdd0R7SD0=;
+        bh=nHZL/8LfEY59F+jSTZXbI5IsJhAvjS0xN6pbKcv/Zf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXMAigZdnmTu5DSfhVBGfcBPGN3QF6ScmmR9U0f5Im+LPTYBWoyF4ySDewljMfoBD
-         DuxyJAJ1gMLQ6p55STB+KKwr+WrJSR7g3hnugClyn/E78d90b8STIoDxT3xQBiV/n6
-         uL9M9bbEpXbNuIQnbmAm5E6JIWT6+V0tJ8evbx22wxlqQiTfw0l7nXGaV0I87B1VBa
-         XKR/bd4QEFA1Zsi6T9nSKagVK4WUpXZx+4aEhq9gXp+buv8+jKMExd9Xs9e8eBkQTf
-         giDONGAEmXjeisYXz5b0fJau6kz4cBUwC005YzBRs308oiacNrkhIZWR3w4YC0Vp3Y
-         mLWQ5E/mVhnYQ==
+        b=K42/u+DsYc+oSSWW35cPcwyLr4uf8gaxJ/ZMErBo18r/4knuXkBmHz1yww2kFTKfA
+         ig8N4evRJ4fKth3CydMKLxQ+hBAX3Klfs8agEXbChpHp74qnPxR14dA8ZjtyJC6NPl
+         joVfiqiRXV/vPk8nQg/6UCKLMn96n+SQpuxnsnY5phJXWCR+SZaWH0OI1d7G5SlGDW
+         IpmZ2gJbMGqbO4RxQhxqOYBR3iK8jWEaCfo0FLbeQtNRMuoXXYUR21pd39JCZx0/Tq
+         TSnlHjnh8heEO+ie6BbUsrqfrlKzz2jzBsrgZQyPWHi1Kinvoc7rwZ8EBiO3F/arOJ
+         3RMuoC45+JMrA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvv-000o05-RL; Tue, 27 Apr 2021 12:27:11 +0200
+        id 1lbKvy-000o1y-5Q; Tue, 27 Apr 2021 12:27:14 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 18/79] media: delta-v4l2: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:26:08 +0200
-Message-Id: <364e0a87973ec4676f1aa16b3373a0c95f0366f0.1619519080.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 57/79] media: i2c: tvp5150: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:47 +0200
+Message-Id: <9e2fb36b577c9693f3c980cb26949c60cc3b8be8.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -54,34 +61,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
+
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/tvp5150.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c691b3d81549..9928b7c46a41 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
- 	int ret = 0;
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index e26e3f544054..374a9da75e4d 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1448,11 +1448,9 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ 	       TVP5150_MISC_CTL_CLOCK_OE;
  
- 	/* enable the hardware */
--	ret = pm_runtime_get_sync(delta->dev);
-+	ret = pm_runtime_resume_and_get(delta->dev);
- 	if (ret < 0) {
--		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-+		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
- 			__func__, ret);
- 		return ret;
- 	}
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(sd->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(sd->dev);
++		ret = pm_runtime_resume_and_get(sd->dev);
++		if (ret < 0)
+ 			return ret;
+-		}
+ 
+ 		tvp5150_enable(sd);
+ 
+@@ -1675,15 +1673,7 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
+ 
+ static int tvp5150_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ {
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(sd->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(sd->dev);
+-		return ret;
+-	}
+-
+-	return 0;
++	return pm_runtime_resume_and_get(sd->dev);
+ }
+ 
+ static int tvp5150_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
