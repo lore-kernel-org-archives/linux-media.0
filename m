@@ -7,29 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79BB5C43600
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B03D5C43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48384613BD
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 924CC613D8
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237809AbhD0MrC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 08:47:02 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45230 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbhD0MrB (ORCPT
+        id S237864AbhD0MrJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 08:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237814AbhD0MrE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 08:47:01 -0400
+        Tue, 27 Apr 2021 08:47:04 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B0AC061574
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 05:46:21 -0700 (PDT)
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 90DBDAF3;
-        Tue, 27 Apr 2021 14:46:16 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99247153F;
+        Tue, 27 Apr 2021 14:46:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1619527577;
-        bh=wUtER6y/muvjECE+juvtSzRao4tXrA1xMUhhM/8/SIw=;
+        s=mail; t=1619527580;
+        bh=xT8RGFDRJHsvUyrDzIzuz6POWWEcq3oOBBJKMostyjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xk7Mrs6aaBqxJkPnf2/aZWi9RzSUGAmeM+6VmM/VoSwpFFT3bqwOIHiUOVqwWkHGe
-         pG5r+e52zJe1WesQJidkKdoYpF2LdRlqS09nV7quF4boFFmeSBZ2lAqfmu4mr1vTB0
-         IzDTCQd56iuHOpmc89AcYvDLdym8oQiXK3dHrPtY=
+        b=OFK1FdXup8A8KEX+oXVKgrYO9goryXHDwT1GDP23IlqbRYFZ6mYJSFxtPu6FHyZ8q
+         KoOFrHryu0+jBkwGcEbhYn2YP4JesiR8U/sS2kUT8yeLwGqtNRE3Rx1nVGmesMckPE
+         sbBGMiAgN5kaCXMGEpA5yAhyVXnWS76yY/w3MVZU=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -37,10 +40,11 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v6 15/24] v4l: Add bus type to frame descriptors
-Date:   Tue, 27 Apr 2021 15:45:14 +0300
-Message-Id: <20210427124523.990938-16-tomi.valkeinen@ideasonboard.com>
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH v6 18/24] v4l: subdev: Add [GS]_ROUTING subdev ioctls and operations
+Date:   Tue, 27 Apr 2021 15:45:17 +0300
+Message-Id: <20210427124523.990938-19-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
 References: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
@@ -51,55 +55,266 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the media bus type to the frame descriptor. CSI-2 specific
-information will be added in next patch to the frame descriptor.
+Add support for subdev internal routing. A route is defined as a single
+stream from a sink pad to a source pad.
+
+The userspace can configure the routing via two new ioctls,
+VIDIOC_SUBDEV_G_ROUTING and VIDIOC_SUBDEV_S_ROUTING, and subdevs can
+implement the functionality with v4l2_subdev_pad_ops.get_routing() and
+v4l2_subdev_pad_ops.set_routing().
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+
+- Add sink and source streams for multiplexed links
+- Copy the argument back in case of an error. This is needed to let the
+  caller know the number of routes.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-- Make the bus type a named enum
+- Expand and refine documentation.
+- Make the 'routes' pointer a __u64 __user pointer so that a compat32
+  version of the ioctl is not required.
+- Add struct v4l2_subdev_krouting to be used for subdevice operations.
+
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+
+- Fix typecasing warnings
+- Check sink & source pad types
+- Add 'which' field
+
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- include/media/v4l2-subdev.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/media/v4l2-core/v4l2-ioctl.c  | 25 +++++++++++++-
+ drivers/media/v4l2-core/v4l2-subdev.c | 46 +++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 24 ++++++++++++++
+ include/uapi/linux/v4l2-subdev.h      | 48 +++++++++++++++++++++++++++
+ 4 files changed, 142 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 6a5d1c6d11d6..7b1dabc23909 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -16,6 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/version.h>
+ 
++#include <linux/v4l2-subdev.h>
+ #include <linux/videodev2.h>
+ 
+ #include <media/v4l2-common.h>
+@@ -3108,6 +3109,21 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+ 		ret = 1;
+ 		break;
+ 	}
++
++	case VIDIOC_SUBDEV_G_ROUTING:
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = parg;
++
++		if (routing->num_routes > 256)
++			return -EINVAL;
++
++		*user_ptr = u64_to_user_ptr(routing->routes);
++		*kernel_ptr = (void **)&routing->routes;
++		*array_size = sizeof(struct v4l2_subdev_route)
++			    * routing->num_routes;
++		ret = 1;
++		break;
++	}
+ 	}
+ 
+ 	return ret;
+@@ -3369,8 +3385,15 @@ video_usercopy(struct file *file, unsigned int orig_cmd, unsigned long arg,
+ 	/*
+ 	 * Some ioctls can return an error, but still have valid
+ 	 * results that must be returned.
++	 *
++	 * FIXME: subdev IOCTLS are partially handled here and partially in
++	 * v4l2-subdev.c and the 'always_copy' flag can only be set for IOCTLS
++	 * defined here as part of the 'v4l2_ioctls' array. As
++	 * VIDIOC_SUBDEV_G_ROUTING needs to return results to applications even
++	 * in case of failure, but it is not defined here as part of the
++	 * 'v4l2_ioctls' array, insert an ad-hoc check to address that.
+ 	 */
+-	if (err < 0 && !always_copy)
++	if (err < 0 && !always_copy && cmd != VIDIOC_SUBDEV_G_ROUTING)
+ 		goto out;
+ 
+ out_array_args:
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 956dafab43d4..ad79ce121cee 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -681,6 +681,52 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 	case VIDIOC_SUBDEV_QUERYSTD:
+ 		return v4l2_subdev_call(sd, video, querystd, arg);
+ 
++	case VIDIOC_SUBDEV_G_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_krouting krouting = {
++			.which = routing->which,
++			.num_routes = routing->num_routes,
++			.routes = (struct v4l2_subdev_route *)(uintptr_t)
++					  routing->routes,
++		};
++		int ret;
++
++		ret = v4l2_subdev_call(sd, pad, get_routing, &krouting);
++
++		routing->num_routes = krouting.num_routes;
++
++		return ret;
++	}
++
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_route *routes =
++			(struct v4l2_subdev_route *)(uintptr_t)routing->routes;
++		struct v4l2_subdev_krouting krouting = {};
++		unsigned int i;
++
++		if (routing->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
++			return -EPERM;
++
++		for (i = 0; i < routing->num_routes; ++i) {
++			if (routes[i].sink_pad >= sd->entity.num_pads ||
++			    routes[i].source_pad >= sd->entity.num_pads)
++				return -EINVAL;
++
++			if (!(sd->entity.pads[routes[i].sink_pad].flags &
++			      MEDIA_PAD_FL_SINK) ||
++			    !(sd->entity.pads[routes[i].source_pad].flags &
++			      MEDIA_PAD_FL_SOURCE))
++				return -EINVAL;
++		}
++
++		krouting.which = routing->which;
++		krouting.num_routes = routing->num_routes;
++		krouting.routes = routes;
++
++		return v4l2_subdev_call(sd, pad, set_routing, &krouting);
++	}
++
+ 	default:
+ 		return v4l2_subdev_call(sd, core, ioctl, cmd, arg);
+ 	}
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index d0e9a5bdb08b..ac531b752028 100644
+index 70a21298020b..c45f5f0156c9 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -340,12 +340,31 @@ struct v4l2_mbus_frame_desc_entry {
- 
- #define V4L2_FRAME_DESC_ENTRY_MAX	4
+@@ -660,6 +660,22 @@ struct v4l2_subdev_pad_config {
+ 	struct v4l2_rect try_compose;
+ };
  
 +/**
-+ * enum v4l2_mbus_frame_desc_type - media bus frame description type
++ * struct v4l2_subdev_krouting - subdev routing table
 + *
-+ * @V4L2_MBUS_FRAME_DESC_TYPE_PLATFORM:
-+ *	Platform specific frame desc type for backwards compatibility.
-+ * @V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL:
-+ *	Parallel media bus.
-+ * @V4L2_MBUS_FRAME_DESC_TYPE_CSI2:
-+ *	CSI-2 media bus. Frame desc parameters must be set in
-+ *	&struct v4l2_mbus_frame_desc_entry->csi2.
++ * @which: format type (from enum v4l2_subdev_format_whence)
++ * @routes: &struct v4l2_subdev_route
++ * @num_routes: number of routes
++ *
++ * This structure is used to translate arguments received from
++ * VIDIOC_SUBDEV_G/S_ROUTING() ioctl to subdev device drivers operations.
 + */
-+enum v4l2_mbus_frame_desc_type {
-+	V4L2_MBUS_FRAME_DESC_TYPE_PLATFORM,
-+	V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL,
-+	V4L2_MBUS_FRAME_DESC_TYPE_CSI2,
++struct v4l2_subdev_krouting {
++	u32 which;
++	struct v4l2_subdev_route *routes;
++	unsigned int num_routes;
 +};
 +
  /**
-  * struct v4l2_mbus_frame_desc - media bus data frame description
-+ * @type: type of the bus (enum v4l2_mbus_frame_desc_type)
-  * @entry: frame descriptors array
-  * @num_entries: number of entries in @entry array
+  * struct v4l2_subdev_pad_ops - v4l2-subdev pad level operations
+  *
+@@ -721,6 +737,10 @@ struct v4l2_subdev_pad_config {
+  *		     applied to the hardware. The operation shall fail if the
+  *		     pad index it has been called on is not valid or in case of
+  *		     unrecoverable failures.
++ *
++ * @get_routing: get the subdevice routing table.
++ * @set_routing: enable or disable data connection routes described in the
++ *		 subdevice routing table.
   */
- struct v4l2_mbus_frame_desc {
-+	enum v4l2_mbus_frame_desc_type type;
- 	struct v4l2_mbus_frame_desc_entry entry[V4L2_FRAME_DESC_ENTRY_MAX];
- 	unsigned short num_entries;
+ struct v4l2_subdev_pad_ops {
+ 	int (*init_cfg)(struct v4l2_subdev *sd,
+@@ -765,6 +785,10 @@ struct v4l2_subdev_pad_ops {
+ 			       struct v4l2_mbus_config *config);
+ 	int (*set_mbus_config)(struct v4l2_subdev *sd, unsigned int pad,
+ 			       struct v4l2_mbus_config *config);
++	int (*get_routing)(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_krouting *route);
++	int (*set_routing)(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_krouting *route);
  };
+ 
+ /**
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 658106f5b5dc..3a360cdcacf4 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -188,6 +188,52 @@ struct v4l2_subdev_capability {
+ /* The v4l2 sub-device video device node is registered in read-only mode. */
+ #define V4L2_SUBDEV_CAP_RO_SUBDEV		0x00000001
+ 
++/*
++ * Is the route active? An active route will start when streaming is enabled
++ * on a video node.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_ACTIVE		BIT(0)
++
++/*
++ * Is the route immutable, i.e. can it be activated and inactivated?
++ * Set by the driver.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_IMMUTABLE		BIT(1)
++
++/**
++ * struct v4l2_subdev_route - A route inside a subdev
++ *
++ * @sink_pad: the sink pad index
++ * @sink_stream: the sink stream identifier
++ * @source_pad: the source pad index
++ * @source_stream: the source stream identifier
++ * @flags: route flags V4L2_SUBDEV_ROUTE_FL_*
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_route {
++	__u32 sink_pad;
++	__u32 sink_stream;
++	__u32 source_pad;
++	__u32 source_stream;
++	__u32 flags;
++	__u32 reserved[5];
++};
++
++/**
++ * struct v4l2_subdev_routing - Subdev routing information
++ *
++ * @which: configuration type (from enum v4l2_subdev_format_whence)
++ * @routes: pointer to the routes array
++ * @num_routes: the total number of routes in the routes array
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_routing {
++	__u32 which;
++	__u64 routes;
++	__u32 num_routes;
++	__u32 reserved[5];
++};
++
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
+ 
+@@ -203,6 +249,8 @@ struct v4l2_subdev_capability {
+ #define VIDIOC_SUBDEV_S_CROP			_IOWR('V', 60, struct v4l2_subdev_crop)
+ #define VIDIOC_SUBDEV_G_SELECTION		_IOWR('V', 61, struct v4l2_subdev_selection)
+ #define VIDIOC_SUBDEV_S_SELECTION		_IOWR('V', 62, struct v4l2_subdev_selection)
++#define VIDIOC_SUBDEV_G_ROUTING			_IOWR('V', 38, struct v4l2_subdev_routing)
++#define VIDIOC_SUBDEV_S_ROUTING			_IOWR('V', 39, struct v4l2_subdev_routing)
+ /* The following ioctls are identical to the ioctls in videodev2.h */
+ #define VIDIOC_SUBDEV_G_STD			_IOR('V', 23, v4l2_std_id)
+ #define VIDIOC_SUBDEV_S_STD			_IOW('V', 24, v4l2_std_id)
 -- 
 2.25.1
 
