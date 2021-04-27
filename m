@@ -4,46 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E10EBC43470
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68372C43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E547613D1
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A2A160FF1
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbhD0KOk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34518 "EHLO mail.kernel.org"
+        id S235501AbhD0KOm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235246AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235268AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DC08F613C5;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EEC5E613CF;
         Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619518430;
-        bh=vSVgVx9oCI4BykR40BTa4+7tin+dlK2U4+Benc8+UkQ=;
+        s=k20201202; t=1619518431;
+        bh=Dz4yuaAkE3G30hsowoZG+/b+CgXUAS8PpNDZLkNm+lU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHeOYgg17IAhtKf2kG3l5ENtWblBsn9K//nDeh3BI5v8/jaPW/tPDqgJPSy/cOetP
-         2ITKnyUMUnRbs0QofKRleV3Nm2SCKuVDgi8OJloO7UgTyOiCpHycLx2GqtFa2WA61q
-         uVlgSsAxagmWMh9CL8UF33VbGYDzyLoCTGzxGr/BNxoHmoAkscZEu8TQhpOgABJwAn
-         om3V9/pdHBgO67UyuHQMGuRz7xebZt1z4eK8LDoh/U/VRhpFDRkhJTCdzcdDQ4ilID
-         FYHnhXzeR6DqiRz4R9Z0jH07yVCT/aPh9L3PG8IQ1Y07FuJ/YJ3psHKyQszyoymlGL
-         2C2wg2iZ+0lMQ==
+        b=LBf4W9RKz5BBonSdEtXhxn5lmb/bEJ9yN6halpTLgkI/cMsCSJ8CJGFBoFe/6MlvK
+         uE4rOQO+oQW0k5nRlKLEvRnzgonMoScpGmuIutaGqH20jMZ7DrStIswhsI1cASeR28
+         Jv/xYkLc8h6i8BexaOtpohbUDmyWxG/wPEEcIge/2r9+GgCi5GUgKIa6xcNYc/SlNF
+         DQlXowrftBJUmHiuE1E0oHzAwC8Yn950smVVRaZ8nZlnC50VgEWon3RaRJuoTfBxy6
+         JG0BKJ/bNkObmaUnpmLrpcunepLNOlix4DB0d9DkBD5mbl3n2KefwNeJFNPQTJ++fQ
+         68AlL84UtPaTg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j54-K8; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j4f-9q; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 10/79] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:12:37 +0200
-Message-Id: <449ab92cf6920f1d66cb831e15d92aed7f5b7192.1619518193.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 02/79] media: i2c: ccs-core: return the right error code at suspend
+Date:   Tue, 27 Apr 2021 12:12:29 +0200
+Message-Id: <745502b8a3216c0607dcb2a9c401636f245c32ad.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -55,52 +54,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+If pm_runtime resume logic fails, return the error code
+provided by it, instead of -EAGAIN, as, depending on what
+caused it to fail, it may not be something that would be
+recovered.
 
-Also, right now, the driver is ignoring any troubles when
-trying to do PM resume. So, add the proper error handling
-for the code.
-
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: cbba45d43631 ("[media] smiapp: Use runtime PM")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/rcar_fdp1.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 01c1fbb97bf6..c32d237af618 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -2140,7 +2140,13 @@ static int fdp1_open(struct file *file)
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 9dc3f45da3dc..b05f409014b2 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3093,7 +3093,7 @@ static int __maybe_unused ccs_suspend(struct device *dev)
+ 	if (rval < 0) {
+ 		pm_runtime_put_noidle(dev);
+ 
+-		return -EAGAIN;
++		return rval;
  	}
  
- 	/* Perform any power management required */
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0) {
-+		v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+		v4l2_ctrl_handler_free(&ctx->hdl);
-+		kfree(ctx);
-+		goto done;
-+	}
- 
- 	v4l2_fh_add(&ctx->fh);
- 
-@@ -2351,7 +2357,9 @@ static int fdp1_probe(struct platform_device *pdev)
- 
- 	/* Power up the cells to read HW */
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0)
-+		return ret;
- 
- 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
- 	switch (hw_version) {
+ 	if (sensor->streaming)
 -- 
 2.30.2
 
