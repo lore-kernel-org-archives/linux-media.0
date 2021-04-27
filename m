@@ -4,49 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E54C43460
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79B32C433ED
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59AA7613C5
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 447B161185
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235696AbhD0KPC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:15:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34668 "EHLO mail.kernel.org"
+        id S235706AbhD0KPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:15:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235398AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235411AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 67D4D6140B;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9103C6141D;
         Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=eeb2tTMTeECwFCJsmdUEhrGisH5F5adY0i6Xu5Zdqhg=;
+        bh=x4LtonqYrT7G4qNBwEeK0f+06mohriAA55Pys8MWWx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KExWx6rx38YnCkcfolMEeFFyC3f1GXJQvNGjOa8ISkbR1/jXcHswuOaPWK3laj6eV
-         tt+pFqegEsZAdeviptiJOw9VCfKsCNbx2+MgXFGhQs5noEb5rkJP3m1hw+p9iqJofK
-         rhCFOkmcpLsaPSr/wIlK7zdmr2bsOJVytIIhT2Z9OKvSV0hEshOvzH6lyd6K1o4SsO
-         k6xxJzUCmJVj4MLfedSVbX2lXO9sq8h9TS+Avkw1cYti/1+TNpExRUMgIkYjFeVR3P
-         Uk0fA3aSskJvOk/fxln8CRVBHdUUahj3tHLe4pF5YQ8MbFbVImnqsNFYpxlaLWIosK
-         Fmk+pGKIlDyog==
+        b=ThlIj0bgaQ5JNijB0DqTP086xOCFuMElwT/wQ83t8A/dEKelm/q1WVUZmH8YjbogC
+         Eg3axCSTi1Sj9ChxVZKznv8Kv6gEjjt2aY09omvqRbg25r9vmtZoqgGgiwQG+Pqwc5
+         +3A9zuFIiWx3fXive0ZXYcXIumuuk9ceqImYKaBibQi4CetU6Ips+3W+KHlM4yFB+/
+         RZTGOC6eRRlNUhsQhhrfVpDVxybp7rDJOcL6IQXqDo92ZKYz9rk6fBE2hE/gYWIpcc
+         muPEIR1MWNDt7rCyyC0TsjFOiO6sngnwMGYjH9Bb1J6klnJQ8+1ODW/HxVr9STX6Of
+         6FXg+GzueGCCA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiz-000j5n-7g; Tue, 27 Apr 2021 12:13:49 +0200
+        id 1lbKiz-000j5w-De; Tue, 27 Apr 2021 12:13:49 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 25/79] staging: media: vde: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:12:52 +0200
-Message-Id: <d162bd300f6e8e8e057a02c0c91429519e5fdfcf.1619518193.git.mchehab+huawei@kernel.org>
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 28/79] media: i2c: ak7375: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:12:55 +0200
+Message-Id: <0e491752d45b9d6ece815cc7ca7dd1a2afb17810.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -66,66 +62,30 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/tegra-vde/vde.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ak7375.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-index 28845b5bafaf..8936f140a246 100644
---- a/drivers/staging/media/tegra-vde/vde.c
-+++ b/drivers/staging/media/tegra-vde/vde.c
-@@ -775,9 +775,9 @@ static int tegra_vde_ioctl_decode_h264(struct tegra_vde *vde,
- 	if (ret)
- 		goto release_dpb_frames;
+diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
+index e1f94ee0f48f..40b1a4aa846c 100644
+--- a/drivers/media/i2c/ak7375.c
++++ b/drivers/media/i2c/ak7375.c
+@@ -87,15 +87,7 @@ static const struct v4l2_ctrl_ops ak7375_vcm_ctrl_ops = {
  
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
--		goto put_runtime_pm;
-+		goto unlock;
- 
- 	/*
- 	 * We rely on the VDE registers reset value, otherwise VDE
-@@ -843,6 +843,8 @@ static int tegra_vde_ioctl_decode_h264(struct tegra_vde *vde,
- put_runtime_pm:
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
-+
-+unlock:
- 	mutex_unlock(&vde->lock);
- 
- release_dpb_frames:
-@@ -1069,8 +1071,8 @@ static int tegra_vde_probe(struct platform_device *pdev)
- 	 * power-cycle it in order to put hardware into a predictable lower
- 	 * power state.
- 	 */
--	pm_runtime_get_sync(dev);
--	pm_runtime_put(dev);
-+	if (pm_runtime_resume_and_get(dev) >= 0)
-+		pm_runtime_put(dev);
- 
- 	return 0;
- 
-@@ -1088,8 +1090,9 @@ static int tegra_vde_remove(struct platform_device *pdev)
+ static int ak7375_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
  {
- 	struct tegra_vde *vde = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-+	int ret;
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(sd->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(sd->dev);
+-		return ret;
+-	}
+-
+-	return 0;
++	return pm_runtime_resume_and_get(sd->dev);
+ }
  
--	pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	pm_runtime_dont_use_autosuspend(dev);
- 	pm_runtime_disable(dev);
- 
-@@ -1097,7 +1100,8 @@ static int tegra_vde_remove(struct platform_device *pdev)
- 	 * Balance RPM state, the VDE power domain is left ON and hardware
- 	 * is clock-gated. It's safe to reboot machine now.
- 	 */
--	pm_runtime_put_noidle(dev);
-+	if (ret >= 0)
-+		pm_runtime_put_noidle(dev);
- 	clk_disable_unprepare(vde->clk);
- 
- 	misc_deregister(&vde->miscdev);
+ static int ak7375_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
