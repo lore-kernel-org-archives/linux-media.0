@@ -7,45 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7AF0C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E4B5C43470
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A50E61185
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A7AC613C8
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbhD0KOq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34772 "EHLO mail.kernel.org"
+        id S235585AbhD0KOs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235351AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:14:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0708F613D3;
-        Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
+        id S235370AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:14:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DE0E613DE;
+        Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=cJmIogEt8DtaRrLuirE0smJSOENxo/aAnd7cgWYfYDc=;
+        bh=LvHrsFJn6JLbIexuKZaI+hIEIjqhrM13uG8Z/t+ytHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KZp74C/N3xULsOG1NcjGyCnHrQUbBn7L4C6SjULa6jlIkjkwb4uQjAmyz7MBIatyJ
-         8aZXyLOROj+YrO2pBurSY+F68uEs1Jq7JH8uqCwePJcN1IGEgiLVpmyxerCcjGmQIf
-         ZTmIUdmWmE3sxwJyOEeTKlY2LM2tJP+uzh4xlcCEuQ3IuqdQWKS9j1AdkFOrYN6Vor
-         RafH87t0RcMEZ2XSQQBWv5wtqRM3l8dW6T/m2a2MOTN6eezeZbhPil2BAoyM/Z8ZFK
-         9q5GHr2H+784p6XQXO43aCpof7AgRGZF/J7/LD2TXJKgfIX/Wx5n9U0dNdaQ39pRd9
-         JuMWqXSUso+VQ==
+        b=MVqLR7mFtMTLO0mK1TyVv9e+yTmOBkTKp+10OaJB+E8GKGvWzwvNELM5c29euVRTA
+         USlnGTJVTJc1qUs5eiLRzGraPsUzUVxRBRdZb3dj2QYodiUjT21ZyJ3XdxD0sYvdb5
+         R8n08vJvzfzrjwR87IG9TYbo7F4hAXUTNwwiFTlSYLHGpPGL5JMt9a5XVt+otKb7Fk
+         Qh8UHDBRVwMqDuoD7fHrAIuahwrZK7Ok4dbmXenwn7JQ3KIOyRWLDB3g8TBY9UOjrV
+         XfCHLr0ZmqO/JJOaR4g8tbEZIoDPZc/cz4Ha+yXKWAuRKkaY4AHE5VXNYUixFP0vK3
+         +74rLo8FW28lQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j5P-RZ; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j5Y-Uq; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 17/79] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:12:44 +0200
-Message-Id: <b6a5ee6479e005c271849b27e752c10f0fd8a150.1619518193.git.mchehab+huawei@kernel.org>
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v2 20/79] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:12:47 +0200
+Message-Id: <8990782e13de0f4b91fa6675bc5fdaeda2fd038a.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -64,25 +63,25 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 2 +-
+ drivers/staging/media/rkvdec/rkvdec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 026111505f5a..c4f19418a460 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2568,7 +2568,7 @@ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index d821661d30f3..8c17615f3a7a 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
+ 	if (WARN_ON(!desc))
+ 		return;
  
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
-+	ret = pm_runtime_resume_and_get(ctx->jpeg->dev);
- 
- 	return ret > 0 ? 0 : ret;
- }
+-	ret = pm_runtime_get_sync(rkvdec->dev);
++	ret = pm_runtime_resume_and_get(rkvdec->dev);
+ 	if (ret < 0) {
+ 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
+ 		return;
 -- 
 2.30.2
 
