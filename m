@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBFEBC433B4
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ABD7C43470
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B98DF6187E
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C9C061623
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbhD0KOf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34442 "EHLO mail.kernel.org"
+        id S235435AbhD0KOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235181AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235225AbhD0KOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D60B9611ED;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D95A0613C3;
         Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518430;
-        bh=rRI8k7N4z41xHzK06mi5M7fZFMz4ECEDrJIiREDOdF8=;
+        bh=yher15YM7h61KHb/hY+EJ/RRJANP10wcnUo8G05kfG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pkiEDdcc+9ZVgINwq7qDhHRDU/jL4TCvY9fmQ5shUJiZGzD3rZxgYoCapv0MIs63/
-         +4JjmIbUcQ9bIMj5aIeXeB7z3xF3N6UpPaByjHXXSgha7rTDeBBVMUOLhJfPdbbFRS
-         frp0UNVCsZYqiihSJDN0xa9pIAC5OGNKynVqkCV5Ce5W8YDlvyese7RJGuCGpaH0dd
-         QC735y/92zi21OcsK2+qVErOT8D1jiKS14QUi0vxAHFs/3eDgAMnxQiqkDuzr/8sIE
-         QvZ8WoPM+i96ESapBAzFVvSRkQf3G8ICWXo2IfmyfGo2yrUannRRK3Iy3bQhA4bVdr
-         cqR4QZhZMd3Uw==
+        b=T3XWa01AwHvFFDXxPmHCkXGTpu38NkeBQsMzh+aS2GAQnXF2qtZeFHRaKoIlsegp/
+         SoD9/IACexeeo1blB8Ydt5o2Pr5A+/JjnLgHUMiatdPxv5kvpVMW4vm71eIVQv5hCh
+         Oi779nfJAbRT5NrWcSD6CNptFxLtS53RXam/B7/PFki0PRWY73hbkr8J9wh71R1GxF
+         bdNiXKvSYNH+DdhdKr/wemLCbawzsQmTK0PwbnwnO8J/Sf2FVoP/gs18XWZgm3rpGV
+         GR21XcsN/zuvrf3TjsPSg6zuDTCuDlHTo85570h1FRhV3GBVubaizLJkzO9WzTlsky
+         sDyIsDwW1ZNyA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j4d-8D; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j4j-Aw; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 01/79] media: venus: fix PM runtime logic at venus_sys_error_handler()
-Date:   Tue, 27 Apr 2021 12:12:28 +0200
-Message-Id: <d20ddc17711e66db4b7c30ee3ccb27c7d90a9f43.1619518193.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 03/79] media: i2c: mt9m001: don't resume at remove time
+Date:   Tue, 27 Apr 2021 12:12:30 +0200
+Message-Id: <5a5442f20a8ddfd18d1231c1f33356729dc8c9c1.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -58,55 +57,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The venus_sys_error_handler() assumes that pm_runtime was
-able to resume, as it does things like:
+Calling pm_runtime_get_sync() at driver's removal time is
+not right, as this will resume PM runtime. This is clearly
+not what it is desired there, since it calls
+pm_runtime_set_suspended() afterwards.
 
-	while (pm_runtime_active(core->dev_dec) || pm_runtime_active(core->dev_enc))
-		msleep(10);
+So, just remove pm runtime get/put logic from the device
+removal logic.
 
-Well, if, for whatever reason, this won't happen, the routine
-won't do what's expected. So, check for the returned error
-condition, warning if it returns an error.
-
-Fixes: af2c3834c8ca ("[media] media: venus: adding core part and helper functions")
+Fixes: 8fcfc491c6ca ("media: mt9m001: switch s_power callback to runtime PM")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/media/i2c/mt9m001.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 54bac7ec14c5..fe63b9ab5b20 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -84,7 +84,11 @@ static void venus_sys_error_handler(struct work_struct *work)
- 			container_of(work, struct venus_core, work.work);
- 	int ret = 0;
+diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
+index 3b0ba8ed5233..ac1b380e6c03 100644
+--- a/drivers/media/i2c/mt9m001.c
++++ b/drivers/media/i2c/mt9m001.c
+@@ -834,14 +834,11 @@ static int mt9m001_remove(struct i2c_client *client)
+ {
+ 	struct mt9m001 *mt9m001 = to_mt9m001(client);
  
--	pm_runtime_get_sync(core->dev);
-+	ret = pm_runtime_get_sync(core->dev);
-+	if (WARN_ON(ret < 0)) {
-+		pm_runtime_put_noidle(core->dev);
-+		return ret;
-+	}
+-	pm_runtime_get_sync(&client->dev);
+-
+ 	v4l2_async_unregister_subdev(&mt9m001->subdev);
+ 	media_entity_cleanup(&mt9m001->subdev.entity);
  
- 	hfi_core_deinit(core, true);
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+-	pm_runtime_put_noidle(&client->dev);
+ 	mt9m001_power_off(&client->dev);
  
-@@ -106,9 +110,13 @@ static void venus_sys_error_handler(struct work_struct *work)
- 
- 	hfi_reinit(core);
- 
--	pm_runtime_get_sync(core->dev);
-+	ret = pm_runtime_get_sync(core->dev);
-+	if (WARN_ON(ret < 0)) {
-+		pm_runtime_put_noidle(core->dev);
-+		return ret;
-+	}
- 
--	ret |= venus_boot(core);
-+	ret = venus_boot(core);
- 	ret |= hfi_core_resume(core, true);
- 
- 	enable_irq(core->irq);
+ 	v4l2_ctrl_handler_free(&mt9m001->hdl);
 -- 
 2.30.2
 
