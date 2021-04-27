@@ -7,29 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF19AC43462
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C59E1C43461
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93D2F613EB
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 991D7613D8
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 12:46:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237784AbhD0MrB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 08:47:01 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45348 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237759AbhD0MrA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S237609AbhD0MrA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 27 Apr 2021 08:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237579AbhD0Mq6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 08:46:58 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34142C061756
+        for <linux-media@vger.kernel.org>; Tue, 27 Apr 2021 05:46:15 -0700 (PDT)
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3446144C;
-        Tue, 27 Apr 2021 14:46:15 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E5BF1173;
+        Tue, 27 Apr 2021 14:46:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1619527576;
-        bh=/HvJfRtGIUaJ33Enk9PhwOPcD/bDLYVcAdsyBwiJszo=;
+        s=mail; t=1619527573;
+        bh=oYdLoBEknIu3Znlf9wPdW/fstDDLulVV4SYlfAd+sHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FYlEnWMXwf2XNu7LKKiY5KZ/qxmo0OuBEKSy74JlZ4Q04C8sAJ7tomc7antvNK3gG
-         CYT+hMTKbY8CUP8BY/qQzR/tCxWh8sF0+3xb6rTWKB+ivxSZV0vTlTqa028woL5qyq
-         IWZuDdBmLSaQaOfgwcCj4JKrQG3s1ii00bRWY84E=
+        b=XvH3zJJy9Iu+xsdSUhYB7v4oEdfZqGtjlJDyEGE5TaMMjzCgBI8WoLflPg+1tsyKG
+         ltF9xiQ/dDUtpF5v/tWJyhX7QOsz/RcncACoHTn3jt0Fl+nq5xDblF0wQt05IjcsBj
+         77ynWiPE8/cWv7Qg11SA8PXw9+HYx+QwXyQlaViY=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -38,9 +41,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v6 14/24] media: entity: Add debug information in graph walk route check
-Date:   Tue, 27 Apr 2021 15:45:13 +0300
-Message-Id: <20210427124523.990938-15-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v6 11/24] media: entity: Skip link validation for pads to which there is no route to
+Date:   Tue, 27 Apr 2021 15:45:10 +0300
+Message-Id: <20210427124523.990938-12-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
 References: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
@@ -53,30 +56,61 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Add debug printout in graph walk route check.
+Links are validated along the pipeline which is about to start streaming.
+Not all the pads in entities that are traversed along that pipeline are
+part of the pipeline, however. Skip the link validation for such pads,
+and while at there rename "other_pad" to "local_pad" to convey the fact
+the route to be checked is internal to the entity.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/mc/mc-entity.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/mc/mc-entity.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 2b70ef97c56c..d62436cdd64f 100644
+index d00c7397e09a..a4cca53124b2 100644
 --- a/drivers/media/mc/mc-entity.c
 +++ b/drivers/media/mc/mc-entity.c
-@@ -351,6 +351,9 @@ static void media_graph_walk_iter(struct media_graph *graph)
- 	 */
- 	if (!media_entity_has_route(pad->entity, pad->index, local->index)) {
- 		link_top(graph) = link_top(graph)->next;
-+		dev_dbg(pad->graph_obj.mdev->dev,
-+			"walk: skipping \"%s\":%u -> %u (no route)\n",
-+			pad->entity->name, pad->index, local->index);
- 		return;
- 	}
+@@ -482,27 +482,32 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
+ 		bitmap_fill(has_no_links, entity->num_pads);
+ 
+ 		list_for_each_entry(link, &entity->links, list) {
+-			struct media_pad *other_pad =
++			struct media_pad *local_pad =
+ 				link->sink->entity == entity ?
+ 				link->sink : link->source;
+ 
++			/* Ignore pads to which there is no route. */
++			if (!media_entity_has_route(entity, pad->index,
++						    local_pad->index))
++				continue;
++
+ 			/* Mark that a pad is connected by a link. */
+-			bitmap_clear(has_no_links, other_pad->index, 1);
++			bitmap_clear(has_no_links, local_pad->index, 1);
+ 
+ 			/*
+ 			 * Pads that either do not need to connect or
+ 			 * are connected through an enabled link are
+ 			 * fine.
+ 			 */
+-			if (!(other_pad->flags & MEDIA_PAD_FL_MUST_CONNECT) ||
++			if (!(local_pad->flags & MEDIA_PAD_FL_MUST_CONNECT) ||
+ 			    link->flags & MEDIA_LNK_FL_ENABLED)
+-				bitmap_set(active, other_pad->index, 1);
++				bitmap_set(active, local_pad->index, 1);
+ 
+ 			/*
+ 			 * Link validation will only take place for
+ 			 * sink ends of the link that are enabled.
+ 			 */
+-			if (link->sink != other_pad ||
++			if (link->sink != local_pad ||
+ 			    !(link->flags & MEDIA_LNK_FL_ENABLED))
+ 				continue;
  
 -- 
 2.25.1
