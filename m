@@ -4,52 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC35C4360C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D36C43617
 	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1433613C3
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AC8D610FA
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:28:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbhD0K3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:29:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48192 "EHLO mail.kernel.org"
+        id S238446AbhD0K3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:29:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237565AbhD0K2Y (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:28:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF13D61439;
+        id S235743AbhD0K20 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:28:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1E1B61445;
         Tue, 27 Apr 2021 10:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619519236;
-        bh=nHZL/8LfEY59F+jSTZXbI5IsJhAvjS0xN6pbKcv/Zf0=;
+        bh=ilbYi39Wp/s1IHEjQb8NZRh7PLiRnT42XXdFX8lFSpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K42/u+DsYc+oSSWW35cPcwyLr4uf8gaxJ/ZMErBo18r/4knuXkBmHz1yww2kFTKfA
-         ig8N4evRJ4fKth3CydMKLxQ+hBAX3Klfs8agEXbChpHp74qnPxR14dA8ZjtyJC6NPl
-         joVfiqiRXV/vPk8nQg/6UCKLMn96n+SQpuxnsnY5phJXWCR+SZaWH0OI1d7G5SlGDW
-         IpmZ2gJbMGqbO4RxQhxqOYBR3iK8jWEaCfo0FLbeQtNRMuoXXYUR21pd39JCZx0/Tq
-         TSnlHjnh8heEO+ie6BbUsrqfrlKzz2jzBsrgZQyPWHi1Kinvoc7rwZ8EBiO3F/arOJ
-         3RMuoC45+JMrA==
+        b=E1V4ib0zbZH+kCUd5H/K3zfdYxnn6eIkc1o8FSQsvNaEok8VvLUUH3V9QiLL7DUEQ
+         dN9W7MRaY2i3s+ixNN13NayXIcIBJcsrxVQQRqyUc36hl2fIR0pxBuN0XmkLsXUnCE
+         R2Z1r0hX+Tfy1uGelCFiFXxgFeQFrYyf2NuxURXOX37gzThSFqOlSJdoazXrYdstXu
+         6CCdBuM2PC1AIti1Hg/1pJXrtHFtG3etjGFzlHWSamm/J3Z7yrWfdgCytXqIxDc31k
+         zeDVLsgxC4qnAUxhELuCUJU6AAt9nCNSo4MS1RQT1jxHOCWBioubSk9uZC0BbweNuV
+         Gc3epVSD6SYYQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKvy-000o1y-5Q; Tue, 27 Apr 2021 12:27:14 +0200
+        id 1lbKvw-000o0W-Cu; Tue, 27 Apr 2021 12:27:12 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 57/79] media: i2c: tvp5150: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:26:47 +0200
-Message-Id: <9e2fb36b577c9693f3c980cb26949c60cc3b8be8.1619519080.git.mchehab+huawei@kernel.org>
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v3 27/79] staging: media: vi: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:26:17 +0200
+Message-Id: <4ee32d7287e0839f23f18e8b9bf1829328411a67.1619519080.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619519080.git.mchehab+huawei@kernel.org>
 References: <cover.1619519080.git.mchehab+huawei@kernel.org>
@@ -69,44 +66,25 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/tvp5150.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ drivers/staging/media/tegra-video/vi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index e26e3f544054..374a9da75e4d 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1448,11 +1448,9 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
- 	       TVP5150_MISC_CTL_CLOCK_OE;
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 7a09061cda57..1298740a9c6c 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -297,10 +297,9 @@ static int tegra_channel_start_streaming(struct vb2_queue *vq, u32 count)
+ 	struct tegra_vi_channel *chan = vb2_get_drv_priv(vq);
+ 	int ret;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(sd->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(sd->dev);
-+		ret = pm_runtime_resume_and_get(sd->dev);
-+		if (ret < 0)
- 			return ret;
--		}
+-	ret = pm_runtime_get_sync(chan->vi->dev);
++	ret = pm_runtime_resume_and_get(chan->vi->dev);
+ 	if (ret < 0) {
+ 		dev_err(chan->vi->dev, "failed to get runtime PM: %d\n", ret);
+-		pm_runtime_put_noidle(chan->vi->dev);
+ 		return ret;
+ 	}
  
- 		tvp5150_enable(sd);
- 
-@@ -1675,15 +1673,7 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
- 
- static int tvp5150_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	int ret;
--
--	ret = pm_runtime_get_sync(sd->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(sd->dev);
--		return ret;
--	}
--
--	return 0;
-+	return pm_runtime_resume_and_get(sd->dev);
- }
- 
- static int tvp5150_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 -- 
 2.30.2
 
