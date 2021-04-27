@@ -7,47 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD160C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 727B1C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:16:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A317360C3D
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54417613C3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbhD0KQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:16:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34862 "EHLO mail.kernel.org"
+        id S237083AbhD0KQl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:16:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235567AbhD0KPM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:15:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB84861949;
+        id S235858AbhD0KPN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Apr 2021 06:15:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF8AD613DB;
         Tue, 27 Apr 2021 10:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518434;
-        bh=oAi5YzlfFlQMfzPh3wYGQ2xjGcqBCgu57W3dE0PjRzI=;
+        bh=Q1WsziPcbnwAb2cpqQFZbO8zttZnZQq1oIpn6yJZI+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WlzE8JFKZcEaqtCedGI64mSq7Zxn6b2RQGKEV1UcH8M57TwJqZZJq0ZaTdnJG9Ynf
-         jbsu9fJuzDy7LLMnudgB5ChhqU99RMJratdZ3sLb/vKih+elx5ZK4LtgmJ+0E1+vE9
-         4XoiCXqQNU9WZUDQjAC8lcjbW/MU/Vv4mXhHhW3MAOzwrxsk3U+vaGBtwEEzAFnEeN
-         4vVZdUMbCXxwc68I2eoJAf+CQ8NBsqg8ZcPUPhQA9XxpaWD13ojwryu/nW571MJrTz
-         Iqta/mHUbeQ6+P/Pw/1dfH8jFNZnr36SQrwyFWl1R8fOXzk5QAWxTuQlj7g5fYqkvp
-         Y/0Vh1CTFMWOw==
+        b=eOxoBc6fX8LQ3nxyOd0t2RIx/rdGgjYfc5pU2Uogwl6kdtZa9v7rIkXdJ8X2UMoUR
+         9xe3yaHftnVjn2wEnD7orANu+Te1STBrC6bv+8Cri6rd2+yG0ELK1JCNedgn8KmRl/
+         F6UNsw4VGQWvXFr75BgLHPB8fxn5YaGoLwOE1Ta0gsE6V9AqQoK0M9AUkI/u0DHXI5
+         2LS85OiasiI5qkpnIKKnPiEpWc0LR/AiQCSw9kdGTI1Ss5uPanq6LQx+G58VlLgL1U
+         PNq8KwYSg7mrpWYTzWyazSwmh+bfQIV2VqDmKo1wXajK+FzJ1eH0fFxJnjhyaInjhj
+         dPoD7fly50gVQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKj1-000j7F-0M; Tue, 27 Apr 2021 12:13:51 +0200
+        id 1lbKj2-000j8D-5T; Tue, 27 Apr 2021 12:13:52 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 55/79] media: i2c: ov8865: use pm_runtime_resume_and_get()
-Date:   Tue, 27 Apr 2021 12:13:22 +0200
-Message-Id: <ce3ead701c232be8d8a8c001a4217581ee5cc2d2.1619518193.git.mchehab+huawei@kernel.org>
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 75/79] media: sunxi: use pm_runtime_resume_and_get()
+Date:   Tue, 27 Apr 2021 12:13:42 +0200
+Message-Id: <8c9d978dfc49ea2de6a1b6cf5b3a9d647e6b1cbf.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -67,27 +65,34 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov8865.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index 9ecf180635ee..3bf6ee4898a9 100644
---- a/drivers/media/i2c/ov8865.c
-+++ b/drivers/media/i2c/ov8865.c
-@@ -2497,11 +2497,9 @@ static int ov8865_s_stream(struct v4l2_subdev *subdev, int enable)
- 	int ret;
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 4785faddf630..54b909987caa 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -206,9 +206,9 @@ static int sun4i_csi_open(struct file *file)
+ 	if (ret)
+ 		return ret;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(sensor->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(sensor->dev);
-+		ret = pm_runtime_resume_and_get(sensor->dev);
-+		if (ret < 0)
- 			return ret;
--		}
- 	}
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
+ 	if (ret < 0)
+-		goto err_pm_put;
++		goto err_unlock;
  
- 	mutex_lock(&sensor->mutex);
+ 	ret = v4l2_pipeline_pm_get(&csi->vdev.entity);
+ 	if (ret)
+@@ -227,6 +227,8 @@ static int sun4i_csi_open(struct file *file)
+ 
+ err_pm_put:
+ 	pm_runtime_put(csi->dev);
++
++err_unlock:
+ 	mutex_unlock(&csi->lock);
+ 
+ 	return ret;
 -- 
 2.30.2
 
