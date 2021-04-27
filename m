@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E4B5C43470
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 076E7C43460
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A7AC613C8
-	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D03E660FF1
+	for <linux-media@archiver.kernel.org>; Tue, 27 Apr 2021 10:14:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbhD0KOs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Apr 2021 06:14:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34864 "EHLO mail.kernel.org"
+        id S235598AbhD0KOt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Apr 2021 06:14:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235370AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235366AbhD0KOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 27 Apr 2021 06:14:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DE0E613DE;
-        Tue, 27 Apr 2021 10:13:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E6F2B613C9;
+        Tue, 27 Apr 2021 10:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619518431;
-        bh=LvHrsFJn6JLbIexuKZaI+hIEIjqhrM13uG8Z/t+ytHI=;
+        bh=XfZSeMotNFyXbfT608pw1ECU5JJkssXPopFyWbltzaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVqLR7mFtMTLO0mK1TyVv9e+yTmOBkTKp+10OaJB+E8GKGvWzwvNELM5c29euVRTA
-         USlnGTJVTJc1qUs5eiLRzGraPsUzUVxRBRdZb3dj2QYodiUjT21ZyJ3XdxD0sYvdb5
-         R8n08vJvzfzrjwR87IG9TYbo7F4hAXUTNwwiFTlSYLHGpPGL5JMt9a5XVt+otKb7Fk
-         Qh8UHDBRVwMqDuoD7fHrAIuahwrZK7Ok4dbmXenwn7JQ3KIOyRWLDB3g8TBY9UOjrV
-         XfCHLr0ZmqO/JJOaR4g8tbEZIoDPZc/cz4Ha+yXKWAuRKkaY4AHE5VXNYUixFP0vK3
-         +74rLo8FW28lQ==
+        b=Nr2lUUMOHAMasRjwlY5qX3qVA4oegZ5AgUvpL6usdP7kYYZZZM6TsC32yW50v4n6u
+         tcvNRQPCPk6KdTQhVAuWpm8L6wfnAnIjOKNjBAs6jwHBPaBboSwVTtHXpbVHICzTcc
+         1lBOKpP8EbMRNwPR8QTTYS2F24GO8hT3AURqYHmbXcQqcXviY2sO/li0wDxoeiLi33
+         nc5lIPv6zUXjHIDqnptAPfdDLqX7OdAffVBQPSFke/Wxl7TBV7w+dNNYe8y48V1rZU
+         mz502CLIOs0MXwwcj+kyRx0Ho46obWLtWanADRaK/TUGgaFs6xRbkw6cpbsKRwfj97
+         jsoJG5CIc2oSA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lbKiy-000j5Y-Uq; Tue, 27 Apr 2021 12:13:48 +0200
+        id 1lbKiy-000j51-J8; Tue, 27 Apr 2021 12:13:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 20/79] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
-Date:   Tue, 27 Apr 2021 12:12:47 +0200
-Message-Id: <8990782e13de0f4b91fa6675bc5fdaeda2fd038a.1619518193.git.mchehab+huawei@kernel.org>
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 09/79] media: mdk-mdp: fix pm_runtime_get_sync() usage count
+Date:   Tue, 27 Apr 2021 12:12:36 +0200
+Message-Id: <36568b7ce611dfaf4abc3233c76018a137f934c8.1619518193.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619518193.git.mchehab+huawei@kernel.org>
 References: <cover.1619518193.git.mchehab+huawei@kernel.org>
@@ -63,25 +65,35 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
+as it doesn't make any sense to return 0 if the PM runtime failed
+to resume.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index d821661d30f3..8c17615f3a7a 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
- 	if (WARN_ON(!desc))
- 		return;
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index ace4528cdc5e..f14779e7596e 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mtk_mdp_ctx *ctx = q->drv_priv;
+ 	int ret;
  
--	ret = pm_runtime_get_sync(rkvdec->dev);
-+	ret = pm_runtime_resume_and_get(rkvdec->dev);
- 	if (ret < 0) {
- 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
- 		return;
+-	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
+ 	if (ret < 0)
+-		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
++		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
+ 			    ctx->id, ret);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
