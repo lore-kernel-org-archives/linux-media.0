@@ -7,45 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F92FC43460
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CC11C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2BDB61435
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB72E61435
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239793AbhD1O4C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:56:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36328 "EHLO mail.kernel.org"
+        id S240800AbhD1O4D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:56:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240333AbhD1Oxj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240332AbhD1Oxj (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D42C6187E;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DA0961628;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=phIvrsjCST0hqKSIzsjBL4/Aigr4NLUZL7GWQhPHYlY=;
+        bh=wdynVwwhyvqKibF+xyVsNRL7Ix8YvvILE1Sgr+qtqMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gdvwprrGmCeX9kXQHXvOYGnQnavbOW0PZHC7KMOpnoIdLP5ffoTlbrLJ4BOeyVVMj
-         43GLtTobvOTqdozdMdkiFkRO0f9u+JohosgHjk3l++HmaOgC3/LI5ccAAxh0vDoqOp
-         eZtl3YzZvAakK01oYeSMbYPdjss/dSXWPYTuMqHJdazTTdoj9vSMf8GD68RlRPblZY
-         T5rrKQHEptbf4ZGUBprxOy8uCSC873TaR04rHWN9AAiXqTz7myGqu8oLpU1sp+xpFx
-         ikiUJUAv9i4VF1BtIn9t7TcrcfMeDkcb7GukVnKxeGQ+9CYUKhIEF3xPJhKT0zmuUd
-         rlQGEAqyuuCww==
+        b=mCIGd0KUv3nX54i1wVXkXIAeO66691k6xUBfmNPBKNDmhWpJOQuj+wMEfVxioO1X5
+         EC3NSjF2ZWgq5ZRPHaKMXJSHvN/sJuvSwrjLwP7b7BwX9gbpCO5K1JNOb33GgLLP/B
+         ODlj/AnkKJzKNAdnkeXKKIwfwf2EqGvMsE4ck70qRDXgPrHzHw2crGt7Vwotx4QVh7
+         DNyB3jAZkqW0tcDJ2A/XAcNgci2oOhY+BL9c1vW8eahsTJUz0KAyD8GiLWVVDzTPk2
+         UDyrjfcFypRtSCufZwGn8zYN22XKLYhaUBgOYXHSk/jBBF8HOAiSB1DzA/8FEH6JB8
+         z25CsXH8ihtjw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYR-001Dss-I8; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYR-001Dsj-F7; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v4 68/79] media: venus: venc: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:29 +0200
-Message-Id: <9113ea74fe1cfcdd7c83eaee4c327690ca3744c7.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 65/79] media: camss: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:26 +0200
+Message-Id: <c7c0cb91cedfd12625f387b904e72a1457a3a7ba.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -63,35 +64,93 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/venc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid.c   | 6 ++----
+ drivers/media/platform/qcom/camss/camss-csiphy.c | 6 ++----
+ drivers/media/platform/qcom/camss/camss-ispif.c  | 6 ++----
+ drivers/media/platform/qcom/camss/camss-vfe.c    | 5 +++--
+ 4 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 4a7291f934b6..8dd49d4f124c 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1205,9 +1205,9 @@ static int venc_open(struct file *file)
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index cc11fbfdae13..d2a7f2a64f26 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -156,11 +156,9 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+ 	int ret;
  
- 	venus_helper_init_instance(inst);
+ 	if (on) {
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			return ret;
+-		}
  
--	ret = pm_runtime_get_sync(core->dev_enc);
-+	ret = pm_runtime_resume_and_get(core->dev_enc);
- 	if (ret < 0)
--		goto err_put_sync;
-+		goto err_free;
+ 		ret = regulator_enable(csid->vdda);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index b3c3bf19e522..8e18b8e668cf 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -197,11 +197,9 @@ static int csiphy_set_power(struct v4l2_subdev *sd, int on)
+ 	if (on) {
+ 		int ret;
  
- 	ret = venc_ctrl_init(inst);
- 	if (ret)
-@@ -1252,6 +1252,7 @@ static int venc_open(struct file *file)
- 	venc_ctrl_deinit(inst);
- err_put_sync:
- 	pm_runtime_put_sync(core->dev_enc);
-+err_free:
- 	kfree(inst);
- 	return ret;
- }
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			return ret;
+-		}
+ 
+ 		ret = csiphy_set_clock_rates(csiphy);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index 37611c8861da..d9907742ba79 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -372,11 +372,9 @@ static int ispif_set_power(struct v4l2_subdev *sd, int on)
+ 			goto exit;
+ 		}
+ 
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			goto exit;
+-		}
+ 
+ 		ret = camss_enable_clocks(ispif->nclocks, ispif->clock, dev);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 15695fd466c4..cf743e61f798 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -584,9 +584,9 @@ static int vfe_get(struct vfe_device *vfe)
+ 		if (ret < 0)
+ 			goto error_pm_domain;
+ 
+-		ret = pm_runtime_get_sync(vfe->camss->dev);
++		ret = pm_runtime_resume_and_get(vfe->camss->dev);
+ 		if (ret < 0)
+-			goto error_pm_runtime_get;
++			goto error_domain_off;
+ 
+ 		ret = vfe_set_clock_rates(vfe);
+ 		if (ret < 0)
+@@ -620,6 +620,7 @@ static int vfe_get(struct vfe_device *vfe)
+ 
+ error_pm_runtime_get:
+ 	pm_runtime_put_sync(vfe->camss->dev);
++error_domain_off:
+ 	vfe->ops->pm_domain_off(vfe);
+ 
+ error_pm_domain:
 -- 
 2.30.2
 
