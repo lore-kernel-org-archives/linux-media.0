@@ -7,42 +7,43 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A681C05031
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAD3DC43618
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D94161441
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 748896143E
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240328AbhD1OzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37052 "EHLO mail.kernel.org"
+        id S240652AbhD1OzT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240389AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240387AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAA6A61946;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B889D61945;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=hgVIRXIaDP3qryP6Ow1GN4bGxSo94x3BXa49gnOI5oU=;
+        bh=/7W/4D4Cg4pCxHEZGuCJQ5dkGl7p2HK4IsN3mgaNluw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3h0eGdXeU42FbQX5nXsu8h3s9APwtyEpXw3+LibpCG6kLrIt6BDyl+FtHQRSKps4
-         Xhc7aPhob8HM6cDJI/26PfL4pGqBkbBGn5DRD3AEyYJ1Gs8OlglLJGBpNQ8tszHOfg
-         uKV5jGBMbk9GHqLZUwR5AefUY3Um86Xr9+SBCA+CSf5nLaaBwhgPfBIyCTfzUhp611
-         DUBoXfgBZPlzlkMUNqBGlc+Yo+VBU+H+2TS2HbWQ+8JuFmL8DgOGMQzE0Xffh3cPEx
-         iOHXAiIVXE0oM7MZChxs+x27CwUnWajos/IIxVzKEKHQ2H38KzEN1mjHEvg7PUGkg0
-         77dxm2LOWJnYQ==
+        b=WYWSoRzRi2/PLHRk8k3zZXQYLq3zigrPJOrONEe36l6WKXuKCvgWt7EE0a4nch4Mu
+         X1gFjGM6hW18yt61srvpgrhNkVXtPHtLGiGJvMVfJIgflZ3wYdD6sC5PxJnVSHd9ko
+         +Q0j1Dqnaa6PVFufgteqTySnR1OPynRvf3OjnMERk6lGoC7RthNuF3UUCVDWPuPSta
+         N9O7Uap5kQXa4uSsbGuPWlva4OUUgVLJzSI3Y2qgQ7nHTeacWXD9YiR2YkYc7Vp6Vx
+         LxSP7Uk7fqlgWOricIIbAgkWvBFP8wkmH4b3eefVxyJ6ZwbPkk1Od2XTiSzaG6anC9
+         B0vqLrbZ7K7iA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYR-001DsI-6N; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYQ-001DrW-NZ; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 56/79] media: i2c: video-i2c: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:17 +0200
-Message-Id: <9798637a8003329b10992d1d983041387b2c6677.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 40/79] media: i2c: mt9m001: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:01 +0200
+Message-Id: <9eae17e79b32ad11fc09093a82c0ffdfbc7fe584.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -62,41 +63,44 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/video-i2c.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/media/i2c/mt9m001.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index c9a774f4c8d2..910a139c5e14 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -286,11 +286,9 @@ static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
- 	__le16 buf;
- 	int tmp;
+diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
+index 3b0ba8ed5233..58c85a3bccf6 100644
+--- a/drivers/media/i2c/mt9m001.c
++++ b/drivers/media/i2c/mt9m001.c
+@@ -217,9 +217,9 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
+ 		goto done;
  
--	tmp = pm_runtime_get_sync(regmap_get_device(data->regmap));
--	if (tmp < 0) {
--		pm_runtime_put_noidle(regmap_get_device(data->regmap));
-+	tmp = pm_runtime_resume_and_get(regmap_get_device(data->regmap));
-+	if (tmp < 0)
- 		return tmp;
--	}
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(&client->dev);
++		ret = pm_runtime_resume_and_get(&client->dev);
+ 		if (ret < 0)
+-			goto put_unlock;
++			goto unlock;
  
- 	tmp = regmap_bulk_read(data->regmap, AMG88XX_REG_TTHL, &buf, 2);
- 	pm_runtime_mark_last_busy(regmap_get_device(data->regmap));
-@@ -512,11 +510,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
- 	if (data->kthread_vid_cap)
- 		return 0;
+ 		ret = mt9m001_apply_selection(sd);
+ 		if (ret)
+@@ -247,6 +247,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
  
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto error_del_list;
--	}
+ put_unlock:
+ 	pm_runtime_put(&client->dev);
++unlock:
+ 	mutex_unlock(&mt9m001->mutex);
  
- 	ret = data->chip->setup(data);
- 	if (ret)
+ 	return ret;
+@@ -834,6 +835,10 @@ static int mt9m001_remove(struct i2c_client *client)
+ {
+ 	struct mt9m001 *mt9m001 = to_mt9m001(client);
+ 
++	/*
++	 * As it increments RPM usage_count even on errors, we don't need to
++	 * check the returned code here.
++	 */
+ 	pm_runtime_get_sync(&client->dev);
+ 
+ 	v4l2_async_unregister_subdev(&mt9m001->subdev);
 -- 
 2.30.2
 
