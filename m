@@ -2,147 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 753D7C43603
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33224C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:09:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F85561440
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:56:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E03F8613EF
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:09:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbhD1OzJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36356 "EHLO mail.kernel.org"
+        id S231169AbhD1PK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 11:10:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240378AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0EE561931;
-        Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
+        id S229920AbhD1PK2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 11:10:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DFC66141F;
+        Wed, 28 Apr 2021 15:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619621564;
-        bh=ICSqYM0Xgfw9oIMwso+FErzxSuvOpl/fXTNpHffe0xs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fHysyxFZlmuI50E5t4vV98qvOtEriUoU3KMn0yepTurqasR22TQkWKLrnsjN+D8rd
-         vLJJLRtpQ+QxAXTyWAjI7+EDodeaq/o8EjSMA6wuZMaKbV2rpRPYyPVVSHM6X1kysc
-         2b/Ro7+t0+F7+PNk2/IvalgG1tEOFgrTJP3C1QJMMOtqe+2UACwv3yl4auDzajd2Or
-         n5kXLVLfZRTKcTWYX+h8G0jfGNID60M3O9RnJJfZ/G+NPzwx4nJ19AvOmE2NAh3MeO
-         bo9FXO4lzTeYiFPAS3M5tDHrt4nXqVgbgcJkhm9qDNJur/30jvLIqbWrOpDFzTfaSg
-         YaUni1JsyJ0AQ==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lblYS-001Dtc-6h; Wed, 28 Apr 2021 16:52:44 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        s=k20201202; t=1619622583;
+        bh=PivjCQ4OHe6j9i0UuVSGYTIEpWQw6cOVC+IdTduVEbQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooui2sOIBvLuR0c2/kuF0MWZedMGpMAdwIOJ8bNGmvmzwPP3wHB+GBvjMxfCMbu9D
+         UCQ6Dxvhd2DvzHnP4qJiU5QYzHYMxxAXs6+ZCxCBfj0q0bgNqC9YO0SWD+zIXlYM56
+         1nQILdxPjC9imI/qwv/wRCiklBSL+UwjUdGUybK0SFofBiD0Qqeh3iIlyFoGlyOkKy
+         J/XVsPdoKT1sNTULA7k/72zyJyTOdWsjkhar1dtyx+Z6QfDHqF/+o+CRN9dldyFshf
+         LJtRXuvzDOFrY99tRjlH4HEyDbYc3/F7YoqsXVWrCA3Xz+PRnr4xcs51gShIbqgKsB
+         nKaQNkEG8Aw/w==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lblp7-00052P-6X; Wed, 28 Apr 2021 17:09:57 +0200
+Date:   Wed, 28 Apr 2021 17:09:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     devel@driverdev.osuosl.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v4 77/79] media: rcar-vin: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:38 +0200
-Message-Id: <c0c8f8b07af20c354b946819f5dcdf9f5129654e.1619621413.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 20/79] staging: media: rkvdec: fix
+ pm_runtime_get_sync() usage count
+Message-ID: <YIl6xZegj9o5m8EF@hovoldconsulting.com>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
+ <4bc46252a7c7ae3612da6da8620ef7db775e27ca.1619621413.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4bc46252a7c7ae3612da6da8620ef7db775e27ca.1619621413.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+On Wed, Apr 28, 2021 at 04:51:41PM +0200, Mauro Carvalho Chehab wrote:
+> The pm_runtime_get_sync() internally increments the
+> dev->power.usage_count without decrementing it, even on errors.
+> Replace it by the new pm_runtime_resume_and_get(), introduced by:
+> commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+> in order to properly decrement the usage counter and avoid memory
+> leaks.
 
-Use the new API, in order to cleanup the error check logic.
+Again, there is no memory leak here either. Just a potential PM usage
+counter leak.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/platform/rcar-vin/rcar-csi2.c | 15 ++++++++++++---
- drivers/media/platform/rcar-vin/rcar-dma.c  |  6 ++----
- drivers/media/platform/rcar-vin/rcar-v4l2.c |  6 ++----
- 3 files changed, 16 insertions(+), 11 deletions(-)
+> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  drivers/staging/media/rkvdec/rkvdec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index d821661d30f3..8c17615f3a7a 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
+>  	if (WARN_ON(!desc))
+>  		return;
+>  
+> -	ret = pm_runtime_get_sync(rkvdec->dev);
+> +	ret = pm_runtime_resume_and_get(rkvdec->dev);
+>  	if (ret < 0) {
+>  		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
+>  		return;
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index e06cd512aba2..436fb17f73ea 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -406,10 +406,17 @@ static void rcsi2_enter_standby(struct rcar_csi2 *priv)
- 	pm_runtime_put(priv->dev);
- }
- 
--static void rcsi2_exit_standby(struct rcar_csi2 *priv)
-+static int rcsi2_exit_standby(struct rcar_csi2 *priv)
- {
--	pm_runtime_get_sync(priv->dev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(priv->dev);
-+	if (ret < 0)
-+		return ret;
-+
- 	reset_control_deassert(priv->rstc);
-+
-+	return ret;
- }
- 
- static int rcsi2_wait_phy_start(struct rcar_csi2 *priv,
-@@ -657,7 +664,9 @@ static int rcsi2_start(struct rcar_csi2 *priv)
- {
- 	int ret;
- 
--	rcsi2_exit_standby(priv);
-+	ret = rcsi2_exit_standby(priv);
-+	if (ret < 0)
-+		return ret;
- 
- 	ret = rcsi2_start_receiver(priv);
- 	if (ret) {
-diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-index f30dafbdf61c..f5f722ab1d4e 100644
---- a/drivers/media/platform/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-@@ -1458,11 +1458,9 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
- 	u32 vnmc;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(vin->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vin->dev);
-+	ret = pm_runtime_resume_and_get(vin->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/* Make register writes take effect immediately. */
- 	vnmc = rvin_read(vin, VNMC_REG);
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 457a65bf6b66..b1e9f86caa5c 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -870,11 +870,9 @@ static int rvin_open(struct file *file)
- 	struct rvin_dev *vin = video_drvdata(file);
- 	int ret;
- 
--	ret = pm_runtime_get_sync(vin->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vin->dev);
-+	ret = pm_runtime_resume_and_get(vin->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	ret = mutex_lock_interruptible(&vin->lock);
- 	if (ret)
--- 
-2.30.2
-
+Johan
