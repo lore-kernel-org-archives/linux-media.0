@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6669C43460
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1818AC43461
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1DD161151
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6554761446
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbhD1Oze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
+        id S240724AbhD1Ozf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36802 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240416AbhD1Oxx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D97761929;
+        id S240420AbhD1Oxy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EA6261446;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=HzlriyHzqlZAHsYOJEVourXS9CSW2DolwRX6O+Dbyqk=;
+        bh=rChg/pXG2Qjbehywcb/+z5hE6+LFH66GvNnoCtLFEBo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UYJGDEEyYE66z34lvWemVWFCJFqzhtfTFdIpQMk8g9d0nSbc7c5xbDfdLFEBo3Mur
-         CU9aw59qOxdBVtfN1JISX4VjGfhRqkIRCinHxMBw4nUG7WBNhyOGY1oqXh4hbs3xa2
-         uK9TyLSyLZ9awJBoIr6g5Ld13qjdKNBWqYhpYkxawzcOk2Rxxss69wn+HmwYMPhBOg
-         nP4+ElqBXEIxzr+IrclBNnel3NVTgYOzaV6VUfUOSlgh8C85D1Hp2jKbwFP92y55vG
-         /mq412QX5DG+HRYFNrXhF0UtJS6NBARyVgVWblYVJ6ehKbCJgTr9PmclbBJfPiZzRB
-         JXvmAatLs/b4A==
+        b=uR/Jo/DpIUEje6LsKdX3PHv/mdjGFVxuHtrPXdPDc+v8dwpOtdxjmkNhhhzSopQsy
+         VSkDo3DDGGZ2gtoDSbH92D4GKyCo3bTAt54F6gwW3uSpbPqD9Gz14OGnvKF8hiFgzi
+         +MPre5UkHMPOVzTKyzgZXb85GXnCgL08yh6RNscnu9ytsbLzB2uBphS5ULdc+tW04Z
+         yFJ4DRfB1ZpjpPDUXuWEzqBguPdtassPM+2xc5DFzDiLTWffXpvG7M1IzaLXvjFw2l
+         Cy1w59xd4cNTLjg7y6LVbd7mTAojeXRxkjAXfQUPnEjSNxAP7tPDvkZIBibmK8RG53
+         ORqbbPx4cSctQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYS-001DtQ-34; Wed, 28 Apr 2021 16:52:44 +0200
+        id 1lblYR-001Dsy-K9; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 76/79] media: vsp1: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:37 +0200
-Message-Id: <78caedcf98e53939e1a1958a3fc3f76451458b72.1619621413.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v4 70/79] media: rkisp1: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:31 +0200
+Message-Id: <17d3cf0b3b137011353079109a4918592c4f57fd.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -64,27 +65,24 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/vsp1/vsp1_drv.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
-index aa66e4f5f3f3..c2bdb6629657 100644
---- a/drivers/media/platform/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/vsp1/vsp1_drv.c
-@@ -561,11 +561,9 @@ int vsp1_device_get(struct vsp1_device *vsp1)
- {
- 	int ret;
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+index 5f6c9d1623e4..3730376897d9 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+@@ -1003,9 +1003,8 @@ rkisp1_vb2_start_streaming(struct vb2_queue *queue, unsigned int count)
+ 	if (ret)
+ 		goto err_pipeline_stop;
  
--	ret = pm_runtime_get_sync(vsp1->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vsp1->dev);
-+	ret = pm_runtime_resume_and_get(vsp1->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	return 0;
- }
+-	ret = pm_runtime_get_sync(cap->rkisp1->dev);
++	ret = pm_runtime_resume_and_get(cap->rkisp1->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(cap->rkisp1->dev);
+ 		dev_err(cap->rkisp1->dev, "power up failed %d\n", ret);
+ 		goto err_destroy_dummy;
+ 	}
 -- 
 2.30.2
 
