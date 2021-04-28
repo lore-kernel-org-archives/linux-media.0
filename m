@@ -4,45 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91844C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5067C43461
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A77E61008
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FC2A61435
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240816AbhD1O4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:56:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36654 "EHLO mail.kernel.org"
+        id S240082AbhD1O4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:56:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240276AbhD1Oxk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5804C616E8;
+        id S240342AbhD1Oxm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6398A61874;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=DzFwWWrx/K8GcHK3QK7SiLSCre5vWmnzlplRbKVIaVw=;
+        bh=73B6Lks3AupUDrJCPSyBZhCBhq2sPf760XjzihM5LGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CSuiwcG175X8vh9j+r6co3XBF+k4NNgAtn05P6y3agoZ5eHxEkUMGAJZtXGA+BFpm
-         3aMlXy2jopO4fvdWaM1bIYTulSuaEiHwwhQJy/yyhp+2AI+5z4PPp4l7UHNuDna6MZ
-         92A3kSNu9SHVW4n+Q5+iXhDClgMZWSHLZ4kWDAOS95OAfuc82ALwnFSsvuS0Ha+IJv
-         +aeQmuA/wVI93EbAZvDrFk3X3kd+BbIzmCKxQZk4lWTjNgk5LqapP9Wd102TmAxuJ+
-         nPfUPvLtjPn9GHV4vh0rYgz9eOB/YHHKYQ+ErBlqMmJ0ma8HpGmaAx0TH9e8EwkMpD
-         IPH/uPWEaikMg==
+        b=jR8X8jJ90tmqUxV1SJiEb4/2UHHiX9/BFfpdXi5zQEHdMMjjKxVJbKdOuMeyrJ52h
+         Vxg/Ak0JBYv8kWe/MUdTboD0kM17uVxSKCbPgql+wlkDNiG+L1HxnZ78SIfvUanGo4
+         Ba8/tW6zwVRdruCUr8jSJWFxQVhRgEVr0wR62Nk0uPalTUU3QFRQaJ4z/uxLpnc2fg
+         4WyIZaxyZS63BL69ofaPX9Sy8sidL1kpwwvaQ31jVnu4xtFMBQaxdtRZCaG+Nfsiwy
+         6TUjLx+OGh4EOkSNVuS9w/rIhLnOHtuhp0p3VPyDAZbbi8yVwsvoFmTo5orAlAlk21
+         k29FNyRsvUysQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYS-001DtH-0b; Wed, 28 Apr 2021 16:52:44 +0200
+        id 1lblYR-001Dsp-H9; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Benoit Parrot <bparrot@ti.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 75/79] media: ti-vpe: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:36 +0200
-Message-Id: <bd62e8ed8b70a68a9173af82c26896d153657f9a.1619621413.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v4 67/79] media: venus: vdec: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:28 +0200
+Message-Id: <8541040c4b0830bb2c2f015b8c26c890baa5918a.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -62,77 +65,30 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/ti-vpe/cal-video.c | 4 +++-
- drivers/media/platform/ti-vpe/cal.c       | 8 +++++---
- drivers/media/platform/ti-vpe/vpe.c       | 4 +---
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ drivers/media/platform/qcom/venus/vdec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-index 7b7436a355ee..15fb5360cf13 100644
---- a/drivers/media/platform/ti-vpe/cal-video.c
-+++ b/drivers/media/platform/ti-vpe/cal-video.c
-@@ -700,7 +700,9 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index ddb7cd39424e..347e533ea673 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -568,7 +568,7 @@ static int vdec_pm_get(struct venus_inst *inst)
+ 	int ret;
  
- 	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+ 	mutex_lock(&core->pm_lock);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	mutex_unlock(&core->pm_lock);
  
--	pm_runtime_get_sync(ctx->cal->dev);
-+	ret = pm_runtime_resume_and_get(ctx->cal->dev);
-+	if (ret < 0)
-+		goto error_pipeline;
+ 	return ret < 0 ? ret : 0;
+@@ -601,7 +601,7 @@ static int vdec_pm_get_put(struct venus_inst *inst)
+ 	mutex_lock(&core->pm_lock);
  
- 	cal_ctx_set_dma_addr(ctx, addr);
- 	cal_ctx_start(ctx);
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 2e2bef91b2b0..76fe7a8b33f6 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1024,7 +1024,7 @@ static int cal_probe(struct platform_device *pdev)
- 
- 	/* Read the revision and hardware info to verify hardware access. */
- 	pm_runtime_enable(&pdev->dev);
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
- 	if (ret)
- 		goto error_pm_runtime;
- 
-@@ -1098,10 +1098,11 @@ static int cal_remove(struct platform_device *pdev)
- {
- 	struct cal_dev *cal = platform_get_drvdata(pdev);
- 	unsigned int i;
-+	int ret;
- 
- 	cal_dbg(1, cal, "Removing %s\n", CAL_MODULE_NAME);
- 
--	pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
- 
- 	cal_media_unregister(cal);
- 
-@@ -1115,7 +1116,8 @@ static int cal_remove(struct platform_device *pdev)
- 	for (i = 0; i < cal->data->num_csi2_phy; i++)
- 		cal_camerarx_destroy(cal->phy[i]);
- 
--	pm_runtime_put_sync(&pdev->dev);
-+	if (ret >= 0)
-+		pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 10251b787674..07cb2c140295 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -2471,10 +2471,8 @@ static int vpe_runtime_get(struct platform_device *pdev)
- 
- 	dev_dbg(&pdev->dev, "vpe_runtime_get\n");
- 
--	r = pm_runtime_get_sync(&pdev->dev);
-+	r = pm_runtime_resume_and_get(&pdev->dev);
- 	WARN_ON(r < 0);
--	if (r)
--		pm_runtime_put_noidle(&pdev->dev);
- 	return r < 0 ? r : 0;
- }
+ 	if (pm_runtime_suspended(dev)) {
+-		ret = pm_runtime_get_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
+ 		if (ret < 0)
+ 			goto error;
  
 -- 
 2.30.2
