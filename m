@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5067C43461
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A86C43462
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FC2A61435
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 153A56143E
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbhD1O4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:56:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36738 "EHLO mail.kernel.org"
+        id S231602AbhD1O4J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:56:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240342AbhD1Oxm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240301AbhD1Oxm (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6398A61874;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 465B761625;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=73B6Lks3AupUDrJCPSyBZhCBhq2sPf760XjzihM5LGk=;
+        bh=Q1WsziPcbnwAb2cpqQFZbO8zttZnZQq1oIpn6yJZI+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jR8X8jJ90tmqUxV1SJiEb4/2UHHiX9/BFfpdXi5zQEHdMMjjKxVJbKdOuMeyrJ52h
-         Vxg/Ak0JBYv8kWe/MUdTboD0kM17uVxSKCbPgql+wlkDNiG+L1HxnZ78SIfvUanGo4
-         Ba8/tW6zwVRdruCUr8jSJWFxQVhRgEVr0wR62Nk0uPalTUU3QFRQaJ4z/uxLpnc2fg
-         4WyIZaxyZS63BL69ofaPX9Sy8sidL1kpwwvaQ31jVnu4xtFMBQaxdtRZCaG+Nfsiwy
-         6TUjLx+OGh4EOkSNVuS9w/rIhLnOHtuhp0p3VPyDAZbbi8yVwsvoFmTo5orAlAlk21
-         k29FNyRsvUysQ==
+        b=pbVmWUko8EIn3VxKIW0ult3Zuz5CkjUtFAymk8b8ZJwX9BlYJlWjjFZMiH5bdFbbI
+         Tdx94aGYJYzZfhJetROKRuHyoZNGKfypX46KoZKJch/9rvmhaHlDS+oXzK1ZXLh+YD
+         GFNlPECjgVSAjn1615zi+bceklNTXLGaxMUqkvjwjQgmrtL1VfhtTdiUPrCL8auadR
+         N9e4U4ROmJ98tOcdf5B3b7eNd6zJD1BQS7AsJDP79Xf3/aCZ0SV7MR3xt58e+Z0f2h
+         wRNbBnKszwhMAx/5aY7FmCAi5JuLSBOWWSZP4fx7rWFvkQ/0HfkbvUkXefThX9Xjrh
+         tynlVDrvf2pCg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYR-001Dsp-H9; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYR-001DtA-U9; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v4 67/79] media: venus: vdec: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:28 +0200
-Message-Id: <8541040c4b0830bb2c2f015b8c26c890baa5918a.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 74/79] media: sunxi: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:35 +0200
+Message-Id: <3138e98e18858b3133b9a6e04890c29c731903f3.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -65,31 +65,34 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/vdec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index ddb7cd39424e..347e533ea673 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -568,7 +568,7 @@ static int vdec_pm_get(struct venus_inst *inst)
- 	int ret;
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 4785faddf630..54b909987caa 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -206,9 +206,9 @@ static int sun4i_csi_open(struct file *file)
+ 	if (ret)
+ 		return ret;
  
- 	mutex_lock(&core->pm_lock);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	mutex_unlock(&core->pm_lock);
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
+ 	if (ret < 0)
+-		goto err_pm_put;
++		goto err_unlock;
  
- 	return ret < 0 ? ret : 0;
-@@ -601,7 +601,7 @@ static int vdec_pm_get_put(struct venus_inst *inst)
- 	mutex_lock(&core->pm_lock);
+ 	ret = v4l2_pipeline_pm_get(&csi->vdev.entity);
+ 	if (ret)
+@@ -227,6 +227,8 @@ static int sun4i_csi_open(struct file *file)
  
- 	if (pm_runtime_suspended(dev)) {
--		ret = pm_runtime_get_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0)
- 			goto error;
+ err_pm_put:
+ 	pm_runtime_put(csi->dev);
++
++err_unlock:
+ 	mutex_unlock(&csi->lock);
  
+ 	return ret;
 -- 
 2.30.2
 
