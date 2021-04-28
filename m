@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A1E6C43460
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 17:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF7B1C433B4
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 17:10:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 315536143A
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 17:09:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A194D613B4
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 17:10:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241507AbhD1RKg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 13:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S241488AbhD1RLh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 13:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241483AbhD1RKf (ORCPT
+        with ESMTP id S231560AbhD1RLg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 13:10:35 -0400
+        Wed, 28 Apr 2021 13:11:36 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA7FC061573;
-        Wed, 28 Apr 2021 10:09:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE841C061573;
+        Wed, 28 Apr 2021 10:10:51 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 986DE1F42B77
-Message-ID: <a56aee6c6e80cc0166cec9b0a331873e9651df0a.camel@collabora.com>
-Subject: Re: [PATCH 70/78] media: rga-buf: use pm_runtime_resume_and_get()
+        with ESMTPSA id 05A351F42B77
+Message-ID: <00113d54d30be862195b736a5e5026eab8f6b5ec.camel@collabora.com>
+Subject: Re: [PATCH v3 11/79] media: rga-buf: use pm_runtime_resume_and_get()
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
@@ -36,10 +36,10 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Date:   Wed, 28 Apr 2021 14:09:40 -0300
-In-Reply-To: <d81e6df2d1a77dc70a4172b77fc15576010e05b3.1619191723.git.mchehab+huawei@kernel.org>
-References: <cover.1619191723.git.mchehab+huawei@kernel.org>
-         <d81e6df2d1a77dc70a4172b77fc15576010e05b3.1619191723.git.mchehab+huawei@kernel.org>
+Date:   Wed, 28 Apr 2021 14:10:41 -0300
+In-Reply-To: <a9099f1ffc537e5f997cb260a175715892387c5a.1619519080.git.mchehab+huawei@kernel.org>
+References: <cover.1619519080.git.mchehab+huawei@kernel.org>
+         <a9099f1ffc537e5f997cb260a175715892387c5a.1619519080.git.mchehab+huawei@kernel.org>
 Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.2-1 
@@ -49,7 +49,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 2021-04-24 at 08:45 +0200, Mauro Carvalho Chehab wrote:
+On Tue, 2021-04-27 at 12:26 +0200, Mauro Carvalho Chehab wrote:
 > Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
 > added pm_runtime_resume_and_get() in order to automatically handle
 > dev->power.usage_count decrement on errors.
@@ -58,14 +58,18 @@ On Sat, 2021-04-24 at 08:45 +0200, Mauro Carvalho Chehab wrote:
 > 
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
+Sorry, I just replied to the wrong patch version.
+Again:
 
 Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 
 Thanks,
+Ezequiel
 
 > ---
 >  drivers/media/platform/rockchip/rga/rga-buf.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/media/platform/rockchip/rga/rga.c     | 4 +++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
 > index bf9a75b75083..81508ed5abf3 100644
@@ -82,5 +86,20 @@ Thanks,
 >                 rga_buf_return_buffers(q, VB2_BUF_STATE_QUEUED);
 >                 return ret;
 >         }
+> diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+> index 9d122429706e..bf3fd71ec3af 100644
+> --- a/drivers/media/platform/rockchip/rga/rga.c
+> +++ b/drivers/media/platform/rockchip/rga/rga.c
+> @@ -866,7 +866,9 @@ static int rga_probe(struct platform_device *pdev)
+>                 goto unreg_video_dev;
+>         }
+>  
+> -       pm_runtime_get_sync(rga->dev);
+> +       ret = pm_runtime_resume_and_get(rga->dev);
+> +       if (ret < 0)
+> +               goto unreg_video_dev;
+>  
+>         rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
+>         rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
 
 
