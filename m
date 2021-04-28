@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C28D9C4360C
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F57C43462
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3BB061474
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4A1461443
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240482AbhD1OyM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:54:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36740 "EHLO mail.kernel.org"
+        id S240617AbhD1OzL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240307AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3655361492;
+        id S240390AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD41A6193D;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=LvHrsFJn6JLbIexuKZaI+hIEIjqhrM13uG8Z/t+ytHI=;
+        bh=EG1Xkz5icS6rCKpEKVZN/X2JADr2Ee/ss00sHCZahe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acFeyWG85zM1TfdpyNY0FZBPG5b58t8Qda7XOXB/zjd1Di+P+E5Ci61lCLVsh36gs
-         VtP1u3jvm640btrrknoGENeGr8LaSZ8tj/a1xr11u32LsCPQLhOQApFtrDzbrHvVSN
-         6zPh8Sq5pzvrAi1VUvgpQjkyzKLaq9D6jt9zmTG21Kfa8+CEl5bOckwJnkZjDxg2p4
-         mIhWMCa9AxkGFJkgugn+wmKTgU8bwBP+LRKdCXrlx7RochlM6Ek2V4dxKEsybL5Uri
-         ZhaeqoGJqeZre6m/1ZcX+rG0WShzfbrFslKp1KyoVwML0IkC7RnNlfMGkPqySc/WOc
-         9YFoyADpXvUdw==
+        b=oCHpn+fmwGV/kArmNSoUSn/jMNhaV6E/cELb1239AFp7tEHpXStLvOGkkClPlKqHs
+         S7Qm6nNL7QYa6ulOnG4byCCfTYEem7BFawbiEPTRfzL7bx/AnCwg77yK0FW7b2ZG25
+         OuBvkfQq1VMaaAzRwwV2KPZqEWGdoYalLtmAiKFIjXcFNilFv4IQA+gljSNBPDmclI
+         Fp9MWk+QZqamavqShzSNyVX15Gt7jXrKM5+jwLX5Bb+QL7MSA1f13GVKKe1Dd3ziD/
+         qufSXKj3aJNvEcWVz+MZc5fJCke6X8fF7Yrlott+4MqITcC6qdWAXSq0h3sPOIM/5W
+         NTnDpyOaC0YSg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001DqY-4f; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYP-001Dpf-JZ; Wed, 28 Apr 2021 16:52:41 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kamil Debski <kamil@wypas.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH v4 20/79] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:41 +0200
-Message-Id: <4bc46252a7c7ae3612da6da8620ef7db775e27ca.1619621413.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v4 02/79] media: s6p_cec: decrement usage count if disabled
+Date:   Wed, 28 Apr 2021 16:51:23 +0200
+Message-Id: <2c52c48533f6eafdb7b9c72ee2f02747e851a983.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -56,32 +58,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+There's a bug at s5p_cec_adap_enable(): if called to
+disable the device, it should call pm_runtime_put()
+instead of pm_runtime_disable(), as the goal here is to
+decrement the usage_count and not to disable PM runtime.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reported-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Fixes: 1bcbf6f4b6b0 ("[media] cec: s5p-cec: Add s5p-cec driver")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 2 +-
+ drivers/media/cec/platform/s5p/s5p_cec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index d821661d30f3..8c17615f3a7a 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
- 	if (WARN_ON(!desc))
- 		return;
+diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
+index 2a3e7ffefe0a..3c7c4c3c798c 100644
+--- a/drivers/media/cec/platform/s5p/s5p_cec.c
++++ b/drivers/media/cec/platform/s5p/s5p_cec.c
+@@ -51,7 +51,7 @@ static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
+ 	} else {
+ 		s5p_cec_mask_tx_interrupts(cec);
+ 		s5p_cec_mask_rx_interrupts(cec);
+-		pm_runtime_disable(cec->dev);
++		pm_runtime_put(cec->dev);
+ 	}
  
--	ret = pm_runtime_get_sync(rkvdec->dev);
-+	ret = pm_runtime_resume_and_get(rkvdec->dev);
- 	if (ret < 0) {
- 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
- 		return;
+ 	return 0;
 -- 
 2.30.2
 
