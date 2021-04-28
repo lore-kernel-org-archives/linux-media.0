@@ -4,49 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC000C0502F
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A681C05031
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F5AD61449
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D94161441
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240688AbhD1OzX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36738 "EHLO mail.kernel.org"
+        id S240328AbhD1OzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37052 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240400AbhD1Oxs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9882D6192C;
+        id S240389AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BAA6A61946;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619621565;
-        bh=Z5Yp+Q0q2yqOayRyZCcv1BilN9Ip1CW26ivzhLbxUjE=;
+        s=k20201202; t=1619621564;
+        bh=hgVIRXIaDP3qryP6Ow1GN4bGxSo94x3BXa49gnOI5oU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N6119slbKp7xKpHK7jY2N8QjZug1qcVWXOfLByFNNeGoy3Vj3JMny2WxtD3OXQZoe
-         rNwfv3MIW+m4EAbkrPp/7C2duKZV0SMWzp00ls4/aXYbJzf4ILmBzgnv3OSRMXptP1
-         ZMpgf5x9q6W1XIaYKYJiQq7Az7WcT2yJl1E9zIX/9sPSUgckGx7jXJzO75mqUfgubL
-         71QkdB7FU4/t66ILdDfb+Q0CQVdhLaghByNUq0tSSWG2IgezZsDbcs5OFUvoI9TPxk
-         5x0CA8cav47vhS4QFCvVvpj+dbNhxfyXYYGQcj8k0fBH85+IPu+HrzihfwHzzsmxWa
-         ILJ4mlCf07p0A==
+        b=f3h0eGdXeU42FbQX5nXsu8h3s9APwtyEpXw3+LibpCG6kLrIt6BDyl+FtHQRSKps4
+         Xhc7aPhob8HM6cDJI/26PfL4pGqBkbBGn5DRD3AEyYJ1Gs8OlglLJGBpNQ8tszHOfg
+         uKV5jGBMbk9GHqLZUwR5AefUY3Um86Xr9+SBCA+CSf5nLaaBwhgPfBIyCTfzUhp611
+         DUBoXfgBZPlzlkMUNqBGlc+Yo+VBU+H+2TS2HbWQ+8JuFmL8DgOGMQzE0Xffh3cPEx
+         iOHXAiIVXE0oM7MZChxs+x27CwUnWajos/IIxVzKEKHQ2H38KzEN1mjHEvg7PUGkg0
+         77dxm2LOWJnYQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYR-001Dsd-DE; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYR-001DsI-6N; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v4 63/79] media: exynos-gsc: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:24 +0200
-Message-Id: <31bdadf2f59e86c6a315ec390b44c6c681af6647.1619621413.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v4 56/79] media: i2c: video-i2c: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:17 +0200
+Message-Id: <9798637a8003329b10992d1d983041387b2c6677.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -64,25 +60,43 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/exynos-gsc/gsc-m2m.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/video-i2c.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
-index 27a3c92c73bc..09551e96ac15 100644
---- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
-+++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
-@@ -58,7 +58,7 @@ static int gsc_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct gsc_ctx *ctx = q->drv_priv;
- 	int ret;
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index c9a774f4c8d2..910a139c5e14 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -286,11 +286,9 @@ static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
+ 	__le16 buf;
+ 	int tmp;
  
--	ret = pm_runtime_get_sync(&ctx->gsc_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->gsc_dev->pdev->dev);
- 	return ret > 0 ? 0 : ret;
- }
+-	tmp = pm_runtime_get_sync(regmap_get_device(data->regmap));
+-	if (tmp < 0) {
+-		pm_runtime_put_noidle(regmap_get_device(data->regmap));
++	tmp = pm_runtime_resume_and_get(regmap_get_device(data->regmap));
++	if (tmp < 0)
+ 		return tmp;
+-	}
  
+ 	tmp = regmap_bulk_read(data->regmap, AMG88XX_REG_TTHL, &buf, 2);
+ 	pm_runtime_mark_last_busy(regmap_get_device(data->regmap));
+@@ -512,11 +510,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (data->kthread_vid_cap)
+ 		return 0;
+ 
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
+ 		goto error_del_list;
+-	}
+ 
+ 	ret = data->chip->setup(data);
+ 	if (ret)
 -- 
 2.30.2
 
