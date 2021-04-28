@@ -7,43 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53003C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B76C43460
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14D4561435
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65F3B61008
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240296AbhD1Oxb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
+        id S240308AbhD1Oxe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35918 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240269AbhD1Ox3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240271AbhD1Ox3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C0EE461447;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C8FBF6144B;
         Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621563;
-        bh=vSVgVx9oCI4BykR40BTa4+7tin+dlK2U4+Benc8+UkQ=;
+        bh=gtR1SkTiYJ9WApgVEIkptCtIXyrWDvbS/bAOqzd9AhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IjmvDkezJvua0hzghdBZ4nL75WLBAmx7//xkI7b0W/JXRMiVDeYzNgmx38tXV6rku
-         2q68MMjEiNSRUwocDaahV8E0WBTtGDrvkm8d6v+ORAoUXoy+S9eKyGbvHPmYTzrsCN
-         eSZufzbPLh+8YA1rodM3dX3zHPoH0mlG71MUW7LVl8VrwLLxZapIP3SvpTTOy2YG//
-         +IdV1llrv2lUlxrSAluaiNTWrVadyvKZohfQJ0U5ee90AstCGV1sYU+jJTX17V2M7a
-         ZV12rplqUy8Gv8Is3Nqj0ojpD43bBz44OSk4aP7/TMKJe8LkybBF4Uimksyv1CVLLz
-         yf2W3T81gkrrQ==
+        b=gui+r5mJheRBaT22aO45UqdlZpSqT3zQNryWIJ3tgxQsIurCryHjrbsq/jbdeGMs0
+         023zuja4D3XR8G280J5skQNG/R3/UneayZ0i/1mdelWGommQEvO+7uNuPLCYV0PcZt
+         bJ+OME3IvhFDTZlsy2/+Unz3JxPpyv1gixe0930RqL5dB4bA3lidAbyXDsC/o4+9Y5
+         NzqOEeyHarutwxhTJcGPCVObkCgs1lJUpSxJPIHPUYKMIBqnFsgnOmyBKAs/w5Ave4
+         OxHisHh8zhy1bGGNpC0edJXgfLrysSEh7D3j3Bzk4hfi7r2tzmoHEvuAU4vxhqR6c3
+         ycWEI0B0NRP+w==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001Dq7-ST; Wed, 28 Apr 2021 16:52:41 +0200
+        id 1lblYP-001Dpv-OZ; Wed, 28 Apr 2021 16:52:41 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 11/79] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:32 +0200
-Message-Id: <6fb49df1ba7c80c2e6c51fb95322e025243ce36c.1619621413.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v4 07/79] media: exynos-gsc: don't resume at remove time
+Date:   Wed, 28 Apr 2021 16:51:28 +0200
+Message-Id: <210a2eee928d2ae7aee65e177f20cfb3f00e29ee.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -55,52 +57,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Calling pm_runtime_get_sync() at driver's removal time is not
+needed, as this will resume PM runtime. Also, the PM runtime
+code at pm_runtime_disable() already calls it, if it detects
+the need.
 
-Also, right now, the driver is ignoring any troubles when
-trying to do PM resume. So, add the proper error handling
-for the code.
+So, change the logic in order to disable PM runtime earlier.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/rcar_fdp1.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/media/platform/exynos-gsc/gsc-core.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 01c1fbb97bf6..c32d237af618 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -2140,7 +2140,13 @@ static int fdp1_open(struct file *file)
- 	}
+diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/exynos-gsc/gsc-core.c
+index 9f41c2e7097a..8b943075c503 100644
+--- a/drivers/media/platform/exynos-gsc/gsc-core.c
++++ b/drivers/media/platform/exynos-gsc/gsc-core.c
+@@ -1210,18 +1210,19 @@ static int gsc_remove(struct platform_device *pdev)
+ 	struct gsc_dev *gsc = platform_get_drvdata(pdev);
+ 	int i;
  
- 	/* Perform any power management required */
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0) {
-+		v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+		v4l2_ctrl_handler_free(&ctx->hdl);
-+		kfree(ctx);
-+		goto done;
-+	}
+-	pm_runtime_get_sync(&pdev->dev);
+-
+ 	gsc_unregister_m2m_device(gsc);
+ 	v4l2_device_unregister(&gsc->v4l2_dev);
  
- 	v4l2_fh_add(&ctx->fh);
+ 	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
+-	for (i = 0; i < gsc->num_clocks; i++)
+-		clk_disable_unprepare(gsc->clock[i]);
  
-@@ -2351,7 +2357,9 @@ static int fdp1_probe(struct platform_device *pdev)
+-	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
  
- 	/* Power up the cells to read HW */
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_sync(fdp1->dev);
-+	ret = pm_runtime_resume_and_get(fdp1->dev);
-+	if (ret < 0)
-+		return ret;
- 
- 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
- 	switch (hw_version) {
++	if (!pm_runtime_status_suspended(dev))
++		for (i = 0; i < gsc->num_clocks; i++)
++			clk_disable_unprepare(gsc->clock[i]);
++
++	pm_runtime_set_suspended(dev);
++
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
+ 	return 0;
+ }
 -- 
 2.30.2
 
