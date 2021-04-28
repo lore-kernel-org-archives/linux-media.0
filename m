@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBDD7C43618
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354D7C4361B
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD6DE61442
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19FA561151
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240283AbhD1Oyy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:54:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
+        id S240614AbhD1OzD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36324 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240282AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 386906161E;
+        id S240316AbhD1Oxg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B981616EC;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=ZOYDC8nizVOemN97ng0w67F2uxMXkIsqLhOdGgCw1ys=;
+        bh=EtwXuWKAdBECD8A9F71A3QjhWQorK36ErcFvypC9txw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VgxbE4mJ0ZEcoI1ecyYFcTPlzsW49H2M63eqo68iaWSmjvRqXboDB5xQMbytGDWQk
-         76GoPeVrxn1RYKVBnd+MXI44IscCshuUzdKYOISFkyavzinHVX6S9dQvZuYZ/c0kKr
-         lG9PDH6exDcSyX5wsHVpaEVPDOkv77fIeL82HhbEgta0782dmoBWO8yOY3Bc7nwAM+
-         GxYxl53JlYU7btpAVOW3OIcuxKbhQ13c/LFfcBMSEltOF4Fgc6TacvT9CYVM7Io6uw
-         TJts9T+pQndgP3gPyl5Y7itlI8I7H01MRldR5N33kS1+NZ3cVPZdxmT1j4pM5o43zS
-         SPIku5x/jRyKw==
+        b=fCTc+k2YZX8hZiejt9I8bK4k/2/w0NppXnV/d8io4z17B5RQlgUuTTn+J714aG1cU
+         5cYZzliS8FH1qWE+Ay3QGpjT00qZRdhNR2tGwrHMvtRU5mjwN2ZKlOLe0efI9814tx
+         4jlLh6lN3beJjvR5aqXG9mwNq57KZnGDjW58HCDiI812U1Jy2bafbwAXRXPzKa+OiV
+         zLmxqAj1cTJHiAaU/SbD8VJcS48Tv7iwYxGsn0kzanQ3OTdq6ckqyiddRFJOq3YC8g
+         murVpdvN4shEZDlc3mMP5KLe8xR1Ex1MEs8oIs4tcQlXok11CNw9Hl97by3XgiB6Hm
+         d0wUoFr9k2vSA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001Dqb-5a; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYQ-001Dqq-AJ; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v4 21/79] staging: media: atomisp: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:51:42 +0200
-Message-Id: <18b1c2debc56925d9caf2d67a794f761557a26f4.1619621413.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v4 26/79] staging: media: tegra-video: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:51:47 +0200
+Message-Id: <956254cdffbc7d07b30e41f7b7cb41cf60bbfc72.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -64,34 +66,42 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/tegra-video/csi.c | 3 +--
+ drivers/staging/media/tegra-video/vi.c  | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index f1e6b2597853..26d05474a035 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -837,7 +837,7 @@ static int atomisp_open(struct file *file)
+diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+index 033a6935c26d..e938bf4c48b6 100644
+--- a/drivers/staging/media/tegra-video/csi.c
++++ b/drivers/staging/media/tegra-video/csi.c
+@@ -298,10 +298,9 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
+ 	struct tegra_csi *csi = csi_chan->csi;
+ 	int ret, err;
+ 
+-	ret = pm_runtime_get_sync(csi->dev);
++	ret = pm_runtime_resume_and_get(csi->dev);
+ 	if (ret < 0) {
+ 		dev_err(csi->dev, "failed to get runtime PM: %d\n", ret);
+-		pm_runtime_put_noidle(csi->dev);
+ 		return ret;
  	}
  
- 	/* runtime power management, turn on ISP */
--	ret = pm_runtime_get_sync(vdev->v4l2_dev->dev);
-+	ret = pm_runtime_resume_and_get(vdev->v4l2_dev->dev);
- 	if (ret < 0) {
- 		dev_err(isp->dev, "Failed to power on device\n");
- 		goto error;
-@@ -881,9 +881,9 @@ static int atomisp_open(struct file *file)
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 7a09061cda57..1298740a9c6c 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -297,10 +297,9 @@ static int tegra_channel_start_streaming(struct vb2_queue *vq, u32 count)
+ 	struct tegra_vi_channel *chan = vb2_get_drv_priv(vq);
+ 	int ret;
  
- css_error:
- 	atomisp_css_uninit(isp);
--error:
--	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
- 	pm_runtime_put(vdev->v4l2_dev->dev);
-+error:
-+	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
- 	rt_mutex_unlock(&isp->mutex);
- 	return ret;
- }
+-	ret = pm_runtime_get_sync(chan->vi->dev);
++	ret = pm_runtime_resume_and_get(chan->vi->dev);
+ 	if (ret < 0) {
+ 		dev_err(chan->vi->dev, "failed to get runtime PM: %d\n", ret);
+-		pm_runtime_put_noidle(chan->vi->dev);
+ 		return ret;
+ 	}
+ 
 -- 
 2.30.2
 
