@@ -2,737 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D798CC43603
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3AA5C43461
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:27:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A24A061431
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82BB061412
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:27:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239236AbhD1KTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 06:19:35 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:54771 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239153AbhD1KTd (ORCPT
+        id S239397AbhD1K23 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 06:28:29 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:60782 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230057AbhD1K23 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 06:19:33 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id bhHFlUpapk1MGbhHLlO0ct; Wed, 28 Apr 2021 12:18:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1619605127; bh=qnRWZ9jNr8S3ac6vUCTznkjFBMzjt5QS+nFSaHzGXA0=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=ufS143DV/NgGBeQD4urm7aMlS2RIP7dVXeNb6RdIdndom4Gr/z8TSwY+SK7AJ8y1C
-         CF7Nw/DRPnIw7fDLOPi2Jw338Mf4js8zJIDgw63z+7tTHY8IZqRfqXf+VLDOURWXam
-         6Fczl5YXPlSP4MK0JhsFUYBnJu2HUSMmBQf5HUUT2/pD15nuqnxPwFRfC23xC7tbDQ
-         i0lkl8IpdYDEWTG7ta1136zIJB+LXsQ9QHocPym47T021MDT4q3ndSCX5gMIkdrIfU
-         OUsaRIty7NmMKO6MLHa24dwQRIylijaMiEDs8cDPdfUGQzV0tNDaoSUzLXsfZNU8AE
-         Ti77pD2CmsGRA==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        John Cox <jc@kynesim.co.uk>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 4/5] v4l2-ctrls: add support for dynamically allocated arrays.
-Date:   Wed, 28 Apr 2021 12:18:40 +0200
-Message-Id: <20210428101841.696059-5-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210428101841.696059-1-hverkuil-cisco@xs4all.nl>
-References: <20210428101841.696059-1-hverkuil-cisco@xs4all.nl>
+        Wed, 28 Apr 2021 06:28:29 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13SAJgHG028469;
+        Wed, 28 Apr 2021 10:27:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=/9bdy+kzg4LBC9GOs35QE7gzX2rzLE0q9ZrYqic5tDo=;
+ b=OgLS7bCQgAPFUiyCwHu5yDfZ3ERgdb670Eu/+07vdlZZEs1GG1sGux40nTY01MWjfjDL
+ SXapLXlJQ7X3pJcLMmycToHbymzCkaITANGVRG32ocini3T5u/ZfzHVsRJQNi2PgzlvC
+ mJiwKE7X2QBSpfbiHY+/ZGiWI84G3L9KrZauBDWNG5x54iRwJFc5stTQ8IFu3ayyHLTw
+ JIWJT5YYu53hYbM6edt5hyNunkv3j5b/xbGmbfIbEJPxrg4AMhJPVbuUbjCHHgZ2M4Gf
+ NmY03XSjvmZrshMSvRV6LiVjCyeR62HHGbiGrJHNJZ7zFzpvincOYZe4/dswChZWwJhX Nw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 385aeq0bgk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Apr 2021 10:27:27 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13SAPpbU103461;
+        Wed, 28 Apr 2021 10:27:27 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 384b588r27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Apr 2021 10:27:27 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 13SARQOM109362;
+        Wed, 28 Apr 2021 10:27:26 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 384b588r1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Apr 2021 10:27:26 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 13SARO44030660;
+        Wed, 28 Apr 2021 10:27:25 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 28 Apr 2021 03:27:24 -0700
+Date:   Wed, 28 Apr 2021 13:27:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 3/6] staging: media: atomisp: use __func__ over
+ function names
+Message-ID: <20210428102717.GT1981@kadam>
+References: <cover.1619199344.git.drv@mailo.com>
+ <2cb42846abb7cab5e64bc29d5e496766f5df169b.1619199344.git.drv@mailo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfInoWTSa9uA8IlVB1DRd/QOYrlb8CaXXFV0IJDu/ZUEW0k7dMrVtQpew9UCaM40YoEtwOjSdVagoxoMWMIqMh9Qt4fDOC2SdSJcL0GjlGPsh+N1NsKqQ
- 6B3BLZdfUDgfV5wnEem2TyGF85xH8Zn+MiXbk521UYA69Pl10WcbAmwPdJ3O2anWGDkZiCKzwOUoDgAOpA2JstTUZU+CLGUik++A1XqwY/8YxKbuRu1ipIK8
- 7h1Typ1vh03I99oIfyOe9UKSOtYTdEvuftUWyix+paPBsxRLVGYC3Xji9cTDdjq+uCbjNsDVs5hX9SaLXRwYmP43IkRvPhDcjia+eV+VBZs=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cb42846abb7cab5e64bc29d5e496766f5df169b.1619199344.git.drv@mailo.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-ORIG-GUID: i1J6sYWtyRlk7DSJCKfE0jF4h4WvARt-
+X-Proofpoint-GUID: i1J6sYWtyRlk7DSJCKfE0jF4h4WvARt-
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9967 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104280068
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement support for dynamically allocated arrays.
+On Sun, Apr 25, 2021 at 02:13:15PM +0530, Deepak R Varma wrote:
+> Replace hard coded function names from the debug print strings by
+> standard __func__ predefined identifier. This resolves following
+> checkpatch script WARNING:
+> Prefer using '"%s...", __func__' to using function's name, in a string.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> 
+> Changes since v2:
+>    - None.
+> Changes since v1:
+>    - None.
+> 
+>  .../staging/media/atomisp/i2c/atomisp-gc0310.c   |  2 +-
+>  .../staging/media/atomisp/i2c/atomisp-gc2235.c   |  2 +-
+>  .../staging/media/atomisp/i2c/atomisp-lm3554.c   |  2 +-
+>  .../staging/media/atomisp/i2c/atomisp-ov2680.c   | 16 ++++++++--------
+>  .../staging/media/atomisp/i2c/atomisp-ov2722.c   |  2 +-
+>  5 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
+> index d68a2bcc9ae1..b572551f1a0d 100644
+> --- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
+> +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
+> @@ -1292,7 +1292,7 @@ static int gc0310_remove(struct i2c_client *client)
+>  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>  	struct gc0310_device *dev = to_gc0310_sensor(sd);
+>  
+> -	dev_dbg(&client->dev, "gc0310_remove...\n");
+> +	dev_dbg(&client->dev, "%s...\n", __func__);
+>  
+>  	dev->platform_data->csi_cfg(sd, 0);
+>  
+> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+> index e722c639b60d..548c572d3b57 100644
+> --- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+> +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+> @@ -1034,7 +1034,7 @@ static int gc2235_remove(struct i2c_client *client)
+>  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>  	struct gc2235_device *dev = to_gc2235_sensor(sd);
+>  
+> -	dev_dbg(&client->dev, "gc2235_remove...\n");
+> +	dev_dbg(&client->dev, "%s...\n", __func__);
 
-Most of the changes concern keeping track of the number of elements
-of the array and the number of elements allocated for the array and
-reallocating memory if needed.
+Just delete printks that only print the function name.  We have ftrace
+for that.  There are several others below.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/v4l2-core/v4l2-ctrls-api.c     | 103 ++++++++---
- drivers/media/v4l2-core/v4l2-ctrls-core.c    | 178 +++++++++++++++----
- drivers/media/v4l2-core/v4l2-ctrls-priv.h    |   3 +-
- drivers/media/v4l2-core/v4l2-ctrls-request.c |  13 +-
- include/media/v4l2-ctrls.h                   |  42 ++++-
- 5 files changed, 269 insertions(+), 70 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-index db9baa0bd05f..031cb2a93545 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-@@ -97,29 +97,47 @@ static int def_to_user(struct v4l2_ext_control *c, struct v4l2_ctrl *ctrl)
- 	return ptr_to_user(c, ctrl, ctrl->p_new);
- }
- 
--/* Helper function: copy the caller-provider value to the given control value */
--static int user_to_ptr(struct v4l2_ext_control *c,
--		       struct v4l2_ctrl *ctrl,
--		       union v4l2_ctrl_ptr ptr)
-+/* Helper function: copy the caller-provider value as the new control value */
-+static int user_to_new(struct v4l2_ext_control *c, struct v4l2_ctrl *ctrl)
- {
- 	int ret;
- 	u32 size;
- 
--	ctrl->is_new = 1;
-+	ctrl->is_new = 0;
-+	if (ctrl->is_dyn_array &&
-+	    c->size > ctrl->p_dyn_alloc_elems * ctrl->elem_size) {
-+		void *old = ctrl->p_dyn;
-+		void *tmp = kvzalloc(2 * c->size, GFP_KERNEL);
-+
-+		if (!tmp)
-+			return -ENOMEM;
-+		memcpy(tmp, ctrl->p_new.p, ctrl->elems * ctrl->elem_size);
-+		memcpy(tmp + c->size, ctrl->p_cur.p, ctrl->elems * ctrl->elem_size);
-+		ctrl->p_new.p = tmp;
-+		ctrl->p_cur.p = tmp + c->size;
-+		ctrl->p_dyn = tmp;
-+		ctrl->p_dyn_alloc_elems = c->size / ctrl->elem_size;
-+		kvfree(old);
-+	}
-+
- 	if (ctrl->is_ptr && !ctrl->is_string) {
-+		unsigned int elems = c->size / ctrl->elem_size;
- 		unsigned int idx;
- 
--		ret = copy_from_user(ptr.p, c->ptr, c->size) ? -EFAULT : 0;
--		if (ret || !ctrl->is_array)
--			return ret;
--		for (idx = c->size / ctrl->elem_size; idx < ctrl->elems; idx++)
--			ctrl->type_ops->init(ctrl, idx, ptr);
-+		if (copy_from_user(ctrl->p_new.p, c->ptr, c->size))
-+			return -EFAULT;
-+		ctrl->is_new = 1;
-+		if (ctrl->is_dyn_array)
-+			ctrl->new_elems = elems;
-+		else if (ctrl->is_array)
-+			for (idx = elems; idx < ctrl->elems; idx++)
-+				ctrl->type_ops->init(ctrl, idx, ctrl->p_new);
- 		return 0;
- 	}
- 
- 	switch (ctrl->type) {
- 	case V4L2_CTRL_TYPE_INTEGER64:
--		*ptr.p_s64 = c->value64;
-+		*ctrl->p_new.p_s64 = c->value64;
- 		break;
- 	case V4L2_CTRL_TYPE_STRING:
- 		size = c->size;
-@@ -127,32 +145,27 @@ static int user_to_ptr(struct v4l2_ext_control *c,
- 			return -ERANGE;
- 		if (size > ctrl->maximum + 1)
- 			size = ctrl->maximum + 1;
--		ret = copy_from_user(ptr.p_char, c->string, size) ? -EFAULT : 0;
-+		ret = copy_from_user(ctrl->p_new.p_char, c->string, size) ? -EFAULT : 0;
- 		if (!ret) {
--			char last = ptr.p_char[size - 1];
-+			char last = ctrl->p_new.p_char[size - 1];
- 
--			ptr.p_char[size - 1] = 0;
-+			ctrl->p_new.p_char[size - 1] = 0;
- 			/*
- 			 * If the string was longer than ctrl->maximum,
- 			 * then return an error.
- 			 */
--			if (strlen(ptr.p_char) == ctrl->maximum && last)
-+			if (strlen(ctrl->p_new.p_char) == ctrl->maximum && last)
- 				return -ERANGE;
- 		}
- 		return ret;
- 	default:
--		*ptr.p_s32 = c->value;
-+		*ctrl->p_new.p_s32 = c->value;
- 		break;
- 	}
-+	ctrl->is_new = 1;
- 	return 0;
- }
- 
--/* Helper function: copy the caller-provider value as the new control value */
--static int user_to_new(struct v4l2_ext_control *c, struct v4l2_ctrl *ctrl)
--{
--	return user_to_ptr(c, ctrl, ctrl->p_new);
--}
--
- /*
-  * VIDIOC_G/TRY/S_EXT_CTRLS implementation
-  */
-@@ -254,7 +267,31 @@ static int prepare_ext_ctrls(struct v4l2_ctrl_handler *hdl,
- 			have_clusters = true;
- 		if (ctrl->cluster[0] != ctrl)
- 			ref = find_ref_lock(hdl, ctrl->cluster[0]->id);
--		if (ctrl->is_ptr && !ctrl->is_string) {
-+		if (ctrl->is_dyn_array) {
-+			unsigned int max_size = ctrl->dims[0] * ctrl->elem_size;
-+			unsigned int tot_size = ctrl->elem_size;
-+
-+			if (cs->which == V4L2_CTRL_WHICH_REQUEST_VAL)
-+				tot_size *= ref->p_req_elems;
-+			else
-+				tot_size *= ctrl->elems;
-+
-+			c->size = ctrl->elem_size * (c->size / ctrl->elem_size);
-+			if (get) {
-+				if (c->size < tot_size) {
-+					c->size = tot_size;
-+					return -ENOSPC;
-+				}
-+				c->size = tot_size;
-+			} else {
-+				if (c->size > max_size) {
-+					c->size = max_size;
-+					return -ENOSPC;
-+				}
-+				if (!c->size)
-+					return -EFAULT;
-+			}
-+		} else if (ctrl->is_ptr && !ctrl->is_string) {
- 			unsigned int tot_size = ctrl->elems * ctrl->elem_size;
- 
- 			if (c->size < tot_size) {
-@@ -346,7 +383,7 @@ static int class_check(struct v4l2_ctrl_handler *hdl, u32 which)
-  *
-  * Note that v4l2_g_ext_ctrls_common() with 'which' set to
-  * V4L2_CTRL_WHICH_REQUEST_VAL is only called if the request was
-- * completed, and in that case valid_p_req is true for all controls.
-+ * completed, and in that case p_req_valid is true for all controls.
-  */
- int v4l2_g_ext_ctrls_common(struct v4l2_ctrl_handler *hdl,
- 			    struct v4l2_ext_controls *cs,
-@@ -430,7 +467,9 @@ int v4l2_g_ext_ctrls_common(struct v4l2_ctrl_handler *hdl,
- 
- 			if (is_default)
- 				ret = def_to_user(cs->controls + idx, ref->ctrl);
--			else if (is_request && ref->valid_p_req)
-+			else if (is_request && ref->p_req_dyn_enomem)
-+				ret = -ENOMEM;
-+			else if (is_request && ref->p_req_valid)
- 				ret = req_to_user(cs->controls + idx, ref);
- 			else if (is_volatile)
- 				ret = new_to_user(cs->controls + idx, ref->ctrl);
-@@ -457,6 +496,17 @@ int v4l2_g_ext_ctrls(struct v4l2_ctrl_handler *hdl, struct video_device *vdev,
- }
- EXPORT_SYMBOL(v4l2_g_ext_ctrls);
- 
-+/* Validate a new control */
-+static int validate_new(const struct v4l2_ctrl *ctrl, union v4l2_ctrl_ptr p_new)
-+{
-+	unsigned idx;
-+	int err = 0;
-+
-+	for (idx = 0; !err && idx < ctrl->new_elems; idx++)
-+		err = ctrl->type_ops->validate(ctrl, idx, p_new);
-+	return err;
-+}
-+
- /* Validate controls. */
- static int validate_ctrls(struct v4l2_ext_controls *cs,
- 			  struct v4l2_ctrl_helper *helpers,
-@@ -872,6 +922,9 @@ int __v4l2_ctrl_s_ctrl_compound(struct v4l2_ctrl *ctrl,
- 	/* It's a driver bug if this happens. */
- 	if (WARN_ON(ctrl->type != type))
- 		return -EINVAL;
-+	/* Setting dynamic arrays is not (yet?) supported. */
-+	if (WARN_ON(ctrl->is_dyn_array))
-+		return -EINVAL;
- 	memcpy(ctrl->p_new.p, p, ctrl->elems * ctrl->elem_size);
- 	return set_ctrl(NULL, ctrl, 0);
- }
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index aa12e4b50a88..ff0fb143c7b0 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -751,11 +751,12 @@ EXPORT_SYMBOL(v4l2_ctrl_notify);
- 
- /* Copy the one value to another. */
- static void ptr_to_ptr(struct v4l2_ctrl *ctrl,
--		       union v4l2_ctrl_ptr from, union v4l2_ctrl_ptr to)
-+		       union v4l2_ctrl_ptr from, union v4l2_ctrl_ptr to,
-+		       unsigned int elems)
- {
- 	if (ctrl == NULL)
- 		return;
--	memcpy(to.p, from.p_const, ctrl->elems * ctrl->elem_size);
-+	memcpy(to.p, from.p_const, elems * ctrl->elem_size);
- }
- 
- /* Copy the new value to the current value. */
-@@ -768,8 +769,11 @@ void new_to_cur(struct v4l2_fh *fh, struct v4l2_ctrl *ctrl, u32 ch_flags)
- 
- 	/* has_changed is set by cluster_changed */
- 	changed = ctrl->has_changed;
--	if (changed)
--		ptr_to_ptr(ctrl, ctrl->p_new, ctrl->p_cur);
-+	if (changed) {
-+		if (ctrl->is_dyn_array)
-+			ctrl->elems = ctrl->new_elems;
-+		ptr_to_ptr(ctrl, ctrl->p_new, ctrl->p_cur, ctrl->elems);
-+	}
- 
- 	if (ch_flags & V4L2_EVENT_CTRL_CH_FLAGS) {
- 		/* Note: CH_FLAGS is only set for auto clusters. */
-@@ -799,36 +803,122 @@ void cur_to_new(struct v4l2_ctrl *ctrl)
- {
- 	if (ctrl == NULL)
- 		return;
--	ptr_to_ptr(ctrl, ctrl->p_cur, ctrl->p_new);
-+	if (ctrl->is_dyn_array)
-+		ctrl->new_elems = ctrl->elems;
-+	ptr_to_ptr(ctrl, ctrl->p_cur, ctrl->p_new, ctrl->new_elems);
-+}
-+
-+static bool req_alloc_dyn_array(struct v4l2_ctrl_ref *ref, u32 elems)
-+{
-+	void *tmp;
-+
-+	if (elems < ref->p_req_dyn_alloc_elems)
-+		return true;
-+
-+	tmp = kvmalloc(elems * ref->ctrl->elem_size, GFP_KERNEL);
-+
-+	if (!tmp) {
-+		ref->p_req_dyn_enomem = true;
-+		return false;
-+	}
-+	ref->p_req_dyn_enomem = false;
-+	kvfree(ref->p_req.p);
-+	ref->p_req.p = tmp;
-+	ref->p_req_dyn_alloc_elems = elems;
-+	return true;
- }
- 
- /* Copy the new value to the request value */
- void new_to_req(struct v4l2_ctrl_ref *ref)
- {
-+	struct v4l2_ctrl *ctrl;
-+
- 	if (!ref)
- 		return;
--	ptr_to_ptr(ref->ctrl, ref->ctrl->p_new, ref->p_req);
--	ref->valid_p_req = true;
-+
-+	ctrl = ref->ctrl;
-+	if (ctrl->is_dyn_array && !req_alloc_dyn_array(ref, ctrl->new_elems))
-+		return;
-+
-+	ref->p_req_elems = ctrl->new_elems;
-+	ptr_to_ptr(ctrl, ctrl->p_new, ref->p_req, ref->p_req_elems);
-+	ref->p_req_valid = true;
- }
- 
- /* Copy the current value to the request value */
- void cur_to_req(struct v4l2_ctrl_ref *ref)
- {
-+	struct v4l2_ctrl *ctrl;
-+
- 	if (!ref)
- 		return;
--	ptr_to_ptr(ref->ctrl, ref->ctrl->p_cur, ref->p_req);
--	ref->valid_p_req = true;
-+
-+	ctrl = ref->ctrl;
-+	if (ctrl->is_dyn_array && !req_alloc_dyn_array(ref, ctrl->elems))
-+		return;
-+
-+	ref->p_req_elems = ctrl->elems;
-+	ptr_to_ptr(ctrl, ctrl->p_cur, ref->p_req, ctrl->elems);
-+	ref->p_req_valid = true;
- }
- 
- /* Copy the request value to the new value */
--void req_to_new(struct v4l2_ctrl_ref *ref)
-+int req_to_new(struct v4l2_ctrl_ref *ref)
- {
-+	struct v4l2_ctrl *ctrl;
-+
- 	if (!ref)
--		return;
--	if (ref->valid_p_req)
--		ptr_to_ptr(ref->ctrl, ref->p_req, ref->ctrl->p_new);
--	else
--		ptr_to_ptr(ref->ctrl, ref->ctrl->p_cur, ref->ctrl->p_new);
-+		return 0;
-+
-+	ctrl = ref->ctrl;
-+
-+	/*
-+	 * This control was never set in the request, so just use the current
-+	 * value.
-+	 */
-+	if (!ref->p_req_valid) {
-+		if (ctrl->is_dyn_array)
-+			ctrl->new_elems = ctrl->elems;
-+		ptr_to_ptr(ctrl, ctrl->p_cur, ctrl->p_new, ctrl->new_elems);
-+		return 0;
-+	}
-+
-+	/* Not a dynamic array, so just copy the request value */
-+	if (!ctrl->is_dyn_array) {
-+		ptr_to_ptr(ctrl, ref->p_req, ctrl->p_new, ctrl->new_elems);
-+		return 0;
-+	}
-+
-+	/* Sanity check, should never happen */
-+	if (WARN_ON(!ref->p_req_dyn_alloc_elems))
-+		return -ENOMEM;
-+
-+	/*
-+	 * Check if the number of elements in the request is more than the
-+	 * elements in ctrl->p_dyn. If so, attempt to realloc ctrl->p_dyn.
-+	 * Note that p_dyn is allocated with twice the number of elements
-+	 * in the dynamic array since it has to store both the current and
-+	 * new value of such a control.
-+	 */
-+	if (ref->p_req_elems > ctrl->p_dyn_alloc_elems) {
-+		unsigned int sz = ref->p_req_elems * ctrl->elem_size;
-+		void *old = ctrl->p_dyn;
-+		void *tmp = kvzalloc(2 * sz, GFP_KERNEL);
-+
-+		if (!tmp)
-+			return -ENOMEM;
-+		memcpy(tmp, ctrl->p_new.p, ctrl->elems * ctrl->elem_size);
-+		memcpy(tmp + sz, ctrl->p_cur.p, ctrl->elems * ctrl->elem_size);
-+		ctrl->p_new.p = tmp;
-+		ctrl->p_cur.p = tmp + sz;
-+		ctrl->p_dyn = tmp;
-+		ctrl->p_dyn_alloc_elems = ref->p_req_elems;
-+		kvfree(old);
-+	}
-+
-+	ctrl->new_elems = ref->p_req_elems;
-+	ptr_to_ptr(ctrl, ref->p_req, ctrl->p_new, ctrl->new_elems);
-+	return 0;
- }
- 
- /* Control range checking */
-@@ -870,17 +960,6 @@ int check_range(enum v4l2_ctrl_type type,
- 	}
- }
- 
--/* Validate a new control */
--int validate_new(const struct v4l2_ctrl *ctrl, union v4l2_ctrl_ptr p_new)
--{
--	unsigned idx;
--	int err = 0;
--
--	for (idx = 0; !err && idx < ctrl->elems; idx++)
--		err = ctrl->type_ops->validate(ctrl, idx, p_new);
--	return err;
--}
--
- /* Set the handler's error code if it wasn't set earlier already */
- static inline int handler_set_err(struct v4l2_ctrl_handler *hdl, int err)
- {
-@@ -925,6 +1004,8 @@ void v4l2_ctrl_handler_free(struct v4l2_ctrl_handler *hdl)
- 	/* Free all nodes */
- 	list_for_each_entry_safe(ref, next_ref, &hdl->ctrl_refs, node) {
- 		list_del(&ref->node);
-+		if (ref->p_req_dyn_alloc_elems)
-+			kvfree(ref->p_req.p);
- 		kfree(ref);
- 	}
- 	/* Free all controls owned by the handler */
-@@ -932,6 +1013,7 @@ void v4l2_ctrl_handler_free(struct v4l2_ctrl_handler *hdl)
- 		list_del(&ctrl->node);
- 		list_for_each_entry_safe(sev, next_sev, &ctrl->ev_subs, node)
- 			list_del(&sev->node);
-+		kvfree(ctrl->p_dyn);
- 		kvfree(ctrl);
- 	}
- 	kvfree(hdl->buckets);
-@@ -1047,7 +1129,7 @@ int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	if (hdl->error)
- 		return hdl->error;
- 
--	if (allocate_req)
-+	if (allocate_req && !ctrl->is_dyn_array)
- 		size_extra_req = ctrl->elems * ctrl->elem_size;
- 	new_ref = kzalloc(sizeof(*new_ref) + size_extra_req, GFP_KERNEL);
- 	if (!new_ref)
-@@ -1206,7 +1288,6 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 			elem_size = sizeof(s32);
- 		break;
- 	}
--	tot_ctrl_size = elem_size * elems;
- 
- 	/* Sanity checks */
- 	if (id == 0 || name == NULL || !elem_size ||
-@@ -1227,17 +1308,34 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 		handler_set_err(hdl, -EINVAL);
- 		return NULL;
- 	}
-+	if (flags & V4L2_CTRL_FLAG_DYNAMIC_ARRAY) {
-+		/*
-+		 * For now only support this for one-dimensional arrays
-+		 * only and not for default compound values.
-+		 *
-+		 * This can be relaxed in the future, but this will
-+		 * require more effort.
-+		 */
-+		if (nr_of_dims != 1 || p_def.p_const) {
-+			handler_set_err(hdl, -EINVAL);
-+			return NULL;
-+		}
-+		/* Start with just 1 element */
-+		elems = 1;
-+	}
- 
-+	tot_ctrl_size = elem_size * elems;
- 	sz_extra = 0;
- 	if (type == V4L2_CTRL_TYPE_BUTTON)
- 		flags |= V4L2_CTRL_FLAG_WRITE_ONLY |
- 			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
- 	else if (type == V4L2_CTRL_TYPE_CTRL_CLASS)
- 		flags |= V4L2_CTRL_FLAG_READ_ONLY;
--	else if (type == V4L2_CTRL_TYPE_INTEGER64 ||
--		 type == V4L2_CTRL_TYPE_STRING ||
--		 type >= V4L2_CTRL_COMPOUND_TYPES ||
--		 is_array)
-+	else if (!(flags & V4L2_CTRL_FLAG_DYNAMIC_ARRAY) &&
-+		 (type == V4L2_CTRL_TYPE_INTEGER64 ||
-+		  type == V4L2_CTRL_TYPE_STRING ||
-+		  type >= V4L2_CTRL_COMPOUND_TYPES ||
-+		  is_array))
- 		sz_extra += 2 * tot_ctrl_size;
- 
- 	if (type >= V4L2_CTRL_COMPOUND_TYPES && p_def.p_const)
-@@ -1266,7 +1364,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	ctrl->is_ptr = is_array || type >= V4L2_CTRL_COMPOUND_TYPES || ctrl->is_string;
- 	ctrl->is_int = !ctrl->is_ptr && type != V4L2_CTRL_TYPE_INTEGER64;
- 	ctrl->is_array = is_array;
-+	ctrl->is_dyn_array = !!(flags & V4L2_CTRL_FLAG_DYNAMIC_ARRAY);
- 	ctrl->elems = elems;
-+	ctrl->new_elems = elems;
- 	ctrl->nr_of_dims = nr_of_dims;
- 	if (nr_of_dims)
- 		memcpy(ctrl->dims, dims, nr_of_dims * sizeof(dims[0]));
-@@ -1279,6 +1379,16 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	ctrl->cur.val = ctrl->val = def;
- 	data = &ctrl[1];
- 
-+	if (ctrl->is_dyn_array) {
-+		ctrl->p_dyn_alloc_elems = elems;
-+		ctrl->p_dyn = kvzalloc(2 * elems * elem_size, GFP_KERNEL);
-+		if (!ctrl->p_dyn) {
-+			kvfree(ctrl);
-+			return NULL;
-+		}
-+		data = ctrl->p_dyn;
-+	}
-+
- 	if (!ctrl->is_int) {
- 		ctrl->p_new.p = data;
- 		ctrl->p_cur.p = data + tot_ctrl_size;
-@@ -1298,6 +1408,7 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	}
- 
- 	if (handler_new_ref(hdl, ctrl, NULL, false, false)) {
-+		kvfree(ctrl->p_dyn);
- 		kvfree(ctrl);
- 		return NULL;
- 	}
-@@ -1635,6 +1746,9 @@ static int cluster_changed(struct v4l2_ctrl *master)
- 			continue;
- 		}
- 
-+		if (ctrl->elems != ctrl->new_elems)
-+			ctrl_changed = true;
-+
- 		for (idx = 0; !ctrl_changed && idx < ctrl->elems; idx++)
- 			ctrl_changed = !ctrl->type_ops->equal(ctrl, idx,
- 				ctrl->p_cur, ctrl->p_new);
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-priv.h b/drivers/media/v4l2-core/v4l2-ctrls-priv.h
-index d4bf2c716f97..aba6176fab6c 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-priv.h
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-priv.h
-@@ -57,10 +57,9 @@ void cur_to_new(struct v4l2_ctrl *ctrl);
- void cur_to_req(struct v4l2_ctrl_ref *ref);
- void new_to_cur(struct v4l2_fh *fh, struct v4l2_ctrl *ctrl, u32 ch_flags);
- void new_to_req(struct v4l2_ctrl_ref *ref);
--void req_to_new(struct v4l2_ctrl_ref *ref);
-+int req_to_new(struct v4l2_ctrl_ref *ref);
- void send_initial_event(struct v4l2_fh *fh, struct v4l2_ctrl *ctrl);
- void send_event(struct v4l2_fh *fh, struct v4l2_ctrl *ctrl, u32 changes);
--int validate_new(const struct v4l2_ctrl *ctrl, union v4l2_ctrl_ptr p_new);
- int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 		    struct v4l2_ctrl *ctrl,
- 		    struct v4l2_ctrl_ref **ctrl_ref,
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-request.c b/drivers/media/v4l2-core/v4l2-ctrls-request.c
-index 7d098f287fd9..c637049d7a2b 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-request.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-request.c
-@@ -143,7 +143,7 @@ v4l2_ctrl_request_hdl_ctrl_find(struct v4l2_ctrl_handler *hdl, u32 id)
- {
- 	struct v4l2_ctrl_ref *ref = find_ref_lock(hdl, id);
- 
--	return (ref && ref->valid_p_req) ? ref->ctrl : NULL;
-+	return (ref && ref->p_req_valid) ? ref->ctrl : NULL;
- }
- EXPORT_SYMBOL_GPL(v4l2_ctrl_request_hdl_ctrl_find);
- 
-@@ -373,7 +373,7 @@ void v4l2_ctrl_request_complete(struct media_request *req,
- 			v4l2_ctrl_unlock(master);
- 			continue;
- 		}
--		if (ref->valid_p_req)
-+		if (ref->p_req_valid)
- 			continue;
- 
- 		/* Copy the current control value into the request */
-@@ -442,7 +442,7 @@ int v4l2_ctrl_request_setup(struct media_request *req,
- 				struct v4l2_ctrl_ref *r =
- 					find_ref(hdl, master->cluster[i]->id);
- 
--				if (r->valid_p_req) {
-+				if (r->p_req_valid) {
- 					have_new_data = true;
- 					break;
- 				}
-@@ -458,7 +458,11 @@ int v4l2_ctrl_request_setup(struct media_request *req,
- 				struct v4l2_ctrl_ref *r =
- 					find_ref(hdl, master->cluster[i]->id);
- 
--				req_to_new(r);
-+				ret = req_to_new(r);
-+				if (ret) {
-+					v4l2_ctrl_unlock(master);
-+					goto error;
-+				}
- 				master->cluster[i]->is_new = 1;
- 				r->req_done = true;
- 			}
-@@ -490,6 +494,7 @@ int v4l2_ctrl_request_setup(struct media_request *req,
- 			break;
- 	}
- 
-+error:
- 	media_request_object_put(obj);
- 	return ret;
- }
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index a5953b812878..ee1d45e5b7e1 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -180,6 +180,8 @@ typedef void (*v4l2_ctrl_notify_fnc)(struct v4l2_ctrl *ctrl, void *priv);
-  *		and/or has type %V4L2_CTRL_TYPE_STRING. In other words, &struct
-  *		v4l2_ext_control uses field p to point to the data.
-  * @is_array: If set, then this control contains an N-dimensional array.
-+ * @is_dyn_array: If set, then this control contains a dynamically sized 1-dimensional array.
-+ *		If this is set, then @is_array is also set.
-  * @has_volatiles: If set, then one or more members of the cluster are volatile.
-  *		Drivers should never touch this flag.
-  * @call_notify: If set, then call the handler's notify function whenever the
-@@ -200,6 +202,9 @@ typedef void (*v4l2_ctrl_notify_fnc)(struct v4l2_ctrl *ctrl, void *priv);
-  * @step:	The control's step value for non-menu controls.
-  * @elems:	The number of elements in the N-dimensional array.
-  * @elem_size:	The size in bytes of the control.
-+ * @new_elems:	The number of elements in p_new. This is the same as @elems,
-+ *		except for dynamic arrays. In that case it is in the range of
-+ *		1 to @p_dyn_alloc_elems.
-  * @dims:	The size of each dimension.
-  * @nr_of_dims:The number of dimensions in @dims.
-  * @menu_skip_mask: The control's skip mask for menu controls. This makes it
-@@ -218,15 +223,21 @@ typedef void (*v4l2_ctrl_notify_fnc)(struct v4l2_ctrl *ctrl, void *priv);
-  *		:math:`ceil(\frac{maximum - minimum}{step}) + 1`.
-  *		Used only if the @type is %V4L2_CTRL_TYPE_INTEGER_MENU.
-  * @flags:	The control's flags.
-- * @cur:	Structure to store the current value.
-- * @cur.val:	The control's current value, if the @type is represented via
-- *		a u32 integer (see &enum v4l2_ctrl_type).
-- * @val:	The control's new s32 value.
-  * @priv:	The control's private pointer. For use by the driver. It is
-  *		untouched by the control framework. Note that this pointer is
-  *		not freed when the control is deleted. Should this be needed
-  *		then a new internal bitfield can be added to tell the framework
-  *		to free this pointer.
-+ * @p_dyn:	Pointer to the dynamically allocated array. Only valid if
-+ *		@is_dyn_array is true.
-+ * @p_dyn_alloc_elems: The number of elements in the dynamically allocated
-+ *		array for both the cur and new values. So @p_dyn is actually
-+ *		sized for 2 * @p_dyn_alloc_elems * @elem_size. Only valid if
-+ *		@is_dyn_array is true.
-+ * @cur:	Structure to store the current value.
-+ * @cur.val:	The control's current value, if the @type is represented via
-+ *		a u32 integer (see &enum v4l2_ctrl_type).
-+ * @val:	The control's new s32 value.
-  * @p_def:	The control's default value represented via a union which
-  *		provides a standard way of accessing control types
-  *		through a pointer (for compound controls only).
-@@ -255,6 +266,7 @@ struct v4l2_ctrl {
- 	unsigned int is_string:1;
- 	unsigned int is_ptr:1;
- 	unsigned int is_array:1;
-+	unsigned int is_dyn_array:1;
- 	unsigned int has_volatiles:1;
- 	unsigned int call_notify:1;
- 	unsigned int manual_mode_value:8;
-@@ -267,6 +279,7 @@ struct v4l2_ctrl {
- 	s64 minimum, maximum, default_value;
- 	u32 elems;
- 	u32 elem_size;
-+	u32 new_elems;
- 	u32 dims[V4L2_CTRL_MAX_DIMS];
- 	u32 nr_of_dims;
- 	union {
-@@ -279,6 +292,8 @@ struct v4l2_ctrl {
- 	};
- 	unsigned long flags;
- 	void *priv;
-+	void *p_dyn;
-+	u32 p_dyn_alloc_elems;
- 	s32 val;
- 	struct {
- 		s32 val;
-@@ -304,12 +319,22 @@ struct v4l2_ctrl {
-  *		the control has been applied. This prevents applying controls
-  *		from a cluster with multiple controls twice (when the first
-  *		control of a cluster is applied, they all are).
-- * @valid_p_req: If set, then p_req contains the control value for the request.
-+ * @p_req_valid: If set, then p_req contains the control value for the request.
-+ * @p_req_dyn_enomem: If set, then p_req is invalid since allocating space for
-+ *		a dynamic array failed. Attempting to read this value shall
-+ *		result in ENOMEM. Only valid if ctrl->is_dyn_array is true.
-+ * @p_req_dyn_alloc_elems: The number of elements allocated for the dynamic
-+ *		array. Only valid if @p_req_valid and ctrl->is_dyn_array are
-+ *		true.
-+ * @p_req_elems: The number of elements in @p_req. This is the same as
-+ *		ctrl->elems, except for dynamic arrays. In that case it is in
-+ *		the range of 1 to @p_req_dyn_alloc_elems. Only valid if
-+ *		@p_req_valid is true.
-  * @p_req:	If the control handler containing this control reference
-  *		is bound to a media request, then this points to the
-  *		value of the control that must be applied when the request
-  *		is executed, or to the value of the control at the time
-- *		that the request was completed. If @valid_p_req is false,
-+ *		that the request was completed. If @p_req_valid is false,
-  *		then this control was never set for this request and the
-  *		control will not be updated when this request is applied.
-  *
-@@ -324,7 +349,10 @@ struct v4l2_ctrl_ref {
- 	struct v4l2_ctrl_helper *helper;
- 	bool from_other_dev;
- 	bool req_done;
--	bool valid_p_req;
-+	bool p_req_valid;
-+	bool p_req_dyn_enomem;
-+	u32 p_req_dyn_alloc_elems;
-+	u32 p_req_elems;
- 	union v4l2_ctrl_ptr p_req;
- };
- 
--- 
-2.30.2
+regards,
+dan carpenter
 
