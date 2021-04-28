@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E190C43462
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7943DC43470
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22A3A61008
+	by mail.kernel.org (Postfix) with ESMTP id 4002A61151
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240477AbhD1OyK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:54:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36738 "EHLO mail.kernel.org"
+        id S240494AbhD1OyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:54:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240306AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240270AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 418ED61624;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DF1B61613;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=9FSuKWFuUqPUC2dP9taAm5sC7kLWnC4fEOP9jl+QpYQ=;
+        bh=/R60wucnhMxzatTcaaq6aX+wA4KyHRrla+Ogrsx7GxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MqiG6OZZyI1IDebZRgl9mjnzxemby+ZAzULilRJTlV4H1IF4cOhxENmXnKzqeMWSh
-         buzwMkYMslsooN0rf7/FWqB/D2e2AaciaVvQjPR7zQAvjrR5BN+iwWX0395+jHoniE
-         exs0ux8DziA1lGRFIGdueXpOr2/cxq+zAuo+blY8qKi+ysXqRsFXJxr7K8bTmhL8ag
-         KAdNhQFE7sDvn8LzZ0F8p8ep+iO6QRlSY4+TATHkglql6oW3rl21VbgQZmblmjve96
-         4BOK8eP39Hc7Alz50+umK8n5RxkuAu1DaRaPK7CDhO2tjHLFV+YPMxA/haVwJwpYoz
-         tgW4ZLVt4m7Nw==
+        b=f9chViMs3E4W7TC7maIn7wiUQ4uOsIa58vIJZBldqJPCAjN4dA9W5L3AtC/OU1w0L
+         jWb1/AbmXGmQkBJqs6e0NgoMgSyrSOXFzGVp4pPSq7hc79Nm55tTclGe3fAUGnVz5e
+         x3NxLPuPGuGyQvb3SwPzRN/7WYpapNMHH0EzZzWrAyHfvrCMY639oNLPRTXWBiK37p
+         Cvp82r/YZagqgx8ZIs1popTCucIkmm/FzXRdBNq3YkSzojrefzlP1NE2UOBS9g4Ycd
+         fwqF6UO6yrZN8Ort/1+xObArJ+FjzZrPdeXISRO2SggVtVcpe/Vp+xJBG/J0TDIHSv
+         mEN1PCZyD5LmA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001Dqh-7V; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYR-001Dt7-RR; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v4 23/79] staging: media: ipu3: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:51:44 +0200
-Message-Id: <ab2332b27d0043574a72a42ec8d757fd06279cc6.1619621413.git.mchehab+huawei@kernel.org>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v4 73/79] media: stm32: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:34 +0200
+Message-Id: <cd918677e36e89196670cacd7027569e741f7d98.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -66,25 +66,35 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/ipu3/ipu3.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/stm32/stm32-dcmi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
-index ee1bba6bdcac..8e1e9e46e604 100644
---- a/drivers/staging/media/ipu3/ipu3.c
-+++ b/drivers/staging/media/ipu3/ipu3.c
-@@ -392,10 +392,9 @@ int imgu_s_stream(struct imgu_device *imgu, int enable)
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index bbcc2254fa2e..5f4e1db8cfcd 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -723,11 +723,11 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	u32 val = 0;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(dcmi->dev);
++	ret = pm_runtime_resume_and_get(dcmi->dev);
+ 	if (ret < 0) {
+ 		dev_err(dcmi->dev, "%s: Failed to start streaming, cannot get sync (%d)\n",
+ 			__func__, ret);
+-		goto err_pm_put;
++		goto err_unlock;
  	}
  
- 	/* Set Power */
--	r = pm_runtime_get_sync(dev);
-+	r = pm_runtime_resume_and_get(dev);
- 	if (r < 0) {
- 		dev_err(dev, "failed to set imgu power\n");
--		pm_runtime_put(dev);
- 		return r;
- 	}
+ 	ret = media_pipeline_start(&dcmi->vdev->entity, &dcmi->pipeline);
+@@ -848,6 +848,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
  
+ err_pm_put:
+ 	pm_runtime_put(dcmi->dev);
++err_unlock:
+ 	spin_lock_irq(&dcmi->irqlock);
+ 	/*
+ 	 * Return all buffers to vb2 in QUEUED state.
 -- 
 2.30.2
 
