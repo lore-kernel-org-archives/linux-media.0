@@ -2,90 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33224C433ED
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 114C9C43461
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E03F8613EF
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:09:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFAD661443
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbhD1PK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 11:10:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60070 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229920AbhD1PK2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 11:10:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DFC66141F;
-        Wed, 28 Apr 2021 15:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619622583;
-        bh=PivjCQ4OHe6j9i0UuVSGYTIEpWQw6cOVC+IdTduVEbQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ooui2sOIBvLuR0c2/kuF0MWZedMGpMAdwIOJ8bNGmvmzwPP3wHB+GBvjMxfCMbu9D
-         UCQ6Dxvhd2DvzHnP4qJiU5QYzHYMxxAXs6+ZCxCBfj0q0bgNqC9YO0SWD+zIXlYM56
-         1nQILdxPjC9imI/qwv/wRCiklBSL+UwjUdGUybK0SFofBiD0Qqeh3iIlyFoGlyOkKy
-         J/XVsPdoKT1sNTULA7k/72zyJyTOdWsjkhar1dtyx+Z6QfDHqF/+o+CRN9dldyFshf
-         LJtRXuvzDOFrY99tRjlH4HEyDbYc3/F7YoqsXVWrCA3Xz+PRnr4xcs51gShIbqgKsB
-         nKaQNkEG8Aw/w==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lblp7-00052P-6X; Wed, 28 Apr 2021 17:09:57 +0200
-Date:   Wed, 28 Apr 2021 17:09:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     devel@driverdev.osuosl.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v4 20/79] staging: media: rkvdec: fix
- pm_runtime_get_sync() usage count
-Message-ID: <YIl6xZegj9o5m8EF@hovoldconsulting.com>
-References: <cover.1619621413.git.mchehab+huawei@kernel.org>
- <4bc46252a7c7ae3612da6da8620ef7db775e27ca.1619621413.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bc46252a7c7ae3612da6da8620ef7db775e27ca.1619621413.git.mchehab+huawei@kernel.org>
+        id S239934AbhD1P0E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 11:26:04 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56554 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231604AbhD1P0D (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 11:26:03 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 13941404C6;
+        Wed, 28 Apr 2021 15:25:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1619623518; bh=tL58wM0CNHnAjNGaw3b8gFhjcr22ewg76YzUjuR3NOI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
+         References:From;
+        b=TtiE8hkirCMw8JWvajkI09ON9aK2gfnXuIOxGbnvOAUANaT6AXiW7HxhJnwQeaEIm
+         xmuZVm+GGBIbkvbazRTdPfLU3ihjqXIiDg0UciQR3NMo8zILnjtPO+6tAZRZEsZGPS
+         c5+p81JPJWQ3VKNodOpdds102KaUAWnkkTFJoLq4cXPYKFPcZJ7FAxmN4MYYlip0fE
+         +HeoVORFeWWklvsOchF+0PvZ87Kj9o56XgcObTS3btb5AF2aDLpxzuvunUs2/1Ke7Y
+         +IlWncgRHWwC9eK6UU6b86IeismZ2+6c78yj/yXP0FRL+c0izX3zxTICWxi5RXavKL
+         +qEVu6mX7Xw3A==
+Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
+        by mailhost.synopsys.com (Postfix) with ESMTP id 61836A005F;
+        Wed, 28 Apr 2021 15:25:16 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+From:   Nelson Costa <Nelson.Costa@synopsys.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Nelson Costa <Nelson.Costa@synopsys.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>
+Subject: [RFC 2/8] MAINTAINERS: Add entry for Synopsys DesignWare HDMI drivers
+Date:   Wed, 28 Apr 2021 17:25:05 +0200
+Message-Id: <badb02be8bc3b962bca578a505fe53d875c41d7e.1618937288.git.nelson.costa@synopsys.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1618937288.git.nelson.costa@synopsys.com>
+References: <cover.1618937288.git.nelson.costa@synopsys.com>
+In-Reply-To: <cover.1618937288.git.nelson.costa@synopsys.com>
+References: <cover.1618937288.git.nelson.costa@synopsys.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Apr 28, 2021 at 04:51:41PM +0200, Mauro Carvalho Chehab wrote:
-> The pm_runtime_get_sync() internally increments the
-> dev->power.usage_count without decrementing it, even on errors.
-> Replace it by the new pm_runtime_resume_and_get(), introduced by:
-> commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-> in order to properly decrement the usage counter and avoid memory
-> leaks.
+Add an entry for Synopsys DesignWare HDMI Receivers drivers
+and PHYs.
 
-Again, there is no memory leak here either. Just a potential PM usage
-counter leak.
+Signed-off-by: Jose Abreu <jose.abreu@synopsys.com>
+Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
+---
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  drivers/staging/media/rkvdec/rkvdec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-> index d821661d30f3..8c17615f3a7a 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec.c
-> @@ -658,7 +658,7 @@ static void rkvdec_device_run(void *priv)
->  	if (WARN_ON(!desc))
->  		return;
->  
-> -	ret = pm_runtime_get_sync(rkvdec->dev);
-> +	ret = pm_runtime_resume_and_get(rkvdec->dev);
->  	if (ret < 0) {
->  		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
->  		return;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 04e6df9..e0e7b41 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17304,6 +17304,17 @@ S:	Supported
+ F:	drivers/net/pcs/pcs-xpcs.c
+ F:	include/linux/pcs/pcs-xpcs.h
+ 
++SYNOPSYS DESIGNWARE HDMI RECEIVERS AND PHY DRIVERS
++M:	Jose Abreu <jose.abreu@synopsys.com>
++M:	Nelson Costa <nelson.costa@synopsys.com>
++L:	linux-media@vger.kernel.org
++S:	Odd Fixes
++F:	Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
++F:	drivers/media/platform/dwc/*
++F:	drivers/phy/dwc/*
++F:	include/linux/phy/dwc/*
++F:	include/media/dwc/*
++
+ SYNOPSYS DESIGNWARE I2C DRIVER
+ M:	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+-- 
+2.7.4
 
-Johan
