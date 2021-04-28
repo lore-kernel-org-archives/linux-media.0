@@ -7,49 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4595BC433ED
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCA0C4360C
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1329E61447
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2B6361008
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240729AbhD1Ozg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36354 "EHLO mail.kernel.org"
+        id S240732AbhD1Ozh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240448AbhD1Ox5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB92561947;
+        id S240465AbhD1OyG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:54:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E769D6196C;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621565;
-        bh=nHZL/8LfEY59F+jSTZXbI5IsJhAvjS0xN6pbKcv/Zf0=;
+        bh=9V28x/0yZtyv8nyV8uH7fSioPt4mARji1tVhL7JUs2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GgvfXq0FPd0nXZ7nGPgs1dqOiQ5HDmrlQ3nw52kie/TcOI1RyT8vHcg4FhzShaNO+
-         BU/PtqBrI/OlsI0y0FJLbhDiRzdtPlISP3cG02Rva5bwburZu+3gkOQQBVuzJKB3R0
-         hhK6YopNNYvuvw4Q+WOm/4sm6uvkE9L8eQOciE86CAqdaInBw8MX+umPHmQ49N9JH2
-         8ZN/Sa4AOQJ2KbqN6RwjlbHEFd1HorZDEjL6C+n/nxSHlYk7gpChyLf9APwSodpyFq
-         tMO0Mn7rn0qxGf3pb2hh4mMum6qk7xdsue8Kiw2r3JtYO9qzvOq4UtKmOFq/iwB7Tt
-         7+3lzmfDtxXkA==
+        b=Erwj8HW+oR0FZc71dGycbIpEK0qKhHOMvjGbgfaDtQlAtawBxmVjxUWKJ1g7LP4kt
+         SQH4je/jtNqKroSvKhUybb5l3m5j152NGz3ZTF/Zp0QQMKxWyF44MiPckMNSQIdxJP
+         +cLEWvzADRBSUDDKcZEW8VDTd9/uB1ajQxfVVy1rRrRZcrEvImOn2TFLl5KmzxHAJP
+         euUhfQQaffhZmaBIGkwhMNwuTGuQIY7sOqNyXioDOLnr+1Ne57t4DAF9RgBAW+B7Y1
+         c1b26O8njaYLRjbANZdYy2gCZuH7hjZhUr5SlXKY519f81FJ3YlSiy3RMNyeNf6I9D
+         PZ4Cx22sOwNNg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYR-001DsF-5S; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYR-001Ds0-0i; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 55/79] media: i2c: tvp5150: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:16 +0200
-Message-Id: <4b1b8a0a5867461c391e113eeedaacfd09a8f5d5.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 50/79] media: i2c: ov5695: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:11 +0200
+Message-Id: <6d3d4ee7a9b3b06d745ba7b8f35a8314f45c8fdf.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -69,44 +62,27 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/tvp5150.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ drivers/media/i2c/ov5695.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index e26e3f544054..374a9da75e4d 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1448,11 +1448,9 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
- 	       TVP5150_MISC_CTL_CLOCK_OE;
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index 09bee57a241d..469d941813c6 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -946,11 +946,9 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
+ 		goto unlock_and_return;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(sd->dev);
+ 	if (on) {
+-		ret = pm_runtime_get_sync(&client->dev);
 -		if (ret < 0) {
--			pm_runtime_put_noidle(sd->dev);
-+		ret = pm_runtime_resume_and_get(sd->dev);
+-			pm_runtime_put_noidle(&client->dev);
++		ret = pm_runtime_resume_and_get(&client->dev);
 +		if (ret < 0)
- 			return ret;
+ 			goto unlock_and_return;
 -		}
  
- 		tvp5150_enable(sd);
- 
-@@ -1675,15 +1673,7 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
- 
- static int tvp5150_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	int ret;
--
--	ret = pm_runtime_get_sync(sd->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(sd->dev);
--		return ret;
--	}
--
--	return 0;
-+	return pm_runtime_resume_and_get(sd->dev);
- }
- 
- static int tvp5150_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		ret = __ov5695_start_stream(ov5695);
+ 		if (ret) {
 -- 
 2.30.2
 
