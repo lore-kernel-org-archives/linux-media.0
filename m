@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D11C433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CED04C43461
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3211E61008
+	by mail.kernel.org (Postfix) with ESMTP id 60C9A61151
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240452AbhD1Ox5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36654 "EHLO mail.kernel.org"
+        id S240468AbhD1OyG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:54:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240300AbhD1Oxd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E12861462;
-        Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
+        id S240305AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 392B06161F;
+        Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=WV8b6oOgk6igZlBf+lkpGwuIqLCl3BXqwFF8R5SKg9o=;
+        bh=WwdunTEPlspSuJNcgiz5VlTq6QqTmYyotSIBFOxVREY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UufPod8BGuQ6F4M2J03kiOvacCzHOy9+rXB8FIMudlZJiHaNgckG8NEYJ+rnI+pZk
-         r3Wt5kG3gwQUPJGyghvtSjMhVMxvFtw0nEsFz1Bi0oS2XWN++YdssWifl4tsROENhs
-         DHbhbLVzxfrKi/ciE/I8VyLGg+CKVmZEicdwrt6scAGtKIGP6StdjMCTa4KNnnRdGw
-         a8+AfoFLsGhwbPCMFQWx0hXVQ2Jt9CpTknZea2BXzrHwBsRMU1STu6CoXV9pS3jm9T
-         hH7W0M93zQ4vJ9lPP6CmxdIxw5TfGWD1oKoVfaHVqwdRYE6rRY4UBxrFU3kempcnEp
-         9+VOkCY9tt9EQ==
+        b=LM7slmUmkpQ8NEr7pseKE9PHmPxOVynU2ApW1DWeGR2AXQUb1++LUp2H3WzNiHTDz
+         ce0W+4lggWefwwa+/9O3r/DA+JHxky9RtPrLccCJGjJIUWZ2icKNKT0RdCOfWFWfMz
+         SCYLxTJrfD66jicSvGaT8S1nzPumgBiZlCin2nk7Oordbjjt7324wuoQv/Y3Co7m1l
+         AVbqDWyfL6NSSZYzvskKqpAAgn3mAz5PgD5vCzTAcGeL7nRQMr3J9mE2cNZ9xcndca
+         A/Q5xGDjquXMxL0rMNLVnPXH5wNoz+9kjytX+j8rxosTST4B3OY0XqI5ZKpEtKISbq
+         3kvffXe1odmcw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001DqD-UJ; Wed, 28 Apr 2021 16:52:41 +0200
+        id 1lblYQ-001Dqe-6X; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v4 13/79] media: s5p: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:34 +0200
-Message-Id: <372eda285a78a43edc865372c560b60d86872742.1619621413.git.mchehab+huawei@kernel.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v4 22/79] staging: media: imx7-mipi-csis: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:51:43 +0200
+Message-Id: <914f9a1ac35dbb25cee9636b9f8533e743173ee7.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -57,42 +63,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-While here, check if the PM runtime error was caught at
-s5p_cec_adap_enable().
+Use the new API, in order to cleanup the error check logic.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/cec/platform/s5p/s5p_cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
-index 3c7c4c3c798c..028a09a7531e 100644
---- a/drivers/media/cec/platform/s5p/s5p_cec.c
-+++ b/drivers/media/cec/platform/s5p/s5p_cec.c
-@@ -35,10 +35,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 025fdc488bd6..1dc680d94a46 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
  
- static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
- {
-+	int ret;
- 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
+ 		mipi_csis_clear_counters(state);
  
- 	if (enable) {
--		pm_runtime_get_sync(cec->dev);
-+		ret = pm_runtime_resume_and_get(cec->dev);
+-		ret = pm_runtime_get_sync(&state->pdev->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&state->pdev->dev);
++		ret = pm_runtime_resume_and_get(&state->pdev->dev);
 +		if (ret < 0)
-+			return ret;
- 
- 		s5p_cec_reset(cec);
- 
+ 			return ret;
+-		}
++
+ 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
+ 		if (ret < 0 && ret != -ENOIOCTLCMD)
+ 			goto done;
 -- 
 2.30.2
 
