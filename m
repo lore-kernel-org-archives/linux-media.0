@@ -7,43 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAD3DC43618
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66112C4363C
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 748896143E
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C1706143E
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240652AbhD1OzT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36352 "EHLO mail.kernel.org"
+        id S239898AbhD1OzY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240387AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B889D61945;
+        id S240397AbhD1Oxs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C576E6194F;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=/7W/4D4Cg4pCxHEZGuCJQ5dkGl7p2HK4IsN3mgaNluw=;
+        bh=zHjujpboN+Iu7V2XpqIB+1lLAb+rrUx5c1q69NYA2sw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WYWSoRzRi2/PLHRk8k3zZXQYLq3zigrPJOrONEe36l6WKXuKCvgWt7EE0a4nch4Mu
-         X1gFjGM6hW18yt61srvpgrhNkVXtPHtLGiGJvMVfJIgflZ3wYdD6sC5PxJnVSHd9ko
-         +Q0j1Dqnaa6PVFufgteqTySnR1OPynRvf3OjnMERk6lGoC7RthNuF3UUCVDWPuPSta
-         N9O7Uap5kQXa4uSsbGuPWlva4OUUgVLJzSI3Y2qgQ7nHTeacWXD9YiR2YkYc7Vp6Vx
-         LxSP7Uk7fqlgWOricIIbAgkWvBFP8wkmH4b3eefVxyJ6ZwbPkk1Od2XTiSzaG6anC9
-         B0vqLrbZ7K7iA==
+        b=dcrxahqfLcgpA/LydyGfKrzwUUQx05Vl0WOe4gFug0iBYxdvQcMYKp1pMaDlZlNpi
+         CNLPgAdzNNqP/UQexjgzJIYcZn6BDWSYES3GZuMcRuLuPVOG3FkwayBGHEYzFvfaEh
+         /0rY5RX5wr0rpdPCrYHPykZtnjPcvpAzNxmDVxZlkceEnoV8THTeB7cXIFi9EjQqdR
+         /ITKCrNaWkmheRjQj/VjdFzburNe/3DCMIPCUbR96I1zEbUoLU0af0NyodHj6PXxae
+         65BN9ItHTCeEgzQHviOTrgSGV1brP8KQ4G52fQ+rC0EFYDC0DBQ3cjOy21Cx05useE
+         uqMbAW+GblSTA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001DrW-NZ; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYQ-001Dri-RF; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 40/79] media: i2c: mt9m001: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:01 +0200
-Message-Id: <9eae17e79b32ad11fc09093a82c0ffdfbc7fe584.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 44/79] media: i2c: ov2685: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:05 +0200
+Message-Id: <868b8a71e01e7ddeefe068ea90cf094da053a3f2.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -63,44 +62,28 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/mt9m001.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov2685.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
-index 3b0ba8ed5233..58c85a3bccf6 100644
---- a/drivers/media/i2c/mt9m001.c
-+++ b/drivers/media/i2c/mt9m001.c
-@@ -217,9 +217,9 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- 		goto done;
+diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+index 49a2dcedb347..2f3836dd8eed 100644
+--- a/drivers/media/i2c/ov2685.c
++++ b/drivers/media/i2c/ov2685.c
+@@ -456,11 +456,10 @@ static int ov2685_s_stream(struct v4l2_subdev *sd, int on)
+ 		goto unlock_and_return;
  
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
- 		if (ret < 0)
--			goto put_unlock;
-+			goto unlock;
- 
- 		ret = mt9m001_apply_selection(sd);
- 		if (ret)
-@@ -247,6 +247,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- 
- put_unlock:
- 	pm_runtime_put(&client->dev);
-+unlock:
- 	mutex_unlock(&mt9m001->mutex);
- 
- 	return ret;
-@@ -834,6 +835,10 @@ static int mt9m001_remove(struct i2c_client *client)
- {
- 	struct mt9m001 *mt9m001 = to_mt9m001(client);
- 
-+	/*
-+	 * As it increments RPM usage_count even on errors, we don't need to
-+	 * check the returned code here.
-+	 */
- 	pm_runtime_get_sync(&client->dev);
- 
- 	v4l2_async_unregister_subdev(&mt9m001->subdev);
+ 	if (on) {
+-		ret = pm_runtime_get_sync(&ov2685->client->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&client->dev);
++		ret = pm_runtime_resume_and_get(&ov2685->client->dev);
++		if (ret < 0)
+ 			goto unlock_and_return;
+-		}
++
+ 		ret = __v4l2_ctrl_handler_setup(&ov2685->ctrl_handler);
+ 		if (ret) {
+ 			pm_runtime_put(&client->dev);
 -- 
 2.30.2
 
