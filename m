@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA51FC433ED
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C509C433B4
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3B106144F
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DADCF61449
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 15:25:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237268AbhD1P0D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 11:26:03 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56546 "EHLO
+        id S240019AbhD1P0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 11:26:07 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56584 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230527AbhD1P0D (ORCPT
+        by vger.kernel.org with ESMTP id S237195AbhD1P0D (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 11:26:03 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 4063B405C3;
-        Wed, 28 Apr 2021 15:25:18 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 0E980404B4;
+        Wed, 28 Apr 2021 15:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1619623518; bh=EIYG6JjhDPjkluDzN5n/M9ZenHvTzZ4e//kR0u2y2CE=;
+        t=1619623518; bh=ZuELJ6ATn+aQJhZHTtn05un1cSBEa9qDYpvqo1rZLMg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=PW7xuBIsmUZGwjkrAHFwXmBBQImaC1i1oKPSZqRxECT1C9V1ui7wqUcjte6P+RRJA
-         cQ0gcXVXgXfk3cXIdl/u/Fiy9brA1LelY9sHCqlGqo0icx7bTi+4cZjUtbhoi3b3Pc
-         YP+orlIsqAse2NUzZU/jzN11wUX1IUDUJL8BoWCHH7rENV//bV42VEMHMRnwRmPank
-         I2EVbHYS964OuNb9CY3u8/g+pnFcsOl/f2dH6x2OVaAf23A+XqJT9wAjZF/vV9XThu
-         5znUqY/qduvUen5HxHxgaI45dqBAFUosq0PTQ2ppNCuFq+NdfQWbmnmOref5V3miBA
-         BnQU8g7FYKQ7w==
+        b=GPKzhDf9P1PNnMRIaUgQu+a6j3YhuBh6vt+CJhl6TA3BQ0M0Q9Qe4TGf0a+hXo9E2
+         3yQLlPbhGPkc0Ly7MR/fOpAzU5dvgvrgYXPJrE+uMsUuXZlO8zL5Vx3ixgmXGkGhAm
+         J6c9CU3RcKKNDpO40RP7odOCbz6Z0ASfdDHq0CIYAwlqyMr/r41/TP6hZCEUKTJXpB
+         +32SOW4q/I5pqBRLjR76fdFRJmaaUx0mV6EKxEJLGUyBPqDvkOS4rQor+pCH8JqiVM
+         VuPstjenSZLS6bi02ECSZjzEPpC1MYUSywwI4zoLR2VjJZ5Ou+6HgFZEEppTSab426
+         r0z/FnW4zX8KQ==
 Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
-        by mailhost.synopsys.com (Postfix) with ESMTP id AFFC3A0099;
+        by mailhost.synopsys.com (Postfix) with ESMTP id 4DCA2A0063;
         Wed, 28 Apr 2021 15:25:16 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 From:   Nelson Costa <Nelson.Costa@synopsys.com>
@@ -49,10 +49,11 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        Nelson Costa <Nelson.Costa@synopsys.com>
-Subject: [RFC 7/8] media: dwc: dw-hdmi-rx: Add support for Aspect Ratio
-Date:   Wed, 28 Apr 2021 17:25:10 +0200
-Message-Id: <0acdcfbe29d2cbb2974377d79391e55f5b489851.1618937288.git.nelson.costa@synopsys.com>
+        Nelson Costa <Nelson.Costa@synopsys.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>
+Subject: [RFC 1/8] dt-bindings: media: Document Synopsys DesignWare HDMI RX
+Date:   Wed, 28 Apr 2021 17:25:04 +0200
+Message-Id: <21bdecce9dd0a8035d906af2242bc7e3495cc1b0.1618937288.git.nelson.costa@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1618937288.git.nelson.costa@synopsys.com>
 References: <cover.1618937288.git.nelson.costa@synopsys.com>
@@ -62,94 +63,170 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds support to get aspect ratio for the current
-video being received and provide the info through v4l2
-API query_dv_timings.
+Document the bindings for the Synopsys DesignWare HDMI RX.
 
+Signed-off-by: Jose Abreu <jose.abreu@synopsys.com>
 Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
 ---
- drivers/media/platform/dwc/dw-hdmi-rx.c | 54 +++++++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/media/snps,dw-hdmi-rx.yaml | 149 +++++++++++++++++++++
+ 1 file changed, 149 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
 
-diff --git a/drivers/media/platform/dwc/dw-hdmi-rx.c b/drivers/media/platform/dwc/dw-hdmi-rx.c
-index 07ac62f..78d9ef3 100644
---- a/drivers/media/platform/dwc/dw-hdmi-rx.c
-+++ b/drivers/media/platform/dwc/dw-hdmi-rx.c
-@@ -2252,13 +2252,31 @@ static u32 dw_hdmi_get_width(struct dw_hdmi_dev *dw_dev)
- 	return width;
- }
- 
-+static int dw_hdmi_vic_to_cea861(u8 hdmi_vic)
-+{
-+	switch (hdmi_vic) {
-+	case 1:
-+		return 95;
-+	case 2:
-+		return 94;
-+	case 3:
-+		return 93;
-+	case 4:
-+		return 98;
-+	default:
-+		return 0;
-+	}
-+}
+diff --git a/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml b/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
+new file mode 100644
+index 0000000..19c7dd4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
+@@ -0,0 +1,149 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/snps,dw-hdmi-rx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
- 				    struct v4l2_dv_timings *timings)
- {
- 	struct dw_hdmi_dev *dw_dev = to_dw_dev(sd);
- 	struct v4l2_bt_timings *bt = &timings->bt;
-+	struct v4l2_dv_timings t = {0};
- 	bool is_hdmi_vic;
- 	u32 htot, hofs;
-+	u8 cea861_vic;
- 	u32 vtot;
- 	u8 vic;
- 
-@@ -2353,8 +2371,40 @@ static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
- 		}
- 	}
- 
--	dev_dbg(dw_dev->dev, "%s: width=%u, height=%u, mbuscode=%u\n", __func__,
--		bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev));
-+	if (is_hdmi_vic)
-+		cea861_vic = dw_hdmi_vic_to_cea861(bt->hdmi_vic);
-+	else
-+		cea861_vic = vic;
++title: Synopsys DesignWare HDMI RX Controller and PHYs e405/e406 Device Tree Bindings
 +
-+	/* picture aspect ratio based on v4l2 dv timings array */
-+	if (v4l2_find_dv_timings_cea861_vic(&t, cea861_vic)) {
-+		/* when the numerator/denominator are zero means that the
-+		 * picture aspect ratio is the same of the active measures ratio
-+		 */
-+		if (!t.bt.picture_aspect.numerator) {
-+			unsigned long n, d;
++maintainers:
++  - Jose Abreu <jose.abreu@synopsys.com>
++  - Nelson Costa <nelson.costa@synopsys.com>
 +
-+			rational_best_approximation(t.bt.width, t.bt.height,
-+						    t.bt.width, t.bt.height,
-+						    &n, &d);
-+			t.bt.picture_aspect.numerator = n;
-+			t.bt.picture_aspect.denominator = d;
-+		}
++description: |
++  The Synopsys DesignWare HDMI RX Controller and PHYs e405/e406 is an HDMI 2.0
++  Receiver solution that is able to decode video and audio.
 +
-+		bt->picture_aspect = t.bt.picture_aspect;
-+	} else {
-+		bt->picture_aspect.numerator = 0;
-+		bt->picture_aspect.denominator = 0;
-+		dev_dbg(dw_dev->dev,
-+			"%s: cea861_vic=%d was not found in v4l2 dv timings",
-+			__func__, cea861_vic);
-+	}
++properties:
++  compatible:
++    const: snps,dw-hdmi-rx
 +
-+	dev_dbg(dw_dev->dev,
-+		"%s: width=%u, height=%u, mbuscode=%u, cea861_vic=%d, ar={%d,%d}\n",
-+		__func__, bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev),
-+		cea861_vic, bt->picture_aspect.numerator,
-+		bt->picture_aspect.denominator);
- 
- 	return 0;
- }
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description: phandle to the configuration clock
++
++  clock-names:
++    const: cfg
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  phys:
++    maxItems: 1
++    description: phandle for the HDMI RX PHY
++
++  phy-names:
++    const: hdmi-phy
++
++  hdmi-phy@fc:
++    type: object
++    description: connection point for HDMI PHY
++    additionalProperties: false
++
++    properties:
++      compatible:
++        oneOf:
++          - const: snps,dw-hdmi-phy-e405
++          - const: snps,dw-hdmi-phy-e406
++
++      reg:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++        description: phandle to the configuration clock
++
++      clock-names:
++        const: cfg
++
++      "#phy-cells":
++        const: 0
++
++      input-count:
++        description: Number of PHY input ports
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [1, 2, 3, 4]
++
++    required:
++      - compatible
++      - reg
++      - clocks
++      - clock-names
++      - "#phy-cells"
++      - input-count
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - "#address-cells"
++  - "#size-cells"
++  - phys
++  - phy-names
++
++additionalProperties: false
++
++examples:
++  - |
++    hdmi_rx0: hdmi-rx@0 {
++        compatible = "snps,dw-hdmi-rx";
++        reg = <0x0 0x10000>;
++        interrupts = <1 2>;
++
++        clocks = <&dw_hdmi_refclk>;
++        clock-names = "cfg";
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        phys = <&hdmi_e405_phy>;
++        phy-names = "hdmi-phy";
++
++        hdmi_e405_phy: hdmi-phy@fc {
++                compatible = "snps,dw-hdmi-phy-e405";
++                reg = <0xfc>;
++
++                clocks = <&dw_hdmi_refclk>;
++                clock-names = "cfg";
++
++                #phy-cells = <0>;
++                input-count = <4>;
++        };
++    };
++  - |
++    hdmi_rx1: hdmi-rx@1 {
++        compatible = "snps,dw-hdmi-rx";
++        reg = <0x0 0x10000>;
++        interrupts = <1 2>;
++
++        clocks = <&dw_hdmi_refclk>;
++        clock-names = "cfg";
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        phys = <&hdmi_e406_phy>;
++        phy-names = "hdmi-phy";
++
++        hdmi_e406_phy: hdmi-phy@fc {
++                compatible = "snps,dw-hdmi-phy-e406";
++                reg = <0xfc>;
++
++                clocks = <&dw_hdmi_refclk>;
++                clock-names = "cfg";
++
++                #phy-cells = <0>;
++                input-count = <4>;
++        };
++    };
 -- 
 2.7.4
 
