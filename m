@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF879C43603
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F08C43611
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86A4B6145A
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56D5F6143E
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240635AbhD1OzF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36982 "EHLO mail.kernel.org"
+        id S239917AbhD1OzZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240323AbhD1Oxi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A57F61626;
+        id S240396AbhD1Oxs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AACE16193B;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=P8ySBvxIssOsYGuosUcRi8p/mrvcDEnJfSep5KVO8S8=;
+        bh=WMp2TYCwNpx5gqoBY3FxSLCFIcbo/CZW59R5D62z+MU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qo6Km9p3rlLQFFeDPMopzRqAwQT0xRTT8oR0mOgVJ70ZBXubeI8rO6L3WbleZllBq
-         wXLz5cCHeI3crP/D/uIBx/q2B1Tu8U0nvUu/OBOHq4lxgD4sQHjdiJXkioGljctxuQ
-         FJ8e+2lj50N8k9Pl6yW8LJWqOZUJc6NBcFpfzR8Fr/2f7pG8mr13FZnUTXaZ+BOVCn
-         eW47r7w9zmpXt0ZbfM3ccPIIoeErWpwJAhgWy64n30q6TFS4+kUW/2tpoHVyLU19zQ
-         /Pn1679UhT4OPAqkaUY6nulfuLeB2xZZdNg9BXmt7FbnTA8wgqEqeOa9ozlcE9vaSW
-         Brh6PVCqPlmHw==
+        b=IxXpDz+CdCt1mZpDcdCdZrrhZUD/ZFbK8bTF7rQd883tbsYbmuCFtp52Ipc6enqb2
+         S0DB5fye6/xQasoozfCuTigx5jynVfXN0/Y89Jjbc54+5+jbDKIfate3zZzvftoazf
+         srgmI9i+ugpW1BsYt1NMmpowJQrKLcJBvQAQQJmNzplU2GeFLDJlMfMKqxnPTykrhM
+         oNx7tnwTM3r5DhGXgIBX9lJZvU0TJf9K35gGra4QWXK2ICFfcFztIGUT9wYLu3CXE5
+         5ssY+DUlxd/o1APTtN7IrUr2oVdB3Rlpx9FNUpTilVu10Ua2gCcdEBPuy5+VQTHLbE
+         2GmwXtC3yYYzQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001Dqk-8Q; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYR-001DsU-AG; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Dan Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 24/79] staging: media: cedrus_video: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:51:45 +0200
-Message-Id: <cc0761dc51d021a4295cce298834afb9be0211c6.1619621413.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v4 60/79] media: ipu3: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:21 +0200
+Message-Id: <d4582829ac01f26ce1c9b9bcbcaaacc4c6f71631.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -67,27 +66,25 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index b62eb8e84057..9ddd789d0b1f 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -490,11 +490,9 @@ static int cedrus_start_streaming(struct vb2_queue *vq, unsigned int count)
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+index fecef85bd62e..ca8040d1a725 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+@@ -975,10 +975,9 @@ static int cio2_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	cio2->cur_queue = q;
+ 	atomic_set(&q->frame_sequence, 0);
+ 
+-	r = pm_runtime_get_sync(&cio2->pci_dev->dev);
++	r = pm_runtime_resume_and_get(&cio2->pci_dev->dev);
+ 	if (r < 0) {
+ 		dev_info(&cio2->pci_dev->dev, "failed to set power %d\n", r);
+-		pm_runtime_put_noidle(&cio2->pci_dev->dev);
+ 		return r;
  	}
  
- 	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
--		ret = pm_runtime_get_sync(dev->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(dev->dev);
-+		ret = pm_runtime_resume_and_get(dev->dev);
-+		if (ret < 0)
- 			goto err_cleanup;
--		}
- 
- 		if (dev->dec_ops[ctx->current_codec]->start) {
- 			ret = dev->dec_ops[ctx->current_codec]->start(ctx);
 -- 
 2.30.2
 
