@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDF3C43462
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D11C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 070BA61440
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:53:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3211E61008
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbhD1Ox4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36328 "EHLO mail.kernel.org"
+        id S240452AbhD1Ox5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240299AbhD1Oxc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0CF661461;
+        id S240300AbhD1Oxd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E12861462;
         Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=euIQLwDaPDSgWFx6NM45FK2bpju26XjkPQY0ICj4Fck=;
+        bh=WV8b6oOgk6igZlBf+lkpGwuIqLCl3BXqwFF8R5SKg9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVrQ9JsiqHSOD2VwH+JVxt43VtdbWfd9KdFIE4KsasypqqTk2SWl5hzobva8vOJeH
-         YAmvBESve74R+BNZprFRS6poE0duv7h+AK7QtDaIuyQzx3F3ewqJRMSWjuO2ufLI/p
-         YJ3n/rW+/gblCeNLgzktb7eDTGYvlKs4p3iliMTyKhBl0UU20Dkka9mgOG0pOpMnMN
-         rD+P3Sz0lHRkQUFlNZv7jf9uu6ZkPo2/Q4nU4MVZKa/aNrXMd1Csb6wuqbNkbC/cZY
-         zM+87X/pPWYxgXMA3wYPdvg6spD7treWwTvnxwk2FcfP7OZ/8X+JD2qzk+yi9Hs8Ir
-         z90Jxjf7/E5mw==
+        b=UufPod8BGuQ6F4M2J03kiOvacCzHOy9+rXB8FIMudlZJiHaNgckG8NEYJ+rnI+pZk
+         r3Wt5kG3gwQUPJGyghvtSjMhVMxvFtw0nEsFz1Bi0oS2XWN++YdssWifl4tsROENhs
+         DHbhbLVzxfrKi/ciE/I8VyLGg+CKVmZEicdwrt6scAGtKIGP6StdjMCTa4KNnnRdGw
+         a8+AfoFLsGhwbPCMFQWx0hXVQ2Jt9CpTknZea2BXzrHwBsRMU1STu6CoXV9pS3jm9T
+         hH7W0M93zQ4vJ9lPP6CmxdIxw5TfGWD1oKoVfaHVqwdRYE6rRY4UBxrFU3kempcnEp
+         9+VOkCY9tt9EQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001DqJ-WC; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYP-001DqD-UJ; Wed, 28 Apr 2021 16:52:41 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 15/79] media: sh_vou: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:36 +0200
-Message-Id: <f7fc9697e61bef13937c3455b20e7c855e31d6f7.1619621413.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v4 13/79] media: s5p: fix pm_runtime_get_sync() usage count
+Date:   Wed, 28 Apr 2021 16:51:34 +0200
+Message-Id: <372eda285a78a43edc865372c560b60d86872742.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -63,30 +64,35 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-While here, check if the PM runtime error was caught at open time.
+While here, check if the PM runtime error was caught at
+s5p_cec_adap_enable().
 
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sh_vou.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/cec/platform/s5p/s5p_cec.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
-index 4ac48441f22c..ca4310e26c49 100644
---- a/drivers/media/platform/sh_vou.c
-+++ b/drivers/media/platform/sh_vou.c
-@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
- 	if (v4l2_fh_is_singular_file(file) &&
- 	    vou_dev->status == SH_VOU_INITIALISING) {
- 		/* First open */
--		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
-+		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
-+		if (err < 0) {
-+			v4l2_fh_release(file);
-+			goto done_open;
-+		}
- 		err = sh_vou_hw_init(vou_dev);
- 		if (err < 0) {
- 			pm_runtime_put(vou_dev->v4l2_dev.dev);
+diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
+index 3c7c4c3c798c..028a09a7531e 100644
+--- a/drivers/media/cec/platform/s5p/s5p_cec.c
++++ b/drivers/media/cec/platform/s5p/s5p_cec.c
+@@ -35,10 +35,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
+ 
+ static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
+ {
++	int ret;
+ 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
+ 
+ 	if (enable) {
+-		pm_runtime_get_sync(cec->dev);
++		ret = pm_runtime_resume_and_get(cec->dev);
++		if (ret < 0)
++			return ret;
+ 
+ 		s5p_cec_reset(cec);
+ 
 -- 
 2.30.2
 
