@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E916C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 18:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAD3CC433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 18:10:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A4E461289
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 18:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A99BC613FF
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 18:10:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243513AbhD1SLD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 14:11:03 -0400
-Received: from msg-1.mailo.com ([213.182.54.11]:35910 "EHLO msg-1.mailo.com"
+        id S243533AbhD1SLZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 14:11:25 -0400
+Received: from msg-1.mailo.com ([213.182.54.11]:35964 "EHLO msg-1.mailo.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231966AbhD1SLC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 14:11:02 -0400
+        id S230248AbhD1SLZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 14:11:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1619633279; bh=exHaujmrvMvjSop2fT7aC2XdNKsYLHFrip2kBC+Uue4=;
+        t=1619633433; bh=KqZDY8ia8XjqWkml/EZvqSqDTQ0bSQIY4Y4Z7BltTyo=;
         h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
          MIME-Version:Content-Type:In-Reply-To;
-        b=bYNQJqFJyPAduq9pU8OKRVV/amituQENHvA+H+K5hS1FcNYkln3bprCefTTDeBdfD
-         XyieriwBgl/WkouYQCqgvKG1ldfo3GxVb76IJJYrOFEKMRTmUxAaSleK4LiGb9+IxG
-         v72/QGj39YJWfZbTE+a2TmL5hE5ikq01nMVMdHFE=
-Received: by 192.168.90.16 [192.168.90.16] with ESMTP
+        b=SQgKznWbjqbslktcd87LmVmZxgJBQWB8oweY+3tu3YdI5NkHGRb1ta1ZXhV5D1sN5
+         MnsLYao3bO46S0ZcHBX8SM7C4a98ahlnCw5mS1JO1gqr3aCIW7fJhqLWCC/Nx7kE8W
+         L3R5daYL1GJXJg8Ou91fZdirYcKEwRZuTNTx6SRg=
+Received: by 192.168.90.11 [192.168.90.11] with ESMTP
         via ip-206.mailobj.net [213.182.55.206]
-        Wed, 28 Apr 2021 20:07:59 +0200 (CEST)
-X-EA-Auth: vMaytMcZP8JKdjZOFy9ekZcIy7CQVCbC9kvzt0VpeFuE9/w81ora+/OSJL8r+UDNEVkZkTeM35w7VT19+aPz/duiPqn6E4YT
-Date:   Wed, 28 Apr 2021 23:37:54 +0530
+        Wed, 28 Apr 2021 20:10:31 +0200 (CEST)
+X-EA-Auth: QKDf1PCt+HoVDZjQj6jJf+h1xB0bfgCSSyoB0dtNmZJZOVZ+qUzfK5+WvkUtayo4YJH+MGi3xH6fVtvIgoJDMZ77zlKykEQ8
+Date:   Wed, 28 Apr 2021 23:40:26 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, drv@mailo.com
-Subject: [PATCH v4 4/9] staging: media: atomisp: use __func__ over function
- names
-Message-ID: <ff72157dce3b0b3f317ffb399362af7ee23109a3.1619630709.git.drv@mailo.com>
+Subject: [PATCH v4 8/9] staging: media: atomisp: remove unnecessary pr_info
+ calls
+Message-ID: <17bd2c71457d25e584f7fdcc6246a3a8d3e4c959.1619630709.git.drv@mailo.com>
 References: <cover.1619630709.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -49,143 +49,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace hard coded function names from the debug print strings by
-standard __func__ predefined identifier. This resolves following
-checkpatch script WARNING:
-Prefer using '"%s...", __func__' to using function's name, in a string.
+pr_info() messages to log function entry / exit tracing spams the log.
+Such basic tracing is not necessary and be removed.
 
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
 
 Changes since v3:
-   - None.
+   - Patch introduced based on other patch review feedback
 Changes since v2:
-   - None.
+   - Patch not part of set
 Changes since v1:
-   - None.
+   - Patch not part of set
 
- .../staging/media/atomisp/i2c/atomisp-gc0310.c   |  2 +-
- .../staging/media/atomisp/i2c/atomisp-gc2235.c   |  2 +-
- .../staging/media/atomisp/i2c/atomisp-lm3554.c   |  2 +-
- .../staging/media/atomisp/i2c/atomisp-ov2680.c   | 16 ++++++++--------
- .../staging/media/atomisp/i2c/atomisp-ov2722.c   |  2 +-
- 5 files changed, 12 insertions(+), 12 deletions(-)
+
+
+ .../staging/media/atomisp/i2c/atomisp-gc0310.c  | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-index d68a2bcc9ae1..b572551f1a0d 100644
+index bb75d077ad63..5f1929a49b07 100644
 --- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
 +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-@@ -1292,7 +1292,7 @@ static int gc0310_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+@@ -718,7 +718,6 @@ static int gc0310_init(struct v4l2_subdev *sd)
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
  	struct gc0310_device *dev = to_gc0310_sensor(sd);
  
--	dev_dbg(&client->dev, "gc0310_remove...\n");
-+	dev_dbg(&client->dev, "%s...\n", __func__);
+-	pr_info("%s S\n", __func__);
+ 	mutex_lock(&dev->input_lock);
  
- 	dev->platform_data->csi_cfg(sd, 0);
+ 	/* set initial registers */
+@@ -730,7 +729,6 @@ static int gc0310_init(struct v4l2_subdev *sd)
  
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-index e722c639b60d..548c572d3b57 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-@@ -1034,7 +1034,7 @@ static int gc2235_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct gc2235_device *dev = to_gc2235_sensor(sd);
+ 	mutex_unlock(&dev->input_lock);
  
--	dev_dbg(&client->dev, "gc2235_remove...\n");
-+	dev_dbg(&client->dev, "%s...\n", __func__);
+-	pr_info("%s E\n", __func__);
+ 	return ret;
+ }
  
- 	dev->platform_data->csi_cfg(sd, 0);
- 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-index 7ca7378b1859..ab10fd98dbc0 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-@@ -680,7 +680,7 @@ static int lm3554_detect(struct v4l2_subdev *sd)
+@@ -796,7 +794,6 @@ static int power_up(struct v4l2_subdev *sd)
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
  	int ret;
  
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA)) {
--		dev_err(&client->dev, "lm3554_detect i2c error\n");
-+		dev_err(&client->dev, "%s i2c error\n", __func__);
- 		return -ENODEV;
+-	pr_info("%s S\n", __func__);
+ 	if (!dev->platform_data) {
+ 		dev_err(&client->dev,
+ 			"no camera_sensor_platform_data");
+@@ -823,7 +820,6 @@ static int power_up(struct v4l2_subdev *sd)
+ 
+ 	msleep(100);
+ 
+-	pr_info("%s E\n", __func__);
+ 	return 0;
+ 
+ fail_gpio:
+@@ -959,15 +955,12 @@ static int startup(struct v4l2_subdev *sd)
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	int ret = 0;
+ 
+-	pr_info("%s S\n", __func__);
+-
+ 	ret = gc0310_write_reg_array(client, gc0310_res[dev->fmt_idx].regs);
+ 	if (ret) {
+ 		dev_err(&client->dev, "gc0310 write register err.\n");
+ 		return ret;
  	}
  
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-index f167781e258a..a51ad9843d39 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-@@ -146,7 +146,7 @@ static int ov2680_g_bin_factor_x(struct v4l2_subdev *sd, s32 *val)
- 	struct ov2680_device *dev = to_ov2680_sensor(sd);
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	pr_info("%s E\n", __func__);
+ 	return ret;
+ }
  
--	dev_dbg(&client->dev,  "++++ov2680_g_bin_factor_x\n");
-+	dev_dbg(&client->dev,  "++++%s\n", __func__);
- 	*val = ov2680_res[dev->fmt_idx].bin_factor_x;
+@@ -982,8 +975,6 @@ static int gc0310_set_fmt(struct v4l2_subdev *sd,
+ 	int ret = 0;
+ 	int idx = 0;
  
- 	return 0;
-@@ -158,7 +158,7 @@ static int ov2680_g_bin_factor_y(struct v4l2_subdev *sd, s32 *val)
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	pr_info("%s S\n", __func__);
+-
+ 	if (format->pad)
+ 		return -EINVAL;
  
- 	*val = ov2680_res[dev->fmt_idx].bin_factor_y;
--	dev_dbg(&client->dev,  "++++ov2680_g_bin_factor_y\n");
-+	dev_dbg(&client->dev,  "++++%s\n", __func__);
+@@ -1035,7 +1026,6 @@ static int gc0310_set_fmt(struct v4l2_subdev *sd,
+ 		goto err;
+ 	}
+ 
+-	pr_info("%s E\n", __func__);
+ err:
+ 	mutex_unlock(&dev->input_lock);
+ 	return ret;
+@@ -1068,7 +1058,6 @@ static int gc0310_detect(struct i2c_client *client)
+ 	int ret;
+ 	u16 id;
+ 
+-	pr_info("%s S\n", __func__);
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+ 
+@@ -1095,8 +1084,6 @@ static int gc0310_detect(struct i2c_client *client)
+ 
+ 	dev_dbg(&client->dev, "detect gc0310 success\n");
+ 
+-	pr_info("%s E\n", __func__);
+-
  	return 0;
  }
  
-@@ -173,7 +173,7 @@ static int ov2680_get_intg_factor(struct i2c_client *client,
- 	u16 reg_val;
- 	int ret;
+@@ -1142,7 +1129,6 @@ static int gc0310_s_stream(struct v4l2_subdev *sd, int enable)
+ 	}
  
--	dev_dbg(&client->dev,  "++++ov2680_get_intg_factor\n");
-+	dev_dbg(&client->dev,  "++++%s\n", __func__);
- 	if (!info)
- 		return -EINVAL;
+ 	mutex_unlock(&dev->input_lock);
+-	pr_info("%s E\n", __func__);
+ 	return ret;
+ }
  
-@@ -251,8 +251,8 @@ static long __ov2680_set_exposure(struct v4l2_subdev *sd, int coarse_itg,
- 	int ret, exp_val;
+@@ -1153,7 +1139,6 @@ static int gc0310_s_config(struct v4l2_subdev *sd,
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	int ret = 0;
  
- 	dev_dbg(&client->dev,
--		"+++++++__ov2680_set_exposure coarse_itg %d, gain %d, digitgain %d++\n",
--		coarse_itg, gain, digitgain);
-+		"+++++++%s coarse_itg %d, gain %d, digitgain %d++\n",
-+		__func__, coarse_itg, gain, digitgain);
+-	pr_info("%s S\n", __func__);
+ 	if (!platform_data)
+ 		return -ENODEV;
  
- 	vts = ov2680_res[dev->fmt_idx].lines_per_frame;
+@@ -1196,7 +1181,6 @@ static int gc0310_s_config(struct v4l2_subdev *sd,
+ 	}
+ 	mutex_unlock(&dev->input_lock);
  
-@@ -1060,9 +1060,9 @@ static int ov2680_s_stream(struct v4l2_subdev *sd, int enable)
+-	pr_info("%s E\n", __func__);
+ 	return 0;
  
- 	mutex_lock(&dev->input_lock);
- 	if (enable)
--		dev_dbg(&client->dev, "ov2680_s_stream one\n");
-+		dev_dbg(&client->dev, "%s one\n", __func__);
- 	else
--		dev_dbg(&client->dev, "ov2680_s_stream off\n");
-+		dev_dbg(&client->dev, "%s off\n", __func__);
+ fail_csi_cfg:
+@@ -1365,7 +1349,6 @@ static int gc0310_probe(struct i2c_client *client)
+ 	if (ret)
+ 		gc0310_remove(client);
  
- 	ret = ov2680_write_reg(client, 1, OV2680_SW_STREAM,
- 			       enable ? OV2680_START_STREAMING :
-@@ -1226,7 +1226,7 @@ static int ov2680_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct ov2680_device *dev = to_ov2680_sensor(sd);
- 
--	dev_dbg(&client->dev, "ov2680_remove...\n");
-+	dev_dbg(&client->dev, "%s...\n", __func__);
- 
- 	dev->platform_data->csi_cfg(sd, 0);
- 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index d046a9804f63..69409f8447b5 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -1175,7 +1175,7 @@ static int ov2722_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct ov2722_device *dev = to_ov2722_sensor(sd);
- 
--	dev_dbg(&client->dev, "ov2722_remove...\n");
-+	dev_dbg(&client->dev, "%s...\n", __func__);
- 
- 	dev->platform_data->csi_cfg(sd, 0);
- 	v4l2_ctrl_handler_free(&dev->ctrl_handler);
+-	pr_info("%s E\n", __func__);
+ 	return ret;
+ out_free:
+ 	v4l2_device_unregister_subdev(&dev->sd);
 -- 
 2.31.1
 
