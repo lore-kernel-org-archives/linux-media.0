@@ -3,119 +3,125 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C328FC43460
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB58C43461
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9458F61424
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C310F61405
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 10:18:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239179AbhD1KTd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 06:19:33 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:40273 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239186AbhD1KTc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S239190AbhD1KTc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 28 Apr 2021 06:19:32 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:35213 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239178AbhD1KTb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 06:19:31 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id bhHFlUpapk1MGbhHKlO0cl; Wed, 28 Apr 2021 12:18:46 +0200
+        id bhHFlUpapk1MGbhHJlO0c6; Wed, 28 Apr 2021 12:18:45 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1619605126; bh=FaGFLXMN8fAUU3nHBbcLeEzxvjl5hbViH+zIyDrLHLI=;
+        t=1619605125; bh=Mcc6qQJcVnFqpe1epH9TBa4iegLkZXWcaWZuZSY8oo0=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=Z1OKyJT+dHTjRkMamRKaKxfziWxbntuMpTWSZfuGno1+jqqNgj/AlFmuWRznJ2YXv
-         YqPPuemEI8yuo4x/+zTjZX9mBkGX+2GUt/pZtrvoSHc2sZBXLRK4h+HgoqctXEVE7h
-         uBekGyIcGO7YQwBziAzNJ4fm1G+/7pQjSASqLaousbvJxrecTqXPUFvxCKMFebqBIo
-         EAEWRGxT4VPEL4PB655R7t7RLEdbVkAH8uvHHBpdG+z98Bhv6S3Vf/XWYrw8HAMxT4
-         fTTnPkNVRi+BJrFCPXQ+NIja4Ecndbd6zzFP+jGvPvRHnRJlUYX7Ks9e98jsUSwo62
-         xvMjDuPDPZoVg==
+        b=sWSB4Aal2i/bG/cv2iuhsihS/sv51lt/j6bM0R5FVfybsIvPEWn57JplF5hbOeLx9
+         PLk/4ZMgqLV4MqvI7D31iPAX+OTkORfgwIl7AYmJpJwr8YkXLGG0zQLmFy3nW8k2cu
+         53ck2CkC9EW9LZkh95c0MCuosoqZQeDUROpL9KVFDIo9cLiT8N1a9rF87z/PQQuzy5
+         UtkzvpyMV+AXDr7xsQs/0KY1VWxUphwgqR3hY3HuPz5wPzsff4YkJpHgdAU0/xkc64
+         BfoRYlot6eIYu+BI6rNR89nTdsaESSLrPy0u0q0cPHo79RyZY0FBNzByJg1d+WmmqU
+         1wT6cJ05iayPg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         John Cox <jc@kynesim.co.uk>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 3/5] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Date:   Wed, 28 Apr 2021 12:18:39 +0200
-Message-Id: <20210428101841.696059-4-hverkuil-cisco@xs4all.nl>
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Subject: [RFC PATCH 0/5] v4l2-ctrls: refactor and add dynamic array support
+Date:   Wed, 28 Apr 2021 12:18:36 +0200
+Message-Id: <20210428101841.696059-1-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210428101841.696059-1-hverkuil-cisco@xs4all.nl>
-References: <20210428101841.696059-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfHFQWPhSbygR6iT2W13lBgP0QONlYInXOymdCv7Sr2VSP0Tze59t8nFvpcl/AWTb8ENYk2aG9D9aJBsChs9V1U/dy+aQkcR8h1H2+H+pXH/jOXKve1fJ
- RGoAmEGO5U2zki+fBosc5N7esDu/wIXxy/nSBfUVeThZsYKK/oYTHeVdNKRg2aAkbuA1XUgMgp/N9yXZLlYIIZKNWZA79uwRNkmg52hWip9Dw5B8ImYDpMGz
- 4AjhafpWQkdW47bYN/quankPHVj7uvmT4l8uC/swIY1H2RWwfEp4DyFfPVtz4VsxXGqS4bTuJniQ4vs5L8I6ofG35S9jgkP95sIgzZA3cAM=
+X-CMAE-Envelope: MS4xfByuEbTvMV2rhHditWDUjUTOYLU8/+Pgr/BmhcOouCc0LV68opItVakHC53Ja5EEdQvq3E037ws6IQ4pGdZGiwJRbMgXaKxm/EKDS4xHnn1jbGHz/mZN
+ bzdj7acWRkeYguyk5HIaffCXwLnnV2JYMHGNs4kTNKhLbYsAScENl3v0lDabC2Tuz2e9MlKlBd+h6fZf1ZjJ+MYe+A3bJGbgf24DyhdMnBkOHzlNVuopx7yV
+ 4OOYcZfBHu7pqYbUh1CPGEUJlvLvsLKKkUlZuQslzIfgXky/HO40XehnLLT/WX9L
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new flag that indicates that this control is a dynamically sized
-array. Also document this flag.
+This patch series adds support for dynamic arrays, something that
+is very helpful for stateless codecs.
 
-Currently dynamically sized arrays are limited to one dimensional arrays,
-but that might change in the future if there is a need for it.
+The first patch fixes a bug in the control framework: if a request
+was queued up without any controls, then after completion the request
+would still have no controls, so it was impossible to read the state
+of the controls at completion time. Note that drivers can also set
+control values themselves, so this information would be lost as well.
 
-The initial use-case of dynamic arrays are stateless codecs. A frame
-can be divided in many slices, so you want to provide an array containing
-slice information for each slice. Typically the number of slices is small,
-but the standard allow for hundreds or thousands of slices. Dynamic arrays
-are a good solution since sizing the array for the worst case would waste
-substantial amounts of memory.
+The v4l2_ctrl_request_complete() was modified to attempt to create
+a request control object if it was missing.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
- .../userspace-api/media/videodev2.h.rst.exceptions        | 1 +
- include/uapi/linux/videodev2.h                            | 1 +
- 3 files changed, 10 insertions(+)
+This patch will need to be backported to older kernels as well,
+but I wait with the details until 5.13-rc1 is released as it is a
+bit easier to tell for which kernels this patch applies cleanly.
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 8a285daedc6a..4a7b2e8dec79 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -595,6 +595,14 @@ See also the examples in :ref:`control`.
- 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
- 	streaming is in progress since most drivers do not support changing
- 	the format in that case.
-+    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-+      - 0x0800
-+      - This control is a dynamically sized 1-dimensional array. It
-+        behaves the same as a regular array, except that the number
-+	of elements as reported by the ``elems`` field is between 1 and
-+	``dims[0]``. So setting the control with a differently sized
-+	array will change the ``elems`` field when the control is
-+	queried afterwards.
- 
- Return Value
- ============
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index f59940352faa..362a4389e60c 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -374,6 +374,7 @@ replace define V4L2_CTRL_FLAG_VOLATILE control-flags
- replace define V4L2_CTRL_FLAG_HAS_PAYLOAD control-flags
- replace define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE control-flags
- replace define V4L2_CTRL_FLAG_MODIFY_LAYOUT control-flags
-+replace define V4L2_CTRL_FLAG_DYNAMIC_ARRAY control-flags
- 
- replace define V4L2_CTRL_FLAG_NEXT_CTRL control
- replace define V4L2_CTRL_FLAG_NEXT_COMPOUND control
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 311a01cc5775..6264dc389193 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1862,6 +1862,7 @@ struct v4l2_querymenu {
- #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
- #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
- #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-+#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
- 
- /*  Query flags, to be ORed with the control ID */
- #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+The second (huge!) patch splits up v4l2-ctrls.c into four source
+files. It became unmanageable, and splitting it up made it much
+easier to maintain. I hope it reaches the mailinglist, it might
+be too big. If it doesn't arrive, then you can find it in my
+git repo:
+
+https://git.linuxtv.org/hverkuil/media_tree.git/commit/?h=ctrl-refactor&id=db91a8696a76e62304d73759a3de6b92bacb7085
+
+The third patch adds the new flag + documentation.
+
+The fourth patch adds the actual support for dynamic arrays.
+
+The fifth patch adds a dynamic array test control to vivid which
+allowed me to test this feature. I'll post a separate patch that
+adds compliance tests for this to v4l2-compliance.
+
+I hope the stateless codec devs can test this to see if it meets
+their needs. Regardless of that, I do want to get the first two
+patches merged as soon as possible once the rc1 is released and
+merged in our master branch.
+
+Especially the refactoring in the second patch was a great help
+in understanding the code.
+
+Regards,
+
+	Hans
+
+Hans Verkuil (5):
+  v4l2-ctrls: always copy the controls on completion
+  v4l2-ctrls: split up into four source files
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
+
+ .../media/v4l/vidioc-queryctrl.rst            |    8 +
+ .../media/videodev2.h.rst.exceptions          |    1 +
+ drivers/media/mc/mc-request.c                 |    3 +-
+ .../media/test-drivers/vivid/vivid-ctrls.c    |   15 +
+ drivers/media/v4l2-core/Makefile              |    5 +-
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 1278 +++++
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 2009 +++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     | 1571 +++++
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   95 +
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  501 ++
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 5035 -----------------
+ include/media/v4l2-ctrls.h                    |   42 +-
+ include/uapi/linux/videodev2.h                |    1 +
+ 13 files changed, 5519 insertions(+), 5045 deletions(-)
+ create mode 100644 drivers/media/v4l2-core/v4l2-ctrls-api.c
+ create mode 100644 drivers/media/v4l2-core/v4l2-ctrls-core.c
+ create mode 100644 drivers/media/v4l2-core/v4l2-ctrls-defs.c
+ create mode 100644 drivers/media/v4l2-core/v4l2-ctrls-priv.h
+ create mode 100644 drivers/media/v4l2-core/v4l2-ctrls-request.c
+ delete mode 100644 drivers/media/v4l2-core/v4l2-ctrls.c
+
 -- 
 2.30.2
 
