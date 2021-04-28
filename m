@@ -2,255 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3FD8C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53003C433B4
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99BE361424
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:14:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14D4561435
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:52:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240202AbhD1OPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239223AbhD1OPk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:15:40 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B39C061573;
-        Wed, 28 Apr 2021 07:14:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id B54DD1F42AFA
-Message-ID: <b92eb32b84dd7a69a47bf78b17f49d4ba500739c.camel@collabora.com>
-Subject: Re: [PATCH v3 79/79] media: hantro: document the usage of
- pm_runtime_get_sync()
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>, linuxarm@huawei.com,
-        mauro.chehab@huawei.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S240296AbhD1Oxb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240269AbhD1Ox3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C0EE461447;
+        Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619621563;
+        bh=vSVgVx9oCI4BykR40BTa4+7tin+dlK2U4+Benc8+UkQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IjmvDkezJvua0hzghdBZ4nL75WLBAmx7//xkI7b0W/JXRMiVDeYzNgmx38tXV6rku
+         2q68MMjEiNSRUwocDaahV8E0WBTtGDrvkm8d6v+ORAoUXoy+S9eKyGbvHPmYTzrsCN
+         eSZufzbPLh+8YA1rodM3dX3zHPoH0mlG71MUW7LVl8VrwLLxZapIP3SvpTTOy2YG//
+         +IdV1llrv2lUlxrSAluaiNTWrVadyvKZohfQJ0U5ee90AstCGV1sYU+jJTX17V2M7a
+         ZV12rplqUy8Gv8Is3Nqj0ojpD43bBz44OSk4aP7/TMKJe8LkybBF4Uimksyv1CVLLz
+         yf2W3T81gkrrQ==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lblYP-001Dq7-ST; Wed, 28 Apr 2021 16:52:41 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Date:   Wed, 28 Apr 2021 11:14:44 -0300
-In-Reply-To: <20210428084431.0c2d505b@coco.lan>
-References: <cover.1619519080.git.mchehab+huawei@kernel.org>
-         <230f22170db7fa57b49cff4570cef15bf11b2ad5.1619519080.git.mchehab+huawei@kernel.org>
-         <02948673-9572-a570-d28e-03a7208f39e1@arm.com>
-         <95ea572e201545b27ff9f48313f7aaea157d4764.camel@collabora.com>
-         <20210428082742.20d54db1@coco.lan> <20210428084431.0c2d505b@coco.lan>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v4 11/79] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
+Date:   Wed, 28 Apr 2021 16:51:32 +0200
+Message-Id: <6fb49df1ba7c80c2e6c51fb95322e025243ce36c.1619621413.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
+References: <cover.1619621413.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter and avoid memory
+leaks.
 
-On Wed, 2021-04-28 at 08:44 +0200, Mauro Carvalho Chehab wrote:
-> Em Wed, 28 Apr 2021 08:27:42 +0200
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
-> 
-> > Em Tue, 27 Apr 2021 12:18:32 -0300
-> > Ezequiel Garcia <ezequiel@collabora.com> escreveu:
-> > 
-> > > On Tue, 2021-04-27 at 16:08 +0100, Robin Murphy wrote:  
-> > > > On 2021-04-27 11:27, Mauro Carvalho Chehab wrote:    
-> > > > > Despite other *_get()/*_put() functions, where usage count is
-> > > > > incremented only if not errors, the pm_runtime_get_sync() has
-> > > > > a different behavior, incrementing the counter *even* on
-> > > > > errors.
-> > > > > 
-> > > > > That's an error prone behavior, as people often forget to
-> > > > > decrement the usage counter.
-> > > > > 
-> > > > > However, the hantro driver depends on this behavior, as it
-> > > > > will decrement the usage_count unconditionally at the m2m
-> > > > > job finish time, which makes sense.
-> > > > > 
-> > > > > So, intead of using the pm_runtime_resume_and_get() that
-> > > > > would decrement the counter on error, keep the current
-> > > > > API, but add a documentation explaining the rationale for
-> > > > > keep using pm_runtime_get_sync().
-> > > > > 
-> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > > > > ---
-> > > > >   drivers/staging/media/hantro/hantro_drv.c | 7 +++++++
-> > > > >   1 file changed, 7 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> > > > > index 595e82a82728..96f940c1c85c 100644
-> > > > > --- a/drivers/staging/media/hantro/hantro_drv.c
-> > > > > +++ b/drivers/staging/media/hantro/hantro_drv.c
-> > > > > @@ -155,6 +155,13 @@ static void device_run(void *priv)
-> > > > >         ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
-> > > > >         if (ret)
-> > > > >                 goto err_cancel_job;    
-> > > > 
-> > > > ..except this can also cause the same pm_runtime_put_autosuspend() call 
-> > > > without even reaching the "matching" get below, so rather than some kind 
-> > > > of cleverness it seems more like it's just broken :/
-> > > >     
-> > > 
-> > > Indeed, I was trying to find time to cook a quick patch, but kept
-> > > getting preempted.
-> > > 
-> > > Feel free to submit a fix for this, otherwise, I'll try to find
-> > > time later this week.  
-> > 
-> > What about doing this instead:
-> > 
-> > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> > index 595e82a82728..67de6b15236d 100644
-> > --- a/drivers/staging/media/hantro/hantro_drv.c
-> > +++ b/drivers/staging/media/hantro/hantro_drv.c
-> > @@ -56,14 +56,12 @@ dma_addr_t hantro_get_ref(struct hantro_ctx *ctx, u64 ts)
-> >         return hantro_get_dec_buf_addr(ctx, buf);
-> >  }
-> >  
-> > -static void hantro_job_finish(struct hantro_dev *vpu,
-> > -                             struct hantro_ctx *ctx,
-> > -                             enum vb2_buffer_state result)
-> > +static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
-> > +                                   struct hantro_ctx *ctx,
-> > +                                   enum vb2_buffer_state result)
-> >  {
-> >         struct vb2_v4l2_buffer *src, *dst;
-> >  
-> > -       pm_runtime_mark_last_busy(vpu->dev);
-> > -       pm_runtime_put_autosuspend(vpu->dev);
-> >         clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
-> >  
-> >         src = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
-> > @@ -81,6 +79,16 @@ static void hantro_job_finish(struct hantro_dev *vpu,
-> >                                          result);
-> >  }
-> >  
-> > +static void hantro_job_finish(struct hantro_dev *vpu,
-> > +                             struct hantro_ctx *ctx,
-> > +                             enum vb2_buffer_state result)
-> > +{
-> > +       pm_runtime_mark_last_busy(vpu->dev);
-> > +       pm_runtime_put_autosuspend(vpu->dev);
-> > +
-> > +       hantro_job_finish_no_pm(vpu, ctx, result);
-> > +}
-> > +
-> >  void hantro_irq_done(struct hantro_dev *vpu,
-> >                      enum vb2_buffer_state result)
-> >  {
-> > @@ -152,12 +160,13 @@ static void device_run(void *priv)
-> >         src = hantro_get_src_buf(ctx);
-> >         dst = hantro_get_dst_buf(ctx);
-> >  
-> > +       ret = pm_runtime_resume_and_get(ctx->dev->dev);
-> > +       if (ret < 0)
-> > +               goto err_cancel_job;
-> > +
-> >         ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
-> >         if (ret)
-> >                 goto err_cancel_job;
-> > -       ret = pm_runtime_get_sync(ctx->dev->dev);
-> > -       if (ret < 0)
-> > -               goto err_cancel_job;
-> >  
-> >         v4l2_m2m_buf_copy_metadata(src, dst, true);
-> >  
-> > @@ -165,7 +174,7 @@ static void device_run(void *priv)
-> >         return;
-> >  
-> >  err_cancel_job:
-> > -       hantro_job_finish(ctx->dev, ctx, VB2_BUF_STATE_ERROR);
-> > +       hantro_job_finish_no_pm(ctx->dev, ctx, VB2_BUF_STATE_ERROR);
-> >  }
-> >  
-> >  static struct v4l2_m2m_ops vpu_m2m_ops = {
-> > 
-> > Thanks,
-> > Mauro
-> 
-> Actually, the order at the finish logic should change as well.
-> Maybe like this:
-> 
+Also, right now, the driver is ignoring any troubles when
+trying to do PM resume. So, add the proper error handling
+for the code.
 
-This one looks good.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/platform/rcar_fdp1.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-Thanks!
-Ezequiel
-
-> <snip>
-> static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
->                                     struct hantro_ctx *ctx,
->                                     enum vb2_buffer_state result)
-> {
->         struct vb2_v4l2_buffer *src, *dst;
-> 
->         src = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
->         dst = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
-> 
->         if (WARN_ON(!src))
->                 return;
->         if (WARN_ON(!dst))
->                 return;
-> 
->         src->sequence = ctx->sequence_out++;
->         dst->sequence = ctx->sequence_cap++;
-> 
->         v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
->                                          result);
-> }
-> 
-> static void hantro_job_finish(struct hantro_dev *vpu,
->                               struct hantro_ctx *ctx,
->                               enum vb2_buffer_state result)
-> {
-> 
->         hantro_job_finish_no_pm(vpu, ctx, result);
-> 
->         clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
-> 
->         pm_runtime_mark_last_busy(vpu->dev);
->         pm_runtime_put_autosuspend(vpu->dev);
-> }
-> 
-> static void device_run(void *priv)
-> {
->         struct hantro_ctx *ctx = priv;
->         struct vb2_v4l2_buffer *src, *dst;
->         int ret;
-> 
->         src = hantro_get_src_buf(ctx);
->         dst = hantro_get_dst_buf(ctx);
-> 
->         ret = pm_runtime_resume_and_get(ctx->dev->dev);
->         if (ret < 0)
->                 goto err_cancel_job;
-> 
->         ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
->         if (ret)
->                 goto err_cancel_job;
-> 
->         v4l2_m2m_buf_copy_metadata(src, dst, true);
-> 
->         ctx->codec_ops->run(ctx);
->         return;
-> 
-> err_cancel_job:
->         hantro_job_finish_no_pm(ctx->dev, ctx, VB2_BUF_STATE_ERROR);
-> }
-> </snip>
-> 
-> 
-> Thanks,
-> Mauro
-
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 01c1fbb97bf6..c32d237af618 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -2140,7 +2140,13 @@ static int fdp1_open(struct file *file)
+ 	}
+ 
+ 	/* Perform any power management required */
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
++	if (ret < 0) {
++		v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++		v4l2_ctrl_handler_free(&ctx->hdl);
++		kfree(ctx);
++		goto done;
++	}
+ 
+ 	v4l2_fh_add(&ctx->fh);
+ 
+@@ -2351,7 +2357,9 @@ static int fdp1_probe(struct platform_device *pdev)
+ 
+ 	/* Power up the cells to read HW */
+ 	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
+ 	switch (hw_version) {
+-- 
+2.30.2
 
