@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13217C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B339C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D421C6143E
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4711661151
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:55:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240739AbhD1Ozi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36366 "EHLO mail.kernel.org"
+        id S230521AbhD1Ozm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240461AbhD1OyF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240457AbhD1OyF (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:54:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EA6A861970;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B45F961943;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621565;
-        bh=kwIJFx+3BZT7CutnecuzIxhgs2GnXNtjRI6MBhWOcG4=;
+        bh=uJQR0czm+DeAW2PWQeBvZ4Rvzd+S5i8+90myFebensI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aqyEcOe1373v2IxrEcx0sTniQDH7DHbNKOfgpoGB5RikmQwT0VSiQbq2m7bqa8Jm2
-         I3k+Py3hiY08ddP2PJMTKLcMR5Yb7EL4bouXoBrwofFsDXlkTIr1cQdfRoeQzfssB4
-         ZUd6tXRIfupa47lAkccVwgmaCclQwSokT/rvaUdEvGMXblHBjuGsDfdMwTcUHS7w2g
-         yux7o8gKVJz65geUL7eL8UmeIedXSFUHs0ep1778C/cRH//qPPmPKWQOpF15Eg/+Rn
-         Vadtv0RSBYaxJAWsnDj844iSoBnARIySLkLeyBX2qCWKRQNJS/w4fAGmwo1lEkAsxe
-         CFBt76BajDKmg==
+        b=gd0RWjwESYvChE/vXJCMbgMdur/zgpmsndv+U7m1KPFsydIARd9u/rGZfIxnlVWAK
+         dEC37mB/No0AtlFC4lrWsscAwp8/zNCRUShMCT9rLYXvM5lw01qGK7jOhujoyJC/Vr
+         /k66J5MVQ/fBrmTq2ao4mLnRs/Z/AJPnOvR3Z7rJnNTPIFRXy74874ksxc1UiQxncJ
+         Ky6bALQZhCk2CSmQZYAazp9dOf8L+iqw9CvSwhw40Ft4DLVJ8oIV6stXFrGcoYqxw5
+         ilknZ4+VUlkH7MlSRyNF6zFpOWMQQZT2E1BxZ4PXQA9m/3aw5ghLONpdS8tV9EFPn1
+         Q5rn/6+Bh6vBQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001Drx-W4; Wed, 28 Apr 2021 16:52:43 +0200
+        id 1lblYR-001DsL-7K; Wed, 28 Apr 2021 16:52:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Tu <shawnx.tu@intel.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v4 49/79] media: i2c: ov5675: use pm_runtime_resume_and_get()
-Date:   Wed, 28 Apr 2021 16:52:10 +0200
-Message-Id: <3deaf3753d5adb417320bfb59a511329a7191c24.1619621413.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v4 57/79] media: rockchip/rga: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:52:18 +0200
+Message-Id: <cf0f0cb266c8b552f03583590a3b02a56f751c79.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -62,24 +65,40 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ov5675.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/rockchip/rga/rga-buf.c | 3 +--
+ drivers/media/platform/rockchip/rga/rga.c     | 4 +++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index dea32859459a..e7e297a23960 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -863,9 +863,8 @@ static int ov5675_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
+index bf9a75b75083..81508ed5abf3 100644
+--- a/drivers/media/platform/rockchip/rga/rga-buf.c
++++ b/drivers/media/platform/rockchip/rga/rga-buf.c
+@@ -79,9 +79,8 @@ static int rga_buf_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct rockchip_rga *rga = ctx->rga;
+ 	int ret;
  
- 	mutex_lock(&ov5675->mutex);
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
- 		if (ret < 0) {
--			pm_runtime_put_noidle(&client->dev);
- 			mutex_unlock(&ov5675->mutex);
- 			return ret;
- 		}
+-	ret = pm_runtime_get_sync(rga->dev);
++	ret = pm_runtime_resume_and_get(rga->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(rga->dev);
+ 		rga_buf_return_buffers(q, VB2_BUF_STATE_QUEUED);
+ 		return ret;
+ 	}
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 9d122429706e..bf3fd71ec3af 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -866,7 +866,9 @@ static int rga_probe(struct platform_device *pdev)
+ 		goto unreg_video_dev;
+ 	}
+ 
+-	pm_runtime_get_sync(rga->dev);
++	ret = pm_runtime_resume_and_get(rga->dev);
++	if (ret < 0)
++		goto unreg_video_dev;
+ 
+ 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
+ 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
 -- 
 2.30.2
 
