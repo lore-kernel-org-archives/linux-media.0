@@ -7,42 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 505A9C433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD86C43460
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1905761151
+	by mail.kernel.org (Postfix) with ESMTP id 9854861435
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbhD1Oxq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36314 "EHLO mail.kernel.org"
+        id S240398AbhD1Oxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240280AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240278AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBB7461457;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D643A61453;
         Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=v3oOn6uPHJX4lDQc2LG+Rn/44BbALYGNkVgzHn1PdbQ=;
+        bh=5nHsKpVEGzLJBEHDZodScTHIbcgjTCmDYHm0aezhxsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVDkAANun4gFfpVw9Hv5Wz/ja0emkiANxg61djJctBzJFVDY62PIlfXf0HOo2EPnP
-         Tbmzawo8Xlqbrpq/N4j/l2uevJu4o+vs4fMksYUZPxEK/A6xdDkaIoi7RDTQeAdzam
-         l3Pb5zZuFBp4DWgLQu2YHtI2XpL0GTA83N7Cwe4AOJn1BVCC2IaVBClCL3U/vdVGSb
-         Dqgx5B3M8Kcx67zmROjRnkfuj+7TNssEK/jBP/eyT/3hj5BmvNdNUDsUVKBayIzZU4
-         u6bSPzcM2DLYL/Nzgt49QqbL/ZDJ4wIDLJcwq1YoTe3C3BQbC3+AO492SDwbQUH22u
-         7SYO0KcUY0+mQ==
+        b=lmMOTK68uTVce6FmJb5G0TPy5vctAr6DS7PxkCja8wOyztbJ4nb8slYu26WGvd7CK
+         ubQykByF9tNnb9PDEMJGiNt8uVFN2l26qFXqzGvEXZZ8YoqIZIY9oOygiipAf98HDP
+         uIcM675f4f+qqaSXBY59FEPMAdiyLnqtYRfYd+5M558S81WvNjR789dbLp/GZ3iZYa
+         zo6/KoOcjyBBlld4U+N+8Xzr0q5ZYB8RYNcbBC/hq1e2wOEYIRQEwdAIYfHO8aaoar
+         Dw2Xtfly855Cq9fyzSuhYOkr1Pxxk0ufgYTc1jw44jjN6hZYv/eN48FmFjCr04iw6k
+         EZvoIl9eOXMoA==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001DqG-VD; Wed, 28 Apr 2021 16:52:41 +0200
+        id 1lblYP-001Dps-Na; Wed, 28 Apr 2021 16:52:41 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 14/79] media: am437x: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:35 +0200
-Message-Id: <13b31912c93b56426660106d673d3c1a5be63170.1619621413.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v4 06/79] media: i2c: imx334: fix the pm runtime get logic
+Date:   Wed, 28 Apr 2021 16:51:27 +0200
+Message-Id: <10ec24ee3e3a33a4ca5c431fc19d3441d59136c3.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -54,95 +56,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
+The PM runtime get logic is currently broken, as it checks if
+ret is zero instead of checking if it is an error code,
+as reported by Dan Carpenter.
+
+While here, use the pm_runtime_resume_and_get() as added by:
 commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-While here, ensure that the driver will check if PM runtime
-resumed at vpfe_initialize_device().
-
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 22 +++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ drivers/media/i2c/imx334.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 6cdc77dda0e4..bced526f30f2 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
- 	if (ret)
- 		return ret;
- 
--	pm_runtime_get_sync(vpfe->pdev);
-+	ret = pm_runtime_resume_and_get(vpfe->pdev);
-+	if (ret < 0)
-+		return ret;
- 
- 	vpfe_config_enable(&vpfe->ccdc, 1);
- 
-@@ -2443,7 +2445,11 @@ static int vpfe_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 
- 	/* for now just enable it here instead of waiting for the open */
--	pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		vpfe_err(vpfe, "Unable to resume device.\n");
-+		goto probe_out_v4l2_unregister;
-+	}
- 
- 	vpfe_ccdc_config_defaults(ccdc);
- 
-@@ -2527,10 +2533,11 @@ static int vpfe_suspend(struct device *dev)
- {
- 	struct vpfe_device *vpfe = dev_get_drvdata(dev);
- 	struct vpfe_ccdc *ccdc = &vpfe->ccdc;
-+	int ret;
- 
- 	/* only do full suspend if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
--		pm_runtime_get_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		vpfe_config_enable(ccdc, 1);
- 
- 		/* Save VPFE context */
-@@ -2541,7 +2548,8 @@ static int vpfe_suspend(struct device *dev)
- 		vpfe_config_enable(ccdc, 0);
- 
- 		/* Disable both master and slave clock */
--		pm_runtime_put_sync(dev);
-+		if (ret >= 0)
-+			pm_runtime_put_sync(dev);
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index 047aa7658d21..23f28606e570 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -717,9 +717,9 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
  	}
  
- 	/* Select sleep pin state */
-@@ -2583,18 +2591,20 @@ static int vpfe_resume(struct device *dev)
- {
- 	struct vpfe_device *vpfe = dev_get_drvdata(dev);
- 	struct vpfe_ccdc *ccdc = &vpfe->ccdc;
-+	int ret;
+ 	if (enable) {
+-		ret = pm_runtime_get_sync(imx334->dev);
+-		if (ret)
+-			goto error_power_off;
++		ret = pm_runtime_resume_and_get(imx334->dev);
++		if (ret < 0)
++			goto error_unlock;
  
- 	/* only do full resume if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
- 		/* Enable both master and slave clock */
--		pm_runtime_get_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		vpfe_config_enable(ccdc, 1);
+ 		ret = imx334_start_streaming(imx334);
+ 		if (ret)
+@@ -737,6 +737,7 @@ static int imx334_set_stream(struct v4l2_subdev *sd, int enable)
  
- 		/* Restore VPFE context */
- 		vpfe_restore_context(ccdc);
+ error_power_off:
+ 	pm_runtime_put(imx334->dev);
++error_unlock:
+ 	mutex_unlock(&imx334->mutex);
  
- 		vpfe_config_enable(ccdc, 0);
--		pm_runtime_put_sync(dev);
-+		if (ret >= 0)
-+			pm_runtime_put_sync(dev);
- 	}
- 
- 	/* Select default pin state */
+ 	return ret;
 -- 
 2.30.2
 
