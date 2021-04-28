@@ -7,45 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB2BC43611
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBDD7C43618
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 509B26143E
+	by mail.kernel.org (Postfix) with ESMTP id CD6DE61442
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbhD1Oxy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36366 "EHLO mail.kernel.org"
+        id S240283AbhD1Oyy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:54:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240292AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 104BD61482;
-        Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
+        id S240282AbhD1Oxe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Apr 2021 10:53:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 386906161E;
+        Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=kZnJ3c5lxpnyMUPcou0x/B7YpZdYmZe9W/fJf9NvZfI=;
+        bh=ZOYDC8nizVOemN97ng0w67F2uxMXkIsqLhOdGgCw1ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oSFD5gjj1UhSA5WJUYg4n0cCSF6kFkwx1Z8v9LX72qbiifLtfs4O1M80mPTmB3eiD
-         1Z3J6u++rlX0YrXAOv52opoAPVUF8J+4HEipvqGNBiUUP9+sRWU+o5F6usoKHSmFN3
-         cw7tzFyLyyXm0tbSNHbbrYXx6bp77puSsAxEskJJbQiaGlFvfthvfT2F2fZPAbuVuZ
-         hR4kRBVabfZyU1ygSCPEgS/ehEcYcOWjh/j4SrJb/vQpr/uvfzRu+ku5zpoc3/2S4H
-         MdaO1KxTiCxV9v3hblGbNnAwcEBnkLskuGC7XS5upffVde2RDJy9RoRGsbxw1N1uNw
-         70d/68RpzcNVQ==
+        b=VgxbE4mJ0ZEcoI1ecyYFcTPlzsW49H2M63eqo68iaWSmjvRqXboDB5xQMbytGDWQk
+         76GoPeVrxn1RYKVBnd+MXI44IscCshuUzdKYOISFkyavzinHVX6S9dQvZuYZ/c0kKr
+         lG9PDH6exDcSyX5wsHVpaEVPDOkv77fIeL82HhbEgta0782dmoBWO8yOY3Bc7nwAM+
+         GxYxl53JlYU7btpAVOW3OIcuxKbhQ13c/LFfcBMSEltOF4Fgc6TacvT9CYVM7Io6uw
+         TJts9T+pQndgP3gPyl5Y7itlI8I7H01MRldR5N33kS1+NZ3cVPZdxmT1j4pM5o43zS
+         SPIku5x/jRyKw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001DqP-1s; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYQ-001Dqb-5a; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v4 17/79] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:38 +0200
-Message-Id: <83a1f7979382d5d5c44964baae819589c94d80c2.1619621413.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 21/79] staging: media: atomisp: use pm_runtime_resume_and_get()
+Date:   Wed, 28 Apr 2021 16:51:42 +0200
+Message-Id: <18b1c2debc56925d9caf2d67a794f761557a26f4.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -57,32 +56,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter and avoid memory
-leaks.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Use the new API, in order to cleanup the error check logic.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 026111505f5a..c4f19418a460 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2568,7 +2568,7 @@ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index f1e6b2597853..26d05474a035 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -837,7 +837,7 @@ static int atomisp_open(struct file *file)
+ 	}
  
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
-+	ret = pm_runtime_resume_and_get(ctx->jpeg->dev);
+ 	/* runtime power management, turn on ISP */
+-	ret = pm_runtime_get_sync(vdev->v4l2_dev->dev);
++	ret = pm_runtime_resume_and_get(vdev->v4l2_dev->dev);
+ 	if (ret < 0) {
+ 		dev_err(isp->dev, "Failed to power on device\n");
+ 		goto error;
+@@ -881,9 +881,9 @@ static int atomisp_open(struct file *file)
  
- 	return ret > 0 ? 0 : ret;
+ css_error:
+ 	atomisp_css_uninit(isp);
+-error:
+-	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
+ 	pm_runtime_put(vdev->v4l2_dev->dev);
++error:
++	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
+ 	rt_mutex_unlock(&isp->mutex);
+ 	return ret;
  }
 -- 
 2.30.2
