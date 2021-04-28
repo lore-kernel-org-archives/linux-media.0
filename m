@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F57C43462
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED6BAC433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4A1461443
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFD3E61445
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240617AbhD1OzL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:55:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36654 "EHLO mail.kernel.org"
+        id S240677AbhD1OzN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:55:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240390AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240391AbhD1Oxr (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD41A6193D;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B07A561940;
         Wed, 28 Apr 2021 14:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=EG1Xkz5icS6rCKpEKVZN/X2JADr2Ee/ss00sHCZahe0=;
+        bh=imJJDHPAiJP2c7eOJo+7OC5ScwYwgiXYY/gmGiNV2zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oCHpn+fmwGV/kArmNSoUSn/jMNhaV6E/cELb1239AFp7tEHpXStLvOGkkClPlKqHs
-         S7Qm6nNL7QYa6ulOnG4byCCfTYEem7BFawbiEPTRfzL7bx/AnCwg77yK0FW7b2ZG25
-         OuBvkfQq1VMaaAzRwwV2KPZqEWGdoYalLtmAiKFIjXcFNilFv4IQA+gljSNBPDmclI
-         Fp9MWk+QZqamavqShzSNyVX15Gt7jXrKM5+jwLX5Bb+QL7MSA1f13GVKKe1Dd3ziD/
-         qufSXKj3aJNvEcWVz+MZc5fJCke6X8fF7Yrlott+4MqITcC6qdWAXSq0h3sPOIM/5W
-         NTnDpyOaC0YSg==
+        b=FrSiQCIXXuso2wfxt2oWBwn4AMJwjz8RxRjTJjgHnGxwyzFc0LCrUdUYk5++nMpAe
+         c1P6h5eH1YjBD0pJeYPtElY1j9WuyqiGHhdVHEu8/WDyZtDXJE3A2ynqb1MWZz2Gz/
+         1RjL0x/mCShkNzl8ioFvY+tFclhDhOoEWK66pzL/qSZjVFfkbBTzQZiDZJMfSdQVib
+         AtwRHtdt47HBU0zQhNHEllbJbZAgqLRMolrFtNQpYz/4h+Tlh/W88STDfdKHxPxfig
+         LxSbnZLywI8vq1juQOXjkJsZHBD14FmeLObUWO84CIinBK/KXQX22U4Ybe6rkVUjlR
+         gIkeZoUe/b2vg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001Dpf-JZ; Wed, 28 Apr 2021 16:52:41 +0200
+        id 1lblYS-001DuM-D5; Wed, 28 Apr 2021 16:52:44 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kamil Debski <kamil@wypas.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v4 02/79] media: s6p_cec: decrement usage count if disabled
-Date:   Wed, 28 Apr 2021 16:51:23 +0200
-Message-Id: <2c52c48533f6eafdb7b9c72ee2f02747e851a983.1619621413.git.mchehab+huawei@kernel.org>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v4 79/79] media: hantro: do a PM resume earlier
+Date:   Wed, 28 Apr 2021 16:52:40 +0200
+Message-Id: <569838d406dde80dcc64989a663882817a54cbb2.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -58,31 +57,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There's a bug at s5p_cec_adap_enable(): if called to
-disable the device, it should call pm_runtime_put()
-instead of pm_runtime_disable(), as the goal here is to
-decrement the usage_count and not to disable PM runtime.
+The device_run() first enables the clock and then
+tries to resume PM runtime, checking for errors.
 
-Reported-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Fixes: 1bcbf6f4b6b0 ("[media] cec: s5p-cec: Add s5p-cec driver")
+Well, if for some reason the pm_runtime can not resume,
+it would be better to detect it beforehand.
+
+So, change the order inside device_run().
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/cec/platform/s5p/s5p_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/hantro/hantro_drv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
-index 2a3e7ffefe0a..3c7c4c3c798c 100644
---- a/drivers/media/cec/platform/s5p/s5p_cec.c
-+++ b/drivers/media/cec/platform/s5p/s5p_cec.c
-@@ -51,7 +51,7 @@ static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
- 	} else {
- 		s5p_cec_mask_tx_interrupts(cec);
- 		s5p_cec_mask_rx_interrupts(cec);
--		pm_runtime_disable(cec->dev);
-+		pm_runtime_put(cec->dev);
- 	}
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 25fa36e7e773..67de6b15236d 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -160,14 +160,14 @@ static void device_run(void *priv)
+ 	src = hantro_get_src_buf(ctx);
+ 	dst = hantro_get_dst_buf(ctx);
  
- 	return 0;
+-	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
+-	if (ret)
+-		goto err_cancel_job;
+-
+ 	ret = pm_runtime_resume_and_get(ctx->dev->dev);
+ 	if (ret < 0)
+ 		goto err_cancel_job;
+ 
++	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
++	if (ret)
++		goto err_cancel_job;
++
+ 	v4l2_m2m_buf_copy_metadata(src, dst, true);
+ 
+ 	ctx->codec_ops->run(ctx);
 -- 
 2.30.2
 
