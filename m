@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C52C43461
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49057C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72A7561447
-	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1274161435
+	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240386AbhD1Oxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
+        id S240426AbhD1Oxy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240281AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240291AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D39F46144E;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21675614A7;
         Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=XfZSeMotNFyXbfT608pw1ECU5JJkssXPopFyWbltzaE=;
+        bh=W1MZ5fUp2z9NMPUzLbsMjuPOyaCJXem6s4s1Qkfcwz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gQMN97eC7BEDIz1pxwojfxcjha4oPcG+hRlJfly/9mEn3EVUjF6A17eUhRaUV4Av6
-         9llNqcINPObifS7R+KKJzcq9sElWMQUcLuEgUGm4dEcPAo7WPuTsJBo8FAKaKUj9Hk
-         VsE0m0+uaGwgEcNcCKy4FE+EybZisDq15Xlqw+m72JjyXstPa88Kj6is8ypDBGKPdI
-         X5k3QuLFiBcmGJ+6I0pWZTX0FzZ3AimINfu9/sQCxIkKFaooCIrQkh6kuh/y12/DqV
-         q/M582iW3kDaTv+n6EwJSHs1PeakpZmbEzfwaSOI0e14HbJuwkIcKyqgVAiYfHvp5V
-         b2Ttn7u9UJXRw==
+        b=j2TOTcw5C445poYixO6MB4771lIkivCDk6l1WcyEeoHLXx/19d6xJ7PwFCbd9A7zF
+         nvUAN9xfF2FVM2yBWLaiNmalMlFsxj5A/UBsSSi6eDtBqBG1TUqiwtAMuwwuBPz4Wa
+         T6MVM6CztEmBDxh1mW/Jz/Xs5VyReq83re7kSzaJaSFdmsHDnc89Y8hn9PjRx1ehzZ
+         OFEAxVTSyd6mB4N7MKW6xKmWnVg/yWiU0CN6VtsO3ruHXAhRALU0U9raQ1OvIeylA6
+         0nG8cb9T4w9p+CmQzNnwUlsyp9YqwWAVvIbjdlCaN70KmHaX5tX8q8E6rdVLzQeGTA
+         +JpqFWntku3vg==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYP-001Dq4-RV; Wed, 28 Apr 2021 16:52:41 +0200
+        id 1lblYQ-001DqV-3i; Wed, 28 Apr 2021 16:52:42 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Maxime Ripard <mripard@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v4 10/79] media: mdk-mdp: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:31 +0200
-Message-Id: <39851c54046fa0d63f34549803df3388361828b7.1619621413.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org
+Subject: [PATCH v4 19/79] media: sunxi: fix pm_runtime_get_sync() usage count
+Date:   Wed, 28 Apr 2021 16:51:40 +0200
+Message-Id: <17cf60c9e5190ff83de40284bb858581bb0ec4a6.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -65,35 +64,24 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
-While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
-as it doesn't make any sense to return 0 if the PM runtime failed
-to resume.
-
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index ace4528cdc5e..f14779e7596e 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mtk_mdp_ctx *ctx = q->drv_priv;
- 	int ret;
+diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+index 3f81dd17755c..fbcca59a0517 100644
+--- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
++++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+@@ -494,7 +494,7 @@ static int rotate_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		struct device *dev = ctx->dev->dev;
+ 		int ret;
  
--	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
- 	if (ret < 0)
--		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
-+		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
- 			    ctx->id, ret);
+-		ret = pm_runtime_get_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
+ 		if (ret < 0) {
+ 			dev_err(dev, "Failed to enable module\n");
  
--	return 0;
-+	return ret;
- }
- 
- static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
