@@ -7,42 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8756C43470
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C52C43461
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFEA261449
+	by mail.kernel.org (Postfix) with ESMTP id 72A7561447
 	for <linux-media@archiver.kernel.org>; Wed, 28 Apr 2021 14:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbhD1Oxt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 10:53:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36354 "EHLO mail.kernel.org"
+        id S240386AbhD1Oxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Apr 2021 10:53:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240289AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S240281AbhD1Oxa (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 28 Apr 2021 10:53:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2713D6157F;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D39F46144E;
         Wed, 28 Apr 2021 14:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1619621564;
-        bh=U3xPtY+HT1GPqKz+iC8qw5pPuPioh4afaqfdd0R7SD0=;
+        bh=XfZSeMotNFyXbfT608pw1ECU5JJkssXPopFyWbltzaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nU8/4nqsaUzqc/2P2LSyHnwWSNRH0YsgZc7WwCj9qWc17cv+s3MwoJRkLsoUaTrZW
-         0fYO9Yx3bA5D0iH7J7SRbWZaxA6dbnqyIahQ070LTg2iHUTnRhlVKN+iIbUaaoOIh/
-         u5SiAd6E7WXV++WxBhFAJIIXXIZGeRa+7XboOxmWaAetyhAmkRTjgisXuERwmxopfN
-         WV3wZNDuIdABms25SFXDGjRuJURKyGxhQhPHP6EdKLLC3cUPEucpq9nY6raeGLPUgG
-         0nXqfBU6wl0WZyhgSLkuyPhhis5hf9ftTledvQZKIVBvs99Ta3C737EGNzHWABUae0
-         0qemN983jqWfA==
+        b=gQMN97eC7BEDIz1pxwojfxcjha4oPcG+hRlJfly/9mEn3EVUjF6A17eUhRaUV4Av6
+         9llNqcINPObifS7R+KKJzcq9sElWMQUcLuEgUGm4dEcPAo7WPuTsJBo8FAKaKUj9Hk
+         VsE0m0+uaGwgEcNcCKy4FE+EybZisDq15Xlqw+m72JjyXstPa88Kj6is8ypDBGKPdI
+         X5k3QuLFiBcmGJ+6I0pWZTX0FzZ3AimINfu9/sQCxIkKFaooCIrQkh6kuh/y12/DqV
+         q/M582iW3kDaTv+n6EwJSHs1PeakpZmbEzfwaSOI0e14HbJuwkIcKyqgVAiYfHvp5V
+         b2Ttn7u9UJXRw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1lblYQ-001DqS-2n; Wed, 28 Apr 2021 16:52:42 +0200
+        id 1lblYP-001Dq4-RV; Wed, 28 Apr 2021 16:52:41 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v4 18/79] media: sti/delta: fix pm_runtime_get_sync() usage count
-Date:   Wed, 28 Apr 2021 16:51:39 +0200
-Message-Id: <e4d120126b7c3be15d33ed8bcf07c285e14c25bf.1619621413.git.mchehab+huawei@kernel.org>
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v4 10/79] media: mdk-mdp: fix pm_runtime_get_sync() usage count
+Date:   Wed, 28 Apr 2021 16:51:31 +0200
+Message-Id: <39851c54046fa0d63f34549803df3388361828b7.1619621413.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
@@ -61,27 +65,35 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter and avoid memory
 leaks.
 
+While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
+as it doesn't make any sense to return 0 if the PM runtime failed
+to resume.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c691b3d81549..9928b7c46a41 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
- 	int ret = 0;
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index ace4528cdc5e..f14779e7596e 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mtk_mdp_ctx *ctx = q->drv_priv;
+ 	int ret;
  
- 	/* enable the hardware */
--	ret = pm_runtime_get_sync(delta->dev);
-+	ret = pm_runtime_resume_and_get(delta->dev);
- 	if (ret < 0) {
--		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-+		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
- 			__func__, ret);
- 		return ret;
- 	}
+-	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
+ 	if (ret < 0)
+-		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
++		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
+ 			    ctx->id, ret);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
