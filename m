@@ -2,130 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C84C43461
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 13:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E2DDC433ED
+	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 14:09:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A23C61445
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 13:43:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C920161420
+	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 14:09:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237294AbhD2Noh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Apr 2021 09:44:37 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35160 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbhD2Nod (ORCPT
+        id S237314AbhD2OKX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Apr 2021 10:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233602AbhD2OKX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Apr 2021 09:44:33 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 0147E1F434AA
-Message-ID: <47800413ff99225e39f46c841bfb8061aee6d1b6.camel@collabora.com>
-Subject: Re: [PATCH v10 6/9] media: uapi: Add a control for HANTRO driver
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        lee.jones@linaro.org, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, hverkuil-cisco@xs4all.nl,
-        emil.l.velikov@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        kernel@collabora.com, cphealy@gmail.com
-Date:   Thu, 29 Apr 2021 10:43:25 -0300
-In-Reply-To: <20210420121046.181889-7-benjamin.gaignard@collabora.com>
-References: <20210420121046.181889-1-benjamin.gaignard@collabora.com>
-         <20210420121046.181889-7-benjamin.gaignard@collabora.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        Thu, 29 Apr 2021 10:10:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD6AC06138B
+        for <linux-media@vger.kernel.org>; Thu, 29 Apr 2021 07:09:35 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D876E70;
+        Thu, 29 Apr 2021 16:09:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1619705372;
+        bh=OZwGB5rAIXjNubZefMV6t7iZpSTCeD3PIc7tOMlkqMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpnJCOBY6vIR8tjcIZ+cQJUhJBDmPV+xCKRlIlZbUasEgaHy1k6ADkvKjrE77vYSx
+         qOiMIeGsU1u8AYki5aR7+jGqafdZlt1KMnNkqzqskFxEcxOhPCIYb2YizCMMcMYAlH
+         00t5HTcu7FLZgnBM1WoOnBUO8Y+srQAFNQWHQnQk=
+Date:   Thu, 29 Apr 2021 17:09:26 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v5 15/24] v4l: Add bus type to frame descriptors
+Message-ID: <YIq+FlDs7T+5FjCN@pendragon.ideasonboard.com>
+References: <20210415130450.421168-1-tomi.valkeinen@ideasonboard.com>
+ <20210415130450.421168-16-tomi.valkeinen@ideasonboard.com>
+ <YHyHN2hWN1Hb3Gv1@pendragon.ideasonboard.com>
+ <20210420115050.GO3@paasikivi.fi.intel.com>
+ <2f39d7b6-ccc4-1afb-d8b2-6e0d44a311b0@ideasonboard.com>
+ <20210429115811.GV3@paasikivi.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210429115811.GV3@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 2021-04-20 at 14:10 +0200, Benjamin Gaignard wrote:
-> The HEVC HANTRO driver needs to know the number of bits to skip at
-> the beginning of the slice header.
-> That is a hardware specific requirement so create a dedicated control
-> for this purpose.
+Hi Sakari,
+
+On Thu, Apr 29, 2021 at 02:58:11PM +0300, Sakari Ailus wrote:
+> On Thu, Apr 22, 2021 at 03:30:55PM +0300, Tomi Valkeinen wrote:
+> > On 20/04/2021 14:50, Sakari Ailus wrote:
+> > > On Sun, Apr 18, 2021 at 10:23:35PM +0300, Laurent Pinchart wrote:
+> > > > On Thu, Apr 15, 2021 at 04:04:41PM +0300, Tomi Valkeinen wrote:
+> > > > > From: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > 
+> > > > > Add the media bus type to the frame descriptor. CSI-2 specific
+> > > > > information will be added in next patch to the frame descriptor.
+> > > > 
+> > > > I'd squash the next patch with this one.
+> > > > 
+> > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > > > > 
+> > > > > - Make the bus type a named enum
+> > > > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > > > > ---
+> > > > >   include/media/v4l2-subdev.h | 9 +++++++++
+> > > > >   1 file changed, 9 insertions(+)
+> > > > > 
+> > > > > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > > > > index d0e9a5bdb08b..85977abbea46 100644
+> > > > > --- a/include/media/v4l2-subdev.h
+> > > > > +++ b/include/media/v4l2-subdev.h
+> > > > > @@ -340,12 +340,21 @@ struct v4l2_mbus_frame_desc_entry {
+> > > > >   #define V4L2_FRAME_DESC_ENTRY_MAX	4
+> > > > > +enum v4l2_mbus_frame_desc_type {
+> > > > > +	V4L2_MBUS_FRAME_DESC_TYPE_PLATFORM,
+> > > > > +	V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL,
+> > > > > +	V4L2_MBUS_FRAME_DESC_TYPE_CCP2,
+> > > > > +	V4L2_MBUS_FRAME_DESC_TYPE_CSI2,
+> > > > > +};
+> > > > 
+> > > > This should be documented. In particular, I have no idea what
+> > > > V4L2_MBUS_FRAME_DESC_TYPE_PLATFORM is. I also wonder if we shouldn't
+> > > > drop CCP2 (at least for now), does anyone use that anymore ?
+> > > 
+> > > I guess we don't need one here, not now at least.
+> > > 
+> > > I agree on the documentation.
+> > 
+> > As it's the first one in the list, I think it really means "undefined", so
+> > that current users have a value there (I presume they initialize the struct
+> > to 0). Sakari?
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> I guess you could drop PLATFORM if there's no need for it now. In practice
+> PARALLEL is probably a good choice.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Works for me too.
 
-> ---
->  .../userspace-api/media/drivers/hantro.rst    | 19 +++++++++++++++++++
->  .../userspace-api/media/drivers/index.rst     |  1 +
->  include/media/hevc-ctrls.h                    | 13 +++++++++++++
->  3 files changed, 33 insertions(+)
->  create mode 100644 Documentation/userspace-api/media/drivers/hantro.rst
-> 
-> diff --git a/Documentation/userspace-api/media/drivers/hantro.rst b/Documentation/userspace-api/media/drivers/hantro.rst
-> new file mode 100644
-> index 000000000000..cd9754b4e005
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/drivers/hantro.rst
-> @@ -0,0 +1,19 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Hantro video decoder driver
-> +===========================
-> +
-> +The Hantro video decoder driver implements the following driver-specific controls:
-> +
-> +``V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP (integer)``
-> +    Specifies to Hantro HEVC video decoder driver the number of data (in bits) to
-> +    skip in the slice segment header.
-> +    If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-> +    to before syntax element "slice_temporal_mvp_enabled_flag".
-> +    If IDR, the skipped bits are just "pic_output_flag"
-> +    (separate_colour_plane_flag is not supported).
-> +
-> +.. note::
-> +
-> +        This control is not yet part of the public kernel API and
-> +        it is expected to change.
-> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-> index 1a9038f5f9fa..12e3c512d718 100644
-> --- a/Documentation/userspace-api/media/drivers/index.rst
-> +++ b/Documentation/userspace-api/media/drivers/index.rst
-> @@ -33,6 +33,7 @@ For more details see the file COPYING in the source distribution of Linux.
->  
->         ccs
->         cx2341x-uapi
-> +        hantro
->         imx-uapi
->         max2175
->         meye-uapi
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 8e0109eea454..b713eeed1915 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -224,4 +224,17 @@ struct v4l2_ctrl_hevc_decode_params {
->         __u64   flags;
->  };
->  
-> +/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
-> +#define V4L2_CID_CODEC_HANTRO_BASE                             (V4L2_CTRL_CLASS_CODEC | 0x1200)
-> +/*
-> + * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
-> + * the number of data (in bits) to skip in the
-> + * slice segment header.
-> + * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-> + * to before syntax element "slice_temporal_mvp_enabled_flag".
-> + * If IDR, the skipped bits are just "pic_output_flag"
-> + * (separate_colour_plane_flag is not supported).
-> + */
-> +#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP (V4L2_CID_CODEC_HANTRO_BASE + 0)
-> +
->  #endif
+-- 
+Regards,
 
-
+Laurent Pinchart
