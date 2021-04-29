@@ -2,114 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD65C433B4
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 03:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9017DC433B4
+	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 06:15:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA5C06135B
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 03:53:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53CE561434
+	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 06:15:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238346AbhD2DyQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Apr 2021 23:54:16 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:42768 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbhD2DyQ (ORCPT
+        id S230423AbhD2GQS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Apr 2021 02:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229814AbhD2GQR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Apr 2021 23:54:16 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E989BC0;
-        Thu, 29 Apr 2021 05:53:28 +0200 (CEST)
+        Thu, 29 Apr 2021 02:16:17 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3AAC06138B
+        for <linux-media@vger.kernel.org>; Wed, 28 Apr 2021 23:15:31 -0700 (PDT)
+Received: from [192.168.1.111] (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 61AA8BC0;
+        Thu, 29 Apr 2021 08:15:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1619668408;
-        bh=n0b40VLEzbS1OoYz0xc6JZAIL6M1snsDz26CaxKrP0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HtZcfcR2KbZfrU8X2jgkHK91dJSo8IpUKRwpIupyHSz5pdUBC57GDf+CM2/gj6tUv
-         +5JhG4cVISsH3pwAaPzfHmdX7OlKmTtxhVlyDlTNiXfDId1kDuGaHiaF00mDwTUAx3
-         pRbSjGpXEeJ3ulH1hPK9S8Yr8QEKK0GM9sViuq+M=
-Date:   Thu, 29 Apr 2021 06:53:22 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Benoit Parrot <bparrot@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org,
-        sakari.ailus@linux.intel.com
-Subject: Re: [PATCH 0/4] media: ti-vpe: cal: multiplexed streams support
-Message-ID: <YIotsrlLrFYeNN/b@pendragon.ideasonboard.com>
-References: <20210427132028.1005757-1-tomi.valkeinen@ideasonboard.com>
+        s=mail; t=1619676922;
+        bh=4W2jZzXcwfuLZJpRxKKK+uSbWkVixJ6XF+QsC3w8G/Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jQOrb4qNzEqDVJFDhnVDN0JobKgIwBJY3B7w+jc9jFvWiG3SCdvrPR/Ap/uorIHQ3
+         dkIMl+jyaGZFiVAyEe0efEMZgLh4sMw9xsU9zNit5PWSiIPyzB05+3EylCM8f9mAr0
+         jwkyGmQ3sNx4Anh8z+2W5UKqg0TTsedgdBYc5B4U=
+Subject: Re: [PATCH v6 18/24] v4l: subdev: Add [GS]_ROUTING subdev ioctls and
+ operations
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20210427124523.990938-1-tomi.valkeinen@ideasonboard.com>
+ <20210427124523.990938-19-tomi.valkeinen@ideasonboard.com>
+ <YIoZteLxCX+A142n@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Message-ID: <75373c48-e908-893a-9e59-4b7460653136@ideasonboard.com>
+Date:   Thu, 29 Apr 2021 09:15:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210427132028.1005757-1-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <YIoZteLxCX+A142n@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+On 29/04/2021 05:28, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> Thank you for the patch.
+> 
+> For some reason, it seems the original authorship got lost. It was fine
+> in v5. I haven't checked if other patches in the series are affected.
+> 
 
-Thank you for the series. Nice to see the multiplexed streams API in
-operation.
+Thanks for pointing this out. I found the issue in my tooling. I'll fix 
+the authorship information.
 
-On Tue, Apr 27, 2021 at 04:20:24PM +0300, Tomi Valkeinen wrote:
-> Hi,
-> 
-> This series adds embedded data and multiplexed streams support to TI CAL
-> driver. These patches depend on the subdev routing series and CAL preparation
-> series:
-> 
-> https://lore.kernel.org/linux-media/20210427124523.990938-1-tomi.valkeinen@ideasonboard.com/
-> 
-> https://lore.kernel.org/linux-media/20210420120433.902394-1-tomi.valkeinen@ideasonboard.com/
-> 
-> One detail I'm not too happy about is adding a new kernel module parameter
-> 'cal_streams_api'. Setting this parameter enables the multiplexed streams
-> support for the CAL sink pads. I'd like the driver to be able to figure this
-> out itself, but there's no simple answer to it.
-> 
-> A pad in a subdev has to be either in non-multiplexed or multiplexed mode. If
-> the subdev cannot support multiplexed streams, then the answer is clear. But if
-> it can, then the question becomes "what's connected to the pad, and what does
-> it want". Afaik, the idea with subdev configuration is that each subdev can be
-> configured independently, so the driver trying to figure out the answer to that
-> question breaks this idea. Also, two connected subdevs that both can support
-> both modes wouldn't even give the answer, but the answer might be found further
-> away, probably from the sensor subdev.
-> 
-> So, maybe it should be the userspace that can set a subdev pad to either of the
-> modes. There's currently no such uAPI, but I think this option makes the most
-> sense.
-
-We'll need to brainstorm this a bit. I agree that the module parameter
-isn't a good solution.
-
-> Another detail to note is the embedded data support. I don't have hardware with
-> real embedded data, so I have not added any embedded data formats. Also, the
-> embedded data is captured with the video capture ioctls, not the metadata
-> capture ioctls. The reason for this is that in the case of CSI-2 embedded data
-> (at least for this hardware) the embedded data is very much like pixel data:
-> the data is sent in lines just before or after the pixel content and each
-> subdev needs a set_fmt call with the width, height, and mbus-code.
-> 
-> Using the metadata ioctls is possible, but it only results in much more complex
-> driver code, and, I think, more confusing userspace.
-> 
->  Tomi
-> 
-> Tomi Valkeinen (4):
->   media: ti-vpe: cal: add embedded data support
->   media: ti-vpe: cal: use frame desc to get vc and dt
->   media: ti-vpe: cal: add routing support
->   media: ti-vpe: cal: add multiplexed streams support
-> 
->  drivers/media/platform/ti-vpe/cal-camerarx.c | 234 ++++++++++++++++---
->  drivers/media/platform/ti-vpe/cal-video.c    |  95 +++++++-
->  drivers/media/platform/ti-vpe/cal.c          | 102 ++++++--
->  drivers/media/platform/ti-vpe/cal.h          |  10 +-
->  4 files changed, 383 insertions(+), 58 deletions(-)
-
--- 
-Regards,
-
-Laurent Pinchart
+  Tomi
