@@ -2,76 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F95C433ED
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 22:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3594C433B4
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:09:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3410C61457
-	for <linux-media@archiver.kernel.org>; Thu, 29 Apr 2021 22:15:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E04161185
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:09:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbhD2WQL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Apr 2021 18:16:11 -0400
-Received: from msg-2.mailo.com ([213.182.54.12]:49422 "EHLO msg-2.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229570AbhD2WQJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Apr 2021 18:16:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1619734382; bh=fqVkx3TPT2hzWCKBQXOQPX3j7Tp/i9ftQf4QckfR9jw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=TfgP1zmnQpIeBk4GhCUEnowGIWyTg+lHHP7BB5dE2DLN2tzaz8NjNu64VRoRL0Wn/
-         2f8ivAXa+3rYeOdJ6HB/3WOjbZzv33N7lpuPXFlByo91axybr8YpKJXEHBHOdh5Ij5
-         fRx8BXz0KOA4rXosl/47xJmJsuKpFI1EckrC/wgU=
-Received: by 192.168.90.13 [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 30 Apr 2021 00:13:01 +0200 (CEST)
-X-EA-Auth: FGh2PRfjIk7MPz+rAvHCky0S4v4blJapa6WZTmW7IuCPXm1pW1kq24GIKw0REpzL7qNl0raovijQQu6jMgDT+5ScuxVTW+CF
-Date:   Fri, 30 Apr 2021 03:42:58 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: code clean up confirmation => staging: media: atomisp: pci driver
-Message-ID: <YIsvamW5HT+PkJMB@dU2104>
-References: <YIrfVFhW8ufjm/tB@192.168.1.8>
- <YIrmwYeSU0Clt7U4@kroah.com>
+        id S229611AbhD3GK2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Apr 2021 02:10:28 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:60435 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229508AbhD3GK1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Apr 2021 02:10:27 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id cMLGlfqONk1MGcMLLlRsFp; Fri, 30 Apr 2021 08:09:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1619762979; bh=BoAHDx1QC101QMSwo5RItLWD/yuPIxRyAHDPVEwnPOQ=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=kgzXiJl8joRfsXyE0d5urD3JBwOfaxp89rlc0Umxq/dd0cQ+cOJ1CI+LzwyqqrNVA
+         JkIRinizPuCIBIzMNNweRWuQlph+qv2tDIb4te1b8+Rp/4QrBV8I9wWnDZhtrK7O8t
+         FZiEBB4joXp29qirDpiSCuaka0wIcSOP4Es+a0BQlHn2XAmSfHzTjiuzslPAKN1mQX
+         uQigSdL8WME9DTrZFKnvFWQNIstJWW+pbW8CdBCHJdzh5lnCG5TBFAxQEyptCyKDfM
+         XVLK5zC9IlJFN3Tzi1ts9hCBIL2oyhU7Ri7Al3Kiedt5Pf0hGHBtnTNMkA8VJ0I0PB
+         GWhrXyKnkkilw==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.14] MPEG-2 stateless API cleanup and destaging
+Message-ID: <79eb0d83-1967-8caf-e205-b29beec6fa23@xs4all.nl>
+Date:   Fri, 30 Apr 2021 08:09:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YIrmwYeSU0Clt7U4@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfHvxd1ElFoqlbNnNb4rWuwIRmBCPsKOO5bFpCAro8lmYRe8r8ar1nUFZULQ4b089rPSX/IgXKrcZkPcNurkCRzYhVVfMK7lGDndouxG32STP59MrN5tq
+ naMaY3VSxGX1sFyONC3QeZarE1yL5f/cRiJGcJJMCkEj+EdZm9xU4D5Uh5v9bp0gXdLSTYfpMJkkBdMejcVh/IEqslZIi9H6Z6Ah+RmXGCTJjHo0Q5YvMjyA
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 07:02:57PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 29, 2021 at 10:01:16PM +0530, Deepak R Varma wrote:
-> > Hello All,
-> > Is anyone already working on code clean up of the following driver
-> > /files? I am specifically targeting addressing the checkpatch
-> > complaints. Let me know.
-> > 
-> > 	drivers/staging/media/atomisp/pci
-> 
-> There's no need to ask, just do the work and submit the patches.
-> 
-> We do not "claim" work ahead of time in the kernel, that is what has
-> killed other open source projects numerous times in the past.  We know
-> to learn from other's mistakes. :)
-> 
-Hello Greg,
-Thank you for the guidance. Just wanted to make sure I am not overstepping on someone else's
-work. I will go ahead and work on the clean up.
+Hi Mauro,
 
-Thank you,
-deepak.
+This series cleans up and destages the MPEG-2 stateless decoder API.
 
-> thanks,
-> 
-> greg k-h
+After this the only remaining staging codec API is that for HEVC. That will
+require more work and also requires support for dynamic array controls, for
+which I posted a patch series recently.
 
+Many thanks to Ezequiel et al for working on this!
 
+Regards,
+
+	Hans
+
+The following changes since commit 0b276e470a4d43e1365d3eb53c608a3d208cabd4:
+
+  media: coda: fix macroblocks count control usage (2021-04-15 13:23:26 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.14a
+
+for you to fetch changes up to 210c886393c28ae158a32ec0208409d49a10414e:
+
+  media: uapi: move MPEG-2 stateless controls out of staging (2021-04-30 07:58:16 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Ezequiel Garcia (10):
+      media: uapi: mpeg2: Rename "quantization" to "quantisation"
+      media: uapi: mpeg2: rework quantisation matrices semantics
+      media: uapi: mpeg2: Cleanup flags
+      media: uapi: mpeg2: Split sequence and picture parameters
+      media: uapi: mpeg2: Move reference buffer fields
+      media: hantro/cedrus: Remove unneeded slice size and slice offset
+      media: uapi: mpeg2: Remove V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS
+      media: uapi: Move the MPEG-2 stateless control type out of staging
+      media: controls: Log MPEG-2 stateless control in .std_log
+      media: uapi: move MPEG-2 stateless controls out of staging
+
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst | 214 +++++++++++++++++++++++++++++++
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst           | 217 --------------------------------
+ Documentation/userspace-api/media/v4l/pixfmt-compressed.rst         |  11 +-
+ Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst        |  12 ++
+ Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst          |  18 ++-
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions        |   5 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c                                | 122 ++++++++++++------
+ drivers/staging/media/hantro/hantro_drv.c                           |   9 +-
+ drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c                  | 110 ++++++++--------
+ drivers/staging/media/hantro/hantro_hw.h                            |   2 +-
+ drivers/staging/media/hantro/hantro_mpeg2.c                         |   2 +-
+ drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c              | 106 +++++++---------
+ drivers/staging/media/sunxi/cedrus/cedrus.c                         |  10 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.h                         |   5 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c                     |  10 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c                   |  97 +++++---------
+ include/media/mpeg2-ctrls.h                                         |  82 ------------
+ include/media/v4l2-ctrls.h                                          |  11 +-
+ include/uapi/linux/v4l2-controls.h                                  | 112 +++++++++++++++++
+ include/uapi/linux/videodev2.h                                      |   7 ++
+ 20 files changed, 610 insertions(+), 552 deletions(-)
+ delete mode 100644 include/media/mpeg2-ctrls.h
