@@ -2,142 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCC0CC433ED
-	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE3F4C433ED
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:42:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 977BF6144B
-	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:19:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3E73613BF
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 06:42:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhD3GUV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Apr 2021 02:20:21 -0400
-Received: from m12-16.163.com ([220.181.12.16]:41432 "EHLO m12-16.163.com"
+        id S229591AbhD3Gmx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Apr 2021 02:42:53 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:52656 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229482AbhD3GUP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Apr 2021 02:20:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KvHw+
-        KCns76RVhHDXsF2R42ufhs063wgmEGrav49uD0=; b=GYfMTYTqLIOYkcf8j9o4s
-        wLRtlD4V15VUMWQm4eFrQX0GNni7PapryjGHd/vgUM+ncaLnWY0RimmEYg3LW9vA
-        F6sONMvZCNVaGHp2t9atKLHkYGofU9dB4/y1xkdPygA9/f+/M9XqkxTNncJpKU5b
-        p/MTrBYfhDTNfU1JT522QI=
-Received: from COOL-20201222LC.ccdomain.com (unknown [218.94.48.178])
-        by smtp12 (Coremail) with SMTP id EMCowABnzUZeoYtgiLnUoQ--.999S2;
-        Fri, 30 Apr 2021 14:19:11 +0800 (CST)
-From:   dingsenjie@163.com
-To:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dingsenjie <dingsenjie@yulong.com>
-Subject: [PATCH] media: qcom/camss: Use devm_platform_ioremap_resource_byname
-Date:   Fri, 30 Apr 2021 14:18:33 +0800
-Message-Id: <20210430061833.32960-1-dingsenjie@163.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S229482AbhD3Gmw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Apr 2021 02:42:52 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lcMqg-00EOSG-Hf; Fri, 30 Apr 2021 06:42:02 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lcMuq-0003fw-2D; Fri, 30 Apr 2021 06:46:20 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.14] MPEG-2 stateless API cleanup and destaging (#73991)
+Date:   Fri, 30 Apr 2021 06:46:18 +0000
+Message-Id: <20210430064619.14087-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <79eb0d83-1967-8caf-e205-b29beec6fa23@xs4all.nl>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowABnzUZeoYtgiLnUoQ--.999S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJw4rZrWfGF4DZr13Ww17ZFb_yoWrWw4fpr
-        WxGFWxur13GF4UC348Jw1DCF4rJF1F9ayUWr43Zw1fZa9xJr9rAw4UCa40yryqyFWjv3W7
-        Jr4SqFyUZa9Y9F7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbpnQUUUUU=
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: 5glqw25hqmxvi6rwjhhfrp/1tbiHh+EyFSIuNfdOQAAsa
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: dingsenjie <dingsenjie@yulong.com>
+From: builder@linuxtv.org
 
-Use the devm_platform_ioremap_resource_byname() helper instead of
-calling platform_get_resource_byname() and devm_ioremap_resource()
-separately.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/79eb0d83-1967-8caf-e205-b29beec6fa23@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/102371/
+Build time: 00:29:01
+Link: https://lore.kernel.org/linux-media/79eb0d83-1967-8caf-e205-b29beec6fa23@xs4all.nl
 
-Signed-off-by: dingsenjie <dingsenjie@yulong.com>
----
- drivers/media/platform/qcom/camss/camss-csid.c   | 3 +--
- drivers/media/platform/qcom/camss/camss-csiphy.c | 6 ++----
- drivers/media/platform/qcom/camss/camss-ispif.c  | 6 ++----
- drivers/media/platform/qcom/camss/camss-vfe.c    | 3 +--
- 4 files changed, 6 insertions(+), 12 deletions(-)
+gpg: Signature made Fri 30 Apr 2021 06:03:41 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index be3fe76..b62f6ae 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -1111,8 +1111,7 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
- 
- 	/* Memory */
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
--	csid->base = devm_ioremap_resource(dev, r);
-+	csid->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
- 	if (IS_ERR(csid->base)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(csid->base);
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 509c9a5..c46f4bf 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -563,15 +563,13 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 
- 	/* Memory */
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
--	csiphy->base = devm_ioremap_resource(dev, r);
-+	csiphy->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
- 	if (IS_ERR(csiphy->base)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(csiphy->base);
- 	}
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[1]);
--	csiphy->base_clk_mux = devm_ioremap_resource(dev, r);
-+	csiphy->base_clk_mux = devm_platform_ioremap_resource_byname(pdev, res->reg[1]);
- 	if (IS_ERR(csiphy->base_clk_mux)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(csiphy->base_clk_mux);
-diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-index adeb928..de624fe 100644
---- a/drivers/media/platform/qcom/camss/camss-ispif.c
-+++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-@@ -1131,15 +1131,13 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
- 
- 	/* Memory */
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
--	ispif->base = devm_ioremap_resource(dev, r);
-+	ispif->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
- 	if (IS_ERR(ispif->base)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(ispif->base);
- 	}
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[1]);
--	ispif->base_clk_mux = devm_ioremap_resource(dev, r);
-+	ispif->base_clk_mux = devm_platform_ioremap_resource_byname(pdev, res->reg[1]);
- 	if (IS_ERR(ispif->base_clk_mux)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(ispif->base_clk_mux);
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index fae2b51..54986cf 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -2008,8 +2008,7 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 
- 	/* Memory */
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
--	vfe->base = devm_ioremap_resource(dev, r);
-+	vfe->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
- 	if (IS_ERR(vfe->base)) {
- 		dev_err(dev, "could not map memory\n");
- 		return PTR_ERR(vfe->base);
--- 
-1.9.1
+Summary: got 6/10 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
+Error/warnings:
+
+patches/0001-media-uapi-mpeg2-Rename-quantization-to-quantisation.patch:
+
+   checkpatch.pl:
+	$ cat patches/0001-media-uapi-mpeg2-Rename-quantization-to-quantisation.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:153: WARNING: line length of 102 exceeds 100 columns
+	-:336: CHECK: Alignment should match open parenthesis
+	-:423: CHECK: spaces preferred around that '+' (ctx:VxV)
+
+patches/0002-media-uapi-mpeg2-rework-quantisation-matrices-semant.patch:
+
+   checkpatch.pl:
+	$ cat patches/0002-media-uapi-mpeg2-rework-quantisation-matrices-semant.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:36: WARNING: Duplicate signature
+
+patches/0003-media-uapi-mpeg2-Cleanup-flags.patch:
+
+   checkpatch.pl:
+	$ cat patches/0003-media-uapi-mpeg2-Cleanup-flags.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:542: WARNING: line length of 101 exceeds 100 columns
+	-:543: WARNING: line length of 105 exceeds 100 columns
+	-:544: WARNING: line length of 111 exceeds 100 columns
+
+patches/0004-media-uapi-mpeg2-Split-sequence-and-picture-paramete.patch:
+
+   checkpatch.pl:
+	$ cat patches/0004-media-uapi-mpeg2-Split-sequence-and-picture-paramete.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:511: CHECK: Alignment should match open parenthesis
+	-:513: CHECK: Alignment should match open parenthesis
+	-:551: CHECK: spaces preferred around that '+' (ctx:VxV)
+	-:552: CHECK: spaces preferred around that '+' (ctx:VxV)
+
+patches/0009-media-controls-Log-MPEG-2-stateless-control-in-.std_.patch:
+
+   checkpatch.pl:
+	$ cat patches/0009-media-controls-Log-MPEG-2-stateless-control-in-.std_.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:26: WARNING: Avoid logging continuation uses where feasible
+	-:29: WARNING: Avoid logging continuation uses where feasible
+	-:32: WARNING: Avoid logging continuation uses where feasible
+
+patches/0010-media-uapi-move-MPEG-2-stateless-controls-out-of-sta.patch:
+
+   checkpatch.pl:
+	$ cat patches/0010-media-uapi-move-MPEG-2-stateless-controls-out-of-sta.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:551: WARNING: line length of 102 exceeds 100 columns
+	-:694: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+	-:849: CHECK: spaces preferred around that '+' (ctx:VxV)
+	-:897: CHECK: spaces preferred around that '+' (ctx:VxV)
+	-:928: CHECK: spaces preferred around that '+' (ctx:VxV)
+
+
+Error #512 when building PDF docs
 
