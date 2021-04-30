@@ -4,46 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D40C433ED
-	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 16:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3716EC433B4
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 16:50:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0954F61468
-	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 16:49:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ED5A6145A
+	for <linux-media@archiver.kernel.org>; Fri, 30 Apr 2021 16:50:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhD3Qtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Apr 2021 12:49:52 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2964 "EHLO
+        id S229579AbhD3QvG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Apr 2021 12:51:06 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2965 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbhD3Qtw (ORCPT
+        with ESMTP id S230446AbhD3QvD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Apr 2021 12:49:52 -0400
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FWyml2sMGz686Ph;
-        Sat,  1 May 2021 00:41:11 +0800 (CST)
+        Fri, 30 Apr 2021 12:51:03 -0400
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FWyrd0QdSz688vR;
+        Sat,  1 May 2021 00:44:33 +0800 (CST)
 Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 30 Apr 2021 18:49:02 +0200
+ 15.1.2176.2; Fri, 30 Apr 2021 18:50:14 +0200
 Received: from localhost (10.52.125.96) by lhreml710-chm.china.huawei.com
  (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 30 Apr
- 2021 17:49:01 +0100
-Date:   Fri, 30 Apr 2021 17:47:27 +0100
+ 2021 17:50:13 +0100
+Date:   Fri, 30 Apr 2021 17:48:38 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 CC:     <linuxarm@huawei.com>, <mauro.chehab@huawei.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v4 18/79] media: sti/delta: fix pm_runtime_get_sync()
- usage count
-Message-ID: <20210430174658.00002e26@Huawei.com>
-In-Reply-To: <e4d120126b7c3be15d33ed8bcf07c285e14c25bf.1619621413.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH v4 19/79] media: sunxi: fix pm_runtime_get_sync() usage
+ count
+Message-ID: <20210430174838.00000412@Huawei.com>
+In-Reply-To: <17cf60c9e5190ff83de40284bb858581bb0ec4a6.1619621413.git.mchehab+huawei@kernel.org>
 References: <cover.1619621413.git.mchehab+huawei@kernel.org>
-        <e4d120126b7c3be15d33ed8bcf07c285e14c25bf.1619621413.git.mchehab+huawei@kernel.org>
+        <17cf60c9e5190ff83de40284bb858581bb0ec4a6.1619621413.git.mchehab+huawei@kernel.org>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
 MIME-Version: 1.0
@@ -57,7 +60,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 28 Apr 2021 16:51:39 +0200
+On Wed, 28 Apr 2021 16:51:40 +0200
 Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
 > The pm_runtime_get_sync() internally increments the
@@ -68,28 +71,23 @@ Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 > leaks.
 > 
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-This looks wrong.    The caller of this calls delta_put_autosuspend()
-on error which calls pm_runtime_put_autosuspend() on something where
-we never incremented the count after your change.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 > ---
->  drivers/media/platform/sti/delta/delta-v4l2.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-> index c691b3d81549..9928b7c46a41 100644
-> --- a/drivers/media/platform/sti/delta/delta-v4l2.c
-> +++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-> @@ -1277,9 +1277,9 @@ int delta_get_sync(struct delta_ctx *ctx)
->  	int ret = 0;
+> diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+> index 3f81dd17755c..fbcca59a0517 100644
+> --- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+> +++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+> @@ -494,7 +494,7 @@ static int rotate_start_streaming(struct vb2_queue *vq, unsigned int count)
+>  		struct device *dev = ctx->dev->dev;
+>  		int ret;
 >  
->  	/* enable the hardware */
-> -	ret = pm_runtime_get_sync(delta->dev);
-> +	ret = pm_runtime_resume_and_get(delta->dev);
->  	if (ret < 0) {
-> -		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-> +		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
->  			__func__, ret);
->  		return ret;
->  	}
+> -		ret = pm_runtime_get_sync(dev);
+> +		ret = pm_runtime_resume_and_get(dev);
+>  		if (ret < 0) {
+>  			dev_err(dev, "Failed to enable module\n");
+>  
 
