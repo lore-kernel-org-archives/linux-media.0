@@ -2,79 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E795DC433B4
-	for <linux-media@archiver.kernel.org>; Sat,  1 May 2021 06:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F781C43470
+	for <linux-media@archiver.kernel.org>; Sat,  1 May 2021 08:20:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C425E6128E
-	for <linux-media@archiver.kernel.org>; Sat,  1 May 2021 06:48:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C3C461414
+	for <linux-media@archiver.kernel.org>; Sat,  1 May 2021 08:20:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbhEAGtD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 May 2021 02:49:03 -0400
-Received: from msg-1.mailo.com ([213.182.54.11]:42358 "EHLO msg-1.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229505AbhEAGtD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 1 May 2021 02:49:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1619851688; bh=JiLdHkQqAQdc8HOZA+v+ql7U6+cmn/TOeYkHlqETiOQ=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=DgcJeBX8vSjU3hBYIx8CBkvur28Q0iVgR9EDOQguqVoW82teqfKzrStx28HqejO2y
-         ZS9sDCvyaAfXzs/uFYQmaTGlNmZNuBctlad81AvPpzOqfReKh6ytvMcMa4tQAcAz+O
-         rQDaPgFCgv5Md/gQCvhJwUs5Aq8GrCGNy4T3YFyc=
-Received: by 192.168.90.14 [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat,  1 May 2021 08:48:08 +0200 (CEST)
-X-EA-Auth: n+oL2fKM0AQBfDrBS9XLL0Vt7txlZtHfAc/hUXjx2E3Qcp1WT7Al30IERw8UERm0pYKUsHiyGjrPzX7YkpNi3QwbhVt6yQ7j
-Date:   Sat, 1 May 2021 12:18:03 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, drv@mailo.com
-Subject: [PATCH 5/5] staging: media: atomisp: code formatting changes
- sh_css_version.c
-Message-ID: <2e2756e00db48165a42b38deaace7edf4feb1450.1619850663.git.drv@mailo.com>
-References: <cover.1619850663.git.drv@mailo.com>
+        id S231681AbhEAIVB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 May 2021 04:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbhEAIVA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 May 2021 04:21:00 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAE4C06138B
+        for <linux-media@vger.kernel.org>; Sat,  1 May 2021 01:20:10 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id lp8so316317pjb.1
+        for <linux-media@vger.kernel.org>; Sat, 01 May 2021 01:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ylnHk+JNuqq5ZmDFacYDEfwOgLykql+ZShEQSvQwkpU=;
+        b=YXhoS2pU2hvfW019BAiAszVK4eSDsIqFZ+yEKWjufqpG5zfOG7SIkphyor3r0BuXlP
+         wy2iqwRKgdHi55Ku+vCNmgiMUBhFebPk8X0KYaWiS/Ty7R9i+yHaRjzaB5FTrF8c23O0
+         WoLVWPAoTEnMMf8evhZBQGUKngWTYDIAp17lM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ylnHk+JNuqq5ZmDFacYDEfwOgLykql+ZShEQSvQwkpU=;
+        b=sF/56Exnk9RTty5YDipHvsdgzOQtjn4l/Kw3nMgMOuNwGJxeIfCBh8YZas/V1I0cr4
+         LJ5+S+qPZefLuI7vgXlgWZ7COB2WuAEk3pQvohLjhoYlV9/5gZzd6IUdLhRQB3Qzw19f
+         o+npItO66ilrURnLuH6s0E3CZEVoRn8nc2mWHT2c2NSqVRII4b4YLwFHxeerKj25oKbM
+         ln1M5pqy3gOarfeb8+DH5h0S1bHK4y4p7wHRYylzKj+kxJaUQ0FstrljDYt8b07Egstb
+         hwuIQ2P0bryFQiPUEMQEFf8q03dRAJgIXuf5M+YvGzNAPYQIl+xMKJdraat9foLgwE4Y
+         2ZnA==
+X-Gm-Message-State: AOAM5331GN3nPbpHOex0JLukbOGaF6L32hLJQVTwn2tD9A0wtm54Ar++
+        /izYH31/39913nux4oRREuvMTg==
+X-Google-Smtp-Source: ABdhPJx2mp2dZu1A0XSG18f8CEsROVW/j3BS/eOmMLtj0jWiktr1sOZCdImZ0JpqCeUCapoTrxSiUQ==
+X-Received: by 2002:a17:90a:a589:: with SMTP id b9mr9487803pjq.80.1619857210492;
+        Sat, 01 May 2021 01:20:10 -0700 (PDT)
+Received: from senozhatsky.flets-east.jp ([2409:10:2e40:5100:8be7:e987:d00a:1442])
+        by smtp.gmail.com with ESMTPSA id b7sm3763003pjq.36.2021.05.01.01.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 May 2021 01:20:10 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCHv5 1/5] media: v4l UAPI: add ROI selection targets
+Date:   Sat,  1 May 2021 17:19:57 +0900
+Message-Id: <20210501082001.100533-2-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+In-Reply-To: <20210501082001.100533-1-senozhatsky@chromium.org>
+References: <20210501082001.100533-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1619850663.git.drv@mailo.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Trivial code reformatting changes done according to the coding
-style guidelines. These code changes overall improve code readability
-and also address chackpatch complaints.
+UVC 1.5 requires Region Of Interest control to implement
+GET_CUR, GET_DEF, GET_MIN and GET_MAX requests. This patch
+adds new V4L2 selection API targets that will implement
+those ROI requests.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/staging/media/atomisp/pci/sh_css_version.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/uapi/linux/v4l2-common.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_version.c b/drivers/staging/media/atomisp/pci/sh_css_version.c
-index fa6de61e4995..f038c61a8499 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_version.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_version.c
-@@ -20,8 +20,8 @@
- #include "ia_css_err.h"
- #include "sh_css_firmware.h"
+diff --git a/include/uapi/linux/v4l2-common.h b/include/uapi/linux/v4l2-common.h
+index 7d21c1634b4d..3651ebb8cb23 100644
+--- a/include/uapi/linux/v4l2-common.h
++++ b/include/uapi/linux/v4l2-common.h
+@@ -78,6 +78,14 @@
+ #define V4L2_SEL_TGT_COMPOSE_BOUNDS	0x0102
+ /* Current composing area plus all padding pixels */
+ #define V4L2_SEL_TGT_COMPOSE_PADDED	0x0103
++/* Current Region of Interest area */
++#define V4L2_SEL_TGT_ROI		0x0200
++/* Default Region of Interest area */
++#define V4L2_SEL_TGT_ROI_DEFAULT	0x0201
++/* Region of Interest minimum values */
++#define V4L2_SEL_TGT_ROI_BOUNDS_MIN	0x0202
++/* Region of Interest maximum values */
++#define V4L2_SEL_TGT_ROI_BOUNDS_MAX	0x0203
  
--int
--ia_css_get_version(char *version, int max_size) {
-+int ia_css_get_version(char *version, int max_size)
-+{
- 	char *css_version;
- 
- 	if (!IS_ISP2401)
+ /* Selection flags */
+ #define V4L2_SEL_FLAG_GE		(1 << 0)
 -- 
-2.30.2
-
-
+2.31.1.527.g47e6f16901-goog
 
