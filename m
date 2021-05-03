@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9588EC43460
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F7DC43611
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DE6B613DE
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24A4C613F6
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbhECQiG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:38:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38488 "EHLO mail.kernel.org"
+        id S231552AbhECQiK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:38:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231626AbhECQhI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:37:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 09277613CF;
-        Mon,  3 May 2021 16:35:59 +0000 (UTC)
+        id S231634AbhECQhL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:37:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 33B5661244;
+        Mon,  3 May 2021 16:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059761;
-        bh=zF10B42BU7PZxpk8L9YI3lbTpw7BWdCgjXh1YWIYcew=;
+        s=k20201202; t=1620059764;
+        bh=XCtJfkGFbC2VRs0fahHq2Xv98B7QeAWABesY4G/UWe4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NjC9YokV2Fsg5MSz79PvkEtePytCMVKOVm7tqPbGZPf7NAR02F5QdErlOC+43f0tl
-         RrhXMyN26YDocZUqX7tQWAhBsmR/8XD8M1CVcHtAHYphdnsFIlqF8mLqnKxSONxUtQ
-         D1heyc6qakSK2jiqFGz9g4MJf5Ht/QsP9Ls/chEC0yhmoP8F387BA9tj3IRXBwNeUy
-         Ng9ecr5OMnkNhR0HpomLmR1WxrkMxXKqKG/dIR/JOM1dVtMVprslae62Eo5AEIqh2Q
-         ziz+Lw4p3yYffhoPZAKTIZIgws9brjPap2akPwH8rfn7vhNQDXQ+Qbk6TNoHcH0Mud
-         79QtGrKC2z9Dw==
+        b=ulDu9/Em5w7tkWx/QbkknJcyBZQFn9XBHmxvElpSrvvR3BZiipIwLkKLaCiKvNCFY
+         kp9/ooZjYuctKUJxXzWENo4GVyJbC455CjqNvdQKri3h3/GBnhn1vWAqsv1A8vGzhT
+         RSUFYb4JqWpXdAQeDG/M2V1fBucDpL9yRy506xT6/0WZIcK9Vn/76adA6bUJMPE5nN
+         9i6XIXIsRh9Z5vV2gwUZtAkJLnmqtKyZ9bC1MeSPrIP6MpLOxl8f70XnbiQVIUaPet
+         ULkEKSsrjQw+dZDW9EYW+cnQWCrkeA/yrLCNKPGHeO12R+NbDjbBVdREOMVrmq8ujq
+         m5PFLsbQR5Bbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brad Love <brad@nextdimension.cc>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 030/134] media: cx23885: add more quirks for reset DMA on some AMD IOMMU
-Date:   Mon,  3 May 2021 12:33:29 -0400
-Message-Id: <20210503163513.2851510-30-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.12 032/134] atomisp: don't let it go past pipes array
+Date:   Mon,  3 May 2021 12:33:31 -0400
+Message-Id: <20210503163513.2851510-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
 References: <20210503163513.2851510-1-sashal@kernel.org>
@@ -51,48 +51,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Brad Love <brad@nextdimension.cc>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 5f864cfbf59bfed2057bd214ce7fbf6ad420d54b ]
+[ Upstream commit 1f6c45ac5fd70ab59136ab5babc7def269f3f509 ]
 
-The folowing AMD IOMMU are affected by the RiSC engine stall, requiring a
-reset to maintain continual operation. After being added to the
-broken_dev_id list the systems are functional long term.
+In practice, IA_CSS_PIPE_ID_NUM should never be used when
+calling atomisp_q_video_buffers_to_css(), as the driver should
+discover the right pipe before calling it.
 
-0x1481 is the PCI ID for the IOMMU found on Starship/Matisse
+Yet, if some pipe parsing issue happens, it could end using
+it.
 
-0x1419 is the PCI ID for the IOMMU found on 15h (Models 10h-1fh) family
+So, add a WARN_ON() to prevent such case.
 
-0x5a23 is the PCI ID for the IOMMU found on RD890S/RD990
-
-Signed-off-by: Brad Love <brad@nextdimension.cc>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index 22f55a7840a6..d0ca260ecf70 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -2077,6 +2077,15 @@ static struct {
- 	 * 0x1423 is the PCI ID for the IOMMU found on Kaveri
- 	 */
- 	{ PCI_VENDOR_ID_AMD, 0x1423 },
-+	/* 0x1481 is the PCI ID for the IOMMU found on Starship/Matisse
-+	 */
-+	{ PCI_VENDOR_ID_AMD, 0x1481 },
-+	/* 0x1419 is the PCI ID for the IOMMU found on 15h (Models 10h-1fh) family
-+	 */
-+	{ PCI_VENDOR_ID_AMD, 0x1419 },
-+	/* 0x5a23 is the PCI ID for the IOMMU found on RD890S/RD990
-+	 */
-+	{ PCI_VENDOR_ID_ATI, 0x5a23 },
- };
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index 453bb6913550..f1e6b2597853 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -221,6 +221,9 @@ int atomisp_q_video_buffers_to_css(struct atomisp_sub_device *asd,
+ 	unsigned long irqflags;
+ 	int err = 0;
  
- static bool cx23885_does_need_dma_reset(void)
++	if (WARN_ON(css_pipe_id >= IA_CSS_PIPE_ID_NUM))
++		return -EINVAL;
++
+ 	while (pipe->buffers_in_css < ATOMISP_CSS_Q_DEPTH) {
+ 		struct videobuf_buffer *vb;
+ 
 -- 
 2.30.2
 
