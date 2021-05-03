@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D799CC433B4
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0D0C43618
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7BD86194C
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 782516194C
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbhECQnJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:43:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38652 "EHLO mail.kernel.org"
+        id S231496AbhECQnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:43:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232373AbhECQkl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:40:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBBE3613F6;
-        Mon,  3 May 2021 16:37:43 +0000 (UTC)
+        id S231846AbhECQkm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A82161429;
+        Mon,  3 May 2021 16:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059864;
-        bh=XCtJfkGFbC2VRs0fahHq2Xv98B7QeAWABesY4G/UWe4=;
+        s=k20201202; t=1620059872;
+        bh=5LnsDbENCZlQF4nCWMHw2rIS0V68TkYnwy3mGlCDfCc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZjStaHo5QXjBgcjuKgk3s2ETUiJ5NXrUUKiq8wKXj7odzqLzoQpIGdBVkVyQ4052X
-         wAuZgoGyVL4JyPjO/6br1slxeJd0jhdoBXAZMwn8VNT/rNlPeC+0kcSUPchLrrGDjT
-         cUSJzaYtD31Q/NPe36JKEgfQrfdX4vwfIsht1qkgdMQB+rkErDUPmHabyyZ535uU5g
-         TXnctt9niMGPPV0mbTDLvCuV/B/zt/FrmrvA6iKnf+SB28gwxZLfjlE7rxpPmynMiV
-         Fx6adAsad8wdysK+G3MmZJErPLYIEh+sHF+aCq7f7DVu9jRAmFQ5jtcDJmJhYshy9E
-         5efCsZohOeGkg==
+        b=slIyqB7eg4Pf4RbpbjPXUHjNynv7Cn98cARLiGqtZWR4Xlr4JJjCX1mrQPMHgPSVL
+         vqXHFmdCcmeEXZLAvIkCYGHZEMyg13+ndMZDkvzEWAXQ7lB4HzVpfXInq5NUr16bKd
+         Y9JA/6TZWblfUTbWV2eAFYm3lT9zX6FPc+AtKqUHrPLoo9qznDB140iQkmsYsFNiSc
+         /VmJ54iUUMkksU0M8BIlBFoWgt7IYjPlfdFRdto2bK6JOEN67HaGwu9++5zPTlPqoq
+         fG8V8h5B18yBYwI6+KF6CP1XDT4NboC9mYY55p+l40PsZlCu+/UtbkdJi04oj/uvXQ
+         cWtd/dHY29kVA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.11 029/115] atomisp: don't let it go past pipes array
-Date:   Mon,  3 May 2021 12:35:33 -0400
-Message-Id: <20210503163700.2852194-29-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        syzbot+a4e309017a5f3a24c7b3@syzkaller.appspotmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 034/115] media: gspca/sq905.c: fix uninitialized variable
+Date:   Mon,  3 May 2021 12:35:38 -0400
+Message-Id: <20210503163700.2852194-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163700.2852194-1-sashal@kernel.org>
 References: <20210503163700.2852194-1-sashal@kernel.org>
@@ -51,40 +51,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 1f6c45ac5fd70ab59136ab5babc7def269f3f509 ]
+[ Upstream commit eaaea4681984c79d2b2b160387b297477f0c1aab ]
 
-In practice, IA_CSS_PIPE_ID_NUM should never be used when
-calling atomisp_q_video_buffers_to_css(), as the driver should
-discover the right pipe before calling it.
+act_len can be uninitialized if usb_bulk_msg() returns an error.
+Set it to 0 to avoid a KMSAN error.
 
-Yet, if some pipe parsing issue happens, it could end using
-it.
-
-So, add a WARN_ON() to prevent such case.
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+a4e309017a5f3a24c7b3@syzkaller.appspotmail.com
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/usb/gspca/sq905.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 453bb6913550..f1e6b2597853 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -221,6 +221,9 @@ int atomisp_q_video_buffers_to_css(struct atomisp_sub_device *asd,
- 	unsigned long irqflags;
- 	int err = 0;
+diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
+index 97799cfb832e..949111070971 100644
+--- a/drivers/media/usb/gspca/sq905.c
++++ b/drivers/media/usb/gspca/sq905.c
+@@ -158,7 +158,7 @@ static int
+ sq905_read_data(struct gspca_dev *gspca_dev, u8 *data, int size, int need_lock)
+ {
+ 	int ret;
+-	int act_len;
++	int act_len = 0;
  
-+	if (WARN_ON(css_pipe_id >= IA_CSS_PIPE_ID_NUM))
-+		return -EINVAL;
-+
- 	while (pipe->buffers_in_css < ATOMISP_CSS_Q_DEPTH) {
- 		struct videobuf_buffer *vb;
- 
+ 	gspca_dev->usb_buf[0] = '\0';
+ 	if (need_lock)
 -- 
 2.30.2
 
