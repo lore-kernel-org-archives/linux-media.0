@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8EA7C43462
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF82BC43619
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:51:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9E3F61283
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB33961165
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:51:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbhECQvv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:51:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35394 "EHLO mail.kernel.org"
+        id S233519AbhECQvx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:51:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234405AbhECQuK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:50:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FF4F6191D;
-        Mon,  3 May 2021 16:40:39 +0000 (UTC)
+        id S234529AbhECQuQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:50:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CFAD6191E;
+        Mon,  3 May 2021 16:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060040;
-        bh=vTb31YzKtHMvMdueKvKNtoz0SHfmU8NPxkhT+E+o4yk=;
+        s=k20201202; t=1620060043;
+        bh=4HDkMF/rnkaFYhl4N7vbJp2w2Tc9rn69yJ6Y47iyDc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eWkNfB7VaIkbQNKR3JG6e/Lxt2WoogOdOpI7Oqe883lORXavEqKTLvAqzRm4fwxu1
-         cwP1Rq0wyioC5fpEOx+/VGyhZ2e8iZVMuHSUZDXUaCL0N0s2TZYSKNJNAbb8wsIiHC
-         m3qf3RxWOKH5G8bGjjl6s2/sxpubYJibHtfBOkIdVknzs0xsQQnfCev99lr0oVlQV9
-         QRrP0id9fEi0nPANWpQiJGIshhvbkphmzNR6dGRFGR4x9b49DEJ/0oCY/2xN+Eheux
-         1klYQYcuX0C02luSLH6+AcVfYOmPRTFnFbMxdPu2mgMQOBIWL8JZIP/BqNJ2Z568zW
-         99U6Xj/2/ENBw==
+        b=q8Mspi0evDdK/FUkPQrKrotOD1Q2zh/4Gb9sQ/z/APyh9T5CiIHhK3jGTdrxQpf+w
+         5k7BmgKRVyc3NQEn/p+AAS7+f1PlLnu/HkbDiQkQEm2Jnzu8JjIv2oOu1TpPs0ZjBv
+         ACj/gb0FuNLwnEnmTqKONOlmf55gJRFQoXl/5CGA8DswnRfONI+aR9EqxNu1w9YpON
+         8nMof69RU+5FxfoHCtK/GHZ3iXz0d5ulehLUJWkHENxlIPAtU9CeZaLai54RDvdMbP
+         7nmOQclGpCePnR53cVoBlwBICQl93iBDyYlCZmyPET9G9/SoxqekC31CkEFmusQO/f
+         aRNIuZX3sR4zg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yang Yingliang <yangyingliang@huawei.com>,
@@ -38,9 +38,9 @@ Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 38/57] media: tc358743: fix possible use-after-free in tc358743_remove()
-Date:   Mon,  3 May 2021 12:39:22 -0400
-Message-Id: <20210503163941.2853291-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 40/57] media: i2c: adv7511-v4l2: fix possible use-after-free in adv7511_remove()
+Date:   Mon,  3 May 2021 12:39:24 -0400
+Message-Id: <20210503163941.2853291-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163941.2853291-1-sashal@kernel.org>
 References: <20210503163941.2853291-1-sashal@kernel.org>
@@ -54,7 +54,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 6107a4fdf8554a7aa9488bdc835bb010062fa8a9 ]
+[ Upstream commit 2c9541720c66899adf6f3600984cf3ef151295ad ]
 
 This driver's remove path calls cancel_delayed_work(). However, that
 function does not wait until the work function finishes. This means
@@ -71,22 +71,22 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/tc358743.c | 2 +-
+ drivers/media/i2c/adv7511-v4l2.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
-index cff99cf61ed4..114c084c4aec 100644
---- a/drivers/media/i2c/tc358743.c
-+++ b/drivers/media/i2c/tc358743.c
-@@ -2192,7 +2192,7 @@ static int tc358743_remove(struct i2c_client *client)
- 		del_timer_sync(&state->timer);
- 		flush_work(&state->work_i2c_poll);
- 	}
--	cancel_delayed_work(&state->delayed_work_enable_hotplug);
-+	cancel_delayed_work_sync(&state->delayed_work_enable_hotplug);
- 	cec_unregister_adapter(state->cec_adap);
- 	v4l2_async_unregister_subdev(sd);
- 	v4l2_device_unregister_subdev(sd);
+diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+index 62763ec4cd07..809fa44ed988 100644
+--- a/drivers/media/i2c/adv7511-v4l2.c
++++ b/drivers/media/i2c/adv7511-v4l2.c
+@@ -1964,7 +1964,7 @@ static int adv7511_remove(struct i2c_client *client)
+ 
+ 	adv7511_set_isr(sd, false);
+ 	adv7511_init_setup(sd);
+-	cancel_delayed_work(&state->edid_handler);
++	cancel_delayed_work_sync(&state->edid_handler);
+ 	i2c_unregister_device(state->i2c_edid);
+ 	i2c_unregister_device(state->i2c_cec);
+ 	i2c_unregister_device(state->i2c_pktmem);
 -- 
 2.30.2
 
