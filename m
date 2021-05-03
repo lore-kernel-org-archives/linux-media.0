@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E9B8C433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B32E8C43461
 	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 633F561165
+	by mail.kernel.org (Postfix) with ESMTP id 88586613E4
 	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbhECQvi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:51:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32838 "EHLO mail.kernel.org"
+        id S232607AbhECQvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:51:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233395AbhECQrw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:47:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FE62613CA;
-        Mon,  3 May 2021 16:39:54 +0000 (UTC)
+        id S233445AbhECQr7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:47:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A051613C4;
+        Mon,  3 May 2021 16:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059996;
-        bh=1EWvrNcYRMZNejusgByiFhHZ5oaQkZq+5SS5tOUEu3E=;
+        s=k20201202; t=1620060003;
+        bh=81GWPSg106hfbIPfhlB6rpot/yd2HEWpe5+wVp14E/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SwqbltnXEurZyIIJ/MTtZBOgvzqWtZuw8P/h8o9VXJSjy/5TdwMGrDtq1m07E39gx
-         Em8DcLCq//GipQiHwSbCLgYmDjMjiof6iSgsijvrJhpNf++ZhB8GFAWrw50ccVtCqe
-         8n70qHE0G5GHG5iDI90/bmuvIOUbp1UShgtCk69tiT4mHyI+eVV8n5Uu2RFdUbg1kx
-         2BqxLpAZDJRHOF3Hcl+DThjGflVECzMzQS09ZRnFmRJKQpAEeO42L6QQptfnA5PUuu
-         i2V1zmhQRed3jf18rnDqbJhjJwyn++6NhdJ28Mu02keVkoDUpj6ZevIODZ8OnKzyPl
-         B5HFOEukwguEg==
+        b=EsHOtXLV5thVOeppBWg5PlzsRKoqKeltHITWaG95c0BuDFRMmbaLfrYIQkjj2DtSm
+         HJvtquBJd9h/o2onTTfXan0CzyPEBhHpH0wXzawMiuG8L9wel2Dukk6gSWvhgOFIyo
+         k0nN9aIweCbna86etATCj3hvzhpPcXpM0myFMiU2F79cEJ71hGullIwirZngpv/zA0
+         OZRucj6GA5KgSusY4pBRdwMVnkvDGuN5v5w5emS0BEW2vctgQmdbLFHTXK0vEPi7Uw
+         kLMpyiB5g4wuUTRp/NbRRdFwml7wL5yCEQZD5IouRcXrO/XFax2gv69fCUizTAMwQ2
+         XUYyQbfEWyMIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Julian Braha <julianbraha@gmail.com>,
+Cc:     Daniel Niv <danielniv3@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/57] media: drivers: media: pci: sta2x11: fix Kconfig dependency on GPIOLIB
-Date:   Mon,  3 May 2021 12:38:53 -0400
-Message-Id: <20210503163941.2853291-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 14/57] media: media/saa7164: fix saa7164_encoder_register() memory leak bugs
+Date:   Mon,  3 May 2021 12:38:58 -0400
+Message-Id: <20210503163941.2853291-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163941.2853291-1-sashal@kernel.org>
 References: <20210503163941.2853291-1-sashal@kernel.org>
@@ -51,42 +51,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Julian Braha <julianbraha@gmail.com>
+From: Daniel Niv <danielniv3@gmail.com>
 
-[ Upstream commit 24df8b74c8b2fb42c49ffe8585562da0c96446ff ]
+[ Upstream commit c759b2970c561e3b56aa030deb13db104262adfe ]
 
-When STA2X11_VIP is enabled, and GPIOLIB is disabled,
-Kbuild gives the following warning:
+Add a fix for the memory leak bugs that can occur when the
+saa7164_encoder_register() function fails.
+The function allocates memory without explicitly freeing
+it when errors occur.
+Add a better error handling that deallocate the unused buffers before the
+function exits during a fail.
 
-WARNING: unmet direct dependencies detected for VIDEO_ADV7180
-  Depends on [n]: MEDIA_SUPPORT [=y] && GPIOLIB [=n] && VIDEO_V4L2 [=y] && I2C [=y]
-  Selected by [y]:
-  - STA2X11_VIP [=y] && MEDIA_SUPPORT [=y] && MEDIA_PCI_SUPPORT [=y] && MEDIA_CAMERA_SUPPORT [=y] && PCI [=y] && VIDEO_V4L2 [=y] && VIRT_TO_BUS [=y] && I2C [=y] && (STA2X11 [=n] || COMPILE_TEST [=y]) && MEDIA_SUBDRV_AUTOSELECT [=y]
-
-This is because STA2X11_VIP selects VIDEO_ADV7180
-without selecting or depending on GPIOLIB,
-despite VIDEO_ADV7180 depending on GPIOLIB.
-
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
+Signed-off-by: Daniel Niv <danielniv3@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/sta2x11/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/pci/saa7164/saa7164-encoder.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/pci/sta2x11/Kconfig b/drivers/media/pci/sta2x11/Kconfig
-index 011b766f0bff..d613feee8176 100644
---- a/drivers/media/pci/sta2x11/Kconfig
-+++ b/drivers/media/pci/sta2x11/Kconfig
-@@ -2,6 +2,7 @@
- config STA2X11_VIP
- 	tristate "STA2X11 VIP Video For Linux"
- 	depends on STA2X11 || COMPILE_TEST
-+	select GPIOLIB if MEDIA_SUBDRV_AUTOSELECT
- 	select VIDEO_ADV7180 if MEDIA_SUBDRV_AUTOSELECT
- 	select VIDEOBUF2_DMA_CONTIG
- 	depends on PCI && VIDEO_V4L2 && VIRT_TO_BUS
+diff --git a/drivers/media/pci/saa7164/saa7164-encoder.c b/drivers/media/pci/saa7164/saa7164-encoder.c
+index 3fca7257a720..df494644b5b6 100644
+--- a/drivers/media/pci/saa7164/saa7164-encoder.c
++++ b/drivers/media/pci/saa7164/saa7164-encoder.c
+@@ -1008,7 +1008,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 		printk(KERN_ERR "%s() failed (errno = %d), NO PCI configuration\n",
+ 			__func__, result);
+ 		result = -ENOMEM;
+-		goto failed;
++		goto fail_pci;
+ 	}
+ 
+ 	/* Establish encoder defaults here */
+@@ -1062,7 +1062,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 			  100000, ENCODER_DEF_BITRATE);
+ 	if (hdl->error) {
+ 		result = hdl->error;
+-		goto failed;
++		goto fail_hdl;
+ 	}
+ 
+ 	port->std = V4L2_STD_NTSC_M;
+@@ -1080,7 +1080,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 		printk(KERN_INFO "%s: can't allocate mpeg device\n",
+ 			dev->name);
+ 		result = -ENOMEM;
+-		goto failed;
++		goto fail_hdl;
+ 	}
+ 
+ 	port->v4l_device->ctrl_handler = hdl;
+@@ -1091,10 +1091,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 	if (result < 0) {
+ 		printk(KERN_INFO "%s: can't register mpeg device\n",
+ 			dev->name);
+-		/* TODO: We're going to leak here if we don't dealloc
+-		 The buffers above. The unreg function can't deal wit it.
+-		*/
+-		goto failed;
++		goto fail_reg;
+ 	}
+ 
+ 	printk(KERN_INFO "%s: registered device video%d [mpeg]\n",
+@@ -1116,9 +1113,14 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 
+ 	saa7164_api_set_encoder(port);
+ 	saa7164_api_get_encoder(port);
++	return 0;
+ 
+-	result = 0;
+-failed:
++fail_reg:
++	video_device_release(port->v4l_device);
++	port->v4l_device = NULL;
++fail_hdl:
++	v4l2_ctrl_handler_free(hdl);
++fail_pci:
+ 	return result;
+ }
+ 
 -- 
 2.30.2
 
