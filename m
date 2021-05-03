@@ -7,39 +7,40 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B32E8C43461
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C44C433B4
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88586613E4
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABE2C60FD7
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbhECQvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:51:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33124 "EHLO mail.kernel.org"
+        id S233280AbhECQvn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:51:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233445AbhECQr7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:47:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A051613C4;
-        Mon,  3 May 2021 16:40:02 +0000 (UTC)
+        id S232827AbhECQsn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:48:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FB046141D;
+        Mon,  3 May 2021 16:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060003;
-        bh=81GWPSg106hfbIPfhlB6rpot/yd2HEWpe5+wVp14E/Q=;
+        s=k20201202; t=1620060006;
+        bh=NEAnHfX4dM6Yys28LD/GQ3z4xz/R0/tEf/kpaqy6+xA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EsHOtXLV5thVOeppBWg5PlzsRKoqKeltHITWaG95c0BuDFRMmbaLfrYIQkjj2DtSm
-         HJvtquBJd9h/o2onTTfXan0CzyPEBhHpH0wXzawMiuG8L9wel2Dukk6gSWvhgOFIyo
-         k0nN9aIweCbna86etATCj3hvzhpPcXpM0myFMiU2F79cEJ71hGullIwirZngpv/zA0
-         OZRucj6GA5KgSusY4pBRdwMVnkvDGuN5v5w5emS0BEW2vctgQmdbLFHTXK0vEPi7Uw
-         kLMpyiB5g4wuUTRp/NbRRdFwml7wL5yCEQZD5IouRcXrO/XFax2gv69fCUizTAMwQ2
-         XUYyQbfEWyMIw==
+        b=sXCzNyAH80j2wwNzhKTFUuF4k7kjdp7Y/6I1msuAJP+3fcoiq5V0+zosdnqEze8IB
+         1PLKS2JJg15GMYG4Ve0sG9cgbgI5RTXljo2lARm3Okh1f+AW9/kSFZOwielsfw13LH
+         XyBYYi9CDxcYAtDpiCquYTRRj7w5M0Zs4cfdHjYuKEuz9584xCa8CA/KvlU7gXp0nP
+         UAz7KCpzwFk3UxJ3uOm4h1t2hrnZyF+GAIL/yPXZfyWwK0i2RIsYcTRVVuvA+GC6Gg
+         946neQA1CNmxaQCqmfTgsyl70wdfvPkqmOzWzKOf2Kl6LT+NUeiCZNype88CRhJIHX
+         GdlER7cKQ81Kg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Niv <danielniv3@gmail.com>,
+Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 14/57] media: media/saa7164: fix saa7164_encoder_register() memory leak bugs
-Date:   Mon,  3 May 2021 12:38:58 -0400
-Message-Id: <20210503163941.2853291-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 16/57] media: pci: saa7164: Rudimentary spelling fixes in the file saa7164-types.h
+Date:   Mon,  3 May 2021 12:39:00 -0400
+Message-Id: <20210503163941.2853291-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163941.2853291-1-sashal@kernel.org>
 References: <20210503163941.2853291-1-sashal@kernel.org>
@@ -51,85 +52,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Daniel Niv <danielniv3@gmail.com>
+From: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-[ Upstream commit c759b2970c561e3b56aa030deb13db104262adfe ]
+[ Upstream commit 4b19f9716ad89af51f07f9b611aabfd5fd80c625 ]
 
-Add a fix for the memory leak bugs that can occur when the
-saa7164_encoder_register() function fails.
-The function allocates memory without explicitly freeing
-it when errors occur.
-Add a better error handling that deallocate the unused buffers before the
-function exits during a fail.
+s/structues/structures/
+s/decies/decides/
 
-Signed-off-by: Daniel Niv <danielniv3@gmail.com>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7164/saa7164-encoder.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ drivers/media/pci/saa7164/saa7164-types.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-encoder.c b/drivers/media/pci/saa7164/saa7164-encoder.c
-index 3fca7257a720..df494644b5b6 100644
---- a/drivers/media/pci/saa7164/saa7164-encoder.c
-+++ b/drivers/media/pci/saa7164/saa7164-encoder.c
-@@ -1008,7 +1008,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
- 		printk(KERN_ERR "%s() failed (errno = %d), NO PCI configuration\n",
- 			__func__, result);
- 		result = -ENOMEM;
--		goto failed;
-+		goto fail_pci;
- 	}
+diff --git a/drivers/media/pci/saa7164/saa7164-types.h b/drivers/media/pci/saa7164/saa7164-types.h
+index 34dd2be6fce4..00f163b38d40 100644
+--- a/drivers/media/pci/saa7164/saa7164-types.h
++++ b/drivers/media/pci/saa7164/saa7164-types.h
+@@ -7,7 +7,7 @@
  
- 	/* Establish encoder defaults here */
-@@ -1062,7 +1062,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
- 			  100000, ENCODER_DEF_BITRATE);
- 	if (hdl->error) {
- 		result = hdl->error;
--		goto failed;
-+		goto fail_hdl;
- 	}
+ /* TODO: Cleanup and shorten the namespace */
  
- 	port->std = V4L2_STD_NTSC_M;
-@@ -1080,7 +1080,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
- 		printk(KERN_INFO "%s: can't allocate mpeg device\n",
- 			dev->name);
- 		result = -ENOMEM;
--		goto failed;
-+		goto fail_hdl;
- 	}
- 
- 	port->v4l_device->ctrl_handler = hdl;
-@@ -1091,10 +1091,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
- 	if (result < 0) {
- 		printk(KERN_INFO "%s: can't register mpeg device\n",
- 			dev->name);
--		/* TODO: We're going to leak here if we don't dealloc
--		 The buffers above. The unreg function can't deal wit it.
--		*/
--		goto failed;
-+		goto fail_reg;
- 	}
- 
- 	printk(KERN_INFO "%s: registered device video%d [mpeg]\n",
-@@ -1116,9 +1113,14 @@ int saa7164_encoder_register(struct saa7164_port *port)
- 
- 	saa7164_api_set_encoder(port);
- 	saa7164_api_get_encoder(port);
-+	return 0;
- 
--	result = 0;
--failed:
-+fail_reg:
-+	video_device_release(port->v4l_device);
-+	port->v4l_device = NULL;
-+fail_hdl:
-+	v4l2_ctrl_handler_free(hdl);
-+fail_pci:
- 	return result;
- }
- 
+-/* Some structues are passed directly to/from the firmware and
++/* Some structures are passed directly to/from the firmware and
+  * have strict alignment requirements. This is one of them.
+  */
+ struct tmComResHWDescr {
+@@ -28,7 +28,7 @@ struct tmComResHWDescr {
+ /* This is DWORD aligned on windows but I can't find the right
+  * gcc syntax to match the binary data from the device.
+  * I've manually padded with Reserved[3] bytes to match the hardware,
+- * but this could break if GCC decies to pack in a different way.
++ * but this could break if GCC decides to pack in a different way.
+  */
+ struct tmComResInterfaceDescr {
+ 	u8	bLength;
 -- 
 2.30.2
 
