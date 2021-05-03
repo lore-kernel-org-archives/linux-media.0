@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CDAEC43461
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E03C43461
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 104EB6141A
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 896B3613DC
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbhECQh6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:37:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38356 "EHLO mail.kernel.org"
+        id S231853AbhECQiE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:38:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231476AbhECQhE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:37:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84D3C613CB;
-        Mon,  3 May 2021 16:35:55 +0000 (UTC)
+        id S231625AbhECQhI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:37:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 45AC861364;
+        Mon,  3 May 2021 16:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059756;
-        bh=M8Fw1kys6+G6wwPjb5qVzyUf6hZGtRAEXQedwGOyilo=;
+        s=k20201202; t=1620059759;
+        bh=AZe2vZ5ADJJaJ4xV8wf/15PTru8F8h0rROcmQxBeQO8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDeA6FeSqWLKOytRWBkcIoapVQy56gYZqVSZVCbgg+P07FANmHz0iIR3abA2gW/Wv
-         4QfpaszaNGqeRzqNalxg3ac0FMJICKn5DbDxsUpAdQYgC+0Qpdvlsz1LCYiCHvVj5Y
-         5K1Wi9GeQb0KMwdLO2osXOncgqN6nltG54oqPvpU/PMSKhxsxNsM0b275hATSp0Let
-         gTGfQW5BByKrPxJAcQgppTxmmu0zNshS2iurJjKzdwZ6ic6w6hCHZnwANr17Y1c79m
-         JAQRAxJE2hbj1c0nhFF8ly37zu/FvkFPTG7fin576z2IOlgt441t/r48AkY7xzEdQf
-         T+I7Wx1e5xZBQ==
+        b=dIT+QEJjZKjeV8FQIv7cYwTC7/PxqRTJkDLBJKZomQf/zlDXNr/YPrRja4AntuEHv
+         m/fySkYFwRm+aNFec/Egxl/NG8lh6OCEmXImelojxihhzVGX6Qoy3bYNHA1yV18j2X
+         qIxYqtXaVeUqPM5Y6gch2FSMaole+95ar2WG7Pr64POWeWed3Llj0IkEdRTDZc70eM
+         qCO5Ve9stgn80OONN9eCv7hoJMsWqeU5aqk/KWYQctRjzXnYhZ4U0Cw+xBwLs/uxYC
+         8dkHb/jKYHClrsZCQHDrjduz3e8AI3bDWM6rFzD9z3Ea02po9acMyikvlcgYkfc1Bl
+         YHZbTecVosjNw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 027/134] media: ite-cir: check for receive overflow
-Date:   Mon,  3 May 2021 12:33:26 -0400
-Message-Id: <20210503163513.2851510-27-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 029/134] media: drivers/media/usb: fix memory leak in zr364xx_probe
+Date:   Mon,  3 May 2021 12:33:28 -0400
+Message-Id: <20210503163513.2851510-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
 References: <20210503163513.2851510-1-sashal@kernel.org>
@@ -50,39 +53,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 28c7afb07ccfc0a939bb06ac1e7afe669901c65a ]
+[ Upstream commit 9c39be40c0155c43343f53e3a439290c0fec5542 ]
 
-It's best if this condition is reported.
+syzbot reported memory leak in zr364xx_probe()[1].
+The problem was in invalid error handling order.
+All error conditions rigth after v4l2_ctrl_handler_init()
+must call v4l2_ctrl_handler_free().
 
-Signed-off-by: Sean Young <sean@mess.org>
+Reported-by: syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/ite-cir.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/usb/zr364xx/zr364xx.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/rc/ite-cir.c b/drivers/media/rc/ite-cir.c
-index 0c6229592e13..e5c4a6941d26 100644
---- a/drivers/media/rc/ite-cir.c
-+++ b/drivers/media/rc/ite-cir.c
-@@ -276,8 +276,14 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
- 	/* read the interrupt flags */
- 	iflags = dev->params.get_irq_causes(dev);
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index d29b861367ea..1ef611e08323 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1430,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (hdl->error) {
+ 		err = hdl->error;
+ 		dev_err(&udev->dev, "couldn't register control\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
+ 	/* save the init method used by this camera */
+ 	cam->method = id->driver_info;
+@@ -1503,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam->read_endpoint) {
+ 		err = -ENOMEM;
+ 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
  
-+	/* Check for RX overflow */
-+	if (iflags & ITE_IRQ_RX_FIFO_OVERRUN) {
-+		dev_warn(&dev->rdev->dev, "receive overflow\n");
-+		ir_raw_event_reset(dev->rdev);
-+	}
-+
- 	/* check for the receive interrupt */
--	if (iflags & (ITE_IRQ_RX_FIFO | ITE_IRQ_RX_FIFO_OVERRUN)) {
-+	if (iflags & ITE_IRQ_RX_FIFO) {
- 		/* read the FIFO bytes */
- 		rx_bytes =
- 			dev->params.get_rx_bytes(dev, rx_buf,
+ 	/* v4l */
+@@ -1515,7 +1515,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	/* load zr364xx board specific */
+ 	err = zr364xx_board_init(cam);
+ 	if (err)
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	err = v4l2_ctrl_handler_setup(hdl);
+ 	if (err)
+ 		goto board_uninit;
+@@ -1533,7 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err) {
+ 		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto free_handler;
++		goto board_uninit;
+ 	}
+ 	cam->v4l2_dev.release = zr364xx_release;
+ 
+@@ -1541,11 +1541,10 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 		 video_device_node_name(&cam->vdev));
+ 	return 0;
+ 
+-free_handler:
+-	v4l2_ctrl_handler_free(hdl);
+ board_uninit:
+ 	zr364xx_board_uninit(cam);
+-unregister:
++free_hdlr_and_unreg_dev:
++	v4l2_ctrl_handler_free(hdl);
+ 	v4l2_device_unregister(&cam->v4l2_dev);
+ free_cam:
+ 	kfree(cam);
 -- 
 2.30.2
 
