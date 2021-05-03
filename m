@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9BEEC43603
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DCE0C433B4
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB005610A5
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1491561059
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbhECQ6J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:58:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43266 "EHLO mail.kernel.org"
+        id S234632AbhECQ6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:58:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43305 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235300AbhECQ4K (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235321AbhECQ4K (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 3 May 2021 12:56:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 567DA61963;
-        Mon,  3 May 2021 16:43:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A045061404;
+        Mon,  3 May 2021 16:43:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060202;
-        bh=lrDdZvCDX8ao5SdFwPZAq7b43b9MvHdFteXdJol0os0=;
+        s=k20201202; t=1620060214;
+        bh=tdsfINl8WT06Bq7ZxsVz/BBSClxn1h0PBiNLgj8e6j8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WAGiq4Vu00tq2Uf0o9GirJheYIuMkgMX43TVjuWcREHNZveK+0Phq1yLltfMMqcqT
-         JAGoaLprO+/pU+bvfYiKY+3I4GaSA8geWtKTkFZrRfVk4KvTR3BzgXKDbgodRrfKm7
-         8jRTt9xkaBZCdQrnzbkGuosIGXeE4nY70keYK8zB0xvuTJ7V757sl6hYs1G15t2nix
-         KqGHikKBFUyNbrbWLJwTQoliznwfoEO27cDUG6eCjuj57Xj9NTcnZOODWPWWhuGKv6
-         ZOrOqLl0I6ph13RaYzs87Nbir0QrgOIk5Tu9+kZA5F2RWfd5XbzbGgORb7lvrIjN77
-         WaX/nggWIOjzg==
+        b=kqpMlV0JQaKjL07Ri3SUIdH9KY/qCaRTUM52wlD/y9k4beP5yke6fDnDs/0SSsmPM
+         MyY51g5tNY2ZgpRNdXJWmoXy9GZp68STeTPws0pV3pH94VDXsvWpKA4bIAu3iObX3K
+         MhPmcPah6x5II4XHCak6/uL2GAVxMw74ckxVLXAcZqVqeEUJgnBV1/C6pwmgqWGdJG
+         ZlmYC5PDTlwYXF6DVbBVZlvRxYMWcoOzEX8B3Q/8LqpVL6t+Eqrzq9U+EZKN5GIzYj
+         wnbUvUbyf2cCD2Q4zIoJHkSO0V0k6BMw0bQrnB+Hxc3BorcPmvOLj26wEhlDfYIQcm
+         DGOH8VIKACnSA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+e7f4c64a4248a0340c37@syzkaller.appspotmail.com,
+Cc:     Daniel Niv <danielniv3@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 20/24] media: gscpa/stv06xx: fix memory leak
-Date:   Mon,  3 May 2021 12:42:48 -0400
-Message-Id: <20210503164252.2854487-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 03/16] media: media/saa7164: fix saa7164_encoder_register() memory leak bugs
+Date:   Mon,  3 May 2021 12:43:16 -0400
+Message-Id: <20210503164329.2854739-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210503164252.2854487-1-sashal@kernel.org>
-References: <20210503164252.2854487-1-sashal@kernel.org>
+In-Reply-To: <20210503164329.2854739-1-sashal@kernel.org>
+References: <20210503164329.2854739-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,82 +51,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Daniel Niv <danielniv3@gmail.com>
 
-[ Upstream commit 4f4e6644cd876c844cdb3bea2dd7051787d5ae25 ]
+[ Upstream commit c759b2970c561e3b56aa030deb13db104262adfe ]
 
-For two of the supported sensors the stv06xx driver allocates memory which
-is stored in sd->sensor_priv. This memory is freed on a disconnect, but if
-the probe() fails, then it isn't freed and so this leaks memory.
+Add a fix for the memory leak bugs that can occur when the
+saa7164_encoder_register() function fails.
+The function allocates memory without explicitly freeing
+it when errors occur.
+Add a better error handling that deallocate the unused buffers before the
+function exits during a fail.
 
-Add a new probe_error() op that drivers can use to free any allocated
-memory in case there was a probe failure.
-
-Thanks to Pavel Skripkin <paskripkin@gmail.com> for discovering the cause
-of the memory leak.
-
-Reported-and-tested-by: syzbot+e7f4c64a4248a0340c37@syzkaller.appspotmail.com
-
+Signed-off-by: Daniel Niv <danielniv3@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/gspca/gspca.c           | 2 ++
- drivers/media/usb/gspca/gspca.h           | 1 +
- drivers/media/usb/gspca/stv06xx/stv06xx.c | 9 +++++++++
- 3 files changed, 12 insertions(+)
+ drivers/media/pci/saa7164/saa7164-encoder.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
-index d239075a6a65..79f1e8904e30 100644
---- a/drivers/media/usb/gspca/gspca.c
-+++ b/drivers/media/usb/gspca/gspca.c
-@@ -2146,6 +2146,8 @@ int gspca_dev_probe2(struct usb_interface *intf,
- #endif
- 	v4l2_ctrl_handler_free(gspca_dev->vdev.ctrl_handler);
- 	v4l2_device_unregister(&gspca_dev->v4l2_dev);
-+	if (sd_desc->probe_error)
-+		sd_desc->probe_error(gspca_dev);
- 	kfree(gspca_dev->usb_buf);
- 	kfree(gspca_dev);
- 	return ret;
-diff --git a/drivers/media/usb/gspca/gspca.h b/drivers/media/usb/gspca/gspca.h
-index d39adf90303b..bec8fccc2c94 100644
---- a/drivers/media/usb/gspca/gspca.h
-+++ b/drivers/media/usb/gspca/gspca.h
-@@ -101,6 +101,7 @@ struct sd_desc {
- 	cam_cf_op config;	/* called on probe */
- 	cam_op init;		/* called on probe and resume */
- 	cam_op init_controls;	/* called on probe */
-+	cam_v_op probe_error;	/* called if probe failed, do cleanup here */
- 	cam_op start;		/* called on stream on after URBs creation */
- 	cam_pkt_op pkt_scan;
- /* optional operations */
-diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx.c b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-index 7d255529ed4c..40d4c99debb8 100644
---- a/drivers/media/usb/gspca/stv06xx/stv06xx.c
-+++ b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-@@ -541,12 +541,21 @@ static int sd_int_pkt_scan(struct gspca_dev *gspca_dev,
- static int stv06xx_config(struct gspca_dev *gspca_dev,
- 			  const struct usb_device_id *id);
+diff --git a/drivers/media/pci/saa7164/saa7164-encoder.c b/drivers/media/pci/saa7164/saa7164-encoder.c
+index 1b184c39ba97..966de363c575 100644
+--- a/drivers/media/pci/saa7164/saa7164-encoder.c
++++ b/drivers/media/pci/saa7164/saa7164-encoder.c
+@@ -1031,7 +1031,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 		       "(errno = %d), NO PCI configuration\n",
+ 			__func__, result);
+ 		result = -ENOMEM;
+-		goto failed;
++		goto fail_pci;
+ 	}
  
-+static void stv06xx_probe_error(struct gspca_dev *gspca_dev)
-+{
-+	struct sd *sd = (struct sd *)gspca_dev;
-+
-+	kfree(sd->sensor_priv);
-+	sd->sensor_priv = NULL;
-+}
-+
- /* sub-driver description */
- static const struct sd_desc sd_desc = {
- 	.name = MODULE_NAME,
- 	.config = stv06xx_config,
- 	.init = stv06xx_init,
- 	.init_controls = stv06xx_init_controls,
-+	.probe_error = stv06xx_probe_error,
- 	.start = stv06xx_start,
- 	.stopN = stv06xx_stopN,
- 	.pkt_scan = stv06xx_pkt_scan,
+ 	/* Establish encoder defaults here */
+@@ -1085,7 +1085,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 			  100000, ENCODER_DEF_BITRATE);
+ 	if (hdl->error) {
+ 		result = hdl->error;
+-		goto failed;
++		goto fail_hdl;
+ 	}
+ 
+ 	port->std = V4L2_STD_NTSC_M;
+@@ -1103,7 +1103,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 		printk(KERN_INFO "%s: can't allocate mpeg device\n",
+ 			dev->name);
+ 		result = -ENOMEM;
+-		goto failed;
++		goto fail_hdl;
+ 	}
+ 
+ 	port->v4l_device->ctrl_handler = hdl;
+@@ -1114,10 +1114,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 	if (result < 0) {
+ 		printk(KERN_INFO "%s: can't register mpeg device\n",
+ 			dev->name);
+-		/* TODO: We're going to leak here if we don't dealloc
+-		 The buffers above. The unreg function can't deal wit it.
+-		*/
+-		goto failed;
++		goto fail_reg;
+ 	}
+ 
+ 	printk(KERN_INFO "%s: registered device video%d [mpeg]\n",
+@@ -1139,9 +1136,14 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 
+ 	saa7164_api_set_encoder(port);
+ 	saa7164_api_get_encoder(port);
++	return 0;
+ 
+-	result = 0;
+-failed:
++fail_reg:
++	video_device_release(port->v4l_device);
++	port->v4l_device = NULL;
++fail_hdl:
++	v4l2_ctrl_handler_free(hdl);
++fail_pci:
+ 	return result;
+ }
+ 
 -- 
 2.30.2
 
