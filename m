@@ -5,45 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05067C43618
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBDEC433ED
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8FA6613BA
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:37:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DA9E61943
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbhECQiY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:38:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38998 "EHLO mail.kernel.org"
+        id S231727AbhECQnC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:43:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231672AbhECQhU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:37:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5588613C9;
-        Mon,  3 May 2021 16:36:16 +0000 (UTC)
+        id S231976AbhECQkk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:40:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E1B74613DE;
+        Mon,  3 May 2021 16:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059777;
-        bh=NEAnHfX4dM6Yys28LD/GQ3z4xz/R0/tEf/kpaqy6+xA=;
+        s=k20201202; t=1620059858;
+        bh=3QPNUUFwutbpp8um8I+PiqU57KH5wx8UBnfck6xHl2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jOTuEUTjvWdUspn9D64X3dCSYjvXw+3jJkayw9y5RCqYSaf7c9vhdCCUTEaVEvTy6
-         OEHZTCK0Nr/5zzHh/QCOVEt5AJPyZO1qBpPB34UEaVkSZbZzl5SleE/cLQSjgijmnJ
-         71ONopbflBdjNkouNUaTX45l+BT6L+ewKQdvy3Ba4DzxVBnwmlancvEWUk4qRMT1hm
-         jd189v3fWw8wwYOIV70vvhqMJGssil/6nvfHnD+RhxHQic59KI45NrchMh5qcH5M4Y
-         Mbi6FRASzfElHfULkl6+oTN4muyPaEID3yEecmh0MFpFNDEf4WzvN2mLzBlnuGGdA8
-         JI3c1LNxRo3GQ==
+        b=r94nRRLMwaQ6XK21Xj2bgynzzelZDu5RrUVFzFDk8GPpqnjw9dk/kL1Uzb7euveF1
+         Kz5K4WFboiLkYJG/67j3a35dvuSpvicWj5OzZOI98UZxgvvNl1Nhl5nhmYXZGo3gVT
+         Z4ezn3KnIVRVsgkFstkBZgI47lSfIP2hkyQp30OGASlWPLeYdRAF5bb8VvfTka0B+C
+         z1aQTA/YzN4idTMzgMBX7/89sbSNAxUEGdB6KH27tfre9SVYEqyDWg3yP2XFx7MyWJ
+         gYtnyTUES/KltslKINCjOE2qWVyJf2DDv/ojdJM5b0BeRtLVQK4xP1GItbBKTyATr2
+         h6EZshiSyi96Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+Cc:     Julian Braha <julianbraha@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 041/134] media: pci: saa7164: Rudimentary spelling fixes in the file saa7164-types.h
-Date:   Mon,  3 May 2021 12:33:40 -0400
-Message-Id: <20210503163513.2851510-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.11 025/115] media: drivers: media: pci: sta2x11: fix Kconfig dependency on GPIOLIB
+Date:   Mon,  3 May 2021 12:35:29 -0400
+Message-Id: <20210503163700.2852194-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
-References: <20210503163513.2851510-1-sashal@kernel.org>
+In-Reply-To: <20210503163700.2852194-1-sashal@kernel.org>
+References: <20210503163700.2852194-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,44 +51,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+From: Julian Braha <julianbraha@gmail.com>
 
-[ Upstream commit 4b19f9716ad89af51f07f9b611aabfd5fd80c625 ]
+[ Upstream commit 24df8b74c8b2fb42c49ffe8585562da0c96446ff ]
 
-s/structues/structures/
-s/decies/decides/
+When STA2X11_VIP is enabled, and GPIOLIB is disabled,
+Kbuild gives the following warning:
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+WARNING: unmet direct dependencies detected for VIDEO_ADV7180
+  Depends on [n]: MEDIA_SUPPORT [=y] && GPIOLIB [=n] && VIDEO_V4L2 [=y] && I2C [=y]
+  Selected by [y]:
+  - STA2X11_VIP [=y] && MEDIA_SUPPORT [=y] && MEDIA_PCI_SUPPORT [=y] && MEDIA_CAMERA_SUPPORT [=y] && PCI [=y] && VIDEO_V4L2 [=y] && VIRT_TO_BUS [=y] && I2C [=y] && (STA2X11 [=n] || COMPILE_TEST [=y]) && MEDIA_SUBDRV_AUTOSELECT [=y]
+
+This is because STA2X11_VIP selects VIDEO_ADV7180
+without selecting or depending on GPIOLIB,
+despite VIDEO_ADV7180 depending on GPIOLIB.
+
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7164/saa7164-types.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/sta2x11/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-types.h b/drivers/media/pci/saa7164/saa7164-types.h
-index 34dd2be6fce4..00f163b38d40 100644
---- a/drivers/media/pci/saa7164/saa7164-types.h
-+++ b/drivers/media/pci/saa7164/saa7164-types.h
-@@ -7,7 +7,7 @@
- 
- /* TODO: Cleanup and shorten the namespace */
- 
--/* Some structues are passed directly to/from the firmware and
-+/* Some structures are passed directly to/from the firmware and
-  * have strict alignment requirements. This is one of them.
-  */
- struct tmComResHWDescr {
-@@ -28,7 +28,7 @@ struct tmComResHWDescr {
- /* This is DWORD aligned on windows but I can't find the right
-  * gcc syntax to match the binary data from the device.
-  * I've manually padded with Reserved[3] bytes to match the hardware,
-- * but this could break if GCC decies to pack in a different way.
-+ * but this could break if GCC decides to pack in a different way.
-  */
- struct tmComResInterfaceDescr {
- 	u8	bLength;
+diff --git a/drivers/media/pci/sta2x11/Kconfig b/drivers/media/pci/sta2x11/Kconfig
+index 4dd98f94a91e..27bb78513631 100644
+--- a/drivers/media/pci/sta2x11/Kconfig
++++ b/drivers/media/pci/sta2x11/Kconfig
+@@ -3,6 +3,7 @@ config STA2X11_VIP
+ 	tristate "STA2X11 VIP Video For Linux"
+ 	depends on PCI && VIDEO_V4L2 && VIRT_TO_BUS && I2C
+ 	depends on STA2X11 || COMPILE_TEST
++	select GPIOLIB if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEO_ADV7180 if MEDIA_SUBDRV_AUTOSELECT
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select MEDIA_CONTROLLER
 -- 
 2.30.2
 
