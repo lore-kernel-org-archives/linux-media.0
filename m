@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9D1C43611
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12EE9C433ED
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2AF8610A5
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8F9561073
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:57:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbhECQ6D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:58:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43030 "EHLO mail.kernel.org"
+        id S234205AbhECQ6F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:58:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235295AbhECQ4J (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:56:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4FC76196A;
-        Mon,  3 May 2021 16:43:16 +0000 (UTC)
+        id S235297AbhECQ4K (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:56:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B96DC61977;
+        Mon,  3 May 2021 16:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060197;
-        bh=4z/ycUZ7/q9+pbbzp4P379DE3gn4uLBgDMv3QLkQ/dc=;
+        s=k20201202; t=1620060200;
+        bh=8PUeSK6m8NDiKRs+ov5NRIEpA7ooQ2i5cHoY4/B8N8s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdKogSMsaswhDNRj6VC5vWvfpCYAmG1rFXnP4weqQc80v5/Arnn4wo80XyA8Na07D
-         Sdnv2UXwiGvtXGR0t0EIzbccy1IawtW9dCjhCV8XJOAkcLzjiQK1L1XxeA2eZMROgc
-         cF8y8C+tD2t98eKhzZ8D56FmOP94S8vgw6Z7SnAWrw5QoWlLuVHbb7KrbDqB83stKA
-         0BYAIm/+s2J9EPzllGHcqhpPPiNJOjrhNQwehtsra1rNYMenlz+l8YwvG1lG90S/BT
-         +vt+XlH6YllkDDv1O4Emf1kuIXPNda0sY7Q4EAGAFTHNLQUmaxZ+/n8si/jNURXNeD
-         hGC7XeAvEMPww==
+        b=FurglIwU/opbVRu+SHXEctCLi8m7znZ3brYvEhuG8PamP5NSa7+7gYHHGylL1J9z3
+         KWYfwifluXgKNsAaIs9mm8YCa5J7isi8kHbqAQD4JzUyZbAP+ccYQpIuP8H3IcWgLu
+         wIdHj/weSrkiLhNmsI7uYpMXfs7qPolhXVrfWpL9IiXzNjgYIY3SHV/qDPuvt3wG8/
+         6eOfKrXhwncmh2fEh3NQ073hlc/lGCzzrs7o+dkhvW11C7z0MYzmHQJruja16q3xCD
+         bsmVrr4ukC6KEz3VLm2fr7a1jx/pTM9+bohuS7xpLD3fzJQnPhHx4IiCsaaIYzfnFC
+         gJwNM0JheCKPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+3c2be7424cea3b932b0e@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 17/24] media: i2c: adv7511-v4l2: fix possible use-after-free in adv7511_remove()
-Date:   Mon,  3 May 2021 12:42:45 -0400
-Message-Id: <20210503164252.2854487-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 19/24] media: dvb-usb: fix memory leak in dvb_usb_adapter_init
+Date:   Mon,  3 May 2021 12:42:47 -0400
+Message-Id: <20210503164252.2854487-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503164252.2854487-1-sashal@kernel.org>
 References: <20210503164252.2854487-1-sashal@kernel.org>
@@ -52,41 +52,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 2c9541720c66899adf6f3600984cf3ef151295ad ]
+[ Upstream commit b7cd0da982e3043f2eec7235ac5530cb18d6af1d ]
 
-This driver's remove path calls cancel_delayed_work(). However, that
-function does not wait until the work function finishes. This means
-that the callback function may still be running after the driver's
-remove function has finished, which would result in a use-after-free.
+syzbot reported memory leak in dvb-usb. The problem was
+in invalid error handling in dvb_usb_adapter_init().
 
-Fix by calling cancel_delayed_work_sync(), which ensures that
-the work is properly cancelled, no longer running, and unable
-to re-schedule itself.
+for (n = 0; n < d->props.num_adapters; n++) {
+....
+	if ((ret = dvb_usb_adapter_stream_init(adap)) ||
+		(ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs)) ||
+		(ret = dvb_usb_adapter_frontend_init(adap))) {
+		return ret;
+	}
+...
+	d->num_adapters_initialized++;
+...
+}
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In case of error in dvb_usb_adapter_dvb_init() or
+dvb_usb_adapter_dvb_init() d->num_adapters_initialized won't be
+incremented, but dvb_usb_adapter_exit() relies on it:
+
+	for (n = 0; n < d->num_adapters_initialized; n++)
+
+So, allocated objects won't be freed.
+
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reported-by: syzbot+3c2be7424cea3b932b0e@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/adv7511-v4l2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index b87c9e7ff146..e81c4cca50c6 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -1976,7 +1976,7 @@ static int adv7511_remove(struct i2c_client *client)
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index b3413404f91a..690c1e06fbfa 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -82,11 +82,17 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ 			}
+ 		}
  
- 	adv7511_set_isr(sd, false);
- 	adv7511_init_setup(sd);
--	cancel_delayed_work(&state->edid_handler);
-+	cancel_delayed_work_sync(&state->edid_handler);
- 	i2c_unregister_device(state->i2c_edid);
- 	if (state->i2c_cec)
- 		i2c_unregister_device(state->i2c_cec);
+-		if ((ret = dvb_usb_adapter_stream_init(adap)) ||
+-			(ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs)) ||
+-			(ret = dvb_usb_adapter_frontend_init(adap))) {
++		ret = dvb_usb_adapter_stream_init(adap);
++		if (ret)
+ 			return ret;
+-		}
++
++		ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs);
++		if (ret)
++			goto dvb_init_err;
++
++		ret = dvb_usb_adapter_frontend_init(adap);
++		if (ret)
++			goto frontend_init_err;
+ 
+ 		/* use exclusive FE lock if there is multiple shared FEs */
+ 		if (adap->fe_adap[1].fe)
+@@ -106,6 +112,12 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ 	}
+ 
+ 	return 0;
++
++frontend_init_err:
++	dvb_usb_adapter_dvb_exit(adap);
++dvb_init_err:
++	dvb_usb_adapter_stream_exit(adap);
++	return ret;
+ }
+ 
+ static int dvb_usb_adapter_exit(struct dvb_usb_device *d)
 -- 
 2.30.2
 
