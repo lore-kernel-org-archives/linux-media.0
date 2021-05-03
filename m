@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55E63C43603
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8768C4360C
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:56:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2852861363
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9B7C61073
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:56:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbhECQ5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:57:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43312 "EHLO mail.kernel.org"
+        id S234365AbhECQ5i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:57:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234822AbhECQzC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:55:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 85D246194F;
-        Mon,  3 May 2021 16:42:29 +0000 (UTC)
+        id S234943AbhECQzO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:55:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF45061940;
+        Mon,  3 May 2021 16:42:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060150;
-        bh=J/Qb51465F1XtX5UgShoqG2tvTIPI3ggTby3Y1SsA5o=;
+        s=k20201202; t=1620060157;
+        bh=8TY0t/Ba2F9x7+OvzxIpXR9RQFp4mudCZseaX2LGbz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qj262mpctl3KaOFS1+ZGh7UpsWgb5RFXU63mTFTb3nxoSS14IbajJQBsrdUsOPRu7
-         FMBI9YST0gv5JfN8Wjr9yi2thHlAC3x55l/mEXmn2WY00xKEMnfKxVH3eC340bM34Q
-         f+2o3i/eDIgHUf6qzkMT1E7vZliSpSziaFTLFykNaVtr4ZFL/YL0HN/oFXumAQxP8o
-         P9+becgbGjjjCPopC39N8PJ+NKrITvrSUnub5fxXBmr86ZrX8W+ROJBrCy9OpanGWh
-         DFjrEOStVXlkSki03HgUDj1QZoM1IotjF503s1wWWxCUstSaL6hnFiYnMmdTr+2nkT
-         srkQk/0B4qSeg==
+        b=IHWjRLNPB5Q3mucHH3i6ARsWnuNppGqNtxFABR7Qtv2ryIjkEmBbmyyDH82BLvq08
+         50UW/Irv68oDik00sjEnSuozhP61jT/k8MYkCrllbbpZU6i4uoqxz7YPmM9s9Bg6Qw
+         hQ4/1tBIx0dbgw1kBQsguMAXxNXD9zIiwWL2OFfumjc6QDOstx+kuDA+zK8Izt4r7T
+         RNGZKY1rNH2kU+eMUmRZ0al5IQbwVAjRyHOQdKiKRuZ3WaEshOFVLqap840whPZ5J7
+         Q44Fi0WJ9ZaQOeUgDjgP+pk/Ks/RLD3kois2HA92uejiic1svbEyBPGn+UyBc9w0FR
+         uFjDzGpoVbM6w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Muhammad Usama Anjum <musamaanjum@gmail.com>,
-        syzbot+889397c820fa56adf25d@syzkaller.appspotmail.com,
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/31] media: em28xx: fix memory leak
-Date:   Mon,  3 May 2021 12:41:50 -0400
-Message-Id: <20210503164204.2854178-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 22/31] media: adv7604: fix possible use-after-free in adv76xx_remove()
+Date:   Mon,  3 May 2021 12:41:55 -0400
+Message-Id: <20210503164204.2854178-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503164204.2854178-1-sashal@kernel.org>
 References: <20210503164204.2854178-1-sashal@kernel.org>
@@ -52,39 +52,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Muhammad Usama Anjum <musamaanjum@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 0ae10a7dc8992ee682ff0b1752ff7c83d472eef1 ]
+[ Upstream commit fa56f5f1fe31c2050675fa63b84963ebd504a5b3 ]
 
-If some error occurs, URB buffers should also be freed. If they aren't
-freed with the dvb here, the em28xx_dvb_fini call doesn't frees the URB
-buffers as dvb is set to NULL. The function in which error occurs should
-do all the cleanup for the allocations it had done.
+This driver's remove path calls cancel_delayed_work(). However, that
+function does not wait until the work function finishes. This means
+that the callback function may still be running after the driver's
+remove function has finished, which would result in a use-after-free.
 
-Tested the patch with the reproducer provided by syzbot. This patch
-fixes the memleak.
+Fix by calling cancel_delayed_work_sync(), which ensures that
+the work is properly cancelled, no longer running, and unable
+to re-schedule itself.
 
-Reported-by: syzbot+889397c820fa56adf25d@syzkaller.appspotmail.com
-Signed-off-by: Muhammad Usama Anjum <musamaanjum@gmail.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-dvb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/adv7604.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-dvb.c b/drivers/media/usb/em28xx/em28xx-dvb.c
-index 29cdaaf1ed90..3667373f14d2 100644
---- a/drivers/media/usb/em28xx/em28xx-dvb.c
-+++ b/drivers/media/usb/em28xx/em28xx-dvb.c
-@@ -2056,6 +2056,7 @@ static int em28xx_dvb_init(struct em28xx *dev)
- 	return result;
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 26c3ec573a56..3078d47d090a 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -3557,7 +3557,7 @@ static int adv76xx_remove(struct i2c_client *client)
+ 	io_write(sd, 0x6e, 0);
+ 	io_write(sd, 0x73, 0);
  
- out_free:
-+	em28xx_uninit_usb_xfer(dev, EM28XX_DIGITAL_MODE);
- 	kfree(dvb);
- 	dev->dvb = NULL;
- 	goto ret;
+-	cancel_delayed_work(&state->delayed_work_enable_hotplug);
++	cancel_delayed_work_sync(&state->delayed_work_enable_hotplug);
+ 	v4l2_async_unregister_subdev(sd);
+ 	media_entity_cleanup(&sd->entity);
+ 	adv76xx_unregister_clients(to_state(sd));
 -- 
 2.30.2
 
