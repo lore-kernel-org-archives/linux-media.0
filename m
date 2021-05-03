@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7989BC43470
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30333C43461
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:52:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E68961165
-	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:52:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BCA0610A5
+	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:52:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbhECQwy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:52:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60824 "EHLO mail.kernel.org"
+        id S232793AbhECQxI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:53:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232284AbhECQuw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:50:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C580F61932;
-        Mon,  3 May 2021 16:41:16 +0000 (UTC)
+        id S231329AbhECQu7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:50:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D5BD6193B;
+        Mon,  3 May 2021 16:41:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060077;
-        bh=u66FIXdXARSGJ8HRvj9RJQ+WZzYTz1VHCYjoJliyteg=;
+        s=k20201202; t=1620060083;
+        bh=45JJugUo8IOeD/S4+MXrRtrfp8plDJ3A8oXfswPBWbg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B438Z62U7NxKzeZMdaRHmrnFYLTJorFpMzyBnhJiw5yYL/uCiDKjPvFxQkLNz+PSv
-         Go2wkLCHPVQw9pd0TyuTgeA1qGx1DXp9I1mUMxfTbR7CixYgf5+JdL2FqaFJZyDY+j
-         BdcbmP/sl4Y8Ie9D0lpmP/pC+rQ3eWfKaZCOxEEYpPm7SPCNUXIK4ts2uNu7/12kVW
-         CiBpHYkE8XS+OvicNJAD9NZfdbCzJ0X5yGxg46RqbgT4TQlgY82oB9ylkV7zvIPHHj
-         iSsMP5k0HDrEZ2COre/ICxN3yU6yhloE7OsCa1Z1xXGJYaV6zmqdudg6G0xCqBpX/V
-         i/PPaKjY5pftA==
+        b=AsnrImmindvSX3OiviKvx2yRlqpYS8vgU+EuXfB6W9HdsNjogKb4KOlrDmGJ48G0Z
+         jXVbeodUtYYp31bhJZ9SsWNF5iCAgrWMTk9L1K/ffeOOq2hS2gtpomB/IxibkPShw/
+         iHM6umD4wbjR8KE/liQyZiqk0Nh7/rV1hwVm/xMWgHfw3PB4tAHqFpSPhWY85Yu3Ys
+         xVpblxq2Ohl030L0rFa3fg/580ZF+SDvPkO7Cm7BbeE0kC5PystJCK8OajP3m2q6mb
+         biqTU5TRK9yDx5dIHzH4LPIdo72VBe+Xgp//veIsOQnXbIbEDsoIlKO42HOgsbJgF7
+         GoOasPWiBv1xA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Julian Braha <julianbraha@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        syzbot+a4e309017a5f3a24c7b3@syzkaller.appspotmail.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/35] media: drivers: media: pci: sta2x11: fix Kconfig dependency on GPIOLIB
-Date:   Mon,  3 May 2021 12:40:39 -0400
-Message-Id: <20210503164109.2853838-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 09/35] media: gspca/sq905.c: fix uninitialized variable
+Date:   Mon,  3 May 2021 12:40:43 -0400
+Message-Id: <20210503164109.2853838-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503164109.2853838-1-sashal@kernel.org>
 References: <20210503164109.2853838-1-sashal@kernel.org>
@@ -51,42 +51,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Julian Braha <julianbraha@gmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 24df8b74c8b2fb42c49ffe8585562da0c96446ff ]
+[ Upstream commit eaaea4681984c79d2b2b160387b297477f0c1aab ]
 
-When STA2X11_VIP is enabled, and GPIOLIB is disabled,
-Kbuild gives the following warning:
+act_len can be uninitialized if usb_bulk_msg() returns an error.
+Set it to 0 to avoid a KMSAN error.
 
-WARNING: unmet direct dependencies detected for VIDEO_ADV7180
-  Depends on [n]: MEDIA_SUPPORT [=y] && GPIOLIB [=n] && VIDEO_V4L2 [=y] && I2C [=y]
-  Selected by [y]:
-  - STA2X11_VIP [=y] && MEDIA_SUPPORT [=y] && MEDIA_PCI_SUPPORT [=y] && MEDIA_CAMERA_SUPPORT [=y] && PCI [=y] && VIDEO_V4L2 [=y] && VIRT_TO_BUS [=y] && I2C [=y] && (STA2X11 [=n] || COMPILE_TEST [=y]) && MEDIA_SUBDRV_AUTOSELECT [=y]
-
-This is because STA2X11_VIP selects VIDEO_ADV7180
-without selecting or depending on GPIOLIB,
-despite VIDEO_ADV7180 depending on GPIOLIB.
-
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+a4e309017a5f3a24c7b3@syzkaller.appspotmail.com
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/sta2x11/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/gspca/sq905.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/sta2x11/Kconfig b/drivers/media/pci/sta2x11/Kconfig
-index 4407b9f881e4..bd690613fe68 100644
---- a/drivers/media/pci/sta2x11/Kconfig
-+++ b/drivers/media/pci/sta2x11/Kconfig
-@@ -1,6 +1,7 @@
- config STA2X11_VIP
- 	tristate "STA2X11 VIP Video For Linux"
- 	depends on STA2X11 || COMPILE_TEST
-+	select GPIOLIB if MEDIA_SUBDRV_AUTOSELECT
- 	select VIDEO_ADV7180 if MEDIA_SUBDRV_AUTOSELECT
- 	select VIDEOBUF2_DMA_CONTIG
- 	depends on PCI && VIDEO_V4L2 && VIRT_TO_BUS
+diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
+index ffea9c35b0a0..13676af42cfc 100644
+--- a/drivers/media/usb/gspca/sq905.c
++++ b/drivers/media/usb/gspca/sq905.c
+@@ -167,7 +167,7 @@ static int
+ sq905_read_data(struct gspca_dev *gspca_dev, u8 *data, int size, int need_lock)
+ {
+ 	int ret;
+-	int act_len;
++	int act_len = 0;
+ 
+ 	gspca_dev->usb_buf[0] = '\0';
+ 	if (need_lock)
 -- 
 2.30.2
 
