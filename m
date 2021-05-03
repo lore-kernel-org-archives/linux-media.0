@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FD68C433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC5EC43460
 	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BA166121D
+	by mail.kernel.org (Postfix) with ESMTP id BBF6A613DB
 	for <linux-media@archiver.kernel.org>; Mon,  3 May 2021 16:50:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbhECQvd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 May 2021 12:51:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32786 "EHLO mail.kernel.org"
+        id S233549AbhECQvh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 May 2021 12:51:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233379AbhECQru (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 May 2021 12:47:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B9F0B61410;
-        Mon,  3 May 2021 16:39:53 +0000 (UTC)
+        id S233397AbhECQrw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 May 2021 12:47:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 789EE613CF;
+        Mon,  3 May 2021 16:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059994;
-        bh=EwRdCm8Hl3BFXJn9n8iyfgOP7JAJSRXxpKGlNTCg6eA=;
+        s=k20201202; t=1620059997;
+        bh=AQJ9f4ACWu1BWs9uka6D3ZPaN2EluY0pQ4R8vA/fE8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HfiSQ82Pk9MtDZ+jFuy7BfVGOGBadTSImn0YmdFUdnldZBwkGvhYdzOHV36cNdhIo
-         xiK9jdstuvV7+ZUIaKT8HoDjNMyKVT7wkkS6ACRzmLrkMIvPcwSlZxe73zMeULqzXB
-         O8AaS24Ve4pF6fDOnfTyRFO4FQjcJ5aE8cTQb6LRbZpGPjPxg5eIADGNvsyleOzOyZ
-         2yKQYqt8MS0TlvTm48apfz/BTh+u6ICWCUNuTv8bsOSBbRP2RQBKXZ4Vig8uAMli/1
-         qtjYhIB2SY8Av5l+1FhRkawvkHcC+cfatR5cwCjwpIR87N/ZjQ5bFimuZGLph1ZqiK
-         5Q1HEZlYTYvDg==
+        b=CEE/gm44lHQAKOI7NoZ0wgUfCW+nuLMld8ZmZL8s38n6uzIZklmBlfI3m1N3cCvLH
+         pe+HbAb2spN0u7+N3rCdnskNA2He34IVNugEAHxTR2F3/wPs/ZvHGYE0fUwGxFaHtv
+         9nYmry/KbY6+jX/jNKQzaamP0OWqW/hAzAKCsEiITvYq3bYQydY1ZwcTm6WQmb8UK9
+         VBJwv386YOQV4jM1hbVJ2R/exuYF8fUA4s825cC26ADSicBWS4CGoU+xhSWTUWoeVQ
+         fpIuTxO4fP/zhU6rfO1SLtwfRBrYZ6CKB9YzApm8Nwa35ocJ/eZWCPFR+WupYOKRcJ
+         0sCx9bnZdnrIA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/57] media: ite-cir: check for receive overflow
-Date:   Mon,  3 May 2021 12:38:52 -0400
-Message-Id: <20210503163941.2853291-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 10/57] media: imx: capture: Return -EPIPE from __capture_legacy_try_fmt()
+Date:   Mon,  3 May 2021 12:38:54 -0400
+Message-Id: <20210503163941.2853291-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503163941.2853291-1-sashal@kernel.org>
 References: <20210503163941.2853291-1-sashal@kernel.org>
@@ -50,39 +53,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit 28c7afb07ccfc0a939bb06ac1e7afe669901c65a ]
+[ Upstream commit cc271b6754691af74d710b761eaf027e3743e243 ]
 
-It's best if this condition is reported.
+The correct return code to report an invalid pipeline configuration is
+-EPIPE. Return it instead of -EINVAL from __capture_legacy_try_fmt()
+when the capture format doesn't match the media bus format of the
+connected subdev.
 
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/ite-cir.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/staging/media/imx/imx-media-capture.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/ite-cir.c b/drivers/media/rc/ite-cir.c
-index 3ab6cec0dc3b..4b8aee390518 100644
---- a/drivers/media/rc/ite-cir.c
-+++ b/drivers/media/rc/ite-cir.c
-@@ -276,8 +276,14 @@ static irqreturn_t ite_cir_isr(int irq, void *data)
- 	/* read the interrupt flags */
- 	iflags = dev->params.get_irq_causes(dev);
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+index d151cd6d3188..fabbfceaa107 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -553,7 +553,7 @@ static int capture_validate_fmt(struct capture_priv *priv)
+ 		priv->vdev.fmt.fmt.pix.height != f.fmt.pix.height ||
+ 		priv->vdev.cc->cs != cc->cs ||
+ 		priv->vdev.compose.width != compose.width ||
+-		priv->vdev.compose.height != compose.height) ? -EINVAL : 0;
++		priv->vdev.compose.height != compose.height) ? -EPIPE : 0;
+ }
  
-+	/* Check for RX overflow */
-+	if (iflags & ITE_IRQ_RX_FIFO_OVERRUN) {
-+		dev_warn(&dev->rdev->dev, "receive overflow\n");
-+		ir_raw_event_reset(dev->rdev);
-+	}
-+
- 	/* check for the receive interrupt */
--	if (iflags & (ITE_IRQ_RX_FIFO | ITE_IRQ_RX_FIFO_OVERRUN)) {
-+	if (iflags & ITE_IRQ_RX_FIFO) {
- 		/* read the FIFO bytes */
- 		rx_bytes =
- 			dev->params.get_rx_bytes(dev, rx_buf,
+ static int capture_start_streaming(struct vb2_queue *vq, unsigned int count)
 -- 
 2.30.2
 
