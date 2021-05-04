@@ -2,83 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25709C433B4
-	for <linux-media@archiver.kernel.org>; Tue,  4 May 2021 14:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D212AC433B4
+	for <linux-media@archiver.kernel.org>; Tue,  4 May 2021 15:48:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D07D8613C6
-	for <linux-media@archiver.kernel.org>; Tue,  4 May 2021 14:48:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1EB360241
+	for <linux-media@archiver.kernel.org>; Tue,  4 May 2021 15:48:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhEDOtY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 May 2021 10:49:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41038 "EHLO mail.kernel.org"
+        id S230494AbhEDPtq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 May 2021 11:49:46 -0400
+Received: from msg-2.mailo.com ([213.182.54.12]:58072 "EHLO msg-2.mailo.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230313AbhEDOtY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 4 May 2021 10:49:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FCE2613C4;
-        Tue,  4 May 2021 14:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620139709;
-        bh=bSJNWoPTxsmjw9lgwCAD+AS0aeK+yfFlLEQuCSSvXnQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NzdVl1vE/HpTNbvRa+04w8VtolgUimmr0osBl+n8x5D8Y4ujpeOeofDBS6nB0uz3r
-         K34SZzHcYShda3uAJZhQ5mRKKYxACPdQgh3fX9S/AvZhqY+rRyvcSE9U9mpgM8yBoc
-         1qkXPBibcPsHxqmuJOVU/tPGzkNBsMjq5EZZ+WEZNAO3w4O7b3xxYCOp+jVV0W8gJm
-         wKSC//OV80HwQAwzU5ac4hjHCDwCLPR6OZzksW/7g//0vTWAzeTEg+/HGyrr0Q388M
-         9rmqNyGBWPv1qG1SbavfsqJWJThNd6e5zqeH3AVxCTEe1+6gcqyc3MTviacEwwTj7c
-         4fEnzC231ZJ/g==
-Received: by mail-qt1-f179.google.com with SMTP id t7so1512240qtn.3;
-        Tue, 04 May 2021 07:48:29 -0700 (PDT)
-X-Gm-Message-State: AOAM531biKX+wwzOc44lt6U2YTVonJVMOgnHf6nOHNJ4RN5Y80XEPRqE
-        1TVFgTP0/3BZzOtRhdWssGO94WhPcX0FMx8bKA==
-X-Google-Smtp-Source: ABdhPJx5atFlFwZpc+7ej9uT8D56VLMBLPhSM6lU+FgDf8UJdvAVnLaysl19h3fODAoht/lkSZv/rL3FKvgD/I3SVDk=
-X-Received: by 2002:ac8:5d52:: with SMTP id g18mr23270245qtx.380.1620139708372;
- Tue, 04 May 2021 07:48:28 -0700 (PDT)
+        id S230256AbhEDPtq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 4 May 2021 11:49:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1620143321; bh=i/DscfyocaLXVPs/tq8JAhNd8zHh2Pe2i8Xk7pjc6tw=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=SaqjVcCDXUJFTlvrG+JFn/T9gKzU8LYdN88S+/1wWVpDpqks3bibcQdAu6NgTWRGE
+         I1HgCFr02pr8dPbWU2nohTDyVP2FVObN9UPrduoHja6OXrrkle5IUSbwzEy9htlOHs
+         B8adLEkja898epS1QCzZR/6Qj6Zzdy2joRq/XwW8=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  4 May 2021 17:48:41 +0200 (CEST)
+X-EA-Auth: ASSLxZ0NBX1lWQ7iVfQIVWKVqHIffGnrW3jbI3eWgAd6GVbDR26vByddwu1ZsTT3EQT/jNXpwthNMtJMvt7VVMiZx+p7/4S8
+Date:   Tue, 4 May 2021 21:18:36 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: media: atomisp: pci: reposition braces as per
+ coding style
+Message-ID: <YJFs1KspK2aapNSk@dU2104>
+References: <YIwk3KbVGRPJwKa4@dU2104>
+ <20210430163327.GI3@paasikivi.fi.intel.com>
+ <YIw4pUzTOHV6E9WZ@dU2104>
+ <20210430171241.GJ3@paasikivi.fi.intel.com>
+ <YIw7vsy+bYzFIQC0@dU2104>
 MIME-Version: 1.0
-References: <20210427111526.1772293-1-acourbot@chromium.org>
- <20210427111526.1772293-9-acourbot@chromium.org> <CAPBb6MWhP+uJSHzMHuH93fxgFosw=FPUoHOLuDX1ZYGunWX11g@mail.gmail.com>
-In-Reply-To: <CAPBb6MWhP+uJSHzMHuH93fxgFosw=FPUoHOLuDX1ZYGunWX11g@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 4 May 2021 09:48:16 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL5ZZvq48c-3Dw70N8cqH1wNC-N9muAX41oD6OQ4E+Uig@mail.gmail.com>
-Message-ID: <CAL_JsqL5ZZvq48c-3Dw70N8cqH1wNC-N9muAX41oD6OQ4E+Uig@mail.gmail.com>
-Subject: Re: [PATCH v4 08/15] dt-bindings: media: document mediatek,mt8183-vcodec-dec
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YIw7vsy+bYzFIQC0@dU2104>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, May 4, 2021 at 7:56 AM Alexandre Courbot <acourbot@chromium.org> wrote:
->
-> Hi Rob,
->
-> On Tue, Apr 27, 2021 at 8:16 PM Alexandre Courbot <acourbot@chromium.org> wrote:
-> >
-> > MT8183's decoder is instantiated similarly to MT8173's.
->
-> Gentle ping on this, could we get your Acked-by for this minor change?
+On Fri, Apr 30, 2021 at 10:48:12PM +0530, Deepak R Varma wrote:
+> On Fri, Apr 30, 2021 at 08:12:41PM +0300, Sakari Ailus wrote:
+> > Hi Deepak,
+> > 
+> > On Fri, Apr 30, 2021 at 10:34:37PM +0530, Deepak R Varma wrote:
+> > > On Fri, Apr 30, 2021 at 07:33:27PM +0300, Sakari Ailus wrote:
+> > > > Hi Deepak,
+> > > > 
+> > > > If you're touching all these lines, I might do a little more. Please see
+> > > > the comments below.
+> > > > 
+> > > Hello Sakari,
+> > > I can definitely include other changes, but then it will be many different
+> > > types of changes into a single patch. Will that be okay?
+> > > 
+> > > I was planning to address one issue per patch as I think the volume of
+> > > change is going to be high.  I mentioned that in the notes section of the patch
+> > > message.
+> > 
+> > I think I'd split the patch into smaller chunks if the result becomes too
+> > big but I don't think it's necessary yet.
+> > 
+> > Splitting different kinds of simple cleanups into several patches takes
+> > longer time to review when they're touching the same piece of code. As the
+> > chunks in these patches have virtually no dependencies to other chunks,
+> > it's fine to do several kinds of cleanups at once.
+> 
+> Okay, sure. That sounds good to me. I will include other related
+> improvements in the same area and send split patch set accordingly. I will
+> include this patch in the patch set.
 
-First, please don't ping for replies during the merge window. Second,
-if you want to be sure of getting a response, you have to CC the DT
-list and then you can check PW and see where you are in my queue[1].
-Third, my ack really isn't needed on a simple compatible string
-addition.
+Hello Sakari and all,
+I have sent in the changes as suggested in a patch set with 5 individual
+patches. I will wait for your review and feedback before I work on other
+files.
 
-In any case,
+Thank you,
+deepak.
 
-Acked-by: Rob Herring <robh@kernel.org>
+> 
+> Thank you for the guidance.
+> deepak.
+> 
+> > 
+> > -- 
+> > Kind regards,
+> > 
+> > Sakari Ailus
 
-Rob
+
