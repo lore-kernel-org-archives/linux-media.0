@@ -2,113 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F05FC43616
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30BB2C433B4
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:48:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAE5A613F5
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7F5C613D6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:48:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbhEEJnc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48574 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232424AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 47E3B61428;
-        Wed,  5 May 2021 09:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620207739;
-        bh=y4nTVWcCXCl2Tp3mRU3icn21BALZ6h0HNRov8iGkFYM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DEYZQXq1Ho1jN6BGBs+eKOlKgV7ZCVvxSQYeCPKEJ5K4Lh7t4nl1W1c+l0x4UeTiK
-         h8MrIQBXplcLiiSN0Lfo0vTKuEWm1e+An1LwT9YLCPgLkM2Py+PJsNOzTOeRflsY2d
-         y3m9g/SpZchkXgoKr5jTGM5Hn3b+bYrtjAnsOkapTJGXSrgj7aIUgn8BD5H6RnjcWN
-         6kxuf1FVax86mJiIZNAaAtuOYy9McxN8OqJ+FS95V4tPRQmCgZiqijz7Bks076Ge+1
-         ix6s4FMXk05rG/8OTO7IrJanBcxS+XUipl2oWfhEDO/p+q05AQOo2g/lNkOnMmbO6F
-         gyFWR9l/tS74w==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwa-9X; Wed, 05 May 2021 11:42:17 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        id S233072AbhEEJt1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233002AbhEEJtY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 05:49:24 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2536CC061574;
+        Wed,  5 May 2021 02:48:25 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2so1704796lft.4;
+        Wed, 05 May 2021 02:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=T9xggn2FMiHUCK0JlgIAaoS/FDcktmglWb4xoxeN6Tg=;
+        b=RMdoQG/DGvhjj378i2tgVHLSU7jPCo8Q3GAdPuFYp6Els+PiHp77O/IHNmbxSb+hOD
+         IQmq10ICgbhp3gULA5p22NXW7Ify3NZwatHUWvJmWqmPmsMJICeKYccd3dR9Fd6kLiiO
+         9Le+1+wRrIgHWYku54L1HX8KBNWufzjB9CSpfymTu6w500Vq65JXfzGphiR7zgCT1GMo
+         T2IX3iDpsEDLcQAaCpXuJQF5TtAxym6tyHDnpxcfbaI+zqvUP7vhN+L63tY7QAgFMH2G
+         z5OxOn95+iqqV3mO582NFFtBjB42z1nNiDqBnHdRFcmwpHywoVD1hPOLH48gP9m0/wp3
+         5P8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=T9xggn2FMiHUCK0JlgIAaoS/FDcktmglWb4xoxeN6Tg=;
+        b=A/0dBZbN6WxJWKP34qS45EVq4fAAiURMAH5wPBMAHYZDOWH3/e5kRfaieo2S9Uwich
+         E1Qa/4P3Tt/6DAy865cMw2oZdgFsUoyZBlYZFGFSJjDIg6cAzqUIit+wTNsBxB0Ebovn
+         4alShfxF7iMtb7+Fgdj/PLjsRXh3uJodRgz6uoABIm5IdQtMOaB9+MRENJSC8NSBBi0D
+         GYSegakkYW57VKrOfma0TsStNcF/irTvSA5DhJpJfnnVulmYL5ib0i/T4I5I9UDbdnXv
+         Uq0rqLzaAMLwCgQa9ooJwpnpOS0LmOMMxhkUnibC/UBWHnMA0c/N6Ok4Xe/uaetTHvPO
+         RJVA==
+X-Gm-Message-State: AOAM533uPonWtDQeEKjavvnBIlmVjhd3IXiczp1qn2dY+E09Gjrj/GH0
+        f7J/HXVvIF+Vx5cy42jxwIkaU3aQxQU=
+X-Google-Smtp-Source: ABdhPJwNQpAAyMQzifb+wR7LJgqRVho6ApD70rHoAY1Gt66RZsTl0RO2v2lvGHo8oeN2+QIarHBIpQ==
+X-Received: by 2002:a05:6512:92e:: with SMTP id f14mr19752982lft.347.1620208103478;
+        Wed, 05 May 2021 02:48:23 -0700 (PDT)
+Received: from [192.168.1.100] ([31.173.83.246])
+        by smtp.gmail.com with ESMTPSA id z27sm2009990ljn.23.2021.05.05.02.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 May 2021 02:48:23 -0700 (PDT)
+Subject: Re: [PATCH 12/25] media: rcar_fdp1: simplify error check logic at
+ fdp_open()
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 16/25] media: am437x: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:06 +0200
-Message-Id: <8688555079cf30f5848bb020b5ecf0b0132b2c7e.1620207353.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
+ <c9e7c9b02841c149b0127a7658d2a3e2828cfb90.1620207353.git.mchehab+huawei@kernel.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <42cf9dff-5c8a-02bd-610f-d88507eb7519@gmail.com>
+Date:   Wed, 5 May 2021 12:48:17 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <c9e7c9b02841c149b0127a7658d2a3e2828cfb90.1620207353.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+Hello!
 
-While here, ensure that the driver will check if PM runtime
-resumed at vpfe_initialize_device().
+On 05.05.2021 12:42, Mauro Carvalho Chehab wrote:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/platform/am437x/am437x-vpfe.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+> Avoid some code duplication by moving the common error path
+> logit at fdp_open().
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 6cdc77dda0e4..1c9cb9e05fdf 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
- 	if (ret)
- 		return ret;
- 
--	pm_runtime_get_sync(vpfe->pdev);
-+	ret = pm_runtime_resume_and_get(vpfe->pdev);
-+	if (ret < 0)
-+		return ret;
- 
- 	vpfe_config_enable(&vpfe->ccdc, 1);
- 
-@@ -2443,7 +2445,11 @@ static int vpfe_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 
- 	/* for now just enable it here instead of waiting for the open */
--	pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		vpfe_err(vpfe, "Unable to resume device.\n");
-+		goto probe_out_v4l2_unregister;
-+	}
- 
- 	vpfe_ccdc_config_defaults(ccdc);
- 
-@@ -2530,6 +2536,11 @@ static int vpfe_suspend(struct device *dev)
- 
- 	/* only do full suspend if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
-+		/*
-+		 * ignore RPM resume errors here, as it is already too late.
-+		 * A check like that should happen earlier, either at
-+		 * open() or just before start streaming.
-+		 */
- 		pm_runtime_get_sync(dev);
- 		vpfe_config_enable(ccdc, 1);
- 
--- 
-2.30.2
+    Logic?
 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+[...]
+
+MBR, Sergei
