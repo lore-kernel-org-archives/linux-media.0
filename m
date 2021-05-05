@@ -4,48 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A3B6C2B9F6
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F05FC43616
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08ACE613F1
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAE5A613F5
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbhEEJne (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48572 "EHLO mail.kernel.org"
+        id S232850AbhEEJnc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232432AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232424AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 74FF061443;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47E3B61428;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=xqjVaoUsuvsxOD3cWDtjlqWziU1GM7gOpoA6IP+HHjE=;
+        bh=y4nTVWcCXCl2Tp3mRU3icn21BALZ6h0HNRov8iGkFYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=USQxtYLCvlBgP5V/QBTap4t8elEYo77Tb1JnmJSdCTKlUDmhPFWlnGSIPZaJCyloV
-         x+5zQzze2KZs0VukHfF62wzi+yw6y+3VvDnquHBFoVkXk573kcQGUODGVoRGmV/CWy
-         l8HvH85dBOt8yrn9AuSCfEgQuprIKqO1CgHRtiXOyNHXA2wjSCbjBPWpPaPcmsmKp6
-         w+rNH8Ok5yKHPwN0SbkIp+Jm4wvWbOdI1swTVQvKNqbXxAmhMEBYYuKv7OpwNLvic7
-         3V/R3+wn/WSfQiwK4xRJhrfFCwRCqYMUKa05ZQLhI5dJKJ1nYbESOjJYu1gIzDEhVa
-         F5Pw9vh6UUS0w==
+        b=DEYZQXq1Ho1jN6BGBs+eKOlKgV7ZCVvxSQYeCPKEJ5K4Lh7t4nl1W1c+l0x4UeTiK
+         h8MrIQBXplcLiiSN0Lfo0vTKuEWm1e+An1LwT9YLCPgLkM2Py+PJsNOzTOeRflsY2d
+         y3m9g/SpZchkXgoKr5jTGM5Hn3b+bYrtjAnsOkapTJGXSrgj7aIUgn8BD5H6RnjcWN
+         6kxuf1FVax86mJiIZNAaAtuOYy9McxN8OqJ+FS95V4tPRQmCgZiqijz7Bks076Ge+1
+         ix6s4FMXk05rG/8OTO7IrJanBcxS+XUipl2oWfhEDO/p+q05AQOo2g/lNkOnMmbO6F
+         gyFWR9l/tS74w==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwj-Dl; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHwa-9X; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 19/25] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:09 +0200
-Message-Id: <534deda71f3cf5f865611aa839a5279e43ebe1c9.1620207353.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 16/25] media: am437x: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:06 +0200
+Message-Id: <8688555079cf30f5848bb020b5ecf0b0132b2c7e.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -64,34 +61,54 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-As a plus, pm_runtime_resume_and_get() doesn't return
-positive numbers, so the return code validation can
-be removed.
+While here, ensure that the driver will check if PM runtime
+resumed at vpfe_initialize_device().
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 026111505f5a..d402e456f27d 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2566,11 +2566,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
- static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
--	int ret;
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+index 6cdc77dda0e4..1c9cb9e05fdf 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/am437x/am437x-vpfe.c
+@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
+ 	if (ret)
+ 		return ret;
  
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
--
--	return ret > 0 ? 0 : ret;
-+	return pm_runtime_resume_and_get(ctx->jpeg->dev);
- }
+-	pm_runtime_get_sync(vpfe->pdev);
++	ret = pm_runtime_resume_and_get(vpfe->pdev);
++	if (ret < 0)
++		return ret;
  
- static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
+ 	vpfe_config_enable(&vpfe->ccdc, 1);
+ 
+@@ -2443,7 +2445,11 @@ static int vpfe_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	/* for now just enable it here instead of waiting for the open */
+-	pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret < 0) {
++		vpfe_err(vpfe, "Unable to resume device.\n");
++		goto probe_out_v4l2_unregister;
++	}
+ 
+ 	vpfe_ccdc_config_defaults(ccdc);
+ 
+@@ -2530,6 +2536,11 @@ static int vpfe_suspend(struct device *dev)
+ 
+ 	/* only do full suspend if streaming has started */
+ 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
++		/*
++		 * ignore RPM resume errors here, as it is already too late.
++		 * A check like that should happen earlier, either at
++		 * open() or just before start streaming.
++		 */
+ 		pm_runtime_get_sync(dev);
+ 		vpfe_config_enable(ccdc, 1);
+ 
 -- 
 2.30.2
 
