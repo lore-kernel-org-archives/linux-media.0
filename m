@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6928C43462
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54119C43460
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99B92613F1
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2139661413
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbhEEJn1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48636 "EHLO mail.kernel.org"
+        id S232700AbhEEJnY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232413AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232414AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 440076141C;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3004661417;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=e6cg3vt5gdRSnzuWDjBWlr3jZ9qzDtzBe//Hw9aDZms=;
+        bh=ddHMsoQJIeEVxpJKZdA1kNWkPpxjkyAVmGR/xG7ZBGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UTRFnfuFAjc8bTsLJzXYCs7bJJiLrJT4aQkq1wE9ELZ6bKZpIV6DU2/2WkfulFbcY
-         cPj0VkZ3DAStETq7XrOAHya7zoBwOUAHf+uBYsaugIK2BUoPEEe3EIZiCXKxs/H3PY
-         S1h4gng4dzYhzkIbwKC4FdNUn5hhX/jlvDXh1hQ2fZlbOI1zLz5ag+IGIh73Y2393A
-         tHkNN1cFwcAc2/pPzizSb1l8tNLjGGzGmumw9eyhWgCrXvEmc52XZSyALnDEbkMIhF
-         AOHskWLYGBMnAxEGxWrWYKHX9r+giFf3kl/zSllgbc8vInNM8g3KVFaa0jolGb1PLT
-         nu9zA4ms+MRMA==
+        b=n11nVBSoJJrK6LOv5J1TgVtk+WKAJeHa8zqHPGr2rmaI/NlH/NBTMyZb7f5miyt/K
+         EWZTEkOwphSu7IYzIO2dpQa0QbNMQwihy6PTpTXaj9bvbH/KRL65dtZmN+k6hFYMMV
+         i7GjR/27WjjHIGlaXflro8tlT6iC3mn7/dMzOULXeXpmCjhHDij8EeMklc9yb8myt0
+         9wHo1DdbCuyQ3XGv1wI8NheBpnS0UlXub4LaM220gbWYJRWHjrJNquNWqUtOI7vWW1
+         1T2sl2BMpqo8qmWNN1NjAVNIP/sE8aHSUAF+3U1MhTn6iWLQyp2L0pKIWS7iop2GQ/
+         R5CZNFTv40rGw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwX-8H; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2q-00AHwC-U6; Wed, 05 May 2021 11:42:16 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH 15/25] media: s5p: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:05 +0200
-Message-Id: <57a141a2c538b253f1c9502a790c370007d2ed83.1620207353.git.mchehab+huawei@kernel.org>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 08/25] media: atmel: properly get pm_runtime
+Date:   Wed,  5 May 2021 11:41:58 +0200
+Message-Id: <975645970144b6c8401ab9bd1243619978a868a9.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -57,42 +58,164 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+There are several issues in the way the atmel driver handles
+pm_runtime_get_sync():
 
-While here, check if the PM runtime error was caught at
-s5p_cec_adap_enable().
+- it doesn't check return codes;
+- it doesn't properly decrement the usage_count on all places;
+- it starts streaming even if pm_runtime_get_sync() fails.
+- while it tries to get pm_runtime at the clock enable logic,
+  it doesn't check if the operation was suceeded.
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Replace all occurrences of it to use the new kAPI:
+pm_runtime_resume_and_get(), which ensures that, if the
+return code is not negative, the usage_count was incremented.
+
+With that, add additional checks when this is called, in order
+to ensure that errors will be properly addressed.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/cec/platform/s5p/s5p_cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/atmel/atmel-isc-base.c | 30 ++++++++++++++-----
+ drivers/media/platform/atmel/atmel-isi.c      | 19 +++++++++---
+ 2 files changed, 38 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
-index 3c7c4c3c798c..028a09a7531e 100644
---- a/drivers/media/cec/platform/s5p/s5p_cec.c
-+++ b/drivers/media/cec/platform/s5p/s5p_cec.c
-@@ -35,10 +35,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
- 
- static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index fe3ec8d0eaee..ce8e1351fa53 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -294,9 +294,13 @@ static int isc_wait_clk_stable(struct clk_hw *hw)
+ static int isc_clk_prepare(struct clk_hw *hw)
  {
+ 	struct isc_clk *isc_clk = to_isc_clk(hw);
 +	int ret;
- 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
  
- 	if (enable) {
--		pm_runtime_get_sync(cec->dev);
-+		ret = pm_runtime_resume_and_get(cec->dev);
+-	if (isc_clk->id == ISC_ISPCK)
+-		pm_runtime_get_sync(isc_clk->dev);
++	if (isc_clk->id == ISC_ISPCK) {
++		ret = pm_runtime_resume_and_get(isc_clk->dev);
 +		if (ret < 0)
 +			return ret;
++	}
  
- 		s5p_cec_reset(cec);
+ 	return isc_wait_clk_stable(hw);
+ }
+@@ -353,9 +357,13 @@ static int isc_clk_is_enabled(struct clk_hw *hw)
+ {
+ 	struct isc_clk *isc_clk = to_isc_clk(hw);
+ 	u32 status;
++	int ret;
  
+-	if (isc_clk->id == ISC_ISPCK)
+-		pm_runtime_get_sync(isc_clk->dev);
++	if (isc_clk->id == ISC_ISPCK) {
++		ret = pm_runtime_resume_and_get(isc_clk->dev);
++		if (ret < 0)
++			return 0;
++	}
+ 
+ 	regmap_read(isc_clk->regmap, ISC_CLKSR, &status);
+ 
+@@ -807,7 +815,12 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		goto err_start_stream;
+ 	}
+ 
+-	pm_runtime_get_sync(isc->dev);
++	ret = pm_runtime_resume_and_get(isc->dev);
++	if (ret < 0) {
++		v4l2_err(&isc->v4l2_dev, "RPM resume failed in subdev %d\n",
++			 ret);
++		goto err_pm_get;
++	}
+ 
+ 	ret = isc_configure(isc);
+ 	if (unlikely(ret))
+@@ -838,7 +851,7 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ err_configure:
+ 	pm_runtime_put_sync(isc->dev);
+-
++err_pm_get:
+ 	v4l2_subdev_call(isc->current_subdev->sd, video, s_stream, 0);
+ 
+ err_start_stream:
+@@ -1809,6 +1822,7 @@ static void isc_awb_work(struct work_struct *w)
+ 	u32 baysel;
+ 	unsigned long flags;
+ 	u32 min, max;
++	int ret;
+ 
+ 	/* streaming is not active anymore */
+ 	if (isc->stop)
+@@ -1831,7 +1845,9 @@ static void isc_awb_work(struct work_struct *w)
+ 	ctrls->hist_id = hist_id;
+ 	baysel = isc->config.sd_format->cfa_baycfg << ISC_HIS_CFG_BAYSEL_SHIFT;
+ 
+-	pm_runtime_get_sync(isc->dev);
++	ret = pm_runtime_resume_and_get(isc->dev);
++	if (ret < 0)
++		return;
+ 
+ 	/*
+ 	 * only update if we have all the required histograms and controls
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index e392b3efe363..5b1dd358f2e6 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -422,7 +422,9 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	struct frame_buffer *buf, *node;
+ 	int ret;
+ 
+-	pm_runtime_get_sync(isi->dev);
++	ret = pm_runtime_resume_and_get(isi->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* Enable stream on the sub device */
+ 	ret = v4l2_subdev_call(isi->entity.subdev, video, s_stream, 1);
+@@ -782,9 +784,10 @@ static int isi_enum_frameintervals(struct file *file, void *fh,
+ 	return 0;
+ }
+ 
+-static void isi_camera_set_bus_param(struct atmel_isi *isi)
++static int isi_camera_set_bus_param(struct atmel_isi *isi)
+ {
+ 	u32 cfg1 = 0;
++	int ret;
+ 
+ 	/* set bus param for ISI */
+ 	if (isi->pdata.hsync_act_low)
+@@ -801,12 +804,16 @@ static void isi_camera_set_bus_param(struct atmel_isi *isi)
+ 	cfg1 |= ISI_CFG1_THMASK_BEATS_16;
+ 
+ 	/* Enable PM and peripheral clock before operate isi registers */
+-	pm_runtime_get_sync(isi->dev);
++	ret = pm_runtime_resume_and_get(isi->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	isi_writel(isi, ISI_CTRL, ISI_CTRL_DIS);
+ 	isi_writel(isi, ISI_CFG1, cfg1);
+ 
+ 	pm_runtime_put(isi->dev);
++
++	return 0;
+ }
+ 
+ /* -----------------------------------------------------------------------*/
+@@ -1085,7 +1092,11 @@ static int isi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+ 		dev_err(isi->dev, "No supported mediabus format found\n");
+ 		return ret;
+ 	}
+-	isi_camera_set_bus_param(isi);
++	ret = isi_camera_set_bus_param(isi);
++	if (ret) {
++		dev_err(isi->dev, "Can't wake up device\n");
++		return ret;
++	}
+ 
+ 	ret = isi_set_default_fmt(isi);
+ 	if (ret) {
 -- 
 2.30.2
 
