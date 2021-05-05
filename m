@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EB92C43600
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E2BCC43603
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45D83613E6
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60E12613D8
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhEEV6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 17:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S229842AbhEEV6S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 17:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbhEEV6Q (ORCPT
+        with ESMTP id S229779AbhEEV6Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 17:58:16 -0400
 Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1DEC061761;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD51C061574;
         Wed,  5 May 2021 14:57:19 -0700 (PDT)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id E5B92C652A; Wed,  5 May 2021 22:57:15 +0100 (BST)
+        id ABADDC642C; Wed,  5 May 2021 22:57:15 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1620251836; bh=+aEvwnnamLpbPMC0Zf6oc8EHS1sTKnBdL/3mFyrQNpU=;
+        t=1620251835; bh=dnLOTiH25jCuthHc9DY99FTg6mAPJkOrFbWAhiC/+jo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=j9qpGXEgWbKCSil1WX166ZpLbb7uNJuogee5w1r+hwdPa3wCrsuKr2STmZIVKZMrc
-         r/ckzY2Wyhj9j0UMmxC6dyUmb1OEPjxGfuMNzLYUlteNikHxycEX4VOBGGvNspq5SX
-         mQFIlJLckBCvbQ/m6t96Pr3OVx+2yAz+Aum3qZ7jd+R0Tr2lo1u3OjBDnjJWmm+cMJ
-         Qlx+gZkXQc1DGf7A5d643SP6Ozk4HsXDrMVhcOsEw1jEj1lBLqBSXciJCcRp0gc1nf
-         KDsxTn5i4VK2/UWLYitBPLqx9/r+rlv4uT0dna7tM94D5zK5/PYgat2+2bpf+1xWWd
-         qYhI+m+mOlwqQ==
+        b=Md0yJDDJ4FPa0fAOMjean30fTAs6wgc0g0CzTLuHYrmISAnK4RXxNWKcVlG+z0aKd
+         RCCTiI5qsAyyoOW42O3IQxy1xffYQHUl+q0+Kx+LkLS+Zc7deYO9BvR4RI6KYOSIoc
+         WgQIZojEw/4r02EuCi9H97/zFGRSuJ+MorVEutRI/jlT0QNF82xgTVscwcG2DxqsjO
+         l2ix1YE2NcAeqMJb34zcXIs/OaeosUJitHMerdQV1fxs9FH8qpAbUvl43jWqKS8cJb
+         tP67baQ1zI+e+nxsfTtDx7/w+mTSwR+uHVpEj7TN0PtATfQ8l9oUr5q9gZlHlc47fT
+         EPr8MWCaBHkOQ==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Rhees <support@usbuirt.com>,
         Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH v2 3/3] USB: serial: blacklist USB-UIRT when driver is selected
-Date:   Wed,  5 May 2021 22:57:15 +0100
-Message-Id: <4e6ea50861b4d65d0be5b8b84c992dbe927103d6.1620251141.git.sean@mess.org>
+Subject: [PATCH v2 1/3] USB: serial: move ftdi_sio.h into include directories
+Date:   Wed,  5 May 2021 22:57:13 +0100
+Message-Id: <2bc01aa7942bc135234abd3d7d4b9a738778de56.1620251141.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1620251141.git.sean@mess.org>
 References: <cover.1620251141.git.sean@mess.org>
@@ -51,67 +51,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The USB-UIRT device has its own driver, so blacklist the fdti driver
-from using it if the driver has been enabled.
+A following commit adds a new IR driver uirt which needs the ftdi defines;
+the hardware uses an fdti usb serial port.
 
 Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/serial/ftdi_sio.c                        | 2 +-
+ {drivers/usb/serial => include/linux/usb}/ftdi_sio.h | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename {drivers/usb/serial => include/linux/usb}/ftdi_sio.h (100%)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 542073d2f0dd..2320bda57796 100644
+index c867592477c9..542073d2f0dd 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -95,7 +95,9 @@ static int   ftdi_jtag_probe(struct usb_serial *serial);
- static int   ftdi_NDI_device_setup(struct usb_serial *serial);
- static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- static void  ftdi_USB_UIRT_setup(struct ftdi_private *priv);
-+#endif
- static void  ftdi_HE_TIRA1_setup(struct ftdi_private *priv);
+@@ -41,7 +41,7 @@
+ #include <linux/serial.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/usb/serial.h>
+-#include "ftdi_sio.h"
++#include <linux/usb/ftdi_sio.h>
+ #include "ftdi_sio_ids.h"
  
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
-@@ -106,9 +108,11 @@ static const struct ftdi_sio_quirk ftdi_NDI_device_quirk = {
- 	.probe	= ftdi_NDI_device_setup,
- };
- 
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- static const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
- 	.port_probe = ftdi_USB_UIRT_setup,
- };
-+#endif
- 
- static const struct ftdi_sio_quirk ftdi_HE_TIRA1_quirk = {
- 	.port_probe = ftdi_HE_TIRA1_setup,
-@@ -568,8 +572,10 @@ static const struct usb_device_id id_table_combined[] = {
- 	{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
- 	{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- 	{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
-+#endif
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_1) },
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_R2X0) },
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_3) },
-@@ -2292,6 +2298,7 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
- 	return 0;
- }
- 
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- /* Setup for the USB-UIRT device, which requires hardwired
-  * baudrate (38400 gets mapped to 312500) */
- /* Called from usbserial:serial_probe */
-@@ -2301,6 +2308,7 @@ static void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
- 	priv->custom_divisor = 77;
- 	priv->force_baud = 38400;
- }
-+#endif
- 
- /* Setup for the HE-TIRA1 device, which requires hardwired
-  * baudrate (38400 gets mapped to 100000) and RTS-CTS enabled.  */
+ #define DRIVER_AUTHOR "Greg Kroah-Hartman <greg@kroah.com>, Bill Ryder <bryder@sgi.com>, Kuba Ober <kuba@mareimbrium.org>, Andreas Mohr, Johan Hovold <jhovold@gmail.com>"
+diff --git a/drivers/usb/serial/ftdi_sio.h b/include/linux/usb/ftdi_sio.h
+similarity index 100%
+rename from drivers/usb/serial/ftdi_sio.h
+rename to include/linux/usb/ftdi_sio.h
 -- 
 2.31.1
 
