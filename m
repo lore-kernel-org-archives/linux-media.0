@@ -2,106 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55E14C433ED
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 11:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C02C433B4
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 11:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17F6E61176
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 11:36:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3701610A1
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 11:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbhEELhO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 07:37:14 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3015 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbhEELhM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 07:37:12 -0400
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FZvbK0QHrz6rlWH;
-        Wed,  5 May 2021 19:28:13 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 5 May 2021 13:36:15 +0200
-Received: from localhost (10.52.120.138) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 5 May 2021
- 12:36:14 +0100
-Date:   Wed, 5 May 2021 12:34:35 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-CC:     <linuxarm@huawei.com>, <mauro.chehab@huawei.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-staging@lists.linux.dev>
-Subject: Re: [PATCH 09/25] media: hantro: do a PM resume earlier
-Message-ID: <20210505123435.00002065@Huawei.com>
-In-Reply-To: <82114a4bd9c7bc1188c6a7167a6e74bb3360961d.1620207353.git.mchehab+huawei@kernel.org>
-References: <cover.1620207353.git.mchehab+huawei@kernel.org>
-        <82114a4bd9c7bc1188c6a7167a6e74bb3360961d.1620207353.git.mchehab+huawei@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+        id S233120AbhEELiZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 07:38:25 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:48469 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232917AbhEELiX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 5 May 2021 07:38:23 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id eFqElLscqWztCeFqIlL6qg; Wed, 05 May 2021 13:37:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1620214646; bh=5iRJzA5kEubJp60F25EMFuTMRaHhlBLtQf10r4ujFDw=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=E2+tadw+If8QahzYHZRLjSbceOVG+BSoWhmr+6HXnmz8DeRgl7E3BqlFZOSihHfSd
+         KPJ9wcQFzgOi2Liq+1NYMdGNxSHzhloP2gG9bt2GnSgOir0oZZWsru/kzCIAYobRPF
+         zleT2vNWPvxdx2ZbgY/CBfp6XbQIJhisCi786wxZtmNcy1Eg71U+YdpzuIdsEAO0Vq
+         ttGJ3yNVAiEZrqajxI32jFogagXn4z112nQ7ppUgEeMvBpiAv/A6UO2GboSrcS8QUg
+         C4eDnbVj/HTA9WsVrt+cr2kgs3AJaM0K4jzTpB+Phb3u7t72zcKMWu3esKDCjEfGEJ
+         VZDxwlqffA5fw==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT FIXES FOR v5.13] Three fixes for 5.13.
+Message-ID: <e2d6324c-b001-7468-2eb6-3df9f044ae8c@xs4all.nl>
+Date:   Wed, 5 May 2021 13:37:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.120.138]
-X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+X-CMAE-Envelope: MS4xfFNApQPBdB//fqwok0bU2VA+cDIffV4mg2Rupm/p1ToXD8bKUpnNIdhRHFWRndwWrdUel3tnBRKs4EMsOgLKvgN3cnu4VTX0OQtXnhQV87rg91LJO6oP
+ 2mDt9NYECshZ036KU3MJdTGjNddJM1a4VfMr+Z3tcGDXZz2mEG3HqP3z+TDd/W29P22eveMNYZXcsTxrEQyXvfWtv1kpULptn0jX+E/SAggSe01SdKW3pXKz
+ tUrzljgW8/BnOpJUqOaKeRjV5lmjg0/dj9t8ij+2Y5gXmi0vT6wIf1gyue9rPLr1bavNi9MEUT6bQIw9gUYWUw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 5 May 2021 11:41:59 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+The following changes since commit 0b276e470a4d43e1365d3eb53c608a3d208cabd4:
 
-> The device_run() first enables the clock and then
-> tries to resume PM runtime, checking for errors.
-> 
-> Well, if for some reason the pm_runtime can not resume,
-> it would be better to detect it beforehand.
-> 
-> So, change the order inside device_run().
-> 
-> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+  media: coda: fix macroblocks count control usage (2021-04-15 13:23:26 +0200)
 
-Does this move not result in a potential call of clk_bulk_disable() for clocks
-that aren't enabled?
+are available in the Git repository at:
 
-> ---
->  drivers/staging/media/hantro/hantro_drv.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index 595e82a82728..4387edaa1d0d 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -152,13 +152,14 @@ static void device_run(void *priv)
->  	src = hantro_get_src_buf(ctx);
->  	dst = hantro_get_dst_buf(ctx);
->  
-> -	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
-> -	if (ret)
-> -		goto err_cancel_job;
->  	ret = pm_runtime_get_sync(ctx->dev->dev);
->  	if (ret < 0)
->  		goto err_cancel_job;
->  
-> +	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
-> +	if (ret)
-> +		goto err_cancel_job;
-> +
->  	v4l2_m2m_buf_copy_metadata(src, dst, true);
->  
->  	ctx->codec_ops->run(ctx);
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.13d
 
+for you to fetch changes up to a3a4bedde4611ba771e3a23b1741199994cb1f66:
+
+  media: s5p-mfc: Fix display delay control creation (2021-05-05 13:35:55 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Dafna Hirschfeld (1):
+      media: mtk-vpu: on suspend, read/write regs only if vpu is running
+
+Marek Szyprowski (1):
+      media: s5p-mfc: Fix display delay control creation
+
+Philipp Zabel (1):
+      media: video-mux: Skip dangling endpoints
+
+ drivers/media/platform/mtk-vpu/mtk_vpu.c     |  6 ++++++
+ drivers/media/platform/s5p-mfc/s5p_mfc_dec.c |  1 +
+ drivers/media/platform/video-mux.c           | 10 +++++++++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
