@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24A6EC433B4
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A3B6C2B9F6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E252F613F1
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08ACE613F1
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbhEEJnf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48622 "EHLO mail.kernel.org"
+        id S232898AbhEEJne (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48572 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232400AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232432AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DCD961411;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 74FF061443;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=/VfMQN3+pkon4IAGYHihI8JDgg/MmcbaQd2LgSvJOKs=;
+        bh=xqjVaoUsuvsxOD3cWDtjlqWziU1GM7gOpoA6IP+HHjE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OJwXWSgCTeFz4nYyd0dPxgy9oWhU8iKG/zEMSgLxJk9nEFTQlcGrcj6aQAzFg8GOx
-         QVVoLds9pHATVB973bb6D5NJ/4900udi760KWYgOCfjTG2huOov9iIGMjl8fYqrUTj
-         tqQjLvebLD9FOGARehRd+WMzGSPCanIGJ36e1RZp7wDOdRn+8ap5QHz3kYwNh9pLf3
-         FBfnEmhMRBPKhjcZkUJM02ecdANSZeZkA3wBhZcwmg11kwyOLUwolHZZL/5zqltfvg
-         FT8BgIxPvmzD4sDImXahZtGrgOFuiXwD/NEFHYWSMcs7ziApJJZaCfjh5keDxY9TFq
-         ZAUI+Gxg5QIfg==
+        b=USQxtYLCvlBgP5V/QBTap4t8elEYo77Tb1JnmJSdCTKlUDmhPFWlnGSIPZaJCyloV
+         x+5zQzze2KZs0VukHfF62wzi+yw6y+3VvDnquHBFoVkXk573kcQGUODGVoRGmV/CWy
+         l8HvH85dBOt8yrn9AuSCfEgQuprIKqO1CgHRtiXOyNHXA2wjSCbjBPWpPaPcmsmKp6
+         w+rNH8Ok5yKHPwN0SbkIp+Jm4wvWbOdI1swTVQvKNqbXxAmhMEBYYuKv7OpwNLvic7
+         3V/R3+wn/WSfQiwK4xRJhrfFCwRCqYMUKa05ZQLhI5dJKJ1nYbESOjJYu1gIzDEhVa
+         F5Pw9vh6UUS0w==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2q-00AHwF-Vt; Wed, 05 May 2021 11:42:16 +0200
+        id 1leE2r-00AHwj-Dl; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH 09/25] media: hantro: do a PM resume earlier
-Date:   Wed,  5 May 2021 11:41:59 +0200
-Message-Id: <82114a4bd9c7bc1188c6a7167a6e74bb3360961d.1620207353.git.mchehab+huawei@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 19/25] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:09 +0200
+Message-Id: <534deda71f3cf5f865611aa839a5279e43ebe1c9.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -58,43 +57,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The device_run() first enables the clock and then
-tries to resume PM runtime, checking for errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
-Well, if for some reason the pm_runtime can not resume,
-it would be better to detect it beforehand.
+As a plus, pm_runtime_resume_and_get() doesn't return
+positive numbers, so the return code validation can
+be removed.
 
-So, change the order inside device_run().
-
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_drv.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 595e82a82728..4387edaa1d0d 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -152,13 +152,14 @@ static void device_run(void *priv)
- 	src = hantro_get_src_buf(ctx);
- 	dst = hantro_get_dst_buf(ctx);
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+index 026111505f5a..d402e456f27d 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+@@ -2566,11 +2566,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
+ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+-	int ret;
  
--	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
--	if (ret)
--		goto err_cancel_job;
- 	ret = pm_runtime_get_sync(ctx->dev->dev);
- 	if (ret < 0)
- 		goto err_cancel_job;
+-	ret = pm_runtime_get_sync(ctx->jpeg->dev);
+-
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(ctx->jpeg->dev);
+ }
  
-+	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
-+	if (ret)
-+		goto err_cancel_job;
-+
- 	v4l2_m2m_buf_copy_metadata(src, dst, true);
- 
- 	ctx->codec_ops->run(ctx);
+ static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
 -- 
 2.30.2
 
