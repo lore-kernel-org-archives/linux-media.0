@@ -4,45 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46005C43603
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0290C433ED
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A3B8613F1
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73AB5613F5
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbhEEJn1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48606 "EHLO mail.kernel.org"
+        id S232869AbhEEJnd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232479AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232495AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7741D61446;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E07561574;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=ZvB0kCnsWXmqDZUIE7RhcVC4zNhkwQXSnjsZuZbrwzk=;
+        bh=YXL+gA4goxj5s7MMwTgNIwMfazgaE4VAbN8eHBvZ4x4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ttN15YcDg/8LjwKPSaQXPIB7se9k3TEAQLs1TFeJzEoPUkKhE7zNBl40yIoQIzapp
-         PF50lMwXs1VeD8D0YRPfnQnnI4iVcCYVnLuLw6ZKzmePdNwIkHNztSWQKvksOXeg3I
-         QZWuOsuCczpPQCtdh/bbs2CQEDYn79FkUVw0kSeCe5R60J/pdDBeaQfQLgPh2zCZDw
-         Q76PFBDtJc3i22trRB42YzJUvIxMnb+AiuGk6LU0jKUjrC9TR5k6zeZu7K/RCD5Qvc
-         oBp8t4q6ixb47deDMFLbX8zT3exft96GZHmyGJHyxT+cNO6Ab5UrhZoVqAB30IQm7q
-         8406fJdSSP3ig==
+        b=uOp+Ty69wRZVl3P+vvXIUlGYDh3ay+6S+YyfcKN1CT3Jme/0sPsvIppoJDG83Ju8R
+         8xYian6y1N4CZxugY3gFZJbOoyS0leNUBXNYaws9CSN8nc8wzyAjmlJS5E/4BaecLP
+         6+7NnEgLJrYAd4E/vIZF1lqkOYW2A2IDBy4RtoVjNxejWauNkwc0YbOS3NtcI5KJba
+         vnIB7fVnDhzE9bdEVsVQYJtcakBROkoOhTXOTFQSpI8hCUbnPKXkZ8liJpfnCqqtqS
+         fCoSll02cfuw87x5iK/Nhwaey5Oiw27cL09Plyan79ObHMLRlUJXbqLptv0Hm4niUw
+         IPv5nnCUdmdTw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwm-Ew; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHwy-KJ; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 20/25] media: sti/delta: use pm_runtime_resume_and_get()
-Date:   Wed,  5 May 2021 11:42:10 +0200
-Message-Id: <a2056fdad3cd3d87b5e9653dc18deca83bb554c2.1620207353.git.mchehab+huawei@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 24/25] media: exynos-gsc: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:14 +0200
+Message-Id: <d73f24e33fb9b1cc0ff968bec833184c6510b9ec.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -54,45 +58,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
-Use the new API, in order to cleanup the error check logic.
+As a bonus, as pm_runtime_get_sync() always return 0 on
+success, the logic can be simplified.
 
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/media/platform/exynos-gsc/gsc-m2m.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c691b3d81549..064a00a3084a 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -954,10 +954,8 @@ static void delta_run_work(struct work_struct *work)
- 	/* enable the hardware */
- 	if (!dec->pm) {
- 		ret = delta_get_sync(ctx);
--		if (ret) {
--			delta_put_autosuspend(ctx);
-+		if (ret)
- 			goto err;
--		}
- 	}
+diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+index 27a3c92c73bc..f1cf847d1cc2 100644
+--- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
++++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+@@ -56,10 +56,8 @@ static void __gsc_m2m_job_abort(struct gsc_ctx *ctx)
+ static int gsc_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct gsc_ctx *ctx = q->drv_priv;
+-	int ret;
  
- 	/* decode this access unit */
-@@ -1277,9 +1275,9 @@ int delta_get_sync(struct delta_ctx *ctx)
- 	int ret = 0;
+-	ret = pm_runtime_get_sync(&ctx->gsc_dev->pdev->dev);
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(&ctx->gsc_dev->pdev->dev);
+ }
  
- 	/* enable the hardware */
--	ret = pm_runtime_get_sync(delta->dev);
-+	ret = pm_runtime_resume_and_get(delta->dev);
- 	if (ret < 0) {
--		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
-+		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
- 			__func__, ret);
- 		return ret;
- 	}
+ static void __gsc_m2m_cleanup_queue(struct gsc_ctx *ctx)
 -- 
 2.30.2
 
