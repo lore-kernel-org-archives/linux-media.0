@@ -7,45 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 165A3C43470
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46005C43603
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6120613F3
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A3B8613F1
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbhEEJnZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48666 "EHLO mail.kernel.org"
+        id S232791AbhEEJn1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232450AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232479AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 745C861442;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7741D61446;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=jUOSb8B9UNKJb4CE+kKLFa5IDIlxTUV4my+V18i70ck=;
+        bh=ZvB0kCnsWXmqDZUIE7RhcVC4zNhkwQXSnjsZuZbrwzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pvz3y1mbOSUJt0QSW0upnvSm2Y3anXrjyUxdYZ3k0aLlwT4LaZaNha8HUW0mZdlbr
-         Q92lXHYKY4fS8BRySZyoX2vBkayQSyKr1O67BmOX9WrmpLGEdgs+v27T1qsYyrdg0P
-         CJvdWltm/ibL4jPbaO08LScm2ScyAxPJLuE68I18mwCFd7qPAsvv373PqBq95774I0
-         df+q6EMijreBjWVwxEN3nFk5n7BzdAYBTmHypk52NiqahPgJs6i5IiUVdWqdFWTGrh
-         tL6RYsE4S4sCgs0nhiUobH/14oMJrduz1/UelMcpaAT6K32ktvObSS9SPb36egAAJB
-         SnyiNSbFfXJ/g==
+        b=ttN15YcDg/8LjwKPSaQXPIB7se9k3TEAQLs1TFeJzEoPUkKhE7zNBl40yIoQIzapp
+         PF50lMwXs1VeD8D0YRPfnQnnI4iVcCYVnLuLw6ZKzmePdNwIkHNztSWQKvksOXeg3I
+         QZWuOsuCczpPQCtdh/bbs2CQEDYn79FkUVw0kSeCe5R60J/pdDBeaQfQLgPh2zCZDw
+         Q76PFBDtJc3i22trRB42YzJUvIxMnb+AiuGk6LU0jKUjrC9TR5k6zeZu7K/RCD5Qvc
+         oBp8t4q6ixb47deDMFLbX8zT3exft96GZHmyGJHyxT+cNO6Ab5UrhZoVqAB30IQm7q
+         8406fJdSSP3ig==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwg-C1; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHwm-Ew; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH 18/25] media: mtk-vcodec: fix PM runtime get logic
-Date:   Wed,  5 May 2021 11:42:08 +0200
-Message-Id: <b8d69ce52e4e455aa8c6e629e215a52847c7c9e0.1620207353.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 20/25] media: sti/delta: use pm_runtime_resume_and_get()
+Date:   Wed,  5 May 2021 11:42:10 +0200
+Message-Id: <a2056fdad3cd3d87b5e9653dc18deca83bb554c2.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -57,78 +54,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently, the driver just assumes that PM runtime logic
-succeded resuming the device.
+Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+added pm_runtime_resume_and_get() in order to automatically handle
+dev->power.usage_count decrement on errors.
 
-That may not be the case, as pm_runtime_get_sync()
-can fail (but keeping the usage count incremented).
-
-Replace the code to use pm_runtime_resume_and_get(),
-and letting it return the error code.
-
-This way, if mtk_vcodec_dec_pw_on() fails, the logic
-under fops_vcodec_open() will do the right thing and
-return an error, instead of just assuming that the
-device is ready to be used.
+Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 4 +++-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c  | 8 +++++---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h  | 2 +-
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/platform/sti/delta/delta-v4l2.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 147dfef1638d..f87dc47d9e63 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -126,7 +126,9 @@ static int fops_vcodec_open(struct file *file)
- 	mtk_vcodec_dec_set_default_params(ctx);
+diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
+index c691b3d81549..064a00a3084a 100644
+--- a/drivers/media/platform/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/sti/delta/delta-v4l2.c
+@@ -954,10 +954,8 @@ static void delta_run_work(struct work_struct *work)
+ 	/* enable the hardware */
+ 	if (!dec->pm) {
+ 		ret = delta_get_sync(ctx);
+-		if (ret) {
+-			delta_put_autosuspend(ctx);
++		if (ret)
+ 			goto err;
+-		}
+ 	}
  
- 	if (v4l2_fh_is_singular(&ctx->fh)) {
--		mtk_vcodec_dec_pw_on(&dev->pm);
-+		ret = mtk_vcodec_dec_pw_on(&dev->pm);
-+		if (ret < 0)
-+			goto err_load_fw;
- 		/*
- 		 * Does nothing if firmware was already loaded.
- 		 */
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-index ddee7046ce42..6038db96f71c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-@@ -88,13 +88,15 @@ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
- 	put_device(dev->pm.larbvdec);
- }
+ 	/* decode this access unit */
+@@ -1277,9 +1275,9 @@ int delta_get_sync(struct delta_ctx *ctx)
+ 	int ret = 0;
  
--void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
-+int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
- {
- 	int ret;
- 
--	ret = pm_runtime_get_sync(pm->dev);
-+	ret = pm_runtime_resume_and_get(pm->dev);
- 	if (ret)
--		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
-+		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
-+
-+	return ret;
- }
- 
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-index 872d8bf8cfaf..280aeaefdb65 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-@@ -12,7 +12,7 @@
- int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
- void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
- 
--void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
-+int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm);
+ 	/* enable the hardware */
+-	ret = pm_runtime_get_sync(delta->dev);
++	ret = pm_runtime_resume_and_get(delta->dev);
+ 	if (ret < 0) {
+-		dev_err(delta->dev, "%s pm_runtime_get_sync failed (%d)\n",
++		dev_err(delta->dev, "%s pm_runtime_resume_and_get failed (%d)\n",
+ 			__func__, ret);
+ 		return ret;
+ 	}
 -- 
 2.30.2
 
