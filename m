@@ -2,77 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41370C2B9F0
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2927C4361A
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 206EA613D6
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C386613ED
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbhEEJnY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48572 "EHLO mail.kernel.org"
+        id S232963AbhEEJnh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232242AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232373AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0602D61401;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 259DC61413;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=yt06NNHz8DnYKToINWX+kvUyHzX2tR5CxsEbiivgk9Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aqDRmaF3drwaIh64M6SmLAXcURg7md3/lxLq6hY7zb9NqADehFDhLwTfZdBs7O+Ua
-         PrWk1xzp0TuIUKCqW49WlvukyoTfR5zgDGz7Uu2PZqSgv1pEGUUxNbyoLUBf8HZnu5
-         qRdm6t31xE9TWLgGFmfaTYQA8hMkY0ziRes30XuBsRHwKIVlQv7wfSkyxIpDYtEO+h
-         OCd1Y0Rg6YCyxJf0fUjbsEoL8cTStyP6CBORWLMbL183NygQ2Jt0qsW8FwH+QN9AJO
-         UNaAIvqUS7AS4O6rIj0PTrvaAvgGwleAAphalHt9KMZmiBAzijNKMWxdBLmzF/O1Jj
-         VRSlJc4wK+6AA==
+        bh=q4BhlNxVlfORYoTSi6feVaPNYXcgoQfMmzgINIkBslA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gZZ6FCv1SxMi1afk7/pU/SwP6ou74/YfwYgWeC31Q79Id6PKiXTKPuUEwZNpVsIS2
+         8+l/ox5g5VrLkHNKCukkKp4I5sTifdejUqTXV5dYmccnOkhASD0g8zj66EDZK3UBNL
+         gribrjV4HqU4el2XqHfttulrZbXTkEzPv3voDofmMvNRzIe7XoXIGRujoQkV3nR67a
+         wydyl/+0O4moqE13TVmVrNdtjGZI/1sIyzLrcojS8H7l6GO//qKQJ3VJdk/eGKzxvk
+         7cLH2bcr5QI7axI8N9yO8LVYUlA3FU9F4AbTkxbbb+PS9O5OS3XQnJL+KiLnOx+UYV
+         Jfh4KEBfJJWmQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2q-00AHvp-Hf; Wed, 05 May 2021 11:42:16 +0200
+        id 1leE2r-00AHwI-1C; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Allen Pais <allen.lkml@gmail.com>,
+        Chuhong Yuan <hslester96@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Helen Koike <helen.koike@collabora.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 00/25] Fix some PM runtime issues at the media subsystem
-Date:   Wed,  5 May 2021 11:41:50 +0200
-Message-Id: <cover.1620207353.git.mchehab+huawei@kernel.org>
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 10/25] media: marvel-ccic: fix some issues when getting pm_runtime
+Date:   Wed,  5 May 2021 11:42:00 +0200
+Message-Id: <0ecf2ea9295dcf08ae6e1ae29ca3bc9ab3221a7c.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
+References: <cover.1620207353.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -81,92 +63,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As part of an effort to cleanup pm_runtime*get* calls, I detected a number
-of issues at the media subsystem.
+Calling pm_runtime_get_sync() is bad, since even when it
+returns an error, pm_runtime_put*() should be called.
+So, use instead pm_runtime_resume_and_get().
 
-Most of the patches here were submitted previously at:
+While here, ensure that the error condition will be checked
+during clock enable an media open() calls.
 
-	https://lore.kernel.org/linux-media/cover.1619621413.git.mchehab+huawei@kernel.org/
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/platform/marvell-ccic/mcam-core.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-This series contain just the bug fixes and other related issues that are
-present with the current code on media.
-
-It address the points from the existing reviews. I also did my own
-set of reviews, in order to avoid regressions.
-
-Changes from v4 of the previous changeset:
-
-- reworked i2c/css RPM get logic;
-- dropped two patches that could cause regressions;
-- am437x: keep using pm_runtime_get_sync on suspend/resume;
-- atmel: fix the returned code and add a print on failures at start streaming;
-- simplify some checks for return code > 0;
-- mdk-vcodec: properly handle RPM errors at device on logic;
-- venus: rework venus_sys_error_handler() logic;
-- sti/delta: fix an issue at the error checking logic.
-
-Mauro Carvalho Chehab (25):
-  staging: media: rkvdec: fix pm_runtime_get_sync() usage count
-  staging: media: imx7-mipi-csis: fix pm_runtime_get_sync() usage count
-  media: venus: Rework error fail recover logic
-  media: s5p_cec: decrement usage count if disabled
-  media: i2c: ccs-core: return the right error code at suspend
-  media: i2c: imx334: fix the pm runtime get logic
-  media: exynos-gsc: don't resume at remove time
-  media: atmel: properly get pm_runtime
-  media: hantro: do a PM resume earlier
-  media: marvel-ccic: fix some issues when getting pm_runtime
-  media: mdk-mdp: fix pm_runtime_get_sync() usage count
-  media: rcar_fdp1: simplify error check logic at fdp_open()
-  media: rcar_fdp1: fix pm_runtime_get_sync() usage count
-  media: renesas-ceu: Properly check for PM errors
-  media: s5p: fix pm_runtime_get_sync() usage count
-  media: am437x: fix pm_runtime_get_sync() usage count
-  media: sh_vou: fix pm_runtime_get_sync() usage count
-  media: mtk-vcodec: fix PM runtime get logic
-  media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-  media: sti/delta: use pm_runtime_resume_and_get()
-  media: sunxi: fix pm_runtime_get_sync() usage count
-  media: sti/bdisp: fix pm_runtime_get_sync() usage count
-  media: exynos4-is: fix pm_runtime_get_sync() usage count
-  media: exynos-gsc: fix pm_runtime_get_sync() usage count
-  media: i2c: ccs-core: fix pm_runtime_get_sync() usage count
-
- drivers/media/cec/platform/s5p/s5p_cec.c      |  7 ++-
- drivers/media/i2c/ccs/ccs-core.c              | 41 ++++++++-----
- drivers/media/i2c/imx334.c                    |  7 ++-
- drivers/media/platform/am437x/am437x-vpfe.c   | 15 ++++-
- drivers/media/platform/atmel/atmel-isc-base.c | 30 +++++++---
- drivers/media/platform/atmel/atmel-isi.c      | 19 ++++--
- drivers/media/platform/exynos-gsc/gsc-core.c  | 11 ++--
- drivers/media/platform/exynos-gsc/gsc-m2m.c   |  4 +-
- .../media/platform/exynos4-is/fimc-capture.c  |  6 +-
- drivers/media/platform/exynos4-is/fimc-is.c   |  4 +-
- .../platform/exynos4-is/fimc-isp-video.c      |  3 +-
- drivers/media/platform/exynos4-is/fimc-isp.c  |  7 +--
- drivers/media/platform/exynos4-is/fimc-lite.c |  5 +-
- drivers/media/platform/exynos4-is/fimc-m2m.c  |  5 +-
- drivers/media/platform/exynos4-is/media-dev.c |  9 +--
- drivers/media/platform/exynos4-is/mipi-csis.c | 10 ++--
- .../media/platform/marvell-ccic/mcam-core.c   |  9 ++-
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c  |  6 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  4 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   |  8 ++-
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |  2 +-
- drivers/media/platform/qcom/venus/core.c      | 59 +++++++++++++++----
- drivers/media/platform/rcar_fdp1.c            | 28 ++++++---
- drivers/media/platform/renesas-ceu.c          |  4 +-
- drivers/media/platform/s5p-jpeg/jpeg-core.c   |  5 +-
- drivers/media/platform/sh_vou.c               |  6 +-
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c |  7 ++-
- drivers/media/platform/sti/delta/delta-v4l2.c |  8 +--
- .../sunxi/sun8i-rotate/sun8i_rotate.c         |  2 +-
- drivers/staging/media/hantro/hantro_drv.c     |  7 ++-
- drivers/staging/media/imx/imx7-mipi-csis.c    |  7 +--
- drivers/staging/media/rkvdec/rkvdec.c         |  2 +-
- 32 files changed, 220 insertions(+), 127 deletions(-)
-
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index 141bf5d97a04..ea87110d9073 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -918,6 +918,7 @@ static int mclk_enable(struct clk_hw *hw)
+ 	struct mcam_camera *cam = container_of(hw, struct mcam_camera, mclk_hw);
+ 	int mclk_src;
+ 	int mclk_div;
++	int ret;
+ 
+ 	/*
+ 	 * Clock the sensor appropriately.  Controller clock should
+@@ -931,7 +932,9 @@ static int mclk_enable(struct clk_hw *hw)
+ 		mclk_div = 2;
+ 	}
+ 
+-	pm_runtime_get_sync(cam->dev);
++	ret = pm_runtime_resume_and_get(cam->dev);
++	if (ret < 0)
++		return ret;
+ 	clk_enable(cam->clk[0]);
+ 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
+ 	mcam_ctlr_power_up(cam);
+@@ -1611,7 +1614,9 @@ static int mcam_v4l_open(struct file *filp)
+ 		ret = sensor_call(cam, core, s_power, 1);
+ 		if (ret)
+ 			goto out;
+-		pm_runtime_get_sync(cam->dev);
++		ret = pm_runtime_resume_and_get(cam->dev);
++		if (ret < 0)
++			goto out;
+ 		__mcam_cam_reset(cam);
+ 		mcam_set_config_needed(cam, 1);
+ 	}
 -- 
 2.30.2
-
 
