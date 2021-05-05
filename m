@@ -4,45 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E62CC2B9F2
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78C7DC43461
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 535BD61415
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5216E613D6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbhEEJn2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48694 "EHLO mail.kernel.org"
+        id S232717AbhEEJnZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232483AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232435AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8A4361582;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 44BC161423;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=+rTtVWoWq20JhxgxmIT+9kZE/lGmMC43nyN1Fh8TG7g=;
+        bh=6MhSd0Gx/6VuoMI9uWT2v1VRzcCGAFf3IJvFSMDOw+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mf9MOyq5thATWWFz9Hfbj8qgxuAvW3JlflD7XQ0cH5Zuor+EZfGkN4Clt6QuA/wuw
-         y//8rOn0wy+PwGVwJR2l2zPRdRAbICxiV10Wht8HhYN9kDf5fwiiGAn5z5+dYRFycg
-         hcs3nteUDogm5vKp4HJiP89KL9dsunC2XF1E+Wy/Yx0g7iHfrGfyqn8+fMGVt3jbap
-         e5CeeWJz/kEw+yVPIXc444DK3B1iQAnTorL0d3P3Fcf0VUbnjuH6RvYudx2oVunGDL
-         MiRntCkCTFvqR19/Zc6WvKZ8WwuoyEiSriT7RmDlXB+pCovVcwfinqKW+5jGx7TF05
-         whTs4hBFXexEQ==
+        b=FWPk3sVYJHJFzNk5hqt10Ix93PRAUjxWb5bPNk0UkGojFOgypyd5HMdoKdDdkjIEC
+         FyYah+GV1zFdewE7dpqboFKqO4wcfPy8jGC5Fr+mv44rI/AvHfZRgqZgJ5QVAM0skq
+         ve0rBKhepGUR1xCOq5IhUkPzDbZ/zWc43XQdw4rXgXOS0+t41Tg284oXVBq+WvqG99
+         MRIMHX5TC5iqXqH6heIRMiTJiln3DUNsQdjDwTagu+R7loMe7/vkynzzdmOGCSsMe+
+         2vszbikT8+ly+cOVJZaS+453+Ow+I8yhk2dUcQgcjOIpXPKnuGuNko/ds5ssfsTrOx
+         LOSBaFL3lQSMw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHws-H9; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHwU-6x; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 22/25] media: sti/bdisp: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:12 +0200
-Message-Id: <dbab81a4521f26538a9ac0c8af838c1ba987ab5a.1620207353.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 14/25] media: renesas-ceu: Properly check for PM errors
+Date:   Wed,  5 May 2021 11:42:04 +0200
+Message-Id: <c3b5546444a33840c569e9b7b968f5f81db96ac0.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -54,59 +56,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pm_runtime_get_sync() internally increments the
+Right now, the driver just assumes that PM runtime resume
+worked, but it may fail.
+
+Well, the pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
 
-The bdisp_start_streaming() doesn't take it into account, which
-would unbalance PM usage counter at bdisp_stop_streaming().
-
-The logic at bdisp_probe() is correct, but the best is to use
-the same call along the driver.
-
-So, replace it by the new pm_runtime_resume_and_get(), introduced by:
+So, using it is tricky. Let's replace it by the new
+pm_runtime_resume_and_get(), introduced by:
 commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+and return an error if something bad happens.
 
+This should ensure that the PM runtime usage_count will be
+properly decremented if an error happens at open time.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/renesas-ceu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-index 060ca85f64d5..85288da9d2ae 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct bdisp_ctx *ctx = q->drv_priv;
- 	struct vb2_v4l2_buffer *buf;
--	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
-+	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
+diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
+index cd137101d41e..17f01b6e3fe0 100644
+--- a/drivers/media/platform/renesas-ceu.c
++++ b/drivers/media/platform/renesas-ceu.c
+@@ -1099,10 +1099,10 @@ static int ceu_open(struct file *file)
  
- 	if (ret < 0) {
- 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
-@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	mutex_lock(&ceudev->mlock);
+ 	/* Causes soft-reset and sensor power on on first open */
+-	pm_runtime_get_sync(ceudev->dev);
++	ret = pm_runtime_resume_and_get(ceudev->dev);
+ 	mutex_unlock(&ceudev->mlock);
  
- 	/* Power management */
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to set PM\n");
--		goto err_pm;
-+		goto err_remove;
- 	}
+-	return 0;
++	return ret;
+ }
  
- 	/* Filters */
-@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
- 	bdisp_hw_free_filters(bdisp->dev);
- err_pm:
- 	pm_runtime_put(dev);
-+err_remove:
- 	bdisp_debugfs_remove(bdisp);
- 	v4l2_device_unregister(&bdisp->v4l2_dev);
- err_clk:
+ static int ceu_release(struct file *file)
 -- 
 2.30.2
 
