@@ -2,82 +2,63 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E2BCC43603
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE7EC433B4
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 22:12:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60E12613D8
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E59BF613D6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 22:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhEEV6S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 17:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhEEV6Q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 17:58:16 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD51C061574;
-        Wed,  5 May 2021 14:57:19 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id ABADDC642C; Wed,  5 May 2021 22:57:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1620251835; bh=dnLOTiH25jCuthHc9DY99FTg6mAPJkOrFbWAhiC/+jo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Md0yJDDJ4FPa0fAOMjean30fTAs6wgc0g0CzTLuHYrmISAnK4RXxNWKcVlG+z0aKd
-         RCCTiI5qsAyyoOW42O3IQxy1xffYQHUl+q0+Kx+LkLS+Zc7deYO9BvR4RI6KYOSIoc
-         WgQIZojEw/4r02EuCi9H97/zFGRSuJ+MorVEutRI/jlT0QNF82xgTVscwcG2DxqsjO
-         l2ix1YE2NcAeqMJb34zcXIs/OaeosUJitHMerdQV1fxs9FH8qpAbUvl43jWqKS8cJb
-         tP67baQ1zI+e+nxsfTtDx7/w+mTSwR+uHVpEj7TN0PtATfQ8l9oUr5q9gZlHlc47fT
-         EPr8MWCaBHkOQ==
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Rhees <support@usbuirt.com>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH v2 1/3] USB: serial: move ftdi_sio.h into include directories
-Date:   Wed,  5 May 2021 22:57:13 +0100
-Message-Id: <2bc01aa7942bc135234abd3d7d4b9a738778de56.1620251141.git.sean@mess.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1620251141.git.sean@mess.org>
-References: <cover.1620251141.git.sean@mess.org>
+        id S233504AbhEEWNh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 18:13:37 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55130 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhEEWNh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 18:13:37 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id B19C91F42E39
+Message-ID: <0c0bf5d35c3098188dc594268e721f8133f38789.camel@collabora.com>
+Subject: Re: [PATCH v3 1/1] v4l: async, fwnode: Improve module organisation
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     ezequiel.garcia@collabora.com
+Date:   Wed, 05 May 2021 19:12:30 -0300
+In-Reply-To: <20210504210642.9568-1-sakari.ailus@linux.intel.com>
+References: <20210504210642.9568-1-sakari.ailus@linux.intel.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A following commit adds a new IR driver uirt which needs the ftdi defines;
-the hardware uses an fdti usb serial port.
+On Wed, 2021-05-05 at 00:06 +0300, Sakari Ailus wrote:
+> The V4L2 async framework is generally used with the V4L2 fwnode, which
+> also depends on the former. There are a few exceptions but they are
+> relatively few.
+> 
+> At the same time there is a vast number of systems that need videodev
+> module, but have no use for v4l2-async that's now part of videodev.
+> 
+> In order to improve, split the v4l2-async into its own module. Selecting
+> V4L2_FWNODE also selects V4L2_ASYNC.
+> 
+> This also moves the initialisation of the debufs entries for async subdevs
+> to loading of the v4l2-async module. The directory is named as
+> "v4l2-async".
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/usb/serial/ftdi_sio.c                        | 2 +-
- {drivers/usb/serial => include/linux/usb}/ftdi_sio.h | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename {drivers/usb/serial => include/linux/usb}/ftdi_sio.h (100%)
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index c867592477c9..542073d2f0dd 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -41,7 +41,7 @@
- #include <linux/serial.h>
- #include <linux/gpio/driver.h>
- #include <linux/usb/serial.h>
--#include "ftdi_sio.h"
-+#include <linux/usb/ftdi_sio.h>
- #include "ftdi_sio_ids.h"
- 
- #define DRIVER_AUTHOR "Greg Kroah-Hartman <greg@kroah.com>, Bill Ryder <bryder@sgi.com>, Kuba Ober <kuba@mareimbrium.org>, Andreas Mohr, Johan Hovold <jhovold@gmail.com>"
-diff --git a/drivers/usb/serial/ftdi_sio.h b/include/linux/usb/ftdi_sio.h
-similarity index 100%
-rename from drivers/usb/serial/ftdi_sio.h
-rename to include/linux/usb/ftdi_sio.h
--- 
-2.31.1
+Thanks!
+Ezequiel
 
