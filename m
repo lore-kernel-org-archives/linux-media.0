@@ -2,206 +2,826 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6280C433ED
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2A8C433B4
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DEC8613F0
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:38:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0770613D6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 21:57:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbhEEVjw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 17:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbhEEVjv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 17:39:51 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F7DC061761;
-        Wed,  5 May 2021 14:38:53 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id e2so1920898plh.8;
-        Wed, 05 May 2021 14:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=nED1tfdyad77CyL5ahIoVpnSjfX9IAkRkG2H71l3Az8=;
-        b=mD7nMf5EDRT5x5dqMxJv+lvSKkg6elqBAP9eWS9YKDFwQq36Atm3/9R+ToXtNAvD/y
-         k3tqJujsngiQZYdOuZGeH/KbZYSWeVxWl59LHP3UP3NsDo2yuY1+1tXivm7aWwWz+Ofu
-         FLqLRu4DgQ9CeKsCy/iu7Ar68uI++dmWUOEotaTDcsPhadGBUvPncaIGud37grprDOFq
-         DaGkfhR/nQZPc5Yhq8jX+rkd2c+sXESg3nqCCXSDkg3Qc7P9HEAKQjECqHKkeO+zje74
-         jakIJAsZ9g6Mlys1PDoionmxib3jwEHMfFlCwqEqw3BqBFinNAYCGlUH8Ute8pS6IPGB
-         f8sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=nED1tfdyad77CyL5ahIoVpnSjfX9IAkRkG2H71l3Az8=;
-        b=ECHBhNAIqXjoDiR8e7JhXjbP54L8MoPtK0C8Jbk2WVyQksxdtIsrjJUMRmQ91lYcGG
-         XPavYPugJESt5GapdFaoxTTRABwVFI5Jxh2xLnv2W9FGwGb5c+DH8nNpAus+wPXaD6HF
-         CKDBRoA6RQ4bOd2vBIJzA+49CKT2nJGvmkPaM+Mw2S8+a0GkDqvwPGe1UZUZaQOFk2M4
-         SutTZJxM2742Ne9yvYqbFo5/JaxtjC5h7VKx9P2yANXoRq4qzQgeNtsK703Kr/oj/r12
-         STbkjDa/TLedypzlxXcfkJbeto87Ut4IHG2iaINOTH8U1yNSTEf9bQXasPnKJrgu5Wra
-         sHHQ==
-X-Gm-Message-State: AOAM531ud8H6fgQmEriwoXZGRL0898Rg18spJYCygZgGmBi65uzZ64ak
-        XfFtYK5kar217SdmRNSrzg3ZkZNka77Raw==
-X-Google-Smtp-Source: ABdhPJwXlz7jAdqnQ/pz7K234pdI+wSXJafvAnXxqkBZ5QVq5pqhY7jhYYhDGnWS4Z6dDd4Eua6Y0A==
-X-Received: by 2002:a17:902:b68c:b029:eb:6c82:60da with SMTP id c12-20020a170902b68cb02900eb6c8260damr947039pls.25.1620250732852;
-        Wed, 05 May 2021 14:38:52 -0700 (PDT)
-Received: from [172.18.1.216] (b-fw-1-nat-campusvpn.ucr.edu. [169.235.64.254])
-        by smtp.gmail.com with ESMTPSA id x79sm165861pfc.57.2021.05.05.14.38.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 May 2021 14:38:52 -0700 (PDT)
-Subject: Re: WARNING in em28xx_init_extension
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        syzbot <syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <00000000000063015a05938f04f0@google.com>
- <CAAeHK+zzdt2ua0XX2_rzuW=+Vs7SQvKgLMz5wir=xh0cqnFTuw@mail.gmail.com>
-From:   SyzScope <syzscope@gmail.com>
-Message-ID: <79e05615-eb47-c71b-9a06-93a50cb6b777@gmail.com>
-Date:   Wed, 5 May 2021 14:38:50 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S229760AbhEEV6Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 17:58:16 -0400
+Received: from gofer.mess.org ([88.97.38.141]:48561 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229691AbhEEV6P (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 5 May 2021 17:58:15 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id C29E4C6505; Wed,  5 May 2021 22:57:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1620251835; bh=tdfGLVJl0eqIX+ay1O81qYVZf/zNAFNE2Hs3LWoR4LU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=TFmrPj/2rXZsrIQrXVyDOOH0/hMFacUHdLXUBTk8O6wxPW+QFS8w9mijXhrbFg5Hr
+         o9gmWaiiRl5RJv9gw9Ctq7yrXKzPMSmD1HHgBjGmRF+XVGvb6mpwHrQLUTrJoo6eoJ
+         621JOGKk2p3KXXjgt+rxpF/D71BQsUNW3YSXCGvHA7ZxfcDudLZcmHJN411zYTC/Ll
+         rnWr5HMX22hllh5oexZQaEgz2bt/bhasiyr2j8Qq+D4QnKaD4Y7gVa5FQabVp9Fyyg
+         gfeqKMJb1YqllFLqYeJ+ZUNMFjTKnvaHpAOyhygxkfQ/8tmLLzBsWtG6X7cEHoMeDy
+         pyY4c5mMMonwQ==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH v2 2/3] media: rc: new driver for USB-UIRT device
+Date:   Wed,  5 May 2021 22:57:14 +0100
+Message-Id: <497d6ecc0f020b35be1f1e06b33a955574f433ed.1620251141.git.sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1620251141.git.sean@mess.org>
+References: <cover.1620251141.git.sean@mess.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+zzdt2ua0XX2_rzuW=+Vs7SQvKgLMz5wir=xh0cqnFTuw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+See http://www.usbuirt.com/
 
-This is SyzScope, a research project that aims to reveal high-risk 
-primitives from a seemingly low-risk bug (UAF/OOB read, WARNING, BUG, etc.).
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/media/rc/Kconfig  |  11 +
+ drivers/media/rc/Makefile |   1 +
+ drivers/media/rc/uirt.c   | 727 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 739 insertions(+)
+ create mode 100644 drivers/media/rc/uirt.c
 
-We are currently testing seemingly low-risk bugs on syzbot's open 
-section(https://syzkaller.appspot.com/upstream), and try to reach out to 
-kernel developers if SyzScope discovers any high-risk primitives.
+diff --git a/drivers/media/rc/Kconfig b/drivers/media/rc/Kconfig
+index f016b35c2b17..dff85a5bfd1e 100644
+--- a/drivers/media/rc/Kconfig
++++ b/drivers/media/rc/Kconfig
+@@ -532,6 +532,17 @@ config IR_TOY
+ 	   To compile this driver as a module, choose M here: the module will be
+ 	   called ir_toy.
+ 
++config IR_UIRT
++	tristate "USB-UIRT"
++	depends on RC_CORE
++	depends on USB_ARCH_HAS_HCD
++	help
++	   Say Y here if you want to use the USB-UIRT. See
++	   http://www.usbuirt.com/
++
++	   To compile this driver as a module, choose M here: the module will be
++	   called uirt.
++
+ endif #RC_DEVICES
+ 
+ endif #RC_CORE
+diff --git a/drivers/media/rc/Makefile b/drivers/media/rc/Makefile
+index 4927f585ebc2..17037915e742 100644
+--- a/drivers/media/rc/Makefile
++++ b/drivers/media/rc/Makefile
+@@ -50,3 +50,4 @@ obj-$(CONFIG_IR_MTK) += mtk-cir.o
+ obj-$(CONFIG_IR_TANGO) += tango-ir.o
+ obj-$(CONFIG_RC_XBOX_DVD) += xbox_remote.o
+ obj-$(CONFIG_IR_TOY) += ir_toy.o
++obj-$(CONFIG_IR_UIRT) += uirt.o
+diff --git a/drivers/media/rc/uirt.c b/drivers/media/rc/uirt.c
+new file mode 100644
+index 000000000000..1075b8ac1d02
+--- /dev/null
++++ b/drivers/media/rc/uirt.c
+@@ -0,0 +1,727 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * USB-UIRT
++ *
++ * Copyright (C) 2021 Sean Young <sean@mess.org>
++ *
++ * See http://www.usbuirt.com/USB-UIRT%20Command%20Protocol.doc
++ */
++
++#include <linux/completion.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/usb.h>
++#include <linux/slab.h>
++#include <linux/usb/input.h>
++#include <linux/usb/ftdi_sio.h>
++
++#include <media/rc-core.h>
++
++static const u8 CMD_GET_VERSION[] = { 0x23, 0xdd };
++static const u8 CMD_SETMODERAW[] = { 0x21, 0xdf };
++static const u8 CMD_SETWIDEBAND[] = { 0x24, 0xdc };
++
++#define UNIT_US 50
++#define IR_TIMEOUT 12500
++#define MAX_PACKET 64
++
++enum cmd_state {
++	CMD_STATE_GET_VERSION,
++	CMD_STATE_SET_MODE_RAW,
++	CMD_STATE_SET_MODE_WIDEBAND,
++	CMD_STATE_IRDATA,
++	CMD_STATE_SHORT_TX,
++	CMD_STATE_STREAMING_TX,
++};
++
++enum rx_state {
++	RX_STATE_INTERSPACE_HIGH,
++	RX_STATE_INTERSPACE_LOW,
++	RX_STATE_ON_HIGH,
++	RX_STATE_ON_LOW,
++	RX_STATE_FREQ_HIGH,
++	RX_STATE_FREQ_LOW,
++	RX_STATE_OFF_HIGH,
++	RX_STATE_OFF_LOW,
++};
++
++struct uirt {
++	struct device *dev;
++	struct usb_device *usbdev;
++
++	struct rc_dev *rc;
++	struct urb *urb_in, *urb_out;
++
++	u8 *in;
++	u8 *out;
++	struct completion cmd_done;
++	u8 freq;
++	u8 high;
++	bool wideband;
++	u32 last_duration;
++
++	enum cmd_state cmd_state;
++	enum rx_state rx_state;
++
++	void *tx_buf;
++	uint tx_len;
++
++	char phys[64];
++};
++
++// read IR in raw mode
++static void uirt_raw_mode(struct uirt *uirt, u32 len)
++{
++	uint i, duration;
++
++	for (i = 2; i < len; i++) {
++		switch (uirt->rx_state) {
++		case RX_STATE_INTERSPACE_HIGH:
++			uirt->rx_state = RX_STATE_INTERSPACE_LOW;
++			break;
++		case RX_STATE_INTERSPACE_LOW:
++			uirt->rx_state = RX_STATE_ON_HIGH;
++			break;
++		case RX_STATE_ON_HIGH:
++			duration = uirt->in[i];
++			if (duration == 0)
++				duration = 1;
++
++			ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++				.duration = duration * UNIT_US,
++				.pulse = true,
++			}));
++
++			uirt->rx_state = RX_STATE_OFF_HIGH;
++			break;
++		case RX_STATE_OFF_HIGH:
++			if (uirt->in[i] == 0xff) {
++				ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++					.duration = IR_TIMEOUT,
++					.timeout = true,
++				}));
++				uirt->rx_state = RX_STATE_INTERSPACE_HIGH;
++				break;
++			}
++
++			duration = uirt->in[i];
++			if (duration == 0)
++				duration = 1;
++
++			ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++				.duration = duration * UNIT_US,
++				.pulse = false,
++			}));
++			uirt->rx_state = RX_STATE_ON_HIGH;
++			break;
++		default:
++			WARN(1, "unreachable state");
++			uirt->rx_state = RX_STATE_INTERSPACE_HIGH;
++			break;
++		}
++	}
++
++	ir_raw_event_handle(uirt->rc);
++}
++
++// read IR in wideband mode
++static void uirt_wideband(struct uirt *uirt, u32 len)
++{
++	uint i, duration, carrier, pulses;
++
++	for (i = 2; i < len; i++) {
++		switch (uirt->rx_state) {
++		case RX_STATE_INTERSPACE_HIGH:
++			uirt->rx_state = RX_STATE_INTERSPACE_LOW;
++			break;
++		case RX_STATE_INTERSPACE_LOW:
++			uirt->rx_state = RX_STATE_ON_HIGH;
++			break;
++		case RX_STATE_ON_HIGH:
++			uirt->high = uirt->in[i];
++			uirt->rx_state = RX_STATE_ON_LOW;
++			break;
++		case RX_STATE_ON_LOW:
++			// duration is in 400ns units
++			duration = (uirt->high << 8) | uirt->in[i];
++			uirt->last_duration = duration;
++			ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++				.duration = DIV_ROUND_CLOSEST(duration * 2, 5),
++				.pulse = true,
++			}));
++			uirt->rx_state = RX_STATE_FREQ_HIGH;
++			break;
++		case RX_STATE_FREQ_HIGH:
++			if (uirt->in[i] & 0x80) {
++				uirt->high = uirt->in[i] & 0x7f;
++				uirt->rx_state = RX_STATE_FREQ_LOW;
++				break;
++			}
++
++			uirt->high = 0;
++			fallthrough;
++		case RX_STATE_FREQ_LOW:
++			pulses = (uirt->high << 8) | uirt->in[i];
++			if (pulses) {
++				dev_dbg(uirt->dev, "carrier duration %u pulses %u",
++					uirt->last_duration, pulses);
++
++				// calculate the Hz of pulses in duration 400ns units
++				carrier = DIV_ROUND_CLOSEST_ULL(pulses * 10000000ull,
++								uirt->last_duration * 4);
++				ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++					.carrier = carrier,
++					.carrier_report = true,
++				}));
++			}
++			uirt->rx_state = RX_STATE_OFF_HIGH;
++			break;
++		case RX_STATE_OFF_HIGH:
++			if (uirt->in[i] == 0xff) {
++				ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++					.duration = IR_TIMEOUT,
++					.timeout = true,
++				}));
++				uirt->rx_state = RX_STATE_INTERSPACE_HIGH;
++			} else {
++				uirt->high = uirt->in[i];
++				uirt->rx_state = RX_STATE_OFF_LOW;
++			}
++			break;
++		case RX_STATE_OFF_LOW:
++			// duration is in 400ns units
++			duration = (uirt->high << 8) | uirt->in[i];
++			ir_raw_event_store(uirt->rc, &((struct ir_raw_event) {
++				.duration = DIV_ROUND_CLOSEST(duration * 2, 5),
++				.pulse = false,
++			}));
++			uirt->rx_state = RX_STATE_ON_HIGH;
++			break;
++		}
++	}
++
++	ir_raw_event_handle(uirt->rc);
++}
++
++static void uirt_response(struct uirt *uirt, u32 len)
++{
++	int i;
++
++	dev_dbg(uirt->dev, "state:%d data: %*phN\n", uirt->cmd_state, len, uirt->in);
++
++	// Do we have more IR to transmit
++	if (uirt->cmd_state == CMD_STATE_STREAMING_TX && len >= 2 &&
++	    uirt->tx_len && uirt->in[0] & FTDI_RS0_CTS) {
++		u32 len;
++		int err;
++
++		len = min_t(u32, uirt->tx_len, MAX_PACKET);
++
++		memcpy(uirt->out, uirt->tx_buf, len);
++		uirt->urb_out->transfer_buffer_length = len;
++
++		uirt->tx_len -= len;
++		uirt->tx_buf += len;
++
++		err = usb_submit_urb(uirt->urb_out, GFP_ATOMIC);
++		if (err != 0)
++			dev_warn(uirt->dev,
++				 "failed to submit out urb: %d\n", err);
++	}
++
++	// if we only have two bytes, it just gives us the serial line status
++	if (len <= 2)
++		return;
++
++	switch (uirt->cmd_state) {
++	case CMD_STATE_GET_VERSION:
++		if (len == 10) {
++			// check checksum
++			u8 checksum = 0;
++
++			for (i = 2; i < len; i++)
++				checksum += uirt->in[i];
++
++			if (checksum != 0) {
++				dev_err(uirt->dev, "checksum does not match: %*phN\n",
++					len, uirt->in);
++				return;
++			}
++
++			dev_info(uirt->dev,
++				 "USB-UIRT firmware v%u.%u protocol v%u.%u %02u-%02u-%04u",
++				 uirt->in[2], uirt->in[3], uirt->in[4],
++				 uirt->in[5], uirt->in[6], uirt->in[7],
++				 2000 + uirt->in[8]);
++
++			complete(&uirt->cmd_done);
++			uirt->cmd_state = CMD_STATE_IRDATA;
++			return;
++		}
++		break;
++	case CMD_STATE_SHORT_TX:
++	case CMD_STATE_STREAMING_TX:
++	case CMD_STATE_SET_MODE_RAW:
++	case CMD_STATE_SET_MODE_WIDEBAND:
++		if (len == 3) {
++			switch (uirt->in[2]) {
++			case 0x20:
++				// 0x20 transmitting is expected during streaming tx
++				if (uirt->cmd_state == CMD_STATE_STREAMING_TX)
++					return;
++
++				if (uirt->cmd_state == CMD_STATE_SHORT_TX)
++					complete(&uirt->cmd_done);
++				else
++					dev_err(uirt->dev, "device transmitting");
++				break;
++			case 0x21:
++				if (uirt->tx_len) {
++					dev_err(uirt->dev, "tx completed with %u left to send",
++						uirt->tx_len);
++				} else {
++					if (uirt->cmd_state == CMD_STATE_SET_MODE_RAW)
++						uirt->wideband = false;
++					if (uirt->cmd_state == CMD_STATE_SET_MODE_WIDEBAND)
++						uirt->wideband = true;
++
++					complete(&uirt->cmd_done);
++				}
++				break;
++			case 0x80:
++				dev_err(uirt->dev, "checksum error");
++				break;
++			case 0x81:
++				dev_err(uirt->dev, "timeout");
++				break;
++			case 0x82:
++				dev_err(uirt->dev, "command error");
++				break;
++			default:
++				dev_err(uirt->dev, "unknown response");
++			}
++
++			uirt->cmd_state = CMD_STATE_IRDATA;
++			return;
++		}
++	default:
++		break;
++	}
++
++	if (uirt->wideband)
++		uirt_wideband(uirt, len);
++	else
++		uirt_raw_mode(uirt, len);
++}
++
++static void uirt_out_callback(struct urb *urb)
++{
++	struct uirt *uirt = urb->context;
++
++	if (urb->status)
++		dev_warn(uirt->dev, "out urb status: %d\n", urb->status);
++}
++
++static void uirt_in_callback(struct urb *urb)
++{
++	struct uirt *uirt = urb->context;
++	int ret;
++
++	if (urb->status == 0)
++		uirt_response(uirt, urb->actual_length);
++	else
++		dev_dbg(uirt->dev, "in urb status: %d\n", urb->status);
++
++	ret = usb_submit_urb(urb, GFP_ATOMIC);
++	if (ret && ret != -ENODEV)
++		dev_warn(uirt->dev, "failed to resubmit urb: %d\n", ret);
++}
++
++static int uirt_command(struct uirt *uirt, const u8 *cmd, int cmd_len,
++			enum cmd_state state)
++{
++	int err;
++
++	init_completion(&uirt->cmd_done);
++
++	uirt->cmd_state = state;
++
++	memcpy(uirt->out, cmd, cmd_len);
++	uirt->urb_out->transfer_buffer_length = cmd_len;
++
++	err = usb_submit_urb(uirt->urb_out, GFP_KERNEL);
++	if (err != 0) {
++		uirt->cmd_state = CMD_STATE_IRDATA;
++		return err;
++	}
++
++	if (!wait_for_completion_timeout(&uirt->cmd_done,
++					 msecs_to_jiffies(USB_CTRL_SET_TIMEOUT))) {
++		usb_kill_urb(uirt->urb_out);
++		uirt->cmd_state = CMD_STATE_IRDATA;
++		return -ETIMEDOUT;
++	}
++
++	return 0;
++}
++
++static int uirt_setup(struct uirt *uirt)
++{
++	int err;
++
++	err = uirt_command(uirt, CMD_SETMODERAW, sizeof(CMD_SETMODERAW),
++			   CMD_STATE_SET_MODE_RAW);
++	if (err) {
++		dev_err(uirt->dev, "set mode raw command failed: %d\n",
++			err);
++		return err;
++	}
++
++	err = uirt_command(uirt, CMD_GET_VERSION,
++			   sizeof(CMD_GET_VERSION), CMD_STATE_GET_VERSION);
++	if (err != 0)
++		dev_err(uirt->dev, "get version command failed: %d\n",
++			err);
++
++	return err;
++}
++
++// IR TX when the data can fit into a single packet (i.e 64 bytes).
++// count must be no larger than 24, else we might overflow the buffer.
++static int uirt_short_tx(struct rc_dev *rc, uint *txbuf, uint count)
++{
++	struct uirt *uirt = rc->priv;
++	u8 *out, checksum;
++	u32 i, dest, width, freq;
++	int err;
++
++	out = kzalloc(MAX_PACKET, GFP_KERNEL);
++	if (!out)
++		return -ENOMEM;
++
++	out[0] = 0x36; // DOTXRAW
++	out[2] = uirt->freq; // carrier frequency
++	out[3] = 1; // number of repeats
++
++	dest = 7;
++
++	freq = uirt->freq & 0x7f;
++
++	for (i = 0; i < count; i++) {
++		// width = (us / freq) * 2.5
++		width = DIV_ROUND_CLOSEST(txbuf[i] * 5, freq * 2);
++
++		if (width == 0)
++			width = 1;
++		else if (width > 127)
++			out[dest++] = (width >> 8) | 0x80;
++
++		out[dest++] = width;
++	}
++
++	// length of RAWSTRUCT + 1
++	out[1] = dest - 1;
++	// number of bytes in encoded pulse/space
++	out[6] = dest - 7;
++
++	// checksum
++	for (i = 0, checksum = 0; i < dest; i++)
++		checksum -= out[i];
++
++	out[dest++] = checksum;
++
++	uirt->tx_buf = NULL;
++	uirt->tx_len = 0;
++
++	err = uirt_command(uirt, out, dest, CMD_STATE_SHORT_TX);
++	kfree(out);
++	if (err != 0)
++		return err;
++
++	return count;
++}
++
++static int uirt_tx(struct rc_dev *rc, uint *txbuf, uint count)
++{
++	struct uirt *uirt = rc->priv;
++	u8 *out;
++	u32 i, dest, unit_raw, freq, len;
++	int err;
++
++	// streaming tx does not work for short IR; use non-streaming
++	// tx for short IR
++	if (count <= 24)
++		return uirt_short_tx(rc, txbuf, count);
++
++	out = kmalloc(count * 2 + 3, GFP_KERNEL);
++	if (!out)
++		return -ENOMEM;
++
++	out[0] = 0x25; // Streaming Transmit
++	out[1] = 0xdb; // checksum over command (just the previous byte)
++	out[2] = uirt->freq; // carrier frequency
++
++	dest = 3;
++
++	freq = uirt->freq & 0x7f;
++
++	for (i = 0; i < count; i++) {
++		// width = (us / freq) * 2.5
++		unit_raw = DIV_ROUND_CLOSEST(txbuf[i] * 5, freq * 2);
++
++		if (unit_raw == 0)
++			unit_raw = 1;
++		else if (unit_raw > 127)
++			out[dest++] = (unit_raw >> 8) | 0x80;
++
++		out[dest++] = unit_raw;
++	}
++
++	len = min_t(u32, dest, MAX_PACKET);
++
++	uirt->tx_buf = out + len;
++	uirt->tx_len = dest - len;
++
++	err = uirt_command(uirt, out, len, CMD_STATE_STREAMING_TX);
++	kfree(out);
++	if (err != 0)
++		return err;
++
++	return count;
++}
++
++static int uirt_set_tx_carrier(struct rc_dev *dev, uint32_t carrier)
++{
++	struct uirt *uirt = dev->priv;
++
++	if (carrier == 0)
++		// bit 7 must be 1 for unmodulated, lower bits need to
++		// be something that makes sense for tx
++		uirt->freq = 0xc0;
++	else if (carrier >= 20000 && carrier <= 500000)
++		// bit 7 must be 0 for modulated
++		uirt->freq = 2500000 / carrier;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++static int uirt_set_rx_wideband(struct rc_dev *dev, int enable)
++{
++	struct uirt *uirt = dev->priv;
++	int err;
++
++	if (enable)
++		err = uirt_command(uirt, CMD_SETWIDEBAND,
++				   sizeof(CMD_SETWIDEBAND),
++				   CMD_STATE_SET_MODE_WIDEBAND);
++	else
++		err = uirt_command(uirt, CMD_SETMODERAW,
++				   sizeof(CMD_SETMODERAW),
++				   CMD_STATE_SET_MODE_RAW);
++
++	if (err) {
++		dev_err(uirt->dev, "could not send set mode command: %d\n",
++			err);
++		return err;
++	}
++
++	return 0;
++}
++
++static int init_ftdi(struct usb_device *udev)
++{
++	int err;
++
++	// set the baud rate
++	err = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
++			      FTDI_SIO_SET_BAUDRATE_REQUEST,
++			      FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
++			      0x4009, 0x0001,
++			      NULL, 0, USB_CTRL_SET_TIMEOUT);
++	if (err)
++		return err;
++
++	// enabling rts/cts flow control
++	err = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
++			      FTDI_SIO_SET_FLOW_CTRL_REQUEST,
++			      FTDI_SIO_SET_FLOW_CTRL_REQUEST_TYPE,
++			      0, FTDI_SIO_RTS_CTS_HS,
++			      NULL, 0, USB_CTRL_SET_TIMEOUT);
++	if (err)
++		return err;
++
++	// Set latency in milliseconds. The USB-UIRT will generate a
++	// urb every latency milliseconds (IR or not), so this should be
++	// set as high as possible.
++	//
++	// The USB-UIRT has a IR timeout of 14ms (i.e. it sends the 0xff
++	// byte after 14ms of IR silence. So if we set the timeout to a higher
++	// value, the 0xff just gets sent in a separate packet, and there
++	// is a small delay for the IR to be processed.
++	return usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
++			      FTDI_SIO_SET_LATENCY_TIMER_REQUEST,
++			      FTDI_SIO_SET_LATENCY_TIMER_REQUEST_TYPE,
++			      50, 0,
++			      NULL, 0, USB_CTRL_SET_TIMEOUT);
++}
++
++static int uirt_probe(struct usb_interface *intf,
++		      const struct usb_device_id *id)
++{
++	struct usb_host_interface *idesc = intf->cur_altsetting;
++	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *ep_in = NULL;
++	struct usb_endpoint_descriptor *ep_out = NULL;
++	struct usb_endpoint_descriptor *ep = NULL;
++	struct uirt *uirt;
++	struct rc_dev *rc;
++	struct urb *urb;
++	int i, pipe, err = -ENOMEM;
++
++	for (i = 0; i < idesc->desc.bNumEndpoints; i++) {
++		ep = &idesc->endpoint[i].desc;
++
++		if (!ep_in && usb_endpoint_is_bulk_in(ep) &&
++		    usb_endpoint_maxp(ep) == MAX_PACKET)
++			ep_in = ep;
++
++		if (!ep_out && usb_endpoint_is_bulk_out(ep) &&
++		    usb_endpoint_maxp(ep) == MAX_PACKET)
++			ep_out = ep;
++	}
++
++	if (!ep_in || !ep_out) {
++		dev_err(&intf->dev, "required endpoints not found\n");
++		return -ENODEV;
++	}
++
++	uirt = kzalloc(sizeof(*uirt), GFP_KERNEL);
++	if (!uirt)
++		return -ENOMEM;
++
++	uirt->in = kmalloc(MAX_PACKET, GFP_KERNEL);
++	if (!uirt->in)
++		goto free_uirt;
++
++	uirt->out = kmalloc(MAX_PACKET, GFP_KERNEL);
++	if (!uirt->out)
++		goto free_uirt;
++
++	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
++	if (!rc)
++		goto free_uirt;
++
++	urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!urb)
++		goto free_rcdev;
++
++	pipe = usb_rcvbulkpipe(usbdev, ep_in->bEndpointAddress);
++	usb_fill_bulk_urb(urb, usbdev, pipe, uirt->in, MAX_PACKET,
++			  uirt_in_callback, uirt);
++	uirt->urb_in = urb;
++
++	urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!urb)
++		goto free_rcdev;
++
++	pipe = usb_sndbulkpipe(usbdev, ep_out->bEndpointAddress);
++	usb_fill_bulk_urb(urb, usbdev, pipe, uirt->out, MAX_PACKET,
++			  uirt_out_callback, uirt);
++
++	uirt->dev = &intf->dev;
++	uirt->usbdev = usbdev;
++	uirt->rc = rc;
++	uirt->urb_out = urb;
++	uirt->rx_state = RX_STATE_INTERSPACE_HIGH;
++
++	err = usb_submit_urb(uirt->urb_in, GFP_KERNEL);
++	if (err != 0) {
++		dev_err(uirt->dev, "failed to submit read urb: %d\n", err);
++		goto free_rcdev;
++	}
++
++	err = init_ftdi(usbdev);
++	if (err) {
++		dev_err(uirt->dev, "failed to setup ftdi: %d\n", err);
++		goto free_rcdev;
++	}
++
++	err = uirt_setup(uirt);
++	if (err)
++		goto free_rcdev;
++
++	usb_make_path(usbdev, uirt->phys, sizeof(uirt->phys));
++
++	rc->device_name = "USB-UIRT";
++	rc->driver_name = KBUILD_MODNAME;
++	rc->input_phys = uirt->phys;
++	usb_to_input_id(usbdev, &rc->input_id);
++	rc->dev.parent = &intf->dev;
++	rc->priv = uirt;
++	rc->tx_ir = uirt_tx;
++	rc->s_tx_carrier = uirt_set_tx_carrier;
++	rc->s_learning_mode = uirt_set_rx_wideband;
++	rc->allowed_protocols = RC_PROTO_BIT_ALL_IR_DECODER;
++	rc->map_name = RC_MAP_RC6_MCE;
++	rc->rx_resolution = UNIT_US;
++	rc->timeout = IR_TIMEOUT;
++
++	uirt_set_tx_carrier(rc, 38000);
++
++	err = rc_register_device(rc);
++	if (err)
++		goto free_rcdev;
++
++	usb_set_intfdata(intf, uirt);
++
++	return 0;
++
++free_rcdev:
++	usb_kill_urb(uirt->urb_out);
++	usb_free_urb(uirt->urb_out);
++	usb_kill_urb(uirt->urb_in);
++	usb_free_urb(uirt->urb_in);
++	rc_free_device(rc);
++free_uirt:
++	kfree(uirt->in);
++	kfree(uirt->out);
++	kfree(uirt);
++	return err;
++}
++
++static void uirt_disconnect(struct usb_interface *intf)
++{
++	struct uirt *ir = usb_get_intfdata(intf);
++
++	rc_unregister_device(ir->rc);
++	usb_set_intfdata(intf, NULL);
++	usb_kill_urb(ir->urb_out);
++	usb_free_urb(ir->urb_out);
++	usb_kill_urb(ir->urb_in);
++	usb_free_urb(ir->urb_in);
++	kfree(ir->in);
++	kfree(ir->out);
++	kfree(ir);
++}
++
++static const struct usb_device_id uirt_table[] = {
++	{ USB_DEVICE(0x0403, 0xf850) },
++	{ }
++};
++
++static struct usb_driver uirt_driver = {
++	.name = KBUILD_MODNAME,
++	.probe = uirt_probe,
++	.disconnect = uirt_disconnect,
++	.id_table = uirt_table,
++};
++
++module_usb_driver(uirt_driver);
++
++MODULE_AUTHOR("Sean Young <sean@mess.org>");
++MODULE_DESCRIPTION("USB-UIRT driver");
++MODULE_LICENSE("GPL");
++MODULE_DEVICE_TABLE(usb, uirt_table);
+-- 
+2.31.1
 
-Regrading the bug "BUG: corrupted list in em28xx_init_extension", it 
-seems that this bug is still missing a valid patch.
-
-SyzScope reports 4 memory write primitives from this bug.
-
-The detailed comments can be found at 
-https://sites.google.com/view/syzscope/bug-corrupted-list-in-em28xx_init_extension
-
-Please let us know if SyzScope indeed helps, and any suggestions/feedback.
-
-On 3/9/2020 8:24 AM, Andrey Konovalov wrote:
-> On Fri, Sep 27, 2019 at 10:49 PM syzbot
-> <syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com> wrote:
->> Hello,
->>
->> syzbot found the following crash on:
->>
->> HEAD commit:    2994c077 usb-fuzzer: main usb gadget fuzzer driver
->> git tree:       https://github.com/google/kasan.git usb-fuzzer
->> console output: https://syzkaller.appspot.com/x/log.txt?x=171c4be3600000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=69ddefac6929256a
->> dashboard link: https://syzkaller.appspot.com/bug?extid=76929be61691e7b3904b
->> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137d73bd600000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f0c8cb600000
->>
->> IMPORTANT: if you fix the bug, please add the following tag to the commit:
->> Reported-by: syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com
->>
->> em28xx 1-1:0.221: Audio interface 221 found (Vendor Class)
->> em28xx 1-1:0.221: unknown em28xx chip ID (0)
->> em28xx 1-1:0.221: Config register raw data: 0xfffffffb
->> em28xx 1-1:0.221: AC97 chip type couldn't be determined
->> em28xx 1-1:0.221: No AC97 audio processor
->> ------------[ cut here ]------------
->> list_add corruption. prev->next should be next (ffffffff87779de0), but was
->> ffffffff8352fdcc. (prev=ffff8881d2ecc240).
->> WARNING: CPU: 1 PID: 83 at lib/list_debug.c:26 __list_add_valid+0x99/0xf0
->> lib/list_debug.c:26
->> Kernel panic - not syncing: panic_on_warn set ...
->> CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.3.0+ #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
->> Google 01/01/2011
->> Workqueue: usb_hub_wq hub_event
->> Call Trace:
->>    __dump_stack lib/dump_stack.c:77 [inline]
->>    dump_stack+0xca/0x13e lib/dump_stack.c:113
->>    panic+0x2a3/0x6da kernel/panic.c:219
->>    __warn.cold+0x20/0x4a kernel/panic.c:576
->>    report_bug+0x262/0x2a0 lib/bug.c:186
->>    fixup_bug arch/x86/kernel/traps.c:179 [inline]
->>    fixup_bug arch/x86/kernel/traps.c:174 [inline]
->>    do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
->>    do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
->>    invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
->> RIP: 0010:__list_add_valid+0x99/0xf0 lib/list_debug.c:26
->> Code: 48 c7 c7 60 06 db 85 e8 2a 7a 30 ff 0f 0b 48 83 c4 08 31 c0 5d 41 5c
->> c3 48 89 f1 48 c7 c7 20 07 db 85 4c 89 e6 e8 0c 7a 30 ff <0f> 0b 31 c0 eb
->> c5 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 07 db 85
->> RSP: 0018:ffff8881d93cf120 EFLAGS: 00010286
->> RAX: 0000000000000000 RBX: ffff8881d2810120 RCX: 0000000000000000
->> RDX: 0000000000000000 RSI: ffffffff8128d3fd RDI: ffffed103b279e16
->> RBP: ffff8881d2810240 R08: ffff8881d92a3000 R09: fffffbfff11f45af
->> R10: fffffbfff11f45ae R11: ffffffff88fa2d77 R12: ffffffff87779de0
->> R13: ffff8881d2810000 R14: ffff8881d281012c R15: ffff8881d2c84400
->>    __list_add include/linux/list.h:60 [inline]
->>    list_add_tail include/linux/list.h:93 [inline]
->>    em28xx_init_extension+0x44/0x1f0
->> drivers/media/usb/em28xx/em28xx-core.c:1125
->>    em28xx_init_dev.isra.0+0xa7b/0x15d8
->> drivers/media/usb/em28xx/em28xx-cards.c:3520
->>    em28xx_usb_probe.cold+0xcac/0x2516
->> drivers/media/usb/em28xx/em28xx-cards.c:3869
->>    usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->>    really_probe+0x281/0x6d0 drivers/base/dd.c:548
->>    driver_probe_device+0x104/0x210 drivers/base/dd.c:721
->>    __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->>    bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->>    __device_attach+0x217/0x360 drivers/base/dd.c:894
->>    bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->>    device_add+0xae6/0x16f0 drivers/base/core.c:2201
->>    usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->>    generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->>    usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->>    really_probe+0x281/0x6d0 drivers/base/dd.c:548
->>    driver_probe_device+0x104/0x210 drivers/base/dd.c:721
->>    __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->>    bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->>    __device_attach+0x217/0x360 drivers/base/dd.c:894
->>    bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->>    device_add+0xae6/0x16f0 drivers/base/core.c:2201
->>    usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->>    hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->>    hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->>    port_event drivers/usb/core/hub.c:5359 [inline]
->>    hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->>    process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->>    process_scheduled_works kernel/workqueue.c:2331 [inline]
->>    worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
->>    kthread+0x318/0x420 kernel/kthread.c:255
->>    ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->> Kernel Offset: disabled
->> Rebooting in 86400 seconds..
->>
->>
->> ---
->> This bug is generated by a bot. It may contain errors.
->> See https://goo.gl/tpsmEJ for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>
->> syzbot will keep track of this bug report. See:
->> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->> syzbot can test patches for this bug, for details see:
->> https://goo.gl/tpsmEJ#testing-patches
-> #syz dup: BUG: corrupted list in em28xx_init_extension
->
