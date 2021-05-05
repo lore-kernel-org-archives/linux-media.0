@@ -4,49 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C16FC43617
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A82D4C43460
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA7676141C
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AE8A61106
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbhEEJna (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48670 "EHLO mail.kernel.org"
+        id S232936AbhEEJnl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232458AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232504AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7452861441;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA8CE61581;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=364y8EHJw+K9cWcJ3TfK59fyAMvbTh2YZ4HqAVyg8A8=;
+        bh=n8BdYNFKHpGuvTsaDKiqExH9RPNm4SzImqrTD24XJEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KndRsQn6wUyNi6eN7k33M1w7kqzJ24+MX/2EQ0eQjTL8hFb+QvTYQcVyx3lu26OZz
-         /6e553NH+Go/bMLU3TXK+Y3rjWMtO0RryzewWuUkbMjKDIwFPpi7sfyrBUJs6ny0hC
-         /6HGkeImhGk8ixnl0PFf4rJe+zxn6hmgeZbk2MKJpZTXhUn6M25A/DNR4/iaJIYue7
-         8cf/K3YZ8ysnQpz04o8qVWiibQ+Hhu5zWH7ec9xHyjTbVCG3qoHupemmTLNl2SmGtr
-         PavTMKvW4zjUj74wRAztvZkpXYiA+ykl0dZxxlTxhhcKse87GIQiPyPryZfwfueTep
-         3Pp+Z6bLFeeSA==
+        b=D5T/Giy9UwbacLo5/r243zsPBZ7bkoG9N39UtkebzGibE2JzsvfvECZm6Zbguc6Uu
+         GTLD3m8D6+iHXCihxX/T3oEYcyShEYVZ6ZuebL91GQWXu2ErP1Pin4TxjkmC0Z3Mn4
+         /Rlz+WQTgF+x/qdH+qzMCxRvzMCOQpnUsbHZsPs2Oi0fV4xStJEi6cNxY96KVK42Ee
+         lfbW+cPG8uR0sAT5xyjz37bkVSrTe7am2zPJQAnYECVG0ALKFGx2k9aPchNc6zBr/E
+         Ursdkl9WjSgrF4HHILE35g25HfkopYqDbw/2QlF3c7I64raujdA+cbcWmF0ZLGalk4
+         daiAuIpELUvOw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHwp-G3; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHx1-Lz; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 21/25] media: sunxi: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:11 +0200
-Message-Id: <0dea9a799700efd0f3ceaf9d25ded282295e2db9.1620207353.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 25/25] media: i2c: ccs-core: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:15 +0200
+Message-Id: <83ec24acb15f17e2ce589575c2f5eb7bdd1daf28.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -60,30 +56,87 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+There is a bug at ccs_pm_get_init(): when this function returns
+an error, the stream is not started, and RPM usage_count
+should not be incremented. However, if the calls to
+v4l2_ctrl_handler_setup() return errors, it will be kept
+incremented.
+
+At ccs_suspend() the best is to replace it by the new
+pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter automatically,
+in the case of errors.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ccs/ccs-core.c | 39 ++++++++++++++++++++------------
+ 1 file changed, 24 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-index 3f81dd17755c..fbcca59a0517 100644
---- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-+++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
-@@ -494,7 +494,7 @@ static int rotate_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		struct device *dev = ctx->dev->dev;
- 		int ret;
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index b05f409014b2..04c3ab9e37b4 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1880,21 +1880,33 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	int rval;
  
--		ret = pm_runtime_get_sync(dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0) {
- 			dev_err(dev, "Failed to enable module\n");
++	/*
++	 * It can't use pm_runtime_resume_and_get() here, as the driver
++	 * relies at the returned value to detect if the device was already
++	 * active or not.
++	 */
+ 	rval = pm_runtime_get_sync(&client->dev);
+-	if (rval < 0) {
+-		pm_runtime_put_noidle(&client->dev);
++	if (rval < 0)
++		goto error;
  
+-		return rval;
+-	} else if (!rval) {
+-		rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->
+-					       ctrl_handler);
+-		if (rval)
+-			return rval;
++	/* Device was already active, so don't set controls */
++	if (rval == 1)
++		return 0;
+ 
+-		return v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
+-	}
++	/* Restore V4L2 controls to the suspended device */
++	rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->ctrl_handler);
++	if (rval)
++		goto error;
+ 
++	rval = v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
++	if (rval)
++		goto error;
++
++	/* Keep PM runtime usage_count incremented on success */
+ 	return 0;
++error:
++	pm_runtime_put_noidle(&client->dev);
++	return rval;
+ }
+ 
+ static int ccs_set_stream(struct v4l2_subdev *subdev, int enable)
+@@ -3089,12 +3101,9 @@ static int __maybe_unused ccs_suspend(struct device *dev)
+ 	bool streaming = sensor->streaming;
+ 	int rval;
+ 
+-	rval = pm_runtime_get_sync(dev);
+-	if (rval < 0) {
+-		pm_runtime_put_noidle(dev);
+-
++	rval = pm_runtime_resume_and_get(dev);
++	if (rval < 0)
+ 		return rval;
+-	}
+ 
+ 	if (sensor->streaming)
+ 		ccs_stop_streaming(sensor);
 -- 
 2.30.2
 
