@@ -4,54 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9605C4363F
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D582C43600
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7128F613D6
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 116ED613D6
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbhEEJnW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48574 "EHLO mail.kernel.org"
+        id S232714AbhEEJn0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48650 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232265AbhEEJnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 5 May 2021 05:43:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A6E961410;
+        id S232441AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 5 May 2021 05:43:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F5F06142C;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=Y6Mm5CQ5FccRV1mq5OQxwJw1oJhZ1ZvSJdtqtRhzZk4=;
+        bh=nQwSJPLaVBdYjIemEjVYgYFNl6DQmZf6LrKXcLdjxJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FyMdhJCuzAtmH21EpjHJi9AkSctdAjlolAuDFK9T9+1ZpeeMTuNEg8MvWc3YVlHDM
-         M5Z8ao/2Vj+/WMSzRRKIaPPB3DMfyiEbzx7xCdTzPJohz/n4w4I+wJsfZiG3vfuvTn
-         KxsNLutY32UJby0kkjcChUAbY+NWDNWxDvXi3x91NCienVvc64uFXhFGqv7fJ7sBuj
-         p6s+95Rk7RJBJX3Cyp0ZFpZM1l4ERgXU178uQQDojjxXQN0wDn/7TvnbR0NOW/ZZTQ
-         P8cd9cD250qbzKtNtVCFuX0s7XlZvNqjRkYOea2Mc+WfEgvICojJSUhlz+IwGFzz9B
-         SLcxBj27xLT5Q==
+        b=F9WUUhkgAtjIMrRyssd4lqvAgaNoCpjaPTh7w7MGeWRglTuwvS98rekMY6tjnCFfU
+         qN1nJqOXFDSgxykV8A1UP4emDRvb/rsb3LW6ZZhBi5Ucb7BFnz4lMW1ZIpuZosoIDS
+         nQKYca3xqqSVSwNF9R5+gYdxDpyQJz+oBXc0yadciXJRqjDBS4uCl77uXuSRTFGhta
+         kXZxGGiZxKoCrim6BkWlJtAWscRtJXcd8Jrv5qtr7ZLOa2m5+PGFvksDUVVxC96Rru
+         xwL3j/PqrCyZpMKnz23T+WtGdFASUpZxmpX/TewQDPeA56fy040o3GUQv351bIF/IT
+         UXqf5fbLWQNpw==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2q-00AHvt-Lf; Wed, 05 May 2021 11:42:16 +0200
+        id 1leE2r-00AHwR-5F; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 02/25] staging: media: imx7-mipi-csis: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:41:52 +0200
-Message-Id: <793a5806a63b6313606fd1c344b9eec41e61a440.1620207353.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 13/25] media: rcar_fdp1: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:03 +0200
+Message-Id: <372d88637707ececab77fffaae49d455d90cf24f.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -70,31 +62,60 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Also, right now, the driver is ignoring any troubles when
+trying to do PM resume. So, add the proper error handling
+for the code.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/platform/rcar_fdp1.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 025fdc488bd6..1dc680d94a46 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -695,11 +695,10 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index d26413fa5205..89aac60066d9 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -2135,7 +2135,9 @@ static int fdp1_open(struct file *file)
+ 	}
  
- 		mipi_csis_clear_counters(state);
+ 	/* Perform any power management required */
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
++	if (ret < 0)
++		goto error_pm;
  
--		ret = pm_runtime_get_sync(&state->pdev->dev);
--		if (ret < 0) {
--			pm_runtime_put_noidle(&state->pdev->dev);
-+		ret = pm_runtime_resume_and_get(&state->pdev->dev);
-+		if (ret < 0)
- 			return ret;
--		}
+ 	v4l2_fh_add(&ctx->fh);
+ 
+@@ -2145,6 +2147,8 @@ static int fdp1_open(struct file *file)
+ 	mutex_unlock(&fdp1->dev_mutex);
+ 	return 0;
+ 
++error_pm:
++       v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+ error_ctx:
+ 	v4l2_ctrl_handler_free(&ctx->hdl);
+ 	kfree(ctx);
+@@ -2352,7 +2356,9 @@ static int fdp1_probe(struct platform_device *pdev)
+ 
+ 	/* Power up the cells to read HW */
+ 	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_get_sync(fdp1->dev);
++	ret = pm_runtime_resume_and_get(fdp1->dev);
++	if (ret < 0)
++		goto disable_pm;
+ 
+ 	hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
+ 	switch (hw_version) {
+@@ -2381,6 +2387,9 @@ static int fdp1_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++disable_pm:
++	pm_runtime_disable(fdp1->dev);
 +
- 		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
- 		if (ret < 0 && ret != -ENOIOCTLCMD)
- 			goto done;
+ release_m2m:
+ 	v4l2_m2m_release(fdp1->m2m_dev);
+ 
 -- 
 2.30.2
 
