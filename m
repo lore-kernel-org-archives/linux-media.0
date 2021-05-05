@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A82D4C43460
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E62CC2B9F2
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AE8A61106
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 535BD61415
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 09:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbhEEJnl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 05:43:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48708 "EHLO mail.kernel.org"
+        id S232834AbhEEJn2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 05:43:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232504AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232483AbhEEJnR (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 5 May 2021 05:43:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BA8CE61581;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8A4361582;
         Wed,  5 May 2021 09:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620207739;
-        bh=n8BdYNFKHpGuvTsaDKiqExH9RPNm4SzImqrTD24XJEw=;
+        bh=+rTtVWoWq20JhxgxmIT+9kZE/lGmMC43nyN1Fh8TG7g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D5T/Giy9UwbacLo5/r243zsPBZ7bkoG9N39UtkebzGibE2JzsvfvECZm6Zbguc6Uu
-         GTLD3m8D6+iHXCihxX/T3oEYcyShEYVZ6ZuebL91GQWXu2ErP1Pin4TxjkmC0Z3Mn4
-         /Rlz+WQTgF+x/qdH+qzMCxRvzMCOQpnUsbHZsPs2Oi0fV4xStJEi6cNxY96KVK42Ee
-         lfbW+cPG8uR0sAT5xyjz37bkVSrTe7am2zPJQAnYECVG0ALKFGx2k9aPchNc6zBr/E
-         Ursdkl9WjSgrF4HHILE35g25HfkopYqDbw/2QlF3c7I64raujdA+cbcWmF0ZLGalk4
-         daiAuIpELUvOw==
+        b=Mf9MOyq5thATWWFz9Hfbj8qgxuAvW3JlflD7XQ0cH5Zuor+EZfGkN4Clt6QuA/wuw
+         y//8rOn0wy+PwGVwJR2l2zPRdRAbICxiV10Wht8HhYN9kDf5fwiiGAn5z5+dYRFycg
+         hcs3nteUDogm5vKp4HJiP89KL9dsunC2XF1E+Wy/Yx0g7iHfrGfyqn8+fMGVt3jbap
+         e5CeeWJz/kEw+yVPIXc444DK3B1iQAnTorL0d3P3Fcf0VUbnjuH6RvYudx2oVunGDL
+         MiRntCkCTFvqR19/Zc6WvKZ8WwuoyEiSriT7RmDlXB+pCovVcwfinqKW+5jGx7TF05
+         whTs4hBFXexEQ==
 Received: by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1leE2r-00AHx1-Lz; Wed, 05 May 2021 11:42:17 +0200
+        id 1leE2r-00AHws-H9; Wed, 05 May 2021 11:42:17 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 25/25] media: i2c: ccs-core: fix pm_runtime_get_sync() usage count
-Date:   Wed,  5 May 2021 11:42:15 +0200
-Message-Id: <83ec24acb15f17e2ce589575c2f5eb7bdd1daf28.1620207353.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 22/25] media: sti/bdisp: fix pm_runtime_get_sync() usage count
+Date:   Wed,  5 May 2021 11:42:12 +0200
+Message-Id: <dbab81a4521f26538a9ac0c8af838c1ba987ab5a.1620207353.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620207353.git.mchehab+huawei@kernel.org>
 References: <cover.1620207353.git.mchehab+huawei@kernel.org>
@@ -57,86 +57,56 @@ X-Mailing-List: linux-media@vger.kernel.org
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
 
-There is a bug at ccs_pm_get_init(): when this function returns
-an error, the stream is not started, and RPM usage_count
-should not be incremented. However, if the calls to
-v4l2_ctrl_handler_setup() return errors, it will be kept
-incremented.
+The bdisp_start_streaming() doesn't take it into account, which
+would unbalance PM usage counter at bdisp_stop_streaming().
 
-At ccs_suspend() the best is to replace it by the new
-pm_runtime_resume_and_get(), introduced by:
+The logic at bdisp_probe() is correct, but the best is to use
+the same call along the driver.
+
+So, replace it by the new pm_runtime_resume_and_get(), introduced by:
 commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter automatically,
-in the case of errors.
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 39 ++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index b05f409014b2..04c3ab9e37b4 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1880,21 +1880,33 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index 060ca85f64d5..85288da9d2ae 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct bdisp_ctx *ctx = q->drv_priv;
+ 	struct vb2_v4l2_buffer *buf;
+-	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
++	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
  
-+	/*
-+	 * It can't use pm_runtime_resume_and_get() here, as the driver
-+	 * relies at the returned value to detect if the device was already
-+	 * active or not.
-+	 */
- 	rval = pm_runtime_get_sync(&client->dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(&client->dev);
-+	if (rval < 0)
-+		goto error;
+ 	if (ret < 0) {
+ 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
+@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
  
--		return rval;
--	} else if (!rval) {
--		rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->
--					       ctrl_handler);
--		if (rval)
--			return rval;
-+	/* Device was already active, so don't set controls */
-+	if (rval == 1)
-+		return 0;
+ 	/* Power management */
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set PM\n");
+-		goto err_pm;
++		goto err_remove;
+ 	}
  
--		return v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
--	}
-+	/* Restore V4L2 controls to the suspended device */
-+	rval = v4l2_ctrl_handler_setup(&sensor->pixel_array->ctrl_handler);
-+	if (rval)
-+		goto error;
- 
-+	rval = v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
-+	if (rval)
-+		goto error;
-+
-+	/* Keep PM runtime usage_count incremented on success */
- 	return 0;
-+error:
-+	pm_runtime_put_noidle(&client->dev);
-+	return rval;
- }
- 
- static int ccs_set_stream(struct v4l2_subdev *subdev, int enable)
-@@ -3089,12 +3101,9 @@ static int __maybe_unused ccs_suspend(struct device *dev)
- 	bool streaming = sensor->streaming;
- 	int rval;
- 
--	rval = pm_runtime_get_sync(dev);
--	if (rval < 0) {
--		pm_runtime_put_noidle(dev);
--
-+	rval = pm_runtime_resume_and_get(dev);
-+	if (rval < 0)
- 		return rval;
--	}
- 
- 	if (sensor->streaming)
- 		ccs_stop_streaming(sensor);
+ 	/* Filters */
+@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp_hw_free_filters(bdisp->dev);
+ err_pm:
+ 	pm_runtime_put(dev);
++err_remove:
+ 	bdisp_debugfs_remove(bdisp);
+ 	v4l2_device_unregister(&bdisp->v4l2_dev);
+ err_clk:
 -- 
 2.30.2
 
