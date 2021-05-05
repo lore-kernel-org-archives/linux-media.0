@@ -2,88 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35528C433B4
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 06:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 046D4C433B4
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 08:06:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11DB1613BE
-	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 06:27:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD4ED613CD
+	for <linux-media@archiver.kernel.org>; Wed,  5 May 2021 08:06:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbhEEG2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 May 2021 02:28:11 -0400
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:52685 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231633AbhEEG2L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 5 May 2021 02:28:11 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 019AC1470;
-        Wed,  5 May 2021 02:27:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 05 May 2021 02:27:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=E1bMRh3YyxIAvDf7EAz+oOfqzWIdjLND5FkkcPstI
-        7A=; b=NHycgAkrF6qL1LGUnqAkzinK5ogiof0EHk4MCHJAMLCE8HyiSKOOw1/n1
-        E4DQz3LNrpYSzh99VSyB9rAhLhmgIghCD24Gg06Eisl9He2/w9rwtbdXHwKOidX3
-        IyxHAS6EJ6qb4o4n9MergQefTnvOeEPKtJIlI0Q8RIcQL8e3rLFJqjAB+XjLd7+I
-        y4e7dAi/GJbpMXxlnH834id4OkkQLgRhUeDh9Bl9VCcyh/+vIKiQd/orPgUMe+PZ
-        sQl88M9ZIrX81nj8Bun6vZ8yzF9xDUEPztRM2V59x8QEQ6H2jhYV6jMr7JbFh7F1
-        IOq94G/Cy0NU0uZI3XWePQ7FFJaHg==
-X-ME-Sender: <xms:wjqSYFVZCDtksDLdLgiEwMJuKN9oXXIguzJ-rFdNLP2jwub9Byb_Kg>
-    <xme:wjqSYFmDIvv2Shen5C3uYUP62aSCAqERewF2lZ8yuGugzcuG1wt-mSLaOxho0kylM
-    ynuzvGUlrN0VeP-Ew>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdefjedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefgughg
-    rghrucfvhhhivghruceoihhnfhhosegvughgrghrthhhihgvrhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepkefhleevjeeivdehffdtffefieejueekhedtleekueeujeehkeduieeg
-    kedufffgnecukfhppeefuddrvddtledrleehrddvgedvnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepihhnfhhosegvughgrghrthhhihgvrhdr
-    nhgvth
-X-ME-Proxy: <xmx:wjqSYBY7ICurj1zjpE01cdZihdhGjHMPSChpzWyjrwFxL5ULLZqDeQ>
-    <xmx:wjqSYIVY-iKxblmq8TRWWj5dxZUqIqtBw0DFqAXHnGiLL5ZQt12raQ>
-    <xmx:wjqSYPny_vyL1rCL9dQoKU_cInpENz5lnc_xpB424WrJiiIqVFFPfQ>
-    <xmx:wjqSYFRoqIFco12DJ-prmrbq9QLF6Hq925wWvAgvQvBNBJYaHn6_0A>
-Received: from [192.168.0.125] (unknown [31.209.95.242])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Wed,  5 May 2021 02:27:13 -0400 (EDT)
-Subject: Re: [PATCH v2 1/2] v4l: Add 12-bit raw bayer linear packed formats
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     sakari.ailus@iki.fi,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <20190708060225.5172-1-info@edgarthier.net>
- <YFib1BNtNYSp2m7W@pendragon.ideasonboard.com>
-From:   Edgar Thier <info@edgarthier.net>
-Message-ID: <d684723c-aab8-e6e1-7077-89560232e132@edgarthier.net>
-Date:   Wed, 5 May 2021 08:27:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S231810AbhEEIHa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 May 2021 04:07:30 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:37439 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231520AbhEEIHa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 May 2021 04:07:30 -0400
+X-UUID: b70482be0ff743979648f56659c1cadc-20210505
+X-UUID: b70482be0ff743979648f56659c1cadc-20210505
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <louis.kuo@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1695147659; Wed, 05 May 2021 16:06:30 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 5 May 2021 16:06:29 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 5 May 2021 16:06:29 +0800
+From:   Louis Kuo <louis.kuo@mediatek.com>
+To:     <sakari.ailus@linux.intel.com>,
+        <laurent.pinchart@ideasonboard.com>, <mchehab@kernel.org>,
+        <matthias.bgg@gmail.com>, <hverkuil-cisco@xs4all.nl>,
+        <arnd@arndb.de>, <louis.kuo@mediatek.com>,
+        <sergey.senozhatsky@gmail.com>, <helen.koike@collabora.com>,
+        <niklas.soderlund+renesas@ragnatech.se>, <yepeilin.cs@gmail.com>
+CC:     <frederic.chen@mediatek.com>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [RFC PATCH V0 2/4] media: subdev: support which in v4l2_subdev_frame_interval
+Date:   Wed, 5 May 2021 16:06:24 +0800
+Message-ID: <20210505080626.15432-3-louis.kuo@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210505080626.15432-1-louis.kuo@mediatek.com>
+References: <20210505080626.15432-1-louis.kuo@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <YFib1BNtNYSp2m7W@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+This patch is to support try or set of VIDIOC_SUBDEV_ENUM_FRAME_INTERVAL
+through which parameter.
+This behavior is already supported in some similar V4L2 IOCTLs such as
+VIDIOC_SUBDEV_ENUM_FRAME_SIZE for the same reason.
 
-My apologies for the late reply.
+Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+---
+ include/uapi/linux/v4l2-subdev.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> no need to resubmit this patch if you agree with the proposed
-> changes, I'll apply them locally.
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index d6ffd5981c68..9d64feaa693b 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -120,12 +120,13 @@ struct v4l2_subdev_frame_size_enum {
+  * struct v4l2_subdev_frame_interval - Pad-level frame rate
+  * @pad: pad number, as reported by the media API
+  * @interval: frame interval in seconds
+- * @reserved: drivers and applications must zero this array
++ * @which: format type (from enum v4l2_subdev_format_whence)
+  */
+ struct v4l2_subdev_frame_interval {
+ 	__u32 pad;
+ 	struct v4l2_fract interval;
+-	__u32 reserved[9];
++	__u32 which;
++	__u32 reserved[8];
+ };
+ 
+ /**
+-- 
+2.18.0
 
-Feel free to apply them locally.
-
-Regards,
-
-Edgar
