@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3339C43470
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12285C43462
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD52E613E8
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD2C8613C7
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbhEFP2K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:28:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40884 "EHLO mail.kernel.org"
+        id S235255AbhEFP2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:28:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235572AbhEFP1y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235573AbhEFP1y (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DDF76196A;
-        Thu,  6 May 2021 15:26:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B58F26101D;
+        Thu,  6 May 2021 15:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620314784;
-        bh=oIZOpIBwHVlxuxb+tCGyZiRaE6QdZqQvQMPRN2jFRlM=;
+        s=k20201202; t=1620314799;
+        bh=MXpnKbLLJHoaKaSDG9Nm2cU25Bmpfhlpa/FbF9E3XvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ntpQ8FKKSJlYAsJZTCOuH7ldiQm0MPXlRmH8jpLDdcbWgWcUYdA+MORhShscEpkHC
-         ap7SMCycuucfepxEhkhF86Zg5cIb0pyGCsEzL9qKYDGPAHaZaa90bXXNbj59DzJqok
-         hNA4cs+gJ9Fjrez1JROHsVM/aTvWwjlmoL4hSa4TANTBOR2NL2rMvSHs4K4Mwozu9g
-         P2/Duj9FHqnvFRJfESCy03w9LstJHAeena9F4K/CHkZiWMPVCKgeXzByw2OwE7VfUr
-         Grz4EwcYfifJS4b3H0DG3zVgUliGAbT6Ye7aR4Sybbk9RwclRh8UFQps7Gi8JzB4g7
-         AIXWSEAoE6bzQ==
+        b=W8ip/QxH+Y0Etz5pdi/g8HQMWk5RcQl3yV626phIa7/INWQEP7huliglW1N5k5vKa
+         Lxk8oKnLEHOGbZ7hu48dwEFxZ3XWfclHeA3g4OdJcAqneWqIM1Ai8ru2JgGYSma2Pf
+         vxXdqNxQlboOkM+xfovZ92fvT0AByRGoWaJbVLvmqPFa18Dzgb61fzCGV+TVPBwDzP
+         Yxd7NAqDG8GFh9Ldnm8zwkyKynfQ/bgWmoFS6N7LXqPGNGnxwiDlyf/j30IlaDewrI
+         LM1w9YAYx+v0XkIKrutyF2LSdBNU+URCHf2pufpsRsN7/Lq4Bt3H1oOls7XXcV4+l/
+         KDnAFT/pXUoag==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left8-000SCZ-ED; Thu, 06 May 2021 17:26:06 +0200
+        id 1left7-000SBD-O8; Thu, 06 May 2021 17:26:05 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v5 24/25] media: rcar-vin: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:26:02 +0200
-Message-Id: <9d28be9ebbf8343b6a7ed9c84b27d0cfa3b4d243.1620314616.git.mchehab+huawei@kernel.org>
+        linux-staging@lists.linux.dev,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v5 03/25] staging: media: ipu3: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:25:41 +0200
+Message-Id: <a32caa4bce0341ab99a4440a431b4aebd55f8498.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     unlisted-recipients:; (no To-header on input)
@@ -64,85 +65,28 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 15 ++++++++++++---
- drivers/media/platform/rcar-vin/rcar-dma.c  |  6 ++----
- drivers/media/platform/rcar-vin/rcar-v4l2.c |  6 ++----
- 3 files changed, 16 insertions(+), 11 deletions(-)
+ drivers/staging/media/ipu3/ipu3.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index e06cd512aba2..99bf814eb2a7 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -406,10 +406,17 @@ static void rcsi2_enter_standby(struct rcar_csi2 *priv)
- 	pm_runtime_put(priv->dev);
- }
+diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
+index ee1bba6bdcac..8e1e9e46e604 100644
+--- a/drivers/staging/media/ipu3/ipu3.c
++++ b/drivers/staging/media/ipu3/ipu3.c
+@@ -392,10 +392,9 @@ int imgu_s_stream(struct imgu_device *imgu, int enable)
+ 	}
  
--static void rcsi2_exit_standby(struct rcar_csi2 *priv)
-+static int rcsi2_exit_standby(struct rcar_csi2 *priv)
- {
--	pm_runtime_get_sync(priv->dev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(priv->dev);
-+	if (ret < 0)
-+		return ret;
-+
- 	reset_control_deassert(priv->rstc);
-+
-+	return 0;
- }
+ 	/* Set Power */
+-	r = pm_runtime_get_sync(dev);
++	r = pm_runtime_resume_and_get(dev);
+ 	if (r < 0) {
+ 		dev_err(dev, "failed to set imgu power\n");
+-		pm_runtime_put(dev);
+ 		return r;
+ 	}
  
- static int rcsi2_wait_phy_start(struct rcar_csi2 *priv,
-@@ -657,7 +664,9 @@ static int rcsi2_start(struct rcar_csi2 *priv)
- {
- 	int ret;
- 
--	rcsi2_exit_standby(priv);
-+	ret = rcsi2_exit_standby(priv);
-+	if (ret < 0)
-+		return ret;
- 
- 	ret = rcsi2_start_receiver(priv);
- 	if (ret) {
-diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-index f30dafbdf61c..f5f722ab1d4e 100644
---- a/drivers/media/platform/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-@@ -1458,11 +1458,9 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
- 	u32 vnmc;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(vin->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vin->dev);
-+	ret = pm_runtime_resume_and_get(vin->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/* Make register writes take effect immediately. */
- 	vnmc = rvin_read(vin, VNMC_REG);
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 457a65bf6b66..b1e9f86caa5c 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -870,11 +870,9 @@ static int rvin_open(struct file *file)
- 	struct rvin_dev *vin = video_drvdata(file);
- 	int ret;
- 
--	ret = pm_runtime_get_sync(vin->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vin->dev);
-+	ret = pm_runtime_resume_and_get(vin->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	ret = mutex_lock_interruptible(&vin->lock);
- 	if (ret)
 -- 
 2.30.2
 
