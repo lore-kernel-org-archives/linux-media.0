@@ -2,51 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 258B4C433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D409EC433ED
 	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:23:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 180CB610C8
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:23:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90F0D6101A
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:23:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235290AbhEFPYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:24:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38140 "EHLO mail.kernel.org"
+        id S235106AbhEFPYu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:24:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235194AbhEFPYa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 May 2021 11:24:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5259B613D6;
+        id S235187AbhEFPY3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 May 2021 11:24:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3EB3F61289;
         Thu,  6 May 2021 15:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314610;
-        bh=/7W/4D4Cg4pCxHEZGuCJQ5dkGl7p2HK4IsN3mgaNluw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQ4R55NhcEmhgwPD+YxHuSRhF87CqsZWODJTKE1snxuW1bRlxU7H49POkm++QU6WN
-         IFBlP/FSQi6VgncF9xPgGngjKqeaeEEaSr+JrF4u+YDS2SDBUrsuv27Du3GV3er1ol
-         qBPaMSEYDf0yTGHEAy9wZ7PF0xtJ+n+4EnrhuXJGQuePGrtXkT/1IVy7Z+2sUosHX1
-         8FVnzJl9/0exitPZF642OS6JtjoJ+03dee6SUM/IKE78U7RcAx/QOh1pvI41qt2Wun
-         RY+EXU4GVsbi26ncgNjyLaL+74j33xoMQB0hGO5eC05roQYn7/oWEO7Sdu+TBI9lqm
-         XR9vvCiWOdHpw==
+        bh=mHMffteSTguBJ20cEjxFDlhyxs7b4CZOVWuPWstQVxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V5sH6CPic+zohK9e0Tej3j8T0kxhtrLLXH+mZlmBv49+NZtZPuX2kr6TsFBz5vekd
+         urwi/KUoo9XkzkPDq6TXUaZQ7nYXGaRLBm8llSAPGI1KovW1EGpcUWUY6erJRofnaH
+         bZnc3eARG7nffX83sw1h1xumx9wqxAA9j0K3VIi0R7jlVOKT5Xp9/B/Eh/XkCNXDzs
+         9+90CCva4xyhxqv+w+WZWiyLR78rX1Z2hD8XE5MZahgwqCOEvUI6WXnWjY4Rh/4mTq
+         0bCj7Zdd2oR1IOAQKOOjIMUGbBRARvm0VVC7riOKIwpD4JN3ZHbZ443EJtIpd6ZSy6
+         0nFUXN48LqZbg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lefqa-000RvO-Cv; Thu, 06 May 2021 17:23:28 +0200
+        id 1lefqZ-000RuV-V0; Thu, 06 May 2021 17:23:27 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Leon Luo <leonl@leopardimaging.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v5 13/30] media: i2c: mt9m001: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:23:09 +0200
-Message-Id: <45d7459c994ea66c0a4745ca5a105e7cf1129575.1620314098.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v5 00/30] media: i2c: use pm_runtime_resume_and_get() were possible
+Date:   Thu,  6 May 2021 17:22:56 +0200
+Message-Id: <cover.1620314098.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1620314098.git.mchehab+huawei@kernel.org>
-References: <cover.1620314098.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -55,52 +66,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-added pm_runtime_resume_and_get() in order to automatically handle
-dev->power.usage_count decrement on errors.
+Dealing with PM runtime (RPM) is different than dealing with other kAPIs used
+on media, as most pm_runtime_get_*() functions won't return to the the state
+before the call if an error rises. They, instead, increment an usage_count.
 
-Use the new API, in order to cleanup the error check logic.
+Due to that, there were several bugs on media. Just on this review, we found
+24 such errors.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/i2c/mt9m001.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+So, let's use pm_runtime_resume_and_get() whenever possible, as it
+has two advantages over :
 
-diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
-index 3b0ba8ed5233..58c85a3bccf6 100644
---- a/drivers/media/i2c/mt9m001.c
-+++ b/drivers/media/i2c/mt9m001.c
-@@ -217,9 +217,9 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- 		goto done;
- 
- 	if (enable) {
--		ret = pm_runtime_get_sync(&client->dev);
-+		ret = pm_runtime_resume_and_get(&client->dev);
- 		if (ret < 0)
--			goto put_unlock;
-+			goto unlock;
- 
- 		ret = mt9m001_apply_selection(sd);
- 		if (ret)
-@@ -247,6 +247,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- 
- put_unlock:
- 	pm_runtime_put(&client->dev);
-+unlock:
- 	mutex_unlock(&mt9m001->mutex);
- 
- 	return ret;
-@@ -834,6 +835,10 @@ static int mt9m001_remove(struct i2c_client *client)
- {
- 	struct mt9m001 *mt9m001 = to_mt9m001(client);
- 
-+	/*
-+	 * As it increments RPM usage_count even on errors, we don't need to
-+	 * check the returned code here.
-+	 */
- 	pm_runtime_get_sync(&client->dev);
- 
- 	v4l2_async_unregister_subdev(&mt9m001->subdev);
+1. On errors, it decrements the usage count;
+2. It always return zero on success or an error code. This prevents a 
+   common error pattern of checking if ret is not zero to identify
+   for errors.
+
+There are however a few places where calls to pm_runtime_get_sync()
+are kept. On several of those, a comment was added, in order to
+help preventing trivial patches that could try to change them.
+
+PS.: This series was submitted already together with the fix patches
+at:
+
+	https://lore.kernel.org/linux-media/cover.1619621413.git.mchehab+huawei@kernel.org/
+
+I opted to break it on 3 parts, in order to make easier to review.
+
+This is the second part.
+
+Mauro Carvalho Chehab (30):
+  media: i2c: ak7375: use pm_runtime_resume_and_get()
+  media: i2c: dw9714: use pm_runtime_resume_and_get()
+  media: i2c: dw9768: use pm_runtime_resume_and_get()
+  media: i2c: dw9807-vcm: use pm_runtime_resume_and_get()
+  media: i2c: hi556: use pm_runtime_resume_and_get()
+  media: i2c: imx214: use pm_runtime_resume_and_get()
+  media: i2c: imx219: use pm_runtime_resume_and_get()
+  media: i2c: imx258: use pm_runtime_resume_and_get()
+  media: i2c: imx274: use pm_runtime_resume_and_get()
+  media: i2c: imx290: use pm_runtime_resume_and_get()
+  media: i2c: imx319: use pm_runtime_resume_and_get()
+  media: i2c: imx355: use pm_runtime_resume_and_get()
+  media: i2c: mt9m001: use pm_runtime_resume_and_get()
+  media: i2c: ov02a10: use pm_runtime_resume_and_get()
+  media: i2c: ov13858: use pm_runtime_resume_and_get()
+  media: i2c: ov2659: use pm_runtime_resume_and_get()
+  media: i2c: ov2685: use pm_runtime_resume_and_get()
+  media: i2c: ov2740: use pm_runtime_resume_and_get()
+  media: i2c: ov5647: use pm_runtime_resume_and_get()
+  media: i2c: ov5648: use pm_runtime_resume_and_get()
+  media: i2c: ov5670: use pm_runtime_resume_and_get()
+  media: i2c: ov5675: use pm_runtime_resume_and_get()
+  media: i2c: ov5695: use pm_runtime_resume_and_get()
+  media: i2c: ov7740: use pm_runtime_resume_and_get()
+  media: i2c: ov8856: use pm_runtime_resume_and_get()
+  media: i2c: ov8865: use pm_runtime_resume_and_get()
+  media: i2c: ov9734: use pm_runtime_resume_and_get()
+  media: i2c: tvp5150: use pm_runtime_resume_and_get()
+  media: i2c: video-i2c: use pm_runtime_resume_and_get()
+  media: i2c: ccs-core: use pm_runtime_resume_and_get()
+
+ drivers/media/i2c/ak7375.c       | 10 +---------
+ drivers/media/i2c/ccs/ccs-core.c |  7 ++-----
+ drivers/media/i2c/dw9714.c       | 10 +---------
+ drivers/media/i2c/dw9768.c       | 10 +---------
+ drivers/media/i2c/dw9807-vcm.c   | 10 +---------
+ drivers/media/i2c/hi556.c        |  3 +--
+ drivers/media/i2c/imx214.c       |  6 ++----
+ drivers/media/i2c/imx219.c       |  6 ++----
+ drivers/media/i2c/imx258.c       |  6 ++----
+ drivers/media/i2c/imx274.c       |  3 +--
+ drivers/media/i2c/imx290.c       |  6 ++----
+ drivers/media/i2c/imx319.c       |  6 ++----
+ drivers/media/i2c/imx355.c       |  6 ++----
+ drivers/media/i2c/mt9m001.c      |  9 +++++++--
+ drivers/media/i2c/ov02a10.c      |  6 ++----
+ drivers/media/i2c/ov13858.c      |  6 ++----
+ drivers/media/i2c/ov2659.c       |  6 ++----
+ drivers/media/i2c/ov2685.c       |  7 +++----
+ drivers/media/i2c/ov2740.c       |  6 ++----
+ drivers/media/i2c/ov5647.c       |  9 +++++----
+ drivers/media/i2c/ov5648.c       |  6 ++----
+ drivers/media/i2c/ov5670.c       |  6 ++----
+ drivers/media/i2c/ov5675.c       |  3 +--
+ drivers/media/i2c/ov5695.c       |  6 ++----
+ drivers/media/i2c/ov7740.c       |  6 ++----
+ drivers/media/i2c/ov8856.c       |  3 +--
+ drivers/media/i2c/ov8865.c       |  6 ++----
+ drivers/media/i2c/ov9734.c       |  3 +--
+ drivers/media/i2c/tvp5150.c      | 16 +++-------------
+ drivers/media/i2c/video-i2c.c    | 12 ++++--------
+ 30 files changed, 63 insertions(+), 142 deletions(-)
+
 -- 
 2.30.2
+
 
