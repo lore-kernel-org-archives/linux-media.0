@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D79EC43462
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A863C433ED
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD70D61969
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A82C613FA
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbhEFP2J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S235625AbhEFP2J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 6 May 2021 11:28:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40886 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:41060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235564AbhEFP1x (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235566AbhEFP1x (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E9CEC61963;
-        Thu,  6 May 2021 15:26:23 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AD9A61969;
+        Thu,  6 May 2021 15:26:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314784;
-        bh=nw7lb3Ybiu0APRxeY/ZSpBCUtyJ2J2dcLU9KernES+8=;
+        bh=CljwneJOzsAzCxr1z7NSaPn2lzrNFeMbh5spoGp6sG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lgi9K68SDn+l1XXT3uJr8bn2sis6shsWTsIWyZZMvO69Z8Nf6rTx8WkNNX7JO7v07
-         ord89xOJiK4oYWRrH5Ji7YLTNHH6MSQwaX6v8Z9Idu30G+9HHcggaPSLtXr1ulhhwl
-         GV33ULYMx1I8mhp3GQ5rKV6ZuP/tW5BsfqmvZgWjDE+zAVIEx/7JY4vWwxptlay+UA
-         TxpqMr+s6lXq3O6LRMmRLHn/TTSVpNcum3XqR502LDLwhrlPtQIZGkJ6ey3bRpLXNu
-         d2AW9ixx2/eVNnDa3xJksSilld9BTF8nRjqfbZ3kZL+W1DJbPq1e2KlMbAhogWeplj
-         XGwXdufLKXk4g==
+        b=JpkDG+1kkaRH/dCZPmcLtq3DaDCDXgF5xWcjAlKhOuiUr1z/IQVXCsgyYy2omoce6
+         /J75nCgEPRGrT+lFqehcRMdlScj/mf7jCFr2Z9aBMBMxECtiL4J6s64/MbFBeptZlX
+         NZDUMytGMTCucl0bBrCTjkzqxTUtfV8jvInIhciF+n+CBWTTMvyzPwd01dvWT+aKuc
+         O0fDecAngeMhSfJ2WbQRVDCOwVvnmXm3mb0lMpLfQ3Wg4d9Buv7RFYV5CMBMueHuLm
+         G2QP2lombNU9zFcZ9gkn7ogCARdt5wj9AvXbuLpzWkKC640nDWOaY8D5R+22RRDvr4
+         mBIh405q8I3mg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left8-000SCV-DB; Thu, 06 May 2021 17:26:06 +0200
+        id 1left8-000SCd-FN; Thu, 06 May 2021 17:26:06 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v5 23/25] media: vsp1: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:26:01 +0200
-Message-Id: <8e8ca03fd0dfa1b3245c0ff0201f3cf9a522ede2.1620314616.git.mchehab+huawei@kernel.org>
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH v5 25/25] media: hantro: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:26:03 +0200
+Message-Id: <0505970478fcb86e190ecdc4aefe55c9982ae7d5.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -60,37 +61,33 @@ Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 added pm_runtime_resume_and_get() in order to automatically handle
 dev->power.usage_count decrement on errors.
 
-Use the new API, in order to cleanup the error check logic.
+While there's nothing wrong with the current usage on this driver,
+as we're getting rid of the pm_runtime_get_sync() call all over
+the media subsystem, let's remove the last occurrence on this
+driver.
 
-As a bonus, pm_runtime_resume_and_get() always return 0 on success.
-So, the code can be simplified.
-
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/vsp1/vsp1_drv.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/staging/media/hantro/hantro_drv.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
-index aa66e4f5f3f3..de442d6c9926 100644
---- a/drivers/media/platform/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/vsp1/vsp1_drv.c
-@@ -559,15 +559,7 @@ static int vsp1_device_init(struct vsp1_device *vsp1)
-  */
- int vsp1_device_get(struct vsp1_device *vsp1)
- {
--	int ret;
--
--	ret = pm_runtime_get_sync(vsp1->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(vsp1->dev);
--		return ret;
--	}
--
--	return 0;
-+	return pm_runtime_resume_and_get(vsp1->dev);
- }
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index eea2009fa17b..74d6545395f9 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -160,9 +160,8 @@ static void device_run(void *priv)
+ 	src = hantro_get_src_buf(ctx);
+ 	dst = hantro_get_dst_buf(ctx);
  
- /*
+-	ret = pm_runtime_get_sync(ctx->dev->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(ctx->dev->dev);
++	ret = pm_runtime_resume_and_get(ctx->dev->dev);
++	if (ret < 0)
+ 		goto err_cancel_job;
+ 	}
+ 
 -- 
 2.30.2
 
