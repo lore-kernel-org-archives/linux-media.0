@@ -7,46 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DAC6C433ED
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F347C43470
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCA4361932
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CF9F6195D
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbhEFP2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:28:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40902 "EHLO mail.kernel.org"
+        id S235250AbhEFP2G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:28:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40900 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235456AbhEFP1n (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235452AbhEFP1n (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF60561948;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA4C66194C;
         Thu,  6 May 2021 15:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314783;
-        bh=FLSzvr6zLm66TJO9Ug0iF1ElODOaUmJVWjZme1bPQlE=;
+        bh=xG6JnysSxfWd3aUelNVSSL+9ckiOYfdOZj8pIwxAXDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LdRFCjh8bCOtEM2j3min+9VewLxm4k0Q5j88UwApnqYWTnVdSaxwWFyksEoXGXLbJ
-         LoCCeH5sC7JhiD/q+TeWKEQdUGg8qmski/FejpctdKxzEWYQ8cVroQJbBhilixh5+k
-         dPnzpSd+0DRQQS/AH29BkZLw8lA32PJHADI33qaEkK8qepjrhJWU1JYzeXHgI5Yc1w
-         KAMgZhcMvKX6C7YtuMukTPuv32ZCakpW4mO8/DW5z/X0kCNC21q2wOJX40Pid1HbX4
-         gnS0i2x1IMJJh7dNFPy6XbpGEYyPiI1xhnUwRa9WDO0A2oryAz8LtEm4KL9hKeA7I5
-         aPRNALMxUZmSw==
+        b=LY480GhqfCXusMjUoczZcVXeOz/0xYAX/WTSEmnRnVBR/t347ct7ahedVlVqRo+aE
+         TblPTYe+laOCe0eSFPTkG2xMjc56zPa5FtQLit4pMgtUbyKoLNHRvAhOGkifCtcrYa
+         1MuynXQRuGCb/MOxw5iWNYote7Z1wqecDpi7MgX2jpHHnWDjmO8jqZicGTGfSw6CW6
+         1H/k2tLO/GeohygkO+kUnbYwWoBi5HlVrftF3khUU2j6iwUcNEuvFpmv+TDp6le3NR
+         hvgO+Y/oeWfjRLG6ORxU1RtpO7/nEl5422kisMDetbQPoSepFaSmH2LU+F9RbkR8EB
+         XEdMlKKvS/PzA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left8-000SCJ-A4; Thu, 06 May 2021 17:26:06 +0200
+        id 1left8-000SCR-C7; Thu, 06 May 2021 17:26:06 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Benoit Parrot <bparrot@ti.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v5 20/25] media: stm32: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:25:58 +0200
-Message-Id: <27d9d61e55a133f811550578b4c9738b806ce491.1620314616.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v5 22/25] media: ti-vpe: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:26:00 +0200
+Message-Id: <d84de29109f097f13b624b3343a77a5b10847d6f.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -66,35 +62,89 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/stm32/stm32-dcmi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/cal-video.c | 4 +++-
+ drivers/media/platform/ti-vpe/cal.c       | 8 +++++---
+ drivers/media/platform/ti-vpe/vpe.c       | 8 +++-----
+ 3 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index d9b4ad0abf0c..b33c6e7ae0a1 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -723,11 +723,11 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	u32 val = 0;
- 	int ret;
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+index 7b7436a355ee..15fb5360cf13 100644
+--- a/drivers/media/platform/ti-vpe/cal-video.c
++++ b/drivers/media/platform/ti-vpe/cal-video.c
+@@ -700,7 +700,9 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
  
--	ret = pm_runtime_get_sync(dcmi->dev);
-+	ret = pm_runtime_resume_and_get(dcmi->dev);
- 	if (ret < 0) {
- 		dev_err(dcmi->dev, "%s: Failed to start streaming, cannot get sync (%d)\n",
- 			__func__, ret);
--		goto err_pm_put;
-+		goto err_unlocked;
- 	}
+ 	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
  
- 	ret = media_pipeline_start(&dcmi->vdev->entity, &dcmi->pipeline);
-@@ -848,6 +848,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+-	pm_runtime_get_sync(ctx->cal->dev);
++	ret = pm_runtime_resume_and_get(ctx->cal->dev);
++	if (ret < 0)
++		goto error_pipeline;
  
- err_pm_put:
- 	pm_runtime_put(dcmi->dev);
-+err_unlocked:
- 	spin_lock_irq(&dcmi->irqlock);
- 	/*
- 	 * Return all buffers to vb2 in QUEUED state.
+ 	cal_ctx_set_dma_addr(ctx, addr);
+ 	cal_ctx_start(ctx);
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index 2e2bef91b2b0..76fe7a8b33f6 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -1024,7 +1024,7 @@ static int cal_probe(struct platform_device *pdev)
+ 
+ 	/* Read the revision and hardware info to verify hardware access. */
+ 	pm_runtime_enable(&pdev->dev);
+-	ret = pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret)
+ 		goto error_pm_runtime;
+ 
+@@ -1098,10 +1098,11 @@ static int cal_remove(struct platform_device *pdev)
+ {
+ 	struct cal_dev *cal = platform_get_drvdata(pdev);
+ 	unsigned int i;
++	int ret;
+ 
+ 	cal_dbg(1, cal, "Removing %s\n", CAL_MODULE_NAME);
+ 
+-	pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 
+ 	cal_media_unregister(cal);
+ 
+@@ -1115,7 +1116,8 @@ static int cal_remove(struct platform_device *pdev)
+ 	for (i = 0; i < cal->data->num_csi2_phy; i++)
+ 		cal_camerarx_destroy(cal->phy[i]);
+ 
+-	pm_runtime_put_sync(&pdev->dev);
++	if (ret >= 0)
++		pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 
+ 	return 0;
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 10251b787674..5b1c5d96a407 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -2471,11 +2471,9 @@ static int vpe_runtime_get(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "vpe_runtime_get\n");
+ 
+-	r = pm_runtime_get_sync(&pdev->dev);
++	r = pm_runtime_resume_and_get(&pdev->dev);
+ 	WARN_ON(r < 0);
+-	if (r)
+-		pm_runtime_put_noidle(&pdev->dev);
+-	return r < 0 ? r : 0;
++	return r;
+ }
+ 
+ static void vpe_runtime_put(struct platform_device *pdev)
+@@ -2580,7 +2578,7 @@ static int vpe_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	ret = vpe_runtime_get(pdev);
+-	if (ret)
++	if (ret < 0)
+ 		goto rel_m2m;
+ 
+ 	/* Perform clk enable followed by reset */
 -- 
 2.30.2
 
