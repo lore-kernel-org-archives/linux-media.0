@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C36EC43460
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC467C433B4
 	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:23:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 499E76101A
+	by mail.kernel.org (Postfix) with ESMTP id BBA79611AE
 	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbhEFPYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:24:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38092 "EHLO mail.kernel.org"
+        id S235300AbhEFPYx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:24:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38208 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235198AbhEFPYa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235201AbhEFPYa (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:24:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49397613C0;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 646A1613E4;
         Thu,  6 May 2021 15:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314610;
-        bh=nPYpAR91E3rgdblnM1RIaAoqqFVi+fAvcFwJJ6A4j/g=;
+        bh=oKyS61glPZn5sXxnrboa/AtTlnD1fG/1xuau3yVfL78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G2D5SjYUp1dulyJdbit5nwxPotB7SPsw8eSZ21eCcpRaLZSYJYR0TjnXhxMyskY6N
-         S919sO/uR0Qak+mzvXO2cI8IJNINLib4b2Sx1a0irZIaIOAXKiwUtgKzKF0VPADhSn
-         k9c9Sdn/ZLWjsANMxSd8hknFlr9AgvJlon55ycnBRp0T9enH/cnPh7DKwYT/LvdCaW
-         pQ0jL4G+MzotSryLfcWSFBZKFNxuPN6G/5LfJTjwYSvf//4fR4GCQmn+DVJy9DoJvC
-         cLds3tRxTpE0WenRaJLMp88URO8YT2ARcJaVPORj9qroC3DQGjLSfpfNJLZBPPlV1X
-         rqDaikNanF2YQ==
+        b=u3COkbEQio84liZvUPD/J3sUZsnfuPrbg5MZknOresXKFtUmxMuZxFvoI/kS6yy6Z
+         a6nGESFr4PMEFiV9zu1onxngOe/kuoyvJGX1COR+hIC3s+mWrsGQeThD/uy8ENUdCR
+         adk1WUekooG8SbWcZ49+AcUZjo4o3DZ6XPdy+KWTGw1lLQsOtG86KQNcchRRqfIbYC
+         AFcioGeR02XmDJrdM2o+NJCs0FgZjafED8Am/bzE/AOMDzltaSUbeQ4yefJHRXkf7f
+         enWuikh/i3jFea7Psx5mtItnTwckemveGfu3j+2AUvd3HRaqgCUKDUCdWSlCFpzUw3
+         Fe9OpzU7UxL/w==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lefqa-000Rv0-6Q; Thu, 06 May 2021 17:23:28 +0200
+        id 1lefqa-000Rva-G9; Thu, 06 May 2021 17:23:28 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v5 07/30] media: i2c: imx219: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:23:03 +0200
-Message-Id: <8f44c30dcb991df458e9a4c6ff833c1dcaaff897.1620314098.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v5 16/30] media: i2c: ov2659: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:23:12 +0200
+Message-Id: <6c19955672011ff88748e3314e984a39504d1622.1620314098.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314098.git.mchehab+huawei@kernel.org>
 References: <cover.1620314098.git.mchehab+huawei@kernel.org>
@@ -60,29 +60,30 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/imx219.c | 6 ++----
+ drivers/media/i2c/ov2659.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 1054ffedaefd..74a0bf9b088b 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -1035,11 +1035,9 @@ static int imx219_start_streaming(struct imx219 *imx219)
- 	const struct imx219_reg_list *reg_list;
- 	int ret;
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index 42f64175a6df..a3c8eae68486 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1186,11 +1186,9 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
+ 		goto unlock;
+ 	}
  
 -	ret = pm_runtime_get_sync(&client->dev);
 -	if (ret < 0) {
 -		pm_runtime_put_noidle(&client->dev);
 +	ret = pm_runtime_resume_and_get(&client->dev);
 +	if (ret < 0)
- 		return ret;
+ 		goto unlock;
 -	}
  
- 	/* Apply default values of current mode */
- 	reg_list = &imx219->mode->reg_list;
+ 	ret = ov2659_init(sd, 0);
+ 	if (!ret)
 -- 
 2.30.2
 
