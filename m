@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 243FAC43470
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9352C43460
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0754C61425
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 842D961460
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbhEFP1u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:27:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40272 "EHLO mail.kernel.org"
+        id S235224AbhEFP1y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:27:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235286AbhEFP1V (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 May 2021 11:27:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 78F5361629;
+        id S235255AbhEFP1m (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 May 2021 11:27:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FD526193D;
         Thu,  6 May 2021 15:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314783;
-        bh=dPmLZXkUMmELV8jfB7++9sSwF5IaiES5o+6MkCMTBxU=;
+        bh=tu2hhB6CHAZbCfvPd96Qq+9zsUaGe3IxV7AH+2XbuEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpB0Kk9121Udvt5fdaJqXL+zE/SnGiWtYZZvDtzpGw9PGfR/ociAObNQe/dPqX04T
-         SJIpSfFP5w4Y6Ai61vHuoLnry5fwfaIOnBlxX6JQ+vV9amhBVXCPXJ5cRV1D4hSoX+
-         tYWCz+CaKh4d2ECF9guBEEjKhc3GkeAYTy+d3YsqWRYK1L2nlo8qz42rFzyhIeJAcS
-         SzhYzn31cV/D47Fhg95jVVnEgs4oebocLgXZJ8CFm6pVQPkU6dFMxKy0jYcAfTQUz5
-         FaSulCwcSS4sd0Wpj9y0le9jwfUwDZ0WDQ/UjyaxCx7nhMkJUm+EXpgYY0ZE2bPFtD
-         OWLhPXqqNvKNA==
+        b=QSv5FyWJT/GViSc6Q+heyZ8j7KBHQdYNi702iuXY93QpbIK8+cnC1/xs1fPqbG58v
+         e6vroDclZEHhpG8z930B+6RnjE6pxRdRheOjDERiTlCPXYw0dKRl/osJFl0dJ7sNUE
+         Px1nspje6+TNsaj4136ofXsWxxFYjDH8U2ju5L0Ojvt8dgSf3V+v+vdWvuSEjDzgYY
+         YQdcBHMVRkrubGz4B1AyJvqKTdLgyZmSVHYaOIx4vmCVvThySszg6LE8Qrp3L79A9H
+         3GL58F3a3RcFjqPKkSMJWLi/vuQgglOYJp7SqiW4X+yffj71IIwTNDgVkuUFH2bA9A
+         rhVu2sLFjEiDw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left8-000SBr-2V; Thu, 06 May 2021 17:26:06 +0200
+        id 1left8-000SBj-0I; Thu, 06 May 2021 17:26:06 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v5 13/25] media: venus: core: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:25:51 +0200
-Message-Id: <492e148ae1c7b0a8858c1670037925d3e4adb719.1620314616.git.mchehab+huawei@kernel.org>
+        Rick Chang <rick.chang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v5 11/25] media: mtk-jpeg: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:25:49 +0200
+Message-Id: <55b1ee0dc3c77c721eb7773666578cdf37908ee2.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -65,24 +65,31 @@ Use the new API, in order to cleanup the error check logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/pm_helpers.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index c7e1ebec47ee..d0fddf5e9a69 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -990,9 +990,8 @@ static int core_power_v4(struct venus_core *core, int on)
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index 88a23bce569d..a89c7b206eef 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -920,7 +920,7 @@ static void mtk_jpeg_enc_device_run(void *priv)
+ 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
  
- 	if (on == POWER_ON) {
- 		if (pmctrl) {
--			ret = pm_runtime_get_sync(pmctrl);
-+			ret = pm_runtime_resume_and_get(pmctrl);
- 			if (ret < 0) {
--				pm_runtime_put_noidle(pmctrl);
- 				return ret;
- 			}
- 		}
+-	ret = pm_runtime_get_sync(jpeg->dev);
++	ret = pm_runtime_resume_and_get(jpeg->dev);
+ 	if (ret < 0)
+ 		goto enc_end;
+ 
+@@ -973,7 +973,7 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 		return;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(jpeg->dev);
++	ret = pm_runtime_resume_and_get(jpeg->dev);
+ 	if (ret < 0)
+ 		goto dec_end;
+ 
 -- 
 2.30.2
 
