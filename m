@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9352C43460
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF72DC433ED
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 842D961460
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:26:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1CA661582
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbhEFP1y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:27:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40886 "EHLO mail.kernel.org"
+        id S235248AbhEFP15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:27:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235255AbhEFP1m (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235326AbhEFP1m (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FD526193D;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC77561943;
         Thu,  6 May 2021 15:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314783;
-        bh=tu2hhB6CHAZbCfvPd96Qq+9zsUaGe3IxV7AH+2XbuEs=;
+        bh=jFh5VbnuBrXc2tgtFwOIhvEafKERvRJMCTg4uhxmLFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QSv5FyWJT/GViSc6Q+heyZ8j7KBHQdYNi702iuXY93QpbIK8+cnC1/xs1fPqbG58v
-         e6vroDclZEHhpG8z930B+6RnjE6pxRdRheOjDERiTlCPXYw0dKRl/osJFl0dJ7sNUE
-         Px1nspje6+TNsaj4136ofXsWxxFYjDH8U2ju5L0Ojvt8dgSf3V+v+vdWvuSEjDzgYY
-         YQdcBHMVRkrubGz4B1AyJvqKTdLgyZmSVHYaOIx4vmCVvThySszg6LE8Qrp3L79A9H
-         3GL58F3a3RcFjqPKkSMJWLi/vuQgglOYJp7SqiW4X+yffj71IIwTNDgVkuUFH2bA9A
-         rhVu2sLFjEiDw==
+        b=gQ+EcUNziXJldC44cpFfwrxjpi3vgg891yyIz1m2ZwRSEjOUjKbObc7e9Btk8f/MR
+         DxJ4XFGfBGrkQsXYvtBhnjaxT7DjbiHPJiFmKnmKmWn2WQn/FqKFYOMO3VkLe/a9a8
+         KU5xdawuNarZygF7ewP+L6Eddsy2qf17fUBz0WVNduBZLYAh7ZR8X+KVqKZz3xqpho
+         Cj32oT3oXqvalfuGHW1YIKkD1ue30rHLHo9CDaDu23KU5wkVnKrIaI5iP/wzGnPbvX
+         7dq9aNlSL/jbrmn6RM/8EcCsVUyDHKHQmv7ONcw8WX3nMJAMt1rInW9jy7V0CprGBj
+         RRUFayVciaTFg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left8-000SBj-0I; Thu, 06 May 2021 17:26:06 +0200
+        id 1left8-000SCB-82; Thu, 06 May 2021 17:26:06 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rick Chang <rick.chang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v5 11/25] media: mtk-jpeg: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:25:49 +0200
-Message-Id: <55b1ee0dc3c77c721eb7773666578cdf37908ee2.1620314616.git.mchehab+huawei@kernel.org>
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: [PATCH v5 18/25] media: s3c-camif: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:25:56 +0200
+Message-Id: <40b44b0945e39b7633b31c6c6e27c7d701dc2691.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -63,33 +62,50 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
+Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/s3c-camif/camif-capture.c | 2 +-
+ drivers/media/platform/s3c-camif/camif-core.c    | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index 88a23bce569d..a89c7b206eef 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-@@ -920,7 +920,7 @@ static void mtk_jpeg_enc_device_run(void *priv)
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
- 
--	ret = pm_runtime_get_sync(jpeg->dev);
-+	ret = pm_runtime_resume_and_get(jpeg->dev);
+diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
+index 9ca49af29542..62241ec3b978 100644
+--- a/drivers/media/platform/s3c-camif/camif-capture.c
++++ b/drivers/media/platform/s3c-camif/camif-capture.c
+@@ -547,7 +547,7 @@ static int s3c_camif_open(struct file *file)
  	if (ret < 0)
- 		goto enc_end;
+ 		goto unlock;
  
-@@ -973,7 +973,7 @@ static void mtk_jpeg_dec_device_run(void *priv)
- 		return;
- 	}
- 
--	ret = pm_runtime_get_sync(jpeg->dev);
-+	ret = pm_runtime_resume_and_get(jpeg->dev);
+-	ret = pm_runtime_get_sync(camif->dev);
++	ret = pm_runtime_resume_and_get(camif->dev);
  	if (ret < 0)
- 		goto dec_end;
+ 		goto err_pm;
  
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index 4c3c00d59c92..e1d51fd3e700 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -460,9 +460,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(dev);
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0)
+-		goto err_pm;
++		goto err_disable;
+ 
+ 	ret = camif_media_dev_init(camif);
+ 	if (ret < 0)
+@@ -502,6 +502,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	camif_unregister_media_entities(camif);
+ err_pm:
+ 	pm_runtime_put(dev);
++err_disable:
+ 	pm_runtime_disable(dev);
+ 	camif_clk_put(camif);
+ err_clk:
 -- 
 2.30.2
 
