@@ -7,47 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12285C43462
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 857D5C433ED
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD2C8613C7
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E9D0613EA
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbhEFP2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:28:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41066 "EHLO mail.kernel.org"
+        id S235649AbhEFP2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:28:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235573AbhEFP1y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235200AbhEFP1y (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B58F26101D;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E72E1613C7;
         Thu,  6 May 2021 15:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620314799;
-        bh=MXpnKbLLJHoaKaSDG9Nm2cU25Bmpfhlpa/FbF9E3XvE=;
+        s=k20201202; t=1620314800;
+        bh=4K87ljT9ixqFdaKF30WMhbJexV0Sw0oEND6zL2GFWyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W8ip/QxH+Y0Etz5pdi/g8HQMWk5RcQl3yV626phIa7/INWQEP7huliglW1N5k5vKa
-         Lxk8oKnLEHOGbZ7hu48dwEFxZ3XWfclHeA3g4OdJcAqneWqIM1Ai8ru2JgGYSma2Pf
-         vxXdqNxQlboOkM+xfovZ92fvT0AByRGoWaJbVLvmqPFa18Dzgb61fzCGV+TVPBwDzP
-         Yxd7NAqDG8GFh9Ldnm8zwkyKynfQ/bgWmoFS6N7LXqPGNGnxwiDlyf/j30IlaDewrI
-         LM1w9YAYx+v0XkIKrutyF2LSdBNU+URCHf2pufpsRsN7/Lq4Bt3H1oOls7XXcV4+l/
-         KDnAFT/pXUoag==
+        b=lLnjGGdtKuEp8Ae3/TLwodZT6L9J0mJGUVHCcp7oiubnKJP1SN9PJ3SE5sOvTz8H/
+         jtqudlwpiO/23UqSTQDZCt3Pxq74xnaA+uOZSx30VRKccvIgAmiR7OvNO41C7iwNCX
+         W0nzOB/wuyooRIvmkyzcbQ9DSP6HcVP6KcQ27M8XVL010CcUA/yY/vBCxdYUp3/OfM
+         24y8PK3CbqFAx8Q5+64Omd3C05O4QRwUlx1qdkNm1bi5pXwl139s9xdyxK1ATvE6dO
+         jBEjXvCS2XTutIlFerMoPnUREcvkAO4FXTnUiw5jxlHJn/6YDUiJtAjCcaB7tzyKh8
+         JtYHol86iAkxQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left7-000SBD-O8; Thu, 06 May 2021 17:26:05 +0200
+        id 1left7-000SBT-SM; Thu, 06 May 2021 17:26:05 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 03/25] staging: media: ipu3: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:25:41 +0200
-Message-Id: <a32caa4bce0341ab99a4440a431b4aebd55f8498.1620314616.git.mchehab+huawei@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v5 07/25] media: rockchip/rga: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:25:45 +0200
+Message-Id: <ce18a4f9ca1bdcf4c68e77eaa410ec03a6ec8fe2.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -65,28 +63,43 @@ dev->power.usage_count decrement on errors.
 
 Use the new API, in order to cleanup the error check logic.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/ipu3/ipu3.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/rockchip/rga/rga-buf.c | 3 +--
+ drivers/media/platform/rockchip/rga/rga.c     | 4 +++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
-index ee1bba6bdcac..8e1e9e46e604 100644
---- a/drivers/staging/media/ipu3/ipu3.c
-+++ b/drivers/staging/media/ipu3/ipu3.c
-@@ -392,10 +392,9 @@ int imgu_s_stream(struct imgu_device *imgu, int enable)
+diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
+index bf9a75b75083..81508ed5abf3 100644
+--- a/drivers/media/platform/rockchip/rga/rga-buf.c
++++ b/drivers/media/platform/rockchip/rga/rga-buf.c
+@@ -79,9 +79,8 @@ static int rga_buf_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct rockchip_rga *rga = ctx->rga;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(rga->dev);
++	ret = pm_runtime_resume_and_get(rga->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(rga->dev);
+ 		rga_buf_return_buffers(q, VB2_BUF_STATE_QUEUED);
+ 		return ret;
+ 	}
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 9d122429706e..bf3fd71ec3af 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -866,7 +866,9 @@ static int rga_probe(struct platform_device *pdev)
+ 		goto unreg_video_dev;
  	}
  
- 	/* Set Power */
--	r = pm_runtime_get_sync(dev);
-+	r = pm_runtime_resume_and_get(dev);
- 	if (r < 0) {
- 		dev_err(dev, "failed to set imgu power\n");
--		pm_runtime_put(dev);
- 		return r;
- 	}
+-	pm_runtime_get_sync(rga->dev);
++	ret = pm_runtime_resume_and_get(rga->dev);
++	if (ret < 0)
++		goto unreg_video_dev;
  
+ 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
+ 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
 -- 
 2.30.2
 
