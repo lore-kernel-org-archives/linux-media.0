@@ -4,46 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A454FC433B4
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7675DC43461
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E58261948
-	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4502B6195D
+	for <linux-media@archiver.kernel.org>; Thu,  6 May 2021 15:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbhEFP2A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 May 2021 11:28:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40896 "EHLO mail.kernel.org"
+        id S235537AbhEFP2C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 May 2021 11:28:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235402AbhEFP1n (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235397AbhEFP1n (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 6 May 2021 11:27:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BBB646194D;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B5D566194B;
         Thu,  6 May 2021 15:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620314783;
-        bh=RAO7dmVKLQDcH6CylVWp9ikY4d/9xR0RnopNUcB5ryI=;
+        bh=wdynVwwhyvqKibF+xyVsNRL7Ix8YvvILE1Sgr+qtqMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDxRrtQ90nN3tyyyAw1+n/qyklcK+N18nA2ub2ElEnoEKKYe47m1XebwIoqeyrwOH
-         E1I39n2UtxUvdqCbNQCncGSNXqSNdsemO1dGTM5IXnvVpo9m+9asVGGCaovxtyn0Mx
-         OrfqrsvocpVdDjq3wMQGnqq44hLYFxdEGxxvVKFT1LXYpny+QBtNZSfAfR/+jbLJw+
-         NInGIBtAk94f4ZHicGV+1a4CvFqmvO+zeS0KC9+7rUeR2M3NODJLSc6uFPEk9u7hRt
-         ne6bMxW/yEC0pzYMhtEartKRGZEJb+SWuwS0+49CxQHIlGOIO50yZFs0CURaTrPAsb
-         nBHsa5X04GSLQ==
+        b=FZA9vxsVPgowDNDMECE5SIhOIlVa0SllblA1ErFoi7bSAHC3VEnKWHfTbWdCRwZQ5
+         Tap/RCoJiKXB5/1H87SejKwxRTv5zL6eerQvJCpfCFLnjdQiUwPtKsx+PZ7KsB6W6V
+         dfXefOJOFcvkOWOu3UDsR9PmiNbiP7g6zyWYz7CraESJe5IQi4EoNTj56mYXgOXxjp
+         fv6GQcaZe0J1O4Ugt9Z6sCPC7i0oKerjWcfOJ3NbtHhGCEu7IyHLGAxl/ev+ctg9KS
+         YzLQhHGHsP0wWYUvKYttKnrjWrGI+FM+RJSYsmAzLUki/ItZIea4v6z1yxNaqeobgM
+         q9rg4Dkm5NaPQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1left7-000SBX-TN; Thu, 06 May 2021 17:26:05 +0200
+        id 1left8-000SBn-1K; Thu, 06 May 2021 17:26:06 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 08/25] media: sti/hva: use pm_runtime_resume_and_get()
-Date:   Thu,  6 May 2021 17:25:46 +0200
-Message-Id: <dea27c7d3df661302e08c1749d95dd9df01e71d2.1620314616.git.mchehab+huawei@kernel.org>
+        Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v5 12/25] media: camss: use pm_runtime_resume_and_get()
+Date:   Thu,  6 May 2021 17:25:50 +0200
+Message-Id: <d4ebcafa976ee6ea8328ddcbb0f3627938a81253.1620314616.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620314616.git.mchehab+huawei@kernel.org>
 References: <cover.1620314616.git.mchehab+huawei@kernel.org>
@@ -59,89 +62,95 @@ Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 added pm_runtime_resume_and_get() in order to automatically handle
 dev->power.usage_count decrement on errors.
 
-While the hva driver does it right, there are lots of errors
-on other drivers due to its misusage. So, let's change
-this driver to also use pm_runtime_resume_and_get(), as we're
-doing similar changes all over the media subsystem.
+Use the new API, in order to cleanup the error check logic.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid.c   | 6 ++----
+ drivers/media/platform/qcom/camss/camss-csiphy.c | 6 ++----
+ drivers/media/platform/qcom/camss/camss-ispif.c  | 6 ++----
+ drivers/media/platform/qcom/camss/camss-vfe.c    | 5 +++--
+ 4 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index f59811e27f51..77b8bfa5e0c5 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -270,9 +270,8 @@ static unsigned long int hva_hw_get_ip_version(struct hva_dev *hva)
- 	struct device *dev = hva_to_dev(hva);
- 	unsigned long int version;
- 
--	if (pm_runtime_get_sync(dev) < 0) {
-+	if (pm_runtime_resume_and_get(dev) < 0) {
- 		dev_err(dev, "%s     failed to get pm_runtime\n", HVA_PREFIX);
--		pm_runtime_put_noidle(dev);
- 		mutex_unlock(&hva->protect_mutex);
- 		return -EFAULT;
- 	}
-@@ -386,10 +385,10 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_enable(dev);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "%s     failed to set PM\n", HVA_PREFIX);
--		goto err_pm;
-+		goto err_clk;
- 	}
- 
- 	/* check IP hardware version */
-@@ -462,6 +461,7 @@ int hva_hw_execute_task(struct hva_ctx *ctx, enum hva_hw_cmd_type cmd,
- 	u8 client_id = ctx->id;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index cc11fbfdae13..d2a7f2a64f26 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -156,11 +156,9 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
  	int ret;
- 	u32 reg = 0;
-+	bool got_pm = false;
  
- 	mutex_lock(&hva->protect_mutex);
+ 	if (on) {
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			return ret;
+-		}
  
-@@ -469,12 +469,13 @@ int hva_hw_execute_task(struct hva_ctx *ctx, enum hva_hw_cmd_type cmd,
- 	enable_irq(hva->irq_its);
- 	enable_irq(hva->irq_err);
+ 		ret = regulator_enable(csid->vdda);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index b3c3bf19e522..8e18b8e668cf 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -197,11 +197,9 @@ static int csiphy_set_power(struct v4l2_subdev *sd, int on)
+ 	if (on) {
+ 		int ret;
  
--	if (pm_runtime_get_sync(dev) < 0) {
-+	if (pm_runtime_resume_and_get(dev) < 0) {
- 		dev_err(dev, "%s     failed to get pm_runtime\n", ctx->name);
- 		ctx->sys_errors++;
- 		ret = -EFAULT;
- 		goto out;
- 	}
-+	got_pm = true;
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			return ret;
+-		}
  
- 	reg = readl_relaxed(hva->regs + HVA_HIF_REG_CLK_GATING);
- 	switch (cmd) {
-@@ -537,7 +538,8 @@ int hva_hw_execute_task(struct hva_ctx *ctx, enum hva_hw_cmd_type cmd,
- 		dev_dbg(dev, "%s     unknown command 0x%x\n", ctx->name, cmd);
- 	}
+ 		ret = csiphy_set_clock_rates(csiphy);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index 37611c8861da..d9907742ba79 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -372,11 +372,9 @@ static int ispif_set_power(struct v4l2_subdev *sd, int on)
+ 			goto exit;
+ 		}
  
--	pm_runtime_put_autosuspend(dev);
-+	if (got_pm)
-+		pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&hva->protect_mutex);
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
+-			pm_runtime_put_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0)
+ 			goto exit;
+-		}
  
- 	return ret;
-@@ -553,9 +555,8 @@ void hva_hw_dump_regs(struct hva_dev *hva, struct seq_file *s)
+ 		ret = camss_enable_clocks(ispif->nclocks, ispif->clock, dev);
+ 		if (ret < 0) {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 15695fd466c4..cf743e61f798 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -584,9 +584,9 @@ static int vfe_get(struct vfe_device *vfe)
+ 		if (ret < 0)
+ 			goto error_pm_domain;
  
- 	mutex_lock(&hva->protect_mutex);
+-		ret = pm_runtime_get_sync(vfe->camss->dev);
++		ret = pm_runtime_resume_and_get(vfe->camss->dev);
+ 		if (ret < 0)
+-			goto error_pm_runtime_get;
++			goto error_domain_off;
  
--	if (pm_runtime_get_sync(dev) < 0) {
-+	if (pm_runtime_resume_and_get(dev) < 0) {
- 		seq_puts(s, "Cannot wake up IP\n");
--		pm_runtime_put_noidle(dev);
- 		mutex_unlock(&hva->protect_mutex);
- 		return;
- 	}
+ 		ret = vfe_set_clock_rates(vfe);
+ 		if (ret < 0)
+@@ -620,6 +620,7 @@ static int vfe_get(struct vfe_device *vfe)
+ 
+ error_pm_runtime_get:
+ 	pm_runtime_put_sync(vfe->camss->dev);
++error_domain_off:
+ 	vfe->ops->pm_domain_off(vfe);
+ 
+ error_pm_domain:
 -- 
 2.30.2
 
