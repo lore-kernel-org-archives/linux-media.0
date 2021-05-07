@@ -2,234 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C2AC433B4
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 07:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653BBC433B4
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 07:55:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F53661457
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 07:46:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20D1F61431
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 07:55:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbhEGHrT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 May 2021 03:47:19 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:50355 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235644AbhEGHrS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 May 2021 03:47:18 -0400
-X-UUID: 62706ea722014782a04f4311e7cc5cf4-20210507
-X-UUID: 62706ea722014782a04f4311e7cc5cf4-20210507
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <louis.kuo@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 902719970; Fri, 07 May 2021 15:46:13 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 7 May 2021 15:46:11 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 May 2021 15:46:11 +0800
-From:   Louis Kuo <louis.kuo@mediatek.com>
-To:     <sakari.ailus@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>, <mchehab@kernel.org>,
-        <matthias.bgg@gmail.com>, <hverkuil-cisco@xs4all.nl>,
-        <arnd@arndb.de>, <louis.kuo@mediatek.com>,
-        <sergey.senozhatsky@gmail.com>, <helen.koike@collabora.com>,
-        <niklas.soderlund+renesas@ragnatech.se>, <yepeilin.cs@gmail.com>
-CC:     <frederic.chen@mediatek.com>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [RESENT PATCH V0 1/4] media: v4l2-core: extend the v4l2 format to support request
-Date:   Fri, 7 May 2021 15:46:01 +0800
-Message-ID: <20210507074604.15079-2-louis.kuo@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210507074604.15079-1-louis.kuo@mediatek.com>
-References: <20210507074604.15079-1-louis.kuo@mediatek.com>
+        id S232038AbhEGH4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 May 2021 03:56:05 -0400
+Received: from mga04.intel.com ([192.55.52.120]:15520 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229936AbhEGH4E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 7 May 2021 03:56:04 -0400
+IronPort-SDR: JOQIFHLG2QcBQ9Ao0YDfAoUZGJM7756Hi8njoLBUfTUETdsnb/3+88gBQPCSKqPY9ul01Do1LV
+ 69TaqQ05IGFw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9976"; a="196657145"
+X-IronPort-AV: E=Sophos;i="5.82,280,1613462400"; 
+   d="scan'208";a="196657145"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2021 00:55:02 -0700
+IronPort-SDR: WaY1sNv/ukokJjPp8wct3T3eaLAIYMWYD6XbFJeXqKJmH6FT51vPPZIZ65FQsn0dz9oIjA2NDd
+ i49gApZFjxbg==
+X-IronPort-AV: E=Sophos;i="5.82,280,1613462400"; 
+   d="scan'208";a="434799232"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2021 00:55:00 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 63DEC203BC;
+        Fri,  7 May 2021 10:54:58 +0300 (EEST)
+Date:   Fri, 7 May 2021 10:54:58 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: media: atomisp: remove useless breaks
+Message-ID: <20210507075458.GB3@paasikivi.fi.intel.com>
+References: <20210506200956.16593-1-paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 1590EAC639185F97FF7E7A490355A9923F682F90A2528AD627AE965E692FF2B72000:8
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210506200956.16593-1-paskripkin@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch is to extend the related interface to support the request-based
-operations. We added request fd to the parameters of MEDIA_IOC_SETUP_LINK,
-VIDIOC_S_FMT, VIDIOC_SUBDEV_S_SELECTION, VIDIOC_SUBDEV_S_FMT.
-The driver uses media_request_get_by_fd() to retrieve the media request and
-save the pending change in it, so that we can apply the pending change in
-req_queue() callback then.
+Hi Pavel,
 
-Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
----
- drivers/media/mc/mc-device.c         | 7 ++++++-
- drivers/media/v4l2-core/v4l2-ioctl.c | 8 ++++----
- include/media/media-entity.h         | 3 +++
- include/uapi/linux/media.h           | 3 ++-
- include/uapi/linux/v4l2-subdev.h     | 3 ++-
- include/uapi/linux/videodev2.h       | 8 ++++++--
- 6 files changed, 23 insertions(+), 9 deletions(-)
+On Thu, May 06, 2021 at 11:09:56PM +0300, Pavel Skripkin wrote:
+> Breaks are not useful after a return, they can
+> simply be removed.
+> 
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>  .../pci/hive_isp_css_common/host/input_system.c       | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+> index 0f5a231672a8..fd82997b11cc 100644
+> --- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+> +++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+> @@ -904,16 +904,12 @@ static input_system_err_t input_system_configure_channel(
+>  			break;
+>  		case INPUT_SYSTEM_SOURCE_TPG:
+>  			return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -			break;
+>  		case INPUT_SYSTEM_SOURCE_PRBS:
+>  			return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -			break;
+>  		case INPUT_SYSTEM_SOURCE_FIFO:
+>  			return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
 
-diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-index 9e56d2ad6b94..f46ae4c38102 100644
---- a/drivers/media/mc/mc-device.c
-+++ b/drivers/media/mc/mc-device.c
-@@ -203,6 +203,7 @@ static long media_device_setup_link(struct media_device *mdev, void *arg)
- 	struct media_link *link = NULL;
- 	struct media_entity *source;
- 	struct media_entity *sink;
-+	int ret;
- 
- 	/* Find the source and sink entities and link.
- 	 */
-@@ -221,10 +222,14 @@ static long media_device_setup_link(struct media_device *mdev, void *arg)
- 	if (link == NULL)
- 		return -EINVAL;
- 
-+	link->request_fd = linkd->request_fd;
- 	memset(linkd->reserved, 0, sizeof(linkd->reserved));
- 
- 	/* Setup the link on both entities. */
--	return __media_entity_setup_link(link, linkd->flags);
-+	ret = __media_entity_setup_link(link, linkd->flags);
-+	link->request_fd = 0;
-+
-+	return ret;
- }
- 
- static long media_device_get_topology(struct media_device *mdev, void *arg)
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 2673f51aafa4..823ebd175f3a 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1634,7 +1634,7 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 		if (unlikely(!ops->vidioc_s_fmt_vid_cap_mplane))
- 			break;
--		CLEAR_AFTER_FIELD(p, fmt.pix_mp.xfer_func);
-+		CLEAR_AFTER_FIELD(p, fmt.pix_mp.request_fd);
- 		for (i = 0; i < p->fmt.pix_mp.num_planes; i++)
- 			CLEAR_AFTER_FIELD(&p->fmt.pix_mp.plane_fmt[i],
- 					  bytesperline);
-@@ -1665,7 +1665,7 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
- 		if (unlikely(!ops->vidioc_s_fmt_vid_out_mplane))
- 			break;
--		CLEAR_AFTER_FIELD(p, fmt.pix_mp.xfer_func);
-+		CLEAR_AFTER_FIELD(p, fmt.pix_mp.request_fd);
- 		for (i = 0; i < p->fmt.pix_mp.num_planes; i++)
- 			CLEAR_AFTER_FIELD(&p->fmt.pix_mp.plane_fmt[i],
- 					  bytesperline);
-@@ -1736,7 +1736,7 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 		if (unlikely(!ops->vidioc_try_fmt_vid_cap_mplane))
- 			break;
--		CLEAR_AFTER_FIELD(p, fmt.pix_mp.xfer_func);
-+		CLEAR_AFTER_FIELD(p, fmt.pix_mp.request_fd);
- 		for (i = 0; i < p->fmt.pix_mp.num_planes; i++)
- 			CLEAR_AFTER_FIELD(&p->fmt.pix_mp.plane_fmt[i],
- 					  bytesperline);
-@@ -1767,7 +1767,7 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
- 		if (unlikely(!ops->vidioc_try_fmt_vid_out_mplane))
- 			break;
--		CLEAR_AFTER_FIELD(p, fmt.pix_mp.xfer_func);
-+		CLEAR_AFTER_FIELD(p, fmt.pix_mp.request_fd);
- 		for (i = 0; i < p->fmt.pix_mp.num_planes; i++)
- 			CLEAR_AFTER_FIELD(&p->fmt.pix_mp.plane_fmt[i],
- 					  bytesperline);
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 09737b47881f..30ad665c4413 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -128,6 +128,8 @@ struct media_pipeline {
-  *		link.
-  * @flags:	Link flags, as defined in uapi/media.h (MEDIA_LNK_FL_*)
-  * @is_backlink: Indicate if the link is a backlink.
-+ * @request_fd: The media request triggered the media link change, it is only
-+ *		meaningful in media_device_setup_link()
-  */
- struct media_link {
- 	struct media_gobj graph_obj;
-@@ -145,6 +147,7 @@ struct media_link {
- 	struct media_link *reverse;
- 	unsigned long flags;
- 	bool is_backlink;
-+	int request_fd;
- };
- 
- /**
-diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-index 200fa8462b90..a331f80afe2d 100644
---- a/include/uapi/linux/media.h
-+++ b/include/uapi/linux/media.h
-@@ -231,7 +231,8 @@ struct media_link_desc {
- 	struct media_pad_desc source;
- 	struct media_pad_desc sink;
- 	__u32 flags;
--	__u32 reserved[2];
-+	__s32 request_fd;
-+	__u32 reserved[1];
- };
- 
- struct media_links_enum {
-diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-index 658106f5b5dc..d6ffd5981c68 100644
---- a/include/uapi/linux/v4l2-subdev.h
-+++ b/include/uapi/linux/v4l2-subdev.h
-@@ -50,7 +50,8 @@ struct v4l2_subdev_format {
- 	__u32 which;
- 	__u32 pad;
- 	struct v4l2_mbus_framefmt format;
--	__u32 reserved[8];
-+	__s32 request_fd;
-+	__u32 reserved[7];
- };
- 
- /**
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 311a01cc5775..6641194b3fab 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1246,6 +1246,7 @@ struct v4l2_crop {
-  *		defined in v4l2-common.h; V4L2_SEL_TGT_* .
-  * @flags:	constraints flags, defined in v4l2-common.h; V4L2_SEL_FLAG_*.
-  * @r:		coordinates of selection window
-+ * @request_fd: fd of the request that trigger the set selection operation
-  * @reserved:	for future use, rounds structure size to 64 bytes, set to zero
-  *
-  * Hardware may use multiple helper windows to process a video stream.
-@@ -1257,7 +1258,8 @@ struct v4l2_selection {
- 	__u32			target;
- 	__u32                   flags;
- 	struct v4l2_rect        r;
--	__u32                   reserved[9];
-+	__s32			request_fd;
-+	__u32                   reserved[8];
- };
- 
- 
-@@ -2266,6 +2268,7 @@ struct v4l2_plane_pix_format {
-  * @hsv_enc:		enum v4l2_hsv_encoding, HSV encoding
-  * @quantization:	enum v4l2_quantization, colorspace quantization
-  * @xfer_func:		enum v4l2_xfer_func, colorspace transfer function
-+ * @request_fd:	fd of the request that trigger the set format operation
-  * @reserved:		drivers and applications must zero this array
-  */
- struct v4l2_pix_format_mplane {
-@@ -2284,7 +2287,8 @@ struct v4l2_pix_format_mplane {
- 	};
- 	__u8				quantization;
- 	__u8				xfer_func;
--	__u8				reserved[7];
-+	__s32				request_fd;
-+	__u8				reserved[3];
- } __attribute__ ((packed));
- 
- /**
+While at it, you could drop the individual return statements, too. There
+seems to be another such location at the end of the patch.
+
+> -			break;
+>  		default:
+>  			return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -			break;
+>  		}
+>  
+>  		if (error != INPUT_SYSTEM_ERR_NO_ERROR) return error;
+> @@ -995,7 +991,6 @@ static input_system_err_t input_buffer_configuration(void)
+>  			default:
+>  				config.csi_buffer_flags[port] |= INPUT_SYSTEM_CFG_FLAG_CONFLICT;
+>  				return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -				break;
+>  			}
+>  
+>  			// Check acquisition buffer specified but set it later since it has to be unique.
+> @@ -1032,7 +1027,6 @@ static input_system_err_t input_buffer_configuration(void)
+>  
+>  			default:
+>  				return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -				break;
+>  			}
+>  		} else {
+>  			config.csi_buffer_flags[port] = INPUT_SYSTEM_CFG_FLAG_BLOCKED;
+> @@ -1319,7 +1313,6 @@ static input_system_err_t configuration_to_registers(void)
+>  
+>  	default:
+>  		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -		break;
+>  
+>  	} // end of switch (source_type)
+>  
+> @@ -1696,16 +1689,12 @@ static input_system_err_t input_system_configure_channel_sensor(
+>  		break;
+>  	case INPUT_SYSTEM_FIFO_CAPTURE_WITH_COUNTING:
+>  		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -		break;
+>  	case INPUT_SYSTEM_XMEM_CAPTURE:
+>  		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -		break;
+>  	case INPUT_SYSTEM_XMEM_ACQUIRE:
+>  		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -		break;
+>  	default:
+>  		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+> -		break;
+>  	}
+>  	return INPUT_SYSTEM_ERR_NO_ERROR;
+>  }
+
 -- 
-2.18.0
+Regards,
 
+Sakari Ailus
