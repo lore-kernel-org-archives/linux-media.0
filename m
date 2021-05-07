@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF2AFC433B4
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0715CC433ED
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CF4C61460
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:36:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6FA061448
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236547AbhEGMh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 May 2021 08:37:57 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59646 "EHLO
+        id S236576AbhEGMh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 May 2021 08:37:59 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59674 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbhEGMhz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 May 2021 08:37:55 -0400
+        with ESMTP id S231179AbhEGMh6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 May 2021 08:37:58 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 565C23F2;
-        Fri,  7 May 2021 14:36:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 76396ACF;
+        Fri,  7 May 2021 14:36:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1620391015;
-        bh=eb7mpxApR5OHhlGD+jZHmLIcDgnPN+JenNNDLJFhBA4=;
+        s=mail; t=1620391017;
+        bh=gPqOehCOXtQl0eZutBhG4bcicx/yMEw/Ao33NCZDPDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DjQhDelgK5WjqNT01lJ1Tgs5MhK8BKyOvtVEQd/bijciKeMs/Ewoh1NiovcYxp2Cy
-         PCIcbr2eOLEvtjqwPORXfTw+DI9z4j3wqkOfjfdskvuRzz8bvRcQgXQuuG6ufEeAig
-         KWOSVwmc9w0pC+9j4bDta0EAOzjSNsETTL6ke6+o=
+        b=PINeq0kmDUz3yORG13DqAzSgxtceLDnA8AzzQ/lrJC/6+IPHDZw7FjJPNNd4rPuT/
+         LmUsowAt+yNHQn108TQ+UAuHUt9qYSzNVYVWBSZP+gJmU4Zgd+wwyCxCdWVbwOkr1Q
+         gSwsJ6/qwQ8o3i5kpvk3pIwO20eL4sS0iOPPq6xc=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -38,674 +38,285 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>, john.wei@mediatek.com,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [RFC 01/11] media: v4l2-subdev: add subdev-wide state struct
-Date:   Fri,  7 May 2021 15:35:48 +0300
-Message-Id: <20210507123558.146948-2-tomi.valkeinen@ideasonboard.com>
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [RFC 03/11] v4l: subdev: Add [GS]_ROUTING subdev ioctls and operations
+Date:   Fri,  7 May 2021 15:35:50 +0300
+Message-Id: <20210507123558.146948-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210507123558.146948-1-tomi.valkeinen@ideasonboard.com>
 References: <20210507123558.146948-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We have 'struct v4l2_subdev_pad_config' which contains configuration for
-a single pad used for the TRY functionality, and an array of those
-structs is passed to various v4l2_subdev_pad_ops.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I was working on subdev internal routing between pads, and realized that
-there's no way to add TRY functionality for routes, which is not pad
-specific configuration. Adding a separate struct for try-route config
-wouldn't work either, as e.g. set-fmt needs to know the try-route
-configuration to propagate the settings.
+Add support for subdev internal routing. A route is defined as a single
+stream from a sink pad to a source pad.
 
-This patch adds a new struct, 'struct v4l2_subdev_state' (which at the
-moment only contains the v4l2_subdev_pad_config array) and the new
-struct is used in most of the places where v4l2_subdev_pad_config was
-used. All v4l2_subdev_pad_ops functions taking v4l2_subdev_pad_config
-are changed to instead take v4l2_subdev_state.
+The userspace can configure the routing via two new ioctls,
+VIDIOC_SUBDEV_G_ROUTING and VIDIOC_SUBDEV_S_ROUTING, and subdevs can
+implement the functionality with v4l2_subdev_pad_ops.get_routing() and
+v4l2_subdev_pad_ops.set_routing().
 
-Two drivers are changed to work with the above changes (drivers for HW
-which I have) as an example.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 
-I worked on a semantic patch (included below, my first spatch...) to do
-this change to all drivers, but hit lots of problems with non-trivial
-uses of v4l2_subdev_pad_config.
+- Add sink and source streams for multiplexed links
+- Copy the argument back in case of an error. This is needed to let the
+  caller know the number of routes.
 
-As it looks like substantial amount of manual work is needed, I'm
-posting this RFC to get an ack on the changes before continuing that
-work.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-@ v4l2_subdev_pad_ops @
-identifier pad_ops;
-identifier func;
-@@
+- Expand and refine documentation.
+- Make the 'routes' pointer a __u64 __user pointer so that a compat32
+  version of the ioctl is not required.
+- Add struct v4l2_subdev_krouting to be used for subdevice operations.
 
-(
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .enum_mbus_code = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .enum_frame_size = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .enum_frame_interval = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .get_fmt = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .set_fmt = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .get_selection = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .set_selection = func,
-        ...,
-};
-|
-static const struct v4l2_subdev_pad_ops pad_ops = {
-        ...,
-        .init_cfg = func,
-        ...,
-};
-)
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-@@
-identifier v4l2_subdev_pad_ops.func;
-identifier sd;
-identifier cfg;
-@@
-
- func(struct v4l2_subdev *sd,
--	struct v4l2_subdev_pad_config *cfg,
-+	struct v4l2_subdev_state *cfg,
-	...
-      )
- {
-    ...
- }
-
-@@
-identifier v4l2_subdev_pad_ops.func;
-identifier sd;
-identifier cfg;
-@@
-
- func(struct v4l2_subdev *sd,
--   struct v4l2_subdev_pad_config *cfg
-+   struct v4l2_subdev_state *cfg
-      )
- {
-    ...
- }
-
-@@
-struct v4l2_subdev_fh *fh;
-@@
--    fh->pad
-+    &fh->cfg
-
-@@
-identifier func;
-identifier cfg;
-@@
-
-func(...,
-- struct v4l2_subdev_pad_config *cfg,
-+ struct v4l2_subdev_state *cfg,
- ...)
-{
-    ...
-}
-
-@@
-struct v4l2_subdev_state *cfg;
-@@
- {
-    <...
-(
--   cfg->try_fmt
-+   cfg->pad->try_fmt
-|
--   cfg->try_crop
-+   cfg->pad->try_crop
-|
--   cfg->try_compose
-+   cfg->pad->try_compose
-)
-    ...>
- }
-
-@@
-identifier pad_cfg;
-@@
-{
-    ...
-    struct v4l2_subdev_pad_config pad_cfg;
-+   struct v4l2_subdev_state cfg = { .pad = &pad_cfg };
-    <...
--   &pad_cfg
-+   &cfg
-    ...>
-}
+- Fix typecasing warnings
+- Check sink & source pad types
+- Add 'which' field
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 141 +++++++++++++++-----------
- include/media/v4l2-subdev.h           |  72 +++++++------
- 2 files changed, 120 insertions(+), 93 deletions(-)
+ drivers/media/v4l2-core/v4l2-ioctl.c  | 25 +++++++++++++-
+ drivers/media/v4l2-core/v4l2-subdev.c | 46 +++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 26 +++++++++++++++
+ include/uapi/linux/v4l2-subdev.h      | 48 +++++++++++++++++++++++++++
+ 4 files changed, 144 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 6ed218f10522..9fb2812799ec 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -16,6 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/version.h>
+ 
++#include <linux/v4l2-subdev.h>
+ #include <linux/videodev2.h>
+ 
+ #include <media/v4l2-common.h>
+@@ -3110,6 +3111,21 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+ 		ret = 1;
+ 		break;
+ 	}
++
++	case VIDIOC_SUBDEV_G_ROUTING:
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = parg;
++
++		if (routing->num_routes > 256)
++			return -EINVAL;
++
++		*user_ptr = u64_to_user_ptr(routing->routes);
++		*kernel_ptr = (void **)&routing->routes;
++		*array_size = sizeof(struct v4l2_subdev_route)
++			    * routing->num_routes;
++		ret = 1;
++		break;
++	}
+ 	}
+ 
+ 	return ret;
+@@ -3371,8 +3387,15 @@ video_usercopy(struct file *file, unsigned int orig_cmd, unsigned long arg,
+ 	/*
+ 	 * Some ioctls can return an error, but still have valid
+ 	 * results that must be returned.
++	 *
++	 * FIXME: subdev IOCTLS are partially handled here and partially in
++	 * v4l2-subdev.c and the 'always_copy' flag can only be set for IOCTLS
++	 * defined here as part of the 'v4l2_ioctls' array. As
++	 * VIDIOC_SUBDEV_G_ROUTING needs to return results to applications even
++	 * in case of failure, but it is not defined here as part of the
++	 * 'v4l2_ioctls' array, insert an ad-hoc check to address that.
+ 	 */
+-	if (err < 0 && !always_copy)
++	if (err < 0 && !always_copy && cmd != VIDIOC_SUBDEV_G_ROUTING)
+ 		goto out;
+ 
+ out_array_args:
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 956dafab43d4..bd996dcace3b 100644
+index bd996dcace3b..28e84453fe28 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -26,19 +26,21 @@
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
- static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
- {
--	if (sd->entity.num_pads) {
--		fh->pad = v4l2_subdev_alloc_pad_config(sd);
--		if (fh->pad == NULL)
--			return -ENOMEM;
--	}
-+	struct v4l2_subdev_state *state;
+@@ -683,6 +683,52 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 	case VIDIOC_SUBDEV_QUERYSTD:
+ 		return v4l2_subdev_call(sd, video, querystd, arg);
+ 
++	case VIDIOC_SUBDEV_G_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_krouting krouting = {
++			.which = routing->which,
++			.num_routes = routing->num_routes,
++			.routes = (struct v4l2_subdev_route *)(uintptr_t)
++					  routing->routes,
++		};
++		int ret;
 +
-+	state = v4l2_subdev_alloc_state(sd);
-+	if (IS_ERR(state))
-+		return PTR_ERR(state);
++		ret = v4l2_subdev_call(sd, pad, get_routing, subdev_fh->state, &krouting);
 +
-+	fh->state = state;
- 
- 	return 0;
- }
- 
- static void subdev_fh_free(struct v4l2_subdev_fh *fh)
- {
--	v4l2_subdev_free_pad_config(fh->pad);
--	fh->pad = NULL;
-+	v4l2_subdev_free_state(fh->state);
-+	fh->state = NULL;
- }
- 
- static int subdev_open(struct file *file)
-@@ -146,63 +148,63 @@ static inline int check_pad(struct v4l2_subdev *sd, u32 pad)
- 	return 0;
- }
- 
--static int check_cfg(u32 which, struct v4l2_subdev_pad_config *cfg)
-+static int check_cfg(u32 which, struct v4l2_subdev_state *state)
- {
--	if (which == V4L2_SUBDEV_FORMAT_TRY && !cfg)
-+	if (which == V4L2_SUBDEV_FORMAT_TRY && !state)
- 		return -EINVAL;
- 
- 	return 0;
- }
- 
- static inline int check_format(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg,
-+			       struct v4l2_subdev_state *state,
- 			       struct v4l2_subdev_format *format)
- {
- 	if (!format)
- 		return -EINVAL;
- 
- 	return check_which(format->which) ? : check_pad(sd, format->pad) ? :
--	       check_cfg(format->which, cfg);
-+	       check_cfg(format->which, state);
- }
- 
- static int call_get_fmt(struct v4l2_subdev *sd,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format)
- {
--	return check_format(sd, cfg, format) ? :
--	       sd->ops->pad->get_fmt(sd, cfg, format);
-+	return check_format(sd, state, format) ? :
-+	       sd->ops->pad->get_fmt(sd, state, format);
- }
- 
- static int call_set_fmt(struct v4l2_subdev *sd,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format)
- {
--	return check_format(sd, cfg, format) ? :
--	       sd->ops->pad->set_fmt(sd, cfg, format);
-+	return check_format(sd, state, format) ? :
-+	       sd->ops->pad->set_fmt(sd, state, format);
- }
- 
- static int call_enum_mbus_code(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg,
-+			       struct v4l2_subdev_state *state,
- 			       struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (!code)
- 		return -EINVAL;
- 
- 	return check_which(code->which) ? : check_pad(sd, code->pad) ? :
--	       check_cfg(code->which, cfg) ? :
--	       sd->ops->pad->enum_mbus_code(sd, cfg, code);
-+	       check_cfg(code->which, state) ? :
-+	       sd->ops->pad->enum_mbus_code(sd, state, code);
- }
- 
- static int call_enum_frame_size(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *state,
- 				struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (!fse)
- 		return -EINVAL;
- 
- 	return check_which(fse->which) ? : check_pad(sd, fse->pad) ? :
--	       check_cfg(fse->which, cfg) ? :
--	       sd->ops->pad->enum_frame_size(sd, cfg, fse);
-+	       check_cfg(fse->which, state) ? :
-+	       sd->ops->pad->enum_frame_size(sd, state, fse);
- }
- 
- static inline int check_frame_interval(struct v4l2_subdev *sd,
-@@ -229,42 +231,42 @@ static int call_s_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int call_enum_frame_interval(struct v4l2_subdev *sd,
--				    struct v4l2_subdev_pad_config *cfg,
-+				    struct v4l2_subdev_state *state,
- 				    struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	if (!fie)
- 		return -EINVAL;
- 
- 	return check_which(fie->which) ? : check_pad(sd, fie->pad) ? :
--	       check_cfg(fie->which, cfg) ? :
--	       sd->ops->pad->enum_frame_interval(sd, cfg, fie);
-+	       check_cfg(fie->which, state) ? :
-+	       sd->ops->pad->enum_frame_interval(sd, state, fie);
- }
- 
- static inline int check_selection(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *state,
- 				  struct v4l2_subdev_selection *sel)
- {
- 	if (!sel)
- 		return -EINVAL;
- 
- 	return check_which(sel->which) ? : check_pad(sd, sel->pad) ? :
--	       check_cfg(sel->which, cfg);
-+	       check_cfg(sel->which, state);
- }
- 
- static int call_get_selection(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *state,
- 			      struct v4l2_subdev_selection *sel)
- {
--	return check_selection(sd, cfg, sel) ? :
--	       sd->ops->pad->get_selection(sd, cfg, sel);
-+	return check_selection(sd, state, sel) ? :
-+	       sd->ops->pad->get_selection(sd, state, sel);
- }
- 
- static int call_set_selection(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *state,
- 			      struct v4l2_subdev_selection *sel)
- {
--	return check_selection(sd, cfg, sel) ? :
--	       sd->ops->pad->set_selection(sd, cfg, sel);
-+	return check_selection(sd, state, sel) ? :
-+	       sd->ops->pad->set_selection(sd, state, sel);
- }
- 
- static inline int check_edid(struct v4l2_subdev *sd,
-@@ -506,7 +508,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		memset(format->reserved, 0, sizeof(format->reserved));
- 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
--		return v4l2_subdev_call(sd, pad, get_fmt, subdev_fh->pad, format);
-+		return v4l2_subdev_call(sd, pad, get_fmt, subdev_fh->state, format);
- 	}
- 
- 	case VIDIOC_SUBDEV_S_FMT: {
-@@ -517,7 +519,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		memset(format->reserved, 0, sizeof(format->reserved));
- 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
--		return v4l2_subdev_call(sd, pad, set_fmt, subdev_fh->pad, format);
-+		return v4l2_subdev_call(sd, pad, set_fmt, subdev_fh->state, format);
- 	}
- 
- 	case VIDIOC_SUBDEV_G_CROP: {
-@@ -531,7 +533,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		sel.target = V4L2_SEL_TGT_CROP;
- 
- 		rval = v4l2_subdev_call(
--			sd, pad, get_selection, subdev_fh->pad, &sel);
-+			sd, pad, get_selection, subdev_fh->state, &sel);
- 
- 		crop->rect = sel.r;
- 
-@@ -553,7 +555,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		sel.r = crop->rect;
- 
- 		rval = v4l2_subdev_call(
--			sd, pad, set_selection, subdev_fh->pad, &sel);
-+			sd, pad, set_selection, subdev_fh->state, &sel);
- 
- 		crop->rect = sel.r;
- 
-@@ -564,7 +566,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		struct v4l2_subdev_mbus_code_enum *code = arg;
- 
- 		memset(code->reserved, 0, sizeof(code->reserved));
--		return v4l2_subdev_call(sd, pad, enum_mbus_code, subdev_fh->pad,
-+		return v4l2_subdev_call(sd, pad, enum_mbus_code, subdev_fh->state,
- 					code);
- 	}
- 
-@@ -572,7 +574,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		struct v4l2_subdev_frame_size_enum *fse = arg;
- 
- 		memset(fse->reserved, 0, sizeof(fse->reserved));
--		return v4l2_subdev_call(sd, pad, enum_frame_size, subdev_fh->pad,
-+		return v4l2_subdev_call(sd, pad, enum_frame_size, subdev_fh->state,
- 					fse);
- 	}
- 
-@@ -597,7 +599,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		struct v4l2_subdev_frame_interval_enum *fie = arg;
- 
- 		memset(fie->reserved, 0, sizeof(fie->reserved));
--		return v4l2_subdev_call(sd, pad, enum_frame_interval, subdev_fh->pad,
-+		return v4l2_subdev_call(sd, pad, enum_frame_interval, subdev_fh->state,
- 					fie);
- 	}
- 
-@@ -606,7 +608,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		memset(sel->reserved, 0, sizeof(sel->reserved));
- 		return v4l2_subdev_call(
--			sd, pad, get_selection, subdev_fh->pad, sel);
-+			sd, pad, get_selection, subdev_fh->state, sel);
- 	}
- 
- 	case VIDIOC_SUBDEV_S_SELECTION: {
-@@ -617,7 +619,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		memset(sel->reserved, 0, sizeof(sel->reserved));
- 		return v4l2_subdev_call(
--			sd, pad, set_selection, subdev_fh->pad, sel);
-+			sd, pad, set_selection, subdev_fh->state, sel);
- 	}
- 
- 	case VIDIOC_G_EDID: {
-@@ -892,35 +894,50 @@ int v4l2_subdev_link_validate(struct media_link *link)
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
- 
--struct v4l2_subdev_pad_config *
--v4l2_subdev_alloc_pad_config(struct v4l2_subdev *sd)
-+struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
- {
--	struct v4l2_subdev_pad_config *cfg;
-+	struct v4l2_subdev_state *state;
- 	int ret;
- 
--	if (!sd->entity.num_pads)
--		return NULL;
--
--	cfg = kvmalloc_array(sd->entity.num_pads, sizeof(*cfg),
--			     GFP_KERNEL | __GFP_ZERO);
--	if (!cfg)
--		return NULL;
-+	state = kzalloc(sizeof(*state), GFP_KERNEL);
-+	if (!state) {
-+		ret = -ENOMEM;
-+		goto err;
++		routing->num_routes = krouting.num_routes;
++
++		return ret;
 +	}
- 
--	ret = v4l2_subdev_call(sd, pad, init_cfg, cfg);
--	if (ret < 0 && ret != -ENOIOCTLCMD) {
--		kvfree(cfg);
--		return NULL;
-+	if (sd->entity.num_pads) {
-+		state->pads = kvmalloc_array(sd->entity.num_pads,
-+					     sizeof(*state->pads),
-+					     GFP_KERNEL | __GFP_ZERO);
-+		if (!state->pads) {
-+			ret = -ENOMEM;
-+			goto err;
++
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_route *routes =
++			(struct v4l2_subdev_route *)(uintptr_t)routing->routes;
++		struct v4l2_subdev_krouting krouting = {};
++		unsigned int i;
++
++		if (routing->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
++			return -EPERM;
++
++		for (i = 0; i < routing->num_routes; ++i) {
++			if (routes[i].sink_pad >= sd->entity.num_pads ||
++			    routes[i].source_pad >= sd->entity.num_pads)
++				return -EINVAL;
++
++			if (!(sd->entity.pads[routes[i].sink_pad].flags &
++			      MEDIA_PAD_FL_SINK) ||
++			    !(sd->entity.pads[routes[i].source_pad].flags &
++			      MEDIA_PAD_FL_SOURCE))
++				return -EINVAL;
 +		}
++
++		krouting.which = routing->which;
++		krouting.num_routes = routing->num_routes;
++		krouting.routes = routes;
++
++		return v4l2_subdev_call(sd, pad, set_routing, subdev_fh->state, &krouting);
++	}
++
+ 	default:
+ 		return v4l2_subdev_call(sd, core, ioctl, cmd, arg);
  	}
- 
--	return cfg;
-+	ret = v4l2_subdev_call(sd, pad, init_cfg, state);
-+	if (ret < 0 && ret != -ENOIOCTLCMD)
-+		goto err;
-+
-+	return state;
-+
-+err:
-+	if (state && state->pads)
-+		kvfree(state->pads);
-+
-+	kfree(state);
-+
-+	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_pad_config);
-+EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_state);
- 
--void v4l2_subdev_free_pad_config(struct v4l2_subdev_pad_config *cfg)
-+void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
- {
--	kvfree(cfg);
-+	kvfree(state->pads);
-+	kvfree(state);
- }
--EXPORT_SYMBOL_GPL(v4l2_subdev_free_pad_config);
-+EXPORT_SYMBOL_GPL(v4l2_subdev_free_state);
-+
- #endif /* CONFIG_MEDIA_CONTROLLER */
- 
- void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index ebe0d50f6a73..a9c470605367 100644
+index a9c470605367..4cd1a3818c68 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -665,6 +665,19 @@ struct v4l2_subdev_pad_config {
+@@ -665,6 +665,22 @@ struct v4l2_subdev_pad_config {
  	struct v4l2_rect try_compose;
  };
  
 +/**
-+ * struct v4l2_subdev_state - Used for storing subdev information.
++ * struct v4l2_subdev_krouting - subdev routing table
 + *
-+ * @pads: &struct v4l2_subdev_pad_config array
++ * @which: format type (from enum v4l2_subdev_format_whence)
++ * @routes: &struct v4l2_subdev_route
++ * @num_routes: number of routes
 + *
-+ * This structure only needs to be passed to the pad op if the 'which' field
-+ * of the main argument is set to %V4L2_SUBDEV_FORMAT_TRY. For
-+ * %V4L2_SUBDEV_FORMAT_ACTIVE it is safe to pass %NULL.
++ * This structure is used to translate arguments received from
++ * VIDIOC_SUBDEV_G/S_ROUTING() ioctl to subdev device drivers operations.
 + */
-+struct v4l2_subdev_state {
-+	struct v4l2_subdev_pad_config *pads;
++struct v4l2_subdev_krouting {
++	u32 which;
++	struct v4l2_subdev_route *routes;
++	unsigned int num_routes;
 +};
 +
  /**
-  * struct v4l2_subdev_pad_ops - v4l2-subdev pad level operations
+  * struct v4l2_subdev_state - Used for storing subdev information.
   *
-@@ -729,27 +742,27 @@ struct v4l2_subdev_pad_config {
+@@ -739,6 +755,10 @@ struct v4l2_subdev_state {
+  *		     applied to the hardware. The operation shall fail if the
+  *		     pad index it has been called on is not valid or in case of
+  *		     unrecoverable failures.
++ *
++ * @get_routing: get the subdevice routing table.
++ * @set_routing: enable or disable data connection routes described in the
++ *		 subdevice routing table.
   */
  struct v4l2_subdev_pad_ops {
  	int (*init_cfg)(struct v4l2_subdev *sd,
--			struct v4l2_subdev_pad_config *cfg);
-+			struct v4l2_subdev_state *state);
- 	int (*enum_mbus_code)(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *state,
- 			      struct v4l2_subdev_mbus_code_enum *code);
- 	int (*enum_frame_size)(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg,
-+			       struct v4l2_subdev_state *state,
- 			       struct v4l2_subdev_frame_size_enum *fse);
- 	int (*enum_frame_interval)(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *state,
- 				   struct v4l2_subdev_frame_interval_enum *fie);
- 	int (*get_fmt)(struct v4l2_subdev *sd,
--		       struct v4l2_subdev_pad_config *cfg,
-+		       struct v4l2_subdev_state *state,
- 		       struct v4l2_subdev_format *format);
- 	int (*set_fmt)(struct v4l2_subdev *sd,
--		       struct v4l2_subdev_pad_config *cfg,
-+		       struct v4l2_subdev_state *state,
- 		       struct v4l2_subdev_format *format);
- 	int (*get_selection)(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *state,
- 			     struct v4l2_subdev_selection *sel);
- 	int (*set_selection)(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *state,
- 			     struct v4l2_subdev_selection *sel);
- 	int (*get_edid)(struct v4l2_subdev *sd, struct v4l2_edid *edid);
- 	int (*set_edid)(struct v4l2_subdev *sd, struct v4l2_edid *edid);
-@@ -960,14 +973,14 @@ struct v4l2_subdev {
-  * struct v4l2_subdev_fh - Used for storing subdev information per file handle
-  *
-  * @vfh: pointer to &struct v4l2_fh
-- * @pad: pointer to &struct v4l2_subdev_pad_config
-+ * @state: pointer to &struct v4l2_subdev_state
-  * @owner: module pointer to the owner of this file handle
-  */
- struct v4l2_subdev_fh {
- 	struct v4l2_fh vfh;
- 	struct module *owner;
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
--	struct v4l2_subdev_pad_config *pad;
-+	struct v4l2_subdev_state *state;
- #endif
+@@ -783,6 +803,12 @@ struct v4l2_subdev_pad_ops {
+ 			       struct v4l2_mbus_config *config);
+ 	int (*set_mbus_config)(struct v4l2_subdev *sd, unsigned int pad,
+ 			       struct v4l2_mbus_config *config);
++	int (*get_routing)(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state,
++			   struct v4l2_subdev_krouting *route);
++	int (*set_routing)(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state,
++			   struct v4l2_subdev_krouting *route);
  };
  
-@@ -987,17 +1000,17 @@ struct v4l2_subdev_fh {
-  *	&struct v4l2_subdev_pad_config->try_fmt
-  *
-  * @sd: pointer to &struct v4l2_subdev
-- * @cfg: pointer to &struct v4l2_subdev_pad_config array.
-- * @pad: index of the pad in the @cfg array.
-+ * @state: pointer to &struct v4l2_subdev_state.
-+ * @pad: index of the pad in the @state array.
-  */
- static inline struct v4l2_mbus_framefmt *
- v4l2_subdev_get_try_format(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *state,
- 			   unsigned int pad)
- {
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &cfg[pad].try_fmt;
-+	return &state->pads[pad].try_fmt;
- }
- 
  /**
-@@ -1005,17 +1018,17 @@ v4l2_subdev_get_try_format(struct v4l2_subdev *sd,
-  *	&struct v4l2_subdev_pad_config->try_crop
-  *
-  * @sd: pointer to &struct v4l2_subdev
-- * @cfg: pointer to &struct v4l2_subdev_pad_config array.
-- * @pad: index of the pad in the @cfg array.
-+ * @state: pointer to &struct v4l2_subdev_state.
-+ * @pad: index of the pad in the @state array.
-  */
- static inline struct v4l2_rect *
- v4l2_subdev_get_try_crop(struct v4l2_subdev *sd,
--			 struct v4l2_subdev_pad_config *cfg,
-+			 struct v4l2_subdev_state *state,
- 			 unsigned int pad)
- {
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &cfg[pad].try_crop;
-+	return &state->pads[pad].try_crop;
- }
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 658106f5b5dc..45c01799e2cd 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -188,6 +188,52 @@ struct v4l2_subdev_capability {
+ /* The v4l2 sub-device video device node is registered in read-only mode. */
+ #define V4L2_SUBDEV_CAP_RO_SUBDEV		0x00000001
  
- /**
-@@ -1023,17 +1036,17 @@ v4l2_subdev_get_try_crop(struct v4l2_subdev *sd,
-  *	&struct v4l2_subdev_pad_config->try_compose
-  *
-  * @sd: pointer to &struct v4l2_subdev
-- * @cfg: pointer to &struct v4l2_subdev_pad_config array.
-- * @pad: index of the pad in the @cfg array.
-+ * @state: pointer to &struct v4l2_subdev_state.
-+ * @pad: index of the pad in the @state array.
-  */
- static inline struct v4l2_rect *
- v4l2_subdev_get_try_compose(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg,
-+			    struct v4l2_subdev_state *state,
- 			    unsigned int pad)
- {
- 	if (WARN_ON(pad >= sd->entity.num_pads))
- 		pad = 0;
--	return &cfg[pad].try_compose;
-+	return &state->pads[pad].try_compose;
- }
- 
- #endif
-@@ -1135,20 +1148,17 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
- int v4l2_subdev_link_validate(struct media_link *link);
- 
- /**
-- * v4l2_subdev_alloc_pad_config - Allocates memory for pad config
-+ * v4l2_subdev_alloc_state - allocate v4l2_subdev_state
-  *
-- * @sd: pointer to struct v4l2_subdev
-+ * Must call v4l2_subdev_free_state() when state is no longer needed.
-  */
--struct
--v4l2_subdev_pad_config *v4l2_subdev_alloc_pad_config(struct v4l2_subdev *sd);
-+struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd);
- 
- /**
-- * v4l2_subdev_free_pad_config - Frees memory allocated by
-- *	v4l2_subdev_alloc_pad_config().
-- *
-- * @cfg: pointer to &struct v4l2_subdev_pad_config
-+ * v4l2_subdev_free_state - uninitialize v4l2_subdev_state
-  */
--void v4l2_subdev_free_pad_config(struct v4l2_subdev_pad_config *cfg);
-+void v4l2_subdev_free_state(struct v4l2_subdev_state *state);
++/**
++ * Is the route active? An active route will start when streaming is enabled
++ * on a video node.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_ACTIVE		BIT(0)
 +
- #endif /* CONFIG_MEDIA_CONTROLLER */
++/**
++ * Is the route immutable, i.e. can it be activated and inactivated?
++ * Set by the driver.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_IMMUTABLE		BIT(1)
++
++/**
++ * struct v4l2_subdev_route - A route inside a subdev
++ *
++ * @sink_pad: the sink pad index
++ * @sink_stream: the sink stream identifier
++ * @source_pad: the source pad index
++ * @source_stream: the source stream identifier
++ * @flags: route flags V4L2_SUBDEV_ROUTE_FL_*
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_route {
++	__u32 sink_pad;
++	__u32 sink_stream;
++	__u32 source_pad;
++	__u32 source_stream;
++	__u32 flags;
++	__u32 reserved[5];
++};
++
++/**
++ * struct v4l2_subdev_routing - Subdev routing information
++ *
++ * @which: configuration type (from enum v4l2_subdev_format_whence)
++ * @routes: pointer to the routes array
++ * @num_routes: the total number of routes in the routes array
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_routing {
++	__u32 which;
++	__u64 routes;
++	__u32 num_routes;
++	__u32 reserved[5];
++};
++
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
  
- /**
+@@ -203,6 +249,8 @@ struct v4l2_subdev_capability {
+ #define VIDIOC_SUBDEV_S_CROP			_IOWR('V', 60, struct v4l2_subdev_crop)
+ #define VIDIOC_SUBDEV_G_SELECTION		_IOWR('V', 61, struct v4l2_subdev_selection)
+ #define VIDIOC_SUBDEV_S_SELECTION		_IOWR('V', 62, struct v4l2_subdev_selection)
++#define VIDIOC_SUBDEV_G_ROUTING			_IOWR('V', 38, struct v4l2_subdev_routing)
++#define VIDIOC_SUBDEV_S_ROUTING			_IOWR('V', 39, struct v4l2_subdev_routing)
+ /* The following ioctls are identical to the ioctls in videodev2.h */
+ #define VIDIOC_SUBDEV_G_STD			_IOR('V', 23, v4l2_std_id)
+ #define VIDIOC_SUBDEV_S_STD			_IOW('V', 24, v4l2_std_id)
 -- 
 2.25.1
 
