@@ -7,28 +7,31 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F4EC433B4
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14096C43460
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE3C76145E
-	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C93FF61464
+	for <linux-media@archiver.kernel.org>; Fri,  7 May 2021 12:37:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbhEGMiA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 May 2021 08:38:00 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59674 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbhEGMh7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 May 2021 08:37:59 -0400
+        id S236618AbhEGMiB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 May 2021 08:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231179AbhEGMiA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 May 2021 08:38:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466B1C061574
+        for <linux-media@vger.kernel.org>; Fri,  7 May 2021 05:37:00 -0700 (PDT)
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4F7E3D4A;
-        Fri,  7 May 2021 14:36:58 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5272C8A1;
+        Fri,  7 May 2021 14:36:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1620391019;
-        bh=8DPrS2WWZL/fgOJvorYFzGjmuL7BwEspF28Yv1QzZvs=;
+        s=mail; t=1620391016;
+        bh=Cugm65dp6wMYYpGMe9vCicD0E/d7W+AQc/VCe9eIHQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qJ0w96AbO/IzmbOtBiCjTkDcErXaMJmsiNfVVgasXMhCF6Ai8P5rhaC6Me4tYKXAV
-         mDVwPq5ZXJyBpDkK3jC8fW7CjcTjKPt7Sc7/uKA9O4hpC5ldEsVKiMA+Rsh7uRhWMB
-         46T26r5XuLsctudD8bmrgcXY6kZM9Kw1kcWzOisI=
+        b=rWb2wOZO9GKTIycXwFUgagEY9YLOFaErOENV2Qq3fyhhuKK0EB5y78JYq43rG9Il7
+         CWET7oZYaISLhMFeTM4MyoE4+ivqgeAa6DcNENGzHFFawlVsgSm+tYD/OwAE7LEfT9
+         PxCjEeN4r/zFZ2AwwVpjpU6ygjPLXFWdPHTAZBmI=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -39,9 +42,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Pratyush Yadav <p.yadav@ti.com>, john.wei@mediatek.com,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [RFC 04/11] v4l: subdev: routing kernel helper functions
-Date:   Fri,  7 May 2021 15:35:51 +0300
-Message-Id: <20210507123558.146948-5-tomi.valkeinen@ideasonboard.com>
+Subject: [RFC 02/11] media: v4l2-subdev: driver fixes for subdev-wide state struct
+Date:   Fri,  7 May 2021 15:35:49 +0300
+Message-Id: <20210507123558.146948-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210507123558.146948-1-tomi.valkeinen@ideasonboard.com>
 References: <20210507123558.146948-1-tomi.valkeinen@ideasonboard.com>
@@ -51,142 +54,125 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add helper functions for routing. These helpers make it easier for the
-drivers to use struct v4l2_subdev_krouting.
+Change two drivers as an example to use the new struct
+v4l2_subdev_pad_config.
 
-TODO: add docs
-TODO: fix according to comments
+All drivers need to be fixed, and these fixes need to be squashed into
+the previous commit.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 89 +++++++++++++++++++++++++++
- include/media/v4l2-subdev.h           | 15 +++++
- 2 files changed, 104 insertions(+)
+ drivers/media/i2c/ov5640.c                   | 10 +++++-----
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 12 ++++++------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 28e84453fe28..7b40bf34f8a3 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -912,6 +912,95 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad,
- 	return -EINVAL;
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index b4f52cee1dff..b29f887cbf84 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2227,7 +2227,7 @@ static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
  }
  
-+int v4l2_subdev_get_routing(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *state,
-+			    struct v4l2_subdev_krouting *routing)
-+{
-+	int ret;
-+
-+	routing->which = state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	routing->routes = NULL;
-+	routing->num_routes = 0;
-+
-+	ret = v4l2_subdev_call(sd, pad, get_routing, state, routing);
-+	if (ret == 0)
-+		return 0;
-+	if (ret != -ENOSPC)
-+		return ret;
-+
-+	routing->routes = kvmalloc_array(routing->num_routes,
-+					 sizeof(*routing->routes), GFP_KERNEL);
-+	if (!routing->routes)
-+		return -ENOMEM;
-+
-+	ret = v4l2_subdev_call(sd, pad, get_routing, state, routing);
-+	if (ret) {
-+		kvfree(routing->routes);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_get_routing);
-+
-+void v4l2_subdev_free_routing(struct v4l2_subdev_krouting *routing)
-+{
-+	kvfree(routing->routes);
-+	routing->routes = NULL;
-+	routing->num_routes = 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_free_routing);
-+
-+void v4l2_subdev_cpy_routing(struct v4l2_subdev_krouting *dst,
-+			     const struct v4l2_subdev_krouting *src)
-+{
-+	memcpy(dst->routes, src->routes,
-+	       src->num_routes * sizeof(*src->routes));
-+	dst->num_routes = src->num_routes;
-+	dst->which = src->which;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_cpy_routing);
-+
-+int v4l2_subdev_dup_routing(struct v4l2_subdev_krouting *dst,
-+			    const struct v4l2_subdev_krouting *src)
-+{
-+	v4l2_subdev_free_routing(dst);
-+
-+	if (src->num_routes == 0) {
-+		dst->which = src->which;
-+		return 0;
-+	}
-+
-+	dst->routes = kvmalloc_array(src->num_routes, sizeof(*src->routes),
-+				     GFP_KERNEL);
-+	if (!dst->routes)
-+		return -ENOMEM;
-+
-+	v4l2_subdev_cpy_routing(dst, src);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_dup_routing);
-+
-+bool v4l2_subdev_has_route(struct v4l2_subdev_krouting *routing,
-+			   unsigned int pad0, unsigned int pad1)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < routing->num_routes; ++i) {
-+		struct v4l2_subdev_route *route = &routing->routes[i];
-+
-+		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-+			continue;
-+
-+		if (route->sink_pad == pad0 && route->source_pad == pad1)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_has_route);
-+
- int v4l2_subdev_link_validate(struct media_link *link)
+ static int ov5640_get_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *cfg,
+ 			  struct v4l2_subdev_format *format)
  {
- 	struct v4l2_subdev *sink;
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 4cd1a3818c68..63a36eead7dc 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1252,4 +1252,19 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
- void v4l2_subdev_notify_event(struct v4l2_subdev *sd,
- 			      const struct v4l2_event *ev);
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+@@ -2285,7 +2285,7 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ }
  
-+int v4l2_subdev_get_routing(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *state,
-+			    struct v4l2_subdev_krouting *routing);
-+
-+void v4l2_subdev_free_routing(struct v4l2_subdev_krouting *routing);
-+
-+int v4l2_subdev_dup_routing(struct v4l2_subdev_krouting *dst,
-+			    const struct v4l2_subdev_krouting *src);
-+
-+void v4l2_subdev_cpy_routing(struct v4l2_subdev_krouting *dst,
-+			     const struct v4l2_subdev_krouting *src);
-+
-+bool v4l2_subdev_has_route(struct v4l2_subdev_krouting *routing,
-+			   unsigned int pad0, unsigned int pad1);
-+
- #endif
+ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *cfg,
+ 			  struct v4l2_subdev_format *format)
+ {
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+@@ -2818,7 +2818,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ }
+ 
+ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *cfg,
+ 				  struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	if (fse->pad != 0)
+@@ -2838,7 +2838,7 @@ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
+ 
+ static int ov5640_enum_frame_interval(
+ 	struct v4l2_subdev *sd,
+-	struct v4l2_subdev_pad_config *cfg,
++	struct v4l2_subdev_state *cfg,
+ 	struct v4l2_subdev_frame_interval_enum *fie)
+ {
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+@@ -2924,7 +2924,7 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
+ }
+ 
+ static int ov5640_enum_mbus_code(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *cfg,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	if (code->pad != 0)
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index 36103f5af6e9..5b41ba493599 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -621,7 +621,7 @@ static inline struct cal_camerarx *to_cal_camerarx(struct v4l2_subdev *sd)
+ 
+ static struct v4l2_mbus_framefmt *
+ cal_camerarx_get_pad_format(struct cal_camerarx *phy,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *cfg,
+ 			    unsigned int pad, u32 which)
+ {
+ 	switch (which) {
+@@ -652,7 +652,7 @@ static int cal_camerarx_sd_s_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+-					  struct v4l2_subdev_pad_config *cfg,
++					  struct v4l2_subdev_state *cfg,
+ 					  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -689,7 +689,7 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+-					   struct v4l2_subdev_pad_config *cfg,
++					   struct v4l2_subdev_state *cfg,
+ 					   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -739,7 +739,7 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *cfg,
+ 				   struct v4l2_subdev_format *format)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -756,7 +756,7 @@ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *cfg,
+ 				   struct v4l2_subdev_format *format)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -806,7 +806,7 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg)
++				    struct v4l2_subdev_state *cfg)
+ {
+ 	struct v4l2_subdev_format format = {
+ 		.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
 -- 
 2.25.1
 
