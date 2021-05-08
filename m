@@ -2,274 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0A6C43461
-	for <linux-media@archiver.kernel.org>; Sat,  8 May 2021 13:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD52C433B4
+	for <linux-media@archiver.kernel.org>; Sat,  8 May 2021 16:05:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBC216140F
-	for <linux-media@archiver.kernel.org>; Sat,  8 May 2021 13:17:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFC0360FE9
+	for <linux-media@archiver.kernel.org>; Sat,  8 May 2021 16:05:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbhEHNSf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 8 May 2021 09:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S229657AbhEHQGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 8 May 2021 12:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbhEHNSe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 8 May 2021 09:18:34 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC3BC061574;
-        Sat,  8 May 2021 06:17:32 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c3so16694895lfs.7;
-        Sat, 08 May 2021 06:17:32 -0700 (PDT)
+        with ESMTP id S229610AbhEHQGE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 8 May 2021 12:06:04 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B915C06175F
+        for <linux-media@vger.kernel.org>; Sat,  8 May 2021 09:05:01 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s25so15437171lji.0
+        for <linux-media@vger.kernel.org>; Sat, 08 May 2021 09:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0S06plEE29isvKviL6ILjCR3CE2KnKhZ0925tx9PQpY=;
-        b=vY+IMZPooRMjOtPm5pg/xrmZPiFE7w25mRru10XQXJx7kpiy86zCoQkgRV272+O5eP
-         UlBN6eAkPBtuFPEL1/nyCsktpL9GAZjdkgoSa8cfLNQatGgQL067/vVDQeWStt6GMTCg
-         mDAk3HBCAtg+TKrQM1FeBZ5GuKqNEmM5GQ/MssZb6bXxZo4zdZJZcQsSg0v551Hh+Vn6
-         VuxN+QhgE16k+xX32UeBUyPzE2Nyk2vfahYZj4VJbUWKDgtCOq5FPuDc0ffZmFFAVm/3
-         SmEmvo0Os3kGNapE9mKjxmSwoV6kJ8OZBfeJCPrLtgZdmx3WIwUprstbcN6nt+DhZ4ZZ
-         FImQ==
+        d=gse-cs-msu-ru.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7DhCvIteBF1AiZLgolJdfWDXx7RlxiueUEPWfMrlLO0=;
+        b=qjXvg4TkfMJbXDBLbUb7ptQZpozeTcxE3jz3cMNqAl4XcCBz55Xj3dGyNClf2ND/49
+         Si0ZiJBAYJNlaA/xBCLN0LwrQgnIzn/zr+vvIyUD7mFSnUQp4gsgWPofcecWxdZyErdR
+         BRBaLk97hB4P3ZpTBRUwl9dhmIUnR4U7sHTIOaaNJ/pOUgd6RyrP+p9TAXmr2N7klB0G
+         XvjQK+uTxwJeJze1rKpX2Ir7IqAcBJjHqsgS8xc3dzp8ikF0Pg4FlUkrqIOG/UEMaezy
+         nFYcu3XgjTQ2SDO0twXPwbWCtj6FeUq6AtsbjG+4mtB8hVihBztSMOBYnHJnZPtbbxJK
+         TANw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0S06plEE29isvKviL6ILjCR3CE2KnKhZ0925tx9PQpY=;
-        b=IOk0q10vYmRLButD/W2rc4FUoGsVxS2HrRrjCJbljYTiL+XZm2hI8eBKsUZA7fTMEM
-         HMU0Cognx/yJNoQPtSWrcAvDImHq8+2odIlB8yMdAAKkfleu6smNItPzrqG1GTXW2U35
-         PG6Oania2QjlBQr2IguQ2V52w6YrTpzVwabNVE7WSnLIwRYsvE8cnru4kNrhW1dJYFTy
-         aL3jzZ5LJQL+UCx/CtjcNBPL9OjXA7MApJ8c5eefPC8mxfTedEenNFDYP/tWT8wc6qsW
-         cH3gJ60rT0k6DkZbRBhKsc7DcVVZF5yXxfKLoo+qKjzk2hDa5c1EbBNb3LZOsTUZcqfN
-         HnYw==
-X-Gm-Message-State: AOAM530zrtTIxsAN2IjKIl4WRN+xd/FsCT9oBAkBc5Bi/1sBK97ts9gW
-        D3Xm+n3HM+X49XmhXFWFYHQ=
-X-Google-Smtp-Source: ABdhPJxUUg5L8GCKluOA4tjn3sZ7XksIti9/Kt2rHubp3otdXglQ24KVBa0o2EuqHjI+TpxB7ke19Q==
-X-Received: by 2002:a19:f114:: with SMTP id p20mr7379795lfh.530.1620479851009;
-        Sat, 08 May 2021 06:17:31 -0700 (PDT)
-Received: from localhost.localdomain ([185.215.60.119])
-        by smtp.gmail.com with ESMTPSA id b11sm1619390lfi.292.2021.05.08.06.17.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7DhCvIteBF1AiZLgolJdfWDXx7RlxiueUEPWfMrlLO0=;
+        b=FRxH2szV79AY2ShHket0POx8nnyKUtsjHvoImnPbwdOYzSadB57JEu1exjoQ8q48Bf
+         G1CdlnXBSj6i8LPMqZxZZAzmybU5pm/dYokIee0lAoJXsosAPiEat7UnVwrkpfZTiddm
+         q1ZhAFzdayRLG6E8d85CBVOKGkvrfV4leGApppCwyEO0qtYHWKer9fpz9eQhWe9M4X69
+         z8VDSevz4JSm7xtfKi9/9Nt+EGKueUYm+tQsax8230Nlbdp0LJ9mtRdg6hsMZ8wRaS6Q
+         iV6JMHyAMhjZaAIQ7npxthhFeS90H6KjD6TxGztMxdYpr+1vui6gYk8SeJ76Kp+pyEFk
+         m5Kg==
+X-Gm-Message-State: AOAM530Sw6bliVxS7/1BC1U9BL4cHyO63mkIv8X/3XSx2yke7n4UsoJX
+        Pu0/G9drojCQQmnqUOO6c2sOwg==
+X-Google-Smtp-Source: ABdhPJyV1vkEl+NROpF0QFiCOzWCNEOAGU8Jji8JGy3yPbWPrMuh6hvpp23ZjvrL3uMgSaiq2QoL8g==
+X-Received: by 2002:a2e:b601:: with SMTP id r1mr12313125ljn.203.1620489899128;
+        Sat, 08 May 2021 09:04:59 -0700 (PDT)
+Received: from localhost.localdomain ([79.165.19.240])
+        by smtp.gmail.com with ESMTPSA id o139sm1665325lfa.129.2021.05.08.09.04.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 May 2021 06:17:30 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH v4 3/3] staging: media: atomisp: remove useless returns
-Date:   Sat,  8 May 2021 16:17:27 +0300
-Message-Id: <23a6984ddfb15ba38f6983381bb6fdaef3edd7d8.1620479607.git.paskripkin@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1620479607.git.paskripkin@gmail.com>
-References: <cover.1620479607.git.paskripkin@gmail.com>
+        Sat, 08 May 2021 09:04:58 -0700 (PDT)
+From:   Yuri Savinykh <s02190703@gse.cs.msu.ru>
+To:     Michael Tretter <m.tretter@pengutronix.de>
+Cc:     Yuri Savinykh <s02190703@gse.cs.msu.ru>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [bug report] media: allegro: possible NULL pointer dereference.
+Date:   Sat,  8 May 2021 19:04:55 +0300
+Message-Id: <20210508160455.86976-1-s02190703@gse.cs.msu.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Returns are not useful at the end of void functions,
-they can simply be removed.
+Hello,
 
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
- .../hive_isp_css_common/host/input_system.c   | 38 -------------------
- 1 file changed, 38 deletions(-)
+At the moment of enabling irq handling:
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
-index 76414b6b43c9..8e085dda0c18 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
-@@ -174,8 +174,6 @@ void input_system_get_state(
- 		ctrl_unit_get_state(ID, sub_id,
- 				    &state->ctrl_unit_state[sub_id - CTRL_UNIT0_ID]);
- 	}
--
--	return;
- }
- 
- void receiver_get_state(
-@@ -246,8 +244,6 @@ void receiver_get_state(
- 			       _HRT_CSS_RECEIVER_BE_IRQ_STATUS_REG_IDX);
- 	state->be_irq_clear = receiver_reg_load(ID,
- 						_HRT_CSS_RECEIVER_BE_IRQ_CLEAR_REG_IDX);
--
--	return;
- }
- 
- bool is_mipi_format_yuv420(
-@@ -310,8 +306,6 @@ void receiver_set_compression(
- 	reg = ((field_id < 6) ? (val << (field_id * 5)) : (val << ((
- 		    field_id - 6) * 5)));
- 	receiver_reg_store(ID, addr, reg);
--
--	return;
- }
- 
- void receiver_port_enable(
-@@ -330,7 +324,6 @@ void receiver_port_enable(
- 
- 	receiver_port_reg_store(ID, port_ID,
- 				_HRT_CSS_RECEIVER_DEVICE_READY_REG_IDX, reg);
--	return;
- }
- 
- bool is_receiver_port_enabled(
-@@ -349,7 +342,6 @@ void receiver_irq_enable(
- {
- 	receiver_port_reg_store(ID,
- 				port_ID, _HRT_CSS_RECEIVER_IRQ_ENABLE_REG_IDX, irq_info);
--	return;
- }
- 
- rx_irq_info_t receiver_get_irq_info(
-@@ -367,7 +359,6 @@ void receiver_irq_clear(
- {
- 	receiver_port_reg_store(ID,
- 				port_ID, _HRT_CSS_RECEIVER_IRQ_STATUS_REG_IDX, irq_info);
--	return;
- }
- 
- static inline void capture_unit_get_state(
-@@ -428,8 +419,6 @@ static inline void capture_unit_get_state(
- 	state->FSM_State_Info = input_system_sub_system_reg_load(ID,
- 				sub_id,
- 				CAPT_FSM_STATE_INFO_REG_ID);
--
--	return;
- }
- 
- static inline void acquisition_unit_get_state(
-@@ -478,8 +467,6 @@ static inline void acquisition_unit_get_state(
- 	state->Int_Cntr_Info = input_system_sub_system_reg_load(ID,
- 			       sub_id,
- 			       ACQ_INT_CNTR_INFO_REG_ID);
--
--	return;
- }
- 
- static inline void ctrl_unit_get_state(
-@@ -561,8 +548,6 @@ static inline void ctrl_unit_get_state(
- 	state->capt_reserve_one_mem_region = input_system_sub_system_reg_load(ID,
- 					     sub_id,
- 					     ISYS_CTRL_CAPT_RESERVE_ONE_MEM_REGION_REG_ID);
--
--	return;
- }
- 
- static inline void mipi_port_get_state(
-@@ -597,8 +582,6 @@ static inline void mipi_port_get_state(
- 		state->lane_sync_count[i] = (uint8_t)((state->sync_count) >> (i * 8));
- 		state->lane_rx_count[i] = (uint8_t)((state->rx_count) >> (i * 8));
- 	}
--
--	return;
- }
- 
- static inline void rx_channel_get_state(
-@@ -652,8 +635,6 @@ static inline void rx_channel_get_state(
- 		state->comp[i] = (mipi_compressor_t)(val & 0x07);
- 		state->pred[i] = (mipi_predictor_t)((val & 0x18) >> 3);
- 	}
--
--	return;
- }
- 
- // MW: "2400" in the name is not good, but this is to avoid a naming conflict
-@@ -672,8 +653,6 @@ static void receiver_rst(
- 	}
- 
- 	// AM: Additional actions for stopping receiver?
--
--	return;
- }
- 
- //Single function to reset all the devices mapped via GP_DEVICE.
-@@ -722,8 +701,6 @@ static void gp_device_rst(const gp_device_ID_t		ID)
- 	//	gp_device_reg_store(ID, _REG_GP_SYNCGEN_FRAME_CNT_ADDR, ZERO);
- 	gp_device_reg_store(ID, _REG_GP_SOFT_RESET_ADDR,
- 			    ZERO); // AM: Maybe this soft reset is not safe.
--
--	return;
- }
- 
- static void input_selector_cfg_for_sensor(const gp_device_ID_t ID)
-@@ -740,8 +717,6 @@ static void input_selector_cfg_for_sensor(const gp_device_ID_t ID)
- 	gp_device_reg_store(ID, _REG_GP_ISEL_SBAND_SEL_ADDR, ZERO);
- 	gp_device_reg_store(ID, _REG_GP_ISEL_SYNC_SEL_ADDR, ZERO);
- 	gp_device_reg_store(ID, _REG_GP_SOFT_RESET_ADDR, ZERO);
--
--	return;
- }
- 
- static void input_switch_rst(const gp_device_ID_t ID)
-@@ -760,8 +735,6 @@ static void input_switch_rst(const gp_device_ID_t ID)
- 	gp_device_reg_store(ID,
- 			    _REG_GP_IFMT_input_switch_fsync_lut,
- 			    ZERO);
--
--	return;
- }
- 
- static void input_switch_cfg(
-@@ -786,8 +759,6 @@ static void input_switch_cfg(
- 	gp_device_reg_store(ID,
- 			    _REG_GP_IFMT_input_switch_fsync_lut,
- 			    cfg->vsync_data_reg);
--
--	return;
- }
- 
- static void input_system_network_rst(const input_system_ID_t ID)
-@@ -843,8 +814,6 @@ static void input_system_network_rst(const input_system_ID_t ID)
- 						  ISYS_CTRL_INIT_REG_ID,
- 						  1U); //AM: Is there any named constant?
- 	}
--
--	return;
- }
- 
- // Function that resets current configuration.
-@@ -1072,8 +1041,6 @@ static void capture_unit_configure(
- 					  sub_id,
- 					  CAPT_NUM_MEM_REGIONS_REG_ID,
- 					  cfg->nof_mem_regs);
--
--	return;
- }
- 
- static void acquisition_unit_configure(
-@@ -1097,8 +1064,6 @@ static void acquisition_unit_configure(
- 					  sub_id,
- 					  ACQ_MEM_REGION_SIZE_REG_ID,
- 					  cfg->mem_reg_size);
--
--	return;
- }
- 
- static void ctrl_unit_configure(
-@@ -1165,7 +1130,6 @@ static void ctrl_unit_configure(
- 					  sub_id,
- 					  ISYS_CTRL_CAPT_RESERVE_ONE_MEM_REGION_REG_ID,
- 					  0);
--	return;
- }
- 
- static void input_system_network_configure(
-@@ -1223,8 +1187,6 @@ static void input_system_network_configure(
- 				    sub_id,
- 				    &cfg->ctrl_unit_cfg[sub_id - CTRL_UNIT0_ID]);
- 	}
--
--	return;
- }
- 
- static input_system_err_t configuration_to_registers(void)
--- 
-2.31.1
+3166     ret = devm_request_threaded_irq(&pdev->dev, irq,
+3167                     allegro_hardirq,
+3168                     allegro_irq_thread,
+3169                     IRQF_SHARED, dev_name(&pdev->dev), dev);
 
+there is still uninitialized field mbox_status of struct allegro_dev *dev.
+If an interrupt occurs in the interval between the installation of the
+interrupt handler and the initialization of this field, NULL pointer
+dereference happens.
+
+This field is dereferenced in the handler function without any check:
+
+1801 static irqreturn_t allegro_irq_thread(int irq, void *data)
+1802 {
+1803     struct allegro_dev *dev = data;
+1804
+1805     allegro_mbox_notify(dev->mbox_status);
+
+
+and then:
+
+752 static void allegro_mbox_notify(struct allegro_mbox *mbox)
+753 {
+754     struct allegro_dev *dev = mbox->dev;
+
+The initialization of the mbox_status field happens asynchronously in
+allegro_fw_callback() via allegro_mcu_hw_init(). 
+
+Is it guaranteed that an interrupt does not occur in this interval?
+If it is not, is it better to move interrupt handler installation
+after initialization of this field has been completed?
+
+Found by Linux Driver Verification project (linuxtesting.org).
