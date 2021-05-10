@@ -8,135 +8,116 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DCB2C43460
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 21:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C1C2C433ED
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 22:32:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CBC861554
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 21:02:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF7A161581
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 22:32:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbhEJVDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 May 2021 17:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S231168AbhEJWdg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 May 2021 18:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbhEJVDu (ORCPT
+        with ESMTP id S230271AbhEJWde (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 May 2021 17:03:50 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE96C061574;
-        Mon, 10 May 2021 14:02:44 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id d25-20020a0568300459b02902f886f7dd43so2262801otc.6;
-        Mon, 10 May 2021 14:02:44 -0700 (PDT)
+        Mon, 10 May 2021 18:33:34 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D28FC061574;
+        Mon, 10 May 2021 15:32:29 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id c3so15508502ils.5;
+        Mon, 10 May 2021 15:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3cBBZkePd5gfKATN60V4QwGBhUGNtLUNcw+1xoOiiZs=;
-        b=S2lsNjatPX3UKOV5pkxnIgd2tRdEDE1F/mJYBW1mBH0XTLW23kTgYMfvEuqFgWgCcG
-         GpeN7skQ8HRDLyzonMznUF4k4KFu9cRWv9zQBbCtBdxybb7lS7+cyIM8ceLQvVpqebto
-         Ta+XIA3rtvSzNn4QMP/U5sGbl11s41Entls7NMUUyS7wgK8ENv7EKgBBvrS2SLGEeu/q
-         d1IQpmZRoZCDXEKRI0odbDo0kwhcdmT8MQOmT+KdCYBwpXFOZgoUV4JgLhmcnri/7V1S
-         Spb/pP0HPKxZnPu9b/Ufuha9NG2NpU2UJiquIBsEYYnlWwNWoBWkSs0Wbz2Mx2SUicRq
-         3rdw==
+         :cc;
+        bh=ZXbKK4DwG4d0nDNXe4XSUJLg6tBFAiW/ctIz6HwNgJs=;
+        b=GRKi1n7PBguuEjIQY8v8nUZMMgtRayd6W4jp02PDWD8r+hZPiLiR5k3UglpB1uOAWn
+         nwf+gxbkRKP8APRNpA48YW+qnnEi1YjDftOCKpx3mdQX1P0L/qxqZFkgGPAuzVG/1gwO
+         8xi//7nTvRYqK6Fv3daYUoQUvg/049ZiJd85EFooHniqhLvhgqMrZjc7rXAc4iY6ZZ51
+         mbdaAqOtPe+g6IZp6YMuSHzoqWZQ7EIGQuH5aCHyuLK7PfGMsLPMUxliKC9Q8VOH09+y
+         bsH0Oic79k480HcmpLleRVd5jsUx+OLHdddZSvG3tKE4nDsaBmreY/p4ImoJUlK170g0
+         BHPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3cBBZkePd5gfKATN60V4QwGBhUGNtLUNcw+1xoOiiZs=;
-        b=fi9BjZjl/jtrlaMzz5n9jkJsTfAUfLmbn0nEQ05awh0fwXS/qxudJo8z2jYqs9XZAH
-         Jg9aUM+Q/szIJkPAy7Q3rwp8nYBDvXq0PI7EnX8o/iObDZCnJHVnuGVUN28behUE3au8
-         a5SBIv2orWxXPokt50Yg/SsLC9LKjubnRZ9QjaYqv3OQL+Cyg/5aR1XG8PGfhUsvGGLD
-         f10ggyC99JdcC9KtGX5IcgLqKnyMe6o465GT4rc+rYXWvOGdx5pPT/lSDaJNWRM55k3H
-         9BTr0fvHsVnBiS6s7DrwUjLbLbB0MD07UZTqzio3GMu1zCJnBUZmebOZcP+Lq02euB1+
-         Yuhg==
-X-Gm-Message-State: AOAM531RN8pgElKcC4s7QuTf1TtNZLeAtyt18K0w4oZ/BdUt0zVCI5IY
-        8OL+Mszo3Oo+obpqy+2REcw4G9pFnbkLuwCuz2g=
-X-Google-Smtp-Source: ABdhPJw7DyKD1Lyyq9S41EMv+Yyu/ErA9AViQoXtkzjglGNF7HKdlfnp86mEla//UDe5eTZlAP0X/kMW5Kco3byONpk=
-X-Received: by 2002:a9d:51c6:: with SMTP id d6mr16637610oth.311.1620680564170;
- Mon, 10 May 2021 14:02:44 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ZXbKK4DwG4d0nDNXe4XSUJLg6tBFAiW/ctIz6HwNgJs=;
+        b=TZhbdbLjIuXMJxadiRHQ8TmMn5bGKxyXNZu9IZIbTZaqIjDR8raCru+lOSkDR73L8x
+         Gg6PFpQC+Vfi/LvQMHb38YqFWolUWlmtcG4A9i3mN3nrKqfx2NiS0DjkoreEhdfkQUXC
+         Uz6jD0EqjKHisXsH6+PRo8j0E6FRXobymZdYMdMYjWP7iRqrrxqCsx+ADtaH7lHfLSf8
+         wuocwMLxA5ELYIKiCvazmpVm1MmkxWE2KuYMydMyjGpsyQNkqZ3dl8WbV5jst8bDUNxI
+         D/wFaymsfl58E1DSvL9U6lFFjNrc6UsmBGWCWT19KM4lTbmY7mNvWDsB/B4yY+TmAo7P
+         0yhw==
+X-Gm-Message-State: AOAM5333QCsA4o9HjX96qwfNvpKkYn2DNN8SdXgKPqZoNsGp/zmpPezK
+        jynCzt6GEkT/Ucz9YyHHcuDGj6bxFRhFZFHod4Y=
+X-Google-Smtp-Source: ABdhPJxnCuH9WS8pfYm0ojlQzqi0SlnZ+I3PaXsZkcGFoYGmmZkCnBpZwbOPW868ZeKgbJ6Uh4+vJvrqoqF0wr4xAxg=
+X-Received: by 2002:a05:6e02:1002:: with SMTP id n2mr22491818ilj.260.1620685948558;
+ Mon, 10 May 2021 15:32:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210509144923.6316-1-dwaipayanray1@gmail.com> <2c5387b7-2fa1-9b5a-c671-806429b463aa@amd.com>
-In-Reply-To: <2c5387b7-2fa1-9b5a-c671-806429b463aa@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 10 May 2021 17:02:32 -0400
-Message-ID: <CADnq5_NXXD1K6kb0Jr8P5DPGcHRMo0jQTC+y2n4-4sfZY12pyA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/amdgpu: Fix errors in function documentation
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20210424005206.261622-1-ztong0001@gmail.com> <b84e0b87-4753-0513-9803-0cda4ceb4adc@xs4all.nl>
+In-Reply-To: <b84e0b87-4753-0513-9803-0cda4ceb4adc@xs4all.nl>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Mon, 10 May 2021 15:32:17 -0700
+Message-ID: <CAA5qM4BtejMqUa+eJLV+9q26E3Du-MiTasB=knCh+Qsw3HjApg@mail.gmail.com>
+Subject: Re: [PATCH] media: cobalt: fix null-ptr-deref when there is no PCI bridge
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Applied.  Thanks!
-
-Alex
-
-On Sun, May 9, 2021 at 12:30 PM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
+On Wed, May 5, 2021 at 2:18 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 >
-> Am 09.05.21 um 16:49 schrieb Dwaipayan Ray:
-> > Fix a couple of syntax errors and removed one excess
-> > parameter in the function documentations which lead
-> > to kernel docs build warning.
+> On 24/04/2021 02:52, Tong Zhang wrote:
+> > the PCI bridge might be NULL, so we'd better check before use it
 > >
-> > Signed-off-by: Dwaipayan Ray <dwaipayanray1@gmail.com>
+> > [    1.870569] RIP: 0010:pcie_bus_link_get_lanes.isra.0+0x26/0x59 [cobalt]
+> > [    1.875880] Call Trace:
+> > [    1.876013]  cobalt_probe.cold+0x1be/0xc11 [cobalt]
+> > [    1.876683]  pci_device_probe+0x10f/0x1c0
 >
-> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> How did you test this? With some virtualized PCI bus or something? I'm not sure
+> how this can happen.
 >
+Hello Hans,
+IMHO bus->self is pci bridge device and we can have a system
+configuration that does not have such a bridge,
+in this case, bus->self is NULL.
+- Tong
+> Regards,
+>
+>         Hans
+>
+> >
+> > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 > > ---
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 3 +++
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c  | 1 -
-> >   2 files changed, 3 insertions(+), 1 deletion(-)
+> >  drivers/media/pci/cobalt/cobalt-driver.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/=
-amd/amdgpu/amdgpu_ras.c
-> > index ae9fb2025259..312f24004413 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> > @@ -320,11 +320,14 @@ static int amdgpu_ras_debugfs_ctrl_parse_data(str=
-uct file *f,
-> >    * "disable" requires only the block.
-> >    * "enable" requires the block and error type.
-> >    * "inject" requires the block, error type, address, and value.
-> > + *
-> >    * The block is one of: umc, sdma, gfx, etc.
-> >    *  see ras_block_string[] for details
-> > + *
-> >    * The error type is one of: ue, ce, where,
-> >    *  ue is multi-uncorrectable
-> >    *  ce is single-correctable
-> > + *
-> >    * The sub-block is a the sub-block index, pass 0 if there is no sub-=
-block.
-> >    * The address and value are hexadecimal numbers, leading 0x is optio=
-nal.
-> >    *
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/a=
-md/amdgpu/amdgpu_vm.c
-> > index 16252d48e5a4..7e1a67295106 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> > @@ -2796,7 +2796,6 @@ long amdgpu_vm_wait_idle(struct amdgpu_vm *vm, lo=
-ng timeout)
-> >    *
-> >    * @adev: amdgpu_device pointer
-> >    * @vm: requested vm
-> > - * @vm_context: Indicates if it GFX or Compute context
-> >    * @pasid: Process address space identifier
-> >    *
-> >    * Init @vm fields.
+> > diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+> > index 0695078ef812..5687ed4869ac 100644
+> > --- a/drivers/media/pci/cobalt/cobalt-driver.c
+> > +++ b/drivers/media/pci/cobalt/cobalt-driver.c
+> > @@ -189,6 +189,8 @@ void cobalt_pcie_status_show(struct cobalt *cobalt)
+> >       u32 capa;
+> >       u16 stat, ctrl;
+> >
+> > +     if (!pci_bus_dev)
+> > +             return;
+> >       if (!pci_is_pcie(pci_dev) || !pci_is_pcie(pci_bus_dev))
+> >               return;
+> >
+> > @@ -247,6 +249,8 @@ static unsigned pcie_bus_link_get_lanes(struct cobalt *cobalt)
+> >       struct pci_dev *pci_dev = cobalt->pci_dev->bus->self;
+> >       u32 link;
+> >
+> > +     if (!pci_dev)
+> > +             return 0;
+> >       if (!pci_is_pcie(pci_dev))
+> >               return 0;
+> >       pcie_capability_read_dword(pci_dev, PCI_EXP_LNKCAP, &link);
+> >
 >
-> _______________________________________________
-> amd-gfx mailing list
-> amd-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
