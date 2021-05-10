@@ -4,45 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19183C43460
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49287C433B4
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1BC1616EB
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:30:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C26561926
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:31:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbhEJKbm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 May 2021 06:31:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58322 "EHLO mail.kernel.org"
+        id S232122AbhEJKcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 May 2021 06:32:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231803AbhEJKaF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 May 2021 06:30:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A20B36162E;
+        id S231861AbhEJKap (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 10 May 2021 06:30:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E395C61925;
         Mon, 10 May 2021 10:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620642443;
-        bh=iXeyTUXAdlgg0SuSf6hKwYNiPGAjzoVAH1M8YwWp+8g=;
+        bh=FoujHp64DqKSqs5BQLT5B6NvQAEXUIh4E++nGC6itdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgpArYRrukcr6HidtXoNZ8Hc9B/QW9l5vaWquFbMyCPYcNl48WViJSfe8VgW8Lf0y
-         ltJlqplbQrsexGqHaxrnIzaO6yzTXSR0SByfr+47jjF6tneCVp8o9NOmGjaMSATNlt
-         xJoZKUpW8nwS2wFJPCyL5d76O4hD2R2L0kMQ94VaKN4oOYkl6O715jrX+dpW8nxaCe
-         MZvrDbvD8Vtq//5SU6OtYYDGNsQlg/d1+R1UeZxEllsEt5Fsd6+Sp8CJTleamMdYO7
-         ESI7C6mjWtOYofE2DM61vOaRdNJy/Zyekqr0q3LPVgwFwiG5gvXq4afNlZgMcMQ9Ak
-         bT9PHEfyPzozg==
+        b=Hw8a6FfY7Ot3KVHu3/2sflkSWbTET9hqgKP2wAP8dv1vEqzqn45l5FNPoOtwV9Ji9
+         AxXpgSTZtbHObekQuodfgsomsq9Gf8ReKUaamk8Noo00JeESyErlro5FVSfy3zY3ek
+         dTNAEErNVzEW3tlgl8J+fVnsKbpecUluNxjuartHxH2eldXjBZiN/yms4s4FOHKJfs
+         c18zWHRAF7lbjiDUFXFMUhP+awq627n4tnRsBX8sRVR9gTLdiEi46U7PBidTplnwGW
+         OoHrhXK6hcld2cjx4SITMR6SfwNCZyEAbR3NDfT/5UTbCGRPzs7buJZRdzRot3zAbz
+         B5C+MMXoAv97w==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lg38D-000UPo-El; Mon, 10 May 2021 12:27:21 +0200
+        id 1lg38D-000UPw-I9; Mon, 10 May 2021 12:27:21 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 23/53] docs: userspace-api: media: fdl-appendix.rst: avoid using UTF-8 chars
-Date:   Mon, 10 May 2021 12:26:35 +0200
-Message-Id: <7d38be007f5dd0495e254a7a6c6bd3e74665723d.1620641727.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 25/53] docs: userspace-api: media: dvb: avoid using UTF-8 chars
+Date:   Mon, 10 May 2021 12:26:37 +0200
+Message-Id: <6e22df8e019d102b882e5ea57365a51e20ac2eaa.1620641727.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
@@ -58,217 +59,125 @@ While UTF-8 characters can be used at the Linux documentation,
 the best is to use them only when ASCII doesn't offer a good replacement.
 So, replace the occurences of the following UTF-8 characters:
 
+	- U+00a0 (' '): NO-BREAK SPACE
+	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
 	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
 	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../userspace-api/media/fdl-appendix.rst      | 64 +++++++++----------
- 1 file changed, 32 insertions(+), 32 deletions(-)
+ .../userspace-api/media/dvb/audio-set-bypass-mode.rst       | 2 +-
+ Documentation/userspace-api/media/dvb/audio.rst             | 2 +-
+ Documentation/userspace-api/media/dvb/dmx-fopen.rst         | 2 +-
+ Documentation/userspace-api/media/dvb/dmx-fread.rst         | 2 +-
+ Documentation/userspace-api/media/dvb/dmx-set-filter.rst    | 2 +-
+ Documentation/userspace-api/media/dvb/intro.rst             | 6 +++---
+ Documentation/userspace-api/media/dvb/video.rst             | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/fdl-appendix.rst b/Documentation/userspace-api/media/fdl-appendix.rst
-index 683ebed87017..b1bc725b4ec7 100644
---- a/Documentation/userspace-api/media/fdl-appendix.rst
-+++ b/Documentation/userspace-api/media/fdl-appendix.rst
-@@ -13,14 +13,14 @@ GNU Free Documentation License
- ===========
+diff --git a/Documentation/userspace-api/media/dvb/audio-set-bypass-mode.rst b/Documentation/userspace-api/media/dvb/audio-set-bypass-mode.rst
+index ecac02f1b2fc..80d551a2053a 100644
+--- a/Documentation/userspace-api/media/dvb/audio-set-bypass-mode.rst
++++ b/Documentation/userspace-api/media/dvb/audio-set-bypass-mode.rst
+@@ -50,7 +50,7 @@ Description
  
- The purpose of this License is to make a manual, textbook, or other
--written document “free” in the sense of freedom: to assure everyone the
-+written document "free" in the sense of freedom: to assure everyone the
- effective freedom to copy and redistribute it, with or without modifying
- it, either commercially or noncommercially. Secondarily, this License
- preserves for the author and publisher a way to get credit for their
- work, while not being considered responsible for modifications made by
- others.
+ This ioctl call asks the Audio Device to bypass the Audio decoder and
+ forward the stream without decoding. This mode shall be used if streams
+-that can’t be handled by the Digital TV system shall be decoded. Dolby
++that can't be handled by the Digital TV system shall be decoded. Dolby
+ DigitalTM streams are automatically forwarded by the Digital TV subsystem if
+ the hardware can handle it.
  
--This License is a kind of “copyleft”, which means that derivative works
-+This License is a kind of "copyleft", which means that derivative works
- of the document must themselves be free in the same sense. It
- complements the GNU General Public License, which is a copyleft license
- designed for free software.
-@@ -44,21 +44,21 @@ works whose purpose is instruction or reference.
+diff --git a/Documentation/userspace-api/media/dvb/audio.rst b/Documentation/userspace-api/media/dvb/audio.rst
+index eaae5675a47d..aa753336b31f 100644
+--- a/Documentation/userspace-api/media/dvb/audio.rst
++++ b/Documentation/userspace-api/media/dvb/audio.rst
+@@ -11,7 +11,7 @@ TV hardware. It can be accessed through ``/dev/dvb/adapter?/audio?``. Data
+ types and ioctl definitions can be accessed by including
+ ``linux/dvb/audio.h`` in your application.
  
- This License applies to any manual or other work that contains a notice
- placed by the copyright holder saying it can be distributed under the
--terms of this License. The “Document”, below, refers to any such manual
-+terms of this License. The "Document", below, refers to any such manual
- or work. Any member of the public is a licensee, and is addressed as
--“you”.
-+"you".
+-Please note that some Digital TV cards don’t have their own MPEG decoder, which
++Please note that some Digital TV cards don't have their own MPEG decoder, which
+ results in the omission of the audio and video device.
  
+ These ioctls were also used by V4L2 to control MPEG decoders implemented
+diff --git a/Documentation/userspace-api/media/dvb/dmx-fopen.rst b/Documentation/userspace-api/media/dvb/dmx-fopen.rst
+index 8f0a2b831d4a..50b36eb4371e 100644
+--- a/Documentation/userspace-api/media/dvb/dmx-fopen.rst
++++ b/Documentation/userspace-api/media/dvb/dmx-fopen.rst
+@@ -82,7 +82,7 @@ appropriately.
+     :widths: 1 16
  
- .. _fdl-modified:
+     -  -  ``EMFILE``
+-       -  “Too many open files”, i.e. no more filters available.
++       -  "Too many open files", i.e. no more filters available.
  
--A “Modified Version” of the Document means any work containing the
-+A "Modified Version" of the Document means any work containing the
- Document or a portion of it, either copied verbatim, or with
- modifications and/or translated into another language.
+ The generic error codes are described at the
+ :ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/Documentation/userspace-api/media/dvb/dmx-fread.rst b/Documentation/userspace-api/media/dvb/dmx-fread.rst
+index 78e9daef595a..88c4cddf7c30 100644
+--- a/Documentation/userspace-api/media/dvb/dmx-fread.rst
++++ b/Documentation/userspace-api/media/dvb/dmx-fread.rst
+@@ -34,7 +34,7 @@ Description
  
+ This system call returns filtered data, which might be section or Packetized
+ Elementary Stream (PES) data. The filtered data is transferred from
+-the driver’s internal circular buffer to ``buf``. The maximum amount of data
++the driver's internal circular buffer to ``buf``. The maximum amount of data
+ to be transferred is implied by count.
  
- .. _fdl-secondary:
+ .. note::
+diff --git a/Documentation/userspace-api/media/dvb/dmx-set-filter.rst b/Documentation/userspace-api/media/dvb/dmx-set-filter.rst
+index f43455b7adae..1b8c8071b14f 100644
+--- a/Documentation/userspace-api/media/dvb/dmx-set-filter.rst
++++ b/Documentation/userspace-api/media/dvb/dmx-set-filter.rst
+@@ -37,7 +37,7 @@ parameters provided. A timeout may be defined stating number of seconds
+ to wait for a section to be loaded. A value of 0 means that no timeout
+ should be applied. Finally there is a flag field where it is possible to
+ state whether a section should be CRC-checked, whether the filter should
+-be a ”one-shot” filter, i.e. if the filtering operation should be
++be a "one-shot" filter, i.e. if the filtering operation should be
+ stopped after the first section is received, and whether the filtering
+ operation should be started immediately (without waiting for a
+ :ref:`DMX_START` ioctl call). If a filter was previously set-up, this
+diff --git a/Documentation/userspace-api/media/dvb/intro.rst b/Documentation/userspace-api/media/dvb/intro.rst
+index a935f3914e56..6784ae79657c 100644
+--- a/Documentation/userspace-api/media/dvb/intro.rst
++++ b/Documentation/userspace-api/media/dvb/intro.rst
+@@ -107,7 +107,7 @@ Audio and video decoder
+       a Systems on a Chip (SoC) integrated circuit.
  
--A “Secondary Section” is a named appendix or a front-matter section of
-+A "Secondary Section" is a named appendix or a front-matter section of
- the :ref:`Document <fdl-document>` that deals exclusively with the
- relationship of the publishers or authors of the Document to the
- Document's overall subject (or to related matters) and contains nothing
-@@ -72,7 +72,7 @@ regarding them.
+       It may also not be needed for certain usages (e.g. for data-only
+-      uses like “internet over satellite”).
++      uses like "internet over satellite").
  
- .. _fdl-invariant:
+ :ref:`stb_components` shows a crude schematic of the control and data
+ flow between those components.
+@@ -148,9 +148,9 @@ individual devices are called:
  
--The “Invariant Sections” are certain
-+The "Invariant Sections" are certain
- :ref:`Secondary Sections <fdl-secondary>` whose titles are designated,
- as being those of Invariant Sections, in the notice that says that the
- :ref:`Document <fdl-document>` is released under this License.
-@@ -80,14 +80,14 @@ as being those of Invariant Sections, in the notice that says that the
+ -  ``/dev/dvb/adapterN/caM``,
  
- .. _fdl-cover-texts:
+-where ``N`` enumerates the Digital TV cards in a system starting from 0, and
++where ``N`` enumerates the Digital TV cards in a system starting from 0, and
+ ``M`` enumerates the devices of each type within each adapter, starting
+-from 0, too. We will omit the “``/dev/dvb/adapterN/``\ ” in the further
++from 0, too. We will omit the "``/dev/dvb/adapterN/``\ " in the further
+ discussion of these devices.
  
--The “Cover Texts” are certain short passages of text that are listed, as
-+The "Cover Texts" are certain short passages of text that are listed, as
- Front-Cover Texts or Back-Cover Texts, in the notice that says that the
- :ref:`Document <fdl-document>` is released under this License.
+ More details about the data structures and function calls of all the
+diff --git a/Documentation/userspace-api/media/dvb/video.rst b/Documentation/userspace-api/media/dvb/video.rst
+index 38a8d39a1d25..808705b769a1 100644
+--- a/Documentation/userspace-api/media/dvb/video.rst
++++ b/Documentation/userspace-api/media/dvb/video.rst
+@@ -16,7 +16,7 @@ stream, not its presentation on the TV or computer screen. On PCs this
+ is typically handled by an associated video4linux device, e.g.
+ **/dev/video**, which allows scaling and defining output windows.
  
+-Some Digital TV cards don’t have their own MPEG decoder, which results in the
++Some Digital TV cards don't have their own MPEG decoder, which results in the
+ omission of the audio and video device as well as the video4linux
+ device.
  
- .. _fdl-transparent:
- 
--A “Transparent” copy of the :ref:`Document <fdl-document>` means a
-+A "Transparent" copy of the :ref:`Document <fdl-document>` means a
- machine-readable copy, represented in a format whose specification is
- available to the general public, whose contents can be viewed and edited
- directly and straightforwardly with generic text editors or (for images
-@@ -97,7 +97,7 @@ formatters or for automatic translation to a variety of formats suitable
- for input to text formatters. A copy made in an otherwise Transparent
- file format whose markup has been designed to thwart or discourage
- subsequent modification by readers is not Transparent. A copy that is
--not “Transparent” is called “Opaque”.
-+not "Transparent" is called "Opaque".
- 
- Examples of suitable formats for Transparent copies include plain ASCII
- without markup, Texinfo input format, LaTeX input format, SGML or XML
-@@ -111,10 +111,10 @@ word processors for output purposes only.
- 
- .. _fdl-title-page:
- 
--The “Title Page” means, for a printed book, the title page itself, plus
-+The "Title Page" means, for a printed book, the title page itself, plus
- such following pages as are needed to hold, legibly, the material this
- License requires to appear in the title page. For works in formats which
--do not have any title page as such, “Title Page” means the text near the
-+do not have any title page as such, "Title Page" means the text near the
- most prominent appearance of the work's title, preceding the beginning
- of the body of the text.
- 
-@@ -242,11 +242,11 @@ Modified Version:
-    Include an unaltered copy of this License.
- 
- -  **I.**
--   Preserve the section entitled “History”, and its title, and add to it
-+   Preserve the section entitled "History", and its title, and add to it
-    an item stating at least the title, year, new authors, and publisher
-    of the :ref:`Modified Version <fdl-modified>` as given on the
-    :ref:`Title Page <fdl-title-page>`. If there is no section entitled
--   “History” in the :ref:`Document <fdl-document>`, create one stating
-+   "History" in the :ref:`Document <fdl-document>`, create one stating
-    the title, year, authors, and publisher of the Document as given on
-    its Title Page, then add an item describing the Modified Version as
-    stated in the previous sentence.
-@@ -256,13 +256,13 @@ Modified Version:
-    :ref:`Document <fdl-document>` for public access to a
-    :ref:`Transparent <fdl-transparent>` copy of the Document, and
-    likewise the network locations given in the Document for previous
--   versions it was based on. These may be placed in the “History”
-+   versions it was based on. These may be placed in the "History"
-    section. You may omit a network location for a work that was
-    published at least four years before the Document itself, or if the
-    original publisher of the version it refers to gives permission.
- 
- -  **K.**
--   In any section entitled “Acknowledgements” or “Dedications”, preserve
-+   In any section entitled "Acknowledgements" or "Dedications", preserve
-    the section's title, and preserve in the section all the substance
-    and tone of each of the contributor acknowledgements and/or
-    dedications given therein.
-@@ -274,11 +274,11 @@ Modified Version:
-    part of the section titles.
- 
- -  **M.**
--   Delete any section entitled “Endorsements”. Such a section may not be
-+   Delete any section entitled "Endorsements". Such a section may not be
-    included in the :ref:`Modified Version <fdl-modified>`.
- 
- -  **N.**
--   Do not retitle any existing section as “Endorsements” or to conflict
-+   Do not retitle any existing section as "Endorsements" or to conflict
-    in title with any :ref:`Invariant Section <fdl-invariant>`.
- 
- If the :ref:`Modified Version <fdl-modified>` includes new
-@@ -290,7 +290,7 @@ of :ref:`Invariant Sections <fdl-invariant>` in the Modified Version's
- license notice. These titles must be distinct from any other section
- titles.
- 
--You may add a section entitled “Endorsements”, provided it contains
-+You may add a section entitled "Endorsements", provided it contains
- nothing but endorsements of your
- :ref:`Modified Version <fdl-modified>` by various parties--for
- example, statements of peer review or that the text has been approved by
-@@ -337,11 +337,11 @@ the original author or publisher of that section if known, or else a
- unique number. Make the same adjustment to the section titles in the
- list of Invariant Sections in the license notice of the combined work.
- 
--In the combination, you must combine any sections entitled “History” in
--the various original documents, forming one section entitled “History”;
--likewise combine any sections entitled “Acknowledgements”, and any
--sections entitled “Dedications”. You must delete all sections entitled
--“Endorsements.”
-+In the combination, you must combine any sections entitled "History" in
-+the various original documents, forming one section entitled "History";
-+likewise combine any sections entitled "Acknowledgements", and any
-+sections entitled "Dedications". You must delete all sections entitled
-+"Endorsements."
- 
- 
- .. _fdl-section6:
-@@ -372,7 +372,7 @@ with other separate and independent documents or works, in or on a
- volume of a storage or distribution medium, does not as a whole count as
- a :ref:`Modified Version <fdl-modified>` of the Document, provided no
- compilation copyright is claimed for the compilation. Such a compilation
--is called an “aggregate”, and this License does not apply to the other
-+is called an "aggregate", and this License does not apply to the other
- self-contained works thus compiled with the Document , on account of
- their being thus compiled, if they are not themselves derivative works
- of the Document. If the :ref:`Cover Text <fdl-cover-texts>`
-@@ -429,7 +429,7 @@ concerns. See
- 
- Each version of the License is given a distinguishing version number. If
- the :ref:`Document <fdl-document>` specifies that a particular
--numbered version of this License “or any later version” applies to it,
-+numbered version of this License "or any later version" applies to it,
- you have the option of following the terms and conditions either of that
- specified version or of any later version that has been published (not
- as a draft) by the Free Software Foundation. If the Document does not
-@@ -455,13 +455,13 @@ notices just after the title page:
-     being LIST THEIR TITLES, with the
-     :ref:`Front-Cover Texts <fdl-cover-texts>` being LIST, and with
-     the :ref:`Back-Cover Texts <fdl-cover-texts>` being LIST. A copy
--    of the license is included in the section entitled “GNU Free
--    Documentation License”.
-+    of the license is included in the section entitled "GNU Free
-+    Documentation License".
- 
--If you have no :ref:`Invariant Sections <fdl-invariant>`, write “with
--no Invariant Sections” instead of saying which ones are invariant. If
--you have no :ref:`Front-Cover Texts <fdl-cover-texts>`, write “no
--Front-Cover Texts” instead of “Front-Cover Texts being LIST”; likewise
-+If you have no :ref:`Invariant Sections <fdl-invariant>`, write "with
-+no Invariant Sections" instead of saying which ones are invariant. If
-+you have no :ref:`Front-Cover Texts <fdl-cover-texts>`, write "no
-+Front-Cover Texts" instead of "Front-Cover Texts being LIST"; likewise
- for :ref:`Back-Cover Texts <fdl-cover-texts>`.
- 
- If your document contains nontrivial examples of program code, we
 -- 
 2.30.2
 
