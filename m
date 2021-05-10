@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1F62C433B4
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3058CC433B4
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:30:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AED23614A5
-	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:29:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDFF16195A
+	for <linux-media@archiver.kernel.org>; Mon, 10 May 2021 10:30:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbhEJKaj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 May 2021 06:30:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33954 "EHLO mail.kernel.org"
+        id S231747AbhEJKb0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 May 2021 06:31:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231213AbhEJK3G (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 May 2021 06:29:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D29A614A5;
+        id S231680AbhEJK3f (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 10 May 2021 06:29:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 854456157F;
         Mon, 10 May 2021 10:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620642443;
-        bh=USKiH/7gRSCQ0TxxfElOg2JRZ2mRxPQmt2kVRT1Z4y4=;
+        bh=JrLMYL4JThvq3F8iBkWp1UK3eSd5nAUFv6Kg0wHMGcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ufkSm02fPjYxv2tyDvIy/DBL+/TGvAmscFZl4P66FTaVfbx2/XOpYOk3Www/tk8rD
-         ZzGEhMSgAQFtKpPlvD4ThDs2HPZMRcB6kG3+GW9oRKQrT/FL0jpgf9m2RSzADF+i5f
-         FJ6dsruqWeYn2/SgGh7KC96gO3A34IOlnOye9hG8kA2u+TmMxF+JQc5T5/JY4/JhjN
-         NPqZXNmxZLjwd3ZHSE2uTb8e/nVIA4mjRsmAI/Da9ZQvPMCzks/hCcIj0ItlrpO2ks
-         4t1VZAcf31E26qkz0wHJcnmAFA5SrNQJ7iQJ/2Jf1fvUMKsVBjnKESRXutGyh2pa1x
-         AHUNr/zLtLUAw==
+        b=YnWY2hZWNeHAPr7IU+RXYtk/YCOhzkDj4igjW97kvMGX+dGYkPWgEA5G4RTwDEA/M
+         sB/skEROu0R62Q0g+d3FJXlrl0Ox46VyjGPv5d9SVkqdxnECOc0NMPTSjDFSndqcBy
+         Nmna0XJ7NqWro49eat00KYeKPZ/ekODKeue/CQMheyP1CPEqxSWB43VA/GMN0BHPaw
+         KeqFwI1xcBgbtSJm8mH0WufW8++SFBG/Izo/289+NgNzIx2eUpLsN5fy3/S4y1ZtWg
+         0B6ZP39Ro+PYej0LgbGrVsKUoAISVnYMF2OdpxsJ3ToysYHkANZqhgK7sOsfxTKPXA
+         hYebhXr+7EqNw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lg38C-000UOm-Lo; Mon, 10 May 2021 12:27:20 +0200
+        id 1lg38D-000UPs-GF; Mon, 10 May 2021 12:27:21 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 07/53] docs: admin-guide: media: ipu3.rst: avoid using UTF-8 chars
-Date:   Mon, 10 May 2021 12:26:19 +0200
-Message-Id: <2864f014c7acc38878f6f015c0d224f65a98244f.1620641727.git.mchehab+huawei@kernel.org>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 24/53] docs: userspace-api: media: v4l: avoid using UTF-8 chars
+Date:   Mon, 10 May 2021 12:26:36 +0200
+Message-Id: <7bfa245cf54bfea669e2f46de4a91eeb3155c169.1620641727.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
@@ -61,27 +63,168 @@ While UTF-8 characters can be used at the Linux documentation,
 the best is to use them only when ASCII doesn't offer a good replacement.
 So, replace the occurences of the following UTF-8 characters:
 
-	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
-	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
+	- U+00a0 (' '): NO-BREAK SPACE
+	- U+00d7 ('×'): MULTIPLICATION SIGN
+	- U+2014 ('—'): EM DASH
+	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/ipu3.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/userspace-api/media/v4l/biblio.rst |  8 ++++----
+ Documentation/userspace-api/media/v4l/crop.rst   | 16 ++++++++--------
+ .../userspace-api/media/v4l/dev-decoder.rst      |  6 +++---
+ .../userspace-api/media/v4l/diff-v4l.rst         |  2 +-
+ Documentation/userspace-api/media/v4l/open.rst   |  2 +-
+ .../userspace-api/media/v4l/vidioc-cropcap.rst   |  4 ++--
+ 6 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/ipu3.rst b/Documentation/admin-guide/media/ipu3.rst
-index f59697c7b374..f77cb1384dc3 100644
---- a/Documentation/admin-guide/media/ipu3.rst
-+++ b/Documentation/admin-guide/media/ipu3.rst
-@@ -244,7 +244,7 @@ larger bayer frame for further YUV processing than "VIDEO" mode to get high
- quality images. Besides, "STILL" mode need XNR3 to do noise reduction, hence
- "STILL" mode will need more power and memory bandwidth than "VIDEO" mode. TNR
- will be enabled in "VIDEO" mode and bypassed by "STILL" mode. ImgU is running at
--“VIDEO” mode by default, the user can use v4l2 control V4L2_CID_INTEL_IPU3_MODE
-+"VIDEO" mode by default, the user can use v4l2 control V4L2_CID_INTEL_IPU3_MODE
- (currently defined in drivers/staging/media/ipu3/include/intel-ipu3.h) to query
- and set the running mode. For user, there is no difference for buffer queueing
- between the "VIDEO" and "STILL" mode, mandatory input and main output node
+diff --git a/Documentation/userspace-api/media/v4l/biblio.rst b/Documentation/userspace-api/media/v4l/biblio.rst
+index 64d241daf63c..6e07b78bd39d 100644
+--- a/Documentation/userspace-api/media/v4l/biblio.rst
++++ b/Documentation/userspace-api/media/v4l/biblio.rst
+@@ -51,7 +51,7 @@ ISO 13818-1
+ ===========
+ 
+ 
+-:title:     ITU-T Rec. H.222.0 | ISO/IEC 13818-1 "Information technology — Generic coding of moving pictures and associated audio information: Systems"
++:title:     ITU-T Rec. H.222.0 | ISO/IEC 13818-1 "Information technology - Generic coding of moving pictures and associated audio information: Systems"
+ 
+ :author:    International Telecommunication Union (http://www.itu.ch), International Organisation for Standardisation (http://www.iso.ch)
+ 
+@@ -61,7 +61,7 @@ ISO 13818-2
+ ===========
+ 
+ 
+-:title:     ITU-T Rec. H.262 | ISO/IEC 13818-2 "Information technology — Generic coding of moving pictures and associated audio information: Video"
++:title:     ITU-T Rec. H.262 | ISO/IEC 13818-2 "Information technology - Generic coding of moving pictures and associated audio information: Video"
+ 
+ :author:    International Telecommunication Union (http://www.itu.ch), International Organisation for Standardisation (http://www.iso.ch)
+ 
+@@ -150,7 +150,7 @@ ITU-T.81
+ ========
+ 
+ 
+-:title:     ITU-T Recommendation T.81 "Information Technology — Digital Compression and Coding of Continous-Tone Still Images — Requirements and Guidelines"
++:title:     ITU-T Recommendation T.81 "Information Technology - Digital Compression and Coding of Continous-Tone Still Images - Requirements and Guidelines"
+ 
+ :author:    International Telecommunication Union (http://www.itu.int)
+ 
+@@ -310,7 +310,7 @@ ISO 12232:2006
+ ==============
+ 
+ 
+-:title:     Photography — Digital still cameras — Determination of exposure index, ISO speed ratings, standard output sensitivity, and recommended exposure index
++:title:     Photography - Digital still cameras - Determination of exposure index, ISO speed ratings, standard output sensitivity, and recommended exposure index
+ 
+ :author:    International Organization for Standardization (http://www.iso.org)
+ 
+diff --git a/Documentation/userspace-api/media/v4l/crop.rst b/Documentation/userspace-api/media/v4l/crop.rst
+index 3fe185e25ccf..23c2b71f449e 100644
+--- a/Documentation/userspace-api/media/v4l/crop.rst
++++ b/Documentation/userspace-api/media/v4l/crop.rst
+@@ -130,22 +130,22 @@ the driver state and therefore only adjust the requested rectangle.
+ 
+ Suppose scaling on a video capture device is restricted to a factor 1:1
+ or 2:1 in either direction and the target image size must be a multiple
+-of 16 × 16 pixels. The source cropping rectangle is set to defaults,
+-which are also the upper limit in this example, of 640 × 400 pixels at
+-offset 0, 0. An application requests an image size of 300 × 225 pixels,
++of 16 x 16 pixels. The source cropping rectangle is set to defaults,
++which are also the upper limit in this example, of 640 x 400 pixels at
++offset 0, 0. An application requests an image size of 300 x 225 pixels,
+ assuming video will be scaled down from the "full picture" accordingly.
+-The driver sets the image size to the closest possible values 304 × 224,
++The driver sets the image size to the closest possible values 304 x 224,
+ then chooses the cropping rectangle closest to the requested size, that
+-is 608 × 224 (224 × 2:1 would exceed the limit 400). The offset 0, 0 is
++is 608 x 224 (224 x 2:1 would exceed the limit 400). The offset 0, 0 is
+ still valid, thus unmodified. Given the default cropping rectangle
+ reported by :ref:`VIDIOC_CROPCAP <VIDIOC_CROPCAP>` the application can
+ easily propose another offset to center the cropping rectangle.
+ 
+ Now the application may insist on covering an area using a picture
+ aspect ratio closer to the original request, so it asks for a cropping
+-rectangle of 608 × 456 pixels. The present scaling factors limit
+-cropping to 640 × 384, so the driver returns the cropping size 608 × 384
+-and adjusts the image size to closest possible 304 × 192.
++rectangle of 608 x 456 pixels. The present scaling factors limit
++cropping to 640 x 384, so the driver returns the cropping size 608 x 384
++and adjusts the image size to closest possible 304 x 192.
+ 
+ 
+ Examples
+diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+index 3d4138a4ba69..5b9b83feeceb 100644
+--- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
++++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+@@ -38,7 +38,7 @@ Conventions and Notations Used in This Document
+ 6. i = [a..b]: sequence of integers from a to b, inclusive, i.e. i =
+    [0..2]: i = 0, 1, 2.
+ 
+-7. Given an ``OUTPUT`` buffer A, then A’ represents a buffer on the ``CAPTURE``
++7. Given an ``OUTPUT`` buffer A, then A' represents a buffer on the ``CAPTURE``
+    queue containing data that resulted from processing buffer A.
+ 
+ .. _decoder-glossary:
+@@ -288,7 +288,7 @@ Initialization
+ 
+       Changing the ``OUTPUT`` format may change the currently set ``CAPTURE``
+       format. How the new ``CAPTURE`` format is determined is up to the decoder
+-      and the client must ensure it matches its needs afterwards.
++      and the client must ensure it matches its needs afterwards.
+ 
+ 2.  Allocate source (bytestream) buffers via :c:func:`VIDIOC_REQBUFS` on
+     ``OUTPUT``.
+@@ -874,7 +874,7 @@ it may be affected as per normal decoder operation.
+ 
+    any of the following results on the ``CAPTURE`` queue is allowed:
+ 
+-     {A’, B’, G’, H’}, {A’, G’, H’}, {G’, H’}.
++     {A', B', G', H'}, {A', G', H'}, {G', H'}.
+ 
+    To determine the CAPTURE buffer containing the first decoded frame after the
+    seek, the client may observe the timestamps to match the CAPTURE and OUTPUT
+diff --git a/Documentation/userspace-api/media/v4l/diff-v4l.rst b/Documentation/userspace-api/media/v4l/diff-v4l.rst
+index 33243ecb5033..9ce60e625974 100644
+--- a/Documentation/userspace-api/media/v4l/diff-v4l.rst
++++ b/Documentation/userspace-api/media/v4l/diff-v4l.rst
+@@ -447,7 +447,7 @@ name ``V4L2_FBUF_FLAG_CHROMAKEY``.
+ 
+ In V4L, storing a bitmap pointer in ``clips`` and setting ``clipcount``
+ to ``VIDEO_CLIP_BITMAP`` (-1) requests bitmap clipping, using a fixed
+-size bitmap of 1024 × 625 bits. Struct :c:type:`v4l2_window`
++size bitmap of 1024 x 625 bits. Struct :c:type:`v4l2_window`
+ has a separate ``bitmap`` pointer field for this purpose and the bitmap
+ size is determined by ``w.width`` and ``w.height``.
+ 
+diff --git a/Documentation/userspace-api/media/v4l/open.rst b/Documentation/userspace-api/media/v4l/open.rst
+index 18bfb9b8137d..b015bbbdf8b5 100644
+--- a/Documentation/userspace-api/media/v4l/open.rst
++++ b/Documentation/userspace-api/media/v4l/open.rst
+@@ -100,7 +100,7 @@ Where ``X`` is a non-negative integer.
+ 	$ tree /dev/v4l
+ 	/dev/v4l
+ 	├── by-id
+-	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
++	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
+ 	└── by-path
+ 	    └── pci-0000:00:14.0-usb-0:2:1.0-video-index0 -> ../../video0
+ 
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
+index 551ac9d3c6ef..4ea652e66401 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
+@@ -69,8 +69,8 @@ overlay devices.
+     * - struct :ref:`v4l2_rect <v4l2-rect-crop>`
+       - ``defrect``
+       - Default cropping rectangle, it shall cover the "whole picture".
+-	Assuming pixel aspect 1/1 this could be for example a 640 × 480
+-	rectangle for NTSC, a 768 × 576 rectangle for PAL and SECAM
++	Assuming pixel aspect 1/1 this could be for example a 640 x 480
++	rectangle for NTSC, a 768 x 576 rectangle for PAL and SECAM
+ 	centered over the active picture area. The same co-ordinate system
+ 	as for ``bounds`` is used.
+     * - struct :c:type:`v4l2_fract`
 -- 
 2.30.2
 
