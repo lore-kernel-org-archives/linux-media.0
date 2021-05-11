@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3875C43460
-	for <linux-media@archiver.kernel.org>; Tue, 11 May 2021 18:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA539C433B4
+	for <linux-media@archiver.kernel.org>; Tue, 11 May 2021 18:08:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1881617ED
-	for <linux-media@archiver.kernel.org>; Tue, 11 May 2021 18:08:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1CD46193D
+	for <linux-media@archiver.kernel.org>; Tue, 11 May 2021 18:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbhEKSJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 May 2021 14:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        id S232181AbhEKSJg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 May 2021 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbhEKSJ1 (ORCPT
+        with ESMTP id S232082AbhEKSJa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 May 2021 14:09:27 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB631C061348
-        for <linux-media@vger.kernel.org>; Tue, 11 May 2021 11:08:19 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id a22so19100179qkl.10
-        for <linux-media@vger.kernel.org>; Tue, 11 May 2021 11:08:19 -0700 (PDT)
+        Tue, 11 May 2021 14:09:30 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627D9C06134E
+        for <linux-media@vger.kernel.org>; Tue, 11 May 2021 11:08:22 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id 1so15301800qtb.0
+        for <linux-media@vger.kernel.org>; Tue, 11 May 2021 11:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=marek-ca.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZPyfLXfAuFVtdULxwP4Td4sMymsB5106H47fAEp+QH8=;
-        b=zWqwgWpJCjw7WKmZ3oqortSwz3uz133jwoi5Cuk2zdcaxJU2LH/Cv4WB3OdImE6rpt
-         knHRbRwCcFlacyCr117pB2bq9R/IGtvQiaeDjlU/GfrjrczWc4jXe1FdlnDygTAsKpZ5
-         b4bEuggLKHnY8bbMgtZ6cZJgqmw05kj9LBAx1PzwoVuhgQt/rb0Uwd6UaDyoqYwRT9ml
-         sTbFOZZZ9lwL6aQWo3Be0DxXVd3STEFAieWYzIWTF63oro4WtMVVvUNtK3kxRg+Uxpfb
-         Fwbcq8eSdzpVYl4Qvn35oFz2OVg0kLeR7uO8eIlZXTiz7aKqahCOqmWe8B8nuOfpPhVa
-         cUgQ==
+        bh=cX7VUxclVGfkyV9rVCDHyazRsd8VZZtRYarJP7RCO34=;
+        b=BuqyYzAdQgWzCtjuH5wvPUIcZPLbBfnEd6wU/R3rGEtSEHDFAq0djDSfodH+yaUhN2
+         UNPjDvyNgDzLYAukgjmx7DbFvjNzDJW4T3dhX2aU9yi7UjWLRL74K3eW0G0RsvZUEGAk
+         nSHBe3e7KsL1+3wWxzf4q0AGF8a8xgwbBNOPgWBpL18UhzW4DcOLeZfpI+dEp7vnLQKd
+         eqvMi1xHx9SyihlXm25Xyp5PSXKIp7VaglFikb5vm/cj2cXmiEKMzM72mKkp8kqX0OQF
+         DpJkEhg+2NiXq7RG1byNz/zuOgU8VmddxwyvYIcd644z6o8n53UdCRfZSEldEuwAz9gk
+         5g5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZPyfLXfAuFVtdULxwP4Td4sMymsB5106H47fAEp+QH8=;
-        b=IiVGsAnXKh2GWTURec3rZRxW0+RXYEfYCbnpAwCHxTHR2QqQt7+isHl/mbIGiZzGJm
-         wyuevyWnWTq5XoXDNiEGxQmPWSi8YaBESdvts/Fa8K6CJEHQgvyFoS8UY7H1rgx7wNRw
-         sELlAjYH5T8iF1X8+k5jpAPAsd4YqqdHLDb3bMOaBUajb1AevdzjWZrPQedqfOZo025m
-         TohkPLwBIDn4TUxIg8WS3Thd138NjyqC46lEmBcMvvgG9RS0YgxQtn64LI8Ne+o7mtX1
-         qeq9QNao25uIBZzyVXJmqNUa+vBvZ0YASddujOe2r+m5tbpSO5wsdNkOFFKsGVxn1HyS
-         Ao6w==
-X-Gm-Message-State: AOAM531mq7nnsoE6l+T0pJxrCyVkXOMHPEAvuy3t3OT30nVEL1SZ/gR6
-        pElptASfp1sJ+MM4Ep4SjaO50A==
-X-Google-Smtp-Source: ABdhPJyUYlQ1lNhxL3Whnu1SGV39Fue1yyCO+w66YFqJ29+5d5GET9aFjejSuvRp/FJxQTu9i4Y2JQ==
-X-Received: by 2002:a37:8403:: with SMTP id g3mr19476744qkd.469.1620756499128;
-        Tue, 11 May 2021 11:08:19 -0700 (PDT)
+        bh=cX7VUxclVGfkyV9rVCDHyazRsd8VZZtRYarJP7RCO34=;
+        b=pjFHAFEjoXYfAxuWq3kPgeFJWWccaA8V+ynNb9ImSrmvRzEBkzhgawBvRLiy5wGN5M
+         5QaZGvtQ+v7IXM/O10i2KHeB8Gt1ijHWSxjiQZOPM1ce9lxigKTCLQEAkOGAq4Y0Rx9y
+         q4n+/hADzL9Q+S6lzDE3oNFk9V0ZuNEdLp1iprehiKSOZ16H/RAZ8XXcZOhHD6C89JL3
+         vbSnmRpGo2PpnhqFOXlkKfQYh18NI6FTZ38816kTkmBo0BkBV8Kf5FmQpavH9yo4onHA
+         PUxHpjVji0GAMbcwvhpEihM5F+9MvMZm68w7AgWoZTYAFjTqpgXPGdZZQOeuJ5Vwkgs2
+         4QpQ==
+X-Gm-Message-State: AOAM533CokFzvv80RqUOH8AdbD5Z5wgRJPhaEOkcdERmD9QE5h240t8J
+        zbCgfGYOG6NYmDUqTY8dd9H2Mg==
+X-Google-Smtp-Source: ABdhPJzrcQa4lolbmsjOGNCmrYUqVsujZXPtz83eDxf39yjfInkVOoMZWdsx4gwDOK+SRWJS79buUA==
+X-Received: by 2002:ac8:44b1:: with SMTP id a17mr29422749qto.369.1620756501537;
+        Tue, 11 May 2021 11:08:21 -0700 (PDT)
 Received: from localhost.localdomain (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
-        by smtp.gmail.com with ESMTPSA id g5sm17104476qtm.2.2021.05.11.11.08.18
+        by smtp.gmail.com with ESMTPSA id g5sm17104476qtm.2.2021.05.11.11.08.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 11:08:18 -0700 (PDT)
+        Tue, 11 May 2021 11:08:21 -0700 (PDT)
 From:   Jonathan Marek <jonathan@marek.ca>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     robert.foss@linaro.org, andrey.konovalov@linaro.org,
@@ -63,11 +63,12 @@ Cc:     robert.foss@linaro.org, andrey.konovalov@linaro.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org (open list:QUALCOMM CAMERA SUBSYSTEM DRIVER),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 10/17] media: camss: remove vdda-csiN from sdm845 resources
-Date:   Tue, 11 May 2021 14:07:17 -0400
-Message-Id: <20210511180728.23781-11-jonathan@marek.ca>
+Subject: [PATCH 12/17] media: camss: vfe-170: clean up some dead code
+Date:   Tue, 11 May 2021 14:07:19 -0400
+Message-Id: <20210511180728.23781-13-jonathan@marek.ca>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20210511180728.23781-1-jonathan@marek.ca>
 References: <20210511180728.23781-1-jonathan@marek.ca>
@@ -77,45 +78,124 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This isn't used and only works because devm_regulator_get() returns a dummy
-regulator.
+vfe_isr_read()/vfe_isr_halt_ack()/vfe_reg_clr() are never called.
 
+vfe_isr_sof() does nothing, remove it.
+
+The only vfe_reg_set() usage can be easily replaced with a writel.
+
+Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
 Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 ---
- drivers/media/platform/qcom/camss/camss.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../media/platform/qcom/camss/camss-vfe-170.c | 53 +------------------
+ 1 file changed, 2 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index ef100d5f7763..c08d6d6f6f90 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -542,7 +542,7 @@ static const struct resources csiphy_res_845[] = {
- static const struct resources csid_res_845[] = {
- 	/* CSID0 */
- 	{
--		.regulator = { "vdda-csi0" },
-+		.regulator = { NULL },
- 		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
- 				"soc_ahb", "vfe0", "vfe0_src",
- 				"vfe0_cphy_rx", "csi0",
-@@ -562,7 +562,7 @@ static const struct resources csid_res_845[] = {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 8594d275b41d..076ca082e107 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -188,20 +188,6 @@ static void vfe_hw_version_read(struct vfe_device *vfe, struct device *dev)
+ 	dev_err(dev, "VFE HW Version = %u.%u.%u\n", gen, rev, step);
+ }
  
- 	/* CSID1 */
- 	{
--		.regulator = { "vdda-csi1" },
-+		.regulator = { NULL },
- 		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
- 				"soc_ahb", "vfe1", "vfe1_src",
- 				"vfe1_cphy_rx", "csi1",
-@@ -582,7 +582,7 @@ static const struct resources csid_res_845[] = {
+-static inline void vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
+-{
+-	u32 bits = readl_relaxed(vfe->base + reg);
+-
+-	writel_relaxed(bits & ~clr_bits, vfe->base + reg);
+-}
+-
+-static inline void vfe_reg_set(struct vfe_device *vfe, u32 reg, u32 set_bits)
+-{
+-	u32 bits = readl_relaxed(vfe->base + reg);
+-
+-	writel_relaxed(bits | set_bits, vfe->base + reg);
+-}
+-
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	u32 reset_bits = GLOBAL_RESET_CMD_CORE		|
+@@ -305,32 +291,14 @@ static inline void vfe_reg_update_clear(struct vfe_device *vfe,
  
- 	/* CSID2 */
- 	{
--		.regulator = { "vdda-csi2" },
-+		.regulator = { NULL },
- 		.clock = { "cpas_ahb", "cphy_rx_src", "slow_ahb_src",
- 				"soc_ahb", "vfe_lite", "vfe_lite_src",
- 				"vfe_lite_cphy_rx", "csi2",
+ static void vfe_enable_irq_common(struct vfe_device *vfe)
+ {
+-	vfe_reg_set(vfe, VFE_IRQ_MASK_0, ~0u);
+-	vfe_reg_set(vfe, VFE_IRQ_MASK_1, ~0u);
++	writel_relaxed(~0u, vfe->base + VFE_IRQ_MASK_0);
++	writel_relaxed(~0u, vfe->base + VFE_IRQ_MASK_1);
+ 
+ 	writel_relaxed(~0u, vfe->base + VFE_BUS_IRQ_MASK(0));
+ 	writel_relaxed(~0u, vfe->base + VFE_BUS_IRQ_MASK(1));
+ 	writel_relaxed(~0u, vfe->base + VFE_BUS_IRQ_MASK(2));
+ }
+ 
+-static void vfe_isr_halt_ack(struct vfe_device *vfe)
+-{
+-	complete(&vfe->halt_complete);
+-}
+-
+-static void vfe_isr_read(struct vfe_device *vfe, u32 *status0, u32 *status1)
+-{
+-	*status0 = readl_relaxed(vfe->base + VFE_IRQ_STATUS_0);
+-	*status1 = readl_relaxed(vfe->base + VFE_IRQ_STATUS_1);
+-
+-	writel_relaxed(*status0, vfe->base + VFE_IRQ_CLEAR_0);
+-	writel_relaxed(*status1, vfe->base + VFE_IRQ_CLEAR_1);
+-
+-	/* Enforce ordering between IRQ Clear and Global IRQ Clear */
+-	wmb();
+-	writel_relaxed(CMD_GLOBAL_CLEAR, vfe->base + VFE_IRQ_CMD);
+-}
+-
+ static void vfe_violation_read(struct vfe_device *vfe)
+ {
+ 	u32 violation = readl_relaxed(vfe->base + VFE_VIOLATION_STATUS);
+@@ -375,10 +343,6 @@ static irqreturn_t vfe_isr(int irq, void *dev)
+ 		if (status0 & STATUS_0_RDI_REG_UPDATE(i))
+ 			vfe->isr_ops.reg_update(vfe, i);
+ 
+-	for (i = VFE_LINE_RDI0; i <= VFE_LINE_RDI2; i++)
+-		if (status0 & STATUS_1_RDI_SOF(i))
+-			vfe->isr_ops.sof(vfe, i);
+-
+ 	for (i = 0; i < MSM_VFE_COMPOSITE_IRQ_NUM; i++)
+ 		if (vfe_bus_status[0] & STATUS0_COMP_BUF_DONE(i))
+ 			vfe->isr_ops.comp_done(vfe, i);
+@@ -607,16 +571,6 @@ static int vfe_disable(struct vfe_line *line)
+ 	return 0;
+ }
+ 
+-/*
+- * vfe_isr_sof - Process start of frame interrupt
+- * @vfe: VFE Device
+- * @line_id: VFE line
+- */
+-static void vfe_isr_sof(struct vfe_device *vfe, enum vfe_line_id line_id)
+-{
+-	/* nop */
+-}
+-
+ /*
+  * vfe_isr_reg_update - Process reg update interrupt
+  * @vfe: VFE Device
+@@ -749,9 +703,7 @@ static int vfe_queue_buffer(struct camss_video *vid,
+ 
+ static const struct vfe_isr_ops vfe_isr_ops_170 = {
+ 	.reset_ack = vfe_isr_reset_ack,
+-	.halt_ack = vfe_isr_halt_ack,
+ 	.reg_update = vfe_isr_reg_update,
+-	.sof = vfe_isr_sof,
+ 	.comp_done = vfe_isr_comp_done,
+ 	.wm_done = vfe_isr_wm_done,
+ };
+@@ -772,7 +724,6 @@ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ const struct vfe_hw_ops vfe_ops_170 = {
+ 	.global_reset = vfe_global_reset,
+ 	.hw_version_read = vfe_hw_version_read,
+-	.isr_read = vfe_isr_read,
+ 	.isr = vfe_isr,
+ 	.pm_domain_off = vfe_pm_domain_off,
+ 	.pm_domain_on = vfe_pm_domain_on,
 -- 
 2.26.1
 
