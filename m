@@ -2,55 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CB5FC43460
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A94AC43616
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:52:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAA47613EE
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:51:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B5B061104
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbhELMxF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 May 2021 08:53:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52504 "EHLO mail.kernel.org"
+        id S232148AbhELMxL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 May 2021 08:53:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231481AbhELMw7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 May 2021 08:52:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C79261433;
+        id S231388AbhELMw4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 12 May 2021 08:52:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B11D61175;
         Wed, 12 May 2021 12:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620823902;
-        bh=9CPQp7MPzDV6VUXKW/UwJMFGHuGr2ouXLMwFYL30Ie8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LZ/zLEsCzTMn33lLAlI+FcB1PvtFemZvcFqOe0kLj6E8X27RmgdG+FFkCid1ZcvD3
-         A/WsjuQ+ZLkcI8eoLyBvnHTiws6g2SsMGo+Yw732IGQ6gWlwzHNL1EWjKgrAW5BcHj
-         4f/8UEzI2mlzmfQnxESDaKAsl/Ff+bLEaqewRUvWZZFiTvvcrMwuA/ijYHEZdWpZe5
-         eOCcVFdBP5Ro7c1VK1GA9dSRkoQPag0lLzfbXQCGJ3c7ivRQt7RTwESj6a549za3Gf
-         ANVlN1OQfNIhwmI8eWHeHYzHYarpjc7GIbznoAMmZN4hYB1Z0lAWILJeiwu9oPBYGQ
-         HDttaeqlXaGKQ==
+        bh=L+E/N8mtA2/+iSqhjhIyKk7M7RrC5qMfkQmRh4SXqOM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ucNSAhXYlF3Szz7W2irBTsvcIq33u1CrsW3ughaZJQqP+LrxpB0KjDChNaWylRCiA
+         8uidMvIFPObFZ6akJiKIQ1n/loNfn6hx8yVucw2xWZ73EfgNRibzOSlugYBt51kwpz
+         sdmRPA3LdwD45uYQTpj7XZoENUjgUxwJTlI1qlwGCNWZNWI+BkaJBNQJYsI68pIF0d
+         fXOa2Wzs1nudr171bvqR7b67LC1CF/NPtlR0c90fFeyu9TgllD9P44UMzmzYncl5FJ
+         KVeCETjMQ0hlqHZjf6TbTaK//D282G036gFoleiqqZjAOauHQnBlpoCUvLp2Ls+ug5
+         bNkKFQYHSRskA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lgoKy-0018hl-L6; Wed, 12 May 2021 14:51:40 +0200
+        id 1lgoKy-0018go-1r; Wed, 12 May 2021 14:51:40 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 15/40] docs: userspace-api: media: v4l: Use ASCII subset instead of UTF-8 alternate symbols
-Date:   Wed, 12 May 2021 14:50:19 +0200
-Message-Id: <9b48ff68615727c517df824af6a5b8f9edf55622.1620823573.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate symbols
+Date:   Wed, 12 May 2021 14:50:04 +0200
+Message-Id: <cover.1620823573.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,141 +64,219 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The conversion tools used during DocBook/LaTeX/Markdown->ReST conversion
-and some automatic rules which exists on certain text editors like
-LibreOffice turned ASCII characters into some UTF-8 alternatives that
-are better displayed on html and PDF.
+This series contain basically a cleanup from all those years of converting
+files to ReST.
 
-While it is OK to use UTF-8 characters in Linux, it is better to
-use the ASCII subset instead of using an UTF-8 equivalent character
-as it makes life easier for tools like grep, and are easier to edit
-with the some commonly used text/source code editors.
+During the conversion period, several tools like LaTeX, pandoc, DocBook
+and some specially-written scripts were used in order to convert
+existing documents.
 
-Also, Sphinx already do such conversion automatically outside literal blocks:
-   https://docutils.sourceforge.io/docs/user/smartquotes.html
+Such conversion tools - plus some text editor like LibreOffice  or similar  - have
+a set of rules that turns some typed ASCII characters into UTF-8 alternatives,
+for instance converting commas into curly commas and adding non-breakable
+spaces. All of those are meant to produce better results when the text is
+displayed in HTML or PDF formats.
 
-So, replace the occurences of the following UTF-8 characters:
+While it is perfectly fine to use UTF-8 characters in Linux, and specially at
+the documentation,  it is better to  stick to the ASCII subset  on such
+particular case,  due to a couple of reasons:
 
-	- U+00a0 (' '): NO-BREAK SPACE
-	- U+00d7 ('×'): MULTIPLICATION SIGN
-	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
+1. it makes life easier for tools like grep;
+2. they easier to edit with the some commonly used text/source
+   code editors.
+    
+Also, Sphinx already do such conversion automatically outside 
+literal blocks, as described at:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+       https://docutils.sourceforge.io/docs/user/smartquotes.html
+
+In this series, the following UTF-8 symbols are replaced:
+
+            - U+00a0 (' '): NO-BREAK SPACE
+            - U+00ad ('­'): SOFT HYPHEN
+            - U+00b4 ('´'): ACUTE ACCENT
+            - U+00d7 ('×'): MULTIPLICATION SIGN
+            - U+2010 ('‐'): HYPHEN
+            - U+2018 ('‘'): LEFT SINGLE QUOTATION MARK
+            - U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
+            - U+201c ('“'): LEFT DOUBLE QUOTATION MARK
+            - U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
+            - U+2212 ('−'): MINUS SIGN
+            - U+2217 ('∗'): ASTERISK OPERATOR
+            - U+feff ('﻿'): ZERO WIDTH NO-BREAK SPACE (BOM)
+
 ---
- Documentation/userspace-api/media/v4l/crop.rst   | 16 ++++++++--------
- .../userspace-api/media/v4l/dev-decoder.rst      |  6 +++---
- .../userspace-api/media/v4l/diff-v4l.rst         |  2 +-
- Documentation/userspace-api/media/v4l/open.rst   |  2 +-
- .../userspace-api/media/v4l/vidioc-cropcap.rst   |  4 ++--
- 5 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/crop.rst b/Documentation/userspace-api/media/v4l/crop.rst
-index 3fe185e25ccf..23c2b71f449e 100644
---- a/Documentation/userspace-api/media/v4l/crop.rst
-+++ b/Documentation/userspace-api/media/v4l/crop.rst
-@@ -130,22 +130,22 @@ the driver state and therefore only adjust the requested rectangle.
+v2:
+- removed EM/EN DASH conversion from this patchset;
+- removed a few fixes, as those were addressed on a separate series.
  
- Suppose scaling on a video capture device is restricted to a factor 1:1
- or 2:1 in either direction and the target image size must be a multiple
--of 16 × 16 pixels. The source cropping rectangle is set to defaults,
--which are also the upper limit in this example, of 640 × 400 pixels at
--offset 0, 0. An application requests an image size of 300 × 225 pixels,
-+of 16 x 16 pixels. The source cropping rectangle is set to defaults,
-+which are also the upper limit in this example, of 640 x 400 pixels at
-+offset 0, 0. An application requests an image size of 300 x 225 pixels,
- assuming video will be scaled down from the "full picture" accordingly.
--The driver sets the image size to the closest possible values 304 × 224,
-+The driver sets the image size to the closest possible values 304 x 224,
- then chooses the cropping rectangle closest to the requested size, that
--is 608 × 224 (224 × 2:1 would exceed the limit 400). The offset 0, 0 is
-+is 608 x 224 (224 x 2:1 would exceed the limit 400). The offset 0, 0 is
- still valid, thus unmodified. Given the default cropping rectangle
- reported by :ref:`VIDIOC_CROPCAP <VIDIOC_CROPCAP>` the application can
- easily propose another offset to center the cropping rectangle.
- 
- Now the application may insist on covering an area using a picture
- aspect ratio closer to the original request, so it asks for a cropping
--rectangle of 608 × 456 pixels. The present scaling factors limit
--cropping to 640 × 384, so the driver returns the cropping size 608 × 384
--and adjusts the image size to closest possible 304 × 192.
-+rectangle of 608 x 456 pixels. The present scaling factors limit
-+cropping to 640 x 384, so the driver returns the cropping size 608 x 384
-+and adjusts the image size to closest possible 304 x 192.
- 
- 
- Examples
-diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-index 3d4138a4ba69..5b9b83feeceb 100644
---- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-@@ -38,7 +38,7 @@ Conventions and Notations Used in This Document
- 6. i = [a..b]: sequence of integers from a to b, inclusive, i.e. i =
-    [0..2]: i = 0, 1, 2.
- 
--7. Given an ``OUTPUT`` buffer A, then A’ represents a buffer on the ``CAPTURE``
-+7. Given an ``OUTPUT`` buffer A, then A' represents a buffer on the ``CAPTURE``
-    queue containing data that resulted from processing buffer A.
- 
- .. _decoder-glossary:
-@@ -288,7 +288,7 @@ Initialization
- 
-       Changing the ``OUTPUT`` format may change the currently set ``CAPTURE``
-       format. How the new ``CAPTURE`` format is determined is up to the decoder
--      and the client must ensure it matches its needs afterwards.
-+      and the client must ensure it matches its needs afterwards.
- 
- 2.  Allocate source (bytestream) buffers via :c:func:`VIDIOC_REQBUFS` on
-     ``OUTPUT``.
-@@ -874,7 +874,7 @@ it may be affected as per normal decoder operation.
- 
-    any of the following results on the ``CAPTURE`` queue is allowed:
- 
--     {A’, B’, G’, H’}, {A’, G’, H’}, {G’, H’}.
-+     {A', B', G', H'}, {A', G', H'}, {G', H'}.
- 
-    To determine the CAPTURE buffer containing the first decoded frame after the
-    seek, the client may observe the timestamps to match the CAPTURE and OUTPUT
-diff --git a/Documentation/userspace-api/media/v4l/diff-v4l.rst b/Documentation/userspace-api/media/v4l/diff-v4l.rst
-index 33243ecb5033..9ce60e625974 100644
---- a/Documentation/userspace-api/media/v4l/diff-v4l.rst
-+++ b/Documentation/userspace-api/media/v4l/diff-v4l.rst
-@@ -447,7 +447,7 @@ name ``V4L2_FBUF_FLAG_CHROMAKEY``.
- 
- In V4L, storing a bitmap pointer in ``clips`` and setting ``clipcount``
- to ``VIDEO_CLIP_BITMAP`` (-1) requests bitmap clipping, using a fixed
--size bitmap of 1024 × 625 bits. Struct :c:type:`v4l2_window`
-+size bitmap of 1024 x 625 bits. Struct :c:type:`v4l2_window`
- has a separate ``bitmap`` pointer field for this purpose and the bitmap
- size is determined by ``w.width`` and ``w.height``.
- 
-diff --git a/Documentation/userspace-api/media/v4l/open.rst b/Documentation/userspace-api/media/v4l/open.rst
-index 18bfb9b8137d..b015bbbdf8b5 100644
---- a/Documentation/userspace-api/media/v4l/open.rst
-+++ b/Documentation/userspace-api/media/v4l/open.rst
-@@ -100,7 +100,7 @@ Where ``X`` is a non-negative integer.
- 	$ tree /dev/v4l
- 	/dev/v4l
- 	├── by-id
--	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
-+	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
- 	└── by-path
- 	    └── pci-0000:00:14.0-usb-0:2:1.0-video-index0 -> ../../video0
- 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
-index 551ac9d3c6ef..4ea652e66401 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
-@@ -69,8 +69,8 @@ overlay devices.
-     * - struct :ref:`v4l2_rect <v4l2-rect-crop>`
-       - ``defrect``
-       - Default cropping rectangle, it shall cover the "whole picture".
--	Assuming pixel aspect 1/1 this could be for example a 640 × 480
--	rectangle for NTSC, a 768 × 576 rectangle for PAL and SECAM
-+	Assuming pixel aspect 1/1 this could be for example a 640 x 480
-+	rectangle for NTSC, a 768 x 576 rectangle for PAL and SECAM
- 	centered over the active picture area. The same co-ordinate system
- 	as for ``bounds`` is used.
-     * - struct :c:type:`v4l2_fract`
+PS.:
+   The first version of this series was posted with a different name:
+
+	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
+
+   I also changed the patch texts, in order to better describe the patches goals.
+
+Mauro Carvalho Chehab (40):
+  docs: hwmon: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: admin-guide: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: admin-guide: media: ipu3.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: admin-guide: perf: imx-ddr.rst: Use ASCII subset instead of
+    UTF-8 alternate symbols
+  docs: admin-guide: pm: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: trace: coresight: coresight-etm4x-reference.rst: Use ASCII
+    subset instead of UTF-8 alternate symbols
+  docs: driver-api: ioctl.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: driver-api: thermal: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: driver-api: media: drivers: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: driver-api: firmware: other_interfaces.rst: Use ASCII subset
+    instead of UTF-8 alternate symbols
+  docs: fault-injection: nvme-fault-injection.rst: Use ASCII subset
+    instead of UTF-8 alternate symbols
+  docs: usb: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: process: code-of-conduct.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: userspace-api: media: fdl-appendix.rst: Use ASCII subset instead
+    of UTF-8 alternate symbols
+  docs: userspace-api: media: v4l: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: userspace-api: media: dvb: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: vm: zswap.rst: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: filesystems: f2fs.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: filesystems: ext4: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: kernel-hacking: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: hid: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: security: tpm: tpm_event_log.rst: Use ASCII subset instead of
+    UTF-8 alternate symbols
+  docs: security: keys: trusted-encrypted.rst: Use ASCII subset instead
+    of UTF-8 alternate symbols
+  docs: networking: scaling.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: networking: devlink: devlink-dpipe.rst: Use ASCII subset instead
+    of UTF-8 alternate symbols
+  docs: networking: device_drivers: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: x86: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: scheduler: sched-deadline.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: power: powercap: powercap.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: ABI: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: PCI: acpi-info.rst: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: gpu: Use ASCII subset instead of UTF-8 alternate symbols
+  docs: sound: kernel-api: writing-an-alsa-driver.rst: Use ASCII subset
+    instead of UTF-8 alternate symbols
+  docs: arm64: arm-acpi.rst: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: infiniband: tag_matching.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: misc-devices: ibmvmc.rst: Use ASCII subset instead of UTF-8
+    alternate symbols
+  docs: firmware-guide: acpi: lpit.rst: Use ASCII subset instead of
+    UTF-8 alternate symbols
+  docs: firmware-guide: acpi: dsd: graph.rst: Use ASCII subset instead
+    of UTF-8 alternate symbols
+  docs: virt: kvm: api.rst: Use ASCII subset instead of UTF-8 alternate
+    symbols
+  docs: RCU: Use ASCII subset instead of UTF-8 alternate symbols
+
+ ...sfs-class-chromeos-driver-cros-ec-lightbar |   2 +-
+ .../ABI/testing/sysfs-devices-platform-ipmi   |   2 +-
+ .../testing/sysfs-devices-platform-trackpoint |   2 +-
+ Documentation/ABI/testing/sysfs-devices-soc   |   4 +-
+ Documentation/PCI/acpi-info.rst               |  22 +-
+ .../Data-Structures/Data-Structures.rst       |  52 ++--
+ .../Expedited-Grace-Periods.rst               |  40 +--
+ .../Tree-RCU-Memory-Ordering.rst              |  10 +-
+ .../RCU/Design/Requirements/Requirements.rst  | 122 ++++-----
+ Documentation/admin-guide/media/ipu3.rst      |   2 +-
+ Documentation/admin-guide/perf/imx-ddr.rst    |   2 +-
+ Documentation/admin-guide/pm/intel_idle.rst   |   4 +-
+ Documentation/admin-guide/pm/intel_pstate.rst |   4 +-
+ Documentation/admin-guide/ras.rst             |  86 +++---
+ .../admin-guide/reporting-issues.rst          |   2 +-
+ Documentation/arm64/arm-acpi.rst              |   8 +-
+ .../driver-api/firmware/other_interfaces.rst  |   2 +-
+ Documentation/driver-api/ioctl.rst            |   8 +-
+ .../media/drivers/sh_mobile_ceu_camera.rst    |   8 +-
+ .../driver-api/media/drivers/zoran.rst        |   2 +-
+ .../driver-api/thermal/cpu-idle-cooling.rst   |  14 +-
+ .../driver-api/thermal/intel_powerclamp.rst   |   6 +-
+ .../thermal/x86_pkg_temperature_thermal.rst   |   2 +-
+ .../fault-injection/nvme-fault-injection.rst  |   2 +-
+ Documentation/filesystems/ext4/attributes.rst |  20 +-
+ Documentation/filesystems/ext4/bigalloc.rst   |   6 +-
+ Documentation/filesystems/ext4/blockgroup.rst |   8 +-
+ Documentation/filesystems/ext4/blocks.rst     |   2 +-
+ Documentation/filesystems/ext4/directory.rst  |  16 +-
+ Documentation/filesystems/ext4/eainode.rst    |   2 +-
+ Documentation/filesystems/ext4/inlinedata.rst |   6 +-
+ Documentation/filesystems/ext4/inodes.rst     |   6 +-
+ Documentation/filesystems/ext4/journal.rst    |   8 +-
+ Documentation/filesystems/ext4/mmp.rst        |   2 +-
+ .../filesystems/ext4/special_inodes.rst       |   4 +-
+ Documentation/filesystems/ext4/super.rst      |  10 +-
+ Documentation/filesystems/f2fs.rst            |   4 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |   2 +-
+ Documentation/firmware-guide/acpi/lpit.rst    |   2 +-
+ Documentation/gpu/i915.rst                    |   2 +-
+ Documentation/gpu/komeda-kms.rst              |   2 +-
+ Documentation/hid/hid-sensor.rst              |  70 ++---
+ Documentation/hid/intel-ish-hid.rst           | 246 +++++++++---------
+ Documentation/hwmon/ir36021.rst               |   2 +-
+ Documentation/hwmon/ltc2992.rst               |   2 +-
+ Documentation/hwmon/pm6764tr.rst              |   2 +-
+ Documentation/infiniband/tag_matching.rst     |   4 +-
+ Documentation/kernel-hacking/hacking.rst      |   2 +-
+ Documentation/kernel-hacking/locking.rst      |   2 +-
+ Documentation/misc-devices/ibmvmc.rst         |   8 +-
+ .../device_drivers/ethernet/intel/i40e.rst    |   8 +-
+ .../device_drivers/ethernet/intel/iavf.rst    |   4 +-
+ .../device_drivers/ethernet/netronome/nfp.rst |  12 +-
+ .../networking/devlink/devlink-dpipe.rst      |   2 +-
+ Documentation/networking/scaling.rst          |  18 +-
+ Documentation/power/powercap/powercap.rst     | 210 +++++++--------
+ Documentation/process/code-of-conduct.rst     |   2 +-
+ Documentation/scheduler/sched-deadline.rst    |   2 +-
+ .../security/keys/trusted-encrypted.rst       |   4 +-
+ Documentation/security/tpm/tpm_event_log.rst  |   2 +-
+ .../kernel-api/writing-an-alsa-driver.rst     |  68 ++---
+ .../coresight/coresight-etm4x-reference.rst   |  16 +-
+ Documentation/usb/ehci.rst                    |   2 +-
+ Documentation/usb/gadget_printer.rst          |   2 +-
+ Documentation/usb/mass-storage.rst            |  36 +--
+ .../media/dvb/audio-set-bypass-mode.rst       |   2 +-
+ .../userspace-api/media/dvb/audio.rst         |   2 +-
+ .../userspace-api/media/dvb/dmx-fopen.rst     |   2 +-
+ .../userspace-api/media/dvb/dmx-fread.rst     |   2 +-
+ .../media/dvb/dmx-set-filter.rst              |   2 +-
+ .../userspace-api/media/dvb/intro.rst         |   6 +-
+ .../userspace-api/media/dvb/video.rst         |   2 +-
+ .../userspace-api/media/fdl-appendix.rst      |  64 ++---
+ .../userspace-api/media/v4l/crop.rst          |  16 +-
+ .../userspace-api/media/v4l/dev-decoder.rst   |   6 +-
+ .../userspace-api/media/v4l/diff-v4l.rst      |   2 +-
+ .../userspace-api/media/v4l/open.rst          |   2 +-
+ .../media/v4l/vidioc-cropcap.rst              |   4 +-
+ Documentation/virt/kvm/api.rst                |  28 +-
+ Documentation/vm/zswap.rst                    |   4 +-
+ Documentation/x86/resctrl.rst                 |   2 +-
+ Documentation/x86/sgx.rst                     |   4 +-
+ 82 files changed, 693 insertions(+), 693 deletions(-)
+
 -- 
 2.30.2
+
 
