@@ -2,85 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E03C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 21:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DFF0C433B4
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 23:02:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1908C613DE
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 21:42:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0996613EB
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 23:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346081AbhELVnU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 May 2021 17:43:20 -0400
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:46943 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385245AbhELUHt (ORCPT
+        id S238414AbhELXBD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 May 2021 19:01:03 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:56078 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347719AbhELVsM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 May 2021 16:07:49 -0400
-Received: by mail-oi1-f172.google.com with SMTP id x15so9629457oic.13;
-        Wed, 12 May 2021 13:06:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tH0uP4kbT2K4dbMJy1WnIwOnLMaRXnLhS70byarsYPk=;
-        b=uCSFpmcpKSZ4uY+ZIu6B50OOp0SNNZfQTNCMG7zYPMtZ7G9eUeAY2HfNc4ZR4vKaxf
-         +nmvBkTTeWvkvwueGJeXque9apsvs1qgnZPEmKQmfPCHXWuP9aSm3l+nahqEjMysZT/x
-         /iZUhjiBLEc+sHiQIoq91c4t/hOZQCm543TjNi8wwcrUYD0HNMGJ1Em5/CgwYSBARcUu
-         xCqsvj48ic258Dc2yY/LPddGKNhH2SfqpIDgktq/pqqRzQFGYdmsalpDEemcNK7QPEbi
-         XM/KmR0Is/jtjUNgFe2dWTeVowY6aVHqFLWCGCE1FFeae+M3Neqw2M7bKDelU92xkiXu
-         JbOQ==
-X-Gm-Message-State: AOAM532dneiQYzZia+UG0zTBM4JUAkv89j+QdMgBaa5oREjbDg1uZTCO
-        W2vnu3KquXCERK8NN4sT/A==
-X-Google-Smtp-Source: ABdhPJx3EpAPwhZKx9aHT/jJbZuQ/7I3A6eO4fAPoiikmfxRxbhA47sWrgL/sKQCmbV/v4Qxt/qfAA==
-X-Received: by 2002:a05:6808:193:: with SMTP id w19mr10841986oic.152.1620850000411;
-        Wed, 12 May 2021 13:06:40 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h2sm217086oop.47.2021.05.12.13.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 13:06:39 -0700 (PDT)
-Received: (nullmailer pid 2460281 invoked by uid 1000);
-        Tue, 11 May 2021 19:23:38 -0000
-Date:   Tue, 11 May 2021 14:23:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2] media: dt-bindings: media: renesas,isp: Add bindings
- for ISP Channel Selector
-Message-ID: <20210511192338.GA2460234@robh.at.kernel.org>
-References: <20210511142320.3463742-1-niklas.soderlund+renesas@ragnatech.se>
+        Wed, 12 May 2021 17:48:12 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 5765D1C0B87; Wed, 12 May 2021 23:47:02 +0200 (CEST)
+Date:   Wed, 12 May 2021 23:47:02 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     agx@sigxcpu.org, phone-devel@vger.kernel.org, martijn@brixit.nl,
+        linux-media@vger.kernel.org
+Subject: Recording videos on phones and camera on Librem 5 devboard
+Message-ID: <20210512214702.GB27652@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="wzJLGUyc3ArbnUjN"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210511142320.3463742-1-niklas.soderlund+renesas@ragnatech.se>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 11 May 2021 16:23:20 +0200, Niklas Söderlund wrote:
-> Add bindings for Renesas R-Car ISP Channel Selector IP. The ISP is
-> responsible for filtering the MIPI CSI-2 bus and directing the different
-> CSI-2 virtual channels to different R-Car VIN instances (DMA engines)
-> for capture.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> ---
-> * Changes since v1
-> - Fix order of compatible value.
-> - Use /schemas/graph.yaml#/properties/port instead of
->   /schemas/graph.yaml#/$defs/port-base for port@0.
-> - Drop status in examples.
-> ---
->  .../bindings/media/renesas,isp.yaml           | 196 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 197 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,isp.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--wzJLGUyc3ArbnUjN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+Who is the right person to talk about Librem 5 cameras? Is there
+mailing list I should use?
+
+AFAICS from bugzillas, it is still not compeletely working. I see
+megapixels packaged in the repository, but without required config
+files. Are there work-in-progress configurations somewhere? Would it
+be useful if I tried to get it to work on the devboard?
+
+I created simple python+gtk+gstreamer application to take photos,
+pictures and record videos. It is in tui repository; it is work on
+progress but some functionality is available on PinePhone, Librem 5
+devboard and a PC. If someone could test it on actual Librem 5... that
+would be nice.
+
+https://gitlab.com/tui/tui/-/tree/master/cam
+
+Best regards,
+										Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+
+
+--wzJLGUyc3ArbnUjN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYJxM1gAKCRAw5/Bqldv6
+8vnoAKC3leq1zUjg3+oG0fXWK1p7bWRBKQCdHMD9RUIo4TUphX7fU7HiTNqy6ZU=
+=5ayr
+-----END PGP SIGNATURE-----
+
+--wzJLGUyc3ArbnUjN--
