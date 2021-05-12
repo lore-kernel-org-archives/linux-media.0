@@ -2,27 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA852C43461
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC1AC43603
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5A5D61425
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EA8361411
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbhELTN4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 May 2021 15:13:56 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58976 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359063AbhELSv0 (ORCPT
+        id S244628AbhELTOG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 May 2021 15:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359621AbhELSxf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 May 2021 14:51:26 -0400
+        Wed, 12 May 2021 14:53:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2F6C061574
+        for <linux-media@vger.kernel.org>; Wed, 12 May 2021 11:50:03 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: adalessandro)
-        with ESMTPSA id 47B481F41BED
+        with ESMTPSA id 1F1671F41BED
 From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
@@ -31,9 +35,9 @@ Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
         gjasny@googlemail.com, xavier.claessens@collabora.com,
         nicolas.dufresne@collabora.com, user.vdr@gmail.com,
         sakari.ailus@iki.fi, mchehab+huawei@kernel.org, rosenp@gmail.com
-Subject: [v4l-utils v5 4/5] meson: Add support for doxygen documentation
-Date:   Wed, 12 May 2021 15:49:45 -0300
-Message-Id: <20210512184946.102863-5-ariel.dalessandro@collabora.com>
+Subject: [v4l-utils v5 1/5] Move README to markdown syntax
+Date:   Wed, 12 May 2021 15:49:42 -0300
+Message-Id: <20210512184946.102863-2-ariel.dalessandro@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210512184946.102863-1-ariel.dalessandro@collabora.com>
 References: <20210512184946.102863-1-ariel.dalessandro@collabora.com>
@@ -43,378 +47,582 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Supports generating plain HTML documentation and manual pages using
-Doxygen.
-
-Note that Doxygen configuration template was a copy from the one used by
-autotools. This commit updates variables to match meson variable
-substitution format, while keeping only options required for HTML and
-man pages.
+This commit just rewrites (and renames) the README file to use markdown
+syntax. Note that no further changes are added, keeping content
+unmodified as much as possible.
 
 Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 ---
- README.md         |   3 ++
- doc/Doxyfile.in   | 128 +++++++++++++++++++++++-----------------------
- doc/meson.build   |  34 ++++++++++++
- meson.build       |   3 ++
- meson_options.txt |   8 +++
- 5 files changed, 112 insertions(+), 64 deletions(-)
- create mode 100644 doc/meson.build
+ README    | 274 -----------------------------------------------------
+ README.md | 278 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 278 insertions(+), 274 deletions(-)
+ delete mode 100644 README
+ create mode 100644 README.md
 
+diff --git a/README b/README
+deleted file mode 100644
+index a7759171..00000000
+--- a/README
++++ /dev/null
+@@ -1,274 +0,0 @@
+-v4l-utils
+----------
+-
+-Linux utilities and libraries to handle media devices (TV devices,
+-capture devices, radio devices, remote controllers).
+-
+-You can always find the latest development v4l-utils in the git repo:
+-	http://git.linuxtv.org/v4l-utils.git
+-
+-Those utilities follow the latest Linux Kernel media API, as documented
+-at:
+-	http://linuxtv.org/downloads/v4l-dvb-apis/
+-
+-Any questions/remarks/patches can be sent to the linux-media mailinglist.
+-See https://linuxtv.org/lists.php for more information about the mailinglist.
+-
+-There is also a wiki page for the v4l-utils:
+-
+-	https://linuxtv.org/wiki/index.php/V4l-utils
+-
+-
+---------
+-Building
+---------
+-
+-A number of packages is required to fully build v4l-utils. The first
+-step is to install those packages. The package names are different on
+-each distro.
+-
+-On Debian and derivated distributions, you need to install the following
+-packages with apt-get or aptitude:
+-    debhelper dh-autoreconf autotools-dev autoconf-archive doxygen graphviz
+-    libasound2-dev libtool libjpeg-dev qtbase5-dev qt5-default
+-    libqt5opengl5-dev libudev-dev libx11-dev pkg-config udev make gcc git
+-
+-
+-On Fedora, the package list for a minimal install with dnf or yum is:
+-	git automake autoconf libtool make gcc gcc-c++ which perl gettext-devel
+-
+-(git is only requiried if you're cloning from the main git repository at
+- linuxtv.org).
+-
+-And, to be able to compile it with all usual functionality with qt5,
+-you'll need also:
+-	alsa-lib-devel doxygen libjpeg-turbo-devel qt5-qtbase-devel
+-	libudev-devel mesa-libGLU-devel
+-
+-
+-After downloading and installing the needed packages, you should run:
+-
+-	./bootstrap.sh
+-	./configure
+-	make
+-
+-If ./configure exit with some errors try:
+-
+-	autoreconf -i --force
+-	./configure
+-
+-And, to install on your system:
+-	sudo make install
+-
+-Optional features
+-^^^^^^^^^^^^^^^^^
+-
+-Please notice that there's an extra feature to add an extra table to
+-decode Japanese DVB tables via iconv. This is meant to be used when
+-the iconv itself doesn't come with the ARIB-STD-B24 and EN300-468-TAB00
+-tables.
+-
+-That requires not only the gconv package, but it also needs to be manually
+-enabled with:
+-	--enable-gconv
+-
+-----------
+-versioning
+-----------
+-
+-The v4l-utils doesn't quite follow the release versioning defined
+-at semver.org.
+-
+-Instead, since version 1.0, it uses:
+-
+-	MAJOR.MINOR.PATCH
+-
+-Where:
+-
+-	MINOR - an odd number means a development version. When
+-		the development is closed, we release an even
+-		numbered version and start a newer odd version;
+-
+-	MAJOR - It is incremented when MINOR number starts to be
+-		too big. The last change occurred from 0.9.x to 1.0.
+-
+-	All numbers start with 0.
+-
+-All versions have their own tags, except for the current
+-deveopment version (with uses the master branch at the git tree).
+-
+-The PATCH meaning actually depends if the version is stable
+-or developent.
+-
+-For even MAJOR.MINOR versions (1.0, 1.2, 1.4, 1.6, ...)
+-
+-	PATCH is incremented when just bug fixes are added;
+-
+-For odd MAJOR.MINOR versions (1.1, 1.3, 1.5, 1.7, ...)
+-	PATCH is incremented for release candidate versions.
+-
+-API/ABI stability:
+------------------
+-
+-There should not have any API/ABI changes when PATCH is incremented.
+-
+-When MAJOR and/or MINOR are incremented, the API/ABI for the
+-libraries might change, although we do all the efforts for not
+-doing it, except when inevitable.
+-
+-The TODO files should specify the events that will generate
+-API/ABI breaks.
+-
+----------------
+-media libraries
+----------------
+-
+-There are currently three media libraries defined at /lib directory,
+-meant to be used internally and by other applications.
+-
+-libv4l
+-------
+-
+-This library is meant to be used by applications that need to
+-talk with V4L2 devices (webcams, analog TV, stream grabbers).
+-
+-It can be found on the following directories:
+-	lib/libv4l1
+-	lib/libv4l2
+-	lib/libv4l-mplane
+-	lib/libv4lconvert
+-
+-See README.libv4l for more information on libv4l.
+-
+-The libv4l is released under the GNU Lesser General Public License.
+-
+-libdvbv5
+---------
+-
+-This library is meant to be used by digital TV applications that
+-need to talk with media hardware.
+-
+-Full documentation is provided via Doxygen. It can be built,
+-after configuring the package, with:
+-	$ make doxygen-run
+-
+-It is possible to generate documentation in html, man pages and pdf
+-formats.
+-
+-The documentation is also available via web, at:
+-	http://linuxtv.org/docs/libdvbv5/
+-
+-It can be found on the following directory:
+-	lib/libdvbv5
+-
+-The libdvbv5 is released under GPL version 2.
+-
+-
+-libv4l2rds
+-----------
+-
+-This library provides support for RDS radio applications.
+-
+-It can be found on the following directory:
+-	lib/libv4l2rds
+-
+-The libv4l is released under the GNU Lesser General Public License.
+-
+----------
+-Utilities
+----------
+-
+-The utilities are stored under /util directory.
+-
+-The (for now for v4l-utils private use only) libv4l2util library is
+-released under the GNU Lesser General Public License, all other code is
+-released under the GNU General Public License.
+-
+-v4l-utils includes the following utilities:
+-
+-decode_tm6000:
+-Decodes tm6000 proprietary format streams.
+-Installed by make install under <prefix>/bin.
+-
+-ir-keytable:
+-Dump, Load or Modify ir receiver input tables.
+-The ir tables for remotes which are known by the kernel
+-(and loaded by default depending on dvb card type) can be found
+-under utils/keytable/keycodes.
+-v4l-keytable does not get installed by make install.
+-
+-ir-ctl:
+-A swiss-knife tool to handle raw IR and to set lirc options
+-
+-qv4l2:
+-QT v4l2 control panel application.
+-Installed by make install under <prefix>/bin.
+-
+-rds-saa6588:
+-Poll i2c RDS receiver [Philips saa6588].
+-rds-saa6588 does not get installed by make install.
+-
+-v4l2-compliance:
+-Tool to test v4l2 API compliance of drivers.
+-Installed by make install under <prefix>/bin.
+-
+-v4l2-ctl:
+-Tool to control v4l2 controls from the cmdline.
+-Installed by make install under <prefix>/bin.
+-
+-v4l2-dbg:
+-Tool to directly get and set registers of v4l2 devices,
+-this requires a kernel >= 2.6.29 with the ADV_DEBUG option
+-enabled. This tool can only be used by root and is meant
+-for development purposes only!
+-Installed by make install under <prefix>/sbin.
+-
+-v4l2-sysfs-path:
+-FIXME add description.
+-Installed by make install under <prefix>/bin.
+-
+-xc3028-firmware:
+-Xceive XC2028/3028 tuner module firmware manipulation tool.
+-xc3028-firmware does not get installed by make install.
+-
+--------------------
+-Syncing with Kernel
+--------------------
+-
+-There are a number of files on this package that depends on the Linux Kernel.
+-
+-In order to make easier to keep it in sync, there's a target on this
+-package to do the synchronism.
+-
+-For the sync to work, you need to run it on with 64 bits userspace and
+-be sure that glibc has the development package for 32 bits.
+-
+-For Fedora, this is provided via this package: glibc-devel.i686
+-
+-There are some steps required:
+-
+-step 1) at the Kernel git tree:
+-
+-We need to sanitize the headers to be installed. To do that, you should
+-run
+-
+-	$ make headers_install INSTALL_HDR_PATH=usr/
+-
+-This will create the dir "usr/" inside the Kernel tree.
+-
+-step 2)
+-
+-Be sure that you have installed both glibc development packages for
+-32 and 64 bits, as otherwise the next step will fail.
+-
+-step 3) at v4l-utils tree:
+-
+-	$ ./sync-with-kernel.sh location/of/the/kernel/tree
+-
+-Alternatively, steps 1 to 3 can be replaced with:
+-
+-KERNEL_DIR=location/of/the/kernel/tree && (cd $KERNEL_DIR && make headers_install INSTALL_HDR_PATH=usr/) && ./sync-with-kernel.sh $KERNEL_DIR
+-
+-step 4)
+-
+-Remove the usr/ from the Kernel tree.
 diff --git a/README.md b/README.md
-index a4ff7511..9cb316c8 100644
---- a/README.md
-+++ b/README.md
-@@ -198,6 +198,9 @@ the package with autotools, running:
- make doxygen-run
- ```
- 
-+In meson, Doxygen documentation is enabled by the auto feature: `doxygen-doc`.
-+If enabled, it will be built within the project.
-+
- It is possible to generate documentation in html, man pages and pdf formats.
- 
- The documentation is also available via web, at:
-diff --git a/doc/Doxyfile.in b/doc/Doxyfile.in
-index b25301a0..6c6b66bc 100644
---- a/doc/Doxyfile.in
-+++ b/doc/Doxyfile.in
-@@ -38,7 +38,7 @@ PROJECT_NAME           = libdvbv5
- # could be handy for archiving the generated documentation or if some version
- # control system is used.
- 
--PROJECT_NUMBER         = $(VERSION)
-+PROJECT_NUMBER         = @VERSION@
- 
- # Using the PROJECT_BRIEF tag one can provide an optional one line description
- # for a project that appears at the top of each page and should give viewer a
-@@ -58,7 +58,7 @@ PROJECT_LOGO           =
- # entered, it will be relative to the location where doxygen was started. If
- # left blank the current directory will be used.
- 
--OUTPUT_DIRECTORY       = $(DOCDIR)
-+OUTPUT_DIRECTORY       = @DOCDIR@
- 
- # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 4096 sub-
- # directories (in 2 levels) under the output directory of each output format and
-@@ -144,7 +144,7 @@ FULL_PATH_NAMES        = YES
- # will be relative from the directory where doxygen is started.
- # This tag requires that the tag FULL_PATH_NAMES is set to YES.
- 
--STRIP_FROM_PATH        = $(SRCDIR)
-+STRIP_FROM_PATH        = @SRCDIR@
- 
- # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
- # path mentioned in the documentation of a class, which tells the reader which
-@@ -743,52 +743,52 @@ WARN_LOGFILE           =
- # spaces.
- # Note: If this tag is empty the current directory is searched.
- 
--INPUT                  = $(SRCDIR)/doc/libdvbv5-index.doc \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-demux.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-dev.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-fe.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-file.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-log.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-sat.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-scan.h \
--			 $(SRCDIR)/lib/include/libdvbv5/dvb-v5-std.h \
--			 $(SRCDIR)/lib/include/libdvbv5/descriptors.h \
--			 $(SRCDIR)/lib/include/libdvbv5/header.h \
--			 $(SRCDIR)/lib/include/libdvbv5/atsc_header.h \
--			 $(SRCDIR)/lib/include/libdvbv5/atsc_eit.h \
--			 $(SRCDIR)/lib/include/libdvbv5/cat.h \
--			 $(SRCDIR)/lib/include/libdvbv5/eit.h \
--			 $(SRCDIR)/lib/include/libdvbv5/mgt.h \
--			 $(SRCDIR)/lib/include/libdvbv5/nit.h \
--			 $(SRCDIR)/lib/include/libdvbv5/pat.h \
--			 $(SRCDIR)/lib/include/libdvbv5/pmt.h \
--			 $(SRCDIR)/lib/include/libdvbv5/sdt.h \
--			 $(SRCDIR)/lib/include/libdvbv5/vct.h \
--			 $(SRCDIR)/lib/include/libdvbv5/crc32.h \
--			 $(SRCDIR)/lib/include/libdvbv5/countries.h \
--			 $(SRCDIR)/lib/include/libdvbv5/mpeg_es.h \
--			 $(SRCDIR)/lib/include/libdvbv5/mpeg_pes.h \
--			 $(SRCDIR)/lib/include/libdvbv5/mpeg_ts.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_atsc_service_location.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_ca.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_ca_identifier.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_cable_delivery.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_event_extended.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_event_short.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_extension.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_descriptor_id.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_frequency_list.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_hierarchy.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_isdbt_delivery.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_language.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_logical_channel.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_network_name.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_partial_reception.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_sat.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_service.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_t2_delivery.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_terrestrial_delivery.h \
--			 $(SRCDIR)/lib/include/libdvbv5/desc_ts_info.h \
-+INPUT                  = @SRCDIR@/doc/libdvbv5-index.doc \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-demux.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-dev.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-fe.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-file.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-log.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-sat.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-scan.h \
-+			 @SRCDIR@/lib/include/libdvbv5/dvb-v5-std.h \
-+			 @SRCDIR@/lib/include/libdvbv5/descriptors.h \
-+			 @SRCDIR@/lib/include/libdvbv5/header.h \
-+			 @SRCDIR@/lib/include/libdvbv5/atsc_header.h \
-+			 @SRCDIR@/lib/include/libdvbv5/atsc_eit.h \
-+			 @SRCDIR@/lib/include/libdvbv5/cat.h \
-+			 @SRCDIR@/lib/include/libdvbv5/eit.h \
-+			 @SRCDIR@/lib/include/libdvbv5/mgt.h \
-+			 @SRCDIR@/lib/include/libdvbv5/nit.h \
-+			 @SRCDIR@/lib/include/libdvbv5/pat.h \
-+			 @SRCDIR@/lib/include/libdvbv5/pmt.h \
-+			 @SRCDIR@/lib/include/libdvbv5/sdt.h \
-+			 @SRCDIR@/lib/include/libdvbv5/vct.h \
-+			 @SRCDIR@/lib/include/libdvbv5/crc32.h \
-+			 @SRCDIR@/lib/include/libdvbv5/countries.h \
-+			 @SRCDIR@/lib/include/libdvbv5/mpeg_es.h \
-+			 @SRCDIR@/lib/include/libdvbv5/mpeg_pes.h \
-+			 @SRCDIR@/lib/include/libdvbv5/mpeg_ts.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_atsc_service_location.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_ca.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_ca_identifier.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_cable_delivery.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_event_extended.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_event_short.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_extension.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_descriptor_id.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_frequency_list.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_hierarchy.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_isdbt_delivery.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_language.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_logical_channel.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_network_name.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_partial_reception.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_sat.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_service.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_t2_delivery.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_terrestrial_delivery.h \
-+			 @SRCDIR@/lib/include/libdvbv5/desc_ts_info.h \
- 
- # This tag can be used to specify the character encoding of the source files
- # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
-@@ -856,7 +856,7 @@ EXCLUDE_SYMBOLS        =
- # that contain example code fragments that are included (see the \include
- # command).
- 
--EXAMPLE_PATH           = $(SRCDIR)/utils/dvb/
-+EXAMPLE_PATH           = @SRCDIR@/utils/dvb/
- 
- # If the value of the EXAMPLE_PATH tag contains directories, you can use the
- # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
-@@ -1045,7 +1045,7 @@ IGNORE_PREFIX          =
- # If the GENERATE_HTML tag is set to YES doxygen will generate HTML output
- # The default value is: YES.
- 
--GENERATE_HTML          = $(GENERATE_HTML)
-+GENERATE_HTML          = @GENERATE_HTML@
- 
- # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
- # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
-@@ -1244,14 +1244,14 @@ DOCSET_PUBLISHER_NAME  = Publisher
- # The default value is: NO.
- # This tag requires that the tag GENERATE_HTML is set to YES.
- 
--GENERATE_HTMLHELP      = $(GENERATE_HTMLHELP)
-+GENERATE_HTMLHELP      = NO
- 
- # The CHM_FILE tag can be used to specify the file name of the resulting .chm
- # file. You can add a path in front of the file if the result should not be
- # written to the html output directory.
- # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
- 
--CHM_FILE               = ../$(PROJECT).chm
-+CHM_FILE               =
- 
- # The HHC_LOCATION tag can be used to specify the location (absolute path
- # including file name) of the HTML help compiler ( hhc.exe). If non-empty
-@@ -1259,14 +1259,14 @@ CHM_FILE               = ../$(PROJECT).chm
- # The file has to be specified with full path.
- # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
- 
--HHC_LOCATION           = $(HHC_PATH)
-+HHC_LOCATION           =
- 
- # The GENERATE_CHI flag controls if a separate .chi index file is generated (
- # YES) or that it should be included in the master .chm file ( NO).
- # The default value is: NO.
- # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
- 
--GENERATE_CHI           = $(GENERATE_CHI)
-+GENERATE_CHI           = NO
- 
- # The CHM_INDEX_ENCODING is used to encode HtmlHelp index ( hhk), content ( hhc)
- # and project file content.
-@@ -1585,7 +1585,7 @@ EXTRA_SEARCH_MAPPINGS  =
- # If the GENERATE_LATEX tag is set to YES doxygen will generate LaTeX output.
- # The default value is: YES.
- 
--GENERATE_LATEX         = $(GENERATE_LATEX)
-+GENERATE_LATEX         = NO
- 
- # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. If a
- # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
-@@ -1628,7 +1628,7 @@ COMPACT_LATEX          = YES
- # The default value is: a4.
- # This tag requires that the tag GENERATE_LATEX is set to YES.
- 
--PAPER_TYPE             = $(PAPER_SIZE)
-+PAPER_TYPE             = a4
- 
- # The EXTRA_PACKAGES tag can be used to specify one or more LaTeX package names
- # that should be included in the LaTeX output. To get the times font for
-@@ -1687,7 +1687,7 @@ PDF_HYPERLINKS         = YES
- # The default value is: YES.
- # This tag requires that the tag GENERATE_LATEX is set to YES.
- 
--USE_PDFLATEX           = $(GENERATE_PDF)
-+USE_PDFLATEX           = YES
- 
- # If the LATEX_BATCHMODE tag is set to YES, doxygen will add the \batchmode
- # command to the generated LaTeX files. This will instruct LaTeX to keep running
-@@ -1732,7 +1732,7 @@ LATEX_BIB_STYLE        = plain
- # readers/editors.
- # The default value is: NO.
- 
--GENERATE_RTF           = $(GENERATE_RTF)
-+GENERATE_RTF           = NO
- 
- # The RTF_OUTPUT tag is used to specify where the RTF docs will be put. If a
- # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
-@@ -1787,7 +1787,7 @@ RTF_EXTENSIONS_FILE    =
- # classes and files.
- # The default value is: NO.
- 
--GENERATE_MAN           = $(GENERATE_MAN)
-+GENERATE_MAN           = @GENERATE_MAN@
- 
- # The MAN_OUTPUT tag is used to specify where the man pages will be put. If a
- # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
-@@ -1824,7 +1824,7 @@ MAN_LINKS              = NO
- # captures the structure of the code including all documentation.
- # The default value is: NO.
- 
--GENERATE_XML           = $(GENERATE_XML)
-+GENERATE_XML           = NO
- 
- # The XML_OUTPUT tag is used to specify where the XML pages will be put. If a
- # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
-@@ -2028,7 +2028,7 @@ TAGFILES               =
- # tag file that is based on the input files it reads. See section "Linking to
- # external documentation" for more information about the usage of tag files.
- 
--GENERATE_TAGFILE       = $(DOCDIR)/$(PROJECT).tag
-+GENERATE_TAGFILE       = @DOCDIR@/@PROJECT@.tag
- 
- # If the ALLEXTERNALS tag is set to YES all external class will be listed in the
- # class index. If set to NO only the inherited external classes will be listed.
-@@ -2098,7 +2098,7 @@ HIDE_UNDOC_RELATIONS   = YES
- # set to NO
- # The default value is: NO.
- 
--HAVE_DOT               = $(HAVE_DOT)
-+HAVE_DOT               = NO
- 
- # The DOT_NUM_THREADS specifies the number of dot invocations doxygen is allowed
- # to run in parallel. When set to 0 doxygen will base this on the number of
-@@ -2270,7 +2270,7 @@ INTERACTIVE_SVG        = NO
- # found. If left blank, it is assumed the dot tool can be found in the path.
- # This tag requires that the tag HAVE_DOT is set to YES.
- 
--DOT_PATH               = $(DOT_PATH)
-+DOT_PATH               =
- 
- # The DOTFILE_DIRS tag can be used to specify one or more directories that
- # contain dot files that are included in the documentation (see the \dotfile
-diff --git a/doc/meson.build b/doc/meson.build
 new file mode 100644
-index 00000000..fef3e83f
+index 00000000..a2322c6e
 --- /dev/null
-+++ b/doc/meson.build
-@@ -0,0 +1,34 @@
-+doxygen_doc_option = get_option('doxygen-doc')
-+if doxygen_doc_option.disabled() or not prog_doxygen.found()
-+    subdir_done()
-+endif
++++ b/README.md
+@@ -0,0 +1,278 @@
++# v4l-utils
 +
-+cdata = configuration_data()
-+cdata.set('DOCDIR', 'doc')
-+cdata.set('GENERATE_HTML', get_option('doxygen-html'))
-+cdata.set('GENERATE_MAN', get_option('doxygen-man'))
-+cdata.set('PROJECT', meson.project_name())
-+cdata.set('SRCDIR', meson.project_source_root())
-+cdata.set('VERSION', as_version)
++Linux utilities and libraries to handle media devices (TV devices, capture
++devices, radio devices, remote controllers).
 +
-+doxyfile = configure_file(input : 'Doxyfile.in',
-+                          output : 'Doxyfile',
-+                          configuration : cdata)
++You can always find the latest development v4l-utils in the git repo:
++[http://git.linuxtv.org/v4l-utils.git](http://git.linuxtv.org/v4l-utils.git).
 +
-+doxygen_install_dir = join_paths(get_option('datadir'), 'doc',
-+                                 '@0@'.format(meson.project_name()))
++Those utilities follow the latest Linux Kernel media API, as documented at:
++[http://linuxtv.org/downloads/v4l-dvb-apis/](http://linuxtv.org/downloads/v4l-dvb-apis/).
 +
-+doxygen_output = []
-+if get_option('doxygen-html')
-+    doxygen_output += 'html'
-+endif
-+if get_option('doxygen-man')
-+    doxygen_output += 'man'
-+endif
++Any questions/remarks/patches can be sent to the linux-media mailinglist. See
++[https://linuxtv.org/lists.php](https://linuxtv.org/lists.php) for more
++information about the mailinglist.
 +
-+custom_target('doxygen',
-+              input : doxyfile,
-+              output : doxygen_output,
-+              command : [prog_doxygen, doxyfile],
-+              install : true,
-+              install_dir : doxygen_install_dir)
-diff --git a/meson.build b/meson.build
-index bad3ce00..bba8e030 100644
---- a/meson.build
-+++ b/meson.build
-@@ -56,6 +56,7 @@ v4l2_utils_incdir = include_directories(v4l2_utils_incdir_arr)
- 
- prog_bash = find_program('bash')
- prog_clang = find_program('clang', required : get_option('bpf'))
-+prog_doxygen = find_program('doxygen', required : get_option('doxygen-doc'))
- prog_git = find_program('git')
- prog_grep = find_program('grep')
- prog_perl = find_program('perl')
-@@ -321,6 +322,8 @@ if get_option('v4l-utils')
-     subdir('contrib')
- endif
- 
-+subdir('doc')
++There is also a wiki page for the v4l-utils:
++[https://linuxtv.org/wiki/index.php/V4l-utils](https://linuxtv.org/wiki/index.php/V4l-utils).
 +
- configure_file(output : 'config.h', configuration : conf)
- 
- foreach m : man_pages
-diff --git a/meson_options.txt b/meson_options.txt
-index d1119990..2c86bfbb 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
-@@ -40,3 +40,11 @@ option('systemdsystemunitdir', type : 'string',
-        description : 'Set systemd system unit directory')
- option('udevdir', type : 'string',
-        description : 'Set udev directory')
++## Building
 +
-+# Doxygen options
-+option('doxygen-doc', type : 'feature', value : 'auto',
-+       description : 'Generate doxygen project documentation')
-+option('doxygen-html', type : 'boolean',
-+       description : 'Generate doxygen plain HTML documentation')
-+option('doxygen-man', type : 'boolean', value : false,
-+       description : 'Generate doxygen manual pages')
++A number of packages is required to fully build v4l-utils. The first step is to
++install those packages. The package names are different on each distro.
++
++On Debian and derivated distributions, you need to install the following
++packages with `apt-get` or `aptitude`:
++
++```
++debhelper dh-autoreconf autotools-dev autoconf-archive doxygen graphviz
++libasound2-dev libtool libjpeg-dev qtbase5-dev qt5-default libqt5opengl5-dev
++libudev-dev libx11-dev pkg-config udev make gcc git
++```
++
++On Fedora, the package list for a minimal install with `dnf` or `yum` is:
++
++```
++git automake autoconf libtool make gcc gcc-c++ which perl gettext-devel
++```
++
++(git is only requiried if you're cloning from the main git repository at
++linuxtv.org).
++
++And, to be able to compile it with all usual functionality with qt5, you'll need
++also:
++
++```
++alsa-lib-devel doxygen libjpeg-turbo-devel qt5-qtbase-devel libudev-devel
++mesa-libGLU-devel
++```
++
++After downloading and installing the needed packages, you should run:
++
++```
++./bootstrap.sh
++./configure
++make
++```
++
++If `./configure` exit with some errors try:
++
++```
++autoreconf -i --force
++./configure
++```
++
++And, to install on your system:
++
++```
++sudo make install
++```
++
++### Optional features
++
++Please notice that there's an extra feature to add an extra table to decode
++Japanese DVB tables via iconv. This is meant to be used when the iconv itself
++doesn't come with the *ARIB-STD-B24* and *EN300-468-TAB00* tables.
++
++That requires not only the gconv package, but it also needs to be manually
++enabled with `--enable-gconv`.
++
++## Versioning
++
++The v4l-utils doesn't quite follow the release versioning defined at
++[semver.org](https://semver.org/).
++
++Instead, since version 1.0, it uses `MAJOR.MINOR.PATCH`. Where:
++
++* `MINOR` - an odd number means a development version. When the development is
++closed, we release an even numbered version and start a newer odd version;
++
++* `MAJOR` - It is incremented when `MINOR` number starts to be too big. The last
++change occurred from 0.9.x to 1.0.
++
++* All numbers start with 0.
++
++All versions have their own tags, except for the current development version
++(with uses the master branch at the git tree).
++
++The `PATCH` meaning actually depends if the version is stable or development.
++
++* For even `MAJOR.MINOR` versions (1.0, 1.2, 1.4, 1.6, ...): `PATCH` is
++incremented when just bug fixes are added;
++
++* For odd `MAJOR.MINOR` versions (1.1, 1.3, 1.5, 1.7, ...): `PATCH` is
++incremented for release candidate versions.
++
++### API/ABI stability:
++
++There should not have any API/ABI changes when `PATCH` is incremented.
++
++When `MAJOR` and/or `MINOR` are incremented, the API/ABI for the libraries might
++change, although we do all the efforts for not doing it, except when inevitable.
++
++The `TODO` files should specify the events that will generate API/ABI breaks.
++
++## Media libraries
++
++There are currently three media libraries defined at `lib/` directory, meant to
++be used internally and by other applications.
++
++### libv4l
++
++This library is meant to be used by applications that need to talk with V4L2
++devices (webcams, analog TV, stream grabbers).
++
++It can be found on the following directories:
++
++```
++lib/libv4l1/
++lib/libv4l2/
++lib/libv4l-mplane/
++lib/libv4lconvert/
++```
++
++See `README.libv4l` for more information on libv4l.
++
++The libv4l is released under the GNU Lesser General Public License.
++
++### libdvbv5
++
++This library is meant to be used by digital TV applications that need to talk
++with media hardware.
++
++Full documentation is provided via Doxygen. It can be built, after configuring
++the package, with:
++
++```
++make doxygen-run
++```
++
++It is possible to generate documentation in html, man pages and pdf formats.
++
++The documentation is also available via web, at:
++[http://linuxtv.org/docs/libdvbv5/](http://linuxtv.org/docs/libdvbv5/).
++
++It can be found on the following directory `lib/libdvbv5/`.
++
++The libdvbv5 is released under GPL version 2.
++
++### libv4l2rds
++
++This library provides support for RDS radio applications.
++
++It can be found on the following directory `lib/libv4l2rds/`.
++
++The libv4l is released under the GNU Lesser General Public License.
++
++## Utilities
++
++The utilities are stored under `utils/` directory.
++
++The (for now for v4l-utils private use only) libv4l2util library is released
++under the GNU Lesser General Public License, all other code is released under
++the GNU General Public License.
++
++v4l-utils includes the following utilities:
++
++### decode\_tm6000
++
++Decodes tm6000 proprietary format streams.
++
++Installed by make install under `<prefix>/bin`.
++
++### ir-keytable
++
++Dump, Load or Modify ir receiver input tables. The ir tables for remotes which
++are known by the kernel (and loaded by default depending on dvb card type) can
++be found under `utils/keytable/keycodes`.
++
++v4l-keytable does not get installed by `make install`.
++
++### ir-ctl
++
++A swiss-knife tool to handle raw IR and to set lirc options.
++
++### qv4l2
++
++QT v4l2 control panel application.
++
++Installed by `make install` under `<prefix>/bin`.
++
++### rds-saa6588
++
++Poll i2c RDS receiver [Philips saa6588].
++
++rds-saa6588 does not get installed by `make install`.
++
++### v4l2-compliance
++
++Tool to test v4l2 API compliance of drivers.
++
++Installed by `make install` under `<prefix>/bin`.
++
++### v4l2-ctl
++
++Tool to control v4l2 controls from the cmdline.
++
++Installed by `make install` under `<prefix>/bin`.
++
++### v4l2-dbg
++
++Tool to directly get and set registers of v4l2 devices, this requires a
++*kernel >= 2.6.29* with the `ADV_DEBUG` option enabled. This tool can only be
++used by root and is meant for development purposes only!
++
++Installed by `make install` under `<prefix>/sbin`.
++
++### v4l2-sysfs-path
++
++*FIXME* add description.
++
++Installed by `make install` under `<prefix>/bin`.
++
++### xc3028-firmware
++
++Xceive XC2028/3028 tuner module firmware manipulation tool.
++
++xc3028-firmware does not get installed by `make install`.
++
++## Syncing with Kernel
++
++There are a number of files on this package that depends on the Linux Kernel.
++
++In order to make easier to keep it in sync, there's a target on this package to
++do the synchronism.
++
++For the sync to work, you need to run it on with 64 bits userspace and be sure
++that glibc has the development package for 32 bits.
++
++For Fedora, this is provided via this package: *glibc-devel.i686*
++
++There are some steps required:
++
++1. At the Kernel git tree:
++
++    We need to sanitize the headers to be installed. To do that, you should run:
++
++    ```
++    make headers_install INSTALL_HDR_PATH=usr/
++    ```
++
++    This will create the dir `usr/` inside the Kernel tree.
++
++1. Be sure that you have installed both glibc development packages for 32 and 64
++bits, as otherwise the next step will fail.
++
++1. At v4l-utils tree:
++
++    ```
++    ./sync-with-kernel.sh location/of/the/kernel/tree
++    ```
++
++    Alternatively, steps 1 to 3 can be replaced with:
++
++    ```
++    KERNEL_DIR=location/of/the/kernel/tree && (cd $KERNEL_DIR && make headers_install INSTALL_HDR_PATH=usr/) && ./sync-with-kernel.sh $KERNEL_DIR
++    ```
++
++1. Remove the `usr/` from the Kernel tree.
 -- 
 2.30.2
 
