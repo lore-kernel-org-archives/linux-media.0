@@ -2,82 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C37C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE5DC43470
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:51:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62EDA61152
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:21:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE4EF61026
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 12:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbhELMWx convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 May 2021 08:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbhELMWx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 May 2021 08:22:53 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0524FC061574
-        for <linux-media@vger.kernel.org>; Wed, 12 May 2021 05:21:45 -0700 (PDT)
-Received: from chickenburger.collabora.co.uk (chickenburger.collabora.co.uk [46.235.227.242])
-        by bhuna.collabora.co.uk (Postfix) with ESMTP id 54FD01F426EC;
-        Wed, 12 May 2021 13:21:43 +0100 (BST)
-From:   "Ezequiel Garcia" <ezequiel.garcia@collabora.com>
-In-Reply-To: <5trl8gldqb467m4nmmbbnubuudajg4j3hb@4ax.com>
-Content-Type: text/plain; charset="utf-8"
-X-Forward: 190.2.102.253
-Date:   Wed, 12 May 2021 13:21:43 +0100
-Cc:     "Hans Verkuil" <hverkuil@xs4all.nl>,
-        "Linux Media Mailing List" <linux-media@vger.kernel.org>
-To:     "John Cox" <jc@kynesim.co.uk>
+        id S231319AbhELMww (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 May 2021 08:52:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231224AbhELMwu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 12 May 2021 08:52:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2515061139;
+        Wed, 12 May 2021 12:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620823902;
+        bh=bnu1cBkpfu6XTv2fqQnm+Wxaf59PXRV8jPumsy3FHs8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WDcRtBsBng0JUHK9CgbB58zQcXc0Srwj0bqrsRVVObHhVcU6eY/5brUTEAdXuEkso
+         qhqM2PqgMnDmLM7q0JQJ7qnvZm1Mhi/0Sfbzsnc6x0148WwFfXNJ0lPFyLHurEALwO
+         yWjlc1yLwQgZNqVph52DEIGsBPniyClMPysjErxPjr0xAzN/yWwEEAQNgXbnHPXYXd
+         FhZD4uwi7KZ29F0PM9eY63JtD4/k3wLIJ7MegOl9WJjMSG68QntEkI1vwQeFvMyZfP
+         PcVfW+RzO30jYIuyI2Gt8FvbQ/uDhnp6XvM1Z0MwwVO3CD5YsG0ercLSwjimPzTT3/
+         TLO3ffQA99q9g==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lgoKy-0018gy-5n; Wed, 12 May 2021 14:51:40 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 03/40] docs: admin-guide: media: ipu3.rst: Use ASCII subset instead of UTF-8 alternate symbols
+Date:   Wed, 12 May 2021 14:50:07 +0200
+Message-Id: <54995f43fcba6c52b6f2163cd9f9e39cb702b40b.1620823573.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Message-ID: <5212-609bc880-9-623f1400@218746912>
-Subject: =?utf-8?q?Re=3A?= Dynamic array control =?utf-8?q?support=3A?= please test!
-User-Agent: SOGoMail 5.0.1
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi John,
- 
-On Thursday, April 29, 2021 14:56 -03, John Cox <jc@kynesim.co.uk> wrote: 
- 
-> Hi
-> 
-> >Hi Ezequiel, John,
-> >
-> >After creating extensive new compliance tests for this feature I am now
-> >confident enough about the implementation.
-> >
-> >You can find it here:
-> >
-> >https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=ctrl-refactor
-> >
-> >There are two items that I want to fix before I will post this:
-> >
-> >1) The new flag needs to be documented
-> >2) I think there are some simplifications possible w.r.t. storing the
-> >   size of the new array, I want to look at that a bit more.
-> >
-> >In the meantime it would be great if some testing of this series can be
-> >done with real drivers instead of just vivid.
-> 
-> Well I finally managed to put together your patch (in 5.10), tweaked
-> driver & ffmpeg to have a variable noof slice headers and it all seems
-> to work well. With the code I have it doesn't give a significant
-> improvement in performance over 1 slice at a time but that is probably
-> because I have multithreaded userland code and take liberties with
-> buffer returns from the driver that Ezequiel disaproves of (but my
-> ffmpeg code is happy with).
-> 
+The conversion tools used during DocBook/LaTeX/Markdown->ReST conversion
+and some automatic rules which exists on certain text editors like
+LibreOffice turned ASCII characters into some UTF-8 alternatives that
+are better displayed on html and PDF.
 
-I don't think I have ever disapproved anything (and if I made it sound like that, it was a mistake). Quite the opposite, I am more than supportive to see get more drivers merged upstream.
+While it is OK to use UTF-8 characters in Linux, it is better to
+use the ASCII subset instead of using an UTF-8 equivalent character
+as it makes life easier for tools like grep, and are easier to edit
+with the some commonly used text/source code editors.
 
-Thanks!
-Ezequiel
+Also, Sphinx already do such conversion automatically outside literal blocks:
+   https://docutils.sourceforge.io/docs/user/smartquotes.html
+
+So, replace the occurences of the following UTF-8 characters:
+
+	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
+	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/admin-guide/media/ipu3.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/media/ipu3.rst b/Documentation/admin-guide/media/ipu3.rst
+index f59697c7b374..f77cb1384dc3 100644
+--- a/Documentation/admin-guide/media/ipu3.rst
++++ b/Documentation/admin-guide/media/ipu3.rst
+@@ -244,7 +244,7 @@ larger bayer frame for further YUV processing than "VIDEO" mode to get high
+ quality images. Besides, "STILL" mode need XNR3 to do noise reduction, hence
+ "STILL" mode will need more power and memory bandwidth than "VIDEO" mode. TNR
+ will be enabled in "VIDEO" mode and bypassed by "STILL" mode. ImgU is running at
+-“VIDEO” mode by default, the user can use v4l2 control V4L2_CID_INTEL_IPU3_MODE
++"VIDEO" mode by default, the user can use v4l2 control V4L2_CID_INTEL_IPU3_MODE
+ (currently defined in drivers/staging/media/ipu3/include/intel-ipu3.h) to query
+ and set the running mode. For user, there is no difference for buffer queueing
+ between the "VIDEO" and "STILL" mode, mandatory input and main output node
+-- 
+2.30.2
 
