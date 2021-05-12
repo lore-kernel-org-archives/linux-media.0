@@ -2,195 +2,247 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A37C43619
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E85BBC4360C
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A913461420
-	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D061061417
+	for <linux-media@archiver.kernel.org>; Wed, 12 May 2021 19:22:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358424AbhELTOl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 May 2021 15:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S244679AbhELTOP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 May 2021 15:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377307AbhELTDc (ORCPT
+        with ESMTP id S1359616AbhELSxf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 May 2021 15:03:32 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0B2C061354
-        for <linux-media@vger.kernel.org>; Wed, 12 May 2021 11:57:57 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so21494641otp.11
-        for <linux-media@vger.kernel.org>; Wed, 12 May 2021 11:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=PehLa9MGShjuTsXrSuonmCUzxBSw0r+oW/besiLAOSg=;
-        b=e7QWriUulUNRPB0jJnAJKw/zMmZn8kRRBSywopzp5wcDxq2VWWf3bpHvugikCOY9W7
-         a0kHkr5Jzk42OGM3+lOAtcuS0p0ieGRuKMhb2vlc8V0O/xW/q5D3pDzlFkt0uzQFmD9p
-         nSwAKymo6YI0llaqDyFJQY9dDhKN070USLUjM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=PehLa9MGShjuTsXrSuonmCUzxBSw0r+oW/besiLAOSg=;
-        b=cbR1Do76bZSWD3/BJofBao0wsMRr6MAWot4fe56QbY5g8BI7vKBIFdWZrMCpMj6rW3
-         SbPWfRQL+/ZP11NvzcFzq6EE146kWVLRb/hTVbztV8t3U0RPdWSgLZ2YRL8+r2yC4orw
-         XlUT/VSfN8k7ex7QJohKXkzJU4ZBGabrjc8Zu/rxmWOKmwmwRGaoB/gFFkQwuZmQ3+pn
-         RhW0UZpN97ds4MDNJ0dua3K/nOyG/SUOjnmI7+1DPDOEMlXEU3IjsEKS5zDmdWrOi7K+
-         Q+0DXgXka7bkjMnSh7kOPuLelv1sHza2HIB5p1uSlFxIeCfkSylTWx4ltP7qhyheZwew
-         DhAg==
-X-Gm-Message-State: AOAM5330TrwmMcSw4yapJnQJS3ySzTRmvG7hnpewqKIvnzsmgBkn3Wjy
-        n9j6xMLtbqUG1Lh7NQYDpeYbl8qMjH1MPZxe28uMeA==
-X-Google-Smtp-Source: ABdhPJzBOj/82oAh5sBucFDlICY1aaY8WRL1s5yQq3y7rEs/5jiHV7d0KyTPx5JmEzraeDWWvfK+qDFF5VxaUmj9mUE=
-X-Received: by 2002:a9d:1ea9:: with SMTP id n38mr32942611otn.233.1620845876668;
- Wed, 12 May 2021 11:57:56 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 May 2021 11:57:56 -0700
+        Wed, 12 May 2021 14:53:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F30C06175F
+        for <linux-media@vger.kernel.org>; Wed, 12 May 2021 11:49:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 9CE9E1F40F2A
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, ezequiel@collabora.com,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com,
+        gjasny@googlemail.com, xavier.claessens@collabora.com,
+        nicolas.dufresne@collabora.com, user.vdr@gmail.com,
+        sakari.ailus@iki.fi, mchehab+huawei@kernel.org, rosenp@gmail.com
+Subject: [v4l-utils v5 0/5] Add support for meson building
+Date:   Wed, 12 May 2021 15:49:41 -0300
+Message-Id: <20210512184946.102863-1-ariel.dalessandro@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210512082220.7137-1-rojay@codeaurora.org>
-References: <20210512082220.7137-1-rojay@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 12 May 2021 11:57:56 -0700
-Message-ID: <CAE-0n52D-K1T0QgxA-S7BXxE3Qk807F9edNyR+2RL4YxRyigMg@mail.gmail.com>
-Subject: Re: [PATCH V10] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
-        gregkh@linuxfoundation.org, mka@chromium.org,
-        skananth@codeaurora.org, msavaliy@qti.qualcomm.com,
-        skakit@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Roja Rani Yarubandi (2021-05-12 01:22:20)
-> If the hardware is still accessing memory after SMMU translation
-> is disabled (as part of smmu shutdown callback), then the
-> IOVAs (I/O virtual address) which it was using will go on the bus
-> as the physical addresses which will result in unknown crashes
-> like NoC/interconnect errors.
->
-> So, implement shutdown callback for i2c driver to suspend the bus
-> during system "reboot" or "shutdown".
->
-> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Stephen's comments added seperate function for stop transfer,
->    fixed minor nitpicks.
->  - As per Stephen's comments, changed commit text.
->
-> Changes in V3:
->  - As per Stephen's comments, squashed patch 1 into patch 2, added Fixes tag.
->  - As per Akash's comments, included FIFO case in stop_xfer, fixed minor nitpicks.
->
-> Changes in V4:
->  - As per Stephen's comments cleaned up geni_i2c_stop_xfer function,
->    added dma_buf in geni_i2c_dev struct to call i2c_put_dma_safe_msg_buf()
->    from other functions, removed "iova" check in geni_se_rx_dma_unprep()
->    and geni_se_tx_dma_unprep() functions.
->  - Added two helper functions geni_i2c_rx_one_msg_done() and
->    geni_i2c_tx_one_msg_done() to unwrap the things after rx/tx FIFO/DMA
->    transfers, so that the same can be used in geni_i2c_stop_xfer() function
->    during shutdown callback. Updated commit text accordingly.
->  - Checking whether it is tx/rx transfer using I2C_M_RD which is valid for both
->    FIFO and DMA cases, so dropped DMA_RX_ACTIVE and DMA_TX_ACTIVE bit checking
->
-> Changes in V5:
->  - As per Stephen's comments, added spin_lock_irqsave & spin_unlock_irqsave in
->    geni_i2c_stop_xfer() function.
->
-> Changes in V6:
->  - As per Stephen's comments, taken care of unsafe lock order in
->    geni_i2c_stop_xfer().
->  - Moved spin_lock/unlock to geni_i2c_rx_msg_cleanup() and
->    geni_i2c_tx_msg_cleanup() functions.
->
-> Changes in V7:
->  - No changes
->
-> Changes in V8:
->  - As per Wolfram Sang comment, removed goto and modified geni_i2c_stop_xfer()
->    accordingly.
->
-> Changes in V9:
->  - Fixed possbile race by protecting gi2c->cur and calling geni_i2c_abort_xfer()
->    with adding another parameter to differentiate from which sequence is the
->    geni_i2c_abort_xfer() called and handle the spin_lock/spin_unlock accordingly
->    inside geni_i2c_abort_xfer(). For this added two macros ABORT_XFER and
->    STOP_AND_ABORT_XFER.
->  - Added a bool variable "stop_xfer" in geni_i2c_dev struct, used to put stop
->    to upcoming geni_i2c_rx_one_msg() and geni_i2c_tx_one_msg() calls once we
->    recieve the shutdown call.
->  - Added gi2c->cur == NULL check in geni_i2c_irq() to not to process the irq
->    even if any transfer is queued and shutdown to HW received.
->
-> Changes in V10:
->  - As per Stephen's comments, removed ongoing transfers flush and only
->    suspending i2c bus in shutdown callback.
->  - Also removed all other changes which have been made for ongoing transfers
->    flush, handling race issues etc., during shutdown callback.
->  - Updated commit text accordingly.
->
->  drivers/i2c/busses/i2c-qcom-geni.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 214b4c913a13..277ab7e7dd51 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -650,6 +650,14 @@ static int geni_i2c_remove(struct platform_device *pdev)
->         return 0;
->  }
->
-> +static void geni_i2c_shutdown(struct platform_device *pdev)
-> +{
-> +       struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-> +
-> +       if (!pm_runtime_status_suspended(gi2c->se.dev))
-> +               pm_runtime_set_suspended(gi2c->se.dev);
+Hi all,
 
-What was wrong with my suggested approach of telling i2c core that the
-bus is suspended? This looks to do a bunch of work right before we're
-shutting down, when it would be simpler to just mark the bus as
-suspended and have it block future transactions and spit out a warning.
+Another attempt to support meson build, addressing comments/fixes from
+reviewers.
 
-I do see that we should be marking it suspended/resumed during runtime
-suspend/resume. I'm also confused if during system wide suspend/resume
-we actually do anything in this driver. Is runtime suspend called for
-system wide suspend?
+This patchset was developed on top of v4l-utils current master branch:
 
-----8<----
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c
-b/drivers/i2c/busses/i2c-qcom-geni.c
-index 214b4c913a13..ca12d348336b 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -656,6 +656,7 @@ static int __maybe_unused
-geni_i2c_runtime_suspend(struct device *dev)
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
+    commit f0c7e3d71eaf4182bae7eb3ee0e43b4eeb047ea9
+    Author: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
- 	disable_irq(gi2c->irq);
-+	i2c_mark_adapter_suspended(&gi2c->adap);
- 	ret = geni_se_resources_off(&gi2c->se);
- 	if (ret) {
- 		enable_irq(gi2c->irq);
-@@ -682,6 +683,7 @@ static int __maybe_unused
-geni_i2c_runtime_resume(struct device *dev)
- 		return ret;
+        v4l2-ctl: add '--set-edid type=list' support
 
- 	enable_irq(gi2c->irq);
-+	i2c_mark_adapter_resumed(&gi2c->adap);
- 	gi2c->suspended = 0;
- 	return 0;
- }
+You can find the patchset pushed to the following branch:
+
+    https://gitlab.collabora.com/adalessandro/v4l-utils/-/tree/v4l-utils-meson-v5
+
+Feedback appreciated as always :-)
+
+Changes from v4:
+
+  * Dropped install_subdir() work-around to install empty dir. Supported
+    now in meson v0.57.
+  * Bump to meson v0.57. Replaced deprecated methods.
+  * Added override_dependency() calls on libraries.
+  * Properly check for bpf and SDL2 dependencies.
+  * Removed libraries_private field from libv4lconvert pkgconfig.
+  * Documented meson static builds support.
+  * Set default compiler standard options.
+  * Added bpf check in keytable.
+
+Changes from v3:
+
+  * Split Doxygen support patch.
+  * Properly generate config.h configuration file.
+
+Changes from v2:
+
+  * Updated to current master branch.
+  * Moved README to markdown syntax.
+  * Documented meson build.
+  * Set PACKAGE_VERSION config macro as quoted.
+
+Changes from v1:
+
+  * Updated project version to 1.21.0.
+  * Fixed clang includes in keytable bpf compilation.
+  * Improved variable reutilization in meson scripts.        
+  * Set libraries version and soversion.                     
+  * Control symbol visibility.                  
+  * Install empty 'protocols' directory in keytable user dir.
+  * Fixed svg filenames in qv4l2 and qvidcap.                         
+  * Added support for Doxygen documentation (html and man).
+  * Updated required meson version to v0.53 (for fs module).       
+  * Added new files to EXTRA_DIST in each Makefile.am.              
+
+Regards,
+
+Ariel D'Alessandro (5):
+  Move README to markdown syntax
+  Add support for meson building
+  Copy Doxygen configuration file to doc/
+  meson: Add support for doxygen documentation
+  Makefile.am: Distribute meson related files
+
+ .gitignore                                    |    1 +
+ INSTALL.meson.md                              |  142 +
+ Makefile.am                                   |    5 +-
+ README                                        |  274 --
+ README.md                                     |  332 +++
+ contrib/Makefile.am                           |    3 +-
+ contrib/cobalt-ctl/Makefile.am                |    2 +
+ contrib/cobalt-ctl/meson.build                |    8 +
+ contrib/decode_tm6000/Makefile.am             |    2 +
+ contrib/decode_tm6000/meson.build             |   14 +
+ contrib/gconv/Makefile.am                     |    2 +-
+ contrib/gconv/meson.build                     |   44 +
+ contrib/meson.build                           |   13 +
+ contrib/rds-saa6588/Makefile.am               |    2 +
+ contrib/rds-saa6588/meson.build               |    7 +
+ contrib/test/Makefile.am                      |    3 +-
+ contrib/test/meson.build                      |  143 +
+ contrib/xc3028-firmware/Makefile.am           |    2 +-
+ contrib/xc3028-firmware/meson.build           |   11 +
+ doc/Doxyfile.in                               | 2352 +++++++++++++++++
+ doc/meson.build                               |   34 +
+ lib/Makefile.am                               |    2 +-
+ lib/libdvbv5/Makefile.am                      |    2 +-
+ lib/libdvbv5/meson.build                      |  159 ++
+ lib/libv4l-mplane/Makefile.am                 |    2 +
+ lib/libv4l-mplane/meson.build                 |   23 +
+ lib/libv4l1/Makefile.am                       |    2 +-
+ lib/libv4l1/meson.build                       |   62 +
+ lib/libv4l2/Makefile.am                       |    2 +-
+ lib/libv4l2/meson.build                       |   71 +
+ lib/libv4l2rds/Makefile.am                    |    2 +
+ lib/libv4l2rds/meson.build                    |   37 +
+ lib/libv4lconvert/Makefile.am                 |    2 +-
+ lib/libv4lconvert/meson.build                 |  117 +
+ lib/meson.build                               |   11 +
+ libdvbv5-po/meson.build                       |    3 +
+ meson.build                                   |  334 +++
+ meson_options.txt                             |   50 +
+ utils/Makefile.am                             |    2 +-
+ utils/cec-compliance/Makefile.am              |    2 +-
+ utils/cec-compliance/meson.build              |   22 +
+ utils/cec-ctl/Makefile.am                     |    2 +-
+ utils/cec-ctl/meson.build                     |   18 +
+ utils/cec-follower/Makefile.am                |    2 +-
+ utils/cec-follower/meson.build                |   19 +
+ utils/cx18-ctl/Makefile.am                    |    2 +
+ utils/cx18-ctl/meson.build                    |    8 +
+ utils/dvb/Makefile.am                         |    2 +-
+ utils/dvb/meson.build                         |   70 +
+ utils/gen_media_bus_format_codes.sh           |    7 +
+ utils/gen_media_bus_format_names.sh           |    7 +
+ utils/ir-ctl/Makefile.am                      |    2 +
+ utils/ir-ctl/meson.build                      |   23 +
+ utils/ivtv-ctl/Makefile.am                    |    2 +
+ utils/ivtv-ctl/meson.build                    |   13 +
+ utils/keytable/Makefile.am                    |    3 +-
+ utils/keytable/bpf_protocols/Makefile.am      |    3 +-
+ .../bpf_protocols/clang_sys_includes.sh       |    9 +
+ utils/keytable/bpf_protocols/meson.build      |   31 +
+ utils/keytable/meson.build                    |   81 +
+ utils/keytable/rc_keymaps/meson.build         |  151 ++
+ utils/libcecutil/Makefile.am                  |    2 +-
+ utils/libcecutil/meson.build                  |   45 +
+ utils/libmedia_dev/Makefile.am                |    2 +-
+ utils/libmedia_dev/meson.build                |   14 +
+ utils/libv4l2util/Makefile.am                 |    2 +-
+ utils/libv4l2util/meson.build                 |   16 +
+ utils/media-ctl/Makefile.am                   |    2 +
+ utils/media-ctl/meson.build                   |   43 +
+ utils/meson.build                             |   46 +
+ utils/qv4l2/Makefile.am                       |    3 +-
+ utils/qv4l2/meson.build                       |   80 +
+ utils/qvidcap/Makefile.am                     |    3 +-
+ utils/qvidcap/meson.build                     |   82 +
+ utils/rds-ctl/Makefile.am                     |    1 +
+ utils/rds-ctl/meson.build                     |   13 +
+ utils/v4l2-compliance/Makefile.am             |    2 +-
+ utils/v4l2-compliance/meson.build             |   58 +
+ utils/v4l2-ctl/Makefile.am                    |    2 +-
+ utils/v4l2-ctl/meson.build                    |   75 +
+ utils/v4l2-dbg/Makefile.am                    |    2 +-
+ utils/v4l2-dbg/meson.build                    |   16 +
+ utils/v4l2-sysfs-path/Makefile.am             |    2 +
+ utils/v4l2-sysfs-path/meson.build             |   14 +
+ v4l-utils-po/meson.build                      |    3 +
+ 85 files changed, 4987 insertions(+), 299 deletions(-)
+ create mode 100644 INSTALL.meson.md
+ delete mode 100644 README
+ create mode 100644 README.md
+ create mode 100644 contrib/cobalt-ctl/meson.build
+ create mode 100644 contrib/decode_tm6000/meson.build
+ create mode 100644 contrib/gconv/meson.build
+ create mode 100644 contrib/meson.build
+ create mode 100644 contrib/rds-saa6588/meson.build
+ create mode 100644 contrib/test/meson.build
+ create mode 100644 contrib/xc3028-firmware/meson.build
+ create mode 100644 doc/Doxyfile.in
+ create mode 100644 doc/meson.build
+ create mode 100644 lib/libdvbv5/meson.build
+ create mode 100644 lib/libv4l-mplane/meson.build
+ create mode 100644 lib/libv4l1/meson.build
+ create mode 100644 lib/libv4l2/meson.build
+ create mode 100644 lib/libv4l2rds/meson.build
+ create mode 100644 lib/libv4lconvert/meson.build
+ create mode 100644 lib/meson.build
+ create mode 100644 libdvbv5-po/meson.build
+ create mode 100644 meson.build
+ create mode 100644 meson_options.txt
+ create mode 100644 utils/cec-compliance/meson.build
+ create mode 100644 utils/cec-ctl/meson.build
+ create mode 100644 utils/cec-follower/meson.build
+ create mode 100644 utils/cx18-ctl/meson.build
+ create mode 100644 utils/dvb/meson.build
+ create mode 100755 utils/gen_media_bus_format_codes.sh
+ create mode 100755 utils/gen_media_bus_format_names.sh
+ create mode 100644 utils/ir-ctl/meson.build
+ create mode 100644 utils/ivtv-ctl/meson.build
+ create mode 100755 utils/keytable/bpf_protocols/clang_sys_includes.sh
+ create mode 100644 utils/keytable/bpf_protocols/meson.build
+ create mode 100644 utils/keytable/meson.build
+ create mode 100644 utils/keytable/rc_keymaps/meson.build
+ create mode 100644 utils/libcecutil/meson.build
+ create mode 100644 utils/libmedia_dev/meson.build
+ create mode 100644 utils/libv4l2util/meson.build
+ create mode 100644 utils/media-ctl/meson.build
+ create mode 100644 utils/meson.build
+ create mode 100644 utils/qv4l2/meson.build
+ create mode 100644 utils/qvidcap/meson.build
+ create mode 100644 utils/rds-ctl/meson.build
+ create mode 100644 utils/v4l2-compliance/meson.build
+ create mode 100644 utils/v4l2-ctl/meson.build
+ create mode 100644 utils/v4l2-dbg/meson.build
+ create mode 100644 utils/v4l2-sysfs-path/meson.build
+ create mode 100644 v4l-utils-po/meson.build
+
+-- 
+2.30.2
+
