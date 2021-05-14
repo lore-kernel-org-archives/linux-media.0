@@ -2,196 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5246C433B4
-	for <linux-media@archiver.kernel.org>; Fri, 14 May 2021 10:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE1FC43462
+	for <linux-media@archiver.kernel.org>; Fri, 14 May 2021 11:02:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84BAD61451
-	for <linux-media@archiver.kernel.org>; Fri, 14 May 2021 10:24:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 451C7610F7
+	for <linux-media@archiver.kernel.org>; Fri, 14 May 2021 11:02:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbhENKZ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 May 2021 06:25:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230295AbhENKZ6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 May 2021 06:25:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7E5061353;
-        Fri, 14 May 2021 10:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620987887;
-        bh=z/miKyvmY7M8tNXyT/t8zRBrMdfgoa7t4pQ+ZnLdxB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E9N/LBStsXpDQmWrGLlzHoMKpcQe4SQXulr8OyJ0SFFwJvv6DKbDirmB3ve6f958c
-         efxVpm/fxrIAOE1kUb5RBoduJwsW9iHb6HcYCuw0FFVgRk0vxbI7dCt+h6SIr1Y2hf
-         lDgdinh35eI09Z5YdOjbm5HYFHwXeOENzkDkenEUlfQ9of+Y/BmrIgpTC3pTYVOtkg
-         ZgdhC0L7rdYUibpNtDENp6/q92x6Aul7VBt/tktdlWdm0q4Ps9I00IpWHFEEmmaHGh
-         P6NoRiEBbtprQ20U1KDpCnSzQTcKhICH/0NQdkQiY0cN1UUVz5/+WKIt+l5rVwLrhs
-         y4zBNQzixtMsg==
-Date:   Fri, 14 May 2021 13:24:41 +0300
-From:   Abel Vesa <abelvesa@kernel.org>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
-        robh+dt@kernel.org, aisheng.dong@nxp.com, guoniu.zhou@nxp.com,
-        linux-arm-kernel@lists.infradead.org, peng.fan@nxp.com,
-        s.hauer@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, paul.kocialkowski@bootlin.com,
-        daniel.baluta@nxp.com, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, p.zabel@pengutronix.de,
-        ezequiel@collabora.com, Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: Re: [PATCH v11] arm64: dts: imx8qxp: Add jpeg encoder/decoder nodes
-Message-ID: <YJ5P6ZdAMIsYrTMX@ryzen.lan>
-References: <20210423101414.20068-1-mirela.rabulea@oss.nxp.com>
- <20210513073832.GS3425@dragon>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210513073832.GS3425@dragon>
+        id S232208AbhENLDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 May 2021 07:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231777AbhENLDv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 May 2021 07:03:51 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6F0C061574;
+        Fri, 14 May 2021 04:02:38 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id i5so19112324pgm.0;
+        Fri, 14 May 2021 04:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=g7DkEbR2JcQCbOxkMhdC26BeBE1YwkunloMTb/SDIZc=;
+        b=TPBiLWV/NQn/o4Os0P4M/SsGh0ZuidyhHWzGQieQPX0qaKdDvntKEKGuI2k+UWP9UV
+         0JFkGypQMuPK9kdymjMT64VZofeIz/FLcvpZCvW+PhnPxq1r4pWFKWwjKZ45IqUlKIqI
+         xnRQgvBUQOvQCunnoMxY32zrpKwgT9WQ0PAbnwPaFGvjoGBlsTaTnBi8sp2dFyd+FcWM
+         a7cOOgn+mMaTwe2xrA11UcqPbOPVi8xMo/BtDOIt73434TAsPV5ngVnQFTWLVl9ixZfV
+         Efmz2Rji/0z1brCmNAums5zhFOO+uLGKXDgUTMsDJwBi/KnhY+lqIew0SINYzuNVSfzS
+         zw0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=g7DkEbR2JcQCbOxkMhdC26BeBE1YwkunloMTb/SDIZc=;
+        b=qxiDBRPnq3lCeiYWPxaYJ8D/8y6GwcOphjzs1zGZmcu5NVOmdgoy5JXvqT0k1QJdJX
+         gL5aqRKpCNWrvASqNNbbZBkjiF1ps1ate6eotr+qL6C80LI+y4pkJn2zAjLx/7D4eonY
+         2HIn1re5mLA2A7gDdzAIHDGChj2Lag5XDMLKvicvu0+nyWHFVqU3R3xZnO+YS+RE8wc1
+         W7I3z+1iX9UZxqbwYcVgMMbVMdhDf80Ke4uBkI9czndFWqo7Wvlw31PeudibRe16s89z
+         XGDn6FzJ8PSELUt3QGyVEZZtM9nMDYElUodG/wlkFRb8bIMC4GhOYrNY7eVcKP5KURER
+         h90Q==
+X-Gm-Message-State: AOAM531vUdcEAirFRsyZaYpyYRNEidr074T5Qs/OrxvupTTpOlE6FqN7
+        9Bbacq52fVLaBqidBVXuu98=
+X-Google-Smtp-Source: ABdhPJzI0fGVTZCZdc30Z3TaVpb0GVm4cmbsGmevnEN/twwgl1TCynmfAE+pe70r417S9GkSp3vXSA==
+X-Received: by 2002:a63:465f:: with SMTP id v31mr13437876pgk.6.1620990157678;
+        Fri, 14 May 2021 04:02:37 -0700 (PDT)
+Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
+        by smtp.gmail.com with ESMTPSA id 202sm4193402pgg.59.2021.05.14.04.02.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 May 2021 04:02:37 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     patrice.chotard@foss.st.com, pierre-yves.mordret@foss.st.com,
+        alain.volmat@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, mturquette@baylibre.com
+Cc:     sboyd@kernel.org, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-clk@vger.kernel.org,
+        Dillon Min <dillon.minfei@gmail.com>
+Subject: [PATCH 0/4] Fix the i2c/clk bug of stm32 mcu platform
+Date:   Fri, 14 May 2021 19:02:28 +0800
+Message-Id: <1620990152-19255-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 21-05-13 15:38:33, Shawn Guo wrote:
-> On Fri, Apr 23, 2021 at 01:14:14PM +0300, Mirela Rabulea (OSS) wrote:
-> > From: Mirela Rabulea <mirela.rabulea@nxp.com>
-> > 
-> > Add dts for imaging subsytem, include jpeg nodes here.
-> > Tested on imx8qxp only, should work on imx8qm, but it was not tested.
-> > 
-> > Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-> 
-> So the bindings and driver parts have been accepted already?
-> 
-> > ---
-> > Changes in v11:
-> >   Adress feedback from Aisheng Dong:
-> >   - Rename img_jpeg_dec_clk/img_jpeg_enc_clk to jpeg_dec_lpcg/jpeg_enc_lpcg to make it visible it's lpcg not other type of clk
-> >   - Drop the cameradev node, not needed for jpeg
-> >   - Match assigned-clocks & assigned-clock-rates
-> > 
-> >  .../arm64/boot/dts/freescale/imx8-ss-img.dtsi | 82 +++++++++++++++++++
-> >  arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |  1 +
-> >  2 files changed, 83 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-> > new file mode 100644
-> > index 000000000000..c508e5d0c92b
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-> > @@ -0,0 +1,82 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Copyright 2019-2021 NXP
-> > + * Zhou Guoniu <guoniu.zhou@nxp.com>
-> > + */
-> > +img_subsys: bus@58000000 {
-> > +	compatible = "simple-bus";
-> > +	#address-cells = <1>;
-> > +	#size-cells = <1>;
-> > +	ranges = <0x58000000 0x0 0x58000000 0x1000000>;
-> > +
-> > +	img_ipg_clk: clock-img-ipg {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <200000000>;
-> > +		clock-output-names = "img_ipg_clk";
-> > +	};
-> 
-> Hmm, not sure a fixed-clock should be in the subsystem.
-> 
+From: Dillon Min <dillon.minfei@gmail.com>
 
-Agreed. Assuming the img_ipg_clk is only used on 8QXP, you could move it
-into imx8qxp-ss-img.dtsi. This way every other platform that uses this
-ss file will not be impacted.
+This seriese fix three i2c/clk bug for stm32 f4/f7
+- kernel runing in sdram, i2c driver get data timeout
+- ltdc clk turn off after kernel console active
+- kernel hang in set ltdc clock rate
 
-> > +
-> > +	img_jpeg_dec_lpcg: clock-controller@585d0000 {
-> > +		compatible = "fsl,imx8qxp-lpcg";
-> > +		reg = <0x585d0000 0x10000>;
-> > +		#clock-cells = <1>;
-> > +		clocks = <&img_ipg_clk>, <&img_ipg_clk>;
-> > +		clock-indices = <IMX_LPCG_CLK_0>,
-> > +				<IMX_LPCG_CLK_4>;
-> > +		clock-output-names = "img_jpeg_dec_lpcg_clk",
-> > +				     "img_jpeg_dec_lpcg_ipg_clk";
-> > +		power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>;
-> > +	};
-> > +
-> > +	img_jpeg_enc_lpcg: clock-controller@585f0000 {
-> > +		compatible = "fsl,imx8qxp-lpcg";
-> > +		reg = <0x585f0000 0x10000>;
-> > +		#clock-cells = <1>;
-> > +		clocks = <&img_ipg_clk>, <&img_ipg_clk>;
-> > +		clock-indices = <IMX_LPCG_CLK_0>,
-> > +				<IMX_LPCG_CLK_4>;
-> > +		clock-output-names = "img_jpeg_enc_lpcg_clk",
-> > +				     "img_jpeg_enc_lpcg_ipg_clk";
-> > +		power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>;
-> > +	};
-> > +
-> > +	jpegdec: jpegdec@58400000 {
-> 
-> Keep nodes sorted in unit address.
-> 
-> Shawn
-> 
-> > +		compatible = "nxp,imx8qxp-jpgdec";
-> > +		reg = <0x58400000 0x00050000 >;
-> > +		interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
-> > +		clocks = <&img_jpeg_dec_lpcg 0>,
-> > +			 <&img_jpeg_dec_lpcg 1>;
-> > +		clock-names = "per", "ipg";
-> > +		assigned-clocks = <&img_jpeg_dec_lpcg 0>,
-> > +				  <&img_jpeg_dec_lpcg 1>;
-> > +		assigned-clock-rates = <200000000>, <200000000>;
-> > +		power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
-> > +				<&pd IMX_SC_R_MJPEG_DEC_S0>,
-> > +				<&pd IMX_SC_R_MJPEG_DEC_S1>,
-> > +				<&pd IMX_SC_R_MJPEG_DEC_S2>,
-> > +				<&pd IMX_SC_R_MJPEG_DEC_S3>;
-> > +	};
-> > +
-> > +	jpegenc: jpegenc@58450000 {
-> > +		compatible = "nxp,imx8qxp-jpgenc";
-> > +		reg = <0x58450000 0x00050000 >;
-> > +		interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
-> > +			     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
-> > +		clocks = <&img_jpeg_enc_lpcg 0>,
-> > +			 <&img_jpeg_enc_lpcg 1>;
-> > +		clock-names = "per", "ipg";
-> > +		assigned-clocks = <&img_jpeg_enc_lpcg 0>,
-> > +				  <&img_jpeg_enc_lpcg 1>;
-> > +		assigned-clock-rates = <200000000>, <200000000>;
-> > +		power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
-> > +				<&pd IMX_SC_R_MJPEG_ENC_S0>,
-> > +				<&pd IMX_SC_R_MJPEG_ENC_S1>,
-> > +				<&pd IMX_SC_R_MJPEG_ENC_S2>,
-> > +				<&pd IMX_SC_R_MJPEG_ENC_S3>;
-> > +	};
-> > +};
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > index 1e6b4995091e..2d9589309bd0 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > @@ -258,6 +258,7 @@
-> >  	};
-> >  
-> >  	/* sorted in register address */
-> > +	#include "imx8-ss-img.dtsi"
-> >  	#include "imx8-ss-adma.dtsi"
-> >  	#include "imx8-ss-conn.dtsi"
-> >  	#include "imx8-ss-ddr.dtsi"
-> > -- 
-> > 2.17.1
-> > 
+clk bug found on stm32f429/f469-disco board
+
+Hi Patrice:
+below is the guide to verify the patch:
+
+setup test env with following files(link at below 'files link'):
+[1] u-boot-dtb.bin
+[2] rootfs zip file (used in kernel initramfs)
+[3] u-boot's mkimage to create itb file
+[4] kernel config file
+[5] my itb with-or-without i2c patch
+
+This patch based on kernel commit:
+88b06399c9c766c283e070b022b5ceafa4f63f19
+
+Note:
+panel-ilitek-ili9341.c is the driver which was submitted last year, but not
+get accepted. it's used to setup touch screen calibration, then test i2c.
+
+create itb file(please correct path of 'data'):
+./mkimage -f stm32.its stm32.itb
+
+HW setup:
+console:
+       PA9, PA10
+       usart0
+       serial@40011000
+       115200 8n1
+
+-- flash u-boot.bin to stm32f429-disco on PC
+$ sudo openocd -f board/stm32f429discovery.cfg -c \
+  '{PATH-TO-YOUR-UBOOT}/u-boot-dtb.bin 0x08000000 exit reset'
+
+-- setup kernel load bootargs at u-boot
+U-Boot > setenv bootargs 'console=tty0 console=ttySTM0,115200
+                    root=/dev/ram rdinit=/linuxrc loglevel=8 fbcon=rotate:2'
+U-Boot > loady;bootm
+(download stm32.dtb or your kernel with itb format, or download zImage, dtb)
+
+-- setup ts_calibrate running env on stm32f429-disco
+/ # export TSLIB_CONFFILE=/etc/ts.conf
+/ # export TSLIB_TSDEVICE=/dev/input/event0
+/ # export TSLIB_CONSOLEDEVICE=none
+/ # export TSLIB_FBDEVICE=/dev/fb0
+
+-- clear screen
+/ # ./fb
+
+-- run ts_calibrate 
+/ # ts_calibrate
+(you can calibrate touchscreen now, and get below errors)
+
+[  113.942087] stmpe-i2c0-0041: failed to read regs 0x52: -110
+[  114.063598] stmpe-i2c 0-0041: failed to read reg 0x4b: -16
+[  114.185629] stmpe-i2c 0-0041: failed to read reg 0x40: -16
+[  114.307257] stmpe-i2c 0-0041: failed to write reg 0xb: -16
+
+...
+with i2c patch applied, you will find below logs:
+
+RAW---------------------> 3164 908 183 118.110884
+TS_READ_RAW----> x = 3164, y =908, pressure = 183
+RAW---------------------> 3166 922 126 118.138946
+TS_READ_RAW----> x = 3166, y = 922, pressure = 126
+....
+
+files link:
+https://drive.google.com/drive/folders/1qNbjChcB6UGtKzne2F5x9_WG_sZFyo3o?usp=sharing
+
+
+
+
+Dillon Min (4):
+  drm/panel: Add ilitek ili9341 panel driver
+  i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
+  clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate
+  clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after
+    kernel startup
+
+ drivers/clk/clk-stm32f4.c                    |   10 +-
+ drivers/gpu/drm/panel/Kconfig                |   12 +
+ drivers/gpu/drm/panel/Makefile               |    1 +
+ drivers/gpu/drm/panel/panel-ilitek-ili9341.c | 1285 ++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-stm32f4.c             |   12 +-
+ 5 files changed, 1310 insertions(+), 10 deletions(-)
+ create mode 100755 drivers/gpu/drm/panel/panel-ilitek-ili9341.c
+
+-- 
+2.7.4
+
