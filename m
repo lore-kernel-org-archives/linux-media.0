@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDBB6C433B4
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:23:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9E2C433ED
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:23:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93D5361285
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:23:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CDD261287
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:23:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbhEPCYd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S231874AbhEPCYe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhEPCYd (ORCPT
+        with ESMTP id S231521AbhEPCYd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 15 May 2021 22:24:33 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E069EC061763
-        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 18:55:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DA4C061756
+        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 18:49:59 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 31736B91;
-        Sun, 16 May 2021 03:45:01 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DAEC8556;
+        Sun, 16 May 2021 03:44:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621129501;
-        bh=JmqGnpDPw9T33107htWdOo96CrEGhuqfrMBa5gpgcQw=;
+        s=mail; t=1621129496;
+        bh=NKZj8dqKmHYGQa7ur/YEwuiH4y+sRaQJusa4Kmtbpsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y0Xl4GecRQzYVwbTz9rU7pGgX3tG3Z3BGEe6vcwvZrOGjs8ZX0TjSqMyvHsAN4+LX
-         yG5yGh6OHTA8m8QbkTjaXSFgSQKcLEQ/NvpsDqIHguEaexw9Khl5KQQ6IJrx250pb+
-         o2WQ9UrESfPVy8PlMzwySPiXhcCAraNfNvAmonpM=
+        b=fuwrYHy6j5G83fDgU2G320hhH8Jt7iTSf0MkHE7eNHYWdtIZoDJKwGCNLSkAlow8Q
+         HFLChZ9zxMFpQS/sy+cc0PYzsCKQIpQCjasbhisgRm+5JR/j5y4I4xP4D2xLFmEX4V
+         362rADp/R+M+BHqsMyUSTk98HrIJqSX0HlpSeV8E=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
         Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 06/25] media: imx: imx7_mipi_csis: Don't set subdev data
-Date:   Sun, 16 May 2021 04:44:22 +0300
-Message-Id: <20210516014441.5508-7-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 01/25] media: imx: imx7_mipi_csis: Fix logging of only error event counters
+Date:   Sun, 16 May 2021 04:44:17 +0300
+Message-Id: <20210516014441.5508-2-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
 References: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
@@ -56,28 +56,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver doesn't need to store subdev data, as the subdev is embedded
-in csi_state and is thus accessed using container_of.
+The mipi_csis_events array ends with 6 non-error events, not 4. Update
+mipi_csis_log_counters() accordingly. While at it, log event counters in
+forward order, as there's no reason to log them backward.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index bbcd39672f92..030ef0925cd5 100644
+index 025fdc488bd6..25d0f89b2e53 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -1105,8 +1105,6 @@ static int mipi_csis_subdev_init(struct v4l2_subdev *mipi_sd,
- 	state->csis_fmt = &mipi_csis_formats[0];
- 	mipi_csis_init_cfg(mipi_sd, NULL);
+@@ -666,13 +666,15 @@ static void mipi_csis_clear_counters(struct csi_state *state)
  
--	v4l2_set_subdevdata(mipi_sd, &pdev->dev);
--
- 	state->pads[CSIS_PAD_SINK].flags = MEDIA_PAD_FL_SINK
- 					 | MEDIA_PAD_FL_MUST_CONNECT;
- 	state->pads[CSIS_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
+ static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
+ {
+-	int i = non_errors ? MIPI_CSIS_NUM_EVENTS : MIPI_CSIS_NUM_EVENTS - 4;
++	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
++				: MIPI_CSIS_NUM_EVENTS - 6;
+ 	struct device *dev = &state->pdev->dev;
+ 	unsigned long flags;
++	unsigned int i;
+ 
+ 	spin_lock_irqsave(&state->slock, flags);
+ 
+-	for (i--; i >= 0; i--) {
++	for (i = 0; i < num_events; ++i) {
+ 		if (state->events[i].counter > 0 || state->debug)
+ 			dev_info(dev, "%s events: %d\n", state->events[i].name,
+ 				 state->events[i].counter);
 -- 
 Regards,
 
