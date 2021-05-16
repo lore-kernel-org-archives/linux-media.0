@@ -7,32 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF034C433ED
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1E84C433B4
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:14:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9828061205
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:14:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80423611AD
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:14:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbhEPCPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbhEPCMx (ORCPT
+        id S232139AbhEPCPr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:15:47 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35538 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232040AbhEPCMx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 15 May 2021 22:12:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D505C061345
-        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 19:10:21 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AF17921A4;
-        Sun, 16 May 2021 03:45:10 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0046E2735;
+        Sun, 16 May 2021 03:45:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621129511;
-        bh=Tt1dtEkJgHoipDqKSOpEmHKwlLmqsyj15YXaCSvBxlI=;
+        s=mail; t=1621129516;
+        bh=2mH24ja4zoag2SCvos1LR2CpAz46bfJlt/+u4++nzqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HPk7z0+g80gJ/WR94Lrc2Qvl8SvfG0VHvyB2EuWOtSwSAMKtMIwfixm0HH9qRu7Bm
-         ysc3oycZZbeDWeMG1Oj6sb1LDi/G33i2TVBBTUc7ww5UZJIm3njMh9XKuux0zRM3U1
-         GS24j/2hF73b74/UcFMSDTXH25nsmlks1Tbt/lz8=
+        b=H3bLYgeHA8NaT9ihmQpksApOlWyCfIwnf4qbtloMkuykDn8QjWcM/za5sufqINvzK
+         m4uZUIZN649jZgGmOsW3wV5WmgPvkJIbNowK+59vBIXK9VoVAdpuUfH0P99/UgZYhb
+         5FGJqrI+fllGkajAUGRDG31WckGgmCWJ5tcFqvts=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -44,9 +41,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
         Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 15/25] media: imx: imx7_mipi_csis: Don't pass pdev to mipi_csis_parse_dt()
-Date:   Sun, 16 May 2021 04:44:31 +0300
-Message-Id: <20210516014441.5508-16-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 20/25] media: imx: imx7_mipi_csis: Reorganize mipi_csis_probe()
+Date:   Sun, 16 May 2021 04:44:36 +0300
+Message-Id: <20210516014441.5508-21-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
 References: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
@@ -56,50 +53,101 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The mipi_csis_parse_dt() function is called with a pointer to the
-csi_state, which contains all the information necessary. Don't pass the
-platform device pointer as well.
+Group the operations performed in mipi_csis_probe() logically to improve
+readability.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 30 ++++++++++++++--------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 0b164436117c..19fa4891737d 100644
+index 61da4db292ef..07b331667db7 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -1283,17 +1283,16 @@ static int mipi_csis_subdev_init(struct v4l2_subdev *sd,
- 				      state->pads);
- }
+@@ -1298,22 +1298,21 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	if (!state)
+ 		return -ENOMEM;
  
--static int mipi_csis_parse_dt(struct platform_device *pdev,
--			      struct csi_state *state)
-+static int mipi_csis_parse_dt(struct csi_state *state)
- {
--	struct device_node *node = pdev->dev.of_node;
-+	struct device_node *node = state->dev->of_node;
++	mutex_init(&state->lock);
+ 	spin_lock_init(&state->slock);
  
- 	if (of_property_read_u32(node, "clock-frequency",
- 				 &state->clk_frequency))
- 		state->clk_frequency = DEFAULT_SCLK_CSIS_FREQ;
- 
- 	/* Get MIPI PHY resets */
--	state->mrst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	state->mrst = devm_reset_control_get_exclusive(state->dev, NULL);
- 	if (IS_ERR(state->mrst))
- 		return PTR_ERR(state->mrst);
- 
-@@ -1316,7 +1315,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 	state->pdev = pdev;
  	state->dev = dev;
  
--	ret = mipi_csis_parse_dt(pdev, state);
-+	ret = mipi_csis_parse_dt(state);
++	memcpy(state->events, mipi_csis_events, sizeof(state->events));
++
++	/* Parse DT properties. */
+ 	ret = mipi_csis_parse_dt(state);
  	if (ret < 0) {
  		dev_err(dev, "Failed to parse device tree: %d\n", ret);
  		return ret;
+ 	}
+ 
+-	ret = mipi_csis_phy_init(state);
+-	if (ret < 0)
+-		return ret;
+-
+-	mipi_csis_phy_reset(state);
+-
++	/* Acquire resources. */
+ 	state->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(state->regs))
+ 		return PTR_ERR(state->regs);
+@@ -1322,16 +1321,24 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
+ 
++	ret = mipi_csis_phy_init(state);
++	if (ret < 0)
++		return ret;
++
+ 	ret = mipi_csis_clk_get(state);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/* Reset PHY and enable the clocks. */
++	mipi_csis_phy_reset(state);
++
+ 	ret = mipi_csis_clk_enable(state);
+ 	if (ret < 0) {
+ 		dev_err(state->dev, "failed to enable clocks: %d\n", ret);
+ 		return ret;
+ 	}
+ 
++	/* Now that the hardware is initialized, request the interrupt. */
+ 	ret = devm_request_irq(dev, irq, mipi_csis_irq_handler, 0,
+ 			       dev_name(dev), state);
+ 	if (ret) {
+@@ -1339,22 +1346,23 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 		goto disable_clock;
+ 	}
+ 
+-	platform_set_drvdata(pdev, &state->sd);
+-
+-	mutex_init(&state->lock);
++	/* Initialize and register the subdev. */
+ 	ret = mipi_csis_subdev_init(state);
+ 	if (ret < 0)
+ 		goto disable_clock;
+ 
++	platform_set_drvdata(pdev, &state->sd);
++
+ 	ret = mipi_csis_async_register(state);
+ 	if (ret < 0) {
+ 		dev_err(dev, "async register failed: %d\n", ret);
+ 		goto cleanup;
+ 	}
+ 
+-	memcpy(state->events, mipi_csis_events, sizeof(state->events));
+-
++	/* Initialize debugfs. */
+ 	mipi_csis_debugfs_init(state);
++
++	/* Enable runtime PM. */
+ 	pm_runtime_enable(dev);
+ 	if (!pm_runtime_enabled(dev)) {
+ 		ret = mipi_csis_pm_resume(dev, true);
 -- 
 Regards,
 
