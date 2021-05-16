@@ -7,32 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D543C433B4
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72330C433ED
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED8BF61205
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:28:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D9BF61287
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbhEPC3e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbhEPC3d (ORCPT
+        id S232357AbhEPCnx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:43:53 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35834 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232227AbhEPCnw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 May 2021 22:29:33 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F70C061760
-        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 18:50:06 -0700 (PDT)
+        Sat, 15 May 2021 22:43:52 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 42226B8A;
-        Sun, 16 May 2021 03:44:59 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFA1A9DF;
+        Sun, 16 May 2021 04:42:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621129500;
-        bh=yd2k7p0t/i4uZXkvy0iYdsiRXQce30xAgzm8AHXI8ns=;
+        s=mail; t=1621132951;
+        bh=zmZgzMgfdUnOLBKmT5LsykPM2XfK7ywnzC0N7pI57XY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0MuVAn7bs+JS41DArPSH2Tv8q0yMW0lddzfzmkn73AHC/MWThhVrqluq2VpOEJvi
-         BNlDQGItzJmsAta5sN02QQqx3MJ+V9rOPgeRzHgnXQ3ysmiNPdfldqPqB+jYTdDGK9
-         Goady/g2pZlOsmDd+cxwBysKSfM50WKo4so5nufg=
+        b=BqdsdernYAotswjlp/21rWHjiZOS367KUZtJMhWlxTdE078QNZhkBNlFGdM9w3X2c
+         V6pFTsaEI4cEGxFy9VDCOLgUOpp6SDdZ5fetfdxyTFqkyLPBC2V2+KvmIwdohYpdRI
+         SlugRoYiChb3RHqK6dr74H18DV0vk2+O3WiVLkL0=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -40,57 +37,77 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 04/25] media: imx: imx7_mipi_csis: Move static data to top of mipi_csis_dump_regs()
-Date:   Sun, 16 May 2021 04:44:20 +0300
-Message-Id: <20210516014441.5508-5-laurent.pinchart@ideasonboard.com>
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Subject: [RFC PATCH 2/3] media: imx: imx7-media-csi: Set TWO_8BIT_SENSOR for >= 10-bit formats
+Date:   Sun, 16 May 2021 05:42:15 +0300
+Message-Id: <20210516024216.4576-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
-In-Reply-To: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
-References: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
+References: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It's customary to declare static variables at the top of the function,
-with a blank line separating them from the non-static variables.
+Sample code from NXP, as well as experiments on i.MX8MM with RAW10
+capture with an OV5640 sensor connected over CSI-2, showed that the
+TWO_8BIT_SENSOR field of the CSICR3 register needs to be set for formats
+larger than 8 bits. Do so, even if the reference manual doesn't clearly
+describe the effect of the field.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index f7c8b6d67e1c..25125e067aa7 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -429,9 +429,6 @@ static inline u32 mipi_csis_read(struct csi_state *state, u32 reg)
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index f85a2f5f1413..256b9aa978f0 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -422,6 +422,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
+ 	int width = out_pix->width;
+ 	u32 stride = 0;
+ 	u32 cr1, cr18;
++	u32 cr3 = 0;
  
- static int mipi_csis_dump_regs(struct csi_state *state)
- {
--	struct device *dev = &state->pdev->dev;
--	unsigned int i;
--	u32 cfg;
- 	static const struct {
- 		u32 offset;
- 		const char * const name;
-@@ -450,6 +447,10 @@ static int mipi_csis_dump_regs(struct csi_state *state)
- 		{ MIPI_CSIS_DBG_CTRL, "DBG_CTRL" },
- 	};
+ 	cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
  
-+	struct device *dev = &state->pdev->dev;
-+	unsigned int i;
-+	u32 cfg;
-+
- 	dev_info(dev, "--- REGISTERS ---\n");
+@@ -464,6 +465,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
+ 		case MEDIA_BUS_FMT_SGBRG10_1X10:
+ 		case MEDIA_BUS_FMT_SGRBG10_1X10:
+ 		case MEDIA_BUS_FMT_SRGGB10_1X10:
++			cr3 |= BIT_TWO_8BIT_SENSOR;
+ 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
+ 			break;
+ 		case MEDIA_BUS_FMT_Y12_1X12:
+@@ -471,6 +473,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
+ 		case MEDIA_BUS_FMT_SGBRG12_1X12:
+ 		case MEDIA_BUS_FMT_SGRBG12_1X12:
+ 		case MEDIA_BUS_FMT_SRGGB12_1X12:
++			cr3 |= BIT_TWO_8BIT_SENSOR;
+ 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
+ 			break;
+ 		case MEDIA_BUS_FMT_Y14_1X14:
+@@ -478,6 +481,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
+ 		case MEDIA_BUS_FMT_SGBRG14_1X14:
+ 		case MEDIA_BUS_FMT_SGRBG14_1X14:
+ 		case MEDIA_BUS_FMT_SRGGB14_1X14:
++			cr3 |= BIT_TWO_8BIT_SENSOR;
+ 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
+ 			break;
+ 		/*
+@@ -510,7 +514,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
  
- 	for (i = 0; i < ARRAY_SIZE(registers); i++) {
+ 	imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
+ 	imx7_csi_reg_write(csi, BIT_DMA_BURST_TYPE_RFF_INCR16, CSI_CSICR2);
+-	imx7_csi_reg_write(csi, BIT_FRMCNT_RST, CSI_CSICR3);
++	imx7_csi_reg_write(csi, BIT_FRMCNT_RST | cr3, CSI_CSICR3);
+ 	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
+ 
+ 	imx7_csi_reg_write(csi, (width * out_pix->height) >> 2, CSI_CSIRXCNT);
 -- 
 Regards,
 
