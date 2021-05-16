@@ -2,34 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72330C433ED
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86EF7C43460
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D9BF61287
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E15D611BF
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:42:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbhEPCnx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:43:53 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35834 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbhEPCnw (ORCPT
+        id S229983AbhEPCny (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229628AbhEPCnv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 May 2021 22:43:52 -0400
+        Sat, 15 May 2021 22:43:51 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB6EC061573;
+        Sat, 15 May 2021 19:42:31 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFA1A9DF;
-        Sun, 16 May 2021 04:42:30 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C20752BA;
+        Sun, 16 May 2021 04:42:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621132951;
-        bh=zmZgzMgfdUnOLBKmT5LsykPM2XfK7ywnzC0N7pI57XY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BqdsdernYAotswjlp/21rWHjiZOS367KUZtJMhWlxTdE078QNZhkBNlFGdM9w3X2c
-         V6pFTsaEI4cEGxFy9VDCOLgUOpp6SDdZ5fetfdxyTFqkyLPBC2V2+KvmIwdohYpdRI
-         SlugRoYiChb3RHqK6dr74H18DV0vk2+O3WiVLkL0=
+        s=mail; t=1621132949;
+        bh=6xN2eCMcMwVfj599mI2qOlkNIpDfUW3R3fO6dacJGAs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Dwi7KxDys3sze32ioYlwtOBEPgcX0HkcxxkCqNATdT0RzwoCliBvJgsRoPQIIzdWt
+         6RZtl8pMF+69GanWYMb5o1AGV7YfYiXZN4ehLSc+yMsbTgx1tqSjM1QROkHImUWhCg
+         pqr+Jn8sBAnudCiLa6flFNG+cx0iIMyhmylv9O2Q=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -39,75 +42,52 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Marek Vasut <marex@denx.de>,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Subject: [RFC PATCH 2/3] media: imx: imx7-media-csi: Set TWO_8BIT_SENSOR for >= 10-bit formats
-Date:   Sun, 16 May 2021 05:42:15 +0300
-Message-Id: <20210516024216.4576-3-laurent.pinchart@ideasonboard.com>
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [RFC PATCH 0/3] media: imx: imx7-media-csi: i.MX8MM support
+Date:   Sun, 16 May 2021 05:42:13 +0300
+Message-Id: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
-In-Reply-To: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
-References: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sample code from NXP, as well as experiments on i.MX8MM with RAW10
-capture with an OV5640 sensor connected over CSI-2, showed that the
-TWO_8BIT_SENSOR field of the CSICR3 register needs to be set for formats
-larger than 8 bits. Do so, even if the reference manual doesn't clearly
-describe the effect of the field.
+Hello,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/staging/media/imx/imx7-media-csi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+This small patch series updates the imx7-media-csi driver to work on the
+i.MX8MM with an OV5640 sensor.
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index f85a2f5f1413..256b9aa978f0 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -422,6 +422,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 	int width = out_pix->width;
- 	u32 stride = 0;
- 	u32 cr1, cr18;
-+	u32 cr3 = 0;
- 
- 	cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
- 
-@@ -464,6 +465,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 		case MEDIA_BUS_FMT_SGBRG10_1X10:
- 		case MEDIA_BUS_FMT_SGRBG10_1X10:
- 		case MEDIA_BUS_FMT_SRGGB10_1X10:
-+			cr3 |= BIT_TWO_8BIT_SENSOR;
- 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
- 			break;
- 		case MEDIA_BUS_FMT_Y12_1X12:
-@@ -471,6 +473,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 		case MEDIA_BUS_FMT_SGBRG12_1X12:
- 		case MEDIA_BUS_FMT_SGRBG12_1X12:
- 		case MEDIA_BUS_FMT_SRGGB12_1X12:
-+			cr3 |= BIT_TWO_8BIT_SENSOR;
- 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
- 			break;
- 		case MEDIA_BUS_FMT_Y14_1X14:
-@@ -478,6 +481,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 		case MEDIA_BUS_FMT_SGBRG14_1X14:
- 		case MEDIA_BUS_FMT_SGRBG14_1X14:
- 		case MEDIA_BUS_FMT_SRGGB14_1X14:
-+			cr3 |= BIT_TWO_8BIT_SENSOR;
- 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
- 			break;
- 		/*
-@@ -510,7 +514,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 
- 	imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
- 	imx7_csi_reg_write(csi, BIT_DMA_BURST_TYPE_RFF_INCR16, CSI_CSICR2);
--	imx7_csi_reg_write(csi, BIT_FRMCNT_RST, CSI_CSICR3);
-+	imx7_csi_reg_write(csi, BIT_FRMCNT_RST | cr3, CSI_CSICR3);
- 	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
- 
- 	imx7_csi_reg_write(csi, (width * out_pix->height) >> 2, CSI_CSIRXCNT);
+Patch 1/3 extends the nxp,imx7-csi DT bindings with a compatible string
+for the i.MX8MM. While the CSI bridge in that SoC doesn't seem to differ
+from the one in the i.MX7 according to the reference manual, experience
+shows that NXP reference manuals are not always reliable. To be on the
+safe side, a new fsl,imx8mm-csi compatible string, with a fallback on
+fsl,imx7-csi, will avoid future backward-compatibility problems.
+
+Patches 2/3 and 3/3 fix issues with RAW8 and RAW10 capture from an
+OV5640 sensor. The fixes are the result of experimentation and study of
+NXP BSP drivers, as the reference manual doesn't provide much
+information in this area. I'm not very happy with this, as understanding
+the exact effect of the register fields modified by those two patches
+would be better. Still, without support from NXP (which I would really,
+really appreciate - anyone from NXP reading this ?), I can't do better.
+
+Given those concerns, I would also appreciate if this series could be
+tested widely for possible regressions. There should be no change for
+YUV formats, so only raw formats (RAW8, RAW10, RAW12 and RAW14) need to
+be tested.
+
+Laurent Pinchart (3):
+  dt-bindings: media: nxp,imx7-csi: Add i.MX8MM support
+  media: imx: imx7-media-csi: Set TWO_8BIT_SENSOR for >= 10-bit formats
+  media: imx: imx7-media-csi: Don't set PIXEL_BIT in CSICR1
+
+ .../bindings/media/nxp,imx7-csi.yaml          | 12 +++++++----
+ drivers/staging/media/imx/imx7-media-csi.c    | 21 +++++--------------
+ 2 files changed, 13 insertions(+), 20 deletions(-)
+
 -- 
 Regards,
 
