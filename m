@@ -7,46 +7,44 @@ X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C6BC4361B
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 10:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E63BDC433B4
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 10:18:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FD836117A
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 10:18:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAAA16117A
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 10:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbhEPKUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 May 2021 06:20:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37558 "EHLO mail.kernel.org"
+        id S235039AbhEPKUH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 May 2021 06:20:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230192AbhEPKTw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S230460AbhEPKTw (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sun, 16 May 2021 06:19:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 671C5611BD;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A1DE611B0;
         Sun, 16 May 2021 10:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1621160317;
-        bh=KkW/7nbwWkyWdFUNcytqxDFBTFIc9rHCdM7IZE9+lWQ=;
+        bh=vAsWsVaNiWeXZMG2ChkHaeM/crfIX9zFJo3VbTPS//Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qpGd0UaOdwdEt4q7M09CMjnC28KJiVtNOtteSe/SC+xsKMN/NwTY0XPht8YcYm/Tr
-         z7+6UdJHU4cmkP6zrwsOkq6rLPlbxbd+Uwk1pmEx1Hpkr8m8h80WKOZXEgpKInq5s5
-         nyntv80XL6OHHpPhj2Fn+ebGiruSTZVDSiq71IH6OLKH5lzHCZIJt4M6vkWwgCqB1D
-         KWVL9U92WVFXuvja0xJOoBta6S82E81CAQcXzgPmuvK1A007OxJncRuHzoGAzgHAet
-         tQE5Tg3ZGLZCSJb46USsFxVhLwHyjH7yLJiBuSZNNS7xjam+sAFXU0lzd48ustC1Qw
-         XN/Brn+qVn5+g==
+        b=LIuU7emlEXMnoqjnou+bjfWHr71DvZqbduFKpVc0sf7jx0ObYsx2JFkAFTHOTsBzK
+         x4ElE9qZx8OF5RHSwUlvKYYr28ZBSy0TcDhkuQ3UEq29/1z7lcBwuP6SC2QL4Hxv0g
+         G2TYAZbywyJlTdu7Xb+FuT0upJA8mwkZf1d+JER2XLg+eJHeSwDOSIbV/HPVCFBunM
+         4JIHWGHo0Z9k+M1GCvBmac4U9VGEPfGpNhp526N3h9fwvwOKso3aZDK49exX+Ebo2w
+         zbWN3oIorw24kI+dspBBp0fDqbX+Nry/JZ4LeiizTo1D6SsBKcP2Zpff9bA+Gfs4Ui
+         Q4LdI1J8x3J4A==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1liDr1-003o8a-ER; Sun, 16 May 2021 12:18:35 +0200
+        id 1liDr1-003o8S-CA; Sun, 16 May 2021 12:18:35 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Corentin Labbe <clabbe@baylibre.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3 07/16] docs: userspace-api: media: v4l: dev-decoder.rst: replace some characters
-Date:   Sun, 16 May 2021 12:18:24 +0200
-Message-Id: <5f8891ecd376b613fd2658e008af27780f41fa72.1621159997.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net
+Subject: [PATCH v3 05/16] docs: driver-api: media: drivers: zoran.rst: replace some characters
+Date:   Sun, 16 May 2021 12:18:22 +0200
+Message-Id: <fb2e971bc2fa4ed1e6f0d5aae6260191ff64c883.1621159997.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1621159997.git.mchehab+huawei@kernel.org>
 References: <cover.1621159997.git.mchehab+huawei@kernel.org>
@@ -65,27 +63,27 @@ troubles when parsed by the documentation build system.
 
 Replace the occurences of the following characters:
 
-	- U+00a0 (' '): NO-BREAK SPACE
-	  as it can cause lines being truncated on PDF output
+	- U+00ad ('­'): SOFT HYPHEN
+	  as ASCII HYPHEN is preferred over SOFT HYPHEN
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/userspace-api/media/v4l/dev-decoder.rst | 2 +-
+ Documentation/driver-api/media/drivers/zoran.rst | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-index 3d4138a4ba69..7de5705c07f8 100644
---- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-@@ -288,7 +288,7 @@ Initialization
+diff --git a/Documentation/driver-api/media/drivers/zoran.rst b/Documentation/driver-api/media/drivers/zoran.rst
+index 83cbae9cedef..b205e10c3154 100644
+--- a/Documentation/driver-api/media/drivers/zoran.rst
++++ b/Documentation/driver-api/media/drivers/zoran.rst
+@@ -319,7 +319,7 @@ Conexant bt866 TV encoder
+ ~~~~~~~~~~~~~~~~~~~~~~~~~
  
-       Changing the ``OUTPUT`` format may change the currently set ``CAPTURE``
-       format. How the new ``CAPTURE`` format is determined is up to the decoder
--      and the client must ensure it matches its needs afterwards.
-+      and the client must ensure it matches its needs afterwards.
+ - is used in AVS6EYES, and
+-- can generate: NTSC/PAL, PAL­M, PAL­N
++- can generate: NTSC/PAL, PAL-M, PAL-N
  
- 2.  Allocate source (bytestream) buffers via :c:func:`VIDIOC_REQBUFS` on
-     ``OUTPUT``.
+ The adv717x, should be able to produce PAL N. But you find nothing PAL N
+ specific in the registers. Seem that you have to reuse a other standard
 -- 
 2.31.1
 
