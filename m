@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E19CC433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 990A0C433ED
 	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:15:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EEB4F61205
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:15:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7818C611AD
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:15:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhEPCQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:16:38 -0400
+        id S232336AbhEPCQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:16:40 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:35538 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbhEPCNF (ORCPT
+        with ESMTP id S232080AbhEPCND (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 May 2021 22:13:05 -0400
+        Sat, 15 May 2021 22:13:03 -0400
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7118229BD;
-        Sun, 16 May 2021 03:45:21 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DD44F2943;
+        Sun, 16 May 2021 03:45:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621129522;
-        bh=8p58NNFDJFv051VBNYUdzLRPuG2+Q2dBtF0Kf4seSpk=;
+        s=mail; t=1621129517;
+        bh=7NxNFXoemo6xs2sU5hl64pmj0PwRY5x3Y2c96a5cbm4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hql9UoR8lc/sjD7lvqvgpw0ftpBiwFYWCI/mt2d3DIQ9dyBxn9+W5uIp8ePe76Rfy
-         9N6/BFaShUbac6FdCLKwnky/5K/1arqjrfpBs95c3Sw/DHsUq7qrN28CVa9MgJSfgv
-         EhdLxlSMV/Go/0mPB3dRl3LG+fXfm+CQjV/KYZJY=
+        b=dQpciqPtN3bHUKhXKE5BDzsgmUWNgoFb+djgq9aZRuB9C4ewRWtOevjkgE1cNtu2P
+         EMHw+7p4rKDM+rpFQ10DOMmD1D87Xr/68ZOJx/bG5vIEaIm8R+tdNwxyeY2Zdd3PZQ
+         xLTBYgKfzy5F4HxPhZmnsqgqJHrfImbNINulYPms=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -41,9 +41,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
         Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 25/25] media: imx: imx7_mipi_csis: Update MAINTAINERS
-Date:   Sun, 16 May 2021 04:44:41 +0300
-Message-Id: <20210516014441.5508-26-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 21/25] media: imx: imx7_mipi_csis: Reject invalid data-lanes settings
+Date:   Sun, 16 May 2021 04:44:37 +0300
+Message-Id: <20210516014441.5508-22-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
 References: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
@@ -53,27 +53,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Given my recent contributions to the imx7-mipi-csis driver, I can as
-well be listed as a maintainer.
+The CSIS doesn't support data lanes reordering. Reject invalid settings.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..2d06dc43fe70 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11283,6 +11283,7 @@ F:	include/media/imx.h
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 07b331667db7..6e235c86e0aa 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -1115,6 +1115,7 @@ static int mipi_csis_async_register(struct csi_state *state)
+ 	};
+ 	struct v4l2_async_subdev *asd;
+ 	struct fwnode_handle *ep;
++	unsigned int i;
+ 	int ret;
  
- MEDIA DRIVERS FOR FREESCALE IMX7
- M:	Rui Miguel Silva <rmfrfs@gmail.com>
-+M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
+ 	v4l2_async_notifier_init(&state->notifier);
+@@ -1128,6 +1129,14 @@ static int mipi_csis_async_register(struct csi_state *state)
+ 	if (ret)
+ 		goto err_parse;
+ 
++	for (i = 0; i < vep.bus.mipi_csi2.num_data_lanes; ++i) {
++		if (vep.bus.mipi_csi2.data_lanes[i] != i + 1) {
++			dev_err(state->dev,
++				"data lanes reordering is not supported");
++			goto err_parse;
++		}
++	}
++
+ 	state->bus = vep.bus.mipi_csi2;
+ 
+ 	dev_dbg(state->dev, "data lanes: %d\n", state->bus.num_data_lanes);
 -- 
 Regards,
 
