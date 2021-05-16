@@ -7,56 +7,55 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C415C433ED
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 20:13:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 305C8C433ED
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 20:49:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B8A261155
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 20:13:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA8C7610A2
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 20:49:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbhEPUOz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 May 2021 16:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S233648AbhEPUuZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 May 2021 16:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhEPUOz (ORCPT
+        with ESMTP id S229900AbhEPUuZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 16 May 2021 16:14:55 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D70C061573
-        for <linux-media@vger.kernel.org>; Sun, 16 May 2021 13:13:39 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id c16so4318258ilo.1
-        for <linux-media@vger.kernel.org>; Sun, 16 May 2021 13:13:39 -0700 (PDT)
+        Sun, 16 May 2021 16:50:25 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB9CC061573
+        for <linux-media@vger.kernel.org>; Sun, 16 May 2021 13:49:09 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id h11so4307359ili.9
+        for <linux-media@vger.kernel.org>; Sun, 16 May 2021 13:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2+Hk/aMu9z2tjSt8cT64FJp5MCQ/GofROgiMOyYZu/s=;
-        b=d4xi5smHsFDzCJCEyNPSw+vwDwfAeZ8K3su/BiIOccawRwBzYPVySEUrTbuj1xGOaR
-         eiOXEq+hh6hmsu/U/0PHDln43hXFKgNVLlx9yWTzfKSmSat4+Oa/hfLHd0JBNMfqdp0l
-         6wNRvlU/nxY+rRsnzt/Lrckh6ogkVJ/qX/vkQ=
+        bh=OJf9iBcCCc/UVdMuPCI5ttnV0t0WRtBJaGyKqbLFHqo=;
+        b=bBsGsmJ1vuQWZPiu0Ony95dF/aB3qEOmnFC0ket30HKe6l+t/mGn2uloqpzRI0ipyW
+         D3gts1gi6fwRaE25sNIzoOrdQsWkUppaodQpn/+RLRDa/+xda45GLsa2S35sU9wWy33b
+         CTB2uP4lyD9sR6t495OGckNjIqV1yNTJ+CVWU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2+Hk/aMu9z2tjSt8cT64FJp5MCQ/GofROgiMOyYZu/s=;
-        b=P5mD6UkhwWICKFCIOQpPzVpfUI3hsTADwygRt/cLKOasyj9qeOvVuA/MYE85Mxyc+m
-         Kikg2lNcO8p8UdNzz+Rs35ewsUs9YS7ep7ocijz8hQ6sqN4ogKI6NRVm7XrNJlocpgAr
-         0AATlWCcLMxVeWiQM6NjtPW4XoRl2RWDvKWZfnZhRRhSviWVPF6KthGmj3DfP+g/pV0Y
-         WB5yBUBH/FeQltfcz9jRJId39Rbo7NSbmJmu6DF0HWMowKSuoeud95gZf1DMC2EfXlfA
-         eVOOMl3iB5oG65mYQGU3x1lQ6ilC7MaDfaiX/AcdcBEtMsWaD33PjXbTItQOmYZie0gH
-         vcZQ==
-X-Gm-Message-State: AOAM533SysTm79CE1a0umfSHXFZJJgo7Sa+iyT+NJyCHZz6mzBnMQw7d
-        ELwluFkI4K2o4kSL7eqIjnv/n/ou4SPnGAfs34dgDw==
-X-Google-Smtp-Source: ABdhPJw/4mNTSmLTGhcV2HLCQJcapFcs3+RVX/RxH6jTwbwNBE+3MhMKRUXmZZylSF7u/ucwtzs9rbzC03Gvdc/R+K8=
-X-Received: by 2002:a05:6e02:eac:: with SMTP id u12mr50575722ilj.177.1621196019343;
- Sun, 16 May 2021 13:13:39 -0700 (PDT)
+        bh=OJf9iBcCCc/UVdMuPCI5ttnV0t0WRtBJaGyKqbLFHqo=;
+        b=GdlolKkdPIiWsXkqjOeTwU+hAPmzNAm0DoUn3dNREMHHRVQ0K3gdtXILMHMJwKWqiZ
+         i+rKzlb0D1hfdyn1Bsm0x6w5p6YxF2lKaIEjv02/xMz/VCWS4XUzUk+1w1oKnwPHDQHN
+         H2GskeYZfkICmUeRSQ53sASCsvCCfR2+b6lxPJ19I2gCxF2cJKrPJqXL3HntCHJGHzga
+         WxfNu51AGhfnFO/z5zvW6xauAVYOYO9tv28iX4QMqZgy0G9KabN8S//JffunaxHL/Cp0
+         MwUIrq7SPBYVNWEBe10aEYm4/4Ukw3UC8jCw99i/1qhzYty/vbeliSa+ZbZnreFkf8T4
+         IY9w==
+X-Gm-Message-State: AOAM533eA00trXxe2w7YMIvxm4yiE7xepCmr1Wzo0EYRCtcAG6rNdhJb
+        1Pw62q/vM/nvyYG8tisTRYhrZOjZ8UfpKN9ajDmuSw==
+X-Google-Smtp-Source: ABdhPJyjRLHANfaJ1uff07Fj0z80VH09TOGbiTPgbBKQ8nNuw1EWmVWAWrAGeimzA3dMisYXcM4CMDUht96lbaZVcFU=
+X-Received: by 2002:a92:ad07:: with SMTP id w7mr48266408ilh.98.1621198149232;
+ Sun, 16 May 2021 13:49:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210516110902.784-1-euphoriccatface@gmail.com>
-In-Reply-To: <20210516110902.784-1-euphoriccatface@gmail.com>
+References: <20210516110902.784-1-euphoriccatface@gmail.com> <20210516110902.784-2-euphoriccatface@gmail.com>
+In-Reply-To: <20210516110902.784-2-euphoriccatface@gmail.com>
 From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Sun, 16 May 2021 13:13:28 -0700
-Message-ID: <CAJCx=gkKBSubNJfQsz7uXmYQ3TrsXrZ43wB4e5V1L+EWzbb_kg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] media: video-i2c: frame delay based on last frame's
- end time
+Date:   Sun, 16 May 2021 13:48:57 -0700
+Message-ID: <CAJCx=gkWjWrM_JOB3HrCb9y7iQH0rEwJSsCj8KWfoJ5i5+pNCQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] media: video-i2c: append register data on MLX90640's frame
 To:     Seongyong Park <euphoriccatface@gmail.com>
 Cc:     linux-media <linux-media@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -68,67 +67,68 @@ X-Mailing-List: linux-media@vger.kernel.org
 On Sun, May 16, 2021 at 4:09 AM Seongyong Park
 <euphoriccatface@gmail.com> wrote:
 >
-> Current implementation calculates frame delay based on the time of
-> start of the loop. This inevitably causes the loop delay to be
-> slightly longer than the actual measurement period, thus skipping a frame
-> every now and then.
->
-> However, MLX90640 should ideally be working without a frame skip.
-> Each measurement step updates half of the pixels in the frame
+> On MLX90640, Each measurement step updates half of the pixels in the frame
 > (every other pixel in default "chess mode", and every other row
 > in "interleave mode"), while additional coefficient data (25th & 26th row)
 > updates every step. The compensational coefficient data only corresponds
 > with the pixels updated in the same step.
 >
-> In short, if a frame is skipped, then half of a frame loses correction
-> information and becomes garbage data.
-
-This changeset makes sense to me. Guess I got lucky with the timing on my board.
-
-Reviewed-by: Matt Ranostay <matt.ranostay@konsulko.com>
-
+> Only way to know which "subpage" was updated on the last step is to read
+> "status register" on address 0x8000. Without this data,
+> compensation calculation may be able to detect which sets of pixels have
+> been updated, but it will have to make assumptions when frame skip happens,
+> and there is no way to do it correctly when the host simply cannot
+> keep up with refresh rate.
 >
 > Signed-off-by: Seongyong Park <euphoriccatface@gmail.com>
 > ---
->  drivers/media/i2c/video-i2c.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+>  drivers/media/i2c/video-i2c.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-> index 0465832a4..2ccb08335 100644
+> index 2ccb08335..ca3a1c504 100644
 > --- a/drivers/media/i2c/video-i2c.c
 > +++ b/drivers/media/i2c/video-i2c.c
-> @@ -445,14 +445,16 @@ static int video_i2c_thread_vid_cap(void *priv)
->         struct video_i2c_data *data = priv;
->         unsigned int delay = mult_frac(HZ, data->frame_interval.numerator,
->                                        data->frame_interval.denominator);
-> +       unsigned long end_jiffies = jiffies;
+> @@ -74,7 +74,7 @@ static const struct v4l2_fmtdesc mlx90640_format = {
 >
->         set_freezable();
+>  static const struct v4l2_frmsize_discrete mlx90640_size = {
+>         .width = 32,
+> -       .height = 26, /* 24 lines of pixel data + 2 lines of processing data */
+> +       .height = 27, /* 24 lines of pixel data + 2 lines of processing data + 1 line of registers */
+>  };
 >
->         do {
-> -               unsigned long start_jiffies = jiffies;
->                 struct video_i2c_buffer *vid_cap_buf = NULL;
->                 int schedule_delay;
+>  static const struct regmap_config amg88xx_regmap_config = {
+> @@ -168,8 +168,11 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
 >
-> +               end_jiffies += delay;
-> +
->                 try_to_freeze();
+>  static int mlx90640_xfer(struct video_i2c_data *data, char *buf)
+>  {
+> -       return regmap_bulk_read(data->regmap, 0x400, buf,
+> -                               data->chip->buffer_size);
+> +       int ret = regmap_bulk_read(data->regmap, 0x400, buf,
+> +                                  data->chip->buffer_size - 64);
+> +       if (ret) return ret;
+> +       return regmap_bulk_read(data->regmap, 0x8000, buf + 1664,
+> +                               64);
+
+Rather than "buf + 1664" it would be more portable and clear if you
+use "buf + (data->chip->buffer_size - 64)"
+
+Also isn't the 1 line of registers only 32-bytes not 64-bytes?
+
+- Matt
+
+>  }
 >
->                 spin_lock(&data->slock);
-> @@ -477,10 +479,9 @@ static int video_i2c_thread_vid_cap(void *priv)
->                                 VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
->                 }
->
-> -               schedule_delay = delay - (jiffies - start_jiffies);
-> -
-> -               if (time_after(jiffies, start_jiffies + delay))
-> -                       schedule_delay = delay;
-> +               schedule_delay = end_jiffies - jiffies;
-> +               while (schedule_delay <= 0)
-> +                       schedule_delay += delay;
->
->                 schedule_timeout_interruptible(schedule_delay);
->         } while (!kthread_should_stop());
+>  static int amg88xx_setup(struct video_i2c_data *data)
+> @@ -375,7 +378,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
+>                 .format         = &mlx90640_format,
+>                 .frame_intervals        = mlx90640_frame_intervals,
+>                 .num_frame_intervals    = ARRAY_SIZE(mlx90640_frame_intervals),
+> -               .buffer_size    = 1664,
+> +               .buffer_size    = 1728,
+>                 .bpp            = 16,
+>                 .regmap_config  = &mlx90640_regmap_config,
+>                 .nvmem_config   = &mlx90640_nvram_config,
 > --
 > 2.31.1
 >
