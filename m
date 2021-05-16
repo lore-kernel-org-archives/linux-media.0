@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF7B3C433ED
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E25C433B4
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:18:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEE4361057
-	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:18:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6DBE61205
+	for <linux-media@archiver.kernel.org>; Sun, 16 May 2021 02:18:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbhEPCTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 May 2021 22:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S232227AbhEPCTg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 May 2021 22:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbhEPCTc (ORCPT
+        with ESMTP id S230306AbhEPCTc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 15 May 2021 22:19:32 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A7AC0613ED
-        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 18:55:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A66FC06138A
+        for <linux-media@vger.kernel.org>; Sat, 15 May 2021 18:55:15 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 348C72BA;
-        Sun, 16 May 2021 03:45:00 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 25D9810CA;
+        Sun, 16 May 2021 03:45:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621129500;
-        bh=9Wnw4ReB/Nc5X0/+8+bLuvcYXhRjj2yascZoxCeqsFs=;
+        s=mail; t=1621129503;
+        bh=qsUkLz6XFzXqyF8zzqb8lHi/ffZ3YQiJyQdTUU6qBHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQ7NXDz9UwXtvhrGt7i7bUmDU8hDpr7k2AiDzkU/SINwkzWPZfDkqTL11igWNdo1y
-         viKo9PFHZqI2MEP7R/+AKBUx+/ioilxrj097WXepNTVKd2B8oARMkgjUp67w8HmQFK
-         Os7S03n7qcmlOLbU9METBqEzSFM2WiRpmOP5W4Wc=
+        b=fZhZoNsXQPDbWaook7yfaW+VLgr9gM0u+BHNimN3IpzZMGSuii3jum6b07do9Dxaj
+         mNuHIsvXLt55400iZq7n9z4L5bsDuBEi2mblq39ueU1Z2PPQE+65QxgNsEmnHqRqgT
+         owFNNFeH5dDcLoLXkP6NkiiGDJcH1AvKgpX2UnZk=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
         Marco Felsch <m.felsch@pengutronix.de>,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
         Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 05/25] media: imx: imx7_mipi_csis: Minimize locking in get/set format
-Date:   Sun, 16 May 2021 04:44:21 +0300
-Message-Id: <20210516014441.5508-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 08/25] media: imx: imx7_mipi_csis: Set the CLKSETTLE register field
+Date:   Sun, 16 May 2021 04:44:24 +0300
+Message-Id: <20210516014441.5508-9-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.28.1
 In-Reply-To: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
 References: <20210516014441.5508-1-laurent.pinchart@ideasonboard.com>
@@ -56,89 +56,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reduce the code sections that are run with the lock held in the get/set
-format handlers:
-
-- mipi_csis_get_format() retrieves a pointer to the format, and thus
-  doesn't need locking as long as the arguments passed to the function
-  don't require locking either.
-
-- sdformat is a structure passed by the caller, not an internal state,
-  and thus doesn't require locking.
+Set the CLKSETTLE field explicitly, with a value hardcoded to 0. This
+brings no functional change, but prepares for calculation of the
+CLKSETTLE value.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 36 ++++++++++++----------
- 1 file changed, 20 insertions(+), 16 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 25125e067aa7..bbcd39672f92 100644
+index eea865ba486d..224d3ac9c9bf 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -860,8 +860,9 @@ static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
- 	struct v4l2_mbus_framefmt *fmt;
+@@ -310,6 +310,7 @@ struct csi_state {
  
--	mutex_lock(&state->lock);
- 	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
-+
-+	mutex_lock(&state->lock);
- 	sdformat->format = *fmt;
- 	mutex_unlock(&state->lock);
+ 	u32 clk_frequency;
+ 	u32 hs_settle;
++	u32 clk_settle;
  
-@@ -919,24 +920,17 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
- 	if (sdformat->pad != CSIS_PAD_SINK)
- 		return -EINVAL;
+ 	struct reset_control *mrst;
  
--	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
--
--	mutex_lock(&state->lock);
--
--	/* Validate the media bus code and clamp the size. */
--	csis_fmt = find_csis_format(sdformat->format.code);
--	if (!csis_fmt)
--		csis_fmt = &mipi_csis_formats[0];
--
--	fmt->code = csis_fmt->code;
--	fmt->width = sdformat->format.width;
--	fmt->height = sdformat->format.height;
--
+@@ -540,11 +541,15 @@ static int mipi_csis_calculate_params(struct csi_state *state)
+ 
  	/*
-+	 * Validate the media bus code and clamp and align the size.
-+	 *
- 	 * The total number of bits per line must be a multiple of 8. We thus
- 	 * need to align the width for formats that are not multiples of 8
- 	 * bits.
+ 	 * The HSSETTLE counter value is document in a table, but can also
+-	 * easily be calculated.
++	 * easily be calculated. Hardcode the CLKSETTLE value to 0 for now
++	 * (which is documented as corresponding to CSI-2 v0.87 to v1.00) until
++	 * we figure out how to compute it correctly.
  	 */
-+	csis_fmt = find_csis_format(sdformat->format.code);
-+	if (!csis_fmt)
-+		csis_fmt = &mipi_csis_formats[0];
+ 	state->hs_settle = (lane_rate - 5000000) / 45000000;
+-	dev_dbg(state->dev, "lane rate %u, Ths_settle %u\n",
+-		lane_rate, state->hs_settle);
++	state->clk_settle = 0;
 +
- 	switch (csis_fmt->width % 8) {
- 	case 0:
- 		align = 0;
-@@ -956,8 +950,18 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
- 		break;
- 	}
++	dev_dbg(state->dev, "lane rate %u, Tclk_settle %u, Ths_settle %u\n",
++		lane_rate, state->clk_settle, state->hs_settle);
  
--	v4l_bound_align_image(&fmt->width, 1, CSIS_MAX_PIX_WIDTH, align,
--			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 0, 0);
-+	v4l_bound_align_image(&sdformat->format.width, 1,
-+			      CSIS_MAX_PIX_WIDTH, align,
-+			      &sdformat->format.height, 1,
-+			      CSIS_MAX_PIX_HEIGHT, 0, 0);
-+
-+	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
-+
-+	mutex_lock(&state->lock);
-+
-+	fmt->code = csis_fmt->code;
-+	fmt->width = sdformat->format.width;
-+	fmt->height = sdformat->format.height;
+ 	return 0;
+ }
+@@ -563,7 +568,8 @@ static void mipi_csis_set_params(struct csi_state *state)
+ 	__mipi_csis_set_format(state);
  
- 	sdformat->format = *fmt;
+ 	mipi_csis_write(state, MIPI_CSIS_DPHY_CMN_CTRL,
+-			MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(state->hs_settle));
++			MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(state->hs_settle) |
++			MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE(state->clk_settle));
  
+ 	val = (0 << MIPI_CSIS_ISP_SYNC_HSYNC_LINTV_OFFSET)
+ 	    | (0 << MIPI_CSIS_ISP_SYNC_VSYNC_SINTV_OFFSET)
 -- 
 Regards,
 
