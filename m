@@ -2,165 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FAB5C43460
-	for <linux-media@archiver.kernel.org>; Mon, 17 May 2021 09:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12ECBC433B4
+	for <linux-media@archiver.kernel.org>; Mon, 17 May 2021 09:40:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1906361209
-	for <linux-media@archiver.kernel.org>; Mon, 17 May 2021 09:30:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1993611EE
+	for <linux-media@archiver.kernel.org>; Mon, 17 May 2021 09:40:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbhEQJcF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 May 2021 05:32:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44308 "EHLO mail.kernel.org"
+        id S236059AbhEQJle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 May 2021 05:41:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46494 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235863AbhEQJb6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 May 2021 05:31:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBB1E611CC;
-        Mon, 17 May 2021 09:30:41 +0000 (UTC)
+        id S235911AbhEQJld (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 17 May 2021 05:41:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 46425611CD;
+        Mon, 17 May 2021 09:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621243841;
-        bh=0isyKzJBz2glDSCHaGYr98WTCKtZiZtdG2mRXWGAAOU=;
+        s=k20201202; t=1621244417;
+        bh=cTiy/a7+Enu12kixTOOmGWJ1ZQKLAAv1lUq4CXeD4Ss=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J4FsMlugZne44eq4ZjgLA+C1wedd8PEfxhaKxTOthJgGVzZlWAYBVfknafkY7aBWr
-         ADND+ji7nUN0jFEM5h/Ptlz5E9gFIm2KDOQK7PEIG4gqsLpP4exm5flIBPfP3Ytqg/
-         fT/29azLXdLvmhkBn5rMWlmujSPePevsfztJCYl4RqFCYZRZV369pXk1JmUXTpOFTC
-         wIxRE8PSLO0f8CSwOKltZD/4jU8Mw0+mFOhaEFlmolc4g9bn2bClN1e/gH+x1uq6xH
-         EXgD9eZncoZeARHVnGliDNnvnzN6mmyy9Sddj8PzBFA5CL6zzVbaTVbbJzK6d7oxQo
-         /AwEKInP7h0vQ==
+        b=N45325oMUhi4vxWoLOS7F/rMYHd6M5MgOeYvXJ+cNVh3h7OjxchlYHlnWtBaOGi9U
+         TbgKZTwAhceYhDgRgYM4Y6rERwzGH9/dU4NSXJN+jASLsKUyfcVSZSAPizdAUankiO
+         Hg2DiLwjpp2Cg+mwrfYAFYN+24wcRKUw0M9MOJgOeEUENv+KW7DlXeQsmqLhEXXtwF
+         Y5UFUmOxBjg8RFyyBEEcDwsFDOqFc2rWWLxSyLwdNxCpRH59ze5cQGhHwLAsVoORtx
+         fndvMM6gl0gYXPACCleKB8Q20TT8muuYGD3TGhLwnheDq3mfHSWx6VhiUaEHAJPK+/
+         +Z3ukYDh+yaJw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1liZaB-0003iT-6j; Mon, 17 May 2021 11:30:39 +0200
-Date:   Mon, 17 May 2021 11:30:39 +0200
+        id 1liZjT-0003lu-8H; Mon, 17 May 2021 11:40:15 +0200
+Date:   Mon, 17 May 2021 11:40:15 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Sean Young <sean@mess.org>
 Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Rhees <support@usbuirt.com>,
         Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
-Message-ID: <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
+Subject: Re: [PATCH v3 3/3] USB: serial: blacklist USB-UIRT when driver is
+ selected
+Message-ID: <YKI5/4Yy+PmO6+vl@hovoldconsulting.com>
 References: <cover.1620304986.git.sean@mess.org>
- <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
- <20210511103219.GA13769@gofer.mess.org>
- <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
- <20210515092226.GA31801@gofer.mess.org>
+ <37339f4102666345168a738d0ffd80d8133a6a03.1620304986.git.sean@mess.org>
+ <YJ5hpTqH7Ke+Fv7V@hovoldconsulting.com>
+ <20210515095628.GC31801@gofer.mess.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210515092226.GA31801@gofer.mess.org>
+In-Reply-To: <20210515095628.GC31801@gofer.mess.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, May 15, 2021 at 10:22:26AM +0100, Sean Young wrote:
-> On Fri, May 14, 2021 at 01:16:47PM +0200, Johan Hovold wrote:
-> > On Tue, May 11, 2021 at 11:32:19AM +0100, Sean Young wrote:
-> > > On Mon, May 10, 2021 at 10:15:14AM +0200, Johan Hovold wrote:
-> > > > On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
-> > > > > This is a new rc-core driver for the USB-UIRT which you can see here
-> > > > > http://www.usbuirt.com/
-> > > > > 
-> > > > > This device is supported in lirc, via the usb serial kernel driver. This
-> > > > > driver is both for rc-core, which means it can use kernel/BPF decoding
-> > > > > ec. Also this implement is superior because it can:
-> > > > >  - support learning mode
-> > > > >  - setting transmit carrier
-> > > > >  - larger transmits using streaming tx command
-> > > > 
-> > > > This looks like something which should have been implemented as a
-> > > > line-discipline or serdev driver instead of reimplementing a minimal
-> > > > on-off ftdi driver and tying it closely to the RC subsystem.
+On Sat, May 15, 2021 at 10:56:28AM +0100, Sean Young wrote:
+> On Fri, May 14, 2021 at 01:40:21PM +0200, Johan Hovold wrote:
+> > On Thu, May 06, 2021 at 01:44:55PM +0100, Sean Young wrote:
+> > > The USB-UIRT device has its own driver, so blacklist the fdti driver
+> > > from using it if the driver has been enabled.
 > > > 
-> > > The device is an infrared device, I'm not sure what it is lost by
-> > > doing it this way. The "minimal on-off ftdi driver" is super trivial.
-> > 
-> > It's still code duplication (and I meant to say "one-off" above").
-> > 
-> > What is preventing you from supporting the above functionality through
-> > lirc?
-> 
-> I guess you mean the userspace lirc daemon, as opposed to the /dev/lirc
-> chardev. If you use the lirc daemon, you don't use rc-core which comes with
-> IR decoding using BPF IR decoding or in-kernel decoders, automatic setup of
-> rc keymaps via udev. None of the modern ir-ctl/ir-keytable tooling will
-> work, including the IRP encoder/BPF compiler I'm working on (very slowly).
-
-Ok, but apart from BPF that sound like other stuff and not the three
-items you list above? Is there anything preventing those items from
-being implemented in user space?
-
-Obviously a user-space implementation (e.g. accessing the device through
-/dev/ttyUSB0) is not going to be able to use in-kernel RC functionality.
-For that you'd need to use either a line-discipline or serdev driver,
-that is, a kernel driver, but not everything has to live in the kernel.
-
-> The other nice thing is that IR TX feeds data from an urb interrupt handler,
-> so you don't need to rely userspace being scheduled quickly enough to feed
-> more data before the device runs out.
-
-The tty layer and tty drivers provide write buffering so that need not
-be an issue.
-
-> > > > Why can't you just add support for the above features to whatever
-> > > > subsystem is managing this device today?
-> > > > 
-> > > > Serdev still doesn't support hotplugging unfortunately so that route may
-> > > > take a bit more work.
+> > > Signed-off-by: Sean Young <sean@mess.org>
+> > > ---
+> > >  drivers/usb/serial/ftdi_sio.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
 > > > 
-> > > There seems to be at least three ways of attaching drivers to serial
-> > > devices: serio, serdev, and line-discipline. All seem to have limitations,
-> > > as you say none of them provide a way of hotplugging devices without
-> > > user-space attaching them through an ioctl or so.
+> > > diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+> > > index 542073d2f0dd..2320bda57796 100644
+> > > --- a/drivers/usb/serial/ftdi_sio.c
+> > > +++ b/drivers/usb/serial/ftdi_sio.c
+> > > @@ -95,7 +95,9 @@ static int   ftdi_jtag_probe(struct usb_serial *serial);
+> > >  static int   ftdi_NDI_device_setup(struct usb_serial *serial);
+> > >  static int   ftdi_stmclite_probe(struct usb_serial *serial);
+> > >  static int   ftdi_8u2232c_probe(struct usb_serial *serial);
+> > > +#if !IS_ENABLED(CONFIG_IR_UIRT)
+> > >  static void  ftdi_USB_UIRT_setup(struct ftdi_private *priv);
+> > > +#endif
+> > >  static void  ftdi_HE_TIRA1_setup(struct ftdi_private *priv);
+> > >  
+> > >  static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
+> > > @@ -106,9 +108,11 @@ static const struct ftdi_sio_quirk ftdi_NDI_device_quirk = {
+> > >  	.probe	= ftdi_NDI_device_setup,
+> > >  };
+> > >  
+> > > +#if !IS_ENABLED(CONFIG_IR_UIRT)
+> > >  static const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
 > > 
-> > serio is also a line-discipline driver, which unlike serdev needs to be
-> > set up by user space.
+> > Please use __maybe_unused instead of sprinkling ifdefs throughout the
+> > driver.
 > 
-> serio is unusable for this case. serio does not allow more than one byte
-> to be written nor does it have callbacks for CTS readiness.
-
-Ok, but you could still implement this as an rc-core line-discipline or
-serdev driver. And when you use hardware flow control as you do here,
-you shouldn't need any callbacks for CTS events either, right?
- 
-> > And the problem with serdev is that it does not (yet) support
-> > hotplugging (specifically hangups) so it can't be enabled for USB serial
-> > just yet.
-> > 
-> > > If you want to go down this route, then ideally you'd want a quirk on
-> > > fdti saying "attach usb-uirt serdev device to this pid/vid". Considering
-> > > module dependencies, I don't know how that could work without again
-> > > userspace getting involved.
-> > 
-> > We'd just reuse or add another matching mechanism for USB devices. This
-> > can be handled without user-space interaction just fine as long as you
-> > have a dedicated device id as you do here.
+> Good point.
 > 
-> Right, ok. I don't quite follow what you have in mind. If at all possible
-> keep me in the loop for any patches for this, I'm happy to test/re-write
-> this driver and the drivers/media/rc/ir_toy.c driver on top of any such
-> patches.
+> > >  	.port_probe = ftdi_USB_UIRT_setup,
+> > >  };
+> > > +#endif
+> > >  
+> > >  static const struct ftdi_sio_quirk ftdi_HE_TIRA1_quirk = {
+> > >  	.port_probe = ftdi_HE_TIRA1_setup,
+> > > @@ -568,8 +572,10 @@ static const struct usb_device_id id_table_combined[] = {
+> > >  	{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
+> > >  	{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
+> > >  		.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
+> > > +#if !IS_ENABLED(CONFIG_IR_UIRT)
+> > >  	{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
+> > >  		.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
+> > > +#endif
+> > 
+> > This would still be needed.
+> 
+> I agree having the quirk in place would be useful, but if vid/pid is listed
+> in the id_table then both uirt and ftdi_sio have the same vid/pid listed,
+> which is not a great idea. How can this work?
 
-Thanks for that pointer. Judging from a quick look, the new driver
-appears to based on this one. By abstracting the serial interface bits
-in a generic RC serdev/ldisc driver you may be able reuse more code,
-even if I'm not in a position to judge how much of the IR protocol bits
-that can be shared.
-
-> There are a bunch old serial usb device IR devices and even older non-usb
-> serial devices that would be nice to have supported, if anyone is still
-> using them.
-
-I noticed that drivers/media/rc/serial_ir.c also appears to use a
-similar approach of implementing a minimal one-off serial (8250?) driver
-and tying it closely to RC core. This one might also benefit from using
-the standard serial drivers for the transport and having an RC layer on
-top.
-
-Currently it appears to use module-parameters for configuration instead
-of devicetree or some to-be-implemented interface for instantiating
-serdev devices from user space.
+Sorry if I was being unclear; I meant that this ifdef would still be
+needed.
 
 Johan
