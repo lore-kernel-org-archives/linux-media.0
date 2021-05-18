@@ -2,77 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79179C433B4
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 11:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6ECBC433ED
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 11:27:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4603C61108
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 11:21:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95DDB611BD
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 11:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbhERLXJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 May 2021 07:23:09 -0400
-Received: from mail-m121144.qiye.163.com ([115.236.121.144]:58306 "EHLO
-        mail-m121144.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbhERLW4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 May 2021 07:22:56 -0400
-X-Greylist: delayed 573 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 May 2021 07:22:55 EDT
-Received: from Wanjb.localdomain (unknown [36.152.145.182])
-        by mail-m121144.qiye.163.com (Hmail) with ESMTPA id 8DBC5AC0516;
-        Tue, 18 May 2021 19:11:57 +0800 (CST)
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiabing Wan <kael_w@yeah.net>,
-        Wan Jiabing <wanjiabing@vivo.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: media: atomisp: Align block comments
-Date:   Tue, 18 May 2021 19:11:12 +0800
-Message-Id: <20210518111125.87304-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
+        id S233705AbhERL2W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 May 2021 07:28:22 -0400
+Received: from comms.puri.sm ([159.203.221.185]:58644 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233632AbhERL2U (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 May 2021 07:28:20 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 10C96E0DCA;
+        Tue, 18 May 2021 04:26:32 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Zs4ZMaLfVfwn; Tue, 18 May 2021 04:26:27 -0700 (PDT)
+Message-ID: <bbe18b43336f73a5c3809b933e07270ef0a45134.camel@puri.sm>
+Subject: Re: [RFC PATCH 1/3] dt-bindings: media: nxp,imx7-csi: Add i.MX8MM
+ support
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Date:   Tue, 18 May 2021 13:26:21 +0200
+In-Reply-To: <20210516024216.4576-2-laurent.pinchart@ideasonboard.com>
+References: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
+         <20210516024216.4576-2-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQ0MZS1ZITU4eSktITkpDS09VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Oj46HQw5Kj8VLysUTA0sHBxN
-        EzhPCT5VSlVKTUlKSEhNSEpDSUpCVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
-        TVVKTklVSk9OVUpDSVlXWQgBWUFJS0xONwY+
-X-HM-Tid: 0a797f2cdf88b039kuuu8dbc5ac0516
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jiabing Wan<kael_w@yeah.net>
+Am Sonntag, dem 16.05.2021 um 05:42 +0300 schrieb Laurent Pinchart:
+> The i.MX8MM integrates a CSI bridge IP core, as the i.MX7. There
+> seems
+> to be no difference between the two SoCs according to the reference
+> manual, but as documentation may not be accurate, add a compatible
+> string for the i.MX8MM, with a fallback on the compatible i.MX7.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  .../devicetree/bindings/media/nxp,imx7-csi.yaml      | 12 ++++++++--
+> --
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-
+> csi.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+> index d91575b8ebb9..5922a2795167 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/media/nxp,imx7-csi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: i.MX7 CMOS Sensor Interface
+> +title: i.MX7 and i.MX8 CSI bridge (CMOS Sensor Interface)
+>  
+>  maintainers:
+>    - Rui Miguel Silva <rmfrfs@gmail.com>
+> @@ -15,9 +15,13 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - fsl,imx7-csi
+> -      - fsl,imx6ul-csi
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx7-csi
+> +          - fsl,imx6ul-csi
+> +      - items:
+> +          - const: fsl,imx8mm-csi
+> +          - const: fsl,imx7-csi
+>  
+>    reg:
+>      maxItems: 1
 
-Fixing the following checkpatch warning:
-WARNING: Block comments should align the * on each line
+isn't the fsl,imx8mm-csi compatible missing in the driver then?
 
-Signed-off-by: Jiabing Wan<kael_w@yeah.net>
----
- .../atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h    | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h
-index be3534e46c15..9b22f2da45d5 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h
-@@ -17,8 +17,8 @@
- #define __IA_CSS_ANR_TYPES_H
- 
- /* @file
--* CSS-API header file for Advanced Noise Reduction kernel v1
--*/
-+ * CSS-API header file for Advanced Noise Reduction kernel v1
-+ */
- 
- /* Application specific DMA settings  */
- #define ANR_BPP                 10
--- 
-2.20.1
+thanks!
+                     martin
 
