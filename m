@@ -2,115 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6420C433ED
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB4CC433ED
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6E5B610FA
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:31:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0000C6124C
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244399AbhERMc6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 May 2021 08:32:58 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:45920 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243225AbhERMc6 (ORCPT
+        id S242984AbhERMml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 May 2021 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349294AbhERMml (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 May 2021 08:32:58 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14ICOjpB164422;
-        Tue, 18 May 2021 12:31:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=18S5hPX3Rys9CMZRJDd44G4yZ/6Awq7sc7aquF2b+po=;
- b=HlEasV+aeuV1waOs4k1WpHW0nzEORHWI1rydhTZ5dNQ5LcEKOaFznYnPznwbA9d054yf
- 3vFan9LDwhQ8w+6VPsZJI4VVGXucQ8M5SWxfynbx6YVgswTTeqO+ludpL7xKb3nfotWs
- 6wjqw+1sVvEbri+4Xnn4rbfFbk/PECa9UvofCZGtFFfHRGCONdpjZPB10/czpQsi1QSm
- M7nBAf0yyPRon5BZaX+KpJzvKIke8/QnUsOxP9ziVzej8Ppk0Ct33BrIKXnb3SwLiLXC
- U5Jqw09zwQe4m8ihwWznLz1ebvkOw+ZXUmxj4kykfer7fJ1pHRZDiWvbvOulf03xGS+t AQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 38j68me6ra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 May 2021 12:31:37 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14ICQEmP182664;
-        Tue, 18 May 2021 12:31:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3030.oracle.com with ESMTP id 38j4bc2kms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 May 2021 12:31:37 +0000
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14ICVaeG196135;
-        Tue, 18 May 2021 12:31:36 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 38j4bc2kmg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 May 2021 12:31:36 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 14ICVZqB024483;
-        Tue, 18 May 2021 12:31:35 GMT
-Received: from mwanda (/10.175.177.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 18 May 2021 05:31:34 -0700
-Date:   Tue, 18 May 2021 15:31:29 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     satendra.t@samsung.com
-Cc:     linux-media@vger.kernel.org
-Subject: [bug report] media: videobuf2: Add new uAPI for DVB streaming I/O
-Message-ID: <YKOzoeC6Bp+C3QxS@mwanda>
+        Tue, 18 May 2021 08:42:41 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD82C06175F
+        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:23 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1428875wmh.4
+        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WjRHSWLwcQME27BIqP7xhnH4Ry5mnwpaQ96JB5epsUo=;
+        b=aEOs2pqTM7bgFZWltKS5/yTJ5nc0SPOS0E8G71ozYxMUL3X4o1FIS+4lmw8v3jPOkH
+         /YqkTuO9MSu9hMtUzlsJEfPbCApqWDRnOvMUtjXZbhIkG9+Kd7hcOd9NvPGDzbjXgXkM
+         qynSwrKCf5w8Lgh+gNBnX1ikcKw2SzoL+z+9uYoJBweHs3uLp4wc2S9YuhUQ9ytE5MTh
+         E/Ep/Li/rIZpxsk9ldLjIvdw64yp5OY89RQ9x00NCGdyzDlYmaeCIghjw2UOnPr/GGMc
+         /3ijhHABMHEDEmf+7V2rNqSgnXm3Mkx7w/RwsEfPP3cGO54V1p/z2HAfOL/yA7bIo0ZX
+         ZKZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WjRHSWLwcQME27BIqP7xhnH4Ry5mnwpaQ96JB5epsUo=;
+        b=UvZjJLPlTZ6xup01/eOy0sOXjxJxIDVkX24FR2EkSsGm7FigSEAYUjYqu7PhhOrwMu
+         +zrwt8ljExcoz2chWEm6HmiJZM7vCWWO1JzD6R7CybBIp0D4pqa5oBKzmxk4uK7da860
+         iuOCHZqOcCfGagqdETgInAuDo0AwQLnVooCXgCfT6bl/w4d0QtHm4jPL4WgTn9E02DtD
+         cC45SIbRWxpcJZflIeRlRejZUzS7zQ6KPMppLC4TCMJvmNeRAzUQY1xn7evjzz1eYx73
+         F6oPdn/AIwwuJTmawJR0CkYVGcIgih2mHwVeYLsHgAc/ozqbGzKEi2d5092RUSR5+8LO
+         Bk7g==
+X-Gm-Message-State: AOAM5320zui3U9sw993/yLe4vbCyYB3pAvqdgwYLYJbOvX9vxEhGvPPc
+        qH7Zo0EG6oob6V8QhaydRupUqQ==
+X-Google-Smtp-Source: ABdhPJzB0CCRFlZQVb49HxHbUpFADNosNUydFeMQcfZfN6BewWshxLe7tXdzO7i5EwCH5Swmw0HlVQ==
+X-Received: by 2002:a1c:1bcc:: with SMTP id b195mr5341668wmb.51.1621341681841;
+        Tue, 18 May 2021 05:41:21 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id z3sm1677239wrq.42.2021.05.18.05.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 May 2021 05:41:21 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     gregkh@linuxfoundation.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 2/5] staging: media: zoran: multiple assignments should be avoided
+Date:   Tue, 18 May 2021 12:41:10 +0000
+Message-Id: <20210518124113.1823055-2-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210518124113.1823055-1-clabbe@baylibre.com>
+References: <20210518124113.1823055-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-ORIG-GUID: mISR8PB72K8DhJYJ9vhFwG8z3NSoOZZK
-X-Proofpoint-GUID: mISR8PB72K8DhJYJ9vhFwG8z3NSoOZZK
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9987 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=917
- priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1011
- adultscore=0 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105180088
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Satendra Singh Thakur,
+Remove all multiple assignments.
 
-The patch 57868acc369a: "media: videobuf2: Add new uAPI for DVB
-streaming I/O" from Dec 18, 2017, leads to the following static
-checker warnings:
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/staging/media/zoran/zoran_driver.c | 6 ++++--
+ drivers/staging/media/zoran/zr36016.c      | 3 ++-
+ drivers/staging/media/zoran/zr36050.c      | 3 ++-
+ drivers/staging/media/zoran/zr36060.c      | 3 ++-
+ 4 files changed, 10 insertions(+), 5 deletions(-)
 
-  drivers/media/common/videobuf2/videobuf2-core.c:645 vb2_core_querybuf()
-  error: buffer overflow 'q->bufs' 32 <= u32max user_rl='0-u32max' uncapped
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index e8902f824d6c..46382e43f1bf 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -678,12 +678,14 @@ static int zoran_g_selection(struct file *file, void *__fh, struct v4l2_selectio
+ 		sel->r.height = zr->jpg_settings.img_height;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP_DEFAULT:
+-		sel->r.top = sel->r.left = 0;
++		sel->r.top = 0;
++		sel->r.left = 0;
+ 		sel->r.width = BUZ_MIN_WIDTH;
+ 		sel->r.height = BUZ_MIN_HEIGHT;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+-		sel->r.top = sel->r.left = 0;
++		sel->r.top = 0;
++		sel->r.left = 0;
+ 		sel->r.width = BUZ_MAX_WIDTH;
+ 		sel->r.height = BUZ_MAX_HEIGHT;
+ 		break;
+diff --git a/drivers/staging/media/zoran/zr36016.c b/drivers/staging/media/zoran/zr36016.c
+index 2d7dc7abde79..82702a13b05f 100644
+--- a/drivers/staging/media/zoran/zr36016.c
++++ b/drivers/staging/media/zoran/zr36016.c
+@@ -361,7 +361,8 @@ static int zr36016_setup(struct videocodec *codec)
+ 		return -ENOSPC;
+ 	}
+ 	//mem structure init
+-	codec->data = ptr = kzalloc(sizeof(struct zr36016), GFP_KERNEL);
++	ptr = kzalloc(sizeof(struct zr36016), GFP_KERNEL);
++	codec->data = ptr;
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
+index 2826f4e5d37b..a78862852a47 100644
+--- a/drivers/staging/media/zoran/zr36050.c
++++ b/drivers/staging/media/zoran/zr36050.c
+@@ -754,7 +754,8 @@ static int zr36050_setup(struct videocodec *codec)
+ 		return -ENOSPC;
+ 	}
+ 	//mem structure init
+-	codec->data = ptr = kzalloc(sizeof(struct zr36050), GFP_KERNEL);
++	ptr = kzalloc(sizeof(struct zr36050), GFP_KERNEL);
++	codec->data = ptr;
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/staging/media/zoran/zr36060.c b/drivers/staging/media/zoran/zr36060.c
+index 4f9eb9ff2c42..1c3af11b5f24 100644
+--- a/drivers/staging/media/zoran/zr36060.c
++++ b/drivers/staging/media/zoran/zr36060.c
+@@ -790,7 +790,8 @@ static int zr36060_setup(struct videocodec *codec)
+ 		return -ENOSPC;
+ 	}
+ 	//mem structure init
+-	codec->data = ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
++	ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
++	codec->data = ptr;
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+-- 
+2.26.3
 
-  drivers/media/common/videobuf2/videobuf2-core.c:1583 vb2_core_qbuf()
-  error: buffer overflow 'q->bufs' 32 <= u32max user_rl='0-u32max' uncapped
-
-drivers/media/common/videobuf2/videobuf2-core.c
-   643  void vb2_core_querybuf(struct vb2_queue *q, unsigned int index, void *pb)
-   644  {
-   645          call_void_bufop(q, fill_user_buffer, q->bufs[index], pb);
-                                                             ^^^^^
-index has not been checked at all.
-
-   646  }
-   647  EXPORT_SYMBOL_GPL(vb2_core_querybuf);
-
-I've been re-working how Smatch parses v4l input validation.  Mostly
-my approach has been to say that if a function is called from the
-v4l2_subdev_call() then it has been validated.  But there a couple
-warnings which remain.
-
-In thise case vb2_core_querybuf() is called from two functions.
-The vb2_querybuf() function does input validation but the
-dvb_vb2_querybuf() function does not.  The callers are
-dvb_demux_do_ioctl() and dvb_dvr_do_ioctl() so "index" comes from the
-user via the ioctl.
-
-Please let me know if I have misread the code so I can silence this
-warning in Smatch.
-
-regards,
-dan carpenter
