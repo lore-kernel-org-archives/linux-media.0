@@ -4,151 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C26C43461
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC2FC433B4
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD5D46108B
-	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FA006135F
+	for <linux-media@archiver.kernel.org>; Tue, 18 May 2021 12:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349305AbhERMmm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 May 2021 08:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S1349316AbhERMmn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 May 2021 08:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349298AbhERMml (ORCPT
+        with ESMTP id S1349307AbhERMmm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 May 2021 08:42:41 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D643C061573
-        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:22 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1428848wmh.4
-        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:22 -0700 (PDT)
+        Tue, 18 May 2021 08:42:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98CEC061760
+        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:23 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id x8so10048518wrq.9
+        for <linux-media@vger.kernel.org>; Tue, 18 May 2021 05:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lFCCf9Zadqmdb5+PTGtOnmwq2MMa2WLH4wJ8jc9X6CI=;
-        b=hz3iR9DZKzar9RisXj35P/cH4E/OklwqizSwOuKA+P9jci3qo9hMZ5gzlW/sly9SSh
-         6zunLWBZkCgMuU35+SsWvaK0mxu/AeNbjZseOjdVrexcKt09np5AIsYVvl2B52U9gDwc
-         qJ2lshVMVJmcmbcghh+x2hJnN4IC33aSAG8DLhpiTMgsIiUNokQWYIFs6iNcIrimpGrJ
-         jw1xNvkl30OO/7EfYyK5inByFH26Ikzqjvi9a/AhcQoUj6X/hPtfBuUdob4hkWtdp53s
-         CSEergk0MLXB8nTpbipmSk4Ptrw1EFC5/4PT4O5RdVfnsU7ucVu3+afhx7bbXAG4Ft0X
-         grQQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hcTo/xjSai7+osUF8Q2k+rYqy/qwu121JkrPDsYsoVo=;
+        b=pr081h7fpAVj/o9r3RNVCDtocZcHc52z9gfCDqd19RovMZYw8oen9DJqpPkVaWGh8i
+         FEB7DK2vrVLByswr6xk389k8n8Rdwodrwa5cpRzQ9hkL0Nt4ZNI6hxQNZXmoovR1bxjd
+         54C3dHpIdR5Nq/O4Jk3Db7mPwzQyCk81yZJq+JlqdsFXl6bO2bpFhHhDbkumwzvXHH5M
+         euwpR5uckFtuXal20JAcTIcMeJ1JpKbQ0QkSCUrlGNDeh06A50i+UH12G2ef2M0ptSNd
+         bBFE6WbaBSONIQkD3uJGw6xhzeLeb1hsz20ww6vv3oww4jhdNJxeTgQi7mcQfAKYoGyJ
+         Jf2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lFCCf9Zadqmdb5+PTGtOnmwq2MMa2WLH4wJ8jc9X6CI=;
-        b=fVB82nGleSkQ36Cji54vKz84I5/bM3gv4M8zdeNXDfp+83/QQ0GBTNGC0IgPllMtah
-         cNfC38obpk44t1aEltv2oniIAOOF7O5wjDXd1hjlBq8A4IJNCz/+ob8zcBfRsUsZUOeK
-         AEkycxKV+gLUcNMRMf2IKpKhqniuOoNlhZnglv7Wyy635ChyU7nNpzpTlzxgPvueWynK
-         sF9dcNP5N9Gjd1yfW0nGMrNSQ5bO47MNEHzxMfC76fPaHUE8U01j2qwiTZaiHZ1N6ND+
-         LWteOCXkzbJBcSo9cSTMYDpmfPCsEpqszguBZHFwRuVQObc708MBWgjBYRKRIU8K/q0M
-         VGeA==
-X-Gm-Message-State: AOAM532YO/bT92R6ec+8xg0XFBTTmJnl7YqP6wx7JUssYTOcnNtsSpFy
-        4rwekrTWTaFTyAiv2Aue9dbYSQ==
-X-Google-Smtp-Source: ABdhPJzSy40WfPhdwmshIXqLyiDyN0wXHif79hqRyhwDPulgerCWoG4o2VFd5eyuQ+IzM/rfmKmLtw==
-X-Received: by 2002:a1c:4c10:: with SMTP id z16mr4887905wmf.134.1621341680913;
-        Tue, 18 May 2021 05:41:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hcTo/xjSai7+osUF8Q2k+rYqy/qwu121JkrPDsYsoVo=;
+        b=osjcNGak2/WGHwrMd34wKJQQhc7gMnK0+leaqrOUNK9rgifpKxjHL2f8hpXCidH/5i
+         /YjziGAChnoVs35pvvccxdNyWH0aNA6v5s1hPUCYYmMuXR0ifNzy9BgCGEaTY/rDSbUD
+         AWR/pnFbOUi43pI8tv3ThzOVUjfdpjrWDWp6XsrE0CPRboXHjIRk8iUcfkaPBvxpZi8F
+         sLRnjFtXjBVzZwQlSxeZB96HFuBD+hN3AaK2rL8cOP1EEmSBezq6vJZA9nbr/AEhXWH1
+         HprO2S/7EGaq3mU0itg/b1WXnXxH7Ms6OGbmvn1NSlCb6HS2LTC0zj15b27xTRO/3O0r
+         hMGg==
+X-Gm-Message-State: AOAM5305MZ2TD2cXucLlvkOUHOL20So/tAsbDrR9j1Y7n3cutqxtmDrC
+        NtPYozpwcxD7wrd6FyHX7ZD3BQ==
+X-Google-Smtp-Source: ABdhPJzDn6VQiLsCOZzSSM0fFq1gVT+7Ow6q9E78vsMn8Fg5W5ywkxmuYsbzc28hgCwySs2sVccaiw==
+X-Received: by 2002:a05:6000:44:: with SMTP id k4mr6816431wrx.76.1621341682565;
+        Tue, 18 May 2021 05:41:22 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z3sm1677239wrq.42.2021.05.18.05.41.19
+        by smtp.googlemail.com with ESMTPSA id z3sm1677239wrq.42.2021.05.18.05.41.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 05:41:20 -0700 (PDT)
+        Tue, 18 May 2021 05:41:22 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 1/5] staging: media: zoran: remove detect_guest_activity
-Date:   Tue, 18 May 2021 12:41:09 +0000
-Message-Id: <20210518124113.1823055-1-clabbe@baylibre.com>
+Subject: [PATCH 3/5] staging: media: zoran: remove blank line
+Date:   Tue, 18 May 2021 12:41:11 +0000
+Message-Id: <20210518124113.1823055-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210518124113.1823055-1-clabbe@baylibre.com>
+References: <20210518124113.1823055-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The detect_guest_activity function is no longer used, so lets removed it.
+Minor style fix by removing useless blank line.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_device.c | 46 ----------------------
- drivers/staging/media/zoran/zoran_device.h |  2 -
- 2 files changed, 48 deletions(-)
+ drivers/staging/media/zoran/zoran.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index cf788d9cd1df..7d2718744d18 100644
---- a/drivers/staging/media/zoran/zoran_device.c
-+++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -166,52 +166,6 @@ static void dump_guests(struct zoran *zr)
- 	}
- }
+diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
+index e7fe8da7732c..b1ad2a2b914c 100644
+--- a/drivers/staging/media/zoran/zoran.h
++++ b/drivers/staging/media/zoran/zoran.h
+@@ -158,7 +158,6 @@ struct zoran_jpg_settings {
+ 	struct v4l2_jpegcompression jpg_comp;	/* JPEG-specific capture settings */
+ };
  
--void detect_guest_activity(struct zoran *zr)
--{
--	int timeout, i, j, res, guest[8], guest0[8], change[8][3];
--	ktime_t t0, t1;
 -
--	/* do not print random data */
--	guest[0] = 0;
--	guest0[0] = 0;
--
--	dump_guests(zr);
--	pci_info(zr->pci_dev, "Detecting guests activity, please wait...\n");
--	for (i = 1; i < 8; i++) /* Don't read jpeg codec here */
--		guest0[i] = guest[i] = post_office_read(zr, i, 0);
--
--	timeout = 0;
--	j = 0;
--	t0 = ktime_get();
--	while (timeout < 10000) {
--		udelay(10);
--		timeout++;
--		for (i = 1; (i < 8) && (j < 8); i++) {
--			res = post_office_read(zr, i, 0);
--			if (res != guest[i]) {
--				t1 = ktime_get();
--				change[j][0] = ktime_to_us(ktime_sub(t1, t0));
--				t0 = t1;
--				change[j][1] = i;
--				change[j][2] = res;
--				j++;
--				guest[i] = res;
--			}
--		}
--		if (j >= 8)
--			break;
--	}
--
--	pci_info(zr->pci_dev, "Guests: %*ph\n", 8, guest0);
--
--	if (j == 0) {
--		pci_info(zr->pci_dev, "No activity detected.\n");
--		return;
--	}
--	for (i = 0; i < j; i++)
--		pci_info(zr->pci_dev, "%6d: %d => 0x%02x\n", change[i][0], change[i][1], change[i][2]);
--}
--
- /*
-  * JPEG Codec access
-  */
-diff --git a/drivers/staging/media/zoran/zoran_device.h b/drivers/staging/media/zoran/zoran_device.h
-index 24be19a61b6d..6c5d70238228 100644
---- a/drivers/staging/media/zoran/zoran_device.h
-+++ b/drivers/staging/media/zoran/zoran_device.h
-@@ -20,8 +20,6 @@ extern int post_office_wait(struct zoran *zr);
- extern int post_office_write(struct zoran *zr, unsigned int guest, unsigned int reg, unsigned int value);
- extern int post_office_read(struct zoran *zr, unsigned int guest, unsigned int reg);
+ struct zoran;
  
--extern void detect_guest_activity(struct zoran *zr);
--
- extern void jpeg_codec_sleep(struct zoran *zr, int sleep);
- extern int jpeg_codec_reset(struct zoran *zr);
- 
+ /* zoran_fh contains per-open() settings */
 -- 
 2.26.3
 
