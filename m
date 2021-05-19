@@ -2,261 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00706C433B4
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A683C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 10:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9AF7613BD
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:38:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C071611AD
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 10:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345933AbhESJjZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 May 2021 05:39:25 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:31762 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346016AbhESJjS (ORCPT
+        id S1347634AbhESKSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 May 2021 06:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347427AbhESKSP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 May 2021 05:39:18 -0400
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 19 May 2021 02:37:58 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 19 May 2021 02:37:57 -0700
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 19 May 2021 15:07:54 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id B4DAD219EB; Wed, 19 May 2021 15:07:45 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, vgarodia@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH 7/7] media: venus: Set buffer to FW based on FW min count requirement.
-Date:   Wed, 19 May 2021 15:06:48 +0530
-Message-Id: <1621417008-6117-8-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1621417008-6117-1-git-send-email-dikshita@codeaurora.org>
-References: <1621417008-6117-1-git-send-email-dikshita@codeaurora.org>
+        Wed, 19 May 2021 06:18:15 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBA3C061760
+        for <linux-media@vger.kernel.org>; Wed, 19 May 2021 03:16:56 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id e19so9566935pfv.3
+        for <linux-media@vger.kernel.org>; Wed, 19 May 2021 03:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ErgaLn/LXwMYchnr1s78l4/CTrq8Ah6eCPn0flSFZZw=;
+        b=x3DySxX2A8/YJP61UlCrtTmMJbXch0e/f1JNjywXSWN5PsQ2gC9JHwTXVnyEwFTpls
+         KnH9Ie1E2weDg/fffT6Tdl+0ZG7qkZUfX0Yt+q0fuCQMOu7Iuky/ryoe+ccLzqyIOxhe
+         MxW81slQl8oeZmhZsNtglsb2SNs6Tb5Ugj5NMKoDcJo7DOI4WOXVe5Oj3qhGz4CZkaxo
+         cXCTDnfrZYYcoupsoreHxKNxVyc3ttIuxWYF7QTTKJFxEN7bipx1gUg7diT3f7CLStsE
+         ncy+Nu4j2OaDojzJZs+geObOfgj5Y/cK870P6aecnjK/eYzReXNG2KJtRUgjdn4pjMxN
+         Oj9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ErgaLn/LXwMYchnr1s78l4/CTrq8Ah6eCPn0flSFZZw=;
+        b=gojtIInYetp3KhbeDSq7/uNSVLVIS3bLSOkKOm9RJ8+gr8wYuphMXeF+rGNqg+lFez
+         u0ZfD0//9gU5uargtauO7/SuBs46qFgRlkMYj4LVYcFIuoo8TfBuAyaTgLvmUk/uWNzy
+         OONatyVlcOKRepuDzlsVqcmVxyt39r4Y2qhCgdwoYEzd0MA/KN66RRWMm25cCWq4Q5nI
+         Xy5E5LWMkW6iS47opEFJXyrqoNmj/pbHovEf+RDv4EOUSHvyOEgWN5sJRuerpkldP8If
+         ABwY0EDv1rqDms6RS8HbO7hNIOgGBc26Ej/4tzUARQ7oE2+D9T1uvUp+jr+t2L8e/aaw
+         Cd7A==
+X-Gm-Message-State: AOAM533keeahhz+z8wPuxxOkbmHC0WXdbOgYLKDif4aulTFAl/jRdsiD
+        ZnOygZh/RF0kidXKyswzfhI0yqzZVX8iZIaqusi1Kw==
+X-Google-Smtp-Source: ABdhPJyQy8LhqHpPMUObOjzgs521n3KsIdr4cfRxqfNqEbvjyzuoRgHy0UWpJtBxppxfvKy2CTIblXYJ5s1KzdMyanw=
+X-Received: by 2002:a62:a517:0:b029:2dc:9daf:5e91 with SMTP id
+ v23-20020a62a5170000b02902dc9daf5e91mr10014131pfm.39.1621419416158; Wed, 19
+ May 2021 03:16:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210511180728.23781-1-jonathan@marek.ca> <20210511180728.23781-2-jonathan@marek.ca>
+In-Reply-To: <20210511180728.23781-2-jonathan@marek.ca>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 19 May 2021 12:16:44 +0200
+Message-ID: <CAG3jFysn=2JNZD8Vcsks3=+5TaR0hgb+=8GYeBrOSt1vfbqgjA@mail.gmail.com>
+Subject: Re: [PATCH 01/17] media: camss: csiphy-3ph: don't print HW version as
+ an error
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     MSM <linux-arm-msm@vger.kernel.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:QUALCOMM CAMERA SUBSYSTEM DRIVER" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Get the min buffer count required by FW from source event change
-  and use the same value to decide actual buffer count and for
-  buffer size calculation.
-- Setup DPB and OPB buffers after session continue incase of
-  reconfig.
+Hey Jonathan,
 
-Co-developed-by: Mansur Alisha Shaik <mansur@codeaurora.org>
-Co-developed-by: Vikash Garodia <vgarodia@codeaurora.org>
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- drivers/media/platform/qcom/venus/core.h           |  1 +
- drivers/media/platform/qcom/venus/helpers.c        | 11 ++++++++++-
- drivers/media/platform/qcom/venus/hfi.h            |  1 +
- drivers/media/platform/qcom/venus/hfi_helper.h     |  9 +++++++++
- drivers/media/platform/qcom/venus/hfi_msgs.c       |  7 +++++++
- .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  3 ++-
- drivers/media/platform/qcom/venus/vdec.c           | 22 ++++++++++++----------
- 7 files changed, 42 insertions(+), 12 deletions(-)
+Thanks for submitting this series, and including some cleanups and fixes.
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 1ff20d9..b2b023e 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -403,6 +403,7 @@ struct venus_inst {
- 	u32 width;
- 	u32 height;
- 	struct v4l2_rect crop;
-+	u32 fw_min_cnt;
- 	u32 out_width;
- 	u32 out_height;
- 	u32 colorspace;
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index cbe653f..83c3009 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -576,6 +576,7 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
- 	struct hfi_plat_buffers_params params;
- 	bool is_dec = inst->session_type == VIDC_SESSION_TYPE_DEC;
- 	struct venc_controls *enc_ctr = &inst->controls.enc;
-+	int ret = 0;
- 
- 	hfi_plat = hfi_platform_get(version);
- 
-@@ -610,7 +611,15 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
- 		params.enc.is_tenbit = inst->bit_depth == VIDC_BITDEPTH_10;
- 	}
- 
--	return hfi_plat->bufreq(&params, inst->session_type, buftype, req);
-+	if (buftype == HFI_BUFFER_OUTPUT || buftype == HFI_BUFFER_OUTPUT2 ||
-+	    buftype == HFI_BUFFER_INTERNAL_SCRATCH_1(version))
-+		req->count_min = inst->fw_min_cnt;
-+
-+	ret = hfi_plat->bufreq(&params, inst->session_type, buftype, req);
-+	if (buftype == HFI_BUFFER_OUTPUT || buftype == HFI_BUFFER_OUTPUT2)
-+		if (inst->fw_min_cnt != req->count_min)
-+			inst->fw_min_cnt = req->count_min;
-+	return ret;
- }
- 
- int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
-diff --git a/drivers/media/platform/qcom/venus/hfi.h b/drivers/media/platform/qcom/venus/hfi.h
-index f25d412..287d544 100644
---- a/drivers/media/platform/qcom/venus/hfi.h
-+++ b/drivers/media/platform/qcom/venus/hfi.h
-@@ -75,6 +75,7 @@ struct hfi_event_data {
- 		u32 left, top;
- 		u32 width, height;
- 	} input_crop;
-+	u32 fw_min_cnt;
- };
- 
- /* define core states */
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index 185c302..5162f09 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -167,6 +167,7 @@
- #define HFI_PROPERTY_PARAM_VDEC_RECOVERY_POINT_SEI_EXTRADATA	0x120300c
- #define HFI_PROPERTY_PARAM_VDEC_THUMBNAIL_MODE			0x120300d
- #define HFI_PROPERTY_PARAM_VDEC_FRAME_ASSEMBLY			0x120300e
-+#define HFI_PROPERTY_PARAM_VDEC_DPB_COUNTS			0x120300e
- #define HFI_PROPERTY_PARAM_VDEC_VC1_FRAMEDISP_EXTRADATA		0x1203011
- #define HFI_PROPERTY_PARAM_VDEC_VC1_SEQDISP_EXTRADATA		0x1203012
- #define HFI_PROPERTY_PARAM_VDEC_TIMESTAMP_EXTRADATA		0x1203013
-@@ -906,6 +907,14 @@ struct hfi_extradata_input_crop {
- 	u32 height;
- };
- 
-+struct hfi_dpb_counts {
-+	u32 max_dpb_count;
-+	u32 max_ref_frames;
-+	u32 max_dec_buffering;
-+	u32 max_reorder_frames;
-+	u32 fw_min_cnt;
-+};
-+
- #define HFI_COLOR_FORMAT_MONOCHROME		0x01
- #define HFI_COLOR_FORMAT_NV12			0x02
- #define HFI_COLOR_FORMAT_NV21			0x03
-diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
-index a2d436d..2d207254 100644
---- a/drivers/media/platform/qcom/venus/hfi_msgs.c
-+++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
-@@ -32,6 +32,7 @@ static void event_seq_changed(struct venus_core *core, struct venus_inst *inst,
- 	struct hfi_colour_space *colour_info;
- 	struct hfi_buffer_requirements *bufreq;
- 	struct hfi_extradata_input_crop *crop;
-+	struct hfi_dpb_counts *dpb_count;
- 	u8 *data_ptr;
- 	u32 ptype;
- 
-@@ -110,6 +111,12 @@ static void event_seq_changed(struct venus_core *core, struct venus_inst *inst,
- 			event.input_crop.height = crop->height;
- 			data_ptr += sizeof(*crop);
- 			break;
-+		case HFI_PROPERTY_PARAM_VDEC_DPB_COUNTS:
-+			data_ptr += sizeof(u32);
-+			dpb_count = (struct hfi_dpb_counts *)data_ptr;
-+			event.fw_min_cnt = dpb_count->fw_min_cnt;
-+			data_ptr += sizeof(*dpb_count);
-+			break;
- 		default:
- 			break;
- 		}
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-index 479178b..c7aea06 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-@@ -1164,7 +1164,7 @@ static int output_buffer_count(u32 session_type, u32 codec)
- 			output_min_count = 6;
- 			break;
- 		case V4L2_PIX_FMT_VP9:
--			output_min_count = 9;
-+			output_min_count = 11;
- 			break;
- 		case V4L2_PIX_FMT_H264:
- 		case V4L2_PIX_FMT_HEVC:
-@@ -1213,6 +1213,7 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
- 	}
- 
- 	out_min_count = output_buffer_count(VIDC_SESSION_TYPE_DEC, codec);
-+	out_min_count = max(out_min_count, bufreq->count_min);
- 
- 	bufreq->type = buftype;
- 	bufreq->region_size = 0;
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index a674281..d8f0529 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -977,7 +977,7 @@ static int vdec_start_capture(struct venus_inst *inst)
- 		return ret;
- 
- 	ret = venus_helper_set_num_bufs(inst, inst->num_input_bufs,
--					VB2_MAX_FRAME, VB2_MAX_FRAME);
-+					inst->num_output_bufs, inst->num_output_bufs);
- 	if (ret)
- 		return ret;
- 
-@@ -985,6 +985,14 @@ static int vdec_start_capture(struct venus_inst *inst)
- 	if (ret)
- 		goto err;
- 
-+	venus_pm_load_scale(inst);
-+
-+	inst->next_buf_last = false;
-+
-+	ret = hfi_session_continue(inst);
-+	if (ret)
-+		goto err;
-+
- 	ret = venus_helper_alloc_dpb_bufs(inst);
- 	if (ret)
- 		goto err;
-@@ -997,14 +1005,6 @@ static int vdec_start_capture(struct venus_inst *inst)
- 	if (ret)
- 		goto free_dpb_bufs;
- 
--	venus_pm_load_scale(inst);
--
--	inst->next_buf_last = false;
--
--	ret = hfi_session_continue(inst);
--	if (ret)
--		goto free_dpb_bufs;
--
- 	inst->codec_state = VENUS_DEC_STATE_DECODING;
- 
- 	if (inst->drain_active)
-@@ -1069,7 +1069,7 @@ static int vdec_start_output(struct venus_inst *inst)
- 		return ret;
- 
- 	ret = venus_helper_set_num_bufs(inst, inst->num_input_bufs,
--					VB2_MAX_FRAME, VB2_MAX_FRAME);
-+					inst->num_output_bufs, inst->num_output_bufs);
- 	if (ret)
- 		return ret;
- 
-@@ -1410,6 +1410,7 @@ static void vdec_event_change(struct venus_inst *inst,
- 		inst->crop.height = ev_data->height;
- 	}
- 
-+	inst->fw_min_cnt = ev_data->fw_min_cnt;
- 	inst->out_width = ev_data->width;
- 	inst->out_height = ev_data->height;
- 
-@@ -1513,6 +1514,7 @@ static void vdec_inst_init(struct venus_inst *inst)
- 	inst->crop.top = 0;
- 	inst->crop.width = inst->width;
- 	inst->crop.height = inst->height;
-+	inst->fw_min_cnt = 8;
- 	inst->out_width = frame_width_min(inst);
- 	inst->out_height = frame_height_min(inst);
- 	inst->fps = 30;
--- 
-2.7.4
+On Tue, 11 May 2021 at 20:08, Jonathan Marek <jonathan@marek.ca> wrote:
+>
+> Avoid unnecessary noise in normal usage (it prints every time CSIPHY is
+> powered on).
+>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
+>  drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> index e318c822ab04..5948abdcd220 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> @@ -163,7 +163,7 @@ static void csiphy_hw_version_read(struct csiphy_device *csiphy,
+>         hw_version |= readl_relaxed(csiphy->base +
+>                                    CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(15)) << 24;
+>
+> -       dev_err(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
+> +       dev_dbg(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
+>  }
+>
+>  /*
 
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
