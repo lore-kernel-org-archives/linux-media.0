@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5289AC433B4
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53600C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:37:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34A04613BD
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:37:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30E1F6109F
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 09:37:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345859AbhESJjF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 May 2021 05:39:05 -0400
+        id S1345835AbhESJjJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 May 2021 05:39:09 -0400
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:42311 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345835AbhESJjC (ORCPT
+        with ESMTP id S1345847AbhESJjE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 May 2021 05:39:02 -0400
+        Wed, 19 May 2021 05:39:04 -0400
 Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 19 May 2021 02:37:42 -0700
+  by alexa-out.qualcomm.com with ESMTP; 19 May 2021 02:37:45 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 19 May 2021 02:37:41 -0700
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 19 May 2021 02:37:44 -0700
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 19 May 2021 15:07:39 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 19 May 2021 15:07:43 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 2BFAA219DC; Wed, 19 May 2021 15:07:38 +0530 (IST)
+        id B26DE219EB; Wed, 19 May 2021 15:07:42 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, vgarodia@codeaurora.org,
         Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH 4/7] media: venus: hfi: Skip AON register programming for V6 1pipe
-Date:   Wed, 19 May 2021 15:06:45 +0530
-Message-Id: <1621417008-6117-5-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH 6/7] media: venus: helpers: update NUM_MBS macro calculation
+Date:   Wed, 19 May 2021 15:06:47 +0530
+Message-Id: <1621417008-6117-7-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1621417008-6117-1-git-send-email-dikshita@codeaurora.org>
 References: <1621417008-6117-1-git-send-email-dikshita@codeaurora.org>
@@ -44,40 +44,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-AON register programming is used to set NOC to low
-power mode during V6 power off sequence. However
-AON register memory map is not applicable to 1pipe,
-hence skipping AON register programming.
+Consider alignment while calculating NUM_MBS.
 
 Co-developed-by: Mansur Alisha Shaik <mansur@codeaurora.org>
-Co-developed-by: Vikash Garodia <vgarodia@codeaurora.org>
 Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/platform/qcom/venus/helpers.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index ce98c52..3a75a27 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -551,6 +551,9 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
- 	if (IS_V6(hdev->core)) {
- 		writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index 2223f55..cbe653f 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -18,8 +18,8 @@
+ #include "hfi_platform.h"
+ #include "hfi_parser.h"
  
-+		if (hdev->core->res->num_vpp_pipes == 1)
-+			goto skip_aon_mvp_noc;
-+
- 		writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
- 		ret = readl_poll_timeout(aon_base + AON_WRAPPER_MVP_NOC_LPI_STATUS,
- 					 val,
-@@ -560,6 +563,7 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
- 		if (ret)
- 			return -ETIMEDOUT;
+-#define NUM_MBS_720P	(((1280 + 15) >> 4) * ((720 + 15) >> 4))
+-#define NUM_MBS_4K	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
++#define NUM_MBS_720P	(((ALIGN(1280, 16)) >> 4) * ((ALIGN(736, 16)) >> 4))
++#define NUM_MBS_4K	(((ALIGN(4096, 16)) >> 4) * ((ALIGN(2304, 16)) >> 4))
  
-+skip_aon_mvp_noc:
- 		mask_val = (BIT(2) | BIT(1) | BIT(0));
- 		writel(mask_val, wrapper_base + WRAPPER_DEBUG_BRIDGE_LPI_CONTROL_V6);
+ struct intbuf {
+ 	struct list_head list;
+@@ -1099,17 +1099,19 @@ static u32 venus_helper_get_work_mode(struct venus_inst *inst)
+ 	u32 num_mbs;
  
+ 	mode = VIDC_WORK_MODE_2;
+-	if (inst->session_type == VIDC_SESSION_TYPE_DEC) {
+-		num_mbs = (ALIGN(inst->height, 16) * ALIGN(inst->width, 16)) / 256;
+-		if (inst->hfi_codec == HFI_VIDEO_CODEC_MPEG2 ||
+-		    inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
+-		    num_mbs <= NUM_MBS_720P)
+-			mode = VIDC_WORK_MODE_1;
+-	} else {
+-		num_mbs = (ALIGN(inst->out_height, 16) * ALIGN(inst->out_width, 16)) / 256;
+-		if (inst->hfi_codec == HFI_VIDEO_CODEC_VP8 &&
+-		    num_mbs <= NUM_MBS_4K)
+-			mode = VIDC_WORK_MODE_1;
++	if (IS_V6(inst->core)) {
++		if (inst->session_type == VIDC_SESSION_TYPE_DEC) {
++			num_mbs = ((ALIGN(inst->height, 16))/16 * (ALIGN(inst->width, 16)))/16;
++			if (inst->hfi_codec == HFI_VIDEO_CODEC_MPEG2 ||
++			    inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
++			    num_mbs <= NUM_MBS_720P)
++				mode = VIDC_WORK_MODE_1;
++		} else {
++			num_mbs = (ALIGN(inst->out_height, 16) * ALIGN(inst->out_width, 16)) / 256;
++			if (inst->hfi_codec == HFI_VIDEO_CODEC_VP8 &&
++			    num_mbs <= NUM_MBS_4K)
++				mode = VIDC_WORK_MODE_1;
++		}
+ 	}
+ 
+ 	return mode;
 -- 
 2.7.4
 
