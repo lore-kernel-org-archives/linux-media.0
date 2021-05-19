@@ -2,114 +2,188 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4351C433ED
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 14:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFF4C43460
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 14:36:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A79066008E
-	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 14:31:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16E2560FE7
+	for <linux-media@archiver.kernel.org>; Wed, 19 May 2021 14:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354301AbhESOdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 May 2021 10:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354168AbhESOcr (ORCPT
+        id S1348092AbhESOh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 May 2021 10:37:59 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45016 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348218AbhESOh6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 May 2021 10:32:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA86EC061348
-        for <linux-media@vger.kernel.org>; Wed, 19 May 2021 07:31:18 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id pi6-20020a17090b1e46b029015cec51d7cdso3508470pjb.5
-        for <linux-media@vger.kernel.org>; Wed, 19 May 2021 07:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pxHWIv8mtXKu/R/yk/BzKvnm7qsRzpUVYJfZeXwk3dw=;
-        b=fXkuTtpeHQgusVE75tuFUeKE9nPDphT70P4L4q+fYAHlAj+GnhdKAXE7840oEYdytQ
-         OKXKEf3OKBJruOF7UFGUIjYdgsEyfHFMyCoqTP3q+0BxEu3yfNw66MpUSL9GqcrIBP83
-         J32QI06OgpG05IDlxcBtnJ0F5xMEzKXmAWxow=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pxHWIv8mtXKu/R/yk/BzKvnm7qsRzpUVYJfZeXwk3dw=;
-        b=inUs608naPhew77DV1WdvVPydEJ/QY7GZbHMRuysktfwWTXlxfhzS91FMUCDLorFhq
-         QpNQ8SUR/eqBnKBjuCvFJ2lU7mHNpJ3H/hCINc0bpinobKhp85VWkH4RXmQHCE73ArHj
-         DYzbhF3K65WOV1ETMXzmYf4/8O0T4SxOoiwrO7sjdbuk6IS8v9bFhd4ue1FTr6Z2Q5B8
-         Uk+ONMggiFPkpvl5wrd5EdU91V6EwS7EnwmDldamyOLMpAky9r2DalxRElpl7vGsDrMm
-         MIZYp5v/d3do+rxeCxW/8KxBj/RdyUUBpFO1uMu1KzVr1u063uwgfi24zOhgceAtwgqJ
-         hEfg==
-X-Gm-Message-State: AOAM531u+sdxkqtzWB6YX2eoy/bxatGYr7MX4w4Sx0owxsDw7glP7j0a
-        oJRhVJZYHdZlLWzDlMGyuVeOqA==
-X-Google-Smtp-Source: ABdhPJzeqnOqsJpS5veow9PnfCXMTVK27upTC7YKtWnpvDe+ecqqvMOsYEizM4mYpgTDHsDyLTdEFw==
-X-Received: by 2002:a17:90b:19d3:: with SMTP id nm19mr11510188pjb.215.1621434678224;
-        Wed, 19 May 2021 07:31:18 -0700 (PDT)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:87ab:ff82:1544:697])
-        by smtp.gmail.com with ESMTPSA id 3sm14337661pff.132.2021.05.19.07.31.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 07:31:17 -0700 (PDT)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
+        Wed, 19 May 2021 10:37:58 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BB3AEBA7;
+        Wed, 19 May 2021 16:36:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1621434996;
+        bh=4WNnDYwWQ9KxLCfoxwzFzT4oBs1jTEj0bUz9/kkQ+3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lq7JZAVlX5YixRbW3QnwLt07h9evlbvsEW6+AsLY+OaaVkMEU9xiFthkIgA5p55DS
+         YyNHtLc/4wDxw9LTj6AdV4EH6n0Tn+wkD5ikF3FJdVH2oQapa+3zka8chMQFuA0TtY
+         YZtYQMPruLqrf4TjyE1KxRShX6QM20pNZraAbgx4=
+Date:   Wed, 19 May 2021 17:36:35 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v5 14/14] media: mtk-vcodec: enable MT8183 decoder
-Date:   Wed, 19 May 2021 23:30:11 +0900
-Message-Id: <20210519143011.1175546-15-acourbot@chromium.org>
-X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-In-Reply-To: <20210519143011.1175546-1-acourbot@chromium.org>
-References: <20210519143011.1175546-1-acourbot@chromium.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: media: renesas,imr: Convert to json-schema
+Message-ID: <YKUic3pypkSOwvTy@pendragon.ideasonboard.com>
+References: <353c2d181ceb6a5dfc553f88a201c6b18ee6914d.1621429265.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <353c2d181ceb6a5dfc553f88a201c6b18ee6914d.1621429265.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+Hi Geert,
 
-Now that all the supporting blocks are present, enable decoder for
-MT8183.
+Thank you for the patch.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[acourbot: refactor, cleanup and split]
-Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On Wed, May 19, 2021 at 03:01:43PM +0200, Geert Uytterhoeven wrote:
+> Convert the Renesas R-Car Image Renderer Tree binding documentation to
+> json-schema.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> I have listed Sergei as the maintainer, as he wrote the original
+> bindings.  Sergei: Please scream if this is inappropriate ;-)
+> ---
+>  .../devicetree/bindings/media/renesas,imr.txt | 31 ---------
+>  .../bindings/media/renesas,imr.yaml           | 66 +++++++++++++++++++
+>  2 files changed, 66 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/renesas,imr.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/renesas,imr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/renesas,imr.txt b/Documentation/devicetree/bindings/media/renesas,imr.txt
+> deleted file mode 100644
+> index b0614153ed3682eb..0000000000000000
+> --- a/Documentation/devicetree/bindings/media/renesas,imr.txt
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -Renesas R-Car Image Renderer (Distortion Correction Engine)
+> ------------------------------------------------------------
+> -
+> -The image renderer, or the distortion correction engine, is a drawing processor
+> -with a simple instruction system capable of referencing video capture data or
+> -data in an external memory as 2D texture data and performing texture mapping
+> -and drawing with respect to any shape that is split into triangular objects.
+> -
+> -Required properties:
+> -
+> -- compatible: "renesas,<soctype>-imr-lx4", "renesas,imr-lx4" as a fallback for
+> -  the image renderer light extended 4 (IMR-LX4) found in the R-Car gen3 SoCs,
+> -  where the examples with <soctype> are:
+> -  - "renesas,r8a7795-imr-lx4" for R-Car H3,
+> -  - "renesas,r8a7796-imr-lx4" for R-Car M3-W.
+> -- reg: offset and length of the register block;
+> -- interrupts: single interrupt specifier;
+> -- clocks: single clock phandle/specifier pair;
+> -- power-domains: power domain phandle/specifier pair;
+> -- resets: reset phandle/specifier pair.
+> -
+> -Example:
+> -
+> -	imr-lx4@fe860000 {
+> -		compatible = "renesas,r8a7795-imr-lx4", "renesas,imr-lx4";
+> -		reg = <0 0xfe860000 0 0x2000>;
+> -		interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>;
+> -		clocks = <&cpg CPG_MOD 823>;
+> -		power-domains = <&sysc R8A7795_PD_A3VC>;
+> -		resets = <&cpg 823>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/media/renesas,imr.yaml b/Documentation/devicetree/bindings/media/renesas,imr.yaml
+> new file mode 100644
+> index 0000000000000000..ea4579209e81660f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/renesas,imr.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/renesas,imr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas R-Car Image Renderer (Distortion Correction Engine)
+> +
+> +maintainers:
+> +  - Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> +
+> +description:
+> +  The image renderer, or the distortion correction engine, is a drawing
+> +  processor with a simple instruction system capable of referencing video
+> +  capture data or data in an external memory as 2D texture data and performing
+> +  texture mapping and drawing with respect to any shape that is split into
+> +  triangular objects.
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index f1e9261cbcf0..00f160ca0f12 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -375,12 +375,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- }
- 
- extern const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata;
-+extern const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata;
- 
- static const struct of_device_id mtk_vcodec_match[] = {
- 	{
- 		.compatible = "mediatek,mt8173-vcodec-dec",
- 		.data = &mtk_vdec_8173_pdata,
- 	},
-+	{
-+		.compatible = "mediatek,mt8183-vcodec-dec",
-+		.data = &mtk_vdec_8183_pdata,
-+	},
- 	{},
- };
- 
+I'd add a blank line between paragraphs.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +  The image renderer light extended 4 (IMR-LX4) is found in R-Car Gen3 SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - renesas,r8a7795-imr-lx4 # R-Car H3
+> +          - renesas,r8a7796-imr-lx4 # R-Car M3-W
+> +      - const: renesas,imr-lx4      # R-Car Gen3
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - power-domains
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/r8a7795-sysc.h>
+> +
+> +    imr-lx4@fe860000 {
+> +            compatible = "renesas,r8a7795-imr-lx4", "renesas,imr-lx4";
+> +            reg = <0xfe860000 0x2000>;
+> +            interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&cpg CPG_MOD 823>;
+> +            power-domains = <&sysc R8A7795_PD_A3VC>;
+> +            resets = <&cpg 823>;
+> +    };
+
 -- 
-2.31.1.751.gd2f1c929bd-goog
+Regards,
 
+Laurent Pinchart
