@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87690C433ED
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34A33C43616
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 687A360C41
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C48061006
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241644AbhETPtp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 11:49:45 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45096 "EHLO
+        id S242063AbhETPtq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 11:49:46 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45108 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239131AbhETPtl (ORCPT
+        by vger.kernel.org with ESMTP id S239427AbhETPtl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 20 May 2021 11:49:41 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2585FC06AB;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 304A0C06AF;
         Thu, 20 May 2021 15:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1621525699; bh=z81DeKSKri9DqTSD8pXM6mMeptAEtqDUsinYUan7qOc=;
+        t=1621525699; bh=Cjwofvyx7tHITwroONobhD5qV5HclCkCWYemv1jIgWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=TNZXs6Er9ImEym/zHgmaXfxNPV0nEd2gCouX2s/dX8qprKDvGzWPewjb+q69cXqAP
-         8KtTWt5YXFKPcRUE+p5FrPjGdghMapACmZdan00ggzbc3VAT17r9LZhlO2tFCuqaV5
-         92SJ92bE1jtfGpilbR8Z7AEqcjVZBDePkigjoDV9nsrKHS7dpvjljY35ifordWbCX5
-         gYuGAjl8kkrwQyzyjsK96cbaQnGaxMRe4/BDlKwM4k83PY8B2xLIhOzJJkKNBYHzyw
-         oY/TcgLhBxoQu/CSsP4az9E5WpqXGyiNi5IsrSkyM6W/DMnzdBqMnroo7xWIL/GWwl
-         ZkrlpV006FS9A==
+        b=Kq+uqBqlwabdQhsVDqW454VpYb+VUyQqf1YWWhf/tgbD/Gopy/X2ebO0zpcTJnsfe
+         owHX0kTRWeb+MgIdnMyWKxSB6jr4fa/5ji4r9su+y6fpq+JtfHl+tNUITD4mLH50dg
+         NVrlIM2OQu+//e0tYrfSC3rkCRsha763sCzc8c8zaonD5gBFhDj79BgrwFKzUo05E1
+         N9UVX2m6gdFubXALErKsDkU7gEka5JJYpyHoDgk28EqXdUwxfKN/cphi4PRPs2A5gn
+         xFx85thtM+BJgiWKyo3hA0dgPxONl93JKeFyk/cwTd33/cbeCgMnDHBxMEliu5GRdU
+         RHqiSSl/YEYig==
 Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
-        by mailhost.synopsys.com (Postfix) with ESMTP id C9608A0061;
+        by mailhost.synopsys.com (Postfix) with ESMTP id EC288A0067;
         Thu, 20 May 2021 15:48:17 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 From:   Nelson Costa <Nelson.Costa@synopsys.com>
@@ -49,11 +49,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        Nelson Costa <Nelson.Costa@synopsys.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>
-Subject: [RFC v2 2/9] dt-bindings: media: Document Synopsys DesignWare HDMI RX
-Date:   Thu, 20 May 2021 17:47:56 +0200
-Message-Id: <a5a52c738db7a4b3125225ac27e5aaff19604aec.1621524721.git.nelson.costa@synopsys.com>
+        Nelson Costa <Nelson.Costa@synopsys.com>
+Subject: [RFC v2 4/9] phy: Add PHY standard HDMI opts to the PHY API
+Date:   Thu, 20 May 2021 17:47:58 +0200
+Message-Id: <fb400f26ab158f6c44bdd1241334945760390d99.1621524721.git.nelson.costa@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1621524721.git.nelson.costa@synopsys.com>
 References: <cover.1621524721.git.nelson.costa@synopsys.com>
@@ -63,120 +62,166 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the device tree bindings for the Synopsys DesignWare HDMI RX
-Controller.
+This adds the new options to give support for HDMI
+PHYs in a standard way. This is mainly useful when
+the HDMI PHY requires parameters to be passed by
+"phy_configure" function.
 
-Signed-off-by: Jose Abreu <jose.abreu@synopsys.com>
+For this, the new struct phy_configure_opts_hdmi
+was added with the required generic and standard
+parameters.
+
 Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
 ---
- .../devicetree/bindings/media/snps,dw-hdmi-rx.yaml | 98 ++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
+ include/linux/phy/phy-hdmi.h | 102 +++++++++++++++++++++++++++++++++++++++++++
+ include/linux/phy/phy.h      |   7 ++-
+ 2 files changed, 108 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/phy/phy-hdmi.h
 
-diff --git a/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml b/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
+diff --git a/include/linux/phy/phy-hdmi.h b/include/linux/phy/phy-hdmi.h
 new file mode 100644
-index 0000000..4f2169e
+index 0000000..62334f4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
-@@ -0,0 +1,98 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/snps,dw-hdmi-rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/include/linux/phy/phy-hdmi.h
+@@ -0,0 +1,102 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 - present Synopsys, Inc. and/or its affiliates.
++ * HDMI generic PHY options.
++ *
++ * Author: Nelson Costa <nelson.costa@synopsys.com>
++ */
++#ifndef __PHY_HDMI_H_
++#define __PHY_HDMI_H_
 +
-+title: Synopsys DesignWare HDMI RX Controller Device Tree Bindings
++#include <linux/types.h>
 +
-+maintainers:
-+  - Jose Abreu <jose.abreu@synopsys.com>
-+  - Nelson Costa <nelson.costa@synopsys.com>
++/**
++ * struct phy_configure_opts_hdmi - HDMI PHY configuration set
++ *
++ * This structure is used to represent the configuration state of an
++ * HDMI PHY.
++ */
++struct phy_configure_opts_hdmi {
++	/**
++	 * @color_depth:
++	 *
++	 * Color depth, as specified by HDMI specification, represents the
++	 * number of bits per pixel.
++	 *
++	 * Allowed values: 24, 30, 36, 48
++	 *
++	 */
++	u8 color_depth;
 +
-+description: |
-+  The Synopsys DesignWare HDMI RX Controller and PHYs e405/e406 is an HDMI 2.0
-+  Receiver solution that is able to decode video and audio.
++	/**
++	 * @tmds_bit_clock_ratio:
++	 *
++	 * Flag indicating, as specified by HDMI specification, the relation
++	 * between TMDS Clock Rate and TMDS Character Rate.
++	 *
++	 * As specified by HDMI specification:
++	 *
++	 * tmds_bit_clock_ratio = 0, for TMDS Character Rates <= 340 Mcsc
++	 * (TMDS Clock Rate = TMDS Character Rate)
++	 *
++	 * tmds_bit_clock_ratio = 1, for TMDS Character Rates > 340 Mcsc
++	 * (TMDS Clock Rate = TMDS Character Rate / 4)
++	 *
++	 */
++	u8 tmds_bit_clock_ratio;
 +
-+properties:
-+  compatible:
-+    const: snps,dw-hdmi-rx
++	/**
++	 * @scrambling:
++	 *
++	 * Scrambling, as specified by HDMI specification, enables the technique
++	 * to reduce the EMI/RFI.
++	 *
++	 */
++	u8 scrambling;
 +
-+  reg:
-+    maxItems: 1
++	/**
++	 * @calibration_acq:
++	 *
++	 * Calibration acquisitions number for the calibration algorithm.
++	 *
++	 */
++	unsigned int calibration_acq;
 +
-+  interrupts:
-+    maxItems: 1
++	/**
++	 * @calibration_force:
++	 *
++	 * Flag indicating, to force calibration algorithm even if the MPLL
++	 * status didn't change from previous run calibration.
++	 *
++	 */
++	u8 calibration_force;
 +
-+  clocks:
-+    maxItems: 1
-+    description: |
-+      phandle to the configuration clock
++	/**
++	 * @set_color_depth:
++	 *
++	 * Flag indicating, whether or not reconfigure deep_color
++	 * to requested values.
++	 *
++	 */
++	u8 set_color_depth : 1;
 +
-+  clock-names:
-+    const: cfg
++	/**
++	 * @set_tmds_bit_clock_ratio:
++	 *
++	 * Flag indicating, whether or not reconfigure tmds_bit_clock_ratio
++	 * to requested values.
++	 *
++	 */
++	u8 set_tmds_bit_clock_ratio : 1;
 +
-+  phys:
-+    maxItems: 1
-+    description: |
-+      phandle for the HDMI RX PHY
++	/**
++	 * @set_scrambling:
++	 *
++	 * Flag indicating, whether or not reconfigure scrambling
++	 * to requested values.
++	 *
++	 */
++	u8 set_scrambling : 1;
++};
 +
-+  phy-names:
-+    const: hdmi-phy
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/properties/port
-+    description: |
-+      Input port node, multiple endpoints describing the HDMI RX data connected
-+      to the HDMI PHY receiver.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - phys
-+  - phy-names
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    hdmi_rx: hdmi-rx@0 {
-+        compatible = "snps,dw-hdmi-rx";
-+        reg = <0x0 0x10000>;
-+        interrupts = <1 2>;
-+
-+        clocks = <&dw_hdmi_refclk>;
-+        clock-names = "cfg";
-+
-+        phys = <&hdmi_e406_phy>;
-+        phy-names = "hdmi-phy";
-+
-+        port {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            hdmi_rx_0: endpoint@0 {
-+                reg = <0>;
-+                remote-endpoint = <&hdmi_e406_phy_0>;
-+            };
-+
-+            hdmi_rx_1: endpoint@1 {
-+                reg = <1>;
-+                remote-endpoint = <&hdmi_e406_phy_1>;
-+            };
-+
-+            hdmi_rx_2: endpoint@2 {
-+                reg = <2>;
-+                remote-endpoint = <&hdmi_e406_phy_2>;
-+            };
-+
-+            hdmi_rx_3: endpoint@3 {
-+                reg = <3>;
-+                remote-endpoint = <&hdmi_e406_phy_3>;
-+            };
-+        };
-+    };
++#endif /* __PHY_HDMI_H_ */
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index e435bdb..8b1aaa4 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -18,6 +18,7 @@
+ 
+ #include <linux/phy/phy-dp.h>
+ #include <linux/phy/phy-mipi-dphy.h>
++#include <linux/phy/phy-hdmi.h>
+ 
+ struct phy;
+ 
+@@ -41,7 +42,8 @@ enum phy_mode {
+ 	PHY_MODE_MIPI_DPHY,
+ 	PHY_MODE_SATA,
+ 	PHY_MODE_LVDS,
+-	PHY_MODE_DP
++	PHY_MODE_DP,
++	PHY_MODE_HDMI
+ };
+ 
+ /**
+@@ -51,10 +53,13 @@ enum phy_mode {
+  *		the MIPI_DPHY phy mode.
+  * @dp:		Configuration set applicable for phys supporting
+  *		the DisplayPort protocol.
++ * @hdmi	Configuration set applicable for phys supporting
++ *		the HDMI protocol.
+  */
+ union phy_configure_opts {
+ 	struct phy_configure_opts_mipi_dphy	mipi_dphy;
+ 	struct phy_configure_opts_dp		dp;
++	struct phy_configure_opts_hdmi		hdmi;
+ };
+ 
+ /**
 -- 
 2.7.4
 
