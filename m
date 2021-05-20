@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98BC3C433B4
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53059C433B4
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:09:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EB4B6108C
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:08:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 358D36105A
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:09:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239168AbhETMKF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 08:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S241181AbhETMKQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 08:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239809AbhETMJ4 (ORCPT
+        with ESMTP id S234850AbhETMKC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 May 2021 08:09:56 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BB0C01CEBA;
-        Thu, 20 May 2021 03:44:23 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d16so12036244pfn.12;
-        Thu, 20 May 2021 03:44:23 -0700 (PDT)
+        Thu, 20 May 2021 08:10:02 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F13C00F78A;
+        Thu, 20 May 2021 03:44:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q6so8916895pjj.2;
+        Thu, 20 May 2021 03:44:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ln/GNcNq5Ro2OkNEh/LM02ElmNPWJ/3MY9XfiUntdlc=;
-        b=C6COQJUoHVx1FUvpa/Y1+fgwUD5eOuVSngTVZKQOjmbeC5IMKGBGpirqwdq+yh6upP
-         AAaOuC+kLKQtVyi05CWflFO1z5s11+7IHT3F0e0/Vo0zvqZDWUcE7XoXicuK9f+kQXI5
-         opcyMD5UHfWrvGvjmkB6YUwXTFX5sNPzXPQil7/dwuPVpnLbdAMMDaTw7Z8VdnTP3cnr
-         gPvwGl7MmoMV61feZJCu26gtXthY5ipd/i0Tl3FEle/ftQ+/Fhf5SsUBLwdZTWj+SfDS
-         NcK0JqDQfoe+MGWgaYnFTpZLh2TY87+u5TXIm5qcqaBU76RLN4Pw9IsQd2P7NRzjfZdD
-         NReQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RFZzbSCSG3liEBFzsFBndnKLD/Fxvy9/A4lnI3gqTkk=;
+        b=JIRPPqQQnCwSCGUt//YCjOWHq2ypvad/gMkV8o3aD7q2iXNGsOkmPuyuSearwgsQZF
+         dBrrjWfXFgsidXWuwCdUHWdEjruWKbKlRC883fPbdU3s/ElPPKF3ZXZ/gWHCqTpIEZvh
+         D+uTuT7SiiMX8uqyVF6zFDrCeScNYWjtipxI9AvISF9jEU+FC+bja7YGzlh0zshKSB9w
+         uqaLECyB3jTOI6BpGLpdaYdQ/kmEOJd+E1Y05e4fQpsdyBlY2V3a8pta9xzuGIU42sn4
+         6lLd/A7a6q1oaC1xHBsBMNq14JwG5y8FApd0SEjIcybEYr0aJgPfW7rQQG37AU7e0WSQ
+         DHrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ln/GNcNq5Ro2OkNEh/LM02ElmNPWJ/3MY9XfiUntdlc=;
-        b=t+8fwuE2JOOzIy12DLAYid1D+3vC34CtOQBI2JDrRr5EKiyKPBltwK9cABGZuZF8HS
-         tDNmb7Hl6aBxOxaNEtnD05ppPYhZ0EvuRA+SZWiobTDzDggDuX/wilBM2YH3FLVn8qz5
-         7pKjAbjYKP5gP2uLeKdWNKemzEUrtrgM05I1OXn1rPqNla9xUjUgDk5NPCacu6qHRPz5
-         RXIxEuXAB5OM79p24c7wbl45PxnO3g1N/mPTv95sI7Ka+dJo4Ph73HJdk9wMJWy3aqoJ
-         oC2iHbip/dJIXhhIj4/03r4CZg8zcE3kfkSgL/uR0g6mYtEDB/pVw+GpEVXy1aLezXKV
-         qSrw==
-X-Gm-Message-State: AOAM530NB2+a+oL6rG1YpNvdi9VHZ9P7FAlpIG/4Vcc336gtKrn12tyc
-        7sdYoBgmE2PJ4HfNjuRESeM=
-X-Google-Smtp-Source: ABdhPJyPJkh+woUNcvvPhjV9BLZHjDX9cfefs69QBlPovPMsvgSoJkKXNt+FopPHtSuynAjN2RWamA==
-X-Received: by 2002:a62:2901:0:b029:28e:ef3d:10d2 with SMTP id p1-20020a6229010000b029028eef3d10d2mr3823125pfp.45.1621507463048;
-        Thu, 20 May 2021 03:44:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RFZzbSCSG3liEBFzsFBndnKLD/Fxvy9/A4lnI3gqTkk=;
+        b=PKS++gee56PAZd04TIFX4K+nHNcG0s3gUnuobeScL3E4IxBSfGOFIjGfXjmNoIIAv2
+         QT94ElMqPgjj88B9rTzd1v1IfGMxXHCGAB1L0uJm2DoKTwnK809tRQLIZkeG3feAcRH7
+         HKoLivjGKseXfd8kb/jyjR7VlPBAZIY3IShdeRr25HCV35qhPLBZI94+hxRip9OruJH3
+         DwEbIcuyVdT4MNa5pEk9QQ+yHag/V6XOO//SQ9RmOI8OUbAIESROjGmsSdxJI2cBlWO/
+         9gkIDDxjcuqyN5Ix3J1LV2+mRafW3bp9Dor2P6Tahow2VaySrq3k4d6G7eAxaryUZ4zf
+         icAg==
+X-Gm-Message-State: AOAM530iqjfYf86uWkkQ7BZqFo/CvKXeCNji8vgBzS5tyRauld6rQCXR
+        MrckDt2NZqOC9kcFnOrAXhA=
+X-Google-Smtp-Source: ABdhPJxx1dTd0Y3Xng3m8t0IBTSlLbvNI9PVElP0v8+VI4s1saDnixJ2q3TyYoXNuylaWlJKnSm3bw==
+X-Received: by 2002:a17:902:8ecc:b029:ef:6471:dc08 with SMTP id x12-20020a1709028eccb02900ef6471dc08mr5094131plo.5.1621507482766;
+        Thu, 20 May 2021 03:44:42 -0700 (PDT)
 Received: from pride.localdomain (c-174-61-140-56.hsd1.wa.comcast.net. [174.61.140.56])
-        by smtp.gmail.com with ESMTPSA id z12sm1762572pfk.45.2021.05.20.03.44.22
+        by smtp.gmail.com with ESMTPSA id z12sm1762572pfk.45.2021.05.20.03.44.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 03:44:22 -0700 (PDT)
+        Thu, 20 May 2021 03:44:42 -0700 (PDT)
 From:   Joe Richey <joerichey94@gmail.com>
 To:     trivial@kernel.org
 Cc:     Joe Richey <joerichey@google.com>,
@@ -71,10 +72,12 @@ Cc:     Joe Richey <joerichey@google.com>,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-accelerators@lists.ozlabs.org
-Subject: [PATCH 0/6] Don't use BIT() macro in UAPI headers
-Date:   Thu, 20 May 2021 03:43:37 -0700
-Message-Id: <20210520104343.317119-1-joerichey94@gmail.com>
+Subject: [PATCH 2/6] KVM: X86: Don't use BIT() macro in UAPI headers
+Date:   Thu, 20 May 2021 03:43:39 -0700
+Message-Id: <20210520104343.317119-3-joerichey94@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210520104343.317119-1-joerichey94@gmail.com>
+References: <20210520104343.317119-1-joerichey94@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -83,50 +86,49 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Joe Richey <joerichey@google.com>
 
-The BIT(n) macro is used in the kernel as an alias for (1 << n).
-However, it is not defined in the UAPI headers, which means that any
-UAPI header files must be careful not to use it, or else the user
-will get a linker error. For example, compiling the following program:
+A previous patch [1] used the BIT() macro to define the
+KVM_DIRTY_GFN_F_* constants in KVM's UAPI header.
 
-    #include <sys/auxv.h>
-    #include <asm/hwcap2.h>
+This macro is defined in the kernel but not in the UAPI headers.
 
-    // Detect if FSGSBASE instructions are enabled
-    int main() {
-        unsigned long val = getauxval(AT_HWCAP2);
-        return !(val & HWCAP2_FSGSBASE);
-    }
+[1] https://patchwork.kernel.org/patch/11854393
 
-Results in the following likner error:
+Signed-off-by: Joe Richey <joerichey@google.com>
+---
+ include/uapi/linux/kvm.h       | 4 ++--
+ tools/include/uapi/linux/kvm.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-    /usr/bin/ld: /tmp/cceFpAdR.o: in function `main':
-    gs.c:(.text+0x21): undefined reference to `BIT'
-
-This patch series changes all UAPI uses of BIT() to just be open-coded.
-However, there really should be a check for this in checkpatch.pl
-Currently, the script actually _encourages_ users to use the BIT macro
-even if adding things to UAPI.
-
-Running `rg "BIT\(" **/uapi/**` shows no more usage of BIT() in any
-UAPI headers. Tested by building a basic kernel. Changes are trivial.
-
-Joe Richey (6):
-  x86/elf: Don't use BIT() macro in UAPI headers
-  KVM: X86: Don't use BIT() macro in UAPI headers
-  drivers: firmware: psci: Don't use BIT() macro in UAPI headers
-  uacce: Don't use BIT() macro in UAPI headers
-  media: vicodec: Don't use BIT() macro in UAPI headers
-  tools headers UAPI: Sync pkt_sched.h with the kernel sources
-
- arch/x86/include/uapi/asm/hwcap2.h   |   2 +-
- include/uapi/linux/kvm.h             |   4 +-
- include/uapi/linux/psci.h            |   2 +-
- include/uapi/linux/v4l2-controls.h   |  22 ++---
- include/uapi/misc/uacce/uacce.h      |   2 +-
- tools/include/uapi/linux/kvm.h       |   4 +-
- tools/include/uapi/linux/pkt_sched.h | 122 ++++++++++++++++++++++++---
- 7 files changed, 130 insertions(+), 28 deletions(-)
-
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 3fd9a7e9d90c..8f8a0fd7cd65 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1879,8 +1879,8 @@ struct kvm_hyperv_eventfd {
+  * conversion after harvesting an entry.  Also, it must not skip any
+  * dirty bits, so that dirty bits are always harvested in sequence.
+  */
+-#define KVM_DIRTY_GFN_F_DIRTY           BIT(0)
+-#define KVM_DIRTY_GFN_F_RESET           BIT(1)
++#define KVM_DIRTY_GFN_F_DIRTY           (1 << 0)
++#define KVM_DIRTY_GFN_F_RESET           (1 << 1)
+ #define KVM_DIRTY_GFN_F_MASK            0x3
+ 
+ /*
+diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+index 3fd9a7e9d90c..8f8a0fd7cd65 100644
+--- a/tools/include/uapi/linux/kvm.h
++++ b/tools/include/uapi/linux/kvm.h
+@@ -1879,8 +1879,8 @@ struct kvm_hyperv_eventfd {
+  * conversion after harvesting an entry.  Also, it must not skip any
+  * dirty bits, so that dirty bits are always harvested in sequence.
+  */
+-#define KVM_DIRTY_GFN_F_DIRTY           BIT(0)
+-#define KVM_DIRTY_GFN_F_RESET           BIT(1)
++#define KVM_DIRTY_GFN_F_DIRTY           (1 << 0)
++#define KVM_DIRTY_GFN_F_RESET           (1 << 1)
+ #define KVM_DIRTY_GFN_F_MASK            0x3
+ 
+ /*
 -- 
 2.31.1
 
