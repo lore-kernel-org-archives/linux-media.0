@@ -2,68 +2,70 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E49B4C43470
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B0D7C433B4
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:10:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C70B860FDA
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:09:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EF876108C
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:10:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241893AbhETMKb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 08:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240603AbhETMKF (ORCPT
+        id S241722AbhETMLz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 08:11:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34749 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242410AbhETMLP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 May 2021 08:10:05 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00AFC00F604;
-        Thu, 20 May 2021 03:44:48 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d16so12036905pfn.12;
-        Thu, 20 May 2021 03:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pvy4uR7MHK/1WKiYT47mbja8P4GqAFt1Aj7E8yW5uXM=;
-        b=JcsM3Mc4gFSpMe75/JOFUKhOM+axazRlgWH3YUkeBTgE8AiBS+LuCEJfb9hO+Voz2Z
-         kLibfAzceTIZxq02vD7Yg0qqD6MJfrOd+2u1hBqdCnjSPOdEJ5wp7QEPpSOy911DC9ZH
-         B7BZnT+9aloxUh1gYNeyBN2NEl5xmIOViIwihVhoj/jAFku/rum2L/ujT0jbOFkQ4fcJ
-         KnQ7ESBMtsXmrnSCMPkV6xOiLNNr6/QyaNukMfnvnrs1bLOpnWUovvCMfiYz56MCSqbP
-         BCYfscGhvVPVvMk9CDCpWHhUyF15NtdTwuTy7MB3crkLyaBfbrWUf/ZpliRnWXFTBdUm
-         h5CA==
+        Thu, 20 May 2021 08:11:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621512593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2dAV78HOpA0s1qDhNtkCx6CZU7A5bPuHPyNp12FridI=;
+        b=Wv2jH4lsdg6zCYbLRh0F803tOMmb1YX2ZkvQRnScZCMxdC8wb5Xn4vybQT5u2KZgptniD0
+        PVEbthPLsZkcc1nB4MaKHhDKazTQxB+G3YM1kYIlJEC+qKpkMos7ujQeTONMrU6u/SRLPJ
+        ChPlCuthQyQ9gldYLsvfr4F5xwD1W28=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-36-7XJ9rZ69NHyMJmCJOvZsxw-1; Thu, 20 May 2021 08:09:51 -0400
+X-MC-Unique: 7XJ9rZ69NHyMJmCJOvZsxw-1
+Received: by mail-wr1-f70.google.com with SMTP id 7-20020adf95070000b02901104ad3ef04so8565784wrs.16
+        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 05:09:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pvy4uR7MHK/1WKiYT47mbja8P4GqAFt1Aj7E8yW5uXM=;
-        b=EU9wgQaLDVbE6IzqM+5hW3kytdrjBRFFIJ31ASpSWqtjJb8mSVckAXBIDpSBGcSFqL
-         KxjA1NovozksTHzeANiUQ8WF+cszU4tLOZ68mB6yxjUI8dUn4wZ7juXsQy0pyO69p8nt
-         6jmk6RJfc3gB+j7aDesTeGK4LXPd87tDGWCtW4OhzuLTcz4CasbWHKD3xh5ZDHoaZDmh
-         pzu6txp8w19aH2U7I1h1lT6ctCrz91LyKJUSc3RVJjpXYiV+KIJrGxS1jkG+dfxXtkGF
-         6UPBBG2Mno7leufZlbtXZawZFaMoMvZcwd/GjhxcOEMvHzk5A+4X+uZzGmx36rn/Nfft
-         6bsQ==
-X-Gm-Message-State: AOAM531KrvguHQKGP8REEdvMmPqLrcWthtzF6XSwmLKvQZHAUImrZEZU
-        pRR4b1ehuqHBxEVuuLamD+U=
-X-Google-Smtp-Source: ABdhPJy5t/g/j1Xb6rx0aCnq91cAL7FUDVsOejKnAtk169jvxK5FjehDQqaPQHtwx+97AcdMQSVyQA==
-X-Received: by 2002:a62:6407:0:b029:2df:b6dc:c68b with SMTP id y7-20020a6264070000b02902dfb6dcc68bmr3844877pfb.17.1621507488171;
-        Thu, 20 May 2021 03:44:48 -0700 (PDT)
-Received: from pride.localdomain (c-174-61-140-56.hsd1.wa.comcast.net. [174.61.140.56])
-        by smtp.gmail.com with ESMTPSA id z12sm1762572pfk.45.2021.05.20.03.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 03:44:47 -0700 (PDT)
-From:   Joe Richey <joerichey94@gmail.com>
-To:     trivial@kernel.org
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2dAV78HOpA0s1qDhNtkCx6CZU7A5bPuHPyNp12FridI=;
+        b=RcjEt4ByYF9I1W4WO/w/2vxvLYfdEARi/qHC0uLaretxWIt0J4/PLQ6vju0ocDqEUn
+         q9poMqJhwW1ys07PiOYrNXFC1B1/UYEg5j3fzO+o43kVPdnmzhDVdvkPgnBlcYfjH0P1
+         ySpPDfqEA1y9tCxrXLbXgFoz9btSFvaj6n87Uqs1WfIzbsljMTem8NLgjm/kEdZUyZnY
+         c4AV5anWBbhwNzSk12/syllTW76VO3EU9xdLLmAPQ8K4CEoXrL8/P4T2cFmWednXJqTJ
+         mMM26S9rx+JhnD0fojxBfgMgGMW9B61BHW8x8JTbXpHviOhedGFTWFQhiFyuahczyCGA
+         lHBQ==
+X-Gm-Message-State: AOAM532c0WBCLwbbOv+Xet1m6n22JkCIVMwv8INPi3aLOPyw1YAzlaQi
+        rFROTPG37mewhV7l64r1SVgEn2OMdT0S5HTA1DKNjzmCXcBz8b7i6+kaKVkoTlIjWXdqD8I71a+
+        yxnNn1nHjRn3x5O7YEcN8GCk=
+X-Received: by 2002:a05:6000:2ca:: with SMTP id o10mr4036120wry.234.1621512590004;
+        Thu, 20 May 2021 05:09:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx6d5uWDaH9xRwXmWQ6G/SkWg2HrDiHqSGmItKZYKWhxlzobkIg+2IdRlmIWTQ/Bbzt4aE8Mw==
+X-Received: by 2002:a05:6000:2ca:: with SMTP id o10mr4036090wry.234.1621512589783;
+        Thu, 20 May 2021 05:09:49 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id u11sm1215500wrw.14.2021.05.20.05.09.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 May 2021 05:09:48 -0700 (PDT)
+Subject: Re: [PATCH 0/6] Don't use BIT() macro in UAPI headers
+To:     Joe Richey <joerichey94@gmail.com>, trivial@kernel.org
 Cc:     Joe Richey <joerichey@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -72,240 +74,70 @@ Cc:     Joe Richey <joerichey@google.com>,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-accelerators@lists.ozlabs.org
-Subject: [PATCH 6/6] tools headers UAPI: Sync pkt_sched.h with the kernel sources
-Date:   Thu, 20 May 2021 03:43:43 -0700
-Message-Id: <20210520104343.317119-7-joerichey94@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210520104343.317119-1-joerichey94@gmail.com>
 References: <20210520104343.317119-1-joerichey94@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <cda47735-3448-9450-1bf4-51a8cb9c43b0@redhat.com>
+Date:   Thu, 20 May 2021 14:09:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210520104343.317119-1-joerichey94@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Joe Richey <joerichey@google.com>
+On 20/05/21 12:43, Joe Richey wrote:
+> From: Joe Richey <joerichey@google.com>
+> 
+> The BIT(n) macro is used in the kernel as an alias for (1 << n).
+> However, it is not defined in the UAPI headers, which means that any
+> UAPI header files must be careful not to use it, or else the user
+> will get a linker error. For example, compiling the following program:
+> 
+>      #include <sys/auxv.h>
+>      #include <asm/hwcap2.h>
+> 
+>      // Detect if FSGSBASE instructions are enabled
+>      int main() {
+>          unsigned long val = getauxval(AT_HWCAP2);
+>          return !(val & HWCAP2_FSGSBASE);
+>      }
+> 
+> Results in the following likner error:
+> 
+>      /usr/bin/ld: /tmp/cceFpAdR.o: in function `main':
+>      gs.c:(.text+0x21): undefined reference to `BIT'
+> 
+> This patch series changes all UAPI uses of BIT() to just be open-coded.
+> However, there really should be a check for this in checkpatch.pl
+> Currently, the script actually _encourages_ users to use the BIT macro
+> even if adding things to UAPI.
+> 
+> Running `rg "BIT\(" **/uapi/**` shows no more usage of BIT() in any
+> UAPI headers. Tested by building a basic kernel. Changes are trivial.
+> 
+> Joe Richey (6):
+>    x86/elf: Don't use BIT() macro in UAPI headers
+>    KVM: X86: Don't use BIT() macro in UAPI headers
+>    drivers: firmware: psci: Don't use BIT() macro in UAPI headers
+>    uacce: Don't use BIT() macro in UAPI headers
+>    media: vicodec: Don't use BIT() macro in UAPI headers
+>    tools headers UAPI: Sync pkt_sched.h with the kernel sources
+> 
+>   arch/x86/include/uapi/asm/hwcap2.h   |   2 +-
+>   include/uapi/linux/kvm.h             |   4 +-
+>   include/uapi/linux/psci.h            |   2 +-
+>   include/uapi/linux/v4l2-controls.h   |  22 ++---
+>   include/uapi/misc/uacce/uacce.h      |   2 +-
+>   tools/include/uapi/linux/kvm.h       |   4 +-
+>   tools/include/uapi/linux/pkt_sched.h | 122 ++++++++++++++++++++++++---
+>   7 files changed, 130 insertions(+), 28 deletions(-)
+> 
 
-It looks like this process isn't automatic for some reason.
+Will queue the KVM one, thanks!
 
-This prevents some perf tools warnings and removes use of the
-BIT() macro which isn't present for UAPI headers.
-
-Signed-off-by: Joe Richey <joerichey@google.com>
----
- tools/include/uapi/linux/pkt_sched.h | 122 ++++++++++++++++++++++++---
- 1 file changed, 112 insertions(+), 10 deletions(-)
-
-diff --git a/tools/include/uapi/linux/pkt_sched.h b/tools/include/uapi/linux/pkt_sched.h
-index 5c903abc9fa5..79a699f106b1 100644
---- a/tools/include/uapi/linux/pkt_sched.h
-+++ b/tools/include/uapi/linux/pkt_sched.h
-@@ -2,6 +2,7 @@
- #ifndef __LINUX_PKT_SCHED_H
- #define __LINUX_PKT_SCHED_H
- 
-+#include <linux/const.h>
- #include <linux/types.h>
- 
- /* Logical priority bands not depending on specific packet scheduler.
-@@ -255,6 +256,9 @@ enum {
- 	TCA_RED_PARMS,
- 	TCA_RED_STAB,
- 	TCA_RED_MAX_P,
-+	TCA_RED_FLAGS,		/* bitfield32 */
-+	TCA_RED_EARLY_DROP_BLOCK, /* u32 */
-+	TCA_RED_MARK_BLOCK,	/* u32 */
- 	__TCA_RED_MAX,
- };
- 
-@@ -267,12 +271,28 @@ struct tc_red_qopt {
- 	unsigned char   Wlog;		/* log(W)		*/
- 	unsigned char   Plog;		/* log(P_max/(qth_max-qth_min))	*/
- 	unsigned char   Scell_log;	/* cell size for idle damping */
-+
-+	/* This field can be used for flags that a RED-like qdisc has
-+	 * historically supported. E.g. when configuring RED, it can be used for
-+	 * ECN, HARDDROP and ADAPTATIVE. For SFQ it can be used for ECN,
-+	 * HARDDROP. Etc. Because this field has not been validated, and is
-+	 * copied back on dump, any bits besides those to which a given qdisc
-+	 * has assigned a historical meaning need to be considered for free use
-+	 * by userspace tools.
-+	 *
-+	 * Any further flags need to be passed differently, e.g. through an
-+	 * attribute (such as TCA_RED_FLAGS above). Such attribute should allow
-+	 * passing both recent and historic flags in one value.
-+	 */
- 	unsigned char	flags;
- #define TC_RED_ECN		1
- #define TC_RED_HARDDROP		2
- #define TC_RED_ADAPTATIVE	4
-+#define TC_RED_NODROP		8
- };
- 
-+#define TC_RED_HISTORIC_FLAGS (TC_RED_ECN | TC_RED_HARDDROP | TC_RED_ADAPTATIVE)
-+
- struct tc_red_xstats {
- 	__u32           early;          /* Early drops */
- 	__u32           pdrop;          /* Drops due to queue limits */
-@@ -894,6 +914,12 @@ enum {
- 
- 	TCA_FQ_CE_THRESHOLD,	/* DCTCP-like CE-marking threshold */
- 
-+	TCA_FQ_TIMER_SLACK,	/* timer slack */
-+
-+	TCA_FQ_HORIZON,		/* time horizon in us */
-+
-+	TCA_FQ_HORIZON_DROP,	/* drop packets beyond horizon, or cap their EDT */
-+
- 	__TCA_FQ_MAX
- };
- 
-@@ -913,6 +939,8 @@ struct tc_fq_qd_stats {
- 	__u32	throttled_flows;
- 	__u32	unthrottle_latency_ns;
- 	__u64	ce_mark;		/* packets above ce_threshold */
-+	__u64	horizon_drops;
-+	__u64	horizon_caps;
- };
- 
- /* Heavy-Hitter Filter */
-@@ -950,19 +978,56 @@ enum {
- 	TCA_PIE_BETA,
- 	TCA_PIE_ECN,
- 	TCA_PIE_BYTEMODE,
-+	TCA_PIE_DQ_RATE_ESTIMATOR,
- 	__TCA_PIE_MAX
- };
- #define TCA_PIE_MAX   (__TCA_PIE_MAX - 1)
- 
- struct tc_pie_xstats {
--	__u32 prob;             /* current probability */
--	__u32 delay;            /* current delay in ms */
--	__u32 avg_dq_rate;      /* current average dq_rate in bits/pie_time */
--	__u32 packets_in;       /* total number of packets enqueued */
--	__u32 dropped;          /* packets dropped due to pie_action */
--	__u32 overlimit;        /* dropped due to lack of space in queue */
--	__u32 maxq;             /* maximum queue size */
--	__u32 ecn_mark;         /* packets marked with ecn*/
-+	__u64 prob;			/* current probability */
-+	__u32 delay;			/* current delay in ms */
-+	__u32 avg_dq_rate;		/* current average dq_rate in
-+					 * bits/pie_time
-+					 */
-+	__u32 dq_rate_estimating;	/* is avg_dq_rate being calculated? */
-+	__u32 packets_in;		/* total number of packets enqueued */
-+	__u32 dropped;			/* packets dropped due to pie_action */
-+	__u32 overlimit;		/* dropped due to lack of space
-+					 * in queue
-+					 */
-+	__u32 maxq;			/* maximum queue size */
-+	__u32 ecn_mark;			/* packets marked with ecn*/
-+};
-+
-+/* FQ PIE */
-+enum {
-+	TCA_FQ_PIE_UNSPEC,
-+	TCA_FQ_PIE_LIMIT,
-+	TCA_FQ_PIE_FLOWS,
-+	TCA_FQ_PIE_TARGET,
-+	TCA_FQ_PIE_TUPDATE,
-+	TCA_FQ_PIE_ALPHA,
-+	TCA_FQ_PIE_BETA,
-+	TCA_FQ_PIE_QUANTUM,
-+	TCA_FQ_PIE_MEMORY_LIMIT,
-+	TCA_FQ_PIE_ECN_PROB,
-+	TCA_FQ_PIE_ECN,
-+	TCA_FQ_PIE_BYTEMODE,
-+	TCA_FQ_PIE_DQ_RATE_ESTIMATOR,
-+	__TCA_FQ_PIE_MAX
-+};
-+#define TCA_FQ_PIE_MAX   (__TCA_FQ_PIE_MAX - 1)
-+
-+struct tc_fq_pie_xstats {
-+	__u32 packets_in;	/* total number of packets enqueued */
-+	__u32 dropped;		/* packets dropped due to fq_pie_action */
-+	__u32 overlimit;	/* dropped due to lack of space in queue */
-+	__u32 overmemory;	/* dropped due to lack of memory in queue */
-+	__u32 ecn_mark;		/* packets marked with ecn */
-+	__u32 new_flow_count;	/* count of new flows created by packets */
-+	__u32 new_flows_len;	/* count of flows in new list */
-+	__u32 old_flows_len;	/* count of flows in old list */
-+	__u32 memory_usage;	/* total memory across all queues */
- };
- 
- /* CBS */
-@@ -989,8 +1054,9 @@ struct tc_etf_qopt {
- 	__s32 delta;
- 	__s32 clockid;
- 	__u32 flags;
--#define TC_ETF_DEADLINE_MODE_ON	BIT(0)
--#define TC_ETF_OFFLOAD_ON	BIT(1)
-+#define TC_ETF_DEADLINE_MODE_ON	_BITUL(0)
-+#define TC_ETF_OFFLOAD_ON	_BITUL(1)
-+#define TC_ETF_SKIP_SOCK_CHECK	_BITUL(2)
- };
- 
- enum {
-@@ -1022,6 +1088,7 @@ enum {
- 	TCA_CAKE_INGRESS,
- 	TCA_CAKE_ACK_FILTER,
- 	TCA_CAKE_SPLIT_GSO,
-+	TCA_CAKE_FWMARK,
- 	__TCA_CAKE_MAX
- };
- #define TCA_CAKE_MAX	(__TCA_CAKE_MAX - 1)
-@@ -1148,6 +1215,19 @@ enum {
- 
- #define TCA_TAPRIO_SCHED_MAX (__TCA_TAPRIO_SCHED_MAX - 1)
- 
-+/* The format for the admin sched (dump only):
-+ * [TCA_TAPRIO_SCHED_ADMIN_SCHED]
-+ *   [TCA_TAPRIO_ATTR_SCHED_BASE_TIME]
-+ *   [TCA_TAPRIO_ATTR_SCHED_ENTRY_LIST]
-+ *     [TCA_TAPRIO_ATTR_SCHED_ENTRY]
-+ *       [TCA_TAPRIO_ATTR_SCHED_ENTRY_CMD]
-+ *       [TCA_TAPRIO_ATTR_SCHED_ENTRY_GATES]
-+ *       [TCA_TAPRIO_ATTR_SCHED_ENTRY_INTERVAL]
-+ */
-+
-+#define TCA_TAPRIO_ATTR_FLAG_TXTIME_ASSIST	_BITUL(0)
-+#define TCA_TAPRIO_ATTR_FLAG_FULL_OFFLOAD	_BITUL(1)
-+
- enum {
- 	TCA_TAPRIO_ATTR_UNSPEC,
- 	TCA_TAPRIO_ATTR_PRIOMAP, /* struct tc_mqprio_qopt */
-@@ -1156,9 +1236,31 @@ enum {
- 	TCA_TAPRIO_ATTR_SCHED_SINGLE_ENTRY, /* single entry */
- 	TCA_TAPRIO_ATTR_SCHED_CLOCKID, /* s32 */
- 	TCA_TAPRIO_PAD,
-+	TCA_TAPRIO_ATTR_ADMIN_SCHED, /* The admin sched, only used in dump */
-+	TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME, /* s64 */
-+	TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME_EXTENSION, /* s64 */
-+	TCA_TAPRIO_ATTR_FLAGS, /* u32 */
-+	TCA_TAPRIO_ATTR_TXTIME_DELAY, /* u32 */
- 	__TCA_TAPRIO_ATTR_MAX,
- };
- 
- #define TCA_TAPRIO_ATTR_MAX (__TCA_TAPRIO_ATTR_MAX - 1)
- 
-+/* ETS */
-+
-+#define TCQ_ETS_MAX_BANDS 16
-+
-+enum {
-+	TCA_ETS_UNSPEC,
-+	TCA_ETS_NBANDS,		/* u8 */
-+	TCA_ETS_NSTRICT,	/* u8 */
-+	TCA_ETS_QUANTA,		/* nested TCA_ETS_QUANTA_BAND */
-+	TCA_ETS_QUANTA_BAND,	/* u32 */
-+	TCA_ETS_PRIOMAP,	/* nested TCA_ETS_PRIOMAP_BAND */
-+	TCA_ETS_PRIOMAP_BAND,	/* u8 */
-+	__TCA_ETS_MAX,
-+};
-+
-+#define TCA_ETS_MAX (__TCA_ETS_MAX - 1)
-+
- #endif
--- 
-2.31.1
+Paolo
 
