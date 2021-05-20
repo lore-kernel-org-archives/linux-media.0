@@ -5,39 +5,39 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2327BC433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF833C43470
 	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F02FE6108D
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF68A61358
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbhETPtm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 11:49:42 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45074 "EHLO
+        id S241063AbhETPtn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 11:49:43 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45080 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232233AbhETPtl (ORCPT
+        by vger.kernel.org with ESMTP id S231966AbhETPtl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 20 May 2021 11:49:41 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 290ADC06AD;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 63A03C06B5;
         Thu, 20 May 2021 15:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1621525699; bh=tL58wM0CNHnAjNGaw3b8gFhjcr22ewg76YzUjuR3NOI=;
+        t=1621525699; bh=iDYmYWV64aAc5K1mNGxWkrk1Utm//trijiEmustKlxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=LvLA3agcwc1numgT5zAZRYxHSJOLQUBCJhN/4j68P1cRCvfK1cQKQHvlI7iCFCiEd
-         JP8CIOSWBWSRDKJkhyLnRCHIHc4A3VV6Ps3N/OGN4ilZa+7yp1Lk4curZbspKgycE6
-         KQyGtLdH0uF0Vve8UnAT1DwCRU6Bqq8f0a1Qcojfzbc+X7jYLBwiXiteZygZebo+K6
-         CNf+sE11e8TtxtrLBWbW5SHafR2n1Q/dFFMrzbBz+PZ1z9m56zR/ICCWLc4kUTx67k
-         gjAKCgp6M7FXfWoU2/q8HKSvXtt/A9LQwlzsESjDeZCiV400C5LlHDj5K2wZ2hMg63
-         Y/ImR92rkvEBg==
+        b=aW61KkqlRYTb+CBrVySjmaKeDtX26DVzsemD9F487xV+JxPTYcZQUicxWaelBmSJQ
+         OKoq8FLOEG4n/D+hMiMT3+4jZ/hbZS7ZBUUscxP9kBmC0fNLmF+Q40e9JDBwW6ziLG
+         qw8DYIJrHLkkStEjpRFx4TOswxYoH6vRZu4+GmeQT6tfdCQxgTIFJ/xNg+1K9mFjCs
+         WuB5yzQO/3dFQxpAyf2OyLmmlmv7EVN1jnrDH9uVUvPf78hHNyhmJ7pIyvaEACCrN5
+         EzgwAh/lldOp/cd85/hAo5uVo8+aF4EAqjcNqil2/JNDwpqnDmxCZoMPl8JquBZcIU
+         c0M6gwjeGcQyw==
 Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
-        by mailhost.synopsys.com (Postfix) with ESMTP id DAAD3A0064;
-        Thu, 20 May 2021 15:48:17 +0000 (UTC)
+        by mailhost.synopsys.com (Postfix) with ESMTP id 2CEA5A0074;
+        Thu, 20 May 2021 15:48:18 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 From:   Nelson Costa <Nelson.Costa@synopsys.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -49,11 +49,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        Nelson Costa <Nelson.Costa@synopsys.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>
-Subject: [RFC v2 3/9] MAINTAINERS: Add entry for Synopsys DesignWare HDMI drivers
-Date:   Thu, 20 May 2021 17:47:57 +0200
-Message-Id: <eba5055b26e6aa370f37bfdd80ae362681900463.1621524721.git.nelson.costa@synopsys.com>
+        Nelson Costa <Nelson.Costa@synopsys.com>
+Subject: [RFC v2 8/9] media: dwc: dw-hdmi-rx: Add support for Aspect Ratio
+Date:   Thu, 20 May 2021 17:48:02 +0200
+Message-Id: <4a2781f854f8bad68b542debe43c989424a21d80.1621524721.git.nelson.costa@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1621524721.git.nelson.costa@synopsys.com>
 References: <cover.1621524721.git.nelson.costa@synopsys.com>
@@ -63,37 +62,94 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add an entry for Synopsys DesignWare HDMI Receivers drivers
-and PHYs.
+This adds support to get aspect ratio for the current
+video being received and provide the info through v4l2
+API query_dv_timings.
 
-Signed-off-by: Jose Abreu <jose.abreu@synopsys.com>
 Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
 ---
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/platform/dwc/dw-hdmi-rx.c | 54 +++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 04e6df9..e0e7b41 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17304,6 +17304,17 @@ S:	Supported
- F:	drivers/net/pcs/pcs-xpcs.c
- F:	include/linux/pcs/pcs-xpcs.h
+diff --git a/drivers/media/platform/dwc/dw-hdmi-rx.c b/drivers/media/platform/dwc/dw-hdmi-rx.c
+index b20eccc..a468a93 100644
+--- a/drivers/media/platform/dwc/dw-hdmi-rx.c
++++ b/drivers/media/platform/dwc/dw-hdmi-rx.c
+@@ -2250,13 +2250,31 @@ static u32 dw_hdmi_get_width(struct dw_hdmi_dev *dw_dev)
+ 	return width;
+ }
  
-+SYNOPSYS DESIGNWARE HDMI RECEIVERS AND PHY DRIVERS
-+M:	Jose Abreu <jose.abreu@synopsys.com>
-+M:	Nelson Costa <nelson.costa@synopsys.com>
-+L:	linux-media@vger.kernel.org
-+S:	Odd Fixes
-+F:	Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
-+F:	drivers/media/platform/dwc/*
-+F:	drivers/phy/dwc/*
-+F:	include/linux/phy/dwc/*
-+F:	include/media/dwc/*
++static int dw_hdmi_vic_to_cea861(u8 hdmi_vic)
++{
++	switch (hdmi_vic) {
++	case 1:
++		return 95;
++	case 2:
++		return 94;
++	case 3:
++		return 93;
++	case 4:
++		return 98;
++	default:
++		return 0;
++	}
++}
 +
- SYNOPSYS DESIGNWARE I2C DRIVER
- M:	Jarkko Nikula <jarkko.nikula@linux.intel.com>
- R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
+ 				    struct v4l2_dv_timings *timings)
+ {
+ 	struct dw_hdmi_dev *dw_dev = to_dw_dev(sd);
+ 	struct v4l2_bt_timings *bt = &timings->bt;
++	struct v4l2_dv_timings t = {0};
+ 	bool is_hdmi_vic;
+ 	u32 htot, hofs;
++	u8 cea861_vic;
+ 	u32 vtot;
+ 	u8 vic;
+ 
+@@ -2351,8 +2369,40 @@ static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
+ 		}
+ 	}
+ 
+-	dev_dbg(dw_dev->dev, "%s: width=%u, height=%u, mbuscode=%u\n", __func__,
+-		bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev));
++	if (is_hdmi_vic)
++		cea861_vic = dw_hdmi_vic_to_cea861(bt->hdmi_vic);
++	else
++		cea861_vic = vic;
++
++	/* picture aspect ratio based on v4l2 dv timings array */
++	if (v4l2_find_dv_timings_cea861_vic(&t, cea861_vic)) {
++		/* when the numerator/denominator are zero means that the
++		 * picture aspect ratio is the same of the active measures ratio
++		 */
++		if (!t.bt.picture_aspect.numerator) {
++			unsigned long n, d;
++
++			rational_best_approximation(t.bt.width, t.bt.height,
++						    t.bt.width, t.bt.height,
++						    &n, &d);
++			t.bt.picture_aspect.numerator = n;
++			t.bt.picture_aspect.denominator = d;
++		}
++
++		bt->picture_aspect = t.bt.picture_aspect;
++	} else {
++		bt->picture_aspect.numerator = 0;
++		bt->picture_aspect.denominator = 0;
++		dev_dbg(dw_dev->dev,
++			"%s: cea861_vic=%d was not found in v4l2 dv timings",
++			__func__, cea861_vic);
++	}
++
++	dev_dbg(dw_dev->dev,
++		"%s: width=%u, height=%u, mbuscode=%u, cea861_vic=%d, ar={%d,%d}\n",
++		__func__, bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev),
++		cea861_vic, bt->picture_aspect.numerator,
++		bt->picture_aspect.denominator);
+ 
+ 	return 0;
+ }
 -- 
 2.7.4
 
