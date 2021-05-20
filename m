@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08ECBC433B4
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CCDC43462
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D27FD61006
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51D7061006
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 15:48:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243728AbhETPuD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 11:50:03 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45160 "EHLO
+        id S242998AbhETPuH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 11:50:07 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45134 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240085AbhETPtm (ORCPT
+        by vger.kernel.org with ESMTP id S239892AbhETPtl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 May 2021 11:49:42 -0400
+        Thu, 20 May 2021 11:49:41 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3E00FC06B0;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5E9B8C06B3;
         Thu, 20 May 2021 15:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1621525700; bh=5v4svQ4pArBvTe3LydexBRkgh0fxhqeRg74fe8w/mE8=;
+        t=1621525700; bh=NCc9VfuZSU/NmUWwHbY97uDvqD/lQNUrB/kpKoSOU9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=bTTltGAY7zJM/2gCVrrjQ/OkMQQ5r2Z9GrwzR5QKAGcbX28UAoFw6ZvnJFczWxYgK
-         cdVXlwVPag2MZUAjYCMNIHD8syd8Pb1gCw6htJ7Mvv1pj791meJOXjSem15pS6aIOb
-         hHgiF2UBg/dLi2rUMXCk+a9flrj53aijqN3Xi2aUuabKGvEZHJSrIhp3hutmtEY42s
-         igtHk04x37aArSKFkYPwaJxCmxDTzQoc00ZUqo1vpOJDkm6Uox5kMiv7TJxjlchgx1
-         PoQEEMu34niMLaTy5KTRcqEi8cB6vw4IKAULMbfvAQn7PDY8bKaJpKYsUMjWrSn0BO
-         QKPS9MyrOv4gg==
+        b=eih/k5wtCXtd13VmnzdQaZtjZwXidsH5zKJFpIp1F8W0SXxoKbx7x81/f3y6vFPUk
+         nwYmOxD1nNGjF262DB4XiLSLqnvLFdB/weWUDq0dEy7OECAH+Ft4Bjs3gR/R//5Bod
+         Mix22ppmAqstNzwRq3ZBvoxHc8hNZbSsn1pUeRIXQVIi1iAqsn8Ny/uWwKXUYZZ8iQ
+         b5iqzGKY+JL/KdONR/ojZC1ZegwgPP62Lq7eYY7XABRV2FkrjxIcB60hMiwW7CPoSL
+         2dl13Ah6dpxsO6+bvK2uWaCipDYO5Y44E5ljQwlzy+Wei26pbq4pMr2x9jT0vBNkzm
+         tiP+LpRSw77EA==
 Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
-        by mailhost.synopsys.com (Postfix) with ESMTP id F30BCA006A;
-        Thu, 20 May 2021 15:48:17 +0000 (UTC)
+        by mailhost.synopsys.com (Postfix) with ESMTP id 2220AA0071;
+        Thu, 20 May 2021 15:48:18 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 From:   Nelson Costa <Nelson.Costa@synopsys.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -49,11 +49,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        Nelson Costa <Nelson.Costa@synopsys.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>
-Subject: [RFC v2 5/9] phy: dwc: Add Synopsys DesignWare HDMI RX PHYs e405 and e406 Driver
-Date:   Thu, 20 May 2021 17:47:59 +0200
-Message-Id: <ac32f8d433860c5be612b393023329f967e2c058.1621524721.git.nelson.costa@synopsys.com>
+        Nelson Costa <Nelson.Costa@synopsys.com>
+Subject: [RFC v2 7/9] media: v4l2-dv-timings: Add more CEA/CTA-861 video format timings
+Date:   Thu, 20 May 2021 17:48:01 +0200
+Message-Id: <a4247a17b49341668eb3e5fe144b36d43e93de36.1621524721.git.nelson.costa@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1621524721.git.nelson.costa@synopsys.com>
 References: <cover.1621524721.git.nelson.costa@synopsys.com>
@@ -63,1922 +62,1788 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds support for the Synopsys DesignWare HDMI RX PHYs e405 and e406.
-The PHY receives and decodes HDMI video that is delivered to a controller.
+This extends the support for more video format timings based
+on SPECs CEA-861-F and CTA-861-G.
 
-Main features included in this driver are:
- - Equalizer algorithm that chooses the PHY best settings
- according to the detected HDMI cable characteristics.
- - Support for scrambling
- - Support for color depth up to 48bpp
- - Support for HDMI 2.0 modes up to 6G (HDMI 4k@60Hz).
+NOTE: For the newer SPECs the CEA was unified to the CTA.
+The CTA-861-G then includes the CEA-861-F timings besides
+the new timings that are specified.
 
-The driver was implemented using the standard PHY API in order to
-provide a standard access to the required callbacks to be handled
-by the controller through the phy_ops.
+CEA-861-F: Specifies the Video timings for VICs 1-107.
+CTA-861-G: Specifies the Video timings for VICs 1-107, 108-127, 193-219.
 
-There is a bidirectional communication between controller and PHY:
- - controller -> PHY : communication is done using the PHY API
- - controller <- PHY : communication is done using the callbacks,
- provided by the controller, which are required to handle the PHY
- such as: read/write, pddq, reset, etc.
- This callback functions are specified in struct dw_phy_pdata from
- 'include/linux/phy/dwc/dw-hdmi-phy-pdata.h'.
+With this patch, the array v4l2_dv_timings_presets has support for
+all video timings specified in CTA-861-G.
 
-Signed-off-by: Jose Abreu <jose.abreu@synopsys.com>
 Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
 ---
- drivers/phy/Kconfig                       |   1 +
- drivers/phy/Makefile                      |   1 +
- drivers/phy/dwc/Kconfig                   |  20 ++
- drivers/phy/dwc/Makefile                  |   9 +
- drivers/phy/dwc/phy-dw-hdmi-e405.c        | 497 +++++++++++++++++++++++++++++
- drivers/phy/dwc/phy-dw-hdmi-e406.c        | 475 +++++++++++++++++++++++++++
- drivers/phy/dwc/phy-dw-hdmi-e40x-core.c   | 514 ++++++++++++++++++++++++++++++
- drivers/phy/dwc/phy-dw-hdmi-e40x.h        | 219 +++++++++++++
- include/linux/phy/dwc/dw-hdmi-phy-pdata.h |  73 +++++
- 9 files changed, 1809 insertions(+)
- create mode 100644 drivers/phy/dwc/Kconfig
- create mode 100644 drivers/phy/dwc/Makefile
- create mode 100644 drivers/phy/dwc/phy-dw-hdmi-e405.c
- create mode 100644 drivers/phy/dwc/phy-dw-hdmi-e406.c
- create mode 100644 drivers/phy/dwc/phy-dw-hdmi-e40x-core.c
- create mode 100644 drivers/phy/dwc/phy-dw-hdmi-e40x.h
- create mode 100644 include/linux/phy/dwc/dw-hdmi-phy-pdata.h
+ drivers/media/v4l2-core/v4l2-dv-timings.c |  139 +++
+ include/uapi/linux/v4l2-dv-timings.h      | 1595 ++++++++++++++++++++++++++++-
+ 2 files changed, 1733 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 68d9c2f..db7c4b1 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -65,6 +65,7 @@ source "drivers/phy/allwinner/Kconfig"
- source "drivers/phy/amlogic/Kconfig"
- source "drivers/phy/broadcom/Kconfig"
- source "drivers/phy/cadence/Kconfig"
-+source "drivers/phy/dwc/Kconfig"
- source "drivers/phy/freescale/Kconfig"
- source "drivers/phy/hisilicon/Kconfig"
- source "drivers/phy/ingenic/Kconfig"
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index 32261e1..ac63979 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -13,6 +13,7 @@ obj-y					+= allwinner/	\
- 					   amlogic/	\
- 					   broadcom/	\
- 					   cadence/	\
-+					   dwc/		\
- 					   freescale/	\
- 					   hisilicon/	\
- 					   ingenic/	\
-diff --git a/drivers/phy/dwc/Kconfig b/drivers/phy/dwc/Kconfig
-new file mode 100644
-index 0000000..ab451d8
---- /dev/null
-+++ b/drivers/phy/dwc/Kconfig
-@@ -0,0 +1,20 @@
-+# SPDX-License-Identifier: GPL-2.0
-+config VIDEO_DWC_HDMI_PHY_E40X
-+	tristate "Synopsys DesignWare HDMI RX PHYs e405 and e406 driver"
-+	select GENERIC_PHY
-+	help
-+	  Support for Synopsys DesignWare HDMI RX PHYs versions
-+	  e405 and e406.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called phy-dw-hdmi-e40x.
-+
-+config VIDEO_DWC_HDMI_PHY_E40X_SUPPORT_TESTCHIP
-+	bool "Synopsys DesignWare HDMI RX PHYs e405/e406 Test Chip Support"
-+	depends on VIDEO_DWC_HDMI_PHY_E40X
-+	help
-+	  Support for Synopsys DesignWare HDMI RX PHYs e405/e406 with Test Chip.
-+
-+	  To have support for HDMI RX PHYs e405/e406 Test Chip, choose Y here.
-+	  It will enable Test Chip additional requirements, for example enable
-+	  the z calibration requirement during the PHY configuration.
-diff --git a/drivers/phy/dwc/Makefile b/drivers/phy/dwc/Makefile
-new file mode 100644
-index 0000000..52a5b6b
---- /dev/null
-+++ b/drivers/phy/dwc/Makefile
-@@ -0,0 +1,9 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for the PHY drivers.
-+#
-+
-+phy-dw-hdmi-e40x-y			:= phy-dw-hdmi-e40x-core.o
-+phy-dw-hdmi-e40x-y			+= phy-dw-hdmi-e405.o
-+phy-dw-hdmi-e40x-y			+= phy-dw-hdmi-e406.o
-+obj-$(CONFIG_VIDEO_DWC_HDMI_PHY_E40X)	+= phy-dw-hdmi-e40x.o
-diff --git a/drivers/phy/dwc/phy-dw-hdmi-e405.c b/drivers/phy/dwc/phy-dw-hdmi-e405.c
-new file mode 100644
-index 0000000..5078a86
---- /dev/null
-+++ b/drivers/phy/dwc/phy-dw-hdmi-e405.c
-@@ -0,0 +1,497 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018 - present Synopsys, Inc. and/or its affiliates.
-+ * Synopsys DesignWare HDMI PHY e405
+diff --git a/drivers/media/v4l2-core/v4l2-dv-timings.c b/drivers/media/v4l2-core/v4l2-dv-timings.c
+index 230d65a..0766e0c 100644
+--- a/drivers/media/v4l2-core/v4l2-dv-timings.c
++++ b/drivers/media/v4l2-core/v4l2-dv-timings.c
+@@ -133,6 +133,145 @@ const struct v4l2_dv_timings v4l2_dv_timings_presets[] = {
+ 	V4L2_DV_BT_CEA_4096X2160P50,
+ 	V4L2_DV_BT_DMT_4096X2160P59_94_RB,
+ 	V4L2_DV_BT_CEA_4096X2160P60,
++	V4L2_DV_BT_CEA_720X480P60_PA16_9,
++	V4L2_DV_BT_CEA_720X480I60_PA16_9,
++	V4L2_DV_BT_CEA_720X240P60_VTOT262_PA4_3,
++	V4L2_DV_BT_CEA_720X240P60_VTOT263_PA4_3,
++	V4L2_DV_BT_CEA_720X240P60_VTOT262_PA16_9,
++	V4L2_DV_BT_CEA_720X240P60_VTOT263_PA16_9,
++	V4L2_DV_BT_CEA_2880X480I60_PA4_3,
++	V4L2_DV_BT_CEA_2880X480I60_PA16_9,
++	V4L2_DV_BT_CEA_2880X240P60_VTOT262_PA4_3,
++	V4L2_DV_BT_CEA_2880X240P60_VTOT263_PA4_3,
++	V4L2_DV_BT_CEA_2880X240P60_VTOT262_PA16_9,
++	V4L2_DV_BT_CEA_2880X240P60_VTOT263_PA16_9,
++	V4L2_DV_BT_CEA_1440X480P60_PA4_3,
++	V4L2_DV_BT_CEA_1440X480P60_PA16_9,
++	V4L2_DV_BT_CEA_720X576P50_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080I50_PA16_9,
++	V4L2_DV_BT_CEA_720X576I50_PA16_9,
++	V4L2_DV_BT_CEA_720X288P50_VTOT312_PA4_3,
++	V4L2_DV_BT_CEA_720X288P50_VTOT313_PA4_3,
++	V4L2_DV_BT_CEA_720X288P50_VTOT314_PA4_3,
++	V4L2_DV_BT_CEA_720X288P50_VTOT312_PA16_9,
++	V4L2_DV_BT_CEA_720X288P50_VTOT313_PA16_9,
++	V4L2_DV_BT_CEA_720X288P50_VTOT314_PA16_9,
++	V4L2_DV_BT_CEA_2880X576I50_PA4_3,
++	V4L2_DV_BT_CEA_2880X576I50_PA16_9,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT312_PA4_3,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT313_PA4_3,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT314_PA4_3,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT312_PA16_9,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT313_PA16_9,
++	V4L2_DV_BT_CEA_2880X288P50_VTOT314_PA16_9,
++	V4L2_DV_BT_CEA_1440X576P50_PA4_3,
++	V4L2_DV_BT_CEA_1440X576P50_PA16_9,
++	V4L2_DV_BT_CEA_2880X480P60_PA4_3,
++	V4L2_DV_BT_CEA_2880X480P60_PA16_9,
++	V4L2_DV_BT_CEA_2880X576P50_PA4_3,
++	V4L2_DV_BT_CEA_2880X576P50_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080I50_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080I100_PA16_9,
++	V4L2_DV_BT_CEA_1280X720P100_PA16_9,
++	V4L2_DV_BT_CEA_720X576P100_PA4_3,
++	V4L2_DV_BT_CEA_720X576P100_PA16_9,
++	V4L2_DV_BT_CEA_1440X576I100_PA4_3,
++	V4L2_DV_BT_CEA_1440X576I100_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080I120_PA16_9,
++	V4L2_DV_BT_CEA_1280X720P120_PA16_9,
++	V4L2_DV_BT_CEA_720X480P120_PA4_3,
++	V4L2_DV_BT_CEA_720X480P120_PA16_9,
++	V4L2_DV_BT_CEA_1440X480I120_PA4_3,
++	V4L2_DV_BT_CEA_1440X480I120_PA16_9,
++	V4L2_DV_BT_CEA_720X576P200_PA4_3,
++	V4L2_DV_BT_CEA_720X576P200_PA16_9,
++	V4L2_DV_BT_CEA_1440X576I200_PA4_3,
++	V4L2_DV_BT_CEA_1440X576I200_PA16_9,
++	V4L2_DV_BT_CEA_720X480P240_PA4_3,
++	V4L2_DV_BT_CEA_720X480P240_PA16_9,
++	V4L2_DV_BT_CEA_1440X480I240_PA4_3,
++	V4L2_DV_BT_CEA_1440X480I240_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080P120_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080P100_PA16_9,
++	V4L2_DV_BT_CEA_1280X720P24_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P25_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P30_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P50_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P60_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P100_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P120_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P24_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P25_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P30_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P50_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P60_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P100_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P120_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P24_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P25_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P30_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P50_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P60_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P100_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P120_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P24_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P25_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P30_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P50_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P60_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P100_PA64_27,
++	V4L2_DV_BT_CEA_2560X1080P120_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P24_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P25_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P30_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P50_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P60_PA64_27,
++	V4L2_DV_BT_CEA_1280X720P48_PA16_9,
++	V4L2_DV_BT_CEA_1280X720P48_PA64_27,
++	V4L2_DV_BT_CEA_1680X720P48_PA64_27,
++	V4L2_DV_BT_CEA_1920X1080P48_PA16_9,
++	V4L2_DV_BT_CEA_1920X1080P48_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P48_PA16_9,
++	V4L2_DV_BT_CEA_4096X2160P48_PA256_135,
++	V4L2_DV_BT_CEA_3840X2160P48_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P100_PA16_9,
++	V4L2_DV_BT_CEA_3840X2160P120_PA16_9,
++	V4L2_DV_BT_CEA_3840X2160P100_PA64_27,
++	V4L2_DV_BT_CEA_3840X2160P120_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P24_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P25_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P30_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P48_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P50_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P60_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P100_PA64_27,
++	V4L2_DV_BT_CEA_5120X2160P120_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P24_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P25_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P30_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P48_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P50_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P60_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P100_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P120_PA16_9,
++	V4L2_DV_BT_CEA_7680X4320P24_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P25_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P30_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P48_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P50_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P60_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P100_PA64_27,
++	V4L2_DV_BT_CEA_7680X4320P120_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P24_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P25_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P30_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P48_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P50_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P60_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P100_PA64_27,
++	V4L2_DV_BT_CEA_10240X4320P120_PA64_27,
++	V4L2_DV_BT_CEA_4096X2160P100_PA256_135,
++	V4L2_DV_BT_CEA_4096X2160P120_PA256_135,
+ 	{ }
+ };
+ EXPORT_SYMBOL_GPL(v4l2_dv_timings_presets);
+diff --git a/include/uapi/linux/v4l2-dv-timings.h b/include/uapi/linux/v4l2-dv-timings.h
+index b52b67c..900530b 100644
+--- a/include/uapi/linux/v4l2-dv-timings.h
++++ b/include/uapi/linux/v4l2-dv-timings.h
+@@ -29,7 +29,14 @@
+ 	.bt = { _width , ## args }
+ #endif
+ 
+-/* CEA-861-F timings (i.e. standard HDTV timings) */
++/* CEA-861-F timings (i.e. standard HDTV timings)
++ * NOTE: For the newer SPECs the CEA was unified to the CTA.
++ * The CTA-861-G includes the CEA-861-F timings besides the
++ * new timings that are specified.
 + *
-+ * Author: Jose Abreu <jose.abreu@synopsys.com>
-+ * Author: Nelson Costa <nelson.costa@synopsys.com>
++ * CEA-861-F: Specifies the Video timings for VICs 1-107
++ * CTA-861-G: Specifies the Video timings for VICs 1-107, 108-127, 193-219
 + */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/phy/dwc/dw-hdmi-phy-pdata.h>
-+
-+#include "phy-dw-hdmi-e40x.h"
-+
-+#define DW_PHY_EQ_WAIT_TIME_START		3
-+#define DW_PHY_EQ_SLEEP_TIME_CDR		30
-+#define DW_PHY_EQ_SLEEP_TIME_ACQ		1
-+#define DW_PHY_EQ_BOUNDSPREAD			20
-+#define DW_PHY_EQ_MIN_ACQ_STABLE		3
-+#define DW_PHY_EQ_ACC_LIMIT			360
-+#define DW_PHY_EQ_ACC_MIN_LIMIT			0
-+#define DW_PHY_EQ_MAX_SETTING			13
-+#define DW_PHY_EQ_SHORT_CABLE_SETTING		4
-+#define DW_PHY_EQ_ERROR_CABLE_SETTING		4
-+#define DW_PHY_EQ_MIN_SLOPE			50
-+#define DW_PHY_EQ_AVG_ACQ			5
-+#define DW_PHY_EQ_MINMAX_NTRIES			3
-+#define DW_PHY_EQ_COUNTER_VAL			512
-+#define DW_PHY_EQ_COUNTER_VAL_HDMI20		512
-+#define DW_PHY_EQ_MINMAX_MAXDIFF		4
-+#define DW_PHY_EQ_MINMAX_MAXDIFF_HDMI20		2
-+#define DW_PHY_EQ_FATBIT_MASK			0x0000
-+#define DW_PHY_EQ_FATBIT_MASK_4K		0x0c03
-+#define DW_PHY_EQ_FATBIT_MASK_HDMI20		0x0e03
-+
-+/* PHY e405 mpll configuration */
-+static const struct dw_phy_mpll_config dw_phy_e405_mpll_cfg[] = {
-+	{ 0x27, 0x1B94 },
-+	{ 0x28, 0x16D2 },
-+	{ 0x29, 0x12D9 },
-+	{ 0x2A, 0x3249 },
-+	{ 0x2B, 0x3653 },
-+	{ 0x2C, 0x3436 },
-+	{ 0x2D, 0x124D },
-+	{ 0x2E, 0x0001 },
-+	{ 0xCE, 0x0505 },
-+	{ 0xCF, 0x0505 },
-+	{ 0xD0, 0x0000 },
-+	{ 0x00, 0x0000 },
-+};
-+
-+/* PHY e405 equalization functions */
-+static int dw_phy_eq_test(struct dw_phy_dev *dw_dev,
-+			  u16 *fat_bit_mask, int *min_max_length)
-+{
-+	u16 main_fsm_status, val;
-+	unsigned int i;
-+
-+	for (i = 0; i < DW_PHY_EQ_WAIT_TIME_START; i++) {
-+		main_fsm_status = dw_phy_read(dw_dev, DW_PHY_MAINFSM_STATUS1);
-+		if (main_fsm_status & DW_PHY_CLOCK_STABLE)
-+			break;
-+		mdelay(DW_PHY_EQ_SLEEP_TIME_CDR);
-+	}
-+
-+	if (i == DW_PHY_EQ_WAIT_TIME_START) {
-+		dev_dbg(dw_dev->dev, "PHY start conditions not achieved\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	if (main_fsm_status & DW_PHY_PLL_RATE_BIT1) {
-+		dev_dbg(dw_dev->dev, "invalid pll rate\n");
-+		return -EINVAL;
-+	}
-+
-+	val = dw_phy_read(dw_dev, DW_PHY_CDR_CTRL_CNT) &
-+		DW_PHY_HDMI_MHL_MODE_MASK;
-+	if (val == DW_PHY_HDMI_MHL_MODE_ABOVE_3_4G_BITPS) {
-+		/* HDMI 2.0 */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK_HDMI20;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF_HDMI20;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 2.0 values\n");
-+	} else if (!(main_fsm_status & DW_PHY_PLL_RATE_MASK)) {
-+		/* HDMI 1.4 (pll rate = 0) */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK_4K;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 1.4@4k values\n");
-+	} else {
-+		/* HDMI 1.4 */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 1.4 values\n");
-+	}
-+
-+	return 0;
+ 
+ #define V4L2_DV_BT_CEA_640X480P59_94 { \
+ 	.type = V4L2_DV_BT_656_1120, \
+@@ -297,6 +304,1592 @@
+ 		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 102) \
+ }
+ 
++/* VIC=3 */
++#define V4L2_DV_BT_CEA_720X480P60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 0, 0, \
++		27000000, 16, 62, 60, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 3) \
 +}
 +
-+static void dw_phy_eq_default(struct dw_phy_dev *dw_dev)
-+{
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_LOOP_CTR_LIMIT(8) |
-+		      DW_PHY_CH0_MSTR_CTR_LIMIT(10) |
-+		      DW_PHY_CH0_ADAP_COMP_LIMIT(4)), DW_PHY_CH0_EQ_CTRL1);
-+	dw_phy_write(dw_dev, DW_PHY_CH0_LB_ACTIVE_OVR, DW_PHY_CH0_EQ_CTRL2);
-+
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_LOOP_CTR_LIMIT(8) |
-+		      DW_PHY_CH1_MSTR_CTR_LIMIT(10) |
-+		      DW_PHY_CH1_ADAP_COMP_LIMIT(4)), DW_PHY_CH1_EQ_CTRL1);
-+	dw_phy_write(dw_dev, DW_PHY_CH1_LB_ACTIVE_OVR, DW_PHY_CH1_EQ_CTRL2);
-+
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_LOOP_CTR_LIMIT(8) |
-+		      DW_PHY_CH2_MSTR_CTR_LIMIT(10) |
-+		      DW_PHY_CH2_ADAP_COMP_LIMIT(4)), DW_PHY_CH2_EQ_CTRL1);
-+	dw_phy_write(dw_dev, DW_PHY_CH2_LB_ACTIVE_OVR, DW_PHY_CH2_EQ_CTRL2);
-+}
-+
-+static void dw_phy_eq_single(struct dw_phy_dev *dw_dev)
-+{
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH0_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH0_ADAP_COMP_LIMIT(1)), DW_PHY_CH0_EQ_CTRL1);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH1_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH1_ADAP_COMP_LIMIT(1)), DW_PHY_CH1_EQ_CTRL1);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH2_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH2_ADAP_COMP_LIMIT(1)), DW_PHY_CH2_EQ_CTRL1);
-+}
-+
-+static void dw_phy_eq_equal_setting_ch0(struct dw_phy_dev *dw_dev,
-+					u16 lock_vector)
-+{
-+	dw_phy_write(dw_dev, lock_vector, DW_PHY_CH0_EQ_CTRL4);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH0_LB_ACTIVE_OVR), DW_PHY_CH0_EQ_CTRL2);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_OVRD_LOCK |
-+		      DW_PHY_CH0_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH0_LB_ACTIVE_OVR), DW_PHY_CH0_EQ_CTRL2);
-+	dw_phy_read(dw_dev, DW_PHY_CH0_EQ_STATUS2);
-+}
-+
-+static void dw_phy_eq_equal_setting_ch1(struct dw_phy_dev *dw_dev,
-+					u16 lock_vector)
-+{
-+	dw_phy_write(dw_dev, lock_vector, DW_PHY_CH1_EQ_CTRL4);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH1_LB_ACTIVE_OVR), DW_PHY_CH1_EQ_CTRL2);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_OVRD_LOCK |
-+		      DW_PHY_CH1_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH1_LB_ACTIVE_OVR), DW_PHY_CH1_EQ_CTRL2);
-+	dw_phy_read(dw_dev, DW_PHY_CH1_EQ_STATUS2);
-+}
-+
-+static void dw_phy_eq_equal_setting_ch2(struct dw_phy_dev *dw_dev,
-+					u16 lock_vector)
-+{
-+	dw_phy_write(dw_dev, lock_vector, DW_PHY_CH2_EQ_CTRL4);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH2_LB_ACTIVE_OVR), DW_PHY_CH2_EQ_CTRL2);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_OVRD_LOCK |
-+		      DW_PHY_CH2_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH2_LB_ACTIVE_OVR), DW_PHY_CH2_EQ_CTRL2);
-+	dw_phy_read(dw_dev, DW_PHY_CH2_EQ_STATUS2);
-+}
-+
-+static void dw_phy_eq_equal_setting(struct dw_phy_dev *dw_dev, u16 lock_vector)
-+{
-+	dw_phy_eq_equal_setting_ch0(dw_dev, lock_vector);
-+	dw_phy_eq_equal_setting_ch1(dw_dev, lock_vector);
-+	dw_phy_eq_equal_setting_ch2(dw_dev, lock_vector);
-+}
-+
-+static void dw_phy_eq_auto_calib(struct dw_phy_dev *dw_dev)
-+{
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_DIS |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_EN |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_DIS |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+}
-+
-+static void dw_phy_eq_init_vars(struct dw_phy_eq_ch *ch)
-+{
-+	ch->acc = 0;
-+	ch->acq = 0;
-+	ch->last_acq = 0;
-+	ch->valid_long_setting = 0;
-+	ch->valid_short_setting = 0;
-+	ch->best_setting = DW_PHY_EQ_SHORT_CABLE_SETTING;
-+}
-+
-+static bool dw_phy_eq_acquire_early_cnt(struct dw_phy_dev *dw_dev,
-+					u16 setting, u16 acq,
-+					struct dw_phy_eq_ch *ch0,
-+					struct dw_phy_eq_ch *ch1,
-+					struct dw_phy_eq_ch *ch2)
-+{
-+	u16 lock_vector = 0x1 << setting;
-+	unsigned int i;
-+
-+	ch0->out_bound_acq = 0;
-+	ch1->out_bound_acq = 0;
-+	ch2->out_bound_acq = 0;
-+	ch0->acq = 0;
-+	ch1->acq = 0;
-+	ch2->acq = 0;
-+
-+	dw_phy_eq_equal_setting(dw_dev, lock_vector);
-+	dw_phy_eq_auto_calib(dw_dev);
-+
-+	mdelay(DW_PHY_EQ_SLEEP_TIME_CDR);
-+	if (!dw_phy_tmds_valid(dw_dev))
-+		dev_dbg(dw_dev->dev, "TMDS is NOT valid\n");
-+
-+	ch0->read_acq = dw_phy_read(dw_dev, DW_PHY_CH0_EQ_STATUS3);
-+	ch1->read_acq = dw_phy_read(dw_dev, DW_PHY_CH1_EQ_STATUS3);
-+	ch2->read_acq = dw_phy_read(dw_dev, DW_PHY_CH2_EQ_STATUS3);
-+
-+	ch0->acq += ch0->read_acq;
-+	ch1->acq += ch1->read_acq;
-+	ch2->acq += ch2->read_acq;
-+
-+	ch0->upper_bound_acq = ch0->read_acq + DW_PHY_EQ_BOUNDSPREAD;
-+	ch0->lower_bound_acq = ch0->read_acq - DW_PHY_EQ_BOUNDSPREAD;
-+	ch1->upper_bound_acq = ch1->read_acq + DW_PHY_EQ_BOUNDSPREAD;
-+	ch1->lower_bound_acq = ch1->read_acq - DW_PHY_EQ_BOUNDSPREAD;
-+	ch2->upper_bound_acq = ch2->read_acq + DW_PHY_EQ_BOUNDSPREAD;
-+	ch2->lower_bound_acq = ch2->read_acq - DW_PHY_EQ_BOUNDSPREAD;
-+
-+	for (i = 1; i < acq; i++) {
-+		dw_phy_eq_auto_calib(dw_dev);
-+		mdelay(DW_PHY_EQ_SLEEP_TIME_ACQ);
-+
-+		if (ch0->read_acq > ch0->upper_bound_acq ||
-+		    ch0->read_acq < ch0->lower_bound_acq)
-+			ch0->out_bound_acq++;
-+		if (ch1->read_acq > ch1->upper_bound_acq ||
-+		    ch1->read_acq < ch1->lower_bound_acq)
-+			ch1->out_bound_acq++;
-+		if (ch2->read_acq > ch2->upper_bound_acq ||
-+		    ch2->read_acq < ch2->lower_bound_acq)
-+			ch2->out_bound_acq++;
-+
-+		if (i == DW_PHY_EQ_MIN_ACQ_STABLE) {
-+			if (!ch0->out_bound_acq &&
-+			    !ch1->out_bound_acq &&
-+			    !ch2->out_bound_acq) {
-+				acq = 3;
-+				break;
-+			}
-+		}
-+
-+		ch0->read_acq = dw_phy_read(dw_dev, DW_PHY_CH0_EQ_STATUS3);
-+		ch1->read_acq = dw_phy_read(dw_dev, DW_PHY_CH1_EQ_STATUS3);
-+		ch2->read_acq = dw_phy_read(dw_dev, DW_PHY_CH2_EQ_STATUS3);
-+
-+		ch0->acq += ch0->read_acq;
-+		ch1->acq += ch1->read_acq;
-+		ch2->acq += ch2->read_acq;
-+	}
-+
-+	ch0->acq /= acq;
-+	ch1->acq /= acq;
-+	ch2->acq /= acq;
-+
-+	return true;
-+}
-+
-+static int dw_phy_eq_test_type(u16 setting, bool tmds_valid,
-+			       struct dw_phy_eq_ch *ch)
-+{
-+	u16 step_slope = 0;
-+
-+	if (ch->acq < ch->last_acq && tmds_valid) {
-+		/* Long cable equalization */
-+		ch->acc += ch->last_acq - ch->acq;
-+		if (!ch->valid_long_setting && ch->acq < 512 && ch->acc) {
-+			ch->best_long_setting = setting;
-+			ch->valid_long_setting = 1;
-+		}
-+		step_slope = ch->last_acq - ch->acq;
-+	}
-+
-+	if (tmds_valid && !ch->valid_short_setting) {
-+		/* Short cable equalization */
-+		if (setting < DW_PHY_EQ_SHORT_CABLE_SETTING &&
-+		    ch->acq < DW_PHY_EQ_COUNTER_VAL) {
-+			ch->best_short_setting = setting;
-+			ch->valid_short_setting = 1;
-+		}
-+
-+		if (setting == DW_PHY_EQ_SHORT_CABLE_SETTING) {
-+			ch->best_short_setting = DW_PHY_EQ_SHORT_CABLE_SETTING;
-+			ch->valid_short_setting = 1;
-+		}
-+	}
-+
-+	if (ch->valid_long_setting && ch->acc > DW_PHY_EQ_ACC_LIMIT) {
-+		ch->best_setting = ch->best_long_setting;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_LONG;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING && ch->acc < DW_PHY_EQ_ACC_LIMIT &&
-+	    ch->valid_short_setting) {
-+		ch->best_setting = ch->best_short_setting;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_SHORT;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING && tmds_valid &&
-+	    ch->acc > DW_PHY_EQ_ACC_LIMIT &&
-+	    step_slope > DW_PHY_EQ_MIN_SLOPE) {
-+		ch->best_setting = DW_PHY_EQ_MAX_SETTING;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_MAX;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING) {
-+		ch->best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR;
-+	}
-+
-+	return 0;
-+}
-+
-+static bool dw_phy_eq_setting_finder(struct dw_phy_dev *dw_dev, u16 acq,
-+				     struct dw_phy_eq_ch *ch0,
-+				     struct dw_phy_eq_ch *ch1,
-+				     struct dw_phy_eq_ch *ch2)
-+{
-+	int ret_ch0 = 0, ret_ch1 = 0, ret_ch2 = 0;
-+	bool tmds_valid = false;
-+	u16 act = 0;
-+
-+	dw_phy_eq_init_vars(ch0);
-+	dw_phy_eq_init_vars(ch1);
-+	dw_phy_eq_init_vars(ch2);
-+
-+	tmds_valid = dw_phy_eq_acquire_early_cnt(dw_dev, act, acq,
-+						 ch0, ch1, ch2);
-+
-+	while (!ret_ch0 || !ret_ch1 || !ret_ch2) {
-+		act++;
-+
-+		ch0->last_acq = ch0->acq;
-+		ch1->last_acq = ch1->acq;
-+		ch2->last_acq = ch2->acq;
-+
-+		tmds_valid = dw_phy_eq_acquire_early_cnt(dw_dev, act, acq,
-+							 ch0, ch1, ch2);
-+
-+		if (!ret_ch0)
-+			ret_ch0 = dw_phy_eq_test_type(act, tmds_valid, ch0);
-+		if (!ret_ch1)
-+			ret_ch1 = dw_phy_eq_test_type(act, tmds_valid, ch1);
-+		if (!ret_ch2)
-+			ret_ch2 = dw_phy_eq_test_type(act, tmds_valid, ch2);
-+	}
-+
-+	if (ret_ch0 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR ||
-+	    ret_ch1 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR ||
-+	    ret_ch2 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR)
-+		return false;
-+	return true;
-+}
-+
-+static bool dw_phy_eq_maxvsmin(u16 ch0_setting, u16 ch1_setting,
-+			       u16 ch2_setting, u16 min_max_length)
-+{
-+	u16 min = ch0_setting, max = ch0_setting;
-+
-+	if (ch1_setting > max)
-+		max = ch1_setting;
-+	if (ch2_setting > max)
-+		max = ch2_setting;
-+	if (ch1_setting < min)
-+		min = ch1_setting;
-+	if (ch2_setting < min)
-+		min = ch2_setting;
-+
-+	if ((max - min) > min_max_length)
-+		return false;
-+	return true;
-+}
-+
-+static int dw_phy_eq_init(struct dw_phy_dev *dw_dev, u16 acq, bool force)
-+{
-+	struct dw_phy_pdata *phy = dw_dev->config;
-+	struct dw_phy_eq_ch ch0, ch1, ch2;
-+	u16 fat_bit_mask, lock_vector;
-+	int min_max_length, ret = 0;
-+	u16 mpll_status;
-+	unsigned int i;
-+
-+	if (phy->version < 401)
-+		return ret;
-+
-+	if (!dw_dev->phy_enabled)
-+		return -EINVAL;
-+
-+	mpll_status = dw_phy_read(dw_dev, DW_PHY_CLK_MPLL_STATUS);
-+	if (mpll_status == dw_dev->mpll_status && !force)
-+		return ret;
-+
-+	dw_dev->mpll_status = mpll_status;
-+
-+	dw_phy_write(dw_dev, 0x00, DW_PHY_MAINFSM_OVR2);
-+	dw_phy_write(dw_dev, 0x00, DW_PHY_CH0_EQ_CTRL3);
-+	dw_phy_write(dw_dev, 0x00, DW_PHY_CH1_EQ_CTRL3);
-+	dw_phy_write(dw_dev, 0x00, DW_PHY_CH2_EQ_CTRL3);
-+
-+	ret = dw_phy_eq_test(dw_dev, &fat_bit_mask, &min_max_length);
-+	if (ret) {
-+		if (ret == -EINVAL) /* Means equalizer is not needed */
-+			ret = 0;
-+
-+		/* Do not change values if we don't have clock */
-+		if (ret != -ETIMEDOUT) {
-+			dw_phy_eq_default(dw_dev);
-+			dw_phy_pddq(dw_dev, 1);
-+			dw_phy_pddq(dw_dev, 0);
-+		}
-+	} else {
-+		dw_phy_eq_single(dw_dev);
-+		dw_phy_eq_equal_setting(dw_dev, 0x0001);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH0_EQ_CTRL6);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH1_EQ_CTRL6);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH2_EQ_CTRL6);
-+
-+		for (i = 0; i < DW_PHY_EQ_MINMAX_NTRIES; i++) {
-+			if (dw_phy_eq_setting_finder(dw_dev, acq,
-+						     &ch0, &ch1, &ch2)) {
-+				if (dw_phy_eq_maxvsmin(ch0.best_setting,
-+						       ch1.best_setting,
-+						       ch2.best_setting,
-+						       min_max_length))
-+					break;
-+			}
-+
-+			ch0.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+			ch1.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+			ch2.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+		}
-+
-+		dev_dbg(dw_dev->dev, "equalizer settings: ch0=0x%x, ch1=0x%x, ch1=0x%x\n",
-+			ch0.best_setting, ch1.best_setting, ch2.best_setting);
-+
-+		if (i == DW_PHY_EQ_MINMAX_NTRIES)
-+			ret = -EINVAL;
-+
-+		lock_vector = 0x1 << ch0.best_setting;
-+		dw_phy_eq_equal_setting_ch0(dw_dev, lock_vector);
-+
-+		lock_vector = 0x1 << ch1.best_setting;
-+		dw_phy_eq_equal_setting_ch1(dw_dev, lock_vector);
-+
-+		lock_vector = 0x1 << ch2.best_setting;
-+		dw_phy_eq_equal_setting_ch2(dw_dev, lock_vector);
-+
-+		dw_phy_pddq(dw_dev, 1);
-+		dw_phy_pddq(dw_dev, 0);
-+	}
-+
-+	return ret;
-+}
-+
-+/* PHY e405 data */
-+const struct dw_hdmi_phy_data dw_phy_e405_data = {
-+	.name = "e405",
-+	.version = 405,
-+	.mpll_cfg = dw_phy_e405_mpll_cfg,
-+	.dw_phy_eq_init = dw_phy_eq_init,
-+};
-diff --git a/drivers/phy/dwc/phy-dw-hdmi-e406.c b/drivers/phy/dwc/phy-dw-hdmi-e406.c
-new file mode 100644
-index 0000000..d4e2502
---- /dev/null
-+++ b/drivers/phy/dwc/phy-dw-hdmi-e406.c
-@@ -0,0 +1,475 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018 - present Synopsys, Inc. and/or its affiliates.
-+ * Synopsys DesignWare HDMI PHY e406
-+ *
-+ * Author: Nelson Costa <nelson.costa@synopsys.com>
++/* VIC=7 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
++#define V4L2_DV_BT_CEA_720X480I60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 1, 0, \
++		13500000, 19, 62, 57, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 7) \
++}
 +
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/phy/dwc/dw-hdmi-phy-pdata.h>
-+
-+#include "phy-dw-hdmi-e40x.h"
-+
-+/*
-+ * Equalization algorithm based on version 01-08-2019
-+ * but with the following adjustments related with 1080p and 4k:
-+ * - DW_PHY_EQ_MAX_SETTING 14 -> 10
-+ * - DW_PHY_EQ_COUNTER_VAL_4K 512 -> 712
-+ *
++/* VIC=8 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
-+#define DW_PHY_EQ_WAIT_TIME_START		3
-+#define DW_PHY_EQ_SLEEP_TIME_CDR		17
-+#define DW_PHY_EQ_SLEEP_TIME_ACQ		1
-+#define DW_PHY_EQ_BOUNDSPREAD			20
-+#define DW_PHY_EQ_MIN_ACQ_STABLE		3
-+#define DW_PHY_EQ_ACC_LIMIT			360
-+#define DW_PHY_EQ_ACC_MIN_LIMIT			0
-+#define DW_PHY_EQ_MAX_SETTING			10
-+#define DW_PHY_EQ_SHORT_CABLE_SETTING		4
-+#define DW_PHY_EQ_ERROR_CABLE_SETTING		4
-+#define DW_PHY_EQ_MIN_SLOPE			50
-+#define DW_PHY_EQ_AVG_ACQ			3
-+#define DW_PHY_EQ_MINMAX_NTRIES			5
-+#define DW_PHY_EQ_COUNTER_VAL			712
-+#define DW_PHY_EQ_COUNTER_VAL_4K		712
-+#define DW_PHY_EQ_COUNTER_VAL_HDMI20		450
-+#define DW_PHY_EQ_MINMAX_MAXDIFF		4
-+#define DW_PHY_EQ_MINMAX_MAXDIFF_4K		4
-+#define DW_PHY_EQ_MINMAX_MAXDIFF_HDMI20		4
-+#define DW_PHY_EQ_FATBIT_MASK			0x0c03
-+#define DW_PHY_EQ_FATBIT_MASK_4K		0x0c03
-+#define DW_PHY_EQ_FATBIT_MASK_HDMI20		0x0e03
-+#define DW_PHY_EQ_CDR_PHUG_FRUG			0x251f
-+#define DW_PHY_EQ_CDR_PHUG_FRUG_4k		0x001f
-+#define DW_PHY_EQ_CDR_PHUG_FRUG_HDMI20		0x001f
-+#define DW_PHY_EQ_CDR_PHUG_FRUG_DEF		0x001f
-+#define DW_CHX_EQ_CTRL3_MASK			0x0000
-+
-+/* PHY e406 mpll configuration */
-+static const struct dw_phy_mpll_config dw_phy_e406_mpll_cfg[] = {
-+	{ 0x27, 0x1C94 },
-+	{ 0x28, 0x3713 },
-+	{ 0x29, 0x24DA },
-+	{ 0x2A, 0x5492 },
-+	{ 0x2B, 0x4B0D },
-+	{ 0x2C, 0x4760 },
-+	{ 0x2D, 0x008C },
-+	{ 0x2E, 0x0010 },
-+	{ 0x00, 0x0000 },
-+};
-+
-+/* PHY e406 equalization functions */
-+static int dw_phy_eq_test(struct dw_phy_dev *dw_dev,
-+			  u16 *fat_bit_mask, int *min_max_length,
-+			  u16 *eq_cnt_threshold, u16 *cdr_phug_frug)
-+{
-+	u16 main_fsm_status, val;
-+	unsigned int i;
-+
-+	for (i = 0; i < DW_PHY_EQ_WAIT_TIME_START; i++) {
-+		main_fsm_status = dw_phy_read(dw_dev, DW_PHY_MAINFSM_STATUS1);
-+		if (main_fsm_status & DW_PHY_CLOCK_STABLE)
-+			break;
-+		mdelay(DW_PHY_EQ_SLEEP_TIME_CDR);
-+	}
-+
-+	if (i == DW_PHY_EQ_WAIT_TIME_START) {
-+		dev_dbg(dw_dev->dev, "PHY start conditions not achieved\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	if (main_fsm_status & DW_PHY_PLL_RATE_BIT1) {
-+		dev_dbg(dw_dev->dev, "invalid pll rate\n");
-+		return -EINVAL;
-+	}
-+
-+	val = dw_phy_read(dw_dev, DW_PHY_CDR_CTRL_CNT) &
-+		DW_PHY_HDMI_MHL_MODE_MASK;
-+	if (val == DW_PHY_HDMI_MHL_MODE_ABOVE_3_4G_BITPS) {
-+		/* HDMI 2.0 */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK_HDMI20;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF_HDMI20;
-+		*eq_cnt_threshold = DW_PHY_EQ_COUNTER_VAL_HDMI20;
-+		*cdr_phug_frug = DW_PHY_EQ_CDR_PHUG_FRUG_HDMI20;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 2.0 values\n");
-+	} else if (!(main_fsm_status & DW_PHY_PLL_RATE_MASK)) {
-+		/* HDMI 1.4 (pll rate = 0) */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK_4K;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF_4K;
-+		*eq_cnt_threshold = DW_PHY_EQ_COUNTER_VAL_4K;
-+		*cdr_phug_frug = DW_PHY_EQ_CDR_PHUG_FRUG_4k;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 1.4@4k values\n");
-+	} else {
-+		/* HDMI 1.4 */
-+		*fat_bit_mask = DW_PHY_EQ_FATBIT_MASK;
-+		*min_max_length = DW_PHY_EQ_MINMAX_MAXDIFF;
-+		*eq_cnt_threshold = DW_PHY_EQ_COUNTER_VAL;
-+		*cdr_phug_frug = DW_PHY_EQ_CDR_PHUG_FRUG;
-+		dev_dbg(dw_dev->dev, "[EQUALIZER] using HDMI 1.4 values\n");
-+	}
-+
-+	return 0;
++#define V4L2_DV_BT_CEA_720X240P60_VTOT262_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 240, 0, 0, \
++		13500000, 19, 62, 57, 4, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 8) \
 +}
 +
-+static void dw_phy_eq_auto_calib(struct dw_phy_dev *dw_dev)
-+{
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_DIS |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_EN |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE |
-+		      DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE |
-+		      DW_PHY_FORCE_STATE_DIS |
-+		      DW_PHY_MAIN_FSM_STATE(9)), DW_PHY_MAINFSM_CTRL);
-+}
-+
-+static void dw_phy_eq_settings(struct dw_phy_dev *dw_dev, u16 ch0_setting,
-+			       u16 ch1_setting, u16 ch2_setting)
-+{
-+	dw_phy_write(dw_dev,
-+		     (DW_CHX_EQ_CTRL3_MASK |
-+		      (ch0_setting & DW_PHY_CH0_EXT_EQ_SET_MASK)),
-+		     DW_PHY_CH0_EQ_CTRL3);
-+	dw_phy_write(dw_dev,
-+		     (DW_CHX_EQ_CTRL3_MASK |
-+		      (ch1_setting & DW_PHY_CH1_EXT_EQ_SET_MASK)),
-+		     DW_PHY_CH1_EQ_CTRL3);
-+	dw_phy_write(dw_dev,
-+		     (DW_CHX_EQ_CTRL3_MASK |
-+		      (ch2_setting & DW_PHY_CH2_EXT_EQ_SET_MASK)),
-+		     DW_PHY_CH2_EQ_CTRL3);
-+	dw_phy_write(dw_dev, DW_PHY_EQ_EN_OVR_EN, DW_PHY_MAINFSM_OVR2);
-+
-+	dw_phy_eq_auto_calib(dw_dev);
-+}
-+
-+static void dw_phy_eq_default(struct dw_phy_dev *dw_dev)
-+{
-+	dw_phy_eq_settings(dw_dev, 0, 0, 0);
-+}
-+
-+static void dw_phy_eq_single(struct dw_phy_dev *dw_dev)
-+{
-+	u16 val;
-+
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH0_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH0_ADAP_COMP_LIMIT(1)), DW_PHY_CH0_EQ_CTRL1);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH1_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH1_ADAP_COMP_LIMIT(1)), DW_PHY_CH1_EQ_CTRL1);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_LOOP_CTR_LIMIT(1) |
-+		      DW_PHY_CH2_MSTR_CTR_LIMIT(1) |
-+		      DW_PHY_CH2_ADAP_COMP_LIMIT(1)), DW_PHY_CH2_EQ_CTRL1);
-+
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH1_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH1_LB_ACTIVE_OVR |
-+		      (DW_PHY_CH1_EQUALIZATION_CTR_THR(DW_PHY_EQ_AVG_ACQ) &
-+		       DW_PHY_CH1_EQUALIZATION_CTR_THR_MASK)),
-+		     DW_PHY_CH1_EQ_CTRL2);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH2_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH2_LB_ACTIVE_OVR |
-+		      (DW_PHY_CH2_EQUALIZATION_CTR_THR(DW_PHY_EQ_AVG_ACQ) &
-+		       DW_PHY_CH2_EQUALIZATION_CTR_THR_MASK)),
-+		     DW_PHY_CH2_EQ_CTRL2);
-+
-+	val = dw_phy_read(dw_dev, DW_PHY_MAINFSM_OVR2);
-+	val &= ~(DW_PHY_EQ_EN_OVR | DW_PHY_EQ_EN_OVR_EN);
-+	dw_phy_write(dw_dev, val, DW_PHY_MAINFSM_OVR2);
-+}
-+
-+static void dw_phy_eq_equal_setting(struct dw_phy_dev *dw_dev, u16 lock_vector)
-+{
-+	dw_phy_write(dw_dev, lock_vector, DW_PHY_CH0_EQ_CTRL4);
-+
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH0_LB_ACTIVE_OVR |
-+		      (DW_PHY_CH0_EQUALIZATION_CTR_THR(DW_PHY_EQ_AVG_ACQ) &
-+		       DW_PHY_CH0_EQUALIZATION_CTR_THR_MASK) |
-+		      DW_PHY_CH0_CH_EQ_SAME_OVRD), DW_PHY_CH0_EQ_CTRL2);
-+	dw_phy_write(dw_dev,
-+		     (DW_PHY_CH0_OVRD_LOCK |
-+		      DW_PHY_CH0_OVRD_LOCK_VECTOR_EN |
-+		      DW_PHY_CH0_LB_ACTIVE_OVR |
-+		      (DW_PHY_CH0_EQUALIZATION_CTR_THR(DW_PHY_EQ_AVG_ACQ) &
-+		       DW_PHY_CH0_EQUALIZATION_CTR_THR_MASK) |
-+		      DW_PHY_CH0_CH_EQ_SAME_OVRD), DW_PHY_CH0_EQ_CTRL2);
-+}
-+
-+static void dw_phy_eq_init_vars(struct dw_phy_eq_ch *ch)
-+{
-+	ch->acc = 0;
-+	ch->acq = 0;
-+	ch->last_acq = 0;
-+	ch->valid_long_setting = 0;
-+	ch->valid_short_setting = 0;
-+	ch->best_setting = DW_PHY_EQ_SHORT_CABLE_SETTING;
-+}
-+
-+static bool dw_phy_eq_acquire_early_cnt(struct dw_phy_dev *dw_dev,
-+					u16 setting, u16 acq,
-+					struct dw_phy_eq_ch *ch0,
-+					struct dw_phy_eq_ch *ch1,
-+					struct dw_phy_eq_ch *ch2)
-+{
-+	u16 lock_vector = 0x1 << setting;
-+
-+	ch0->acq = 0;
-+	ch1->acq = 0;
-+	ch2->acq = 0;
-+
-+	dw_phy_eq_equal_setting(dw_dev, lock_vector);
-+	dw_phy_eq_auto_calib(dw_dev);
-+
-+	mdelay(DW_PHY_EQ_SLEEP_TIME_CDR);
-+	if (!dw_phy_tmds_valid(dw_dev))
-+		dev_dbg(dw_dev->dev, "TMDS is NOT valid\n");
-+
-+	ch0->acq = dw_phy_read(dw_dev, DW_PHY_CH0_EQ_STATUS3) >>
-+		DW_PHY_EQ_AVG_ACQ;
-+	ch1->acq = dw_phy_read(dw_dev, DW_PHY_CH1_EQ_STATUS3) >>
-+		DW_PHY_EQ_AVG_ACQ;
-+	ch2->acq = dw_phy_read(dw_dev, DW_PHY_CH2_EQ_STATUS3) >>
-+		DW_PHY_EQ_AVG_ACQ;
-+
-+	dev_dbg(dw_dev->dev,
-+		"%s -> phy_read(dw_dev, DW_PHY_CH0_EQ_STATUS3) [%d] [%u]\n",
-+		__func__, setting, ch0->acq);
-+	dev_dbg(dw_dev->dev,
-+		"%s -> phy_read(dw_dev, DW_PHY_CH1_EQ_STATUS3) [%d] [%u]\n",
-+		__func__, setting, ch1->acq);
-+	dev_dbg(dw_dev->dev,
-+		"%s -> phy_read(dw_dev, DW_PHY_CH2_EQ_STATUS3) [%d] [%u]\n",
-+		__func__, setting, ch2->acq);
-+
-+	return true;
-+}
-+
-+static int dw_phy_eq_test_type(u16 setting, bool tmds_valid,
-+			       u16 eq_cnt_threshold, struct dw_phy_eq_ch *ch)
-+{
-+	u16 step_slope = 0;
-+
-+	if (ch->acq < ch->last_acq && tmds_valid) {
-+		/* Long cable equalization */
-+		ch->acc += ch->last_acq - ch->acq;
-+		if (!ch->valid_long_setting &&
-+		    ch->acq < eq_cnt_threshold &&
-+		    ch->acc > DW_PHY_EQ_ACC_MIN_LIMIT) {
-+			ch->best_long_setting = setting;
-+			ch->valid_long_setting = 1;
-+		}
-+		step_slope = ch->last_acq - ch->acq;
-+	}
-+
-+	if (tmds_valid && !ch->valid_short_setting) {
-+		/* Short cable equalization */
-+		if (setting < DW_PHY_EQ_SHORT_CABLE_SETTING &&
-+		    ch->acq < eq_cnt_threshold) {
-+			ch->best_short_setting = setting;
-+			ch->valid_short_setting = 1;
-+		}
-+
-+		if (setting == DW_PHY_EQ_SHORT_CABLE_SETTING) {
-+			ch->best_short_setting = DW_PHY_EQ_SHORT_CABLE_SETTING;
-+			ch->valid_short_setting = 1;
-+		}
-+	}
-+
-+	if (ch->valid_long_setting && ch->acc > DW_PHY_EQ_ACC_LIMIT) {
-+		ch->best_setting = ch->best_long_setting;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_LONG;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING && ch->acc < DW_PHY_EQ_ACC_LIMIT &&
-+	    ch->valid_short_setting) {
-+		ch->best_setting = ch->best_short_setting;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_SHORT;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING && tmds_valid &&
-+	    ch->acc > DW_PHY_EQ_ACC_LIMIT &&
-+	    step_slope > DW_PHY_EQ_MIN_SLOPE) {
-+		ch->best_setting = DW_PHY_EQ_MAX_SETTING;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_MAX;
-+	}
-+
-+	if (setting == DW_PHY_EQ_MAX_SETTING) {
-+		ch->best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+		return DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR;
-+	}
-+
-+	return 0;
-+}
-+
-+static bool dw_phy_eq_setting_finder(struct dw_phy_dev *dw_dev, u16 acq,
-+				     u16 eq_cnt_threshold,
-+				     struct dw_phy_eq_ch *ch0,
-+				     struct dw_phy_eq_ch *ch1,
-+				     struct dw_phy_eq_ch *ch2)
-+{
-+	int ret_ch0 = 0, ret_ch1 = 0, ret_ch2 = 0;
-+	bool tmds_valid = false;
-+	u16 act = 0;
-+
-+	dw_phy_eq_init_vars(ch0);
-+	dw_phy_eq_init_vars(ch1);
-+	dw_phy_eq_init_vars(ch2);
-+
-+	tmds_valid = dw_phy_eq_acquire_early_cnt(dw_dev, act, acq,
-+						 ch0, ch1, ch2);
-+
-+	while (!ret_ch0 || !ret_ch1 || !ret_ch2) {
-+		act++;
-+
-+		ch0->last_acq = ch0->acq;
-+		ch1->last_acq = ch1->acq;
-+		ch2->last_acq = ch2->acq;
-+
-+		tmds_valid = dw_phy_eq_acquire_early_cnt(dw_dev, act, acq,
-+							 ch0, ch1, ch2);
-+
-+		if (!ret_ch0)
-+			ret_ch0 = dw_phy_eq_test_type(act, tmds_valid,
-+						      eq_cnt_threshold, ch0);
-+		if (!ret_ch1)
-+			ret_ch1 = dw_phy_eq_test_type(act, tmds_valid,
-+						      eq_cnt_threshold, ch1);
-+		if (!ret_ch2)
-+			ret_ch2 = dw_phy_eq_test_type(act, tmds_valid,
-+						      eq_cnt_threshold, ch2);
-+	}
-+
-+	if (ret_ch0 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR ||
-+	    ret_ch1 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR ||
-+	    ret_ch2 == DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR)
-+		return false;
-+	return true;
-+}
-+
-+static bool dw_phy_eq_maxvsmin(u16 ch0_setting, u16 ch1_setting,
-+			       u16 ch2_setting, u16 min_max_length)
-+{
-+	u16 min = ch0_setting, max = ch0_setting;
-+
-+	if (ch1_setting > max)
-+		max = ch1_setting;
-+	if (ch2_setting > max)
-+		max = ch2_setting;
-+	if (ch1_setting < min)
-+		min = ch1_setting;
-+	if (ch2_setting < min)
-+		min = ch2_setting;
-+
-+	if ((max - min) > min_max_length)
-+		return false;
-+	return true;
-+}
-+
-+static int dw_phy_eq_init(struct dw_phy_dev *dw_dev, u16 acq, bool force)
-+{
-+	u16 fat_bit_mask, eq_cnt_threshold;
-+	struct dw_phy_eq_ch ch0, ch1, ch2;
-+	int min_max_length, ret = 0;
-+	u16 cdr_phug_frug;
-+	u16 mpll_status;
-+	unsigned int i;
-+
-+	if (!dw_dev->phy_enabled)
-+		return -EINVAL;
-+
-+	mpll_status = dw_phy_read(dw_dev, DW_PHY_CLK_MPLL_STATUS);
-+	if (mpll_status == dw_dev->mpll_status && !force)
-+		return ret;
-+
-+	dw_dev->mpll_status = mpll_status;
-+
-+	ret = dw_phy_eq_test(dw_dev, &fat_bit_mask, &min_max_length,
-+			     &eq_cnt_threshold, &cdr_phug_frug);
-+	if (ret) {
-+		if (ret == -EINVAL) /* Means equalizer is not needed */
-+			ret = 0;
-+
-+		/* Do not change values if we don't have clock */
-+		if (ret != -ETIMEDOUT) {
-+			dw_phy_eq_default(dw_dev);
-+			dw_phy_pddq(dw_dev, 1);
-+			dw_phy_pddq(dw_dev, 0);
-+		}
-+	} else {
-+		dw_phy_eq_single(dw_dev);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH0_EQ_CTRL6);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH1_EQ_CTRL6);
-+		dw_phy_write(dw_dev, fat_bit_mask, DW_PHY_CH2_EQ_CTRL6);
-+		/* config cdr */
-+		dw_phy_write(dw_dev, cdr_phug_frug, DW_PHY_CH0_CDR_CTRL);
-+		dw_phy_write(dw_dev, cdr_phug_frug, DW_PHY_CH1_CDR_CTRL);
-+		dw_phy_write(dw_dev, cdr_phug_frug, DW_PHY_CH2_CDR_CTRL);
-+
-+		for (i = 0; i < DW_PHY_EQ_MINMAX_NTRIES; i++) {
-+			if (dw_phy_eq_setting_finder(dw_dev, acq,
-+						     eq_cnt_threshold,
-+						     &ch0, &ch1, &ch2)) {
-+				if (dw_phy_eq_maxvsmin(ch0.best_setting,
-+						       ch1.best_setting,
-+						       ch2.best_setting,
-+						       min_max_length))
-+					break;
-+			}
-+
-+			ch0.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+			ch1.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+			ch2.best_setting = DW_PHY_EQ_ERROR_CABLE_SETTING;
-+		}
-+
-+		dev_dbg(dw_dev->dev, "equalizer settings: ch0=0x%x, ch1=0x%x, ch1=0x%x\n",
-+			ch0.best_setting, ch1.best_setting,
-+			ch2.best_setting);
-+
-+		if (i == DW_PHY_EQ_MINMAX_NTRIES)
-+			ret = -EINVAL;
-+
-+		/* restore cdr to default settings */
-+		dw_phy_write(dw_dev, DW_PHY_EQ_CDR_PHUG_FRUG_DEF,
-+			     DW_PHY_CH0_CDR_CTRL);
-+		dw_phy_write(dw_dev, DW_PHY_EQ_CDR_PHUG_FRUG_DEF,
-+			     DW_PHY_CH1_CDR_CTRL);
-+		dw_phy_write(dw_dev, DW_PHY_EQ_CDR_PHUG_FRUG_DEF,
-+			     DW_PHY_CH2_CDR_CTRL);
-+
-+		dw_phy_eq_settings(dw_dev, ch0.best_setting, ch1.best_setting,
-+				   ch2.best_setting);
-+
-+		dw_phy_pddq(dw_dev, 1);
-+		dw_phy_pddq(dw_dev, 0);
-+	}
-+
-+	return ret;
-+}
-+
-+/* PHY e406 data */
-+const struct dw_hdmi_phy_data dw_phy_e406_data = {
-+	.name = "e406",
-+	.version = 406,
-+	.mpll_cfg = dw_phy_e406_mpll_cfg,
-+	.dw_phy_eq_init = dw_phy_eq_init,
-+};
-diff --git a/drivers/phy/dwc/phy-dw-hdmi-e40x-core.c b/drivers/phy/dwc/phy-dw-hdmi-e40x-core.c
-new file mode 100644
-index 0000000..804afac
---- /dev/null
-+++ b/drivers/phy/dwc/phy-dw-hdmi-e40x-core.c
-@@ -0,0 +1,514 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018 - present Synopsys, Inc. and/or its affiliates.
-+ * Synopsys DesignWare HDMI PHYs e405 and e406 driver
-+ *
-+ * Author: Jose Abreu <jose.abreu@synopsys.com>
-+ * Author: Nelson Costa <nelson.costa@synopsys.com>
++/* VIC=8 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/phy/phy.h>
-+#include <linux/phy/dwc/dw-hdmi-phy-pdata.h>
-+
-+#include "phy-dw-hdmi-e40x.h"
-+
-+void dw_phy_write(struct dw_phy_dev *dw_dev, u16 val, u16 addr)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	funcs->write(arg, val, addr);
++#define V4L2_DV_BT_CEA_720X240P60_VTOT263_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 240, 0, 0, \
++		13500000, 19, 62, 57, 5, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 8) \
 +}
 +
-+u16 dw_phy_read(struct dw_phy_dev *dw_dev, u16 addr)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	return funcs->read(arg, addr);
-+}
-+
-+static void dw_phy_reset(struct dw_phy_dev *dw_dev, int enable)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	funcs->reset(arg, enable);
-+}
-+
-+void dw_phy_pddq(struct dw_phy_dev *dw_dev, int enable)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	funcs->pddq(arg, enable);
-+}
-+
-+static void dw_phy_svsmode(struct dw_phy_dev *dw_dev, int enable)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	funcs->svsmode(arg, enable);
-+}
-+
-+static void dw_phy_zcal_reset(struct dw_phy_dev *dw_dev)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	funcs->zcal_reset(arg);
-+}
-+
-+static bool dw_phy_zcal_done(struct dw_phy_dev *dw_dev)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	return funcs->zcal_done(arg);
-+}
-+
-+bool dw_phy_tmds_valid(struct dw_phy_dev *dw_dev)
-+{
-+	const struct dw_phy_funcs *funcs = dw_dev->config->funcs;
-+	void *arg = dw_dev->config->funcs_arg;
-+
-+	return funcs->tmds_valid(arg);
-+}
-+
-+static int dw_phy_color_depth_to_mode(u8 color_depth)
-+{
-+	int sc_clrdep = 0;
-+
-+	switch (color_depth) {
-+	case 24:
-+		sc_clrdep = DW_PHY_CLRDEP_8BIT_MODE;
-+		break;
-+	case 30:
-+		sc_clrdep = DW_PHY_CLRDEP_10BIT_MODE;
-+		break;
-+	case 36:
-+		sc_clrdep = DW_PHY_CLRDEP_12BIT_MODE;
-+		break;
-+	case 48:
-+		sc_clrdep = DW_PHY_CLRDEP_16BIT_MODE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return sc_clrdep;
-+}
-+
-+static int dw_phy_config(struct dw_phy_dev *dw_dev, u8 color_depth,
-+			 bool hdmi2, bool scrambling)
-+{
-+	const struct dw_phy_mpll_config *mpll_cfg = dw_dev->phy_data->mpll_cfg;
-+	struct dw_phy_pdata *phy = dw_dev->config;
-+	struct device *dev = dw_dev->dev;
-+	u16 val, sc_clrdep;
-+	int timeout = 100;
-+	bool zcal_done;
-+	int ret;
-+
-+	dev_dbg(dev, "%s: color_depth=%d, hdmi2=%d, scrambling=%d, cfg_clk=%d\n",
-+		__func__, color_depth, hdmi2, scrambling, phy->cfg_clk);
-+
-+	ret = dw_phy_color_depth_to_mode(color_depth);
-+	if (ret < 0)
-+		return ret;
-+
-+	sc_clrdep = ret;
-+
-+	dw_phy_reset(dw_dev, 1);
-+	dw_phy_pddq(dw_dev, 1);
-+	dw_phy_svsmode(dw_dev, 1);
-+
-+#if IS_ENABLED(CONFIG_VIDEO_DWC_HDMI_PHY_E40X_SUPPORT_TESTCHIP)
-+	dw_phy_zcal_reset(dw_dev);
-+	do {
-+		usleep_range(1000, 1100);
-+		zcal_done = dw_phy_zcal_done(dw_dev);
-+	} while (!zcal_done && timeout--);
-+
-+	if (!zcal_done) {
-+		dev_err(dw_dev->dev, "Zcal calibration failed\n");
-+		return -ETIMEDOUT;
-+	}
-+#endif /* CONFIG_VIDEO_DWC_HDMI_PHY_E40X_SUPPORT_TESTCHIP */
-+
-+	dw_phy_reset(dw_dev, 0);
-+
-+	/* CMU */
-+	val = DW_PHY_LOCK_THRES(0x08) & DW_PHY_LOCK_THRES_MASK;
-+	val |= DW_PHY_TIMEBASE_OVR_EN;
-+	val |= DW_PHY_TIMEBASE_OVR(phy->cfg_clk * 4) & DW_PHY_TIMEBASE_OVR_MASK;
-+	dw_phy_write(dw_dev, val, DW_PHY_CMU_CONFIG);
-+
-+	/* Color Depth and enable fast switching */
-+	val = dw_phy_read(dw_dev, DW_PHY_SYSTEM_CONFIG);
-+	val &= ~DW_PHY_CLRDEP_MASK;
-+	val |= sc_clrdep | DW_PHY_FAST_SWITCHING;
-+	dw_phy_write(dw_dev, val, DW_PHY_SYSTEM_CONFIG);
-+
-+	/* MPLL */
-+	for (; mpll_cfg->addr != 0x0; mpll_cfg++)
-+		dw_phy_write(dw_dev, mpll_cfg->val, mpll_cfg->addr);
-+
-+	/* Operation for data rates between 3.4Gbps and 6Gbps */
-+	val = dw_phy_read(dw_dev, DW_PHY_CDR_CTRL_CNT);
-+	val &= ~DW_PHY_HDMI_MHL_MODE_MASK;
-+	if (hdmi2)
-+		val |= DW_PHY_HDMI_MHL_MODE_ABOVE_3_4G_BITPS;
-+	else
-+		val |= DW_PHY_HDMI_MHL_MODE_BELOW_3_4G_BITPS;
-+	dw_phy_write(dw_dev, val, DW_PHY_CDR_CTRL_CNT);
-+
-+	/* Scrambling */
-+	val = dw_phy_read(dw_dev, DW_PHY_OVL_PROT_CTRL);
-+	if (scrambling)
-+		val |= DW_PHY_SCRAMBLING_EN_OVR |
-+			DW_PHY_SCRAMBLING_EN_OVR_EN;
-+	else
-+		val &= ~(DW_PHY_SCRAMBLING_EN_OVR |
-+			DW_PHY_SCRAMBLING_EN_OVR_EN);
-+	dw_phy_write(dw_dev, val, DW_PHY_OVL_PROT_CTRL);
-+
-+	/* Enable PHY */
-+	dw_phy_pddq(dw_dev, 0);
-+
-+	dw_dev->color_depth = color_depth;
-+	dw_dev->hdmi2 = hdmi2;
-+	dw_dev->scrambling = scrambling;
-+	return 0;
-+}
-+
-+static int dw_phy_enable(struct dw_phy_dev *dw_dev, unsigned char color_depth,
-+			 bool hdmi2, bool scrambling)
-+{
-+	int ret;
-+
-+	ret = dw_phy_config(dw_dev, color_depth, hdmi2, scrambling);
-+	if (ret)
-+		return ret;
-+
-+	dw_phy_reset(dw_dev, 0);
-+	dw_phy_pddq(dw_dev, 0);
-+	dw_dev->phy_enabled = true;
-+	return 0;
-+}
-+
-+static void dw_phy_disable(struct dw_phy_dev *dw_dev)
-+{
-+	if (!dw_dev->phy_enabled)
-+		return;
-+
-+	dw_phy_reset(dw_dev, 1);
-+	dw_phy_pddq(dw_dev, 1);
-+	dw_phy_svsmode(dw_dev, 0);
-+	dw_dev->mpll_status = 0xFFFF;
-+	dw_dev->phy_enabled = false;
-+}
-+
-+static int dw_phy_set_color_depth(struct dw_phy_dev *dw_dev,
-+				  u8 color_depth)
-+{
-+	u16 val, sc_clrdep;
-+	int ret;
-+
-+	if (!dw_dev->phy_enabled)
-+		return -EINVAL;
-+
-+	ret = dw_phy_color_depth_to_mode(color_depth);
-+	if (ret < 0)
-+		return ret;
-+
-+	sc_clrdep = ret;
-+
-+	/* Color Depth */
-+	val = dw_phy_read(dw_dev, DW_PHY_SYSTEM_CONFIG);
-+	val &= ~DW_PHY_CLRDEP_MASK;
-+	val |= sc_clrdep;
-+	dw_phy_write(dw_dev, val, DW_PHY_SYSTEM_CONFIG);
-+
-+	dev_dbg(dw_dev->dev, "%s: color_depth=%d\n", __func__, color_depth);
-+
-+	return 0;
-+}
-+
-+static bool dw_phy_has_dt(struct dw_phy_dev *dw_dev)
-+{
-+	return of_device_get_match_data(dw_dev->dev);
-+}
-+
-+static int dw_phy_parse_dt(struct dw_phy_dev *dw_dev)
-+{
-+	const struct dw_hdmi_phy_data *of_data;
-+	int ret;
-+
-+	of_data = of_device_get_match_data(dw_dev->dev);
-+	if (!of_data) {
-+		dev_err(dw_dev->dev, "no valid PHY configuration available\n");
-+		return -EINVAL;
-+	}
-+
-+	/* load PHY version */
-+	dw_dev->config->version = of_data->version;
-+
-+	/* load PHY clock */
-+	dw_dev->clk = devm_clk_get(dw_dev->dev, "cfg");
-+	if (IS_ERR(dw_dev->clk)) {
-+		dev_err(dw_dev->dev, "failed to get cfg clock\n");
-+		return PTR_ERR(dw_dev->clk);
-+	}
-+
-+	ret = clk_prepare_enable(dw_dev->clk);
-+	if (ret) {
-+		dev_err(dw_dev->dev, "failed to enable cfg clock\n");
-+		return ret;
-+	}
-+
-+	dw_dev->config->cfg_clk = clk_get_rate(dw_dev->clk) / 1000000U;
-+	if (!dw_dev->config->cfg_clk) {
-+		dev_err(dw_dev->dev, "invalid cfg clock frequency\n");
-+		ret = -EINVAL;
-+		goto err_clk;
-+	}
-+
-+	return 0;
-+
-+err_clk:
-+	clk_disable_unprepare(dw_dev->clk);
-+	return ret;
-+}
-+
-+static int dw_phy_parse_pd(struct dw_phy_dev *dw_dev)
-+{
-+	/* validate if the platform data was properly supplied */
-+
-+	if (!dw_dev->config->version) {
-+		dev_err(dw_dev->dev,
-+			"invalid version platform data supplied\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!dw_dev->config->cfg_clk) {
-+		dev_err(dw_dev->dev, "invalid clock platform data supplied\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int dw_phy_set_data(struct dw_phy_dev *dw_dev)
-+{
-+	const struct dw_hdmi_phy_data *of_data;
-+
-+	of_data = of_device_get_match_data(dw_dev->dev);
-+
-+	if (of_data) {
-+		dw_dev->phy_data = (struct dw_hdmi_phy_data *)of_data;
-+	} else if (dw_dev->config->version == dw_phy_e405_data.version) {
-+		dw_dev->phy_data = &dw_phy_e405_data;
-+	} else if (dw_dev->config->version == dw_phy_e406_data.version) {
-+		dw_dev->phy_data = &dw_phy_e406_data;
-+	} else {
-+		dev_err(dw_dev->dev, "failed setting PHY data\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const char *dw_phy_lookup_dev_id(struct dw_phy_dev *dw_dev)
-+{
-+	const char *dev_id = "dw-hdmi-rx";
-+
-+	/* The lookup dev_id name by default is "dw-hdmi-rx",
-+	 * however if there is a parent device associated then
-+	 * the dev_id will be overridden by that dev_name of parent.
-+	 * This allows other drivers to re-use the same API PHY.
-+	 */
-+	if (dw_dev->dev->parent)
-+		dev_id = dev_name(dw_dev->dev->parent);
-+
-+	return dev_id;
-+}
-+
-+static int dw_hdmi_phy_calibrate(struct phy *phy)
-+{
-+	struct dw_phy_dev *dw_dev = phy_get_drvdata(phy);
-+	const struct phy_configure_opts_hdmi *hdmi_opts = &dw_dev->hdmi_opts;
-+
-+	/* call the equalization function for calibration */
-+	return dw_dev->phy_data->dw_phy_eq_init(dw_dev,
-+						hdmi_opts->calibration_acq,
-+						hdmi_opts->calibration_force);
-+}
-+
-+static int dw_hdmi_phy_power_on(struct phy *phy)
-+{
-+	struct dw_phy_dev *dw_dev = phy_get_drvdata(phy);
-+
-+	return dw_phy_enable(dw_dev, dw_dev->hdmi_opts.color_depth,
-+			     dw_dev->hdmi_opts.tmds_bit_clock_ratio,
-+			     dw_dev->hdmi_opts.scrambling);
-+}
-+
-+static int dw_hdmi_phy_power_off(struct phy *phy)
-+{
-+	struct dw_phy_dev *dw_dev = phy_get_drvdata(phy);
-+
-+	dw_phy_disable(dw_dev);
-+
-+	return 0;
-+}
-+
-+static int dw_hdmi_phy_configure(struct phy *phy,
-+				 union phy_configure_opts *opts)
-+{
-+	const struct phy_configure_opts_hdmi *hdmi_opts = &opts->hdmi;
-+	struct dw_phy_dev *dw_dev = phy_get_drvdata(phy);
-+	int ret = 0;
-+
-+	/* save the configuration options */
-+	memcpy(&dw_dev->hdmi_opts, hdmi_opts, sizeof(*hdmi_opts));
-+
-+	/* check if it is needed to reconfigure deep_color */
-+	if (dw_dev->hdmi_opts.set_color_depth) {
-+		if (dw_dev->phy_enabled) {
-+			ret = dw_phy_set_color_depth(dw_dev,
-+						     hdmi_opts->color_depth);
-+			if (!ret)
-+				dw_dev->hdmi_opts.set_color_depth = 0;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct phy_ops dw_hdmi_phy_ops = {
-+	.configure	= dw_hdmi_phy_configure,
-+	.power_on	= dw_hdmi_phy_power_on,
-+	.calibrate	= dw_hdmi_phy_calibrate,
-+	.power_off	= dw_hdmi_phy_power_off,
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int dw_phy_probe(struct platform_device *pdev)
-+{
-+	struct dw_phy_pdata *pdata = pdev->dev.platform_data;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->of_node;
-+	struct dw_phy_dev *dw_dev;
-+	int ret;
-+
-+	dev_dbg(dev, "probe start\n");
-+
-+	dw_dev = devm_kzalloc(dev, sizeof(*dw_dev), GFP_KERNEL);
-+	if (!dw_dev)
-+		return -ENOMEM;
-+
-+	if (!pdata) {
-+		dev_err(dev, "no platform data supplied\n");
-+		return -EINVAL;
-+	}
-+
-+	dw_dev->dev = dev;
-+	dw_dev->config = pdata;
-+
-+	/* parse configuration */
-+	if (dw_phy_has_dt(dw_dev)) {
-+		/* configuration based on device tree */
-+		ret = dw_phy_parse_dt(dw_dev);
-+	} else {
-+		/* configuration based on platform device */
-+		ret = dw_phy_parse_pd(dw_dev);
-+	}
-+	if (ret)
-+		goto err;
-+
-+	/* set phy_data depending on the PHY type */
-+	ret = dw_phy_set_data(dw_dev);
-+	if (ret)
-+		goto err;
-+
-+	/* Force PHY disabling */
-+	dw_dev->phy_enabled = true;
-+	dw_phy_disable(dw_dev);
-+
-+	/* creates the PHY reference */
-+	dw_dev->phy = devm_phy_create(dw_dev->dev, node, &dw_hdmi_phy_ops);
-+	if (IS_ERR(dw_dev->phy)) {
-+		dev_err(dw_dev->dev, "Failed to create HDMI PHY reference\n");
-+		return PTR_ERR(dw_dev->phy);
-+	}
-+
-+	platform_set_drvdata(pdev, dw_dev);
-+	phy_set_drvdata(dw_dev->phy, dw_dev);
-+
-+	/* create the lookup association for non-dt systems */
-+	if (!node) {
-+		ret = phy_create_lookup(dw_dev->phy, "hdmi-phy",
-+					dw_phy_lookup_dev_id(dw_dev));
-+		if (ret) {
-+			dev_err(dev, "Failed to create HDMI PHY lookup\n");
-+			goto err;
-+		}
-+		dev_dbg(dev,
-+			"phy_create_lookup: con_id='%s' <-> dev_id='%s')\n",
-+			"hdmi-phy", dw_phy_lookup_dev_id(dw_dev));
-+	}
-+
-+	dev_dbg(dev, "driver probed (name=e%d, cfg clock=%d, dev_name=%s)\n",
-+		dw_dev->config->version, dw_dev->config->cfg_clk,
-+		dev_name(dw_dev->dev));
-+	return 0;
-+
-+err:
-+	if (dw_dev->clk)
-+		clk_disable_unprepare(dw_dev->clk);
-+
-+	return ret;
-+}
-+
-+static int dw_phy_remove(struct platform_device *pdev)
-+{
-+	struct dw_phy_dev *dw_dev = platform_get_drvdata(pdev);
-+
-+	phy_remove_lookup(dw_dev->phy, "hdmi-phy",
-+			  dw_phy_lookup_dev_id(dw_dev));
-+
-+	if (dw_dev->clk)
-+		clk_disable_unprepare(dw_dev->clk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id dw_hdmi_phy_e40x_id[] = {
-+	{ .compatible = "snps,dw-hdmi-phy-e405", .data = &dw_phy_e405_data, },
-+	{ .compatible = "snps,dw-hdmi-phy-e406", .data = &dw_phy_e406_data, },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, dw_hdmi_phy_e40x_id);
-+
-+static struct platform_driver dw_phy_e40x_driver = {
-+	.probe = dw_phy_probe,
-+	.remove = dw_phy_remove,
-+	.driver = {
-+		.name = DW_PHY_E40X_DRVNAME,
-+		.of_match_table = dw_hdmi_phy_e40x_id,
-+	}
-+};
-+module_platform_driver(dw_phy_e40x_driver);
-+
-+MODULE_AUTHOR("Jose Abreu <jose.abreu@synopsys.com>");
-+MODULE_AUTHOR("Nelson Costa <nelson.costa@synopsys.com>");
-+MODULE_DESCRIPTION("DesignWare HDMI PHYs e405 and e406 driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/phy/dwc/phy-dw-hdmi-e40x.h b/drivers/phy/dwc/phy-dw-hdmi-e40x.h
-new file mode 100644
-index 0000000..03b5c60
---- /dev/null
-+++ b/drivers/phy/dwc/phy-dw-hdmi-e40x.h
-@@ -0,0 +1,219 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 - present Synopsys, Inc. and/or its affiliates.
-+ * Synopsys DesignWare HDMI PHYs e405 and e406 driver
-+ *
-+ * Author: Jose Abreu <jose.abreu@synopsys.com>
-+ * Author: Nelson Costa <nelson.costa@synopsys.com>
++/* VIC=9 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
++#define V4L2_DV_BT_CEA_720X240P60_VTOT262_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 240, 0, 0, \
++		13500000, 19, 62, 57, 4, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 9) \
++}
 +
-+#ifndef __DW_HDMI_PHY_E40X_H__
-+#define __DW_HDMI_PHY_E40X_H__
-+
-+#include <linux/phy/phy.h>
-+
-+/* PHYs e405 and e406 Registers */
-+
-+/* Clock Measurement Unit Configuration Register */
-+#define DW_PHY_CMU_CONFIG			0x02
-+#define DW_PHY_TIMEBASE_OVR(v)			(v)
-+#define DW_PHY_TIMEBASE_OVR_MASK		GENMASK(8, 0)
-+#define DW_PHY_TIMEBASE_OVR_EN			BIT(9)
-+#define DW_PHY_LOCK_THRES(v)			((v) << 10)
-+#define DW_PHY_LOCK_THRES_MASK			GENMASK(15, 10)
-+
-+/* System Configuration Register */
-+#define DW_PHY_SYSTEM_CONFIG			0x03
-+#define DW_PHY_CLRDEP_8BIT_MODE			(0 << 5)
-+#define DW_PHY_CLRDEP_10BIT_MODE		BIT(5)
-+#define DW_PHY_CLRDEP_12BIT_MODE		(2 << 5)
-+#define DW_PHY_CLRDEP_16BIT_MODE		(3 << 5)
-+#define DW_PHY_CLRDEP_MASK			GENMASK(6, 5)
-+#define DW_PHY_FAST_SWITCHING			BIT(11)
-+
-+/* Main FSM Control Register */
-+#define DW_PHY_MAINFSM_CTRL			0x05
-+#define DW_PHY_MAIN_FSM_STATE(v)		(v)
-+#define DW_PHY_MAIN_FSM_STATE_MASK		GENMASK(3, 0)
-+#define DW_PHY_FORCE_STATE_EN			BIT(4)
-+#define DW_PHY_FORCE_STATE_DIS			(0 << 4)
-+#define DW_PHY_FORCE_STATE_MASK			BIT(4)
-+#define DW_PHY_EQCAL_DIS_CTRL_QUARTER_RATE	(BIT(2) << 9)
-+#define DW_PHY_EQCAL_DIS_CTRL_ONE_EIGHT_RATE	(BIT(3) << 9)
-+#define DW_PHY_EQCAL_DIS_CTRL_MASK		GENMASK(12, 9)
-+
-+/* Main FSM Override 2 Register */
-+#define DW_PHY_MAINFSM_OVR2			0x08
-+#define DW_PHY_EQ_EN_OVR			BIT(5)
-+#define DW_PHY_EQ_EN_OVR_EN			BIT(6)
-+
-+/* Main FSM Status 1 Register */
-+#define DW_PHY_MAINFSM_STATUS1			0x09
-+#define DW_PHY_CLOCK_STABLE			BIT(8)
-+#define DW_PHY_PLL_RATE_BIT0			BIT(9)
-+#define DW_PHY_PLL_RATE_BIT1			(2 << 9)
-+#define DW_PHY_PLL_RATE_MASK			GENMASK(10, 9)
-+
-+/* Overload Protection Control Register */
-+#define DW_PHY_OVL_PROT_CTRL			0x0D
-+#define DW_PHY_SCRAMBLING_EN_OVR		BIT(6)
-+#define DW_PHY_SCRAMBLING_EN_OVR_EN		BIT(7)
-+
-+/* CDR Control Register */
-+#define DW_PHY_CDR_CTRL_CNT			0x0E
-+#define DW_PHY_HDMI_MHL_MODE_BELOW_3_4G_BITPS	(0 << 8)
-+#define DW_PHY_HDMI_MHL_MODE_ABOVE_3_4G_BITPS	BIT(8)
-+#define DW_PHY_HDMI_MHL_MODE_MASK		GENMASK(9, 8)
-+
-+#define DW_PHY_CLK_MPLL_STATUS			0x2F
-+#define DW_PHY_CH0_CDR_CTRL			0x31
-+
-+/* Channel 0 Equalizer Control 1 Register*/
-+#define DW_PHY_CH0_EQ_CTRL1			0x32
-+#define DW_PHY_CH0_LOOP_CTR_LIMIT(v)		(v)
-+#define DW_PHY_CH0_LOOP_CTR_LIMIT_MASK		GENMASK(3, 0)
-+#define DW_PHY_CH0_MSTR_CTR_LIMIT(v)		((v) << 4)
-+#define DW_PHY_CH0_MSTR_CTR_LIMIT_MASK		GENMASK(8, 4)
-+#define DW_PHY_CH0_ADAP_COMP_LIMIT(v)		((v) << 9)
-+#define DW_PHY_CH0_ADAP_COMP_LIMIT_MASK		GENMASK(12, 9)
-+
-+/* Channel 0 Equalizer Control 2 Register */
-+#define DW_PHY_CH0_EQ_CTRL2			0x33
-+#define DW_PHY_CH0_OVRD_LOCK			BIT(1)
-+#define DW_PHY_CH0_OVRD_LOCK_VECTOR_EN		BIT(2)
-+#define DW_PHY_CH0_LB_ACTIVE_OVR		BIT(5)
-+#define DW_PHY_CH0_EQUALIZATION_CTR_THR(v)	((v) << 11)
-+#define DW_PHY_CH0_EQUALIZATION_CTR_THR_MASK	GENMASK(13, 11)
-+#define DW_PHY_CH0_CH_EQ_SAME_OVRD		BIT(14)
-+
-+#define DW_PHY_CH0_EQ_STATUS			0x34
-+
-+/* Channel 0 Equalizer Control 3 Register */
-+#define DW_PHY_CH0_EQ_CTRL3			0x3E
-+#define DW_PHY_CH0_EXT_EQ_SET_MASK		GENMASK(3, 0)
-+
-+#define DW_PHY_CH0_EQ_CTRL4			0x3F
-+#define DW_PHY_CH0_EQ_STATUS2			0x40
-+#define DW_PHY_CH0_EQ_STATUS3			0x42
-+#define DW_PHY_CH0_EQ_CTRL6			0x43
-+#define DW_PHY_CH1_CDR_CTRL			0x51
-+
-+/* Channel 1 Equalizer Control 1 Register */
-+#define DW_PHY_CH1_EQ_CTRL1			0x52
-+#define DW_PHY_CH1_LOOP_CTR_LIMIT(v)		(v)
-+#define DW_PHY_CH1_LOOP_CTR_LIMIT_MASK		GENMASK(3, 0)
-+#define DW_PHY_CH1_MSTR_CTR_LIMIT(v)		((v) << 4)
-+#define DW_PHY_CH1_MSTR_CTR_LIMIT_MASK		GENMASK(8, 4)
-+#define DW_PHY_CH1_ADAP_COMP_LIMIT(v)		((v) << 9)
-+#define DW_PHY_CH1_ADAP_COMP_LIMIT_MASK		GENMASK(12, 9)
-+
-+/* Channel 1 Equalizer Control 2 Register */
-+#define DW_PHY_CH1_EQ_CTRL2			0x53
-+#define DW_PHY_CH1_OVRD_LOCK			BIT(1)
-+#define DW_PHY_CH1_OVRD_LOCK_VECTOR_EN		BIT(2)
-+#define DW_PHY_CH1_LB_ACTIVE_OVR		BIT(5)
-+#define DW_PHY_CH1_EQUALIZATION_CTR_THR(v)	((v) << 11)
-+#define DW_PHY_CH1_EQUALIZATION_CTR_THR_MASK	GENMASK(13, 11)
-+
-+#define DW_PHY_CH1_EQ_STATUS			0x54
-+
-+/* Channel 1 Equalizer Control 3 Register */
-+#define DW_PHY_CH1_EQ_CTRL3			0x5E
-+#define DW_PHY_CH1_EXT_EQ_SET_MASK		GENMASK(3, 0)
-+
-+#define DW_PHY_CH1_EQ_CTRL4			0x5F
-+#define DW_PHY_CH1_EQ_STATUS2			0x60
-+#define DW_PHY_CH1_EQ_STATUS3			0x62
-+#define DW_PHY_CH1_EQ_CTRL6			0x63
-+#define DW_PHY_CH2_CDR_CTRL			0x71
-+
-+/* Channel 2 Equalizer Control 1 Register */
-+#define DW_PHY_CH2_EQ_CTRL1			0x72
-+#define DW_PHY_CH2_LOOP_CTR_LIMIT(v)		(v)
-+#define DW_PHY_CH2_LOOP_CTR_LIMIT_MASK		GENMASK(3, 0)
-+#define DW_PHY_CH2_MSTR_CTR_LIMIT(v)		((v) << 4)
-+#define DW_PHY_CH2_MSTR_CTR_LIMIT_MASK		GENMASK(8, 4)
-+#define DW_PHY_CH2_ADAP_COMP_LIMIT(v)		((v) << 9)
-+#define DW_PHY_CH2_ADAP_COMP_LIMIT_MASK		GENMASK(12, 9)
-+
-+/* Channel 2 Equalizer Control 2 Register */
-+#define DW_PHY_CH2_EQ_CTRL2			0x73
-+#define DW_PHY_CH2_OVRD_LOCK			BIT(1)
-+#define DW_PHY_CH2_OVRD_LOCK_VECTOR_EN		BIT(2)
-+#define DW_PHY_CH2_LB_ACTIVE_OVR		BIT(5)
-+#define DW_PHY_CH2_EQUALIZATION_CTR_THR(v)	((v) << 11)
-+#define DW_PHY_CH2_EQUALIZATION_CTR_THR_MASK	GENMASK(13, 11)
-+
-+#define DW_PHY_CH2_EQ_STATUS			0x74
-+
-+/* Channel 2 Equalizer Control 3 Register */
-+#define DW_PHY_CH2_EQ_CTRL3			0x7E
-+#define DW_PHY_CH2_EXT_EQ_SET_MASK		GENMASK(3, 0)
-+
-+#define DW_PHY_CH2_EQ_CTRL4			0x7F
-+#define DW_PHY_CH2_EQ_STATUS2			0x80
-+#define DW_PHY_CH2_EQ_STATUS3			0x82
-+#define DW_PHY_CH2_EQ_CTRL6			0x83
-+
-+/* PHY equalization test type return codes */
-+#define DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_LONG	1
-+#define DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_SHORT	2
-+#define DW_PHY_EQ_TEST_TYPE_BEST_SET_IS_MAX	3
-+#define DW_PHY_EQ_TEST_TYPE_BEST_SET_ERROR	255
-+
-+/* PHY equalization channel struct */
-+struct dw_phy_eq_ch {
-+	u16 best_long_setting;
-+	u8 valid_long_setting;
-+	u16 best_short_setting;
-+	u8 valid_short_setting;
-+	u16 best_setting;
-+	u16 acc;
-+	u16 acq;
-+	u16 last_acq;
-+	u16 upper_bound_acq;
-+	u16 lower_bound_acq;
-+	u16 out_bound_acq;
-+	u16 read_acq;
-+};
-+
-+/* PHY mpll configuration struct */
-+struct dw_phy_mpll_config {
-+	u16 addr;
-+	u16 val;
-+};
-+
-+struct dw_phy_dev;
-+
-+/* PHY data struct */
-+struct dw_hdmi_phy_data {
-+	const char *name;
-+	unsigned int version;
-+	const struct dw_phy_mpll_config *mpll_cfg;
-+	int (*dw_phy_eq_init)(struct dw_phy_dev *dw_dev, u16 acq, bool force);
-+};
-+
-+/* PHY device struct */
-+struct dw_phy_dev {
-+	struct device *dev;
-+	struct dw_phy_pdata *config;
-+	const struct dw_hdmi_phy_data *phy_data;
-+	struct phy *phy;
-+	struct phy_configure_opts_hdmi hdmi_opts;
-+	struct clk *clk;
-+	u8 phy_enabled;
-+	u16 mpll_status;
-+	u8 color_depth;
-+	u8 hdmi2;
-+	u8 scrambling;
-+};
-+
-+void dw_phy_write(struct dw_phy_dev *dw_dev, u16 val, u16 addr);
-+u16 dw_phy_read(struct dw_phy_dev *dw_dev, u16 addr);
-+void dw_phy_pddq(struct dw_phy_dev *dw_dev, int enable);
-+bool dw_phy_tmds_valid(struct dw_phy_dev *dw_dev);
-+
-+extern const struct dw_hdmi_phy_data dw_phy_e405_data;
-+extern const struct dw_hdmi_phy_data dw_phy_e406_data;
-+
-+#endif /* __DW_HDMI_PHY_E40X_H__ */
-diff --git a/include/linux/phy/dwc/dw-hdmi-phy-pdata.h b/include/linux/phy/dwc/dw-hdmi-phy-pdata.h
-new file mode 100644
-index 0000000..19f3b05
---- /dev/null
-+++ b/include/linux/phy/dwc/dw-hdmi-phy-pdata.h
-@@ -0,0 +1,73 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 - present Synopsys, Inc. and/or its affiliates.
-+ * Synopsys DesignWare HDMI PHY platform data
-+ *
-+ * Author: Jose Abreu <jose.abreu@synopsys.com>
-+ * Author: Nelson Costa <nelson.costa@synopsys.com>
++/* VIC=9 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
++#define V4L2_DV_BT_CEA_720X240P60_VTOT263_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 240, 0, 0, \
++		13500000, 19, 62, 57, 5, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 9) \
++}
 +
-+#ifndef __DW_HDMI_PHY_PDATA_H__
-+#define __DW_HDMI_PHY_PDATA_H__
++/* VIC=10 */
++#define V4L2_DV_BT_CEA_2880X480I60_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 480, 1, 0, \
++		54000000, 76, 248, 228, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 10) \
++}
 +
-+#define DW_PHY_E40X_DRVNAME	"phy-dw-hdmi-e40x"
++/* VIC=11 */
++#define V4L2_DV_BT_CEA_2880X480I60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 480, 1, 0, \
++		54000000, 76, 248, 228, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 11) \
++}
 +
-+/**
-+ * struct dw_phy_funcs - Set of callbacks used to communicate between phy
-+ * and hdmi controller. Controller must correctly fill these callbacks
-+ * before probbing the phy driver.
-+ *
-+ * @write: write callback. Write value 'val' into address 'addr' of phy.
-+ *
-+ * @read: read callback. Read address 'addr' and return the value.
-+ *
-+ * @reset: reset callback. Activate phy reset. Active high.
-+ *
-+ * @pddq: pddq callback. Activate phy configuration mode. Active high.
-+ *
-+ * @svsmode: svsmode callback. Activate phy retention mode. Active low.
-+ *
-+ * @zcal_reset: zcal reset callback. Restart the impedance calibration
-+ * procedure. Active high. This is only used in prototyping and not in real
-+ * ASIC. Callback shall be empty (but non NULL) in ASIC cases.
-+ *
-+ * @zcal_done: zcal done callback. Return the current status of impedance
-+ * calibration procedure. This is only used in prototyping and not in real
-+ * ASIC. Shall return always true in ASIC cases.
-+ *
-+ * @tmds_valid: TMDS valid callback. Return the current status of TMDS signal
-+ * that comes from phy and feeds controller. This is read from a controller
-+ * register.
++/* VIC=12 */
++#define V4L2_DV_BT_CEA_2880X240P60_VTOT262_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 240, 0, 0, \
++		54000000, 76, 248, 228, 4, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 12) \
++}
++
++/* VIC=12 */
++#define V4L2_DV_BT_CEA_2880X240P60_VTOT263_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 240, 0, 0, \
++		54000000, 76, 248, 228, 5, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 12) \
++}
++
++/* VIC=13 */
++#define V4L2_DV_BT_CEA_2880X240P60_VTOT262_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 240, 0, 0, \
++		54000000, 76, 248, 228, 4, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 13) \
++}
++
++/* VIC=13 */
++#define V4L2_DV_BT_CEA_2880X240P60_VTOT263_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 240, 0, 0, \
++		54000000, 76, 248, 228, 5, 3, 15, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 13) \
++}
++
++/* VIC=14 */
++#define V4L2_DV_BT_CEA_1440X480P60_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 0, 0, \
++		54000000, 32, 124, 120, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 14) \
++}
++
++/* VIC=15 */
++#define V4L2_DV_BT_CEA_1440X480P60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 0, 0, \
++		54000000, 32, 124, 120, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 15) \
++}
++
++/* VIC=18 */
++#define V4L2_DV_BT_CEA_720X576P50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 0, 0, \
++		27000000, 12, 64, 68, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 18) \
++}
++
++/* VIC=22 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
-+struct dw_phy_funcs {
-+	void (*write)(void *arg, u16 val, u16 addr);
-+	u16 (*read)(void *arg, u16 addr);
-+	void (*reset)(void *arg, int enable);
-+	void (*pddq)(void *arg, int enable);
-+	void (*svsmode)(void *arg, int enable);
-+	void (*zcal_reset)(void *arg);
-+	bool (*zcal_done)(void *arg);
-+	bool (*tmds_valid)(void *arg);
-+};
++#define V4L2_DV_BT_CEA_720X576I50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 1, 0, \
++		13500000, 12, 63, 69, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 22) \
++}
 +
-+/**
-+ * struct dw_phy_pdata - Platform data definition for Synopsys HDMI PHY.
-+ *
-+ * @version: The version of the phy.
-+ *
-+ * @cfg_clk: Configuration clock.
-+ *
-+ * @funcs: set of callbacks that must be correctly filled and supplied to phy.
-+ * See @dw_phy_funcs.
-+ *
-+ * @funcs_arg: parameter that is supplied to callbacks along with the function
-+ * parameters.
++/* VIC=23 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
 + */
-+struct dw_phy_pdata {
-+	unsigned int version;
-+	unsigned int cfg_clk;
-+	const struct dw_phy_funcs *funcs;
-+	void *funcs_arg;
-+};
++#define V4L2_DV_BT_CEA_720X288P50_VTOT312_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 2, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 23) \
++}
 +
-+#endif /* __DW_HDMI_PHY_PDATA_H__ */
++/* VIC=23 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
++ */
++#define V4L2_DV_BT_CEA_720X288P50_VTOT313_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 3, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 23) \
++}
++
++/* VIC=23 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
++ */
++#define V4L2_DV_BT_CEA_720X288P50_VTOT314_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 4, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 23) \
++}
++
++/* VIC=24 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
++ */
++#define V4L2_DV_BT_CEA_720X288P50_VTOT312_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 2, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 24) \
++}
++
++/* VIC=24 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
++ */
++#define V4L2_DV_BT_CEA_720X288P50_VTOT313_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 3, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 24) \
++}
++
++/* VIC=24 */
++/* Note: these are the nominal timings, for HDMI links this format is typically
++ * double-clocked to meet the minimum pixelclock requirements.
++ */
++#define V4L2_DV_BT_CEA_720X288P50_VTOT314_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 288, 0, 0, \
++		13500000, 12, 63, 69, 4, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 24) \
++}
++
++/* VIC=25 */
++#define V4L2_DV_BT_CEA_2880X576I50_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 576, 1, 0, \
++		54000000, 48, 252, 276, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 25) \
++}
++
++/* VIC=26 */
++#define V4L2_DV_BT_CEA_2880X576I50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 576, 1, 0, \
++		54000000, 48, 252, 276, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 26) \
++}
++
++/* VIC=27 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT312_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 2, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 27) \
++}
++
++/* VIC=27 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT313_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 3, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 27) \
++}
++
++/* VIC=27 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT314_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 4, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 27) \
++}
++
++/* VIC=28 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT312_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 2, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 28) \
++}
++
++/* VIC=28 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT313_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 3, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 28) \
++}
++
++/* VIC=28 */
++#define V4L2_DV_BT_CEA_2880X288P50_VTOT314_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 288, 0, 0, \
++		54000000, 48, 252, 276, 4, 3, 19, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 28) \
++}
++
++/* VIC=29 */
++#define V4L2_DV_BT_CEA_1440X576P50_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 0, 0, \
++		54000000, 24, 128, 136, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 29) \
++}
++
++/* VIC=30 */
++#define V4L2_DV_BT_CEA_1440X576P50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 0, 0, \
++		54000000, 24, 128, 136, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 30) \
++}
++
++/* VIC=35 */
++#define V4L2_DV_BT_CEA_2880X480P60_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 480, 0, 0, \
++		108000000, 64, 248, 240, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 35) \
++}
++
++/* VIC=36 */
++#define V4L2_DV_BT_CEA_2880X480P60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 480, 0, 0, \
++		108000000, 64, 248, 240, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 36) \
++}
++
++/* VIC=37 */
++#define V4L2_DV_BT_CEA_2880X576P50_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 576, 0, 0, \
++		108000000, 48, 256, 272, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 37) \
++}
++
++/* VIC=38 */
++#define V4L2_DV_BT_CEA_2880X576P50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2880, 576, 0, 0, \
++		108000000, 48, 256, 272, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 38) \
++}
++
++/* VIC=39 */
++#define V4L2_DV_BT_CEA_1920X1080I50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 1, V4L2_DV_HSYNC_POS_POL, \
++		72000000, 32, 168, 184, 23, 5, 57, 23, 5, 58, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 39) \
++}
++
++/* VIC=40 */
++#define V4L2_DV_BT_CEA_1920X1080I100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 1, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 528, 44, 148, 2, 5, 15, 2, 5, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 40) \
++}
++
++/* VIC=41 */
++#define V4L2_DV_BT_CEA_1280X720P100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 440, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 41) \
++}
++
++/* VIC=42 */
++#define V4L2_DV_BT_CEA_720X576P100_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 0, 0, \
++		54000000, 12, 64, 68, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 42) \
++}
++
++/* VIC=43 */
++#define V4L2_DV_BT_CEA_720X576P100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 0, 0, \
++		54000000, 12, 64, 68, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 43) \
++}
++
++/* VIC=44 */
++#define V4L2_DV_BT_CEA_1440X576I100_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 1, 0, \
++		54000000, 24, 126, 138, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 44) \
++}
++
++/* VIC=45 */
++#define V4L2_DV_BT_CEA_1440X576I100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 1, 0, \
++		54000000, 24, 126, 138, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 45) \
++}
++
++/* VIC=46 */
++#define V4L2_DV_BT_CEA_1920X1080I120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 1, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 88, 44, 148, 2, 5, 15, 2, 5, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 46) \
++}
++
++/* VIC=47 */
++#define V4L2_DV_BT_CEA_1280X720P120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 110, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 47) \
++}
++
++/* VIC=48 */
++#define V4L2_DV_BT_CEA_720X480P120_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 0, 0, \
++		54000000, 16, 62, 60, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 48) \
++}
++
++/* VIC=49 */
++#define V4L2_DV_BT_CEA_720X480P120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 0, 0, \
++		54000000, 16, 62, 60, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 49) \
++}
++
++/* VIC=50 */
++#define V4L2_DV_BT_CEA_1440X480I120_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 1, 0, \
++		54000000, 38, 124, 114, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 50) \
++}
++
++/* VIC=51 */
++#define V4L2_DV_BT_CEA_1440X480I120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 1, 0, \
++		54000000, 38, 124, 114, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 51) \
++}
++
++/* VIC=52 */
++#define V4L2_DV_BT_CEA_720X576P200_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 0, 0, \
++		108000000, 12, 64, 68, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 52) \
++}
++
++/* VIC=53 */
++#define V4L2_DV_BT_CEA_720X576P200_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 576, 0, 0, \
++		108000000, 12, 64, 68, 5, 5, 39, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 53) \
++}
++
++/* VIC=54 */
++#define V4L2_DV_BT_CEA_1440X576I200_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 1, 0, \
++		108000000, 24, 126, 138, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 54) \
++}
++
++/* VIC=55 */
++#define V4L2_DV_BT_CEA_1440X576I200_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 576, 1, 0, \
++		108000000, 24, 126, 138, 2, 3, 19, 2, 3, 20, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_HALF_LINE | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 55) \
++}
++
++/* VIC=56 */
++#define V4L2_DV_BT_CEA_720X480P240_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 0, 0, \
++		108000000, 16, 62, 60, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 4, 3 }, 56) \
++}
++
++/* VIC=57 */
++#define V4L2_DV_BT_CEA_720X480P240_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(720, 480, 0, 0, \
++		108000000, 16, 62, 60, 9, 6, 30, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 57) \
++}
++
++/* VIC=58 */
++#define V4L2_DV_BT_CEA_1440X480I240_PA4_3 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 1, 0, \
++		108000000, 38, 124, 114, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 4, 3 }, 58) \
++}
++
++/* VIC=59 */
++#define V4L2_DV_BT_CEA_1440X480I240_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1440, 480, 1, 0, \
++		108000000, 38, 124, 114, 4, 3, 15, 4, 3, 16, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_HALF_LINE | \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 59) \
++}
++
++/* VIC=63 */
++#define V4L2_DV_BT_CEA_1920X1080P120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 88, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 63) \
++}
++
++/* VIC=64 */
++#define V4L2_DV_BT_CEA_1920X1080P100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 528, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 64) \
++}
++
++/* VIC=65 */
++#define V4L2_DV_BT_CEA_1280X720P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		59400000, 1760, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 65) \
++}
++
++/* VIC=66 */
++#define V4L2_DV_BT_CEA_1280X720P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 2420, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 66) \
++}
++
++/* VIC=67 */
++#define V4L2_DV_BT_CEA_1280X720P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 1760, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 67) \
++}
++
++/* VIC=68 */
++#define V4L2_DV_BT_CEA_1280X720P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 440, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 68) \
++}
++
++/* VIC=69 */
++#define V4L2_DV_BT_CEA_1280X720P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 110, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 69) \
++}
++
++/* VIC=70 */
++#define V4L2_DV_BT_CEA_1280X720P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 440, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 70) \
++}
++
++/* VIC=71 */
++#define V4L2_DV_BT_CEA_1280X720P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 110, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 71) \
++}
++
++/* VIC=72 */
++#define V4L2_DV_BT_CEA_1920X1080P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 638, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 72) \
++}
++
++/* VIC=73 */
++#define V4L2_DV_BT_CEA_1920X1080P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 528, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 73) \
++}
++
++/* VIC=74 */
++#define V4L2_DV_BT_CEA_1920X1080P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		74250000, 88, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 74) \
++}
++
++/* VIC=75 */
++#define V4L2_DV_BT_CEA_1920X1080P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 528, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 75) \
++}
++
++/* VIC=76 */
++#define V4L2_DV_BT_CEA_1920X1080P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 88, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 76) \
++}
++
++/* VIC=77 */
++#define V4L2_DV_BT_CEA_1920X1080P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 528, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 77) \
++}
++
++/* VIC=78 */
++#define V4L2_DV_BT_CEA_1920X1080P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 88, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 78) \
++}
++
++/* VIC=79 */
++#define V4L2_DV_BT_CEA_1680X720P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		59400000, 1360, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 79) \
++}
++
++/* VIC=80 */
++#define V4L2_DV_BT_CEA_1680X720P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		59400000, 1228, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 80) \
++}
++
++/* VIC=81 */
++#define V4L2_DV_BT_CEA_1680X720P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		59400000, 700, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 81) \
++}
++
++/* VIC=82 */
++#define V4L2_DV_BT_CEA_1680X720P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		82500000, 260, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 82) \
++}
++
++/* VIC=83 */
++#define V4L2_DV_BT_CEA_1680X720P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		99000000, 260, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 83) \
++}
++
++/* VIC=84 */
++#define V4L2_DV_BT_CEA_1680X720P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		165000000, 60, 40, 220, 5, 5, 95, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 84) \
++}
++
++/* VIC=85 */
++#define V4L2_DV_BT_CEA_1680X720P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		198000000, 60, 40, 220, 5, 5, 95, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 85) \
++}
++
++/* VIC=86 */
++#define V4L2_DV_BT_CEA_2560X1080P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		99000000, 998, 44, 148, 4, 5, 11, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 86) \
++}
++
++/* VIC=87 */
++#define V4L2_DV_BT_CEA_2560X1080P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		90000000, 448, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 87) \
++}
++
++/* VIC=88 */
++#define V4L2_DV_BT_CEA_2560X1080P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		118800000, 768, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 88) \
++}
++
++/* VIC=89 */
++#define V4L2_DV_BT_CEA_2560X1080P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		185625000, 548, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 89) \
++}
++
++/* VIC=90 */
++#define V4L2_DV_BT_CEA_2560X1080P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		198000000, 248, 44, 148, 4, 5, 11, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 90) \
++}
++
++/* VIC=91 */
++#define V4L2_DV_BT_CEA_2560X1080P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		371250000, 218, 44, 148, 4, 5, 161, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 91) \
++}
++
++/* VIC=92 */
++#define V4L2_DV_BT_CEA_2560X1080P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(2560, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		495000000, 548, 44, 148, 4, 5, 161, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 92) \
++}
++
++/* VIC=103 */
++#define V4L2_DV_BT_CEA_3840X2160P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 1276, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 103) \
++}
++
++/* VIC=104 */
++#define V4L2_DV_BT_CEA_3840X2160P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 1056, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 104) \
++}
++
++/* VIC=105 */
++#define V4L2_DV_BT_CEA_3840X2160P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		297000000, 176, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 105) \
++}
++
++/* VIC=106 */
++#define V4L2_DV_BT_CEA_3840X2160P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1056, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 106) \
++}
++
++/* VIC=107 */
++#define V4L2_DV_BT_CEA_3840X2160P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 176, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 107) \
++}
++
++/* VIC=108 */
++#define V4L2_DV_BT_CEA_1280X720P48_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		90000000, 960, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 108) \
++}
++
++/* VIC=109 */
++#define V4L2_DV_BT_CEA_1280X720P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1280, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		90000000, 960, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 109) \
++}
++
++/* VIC=110 */
++#define V4L2_DV_BT_CEA_1680X720P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1680, 720, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		99000000, 810, 40, 220, 5, 5, 20, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 110) \
++}
++
++/* VIC=111 */
++#define V4L2_DV_BT_CEA_1920X1080P48_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 638, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 111) \
++}
++
++/* VIC=112 */
++#define V4L2_DV_BT_CEA_1920X1080P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 638, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 112) \
++}
++
++/* VIC=114 */
++#define V4L2_DV_BT_CEA_3840X2160P48_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1276, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 114) \
++}
++
++/* VIC=115 */
++#define V4L2_DV_BT_CEA_4096X2160P48_PA256_135 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(4096, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1020, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 256, 135 }, 115) \
++}
++
++/* VIC=116 */
++#define V4L2_DV_BT_CEA_3840X2160P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1276, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 116) \
++}
++
++/* VIC=117 */
++#define V4L2_DV_BT_CEA_3840X2160P100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 1056, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 117) \
++}
++
++/* VIC=118 */
++#define V4L2_DV_BT_CEA_3840X2160P120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 176, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 118) \
++}
++
++/* VIC=119 */
++#define V4L2_DV_BT_CEA_3840X2160P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 1056, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 119) \
++}
++
++/* VIC=120 */
++#define V4L2_DV_BT_CEA_3840X2160P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 176, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 120) \
++}
++
++/* VIC=121 */
++#define V4L2_DV_BT_CEA_5120X2160P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		396000000, 1996, 88, 296, 8, 10, 22, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 121) \
++}
++
++/* VIC=122 */
++#define V4L2_DV_BT_CEA_5120X2160P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		396000000, 1696, 88, 296, 8, 10, 22, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 122) \
++}
++
++/* VIC=123 */
++#define V4L2_DV_BT_CEA_5120X2160P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		396000000, 664, 88, 296, 8, 10, 22, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 123) \
++}
++
++/* VIC=124 */
++#define V4L2_DV_BT_CEA_5120X2160P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		742500000, 746, 88, 296, 8, 10, 297, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 124) \
++}
++
++/* VIC=125 */
++#define V4L2_DV_BT_CEA_5120X2160P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		742500000, 1096, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 125) \
++}
++
++/* VIC=126 */
++#define V4L2_DV_BT_CEA_5120X2160P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		742500000, 164, 88, 128, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 126) \
++}
++
++/* VIC=127 */
++#define V4L2_DV_BT_CEA_5120X2160P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1485000000, 1096, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 127) \
++}
++
++/* VIC=193 */
++#define V4L2_DV_BT_CEA_5120X2160P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(5120, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1485000000, 154, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 193) \
++}
++
++/* VIC=194 */
++#define V4L2_DV_BT_CEA_7680X4320P24_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 2552, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 194) \
++}
++
++/* VIC=195 */
++#define V4L2_DV_BT_CEA_7680X4320P25_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 2352, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 195) \
++}
++
++/* VIC=196 */
++#define V4L2_DV_BT_CEA_7680X4320P30_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 552, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 196) \
++}
++
++/* VIC=197 */
++#define V4L2_DV_BT_CEA_7680X4320P48_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 2552, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 197) \
++}
++
++/* VIC=198 */
++#define V4L2_DV_BT_CEA_7680X4320P50_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 2352, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 198) \
++}
++
++/* VIC=199 */
++#define V4L2_DV_BT_CEA_7680X4320P60_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 552, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 199) \
++}
++
++/* VIC=200 */
++#define V4L2_DV_BT_CEA_7680X4320P100_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		4752000000ULL, 2112, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 16, 9 }, 200) \
++}
++
++/* VIC=201 */
++#define V4L2_DV_BT_CEA_7680X4320P120_PA16_9 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		4752000000ULL, 352, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 16, 9 }, 201) \
++}
++
++/* VIC=202 */
++#define V4L2_DV_BT_CEA_7680X4320P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 2552, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 202) \
++}
++
++/* VIC=203 */
++#define V4L2_DV_BT_CEA_7680X4320P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 2352, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 203) \
++}
++
++/* VIC=204 */
++#define V4L2_DV_BT_CEA_7680X4320P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 552, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 204) \
++}
++
++/* VIC=205 */
++#define V4L2_DV_BT_CEA_7680X4320P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 2552, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 205) \
++}
++
++/* VIC=206 */
++#define V4L2_DV_BT_CEA_7680X4320P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 2352, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 206) \
++}
++
++/* VIC=207 */
++#define V4L2_DV_BT_CEA_7680X4320P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2376000000ULL, 552, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 207) \
++}
++
++/* VIC=208 */
++#define V4L2_DV_BT_CEA_7680X4320P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		4752000000ULL, 2112, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 208) \
++}
++
++/* VIC=209 */
++#define V4L2_DV_BT_CEA_7680X4320P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(7680, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		4752000000ULL, 352, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 209) \
++}
++
++/* VIC=210 */
++#define V4L2_DV_BT_CEA_10240X4320P24_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1485000000, 1492, 176, 592, 16, 20, 594, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 210) \
++}
++
++/* VIC=211 */
++#define V4L2_DV_BT_CEA_10240X4320P25_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1485000000, 2492, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 211) \
++}
++
++/* VIC=212 */
++#define V4L2_DV_BT_CEA_10240X4320P30_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1485000000, 288, 176, 296, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 212) \
++}
++
++/* VIC=213 */
++#define V4L2_DV_BT_CEA_10240X4320P48_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2970000000ULL, 1492, 176, 592, 16, 20, 594, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 213) \
++}
++
++/* VIC=214 */
++#define V4L2_DV_BT_CEA_10240X4320P50_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2970000000ULL, 2492, 176, 592, 16, 20, 44, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 214) \
++}
++
++/* VIC=215 */
++#define V4L2_DV_BT_CEA_10240X4320P60_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		2970000000ULL, 288, 176, 296, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 215) \
++}
++
++/* VIC=216 */
++#define V4L2_DV_BT_CEA_10240X4320P100_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		5940000000ULL, 2192, 176, 592, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 64, 27 }, 216) \
++}
++
++/* VIC=217 */
++#define V4L2_DV_BT_CEA_10240X4320P120_PA64_27 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(10240, 4320, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		5940000000ULL, 288, 176, 296, 16, 20, 144, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 64, 27 }, 217) \
++}
++
++/* VIC=218 */
++#define V4L2_DV_BT_CEA_4096X2160P100_PA256_135 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(4096, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 800, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_IS_CE_VIDEO | V4L2_DV_FL_HAS_PICTURE_ASPECT | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 256, 135 }, 218) \
++}
++
++/* VIC=219 */
++#define V4L2_DV_BT_CEA_4096X2160P120_PA256_135 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(4096, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		1188000000, 88, 88, 128, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_PICTURE_ASPECT | V4L2_DV_FL_HAS_CEA861_VIC, \
++		{ 256, 135 }, 219) \
++}
+ 
+ /* VESA Discrete Monitor Timings as per version 1.0, revision 12 */
+ 
 -- 
 2.7.4
 
