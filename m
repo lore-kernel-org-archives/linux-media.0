@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FEFC43462
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B19C433B4
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:42:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79A0C61279
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:42:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D662A60200
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:42:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242617AbhETMoB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 08:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S242653AbhETMoE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 08:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237089AbhETMnU (ORCPT
+        with ESMTP id S241962AbhETMnV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 May 2021 08:43:20 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95568C056490
-        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 05:03:04 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id a4so17423356wrr.2
-        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 05:03:04 -0700 (PDT)
+        Thu, 20 May 2021 08:43:21 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2BDC0611AC
+        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 05:03:07 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id u5-20020a7bc0450000b02901480e40338bso4931113wmc.1
+        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 05:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=erxm+Xcrd7+qygxkCLKKNU6rbI+w3lNDzPu8B/httcU=;
-        b=OE1cmOeal6mPQ3zY2RJYNzLtzyM0CyRa/eBZHVQFbLPbo4XxFRKmFTfyjaRvKhOasA
-         hsZjqbS+YYSXLp0jBQp9nvLozK2NuK4+EZXBYKlK/zb+ZI5ALEfDhcrouqo71EsiWyGl
-         dpRYBbKFuPPVmDWnZFYucI6qPiXCOW2SI0++B+paB0abLzPN8pmtpqj9s8MZBLSLa1gF
-         BOS1Y4mjTQipSdmTUML3II0zTQleLPhan2VJ4IaVPVI178JIN2NNaiQYqUFo4xEbJysy
-         fCafIbHV0mLWXiEuaeESdDWjMqZIMKDL2IfpqSl0N6fhknVAhAmOTzgb1DAV0LKz/mT1
-         XpbQ==
+        bh=OmMgm22TVdmn0YlU70PwNW8OaCfk/LhHrn8mYGM1ILk=;
+        b=QD/KEVmze2nJBsl72X+9/4makCpNLgnhq9kHYQtB0j4vPW1YZXrU1khxF3fGuZU0h+
+         ZPx91P2Ne+MJofYJYv5eKK7Yft2hMjg3D7P89z+qpLWEu9oeG6N31skJJsST4qDrmNuL
+         ySurx8C8e78/4JZjFHBzSggFMTGDA1MPBXw05kOtgeBccYfmGiCg/i8VWeoCenhST8s3
+         okGcBzBiUXfR8+BF1kkNK6mjF301dRzRn875g/Zz6dy9mlYT5wmxs++2gIlYPo+WBEGW
+         VwU0WXfkvJCZBLqh2oTsGKIhfsdLjBIrutsQI0UPvKw8CSfIyIxy42lR1AHIt+/e9wWS
+         nUuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=erxm+Xcrd7+qygxkCLKKNU6rbI+w3lNDzPu8B/httcU=;
-        b=iwIQY1dz4RSMKC+WVTYdDS0b7/p6pDCq0P2ZRCqyLJZfY6vdnwm9MMn1PLgnDlSZMv
-         yI/8nVsiZP1XA9wM1fL4OUQ6adYGmH7w9PwZVN5/rKKebcRAt0vBrsWhLMR5jjmv+dYD
-         YYqKWAnGEFhqyFW2y3o7B7t1daonxHXjiVl8ETULT5zaKx3C4fcGcib7XP7lyUlf7omf
-         1IJrpSoU9oEUfF0Q3bipnTP/s0wrhDPOvV/79NXYynizUue/0hp0hAzqDaXZ6Degqjz5
-         t0FCEq3967/7EjBJe2IX78aGoDxognT21BL25STenhO9mP+O7OT5XkIkh+f11jJrqy/e
-         whyw==
-X-Gm-Message-State: AOAM532ZWS3wXyqx8zcbj9q/3Yx2z/ipLdI+oNqH3DKY4ffYu1plKfk0
-        XtbghiqDm2vOizlGdJdbtv7W+A==
-X-Google-Smtp-Source: ABdhPJzC65qtzUVA+gIP2kmGgel53QLMcK/7hJnqDkaigOHVU54rfgzhY6XVPlH7o1hAbiiYYuUonw==
-X-Received: by 2002:a5d:50c7:: with SMTP id f7mr4037179wrt.189.1621512183252;
-        Thu, 20 May 2021 05:03:03 -0700 (PDT)
+        bh=OmMgm22TVdmn0YlU70PwNW8OaCfk/LhHrn8mYGM1ILk=;
+        b=DeFPLyaFwJ+pw4PnRSLQvCovgABuc56nUws85xf9in8ZB9hplvAhzQiX0J9/pFJSMn
+         N+XCXr+oejdBTxmN5RgAwENtaDPsx3DqvuNzv5kWCmMUPB0BESiysRk3/TYp26a+epX3
+         PLfU6z4Lync2stN85fFcADKmuaHWD9FP9BvrFlPQoGWM2J2ZYzmOqZuRhnoRNoMruyj2
+         7hX1L8oS0hOalyaCEz1I+pWtz4/IJBCPkfUvJDIprIiijZbSHBFmR31gjdn+k0ym0ZY3
+         qJurV41B4bypIuYz2r+iyayMliZEomChhEb29KTMGSUuZ3accWfjUynHCNDvY7wx90pz
+         2mCg==
+X-Gm-Message-State: AOAM533vKvm4Caq+//h/wTofCT/tfbY+/ha/d+82riODK4L4bS/TGsHq
+        xaiX6bwkhtj4lq+PIkGtQrqy0g==
+X-Google-Smtp-Source: ABdhPJxIRwowWq6Q6Jk0qbvu6pd7yWq+Mmva8O37/LRH9s85uRpcjtEb6krZZtsukcUmk7nXDt3tAw==
+X-Received: by 2002:a1c:bbc3:: with SMTP id l186mr3700393wmf.38.1621512186295;
+        Thu, 20 May 2021 05:03:06 -0700 (PDT)
 Received: from dell.default ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id j10sm2886332wrt.32.2021.05.20.05.03.02
+        by smtp.gmail.com with ESMTPSA id j10sm2886332wrt.32.2021.05.20.05.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 05:03:02 -0700 (PDT)
+        Thu, 20 May 2021 05:03:05 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -66,9 +66,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 11/38] drm/amd/amdgpu/amdgpu_debugfs: Fix a couple of misnamed functions
-Date:   Thu, 20 May 2021 13:02:21 +0100
-Message-Id: <20210520120248.3464013-12-lee.jones@linaro.org>
+Subject: [PATCH 14/38] drm/amd/amdgpu/gfx_v7_0: Repair function names in the documentation
+Date:   Thu, 20 May 2021 13:02:24 +0100
+Message-Id: <20210520120248.3464013-15-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210520120248.3464013-1-lee.jones@linaro.org>
 References: <20210520120248.3464013-1-lee.jones@linaro.org>
@@ -81,8 +81,9 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c:1004: warning: expecting prototype for amdgpu_debugfs_regs_gfxoff_write(). Prototype was for amdgpu_debugfs_gfxoff_write() instead
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c:1053: warning: expecting prototype for amdgpu_debugfs_regs_gfxoff_status(). Prototype was for amdgpu_debugfs_gfxoff_read() instead
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2126: warning: expecting prototype for gfx_v7_0_ring_emit_hdp(). Prototype was for gfx_v7_0_ring_emit_hdp_flush() instead
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2262: warning: expecting prototype for gfx_v7_0_ring_emit_ib(). Prototype was for gfx_v7_0_ring_emit_ib_gfx() instead
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:3207: warning: expecting prototype for gfx_v7_0_ring_emit_vm_flush(). Prototype was for gfx_v7_0_ring_emit_pipeline_sync() instead
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
@@ -95,31 +96,40 @@ Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-index bcaf271b39bf5..a9bbb0034e1ec 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -990,7 +990,7 @@ static ssize_t amdgpu_debugfs_gpr_read(struct file *f, char __user *buf,
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+index c35fdd2ef2d4d..685212c3ddae5 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+@@ -2116,7 +2116,7 @@ static int gfx_v7_0_ring_test_ring(struct amdgpu_ring *ring)
  }
  
  /**
-- * amdgpu_debugfs_regs_gfxoff_write - Enable/disable GFXOFF
-+ * amdgpu_debugfs_gfxoff_write - Enable/disable GFXOFF
+- * gfx_v7_0_ring_emit_hdp - emit an hdp flush on the cp
++ * gfx_v7_0_ring_emit_hdp_flush - emit an hdp flush on the cp
   *
-  * @f: open file handle
-  * @buf: User buffer to write data from
-@@ -1041,7 +1041,7 @@ static ssize_t amdgpu_debugfs_gfxoff_write(struct file *f, const char __user *bu
- 
+  * @ring: amdgpu_ring structure holding ring information
+  *
+@@ -2242,7 +2242,7 @@ static void gfx_v7_0_ring_emit_fence_compute(struct amdgpu_ring *ring,
+  * IB stuff
+  */
+ /**
+- * gfx_v7_0_ring_emit_ib - emit an IB (Indirect Buffer) on the ring
++ * gfx_v7_0_ring_emit_ib_gfx - emit an IB (Indirect Buffer) on the ring
+  *
+  * @ring: amdgpu_ring structure holding ring information
+  * @job: job to retrieve vmid from
+@@ -3196,7 +3196,7 @@ static int gfx_v7_0_cp_resume(struct amdgpu_device *adev)
+ }
  
  /**
-- * amdgpu_debugfs_regs_gfxoff_status - read gfxoff status
-+ * amdgpu_debugfs_gfxoff_read - read gfxoff status
+- * gfx_v7_0_ring_emit_vm_flush - cik vm flush using the CP
++ * gfx_v7_0_ring_emit_pipeline_sync - cik vm flush using the CP
   *
-  * @f: open file handle
-  * @buf: User buffer to store read data in
+  * @ring: the ring to emit the commands to
+  *
 -- 
 2.31.1
 
