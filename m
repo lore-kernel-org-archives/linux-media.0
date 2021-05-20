@@ -3,103 +3,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59055C433ED
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40DC7C43460
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:17:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 341AC61163
-	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:15:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DFCC61186
+	for <linux-media@archiver.kernel.org>; Thu, 20 May 2021 12:17:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbhETMQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 May 2021 08:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S235572AbhETMSz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 May 2021 08:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbhETMQN (ORCPT
+        with ESMTP id S235553AbhETMSn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 May 2021 08:16:13 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEBCC0612ED
-        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 03:57:30 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gb21-20020a17090b0615b029015d1a863a91so5238116pjb.2
-        for <linux-media@vger.kernel.org>; Thu, 20 May 2021 03:57:30 -0700 (PDT)
+        Thu, 20 May 2021 08:18:43 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F67AC07A822;
+        Thu, 20 May 2021 04:05:38 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id e17so1482779pfl.5;
+        Thu, 20 May 2021 04:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PlV0ND2zMSHfNqzEpFSjKgb1Ow4U28pqFWjx1oA2ZI8=;
-        b=BYZSBLouIgG4roXRxQcWWuJimWgriJIdH1kbtNbl8WjMOcvjShw3+qTxXf7yDjxjRw
-         TuMJKaWlgb33vo8JffUd/G1Wivv9JHXi1KKaeh8S2YX1Yyl9kNwgDxuQ7p0dAP+UzVYS
-         3pc64XxVU33PaEzebd7oX6QQ8UF3hKt0ciOx8yi6Ci9XX4YxEerxDDWHDerw3cmz8Zv+
-         a0Uj4YgxKlxrdpJCI4DOTVdzd80YNL4ArB4vIpCbHBjZo5wQA5yRuLfVaptNpVqKl8K5
-         u/QBbXWx1/NM0rGtjw9raSNbbCwiwraBRm0lQYHSZzESZxnS+IRoYvyb2OiXZEDx26DK
-         ECWg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=0oFfIWOdrNxxHDeBLAkvWpJ2lIKRgTWmgVtZro160nA=;
+        b=NgzNWH/sWTyfspG523F3M89WfHPNXWnk/w5kyeLxo7FcaM+DuOjyCZbUk3FbfITIkI
+         eXM5D7qbkqyA5IULgS2k4qu1LImkHPUUKnX8KyMyXc4UWFtgi3/UrsSqKPI1YKXBeafC
+         yumG1AhjmP13RjNkrXNiNx8mJC3TCJb4Y3Z1jwLNWCRUPOxviTuGyLDSMw1EHGyjLfSI
+         fQ6UFlKhtMtlh0+RtMANy6gCOVNBsO9O1OAWNYdc8A+S8hRSAnpkBEPFZDF2SJZUdnL+
+         HZs/K5ZVpzR86VO3Inhw/89ynPrZIaV22i19X8Qen6DI491cd9rJJFVWgkQzK+YiNAdt
+         X0Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PlV0ND2zMSHfNqzEpFSjKgb1Ow4U28pqFWjx1oA2ZI8=;
-        b=aN/msMaAQe3yNOoCl0mcqMOgG/zoYJsphW0lkc3WPPbF8PdxJ+00geyAeJauq0s7R0
-         aKGX5thAJoF17IOMw0pCCKY8/19ZDXesOGxHeKalJRYSqHtkv496I5Nw0xD2ssBqNlqu
-         LIP5Bxe/+hhfwDleafqKfalQBkbduVTDwf8jjKBJJlPsAjrJHAeFMecSfDz6btuJM+ZL
-         bvcWLUl0ytQpt/b4xtOlVvRCKnyoaxe2Ib+OroBUviAOtVqGI3F1p1bEtf0xorWrCQUT
-         7kyYLvL8y+RzWbyIBKCNQYPiL2dtR6OcVvsAVvgz1s12nik1aSQt2y/Jcr6LLQvT/gxc
-         UoDg==
-X-Gm-Message-State: AOAM533M8r+fqSIpVuKiZmynFpUDycBmncO89LCjNdGUX4asm3gGWMjG
-        wWB1d8Ky9Af2hPMsOOBzedjmVBdQEoaVEi0BwIfEMA==
-X-Google-Smtp-Source: ABdhPJxGZPs13PLXuzze7/vkQeHoAbJomuHm3IrrZMyl4A5feCJsHjkf8pa88MmpcuR6RrfFqIkrob0bkH4c+26E8pQ=
-X-Received: by 2002:a17:902:b70f:b029:f4:5445:cd9f with SMTP id
- d15-20020a170902b70fb02900f45445cd9fmr5339434pls.32.1621508250299; Thu, 20
- May 2021 03:57:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210511180728.23781-1-jonathan@marek.ca> <20210511180728.23781-7-jonathan@marek.ca>
-In-Reply-To: <20210511180728.23781-7-jonathan@marek.ca>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 20 May 2021 12:57:18 +0200
-Message-ID: <CAG3jFytobK4CoX9hg=LFpBAW9QMeiQJJyQ2hK4YE9o44efpHqw@mail.gmail.com>
-Subject: Re: [PATCH 06/17] media: camss: csid-170: remove stray comment
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     MSM <linux-arm-msm@vger.kernel.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "open list:QUALCOMM CAMERA SUBSYSTEM DRIVER" 
-        <linux-media@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=0oFfIWOdrNxxHDeBLAkvWpJ2lIKRgTWmgVtZro160nA=;
+        b=me20e6Ln27AmW20z3cd09oS/bA+/1PHU56ng3e9mKfNijh9kuFCU9fMnk8Wqkip1jQ
+         qr2rAFqkQ3IVQ8YrmhDi/OdzaMGdSaS1TqaPe8LqbzdzskSxenqGDEOy3CEhi0v8sxdC
+         1SuSrmaOhqXpuuFaBZGc6qpy5gbhnk553vDF4nv0YbJemU1A3+wyPPxwyEdKHsiSnhMC
+         I9CE+sN6/wvEinMq0/Ki4vdkSLZhXIzD2jTH1fDZQC8UAkfgGC8l2CTbNui27m6K8mBZ
+         ynBTg9gB+HuRgzY0F5+rthpoRK+QiY61XIRzszdLrezimMEl34V36H6UguMf8Pvqp/S3
+         JqPg==
+X-Gm-Message-State: AOAM531c1ducbM5p3igi5QwIKKSiYvxUKRzdRJO3qTLr/V2hYr3ikB8z
+        AExYzdBZudNUspqOWBIY0fk=
+X-Google-Smtp-Source: ABdhPJwNSLnDX2NgTftaUo9jI4/HhJwLnQlxnfQwRUGa/5PdBWI9rxfBNoSJccRirWl2S1GSdeTn7g==
+X-Received: by 2002:a63:f443:: with SMTP id p3mr3993109pgk.378.1621508738022;
+        Thu, 20 May 2021 04:05:38 -0700 (PDT)
+Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
+        by smtp.gmail.com with ESMTPSA id hk15sm5839121pjb.53.2021.05.20.04.05.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 20 May 2021 04:05:37 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     mchehab@kernel.org, mchehab+huawei@kernel.org,
+        hverkuil-cisco@xs4all.nl, ezequiel@collabora.com, gnurou@gmail.com,
+        pihsun@chromium.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org
+Cc:     patrice.chotard@foss.st.com, hugues.fruchet@foss.st.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Dillon Min <dillon.minfei@gmail.com>
+Subject: [PATCH 1/7] media: admin-guide: add stm32-dma2d description
+Date:   Thu, 20 May 2021 19:05:21 +0800
+Message-Id: <1621508727-24486-2-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1621508727-24486-1-git-send-email-dillon.minfei@gmail.com>
+References: <1621508727-24486-1-git-send-email-dillon.minfei@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 11 May 2021 at 20:08, Jonathan Marek <jonathan@marek.ca> wrote:
->
-> This is a leftover from my original patches, it doesn't serve any purpose.
-> (it was a reminder to figure out how downstream sets a particular field in
-> the register).
->
-> Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> ---
->  drivers/media/platform/qcom/camss/camss-csid-170.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-> index 2bc695819919..3958bacd7b97 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csid-170.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-> @@ -441,7 +441,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
->
->         val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
->         val |= 1 << CSI2_RX_CFG1_MISR_EN;
-> -       writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
-> +       writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
->
->         val = 1 << RDI_CTRL_HALT_CMD;
->         writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
+From: Dillon Min <dillon.minfei@gmail.com>
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+add stm32-dma2d description for dma2d driver
+
+Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
+---
+ Documentation/admin-guide/media/platform-cardlist.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/admin-guide/media/platform-cardlist.rst b/Documentation/admin-guide/media/platform-cardlist.rst
+index 261e7772eb3e..ac73c4166d1e 100644
+--- a/Documentation/admin-guide/media/platform-cardlist.rst
++++ b/Documentation/admin-guide/media/platform-cardlist.rst
+@@ -60,6 +60,7 @@ s5p-mfc            Samsung S5P MFC Video Codec
+ sh_veu             SuperH VEU mem2mem video processing
+ sh_vou             SuperH VOU video output
+ stm32-dcmi         STM32 Digital Camera Memory Interface (DCMI)
++stm32-dma2d        STM32 Chrom-Art Accelerator Unit
+ sun4i-csi          Allwinner A10 CMOS Sensor Interface Support
+ sun6i-csi          Allwinner V3s Camera Sensor Interface
+ sun8i-di           Allwinner Deinterlace
+-- 
+2.7.4
+
