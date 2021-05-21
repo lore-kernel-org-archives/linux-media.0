@@ -2,113 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638FBC433ED
-	for <linux-media@archiver.kernel.org>; Fri, 21 May 2021 13:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5BC1C43460
+	for <linux-media@archiver.kernel.org>; Fri, 21 May 2021 13:29:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A7FA613EC
-	for <linux-media@archiver.kernel.org>; Fri, 21 May 2021 13:25:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABA81610CB
+	for <linux-media@archiver.kernel.org>; Fri, 21 May 2021 13:29:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbhEUN1C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 May 2021 09:27:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:47306 "EHLO foss.arm.com"
+        id S235691AbhEUNaz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 May 2021 09:30:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47056 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235201AbhEUN05 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 May 2021 09:26:57 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55B3811B3;
-        Fri, 21 May 2021 06:25:34 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.33.243])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 795FC3F73B;
-        Fri, 21 May 2021 06:25:28 -0700 (PDT)
-Date:   Fri, 21 May 2021 14:25:19 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Joe Richey <joerichey94@gmail.com>
-Cc:     trivial@kernel.org, Joe Richey <joerichey@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Lei Cao <lei.cao@stratus.com>,
-        Peter Xu <peterx@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Kenneth Lee <liguozhu@hisilicon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-accelerators@lists.ozlabs.org
-Subject: Re: [PATCH v2 3/7] drivers: firmware: psci:  Use _BITUL() macro in
- UAPI headers
-Message-ID: <20210521132519.GA7325@C02TD0UTHF1T.local>
-References: <20210520104343.317119-1-joerichey94@gmail.com>
- <20210521085849.37676-1-joerichey94@gmail.com>
- <20210521085849.37676-4-joerichey94@gmail.com>
+        id S235439AbhEUNat (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 21 May 2021 09:30:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4846E613D8;
+        Fri, 21 May 2021 13:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621603766;
+        bh=qO4SLfrW1W78bLSZRB/dcva+XP0knpmkyOnmLhDkIo4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CBxWl4F8qtQ8vxah7ELt8ou/YTjNMd/PXn3b6ldEZROchGHQnUVglsz6lyYpR+pRF
+         YgyzcSqrIU4rG3uQoYjpKXwZz0sIvkHXeNnIXIHrobifR8qVbncuVAvRASVaE895+M
+         uUvc87T2/UZxqmmPNy9LzuF4rhaRNmns5uTHaghuchqxF6rvd7+KHD6YSpCoSoKwOV
+         WqtY0xLk1KO6V9CN7BNy9VU66JpobqnJSzEqEnNvVgzlOkOCTOUoc802Bf9n8Gwgrr
+         wVIOpuB93gL3xMEDhTieLDu0m/M6j4Vis8yXq40HDa5A59vYFjN+e/u8KJZY6sQ5xW
+         +lsmcGavZ88nQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lk5DT-0004Ts-E0; Fri, 21 May 2021 15:29:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 2/2] media: gspca/sq905: fix control-request direction
+Date:   Fri, 21 May 2021 15:28:39 +0200
+Message-Id: <20210521132839.17163-3-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210521132839.17163-1-johan@kernel.org>
+References: <20210521132839.17163-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210521085849.37676-4-joerichey94@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 21, 2021 at 01:58:44AM -0700, Joe Richey wrote:
-> From: Joe Richey <joerichey@google.com>
-> 
-> Replace BIT() in psci's UPAI header with _BITUL(). BIT() is not defined
-> in the UAPI headers and its usage may cause userspace build errors.
-> 
-> Fixes: 60dd1ead65e8 ("drivers: firmware: psci: Announce support for OS initiated suspend mode")
-> Signed-off-by: Joe Richey <joerichey@google.com>
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Fix the USB_REQ_SYNCH_FRAME request which erroneously used
+usb_sndctrlpipe().
 
-Mark.
+Fixes: 27d35fc3fb06 ("V4L/DVB (10639): gspca - sq905: New subdriver.")
+Cc: stable@vger.kernel.org      # 2.6.30
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/media/usb/gspca/sq905.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  include/uapi/linux/psci.h | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
-> index 2fcad1dd0b0e..87afdeb95096 100644
-> --- a/include/uapi/linux/psci.h
-> +++ b/include/uapi/linux/psci.h
-> @@ -12,6 +12,8 @@
->  #ifndef _UAPI_LINUX_PSCI_H
->  #define _UAPI_LINUX_PSCI_H
->  
-> +#include <linux/const.h>
-> +
->  /*
->   * PSCI v0.1 interface
->   *
-> @@ -100,7 +102,7 @@
->  #define PSCI_1_0_FEATURES_CPU_SUSPEND_PF_MASK	\
->  			(0x1 << PSCI_1_0_FEATURES_CPU_SUSPEND_PF_SHIFT)
->  
-> -#define PSCI_1_0_OS_INITIATED			BIT(0)
-> +#define PSCI_1_0_OS_INITIATED			_BITUL(0)
->  #define PSCI_1_0_SUSPEND_MODE_PC		0
->  #define PSCI_1_0_SUSPEND_MODE_OSI		1
->  
-> -- 
-> 2.31.1
-> 
+diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
+index 949111070971..32504ebcfd4d 100644
+--- a/drivers/media/usb/gspca/sq905.c
++++ b/drivers/media/usb/gspca/sq905.c
+@@ -116,7 +116,7 @@ static int sq905_command(struct gspca_dev *gspca_dev, u16 index)
+ 	}
+ 
+ 	ret = usb_control_msg(gspca_dev->dev,
+-			      usb_sndctrlpipe(gspca_dev->dev, 0),
++			      usb_rcvctrlpipe(gspca_dev->dev, 0),
+ 			      USB_REQ_SYNCH_FRAME,                /* request */
+ 			      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 			      SQ905_PING, 0, gspca_dev->usb_buf, 1,
+-- 
+2.26.3
+
