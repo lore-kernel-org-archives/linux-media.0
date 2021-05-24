@@ -2,115 +2,115 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99390C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE9CC47246
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:54:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 779376144B
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:34:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4CAB6109F
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:54:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbhEXPgM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 11:36:12 -0400
-Received: from mga03.intel.com ([134.134.136.65]:54402 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233814AbhEXPe3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 11:34:29 -0400
-IronPort-SDR: /1BIbrrwFpPpbPHvt1rDyST/VdO1IH37rQDsd8GZ6O/WK90ydFMU+7woMbg9eMg4U9bkN4D+W5
- AFcx4mqtulXQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="202002891"
-X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
-   d="scan'208";a="202002891"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 08:32:52 -0700
-IronPort-SDR: TSVuQCCO5bDPRFhHJiq8iyGKubH2rl6VexUUuLqrub78lkVQiJ7iAfQdGmkUIOjaMn0STbV+rf
- 9dKksCxla/3w==
-X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
-   d="scan'208";a="396432635"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 08:32:50 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 8095B202F7;
-        Mon, 24 May 2021 18:32:47 +0300 (EEST)
-Date:   Mon, 24 May 2021 18:32:47 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     trix@redhat.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, drv@mailo.com,
-        martinsdecarvalhobeatriz@gmail.com, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: staging: atomisp: improve error handling in
- gc2235_detect()
-Message-ID: <20210524153247.GQ3@paasikivi.fi.intel.com>
-References: <20210521194805.2078135-1-trix@redhat.com>
+        id S235257AbhEXP4J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234328AbhEXPz3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 11:55:29 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF5AC0611B4;
+        Mon, 24 May 2021 08:06:33 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s6so32308035edu.10;
+        Mon, 24 May 2021 08:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=hYc9RqsGPOFH4b9ZCxZD1i1R6dOMPd4eh7fzqVzT0H8=;
+        b=IYggH2+zUrbdnBrdf/jTJBsFvsk4fNzJueTFJWS2wav+i4qdiNx+Cg0ds2JTrtFcJK
+         T0RtnoZxttQZp0nj6iOlzrT7rkaHfWvs5EQDRIMjbwVcQDab1kFlwtrzAhAUmNszUMXE
+         mlWELyPzvUT5Hwby3Mu+xJRDzQt2R3Dhpe3/qxCxniY/MO4vxeVuu8Gj2tgy9IDFoe9q
+         XuiY4wOt76aQ6kgEv9nz8fWdfq2lue434npLku5Ss7xpDFDkllkfdX9CZyAfQxQ+OtsS
+         TncgOK/EWbljBM15dTijeALKHyo5V+bt98Jx2zJXFkesK/GaSJ88AfBd+7rTvBLXdrG7
+         Hdxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=hYc9RqsGPOFH4b9ZCxZD1i1R6dOMPd4eh7fzqVzT0H8=;
+        b=GUj6USM/ECCiY4t7WeQxefutyqudkF6pIa0EBMdzw+VJEP1avOvoVnQiEjyYt0XA5q
+         s68uYuFw9MDTlUc5awaMfFYadouF+/H60X12ND1o/Pt85sGS1R3nWjhmilfsNWy+pktm
+         qyMFm6ciSwwj+K4l1EYDCrGw2BgXdMxLaamy1Pv4RZ1C7gd4TsWgdtwdhZw6fH/JhTT6
+         lJNZKeOobLfgtQcTZX5M4P0BuoqoKvvfjMrOUlsavzJv9nQ14MYQYrEFPUCDzB93Ul7e
+         dkbG+pLSSyn4UooX+u/CcjYxbNGBBCnaMFGci+aLfQodGWGr6eA1MS9idbKbE35iP2Xf
+         mDVw==
+X-Gm-Message-State: AOAM530LnHVRqjcwx+fW20km5ItWUUX8ZU9fypKZwnZ39p/XnupBGyOz
+        Iw1iTNE/zQ/+A/R77VBeDLyjWG5pYHBmzNgW/Xs=
+X-Google-Smtp-Source: ABdhPJxnql6m4jMoSsNIXd+822UQ+FgMCyWYYrxYDrZNdFQtMwci4jKmziipZTven+e/600RCUx8aswTUzA0OJJ9xKs=
+X-Received: by 2002:a05:6402:4256:: with SMTP id g22mr25643956edb.214.1621868792568;
+ Mon, 24 May 2021 08:06:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210521194805.2078135-1-trix@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
+Date:   Mon, 24 May 2021 23:06:11 +0800
+Message-ID: <CAD-N9QU7T0vb1YaZ_NJfySEGiUsQ1ix6ved6TJKSUBQ+HqO1eQ@mail.gmail.com>
+Subject: Is this a bug between dvb_usb_adapter_frontend_init and cinergyt2_frontend_attach?
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tom,
+Hi kernel developers,
 
-On Fri, May 21, 2021 at 12:48:05PM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Static analysis reports this representative problem
-> 
-> atomisp-gc2235.c:867:20: warning: The right operand
->   of '|' is a garbage value
->         id = ((high << 8) | low);
->                           ^ ~~~
-> When gc2235_read_reg() fails, its return val is never written.
-> 
-> For gc2235_detect(), high and low are or-ed and compared
-> with GC2235_ID, 0x2235.  Initialize both to 0 and skip
-> checking the read returns, it's errors are not passed up, only
-> -ENODEV is.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/staging/media/atomisp/i2c/atomisp-gc2235.c | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-> index 38defa0f81513..3b6e02b1f45d1 100644
-> --- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-> +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-> @@ -849,21 +849,14 @@ static int gc2235_get_fmt(struct v4l2_subdev *sd,
->  static int gc2235_detect(struct i2c_client *client)
->  {
->  	struct i2c_adapter *adapter = client->adapter;
-> -	u16 high, low;
-> -	int ret;
-> +	u16 high = 0, low = 0;
->  	u16 id;
->  
->  	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
->  		return -ENODEV;
->  
-> -	ret = gc2235_read_reg(client, GC2235_8BIT,
-> -			      GC2235_SENSOR_ID_H, &high);
-> -	if (ret) {
-> -		dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
-> -		return -ENODEV;
+I doubt there is a bug between dvb_usb_adapter_frontend_init [1] and
+cinergyt2_frontend_attach [2]. The following source code includes the
+critical part.
 
-It'd be nice if the function returned a different value for different
-errors, such as there was an I/O error and that the ID was wrong.
+-----------------------------------------------------------------------------------------------------
+int dvb_usb_adapter_frontend_init(struct dvb_usb_adapter *adap)
+{
+        ......
+        /* register all given adapter frontends */
+        for (i = 0; i < adap->props.num_frontends; i++) {
+                ret = adap->props.fe[i].frontend_attach(adap);
+                if (ret || adap->fe_adap[i].fe == NULL) {
+                        return 0;
+                }
+        }
+        ......
+}
 
-> -	}
-> -	ret = gc2235_read_reg(client, GC2235_8BIT,
-> -			      GC2235_SENSOR_ID_L, &low);
-> +	gc2235_read_reg(client, GC2235_8BIT, GC2235_SENSOR_ID_H, &high);
-> +	gc2235_read_reg(client, GC2235_8BIT, GC2235_SENSOR_ID_L, &low);
->  	id = ((high << 8) | low);
->  
->  	if (id != GC2235_ID) {
+static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
+{
+        ......
+        adap->fe_adap[0].fe = cinergyt2_fe_attach(adap->dev);
+        ......
+        return ret;
+}
+-----------------------------------------------------------------------------------------------------
 
--- 
-Sakari Ailus
+In the dvb_usb_adapter_frontend_init, the function pointer -
+frontend_attach points to cinergyt2_frontend_attach. Then the parent
+function dvb_usb_adapter_frontend_init checks the return value and
+adap->fe_adap[i].fe to verify the execution of the child function.
+However, the child function - cinergyt2_frontend_attach passes the
+allocated dvb_frontend with adap->fe_adap[0].fe, but the check is
+performed on adap->fe_adap[i].fe. At the same time, the adap in both
+expressions should be the same data pointer.
+
+Please correct me if you have any opinions with the above statements.
+
+[1] dvb_usb_adapter_frontend_init:
+https://elixir.bootlin.com/linux/latest/source/drivers/media/usb/dvb-usb/dvb-usb-dvb.c#L276
+
+[2] cinergyt2_frontend_attach:
+https://elixir.bootlin.com/linux/latest/source/drivers/media/usb/dvb-usb/cinergyT2-core.c#L68
+
+--
+My best regards to you.
+
+     No System Is Safe!
+     Dongliang Mu
