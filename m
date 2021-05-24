@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29499C2B9F8
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 722C2C47085
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D3B361153
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56DA6611CE
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbhEXLLE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:04 -0400
+        id S232714AbhEXLLG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:06 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33754 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbhEXLKz (ORCPT
+        with ESMTP id S232685AbhEXLK5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:55 -0400
+        Mon, 24 May 2021 07:10:57 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4165129E3;
-        Mon, 24 May 2021 13:09:23 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5BB2D140C;
+        Mon, 24 May 2021 13:09:24 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854563;
-        bh=G7Vf0Pj/hW2bpB0JTOfWOzNd4U+LmtjrcKCJ8VJ1dds=;
+        s=mail; t=1621854564;
+        bh=HqrhDruHAh04ay7WEMWsGhq+NT2/TcOOjBaQ2rD61zA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cW3avTldhwEndK9TC9jlgE2DY9AF0oJEUQd7ydLYI6u/2FA9dtvjN6B6kmTTiO0b0
-         B6BuAqBvwHLSiOKEp3CDv+Bx+obKBQbAA0jp+m+tniwg85XegQGRU6VcAB82sOuppw
-         DzPsYnCoFueGmoHvlX0bnx9r1txNWcmmn1DMOOxo=
+        b=XQrBmasr7nAZKXFk/U4IGZdSpKDyXrRa0MOBs59YcCPl2ubYc3BFO3+bM2/SOBPIy
+         ig3SbIoNxkRG61ykXVscsIHbeLIxnswCXCWdedn6l2oZLZt8K1sCXTk6yW7ddrVWD8
+         SgT7afM3QrVlvXaDrIjMC8ss5ycAn1byPc0nL7gg=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 13/38] media: ti-vpe: cal: clean up CAL_CSI2_VC_IRQ_* macros
-Date:   Mon, 24 May 2021 14:08:44 +0300
-Message-Id: <20210524110909.672432-14-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 15/38] media: ti-vpe: cal: remove wait when stopping camerarx
+Date:   Mon, 24 May 2021 14:08:46 +0300
+Message-Id: <20210524110909.672432-16-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,59 +47,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The macros related to CAL_CSI2_VC_IRQ can be handled better by having
-the VC number as a macro parameter.
+Asserting ComplexIO reset seems to affect the HW (ie. asserting reset
+will break an active capture), but the RESET_DONE bit never changes to
+"reset is ongoing" state. Thus we always get a timeout.
 
-Note that the macros are not used anywhere yet, so no other changes are
-needed.
+Drop the wait, as it seems to achieve nothing.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal_regs.h | 30 +++++-------------------
- 1 file changed, 6 insertions(+), 24 deletions(-)
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
-index 94cb4f329cf3..7eeceeeb303e 100644
---- a/drivers/media/platform/ti-vpe/cal_regs.h
-+++ b/drivers/media/platform/ti-vpe/cal_regs.h
-@@ -406,30 +406,12 @@
- #define CAL_CSI2_TIMING_STOP_STATE_X16_IO1_MASK		BIT(14)
- #define CAL_CSI2_TIMING_FORCE_RX_MODE_IO1_MASK		BIT(15)
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index b36e55b63718..a8cca30f3f51 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -407,7 +407,6 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
  
--#define CAL_CSI2_VC_IRQ_FS_IRQ_0_MASK			BIT(0)
--#define CAL_CSI2_VC_IRQ_FE_IRQ_0_MASK			BIT(1)
--#define CAL_CSI2_VC_IRQ_LS_IRQ_0_MASK			BIT(2)
--#define CAL_CSI2_VC_IRQ_LE_IRQ_0_MASK			BIT(3)
--#define CAL_CSI2_VC_IRQ_CS_IRQ_0_MASK			BIT(4)
--#define CAL_CSI2_VC_IRQ_ECC_CORRECTION0_IRQ_0_MASK	BIT(5)
--#define CAL_CSI2_VC_IRQ_FS_IRQ_1_MASK			BIT(8)
--#define CAL_CSI2_VC_IRQ_FE_IRQ_1_MASK			BIT(9)
--#define CAL_CSI2_VC_IRQ_LS_IRQ_1_MASK			BIT(10)
--#define CAL_CSI2_VC_IRQ_LE_IRQ_1_MASK			BIT(11)
--#define CAL_CSI2_VC_IRQ_CS_IRQ_1_MASK			BIT(12)
--#define CAL_CSI2_VC_IRQ_ECC_CORRECTION0_IRQ_1_MASK	BIT(13)
--#define CAL_CSI2_VC_IRQ_FS_IRQ_2_MASK			BIT(16)
--#define CAL_CSI2_VC_IRQ_FE_IRQ_2_MASK			BIT(17)
--#define CAL_CSI2_VC_IRQ_LS_IRQ_2_MASK			BIT(18)
--#define CAL_CSI2_VC_IRQ_LE_IRQ_2_MASK			BIT(19)
--#define CAL_CSI2_VC_IRQ_CS_IRQ_2_MASK			BIT(20)
--#define CAL_CSI2_VC_IRQ_ECC_CORRECTION0_IRQ_2_MASK	BIT(21)
--#define CAL_CSI2_VC_IRQ_FS_IRQ_3_MASK			BIT(24)
--#define CAL_CSI2_VC_IRQ_FE_IRQ_3_MASK			BIT(25)
--#define CAL_CSI2_VC_IRQ_LS_IRQ_3_MASK			BIT(26)
--#define CAL_CSI2_VC_IRQ_LE_IRQ_3_MASK			BIT(27)
--#define CAL_CSI2_VC_IRQ_CS_IRQ_3_MASK			BIT(28)
--#define CAL_CSI2_VC_IRQ_ECC_CORRECTION0_IRQ_3_MASK	BIT(29)
-+#define CAL_CSI2_VC_IRQ_FS_IRQ_MASK(n)			BIT(0 + ((n) * 8))
-+#define CAL_CSI2_VC_IRQ_FE_IRQ_MASK(n)			BIT(1 + ((n) * 8))
-+#define CAL_CSI2_VC_IRQ_LS_IRQ_MASK(n)			BIT(2 + ((n) * 8))
-+#define CAL_CSI2_VC_IRQ_LE_IRQ_MASK(n)			BIT(3 + ((n) * 8))
-+#define CAL_CSI2_VC_IRQ_CS_IRQ_MASK(n)			BIT(4 + ((n) * 8))
-+#define CAL_CSI2_VC_IRQ_ECC_CORRECTION_IRQ_MASK(n)	BIT(5 + ((n) * 8))
+ static void cal_camerarx_stop(struct cal_camerarx *phy)
+ {
+-	unsigned int i;
+ 	int ret;
  
- #define CAL_CSI2_CTX_DT_MASK		GENMASK(5, 0)
- #define CAL_CSI2_CTX_VC_MASK		GENMASK(7, 6)
+ 	cal_camerarx_ppi_disable(phy);
+@@ -421,19 +420,9 @@ static void cal_camerarx_stop(struct cal_camerarx *phy)
+ 			CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL,
+ 			CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_MASK);
+ 
+-	/* Wait for power down completion */
+-	for (i = 0; i < 10; i++) {
+-		if (cal_read_field(phy->cal,
+-				   CAL_CSI2_COMPLEXIO_CFG(phy->instance),
+-				   CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_MASK) ==
+-		    CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_RESETONGOING)
+-			break;
+-		usleep_range(1000, 1100);
+-	}
+-	phy_dbg(3, phy, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Complex IO in Reset (%d) %s\n",
++	phy_dbg(3, phy, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Complex IO in Reset\n",
+ 		phy->instance,
+-		cal_read(phy->cal, CAL_CSI2_COMPLEXIO_CFG(phy->instance)), i,
+-		(i >= 10) ? "(timeout)" : "");
++		cal_read(phy->cal, CAL_CSI2_COMPLEXIO_CFG(phy->instance)));
+ 
+ 	/* Disable the phy */
+ 	cal_camerarx_disable(phy);
 -- 
 2.25.1
 
