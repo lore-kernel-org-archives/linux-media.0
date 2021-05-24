@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB00C47086
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F10DC04FF3
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E67561206
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:10:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8531F61002
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbhEXLLb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:31 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33776 "EHLO
+        id S232730AbhEXLLc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:32 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33754 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbhEXLLR (ORCPT
+        with ESMTP id S232731AbhEXLLK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:11:17 -0400
+        Mon, 24 May 2021 07:11:10 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B695A29ED;
-        Mon, 24 May 2021 13:09:35 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AAB6A29E7;
+        Mon, 24 May 2021 13:09:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854576;
-        bh=i5eci26Qsvln+6L3qb0ZHnm2A6f9i92rM5ZUbaIuGck=;
+        s=mail; t=1621854573;
+        bh=miHNtt2G/RnaJ2u4ghoH+opFn0rLOQ/yJJoBzzqhv1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oUUIdhS1UXrEHP8VVj1Tmcn5w+ndfiMkek6lc2ACgiKtn/gCxnznkjuR6hnYAFY8r
-         9c1kPB2sa9VyMHE+k8FeE/Pnwp45cjsaqyJ0y+PP6goXDC8pQ/DwmngSfvTj86llj8
-         ox2o+d2dbg+pHdoeadvf9zfWri9O/zCmTPuL/KDo=
+        b=OJMFwTcn6LruvTHRDR1B0K2bQVoj8EKlEorWb9MZ6TCgqtj/lfo3jT5Jnx/OrbdBt
+         yHgIcSvly2xMnTsCpHsBpO8IJyXeNfjJEwjrppO6G00H4mDd4NKVd2JNltoqrCDhw9
+         o3ekg0FPCiadMZ3Ei7Ft40Ki699wJE9sMDzxnnos=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 34/38] media: ti-vpe: cal: add camerarx enable/disable refcounting
-Date:   Mon, 24 May 2021 14:09:05 +0300
-Message-Id: <20210524110909.672432-35-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 29/38] media: ti-vpe: cal: cleanup phy iteration in cal_remove
+Date:   Mon, 24 May 2021 14:09:00 +0300
+Message-Id: <20210524110909.672432-30-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,64 +47,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following patches add multistream support and we will have multiple
-video devices using the same camerarx instances. Thus we need
-enable/disable refcounting for the camerarx.
+Most of the driver has moved from ARRAY_SIZE(cal->phy) to
+cal->data->num_csi2_phy, but we have one place left in cal_remove. Also,
+checking for cal->phy[i] != NULL is not needed as we always have all the
+phys instantiated.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal-camerarx.c | 10 ++++++++++
- drivers/media/platform/ti-vpe/cal.h          |  2 ++
- 2 files changed, 12 insertions(+)
+ drivers/media/platform/ti-vpe/cal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
-index b87ffc52feb6..803d53753e87 100644
---- a/drivers/media/platform/ti-vpe/cal-camerarx.c
-+++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
-@@ -285,6 +285,11 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
- 	u32 val;
- 	int ret;
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index d43972c392fc..bb99d0ce796f 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -1173,10 +1173,8 @@ static int cal_remove(struct platform_device *pdev)
  
-+	if (phy->enable_count > 0) {
-+		phy->enable_count++;
-+		return 0;
-+	}
-+
- 	link_freq = cal_camerarx_get_ext_link_freq(phy);
- 	if (link_freq < 0)
- 		return link_freq;
-@@ -409,6 +414,8 @@ static int cal_camerarx_start(struct cal_camerarx *phy)
- 	/* Finally, enable the PHY Protocol Interface (PPI). */
- 	cal_camerarx_ppi_enable(phy);
+ 	cal_media_unregister(cal);
  
-+	phy->enable_count++;
-+
- 	return 0;
- }
+-	for (i = 0; i < ARRAY_SIZE(cal->phy); i++) {
+-		if (cal->phy[i])
+-			cal_camerarx_disable(cal->phy[i]);
+-	}
++	for (i = 0; i < cal->data->num_csi2_phy; i++)
++		cal_camerarx_disable(cal->phy[i]);
  
-@@ -416,6 +423,9 @@ static void cal_camerarx_stop(struct cal_camerarx *phy)
- {
- 	int ret;
+ 	cal_media_cleanup(cal);
  
-+	if (--phy->enable_count > 0)
-+		return;
-+
- 	cal_camerarx_ppi_disable(phy);
- 
- 	cal_camerarx_disable_irqs(phy);
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index 78bd2e041d9a..8608a2c6c01a 100644
---- a/drivers/media/platform/ti-vpe/cal.h
-+++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -166,6 +166,8 @@ struct cal_camerarx {
- 
- 	/* mutex for camerarx ops */
- 	struct mutex		mutex;
-+
-+	unsigned int enable_count;
- };
- 
- struct cal_dev {
 -- 
 2.25.1
 
