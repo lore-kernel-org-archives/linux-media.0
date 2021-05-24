@@ -4,42 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8605C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE52CC47085
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C7B2061209
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 946B261209
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbhEXO4f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 10:56:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55384 "EHLO mail.kernel.org"
+        id S234010AbhEXO4m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 10:56:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34006 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233887AbhEXOxi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 10:53:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D1C4161411;
-        Mon, 24 May 2021 14:48:26 +0000 (UTC)
+        id S233119AbhEXOx6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 10:53:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68F3C6141B;
+        Mon, 24 May 2021 14:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621867707;
-        bh=yGMZrSeD5ldYQ8amepKy7fmPBbO/88Lgz8D1NmVxsVU=;
+        s=k20201202; t=1621867711;
+        bh=/5mkWMxrniQRM0OIO+l/RFMqZzon2mnA8svi+4FOsBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8N0MZ2/Rc5VjajapQ6MclwLt+9lzLuqRefzUSlCnRwkAY50wlFoCLamvyxzGABWs
-         ++XuwrdVRlfNSdWcKiqB8P1lvoVOMGEAjtKA8rAE4boTXWwnIUCIffNJfiKs49IK4M
-         2rq+PRCDw63riVwdU+CxXY9s/UlzKwunjtulVpsbo4uqlIHmXM8LU1XlfPLhmeP2tE
-         vubFe9ZdizJDxfSVh7ZLyAvpIC7H42HpANYe3GvZdOr2mtRTmw3M7hLJTSADPLWhPr
-         EdHznD1JEZiPMOYMOeDTlCq+n2lbOccgQGOyQF8+E52fx2N/GKhX8t/vgESscJpLvB
-         bUHzSVIyeMgeg==
+        b=PzQlC6QQBjvpnPWsag1biNvQ3utDrFozd2Bk5V1BlB3BkC6A1YTBvM2wcpcu6fW3z
+         EAmyUX1RWzWHuNH5r1kxGa91K7falNwb9fLDOMWLAQatM3k/4AGUWP6hxSLo0PYUd/
+         3pPBbEuBGG1MiyUYRqj67P92hBWBmAOv/UZKXGKiEZTJxIibxTKQ18juBodc6fUVWw
+         9/FdsQJXKXakpfoPZv3vZ4s4NfgpJ5ogNCX4IfSRb0FG94v1vzLDpiGrt2asoYl+2U
+         Z8iJRjOpopLEWr4RIR1jI4NyQigd9VeWjfhvQQ5E5c/9vve1ET/Uxb4pTICt1hLQ2m
+         hDrEhpkVsREyw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Aditya Pakki <pakki001@umn.edu>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 35/62] Revert "media: gspca: mt9m111: Check write_bridge for timeout"
-Date:   Mon, 24 May 2021 10:47:16 -0400
-Message-Id: <20210524144744.2497894-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 38/62] media: gspca: properly check for errors in po1030_probe()
+Date:   Mon, 24 May 2021 10:47:19 -0400
+Message-Id: <20210524144744.2497894-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210524144744.2497894-1-sashal@kernel.org>
 References: <20210524144744.2497894-1-sashal@kernel.org>
@@ -53,64 +52,48 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit d8c3be2fb2079d0cb4cd29d6aba58dbe54771e42 ]
+[ Upstream commit dacb408ca6f0e34df22b40d8dd5fae7f8e777d84 ]
 
-This reverts commit 656025850074f5c1ba2e05be37bda57ba2b8d491.
+If m5602_write_sensor() or m5602_write_bridge() fail, do not continue to
+initialize the device but return the error to the calling funtion.
 
-Because of recent interactions with developers from @umn.edu, all
-commits from them have been recently re-reviewed to ensure if they were
-correct or not.
-
-Upon review, this commit was found to be incorrect for the reasons
-below, so it must be reverted.  It will be fixed up "correctly" in a
-later kernel change.
-
-Different error values should never be "OR" together and expect anything
-sane to come out of the result.
-
-Cc: Aditya Pakki <pakki001@umn.edu>
 Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Link: https://lore.kernel.org/r/20210503115736.2104747-61-gregkh@linuxfoundation.org
+Link: https://lore.kernel.org/r/20210503115736.2104747-64-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/gspca/m5602/m5602_mt9m111.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/media/usb/gspca/m5602/m5602_po1030.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-index bfa3b381d8a2..50481dc928d0 100644
---- a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-+++ b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-@@ -195,7 +195,7 @@ static const struct v4l2_ctrl_config mt9m111_greenbal_cfg = {
- int mt9m111_probe(struct sd *sd)
+diff --git a/drivers/media/usb/gspca/m5602/m5602_po1030.c b/drivers/media/usb/gspca/m5602/m5602_po1030.c
+index 7bdbb8065146..8fd99ceee4b6 100644
+--- a/drivers/media/usb/gspca/m5602/m5602_po1030.c
++++ b/drivers/media/usb/gspca/m5602/m5602_po1030.c
+@@ -155,6 +155,7 @@ static const struct v4l2_ctrl_config po1030_greenbal_cfg = {
+ int po1030_probe(struct sd *sd)
  {
- 	u8 data[2] = {0x00, 0x00};
--	int i, rc = 0;
-+	int i;
+ 	u8 dev_id_h = 0, i;
++	int err;
  	struct gspca_dev *gspca_dev = (struct gspca_dev *)sd;
  
  	if (force_sensor) {
-@@ -213,18 +213,16 @@ int mt9m111_probe(struct sd *sd)
- 	/* Do the preinit */
- 	for (i = 0; i < ARRAY_SIZE(preinit_mt9m111); i++) {
- 		if (preinit_mt9m111[i][0] == BRIDGE) {
--			rc |= m5602_write_bridge(sd,
-+			m5602_write_bridge(sd,
- 				preinit_mt9m111[i][1],
- 				preinit_mt9m111[i][2]);
- 		} else {
- 			data[0] = preinit_mt9m111[i][2];
- 			data[1] = preinit_mt9m111[i][3];
--			rc |= m5602_write_sensor(sd,
-+			m5602_write_sensor(sd,
- 				preinit_mt9m111[i][1], data, 2);
- 		}
+@@ -173,10 +174,13 @@ int po1030_probe(struct sd *sd)
+ 	for (i = 0; i < ARRAY_SIZE(preinit_po1030); i++) {
+ 		u8 data = preinit_po1030[i][2];
+ 		if (preinit_po1030[i][0] == SENSOR)
+-			m5602_write_sensor(sd,
+-				preinit_po1030[i][1], &data, 1);
++			err = m5602_write_sensor(sd, preinit_po1030[i][1],
++						 &data, 1);
+ 		else
+-			m5602_write_bridge(sd, preinit_po1030[i][1], data);
++			err = m5602_write_bridge(sd, preinit_po1030[i][1],
++						 data);
++		if (err < 0)
++			return err;
  	}
--	if (rc < 0)
--		return rc;
  
- 	if (m5602_read_sensor(sd, MT9M111_SC_CHIPVER, data, 2))
- 		return -ENODEV;
+ 	if (m5602_read_sensor(sd, PO1030_DEVID_H, &dev_id_h, 1))
 -- 
 2.30.2
 
