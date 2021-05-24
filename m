@@ -2,107 +2,140 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C117C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF647C2B9F8
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 65F7161206
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D172561153
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbhEXLLV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232730AbhEXLLK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:11:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89C45611CD;
-        Mon, 24 May 2021 11:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621854581;
-        bh=1QEq8RH7DvUtvkEg63hz04yhGqG8J5VEkIdq8eVbWuc=;
+        id S232813AbhEXLLW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:22 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33776 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232696AbhEXLLL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 07:11:11 -0400
+Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 436E23481;
+        Mon, 24 May 2021 13:09:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1621854573;
+        bh=bD13pVK5mHu8cIFvfAqNvhWA0dAykt4W04QhKLuRpwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+WYg/59ib2G8P3tUR+dUt1WyijqSP1MBlOgplWaeqfXdd1vAZXX6b94V4esRgNyN
-         ZbE4F9JIaD0NKYdIyBBWErteOSeCMjnG/xl+YmCUkDuoy6QyvIRIG5NORw7IyCISaa
-         rYvzr08fsQ96c3ooYPSZSYAjy0QtLMhSzr9A67sKQQbGSmRtXYIbuBx/f9wb7Hqm15
-         SnO1t0q2WlgoCIwuf1J23H3lMuIm4ejhKAOXcfqp1xGOVgmTGEHxMHqPNgWURRFNqI
-         +PqfpNm3pGqVXp11LgrvXkcvoIKOoRQCZWlWh2Krzt8ZMRAtkBPuENhfEoWcRV9cir
-         bi/mfj6kKahmQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ll8Sp-0006Pr-EZ; Mon, 24 May 2021 13:09:39 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 2/3] media: gspca/sunplus: fix zero-length control requests
-Date:   Mon, 24 May 2021 13:09:19 +0200
-Message-Id: <20210524110920.24599-3-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210524110920.24599-1-johan@kernel.org>
-References: <20210524110920.24599-1-johan@kernel.org>
+        b=IJOPkS88Z0K/ArF0m4IvE1CDD/BUyq0BQJmYGDT1zyohjhrAmRi7gsnRcEp4LASsK
+         aawrSD0XUONqs6/pKStDhXtCft9LVHzC8Oqd2hJzlfXMy+OuusGcRZzZW4WTL4hrMz
+         3Nh3dl1KCZohRMTGEn73AtJIbbUsC/Ml3d3h4RO8=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 30/38] media: ti-vpe: cal: fix ctx uninitialization
+Date:   Mon, 24 May 2021 14:09:01 +0300
+Message-Id: <20210524110909.672432-31-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The direction of the pipe argument must match the request-type direction
-bit or control requests may fail depending on the host-controller-driver
-implementation.
+Somewhere along the way the context uninitialization has gone a bit odd:
 
-Control transfers without a data stage are treated as OUT requests by
-the USB stack and should be using usb_sndctrlpipe(). Failing to do so
-will now trigger a warning.
+* We have cal_ctx_create() but no matching destroy call, but we still
+need to call cal_ctx_v4l2_cleanup() for each context.
 
-Fix the single zero-length control request which was using the
-read-register helper, and update the helper so that zero-length reads
-fail with an error message instead.
+* We have cal_media_cleanup() which calls cal_ctx_v4l2_cleanup() for all
+contexts, but cal_media_init() is not where the contexts are created.
 
-Fixes: 6a7eba24e4f0 ("V4L/DVB (8157): gspca: all subdrivers")
-Cc: stable@vger.kernel.org      # 2.6.27
-Signed-off-by: Johan Hovold <johan@kernel.org>
+* The order of uninit steps in cal_remove() is different than the error
+handling path in cal_probe().
+
+* cal_probe()'s error handling calls cal_ctx_v4l2_cleanup() for each
+context, but also calls cal_media_clean(), doing the same context
+cleanup twice.
+
+So fix these, by introducing cal_ctx_destroy(), and using that in
+appropriate places instead of calling cal_ctx_v4l2_cleanup() in
+cal_media_clean(). Also use normal kzalloc (and kfree) instead of devm
+version as we anyway do manual cleanup for each context.
+
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/usb/gspca/sunplus.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/sunplus.c b/drivers/media/usb/gspca/sunplus.c
-index ace3da40006e..971dee0a56da 100644
---- a/drivers/media/usb/gspca/sunplus.c
-+++ b/drivers/media/usb/gspca/sunplus.c
-@@ -242,6 +242,10 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 		gspca_err(gspca_dev, "reg_r: buffer overflow\n");
- 		return;
- 	}
-+	if (len == 0) {
-+		gspca_err(gspca_dev, "reg_r: zero-length read\n");
-+		return;
-+	}
- 	if (gspca_dev->usb_err < 0)
- 		return;
- 	ret = usb_control_msg(gspca_dev->dev,
-@@ -250,7 +254,7 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 			0,		/* value */
- 			index,
--			len ? gspca_dev->usb_buf : NULL, len,
-+			gspca_dev->usb_buf, len,
- 			500);
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
-@@ -727,7 +731,7 @@ static int sd_start(struct gspca_dev *gspca_dev)
- 		case MegaImageVI:
- 			reg_w_riv(gspca_dev, 0xf0, 0, 0);
- 			spca504B_WaitCmdStatus(gspca_dev);
--			reg_r(gspca_dev, 0xf0, 4, 0);
-+			reg_w_riv(gspca_dev, 0xf0, 4, 0);
- 			spca504B_WaitCmdStatus(gspca_dev);
- 			break;
- 		default:
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index bb99d0ce796f..888706187fd1 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -894,11 +894,6 @@ static int cal_media_init(struct cal_dev *cal)
+  */
+ static void cal_media_cleanup(struct cal_dev *cal)
+ {
+-	unsigned int i;
+-
+-	for (i = 0; i < cal->num_contexts; i++)
+-		cal_ctx_v4l2_cleanup(cal->ctx[i]);
+-
+ 	v4l2_device_unregister(&cal->v4l2_dev);
+ 	media_device_cleanup(&cal->mdev);
+ 
+@@ -915,7 +910,7 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
+ 	struct cal_ctx *ctx;
+ 	int ret;
+ 
+-	ctx = devm_kzalloc(cal->dev, sizeof(*ctx), GFP_KERNEL);
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+ 		return NULL;
+ 
+@@ -934,6 +929,13 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
+ 	return ctx;
+ }
+ 
++static void cal_ctx_destroy(struct cal_ctx *ctx)
++{
++	cal_ctx_v4l2_cleanup(ctx);
++
++	kfree(ctx);
++}
++
+ static const struct of_device_id cal_of_match[] = {
+ 	{
+ 		.compatible = "ti,dra72-cal",
+@@ -1148,7 +1150,7 @@ static int cal_probe(struct platform_device *pdev)
+ 
+ error_context:
+ 	for (i = 0; i < cal->num_contexts; i++)
+-		cal_ctx_v4l2_cleanup(cal->ctx[i]);
++		cal_ctx_destroy(cal->ctx[i]);
+ 
+ error_camerarx:
+ 	for (i = 0; i < cal->data->num_csi2_phy; i++)
+@@ -1176,11 +1178,14 @@ static int cal_remove(struct platform_device *pdev)
+ 	for (i = 0; i < cal->data->num_csi2_phy; i++)
+ 		cal_camerarx_disable(cal->phy[i]);
+ 
+-	cal_media_cleanup(cal);
++	for (i = 0; i < cal->num_contexts; i++)
++		cal_ctx_destroy(cal->ctx[i]);
+ 
+ 	for (i = 0; i < cal->data->num_csi2_phy; i++)
+ 		cal_camerarx_destroy(cal->phy[i]);
+ 
++	cal_media_cleanup(cal);
++
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 
 -- 
-2.26.3
+2.25.1
 
