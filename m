@@ -2,190 +2,297 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A02E7C2B9F8
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:31:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBE0C2B9F7
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 880D560FE7
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:31:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E5FB61132
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbhEXKdD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 06:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbhEXKdD (ORCPT
+        id S232603AbhEXKpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 06:45:53 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60816 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232513AbhEXKpw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 06:33:03 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FFBC061574
-        for <linux-media@vger.kernel.org>; Mon, 24 May 2021 03:31:35 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id u4-20020a05600c00c4b02901774b80945cso11148343wmm.3
-        for <linux-media@vger.kernel.org>; Mon, 24 May 2021 03:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vMWVKs1JTtne6DONBYbw+8L6Hg2mrUi7VKxUmAqK9nc=;
-        b=Xh6Es5DRo26hM3Plt6dQ33HvYP+A0JQCSaRwAmwdB+ZoBB5ynYz43JpTu5Ocy6oJFP
-         I5RmTUdmvzZT6tApWUmqXsu4NduYZvvPXkAQ69ilEwyWHY11514/5g4F9OPZiei8OonC
-         JnVJeW01cbT5OrWs2UKrS74pLOIY2NLa+G9r180iZVXg21Lu1VEsTmh7+dBUsNcRe90W
-         6Y75KdEZPn0tBccL7AkErf1O4PnhBfg7oKmNCt/HvysFdXjX4xlD+Ytfr0il/l7bB6Rh
-         tSshOdR8uwminTwQZ55q7+tfAXaKn6X9AJOAoT6mEtH+8Y9dotEMKZk+vnurzEvaee5o
-         5N1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vMWVKs1JTtne6DONBYbw+8L6Hg2mrUi7VKxUmAqK9nc=;
-        b=t6yoGVB36dbJDPgugCHjUww/mHMsr1mny/diK7FazOQqkbWsb5F859yXh9RcOwB3mC
-         RpCCa911l9y88/kmFqQrq0XAHbUDX7spFbrhR6gERI8Y0BevosOwxbD4LPcBjjFxJmyf
-         7WiEjzEgpWmBNvpn+GfqqN4nI6CSnyLq2jWgStfhwXbNLhjcXRIdmYe1wTk+BPPu/cZt
-         r6BU9ijI+H8qNICSjpNbCpBGXfTJhju52qcvv7TZCe7f0HB/6UfrCFKmJN/NRRjCyOGH
-         DHkpVAYfMQ0hPjwlEzlkJHq187JwXmUNO6I5DNbbNNrGe6dcoXVFdCjIbaxo2Lhm33xG
-         yxqA==
-X-Gm-Message-State: AOAM532xE5eKL/oAMZX2U2hCXdO6NRLXeeMakhjMHKerPh8MrFi7UwsR
-        8nqb0BEjnmlgbUKWtBFRApk3kcP/qnCQiBRAdzjYeA==
-X-Google-Smtp-Source: ABdhPJwU4GKReY1df/x0G0FdCA5LtZLoLE9V8bjanLspYY9hJu3SPY2IKfIUHbyAoZpS472M6E+XrrsbjYMf2XDC3J0=
-X-Received: by 2002:a05:600c:4a23:: with SMTP id c35mr19414959wmp.130.1621852293802;
- Mon, 24 May 2021 03:31:33 -0700 (PDT)
+        Mon, 24 May 2021 06:45:52 -0400
+Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 426421575;
+        Mon, 24 May 2021 12:44:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1621853064;
+        bh=5MZdmo7qB8/ke7tE3fAZ5dD3PeUhDrjqHCypt7t3eKY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IJYKZgbDmryRtNZRrrFucgaL3s8A/Oh1eyWtqTNswuzvLOthi8BkWzN2fesY4YLKt
+         5CONl6DTa4LkepZEDGcxn33gzl0U8eJsjpaC6ZkliyfQFpN/kj9tM7KNJRfCAVQIAP
+         8oAuSBONdmBukccAh5gHNh4hMAZKXMeT2tiATpSI=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: [PATCH v7 01/27] media: entity: Use pad as a starting point for graph walk
+Date:   Mon, 24 May 2021 13:43:42 +0300
+Message-Id: <20210524104408.599645-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
+References: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-References: <20210517100240.3323-1-david.plowman@raspberrypi.com>
- <20210517100240.3323-3-david.plowman@raspberrypi.com> <20210519190121.GJ3@valkosipuli.retiisi.eu>
- <20210519190148.GK3@valkosipuli.retiisi.eu> <YKr8Qc65KSFBZJ2s@pendragon.ideasonboard.com>
-In-Reply-To: <YKr8Qc65KSFBZJ2s@pendragon.ideasonboard.com>
-From:   David Plowman <david.plowman@raspberrypi.com>
-Date:   Mon, 24 May 2021 11:31:22 +0100
-Message-ID: <CAHW6GYJrhWDUEhexGMAVBJDs0GG=DzhE9OjCCOzMcw0doSp_6g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] media: v4l2-ctrls: Document V4L2_CID_NOTIFY_GAIN_XXX controls
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari, Laurent, everyone
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Thanks for the feedback.
+With the upcoming use of the recently added has_route() media entity op, all
+the pads in an entity will no longer be considered interconnected. This has
+an effect where the media graph is traversed: the starting pad does make a
+difference.
 
-On Mon, 24 May 2021 at 02:07, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hello,
->
-> On Wed, May 19, 2021 at 10:01:49PM +0300, Sakari Ailus wrote:
-> > Added Laurent to cc.
-> >
-> > On Wed, May 19, 2021 at 10:01:21PM +0300, Sakari Ailus wrote:
-> > > Hi David,
-> > >
-> > > Thanks for the patch.
-> > >
-> > > Cc'ing Laurent, too.
-> > >
-> > > On Mon, May 17, 2021 at 11:02:40AM +0100, David Plowman wrote:
-> > > > Add documentation for each of the controls
-> > > >
-> > > > V4L2_CID_NOTIFY_GAIN_RED
-> > > > V4L2_CID_NOTIFY_GAIN_GREENR
-> > > > V4L2_CID_NOTIFY_GAIN_BLUE
-> > > > V4L2_CID_NOTIFY_GAIN_GREENB
-> > > >
-> > > > These controls are required by sensors that need to know what colour
-> > > > gains will be applied to pixels by downstream processing (such as by
-> > > > an ISP), though the sensor does not apply these gains itself.
-> > > >
-> > > > Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
-> > > > ---
-> > > >  .../media/v4l/ext-ctrls-image-source.rst      | 28 +++++++++++++++++++
-> > > >  1 file changed, 28 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> > > > index de43f5c8486d..f824d6c36ae8 100644
-> > > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> > > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> > > > @@ -72,3 +72,31 @@ Image Source Control IDs
-> > > >      * - __u32
-> > > >        - ``height``
-> > > >        - Height of the area.
-> > > > +
-> > > > +``V4L2_CID_NOTIFY_GAIN_RED (integer)``
-> > > > +    Notify the sensor what gain will be applied to red pixels by the
-> > > > +    subsequent processing (such as by an ISP). The sensor is merely
-> > > > +    informed of this value in case it performs processing that requires
-> > > > +    it, but it is not applied to the output pixels themselves. The
-> > > > +    units are determined by the sensor driver.
-> > >
-> > > I wonder if this should say the default value should reflect gain of 1. It
-> > > probably wouldn't hurt at least.
->
-> Seems reasonable to me.
+Prepare for this change by using pad instead of the entity as an argument
+for the graph walk operations. The actual graph traversal algorithm change
+is in further patches.
 
-Yes, I think this is a good idea.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ Documentation/driver-api/media/mc-core.rst    |  2 +-
+ drivers/media/mc/mc-entity.c                  | 17 ++++++++---------
+ drivers/media/platform/exynos4-is/media-dev.c |  4 ++--
+ drivers/media/platform/omap3isp/ispvideo.c    |  2 +-
+ drivers/media/platform/vsp1/vsp1_video.c      |  2 +-
+ drivers/media/platform/xilinx/xilinx-dma.c    |  2 +-
+ drivers/media/v4l2-core/v4l2-mc.c             |  6 +++---
+ drivers/staging/media/omap4iss/iss_video.c    |  4 ++--
+ include/media/media-entity.h                  | 10 ++++------
+ 9 files changed, 23 insertions(+), 26 deletions(-)
 
->
-> David, do you think we could also document that the values of these
-> controls are linear, or would that be too restrictive ?
+diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
+index 57b5bbba944e..ba0aee982124 100644
+--- a/Documentation/driver-api/media/mc-core.rst
++++ b/Documentation/driver-api/media/mc-core.rst
+@@ -167,7 +167,7 @@ Drivers initiate a graph traversal by calling
+ :c:func:`media_graph_walk_start()`
+ 
+ The graph structure, provided by the caller, is initialized to start graph
+-traversal at the given entity.
++traversal at the given pad in an entity.
+ 
+ Drivers can then retrieve the next entity by calling
+ :c:func:`media_graph_walk_next()`
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 678b99771cfa..b18502b61396 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -291,17 +291,16 @@ void media_graph_walk_cleanup(struct media_graph *graph)
+ }
+ EXPORT_SYMBOL_GPL(media_graph_walk_cleanup);
+ 
+-void media_graph_walk_start(struct media_graph *graph,
+-			    struct media_entity *entity)
++void media_graph_walk_start(struct media_graph *graph, struct media_pad *pad)
+ {
+ 	media_entity_enum_zero(&graph->ent_enum);
+-	media_entity_enum_set(&graph->ent_enum, entity);
++	media_entity_enum_set(&graph->ent_enum, pad->entity);
+ 
+ 	graph->top = 0;
+ 	graph->stack[graph->top].entity = NULL;
+-	stack_push(graph, entity);
+-	dev_dbg(entity->graph_obj.mdev->dev,
+-		"begin graph walk at '%s'\n", entity->name);
++	stack_push(graph, pad->entity);
++	dev_dbg(pad->graph_obj.mdev->dev,
++		"begin graph walk at '%s':%u\n", pad->entity->name, pad->index);
+ }
+ EXPORT_SYMBOL_GPL(media_graph_walk_start);
+ 
+@@ -420,7 +419,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
+ 			goto error_graph_walk_start;
+ 	}
+ 
+-	media_graph_walk_start(&pipe->graph, entity);
++	media_graph_walk_start(&pipe->graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(graph))) {
+ 		DECLARE_BITMAP(active, MEDIA_ENTITY_MAX_PADS);
+@@ -504,7 +503,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
+ 	 * Link validation on graph failed. We revert what we did and
+ 	 * return the error.
+ 	 */
+-	media_graph_walk_start(graph, entity_err);
++	media_graph_walk_start(graph, entity_err->pads);
+ 
+ 	while ((entity_err = media_graph_walk_next(graph))) {
+ 		/* Sanity check for negative stream_count */
+@@ -555,7 +554,7 @@ void __media_pipeline_stop(struct media_entity *entity)
+ 	if (WARN_ON(!pipe))
+ 		return;
+ 
+-	media_graph_walk_start(graph, entity);
++	media_graph_walk_start(graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(graph))) {
+ 		/* Sanity check for negative stream_count */
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index e025178db06c..5aaecdf92c53 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -1173,7 +1173,7 @@ static int __fimc_md_modify_pipelines(struct media_entity *entity, bool enable,
+ 	 * through active links. This is needed as we cannot power on/off the
+ 	 * subdevs in random order.
+ 	 */
+-	media_graph_walk_start(graph, entity);
++	media_graph_walk_start(graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(graph))) {
+ 		if (!is_media_entity_v4l2_video_device(entity))
+@@ -1188,7 +1188,7 @@ static int __fimc_md_modify_pipelines(struct media_entity *entity, bool enable,
+ 	return 0;
+ 
+ err:
+-	media_graph_walk_start(graph, entity_err);
++	media_graph_walk_start(graph, entity_err->pads);
+ 
+ 	while ((entity_err = media_graph_walk_next(graph))) {
+ 		if (!is_media_entity_v4l2_video_device(entity_err))
+diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
+index 8811d6dd4ee7..3c1485d59404 100644
+--- a/drivers/media/platform/omap3isp/ispvideo.c
++++ b/drivers/media/platform/omap3isp/ispvideo.c
+@@ -234,7 +234,7 @@ static int isp_video_get_graph_data(struct isp_video *video,
+ 		return ret;
+ 	}
+ 
+-	media_graph_walk_start(&graph, entity);
++	media_graph_walk_start(&graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(&graph))) {
+ 		struct isp_video *__video;
+diff --git a/drivers/media/platform/vsp1/vsp1_video.c b/drivers/media/platform/vsp1/vsp1_video.c
+index 044eb5778820..61e4fbaba7b7 100644
+--- a/drivers/media/platform/vsp1/vsp1_video.c
++++ b/drivers/media/platform/vsp1/vsp1_video.c
+@@ -569,7 +569,7 @@ static int vsp1_video_pipeline_build(struct vsp1_pipeline *pipe,
+ 	if (ret)
+ 		return ret;
+ 
+-	media_graph_walk_start(&graph, entity);
++	media_graph_walk_start(&graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(&graph))) {
+ 		struct v4l2_subdev *subdev;
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
+index 2a56201cb853..d64c3bee8b95 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.c
++++ b/drivers/media/platform/xilinx/xilinx-dma.c
+@@ -190,7 +190,7 @@ static int xvip_pipeline_validate(struct xvip_pipeline *pipe,
+ 		return ret;
+ 	}
+ 
+-	media_graph_walk_start(&graph, entity);
++	media_graph_walk_start(&graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(&graph))) {
+ 		struct xvip_dma *dma;
+diff --git a/drivers/media/v4l2-core/v4l2-mc.c b/drivers/media/v4l2-core/v4l2-mc.c
+index b01474717dca..d215fe31b9a2 100644
+--- a/drivers/media/v4l2-core/v4l2-mc.c
++++ b/drivers/media/v4l2-core/v4l2-mc.c
+@@ -436,7 +436,7 @@ static int pipeline_pm_use_count(struct media_entity *entity,
+ {
+ 	int use = 0;
+ 
+-	media_graph_walk_start(graph, entity);
++	media_graph_walk_start(graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(graph))) {
+ 		if (is_media_entity_v4l2_video_device(entity))
+@@ -499,7 +499,7 @@ static int pipeline_pm_power(struct media_entity *entity, int change,
+ 	if (!change)
+ 		return 0;
+ 
+-	media_graph_walk_start(graph, entity);
++	media_graph_walk_start(graph, entity->pads);
+ 
+ 	while (!ret && (entity = media_graph_walk_next(graph)))
+ 		if (is_media_entity_v4l2_subdev(entity))
+@@ -508,7 +508,7 @@ static int pipeline_pm_power(struct media_entity *entity, int change,
+ 	if (!ret)
+ 		return ret;
+ 
+-	media_graph_walk_start(graph, first);
++	media_graph_walk_start(graph, first->pads);
+ 
+ 	while ((first = media_graph_walk_next(graph))
+ 	       && first != entity)
+diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
+index d0da083deed5..760cd0ab1feb 100644
+--- a/drivers/staging/media/omap4iss/iss_video.c
++++ b/drivers/staging/media/omap4iss/iss_video.c
+@@ -217,7 +217,7 @@ iss_video_far_end(struct iss_video *video)
+ 		return NULL;
+ 	}
+ 
+-	media_graph_walk_start(&graph, entity);
++	media_graph_walk_start(&graph, entity->pads);
+ 
+ 	while ((entity = media_graph_walk_next(&graph))) {
+ 		if (entity == &video->video.entity)
+@@ -892,7 +892,7 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+ 		goto err_media_pipeline_start;
+ 
+ 	mutex_lock(&mdev->graph_mutex);
+-	media_graph_walk_start(&graph, entity);
++	media_graph_walk_start(&graph, entity->pads);
+ 	while ((entity = media_graph_walk_next(&graph)))
+ 		media_entity_enum_set(&pipe->ent_enum, entity);
+ 	mutex_unlock(&mdev->graph_mutex);
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 09737b47881f..b9bfcf34eb0a 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -902,22 +902,20 @@ __must_check int media_graph_walk_init(
+ void media_graph_walk_cleanup(struct media_graph *graph);
+ 
+ /**
+- * media_graph_walk_start - Start walking the media graph at a
+- *	given entity
++ * media_graph_walk_start - Start walking the media graph at a given pad
+  *
+  * @graph: Media graph structure that will be used to walk the graph
+- * @entity: Starting entity
++ * @pad: Starting pad
+  *
+  * Before using this function, media_graph_walk_init() must be
+  * used to allocate resources used for walking the graph. This
+  * function initializes the graph traversal structure to walk the
+- * entities graph starting at the given entity. The traversal
++ * entities graph starting at the given pad. The traversal
+  * structure must not be modified by the caller during graph
+  * traversal. After the graph walk, the resources must be released
+  * using media_graph_walk_cleanup().
+  */
+-void media_graph_walk_start(struct media_graph *graph,
+-			    struct media_entity *entity);
++void media_graph_walk_start(struct media_graph *graph, struct media_pad *pad);
+ 
+ /**
+  * media_graph_walk_next - Get the next entity in the graph
+-- 
+2.25.1
 
-That's an interesting point. I guess I was drawing on the precedent
-set by analogue gain, but in many respects mandating a linear
-response, and not letting device specific units escape the driver,
-might be more convenient for application code.
-
-The typical use would, I expect, involve firmware reading colour gains
-from an ISP and passing them in here. As such, linear is quite likely
-to be desirable. In the event that there is a conversion to be done,
-the driver can always take care of it.
-
-Further, if we want to go with linear values, I wonder whether we
-should go all the way and specify it fully. For example we could
-mandate u8.8 values, so that 256 means 1.0x - this already feels like
-more than enough range and precision.
-
-There's a slight question in my mind as to whether we should specify
-the range of the control too, in particular whether gains can be less
-than unity or not. Again, this would be kind to applications, but
-drivers might have to re-interpret it internally for "fussy" sensors.
-Any other opinions on that?
-
-One side effect of specifying the meaning precisely is that all four
-necessarily become identical. I hadn't mentioned this previously, but
-having them different would clearly be a right nuisance!
-
-If that sounds good to everyone I'll make up a second version with
-updated documentation.
-
-Thanks and best regards
-David
-
->
-> > > > +
-> > > > +``V4L2_CID_NOTIFY_GAIN_GREENR (integer)``
-> > > > +    Notify the sensor what gain will be applied to green pixels (on
-> > > > +    red rows) by subsequent processing (such as by an ISP). The sensor
-> > > > +    is merely informed of this value in case it performs processing
-> > > > +    that requires it, but it is not applied to the output pixels
-> > > > +    themselves. The units are determined by the sensor driver.
-> > > > +
-> > > > +``V4L2_CID_NOTIFY_GAIN_BLUE (integer)``
-> > > > +    Notify the sensor what gain will be applied to blue pixels by the
-> > > > +    subsequent processing (such as by an ISP). The sensor is merely
-> > > > +    informed of this value in case it performs processing that requires
-> > > > +    it, but it is not applied to the output pixels themselves. The
-> > > > +    units are determined by the sensor driver.
-> > > > +
-> > > > +``V4L2_CID_NOTIFY_GAIN_GREENB (integer)``
-> > > > +    Notify the sensor what gain will be applied to green pixels (on
-> > > > +    blue rows) by subsequent processing (such as by an ISP). The sensor
-> > > > +    is merely informed of this value in case it performs processing
-> > > > +    that requires it, but it is not applied to the output pixels
-> > > > +    themselves. The units are determined by the sensor driver.
->
-> --
-> Regards,
->
-> Laurent Pinchart
