@@ -7,40 +7,38 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C1ACC47085
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3707BC2B9F7
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DA6E61376
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C70D613B0
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbhEXPIi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 11:08:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38150 "EHLO mail.kernel.org"
+        id S234670AbhEXPIj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 11:08:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234784AbhEXPFB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S234785AbhEXPFB (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 24 May 2021 11:05:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 99FD961406;
-        Mon, 24 May 2021 14:50:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06E9461626;
+        Mon, 24 May 2021 14:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621867854;
-        bh=xtLMumVgtJEQDYmH/yfxN1UxvNic+puxMIyGP/3wjBg=;
+        s=k20201202; t=1621867856;
+        bh=WCY1tsQHs0qPaWWClyBnYNlp7D6WjJ9ssswyl7No6Yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bmPuz6Vr476fbDb4BKXtGzIvpGA9f8x77gPv8RzDivfC4gM+4MOPLh6FXv5ZAoY9h
-         Vlf3u6vKkE/4fIzLI6lUC7gnThc49LdO97wNKiQ9Fw+bcWlXbj22h06AzgxPiCXeJ9
-         CNiejh5vUOfHyYKNdgRHY0NmGnqBehKqRWqVzZNN8uoL68po+5wJzbEVLRnvEd3pwE
-         JVMyEJM0kl+TA05rHAHDN9ZKYH3ZxA59gQ5ItMGD6Ix3jlVGARDsJCMFMwHPuYPdc0
-         4ZSbyM/2bWHThsiCC6yK4IZL2noClNwhYGyq6sqOegeTS1NkYcFPHMqFKDIMxIYCgi
-         KYC5XV+MYzWIQ==
+        b=oAy6GUywR4nSb58yLE18ZvNj2hs4ZQ6LTfaZdEy49Onoipk4rD3YP/pV6LBfF849O
+         eVr3y2R03D+uddzBukMKtc/6ohEfdIgGayTWASazmEi9N1A8xnD/I+Gjq5p75GUqHT
+         sX23NcMKR6aJj8Wcj+HLgHaimeK68uJSr1xV2ipo6gdW6O3XdLPxSn01spVWQxP+EP
+         z4bB8HDUFZ8FBPyicK1MRZDm++XZWrT8uGayW9XG0U0EFhtYfz2kphgY/diBOI3Y1b
+         jirGjDYTAX5tVNM8DGxDOMFAu/yb2uqRoDSlVTreYrKfKJnVlBoFkf913HwB0G4FZz
+         XMTKMBusfBDvg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alaa Emad <alaaemadhossney.ae@gmail.com>,
-        Sean Young <sean@mess.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/21] media: dvb: Add check on sp8870_readreg return
-Date:   Mon, 24 May 2021 10:50:30 -0400
-Message-Id: <20210524145040.2499322-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 13/21] media: gspca: properly check for errors in po1030_probe()
+Date:   Mon, 24 May 2021 10:50:32 -0400
+Message-Id: <20210524145040.2499322-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210524145040.2499322-1-sashal@kernel.org>
 References: <20210524145040.2499322-1-sashal@kernel.org>
@@ -52,38 +50,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Alaa Emad <alaaemadhossney.ae@gmail.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit c6d822c56e7fd29e6fa1b1bb91b98f6a1e942b3c ]
+[ Upstream commit dacb408ca6f0e34df22b40d8dd5fae7f8e777d84 ]
 
-The function sp8870_readreg returns a negative value when i2c_transfer
-fails so properly check for this and return the error if it happens.
+If m5602_write_sensor() or m5602_write_bridge() fail, do not continue to
+initialize the device but return the error to the calling funtion.
 
-Cc: Sean Young <sean@mess.org>
 Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Alaa Emad <alaaemadhossney.ae@gmail.com>
-Link: https://lore.kernel.org/r/20210503115736.2104747-60-gregkh@linuxfoundation.org
+Link: https://lore.kernel.org/r/20210503115736.2104747-64-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/sp8870.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/usb/gspca/m5602/m5602_po1030.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/sp8870.c b/drivers/media/dvb-frontends/sp8870.c
-index 04454cb78467..a5782d1133df 100644
---- a/drivers/media/dvb-frontends/sp8870.c
-+++ b/drivers/media/dvb-frontends/sp8870.c
-@@ -293,7 +293,9 @@ static int sp8870_set_frontend_parameters(struct dvb_frontend *fe)
- 	sp8870_writereg(state, 0xc05, reg0xc05);
+diff --git a/drivers/media/usb/gspca/m5602/m5602_po1030.c b/drivers/media/usb/gspca/m5602/m5602_po1030.c
+index a0a90dd34ca8..a098aeb290c3 100644
+--- a/drivers/media/usb/gspca/m5602/m5602_po1030.c
++++ b/drivers/media/usb/gspca/m5602/m5602_po1030.c
+@@ -159,6 +159,7 @@ static const struct v4l2_ctrl_config po1030_greenbal_cfg = {
+ int po1030_probe(struct sd *sd)
+ {
+ 	u8 dev_id_h = 0, i;
++	int err;
+ 	struct gspca_dev *gspca_dev = (struct gspca_dev *)sd;
  
- 	// read status reg in order to clear pending irqs
--	sp8870_readreg(state, 0x200);
-+	err = sp8870_readreg(state, 0x200);
-+	if (err < 0)
-+		return err;
+ 	if (force_sensor) {
+@@ -177,10 +178,13 @@ int po1030_probe(struct sd *sd)
+ 	for (i = 0; i < ARRAY_SIZE(preinit_po1030); i++) {
+ 		u8 data = preinit_po1030[i][2];
+ 		if (preinit_po1030[i][0] == SENSOR)
+-			m5602_write_sensor(sd,
+-				preinit_po1030[i][1], &data, 1);
++			err = m5602_write_sensor(sd, preinit_po1030[i][1],
++						 &data, 1);
+ 		else
+-			m5602_write_bridge(sd, preinit_po1030[i][1], data);
++			err = m5602_write_bridge(sd, preinit_po1030[i][1],
++						 data);
++		if (err < 0)
++			return err;
+ 	}
  
- 	// system controller start
- 	sp8870_microcontroller_start(state);
+ 	if (m5602_read_sensor(sd, PO1030_DEVID_H, &dev_id_h, 1))
 -- 
 2.30.2
 
