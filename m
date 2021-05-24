@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB251C2B9F7
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58A91C47084
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF6BB61002
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D0F6611CD
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbhEXLKv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:10:51 -0400
+        id S232667AbhEXLKx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:10:53 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33754 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbhEXLKt (ORCPT
+        with ESMTP id S232641AbhEXLKv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:49 -0400
+        Mon, 24 May 2021 07:10:51 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 749B01C41;
-        Mon, 24 May 2021 13:09:18 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A9F541575;
+        Mon, 24 May 2021 13:09:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854558;
-        bh=HRqlXcffNd4VTm5Q/N89itPbQXy5Vk7CKyZ47Go0cbQ=;
+        s=mail; t=1621854560;
+        bh=y8W10WXNoz/BEsz/IxLD63DMtqzD/ASIjUKKw6Wtbp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n1mC2ZmX3QyAUObfvoQK1xQ1Yu4oyIWlGgVKXkORI9ZVkmRZt7Iy6MekCL1m/VAvO
-         6eqjZag+Pirp/A7Ju4yD8b3m+6hNd+OKusQptnXPSr+ctPhk9ZfhTZTFDbECbeMqOk
-         DNznq4TVAB+mgAIVEynXqsLWAj6GjjbpJw8z2Zp0=
+        b=Oowk4tMSvKEwZmSXutO7gpvK1wWlvpispd2zGBoQ0qMP4nSnV0otowGXBFaDBc+AQ
+         wUcRSHQaOgmk3eVodOY702rZmOcR1rRq1yrlJHGdPsmXcO7+pTbJNlrHVcYE6MgSu+
+         PlAVmnYNDqlbDfrZPTieXBlKF8+i6h2j2VKQopx0=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 05/38] media: ti-vpe: cal: move global config from cal_ctx_wr_dma_config to runtime resume
-Date:   Mon, 24 May 2021 14:08:36 +0300
-Message-Id: <20210524110909.672432-6-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 07/38] media: ti-vpe: cal: add cal_ctx_prepare/unprepare
+Date:   Mon, 24 May 2021 14:08:38 +0300
+Message-Id: <20210524110909.672432-8-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,66 +47,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For some reason CAL_CTRL is written at the end of cal_ctx_wr_dma_config.
-CAL_CTRL is a global (for CAL) register, so it should be independent of
-contexts.
-
-Move the code to cal_runtime_resume().
+In the following patches we need to do context configuration which might
+fail. Add new functions, cal_ctx_prepare and cal_ctx_unprepare, to
+handle such configuration.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ drivers/media/platform/ti-vpe/cal-video.c |  9 +++++++++
+ drivers/media/platform/ti-vpe/cal.c       | 10 ++++++++++
+ drivers/media/platform/ti-vpe/cal.h       |  2 ++
+ 3 files changed, 21 insertions(+)
 
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+index 777413793d86..9f0eebd92aac 100644
+--- a/drivers/media/platform/ti-vpe/cal-video.c
++++ b/drivers/media/platform/ti-vpe/cal-video.c
+@@ -708,6 +708,12 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		goto error_pipeline;
+ 	}
+ 
++	ret = cal_ctx_prepare(ctx);
++	if (ret) {
++		ctx_err(ctx, "Failed to prepare context: %d\n", ret);
++		goto error_pipeline;
++	}
++
+ 	spin_lock_irq(&ctx->dma.lock);
+ 	buf = list_first_entry(&ctx->dma.queue, struct cal_buffer, list);
+ 	ctx->dma.pending = buf;
+@@ -733,6 +739,7 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ error_stop:
+ 	cal_ctx_stop(ctx);
+ 	pm_runtime_put_sync(ctx->cal->dev);
++	cal_ctx_unprepare(ctx);
+ 
+ error_pipeline:
+ 	media_pipeline_stop(ctx->vdev.entity.pads);
+@@ -752,6 +759,8 @@ static void cal_stop_streaming(struct vb2_queue *vq)
+ 
+ 	pm_runtime_put_sync(ctx->cal->dev);
+ 
++	cal_ctx_unprepare(ctx);
++
+ 	cal_release_buffers(ctx, VB2_BUF_STATE_ERROR);
+ 
+ 	media_pipeline_stop(ctx->vdev.entity.pads);
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index a5340b583592..d24f1918f264 100644
+index d24f1918f264..6d6dce8001b2 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -403,17 +403,6 @@ static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
- 	cal_write(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index), val);
- 	ctx_dbg(3, ctx, "CAL_WR_DMA_XSIZE(%d) = 0x%08x\n", ctx->index,
- 		cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index)));
--
--	val = cal_read(ctx->cal, CAL_CTRL);
--	cal_set_field(&val, CAL_CTRL_BURSTSIZE_BURST128,
--		      CAL_CTRL_BURSTSIZE_MASK);
--	cal_set_field(&val, 0xF, CAL_CTRL_TAGCNT_MASK);
--	cal_set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
--		      CAL_CTRL_POSTED_WRITES_MASK);
--	cal_set_field(&val, 0xFF, CAL_CTRL_MFLAGL_MASK);
--	cal_set_field(&val, 0xFF, CAL_CTRL_MFLAGH_MASK);
--	cal_write(ctx->cal, CAL_CTRL, val);
--	ctx_dbg(3, ctx, "CAL_CTRL = 0x%08x\n", cal_read(ctx->cal, CAL_CTRL));
+@@ -430,6 +430,16 @@ static bool cal_ctx_wr_dma_stopped(struct cal_ctx *ctx)
+ 	return stopped;
  }
  
- void cal_ctx_set_dma_addr(struct cal_ctx *ctx, dma_addr_t addr)
-@@ -1125,6 +1114,7 @@ static int cal_runtime_resume(struct device *dev)
- {
- 	struct cal_dev *cal = dev_get_drvdata(dev);
- 	unsigned int i;
-+	u32 val;
- 
- 	if (cal->data->flags & DRA72_CAL_PRE_ES2_LDO_DISABLE) {
- 		/*
-@@ -1141,6 +1131,17 @@ static int cal_runtime_resume(struct device *dev)
- 	 */
- 	cal_write(cal, CAL_HL_IRQENABLE_SET(0), CAL_HL_IRQ_OCPO_ERR_MASK);
- 
-+	val = cal_read(cal, CAL_CTRL);
-+	cal_set_field(&val, CAL_CTRL_BURSTSIZE_BURST128,
-+		      CAL_CTRL_BURSTSIZE_MASK);
-+	cal_set_field(&val, 0xf, CAL_CTRL_TAGCNT_MASK);
-+	cal_set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
-+		      CAL_CTRL_POSTED_WRITES_MASK);
-+	cal_set_field(&val, 0xff, CAL_CTRL_MFLAGL_MASK);
-+	cal_set_field(&val, 0xff, CAL_CTRL_MFLAGH_MASK);
-+	cal_write(cal, CAL_CTRL, val);
-+	cal_dbg(3, cal, "CAL_CTRL = 0x%08x\n", cal_read(cal, CAL_CTRL));
++int cal_ctx_prepare(struct cal_ctx *ctx)
++{
++	return 0;
++}
 +
- 	return 0;
- }
++void cal_ctx_unprepare(struct cal_ctx *ctx)
++{
++
++}
++
+ void cal_ctx_start(struct cal_ctx *ctx)
+ {
+ 	ctx->sequence = 0;
+diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
+index af46084580bd..09ad20faa9e1 100644
+--- a/drivers/media/platform/ti-vpe/cal.h
++++ b/drivers/media/platform/ti-vpe/cal.h
+@@ -296,6 +296,8 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+ 					 unsigned int instance);
+ void cal_camerarx_destroy(struct cal_camerarx *phy);
  
++int cal_ctx_prepare(struct cal_ctx *ctx);
++void cal_ctx_unprepare(struct cal_ctx *ctx);
+ void cal_ctx_set_dma_addr(struct cal_ctx *ctx, dma_addr_t addr);
+ void cal_ctx_start(struct cal_ctx *ctx);
+ void cal_ctx_stop(struct cal_ctx *ctx);
 -- 
 2.25.1
 
