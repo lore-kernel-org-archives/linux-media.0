@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39785C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8AEC47085
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CB756044F
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72DE96109F
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbhEXKqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 06:46:10 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60880 "EHLO
+        id S232690AbhEXKqO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 06:46:14 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60914 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbhEXKqD (ORCPT
+        with ESMTP id S232679AbhEXKqG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 06:46:03 -0400
+        Mon, 24 May 2021 06:46:06 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2D08E1846;
-        Mon, 24 May 2021 12:44:34 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 57F68140C;
+        Mon, 24 May 2021 12:44:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621853075;
-        bh=HjPDCv/XOlkhje7KB2TWfuUtrRmpcu1u+QcroDKJ3HA=;
+        s=mail; t=1621853078;
+        bh=VyadD48nYm74/kLPqNEKdNAFtkZjPEKr4GPvXjEaCLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KlbCEz+wJQjvprkly+2KEONkwm/wKReSOjz4xq6zKZxV0Ih9BaXd402jkUJWSR7TQ
-         D0KRum8HsRJHncDmK1n3PAixa4aFNCZbpbntnaPHeWSKzuVgTLE/QfDKFAeIngCB7L
-         dGS6q94Ds07jl7nE4jrrMAFyImScLOjOI4OaEess=
+        b=TjRi6AnmEKGRsy67HZHpRq9rW7+ISLYoLn87loyjN0SBH4GJeA/kEGhvpkxJjCYmG
+         2yYnPMerLYIxnE8rOD5yFVPetWSkjOrAakPNDU1e+f9x6Ggn/EnWagwrNJB06TyFd3
+         qs3b2slpdFYjHzzxinq0KAMRmSCzpq1UxeDyeB9c=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -39,11 +39,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: [PATCH v7 10/27] media: entity: Use routing information during graph traversal
-Date:   Mon, 24 May 2021 13:43:51 +0300
-Message-Id: <20210524104408.599645-11-tomi.valkeinen@ideasonboard.com>
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: [PATCH v7 13/27] media: entity: Add only connected pads to the pipeline
+Date:   Mon, 24 May 2021 13:43:54 +0300
+Message-Id: <20210524104408.599645-14-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
@@ -54,103 +53,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Take internal routing information as reported by the entity has_route
-operation into account during graph traversal to avoid following
-unrelated links.
+A single entity may contain multiple pipelines. Only add pads that were
+connected to the pad through which the entity was reached to the pipeline.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/mc/mc-entity.c | 46 ++++++++++++++++++++++--------------
- 1 file changed, 28 insertions(+), 18 deletions(-)
+ drivers/media/mc/mc-entity.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index db62f852bd67..6a270eeae280 100644
+index 71dd14dd6c4d..e2aa14ac8000 100644
 --- a/drivers/media/mc/mc-entity.c
 +++ b/drivers/media/mc/mc-entity.c
-@@ -248,15 +248,6 @@ bool media_entity_has_route(struct media_entity *entity, unsigned int pad0,
- }
- EXPORT_SYMBOL_GPL(media_entity_has_route);
+@@ -472,7 +472,7 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
+ 		DECLARE_BITMAP(active, MEDIA_ENTITY_MAX_PADS);
+ 		DECLARE_BITMAP(has_no_links, MEDIA_ENTITY_MAX_PADS);
  
--static struct media_pad *
--media_pad_other(struct media_pad *pad, struct media_link *link)
--{
--	if (link->source == pad)
--		return link->sink;
--	else
--		return link->source;
--}
--
- /* push an entity to traversal stack */
- static void stack_push(struct media_graph *graph, struct media_pad *pad)
- {
-@@ -327,7 +318,8 @@ static void media_graph_walk_iter(struct media_graph *graph)
- {
- 	struct media_pad *pad = stack_top(graph);
- 	struct media_link *link;
--	struct media_pad *next;
-+	struct media_pad *remote;
-+	struct media_pad *local;
+-		media_entity_for_each_pad(entity, iter) {
++		media_entity_for_each_routed_pad(pad, iter) {
+ 			if (iter->pipe && iter->pipe != pipe) {
+ 				pr_err("Pipe active for %s. Can't start for %s\n",
+ 				       entity->name, iter->entity->name);
+@@ -561,10 +561,9 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
+ 	media_graph_walk_start(graph, pad_err);
  
- 	link = list_entry(link_top(graph), typeof(*link), list);
+ 	while ((pad_err = media_graph_walk_next(graph))) {
+-		struct media_entity *entity = pad_err->entity;
+ 		struct media_pad *iter;
  
-@@ -341,24 +333,42 @@ static void media_graph_walk_iter(struct media_graph *graph)
- 		return;
- 	}
+-		media_entity_for_each_pad(entity, iter) {
++		media_entity_for_each_routed_pad(pad_err, iter) {
+ 			/* Sanity check for negative stream_count */
+ 			if (!WARN_ON_ONCE(iter->stream_count <= 0)) {
+ 				--iter->stream_count;
+@@ -617,10 +616,9 @@ void __media_pipeline_stop(struct media_pad *pad)
+ 	media_graph_walk_start(graph, pad);
  
--	/* Get the entity in the other end of the link . */
--	next = media_pad_other(pad, link);
-+	/*
-+	 * Get the local pad, the remote pad and the entity at the other
-+	 * end of the link.
-+	 */
-+	if (link->source->entity == pad->entity) {
-+		remote = link->sink;
-+		local = link->source;
-+	} else {
-+		remote = link->source;
-+		local = link->sink;
-+	}
-+
-+	/*
-+	 * Are the local pad and the pad we came from connected
-+	 * internally in the entity ?
-+	 */
-+	if (!media_entity_has_route(pad->entity, pad->index, local->index)) {
-+		link_top(graph) = link_top(graph)->next;
-+		return;
-+	}
+ 	while ((pad = media_graph_walk_next(graph))) {
+-		struct media_entity *entity = pad->entity;
+ 		struct media_pad *iter;
  
- 	/* Has the entity already been visited? */
--	if (media_entity_enum_test_and_set(&graph->ent_enum, next->entity)) {
-+	if (media_entity_enum_test_and_set(&graph->ent_enum, remote->entity)) {
- 		link_top(graph) = link_top(graph)->next;
- 		dev_dbg(pad->graph_obj.mdev->dev,
- 			"walk: skipping entity '%s' (already seen)\n",
--			next->entity->name);
-+			remote->entity->name);
- 		return;
- 	}
- 
- 	/* Push the new entity to stack and start over. */
- 	link_top(graph) = link_top(graph)->next;
--	stack_push(graph, next);
--	dev_dbg(next->graph_obj.mdev->dev, "walk: pushing '%s':%u on stack\n",
--		next->entity->name, next->index);
--	lockdep_assert_held(&next->graph_obj.mdev->graph_mutex);
-+	stack_push(graph, remote);
-+	dev_dbg(remote->graph_obj.mdev->dev, "walk: pushing '%s':%u on stack\n",
-+		remote->entity->name, remote->index);
-+	lockdep_assert_held(&remote->graph_obj.mdev->graph_mutex);
- }
- 
- struct media_pad *media_graph_walk_next(struct media_graph *graph)
+-		media_entity_for_each_pad(entity, iter) {
++		media_entity_for_each_routed_pad(pad, iter) {
+ 			/* Sanity check for negative stream_count */
+ 			if (!WARN_ON_ONCE(iter->stream_count <= 0)) {
+ 				iter->stream_count--;
 -- 
 2.25.1
 
