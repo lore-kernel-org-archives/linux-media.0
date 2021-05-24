@@ -2,71 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D93C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED16C04FF3
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4AF9D610C7
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:47:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DD3661002
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhEXKsc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 06:48:32 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:56560 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232426AbhEXKsa (ORCPT
+        id S232636AbhEXLKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:10:48 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33746 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232476AbhEXLKp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 06:48:30 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0UZw1ezY_1621853215;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UZw1ezY_1621853215)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 24 May 2021 18:47:01 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] drm/amdgpu: remove unreachable code
-Date:   Mon, 24 May 2021 18:46:53 +0800
-Message-Id: <1621853213-55876-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Mon, 24 May 2021 07:10:45 -0400
+Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16EEF1575;
+        Mon, 24 May 2021 13:09:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1621854556;
+        bh=TBsMvYPH7s+9iWn6T9mop5HvZkoP10/3/Y7Xhhw0vuY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WNoffY/hT1o9ipFEV4JzfHBkArmO1kHmfo8Xpd7bRbECrNlD3h8VYGrMmmYtcWX0U
+         WcaoKlb7hkIujAgnF/4lJEjNDRwVXG3RdCFnIVLasQmbS0QlFpuaPk7ET1jem+7Xw0
+         CYW6l2eP7K7mPhb3lr3hvqoimEix3HazARlCRPfM=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 01/38] media: ti-vpe: cal: add g/s_parm for legacy API
+Date:   Mon, 24 May 2021 14:08:32 +0300
+Message-Id: <20210524110909.672432-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the function amdgpu_uvd_cs_msg(), every branch in the switch
-statement will have a return, so the code below the switch statement
-will not be executed.
+v4l2-compliance complains about g/s_parm when using the non-MC API. Fix
+it by adding the functions and just call v4l2_s/g_parm_cap for the
+phy subdev.
 
-Eliminate the follow smatch warning:
-
-drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c:845 amdgpu_uvd_cs_msg() warn:
-ignoring unreachable code.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/ti-vpe/cal-video.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-index 82f0542..375b346 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-@@ -842,8 +842,6 @@ static int amdgpu_uvd_cs_msg(struct amdgpu_uvd_cs_ctx *ctx,
- 		DRM_ERROR("Illegal UVD message type (%d)!\n", msg_type);
- 		return -EINVAL;
- 	}
--	BUG();
--	return -EINVAL;
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+index ca75b54311a8..c49ee169b019 100644
+--- a/drivers/media/platform/ti-vpe/cal-video.c
++++ b/drivers/media/platform/ti-vpe/cal-video.c
+@@ -388,6 +388,20 @@ static int cal_enum_frameintervals(struct file *file, void *priv,
+ 	return 0;
  }
  
- /**
++static int cal_g_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
++{
++	struct cal_ctx *ctx = video_drvdata(file);
++
++	return v4l2_g_parm_cap(video_devdata(file), ctx->phy->sensor, a);
++}
++
++static int cal_s_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
++{
++	struct cal_ctx *ctx = video_drvdata(file);
++
++	return v4l2_s_parm_cap(video_devdata(file), ctx->phy->sensor, a);
++}
++
+ static const struct v4l2_ioctl_ops cal_ioctl_video_ops = {
+ 	.vidioc_querycap      = cal_querycap,
+ 	.vidioc_enum_fmt_vid_cap  = cal_enum_fmt_vid_cap,
+@@ -411,6 +425,8 @@ static const struct v4l2_ioctl_ops cal_ioctl_video_ops = {
+ 	.vidioc_log_status    = v4l2_ctrl_log_status,
+ 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+ 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
++	.vidioc_g_parm		= cal_g_parm,
++	.vidioc_s_parm		= cal_s_parm,
+ };
+ 
+ /* ------------------------------------------------------------------
 -- 
-1.8.3.1
+2.25.1
 
