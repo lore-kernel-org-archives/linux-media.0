@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E85FC47084
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:40 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E882E61002
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03079C2B9F7
 	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:39 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D91C661002
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbhEXLLH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:07 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33754 "EHLO
+        id S232704AbhEXLLF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:05 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33776 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbhEXLK6 (ORCPT
+        with ESMTP id S232679AbhEXLK5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:58 -0400
+        Mon, 24 May 2021 07:10:57 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 900C53274;
-        Mon, 24 May 2021 13:09:25 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C701829E7;
+        Mon, 24 May 2021 13:09:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854565;
-        bh=WFtTL1DzuHz31fUfyAMy1ytmb2WZ7PSXV0A0rsVj8nM=;
+        s=mail; t=1621854564;
+        bh=/bO4BOYTblT6C+IXnVgDavnxDORJuqVwTddskR8seHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hdrd0I6dHO1HMbBcg+uzCR++Ry+r/UI2rCwZIUHXnH8veRpv3760T2auK7PF5/dum
-         841nXuHvBQD6Nwu8pyipOPnRmcGrgr2irLzT7YQwNg5jBv3xn8ZP1/SDtuT/VbwJmB
-         J6aE7BE9ZB1AeYo+RLUlgIOpnVhfMMM6Tovdhg2s=
+        b=vlPkiqq64s6SfFsUJkYuehg+Y2zijcF8mtPDW9rkQ6yoqqkrUfkbK2jizi1HGyKxB
+         i4Dzj0y4rvuRhjRI8NK9begYwPideO2SSzkhwI62yEz2TPc1tJrhfRgDKHyW6vmj/N
+         64BauCVTXFrddOCbLIkW7eApxNRFqEShqAJQEA/Q=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 17/38] media: ti-vpe: cal: allocate pix proc dynamically
-Date:   Mon, 24 May 2021 14:08:48 +0300
-Message-Id: <20210524110909.672432-18-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 14/38] media: ti-vpe: cal: catch VC errors
+Date:   Mon, 24 May 2021 14:08:45 +0300
+Message-Id: <20210524110909.672432-15-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,110 +47,88 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CAL has 4 pixel processing units but the units are not needed e.g. for
-metadata. As we could be capturing 4 pixel streams and 4 metadata
-streams, i.e. using 8 DMA contexts, we cannot assign a pixel processing
-unit to every DMA context. Instead we need to reserve a pixel processing
-unit only when needed.
-
-Add functions to reserve and release a pix proc unit, and use them in
-cal_ctx_prepare/unprepare. Note that for the time being we still always
-reserve a pix proc unit.
+CAL driver currently ignores VC related errors. To help catch error
+conditions, enable all the VC error interrupts and handle them in the
+interrupt handler by printing an error.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 44 +++++++++++++++++++++++++++--
- drivers/media/platform/ti-vpe/cal.h |  2 ++
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 25 ++++++++++++++++----
+ drivers/media/platform/ti-vpe/cal.c          | 10 ++++++++
+ 2 files changed, 31 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index 3bc63a5e9317..b36e55b63718 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -226,24 +226,41 @@ static void cal_camerarx_enable_irqs(struct cal_camerarx *phy)
+ 		CAL_CSI2_COMPLEXIO_IRQ_FIFO_OVR_MASK |
+ 		CAL_CSI2_COMPLEXIO_IRQ_SHORT_PACKET_MASK |
+ 		CAL_CSI2_COMPLEXIO_IRQ_ECC_NO_CORRECTION_MASK;
+-
+-	/* Enable CIO error IRQs. */
++	const u32 vc_err_mask =
++		CAL_CSI2_VC_IRQ_CS_IRQ_MASK(0) |
++		CAL_CSI2_VC_IRQ_CS_IRQ_MASK(1) |
++		CAL_CSI2_VC_IRQ_CS_IRQ_MASK(2) |
++		CAL_CSI2_VC_IRQ_CS_IRQ_MASK(3) |
++		CAL_CSI2_VC_IRQ_ECC_CORRECTION_IRQ_MASK(0) |
++		CAL_CSI2_VC_IRQ_ECC_CORRECTION_IRQ_MASK(1) |
++		CAL_CSI2_VC_IRQ_ECC_CORRECTION_IRQ_MASK(2) |
++		CAL_CSI2_VC_IRQ_ECC_CORRECTION_IRQ_MASK(3);
++
++	/* Enable CIO & VC error IRQs. */
+ 	cal_write(phy->cal, CAL_HL_IRQENABLE_SET(0),
+-		  CAL_HL_IRQ_CIO_MASK(phy->instance));
++		  CAL_HL_IRQ_CIO_MASK(phy->instance) |
++		  CAL_HL_IRQ_VC_MASK(phy->instance));
+ 	cal_write(phy->cal, CAL_CSI2_COMPLEXIO_IRQENABLE(phy->instance),
+ 		  cio_err_mask);
++	cal_write(phy->cal, CAL_CSI2_VC_IRQENABLE(phy->instance),
++		  vc_err_mask);
+ }
+ 
+ static void cal_camerarx_disable_irqs(struct cal_camerarx *phy)
+ {
+ 	/* Disable CIO error irqs */
+ 	cal_write(phy->cal, CAL_HL_IRQENABLE_CLR(0),
+-		  CAL_HL_IRQ_CIO_MASK(phy->instance));
++		  CAL_HL_IRQ_CIO_MASK(phy->instance) |
++		  CAL_HL_IRQ_VC_MASK(phy->instance));
+ 	cal_write(phy->cal, CAL_CSI2_COMPLEXIO_IRQENABLE(phy->instance), 0);
++	cal_write(phy->cal, CAL_CSI2_VC_IRQENABLE(phy->instance), 0);
+ }
+ 
+ static void cal_camerarx_ppi_enable(struct cal_camerarx *phy)
+ {
++	cal_write_field(phy->cal, CAL_CSI2_PPI_CTRL(phy->instance),
++			1, CAL_CSI2_PPI_CTRL_ECC_EN_MASK);
++
+ 	cal_write_field(phy->cal, CAL_CSI2_PPI_CTRL(phy->instance),
+ 			1, CAL_CSI2_PPI_CTRL_IF_EN_MASK);
+ }
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index f47d2fa31a39..5ab87c9d3707 100644
+index 01363294b882..0568677674b4 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -290,6 +290,37 @@ void cal_quickdump_regs(struct cal_dev *cal)
-  * ------------------------------------------------------------------
-  */
+@@ -577,6 +577,16 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 				cal_write(cal, CAL_CSI2_COMPLEXIO_IRQSTATUS(i),
+ 					  cio_stat);
+ 			}
++
++			if (status & CAL_HL_IRQ_VC_MASK(i)) {
++				u32 vc_stat = cal_read(cal, CAL_CSI2_VC_IRQSTATUS(i));
++
++				dev_err_ratelimited(cal->dev,
++						    "CIO%u VC error: %#08x\n",
++						    i, vc_stat);
++
++				cal_write(cal, CAL_CSI2_VC_IRQSTATUS(i), vc_stat);
++			}
+ 		}
+ 	}
  
-+#define CAL_MAX_PIX_PROC 4
-+
-+static int cal_reserve_pix_proc(struct cal_dev *cal)
-+{
-+	unsigned long ret;
-+
-+	spin_lock(&cal->v4l2_dev.lock);
-+
-+	ret = find_first_zero_bit(&cal->reserved_pix_proc_mask, CAL_MAX_PIX_PROC);
-+
-+	if (ret == CAL_MAX_PIX_PROC) {
-+		spin_unlock(&cal->v4l2_dev.lock);
-+		return -ENOSPC;
-+	}
-+
-+	cal->reserved_pix_proc_mask |= BIT(ret);
-+
-+	spin_unlock(&cal->v4l2_dev.lock);
-+
-+	return ret;
-+}
-+
-+static void cal_release_pix_proc(struct cal_dev *cal, unsigned int pix_proc_num)
-+{
-+	spin_lock(&cal->v4l2_dev.lock);
-+
-+	cal->reserved_pix_proc_mask &= ~BIT(pix_proc_num);
-+
-+	spin_unlock(&cal->v4l2_dev.lock);
-+}
-+
- static void cal_ctx_csi2_config(struct cal_ctx *ctx)
- {
- 	u32 val;
-@@ -433,12 +464,22 @@ static bool cal_ctx_wr_dma_stopped(struct cal_ctx *ctx)
- 
- int cal_ctx_prepare(struct cal_ctx *ctx)
- {
-+	int ret;
-+
-+	ret = cal_reserve_pix_proc(ctx->cal);
-+	if (ret < 0) {
-+		ctx_err(ctx, "Failed to reserve pix proc: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ctx->pix_proc = ret;
-+
- 	return 0;
- }
- 
- void cal_ctx_unprepare(struct cal_ctx *ctx)
- {
--
-+	cal_release_pix_proc(ctx->cal, ctx->pix_proc);
- }
- 
- void cal_ctx_start(struct cal_ctx *ctx)
-@@ -873,7 +914,6 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
- 	ctx->dma_ctx = inst;
- 	ctx->csi2_ctx = inst;
- 	ctx->cport = inst;
--	ctx->pix_proc = inst;
- 
- 	ret = cal_ctx_v4l2_init(ctx);
- 	if (ret)
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index e4db2a905f68..5d8b3193be7d 100644
---- a/drivers/media/platform/ti-vpe/cal.h
-+++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -188,6 +188,8 @@ struct cal_dev {
- 	struct media_device	mdev;
- 	struct v4l2_device	v4l2_dev;
- 	struct v4l2_async_notifier notifier;
-+
-+	unsigned long		reserved_pix_proc_mask;
- };
- 
- /*
 -- 
 2.25.1
 
