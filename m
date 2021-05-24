@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D604C04FF3
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10447C04FF3
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1041961153
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E490561002
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbhEXLK6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:10:58 -0400
+        id S232674AbhEXLLC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:02 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33776 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbhEXLKy (ORCPT
+        with ESMTP id S232672AbhEXLKz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:54 -0400
+        Mon, 24 May 2021 07:10:55 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83D47182C;
-        Mon, 24 May 2021 13:09:21 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9DEF01C41;
+        Mon, 24 May 2021 13:09:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854561;
-        bh=fWGZFWN5+U0n63CdGWDy3nJ34Xex2vtAsUJOIw7B2zg=;
+        s=mail; t=1621854563;
+        bh=Qm76wVEBLO7kdQYpB4LrmwHyCiHdkEF9gUXO0x1AUIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uP96VXx2MAsXo3mTWAxNfqoGUU/CJC4c8MuJ5PrgGGhQwSyz0nbmfQncwewSnhzcp
-         4dZauCCaGDP0ihl7yKdxQwaOqNZtPbxG3R5t3BfogqQjoO1+O1FXnEip3NvV32Abij
-         pShNFFebl5iC5HqjXP4yLdHoUSRzC2IaVXTVMub4=
+        b=KjeKfjKsvtK8U0KvPHAwOJTj4vNGTLkxKVioGats4EZHGzcLGdZJ/BzEh9pagVoLm
+         eIxkVMypEQoWuiBg4l7L3tsl7EXlS/XVaGQpJ/oCA4GnhPd2fwKPppQEvvpGADYUdT
+         Zt4YioytmfIlJjeDumClspbt0fcynfsWOQKmRRBU=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 10/38] media: ti-vpe: cal: Add pixel processing context
-Date:   Mon, 24 May 2021 14:08:41 +0300
-Message-Id: <20210524110909.672432-11-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 12/38] media: ti-vpe: cal: rename CAL_HL_IRQ_MASK
+Date:   Mon, 24 May 2021 14:08:43 +0300
+Message-Id: <20210524110909.672432-13-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,65 +47,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CAL has 4 pixel processing contexts (PIX PROC) of which the driver
-currently uses pix proc 0 for PHY0, and pix proc 1 for PHY1 (as the
-driver supports only a single source per PHY).
-
-Add a pix_proc field to cal_ctx to allow us to use different pix proc
-contexts in the future
+CAL_HL_IRQ_MASK macro is used for both WDMA start and end status bits.
+For clarity, rename CAL_HL_IRQ_MASK macro to CAL_HL_IRQ_WDMA_END_MASK
+and CAL_HL_IRQ_WDMA_START_MASK.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 9 +++++----
- drivers/media/platform/ti-vpe/cal.h | 1 +
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c      | 12 ++++++------
+ drivers/media/platform/ti-vpe/cal_regs.h |  3 ++-
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 98739f9200ff..7f5ce6f9d874 100644
+index b9b533a4497f..01363294b882 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -355,16 +355,16 @@ static void cal_ctx_pix_proc_config(struct cal_ctx *ctx)
- 		break;
- 	}
+@@ -453,9 +453,9 @@ void cal_ctx_start(struct cal_ctx *ctx)
  
--	val = cal_read(ctx->cal, CAL_PIX_PROC(ctx->index));
-+	val = cal_read(ctx->cal, CAL_PIX_PROC(ctx->pix_proc));
- 	cal_set_field(&val, extract, CAL_PIX_PROC_EXTRACT_MASK);
- 	cal_set_field(&val, CAL_PIX_PROC_DPCMD_BYPASS, CAL_PIX_PROC_DPCMD_MASK);
- 	cal_set_field(&val, CAL_PIX_PROC_DPCME_BYPASS, CAL_PIX_PROC_DPCME_MASK);
- 	cal_set_field(&val, pack, CAL_PIX_PROC_PACK_MASK);
- 	cal_set_field(&val, ctx->cport, CAL_PIX_PROC_CPORT_MASK);
- 	cal_set_field(&val, 1, CAL_PIX_PROC_EN_MASK);
--	cal_write(ctx->cal, CAL_PIX_PROC(ctx->index), val);
--	ctx_dbg(3, ctx, "CAL_PIX_PROC(%d) = 0x%08x\n", ctx->index,
--		cal_read(ctx->cal, CAL_PIX_PROC(ctx->index)));
-+	cal_write(ctx->cal, CAL_PIX_PROC(ctx->pix_proc), val);
-+	ctx_dbg(3, ctx, "CAL_PIX_PROC(%u) = 0x%08x\n", ctx->pix_proc,
-+		cal_read(ctx->cal, CAL_PIX_PROC(ctx->pix_proc)));
+ 	/* Enable IRQ_WDMA_END and IRQ_WDMA_START. */
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_SET(1),
+-		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
++		  CAL_HL_IRQ_WDMA_END_MASK(ctx->dma_ctx));
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_SET(2),
+-		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
++		  CAL_HL_IRQ_WDMA_START_MASK(ctx->dma_ctx));
  }
  
- static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
-@@ -857,6 +857,7 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
- 	ctx->index = inst;
- 	ctx->csi2_ctx = inst;
- 	ctx->cport = inst;
-+	ctx->pix_proc = inst;
+ void cal_ctx_stop(struct cal_ctx *ctx)
+@@ -479,9 +479,9 @@ void cal_ctx_stop(struct cal_ctx *ctx)
  
- 	ret = cal_ctx_v4l2_init(ctx);
- 	if (ret)
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index bcc3378b6b41..9475dc80559b 100644
---- a/drivers/media/platform/ti-vpe/cal.h
-+++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -220,6 +220,7 @@ struct cal_ctx {
- 	u8			index;
- 	u8			cport;
- 	u8			csi2_ctx;
-+	u8			pix_proc;
- };
+ 	/* Disable IRQ_WDMA_END and IRQ_WDMA_START. */
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_CLR(1),
+-		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
++		  CAL_HL_IRQ_WDMA_END_MASK(ctx->dma_ctx));
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_CLR(2),
+-		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
++		  CAL_HL_IRQ_WDMA_START_MASK(ctx->dma_ctx));
  
- extern unsigned int cal_debug;
+ 	ctx->dma.state = CAL_DMA_STOPPED;
+ }
+@@ -589,7 +589,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		cal_write(cal, CAL_HL_IRQSTATUS(1), status);
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
+-			if (status & CAL_HL_IRQ_MASK(i))
++			if (status & CAL_HL_IRQ_WDMA_END_MASK(i))
+ 				cal_irq_wdma_end(cal->ctx[i]);
+ 		}
+ 	}
+@@ -603,7 +603,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		cal_write(cal, CAL_HL_IRQSTATUS(2), status);
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
+-			if (status & CAL_HL_IRQ_MASK(i))
++			if (status & CAL_HL_IRQ_WDMA_START_MASK(i))
+ 				cal_irq_wdma_start(cal->ctx[i]);
+ 		}
+ 	}
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
+index bf937919a1e9..94cb4f329cf3 100644
+--- a/drivers/media/platform/ti-vpe/cal_regs.h
++++ b/drivers/media/platform/ti-vpe/cal_regs.h
+@@ -125,7 +125,8 @@
+ #define CAL_HL_IRQ_EOI_LINE_NUMBER_READ0		0
+ #define CAL_HL_IRQ_EOI_LINE_NUMBER_EOI0			0
+ 
+-#define CAL_HL_IRQ_MASK(m)			BIT(m)
++#define CAL_HL_IRQ_WDMA_END_MASK(m)		BIT(m)
++#define CAL_HL_IRQ_WDMA_START_MASK(m)		BIT(m)
+ 
+ #define CAL_HL_IRQ_OCPO_ERR_MASK		BIT(6)
+ 
 -- 
 2.25.1
 
