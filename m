@@ -2,115 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE9CC47246
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 827C9C2B9F8
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 16:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4CAB6109F
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:54:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60123613CC
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 16:34:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbhEXP4J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 11:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbhEXPz3 (ORCPT
+        id S233120AbhEXQgP convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 12:36:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:25678 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232491AbhEXQgO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 11:55:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF5AC0611B4;
-        Mon, 24 May 2021 08:06:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s6so32308035edu.10;
-        Mon, 24 May 2021 08:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=hYc9RqsGPOFH4b9ZCxZD1i1R6dOMPd4eh7fzqVzT0H8=;
-        b=IYggH2+zUrbdnBrdf/jTJBsFvsk4fNzJueTFJWS2wav+i4qdiNx+Cg0ds2JTrtFcJK
-         T0RtnoZxttQZp0nj6iOlzrT7rkaHfWvs5EQDRIMjbwVcQDab1kFlwtrzAhAUmNszUMXE
-         mlWELyPzvUT5Hwby3Mu+xJRDzQt2R3Dhpe3/qxCxniY/MO4vxeVuu8Gj2tgy9IDFoe9q
-         XuiY4wOt76aQ6kgEv9nz8fWdfq2lue434npLku5Ss7xpDFDkllkfdX9CZyAfQxQ+OtsS
-         TncgOK/EWbljBM15dTijeALKHyo5V+bt98Jx2zJXFkesK/GaSJ88AfBd+7rTvBLXdrG7
-         Hdxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=hYc9RqsGPOFH4b9ZCxZD1i1R6dOMPd4eh7fzqVzT0H8=;
-        b=GUj6USM/ECCiY4t7WeQxefutyqudkF6pIa0EBMdzw+VJEP1avOvoVnQiEjyYt0XA5q
-         s68uYuFw9MDTlUc5awaMfFYadouF+/H60X12ND1o/Pt85sGS1R3nWjhmilfsNWy+pktm
-         qyMFm6ciSwwj+K4l1EYDCrGw2BgXdMxLaamy1Pv4RZ1C7gd4TsWgdtwdhZw6fH/JhTT6
-         lJNZKeOobLfgtQcTZX5M4P0BuoqoKvvfjMrOUlsavzJv9nQ14MYQYrEFPUCDzB93Ul7e
-         dkbG+pLSSyn4UooX+u/CcjYxbNGBBCnaMFGci+aLfQodGWGr6eA1MS9idbKbE35iP2Xf
-         mDVw==
-X-Gm-Message-State: AOAM530LnHVRqjcwx+fW20km5ItWUUX8ZU9fypKZwnZ39p/XnupBGyOz
-        Iw1iTNE/zQ/+A/R77VBeDLyjWG5pYHBmzNgW/Xs=
-X-Google-Smtp-Source: ABdhPJxnql6m4jMoSsNIXd+822UQ+FgMCyWYYrxYDrZNdFQtMwci4jKmziipZTven+e/600RCUx8aswTUzA0OJJ9xKs=
-X-Received: by 2002:a05:6402:4256:: with SMTP id g22mr25643956edb.214.1621868792568;
- Mon, 24 May 2021 08:06:32 -0700 (PDT)
+        Mon, 24 May 2021 12:36:14 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-130-Su6f02UuPwmFID_yslxeDA-1; Mon, 24 May 2021 17:34:43 +0100
+X-MC-Unique: Su6f02UuPwmFID_yslxeDA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Mon, 24 May 2021 17:34:39 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.015; Mon, 24 May 2021 17:34:39 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mark Rutland' <mark.rutland@arm.com>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Joe Richey <joerichey94@gmail.com>,
+        "trivial@kernel.org" <trivial@kernel.org>,
+        Joe Richey <joerichey@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-accelerators@lists.ozlabs.org" 
+        <linux-accelerators@lists.ozlabs.org>
+Subject: RE: [PATCH 0/6] Don't use BIT() macro in UAPI headers
+Thread-Topic: [PATCH 0/6] Don't use BIT() macro in UAPI headers
+Thread-Index: AQHXUJhmyhlvadTh4EyDNcSC3h2x96ry0v3w
+Date:   Mon, 24 May 2021 16:34:39 +0000
+Message-ID: <56cdb86fe8984a94b4a7a8073476d849@AcuMS.aculab.com>
+References: <20210520104343.317119-1-joerichey94@gmail.com>
+ <YKuSEnfEbjpOOgLS@infradead.org> <20210524122901.GH1040@C02TD0UTHF1T.local>
+In-Reply-To: <20210524122901.GH1040@C02TD0UTHF1T.local>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
-Date:   Mon, 24 May 2021 23:06:11 +0800
-Message-ID: <CAD-N9QU7T0vb1YaZ_NJfySEGiUsQ1ix6ved6TJKSUBQ+HqO1eQ@mail.gmail.com>
-Subject: Is this a bug between dvb_usb_adapter_frontend_init and cinergyt2_frontend_attach?
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi kernel developers,
+From: Mark Rutland
+> Sent: 24 May 2021 13:29
+> 
+> On Mon, May 24, 2021 at 12:46:26PM +0100, Christoph Hellwig wrote:
+> > On Thu, May 20, 2021 at 03:43:37AM -0700, Joe Richey wrote:
+> > > This patch series changes all UAPI uses of BIT() to just be open-coded.
+> > > However, there really should be a check for this in checkpatch.pl
+> > > Currently, the script actually _encourages_ users to use the BIT macro
+> > > even if adding things to UAPI.
+> >
+> > Yes.  In fact it should warn about BIT() in general.  It is totally
+> > pointless obsfucation that doesn't even save any typing at all.
+> 
+> That's not quite true; the point is that if you use BIT() consistently,
+> then even when you refer to bits 32 to 63 you won't accidentally
+> introduce shifts of more than the width of int, and the definition will
+> work equally well for assembly and C, which isn't true if you use `1UL`
+> in the definition.
+> 
+> With that in mind it's shorter and clearer than its functional
+> equivalent:
+> 
+>   BIT(x)
+>   (UL(1) << (x))
+> 
+> So IMO it's preferable to use BIT() generally, or _BITUL() in uapi
+> headers.
 
-I doubt there is a bug between dvb_usb_adapter_frontend_init [1] and
-cinergyt2_frontend_attach [2]. The following source code includes the
-critical part.
+And then, suddenly the compiler warns about truncation of the
+high bits when ~BIT(x) is used to mask a 32bit value on 64bit systems.
 
------------------------------------------------------------------------------------------------------
-int dvb_usb_adapter_frontend_init(struct dvb_usb_adapter *adap)
-{
-        ......
-        /* register all given adapter frontends */
-        for (i = 0; i < adap->props.num_frontends; i++) {
-                ret = adap->props.fe[i].frontend_attach(adap);
-                if (ret || adap->fe_adap[i].fe == NULL) {
-                        return 0;
-                }
-        }
-        ......
-}
+Once the C standard committee had decided to change from K&R's
+'sign preserving' integer promotions to 'value preserving'
+you always lose somewhere.
 
-static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
-{
-        ......
-        adap->fe_adap[0].fe = cinergyt2_fe_attach(adap->dev);
-        ......
-        return ret;
-}
------------------------------------------------------------------------------------------------------
+Personally I prefer hex constants - I can't count bits at all.
 
-In the dvb_usb_adapter_frontend_init, the function pointer -
-frontend_attach points to cinergyt2_frontend_attach. Then the parent
-function dvb_usb_adapter_frontend_init checks the return value and
-adap->fe_adap[i].fe to verify the execution of the child function.
-However, the child function - cinergyt2_frontend_attach passes the
-allocated dvb_frontend with adap->fe_adap[0].fe, but the check is
-performed on adap->fe_adap[i].fe. At the same time, the adap in both
-expressions should be the same data pointer.
+	David
 
-Please correct me if you have any opinions with the above statements.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-[1] dvb_usb_adapter_frontend_init:
-https://elixir.bootlin.com/linux/latest/source/drivers/media/usb/dvb-usb/dvb-usb-dvb.c#L276
-
-[2] cinergyt2_frontend_attach:
-https://elixir.bootlin.com/linux/latest/source/drivers/media/usb/dvb-usb/cinergyT2-core.c#L68
-
---
-My best regards to you.
-
-     No System Is Safe!
-     Dongliang Mu
