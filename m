@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D9E6C47088
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA0DC2B9F8
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA32661132
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C8006109F
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbhEXKqP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 06:46:15 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60914 "EHLO
+        id S232683AbhEXKqM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 06:46:12 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60880 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbhEXKqK (ORCPT
+        with ESMTP id S232676AbhEXKqF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 06:46:10 -0400
+        Mon, 24 May 2021 06:46:05 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2AA8929E3;
-        Mon, 24 May 2021 12:44:40 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E8FC182C;
+        Mon, 24 May 2021 12:44:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621853080;
-        bh=Rp2dGvl06pat+NIP/CbJy7ftqlsr8QJeDVAAGHhb5+M=;
+        s=mail; t=1621853076;
+        bh=42iWgqFuvWapOenz3DNYYikBnIU+Hq9VIvpPL35LLsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZfY808uVktcU/sy0PDZ7hZtyyQG5gzeLJ1G9lpwJnuTFDpGIRRHpYSFp5lCIZWub+
-         4YO+JNz5yYteYhblg3VnJ9QXoFWnhDYTLMhJ5smX9KAVmAwTchgDyMDJkL0D5pyGeR
-         LrEHtOJMLujttkeJ+LkQIXamQOGT6qteMurTxa38=
+        b=U8dgiKx66HXroRVdlXcBKk9wE/5XhoZj5Nrny3zbJRotZTeo08Y0c9U4hUB6T2TyS
+         DUvlqGhlDwGbeyJzgkyEC4VIuS/RP768myw3fH6cpkDa/Vsk4zocuySgUQQP9wP+ra
+         snfIahk77VqTmLp6vwXc0GTZrZbiHaqeRtjieJnE=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -40,9 +40,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>
-Subject: [PATCH v7 16/27] v4l: Add CSI-2 bus configuration to frame descriptors
-Date:   Mon, 24 May 2021 13:43:57 +0300
-Message-Id: <20210524104408.599645-17-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v7 12/27] media: entity: Add an iterator helper for connected pads
+Date:   Mon, 24 May 2021 13:43:53 +0300
+Message-Id: <20210524104408.599645-13-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
@@ -55,58 +55,86 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Add CSI-2 bus specific configuration to the frame descriptors. This allows
-obtaining the virtual channel and data type information for each stream
-the transmitter is sending.
+Add a helper macro for iterating over pads that are connected through
+enabled routes. This can be used to find all the connected pads within an
+entity, for instance starting from the pad which has been obtained during
+the graph walk.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- include/media/v4l2-subdev.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 53967379fd08..59effa111150 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -308,6 +308,17 @@ struct v4l2_subdev_audio_ops {
- 	int (*s_stream)(struct v4l2_subdev *sd, int enable);
- };
+- Make __media_entity_next_routed_pad() return NULL and adjust the
+  iterator to handle that
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/media/mc/mc-entity.c | 14 ++++++++++++++
+ include/media/media-entity.h | 26 ++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 2ff0ae4c13c1..71dd14dd6c4d 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -248,6 +248,20 @@ bool media_entity_has_route(struct media_entity *entity, unsigned int pad0,
+ }
+ EXPORT_SYMBOL_GPL(media_entity_has_route);
+ 
++struct media_pad *__media_entity_next_routed_pad(struct media_pad *root,
++						 struct media_pad *iter)
++{
++	struct media_entity *entity = root->entity;
++
++	for (; iter < &entity->pads[entity->num_pads]; iter++) {
++		if (media_entity_has_route(entity, root->index, iter->index))
++			return iter;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__media_entity_next_routed_pad);
++
+ /* push an entity to traversal stack */
+ static void stack_push(struct media_graph *graph, struct media_pad *pad)
+ {
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index b3069eef7fdb..cd1750e495df 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -921,6 +921,32 @@ __must_check int media_graph_walk_init(
+ bool media_entity_has_route(struct media_entity *entity, unsigned int pad0,
+ 			    unsigned int pad1);
  
 +/**
-+ * struct v4l2_mbus_frame_desc_entry_csi2
++ * __media_entity_next_routed_pad - Get next pad connected to @root
 + *
-+ * @vc: CSI-2 virtual channel
-+ * @dt: CSI-2 data type ID
++ * @root: The root pad to which the iterated pads have a route
++ * @iter: The iterator pad
++ *
++ * Get next pad which has a route to @root.
 + */
-+struct v4l2_mbus_frame_desc_entry_csi2 {
-+	u8 vc;
-+	u8 dt;
-+};
++struct media_pad *__media_entity_next_routed_pad(struct media_pad *root,
++						 struct media_pad *iter);
++
++/**
++ * media_entity_for_each_routed_pad - Iterate over entity pads connected by routes
++ *
++ * @root: The root pad to which the iterated pads have a route
++ * @iter: The iterator pad
++ *
++ * Iterate over all pads of an entity which have an internal route to @root pad.
++ * The iteration will include the @root pad itself.
++ */
++#define media_entity_for_each_routed_pad(root, iter)                           \
++	for (iter = __media_entity_next_routed_pad(root,                       \
++						   (root)->entity->pads);      \
++	     iter != NULL;                                                     \
++	     iter = __media_entity_next_routed_pad(root, iter + 1))
 +
  /**
-  * enum v4l2_mbus_frame_desc_flags - media bus frame description flags
+  * media_graph_walk_cleanup - Release resources used by graph walk.
   *
-@@ -331,11 +342,16 @@ enum v4l2_mbus_frame_desc_flags {
-  *		%FRAME_DESC_FL_BLOB is not set.
-  * @length:	number of octets per frame, valid if @flags
-  *		%V4L2_MBUS_FRAME_DESC_FL_LEN_MAX is set.
-+ * @bus:	Bus-specific frame descriptor parameters
-+ * @bus.csi2:	CSI-2-specific bus configuration
-  */
- struct v4l2_mbus_frame_desc_entry {
- 	enum v4l2_mbus_frame_desc_flags flags;
- 	u32 pixelcode;
- 	u32 length;
-+	union {
-+		struct v4l2_mbus_frame_desc_entry_csi2 csi2;
-+	} bus;
- };
- 
- #define V4L2_FRAME_DESC_ENTRY_MAX	4
 -- 
 2.25.1
 
