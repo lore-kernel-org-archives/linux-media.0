@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56599C04FF3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F47C2B9F7
 	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 369ED611CD
+	by mail.kernel.org (Postfix) with ESMTP id AC20C61153
 	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbhEXLK4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:10:56 -0400
+        id S232690AbhEXLK5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:10:57 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33754 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbhEXLKx (ORCPT
+        with ESMTP id S232666AbhEXLKy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:53 -0400
+        Mon, 24 May 2021 07:10:54 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D0C7F17C6;
-        Mon, 24 May 2021 13:09:20 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 165651846;
+        Mon, 24 May 2021 13:09:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854561;
-        bh=/gkVBS+9GUyxhBELfwBEuZ0OXe28THzi7so3Rwk9D+A=;
+        s=mail; t=1621854562;
+        bh=ZHpe+kZkUnDU03cxhmkoY2xaEFkadVXVOVDFWK5fav4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UnJPY7/+K5ZQw6ODdOyKHMjuqegazWimj1lZyqmBDQ4kjmkokJ9MWMx+3w5g+MX3M
-         TJQq5QxKHW4WZn/0U5B/jwV7EMu2109YVawzWqhmMCFXF/VZmxol4DlfE3uMdV9uYA
-         kG/m8vAonrZEWSIKqxJ0r7E3Rfzd9lFdEJpv5A1s=
+        b=VWFfHDfTdz8N3clvmSzIk1Jp2q/RHHknA3RUltSs5MTQnFk0cKQMMCyUOnQvdPCaZ
+         RbWtY7kKcShJXJ3OulUlL6FTtTblyfVVPNbgGFbTS717K6mtejBvmm1o+1naxZz0nk
+         vR2AyAVkwMGqs0/PtPgteQfHJeGCefozgdT30NZ8=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 09/38] media: ti-vpe: cal: Add CSI2 context
-Date:   Mon, 24 May 2021 14:08:40 +0300
-Message-Id: <20210524110909.672432-10-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 11/38] media: ti-vpe: cal: rename cal_ctx->index to dma_ctx
+Date:   Mon, 24 May 2021 14:08:42 +0300
+Message-Id: <20210524110909.672432-12-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
@@ -47,102 +47,167 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CAL has 8 CSI2 contexts per PHY, which are used to tag the incoming
-data.  The current driver only uses the first context, but we need to
-support all of them to implement multi-stream support.
-
-Add a csi2_ctx field to cal_ctx, which indicates which of the 8 CSI2
-contexts is used for the particular cal_ctx. Also clean up the context
-register macros to take the CSI2 context number as a parameter.
-
-Note that before this patch the CSI2 context used for both PHYs was
-always 0. This patch always uses cal_ctx index number as the CSI2
-context. There is no functional difference, but this approach will work
-also in the future when we use more than 1 CSI2 context per PHY.
+Rename cal_ctx->index to dma_ctx to clarify that the field refers to the
+DMA context number.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c      | 10 ++++++----
- drivers/media/platform/ti-vpe/cal.h      |  1 +
- drivers/media/platform/ti-vpe/cal_regs.h | 18 ++----------------
- 3 files changed, 9 insertions(+), 20 deletions(-)
+ drivers/media/platform/ti-vpe/cal-video.c |  4 +--
+ drivers/media/platform/ti-vpe/cal.c       | 38 +++++++++++------------
+ drivers/media/platform/ti-vpe/cal.h       |  8 ++---
+ 3 files changed, 25 insertions(+), 25 deletions(-)
 
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+index 9f0eebd92aac..1311adfb35a7 100644
+--- a/drivers/media/platform/ti-vpe/cal-video.c
++++ b/drivers/media/platform/ti-vpe/cal-video.c
+@@ -897,7 +897,7 @@ int cal_ctx_v4l2_register(struct cal_ctx *ctx)
+ 				    MEDIA_LNK_FL_ENABLED);
+ 	if (ret) {
+ 		ctx_err(ctx, "Failed to create media link for context %u\n",
+-			ctx->index);
++			ctx->dma_ctx);
+ 		video_unregister_device(vfd);
+ 		return ret;
+ 	}
+@@ -949,7 +949,7 @@ int cal_ctx_v4l2_init(struct cal_ctx *ctx)
+ 			 | (cal_mc_api ? V4L2_CAP_IO_MC : 0);
+ 	vfd->v4l2_dev = &ctx->cal->v4l2_dev;
+ 	vfd->queue = q;
+-	snprintf(vfd->name, sizeof(vfd->name), "CAL output %u", ctx->index);
++	snprintf(vfd->name, sizeof(vfd->name), "CAL output %u", ctx->dma_ctx);
+ 	vfd->release = video_device_release_empty;
+ 	vfd->ioctl_ops = cal_mc_api ? &cal_ioctl_mc_ops : &cal_ioctl_video_ops;
+ 	vfd->lock = &ctx->mutex;
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 6d6dce8001b2..98739f9200ff 100644
+index 7f5ce6f9d874..b9b533a4497f 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -294,7 +294,7 @@ static void cal_ctx_csi2_config(struct cal_ctx *ctx)
- {
+@@ -372,7 +372,7 @@ static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
+ 	unsigned int stride = ctx->v_fmt.fmt.pix.bytesperline;
  	u32 val;
  
--	val = cal_read(ctx->cal, CAL_CSI2_CTX0(ctx->index));
-+	val = cal_read(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx));
- 	cal_set_field(&val, ctx->cport, CAL_CSI2_CTX_CPORT_MASK);
+-	val = cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->index));
++	val = cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->dma_ctx));
+ 	cal_set_field(&val, ctx->cport, CAL_WR_DMA_CTRL_CPORT_MASK);
+ 	cal_set_field(&val, ctx->v_fmt.fmt.pix.height,
+ 		      CAL_WR_DMA_CTRL_YSIZE_MASK);
+@@ -383,16 +383,16 @@ static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
+ 	cal_set_field(&val, CAL_WR_DMA_CTRL_PATTERN_LINEAR,
+ 		      CAL_WR_DMA_CTRL_PATTERN_MASK);
+ 	cal_set_field(&val, 1, CAL_WR_DMA_CTRL_STALL_RD_MASK);
+-	cal_write(ctx->cal, CAL_WR_DMA_CTRL(ctx->index), val);
+-	ctx_dbg(3, ctx, "CAL_WR_DMA_CTRL(%d) = 0x%08x\n", ctx->index,
+-		cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->index)));
++	cal_write(ctx->cal, CAL_WR_DMA_CTRL(ctx->dma_ctx), val);
++	ctx_dbg(3, ctx, "CAL_WR_DMA_CTRL(%d) = 0x%08x\n", ctx->dma_ctx,
++		cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->dma_ctx)));
+ 
+-	cal_write_field(ctx->cal, CAL_WR_DMA_OFST(ctx->index),
++	cal_write_field(ctx->cal, CAL_WR_DMA_OFST(ctx->dma_ctx),
+ 			stride / 16, CAL_WR_DMA_OFST_MASK);
+-	ctx_dbg(3, ctx, "CAL_WR_DMA_OFST(%d) = 0x%08x\n", ctx->index,
+-		cal_read(ctx->cal, CAL_WR_DMA_OFST(ctx->index)));
++	ctx_dbg(3, ctx, "CAL_WR_DMA_OFST(%d) = 0x%08x\n", ctx->dma_ctx,
++		cal_read(ctx->cal, CAL_WR_DMA_OFST(ctx->dma_ctx)));
+ 
+-	val = cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index));
++	val = cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->dma_ctx));
+ 	/* 64 bit word means no skipping */
+ 	cal_set_field(&val, 0, CAL_WR_DMA_XSIZE_XSKIP_MASK);
  	/*
- 	 * DT type: MIPI CSI-2 Specs
-@@ -310,9 +310,10 @@ static void cal_ctx_csi2_config(struct cal_ctx *ctx)
- 	cal_set_field(&val, CAL_CSI2_CTX_ATT_PIX, CAL_CSI2_CTX_ATT_MASK);
- 	cal_set_field(&val, CAL_CSI2_CTX_PACK_MODE_LINE,
- 		      CAL_CSI2_CTX_PACK_MODE_MASK);
--	cal_write(ctx->cal, CAL_CSI2_CTX0(ctx->index), val);
--	ctx_dbg(3, ctx, "CAL_CSI2_CTX0(%d) = 0x%08x\n", ctx->index,
--		cal_read(ctx->cal, CAL_CSI2_CTX0(ctx->index)));
-+	cal_write(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx), val);
-+	ctx_dbg(3, ctx, "CAL_CSI2_CTX(%u, %u) = 0x%08x\n",
-+		ctx->phy->instance, ctx->csi2_ctx,
-+		cal_read(ctx->cal, CAL_CSI2_CTX(ctx->phy->instance, ctx->csi2_ctx)));
+@@ -401,23 +401,23 @@ static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
+ 	 * written per line.
+ 	 */
+ 	cal_set_field(&val, stride / 8, CAL_WR_DMA_XSIZE_MASK);
+-	cal_write(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index), val);
+-	ctx_dbg(3, ctx, "CAL_WR_DMA_XSIZE(%d) = 0x%08x\n", ctx->index,
+-		cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index)));
++	cal_write(ctx->cal, CAL_WR_DMA_XSIZE(ctx->dma_ctx), val);
++	ctx_dbg(3, ctx, "CAL_WR_DMA_XSIZE(%d) = 0x%08x\n", ctx->dma_ctx,
++		cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->dma_ctx)));
  }
  
- static void cal_ctx_pix_proc_config(struct cal_ctx *ctx)
-@@ -854,6 +855,7 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
+ void cal_ctx_set_dma_addr(struct cal_ctx *ctx, dma_addr_t addr)
+ {
+-	cal_write(ctx->cal, CAL_WR_DMA_ADDR(ctx->index), addr);
++	cal_write(ctx->cal, CAL_WR_DMA_ADDR(ctx->dma_ctx), addr);
+ }
+ 
+ static void cal_ctx_wr_dma_disable(struct cal_ctx *ctx)
+ {
+-	u32 val = cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->index));
++	u32 val = cal_read(ctx->cal, CAL_WR_DMA_CTRL(ctx->dma_ctx));
+ 
+ 	cal_set_field(&val, CAL_WR_DMA_CTRL_MODE_DIS,
+ 		      CAL_WR_DMA_CTRL_MODE_MASK);
+-	cal_write(ctx->cal, CAL_WR_DMA_CTRL(ctx->index), val);
++	cal_write(ctx->cal, CAL_WR_DMA_CTRL(ctx->dma_ctx), val);
+ }
+ 
+ static bool cal_ctx_wr_dma_stopped(struct cal_ctx *ctx)
+@@ -453,9 +453,9 @@ void cal_ctx_start(struct cal_ctx *ctx)
+ 
+ 	/* Enable IRQ_WDMA_END and IRQ_WDMA_START. */
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_SET(1),
+-		  CAL_HL_IRQ_MASK(ctx->index));
++		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_SET(2),
+-		  CAL_HL_IRQ_MASK(ctx->index));
++		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
+ }
+ 
+ void cal_ctx_stop(struct cal_ctx *ctx)
+@@ -479,9 +479,9 @@ void cal_ctx_stop(struct cal_ctx *ctx)
+ 
+ 	/* Disable IRQ_WDMA_END and IRQ_WDMA_START. */
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_CLR(1),
+-		  CAL_HL_IRQ_MASK(ctx->index));
++		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
+ 	cal_write(ctx->cal, CAL_HL_IRQENABLE_CLR(2),
+-		  CAL_HL_IRQ_MASK(ctx->index));
++		  CAL_HL_IRQ_MASK(ctx->dma_ctx));
+ 
+ 	ctx->dma.state = CAL_DMA_STOPPED;
+ }
+@@ -854,7 +854,7 @@ static struct cal_ctx *cal_ctx_create(struct cal_dev *cal, int inst)
+ 
  	ctx->cal = cal;
  	ctx->phy = cal->phy[inst];
- 	ctx->index = inst;
-+	ctx->csi2_ctx = inst;
+-	ctx->index = inst;
++	ctx->dma_ctx = inst;
+ 	ctx->csi2_ctx = inst;
  	ctx->cport = inst;
- 
- 	ret = cal_ctx_v4l2_init(ctx);
+ 	ctx->pix_proc = inst;
 diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index 251bb0ba7b3b..bcc3378b6b41 100644
+index 9475dc80559b..e4db2a905f68 100644
 --- a/drivers/media/platform/ti-vpe/cal.h
 +++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -219,6 +219,7 @@ struct cal_ctx {
+@@ -217,7 +217,7 @@ struct cal_ctx {
+ 
+ 	unsigned int		sequence;
  	struct vb2_queue	vb_vidq;
- 	u8			index;
+-	u8			index;
++	u8			dma_ctx;
  	u8			cport;
-+	u8			csi2_ctx;
- };
+ 	u8			csi2_ctx;
+ 	u8			pix_proc;
+@@ -238,11 +238,11 @@ extern bool cal_mc_api;
+ 	dev_err((cal)->dev, fmt, ##arg)
  
- extern unsigned int cal_debug;
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
-index f752096dcf7f..bf937919a1e9 100644
---- a/drivers/media/platform/ti-vpe/cal_regs.h
-+++ b/drivers/media/platform/ti-vpe/cal_regs.h
-@@ -72,22 +72,8 @@
- #define CAL_CSI2_TIMING(m)		(0x314U + (m) * 0x80U)
- #define CAL_CSI2_VC_IRQENABLE(m)	(0x318U + (m) * 0x80U)
- #define CAL_CSI2_VC_IRQSTATUS(m)	(0x328U + (m) * 0x80U)
--#define CAL_CSI2_CTX0(m)		(0x330U + (m) * 0x80U)
--#define CAL_CSI2_CTX1(m)		(0x334U + (m) * 0x80U)
--#define CAL_CSI2_CTX2(m)		(0x338U + (m) * 0x80U)
--#define CAL_CSI2_CTX3(m)		(0x33cU + (m) * 0x80U)
--#define CAL_CSI2_CTX4(m)		(0x340U + (m) * 0x80U)
--#define CAL_CSI2_CTX5(m)		(0x344U + (m) * 0x80U)
--#define CAL_CSI2_CTX6(m)		(0x348U + (m) * 0x80U)
--#define CAL_CSI2_CTX7(m)		(0x34cU + (m) * 0x80U)
--#define CAL_CSI2_STATUS0(m)		(0x350U + (m) * 0x80U)
--#define CAL_CSI2_STATUS1(m)		(0x354U + (m) * 0x80U)
--#define CAL_CSI2_STATUS2(m)		(0x358U + (m) * 0x80U)
--#define CAL_CSI2_STATUS3(m)		(0x35cU + (m) * 0x80U)
--#define CAL_CSI2_STATUS4(m)		(0x360U + (m) * 0x80U)
--#define CAL_CSI2_STATUS5(m)		(0x364U + (m) * 0x80U)
--#define CAL_CSI2_STATUS6(m)		(0x368U + (m) * 0x80U)
--#define CAL_CSI2_STATUS7(m)		(0x36cU + (m) * 0x80U)
-+#define CAL_CSI2_CTX(phy, csi2_ctx)	(0x330U + (phy) * 0x80U + (csi2_ctx) * 4)
-+#define CAL_CSI2_STATUS(phy, csi2_ctx)	(0x350U + (phy) * 0x80U + (csi2_ctx) * 4)
+ #define ctx_dbg(level, ctx, fmt, arg...)				\
+-	cal_dbg(level, (ctx)->cal, "ctx%u: " fmt, (ctx)->index, ##arg)
++	cal_dbg(level, (ctx)->cal, "ctx%u: " fmt, (ctx)->dma_ctx, ##arg)
+ #define ctx_info(ctx, fmt, arg...)					\
+-	cal_info((ctx)->cal, "ctx%u: " fmt, (ctx)->index, ##arg)
++	cal_info((ctx)->cal, "ctx%u: " fmt, (ctx)->dma_ctx, ##arg)
+ #define ctx_err(ctx, fmt, arg...)					\
+-	cal_err((ctx)->cal, "ctx%u: " fmt, (ctx)->index, ##arg)
++	cal_err((ctx)->cal, "ctx%u: " fmt, (ctx)->dma_ctx, ##arg)
  
- /* CAL CSI2 PHY register offsets */
- #define CAL_CSI2_PHY_REG0		0x000
+ #define phy_dbg(level, phy, fmt, arg...)				\
+ 	cal_dbg(level, (phy)->cal, "phy%u: " fmt, (phy)->instance, ##arg)
 -- 
 2.25.1
 
