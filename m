@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 259DCC47086
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73F91C47084
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07E3F610A5
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5818F6044F
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 10:44:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbhEXKqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 06:46:25 -0400
+        id S232701AbhEXKqY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 06:46:24 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:60914 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbhEXKqR (ORCPT
+        with ESMTP id S232494AbhEXKqP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 06:46:17 -0400
+        Mon, 24 May 2021 06:46:15 -0400
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 65A83140C;
-        Mon, 24 May 2021 12:44:48 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A186345C;
+        Mon, 24 May 2021 12:44:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621853089;
-        bh=ADLUb+MRJXyAFeHiUtO+JuaKbbFTE4g4ySEQXG44N7E=;
+        s=mail; t=1621853087;
+        bh=dRACppGO0vScoL90ipeeNKSysWmpuH8hEJSMmFsu3iM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O26+OLdOBWHE1+yCPRDmmmEixIbUpqb1GYzEdyU7fye1mCywvEw/xvIXPeBtQic4J
-         1lA8yPS893kqO3thaecuwMiSr+4xW884sQsv7J5Fs7upXMAlRmmVfD3ipNkHyjS9PN
-         S20Hk8loweTi+AqRkansbWTRyfwD5tr1QK3meE3o=
+        b=NJxL2MOYJdjKHZZCFX3COsrHU/zcb0/74XxrEv0a1rfFd0f2CzF2lQiuMsv6h9oKg
+         caQGLGx3O3hODh7xa2tX4qQ6DcEdQ/x1nrpM/1qjW3WJaAVnfmedtlM6+VGc4+rwY6
+         EkVZn0GoX3VtYxTddKvfuVKHDI6/ExMZm8jUsx6U=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -40,9 +40,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>
-Subject: [PATCH v7 24/27] v4l: subdev: use streams in v4l2_subdev_link_validate()
-Date:   Mon, 24 May 2021 13:44:05 +0300
-Message-Id: <20210524104408.599645-25-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v7 22/27] v4l: subdev: add stream based configuration
+Date:   Mon, 24 May 2021 13:44:03 +0300
+Message-Id: <20210524104408.599645-23-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
 References: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
@@ -52,237 +52,161 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update v4l2_subdev_link_validate() to use routing and streams for
-validation.
+Add support to manage configurations (format, crop, compose) per stream,
+instead of per pad. This is accomplished with data structures that hold
+an array of all subdev's stream configurations.
+
+The number of streams can vary at runtime based on routing. Every time
+the routing is changed, the stream configurations need to be
+re-initialized.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 184 +++++++++++++++++++++++---
- 1 file changed, 166 insertions(+), 18 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 62 +++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 55 ++++++++++++++++++++++++
+ 2 files changed, 117 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index da6ea9b14631..b30b456d8d99 100644
+index ef18682dbc6f..da6ea9b14631 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -16,6 +16,7 @@
- #include <linux/videodev2.h>
- #include <linux/export.h>
- #include <linux/version.h>
-+#include <linux/sort.h>
- 
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
-@@ -894,6 +895,7 @@ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate_default);
- 
- static int
- v4l2_subdev_link_validate_get_format(struct media_pad *pad,
-+				     u32 stream,
- 				     struct v4l2_subdev_format *fmt)
- {
- 	if (is_media_entity_v4l2_subdev(pad->entity)) {
-@@ -902,6 +904,7 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad,
- 
- 		fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 		fmt->pad = pad->index;
-+		fmt->stream = stream;
- 		return v4l2_subdev_call(sd, pad, get_fmt, NULL, fmt);
- 	}
- 
-@@ -1012,31 +1015,176 @@ bool v4l2_subdev_has_route(struct v4l2_subdev_krouting *routing,
+@@ -1112,3 +1112,65 @@ void v4l2_subdev_notify_event(struct v4l2_subdev *sd,
+ 	v4l2_subdev_notify(sd, V4L2_DEVICE_NOTIFY_EVENT, (void *)ev);
  }
- EXPORT_SYMBOL_GPL(v4l2_subdev_has_route);
- 
-+static int cmp_u32(const void *a, const void *b)
+ EXPORT_SYMBOL_GPL(v4l2_subdev_notify_event);
++
++int v4l2_init_stream_configs(struct v4l2_subdev_stream_configs *stream_configs,
++			     const struct v4l2_subdev_krouting *routing)
 +{
-+	u32 a32 = *(u32 *)a;
-+	u32 b32 = *(u32 *)b;
-+
-+	return a32 > b32 ? 1 : (a32 < b32 ? -1 : 0);
-+}
-+
- int v4l2_subdev_link_validate(struct media_link *link)
- {
--	struct v4l2_subdev *sink;
--	struct v4l2_subdev_format sink_fmt, source_fmt;
--	int rval;
-+	int ret;
++	u32 num_configs = 0;
 +	unsigned int i;
- 
--	rval = v4l2_subdev_link_validate_get_format(
--		link->source, &source_fmt);
--	if (rval < 0)
--		return 0;
-+	struct v4l2_subdev *source_subdev =
-+		media_entity_to_v4l2_subdev(link->source->entity);
-+	struct v4l2_subdev *sink_subdev =
-+		media_entity_to_v4l2_subdev(link->sink->entity);
-+	struct device *dev = sink_subdev->entity.graph_obj.mdev->dev;
- 
--	rval = v4l2_subdev_link_validate_get_format(
--		link->sink, &sink_fmt);
--	if (rval < 0)
--		return 0;
-+	struct v4l2_subdev_krouting routing;
- 
--	sink = media_entity_to_v4l2_subdev(link->sink->entity);
-+	static const u32 default_streams[] = { 0 };
- 
--	rval = v4l2_subdev_call(sink, pad, link_validate, link,
--				&source_fmt, &sink_fmt);
--	if (rval != -ENOIOCTLCMD)
--		return rval;
-+	u32 num_source_streams = 0;
-+	const u32 *source_streams;
-+	u32 num_sink_streams = 0;
-+	const u32 *sink_streams;
++	u32 format_idx = 0;
 +
-+	dev_dbg(dev, "validating link \"%s\":%u -> \"%s\":%u\n",
-+		link->source->entity->name, link->source->index,
-+		link->sink->entity->name, link->sink->index);
++	v4l2_uninit_stream_configs(stream_configs);
 +
-+	/* Get source streams */
++	/* Count number of formats needed */
++	for (i = 0; i < routing->num_routes; ++i) {
++		struct v4l2_subdev_route *route = &routing->routes[i];
 +
-+	memset(&routing, 0, sizeof(routing));
-+
-+	ret = v4l2_subdev_get_routing(source_subdev, NULL, &routing);
-+
-+	if (ret && ret != -ENOIOCTLCMD)
-+		return ret;
-+
-+	if (ret == -ENOIOCTLCMD) {
-+		num_source_streams = 1;
-+		source_streams = default_streams;
-+	} else {
-+		u32 *streams;
-+
-+		streams = kmalloc_array(routing.num_routes, sizeof(u32),
-+					GFP_KERNEL);
-+
-+		for (i = 0; i < routing.num_routes; ++i) {
-+			struct v4l2_subdev_route *route = &routing.routes[i];
-+
-+			if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-+				continue;
-+
-+			if (route->source_pad == link->source->index)
-+				streams[num_source_streams++] =
-+					route->source_stream;
-+		}
-+
-+		sort(streams, num_source_streams, sizeof(u32), &cmp_u32, NULL);
-+
-+		source_streams = streams;
-+
-+		v4l2_subdev_free_routing(&routing);
-+	}
-+
-+	/* Get sink streams */
-+
-+	memset(&routing, 0, sizeof(routing));
-+
-+	ret = v4l2_subdev_get_routing(sink_subdev, NULL, &routing);
-+
-+	if (ret && ret != -ENOIOCTLCMD)
-+		return ret;
-+
-+	if (ret == -ENOIOCTLCMD) {
-+		num_sink_streams = 1;
-+		sink_streams = default_streams;
-+	} else {
-+		u32 *streams;
- 
--	return v4l2_subdev_link_validate_default(
--		sink, link, &source_fmt, &sink_fmt);
-+		streams = kmalloc_array(routing.num_routes, sizeof(u32),
-+					GFP_KERNEL);
-+
-+		for (i = 0; i < routing.num_routes; ++i) {
-+			struct v4l2_subdev_route *route = &routing.routes[i];
-+
-+			if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-+				continue;
-+
-+			if (route->sink_pad == link->sink->index)
-+				streams[num_sink_streams++] =
-+					route->sink_stream;
-+		}
-+
-+		sort(streams, num_sink_streams, sizeof(u32), &cmp_u32, NULL);
-+
-+		sink_streams = streams;
-+
-+		v4l2_subdev_free_routing(&routing);
-+	}
-+
-+	if (num_source_streams != num_sink_streams) {
-+		dev_err(dev,
-+			"Sink and source stream count mismatch: %d vs %d\n",
-+			num_source_streams, num_sink_streams);
-+		return -EINVAL;
-+	}
-+
-+	/* Validate source and sink stream formats */
-+
-+	for (i = 0; i < num_source_streams; ++i) {
-+		struct v4l2_subdev_format sink_fmt, source_fmt;
-+		u32 stream;
-+		int ret;
-+
-+		if (source_streams[i] != sink_streams[i]) {
-+			dev_err(dev, "Sink and source streams do not match\n");
-+			return -EINVAL;
-+		}
-+
-+		stream = source_streams[i];
-+
-+		dev_dbg(dev, "validating stream \"%s\":%u:%u -> \"%s\":%u:%u\n",
-+			link->source->entity->name, link->source->index, stream,
-+			link->sink->entity->name, link->sink->index, stream);
-+
-+		ret = v4l2_subdev_link_validate_get_format(link->source, stream,
-+							   &source_fmt);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to get format for \"%s\":%u:%u\n",
-+				link->source->entity->name, link->source->index,
-+				stream);
-+			return ret;
-+		}
-+
-+		ret = v4l2_subdev_link_validate_get_format(link->sink, stream,
-+							   &sink_fmt);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to get format for \"%s\":%u:%u\n",
-+				link->sink->entity->name, link->sink->index,
-+				stream);
-+			return ret;
-+		}
-+
-+		/* TODO: add stream number to link_validate() */
-+		ret = v4l2_subdev_call(sink_subdev, pad, link_validate, link,
-+				       &source_fmt, &sink_fmt);
-+		if (!ret)
++		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
 +			continue;
 +
-+		if (ret != -ENOIOCTLCMD)
-+			return ret;
-+
-+		ret = v4l2_subdev_link_validate_default(sink_subdev, link,
-+							&source_fmt, &sink_fmt);
-+
-+		if (ret)
-+			return ret;
++		/* Each route needs a format on both ends of the route */
++		num_configs += 2;
 +	}
 +
-+	if (source_streams != default_streams)
-+		kfree(source_streams);
++	if (num_configs) {
++		stream_configs->configs =
++			kvcalloc(num_configs, sizeof(*stream_configs->configs),
++				 GFP_KERNEL);
 +
-+	if (sink_streams != default_streams)
-+		kfree(sink_streams);
++		if (!stream_configs->configs)
++			return -ENOMEM;
++
++		stream_configs->num_configs = num_configs;
++	}
++
++	/* Fill in the 'pad' and stream' value for each item in the array from the routing table */
++	for (i = 0; i < routing->num_routes; ++i) {
++		struct v4l2_subdev_route *route = &routing->routes[i];
++		u32 idx;
++
++		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
++			continue;
++
++		idx = format_idx++;
++
++		stream_configs->configs[idx].pad = route->sink_pad;
++		stream_configs->configs[idx].stream = route->sink_stream;
++
++		idx = format_idx++;
++
++		stream_configs->configs[idx].pad = route->source_pad;
++		stream_configs->configs[idx].stream = route->source_stream;
++	}
 +
 +	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
++}
++EXPORT_SYMBOL_GPL(v4l2_init_stream_configs);
++
++void v4l2_uninit_stream_configs(struct v4l2_subdev_stream_configs *stream_configs)
++{
++	kvfree(stream_configs->configs);
++	stream_configs->configs = NULL;
++	stream_configs->num_configs = 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_uninit_stream_configs);
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 87f6bb78bbe9..39c6b811463a 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -661,6 +661,37 @@ struct v4l2_subdev_pad_config {
+ 	struct v4l2_rect try_compose;
+ };
  
++/**
++ * struct v4l2_subdev_stream_config - Used for storing stream configuration.
++ *
++ * @pad: pad number
++ * @stream: stream number
++ * @fmt: &struct v4l2_mbus_framefmt
++ * @crop: &struct v4l2_rect to be used for crop
++ * @compose: &struct v4l2_rect to be used for compose
++ *
++ * This structure stores configuration for a stream.
++ */
++struct v4l2_subdev_stream_config {
++	u32 pad;
++	u32 stream;
++
++	struct v4l2_mbus_framefmt fmt;
++	struct v4l2_rect crop;
++	struct v4l2_rect compose;
++};
++
++/**
++ * struct v4l2_subdev_stream_configs - A collection of stream configs.
++ *
++ * @num_configs: number of entries in @config.
++ * @config: an array of &struct v4l2_subdev_stream_configs.
++ */
++struct v4l2_subdev_stream_configs {
++	u32 num_configs;
++	struct v4l2_subdev_stream_config *configs;
++};
++
+ /**
+  * struct v4l2_subdev_krouting - subdev routing table
+  *
+@@ -1317,4 +1348,28 @@ int v4l2_subdev_dup_routing(struct v4l2_subdev_krouting *dst,
+ bool v4l2_subdev_has_route(struct v4l2_subdev_krouting *routing,
+ 			   unsigned int pad0, unsigned int pad1);
+ 
++
++/**
++ * v4l2_init_stream_configs() - Initialize stream configs according to routing
++ *
++ * @stream_configs: The stream configs to initialize
++ * @routing: The routing used for the stream configs
++ *
++ * Initializes @stream_configs according to @routing, allocating enough
++ * space to hold configuration for each route endpoint.
++ *
++ * Must be freed with v4l2_uninit_stream_configs().
++ */
++int v4l2_init_stream_configs(struct v4l2_subdev_stream_configs *stream_configs,
++			     const struct v4l2_subdev_krouting *routing);
++
++/**
++ * v4l2_uninit_stream_configs() - Uninitialize stream configs
++ *
++ * @stream_configs: The stream configs to uninitialize
++ *
++ * Frees any allocated memory in @stream_configs.
++ */
++void v4l2_uninit_stream_configs(struct v4l2_subdev_stream_configs *stream_configs);
++
+ #endif
 -- 
 2.25.1
 
