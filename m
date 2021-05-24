@@ -2,178 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C76C4708A
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6599C04FF3
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 683E7611CE
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6BEA611EE
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbhEXLLQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:16 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33776 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbhEXLLJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:11:09 -0400
-Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 230553480;
-        Mon, 24 May 2021 13:09:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854572;
-        bh=wo6k2+e1ysEKVq4iD8tElxuoWTEROUqtd3CxKV7au7c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fgm5nTEznj4OOqblbGXwLA4GbdNlbn4mwl59coCUsZgLpma1iqF4T/1OnGmJi4oEg
-         qef+ZtYjhqDJTUx/vWFa0Dm/SlmVO4T2PKZcP4oU39dV2QMcN/gpdversYpwW+YhIH
-         Gc5KGV6C93QLwxudYyxdPRX3xKzvXjOhDDAFgMUk=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 28/38] media: ti-vpe: cal: support 8 DMA contexts
-Date:   Mon, 24 May 2021 14:08:59 +0300
-Message-Id: <20210524110909.672432-29-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
-References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+        id S232781AbhEXLLR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232733AbhEXLLK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 07:11:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85E5661151;
+        Mon, 24 May 2021 11:09:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621854582;
+        bh=LjBPzHdi1VU5NCGXGexHmi9kLJgLIN8NjpuFdA8BasA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R7Monon/ROGBciX//tUf1cJxXDrjE12vb/BalO2Y3IATvVItA2QtGp0jmRqRPew11
+         SzT88VYq8sNTD/su/yR5kEJYGq9eJo4FLVK0zbd8rY/EEy1/pjmXCoBlrZLnpB2HsI
+         8MtngDsywFxwBBgzhwfX0Oytd0ewvWi9YF4lv7DWXIN13zCMiuGsUTc7hrQlexOseg
+         8njbPZF7xZ8Wzmfwi+Dc7LDUrmJf0mReVuE3calqqOSawMZNhaPAfpbfiNNBNYNd2W
+         zr8VgHDnVu4b2fTVlguX6ShXxWu6iec8QQYFnG1cRG9XTO3mHwibkae6/aEzltPvKn
+         1rF4yNtb8RhHg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ll8Sp-0006Pn-7F; Mon, 24 May 2021 13:09:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/3] media: fix zero-length USB control requests
+Date:   Mon, 24 May 2021 13:09:17 +0200
+Message-Id: <20210524110920.24599-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The current driver only ever needs 2 DMA contexts (one per PHY), but we
-need to use more of the 8 contexts to add support for multiple streams.
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
+    
+Control transfers without a data stage are treated as OUT requests by
+the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+will now trigger a warning.
 
-Change the code so that we allocate DMA contexts as needed, which at
-this time is 1 per PHY, but could be up to 8.
+This series fixes the three media drivers that got this wrong.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/platform/ti-vpe/cal.c | 31 ++++++++++-------------------
- drivers/media/platform/ti-vpe/cal.h |  5 +++--
- 2 files changed, 14 insertions(+), 22 deletions(-)
+Johan
 
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 9e051c2e84a9..d43972c392fc 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -658,7 +658,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
- 		/* Clear Interrupt status */
- 		cal_write(cal, CAL_HL_IRQSTATUS(1), status);
- 
--		for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
-+		for (i = 0; i < cal->num_contexts; ++i) {
- 			if (status & CAL_HL_IRQ_WDMA_END_MASK(i))
- 				cal_irq_wdma_end(cal->ctx[i]);
- 		}
-@@ -672,7 +672,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
- 		/* Clear Interrupt status */
- 		cal_write(cal, CAL_HL_IRQSTATUS(2), status);
- 
--		for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
-+		for (i = 0; i < cal->num_contexts; ++i) {
- 			if (status & CAL_HL_IRQ_WDMA_START_MASK(i))
- 				cal_irq_wdma_start(cal->ctx[i]);
- 		}
-@@ -742,10 +742,7 @@ static int cal_async_notifier_complete(struct v4l2_async_notifier *notifier)
- 	unsigned int i;
- 	int ret = 0;
- 
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
--		if (!cal->ctx[i])
--			continue;
--
-+	for (i = 0; i < cal->num_contexts; ++i) {
- 		ret = cal_ctx_v4l2_register(cal->ctx[i]);
- 		if (ret)
- 			return ret;
-@@ -851,10 +848,8 @@ static void cal_media_unregister(struct cal_dev *cal)
- 	unsigned int i;
- 
- 	/* Unregister all the V4L2 video devices. */
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
--		if (cal->ctx[i])
--			cal_ctx_v4l2_unregister(cal->ctx[i]);
--	}
-+	for (i = 0; i < cal->num_contexts; i++)
-+		cal_ctx_v4l2_unregister(cal->ctx[i]);
- 
- 	cal_async_notifier_unregister(cal);
- 	media_device_unregister(&cal->mdev);
-@@ -901,10 +896,8 @@ static void cal_media_cleanup(struct cal_dev *cal)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
--		if (cal->ctx[i])
--			cal_ctx_v4l2_cleanup(cal->ctx[i]);
--	}
-+	for (i = 0; i < cal->num_contexts; i++)
-+		cal_ctx_v4l2_cleanup(cal->ctx[i]);
- 
- 	v4l2_device_unregister(&cal->v4l2_dev);
- 	media_device_cleanup(&cal->mdev);
-@@ -1053,7 +1046,6 @@ static int cal_init_camerarx_regmap(struct cal_dev *cal)
- static int cal_probe(struct platform_device *pdev)
- {
- 	struct cal_dev *cal;
--	struct cal_ctx *ctx;
- 	bool connected = false;
- 	unsigned int i;
- 	int ret;
-@@ -1143,6 +1135,8 @@ static int cal_probe(struct platform_device *pdev)
- 			ret = -ENODEV;
- 			goto error_context;
- 		}
-+
-+		cal->num_contexts++;
- 	}
- 
- 	/* Register the media device. */
-@@ -1153,11 +1147,8 @@ static int cal_probe(struct platform_device *pdev)
- 	return 0;
- 
- error_context:
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
--		ctx = cal->ctx[i];
--		if (ctx)
--			cal_ctx_v4l2_cleanup(ctx);
--	}
-+	for (i = 0; i < cal->num_contexts; i++)
-+		cal_ctx_v4l2_cleanup(cal->ctx[i]);
- 
- error_camerarx:
- 	for (i = 0; i < cal->data->num_csi2_phy; i++)
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-index 7d9a2d697fc4..400f95485d7c 100644
---- a/drivers/media/platform/ti-vpe/cal.h
-+++ b/drivers/media/platform/ti-vpe/cal.h
-@@ -29,7 +29,7 @@
- #include <media/videobuf2-v4l2.h>
- 
- #define CAL_MODULE_NAME			"cal"
--#define CAL_NUM_CONTEXT			2
-+#define CAL_MAX_NUM_CONTEXT		8
- #define CAL_NUM_CSI2_PORTS		2
- 
- /*
-@@ -182,7 +182,8 @@ struct cal_dev {
- 	/* Camera Core Module handle */
- 	struct cal_camerarx	*phy[CAL_NUM_CSI2_PORTS];
- 
--	struct cal_ctx		*ctx[CAL_NUM_CONTEXT];
-+	u32 num_contexts;
-+	struct cal_ctx		*ctx[CAL_MAX_NUM_CONTEXT];
- 
- 	struct media_device	mdev;
- 	struct v4l2_device	v4l2_dev;
+
+Johan Hovold (3):
+  media: gspca/gl860: fix zero-length control requests
+  media: gspca/sunplus: fix zero-length control requests
+  media: rtl28xxu: fix zero-length control request
+
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 3 ++-
+ drivers/media/usb/gspca/gl860/gl860.c   | 4 ++--
+ drivers/media/usb/gspca/sunplus.c       | 8 ++++++--
+ 3 files changed, 10 insertions(+), 5 deletions(-)
+
 -- 
-2.25.1
+2.26.3
 
