@@ -7,41 +7,43 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42CCAC2B9F8
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F271C47084
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A3CC611CE
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81A69611CD
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbhEXLLT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:11:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36652 "EHLO mail.kernel.org"
+        id S232796AbhEXLLU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:11:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232728AbhEXLLK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232734AbhEXLLK (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 24 May 2021 07:11:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D6DE6120E;
-        Mon, 24 May 2021 11:09:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8775361153;
+        Mon, 24 May 2021 11:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621854581;
-        bh=i4o9pM1TO4UbXp2eyfjZ3b0JJ10hVOg6gx1op1DjUOE=;
+        s=k20201202; t=1621854582;
+        bh=GVsPUYUbH6Fhhs9/c1HYG789KkLiGQmAFPvGxAEzfZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNbZ+fIe83UGwa0r1jyRRXpxE/ZXt69KNUQHtGUvzOtNdxPqqoT6pBUz3Ev4ePOwc
-         Gq6H789irbR9WaeiOpLAd9sHz3FczWjIEz9kAKPwXw39AHWxqNUI92rUCDDQiwn2Ey
-         ic/JsMvWsZ09zwAOahHcinNfI4MbVrQgGt56fOJJH3O+4wEdbyAxxMLBg3xeLS8clF
-         Ql7BgFDQaBQOiIusBRO7FlDHIBp/LmtNzeL+ZvI4LnPl1Vhsg2g7q+H4WKirIjQjTm
-         L+c14I8QAbfDHhHKpY0HhLMPvTlQ2STeToyuVXqPosz/1pIOSh8wSpQm7csgkbasYm
-         YUPfPOw1Dd6fA==
+        b=hcwVbcNJ0Akpo4wTKnWBaTfvzngnBY9pvoRnrM6kiZoEiZBS+zyPHwbmI6J7k3Vfu
+         +kmyyh5jCP5lGK4RelfJJgRC0u09ocQLXuL271GdSQQe5HOQ3UB+oyPyiL7tYWdrzF
+         Efe217s5NENfYhE7A7VEFcDvj9lT/WNUulhVDllPe81oFARpMfKxSsxqHqCxCLDQSW
+         TAHoOFJMTP0KrPiYaxuelbp3HiYJkeVXI65AHxn0dEbwWzzYhDAqkfpm1hWlc0bEyi
+         EDgPW+nqgGTzB+tkXrfDEX+q/zR+EiUdz8JC6ZL05m/CDLo/kS9jE2eAfMtUwRR2J5
+         cwod2wQaCBeNA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1ll8Sp-0006Pp-BJ; Mon, 24 May 2021 13:09:39 +0200
+        id 1ll8Sp-0006Pt-Hr; Mon, 24 May 2021 13:09:39 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 1/3] media: gspca/gl860: fix zero-length control requests
-Date:   Mon, 24 May 2021 13:09:18 +0200
-Message-Id: <20210524110920.24599-2-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>,
+        syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Antti Palosaari <crope@iki.fi>
+Subject: [PATCH 3/3] media: rtl28xxu: fix zero-length control request
+Date:   Mon, 24 May 2021 13:09:20 +0200
+Message-Id: <20210524110920.24599-4-johan@kernel.org>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210524110920.24599-1-johan@kernel.org>
 References: <20210524110920.24599-1-johan@kernel.org>
@@ -59,30 +61,32 @@ Control transfers without a data stage are treated as OUT requests by
 the USB stack and should be using usb_sndctrlpipe(). Failing to do so
 will now trigger a warning.
 
-Fix the gl860_RTx() helper so that zero-length control reads fail with
-an error message instead. Note that there are no current callers that
-would trigger this.
+Fix the zero-length i2c-read request used for type detection by
+attempting to read a single byte instead.
 
-Fixes: 4f7cb8837cec ("V4L/DVB (12954): gspca - gl860: Addition of GL860 based webcams")
+Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
+Cc: stable@vger.kernel.org      # 4.0
+Cc: Antti Palosaari <crope@iki.fi>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/usb/gspca/gl860/gl860.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/gl860/gl860.c b/drivers/media/usb/gspca/gl860/gl860.c
-index 2c05ea2598e7..ce4ee8bc75c8 100644
---- a/drivers/media/usb/gspca/gl860/gl860.c
-+++ b/drivers/media/usb/gspca/gl860/gl860.c
-@@ -561,8 +561,8 @@ int gl860_RTx(struct gspca_dev *gspca_dev,
- 					len, 400 + 200 * (len > 1));
- 			memcpy(pdata, gspca_dev->usb_buf, len);
- 		} else {
--			r = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--					req, pref, val, index, NULL, len, 400);
-+			gspca_err(gspca_dev, "zero-length read request\n");
-+			r = -EINVAL;
- 		}
- 	}
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 97ed17a141bb..2c04ed8af0e4 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -612,8 +612,9 @@ static int rtl28xxu_read_config(struct dvb_usb_device *d)
+ static int rtl28xxu_identify_state(struct dvb_usb_device *d, const char **name)
+ {
+ 	struct rtl28xxu_dev *dev = d_to_priv(d);
++	u8 buf[1];
+ 	int ret;
+-	struct rtl28xxu_req req_demod_i2c = {0x0020, CMD_I2C_DA_RD, 0, NULL};
++	struct rtl28xxu_req req_demod_i2c = {0x0020, CMD_I2C_DA_RD, 1, buf};
+ 
+ 	dev_dbg(&d->intf->dev, "\n");
  
 -- 
 2.26.3
