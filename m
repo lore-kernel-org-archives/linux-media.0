@@ -2,98 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 186B2C2B9F7
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:14:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18761C04FF3
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:21:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F17A661057
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF31B613EA
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234164AbhEXPQC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 11:16:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40894 "EHLO mail.kernel.org"
+        id S234309AbhEXPWo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 11:22:44 -0400
+Received: from mga01.intel.com ([192.55.52.88]:44414 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234805AbhEXPJK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 11:09:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D2A826191F;
-        Mon, 24 May 2021 14:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621867904;
-        bh=ZLSLEAHz+odBCjxBEJd4M0bW9wsgwR8skocIbqmHwt8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hk5goBM0/iR2ghX4n4A7fOUW5tTneXNIasV1hzNR9O4v1L99lOfvoinNvrJtQ7yJH
-         c21OK+PcRKNtSBJvCcV3DX8DZvP3QIUTvqctB3cKvLyj6GxQw7r1wMT20/8t0769TJ
-         V/YwZShAHvFwSGMOqYRFVgI54TD5MwucHQemsx5WnQ1jE8JCYRtr6ZPHi9t8wpn24I
-         HnioIIrtDOPkm6QsZyXl20CDYB4m3PKSuoQQheAkepMBLdHrn7riin4BZ+FCAa7Z5R
-         SVpZ/DPBT+uzFFJoa5qBoG+Ab9g3Gob534PiV725nZL7CJrdr8k98WAn0aIVbQVT6t
-         9JOeeVtd1jY2Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 11/16] media: gspca: properly check for errors in po1030_probe()
-Date:   Mon, 24 May 2021 10:51:25 -0400
-Message-Id: <20210524145130.2499829-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210524145130.2499829-1-sashal@kernel.org>
-References: <20210524145130.2499829-1-sashal@kernel.org>
+        id S235295AbhEXPUl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 11:20:41 -0400
+IronPort-SDR: 3VAmEWNKnN1kJRH5F+MBT+S+8/OQ7aElxVzIfCXaQR+3zXkhx4IvpyAx3wZU8Ipnw3AkXzWXB7
+ HWi4JpcJr7fw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="223112581"
+X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
+   d="scan'208";a="223112581"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 08:18:34 -0700
+IronPort-SDR: 3xTXIYzKCtF6IjPu7vE/AmzsvA23PXBxNkDOLWZ71J7wEIsEt2GSoZn7c8zNKaDFnHxGeMg9wl
+ hq5kQftQnV1w==
+X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
+   d="scan'208";a="629725647"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 08:18:31 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id B4AA4202F7;
+        Mon, 24 May 2021 18:18:29 +0300 (EEST)
+Date:   Mon, 24 May 2021 18:18:29 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH] media: atomisp: remove compat_ioctl32 code
+Message-ID: <20210524151829.GO3@paasikivi.fi.intel.com>
+References: <20210516204818.2967910-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210516204818.2967910-1-arnd@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Arnd,
 
-[ Upstream commit dacb408ca6f0e34df22b40d8dd5fae7f8e777d84 ]
+On Sun, May 16, 2021 at 10:47:43PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This is one of the last remaining users of compat_alloc_user_space()
+> and copy_in_user(), which are in the process of getting removed.
+> 
+> As of commit 57e6b6f2303e ("media: atomisp_fops.c: disable
+> atomisp_compat_ioctl32"), nothing in this file is actually getting used
+> as the only reference has been stubbed out.
 
-If m5602_write_sensor() or m5602_write_bridge() fail, do not continue to
-initialize the device but return the error to the calling funtion.
+This patch was made redundant by another one that fixed the bug. But I
+guess you're right in the sense that no-one could have used this because of
+the patch that disabled it.
 
-Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Link: https://lore.kernel.org/r/20210503115736.2104747-64-gregkh@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/gspca/m5602/m5602_po1030.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+So:
 
-diff --git a/drivers/media/usb/gspca/m5602/m5602_po1030.c b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-index 4bf5c43424b7..971253dafb57 100644
---- a/drivers/media/usb/gspca/m5602/m5602_po1030.c
-+++ b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-@@ -55,6 +55,7 @@ static const struct v4l2_ctrl_config po1030_greenbal_cfg = {
- int po1030_probe(struct sd *sd)
- {
- 	u8 dev_id_h = 0, i;
-+	int err;
- 	struct gspca_dev *gspca_dev = (struct gspca_dev *)sd;
- 
- 	if (force_sensor) {
-@@ -73,10 +74,13 @@ int po1030_probe(struct sd *sd)
- 	for (i = 0; i < ARRAY_SIZE(preinit_po1030); i++) {
- 		u8 data = preinit_po1030[i][2];
- 		if (preinit_po1030[i][0] == SENSOR)
--			m5602_write_sensor(sd,
--				preinit_po1030[i][1], &data, 1);
-+			err = m5602_write_sensor(sd, preinit_po1030[i][1],
-+						 &data, 1);
- 		else
--			m5602_write_bridge(sd, preinit_po1030[i][1], data);
-+			err = m5602_write_bridge(sd, preinit_po1030[i][1],
-+						 data);
-+		if (err < 0)
-+			return err;
- 	}
- 
- 	if (m5602_read_sensor(sd, PO1030_DEVID_H, &dev_id_h, 1))
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+But:
+
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+> index f1e6b2597853..e383e17c5072 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+> @@ -1283,7 +1283,8 @@ const struct v4l2_file_operations atomisp_fops = {
+>  	.unlocked_ioctl = video_ioctl2,
+>  #ifdef CONFIG_COMPAT
+>  	/*
+> -	 * There are problems with this code. Disable this for now.
+> +	 * this was removed because of bugs, the interface
+> +	 * needs to be made safe for compat tasks instead.
+>  	.compat_ioctl32 = atomisp_compat_ioctl32,
+
+I think the comment could go, too.
+
+>  	 */
+>  #endif
+> @@ -1297,10 +1298,7 @@ const struct v4l2_file_operations atomisp_file_fops = {
+>  	.mmap = atomisp_file_mmap,
+>  	.unlocked_ioctl = video_ioctl2,
+>  #ifdef CONFIG_COMPAT
+> -	/*
+> -	 * There are problems with this code. Disable this for now.
+> -	.compat_ioctl32 = atomisp_compat_ioctl32,
+> -	 */
+> +	/* .compat_ioctl32 = atomisp_compat_ioctl32, */
+
+Thie one, too.
+
+>  #endif
+>  	.poll = atomisp_poll,
+>  };
+
 -- 
-2.30.2
+Kind  regards,
 
+Sakari Ailus
