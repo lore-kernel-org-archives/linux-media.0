@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2327C2B9F8
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B479C47084
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:57:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D74EA6128D
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:55:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 412AD610FC
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 14:57:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbhEXO4k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 10:56:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33934 "EHLO mail.kernel.org"
+        id S233548AbhEXO6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 10:58:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233945AbhEXOxz (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 10:53:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C03761414;
-        Mon, 24 May 2021 14:48:29 +0000 (UTC)
+        id S233372AbhEXO4d (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 10:56:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADA6F61441;
+        Mon, 24 May 2021 14:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621867710;
-        bh=DKm/4LqZEMd3LR14FJ9YG0VfrPqVTXlodDeLd28VrlU=;
+        s=k20201202; t=1621867747;
+        bh=sVg6SB/8K3yyZdgO0ZP29Rf+pPOA/vY5LIPQHKTVJMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F7We/ueOLfkGxHrjlQis+8IwV4wwXWOAbEX18mFcoZRb74+ybMjAoLpvZLGzR+BGU
-         ZI9F7lMO077HLtjGpmOCbLYRI5jrkEIXei/Xa3SFQCWewILjT+N8pBLfgtUBqB2OCy
-         Pbn+s2w7ooN7GurNEgO5I8MYrDWk49sZROY/fmVZ8u22vT4+qYja4ZSV/sON76uR02
-         Y8thEGA++6SMwkzT9VlBaTDKjNU5Gbzvpo3iX/vqYYAFeZsEGqM/R6GR0x4rIFOYPh
-         VHVy7cR/I5nrWGbNazVUTlW1q9Qi7KNHY/Xt8zgmGbNE6R8/zl6dZWqzrG6PLkOCfX
-         +suULeLA+zdVA==
+        b=lPGTc7uB25blCuRpEINMnXwgRrEy0pE+IK261x9U2VcVhDwmfgVktpYh8zJJdU7rw
+         Gm8e+Bgs0Gy+D0jRlkykLnSeozwthYzyeIiAMA8rfF2pHTAIqsyA64qbcaGECdxoHE
+         xn5rVdkWUDz1oVWdX6FXy3fQdU/47U6hsi5HECXw9/Nxvx/dAj7T0ta4EuVzh1HnCC
+         O7bau2Mvz77IjEjI3TzWlOktyRUdCg4nU762hdERArRQmZJ7yZXzzEKTZsvck21XDp
+         17fkwV3mRrBuL4jCtaybNjgmY95iheRwnirTfwieCLdJnQIE4HhvwETaXiz5sqkQnX
+         dj7Ppn4+OdEXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Aditya Pakki <pakki001@umn.edu>,
+        Kangjie Lu <kjlu@umn.edu>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 37/62] Revert "media: gspca: Check the return value of write_bridge for timeout"
-Date:   Mon, 24 May 2021 10:47:18 -0400
-Message-Id: <20210524144744.2497894-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 03/52] Revert "media: usb: gspca: add a missed check for goto_low_power"
+Date:   Mon, 24 May 2021 10:48:13 -0400
+Message-Id: <20210524144903.2498518-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210524144744.2497894-1-sashal@kernel.org>
-References: <20210524144744.2497894-1-sashal@kernel.org>
+In-Reply-To: <20210524144903.2498518-1-sashal@kernel.org>
+References: <20210524144903.2498518-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,59 +53,51 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit 8e23e83c752b54e98102627a1cc09281ad71a299 ]
+[ Upstream commit fd013265e5b5576a74a033920d6c571e08d7c423 ]
 
-This reverts commit a21a0eb56b4e8fe4a330243af8030f890cde2283.
+This reverts commit 5b711870bec4dc9a6d705d41e127e73944fa3650.
 
 Because of recent interactions with developers from @umn.edu, all
 commits from them have been recently re-reviewed to ensure if they were
 correct or not.
 
-Upon review, this commit was found to be incorrect for the reasons
-below, so it must be reverted.  It will be fixed up "correctly" in a
-later kernel change.
+Upon review, this commit was found to do does nothing useful as a user
+can do nothing with this information and if an error did happen, the
+code would continue on as before.  Because of this, just revert it.
 
-Different error values should never be "OR" together and expect anything
-sane to come out of the result.
-
-Cc: Aditya Pakki <pakki001@umn.edu>
+Cc: Kangjie Lu <kjlu@umn.edu>
 Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Link: https://lore.kernel.org/r/20210503115736.2104747-63-gregkh@linuxfoundation.org
+Link: https://lore.kernel.org/r/20210503115736.2104747-7-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/gspca/m5602/m5602_po1030.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/media/usb/gspca/cpia1.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/m5602/m5602_po1030.c b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-index d680b777f097..7bdbb8065146 100644
---- a/drivers/media/usb/gspca/m5602/m5602_po1030.c
-+++ b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-@@ -154,7 +154,6 @@ static const struct v4l2_ctrl_config po1030_greenbal_cfg = {
- 
- int po1030_probe(struct sd *sd)
+diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
+index a4f7431486f3..d93d384286c1 100644
+--- a/drivers/media/usb/gspca/cpia1.c
++++ b/drivers/media/usb/gspca/cpia1.c
+@@ -1424,7 +1424,6 @@ static int sd_config(struct gspca_dev *gspca_dev,
  {
--	int rc = 0;
- 	u8 dev_id_h = 0, i;
- 	struct gspca_dev *gspca_dev = (struct gspca_dev *)sd;
+ 	struct sd *sd = (struct sd *) gspca_dev;
+ 	struct cam *cam;
+-	int ret;
  
-@@ -174,14 +173,11 @@ int po1030_probe(struct sd *sd)
- 	for (i = 0; i < ARRAY_SIZE(preinit_po1030); i++) {
- 		u8 data = preinit_po1030[i][2];
- 		if (preinit_po1030[i][0] == SENSOR)
--			rc |= m5602_write_sensor(sd,
-+			m5602_write_sensor(sd,
- 				preinit_po1030[i][1], &data, 1);
- 		else
--			rc |= m5602_write_bridge(sd, preinit_po1030[i][1],
--						data);
-+			m5602_write_bridge(sd, preinit_po1030[i][1], data);
- 	}
--	if (rc < 0)
--		return rc;
+ 	sd->mainsFreq = FREQ_DEF == V4L2_CID_POWER_LINE_FREQUENCY_60HZ;
+ 	reset_camera_params(gspca_dev);
+@@ -1436,10 +1435,7 @@ static int sd_config(struct gspca_dev *gspca_dev,
+ 	cam->cam_mode = mode;
+ 	cam->nmodes = ARRAY_SIZE(mode);
  
- 	if (m5602_read_sensor(sd, PO1030_DEVID_H, &dev_id_h, 1))
- 		return -ENODEV;
+-	ret = goto_low_power(gspca_dev);
+-	if (ret)
+-		gspca_err(gspca_dev, "Cannot go to low power mode: %d\n",
+-			  ret);
++	goto_low_power(gspca_dev);
+ 	/* Check the firmware version. */
+ 	sd->params.version.firmwareVersion = 0;
+ 	get_version_information(gspca_dev);
 -- 
 2.30.2
 
