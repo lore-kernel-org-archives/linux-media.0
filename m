@@ -2,118 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07984C2B9F7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF12BC2B9F8
 	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE5BA61209
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCF62611CD
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 11:09:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbhEXLKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 07:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S232547AbhEXLKt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 07:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbhEXLKq (ORCPT
+        with ESMTP id S232631AbhEXLKs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 07:10:46 -0400
+        Mon, 24 May 2021 07:10:48 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF5EC061574
-        for <linux-media@vger.kernel.org>; Mon, 24 May 2021 04:09:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FAC061756
+        for <linux-media@vger.kernel.org>; Mon, 24 May 2021 04:09:19 -0700 (PDT)
 Received: from deskari.lan (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 828BE140C;
-        Mon, 24 May 2021 13:09:15 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E1C617C6;
+        Mon, 24 May 2021 13:09:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621854555;
-        bh=xmNEETQ8Vy9VvfsOWDuweZflLjv9wzge9hrpI8+b+bo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tPwWCEX3PiBDI3heHHDVwmLVWEvvAEkbOrAlQdqaYba0Or/dMplnkMO6Bc1/WwvnF
-         Gav/CmBiRngge34lAjzQJYnzjFaWa0ZlIncfARpq5qXbKJkR7cpCA2/n3uVeKKIt1z
-         IIzl2wchd/eIYlo+qgGrowT1EDR4OJIPeMAv5oY4=
+        s=mail; t=1621854557;
+        bh=iV5keq1JsHitpvZvv12C91/SJpBP2NrOAIMCZGpaE+o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DSoAUoY+Qckxx8dXdmD+khNR1pgJaJyqfvoBCRXxLtf6LifflD0ClmeO7ALLybQo9
+         L9k7CoOa8TvoDkh6dbGFracd1q8J29dtuh8pQPByUNbQBfmjIxsUHjHMq4m/G7Eevs
+         kGlO2sPt4cPM234PBCHPjA2gfnWS5nKgTtNICfBY=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>, linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 00/38] media: ti-vpe: cal: multistream & embedded data support
-Date:   Mon, 24 May 2021 14:08:31 +0300
-Message-Id: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 02/38] media: ti-vpe: cal: fix error handling in cal_camerarx_create
+Date:   Mon, 24 May 2021 14:08:33 +0300
+Message-Id: <20210524110909.672432-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+cal_camerarx_create() doesn't handle error returned from
+cal_camerarx_sd_init_cfg(). Fix this.
 
-This is v3 of the CAL series to add multiplexed streams and embedded
-data support.
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/media/platform/ti-vpe/cal-camerarx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This is based on the v7 of the v4l2 core changes to add multiplexed
-streams:
-
-https://lore.kernel.org/linux-media/20210524104408.599645-1-tomi.valkeinen@ideasonboard.com/
-
-I didn't receive any comments on the v2 of the series, so the patches up
-to and including "media: ti-vpe: cal: allow more than 1 source pads"
-have very little changes. The patches after that add the multiplexed
-streams and embedded data support, which are now based on the new
-approach in the above mentioned v7 series
-
- Tomi
-
-Tomi Valkeinen (38):
-  media: ti-vpe: cal: add g/s_parm for legacy API
-  media: ti-vpe: cal: fix error handling in cal_camerarx_create
-  media: ti-vpe: cal: remove unused cal_camerarx->dev field
-  media: ti-vpe: cal: rename "sensor" to "source"
-  media: ti-vpe: cal: move global config from cal_ctx_wr_dma_config to
-    runtime resume
-  media: ti-vpe: cal: use v4l2_get_link_freq
-  media: ti-vpe: cal: add cal_ctx_prepare/unprepare
-  media: ti-vpe: cal: change index and cport to u8
-  media: ti-vpe: cal: Add CSI2 context
-  media: ti-vpe: cal: Add pixel processing context
-  media: ti-vpe: cal: rename cal_ctx->index to dma_ctx
-  media: ti-vpe: cal: rename CAL_HL_IRQ_MASK
-  media: ti-vpe: cal: clean up CAL_CSI2_VC_IRQ_* macros
-  media: ti-vpe: cal: catch VC errors
-  media: ti-vpe: cal: remove wait when stopping camerarx
-  media: ti-vpe: cal: disable csi2 ctx and pix proc at ctx_stop
-  media: ti-vpe: cal: allocate pix proc dynamically
-  media: ti-vpe: cal: add 'use_pix_proc' field
-  media: ti-vpe: cal: add cal_ctx_wr_dma_enable and fix a race
-  media: ti-vpe: cal: add vc and datatype fields to cal_ctx
-  media: ti-vpe: cal: handle cal_ctx_v4l2_register error
-  media: ti-vpe: cal: set field always to V4L2_FIELD_NONE
-  media: ti-vpe: cal: fix typo in a comment
-  media: ti-vpe: cal: add mbus_code support to cal_mc_enum_fmt_vid_cap
-  media: ti-vpe: cal: rename non-MC funcs to cal_legacy_*
-  media: ti-vpe: cal: init ctx->v_fmt correctly in MC mode
-  media: ti-vpe: cal: remove cal_camerarx->fmtinfo
-  media: ti-vpe: cal: support 8 DMA contexts
-  media: ti-vpe: cal: cleanup phy iteration in cal_remove
-  media: ti-vpe: cal: fix ctx uninitialization
-  media: ti-vpe: cal: fix queuing of the initial buffer
-  media: ti-vpe: cal: use CSI-2 frame number
-  media: ti-vpe: cal: add camerarx locking
-  media: ti-vpe: cal: add camerarx enable/disable refcounting
-  media: ti-vpe: cal: allow more than 1 source pads
-  media: ti-vpe: cal: add embedded data support
-  media: ti-vpe: cal: use frame desc to get vc and dt
-  media: ti-vpe: cal: add multiplexed streams support
-
- drivers/media/platform/ti-vpe/cal-camerarx.c | 565 ++++++++++++++-----
- drivers/media/platform/ti-vpe/cal-video.c    | 273 +++++++--
- drivers/media/platform/ti-vpe/cal.c          | 334 ++++++++---
- drivers/media/platform/ti-vpe/cal.h          |  74 ++-
- drivers/media/platform/ti-vpe/cal_regs.h     |  53 +-
- 5 files changed, 951 insertions(+), 348 deletions(-)
-
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index 124a4e2bdefe..e2e384a887ac 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -845,7 +845,9 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+ 	if (ret)
+ 		goto error;
+ 
+-	cal_camerarx_sd_init_cfg(sd, NULL);
++	ret = cal_camerarx_sd_init_cfg(sd, NULL);
++	if (ret)
++		goto error;
+ 
+ 	ret = v4l2_device_register_subdev(&cal->v4l2_dev, sd);
+ 	if (ret)
 -- 
 2.25.1
 
