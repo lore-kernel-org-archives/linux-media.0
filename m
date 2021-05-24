@@ -7,42 +7,43 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E124C2B9F8
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F827C2B9F7
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:14:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8452A6138C
-	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:07:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43D81610FC
+	for <linux-media@archiver.kernel.org>; Mon, 24 May 2021 15:14:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234708AbhEXPIl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 May 2021 11:08:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38144 "EHLO mail.kernel.org"
+        id S233188AbhEXPPk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 May 2021 11:15:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234783AbhEXPFB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 May 2021 11:05:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCB386140D;
-        Mon, 24 May 2021 14:50:54 +0000 (UTC)
+        id S234235AbhEXPHD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 May 2021 11:07:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D99E161603;
+        Mon, 24 May 2021 14:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621867855;
-        bh=pXquFE27Ilo2p3a3wmp4SiX+uOtiaz79B/x+/SVoWww=;
+        s=k20201202; t=1621867880;
+        bh=Sg+oHbjPM3EyWs9U+wsYp0uv2MQ9sKDApoykKutJ+x8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G3iepzJTXOKF1+naD6rKXicaI3p+eIFWDjHPte09skWCrlkiZ+IDFCi2bpTyfPIl7
-         xnxiWQVvhG56ehH1O86Yj7P5yTxQNBcmE9+6nnhSJrgTvhrOiDfcfJDF+S6h7z6BrJ
-         rXlB4Vn1cc88FZEYsHVBsizdf3kfX+guXQMLAJJT++za+I6jvzsQ40/liO31SMeRPw
-         Ndlx4ZQ3Aeyc4eSWJQw4g/B12E8fMw889xzEz7MgzoCx2ih7qkI431fNLLby8+R72q
-         MnF0QvAvhR+sxmVHsM2TM6jgIcmTF6iFs0wb+pTG0Tln4ILqMN9xO6KMDzTYYYS4Qh
-         2nReUisoQsI6Q==
+        b=m4HoOuyVpakcAw3GM3f1TWHIQwuwDMTSMBD7699LOEe8vB926yBFngKp9jTkbWWgf
+         heKyrLpiG4yucrJnkk2tq+QUNS7WrwhJcnx7O5tTpLlzWs7nyYbwc1Lg1JCA2qqk81
+         Q/fK+itKUTrHVNVUUzBG2DMbaCi+zRRyjYbQ/JS1RBAHOiSEw9ezxduk/hUuq8y3yV
+         G8fk1jMHy7N4/aEWcMKhBKBz1PTO/rSOmfTK1/1RScJqfxn0d3nWvEKwDRBheqm8H7
+         B+mKKzKEbZxXwp6BLeOvJM4vzq3KtF7wvNBD4gWPA5490K4lHXjs7bVaWLdsqcR7IF
+         CCEBOoy/P5kGw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alaa Emad <alaaemadhossney.ae@gmail.com>,
-        Aditya Pakki <pakki001@umn.edu>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/21] media: gspca: mt9m111: Check write_bridge for timeout
-Date:   Mon, 24 May 2021 10:50:31 -0400
-Message-Id: <20210524145040.2499322-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 11/19] media: dvb: Add check on sp8870_readreg return
+Date:   Mon, 24 May 2021 10:50:58 -0400
+Message-Id: <20210524145106.2499571-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210524145040.2499322-1-sashal@kernel.org>
-References: <20210524145040.2499322-1-sashal@kernel.org>
+In-Reply-To: <20210524145106.2499571-1-sashal@kernel.org>
+References: <20210524145106.2499571-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,54 +54,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Alaa Emad <alaaemadhossney.ae@gmail.com>
 
-[ Upstream commit 656025850074f5c1ba2e05be37bda57ba2b8d491 ]
+[ Upstream commit c6d822c56e7fd29e6fa1b1bb91b98f6a1e942b3c ]
 
-In mt9m111_probe, m5602_write_bridge can timeout and return a negative
-error value. The fix checks for this error and passes it upstream.
+The function sp8870_readreg returns a negative value when i2c_transfer
+fails so properly check for this and return the error if it happens.
 
-Signed-off-by: Aditya Pakki <pakki001@umn.edu>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc: Sean Young <sean@mess.org>
+Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Alaa Emad <alaaemadhossney.ae@gmail.com>
+Link: https://lore.kernel.org/r/20210503115736.2104747-60-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/gspca/m5602/m5602_mt9m111.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/media/dvb-frontends/sp8870.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-index 7d01ddd7ed01..da17c384e64d 100644
---- a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-+++ b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-@@ -199,7 +199,7 @@ static const struct v4l2_ctrl_config mt9m111_greenbal_cfg = {
- int mt9m111_probe(struct sd *sd)
- {
- 	u8 data[2] = {0x00, 0x00};
--	int i;
-+	int i, err;
- 	struct gspca_dev *gspca_dev = (struct gspca_dev *)sd;
+diff --git a/drivers/media/dvb-frontends/sp8870.c b/drivers/media/dvb-frontends/sp8870.c
+index e87ac30d7fb8..b43135c5a960 100644
+--- a/drivers/media/dvb-frontends/sp8870.c
++++ b/drivers/media/dvb-frontends/sp8870.c
+@@ -293,7 +293,9 @@ static int sp8870_set_frontend_parameters(struct dvb_frontend *fe)
+ 	sp8870_writereg(state, 0xc05, reg0xc05);
  
- 	if (force_sensor) {
-@@ -217,15 +217,17 @@ int mt9m111_probe(struct sd *sd)
- 	/* Do the preinit */
- 	for (i = 0; i < ARRAY_SIZE(preinit_mt9m111); i++) {
- 		if (preinit_mt9m111[i][0] == BRIDGE) {
--			m5602_write_bridge(sd,
--				preinit_mt9m111[i][1],
--				preinit_mt9m111[i][2]);
-+			err = m5602_write_bridge(sd,
-+					preinit_mt9m111[i][1],
-+					preinit_mt9m111[i][2]);
- 		} else {
- 			data[0] = preinit_mt9m111[i][2];
- 			data[1] = preinit_mt9m111[i][3];
--			m5602_write_sensor(sd,
--				preinit_mt9m111[i][1], data, 2);
-+			err = m5602_write_sensor(sd,
-+					preinit_mt9m111[i][1], data, 2);
- 		}
-+		if (err < 0)
-+			return err;
- 	}
+ 	// read status reg in order to clear pending irqs
+-	sp8870_readreg(state, 0x200);
++	err = sp8870_readreg(state, 0x200);
++	if (err < 0)
++		return err;
  
- 	if (m5602_read_sensor(sd, MT9M111_SC_CHIPVER, data, 2))
+ 	// system controller start
+ 	sp8870_microcontroller_start(state);
 -- 
 2.30.2
 
