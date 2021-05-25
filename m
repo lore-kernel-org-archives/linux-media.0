@@ -2,83 +2,134 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72913C2B9F8
-	for <linux-media@archiver.kernel.org>; Tue, 25 May 2021 17:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45CA1C47085
+	for <linux-media@archiver.kernel.org>; Tue, 25 May 2021 18:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FBE961423
-	for <linux-media@archiver.kernel.org>; Tue, 25 May 2021 17:36:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29B96613FA
+	for <linux-media@archiver.kernel.org>; Tue, 25 May 2021 18:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbhEYRiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 May 2021 13:38:07 -0400
-Received: from m12-14.163.com ([220.181.12.14]:44649 "EHLO m12-14.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234123AbhEYRhy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 May 2021 13:37:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=OdYXP
-        pa0ZDQMtZGtyalDSl75BLbfhf57+2BhDu/Wwx8=; b=EsNhscowKKFUFKJKolUyb
-        /NPI4Psb8ftmVQ+2JdePdIFhvmgsSKO+RLgycB9pXexkXmjb1oAQAxnje/Ed8Ow/
-        uicjt8oTGaFtb6jZES4bOdXheM7+/Qks8RjEFaHUzUXiHXknNzfH2yLYVSG2wLWn
-        zRXvAuslOlBH5ge9WiKNHY=
-Received: from localhost.localdomain (unknown [218.17.89.92])
-        by smtp10 (Coremail) with SMTP id DsCowAAHYW43x6xg3jaOKw--.45330S2;
-        Tue, 25 May 2021 17:45:28 +0800 (CST)
-From:   lijian_8010a29@163.com
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        sakari.ailus@linux.intel.com, ezequiel@collabora.com,
-        laurent.pinchart@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lijian <lijian@yulong.com>
-Subject: [PATCH] media: v4l2-dev.c: Modified the macro SET_VALID_IOCTL
-Date:   Tue, 25 May 2021 17:41:48 +0800
-Message-Id: <20210525094148.74300-1-lijian_8010a29@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S231596AbhEYSQs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 May 2021 14:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231556AbhEYSQr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 25 May 2021 14:16:47 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B05DC061756
+        for <linux-media@vger.kernel.org>; Tue, 25 May 2021 11:15:16 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b12so32161617ljp.1
+        for <linux-media@vger.kernel.org>; Tue, 25 May 2021 11:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JDvTiCSdSa6DaxtIYC1tMowbiLo2hs8x4utC1OfqK2o=;
+        b=Y0cT5eNGrR2XbykQQJwT1wOeAUQMHH6SYgDmM+mMFkMkayQ6xD5PUGDOGr3F32/fBk
+         pkNc+6EdG/uSZSm6eLl6qiZD/OKRmROd7jYkTXTN6ouPouIRxsmPSHcvmpdQ4+peCzub
+         huZocnWTLrHULYRTEn0klXNgWfoIQ2ns1VhthONqcOnXNUJdrdbGwDMn9jsSSKBlxigu
+         MZLW27hw6rDXtSoH4SSl0gXNgIt0i3ecQ6w98XGRkEjhvPrZNI/Djihh3ZRjvR+kCpk6
+         pRQIAoD+OXiNKeGF2dVGnKpXsJB9q4Y3guE/VoNosiSTyKkdrxjtkDHkHT/Wm/DtMkxD
+         r3/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JDvTiCSdSa6DaxtIYC1tMowbiLo2hs8x4utC1OfqK2o=;
+        b=VetuonSa/un1kzma/lnXUnbNfvLztuEZ9X8jg6Uk1bUSNOI0l7S9XM+dEBdDU3gwfi
+         aV0nbbCK6yjf/jZ11TLIfbpQBKi3WsyVTqqxVD/tkHxf+rBlrBK2rsl2WVhAuCYg4TS4
+         gIf/5r/2Wz5C8XX/OFK5AOU2tAkTxQtS5CzVbfPnwvMEEW4xLFhixmDGNw6sS4vN3WU6
+         ayJyCzsLZoihmW+XIf/Ht9vCnHBcF3LzRr3rFBWIUrQcqj8Voq4ubl/F3nxwh5u/hG+D
+         fNcuqw9bx3I/OGp76lkOsOZofvuHlPHeI+OQUsFElCTNUYcT360ySw5Gv9gfZ1TN5C2/
+         V0iA==
+X-Gm-Message-State: AOAM5330obHXS+DzeIzlFGDKOHFgNADjDgHBeOKCEtujpSZsapUTH07o
+        uL26jyuygv4T6MaTR+0mzd5HZg==
+X-Google-Smtp-Source: ABdhPJxK4MtgBJuOAVSzxlU1r+29hap5/+nJwVLbu8fMwzhn270NTK8HImjvnRIAlbRf3BG5N52VSA==
+X-Received: by 2002:a2e:7a02:: with SMTP id v2mr21900894ljc.271.1621966514644;
+        Tue, 25 May 2021 11:15:14 -0700 (PDT)
+Received: from [192.168.88.254] ([85.249.41.56])
+        by smtp.gmail.com with ESMTPSA id m9sm2175810ljh.6.2021.05.25.11.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 May 2021 11:15:13 -0700 (PDT)
+Subject: Re: [PATCH 04/17] media: camss: csid-170: fix non-10bit formats
+To:     Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org
+Cc:     robert.foss@linaro.org, Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "open list:QUALCOMM CAMERA SUBSYSTEM DRIVER" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20210511180728.23781-1-jonathan@marek.ca>
+ <20210511180728.23781-5-jonathan@marek.ca>
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+Message-ID: <fd72befe-f39c-ecb0-1130-50aa8452a90e@linaro.org>
+Date:   Tue, 25 May 2021 21:15:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowAAHYW43x6xg3jaOKw--.45330S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Xry8Zr48KFW5XF17XFy7KFg_yoWkJrg_Wr
-        1kuF97XryqyF10vw1qyw1rA34qva98uryruF9xtrs3JFy5Z3WUXr1vqry3trsrW3W7ZFn8
-        XF9xWr1Ska48CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUexcTJUUUUU==
-X-Originating-IP: [218.17.89.92]
-X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/xtbBLBOdUF++L6NhUAAAsu
+In-Reply-To: <20210511180728.23781-5-jonathan@marek.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: lijian <lijian@yulong.com>
+Hi Jonathan,
 
-Macros starting with if should be enclosed by a do - while loop
-to avoid possible if/else logic defects.
-So modified the macro SET_VALID_IOCTL with do - while loop.
+Thank you for your patch!
 
-Signed-off-by: lijian <lijian@yulong.com>
----
- drivers/media/v4l2-core/v4l2-dev.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 11.05.2021 21:07, Jonathan Marek wrote:
+> Use the decode_format/data_type from the "format" struct instead of a
+> hardcoded 10-bit format.
+> 
+> Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
+>   drivers/media/platform/qcom/camss/camss-csid-170.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+> index ac22ff29d2a9..a81cc94c075f 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csid-170.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+> @@ -366,7 +366,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+>   			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
+>   			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
+>   
+> -			val = DATA_TYPE_RAW_10BIT << TPG_DT_n_CFG_1_DATA_TYPE;
+> +			val = format->data_type << TPG_DT_n_CFG_1_DATA_TYPE;
+>   			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
+>   
+>   			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
+> @@ -382,8 +382,8 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+>   		val = 1 << RDI_CFG0_BYTE_CNTR_EN;
+>   		val |= 1 << RDI_CFG0_FORMAT_MEASURE_EN;
+>   		val |= 1 << RDI_CFG0_TIMESTAMP_EN;
+> -		val |= DECODE_FORMAT_PAYLOAD_ONLY << RDI_CFG0_DECODE_FORMAT;
+> -		val |= DATA_TYPE_RAW_10BIT << RDI_CFG0_DATA_TYPE;
+> +		val |= format->decode_format << RDI_CFG0_DECODE_FORMAT;
+> +		val |= format->data_type << RDI_CFG0_DATA_TYPE;
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 7d0edf3530be..15067843456e 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -520,9 +520,8 @@ static int get_index(struct video_device *vdev)
- 	return find_first_zero_bit(used, VIDEO_NUM_DEVICES);
- }
- 
--#define SET_VALID_IOCTL(ops, cmd, op)			\
--	if (ops->op)					\
--		set_bit(_IOC_NR(cmd), valid_ioctls)
-+#define SET_VALID_IOCTL(ops, cmd, op) \
-+	do { if (ops->op) set_bit(_IOC_NR(cmd), valid_ioctls); } while (0)
- 
- /* This determines which ioctls are actually implemented in the driver.
-    It's a one-time thing which simplifies video_ioctl2 as it can just do
--- 
-2.25.1
+I've given it a try on RB3 board (aka db845c plus the navigation mezzanine), which uses ov8856 camera
+sensor (its output format is SGRBG10_1X10).
 
+The above change doesn't work for me because format->decode_format has the value of 0x02 (which is
+DECODE_FORMAT_UNCOMPRESSED_10_BIT). format->data_type has the expected value of 0x2b (DATA_TYPE_RAW_10BIT).
+
+Thanks,
+Andrey
+
+>   		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
+>   		val |= dt_id << RDI_CFG0_DT_ID;
+>   		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
+> 
