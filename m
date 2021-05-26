@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5B5AC4708A
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 016FBC47089
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D00A613DC
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEFA3613C9
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235372AbhEZP0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 May 2021 11:26:43 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59298 "EHLO
+        id S234721AbhEZP0o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 May 2021 11:26:44 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59500 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbhEZP0T (ORCPT
+        with ESMTP id S235527AbhEZP0U (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 May 2021 11:26:19 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14QFOBEt001745;
-        Wed, 26 May 2021 10:24:11 -0500
+        Wed, 26 May 2021 11:26:20 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14QFOgLh001936;
+        Wed, 26 May 2021 10:24:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622042651;
-        bh=BMdz5PIJ0bDUzRjPQ3h1Ef4Vn0+hXXShPYDakbVNwWY=;
+        s=ti-com-17Q1; t=1622042682;
+        bh=eG0vS5X4uAnLzGcZzDZZSZFpDq3RPWTO+SVdvVDyqZ8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LKyZ1j1jo5rtIHOGp+W2Y09byBc3lfx05EF4zJS7YJIbAfGP6NBpjQqRsSPEXDZNj
-         vZpv13I3KS/chm0DPrdYI2k3Rdzs8nY4SWzcBHUHkhnd18wFymedxaefQVTd0LXPW5
-         X95OJkP55aYdSXQlbNSbGmOtTnlsOw71Ibd9Xd/k=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14QFOB2t101445
+        b=LoaJlNvm8fsqQ6lRFmJpgjeanTgybIDredCjwPtgD/ifpDmcDBtfAnokGsypr/edz
+         YNUnoMzkOl0Rj6O2cSzu2eWqDfMcNXDWykaRE2Jk+hMCd513Un9NC84dWK5B8AvRRJ
+         45b6arv2TSeFu/Ue4AfBMyj+iDLF9puNrhy0ePkA=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14QFOgXc094652
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 May 2021 10:24:11 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 26 May 2021 10:24:42 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 26
- May 2021 10:24:11 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ May 2021 10:24:42 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 26 May 2021 10:24:11 -0500
+ Frontend Transport; Wed, 26 May 2021 10:24:42 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14QFN9Jj056314;
-        Wed, 26 May 2021 10:24:06 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14QFN9Jp056314;
+        Wed, 26 May 2021 10:24:37 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Maxime Ripard <mripard@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ CC:     Vignesh Raghavendra <vigneshr@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v2 11/18] dmaengine: ti: k3-psil-j721e: Add entry for CSI2RX
-Date:   Wed, 26 May 2021 20:53:01 +0530
-Message-ID: <20210526152308.16525-12-p.yadav@ti.com>
+Subject: [PATCH v2 17/18] phy: dt-bindings: cdns,dphy: make clocks optional
+Date:   Wed, 26 May 2021 20:53:07 +0530
+Message-ID: <20210526152308.16525-18-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210526152308.16525-1-p.yadav@ti.com>
 References: <20210526152308.16525-1-p.yadav@ti.com>
@@ -75,112 +75,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CSI2RX subsystem uses PSI-L DMA to transfer frames to memory. It can
-have up to 32 threads but the current driver only supports using one. So
-add an entry for that one thread.
+The clocks are not used by the DPHY when used in Rx mode so make them
+optional.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
 ---
 
 Changes in v2:
-- Add all 64 threads, instead of having only the one thread being
-  currently used by the driver.
+- Re-order subject prefixes.
 
- drivers/dma/ti/k3-psil-j721e.c | 73 ++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ Documentation/devicetree/bindings/phy/cdns,dphy.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/dma/ti/k3-psil-j721e.c b/drivers/dma/ti/k3-psil-j721e.c
-index 7580870ed746..34e3fc565a37 100644
---- a/drivers/dma/ti/k3-psil-j721e.c
-+++ b/drivers/dma/ti/k3-psil-j721e.c
-@@ -58,6 +58,14 @@
- 		},					\
- 	}
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+index b90a58773bf2..3bb5be05e825 100644
+--- a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+@@ -33,8 +33,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - clocks
+-  - clock-names
+   - "#phy-cells"
  
-+#define PSIL_CSI2RX(x)					\
-+	{						\
-+		.thread_id = x,				\
-+		.ep_config = {				\
-+			.ep_type = PSIL_EP_NATIVE,	\
-+		},					\
-+	}
-+
- /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
- static struct psil_ep j721e_src_ep_map[] = {
- 	/* SA2UL */
-@@ -138,6 +146,71 @@ static struct psil_ep j721e_src_ep_map[] = {
- 	PSIL_PDMA_XY_PKT(0x4707),
- 	PSIL_PDMA_XY_PKT(0x4708),
- 	PSIL_PDMA_XY_PKT(0x4709),
-+	/* CSI2RX */
-+	PSIL_CSI2RX(0x4940),
-+	PSIL_CSI2RX(0x4941),
-+	PSIL_CSI2RX(0x4942),
-+	PSIL_CSI2RX(0x4943),
-+	PSIL_CSI2RX(0x4944),
-+	PSIL_CSI2RX(0x4945),
-+	PSIL_CSI2RX(0x4946),
-+	PSIL_CSI2RX(0x4947),
-+	PSIL_CSI2RX(0x4948),
-+	PSIL_CSI2RX(0x4949),
-+	PSIL_CSI2RX(0x494a),
-+	PSIL_CSI2RX(0x494b),
-+	PSIL_CSI2RX(0x494c),
-+	PSIL_CSI2RX(0x494d),
-+	PSIL_CSI2RX(0x494e),
-+	PSIL_CSI2RX(0x494f),
-+	PSIL_CSI2RX(0x4950),
-+	PSIL_CSI2RX(0x4951),
-+	PSIL_CSI2RX(0x4952),
-+	PSIL_CSI2RX(0x4953),
-+	PSIL_CSI2RX(0x4954),
-+	PSIL_CSI2RX(0x4955),
-+	PSIL_CSI2RX(0x4956),
-+	PSIL_CSI2RX(0x4957),
-+	PSIL_CSI2RX(0x4958),
-+	PSIL_CSI2RX(0x4959),
-+	PSIL_CSI2RX(0x495a),
-+	PSIL_CSI2RX(0x495b),
-+	PSIL_CSI2RX(0x495c),
-+	PSIL_CSI2RX(0x495d),
-+	PSIL_CSI2RX(0x495e),
-+	PSIL_CSI2RX(0x495f),
-+	PSIL_CSI2RX(0x4960),
-+	PSIL_CSI2RX(0x4961),
-+	PSIL_CSI2RX(0x4962),
-+	PSIL_CSI2RX(0x4963),
-+	PSIL_CSI2RX(0x4964),
-+	PSIL_CSI2RX(0x4965),
-+	PSIL_CSI2RX(0x4966),
-+	PSIL_CSI2RX(0x4967),
-+	PSIL_CSI2RX(0x4968),
-+	PSIL_CSI2RX(0x4969),
-+	PSIL_CSI2RX(0x496a),
-+	PSIL_CSI2RX(0x496b),
-+	PSIL_CSI2RX(0x496c),
-+	PSIL_CSI2RX(0x496d),
-+	PSIL_CSI2RX(0x496e),
-+	PSIL_CSI2RX(0x496f),
-+	PSIL_CSI2RX(0x4970),
-+	PSIL_CSI2RX(0x4971),
-+	PSIL_CSI2RX(0x4972),
-+	PSIL_CSI2RX(0x4973),
-+	PSIL_CSI2RX(0x4974),
-+	PSIL_CSI2RX(0x4975),
-+	PSIL_CSI2RX(0x4976),
-+	PSIL_CSI2RX(0x4977),
-+	PSIL_CSI2RX(0x4978),
-+	PSIL_CSI2RX(0x4979),
-+	PSIL_CSI2RX(0x497a),
-+	PSIL_CSI2RX(0x497b),
-+	PSIL_CSI2RX(0x497c),
-+	PSIL_CSI2RX(0x497d),
-+	PSIL_CSI2RX(0x497e),
-+	PSIL_CSI2RX(0x497f),
- 	/* CPSW9 */
- 	PSIL_ETHERNET(0x4a00),
- 	/* CPSW0 */
+ additionalProperties: false
 -- 
 2.30.0
 
