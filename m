@@ -2,101 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FBCC47089
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2061C47088
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 13:07:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21428613EC
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C47D461090
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 13:07:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbhEZM5o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 May 2021 08:57:44 -0400
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:34782 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbhEZM5l (ORCPT
+        id S232211AbhEZNIp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 May 2021 09:08:45 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:60063 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231189AbhEZNIn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 May 2021 08:57:41 -0400
-Received: by mail-oo1-f44.google.com with SMTP id i8-20020a4aa1080000b0290201edd785e7so264347ool.1;
-        Wed, 26 May 2021 05:56:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=5TB/SHe/X+zDtrYw2YxYbY1YRqVP38bTz1Qf4xf36SM=;
-        b=io/ZNlJ+8Zd40jnUMwB5lclGk4lzJW9bEQRDaRNhcp3fQX+Y3tAMjteTwrl2b7sZGa
-         y8nzN1MIRsxaZXOVzMUkjVVF3lGFv8ylHDP+lNhVcTLBcNp7Fnx3CGbGo7kz4LWYfGMA
-         GvtdYtUPpMk/9ESzOGdCoQV9Fev46HkI8qJupq04M9HP23ReJO+ZW3DcpqAEMkY/8EBw
-         GKiXMKVzPSapYUjjxH6YjD7vbkg4cRwYG3d7R4XFb961T5qzjVDNPYeg9pgzkRkchGfE
-         aqCKTmjGW/TG/BSFEWt5iKsAodGBf6/mmytCSCJQeLS5/SsDNyS52ctyS6CiXmqg+jvx
-         Jtwg==
-X-Gm-Message-State: AOAM530mUDeyos4AY5adsp9KsFEOhFeZHbecBxEPPT6kjP4Fl1+fUCiR
-        6zCwuU475428AmtC5Se8qA==
-X-Google-Smtp-Source: ABdhPJx/wh7g4D4CYGH7ibtdrflqxgEzKG7CJwLQ7CT974mn8HeUIO7mDRBNtkrVn8LgAfyQ54eYqg==
-X-Received: by 2002:a4a:e715:: with SMTP id y21mr2171382oou.54.1622033769085;
-        Wed, 26 May 2021 05:56:09 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b19sm3716364oib.46.2021.05.26.05.56.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 05:56:07 -0700 (PDT)
-Received: (nullmailer pid 2377037 invoked by uid 1000);
-        Wed, 26 May 2021 12:56:03 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alex Bee <knaerzche@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-staging@lists.linux.dev,
-        Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20210525152225.154302-11-knaerzche@gmail.com>
-References: <20210525152225.154302-1-knaerzche@gmail.com> <20210525152225.154302-11-knaerzche@gmail.com>
-Subject: Re: [PATCH 10/10] media: dt-bindings: media: rockchip-vdec: add RK3228 compatible
-Date:   Wed, 26 May 2021 07:56:03 -0500
-Message-Id: <1622033763.779031.2377036.nullmailer@robh.at.kernel.org>
+        Wed, 26 May 2021 09:08:43 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id ltFalTghSWkKbltFdlDGHO; Wed, 26 May 2021 15:07:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1622034429; bh=B6zxLn4uRG6Xzw55EhknNDwa5s9LCryD7nlMql2E84Q=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Z0gYKZupbgwY3M577zWhboFLscfaYZRNKD8CShrUDWaMo0Xl2n7rCRq41R3ubx5Sv
+         iqJHxn5WUiJQaxOCO92JVzlHmJGmX4+jVj1E8j9hYiuxSOqruu7O9N8zj6vfeWpNii
+         wFz+0sh2key4ttMCXyWjfAXDbbP5xXp8S7m2tr3TMUdblRT1hGmo23A+vSIJ92bNhg
+         lQ+i5fueHtERJbh4on/R4MWkVpmKcb/Bv6xXX0TfY16v6luylXNFuBlJnSOFXOHyBe
+         nYJK1koo0wMCrtWGNmFv5DTBd1BKblyb6a3dHKWFQDsNyIYKmNAlikhyXZolFK+Brd
+         NeGZy9/EyJPgw==
+Subject: Re: [PATCH] media: cobalt: fix null-ptr-deref when there is no PCI
+ bridge
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+References: <20210424005206.261622-1-ztong0001@gmail.com>
+ <b84e0b87-4753-0513-9803-0cda4ceb4adc@xs4all.nl>
+ <CAA5qM4BtejMqUa+eJLV+9q26E3Du-MiTasB=knCh+Qsw3HjApg@mail.gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <a6052f9f-5d2e-e713-1ab4-27d38d14fa99@xs4all.nl>
+Date:   Wed, 26 May 2021 15:07:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAA5qM4BtejMqUa+eJLV+9q26E3Du-MiTasB=knCh+Qsw3HjApg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKWnk3IFAGQaBX9OfzJ9z7MsD2JYa1O0jJDNOAnkNl6JHHP8JuapGTiO0XgJ7iwnpWIhhi3GKLaqs1EvEVwrsDnHrrW09GSi+sV1xhPicCXdcZc1vcDl
+ ZVV9Y4BC6YtTwDzspbNk5Hsg1d4bGUaG4GbkESABgmwWK7sGhp0xj3AnMkt2p9lUqRlNLRwM6wMvrOl2JUlq5JbwdUVoBiJ/OUlDij5eSO9GtQeC6AXXnjtf
+ 1J3kmlAPxF9WhJuoR56CfKBBnTp6vrwfIjFMXH1fO8SoYbp6WrBRhwitXIxC8B2PRjSIl5fnB4k8UMHdbKy9iQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 25 May 2021 17:22:25 +0200, Alex Bee wrote:
-> Document the RK3228 compatible for rockchip-vdec.
-> Also add the optional assigned-clocks and assigned-clock-rates
-> properties.
-> 
-> Checked with:
-> make ARCH=arm dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip,vdec.yaml
-> 
-> Signed-off-by: Alex Bee <knaerzche@gmail.com>
-> ---
->  .../devicetree/bindings/media/rockchip,vdec.yaml       | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
+On 11/05/2021 00:32, Tong Zhang wrote:
+> On Wed, May 5, 2021 at 2:18 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>>
+>> On 24/04/2021 02:52, Tong Zhang wrote:
+>>> the PCI bridge might be NULL, so we'd better check before use it
+>>>
+>>> [    1.870569] RIP: 0010:pcie_bus_link_get_lanes.isra.0+0x26/0x59 [cobalt]
+>>> [    1.875880] Call Trace:
+>>> [    1.876013]  cobalt_probe.cold+0x1be/0xc11 [cobalt]
+>>> [    1.876683]  pci_device_probe+0x10f/0x1c0
+>>
+>> How did you test this? With some virtualized PCI bus or something? I'm not sure
+>> how this can happen.
+>>
+> Hello Hans,
+> IMHO bus->self is pci bridge device and we can have a system
+> configuration that does not have such a bridge,
+> in this case, bus->self is NULL.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+That does not answer my question :-)
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/rockchip,vdec.yaml:21:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+You show a backtrace in the commit message, how did you get that?
 
-dtschema/dtc warnings/errors:
+Regards,
 
-See https://patchwork.ozlabs.org/patch/1483527
+	Hans
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+> - Tong
+>> Regards,
+>>
+>>         Hans
+>>
+>>>
+>>> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+>>> ---
+>>>  drivers/media/pci/cobalt/cobalt-driver.c | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+>>> index 0695078ef812..5687ed4869ac 100644
+>>> --- a/drivers/media/pci/cobalt/cobalt-driver.c
+>>> +++ b/drivers/media/pci/cobalt/cobalt-driver.c
+>>> @@ -189,6 +189,8 @@ void cobalt_pcie_status_show(struct cobalt *cobalt)
+>>>       u32 capa;
+>>>       u16 stat, ctrl;
+>>>
+>>> +     if (!pci_bus_dev)
+>>> +             return;
+>>>       if (!pci_is_pcie(pci_dev) || !pci_is_pcie(pci_bus_dev))
+>>>               return;
+>>>
+>>> @@ -247,6 +249,8 @@ static unsigned pcie_bus_link_get_lanes(struct cobalt *cobalt)
+>>>       struct pci_dev *pci_dev = cobalt->pci_dev->bus->self;
+>>>       u32 link;
+>>>
+>>> +     if (!pci_dev)
+>>> +             return 0;
+>>>       if (!pci_is_pcie(pci_dev))
+>>>               return 0;
+>>>       pcie_capability_read_dword(pci_dev, PCI_EXP_LNKCAP, &link);
+>>>
+>>
 
