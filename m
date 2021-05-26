@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C18C4708C
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:24:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AFDCC47088
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C51B61378
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:24:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58898613D2
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 15:25:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbhEZP03 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 May 2021 11:26:29 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59372 "EHLO
+        id S235570AbhEZP0b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 May 2021 11:26:31 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59480 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbhEZP0T (ORCPT
+        with ESMTP id S235553AbhEZP0T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 26 May 2021 11:26:19 -0400
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14QFOG0P001753;
-        Wed, 26 May 2021 10:24:16 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14QFOWjO001878;
+        Wed, 26 May 2021 10:24:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622042656;
-        bh=Fm+hVjRUGJmwYKDMUjbdou43Vw1Zw5cGhop7i6WK2Zs=;
+        s=ti-com-17Q1; t=1622042672;
+        bh=dT5jvPsb/QAgTb7Igc8UFYpBPraYdmelyuAtBl9NNb4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=mJADvKwfSNQGntLrVQzyXdzhQgYPK85gcVyr5brT2ja4ajBfvlAvS43uC2fTLd38t
-         CoMIpUpo+39B2+6hELvgwNKcG5xOx4rSFp4oyVX16jdUbV5mGiGJa2ElGiwTQB1tkS
-         GIi1F0jD6RO8Z+Qt17SSCWz9wdnVgT2+7u8vApQ8=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14QFOGxk079325
+        b=UNr6t8iSQn2wIZIUbe3x/0IcYF6ovoSlCyLeI0ynj4ijudfx2RW78PatcQ1odksHH
+         vUgjjodSUb6cimpgemNqF5KL11i9Q5cwUX5FxEVp26oTh7ukX4tOWnxVlxapDEkzcO
+         HodOFu3yLi+yj0v6E4UNaV7UqD3mC6LMujuvM9lc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14QFOWsK079515
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 May 2021 10:24:16 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 26 May 2021 10:24:32 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 26
- May 2021 10:24:16 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ May 2021 10:24:31 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 26 May 2021 10:24:16 -0500
+ Frontend Transport; Wed, 26 May 2021 10:24:31 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14QFN9Jk056314;
-        Wed, 26 May 2021 10:24:11 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14QFN9Jn056314;
+        Wed, 26 May 2021 10:24:27 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Maxime Ripard <mripard@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,9 +61,9 @@ CC:     Vignesh Raghavendra <vigneshr@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v2 12/18] media: Re-structure TI platform drivers
-Date:   Wed, 26 May 2021 20:53:02 +0530
-Message-ID: <20210526152308.16525-13-p.yadav@ti.com>
+Subject: [PATCH v2 15/18] media: dt-bindings: Convert Cadence CSI2RX binding to YAML
+Date:   Wed, 26 May 2021 20:53:05 +0530
+Message-ID: <20210526152308.16525-16-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210526152308.16525-1-p.yadav@ti.com>
 References: <20210526152308.16525-1-p.yadav@ti.com>
@@ -75,183 +75,297 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ti-vpe/ sub-directory does not only contain the VPE-specific things.
-It also contains the CAL driver, which is a completely different
-subsystem. This is also not a good place to add new drivers for other TI
-platforms since they will all get mixed up.
-
-Separate the VPE and CAL parts into different sub-directories and rename
-the ti-vpe/ sub-directory to ti/. This is now the place where new TI
-platform drivers can be added.
+Convert the Cadence CSI2RX binding to use YAML schema.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
 ---
-Compile tested only. There should be no functional change.
 
 Changes in v2:
 - New in v2.
 
- MAINTAINERS                                              | 3 ++-
- drivers/media/platform/Makefile                          | 2 +-
- drivers/media/platform/ti/Makefile                       | 3 +++
- drivers/media/platform/ti/cal/Makefile                   | 3 +++
- drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c    | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal.c          | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal.h          | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h     | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/Makefile       | 4 ----
- drivers/media/platform/{ti-vpe => ti/vpe}/csc.c          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/csc.h          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc.c           | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc.h           | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h     | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c        | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h        | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h   | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h     | 0
- 20 files changed, 9 insertions(+), 6 deletions(-)
- create mode 100644 drivers/media/platform/ti/Makefile
- create mode 100644 drivers/media/platform/ti/cal/Makefile
- rename drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/cal}/cal.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/cal}/cal.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (78%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
- rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
+ .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
+ .../bindings/media/cdns,csi2rx.yaml           | 164 ++++++++++++++++++
+ 2 files changed, 164 insertions(+), 100 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 710203d794d7..607dd5e18e7d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18449,7 +18449,8 @@ W:	http://linuxtv.org/
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	Documentation/devicetree/bindings/media/ti,cal.yaml
- F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
--F:	drivers/media/platform/ti-vpe/
-+F:	drivers/media/platform/ti/cal/
-+F:	drivers/media/platform/ti/vpe/
- 
- TI WILINK WIRELESS DRIVERS
- L:	linux-wireless@vger.kernel.org
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index eedc14aafb32..5ddfa5bc02e1 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -15,7 +15,7 @@ obj-$(CONFIG_VIDEO_PXA27x)	+= pxa_camera.o
- 
- obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
- 
--obj-y	+= ti-vpe/
-+obj-y	+= ti/
- 
- obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
- obj-$(CONFIG_VIDEO_CODA)		+= coda/
-diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
-new file mode 100644
-index 000000000000..bbc737ccbbea
---- /dev/null
-+++ b/drivers/media/platform/ti/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-y += cal/
-+obj-y += vpe/
-diff --git a/drivers/media/platform/ti/cal/Makefile b/drivers/media/platform/ti/cal/Makefile
-new file mode 100644
-index 000000000000..45ac35585f0b
---- /dev/null
-+++ b/drivers/media/platform/ti/cal/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
-+ti-cal-y := cal.o cal-camerarx.o cal-video.o
-diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal-camerarx.c
-rename to drivers/media/platform/ti/cal/cal-camerarx.c
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal-video.c
-rename to drivers/media/platform/ti/cal/cal-video.c
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti/cal/cal.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal.c
-rename to drivers/media/platform/ti/cal/cal.c
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti/cal/cal.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal.h
-rename to drivers/media/platform/ti/cal/cal.h
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti/cal/cal_regs.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal_regs.h
-rename to drivers/media/platform/ti/cal/cal_regs.h
-diff --git a/drivers/media/platform/ti-vpe/Makefile b/drivers/media/platform/ti/vpe/Makefile
-similarity index 78%
-rename from drivers/media/platform/ti-vpe/Makefile
-rename to drivers/media/platform/ti/vpe/Makefile
-index ad624056e039..3fadfe084f87 100644
---- a/drivers/media/platform/ti-vpe/Makefile
-+++ b/drivers/media/platform/ti/vpe/Makefile
-@@ -10,7 +10,3 @@ ti-sc-y := sc.o
- ti-csc-y := csc.o
- 
- ccflags-$(CONFIG_VIDEO_TI_VPE_DEBUG) += -DDEBUG
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+deleted file mode 100644
+index 6b02a0657ad9..000000000000
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
++++ /dev/null
+@@ -1,100 +0,0 @@
+-Cadence MIPI-CSI2 RX controller
+-===============================
 -
--obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
+-The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+-lanes in input, and 4 different pixel streams in output.
 -
--ti-cal-y := cal.o cal-camerarx.o cal-video.o
-diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti/vpe/csc.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/csc.c
-rename to drivers/media/platform/ti/vpe/csc.c
-diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti/vpe/csc.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/csc.h
-rename to drivers/media/platform/ti/vpe/csc.h
-diff --git a/drivers/media/platform/ti-vpe/sc.c b/drivers/media/platform/ti/vpe/sc.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc.c
-rename to drivers/media/platform/ti/vpe/sc.c
-diff --git a/drivers/media/platform/ti-vpe/sc.h b/drivers/media/platform/ti/vpe/sc.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc.h
-rename to drivers/media/platform/ti/vpe/sc.h
-diff --git a/drivers/media/platform/ti-vpe/sc_coeff.h b/drivers/media/platform/ti/vpe/sc_coeff.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc_coeff.h
-rename to drivers/media/platform/ti/vpe/sc_coeff.h
-diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti/vpe/vpdma.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma.c
-rename to drivers/media/platform/ti/vpe/vpdma.c
-diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti/vpe/vpdma.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma.h
-rename to drivers/media/platform/ti/vpe/vpdma.h
-diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti/vpe/vpdma_priv.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma_priv.h
-rename to drivers/media/platform/ti/vpe/vpdma_priv.h
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpe.c
-rename to drivers/media/platform/ti/vpe/vpe.c
-diff --git a/drivers/media/platform/ti-vpe/vpe_regs.h b/drivers/media/platform/ti/vpe/vpe_regs.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpe_regs.h
-rename to drivers/media/platform/ti/vpe/vpe_regs.h
+-Required properties:
+-  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
+-  - reg: base address and size of the memory mapped region
+-  - clocks: phandles to the clocks driving the controller
+-  - clock-names: must contain:
+-    * sys_clk: main clock
+-    * p_clk: register bank clock
+-    * pixel_if[0-3]_clk: pixel stream output clock, one for each stream
+-                         implemented in hardware, between 0 and 3
+-
+-Optional properties:
+-  - phys: phandle to the external D-PHY, phy-names must be provided
+-  - phy-names: must contain "dphy", if the implementation uses an
+-               external D-PHY
+-
+-Required subnodes:
+-  - ports: A ports node with one port child node per device input and output
+-           port, in accordance with the video interface bindings defined in
+-           Documentation/devicetree/bindings/media/video-interfaces.txt. The
+-           port nodes are numbered as follows:
+-
+-           Port Description
+-           -----------------------------
+-           0    CSI-2 input
+-           1    Stream 0 output
+-           2    Stream 1 output
+-           3    Stream 2 output
+-           4    Stream 3 output
+-
+-           The stream output port nodes are optional if they are not
+-           connected to anything at the hardware level or implemented
+-           in the design.Since there is only one endpoint per port,
+-           the endpoints are not numbered.
+-
+-
+-Example:
+-
+-csi2rx: csi-bridge@0d060000 {
+-	compatible = "cdns,csi2rx";
+-	reg = <0x0d060000 0x1000>;
+-	clocks = <&byteclock>, <&byteclock>
+-		 <&coreclock>, <&coreclock>,
+-		 <&coreclock>, <&coreclock>;
+-	clock-names = "sys_clk", "p_clk",
+-		      "pixel_if0_clk", "pixel_if1_clk",
+-		      "pixel_if2_clk", "pixel_if3_clk";
+-
+-	ports {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		port@0 {
+-			reg = <0>;
+-
+-			csi2rx_in_sensor: endpoint {
+-				remote-endpoint = <&sensor_out_csi2rx>;
+-				clock-lanes = <0>;
+-				data-lanes = <1 2>;
+-			};
+-		};
+-
+-		port@1 {
+-			reg = <1>;
+-
+-			csi2rx_out_grabber0: endpoint {
+-				remote-endpoint = <&grabber0_in_csi2rx>;
+-			};
+-		};
+-
+-		port@2 {
+-			reg = <2>;
+-
+-			csi2rx_out_grabber1: endpoint {
+-				remote-endpoint = <&grabber1_in_csi2rx>;
+-			};
+-		};
+-
+-		port@3 {
+-			reg = <3>;
+-
+-			csi2rx_out_grabber2: endpoint {
+-				remote-endpoint = <&grabber2_in_csi2rx>;
+-			};
+-		};
+-
+-		port@4 {
+-			reg = <4>;
+-
+-			csi2rx_out_grabber3: endpoint {
+-				remote-endpoint = <&grabber3_in_csi2rx>;
+-			};
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+new file mode 100644
+index 000000000000..ff5dd4211ac9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -0,0 +1,164 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cadence MIPI-CSI2 RX controller
++
++description: |
++  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
++  lanes in input, and 4 different pixel streams in output.
++
++maintainers:
++  - Pratyush Yadav <p.yadav@ti.com>
++
++properties:
++  compatible:
++    items:
++      - const: cdns,csi2rx
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 3
++    maxItems: 6
++
++  clock-names:
++    minItems: 3
++    maxItems: 6
++    items:
++      - const: sys_clk # main clock
++      - const: p_clk # register bank clock
++      - const: pixel_if0_clk # pixel stream 0 output clock
++      - const: pixel_if1_clk # pixel stream 1 output clock
++      - const: pixel_if2_clk # pixel stream 2 output clock
++      - const: pixel_if3_clk # pixel stream 3 output clock
++
++  phys:
++    maxItems: 1
++    description: phandle to the external D-PHY
++
++  phy-names:
++    items:
++      - const: dphy
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: CSI-2 input
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              clock-lanes:
++                maxItems: 1
++
++              data-lanes:
++                maxItems: 1
++
++            required:
++              - clock-lanes
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Stream 0 output
++
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Stream 1 output
++
++      port@3:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Stream 2 output
++
++      port@4:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Stream 3 output
++
++    required:
++      - port@0
++
++
++dependencies:
++  phys: [ 'phy-names' ]
++  phy-names: [ 'phys' ]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    csi2rx: csi-bridge@d060000 {
++      compatible = "cdns,csi2rx";
++      reg = <0x0d060000 0x1000>;
++      clocks = <&byteclock>, <&byteclock>,
++        <&coreclock>, <&coreclock>,
++        <&coreclock>, <&coreclock>;
++      clock-names = "sys_clk", "p_clk",
++              "pixel_if0_clk", "pixel_if1_clk",
++              "pixel_if2_clk", "pixel_if3_clk";
++      phys = <&dphy0>;
++      phy-names = "dphy";
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        port@0 {
++          reg = <0>;
++
++          csi2rx_in_sensor: endpoint {
++            remote-endpoint = <&sensor_out_csi2rx>;
++            clock-lanes = <0>;
++            data-lanes = <1 2>;
++          };
++        };
++
++        port@1 {
++          reg = <1>;
++
++          csi2rx_out_grabber0: endpoint {
++            remote-endpoint = <&grabber0_in_csi2rx>;
++          };
++        };
++
++        port@2 {
++          reg = <2>;
++
++          csi2rx_out_grabber1: endpoint {
++            remote-endpoint = <&grabber1_in_csi2rx>;
++          };
++        };
++
++        port@3 {
++          reg = <3>;
++
++          csi2rx_out_grabber2: endpoint {
++            remote-endpoint = <&grabber2_in_csi2rx>;
++          };
++        };
++
++        port@4 {
++          reg = <4>;
++
++          csi2rx_out_grabber3: endpoint {
++            remote-endpoint = <&grabber3_in_csi2rx>;
++          };
++        };
++      };
++    };
 -- 
 2.30.0
 
