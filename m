@@ -7,22 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 261ACC4708B
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D7EC47088
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:46:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06E226124B
-	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:46:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F4ED6124B
+	for <linux-media@archiver.kernel.org>; Wed, 26 May 2021 12:46:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbhEZMsO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 May 2021 08:48:14 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33092 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbhEZMrJ (ORCPT
+        id S234216AbhEZMsR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 May 2021 08:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234763AbhEZMrJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 26 May 2021 08:47:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE5BC06138A;
+        Wed, 26 May 2021 05:45:28 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id D2AD11F42C4F
+        with ESMTPSA id 9895C1F42C28
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -34,9 +37,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 6/9] media: uapi: Add a control for HANTRO driver
-Date:   Wed, 26 May 2021 14:45:13 +0200
-Message-Id: <20210526124516.2039434-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v12 1/9] media: hevc: Add fields and flags for hevc PPS
+Date:   Wed, 26 May 2021 14:45:08 +0200
+Message-Id: <20210526124516.2039434-2-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210526124516.2039434-1-benjamin.gaignard@collabora.com>
 References: <20210526124516.2039434-1-benjamin.gaignard@collabora.com>
@@ -46,78 +49,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HEVC HANTRO driver needs to know the number of bits to skip at
-the beginning of the slice header.
-That is a hardware specific requirement so create a dedicated control
-for this purpose.
+Add fields and flags as they are defined in
+7.4.3.3.1 "General picture parameter set RBSP semantics of the
+H.265 ITU specification.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- .../userspace-api/media/drivers/hantro.rst    | 19 +++++++++++++++++++
- .../userspace-api/media/drivers/index.rst     |  1 +
- include/media/hevc-ctrls.h                    | 13 +++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 Documentation/userspace-api/media/drivers/hantro.rst
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 14 ++++++++++++++
+ include/media/hevc-ctrls.h                         |  4 ++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/drivers/hantro.rst b/Documentation/userspace-api/media/drivers/hantro.rst
-new file mode 100644
-index 000000000000..cd9754b4e005
---- /dev/null
-+++ b/Documentation/userspace-api/media/drivers/hantro.rst
-@@ -0,0 +1,19 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Hantro video decoder driver
-+===========================
-+
-+The Hantro video decoder driver implements the following driver-specific controls:
-+
-+``V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP (integer)``
-+    Specifies to Hantro HEVC video decoder driver the number of data (in bits) to
-+    skip in the slice segment header.
-+    If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-+    to before syntax element "slice_temporal_mvp_enabled_flag".
-+    If IDR, the skipped bits are just "pic_output_flag"
-+    (separate_colour_plane_flag is not supported).
-+
-+.. note::
-+
-+        This control is not yet part of the public kernel API and
-+        it is expected to change.
-diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-index 1a9038f5f9fa..12e3c512d718 100644
---- a/Documentation/userspace-api/media/drivers/index.rst
-+++ b/Documentation/userspace-api/media/drivers/index.rst
-@@ -33,6 +33,7 @@ For more details see the file COPYING in the source distribution of Linux.
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 0b8061666c57..9cfb471fc6be 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -2783,6 +2783,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``num_extra_slice_header_bits``
+       -
++    * - __u8
++      - ``num_ref_idx_l0_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l0_active_minus1
++    * - __u8
++      - ``num_ref_idx_l1_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l1_active_minus1
+     * - __s8
+       - ``init_qp_minus26``
+       -
+@@ -2893,6 +2899,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - ``V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT``
+       - 0x00040000
+       -
++    * - ``V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT``
++      - 0x00080000
++      - Specifies the presence of deblocking filter control syntax elements in
++        the PPS
++    * - ``V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING``
++      - 0x00100000
++      - Specifies that tile column boundaries and likewise tile row boundaries
++        are distributed uniformly across the picture
  
- 	ccs
- 	cx2341x-uapi
-+        hantro
- 	imx-uapi
- 	max2175
- 	meye-uapi
+ .. raw:: latex
+ 
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index e53666a1127f..dc964ff7cd29 100644
+index 226fcfa0e026..245052c15864 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -225,4 +225,17 @@ struct v4l2_ctrl_hevc_decode_params {
- 	__u64	flags;
- };
+@@ -100,10 +100,14 @@ struct v4l2_ctrl_hevc_sps {
+ #define V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER	(1ULL << 16)
+ #define V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT		(1ULL << 17)
+ #define V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT (1ULL << 18)
++#define V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT	(1ULL << 19)
++#define V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING			(1ULL << 20)
  
-+/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
-+#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
-+/*
-+ * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
-+ * the number of data (in bits) to skip in the
-+ * slice segment header.
-+ * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-+ * to before syntax element "slice_temporal_mvp_enabled_flag".
-+ * If IDR, the skipped bits are just "pic_output_flag"
-+ * (separate_colour_plane_flag is not supported).
-+ */
-+#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
-+
- #endif
+ struct v4l2_ctrl_hevc_pps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+ 	__u8	num_extra_slice_header_bits;
++	__u8	num_ref_idx_l0_default_active_minus1;
++	__u8	num_ref_idx_l1_default_active_minus1;
+ 	__s8	init_qp_minus26;
+ 	__u8	diff_cu_qp_delta_depth;
+ 	__s8	pps_cb_qp_offset;
 -- 
 2.25.1
 
