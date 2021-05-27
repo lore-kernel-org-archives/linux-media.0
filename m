@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07DCEC47089
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8052FC4707F
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D96A8613C0
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F5DE613C0
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235184AbhE0Pq5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 May 2021 11:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S235654AbhE0Pq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 May 2021 11:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235597AbhE0Pqx (ORCPT
+        with ESMTP id S235559AbhE0Pq4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 May 2021 11:46:53 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29BEC061760;
-        Thu, 27 May 2021 08:45:16 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a25so1365860edr.12;
-        Thu, 27 May 2021 08:45:16 -0700 (PDT)
+        Thu, 27 May 2021 11:46:56 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7CCC0613CE;
+        Thu, 27 May 2021 08:45:22 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id e12so853539ejt.3;
+        Thu, 27 May 2021 08:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=H3e6CRdd0/EdKHGPL7BtIypEry6FkjdG9zyNOFKlRZY=;
-        b=Zq414ODqOuxOqan5cRLla7EM1a09egGEdX54QCzdpcjPVdmU8GchM0oU1+D15vQJct
-         iOAhZd3Rbqm9eCvq+lpewz3d0Kne2pSy2MCq+e3vUDLrzYbnOUYwHMblhoqTapYzRFm7
-         FTIDWJ/wf3lMmlQ0SynMhFCTAAc2EHIBi9U7FXMBtEZ6BfMKrgiVdF5CZ0TyRPtLMS8I
-         mKg4GmsFUI3rjf7z/18m8ENQ4hkfp0yOZyTQzAsMLa64Ip2FRe9IF/Z7wujDpWElomzM
-         dv4u770vt+5zBzxgBC5o1bnoeVIO9Q/2PM4hsJv0bgWtkdNFeokOqnhL2XfHxw8lqJHe
-         C25g==
+        bh=tWh5VnD7cFHZl8C6HW0Fm8ub9f2GQzag/b5XhoSI/fU=;
+        b=q9fQcC7wLe3lM0iph0SsisC3/aNTsM/GvBZwFDBeMPskHAlxRJak3yrR5oACerI8QO
+         sOP97Qu/BdABWfOPRMwtEofpFUkYV/kuw5pmh5JPGcZe/ZQhQbjAjIbbi5NV8aLYCVmr
+         IGe/1iz0dMUE5AmqStxMoWET4S1SuwowwRiRSBTQ0TKMQ/r20Q5dHuVkZ9WR3k0OaK2r
+         TfjGqMpNunVJXd+Hi3ipSzUdo08wD+6qjsjjUlBqwW+NL6lAQUPV2WTom7Q3BJ8bVdfF
+         wMaOPBmiUB7xrh0cVBbXlRuCckH1oo5gCq4YkEPZR9p5TPyDS6rtLxVsx9ytEPJWDUIL
+         zYTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=H3e6CRdd0/EdKHGPL7BtIypEry6FkjdG9zyNOFKlRZY=;
-        b=h7Od0U0MGGSFJtVVtaC5ESnjcSGTRvo0YGb2pSoTHQaxiySa1+LBags35lmpvSjHan
-         /r2gytzZxOpkXMXgZ8KUKlds4XVWPn3uHgIiE1EAxJM+Up7regE4ysYtjCH26BecO2nt
-         TvQcZFi76vjjEgEAjBBOGLqp04tXy3XKiMXG+bAYRhvoQes1tMgjZgtzImTZSQTBdSiT
-         XHKofm9C51DhxybGZtHsynYtlzGqq2fJEGt6nSnfNDAP0EyMJ7EOtGq1AkZM1aL59WEP
-         SBCfhrEc4jQ1kJxHj7IsKJ+7hNX1ed/wZdIsaD7kyyCReEMfavDUnAl4sB1RrrCFNZ4g
-         SW5g==
-X-Gm-Message-State: AOAM530bXDEuG7BPbOQTMlYrvnZ9OGaCSFb3jdKeMmUM5jHobjByoUZV
-        RmdHoiA5bn0gMD7rn2yNOA==
-X-Google-Smtp-Source: ABdhPJwWqRVBxukUfKDrH5kauhHqoAn2Igk5q1H89Q/2gzsKpczlUnRw6MdN4rCCTg6RzBydH6gacQ==
-X-Received: by 2002:a05:6402:290:: with SMTP id l16mr1577478edv.186.1622130315457;
-        Thu, 27 May 2021 08:45:15 -0700 (PDT)
+        bh=tWh5VnD7cFHZl8C6HW0Fm8ub9f2GQzag/b5XhoSI/fU=;
+        b=if8QuVJpmU8ljk+Tn+b8YhI1AxtpdQGtSqqw24j5ZfWTy1YcTaXjOZca19WHVpy13i
+         XNiLJV3znW91Y08dQXrpYT7/BmzWasUnlXm9S8BuJ+FGlqZZRQUvQ1/PO7Gn6BDhrX+g
+         T+QetrEAe9Ar4/Q9Shtl2MHNcnrZgTdxdpUc4EmIq72Fh7WjaXxm/bVP63Wx8kCkuuvY
+         zCuGwYeEU0XIMtjJMVeM0vCz50Qq3HMQ2zYkbZCpUcEwXbqB77t2wy8ftvLqrNsimcm5
+         cw6wPGCDiLCiokFAn/fXWETZ9DONrQ4XmWr0Fd30ivhDk6ty5Qq/SIL4gmaxGT8wg2CX
+         Vfyg==
+X-Gm-Message-State: AOAM532fWYeLcH9Eva3xKI9BuCmL+ZdsW5LTGKvFM+my6hIzSZ9wv4qc
+        3+/JODQ9JZgHKmLZ9QOwDg==
+X-Google-Smtp-Source: ABdhPJx72nszVqk+UI7jolgi7GYA7GGvBFxILd6po326xUR5QN1cFlYUVmwLbXdRjxkIy45WaDcKRg==
+X-Received: by 2002:a17:906:5211:: with SMTP id g17mr4525723ejm.281.1622130321132;
+        Thu, 27 May 2021 08:45:21 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:810b:f40:e00:fefd:4d98:c981:7f97])
-        by smtp.googlemail.com with ESMTPSA id u6sm1178826ejr.55.2021.05.27.08.45.14
+        by smtp.googlemail.com with ESMTPSA id u6sm1178826ejr.55.2021.05.27.08.45.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 08:45:14 -0700 (PDT)
+        Thu, 27 May 2021 08:45:20 -0700 (PDT)
 From:   Alex Bee <knaerzche@gmail.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -69,9 +69,9 @@ To:     Ezequiel Garcia <ezequiel@collabora.com>,
         devicetree@vger.kernel.org
 Cc:     Alex Bee <knaerzche@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/12] dt-bindings: mfd: syscon: add Rockchip RK3036/RK3228 qos compatibles
-Date:   Thu, 27 May 2021 17:44:44 +0200
-Message-Id: <20210527154455.358869-2-knaerzche@gmail.com>
+Subject: [PATCH v2 04/12] media: hantro: reorder variants
+Date:   Thu, 27 May 2021 17:44:47 +0200
+Message-Id: <20210527154455.358869-5-knaerzche@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210527154455.358869-1-knaerzche@gmail.com>
 References: <20210525152225.154302-1-knaerzche@gmail.com>
@@ -82,32 +82,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document Rockchip RK3036/RK3228 qos compatibles
+Reorder variants in hantro driver alphanumeric.
 
 Signed-off-by: Alex Bee <knaerzche@gmail.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
 
  Changes in v2:
- - collect Reviewed tag
+ - added patch
 
- Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/hantro/hantro_drv.c | 4 ++--
+ drivers/staging/media/hantro/hantro_hw.h  | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-index f14ae6da0068..ad1121620e15 100644
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@ -45,7 +45,9 @@ properties:
-               - microchip,sparx5-cpu-syscon
-               - mstar,msc313-pmsleep
-               - rockchip,px30-qos
-+              - rockchip,rk3036-qos
-               - rockchip,rk3066-qos
-+              - rockchip,rk3228-qos
-               - rockchip,rk3288-qos
-               - rockchip,rk3399-qos
-               - samsung,exynos3-sysreg
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 2f6b01c7a6a0..2f7035a14804 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -486,9 +486,9 @@ static const struct v4l2_file_operations hantro_fops = {
+ 
+ static const struct of_device_id of_hantro_match[] = {
+ #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
+-	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+-	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
++	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
++	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+ 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 3d8b53567f16..bbdbdb90b628 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -160,10 +160,10 @@ enum hantro_enc_fmt {
+ 	RK3288_VPU_ENC_FMT_UYVY422 = 3,
+ };
+ 
+-extern const struct hantro_variant rk3399_vpu_variant;
+-extern const struct hantro_variant rk3328_vpu_variant;
+-extern const struct hantro_variant rk3288_vpu_variant;
+ extern const struct hantro_variant imx8mq_vpu_variant;
++extern const struct hantro_variant rk3288_vpu_variant;
++extern const struct hantro_variant rk3328_vpu_variant;
++extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant sama5d4_vdec_variant;
+ 
+ extern const struct hantro_postproc_regs hantro_g1_postproc_regs;
 -- 
 2.27.0
 
