@@ -2,153 +2,160 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A17C4708C
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D34AC4707F
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 16:06:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2710613C3
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 15:45:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E316C611CD
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 16:06:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236962AbhE0PrP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 May 2021 11:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbhE0PrI (ORCPT
+        id S235179AbhE0QIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 May 2021 12:08:02 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39528 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234504AbhE0QIB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 May 2021 11:47:08 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B241C061763;
-        Thu, 27 May 2021 08:45:29 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id gb17so804894ejc.8;
-        Thu, 27 May 2021 08:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9kGg6mgXV7FtlTslQDxVXLeRt/Pl+NMx0FiHr4993Xw=;
-        b=SJSq5gDc9cJqzrtBIeoHUABqAbJXF1WgqcFwRqccTMI885ta1aFLGfTZwXfb2KJ7O3
-         nJqDnUY5RqpDAUXTrkLnTkMRTLAGhLcqdzN/JgjJndnfKxdj2ZcSGjM1860ItjSIcu32
-         2yce1vMAuXjAxhBpZNF8BpavC+JvUO+HL1TdURtRu48DIkAdPAfjIesACyBShvSDmUv3
-         as7bLCSxEXLZMG/dbmVWmRIQ3DOna1tdcr8hC6c/YXylhLTzk9p6Hj9X6fXJthMyTski
-         +Ypv3neMpHtoxutXKbJ3sJ0YMnV6bDbdH8BGnf0uSOMisaJXSGhLWynn5pDimCeBB1OS
-         NtEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9kGg6mgXV7FtlTslQDxVXLeRt/Pl+NMx0FiHr4993Xw=;
-        b=mjsRb6L03702u9EEYcH1fTojQeof/Fr+ONn1ekczGOiIoa3GIl+S67hyRm2OUcXao/
-         K1v/PCYN0zZNzXlhJeoYaindRujEzIedrlh5/tCq3B1IYrAq+uuqnnf61TbhjTbeXuPJ
-         ZdulUxIH2IvJ9DMDHtO+kWs9cphttJWYL41cJVDx0376NhDzLtcQnhfllIuA9W7d3Ipo
-         3mgorzpy6PTDVJijHl4fX2u2+934b7Zej1E2LF9QAgIA8Km7ecxCErOoV3s57LEBGu/7
-         WjiR+2v/IeN1u2dHwiMw7vNe0DZHXty3WUXqU9/jNOgNkLWHpcEypQYH51p1Ypy6Wqm1
-         x14Q==
-X-Gm-Message-State: AOAM532ylDrJ7+MiQKrX9hBeBxpzCbxBEoP2p+1uPBAwwAxRPiRMFS1F
-        Vy2onFB5DyCvTmeeeFwC+A==
-X-Google-Smtp-Source: ABdhPJzl5JDhEkcjJ1OIMd8jUhx4sOX++iKQ4claQLkF+8FKKTYfKLs16MMzLfV41QKc9wia1n4MoQ==
-X-Received: by 2002:a17:907:961e:: with SMTP id gb30mr4643145ejc.58.1622130328207;
-        Thu, 27 May 2021 08:45:28 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810b:f40:e00:fefd:4d98:c981:7f97])
-        by smtp.googlemail.com with ESMTPSA id u6sm1178826ejr.55.2021.05.27.08.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 08:45:27 -0700 (PDT)
-From:   Alex Bee <knaerzche@gmail.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     Alex Bee <knaerzche@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/12] ARM: dts: rockchip: add vpu nodes for RK3066 and RK3188
-Date:   Thu, 27 May 2021 17:44:54 +0200
-Message-Id: <20210527154455.358869-12-knaerzche@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210527154455.358869-1-knaerzche@gmail.com>
-References: <20210525152225.154302-1-knaerzche@gmail.com>
- <20210527154455.358869-1-knaerzche@gmail.com>
+        Thu, 27 May 2021 12:08:01 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14RG6P1S077901;
+        Thu, 27 May 2021 11:06:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1622131585;
+        bh=YeoTFdKp6IxUVyN2wmRPBI7eBnP9g3G0klGNiDtHzGc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Wu64+3LhSyqsw8cpub4RbwjKFpq31yE4Am/pGUF/ZKgEb7aYxGvW5ctHiQijlH/MN
+         MsAG612tncWMb2ajwX6BIrbAzyfd5Hl16IKl4cI0JQTGWNfhiFbRMInxo4VgUA65DS
+         A5oX22gUWEia8Xpf2iAlTPLyPTTKAzwjHJFxMqpY=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14RG6Pu2087476
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 May 2021 11:06:25 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 27
+ May 2021 11:06:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Thu, 27 May 2021 11:06:25 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14RG6OjN077494;
+        Thu, 27 May 2021 11:06:25 -0500
+Date:   Thu, 27 May 2021 21:36:24 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v3 38/38] media: ti-vpe: cal: add multiplexed streams
+ support
+Message-ID: <20210527160622.c4tumqkld2rrwbva@ti.com>
+References: <20210524110909.672432-1-tomi.valkeinen@ideasonboard.com>
+ <20210524110909.672432-39-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210524110909.672432-39-tomi.valkeinen@ideasonboard.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the vpu node to the common rk3xxx.dtsi and only the powerdomain
-property to the SoC specific device trees.
+Hi Tomi,
 
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
----
+On 24/05/21 02:09PM, Tomi Valkeinen wrote:
+> Add routing and stream_config support to CAL driver.
+> 
+> Add multiplexed streams support. CAL has 8 dma-engines and can capture 8
+> separate streams at the same time.
+> 
+> Add 8 video device nodes, each representing a single dma-engine, and set
+> the number of source pads on camerarx to 8. Each video node can be
+> connected to any of the source pads on either of the camerarx instances
+> using media links. Camerarx internal routing is used to route the
+> incoming CSI-2 streams to one of the 8 source pads.
+> 
+> CAL doesn't support transcoding, so the driver currently allows changes
+> only on the camerarx sink side, and then copies the sink pad config to
+> the source pad. This becomes slighly more complex with 8 source pads and
+> multiple streams on the sink pad. A helper,
+> cal_camerarx_get_opposite_stream_format(), is added, which uses the
+> routing table to get the format from the "opposite" side.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/platform/ti-vpe/cal-camerarx.c | 303 ++++++++++++++++---
+>  drivers/media/platform/ti-vpe/cal-video.c    | 103 ++++++-
+>  drivers/media/platform/ti-vpe/cal.c          |  34 ++-
+>  drivers/media/platform/ti-vpe/cal.h          |  12 +-
+>  4 files changed, 385 insertions(+), 67 deletions(-)
+> 
+[...]
+> @@ -1178,18 +1177,33 @@ static int cal_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* Create contexts. */
+> -	for (i = 0; i < cal->data->num_csi2_phy; ++i) {
+> -		if (!cal->phy[i]->source_node)
+> -			continue;
+> +	if (!cal_mc_api) {
+> +		for (i = 0; i < cal->data->num_csi2_phy; ++i) {
+> +			if (!cal->phy[i]->source_node)
+> +				continue;
+> +
+> +			cal->ctx[i] = cal_ctx_create(cal, i);
+> +			if (!cal->ctx[i]) {
+> +				cal_err(cal, "Failed to create context %u\n", i);
+> +				ret = -ENODEV;
+> +				goto error_context;
+> +			}
+>  
+> -		cal->ctx[i] = cal_ctx_create(cal, i);
+> -		if (!cal->ctx[i]) {
+> -			cal_err(cal, "Failed to create context %u\n", i);
+> -			ret = -ENODEV;
+> -			goto error_context;
+> +			cal->ctx[i]->phy = cal->phy[i];
+> +
+> +			cal->num_contexts++;
+>  		}
+> +	} else {
+> +		for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
+> +			cal->ctx[i] = cal_ctx_create(cal, i);
+> +			if (!cal->ctx[i]) {
+> +				cal_err(cal, "Failed to create context %u\n", i);
+> +				ret = -ENODEV;
+> +				goto error_context;
+> +			}
+>  
+> -		cal->num_contexts++;
+> +			cal->num_contexts++;
 
- (no changes since v1)
+In cal_async_notifier_complete() I see:
 
- arch/arm/boot/dts/rk3066a.dtsi |  4 ++++
- arch/arm/boot/dts/rk3188.dtsi  |  5 +++++
- arch/arm/boot/dts/rk3xxx.dtsi  | 12 ++++++++++++
- 3 files changed, 21 insertions(+)
+  for (i = 0; i < cal->num_contexts; i++)
+    ret = cal_ctx_v4l2_register();
 
-diff --git a/arch/arm/boot/dts/rk3066a.dtsi b/arch/arm/boot/dts/rk3066a.dtsi
-index 30dcf557ec33..67d54d88fe53 100644
---- a/arch/arm/boot/dts/rk3066a.dtsi
-+++ b/arch/arm/boot/dts/rk3066a.dtsi
-@@ -869,6 +869,10 @@ &uart3 {
- 	pinctrl-0 = <&uart3_xfer>;
- };
- 
-+&vpu {
-+	power-domains = <&power RK3066_PD_VIDEO>;
-+};
-+
- &wdt {
- 	compatible = "rockchip,rk3066-wdt", "snps,dw-wdt";
- };
-diff --git a/arch/arm/boot/dts/rk3188.dtsi b/arch/arm/boot/dts/rk3188.dtsi
-index 3a0c50026b07..9d982bc0170e 100644
---- a/arch/arm/boot/dts/rk3188.dtsi
-+++ b/arch/arm/boot/dts/rk3188.dtsi
-@@ -802,6 +802,11 @@ &uart3 {
- 	pinctrl-0 = <&uart3_xfer>;
- };
- 
-+&vpu {
-+	compatible = "rockchip,rk3188-vpu", "rockchip,rk3066-vpu";
-+	power-domains = <&power RK3188_PD_VIDEO>;
-+};
-+
- &wdt {
- 	compatible = "rockchip,rk3188-wdt", "snps,dw-wdt";
- };
-diff --git a/arch/arm/boot/dts/rk3xxx.dtsi b/arch/arm/boot/dts/rk3xxx.dtsi
-index d473552e8547..e974b49cff1e 100644
---- a/arch/arm/boot/dts/rk3xxx.dtsi
-+++ b/arch/arm/boot/dts/rk3xxx.dtsi
-@@ -50,6 +50,18 @@ gpu: gpu@10090000 {
- 		status = "disabled";
- 	};
- 
-+	vpu: video-codec@10104000 {
-+		compatible = "rockchip,rk3066-vpu";
-+		reg = <0x10104000 0x800>;
-+		interrupts = <GIC_SPI  9 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "vepu", "vdpu";
-+		clocks = <&cru ACLK_VDPU>, <&cru HCLK_VDPU>,
-+			 <&cru ACLK_VEPU>, <&cru HCLK_VEPU>;
-+		clock-names = "aclk_vdpu", "hclk_vdpu",
-+			      "aclk_vepu", "hclk_vepu";
-+	};
-+
- 	L2: cache-controller@10138000 {
- 		compatible = "arm,pl310-cache";
- 		reg = <0x10138000 0x1000>;
+This means that if the CAL device has 8 DMA contexts it will create 8 
+/dev/videoX nodes, even if the hardware setup is only capable of 1 
+stream.
+
+Would it make more sense to populate /dev/videoX nodes based on the 
+configured routing? So for example, if only one pad is being used to 
+output, only create one node corresponding to that pad. If there are 3 
+pads being populated then create 3 nodes and so on.
+
+> +		}
+>  	}
+>  
+>  	/* Register the media device. */
+
 -- 
-2.27.0
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
