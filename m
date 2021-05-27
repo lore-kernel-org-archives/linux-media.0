@@ -2,226 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C54C4707F
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 07:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93084C4707F
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 07:55:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C72486143F
-	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 07:55:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F878613F6
+	for <linux-media@archiver.kernel.org>; Thu, 27 May 2021 07:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbhE0H4j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 May 2021 03:56:39 -0400
-Received: from comms.puri.sm ([159.203.221.185]:53450 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235111AbhE0H4S (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 May 2021 03:56:18 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 56AE0E204E;
-        Thu, 27 May 2021 00:54:46 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AvVzDm61ahfv; Thu, 27 May 2021 00:54:45 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        robh@kernel.org
-Cc:     shawnguo@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, slongerbeam@gmail.com, kernel@puri.sm,
-        krzk@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v1 1/3] dt-bindings: media: document the nxp,imx8mq-mipi-csi2 receiver phy and controller
-Date:   Thu, 27 May 2021 09:54:05 +0200
-Message-Id: <20210527075407.3180744-2-martin.kepplinger@puri.sm>
-In-Reply-To: <20210527075407.3180744-1-martin.kepplinger@puri.sm>
-References: <20210527075407.3180744-1-martin.kepplinger@puri.sm>
+        id S235178AbhE0H4s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 May 2021 03:56:48 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:49541 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235169AbhE0H40 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 May 2021 03:56:26 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id mAqulaPv0VN4kmAqylNZyE; Thu, 27 May 2021 09:54:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1622102092; bh=iRozK57aD38922wBPIqM+mPlF2ZSkmLhmWfW+6TOOPw=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=nnKc9HVxyv2mtu0DezX4xoETYeRiqFmVXF2LuqjUIhHPYk5s0S7TKUrQovHjlP22Y
+         2ws0+e6HpMHwZ59YXAHwv06qjAos2iXkB53xYYGhCnfmvoteuzOezEV7GmSNEEsGGG
+         Z9j8vIL8LcphzZEUlP81oK6WJb7kUCEh1l8wiH0teDS7acQMGnSaNX2lNjM8mgaA+J
+         5RY8cOyFpbW+FeowyY1p6VkKZFFrC58iHZlD5a8ZBYOQLz4Epqe2aClD5ROWNvUB/m
+         T67zGyNPcUzyluPIogDJmxdII1zbH8qJ4sykodc7KieF8QE+Lo5RSJV5+zq1sVzxcE
+         X8kPBqBNVroGg==
+Subject: Re: [RFC/WIP 0/4] HEIC image encoder
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20210429132833.2802390-1-stanimir.varbanov@linaro.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <ae54a98a-c1e5-e7f9-4d3f-fa4a56b9a359@xs4all.nl>
+Date:   Thu, 27 May 2021 09:54:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210429132833.2802390-1-stanimir.varbanov@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGHDem9dY35z8m1M5JhY6kWFDSMTHAzmmjYiAuF0OnASAgIi6P++gGlPumw5ROVrYfCnUAwuJF7D6R+zLKzsOh9hfFuXkV/Ak74RLbqHeF6pw9YJiey1
+ LzHCRxRs86rHNC03JCUFH7HdFw3tr8JElJkYWMzEBBwN9HLTRjKe0/w8CbZAB9tKgrR2aBpziww6OODLmXDepW8WKoAqrpKJ50/4k75j6DTXcpgNwvEcPAEu
+ 64mWxN0uYGkyDURj1EqTVg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX8MQ SoC integrates a different MIPI CSI receiver as the i.MX8MM so
-describe the DT bindings for it.
+Hi Stanimir,
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 163 ++++++++++++++++++
- 1 file changed, 163 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+On 29/04/2021 15:28, Stanimir Varbanov wrote:
+> Hi,
+> 
+> HEIC (High-Efficiency Image Container) is a variant of HEIF (High
+> Efficiency Image File Format) where HEVC/h265 codec is used to encode
+> images.  For more info see [1].
+> 
+> In this RFC we propose a new compressed pixel format V4L2_PIX_FMT_HEIC.
+> The name is debatable and could be changed (V4L2_PIX_FMT_HEVC_HEIF is
+> also an option).
+> 
+> There are two encoding modes which should be selectable by clients:
+>     1. Regular image encoding
+>     2. Grid image encoding
+> 
+> 1. Regular image encoding
+> 
+> Propose to reuse stateful video encoder spec [2].
+> 
+> - queuing one OUTPUT buffer will produce one CAPTURE buffer.  The
+> client could trigger Drain sequence at any point of time.
+> 
+> 2. Grid image encoding
+> 
+> Propose to reuse stateful video encoder spec [2].
+> 
+> - queuing one OUTPUT buffer will produce a number of grids CAPTURE
+> buffers.  The client could trigger Drain sequence at any point of time.
+> 
+> This image encoding mode is used when the input image resolution is
+> bigger then the hardware can support and/or for compatibility reasons
+> (for exmaple, the HEIC decoding hardware is not capable to decode higher
+> than VGA resolutions).
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
-new file mode 100644
-index 000000000000..823609ac4cf5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
-@@ -0,0 +1,163 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/nxp,imx8mq-mipi-csi2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP and i.MX8MQ MIPI CSI-2 receiver
-+
-+maintainers:
-+  - Martin Kepplinger <martin.kepplinger@puri.sm>
-+
-+description: |-
-+  This binding covers the CSI-2 RX PHY and host controller included in the
-+  NXP i.MX8MQ SoC. It handles the sensor/image input and process for all the
-+  input imaging devices.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,imx8mq-mipi-csi2
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 4
-+
-+  clock-names:
-+    minItems: 4
-+    items:
-+      - const: core
-+      - const: esc
-+      - const: pxl
-+      - const: clko2
-+
-+  assigned-clocks:
-+    maxItems: 3
-+
-+  assigned-clock-rates:
-+    maxItems: 3
-+
-+  assigned-clock-parents:
-+    maxItems: 3
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  phy-reset:
-+    description:
-+      The phandle to the imx8mq reset-controller.
-+    maxItems: 1
-+
-+  phy-gpr:
-+    description:
-+      The phandle to the imx8mq syscon iomux-gpr.
-+    maxItems: 1
-+
-+  interconnects:
-+    maxItems: 1
-+
-+  interconnect-names:
-+    const: dram
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port node, single endpoint describing the CSI-2 transmitter.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                items:
-+                  minItems: 1
-+                  maxItems: 4
-+                  items:
-+                    - const: 1
-+                    - const: 2
-+                    - const: 3
-+                    - const: 4
-+
-+            required:
-+              - data-lanes
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Output port node
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - assigned-clocks
-+  - assigned-clock-rates
-+  - assigned-clock-parents
-+  - power-domains
-+  - phy-reset
-+  - phy-gpr
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx8mq-clock.h>
-+    #include <dt-bindings/interconnect/imx8mq.h>
-+
-+    mipi_csi1@30a70000 {
-+        compatible = "fsl,imx8mq-mipi-csi2";
-+        reg = <0x30a70000 0x1000>; /* MIPI CSI1 Controller base addr */
-+        clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
-+                 <&clk IMX8MQ_CLK_CSI1_ESC>,
-+                 <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
-+                 <&clk IMX8MQ_CLK_CLKO2>;
-+        clock-names = "core", "esc", "pxl", "clko2";
-+        assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
-+                          <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
-+                          <&clk IMX8MQ_CLK_CSI1_ESC>;
-+        assigned-clock-rates = <266000000>, <200000000>, <66000000>;
-+        assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
-+                                 <&clk IMX8MQ_SYS2_PLL_1000M>,
-+                                 <&clk IMX8MQ_SYS1_PLL_800M>;
-+        power-domains = <&pgc_mipi_csi1>;
-+        phy-reset = <&src>;
-+        phy-gpr = <&iomuxc_gpr>;
-+        interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
-+        interconnect-names = "dram";
-+        status = "disabled";
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@0 {
-+                reg = <0>;
-+
-+                imx8mm_mipi_csi_in: endpoint {
-+                    remote-endpoint = <&imx477_out>;
-+                    data-lanes = <1 2 3 4>;
-+                };
-+            };
-+
-+            port@1 {
-+                reg = <1>;
-+
-+                imx8mm_mipi_csi_out: endpoint {
-+                    remote-endpoint = <&csi_in>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
--- 
-2.30.2
+Is grid image encoding part of the spec for this format? Is this something
+that the venus hardware needs due to image resolution limitations as
+described above?
+
+Would it be possible for the driver to handle this internally? I.e.,
+if it detects that it needs to switch to grid mode, can it just encode
+each grid and copy it in the capture buffer? This assumes that there is
+metadata that can be used by a decoder do find and decode each grid.
+
+> 
+> In this mode the input image is divided on square blocks (we call them grids)
+> and every block is encoded separately (the Venus driver presently supports 
+> grid size of 512x512 but that could be changed in the future).
+> 
+> To set the grid size we use a new v4l2 control.
+
+Can the driver make a choice of the grid size, and the control just
+reports the grid size? I.e., does it make sense for userspace to set
+this?
+
+The wiki page [1] doesn't mention grids, so where does this come from?
+Is it part of some spec? Or is it a venus-specific feature?
+
+> 
+> The side effect of this mode is that the client have to set the v4l2
+> control and thus enable grid encoding before setting the formats on
+> CAPTURE and OUTPUT queues, because the grid size reflects on the
+> selected resolutions. Also the horizontal and vertical strides will
+> also be affected because thеy have to be aligned to the grid size
+> in order to satisfy DMA alignment restrictions.
+> 
+> Using of v4l2 control to set up Grid mode and Grid size above looks
+> inpractical and somehow breaks the v4l2 and v4l2 control rules, so
+> I'd give one more option. 
+> 
+> Encoding the Grid mode/size in the new proposed HEIC pixel format:
+> 
+>    V4L2_PIX_FMT_HEIC - Regular HEIC image encoding
+>    V4L2_PIX_FMT_HEIC_GRID_512x512 - Grid HEIC image encoding, grid size of 512x512 
+>    and so on ...
+> 
+> Comments and suggestions are welcome!
+
+I notice that this RFC just talks about the encoder, does venus also
+support a decoder? How would a HW decoder handle grids?
+
+Regards,
+
+	Hans
+
+> 
+> regards,
+> Stan
+> 
+> [1] https://en.wikipedia.org/wiki/High_Efficiency_Image_File_Format
+> [2] https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/dev-encoder.html
+> 
+> 
+> Stanimir Varbanov (4):
+>   media: Add HEIC compressed pixel format
+>   v4l2-ctrls: Add HEIC grid size control
+>   venus: helpers: Add a new helper for buffer processing
+>   venus: Add HEIC image encoder
+> 
+>  .../media/v4l/pixfmt-compressed.rst           |   12 +
+>  drivers/media/platform/qcom/venus/Makefile    |    2 +
+>  drivers/media/platform/qcom/venus/core.h      |   10 +
+>  drivers/media/platform/qcom/venus/helpers.c   |   20 +
+>  drivers/media/platform/qcom/venus/helpers.h   |    1 +
+>  drivers/media/platform/qcom/venus/hfi_cmds.c  |   10 +-
+>  .../media/platform/qcom/venus/hfi_helper.h    |    5 +
+>  drivers/media/platform/qcom/venus/ienc.c      | 1348 +++++++++++++++++
+>  drivers/media/platform/qcom/venus/ienc.h      |   14 +
+>  .../media/platform/qcom/venus/ienc_ctrls.c    |   83 +
+>  drivers/media/v4l2-core/v4l2-ctrls.c          |    3 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+>  include/uapi/linux/v4l2-controls.h            |    1 +
+>  include/uapi/linux/videodev2.h                |    1 +
+>  14 files changed, 1510 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/media/platform/qcom/venus/ienc.c
+>  create mode 100644 drivers/media/platform/qcom/venus/ienc.h
+>  create mode 100644 drivers/media/platform/qcom/venus/ienc_ctrls.c
+> 
 
