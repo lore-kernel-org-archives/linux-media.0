@@ -2,105 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28F15C47095
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1F1C47094
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 072C26127C
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:16:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B188661248
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhEaJSc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 May 2021 05:18:32 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58134 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhEaJSc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 May 2021 05:18:32 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14V9GglZ070674;
-        Mon, 31 May 2021 04:16:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622452602;
-        bh=Its6+pOD1tBTaXUgRpY3KMtTS3wCWqo3YueW1RmMxa4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=bhyHSF86k7TkEqFAYrfbkzaEnncWTx402W1pNM9x25C2B1kNpEgNcgH4kGbvr/E/v
-         mkTSAKmvn2Azip1C/SjOXBGxfZyyDEqj3m6J64QRdoUp/jX6wFsMnuXj0ATGFU9RYB
-         t/TCtI9r09p9pjLXGiqOM4a5o6WIWnMcSKA4ahyA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14V9GgR2072205
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 May 2021 04:16:42 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 31
- May 2021 04:16:42 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 31 May 2021 04:16:42 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14V9GfmG035500;
-        Mon, 31 May 2021 04:16:42 -0500
-Date:   Mon, 31 May 2021 14:46:40 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@gmail.com>
-CC:     Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <dmaengine@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v2 11/18] dmaengine: ti: k3-psil-j721e: Add entry for
- CSI2RX
-Message-ID: <20210531091638.6mynfeusuzlgegdr@ti.com>
-References: <20210526152308.16525-1-p.yadav@ti.com>
- <20210526152308.16525-12-p.yadav@ti.com>
- <916ef8c9-e444-afa4-d544-8fa672690fdb@gmail.com>
+        id S231236AbhEaJrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 May 2021 05:47:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231172AbhEaJra (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 31 May 2021 05:47:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11BFE6103E;
+        Mon, 31 May 2021 09:45:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622454351;
+        bh=jF62RzkWE7fS2aErLRL97R4fHohCVIw0Or/yoZ4tfN4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=I/0IKrQFbRJkV+NAU7aBGlJgPdUhoLQrHQmidvU9HQFHvpZNCma1Lpj7doG6kpxf6
+         CtIs4xXX9BM6osGWtIMaR5+qiRucS+ZPyH0EjvQm1LkSWCXk9nC3k9rSmh3qKCG6tj
+         sXVyUIH9UZWVNRGru9Hd3ljVdwvjl9Jq/o0JtqDhzxsnjzYDwFroB8qF7qS/zWGEFM
+         o4cKPcxJQiTyzfJWwIVixIOjvsRRQpNTmNaYVufpx+RacjfttK5Nj2WU6EDD/A2M5n
+         o/KpQagRejQjH3AWp3GDvS01Pkm2lG9tAEGep/GnFbEZGNFt9Gnkys6mPqteIGVTZM
+         r/RQXDEYvPTeA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lneUU-0003JP-Dy; Mon, 31 May 2021 11:45:46 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eero Lehtinen <debiangamer2@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Antti Palosaari <crope@iki.fi>
+Subject: [PATCH v2 3/3] media: rtl28xxu: fix zero-length control request
+Date:   Mon, 31 May 2021 11:44:34 +0200
+Message-Id: <20210531094434.12651-4-johan@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210531094434.12651-1-johan@kernel.org>
+References: <20210531094434.12651-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <916ef8c9-e444-afa4-d544-8fa672690fdb@gmail.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 31/05/21 09:51AM, Péter Ujfalusi wrote:
-> 
-> 
-> On 26/05/2021 18:23, Pratyush Yadav wrote:
-> > The CSI2RX subsystem uses PSI-L DMA to transfer frames to memory. It can
-> > have up to 32 threads but the current driver only supports using one. So
-> > add an entry for that one thread.
-> > 
-> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> > 
-> > ---
-> > 
-> > Changes in v2:
-> > - Add all 64 threads, instead of having only the one thread being
-> >   currently used by the driver.
-> 
-> How many threads CSI2RX have? 32 (as per commit message) or 64? If I
-> recall right, it is 32.
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
 
-Ah, sorry I forgot to update the commit message. Each instance of CSI2RX 
-has 32 threads, and J721E has 2 instances. So 64 threads total.
+Control transfers without a data stage are treated as OUT requests by
+the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+will now trigger a warning.
 
+The driver uses a zero-length i2c-read request for type detection so
+update the control-request code to use usb_sndctrlpipe() in this case.
+
+Note that actually trying to read the i2c register in question does not
+work as the register might not exist (e.g. depending on the demodulator)
+as reported by Eero Lehtinen <debiangamer2@gmail.com>.
+
+Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+Reported-by: Eero Lehtinen <debiangamer2@gmail.com>
+Tested-by: Eero Lehtinen <debiangamer2@gmail.com>
+Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
+Cc: stable@vger.kernel.org      # 4.0
+Cc: Antti Palosaari <crope@iki.fi>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 97ed17a141bb..a6124472cb06 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -37,7 +37,16 @@ static int rtl28xxu_ctrl_msg(struct dvb_usb_device *d, struct rtl28xxu_req *req)
+ 	} else {
+ 		/* read */
+ 		requesttype = (USB_TYPE_VENDOR | USB_DIR_IN);
+-		pipe = usb_rcvctrlpipe(d->udev, 0);
++
++		/*
++		 * Zero-length transfers must use usb_sndctrlpipe() and
++		 * rtl28xxu_identify_state() uses a zero-length i2c read
++		 * command to determine the chip type.
++		 */
++		if (req->size)
++			pipe = usb_rcvctrlpipe(d->udev, 0);
++		else
++			pipe = usb_sndctrlpipe(d->udev, 0);
+ 	}
+ 
+ 	ret = usb_control_msg(d->udev, pipe, 0, requesttype, req->value,
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.31.1
+
