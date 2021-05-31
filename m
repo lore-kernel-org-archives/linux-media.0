@@ -2,48 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54627C47095
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9005C47097
 	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3118A6127A
+	by mail.kernel.org (Postfix) with ESMTP id 99CE86023C
 	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbhEaJrd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 May 2021 05:47:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56118 "EHLO mail.kernel.org"
+        id S231287AbhEaJre (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 May 2021 05:47:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231183AbhEaJra (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231180AbhEaJra (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 31 May 2021 05:47:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19AB2611EE;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 143EB6023C;
         Mon, 31 May 2021 09:45:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1622454351;
-        bh=wZAAmPPbRYOf0H8CXkKXFYk4mvXla/HH3PD4TIXMdFU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fvtxcdmrUYuO3TQKAAIUPbb8Dku6hA1QMY96MwVpJbQtf68siBxux2Z49iaty0ena
-         ljr5JZtk6C9TUvzxCF4t6u09CzpL2W/GsLO+od4FzfDgV6n+//51yJi5/5QipeOm7v
-         KwW3AHkh20Q/L6EU3NIJJ4TKUNMQLBOyRMl2bUsu4pEq1JLUXLqms/wXlbz5VbsgzS
-         V7DMaGCxpv8pW9yR9Y5FKSu0eSnPAc14O/+w5azlP3e9vLVFIxvRoJXDQ+UA/xx8Fe
-         pvFRMOumDHWRSPmVd0OLOH+vepWfwHtOo8vfrItbB3Y4vG4IcNampi44YiylnKe/kR
-         ULWXmbSeDpriw==
+        bh=MfFj2A1+plW7C8UGXf3GwEVFhMD2e02UkVEb+mKDLeQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Mj+Q7Gg6C6ei6AznJpPJGiG3L5mspDxkEnNr1JBJX0NL8x6/k6MAuMAiBcrLkeaNV
+         gcuh7ctErMOV/CNXUE8j0pPf3jqj7cmXS4QOIbGalo6AOfsQY8KDKSHrFQBAcyGQCC
+         AqXuDwo9CZwZTIRWXTTsn/0MKgkMTpAT9oghOeYPLX2I8/2vPdNbhzrYe3MkecBE09
+         LzpmeXazgYsZcvPnggTCZDj/jwk/yXP+X3AuocBSy4W+RlhvooQSzcbVA7SvVqJ0lp
+         /Yi9eDcGxs+tXdpM4cJKeC4F5QDLkoL45tNB6U8F722+4Me98xURfpfn6vX4eufi9K
+         RzZHGR120903A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lneUT-0003JJ-ED; Mon, 31 May 2021 11:45:46 +0200
+        id 1lneUU-0003JN-B9; Mon, 31 May 2021 11:45:46 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Eero Lehtinen <debiangamer2@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2 0/3] media: fix zero-length USB control requests
-Date:   Mon, 31 May 2021 11:44:31 +0200
-Message-Id: <20210531094434.12651-1-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2 2/3] media: gspca/sunplus: fix zero-length control requests
+Date:   Mon, 31 May 2021 11:44:33 +0200
+Message-Id: <20210531094434.12651-3-johan@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210531094434.12651-1-johan@kernel.org>
+References: <20210531094434.12651-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -53,30 +55,55 @@ X-Mailing-List: linux-media@vger.kernel.org
 The direction of the pipe argument must match the request-type direction
 bit or control requests may fail depending on the host-controller-driver
 implementation.
-    
+
 Control transfers without a data stage are treated as OUT requests by
 the USB stack and should be using usb_sndctrlpipe(). Failing to do so
 will now trigger a warning.
 
-This series fixes the three media drivers that got this wrong.
+Fix the single zero-length control request which was using the
+read-register helper, and update the helper so that zero-length reads
+fail with an error message instead.
 
-Johan
+Fixes: 6a7eba24e4f0 ("V4L/DVB (8157): gspca: all subdrivers")
+Cc: stable@vger.kernel.org      # 2.6.27
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/media/usb/gspca/sunplus.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Changes in v2
- - keep the rtl28xxu zero-length read request which is needed for
-   proper type detection (Eero)
-
-
-Johan Hovold (3):
-  media: gspca/gl860: fix zero-length control requests
-  media: gspca/sunplus: fix zero-length control requests
-  media: rtl28xxu: fix zero-length control request
-
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
- drivers/media/usb/gspca/gl860/gl860.c   |  4 ++--
- drivers/media/usb/gspca/sunplus.c       |  8 ++++++--
- 3 files changed, 18 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/media/usb/gspca/sunplus.c b/drivers/media/usb/gspca/sunplus.c
+index ace3da40006e..971dee0a56da 100644
+--- a/drivers/media/usb/gspca/sunplus.c
++++ b/drivers/media/usb/gspca/sunplus.c
+@@ -242,6 +242,10 @@ static void reg_r(struct gspca_dev *gspca_dev,
+ 		gspca_err(gspca_dev, "reg_r: buffer overflow\n");
+ 		return;
+ 	}
++	if (len == 0) {
++		gspca_err(gspca_dev, "reg_r: zero-length read\n");
++		return;
++	}
+ 	if (gspca_dev->usb_err < 0)
+ 		return;
+ 	ret = usb_control_msg(gspca_dev->dev,
+@@ -250,7 +254,7 @@ static void reg_r(struct gspca_dev *gspca_dev,
+ 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 			0,		/* value */
+ 			index,
+-			len ? gspca_dev->usb_buf : NULL, len,
++			gspca_dev->usb_buf, len,
+ 			500);
+ 	if (ret < 0) {
+ 		pr_err("reg_r err %d\n", ret);
+@@ -727,7 +731,7 @@ static int sd_start(struct gspca_dev *gspca_dev)
+ 		case MegaImageVI:
+ 			reg_w_riv(gspca_dev, 0xf0, 0, 0);
+ 			spca504B_WaitCmdStatus(gspca_dev);
+-			reg_r(gspca_dev, 0xf0, 4, 0);
++			reg_w_riv(gspca_dev, 0xf0, 4, 0);
+ 			spca504B_WaitCmdStatus(gspca_dev);
+ 			break;
+ 		default:
 -- 
 2.31.1
 
