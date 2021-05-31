@@ -4,47 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1F1C47094
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B04C47094
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B188661248
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 523996023C
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 09:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbhEaJrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S231266AbhEaJrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 31 May 2021 05:47:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56110 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:56116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231172AbhEaJra (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231182AbhEaJra (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 31 May 2021 05:47:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11BFE6103E;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1776C611AC;
         Mon, 31 May 2021 09:45:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1622454351;
-        bh=jF62RzkWE7fS2aErLRL97R4fHohCVIw0Or/yoZ4tfN4=;
+        bh=04+wAH7j3nqUMel0heO+GqGanLbRhs52MofR9BwnKwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/0IKrQFbRJkV+NAU7aBGlJgPdUhoLQrHQmidvU9HQFHvpZNCma1Lpj7doG6kpxf6
-         CtIs4xXX9BM6osGWtIMaR5+qiRucS+ZPyH0EjvQm1LkSWCXk9nC3k9rSmh3qKCG6tj
-         sXVyUIH9UZWVNRGru9Hd3ljVdwvjl9Jq/o0JtqDhzxsnjzYDwFroB8qF7qS/zWGEFM
-         o4cKPcxJQiTyzfJWwIVixIOjvsRRQpNTmNaYVufpx+RacjfttK5Nj2WU6EDD/A2M5n
-         o/KpQagRejQjH3AWp3GDvS01Pkm2lG9tAEGep/GnFbEZGNFt9Gnkys6mPqteIGVTZM
-         r/RQXDEYvPTeA==
+        b=aTjF5Bdp2vpHbSrbdQKW62blI0c9BUktXqBLFSMz4kZQIc1ifWWN2InIs92ttmMCf
+         rW1wq2teFiWvrC1s9wNLQK5FHRcBm1RT5cFdhXAv3Nqhr7rcaALLBvbD6A6xIRLJJy
+         hsh1nJD4SbSHHNsB0a1Mehn0iFpShR+CQhOdYTYkp8H/w94oqcBppF/O9N9z+GVC0U
+         1LGjzWNfaZJ4dLprS8+be+ahwPSeHpc1FkKXm3BptmRauKRKR3DJCD2qmoaZutq6rS
+         miRyt9skglrdmcWQ1/h0PyGJYDMwGC4g7khAoM/om1FHjyAiNRIOg3Go+3goFKd60D
+         +Vv2WfOAwiX/w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lneUU-0003JP-Dy; Mon, 31 May 2021 11:45:46 +0200
+        id 1lneUU-0003JL-8I; Mon, 31 May 2021 11:45:46 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Eero Lehtinen <debiangamer2@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Antti Palosaari <crope@iki.fi>
-Subject: [PATCH v2 3/3] media: rtl28xxu: fix zero-length control request
-Date:   Mon, 31 May 2021 11:44:34 +0200
-Message-Id: <20210531094434.12651-4-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH v2 1/3] media: gspca/gl860: fix zero-length control requests
+Date:   Mon, 31 May 2021 11:44:32 +0200
+Message-Id: <20210531094434.12651-2-johan@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210531094434.12651-1-johan@kernel.org>
 References: <20210531094434.12651-1-johan@kernel.org>
@@ -62,46 +60,31 @@ Control transfers without a data stage are treated as OUT requests by
 the USB stack and should be using usb_sndctrlpipe(). Failing to do so
 will now trigger a warning.
 
-The driver uses a zero-length i2c-read request for type detection so
-update the control-request code to use usb_sndctrlpipe() in this case.
+Fix the gl860_RTx() helper so that zero-length control reads fail with
+an error message instead. Note that there are no current callers that
+would trigger this.
 
-Note that actually trying to read the i2c register in question does not
-work as the register might not exist (e.g. depending on the demodulator)
-as reported by Eero Lehtinen <debiangamer2@gmail.com>.
-
-Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
-Reported-by: Eero Lehtinen <debiangamer2@gmail.com>
-Tested-by: Eero Lehtinen <debiangamer2@gmail.com>
-Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
-Cc: stable@vger.kernel.org      # 4.0
-Cc: Antti Palosaari <crope@iki.fi>
+Fixes: 4f7cb8837cec ("V4L/DVB (12954): gspca - gl860: Addition of GL860 based webcams")
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/media/usb/gspca/gl860/gl860.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 97ed17a141bb..a6124472cb06 100644
---- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-+++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -37,7 +37,16 @@ static int rtl28xxu_ctrl_msg(struct dvb_usb_device *d, struct rtl28xxu_req *req)
- 	} else {
- 		/* read */
- 		requesttype = (USB_TYPE_VENDOR | USB_DIR_IN);
--		pipe = usb_rcvctrlpipe(d->udev, 0);
-+
-+		/*
-+		 * Zero-length transfers must use usb_sndctrlpipe() and
-+		 * rtl28xxu_identify_state() uses a zero-length i2c read
-+		 * command to determine the chip type.
-+		 */
-+		if (req->size)
-+			pipe = usb_rcvctrlpipe(d->udev, 0);
-+		else
-+			pipe = usb_sndctrlpipe(d->udev, 0);
+diff --git a/drivers/media/usb/gspca/gl860/gl860.c b/drivers/media/usb/gspca/gl860/gl860.c
+index 2c05ea2598e7..ce4ee8bc75c8 100644
+--- a/drivers/media/usb/gspca/gl860/gl860.c
++++ b/drivers/media/usb/gspca/gl860/gl860.c
+@@ -561,8 +561,8 @@ int gl860_RTx(struct gspca_dev *gspca_dev,
+ 					len, 400 + 200 * (len > 1));
+ 			memcpy(pdata, gspca_dev->usb_buf, len);
+ 		} else {
+-			r = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+-					req, pref, val, index, NULL, len, 400);
++			gspca_err(gspca_dev, "zero-length read request\n");
++			r = -EINVAL;
+ 		}
  	}
  
- 	ret = usb_control_msg(d->udev, pipe, 0, requesttype, req->value,
 -- 
 2.31.1
 
