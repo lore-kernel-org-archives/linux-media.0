@@ -2,116 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFABAC47082
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 11:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6021C47083
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 11:24:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C875661090
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 11:23:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE57661364
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 11:24:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbhEaLYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 May 2021 07:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbhEaLYo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 May 2021 07:24:44 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CC6C06174A;
-        Mon, 31 May 2021 04:23:05 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c10so7654871qtx.10;
-        Mon, 31 May 2021 04:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Mt7POv9PaCwKFvdwIODXsLJlyClKZZS8dpjMNwC08Rk=;
-        b=FpkAUxBHyO6WxH6MjvrfYwHqOShz/gWIonA+Zb6HgAqE7r/GxLuo7uPfudu/hlT4Cz
-         EvoMTXEi8geOdv0lx/bn7vQDJIXeSoBupCGmZZfQ1sCCzNIMy/+0X7zU2kt+KNqGIhp3
-         MhVs2rNyUU5oP+zHJG6kfWdlOMrj/HN83OAK3AKPzG25FDxOF4TkZitdjQ+UVjXVxpTi
-         5KKji0u8fvXeyel7lUPyDgyCvXztM0CfChX2TKFs8zLMM4lhB2C6wnkICSmNRZYtpZjA
-         F0/RajNllgXEK6ftJ4FaprWp+O8at6YCo46gLDFWaUZPbGIzSUnMTNCqJrifVIWyfyN1
-         qB2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Mt7POv9PaCwKFvdwIODXsLJlyClKZZS8dpjMNwC08Rk=;
-        b=RQCwh0SDrwNJQ5HzMLuB/He2QnXNk5MtKtoFjY5cWZOCGOBnCw/6fjgl3j0mCOrogc
-         R1rcjqxrFRGxlfn7d+MeCZbrpUFr+mFiJA7bnhBYokZ0WTa4RgskgXxJu9+hWZWF+vpz
-         fsbYctFWnQ7Kjdfc/FCNgfjhVcL151OEM/pIThDvBMpsmTmOAOPLyghLVjlELdVObaX1
-         nQ1kRyv0vb3dQNhrBphZ6BNdyX4Jxl/374uXnDn5yFrzfsai0vHWCR08pjo11mNrpnmF
-         TWZUMbqBJpJKzpVa14yFy1JsHf1Uzm2yU8G9mVS1OePRcWAaLVTF3xh5uBihplm3aigT
-         UrSQ==
-X-Gm-Message-State: AOAM533vEJ+YVAs9RO6wqNkKvdulKFiu5m79Ho4no3cOX3JZ1lXUeo+Z
-        xJL+/0Lc2AhKnCjnbJaAXBY=
-X-Google-Smtp-Source: ABdhPJxzSZAUeVtEqtOK6G/lO950T7d9LNRDEcB1h+2IPLpRndsKnrbArB4s83shNBHe9LfY3fRZOw==
-X-Received: by 2002:ac8:51c4:: with SMTP id d4mr14458594qtn.186.1622460184409;
-        Mon, 31 May 2021 04:23:04 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:485:504a:df45:f91c:ea2e:9334])
-        by smtp.gmail.com with ESMTPSA id h5sm9105480qkg.122.2021.05.31.04.23.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 04:23:04 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     hverkuil-cisco@xs4all.nl
-Cc:     lars@metafoo.de, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, tharvey@gateworks.com,
-        frieder.schrempf@kontron.de, niklas.soderlund@ragnatech.se,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2 3/3] media: i2c: adv7180: Print the chip ID on probe
-Date:   Mon, 31 May 2021 08:22:37 -0300
-Message-Id: <20210531112237.706063-3-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210531112237.706063-1-festevam@gmail.com>
-References: <20210531112237.706063-1-festevam@gmail.com>
-MIME-Version: 1.0
+        id S231327AbhEaLZ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 May 2021 07:25:56 -0400
+Received: from comms.puri.sm ([159.203.221.185]:59500 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230518AbhEaLZy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 31 May 2021 07:25:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id DC11DE1B00;
+        Mon, 31 May 2021 04:24:11 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aVXX4gpULj9V; Mon, 31 May 2021 04:24:11 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     martin.kepplinger@puri.sm, festevam@gmail.com, krzk@kernel.org,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        robh@kernel.org
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de, kernel@puri.sm,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, shawnguo@kernel.org,
+        slongerbeam@gmail.com, phone-devel@vger.kernel.org
+Subject: [PATCH v2 3/3] arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
+Date:   Mon, 31 May 2021 13:23:26 +0200
+Message-Id: <20210531112326.90094-4-martin.kepplinger@puri.sm>
+In-Reply-To: <20210531112326.90094-1-martin.kepplinger@puri.sm>
+References: <20210531112326.90094-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Improve the probe message by printing the chip ID version.
+Describe the 2 available CSI interfaces on the i.MX8MQ with the MIPI-CSI2
+receiver and the CSI Bridge that provides the user buffers, where the
+existing driver can directly be used.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+An image sensor is to be connected to the MIPIs' second port, described in
+board files.
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
-Changes since v1:
-- Added Frieder's Reviewed-by tag.
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 102 ++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
- drivers/media/i2c/adv7180.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 2890041cc231..4f99b46e7eaa 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -1415,11 +1415,19 @@ static int adv7180_probe(struct i2c_client *client,
- 	if (ret)
- 		goto err_free_irq;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index 91df9c5350ae..5bf02f4f904d 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -1099,6 +1099,108 @@ uart4: serial@30a60000 {
+ 				status = "disabled";
+ 			};
  
--	v4l_info(client, "chip found @ 0x%02x (%s)\n",
--		 client->addr, client->adapter->name);
-+	mutex_lock(&state->mutex);
-+	ret = adv7180_read(state, ADV7180_REG_IDENT);
-+	mutex_unlock(&state->mutex);
-+	if (ret < 0)
-+		goto err_v4l2_async_unregister;
++			mipi_csi1: mipi_csi1@30a70000 {
++				compatible = "fsl,imx8mq-mipi-csi2";
++				reg = <0x30a70000 0x1000>;
++				clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++				   <&clk IMX8MQ_CLK_CSI1_ESC>,
++				   <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++				   <&clk IMX8MQ_CLK_CLKO2>;
++				clock-names = "core", "esc", "pxl", "clko2";
++				assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++				    <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++				    <&clk IMX8MQ_CLK_CSI1_ESC>;
++				assigned-clock-rates = <266000000>, <200000000>, <66000000>;
++				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++					<&clk IMX8MQ_SYS2_PLL_1000M>,
++					<&clk IMX8MQ_SYS1_PLL_800M>;
++				power-domains = <&pgc_mipi_csi1>;
++				phy-reset = <&src>;
++				phy-gpr = <&iomuxc_gpr>;
++				interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
++				interconnect-names = "dram";
++				status = "disabled";
 +
-+	v4l_info(client, "chip id 0x%x found @ 0x%02x (%s)\n",
-+		 ret, client->addr, client->adapter->name);
- 
- 	return 0;
- 
-+err_v4l2_async_unregister:
-+	v4l2_async_unregister_subdev(sd);
- err_free_irq:
- 	if (state->irq > 0)
- 		free_irq(client->irq, state);
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						csi1_mipi_ep: endpoint {
++							remote-endpoint = <&csi1_ep>;
++						};
++					};
++				};
++			};
++
++			csi1_bridge: csi1_bridge@30a90000 {
++				compatible = "fsl,imx7-csi";
++				reg = <0x30a90000 0x10000>;
++				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk IMX8MQ_CLK_CSI1_ROOT>;
++				clock-names = "mclk";
++				status = "disabled";
++
++				port {
++					csi1_ep: endpoint {
++						remote-endpoint = <&csi1_mipi_ep>;
++					};
++				};
++			};
++
++			mipi_csi2: mipi_csi2@30b60000 {
++				compatible = "fsl,imx8mq-mipi-csi2";
++				reg = <0x30b60000 0x1000>;
++				clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
++				   <&clk IMX8MQ_CLK_CSI2_ESC>,
++				   <&clk IMX8MQ_CLK_CSI2_PHY_REF>,
++				   <&clk IMX8MQ_CLK_CLKO2>;
++				clock-names = "core", "esc", "pxl", "clko2";
++				assigned-clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
++				    <&clk IMX8MQ_CLK_CSI2_PHY_REF>,
++				    <&clk IMX8MQ_CLK_CSI2_ESC>;
++				assigned-clock-rates = <266000000>, <333000000>, <66000000>;
++				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++					<&clk IMX8MQ_SYS2_PLL_1000M>,
++					<&clk IMX8MQ_SYS1_PLL_800M>;
++				power-domains = <&pgc_mipi_csi2>;
++				phy-reset = <&src>;
++				phy-gpr = <&iomuxc_gpr>;
++				interconnects = <&noc IMX8MQ_ICM_CSI2 &noc IMX8MQ_ICS_DRAM>;
++				interconnect-names = "dram";
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						csi2_mipi_ep: endpoint {
++							remote-endpoint = <&csi2_ep>;
++						};
++					};
++				};
++			};
++
++			csi2_bridge: csi2_bridge@30b80000 {
++				compatible = "fsl,imx7-csi";
++				reg = <0x30b80000 0x10000>;
++				interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk IMX8MQ_CLK_CSI2_ROOT>;
++				clock-names = "mclk";
++				status = "disabled";
++
++				port {
++					csi2_ep: endpoint {
++						remote-endpoint = <&csi2_mipi_ep>;
++					};
++				};
++			};
++
+ 			mu: mailbox@30aa0000 {
+ 				compatible = "fsl,imx8mq-mu", "fsl,imx6sx-mu";
+ 				reg = <0x30aa0000 0x10000>;
 -- 
-2.25.1
+2.30.2
 
