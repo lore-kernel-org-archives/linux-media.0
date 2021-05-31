@@ -2,454 +2,485 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D8AC47082
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 16:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6BBDC47082
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 17:27:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 843D561375
-	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 16:10:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87D8961008
+	for <linux-media@archiver.kernel.org>; Mon, 31 May 2021 17:27:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbhEaQMT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 May 2021 12:12:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234260AbhEaQJ4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 May 2021 12:09:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11E7D61370;
-        Mon, 31 May 2021 16:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622477296;
-        bh=mbjHGiixcSsPgqhpskP0uFDOFBnh6wzWCECpG4kopOY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XkmVLdX5YFfVHuhnQV93uDIZ2efjQVchqw3YnTlTV76clM3qWwbddKa3GJ8kuvfKC
-         Ll9OQSzXrzWr9dbjifUF2ysD+PuWfo2WiyfmCKeE0gWsjGHrizhzSStPr0j3VI5QDj
-         t2+p4Uv7GoA1s63bJKYxNtjURQqntmrQrQOHAu6y5N3iNYhXS4XQQYxyPJXpZ2lnIH
-         KjSrGBqGoc88PmQfn33WcrO7JLlzIKAKHE6GOeNWRRTuWKQ7UQxkRJamrIxb3KFewF
-         lfmsWNOjugAFfodUO1hPvg0aGW+q1vWKu0ric83jMrc1fF1gksYTDB7eXgRMHU1bD/
-         NYjRJSx4C8u5Q==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lnkSb-000epQ-LW; Mon, 31 May 2021 18:08:13 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Allen Pais <allen.lkml@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jia-Ju Bai <baijiaju@tsinghua.edu.cn>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Romain Perier <romain.perier@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 2/2] media: av7110: move driver to staging
-Date:   Mon, 31 May 2021 18:08:12 +0200
-Message-Id: <4e7136434c68eabcdb66d25f44946ab794f4af0b.1622476959.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1622476959.git.mchehab+huawei@kernel.org>
-References: <cover.1622476959.git.mchehab+huawei@kernel.org>
+        id S233728AbhEaR2b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 May 2021 13:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233744AbhEaR1l (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 31 May 2021 13:27:41 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84159C072136
+        for <linux-media@vger.kernel.org>; Mon, 31 May 2021 09:07:21 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id n12so5407580pgs.13
+        for <linux-media@vger.kernel.org>; Mon, 31 May 2021 09:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZvsZCbxmQfdxc44/lTaoIYSz+l4Ldx7pjvFagvfr9hA=;
+        b=CnrLe1+a4qowa3ZOhslGOuGAdT7ITZRChEr9oRO5G1qEQa8PwWavoBpBNHloPHgHY3
+         PNFE05mFur8nAI4LMyEyH3KzvyZFr7plVQLaZRg4go1YjTi2OJWTJknwYaUglzvEwoTS
+         fmpZaZ1YI76QKD9ZsmtSilY7rdlms+aML8Jm+sbE02xXC6mqMEQB3CAG3+25QEOnpm9b
+         bYL1hsG8j7IqtBeMwijF5VqNeG1FL2HhUvTxwyyhgBWBRSb8iQ6bWIhcDRzQ5y3QvXZ2
+         4aXa6aVhGbJIB/Kdif9COSk17K3YiwL/uhh2Q6vTjNyhaT96ZuQCnuOoMF/pLMyMRw3m
+         QHXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZvsZCbxmQfdxc44/lTaoIYSz+l4Ldx7pjvFagvfr9hA=;
+        b=LX/+sVIq+Yg/LPJatKkHxrqiayqKmfr90ZM3WUnpTQsYUJ7vNsryLsKAJ671WxbjGV
+         TD/oryjqEMmuIbo9q3XpbRsqqapOc3RyhWNG3TqVrCKZKMnLWvrl6uz5GF0GJJXkn8ly
+         wrPl1so7Q4j3bit4TE89ibNMh/qm798mfFNhvKw07FGu11KnAhDfNgRuSCvQzO8ZIwM5
+         D78UzTJVccUsB3U9U+jkoDL8F4AsBekW8xjdfaioY2ZZlG8+qjJ4vFcXpIoB2Oq8rvID
+         qejPAn5X4QvRg0ccccJ32Va+jZrd4ENqqIRtfJ7sC78pU0nNBNGUBlAnUF3jS8G7W7PQ
+         y8CA==
+X-Gm-Message-State: AOAM532cK0QgTsWsfpqO+DhgXx4VtWHZ3kE9w+nspcDtQK6d/GAauoJd
+        wa6MVRQm7AOyrkIdd5rmXnRYOQwwhacQjlUnZcebfw==
+X-Google-Smtp-Source: ABdhPJweRY9/eixmV5nTyVU/cSGdNjVagQF1zyQXYgMBPh2qp6fllbEN4xtPDqbxLfR2bC7vIiUklwICSj4c6yHPLng=
+X-Received: by 2002:a63:724f:: with SMTP id c15mr3306831pgn.339.1622477240863;
+ Mon, 31 May 2021 09:07:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+References: <20210511180728.23781-1-jonathan@marek.ca> <20210511180728.23781-17-jonathan@marek.ca>
+In-Reply-To: <20210511180728.23781-17-jonathan@marek.ca>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 31 May 2021 18:07:09 +0200
+Message-ID: <CAG3jFyuJkUNzQge=m_7yzew4a2_5LQqCQhHU8myQqhta7cH8cw@mail.gmail.com>
+Subject: Re: [PATCH 16/17] media: camss: add support for SM8250 camss
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     MSM <linux-arm-msm@vger.kernel.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:QUALCOMM CAMERA SUBSYSTEM DRIVER" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This driver is really old, from a device whose manufacturer
-got bankrupted more than 15 years ago.
+On Tue, 11 May 2021 at 20:08, Jonathan Marek <jonathan@marek.ca> wrote:
+>
+> The Titan 480 camss found on SM8250 has 6 CSIPHY and 4 VFE/CSID.
+>
+> CSID is compatible with the Titan 170 CSID, but the Titan 480 CSID are
+> inside the VFE region (between the "top" and "bus" registers), so a
+> workaround is added to avoid ioremap failure.
+>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
+>  .../media/platform/qcom/camss/camss-csid.c    |  22 +-
+>  .../media/platform/qcom/camss/camss-csiphy.c  |   8 +-
+>  drivers/media/platform/qcom/camss/camss-vfe.c |   9 +-
+>  .../media/platform/qcom/camss/camss-video.c   |   3 +-
+>  drivers/media/platform/qcom/camss/camss.c     | 196 ++++++++++++++++--
+>  drivers/media/platform/qcom/camss/camss.h     |   1 +
+>  6 files changed, 217 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+> index 528674dea06c..5ba603549a4f 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csid.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csid.c
+> @@ -560,7 +560,8 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+>         } else if (camss->version == CAMSS_8x96 ||
+>                    camss->version == CAMSS_660) {
+>                 csid->ops = &csid_ops_4_7;
+> -       } else if (camss->version == CAMSS_845) {
+> +       } else if (camss->version == CAMSS_845 ||
+> +                  camss->version == CAMSS_8250) {
+>                 csid->ops = &csid_ops_170;
 
-It is also the only upstream driver relying on the DVB
-"full-featured" API.
+csid_ops_170 should probably be renamed csid_ops_gen2 for clarity.
 
-Some changes at the frontend drivers seem to have broken it
-without anybody noticing.
+>         } else {
+>                 return -EINVAL;
+> @@ -569,10 +570,21 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+>
+>         /* Memory */
+>
+> -       r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
+> -       csid->base = devm_ioremap_resource(dev, r);
+> -       if (IS_ERR(csid->base))
+> -               return PTR_ERR(csid->base);
+> +       if (camss->version == CAMSS_8250) {
+> +               /* for titan 480, CSID registers are inside the VFE region,
+> +                * between the VFE "top" and "bus" registers. this requires
+> +                * VFE to be initialized before CSID
+> +                */
+> +               if (id >= 2) /* VFE/CSID lite */
+> +                       csid->base = camss->vfe[id].base + 0x200;
+> +               else
+> +                       csid->base = camss->vfe[id].base + 0x1200;
 
-So, it sounds it is time to retire the driver for good.
+Could these 0x200 & 0x1200 be replaced with defines?
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/pci/ttpci/Kconfig               | 74 -------------------
- drivers/media/pci/ttpci/Makefile              |  9 ---
- drivers/media/pci/ttpci/budget.h              |  2 +-
- drivers/staging/media/Kconfig                 |  2 +
- drivers/staging/media/Makefile                |  1 +
- drivers/staging/media/av7110/Kconfig          | 74 +++++++++++++++++++
- drivers/staging/media/av7110/Makefile         | 20 +++++
- drivers/staging/media/av7110/TODO             |  2 +
- .../ttpci => staging/media/av7110}/av7110.c   |  0
- .../ttpci => staging/media/av7110}/av7110.h   |  0
- .../media/av7110}/av7110_av.c                 |  0
- .../media/av7110}/av7110_av.h                 |  0
- .../media/av7110}/av7110_ca.c                 |  0
- .../media/av7110}/av7110_ca.h                 |  0
- .../media/av7110}/av7110_hw.c                 |  0
- .../media/av7110}/av7110_hw.h                 |  0
- .../media/av7110}/av7110_ipack.c              |  0
- .../media/av7110}/av7110_ipack.h              |  0
- .../media/av7110}/av7110_ir.c                 |  0
- .../media/av7110}/av7110_v4l.c                |  0
- .../media/av7110}/budget-patch.c              |  0
- .../media/av7110}/dvb_filter.c                |  0
- .../media/av7110}/dvb_filter.h                |  0
- 23 files changed, 100 insertions(+), 84 deletions(-)
- create mode 100644 drivers/staging/media/av7110/Kconfig
- create mode 100644 drivers/staging/media/av7110/Makefile
- create mode 100644 drivers/staging/media/av7110/TODO
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110.h (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_av.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_av.h (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_ca.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_ca.h (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_hw.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_hw.h (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_ipack.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_ipack.h (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_ir.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/av7110_v4l.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/budget-patch.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/dvb_filter.c (100%)
- rename drivers/{media/pci/ttpci => staging/media/av7110}/dvb_filter.h (100%)
+> +       } else {
+> +               r = platform_get_resource_byname(pdev, IORESOURCE_MEM, res->reg[0]);
+> +               csid->base = devm_ioremap_resource(dev, r);
+> +               if (IS_ERR(csid->base))
+> +                       return PTR_ERR(csid->base);
+> +       }
+>
+>         /* Interrupt */
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> index f82f1e2aa688..1d10c816acf5 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> @@ -582,7 +582,8 @@ int msm_csiphy_subdev_init(struct camss *camss,
+>                 csiphy->ops = &csiphy_ops_3ph_1_0;
+>                 csiphy->formats = csiphy_formats_8x96;
+>                 csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x96);
+> -       } else if (camss->version == CAMSS_845) {
+> +       } else if (camss->version == CAMSS_845 ||
+> +                  camss->version == CAMSS_8250) {
+>                 csiphy->ops = &csiphy_ops_3ph_1_0;
+>                 csiphy->formats = csiphy_formats_sdm845;
+>                 csiphy->nformats = ARRAY_SIZE(csiphy_formats_sdm845);
+> @@ -679,7 +680,10 @@ int msm_csiphy_subdev_init(struct camss *camss,
+>
+>                 if (!strcmp(clock->name, "csiphy0_timer") ||
+>                     !strcmp(clock->name, "csiphy1_timer") ||
+> -                   !strcmp(clock->name, "csiphy2_timer"))
+> +                   !strcmp(clock->name, "csiphy2_timer") ||
+> +                   !strcmp(clock->name, "csiphy3_timer") ||
+> +                   !strcmp(clock->name, "csiphy4_timer") ||
+> +                   !strcmp(clock->name, "csiphy5_timer"))
+>                         csiphy->rate_set[i] = true;
+>
+>                 if (camss->version == CAMSS_660 &&
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+> index e7ab2c175ac9..d543048c10a8 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+> @@ -220,7 +220,8 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
+>                 }
+>         else if (vfe->camss->version == CAMSS_8x96 ||
+>                  vfe->camss->version == CAMSS_660 ||
+> -                vfe->camss->version == CAMSS_845)
+> +                vfe->camss->version == CAMSS_845 ||
+> +                vfe->camss->version == CAMSS_8250)
+>                 switch (sink_code) {
+>                 case MEDIA_BUS_FMT_YUYV8_2X8:
+>                 {
+> @@ -1294,6 +1295,9 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+>         case CAMSS_845:
+>                 vfe->ops = &vfe_ops_170;
+>                 break;
+> +       case CAMSS_8250:
+> +               vfe->ops = &vfe_ops_480;
+> +               break;
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -1405,7 +1409,8 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+>                                 l->formats = formats_rdi_8x96;
+>                                 l->nformats = ARRAY_SIZE(formats_rdi_8x96);
+>                         }
+> -               } else if (camss->version == CAMSS_845) {
+> +               } else if (camss->version == CAMSS_845 ||
+> +                          camss->version == CAMSS_8250) {
+>                         l->formats = formats_rdi_845;
+>                         l->nformats = ARRAY_SIZE(formats_rdi_845);
+>                 } else {
+> diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+> index 54e77d30d452..5dc1ddbe6d65 100644
+> --- a/drivers/media/platform/qcom/camss/camss-video.c
+> +++ b/drivers/media/platform/qcom/camss/camss-video.c
+> @@ -1011,7 +1011,8 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+>                         video->formats = formats_rdi_8x96;
+>                         video->nformats = ARRAY_SIZE(formats_rdi_8x96);
+>                 }
+> -       }  else if (video->camss->version == CAMSS_845) {
+> +       }  else if (video->camss->version == CAMSS_845 ||
+> +                   video->camss->version == CAMSS_8250) {
+>                 video->formats = formats_rdi_845;
+>                 video->nformats = ARRAY_SIZE(formats_rdi_845);
+>         } else {
+> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+> index c08d6d6f6f90..463850725f37 100644
+> --- a/drivers/media/platform/qcom/camss/camss.c
+> +++ b/drivers/media/platform/qcom/camss/camss.c
+> @@ -662,6 +662,162 @@ static const struct resources vfe_res_845[] = {
+>         }
+>  };
+>
+> +static const struct resources csiphy_res_8250[] = {
+> +       /* CSIPHY0 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy0", "csiphy0_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy0" },
+> +               .interrupt = { "csiphy0" }
+> +       },
+> +       /* CSIPHY1 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy1", "csiphy1_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy1" },
+> +               .interrupt = { "csiphy1" }
+> +       },
+> +       /* CSIPHY2 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy2", "csiphy2_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy2" },
+> +               .interrupt = { "csiphy2" }
+> +       },
+> +       /* CSIPHY3 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy3", "csiphy3_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy3" },
+> +               .interrupt = { "csiphy3" }
+> +       },
+> +       /* CSIPHY4 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy4", "csiphy4_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy4" },
+> +               .interrupt = { "csiphy4" }
+> +       },
+> +       /* CSIPHY5 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "csiphy5", "csiphy5_timer" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 300000000 } },
+> +               .reg = { "csiphy5" },
+> +               .interrupt = { "csiphy5" }
+> +       }
+> +};
+> +
+> +static const struct resources csid_res_8250[] = {
+> +       /* CSID0 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe0_csid", "vfe0_cphy_rx", "vfe0", "vfe0_areg", "vfe0_ahb" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 400000000 },
+> +                               { 350000000, 475000000, 576000000, 720000000 },
+> +                               { 100000000, 200000000, 300000000, 400000000 },
+> +                               { 0 } },
+> +               .reg = { "csid0" },
+> +               .interrupt = { "csid0" }
+> +       },
+> +       /* CSID1 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe1_csid", "vfe1_cphy_rx", "vfe1", "vfe1_areg", "vfe1_ahb" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 400000000 },
+> +                               { 350000000, 475000000, 576000000, 720000000 },
+> +                               { 100000000, 200000000, 300000000, 400000000 },
+> +                               { 0 } },
+> +               .reg = { "csid1" },
+> +               .interrupt = { "csid1" }
+> +       },
+> +       /* CSID2 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe_lite_csid", "vfe_lite_cphy_rx", "vfe_lite",  "vfe_lite_ahb" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 400000000 },
+> +                               { 400000000, 480000000 },
+> +                               { 0 } },
+> +               .reg = { "csid2" },
+> +               .interrupt = { "csid2" }
+> +       },
+> +       /* CSID3 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe_lite_csid", "vfe_lite_cphy_rx", "vfe_lite",  "vfe_lite_ahb" },
+> +               .clock_rate = { { 400000000 },
+> +                               { 400000000 },
+> +                               { 400000000, 480000000 },
+> +                               { 0 } },
+> +               .reg = { "csid3" },
+> +               .interrupt = { "csid3" }
+> +       }
+> +};
+> +
+> +static const struct resources vfe_res_8250[] = {
+> +       /* VFE0 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe0_ahb", "vfe0_areg", "vfe0", "vfe0_axi", "cam_hf_axi" },
+> +               .clock_rate = { { 0 },
+> +                               { 100000000, 200000000, 300000000, 400000000 },
+> +                               { 350000000, 475000000, 576000000, 720000000 },
+> +                               { 0 },
+> +                               { 0 } },
+> +               .reg = { "vfe0" },
+> +               .interrupt = { "vfe0" }
+> +       },
+> +       /* VFE1 */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe1_ahb", "vfe1_areg", "vfe1", "vfe1_axi", "cam_hf_axi" },
+> +               .clock_rate = { { 0 },
+> +                               { 100000000, 200000000, 300000000, 400000000 },
+> +                               { 350000000, 475000000, 576000000, 720000000 },
+> +                               { 0 },
+> +                               { 0 } },
+> +               .reg = { "vfe1" },
+> +               .interrupt = { "vfe1" }
+> +       },
+> +       /* VFE2 (lite) */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe_lite_ahb", "vfe_lite_axi", "vfe_lite", "cam_hf_axi" },
+> +               .clock_rate = { { 0 },
+> +                               { 0 },
+> +                               { 400000000, 480000000 },
+> +                               { 0 } },
+> +               .reg = { "vfe_lite0" },
+> +               .interrupt = { "vfe_lite0" }
+> +       },
+> +
+> +       /* VFE3 (lite) */
+> +       {
+> +               .regulator = { NULL },
+> +               .clock = { "vfe_lite_ahb", "vfe_lite_axi", "vfe_lite", "cam_hf_axi" },
+> +               .clock_rate = { { 0 },
+> +                               { 0 },
+> +                               { 400000000, 480000000 },
+> +                               { 0 } },
+> +               .reg = { "vfe_lite1" },
+> +               .interrupt = { "vfe_lite1" }
+> +       },
+> +};
+> +
+>  /*
+>   * camss_add_clock_margin - Add margin to clock frequency rate
+>   * @rate: Clock frequency rate
+> @@ -945,6 +1101,12 @@ static int camss_init_subdevices(struct camss *camss)
+>                 /* Titan VFEs don't have an ISPIF  */
+>                 ispif_res = NULL;
+>                 vfe_res = vfe_res_845;
+> +       } else if (camss->version == CAMSS_8250) {
+> +               csiphy_res = csiphy_res_8250;
+> +               csid_res = csid_res_8250;
+> +               /* Titan VFEs don't have an ISPIF  */
+> +               ispif_res = NULL;
+> +               vfe_res = vfe_res_8250;
+>         } else {
+>                 return -EINVAL;
+>         }
+> @@ -960,6 +1122,17 @@ static int camss_init_subdevices(struct camss *camss)
+>                 }
+>         }
+>
+> +       /* note: SM8250 requires VFE to be initialized before CSID */
+> +       for (i = 0; i < camss->vfe_num; i++) {
+> +               ret = msm_vfe_subdev_init(camss, &camss->vfe[i],
+> +                                         &vfe_res[i], i);
+> +               if (ret < 0) {
+> +                       dev_err(camss->dev,
+> +                               "Fail to init vfe%d sub-device: %d\n", i, ret);
+> +                       return ret;
+> +               }
+> +       }
+> +
+>         for (i = 0; i < camss->csid_num; i++) {
+>                 ret = msm_csid_subdev_init(camss, &camss->csid[i],
+>                                            &csid_res[i], i);
+> @@ -978,16 +1151,6 @@ static int camss_init_subdevices(struct camss *camss)
+>                 return ret;
+>         }
+>
+> -       for (i = 0; i < camss->vfe_num; i++) {
+> -               ret = msm_vfe_subdev_init(camss, &camss->vfe[i],
+> -                                         &vfe_res[i], i);
+> -               if (ret < 0) {
+> -                       dev_err(camss->dev,
+> -                               "Fail to init vfe%d sub-device: %d\n", i, ret);
+> -                       return ret;
+> -               }
+> -       }
+> -
+>         return 0;
+>  }
+>
+> @@ -1250,7 +1413,8 @@ static int camss_configure_pd(struct camss *camss)
+>         if (camss->version == CAMSS_8x96 ||
+>             camss->version == CAMSS_660)
+>                 nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
+> -       else if (camss->version == CAMSS_845)
+> +       else if (camss->version == CAMSS_845 ||
+> +                camss->version == CAMSS_8250)
+>                 nbr_pm_domains = PM_DOMAIN_GEN2_COUNT;
+>
+>         for (i = 0; i < nbr_pm_domains; i++) {
+> @@ -1326,6 +1490,12 @@ static int camss_probe(struct platform_device *pdev)
+>                 camss->csiphy_num = 4;
+>                 camss->csid_num = 3;
+>                 camss->vfe_num = 3;
+> +       } else if (of_device_is_compatible(dev->of_node,
+> +                                          "qcom,sm8250-camss")) {
+> +               camss->version = CAMSS_8250;
+> +               camss->csiphy_num = 6;
+> +               camss->csid_num = 4;
+> +               camss->vfe_num = 4;
+>         } else {
+>                 ret = -EINVAL;
+>                 goto err_free;
+> @@ -1457,7 +1627,8 @@ void camss_delete(struct camss *camss)
+>         if (camss->version == CAMSS_8x96 ||
+>             camss->version == CAMSS_660)
+>                 nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
+> -       else if (camss->version == CAMSS_845)
+> +       else if (camss->version == CAMSS_845 ||
+> +                camss->version == CAMSS_8250)
+>                 nbr_pm_domains = PM_DOMAIN_GEN2_COUNT;
+>
+>         for (i = 0; i < nbr_pm_domains; i++) {
+> @@ -1493,6 +1664,7 @@ static const struct of_device_id camss_dt_match[] = {
+>         { .compatible = "qcom,msm8996-camss" },
+>         { .compatible = "qcom,sdm660-camss" },
+>         { .compatible = "qcom,sdm845-camss" },
+> +       { .compatible = "qcom,sm8250-camss" },
+>         { }
+>  };
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+> index dc8b4154f92b..377e2474a485 100644
+> --- a/drivers/media/platform/qcom/camss/camss.h
+> +++ b/drivers/media/platform/qcom/camss/camss.h
+> @@ -69,6 +69,7 @@ enum camss_version {
+>         CAMSS_8x96,
+>         CAMSS_660,
+>         CAMSS_845,
+> +       CAMSS_8250,
+>  };
+>
+>  struct camss {
 
-diff --git a/drivers/media/pci/ttpci/Kconfig b/drivers/media/pci/ttpci/Kconfig
-index 8a362ee9105f..65a6832a6b96 100644
---- a/drivers/media/pci/ttpci/Kconfig
-+++ b/drivers/media/pci/ttpci/Kconfig
-@@ -1,56 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
--config DVB_AV7110_IR
--	bool
--	depends on RC_CORE=y || RC_CORE = DVB_AV7110
--	default DVB_AV7110
--
--config DVB_AV7110
--	tristate "AV7110 cards"
--	depends on DVB_CORE && PCI && I2C
--	select TTPCI_EEPROM
--	select VIDEO_SAA7146_VV
--	depends on VIDEO_DEV	# dependencies of VIDEO_SAA7146_VV
--	select DVB_VES1820 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_SP8870 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0297 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_L64781 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
--	help
--	  Support for SAA7146 and AV7110 based DVB cards as produced
--	  by Fujitsu-Siemens, Technotrend, Hauppauge and others.
--
--	  This driver only supports the fullfeatured cards with
--	  onboard MPEG2 decoder.
--
--	  This driver needs an external firmware. Please use the script
--	  "<kerneldir>/scripts/get_dvb_firmware av7110" to
--	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
--	  or /lib/firmware (depending on configuration of firmware hotplug).
--
--	  Alternatively, you can download the file and use the kernel's
--	  EXTRA_FIRMWARE configuration option to build it into your
--	  kernel image by adding the filename to the EXTRA_FIRMWARE
--	  configuration option string.
--
--	  Say Y if you own such a card and want to use it.
--
--config DVB_AV7110_OSD
--	bool "AV7110 OSD support"
--	depends on DVB_AV7110
--	default y if DVB_AV7110=y || DVB_AV7110=m
--	help
--	  The AV7110 firmware provides some code to generate an OnScreenDisplay
--	  on the video output. This is kind of nonstandard and not guaranteed to
--	  be maintained.
--
--	  Anyway, some popular DVB software like VDR uses this OSD to render
--	  its menus, so say Y if you want to use this software.
--
--	  All other people say N.
--
- config DVB_BUDGET_CORE
- 	tristate "SAA7146 DVB cards (aka Budget, Nova-PCI)"
- 	depends on DVB_CORE && PCI && I2C
-@@ -136,25 +84,3 @@ config DVB_BUDGET_AV
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called budget-av.
--
--config DVB_BUDGET_PATCH
--	tristate "AV7110 cards with Budget Patch"
--	depends on DVB_BUDGET_CORE && I2C
--	depends on DVB_AV7110
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
--	help
--	  Support for Budget Patch (full TS) modification on
--	  SAA7146+AV7110 based cards (DVB-S cards). This
--	  driver doesn't use onboard MPEG2 decoder. The
--	  card is driven in Budget-only mode. Card is
--	  required to have loaded firmware to tune properly.
--	  Firmware can be loaded by insertion and removal of
--	  standard AV7110 driver prior to loading this
--	  driver.
--
--	  Say Y if you own such a card and want to use it.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called budget-patch.
-diff --git a/drivers/media/pci/ttpci/Makefile b/drivers/media/pci/ttpci/Makefile
-index 61001fa5a93e..b0708f6e40cc 100644
---- a/drivers/media/pci/ttpci/Makefile
-+++ b/drivers/media/pci/ttpci/Makefile
-@@ -1,21 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- # Makefile for the kernel SAA7146 FULL TS DVB device driver
--# and the AV7110 DVB device driver
- #
- 
--dvb-ttpci-objs := av7110_hw.o av7110_v4l.o av7110_av.o av7110_ca.o av7110.o av7110_ipack.o dvb_filter.o
--
--ifdef CONFIG_DVB_AV7110_IR
--dvb-ttpci-objs += av7110_ir.o
--endif
--
- obj-$(CONFIG_DVB_BUDGET_CORE) += budget-core.o
- obj-$(CONFIG_DVB_BUDGET) += budget.o
- obj-$(CONFIG_DVB_BUDGET_AV) += budget-av.o
- obj-$(CONFIG_DVB_BUDGET_CI) += budget-ci.o
--obj-$(CONFIG_DVB_BUDGET_PATCH) += budget-patch.o
--obj-$(CONFIG_DVB_AV7110) += dvb-ttpci.o
- 
- ccflags-y += -I $(srctree)/drivers/media/dvb-frontends/
- ccflags-y += -I $(srctree)/drivers/media/tuners
-diff --git a/drivers/media/pci/ttpci/budget.h b/drivers/media/pci/ttpci/budget.h
-index a7463daf39f1..bd87432e6cde 100644
---- a/drivers/media/pci/ttpci/budget.h
-+++ b/drivers/media/pci/ttpci/budget.h
-@@ -8,7 +8,6 @@
- #include <media/demux.h>
- #include <media/dvb_demux.h>
- #include <media/dmxdev.h>
--#include "dvb_filter.h"
- #include <media/dvb_net.h>
- 
- #include <linux/module.h>
-@@ -28,6 +27,7 @@ extern int budget_debug;
- 		       __func__, ##arg);				\
- } while (0)
- 
-+#define TS_SIZE        188
- 
- struct budget_info {
- 	char *name;
-diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index ca59986b20f8..e3aaae920847 100644
---- a/drivers/staging/media/Kconfig
-+++ b/drivers/staging/media/Kconfig
-@@ -42,4 +42,6 @@ source "drivers/staging/media/tegra-video/Kconfig"
- 
- source "drivers/staging/media/ipu3/Kconfig"
- 
-+source "drivers/staging/media/av7110/Kconfig"
-+
- endif
-diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 716929a1a313..5b5afc5b03a0 100644
---- a/drivers/staging/media/Makefile
-+++ b/drivers/staging/media/Makefile
-@@ -10,3 +10,4 @@ obj-$(CONFIG_TEGRA_VDE)		+= tegra-vde/
- obj-$(CONFIG_VIDEO_HANTRO)	+= hantro/
- obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
- obj-$(CONFIG_VIDEO_ZORAN)	+= zoran/
-+obj-$(CONFIG_DVB_AV7110)	+= av7110/
-diff --git a/drivers/staging/media/av7110/Kconfig b/drivers/staging/media/av7110/Kconfig
-new file mode 100644
-index 000000000000..e19d24bf2eb4
---- /dev/null
-+++ b/drivers/staging/media/av7110/Kconfig
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config DVB_AV7110_IR
-+	bool
-+	depends on RC_CORE=y || RC_CORE = DVB_AV7110
-+	default DVB_AV7110
-+
-+config DVB_AV7110
-+	tristate "AV7110 cards"
-+	depends on DVB_CORE && PCI && I2C
-+	select TTPCI_EEPROM
-+	select VIDEO_SAA7146_VV
-+	depends on VIDEO_DEV	# dependencies of VIDEO_SAA7146_VV
-+	select DVB_VES1820 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_SP8870 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_STV0297 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_L64781 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
-+	help
-+	  Support for SAA7146 and AV7110 based DVB cards as produced
-+	  by Fujitsu-Siemens, Technotrend, Hauppauge and others.
-+
-+	  This driver only supports the fullfeatured cards with
-+	  onboard MPEG2 decoder.
-+
-+	  This driver needs an external firmware. Please use the script
-+	  "<kerneldir>/scripts/get_dvb_firmware av7110" to
-+	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
-+	  or /lib/firmware (depending on configuration of firmware hotplug).
-+
-+	  Alternatively, you can download the file and use the kernel's
-+	  EXTRA_FIRMWARE configuration option to build it into your
-+	  kernel image by adding the filename to the EXTRA_FIRMWARE
-+	  configuration option string.
-+
-+	  Say Y if you own such a card and want to use it.
-+
-+config DVB_AV7110_OSD
-+	bool "AV7110 OSD support"
-+	depends on DVB_AV7110
-+	default y if DVB_AV7110=y || DVB_AV7110=m
-+	help
-+	  The AV7110 firmware provides some code to generate an OnScreenDisplay
-+	  on the video output. This is kind of nonstandard and not guaranteed to
-+	  be maintained.
-+
-+	  Anyway, some popular DVB software like VDR uses this OSD to render
-+	  its menus, so say Y if you want to use this software.
-+
-+	  All other people say N.
-+
-+config DVB_BUDGET_PATCH
-+	tristate "AV7110 cards with Budget Patch"
-+	depends on DVB_BUDGET_CORE && I2C
-+	depends on DVB_AV7110
-+	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
-+	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
-+	help
-+	  Support for Budget Patch (full TS) modification on
-+	  SAA7146+AV7110 based cards (DVB-S cards). This
-+	  driver doesn't use onboard MPEG2 decoder. The
-+	  card is driven in Budget-only mode. Card is
-+	  required to have loaded firmware to tune properly.
-+	  Firmware can be loaded by insertion and removal of
-+	  standard AV7110 driver prior to loading this
-+	  driver.
-+
-+	  Say Y if you own such a card and want to use it.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called budget-patch.
-diff --git a/drivers/staging/media/av7110/Makefile b/drivers/staging/media/av7110/Makefile
-new file mode 100644
-index 000000000000..dcabecf1abde
---- /dev/null
-+++ b/drivers/staging/media/av7110/Makefile
-@@ -0,0 +1,20 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for the AV7110 DVB device driver
-+#
-+
-+dvb-ttpci-objs := av7110_hw.o av7110_v4l.o av7110_av.o av7110_ca.o av7110.o \
-+		  av7110_ipack.o dvb_filter.o
-+
-+ifdef CONFIG_DVB_AV7110_IR
-+dvb-ttpci-objs += av7110_ir.o
-+endif
-+
-+obj-$(CONFIG_DVB_BUDGET_PATCH) += budget-patch.o
-+
-+obj-$(CONFIG_DVB_AV7110) += dvb-ttpci.o
-+
-+ccflags-y += -I $(srctree)/drivers/media/dvb-frontends
-+ccflags-y += -I $(srctree)/drivers/media/tuners
-+ccflags-y += -I $(srctree)/drivers/media/pci/ttpci
-+ccflags-y += -I $(srctree)/drivers/media/common
-diff --git a/drivers/staging/media/av7110/TODO b/drivers/staging/media/av7110/TODO
-new file mode 100644
-index 000000000000..84a16d077318
---- /dev/null
-+++ b/drivers/staging/media/av7110/TODO
-@@ -0,0 +1,2 @@
-+- Thid driver is too old and relies on a different API.
-+  Drop it from Kernel on a couple of versions.
-diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/staging/media/av7110/av7110.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110.c
-rename to drivers/staging/media/av7110/av7110.c
-diff --git a/drivers/media/pci/ttpci/av7110.h b/drivers/staging/media/av7110/av7110.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110.h
-rename to drivers/staging/media/av7110/av7110.h
-diff --git a/drivers/media/pci/ttpci/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_av.c
-rename to drivers/staging/media/av7110/av7110_av.c
-diff --git a/drivers/media/pci/ttpci/av7110_av.h b/drivers/staging/media/av7110/av7110_av.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_av.h
-rename to drivers/staging/media/av7110/av7110_av.h
-diff --git a/drivers/media/pci/ttpci/av7110_ca.c b/drivers/staging/media/av7110/av7110_ca.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_ca.c
-rename to drivers/staging/media/av7110/av7110_ca.c
-diff --git a/drivers/media/pci/ttpci/av7110_ca.h b/drivers/staging/media/av7110/av7110_ca.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_ca.h
-rename to drivers/staging/media/av7110/av7110_ca.h
-diff --git a/drivers/media/pci/ttpci/av7110_hw.c b/drivers/staging/media/av7110/av7110_hw.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_hw.c
-rename to drivers/staging/media/av7110/av7110_hw.c
-diff --git a/drivers/media/pci/ttpci/av7110_hw.h b/drivers/staging/media/av7110/av7110_hw.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_hw.h
-rename to drivers/staging/media/av7110/av7110_hw.h
-diff --git a/drivers/media/pci/ttpci/av7110_ipack.c b/drivers/staging/media/av7110/av7110_ipack.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_ipack.c
-rename to drivers/staging/media/av7110/av7110_ipack.c
-diff --git a/drivers/media/pci/ttpci/av7110_ipack.h b/drivers/staging/media/av7110/av7110_ipack.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_ipack.h
-rename to drivers/staging/media/av7110/av7110_ipack.h
-diff --git a/drivers/media/pci/ttpci/av7110_ir.c b/drivers/staging/media/av7110/av7110_ir.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_ir.c
-rename to drivers/staging/media/av7110/av7110_ir.c
-diff --git a/drivers/media/pci/ttpci/av7110_v4l.c b/drivers/staging/media/av7110/av7110_v4l.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/av7110_v4l.c
-rename to drivers/staging/media/av7110/av7110_v4l.c
-diff --git a/drivers/media/pci/ttpci/budget-patch.c b/drivers/staging/media/av7110/budget-patch.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/budget-patch.c
-rename to drivers/staging/media/av7110/budget-patch.c
-diff --git a/drivers/media/pci/ttpci/dvb_filter.c b/drivers/staging/media/av7110/dvb_filter.c
-similarity index 100%
-rename from drivers/media/pci/ttpci/dvb_filter.c
-rename to drivers/staging/media/av7110/dvb_filter.c
-diff --git a/drivers/media/pci/ttpci/dvb_filter.h b/drivers/staging/media/av7110/dvb_filter.h
-similarity index 100%
-rename from drivers/media/pci/ttpci/dvb_filter.h
-rename to drivers/staging/media/av7110/dvb_filter.h
--- 
-2.31.1
+With the above issues fixed, feel free to add my r-b.
 
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
