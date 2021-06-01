@@ -2,246 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50593C4708F
-	for <linux-media@archiver.kernel.org>; Tue,  1 Jun 2021 08:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F877C47092
+	for <linux-media@archiver.kernel.org>; Tue,  1 Jun 2021 09:11:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DFDC613AF
-	for <linux-media@archiver.kernel.org>; Tue,  1 Jun 2021 08:55:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D1ED613AD
+	for <linux-media@archiver.kernel.org>; Tue,  1 Jun 2021 09:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbhFAI5f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Jun 2021 04:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbhFAI5f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Jun 2021 04:57:35 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1666C061574
-        for <linux-media@vger.kernel.org>; Tue,  1 Jun 2021 01:55:53 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id j10so16314275edw.8
-        for <linux-media@vger.kernel.org>; Tue, 01 Jun 2021 01:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ki1m+phqqeEKMm1Y4FBuUTps1qqhBduvhtHEsbv1LNk=;
-        b=gVHP+iVkVE0dsRQgwkY8e1vEleVxDXKMH2ooJn0cjVk37p2rPcdS75EF/5UQNotqw2
-         wBlAF9I6LXaYe6wvYob55OyeKzSa9JrGQ3PEfLh9El6YU8lqX1J9TZhVezrIc0r5wo4M
-         VPWf/XRvi94ZTVyLWE6rtJbEMDao1rIqQa62Ld0ikX/LX8OttXYStEYPbXrT+OTuOZF6
-         lHB8BLwWTGBE6s2Vp7TI7HJzvt5PKO98hQf6zn96OYaZaoTbtyFRUxgiJTEjVEOACzoP
-         9zAmn9nnHL5SXM6yQ7TeJz8iyTgj4+oCKgDziQUzFyV2FStcD5UTDXl910NK07+XX1Gi
-         GEDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ki1m+phqqeEKMm1Y4FBuUTps1qqhBduvhtHEsbv1LNk=;
-        b=hXhkh0cAJ++Pxsd2vWXhDSJkia6kPcz5NGrYdgnFVp2LNCSlKgMlVA6ZjL63bfFQS5
-         XPkv1AWi4NScf6jsv8Jce7oLZDaIw/bpZQtc0V70PQv8mNzLE8hLE5reVAEXUGpdp7Ww
-         jdVPUlUuzrOKmnm1muALQ6rbbdwnLaaItvQTtgwNsJzTvKOSYPWZBnv6bjeDkhhfzupt
-         XD5OiUS05WFQzOyVSdET++YkiiQBX2z85qjaQs5eImUQ5eIuiW/8GTYMjn3UCY8NboYh
-         7LlJHHVH9HD8zaMAKVa4Pq2KwprRySulMEWIiTBEjEHo79IoxuPheE6AaLpg5bD/RbYf
-         6DAg==
-X-Gm-Message-State: AOAM533PlI6F/xzHXzgViYn8NaQzb41FoWLNV5QfX+1c8aEeocaDyKQC
-        aGYeYSi+AaUimckq++WRVCIOdQ==
-X-Google-Smtp-Source: ABdhPJy0RXo/zlgAv9qpM1Lr6nZNz/RzUBY/p2OdPdpz8RLu++tUZdIuaNMmVap7sWf7w9OzZ+If9g==
-X-Received: by 2002:aa7:c545:: with SMTP id s5mr17668220edr.113.1622537752505;
-        Tue, 01 Jun 2021 01:55:52 -0700 (PDT)
-Received: from [192.168.1.12] (hst-221-74.medicom.bg. [84.238.221.74])
-        by smtp.googlemail.com with ESMTPSA id f3sm3735863eds.59.2021.06.01.01.55.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Jun 2021 01:55:52 -0700 (PDT)
-Subject: Re: [PATCH] venus: venc: add support for
- V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control
-To:     Mansur Alisha Shaik <mansur@codeaurora.org>,
-        linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, dikshita@codeaurora.org
-References: <1622438514-16657-1-git-send-email-mansur@codeaurora.org>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <f49ab90e-2e5a-8a61-ba6f-30bdb71818cf@linaro.org>
-Date:   Tue, 1 Jun 2021 11:55:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233638AbhFAJM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Jun 2021 05:12:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39852 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233627AbhFAJMu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Jun 2021 05:12:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 78FFD613AB;
+        Tue,  1 Jun 2021 09:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622538668;
+        bh=7Bq5BexlVK9T8fkTBp8wKN4Dq7W5jstexvuIXnyTpQc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oOun13lYV2AnXJQuzudIT4j2IEdN/wzH067SMKvSOHx6ui0cxGZaPk+IfqB733x30
+         PaC75lgP8/4j1Hhui15awCZ0fDdmgoCrSlTUj3KOk0nWigderTQFnvQMqmheaafjWn
+         Hw5t1NQ16+4hKhA2NC22Mstp0f8uuob+JD9e+DcpJfAgSy4gRpiu9RorMJOsUZ16wL
+         ePaint4rEvudwMxHrgMEtbRHUgXHTSLmE3OsIrroP3sUbysnsJFdscSTDKou0jiD9/
+         VQIBNyeIE65SCi7H71E6rn41ZD81v8ZBDDShlzYvuJzfGRf4ChH5zXxVcVtNSkHqjr
+         XRuJTifzeUbmA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lo0QU-000vRq-2E; Tue, 01 Jun 2021 11:11:06 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alaa Emad <alaaemadhossney.ae@gmail.com>,
+        Brad Love <brad@nextdimension.cc>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Plotnikov <wgh@torlan.ru>, Sean Young <sean@mess.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH v2 3/3] media: sp8870: move it to staging
+Date:   Tue,  1 Jun 2021 11:11:04 +0200
+Message-Id: <2113b7c773a5fe55d5d04082ee3c6873a29f71e9.1622537534.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1622537534.git.mchehab+huawei@kernel.org>
+References: <cover.1622537534.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1622438514-16657-1-git-send-email-mansur@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This driver is used only by av7110, which is preparing for
+its retirement. So, move this ancillary driver to stay together
+with av7110.
 
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/dvb-frontends/Kconfig           | 12 -----------
+ drivers/media/dvb-frontends/Makefile          |  1 -
+ drivers/staging/media/av7110/Kconfig          | 20 +++++++++++++++++++
+ drivers/staging/media/av7110/Makefile         |  2 ++
+ .../media/av7110}/sp8870.c                    |  0
+ .../media/av7110}/sp8870.h                    |  0
+ 6 files changed, 22 insertions(+), 13 deletions(-)
+ rename drivers/{media/dvb-frontends => staging/media/av7110}/sp8870.c (100%)
+ rename drivers/{media/dvb-frontends => staging/media/av7110}/sp8870.h (100%)
 
-On 5/31/21 8:21 AM, Mansur Alisha Shaik wrote:
-> Add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control for
-> H264 high profile and constrained high profile.
-> 
-> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
-> ---
->  drivers/media/platform/qcom/venus/core.h       |  1 +
->  drivers/media/platform/qcom/venus/hfi_cmds.c   | 10 ++++++++++
->  drivers/media/platform/qcom/venus/hfi_helper.h |  5 +++++
->  drivers/media/platform/qcom/venus/venc.c       | 11 +++++++++++
->  drivers/media/platform/qcom/venus/venc_ctrls.c | 12 +++++++++++-
->  5 files changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-> index 745f226..103fbd8 100644
-> --- a/drivers/media/platform/qcom/venus/core.h
-> +++ b/drivers/media/platform/qcom/venus/core.h
-> @@ -235,6 +235,7 @@ struct venc_controls {
->  	u32 h264_loop_filter_mode;
->  	s32 h264_loop_filter_alpha;
->  	s32 h264_loop_filter_beta;
-> +	u32 h264_8x8_transform;
->  
->  	u32 hevc_i_qp;
->  	u32 hevc_p_qp;
-> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> index 11a8347..61d04a5 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> @@ -1178,6 +1178,7 @@ pkt_session_set_property_4xx(struct hfi_session_set_property_pkt *pkt,
->  {
->  	void *prop_data;
->  
-> +
-
-Uneeded new blank line.
-
->  	if (!pkt || !cookie || !pdata)
->  		return -EINVAL;
->  
-> @@ -1227,6 +1228,15 @@ pkt_session_set_property_4xx(struct hfi_session_set_property_pkt *pkt,
->  		break;
->  	}
->  
-> +	case HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8: {
-> +		struct hfi_h264_8x8x_transform *in = pdata, *tm = prop_data;
-
-s/hfi_h264_8x8x_transform/hfi_h264_8x8_transform
-
-> +
-> +		tm->enable_type = in->enable_type;
-> +		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*tm);
-> +		break;
-> +
-> +	}
-> +
->  	case HFI_PROPERTY_CONFIG_VENC_MAX_BITRATE:
->  	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER:
->  	case HFI_PROPERTY_PARAM_BUFFER_ALLOC_MODE:
-> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-> index 63cd347..81d0536 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
-> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-> @@ -510,6 +510,7 @@
->  #define HFI_PROPERTY_PARAM_VENC_MAX_NUM_B_FRAMES		0x2005020
->  #define HFI_PROPERTY_PARAM_VENC_H264_VUI_BITSTREAM_RESTRC	0x2005021
->  #define HFI_PROPERTY_PARAM_VENC_PRESERVE_TEXT_QUALITY		0x2005023
-> +#define HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8			0x2005025
->  #define HFI_PROPERTY_PARAM_VENC_HIER_P_MAX_NUM_ENH_LAYER	0x2005026
->  #define HFI_PROPERTY_PARAM_VENC_DISABLE_RC_TIMESTAMP		0x2005027
->  #define HFI_PROPERTY_PARAM_VENC_INITIAL_QP			0x2005028
-> @@ -565,6 +566,10 @@ struct hfi_bitrate {
->  	u32 layer_id;
->  };
->  
-> +struct hfi_h264_8x8x_transform {
-
-s/hfi_h264_8x8x_transform/hfi_h264_8x8_transform
-
-> +	u32 enable_type;
-> +};
-> +
->  #define HFI_CAPABILITY_FRAME_WIDTH			0x01
->  #define HFI_CAPABILITY_FRAME_HEIGHT			0x02
->  #define HFI_CAPABILITY_MBS_PER_FRAME			0x03
-> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-> index 8dd49d4..4ecf331 100644
-> --- a/drivers/media/platform/qcom/venus/venc.c
-> +++ b/drivers/media/platform/qcom/venus/venc.c
-> @@ -567,6 +567,7 @@ static int venc_set_properties(struct venus_inst *inst)
->  		struct hfi_h264_vui_timing_info info;
->  		struct hfi_h264_entropy_control entropy;
->  		struct hfi_h264_db_control deblock;
-> +		struct hfi_h264_8x8x_transform h264_transform;
-
-ditto
-
->  
->  		ptype = HFI_PROPERTY_PARAM_VENC_H264_VUI_TIMING_INFO;
->  		info.enable = 1;
-> @@ -597,6 +598,16 @@ static int venc_set_properties(struct venus_inst *inst)
->  		ret = hfi_session_set_property(inst, ptype, &deblock);
->  		if (ret)
->  			return ret;
-> +
-> +		ptype = HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8;
-> +		if (ctr->profile.h264 == HFI_H264_PROFILE_HIGH ||
-> +			ctr->profile.h264 == HFI_H264_PROFILE_CONSTRAINED_HIGH)
-
-checkpatch.pl --strict should complain about this ctr->profile.h264
-alignment.
-
-> +			h264_transform.enable_type = ctr->h264_8x8_transform;
-> +
-> +		ret = hfi_session_set_property(inst, ptype, &h264_transform);
-> +		if (ret)
-> +			return ret;
-> +
->  	}
->  
->  	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_H264 ||
-> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> index 637c92f..e3ef611 100644
-> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> @@ -319,6 +319,13 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
->  	case V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY:
->  		ctr->mastering = *ctrl->p_new.p_hdr10_mastering;
->  		break;
-> +	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
-> +		if (ctr->profile.h264 != HFI_H264_PROFILE_HIGH ||
-> +			ctr->profile.h264 != HFI_H264_PROFILE_CONSTRAINED_HIGH)
-
-ditto
-
-> +			return -EINVAL;
-> +
-> +		ctr->h264_8x8_transform = ctrl->val;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -334,7 +341,7 @@ int venc_ctrl_init(struct venus_inst *inst)
->  {
->  	int ret;
->  
-> -	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 57);
-> +	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
->  	if (ret)
->  		return ret;
->  
-> @@ -438,6 +445,9 @@ int venc_ctrl_init(struct venus_inst *inst)
->  			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
->  
->  	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-> +		V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 0);
-> +
-> +	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
->  			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
->  
->  	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-> 
-
+diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
+index 3468b07b62fe..2c1ed98d43c5 100644
+--- a/drivers/media/dvb-frontends/Kconfig
++++ b/drivers/media/dvb-frontends/Kconfig
+@@ -323,18 +323,6 @@ config DVB_TDA10071
+ comment "DVB-T (terrestrial) frontends"
+ 	depends on DVB_CORE
+ 
+-config DVB_SP8870
+-	tristate "Spase sp8870 based"
+-	depends on DVB_CORE && I2C
+-	default m if !MEDIA_SUBDRV_AUTOSELECT
+-	help
+-	  A DVB-T tuner module. Say Y when you want to support this frontend.
+-
+-	  This driver needs external firmware. Please use the command
+-	  "<kerneldir>/scripts/get_dvb_firmware sp8870" to
+-	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
+-	  or /lib/firmware (depending on configuration of firmware hotplug).
+-
+ config DVB_SP887X
+ 	tristate "Spase sp887x based"
+ 	depends on DVB_CORE && I2C
+diff --git a/drivers/media/dvb-frontends/Makefile b/drivers/media/dvb-frontends/Makefile
+index b9f47d68e14e..d32e4c0be576 100644
+--- a/drivers/media/dvb-frontends/Makefile
++++ b/drivers/media/dvb-frontends/Makefile
+@@ -20,7 +20,6 @@ obj-$(CONFIG_DVB_PLL) += dvb-pll.o
+ obj-$(CONFIG_DVB_STV0299) += stv0299.o
+ obj-$(CONFIG_DVB_STB0899) += stb0899.o
+ obj-$(CONFIG_DVB_STB6100) += stb6100.o
+-obj-$(CONFIG_DVB_SP8870) += sp8870.o
+ obj-$(CONFIG_DVB_CX22700) += cx22700.o
+ obj-$(CONFIG_DVB_S5H1432) += s5h1432.o
+ obj-$(CONFIG_DVB_CX24110) += cx24110.o
+diff --git a/drivers/staging/media/av7110/Kconfig b/drivers/staging/media/av7110/Kconfig
+index e19d24bf2eb4..9faf9d2d4001 100644
+--- a/drivers/staging/media/av7110/Kconfig
++++ b/drivers/staging/media/av7110/Kconfig
+@@ -72,3 +72,23 @@ config DVB_BUDGET_PATCH
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called budget-patch.
++
++if DVB_AV7110
++
++# Frontend driver that it is used only by AV7110 driver
++# While technically independent, it doesn't make sense to keep
++# it if we drop support for AV7110, as no other driver will use it.
++
++config DVB_SP8870
++	tristate "Spase sp8870 based"
++	depends on DVB_CORE && I2C
++	default m if !MEDIA_SUBDRV_AUTOSELECT
++	help
++	  A DVB-T tuner module. Say Y when you want to support this frontend.
++
++	  This driver needs external firmware. Please use the command
++	  "<kerneldir>/scripts/get_dvb_firmware sp8870" to
++	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
++	  or /lib/firmware (depending on configuration of firmware hotplug).
++
++endif
+diff --git a/drivers/staging/media/av7110/Makefile b/drivers/staging/media/av7110/Makefile
+index dcabecf1abde..307b267598ea 100644
+--- a/drivers/staging/media/av7110/Makefile
++++ b/drivers/staging/media/av7110/Makefile
+@@ -14,6 +14,8 @@ obj-$(CONFIG_DVB_BUDGET_PATCH) += budget-patch.o
+ 
+ obj-$(CONFIG_DVB_AV7110) += dvb-ttpci.o
+ 
++obj-$(CONFIG_DVB_SP8870) += sp8870.o
++
+ ccflags-y += -I $(srctree)/drivers/media/dvb-frontends
+ ccflags-y += -I $(srctree)/drivers/media/tuners
+ ccflags-y += -I $(srctree)/drivers/media/pci/ttpci
+diff --git a/drivers/media/dvb-frontends/sp8870.c b/drivers/staging/media/av7110/sp8870.c
+similarity index 100%
+rename from drivers/media/dvb-frontends/sp8870.c
+rename to drivers/staging/media/av7110/sp8870.c
+diff --git a/drivers/media/dvb-frontends/sp8870.h b/drivers/staging/media/av7110/sp8870.h
+similarity index 100%
+rename from drivers/media/dvb-frontends/sp8870.h
+rename to drivers/staging/media/av7110/sp8870.h
 -- 
-regards,
-Stan
+2.31.1
+
