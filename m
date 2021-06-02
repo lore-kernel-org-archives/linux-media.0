@@ -2,102 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF8B2C47080
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 01:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6724C4708F
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 01:57:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0E86613CD
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 01:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FBAD6101C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 01:57:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbhFBBlB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Jun 2021 21:41:01 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2940 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbhFBBlB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Jun 2021 21:41:01 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Fvs7S1CN6z6917;
-        Wed,  2 Jun 2021 09:36:20 +0800 (CST)
-Received: from dggpemm000001.china.huawei.com (7.185.36.245) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 2 Jun 2021 09:39:17 +0800
-Received: from [10.174.178.95] (10.174.178.95) by
- dggpemm000001.china.huawei.com (7.185.36.245) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 2 Jun 2021 09:39:17 +0800
-Subject: Re: [PATCH -next] media: rc: Fix a typo in lirc_ioctl
-To:     Sean Young <sean@mess.org>
-References: <20210601100235.69935-1-tongtiangen@huawei.com>
- <20210601102506.GA13203@gofer.mess.org>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   tongtiangen <tongtiangen@huawei.com>
-Message-ID: <8a18bc10-8e6d-3cb8-5551-899cc20d2b1f@huawei.com>
-Date:   Wed, 2 Jun 2021 09:39:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        id S230203AbhFBB7a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Jun 2021 21:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229635AbhFBB73 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Jun 2021 21:59:29 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91403C061574;
+        Tue,  1 Jun 2021 18:57:46 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id w127so1228598oig.12;
+        Tue, 01 Jun 2021 18:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SU3VNhIHP4qFfMS6BHdB+T/4wdfQUGXE54wCPeu58gQ=;
+        b=QQO75cNDTpDKr0tOdLOk5vG9ysCKgZa/phRsAdD89jlR+TT9Wjgl3mHuc1yXOnZu9L
+         xsRhHTI9U8g5BYgBihgDXw6SikyKy9uI+vcBR/0GRLeuZPZPL/sZ+Q8NyhCrFi6h/8Rq
+         ZEOkfNeRAWeAfwfI/4mLVNOdfpqIvjsk/+BgiSUjprCSv3xhbHyQZJvd23gxCfFk6QKD
+         QOImaejnjZGYi3c+IWhtKD14pHWKC11iaZ1fLPcXIYgwoFVMWYOv7mN3EYxOAP7W4T9/
+         yHHTxTAYdLhrWVepaPX/WcM0IxKK2z1R8oLv3rcFrSmis3GkxABc1obOY4Yh0u0nmFw4
+         Ckkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SU3VNhIHP4qFfMS6BHdB+T/4wdfQUGXE54wCPeu58gQ=;
+        b=qUeuVpZFppJmDFsyW5XS1qHCIl8KNtrxcDAAiHnjkGtZdQY4dz5vB4FDbEWcpRVMvZ
+         IwThj+felhl5bcvA9vmoP+j6fpYPI2lbH1SEEM/E+S5/CJ2h7q1KHXWEfKuSCmRCMdGS
+         cZWNO/0PnYJIs2bu1tjy3Wi8UrHMSMqHQjpWsmZ8a1y0q8LQivyXYjcbMEUAy3/lwz3c
+         M7A0jKPpEC/XkZ6yWOb0BW2WiAY8VFXQoKHiGW7xzwYgvq6q4204nsiDwEbVcqZT1jxS
+         FaCion38U6NXiE36P6PaPYYeQxCD5UcD+aGa5z9w0Wkw37FVc6gTmvAGlMrT0BIBA3Xc
+         bFpQ==
+X-Gm-Message-State: AOAM533Go/l6E2UmvrmlDKIo/66yfR6HpKavakorKLMe13XeN3x/0Mpn
+        +2w59558iPZhvJOFzkboplvrdjvCcjGPLbp6oaI=
+X-Google-Smtp-Source: ABdhPJz1oJcj/TIW7IPXKfUGMx+mKb7O5I8+KY9nNPCZgngt3Y0TTxSNjp3R9qmQkBVU/dtI0mfS9UGxQ14qdDZsEFg=
+X-Received: by 2002:a05:6808:1592:: with SMTP id t18mr19903224oiw.123.1622599066060;
+ Tue, 01 Jun 2021 18:57:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210601102506.GA13203@gofer.mess.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.95]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm000001.china.huawei.com (7.185.36.245)
-X-CFilter-Loop: Reflected
+References: <1622194158-70898-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+ <37a4f0bf-4acb-3961-699b-8335e194e315@amd.com>
+In-Reply-To: <37a4f0bf-4acb-3961-699b-8335e194e315@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 1 Jun 2021 21:57:35 -0400
+Message-ID: <CADnq5_NY_uWzB6QjsM0_+xcbQkMfy1wm2gQx3v7xW_eHQ804YA@mail.gmail.com>
+Subject: Re: [PATCH v3] amdgpu: remove unreachable code
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Applied.  Thanks!
 
-
-On 2021/6/1 18:25, Sean Young wrote:
-> On Tue, Jun 01, 2021 at 06:02:35PM +0800, Tong Tiangen wrote:
->> Fix a typo in lirc_ioctl, apparently min_timeout should be used
->> in this case.
->>
->> Fixes: e589333f346b ("V4L/DVB: IR: extend interfaces to support more device settings")
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   drivers/media/rc/lirc_dev.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
->> index 116daf90c858..abbeae2ccd4a 100644
->> --- a/drivers/media/rc/lirc_dev.c
->> +++ b/drivers/media/rc/lirc_dev.c
->> @@ -534,7 +534,7 @@ static long lirc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
->>   
->>   	/* Generic timeout support */
->>   	case LIRC_GET_MIN_TIMEOUT:
->> -		if (!dev->max_timeout)
->> +		if (!dev->min_timeout)
-> So maybe this isn't the clearest piece of code, but all rc drivers set
-> either both of min_timeout & max_timeout, or neither. Having a max_timeout
-> without a min_timeout does not make any sense.
+On Fri, May 28, 2021 at 8:18 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-> Changing this to min_timeout gives the impression min_timeout can be set
-> without max_timeout, which is not the case. This should at least commented.
+> Am 28.05.21 um 11:29 schrieb Jiapeng Chong:
+> > In the function amdgpu_uvd_cs_msg(), every branch in the switch
+> > statement will have a return, so the code below the switch statement
+> > will not be executed.
+> >
+> > Eliminate the follow smatch warning:
+> >
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c:845 amdgpu_uvd_cs_msg() warn:
+> > ignoring unreachable code.
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 >
-> Thanks
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 >
-> Sean
-
-I agree,  the necessary comments should be added here.
-
-Thanks
-
+> > ---
+> > Changes in v2:
+> >    -For the follow advice: https://lore.kernel.org/patchwork/patch/1435=
+968/
+> >
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c b/drivers/gpu/drm/=
+amd/amdgpu/amdgpu_uvd.c
+> > index c6dbc08..35f6874 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
+> > @@ -829,9 +829,8 @@ static int amdgpu_uvd_cs_msg(struct amdgpu_uvd_cs_c=
+tx *ctx,
+> >
+> >       default:
+> >               DRM_ERROR("Illegal UVD message type (%d)!\n", msg_type);
+> > -             return -EINVAL;
+> >       }
+> > -     BUG();
+> > +
+> >       return -EINVAL;
+> >   }
+> >
 >
->>   			ret = -ENOTTY;
->>   		else
->>   			val = dev->min_timeout;
->> -- 
->> 2.18.0.huawei.25
-> .
->
-
+> _______________________________________________
+> amd-gfx mailing list
+> amd-gfx@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
