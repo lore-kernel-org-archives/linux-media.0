@@ -5,38 +5,38 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 910AAC47093
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 11:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E5E6C47083
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 11:24:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DF44613D6
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 11:24:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8951F613D2
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 11:24:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbhFBL0Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Jun 2021 07:26:25 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:59184 "EHLO
+        id S232587AbhFBL01 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Jun 2021 07:26:27 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:59166 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232421AbhFBL0W (ORCPT
+        by vger.kernel.org with ESMTP id S232322AbhFBL0W (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 2 Jun 2021 07:26:22 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AC839C0516;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 895BAC043D;
         Wed,  2 Jun 2021 11:24:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1622633079; bh=iDYmYWV64aAc5K1mNGxWkrk1Utm//trijiEmustKlxc=;
+        t=1622633079; bh=Cjwofvyx7tHITwroONobhD5qV5HclCkCWYemv1jIgWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=lcl2oIHx58OfXBmeNcn6b3pZuQn8c2sDnDL168Ugyv2N9ukIuxcnQqDGHb0L7A8NA
-         QRDDL102kn7wgD/N4Ou/clNCN+xKwrDhl7Dw8I1cEno/jdCHpy2d+LLZBUuC19+2YC
-         5BCtvedzARZ/yTlS8REzatpfnHizunUuGhhV4CtfD7J6i4XCmfrfXSfELRwCC7kUwH
-         oUNIk1jxbTfupu6+JljRAcxoUE853/G5oYpY7zXvJIhlKN+2LUtlLgC6PdQ6HMBkb8
-         0eIpaAladlIg6TYEAd89hl/NE+xwUS9/+UX2TuOeCvheR3iBqxaC5FGKwtu9Qp3WXS
-         qk8NiOXfbD91Q==
+        b=JRzwo6X5wD2eGf3ut07wX48KnCGO79T1WetxnNRkp3aBD07ZBNq3DdaNrPQEeQwb6
+         YJdv3rs/pA44sQfwsmqXPMTTWGSVPTYs12GdaNBjzXtNUm9iOiuFRmL30xIHzPx7SI
+         xDn8bt85dW60Ib5J/Cn1+bTyEVRu3W1NuaeCI4XvgEJ2xKRdmx2ygwMY16fZEv6K5Z
+         2lrNc4SKwE0CPaVZ3vfIP0+guJS4GHNqEUyxDdDvvTaSaMaWeaAzT6WPV4yCLEEzr2
+         pX6sGrV2f26rmjfMEgUID6H0/JLVDS/1xO24dGaHgU1BDqdN0Bt7p9N1ITsGaUpIOc
+         ibLiAr1V/Kddg==
 Received: from de02dwvm009.internal.synopsys.com (de02dwvm009.internal.synopsys.com [10.225.17.73])
-        by mailhost.synopsys.com (Postfix) with ESMTP id 7529CA0099;
+        by mailhost.synopsys.com (Postfix) with ESMTP id 427A5A006E;
         Wed,  2 Jun 2021 11:24:37 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 From:   Nelson Costa <Nelson.Costa@synopsys.com>
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
         Nelson Costa <Nelson.Costa@synopsys.com>
-Subject: [PATCH 8/9] media: dwc: dw-hdmi-rx: Add support for Aspect Ratio
-Date:   Wed,  2 Jun 2021 13:24:26 +0200
-Message-Id: <79c8b378a0b9d73e8116fe31a1ebb06fcc6b0925.1622631488.git.nelson.costa@synopsys.com>
+Subject: [PATCH 4/9] phy: Add PHY standard HDMI opts to the PHY API
+Date:   Wed,  2 Jun 2021 13:24:22 +0200
+Message-Id: <fb400f26ab158f6c44bdd1241334945760390d99.1622631488.git.nelson.costa@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1622631488.git.nelson.costa@synopsys.com>
 References: <cover.1622631488.git.nelson.costa@synopsys.com>
@@ -62,94 +62,166 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds support to get aspect ratio for the current
-video being received and provide the info through v4l2
-API query_dv_timings.
+This adds the new options to give support for HDMI
+PHYs in a standard way. This is mainly useful when
+the HDMI PHY requires parameters to be passed by
+"phy_configure" function.
+
+For this, the new struct phy_configure_opts_hdmi
+was added with the required generic and standard
+parameters.
 
 Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
 ---
- drivers/media/platform/dwc/dw-hdmi-rx.c | 54 +++++++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 2 deletions(-)
+ include/linux/phy/phy-hdmi.h | 102 +++++++++++++++++++++++++++++++++++++++++++
+ include/linux/phy/phy.h      |   7 ++-
+ 2 files changed, 108 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/phy/phy-hdmi.h
 
-diff --git a/drivers/media/platform/dwc/dw-hdmi-rx.c b/drivers/media/platform/dwc/dw-hdmi-rx.c
-index b20eccc..a468a93 100644
---- a/drivers/media/platform/dwc/dw-hdmi-rx.c
-+++ b/drivers/media/platform/dwc/dw-hdmi-rx.c
-@@ -2250,13 +2250,31 @@ static u32 dw_hdmi_get_width(struct dw_hdmi_dev *dw_dev)
- 	return width;
- }
+diff --git a/include/linux/phy/phy-hdmi.h b/include/linux/phy/phy-hdmi.h
+new file mode 100644
+index 0000000..62334f4
+--- /dev/null
++++ b/include/linux/phy/phy-hdmi.h
+@@ -0,0 +1,102 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 - present Synopsys, Inc. and/or its affiliates.
++ * HDMI generic PHY options.
++ *
++ * Author: Nelson Costa <nelson.costa@synopsys.com>
++ */
++#ifndef __PHY_HDMI_H_
++#define __PHY_HDMI_H_
++
++#include <linux/types.h>
++
++/**
++ * struct phy_configure_opts_hdmi - HDMI PHY configuration set
++ *
++ * This structure is used to represent the configuration state of an
++ * HDMI PHY.
++ */
++struct phy_configure_opts_hdmi {
++	/**
++	 * @color_depth:
++	 *
++	 * Color depth, as specified by HDMI specification, represents the
++	 * number of bits per pixel.
++	 *
++	 * Allowed values: 24, 30, 36, 48
++	 *
++	 */
++	u8 color_depth;
++
++	/**
++	 * @tmds_bit_clock_ratio:
++	 *
++	 * Flag indicating, as specified by HDMI specification, the relation
++	 * between TMDS Clock Rate and TMDS Character Rate.
++	 *
++	 * As specified by HDMI specification:
++	 *
++	 * tmds_bit_clock_ratio = 0, for TMDS Character Rates <= 340 Mcsc
++	 * (TMDS Clock Rate = TMDS Character Rate)
++	 *
++	 * tmds_bit_clock_ratio = 1, for TMDS Character Rates > 340 Mcsc
++	 * (TMDS Clock Rate = TMDS Character Rate / 4)
++	 *
++	 */
++	u8 tmds_bit_clock_ratio;
++
++	/**
++	 * @scrambling:
++	 *
++	 * Scrambling, as specified by HDMI specification, enables the technique
++	 * to reduce the EMI/RFI.
++	 *
++	 */
++	u8 scrambling;
++
++	/**
++	 * @calibration_acq:
++	 *
++	 * Calibration acquisitions number for the calibration algorithm.
++	 *
++	 */
++	unsigned int calibration_acq;
++
++	/**
++	 * @calibration_force:
++	 *
++	 * Flag indicating, to force calibration algorithm even if the MPLL
++	 * status didn't change from previous run calibration.
++	 *
++	 */
++	u8 calibration_force;
++
++	/**
++	 * @set_color_depth:
++	 *
++	 * Flag indicating, whether or not reconfigure deep_color
++	 * to requested values.
++	 *
++	 */
++	u8 set_color_depth : 1;
++
++	/**
++	 * @set_tmds_bit_clock_ratio:
++	 *
++	 * Flag indicating, whether or not reconfigure tmds_bit_clock_ratio
++	 * to requested values.
++	 *
++	 */
++	u8 set_tmds_bit_clock_ratio : 1;
++
++	/**
++	 * @set_scrambling:
++	 *
++	 * Flag indicating, whether or not reconfigure scrambling
++	 * to requested values.
++	 *
++	 */
++	u8 set_scrambling : 1;
++};
++
++#endif /* __PHY_HDMI_H_ */
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index e435bdb..8b1aaa4 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -18,6 +18,7 @@
  
-+static int dw_hdmi_vic_to_cea861(u8 hdmi_vic)
-+{
-+	switch (hdmi_vic) {
-+	case 1:
-+		return 95;
-+	case 2:
-+		return 94;
-+	case 3:
-+		return 93;
-+	case 4:
-+		return 98;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
- 				    struct v4l2_dv_timings *timings)
- {
- 	struct dw_hdmi_dev *dw_dev = to_dw_dev(sd);
- 	struct v4l2_bt_timings *bt = &timings->bt;
-+	struct v4l2_dv_timings t = {0};
- 	bool is_hdmi_vic;
- 	u32 htot, hofs;
-+	u8 cea861_vic;
- 	u32 vtot;
- 	u8 vic;
+ #include <linux/phy/phy-dp.h>
+ #include <linux/phy/phy-mipi-dphy.h>
++#include <linux/phy/phy-hdmi.h>
  
-@@ -2351,8 +2369,40 @@ static int dw_hdmi_query_dv_timings(struct v4l2_subdev *sd,
- 		}
- 	}
+ struct phy;
  
--	dev_dbg(dw_dev->dev, "%s: width=%u, height=%u, mbuscode=%u\n", __func__,
--		bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev));
-+	if (is_hdmi_vic)
-+		cea861_vic = dw_hdmi_vic_to_cea861(bt->hdmi_vic);
-+	else
-+		cea861_vic = vic;
-+
-+	/* picture aspect ratio based on v4l2 dv timings array */
-+	if (v4l2_find_dv_timings_cea861_vic(&t, cea861_vic)) {
-+		/* when the numerator/denominator are zero means that the
-+		 * picture aspect ratio is the same of the active measures ratio
-+		 */
-+		if (!t.bt.picture_aspect.numerator) {
-+			unsigned long n, d;
-+
-+			rational_best_approximation(t.bt.width, t.bt.height,
-+						    t.bt.width, t.bt.height,
-+						    &n, &d);
-+			t.bt.picture_aspect.numerator = n;
-+			t.bt.picture_aspect.denominator = d;
-+		}
-+
-+		bt->picture_aspect = t.bt.picture_aspect;
-+	} else {
-+		bt->picture_aspect.numerator = 0;
-+		bt->picture_aspect.denominator = 0;
-+		dev_dbg(dw_dev->dev,
-+			"%s: cea861_vic=%d was not found in v4l2 dv timings",
-+			__func__, cea861_vic);
-+	}
-+
-+	dev_dbg(dw_dev->dev,
-+		"%s: width=%u, height=%u, mbuscode=%u, cea861_vic=%d, ar={%d,%d}\n",
-+		__func__, bt->width, bt->height, dw_hdmi_get_mbus_code(dw_dev),
-+		cea861_vic, bt->picture_aspect.numerator,
-+		bt->picture_aspect.denominator);
+@@ -41,7 +42,8 @@ enum phy_mode {
+ 	PHY_MODE_MIPI_DPHY,
+ 	PHY_MODE_SATA,
+ 	PHY_MODE_LVDS,
+-	PHY_MODE_DP
++	PHY_MODE_DP,
++	PHY_MODE_HDMI
+ };
  
- 	return 0;
- }
+ /**
+@@ -51,10 +53,13 @@ enum phy_mode {
+  *		the MIPI_DPHY phy mode.
+  * @dp:		Configuration set applicable for phys supporting
+  *		the DisplayPort protocol.
++ * @hdmi	Configuration set applicable for phys supporting
++ *		the HDMI protocol.
+  */
+ union phy_configure_opts {
+ 	struct phy_configure_opts_mipi_dphy	mipi_dphy;
+ 	struct phy_configure_opts_dp		dp;
++	struct phy_configure_opts_hdmi		hdmi;
+ };
+ 
+ /**
 -- 
 2.7.4
 
