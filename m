@@ -2,206 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CFAC4708F
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 14:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45DFBC47093
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 14:33:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE130613EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 14:15:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 316BF613BA
+	for <linux-media@archiver.kernel.org>; Wed,  2 Jun 2021 14:33:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbhFBOQz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Jun 2021 10:16:55 -0400
-Received: from comms.puri.sm ([159.203.221.185]:52480 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231669AbhFBOO7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Jun 2021 10:14:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 396EBDFAEF;
-        Wed,  2 Jun 2021 07:12:44 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ff76JJN6Hjvg; Wed,  2 Jun 2021 07:12:39 -0700 (PDT)
-Message-ID: <76437d47e5ac920baed3429d8839b6175864d13d.camel@puri.sm>
-Subject: Re: [PATCH v2 2/5] dt-bindings: media: document SK Hynix Hi-846
- MIPI CSI-2 8M pixel sensor
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     mchehab@kernel.org, devicetree@vger.kernel.org, kernel@puri.sm,
-        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, paul.kocialkowski@bootlin.com,
-        robh@kernel.org, shawnx.tu@intel.com
-Date:   Wed, 02 Jun 2021 16:12:33 +0200
-In-Reply-To: <YLeQGjDdTX0iohZ0@pendragon.ideasonboard.com>
-References: <20210528081336.3858700-1-martin.kepplinger@puri.sm>
-         <20210528081336.3858700-3-martin.kepplinger@puri.sm>
-         <20210602135137.GW3@valkosipuli.retiisi.eu>
-         <YLeQGjDdTX0iohZ0@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        id S231463AbhFBOfV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Jun 2021 10:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231381AbhFBOfR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Jun 2021 10:35:17 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BDFC061763
+        for <linux-media@vger.kernel.org>; Wed,  2 Jun 2021 07:33:34 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso3916111wmh.4
+        for <linux-media@vger.kernel.org>; Wed, 02 Jun 2021 07:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JvuBm7KpIXmVjvwi2OsKGMdogxy/zdINv8FqDSEvNYM=;
+        b=nH1tswbv/dRTxAbMVL2oQ+YkAIasGdidijupRDL7c3sCfVwK+oNtIhOPL0xok9gzVW
+         t5+ceR05rXZ7uMo2uFij6BvFfqXaDmi0JMWGswWKDBNIILG5hLPYn20T6fCzdxolvyPX
+         +XTqGQ5X5YYinYoN2/mYvDaKDcYXM0/IDw799rIPSAk/3ROkjHPygpnIc7Z8qekh7XqF
+         ANhYI2NCG0tckEoHP506uUWeO9SDw2dESxg+EJ8Be80RUywMFpYsHwunvITnn9pQm8V5
+         0tiSbn6+yxv5bdePKcmjb5leSF3Dh/kD4YgCPLWnT+gapDJbriqm67BYzq1bujgpWvBm
+         NwKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JvuBm7KpIXmVjvwi2OsKGMdogxy/zdINv8FqDSEvNYM=;
+        b=jm3VJROXGvYxN8OMxS7QxJtiBqj17214mdGWgKGDAhcR7qUuN08TBK19q9U1khnLw8
+         eezzBxznohrWBfLHhTbtI8MTOjH/ov7HLuDr3PAVPqZ/TNXT7CC0o7nGql+3GDzDwtBk
+         5LPn1lIEbNWoVGj4y8I8PPulVhV0jzl7nYqCavBdu8NCgRhRsATU5tW7MStU5/q3Q+nw
+         evxjkNhbpVohGzh0t4YbQL9Lkkn81utBvx0t/EAKRWDLRynkXf5CYQ6d9iqeI0k45dCj
+         K8uB+jbmmhFZZnCQT4xYXRCPFW2oypdM/QeWSsEkgyyM46J21s+3KB3NJ7bus2D4WrwU
+         c2xQ==
+X-Gm-Message-State: AOAM533euYphMD/ZKaWRvb7Kv04Ytc806UExmktqRt3WO3JPyxKE4Hag
+        G04biptMgjgQjI9eJplLHN9AAQ==
+X-Google-Smtp-Source: ABdhPJyUgla3FFfynuCl+ad/SpJvdCBqRlxX5f3USSzH6/SPYgduUsfipkbdGBvQZ5pWNouc43kgzw==
+X-Received: by 2002:a1c:41c5:: with SMTP id o188mr5498913wma.60.1622644412785;
+        Wed, 02 Jun 2021 07:33:32 -0700 (PDT)
+Received: from dell.default ([91.110.221.214])
+        by smtp.gmail.com with ESMTPSA id o11sm132315wrq.93.2021.06.02.07.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 07:33:32 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Adam Jackson <ajax@redhat.com>,
+        Ben Widawsky <ben@bwidawsk.net>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [RESEND 22/26] drm/vgem/vgem_drv: Standard comment blocks should not use kernel-doc format
+Date:   Wed,  2 Jun 2021 15:32:56 +0100
+Message-Id: <20210602143300.2330146-23-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210602143300.2330146-1-lee.jones@linaro.org>
+References: <20210602143300.2330146-1-lee.jones@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Mittwoch, dem 02.06.2021 um 17:05 +0300 schrieb Laurent Pinchart:
-> On Wed, Jun 02, 2021 at 04:51:37PM +0300, Sakari Ailus wrote:
-> > Hi Martin,
-> > 
-> > On Fri, May 28, 2021 at 10:13:33AM +0200, Martin Kepplinger wrote:
-> > > Document the bindings used for the SK Hynix Hi-846 CMOS camera
-> > > driver.
-> > > 
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > 
-> > Could you read Documentation/driver-api/media/camera-sensor.rst,
-> > please?
-> > 
-> > I believe you'll need assigned-clock-rates device property as well
-> > as
-> 
-> I dn't think assigned-clock-rates should be part of the bindings,
-> it's a
-> mechanism that can be used in any DT device node.
-> 
-> > link-frequencies endpoint property.
-> > 
-> > > ---
-> > >  .../bindings/media/i2c/hynix,hi846.yaml       | 99
-> > > +++++++++++++++++++
-> > >  1 file changed, 99 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> > > 
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> > > b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> > > new file mode 100644
-> > > index 000000000000..2991108e23e5
-> > > --- /dev/null
-> > > +++
-> > > b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> > > @@ -0,0 +1,99 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/i2c/hynix,hi846.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: SK Hynix Hi-846 1/4" 8M Pixel MIPI CSI-2 sensor
-> > > +
-> > > +maintainers:
-> > > +  - Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > +
-> > > +description: |-
-> > > +  The Hi-846 is a raw image sensor with an MIPI CSI-2 image data
-> > > +  interface and CCI (I2C compatible) control bus. The output
-> > > format
-> > > +  is 10bit Bayer.
-> > 
-> > Virtually all Bayer sensors can do 8 bpp, too. I'd drop the
-> > sentence
-> 
-> Not this one according to its datasheet (we can't rule out that this
-> would be possible an undocumented of course).
+Fixes the following W=1 kernel build warning(s):
 
-actually there is one register that mentions raw8 output but I never
-got that to work. I don't have to mention 10bit in this description.
-thanks.
+ drivers/gpu/drm/vgem/vgem_drv.c:47: warning: expecting prototype for This is vgem, a (non-hardware(). Prototype was for DRIVER_NAME() instead
 
-> 
-> > mentoning 10 bits.
-> > 
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: hynix,hi846
-> > > +
-> > > +  reg:
-> > > +    description: I2C device address.
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    description: Reference to the mclk clock.
-> > > +    maxItems: 1
-> > > +
-> > > +  clock-names:
-> > > +    const: mclk
-> > > +
-> > > +  rst-gpios:
-> > > +    description: Reference to the GPIO connected to the reset
-> > > pin. Active low.
-> > > +    maxItems: 1
-> > > +
-> > > +  vdd-supply:
-> > > +    description: Definition of the regulator used as 1.8V
-> > > digital power supply.
-> > > +
-> > > +  port:
-> > > +    $ref: /schemas/graph.yaml#/properties/port
-> > > +    additionalProperties: false
-> > > +
-> > > +    properties:
-> > > +      endpoint:
-> > > +        $ref: /schemas/media/video-interfaces.yaml#
-> > > +        unevaluatedProperties: false
-> > > +
-> > > +        properties:
-> > > +          data-lanes:
-> > > +            oneOf:
-> > > +              - items:
-> > > +                  - const: 1
-> > > +                  - const: 2
-> > > +                  - const: 3
-> > > +                  - const: 4
-> > > +              - items:
-> > > +                  - const: 1
-> > > +                  - const: 2
-> > > +
-> > > +        required:
-> > > +          - data-lanes
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - rst-gpios
-> > > +  - vdd-supply
-> > > +  - port
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/gpio/gpio.h>
-> > > +
-> > > +    i2c {
-> > > +        #address-cells = <1>;
-> > > +        #size-cells = <0>;
-> > > +
-> > > +        hi846: camera@20 {
-> > > +            compatible = "hynix,hi846";
-> > > +            reg = <0x20>;
-> > > +            clocks = <&clk>;
-> > > +            clock-names = "mclk";
-> > > +            vdd-supply = <&reg_camera_pwr_en>; /* 1.8v */
-> > > +            rst-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
-> > > +
-> > > +            port {
-> > > +                camera_out: endpoint {
-> > > +                    remote-endpoint = <&csi1_ep1>;
-> > > +                    data-lanes = <1 2>;
-> > > +                };
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +
-> > > +...
-> 
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: Adam Jackson <ajax@redhat.com>
+Cc: Ben Widawsky <ben@bwidawsk.net>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/vgem/vgem_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/vgem/vgem_drv.c b/drivers/gpu/drm/vgem/vgem_drv.c
+index a0e75f1d5d016..bf38a7e319d14 100644
+--- a/drivers/gpu/drm/vgem/vgem_drv.c
++++ b/drivers/gpu/drm/vgem/vgem_drv.c
+@@ -25,7 +25,7 @@
+  *	Ben Widawsky <ben@bwidawsk.net>
+  */
+ 
+-/**
++/*
+  * This is vgem, a (non-hardware-backed) GEM service.  This is used by Mesa's
+  * software renderer and the X server for efficient buffer sharing.
+  */
+-- 
+2.31.1
 
