@@ -2,75 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D582DC47082
-	for <linux-media@archiver.kernel.org>; Thu,  3 Jun 2021 11:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 970B6C47096
+	for <linux-media@archiver.kernel.org>; Thu,  3 Jun 2021 11:50:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C03D160231
-	for <linux-media@archiver.kernel.org>; Thu,  3 Jun 2021 11:43:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DCD2613F0
+	for <linux-media@archiver.kernel.org>; Thu,  3 Jun 2021 11:50:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbhFCLow (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Jun 2021 07:44:52 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:50570 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229936AbhFCLov (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Jun 2021 07:44:51 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lolkg-0002cv-BA; Thu, 03 Jun 2021 11:43:06 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lolp3-00055M-SG; Thu, 03 Jun 2021 11:47:37 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.14] vb2_queue_change_type, hevc fix and atmel-isc (#74764)
-Date:   Thu,  3 Jun 2021 11:47:36 +0000
-Message-Id: <20210603114736.19506-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <57e15ed1-61c7-0240-5bf3-115de3bbec9c@xs4all.nl>
-References: 
+        id S229747AbhFCLwD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Jun 2021 07:52:03 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48230 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229697AbhFCLwB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Jun 2021 07:52:01 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id CB4901F42FDD
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     hverkuil@xs4all.nl, ezequiel@collabora.com, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
+        andrzej.p@collabora.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v13 1/9] media: hevc: Add fields and flags for hevc PPS
+Date:   Thu,  3 Jun 2021 13:49:56 +0200
+Message-Id: <20210603115004.915294-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210603115004.915294-1-benjamin.gaignard@collabora.com>
+References: <20210603115004.915294-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Add fields and flags as they are defined in
+7.4.3.3.1 "General picture parameter set RBSP semantics of the
+H.265 ITU specification.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/57e15ed1-61c7-0240-5bf3-115de3bbec9c@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/112158/
-Build time: 00:00:00
-Link: https://lore.kernel.org/linux-media/57e15ed1-61c7-0240-5bf3-115de3bbec9c@xs4all.nl
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 14 ++++++++++++++
+ include/media/hevc-ctrls.h                         |  4 ++++
+ 2 files changed, 18 insertions(+)
 
-gpg: Signature made Thu 03 Jun 2021 10:47:23 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
-
-
-Build aborted due to a fatal error:
-FAILED: patch patch patches/0028-media-atmel-atmel-isc-move-the-formats-list-into-pro.patch doesn't apply:
-Applying patch patches/0028-media-atmel-atmel-isc-move-the-formats-list-into-pro.patch
-patching file drivers/media/platform/atmel/atmel-isc-base.c
-Hunk #2 FAILED at 788.
-Hunk #3 succeeded at 1346 (offset -1 lines).
-Hunk #4 succeeded at 1383 (offset -1 lines).
-Hunk #5 succeeded at 1995 (offset -1 lines).
-Hunk #6 succeeded at 2018 (offset -1 lines).
-Hunk #7 succeeded at 2028 (offset -1 lines).
-Hunk #8 succeeded at 2049 (offset -1 lines).
-1 out of 8 hunks FAILED -- rejects in file drivers/media/platform/atmel/atmel-isc-base.c
-patching file drivers/media/platform/atmel/atmel-isc.h
-patching file drivers/media/platform/atmel/atmel-sama5d2-isc.c
-Patch patches/0028-media-atmel-atmel-isc-move-the-formats-list-into-pro.patch does not apply (enforce with -f)
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 0b8061666c57..9cfb471fc6be 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -2783,6 +2783,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``num_extra_slice_header_bits``
+       -
++    * - __u8
++      - ``num_ref_idx_l0_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l0_active_minus1
++    * - __u8
++      - ``num_ref_idx_l1_default_active_minus1``
++      - Specifies the inferred value of num_ref_idx_l1_active_minus1
+     * - __s8
+       - ``init_qp_minus26``
+       -
+@@ -2893,6 +2899,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - ``V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT``
+       - 0x00040000
+       -
++    * - ``V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT``
++      - 0x00080000
++      - Specifies the presence of deblocking filter control syntax elements in
++        the PPS
++    * - ``V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING``
++      - 0x00100000
++      - Specifies that tile column boundaries and likewise tile row boundaries
++        are distributed uniformly across the picture
+ 
+ .. raw:: latex
+ 
+diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+index 226fcfa0e026..245052c15864 100644
+--- a/include/media/hevc-ctrls.h
++++ b/include/media/hevc-ctrls.h
+@@ -100,10 +100,14 @@ struct v4l2_ctrl_hevc_sps {
+ #define V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER	(1ULL << 16)
+ #define V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT		(1ULL << 17)
+ #define V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT (1ULL << 18)
++#define V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT	(1ULL << 19)
++#define V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING			(1ULL << 20)
+ 
+ struct v4l2_ctrl_hevc_pps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+ 	__u8	num_extra_slice_header_bits;
++	__u8	num_ref_idx_l0_default_active_minus1;
++	__u8	num_ref_idx_l1_default_active_minus1;
+ 	__s8	init_qp_minus26;
+ 	__u8	diff_cu_qp_delta_depth;
+ 	__s8	pps_cb_qp_offset;
+-- 
+2.25.1
 
