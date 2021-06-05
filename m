@@ -2,104 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7851AC4743D
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 489BAC4743C
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58D62613D2
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:10:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20817613FF
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbhFECLG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Jun 2021 22:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbhFECLF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Jun 2021 22:11:05 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F49C061766;
-        Fri,  4 Jun 2021 19:09:09 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id og14so11965983ejc.5;
-        Fri, 04 Jun 2021 19:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lkNfGy1F0k5RDq7SvWZFsIErKoDT4IMXfAXGU4u+NcM=;
-        b=C1YtPn7sDDgG+AcANfGdKZPHQMkCdfHqsy/0Pmo/EYYSiqDuT+ylyJkWym8CjuknVA
-         TBhBKN/u8MhxcHEvYLWtD9iehYp3B5qaBttb67NPwUFqRydzZY/C7NjkEwuCfKT1lcCu
-         mnT0HPrzjmSxFSRfNbUN3kjd5n7nhKpfIh5fUdXRFBH2Kv0NZeHBdBQ4tZ2XiLMWsaDm
-         CvbXqglTQTgzUmWc645pfhBGNSuSZoULFCOnImCjbg6c8jq2xuiGzGlW/Gbnp+q88duy
-         lhgBcJnWH53s3yCFxPB70AG/ZJ/5mcTApO4FUOUgXbwcvaQSMS9c/VoeuWVnXbgNuC2j
-         SMlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lkNfGy1F0k5RDq7SvWZFsIErKoDT4IMXfAXGU4u+NcM=;
-        b=VwPiFd+iuorebBRNYJj6GdkIX1KP19k26slN56rSGBCakkaPuJ75WRH3EUwXgiU98N
-         DPnCMVyAptHl3xljQtk5QovrajTbFz/t298qz8NdKr+Gr+JHggvvFuVyoMV60am2Ksyo
-         VErUkORdpRAoL9dsEtQdnAyQmL497ew6IwRzCVtXP++Oj6KswCaFms/CbPKIgF2BO257
-         dm65Hs2mYKDIIe3lLo4bmFQ/tI8xDkiyAOX5hNawBH5cDynI1Mmf4zn2TbWkHLUEmbK5
-         qYLdzJWY7B8AsJNjIwQetqwOv7dq3WMJrvVtFQXEyASUc/8IJ4dHXi7OVrDb54KOWDB3
-         M2qg==
-X-Gm-Message-State: AOAM5336Zqwi2Tz1XjLy9ojfYj+3nZS1/xlpFBdR8MacSp1/M06IpUN2
-        fjP3o6frnmXvwQUF1z4lfww=
-X-Google-Smtp-Source: ABdhPJwvdsYRpYqsHonCA56Y8k350JpsKIxHU6vKvqoz24zXqCN1egvhUkXUXds68gyR7KSU5nfZlg==
-X-Received: by 2002:a17:906:6c88:: with SMTP id s8mr7119605ejr.129.1622858947301;
-        Fri, 04 Jun 2021 19:09:07 -0700 (PDT)
-Received: from linux.local (host-82-59-55-132.retail.telecomitalia.it. [82.59.55.132])
-        by smtp.gmail.com with ESMTPSA id gz5sm3496232ejb.113.2021.06.04.19.09.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 19:09:07 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v2 2/2] staging: media: atomisp: pci: Remove unnecessary (void *) cast
-Date:   Sat,  5 Jun 2021 04:08:55 +0200
-Message-Id: <20210605020855.1065-3-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210605020855.1065-1-fmdefrancesco@gmail.com>
-References: <20210605020855.1065-1-fmdefrancesco@gmail.com>
+        id S231532AbhFECbS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Jun 2021 22:31:18 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:37538 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230169AbhFECbR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Jun 2021 22:31:17 -0400
+X-UUID: f9d9df33227547b2806ad0992ecebcd4-20210605
+X-UUID: f9d9df33227547b2806ad0992ecebcd4-20210605
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 750112557; Sat, 05 Jun 2021 10:29:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 5 Jun 2021 10:29:25 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 5 Jun 2021 10:29:24 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>, Yong Wu <yong.wu@mediatek.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5,1/6] media: mtk-vcodec: venc: remove redundant code
+Date:   Sat, 5 Jun 2021 10:29:13 +0800
+Message-ID: <20210605022918.4213-2-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210605022918.4213-1-irui.wang@mediatek.com>
+References: <20210605022918.4213-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Removed an unnecessary (void *) cast for an argument passed to kfree().
+From: Alexandre Courbot <acourbot@chromium.org>
 
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+vidioc_try_fmt() does clamp height and width when called on the OUTPUT
+queue, so clamping them prior to calling this function is redundant. Set
+the queue's parameters after calling vidioc_try_fmt() so we can use the
+values it computed.
+
+Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 ---
+ .../media/platform/mtk-vcodec/mtk_vcodec_enc.c   | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-v1 -> v2: Added this 2/2 patch.
-
- drivers/staging/media/atomisp/pci/sh_css_firmware.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-index 5301cc014c7e..e1a16a50e588 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-@@ -363,7 +363,7 @@ void sh_css_unload_firmware(void)
- 		unsigned int i = 0;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 4831052f475d..42ff13867940 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -443,7 +443,6 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
+ 	struct mtk_q_data *q_data;
+ 	int ret, i;
+ 	const struct mtk_video_fmt *fmt;
+-	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
  
- 		for (i = 0; i < sh_css_num_binaries; i++) {
--			kfree((void *)fw_minibuffer[i].name);
-+			kfree(fw_minibuffer[i].name);
- 			kvfree(fw_minibuffer[i].buffer);
- 		}
- 		kfree(fw_minibuffer);
+ 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
+ 	if (!vq) {
+@@ -468,20 +467,13 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
+ 	}
+ 
+-	pix_fmt_mp->height = clamp(pix_fmt_mp->height,
+-				MTK_VENC_MIN_H,
+-				MTK_VENC_MAX_H);
+-	pix_fmt_mp->width = clamp(pix_fmt_mp->width,
+-				MTK_VENC_MIN_W,
+-				MTK_VENC_MAX_W);
+-
+-	q_data->visible_width = f->fmt.pix_mp.width;
+-	q_data->visible_height = f->fmt.pix_mp.height;
+-	q_data->fmt = fmt;
+-	ret = vidioc_try_fmt(f, q_data->fmt);
++	ret = vidioc_try_fmt(f, fmt);
+ 	if (ret)
+ 		return ret;
+ 
++	q_data->fmt = fmt;
++	q_data->visible_width = f->fmt.pix_mp.width;
++	q_data->visible_height = f->fmt.pix_mp.height;
+ 	q_data->coded_width = f->fmt.pix_mp.width;
+ 	q_data->coded_height = f->fmt.pix_mp.height;
+ 
 -- 
-2.31.1
+2.18.0
 
