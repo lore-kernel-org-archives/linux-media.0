@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4D5C4743D
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D83C4743F
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D538B613E9
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1234C6141A
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbhFECbU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Jun 2021 22:31:20 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35062 "EHLO
+        id S231640AbhFECbW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Jun 2021 22:31:22 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35073 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231527AbhFECbS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Jun 2021 22:31:18 -0400
-X-UUID: 761653e3f0e64fec9bae36c74c11f6d4-20210605
-X-UUID: 761653e3f0e64fec9bae36c74c11f6d4-20210605
+        with ESMTP id S231565AbhFECbT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Jun 2021 22:31:19 -0400
+X-UUID: 947f8efeb46944859320c995a0578351-20210605
+X-UUID: 947f8efeb46944859320c995a0578351-20210605
 Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 77907895; Sat, 05 Jun 2021 10:29:30 +0800
+        with ESMTP id 573427133; Sat, 05 Jun 2021 10:29:30 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 5 Jun 2021 10:29:28 +0800
+ 15.0.1497.2; Sat, 5 Jun 2021 10:29:22 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 5 Jun 2021 10:29:27 +0800
+ Transport; Sat, 5 Jun 2021 10:29:21 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -53,12 +53,10 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5,2/6] dt-bindings: media: mtk-vcodec: Add dma-ranges property
-Date:   Sat, 5 Jun 2021 10:29:14 +0800
-Message-ID: <20210605022918.4213-3-irui.wang@mediatek.com>
+Subject: [PATCH v5,0/6] Support H264 4K on MT8192
+Date:   Sat, 5 Jun 2021 10:29:12 +0800
+Message-ID: <20210605022918.4213-1-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210605022918.4213-1-irui.wang@mediatek.com>
-References: <20210605022918.4213-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -66,36 +64,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The mt8192 iommu support 0~16GB iova. We separate it to four banks:
-0~4G; 4G~8G; 8G~12G; 12G~16G.
+Add MT8192 H264 venc driver and support H264 4K encoding on MT8192.
 
-The "dma-ranges" could be used to adjust the bank we locate.
-If we don't set this property. The default range always is 0~4G.
+Change notes:
+v5: rebase on Linux 5.13-rc4
 
-This is optional and only needed in mt8192, the dma ranges should
-not cross 4G/8G/12G.
+Alexandre Courbot (1):
+  media: mtk-vcodec: venc: remove redundant code
 
-Here we don't have actual bus/parent concept here.  And the iova
-requirement is for our HW. Thus put the property in our node.
+Irui Wang (5):
+  dt-bindings: media: mtk-vcodec: Add dma-ranges property
+  media: mtk-vcodec: Support 34bits dma address for venc
+  dt-bindings: media: mtk-vcodec: Add binding for MT8192 VENC
+  media: mtk-vcodec: Add MT8192 H264 venc driver
+  media: mtk-vcodec: Support MT8192 H264 4K encoding
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/media/mediatek-vcodec.txt        |  2 +
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  1 +
+ .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 92 +++++++++++--------
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  | 17 ++++
+ .../platform/mtk-vcodec/venc/venc_h264_if.c   |  4 +
+ 5 files changed, 80 insertions(+), 36 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-index 06db6837cefd..5bb9e6e191b7 100644
---- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-@@ -22,6 +22,7 @@ Required properties:
- - iommus : should point to the respective IOMMU block with master port as
-   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-   for details.
-+- dma-ranges : describes the dma address range space that the codec hw access.
- One of the two following nodes:
- - mediatek,vpu : the node of the video processor unit, if using VPU.
- - mediatek,scp : the node of the SCP unit, if using SCP.
 -- 
 2.18.0
 
