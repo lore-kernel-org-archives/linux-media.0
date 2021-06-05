@@ -2,122 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEAF0C48BC2
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67DEAC4743D
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 03:29:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA240613F1
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 02:29:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4650A61415
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 03:29:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbhFECbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Jun 2021 22:31:33 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37669 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231609AbhFECbc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Jun 2021 22:31:32 -0400
-X-UUID: 86c21490bd1043a684cfca3a3ae8916c-20210605
-X-UUID: 86c21490bd1043a684cfca3a3ae8916c-20210605
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1372507308; Sat, 05 Jun 2021 10:29:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 5 Jun 2021 10:29:34 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 5 Jun 2021 10:29:33 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>, Yong Wu <yong.wu@mediatek.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5,5/6] media: mtk-vcodec: Add MT8192 H264 venc driver
-Date:   Sat, 5 Jun 2021 10:29:17 +0800
-Message-ID: <20210605022918.4213-6-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210605022918.4213-1-irui.wang@mediatek.com>
-References: <20210605022918.4213-1-irui.wang@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        id S230250AbhFEDbn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Jun 2021 23:31:43 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:53395 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229726AbhFEDbm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Jun 2021 23:31:42 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id pN0RlWggshg8ZpN0Tl1eKN; Sat, 05 Jun 2021 05:29:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1622863793; bh=CMdnNUbBTCO1DY/NQrTOKDPrKVbMB/9YwKFHfFrOd04=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=X1oyafjlXNV0ntgHAdmFDkqfKNQqUw+H6HIAZK5MglukgURsNgNo2nwOp6pCR8Hf2
+         cNhu8U3EWls0L41RAb6Fsqm9lk0WuQb/zjO5hjH6FhMjpI/pFtzRdLsG7uq+sfwrij
+         JHPI32K9IpNn1SGQjHTsvwmHXAfqpa6blgts4UdcKW4xoDUbUn5NwMYqZDtHP/1Ioe
+         OcdmKTZ0kx7RZEnlcz2njfHGbKqDGl8voTmu1Gz0A4enyp5dl1D9mennfNXHhmOsB8
+         8JHG3QANeNHipKJOBJoPiUCt8eLzme0Jo/prGM1btQrI8iZfjyVVztyfBZ4Mu3BKgJ
+         xggkDDpzmxiww==
+Message-ID: <89e9285a90ae34c0e88b41cb19cc25f9@smtp-cloud9.xs4all.net>
+Date:   Sat, 05 Jun 2021 05:29:51 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfB2fXKp0DeanUAbH0zptSxgEpKam3XySSf0dc8xUoCFDiZnZc8gh5oPs7XP+C0M8iHq9E2DU43fFsa3MD+boBhaB2RL//D368COokYsdVfUjhEIQysuw
+ 2aDxhvPJqKmDq9O2mRLRfYvdfy0omlXOuS/ZX+nV02p1xaQc8FXf+8KKz6iCnmqtg+7ZhJXGqOb9IXq51MfL6Y2JDY7fRdME3lxLrSCsl1JYVA9G/1cMVslg
+ AwIM2U8ONZoVtUuq+S0FMg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MT8192 venc driver's compatible and device private data.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h |  1 +
- .../media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index d03cca95e99b..14893d277bb8 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -302,6 +302,7 @@ struct mtk_vcodec_ctx {
- enum mtk_chip {
- 	MTK_MT8173,
- 	MTK_MT8183,
-+	MTK_MT8192,
- };
- 
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 26b089e81213..45d1870c83dd 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -425,12 +425,26 @@ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
- 	.core_id = VENC_SYS,
- };
- 
-+static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
-+	.chip = MTK_MT8192,
-+	.uses_ext = true,
-+	/* MT8192 supports the same capture formats as MT8183 */
-+	.capture_formats = mtk_video_formats_capture_mt8183,
-+	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8183),
-+	/* MT8192 supports the same output formats as MT8173 */
-+	.output_formats = mtk_video_formats_output_mt8173,
-+	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
-+	.min_bitrate = 64,
-+	.max_bitrate = 100000000,
-+	.core_id = VENC_SYS,
-+};
- static const struct of_device_id mtk_vcodec_enc_match[] = {
- 	{.compatible = "mediatek,mt8173-vcodec-enc",
- 			.data = &mt8173_avc_pdata},
- 	{.compatible = "mediatek,mt8173-vcodec-enc-vp8",
- 			.data = &mt8173_vp8_pdata},
- 	{.compatible = "mediatek,mt8183-vcodec-enc", .data = &mt8183_pdata},
-+	{.compatible = "mediatek,mt8192-vcodec-enc", .data = &mt8192_pdata},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
--- 
-2.18.0
+date:			Sat Jun  5 05:00:13 CEST 2021
+media-tree git hash:	c11669f738f48c7b3cf3b7ec700af33e1566d9c3
+media_build git hash:	b85393d37cdac84cb846802f0d62259aa679c994
+v4l-utils git hash:	242ad0b774c726cabaced873864a03a52e99e315
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-342-g92ace436
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7445-g58776ae33
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b010e650519b1cd0d44b110c056ef26ae6ff80a7
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-mips: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.258-i686: ERRORS
+linux-4.4.258-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.258-i686: ERRORS
+linux-4.9.258-x86_64: ERRORS
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.222-i686: ERRORS
+linux-4.14.222-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.177-i686: ERRORS
+linux-4.19.177-x86_64: ERRORS
+linux-4.20.17-i686: ERRORS
+linux-4.20.17-x86_64: ERRORS
+linux-5.0.21-i686: ERRORS
+linux-5.0.21-x86_64: ERRORS
+linux-5.1.21-i686: ERRORS
+linux-5.1.21-x86_64: ERRORS
+linux-5.2.21-i686: ERRORS
+linux-5.2.21-x86_64: ERRORS
+linux-5.3.18-i686: ERRORS
+linux-5.3.18-x86_64: ERRORS
+linux-5.4.100-i686: ERRORS
+linux-5.4.100-x86_64: ERRORS
+linux-5.5.19-i686: ERRORS
+linux-5.5.19-x86_64: ERRORS
+linux-5.6.19-i686: ERRORS
+linux-5.6.19-x86_64: ERRORS
+linux-5.7.19-i686: ERRORS
+linux-5.7.19-x86_64: ERRORS
+linux-5.8.13-i686: ERRORS
+linux-5.8.13-x86_64: ERRORS
+linux-5.9.1-i686: ERRORS
+linux-5.9.1-x86_64: ERRORS
+linux-5.10.18-i686: ERRORS
+linux-5.10.18-x86_64: ERRORS
+linux-5.11.1-i686: ERRORS
+linux-5.11.1-x86_64: ERRORS
+linux-5.12.1-i686: ERRORS
+linux-5.12.1-x86_64: ERRORS
+linux-5.13-rc1-i686: ERRORS
+linux-5.13-rc1-x86_64: ERRORS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2963, Succeeded: 2963, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3023, Succeeded: 3023, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: ERRORS
+kerneldoc: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
