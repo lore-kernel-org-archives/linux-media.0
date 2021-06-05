@@ -2,130 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB240C47082
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 11:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C90DC4743D
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEF9961078
-	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 11:56:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBDB861429
+	for <linux-media@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhFEL6g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Jun 2021 07:58:36 -0400
-Received: from mail-pf1-f172.google.com ([209.85.210.172]:39641 "EHLO
-        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbhFEL6g (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Jun 2021 07:58:36 -0400
-Received: by mail-pf1-f172.google.com with SMTP id k15so9386900pfp.6
-        for <linux-media@vger.kernel.org>; Sat, 05 Jun 2021 04:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IF9z/4CR4I9nODmhixle8IEYz+JA1I8SG+9FbLFfO/8=;
-        b=avV7ATYuhsjelQ2ZmcqNoBeqwaL65oSP2Ad51A1/nlGtkmiw1lcH+IxCV0x94pB9AT
-         Xy7Jq4jWuL1xD/7+XlesAsNhGyHS2CZbbY1Aw2QdKlioomj1DnZFq9eSlyaAWp/o/le0
-         h95sBwLc0o4+n1nR0vtv1au3jKTTqnOrZK3dviowRQXvGG6NBT3BW6YiUcA+JDswjxVT
-         2aQp9I8XcDqn4lMXn1B4ktcHaeNpZg2qpfACc9OFoAmV5pkZ9jm9t8dWSQA1GlzBhdwG
-         tfgaH8UDd5Lk9MR2RcowVO3Ilj7fdOJtdTbdXM1QPyFB5pM6jWLrJTPfIS6356HiziYN
-         rJiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IF9z/4CR4I9nODmhixle8IEYz+JA1I8SG+9FbLFfO/8=;
-        b=dTsYAFSAYsUH3kG7nljXTVj6QpFqO7PtetHUOU+1GHWMrYA44Iy4Tlh/csODgyE5oI
-         tak1xnkGqcGYoXsJ3tvWEiD4XEeg1wAmrNMTZZWCneMqM8TCCcSxFQyeqUzRlXMLf14z
-         JnWbF4GMDEIu8nzdFrMJCIkq2Ua9jHnodLYpcEI7eQ29gtS+cKqnEsDF/Wr4MZ3QDlsk
-         oOoC8ZXIPGOnLb7UPfO+k2qteasv4C1suYbeCOSHMRp7/nzb+HB0oZ3EfPccZsdFNQmQ
-         rWcDlBbdU3qRO13Pds7nRyc+aGCkDdhW9BdqBR71ujFYBvqhizo1NFOEalOrdEzp+PhB
-         eh9Q==
-X-Gm-Message-State: AOAM531uHxyaHXXXZ0zMggxM5reFTW0hIPFG2m0HpMqvUBPySpD414eW
-        0sTM3kax1C8aKuAHGhlAVnbn3B5qftw=
-X-Google-Smtp-Source: ABdhPJzrHN7KiO+uZW5WIm6J6qUByrlLX42Gjuvkf1wQtL7eLa5BLu7KPIsdDMssY2wj1k8+iek2GA==
-X-Received: by 2002:a62:cf45:0:b029:2ea:c56c:7b3e with SMTP id b66-20020a62cf450000b02902eac56c7b3emr4750756pfg.40.1622894148299;
-        Sat, 05 Jun 2021 04:55:48 -0700 (PDT)
-Received: from odkf.hopto.org ([211.58.213.153])
-        by smtp.gmail.com with ESMTPSA id p20sm3897126pff.204.2021.06.05.04.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Jun 2021 04:55:47 -0700 (PDT)
-From:   Seongyong Park <euphoriccatface@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Matt Ranostay <matt.ranostay@konsulko.com>,
+        id S230099AbhFENU0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Jun 2021 09:20:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34948 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229933AbhFENUZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 5 Jun 2021 09:20:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68150613FE;
+        Sat,  5 Jun 2021 13:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622899117;
+        bh=MZn/b+egYgV5T6zhO3wdcAfr9Ty9nBtYJvlFIpjsCtk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZtTd0YOfBUHABR/O/32+9rYjnBDSW92uYfVfgrr2hYM2onLNcbYxnvx5WfU2iOe4x
+         L8XCRSRTVQiRrhgXH1rrq8bfIkU0y/3DX2qsb08nLcpWkabcKr0nCAYmKdafSOarrF
+         qGzfhKUTbyzD8NYLJ9pmB41uXoMf9w1xZw6UVzOXIr5ZjyVC1iuYzWCRFIX/IPDg9r
+         K5Yq0m672UCJYBgVH87ZY+ybDz4lnxq3MmRjkX6FHFdFAqmWlJqttsesoTmLDawo/K
+         8Kj5ceITiSortfZuiCfHETvulqXiqdIDf0VsSMK1q56C0HNhBOyKv5/d33vEHZ3RX+
+         Txg3frZMECNjA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lpWCB-008GEe-Bz; Sat, 05 Jun 2021 15:18:35 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "Jonathan Corbet" <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Seongyong Park <euphoriccatface@gmail.com>
-Subject: [PATCH V2 2/2] media: video-i2c: append register data on MLX90640's frame
-Date:   Sat,  5 Jun 2021 20:54:57 +0900
-Message-Id: <20210605115456.14440-3-euphoriccatface@gmail.com>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 03/34] media: docs: */media/index.rst: don't use ReST doc:`foo`
+Date:   Sat,  5 Jun 2021 15:18:02 +0200
+Message-Id: <4c55f89ee17c762581610036acf2e8a4408b00a6.1622898327.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210516110902.784-1-euphoriccatface@gmail.com>
-References: <20210605115456.14440-1-euphoriccatface@gmail.com>
+In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On MLX90640, Each measurement step updates half of the pixels in the frame
-(every other pixel in default "chess mode", and every other row
-in "interleave mode"), while additional coefficient data (25th & 26th row)
-updates every step. The compensational coefficient data only corresponds
-with the pixels updated in the same step.
+The :doc:`foo` tag is auto-generated via automarkup.py.
+    So, use the filename at the sources, instead of :doc:`foo`.
 
-Only way to know which "subpage" was updated on the last step is to read
-"status register" on address 0x8000. Without this data,
-compensation calculation may be able to detect which sets of pixels have
-been updated, but it will have to make assumptions when frame skip happens,
-and there is no way to do it correctly when the host simply cannot
-keep up with refresh rate.
-
-Signed-off-by: Seongyong Park <euphoriccatface@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/i2c/video-i2c.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ Documentation/admin-guide/media/index.rst   | 12 +++++++-----
+ Documentation/driver-api/media/index.rst    | 10 ++++++----
+ Documentation/userspace-api/media/index.rst | 12 +++++++-----
+ 3 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 2ccb08335..f2313b446 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -74,7 +74,8 @@ static const struct v4l2_fmtdesc mlx90640_format = {
+diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
+index 6e0d2bae7154..c676af665111 100644
+--- a/Documentation/admin-guide/media/index.rst
++++ b/Documentation/admin-guide/media/index.rst
+@@ -11,12 +11,14 @@ its supported drivers.
  
- static const struct v4l2_frmsize_discrete mlx90640_size = {
- 	.width = 32,
--	.height = 26, /* 24 lines of pixel data + 2 lines of processing data */
-+	.height = 27,
-+	/* 24 lines of pixel data + 2 lines of processing data + 1 line of registers */
- };
+ Please see:
  
- static const struct regmap_config amg88xx_regmap_config = {
-@@ -168,8 +169,12 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+-- :doc:`/userspace-api/media/index`
+-     for the userspace APIs used on media devices.
++Documentation/userspace-api/media/index.rst
  
- static int mlx90640_xfer(struct video_i2c_data *data, char *buf)
- {
--	return regmap_bulk_read(data->regmap, 0x400, buf,
--				data->chip->buffer_size);
-+	int ret = regmap_bulk_read(data->regmap, 0x400, buf,
-+				   data->chip->buffer_size - 64);
-+	if (ret)
-+		return ret;
-+	return regmap_bulk_read(data->regmap, 0x8000, buf + (data->chip->buffer_size - 64),
-+				64);
- }
+-- :doc:`/driver-api/media/index`
+-     for driver development information and Kernel APIs used by
+-     media devices;
++  - for the userspace APIs used on media devices.
++
++Documentation/driver-api/media/index.rst
++
++  - for driver development information and Kernel APIs used by
++    media devices;
  
- static int amg88xx_setup(struct video_i2c_data *data)
-@@ -375,7 +380,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
- 		.format		= &mlx90640_format,
- 		.frame_intervals	= mlx90640_frame_intervals,
- 		.num_frame_intervals	= ARRAY_SIZE(mlx90640_frame_intervals),
--		.buffer_size	= 1664,
-+		.buffer_size	= 1728,
- 		.bpp		= 16,
- 		.regmap_config	= &mlx90640_regmap_config,
- 		.nvmem_config	= &mlx90640_nvram_config,
+ The media subsystem
+ ===================
+diff --git a/Documentation/driver-api/media/index.rst b/Documentation/driver-api/media/index.rst
+index 2ad71dfa8828..813d7db59da7 100644
+--- a/Documentation/driver-api/media/index.rst
++++ b/Documentation/driver-api/media/index.rst
+@@ -11,11 +11,13 @@ its supported drivers.
+ 
+ Please see:
+ 
+-- :doc:`/admin-guide/media/index`
+-    for usage information about media subsystem and supported drivers;
++Documentation/admin-guide/media/index.rst
+ 
+-- :doc:`/userspace-api/media/index`
+-     for the userspace APIs used on media devices.
++  - for usage information about media subsystem and supported drivers;
++
++Documentation/userspace-api/media/index.rst
++
++  - for the userspace APIs used on media devices.
+ 
+ 
+ .. only:: html
+diff --git a/Documentation/userspace-api/media/index.rst b/Documentation/userspace-api/media/index.rst
+index 7f42f83b9f59..d839904be085 100644
+--- a/Documentation/userspace-api/media/index.rst
++++ b/Documentation/userspace-api/media/index.rst
+@@ -11,12 +11,14 @@ used by media devices.
+ 
+ Please see:
+ 
+-- :doc:`/admin-guide/media/index`
+-    for usage information about media subsystem and supported drivers;
++Documentation/admin-guide/media/index.rst
+ 
+-- :doc:`/driver-api/media/index`
+-     for driver development information and Kernel APIs used by
+-     media devices;
++  - for usage information about media subsystem and supported drivers;
++
++Documentation/driver-api/media/index.rst
++
++  - for driver development information and Kernel APIs used by
++    media devices;
+ 
+ 
+ .. only:: html
 -- 
 2.31.1
 
