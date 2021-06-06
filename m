@@ -2,285 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8154DC4743E
-	for <linux-media@archiver.kernel.org>; Sun,  6 Jun 2021 07:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8182C47096
+	for <linux-media@archiver.kernel.org>; Sun,  6 Jun 2021 08:23:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 65668613AD
-	for <linux-media@archiver.kernel.org>; Sun,  6 Jun 2021 07:50:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C46EC61421
+	for <linux-media@archiver.kernel.org>; Sun,  6 Jun 2021 08:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbhFFHwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Jun 2021 03:52:36 -0400
-Received: from mail-ej1-f44.google.com ([209.85.218.44]:42563 "EHLO
-        mail-ej1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhFFHwg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Jun 2021 03:52:36 -0400
-Received: by mail-ej1-f44.google.com with SMTP id k25so15843259eja.9;
-        Sun, 06 Jun 2021 00:50:34 -0700 (PDT)
+        id S230334AbhFFIZo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Jun 2021 04:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230287AbhFFIZn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Jun 2021 04:25:43 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DADC061789;
+        Sun,  6 Jun 2021 01:23:40 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id g20so21464896ejt.0;
+        Sun, 06 Jun 2021 01:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1L+CugDcu0ySFhbe2SRx9ewcJnc69OcVxM+Qz0KsWKg=;
-        b=Z8xTXcjTXNQtrLBJjbQfH1dm3DIceJGvfjGD75iKVuUKNzaCoqwrUBfv6lobrk2cka
-         flQoBYh0RxTHEBp6Cj5ZxnrcmOPDhpNdelaV4+Q5Wzi+zIqLyQNOAHpPFcPtwCQbYC+g
-         dPMksezdZjkwBSyybA4dFS4bvGPT4b4UC3PL0SV+5eQ9HXjZULncH71epDhbP/DSbCm9
-         eRPkBnrNAkowx+8/2MMQqwcMP9TNg52r6026F+NBcTeYL9SLa6wtre5kChVhszLf1FiP
-         5fwMN1JO4bHdP1SF1X9cUo6sWjZN+UD6uET/I2O73j1hRjDOJBfN/ULOaBw9nORKmwoS
-         DOWA==
+        bh=ckHIT+W+zFdzF0pdvXxvN2EcXoFnHIBls4vcXGLYoGY=;
+        b=LU58Y66UQ9FitfV6F/zH772RT9rVk1M9TCGwX2oEhpI4rXAHoIw0OPVl4OJ1WTMY4n
+         JDpht2Wjw+RwsgesIQObYGC5wk0NUhq/Pk+qnI6pkXG8GmaAnErP4fSR8IWx+d4ke2Ya
+         HIQdgTN62PvP/mWxrvmbVuIHZ/qTzuADinlXKupdjLFwsg5SYAr//OUZtsKslDZcVTD6
+         ytvHsN/vClD9RKVTqbTXCQbboJl3uopVYSHmoXJB8Bp9A/S4Q8/5pGWb02bt1C0AQ5Hd
+         Jxrol1ybnNTP3LxpxJFndvn8Pf4uByKrbvQ5p0Lrn2fhvDWXVG7BXWwtdmk7WOrKomrK
+         yy1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1L+CugDcu0ySFhbe2SRx9ewcJnc69OcVxM+Qz0KsWKg=;
-        b=PnSa/rEKqA9v+Qm0uAjMqCJS8bBwGIQZVSpNCRNTiatY4VK1VXkCqRwBykq/Y1UnyJ
-         IjI40w0lzCUsu2bNopxQD9a+7W1uSg3gd9KtqQgw1vj+6zgWRkWCkx/Vchnemdke7XDg
-         bpveUhQPimxKniWCeDZRMylxl+KbW4yaJcBlhDfqtMqNl9o7/ND/lxEJccix4TGIm3kF
-         aqTnkXtWRmK6LIWy769BzBhTYJ9Mq3KPMXy6kLvyLrnYpk9OuOLHY8qgTkZmX/8BSPez
-         gYSahy/ASKz8EJUxYs5oeSMVlp93PtITxwho4ZJOk85ZiLL4QqGV4MvAll4rRhktbSh9
-         Rniw==
-X-Gm-Message-State: AOAM532dIMypsHbcLm0RtYuGs29SLFembmfEZhk9a6lPYa8lLFKiylzN
-        FFl1PTEmNPar6eef4zVOb6g=
-X-Google-Smtp-Source: ABdhPJyHJED78NmxWqy+3UB12hj3JL5WXMqpSyt2T4SSzymkviDsOiWzsALrKob1WbjW4tw4sU8YHg==
-X-Received: by 2002:a17:906:6849:: with SMTP id a9mr12712425ejs.415.1622965773781;
-        Sun, 06 Jun 2021 00:49:33 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-17-133.cable.triera.net. [86.58.17.133])
-        by smtp.gmail.com with ESMTPSA id qh23sm5070097ejb.77.2021.06.06.00.49.32
+        bh=ckHIT+W+zFdzF0pdvXxvN2EcXoFnHIBls4vcXGLYoGY=;
+        b=LfT8ULtuOCJgHkSm7JXLg3HM7kg4ZRT8f0XJimwFUapjiJGPGkW+AqOkyp5ZLetgMf
+         iluHbXAwZmgNt89B+hXrEkHFxuSkhKJBBVLfXqYH3TeTwVdLkmPnCDM5VWf5fc+9Jj1Z
+         Yol5sXGVOllNT81lDVFO2ur7xd2KUy6+lbK+8ubzzOxIn1eanh/2WIOBAHA2IKVm5AVY
+         gF5n99bLHvZNp8wsi6YKkSGzHtCEkySCY0xRr9m+gPH9btrIgGMKtkqDRhfgq+8nfhFG
+         ouekMq6rc0rNhvaL+AuzuRCgZHeeXmYmSzLw6oyqm1N5n9j317tss6sxeaPwSM73ZqqE
+         3QOQ==
+X-Gm-Message-State: AOAM531fHXlREPbYu/Zieg9/aX8L+6qRAMrhVvoliawly5/zz+i/yXDo
+        DAPkwe/sgXQ8UGkJNmAlSu2x8kFB5X+Khw==
+X-Google-Smtp-Source: ABdhPJw1X2nuGFVnO9OCSUzei4cPO5JAv5OhSvfeDHG7Se/qVMnOjKe9TTZzzbz7LUdrSmuRs9dL/g==
+X-Received: by 2002:a17:906:2ec6:: with SMTP id s6mr12422415eji.65.1622967818617;
+        Sun, 06 Jun 2021 01:23:38 -0700 (PDT)
+Received: from kista.localdomain (cpe-86-58-17-133.cable.triera.net. [86.58.17.133])
+        by smtp.gmail.com with ESMTPSA id y1sm4945908ejl.7.2021.06.06.01.23.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Jun 2021 00:49:33 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     hverkuil@xs4all.nl, ezequiel@collabora.com, p.zabel@pengutronix.de,
-        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
-        andrzej.p@collabora.com, jc@kynesim.co.uk,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH 7/8] media: hevc: Add scaling matrix control
-Date:   Sun, 06 Jun 2021 09:49:31 +0200
-Message-ID: <2618802.xq3rs0cueg@kista>
-In-Reply-To: <20210604130619.491200-8-benjamin.gaignard@collabora.com>
-References: <20210604130619.491200-1-benjamin.gaignard@collabora.com> <20210604130619.491200-8-benjamin.gaignard@collabora.com>
+        Sun, 06 Jun 2021 01:23:38 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        hverkuil-cisco@xs4all.nl, ezequiel@collabora.com,
+        benjamin.gaignard@collabora.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH 2/2] media: cedrus: hevc: Add support for multiple slices
+Date:   Sun,  6 Jun 2021 10:23:14 +0200
+Message-Id: <20210606082314.454193-3-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210606082314.454193-1-jernej.skrabec@gmail.com>
+References: <20210606082314.454193-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi!
+Now that segment address is available, support for multi-slice frames
+can be easily added.
 
-Dne petek, 04. junij 2021 ob 15:06:18 CEST je Benjamin Gaignard napisal(a):
-> HEVC scaling lists are used for the scaling process for transform
-> coefficients.
-> V4L2_HEVC_SPS_FLAG_SCALING_LIST_ENABLED has to set when they are
-> encoded in the bitstream.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  .../media/v4l/ext-ctrls-codec.rst             | 45 +++++++++++++++++++
->  .../media/v4l/vidioc-queryctrl.rst            |  6 +++
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     |  6 +++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  4 ++
->  include/media/hevc-ctrls.h                    | 11 +++++
->  5 files changed, 72 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
-Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 9120c5bcaf90..a4512b7cb520 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -3065,6 +3065,51 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->  
->      \normalsize
->  
-> +``V4L2_CID_MPEG_VIDEO_HEVC_SCALING_MATRIX (struct)``
-> +    Specifies the HEVC scaling matrix parameters used for the scaling 
-process
-> +    for transform coefficients.
-> +    These matrix and parameters are defined according to :ref:`hevc`.
-> +    They are described in section 7.4.5 "Scaling list data semantics" of
-> +    the specification.
-> +
-> +.. c:type:: v4l2_ctrl_hevc_scaling_matrix
-> +
-> +.. raw:: latex
-> +
-> +    \scriptsize
-> +
-> +.. tabularcolumns:: |p{5.4cm}|p{6.8cm}|p{5.1cm}|
-> +
-> +.. cssclass:: longtable
-> +
-> +.. flat-table:: struct v4l2_ctrl_hevc_slice_params
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  | 26 ++++++++++++-------
+ .../staging/media/sunxi/cedrus/cedrus_video.c |  1 +
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-^ copy paste error? It should be v4l2_ctrl_hevc_scaling_matrix.
-
-Best regards,
-Jernej
-
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 1 2
-> +
-> +    * - __u8
-> +      - ``scaling_list_4x4[6][16]``
-> +      -
-> +    * - __u8
-> +      - ``scaling_list_8x8[6][64]``
-> +      -
-> +    * - __u8
-> +      - ``scaling_list_16x16[6][64]``
-> +      -
-> +    * - __u8
-> +      - ``scaling_list_32x32[2][64]``
-> +      -
-> +    * - __u8
-> +      - ``scaling_list_dc_coef_16x16[6]``
-> +      -
-> +    * - __u8
-> +      - ``scaling_list_dc_coef_32x32[2]``
-> +      -
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
-> +
->  .. c:type:: v4l2_hevc_dpb_entry
->  
->  .. raw:: latex
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/
-Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> index f9ecf6276129..2f491c17dd5d 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> @@ -495,6 +495,12 @@ See also the examples in :ref:`control`.
->        - n/a
->        - A struct :c:type:`v4l2_ctrl_hevc_slice_params`, containing HEVC
->  	slice parameters for stateless video decoders.
-> +    * - ``V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX``
-> +      - n/a
-> +      - n/a
-> +      - n/a
-> +      - A struct :c:type:`v4l2_ctrl_hevc_scaling_matrix`, containing HEVC
-> +	scaling matrix for stateless video decoders.
->      * - ``V4L2_CTRL_TYPE_VP8_FRAME``
->        - n/a
->        - n/a
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-
-core/v4l2-ctrls-core.c
-> index c4b5082849b6..70adfc1b9c81 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -687,6 +687,9 @@ static int std_validate_compound(const struct v4l2_ctrl 
-*ctrl, u32 idx,
->  
->  		break;
->  
-> +	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
-> +		break;
-> +
->  	case V4L2_CTRL_TYPE_AREA:
->  		area = p;
->  		if (!area->width || !area->height)
-> @@ -1240,6 +1243,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct 
-v4l2_ctrl_handler *hdl,
->  	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
->  		elem_size = sizeof(struct v4l2_ctrl_hevc_slice_params);
->  		break;
-> +	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
-> +		elem_size = sizeof(struct 
-v4l2_ctrl_hevc_scaling_matrix);
-> +		break;
->  	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
->  		elem_size = sizeof(struct 
-v4l2_ctrl_hevc_decode_params);
->  		break;
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-
-core/v4l2-ctrls-defs.c
-> index b6344bbf1e00..cb29c2a7fabe 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -996,6 +996,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_HEVC_SPS:			
-return "HEVC Sequence Parameter Set";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_PPS:			
-return "HEVC Picture Parameter Set";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:		return 
-"HEVC Slice Parameters";
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_SCALING_MATRIX:		
-return "HEVC Scaling Matrix";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS:		
-return "HEVC Decode Parameters";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:		return "HEVC 
-Decode Mode";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:		return 
-"HEVC Start Code";
-> @@ -1488,6 +1489,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum 
-v4l2_ctrl_type *type,
->  	case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:
->  		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
->  		break;
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_SCALING_MATRIX:
-> +		*type = V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
-> +		break;
->  	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS:
->  		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
->  		break;
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index dc964ff7cd29..da6189ef7ab4 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -19,6 +19,7 @@
->  #define V4L2_CID_MPEG_VIDEO_HEVC_SPS		(V4L2_CID_CODEC_BASE + 
-1008)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_PPS		(V4L2_CID_CODEC_BASE + 
-1009)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 
-1010)
-> +#define V4L2_CID_MPEG_VIDEO_HEVC_SCALING_MATRIX	(V4L2_CID_CODEC_BASE + 
-1011)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE + 
-1012)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 
-1015)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 
-1016)
-> @@ -27,6 +28,7 @@
->  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
->  #define V4L2_CTRL_TYPE_HEVC_PPS 0x0121
->  #define V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS 0x0122
-> +#define V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX 0x0123
->  #define V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS 0x0124
->  
->  enum v4l2_mpeg_video_hevc_decode_mode {
-> @@ -225,6 +227,15 @@ struct v4l2_ctrl_hevc_decode_params {
->  	__u64	flags;
->  };
->  
-> +struct v4l2_ctrl_hevc_scaling_matrix {
-> +	__u8	scaling_list_4x4[6][16];
-> +	__u8	scaling_list_8x8[6][64];
-> +	__u8	scaling_list_16x16[6][64];
-> +	__u8	scaling_list_32x32[2][64];
-> +	__u8	scaling_list_dc_coef_16x16[6];
-> +	__u8	scaling_list_dc_coef_32x32[2];
-> +};
-> +
->  /*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 
-*/
->  #define V4L2_CID_CODEC_HANTRO_BASE				
-(V4L2_CTRL_CLASS_CODEC | 0x1200)
->  /*
-> 
-
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 6821e3d05d34..ef0311a16d01 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -247,6 +247,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	const struct v4l2_ctrl_hevc_slice_params *slice_params;
+ 	const struct v4l2_ctrl_hevc_decode_params *decode_params;
+ 	const struct v4l2_hevc_pred_weight_table *pred_weight_table;
++	unsigned int width_in_ctb_luma, ctb_size_luma;
++	unsigned int log2_max_luma_coding_block_size;
+ 	dma_addr_t src_buf_addr;
+ 	dma_addr_t src_buf_end_addr;
+ 	u32 chroma_log2_weight_denom;
+@@ -260,15 +262,17 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	decode_params = run->h265.decode_params;
+ 	pred_weight_table = &slice_params->pred_weight_table;
+ 
++	log2_max_luma_coding_block_size =
++		sps->log2_min_luma_coding_block_size_minus3 + 3 +
++		sps->log2_diff_max_min_luma_coding_block_size;
++	ctb_size_luma = 1UL << log2_max_luma_coding_block_size;
++	width_in_ctb_luma =
++		DIV_ROUND_UP(sps->pic_width_in_luma_samples, ctb_size_luma);
++
+ 	/* MV column buffer size and allocation. */
+ 	if (!ctx->codec.h265.mv_col_buf_size) {
+ 		unsigned int num_buffers =
+ 			run->dst->vb2_buf.vb2_queue->num_buffers;
+-		unsigned int log2_max_luma_coding_block_size =
+-			sps->log2_min_luma_coding_block_size_minus3 + 3 +
+-			sps->log2_diff_max_min_luma_coding_block_size;
+-		unsigned int ctb_size_luma =
+-			1UL << log2_max_luma_coding_block_size;
+ 
+ 		/*
+ 		 * Each CTB requires a MV col buffer with a specific unit size.
+@@ -322,15 +326,17 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	reg = VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_end_addr);
+ 	cedrus_write(dev, VE_DEC_H265_BITS_END_ADDR, reg);
+ 
+-	/* Coding tree block address: start at the beginning. */
+-	reg = VE_DEC_H265_DEC_CTB_ADDR_X(0) | VE_DEC_H265_DEC_CTB_ADDR_Y(0);
++	/* Coding tree block address */
++	reg = VE_DEC_H265_DEC_CTB_ADDR_X(slice_params->slice_segment_addr % width_in_ctb_luma);
++	reg |= VE_DEC_H265_DEC_CTB_ADDR_Y(slice_params->slice_segment_addr / width_in_ctb_luma);
+ 	cedrus_write(dev, VE_DEC_H265_DEC_CTB_ADDR, reg);
+ 
+ 	cedrus_write(dev, VE_DEC_H265_TILE_START_CTB, 0);
+ 	cedrus_write(dev, VE_DEC_H265_TILE_END_CTB, 0);
+ 
+ 	/* Clear the number of correctly-decoded coding tree blocks. */
+-	cedrus_write(dev, VE_DEC_H265_DEC_CTB_NUM, 0);
++	if (ctx->fh.m2m_ctx->new_frame)
++		cedrus_write(dev, VE_DEC_H265_DEC_CTB_NUM, 0);
+ 
+ 	/* Initialize bitstream access. */
+ 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
+@@ -482,8 +488,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 				V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT,
+ 				slice_params->flags);
+ 
+-	/* FIXME: For multi-slice support. */
+-	reg |= VE_DEC_H265_DEC_SLICE_HDR_INFO0_FLAG_FIRST_SLICE_SEGMENT_IN_PIC;
++	if (ctx->fh.m2m_ctx->new_frame)
++		reg |= VE_DEC_H265_DEC_SLICE_HDR_INFO0_FLAG_FIRST_SLICE_SEGMENT_IN_PIC;
+ 
+ 	cedrus_write(dev, VE_DEC_H265_DEC_SLICE_HDR_INFO0, reg);
+ 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index 9ddd789d0b1f..247ff90a26b9 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -340,6 +340,7 @@ static int cedrus_s_fmt_vid_out(struct file *file, void *priv,
+ 
+ 	switch (ctx->src_fmt.pixelformat) {
+ 	case V4L2_PIX_FMT_H264_SLICE:
++	case V4L2_PIX_FMT_HEVC_SLICE:
+ 		vq->subsystem_flags |=
+ 			VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
+ 		break;
+-- 
+2.31.1
 
