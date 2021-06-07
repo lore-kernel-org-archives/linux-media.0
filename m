@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F4FC47082
-	for <linux-media@archiver.kernel.org>; Mon,  7 Jun 2021 07:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FBACC47082
+	for <linux-media@archiver.kernel.org>; Mon,  7 Jun 2021 07:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38CC3611AE
-	for <linux-media@archiver.kernel.org>; Mon,  7 Jun 2021 07:38:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0918F6120F
+	for <linux-media@archiver.kernel.org>; Mon,  7 Jun 2021 07:39:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbhFGHkR convert rfc822-to-8bit (ORCPT
+        id S230177AbhFGHky convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Jun 2021 03:40:17 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:4374 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhFGHkQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Jun 2021 03:40:16 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Fz4rV0xK7z69cZ;
-        Mon,  7 Jun 2021 15:34:34 +0800 (CST)
+        Mon, 7 Jun 2021 03:40:54 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3079 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230197AbhFGHky (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Jun 2021 03:40:54 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Fz4r42KKCzWsvZ;
+        Mon,  7 Jun 2021 15:34:12 +0800 (CST)
 Received: from dggpeml500016.china.huawei.com (7.185.36.70) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 7 Jun 2021 15:38:18 +0800
+ 15.1.2176.2; Mon, 7 Jun 2021 15:39:01 +0800
 Received: from huawei.com (10.174.179.133) by dggpeml500016.china.huawei.com
  (7.185.36.70) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 7 Jun 2021
- 15:38:18 +0800
+ 15:39:01 +0800
 From:   Yang Yanchao <yangyanchao6@huawei.com>
 To:     <dan.carpenter@oracle.com>
 CC:     <linux-distros@vs.openwall.org>, <linux-media@vger.kernel.org>,
         <linux1394-devel@lists.sourceforge.net>, <mchehab@kernel.org>,
         <security@kernel.org>
 Subject: [PATCH] media firewire firedtv-avc fix a buffer overflow in avc_ca_pmt() 
-Date:   Mon, 7 Jun 2021 15:38:17 +0800
-Message-ID: <20210607073817.1246-1-yangyanchao6@huawei.com>
+Date:   Mon, 7 Jun 2021 15:39:00 +0800
+Message-ID: <20210607073900.1298-1-yangyanchao6@huawei.com>
 X-Mailer: git-send-email 2.31.1.windows.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain
 X-Originating-IP: [10.174.179.133]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpeml500016.china.huawei.com (7.185.36.70)
 X-CFilter-Loop: Reflected
 Precedence: bulk
