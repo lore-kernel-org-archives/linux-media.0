@@ -2,118 +2,140 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67589C48BCD
-	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 22:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A73CC47082
+	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 22:38:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CBD860551
-	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 22:37:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57DA66136D
+	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 22:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235152AbhFHWju (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Jun 2021 18:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S234489AbhFHWjy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Jun 2021 18:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235134AbhFHWjt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Jun 2021 18:39:49 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8FC061795
-        for <linux-media@vger.kernel.org>; Tue,  8 Jun 2021 15:37:56 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id r20so1248221qtp.3
-        for <linux-media@vger.kernel.org>; Tue, 08 Jun 2021 15:37:56 -0700 (PDT)
+        with ESMTP id S235164AbhFHWjv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Jun 2021 18:39:51 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEC2C061574
+        for <linux-media@vger.kernel.org>; Tue,  8 Jun 2021 15:37:43 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id 93so9207788qtc.10
+        for <linux-media@vger.kernel.org>; Tue, 08 Jun 2021 15:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=marek-ca.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v1xMzXmW4I8A20yjy4AJ9Bre8Zlk0ksm9chOAJeMj/U=;
-        b=CYGqoeVnx4rMzz+HeBXV4/4Reh2bBFmtJn0nqGSgSPqkrhmgooh5EN0gUOWB/KVmxs
-         KAMBdi7cT0x4yb7I08HyOe1afZDKaOAgts4wgvuh92E4LI/0dBw58KAb/lVjV2sAn3xO
-         FTAUO+SM4iOK4Sp1OoNThF6BEgzSjFFyq2iLMDbStUPZwmsiz2lPes0FqSIZuUf61EPI
-         yo/Twvg0ZbOniepw5JA7XXrHNG3RD+wq6N0M0qnjZFCFvr4vjjuDmX6eiIdh6ar1WoSv
-         llGtqpL6rg042MGIk5MnhmyZtsBHya1YteDS3Su0HTTv1vd0PnsnkUe3U/rdqRC8slcl
-         st5Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f8KKZp9p4T52mWssg/ioLod7mgnjoZBlX8q2vGwB4Gs=;
+        b=dANiAJZSTKr2CdLU0E2rgby4U9Ue2OGJ/CdRtL7FQg56FEjDpFcPCzzAJOTq2+WQHT
+         PXIOzfyTzqTJelhComj0bsW29SNpwRQmySGsrunGQ2iiSHPNU7KjNm4RinuKx/8GtPaE
+         YMjM7Z4CAxWRxBW5MXIQ34N/bXrjk/UTMmpIvq/rvhFWOFZZH2SDZY2zFUGt4B5IYEPt
+         +UvYVrRwWvEpRHAuoW2HHnWoLV4ZRk3valvN3zFkghkjmkJwCtf87jupih0dsojWubE0
+         n40saO5M/AZ/0ZR3yrCMU8pQgdz2zrqbCqwzXfmIqIVWXBQjI0KflLNL0RKON7BF32IE
+         2qBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v1xMzXmW4I8A20yjy4AJ9Bre8Zlk0ksm9chOAJeMj/U=;
-        b=oHQwff2RFjhxyAzQ+584Qam92FXaTzjkpJ2BfhUPqq2RapXCeUCwim07G+1Ipl5AFl
-         7IlYR9inINJ03gSO43JDMTbnvvrpM5Ge6ro3waLpPimkVkBBSpJznhLgkBoKqj1mWt/N
-         +PiT8YN/DX3mN+AbTuu4z7agEiW6W6NgHzh0M08w0iD3r50O9Hx4Atl5p60Pbkl7FTCa
-         aY+NSNvRqMIjJe3YjBRt8irjppn4r5mcgT/TgWRQusfbXdB9AyARdj7Pa2e98SREJWmz
-         AjqkWw2Ztr4aq51WTLvcSg5ZUIXiiFiorqYEr//vEcMryhxDdYbDHJGpRy/arsKz3NiR
-         WOtA==
-X-Gm-Message-State: AOAM530bcog8hTHGF3KK8m0w2oxZqLna2j5DFKJi2Vh8e/XhbtUwgvS3
-        Hz4R4kwx4cumFLpjF9dvAHEdXQ==
-X-Google-Smtp-Source: ABdhPJxPJ7139kfkP3asQjYjHTq0Q0zZhjYefdq0sumHlkAT/u8hSy/RpZYYqnmbPY7Hq5whpoTgtQ==
-X-Received: by 2002:ac8:5bc1:: with SMTP id b1mr22672747qtb.161.1623191875339;
-        Tue, 08 Jun 2021 15:37:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f8KKZp9p4T52mWssg/ioLod7mgnjoZBlX8q2vGwB4Gs=;
+        b=UVi52cMJDyykk5TA0AofCVSHN7nQZRDip3ww9q4hcQRuwdADViqXlArDiyU7ng7ZpY
+         bqDB8oHd5gfIvSzO79bGl8nTOvIGDPV38DRDySKIQI1jD6dzs+YAkkiPVkzRLjCayFXQ
+         7bgagGW0xqgDPILIU7uOaSJLaE2TV84pAK9e/nnnkeN9qpADRB9jekz9P0bddgA1IjPH
+         Brtj8ZR5oH1cPcCi8INNTfbVG0dL4VKrI/RIsMOu6OS9xhyEPunC4oCXyLKjH1qeihBJ
+         fMsFIJRvkcpQNqjCklEH4d0K4hmwzi9kriVDyzUlXHXFn555ZZ4ZgZ3p03fpjgCkMSig
+         eWWw==
+X-Gm-Message-State: AOAM5323YiiDVNJnSZSVZrg0TtkPPbivuyotPzhE51Ec8iSND5R4BLzE
+        0WQ5w7eFSGU3FlPwYrmQqehtcw==
+X-Google-Smtp-Source: ABdhPJyUHL2nFV7DwXU0kKPHWeKA7OJKnN40XVZ4z8YyT8LkDvLCsYuQ+iAuC+4HyGsiBxAzJa4Qng==
+X-Received: by 2002:ac8:5bca:: with SMTP id b10mr1164997qtb.270.1623191862905;
+        Tue, 08 Jun 2021 15:37:42 -0700 (PDT)
 Received: from localhost.localdomain (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
-        by smtp.gmail.com with ESMTPSA id m3sm2324266qkh.135.2021.06.08.15.37.54
+        by smtp.gmail.com with ESMTPSA id m3sm2324266qkh.135.2021.06.08.15.37.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 15:37:55 -0700 (PDT)
+        Tue, 08 Jun 2021 15:37:42 -0700 (PDT)
 From:   Jonathan Marek <jonathan@marek.ca>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     robert.foss@linaro.org, andrey.konovalov@linaro.org,
-        Todor Tomov <todor.too@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org (open list),
         linux-media@vger.kernel.org (open list:QUALCOMM CAMERA SUBSYSTEM DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 08/17] media: camss: csid-170: set the right HALT_CMD when disabled
-Date:   Tue,  8 Jun 2021 18:34:57 -0400
-Message-Id: <20210608223513.23193-9-jonathan@marek.ca>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>
+Subject: [PATCH 00/17] CAMSS: SM8250 support (and some fixes)
+Date:   Tue,  8 Jun 2021 18:34:49 -0400
+Message-Id: <20210608223513.23193-1-jonathan@marek.ca>
 X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20210608223513.23193-1-jonathan@marek.ca>
-References: <20210608223513.23193-1-jonathan@marek.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the "HALT_CMD_RESUME_AT_FRAME_BOUNDARY" define instead of a "1" which
-is otherwise confusing, and add a "HALT_CMD_HALT_AT_FRAME_BOUNDARY" which
-is set when disabling.
+This adds initial support for SM8250 and its 4 VFEs and 6 CSIPHYs.
+The only big change is the added camss-vfe-480.c to support the
+Titan 480 VFE.
 
-Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-csid-170.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+v2:
+ - Fixed some typos in commit messages (patches 02 and 08)
+ - patch 03 ("media: camss: csiphy-3ph: add support for SM8250 CSI DPHY"):
+   - moved definition of CAMSS_8250 to this patch,
+   - removed unused lane_enable variable
+   - added a default unreachable case to avoid a warning
+   - added a is_gen2 variable (minor rework)
+ - Undo DECODE_FORMAT_PAYLOAD_ONLY change, add comment instead (patch 04)
+ - "ops" reworks in addition to removing dead code (patch 12)
+ - renamed csid-170 to csid-gen2, added defines for offsets, add missing
+   camnoc_axi clock to sm8250 vfe resources (patch 16/17)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-index 2c84d40fe3e04..22a7d7ad63403 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-@@ -105,7 +105,8 @@
- #define CSID_RDI_CTRL(rdi)			((IS_LITE ? 0x208 : 0x308)\
- 						+ 0x100 * (rdi))
- #define		RDI_CTRL_HALT_CMD		0
--#define			ALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
-+#define			HALT_CMD_HALT_AT_FRAME_BOUNDARY		0
-+#define			HALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
- #define		RDI_CTRL_HALT_MODE		2
- 
- #define CSID_RDI_FRM_DROP_PATTERN(rdi)			((IS_LITE ? 0x20C : 0x30C)\
-@@ -444,7 +445,10 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1);
- 
--	val = 1 << RDI_CTRL_HALT_CMD;
-+	if (enable)
-+		val = HALT_CMD_RESUME_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
-+	else
-+		val = HALT_CMD_HALT_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
- 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
- }
- 
+Jonathan Marek (17):
+  media: camss: csiphy-3ph: don't print HW version as an error
+  media: camss: csiphy-3ph: disable interrupts
+  media: camss: csiphy-3ph: add support for SM8250 CSI DPHY
+  media: camss: csid-170: fix non-10bit formats
+  media: camss: csid-170: don't enable unused irqs
+  media: camss: csid-170: remove stray comment
+  media: camss: csid-170: support more than one lite vfe
+  media: camss: csid-170: set the right HALT_CMD when disabled
+  media: camss: csid: allow csid to work without a regulator
+  media: camss: remove vdda-csiN from sdm845 resources
+  media: camss: fix VFE irq name
+  media: camss: remove some vfe ops and clean up dead vfe-170 code
+  media: camss: vfe-170: fix "VFE halt timeout" error
+  media: camss: Add initial support for VFE hardware version Titan 480
+  media: camss: add support for V4L2_PIX_FMT_GREY for sdm845 HW
+  media: camss: add support for SM8250 camss
+  media: dt-bindings: media: camss: Add qcom,sm8250-camss binding
+
+ .../bindings/media/qcom,sm8250-camss.yaml     | 399 +++++++++++++
+ drivers/media/platform/qcom/camss/Makefile    |   3 +-
+ .../{camss-csid-170.c => camss-csid-gen2.c}   |  32 +-
+ .../media/platform/qcom/camss/camss-csid.c    |  45 +-
+ .../media/platform/qcom/camss/camss-csid.h    |   2 +-
+ .../qcom/camss/camss-csiphy-3ph-1-0.c         | 184 ++++--
+ .../media/platform/qcom/camss/camss-csiphy.c  |   9 +-
+ .../media/platform/qcom/camss/camss-vfe-170.c | 101 +---
+ .../media/platform/qcom/camss/camss-vfe-4-1.c |  25 +-
+ .../media/platform/qcom/camss/camss-vfe-4-7.c |  63 +-
+ .../media/platform/qcom/camss/camss-vfe-4-8.c |  65 +--
+ .../media/platform/qcom/camss/camss-vfe-480.c | 545 ++++++++++++++++++
+ .../platform/qcom/camss/camss-vfe-gen1.c      |  94 +--
+ .../platform/qcom/camss/camss-vfe-gen1.h      |  39 +-
+ drivers/media/platform/qcom/camss/camss-vfe.c |  29 +-
+ drivers/media/platform/qcom/camss/camss-vfe.h |  17 +-
+ .../media/platform/qcom/camss/camss-video.c   |   5 +-
+ drivers/media/platform/qcom/camss/camss.c     | 205 ++++++-
+ drivers/media/platform/qcom/camss/camss.h     |   1 +
+ 19 files changed, 1523 insertions(+), 340 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
+ rename drivers/media/platform/qcom/camss/{camss-csid-170.c => camss-csid-gen2.c} (95%)
+ create mode 100644 drivers/media/platform/qcom/camss/camss-vfe-480.c
+
 -- 
 2.26.1
 
