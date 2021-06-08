@@ -2,76 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF3BC47082
-	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 10:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7695AC4743E
+	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 10:42:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 156FF61246
-	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 10:15:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54A3B61246
+	for <linux-media@archiver.kernel.org>; Tue,  8 Jun 2021 10:42:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbhFHKRQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Jun 2021 06:17:16 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33430 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229626AbhFHKRP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Jun 2021 06:17:15 -0400
-X-UUID: 968a5aa102434385859ef1fc8cbb58a1-20210608
-X-UUID: 968a5aa102434385859ef1fc8cbb58a1-20210608
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 939033216; Tue, 08 Jun 2021 18:15:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 8 Jun 2021 18:15:11 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Jun 2021 18:15:11 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yj.chiang@mediatek.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>
-Subject: [PATCH] media: Kconfig: Fix DVB_CORE can't be selected as module
-Date:   Tue, 8 Jun 2021 18:14:51 +0800
-Message-ID: <20210608101451.9301-1-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        id S230523AbhFHKoI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Jun 2021 06:44:08 -0400
+Received: from comms.puri.sm ([159.203.221.185]:55568 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231184AbhFHKoI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Jun 2021 06:44:08 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id EFDC6DF8FD;
+        Tue,  8 Jun 2021 03:42:14 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TJmJLB6gP39x; Tue,  8 Jun 2021 03:42:13 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     martin.kepplinger@puri.sm, festevam@gmail.com, krzk@kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de, kernel@puri.sm,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org,
+        phone-devel@vger.kernel.org, robh@kernel.org, shawnguo@kernel.org,
+        slongerbeam@gmail.com
+Subject: [PATCH v3 3/3] arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
+Date:   Tue,  8 Jun 2021 12:41:28 +0200
+Message-Id: <20210608104128.1616028-4-martin.kepplinger@puri.sm>
+In-Reply-To: <20210608104128.1616028-1-martin.kepplinger@puri.sm>
+References: <20210608104128.1616028-1-martin.kepplinger@puri.sm>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The DVB_CORE now depends on MEDIA_DIGITAL_TV_SUPPORT and
-default MEDIA_DIGITAL_TV_SUPPORT, and this makes it can never be =m
-since the type of MEDIA_DIGITAL_TV_SUPPORT is bool.
+Describe the 2 available CSI interfaces on the i.MX8MQ with the MIPI-CSI2
+receiver and the CSI Bridge that provides the user buffers, where the
+existing driver can directly be used.
 
-Change MEDIA_DIGITAL_TV_SUPPORT to tristate so it's possible to set
-DVB_CORE as =m.
+An image sensor is to be connected to the MIPIs' second port, described in
+board files.
 
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
- drivers/media/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 102 ++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
-diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index b07812657cee..c3baf92b4d02 100644
---- a/drivers/media/Kconfig
-+++ b/drivers/media/Kconfig
-@@ -88,7 +88,7 @@ config MEDIA_ANALOG_TV_SUPPORT
- 		will disable support for them.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index 91df9c5350ae..39955d6621f2 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -1099,6 +1099,108 @@ uart4: serial@30a60000 {
+ 				status = "disabled";
+ 			};
  
- config MEDIA_DIGITAL_TV_SUPPORT
--	bool
-+	tristate
- 	prompt "Digital TV" if MEDIA_SUPPORT_FILTER
- 	default y if !MEDIA_SUPPORT_FILTER
- 	help
++			mipi_csi1: csi@30a70000 {
++				compatible = "fsl,imx8mq-mipi-csi2";
++				reg = <0x30a70000 0x1000>;
++				clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++				   <&clk IMX8MQ_CLK_CSI1_ESC>,
++				   <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++				   <&clk IMX8MQ_CLK_CLKO2>;
++				clock-names = "core", "esc", "pxl", "clko2";
++				assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++				    <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++				    <&clk IMX8MQ_CLK_CSI1_ESC>;
++				assigned-clock-rates = <266000000>, <333000000>, <66000000>;
++				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++					<&clk IMX8MQ_SYS2_PLL_1000M>,
++					<&clk IMX8MQ_SYS1_PLL_800M>;
++				power-domains = <&pgc_mipi_csi1>;
++				reset = <&src>;
++				phy = <&iomuxc_gpr>;
++				interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
++				interconnect-names = "dram";
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						csi1_mipi_ep: endpoint {
++							remote-endpoint = <&csi1_ep>;
++						};
++					};
++				};
++			};
++
++			csi1: csi@30a90000 {
++				compatible = "fsl,imx7-csi";
++				reg = <0x30a90000 0x10000>;
++				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk IMX8MQ_CLK_CSI1_ROOT>;
++				clock-names = "mclk";
++				status = "disabled";
++
++				port {
++					csi1_ep: endpoint {
++						remote-endpoint = <&csi1_mipi_ep>;
++					};
++				};
++			};
++
++			mipi_csi2: csi@30b60000 {
++				compatible = "fsl,imx8mq-mipi-csi2";
++				reg = <0x30b60000 0x1000>;
++				clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
++				   <&clk IMX8MQ_CLK_CSI2_ESC>,
++				   <&clk IMX8MQ_CLK_CSI2_PHY_REF>,
++				   <&clk IMX8MQ_CLK_CLKO2>;
++				clock-names = "core", "esc", "pxl", "clko2";
++				assigned-clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
++				    <&clk IMX8MQ_CLK_CSI2_PHY_REF>,
++				    <&clk IMX8MQ_CLK_CSI2_ESC>;
++				assigned-clock-rates = <266000000>, <333000000>, <66000000>;
++				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++					<&clk IMX8MQ_SYS2_PLL_1000M>,
++					<&clk IMX8MQ_SYS1_PLL_800M>;
++				power-domains = <&pgc_mipi_csi2>;
++				reset = <&src>;
++				phy = <&iomuxc_gpr>;
++				interconnects = <&noc IMX8MQ_ICM_CSI2 &noc IMX8MQ_ICS_DRAM>;
++				interconnect-names = "dram";
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						csi2_mipi_ep: endpoint {
++							remote-endpoint = <&csi2_ep>;
++						};
++					};
++				};
++			};
++
++			csi2: csi@30b80000 {
++				compatible = "fsl,imx7-csi";
++				reg = <0x30b80000 0x10000>;
++				interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk IMX8MQ_CLK_CSI2_ROOT>;
++				clock-names = "mclk";
++				status = "disabled";
++
++				port {
++					csi2_ep: endpoint {
++						remote-endpoint = <&csi2_mipi_ep>;
++					};
++				};
++			};
++
+ 			mu: mailbox@30aa0000 {
+ 				compatible = "fsl,imx8mq-mu", "fsl,imx6sx-mu";
+ 				reg = <0x30aa0000 0x10000>;
 -- 
-2.18.0
+2.30.2
 
