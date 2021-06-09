@@ -2,77 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29557C48BCD
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75483C48BCD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:28:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09A4F61364
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:27:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A6E2613AD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:28:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbhFIM3f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 08:29:35 -0400
-Received: from mga01.intel.com ([192.55.52.88]:23993 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229814AbhFIM3e (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Jun 2021 08:29:34 -0400
-IronPort-SDR: Z/vvuBzW2MT17ysVx7XwPTcbw7nRdvHCrpZIUAthB8+LWS5guyzsYwfji49NdaD1bxslUoHy2b
- r14oWRC8Mf3g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="226430115"
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="226430115"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:27:40 -0700
-IronPort-SDR: VO3Na5XLmsjuzG+q5Tv2xf3SvDoJ6p+Jzcda6MA/89OJKBJdl8Qvfplw1CqyZD+kfYDVt3WhUr
- Dh7uxwbWYIyA==
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="440827374"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:27:37 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 9D7E220116;
-        Wed,  9 Jun 2021 15:27:35 +0300 (EEST)
-Date:   Wed, 9 Jun 2021 15:27:35 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 2/2] media: v4l2-async: Make subdev notifier cleanup
- conditional
-Message-ID: <20210609122735.GE3@paasikivi.fi.intel.com>
-References: <20210609115457.822085-1-paul.kocialkowski@bootlin.com>
- <20210609115457.822085-2-paul.kocialkowski@bootlin.com>
+        id S232363AbhFIMau (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 08:30:50 -0400
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:41783 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231834AbhFIMat (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 08:30:49 -0400
+Received: by mail-lf1-f50.google.com with SMTP id j20so8425886lfe.8
+        for <linux-media@vger.kernel.org>; Wed, 09 Jun 2021 05:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BTJB1S5ExGvJdJQAtKtn58DjeMYhauL+VWrppub8qD8=;
+        b=E4ij39tEzrPsi7ctjyMd9409f+3A11WF+VZm1E+4t6L7I9eXSyw7LJS29D5IDfELU7
+         EGnJCxLok8hj7uZ8I/Co81qOr8Bv63xBCmnOUNuXWaofOtbpyxnYbYfZgHJAr8NSwGUh
+         WPDKpwMvo6FWjsOUZQPt2Vt+0ymZMmWc2Kdo1aZz8/jSK8H8FirG8v0JgTt2gWC/bKEW
+         0tTtyeOlHMC1l6qNH7PBPG9170hnJpZni03Rb8gReC4NKNLjfMTwS54PTI2pv2VkZTIx
+         3x5RDqOBfbsU+iZmSdoDqjiup4oEjbpA4q1lW4t3cvZGWlMIXB1+cB/+cT78P5XZvp+F
+         imxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BTJB1S5ExGvJdJQAtKtn58DjeMYhauL+VWrppub8qD8=;
+        b=MEzo3jDTBgMbRIkh0B9IsZAweMmkJwimHutB/XxMcFvSLktMU0BxaA/hVZKD5VNIov
+         fXsaM8yfUpykVchecMtcKHOp2fGbB0ONs2pR8iCeeiaZ9u8CRzSlqHDmrXfBs0JxvvaV
+         EUeIKAb0zWpsaxp/EtRG4oa2TxmlZ6QmUPKjM5A46mlBMsFB6cr408M4d2obsaWGSepi
+         ubTprU3q4OYqOCdlBMyI8xWAxI54JnbPFyAGSaOT5N1bM+cSMOlLsERxMX2gYboGPatd
+         yrHXrxs83anrlVeG6JXX9CVzPHUBBQjUTZeXgMR+vrU0ExYnqoD8oyOq62tSgWLoHSnO
+         ES/A==
+X-Gm-Message-State: AOAM530FYqdjOlHLTZQJ3KIqUp6qEA/64XDozZXPzsAs/BKjbDYQFyM+
+        /NgVnhu+A7yOe9l7szJmyAcSXeFnfI7g5RviUVw=
+X-Google-Smtp-Source: ABdhPJzeqqyuxBN+6B+nfjiO733i9lI6qkYhEHwdEwm/swSK+l2Sa+bPMI0pCH5BMAQt5dGT75fzrAU2xqCOT9gLc2Y=
+X-Received: by 2002:a19:c211:: with SMTP id l17mr5853489lfc.500.1623241663061;
+ Wed, 09 Jun 2021 05:27:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609115457.822085-2-paul.kocialkowski@bootlin.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAOMZO5A0nV2bubWt3EzkaWVBoD96YNTYB10y-qB79mX2pTBu0w@mail.gmail.com>
+ <CAOMZO5CfCZcngeOj4yEV+g5s6Wy4F0=wCu3PD3LyZAUMz9V2LQ@mail.gmail.com>
+ <CAOMZO5C6ai+Vze6e4o1WYCa42p2YK5_cjo99Q7qKc50E+ebgSA@mail.gmail.com>
+ <cad89872382bad67fdd8e12c392d023bff2a3ff9.camel@pengutronix.de>
+ <CAOMZO5CxDtPa_WYEJf9dkLa8x1UthicBqB=RBJUgxKud+srsDQ@mail.gmail.com> <a6322fe86be905c028ede9ee2abee278266e1b35.camel@pengutronix.de>
+In-Reply-To: <a6322fe86be905c028ede9ee2abee278266e1b35.camel@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 9 Jun 2021 09:27:31 -0300
+Message-ID: <CAOMZO5CLOYGkWtmAOT=U4r4-eZ92JHsKh7iojZejFtsFZJcaWQ@mail.gmail.com>
+Subject: Re: Unable to capture adv7280-m on i.MX6Q
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-media <linux-media@vger.kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+Hi Philipp,
 
-On Wed, Jun 09, 2021 at 01:54:57PM +0200, Paul Kocialkowski wrote:
-> A dedicated subdev notified is registered when using the helper
-> dedicated to sensors (v4l2_async_register_subdev_sensor_common),
-> but this is not the case when a driver uses v4l2_async_register_subdev
-> directly.
+On Wed, Jun 9, 2021 at 4:20 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
 
-Is this a problem?
+> So now I wonder what happens between the first and second time (in
+> s_stream? in s_power(0)?) that does put the lanes into LP-11 from
+> whatever state they were in before. When you get the clock lane timeout,
+> is phy_state = 0x610? Does it stay there when you repeat this again?
 
-The notifier unregistration and cleanup functions should be safe to call on
-a notifier that's not been initialised or registered. The same goes for
-kfree with NULL argument.
+Yes, correct. I do see phy_state = 0x610 in the second time I run the
+Gstreamer pipeline:
 
--- 
-Kind regards,
+New clock: GstSystemClock
+[   24.190274] imx6-mipi-csi2: clock lane timeout, phy_state = 0x00000610
+[   24.197737] ipu1_ic_prpvf: upstream stream on failed: -110
+[   24.204359] ipu1_ic_prpvf: pipeline start failed with -110
 
-Sakari Ailus
+It stays there if I repeat it again.
+
+Thanks,
+
+Fabio Estevam
