@@ -2,83 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D279CC48BCF
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECE9C47095
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:08:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE75560FDA
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:00:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1795C6135D
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:08:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbhFIHCf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 03:02:35 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:55703 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236892AbhFIHCe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Jun 2021 03:02:34 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id qsCRlytcwhg8ZqsCUl9bck; Wed, 09 Jun 2021 09:00:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623222038; bh=f/Gg/RPO7uNzrNUc0IDgM55uFY/+3t/hG5lEXe/upLo=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=N31qXlxpwcLUNKCnMqiKEwnJQh204DEimo+IW8MxPB+xLtZaQbiAZtM60CbZyM0aJ
-         I9bag61kNROJs4rpKJoTxGjMEJ68N4K9i7wM12SjefUO4P5jAxozSvEFwn9Dg649o7
-         21p9FkO7cIt910DHI2uGXg6j+PGOQiQ/PatjwcjXRoS7ePCL/3jriIkn8e9r5Glx1E
-         HPfVhUa5HcNLQB/fcbbWGpYJk+rVg5dtKqkdv1LlShOv42ZsuUrxnwMLKq/X7EvUa/
-         sIqq3z5WgowhbU6I2rXZ2sSHegfIgHeY7uE+MONg6GICNh1I5li7QvTweJsxiIW9Vo
-         Pa3SQDhe1JmNA==
-Subject: Re: [PATCH] drivers/media/usb/gspca: fix typo issues
-To:     Joe Perches <joe@perches.com>, herman yim <herman.yim88@gmail.com>,
-        "yanshuaijun@yulong.com" <yanshuaijun@yulong.com>
-Cc:     mchehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210609033245.3410-1-yanshuaijun@yulong.com>
- <601ccbd8b792abd0177475dd09fdd2d6c6f4a6af.camel@perches.com>
- <60c05921.1c69fb81.dbb59.4019SMTPIN_ADDED_BROKEN@mx.google.com>
- <CAP6HEvL-wCAfBJLBoJ2gaUBN0G-CWFb95e2nd6nwPNdwF7VaJQ@mail.gmail.com>
- <9ebb46d4cb9f66c2bb3e6d1987d8e79fa20323f9.camel@perches.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <e86f856e-f34f-6c48-a064-9265bc60516d@xs4all.nl>
-Date:   Wed, 9 Jun 2021 09:00:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.10.0
+        id S233692AbhFIHKk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 03:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235091AbhFIHK3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 03:10:29 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3148C061789
+        for <linux-media@vger.kernel.org>; Wed,  9 Jun 2021 00:08:22 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id j26so13789208ila.4
+        for <linux-media@vger.kernel.org>; Wed, 09 Jun 2021 00:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=quU0T4l76YjjJD2tLl8ioG0gxR7mjWeZchunD1LV6j8=;
+        b=FZQHIcx4mqI8FjD/OsLe8kzV6NpR/5wLWtR3xiHCTqpkHuoFtuNAX8ehB8vxjRWu6n
+         4jiUYVBeJoac5hJ2KMvk6Rzj6hbNJnGJ30iXqgvn2S16UhdPyruq2+Wo43VDsk2NWl1W
+         OuR+AQHmf6lbCtaPNiaTtEXvws7UztpZKhtsE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=quU0T4l76YjjJD2tLl8ioG0gxR7mjWeZchunD1LV6j8=;
+        b=apx9yjcoirW0Xsz9J4Km08E9/NzQnnYMziqR9F06K+z/bUJZtbAvmqhxVFVAXzxTdz
+         wlK3TsDUGbza3Pw8iTwI04nEJXGG+qAoy4Y6RKx6b08wlaHy5grVszQnhPcO+/BLWby9
+         7issZyjU4C6m7mQ969s/eBJ5UrdznE2rbdZyeRgfGHlchQp4Wu5rbG+x98fTk0c6WxjU
+         72WDVafUTyX2+eZMmTweVU8+SFG+JRE2sig0uEDsPCQXxYxxND6oDz9avkGZZ1lJhlq5
+         OxM6ccu4h9FQZJEHyEUu7aaPH1huLso1xpHkT1mP6HEXhy2RfWvASdoFKwcXuxJC6b5J
+         BuCw==
+X-Gm-Message-State: AOAM533LOTc5tNnQYy1vSBZk1juYsbymUjbKV55bHObekZCB1acUmQM7
+        PlGheTlFfPNeG7T3J8VRzx4ZEJJ7gjIIh6g2cacTHQ==
+X-Google-Smtp-Source: ABdhPJzRGgzxR2Bn0m7opScFPW47CvBdn9Rn4FimpjgS3Ys10OwbVRbBoTXyoiXgFfZByGv6kWwtv5MFrohIffrgc6c=
+X-Received: by 2002:a02:3304:: with SMTP id c4mr24456956jae.68.1623222502221;
+ Wed, 09 Jun 2021 00:08:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <9ebb46d4cb9f66c2bb3e6d1987d8e79fa20323f9.camel@perches.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfEPz7gxNfTV+Y7pi5rEntAapFdI2yd783V5ONelgUZPI80soAHiAMfc9789fazH7/DyK2+GYrK0EWAP9NSoQRn3U+aQh8Ji2JsaBTbRTeu8GIG1XQlqM
- ONGWYQX0jCTVaRBbTDgAOgY961RvUR2mc+8a0MDHFwi6dxxjQ9GBXzTYtoIb0A8ZpzhLmQe+vYHzOQj+fue9UXkIMH21yvVlLURFUteyxpVwXt1+ov4m1PhO
- 7rgFVGjOr+YLmoHsUOV9NFO+A+UZQWGLD3spOCo/PdGAuGaAx3419Qd0j22H6rxXEOuadXzX/CHk9RytX8nUzZALUzO8iUCqCeUFp9zBJJa7T1FGbP+qA20x
- IeHd7o2kmB+Zm3XN3RY8wJjwfn9iCg==
+References: <20210608152451.14730-1-euphoriccatface@gmail.com>
+In-Reply-To: <20210608152451.14730-1-euphoriccatface@gmail.com>
+From:   Matt Ranostay <matt.ranostay@konsulko.com>
+Date:   Wed, 9 Jun 2021 00:08:11 -0700
+Message-ID: <CAJCx=gkS3Jycvi_jfp6E7-11go+xCi7YFu0p1aEMMfHWEkamNw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] media: video-i2c: additional support for Melexis MLX90640
+To:     Seongyong Park <euphoriccatface@gmail.com>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 09/06/2021 08:39, Joe Perches wrote:
-> On Wed, 2021-06-09 at 14:29 +0800, herman yim wrote:
->> hi Joe,
->>  many flicker written into fliker in this file, relate to variable name and
->> function name.
->>  change them together ? what is your suggestion ?
-> 
-> Leave it alone.  It's old and probably obsolete.
-> 
-> 
+On Tue, Jun 8, 2021 at 8:25 AM Seongyong Park <euphoriccatface@gmail.com> wrote:
+>
+> Thanks to Matt Ranostay and Mauro Carvalho Chehab (mchehab) for guidance
+>
 
-Actually, this driver is still in use and maintained. Apparently these old
-webcams refuse to die :-)
+Just one nitpick on future revisions. It is helpful to mention the
+changes from from v1 to v2 makes it easier
+for a quicker review.
 
-So I'll accept a patch changing the fliker typo in this driver (just make a
-single patch changing this in the gscpa driver).
+- Matt
 
-Regards,
-
-	Hans
+> Seongyong Park (2):
+>   media: video-i2c: more precise intervals between frames
+>   media: video-i2c: append register data on MLX90640's frame
+>
+>  drivers/media/i2c/video-i2c.c | 34 +++++++++++++++++++++-------------
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+>
+> --
+> 2.31.1
+>
