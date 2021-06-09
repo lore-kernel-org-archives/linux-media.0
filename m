@@ -2,70 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE73FC48BCD
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29557C48BCD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:27:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4D2661287
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09A4F61364
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 12:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbhFIMQH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 08:16:07 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:41094 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239734AbhFIMQG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 08:16:06 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lqx60-0000hx-GF; Wed, 09 Jun 2021 12:14:08 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: atomisp: remove redundant initialization of variable ret
-Date:   Wed,  9 Jun 2021 13:14:08 +0100
-Message-Id: <20210609121408.186239-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
+        id S230377AbhFIM3f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 08:29:35 -0400
+Received: from mga01.intel.com ([192.55.52.88]:23993 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229814AbhFIM3e (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 9 Jun 2021 08:29:34 -0400
+IronPort-SDR: Z/vvuBzW2MT17ysVx7XwPTcbw7nRdvHCrpZIUAthB8+LWS5guyzsYwfji49NdaD1bxslUoHy2b
+ r14oWRC8Mf3g==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="226430115"
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="226430115"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:27:40 -0700
+IronPort-SDR: VO3Na5XLmsjuzG+q5Tv2xf3SvDoJ6p+Jzcda6MA/89OJKBJdl8Qvfplw1CqyZD+kfYDVt3WhUr
+ Dh7uxwbWYIyA==
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="440827374"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:27:37 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 9D7E220116;
+        Wed,  9 Jun 2021 15:27:35 +0300 (EEST)
+Date:   Wed, 9 Jun 2021 15:27:35 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/2] media: v4l2-async: Make subdev notifier cleanup
+ conditional
+Message-ID: <20210609122735.GE3@paasikivi.fi.intel.com>
+References: <20210609115457.822085-1-paul.kocialkowski@bootlin.com>
+ <20210609115457.822085-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210609115457.822085-2-paul.kocialkowski@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi Paul,
 
-The variable ret is being initialized with a value that is never read,
-it is being updated later on. The assignment is redundant and can be
-removed.
+On Wed, Jun 09, 2021 at 01:54:57PM +0200, Paul Kocialkowski wrote:
+> A dedicated subdev notified is registered when using the helper
+> dedicated to sensors (v4l2_async_register_subdev_sensor_common),
+> but this is not the case when a driver uses v4l2_async_register_subdev
+> directly.
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Is this a problem?
 
-diff --git a/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c b/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-index e698b63d6cb7..769dc122f266 100644
---- a/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-+++ b/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-@@ -932,7 +932,7 @@ static int ov5693_q_exposure(struct v4l2_subdev *sd, s32 *value)
- static int ad5823_t_focus_vcm(struct v4l2_subdev *sd, u16 val)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
--	int ret = -EINVAL;
-+	int ret;
- 	u8 vcm_code;
- 
- 	ret = ad5823_i2c_read(client, AD5823_REG_VCM_CODE_MSB, &vcm_code);
+The notifier unregistration and cleanup functions should be safe to call on
+a notifier that's not been initialised or registered. The same goes for
+kfree with NULL argument.
+
 -- 
-2.31.1
+Kind regards,
 
+Sakari Ailus
