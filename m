@@ -2,122 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3980C48BCF
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 13:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2EFAC48BCD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 13:03:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0B33613AD
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 13:00:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0A8361108
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 13:03:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbhFINCr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 09:02:47 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:44815 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbhFINCm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 09:02:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1623243647; x=1654779647;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BpqxinrRCUKxHtv0Qy6tpZJ1UbGKCSXrOA7Y3esQIFI=;
-  b=VzzIJsk3ygiy6i8bKMk5AH1+cX+1PGtHEzyu64BQsb20GDZrc9psp/3f
-   36Z3BOLnPqjE/05IEMimF1o4dgOmtnyiEpMQ+no8pC0m4bFx7XqDl2MAQ
-   gnejNwcDMsQMzTeWLzS0/9Ebi+m2dCu0o4eMsOIT/LIHKTyWTIz8Iz+g6
-   a7oZc8WE7UXzxvv2+f8iR7ayhLczrVZwD2T6Gd5AtWal+eKOyMboCbqO1
-   djLaL2My2qnf+eUk4fXdTi4hxmd4YLRsPRyV2DzKo7Lqkj/gnFBTiw0aK
-   uxXJwANLi/EAWckNCaWHjf8mIC9UzqnVIBRFVLXaSYJWk9Z5eC7EheKN5
-   Q==;
-IronPort-SDR: 8Jpmgq50PDtZkxIiug3oW4ArytJmqwG/a7/V07scvWkqzWVi43y8CzHJfopjUSoxeflBY74jiV
- XW6HqlI1z0HARlWuyIrdCMC/3gQm72OOmYTfI3LA0vAOxLz2EBjCu+LNsw/ktU/muWDdw4LNWf
- hLhuLiHzfZ2rsFZZ5LPFu0YTp97rGFlx2sBnuputlpTk8zdfXZSTAm1JzENmJ9RN2LGFcyNLr/
- hvmxs72IzaBBLFfWcZXX2a7MkzXyIhZJfyphFw/iZiXlFlA80iBtx59Vw0S/IRv48NtALqvKus
- ko8=
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="124643305"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2021 06:00:46 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 9 Jun 2021 06:00:46 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Wed, 9 Jun 2021 06:00:45 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] media: atmel: atmel-sama5d2-isc: fix YUYV format
-Date:   Wed, 9 Jun 2021 16:00:28 +0300
-Message-ID: <20210609130028.394348-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        id S233894AbhFINFD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 09:05:03 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:56507 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhFINFA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 09:05:00 -0400
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id C3CE61C001D;
+        Wed,  9 Jun 2021 13:03:02 +0000 (UTC)
+Date:   Wed, 9 Jun 2021 15:03:02 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2] media: v4l2-subdev: Fix documentation of the
+ subdev_notifier member
+Message-ID: <YMC8BgVmcpAk3o3h@aptenodytes>
+References: <20210609115457.822085-1-paul.kocialkowski@bootlin.com>
+ <20210609123003.GF3@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8ict/VnrDmy6dFMo"
+Content-Disposition: inline
+In-Reply-To: <20210609123003.GF3@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SAMA5D2 does not have the YCYC field for the RLP (rounding, limiting, packaging)
-module.
-The YCYC field is supposed to work with interleaved YUV formats like YUYV.
-In SAMA5D2, we have to use YYCC field, which is used for both planar formats
-like YUV420 and interleaved formats like YUYV.
-Fix the according rlp callback to replace the generic YCYC field (which makes
-more sense from a logical point of view) with the required YYCC field.
 
-Fixes: 0733a77ae78c ("media: atmel: atmel-isc-base: add support for more formats and additional pipeline modules")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
-Hello Hans,
+--8ict/VnrDmy6dFMo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This should go on top of my ISC series which you sent a PR for :
-https://lore.kernel.org/linux-media/57e15ed1-61c7-0240-5bf3-115de3bbec9c@xs4all.nl/
+Hi Sakari,
 
-I noticed this was introduced with one of the commits.
-It would be great if it can go as a fix for 5.14 , if not together with the
-initial series.
+On Wed 09 Jun 21, 15:30, Sakari Ailus wrote:
+> Hi Paul,
+>=20
+> On Wed, Jun 09, 2021 at 01:54:56PM +0200, Paul Kocialkowski wrote:
+> > Fix the name of the function that registers the subdev_notifier member
+> > of the v4l2_subdev structure.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  include/media/v4l2-subdev.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index d0e9a5bdb08b..f3b657dfe304 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -854,7 +854,7 @@ struct v4l2_subdev_platform_data {
+> >   * @asd: Pointer to respective &struct v4l2_async_subdev.
+> >   * @notifier: Pointer to the managing notifier.
+> >   * @subdev_notifier: A sub-device notifier implicitly registered for t=
+he sub-
+> > - *		     device using v4l2_device_register_sensor_subdev().
+> > + *		     device using v4l2_async_register_subdev_sensor_common().
+>=20
+> I agree in principle, but the function is nowadays called
+> v4l2_async_register_subdev_sensor().
+>=20
+> I can fix this while applying.
 
-Thanks !
-Eugen
+Looks like I missed the rename when rebasing my patch on media/master!
+Of course, feel free to update with the new name.
 
- .../media/platform/atmel/atmel-sama5d2-isc.c    | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Thanks,
 
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index cab2989103f9..34efd12fef55 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -255,6 +255,23 @@ void isc_sama5d2_config_rlp(struct isc_device *isc)
- 	struct regmap *regmap = isc->regmap;
- 	u32 rlp_mode = isc->config.rlp_cfg_mode;
- 
-+	/*
-+	 * In sama5d2, the YUV planar modes and the YUYV modes are treated
-+	 * in the same way in RLP register.
-+	 * Normally, YYCC mode should be Luma(n) - Color B(n) - Color R (n)
-+	 * and YCYC should be Luma(n + 1) - Color B (n) - Luma (n) - Color R (n)
-+	 * but in sama5d2, the YCYC mode does not exist, and YYCC must be
-+	 * selected for both planar and interleaved modes, as in fact
-+	 * both modes are supported.
-+	 *
-+	 * Thus, if the YCYC mode is selected, replace it with the
-+	 * sama5d2-compliant mode which is YYCC .
-+	 */
-+	if ((rlp_mode & ISC_RLP_CFG_MODE_YCYC) == ISC_RLP_CFG_MODE_YCYC) {
-+		rlp_mode &= ~ISC_RLP_CFG_MODE_MASK;
-+		rlp_mode |= ISC_RLP_CFG_MODE_YYCC;
-+	}
-+
- 	regmap_update_bits(regmap, ISC_RLP_CFG + isc->offsets.rlp,
- 			   ISC_RLP_CFG_MODE_MASK, rlp_mode);
- }
--- 
-2.25.1
+Paul
 
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--8ict/VnrDmy6dFMo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmDAvAYACgkQ3cLmz3+f
+v9Fv6Qf9HId8bGavXs06BYDx3THrx29O6HEbuNvrhcARHyLprUcpNZd7aeySbd+I
+yPE4c6WLGt+l4w2C7W1PfVySyIR/fzDu5iSpo6q2cBePntxNRD3i2KjskTvG8R+r
+WCXnuaxzLFs0Y0yMp3Urn7jLUg3oFmoipxKnpa+WA/Fsx3yByd9+Vj+K2jvDSa4n
+oZRMxuL03TcPZI+gePjt7mY/pRrOqTEWf19wnvkZW8ZOQu2ukcXJ9Zw4UtQBXaxu
+/u1JDvm50C59tncroDr4K+Tmnre9TK7PFUwtssWinhHq9HsZtcb843uiTJ0Ero6M
+aqZpxv8yKTtQ1Ae3OjOY2phTCTez7g==
+=AyNo
+-----END PGP SIGNATURE-----
+
+--8ict/VnrDmy6dFMo--
