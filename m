@@ -2,138 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB01CC47095
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE6DC48BCF
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:15:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC57161002
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:14:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1417061352
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 07:15:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237151AbhFIHQP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 03:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235471AbhFIHQO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 03:16:14 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6198C061574
-        for <linux-media@vger.kernel.org>; Wed,  9 Jun 2021 00:14:10 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id h16so11218032ila.6
-        for <linux-media@vger.kernel.org>; Wed, 09 Jun 2021 00:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X3DtYst6A/mBqMOXmXvZKUfqHu7r5s5KvyZbfU1v3sU=;
-        b=qI/UbSz9bcifVyvpfiHIGhboZU8MjrqvrmZBjYk/Xl/NYCgnS7XEusjLLFqpaZbtdM
-         UXxwUD/qIl/9GKNpFSlLaPuIf+R5OiS9WwhkMi33P78U9PB8WEp4r/rTpwbYJXizTA5k
-         GdXIHWNoRpHJlwfeCW4P1rk/+MGT7cZRmjapY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X3DtYst6A/mBqMOXmXvZKUfqHu7r5s5KvyZbfU1v3sU=;
-        b=PaeEssGRZic5N4qaWdZzTWxliMUgmgjRAm4CaGhd+YHGK10qOGaD9DdCFxavJSNVVK
-         cEAJ7YYX0jTWffnhhVxYmtUOYzJYYtL6STpAQ2ci8sCV3HkdGiaPleYqtGnaPCdgoW24
-         KG3ZCSOiK66jj+osrUzW0cgwKro89Kn329ccFI3c79+GjBoGrfwLrg5j1PMehvxDqkNl
-         aZsutWDytfbepG+f2Gl4wG1pjdXBKVpVLiX4TRFBH7e61blYFNO5QiN/IpbqtyL2KmB2
-         cYV3bB6/3le12oBabfRnMcHmI8ebm98F+skGNaGe08wOT+f0CPuDa/3wpOugFc79Q4V7
-         pEvQ==
-X-Gm-Message-State: AOAM5334+4GEnjIAeTzwhdf5pHSys7BRy8Zn36EJaKzuOyMyB5dsUwvd
-        aaSvCOJrDcUTJeIbz0PoqTE/kyodvYHdJVos+8E7nw==
-X-Google-Smtp-Source: ABdhPJyv0vQJfjh5xp+zfLZdJ1/0jw/hfzSIKqDUn5HJ7FHQlwN/BHhoy7ib0qp79vam5jNQvLbltBL+k+w9XkVOVo0=
-X-Received: by 2002:a05:6602:2145:: with SMTP id y5mr220349ioy.46.1623222850295;
- Wed, 09 Jun 2021 00:14:10 -0700 (PDT)
+        id S237159AbhFIHRG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 03:17:06 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3809 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235160AbhFIHRF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 03:17:05 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G0JCY72S6zWtG7;
+        Wed,  9 Jun 2021 15:10:17 +0800 (CST)
+Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 15:15:01 +0800
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 9 Jun 2021
+ 15:15:00 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kaixu Xia <kaixuxia@tencent.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <yangjihong1@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, <linux-media@vger.kernel.org>,
+        <linux-staging@lists.linux.dev>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next v2] media: staging: atomisp: use list_move_tail instead of list_del/list_add_tail in atomisp_compat_css20.c
+Date:   Wed, 9 Jun 2021 15:24:09 +0800
+Message-ID: <20210609072409.1357327-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210608152451.14730-1-euphoriccatface@gmail.com> <20210608152451.14730-3-euphoriccatface@gmail.com>
-In-Reply-To: <20210608152451.14730-3-euphoriccatface@gmail.com>
-From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Wed, 9 Jun 2021 00:13:59 -0700
-Message-ID: <CAJCx=g=hngBOv-6ov1_0YQ0qRC+fTngfNHopcmpHmF5ToAEVaw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] media: video-i2c: append register data on
- MLX90640's frame
-To:     Seongyong Park <euphoriccatface@gmail.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jun 8, 2021 at 8:25 AM Seongyong Park <euphoriccatface@gmail.com> wrote:
->
-> On MLX90640, Each measurement step updates half of the pixels in the frame
-> (every other pixel in default "chess mode", and every other row
-> in "interleave mode"), while additional coefficient data (25th & 26th row)
-> updates every step. The compensational coefficient data only corresponds
-> with the pixels updated in the same step.
->
-> Only way to know which "subpage" was updated on the last step is to read
-> "status register" on address 0x8000. Without this data,
-> compensation calculation may be able to detect which sets of pixels have
-> been updated, but it will have to make assumptions when frame skip happens,
-> and there is no way to do it correctly when the host simply cannot
-> keep up with refresh rate.
->
-> Signed-off-by: Seongyong Park <euphoriccatface@gmail.com>
-> ---
->  drivers/media/i2c/video-i2c.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-> index 64ba96329..2b50a76f3 100644
-> --- a/drivers/media/i2c/video-i2c.c
-> +++ b/drivers/media/i2c/video-i2c.c
-> @@ -74,7 +74,8 @@ static const struct v4l2_fmtdesc mlx90640_format = {
->
->  static const struct v4l2_frmsize_discrete mlx90640_size = {
->         .width = 32,
-> -       .height = 26, /* 24 lines of pixel data + 2 lines of processing data */
-> +       .height = 27,
-> +       /* 24 lines of pixel data + 2 lines of processing data + 1 line of registers */
+Using list_move_tail() instead of list_del() + list_add_tail() in atomisp_compat_css20.c.
 
-Guess you hit the 80 character line here and checkpatch.pl complained
-.. But should all be one line since it is
-much more clear on one line.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	CC mailist
 
->  };
->
->  static const struct regmap_config amg88xx_regmap_config = {
-> @@ -168,8 +169,12 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
->
->  static int mlx90640_xfer(struct video_i2c_data *data, char *buf)
->  {
-> -       return regmap_bulk_read(data->regmap, 0x400, buf,
-> -                               data->chip->buffer_size);
-> +       int ret = regmap_bulk_read(data->regmap, 0x400, buf,
-> +                                  data->chip->buffer_size - 64);
-> +       if (ret)
-> +               return ret;
-> +       return regmap_bulk_read(data->regmap, 0x8000, buf + (data->chip->buffer_size - 64),
-> +                               64);
->  }
->
->  static int amg88xx_setup(struct video_i2c_data *data)
-> @@ -375,7 +380,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
->                 .format         = &mlx90640_format,
->                 .frame_intervals        = mlx90640_frame_intervals,
->                 .num_frame_intervals    = ARRAY_SIZE(mlx90640_frame_intervals),
-> -               .buffer_size    = 1664,
-> +               .buffer_size    = 1728,
+ .../pci/atomisp_compat_css20.c        | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Minus nitpick above looks good to me. You can keep the acked-by if
-that is only change
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index f60198bb8a1a..3bd4c616655d 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -2147,22 +2147,19 @@ void atomisp_css_stop(struct atomisp_sub_device *asd,
+ 	while (!list_empty(&asd->s3a_stats_in_css)) {
+ 		s3a_buf = list_entry(asd->s3a_stats_in_css.next,
+ 				     struct atomisp_s3a_buf, list);
+-		list_del(&s3a_buf->list);
+-		list_add_tail(&s3a_buf->list, &asd->s3a_stats);
++		list_move_tail(&s3a_buf->list, &asd->s3a_stats);
+ 	}
+ 	while (!list_empty(&asd->s3a_stats_ready)) {
+ 		s3a_buf = list_entry(asd->s3a_stats_ready.next,
+ 				     struct atomisp_s3a_buf, list);
+-		list_del(&s3a_buf->list);
+-		list_add_tail(&s3a_buf->list, &asd->s3a_stats);
++		list_move_tail(&s3a_buf->list, &asd->s3a_stats);
+ 	}
+ 
+ 	spin_lock_irqsave(&asd->dis_stats_lock, irqflags);
+ 	while (!list_empty(&asd->dis_stats_in_css)) {
+ 		dis_buf = list_entry(asd->dis_stats_in_css.next,
+ 				     struct atomisp_dis_buf, list);
+-		list_del(&dis_buf->list);
+-		list_add_tail(&dis_buf->list, &asd->dis_stats);
++		list_move_tail(&dis_buf->list, &asd->dis_stats);
+ 	}
+ 	asd->params.dis_proj_data_valid = false;
+ 	spin_unlock_irqrestore(&asd->dis_stats_lock, irqflags);
+@@ -2171,14 +2168,12 @@ void atomisp_css_stop(struct atomisp_sub_device *asd,
+ 		while (!list_empty(&asd->metadata_in_css[i])) {
+ 			md_buf = list_entry(asd->metadata_in_css[i].next,
+ 					    struct atomisp_metadata_buf, list);
+-			list_del(&md_buf->list);
+-			list_add_tail(&md_buf->list, &asd->metadata[i]);
++			list_move_tail(&md_buf->list, &asd->metadata[i]);
+ 		}
+ 		while (!list_empty(&asd->metadata_ready[i])) {
+ 			md_buf = list_entry(asd->metadata_ready[i].next,
+ 					    struct atomisp_metadata_buf, list);
+-			list_del(&md_buf->list);
+-			list_add_tail(&md_buf->list, &asd->metadata[i]);
++			list_move_tail(&md_buf->list, &asd->metadata[i]);
+ 		}
+ 	}
+ 
 
-Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
-
-
->                 .bpp            = 16,
->                 .regmap_config  = &mlx90640_regmap_config,
->                 .nvmem_config   = &mlx90640_nvram_config,
-> --
-> 2.31.1
->
