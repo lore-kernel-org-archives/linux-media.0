@@ -2,242 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DA98C48BCD
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 17:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F3EC48BCD
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 17:59:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25E35613D3
-	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 17:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDFE9613CB
+	for <linux-media@archiver.kernel.org>; Wed,  9 Jun 2021 17:59:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhFIRaZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Jun 2021 13:30:25 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:34347 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbhFIRaY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 13:30:24 -0400
-Received: by mail-wr1-f41.google.com with SMTP id q5so26392631wrm.1
-        for <linux-media@vger.kernel.org>; Wed, 09 Jun 2021 10:28:29 -0700 (PDT)
+        id S231891AbhFISBE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Jun 2021 14:01:04 -0400
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:40689 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231179AbhFISBE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Jun 2021 14:01:04 -0400
+Received: by mail-qk1-f171.google.com with SMTP id u30so24546743qke.7
+        for <linux-media@vger.kernel.org>; Wed, 09 Jun 2021 10:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wskYStBmcNPDTfLKW+BNbupo93MWxUbiOgqVR0Uy7TY=;
-        b=RCZIwzvEEPiiNaMlsrNb+FrtVr6RUFvlmtxJpoi6jgXIxNeVpnkM63fQoz8aSLJecW
-         vQsSXynCwN5BYS30a0odBPMYTjneAUbtlmy7BwQ66dHjmHiqQJEucS1KrvcFZjjGepRk
-         UGWSIfQjvyeh8KCviBAq/apMEK/vi7oKXqeI5XPyG1pvLjj5q/jnixm/gfXLUJoBKpkq
-         eZcrfOl0MW/KhBCAeg9wH17zKhGhr6Fh7N/luSnbFeuFmJJc0tOUCSlFw5Wc6vK7+Bgh
-         WPTGJoROAChZpn2k0P1GFUOpX1IipvHJETlIPtmdtQZWd1lSyc2EMU0phYhXfsa0Z+uy
-         1GaQ==
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=sD4xbXzJdhLFgeuQ5nBJesjoj6vgirv7H4osKuZsqq0=;
+        b=DjgOxPJQLkhrNb5WPZFBXu2cxyzvuYFmoK7TmLRCQmpcbhA0IeGA8Ai5cq0SzMSzqs
+         JT76xG4AlRtPCtMfiLh6xIRvpHbqoegGQgF8FmQEJtE6SsLpE3Q5ArxnieG53FHByCkB
+         2Vt0fMynLasUi4od4wX/DSlBhOkh+rW3l2FCBKmdWY81/bTgKrulkx7/BKqUUeuKeRQm
+         iPD4uJcv+RzO71dghT0d8cwQq2mrGiAHBKKDtFblSYl7gp208n8PnBaONx4BALWoPm7O
+         iHwfGHBxDqnXLClZ6BsLv/Ht9NJMJTljj+ck2RySPlsWPTDju5iYv72Wa5ueuXmiEJsl
+         Rk4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wskYStBmcNPDTfLKW+BNbupo93MWxUbiOgqVR0Uy7TY=;
-        b=P7yrdsTd9whkwqp4/SlrQT+rWu//ii39pjajvafTvmNdjqApGcz/FDT/iyDROMCJ38
-         3MV2DrmT6foK6uiaUJw1CPM7XZCZb2lBJt2jGX5U/e5nwhMJ7BGKRvCe9Ri8dYMHjl5i
-         O8SONYvZ6QJT4XGXKrytLWXlmx56z9OY95hdFfuJwKmIMedlZ9CjBhq/0jAdcRirVnTt
-         9mbBn7Q/LxovC3m/QSwxSVM+BMnXMpr61ILQSSwnq1vJZwo9/rsRIBVLJ8Tg+9IUY0gD
-         yBJ+zc5cyrKFx7PLiIl0/+Okv8fGzayg3M6CamK/bSWMQS71cIX1yNJByEayRGNlEYpd
-         63Yw==
-X-Gm-Message-State: AOAM532sWUAlmQ54EmuYGJEwWSDtXF6taN+ZtHXYVHpQLS4/W/arTkju
-        xnQE4sn7yRm/shAb+2gDg1zGNOLbDl0SOyNa/ZNdbIFR+73Fqaqp
-X-Google-Smtp-Source: ABdhPJxb8dpkLxRt/0SrRdoenBb8VWzRfdgquE7QUEDKlCSUZgjNl/yP1WUX+gPAJ8Jr+9f0CsUId7xTLbZEQJ+ZXCA=
-X-Received: by 2002:a5d:47ce:: with SMTP id o14mr888846wrc.273.1623259648922;
- Wed, 09 Jun 2021 10:27:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <427466e4-1b6f-f7c3-3d5e-89c7a7f2ec79@jm0.eu> <19a143de-818d-4c21-94c1-f4ebf57e3802@jm0.eu>
- <35096323-4f28-6c04-2308-de9895c2751d@jm0.eu>
-In-Reply-To: <35096323-4f28-6c04-2308-de9895c2751d@jm0.eu>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 9 Jun 2021 18:27:13 +0100
-Message-ID: <CAPY8ntBEDFJi2zUN9nhwYvicn1kf926L63GzG2CfmM0=p33C3Q@mail.gmail.com>
-Subject: Re: [BUG] tc358743: division by zero
-To:     "Ing. Josua Mayer" <josua.mayer@jm0.eu>
-Cc:     matrandg@cisco.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=sD4xbXzJdhLFgeuQ5nBJesjoj6vgirv7H4osKuZsqq0=;
+        b=WkUmdCYiSVcBfhLQgAAoWuLUgPZeEo0Z9+ITBeW3SCa5uwATuxZ9yM4/JgfMP3+KtB
+         XQXR9ReY6OUDmZbUMxcaixNFpXygUSlcTmoMcvm/vPhEbZXNmVxN4igfuu8ytclrpRn4
+         4c8ZMwCeEKHrV2c/IWmpERi/mT8tDE2O3XkvbWqmB+1d3g+liywjPt6uetkchdvqez7q
+         Y8L5bbFWDF38np0yu9fjEmOa5/jZw2hPjzzcNDs8rRd2kR6na9eLJVSMtct7bb0Ud2rW
+         PVBmAODanpSAqp0nK5wPDu6PeZv3cgzbUnqcGnFL17xu9WIU1spn95aO7RbSt5l/1Qnz
+         qbdQ==
+X-Gm-Message-State: AOAM531DLXB+svkHk4g2g05TGBhAEL4oQG7kWeugemfhZUxCBRhmfDLn
+        YtNUaoL43wKwO4ngMMxVpeeE1g==
+X-Google-Smtp-Source: ABdhPJykjLnoTm3ybue5WPkgKUgbUTzUFwpOXYV48Z0zZ75Y6VN4U9IY0c1jS4y07Rkz6kwVHpQS8g==
+X-Received: by 2002:a37:7e85:: with SMTP id z127mr820199qkc.133.1623261488972;
+        Wed, 09 Jun 2021 10:58:08 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id f19sm567218qkg.70.2021.06.09.10.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jun 2021 10:58:08 -0700 (PDT)
+Message-ID: <0cdb3b283c4d2043b43d0b356bf103ec75ef4098.camel@ndufresne.ca>
+Subject: Re: [PATCH 4/8] media: Add P010 video format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        hverkuil@xs4all.nl, ezequiel@collabora.com, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
+        andrzej.p@collabora.com, jc@kynesim.co.uk
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Wed, 09 Jun 2021 13:58:05 -0400
+In-Reply-To: <d7b89e82-4b7a-69ce-74ad-d61934c03764@collabora.com>
+References: <20210604130619.491200-1-benjamin.gaignard@collabora.com>
+         <20210604130619.491200-5-benjamin.gaignard@collabora.com>
+         <f9fccfc4325e32022fac5f2c7b11c5e6b42e6fc8.camel@ndufresne.ca>
+         <d7b89e82-4b7a-69ce-74ad-d61934c03764@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.1 (3.40.1-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Josua
+Le lundi 07 juin 2021 à 13:31 +0200, Benjamin Gaignard a écrit :
+> Le 04/06/2021 à 18:17, Nicolas Dufresne a écrit :
+> > Le vendredi 04 juin 2021 à 15:06 +0200, Benjamin Gaignard a écrit :
+> > > P010 is a YUV format with 10-bits per pixel with interleaved UV.
+> > > 
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > ---
+> > >   .../userspace-api/media/v4l/pixfmt-yuv-planar.rst         | 8 ++++++++
+> > >   drivers/media/v4l2-core/v4l2-common.c                     | 1 +
+> > >   drivers/media/v4l2-core/v4l2-ioctl.c                      | 1 +
+> > >   include/uapi/linux/videodev2.h                            | 1 +
+> > >   4 files changed, 11 insertions(+)
+> > > 
+> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > index 090c091affd2..71fed70c03ec 100644
+> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > @@ -100,6 +100,13 @@ All components are stored with the same number of bits per component.
+> > >         - Cb, Cr
+> > >         - No
+> > >         - 64x32 macroblocks
+> > > +    * - V4L2_PIX_FMT_P010
+> > > +      - 'P010'
+> > > +      - 10
+> > > +      - 4:2:0
+> > > +      - Cb, Cr
+> > > +      - No
+> > > +      - Linear
+> > >   
+> > >           Horizontal Z order
+> > >       * - V4L2_PIX_FMT_NV12MT_16X16
+> > > @@ -171,6 +178,7 @@ horizontally.
+> > >   .. _V4L2-PIX-FMT-NV21:
+> > >   .. _V4L2-PIX-FMT-NV12M:
+> > >   .. _V4L2-PIX-FMT-NV21M:
+> > > +.. _V4L2-PIX-FMT-P010:
+> > The NV12/21 documentation is not sufficient to describe this format. While it
+> > shares the layout (two planes Y and interleaved UV), it does not share the
+> > packing. In this case, assuming this is P010 (and not the P010 the Rockchip
+> > tried to upstreamed previously), each 10bit worth of pixel data would be pakced
+> > into 16 bits with the least significant 6 bit being padding bits.
+> 
+> Yes it 10 bits packed in 16 bits. I was think that the 'Bits per component' columns
+> was referring to the number of encoded bits.
+> So like this is it fine ? or does something else than the bit per component need to be changed ?
+>   * - V4L2_PIX_FMT_P010
+>        - 'P010'
+>        - 16
+>        - 4:2:0
+>        - Cb, Cr
+>        - No
+>        - Linear
 
-On Wed, 9 Jun 2021 at 18:08, Ing. Josua Mayer <josua.mayer@jm0.eu> wrote:
->
-> Hello again,
->
-> I added debug prints to tc358743_probe_of and
-> tc358743_num_csi_lanes_needed, tracking the values of pll_prd and pll_fbd.
->
-> I believe the bug is caused by probe returning early when it encounters
-> an unsupported datarate of more than 1gbps per lane, which skips the
-> code that would initialize pll_fbd.
-> Hence later in tc358743_num_csi_lanes_needed, pll_fbd is zero - leading
-> to divide by zero.
->
-> The interesting parts of dmesg leading to this conclusion:
-> [   16.393072] imx6_mipi_csi2: module is from the staging directory, the
-> quality is unknown, you have been warned.
-> [   16.891557] tc358743 0-000f: initialized pll_prd = 4
-> [   16.896618] tc358743 0-000f: unsupported bps per lane: 1188000000 bps
-> # pll_prd has been initialized, but pll_fbd has not
-> [   17.203559] tc358743 0-000f: pll_prd = 4
-> [   17.207588] tc358743 0-000f: pll_fbd = 0
-> # using pll_fbd value 0
-> [   17.211539] Division by zero in kernel.
-> [   17.215415] CPU: 1 PID: 208 Comm: systemd-udevd Tainted: G        WC
->   E     5.10.0-7-armmp #1 Debian 5.10.40-2
-> [   17.225418] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> [   17.231947] Backtrace:
-> [   17.234417] [<c0cf1fe8>] (dump_backtrace) from [<c0cf2394>]
-> (show_stack+0x20/0x24)
-> [   17.247662] [<c0cf2374>] (show_stack) from [<c0cf74c4>]
-> (dump_stack+0xc8/0xdc)
-> [   17.254892] [<c0cf73fc>] (dump_stack) from [<c0cf216c>]
-> (__div0+0x24/0x28)
-> [   17.267442] [<c0cf2148>] (__div0) from [<c07b1254>] (Ldiv0+0x8/0x10)
-> [   17.273844] [<bf4cea34>] (tc358743_num_csi_lanes_needed [tc358743])
-> from [<bf4cec3c>] (tc358743_set_csi+0x1c/0x2f8 [tc358743])
-> [   17.290929] [<bf4cec20>] (tc358743_set_csi [tc358743]) from
-> [<bf4ccaac>] (tc358743_s_dv_timings+0x104/0x1a8 [tc358743])
-> [   17.307430] [<bf4cc9a8>] (tc358743_s_dv_timings [tc358743]) from
-> [<bf4ce384>] (tc358743_probe+0x93c/0xfec [tc358743])
-> [   17.323757] [<bf4cda48>] (tc358743_probe [tc358743]) from
-> [<c0a3ace4>] (i2c_device_probe+0x100/0x2e0)
->
-> I don't really know where this condition should be checked for, or
-> avoided. Hopefully though this gives somebody else enough information to
-> find a solution.
+I believe we also need a table, similar to what we do for BGRx and other padded
+format in order to document were the padding is located. Specially, with 16bit
+formats, which could also have a big engian variants if handled per 16bit words.
 
-In both the
-    default:
-        dev_err(dev, "unsupported refclk rate: %u Hz\n",
-            state->pdata.refclk_hz);
-        goto disable_clk;
-and
-   if (bps_pr_lane < 62500000U || bps_pr_lane > 1000000000U) {
-        dev_err(dev, "unsupported bps per lane: %u bps\n", bps_pr_lane);
-        goto disable_clk;
-    }
-cases, you want a
-   ret = -EINVAL;
-or similar before the goto disable_clk;
+> 
+> Regards,
+> Benjamin
+> 
+> > 
+> > >   
+> > >   NV12, NV21, NV12M and NV21M
+> > >   ---------------------------
+> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> > > index 04af03285a20..37b5d82359dd 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > > @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+> > >   		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > >   		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > >   		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > > +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > >   
+> > >   		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> > >   		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > index 2673f51aafa4..6404d5b6e350 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > @@ -1282,6 +1282,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+> > >   	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+> > >   	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+> > >   	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
+> > > +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
+> > >   	case V4L2_PIX_FMT_NV12M:	descr = "Y/CbCr 4:2:0 (N-C)"; break;
+> > >   	case V4L2_PIX_FMT_NV21M:	descr = "Y/CrCb 4:2:0 (N-C)"; break;
+> > >   	case V4L2_PIX_FMT_NV16M:	descr = "Y/CbCr 4:2:2 (N-C)"; break;
+> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > > index 9260791b8438..e5f7acde0730 100644
+> > > --- a/include/uapi/linux/videodev2.h
+> > > +++ b/include/uapi/linux/videodev2.h
+> > > @@ -602,6 +602,7 @@ struct v4l2_pix_format {
+> > >   #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+> > >   #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+> > >   #define V4L2_PIX_FMT_HM12    v4l2_fourcc('H', 'M', '1', '2') /*  8  YUV 4:2:0 16x16 macroblocks */
+> > > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 15  Y/CbCr 4:2:0 10-bit per pixel*/
+> > >   
+> > >   /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+> > >   #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+> > 
 
-Most of the other cases are doing a ret = <some function call> and
-checking ret. That's not the case with these validation checks, so it
-is aborting but has left ret at the value from the previous call
-(which succeeded).
 
-Hope that helps. If it works then a patch would be welcome.
-
-  Dave
-
-> Yours sincerely
-> Josua Mayer
->
->
-> Am 09.06.21 um 17:08 schrieb Ing. Josua Mayer:
-> > and I forgot about the promised dts :( .. I am realyl sorry for spamming
-> > your mailbox like this ...
-> >
-> > Am 09.06.21 um 17:07 schrieb Ing. Josua Mayer:
-> >> Dear Maintainers,
-> >>
-> >> During my attempts at capturing HDMI via the csi-2 port on i.MX6
-> >> HummingBoard, I triggered a division by zero in
-> >> tc358743_num_csi_lanes_needed!
-> >> I am running Debian testing, with linux 5.10.40 - built from debian
-> >> sources with the tc358743 driver enabled:
-> >> Linux sr-imx6 5.10.0-7-armmp #1 SMP Debian 5.10.40-2 (2021-05-29)
-> >> armv7l GNU/Linux
-> >>
-> >> The crash is triggered from userspace as I execute:
-> >> media-ctl -l "'tc358743 0-000f':0->'imx6-mipi-csi2':0[1]"
-> >> media-ctl -l "'imx6-mipi-csi2':1->'ipu1_csi0_mux':0[1]"
-> >> media-ctl -l "'ipu1_csi0_mux':2->'ipu1_csi0':0[1]"
-> >> media-ctl -l "'ipu1_csi0':2->'ipu1_csi0 capture':0[1]"
-> >> v4l2-ctl -d /dev/v4l-subdev7 --set-edid=file=tc358743-edid.hex && sleep 1
-> >> v4l2-ctl -d /dev/v4l-subdev7 --set-dv-bt-timings query && sleep 1
-> >>
-> >> [   60.985439] Division by zero in kernel.
-> >> [   60.989333] CPU: 1 PID: 395 Comm: v4l2-ctl Tainted: G        WC  E
-> >>   5.10.0-7-armmp #1 Debian 5.10.40-2
-> >> [   60.998904] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> >> [   61.005438] Backtrace:
-> >> [   61.007911] [<c0cf1fe8>] (dump_backtrace) from [<c0cf2394>]
-> >> (show_stack+0x20/0x24)
-> >> [   61.015489]  r7:00000018 r6:600b0013 r5:00000000 r4:c14cdc90
-> >> [   61.021162] [<c0cf2374>] (show_stack) from [<c0cf74c4>]
-> >> (dump_stack+0xc8/0xdc)
-> >> [   61.028394] [<c0cf73fc>] (dump_stack) from [<c0cf216c>]
-> >> (__div0+0x24/0x28)
-> >> [   61.035276]  r7:00000018 r6:034bc000 r5:c1f67890 r4:4f1a0000
-> >> [   61.040951] [<c0cf2148>] (__div0) from [<c07b1254>] (Ldiv0+0x8/0x10)
-> >> [   61.047336] [<bf412000>] (tc358743_num_csi_lanes_needed [tc358743])
-> >> from [<bf412a44>] (tc358743_set_csi+0x1c/0x3f0 [tc358743])
-> >> [   61.058734]  r9:00000000 r8:c2b8b400 r7:c1f67a59 r6:bf419380
-> >> r5:c1f679e8 r4:c1f67890
-> >> [   61.066495] [<bf412a28>] (tc358743_set_csi [tc358743]) from
-> >> [<bf413f64>] (tc358743_s_dv_timings+0x104/0x1a8 [tc358743])
-> >> [   61.077283]  r7:c1f67a59 r6:bf419380 r5:c1f679e8 r4:c1f67890
-> >> [   61.082961] [<bf413e60>] (tc358743_s_dv_timings [tc358743]) from
-> >> [<c0a79fd4>] (subdev_do_ioctl+0x430/0xd0c)
-> >> [   61.092708]  r7:c1f67890 r6:c2ea0780 r5:c2d91c00 r4:c0845657
-> >> [   61.098376] [<c0a79ba4>] (subdev_do_ioctl) from [<c0a7a934>]
-> >> (subdev_do_ioctl_lock+0x84/0xb4)
-> >> [   61.106909]  r10:c2d91c00 r9:bea08dec r8:c0845657 r7:00000000
-> >> r6:c2d91c00 r5:c2ea0780
-> >> [   61.114741]  r4:c2e35000
-> >> [   61.117294] [<c0a7a8b0>] (subdev_do_ioctl_lock) from [<c0a6c4b4>]
-> >> (video_usercopy+0x190/0x674)
-> >> [   61.125913]  r9:bea08dec r8:c2d91c00 r7:bea08dec r6:c0845657
-> >> r5:00000000 r4:c0845657
-> >> [   61.133668] [<c0a6c324>] (video_usercopy) from [<c0a79254>]
-> >> (subdev_ioctl+0x20/0x24)
-> >> [   61.141419]  r10:c30372a8 r9:00000003 r8:c2ea0780 r7:bea08dec
-> >> r6:c2ea0780 r5:00000000
-> >> [   61.149251]  r4:c0a79234
-> >> [   61.151797] [<c0a79234>] (subdev_ioctl) from [<c0a64920>]
-> >> (v4l2_ioctl+0x4c/0x60)
-> >> [   61.159207] [<c0a648d4>] (v4l2_ioctl) from [<c05a90ac>]
-> >> (sys_ioctl+0x130/0xa74)
-> >> [   61.166520]  r5:00000000 r4:c0845657
-> >> [   61.170107] [<c05a8f7c>] (sys_ioctl) from [<c03000c0>]
-> >> (ret_fast_syscall+0x0/0x54)
-> >> [   61.177681] Exception stack(0xc48adfa8 to 0xc48adff0)
-> >> [   61.182742] dfa0:                   005023a4 004dad3c 00000003
-> >> c0845657 bea08dec 00000000
-> >> [   61.190927] dfc0: 005023a4 004dad3c 00000003 00000036 0050c808
-> >> bea09494 bea08fa0 00000000
-> >> [   61.199109] dfe0: 00500df8 bea08d2c 004a635d b6cde418
-> >> [   61.204169]  r10:00000036 r9:c48ac000 r8:c03002c4 r7:00000036
-> >> r6:00000003 r5:004dad3c
-> >> [   61.212000]  r4:005023a4
-> >>
-> >> I am attaching the device-tree changes as a file for reference. Any
-> >> ideas what is happening here?
-> >>
-> >> I can see 2 divisions:
-> >> 1. pdata->refclk_hz / pdata->pll_prd
-> >> 2. DIV_ROUND_UP(bps, bps_pr_lane)
-> >>
-> >> 1. should never be 0, since it is initialized during probe and then
-> >> never changed
-> >>
-> >> 2. see how the divisor can be 0
-> >> pdata->refclk_hz / pdata->pll_prd is the inversion of how pll_prd is
-> >> calculated, and should equal to 6MHz from probe.
-> >> pll_fbd is also set in probe: pll_fbd = bps_pr_lane / refclk_hz * pll_prd
-> >> As I have specified a link-frequency of 594MHz, that produces:
-> >> bps_pr_lane = 2 * 594MHz
-> >> pll_fbd = 2 * 594MHz / 27MHz * (27MHz / 6MHz) = 2 * 594MHz / 6MHz = 198
-> >>
-> >> Apparently from initialization, the division by zero can not occur :(
-> >> (unless I made a mistake here).
-> >>
-> >> Thank you for reading this far!
-> >> Yours sincerely
-> >> Josua Mayer
