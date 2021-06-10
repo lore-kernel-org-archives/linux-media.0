@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C41C48BE0
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92AE5C48BE5
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEA42613FE
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79FCD613FF
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbhFJLiX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Jun 2021 07:38:23 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:47187 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230446AbhFJLiU (ORCPT
+        id S230469AbhFJLiZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Jun 2021 07:38:25 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:57079 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230457AbhFJLiV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Jun 2021 07:38:20 -0400
+        Thu, 10 Jun 2021 07:38:21 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id rIytl7kZmhqltrIz0lXjSo; Thu, 10 Jun 2021 13:36:22 +0200
+        id rIytl7kZmhqltrIz1lXjTn; Thu, 10 Jun 2021 13:36:24 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623324983; bh=eNgd9lW+L9rPHrGo4H7z/pW1zi06P9qNFByilVROqxk=;
+        t=1623324984; bh=t22WTrW8+JFusXDdj4HAREjuuzOKT+rNXDu4SmLIBsg=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=XljXC+6oCcTh3tkOm7njn9WK1/3jzHHKorSRsGuIGgqtEv8ekl7+VqGO2gJBODU0b
-         o2dQ0xgpwOvjzAi1KnIgsT6fCWYK+2x/039BflUmlhCDjDp0T4m5EurGXtIRmELosk
-         zKji79dkAtAA7tZ0/z+JiF4e6qCpQeY1Bgll8G85KEZ4ZCjBvpGcFtwF5+WEUvV8D4
-         IoxSWSB58P0QxdeG124eUG4tKYxM5ncFi0inEQ6yM2ji1tekRe1Pa9uOa2zJAJNRtM
-         b284jQly1aALEEOcllksIKmhb5HEeCxoNDjnmHsHL4BtS6/qQEAIESZNa8FzgxW1tz
-         KGlFslLsAndRA==
+        b=WMMtmj/A0akY+PjekL+oyW7v5MtFJ7XfCWM/iv7vjgPS9bjb6HQBUpZy3+LlOnfsg
+         LYFOWFi5EKpW4oQ22iWqbhrGjJQuO6u4vh9LzwLvoe/9APMWA4bT4G1waVAeEqjVKL
+         6R+o57K+WmC9o1CncuRRwDXnfMmwhbPmwKIQCMp5+pyXiNf8iLkzaQlX0D44EQzD6d
+         NlegKvOQlzkOl8T5+3nlBT+8rfLDm7DBJvKUp2h1hq0oPUyeV0a7Fnp9QUtdlBugAl
+         TqogH3Yrc29Vm7hzY2iHDl+Wa7JykyDA2mFZQlBtLYDHvM5/J12qcoX/3DoKTjubho
+         q5GAxeUMVF52A==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
@@ -40,110 +40,60 @@ Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         John Cox <jc@kynesim.co.uk>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCHv2 04/11] media: document read-only requests
-Date:   Thu, 10 Jun 2021 13:36:08 +0200
-Message-Id: <20210610113615.785359-5-hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCHv2 08/11] v4l2-mem2mem.c: allow requests for capture queues
+Date:   Thu, 10 Jun 2021 13:36:12 +0200
+Message-Id: <20210610113615.785359-9-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210610113615.785359-1-hverkuil-cisco@xs4all.nl>
 References: <20210610113615.785359-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfOQXvprzNOxv3dllV8tYfCqFEZTxHVPvxwWq5j8/dztnYXnbIicoUV+916/WWo0LY09C7617zTll/A7TMa6JUFvfEI1cabtbfthGymVXA0bj0OTVGvmw
- 32gLTaZy4XaVSdDIhHJ6fkbG0mBttYK1ToKmZsQiTpwbb1XalHZWI/3X9wdNyTVrYY0q1yIwAI7Rb4+ieozrulYufEwfhUnekUPcIgNxExwxp4q3Nf2X5c42
- Leobpu8kZOX3ZFgSPlwyQnR4MT9ODGPWxWTbdyBSUfGs8zs2LXF/FtbQ+IUiyMjxY9WV/zcClPUmxYcBDI+z34stHLy+n15SyLqaZLNMQGCn+veDXqRp+Ut/
- 2b7QvzCsLz/EIQObz+K1JoGhVoC7JwavZrfwg1CpwTsujvZCyWFfDfllN8TalhXPKy6EvvvF
+X-CMAE-Envelope: MS4xfPnmug6ZXHlb/ZvmC4vbNHpxD73xFb4M0tsprMr6EdAuDd6oNWZt2PXVubXtTOyCb/7VEbxIceoKE0V2AfbWJPh9otbmfksO3D/oXia8aoOXFDH8ic97
+ 4tbXpucSAudlbehnxYyTSy42Jbr5n3ywcjq+0WLAAeSno+XW7IpFee8wqdTQlWwc7MfSSF0CCrEuuqzrYU1c18DJ5iixB4V78OH/jewuA/vpb53SvEU2JypW
+ YQD07JXW85ijiW9dWVf7G/7LSIS2vO5pf+SsJXchHjqhjv70U+Q7crbvrkKE5JR9aJMFO1vsWkykfvKPIXZq4MD+B8JpH0Pel2U1/LS9tSkjtdWXcUGIJ2vc
+ tMlf7ZqBUjOquByjzzQpkua+L+BIwfTQSLRBVtMZ+Q+vLN2c7bKwiFvxDnCxyt9mICqMxYBI
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch documents read-only requests, including the new
-V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS capability flag.
-
-Based in part on a patch from Yunfei Dong <yunfei.dong@mediatek.com>.
+Capture queues can support requests as well, so add support for this.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/mediactl/media-request-ioc-queue.rst        |  5 +++++
- .../userspace-api/media/mediactl/request-api.rst      | 11 +++++++++++
- .../userspace-api/media/v4l/vidioc-reqbufs.rst        |  6 ++++++
- 3 files changed, 22 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-index 04b33db2bb45..aee65ad765fc 100644
---- a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-@@ -51,6 +51,11 @@ queued directly and you next try to queue a request, or vice versa.
- A request must contain at least one buffer, otherwise this ioctl will
- return an ``ENOENT`` error.
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 0d7c27a07224..e068ffa9006b 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -20,6 +20,7 @@
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fh.h>
+ #include <media/v4l2-event.h>
++#include <media/v4l2-ctrls.h>
  
-+If the :ref:`buffer capabilities <v4l2-buf-capabilities>` indicate that
-+only read-only requests are supported, then the request can only contain
-+buffers. If anything else is present then this ioctl will return an
-+``EINVAL`` error.
-+
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/request-api.rst b/Documentation/userspace-api/media/mediactl/request-api.rst
-index 6c4cbd9f08a5..71259cff590f 100644
---- a/Documentation/userspace-api/media/mediactl/request-api.rst
-+++ b/Documentation/userspace-api/media/mediactl/request-api.rst
-@@ -30,6 +30,13 @@ with different configurations in advance, knowing that the configuration will be
- applied when needed to get the expected result. Configuration values at the time
- of request completion are also available for reading.
- 
-+In some cases it does not make sense for user-space to associate configuration
-+values with a frame, instead it only makes sense to retrieving configuration
-+values at the time of request completion. In that case read-only requests can be
-+used that only allow buffers to be queued and not configuration values. Which
-+type of requests (regular or read-only) are supported is signalled through
-+:ref:`buffer capabilities <v4l2-buf-capabilities>`.
-+
- General Usage
- -------------
- 
-@@ -72,6 +79,10 @@ A queued request cannot be modified anymore.
-    output buffers, not for capture buffers. Attempting to add a capture buffer
-    to a request will result in an ``EBADR`` error.
- 
-+If the buffer type supports only read-only requests, and the request contains
-+configuration values such as controls, then ``EINVAL`` is returned since no
-+configuration values are allowed when submitting a read-only request.
-+
- If the request contains configurations for multiple entities, individual drivers
- may synchronize so the requested pipeline's topology is applied before the
- buffers are processed. Media controller drivers do a best effort implementation
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-index 50ea72043bb0..0451da50de51 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-@@ -117,6 +117,7 @@ aborting or finishing any DMA in progress, an implicit
- .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
- .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
- .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
-+.. _V4L2-BUF-CAP-SUPPORTS-RO-REQUESTS:
- 
- .. raw:: latex
- 
-@@ -143,6 +144,7 @@ aborting or finishing any DMA in progress, an implicit
-     * - ``V4L2_BUF_CAP_SUPPORTS_REQUESTS``
-       - 0x00000008
-       - This buffer type supports :ref:`requests <media-request-api>`.
-+        This flag is mutually exclusive with ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``.
-     * - ``V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS``
-       - 0x00000010
-       - The kernel allows calling :ref:`VIDIOC_REQBUFS` while buffers are still
-@@ -160,6 +162,10 @@ aborting or finishing any DMA in progress, an implicit
-         queue is used for :ref:`memory mapping <mmap>` streaming I/O. See
-         :ref:`V4L2_BUF_FLAG_NO_CACHE_INVALIDATE <V4L2-BUF-FLAG-NO-CACHE-INVALIDATE>` and
-         :ref:`V4L2_BUF_FLAG_NO_CACHE_CLEAN <V4L2-BUF-FLAG-NO-CACHE-CLEAN>`.
-+    * - ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``
-+      - 0x00000080
-+      - This buffer type supports read-only :ref:`requests <media-request-api>`.
-+        This flag is mutually exclusive with ``V4L2_BUF_CAP_SUPPORTS_REQUESTS``.
- 
- .. raw:: latex
- 
+ MODULE_DESCRIPTION("Mem to mem device framework for videobuf");
+ MODULE_AUTHOR("Pawel Osciak, <pawel@osciak.com>");
+@@ -1284,10 +1285,14 @@ void v4l2_m2m_request_queue(struct media_request *req)
+ 		if (vb2_request_object_is_buffer(obj)) {
+ 			/* Sanity checks */
+ 			vb = container_of(obj, struct vb2_buffer, req_obj);
+-			WARN_ON(!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type));
+-			m2m_ctx_obj = container_of(vb->vb2_queue,
+-						   struct v4l2_m2m_ctx,
+-						   out_q_ctx.q);
++			if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
++				m2m_ctx_obj = container_of(vb->vb2_queue,
++							   struct v4l2_m2m_ctx,
++							   out_q_ctx.q);
++			else
++				m2m_ctx_obj = container_of(vb->vb2_queue,
++							   struct v4l2_m2m_ctx,
++							   cap_q_ctx.q);
+ 			WARN_ON(m2m_ctx && m2m_ctx_obj != m2m_ctx);
+ 			m2m_ctx = m2m_ctx_obj;
+ 		}
 -- 
 2.30.2
 
