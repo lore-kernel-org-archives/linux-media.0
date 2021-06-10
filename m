@@ -7,72 +7,71 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB808C49361
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 14:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A96F3C48BD1
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 14:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 917E261406
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 14:56:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86BC46023C
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 14:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbhFJO6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Jun 2021 10:58:33 -0400
+        id S231486AbhFJO6g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Jun 2021 10:58:36 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45088 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbhFJO6c (ORCPT
+        with ESMTP id S231450AbhFJO6f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Jun 2021 10:58:32 -0400
+        Thu, 10 Jun 2021 10:58:35 -0400
 Received: from deskari.lan (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2E9E1571;
-        Thu, 10 Jun 2021 16:56:32 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9D64218C1;
+        Thu, 10 Jun 2021 16:56:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1623336994;
-        bh=9qaGrF7qY0JE3Tax6S1rwEajHcslPd4YrNJZoCfaxfA=;
+        s=mail; t=1623336997;
+        bh=wzEh+mugPkPKBH2WUWL9k/3ZVxQ5ATAxNSi06a4QQoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rLgpdhHMnsRbvp6OVx67bJ6curGY335Q+mwM/rR/b7LtmGQmzhuJCSyOCCUjBJ+Vf
-         Y7v0mnExPLFNl7ei8ISrk1/INtX57FvYGA41MaMbb0QyGy52TRGyi/zBYhNRlkBANP
-         7lbgfnyldjo6jXgWuc9t01Ci5O4MbnLv8Ws2UDEY=
+        b=hKZfC6LIBZnRo9fsMOld5e6JstVt7LA5wZZuIxlN6wqUJstK/altAw3ljc6HknBqD
+         urGcP658Z9l6KBsAaCyt6a0E5x5jyEJlFIUIdk4kM7wuHa/VIMTqPSEjPsLnq9tcbV
+         0VcElfXMu4M/RyO/AoLV9bg5QcxQyueINaqpuXyU=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pavel Machek <pavel@ucw.cz>, Shawn Tu <shawnx.tu@intel.com>,
-        Ricardo Ribalda <ribalda@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Leon Luo <leonl@leopardimaging.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Heungjun Kim <riverful.kim@samsung.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Petr Cvek <petrcvekcz@gmail.com>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Mickael Guene <mickael.guene@st.com>,
-        Mats Randgaard <matrandg@cisco.com>,
-        Tim Harvey <tharvey@gateworks.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v5 4/9] media: i2c: changes for subdev-wide state struct
-Date:   Thu, 10 Jun 2021 17:56:01 +0300
-Message-Id: <20210610145606.3468235-5-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v5 6/9] media: platform: changes for subdev-wide state struct
+Date:   Thu, 10 Jun 2021 17:56:03 +0300
+Message-Id: <20210610145606.3468235-7-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210610145606.3468235-1-tomi.valkeinen@ideasonboard.com>
 References: <20210610145606.3468235-1-tomi.valkeinen@ideasonboard.com>
@@ -86,6244 +85,4951 @@ Patch "media: v4l2-subdev: add subdev-wide state struct" changes how
 subdev state is managed, adding a new struct to hold all the v4l2 subdev
 state.
 
-This patch does the required changes for drivers/media/i2c/
+This patch does the required changes for drivers/media/platform/
 
 Note that this patch is meant to be squashed into the main patch.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/i2c/adv7170.c              |  6 +-
- drivers/media/i2c/adv7175.c              |  6 +-
- drivers/media/i2c/adv7180.c              | 18 ++---
- drivers/media/i2c/adv7183.c              |  8 +--
- drivers/media/i2c/adv748x/adv748x-afe.c  | 13 ++--
- drivers/media/i2c/adv748x/adv748x-csi2.c | 14 ++--
- drivers/media/i2c/adv748x/adv748x-hdmi.c | 13 ++--
- drivers/media/i2c/adv7511-v4l2.c         | 10 +--
- drivers/media/i2c/adv7604.c              | 12 ++--
- drivers/media/i2c/adv7842.c              | 12 ++--
- drivers/media/i2c/ak881x.c               |  6 +-
- drivers/media/i2c/ccs/ccs-core.c         | 84 +++++++++++++-----------
- drivers/media/i2c/cx25840/cx25840-core.c |  2 +-
- drivers/media/i2c/et8ek8/et8ek8_driver.c | 23 ++++---
- drivers/media/i2c/hi556.c                | 15 +++--
- drivers/media/i2c/imx208.c               | 19 +++---
- drivers/media/i2c/imx214.c               | 37 ++++++-----
- drivers/media/i2c/imx219.c               | 30 +++++----
- drivers/media/i2c/imx258.c               | 19 +++---
- drivers/media/i2c/imx274.c               | 38 +++++------
- drivers/media/i2c/imx290.c               | 20 +++---
- drivers/media/i2c/imx319.c               | 18 ++---
- drivers/media/i2c/imx334.c               | 28 ++++----
- drivers/media/i2c/imx355.c               | 18 ++---
- drivers/media/i2c/m5mols/m5mols_core.c   | 21 +++---
- drivers/media/i2c/max9286.c              | 17 ++---
- drivers/media/i2c/ml86v7667.c            |  4 +-
- drivers/media/i2c/mt9m001.c              | 18 ++---
- drivers/media/i2c/mt9m032.c              | 38 ++++++-----
- drivers/media/i2c/mt9m111.c              | 18 ++---
- drivers/media/i2c/mt9p031.c              | 45 +++++++------
- drivers/media/i2c/mt9t001.c              | 44 ++++++++-----
- drivers/media/i2c/mt9t112.c              | 14 ++--
- drivers/media/i2c/mt9v011.c              |  6 +-
- drivers/media/i2c/mt9v032.c              | 44 ++++++++-----
- drivers/media/i2c/mt9v111.c              | 23 +++----
- drivers/media/i2c/noon010pc30.c          | 19 +++---
- drivers/media/i2c/ov02a10.c              | 17 ++---
- drivers/media/i2c/ov13858.c              | 18 ++---
- drivers/media/i2c/ov2640.c               | 16 ++---
- drivers/media/i2c/ov2659.c               | 14 ++--
- drivers/media/i2c/ov2680.c               | 23 +++----
- drivers/media/i2c/ov2685.c               | 10 +--
- drivers/media/i2c/ov2740.c               | 15 +++--
- drivers/media/i2c/ov5640.c               | 14 ++--
- drivers/media/i2c/ov5645.c               | 38 ++++++-----
- drivers/media/i2c/ov5647.c               | 26 ++++----
- drivers/media/i2c/ov5648.c               | 14 ++--
- drivers/media/i2c/ov5670.c               | 19 +++---
- drivers/media/i2c/ov5675.c               | 15 +++--
- drivers/media/i2c/ov5695.c               | 15 +++--
- drivers/media/i2c/ov6650.c               | 28 ++++----
- drivers/media/i2c/ov7251.c               | 39 ++++++-----
- drivers/media/i2c/ov7670.c               | 17 ++---
- drivers/media/i2c/ov772x.c               | 12 ++--
- drivers/media/i2c/ov7740.c               | 17 ++---
- drivers/media/i2c/ov8856.c               | 15 +++--
- drivers/media/i2c/ov8865.c               | 14 ++--
- drivers/media/i2c/ov9640.c               |  8 +--
- drivers/media/i2c/ov9650.c               | 17 ++---
- drivers/media/i2c/ov9734.c               | 15 +++--
- drivers/media/i2c/rdacm20.c              |  4 +-
- drivers/media/i2c/rdacm21.c              |  4 +-
- drivers/media/i2c/rj54n1cb0c.c           | 12 ++--
- drivers/media/i2c/s5c73m3/s5c73m3-core.c | 55 ++++++++--------
- drivers/media/i2c/s5k4ecgx.c             | 22 ++++---
- drivers/media/i2c/s5k6a3.c               | 19 +++---
- drivers/media/i2c/s5k6aa.c               | 39 ++++++-----
- drivers/media/i2c/saa6752hs.c            |  6 +-
- drivers/media/i2c/saa7115.c              |  2 +-
- drivers/media/i2c/saa717x.c              |  2 +-
- drivers/media/i2c/sr030pc30.c            |  8 +--
- drivers/media/i2c/st-mipid02.c           | 21 +++---
- drivers/media/i2c/tc358743.c             |  8 +--
- drivers/media/i2c/tda1997x.c             | 14 ++--
- drivers/media/i2c/tvp514x.c              | 12 ++--
- drivers/media/i2c/tvp5150.c              | 20 +++---
- drivers/media/i2c/tvp7002.c              | 11 ++--
- drivers/media/i2c/tw9910.c               | 10 +--
- drivers/media/i2c/vs6624.c               |  8 +--
- 80 files changed, 792 insertions(+), 701 deletions(-)
+ drivers/media/platform/atmel/atmel-isc-base.c |  19 +--
+ drivers/media/platform/atmel/atmel-isi.c      |  19 +--
+ drivers/media/platform/cadence/cdns-csi2tx.c  |  14 +--
+ .../media/platform/exynos4-is/fimc-capture.c  |  22 ++--
+ drivers/media/platform/exynos4-is/fimc-isp.c  |  37 +++---
+ drivers/media/platform/exynos4-is/fimc-lite.c |  39 +++---
+ drivers/media/platform/exynos4-is/mipi-csis.c |  17 +--
+ .../media/platform/marvell-ccic/mcam-core.c   |   5 +-
+ drivers/media/platform/omap3isp/ispccdc.c     |  85 +++++++------
+ drivers/media/platform/omap3isp/ispccp2.c     |  49 ++++----
+ drivers/media/platform/omap3isp/ispcsi2.c     |  41 ++++---
+ drivers/media/platform/omap3isp/isppreview.c  |  69 ++++++-----
+ drivers/media/platform/omap3isp/ispresizer.c  |  70 ++++++-----
+ drivers/media/platform/pxa_camera.c           |   5 +-
+ .../media/platform/qcom/camss/camss-csid.c    |  35 +++---
+ .../media/platform/qcom/camss/camss-csiphy.c  |  40 ++++---
+ .../media/platform/qcom/camss/camss-ispif.c   |  36 +++---
+ drivers/media/platform/qcom/camss/camss-vfe.c |  84 ++++++-------
+ drivers/media/platform/rcar-vin/rcar-csi2.c   |   8 +-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c   |  10 +-
+ drivers/media/platform/renesas-ceu.c          |   7 +-
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     | 112 ++++++++++--------
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c |  95 +++++++++------
+ drivers/media/platform/stm32/stm32-dcmi.c     |  14 ++-
+ .../platform/sunxi/sun4i-csi/sun4i_v4l2.c     |  16 +--
+ drivers/media/platform/ti-vpe/cal-camerarx.c  |  35 +++---
+ drivers/media/platform/via-camera.c           |   5 +-
+ drivers/media/platform/video-mux.c            |  22 ++--
+ drivers/media/platform/vsp1/vsp1_brx.c        |  34 +++---
+ drivers/media/platform/vsp1/vsp1_clu.c        |  13 +-
+ drivers/media/platform/vsp1/vsp1_entity.c     |  59 ++++-----
+ drivers/media/platform/vsp1/vsp1_entity.h     |  20 ++--
+ drivers/media/platform/vsp1/vsp1_histo.c      |  51 ++++----
+ drivers/media/platform/vsp1/vsp1_hsit.c       |  14 ++-
+ drivers/media/platform/vsp1/vsp1_lif.c        |  13 +-
+ drivers/media/platform/vsp1/vsp1_lut.c        |  13 +-
+ drivers/media/platform/vsp1/vsp1_rwpf.c       |  32 ++---
+ drivers/media/platform/vsp1/vsp1_rwpf.h       |   2 +-
+ drivers/media/platform/vsp1/vsp1_sru.c        |  22 ++--
+ drivers/media/platform/vsp1/vsp1_uds.c        |  22 ++--
+ drivers/media/platform/vsp1/vsp1_uif.c        |  27 +++--
+ .../media/platform/xilinx/xilinx-csi2rxss.c   |  26 ++--
+ drivers/media/platform/xilinx/xilinx-tpg.c    |  25 ++--
+ drivers/media/platform/xilinx/xilinx-vip.c    |  12 +-
+ drivers/media/platform/xilinx/xilinx-vip.h    |   4 +-
+ 45 files changed, 788 insertions(+), 611 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7170.c b/drivers/media/i2c/adv7170.c
-index e4e8fda51ad8..714e31f993e1 100644
---- a/drivers/media/i2c/adv7170.c
-+++ b/drivers/media/i2c/adv7170.c
-@@ -250,7 +250,7 @@ static int adv7170_s_routing(struct v4l2_subdev *sd,
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index 46c6e3e20f33..19daa49bf604 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -1095,7 +1095,7 @@ static int isc_try_configure_pipeline(struct isc_device *isc)
  }
  
- static int adv7170_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
+ static void isc_try_fse(struct isc_device *isc,
+-			struct v4l2_subdev_pad_config *pad_cfg)
++			struct v4l2_subdev_state *sd_state)
  {
- 	if (code->pad || code->index >= ARRAY_SIZE(adv7170_codes))
-@@ -261,7 +261,7 @@ static int adv7170_enum_mbus_code(struct v4l2_subdev *sd,
+ 	int ret;
+ 	struct v4l2_subdev_frame_size_enum fse = {};
+@@ -1111,17 +1111,17 @@ static void isc_try_fse(struct isc_device *isc,
+ 	fse.which = V4L2_SUBDEV_FORMAT_TRY;
+ 
+ 	ret = v4l2_subdev_call(isc->current_subdev->sd, pad, enum_frame_size,
+-			       pad_cfg, &fse);
++			       sd_state, &fse);
+ 	/*
+ 	 * Attempt to obtain format size from subdev. If not available,
+ 	 * just use the maximum ISC can receive.
+ 	 */
+ 	if (ret) {
+-		pad_cfg->try_crop.width = isc->max_width;
+-		pad_cfg->try_crop.height = isc->max_height;
++		sd_state->pads->try_crop.width = isc->max_width;
++		sd_state->pads->try_crop.height = isc->max_height;
+ 	} else {
+-		pad_cfg->try_crop.width = fse.max_width;
+-		pad_cfg->try_crop.height = fse.max_height;
++		sd_state->pads->try_crop.width = fse.max_width;
++		sd_state->pads->try_crop.height = fse.max_height;
+ 	}
  }
  
- static int adv7170_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
+@@ -1132,6 +1132,9 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
+ 	struct isc_format *sd_fmt = NULL, *direct_fmt = NULL;
+ 	struct v4l2_pix_format *pixfmt = &f->fmt.pix;
+ 	struct v4l2_subdev_pad_config pad_cfg = {};
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -1229,11 +1232,11 @@ static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
+ 		goto isc_try_fmt_err;
+ 
+ 	/* Obtain frame sizes if possible to have crop requirements ready */
+-	isc_try_fse(isc, &pad_cfg);
++	isc_try_fse(isc, &pad_state);
+ 
+ 	v4l2_fill_mbus_format(&format.format, pixfmt, mbus_code);
+ 	ret = v4l2_subdev_call(isc->current_subdev->sd, pad, set_fmt,
+-			       &pad_cfg, &format);
++			       &pad_state, &format);
+ 	if (ret < 0)
+ 		goto isc_try_fmt_subdev_err;
+ 
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index 5b1dd358f2e6..095d80c4f59e 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -557,7 +557,7 @@ static const struct isi_format *find_format_by_fourcc(struct atmel_isi *isi,
+ }
+ 
+ static void isi_try_fse(struct atmel_isi *isi, const struct isi_format *isi_fmt,
+-			struct v4l2_subdev_pad_config *pad_cfg)
++			struct v4l2_subdev_state *sd_state)
  {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -284,7 +284,7 @@ static int adv7170_get_fmt(struct v4l2_subdev *sd,
+ 	int ret;
+ 	struct v4l2_subdev_frame_size_enum fse = {
+@@ -566,17 +566,17 @@ static void isi_try_fse(struct atmel_isi *isi, const struct isi_format *isi_fmt,
+ 	};
+ 
+ 	ret = v4l2_subdev_call(isi->entity.subdev, pad, enum_frame_size,
+-			       pad_cfg, &fse);
++			       sd_state, &fse);
+ 	/*
+ 	 * Attempt to obtain format size from subdev. If not available,
+ 	 * just use the maximum ISI can receive.
+ 	 */
+ 	if (ret) {
+-		pad_cfg->try_crop.width = MAX_SUPPORT_WIDTH;
+-		pad_cfg->try_crop.height = MAX_SUPPORT_HEIGHT;
++		sd_state->pads->try_crop.width = MAX_SUPPORT_WIDTH;
++		sd_state->pads->try_crop.height = MAX_SUPPORT_HEIGHT;
+ 	} else {
+-		pad_cfg->try_crop.width = fse.max_width;
+-		pad_cfg->try_crop.height = fse.max_height;
++		sd_state->pads->try_crop.width = fse.max_width;
++		sd_state->pads->try_crop.height = fse.max_height;
+ 	}
  }
  
- static int adv7170_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
+@@ -586,6 +586,9 @@ static int isi_try_fmt(struct atmel_isi *isi, struct v4l2_format *f,
+ 	const struct isi_format *isi_fmt;
+ 	struct v4l2_pix_format *pixfmt = &f->fmt.pix;
+ 	struct v4l2_subdev_pad_config pad_cfg = {};
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -603,10 +606,10 @@ static int isi_try_fmt(struct atmel_isi *isi, struct v4l2_format *f,
+ 
+ 	v4l2_fill_mbus_format(&format.format, pixfmt, isi_fmt->mbus_code);
+ 
+-	isi_try_fse(isi, isi_fmt, &pad_cfg);
++	isi_try_fse(isi, isi_fmt, &pad_state);
+ 
+ 	ret = v4l2_subdev_call(isi->entity.subdev, pad, set_fmt,
+-			       &pad_cfg, &format);
++			       &pad_state, &format);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/drivers/media/platform/cadence/cdns-csi2tx.c b/drivers/media/platform/cadence/cdns-csi2tx.c
+index 765ae408970a..5a67fba73ddd 100644
+--- a/drivers/media/platform/cadence/cdns-csi2tx.c
++++ b/drivers/media/platform/cadence/cdns-csi2tx.c
+@@ -156,7 +156,7 @@ static const struct csi2tx_fmt *csi2tx_get_fmt_from_mbus(u32 mbus)
+ }
+ 
+ static int csi2tx_enum_mbus_code(struct v4l2_subdev *subdev,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
  {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-diff --git a/drivers/media/i2c/adv7175.c b/drivers/media/i2c/adv7175.c
-index 0cdd8e033197..1813f67f0fe1 100644
---- a/drivers/media/i2c/adv7175.c
-+++ b/drivers/media/i2c/adv7175.c
-@@ -288,7 +288,7 @@ static int adv7175_s_routing(struct v4l2_subdev *sd,
- }
+ 	if (code->pad || code->index >= ARRAY_SIZE(csi2tx_formats))
+@@ -169,20 +169,20 @@ static int csi2tx_enum_mbus_code(struct v4l2_subdev *subdev,
  
- static int adv7175_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
+ static struct v4l2_mbus_framefmt *
+ __csi2tx_get_pad_format(struct v4l2_subdev *subdev,
+-			struct v4l2_subdev_pad_config *cfg,
++			struct v4l2_subdev_state *sd_state,
+ 			struct v4l2_subdev_format *fmt)
  {
- 	if (code->pad || code->index >= ARRAY_SIZE(adv7175_codes))
-@@ -299,7 +299,7 @@ static int adv7175_enum_mbus_code(struct v4l2_subdev *sd,
+ 	struct csi2tx_priv *csi2tx = v4l2_subdev_to_csi2tx(subdev);
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(subdev, cfg,
++		return v4l2_subdev_get_try_format(subdev, sd_state,
+ 						  fmt->pad);
+ 
+ 	return &csi2tx->pad_fmts[fmt->pad];
  }
  
- static int adv7175_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
+ static int csi2tx_get_pad_format(struct v4l2_subdev *subdev,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_format *fmt)
  {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -322,7 +322,7 @@ static int adv7175_get_fmt(struct v4l2_subdev *sd,
+ 	const struct v4l2_mbus_framefmt *format;
+@@ -191,7 +191,7 @@ static int csi2tx_get_pad_format(struct v4l2_subdev *subdev,
+ 	if (fmt->pad == CSI2TX_PAD_SOURCE)
+ 		return -EINVAL;
+ 
+-	format = __csi2tx_get_pad_format(subdev, cfg, fmt);
++	format = __csi2tx_get_pad_format(subdev, sd_state, fmt);
+ 	if (!format)
+ 		return -EINVAL;
+ 
+@@ -201,7 +201,7 @@ static int csi2tx_get_pad_format(struct v4l2_subdev *subdev,
  }
  
- static int adv7175_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
+ static int csi2tx_set_pad_format(struct v4l2_subdev *subdev,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_format *fmt)
  {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 44bb6fe85644..fa5bc55bc944 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -633,7 +633,7 @@ static void adv7180_exit_controls(struct adv7180_state *state)
+ 	const struct v4l2_mbus_framefmt *src_format = &fmt->format;
+@@ -214,7 +214,7 @@ static int csi2tx_set_pad_format(struct v4l2_subdev *subdev,
+ 	if (!csi2tx_get_fmt_from_mbus(fmt->format.code))
+ 		src_format = &fmt_default;
+ 
+-	dst_format = __csi2tx_get_pad_format(subdev, cfg, fmt);
++	dst_format = __csi2tx_get_pad_format(subdev, sd_state, fmt);
+ 	if (!dst_format)
+ 		return -EINVAL;
+ 
+diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/exynos4-is/fimc-capture.c
+index 0da36443173c..7ff4024003f4 100644
+--- a/drivers/media/platform/exynos4-is/fimc-capture.c
++++ b/drivers/media/platform/exynos4-is/fimc-capture.c
+@@ -1454,7 +1454,7 @@ void fimc_sensor_notify(struct v4l2_subdev *sd, unsigned int notification,
  }
  
- static int adv7180_enum_mbus_code(struct v4l2_subdev *sd,
+ static int fimc_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+-				      struct v4l2_subdev_pad_config *cfg,
++				      struct v4l2_subdev_state *sd_state,
+ 				      struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct fimc_fmt *fmt;
+@@ -1467,7 +1467,7 @@ static int fimc_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_subdev_get_fmt(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_dev *fimc = v4l2_get_subdevdata(sd);
+@@ -1476,7 +1476,7 @@ static int fimc_subdev_get_fmt(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *mf;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
++		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+ 		fmt->format = *mf;
+ 		return 0;
+ 	}
+@@ -1508,7 +1508,7 @@ static int fimc_subdev_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_subdev_set_fmt(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_dev *fimc = v4l2_get_subdevdata(sd);
+@@ -1531,7 +1531,7 @@ static int fimc_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	mf->colorspace = V4L2_COLORSPACE_JPEG;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
++		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+ 		*mf = fmt->format;
+ 		return 0;
+ 	}
+@@ -1574,7 +1574,7 @@ static int fimc_subdev_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_subdev_get_selection(struct v4l2_subdev *sd,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_selection *sel)
+ {
+ 	struct fimc_dev *fimc = v4l2_get_subdevdata(sd);
+@@ -1601,10 +1601,10 @@ static int fimc_subdev_get_selection(struct v4l2_subdev *sd,
+ 		return 0;
+ 
+ 	case V4L2_SEL_TGT_CROP:
+-		try_sel = v4l2_subdev_get_try_crop(sd, cfg, sel->pad);
++		try_sel = v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
+ 		break;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		try_sel = v4l2_subdev_get_try_compose(sd, cfg, sel->pad);
++		try_sel = v4l2_subdev_get_try_compose(sd, sd_state, sel->pad);
+ 		f = &ctx->d_frame;
+ 		break;
+ 	default:
+@@ -1630,7 +1630,7 @@ static int fimc_subdev_get_selection(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_subdev_set_selection(struct v4l2_subdev *sd,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_selection *sel)
+ {
+ 	struct fimc_dev *fimc = v4l2_get_subdevdata(sd);
+@@ -1648,10 +1648,10 @@ static int fimc_subdev_set_selection(struct v4l2_subdev *sd,
+ 
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP:
+-		try_sel = v4l2_subdev_get_try_crop(sd, cfg, sel->pad);
++		try_sel = v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
+ 		break;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		try_sel = v4l2_subdev_get_try_compose(sd, cfg, sel->pad);
++		try_sel = v4l2_subdev_get_try_compose(sd, sd_state, sel->pad);
+ 		f = &ctx->d_frame;
+ 		break;
+ 	default:
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
+index 74b49d30901e..855235bea46d 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp.c
++++ b/drivers/media/platform/exynos4-is/fimc-isp.c
+@@ -106,7 +106,7 @@ static const struct media_entity_operations fimc_is_subdev_media_ops = {
+ };
+ 
+ static int fimc_is_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	const struct fimc_fmt *fmt;
+@@ -119,14 +119,14 @@ static int fimc_is_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_isp_subdev_get_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_isp *isp = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *mf = &fmt->format;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		*mf = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
++		*mf = *v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+ 		return 0;
+ 	}
+ 
+@@ -156,7 +156,7 @@ static int fimc_isp_subdev_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static void __isp_subdev_try_format(struct fimc_isp *isp,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_format *fmt)
+ {
+ 	struct v4l2_mbus_framefmt *mf = &fmt->format;
+@@ -172,8 +172,9 @@ static void __isp_subdev_try_format(struct fimc_isp *isp,
+ 		mf->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	} else {
+ 		if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+-			format = v4l2_subdev_get_try_format(&isp->subdev, cfg,
+-						FIMC_ISP_SD_PAD_SINK);
++			format = v4l2_subdev_get_try_format(&isp->subdev,
++							    sd_state,
++							    FIMC_ISP_SD_PAD_SINK);
+ 		else
+ 			format = &isp->sink_fmt;
+ 
+@@ -191,7 +192,7 @@ static void __isp_subdev_try_format(struct fimc_isp *isp,
+ }
+ 
+ static int fimc_isp_subdev_set_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_isp *isp = v4l2_get_subdevdata(sd);
+@@ -203,10 +204,10 @@ static int fimc_isp_subdev_set_fmt(struct v4l2_subdev *sd,
+ 		 __func__, fmt->pad, mf->code, mf->width, mf->height);
+ 
+ 	mutex_lock(&isp->subdev_lock);
+-	__isp_subdev_try_format(isp, cfg, fmt);
++	__isp_subdev_try_format(isp, sd_state, fmt);
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
++		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+ 		*mf = fmt->format;
+ 
+ 		/* Propagate format to the source pads */
+@@ -217,8 +218,10 @@ static int fimc_isp_subdev_set_fmt(struct v4l2_subdev *sd,
+ 			for (pad = FIMC_ISP_SD_PAD_SRC_FIFO;
+ 					pad < FIMC_ISP_SD_PADS_NUM; pad++) {
+ 				format.pad = pad;
+-				__isp_subdev_try_format(isp, cfg, &format);
+-				mf = v4l2_subdev_get_try_format(sd, cfg, pad);
++				__isp_subdev_try_format(isp, sd_state,
++							&format);
++				mf = v4l2_subdev_get_try_format(sd, sd_state,
++								pad);
+ 				*mf = format.format;
+ 			}
+ 		}
+@@ -230,7 +233,8 @@ static int fimc_isp_subdev_set_fmt(struct v4l2_subdev *sd,
+ 				isp->sink_fmt = *mf;
+ 
+ 				format.pad = FIMC_ISP_SD_PAD_SRC_DMA;
+-				__isp_subdev_try_format(isp, cfg, &format);
++				__isp_subdev_try_format(isp, sd_state,
++							&format);
+ 
+ 				isp->src_fmt = format.format;
+ 				__is_set_frame_size(is, &isp->src_fmt);
+@@ -370,15 +374,18 @@ static int fimc_isp_subdev_open(struct v4l2_subdev *sd,
+ 		.field = V4L2_FIELD_NONE,
+ 	};
+ 
+-	format = v4l2_subdev_get_try_format(sd, fh->pad, FIMC_ISP_SD_PAD_SINK);
++	format = v4l2_subdev_get_try_format(sd, fh->state,
++					    FIMC_ISP_SD_PAD_SINK);
+ 	*format = fmt;
+ 
+-	format = v4l2_subdev_get_try_format(sd, fh->pad, FIMC_ISP_SD_PAD_SRC_FIFO);
++	format = v4l2_subdev_get_try_format(sd, fh->state,
++					    FIMC_ISP_SD_PAD_SRC_FIFO);
+ 	fmt.width = DEFAULT_PREVIEW_STILL_WIDTH;
+ 	fmt.height = DEFAULT_PREVIEW_STILL_HEIGHT;
+ 	*format = fmt;
+ 
+-	format = v4l2_subdev_get_try_format(sd, fh->pad, FIMC_ISP_SD_PAD_SRC_DMA);
++	format = v4l2_subdev_get_try_format(sd, fh->state,
++					    FIMC_ISP_SD_PAD_SRC_DMA);
+ 	*format = fmt;
+ 
+ 	return 0;
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
+index 4d8b18078ff3..aaa3af0493ce 100644
+--- a/drivers/media/platform/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/exynos4-is/fimc-lite.c
+@@ -550,7 +550,7 @@ static const struct v4l2_file_operations fimc_lite_fops = {
+  */
+ 
+ static const struct fimc_fmt *fimc_lite_subdev_try_fmt(struct fimc_lite *fimc,
+-					struct v4l2_subdev_pad_config *cfg,
++					struct v4l2_subdev_state *sd_state,
+ 					struct v4l2_subdev_format *format)
+ {
+ 	struct flite_drvdata *dd = fimc->dd;
+@@ -574,14 +574,16 @@ static const struct fimc_fmt *fimc_lite_subdev_try_fmt(struct fimc_lite *fimc,
+ 		struct v4l2_rect *rect;
+ 
+ 		if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+-			sink_fmt = v4l2_subdev_get_try_format(&fimc->subdev, cfg,
+-						FLITE_SD_PAD_SINK);
++			sink_fmt = v4l2_subdev_get_try_format(&fimc->subdev,
++							      sd_state,
++							      FLITE_SD_PAD_SINK);
+ 
+ 			mf->code = sink_fmt->code;
+ 			mf->colorspace = sink_fmt->colorspace;
+ 
+-			rect = v4l2_subdev_get_try_crop(&fimc->subdev, cfg,
+-						FLITE_SD_PAD_SINK);
++			rect = v4l2_subdev_get_try_crop(&fimc->subdev,
++							sd_state,
++							FLITE_SD_PAD_SINK);
+ 		} else {
+ 			mf->code = sink->fmt->mbus_code;
+ 			mf->colorspace = sink->fmt->colorspace;
+@@ -1002,7 +1004,7 @@ static const struct media_entity_operations fimc_lite_subdev_media_ops = {
+ };
+ 
+ static int fimc_lite_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+-					   struct v4l2_subdev_pad_config *cfg,
++					   struct v4l2_subdev_state *sd_state,
+ 					   struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	const struct fimc_fmt *fmt;
+@@ -1016,16 +1018,16 @@ static int fimc_lite_subdev_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ static struct v4l2_mbus_framefmt *__fimc_lite_subdev_get_try_fmt(
+ 		struct v4l2_subdev *sd,
+-		struct v4l2_subdev_pad_config *cfg, unsigned int pad)
++		struct v4l2_subdev_state *sd_state, unsigned int pad)
+ {
+ 	if (pad != FLITE_SD_PAD_SINK)
+ 		pad = FLITE_SD_PAD_SOURCE_DMA;
+ 
+-	return v4l2_subdev_get_try_format(sd, cfg, pad);
++	return v4l2_subdev_get_try_format(sd, sd_state, pad);
+ }
+ 
+ static int fimc_lite_subdev_get_fmt(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_lite *fimc = v4l2_get_subdevdata(sd);
+@@ -1033,7 +1035,7 @@ static int fimc_lite_subdev_get_fmt(struct v4l2_subdev *sd,
+ 	struct flite_frame *f = &fimc->inp_frame;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		mf = __fimc_lite_subdev_get_try_fmt(sd, cfg, fmt->pad);
++		mf = __fimc_lite_subdev_get_try_fmt(sd, sd_state, fmt->pad);
+ 		fmt->format = *mf;
+ 		return 0;
+ 	}
+@@ -1056,7 +1058,7 @@ static int fimc_lite_subdev_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_lite_subdev_set_fmt(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_format *fmt)
+ {
+ 	struct fimc_lite *fimc = v4l2_get_subdevdata(sd);
+@@ -1078,17 +1080,18 @@ static int fimc_lite_subdev_set_fmt(struct v4l2_subdev *sd,
+ 		return -EBUSY;
+ 	}
+ 
+-	ffmt = fimc_lite_subdev_try_fmt(fimc, cfg, fmt);
++	ffmt = fimc_lite_subdev_try_fmt(fimc, sd_state, fmt);
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+ 		struct v4l2_mbus_framefmt *src_fmt;
+ 
+-		mf = __fimc_lite_subdev_get_try_fmt(sd, cfg, fmt->pad);
++		mf = __fimc_lite_subdev_get_try_fmt(sd, sd_state, fmt->pad);
+ 		*mf = fmt->format;
+ 
+ 		if (fmt->pad == FLITE_SD_PAD_SINK) {
+ 			unsigned int pad = FLITE_SD_PAD_SOURCE_DMA;
+-			src_fmt = __fimc_lite_subdev_get_try_fmt(sd, cfg, pad);
++			src_fmt = __fimc_lite_subdev_get_try_fmt(sd, sd_state,
++								 pad);
+ 			*src_fmt = *mf;
+ 		}
+ 
+@@ -1116,7 +1119,7 @@ static int fimc_lite_subdev_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_lite_subdev_get_selection(struct v4l2_subdev *sd,
+-					  struct v4l2_subdev_pad_config *cfg,
++					  struct v4l2_subdev_state *sd_state,
+ 					  struct v4l2_subdev_selection *sel)
+ {
+ 	struct fimc_lite *fimc = v4l2_get_subdevdata(sd);
+@@ -1128,7 +1131,7 @@ static int fimc_lite_subdev_get_selection(struct v4l2_subdev *sd,
+ 		return -EINVAL;
+ 
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		sel->r = *v4l2_subdev_get_try_crop(sd, cfg, sel->pad);
++		sel->r = *v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
+ 		return 0;
+ 	}
+ 
+@@ -1151,7 +1154,7 @@ static int fimc_lite_subdev_get_selection(struct v4l2_subdev *sd,
+ }
+ 
+ static int fimc_lite_subdev_set_selection(struct v4l2_subdev *sd,
+-					  struct v4l2_subdev_pad_config *cfg,
++					  struct v4l2_subdev_state *sd_state,
+ 					  struct v4l2_subdev_selection *sel)
+ {
+ 	struct fimc_lite *fimc = v4l2_get_subdevdata(sd);
+@@ -1165,7 +1168,7 @@ static int fimc_lite_subdev_set_selection(struct v4l2_subdev *sd,
+ 	fimc_lite_try_crop(fimc, &sel->r);
+ 
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		*v4l2_subdev_get_try_crop(sd, cfg, sel->pad) = sel->r;
++		*v4l2_subdev_get_try_crop(sd, sd_state, sel->pad) = sel->r;
+ 	} else {
+ 		unsigned long flags;
+ 		spin_lock_irqsave(&fimc->slock, flags);
+diff --git a/drivers/media/platform/exynos4-is/mipi-csis.c b/drivers/media/platform/exynos4-is/mipi-csis.c
+index ebf39c856894..32b23329b033 100644
+--- a/drivers/media/platform/exynos4-is/mipi-csis.c
++++ b/drivers/media/platform/exynos4-is/mipi-csis.c
+@@ -537,7 +537,7 @@ static int s5pcsis_s_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static int s5pcsis_enum_mbus_code(struct v4l2_subdev *sd,
 -				  struct v4l2_subdev_pad_config *cfg,
 +				  struct v4l2_subdev_state *sd_state,
  				  struct v4l2_subdev_mbus_code_enum *code)
  {
- 	if (code->index != 0)
-@@ -699,13 +699,13 @@ static int adv7180_set_field_mode(struct adv7180_state *state)
+ 	if (code->index >= ARRAY_SIZE(s5pcsis_formats))
+@@ -565,23 +565,25 @@ static struct csis_pix_format const *s5pcsis_try_format(
  }
  
- static int adv7180_get_pad_format(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *format)
+ static struct v4l2_mbus_framefmt *__s5pcsis_get_format(
+-		struct csis_state *state, struct v4l2_subdev_pad_config *cfg,
++		struct csis_state *state, struct v4l2_subdev_state *sd_state,
+ 		enum v4l2_subdev_format_whence which)
  {
- 	struct adv7180_state *state = to_state(sd);
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return cfg ? v4l2_subdev_get_try_format(&state->sd, cfg, 0) : NULL;
++		return sd_state ? v4l2_subdev_get_try_format(&state->sd,
++							     sd_state, 0) : NULL;
  
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		format->format = *v4l2_subdev_get_try_format(sd, cfg, 0);
-+		format->format = *v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	} else {
- 		adv7180_mbus_fmt(sd, &format->format);
- 		format->format.field = state->field;
-@@ -715,7 +715,7 @@ static int adv7180_get_pad_format(struct v4l2_subdev *sd,
+ 	return &state->format;
  }
  
- static int adv7180_set_pad_format(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *format)
+-static int s5pcsis_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int s5pcsis_set_fmt(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
  {
- 	struct adv7180_state *state = to_state(sd);
-@@ -742,7 +742,7 @@ static int adv7180_set_pad_format(struct v4l2_subdev *sd,
- 			adv7180_set_power(state, true);
+ 	struct csis_state *state = sd_to_csis_state(sd);
+ 	struct csis_pix_format const *csis_fmt;
+ 	struct v4l2_mbus_framefmt *mf;
+ 
+-	mf = __s5pcsis_get_format(state, cfg, fmt->which);
++	mf = __s5pcsis_get_format(state, sd_state, fmt->which);
+ 
+ 	if (fmt->pad == CSIS_PAD_SOURCE) {
+ 		if (mf) {
+@@ -602,13 +604,14 @@ static int s5pcsis_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+ 	return 0;
+ }
+ 
+-static int s5pcsis_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int s5pcsis_get_fmt(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct csis_state *state = sd_to_csis_state(sd);
+ 	struct v4l2_mbus_framefmt *mf;
+ 
+-	mf = __s5pcsis_get_format(state, cfg, fmt->which);
++	mf = __s5pcsis_get_format(state, sd_state, fmt->which);
+ 	if (!mf)
+ 		return -EINVAL;
+ 
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index ea87110d9073..070a0f3fc337 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -1350,6 +1350,9 @@ static int mcam_vidioc_try_fmt_vid_cap(struct file *filp, void *priv,
+ 	struct mcam_format_struct *f;
+ 	struct v4l2_pix_format *pix = &fmt->fmt.pix;
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -1358,7 +1361,7 @@ static int mcam_vidioc_try_fmt_vid_cap(struct file *filp, void *priv,
+ 	f = mcam_find_format(pix->pixelformat);
+ 	pix->pixelformat = f->pixelformat;
+ 	v4l2_fill_mbus_format(&format.format, pix, f->mbus_code);
+-	ret = sensor_call(cam, pad, set_fmt, &pad_cfg, &format);
++	ret = sensor_call(cam, pad, set_fmt, &pad_state, &format);
+ 	v4l2_fill_pix_format(pix, &format.format);
+ 	pix->bytesperline = pix->width * f->bpp;
+ 	switch (f->pixelformat) {
+diff --git a/drivers/media/platform/omap3isp/ispccdc.c b/drivers/media/platform/omap3isp/ispccdc.c
+index 4e8905ef362f..108b5e9f82cb 100644
+--- a/drivers/media/platform/omap3isp/ispccdc.c
++++ b/drivers/media/platform/omap3isp/ispccdc.c
+@@ -29,7 +29,8 @@
+ #define CCDC_MIN_HEIGHT		32
+ 
+ static struct v4l2_mbus_framefmt *
+-__ccdc_get_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg,
++__ccdc_get_format(struct isp_ccdc_device *ccdc,
++		  struct v4l2_subdev_state *sd_state,
+ 		  unsigned int pad, enum v4l2_subdev_format_whence which);
+ 
+ static const unsigned int ccdc_fmts[] = {
+@@ -1936,21 +1937,25 @@ static int ccdc_set_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static struct v4l2_mbus_framefmt *
+-__ccdc_get_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg,
++__ccdc_get_format(struct isp_ccdc_device *ccdc,
++		  struct v4l2_subdev_state *sd_state,
+ 		  unsigned int pad, enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&ccdc->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&ccdc->subdev, sd_state,
++						  pad);
+ 	else
+ 		return &ccdc->formats[pad];
+ }
+ 
+ static struct v4l2_rect *
+-__ccdc_get_crop(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg,
++__ccdc_get_crop(struct isp_ccdc_device *ccdc,
++		struct v4l2_subdev_state *sd_state,
+ 		enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&ccdc->subdev, cfg, CCDC_PAD_SOURCE_OF);
++		return v4l2_subdev_get_try_crop(&ccdc->subdev, sd_state,
++						CCDC_PAD_SOURCE_OF);
+ 	else
+ 		return &ccdc->crop;
+ }
+@@ -1963,7 +1968,8 @@ __ccdc_get_crop(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg
+  * @fmt: Format
+  */
+ static void
+-ccdc_try_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg,
++ccdc_try_format(struct isp_ccdc_device *ccdc,
++		struct v4l2_subdev_state *sd_state,
+ 		unsigned int pad, struct v4l2_mbus_framefmt *fmt,
+ 		enum v4l2_subdev_format_whence which)
+ {
+@@ -1999,7 +2005,8 @@ ccdc_try_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg
+ 	case CCDC_PAD_SOURCE_OF:
+ 		pixelcode = fmt->code;
+ 		field = fmt->field;
+-		*fmt = *__ccdc_get_format(ccdc, cfg, CCDC_PAD_SINK, which);
++		*fmt = *__ccdc_get_format(ccdc, sd_state, CCDC_PAD_SINK,
++					  which);
+ 
+ 		/* In SYNC mode the bridge converts YUV formats from 2X8 to
+ 		 * 1X16. In BT.656 no such conversion occurs. As we don't know
+@@ -2024,7 +2031,7 @@ ccdc_try_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg
  		}
+ 
+ 		/* Hardcode the output size to the crop rectangle size. */
+-		crop = __ccdc_get_crop(ccdc, cfg, which);
++		crop = __ccdc_get_crop(ccdc, sd_state, which);
+ 		fmt->width = crop->width;
+ 		fmt->height = crop->height;
+ 
+@@ -2041,7 +2048,8 @@ ccdc_try_format(struct isp_ccdc_device *ccdc, struct v4l2_subdev_pad_config *cfg
+ 		break;
+ 
+ 	case CCDC_PAD_SOURCE_VP:
+-		*fmt = *__ccdc_get_format(ccdc, cfg, CCDC_PAD_SINK, which);
++		*fmt = *__ccdc_get_format(ccdc, sd_state, CCDC_PAD_SINK,
++					  which);
+ 
+ 		/* The video port interface truncates the data to 10 bits. */
+ 		info = omap3isp_video_format_info(fmt->code);
+@@ -2118,7 +2126,7 @@ static void ccdc_try_crop(struct isp_ccdc_device *ccdc,
+  * return -EINVAL or zero on success
+  */
+ static int ccdc_enum_mbus_code(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+@@ -2133,7 +2141,7 @@ static int ccdc_enum_mbus_code(struct v4l2_subdev *sd,
+ 		break;
+ 
+ 	case CCDC_PAD_SOURCE_OF:
+-		format = __ccdc_get_format(ccdc, cfg, code->pad,
++		format = __ccdc_get_format(ccdc, sd_state, code->pad,
+ 					   code->which);
+ 
+ 		if (format->code == MEDIA_BUS_FMT_YUYV8_2X8 ||
+@@ -2164,7 +2172,7 @@ static int ccdc_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index != 0)
+ 			return -EINVAL;
+ 
+-		format = __ccdc_get_format(ccdc, cfg, code->pad,
++		format = __ccdc_get_format(ccdc, sd_state, code->pad,
+ 					   code->which);
+ 
+ 		/* A pixel code equal to 0 means that the video port doesn't
+@@ -2184,7 +2192,7 @@ static int ccdc_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int ccdc_enum_frame_size(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+@@ -2196,7 +2204,7 @@ static int ccdc_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	ccdc_try_format(ccdc, cfg, fse->pad, &format, fse->which);
++	ccdc_try_format(ccdc, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -2206,7 +2214,7 @@ static int ccdc_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	ccdc_try_format(ccdc, cfg, fse->pad, &format, fse->which);
++	ccdc_try_format(ccdc, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -2224,7 +2232,8 @@ static int ccdc_enum_frame_size(struct v4l2_subdev *sd,
+  *
+  * Return 0 on success or a negative error code otherwise.
+  */
+-static int ccdc_get_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int ccdc_get_selection(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+@@ -2240,12 +2249,13 @@ static int ccdc_get_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+ 		sel->r.width = INT_MAX;
+ 		sel->r.height = INT_MAX;
+ 
+-		format = __ccdc_get_format(ccdc, cfg, CCDC_PAD_SINK, sel->which);
++		format = __ccdc_get_format(ccdc, sd_state, CCDC_PAD_SINK,
++					   sel->which);
+ 		ccdc_try_crop(ccdc, format, &sel->r);
+ 		break;
+ 
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = *__ccdc_get_crop(ccdc, cfg, sel->which);
++		sel->r = *__ccdc_get_crop(ccdc, sd_state, sel->which);
+ 		break;
+ 
+ 	default:
+@@ -2266,7 +2276,8 @@ static int ccdc_get_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+  *
+  * Return 0 on success or a negative error code otherwise.
+  */
+-static int ccdc_set_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int ccdc_set_selection(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+@@ -2285,17 +2296,19 @@ static int ccdc_set_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+ 	 * rectangle.
+ 	 */
+ 	if (sel->flags & V4L2_SEL_FLAG_KEEP_CONFIG) {
+-		sel->r = *__ccdc_get_crop(ccdc, cfg, sel->which);
++		sel->r = *__ccdc_get_crop(ccdc, sd_state, sel->which);
+ 		return 0;
+ 	}
+ 
+-	format = __ccdc_get_format(ccdc, cfg, CCDC_PAD_SINK, sel->which);
++	format = __ccdc_get_format(ccdc, sd_state, CCDC_PAD_SINK, sel->which);
+ 	ccdc_try_crop(ccdc, format, &sel->r);
+-	*__ccdc_get_crop(ccdc, cfg, sel->which) = sel->r;
++	*__ccdc_get_crop(ccdc, sd_state, sel->which) = sel->r;
+ 
+ 	/* Update the source format. */
+-	format = __ccdc_get_format(ccdc, cfg, CCDC_PAD_SOURCE_OF, sel->which);
+-	ccdc_try_format(ccdc, cfg, CCDC_PAD_SOURCE_OF, format, sel->which);
++	format = __ccdc_get_format(ccdc, sd_state, CCDC_PAD_SOURCE_OF,
++				   sel->which);
++	ccdc_try_format(ccdc, sd_state, CCDC_PAD_SOURCE_OF, format,
++			sel->which);
+ 
+ 	return 0;
+ }
+@@ -2309,13 +2322,14 @@ static int ccdc_set_selection(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+  * Return 0 on success or -EINVAL if the pad is invalid or doesn't correspond
+  * to the format type.
+  */
+-static int ccdc_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int ccdc_get_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __ccdc_get_format(ccdc, cfg, fmt->pad, fmt->which);
++	format = __ccdc_get_format(ccdc, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -2332,24 +2346,25 @@ static int ccdc_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+  * Return 0 on success or -EINVAL if the pad is invalid or doesn't correspond
+  * to the format type.
+  */
+-static int ccdc_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int ccdc_set_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_ccdc_device *ccdc = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *crop;
+ 
+-	format = __ccdc_get_format(ccdc, cfg, fmt->pad, fmt->which);
++	format = __ccdc_get_format(ccdc, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	ccdc_try_format(ccdc, cfg, fmt->pad, &fmt->format, fmt->which);
++	ccdc_try_format(ccdc, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == CCDC_PAD_SINK) {
+ 		/* Reset the crop rectangle. */
+-		crop = __ccdc_get_crop(ccdc, cfg, fmt->which);
++		crop = __ccdc_get_crop(ccdc, sd_state, fmt->which);
+ 		crop->left = 0;
+ 		crop->top = 0;
+ 		crop->width = fmt->format.width;
+@@ -2358,16 +2373,16 @@ static int ccdc_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+ 		ccdc_try_crop(ccdc, &fmt->format, crop);
+ 
+ 		/* Update the source formats. */
+-		format = __ccdc_get_format(ccdc, cfg, CCDC_PAD_SOURCE_OF,
++		format = __ccdc_get_format(ccdc, sd_state, CCDC_PAD_SOURCE_OF,
+ 					   fmt->which);
+ 		*format = fmt->format;
+-		ccdc_try_format(ccdc, cfg, CCDC_PAD_SOURCE_OF, format,
++		ccdc_try_format(ccdc, sd_state, CCDC_PAD_SOURCE_OF, format,
+ 				fmt->which);
+ 
+-		format = __ccdc_get_format(ccdc, cfg, CCDC_PAD_SOURCE_VP,
++		format = __ccdc_get_format(ccdc, sd_state, CCDC_PAD_SOURCE_VP,
+ 					   fmt->which);
+ 		*format = fmt->format;
+-		ccdc_try_format(ccdc, cfg, CCDC_PAD_SOURCE_VP, format,
++		ccdc_try_format(ccdc, sd_state, CCDC_PAD_SOURCE_VP, format,
+ 				fmt->which);
+ 	}
+ 
+@@ -2454,7 +2469,7 @@ static int ccdc_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	format.format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	format.format.width = 4096;
+ 	format.format.height = 4096;
+-	ccdc_set_format(sd, fh ? fh->pad : NULL, &format);
++	ccdc_set_format(sd, fh ? fh->state : NULL, &format);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/omap3isp/ispccp2.c
+index d0a49cdfd22d..acb58b6ddba1 100644
+--- a/drivers/media/platform/omap3isp/ispccp2.c
++++ b/drivers/media/platform/omap3isp/ispccp2.c
+@@ -618,11 +618,13 @@ static const unsigned int ccp2_fmts[] = {
+  * return format structure or NULL on error
+  */
+ static struct v4l2_mbus_framefmt *
+-__ccp2_get_format(struct isp_ccp2_device *ccp2, struct v4l2_subdev_pad_config *cfg,
+-		     unsigned int pad, enum v4l2_subdev_format_whence which)
++__ccp2_get_format(struct isp_ccp2_device *ccp2,
++		  struct v4l2_subdev_state *sd_state,
++		  unsigned int pad, enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&ccp2->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&ccp2->subdev, sd_state,
++						  pad);
+ 	else
+ 		return &ccp2->formats[pad];
+ }
+@@ -636,7 +638,8 @@ __ccp2_get_format(struct isp_ccp2_device *ccp2, struct v4l2_subdev_pad_config *c
+  * @which : wanted subdev format
+  */
+ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
+-			       struct v4l2_subdev_pad_config *cfg, unsigned int pad,
++			       struct v4l2_subdev_state *sd_state,
++			       unsigned int pad,
+ 			       struct v4l2_mbus_framefmt *fmt,
+ 			       enum v4l2_subdev_format_whence which)
+ {
+@@ -670,7 +673,8 @@ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
+ 		 * When CCP2 write to memory feature will be added this
+ 		 * should be changed properly.
+ 		 */
+-		format = __ccp2_get_format(ccp2, cfg, CCP2_PAD_SINK, which);
++		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
++					   which);
+ 		memcpy(fmt, format, sizeof(*fmt));
+ 		fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 		break;
+@@ -688,7 +692,7 @@ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
+  * return -EINVAL or zero on success
+  */
+ static int ccp2_enum_mbus_code(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct isp_ccp2_device *ccp2 = v4l2_get_subdevdata(sd);
+@@ -703,8 +707,8 @@ static int ccp2_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index != 0)
+ 			return -EINVAL;
+ 
+-		format = __ccp2_get_format(ccp2, cfg, CCP2_PAD_SINK,
+-					      code->which);
++		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
++					   code->which);
+ 		code->code = format->code;
+ 	}
+ 
+@@ -712,7 +716,7 @@ static int ccp2_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int ccp2_enum_frame_size(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct isp_ccp2_device *ccp2 = v4l2_get_subdevdata(sd);
+@@ -724,7 +728,7 @@ static int ccp2_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	ccp2_try_format(ccp2, cfg, fse->pad, &format, fse->which);
++	ccp2_try_format(ccp2, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -734,7 +738,7 @@ static int ccp2_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	ccp2_try_format(ccp2, cfg, fse->pad, &format, fse->which);
++	ccp2_try_format(ccp2, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -748,13 +752,14 @@ static int ccp2_enum_frame_size(struct v4l2_subdev *sd,
+  * @fmt   : pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int ccp2_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
+-			      struct v4l2_subdev_format *fmt)
++static int ccp2_get_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
++			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_ccp2_device *ccp2 = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __ccp2_get_format(ccp2, cfg, fmt->pad, fmt->which);
++	format = __ccp2_get_format(ccp2, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -769,25 +774,27 @@ static int ccp2_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+  * @fmt   : pointer to v4l2 subdev format structure
+  * returns zero
+  */
+-static int ccp2_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
+-			      struct v4l2_subdev_format *fmt)
++static int ccp2_set_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
++			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_ccp2_device *ccp2 = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __ccp2_get_format(ccp2, cfg, fmt->pad, fmt->which);
++	format = __ccp2_get_format(ccp2, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	ccp2_try_format(ccp2, cfg, fmt->pad, &fmt->format, fmt->which);
++	ccp2_try_format(ccp2, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == CCP2_PAD_SINK) {
+-		format = __ccp2_get_format(ccp2, cfg, CCP2_PAD_SOURCE,
++		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SOURCE,
+ 					   fmt->which);
+ 		*format = fmt->format;
+-		ccp2_try_format(ccp2, cfg, CCP2_PAD_SOURCE, format, fmt->which);
++		ccp2_try_format(ccp2, sd_state, CCP2_PAD_SOURCE, format,
++				fmt->which);
+ 	}
+ 
+ 	return 0;
+@@ -812,7 +819,7 @@ static int ccp2_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	format.format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	format.format.width = 4096;
+ 	format.format.height = 4096;
+-	ccp2_set_format(sd, fh ? fh->pad : NULL, &format);
++	ccp2_set_format(sd, fh ? fh->state : NULL, &format);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/omap3isp/ispcsi2.c b/drivers/media/platform/omap3isp/ispcsi2.c
+index fd493c5e4e24..6302e0c94034 100644
+--- a/drivers/media/platform/omap3isp/ispcsi2.c
++++ b/drivers/media/platform/omap3isp/ispcsi2.c
+@@ -827,17 +827,20 @@ static const struct isp_video_operations csi2_ispvideo_ops = {
+  */
+ 
+ static struct v4l2_mbus_framefmt *
+-__csi2_get_format(struct isp_csi2_device *csi2, struct v4l2_subdev_pad_config *cfg,
++__csi2_get_format(struct isp_csi2_device *csi2,
++		  struct v4l2_subdev_state *sd_state,
+ 		  unsigned int pad, enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&csi2->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&csi2->subdev, sd_state,
++						  pad);
+ 	else
+ 		return &csi2->formats[pad];
+ }
+ 
+ static void
+-csi2_try_format(struct isp_csi2_device *csi2, struct v4l2_subdev_pad_config *cfg,
++csi2_try_format(struct isp_csi2_device *csi2,
++		struct v4l2_subdev_state *sd_state,
+ 		unsigned int pad, struct v4l2_mbus_framefmt *fmt,
+ 		enum v4l2_subdev_format_whence which)
+ {
+@@ -867,7 +870,8 @@ csi2_try_format(struct isp_csi2_device *csi2, struct v4l2_subdev_pad_config *cfg
+ 		 * compression.
+ 		 */
+ 		pixelcode = fmt->code;
+-		format = __csi2_get_format(csi2, cfg, CSI2_PAD_SINK, which);
++		format = __csi2_get_format(csi2, sd_state, CSI2_PAD_SINK,
++					   which);
+ 		memcpy(fmt, format, sizeof(*fmt));
+ 
+ 		/*
+@@ -893,7 +897,7 @@ csi2_try_format(struct isp_csi2_device *csi2, struct v4l2_subdev_pad_config *cfg
+  * return -EINVAL or zero on success
+  */
+ static int csi2_enum_mbus_code(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct isp_csi2_device *csi2 = v4l2_get_subdevdata(sd);
+@@ -906,7 +910,7 @@ static int csi2_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 		code->code = csi2_input_fmts[code->index];
+ 	} else {
+-		format = __csi2_get_format(csi2, cfg, CSI2_PAD_SINK,
++		format = __csi2_get_format(csi2, sd_state, CSI2_PAD_SINK,
+ 					   code->which);
+ 		switch (code->index) {
+ 		case 0:
+@@ -930,7 +934,7 @@ static int csi2_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int csi2_enum_frame_size(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct isp_csi2_device *csi2 = v4l2_get_subdevdata(sd);
+@@ -942,7 +946,7 @@ static int csi2_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	csi2_try_format(csi2, cfg, fse->pad, &format, fse->which);
++	csi2_try_format(csi2, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -952,7 +956,7 @@ static int csi2_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	csi2_try_format(csi2, cfg, fse->pad, &format, fse->which);
++	csi2_try_format(csi2, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -966,13 +970,14 @@ static int csi2_enum_frame_size(struct v4l2_subdev *sd,
+  * @fmt: pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int csi2_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int csi2_get_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_csi2_device *csi2 = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csi2_get_format(csi2, cfg, fmt->pad, fmt->which);
++	format = __csi2_get_format(csi2, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -987,25 +992,27 @@ static int csi2_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+  * @fmt: pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int csi2_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int csi2_set_format(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_csi2_device *csi2 = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csi2_get_format(csi2, cfg, fmt->pad, fmt->which);
++	format = __csi2_get_format(csi2, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	csi2_try_format(csi2, cfg, fmt->pad, &fmt->format, fmt->which);
++	csi2_try_format(csi2, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == CSI2_PAD_SINK) {
+-		format = __csi2_get_format(csi2, cfg, CSI2_PAD_SOURCE,
++		format = __csi2_get_format(csi2, sd_state, CSI2_PAD_SOURCE,
+ 					   fmt->which);
+ 		*format = fmt->format;
+-		csi2_try_format(csi2, cfg, CSI2_PAD_SOURCE, format, fmt->which);
++		csi2_try_format(csi2, sd_state, CSI2_PAD_SOURCE, format,
++				fmt->which);
+ 	}
+ 
+ 	return 0;
+@@ -1030,7 +1037,7 @@ static int csi2_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	format.format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	format.format.width = 4096;
+ 	format.format.height = 4096;
+-	csi2_set_format(sd, fh ? fh->pad : NULL, &format);
++	csi2_set_format(sd, fh ? fh->state : NULL, &format);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/omap3isp/isppreview.c b/drivers/media/platform/omap3isp/isppreview.c
+index 607b7685c982..53aedec7990d 100644
+--- a/drivers/media/platform/omap3isp/isppreview.c
++++ b/drivers/media/platform/omap3isp/isppreview.c
+@@ -1679,21 +1679,25 @@ static int preview_set_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static struct v4l2_mbus_framefmt *
+-__preview_get_format(struct isp_prev_device *prev, struct v4l2_subdev_pad_config *cfg,
++__preview_get_format(struct isp_prev_device *prev,
++		     struct v4l2_subdev_state *sd_state,
+ 		     unsigned int pad, enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&prev->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&prev->subdev, sd_state,
++						  pad);
+ 	else
+ 		return &prev->formats[pad];
+ }
+ 
+ static struct v4l2_rect *
+-__preview_get_crop(struct isp_prev_device *prev, struct v4l2_subdev_pad_config *cfg,
++__preview_get_crop(struct isp_prev_device *prev,
++		   struct v4l2_subdev_state *sd_state,
+ 		   enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&prev->subdev, cfg, PREV_PAD_SINK);
++		return v4l2_subdev_get_try_crop(&prev->subdev, sd_state,
++						PREV_PAD_SINK);
+ 	else
+ 		return &prev->crop;
+ }
+@@ -1729,7 +1733,8 @@ static const unsigned int preview_output_fmts[] = {
+  * engine limits and the format and crop rectangles on other pads.
+  */
+ static void preview_try_format(struct isp_prev_device *prev,
+-			       struct v4l2_subdev_pad_config *cfg, unsigned int pad,
++			       struct v4l2_subdev_state *sd_state,
++			       unsigned int pad,
+ 			       struct v4l2_mbus_framefmt *fmt,
+ 			       enum v4l2_subdev_format_whence which)
+ {
+@@ -1770,7 +1775,8 @@ static void preview_try_format(struct isp_prev_device *prev,
+ 
+ 	case PREV_PAD_SOURCE:
+ 		pixelcode = fmt->code;
+-		*fmt = *__preview_get_format(prev, cfg, PREV_PAD_SINK, which);
++		*fmt = *__preview_get_format(prev, sd_state, PREV_PAD_SINK,
++					     which);
+ 
+ 		switch (pixelcode) {
+ 		case MEDIA_BUS_FMT_YUYV8_1X16:
+@@ -1788,7 +1794,7 @@ static void preview_try_format(struct isp_prev_device *prev,
+ 		 * is not supported yet, hardcode the output size to the crop
+ 		 * rectangle size.
+ 		 */
+-		crop = __preview_get_crop(prev, cfg, which);
++		crop = __preview_get_crop(prev, sd_state, which);
+ 		fmt->width = crop->width;
+ 		fmt->height = crop->height;
+ 
+@@ -1862,7 +1868,7 @@ static void preview_try_crop(struct isp_prev_device *prev,
+  * return -EINVAL or zero on success
+  */
+ static int preview_enum_mbus_code(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	switch (code->pad) {
+@@ -1886,7 +1892,7 @@ static int preview_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int preview_enum_frame_size(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct isp_prev_device *prev = v4l2_get_subdevdata(sd);
+@@ -1898,7 +1904,7 @@ static int preview_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	preview_try_format(prev, cfg, fse->pad, &format, fse->which);
++	preview_try_format(prev, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -1908,7 +1914,7 @@ static int preview_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	preview_try_format(prev, cfg, fse->pad, &format, fse->which);
++	preview_try_format(prev, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -1926,7 +1932,7 @@ static int preview_enum_frame_size(struct v4l2_subdev *sd,
+  * Return 0 on success or a negative error code otherwise.
+  */
+ static int preview_get_selection(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_prev_device *prev = v4l2_get_subdevdata(sd);
+@@ -1942,13 +1948,13 @@ static int preview_get_selection(struct v4l2_subdev *sd,
+ 		sel->r.width = INT_MAX;
+ 		sel->r.height = INT_MAX;
+ 
+-		format = __preview_get_format(prev, cfg, PREV_PAD_SINK,
++		format = __preview_get_format(prev, sd_state, PREV_PAD_SINK,
+ 					      sel->which);
+ 		preview_try_crop(prev, format, &sel->r);
+ 		break;
+ 
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = *__preview_get_crop(prev, cfg, sel->which);
++		sel->r = *__preview_get_crop(prev, sd_state, sel->which);
+ 		break;
+ 
+ 	default:
+@@ -1969,7 +1975,7 @@ static int preview_get_selection(struct v4l2_subdev *sd,
+  * Return 0 on success or a negative error code otherwise.
+  */
+ static int preview_set_selection(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_prev_device *prev = v4l2_get_subdevdata(sd);
+@@ -1988,17 +1994,20 @@ static int preview_set_selection(struct v4l2_subdev *sd,
+ 	 * rectangle.
+ 	 */
+ 	if (sel->flags & V4L2_SEL_FLAG_KEEP_CONFIG) {
+-		sel->r = *__preview_get_crop(prev, cfg, sel->which);
++		sel->r = *__preview_get_crop(prev, sd_state, sel->which);
+ 		return 0;
+ 	}
+ 
+-	format = __preview_get_format(prev, cfg, PREV_PAD_SINK, sel->which);
++	format = __preview_get_format(prev, sd_state, PREV_PAD_SINK,
++				      sel->which);
+ 	preview_try_crop(prev, format, &sel->r);
+-	*__preview_get_crop(prev, cfg, sel->which) = sel->r;
++	*__preview_get_crop(prev, sd_state, sel->which) = sel->r;
+ 
+ 	/* Update the source format. */
+-	format = __preview_get_format(prev, cfg, PREV_PAD_SOURCE, sel->which);
+-	preview_try_format(prev, cfg, PREV_PAD_SOURCE, format, sel->which);
++	format = __preview_get_format(prev, sd_state, PREV_PAD_SOURCE,
++				      sel->which);
++	preview_try_format(prev, sd_state, PREV_PAD_SOURCE, format,
++			   sel->which);
+ 
+ 	return 0;
+ }
+@@ -2010,13 +2019,14 @@ static int preview_set_selection(struct v4l2_subdev *sd,
+  * @fmt: pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int preview_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int preview_get_format(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_prev_device *prev = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __preview_get_format(prev, cfg, fmt->pad, fmt->which);
++	format = __preview_get_format(prev, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -2031,24 +2041,25 @@ static int preview_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+  * @fmt: pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int preview_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int preview_set_format(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_prev_device *prev = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *crop;
+ 
+-	format = __preview_get_format(prev, cfg, fmt->pad, fmt->which);
++	format = __preview_get_format(prev, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	preview_try_format(prev, cfg, fmt->pad, &fmt->format, fmt->which);
++	preview_try_format(prev, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == PREV_PAD_SINK) {
+ 		/* Reset the crop rectangle. */
+-		crop = __preview_get_crop(prev, cfg, fmt->which);
++		crop = __preview_get_crop(prev, sd_state, fmt->which);
+ 		crop->left = 0;
+ 		crop->top = 0;
+ 		crop->width = fmt->format.width;
+@@ -2057,9 +2068,9 @@ static int preview_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+ 		preview_try_crop(prev, &fmt->format, crop);
+ 
+ 		/* Update the source format. */
+-		format = __preview_get_format(prev, cfg, PREV_PAD_SOURCE,
++		format = __preview_get_format(prev, sd_state, PREV_PAD_SOURCE,
+ 					      fmt->which);
+-		preview_try_format(prev, cfg, PREV_PAD_SOURCE, format,
++		preview_try_format(prev, sd_state, PREV_PAD_SOURCE, format,
+ 				   fmt->which);
+ 	}
+ 
+@@ -2086,7 +2097,7 @@ static int preview_init_formats(struct v4l2_subdev *sd,
+ 	format.format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	format.format.width = 4096;
+ 	format.format.height = 4096;
+-	preview_set_format(sd, fh ? fh->pad : NULL, &format);
++	preview_set_format(sd, fh ? fh->state : NULL, &format);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/omap3isp/ispresizer.c b/drivers/media/platform/omap3isp/ispresizer.c
+index 78d9dd7ea2da..ed2fb0c7a57e 100644
+--- a/drivers/media/platform/omap3isp/ispresizer.c
++++ b/drivers/media/platform/omap3isp/ispresizer.c
+@@ -114,11 +114,12 @@ static const struct isprsz_coef filter_coefs = {
+  * return zero
+  */
+ static struct v4l2_mbus_framefmt *
+-__resizer_get_format(struct isp_res_device *res, struct v4l2_subdev_pad_config *cfg,
++__resizer_get_format(struct isp_res_device *res,
++		     struct v4l2_subdev_state *sd_state,
+ 		     unsigned int pad, enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&res->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&res->subdev, sd_state, pad);
+ 	else
+ 		return &res->formats[pad];
+ }
+@@ -130,11 +131,13 @@ __resizer_get_format(struct isp_res_device *res, struct v4l2_subdev_pad_config *
+  * @which : wanted subdev crop rectangle
+  */
+ static struct v4l2_rect *
+-__resizer_get_crop(struct isp_res_device *res, struct v4l2_subdev_pad_config *cfg,
++__resizer_get_crop(struct isp_res_device *res,
++		   struct v4l2_subdev_state *sd_state,
+ 		   enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&res->subdev, cfg, RESZ_PAD_SINK);
++		return v4l2_subdev_get_try_crop(&res->subdev, sd_state,
++						RESZ_PAD_SINK);
+ 	else
+ 		return &res->crop.request;
+ }
+@@ -1220,7 +1223,7 @@ static void resizer_try_crop(const struct v4l2_mbus_framefmt *sink,
+  * Return 0 on success or a negative error code otherwise.
+  */
+ static int resizer_get_selection(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+@@ -1231,9 +1234,9 @@ static int resizer_get_selection(struct v4l2_subdev *sd,
+ 	if (sel->pad != RESZ_PAD_SINK)
+ 		return -EINVAL;
+ 
+-	format_sink = __resizer_get_format(res, cfg, RESZ_PAD_SINK,
++	format_sink = __resizer_get_format(res, sd_state, RESZ_PAD_SINK,
+ 					   sel->which);
+-	format_source = __resizer_get_format(res, cfg, RESZ_PAD_SOURCE,
++	format_source = __resizer_get_format(res, sd_state, RESZ_PAD_SOURCE,
+ 					     sel->which);
+ 
+ 	switch (sel->target) {
+@@ -1248,7 +1251,7 @@ static int resizer_get_selection(struct v4l2_subdev *sd,
+ 		break;
+ 
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = *__resizer_get_crop(res, cfg, sel->which);
++		sel->r = *__resizer_get_crop(res, sd_state, sel->which);
+ 		resizer_calc_ratios(res, &sel->r, format_source, &ratio);
+ 		break;
+ 
+@@ -1273,7 +1276,7 @@ static int resizer_get_selection(struct v4l2_subdev *sd,
+  * Return 0 on success or a negative error code otherwise.
+  */
+ static int resizer_set_selection(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_selection *sel)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+@@ -1287,9 +1290,9 @@ static int resizer_set_selection(struct v4l2_subdev *sd,
+ 	    sel->pad != RESZ_PAD_SINK)
+ 		return -EINVAL;
+ 
+-	format_sink = __resizer_get_format(res, cfg, RESZ_PAD_SINK,
++	format_sink = __resizer_get_format(res, sd_state, RESZ_PAD_SINK,
+ 					   sel->which);
+-	format_source = *__resizer_get_format(res, cfg, RESZ_PAD_SOURCE,
++	format_source = *__resizer_get_format(res, sd_state, RESZ_PAD_SOURCE,
+ 					      sel->which);
+ 
+ 	dev_dbg(isp->dev, "%s(%s): req %ux%u -> (%d,%d)/%ux%u -> %ux%u\n",
+@@ -1307,7 +1310,7 @@ static int resizer_set_selection(struct v4l2_subdev *sd,
+ 	 * stored the mangled rectangle.
+ 	 */
+ 	resizer_try_crop(format_sink, &format_source, &sel->r);
+-	*__resizer_get_crop(res, cfg, sel->which) = sel->r;
++	*__resizer_get_crop(res, sd_state, sel->which) = sel->r;
+ 	resizer_calc_ratios(res, &sel->r, &format_source, &ratio);
+ 
+ 	dev_dbg(isp->dev, "%s(%s): got %ux%u -> (%d,%d)/%ux%u -> %ux%u\n",
+@@ -1317,7 +1320,8 @@ static int resizer_set_selection(struct v4l2_subdev *sd,
+ 		format_source.width, format_source.height);
+ 
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		*__resizer_get_format(res, cfg, RESZ_PAD_SOURCE, sel->which) =
++		*__resizer_get_format(res, sd_state, RESZ_PAD_SOURCE,
++				      sel->which) =
+ 			format_source;
+ 		return 0;
+ 	}
+@@ -1328,7 +1332,7 @@ static int resizer_set_selection(struct v4l2_subdev *sd,
+ 	 */
+ 	spin_lock_irqsave(&res->lock, flags);
+ 
+-	*__resizer_get_format(res, cfg, RESZ_PAD_SOURCE, sel->which) =
++	*__resizer_get_format(res, sd_state, RESZ_PAD_SOURCE, sel->which) =
+ 		format_source;
+ 
+ 	res->ratio = ratio;
+@@ -1371,7 +1375,8 @@ static unsigned int resizer_max_in_width(struct isp_res_device *res)
+  * @which : wanted subdev format
+  */
+ static void resizer_try_format(struct isp_res_device *res,
+-			       struct v4l2_subdev_pad_config *cfg, unsigned int pad,
++			       struct v4l2_subdev_state *sd_state,
++			       unsigned int pad,
+ 			       struct v4l2_mbus_framefmt *fmt,
+ 			       enum v4l2_subdev_format_whence which)
+ {
+@@ -1392,10 +1397,11 @@ static void resizer_try_format(struct isp_res_device *res,
+ 		break;
+ 
+ 	case RESZ_PAD_SOURCE:
+-		format = __resizer_get_format(res, cfg, RESZ_PAD_SINK, which);
++		format = __resizer_get_format(res, sd_state, RESZ_PAD_SINK,
++					      which);
+ 		fmt->code = format->code;
+ 
+-		crop = *__resizer_get_crop(res, cfg, which);
++		crop = *__resizer_get_crop(res, sd_state, which);
+ 		resizer_calc_ratios(res, &crop, fmt, &ratio);
+ 		break;
+ 	}
+@@ -1412,7 +1418,7 @@ static void resizer_try_format(struct isp_res_device *res,
+  * return -EINVAL or zero on success
+  */
+ static int resizer_enum_mbus_code(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+@@ -1427,7 +1433,7 @@ static int resizer_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index != 0)
+ 			return -EINVAL;
+ 
+-		format = __resizer_get_format(res, cfg, RESZ_PAD_SINK,
++		format = __resizer_get_format(res, sd_state, RESZ_PAD_SINK,
+ 					      code->which);
+ 		code->code = format->code;
+ 	}
+@@ -1436,7 +1442,7 @@ static int resizer_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int resizer_enum_frame_size(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+@@ -1448,7 +1454,7 @@ static int resizer_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	resizer_try_format(res, cfg, fse->pad, &format, fse->which);
++	resizer_try_format(res, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -1458,7 +1464,7 @@ static int resizer_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	resizer_try_format(res, cfg, fse->pad, &format, fse->which);
++	resizer_try_format(res, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -1472,13 +1478,14 @@ static int resizer_enum_frame_size(struct v4l2_subdev *sd,
+  * @fmt   : pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int resizer_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int resizer_get_format(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __resizer_get_format(res, cfg, fmt->pad, fmt->which);
++	format = __resizer_get_format(res, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -1493,33 +1500,34 @@ static int resizer_get_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_con
+  * @fmt   : pointer to v4l2 subdev format structure
+  * return -EINVAL or zero on success
+  */
+-static int resizer_set_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
++static int resizer_set_format(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct isp_res_device *res = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *crop;
+ 
+-	format = __resizer_get_format(res, cfg, fmt->pad, fmt->which);
++	format = __resizer_get_format(res, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	resizer_try_format(res, cfg, fmt->pad, &fmt->format, fmt->which);
++	resizer_try_format(res, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	if (fmt->pad == RESZ_PAD_SINK) {
+ 		/* reset crop rectangle */
+-		crop = __resizer_get_crop(res, cfg, fmt->which);
++		crop = __resizer_get_crop(res, sd_state, fmt->which);
+ 		crop->left = 0;
+ 		crop->top = 0;
+ 		crop->width = fmt->format.width;
+ 		crop->height = fmt->format.height;
+ 
+ 		/* Propagate the format from sink to source */
+-		format = __resizer_get_format(res, cfg, RESZ_PAD_SOURCE,
++		format = __resizer_get_format(res, sd_state, RESZ_PAD_SOURCE,
+ 					      fmt->which);
+ 		*format = fmt->format;
+-		resizer_try_format(res, cfg, RESZ_PAD_SOURCE, format,
++		resizer_try_format(res, sd_state, RESZ_PAD_SOURCE, format,
+ 				   fmt->which);
+ 	}
+ 
+@@ -1570,7 +1578,7 @@ static int resizer_init_formats(struct v4l2_subdev *sd,
+ 	format.format.code = MEDIA_BUS_FMT_YUYV8_1X16;
+ 	format.format.width = 4096;
+ 	format.format.height = 4096;
+-	resizer_set_format(sd, fh ? fh->pad : NULL, &format);
++	resizer_set_format(sd, fh ? fh->state : NULL, &format);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index dd510ee9b58a..ec4c010644ca 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -1792,6 +1792,9 @@ static int pxac_vidioc_try_fmt_vid_cap(struct file *filp, void *priv,
+ 	const struct pxa_camera_format_xlate *xlate;
+ 	struct v4l2_pix_format *pix = &f->fmt.pix;
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -1816,7 +1819,7 @@ static int pxac_vidioc_try_fmt_vid_cap(struct file *filp, void *priv,
+ 			      pixfmt == V4L2_PIX_FMT_YUV422P ? 4 : 0);
+ 
+ 	v4l2_fill_mbus_format(mf, pix, xlate->code);
+-	ret = sensor_call(pcdev, pad, set_fmt, &pad_cfg, &format);
++	ret = sensor_call(pcdev, pad, set_fmt, &pad_state, &format);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index 251f4c4afe19..a1637b78568b 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -245,12 +245,13 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
+  */
+ static struct v4l2_mbus_framefmt *
+ __csid_get_format(struct csid_device *csid,
+-		  struct v4l2_subdev_pad_config *cfg,
++		  struct v4l2_subdev_state *sd_state,
+ 		  unsigned int pad,
+ 		  enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&csid->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&csid->subdev, sd_state,
++						  pad);
+ 
+ 	return &csid->fmt[pad];
+ }
+@@ -264,7 +265,7 @@ __csid_get_format(struct csid_device *csid,
+  * @which: wanted subdev format
+  */
+ static void csid_try_format(struct csid_device *csid,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    unsigned int pad,
+ 			    struct v4l2_mbus_framefmt *fmt,
+ 			    enum v4l2_subdev_format_whence which)
+@@ -297,7 +298,7 @@ static void csid_try_format(struct csid_device *csid,
+ 			/* keep pad formats in sync */
+ 			u32 code = fmt->code;
+ 
+-			*fmt = *__csid_get_format(csid, cfg,
++			*fmt = *__csid_get_format(csid, sd_state,
+ 						      MSM_CSID_PAD_SINK, which);
+ 			fmt->code = csid->ops->src_pad_code(csid, fmt->code, 0, code);
+ 		} else {
+@@ -331,7 +332,7 @@ static void csid_try_format(struct csid_device *csid,
+  * return -EINVAL or zero on success
+  */
+ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct csid_device *csid = v4l2_get_subdevdata(sd);
+@@ -345,7 +346,7 @@ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (csid->testgen_mode->cur.val == 0) {
+ 			struct v4l2_mbus_framefmt *sink_fmt;
+ 
+-			sink_fmt = __csid_get_format(csid, cfg,
++			sink_fmt = __csid_get_format(csid, sd_state,
+ 						     MSM_CSID_PAD_SINK,
+ 						     code->which);
+ 
+@@ -372,7 +373,7 @@ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
+  * return -EINVAL or zero on success
+  */
+ static int csid_enum_frame_size(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct csid_device *csid = v4l2_get_subdevdata(sd);
+@@ -384,7 +385,7 @@ static int csid_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	csid_try_format(csid, cfg, fse->pad, &format, fse->which);
++	csid_try_format(csid, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -394,7 +395,7 @@ static int csid_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	csid_try_format(csid, cfg, fse->pad, &format, fse->which);
++	csid_try_format(csid, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -410,13 +411,13 @@ static int csid_enum_frame_size(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int csid_get_format(struct v4l2_subdev *sd,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct csid_device *csid = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csid_get_format(csid, cfg, fmt->pad, fmt->which);
++	format = __csid_get_format(csid, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -434,26 +435,26 @@ static int csid_get_format(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int csid_set_format(struct v4l2_subdev *sd,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct csid_device *csid = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csid_get_format(csid, cfg, fmt->pad, fmt->which);
++	format = __csid_get_format(csid, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	csid_try_format(csid, cfg, fmt->pad, &fmt->format, fmt->which);
++	csid_try_format(csid, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == MSM_CSID_PAD_SINK) {
+-		format = __csid_get_format(csid, cfg, MSM_CSID_PAD_SRC,
++		format = __csid_get_format(csid, sd_state, MSM_CSID_PAD_SRC,
+ 					   fmt->which);
+ 
+ 		*format = fmt->format;
+-		csid_try_format(csid, cfg, MSM_CSID_PAD_SRC, format,
++		csid_try_format(csid, sd_state, MSM_CSID_PAD_SRC, format,
+ 				fmt->which);
+ 	}
+ 
+@@ -482,7 +483,7 @@ static int csid_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		}
+ 	};
+ 
+-	return csid_set_format(sd, fh ? fh->pad : NULL, &format);
++	return csid_set_format(sd, fh ? fh->state : NULL, &format);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 35470cbaea86..24eec16197e7 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -338,12 +338,13 @@ static int csiphy_set_stream(struct v4l2_subdev *sd, int enable)
+  */
+ static struct v4l2_mbus_framefmt *
+ __csiphy_get_format(struct csiphy_device *csiphy,
+-		    struct v4l2_subdev_pad_config *cfg,
++		    struct v4l2_subdev_state *sd_state,
+ 		    unsigned int pad,
+ 		    enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&csiphy->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&csiphy->subdev, sd_state,
++						  pad);
+ 
+ 	return &csiphy->fmt[pad];
+ }
+@@ -357,7 +358,7 @@ __csiphy_get_format(struct csiphy_device *csiphy,
+  * @which: wanted subdev format
+  */
+ static void csiphy_try_format(struct csiphy_device *csiphy,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      unsigned int pad,
+ 			      struct v4l2_mbus_framefmt *fmt,
+ 			      enum v4l2_subdev_format_whence which)
+@@ -387,7 +388,8 @@ static void csiphy_try_format(struct csiphy_device *csiphy,
+ 	case MSM_CSIPHY_PAD_SRC:
+ 		/* Set and return a format same as sink pad */
+ 
+-		*fmt = *__csiphy_get_format(csiphy, cfg, MSM_CSID_PAD_SINK,
++		*fmt = *__csiphy_get_format(csiphy, sd_state,
++					    MSM_CSID_PAD_SINK,
+ 					    which);
+ 
+ 		break;
+@@ -402,7 +404,7 @@ static void csiphy_try_format(struct csiphy_device *csiphy,
+  * return -EINVAL or zero on success
+  */
+ static int csiphy_enum_mbus_code(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct csiphy_device *csiphy = v4l2_get_subdevdata(sd);
+@@ -417,7 +419,8 @@ static int csiphy_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index > 0)
+ 			return -EINVAL;
+ 
+-		format = __csiphy_get_format(csiphy, cfg, MSM_CSIPHY_PAD_SINK,
++		format = __csiphy_get_format(csiphy, sd_state,
++					     MSM_CSIPHY_PAD_SINK,
+ 					     code->which);
+ 
+ 		code->code = format->code;
+@@ -434,7 +437,7 @@ static int csiphy_enum_mbus_code(struct v4l2_subdev *sd,
+  * return -EINVAL or zero on success
+  */
+ static int csiphy_enum_frame_size(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct csiphy_device *csiphy = v4l2_get_subdevdata(sd);
+@@ -446,7 +449,7 @@ static int csiphy_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	csiphy_try_format(csiphy, cfg, fse->pad, &format, fse->which);
++	csiphy_try_format(csiphy, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -456,7 +459,7 @@ static int csiphy_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	csiphy_try_format(csiphy, cfg, fse->pad, &format, fse->which);
++	csiphy_try_format(csiphy, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -472,13 +475,13 @@ static int csiphy_enum_frame_size(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int csiphy_get_format(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_format *fmt)
+ {
+ 	struct csiphy_device *csiphy = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csiphy_get_format(csiphy, cfg, fmt->pad, fmt->which);
++	format = __csiphy_get_format(csiphy, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -496,26 +499,29 @@ static int csiphy_get_format(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int csiphy_set_format(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_format *fmt)
+ {
+ 	struct csiphy_device *csiphy = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __csiphy_get_format(csiphy, cfg, fmt->pad, fmt->which);
++	format = __csiphy_get_format(csiphy, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	csiphy_try_format(csiphy, cfg, fmt->pad, &fmt->format, fmt->which);
++	csiphy_try_format(csiphy, sd_state, fmt->pad, &fmt->format,
++			  fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == MSM_CSIPHY_PAD_SINK) {
+-		format = __csiphy_get_format(csiphy, cfg, MSM_CSIPHY_PAD_SRC,
++		format = __csiphy_get_format(csiphy, sd_state,
++					     MSM_CSIPHY_PAD_SRC,
+ 					     fmt->which);
+ 
+ 		*format = fmt->format;
+-		csiphy_try_format(csiphy, cfg, MSM_CSIPHY_PAD_SRC, format,
++		csiphy_try_format(csiphy, sd_state, MSM_CSIPHY_PAD_SRC,
++				  format,
+ 				  fmt->which);
+ 	}
+ 
+@@ -545,7 +551,7 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
+ 		}
+ 	};
+ 
+-	return csiphy_set_format(sd, fh ? fh->pad : NULL, &format);
++	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index 1b716182d35c..ba5d65f6ef34 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -874,12 +874,13 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
+  */
+ static struct v4l2_mbus_framefmt *
+ __ispif_get_format(struct ispif_line *line,
+-		   struct v4l2_subdev_pad_config *cfg,
++		   struct v4l2_subdev_state *sd_state,
+ 		   unsigned int pad,
+ 		   enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&line->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&line->subdev, sd_state,
++						  pad);
+ 
+ 	return &line->fmt[pad];
+ }
+@@ -893,7 +894,7 @@ __ispif_get_format(struct ispif_line *line,
+  * @which: wanted subdev format
+  */
+ static void ispif_try_format(struct ispif_line *line,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     unsigned int pad,
+ 			     struct v4l2_mbus_framefmt *fmt,
+ 			     enum v4l2_subdev_format_whence which)
+@@ -923,7 +924,7 @@ static void ispif_try_format(struct ispif_line *line,
+ 	case MSM_ISPIF_PAD_SRC:
+ 		/* Set and return a format same as sink pad */
+ 
+-		*fmt = *__ispif_get_format(line, cfg, MSM_ISPIF_PAD_SINK,
++		*fmt = *__ispif_get_format(line, sd_state, MSM_ISPIF_PAD_SINK,
+ 					   which);
+ 
+ 		break;
+@@ -940,7 +941,7 @@ static void ispif_try_format(struct ispif_line *line,
+  * return -EINVAL or zero on success
+  */
+ static int ispif_enum_mbus_code(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct ispif_line *line = v4l2_get_subdevdata(sd);
+@@ -955,7 +956,8 @@ static int ispif_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index > 0)
+ 			return -EINVAL;
+ 
+-		format = __ispif_get_format(line, cfg, MSM_ISPIF_PAD_SINK,
++		format = __ispif_get_format(line, sd_state,
++					    MSM_ISPIF_PAD_SINK,
+ 					    code->which);
+ 
+ 		code->code = format->code;
+@@ -972,7 +974,7 @@ static int ispif_enum_mbus_code(struct v4l2_subdev *sd,
+  * return -EINVAL or zero on success
+  */
+ static int ispif_enum_frame_size(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct ispif_line *line = v4l2_get_subdevdata(sd);
+@@ -984,7 +986,7 @@ static int ispif_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	ispif_try_format(line, cfg, fse->pad, &format, fse->which);
++	ispif_try_format(line, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -994,7 +996,7 @@ static int ispif_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	ispif_try_format(line, cfg, fse->pad, &format, fse->which);
++	ispif_try_format(line, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -1010,13 +1012,13 @@ static int ispif_enum_frame_size(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int ispif_get_format(struct v4l2_subdev *sd,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *fmt)
+ {
+ 	struct ispif_line *line = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __ispif_get_format(line, cfg, fmt->pad, fmt->which);
++	format = __ispif_get_format(line, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -1034,26 +1036,26 @@ static int ispif_get_format(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int ispif_set_format(struct v4l2_subdev *sd,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *fmt)
+ {
+ 	struct ispif_line *line = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __ispif_get_format(line, cfg, fmt->pad, fmt->which);
++	format = __ispif_get_format(line, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	ispif_try_format(line, cfg, fmt->pad, &fmt->format, fmt->which);
++	ispif_try_format(line, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	/* Propagate the format from sink to source */
+ 	if (fmt->pad == MSM_ISPIF_PAD_SINK) {
+-		format = __ispif_get_format(line, cfg, MSM_ISPIF_PAD_SRC,
++		format = __ispif_get_format(line, sd_state, MSM_ISPIF_PAD_SRC,
+ 					    fmt->which);
+ 
+ 		*format = fmt->format;
+-		ispif_try_format(line, cfg, MSM_ISPIF_PAD_SRC, format,
++		ispif_try_format(line, sd_state, MSM_ISPIF_PAD_SRC, format,
+ 				 fmt->which);
+ 	}
+ 
+@@ -1082,7 +1084,7 @@ static int ispif_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		}
+ 	};
+ 
+-	return ispif_set_format(sd, fh ? fh->pad : NULL, &format);
++	return ispif_set_format(sd, fh ? fh->state : NULL, &format);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 27ab20c5b57e..e0f3a36f3f3f 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -763,12 +763,13 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
+  */
+ static struct v4l2_mbus_framefmt *
+ __vfe_get_format(struct vfe_line *line,
+-		 struct v4l2_subdev_pad_config *cfg,
++		 struct v4l2_subdev_state *sd_state,
+ 		 unsigned int pad,
+ 		 enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&line->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&line->subdev, sd_state,
++						  pad);
+ 
+ 	return &line->fmt[pad];
+ }
+@@ -783,11 +784,11 @@ __vfe_get_format(struct vfe_line *line,
+  */
+ static struct v4l2_rect *
+ __vfe_get_compose(struct vfe_line *line,
+-		  struct v4l2_subdev_pad_config *cfg,
++		  struct v4l2_subdev_state *sd_state,
+ 		  enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_compose(&line->subdev, cfg,
++		return v4l2_subdev_get_try_compose(&line->subdev, sd_state,
+ 						   MSM_VFE_PAD_SINK);
+ 
+ 	return &line->compose;
+@@ -803,11 +804,11 @@ __vfe_get_compose(struct vfe_line *line,
+  */
+ static struct v4l2_rect *
+ __vfe_get_crop(struct vfe_line *line,
+-	       struct v4l2_subdev_pad_config *cfg,
++	       struct v4l2_subdev_state *sd_state,
+ 	       enum v4l2_subdev_format_whence which)
+ {
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&line->subdev, cfg,
++		return v4l2_subdev_get_try_crop(&line->subdev, sd_state,
+ 						MSM_VFE_PAD_SRC);
+ 
+ 	return &line->crop;
+@@ -822,7 +823,7 @@ __vfe_get_crop(struct vfe_line *line,
+  * @which: wanted subdev format
+  */
+ static void vfe_try_format(struct vfe_line *line,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad,
+ 			   struct v4l2_mbus_framefmt *fmt,
+ 			   enum v4l2_subdev_format_whence which)
+@@ -854,14 +855,15 @@ static void vfe_try_format(struct vfe_line *line,
+ 		/* Set and return a format same as sink pad */
+ 		code = fmt->code;
+ 
+-		*fmt = *__vfe_get_format(line, cfg, MSM_VFE_PAD_SINK, which);
++		*fmt = *__vfe_get_format(line, sd_state, MSM_VFE_PAD_SINK,
++					 which);
+ 
+ 		fmt->code = vfe_src_pad_code(line, fmt->code, 0, code);
+ 
+ 		if (line->id == VFE_LINE_PIX) {
+ 			struct v4l2_rect *rect;
+ 
+-			rect = __vfe_get_crop(line, cfg, which);
++			rect = __vfe_get_crop(line, sd_state, which);
+ 
+ 			fmt->width = rect->width;
+ 			fmt->height = rect->height;
+@@ -881,13 +883,13 @@ static void vfe_try_format(struct vfe_line *line,
+  * @which: wanted subdev format
+  */
+ static void vfe_try_compose(struct vfe_line *line,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_rect *rect,
+ 			    enum v4l2_subdev_format_whence which)
+ {
+ 	struct v4l2_mbus_framefmt *fmt;
+ 
+-	fmt = __vfe_get_format(line, cfg, MSM_VFE_PAD_SINK, which);
++	fmt = __vfe_get_format(line, sd_state, MSM_VFE_PAD_SINK, which);
+ 
+ 	if (rect->width > fmt->width)
+ 		rect->width = fmt->width;
+@@ -920,13 +922,13 @@ static void vfe_try_compose(struct vfe_line *line,
+  * @which: wanted subdev format
+  */
+ static void vfe_try_crop(struct vfe_line *line,
+-			 struct v4l2_subdev_pad_config *cfg,
++			 struct v4l2_subdev_state *sd_state,
+ 			 struct v4l2_rect *rect,
+ 			 enum v4l2_subdev_format_whence which)
+ {
+ 	struct v4l2_rect *compose;
+ 
+-	compose = __vfe_get_compose(line, cfg, which);
++	compose = __vfe_get_compose(line, sd_state, which);
+ 
+ 	if (rect->width > compose->width)
+ 		rect->width = compose->width;
+@@ -964,7 +966,7 @@ static void vfe_try_crop(struct vfe_line *line,
+  * return -EINVAL or zero on success
+  */
+ static int vfe_enum_mbus_code(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+@@ -977,7 +979,7 @@ static int vfe_enum_mbus_code(struct v4l2_subdev *sd,
+ 	} else {
+ 		struct v4l2_mbus_framefmt *sink_fmt;
+ 
+-		sink_fmt = __vfe_get_format(line, cfg, MSM_VFE_PAD_SINK,
++		sink_fmt = __vfe_get_format(line, sd_state, MSM_VFE_PAD_SINK,
+ 					    code->which);
+ 
+ 		code->code = vfe_src_pad_code(line, sink_fmt->code,
+@@ -998,7 +1000,7 @@ static int vfe_enum_mbus_code(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int vfe_enum_frame_size(struct v4l2_subdev *sd,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+@@ -1010,7 +1012,7 @@ static int vfe_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = 1;
+ 	format.height = 1;
+-	vfe_try_format(line, cfg, fse->pad, &format, fse->which);
++	vfe_try_format(line, sd_state, fse->pad, &format, fse->which);
+ 	fse->min_width = format.width;
+ 	fse->min_height = format.height;
+ 
+@@ -1020,7 +1022,7 @@ static int vfe_enum_frame_size(struct v4l2_subdev *sd,
+ 	format.code = fse->code;
+ 	format.width = -1;
+ 	format.height = -1;
+-	vfe_try_format(line, cfg, fse->pad, &format, fse->which);
++	vfe_try_format(line, sd_state, fse->pad, &format, fse->which);
+ 	fse->max_width = format.width;
+ 	fse->max_height = format.height;
+ 
+@@ -1036,13 +1038,13 @@ static int vfe_enum_frame_size(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int vfe_get_format(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __vfe_get_format(line, cfg, fmt->pad, fmt->which);
++	format = __vfe_get_format(line, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+@@ -1052,7 +1054,7 @@ static int vfe_get_format(struct v4l2_subdev *sd,
+ }
+ 
+ static int vfe_set_selection(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel);
+ 
+ /*
+@@ -1064,17 +1066,17 @@ static int vfe_set_selection(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int vfe_set_format(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 
+-	format = __vfe_get_format(line, cfg, fmt->pad, fmt->which);
++	format = __vfe_get_format(line, sd_state, fmt->pad, fmt->which);
+ 	if (format == NULL)
+ 		return -EINVAL;
+ 
+-	vfe_try_format(line, cfg, fmt->pad, &fmt->format, fmt->which);
++	vfe_try_format(line, sd_state, fmt->pad, &fmt->format, fmt->which);
+ 	*format = fmt->format;
+ 
+ 	if (fmt->pad == MSM_VFE_PAD_SINK) {
+@@ -1082,11 +1084,11 @@ static int vfe_set_format(struct v4l2_subdev *sd,
+ 		int ret;
+ 
+ 		/* Propagate the format from sink to source */
+-		format = __vfe_get_format(line, cfg, MSM_VFE_PAD_SRC,
++		format = __vfe_get_format(line, sd_state, MSM_VFE_PAD_SRC,
+ 					  fmt->which);
+ 
+ 		*format = fmt->format;
+-		vfe_try_format(line, cfg, MSM_VFE_PAD_SRC, format,
++		vfe_try_format(line, sd_state, MSM_VFE_PAD_SRC, format,
+ 			       fmt->which);
+ 
+ 		if (line->id != VFE_LINE_PIX)
+@@ -1098,7 +1100,7 @@ static int vfe_set_format(struct v4l2_subdev *sd,
+ 		sel.target = V4L2_SEL_TGT_COMPOSE;
+ 		sel.r.width = fmt->format.width;
+ 		sel.r.height = fmt->format.height;
+-		ret = vfe_set_selection(sd, cfg, &sel);
++		ret = vfe_set_selection(sd, sd_state, &sel);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+@@ -1115,7 +1117,7 @@ static int vfe_set_format(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int vfe_get_selection(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+@@ -1131,7 +1133,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+ 		case V4L2_SEL_TGT_COMPOSE_BOUNDS:
+ 			fmt.pad = sel->pad;
+ 			fmt.which = sel->which;
+-			ret = vfe_get_format(sd, cfg, &fmt);
++			ret = vfe_get_format(sd, sd_state, &fmt);
+ 			if (ret < 0)
+ 				return ret;
+ 
+@@ -1141,7 +1143,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+ 			sel->r.height = fmt.format.height;
+ 			break;
+ 		case V4L2_SEL_TGT_COMPOSE:
+-			rect = __vfe_get_compose(line, cfg, sel->which);
++			rect = __vfe_get_compose(line, sd_state, sel->which);
+ 			if (rect == NULL)
+ 				return -EINVAL;
+ 
+@@ -1153,7 +1155,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+ 	else if (sel->pad == MSM_VFE_PAD_SRC)
+ 		switch (sel->target) {
+ 		case V4L2_SEL_TGT_CROP_BOUNDS:
+-			rect = __vfe_get_compose(line, cfg, sel->which);
++			rect = __vfe_get_compose(line, sd_state, sel->which);
+ 			if (rect == NULL)
+ 				return -EINVAL;
+ 
+@@ -1163,7 +1165,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+ 			sel->r.height = rect->height;
+ 			break;
+ 		case V4L2_SEL_TGT_CROP:
+-			rect = __vfe_get_crop(line, cfg, sel->which);
++			rect = __vfe_get_crop(line, sd_state, sel->which);
+ 			if (rect == NULL)
+ 				return -EINVAL;
+ 
+@@ -1185,7 +1187,7 @@ static int vfe_get_selection(struct v4l2_subdev *sd,
+  * Return -EINVAL or zero on success
+  */
+ static int vfe_set_selection(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+@@ -1199,11 +1201,11 @@ static int vfe_set_selection(struct v4l2_subdev *sd,
+ 		sel->pad == MSM_VFE_PAD_SINK) {
+ 		struct v4l2_subdev_selection crop = { 0 };
+ 
+-		rect = __vfe_get_compose(line, cfg, sel->which);
++		rect = __vfe_get_compose(line, sd_state, sel->which);
+ 		if (rect == NULL)
+ 			return -EINVAL;
+ 
+-		vfe_try_compose(line, cfg, &sel->r, sel->which);
++		vfe_try_compose(line, sd_state, &sel->r, sel->which);
+ 		*rect = sel->r;
+ 
+ 		/* Reset source crop selection */
+@@ -1211,28 +1213,28 @@ static int vfe_set_selection(struct v4l2_subdev *sd,
+ 		crop.pad = MSM_VFE_PAD_SRC;
+ 		crop.target = V4L2_SEL_TGT_CROP;
+ 		crop.r = *rect;
+-		ret = vfe_set_selection(sd, cfg, &crop);
++		ret = vfe_set_selection(sd, sd_state, &crop);
+ 	} else if (sel->target == V4L2_SEL_TGT_CROP &&
+ 		sel->pad == MSM_VFE_PAD_SRC) {
+ 		struct v4l2_subdev_format fmt = { 0 };
+ 
+-		rect = __vfe_get_crop(line, cfg, sel->which);
++		rect = __vfe_get_crop(line, sd_state, sel->which);
+ 		if (rect == NULL)
+ 			return -EINVAL;
+ 
+-		vfe_try_crop(line, cfg, &sel->r, sel->which);
++		vfe_try_crop(line, sd_state, &sel->r, sel->which);
+ 		*rect = sel->r;
+ 
+ 		/* Reset source pad format width and height */
+ 		fmt.which = sel->which;
+ 		fmt.pad = MSM_VFE_PAD_SRC;
+-		ret = vfe_get_format(sd, cfg, &fmt);
++		ret = vfe_get_format(sd, sd_state, &fmt);
+ 		if (ret < 0)
+ 			return ret;
+ 
+ 		fmt.format.width = rect->width;
+ 		fmt.format.height = rect->height;
+-		ret = vfe_set_format(sd, cfg, &fmt);
++		ret = vfe_set_format(sd, sd_state, &fmt);
+ 	} else {
+ 		ret = -EINVAL;
+ 	}
+@@ -1262,7 +1264,7 @@ static int vfe_init_formats(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		}
+ 	};
+ 
+-	return vfe_set_format(sd, fh ? fh->pad : NULL, &format);
++	return vfe_set_format(sd, fh ? fh->state : NULL, &format);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index b87d5453e418..a128bf80e42c 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -717,7 +717,7 @@ static int rcsi2_s_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_format *format)
+ {
+ 	struct rcar_csi2 *priv = sd_to_csi2(sd);
+@@ -729,7 +729,7 @@ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
+ 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		priv->mf = format->format;
  	} else {
 -		framefmt = v4l2_subdev_get_try_format(sd, cfg, 0);
 +		framefmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
  		*framefmt = format->format;
  	}
  
-@@ -750,14 +750,14 @@ static int adv7180_set_pad_format(struct v4l2_subdev *sd,
+@@ -737,7 +737,7 @@ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
  }
  
- static int adv7180_init_cfg(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg)
-+			    struct v4l2_subdev_state *sd_state)
+ static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_format *format)
  {
- 	struct v4l2_subdev_format fmt = {
--		.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
--			: V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
-+		: V4L2_SUBDEV_FORMAT_ACTIVE,
- 	};
- 
--	return adv7180_set_pad_format(sd, cfg, &fmt);
-+	return adv7180_set_pad_format(sd, sd_state, &fmt);
- }
- 
- static int adv7180_get_mbus_config(struct v4l2_subdev *sd,
-diff --git a/drivers/media/i2c/adv7183.c b/drivers/media/i2c/adv7183.c
-index 8bcd632c081a..92cafdea3f1f 100644
---- a/drivers/media/i2c/adv7183.c
-+++ b/drivers/media/i2c/adv7183.c
-@@ -409,7 +409,7 @@ static int adv7183_g_input_status(struct v4l2_subdev *sd, u32 *status)
- }
- 
- static int adv7183_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -420,7 +420,7 @@ static int adv7183_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int adv7183_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct adv7183 *decoder = to_adv7183(sd);
-@@ -443,12 +443,12 @@ static int adv7183_set_fmt(struct v4l2_subdev *sd,
+ 	struct rcar_csi2 *priv = sd_to_csi2(sd);
+@@ -745,7 +745,7 @@ static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
  	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		decoder->fmt = *fmt;
+ 		format->format = priv->mf;
  	else
--		cfg->try_fmt = *fmt;
-+		sd_state->pads->try_fmt = *fmt;
- 	return 0;
- }
- 
- static int adv7183_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct adv7183 *decoder = to_adv7183(sd);
-diff --git a/drivers/media/i2c/adv748x/adv748x-afe.c b/drivers/media/i2c/adv748x/adv748x-afe.c
-index 4052cf67bf16..02eabe10ab97 100644
---- a/drivers/media/i2c/adv748x/adv748x-afe.c
-+++ b/drivers/media/i2c/adv748x/adv748x-afe.c
-@@ -331,7 +331,7 @@ static int adv748x_afe_propagate_pixelrate(struct adv748x_afe *afe)
- }
- 
- static int adv748x_afe_enum_mbus_code(struct v4l2_subdev *sd,
--				      struct v4l2_subdev_pad_config *cfg,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index != 0)
-@@ -343,7 +343,7 @@ static int adv748x_afe_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int adv748x_afe_get_format(struct v4l2_subdev *sd,
--				      struct v4l2_subdev_pad_config *cfg,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_format *sdformat)
- {
- 	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
-@@ -354,7 +354,8 @@ static int adv748x_afe_get_format(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (sdformat->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mbusformat = v4l2_subdev_get_try_format(sd, cfg, sdformat->pad);
-+		mbusformat = v4l2_subdev_get_try_format(sd, sd_state,
-+							sdformat->pad);
- 		sdformat->format = *mbusformat;
- 	} else {
- 		adv748x_afe_fill_format(afe, &sdformat->format);
-@@ -365,7 +366,7 @@ static int adv748x_afe_get_format(struct v4l2_subdev *sd,
- }
- 
- static int adv748x_afe_set_format(struct v4l2_subdev *sd,
--				      struct v4l2_subdev_pad_config *cfg,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_format *sdformat)
- {
- 	struct v4l2_mbus_framefmt *mbusformat;
-@@ -375,9 +376,9 @@ static int adv748x_afe_set_format(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		return adv748x_afe_get_format(sd, cfg, sdformat);
-+		return adv748x_afe_get_format(sd, sd_state, sdformat);
- 
--	mbusformat = v4l2_subdev_get_try_format(sd, cfg, sdformat->pad);
-+	mbusformat = v4l2_subdev_get_try_format(sd, sd_state, sdformat->pad);
- 	*mbusformat = sdformat->format;
+-		format->format = *v4l2_subdev_get_try_format(sd, cfg, 0);
++		format->format = *v4l2_subdev_get_try_format(sd, sd_state, 0);
  
  	return 0;
-diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
-index fa9278a08fde..589e9644fcdc 100644
---- a/drivers/media/i2c/adv748x/adv748x-csi2.c
-+++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
-@@ -141,26 +141,26 @@ static const struct v4l2_subdev_video_ops adv748x_csi2_video_ops = {
+ }
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index b1e9f86caa5c..cca15a10c0b3 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -243,7 +243,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 			   struct v4l2_rect *src_rect)
+ {
+ 	struct v4l2_subdev *sd = vin_to_source(vin);
+-	struct v4l2_subdev_pad_config *pad_cfg;
++	struct v4l2_subdev_state *sd_state;
+ 	struct v4l2_subdev_format format = {
+ 		.which = which,
+ 		.pad = vin->parallel.source_pad,
+@@ -252,8 +252,8 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 	u32 width, height;
+ 	int ret;
+ 
+-	pad_cfg = v4l2_subdev_alloc_pad_config(sd);
+-	if (pad_cfg == NULL)
++	sd_state = v4l2_subdev_alloc_state(sd);
++	if (sd_state == NULL)
+ 		return -ENOMEM;
+ 
+ 	if (!rvin_format_from_pixel(vin, pix->pixelformat))
+@@ -266,7 +266,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 	width = pix->width;
+ 	height = pix->height;
+ 
+-	ret = v4l2_subdev_call(sd, pad, set_fmt, pad_cfg, &format);
++	ret = v4l2_subdev_call(sd, pad, set_fmt, sd_state, &format);
+ 	if (ret < 0 && ret != -ENOIOCTLCMD)
+ 		goto done;
+ 	ret = 0;
+@@ -288,7 +288,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 
+ 	rvin_format_align(vin, pix);
+ done:
+-	v4l2_subdev_free_pad_config(pad_cfg);
++	v4l2_subdev_free_state(sd_state);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
+index 17f01b6e3fe0..f432032c7084 100644
+--- a/drivers/media/platform/renesas-ceu.c
++++ b/drivers/media/platform/renesas-ceu.c
+@@ -794,6 +794,9 @@ static int __ceu_try_fmt(struct ceu_device *ceudev, struct v4l2_format *v4l2_fmt
+ 	struct v4l2_pix_format_mplane *pix = &v4l2_fmt->fmt.pix_mp;
+ 	struct v4l2_subdev *v4l2_sd = ceu_sd->v4l2_sd;
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	const struct ceu_fmt *ceu_fmt;
+ 	u32 mbus_code_old;
+ 	u32 mbus_code;
+@@ -850,13 +853,13 @@ static int __ceu_try_fmt(struct ceu_device *ceudev, struct v4l2_format *v4l2_fmt
+ 	 * time.
+ 	 */
+ 	sd_format.format.code = mbus_code;
+-	ret = v4l2_subdev_call(v4l2_sd, pad, set_fmt, &pad_cfg, &sd_format);
++	ret = v4l2_subdev_call(v4l2_sd, pad, set_fmt, &pad_state, &sd_format);
+ 	if (ret) {
+ 		if (ret == -EINVAL) {
+ 			/* fallback */
+ 			sd_format.format.code = mbus_code_old;
+ 			ret = v4l2_subdev_call(v4l2_sd, pad, set_fmt,
+-					       &pad_cfg, &sd_format);
++					       &pad_state, &sd_format);
+ 		}
+ 
+ 		if (ret)
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+index 2e5b57e3aedc..d596bc040005 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+@@ -208,24 +208,30 @@ static struct v4l2_subdev *rkisp1_get_remote_sensor(struct v4l2_subdev *sd)
  
  static struct v4l2_mbus_framefmt *
- adv748x_csi2_get_pad_format(struct v4l2_subdev *sd,
+ rkisp1_isp_get_pad_fmt(struct rkisp1_isp *isp,
+-		       struct v4l2_subdev_pad_config *cfg,
++		       struct v4l2_subdev_state *sd_state,
+ 		       unsigned int pad, u32 which)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = isp->pad_cfg
++		};
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&isp->sd, cfg, pad);
++		return v4l2_subdev_get_try_format(&isp->sd, sd_state, pad);
+ 	else
+-		return v4l2_subdev_get_try_format(&isp->sd, isp->pad_cfg, pad);
++		return v4l2_subdev_get_try_format(&isp->sd, &state, pad);
+ }
+ 
+ static struct v4l2_rect *
+ rkisp1_isp_get_pad_crop(struct rkisp1_isp *isp,
+-			struct v4l2_subdev_pad_config *cfg,
++			struct v4l2_subdev_state *sd_state,
+ 			unsigned int pad, u32 which)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = isp->pad_cfg
++		};
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&isp->sd, cfg, pad);
++		return v4l2_subdev_get_try_crop(&isp->sd, sd_state, pad);
+ 	else
+-		return v4l2_subdev_get_try_crop(&isp->sd, isp->pad_cfg, pad);
++		return v4l2_subdev_get_try_crop(&isp->sd, &state, pad);
+ }
+ 
+ /* ----------------------------------------------------------------------------
+@@ -561,7 +567,7 @@ static void rkisp1_isp_start(struct rkisp1_device *rkisp1)
+  */
+ 
+ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	unsigned int i, dir;
+@@ -601,7 +607,7 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_isp_enum_frame_size(struct v4l2_subdev *sd,
+-				      struct v4l2_subdev_pad_config *cfg,
++				      struct v4l2_subdev_state *sd_state,
+ 				      struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	const struct rkisp1_isp_mbus_info *mbus_info;
+@@ -634,37 +640,37 @@ static int rkisp1_isp_enum_frame_size(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg)
++				  struct v4l2_subdev_state *sd_state)
+ {
+ 	struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
+ 	struct v4l2_rect *sink_crop, *src_crop;
+ 
+-	sink_fmt = v4l2_subdev_get_try_format(sd, cfg,
++	sink_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					      RKISP1_ISP_PAD_SINK_VIDEO);
+ 	sink_fmt->width = RKISP1_DEFAULT_WIDTH;
+ 	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_fmt->field = V4L2_FIELD_NONE;
+ 	sink_fmt->code = RKISP1_DEF_SINK_PAD_FMT;
+ 
+-	sink_crop = v4l2_subdev_get_try_crop(sd, cfg,
++	sink_crop = v4l2_subdev_get_try_crop(sd, sd_state,
+ 					     RKISP1_ISP_PAD_SINK_VIDEO);
+ 	sink_crop->width = RKISP1_DEFAULT_WIDTH;
+ 	sink_crop->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_crop->left = 0;
+ 	sink_crop->top = 0;
+ 
+-	src_fmt = v4l2_subdev_get_try_format(sd, cfg,
++	src_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_fmt = *sink_fmt;
+ 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
+ 
+-	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
++	src_crop = v4l2_subdev_get_try_crop(sd, sd_state,
+ 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_crop = *sink_crop;
+ 
+-	sink_fmt = v4l2_subdev_get_try_format(sd, cfg,
++	sink_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					      RKISP1_ISP_PAD_SINK_PARAMS);
+-	src_fmt = v4l2_subdev_get_try_format(sd, cfg,
++	src_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					     RKISP1_ISP_PAD_SOURCE_STATS);
+ 	sink_fmt->width = 0;
+ 	sink_fmt->height = 0;
+@@ -676,7 +682,7 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ }
+ 
+ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_mbus_framefmt *format,
+ 				   unsigned int which)
+ {
+@@ -684,9 +690,9 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ 	struct v4l2_mbus_framefmt *src_fmt;
+ 	const struct v4l2_rect *src_crop;
+ 
+-	src_fmt = rkisp1_isp_get_pad_fmt(isp, cfg,
++	src_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
+ 					 RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+-	src_crop = rkisp1_isp_get_pad_crop(isp, cfg,
++	src_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
+ 					   RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+ 
+ 	src_fmt->code = format->code;
+@@ -717,17 +723,17 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ }
+ 
+ static void rkisp1_isp_set_src_crop(struct rkisp1_isp *isp,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_rect *r, unsigned int which)
+ {
+ 	struct v4l2_mbus_framefmt *src_fmt;
+ 	const struct v4l2_rect *sink_crop;
+ 	struct v4l2_rect *src_crop;
+ 
+-	src_crop = rkisp1_isp_get_pad_crop(isp, cfg,
++	src_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
+ 					   RKISP1_ISP_PAD_SOURCE_VIDEO,
+ 					   which);
+-	sink_crop = rkisp1_isp_get_pad_crop(isp, cfg,
++	sink_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
+ 					    RKISP1_ISP_PAD_SINK_VIDEO,
+ 					    which);
+ 
+@@ -740,21 +746,23 @@ static void rkisp1_isp_set_src_crop(struct rkisp1_isp *isp,
+ 	*r = *src_crop;
+ 
+ 	/* Propagate to out format */
+-	src_fmt = rkisp1_isp_get_pad_fmt(isp, cfg,
++	src_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
+ 					 RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+-	rkisp1_isp_set_src_fmt(isp, cfg, src_fmt, which);
++	rkisp1_isp_set_src_fmt(isp, sd_state, src_fmt, which);
+ }
+ 
+ static void rkisp1_isp_set_sink_crop(struct rkisp1_isp *isp,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_rect *r, unsigned int which)
+ {
+ 	struct v4l2_rect *sink_crop, *src_crop;
+ 	struct v4l2_mbus_framefmt *sink_fmt;
+ 
+-	sink_crop = rkisp1_isp_get_pad_crop(isp, cfg, RKISP1_ISP_PAD_SINK_VIDEO,
++	sink_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
++					    RKISP1_ISP_PAD_SINK_VIDEO,
+ 					    which);
+-	sink_fmt = rkisp1_isp_get_pad_fmt(isp, cfg, RKISP1_ISP_PAD_SINK_VIDEO,
++	sink_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
++					  RKISP1_ISP_PAD_SINK_VIDEO,
+ 					  which);
+ 
+ 	sink_crop->left = ALIGN(r->left, 2);
+@@ -766,13 +774,13 @@ static void rkisp1_isp_set_sink_crop(struct rkisp1_isp *isp,
+ 	*r = *sink_crop;
+ 
+ 	/* Propagate to out crop */
+-	src_crop = rkisp1_isp_get_pad_crop(isp, cfg,
++	src_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
+ 					   RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+-	rkisp1_isp_set_src_crop(isp, cfg, src_crop, which);
++	rkisp1_isp_set_src_crop(isp, sd_state, src_crop, which);
+ }
+ 
+ static void rkisp1_isp_set_sink_fmt(struct rkisp1_isp *isp,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_mbus_framefmt *format,
+ 				    unsigned int which)
+ {
+@@ -780,7 +788,8 @@ static void rkisp1_isp_set_sink_fmt(struct rkisp1_isp *isp,
+ 	struct v4l2_mbus_framefmt *sink_fmt;
+ 	struct v4l2_rect *sink_crop;
+ 
+-	sink_fmt = rkisp1_isp_get_pad_fmt(isp, cfg, RKISP1_ISP_PAD_SINK_VIDEO,
++	sink_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
++					  RKISP1_ISP_PAD_SINK_VIDEO,
+ 					  which);
+ 	sink_fmt->code = format->code;
+ 	mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
+@@ -801,36 +810,40 @@ static void rkisp1_isp_set_sink_fmt(struct rkisp1_isp *isp,
+ 	*format = *sink_fmt;
+ 
+ 	/* Propagate to in crop */
+-	sink_crop = rkisp1_isp_get_pad_crop(isp, cfg, RKISP1_ISP_PAD_SINK_VIDEO,
++	sink_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
++					    RKISP1_ISP_PAD_SINK_VIDEO,
+ 					    which);
+-	rkisp1_isp_set_sink_crop(isp, cfg, sink_crop, which);
++	rkisp1_isp_set_sink_crop(isp, sd_state, sink_crop, which);
+ }
+ 
+ static int rkisp1_isp_get_fmt(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
+ 
+ 	mutex_lock(&isp->ops_lock);
+-	fmt->format = *rkisp1_isp_get_pad_fmt(isp, cfg, fmt->pad, fmt->which);
++	fmt->format = *rkisp1_isp_get_pad_fmt(isp, sd_state, fmt->pad,
++					      fmt->which);
+ 	mutex_unlock(&isp->ops_lock);
+ 	return 0;
+ }
+ 
+ static int rkisp1_isp_set_fmt(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
+ 
+ 	mutex_lock(&isp->ops_lock);
+ 	if (fmt->pad == RKISP1_ISP_PAD_SINK_VIDEO)
+-		rkisp1_isp_set_sink_fmt(isp, cfg, &fmt->format, fmt->which);
++		rkisp1_isp_set_sink_fmt(isp, sd_state, &fmt->format,
++					fmt->which);
+ 	else if (fmt->pad == RKISP1_ISP_PAD_SOURCE_VIDEO)
+-		rkisp1_isp_set_src_fmt(isp, cfg, &fmt->format, fmt->which);
++		rkisp1_isp_set_src_fmt(isp, sd_state, &fmt->format,
++				       fmt->which);
+ 	else
+-		fmt->format = *rkisp1_isp_get_pad_fmt(isp, cfg, fmt->pad,
++		fmt->format = *rkisp1_isp_get_pad_fmt(isp, sd_state, fmt->pad,
+ 						      fmt->which);
+ 
+ 	mutex_unlock(&isp->ops_lock);
+@@ -838,7 +851,7 @@ static int rkisp1_isp_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_isp_get_selection(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_selection *sel)
+ {
+ 	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
+@@ -854,20 +867,20 @@ static int rkisp1_isp_get_selection(struct v4l2_subdev *sd,
+ 		if (sel->pad == RKISP1_ISP_PAD_SINK_VIDEO) {
+ 			struct v4l2_mbus_framefmt *fmt;
+ 
+-			fmt = rkisp1_isp_get_pad_fmt(isp, cfg, sel->pad,
++			fmt = rkisp1_isp_get_pad_fmt(isp, sd_state, sel->pad,
+ 						     sel->which);
+ 			sel->r.height = fmt->height;
+ 			sel->r.width = fmt->width;
+ 			sel->r.left = 0;
+ 			sel->r.top = 0;
+ 		} else {
+-			sel->r = *rkisp1_isp_get_pad_crop(isp, cfg,
+-						RKISP1_ISP_PAD_SINK_VIDEO,
+-						sel->which);
++			sel->r = *rkisp1_isp_get_pad_crop(isp, sd_state,
++							  RKISP1_ISP_PAD_SINK_VIDEO,
++							  sel->which);
+ 		}
+ 		break;
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = *rkisp1_isp_get_pad_crop(isp, cfg, sel->pad,
++		sel->r = *rkisp1_isp_get_pad_crop(isp, sd_state, sel->pad,
+ 						  sel->which);
+ 		break;
+ 	default:
+@@ -878,7 +891,7 @@ static int rkisp1_isp_get_selection(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_isp_set_selection(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_selection *sel)
+ {
+ 	struct rkisp1_device *rkisp1 =
+@@ -893,9 +906,9 @@ static int rkisp1_isp_set_selection(struct v4l2_subdev *sd,
+ 		sel->pad, sel->r.left, sel->r.top, sel->r.width, sel->r.height);
+ 	mutex_lock(&isp->ops_lock);
+ 	if (sel->pad == RKISP1_ISP_PAD_SINK_VIDEO)
+-		rkisp1_isp_set_sink_crop(isp, cfg, &sel->r, sel->which);
++		rkisp1_isp_set_sink_crop(isp, sd_state, &sel->r, sel->which);
+ 	else if (sel->pad == RKISP1_ISP_PAD_SOURCE_VIDEO)
+-		rkisp1_isp_set_src_crop(isp, cfg, &sel->r, sel->which);
++		rkisp1_isp_set_src_crop(isp, sd_state, &sel->r, sel->which);
+ 	else
+ 		ret = -EINVAL;
+ 
+@@ -1037,6 +1050,9 @@ static const struct v4l2_subdev_ops rkisp1_isp_ops = {
+ 
+ int rkisp1_isp_register(struct rkisp1_device *rkisp1)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = rkisp1->isp.pad_cfg
++		};
+ 	struct rkisp1_isp *isp = &rkisp1->isp;
+ 	struct media_pad *pads = isp->pads;
+ 	struct v4l2_subdev *sd = &isp->sd;
+@@ -1069,7 +1085,7 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1)
+ 		goto err_cleanup_media_entity;
+ 	}
+ 
+-	rkisp1_isp_init_config(sd, rkisp1->isp.pad_cfg);
++	rkisp1_isp_init_config(sd, &state);
+ 	return 0;
+ 
+ err_cleanup_media_entity:
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
+index 79deed8adcea..2070f4b06705 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
+@@ -180,24 +180,30 @@ static const struct rkisp1_rsz_config rkisp1_rsz_config_sp = {
+ 
+ static struct v4l2_mbus_framefmt *
+ rkisp1_rsz_get_pad_fmt(struct rkisp1_resizer *rsz,
+-		       struct v4l2_subdev_pad_config *cfg,
++		       struct v4l2_subdev_state *sd_state,
+ 		       unsigned int pad, u32 which)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = rsz->pad_cfg
++		};
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_format(&rsz->sd, cfg, pad);
++		return v4l2_subdev_get_try_format(&rsz->sd, sd_state, pad);
+ 	else
+-		return v4l2_subdev_get_try_format(&rsz->sd, rsz->pad_cfg, pad);
++		return v4l2_subdev_get_try_format(&rsz->sd, &state, pad);
+ }
+ 
+ static struct v4l2_rect *
+ rkisp1_rsz_get_pad_crop(struct rkisp1_resizer *rsz,
+-			struct v4l2_subdev_pad_config *cfg,
++			struct v4l2_subdev_state *sd_state,
+ 			unsigned int pad, u32 which)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = rsz->pad_cfg
++		};
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+-		return v4l2_subdev_get_try_crop(&rsz->sd, cfg, pad);
++		return v4l2_subdev_get_try_crop(&rsz->sd, sd_state, pad);
+ 	else
+-		return v4l2_subdev_get_try_crop(&rsz->sd, rsz->pad_cfg, pad);
++		return v4l2_subdev_get_try_crop(&rsz->sd, &state, pad);
+ }
+ 
+ /* ----------------------------------------------------------------------------
+@@ -451,12 +457,15 @@ static void rkisp1_rsz_config(struct rkisp1_resizer *rsz,
+  */
+ 
+ static int rkisp1_rsz_enum_mbus_code(struct v4l2_subdev *sd,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct rkisp1_resizer *rsz =
+ 		container_of(sd, struct rkisp1_resizer, sd);
+ 	struct v4l2_subdev_pad_config dummy_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &dummy_cfg
++		};
+ 	u32 pad = code->pad;
+ 	int ret;
+ 
+@@ -481,7 +490,7 @@ static int rkisp1_rsz_enum_mbus_code(struct v4l2_subdev *sd,
+ 	/* supported mbus codes on the sink pad are the same as isp src pad */
+ 	code->pad = RKISP1_ISP_PAD_SOURCE_VIDEO;
+ 	ret = v4l2_subdev_call(&rsz->rkisp1->isp.sd, pad, enum_mbus_code,
+-			       &dummy_cfg, code);
++			       &pad_state, code);
+ 
+ 	/* restore pad */
+ 	code->pad = pad;
+@@ -490,24 +499,27 @@ static int rkisp1_rsz_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_rsz_init_config(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg)
++				  struct v4l2_subdev_state *sd_state)
+ {
+ 	struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
+ 	struct v4l2_rect *sink_crop;
+ 
+-	sink_fmt = v4l2_subdev_get_try_format(sd, cfg, RKISP1_RSZ_PAD_SRC);
++	sink_fmt = v4l2_subdev_get_try_format(sd, sd_state,
++					      RKISP1_RSZ_PAD_SRC);
+ 	sink_fmt->width = RKISP1_DEFAULT_WIDTH;
+ 	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_fmt->field = V4L2_FIELD_NONE;
+ 	sink_fmt->code = RKISP1_DEF_FMT;
+ 
+-	sink_crop = v4l2_subdev_get_try_crop(sd, cfg, RKISP1_RSZ_PAD_SINK);
++	sink_crop = v4l2_subdev_get_try_crop(sd, sd_state,
++					     RKISP1_RSZ_PAD_SINK);
+ 	sink_crop->width = RKISP1_DEFAULT_WIDTH;
+ 	sink_crop->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_crop->left = 0;
+ 	sink_crop->top = 0;
+ 
+-	src_fmt = v4l2_subdev_get_try_format(sd, cfg, RKISP1_RSZ_PAD_SINK);
++	src_fmt = v4l2_subdev_get_try_format(sd, sd_state,
++					     RKISP1_RSZ_PAD_SINK);
+ 	*src_fmt = *sink_fmt;
+ 
+ 	/* NOTE: there is no crop in the source pad, only in the sink */
+@@ -516,15 +528,17 @@ static int rkisp1_rsz_init_config(struct v4l2_subdev *sd,
+ }
+ 
+ static void rkisp1_rsz_set_src_fmt(struct rkisp1_resizer *rsz,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_mbus_framefmt *format,
+ 				   unsigned int which)
+ {
+ 	const struct rkisp1_isp_mbus_info *sink_mbus_info;
+ 	struct v4l2_mbus_framefmt *src_fmt, *sink_fmt;
+ 
+-	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK, which);
+-	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SRC, which);
++	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, sd_state, RKISP1_RSZ_PAD_SINK,
++					  which);
++	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, sd_state, RKISP1_RSZ_PAD_SRC,
++					 which);
+ 	sink_mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
+ 
+ 	/* for YUV formats, userspace can change the mbus code on the src pad if it is supported */
+@@ -543,7 +557,7 @@ static void rkisp1_rsz_set_src_fmt(struct rkisp1_resizer *rsz,
+ }
+ 
+ static void rkisp1_rsz_set_sink_crop(struct rkisp1_resizer *rsz,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_rect *r,
+ 				     unsigned int which)
+ {
+@@ -551,8 +565,10 @@ static void rkisp1_rsz_set_sink_crop(struct rkisp1_resizer *rsz,
+ 	struct v4l2_mbus_framefmt *sink_fmt;
+ 	struct v4l2_rect *sink_crop;
+ 
+-	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK, which);
+-	sink_crop = rkisp1_rsz_get_pad_crop(rsz, cfg, RKISP1_RSZ_PAD_SINK,
++	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, sd_state, RKISP1_RSZ_PAD_SINK,
++					  which);
++	sink_crop = rkisp1_rsz_get_pad_crop(rsz, sd_state,
++					    RKISP1_RSZ_PAD_SINK,
+ 					    which);
+ 
+ 	/* Not crop for MP bayer raw data */
+@@ -579,7 +595,7 @@ static void rkisp1_rsz_set_sink_crop(struct rkisp1_resizer *rsz,
+ }
+ 
+ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_mbus_framefmt *format,
+ 				    unsigned int which)
+ {
+@@ -587,9 +603,12 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+ 	struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
+ 	struct v4l2_rect *sink_crop;
+ 
+-	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK, which);
+-	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SRC, which);
+-	sink_crop = rkisp1_rsz_get_pad_crop(rsz, cfg, RKISP1_RSZ_PAD_SINK,
++	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, sd_state, RKISP1_RSZ_PAD_SINK,
++					  which);
++	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, sd_state, RKISP1_RSZ_PAD_SRC,
++					 which);
++	sink_crop = rkisp1_rsz_get_pad_crop(rsz, sd_state,
++					    RKISP1_RSZ_PAD_SINK,
+ 					    which);
+ 	if (rsz->id == RKISP1_SELFPATH)
+ 		sink_fmt->code = MEDIA_BUS_FMT_YUYV8_2X8;
+@@ -617,24 +636,25 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+ 	*format = *sink_fmt;
+ 
+ 	/* Update sink crop */
+-	rkisp1_rsz_set_sink_crop(rsz, cfg, sink_crop, which);
++	rkisp1_rsz_set_sink_crop(rsz, sd_state, sink_crop, which);
+ }
+ 
+ static int rkisp1_rsz_get_fmt(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct rkisp1_resizer *rsz =
+ 		container_of(sd, struct rkisp1_resizer, sd);
+ 
+ 	mutex_lock(&rsz->ops_lock);
+-	fmt->format = *rkisp1_rsz_get_pad_fmt(rsz, cfg, fmt->pad, fmt->which);
++	fmt->format = *rkisp1_rsz_get_pad_fmt(rsz, sd_state, fmt->pad,
++					      fmt->which);
+ 	mutex_unlock(&rsz->ops_lock);
+ 	return 0;
+ }
+ 
+ static int rkisp1_rsz_set_fmt(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
+ {
+ 	struct rkisp1_resizer *rsz =
+@@ -642,16 +662,18 @@ static int rkisp1_rsz_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&rsz->ops_lock);
+ 	if (fmt->pad == RKISP1_RSZ_PAD_SINK)
+-		rkisp1_rsz_set_sink_fmt(rsz, cfg, &fmt->format, fmt->which);
++		rkisp1_rsz_set_sink_fmt(rsz, sd_state, &fmt->format,
++					fmt->which);
+ 	else
+-		rkisp1_rsz_set_src_fmt(rsz, cfg, &fmt->format, fmt->which);
++		rkisp1_rsz_set_src_fmt(rsz, sd_state, &fmt->format,
++				       fmt->which);
+ 
+ 	mutex_unlock(&rsz->ops_lock);
+ 	return 0;
+ }
+ 
+ static int rkisp1_rsz_get_selection(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_selection *sel)
+ {
+ 	struct rkisp1_resizer *rsz =
+@@ -665,7 +687,8 @@ static int rkisp1_rsz_get_selection(struct v4l2_subdev *sd,
+ 	mutex_lock(&rsz->ops_lock);
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+-		mf_sink = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK,
++		mf_sink = rkisp1_rsz_get_pad_fmt(rsz, sd_state,
++						 RKISP1_RSZ_PAD_SINK,
+ 						 sel->which);
+ 		sel->r.height = mf_sink->height;
+ 		sel->r.width = mf_sink->width;
+@@ -673,7 +696,8 @@ static int rkisp1_rsz_get_selection(struct v4l2_subdev *sd,
+ 		sel->r.top = 0;
+ 		break;
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = *rkisp1_rsz_get_pad_crop(rsz, cfg, RKISP1_RSZ_PAD_SINK,
++		sel->r = *rkisp1_rsz_get_pad_crop(rsz, sd_state,
++						  RKISP1_RSZ_PAD_SINK,
+ 						  sel->which);
+ 		break;
+ 	default:
+@@ -685,7 +709,7 @@ static int rkisp1_rsz_get_selection(struct v4l2_subdev *sd,
+ }
+ 
+ static int rkisp1_rsz_set_selection(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_selection *sel)
+ {
+ 	struct rkisp1_resizer *rsz =
+@@ -698,7 +722,7 @@ static int rkisp1_rsz_set_selection(struct v4l2_subdev *sd,
+ 		sel->pad, sel->r.left, sel->r.top, sel->r.width, sel->r.height);
+ 
+ 	mutex_lock(&rsz->ops_lock);
+-	rkisp1_rsz_set_sink_crop(rsz, cfg, &sel->r, sel->which);
++	rkisp1_rsz_set_sink_crop(rsz, sd_state, &sel->r, sel->which);
+ 	mutex_unlock(&rsz->ops_lock);
+ 
+ 	return 0;
+@@ -764,6 +788,9 @@ static void rkisp1_rsz_unregister(struct rkisp1_resizer *rsz)
+ 
+ static int rkisp1_rsz_register(struct rkisp1_resizer *rsz)
+ {
++	struct v4l2_subdev_state state = {
++		.pads = rsz->pad_cfg
++		};
+ 	static const char * const dev_names[] = {
+ 		RKISP1_RSZ_MP_DEV_NAME,
+ 		RKISP1_RSZ_SP_DEV_NAME
+@@ -802,7 +829,7 @@ static int rkisp1_rsz_register(struct rkisp1_resizer *rsz)
+ 		goto err_cleanup_media_entity;
+ 	}
+ 
+-	rkisp1_rsz_init_config(sd, rsz->pad_cfg);
++	rkisp1_rsz_init_config(sd, &state);
+ 	return 0;
+ 
+ err_cleanup_media_entity:
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index b33c6e7ae0a1..d914ccef9831 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -600,7 +600,7 @@ static struct media_entity *dcmi_find_source(struct stm32_dcmi *dcmi)
+ }
+ 
+ static int dcmi_pipeline_s_fmt(struct stm32_dcmi *dcmi,
+-			       struct v4l2_subdev_pad_config *pad_cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *format)
+ {
+ 	struct media_entity *entity = &dcmi->source->entity;
+@@ -642,7 +642,7 @@ static int dcmi_pipeline_s_fmt(struct stm32_dcmi *dcmi,
+ 			format->format.width, format->format.height);
+ 
+ 		fmt.pad = pad->index;
+-		ret = v4l2_subdev_call(subdev, pad, set_fmt, pad_cfg, &fmt);
++		ret = v4l2_subdev_call(subdev, pad, set_fmt, sd_state, &fmt);
+ 		if (ret < 0) {
+ 			dev_err(dcmi->dev, "%s: Failed to set format 0x%x %ux%u on \"%s\":%d pad (%d)\n",
+ 				__func__, format->format.code,
+@@ -978,6 +978,9 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
+ 	struct dcmi_framesize sd_fsize;
+ 	struct v4l2_pix_format *pix = &f->fmt.pix;
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -1013,7 +1016,7 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
+ 
+ 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
+ 	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
+-			       &pad_cfg, &format);
++			       &pad_state, &format);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1163,6 +1166,9 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	int ret;
+ 
+ 	sd_fmt = find_format_by_fourcc(dcmi, pix->pixelformat);
+@@ -1176,7 +1182,7 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
+ 
+ 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
+ 	ret = v4l2_subdev_call(dcmi->source, pad, set_fmt,
+-			       &pad_cfg, &format);
++			       &pad_state, &format);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 54b909987caa..3872027ed2fa 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -271,25 +271,26 @@ static const struct v4l2_mbus_framefmt sun4i_csi_pad_fmt_default = {
+ };
+ 
+ static int sun4i_csi_subdev_init_cfg(struct v4l2_subdev *subdev,
+-				     struct v4l2_subdev_pad_config *cfg)
++				     struct v4l2_subdev_state *sd_state)
+ {
+ 	struct v4l2_mbus_framefmt *fmt;
+ 
+-	fmt = v4l2_subdev_get_try_format(subdev, cfg, CSI_SUBDEV_SINK);
++	fmt = v4l2_subdev_get_try_format(subdev, sd_state, CSI_SUBDEV_SINK);
+ 	*fmt = sun4i_csi_pad_fmt_default;
+ 
+ 	return 0;
+ }
+ 
+ static int sun4i_csi_subdev_get_fmt(struct v4l2_subdev *subdev,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_format *fmt)
+ {
+ 	struct sun4i_csi *csi = container_of(subdev, struct sun4i_csi, subdev);
+ 	struct v4l2_mbus_framefmt *subdev_fmt;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+-		subdev_fmt = v4l2_subdev_get_try_format(subdev, cfg, fmt->pad);
++		subdev_fmt = v4l2_subdev_get_try_format(subdev, sd_state,
++							fmt->pad);
+ 	else
+ 		subdev_fmt = &csi->subdev_fmt;
+ 
+@@ -299,14 +300,15 @@ static int sun4i_csi_subdev_get_fmt(struct v4l2_subdev *subdev,
+ }
+ 
+ static int sun4i_csi_subdev_set_fmt(struct v4l2_subdev *subdev,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_format *fmt)
+ {
+ 	struct sun4i_csi *csi = container_of(subdev, struct sun4i_csi, subdev);
+ 	struct v4l2_mbus_framefmt *subdev_fmt;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+-		subdev_fmt = v4l2_subdev_get_try_format(subdev, cfg, fmt->pad);
++		subdev_fmt = v4l2_subdev_get_try_format(subdev, sd_state,
++							fmt->pad);
+ 	else
+ 		subdev_fmt = &csi->subdev_fmt;
+ 
+@@ -325,7 +327,7 @@ static int sun4i_csi_subdev_set_fmt(struct v4l2_subdev *subdev,
+ 
+ static int
+ sun4i_csi_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_mbus_code_enum *mbus)
+ {
+ 	if (mbus->index >= ARRAY_SIZE(sun4i_csi_formats))
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+index cbe6114908de..124a4e2bdefe 100644
+--- a/drivers/media/platform/ti-vpe/cal-camerarx.c
++++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+@@ -586,12 +586,12 @@ static inline struct cal_camerarx *to_cal_camerarx(struct v4l2_subdev *sd)
+ 
+ static struct v4l2_mbus_framefmt *
+ cal_camerarx_get_pad_format(struct cal_camerarx *phy,
 -			    struct v4l2_subdev_pad_config *cfg,
 +			    struct v4l2_subdev_state *sd_state,
  			    unsigned int pad, u32 which)
  {
- 	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
- 
- 	if (which == V4L2_SUBDEV_FORMAT_TRY)
--		return v4l2_subdev_get_try_format(sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(sd, sd_state, pad);
- 
- 	return &tx->format;
+ 	switch (which) {
+ 	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_get_try_format(&phy->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&phy->subdev, sd_state, pad);
+ 	case V4L2_SUBDEV_FORMAT_ACTIVE:
+ 		return &phy->formats[pad];
+ 	default:
+@@ -611,7 +611,7 @@ static int cal_camerarx_sd_s_stream(struct v4l2_subdev *sd, int enable)
  }
  
- static int adv748x_csi2_get_format(struct v4l2_subdev *sd,
+ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+-					  struct v4l2_subdev_pad_config *cfg,
++					  struct v4l2_subdev_state *sd_state,
+ 					  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -623,7 +623,7 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index > 0)
+ 			return -EINVAL;
+ 
+-		fmt = cal_camerarx_get_pad_format(phy, cfg,
++		fmt = cal_camerarx_get_pad_format(phy, sd_state,
+ 						  CAL_CAMERARX_PAD_SINK,
+ 						  code->which);
+ 		code->code = fmt->code;
+@@ -639,7 +639,7 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+-					   struct v4l2_subdev_pad_config *cfg,
++					   struct v4l2_subdev_state *sd_state,
+ 					   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -652,7 +652,7 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+ 	if (fse->pad == CAL_CAMERARX_PAD_SOURCE) {
+ 		struct v4l2_mbus_framefmt *fmt;
+ 
+-		fmt = cal_camerarx_get_pad_format(phy, cfg,
++		fmt = cal_camerarx_get_pad_format(phy, sd_state,
+ 						  CAL_CAMERARX_PAD_SINK,
+ 						  fse->which);
+ 		if (fse->code != fmt->code)
+@@ -679,20 +679,21 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
 -				   struct v4l2_subdev_pad_config *cfg,
 +				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *sdformat)
+ 				   struct v4l2_subdev_format *format)
  {
- 	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
- 	struct adv748x_state *state = tx->state;
- 	struct v4l2_mbus_framefmt *mbusformat;
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+ 	struct v4l2_mbus_framefmt *fmt;
  
--	mbusformat = adv748x_csi2_get_pad_format(sd, cfg, sdformat->pad,
-+	mbusformat = adv748x_csi2_get_pad_format(sd, sd_state, sdformat->pad,
- 						 sdformat->which);
- 	if (!mbusformat)
- 		return -EINVAL;
-@@ -175,7 +175,7 @@ static int adv748x_csi2_get_format(struct v4l2_subdev *sd,
- }
- 
- static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *sdformat)
- {
- 	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
-@@ -183,7 +183,7 @@ static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
- 	struct v4l2_mbus_framefmt *mbusformat;
- 	int ret = 0;
- 
--	mbusformat = adv748x_csi2_get_pad_format(sd, cfg, sdformat->pad,
-+	mbusformat = adv748x_csi2_get_pad_format(sd, sd_state, sdformat->pad,
- 						 sdformat->which);
- 	if (!mbusformat)
- 		return -EINVAL;
-@@ -193,7 +193,7 @@ static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
- 	if (sdformat->pad == ADV748X_CSI2_SOURCE) {
- 		const struct v4l2_mbus_framefmt *sink_fmt;
- 
--		sink_fmt = adv748x_csi2_get_pad_format(sd, cfg,
-+		sink_fmt = adv748x_csi2_get_pad_format(sd, sd_state,
- 						       ADV748X_CSI2_SINK,
- 						       sdformat->which);
- 
-diff --git a/drivers/media/i2c/adv748x/adv748x-hdmi.c b/drivers/media/i2c/adv748x/adv748x-hdmi.c
-index c557f8fdf11a..52fa7bd75660 100644
---- a/drivers/media/i2c/adv748x/adv748x-hdmi.c
-+++ b/drivers/media/i2c/adv748x/adv748x-hdmi.c
-@@ -409,7 +409,7 @@ static int adv748x_hdmi_propagate_pixelrate(struct adv748x_hdmi *hdmi)
- }
- 
- static int adv748x_hdmi_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index != 0)
-@@ -421,7 +421,7 @@ static int adv748x_hdmi_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int adv748x_hdmi_get_format(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *sdformat)
- {
- 	struct adv748x_hdmi *hdmi = adv748x_sd_to_hdmi(sd);
-@@ -431,7 +431,8 @@ static int adv748x_hdmi_get_format(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (sdformat->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mbusformat = v4l2_subdev_get_try_format(sd, cfg, sdformat->pad);
-+		mbusformat = v4l2_subdev_get_try_format(sd, sd_state,
-+							sdformat->pad);
- 		sdformat->format = *mbusformat;
- 	} else {
- 		adv748x_hdmi_fill_format(hdmi, &sdformat->format);
-@@ -442,7 +443,7 @@ static int adv748x_hdmi_get_format(struct v4l2_subdev *sd,
- }
- 
- static int adv748x_hdmi_set_format(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *sdformat)
- {
- 	struct v4l2_mbus_framefmt *mbusformat;
-@@ -451,9 +452,9 @@ static int adv748x_hdmi_set_format(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		return adv748x_hdmi_get_format(sd, cfg, sdformat);
-+		return adv748x_hdmi_get_format(sd, sd_state, sdformat);
- 
--	mbusformat = v4l2_subdev_get_try_format(sd, cfg, sdformat->pad);
-+	mbusformat = v4l2_subdev_get_try_format(sd, sd_state, sdformat->pad);
- 	*mbusformat = sdformat->format;
+-	fmt = cal_camerarx_get_pad_format(phy, cfg, format->pad, format->which);
++	fmt = cal_camerarx_get_pad_format(phy, sd_state, format->pad,
++					  format->which);
+ 	format->format = *fmt;
  
  	return 0;
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 5fc6c06edda1..41f4e749a859 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -1216,7 +1216,7 @@ static int adv7511_get_edid(struct v4l2_subdev *sd, struct v4l2_edid *edid)
  }
  
- static int adv7511_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
+ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_format *format)
  {
- 	if (code->pad != 0)
-@@ -1247,7 +1247,7 @@ static void adv7511_fill_format(struct adv7511_state *state,
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -702,7 +703,7 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	/* No transcoding, source and sink formats must match. */
+ 	if (format->pad == CAL_CAMERARX_PAD_SOURCE)
+-		return cal_camerarx_sd_get_fmt(sd, cfg, format);
++		return cal_camerarx_sd_get_fmt(sd, sd_state, format);
+ 
+ 	/*
+ 	 * Default to the first format is the requested media bus code isn't
+@@ -727,11 +728,13 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ 	format->format.code = fmtinfo->code;
+ 
+ 	/* Store the format and propagate it to the source pad. */
+-	fmt = cal_camerarx_get_pad_format(phy, cfg, CAL_CAMERARX_PAD_SINK,
++	fmt = cal_camerarx_get_pad_format(phy, sd_state,
++					  CAL_CAMERARX_PAD_SINK,
+ 					  format->which);
+ 	*fmt = format->format;
+ 
+-	fmt = cal_camerarx_get_pad_format(phy, cfg, CAL_CAMERARX_PAD_SOURCE,
++	fmt = cal_camerarx_get_pad_format(phy, sd_state,
++					  CAL_CAMERARX_PAD_SOURCE,
+ 					  format->which);
+ 	*fmt = format->format;
+ 
+@@ -742,11 +745,11 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
  }
  
- static int adv7511_get_fmt(struct v4l2_subdev *sd,
+ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_pad_config *cfg)
++				    struct v4l2_subdev_state *sd_state)
+ {
+ 	struct v4l2_subdev_format format = {
+-		.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
+-		       : V4L2_SUBDEV_FORMAT_ACTIVE,
++		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
++		: V4L2_SUBDEV_FORMAT_ACTIVE,
+ 		.pad = CAL_CAMERARX_PAD_SINK,
+ 		.format = {
+ 			.width = 640,
+@@ -760,7 +763,7 @@ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+ 		},
+ 	};
+ 
+-	return cal_camerarx_sd_set_fmt(sd, cfg, &format);
++	return cal_camerarx_sd_set_fmt(sd, sd_state, &format);
+ }
+ 
+ static const struct v4l2_subdev_video_ops cal_camerarx_video_ops = {
+diff --git a/drivers/media/platform/via-camera.c b/drivers/media/platform/via-camera.c
+index ed0ad68c5c48..3655573e8581 100644
+--- a/drivers/media/platform/via-camera.c
++++ b/drivers/media/platform/via-camera.c
+@@ -844,6 +844,9 @@ static int viacam_do_try_fmt(struct via_camera *cam,
+ {
+ 	int ret;
+ 	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_state pad_state = {
++		.pads = &pad_cfg
++		};
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+@@ -852,7 +855,7 @@ static int viacam_do_try_fmt(struct via_camera *cam,
+ 	upix->pixelformat = f->pixelformat;
+ 	viacam_fmt_pre(upix, spix);
+ 	v4l2_fill_mbus_format(&format.format, spix, f->mbus_code);
+-	ret = sensor_call(cam, pad, set_fmt, &pad_cfg, &format);
++	ret = sensor_call(cam, pad, set_fmt, &pad_state, &format);
+ 	v4l2_fill_pix_format(spix, &format.format);
+ 	viacam_fmt_post(upix, spix);
+ 	return ret;
+diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+index 133122e38515..f7e2a5e48ccf 100644
+--- a/drivers/media/platform/video-mux.c
++++ b/drivers/media/platform/video-mux.c
+@@ -140,14 +140,14 @@ static const struct v4l2_subdev_video_ops video_mux_subdev_video_ops = {
+ 
+ static struct v4l2_mbus_framefmt *
+ __video_mux_get_pad_format(struct v4l2_subdev *sd,
 -			   struct v4l2_subdev_pad_config *cfg,
 +			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
+ 			   unsigned int pad, u32 which)
  {
- 	struct adv7511_state *state = get_adv7511_state(sd);
-@@ -1261,7 +1261,7 @@ static int adv7511_get_fmt(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
+ 	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
  
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		format->format.code = fmt->code;
- 		format->format.colorspace = fmt->colorspace;
- 		format->format.ycbcr_enc = fmt->ycbcr_enc;
-@@ -1279,7 +1279,7 @@ static int adv7511_get_fmt(struct v4l2_subdev *sd,
+ 	switch (which) {
+ 	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_get_try_format(sd, cfg, pad);
++		return v4l2_subdev_get_try_format(sd, sd_state, pad);
+ 	case V4L2_SUBDEV_FORMAT_ACTIVE:
+ 		return &vmux->format_mbus[pad];
+ 	default:
+@@ -156,14 +156,15 @@ __video_mux_get_pad_format(struct v4l2_subdev *sd,
  }
  
- static int adv7511_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
+ static int video_mux_get_format(struct v4l2_subdev *sd,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *sdformat)
  {
- 	struct adv7511_state *state = get_adv7511_state(sd);
-@@ -1316,7 +1316,7 @@ static int adv7511_set_fmt(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
+ 	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
  
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		fmt->code = format->format.code;
- 		fmt->colorspace = format->format.colorspace;
- 		fmt->ycbcr_enc = format->format.ycbcr_enc;
-diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
-index 3049aa2fd0f0..122e1fdccd96 100644
---- a/drivers/media/i2c/adv7604.c
-+++ b/drivers/media/i2c/adv7604.c
-@@ -1833,7 +1833,7 @@ static int adv76xx_s_routing(struct v4l2_subdev *sd,
+ 	mutex_lock(&vmux->lock);
+ 
+-	sdformat->format = *__video_mux_get_pad_format(sd, cfg, sdformat->pad,
++	sdformat->format = *__video_mux_get_pad_format(sd, sd_state,
++						       sdformat->pad,
+ 						       sdformat->which);
+ 
+ 	mutex_unlock(&vmux->lock);
+@@ -172,7 +173,7 @@ static int video_mux_get_format(struct v4l2_subdev *sd,
  }
  
- static int adv76xx_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
+ static int video_mux_set_format(struct v4l2_subdev *sd,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *sdformat)
  {
- 	struct adv76xx_state *state = to_state(sd);
-@@ -1913,7 +1913,7 @@ static void adv76xx_setup_format(struct adv76xx_state *state)
- }
+ 	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
+@@ -180,12 +181,13 @@ static int video_mux_set_format(struct v4l2_subdev *sd,
+ 	struct media_pad *pad = &vmux->pads[sdformat->pad];
+ 	u16 source_pad = sd->entity.num_pads - 1;
  
- static int adv76xx_get_format(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct adv76xx_state *state = to_state(sd);
-@@ -1926,7 +1926,7 @@ static int adv76xx_get_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		format->format.code = fmt->code;
- 	} else {
- 		format->format.code = state->format->code;
-@@ -1936,7 +1936,7 @@ static int adv76xx_get_format(struct v4l2_subdev *sd,
- }
- 
- static int adv76xx_get_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct adv76xx_state *state = to_state(sd);
-@@ -1956,7 +1956,7 @@ static int adv76xx_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int adv76xx_set_format(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct adv76xx_state *state = to_state(sd);
-@@ -1975,7 +1975,7 @@ static int adv76xx_set_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		fmt->code = format->format.code;
- 	} else {
- 		state->format = info;
-diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
-index 78e61fe6f2f0..263713963a00 100644
---- a/drivers/media/i2c/adv7842.c
-+++ b/drivers/media/i2c/adv7842.c
-@@ -1993,7 +1993,7 @@ static int adv7842_s_routing(struct v4l2_subdev *sd,
- }
- 
- static int adv7842_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(adv7842_formats))
-@@ -2069,7 +2069,7 @@ static void adv7842_setup_format(struct adv7842_state *state)
- }
- 
- static int adv7842_get_format(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct adv7842_state *state = to_state(sd);
-@@ -2097,7 +2097,7 @@ static int adv7842_get_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		format->format.code = fmt->code;
- 	} else {
- 		format->format.code = state->format->code;
-@@ -2107,7 +2107,7 @@ static int adv7842_get_format(struct v4l2_subdev *sd,
- }
- 
- static int adv7842_set_format(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct adv7842_state *state = to_state(sd);
-@@ -2117,7 +2117,7 @@ static int adv7842_set_format(struct v4l2_subdev *sd,
+-	mbusformat = __video_mux_get_pad_format(sd, cfg, sdformat->pad,
+-					    sdformat->which);
++	mbusformat = __video_mux_get_pad_format(sd, sd_state, sdformat->pad,
++						sdformat->which);
+ 	if (!mbusformat)
  		return -EINVAL;
  
- 	if (state->mode == ADV7842_MODE_SDP)
--		return adv7842_get_format(sd, cfg, format);
-+		return adv7842_get_format(sd, sd_state, format);
- 
- 	info = adv7842_format_info(state, format->format.code);
- 	if (info == NULL)
-@@ -2129,7 +2129,7 @@ static int adv7842_set_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		fmt->code = format->format.code;
- 	} else {
- 		state->format = info;
-diff --git a/drivers/media/i2c/ak881x.c b/drivers/media/i2c/ak881x.c
-index 1adaf470c75a..dc569d5a4d9d 100644
---- a/drivers/media/i2c/ak881x.c
-+++ b/drivers/media/i2c/ak881x.c
-@@ -91,7 +91,7 @@ static int ak881x_s_register(struct v4l2_subdev *sd,
- #endif
- 
- static int ak881x_fill_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -111,7 +111,7 @@ static int ak881x_fill_fmt(struct v4l2_subdev *sd,
+-	source_mbusformat = __video_mux_get_pad_format(sd, cfg, source_pad,
++	source_mbusformat = __video_mux_get_pad_format(sd, sd_state,
++						       source_pad,
+ 						       sdformat->which);
+ 	if (!source_mbusformat)
+ 		return -EINVAL;
+@@ -310,7 +312,7 @@ static int video_mux_set_format(struct v4l2_subdev *sd,
  }
  
- static int ak881x_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
+ static int video_mux_init_cfg(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg)
++			      struct v4l2_subdev_state *sd_state)
  {
- 	if (code->pad || code->index)
-@@ -122,7 +122,7 @@ static int ak881x_enum_mbus_code(struct v4l2_subdev *sd,
- }
+ 	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
+ 	struct v4l2_mbus_framefmt *mbusformat;
+@@ -319,7 +321,7 @@ static int video_mux_init_cfg(struct v4l2_subdev *sd,
+ 	mutex_lock(&vmux->lock);
  
- static int ak881x_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index a349189a38db..a9403a227c6b 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1944,7 +1944,7 @@ static int ccs_set_stream(struct v4l2_subdev *subdev, int enable)
- }
+ 	for (i = 0; i < sd->entity.num_pads; i++) {
+-		mbusformat = v4l2_subdev_get_try_format(sd, cfg, i);
++		mbusformat = v4l2_subdev_get_try_format(sd, sd_state, i);
+ 		*mbusformat = video_mux_format_mbus_default;
+ 	}
  
- static int ccs_enum_mbus_code(struct v4l2_subdev *subdev,
+diff --git a/drivers/media/platform/vsp1/vsp1_brx.c b/drivers/media/platform/vsp1/vsp1_brx.c
+index 2d86c718a5cf..89385b4cabe5 100644
+--- a/drivers/media/platform/vsp1/vsp1_brx.c
++++ b/drivers/media/platform/vsp1/vsp1_brx.c
+@@ -65,7 +65,7 @@ static const struct v4l2_ctrl_ops brx_ctrl_ops = {
+  */
+ 
+ static int brx_enum_mbus_code(struct v4l2_subdev *subdev,
 -			      struct v4l2_subdev_pad_config *cfg,
 +			      struct v4l2_subdev_state *sd_state,
  			      struct v4l2_subdev_mbus_code_enum *code)
  {
- 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
-@@ -1997,13 +1997,13 @@ static u32 __ccs_get_mbus_code(struct v4l2_subdev *subdev, unsigned int pad)
+ 	static const unsigned int codes[] = {
+@@ -73,12 +73,12 @@ static int brx_enum_mbus_code(struct v4l2_subdev *subdev,
+ 		MEDIA_BUS_FMT_AYUV8_1X32,
+ 	};
+ 
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, codes,
+ 					  ARRAY_SIZE(codes));
  }
  
- static int __ccs_get_format(struct v4l2_subdev *subdev,
--			    struct v4l2_subdev_pad_config *cfg,
-+			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
- {
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		fmt->format = *v4l2_subdev_get_try_format(subdev, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(subdev, sd_state,
- 							  fmt->pad);
- 	} else {
- 		struct v4l2_rect *r;
-@@ -2023,21 +2023,21 @@ static int __ccs_get_format(struct v4l2_subdev *subdev,
- }
- 
- static int ccs_get_format(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	int rval;
- 
- 	mutex_lock(&sensor->mutex);
--	rval = __ccs_get_format(subdev, cfg, fmt);
-+	rval = __ccs_get_format(subdev, sd_state, fmt);
- 	mutex_unlock(&sensor->mutex);
- 
- 	return rval;
- }
- 
- static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_rect **crops,
- 				 struct v4l2_rect **comps, int which)
- {
-@@ -2054,24 +2054,25 @@ static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
- 		if (crops) {
- 			for (i = 0; i < subdev->entity.num_pads; i++)
- 				crops[i] = v4l2_subdev_get_try_crop(subdev,
--								    cfg, i);
-+								    sd_state,
-+								    i);
- 		}
- 		if (comps)
--			*comps = v4l2_subdev_get_try_compose(subdev, cfg,
-+			*comps = v4l2_subdev_get_try_compose(subdev, sd_state,
- 							     CCS_PAD_SINK);
- 	}
- }
- 
- /* Changes require propagation only on sink pad. */
- static void ccs_propagate(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *cfg, int which,
-+			  struct v4l2_subdev_state *sd_state, int which,
- 			  int target)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crops[CCS_PADS];
- 
--	ccs_get_crop_compose(subdev, cfg, crops, &comp, which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp, which);
- 
- 	switch (target) {
- 	case V4L2_SEL_TGT_CROP:
-@@ -2111,7 +2112,7 @@ static const struct ccs_csi_data_format
- }
- 
- static int ccs_set_format_source(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2122,7 +2123,7 @@ static int ccs_set_format_source(struct v4l2_subdev *subdev,
- 	unsigned int i;
- 	int rval;
- 
--	rval = __ccs_get_format(subdev, cfg, fmt);
-+	rval = __ccs_get_format(subdev, sd_state, fmt);
- 	if (rval)
- 		return rval;
- 
-@@ -2164,7 +2165,7 @@ static int ccs_set_format_source(struct v4l2_subdev *subdev,
- }
- 
- static int ccs_set_format(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2176,7 +2177,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- 	if (fmt->pad == ssd->source_pad) {
- 		int rval;
- 
--		rval = ccs_set_format_source(subdev, cfg, fmt);
-+		rval = ccs_set_format_source(subdev, sd_state, fmt);
- 
- 		mutex_unlock(&sensor->mutex);
- 
-@@ -2198,7 +2199,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- 		      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
- 		      CCS_LIM(sensor, MAX_Y_OUTPUT_SIZE));
- 
--	ccs_get_crop_compose(subdev, cfg, crops, NULL, fmt->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, NULL, fmt->which);
- 
- 	crops[ssd->sink_pad]->left = 0;
- 	crops[ssd->sink_pad]->top = 0;
-@@ -2206,7 +2207,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- 	crops[ssd->sink_pad]->height = fmt->format.height;
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		ssd->sink_fmt = *crops[ssd->sink_pad];
--	ccs_propagate(subdev, cfg, fmt->which, V4L2_SEL_TGT_CROP);
-+	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
- 
- 	mutex_unlock(&sensor->mutex);
- 
-@@ -2258,7 +2259,7 @@ static int scaling_goodness(struct v4l2_subdev *subdev, int w, int ask_w,
- }
- 
- static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_selection *sel,
- 				   struct v4l2_rect **crops,
- 				   struct v4l2_rect *comp)
-@@ -2306,7 +2307,7 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
-  * result.
-  */
- static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_selection *sel,
- 				   struct v4l2_rect **crops,
- 				   struct v4l2_rect *comp)
-@@ -2421,25 +2422,25 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- }
- /* We're only called on source pads. This function sets scaling. */
- static int ccs_set_compose(struct v4l2_subdev *subdev,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_selection *sel)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crops[CCS_PADS];
- 
--	ccs_get_crop_compose(subdev, cfg, crops, &comp, sel->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp, sel->which);
- 
- 	sel->r.top = 0;
- 	sel->r.left = 0;
- 
- 	if (ssd == sensor->binner)
--		ccs_set_compose_binner(subdev, cfg, sel, crops, comp);
-+		ccs_set_compose_binner(subdev, sd_state, sel, crops, comp);
- 	else
--		ccs_set_compose_scaler(subdev, cfg, sel, crops, comp);
-+		ccs_set_compose_scaler(subdev, sd_state, sel, crops, comp);
- 
- 	*comp = sel->r;
--	ccs_propagate(subdev, cfg, sel->which, V4L2_SEL_TGT_COMPOSE);
-+	ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_COMPOSE);
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return ccs_pll_blanking_update(sensor);
-@@ -2486,7 +2487,7 @@ static int __ccs_sel_supported(struct v4l2_subdev *subdev,
- }
- 
- static int ccs_set_crop(struct v4l2_subdev *subdev,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *sd_state,
- 			struct v4l2_subdev_selection *sel)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2494,7 +2495,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 	struct v4l2_rect *src_size, *crops[CCS_PADS];
- 	struct v4l2_rect _r;
- 
--	ccs_get_crop_compose(subdev, cfg, crops, NULL, sel->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, NULL, sel->which);
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		if (sel->pad == ssd->sink_pad)
-@@ -2505,16 +2506,18 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 		if (sel->pad == ssd->sink_pad) {
- 			_r.left = 0;
- 			_r.top = 0;
--			_r.width = v4l2_subdev_get_try_format(subdev, cfg,
-+			_r.width = v4l2_subdev_get_try_format(subdev,
-+							      sd_state,
- 							      sel->pad)
- 				->width;
--			_r.height = v4l2_subdev_get_try_format(subdev, cfg,
-+			_r.height = v4l2_subdev_get_try_format(subdev,
-+							       sd_state,
- 							       sel->pad)
- 				->height;
- 			src_size = &_r;
- 		} else {
- 			src_size = v4l2_subdev_get_try_compose(
--				subdev, cfg, ssd->sink_pad);
-+				subdev, sd_state, ssd->sink_pad);
- 		}
- 	}
- 
-@@ -2532,7 +2535,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 	*crops[sel->pad] = sel->r;
- 
- 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
--		ccs_propagate(subdev, cfg, sel->which, V4L2_SEL_TGT_CROP);
-+		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
- 
- 	return 0;
- }
-@@ -2546,7 +2549,7 @@ static void ccs_get_native_size(struct ccs_subdev *ssd, struct v4l2_rect *r)
- }
- 
- static int __ccs_get_selection(struct v4l2_subdev *subdev,
+ static int brx_enum_frame_size(struct v4l2_subdev *subdev,
 -			       struct v4l2_subdev_pad_config *cfg,
 +			       struct v4l2_subdev_state *sd_state,
- 			       struct v4l2_subdev_selection *sel)
+ 			       struct v4l2_subdev_frame_size_enum *fse)
  {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2559,13 +2562,14 @@ static int __ccs_get_selection(struct v4l2_subdev *subdev,
- 	if (ret)
- 		return ret;
- 
--	ccs_get_crop_compose(subdev, cfg, crops, &comp, sel->which);
-+	ccs_get_crop_compose(subdev, sd_state, crops, &comp, sel->which);
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		sink_fmt = ssd->sink_fmt;
- 	} else {
- 		struct v4l2_mbus_framefmt *fmt =
--			v4l2_subdev_get_try_format(subdev, cfg, ssd->sink_pad);
-+			v4l2_subdev_get_try_format(subdev, sd_state,
-+						   ssd->sink_pad);
- 
- 		sink_fmt.left = 0;
- 		sink_fmt.top = 0;
-@@ -2596,21 +2600,21 @@ static int __ccs_get_selection(struct v4l2_subdev *subdev,
+ 	if (fse->index)
+@@ -97,14 +97,14 @@ static int brx_enum_frame_size(struct v4l2_subdev *subdev,
  }
  
- static int ccs_get_selection(struct v4l2_subdev *subdev,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_selection *sel)
+ static struct v4l2_rect *brx_get_compose(struct vsp1_brx *brx,
+-					 struct v4l2_subdev_pad_config *cfg,
++					 struct v4l2_subdev_state *sd_state,
+ 					 unsigned int pad)
  {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	int rval;
- 
- 	mutex_lock(&sensor->mutex);
--	rval = __ccs_get_selection(subdev, cfg, sel);
-+	rval = __ccs_get_selection(subdev, sd_state, sel);
- 	mutex_unlock(&sensor->mutex);
- 
- 	return rval;
+-	return v4l2_subdev_get_try_compose(&brx->entity.subdev, cfg, pad);
++	return v4l2_subdev_get_try_compose(&brx->entity.subdev, sd_state, pad);
  }
  
- static int ccs_set_selection(struct v4l2_subdev *subdev,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_selection *sel)
+ static void brx_try_format(struct vsp1_brx *brx,
+-			   struct v4l2_subdev_pad_config *config,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad, struct v4l2_mbus_framefmt *fmt)
  {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2634,10 +2638,10 @@ static int ccs_set_selection(struct v4l2_subdev *subdev,
+ 	struct v4l2_mbus_framefmt *format;
+@@ -119,7 +119,7 @@ static void brx_try_format(struct vsp1_brx *brx,
  
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP:
--		ret = ccs_set_crop(subdev, cfg, sel);
-+		ret = ccs_set_crop(subdev, sd_state, sel);
- 		break;
- 	case V4L2_SEL_TGT_COMPOSE:
--		ret = ccs_set_compose(subdev, cfg, sel);
-+		ret = ccs_set_compose(subdev, sd_state, sel);
- 		break;
  	default:
+ 		/* The BRx can't perform format conversion. */
+-		format = vsp1_entity_get_pad_format(&brx->entity, config,
++		format = vsp1_entity_get_pad_format(&brx->entity, sd_state,
+ 						    BRX_PAD_SINK(0));
+ 		fmt->code = format->code;
+ 		break;
+@@ -132,17 +132,18 @@ static void brx_try_format(struct vsp1_brx *brx,
+ }
+ 
+ static int brx_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_brx *brx = to_brx(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&brx->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&brx->entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(&brx->entity, sd_state,
++					    fmt->which);
+ 	if (!config) {
  		ret = -EINVAL;
-@@ -3028,9 +3032,9 @@ static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 		goto done;
+@@ -181,11 +182,11 @@ static int brx_set_format(struct v4l2_subdev *subdev,
+ }
  
- 	for (i = 0; i < ssd->npads; i++) {
- 		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(sd, fh->pad, i);
-+			v4l2_subdev_get_try_format(sd, fh->state, i);
- 		struct v4l2_rect *try_crop =
--			v4l2_subdev_get_try_crop(sd, fh->pad, i);
-+			v4l2_subdev_get_try_crop(sd, fh->state, i);
- 		struct v4l2_rect *try_comp;
+ static int brx_get_selection(struct v4l2_subdev *subdev,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_brx *brx = to_brx(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
  
- 		ccs_get_native_size(ssd, try_crop);
-@@ -3043,7 +3047,7 @@ static int ccs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 		if (ssd != sensor->pixel_array)
- 			continue;
+ 	if (sel->pad == brx->entity.source_pad)
+ 		return -EINVAL;
+@@ -199,7 +200,7 @@ static int brx_get_selection(struct v4l2_subdev *subdev,
+ 		return 0;
  
--		try_comp = v4l2_subdev_get_try_compose(sd, fh->pad, i);
-+		try_comp = v4l2_subdev_get_try_compose(sd, fh->state, i);
- 		*try_comp = *try_crop;
- 	}
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		config = vsp1_entity_get_pad_config(&brx->entity, cfg,
++		config = vsp1_entity_get_pad_config(&brx->entity, sd_state,
+ 						    sel->which);
+ 		if (!config)
+ 			return -EINVAL;
+@@ -215,11 +216,11 @@ static int brx_get_selection(struct v4l2_subdev *subdev,
+ }
  
-diff --git a/drivers/media/i2c/cx25840/cx25840-core.c b/drivers/media/i2c/cx25840/cx25840-core.c
-index e2e935f78986..dc31944c7d5b 100644
---- a/drivers/media/i2c/cx25840/cx25840-core.c
-+++ b/drivers/media/i2c/cx25840/cx25840-core.c
-@@ -1746,7 +1746,7 @@ static int cx25840_s_ctrl(struct v4l2_ctrl *ctrl)
- /* ----------------------------------------------------------------------- */
+ static int brx_set_selection(struct v4l2_subdev *subdev,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_brx *brx = to_brx(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *compose;
+ 	int ret = 0;
+@@ -232,7 +233,8 @@ static int brx_set_selection(struct v4l2_subdev *subdev,
  
- static int cx25840_set_fmt(struct v4l2_subdev *sd,
+ 	mutex_lock(&brx->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&brx->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&brx->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/vsp1/vsp1_clu.c b/drivers/media/platform/vsp1/vsp1_clu.c
+index a47b23bf5abf..c5217fee24f1 100644
+--- a/drivers/media/platform/vsp1/vsp1_clu.c
++++ b/drivers/media/platform/vsp1/vsp1_clu.c
+@@ -123,27 +123,28 @@ static const unsigned int clu_codes[] = {
+ };
+ 
+ static int clu_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, clu_codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, clu_codes,
+ 					  ARRAY_SIZE(clu_codes));
+ }
+ 
+ static int clu_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, CLU_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   CLU_MIN_SIZE,
+ 					   CLU_MIN_SIZE, CLU_MAX_SIZE,
+ 					   CLU_MAX_SIZE);
+ }
+ 
+ static int clu_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+-	return vsp1_subdev_set_pad_format(subdev, cfg, fmt, clu_codes,
++	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt, clu_codes,
+ 					  ARRAY_SIZE(clu_codes),
+ 					  CLU_MIN_SIZE, CLU_MIN_SIZE,
+ 					  CLU_MAX_SIZE, CLU_MAX_SIZE);
+diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+index aa9d2286056e..6f51e5c75543 100644
+--- a/drivers/media/platform/vsp1/vsp1_entity.c
++++ b/drivers/media/platform/vsp1/vsp1_entity.c
+@@ -103,7 +103,7 @@ void vsp1_entity_configure_partition(struct vsp1_entity *entity,
+ /**
+  * vsp1_entity_get_pad_config - Get the pad configuration for an entity
+  * @entity: the entity
+- * @cfg: the TRY pad configuration
++ * @sd_state: the TRY state
+  * @which: configuration selector (ACTIVE or TRY)
+  *
+  * When called with which set to V4L2_SUBDEV_FORMAT_ACTIVE the caller must hold
+@@ -114,9 +114,9 @@ void vsp1_entity_configure_partition(struct vsp1_entity *entity,
+  * and simply returned when requested. The ACTIVE configuration comes from the
+  * entity structure.
+  */
+-struct v4l2_subdev_pad_config *
++struct v4l2_subdev_state *
+ vsp1_entity_get_pad_config(struct vsp1_entity *entity,
 -			   struct v4l2_subdev_pad_config *cfg,
 +			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-diff --git a/drivers/media/i2c/et8ek8/et8ek8_driver.c b/drivers/media/i2c/et8ek8/et8ek8_driver.c
-index bb3eac5e005e..c7b91c0c03b5 100644
---- a/drivers/media/i2c/et8ek8/et8ek8_driver.c
-+++ b/drivers/media/i2c/et8ek8/et8ek8_driver.c
-@@ -882,7 +882,7 @@ static int et8ek8_power_on(struct et8ek8_sensor *sensor)
-  */
- #define MAX_FMTS 4
- static int et8ek8_enum_mbus_code(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct et8ek8_reglist **list =
-@@ -920,7 +920,7 @@ static int et8ek8_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int et8ek8_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct et8ek8_reglist **list =
-@@ -958,7 +958,7 @@ static int et8ek8_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int et8ek8_enum_frame_ival(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct et8ek8_reglist **list =
-@@ -990,12 +990,13 @@ static int et8ek8_enum_frame_ival(struct v4l2_subdev *subdev,
- 
- static struct v4l2_mbus_framefmt *
- __et8ek8_get_pad_format(struct et8ek8_sensor *sensor,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *sd_state,
- 			unsigned int pad, enum v4l2_subdev_format_whence which)
+ 			   enum v4l2_subdev_format_whence which)
  {
  	switch (which) {
+@@ -124,14 +124,14 @@ vsp1_entity_get_pad_config(struct vsp1_entity *entity,
+ 		return entity->config;
  	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&sensor->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_format(&sensor->subdev, sd_state,
-+						  pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &sensor->format;
  	default:
-@@ -1004,13 +1005,14 @@ __et8ek8_get_pad_format(struct et8ek8_sensor *sensor,
+-		return cfg;
++		return sd_state;
+ 	}
  }
  
- static int et8ek8_get_pad_format(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
+ /**
+  * vsp1_entity_get_pad_format - Get a pad format from storage for an entity
+  * @entity: the entity
+- * @cfg: the configuration storage
++ * @sd_state: the state storage
+  * @pad: the pad number
+  *
+  * Return the format stored in the given configuration for an entity's pad. The
+@@ -139,16 +139,16 @@ vsp1_entity_get_pad_config(struct vsp1_entity *entity,
+  */
+ struct v4l2_mbus_framefmt *
+ vsp1_entity_get_pad_format(struct vsp1_entity *entity,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad)
  {
- 	struct et8ek8_sensor *sensor = to_et8ek8_sensor(subdev);
- 	struct v4l2_mbus_framefmt *format;
+-	return v4l2_subdev_get_try_format(&entity->subdev, cfg, pad);
++	return v4l2_subdev_get_try_format(&entity->subdev, sd_state, pad);
+ }
  
--	format = __et8ek8_get_pad_format(sensor, cfg, fmt->pad, fmt->which);
-+	format = __et8ek8_get_pad_format(sensor, sd_state, fmt->pad,
-+					 fmt->which);
- 	if (!format)
+ /**
+  * vsp1_entity_get_pad_selection - Get a pad selection from storage for entity
+  * @entity: the entity
+- * @cfg: the configuration storage
++ * @sd_state: the state storage
+  * @pad: the pad number
+  * @target: the selection target
+  *
+@@ -158,14 +158,16 @@ vsp1_entity_get_pad_format(struct vsp1_entity *entity,
+  */
+ struct v4l2_rect *
+ vsp1_entity_get_pad_selection(struct vsp1_entity *entity,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      unsigned int pad, unsigned int target)
+ {
+ 	switch (target) {
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		return v4l2_subdev_get_try_compose(&entity->subdev, cfg, pad);
++		return v4l2_subdev_get_try_compose(&entity->subdev, sd_state,
++						   pad);
+ 	case V4L2_SEL_TGT_CROP:
+-		return v4l2_subdev_get_try_crop(&entity->subdev, cfg, pad);
++		return v4l2_subdev_get_try_crop(&entity->subdev, sd_state,
++						pad);
+ 	default:
+ 		return NULL;
+ 	}
+@@ -180,7 +182,7 @@ vsp1_entity_get_pad_selection(struct vsp1_entity *entity,
+  * function can be used as a handler for the subdev pad::init_cfg operation.
+  */
+ int vsp1_entity_init_cfg(struct v4l2_subdev *subdev,
+-			 struct v4l2_subdev_pad_config *cfg)
++			 struct v4l2_subdev_state *sd_state)
+ {
+ 	struct v4l2_subdev_format format;
+ 	unsigned int pad;
+@@ -189,10 +191,10 @@ int vsp1_entity_init_cfg(struct v4l2_subdev *subdev,
+ 		memset(&format, 0, sizeof(format));
+ 
+ 		format.pad = pad;
+-		format.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
++		format.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
+ 			     : V4L2_SUBDEV_FORMAT_ACTIVE;
+ 
+-		v4l2_subdev_call(subdev, pad, set_fmt, cfg, &format);
++		v4l2_subdev_call(subdev, pad, set_fmt, sd_state, &format);
+ 	}
+ 
+ 	return 0;
+@@ -208,13 +210,13 @@ int vsp1_entity_init_cfg(struct v4l2_subdev *subdev,
+  * a direct drop-in for the operation handler.
+  */
+ int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_entity *entity = to_vsp1_entity(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 
+-	config = vsp1_entity_get_pad_config(entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(entity, sd_state, fmt->which);
+ 	if (!config)
  		return -EINVAL;
  
-@@ -1020,14 +1022,15 @@ static int et8ek8_get_pad_format(struct v4l2_subdev *subdev,
- }
- 
- static int et8ek8_set_pad_format(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
+@@ -239,7 +241,7 @@ int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+  * the sink pad.
+  */
+ int vsp1_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code,
+ 			       const unsigned int *codes, unsigned int ncodes)
  {
- 	struct et8ek8_sensor *sensor = to_et8ek8_sensor(subdev);
- 	struct v4l2_mbus_framefmt *format;
- 	struct et8ek8_reglist *reglist;
+@@ -251,7 +253,7 @@ int vsp1_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
  
--	format = __et8ek8_get_pad_format(sensor, cfg, fmt->pad, fmt->which);
-+	format = __et8ek8_get_pad_format(sensor, sd_state, fmt->pad,
-+					 fmt->which);
- 	if (!format)
- 		return -EINVAL;
- 
-@@ -1327,7 +1330,7 @@ static int et8ek8_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	struct et8ek8_reglist *reglist;
- 
- 	reglist = et8ek8_reglist_find_type(&meta_reglist, ET8EK8_REGLIST_MODE);
--	format = __et8ek8_get_pad_format(sensor, fh->pad, 0,
-+	format = __et8ek8_get_pad_format(sensor, fh->state, 0,
- 					 V4L2_SUBDEV_FORMAT_TRY);
- 	et8ek8_reglist_to_mbus(reglist, format);
- 
-diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-index 627ccfa34835..8db1cbedc1fd 100644
---- a/drivers/media/i2c/hi556.c
-+++ b/drivers/media/i2c/hi556.c
-@@ -875,7 +875,7 @@ static int __maybe_unused hi556_resume(struct device *dev)
- }
- 
- static int hi556_set_format(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg,
-+			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
- {
- 	struct hi556 *hi556 = to_hi556(sd);
-@@ -890,7 +890,7 @@ static int hi556_set_format(struct v4l2_subdev *sd,
- 	mutex_lock(&hi556->mutex);
- 	hi556_assign_pad_format(mode, &fmt->format);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
+ 		code->code = codes[code->index];
  	} else {
- 		hi556->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(hi556->link_freq, mode->link_freq_index);
-@@ -917,14 +917,15 @@ static int hi556_set_format(struct v4l2_subdev *sd,
- }
+-		struct v4l2_subdev_pad_config *config;
++		struct v4l2_subdev_state *config;
+ 		struct v4l2_mbus_framefmt *format;
  
- static int hi556_get_format(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg,
-+			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
+ 		/*
+@@ -261,7 +263,8 @@ int vsp1_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
+ 		if (code->index)
+ 			return -EINVAL;
+ 
+-		config = vsp1_entity_get_pad_config(entity, cfg, code->which);
++		config = vsp1_entity_get_pad_config(entity, sd_state,
++						    code->which);
+ 		if (!config)
+ 			return -EINVAL;
+ 
+@@ -290,17 +293,17 @@ int vsp1_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
+  * source pad size identical to the sink pad.
+  */
+ int vsp1_subdev_enum_frame_size(struct v4l2_subdev *subdev,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse,
+ 				unsigned int min_width, unsigned int min_height,
+ 				unsigned int max_width, unsigned int max_height)
  {
- 	struct hi556 *hi556 = to_hi556(sd);
+ 	struct vsp1_entity *entity = to_vsp1_entity(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
  
- 	mutex_lock(&hi556->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&hi556->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&hi556->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		hi556_assign_pad_format(hi556->cur_mode, &fmt->format);
-@@ -935,7 +936,7 @@ static int hi556_get_format(struct v4l2_subdev *sd,
+-	config = vsp1_entity_get_pad_config(entity, cfg, fse->which);
++	config = vsp1_entity_get_pad_config(entity, sd_state, fse->which);
+ 	if (!config)
+ 		return -EINVAL;
+ 
+@@ -353,14 +356,14 @@ int vsp1_subdev_enum_frame_size(struct v4l2_subdev *subdev,
+  * source pad.
+  */
+ int vsp1_subdev_set_pad_format(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt,
+ 			       const unsigned int *codes, unsigned int ncodes,
+ 			       unsigned int min_width, unsigned int min_height,
+ 			       unsigned int max_width, unsigned int max_height)
+ {
+ 	struct vsp1_entity *entity = to_vsp1_entity(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *selection;
+ 	unsigned int i;
+@@ -368,7 +371,7 @@ int vsp1_subdev_set_pad_format(struct v4l2_subdev *subdev,
+ 
+ 	mutex_lock(&entity->lock);
+ 
+-	config = vsp1_entity_get_pad_config(entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(entity, sd_state, fmt->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -672,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+ 	 * Allocate the pad configuration to store formats and selection
+ 	 * rectangles.
+ 	 */
+-	entity->config = v4l2_subdev_alloc_pad_config(&entity->subdev);
++	entity->config = v4l2_subdev_alloc_state(&entity->subdev);
+ 	if (entity->config == NULL) {
+ 		media_entity_cleanup(&entity->subdev.entity);
+ 		return -ENOMEM;
+@@ -687,6 +690,6 @@ void vsp1_entity_destroy(struct vsp1_entity *entity)
+ 		entity->ops->destroy(entity);
+ 	if (entity->subdev.ctrl_handler)
+ 		v4l2_ctrl_handler_free(entity->subdev.ctrl_handler);
+-	v4l2_subdev_free_pad_config(entity->config);
++	v4l2_subdev_free_state(entity->config);
+ 	media_entity_cleanup(&entity->subdev.entity);
  }
+diff --git a/drivers/media/platform/vsp1/vsp1_entity.h b/drivers/media/platform/vsp1/vsp1_entity.h
+index a1ceb37bb837..f22724439cdc 100644
+--- a/drivers/media/platform/vsp1/vsp1_entity.h
++++ b/drivers/media/platform/vsp1/vsp1_entity.h
+@@ -115,7 +115,7 @@ struct vsp1_entity {
+ 	unsigned int sink_pad;
  
- static int hi556_enum_mbus_code(struct v4l2_subdev *sd,
+ 	struct v4l2_subdev subdev;
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 
+ 	struct mutex lock;	/* Protects the pad config */
+ };
+@@ -136,20 +136,20 @@ int vsp1_entity_link_setup(struct media_entity *entity,
+ 			   const struct media_pad *local,
+ 			   const struct media_pad *remote, u32 flags);
+ 
+-struct v4l2_subdev_pad_config *
++struct v4l2_subdev_state *
+ vsp1_entity_get_pad_config(struct vsp1_entity *entity,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   enum v4l2_subdev_format_whence which);
+ struct v4l2_mbus_framefmt *
+ vsp1_entity_get_pad_format(struct vsp1_entity *entity,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad);
+ struct v4l2_rect *
+ vsp1_entity_get_pad_selection(struct vsp1_entity *entity,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      unsigned int pad, unsigned int target);
+ int vsp1_entity_init_cfg(struct v4l2_subdev *subdev,
+-			 struct v4l2_subdev_pad_config *cfg);
++			 struct v4l2_subdev_state *sd_state);
+ 
+ void vsp1_entity_route_setup(struct vsp1_entity *entity,
+ 			     struct vsp1_pipeline *pipe,
+@@ -173,20 +173,20 @@ void vsp1_entity_configure_partition(struct vsp1_entity *entity,
+ struct media_pad *vsp1_entity_remote_pad(struct media_pad *pad);
+ 
+ int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt);
+ int vsp1_subdev_set_pad_format(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_format *fmt,
+ 			       const unsigned int *codes, unsigned int ncodes,
+ 			       unsigned int min_width, unsigned int min_height,
+ 			       unsigned int max_width, unsigned int max_height);
+ int vsp1_subdev_enum_mbus_code(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code,
+ 			       const unsigned int *codes, unsigned int ncodes);
+ int vsp1_subdev_enum_frame_size(struct v4l2_subdev *subdev,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse,
+ 				unsigned int min_w, unsigned int min_h,
+ 				unsigned int max_w, unsigned int max_h);
+diff --git a/drivers/media/platform/vsp1/vsp1_histo.c b/drivers/media/platform/vsp1/vsp1_histo.c
+index a91e142bcb94..5e5013d2cd2a 100644
+--- a/drivers/media/platform/vsp1/vsp1_histo.c
++++ b/drivers/media/platform/vsp1/vsp1_histo.c
+@@ -170,7 +170,7 @@ static const struct vb2_ops histo_video_queue_qops = {
+  */
+ 
+ static int histo_enum_mbus_code(struct v4l2_subdev *subdev,
 -				struct v4l2_subdev_pad_config *cfg,
 +				struct v4l2_subdev_state *sd_state,
  				struct v4l2_subdev_mbus_code_enum *code)
  {
- 	if (code->index > 0)
-@@ -947,7 +948,7 @@ static int hi556_enum_mbus_code(struct v4l2_subdev *sd,
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+@@ -180,28 +180,30 @@ static int histo_enum_mbus_code(struct v4l2_subdev *subdev,
+ 		return 0;
+ 	}
+ 
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, histo->formats,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code,
++					  histo->formats,
+ 					  histo->num_formats);
  }
  
- static int hi556_enum_frame_size(struct v4l2_subdev *sd,
+ static int histo_enum_frame_size(struct v4l2_subdev *subdev,
 -				 struct v4l2_subdev_pad_config *cfg,
 +				 struct v4l2_subdev_state *sd_state,
  				 struct v4l2_subdev_frame_size_enum *fse)
  {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -970,7 +971,7 @@ static int hi556_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&hi556->mutex);
- 	hi556_assign_pad_format(&supported_modes[0],
--				v4l2_subdev_get_try_format(sd, fh->pad, 0));
-+				v4l2_subdev_get_try_format(sd, fh->state, 0));
- 	mutex_unlock(&hi556->mutex);
- 
- 	return 0;
-diff --git a/drivers/media/i2c/imx208.c b/drivers/media/i2c/imx208.c
-index 9ed261ea7255..6f3d9c1b5879 100644
---- a/drivers/media/i2c/imx208.c
-+++ b/drivers/media/i2c/imx208.c
-@@ -395,7 +395,7 @@ static int imx208_write_regs(struct imx208 *imx208,
- static int imx208_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	/* Initialize try_fmt */
- 	try_fmt->width = supported_modes[0].width;
-@@ -500,7 +500,7 @@ static const struct v4l2_ctrl_config imx208_digital_gain_control = {
- };
- 
- static int imx208_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct imx208 *imx208 = to_imx208(sd);
-@@ -514,7 +514,7 @@ static int imx208_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx208_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct imx208 *imx208 = to_imx208(sd);
-@@ -544,11 +544,12 @@ static void imx208_mode_to_pad_format(struct imx208 *imx208,
- }
- 
- static int __imx208_get_pad_format(struct imx208 *imx208,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *fmt)
- {
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&imx208->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&imx208->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		imx208_mode_to_pad_format(imx208, imx208->cur_mode, fmt);
-@@ -557,21 +558,21 @@ static int __imx208_get_pad_format(struct imx208 *imx208,
- }
- 
- static int imx208_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx208 *imx208 = to_imx208(sd);
- 	int ret;
- 
- 	mutex_lock(&imx208->imx208_mx);
--	ret = __imx208_get_pad_format(imx208, cfg, fmt);
-+	ret = __imx208_get_pad_format(imx208, sd_state, fmt);
- 	mutex_unlock(&imx208->imx208_mx);
- 
- 	return ret;
- }
- 
- static int imx208_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx208 *imx208 = to_imx208(sd);
-@@ -590,7 +591,7 @@ static int imx208_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	imx208_mode_to_pad_format(imx208, mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		imx208->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(imx208->link_freq, mode->link_freq_index);
-diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 1a770a530cf5..83c1737abeec 100644
---- a/drivers/media/i2c/imx214.c
-+++ b/drivers/media/i2c/imx214.c
-@@ -474,7 +474,7 @@ static int __maybe_unused imx214_power_off(struct device *dev)
- }
- 
- static int imx214_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -486,7 +486,7 @@ static int imx214_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx214_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->code != IMX214_MBUS_CODE)
-@@ -534,13 +534,13 @@ static const struct v4l2_subdev_core_ops imx214_core_ops = {
- 
- static struct v4l2_mbus_framefmt *
- __imx214_get_pad_format(struct imx214 *imx214,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *sd_state,
- 			unsigned int pad,
- 			enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&imx214->sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(&imx214->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &imx214->fmt;
- 	default:
-@@ -549,13 +549,14 @@ __imx214_get_pad_format(struct imx214 *imx214,
- }
- 
- static int imx214_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct imx214 *imx214 = to_imx214(sd);
- 
- 	mutex_lock(&imx214->mutex);
--	format->format = *__imx214_get_pad_format(imx214, cfg, format->pad,
-+	format->format = *__imx214_get_pad_format(imx214, sd_state,
-+						  format->pad,
- 						  format->which);
- 	mutex_unlock(&imx214->mutex);
- 
-@@ -563,12 +564,13 @@ static int imx214_get_format(struct v4l2_subdev *sd,
- }
- 
- static struct v4l2_rect *
--__imx214_get_pad_crop(struct imx214 *imx214, struct v4l2_subdev_pad_config *cfg,
-+__imx214_get_pad_crop(struct imx214 *imx214,
-+		      struct v4l2_subdev_state *sd_state,
- 		      unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&imx214->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&imx214->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &imx214->crop;
- 	default:
-@@ -577,7 +579,7 @@ __imx214_get_pad_crop(struct imx214 *imx214, struct v4l2_subdev_pad_config *cfg,
- }
- 
- static int imx214_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct imx214 *imx214 = to_imx214(sd);
-@@ -587,7 +589,8 @@ static int imx214_set_format(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&imx214->mutex);
- 
--	__crop = __imx214_get_pad_crop(imx214, cfg, format->pad, format->which);
-+	__crop = __imx214_get_pad_crop(imx214, sd_state, format->pad,
-+				       format->which);
- 
- 	mode = v4l2_find_nearest_size(imx214_modes,
- 				      ARRAY_SIZE(imx214_modes), width, height,
-@@ -597,7 +600,7 @@ static int imx214_set_format(struct v4l2_subdev *sd,
- 	__crop->width = mode->width;
- 	__crop->height = mode->height;
- 
--	__format = __imx214_get_pad_format(imx214, cfg, format->pad,
-+	__format = __imx214_get_pad_format(imx214, sd_state, format->pad,
- 					   format->which);
- 	__format->width = __crop->width;
- 	__format->height = __crop->height;
-@@ -617,7 +620,7 @@ static int imx214_set_format(struct v4l2_subdev *sd,
- }
- 
- static int imx214_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct imx214 *imx214 = to_imx214(sd);
-@@ -626,22 +629,22 @@ static int imx214_get_selection(struct v4l2_subdev *sd,
+ 	if (fse->pad != HISTO_PAD_SINK)
  		return -EINVAL;
  
- 	mutex_lock(&imx214->mutex);
--	sel->r = *__imx214_get_pad_crop(imx214, cfg, sel->pad,
-+	sel->r = *__imx214_get_pad_crop(imx214, sd_state, sel->pad,
- 					sel->which);
- 	mutex_unlock(&imx214->mutex);
- 	return 0;
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, HISTO_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   HISTO_MIN_SIZE,
+ 					   HISTO_MIN_SIZE, HISTO_MAX_SIZE,
+ 					   HISTO_MAX_SIZE);
  }
  
- static int imx214_entity_init_cfg(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg)
-+				  struct v4l2_subdev_state *sd_state)
+ static int histo_get_selection(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_selection *sel)
  {
- 	struct v4l2_subdev_format fmt = { };
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *crop;
+ 	int ret = 0;
+@@ -211,7 +213,8 @@ static int histo_get_selection(struct v4l2_subdev *subdev,
  
--	fmt.which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
- 	fmt.format.width = imx214_modes[0].width;
- 	fmt.format.height = imx214_modes[0].height;
+ 	mutex_lock(&histo->entity.lock);
  
--	imx214_set_format(subdev, cfg, &fmt);
-+	imx214_set_format(subdev, sd_state, &fmt);
- 
- 	return 0;
- }
-@@ -808,7 +811,7 @@ static int imx214_g_frame_interval(struct v4l2_subdev *subdev,
- }
- 
- static int imx214_enum_frame_interval(struct v4l2_subdev *subdev,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	const struct imx214_mode *mode;
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 74a0bf9b088b..e10af3f74b38 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -689,7 +689,7 @@ static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
- 	struct v4l2_rect *try_crop;
- 
- 	mutex_lock(&imx219->mutex);
-@@ -702,7 +702,7 @@ static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	try_fmt->field = V4L2_FIELD_NONE;
- 
- 	/* Initialize try_crop rectangle. */
--	try_crop = v4l2_subdev_get_try_crop(sd, fh->pad, 0);
-+	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
- 	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
- 	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
- 	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
-@@ -803,7 +803,7 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
- };
- 
- static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -819,7 +819,7 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+-	config = vsp1_entity_get_pad_config(&histo->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&histo->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -256,15 +259,15 @@ static int histo_get_selection(struct v4l2_subdev *subdev,
  }
  
- static int imx219_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
+ static int histo_set_crop(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *config,
+-			 struct v4l2_subdev_selection *sel)
++			  struct v4l2_subdev_state *sd_state,
++			  struct v4l2_subdev_selection *sel)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -863,12 +863,13 @@ static void imx219_update_pad_format(struct imx219 *imx219,
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *selection;
+ 
+ 	/* The crop rectangle must be inside the input frame. */
+-	format = vsp1_entity_get_pad_format(&histo->entity, config,
++	format = vsp1_entity_get_pad_format(&histo->entity, sd_state,
+ 					    HISTO_PAD_SINK);
+ 	sel->r.left = clamp_t(unsigned int, sel->r.left, 0, format->width - 1);
+ 	sel->r.top = clamp_t(unsigned int, sel->r.top, 0, format->height - 1);
+@@ -274,11 +277,11 @@ static int histo_set_crop(struct v4l2_subdev *subdev,
+ 				format->height - sel->r.top);
+ 
+ 	/* Set the crop rectangle and reset the compose rectangle. */
+-	selection = vsp1_entity_get_pad_selection(&histo->entity, config,
++	selection = vsp1_entity_get_pad_selection(&histo->entity, sd_state,
+ 						  sel->pad, V4L2_SEL_TGT_CROP);
+ 	*selection = sel->r;
+ 
+-	selection = vsp1_entity_get_pad_selection(&histo->entity, config,
++	selection = vsp1_entity_get_pad_selection(&histo->entity, sd_state,
+ 						  sel->pad,
+ 						  V4L2_SEL_TGT_COMPOSE);
+ 	*selection = sel->r;
+@@ -287,7 +290,7 @@ static int histo_set_crop(struct v4l2_subdev *subdev,
  }
  
- static int __imx219_get_pad_format(struct imx219 *imx219,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *fmt)
+ static int histo_set_compose(struct v4l2_subdev *subdev,
+-			     struct v4l2_subdev_pad_config *config,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
  {
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(&imx219->sd, cfg, fmt->pad);
-+			v4l2_subdev_get_try_format(&imx219->sd, sd_state,
-+						   fmt->pad);
- 		/* update the code which could change due to vflip or hflip: */
- 		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
- 		fmt->format = *try_fmt;
-@@ -882,21 +883,21 @@ static int __imx219_get_pad_format(struct imx219 *imx219,
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+@@ -303,7 +306,8 @@ static int histo_set_compose(struct v4l2_subdev *subdev,
+ 	sel->r.left = 0;
+ 	sel->r.top = 0;
+ 
+-	crop = vsp1_entity_get_pad_selection(&histo->entity, config, sel->pad,
++	crop = vsp1_entity_get_pad_selection(&histo->entity, sd_state,
++					     sel->pad,
+ 					     V4L2_SEL_TGT_CROP);
+ 
+ 	/*
+@@ -329,7 +333,7 @@ static int histo_set_compose(struct v4l2_subdev *subdev,
+ 	ratio = 1 << (crop->height * 2 / sel->r.height / 3);
+ 	sel->r.height = crop->height / ratio;
+ 
+-	compose = vsp1_entity_get_pad_selection(&histo->entity, config,
++	compose = vsp1_entity_get_pad_selection(&histo->entity, sd_state,
+ 						sel->pad,
+ 						V4L2_SEL_TGT_COMPOSE);
+ 	*compose = sel->r;
+@@ -338,11 +342,11 @@ static int histo_set_compose(struct v4l2_subdev *subdev,
  }
  
- static int imx219_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
+ static int histo_set_selection(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_selection *sel)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
  	int ret;
  
- 	mutex_lock(&imx219->mutex);
--	ret = __imx219_get_pad_format(imx219, cfg, fmt);
-+	ret = __imx219_get_pad_format(imx219, sd_state, fmt);
- 	mutex_unlock(&imx219->mutex);
+ 	if (sel->pad != HISTO_PAD_SINK)
+@@ -350,7 +354,8 @@ static int histo_set_selection(struct v4l2_subdev *subdev,
  
- 	return ret;
+ 	mutex_lock(&histo->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&histo->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&histo->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -369,7 +374,7 @@ static int histo_set_selection(struct v4l2_subdev *subdev,
  }
  
- static int imx219_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
+ static int histo_get_format(struct v4l2_subdev *subdev,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *fmt)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
-@@ -922,7 +923,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	imx219_update_pad_format(imx219, mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else if (imx219->mode != mode ||
- 		   imx219->fmt.code != fmt->format.code) {
-@@ -979,12 +980,13 @@ static int imx219_set_framefmt(struct imx219 *imx219)
+ 	if (fmt->pad == HISTO_PAD_SOURCE) {
+@@ -381,19 +386,19 @@ static int histo_get_format(struct v4l2_subdev *subdev,
+ 		return 0;
+ 	}
+ 
+-	return vsp1_subdev_get_pad_format(subdev, cfg, fmt);
++	return vsp1_subdev_get_pad_format(subdev, sd_state, fmt);
  }
  
- static const struct v4l2_rect *
--__imx219_get_pad_crop(struct imx219 *imx219, struct v4l2_subdev_pad_config *cfg,
-+__imx219_get_pad_crop(struct imx219 *imx219,
-+		      struct v4l2_subdev_state *sd_state,
- 		      unsigned int pad, enum v4l2_subdev_format_whence which)
+ static int histo_set_format(struct v4l2_subdev *subdev,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_histogram *histo = subdev_to_histo(subdev);
+ 
+ 	if (fmt->pad != HISTO_PAD_SINK)
+-		return histo_get_format(subdev, cfg, fmt);
++		return histo_get_format(subdev, sd_state, fmt);
+ 
+-	return vsp1_subdev_set_pad_format(subdev, cfg, fmt,
++	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt,
+ 					  histo->formats, histo->num_formats,
+ 					  HISTO_MIN_SIZE, HISTO_MIN_SIZE,
+ 					  HISTO_MAX_SIZE, HISTO_MAX_SIZE);
+diff --git a/drivers/media/platform/vsp1/vsp1_hsit.c b/drivers/media/platform/vsp1/vsp1_hsit.c
+index d5ebd9d08c8a..361a870380c2 100644
+--- a/drivers/media/platform/vsp1/vsp1_hsit.c
++++ b/drivers/media/platform/vsp1/vsp1_hsit.c
+@@ -34,7 +34,7 @@ static inline void vsp1_hsit_write(struct vsp1_hsit *hsit,
+  */
+ 
+ static int hsit_enum_mbus_code(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct vsp1_hsit *hsit = to_hsit(subdev);
+@@ -52,26 +52,28 @@ static int hsit_enum_mbus_code(struct v4l2_subdev *subdev,
+ }
+ 
+ static int hsit_enum_frame_size(struct v4l2_subdev *subdev,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, HSIT_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   HSIT_MIN_SIZE,
+ 					   HSIT_MIN_SIZE, HSIT_MAX_SIZE,
+ 					   HSIT_MAX_SIZE);
+ }
+ 
+ static int hsit_set_format(struct v4l2_subdev *subdev,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_hsit *hsit = to_hsit(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&hsit->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&hsit->entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(&hsit->entity, sd_state,
++					    fmt->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/vsp1/vsp1_lif.c b/drivers/media/platform/vsp1/vsp1_lif.c
+index 14ed5d7bd061..6a6857ac9327 100644
+--- a/drivers/media/platform/vsp1/vsp1_lif.c
++++ b/drivers/media/platform/vsp1/vsp1_lif.c
+@@ -40,27 +40,28 @@ static const unsigned int lif_codes[] = {
+ };
+ 
+ static int lif_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, lif_codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, lif_codes,
+ 					  ARRAY_SIZE(lif_codes));
+ }
+ 
+ static int lif_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, LIF_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   LIF_MIN_SIZE,
+ 					   LIF_MIN_SIZE, LIF_MAX_SIZE,
+ 					   LIF_MAX_SIZE);
+ }
+ 
+ static int lif_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+-	return vsp1_subdev_set_pad_format(subdev, cfg, fmt, lif_codes,
++	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt, lif_codes,
+ 					  ARRAY_SIZE(lif_codes),
+ 					  LIF_MIN_SIZE, LIF_MIN_SIZE,
+ 					  LIF_MAX_SIZE, LIF_MAX_SIZE);
+diff --git a/drivers/media/platform/vsp1/vsp1_lut.c b/drivers/media/platform/vsp1/vsp1_lut.c
+index 9f88842d7048..ac6802a325f5 100644
+--- a/drivers/media/platform/vsp1/vsp1_lut.c
++++ b/drivers/media/platform/vsp1/vsp1_lut.c
+@@ -99,27 +99,28 @@ static const unsigned int lut_codes[] = {
+ };
+ 
+ static int lut_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, lut_codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, lut_codes,
+ 					  ARRAY_SIZE(lut_codes));
+ }
+ 
+ static int lut_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, LUT_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   LUT_MIN_SIZE,
+ 					   LUT_MIN_SIZE, LUT_MAX_SIZE,
+ 					   LUT_MAX_SIZE);
+ }
+ 
+ static int lut_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+-	return vsp1_subdev_set_pad_format(subdev, cfg, fmt, lut_codes,
++	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt, lut_codes,
+ 					  ARRAY_SIZE(lut_codes),
+ 					  LUT_MIN_SIZE, LUT_MIN_SIZE,
+ 					  LUT_MAX_SIZE, LUT_MAX_SIZE);
+diff --git a/drivers/media/platform/vsp1/vsp1_rwpf.c b/drivers/media/platform/vsp1/vsp1_rwpf.c
+index 049bdd958e56..22a82d218152 100644
+--- a/drivers/media/platform/vsp1/vsp1_rwpf.c
++++ b/drivers/media/platform/vsp1/vsp1_rwpf.c
+@@ -17,9 +17,9 @@
+ #define RWPF_MIN_HEIGHT				1
+ 
+ struct v4l2_rect *vsp1_rwpf_get_crop(struct vsp1_rwpf *rwpf,
+-				     struct v4l2_subdev_pad_config *config)
++				     struct v4l2_subdev_state *sd_state)
+ {
+-	return v4l2_subdev_get_try_crop(&rwpf->entity.subdev, config,
++	return v4l2_subdev_get_try_crop(&rwpf->entity.subdev, sd_state,
+ 					RWPF_PAD_SINK);
+ }
+ 
+@@ -28,7 +28,7 @@ struct v4l2_rect *vsp1_rwpf_get_crop(struct vsp1_rwpf *rwpf,
+  */
+ 
+ static int vsp1_rwpf_enum_mbus_code(struct v4l2_subdev *subdev,
+-				    struct v4l2_subdev_pad_config *cfg,
++				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	static const unsigned int codes[] = {
+@@ -46,28 +46,30 @@ static int vsp1_rwpf_enum_mbus_code(struct v4l2_subdev *subdev,
+ }
+ 
+ static int vsp1_rwpf_enum_frame_size(struct v4l2_subdev *subdev,
+-				     struct v4l2_subdev_pad_config *cfg,
++				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct vsp1_rwpf *rwpf = to_rwpf(subdev);
+ 
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, RWPF_MIN_WIDTH,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   RWPF_MIN_WIDTH,
+ 					   RWPF_MIN_HEIGHT, rwpf->max_width,
+ 					   rwpf->max_height);
+ }
+ 
+ static int vsp1_rwpf_set_format(struct v4l2_subdev *subdev,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_rwpf *rwpf = to_rwpf(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&rwpf->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&rwpf->entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(&rwpf->entity, sd_state,
++					    fmt->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -128,11 +130,11 @@ static int vsp1_rwpf_set_format(struct v4l2_subdev *subdev,
+ }
+ 
+ static int vsp1_rwpf_get_selection(struct v4l2_subdev *subdev,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_rwpf *rwpf = to_rwpf(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+@@ -145,7 +147,8 @@ static int vsp1_rwpf_get_selection(struct v4l2_subdev *subdev,
+ 
+ 	mutex_lock(&rwpf->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&rwpf->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&rwpf->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -176,11 +179,11 @@ static int vsp1_rwpf_get_selection(struct v4l2_subdev *subdev,
+ }
+ 
+ static int vsp1_rwpf_set_selection(struct v4l2_subdev *subdev,
+-				   struct v4l2_subdev_pad_config *cfg,
++				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_rwpf *rwpf = to_rwpf(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *crop;
+ 	int ret = 0;
+@@ -197,7 +200,8 @@ static int vsp1_rwpf_set_selection(struct v4l2_subdev *subdev,
+ 
+ 	mutex_lock(&rwpf->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&rwpf->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&rwpf->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/vsp1/vsp1_rwpf.h b/drivers/media/platform/vsp1/vsp1_rwpf.h
+index 2f3582590618..eac5c04c2239 100644
+--- a/drivers/media/platform/vsp1/vsp1_rwpf.h
++++ b/drivers/media/platform/vsp1/vsp1_rwpf.h
+@@ -84,6 +84,6 @@ int vsp1_rwpf_init_ctrls(struct vsp1_rwpf *rwpf, unsigned int ncontrols);
+ extern const struct v4l2_subdev_pad_ops vsp1_rwpf_pad_ops;
+ 
+ struct v4l2_rect *vsp1_rwpf_get_crop(struct vsp1_rwpf *rwpf,
+-				     struct v4l2_subdev_pad_config *config);
++				     struct v4l2_subdev_state *sd_state);
+ 
+ #endif /* __VSP1_RWPF_H__ */
+diff --git a/drivers/media/platform/vsp1/vsp1_sru.c b/drivers/media/platform/vsp1/vsp1_sru.c
+index 2b65457ee12f..b614a2aea461 100644
+--- a/drivers/media/platform/vsp1/vsp1_sru.c
++++ b/drivers/media/platform/vsp1/vsp1_sru.c
+@@ -106,7 +106,7 @@ static const struct v4l2_ctrl_config sru_intensity_control = {
+  */
+ 
+ static int sru_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	static const unsigned int codes[] = {
+@@ -114,20 +114,21 @@ static int sru_enum_mbus_code(struct v4l2_subdev *subdev,
+ 		MEDIA_BUS_FMT_AYUV8_1X32,
+ 	};
+ 
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, codes,
+ 					  ARRAY_SIZE(codes));
+ }
+ 
+ static int sru_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct vsp1_sru *sru = to_sru(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+-	config = vsp1_entity_get_pad_config(&sru->entity, cfg, fse->which);
++	config = vsp1_entity_get_pad_config(&sru->entity, sd_state,
++					    fse->which);
+ 	if (!config)
+ 		return -EINVAL;
+ 
+@@ -164,7 +165,7 @@ static int sru_enum_frame_size(struct v4l2_subdev *subdev,
+ }
+ 
+ static void sru_try_format(struct vsp1_sru *sru,
+-			   struct v4l2_subdev_pad_config *config,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad, struct v4l2_mbus_framefmt *fmt)
+ {
+ 	struct v4l2_mbus_framefmt *format;
+@@ -184,7 +185,7 @@ static void sru_try_format(struct vsp1_sru *sru,
+ 
+ 	case SRU_PAD_SOURCE:
+ 		/* The SRU can't perform format conversion. */
+-		format = vsp1_entity_get_pad_format(&sru->entity, config,
++		format = vsp1_entity_get_pad_format(&sru->entity, sd_state,
+ 						    SRU_PAD_SINK);
+ 		fmt->code = format->code;
+ 
+@@ -216,17 +217,18 @@ static void sru_try_format(struct vsp1_sru *sru,
+ }
+ 
+ static int sru_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_sru *sru = to_sru(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&sru->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&sru->entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(&sru->entity, sd_state,
++					    fmt->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/vsp1/vsp1_uds.c b/drivers/media/platform/vsp1/vsp1_uds.c
+index 5fc04c082d1a..1c290cda005a 100644
+--- a/drivers/media/platform/vsp1/vsp1_uds.c
++++ b/drivers/media/platform/vsp1/vsp1_uds.c
+@@ -111,7 +111,7 @@ static unsigned int uds_compute_ratio(unsigned int input, unsigned int output)
+  */
+ 
+ static int uds_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	static const unsigned int codes[] = {
+@@ -119,20 +119,21 @@ static int uds_enum_mbus_code(struct v4l2_subdev *subdev,
+ 		MEDIA_BUS_FMT_AYUV8_1X32,
+ 	};
+ 
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, codes,
+ 					  ARRAY_SIZE(codes));
+ }
+ 
+ static int uds_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct vsp1_uds *uds = to_uds(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+-	config = vsp1_entity_get_pad_config(&uds->entity, cfg, fse->which);
++	config = vsp1_entity_get_pad_config(&uds->entity, sd_state,
++					    fse->which);
+ 	if (!config)
+ 		return -EINVAL;
+ 
+@@ -164,7 +165,7 @@ static int uds_enum_frame_size(struct v4l2_subdev *subdev,
+ }
+ 
+ static void uds_try_format(struct vsp1_uds *uds,
+-			   struct v4l2_subdev_pad_config *config,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad, struct v4l2_mbus_framefmt *fmt)
+ {
+ 	struct v4l2_mbus_framefmt *format;
+@@ -184,7 +185,7 @@ static void uds_try_format(struct vsp1_uds *uds,
+ 
+ 	case UDS_PAD_SOURCE:
+ 		/* The UDS scales but can't perform format conversion. */
+-		format = vsp1_entity_get_pad_format(&uds->entity, config,
++		format = vsp1_entity_get_pad_format(&uds->entity, sd_state,
+ 						    UDS_PAD_SINK);
+ 		fmt->code = format->code;
+ 
+@@ -200,17 +201,18 @@ static void uds_try_format(struct vsp1_uds *uds,
+ }
+ 
+ static int uds_set_format(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *sd_state,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct vsp1_uds *uds = to_uds(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&uds->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&uds->entity, cfg, fmt->which);
++	config = vsp1_entity_get_pad_config(&uds->entity, sd_state,
++					    fmt->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/vsp1/vsp1_uif.c b/drivers/media/platform/vsp1/vsp1_uif.c
+index 467d1072577b..83d7f17df80e 100644
+--- a/drivers/media/platform/vsp1/vsp1_uif.c
++++ b/drivers/media/platform/vsp1/vsp1_uif.c
+@@ -54,38 +54,39 @@ static const unsigned int uif_codes[] = {
+ };
+ 
+ static int uif_enum_mbus_code(struct v4l2_subdev *subdev,
+-			      struct v4l2_subdev_pad_config *cfg,
++			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	return vsp1_subdev_enum_mbus_code(subdev, cfg, code, uif_codes,
++	return vsp1_subdev_enum_mbus_code(subdev, sd_state, code, uif_codes,
+ 					  ARRAY_SIZE(uif_codes));
+ }
+ 
+ static int uif_enum_frame_size(struct v4l2_subdev *subdev,
+-			       struct v4l2_subdev_pad_config *cfg,
++			       struct v4l2_subdev_state *sd_state,
+ 			       struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	return vsp1_subdev_enum_frame_size(subdev, cfg, fse, UIF_MIN_SIZE,
++	return vsp1_subdev_enum_frame_size(subdev, sd_state, fse,
++					   UIF_MIN_SIZE,
+ 					   UIF_MIN_SIZE, UIF_MAX_SIZE,
+ 					   UIF_MAX_SIZE);
+ }
+ 
+ static int uif_set_format(struct v4l2_subdev *subdev,
+-			    struct v4l2_subdev_pad_config *cfg,
++			    struct v4l2_subdev_state *sd_state,
+ 			    struct v4l2_subdev_format *fmt)
+ {
+-	return vsp1_subdev_set_pad_format(subdev, cfg, fmt, uif_codes,
++	return vsp1_subdev_set_pad_format(subdev, sd_state, fmt, uif_codes,
+ 					  ARRAY_SIZE(uif_codes),
+ 					  UIF_MIN_SIZE, UIF_MIN_SIZE,
+ 					  UIF_MAX_SIZE, UIF_MAX_SIZE);
+ }
+ 
+ static int uif_get_selection(struct v4l2_subdev *subdev,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_uif *uif = to_uif(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	int ret = 0;
+ 
+@@ -94,7 +95,8 @@ static int uif_get_selection(struct v4l2_subdev *subdev,
+ 
+ 	mutex_lock(&uif->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&uif->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&uif->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+@@ -127,11 +129,11 @@ static int uif_get_selection(struct v4l2_subdev *subdev,
+ }
+ 
+ static int uif_set_selection(struct v4l2_subdev *subdev,
+-			     struct v4l2_subdev_pad_config *cfg,
++			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_selection *sel)
+ {
+ 	struct vsp1_uif *uif = to_uif(subdev);
+-	struct v4l2_subdev_pad_config *config;
++	struct v4l2_subdev_state *config;
+ 	struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_rect *selection;
+ 	int ret = 0;
+@@ -142,7 +144,8 @@ static int uif_set_selection(struct v4l2_subdev *subdev,
+ 
+ 	mutex_lock(&uif->entity.lock);
+ 
+-	config = vsp1_entity_get_pad_config(&uif->entity, cfg, sel->which);
++	config = vsp1_entity_get_pad_config(&uif->entity, sd_state,
++					    sel->which);
+ 	if (!config) {
+ 		ret = -EINVAL;
+ 		goto done;
+diff --git a/drivers/media/platform/xilinx/xilinx-csi2rxss.c b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+index fff7ddec6745..b1baf9d7b6ec 100644
+--- a/drivers/media/platform/xilinx/xilinx-csi2rxss.c
++++ b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+@@ -681,12 +681,13 @@ static int xcsi2rxss_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ static struct v4l2_mbus_framefmt *
+ __xcsi2rxss_get_pad_format(struct xcsi2rxss_state *xcsi2rxss,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   unsigned int pad, u32 which)
  {
  	switch (which) {
  	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&imx219->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&imx219->sd, sd_state, pad);
+-		return v4l2_subdev_get_try_format(&xcsi2rxss->subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&xcsi2rxss->subdev,
++						  sd_state, pad);
  	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &imx219->mode->crop;
- 	}
-@@ -993,7 +995,7 @@ __imx219_get_pad_crop(struct imx219 *imx219, struct v4l2_subdev_pad_config *cfg,
- }
- 
- static int imx219_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	switch (sel->target) {
-@@ -1001,7 +1003,7 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
- 		struct imx219 *imx219 = to_imx219(sd);
- 
- 		mutex_lock(&imx219->mutex);
--		sel->r = *__imx219_get_pad_crop(imx219, cfg, sel->pad,
-+		sel->r = *__imx219_get_pad_crop(imx219, sd_state, sel->pad,
- 						sel->which);
- 		mutex_unlock(&imx219->mutex);
- 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index 90529424d5b6..7ab9e5f9f267 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -710,7 +710,7 @@ static int imx258_write_regs(struct imx258 *imx258,
- static int imx258_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	/* Initialize try_fmt */
- 	try_fmt->width = supported_modes[0].width;
-@@ -820,7 +820,7 @@ static const struct v4l2_ctrl_ops imx258_ctrl_ops = {
- };
- 
- static int imx258_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	/* Only one bayer order(GRBG) is supported */
-@@ -833,7 +833,7 @@ static int imx258_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx258_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -860,11 +860,12 @@ static void imx258_update_pad_format(const struct imx258_mode *mode,
- }
- 
- static int __imx258_get_pad_format(struct imx258 *imx258,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *fmt)
- {
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&imx258->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&imx258->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		imx258_update_pad_format(imx258->cur_mode, fmt);
-@@ -873,21 +874,21 @@ static int __imx258_get_pad_format(struct imx258 *imx258,
- }
- 
- static int imx258_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx258 *imx258 = to_imx258(sd);
- 	int ret;
- 
- 	mutex_lock(&imx258->mutex);
--	ret = __imx258_get_pad_format(imx258, cfg, fmt);
-+	ret = __imx258_get_pad_format(imx258, sd_state, fmt);
- 	mutex_unlock(&imx258->mutex);
- 
- 	return ret;
- }
- 
- static int imx258_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx258 *imx258 = to_imx258(sd);
-@@ -909,7 +910,7 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
- 		fmt->format.width, fmt->format.height);
- 	imx258_update_pad_format(mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else {
- 		imx258->cur_mode = mode;
-diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
-index ee2127436f0b..0dce92872176 100644
---- a/drivers/media/i2c/imx274.c
-+++ b/drivers/media/i2c/imx274.c
-@@ -996,7 +996,7 @@ static int imx274_binning_goodness(struct stimx274 *imx274,
-  * Must be called with imx274->lock locked.
-  *
-  * @imx274: The device object
-- * @cfg:    The pad config we are editing for TRY requests
-+ * @sd_state: The subdev state we are editing for TRY requests
-  * @which:  V4L2_SUBDEV_FORMAT_ACTIVE or V4L2_SUBDEV_FORMAT_TRY from the caller
-  * @width:  Input-output parameter: set to the desired width before
-  *          the call, contains the chosen value after returning successfully
-@@ -1005,7 +1005,7 @@ static int imx274_binning_goodness(struct stimx274 *imx274,
-  *          available (when called from set_fmt)
-  */
- static int __imx274_change_compose(struct stimx274 *imx274,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   u32 which,
- 				   u32 *width,
- 				   u32 *height,
-@@ -1019,8 +1019,8 @@ static int __imx274_change_compose(struct stimx274 *imx274,
- 	int best_goodness = INT_MIN;
- 
- 	if (which == V4L2_SUBDEV_FORMAT_TRY) {
--		cur_crop = &cfg->try_crop;
--		tgt_fmt = &cfg->try_fmt;
-+		cur_crop = &sd_state->pads->try_crop;
-+		tgt_fmt = &sd_state->pads->try_fmt;
- 	} else {
- 		cur_crop = &imx274->crop;
- 		tgt_fmt = &imx274->format;
-@@ -1061,7 +1061,7 @@ static int __imx274_change_compose(struct stimx274 *imx274,
+ 		return &xcsi2rxss->format;
+ 	default:
+@@ -697,7 +698,7 @@ __xcsi2rxss_get_pad_format(struct xcsi2rxss_state *xcsi2rxss,
  /**
-  * imx274_get_fmt - Get the pad format
+  * xcsi2rxss_init_cfg - Initialise the pad format config to default
+  * @sd: Pointer to V4L2 Sub device structure
+- * @cfg: Pointer to sub device pad information structure
++ * @sd_state: Pointer to sub device state structure
+  *
+  * This function is used to initialize the pad format with the default
+  * values.
+@@ -705,7 +706,7 @@ __xcsi2rxss_get_pad_format(struct xcsi2rxss_state *xcsi2rxss,
+  * Return: 0 on success
+  */
+ static int xcsi2rxss_init_cfg(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_pad_config *cfg)
++			      struct v4l2_subdev_state *sd_state)
+ {
+ 	struct xcsi2rxss_state *xcsi2rxss = to_xcsi2rxssstate(sd);
+ 	struct v4l2_mbus_framefmt *format;
+@@ -713,7 +714,7 @@ static int xcsi2rxss_init_cfg(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&xcsi2rxss->lock);
+ 	for (i = 0; i < XCSI_MEDIA_PADS; i++) {
+-		format = v4l2_subdev_get_try_format(sd, cfg, i);
++		format = v4l2_subdev_get_try_format(sd, sd_state, i);
+ 		*format = xcsi2rxss->default_format;
+ 	}
+ 	mutex_unlock(&xcsi2rxss->lock);
+@@ -724,7 +725,7 @@ static int xcsi2rxss_init_cfg(struct v4l2_subdev *sd,
+ /**
+  * xcsi2rxss_get_format - Get the pad format
   * @sd: Pointer to V4L2 Sub device structure
 - * @cfg: Pointer to sub device pad information structure
 + * @sd_state: Pointer to sub device state structure
   * @fmt: Pointer to pad level media bus format
   *
   * This function is used to get the pad format information.
-@@ -1069,7 +1069,7 @@ static int __imx274_change_compose(struct stimx274 *imx274,
+@@ -732,13 +733,14 @@ static int xcsi2rxss_init_cfg(struct v4l2_subdev *sd,
   * Return: 0 on success
   */
- static int imx274_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
+ static int xcsi2rxss_get_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_format *fmt)
  {
- 	struct stimx274 *imx274 = to_imx274(sd);
-@@ -1083,7 +1083,7 @@ static int imx274_get_fmt(struct v4l2_subdev *sd,
+ 	struct xcsi2rxss_state *xcsi2rxss = to_xcsi2rxssstate(sd);
+ 
+ 	mutex_lock(&xcsi2rxss->lock);
+-	fmt->format = *__xcsi2rxss_get_pad_format(xcsi2rxss, cfg, fmt->pad,
++	fmt->format = *__xcsi2rxss_get_pad_format(xcsi2rxss, sd_state,
++						  fmt->pad,
+ 						  fmt->which);
+ 	mutex_unlock(&xcsi2rxss->lock);
+ 
+@@ -748,7 +750,7 @@ static int xcsi2rxss_get_format(struct v4l2_subdev *sd,
  /**
-  * imx274_set_fmt - This is used to set the pad format
+  * xcsi2rxss_set_format - This is used to set the pad format
   * @sd: Pointer to V4L2 Sub device structure
 - * @cfg: Pointer to sub device pad information structure
-+ * @sd_state: Pointer to sub device state information structure
-  * @format: Pointer to pad level media bus format
++ * @sd_state: Pointer to sub device state structure
+  * @fmt: Pointer to pad level media bus format
   *
-  * This function is used to set the pad format.
-@@ -1091,7 +1091,7 @@ static int imx274_get_fmt(struct v4l2_subdev *sd,
+  * This function is used to set the pad format. Since the pad format is fixed
+@@ -759,7 +761,7 @@ static int xcsi2rxss_get_format(struct v4l2_subdev *sd,
   * Return: 0 on success
   */
- static int imx274_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
+ static int xcsi2rxss_set_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_pad_config *cfg,
++				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_format *fmt)
  {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-@@ -1100,7 +1100,7 @@ static int imx274_set_fmt(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&imx274->lock);
- 
--	err = __imx274_change_compose(imx274, cfg, format->which,
-+	err = __imx274_change_compose(imx274, sd_state, format->which,
- 				      &fmt->width, &fmt->height, 0);
- 
- 	if (err)
-@@ -1113,7 +1113,7 @@ static int imx274_set_fmt(struct v4l2_subdev *sd,
+ 	struct xcsi2rxss_state *xcsi2rxss = to_xcsi2rxssstate(sd);
+@@ -773,7 +775,7 @@ static int xcsi2rxss_set_format(struct v4l2_subdev *sd,
+ 	 * CSI format cannot be changed at runtime.
+ 	 * Ensure that format to set is copied to over to CSI pad format
  	 */
- 	fmt->field = V4L2_FIELD_NONE;
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		cfg->try_fmt = *fmt;
-+		sd_state->pads->try_fmt = *fmt;
- 	else
- 		imx274->format = *fmt;
+-	__format = __xcsi2rxss_get_pad_format(xcsi2rxss, cfg,
++	__format = __xcsi2rxss_get_pad_format(xcsi2rxss, sd_state,
+ 					      fmt->pad, fmt->which);
  
-@@ -1124,7 +1124,7 @@ static int imx274_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int imx274_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct stimx274 *imx274 = to_imx274(sd);
-@@ -1144,8 +1144,8 @@ static int imx274_get_selection(struct v4l2_subdev *sd,
- 	}
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
--		src_crop = &cfg->try_crop;
--		src_fmt = &cfg->try_fmt;
-+		src_crop = &sd_state->pads->try_crop;
-+		src_fmt = &sd_state->pads->try_fmt;
- 	} else {
- 		src_crop = &imx274->crop;
- 		src_fmt = &imx274->format;
-@@ -1179,7 +1179,7 @@ static int imx274_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int imx274_set_selection_crop(struct stimx274 *imx274,
--				     struct v4l2_subdev_pad_config *cfg,
-+				     struct v4l2_subdev_state *sd_state,
- 				     struct v4l2_subdev_selection *sel)
- {
- 	struct v4l2_rect *tgt_crop;
-@@ -1216,7 +1216,7 @@ static int imx274_set_selection_crop(struct stimx274 *imx274,
- 	sel->r = new_crop;
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
--		tgt_crop = &cfg->try_crop;
-+		tgt_crop = &sd_state->pads->try_crop;
- 	else
- 		tgt_crop = &imx274->crop;
- 
-@@ -1230,7 +1230,7 @@ static int imx274_set_selection_crop(struct stimx274 *imx274,
- 
- 	/* if crop size changed then reset the output image size */
- 	if (size_changed)
--		__imx274_change_compose(imx274, cfg, sel->which,
-+		__imx274_change_compose(imx274, sd_state, sel->which,
- 					&new_crop.width, &new_crop.height,
- 					sel->flags);
- 
-@@ -1240,7 +1240,7 @@ static int imx274_set_selection_crop(struct stimx274 *imx274,
- }
- 
- static int imx274_set_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct stimx274 *imx274 = to_imx274(sd);
-@@ -1249,13 +1249,13 @@ static int imx274_set_selection(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (sel->target == V4L2_SEL_TGT_CROP)
--		return imx274_set_selection_crop(imx274, cfg, sel);
-+		return imx274_set_selection_crop(imx274, sd_state, sel);
- 
- 	if (sel->target == V4L2_SEL_TGT_COMPOSE) {
- 		int err;
- 
- 		mutex_lock(&imx274->lock);
--		err =  __imx274_change_compose(imx274, cfg, sel->which,
-+		err =  __imx274_change_compose(imx274, sd_state, sel->which,
- 					       &sel->r.width, &sel->r.height,
- 					       sel->flags);
- 		mutex_unlock(&imx274->lock);
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 06020e648a97..bf7a6c37ca5d 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -516,7 +516,7 @@ static const struct v4l2_ctrl_ops imx290_ctrl_ops = {
- };
- 
- static int imx290_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(imx290_formats))
-@@ -528,7 +528,7 @@ static int imx290_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx290_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	const struct imx290 *imx290 = to_imx290(sd);
-@@ -550,7 +550,7 @@ static int imx290_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static int imx290_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct imx290 *imx290 = to_imx290(sd);
-@@ -559,7 +559,7 @@ static int imx290_get_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&imx290->lock);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		framefmt = v4l2_subdev_get_try_format(&imx290->sd, cfg,
-+		framefmt = v4l2_subdev_get_try_format(&imx290->sd, sd_state,
- 						      fmt->pad);
- 	else
- 		framefmt = &imx290->current_format;
-@@ -596,8 +596,8 @@ static u64 imx290_calc_pixel_rate(struct imx290 *imx290)
- }
- 
- static int imx290_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
--		      struct v4l2_subdev_format *fmt)
-+			  struct v4l2_subdev_state *sd_state,
-+			  struct v4l2_subdev_format *fmt)
- {
- 	struct imx290 *imx290 = to_imx290(sd);
- 	const struct imx290_mode *mode;
-@@ -624,7 +624,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
- 	fmt->format.field = V4L2_FIELD_NONE;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		format = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		format = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 	} else {
- 		format = &imx290->current_format;
- 		imx290->current_mode = mode;
-@@ -646,15 +646,15 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int imx290_entity_init_cfg(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg)
-+				  struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_subdev_format fmt = { 0 };
- 
--	fmt.which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
- 	fmt.format.width = 1920;
- 	fmt.format.height = 1080;
- 
--	imx290_set_fmt(subdev, cfg, &fmt);
-+	imx290_set_fmt(subdev, sd_state, &fmt);
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
-index 4e0a8c9d271f..dba0854ab5aa 100644
---- a/drivers/media/i2c/imx319.c
-+++ b/drivers/media/i2c/imx319.c
-@@ -1860,7 +1860,7 @@ static int imx319_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct imx319 *imx319 = to_imx319(sd);
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	mutex_lock(&imx319->mutex);
- 
-@@ -1947,7 +1947,7 @@ static const struct v4l2_ctrl_ops imx319_ctrl_ops = {
- };
- 
- static int imx319_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct imx319 *imx319 = to_imx319(sd);
-@@ -1963,7 +1963,7 @@ static int imx319_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int imx319_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct imx319 *imx319 = to_imx319(sd);
-@@ -1997,14 +1997,14 @@ static void imx319_update_pad_format(struct imx319 *imx319,
- }
- 
- static int imx319_do_get_pad_format(struct imx319 *imx319,
+ 	/* only sink pad format can be updated */
+@@ -811,7 +813,7 @@ static int xcsi2rxss_set_format(struct v4l2_subdev *sd,
+  * Return: -EINVAL or zero on success
+  */
+ static int xcsi2rxss_enum_mbus_code(struct v4l2_subdev *sd,
 -				    struct v4l2_subdev_pad_config *cfg,
 +				    struct v4l2_subdev_state *sd_state,
- 				    struct v4l2_subdev_format *fmt)
+ 				    struct v4l2_subdev_mbus_code_enum *code)
  {
- 	struct v4l2_mbus_framefmt *framefmt;
- 	struct v4l2_subdev *sd = &imx319->sd;
+ 	struct xcsi2rxss_state *state = to_xcsi2rxssstate(sd);
+diff --git a/drivers/media/platform/xilinx/xilinx-tpg.c b/drivers/media/platform/xilinx/xilinx-tpg.c
+index ed01bedb5db6..0f2d5a0edf0c 100644
+--- a/drivers/media/platform/xilinx/xilinx-tpg.c
++++ b/drivers/media/platform/xilinx/xilinx-tpg.c
+@@ -251,12 +251,13 @@ static int xtpg_s_stream(struct v4l2_subdev *subdev, int enable)
  
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		fmt->format = *framefmt;
- 	} else {
- 		imx319_update_pad_format(imx319, imx319->cur_mode, fmt);
-@@ -2014,14 +2014,14 @@ static int imx319_do_get_pad_format(struct imx319 *imx319,
- }
- 
- static int imx319_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx319 *imx319 = to_imx319(sd);
- 	int ret;
- 
- 	mutex_lock(&imx319->mutex);
--	ret = imx319_do_get_pad_format(imx319, cfg, fmt);
-+	ret = imx319_do_get_pad_format(imx319, sd_state, fmt);
- 	mutex_unlock(&imx319->mutex);
- 
- 	return ret;
-@@ -2029,7 +2029,7 @@ static int imx319_get_pad_format(struct v4l2_subdev *sd,
- 
- static int
- imx319_set_pad_format(struct v4l2_subdev *sd,
+ static struct v4l2_mbus_framefmt *
+ __xtpg_get_pad_format(struct xtpg_device *xtpg,
 -		      struct v4l2_subdev_pad_config *cfg,
 +		      struct v4l2_subdev_state *sd_state,
- 		      struct v4l2_subdev_format *fmt)
+ 		      unsigned int pad, u32 which)
  {
- 	struct imx319 *imx319 = to_imx319(sd);
-@@ -2055,7 +2055,7 @@ imx319_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	imx319_update_pad_format(imx319, mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else {
- 		imx319->cur_mode = mode;
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 23f28606e570..062125501788 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -497,13 +497,13 @@ static const struct v4l2_ctrl_ops imx334_ctrl_ops = {
- /**
-  * imx334_enum_mbus_code() - Enumerate V4L2 sub-device mbus codes
-  * @sd: pointer to imx334 V4L2 sub-device structure
-- * @cfg: V4L2 sub-device pad configuration
-+ * @sd_state: V4L2 sub-device state
-  * @code: V4L2 sub-device code enumeration need to be filled
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- static int imx334_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -517,13 +517,13 @@ static int imx334_enum_mbus_code(struct v4l2_subdev *sd,
- /**
-  * imx334_enum_frame_size() - Enumerate V4L2 sub-device frame sizes
-  * @sd: pointer to imx334 V4L2 sub-device structure
-- * @cfg: V4L2 sub-device pad configuration
-+ * @sd_state: V4L2 sub-device state
-  * @fsize: V4L2 sub-device size enumeration need to be filled
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- static int imx334_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fsize)
- {
- 	if (fsize->index > 0)
-@@ -564,13 +564,13 @@ static void imx334_fill_pad_format(struct imx334 *imx334,
- /**
-  * imx334_get_pad_format() - Get subdevice pad format
-  * @sd: pointer to imx334 V4L2 sub-device structure
-- * @cfg: V4L2 sub-device pad configuration
-+ * @sd_state: V4L2 sub-device state
-  * @fmt: V4L2 sub-device format need to be set
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- static int imx334_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx334 *imx334 = to_imx334(sd);
-@@ -580,7 +580,7 @@ static int imx334_get_pad_format(struct v4l2_subdev *sd,
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *framefmt;
- 
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		fmt->format = *framefmt;
- 	} else {
- 		imx334_fill_pad_format(imx334, imx334->cur_mode, fmt);
-@@ -594,13 +594,13 @@ static int imx334_get_pad_format(struct v4l2_subdev *sd,
- /**
-  * imx334_set_pad_format() - Set subdevice pad format
-  * @sd: pointer to imx334 V4L2 sub-device structure
-- * @cfg: V4L2 sub-device pad configuration
-+ * @sd_state: V4L2 sub-device state
-  * @fmt: V4L2 sub-device format need to be set
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- static int imx334_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx334 *imx334 = to_imx334(sd);
-@@ -615,7 +615,7 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *framefmt;
- 
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else {
- 		ret = imx334_update_controls(imx334, mode);
-@@ -631,20 +631,20 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
- /**
-  * imx334_init_pad_cfg() - Initialize sub-device pad configuration
-  * @sd: pointer to imx334 V4L2 sub-device structure
-- * @cfg: V4L2 sub-device pad configuration
-+ * @sd_state: V4L2 sub-device state
-  *
-  * Return: 0 if successful, error code otherwise.
-  */
- static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg)
-+			       struct v4l2_subdev_state *sd_state)
- {
- 	struct imx334 *imx334 = to_imx334(sd);
- 	struct v4l2_subdev_format fmt = { 0 };
- 
--	fmt.which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
- 	imx334_fill_pad_format(imx334, &supported_mode, &fmt);
- 
--	return imx334_set_pad_format(sd, cfg, &fmt);
-+	return imx334_set_pad_format(sd, sd_state, &fmt);
+ 	switch (which) {
+ 	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_get_try_format(&xtpg->xvip.subdev, cfg, pad);
++		return v4l2_subdev_get_try_format(&xtpg->xvip.subdev,
++						  sd_state, pad);
+ 	case V4L2_SUBDEV_FORMAT_ACTIVE:
+ 		return &xtpg->formats[pad];
+ 	default:
+@@ -265,25 +266,26 @@ __xtpg_get_pad_format(struct xtpg_device *xtpg,
  }
  
- /**
-diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
-index 93f13a04439a..cb51c81786bd 100644
---- a/drivers/media/i2c/imx355.c
-+++ b/drivers/media/i2c/imx355.c
-@@ -1161,7 +1161,7 @@ static int imx355_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ static int xtpg_get_format(struct v4l2_subdev *subdev,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
  {
- 	struct imx355 *imx355 = to_imx355(sd);
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
+ 	struct xtpg_device *xtpg = to_tpg(subdev);
  
- 	mutex_lock(&imx355->mutex);
+-	fmt->format = *__xtpg_get_pad_format(xtpg, cfg, fmt->pad, fmt->which);
++	fmt->format = *__xtpg_get_pad_format(xtpg, sd_state, fmt->pad,
++					     fmt->which);
  
-@@ -1248,7 +1248,7 @@ static const struct v4l2_ctrl_ops imx355_ctrl_ops = {
- };
- 
- static int imx355_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct imx355 *imx355 = to_imx355(sd);
-@@ -1264,7 +1264,7 @@ static int imx355_enum_mbus_code(struct v4l2_subdev *sd,
+ 	return 0;
  }
  
- static int imx355_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
+ static int xtpg_set_format(struct v4l2_subdev *subdev,
+-			   struct v4l2_subdev_pad_config *cfg,
++			   struct v4l2_subdev_state *sd_state,
+ 			   struct v4l2_subdev_format *fmt)
  {
- 	struct imx355 *imx355 = to_imx355(sd);
-@@ -1298,14 +1298,14 @@ static void imx355_update_pad_format(struct imx355 *imx355,
- }
+ 	struct xtpg_device *xtpg = to_tpg(subdev);
+ 	struct v4l2_mbus_framefmt *__format;
+ 	u32 bayer_phase;
  
- static int imx355_do_get_pad_format(struct imx355 *imx355,
--				    struct v4l2_subdev_pad_config *cfg,
-+				    struct v4l2_subdev_state *sd_state,
- 				    struct v4l2_subdev_format *fmt)
- {
- 	struct v4l2_mbus_framefmt *framefmt;
- 	struct v4l2_subdev *sd = &imx355->sd;
+-	__format = __xtpg_get_pad_format(xtpg, cfg, fmt->pad, fmt->which);
++	__format = __xtpg_get_pad_format(xtpg, sd_state, fmt->pad, fmt->which);
  
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		fmt->format = *framefmt;
- 	} else {
- 		imx355_update_pad_format(imx355, imx355->cur_mode, fmt);
-@@ -1315,14 +1315,14 @@ static int imx355_do_get_pad_format(struct imx355 *imx355,
- }
+ 	/* In two pads mode the source pad format is always identical to the
+ 	 * sink pad format.
+@@ -306,7 +308,8 @@ static int xtpg_set_format(struct v4l2_subdev *subdev,
  
- static int imx355_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx355 *imx355 = to_imx355(sd);
- 	int ret;
+ 	/* Propagate the format to the source pad. */
+ 	if (xtpg->npads == 2) {
+-		__format = __xtpg_get_pad_format(xtpg, cfg, 1, fmt->which);
++		__format = __xtpg_get_pad_format(xtpg, sd_state, 1,
++						 fmt->which);
+ 		*__format = fmt->format;
+ 	}
  
- 	mutex_lock(&imx355->mutex);
--	ret = imx355_do_get_pad_format(imx355, cfg, fmt);
-+	ret = imx355_do_get_pad_format(imx355, sd_state, fmt);
- 	mutex_unlock(&imx355->mutex);
+@@ -318,12 +321,12 @@ static int xtpg_set_format(struct v4l2_subdev *subdev,
+  */
  
- 	return ret;
-@@ -1330,7 +1330,7 @@ static int imx355_get_pad_format(struct v4l2_subdev *sd,
- 
- static int
- imx355_set_pad_format(struct v4l2_subdev *sd,
--		      struct v4l2_subdev_pad_config *cfg,
-+		      struct v4l2_subdev_state *sd_state,
- 		      struct v4l2_subdev_format *fmt)
- {
- 	struct imx355 *imx355 = to_imx355(sd);
-@@ -1356,7 +1356,7 @@ imx355_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	imx355_update_pad_format(imx355, mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else {
- 		imx355->cur_mode = mode;
-diff --git a/drivers/media/i2c/m5mols/m5mols_core.c b/drivers/media/i2c/m5mols/m5mols_core.c
-index 21666d705e37..e29be0242f07 100644
---- a/drivers/media/i2c/m5mols/m5mols_core.c
-+++ b/drivers/media/i2c/m5mols/m5mols_core.c
-@@ -539,17 +539,19 @@ static int __find_resolution(struct v4l2_subdev *sd,
- }
- 
- static struct v4l2_mbus_framefmt *__find_format(struct m5mols_info *info,
+ static int xtpg_enum_frame_size(struct v4l2_subdev *subdev,
 -				struct v4l2_subdev_pad_config *cfg,
 +				struct v4l2_subdev_state *sd_state,
- 				enum v4l2_subdev_format_whence which,
- 				enum m5mols_restype type)
+ 				struct v4l2_subdev_frame_size_enum *fse)
  {
- 	if (which == V4L2_SUBDEV_FORMAT_TRY)
--		return cfg ? v4l2_subdev_get_try_format(&info->sd, cfg, 0) : NULL;
-+		return sd_state ? v4l2_subdev_get_try_format(&info->sd,
-+							     sd_state, 0) : NULL;
+ 	struct v4l2_mbus_framefmt *format;
  
- 	return &info->ffmt[type];
- }
+-	format = v4l2_subdev_get_try_format(subdev, cfg, fse->pad);
++	format = v4l2_subdev_get_try_format(subdev, sd_state, fse->pad);
  
--static int m5mols_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int m5mols_get_fmt(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct m5mols_info *info = to_m5mols(sd);
-@@ -558,7 +560,7 @@ static int m5mols_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
+ 	if (fse->index || fse->code != format->code)
+ 		return -EINVAL;
+@@ -351,11 +354,11 @@ static int xtpg_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
+ 	struct xtpg_device *xtpg = to_tpg(subdev);
+ 	struct v4l2_mbus_framefmt *format;
  
- 	mutex_lock(&info->lock);
+-	format = v4l2_subdev_get_try_format(subdev, fh->pad, 0);
++	format = v4l2_subdev_get_try_format(subdev, fh->state, 0);
+ 	*format = xtpg->default_format;
  
--	format = __find_format(info, cfg, fmt->which, info->res_type);
-+	format = __find_format(info, sd_state, fmt->which, info->res_type);
- 	if (format)
- 		fmt->format = *format;
- 	else
-@@ -568,7 +570,8 @@ static int m5mols_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	return ret;
- }
- 
--static int m5mols_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int m5mols_set_fmt(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct m5mols_info *info = to_m5mols(sd);
-@@ -582,7 +585,7 @@ static int m5mols_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	if (ret < 0)
- 		return ret;
- 
--	sfmt = __find_format(info, cfg, fmt->which, type);
-+	sfmt = __find_format(info, sd_state, fmt->which, type);
- 	if (!sfmt)
- 		return 0;
- 
-@@ -648,7 +651,7 @@ static int m5mols_set_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- 
- 
- static int m5mols_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (!code || code->index >= SIZE_DEFAULT_FFMT)
-@@ -909,7 +912,9 @@ static const struct v4l2_subdev_core_ops m5mols_core_ops = {
-  */
- static int m5mols_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd,
-+								       fh->state,
-+								       0);
- 
- 	*format = m5mols_default_ffmt[0];
- 	return 0;
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index 6fd4d59fcc72..4631bfeeacc0 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -712,7 +712,7 @@ static int max9286_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int max9286_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -725,12 +725,12 @@ static int max9286_enum_mbus_code(struct v4l2_subdev *sd,
- 
- static struct v4l2_mbus_framefmt *
- max9286_get_pad_format(struct max9286_priv *priv,
--		       struct v4l2_subdev_pad_config *cfg,
-+		       struct v4l2_subdev_state *sd_state,
- 		       unsigned int pad, u32 which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&priv->sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(&priv->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &priv->fmt[pad];
- 	default:
-@@ -739,7 +739,7 @@ max9286_get_pad_format(struct max9286_priv *priv,
- }
- 
- static int max9286_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct max9286_priv *priv = sd_to_max9286(sd);
-@@ -760,7 +760,8 @@ static int max9286_set_fmt(struct v4l2_subdev *sd,
- 		break;
+ 	if (xtpg->npads == 2) {
+-		format = v4l2_subdev_get_try_format(subdev, fh->pad, 1);
++		format = v4l2_subdev_get_try_format(subdev, fh->state, 1);
+ 		*format = xtpg->default_format;
  	}
  
--	cfg_fmt = max9286_get_pad_format(priv, cfg, format->pad, format->which);
-+	cfg_fmt = max9286_get_pad_format(priv, sd_state, format->pad,
-+					 format->which);
- 	if (!cfg_fmt)
- 		return -EINVAL;
- 
-@@ -772,7 +773,7 @@ static int max9286_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int max9286_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct max9286_priv *priv = sd_to_max9286(sd);
-@@ -788,7 +789,7 @@ static int max9286_get_fmt(struct v4l2_subdev *sd,
- 	if (pad == MAX9286_SRC_PAD)
- 		pad = __ffs(priv->bound_sources);
- 
--	cfg_fmt = max9286_get_pad_format(priv, cfg, pad, format->which);
-+	cfg_fmt = max9286_get_pad_format(priv, sd_state, pad, format->which);
- 	if (!cfg_fmt)
- 		return -EINVAL;
- 
-@@ -832,7 +833,7 @@ static int max9286_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
- 	unsigned int i;
- 
- 	for (i = 0; i < MAX9286_N_SINKS; i++) {
--		format = v4l2_subdev_get_try_format(subdev, fh->pad, i);
-+		format = v4l2_subdev_get_try_format(subdev, fh->state, i);
- 		max9286_init_format(format);
- 	}
- 
-diff --git a/drivers/media/i2c/ml86v7667.c b/drivers/media/i2c/ml86v7667.c
-index ff212335326a..4a1410ebb4c8 100644
---- a/drivers/media/i2c/ml86v7667.c
-+++ b/drivers/media/i2c/ml86v7667.c
-@@ -188,7 +188,7 @@ static int ml86v7667_g_input_status(struct v4l2_subdev *sd, u32 *status)
- }
- 
- static int ml86v7667_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -200,7 +200,7 @@ static int ml86v7667_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ml86v7667_fill_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct ml86v7667_priv *priv = to_ml86v7667(sd);
-diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
-index 58c85a3bccf6..c9f0bd997ea7 100644
---- a/drivers/media/i2c/mt9m001.c
-+++ b/drivers/media/i2c/mt9m001.c
-@@ -254,7 +254,7 @@ static int mt9m001_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int mt9m001_set_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -295,7 +295,7 @@ static int mt9m001_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9m001_get_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -320,7 +320,7 @@ static int mt9m001_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9m001_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -331,7 +331,7 @@ static int mt9m001_get_fmt(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *mf;
- 		return 0;
- 	}
-@@ -377,7 +377,7 @@ static int mt9m001_s_fmt(struct v4l2_subdev *sd,
- }
- 
- static int mt9m001_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -411,7 +411,7 @@ static int mt9m001_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return mt9m001_s_fmt(sd, fmt, mf);
--	cfg->try_fmt = *mf;
-+	sd_state->pads->try_fmt = *mf;
- 	return 0;
- }
- 
-@@ -657,12 +657,12 @@ static const struct v4l2_subdev_core_ops mt9m001_subdev_core_ops = {
- };
- 
- static int mt9m001_init_cfg(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg)
-+			    struct v4l2_subdev_state *sd_state)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
- 	struct mt9m001 *mt9m001 = to_mt9m001(client);
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, cfg, 0);
-+		v4l2_subdev_get_try_format(sd, sd_state, 0);
- 
- 	try_fmt->width		= MT9M001_MAX_WIDTH;
- 	try_fmt->height		= MT9M001_MAX_HEIGHT;
-@@ -677,7 +677,7 @@ static int mt9m001_init_cfg(struct v4l2_subdev *sd,
- }
- 
- static int mt9m001_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-diff --git a/drivers/media/i2c/mt9m032.c b/drivers/media/i2c/mt9m032.c
-index 5a4c0f9d1eee..ba0c0ea91c95 100644
---- a/drivers/media/i2c/mt9m032.c
-+++ b/drivers/media/i2c/mt9m032.c
-@@ -304,7 +304,7 @@ static int mt9m032_setup_pll(struct mt9m032 *sensor)
-  */
- 
- static int mt9m032_enum_mbus_code(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index != 0)
-@@ -315,7 +315,7 @@ static int mt9m032_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int mt9m032_enum_frame_size(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index != 0 || fse->code != MEDIA_BUS_FMT_Y8_1X8)
-@@ -332,18 +332,19 @@ static int mt9m032_enum_frame_size(struct v4l2_subdev *subdev,
+diff --git a/drivers/media/platform/xilinx/xilinx-vip.c b/drivers/media/platform/xilinx/xilinx-vip.c
+index 6ad61b08a31a..07d16a007d5f 100644
+--- a/drivers/media/platform/xilinx/xilinx-vip.c
++++ b/drivers/media/platform/xilinx/xilinx-vip.c
+@@ -234,7 +234,7 @@ EXPORT_SYMBOL_GPL(xvip_cleanup_resources);
  /**
-  * __mt9m032_get_pad_crop() - get crop rect
-  * @sensor: pointer to the sensor struct
-- * @cfg: v4l2_subdev_pad_config for getting the try crop rect from
-+ * @sd_state: v4l2_subdev_state for getting the try crop rect from
-  * @which: select try or active crop rect
+  * xvip_enum_mbus_code - Enumerate the media format code
+  * @subdev: V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @code: returning media bus code
   *
-  * Returns a pointer the current active or fh relative try crop rect
+  * Enumerate the media bus code of the subdevice. Return the corresponding
+@@ -246,7 +246,7 @@ EXPORT_SYMBOL_GPL(xvip_cleanup_resources);
+  * is not valid.
   */
- static struct v4l2_rect *
--__mt9m032_get_pad_crop(struct mt9m032 *sensor, struct v4l2_subdev_pad_config *cfg,
-+__mt9m032_get_pad_crop(struct mt9m032 *sensor,
-+		       struct v4l2_subdev_state *sd_state,
- 		       enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&sensor->subdev, cfg, 0);
-+		return v4l2_subdev_get_try_crop(&sensor->subdev, sd_state, 0);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &sensor->crop;
- 	default:
-@@ -354,18 +355,20 @@ __mt9m032_get_pad_crop(struct mt9m032 *sensor, struct v4l2_subdev_pad_config *cf
- /**
-  * __mt9m032_get_pad_format() - get format
-  * @sensor: pointer to the sensor struct
-- * @cfg: v4l2_subdev_pad_config for getting the try format from
-+ * @sd_state: v4l2_subdev_state for getting the try format from
-  * @which: select try or active format
-  *
-  * Returns a pointer the current active or fh relative try format
-  */
- static struct v4l2_mbus_framefmt *
--__mt9m032_get_pad_format(struct mt9m032 *sensor, struct v4l2_subdev_pad_config *cfg,
-+__mt9m032_get_pad_format(struct mt9m032 *sensor,
-+			 struct v4l2_subdev_state *sd_state,
- 			 enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&sensor->subdev, cfg, 0);
-+		return v4l2_subdev_get_try_format(&sensor->subdev, sd_state,
-+						  0);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &sensor->format;
- 	default:
-@@ -374,20 +377,20 @@ __mt9m032_get_pad_format(struct mt9m032 *sensor, struct v4l2_subdev_pad_config *
- }
- 
- static int mt9m032_get_pad_format(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *fmt)
- {
- 	struct mt9m032 *sensor = to_mt9m032(subdev);
- 
- 	mutex_lock(&sensor->lock);
--	fmt->format = *__mt9m032_get_pad_format(sensor, cfg, fmt->which);
-+	fmt->format = *__mt9m032_get_pad_format(sensor, sd_state, fmt->which);
- 	mutex_unlock(&sensor->lock);
- 
- 	return 0;
- }
- 
- static int mt9m032_set_pad_format(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *fmt)
- {
- 	struct mt9m032 *sensor = to_mt9m032(subdev);
-@@ -401,7 +404,7 @@ static int mt9m032_set_pad_format(struct v4l2_subdev *subdev,
- 	}
- 
- 	/* Scaling is not supported, the format is thus fixed. */
--	fmt->format = *__mt9m032_get_pad_format(sensor, cfg, fmt->which);
-+	fmt->format = *__mt9m032_get_pad_format(sensor, sd_state, fmt->which);
- 	ret = 0;
- 
- done:
-@@ -410,7 +413,7 @@ static int mt9m032_set_pad_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9m032_get_pad_selection(struct v4l2_subdev *subdev,
--				     struct v4l2_subdev_pad_config *cfg,
-+				     struct v4l2_subdev_state *sd_state,
- 				     struct v4l2_subdev_selection *sel)
- {
- 	struct mt9m032 *sensor = to_mt9m032(subdev);
-@@ -419,14 +422,14 @@ static int mt9m032_get_pad_selection(struct v4l2_subdev *subdev,
- 		return -EINVAL;
- 
- 	mutex_lock(&sensor->lock);
--	sel->r = *__mt9m032_get_pad_crop(sensor, cfg, sel->which);
-+	sel->r = *__mt9m032_get_pad_crop(sensor, sd_state, sel->which);
- 	mutex_unlock(&sensor->lock);
- 
- 	return 0;
- }
- 
- static int mt9m032_set_pad_selection(struct v4l2_subdev *subdev,
--				     struct v4l2_subdev_pad_config *cfg,
-+				     struct v4l2_subdev_state *sd_state,
- 				     struct v4l2_subdev_selection *sel)
- {
- 	struct mt9m032 *sensor = to_mt9m032(subdev);
-@@ -462,13 +465,14 @@ static int mt9m032_set_pad_selection(struct v4l2_subdev *subdev,
- 	rect.height = min_t(unsigned int, rect.height,
- 			    MT9M032_PIXEL_ARRAY_HEIGHT - rect.top);
- 
--	__crop = __mt9m032_get_pad_crop(sensor, cfg, sel->which);
-+	__crop = __mt9m032_get_pad_crop(sensor, sd_state, sel->which);
- 
- 	if (rect.width != __crop->width || rect.height != __crop->height) {
- 		/* Reset the output image size if the crop rectangle size has
- 		 * been modified.
- 		 */
--		format = __mt9m032_get_pad_format(sensor, cfg, sel->which);
-+		format = __mt9m032_get_pad_format(sensor, sd_state,
-+						  sel->which);
- 		format->width = rect.width;
- 		format->height = rect.height;
- 	}
-diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-index 0e11734f75aa..91a44359bcd3 100644
---- a/drivers/media/i2c/mt9m111.c
-+++ b/drivers/media/i2c/mt9m111.c
-@@ -449,7 +449,7 @@ static int mt9m111_reset(struct mt9m111 *mt9m111)
- }
- 
- static int mt9m111_set_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -493,7 +493,7 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9m111_get_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -518,7 +518,7 @@ static int mt9m111_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9m111_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -529,7 +529,7 @@ static int mt9m111_get_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mf = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		format->format = *mf;
- 		return 0;
- #else
-@@ -624,7 +624,7 @@ static int mt9m111_set_pixfmt(struct mt9m111 *mt9m111,
- }
- 
- static int mt9m111_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -678,7 +678,7 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
- 	mf->xfer_func	= V4L2_XFER_FUNC_DEFAULT;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *mf;
-+		sd_state->pads->try_fmt = *mf;
- 		return 0;
- 	}
- 
-@@ -1100,7 +1100,7 @@ static int mt9m111_s_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int mt9m111_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(mt9m111_colour_fmts))
-@@ -1119,11 +1119,11 @@ static int mt9m111_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int mt9m111_init_cfg(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg)
-+			    struct v4l2_subdev_state *sd_state)
- {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
- 	struct v4l2_mbus_framefmt *format =
--		v4l2_subdev_get_try_format(sd, cfg, 0);
-+		v4l2_subdev_get_try_format(sd, sd_state, 0);
- 
- 	format->width	= MT9M111_MAX_WIDTH;
- 	format->height	= MT9M111_MAX_HEIGHT;
-diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index a633b934d93e..6eb88ef99783 100644
---- a/drivers/media/i2c/mt9p031.c
-+++ b/drivers/media/i2c/mt9p031.c
-@@ -470,7 +470,7 @@ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
- }
- 
- static int mt9p031_enum_mbus_code(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-@@ -483,7 +483,7 @@ static int mt9p031_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int mt9p031_enum_frame_size(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-@@ -501,12 +501,14 @@ static int mt9p031_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static struct v4l2_mbus_framefmt *
--__mt9p031_get_pad_format(struct mt9p031 *mt9p031, struct v4l2_subdev_pad_config *cfg,
-+__mt9p031_get_pad_format(struct mt9p031 *mt9p031,
-+			 struct v4l2_subdev_state *sd_state,
- 			 unsigned int pad, u32 which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&mt9p031->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_format(&mt9p031->subdev, sd_state,
-+						  pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9p031->format;
- 	default:
-@@ -515,12 +517,14 @@ __mt9p031_get_pad_format(struct mt9p031 *mt9p031, struct v4l2_subdev_pad_config
- }
- 
- static struct v4l2_rect *
--__mt9p031_get_pad_crop(struct mt9p031 *mt9p031, struct v4l2_subdev_pad_config *cfg,
--		     unsigned int pad, u32 which)
-+__mt9p031_get_pad_crop(struct mt9p031 *mt9p031,
-+		       struct v4l2_subdev_state *sd_state,
-+		       unsigned int pad, u32 which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&mt9p031->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&mt9p031->subdev, sd_state,
-+						pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9p031->crop;
- 	default:
-@@ -529,18 +533,18 @@ __mt9p031_get_pad_crop(struct mt9p031 *mt9p031, struct v4l2_subdev_pad_config *c
- }
- 
- static int mt9p031_get_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *fmt)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
- 
--	fmt->format = *__mt9p031_get_pad_format(mt9p031, cfg, fmt->pad,
-+	fmt->format = *__mt9p031_get_pad_format(mt9p031, sd_state, fmt->pad,
- 						fmt->which);
- 	return 0;
- }
- 
- static int mt9p031_set_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-@@ -551,7 +555,7 @@ static int mt9p031_set_format(struct v4l2_subdev *subdev,
- 	unsigned int hratio;
- 	unsigned int vratio;
- 
--	__crop = __mt9p031_get_pad_crop(mt9p031, cfg, format->pad,
-+	__crop = __mt9p031_get_pad_crop(mt9p031, sd_state, format->pad,
- 					format->which);
- 
- 	/* Clamp the width and height to avoid dividing by zero. */
-@@ -567,7 +571,7 @@ static int mt9p031_set_format(struct v4l2_subdev *subdev,
- 	hratio = DIV_ROUND_CLOSEST(__crop->width, width);
- 	vratio = DIV_ROUND_CLOSEST(__crop->height, height);
- 
--	__format = __mt9p031_get_pad_format(mt9p031, cfg, format->pad,
-+	__format = __mt9p031_get_pad_format(mt9p031, sd_state, format->pad,
- 					    format->which);
- 	__format->width = __crop->width / hratio;
- 	__format->height = __crop->height / vratio;
-@@ -578,7 +582,7 @@ static int mt9p031_set_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9p031_get_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-@@ -586,12 +590,13 @@ static int mt9p031_get_selection(struct v4l2_subdev *subdev,
- 	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
--	sel->r = *__mt9p031_get_pad_crop(mt9p031, cfg, sel->pad, sel->which);
-+	sel->r = *__mt9p031_get_pad_crop(mt9p031, sd_state, sel->pad,
-+					 sel->which);
- 	return 0;
- }
- 
- static int mt9p031_set_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-@@ -621,13 +626,15 @@ static int mt9p031_set_selection(struct v4l2_subdev *subdev,
- 	rect.height = min_t(unsigned int, rect.height,
- 			    MT9P031_PIXEL_ARRAY_HEIGHT - rect.top);
- 
--	__crop = __mt9p031_get_pad_crop(mt9p031, cfg, sel->pad, sel->which);
-+	__crop = __mt9p031_get_pad_crop(mt9p031, sd_state, sel->pad,
-+					sel->which);
- 
- 	if (rect.width != __crop->width || rect.height != __crop->height) {
- 		/* Reset the output image size if the crop rectangle size has
- 		 * been modified.
- 		 */
--		__format = __mt9p031_get_pad_format(mt9p031, cfg, sel->pad,
-+		__format = __mt9p031_get_pad_format(mt9p031, sd_state,
-+						    sel->pad,
- 						    sel->which);
- 		__format->width = rect.width;
- 		__format->height = rect.height;
-@@ -942,13 +949,13 @@ static int mt9p031_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
- 	struct v4l2_mbus_framefmt *format;
- 	struct v4l2_rect *crop;
- 
--	crop = v4l2_subdev_get_try_crop(subdev, fh->pad, 0);
-+	crop = v4l2_subdev_get_try_crop(subdev, fh->state, 0);
- 	crop->left = MT9P031_COLUMN_START_DEF;
- 	crop->top = MT9P031_ROW_START_DEF;
- 	crop->width = MT9P031_WINDOW_WIDTH_DEF;
- 	crop->height = MT9P031_WINDOW_HEIGHT_DEF;
- 
--	format = v4l2_subdev_get_try_format(subdev, fh->pad, 0);
-+	format = v4l2_subdev_get_try_format(subdev, fh->state, 0);
- 
- 	if (mt9p031->model == MT9P031_MODEL_MONOCHROME)
- 		format->code = MEDIA_BUS_FMT_Y12_1X12;
-diff --git a/drivers/media/i2c/mt9t001.c b/drivers/media/i2c/mt9t001.c
-index 2e96ff5234b4..b651ee4a26e8 100644
---- a/drivers/media/i2c/mt9t001.c
-+++ b/drivers/media/i2c/mt9t001.c
-@@ -252,12 +252,14 @@ static int __mt9t001_set_power(struct mt9t001 *mt9t001, bool on)
-  */
- 
- static struct v4l2_mbus_framefmt *
--__mt9t001_get_pad_format(struct mt9t001 *mt9t001, struct v4l2_subdev_pad_config *cfg,
-+__mt9t001_get_pad_format(struct mt9t001 *mt9t001,
-+			 struct v4l2_subdev_state *sd_state,
- 			 unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&mt9t001->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_format(&mt9t001->subdev, sd_state,
-+						  pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9t001->format;
- 	default:
-@@ -266,12 +268,14 @@ __mt9t001_get_pad_format(struct mt9t001 *mt9t001, struct v4l2_subdev_pad_config
- }
- 
- static struct v4l2_rect *
--__mt9t001_get_pad_crop(struct mt9t001 *mt9t001, struct v4l2_subdev_pad_config *cfg,
-+__mt9t001_get_pad_crop(struct mt9t001 *mt9t001,
-+		       struct v4l2_subdev_state *sd_state,
- 		       unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&mt9t001->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&mt9t001->subdev, sd_state,
-+						pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9t001->crop;
- 	default:
-@@ -335,7 +339,7 @@ static int mt9t001_s_stream(struct v4l2_subdev *subdev, int enable)
- }
- 
- static int mt9t001_enum_mbus_code(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -346,7 +350,7 @@ static int mt9t001_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int mt9t001_enum_frame_size(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= 8 || fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-@@ -361,18 +365,19 @@ static int mt9t001_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int mt9t001_get_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9t001 *mt9t001 = to_mt9t001(subdev);
- 
--	format->format = *__mt9t001_get_pad_format(mt9t001, cfg, format->pad,
-+	format->format = *__mt9t001_get_pad_format(mt9t001, sd_state,
-+						   format->pad,
- 						   format->which);
- 	return 0;
- }
- 
- static int mt9t001_set_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9t001 *mt9t001 = to_mt9t001(subdev);
-@@ -383,7 +388,7 @@ static int mt9t001_set_format(struct v4l2_subdev *subdev,
- 	unsigned int hratio;
- 	unsigned int vratio;
- 
--	__crop = __mt9t001_get_pad_crop(mt9t001, cfg, format->pad,
-+	__crop = __mt9t001_get_pad_crop(mt9t001, sd_state, format->pad,
- 					format->which);
- 
- 	/* Clamp the width and height to avoid dividing by zero. */
-@@ -399,7 +404,7 @@ static int mt9t001_set_format(struct v4l2_subdev *subdev,
- 	hratio = DIV_ROUND_CLOSEST(__crop->width, width);
- 	vratio = DIV_ROUND_CLOSEST(__crop->height, height);
- 
--	__format = __mt9t001_get_pad_format(mt9t001, cfg, format->pad,
-+	__format = __mt9t001_get_pad_format(mt9t001, sd_state, format->pad,
- 					    format->which);
- 	__format->width = __crop->width / hratio;
- 	__format->height = __crop->height / vratio;
-@@ -410,7 +415,7 @@ static int mt9t001_set_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9t001_get_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9t001 *mt9t001 = to_mt9t001(subdev);
-@@ -418,12 +423,13 @@ static int mt9t001_get_selection(struct v4l2_subdev *subdev,
- 	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
--	sel->r = *__mt9t001_get_pad_crop(mt9t001, cfg, sel->pad, sel->which);
-+	sel->r = *__mt9t001_get_pad_crop(mt9t001, sd_state, sel->pad,
-+					 sel->which);
- 	return 0;
- }
- 
- static int mt9t001_set_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9t001 *mt9t001 = to_mt9t001(subdev);
-@@ -455,13 +461,15 @@ static int mt9t001_set_selection(struct v4l2_subdev *subdev,
- 	rect.height = min_t(unsigned int, rect.height,
- 			    MT9T001_PIXEL_ARRAY_HEIGHT - rect.top);
- 
--	__crop = __mt9t001_get_pad_crop(mt9t001, cfg, sel->pad, sel->which);
-+	__crop = __mt9t001_get_pad_crop(mt9t001, sd_state, sel->pad,
-+					sel->which);
- 
- 	if (rect.width != __crop->width || rect.height != __crop->height) {
- 		/* Reset the output image size if the crop rectangle size has
- 		 * been modified.
- 		 */
--		__format = __mt9t001_get_pad_format(mt9t001, cfg, sel->pad,
-+		__format = __mt9t001_get_pad_format(mt9t001, sd_state,
-+						    sel->pad,
- 						    sel->which);
- 		__format->width = rect.width;
- 		__format->height = rect.height;
-@@ -798,13 +806,13 @@ static int mt9t001_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
- 	struct v4l2_mbus_framefmt *format;
- 	struct v4l2_rect *crop;
- 
--	crop = v4l2_subdev_get_try_crop(subdev, fh->pad, 0);
-+	crop = v4l2_subdev_get_try_crop(subdev, fh->state, 0);
- 	crop->left = MT9T001_COLUMN_START_DEF;
- 	crop->top = MT9T001_ROW_START_DEF;
- 	crop->width = MT9T001_WINDOW_WIDTH_DEF + 1;
- 	crop->height = MT9T001_WINDOW_HEIGHT_DEF + 1;
- 
--	format = v4l2_subdev_get_try_format(subdev, fh->pad, 0);
-+	format = v4l2_subdev_get_try_format(subdev, fh->state, 0);
- 	format->code = MEDIA_BUS_FMT_SGRBG10_1X10;
- 	format->width = MT9T001_WINDOW_WIDTH_DEF + 1;
- 	format->height = MT9T001_WINDOW_HEIGHT_DEF + 1;
-diff --git a/drivers/media/i2c/mt9t112.c b/drivers/media/i2c/mt9t112.c
-index ae3c336eadf5..8d2e3caa9b28 100644
---- a/drivers/media/i2c/mt9t112.c
-+++ b/drivers/media/i2c/mt9t112.c
-@@ -872,8 +872,8 @@ static int mt9t112_set_params(struct mt9t112_priv *priv,
- }
- 
- static int mt9t112_get_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
--		struct v4l2_subdev_selection *sel)
-+				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
- 	struct mt9t112_priv *priv = to_mt9t112(client);
-@@ -897,7 +897,7 @@ static int mt9t112_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9t112_set_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -912,7 +912,7 @@ static int mt9t112_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int mt9t112_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -953,7 +953,7 @@ static int mt9t112_s_fmt(struct v4l2_subdev *sd,
- }
- 
- static int mt9t112_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -982,13 +982,13 @@ static int mt9t112_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return mt9t112_s_fmt(sd, mf);
--	cfg->try_fmt = *mf;
-+	sd_state->pads->try_fmt = *mf;
- 
- 	return 0;
- }
- 
- static int mt9t112_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-diff --git a/drivers/media/i2c/mt9v011.c b/drivers/media/i2c/mt9v011.c
-index 46ef74a2ca36..7699e64e1127 100644
---- a/drivers/media/i2c/mt9v011.c
-+++ b/drivers/media/i2c/mt9v011.c
-@@ -327,7 +327,7 @@ static int mt9v011_reset(struct v4l2_subdev *sd, u32 val)
- }
- 
- static int mt9v011_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -338,7 +338,7 @@ static int mt9v011_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int mt9v011_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-@@ -358,7 +358,7 @@ static int mt9v011_set_fmt(struct v4l2_subdev *sd,
- 
- 		set_res(sd);
- 	} else {
--		cfg->try_fmt = *fmt;
-+		sd_state->pads->try_fmt = *fmt;
- 	}
- 
- 	return 0;
-diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
-index 5bd3ae82992f..4cfdd3dfbd42 100644
---- a/drivers/media/i2c/mt9v032.c
-+++ b/drivers/media/i2c/mt9v032.c
-@@ -349,12 +349,14 @@ static int __mt9v032_set_power(struct mt9v032 *mt9v032, bool on)
-  */
- 
- static struct v4l2_mbus_framefmt *
--__mt9v032_get_pad_format(struct mt9v032 *mt9v032, struct v4l2_subdev_pad_config *cfg,
-+__mt9v032_get_pad_format(struct mt9v032 *mt9v032,
-+			 struct v4l2_subdev_state *sd_state,
- 			 unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&mt9v032->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_format(&mt9v032->subdev, sd_state,
-+						  pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9v032->format;
- 	default:
-@@ -363,12 +365,14 @@ __mt9v032_get_pad_format(struct mt9v032 *mt9v032, struct v4l2_subdev_pad_config
- }
- 
- static struct v4l2_rect *
--__mt9v032_get_pad_crop(struct mt9v032 *mt9v032, struct v4l2_subdev_pad_config *cfg,
-+__mt9v032_get_pad_crop(struct mt9v032 *mt9v032,
-+		       struct v4l2_subdev_state *sd_state,
- 		       unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&mt9v032->subdev, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&mt9v032->subdev, sd_state,
-+						pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &mt9v032->crop;
- 	default:
-@@ -425,7 +429,7 @@ static int mt9v032_s_stream(struct v4l2_subdev *subdev, int enable)
- }
- 
- static int mt9v032_enum_mbus_code(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
-@@ -438,7 +442,7 @@ static int mt9v032_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v032_enum_frame_size(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
-@@ -457,12 +461,13 @@ static int mt9v032_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v032_get_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
- 
--	format->format = *__mt9v032_get_pad_format(mt9v032, cfg, format->pad,
-+	format->format = *__mt9v032_get_pad_format(mt9v032, sd_state,
-+						   format->pad,
- 						   format->which);
- 	return 0;
- }
-@@ -492,7 +497,7 @@ static unsigned int mt9v032_calc_ratio(unsigned int input, unsigned int output)
- }
- 
- static int mt9v032_set_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
-@@ -503,7 +508,7 @@ static int mt9v032_set_format(struct v4l2_subdev *subdev,
- 	unsigned int hratio;
- 	unsigned int vratio;
- 
--	__crop = __mt9v032_get_pad_crop(mt9v032, cfg, format->pad,
-+	__crop = __mt9v032_get_pad_crop(mt9v032, sd_state, format->pad,
- 					format->which);
- 
- 	/* Clamp the width and height to avoid dividing by zero. */
-@@ -519,7 +524,7 @@ static int mt9v032_set_format(struct v4l2_subdev *subdev,
- 	hratio = mt9v032_calc_ratio(__crop->width, width);
- 	vratio = mt9v032_calc_ratio(__crop->height, height);
- 
--	__format = __mt9v032_get_pad_format(mt9v032, cfg, format->pad,
-+	__format = __mt9v032_get_pad_format(mt9v032, sd_state, format->pad,
- 					    format->which);
- 	__format->width = __crop->width / hratio;
- 	__format->height = __crop->height / vratio;
-@@ -536,7 +541,7 @@ static int mt9v032_set_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v032_get_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
-@@ -544,12 +549,13 @@ static int mt9v032_get_selection(struct v4l2_subdev *subdev,
- 	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
--	sel->r = *__mt9v032_get_pad_crop(mt9v032, cfg, sel->pad, sel->which);
-+	sel->r = *__mt9v032_get_pad_crop(mt9v032, sd_state, sel->pad,
-+					 sel->which);
- 	return 0;
- }
- 
- static int mt9v032_set_selection(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
-@@ -581,13 +587,15 @@ static int mt9v032_set_selection(struct v4l2_subdev *subdev,
- 	rect.height = min_t(unsigned int,
- 			    rect.height, MT9V032_PIXEL_ARRAY_HEIGHT - rect.top);
- 
--	__crop = __mt9v032_get_pad_crop(mt9v032, cfg, sel->pad, sel->which);
-+	__crop = __mt9v032_get_pad_crop(mt9v032, sd_state, sel->pad,
-+					sel->which);
- 
- 	if (rect.width != __crop->width || rect.height != __crop->height) {
- 		/* Reset the output image size if the crop rectangle size has
- 		 * been modified.
- 		 */
--		__format = __mt9v032_get_pad_format(mt9v032, cfg, sel->pad,
-+		__format = __mt9v032_get_pad_format(mt9v032, sd_state,
-+						    sel->pad,
- 						    sel->which);
- 		__format->width = rect.width;
- 		__format->height = rect.height;
-@@ -922,13 +930,13 @@ static int mt9v032_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
- 	struct v4l2_mbus_framefmt *format;
- 	struct v4l2_rect *crop;
- 
--	crop = v4l2_subdev_get_try_crop(subdev, fh->pad, 0);
-+	crop = v4l2_subdev_get_try_crop(subdev, fh->state, 0);
- 	crop->left = MT9V032_COLUMN_START_DEF;
- 	crop->top = MT9V032_ROW_START_DEF;
- 	crop->width = MT9V032_WINDOW_WIDTH_DEF;
- 	crop->height = MT9V032_WINDOW_HEIGHT_DEF;
- 
--	format = v4l2_subdev_get_try_format(subdev, fh->pad, 0);
-+	format = v4l2_subdev_get_try_format(subdev, fh->state, 0);
- 
- 	if (mt9v032->model->color)
- 		format->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
-index 97c7527b74ed..b438f8c077d5 100644
---- a/drivers/media/i2c/mt9v111.c
-+++ b/drivers/media/i2c/mt9v111.c
-@@ -791,14 +791,14 @@ static int mt9v111_g_frame_interval(struct v4l2_subdev *sd,
- 
- static struct v4l2_mbus_framefmt *__mt9v111_get_pad_format(
- 					struct mt9v111_dev *mt9v111,
--					struct v4l2_subdev_pad_config *cfg,
-+					struct v4l2_subdev_state *sd_state,
- 					unsigned int pad,
- 					enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
- #if IS_ENABLED(CONFIG_VIDEO_V4L2_SUBDEV_API)
--		return v4l2_subdev_get_try_format(&mt9v111->sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(&mt9v111->sd, sd_state, pad);
- #else
- 		return &cfg->try_fmt;
- #endif
-@@ -810,7 +810,7 @@ static struct v4l2_mbus_framefmt *__mt9v111_get_pad_format(
- }
- 
- static int mt9v111_enum_mbus_code(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > ARRAY_SIZE(mt9v111_formats) - 1)
-@@ -822,7 +822,7 @@ static int mt9v111_enum_mbus_code(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v111_enum_frame_interval(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	unsigned int i;
-@@ -845,7 +845,7 @@ static int mt9v111_enum_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int mt9v111_enum_frame_size(struct v4l2_subdev *subdev,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->pad || fse->index >= ARRAY_SIZE(mt9v111_frame_sizes))
-@@ -860,7 +860,7 @@ static int mt9v111_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v111_get_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9v111_dev *mt9v111 = sd_to_mt9v111(subdev);
-@@ -869,7 +869,8 @@ static int mt9v111_get_format(struct v4l2_subdev *subdev,
- 		return -EINVAL;
- 
- 	mutex_lock(&mt9v111->stream_mutex);
--	format->format = *__mt9v111_get_pad_format(mt9v111, cfg, format->pad,
-+	format->format = *__mt9v111_get_pad_format(mt9v111, sd_state,
-+						   format->pad,
- 						   format->which);
- 	mutex_unlock(&mt9v111->stream_mutex);
- 
-@@ -877,7 +878,7 @@ static int mt9v111_get_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v111_set_format(struct v4l2_subdev *subdev,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct mt9v111_dev *mt9v111 = sd_to_mt9v111(subdev);
-@@ -925,7 +926,7 @@ static int mt9v111_set_format(struct v4l2_subdev *subdev,
- 	new_fmt.height = mt9v111_frame_sizes[idx].height;
- 
- 	/* Update the device (or pad) format if it has changed. */
--	__fmt = __mt9v111_get_pad_format(mt9v111, cfg, format->pad,
-+	__fmt = __mt9v111_get_pad_format(mt9v111, sd_state, format->pad,
- 					 format->which);
- 
- 	/* Format hasn't changed, stop here. */
-@@ -954,9 +955,9 @@ static int mt9v111_set_format(struct v4l2_subdev *subdev,
- }
- 
- static int mt9v111_init_cfg(struct v4l2_subdev *subdev,
--			    struct v4l2_subdev_pad_config *cfg)
-+			    struct v4l2_subdev_state *sd_state)
- {
--	cfg->try_fmt = mt9v111_def_fmt;
-+	sd_state->pads->try_fmt = mt9v111_def_fmt;
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/noon010pc30.c b/drivers/media/i2c/noon010pc30.c
-index 87d76a7f691a..f3ac379ef34a 100644
---- a/drivers/media/i2c/noon010pc30.c
-+++ b/drivers/media/i2c/noon010pc30.c
-@@ -488,7 +488,7 @@ static int noon010_s_ctrl(struct v4l2_ctrl *ctrl)
- }
- 
- static int noon010_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(noon010_formats))
-@@ -499,15 +499,15 @@ static int noon010_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int noon010_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct noon010_info *info = to_noon010(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (cfg) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		if (sd_state) {
-+			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 			fmt->format = *mf;
- 		}
- 		return 0;
-@@ -539,7 +539,8 @@ static const struct noon010_format *noon010_try_fmt(struct v4l2_subdev *sd,
- 	return &noon010_formats[i];
- }
- 
--static int noon010_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int noon010_set_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct noon010_info *info = to_noon010(sd);
-@@ -554,8 +555,8 @@ static int noon010_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	fmt->format.field = V4L2_FIELD_NONE;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (cfg) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		if (sd_state) {
-+			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 			*mf = fmt->format;
- 		}
- 		return 0;
-@@ -637,7 +638,9 @@ static int noon010_log_status(struct v4l2_subdev *sd)
- 
- static int noon010_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	struct v4l2_mbus_framefmt *mf = v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+	struct v4l2_mbus_framefmt *mf = v4l2_subdev_get_try_format(sd,
-+								   fh->state,
-+								   0);
- 
- 	mf->width = noon010_sizes[0].width;
- 	mf->height = noon010_sizes[0].height;
-diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-index a1d7314b20a9..a3ce5500d355 100644
---- a/drivers/media/i2c/ov02a10.c
-+++ b/drivers/media/i2c/ov02a10.c
-@@ -295,7 +295,7 @@ static void ov02a10_fill_fmt(const struct ov02a10_mode *mode,
- }
- 
- static int ov02a10_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct ov02a10 *ov02a10 = to_ov02a10(sd);
-@@ -315,7 +315,7 @@ static int ov02a10_set_fmt(struct v4l2_subdev *sd,
- 	ov02a10_fill_fmt(ov02a10->cur_mode, mbus_fmt);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		frame_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		frame_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	else
- 		frame_fmt = &ov02a10->fmt;
- 
-@@ -327,7 +327,7 @@ static int ov02a10_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov02a10_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct ov02a10 *ov02a10 = to_ov02a10(sd);
-@@ -336,7 +336,8 @@ static int ov02a10_get_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&ov02a10->mutex);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		fmt->format = *v4l2_subdev_get_try_format(sd, sd_state,
-+							  fmt->pad);
- 	} else {
- 		fmt->format = ov02a10->fmt;
- 		mbus_fmt->code = ov02a10->fmt.code;
-@@ -349,7 +350,7 @@ static int ov02a10_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov02a10_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct ov02a10 *ov02a10 = to_ov02a10(sd);
-@@ -363,7 +364,7 @@ static int ov02a10_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov02a10_enum_frame_sizes(struct v4l2_subdev *sd,
--				    struct v4l2_subdev_pad_config *cfg,
-+				    struct v4l2_subdev_state *sd_state,
- 				    struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -511,7 +512,7 @@ static int __ov02a10_stop_stream(struct ov02a10 *ov02a10)
- }
- 
- static int ov02a10_entity_init_cfg(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg)
-+				   struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_subdev_format fmt = {
- 		.which = V4L2_SUBDEV_FORMAT_TRY,
-@@ -521,7 +522,7 @@ static int ov02a10_entity_init_cfg(struct v4l2_subdev *sd,
- 		}
- 	};
- 
--	ov02a10_set_fmt(sd, cfg, &fmt);
-+	ov02a10_set_fmt(sd, sd_state, &fmt);
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
-index 9598c0b19603..7fc70af53e45 100644
---- a/drivers/media/i2c/ov13858.c
-+++ b/drivers/media/i2c/ov13858.c
-@@ -1150,7 +1150,7 @@ static int ov13858_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct ov13858 *ov13858 = to_ov13858(sd);
- 	struct v4l2_mbus_framefmt *try_fmt = v4l2_subdev_get_try_format(sd,
--									fh->pad,
-+									fh->state,
- 									0);
- 
- 	mutex_lock(&ov13858->mutex);
-@@ -1275,7 +1275,7 @@ static const struct v4l2_ctrl_ops ov13858_ctrl_ops = {
- };
- 
- static int ov13858_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	/* Only one bayer order(GRBG) is supported */
-@@ -1288,7 +1288,7 @@ static int ov13858_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov13858_enum_frame_size(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -1315,14 +1315,14 @@ static void ov13858_update_pad_format(const struct ov13858_mode *mode,
- }
- 
- static int ov13858_do_get_pad_format(struct ov13858 *ov13858,
--				     struct v4l2_subdev_pad_config *cfg,
-+				     struct v4l2_subdev_state *sd_state,
- 				     struct v4l2_subdev_format *fmt)
- {
- 	struct v4l2_mbus_framefmt *framefmt;
- 	struct v4l2_subdev *sd = &ov13858->sd;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		fmt->format = *framefmt;
- 	} else {
- 		ov13858_update_pad_format(ov13858->cur_mode, fmt);
-@@ -1332,14 +1332,14 @@ static int ov13858_do_get_pad_format(struct ov13858 *ov13858,
- }
- 
- static int ov13858_get_pad_format(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *fmt)
- {
- 	struct ov13858 *ov13858 = to_ov13858(sd);
- 	int ret;
- 
- 	mutex_lock(&ov13858->mutex);
--	ret = ov13858_do_get_pad_format(ov13858, cfg, fmt);
-+	ret = ov13858_do_get_pad_format(ov13858, sd_state, fmt);
- 	mutex_unlock(&ov13858->mutex);
- 
- 	return ret;
-@@ -1347,7 +1347,7 @@ static int ov13858_get_pad_format(struct v4l2_subdev *sd,
- 
- static int
- ov13858_set_pad_format(struct v4l2_subdev *sd,
--		       struct v4l2_subdev_pad_config *cfg,
-+		       struct v4l2_subdev_state *sd_state,
- 		       struct v4l2_subdev_format *fmt)
- {
- 	struct ov13858 *ov13858 = to_ov13858(sd);
-@@ -1371,7 +1371,7 @@ ov13858_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	ov13858_update_pad_format(mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
- 	} else {
- 		ov13858->cur_mode = mode;
-diff --git a/drivers/media/i2c/ov2640.c b/drivers/media/i2c/ov2640.c
-index 4a4bd5b665a1..4b75da55b260 100644
---- a/drivers/media/i2c/ov2640.c
-+++ b/drivers/media/i2c/ov2640.c
-@@ -913,7 +913,7 @@ static int ov2640_set_params(struct i2c_client *client,
- }
- 
- static int ov2640_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -925,7 +925,7 @@ static int ov2640_get_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *mf;
- 		return 0;
- #else
-@@ -946,7 +946,7 @@ static int ov2640_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2640_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -996,7 +996,7 @@ static int ov2640_set_fmt(struct v4l2_subdev *sd,
- 		/* select format */
- 		priv->cfmt_code = mf->code;
- 	} else {
--		cfg->try_fmt = *mf;
-+		sd_state->pads->try_fmt = *mf;
- 	}
- out:
- 	mutex_unlock(&priv->lock);
-@@ -1005,11 +1005,11 @@ static int ov2640_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2640_init_cfg(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg)
-+			   struct v4l2_subdev_state *sd_state)
- {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
- 	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, cfg, 0);
-+		v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	const struct ov2640_win_size *win =
- 		ov2640_select_win(SVGA_WIDTH, SVGA_HEIGHT);
- 
-@@ -1026,7 +1026,7 @@ static int ov2640_init_cfg(struct v4l2_subdev *sd,
- }
- 
- static int ov2640_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(ov2640_codes))
-@@ -1037,7 +1037,7 @@ static int ov2640_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov2640_get_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index befef14aa86b..13ded5b2aa66 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -980,7 +980,7 @@ static int ov2659_init(struct v4l2_subdev *sd, u32 val)
-  */
- 
- static int ov2659_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -996,7 +996,7 @@ static int ov2659_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov2659_enum_frame_sizes(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -1022,7 +1022,7 @@ static int ov2659_enum_frame_sizes(struct v4l2_subdev *sd,
- }
- 
- static int ov2659_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -1034,7 +1034,7 @@ static int ov2659_get_fmt(struct v4l2_subdev *sd,
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
- 		struct v4l2_mbus_framefmt *mf;
- 
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		mutex_lock(&ov2659->lock);
- 		fmt->format = *mf;
- 		mutex_unlock(&ov2659->lock);
-@@ -1084,7 +1084,7 @@ static void __ov2659_try_frame_size(struct v4l2_mbus_framefmt *mf,
- }
- 
- static int ov2659_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -1114,7 +1114,7 @@ static int ov2659_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*mf = fmt->format;
- #endif
- 	} else {
-@@ -1311,7 +1311,7 @@ static int ov2659_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
- 	struct v4l2_mbus_framefmt *format =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	dev_dbg(&client->dev, "%s:\n", __func__);
- 
-diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-index 178dfe985a25..906c711f6821 100644
---- a/drivers/media/i2c/ov2680.c
-+++ b/drivers/media/i2c/ov2680.c
-@@ -645,7 +645,7 @@ static int ov2680_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int ov2680_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-@@ -659,7 +659,7 @@ static int ov2680_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov2680_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-@@ -673,7 +673,8 @@ static int ov2680_get_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		fmt = v4l2_subdev_get_try_format(&sensor->sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(&sensor->sd, sd_state,
-+						 format->pad);
- #else
- 		ret = -EINVAL;
- #endif
-@@ -690,7 +691,7 @@ static int ov2680_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2680_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
-@@ -721,7 +722,7 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		try_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		try_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *try_fmt;
- #endif
- 		goto unlock;
-@@ -743,22 +744,22 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2680_init_cfg(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg)
-+			   struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_subdev_format fmt = {
--		.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
--				: V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
-+		: V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.format = {
- 			.width = 800,
- 			.height = 600,
- 		}
- 	};
- 
--	return ov2680_set_fmt(sd, cfg, &fmt);
-+	return ov2680_set_fmt(sd, sd_state, &fmt);
- }
- 
- static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	int index = fse->index;
-@@ -775,7 +776,7 @@ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static int ov2680_enum_frame_interval(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct v4l2_fract tpf;
-diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index 2f3836dd8eed..b6e010ea3249 100644
---- a/drivers/media/i2c/ov2685.c
-+++ b/drivers/media/i2c/ov2685.c
-@@ -328,7 +328,7 @@ static void ov2685_fill_fmt(const struct ov2685_mode *mode,
- }
- 
- static int ov2685_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ov2685 *ov2685 = to_ov2685(sd);
-@@ -341,7 +341,7 @@ static int ov2685_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2685_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ov2685 *ov2685 = to_ov2685(sd);
-@@ -353,7 +353,7 @@ static int ov2685_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov2685_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(supported_modes))
-@@ -365,7 +365,7 @@ static int ov2685_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov2685_enum_frame_sizes(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	int index = fse->index;
-@@ -493,7 +493,7 @@ static int ov2685_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&ov2685->mutex);
- 
--	try_fmt = v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+	try_fmt = v4l2_subdev_get_try_format(sd, fh->state, 0);
- 	/* Initialize try_fmt */
- 	ov2685_fill_fmt(&supported_modes[0], try_fmt);
- 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 54779f720f9d..599369a3d192 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -810,7 +810,7 @@ static int __maybe_unused ov2740_resume(struct device *dev)
- }
- 
- static int ov2740_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov2740 *ov2740 = to_ov2740(sd);
-@@ -825,7 +825,7 @@ static int ov2740_set_format(struct v4l2_subdev *sd,
- 	mutex_lock(&ov2740->mutex);
- 	ov2740_update_pad_format(mode, &fmt->format);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		ov2740->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(ov2740->link_freq, mode->link_freq_index);
-@@ -850,14 +850,15 @@ static int ov2740_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov2740_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov2740 *ov2740 = to_ov2740(sd);
- 
- 	mutex_lock(&ov2740->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&ov2740->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&ov2740->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		ov2740_update_pad_format(ov2740->cur_mode, &fmt->format);
-@@ -868,7 +869,7 @@ static int ov2740_get_format(struct v4l2_subdev *sd,
- }
- 
- static int ov2740_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -880,7 +881,7 @@ static int ov2740_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov2740_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -903,7 +904,7 @@ static int ov2740_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&ov2740->mutex);
- 	ov2740_update_pad_format(&supported_modes[0],
--				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
-+				 v4l2_subdev_get_try_format(sd, fh->state, 0));
- 	mutex_unlock(&ov2740->mutex);
- 
- 	return 0;
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 5b9cc71df473..f6e1e51e0375 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -2227,7 +2227,7 @@ static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
- }
- 
- static int ov5640_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-@@ -2239,7 +2239,7 @@ static int ov5640_get_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&sensor->lock);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt = v4l2_subdev_get_try_format(&sensor->sd, cfg,
-+		fmt = v4l2_subdev_get_try_format(&sensor->sd, sd_state,
- 						 format->pad);
- 	else
- 		fmt = &sensor->fmt;
-@@ -2285,7 +2285,7 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
- }
- 
- static int ov5640_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-@@ -2310,7 +2310,7 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
- 		goto out;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	else
- 		fmt = &sensor->fmt;
- 
-@@ -2818,7 +2818,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
- }
- 
- static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->pad != 0)
-@@ -2838,7 +2838,7 @@ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
- 
- static int ov5640_enum_frame_interval(
- 	struct v4l2_subdev *sd,
--	struct v4l2_subdev_pad_config *cfg,
-+	struct v4l2_subdev_state *sd_state,
- 	struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-@@ -2924,7 +2924,7 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int ov5640_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad != 0)
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index a6c17d15d754..368fa21e675e 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -837,7 +837,7 @@ static const struct v4l2_ctrl_ops ov5645_ctrl_ops = {
- };
- 
- static int ov5645_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -849,7 +849,7 @@ static int ov5645_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov5645_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->code != MEDIA_BUS_FMT_UYVY8_2X8)
-@@ -868,13 +868,13 @@ static int ov5645_enum_frame_size(struct v4l2_subdev *subdev,
- 
- static struct v4l2_mbus_framefmt *
- __ov5645_get_pad_format(struct ov5645 *ov5645,
+ int xvip_enum_mbus_code(struct v4l2_subdev *subdev,
 -			struct v4l2_subdev_pad_config *cfg,
 +			struct v4l2_subdev_state *sd_state,
- 			unsigned int pad,
- 			enum v4l2_subdev_format_whence which)
+ 			struct v4l2_subdev_mbus_code_enum *code)
  {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&ov5645->sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(&ov5645->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &ov5645->fmt;
- 	default:
-@@ -883,23 +883,25 @@ __ov5645_get_pad_format(struct ov5645 *ov5645,
- }
- 
- static int ov5645_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct ov5645 *ov5645 = to_ov5645(sd);
- 
--	format->format = *__ov5645_get_pad_format(ov5645, cfg, format->pad,
-+	format->format = *__ov5645_get_pad_format(ov5645, sd_state,
-+						  format->pad,
- 						  format->which);
- 	return 0;
- }
- 
- static struct v4l2_rect *
--__ov5645_get_pad_crop(struct ov5645 *ov5645, struct v4l2_subdev_pad_config *cfg,
-+__ov5645_get_pad_crop(struct ov5645 *ov5645,
-+		      struct v4l2_subdev_state *sd_state,
- 		      unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&ov5645->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&ov5645->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &ov5645->crop;
- 	default:
-@@ -908,7 +910,7 @@ __ov5645_get_pad_crop(struct ov5645 *ov5645, struct v4l2_subdev_pad_config *cfg,
- }
- 
- static int ov5645_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct ov5645 *ov5645 = to_ov5645(sd);
-@@ -917,8 +919,8 @@ static int ov5645_set_format(struct v4l2_subdev *sd,
- 	const struct ov5645_mode_info *new_mode;
- 	int ret;
- 
--	__crop = __ov5645_get_pad_crop(ov5645, cfg, format->pad,
--			format->which);
-+	__crop = __ov5645_get_pad_crop(ov5645, sd_state, format->pad,
-+				       format->which);
- 
- 	new_mode = v4l2_find_nearest_size(ov5645_mode_info_data,
- 			       ARRAY_SIZE(ov5645_mode_info_data),
-@@ -942,8 +944,8 @@ static int ov5645_set_format(struct v4l2_subdev *sd,
- 		ov5645->current_mode = new_mode;
- 	}
- 
--	__format = __ov5645_get_pad_format(ov5645, cfg, format->pad,
--			format->which);
-+	__format = __ov5645_get_pad_format(ov5645, sd_state, format->pad,
-+					   format->which);
- 	__format->width = __crop->width;
- 	__format->height = __crop->height;
- 	__format->code = MEDIA_BUS_FMT_UYVY8_2X8;
-@@ -956,21 +958,21 @@ static int ov5645_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov5645_entity_init_cfg(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg)
-+				  struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_subdev_format fmt = { 0 };
- 
--	fmt.which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
- 	fmt.format.width = 1920;
- 	fmt.format.height = 1080;
- 
--	ov5645_set_format(subdev, cfg, &fmt);
-+	ov5645_set_format(subdev, sd_state, &fmt);
- 
- 	return 0;
- }
- 
- static int ov5645_get_selection(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_selection *sel)
- {
- 	struct ov5645 *ov5645 = to_ov5645(sd);
-@@ -978,7 +980,7 @@ static int ov5645_get_selection(struct v4l2_subdev *sd,
- 	if (sel->target != V4L2_SEL_TGT_CROP)
+ 	struct v4l2_mbus_framefmt *format;
+@@ -260,7 +260,7 @@ int xvip_enum_mbus_code(struct v4l2_subdev *subdev,
+ 	if (code->index)
  		return -EINVAL;
  
--	sel->r = *__ov5645_get_pad_crop(ov5645, cfg, sel->pad,
-+	sel->r = *__ov5645_get_pad_crop(ov5645, sd_state, sel->pad,
- 					sel->which);
- 	return 0;
- }
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 38faa74755e3..d346d18ce629 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -856,12 +856,13 @@ static const struct v4l2_subdev_core_ops ov5647_subdev_core_ops = {
- };
- 
- static const struct v4l2_rect *
--__ov5647_get_pad_crop(struct ov5647 *ov5647, struct v4l2_subdev_pad_config *cfg,
-+__ov5647_get_pad_crop(struct ov5647 *ov5647,
-+		      struct v4l2_subdev_state *sd_state,
- 		      unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&ov5647->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&ov5647->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &ov5647->mode->crop;
- 	}
-@@ -918,7 +919,7 @@ static const struct v4l2_subdev_video_ops ov5647_subdev_video_ops = {
- };
- 
- static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -930,7 +931,7 @@ static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov5647_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	const struct v4l2_mbus_framefmt *fmt;
-@@ -949,7 +950,7 @@ static int ov5647_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-@@ -959,7 +960,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&sensor->lock);
- 	switch (format->which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		sensor_format = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		sensor_format = v4l2_subdev_get_try_format(sd, sd_state,
-+							   format->pad);
- 		break;
- 	default:
- 		sensor_format = &sensor->mode->format;
-@@ -973,7 +975,7 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-@@ -987,7 +989,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- 	/* Update the sensor mode and apply at it at streamon time. */
- 	mutex_lock(&sensor->lock);
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, format->pad) = mode->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, format->pad) = mode->format;
- 	} else {
- 		int exposure_max, exposure_def;
- 		int hblank, vblank;
-@@ -1020,7 +1022,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov5647_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	switch (sel->target) {
-@@ -1028,7 +1030,7 @@ static int ov5647_get_selection(struct v4l2_subdev *sd,
- 		struct ov5647 *sensor = to_sensor(sd);
- 
- 		mutex_lock(&sensor->lock);
--		sel->r = *__ov5647_get_pad_crop(sensor, cfg, sel->pad,
-+		sel->r = *__ov5647_get_pad_crop(sensor, sd_state, sel->pad,
- 						sel->which);
- 		mutex_unlock(&sensor->lock);
- 
-@@ -1104,8 +1106,8 @@ static int ov5647_detect(struct v4l2_subdev *sd)
- static int ov5647_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *format =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
--	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
-+	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
- 
- 	crop->left = OV5647_PIXEL_ARRAY_LEFT;
- 	crop->top = OV5647_PIXEL_ARRAY_TOP;
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index 07e64ff0be3f..947d437ed0ef 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2188,7 +2188,7 @@ static const struct v4l2_subdev_video_ops ov5648_subdev_video_ops = {
- /* Subdev Pad Operations */
- 
- static int ov5648_enum_mbus_code(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *config,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code_enum)
- {
- 	if (code_enum->index >= ARRAY_SIZE(ov5648_mbus_codes))
-@@ -2217,7 +2217,7 @@ static void ov5648_mbus_format_fill(struct v4l2_mbus_framefmt *mbus_format,
- }
- 
- static int ov5648_get_fmt(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *config,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov5648_sensor *sensor = ov5648_subdev_sensor(subdev);
-@@ -2226,7 +2226,7 @@ static int ov5648_get_fmt(struct v4l2_subdev *subdev,
- 	mutex_lock(&sensor->mutex);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		*mbus_format = *v4l2_subdev_get_try_format(subdev, config,
-+		*mbus_format = *v4l2_subdev_get_try_format(subdev, sd_state,
- 							   format->pad);
- 	else
- 		ov5648_mbus_format_fill(mbus_format, sensor->state.mbus_code,
-@@ -2238,7 +2238,7 @@ static int ov5648_get_fmt(struct v4l2_subdev *subdev,
- }
- 
- static int ov5648_set_fmt(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *config,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov5648_sensor *sensor = ov5648_subdev_sensor(subdev);
-@@ -2279,7 +2279,7 @@ static int ov5648_set_fmt(struct v4l2_subdev *subdev,
- 	ov5648_mbus_format_fill(mbus_format, mbus_code, mode);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		*v4l2_subdev_get_try_format(subdev, config, format->pad) =
-+		*v4l2_subdev_get_try_format(subdev, sd_state, format->pad) =
- 			*mbus_format;
- 	else if (sensor->state.mode != mode ||
- 		 sensor->state.mbus_code != mbus_code)
-@@ -2292,7 +2292,7 @@ static int ov5648_set_fmt(struct v4l2_subdev *subdev,
- }
- 
- static int ov5648_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *config,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *size_enum)
- {
- 	const struct ov5648_mode *mode;
-@@ -2309,7 +2309,7 @@ static int ov5648_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int ov5648_enum_frame_interval(struct v4l2_subdev *subdev,
--				      struct v4l2_subdev_pad_config *config,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_frame_interval_enum *interval_enum)
- {
- 	const struct ov5648_mode *mode = NULL;
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 182f271f118f..49189926afd6 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -1937,7 +1937,7 @@ static int ov5670_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct ov5670 *ov5670 = to_ov5670(sd);
- 	struct v4l2_mbus_framefmt *try_fmt =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	mutex_lock(&ov5670->mutex);
- 
-@@ -2153,7 +2153,7 @@ static int ov5670_init_controls(struct ov5670 *ov5670)
- }
- 
- static int ov5670_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	/* Only one bayer order GRBG is supported */
-@@ -2166,7 +2166,7 @@ static int ov5670_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov5670_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -2193,11 +2193,12 @@ static void ov5670_update_pad_format(const struct ov5670_mode *mode,
- }
- 
- static int ov5670_do_get_pad_format(struct ov5670 *ov5670,
--				    struct v4l2_subdev_pad_config *cfg,
-+				    struct v4l2_subdev_state *sd_state,
- 				    struct v4l2_subdev_format *fmt)
- {
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&ov5670->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&ov5670->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		ov5670_update_pad_format(ov5670->cur_mode, fmt);
-@@ -2206,21 +2207,21 @@ static int ov5670_do_get_pad_format(struct ov5670 *ov5670,
- }
- 
- static int ov5670_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct ov5670 *ov5670 = to_ov5670(sd);
- 	int ret;
- 
- 	mutex_lock(&ov5670->mutex);
--	ret = ov5670_do_get_pad_format(ov5670, cfg, fmt);
-+	ret = ov5670_do_get_pad_format(ov5670, sd_state, fmt);
- 	mutex_unlock(&ov5670->mutex);
- 
- 	return ret;
- }
- 
- static int ov5670_set_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct ov5670 *ov5670 = to_ov5670(sd);
-@@ -2238,7 +2239,7 @@ static int ov5670_set_pad_format(struct v4l2_subdev *sd,
- 				      fmt->format.width, fmt->format.height);
- 	ov5670_update_pad_format(mode, fmt);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		ov5670->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(ov5670->link_freq, mode->link_freq_index);
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index e7e297a23960..da5850b7ad07 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -923,7 +923,7 @@ static int __maybe_unused ov5675_resume(struct device *dev)
- }
- 
- static int ov5675_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov5675 *ov5675 = to_ov5675(sd);
-@@ -938,7 +938,7 @@ static int ov5675_set_format(struct v4l2_subdev *sd,
- 	mutex_lock(&ov5675->mutex);
- 	ov5675_update_pad_format(mode, &fmt->format);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		ov5675->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(ov5675->link_freq, mode->link_freq_index);
-@@ -964,14 +964,15 @@ static int ov5675_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov5675_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov5675 *ov5675 = to_ov5675(sd);
- 
- 	mutex_lock(&ov5675->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&ov5675->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&ov5675->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		ov5675_update_pad_format(ov5675->cur_mode, &fmt->format);
-@@ -982,7 +983,7 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
- }
- 
- static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -994,7 +995,7 @@ static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov5675_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -1017,7 +1018,7 @@ static int ov5675_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&ov5675->mutex);
- 	ov5675_update_pad_format(&supported_modes[0],
--				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
-+				 v4l2_subdev_get_try_format(sd, fh->state, 0));
- 	mutex_unlock(&ov5675->mutex);
- 
- 	return 0;
-diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-index 469d941813c6..439385938a51 100644
---- a/drivers/media/i2c/ov5695.c
-+++ b/drivers/media/i2c/ov5695.c
-@@ -806,7 +806,7 @@ ov5695_find_best_fit(struct v4l2_subdev_format *fmt)
- }
- 
- static int ov5695_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ov5695 *ov5695 = to_ov5695(sd);
-@@ -822,7 +822,7 @@ static int ov5695_set_fmt(struct v4l2_subdev *sd,
- 	fmt->format.field = V4L2_FIELD_NONE;
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- #endif
- 	} else {
- 		ov5695->cur_mode = mode;
-@@ -841,7 +841,7 @@ static int ov5695_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov5695_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ov5695 *ov5695 = to_ov5695(sd);
-@@ -850,7 +850,8 @@ static int ov5695_get_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&ov5695->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		fmt->format = *v4l2_subdev_get_try_format(sd, sd_state,
-+							  fmt->pad);
- #else
- 		mutex_unlock(&ov5695->mutex);
- 		return -EINVAL;
-@@ -867,7 +868,7 @@ static int ov5695_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov5695_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index != 0)
-@@ -878,7 +879,7 @@ static int ov5695_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov5695_enum_frame_sizes(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -1052,7 +1053,7 @@ static int ov5695_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct ov5695 *ov5695 = to_ov5695(sd);
- 	struct v4l2_mbus_framefmt *try_fmt =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
- 	const struct ov5695_mode *def_mode = &supported_modes[0];
- 
- 	mutex_lock(&ov5695->mutex);
-diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 85dd13694bd2..f67412150b16 100644
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -467,7 +467,7 @@ static int ov6650_s_power(struct v4l2_subdev *sd, int on)
- }
- 
- static int ov6650_get_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -492,7 +492,7 @@ static int ov6650_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int ov6650_set_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -535,7 +535,7 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int ov6650_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -550,9 +550,9 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
- 
- 	/* update media bus format code and frame size */
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf->width = cfg->try_fmt.width;
--		mf->height = cfg->try_fmt.height;
--		mf->code = cfg->try_fmt.code;
-+		mf->width = sd_state->pads->try_fmt.width;
-+		mf->height = sd_state->pads->try_fmt.height;
-+		mf->code = sd_state->pads->try_fmt.code;
- 
- 	} else {
- 		mf->width = priv->rect.width >> priv->half_scale;
-@@ -668,7 +668,7 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- }
- 
- static int ov6650_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -701,15 +701,15 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		/* store media bus format code and frame size in pad config */
--		cfg->try_fmt.width = mf->width;
--		cfg->try_fmt.height = mf->height;
--		cfg->try_fmt.code = mf->code;
-+		sd_state->pads->try_fmt.width = mf->width;
-+		sd_state->pads->try_fmt.height = mf->height;
-+		sd_state->pads->try_fmt.code = mf->code;
- 
- 		/* return default mbus frame format updated with pad config */
- 		*mf = ov6650_def_fmt;
--		mf->width = cfg->try_fmt.width;
--		mf->height = cfg->try_fmt.height;
--		mf->code = cfg->try_fmt.code;
-+		mf->width = sd_state->pads->try_fmt.width;
-+		mf->height = sd_state->pads->try_fmt.height;
-+		mf->code = sd_state->pads->try_fmt.code;
- 
- 	} else {
- 		/* apply new media bus format code and frame size */
-@@ -728,7 +728,7 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov6650_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(ov6650_codes))
-diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-index 0c10203f822b..ebb299f207e5 100644
---- a/drivers/media/i2c/ov7251.c
-+++ b/drivers/media/i2c/ov7251.c
-@@ -898,7 +898,7 @@ static const struct v4l2_ctrl_ops ov7251_ctrl_ops = {
- };
- 
- static int ov7251_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -910,7 +910,7 @@ static int ov7251_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov7251_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->code != MEDIA_BUS_FMT_Y10_1X10)
-@@ -928,7 +928,7 @@ static int ov7251_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int ov7251_enum_frame_ival(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	unsigned int index = fie->index;
-@@ -950,13 +950,13 @@ static int ov7251_enum_frame_ival(struct v4l2_subdev *subdev,
- 
- static struct v4l2_mbus_framefmt *
- __ov7251_get_pad_format(struct ov7251 *ov7251,
--			struct v4l2_subdev_pad_config *cfg,
-+			struct v4l2_subdev_state *sd_state,
- 			unsigned int pad,
- 			enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&ov7251->sd, cfg, pad);
-+		return v4l2_subdev_get_try_format(&ov7251->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &ov7251->fmt;
- 	default:
-@@ -965,13 +965,14 @@ __ov7251_get_pad_format(struct ov7251 *ov7251,
- }
- 
- static int ov7251_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct ov7251 *ov7251 = to_ov7251(sd);
- 
- 	mutex_lock(&ov7251->lock);
--	format->format = *__ov7251_get_pad_format(ov7251, cfg, format->pad,
-+	format->format = *__ov7251_get_pad_format(ov7251, sd_state,
-+						  format->pad,
- 						  format->which);
- 	mutex_unlock(&ov7251->lock);
- 
-@@ -979,12 +980,13 @@ static int ov7251_get_format(struct v4l2_subdev *sd,
- }
- 
- static struct v4l2_rect *
--__ov7251_get_pad_crop(struct ov7251 *ov7251, struct v4l2_subdev_pad_config *cfg,
-+__ov7251_get_pad_crop(struct ov7251 *ov7251,
-+		      struct v4l2_subdev_state *sd_state,
- 		      unsigned int pad, enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
- 	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_crop(&ov7251->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&ov7251->sd, sd_state, pad);
- 	case V4L2_SUBDEV_FORMAT_ACTIVE:
- 		return &ov7251->crop;
- 	default:
-@@ -1027,7 +1029,7 @@ ov7251_find_mode_by_ival(struct ov7251 *ov7251, struct v4l2_fract *timeperframe)
- }
- 
- static int ov7251_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *format)
- {
- 	struct ov7251 *ov7251 = to_ov7251(sd);
-@@ -1038,7 +1040,8 @@ static int ov7251_set_format(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&ov7251->lock);
- 
--	__crop = __ov7251_get_pad_crop(ov7251, cfg, format->pad, format->which);
-+	__crop = __ov7251_get_pad_crop(ov7251, sd_state, format->pad,
-+				       format->which);
- 
- 	new_mode = v4l2_find_nearest_size(ov7251_mode_info_data,
- 				ARRAY_SIZE(ov7251_mode_info_data),
-@@ -1077,7 +1080,7 @@ static int ov7251_set_format(struct v4l2_subdev *sd,
- 		ov7251->current_mode = new_mode;
- 	}
- 
--	__format = __ov7251_get_pad_format(ov7251, cfg, format->pad,
-+	__format = __ov7251_get_pad_format(ov7251, sd_state, format->pad,
- 					   format->which);
- 	__format->width = __crop->width;
- 	__format->height = __crop->height;
-@@ -1098,24 +1101,24 @@ static int ov7251_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov7251_entity_init_cfg(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg)
-+				  struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_subdev_format fmt = {
--		.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
--			     : V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
-+		: V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.format = {
- 			.width = 640,
- 			.height = 480
- 		}
- 	};
- 
--	ov7251_set_format(subdev, cfg, &fmt);
-+	ov7251_set_format(subdev, sd_state, &fmt);
- 
- 	return 0;
- }
- 
- static int ov7251_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct ov7251 *ov7251 = to_ov7251(sd);
-@@ -1124,7 +1127,7 @@ static int ov7251_get_selection(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	mutex_lock(&ov7251->lock);
--	sel->r = *__ov7251_get_pad_crop(ov7251, cfg, sel->pad,
-+	sel->r = *__ov7251_get_pad_crop(ov7251, sd_state, sel->pad,
- 					sel->which);
- 	mutex_unlock(&ov7251->lock);
- 
-diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
-index d2df811b1a40..196746423116 100644
---- a/drivers/media/i2c/ov7670.c
-+++ b/drivers/media/i2c/ov7670.c
-@@ -960,7 +960,7 @@ static int ov7670_set_hw(struct v4l2_subdev *sd, int hstart, int hstop,
- 
- 
- static int ov7670_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= N_OV7670_FMTS)
-@@ -1105,7 +1105,7 @@ static int ov7670_apply_fmt(struct v4l2_subdev *sd)
-  * Set a format.
+-	format = v4l2_subdev_get_try_format(subdev, cfg, code->pad);
++	format = v4l2_subdev_get_try_format(subdev, sd_state, code->pad);
+ 
+ 	code->code = format->code;
+ 
+@@ -271,7 +271,7 @@ EXPORT_SYMBOL_GPL(xvip_enum_mbus_code);
+ /**
+  * xvip_enum_frame_size - Enumerate the media bus frame size
+  * @subdev: V4L2 subdevice
+- * @cfg: V4L2 subdev pad configuration
++ * @sd_state: V4L2 subdev state
+  * @fse: returning media bus frame size
+  *
+  * This function is a drop-in implementation of the subdev enum_frame_size pad
+@@ -284,7 +284,7 @@ EXPORT_SYMBOL_GPL(xvip_enum_mbus_code);
+  * if the index or the code is not valid.
   */
- static int ov7670_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct ov7670_info *info = to_state(sd);
-@@ -1122,7 +1122,8 @@ static int ov7670_set_fmt(struct v4l2_subdev *sd,
- 		if (ret)
- 			return ret;
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		mbus_fmt = v4l2_subdev_get_try_format(sd, sd_state,
-+						      format->pad);
- 		*mbus_fmt = format->format;
- #endif
- 		return 0;
-@@ -1144,7 +1145,7 @@ static int ov7670_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov7670_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov7670_info *info = to_state(sd);
-@@ -1154,7 +1155,7 @@ static int ov7670_get_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mbus_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *mbus_fmt;
- 		return 0;
- #else
-@@ -1202,7 +1203,7 @@ static int ov7670_s_frame_interval(struct v4l2_subdev *sd,
- static int ov7670_frame_rates[] = { 30, 15, 10, 5, 1 };
- 
- static int ov7670_enum_frame_interval(struct v4l2_subdev *sd,
--				      struct v4l2_subdev_pad_config *cfg,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct ov7670_info *info = to_state(sd);
-@@ -1241,7 +1242,7 @@ static int ov7670_enum_frame_interval(struct v4l2_subdev *sd,
-  * Frame size enumeration
-  */
- static int ov7670_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct ov7670_info *info = to_state(sd);
-@@ -1724,7 +1725,7 @@ static void ov7670_get_default_format(struct v4l2_subdev *sd,
- static int ov7670_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *format =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	ov7670_get_default_format(sd, format);
- 
-diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index d94cf2d39c2a..78602a2f70b0 100644
---- a/drivers/media/i2c/ov772x.c
-+++ b/drivers/media/i2c/ov772x.c
-@@ -1157,7 +1157,7 @@ static int ov772x_set_params(struct ov772x_priv *priv,
- }
- 
- static int ov772x_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct ov772x_priv *priv = to_ov772x(sd);
-@@ -1179,7 +1179,7 @@ static int ov772x_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int ov772x_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -1198,7 +1198,7 @@ static int ov772x_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov772x_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov772x_priv *priv = to_ov772x(sd);
-@@ -1222,7 +1222,7 @@ static int ov772x_set_fmt(struct v4l2_subdev *sd,
- 	mf->xfer_func = V4L2_XFER_FUNC_DEFAULT;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *mf;
-+		sd_state->pads->try_fmt = *mf;
- 		return 0;
- 	}
- 
-@@ -1320,7 +1320,7 @@ static const struct v4l2_subdev_core_ops ov772x_subdev_core_ops = {
- };
- 
- static int ov772x_enum_frame_interval(struct v4l2_subdev *sd,
--				      struct v4l2_subdev_pad_config *cfg,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	if (fie->pad || fie->index >= ARRAY_SIZE(ov772x_frame_intervals))
-@@ -1338,7 +1338,7 @@ static int ov772x_enum_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int ov772x_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(ov772x_cfmts))
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index e0ff6506a543..2539cfee85c8 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -707,7 +707,7 @@ static const struct ov7740_pixfmt ov7740_formats[] = {
- #define N_OV7740_FMTS ARRAY_SIZE(ov7740_formats)
- 
- static int ov7740_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= N_OV7740_FMTS)
-@@ -719,7 +719,7 @@ static int ov7740_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov7740_enum_frame_interval(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	if (fie->pad)
-@@ -738,7 +738,7 @@ static int ov7740_enum_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int ov7740_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->pad)
-@@ -801,7 +801,7 @@ static int ov7740_try_fmt_internal(struct v4l2_subdev *sd,
- }
- 
- static int ov7740_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov7740 *ov7740 = container_of(sd, struct ov7740, subdev);
-@@ -823,7 +823,8 @@ static int ov7740_set_fmt(struct v4l2_subdev *sd,
- 		if (ret)
- 			goto error;
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		mbus_fmt = v4l2_subdev_get_try_format(sd, sd_state,
-+						      format->pad);
- 		*mbus_fmt = format->format;
- #endif
- 		mutex_unlock(&ov7740->mutex);
-@@ -846,7 +847,7 @@ static int ov7740_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov7740_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov7740 *ov7740 = container_of(sd, struct ov7740, subdev);
-@@ -858,7 +859,7 @@ static int ov7740_get_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&ov7740->mutex);
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
--		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mbus_fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		format->format = *mbus_fmt;
- 		ret = 0;
- #else
-@@ -903,7 +904,7 @@ static int ov7740_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct ov7740 *ov7740 = container_of(sd, struct ov7740, subdev);
- 	struct v4l2_mbus_framefmt *format =
--				v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+				v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	mutex_lock(&ov7740->mutex);
- 	ov7740_get_default_format(sd, format);
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index a6bc665a6430..88e19f30d376 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -2083,7 +2083,7 @@ static int __maybe_unused ov8856_resume(struct device *dev)
- }
- 
- static int ov8856_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov8856 *ov8856 = to_ov8856(sd);
-@@ -2098,7 +2098,7 @@ static int ov8856_set_format(struct v4l2_subdev *sd,
- 	mutex_lock(&ov8856->mutex);
- 	ov8856_update_pad_format(mode, &fmt->format);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		ov8856->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(ov8856->link_freq, mode->link_freq_index);
-@@ -2129,14 +2129,15 @@ static int ov8856_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov8856_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov8856 *ov8856 = to_ov8856(sd);
- 
- 	mutex_lock(&ov8856->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&ov8856->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&ov8856->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		ov8856_update_pad_format(ov8856->cur_mode, &fmt->format);
-@@ -2147,7 +2148,7 @@ static int ov8856_get_format(struct v4l2_subdev *sd,
- }
- 
- static int ov8856_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	/* Only one bayer order GRBG is supported */
-@@ -2160,7 +2161,7 @@ static int ov8856_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov8856_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct ov8856 *ov8856 = to_ov8856(sd);
-@@ -2185,7 +2186,7 @@ static int ov8856_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&ov8856->mutex);
- 	ov8856_update_pad_format(&ov8856->priv_lane->supported_modes[0],
--				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
-+				 v4l2_subdev_get_try_format(sd, fh->state, 0));
- 	mutex_unlock(&ov8856->mutex);
- 
- 	return 0;
-diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index b16c82559800..ce50f3ea87b8 100644
---- a/drivers/media/i2c/ov8865.c
-+++ b/drivers/media/i2c/ov8865.c
-@@ -2542,7 +2542,7 @@ static const struct v4l2_subdev_video_ops ov8865_subdev_video_ops = {
- /* Subdev Pad Operations */
- 
- static int ov8865_enum_mbus_code(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_pad_config *config,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code_enum)
- {
- 	if (code_enum->index >= ARRAY_SIZE(ov8865_mbus_codes))
-@@ -2571,7 +2571,7 @@ static void ov8865_mbus_format_fill(struct v4l2_mbus_framefmt *mbus_format,
- }
- 
- static int ov8865_get_fmt(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *config,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov8865_sensor *sensor = ov8865_subdev_sensor(subdev);
-@@ -2580,7 +2580,7 @@ static int ov8865_get_fmt(struct v4l2_subdev *subdev,
- 	mutex_lock(&sensor->mutex);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		*mbus_format = *v4l2_subdev_get_try_format(subdev, config,
-+		*mbus_format = *v4l2_subdev_get_try_format(subdev, sd_state,
- 							   format->pad);
- 	else
- 		ov8865_mbus_format_fill(mbus_format, sensor->state.mbus_code,
-@@ -2592,7 +2592,7 @@ static int ov8865_get_fmt(struct v4l2_subdev *subdev,
- }
- 
- static int ov8865_set_fmt(struct v4l2_subdev *subdev,
--			  struct v4l2_subdev_pad_config *config,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct ov8865_sensor *sensor = ov8865_subdev_sensor(subdev);
-@@ -2633,7 +2633,7 @@ static int ov8865_set_fmt(struct v4l2_subdev *subdev,
- 	ov8865_mbus_format_fill(mbus_format, mbus_code, mode);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		*v4l2_subdev_get_try_format(subdev, config, format->pad) =
-+		*v4l2_subdev_get_try_format(subdev, sd_state, format->pad) =
- 			*mbus_format;
- 	else if (sensor->state.mode != mode ||
- 		 sensor->state.mbus_code != mbus_code)
-@@ -2646,7 +2646,7 @@ static int ov8865_set_fmt(struct v4l2_subdev *subdev,
- }
- 
- static int ov8865_enum_frame_size(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *config,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *size_enum)
- {
- 	const struct ov8865_mode *mode;
-@@ -2663,7 +2663,7 @@ static int ov8865_enum_frame_size(struct v4l2_subdev *subdev,
- }
- 
- static int ov8865_enum_frame_interval(struct v4l2_subdev *subdev,
--				      struct v4l2_subdev_pad_config *config,
-+				      struct v4l2_subdev_state *sd_state,
- 				      struct v4l2_subdev_frame_interval_enum *interval_enum)
- {
- 	const struct ov8865_mode *mode = NULL;
-diff --git a/drivers/media/i2c/ov9640.c b/drivers/media/i2c/ov9640.c
-index d36b04c49628..0bab8c2cf160 100644
---- a/drivers/media/i2c/ov9640.c
-+++ b/drivers/media/i2c/ov9640.c
-@@ -519,7 +519,7 @@ static int ov9640_s_fmt(struct v4l2_subdev *sd,
- }
- 
- static int ov9640_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -547,13 +547,13 @@ static int ov9640_set_fmt(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return ov9640_s_fmt(sd, mf);
- 
--	cfg->try_fmt = *mf;
-+	sd_state->pads->try_fmt = *mf;
- 
- 	return 0;
- }
- 
- static int ov9640_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(ov9640_codes))
-@@ -565,7 +565,7 @@ static int ov9640_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov9640_get_selection(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_selection *sel)
- {
- 	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-diff --git a/drivers/media/i2c/ov9650.c b/drivers/media/i2c/ov9650.c
-index a9f13dc2f053..c313e11a9754 100644
---- a/drivers/media/i2c/ov9650.c
-+++ b/drivers/media/i2c/ov9650.c
-@@ -1070,7 +1070,7 @@ static void ov965x_get_default_format(struct v4l2_mbus_framefmt *mf)
- }
- 
- static int ov965x_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(ov965x_formats))
-@@ -1081,7 +1081,7 @@ static int ov965x_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov965x_enum_frame_sizes(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	int i = ARRAY_SIZE(ov965x_formats);
-@@ -1167,14 +1167,14 @@ static int ov965x_s_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int ov965x_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct ov965x *ov965x = to_ov965x(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		fmt->format = *mf;
- 		return 0;
- 	}
-@@ -1212,7 +1212,7 @@ static void __ov965x_try_frame_size(struct v4l2_mbus_framefmt *mf,
- }
- 
- static int ov965x_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	unsigned int index = ARRAY_SIZE(ov965x_formats);
-@@ -1234,8 +1234,9 @@ static int ov965x_set_fmt(struct v4l2_subdev *sd,
- 	mutex_lock(&ov965x->lock);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (cfg) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		if (sd_state) {
-+			mf = v4l2_subdev_get_try_format(sd, sd_state,
-+							fmt->pad);
- 			*mf = fmt->format;
- 		}
- 	} else {
-@@ -1364,7 +1365,7 @@ static int ov965x_s_stream(struct v4l2_subdev *sd, int on)
- static int ov965x_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *mf =
--		v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+		v4l2_subdev_get_try_format(sd, fh->state, 0);
- 
- 	ov965x_get_default_format(mf);
- 	return 0;
-diff --git a/drivers/media/i2c/ov9734.c b/drivers/media/i2c/ov9734.c
-index ba156683c533..af50c66cf5ce 100644
---- a/drivers/media/i2c/ov9734.c
-+++ b/drivers/media/i2c/ov9734.c
-@@ -705,7 +705,7 @@ static int __maybe_unused ov9734_resume(struct device *dev)
- }
- 
- static int ov9734_set_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov9734 *ov9734 = to_ov9734(sd);
-@@ -720,7 +720,7 @@ static int ov9734_set_format(struct v4l2_subdev *sd,
- 	mutex_lock(&ov9734->mutex);
- 	ov9734_update_pad_format(mode, &fmt->format);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
- 	} else {
- 		ov9734->cur_mode = mode;
- 		__v4l2_ctrl_s_ctrl(ov9734->link_freq, mode->link_freq_index);
-@@ -746,14 +746,15 @@ static int ov9734_set_format(struct v4l2_subdev *sd,
- }
- 
- static int ov9734_get_format(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_state *sd_state,
- 			     struct v4l2_subdev_format *fmt)
- {
- 	struct ov9734 *ov9734 = to_ov9734(sd);
- 
- 	mutex_lock(&ov9734->mutex);
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt->format = *v4l2_subdev_get_try_format(&ov9734->sd, cfg,
-+		fmt->format = *v4l2_subdev_get_try_format(&ov9734->sd,
-+							  sd_state,
- 							  fmt->pad);
- 	else
- 		ov9734_update_pad_format(ov9734->cur_mode, &fmt->format);
-@@ -764,7 +765,7 @@ static int ov9734_get_format(struct v4l2_subdev *sd,
- }
- 
- static int ov9734_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index > 0)
-@@ -776,7 +777,7 @@ static int ov9734_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int ov9734_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
-@@ -799,7 +800,7 @@ static int ov9734_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- 	mutex_lock(&ov9734->mutex);
- 	ov9734_update_pad_format(&supported_modes[0],
--				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
-+				 v4l2_subdev_get_try_format(sd, fh->state, 0));
- 	mutex_unlock(&ov9734->mutex);
- 
- 	return 0;
-diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index 90eb73f0e6e9..a4b639cf8063 100644
---- a/drivers/media/i2c/rdacm20.c
-+++ b/drivers/media/i2c/rdacm20.c
-@@ -403,7 +403,7 @@ static int rdacm20_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int rdacm20_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -415,7 +415,7 @@ static int rdacm20_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int rdacm20_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-index 179d107f494c..5b78d8185773 100644
---- a/drivers/media/i2c/rdacm21.c
-+++ b/drivers/media/i2c/rdacm21.c
-@@ -281,7 +281,7 @@ static int rdacm21_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int rdacm21_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index > 0)
-@@ -293,7 +293,7 @@ static int rdacm21_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int rdacm21_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-diff --git a/drivers/media/i2c/rj54n1cb0c.c b/drivers/media/i2c/rj54n1cb0c.c
-index 4cc51e001874..2e4018c26912 100644
---- a/drivers/media/i2c/rj54n1cb0c.c
-+++ b/drivers/media/i2c/rj54n1cb0c.c
-@@ -488,7 +488,7 @@ static int reg_write_multiple(struct i2c_client *client,
- }
- 
- static int rj54n1_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(rj54n1_colour_fmts))
-@@ -541,7 +541,7 @@ static int rj54n1_sensor_scale(struct v4l2_subdev *sd, s32 *in_w, s32 *in_h,
- 			       s32 *out_w, s32 *out_h);
- 
- static int rj54n1_set_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -578,7 +578,7 @@ static int rj54n1_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int rj54n1_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -603,7 +603,7 @@ static int rj54n1_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int rj54n1_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -973,7 +973,7 @@ static int rj54n1_reg_init(struct i2c_client *client)
- }
- 
- static int rj54n1_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -1009,7 +1009,7 @@ static int rj54n1_set_fmt(struct v4l2_subdev *sd,
- 			      &mf->height, 84, RJ54N1_MAX_HEIGHT, align, 0);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *mf;
-+		sd_state->pads->try_fmt = *mf;
- 		return 0;
- 	}
- 
-diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-index 71804a70bc6d..e2b88c5e4f98 100644
---- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-+++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-@@ -817,7 +817,7 @@ static const struct s5c73m3_frame_size *s5c73m3_find_frame_size(
- }
- 
- static void s5c73m3_oif_try_format(struct s5c73m3 *state,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *fmt,
- 				   const struct s5c73m3_frame_size **fs)
- {
-@@ -844,8 +844,8 @@ static void s5c73m3_oif_try_format(struct s5c73m3 *state,
- 			*fs = state->oif_pix_size[RES_ISP];
- 		else
- 			*fs = s5c73m3_find_frame_size(
--						v4l2_subdev_get_try_format(sd, cfg,
--							OIF_ISP_PAD),
-+						v4l2_subdev_get_try_format(sd, sd_state,
-+									   OIF_ISP_PAD),
- 						RES_ISP);
- 		break;
- 	}
-@@ -854,7 +854,7 @@ static void s5c73m3_oif_try_format(struct s5c73m3 *state,
- }
- 
- static void s5c73m3_try_format(struct s5c73m3 *state,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_format *fmt,
- 			      const struct s5c73m3_frame_size **fs)
- {
-@@ -946,7 +946,7 @@ static int s5c73m3_oif_s_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_oif_enum_frame_interval(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct s5c73m3 *state = oif_sd_to_s5c73m3(sd);
-@@ -984,7 +984,7 @@ static int s5c73m3_oif_get_pad_code(int pad, int index)
- }
- 
- static int s5c73m3_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct s5c73m3 *state = sensor_sd_to_s5c73m3(sd);
-@@ -992,7 +992,8 @@ static int s5c73m3_get_fmt(struct v4l2_subdev *sd,
- 	u32 code;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		fmt->format = *v4l2_subdev_get_try_format(sd, sd_state,
-+							  fmt->pad);
- 		return 0;
- 	}
- 
-@@ -1018,7 +1019,7 @@ static int s5c73m3_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_oif_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	struct s5c73m3 *state = oif_sd_to_s5c73m3(sd);
-@@ -1026,7 +1027,8 @@ static int s5c73m3_oif_get_fmt(struct v4l2_subdev *sd,
- 	u32 code;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		fmt->format = *v4l2_subdev_get_try_format(sd, sd_state,
-+							  fmt->pad);
- 		return 0;
- 	}
- 
-@@ -1056,7 +1058,7 @@ static int s5c73m3_oif_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *fmt)
- {
- 	const struct s5c73m3_frame_size *frame_size = NULL;
-@@ -1066,10 +1068,10 @@ static int s5c73m3_set_fmt(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&state->lock);
- 
--	s5c73m3_try_format(state, cfg, fmt, &frame_size);
-+	s5c73m3_try_format(state, sd_state, fmt, &frame_size);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*mf = fmt->format;
- 	} else {
- 		switch (fmt->pad) {
-@@ -1095,7 +1097,7 @@ static int s5c73m3_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_oif_set_fmt(struct v4l2_subdev *sd,
+ int xvip_enum_frame_size(struct v4l2_subdev *subdev,
 -			 struct v4l2_subdev_pad_config *cfg,
 +			 struct v4l2_subdev_state *sd_state,
- 			 struct v4l2_subdev_format *fmt)
+ 			 struct v4l2_subdev_frame_size_enum *fse)
  {
- 	const struct s5c73m3_frame_size *frame_size = NULL;
-@@ -1105,13 +1107,14 @@ static int s5c73m3_oif_set_fmt(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&state->lock);
- 
--	s5c73m3_oif_try_format(state, cfg, fmt, &frame_size);
-+	s5c73m3_oif_try_format(state, sd_state, fmt, &frame_size);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*mf = fmt->format;
- 		if (fmt->pad == OIF_ISP_PAD) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, OIF_SOURCE_PAD);
-+			mf = v4l2_subdev_get_try_format(sd, sd_state,
-+							OIF_SOURCE_PAD);
- 			mf->width = fmt->format.width;
- 			mf->height = fmt->format.height;
- 		}
-@@ -1183,7 +1186,7 @@ static int s5c73m3_oif_set_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
- }
- 
- static int s5c73m3_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	static const int codes[] = {
-@@ -1199,7 +1202,7 @@ static int s5c73m3_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_oif_enum_mbus_code(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_mbus_code_enum *code)
- {
- 	int ret;
-@@ -1214,7 +1217,7 @@ static int s5c73m3_oif_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_enum_frame_size(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	int idx;
-@@ -1241,7 +1244,7 @@ static int s5c73m3_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static int s5c73m3_oif_enum_frame_size(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct s5c73m3 *state = oif_sd_to_s5c73m3(sd);
-@@ -1259,7 +1262,7 @@ static int s5c73m3_oif_enum_frame_size(struct v4l2_subdev *sd,
- 			if (fse->which == V4L2_SUBDEV_FORMAT_TRY) {
- 				struct v4l2_mbus_framefmt *mf;
- 
--				mf = v4l2_subdev_get_try_format(sd, cfg,
-+				mf = v4l2_subdev_get_try_format(sd, sd_state,
- 								OIF_ISP_PAD);
- 
- 				w = mf->width;
-@@ -1315,11 +1318,11 @@ static int s5c73m3_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *mf;
- 
--	mf = v4l2_subdev_get_try_format(sd, fh->pad, S5C73M3_ISP_PAD);
-+	mf = v4l2_subdev_get_try_format(sd, fh->state, S5C73M3_ISP_PAD);
- 	s5c73m3_fill_mbus_fmt(mf, &s5c73m3_isp_resolutions[1],
- 						S5C73M3_ISP_FMT);
- 
--	mf = v4l2_subdev_get_try_format(sd, fh->pad, S5C73M3_JPEG_PAD);
-+	mf = v4l2_subdev_get_try_format(sd, fh->state, S5C73M3_JPEG_PAD);
- 	s5c73m3_fill_mbus_fmt(mf, &s5c73m3_jpeg_resolutions[1],
- 					S5C73M3_JPEG_FMT);
- 
-@@ -1330,15 +1333,15 @@ static int s5c73m3_oif_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
- 	struct v4l2_mbus_framefmt *mf;
- 
--	mf = v4l2_subdev_get_try_format(sd, fh->pad, OIF_ISP_PAD);
-+	mf = v4l2_subdev_get_try_format(sd, fh->state, OIF_ISP_PAD);
- 	s5c73m3_fill_mbus_fmt(mf, &s5c73m3_isp_resolutions[1],
- 						S5C73M3_ISP_FMT);
- 
--	mf = v4l2_subdev_get_try_format(sd, fh->pad, OIF_JPEG_PAD);
-+	mf = v4l2_subdev_get_try_format(sd, fh->state, OIF_JPEG_PAD);
- 	s5c73m3_fill_mbus_fmt(mf, &s5c73m3_jpeg_resolutions[1],
- 					S5C73M3_JPEG_FMT);
- 
--	mf = v4l2_subdev_get_try_format(sd, fh->pad, OIF_SOURCE_PAD);
-+	mf = v4l2_subdev_get_try_format(sd, fh->state, OIF_SOURCE_PAD);
- 	s5c73m3_fill_mbus_fmt(mf, &s5c73m3_isp_resolutions[1],
- 						S5C73M3_ISP_FMT);
- 	return 0;
-diff --git a/drivers/media/i2c/s5k4ecgx.c b/drivers/media/i2c/s5k4ecgx.c
-index 4e97309a67f4..af9a305242cd 100644
---- a/drivers/media/i2c/s5k4ecgx.c
-+++ b/drivers/media/i2c/s5k4ecgx.c
-@@ -525,7 +525,7 @@ static int s5k4ecgx_try_frame_size(struct v4l2_mbus_framefmt *mf,
- }
- 
- static int s5k4ecgx_enum_mbus_code(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(s5k4ecgx_formats))
-@@ -535,15 +535,16 @@ static int s5k4ecgx_enum_mbus_code(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
--static int s5k4ecgx_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
--			   struct v4l2_subdev_format *fmt)
-+static int s5k4ecgx_get_fmt(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *sd_state,
-+			    struct v4l2_subdev_format *fmt)
- {
- 	struct s5k4ecgx *priv = to_s5k4ecgx(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (cfg) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		if (sd_state) {
-+			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 			fmt->format = *mf;
- 		}
- 		return 0;
-@@ -575,7 +576,8 @@ static const struct s5k4ecgx_pixfmt *s5k4ecgx_try_fmt(struct v4l2_subdev *sd,
- 	return &s5k4ecgx_formats[i];
- }
- 
--static int s5k4ecgx_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int s5k4ecgx_set_fmt(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *fmt)
- {
- 	struct s5k4ecgx *priv = to_s5k4ecgx(sd);
-@@ -590,8 +592,8 @@ static int s5k4ecgx_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_confi
- 	fmt->format.field = V4L2_FIELD_NONE;
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (cfg) {
--			mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		if (sd_state) {
-+			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 			*mf = fmt->format;
- 		}
- 		return 0;
-@@ -686,7 +688,9 @@ static int s5k4ecgx_registered(struct v4l2_subdev *sd)
-  */
- static int s5k4ecgx_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	struct v4l2_mbus_framefmt *mf = v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+	struct v4l2_mbus_framefmt *mf = v4l2_subdev_get_try_format(sd,
-+								   fh->state,
-+								   0);
- 
- 	mf->width = s5k4ecgx_prev_sizes[0].size.width;
- 	mf->height = s5k4ecgx_prev_sizes[0].size.height;
-diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
-index f26c168ef942..b97dd6149e90 100644
---- a/drivers/media/i2c/s5k6a3.c
-+++ b/drivers/media/i2c/s5k6a3.c
-@@ -99,7 +99,7 @@ static const struct v4l2_mbus_framefmt *find_sensor_format(
- }
- 
- static int s5k6a3_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(s5k6a3_formats))
-@@ -123,17 +123,18 @@ static void s5k6a3_try_format(struct v4l2_mbus_framefmt *mf)
- }
- 
- static struct v4l2_mbus_framefmt *__s5k6a3_get_format(
--		struct s5k6a3 *sensor, struct v4l2_subdev_pad_config *cfg,
-+		struct s5k6a3 *sensor, struct v4l2_subdev_state *sd_state,
- 		u32 pad, enum v4l2_subdev_format_whence which)
- {
- 	if (which == V4L2_SUBDEV_FORMAT_TRY)
--		return cfg ? v4l2_subdev_get_try_format(&sensor->subdev, cfg, pad) : NULL;
-+		return sd_state ? v4l2_subdev_get_try_format(&sensor->subdev,
-+							     sd_state, pad) : NULL;
- 
- 	return &sensor->format;
- }
- 
- static int s5k6a3_set_fmt(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *fmt)
- {
- 	struct s5k6a3 *sensor = sd_to_s5k6a3(sd);
-@@ -141,7 +142,7 @@ static int s5k6a3_set_fmt(struct v4l2_subdev *sd,
- 
- 	s5k6a3_try_format(&fmt->format);
- 
--	mf = __s5k6a3_get_format(sensor, cfg, fmt->pad, fmt->which);
-+	mf = __s5k6a3_get_format(sensor, sd_state, fmt->pad, fmt->which);
- 	if (mf) {
- 		mutex_lock(&sensor->lock);
- 		*mf = fmt->format;
-@@ -151,13 +152,13 @@ static int s5k6a3_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int s5k6a3_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct s5k6a3 *sensor = sd_to_s5k6a3(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
--	mf = __s5k6a3_get_format(sensor, cfg, fmt->pad, fmt->which);
-+	mf = __s5k6a3_get_format(sensor, sd_state, fmt->pad, fmt->which);
- 
- 	mutex_lock(&sensor->lock);
- 	fmt->format = *mf;
-@@ -173,7 +174,9 @@ static const struct v4l2_subdev_pad_ops s5k6a3_pad_ops = {
- 
- static int s5k6a3_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd, fh->pad, 0);
-+	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd,
-+								       fh->state,
-+								       0);
- 
- 	*format		= s5k6a3_formats[0];
- 	format->width	= S5K6A3_DEFAULT_WIDTH;
-diff --git a/drivers/media/i2c/s5k6aa.c b/drivers/media/i2c/s5k6aa.c
-index e9be7323a22e..105a4b7d8354 100644
---- a/drivers/media/i2c/s5k6aa.c
-+++ b/drivers/media/i2c/s5k6aa.c
-@@ -997,7 +997,7 @@ static int s5k6aa_s_frame_interval(struct v4l2_subdev *sd,
-  * V4L2 subdev pad level and video operations
-  */
- static int s5k6aa_enum_frame_interval(struct v4l2_subdev *sd,
--			      struct v4l2_subdev_pad_config *cfg,
-+			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	struct s5k6aa *s5k6aa = to_s5k6aa(sd);
-@@ -1024,7 +1024,7 @@ static int s5k6aa_enum_frame_interval(struct v4l2_subdev *sd,
- }
- 
- static int s5k6aa_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->index >= ARRAY_SIZE(s5k6aa_formats))
-@@ -1035,7 +1035,7 @@ static int s5k6aa_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int s5k6aa_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
- 	int i = ARRAY_SIZE(s5k6aa_formats);
-@@ -1057,14 +1057,15 @@ static int s5k6aa_enum_frame_size(struct v4l2_subdev *sd,
- }
- 
- static struct v4l2_rect *
--__s5k6aa_get_crop_rect(struct s5k6aa *s5k6aa, struct v4l2_subdev_pad_config *cfg,
-+__s5k6aa_get_crop_rect(struct s5k6aa *s5k6aa,
-+		       struct v4l2_subdev_state *sd_state,
- 		       enum v4l2_subdev_format_whence which)
- {
- 	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return &s5k6aa->ccd_rect;
- 
- 	WARN_ON(which != V4L2_SUBDEV_FORMAT_TRY);
--	return v4l2_subdev_get_try_crop(&s5k6aa->sd, cfg, 0);
-+	return v4l2_subdev_get_try_crop(&s5k6aa->sd, sd_state, 0);
- }
- 
- static void s5k6aa_try_format(struct s5k6aa *s5k6aa,
-@@ -1088,7 +1089,8 @@ static void s5k6aa_try_format(struct s5k6aa *s5k6aa,
- 	mf->field	= V4L2_FIELD_NONE;
- }
- 
--static int s5k6aa_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int s5k6aa_get_fmt(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct s5k6aa *s5k6aa = to_s5k6aa(sd);
-@@ -1097,7 +1099,7 @@ static int s5k6aa_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	memset(fmt->reserved, 0, sizeof(fmt->reserved));
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 		fmt->format = *mf;
- 		return 0;
- 	}
-@@ -1109,7 +1111,8 @@ static int s5k6aa_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	return 0;
- }
- 
--static int s5k6aa_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+static int s5k6aa_set_fmt(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *fmt)
- {
- 	struct s5k6aa *s5k6aa = to_s5k6aa(sd);
-@@ -1122,8 +1125,8 @@ static int s5k6aa_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- 	s5k6aa_try_format(s5k6aa, &fmt->format);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
--		crop = v4l2_subdev_get_try_crop(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
-+		crop = v4l2_subdev_get_try_crop(sd, sd_state, 0);
- 	} else {
- 		if (s5k6aa->streaming) {
- 			ret = -EBUSY;
-@@ -1163,7 +1166,7 @@ static int s5k6aa_set_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config
- }
- 
- static int s5k6aa_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct s5k6aa *s5k6aa = to_s5k6aa(sd);
-@@ -1175,7 +1178,7 @@ static int s5k6aa_get_selection(struct v4l2_subdev *sd,
- 	memset(sel->reserved, 0, sizeof(sel->reserved));
- 
- 	mutex_lock(&s5k6aa->lock);
--	rect = __s5k6aa_get_crop_rect(s5k6aa, cfg, sel->which);
-+	rect = __s5k6aa_get_crop_rect(s5k6aa, sd_state, sel->which);
- 	sel->r = *rect;
- 	mutex_unlock(&s5k6aa->lock);
- 
-@@ -1186,7 +1189,7 @@ static int s5k6aa_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int s5k6aa_set_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct s5k6aa *s5k6aa = to_s5k6aa(sd);
-@@ -1198,13 +1201,13 @@ static int s5k6aa_set_selection(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *format;
+@@ -295,7 +295,7 @@ int xvip_enum_frame_size(struct v4l2_subdev *subdev,
+ 	if (fse->which == V4L2_SUBDEV_FORMAT_ACTIVE)
  		return -EINVAL;
  
- 	mutex_lock(&s5k6aa->lock);
--	crop_r = __s5k6aa_get_crop_rect(s5k6aa, cfg, sel->which);
-+	crop_r = __s5k6aa_get_crop_rect(s5k6aa, sd_state, sel->which);
+-	format = v4l2_subdev_get_try_format(subdev, cfg, fse->pad);
++	format = v4l2_subdev_get_try_format(subdev, sd_state, fse->pad);
  
- 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		mf = &s5k6aa->preset->mbus_fmt;
- 		s5k6aa->apply_crop = 1;
- 	} else {
--		mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+		mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	}
- 	v4l_bound_align_image(&sel->r.width, mf->width,
- 			      S5K6AA_WIN_WIDTH_MAX, 1,
-@@ -1425,8 +1428,10 @@ static int s5k6aa_initialize_ctrls(struct s5k6aa *s5k6aa)
-  */
- static int s5k6aa_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd, fh->pad, 0);
--	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, fh->pad, 0);
-+	struct v4l2_mbus_framefmt *format = v4l2_subdev_get_try_format(sd,
-+								       fh->state,
-+								       0);
-+	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
- 
- 	format->colorspace = s5k6aa_formats[0].colorspace;
- 	format->code = s5k6aa_formats[0].code;
-diff --git a/drivers/media/i2c/saa6752hs.c b/drivers/media/i2c/saa6752hs.c
-index 6171ced809bb..a7f043cad149 100644
---- a/drivers/media/i2c/saa6752hs.c
-+++ b/drivers/media/i2c/saa6752hs.c
-@@ -543,7 +543,7 @@ static int saa6752hs_init(struct v4l2_subdev *sd, u32 leading_null_bytes)
- }
- 
- static int saa6752hs_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *f = &format->format;
-@@ -563,7 +563,7 @@ static int saa6752hs_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int saa6752hs_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *f = &format->format;
-@@ -595,7 +595,7 @@ static int saa6752hs_set_fmt(struct v4l2_subdev *sd,
- 	f->colorspace = V4L2_COLORSPACE_SMPTE170M;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *f;
-+		sd_state->pads->try_fmt = *f;
- 		return 0;
- 	}
- 
-diff --git a/drivers/media/i2c/saa7115.c b/drivers/media/i2c/saa7115.c
-index 88dc6baac639..a958bbc2c33d 100644
---- a/drivers/media/i2c/saa7115.c
-+++ b/drivers/media/i2c/saa7115.c
-@@ -1167,7 +1167,7 @@ static int saa711x_s_sliced_fmt(struct v4l2_subdev *sd, struct v4l2_sliced_vbi_f
- }
- 
- static int saa711x_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-diff --git a/drivers/media/i2c/saa717x.c b/drivers/media/i2c/saa717x.c
-index ba103a6a1875..adf905360171 100644
---- a/drivers/media/i2c/saa717x.c
-+++ b/drivers/media/i2c/saa717x.c
-@@ -980,7 +980,7 @@ static int saa717x_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_regi
- #endif
- 
- static int saa717x_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-diff --git a/drivers/media/i2c/sr030pc30.c b/drivers/media/i2c/sr030pc30.c
-index 46924024faa8..19c0252df2f1 100644
---- a/drivers/media/i2c/sr030pc30.c
-+++ b/drivers/media/i2c/sr030pc30.c
-@@ -468,7 +468,7 @@ static int sr030pc30_s_ctrl(struct v4l2_ctrl *ctrl)
- }
- 
- static int sr030pc30_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (!code || code->pad ||
-@@ -480,7 +480,7 @@ static int sr030pc30_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int sr030pc30_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf;
-@@ -525,7 +525,7 @@ static const struct sr030pc30_format *try_fmt(struct v4l2_subdev *sd,
- 
- /* Return nearest media bus frame format. */
- static int sr030pc30_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct sr030pc30_info *info = sd ? to_sr030pc30(sd) : NULL;
-@@ -541,7 +541,7 @@ static int sr030pc30_set_fmt(struct v4l2_subdev *sd,
- 
- 	fmt = try_fmt(sd, mf);
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *mf;
-+		sd_state->pads->try_fmt = *mf;
- 		return 0;
- 	}
- 
-diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
-index 7f07ef56fbbd..f630b88cbfaa 100644
---- a/drivers/media/i2c/st-mipid02.c
-+++ b/drivers/media/i2c/st-mipid02.c
-@@ -643,7 +643,7 @@ static int mipid02_s_stream(struct v4l2_subdev *sd, int enable)
- }
- 
- static int mipid02_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct mipid02_dev *bridge = to_mipid02_dev(sd);
-@@ -670,7 +670,7 @@ static int mipid02_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int mipid02_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
-@@ -687,7 +687,8 @@ static int mipid02_get_fmt(struct v4l2_subdev *sd,
+ 	if (fse->index || fse->code != format->code)
  		return -EINVAL;
+diff --git a/drivers/media/platform/xilinx/xilinx-vip.h b/drivers/media/platform/xilinx/xilinx-vip.h
+index a528a32ea1dc..d0b0e0600952 100644
+--- a/drivers/media/platform/xilinx/xilinx-vip.h
++++ b/drivers/media/platform/xilinx/xilinx-vip.h
+@@ -125,10 +125,10 @@ const struct xvip_video_format *xvip_of_get_format(struct device_node *node);
+ void xvip_set_format_size(struct v4l2_mbus_framefmt *format,
+ 			  const struct v4l2_subdev_format *fmt);
+ int xvip_enum_mbus_code(struct v4l2_subdev *subdev,
+-			struct v4l2_subdev_pad_config *cfg,
++			struct v4l2_subdev_state *sd_state,
+ 			struct v4l2_subdev_mbus_code_enum *code);
+ int xvip_enum_frame_size(struct v4l2_subdev *subdev,
+-			 struct v4l2_subdev_pad_config *cfg,
++			 struct v4l2_subdev_state *sd_state,
+ 			 struct v4l2_subdev_frame_size_enum *fse);
  
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt = v4l2_subdev_get_try_format(&bridge->sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(&bridge->sd, sd_state,
-+						 format->pad);
- 	else
- 		fmt = &bridge->fmt;
- 
-@@ -704,7 +705,7 @@ static int mipid02_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static void mipid02_set_fmt_source(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *format)
- {
- 	struct mipid02_dev *bridge = to_mipid02_dev(sd);
-@@ -718,11 +719,11 @@ static void mipid02_set_fmt_source(struct v4l2_subdev *sd,
- 	if (format->which != V4L2_SUBDEV_FORMAT_TRY)
- 		return;
- 
--	*v4l2_subdev_get_try_format(sd, cfg, format->pad) = format->format;
-+	*v4l2_subdev_get_try_format(sd, sd_state, format->pad) = format->format;
- }
- 
- static void mipid02_set_fmt_sink(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *format)
- {
- 	struct mipid02_dev *bridge = to_mipid02_dev(sd);
-@@ -731,7 +732,7 @@ static void mipid02_set_fmt_sink(struct v4l2_subdev *sd,
- 	format->format.code = get_fmt_code(format->format.code);
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 	else
- 		fmt = &bridge->fmt;
- 
-@@ -739,7 +740,7 @@ static void mipid02_set_fmt_sink(struct v4l2_subdev *sd,
- }
- 
- static int mipid02_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_state *sd_state,
- 			   struct v4l2_subdev_format *format)
- {
- 	struct mipid02_dev *bridge = to_mipid02_dev(sd);
-@@ -762,9 +763,9 @@ static int mipid02_set_fmt(struct v4l2_subdev *sd,
- 	}
- 
- 	if (format->pad == MIPID02_SOURCE)
--		mipid02_set_fmt_source(sd, cfg, format);
-+		mipid02_set_fmt_source(sd, sd_state, format);
- 	else
--		mipid02_set_fmt_sink(sd, cfg, format);
-+		mipid02_set_fmt_sink(sd, sd_state, format);
- 
- error:
- 	mutex_unlock(&bridge->lock);
-diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
-index f21da11caf22..3205cd8298dd 100644
---- a/drivers/media/i2c/tc358743.c
-+++ b/drivers/media/i2c/tc358743.c
-@@ -1649,7 +1649,7 @@ static int tc358743_s_stream(struct v4l2_subdev *sd, int enable)
- /* --------------- PAD OPS --------------- */
- 
- static int tc358743_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	switch (code->index) {
-@@ -1666,7 +1666,7 @@ static int tc358743_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int tc358743_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct tc358743_state *state = to_state(sd);
-@@ -1702,13 +1702,13 @@ static int tc358743_get_fmt(struct v4l2_subdev *sd,
- }
- 
- static int tc358743_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct tc358743_state *state = to_state(sd);
- 
- 	u32 code = format->format.code; /* is overwritten by get_fmt */
--	int ret = tc358743_get_fmt(sd, cfg, format);
-+	int ret = tc358743_get_fmt(sd, sd_state, format);
- 
- 	format->format.code = code;
- 
-diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
-index 89bb7e6dc7a4..91e6db847bb5 100644
---- a/drivers/media/i2c/tda1997x.c
-+++ b/drivers/media/i2c/tda1997x.c
-@@ -1718,19 +1718,19 @@ static const struct v4l2_subdev_video_ops tda1997x_video_ops = {
-  */
- 
- static int tda1997x_init_cfg(struct v4l2_subdev *sd,
--			     struct v4l2_subdev_pad_config *cfg)
-+			     struct v4l2_subdev_state *sd_state)
- {
- 	struct tda1997x_state *state = to_state(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
--	mf = v4l2_subdev_get_try_format(sd, cfg, 0);
-+	mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
- 	mf->code = state->mbus_codes[0];
- 
- 	return 0;
- }
- 
- static int tda1997x_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct tda1997x_state *state = to_state(sd);
-@@ -1762,7 +1762,7 @@ static void tda1997x_fill_format(struct tda1997x_state *state,
- }
- 
- static int tda1997x_get_format(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg,
-+			       struct v4l2_subdev_state *sd_state,
- 			       struct v4l2_subdev_format *format)
- {
- 	struct tda1997x_state *state = to_state(sd);
-@@ -1775,7 +1775,7 @@ static int tda1997x_get_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		format->format.code = fmt->code;
- 	} else
- 		format->format.code = state->mbus_code;
-@@ -1784,7 +1784,7 @@ static int tda1997x_get_format(struct v4l2_subdev *sd,
- }
- 
- static int tda1997x_set_format(struct v4l2_subdev *sd,
--			       struct v4l2_subdev_pad_config *cfg,
-+			       struct v4l2_subdev_state *sd_state,
- 			       struct v4l2_subdev_format *format)
- {
- 	struct tda1997x_state *state = to_state(sd);
-@@ -1809,7 +1809,7 @@ static int tda1997x_set_format(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
-+		fmt = v4l2_subdev_get_try_format(sd, sd_state, format->pad);
- 		*fmt = format->format;
- 	} else {
- 		int ret = tda1997x_setup_format(state, format->format.code);
-diff --git a/drivers/media/i2c/tvp514x.c b/drivers/media/i2c/tvp514x.c
-index a7fbe5b400c2..cee60f945036 100644
---- a/drivers/media/i2c/tvp514x.c
-+++ b/drivers/media/i2c/tvp514x.c
-@@ -853,13 +853,13 @@ static const struct v4l2_ctrl_ops tvp514x_ctrl_ops = {
- /**
-  * tvp514x_enum_mbus_code() - V4L2 decoder interface handler for enum_mbus_code
-  * @sd: pointer to standard V4L2 sub-device structure
-- * @cfg: pad configuration
-+ * @sd_state: subdev state
-  * @code: pointer to v4l2_subdev_mbus_code_enum structure
-  *
-  * Enumertaes mbus codes supported
-  */
- static int tvp514x_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	u32 pad = code->pad;
-@@ -880,13 +880,13 @@ static int tvp514x_enum_mbus_code(struct v4l2_subdev *sd,
- /**
-  * tvp514x_get_pad_format() - V4L2 decoder interface handler for get pad format
-  * @sd: pointer to standard V4L2 sub-device structure
-- * @cfg: pad configuration
-+ * @sd_state: subdev state
-  * @format: pointer to v4l2_subdev_format structure
-  *
-  * Retrieves pad format which is active or tried based on requirement
-  */
- static int tvp514x_get_pad_format(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *format)
- {
- 	struct tvp514x_decoder *decoder = to_decoder(sd);
-@@ -912,13 +912,13 @@ static int tvp514x_get_pad_format(struct v4l2_subdev *sd,
- /**
-  * tvp514x_set_pad_format() - V4L2 decoder interface handler for set pad format
-  * @sd: pointer to standard V4L2 sub-device structure
-- * @cfg: pad configuration
-+ * @sd_state: subdev state
-  * @fmt: pointer to v4l2_subdev_format structure
-  *
-  * Set pad format for the output pad
-  */
- static int tvp514x_set_pad_format(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_format *fmt)
- {
- 	struct tvp514x_decoder *decoder = to_decoder(sd);
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 374a9da75e4d..30c63552556d 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1027,7 +1027,7 @@ static void tvp5150_set_default(v4l2_std_id std, struct v4l2_rect *crop)
- 
- static struct v4l2_rect *
- tvp5150_get_pad_crop(struct tvp5150 *decoder,
--		     struct v4l2_subdev_pad_config *cfg, unsigned int pad,
-+		     struct v4l2_subdev_state *sd_state, unsigned int pad,
- 		     enum v4l2_subdev_format_whence which)
- {
- 	switch (which) {
-@@ -1035,7 +1035,7 @@ tvp5150_get_pad_crop(struct tvp5150 *decoder,
- 		return &decoder->rect;
- 	case V4L2_SUBDEV_FORMAT_TRY:
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
--		return v4l2_subdev_get_try_crop(&decoder->sd, cfg, pad);
-+		return v4l2_subdev_get_try_crop(&decoder->sd, sd_state, pad);
- #else
- 		return ERR_PTR(-EINVAL);
- #endif
-@@ -1045,7 +1045,7 @@ tvp5150_get_pad_crop(struct tvp5150 *decoder,
- }
- 
- static int tvp5150_fill_fmt(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg,
-+			    struct v4l2_subdev_state *sd_state,
- 			    struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *f;
-@@ -1104,7 +1104,7 @@ static void tvp5150_set_hw_selection(struct v4l2_subdev *sd,
- }
- 
- static int tvp5150_set_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
-@@ -1138,7 +1138,7 @@ static int tvp5150_set_selection(struct v4l2_subdev *sd,
- 	    sel->which == V4L2_SUBDEV_FORMAT_TRY)
- 		return 0;
- 
--	crop = tvp5150_get_pad_crop(decoder, cfg, sel->pad, sel->which);
-+	crop = tvp5150_get_pad_crop(decoder, sd_state, sel->pad, sel->which);
- 	if (IS_ERR(crop))
- 		return PTR_ERR(crop);
- 
-@@ -1156,7 +1156,7 @@ static int tvp5150_set_selection(struct v4l2_subdev *sd,
- }
- 
- static int tvp5150_get_selection(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct tvp5150 *decoder = container_of(sd, struct tvp5150, sd);
-@@ -1180,7 +1180,7 @@ static int tvp5150_get_selection(struct v4l2_subdev *sd,
- 			sel->r.height = TVP5150_V_MAX_OTHERS;
- 		return 0;
- 	case V4L2_SEL_TGT_CROP:
--		crop = tvp5150_get_pad_crop(decoder, cfg, sel->pad,
-+		crop = tvp5150_get_pad_crop(decoder, sd_state, sel->pad,
- 					    sel->which);
- 		if (IS_ERR(crop))
- 			return PTR_ERR(crop);
-@@ -1208,7 +1208,7 @@ static int tvp5150_get_mbus_config(struct v4l2_subdev *sd,
- 			V4L2 subdev pad ops
-  ****************************************************************************/
- static int tvp5150_init_cfg(struct v4l2_subdev *sd,
--			    struct v4l2_subdev_pad_config *cfg)
-+			    struct v4l2_subdev_state *sd_state)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
- 	v4l2_std_id std;
-@@ -1229,7 +1229,7 @@ static int tvp5150_init_cfg(struct v4l2_subdev *sd,
- }
- 
- static int tvp5150_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index)
-@@ -1240,7 +1240,7 @@ static int tvp5150_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int tvp5150_enum_frame_size(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_pad_config *cfg,
-+				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_frame_size_enum *fse)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
-diff --git a/drivers/media/i2c/tvp7002.c b/drivers/media/i2c/tvp7002.c
-index ada4ec5ef782..2de18833b07b 100644
---- a/drivers/media/i2c/tvp7002.c
-+++ b/drivers/media/i2c/tvp7002.c
-@@ -797,7 +797,8 @@ static const struct v4l2_ctrl_ops tvp7002_ctrl_ops = {
-  * Enumerate supported digital video formats for pad.
-  */
- static int
--tvp7002_enum_mbus_code(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+tvp7002_enum_mbus_code(struct v4l2_subdev *sd,
-+		       struct v4l2_subdev_state *sd_state,
- 		       struct v4l2_subdev_mbus_code_enum *code)
- {
- 	/* Check requested format index is within range */
-@@ -818,7 +819,8 @@ tvp7002_enum_mbus_code(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cf
-  * get video format for pad.
-  */
- static int
--tvp7002_get_pad_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+tvp7002_get_pad_format(struct v4l2_subdev *sd,
-+		       struct v4l2_subdev_state *sd_state,
- 		       struct v4l2_subdev_format *fmt)
- {
- 	struct tvp7002 *tvp7002 = to_tvp7002(sd);
-@@ -841,10 +843,11 @@ tvp7002_get_pad_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cf
-  * set video format for pad.
-  */
- static int
--tvp7002_set_pad_format(struct v4l2_subdev *sd, struct v4l2_subdev_pad_config *cfg,
-+tvp7002_set_pad_format(struct v4l2_subdev *sd,
-+		       struct v4l2_subdev_state *sd_state,
- 		       struct v4l2_subdev_format *fmt)
- {
--	return tvp7002_get_pad_format(sd, cfg, fmt);
-+	return tvp7002_get_pad_format(sd, sd_state, fmt);
- }
- 
- /* V4L2 core operation handlers */
-diff --git a/drivers/media/i2c/tw9910.c b/drivers/media/i2c/tw9910.c
-index a25a350b0ddc..09f5b3986928 100644
---- a/drivers/media/i2c/tw9910.c
-+++ b/drivers/media/i2c/tw9910.c
-@@ -720,7 +720,7 @@ static int tw9910_set_frame(struct v4l2_subdev *sd, u32 *width, u32 *height)
- }
- 
- static int tw9910_get_selection(struct v4l2_subdev *sd,
--				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-@@ -746,7 +746,7 @@ static int tw9910_get_selection(struct v4l2_subdev *sd,
- }
- 
- static int tw9910_get_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -797,7 +797,7 @@ static int tw9910_s_fmt(struct v4l2_subdev *sd,
- }
- 
- static int tw9910_set_fmt(struct v4l2_subdev *sd,
--			  struct v4l2_subdev_pad_config *cfg,
-+			  struct v4l2_subdev_state *sd_state,
- 			  struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *mf = &format->format;
-@@ -829,7 +829,7 @@ static int tw9910_set_fmt(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		return tw9910_s_fmt(sd, mf);
- 
--	cfg->try_fmt = *mf;
-+	sd_state->pads->try_fmt = *mf;
- 
- 	return 0;
- }
-@@ -886,7 +886,7 @@ static const struct v4l2_subdev_core_ops tw9910_subdev_core_ops = {
- };
- 
- static int tw9910_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_pad_config *cfg,
-+				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index)
-diff --git a/drivers/media/i2c/vs6624.c b/drivers/media/i2c/vs6624.c
-index c292c92e37b9..29003dec6f2d 100644
---- a/drivers/media/i2c/vs6624.c
-+++ b/drivers/media/i2c/vs6624.c
-@@ -546,7 +546,7 @@ static int vs6624_s_ctrl(struct v4l2_ctrl *ctrl)
- }
- 
- static int vs6624_enum_mbus_code(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_mbus_code_enum *code)
- {
- 	if (code->pad || code->index >= ARRAY_SIZE(vs6624_formats))
-@@ -557,7 +557,7 @@ static int vs6624_enum_mbus_code(struct v4l2_subdev *sd,
- }
- 
- static int vs6624_set_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
-@@ -587,7 +587,7 @@ static int vs6624_set_fmt(struct v4l2_subdev *sd,
- 	fmt->colorspace = vs6624_formats[index].colorspace;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
--		cfg->try_fmt = *fmt;
-+		sd_state->pads->try_fmt = *fmt;
- 		return 0;
- 	}
- 
-@@ -637,7 +637,7 @@ static int vs6624_set_fmt(struct v4l2_subdev *sd,
- }
- 
- static int vs6624_get_fmt(struct v4l2_subdev *sd,
--		struct v4l2_subdev_pad_config *cfg,
-+		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct vs6624 *sensor = to_vs6624(sd);
+ static inline u32 xvip_read(struct xvip_device *xvip, u32 addr)
 -- 
 2.25.1
 
