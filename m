@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92AE5C48BE5
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4257FC49EA2
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79FCD613FF
-	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E40D613F1
+	for <linux-media@archiver.kernel.org>; Thu, 10 Jun 2021 11:36:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbhFJLiZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Jun 2021 07:38:25 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:57079 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230457AbhFJLiV (ORCPT
+        id S230460AbhFJLi1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Jun 2021 07:38:27 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:34243 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230462AbhFJLiW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Jun 2021 07:38:21 -0400
+        Thu, 10 Jun 2021 07:38:22 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id rIytl7kZmhqltrIz1lXjTn; Thu, 10 Jun 2021 13:36:24 +0200
+        id rIytl7kZmhqltrIz2lXjUJ; Thu, 10 Jun 2021 13:36:24 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623324984; bh=t22WTrW8+JFusXDdj4HAREjuuzOKT+rNXDu4SmLIBsg=;
+        t=1623324984; bh=ptsFKwpuKbhad0oZGzrE1ORA6VZ/UIUPOLhGW1LXXW0=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=WMMtmj/A0akY+PjekL+oyW7v5MtFJ7XfCWM/iv7vjgPS9bjb6HQBUpZy3+LlOnfsg
-         LYFOWFi5EKpW4oQ22iWqbhrGjJQuO6u4vh9LzwLvoe/9APMWA4bT4G1waVAeEqjVKL
-         6R+o57K+WmC9o1CncuRRwDXnfMmwhbPmwKIQCMp5+pyXiNf8iLkzaQlX0D44EQzD6d
-         NlegKvOQlzkOl8T5+3nlBT+8rfLDm7DBJvKUp2h1hq0oPUyeV0a7Fnp9QUtdlBugAl
-         TqogH3Yrc29Vm7hzY2iHDl+Wa7JykyDA2mFZQlBtLYDHvM5/J12qcoX/3DoKTjubho
-         q5GAxeUMVF52A==
+        b=SQfxKfbSKsj9a6QSVneScS1jnbTBva0sssoRAwJEfKQfBN9fRml1kpgJ1f2fDbN/F
+         pOzx1DmuFIc0ZjzOXc8A/mV7UogUR7Z0rSF22v5TkYM3GuGsm/b3XVoxPfIz0bz1Rt
+         I8KCYPwy860CBe3JICtd8qR4TdyiTCDOKvjeTc6LZVy6eZdNvWe+1QSnIf++5AD8//
+         Cq6mnqrx319yjlgJx3rCFsiAs+OZzKxJ110HuxgZlVWhbmWbYzcNxlkh4QsC3QtOcA
+         BvDPsltxD55JpMf8QU53biloTwhJrC+D687ptAMqhkvxLtmOpRqVx4z4CO+lmFvfQ2
+         POs4k/sgq0EIA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
@@ -40,9 +40,9 @@ Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         John Cox <jc@kynesim.co.uk>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCHv2 08/11] v4l2-mem2mem.c: allow requests for capture queues
-Date:   Thu, 10 Jun 2021 13:36:12 +0200
-Message-Id: <20210610113615.785359-9-hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCHv2 10/11] vim2m: support read-only requests on the capture queue
+Date:   Thu, 10 Jun 2021 13:36:14 +0200
+Message-Id: <20210610113615.785359-11-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210610113615.785359-1-hverkuil-cisco@xs4all.nl>
 References: <20210610113615.785359-1-hverkuil-cisco@xs4all.nl>
@@ -56,44 +56,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Capture queues can support requests as well, so add support for this.
+Added support for read-only requests on the capture queue
+in order to test this feature.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/test-drivers/vim2m.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0d7c27a07224..e068ffa9006b 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -20,6 +20,7 @@
- #include <media/v4l2-device.h>
- #include <media/v4l2-fh.h>
- #include <media/v4l2-event.h>
-+#include <media/v4l2-ctrls.h>
+diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
+index d714fe50afe5..8bd794a19629 100644
+--- a/drivers/media/test-drivers/vim2m.c
++++ b/drivers/media/test-drivers/vim2m.c
+@@ -602,7 +602,11 @@ static void device_run(void *priv)
+ 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
  
- MODULE_DESCRIPTION("Mem to mem device framework for videobuf");
- MODULE_AUTHOR("Pawel Osciak, <pawel@osciak.com>");
-@@ -1284,10 +1285,14 @@ void v4l2_m2m_request_queue(struct media_request *req)
- 		if (vb2_request_object_is_buffer(obj)) {
- 			/* Sanity checks */
- 			vb = container_of(obj, struct vb2_buffer, req_obj);
--			WARN_ON(!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type));
--			m2m_ctx_obj = container_of(vb->vb2_queue,
--						   struct v4l2_m2m_ctx,
--						   out_q_ctx.q);
-+			if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
-+				m2m_ctx_obj = container_of(vb->vb2_queue,
-+							   struct v4l2_m2m_ctx,
-+							   out_q_ctx.q);
-+			else
-+				m2m_ctx_obj = container_of(vb->vb2_queue,
-+							   struct v4l2_m2m_ctx,
-+							   cap_q_ctx.q);
- 			WARN_ON(m2m_ctx && m2m_ctx_obj != m2m_ctx);
- 			m2m_ctx = m2m_ctx_obj;
- 		}
+-	/* Apply request controls if any */
++	/*
++	 * Apply request controls if any.
++	 * The dst_buf queue has read-only requests, so no need to
++	 * setup any controls for that buffer.
++	 */
+ 	v4l2_ctrl_request_setup(src_buf->vb2_buf.req_obj.req,
+ 				&ctx->hdl);
+ 
+@@ -611,6 +615,8 @@ static void device_run(void *priv)
+ 	/* Complete request controls if any */
+ 	v4l2_ctrl_request_complete(src_buf->vb2_buf.req_obj.req,
+ 				   &ctx->hdl);
++	v4l2_ctrl_request_complete(dst_buf->vb2_buf.req_obj.req,
++				   &ctx->hdl);
+ 
+ 	/* Run delayed work, which simulates a hardware irq  */
+ 	schedule_delayed_work(&ctx->work_run, msecs_to_jiffies(ctx->transtime));
+@@ -1138,6 +1144,8 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	dst_vq->mem_ops = &vb2_vmalloc_memops;
+ 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+ 	dst_vq->lock = &ctx->vb_mutex;
++	dst_vq->supports_requests = true;
++	dst_vq->supports_ro_requests = true;
+ 
+ 	return vb2_queue_init(dst_vq);
+ }
 -- 
 2.30.2
 
