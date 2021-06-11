@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F80C48BD1
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 15:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A3CBC48BE0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 15:59:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08D94613F9
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 15:51:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48FFC613EE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 15:59:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhFKPxC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Jun 2021 11:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S230265AbhFKQBN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Jun 2021 12:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbhFKPxC (ORCPT
+        with ESMTP id S230201AbhFKQBL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Jun 2021 11:53:02 -0400
+        Fri, 11 Jun 2021 12:01:11 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B491C061574;
-        Fri, 11 Jun 2021 08:51:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7FAC061574;
+        Fri, 11 Jun 2021 08:59:13 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 0B6ED1F447EC
-Message-ID: <09885c89dd37ca56305630c96da88333e81a2f25.camel@collabora.com>
-Subject: Re: [PATCH v2 06/12] media: hantro: add support for Rockchip RK3066
+        with ESMTPSA id 4466C1F44800
+Message-ID: <1dc782cd3956598b2eb5f89ad0680d2ce38ffd54.camel@collabora.com>
+Subject: Re: [PATCH v2 08/12] ARM: dts: rockchip: add power controller for
+ RK3036
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Alex Bee <knaerzche@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -39,43 +39,32 @@ To:     Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Fri, 11 Jun 2021 12:50:50 -0300
-In-Reply-To: <20210527154455.358869-7-knaerzche@gmail.com>
+Date:   Fri, 11 Jun 2021 12:58:58 -0300
+In-Reply-To: <20210527154455.358869-9-knaerzche@gmail.com>
 References: <20210525152225.154302-1-knaerzche@gmail.com>
          <20210527154455.358869-1-knaerzche@gmail.com>
-         <20210527154455.358869-7-knaerzche@gmail.com>
+         <20210527154455.358869-9-knaerzche@gmail.com>
 Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alex,
+Hi Heiko,
 
 On Thu, 2021-05-27 at 17:44 +0200, Alex Bee wrote:
-> RK3066's VPU IP block is the predecessor from what RK3288 has.
-> The hardware differences are:
->   - supports decoding frame sizes up to 1920x1088 only
->   - doesn't have the 'G1_REG_SOFT_RESET' register
->     (requires another .reset callback for hantro_codec_ops,
->      since writing this register will result in non-working
->      IP block)
->   - has one ACLK/HCLK per vdpu/vepu
->   - ACLKs can be clocked up to 300 MHz only
-
-Have you tested trying 400 MHz (or more) ?
-
->   - no MMU
->     (no changes required: CMA will be transparently used)
-> 
-> Add a new RK3066 variant which reflect this differences. This variant
-> can be used for RK3188 as well.
+> Add the power controller node and the correspondending qos nodes for
+> RK3036.
+> Also add the power-domain property to the nodes that are already
+> present.
+> Note: Since the regiser offsets of the axi interconnect QoS are missing
+> in the TRM (RK3036 TRM V1.0), they have been taken from vendor kernel.
 > 
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Can you take care of the device tree changes (patches 8 to 12)?
 
 Thanks!
 Ezequiel
