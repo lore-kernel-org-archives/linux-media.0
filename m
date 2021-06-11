@@ -2,66 +2,83 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F448C49361
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADA22C48BD1
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:46:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0948061403
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94B14613F3
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbhFKKRP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Jun 2021 06:17:15 -0400
-Received: from comms.puri.sm ([159.203.221.185]:51780 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230407AbhFKKRO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Jun 2021 06:17:14 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id A6062E0186;
-        Fri, 11 Jun 2021 03:14:46 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lRNvkGaTfasI; Fri, 11 Jun 2021 03:14:45 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     martin.kepplinger@puri.sm, krzysztof.kozlowski@canonical.com,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        paul.kocialkowski@bootlin.com, pavel@ucw.cz
-Cc:     devicetree@vger.kernel.org, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        phone-devel@vger.kernel.org, robh@kernel.org, shawnx.tu@intel.com
-Subject: [PATCH v5 4/5] arm64: defconfig: enable VIDEO_HI846
-Date:   Fri, 11 Jun 2021 12:14:03 +0200
-Message-Id: <20210611101404.2553818-5-martin.kepplinger@puri.sm>
-In-Reply-To: <20210611101404.2553818-1-martin.kepplinger@puri.sm>
-References: <20210611101404.2553818-1-martin.kepplinger@puri.sm>
-Content-Transfer-Encoding: 8bit
+        id S231217AbhFKKsX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Jun 2021 06:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230365AbhFKKsW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:48:22 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377AC061574;
+        Fri, 11 Jun 2021 03:46:24 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 376EC2FB; Fri, 11 Jun 2021 12:46:21 +0200 (CEST)
+Date:   Fri, 11 Jun 2021 12:46:19 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, srv_heupstream@mediatek.com,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
+        chao.hao@mediatek.com, ming-fan.chen@mediatek.com,
+        yi.kuo@mediatek.com, eizan@chromium.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v5 13/16] media: mtk-vcodec: Get rid of
+ mtk_smi_larb_get/put
+Message-ID: <YMM++ySKo38OUMXQ@8bytes.org>
+References: <20210410091128.31823-1-yong.wu@mediatek.com>
+ <20210410091128.31823-14-yong.wu@mediatek.com>
+ <CAJMQK-iTrQRDDm_=LNqSpvXFd431LYRxXMasJHUpN+K8rJ=Qpg@mail.gmail.com>
+ <1620822547.2983.8.camel@mhfsdcap03>
+ <c1422242-8d8c-9592-c22d-288c503cd8b1@gmail.com>
+ <1623326528.23717.20.camel@mhfsdcap03>
+ <e7269c80-5437-6ab9-c1db-df0b94eb97d8@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7269c80-5437-6ab9-c1db-df0b94eb97d8@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-build the driver for the Hi-846 camera by default on arm64, where it's
-going to be used on at least the imx8mq-librem5 board.
+On Fri, Jun 11, 2021 at 12:07:24PM +0200, Matthias Brugger wrote:
+> That's a good question. I think the media tree would be a good
+> candidate, as it has the biggest bunch of patches. But that would mean
+> that Joerg is fine that.  The DTS part could still go through my tree.
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+IOMMU changes are only a minor part of this, so it should not go through
+the IOMMU tree. When Matthias has reviewed the IOMMU changes, feel free
+to add my
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 1f1cb5b0dfe0..3a838464d3c1 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -665,6 +665,7 @@ CONFIG_VIDEO_RENESAS_FCP=m
- CONFIG_VIDEO_RENESAS_VSP1=m
- CONFIG_SDR_PLATFORM_DRIVERS=y
- CONFIG_VIDEO_RCAR_DRIF=m
-+CONFIG_VIDEO_HI846=m
- CONFIG_VIDEO_IMX219=m
- CONFIG_VIDEO_OV5645=m
- CONFIG_VIDEO_QCOM_CAMSS=m
--- 
-2.30.2
+	Acked-by: Joerg Roedel <jroedel@suse.de>
 
+to them.
+
+Regards,
+
+	Joerg
