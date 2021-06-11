@@ -2,28 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7764FC48BE0
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 445F5C48BE8
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A17161073
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BC5961073
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:15:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbhFKKRC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Jun 2021 06:17:02 -0400
-Received: from comms.puri.sm ([159.203.221.185]:51710 "EHLO comms.puri.sm"
+        id S231691AbhFKKRI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Jun 2021 06:17:08 -0400
+Received: from comms.puri.sm ([159.203.221.185]:51730 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230407AbhFKKRB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Jun 2021 06:17:01 -0400
+        id S230407AbhFKKRH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:17:07 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id DDF97E0190;
-        Fri, 11 Jun 2021 03:14:33 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 4DE7FE019C;
+        Fri, 11 Jun 2021 03:14:40 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YWQN31593CEz; Fri, 11 Jun 2021 03:14:32 -0700 (PDT)
+        with ESMTP id DEIHx4flHnOy; Fri, 11 Jun 2021 03:14:39 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 To:     martin.kepplinger@puri.sm, krzysztof.kozlowski@canonical.com,
         laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
@@ -31,80 +32,140 @@ To:     martin.kepplinger@puri.sm, krzysztof.kozlowski@canonical.com,
 Cc:     devicetree@vger.kernel.org, kernel@puri.sm,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         phone-devel@vger.kernel.org, robh@kernel.org, shawnx.tu@intel.com
-Subject: [PATCH v5 0/5] Add support for the Hynix Hi-846 camera
-Date:   Fri, 11 Jun 2021 12:13:59 +0200
-Message-Id: <20210611101404.2553818-1-martin.kepplinger@puri.sm>
+Subject: [PATCH v5 2/5] dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor
+Date:   Fri, 11 Jun 2021 12:14:01 +0200
+Message-Id: <20210611101404.2553818-3-martin.kepplinger@puri.sm>
+In-Reply-To: <20210611101404.2553818-1-martin.kepplinger@puri.sm>
+References: <20210611101404.2553818-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-hi,
+Document the bindings used for the SK Hynix Hi-846 CMOS camera driver.
 
-This patchset adds support for the SK Hynix Hi-846 CMOS images sensor.
-It includes dt-bindings and the driver.
-
-Patches 4 and 5 are basically optional: if i2c-cardlist is deprecated,
-ignore it and act on it appropriately, and the arm64 defconfig is just
-convenience for now.
-
-best wishes,
-
-                              martin
-
-revision history
-----------------
-v5: (thank you Laurent and Rob)
-* minor dt-bindings fixes
-* driver: disable lens shading correcting (no seed values yet used from "otp" for that)
-* add reviewed-tags
-
-v4: (thank you Laurent, Sakari and Rob) many driver changes, see v3 review for
-details. they include:
-* add get_selection(), remove open() callback
-* use gpiod API
-* use regulator_bulk API
-* fix power supply timing sequence and bindings
-* https://lore.kernel.org/linux-media/20210607105213.1211722-1-martin.kepplinger@puri.sm/
-
-v3: (thank you, Laurent)
-* use do_div() for divisions
-* reset-gpios DT property name instead of rst-gpios
-* improve the dt-bindings
-* add the phone-devel list
-* https://lore.kernel.org/linux-media/20210531120737.168496-1-martin.kepplinger@puri.sm/
-
-v2:
-sent a bit early due to stupid mistakes
-* fix build issues
-* fix dtschema issues
-* add enable for arm64 defconfig
-* https://lore.kernel.org/linux-media/20210530212337.GA15366@duo.ucw.cz/T/#t
-
-v1:
-* https://lore.kernel.org/linux-media/20210527091221.3335998-1-martin.kepplinger@puri.sm/
-
-
-Martin Kepplinger (5):
-  dt-bindings: vendor-prefixes: Add SK Hynix Inc.
-  dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel
-    sensor
-  media: i2c: add driver for the SK Hynix Hi-846 8M pixel camera
-  arm64: defconfig: enable VIDEO_HI846
-  Documentation: i2c-cardlist: add the Hynix hi846 sensor
-
- .../admin-guide/media/i2c-cardlist.rst        |    1 +
- .../bindings/media/i2c/hynix,hi846.yaml       |  108 +
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |    6 +
- arch/arm64/configs/defconfig                  |    1 +
- drivers/media/i2c/Kconfig                     |   13 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/hi846.c                     | 2117 +++++++++++++++++
- 8 files changed, 2249 insertions(+)
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/media/i2c/hynix,hi846.yaml       | 108 ++++++++++++++++++
+ 1 file changed, 108 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
- create mode 100644 drivers/media/i2c/hi846.c
 
+diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+new file mode 100644
+index 000000000000..8ca038b8d388
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+@@ -0,0 +1,108 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/hynix,hi846.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SK Hynix Hi-846 1/4" 8M Pixel MIPI CSI-2 sensor
++
++maintainers:
++  - Martin Kepplinger <martin.kepplinger@puri.sm>
++
++description: |-
++  The Hi-846 is a raw image sensor with an MIPI CSI-2 image data
++  interface and CCI (I2C compatible) control bus. The output format
++  is raw Bayer.
++
++properties:
++  compatible:
++    const: hynix,hi846
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Reference to the mclk clock.
++
++  reset-gpios:
++    description: Reference to the GPIO connected to the RESETB pin. Active low.
++    maxItems: 1
++
++  shutdown-gpios:
++    description: Reference to the GPIO connected to the XSHUTDOWN pin. Active low.
++    maxItems: 1
++
++  vddio-supply:
++    description: Definition of the regulator used for the VDDIO power supply.
++
++  vdda-supply:
++    description: Definition of the regulator used for the VDDA power supply.
++
++  vddd-supply:
++    description: Definition of the regulator used for the VDDD power supply.
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            oneOf:
++              - items:
++                  - const: 1
++                  - const: 2
++                  - const: 3
++                  - const: 4
++              - items:
++                  - const: 1
++                  - const: 2
++
++        required:
++          - data-lanes
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - vddio-supply
++  - vdda-supply
++  - vddd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hi846: camera@20 {
++            compatible = "hynix,hi846";
++            reg = <0x20>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&pinctrl_csi1>;
++            clocks = <&clk>;
++            vdda-supply = <&reg_camera_vdda>;
++            vddd-supply = <&reg_camera_vddd>;
++            vddio-supply = <&reg_camera_vddio>;
++            reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
++            shutdown-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
++
++            port {
++                camera_out: endpoint {
++                    remote-endpoint = <&csi1_ep1>;
++                    data-lanes = <1 2>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 2.30.2
 
