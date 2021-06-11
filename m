@@ -2,107 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C13C48BE0
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 09:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8C3BC48BE0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:00:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52675613D2
-	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 09:25:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3C6B613D0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Jun 2021 10:00:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhFKJ1V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Jun 2021 05:27:21 -0400
-Received: from mga18.intel.com ([134.134.136.126]:28291 "EHLO mga18.intel.com"
+        id S231236AbhFKKB5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Jun 2021 06:01:57 -0400
+Received: from mga17.intel.com ([192.55.52.151]:65434 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231447AbhFKJ1U (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:27:20 -0400
-IronPort-SDR: bTlDg8PfKNeW/Z9QPiw0qrwz419U867ryObzUIjkqzzvAl2p/MtFm5iuCoYoFzPk8qPvbjQIEu
- azuBrYR0ZlQw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="192805545"
+        id S230356AbhFKKB4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:01:56 -0400
+IronPort-SDR: KbRBw84QMUkbJlsQOWUK4xLdEtHqN43el7zBfvTAiiwAwTsLOuwPEYMoaJLscMLKTciJL/gODL
+ JJWGyy4D4PGg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="185872338"
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="192805545"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:25:22 -0700
-IronPort-SDR: EBfadmRwfYNO/wjmn5hoOHtYRfIHdCTzvx10C2DOxaa9XJbOZNb8o/NXWFd/Gr4/MaZSi3e7YU
- /BB7XGFaL+gA==
+   d="scan'208";a="185872338"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:59:58 -0700
+IronPort-SDR: fkhDfSlQ9vKy2UjFBMV6u4V7kKolzSzvRQ9J+MTp+VU583mEzKSoxIs4kcnXIGdjuJeL0KWhkK
+ OhtlES0XpWyA==
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="636074567"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:25:19 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 3A9F1200C8;
-        Fri, 11 Jun 2021 12:25:16 +0300 (EEST)
-Date:   Fri, 11 Jun 2021 12:25:16 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Krasteva, Martina" <martinax.krasteva@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        daniele.alessandrelli@linux.intel.com,
-        paul.j.murphy@linux.intel.com, gjorgjix.rosikopulos@linux.intel.com
-Subject: Re: [PATCH v2 0/6] Camera Sensor Drivers
-Message-ID: <20210611092516.GN3@paasikivi.fi.intel.com>
-References: <20210527142145.173-1-martinax.krasteva@linux.intel.com>
- <20210610212751.GJ3@paasikivi.fi.intel.com>
- <747a5d78-2575-4d1e-f4c2-ae803a02a654@linux.intel.com>
+   d="scan'208";a="552649386"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:59:55 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lrdxA-001TlT-E8; Fri, 11 Jun 2021 12:59:52 +0300
+Date:   Fri, 11 Jun 2021 12:59:52 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, kaixuxia@tencent.com,
+        gustavoars@kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com,
+        yangjihong1@huawei.com, yukuai3@huawei.com,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next v3] media: staging: atomisp: use list_splice_init
+ in atomisp_compat_css20.c
+Message-ID: <YMM0GO4Ny6j/FvQV@smile.fi.intel.com>
+References: <20210611081004.1348026-1-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <747a5d78-2575-4d1e-f4c2-ae803a02a654@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210611081004.1348026-1-libaokun1@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martina,
+On Fri, Jun 11, 2021 at 04:10:04PM +0800, Baokun Li wrote:
+> Using list_splice_init() instead of entire while-loops
+> in atomisp_compat_css20.c.
 
-On Fri, Jun 11, 2021 at 10:06:00AM +0100, Krasteva, Martina wrote:
-> Hi Sakari,
-> 
-> Thanks for the review
-> 
-> On 6/10/2021 10:27 PM, Sakari Ailus wrote:
-> > Hi Martina,
-> > 
-> > On Thu, May 27, 2021 at 03:21:39PM +0100, Martina Krasteva wrote:
-> > > From: Martina Krasteva <martinax.krasteva@intel.com>
-> > > 
-> > > Patch series contains Sony IMX335, Sony IMX412 and OmniVision OV9282
-> > > camera sensor drivers and respective binding documentation.
-> > > 
-> > > v1->v2:
-> > > - define maxItems for reset-gpios in dt binding document
-> > > - make sure the device is powered off on remove
-> > > - use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
-> > > 
-> > > v1: https://patchwork.kernel.org/project/linux-media/list/?series=458115
-> > Thanks for the update.
-> > 
-> > The patches seem fine, but I noticed one problem: the analogue gain is only
-> > updated when exposure is set. This is a bug.
-> > 
-> > Most drivers do not try to synchronise setting analogue gain and exposure
-> > to the same frame. Do you need that? Alternatively the control framework
-> > would probably need to be amended a little --- something that would have
-> > other benefits, too.
-> 
-> Analog gain and exposure are "clustered". If I understand correctly, when
-> several controls are in a cluster and one/several of them are set/get from
-> userspace only the first control ops is called - V4L2_CID_EXPOSURE in my
-> case.
-> 
-> Analog gain can be set explicitly, exposure control ops will be called with
-> analog gain new value and current exp. value.
-> Then I could have checked the is_new flag, so I can write the reg value just
-> to the updated control, not to both.
-> 
-> In my case the userspace provides gain and exposure settings in sync so
-> cluster is used to mirror that behavior.
+Seems fine to me.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I missed that, indeed that's fine then.
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+> V1->V2:
+> 	CC mailist
+> V2->V3:
+>         Using list_move_tail() -> Using list_splice_init()
+> 
+>  .../media/atomisp/pci/atomisp_compat_css20.c  | 35 +++----------------
+>  1 file changed, 5 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> index f60198bb8a1a..3844180d32b5 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> @@ -2144,42 +2144,17 @@ void atomisp_css_stop(struct atomisp_sub_device *asd,
+>  	}
+>  
+>  	/* move stats buffers to free queue list */
+> -	while (!list_empty(&asd->s3a_stats_in_css)) {
+> -		s3a_buf = list_entry(asd->s3a_stats_in_css.next,
+> -				     struct atomisp_s3a_buf, list);
+> -		list_del(&s3a_buf->list);
+> -		list_add_tail(&s3a_buf->list, &asd->s3a_stats);
+> -	}
+> -	while (!list_empty(&asd->s3a_stats_ready)) {
+> -		s3a_buf = list_entry(asd->s3a_stats_ready.next,
+> -				     struct atomisp_s3a_buf, list);
+> -		list_del(&s3a_buf->list);
+> -		list_add_tail(&s3a_buf->list, &asd->s3a_stats);
+> -	}
+> +	list_splice_init(&asd->s3a_stats_in_css, &asd->s3a_stats);
+> +	list_splice_init(&asd->s3a_stats_ready, &asd->s3a_stats);
+>  
+>  	spin_lock_irqsave(&asd->dis_stats_lock, irqflags);
+> -	while (!list_empty(&asd->dis_stats_in_css)) {
+> -		dis_buf = list_entry(asd->dis_stats_in_css.next,
+> -				     struct atomisp_dis_buf, list);
+> -		list_del(&dis_buf->list);
+> -		list_add_tail(&dis_buf->list, &asd->dis_stats);
+> -	}
+> +	list_splice_init(&asd->dis_stats_in_css, &asd->dis_stats);
+>  	asd->params.dis_proj_data_valid = false;
+>  	spin_unlock_irqrestore(&asd->dis_stats_lock, irqflags);
+>  
+>  	for (i = 0; i < ATOMISP_METADATA_TYPE_NUM; i++) {
+> -		while (!list_empty(&asd->metadata_in_css[i])) {
+> -			md_buf = list_entry(asd->metadata_in_css[i].next,
+> -					    struct atomisp_metadata_buf, list);
+> -			list_del(&md_buf->list);
+> -			list_add_tail(&md_buf->list, &asd->metadata[i]);
+> -		}
+> -		while (!list_empty(&asd->metadata_ready[i])) {
+> -			md_buf = list_entry(asd->metadata_ready[i].next,
+> -					    struct atomisp_metadata_buf, list);
+> -			list_del(&md_buf->list);
+> -			list_add_tail(&md_buf->list, &asd->metadata[i]);
+> -		}
+> +		list_splice_init(&asd->metadata_in_css[i], &asd->asd->metadata[i]);
+> +		list_splice_init(&asd->metadata_ready[i], &asd->asd->metadata[i]);
+>  	}
+>  
+>  	atomisp_flush_params_queue(&asd->video_out_capture);
+> -- 
+> 2.31.1
+> 
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Sakari Ailus
+
