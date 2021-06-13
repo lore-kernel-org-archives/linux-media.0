@@ -2,108 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5267C48BCF
-	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C3BC48BCF
+	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 15:09:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79B0960FF0
-	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:59:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04ADB611C0
+	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 15:09:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbhFMKBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Jun 2021 06:01:45 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:38388 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230255AbhFMKBp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Jun 2021 06:01:45 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lsMu7-00EWzJ-Hl; Sun, 13 Jun 2021 09:59:43 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1lsMyZ-0007TQ-8V; Sun, 13 Jun 2021 10:04:19 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.14] v4l2-subdev: add subdev-wide state struct (#75003)
-Date:   Sun, 13 Jun 2021 10:04:18 +0000
-Message-Id: <20210613100419.28687-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <e2098236-6b6d-4fbc-3493-4132a0cbb9d7@xs4all.nl>
-References: 
+        id S231913AbhFMPLP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Jun 2021 11:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231887AbhFMPLP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 13 Jun 2021 11:11:15 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87E7C061574
+        for <linux-media@vger.kernel.org>; Sun, 13 Jun 2021 08:09:13 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id g20so12282507ejt.0
+        for <linux-media@vger.kernel.org>; Sun, 13 Jun 2021 08:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsFPGPRtyZEIQpz+krVUmYKB4TQmq9ynXdMydNWeOZQ=;
+        b=vXHFjnlEk1iBCVrvvKiNv7dfwQLL7WFAV7vEVWbfatw6BeYeEyI8tvU26HCrln5BE5
+         1YHvAW78Wfh8RWJigjn37KvZuKgvVmRWAtMz6AzjF7gCSE1Bd2BsW52kjMflNZ5pIcQr
+         XGTztyQKgz3nrOLDK1hAMiLebyujgYH7owjMdPIwLwcVIkkXm3FH0VAXvfWxqPu/Gwta
+         9bIYjmpuwOk/KhkdsZyZBNmJSFN/BmklhRGz+SsGWyUaD+7iOmEhsnliKEA/2gn98zXB
+         HhTkyX06YlWjqc3oC3kpUKSDx42l/WKEftTBNbujpo6/GWfgHzlyGHHaa75HUDIo12Ne
+         c+Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsFPGPRtyZEIQpz+krVUmYKB4TQmq9ynXdMydNWeOZQ=;
+        b=AKaVnnKWwRXOvFzZax01aw6YK9EXoIqXtVySH9a+FcxQ2jd4wdDPaqjQDz/nGIGh9j
+         MCriTypLRN9v/QxJtiARu+sbaV2TO4W+iYEAh5IVkaUBzZFx7cqf+Hs+wBJ3+yK42W0W
+         L1QRHZQXFuLeWTS4DssYkj7gMbEgRseDYHicggSHSnfNCtAfsX5CtjUgHjZ18wmMEbVT
+         Pl/zFXE35EuqYrER0Fb8Eh6uBrZjFyxR6AMclG8Yx6qckyPsX0SUcWv5lq0D5K0llx0J
+         WjapFky8FuZcGfmLC2caKlqVAugrWhtHXrZvObelIAzpvxHXHFnp1B92k4zEye91IRBK
+         KpTQ==
+X-Gm-Message-State: AOAM533GmFQJEXtzwDixK6dc8V5DJLn9wUIIOAT60Y/tDVXEDVARdlkx
+        iKnWaC57YC9hE90BzxIDvj+IWA==
+X-Google-Smtp-Source: ABdhPJyPrEsu73jUXa3yP/ywswb98s4qPb0GygrMIFlz6zLrjD/WP0aRE0w9SwpmJSwPD8UAY8VLvQ==
+X-Received: by 2002:a17:906:fa13:: with SMTP id lo19mr11962105ejb.468.1623596948266;
+        Sun, 13 Jun 2021 08:09:08 -0700 (PDT)
+Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
+        by smtp.googlemail.com with ESMTPSA id h26sm5014367ejx.25.2021.06.13.08.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Jun 2021 08:09:07 -0700 (PDT)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v3] media: v4l2-fwnode: Simplify v4l2_async_nf_parse_fwnode_endpoints()
+Date:   Sun, 13 Jun 2021 17:08:47 +0200
+Message-Id: <20210613150847.774978-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+There are only one user left of __v4l2_async_notifier_parse_fwnode_ep()
+since [1], v4l2_async_notifier_parse_fwnode_endpoints(). The two
+functions can be merged.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/e2098236-6b6d-4fbc-3493-4132a0cbb9d7@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/114972/
-Build time: 00:19:48
-Link: https://lore.kernel.org/linux-media/e2098236-6b6d-4fbc-3493-4132a0cbb9d7@xs4all.nl
+The merge of the two highlights a dead code block conditioned by the
+argument 'has_port' that always is false and can therefor be removed.
 
-gpg: Signature made Sun 13 Jun 2021 09:26:10 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+1. commit 0ae426ebd0dcef81 ("media: v4l2-fwnode: Remove v4l2_async_notifier_parse_fwnode_endpoints_by_port()")
 
-Summary: got 1/1 patches with issues, being 1 at build time, plus one error when buinding PDF document
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+* Changes since v2
+- Extend commit message to describe that the dead code removed is created
+  by the merge of the two functions.
+- The rename of the effected function never made it upstream, rebase
+  this patch to latest media-tree so it can be picked-up without the
+  rename.
 
-Error/warnings:
+* Changes since v1
+- Rebased on Sakari's branch which renames
+  v4l2_async_notifier_parse_fwnode_endpoints() to
+  v4l2_async_nf_parse_fwnode_endpoints).
+---
+ drivers/media/v4l2-core/v4l2-fwnode.c | 33 ++++-----------------------
+ 1 file changed, 5 insertions(+), 28 deletions(-)
 
-patches/0001-media-v4l2-subdev-add-subdev-wide-state-struct.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-
-    allyesconfig: return code #512:
-	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	(null):builtin:2:0: error: missing terminating " character
-	No such file: drivers/media/platform/atmel/atmel-xisc"
-	SPARSE:(null) builtin:2:0:  warning: missing terminating " character
-	No such file: drivers/media/platform/atmel/atmel-xisc"
-	make[5]: *** [../scripts/Makefile.build:272: drivers/media/platform/atmel/atmel-isc-base.o] Error 1
-	make[5]: *** Deleting file 'drivers/media/platform/atmel/atmel-isc-base.o'
-	make[4]: *** [../scripts/Makefile.build:515: drivers/media/platform/atmel] Error 2
-	make[3]: *** [../scripts/Makefile.build:515: drivers/media/platform] Error 2
-	make[3]: *** Waiting for unfinished jobs....
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2856 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-	make[2]: *** [../scripts/Makefile.build:515: drivers/media] Error 2
-	make[1]: *** [/var/lib/jenkins/workspace/patchwork/Makefile:1844: drivers] Error 2
-	make: *** [Makefile:215: __sub-make] Error 2
-
-   checkpatch.pl:
-	$ cat patches/0001-media-v4l2-subdev-add-subdev-wide-state-struct.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:28: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-	-:37: ERROR: Avoid using diff content in the commit message - patch(1) might not work
-	-:9431: CHECK: Comparison to NULL could be written "!sd_state"
-	-:13209: CHECK: Prefer kernel type 'u32' over 'uint32_t'
-	-:13335: CHECK: Prefer kernel type 'u32' over 'uint32_t'
-	-:13408: CHECK: Prefer kernel type 'u32' over 'uint32_t'
-
-
-Error #512 when building PDF docs
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 843259c304bb5857..60ef0e11af51850c 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -839,13 +839,11 @@ v4l2_async_notifier_fwnode_parse_endpoint(struct device *dev,
+ 	return ret == -ENOTCONN ? 0 : ret;
+ }
+ 
+-static int
+-__v4l2_async_notifier_parse_fwnode_ep(struct device *dev,
+-				      struct v4l2_async_notifier *notifier,
+-				      size_t asd_struct_size,
+-				      unsigned int port,
+-				      bool has_port,
+-				      parse_endpoint_func parse_endpoint)
++int
++v4l2_async_notifier_parse_fwnode_endpoints(struct device *dev,
++					   struct v4l2_async_notifier *notifier,
++					   size_t asd_struct_size,
++					   parse_endpoint_func parse_endpoint)
+ {
+ 	struct fwnode_handle *fwnode;
+ 	int ret = 0;
+@@ -863,16 +861,6 @@ __v4l2_async_notifier_parse_fwnode_ep(struct device *dev,
+ 		if (!is_available)
+ 			continue;
+ 
+-		if (has_port) {
+-			struct fwnode_endpoint ep;
+-
+-			ret = fwnode_graph_parse_endpoint(fwnode, &ep);
+-			if (ret)
+-				break;
+-
+-			if (ep.port != port)
+-				continue;
+-		}
+ 
+ 		ret = v4l2_async_notifier_fwnode_parse_endpoint(dev,
+ 								notifier,
+@@ -887,17 +875,6 @@ __v4l2_async_notifier_parse_fwnode_ep(struct device *dev,
+ 
+ 	return ret;
+ }
+-
+-int
+-v4l2_async_notifier_parse_fwnode_endpoints(struct device *dev,
+-					   struct v4l2_async_notifier *notifier,
+-					   size_t asd_struct_size,
+-					   parse_endpoint_func parse_endpoint)
+-{
+-	return __v4l2_async_notifier_parse_fwnode_ep(dev, notifier,
+-						     asd_struct_size, 0,
+-						     false, parse_endpoint);
+-}
+ EXPORT_SYMBOL_GPL(v4l2_async_notifier_parse_fwnode_endpoints);
+ 
+ /*
+-- 
+2.32.0
 
