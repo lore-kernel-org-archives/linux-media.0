@@ -2,198 +2,224 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DC5C49EBA
-	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F091BC48BCF
+	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:54:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 881CF6135A
-	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:30:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4CEF6124B
+	for <linux-media@archiver.kernel.org>; Sun, 13 Jun 2021 09:54:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbhFMJcX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Jun 2021 05:32:23 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:6345 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbhFMJcU (ORCPT
+        id S231277AbhFMJ4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Jun 2021 05:56:08 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:45671 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230255AbhFMJ4I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Jun 2021 05:32:20 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4G2q2g3CGCz6xBR;
-        Sun, 13 Jun 2021 17:26:19 +0800 (CST)
-Received: from SZX1000464847.huawei.com (10.21.59.169) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Sun, 13 Jun 2021 17:30:15 +0800
-From:   Dongdong Liu <liudongdong3@huawei.com>
-To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
-        <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
-        <hverkuil-cisco@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [RESEND PATCH V3 2/6] PCI: Use cached Device Capabilities 2 Register
-Date:   Sun, 13 Jun 2021 17:29:11 +0800
-Message-ID: <1623576555-40338-3-git-send-email-liudongdong3@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1623576555-40338-1-git-send-email-liudongdong3@huawei.com>
-References: <1623576555-40338-1-git-send-email-liudongdong3@huawei.com>
+        Sun, 13 Jun 2021 05:56:08 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id sMoWlTz7BhqltsMoaliukF; Sun, 13 Jun 2021 11:54:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1623578046; bh=SQyS+Y3p6UN65qWEUsJs2WXAkTNdt6/vcL+TKRR4/QI=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=NH2lLmGDRpDMHo5GbuZ2dRQ12B9au4vu16j+eqC4lKX7s6sM/rqXScRfwfrSs+2ZO
+         y2G3ioxoRrjosfI6hmcEhbjkeH+DgxmjfI5kUTMw107Gi58My2J6eCBfgHQ0WDqwuM
+         YfM/XARHYk/J0gQJBo+BoLnHYwp6/mwrpszej8cQl0eHG6l8PGOEnZ+EMDLd5JmNk3
+         KzSmnjPwk3uSV6hxmC4+IEbrbVpm1GZa7/p+cAfb6IU3FXGTKuPKeh0eDDovzcdz6E
+         eXFX+MkgSpzj6UFIfEmKOO1bKuIQWty/6msJPybwDmC0Bhx4buiiJs9jXJxSucWCQo
+         ZoRSA9QeWRnpg==
+Subject: Re: [PATCH 1/8] media: hantro: Trace hevc hw cycles performance
+ register
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@collabora.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
+        andrzej.p@collabora.com, jc@kynesim.co.uk
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210604130619.491200-1-benjamin.gaignard@collabora.com>
+ <20210604130619.491200-2-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <dbf5f5e1-4989-c97d-3679-58af549b5082@xs4all.nl>
+Date:   Sun, 13 Jun 2021 11:53:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.21.59.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210604130619.491200-2-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfC+qvsamcgTUEUyTEVHimnw2PMHl0XfEPb1n2rzUK/9wEqbYCo1bpuCq2E/jqEfXyTjejOZ1YLNH+WF3nx/PtNIKT4rrZzLYrtQOxrGrtvUtPd7sG2Aa
+ qjiG1wFH6IO0pmH2R/L0xXwzoWLptRz+VYin8O+BGOMP+3Ox5+1jnR5cOnel2THG2kgzymNq8a3+gpv05HQHLzXo4Gwyi6aRoY8pbKfCFQYkvAr1y8ChzNxx
+ Djt1CCb0B2pRfwFUefbhkjv42efzUogqSeUx5ox8nGXoIfGl/Ab0VTCg5KOSbATFXnB3UZ8uFI3mvc5AhcZzL9f7F72MdUnQziy0ORAbMr4DomY3ZqPJ95Qe
+ vziPNG4mzChT8tAkosQNwDYQ2ILD0lhmYjsaqUyEFPiHBhUsDrZuKJYSEeCOivCEC2ZK7HZ3auwEdjxGOSGkQPT9kYp6Jtbvktb5WgEeuon/mYANfHFwIZG8
+ x7ytrwSqgouOZBb6iVqyvxv1iL6cF78SCagtRtoP23vCy++xDWEmUVnPOxAgJRQfzOLHT8r0RCjVJ0ySjr6KhlF3I892je1kSehV/dkoKU5g3sbOolVORgw3
+ 0Ju0O5CVzo2UR8jo5OYRVPmFYq6g6t5Y+5V+eLC6ByXQvZPNPi2eo00IKL2RkvuwBTFEJ7ErkGNz2LIvcFRew2ZbY4tBV31QwPnX535j2I880Hgtp6mhJYRf
+ YH1qcDjL92GS8JNk7rXDPNp0gcj24//GEfQpzB6o2GquY6wnq73/MG8QKm/ApbfNCpX5rw3PpcDyjTWTuviGNJcPUc/NBtmvslVdsb2DFb61jK/5OGgVjc7j
+ dNjbShTto4ytcCpdoSpdzh1uH51r+0avBnMIuo0CgjMhYn0OpKXpBVHC101ylP7zneV5+kdrU2okqLw/IDDmePkVle9/jCDZ20DOPcW7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It will make sense to store the pcie_devcap2 value in the pci_dev
-structure instead of reading Device Capabilities 2 Register multiple
-times. Add pci_init_devcap2() to get the pcie_devcap2 value, then
-use cached pcie_devcap2 in the needed place.
+On 04/06/2021 15:06, Benjamin Gaignard wrote:
+> After each hevc decoded frame trace the hardware performance.
+> It provides the number of hw cycles spend per decoded macroblock.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  drivers/staging/media/hantro/hantro_drv.c     |  3 ++
+>  .../staging/media/hantro/hantro_g2_hevc_dec.c | 16 ++++++++
+>  drivers/staging/media/hantro/hantro_g2_regs.h |  1 +
+>  drivers/staging/media/hantro/hantro_hw.h      |  1 +
+>  drivers/staging/media/hantro/imx8m_vpu_hw.c   |  1 +
+>  drivers/staging/media/hantro/trace.h          | 40 +++++++++++++++++++
 
-Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
----
- drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c |  4 +---
- drivers/pci/pci.c                               |  8 +++-----
- drivers/pci/probe.c                             | 18 ++++++++++++------
- include/linux/pci.h                             |  2 ++
- 4 files changed, 18 insertions(+), 14 deletions(-)
+Can you rename this to hantro_trace.h? I prefer to have the driver prefix in the name.
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-index 6264bc6..7896c96 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-@@ -6303,7 +6303,6 @@ static int cxgb4_iov_configure(struct pci_dev *pdev, int num_vfs)
- 		struct pci_dev *pbridge;
- 		struct port_info *pi;
- 		char name[IFNAMSIZ];
--		u32 devcap2;
- 		u16 flags;
- 
- 		/* If we want to instantiate Virtual Functions, then our
-@@ -6313,10 +6312,9 @@ static int cxgb4_iov_configure(struct pci_dev *pdev, int num_vfs)
- 		 */
- 		pbridge = pdev->bus->self;
- 		pcie_capability_read_word(pbridge, PCI_EXP_FLAGS, &flags);
--		pcie_capability_read_dword(pbridge, PCI_EXP_DEVCAP2, &devcap2);
- 
- 		if ((flags & PCI_EXP_FLAGS_VERS) < 2 ||
--		    !(devcap2 & PCI_EXP_DEVCAP2_ARI)) {
-+		    !(pbridge->pcie_devcap2 & PCI_EXP_DEVCAP2_ARI)) {
- 			/* Our parent bridge does not support ARI so issue a
- 			 * warning and skip instantiating the VFs.  They
- 			 * won't be reachable.
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 68ccd77..11103bb 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3690,7 +3690,7 @@ int pci_enable_atomic_ops_to_root(struct pci_dev *dev, u32 cap_mask)
- {
- 	struct pci_bus *bus = dev->bus;
- 	struct pci_dev *bridge;
--	u32 cap, ctl2;
-+	u32 ctl2;
- 
- 	if (!pci_is_pcie(dev))
- 		return -EINVAL;
-@@ -3714,19 +3714,17 @@ int pci_enable_atomic_ops_to_root(struct pci_dev *dev, u32 cap_mask)
- 	while (bus->parent) {
- 		bridge = bus->self;
- 
--		pcie_capability_read_dword(bridge, PCI_EXP_DEVCAP2, &cap);
--
- 		switch (pci_pcie_type(bridge)) {
- 		/* Ensure switch ports support AtomicOp routing */
- 		case PCI_EXP_TYPE_UPSTREAM:
- 		case PCI_EXP_TYPE_DOWNSTREAM:
--			if (!(cap & PCI_EXP_DEVCAP2_ATOMIC_ROUTE))
-+			if (!(bridge->pcie_devcap2 & PCI_EXP_DEVCAP2_ATOMIC_ROUTE))
- 				return -EINVAL;
- 			break;
- 
- 		/* Ensure root port supports all the sizes we care about */
- 		case PCI_EXP_TYPE_ROOT_PORT:
--			if ((cap & cap_mask) != cap_mask)
-+			if ((bridge->pcie_devcap2 & cap_mask) != cap_mask)
- 				return -EINVAL;
- 			break;
- 		}
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 7963ab2..b9942cc 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2093,7 +2093,7 @@ static void pci_configure_ltr(struct pci_dev *dev)
- #ifdef CONFIG_PCIEASPM
- 	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
- 	struct pci_dev *bridge;
--	u32 cap, ctl;
-+	u32 ctl;
- 
- 	if (!pci_is_pcie(dev))
- 		return;
-@@ -2101,8 +2101,7 @@ static void pci_configure_ltr(struct pci_dev *dev)
- 	/* Read L1 PM substate capabilities */
- 	dev->l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
- 
--	pcie_capability_read_dword(dev, PCI_EXP_DEVCAP2, &cap);
--	if (!(cap & PCI_EXP_DEVCAP2_LTR))
-+	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_LTR))
- 		return;
- 
- 	pcie_capability_read_dword(dev, PCI_EXP_DEVCTL2, &ctl);
-@@ -2142,13 +2141,11 @@ static void pci_configure_eetlp_prefix(struct pci_dev *dev)
- #ifdef CONFIG_PCI_PASID
- 	struct pci_dev *bridge;
- 	int pcie_type;
--	u32 cap;
- 
- 	if (!pci_is_pcie(dev))
- 		return;
- 
--	pcie_capability_read_dword(dev, PCI_EXP_DEVCAP2, &cap);
--	if (!(cap & PCI_EXP_DEVCAP2_EE_PREFIX))
-+	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_EE_PREFIX))
- 		return;
- 
- 	pcie_type = pci_pcie_type(dev);
-@@ -2376,6 +2373,14 @@ void pcie_report_downtraining(struct pci_dev *dev)
- 	__pcie_print_link_status(dev, false);
- }
- 
-+static void pci_init_devcap2(struct pci_dev *dev)
-+{
-+	if (!pci_is_pcie(dev))
-+		return;
-+
-+	pcie_capability_read_dword(dev, PCI_EXP_DEVCAP2, &dev->pcie_devcap2);
-+}
-+
- static void pci_init_capabilities(struct pci_dev *dev)
- {
- 	pci_ea_init(dev);		/* Enhanced Allocation */
-@@ -2452,6 +2457,7 @@ void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
- {
- 	int ret;
- 
-+	pci_init_devcap2(dev);
- 	pci_configure_device(dev);
- 
- 	device_initialize(&dev->dev);
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 555a3ac..2965620 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -341,6 +341,8 @@ struct pci_dev {
- 	u8		pin;		/* Interrupt pin this device uses */
- 	u16		pcie_flags_reg;	/* Cached PCIe Capabilities Register */
- 	u32		pcie_devcap;	/* Cached Device Capabilities Register */
-+	u32		pcie_devcap2;	/* Cached Device Capabilities 2
-+					   Register */
- 	unsigned long	*dma_alias_mask;/* Mask of enabled devfn aliases */
- 
- 	struct pci_driver *driver;	/* Driver bound to this device */
--- 
-2.7.4
+Regards,
+
+	Hans
+
+>  6 files changed, 62 insertions(+)
+>  create mode 100644 drivers/staging/media/hantro/trace.h
+> 
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index dbc69ee0b562..6053c86b1c3f 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -28,6 +28,9 @@
+>  #include "hantro.h"
+>  #include "hantro_hw.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include "trace.h"
+> +
+>  #define DRIVER_NAME "hantro-vpu"
+>  
+>  int hantro_debug;
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> index 340efb57fd18..89fac5146433 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include "hantro_hw.h"
+>  #include "hantro_g2_regs.h"
+> +#include "trace.h"
+>  
+>  #define HEVC_DEC_MODE	0xC
+>  
+> @@ -22,6 +23,21 @@ static inline void hantro_write_addr(struct hantro_dev *vpu,
+>  	vdpu_write(vpu, addr & 0xffffffff, offset);
+>  }
+>  
+> +void hantro_g2_hevc_dec_done(struct hantro_ctx *ctx)
+> +{
+> +	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
+> +	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
+> +	struct hantro_dev *vpu = ctx->dev;
+> +	u32 hw_cycles = 0;
+> +	u32 mbs = (sps->pic_width_in_luma_samples *
+> +		   sps->pic_height_in_luma_samples) >> 8;
+> +
+> +	if (mbs)
+> +		hw_cycles = vdpu_read(vpu, G2_HW_PERFORMANCE) / mbs;
+> +
+> +	trace_hantro_hevc_perf(ctx, hw_cycles);
+> +}
+> +
+>  static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+>  {
+>  	struct hantro_dev *vpu = ctx->dev;
+> diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+> index bb22fa921914..17d84ec9c5c2 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_regs.h
+> +++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+> @@ -177,6 +177,7 @@
+>  #define G2_REG_CONFIG_DEC_CLK_GATE_E		BIT(16)
+>  #define G2_REG_CONFIG_DEC_CLK_GATE_IDLE_E	BIT(17)
+>  
+> +#define G2_HW_PERFORMANCE	(G2_SWREG(63))
+>  #define G2_ADDR_DST		(G2_SWREG(65))
+>  #define G2_REG_ADDR_REF(i)	(G2_SWREG(67)  + ((i) * 0x8))
+>  #define G2_ADDR_DST_CHR		(G2_SWREG(99))
+> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+> index 5737a7707944..8fa0aacb61cd 100644
+> --- a/drivers/staging/media/hantro/hantro_hw.h
+> +++ b/drivers/staging/media/hantro/hantro_hw.h
+> @@ -240,6 +240,7 @@ void hantro_h264_dec_exit(struct hantro_ctx *ctx);
+>  int hantro_hevc_dec_init(struct hantro_ctx *ctx);
+>  void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+>  int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+> +void hantro_g2_hevc_dec_done(struct hantro_ctx *ctx);
+>  int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+>  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
+>  void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> index ea919bfb9891..7e9e24bb5057 100644
+> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> @@ -239,6 +239,7 @@ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+>  		.reset = imx8m_vpu_g2_reset,
+>  		.init = hantro_hevc_dec_init,
+>  		.exit = hantro_hevc_dec_exit,
+> +		.done = hantro_g2_hevc_dec_done,
+>  	},
+>  };
+>  
+> diff --git a/drivers/staging/media/hantro/trace.h b/drivers/staging/media/hantro/trace.h
+> new file mode 100644
+> index 000000000000..8abe5ddb4814
+> --- /dev/null
+> +++ b/drivers/staging/media/hantro/trace.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM hantro
+> +
+> +#if !defined(__HANTRO_TRACE_H__) || defined(TRACE_HEADER_MULTI_READ)
+> +#define __HANTRO_TRACE_H__
+> +
+> +#include <linux/tracepoint.h>
+> +#include <media/videobuf2-v4l2.h>
+> +
+> +#include "hantro.h"
+> +
+> +TRACE_EVENT(hantro_hevc_perf,
+> +	TP_PROTO(struct hantro_ctx *ctx, u32 hw_cycles),
+> +
+> +	TP_ARGS(ctx, hw_cycles),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(int, minor)
+> +		__field(u32, hw_cycles)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->minor = ctx->fh.vdev->minor;
+> +		__entry->hw_cycles = hw_cycles;
+> +	),
+> +
+> +	TP_printk("minor = %d, %8d cycles / mb",
+> +		  __entry->minor, __entry->hw_cycles)
+> +);
+> +
+> +#endif /* __HANTRO_TRACE_H__ */
+> +
+> +#undef TRACE_INCLUDE_PATH
+> +#define TRACE_INCLUDE_PATH ../../drivers/staging/media/hantro
+> +#undef TRACE_INCLUDE_FILE
+> +#define TRACE_INCLUDE_FILE trace
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+> 
 
