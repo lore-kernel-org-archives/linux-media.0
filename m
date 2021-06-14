@@ -7,38 +7,39 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AFD4C48BE6
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A880CC4743C
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:26:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3617B61242
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:16:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 912D3611EE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:26:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbhFNMSc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 08:18:32 -0400
-Received: from comms.puri.sm ([159.203.221.185]:56610 "EHLO comms.puri.sm"
+        id S233234AbhFNM2R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 08:28:17 -0400
+Received: from comms.puri.sm ([159.203.221.185]:57366 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233421AbhFNMSb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 08:18:31 -0400
+        id S233076AbhFNM2M (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Jun 2021 08:28:12 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id A9FFEE1FD0;
-        Mon, 14 Jun 2021 05:15:58 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 00B3CE0FEB;
+        Mon, 14 Jun 2021 05:25:39 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qlnbILbDuOFA; Mon, 14 Jun 2021 05:15:57 -0700 (PDT)
+        with ESMTP id AUCxcWaGoJwN; Mon, 14 Jun 2021 05:25:38 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     martin.kepplinger@puri.sm, laurent.pinchart@ideasonboard.com
+To:     martin.kepplinger@puri.sm
 Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
         kernel@pengutronix.de, kernel@puri.sm, krzk@kernel.org,
+        laurent.pinchart@ideasonboard.com,
         linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        phone-devel@vger.kernel.org, robh@kernel.org, shawnguo@kernel.org,
-        slongerbeam@gmail.com, m.felsch@pengutronix.de
-Subject: [PATCH v4 3/3] arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
-Date:   Mon, 14 Jun 2021 14:15:22 +0200
-Message-Id: <20210614121522.2944593-4-martin.kepplinger@puri.sm>
-In-Reply-To: <20210614121522.2944593-1-martin.kepplinger@puri.sm>
-References: <20210614121522.2944593-1-martin.kepplinger@puri.sm>
+        linux-staging@lists.linux.dev, m.felsch@pengutronix.de,
+        mchehab@kernel.org, phone-devel@vger.kernel.org, robh@kernel.org,
+        shawnguo@kernel.org, slongerbeam@gmail.com
+Subject: [PATCH v4.1 3/3] arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
+Date:   Mon, 14 Jun 2021 14:25:17 +0200
+Message-Id: <20210614122517.2945532-1-martin.kepplinger@puri.sm>
+In-Reply-To: <20210614121522.2944593-4-martin.kepplinger@puri.sm>
+References: <20210614121522.2944593-4-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -53,11 +54,17 @@ board files.
 
 Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
+
+sorry, the csi compatible addition suggested by Marco was missing in
+v4 3/3. here is 3/3 updated.
+
+
+
  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 102 ++++++++++++++++++++++
  1 file changed, 102 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index 91df9c5350ae..480eaf1dec2b 100644
+index 91df9c5350ae..fa83e8294b20 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
 @@ -1099,6 +1099,108 @@ uart4: serial@30a60000 {
@@ -101,7 +108,7 @@ index 91df9c5350ae..480eaf1dec2b 100644
 +			};
 +
 +			csi1: csi@30a90000 {
-+				compatible = "fsl,imx7-csi";
++				compatible = "fsl,imx8mq-csi", "fsl,imx7-csi";
 +				reg = <0x30a90000 0x10000>;
 +				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
 +				clocks = <&clk IMX8MQ_CLK_CSI1_ROOT>;
@@ -152,7 +159,7 @@ index 91df9c5350ae..480eaf1dec2b 100644
 +			};
 +
 +			csi2: csi@30b80000 {
-+				compatible = "fsl,imx7-csi";
++				compatible = "fsl,imx8mq-csi", "fsl,imx7-csi";
 +				reg = <0x30b80000 0x10000>;
 +				interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
 +				clocks = <&clk IMX8MQ_CLK_CSI2_ROOT>;
