@@ -2,176 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43233C48BE6
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 10:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C708C2B9F4
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:11:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A68D6142F
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 10:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFF7C61410
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:11:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbhFNLBE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 07:01:04 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:43759 "EHLO
+        id S235384AbhFNLNy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 07:13:54 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:59197 "EHLO
         lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234170AbhFNK7F (ORCPT
+        by vger.kernel.org with ESMTP id S234286AbhFNLLw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 06:59:05 -0400
+        Mon, 14 Jun 2021 07:11:52 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id skGxlbuC6hqltskH1lmf3r; Mon, 14 Jun 2021 12:56:58 +0200
+        id skTKlbz73hqltskTOlmht4; Mon, 14 Jun 2021 13:09:42 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623668218; bh=AOudWRCLPe9UsgRtUXZk3e9P85IPnGpiu+lL8sTi4mU=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+        t=1623668982; bh=vddD9ihU2ZPegn37Asrq1n1pbNugCtI3Mvl3vbyY6h8=;
+        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=WpH+tPXfZoAAxmVvhbpyXuGZDhMtHDxoV9uzWMe/ahG0bJGzkXBDm0LqNMdKZW6eD
-         tk46WvtagNCVk9zVzgth2Yp7kGP9gLbVpvpYM+jVGJ1+iGSRjTWPAKFQEnSI3DfdZz
-         ktLKkghN7vJxuc7wuIG/vgml38th5q4/rb6x4BT3932RjSp87ODFT2c4ikO2hFFte5
-         HxDffyjhi2ZKiUjfVYF7wkSzYJ9jFd0TBei2NffjFGE3QA/I1Up+TGxWBSyfEZOPJy
-         7/i1VRUsEssUPiW894BXlDnDtkFnh6HKdqfC6LqkwYRwEyjxCiAXMjCCjh5Ha/nnNO
-         6MgCTXp+v6DoQ==
-Subject: Re: [RESENT PATCH V0 0/4] media: some framework interface extension
- for new feature of Mediatek Camsys driver
-To:     Louis Kuo <louis.kuo@mediatek.com>, sakari.ailus@linux.intel.com,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, arnd@arndb.de,
-        sergey.senozhatsky@gmail.com, helen.koike@collabora.com,
-        niklas.soderlund+renesas@ragnatech.se, yepeilin.cs@gmail.com
-Cc:     frederic.chen@mediatek.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20210507074604.15079-1-louis.kuo@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <61393c9e-6f28-a357-8ea1-3590e883f107@xs4all.nl>
-Date:   Mon, 14 Jun 2021 12:56:51 +0200
+        b=Lr2Ea2Nto2lShMCH2S9F4Qy+ZMmP4fHjYWaNzClW178dJRGP54kumaKtjozLg2oLd
+         LQMuiNVGR9I8w5WypJ4YRPdfuowA9aC9QRfMekvPfAau101RZ/J59N1MP8jhmdjU3K
+         OS4v4s8q4i/oESf9z+CqGFOYapY0ti9NtJ2a5xMcs0ZDp2SeH2Lf5ffiLnOA7kjyst
+         ueW+Kl8n7VsJkKpUteqXBAdyJZ95oqNK6y+Bax4i+7COT2dWkIoZ6CaJLnbSK5SJRh
+         LGCZrLW9z4hSugxCMrtavEG/12C4UXL1xJw9PqdDVMoPJOX0kg53FKJcbg/5xOBBQ3
+         593kZXqao8AGg==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH v2 00/12] Add support for older Rockchip SoCs to V4L2
+ hantro and rkvdec drivers
+To:     Alex Bee <knaerzche@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210525152225.154302-1-knaerzche@gmail.com>
+ <20210527154455.358869-1-knaerzche@gmail.com>
+Message-ID: <562d80eb-92e5-53ff-0a15-182cc7676063@xs4all.nl>
+Date:   Mon, 14 Jun 2021 13:09:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210507074604.15079-1-louis.kuo@mediatek.com>
+In-Reply-To: <20210527154455.358869-1-knaerzche@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfBr8/FTx31r1MxngxhkwPP1xVVVhMf03l2XIhYRo2BPSAa/6h0U5CnSBJIWBPqgT9S4JoK1CocG8f/HEFIKWo9vu/E2UHlTIutuI34VPUtJJpPAKSTfg
- dZecbBEQyMcor0GktqGzldxpjMSBP2v8OwkMBlQWaiYbbbP5KcOZrL2SHqJ92XJ/YGs6knGGdPDk3bGHXUX6Bb4mdHbpY4bmbZtfT+6c3i8m5NxxogrUUpu4
- nGSUH9jt05EkW19i7UUvbg9rQzBriJwn2C7ciuw01ussUc9Ky1NL7aknTMG42vguxdCDvO5i3CRU6l2HI4nGr1h9BkHPrblBJ5KZ9CcFICi/MT4bhsimxiUM
- bILJOArkAxf4QHHgsUOTn/4Jl4+/va9SBib6tUnZ4DL8ToexgjwV+PwAfizhdipq6AZqD2xjYk09Kz3zVBJVbXdZRRNoaiv6lzLwq5FFt2KVTtnN7EylJesD
- U+S562UdDofoWQHLaXTshDrTqYSHzwU9dpQ7gSpSNvqVNj2vchvaYYIKxhbxyz7vwd5y+9sqD6+V1JmN1tJP+6RjuK8KUnMf7wy90g9w7FI/O7jpDbTs4MDr
- qrqz4ZwLi47gt3X+BWf1HLpYm3r7Iijla8sXWisBB8zLURsxLp2IHvMaa81HsZ4cFDRggsJvQ05o8DJQnJTMmqYgKyViJhOQp18Mljjd8LV8g9aQPbPRL28V
- g+/Qh8Tfk6FfZlNiQNPFIU15XS2W+Vn8qk1xQZDri5ox/FsWPZc1oipJifHShTD/XvJRgilZI/4=
+X-CMAE-Envelope: MS4xfD616eqUHJJQZz5sFByPOsT2nDsyUUckWPOoJiPESgeRGGyqXzoSDTV2d+J5vxBPHFQtCE7ANAWcxFhYOA2b34PGEqUnsnh0BYxT2Y/TDGHWlY35SSlP
+ 5sDVP+cBhS+p4bof0AGFTWLMLb2+szh+3qsh6pfM7nmwYqGhklRnvwUSK0zv3BfDCY5NeVTZ64UubpapoTbeu6hiMuIVlCyNMfY5gWEV9sZeK5RgS9Y2YVVe
+ 1RhaL33Dyo50NUabDEv2s3gJ3caTcFX7FKyrJ8SKjbht8ZKhmP9F0QVbCx8zurQcluEv9iJfZlWM4ZdW7yqihDnr1Q5hJDm32rXciZZE16jvN5f0yX6DqvYt
+ PuWagwZEzgxglTyQSuMHEOJTgYbIjQwCTaM1mv7O/UKwaN5DOhPjz2nspL7qz7pfYIedpiYgBXvA60bPpRR85gnE8BqfHzTTz5gzZE0tF0NRIXp2whb4Mpam
+ wlpeh6OUSzGzv/pShG7G47rDyvF/uLaeHwKNsX0vrPW4QM2UaS69Sw2DQFqCnCrFv1w2GNheGgRZQnLeWoGgoLJqCTkA4r8GgbFqqaryRm2P5ciY9a1EGH3f
+ HFI8Tcqv3xyQUd7XHc5DDckgRCV7DEm/WOnEOAXXZWN3n5wqd/xNwDab5wDOtts+/e0=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Louis,
+Hi Alex,
 
-On 07/05/2021 09:46, Louis Kuo wrote:
-> Hello,
+On 27/05/2021 17:44, Alex Bee wrote:
+> Hi list,
 > 
-> This is the first version of the patch series extending V4L2 and media
-> framework to support some advanced camera function, for example, to change
-> the sensor when ISP is still streaming. A typical scenario is the wide-angle
-> sensor and telephoto sensor switching in camera application. When the user
-> is using the zooming UI, the application needs to switch the sensor from
-> wide-angle sensor to telephoto sensor smoothly.
+> this series adds support for older Rockchip SoCs (RK3036, RK3066, RK3188
+> and RK322x) to the existing V4L2 video decoder/-encoder drivers - namely
+> hantro and rkvdec.
+> They can be used as-is or with very little modifications.
 > 
-> To finish the function, we may need to modify the links of a pipeline and
-> the format of pad and video device per request. Currently, the link,
-> pad and video device format and selection settings are not involved in
-> media request's design. Therefore, we try to extend the related interface
-> to support the request-based operations. In the early version, we added
-> request fd to the parameters of MEDIA_IOC_SETUP_LINK,
-> VIDIOC_S_FMT, VIDIOC_SUBDEV_S_SELECTION, VIDIOC_SUBDEV_S_FMT.
-> The driver uses media_request_get_by_fd() to retrieve the media request
-> and save the pending change in it, so that we can apply the pending change
-> in req_queue() callback then.
+> In preparation to that patches 1,8 and 9 add power-controller support for
+> RK3036 and RK322x, since both drivers rely on pm. The drivers for them 
+> exist already in the common Rockchip pm driver, they just haven't be added
+> to the device trees yet.
 > 
-> Here is an example:
+> Changes in v2:
+> - reordered patches as suggested by Heiko
+> - fixed indentation and order issues in dt-bindings / DT patches
+> - added patch to reorder variants in hantro alphanumeric
+> - added patch that merges hantro platform drivers for Rockchip in one
+> - added missing DT patch for RK3036 (missed to submit with v1)
+> See individual patches for details about changes.
 > 
-> int mtk_cam_vidioc_s_selection(struct file *file, void *fh,
-> 				struct v4l2_selection *s)
-> {
-> 	struct mtk_cam_device *cam = video_drvdata(file);
-> 	struct mtk_cam_video_device *node = file_to_mtk_cam_node(file);
-> 	struct mtk_cam_request_stream_data *stream_data;
-> 	struct mtk_cam_request *cam_req;
-> 	struct media_request *req;
-> 	s32 fd;
+> Thanks for your feedback,
+> Alex.
 > 
-> 	fd = s->request_fd;
-> 	if (fd < 0)
-> 		return -EINVAL;
-> 
-> 	req = media_request_get_by_fd(&cam->media_dev, fd);
-> 
-> 	/* .... */
->  
-> 	cam_req = to_mtk_cam_req(req);
-> 	stream_data = &cam_req->stream_data[node->uid.pipe_id];
-> 	stream_data->vdev_selection_update |= (1 << node->desc.id);
-> 	stream_data->vdev_selection[node->desc.id] = *s;
-> 
-> 	/* .... */
-> 
-> 	media_request_put(req);
-> 
-> 	return 0;
-> }
-> 
-> I posted interface change to discuss first and would like some
-> review comments.
-> 
-> Thank you very much.
+> Alex Bee (12):
+>   dt-bindings: mfd: syscon: add Rockchip RK3036/RK3228 qos compatibles
+>   dt-bindings: media: rockchip-vpu: add new compatibles
+>   dt-bindings: media: rockchip-vdec: add RK3228 compatible
+>   media: hantro: reorder variants
+>   media: hantro: merge Rockchip platform drivers
+>   media: hantro: add support for Rockchip RK3066
+>   media: hantro: add support for Rockchip RK3036
+>   ARM: dts: rockchip: add power controller for RK3036
+>   ARM: dts: rockchip: add power controller for RK322x
+>   ARM: dts: rockchip: add vpu node for RK3036
+>   ARM: dts: rockchip: add vpu nodes for RK3066 and RK3188
+>   ARM: dts: rockchip: add vpu and vdec node for RK322x
 
-Just adding a request_fd in several places is the easy bit. The much
-harder part is where to store that information, and even harder is an
-outstanding issue with the request framework:
+Unfortunately this series no longer applies. Support for the G2/HEVC decoder
+was merged, and that conflicts with this series.
 
-Currently the request framework is only used with decoder drivers, so
-there are no subdev drivers involved. I suspect that there is a fair
-amount of work to do to make it work well if part of the request configuration
-is for subdev drivers.
-
-Ideally I would like to see a proof-of-concept with the vimc driver.
-
-I think getting this right is quite a lot of work. The public API part
-is just a minor part of that since the public API was designed with support
-for this in mind. It's the internal kernel support that is lacking.
-
-If you want to pursue this (and that would be great!), then start with
-vimc and initially just support controls in a request. The core problem
-is likely to be how to keep track of the request data if it is spread
-out between the bridge driver and subdev drivers, and that can be tested
-with just supporting controls.
-
-Adding support for formats and selection rectangles is, I think, much less
-difficult and can be addressed later. Changing the topology in a request
-is a separate issue as well, and I would suggest that you postpone that.
-There is some low-level work going on that might make this easier in the
-near future (1), we'll have to wait and see.
+It is best to rebase you series to the master branch of the media_stage
+tree (https://git.linuxtv.org/media_stage.git/log/), which contains that
+series. I expect/hope that this will be merged later this week to the
+regular media_tree master branch, so you can wait for that as well.
 
 Regards,
 
 	Hans
 
-(1): https://patchwork.linuxtv.org/project/linux-media/cover/20210524104408.599645-1-tomi.valkeinen@ideasonboard.com/
-
 > 
->   media: v4l2-core: extend the v4l2 format to support request
->   media: subdev: support which in v4l2_subdev_frame_interval
->   media: v4l2-ctrl: Add ISP Camsys user control
->   media: pixfmt: Add ISP Camsys formats
+>  .../bindings/media/rockchip,vdec.yaml         |  10 +-
+>  .../bindings/media/rockchip-vpu.yaml          |  33 +-
+>  .../devicetree/bindings/mfd/syscon.yaml       |   2 +
+>  arch/arm/boot/dts/rk3036.dtsi                 |  72 +++
+>  arch/arm/boot/dts/rk3066a.dtsi                |   4 +
+>  arch/arm/boot/dts/rk3188.dtsi                 |   5 +
+>  arch/arm/boot/dts/rk322x.dtsi                 | 140 ++++-
+>  arch/arm/boot/dts/rk3xxx.dtsi                 |  12 +
+>  drivers/staging/media/hantro/Makefile         |   9 +-
+>  drivers/staging/media/hantro/hantro_drv.c     |   6 +-
+>  drivers/staging/media/hantro/hantro_hw.h      |  30 +-
+>  drivers/staging/media/hantro/rk3288_vpu_hw.c  | 208 -------
+>  drivers/staging/media/hantro/rk3399_vpu_hw.c  | 222 --------
+>  ...jpeg_enc.c => rockchip_vpu2_hw_jpeg_enc.c} |  30 +-
+>  ...eg2_dec.c => rockchip_vpu2_hw_mpeg2_dec.c} |  25 +-
+>  ...w_vp8_dec.c => rockchip_vpu2_hw_vp8_dec.c} |   2 +-
+>  ...rk3399_vpu_regs.h => rockchip_vpu2_regs.h} |   6 +-
+>  .../staging/media/hantro/rockchip_vpu_hw.c    | 526 ++++++++++++++++++
+>  18 files changed, 848 insertions(+), 494 deletions(-)
+>  delete mode 100644 drivers/staging/media/hantro/rk3288_vpu_hw.c
+>  delete mode 100644 drivers/staging/media/hantro/rk3399_vpu_hw.c
+>  rename drivers/staging/media/hantro/{rk3399_vpu_hw_jpeg_enc.c => rockchip_vpu2_hw_jpeg_enc.c} (87%)
+>  rename drivers/staging/media/hantro/{rk3399_vpu_hw_mpeg2_dec.c => rockchip_vpu2_hw_mpeg2_dec.c} (93%)
+>  rename drivers/staging/media/hantro/{rk3399_vpu_hw_vp8_dec.c => rockchip_vpu2_hw_vp8_dec.c} (99%)
+>  rename drivers/staging/media/hantro/{rk3399_vpu_regs.h => rockchip_vpu2_regs.h} (99%)
+>  create mode 100644 drivers/staging/media/hantro/rockchip_vpu_hw.c
 > 
->  drivers/media/mc/mc-device.c         |   7 +-
->  drivers/media/v4l2-core/v4l2-ioctl.c | 153 ++++++++++++++++++++++++++-
->  include/media/media-entity.h         |   3 +
->  include/uapi/linux/media.h           |   3 +-
->  include/uapi/linux/v4l2-controls.h   |   4 +
->  include/uapi/linux/v4l2-subdev.h     |   8 +-
->  include/uapi/linux/videodev2.h       | 109 ++++++++++++++++++-
->  7 files changed, 275 insertions(+), 12 deletions(-)
 > 
+> base-commit: 5d765451c2409e63563fa6a3e8005bd03ab9e82f
 > 
 
