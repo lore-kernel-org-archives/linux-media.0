@@ -2,142 +2,234 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E663C48BE6
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8D2CC48BE6
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5453D611BE
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:56:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0EC0611CE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbhFNL6J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 07:58:09 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:44009 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbhFNL6I (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 07:58:08 -0400
-Received: by mail-wm1-f42.google.com with SMTP id 3-20020a05600c0243b029019f2f9b2b8aso12626906wmj.2
-        for <linux-media@vger.kernel.org>; Mon, 14 Jun 2021 04:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yO4bQv3rKZ65ZJRJ/lyl1Qcd2blU+mVdtVLes/zMW7s=;
-        b=awICW+94hy4NRGpMkZ5TAOwo7443g11BQ6nOWcg76dvZXWc2p7Hk/0nAO9g4JNdYkf
-         MwvBMpaYoSd8zQ0vDA8drAAk+ahvuAegi3a83dvDQwGidRLiaNzUZxB7XdzMtw3RzCmH
-         iFHMR5zdNfmYrlCUMsSyg+PujxOpdkBnqAcqeQhfnlM2G+PGObTjjruifZNbCiim5DNW
-         sH9HwxjfebRCqLqvjDPtHeRrpkdYgMWHIWvUxX2/5EbzPeeeijjj28MOJGO0SC6Nl/dv
-         7MK6TNYfrTHEbHlHg04na1ckTL83QxyuixeCNXi2Pdw11yV++ZyTPOkFrwsAhkhudbLQ
-         O7Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yO4bQv3rKZ65ZJRJ/lyl1Qcd2blU+mVdtVLes/zMW7s=;
-        b=mzhCYVjKWgJ3F1X/7N8hJi71r2HGWYoR2OLNn5XKjUQs58gmK2cCCl3vAJICQB+v7g
-         9uZu7SGm0Zrt8BFWMvwfUJy4VPYTP6DCvr6sXQgtWwi/dK1gcaSt4eCP65fDVEXBD8fM
-         rOq/0OfOme6Qb/o0opLG6j6NVjSKM+tjWYz0NXA/Cs9lXxtih1xJwZQTXSA+k3gCSSJp
-         zykNL1osSvv+k1sI16Pot/Z+O6mv6TGV6vmJzzSEilCSFGRpEhDzAtFtq/0qi5F/7eFu
-         vfc37jRWPxF6bLh9UAVuHm+GK41ZdMmlub7LiUncl/NQFZRc+ILTcuZrfIZe1/nUaH6i
-         c3Kg==
-X-Gm-Message-State: AOAM5311b//oAT+JzARONwS0SfyJryux5rb2yVVe4of2WG5eFhOsVWQV
-        bti5ccRde5PW264SwowVvgirRg==
-X-Google-Smtp-Source: ABdhPJxHKOW0w1lBJGYcvVFuYGzq87xRJP78nHKvtf1vYSTYapG2R0es7hemaCO+D6a6+ezpZ4TgVw==
-X-Received: by 2002:a7b:c4d0:: with SMTP id g16mr32404919wmk.147.1623671705038;
-        Mon, 14 Jun 2021 04:55:05 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b15sm18917776wrr.27.2021.06.14.04.55.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jun 2021 04:55:04 -0700 (PDT)
-Subject: Re: [PATCH] venus: helper: do not set constrained format for UBWC
-To:     mansur@codeaurora.org,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, vgarodia@codeaurora.org,
-        dikshita@codeaurora.org
-References: <1622195288-18541-1-git-send-email-mansur@codeaurora.org>
- <a66e00f2-af3a-9550-0779-625152cc2719@nexus-software.ie>
- <17aaec56-bfad-63a6-b1c4-7562dedb3137@linaro.org>
- <b649a7ecb3feb1fdf6d0743135814840@codeaurora.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <28ab2706-2a0c-e9d6-c02c-8ede6fa01efb@linaro.org>
-Date:   Mon, 14 Jun 2021 12:56:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <b649a7ecb3feb1fdf6d0743135814840@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        id S232809AbhFNMRz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 08:17:55 -0400
+Received: from comms.puri.sm ([159.203.221.185]:56388 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232559AbhFNMRz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Jun 2021 08:17:55 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 3EDEBE1FD3;
+        Mon, 14 Jun 2021 05:15:52 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Xdk0FjcwTApp; Mon, 14 Jun 2021 05:15:48 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     martin.kepplinger@puri.sm, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, kernel@puri.sm, krzk@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org,
+        phone-devel@vger.kernel.org, robh@kernel.org, shawnguo@kernel.org,
+        slongerbeam@gmail.com, m.felsch@pengutronix.de
+Subject: [PATCH v4 1/3] dt-bindings: media: document the nxp,imx8mq-mipi-csi2 receiver phy and controller
+Date:   Mon, 14 Jun 2021 14:15:20 +0200
+Message-Id: <20210614121522.2944593-2-martin.kepplinger@puri.sm>
+In-Reply-To: <20210614121522.2944593-1-martin.kepplinger@puri.sm>
+References: <20210614121522.2944593-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/06/2021 07:25, mansur@codeaurora.org wrote:
-> On 2021-06-02 15:23, Stanimir Varbanov wrote:
->> Mansur, could you answer to Bryan's comments?
->>
->>> On 5/28/21 8:23 PM, Bryan O'Donoghue wrote:
->>>> On 28/05/2021 10:48, Mansur Alisha Shaik wrote:
->>>>> Do not set constrained format explicitly for UBWC
->>>>>
->>>>> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
->>>>
->>>> Could you give a little bit more detail on why, what the side 
->>>> effects are ?
->>>>
->      Sorry for late response, by default for NV12_UBWC is 128x32
-> 
+The i.MX8MQ SoC integrates a different MIPI CSI receiver as the i.MX8MM so
+describe the DT bindings for it.
 
-Right so we have
-
-pconstraint.plane_format[0].stride_multiples = 128;
-pconstraint.plane_format[0].min_plane_buffer_height_multiple = 32;
-
-and
-
-pconstraint.plane_format[1].stride_multiples = 128;
-pconstraint.plane_format[1].min_plane_buffer_height_multiple = 16;
-
-and your patch says if opb_fmt == HFI_COLOR_FORMAT_NV12_UBWC then the we 
-shouldn't do hfi_session_set_property()
-
-I'm sure that's a fix that works but, I wonder would it be possible to 
-fix this routine to continue to do hfi_session_set_property() with 
-updated parameters for opb_fmt == HFI_COLOR_FORMAT_NV12_UBWC ?
-
-Could you drill down into the detail in the commit log a little bit 
-maybe giving a description of why returning for opb_fmt == 
-HFI_COLOR_FORMAT_NV12_UBWC is the right thing to-do instead of adding a 
-new case to the routine for HFI_COLOR_FORMAT_NV12_UBWC and calling 
-hfi_session_set_property() ?
-
-Its more for my own education on this topic :) but, also helps somebody 
-else reading the log to understand what the fix is, why it is done this way.
-
->>>> Should this be a Fixes: ?
->>>>
->      without this fix on V6, firmware throws below SFR
->      qcom-venus aa00000.video-codec: SFR message from FW: 
-> QC_IMAGE_VERSION_STRING=video-firmware.1.0-df9cb37cf8e507a4468265658702247652351a49 
-> 
->      Err_Fatal - 
-> /local/mnt/workspace/pkg/builds/dynamic_timely/tree2/vendor/qcom/proprietary/video-firmware-noship/venus_proc/venus/decoders/common/src/video_decoder.c:6644:2fef3 
-> 
->      which result in playback happens through Software codec.
-OK, I think I can answer my own question here.
-
-Technically no since 6XX isn't in the long-term-support kernel but, I'd 
-suggest adding a "Fixes" anyway, so that other users know to apply this 
-patch to their trees.
-
-Fixes: bc28936bbba9 ("media: venus: helpers, hfi, vdec: Set actual plane 
-constraints to FW")
-
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
-bod
+ .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 171 ++++++++++++++++++
+ 1 file changed, 171 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..4fed224ebfdd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+@@ -0,0 +1,171 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nxp,imx8mq-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP i.MX8MQ MIPI CSI-2 receiver
++
++maintainers:
++  - Martin Kepplinger <martin.kepplinger@puri.sm>
++
++description: |-
++  This binding covers the CSI-2 RX PHY and host controller included in the
++  NXP i.MX8MQ SoC. It handles the sensor/image input and process for all the
++  input imaging devices.
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx8mq-mipi-csi2
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: core is the RX Controller Core Clock input. This clock
++                     must be exactly equal to or faster than the receive
++                     byteclock from the RX DPHY.
++      - description: esc is the Rx Escape Clock. This must be the same escape
++                     clock that the RX DPHY receives.
++      - description: pxl is the pixel clock (phy_ref up to 333Mhz).
++      - description: clko2 is the CLKO2 clock root.
++                     See the reference manual for details.
++
++  clock-names:
++    items:
++      - const: core
++      - const: esc
++      - const: pxl
++      - const: clko2
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  fsl,mipi-phy-gpr:
++    description: |
++      The phandle to the imx8mq syscon iomux-gpr with the register
++      for setting RX_ENABLE for the mipi receiver.
++
++      The format should be as follows:
++      <gpr req_gpr>
++      gpr is the phandle to general purpose register node.
++      req_gpr is the gpr register offset of RX_ENABLE for the mipi phy.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: The 'gpr' is the phandle to general purpose register node.
++        - description: The 'req_gpr' is the gpr register offset containing
++                       CSI2_1_RX_ENABLE or CSI2_2_RX_ENABLE respectively.
++          maximum: 0xff
++
++  interconnects:
++    maxItems: 1
++
++  interconnect-names:
++    const: dram
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description:
++          Input port node, single endpoint describing the CSI-2 transmitter.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes:
++                items:
++                  minItems: 1
++                  maxItems: 4
++                  items:
++                    - const: 1
++                    - const: 2
++                    - const: 3
++                    - const: 4
++
++            required:
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Output port node
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - power-domains
++  - resets
++  - fsl,mipi-phy-gpr
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mq-clock.h>
++    #include <dt-bindings/interconnect/imx8mq.h>
++
++    csi@30a70000 {
++        compatible = "fsl,imx8mq-mipi-csi2";
++        reg = <0x30a70000 0x1000>;
++        clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++                 <&clk IMX8MQ_CLK_CSI1_ESC>,
++                 <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++                 <&clk IMX8MQ_CLK_CLKO2>;
++        clock-names = "core", "esc", "pxl", "clko2";
++        assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++                          <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++                          <&clk IMX8MQ_CLK_CSI1_ESC>;
++        assigned-clock-rates = <266000000>, <200000000>, <66000000>;
++        assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++                                 <&clk IMX8MQ_SYS2_PLL_1000M>,
++                                 <&clk IMX8MQ_SYS1_PLL_800M>;
++        power-domains = <&pgc_mipi_csi1>;
++        resets = <&src>;
++        fsl,mipi-phy-gpr = <&iomuxc_gpr 0x88>;
++        interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
++        interconnect-names = "dram";
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++
++                imx8mm_mipi_csi_in: endpoint {
++                    remote-endpoint = <&imx477_out>;
++                    data-lanes = <1 2 3 4>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++
++                imx8mm_mipi_csi_out: endpoint {
++                    remote-endpoint = <&csi_in>;
++                };
++            };
++        };
++    };
++
++...
+-- 
+2.30.2
+
