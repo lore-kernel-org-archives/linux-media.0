@@ -2,97 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6772C2B9F4
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44768C4743C
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:51:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B106F610CD
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FF7461378
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 12:51:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbhFNMmw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 08:42:52 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:52417 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233025AbhFNMms (ORCPT
+        id S233848AbhFNMxX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 08:53:23 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48788 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233721AbhFNMxK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 08:42:48 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id sltOlcYFrhqltsltRln3Og; Mon, 14 Jun 2021 14:40:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623674442; bh=glrI00jnhxo5manMT9qoOgajXjAFJmV+7SB8WHUDxls=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=bfHaqN0gQW75ThHcMtpGZlZS7QBVFbI2hsZBrEAs8HkABFX4icj1V/jS3QXtirZIn
-         /rlwJy2LlkfXmtjRpMWQbHwJXPhjizntcivzu22XZjNC+Se7o/XKUDXZFiZOuDZH8Y
-         hNCy88rqaabYIRsQjksf1qc8ot0ZJY8Gjqe5EnqGop/DL9EGO1VyEJ7BT1JNF7d5p0
-         nqmhDb3Gq8p+dZJAds9hago0IOunKeg/jh+zc3HxN49VLvCRlweiJ6whj0LQrq0K7G
-         Io1vmREMy6Lhy/xCR9YBXw0PomBIN8coACfkj+NstSOAuNXq09L8LAmnTju2Rur95f
-         tLSpbKGMFNUkQ==
-Subject: Re: [PATCH] drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c : fix
- typo imporant > important
-To:     Herman <herman.yim88@gmail.com>, a.hajda@samsung.com
-Cc:     mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Herman <yanshuaijun@yulong.com>
-References: <20210610082409.13090-1-yanshuaijun@yulong.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <bca73f8d-7780-5d84-1a6e-3575ec834370@xs4all.nl>
-Date:   Mon, 14 Jun 2021 14:40:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.10.0
+        Mon, 14 Jun 2021 08:53:10 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id D30551F4035A
+Message-ID: <96e63be705b04b40a943307c81ed71e8c573ef96.camel@collabora.com>
+Subject: Re: [PATCH v2 7/8] media: hevc: Add scaling matrix control
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@siol.net, emil.l.velikov@gmail.com,
+        andrzej.p@collabora.com, jc@kynesim.co.uk, jernej.skrabec@gmail.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Mon, 14 Jun 2021 09:50:46 -0300
+In-Reply-To: <d5b010c8-c0c5-8800-b2c3-9371923ca10c@collabora.com>
+References: <20210610154442.806107-1-benjamin.gaignard@collabora.com>
+         <20210610154442.806107-8-benjamin.gaignard@collabora.com>
+         <87a1e585-688e-7c4d-b9a9-24f42772a1a8@xs4all.nl>
+         <d5b010c8-c0c5-8800-b2c3-9371923ca10c@collabora.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-In-Reply-To: <20210610082409.13090-1-yanshuaijun@yulong.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfNcgSPuL3Ext+TJJhONBo7e+kMMFwrTlNKrkJ4OdOAdwPyYYKSgV+6kh4Bpff9k2ZxBu78d4LeKGYNPYD5J0/aE86fKkt/rTSvg1X0j7Ucse3WTM4BWy
- axkKhVi59e5cpRNlhX3uRerjdTaNtJfBTtsH6HnmX2ntKpYcBLqIxZBEdUp8ybUtKNIepIdanxXLUcgygqaVIftVXDEbcTZg1b64Y83qIoNiTfTHbAneOkcG
- s73LbPxAQFOMHg0NElENgphUzk9FwERdtsGMMQta6PppPzu6US2szwXLbr/+9/UD3ZDo/TPg//bOSgCgqnGwMBh35ALiTtuyVf/X8LGdzwHmgudQKkg5ZL8K
- iokOsoXsRnAT7wmNem1OKHdhGc6AJ8i2A6c4wpkGXuuktk6I4phAnKqfbi8V2Qx/OblX/gQy
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/06/2021 10:24, Herman wrote:
-> Change 'imporant' into 'important'.
+On Mon, 2021-06-14 at 09:43 +0200, Benjamin Gaignard wrote:
 > 
-> Signed-off-by: Herman <yanshuaijun@yulong.com>
-> ---
->  drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Le 14/06/2021 à 09:27, Hans Verkuil a écrit :
+> > On 10/06/2021 17:44, Benjamin Gaignard wrote:
+> > > HEVC scaling lists are used for the scaling process for transform
+> > > coefficients.
+> > > V4L2_HEVC_SPS_FLAG_SCALING_LIST_ENABLED has to set when they are
+> > > encoded in the bitstream.
+> > Comparing H264 with HEVC I noticed that the corresponding flag for H264 is
+> > called V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT.
+> > 
+> > Should those names be aligned? Also, it is part of PPS for H264 and SPS in HEVC,
+> > is that difference correct?
 > 
-> diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-> index 49503c20d320..aa80b3f67ded 100644
-> --- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-> +++ b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-> @@ -1418,7 +1418,7 @@ static void s5p_mfc_try_run_v5(struct s5p_mfc_dev *dev)
->  		if (test_and_clear_bit(0, &dev->hw_lock) == 0)
->  			mfc_err("Failed to unlock hardware\n");
->  
-> -		/* This is in deed imporant, as no operation has been
-> +		/* This is in deed important, as no operation has been
-
-While we're at it, can you also change: in deed -> indeed
-
-checkpatch also gives me:
-
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Herman <herman.yim88@gmail.com>' != 'Signed-off-by: Herman
-<yanshuaijun@yulong.com>'
-
-I can manually change one of the two, but I need to know which you prefer.
-
-Regards,
-
-	Hans
-
-
->  		 * scheduled, reduce the clock count as no one will
->  		 * ever do this, because no interrupt related to this try_run
->  		 * will ever come from hardware. */
+> In ITU specifications ("7.4.3.2.1 General sequence parameter set RBSP semantics") this flag is define like that:
+> scaling_list_enabled_flag equal to 1 specifies that a scaling list is used for the scaling process for transform coefficients.
+> scaling_list_enabled_flag equal to 0 specifies that scaling list is not used for the scaling process for transform coefficients.
 > 
+> So for me the naming is correct.
+> 
+
+The bitstream is really parsed in userspace (gstreamer, ffmpeg, chromium).
+Not all bitstream parameters need to be passed as-is, because the kernel
+is actually a sort of low-level layer in the decoder stack.
+
+I think it's probably most appropriate to follow our H.264 interface
+semantics, see https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54889c51b833d236228f983be16212fbe806bb89.
+
+The H.264 story goes like this:
+
+* Default scaling list is used for decoding, but can be modified
+  by a bitstream-provided scaling list.
+   
+* The scaling list modification can be in SPS or in PPS.
+
+* For each frame, the SPS and PPS headers will tell if
+  a modified scaling list must be used for decoding,
+  and if it's provided in the SPS header or the PPS header.
+
+The userspace parser must take care of this, and pass
+a scaling matrix to the kernel via V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
+setting PPS_FLAG_SCALING_MATRIX_PRESENT.
+
+This flag is at the PPS control, so the scaling modification
+can be applied on each frame.
+
+In other words, the kernel interface is simpler, it just
+receives a scaling matrix and a flag telling if it must be used or not. 
+
+We should probably clarify the documentation, so this process is more clear.
+
+From the HEVC spec, it seems the process should be similar.
+The only difference is the SPS "scaling_list_enabled_flag" parameter,
+which doesn't exist in H.264.
+
+Nicolas: what do you think?
+
+Thanks,
+Ezequiel
 
