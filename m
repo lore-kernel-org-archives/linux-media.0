@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9947C2B9F4
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8CACC48BE6
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:28:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B99061166
-	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:26:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C162C610A2
+	for <linux-media@archiver.kernel.org>; Mon, 14 Jun 2021 11:28:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbhFNL2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 07:28:11 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58060 "EHLO
+        id S234811AbhFNLa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 07:30:29 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:58158 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbhFNL0G (ORCPT
+        with ESMTP id S235329AbhFNL2L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 07:26:06 -0400
+        Mon, 14 Jun 2021 07:28:11 -0400
 Received: from deskari.lan (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9C149103F;
-        Mon, 14 Jun 2021 13:24:01 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 832782A66;
+        Mon, 14 Jun 2021 13:24:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1623669841;
-        bh=2FNofsu3RqpxCX65D/qXx5m5uJuOQeQTZQmsoK2PItQ=;
+        s=mail; t=1623669843;
+        bh=aQzFzOExEj6xbAVOHIGV4KEaUJNtH7bHxGD59IElboE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YbbdU/yFH3rOM1td94TxitIFr2d1yiMHmN0YBZd+3VQ41xsVRK0dfn2cTK3/RTqda
-         BalFbxsiJgrtDP/GFLh9pJNnMLxfXbKjufr0npidhHFz2gFW7M1xlDYmhtyUA7kJTs
-         umkjnSz5sTqOCoS3AQHi65a0VrNiGRc1WEE4Yi34=
+        b=qbKPnefrAUfoAL3w05eYJn60GMWfMrNaYK/KnrQQWmsFRe8xC85XJCtzeHKRzAvge
+         m8yggxP10eFrZskvIgtnmsvl54naP64XHo3PCOfS7JiTOZlM+64oxSvHt7HMkjBmdA
+         vFOwZwYB1Zi+hnaBfEAMpn49stZUvOVoszPfQydw=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, Lokesh Vutla <lokeshvutla@ti.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v4 01/35] media: ti-vpe: cal: add g/s_parm for legacy API
-Date:   Mon, 14 Jun 2021 14:23:11 +0300
-Message-Id: <20210614112345.2032435-2-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v4 05/35] media: ti-vpe: cal: move global config from cal_ctx_wr_dma_config to runtime resume
+Date:   Mon, 14 Jun 2021 14:23:15 +0300
+Message-Id: <20210614112345.2032435-6-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210614112345.2032435-1-tomi.valkeinen@ideasonboard.com>
 References: <20210614112345.2032435-1-tomi.valkeinen@ideasonboard.com>
@@ -47,50 +47,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2-compliance complains about g/s_parm when using the non-MC API. Fix
-it by adding the functions and just call v4l2_s/g_parm_cap for the
-phy subdev.
+For some reason CAL_CTRL is written at the end of cal_ctx_wr_dma_config.
+CAL_CTRL is a global (for CAL) register, so it should be independent of
+contexts.
+
+Move the code to cal_runtime_resume().
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal-video.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/media/platform/ti-vpe/cal.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-index 15fb5360cf13..57b3a592f823 100644
---- a/drivers/media/platform/ti-vpe/cal-video.c
-+++ b/drivers/media/platform/ti-vpe/cal-video.c
-@@ -388,6 +388,20 @@ static int cal_enum_frameintervals(struct file *file, void *priv,
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index 9446933b9189..2f70725a567b 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -403,17 +403,6 @@ static void cal_ctx_wr_dma_config(struct cal_ctx *ctx)
+ 	cal_write(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index), val);
+ 	ctx_dbg(3, ctx, "CAL_WR_DMA_XSIZE(%d) = 0x%08x\n", ctx->index,
+ 		cal_read(ctx->cal, CAL_WR_DMA_XSIZE(ctx->index)));
+-
+-	val = cal_read(ctx->cal, CAL_CTRL);
+-	cal_set_field(&val, CAL_CTRL_BURSTSIZE_BURST128,
+-		      CAL_CTRL_BURSTSIZE_MASK);
+-	cal_set_field(&val, 0xF, CAL_CTRL_TAGCNT_MASK);
+-	cal_set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
+-		      CAL_CTRL_POSTED_WRITES_MASK);
+-	cal_set_field(&val, 0xFF, CAL_CTRL_MFLAGL_MASK);
+-	cal_set_field(&val, 0xFF, CAL_CTRL_MFLAGH_MASK);
+-	cal_write(ctx->cal, CAL_CTRL, val);
+-	ctx_dbg(3, ctx, "CAL_CTRL = 0x%08x\n", cal_read(ctx->cal, CAL_CTRL));
+ }
+ 
+ void cal_ctx_set_dma_addr(struct cal_ctx *ctx, dma_addr_t addr)
+@@ -1127,6 +1116,7 @@ static int cal_runtime_resume(struct device *dev)
+ {
+ 	struct cal_dev *cal = dev_get_drvdata(dev);
+ 	unsigned int i;
++	u32 val;
+ 
+ 	if (cal->data->flags & DRA72_CAL_PRE_ES2_LDO_DISABLE) {
+ 		/*
+@@ -1143,6 +1133,17 @@ static int cal_runtime_resume(struct device *dev)
+ 	 */
+ 	cal_write(cal, CAL_HL_IRQENABLE_SET(0), CAL_HL_IRQ_OCPO_ERR_MASK);
+ 
++	val = cal_read(cal, CAL_CTRL);
++	cal_set_field(&val, CAL_CTRL_BURSTSIZE_BURST128,
++		      CAL_CTRL_BURSTSIZE_MASK);
++	cal_set_field(&val, 0xf, CAL_CTRL_TAGCNT_MASK);
++	cal_set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
++		      CAL_CTRL_POSTED_WRITES_MASK);
++	cal_set_field(&val, 0xff, CAL_CTRL_MFLAGL_MASK);
++	cal_set_field(&val, 0xff, CAL_CTRL_MFLAGH_MASK);
++	cal_write(cal, CAL_CTRL, val);
++	cal_dbg(3, cal, "CAL_CTRL = 0x%08x\n", cal_read(cal, CAL_CTRL));
++
  	return 0;
  }
  
-+static int cal_g_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
-+{
-+	struct cal_ctx *ctx = video_drvdata(file);
-+
-+	return v4l2_g_parm_cap(video_devdata(file), ctx->phy->sensor, a);
-+}
-+
-+static int cal_s_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
-+{
-+	struct cal_ctx *ctx = video_drvdata(file);
-+
-+	return v4l2_s_parm_cap(video_devdata(file), ctx->phy->sensor, a);
-+}
-+
- static const struct v4l2_ioctl_ops cal_ioctl_video_ops = {
- 	.vidioc_querycap      = cal_querycap,
- 	.vidioc_enum_fmt_vid_cap  = cal_enum_fmt_vid_cap,
-@@ -411,6 +425,8 @@ static const struct v4l2_ioctl_ops cal_ioctl_video_ops = {
- 	.vidioc_log_status    = v4l2_ctrl_log_status,
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
- 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+	.vidioc_g_parm		= cal_g_parm,
-+	.vidioc_s_parm		= cal_s_parm,
- };
- 
- /* ------------------------------------------------------------------
 -- 
 2.25.1
 
