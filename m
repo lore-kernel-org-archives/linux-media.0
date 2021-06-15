@@ -7,190 +7,170 @@ X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2EECC48BE5
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 08:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30384C48BE8
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 08:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9609061420
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 08:26:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06C1461428
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 08:39:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbhFOI22 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Jun 2021 04:28:28 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:54837 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230190AbhFOI22 (ORCPT
+        id S231169AbhFOImB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Jun 2021 04:42:01 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:37363 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230455AbhFOImB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Jun 2021 04:28:28 -0400
+        Tue, 15 Jun 2021 04:42:01 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id t4Okla3YIhg8Zt4OnlNW8I; Tue, 15 Jun 2021 10:26:22 +0200
+        id t4bwla9VIhg8Zt4bzlNaUe; Tue, 15 Jun 2021 10:39:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1623745582; bh=ZTRCW0WiskrdGzlsdFEoxXqcFBj3Oe5Up1ZbP3p2TBk=;
+        t=1623746395; bh=P272GEMadL8ZFN1YvcW3dMHdgber4KEpXLxvk//n2Ys=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=fWnTzbWpL6estA1ZiGUwLO5SYRs+9GN61S+GMVVkuFC0IHN1upNXWOM+5rHyexxfA
-         qaQjxenCkd6RZ7CbwemTasilI9WfGMjXe202Tf6DbBWqdBd3hrve541uRxToKFekc0
-         NNOJgPcYcv9O7289RdLW69/pi9CzUQZZPq1F1sBooPaLEDkxMD86PZ2Ifu/tKLCgr8
-         Nv+jgYvJBGK4jX2ygSiecaxym/bpgJS4R+aa5pHl549SK7RCvKAulG04wl63XSTgz7
-         fILt8Oxzox6khidNPIuNEKih0j2+ODC5OcQYj1l+IVqdRboQp2FuV7Avf6fbqJ+MwX
-         hNOwL0eUZ/7vQ==
-Subject: Re: [PATCH v3 7/8] media: subdev: fix compat_ioctl32
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Arnd Bergmann <arnd@kernel.org>
+        b=eICmrzWstZ7AN++H0c8Q/gITGcC0Xl09uqdVWcEQr3wJs5JdcQ8MZZYHWw1bqa0jd
+         mB4XJjN2bWix+VzzOFobdXIhsuRV7//yqYHjmppUZoICT2YmEu36F+K4ECSS0hKa4z
+         b0sgAd/9J9gTJ5PLZZi6tPz8a0M/QD/Ut9jAdyJhQMkumda9qdL69wnit/XyIoENtU
+         ovXpYJVM6h1/Dosx0Ik0kAdbSnJ5R8UEEJ9dO7bJ34MbqbbJ5DoINtnrd2oe2UXvuC
+         8hBBXcxZXVa1TXMEyFu4UoP6iWWERzihA4Gggbne1b9hoUHE1b7FcnNY7NVniJmpPT
+         obXpYYduipt5g==
+Subject: Re: [PATCH 7/9] media: v4l2-dv-timings: Add more CEA/CTA-861 video
+ format timings
+To:     Nelson Costa <Nelson.Costa@synopsys.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20210614103409.3154127-1-arnd@kernel.org>
- <20210614103409.3154127-8-arnd@kernel.org>
- <YMePUYfDzdsErRab@pendragon.ideasonboard.com>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>
+References: <cover.1622631488.git.nelson.costa@synopsys.com>
+ <6a0dcbd4f6dae00c664e5ef80cde3f1eb530c382.1622631488.git.nelson.costa@synopsys.com>
+ <d4b681b1-7bac-7b6f-fd44-5beb68d3f820@xs4all.nl>
+ <MW3PR12MB4459A066F9B85A478CA92977C13D9@MW3PR12MB4459.namprd12.prod.outlook.com>
+ <c4122867-9b06-2a1f-a1a0-9176f6ae7b52@xs4all.nl>
+ <MW3PR12MB4459428F816C3816B1EBB583C1319@MW3PR12MB4459.namprd12.prod.outlook.com>
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <2d988daa-cb25-9f0d-8309-99f4de2a1e58@xs4all.nl>
-Date:   Tue, 15 Jun 2021 10:26:14 +0200
+Message-ID: <a6f78f33-99b8-c02e-b58c-86eb1bd97969@xs4all.nl>
+Date:   Tue, 15 Jun 2021 10:39:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <YMePUYfDzdsErRab@pendragon.ideasonboard.com>
+In-Reply-To: <MW3PR12MB4459428F816C3816B1EBB583C1319@MW3PR12MB4459.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfC6HRC5tsAQ+zZpT9lCPZYDj7PDQI8U97USdIDIZr7hy5NKtwvbfGEmlLFf9sQraFpyNO9GieEIKeXnpOA5MRP9m7gO187WMrzNr6lzQIOGeV5KW9ySr
- PsOMhhG4psR7d/eJailZjbc1PHdeC+tvOnUFOY1SAPJafVUwmyjddvwkYW+VUtYaXB3sGSMsWbRBstTLhR+9v6tW8slZCKYFfUF2W1D83ww5Ig78rfGxW/Cd
- 7sfmCDWdpO/W8GEqkx8A8stD43QpFZaIBrsB0ZQQ8N2gO7dOe+ProKx/bmsDUwqIQgKlgHHlSJ43xI+Gg7FsYWIp2EBhqSbKPWa5UyRCFywkd7innOQ3FLoe
- GsNd9eKE+TsVDhyoZoq53LppD43xNluSIIMaTUL9+qHVbUkNfwhHiIMMNOk5LJqH7vWLGo2MiQdwo61Rf4wcKL31lN+o/agvYz2BZmKTKM+yUW9k4SLZ241V
- LFdXHRjfxEMkhe2ZUxw9NmWwyFBqkymgW+ixUTEf/PRouCwEeealriZmUDl0ciwwMMc1pZYgtCXzzOwt99g5Liazw8HiBQOBYGELAYHXPmETs9F2NIKc0W1o
- B273mWu6B+jMZU4WlotYvUihw8DFnay/ZBXD+NTqtaBpwgsOn8wYTuyT0s2cDrGV2mCIRzt7ScGy48Fpu1D4Gl6Woyy0rFvjlBI7mUGXlpiILXAiaoGokd85
- D4HYpFeEPfeQREzfH39Pi3TPXOhe1Tm6
+X-CMAE-Envelope: MS4xfL6NW/1ucZk6RvK/RGh8CVaFh54+iXNMlqxXjlwsZBIeh3ZfrQgmkhckOJAEgkCQdl9XEAmP4VtGW9Sx1loV8lsvjnFW0mPC6CfhxB6N21qu4NWNgG4/
+ eP2a4YSKhm0FphrbRrR5V+0gZG5zNxYPShxucWAfR+XxRb3j/kEtxm33UxARkfcGHgP7WvFCHgl9PIpppKxnmBCr1fH11Ox4A0MIg14axcf2v6JMwodlIqvD
+ U6qWmCnve9B97KT/2Gn9gXdpUD4OK9mo0via65pPfuXYT6mnKucrXggIEAnZQ6MufL1lpRqtAWTW5lT3ub6v7fa2mEje39PFW8Uz3t+cBEevVcQKDk1oTt35
+ QNDf2xk5LqWPgw4035G2/nP0xDfMrco/FCezFO3m2b1KtPenkR/ZQ990ORr26RAW5R0C7G2mhhtoEQeXrru2xihTNgllr+IF4LBWNZFGLKu5Y3cwd/w/LcJF
+ 4piFUojQj/OinvCHdGsBDPJYl6yd9kNmUBidP2i1Wfy7SxICY3yw6PNxZP4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/06/2021 19:18, Laurent Pinchart wrote:
-> Hi Arnd,
+On 14/06/2021 19:04, Nelson Costa wrote:
+> Hi Hans,
 > 
-> Thank you for the patch.
+> Thanks for your comments!
 > 
-> On Mon, Jun 14, 2021 at 12:34:08PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
+> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Date: qua, jun 02, 2021 at 19:19:25
+> 
+>> On 02/06/2021 19:15, Nelson Costa wrote:
+>>> Hi Hans,
+>>>
+>>> Thanks for your comments and feedback!
+>>>
+>>> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>>> Date: qua, jun 02, 2021 at 13:26:17
+>>>
+>>>> Hi Nelson,
+>>>>
+>>>> On 02/06/2021 13:24, Nelson Costa wrote:
+>>>>> This extends the support for more video format timings based
+>>>>> on SPECs CEA-861-F and CTA-861-G.
+>>>>>
+>>>>> NOTE: For the newer SPECs the CEA was unified to the CTA.
+>>>>> The CTA-861-G then includes the CEA-861-F timings besides
+>>>>> the new timings that are specified.
+>>>>>
+>>>>> CEA-861-F: Specifies the Video timings for VICs 1-107.
+>>>>> CTA-861-G: Specifies the Video timings for VICs 1-107, 108-127, 193-219.
+>>>>>
+>>>>> With this patch, the array v4l2_dv_timings_presets has support for
+>>>>> all video timings specified in CTA-861-G.
+>>>>>
+>>>>> Signed-off-by: Nelson Costa <nelson.costa@synopsys.com>
+>>>>> ---
+>>>>>  drivers/media/v4l2-core/v4l2-dv-timings.c |  139 +++
+>>>>>  include/uapi/linux/v4l2-dv-timings.h      | 1595 ++++++++++++++++++++++++++++-
+>>>>
+>>>> I prefer to split this up in two patches, one for each header.
+>>>>
+>>>
+>>> I agree! It will be addressed in the next patch series.
+>>>
+>>>> The v4l2-dv-timings.h changes look good (my compliments for all the
+>>>> work you put into that!).
+>>>>
+>>>
+>>> Thanks!
+>>>
+>>>> I am more concerned about adding all these timings to v4l2_dv_timings_presets.
+>>>>
+>>>> There are really two different things going on here: the v4l2_dv_timings_presets
+>>>> array is used both by v4l2_enum_dv_timings_cap() to list supported commonly used
+>>>> timings, or to match against timings parameters (v4l2_find_dv_timings_cap()), and
+>>>> as a lookup table when receiving a specific VIC code (v4l2_find_dv_timings_cea861_vic()).
+>>>>
+>>>> All the new timings you added are really only relevant in the last case when you
+>>>> have the vic code.
+>>>>
+>>>> I think it is better to create a second array v4l2_dv_timings_non_square_vics[]
+>>>> (or a better name!) that contains these timings.
+>>>>
+>>>
+>>> I understood.
+>>>
+>>> We can then create another array as you said. But when you say 
+>>> "non_square"
+>>> you mean that the vics have "Pixel Aspect Ratio != 1:1"?
+>>>
+>>> Because the new vics added have both kind of vics with "Pixel Aspect 
+>>> Ratio != 1:1"
+>>> and also "Pixel Aspect Ratio == 1:1".
 >>
->> The adv7842 and si4713 drivers each define one private ioctl command that
->> are handled through the subdev_ioctl() helpers, but that don't work in
-> 
-> s/don't/doesn't/
-> 
->> compat mode because this does not handle private ioctl commands.
+>> There are? It's confusing since for 1:1 pixel aspect ratios I expect that the
+>> picture aspect ratio is set to { 0, 0 }, instead they are all filled in.
 >>
->> The compat_ioctl32 callback for subdevs has outdated calling conventions,
->> but as there are no users of that, it is easy to change the function
->> pointer type and the caller to make it behave the same way as the normal
->> ioctl callback and hook in the two drivers that need no argument
->> conversion.
+>> I think it will be clearer if I see a v2 where the picture aspect ratio and
+>> the V4L2_DV_FL_HAS_PICTURE_ASPECT flag are only set for the non-square pixel
+>> timings. Also, for the timings with 1:1 pixel aspect ratio you don't need to
+>> add the PA... suffix. That suffix only makes sense for non-square pixel aspect
+>> ratios. It's confusing otherwise.
 >>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/media/i2c/adv7842.c           |  3 +++
->>  drivers/media/radio/si4713/si4713.c   |  3 +++
->>  drivers/media/v4l2-core/v4l2-subdev.c | 19 ++++++++++++++++---
->>  include/media/v4l2-subdev.h           |  3 +--
->>  4 files changed, 23 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
->> index 78e61fe6f2f0..cd6df4f52f33 100644
->> --- a/drivers/media/i2c/adv7842.c
->> +++ b/drivers/media/i2c/adv7842.c
->> @@ -3293,6 +3293,9 @@ static const struct v4l2_ctrl_ops adv7842_ctrl_ops = {
->>  static const struct v4l2_subdev_core_ops adv7842_core_ops = {
->>  	.log_status = adv7842_log_status,
->>  	.ioctl = adv7842_ioctl,
->> +#ifdef CONFIG_COMPAT
->> +	.compat_ioctl32 = adv7842_ioctl,
->> +#endif
->>  	.interrupt_service_routine = adv7842_isr,
->>  	.subscribe_event = adv7842_subscribe_event,
->>  	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
->> diff --git a/drivers/media/radio/si4713/si4713.c b/drivers/media/radio/si4713/si4713.c
->> index adbf43ff6a21..ae7e477774e3 100644
->> --- a/drivers/media/radio/si4713/si4713.c
->> +++ b/drivers/media/radio/si4713/si4713.c
->> @@ -1398,6 +1398,9 @@ static const struct v4l2_ctrl_ops si4713_ctrl_ops = {
->>  
->>  static const struct v4l2_subdev_core_ops si4713_subdev_core_ops = {
->>  	.ioctl		= si4713_ioctl,
->> +#ifdef CONFIG_COMPAT
->> +	.compat_ioctl32	= si4713_ioctl,
->> +#endif
 > 
-> Should we drop v4l2_subdev_core_ops.compat_ioctl32 and call
-> v4l2_subdev_core_ops.ioctl from subdev_do_compat_ioctl32() ? New drivers
-> should design custom ioctls in a way that doesn't require compat code.
+> It makes sense! That way it will assure coherence with the current 
+> implementation.
+> In the v2 patch series this will be addressed.
+> 
+>>>
+>>> So, for the new vics should we create a second array with name 
+>>> v4l2_dv_timings_extended_vics[]?
+>>
+>> The new vics with non-square pixel aspect ratios, or with pixel repetition.
+>>
+> 
+> You mean the new vics added that are square should be kept in the 
+> original array?
+> 
+> And only the new vics that are non-square or with pixel repetition should 
+> go to a second array?
 
-I agree, we can drop it completely.
-
-I'll skip this patch, but I'll take the other 7 patches and make a v3 PR with
-updated Reviewed-by tags from Laurent.
+Correct.
 
 Regards,
 
 	Hans
-
-> 
->>  };
->>  
->>  static const struct v4l2_subdev_tuner_ops si4713_subdev_tuner_ops = {
->> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
->> index bf3aa9252458..fbd176d6c415 100644
->> --- a/drivers/media/v4l2-core/v4l2-subdev.c
->> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
->> @@ -686,13 +686,26 @@ static long subdev_ioctl(struct file *file, unsigned int cmd,
->>  }
->>  
->>  #ifdef CONFIG_COMPAT
->> -static long subdev_compat_ioctl32(struct file *file, unsigned int cmd,
->> -	unsigned long arg)
->> +static long subdev_do_compat_ioctl32(struct file *file, unsigned int cmd, void *arg)
->>  {
->>  	struct video_device *vdev = video_devdata(file);
->>  	struct v4l2_subdev *sd = vdev_to_v4l2_subdev(vdev);
->> +	struct mutex *lock = vdev->lock;
->> +	long ret = -ENODEV;
->>  
->> -	return v4l2_subdev_call(sd, core, compat_ioctl32, cmd, arg);
->> +	if (lock && mutex_lock_interruptible(lock))
->> +		return -ERESTARTSYS;
->> +	if (video_is_registered(vdev))
->> +		ret = v4l2_subdev_call(sd, core, compat_ioctl32, cmd, arg);
->> +	if (lock)
->> +		mutex_unlock(lock);
->> +	return ret;
->> +}
->> +
->> +static long subdev_compat_ioctl32(struct file *file, unsigned int cmd,
->> +	unsigned long arg)
->> +{
->> +	return video_usercopy(file, cmd, arg, subdev_do_compat_ioctl32);
->>  }
->>  #endif
->>  
->> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
->> index d0e9a5bdb08b..42aa1f6c7c3f 100644
->> --- a/include/media/v4l2-subdev.h
->> +++ b/include/media/v4l2-subdev.h
->> @@ -195,8 +195,7 @@ struct v4l2_subdev_core_ops {
->>  	int (*s_gpio)(struct v4l2_subdev *sd, u32 val);
->>  	long (*ioctl)(struct v4l2_subdev *sd, unsigned int cmd, void *arg);
->>  #ifdef CONFIG_COMPAT
->> -	long (*compat_ioctl32)(struct v4l2_subdev *sd, unsigned int cmd,
->> -			       unsigned long arg);
->> +	long (*compat_ioctl32)(struct v4l2_subdev *sd, unsigned int cmd, void *arg);
->>  #endif
->>  #ifdef CONFIG_VIDEO_ADV_DEBUG
->>  	int (*g_register)(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg);
-> 
-
