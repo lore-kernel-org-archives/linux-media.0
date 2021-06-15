@@ -2,113 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC88C48BE5
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 03:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C34FDC48BDF
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 03:44:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 259546134F
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 03:15:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1DFB6140D
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 03:44:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbhFODRH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Jun 2021 23:17:07 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:4905 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbhFODRG (ORCPT
+        id S230444AbhFODqS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Jun 2021 23:46:18 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:44851 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230387AbhFODqS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Jun 2021 23:17:06 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G3rxH3x8kz6yrs;
-        Tue, 15 Jun 2021 09:55:15 +0800 (CST)
-Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 15 Jun 2021 09:58:24 +0800
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 15 Jun 2021 09:58:23 +0800
-Subject: Re: [PATCH -next] drm/nouveau: Remove set but not used variable 'dev'
-To:     <bskeggs@redhat.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linaro-mm-sig@lists.linaro.org>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <yangjihong1@huawei.com>, <yukuai3@huawei.com>
-References: <20210525082511.580068-1-libaokun1@huawei.com>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-Message-ID: <cee44d34-81c1-4972-e68b-e6b193598763@huawei.com>
-Date:   Tue, 15 Jun 2021 09:58:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <20210525082511.580068-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+        Mon, 14 Jun 2021 23:46:18 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id szzmlYkmJhg8ZszzolMrqL; Tue, 15 Jun 2021 05:44:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1623728652; bh=mRcLl0sd8fUCn6a08+5CPpzakwDLPt2vPWZfSOT7Jn4=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=CeGq+++D7ALrprj7N9nDmBH7JyooxB8roWeIagQdyW31+y/CoSCWlmmYQhHE1pA5u
+         8jrIf73c3gFPtucPsJBUyIUy2NNgdLGyfBCH0cv6ZXV/ITHh9FkbovVq24arBpZ70p
+         +OE+955nE+Gqechdwp5aJ1fma07wYWM8yxYfArZIXGHJfgojRO2S3D9bGuyluETv3X
+         3bCq5W3erwMzO3WCIY6dg/mhK+Yz+NiT4AbxZtmT+IPEVGFsTo9vF3zmZWXEgQv9Bw
+         SLqbRdD1DMbI8CFCuWhJwyGZ6ONhWdmehvYI8hZvkY5Kr9QkiEZ7T4n75qH73t3kRH
+         oa8NkGokhy/Ow==
+Message-ID: <8746daff5afbaa497117aa99121a2e46@smtp-cloud9.xs4all.net>
+Date:   Tue, 15 Jun 2021 05:44:10 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfARqeSKtmoB/gmRWX6LOMIrLwx1+4pUI1+s6FTF4nkiDiisLdnTkTyy3qruQme4BFxa/cMX2tk5oDtvDogRv0HVNC7rUnwZO5wQ+devdjwNzBf0FJatk
+ HrI88BeFR22uqsrAjkkHMDgX5tW0HySVwLpJEoQEtaVq7jELX/3LsitfGF8n/QfvtbCRGX4Xox8HM1iXJrLurzV9ujwwbvWga34w1jboHzq6nDwzNvhJNe7t
+ G9t5FimhPvJ2SuubMK/yeg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ping
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-在 2021/5/25 16:25, Baokun Li 写道:
-> Fixes gcc '-Wunused-but-set-variable' warning:
->
-> drivers/gpu/drm/nouveau/nouveau_bo.c: In function 'nouveau_ttm_tt_populate':
-> drivers/gpu/drm/nouveau/nouveau_bo.c:1258:17: warning:
->   variable ‘dev’ set but not used [-Wunused-but-set-variable]
->
-> drivers/gpu/drm/nouveau/nouveau_bo.c: In function 'nouveau_ttm_tt_unpopulate':
-> drivers/gpu/drm/nouveau/nouveau_bo.c:1281:17: warning:
->   variable ‘dev’ set but not used [-Wunused-but-set-variable]
->
-> It never used since introduction.
->
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
->   drivers/gpu/drm/nouveau/nouveau_bo.c | 4 ----
->   1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c b/drivers/gpu/drm/nouveau/nouveau_bo.c
-> index 7a2624c0ba4c..51f9a2e6532e 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_bo.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
-> @@ -1254,7 +1254,6 @@ nouveau_ttm_tt_populate(struct ttm_device *bdev,
->   {
->   	struct ttm_tt *ttm_dma = (void *)ttm;
->   	struct nouveau_drm *drm;
-> -	struct device *dev;
->   	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
->   
->   	if (ttm_tt_is_populated(ttm))
-> @@ -1267,7 +1266,6 @@ nouveau_ttm_tt_populate(struct ttm_device *bdev,
->   	}
->   
->   	drm = nouveau_bdev(bdev);
-> -	dev = drm->dev->dev;
->   
->   	return ttm_pool_alloc(&drm->ttm.bdev.pool, ttm, ctx);
->   }
-> @@ -1277,14 +1275,12 @@ nouveau_ttm_tt_unpopulate(struct ttm_device *bdev,
->   			  struct ttm_tt *ttm)
->   {
->   	struct nouveau_drm *drm;
-> -	struct device *dev;
->   	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
->   
->   	if (slave)
->   		return;
->   
->   	drm = nouveau_bdev(bdev);
-> -	dev = drm->dev->dev;
->   
->   	return ttm_pool_free(&drm->ttm.bdev.pool, ttm);
->   }
+Results of the daily build of media_tree:
+
+date:			Tue Jun 15 05:00:09 CEST 2021
+media-tree git hash:	45040f675041956ad763f9ef139ecee3647aa8bb
+media_build git hash:	8dab03da8769cd94afc5df1fe14c67400dc2f16e
+v4l-utils git hash:	242ad0b774c726cabaced873864a03a52e99e315
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-342-g92ace436
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7481-g7f50411af
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b010e650519b1cd0d44b110c056ef26ae6ff80a7
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
+
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.258-i686: OK
+linux-4.4.258-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.258-i686: OK
+linux-4.9.258-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.222-i686: OK
+linux-4.14.222-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.177-i686: OK
+linux-4.19.177-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.100-i686: OK
+linux-5.4.100-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10.18-i686: OK
+linux-5.10.18-x86_64: OK
+linux-5.11.1-i686: OK
+linux-5.11.1-x86_64: OK
+linux-5.12.1-i686: OK
+linux-5.12.1-x86_64: OK
+linux-5.13-rc1-i686: OK
+linux-5.13-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 1, Succeeded: 0, Failed: 1, Warnings: 0
+virtme-32: OK: Final Summary: 3035, Succeeded: 3035, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: ERRORS
+kerneldoc: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
