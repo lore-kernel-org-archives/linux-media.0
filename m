@@ -2,79 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83D5CC49EA6
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 22:50:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A91C49361
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 22:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A7C2613EE
-	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 22:50:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B41161246
+	for <linux-media@archiver.kernel.org>; Tue, 15 Jun 2021 22:50:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbhFOWxA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Jun 2021 18:53:00 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:53070 "EHLO gloria.sntech.de"
+        id S230444AbhFOWxB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Jun 2021 18:53:01 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:53064 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229908AbhFOWw5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S229968AbhFOWw5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 15 Jun 2021 18:52:57 -0400
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1ltHtG-0002WY-Ax; Wed, 16 Jun 2021 00:50:38 +0200
+        id 1ltHtF-0002WY-11; Wed, 16 Jun 2021 00:50:37 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
 Cc:     ezequiel@collabora.com, dafna.hirschfeld@collabora.com,
         helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com,
         linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-        heiko@sntech.de, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH v3 03/10] dt-bindings: media: rkisp1: document different irq possibilities
-Date:   Wed, 16 Jun 2021 00:50:16 +0200
-Message-Id: <20210615225023.3929434-4-heiko@sntech.de>
+        heiko@sntech.de, robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 0/7] rkisp1 support for px30
+Date:   Wed, 16 Jun 2021 00:50:13 +0200
+Message-Id: <20210615225023.3929434-1-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210615225023.3929434-1-heiko@sntech.de>
-References: <20210615225023.3929434-1-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+This series adds support for the slightly different v12
+variant of the ISP used for example in the px30 soc.
 
-Some variants have one irq signaling all of MI, MIPI and ISP events
-while some rkisp1 variants use separate irqs for each.
+changes in v3:
+- add necessary binding additions
+- fix pclk naming in binding
+- move v12 clk_ctrl register bits to v12 addition patch
+- fix rebase artefact with hst_enable
 
-Adapt the binding to handle both cases.
+changes in v2 (from rfc):
+- split out phy patch into a separate series
+- drop dts patches for now
+- split v12 addition and v10 prefixes into separate patches
+  to enable easier review (Dafna)
+- remove {stats,params}_config structs, we can just use the
+  correct constant (Dafna)
+- adapt to styling comments from Dafna and Helen
+- add patch to remove the unused irq variable in struct rkisp
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
----
- .../devicetree/bindings/media/rockchip-isp1.yaml         | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Heiko Stuebner (10):
+  media: rockchip: rkisp1: remove unused irq variable
+  dt-bindings: media: rkisp1: fix pclk clock-name
+  dt-bindings: media: rkisp1: document different irq possibilities
+  media: rockchip: rkisp1: allow separate interrupts
+  media: rockchip: rkisp1: make some isp-param functions variable
+  media: rockchip: rkisp1: make some isp-stats functions variable
+  media: rockchip: rkisp1: add prefixes for v10 specific parts
+  media: rockchip: rkisp1: add support for v12 isp variants
+  dt-bindings: media: rkisp1: document px30 isp compatible
+  media: rockchip: rkisp1: add support for px30 isp version
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-index 2f8f0625d22e..80709a01c6fd 100644
---- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-@@ -21,7 +21,14 @@ properties:
-     maxItems: 1
- 
-   interrupts:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
-+
-+  interrupt-names:
-+    items:
-+      - const: isp
-+      - const: mi
-+      - const: mipi
- 
-   clocks:
-     minItems: 3
+ .../bindings/media/rockchip-isp1.yaml         |  15 +-
+ .../platform/rockchip/rkisp1/rkisp1-capture.c |   9 +-
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  44 +-
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |  77 ++-
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     |  29 +-
+ .../platform/rockchip/rkisp1/rkisp1-params.c  | 557 ++++++++++++++----
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 406 ++++++++-----
+ .../platform/rockchip/rkisp1/rkisp1-stats.c   | 107 +++-
+ 8 files changed, 967 insertions(+), 277 deletions(-)
+
 -- 
 2.29.2
 
