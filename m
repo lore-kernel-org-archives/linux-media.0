@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3585C49EA2
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CBA9C48BE6
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98AA76135C
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63427613B9
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbhFPMax (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Jun 2021 08:30:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49300 "EHLO mail.kernel.org"
+        id S232935AbhFPMay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Jun 2021 08:30:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232543AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232620AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 16 Jun 2021 08:30:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9825D613C1;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A353613CB;
         Wed, 16 Jun 2021 12:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1623846520;
-        bh=6esczEUC+IAp1wiH2+5uojr1T2m2zz+t/CuNq/KViCQ=;
+        bh=nBySG9GXlvUgri5A+5P6So4wWVqRbxFEOGnkkfBp9EU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K4zuMsVGPMOi3SVQn90yWK7XUuLc/v436/GjGpW7KhK3WcvVWEnZmDMFSbBmvxCS3
-         vxgHiHl/GdHe1JRORqirVkCgFAy4EvHkl2o/UZtwznki4ChPk92vAkzc3TsoyGf4Xp
-         mHnCrH16I58Fn2bw0+MppGVKqI4Zybs1oI5vGa6mwhn6We0KYW1SmgSXBehLOuTXwy
-         KvmuPtVL8+swAgQ7dWnKzuGb1ymso+zhybCXODvn0QLs/uVP5vD6MyoVAVa/poACl0
-         FnRx0vNVCbdEhIedt2lBU6nKm31yt2h34usvCVmkZzNV7366Ri/R/Ap21CeNVXsQyr
-         py0l8vtepZnzQ==
+        b=CCcXMRBVhARM2ANw/W7/WRNnQtye4EnwW+IasEd+/pfCkOUxjPJZsgL4oi1KXmoJc
+         7VIoxryt4qcIWfa8AIAn8BS1xxYNsIKtHUntksfBrVkC53hi8p5TkdDa6agEH4h2PB
+         sm7iR/TywQYIvfUFT6ISKgluK81W+wwNVZghEFLzF1GabvIsSn40HftwT1VvCY/UE6
+         QGZbo+sfOkwsq9s97EJVxkO8Tos+xD6F73y3+lZkG5Qq8TCP02Kth6gSIF90P7cjbL
+         66daJgmUr/eRo4g5WQ7mP+CW+cirUOclKBlRFj3AazGhHng/OFL0n/7CSwPq+XdyFB
+         5yczfHRUtSsSg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1ltUes-004oj3-Hz; Wed, 16 Jun 2021 14:28:38 +0200
+        id 1ltUes-004oin-DV; Wed, 16 Jun 2021 14:28:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 11/11] media: xilinx: simplify get fourcc logic
-Date:   Wed, 16 Jun 2021 14:28:37 +0200
-Message-Id: <bc012d0e221659d0a937e5bf8a9c0e449e5f3609.1623846327.git.mchehab+huawei@kernel.org>
+        Nicolas Stuardo Diaz <nicolasstuardodiaz@gmail.com>,
+        Sean Young <sean@mess.org>, Ye Bin <yebin10@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 07/11] media: siano: fix device register error path
+Date:   Wed, 16 Jun 2021 14:28:33 +0200
+Message-Id: <73a7f08bb84ce2bd27045822fb66ad1f9c372dde.1623846327.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1623846327.git.mchehab+huawei@kernel.org>
 References: <cover.1623846327.git.mchehab+huawei@kernel.org>
@@ -57,81 +57,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now, there are two calls for xvip_get_format_by_fourcc().
-If the first one fails, it is called again in order to pick
-the first available format: V4L2_PIX_FMT_YUYV.
+As reported by smatch:
+	drivers/media/common/siano/smsdvb-main.c:1231 smsdvb_hotplug() warn: '&client->entry' not removed from list
 
-This ends by producing a smatch warnings:
-	drivers/media/platform/xilinx/xilinx-dma.c:555 __xvip_dma_try_format() error: 'info' dereferencing possible ERR_PTR()
-	drivers/media/platform/xilinx/xilinx-dma.c: drivers/media/platform/xilinx/xilinx-dma.c:664 xvip_dma_init() error: 'dma->fmtinfo' dereferencing possible ERR_PTR()
-
-as it is hard for an static analyzer to ensure that calling
-xvip_get_format_by_fourcc(XVIP_DMA_DEF_FORMAT) won't return an
-error.
-
-So, better to optimize the logic, ensuring that the function
-will never return an error.
+If an error occur at the end of the registration logic, it won't
+drop the device from the list.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/xilinx/xilinx-dma.c | 5 +----
- drivers/media/platform/xilinx/xilinx-vip.c | 6 +++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ drivers/media/common/siano/smsdvb-main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
-index 2a56201cb853..338c3661d809 100644
---- a/drivers/media/platform/xilinx/xilinx-dma.c
-+++ b/drivers/media/platform/xilinx/xilinx-dma.c
-@@ -26,7 +26,6 @@
- #include "xilinx-vip.h"
- #include "xilinx-vipp.h"
+diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
+index b8a163a47d09..f80caaa333da 100644
+--- a/drivers/media/common/siano/smsdvb-main.c
++++ b/drivers/media/common/siano/smsdvb-main.c
+@@ -1212,6 +1212,10 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
+ 	return 0;
  
--#define XVIP_DMA_DEF_FORMAT		V4L2_PIX_FMT_YUYV
- #define XVIP_DMA_DEF_WIDTH		1920
- #define XVIP_DMA_DEF_HEIGHT		1080
+ media_graph_error:
++	mutex_lock(&g_smsdvb_clientslock);
++	list_del(&client->entry);
++	mutex_unlock(&g_smsdvb_clientslock);
++
+ 	smsdvb_debugfs_release(client);
  
-@@ -549,8 +548,6 @@ __xvip_dma_try_format(struct xvip_dma *dma, struct v4l2_pix_format *pix,
- 	 * requested format isn't supported.
- 	 */
- 	info = xvip_get_format_by_fourcc(pix->pixelformat);
--	if (IS_ERR(info))
--		info = xvip_get_format_by_fourcc(XVIP_DMA_DEF_FORMAT);
- 
- 	pix->pixelformat = info->fourcc;
- 	pix->field = V4L2_FIELD_NONE;
-@@ -660,7 +657,7 @@ int xvip_dma_init(struct xvip_composite_device *xdev, struct xvip_dma *dma,
- 	INIT_LIST_HEAD(&dma->queued_bufs);
- 	spin_lock_init(&dma->queued_lock);
- 
--	dma->fmtinfo = xvip_get_format_by_fourcc(XVIP_DMA_DEF_FORMAT);
-+	dma->fmtinfo = xvip_get_format_by_fourcc(V4L2_PIX_FMT_YUYV);
- 	dma->format.pixelformat = dma->fmtinfo->fourcc;
- 	dma->format.colorspace = V4L2_COLORSPACE_SRGB;
- 	dma->format.field = V4L2_FIELD_NONE;
-diff --git a/drivers/media/platform/xilinx/xilinx-vip.c b/drivers/media/platform/xilinx/xilinx-vip.c
-index 6ad61b08a31a..a4eb57683411 100644
---- a/drivers/media/platform/xilinx/xilinx-vip.c
-+++ b/drivers/media/platform/xilinx/xilinx-vip.c
-@@ -70,8 +70,8 @@ EXPORT_SYMBOL_GPL(xvip_get_format_by_code);
-  * @fourcc: the format 4CC
-  *
-  * Return: a pointer to the format information structure corresponding to the
-- * given V4L2 format @fourcc, or ERR_PTR if no corresponding format can be
-- * found.
-+ * given V4L2 format @fourcc. If not found, return a pointer to the first
-+ * available format (V4L2_PIX_FMT_YUYV).
-  */
- const struct xvip_video_format *xvip_get_format_by_fourcc(u32 fourcc)
- {
-@@ -84,7 +84,7 @@ const struct xvip_video_format *xvip_get_format_by_fourcc(u32 fourcc)
- 			return format;
- 	}
- 
--	return ERR_PTR(-EINVAL);
-+	return &xvip_video_formats[0];
- }
- EXPORT_SYMBOL_GPL(xvip_get_format_by_fourcc);
- 
+ client_error:
 -- 
 2.31.1
 
