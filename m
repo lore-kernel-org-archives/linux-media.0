@@ -2,50 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E075C48BE6
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFA43C48BE8
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C9C1613DC
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C65FD613D5
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbhFPMas (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S231179AbhFPMas (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 16 Jun 2021 08:30:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49222 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:49232 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230283AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231303AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 16 Jun 2021 08:30:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DF5B61359;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 808846135C;
         Wed, 16 Jun 2021 12:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1623846520;
-        bh=nqOi7exA2OYkFrttpEgptdFAZL2FSfg8ZJVmqK1EC10=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W7s5YjzDLCJAnl3xLIFrS2/DOCq9zs+J42zFZHceYDblpR5xDiSrEqu9zbB2BVWR7
-         XQ0B7H4EeuCRskAE5HcoVTRQFYn8sqgDWxSrLoE3h/McIqbcdIriEyUTGKknjduqNK
-         /2GbnclE7DQBgwNZkVLCxPpD6v7VKHYR4RMDMZlz7gKQbs5Bop9S6xzO11AmalWPdb
-         CyTZahGB7NDX/eSwgQtTjBn7VxqiNag+fvbyNC9+sMR4X7W9MclHRbp4tmcaO+UhDf
-         NwzqbPZka9o5RRKTGe/zi7AHCBp0a0vDP83AUMLz813W8567JY8bw4cV8ecUiU2Ae6
-         fZkuWde92fWeQ==
+        bh=qMLD5L33JuSzop8XE5CQqNRAcxqJX553vmnX+Xl74Dc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L/R2NwoGZMLbmQtky2swZPfqmxZlTIbB4ppAfSV2KG39FufEVQkDEWsG+tSOnkrRo
+         Zjx63oN3Kk4Cz/4+sAf/tADqRztyaneLNBu3PCY7MA7UEtFLwEjsYo0I5zpoTz3kIt
+         VOb05SczaB9QOKupeFsqMD7GSMF3Y8aU3tJn4FRlyw1lUh8TdUf5BcPQLvlrG6oz60
+         61SvPNCFbUn23aUKvv0tAQqnCdfHNjsbTN4QMxy8Gc5yNxk1Mt0ZbqE4paFO1BUp4k
+         tggLIXxkvTvzWXb0ZVizM7mgte/VwMYrIOuBriXtcDGKYXs+gJ7DBcb6rSf2qUFkoY
+         UsNqeYaRtmUbQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1ltUes-004oiS-8D; Wed, 16 Jun 2021 14:28:38 +0200
+        id 1ltUes-004oiL-5M; Wed, 16 Jun 2021 14:28:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 02/11] media: dvb_net: avoid speculation from net slot
-Date:   Wed, 16 Jun 2021 14:28:28 +0200
-Message-Id: <9b1948f067df308cf875a3d8ec85aaa6b7340a65.1623846327.git.mchehab+huawei@kernel.org>
+        Maxime Ripard <mripard@kernel.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 00/11] Address some smatch warnings
+Date:   Wed, 16 Jun 2021 14:28:26 +0200
+Message-Id: <cover.1623846327.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1623846327.git.mchehab+huawei@kernel.org>
-References: <cover.1623846327.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -54,82 +56,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The risk of especulation is actually almost-non-existing here,
-as there are very few users of TCP/IP using the DVB stack,
-as, this is mainly used with DVB-S/S2 cards, and only by people
-that receives TCP/IP from satellite connections, which limits
-a lot the number of users of such feature(*).
+There are currently a couple of smatch warnings at the media subsystem.
 
-(*) In thesis, DVB-C cards could also benefit from it, but I'm
-yet to see a hardware that supports it.
+This series fix several of them. The end goal is to reduce smatch warnings
+to be close to zero, but there are still some work to be done. I'll likely
+submit another round along this week.
 
-Yet, fixing it is trivial.
+Mauro Carvalho Chehab (11):
+  media: dvb_ca_en50221: avoid speculation from CA slot
+  media: dvb_net: avoid speculation from net slot
+  media: dvbdev: fix error logic at dvb_register_device()
+  media: sun6i-csi: add a missing return code
+  media: saa7134: use more meaninful goto labels
+  media: saa7134: fix saa7134_initdev error handling logic
+  media: siano: fix device register error path
+  media: adv7842: better document EDID block size
+  media: ttusb-dec: cleanup an error handling logic
+  media: dvb-core: frontend: make GET/SET safer
+  media: xilinx: simplify get fourcc logic
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/dvb-core/dvb_net.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ drivers/media/common/siano/smsdvb-main.c      |   4 +
+ drivers/media/dvb-core/dvb_ca_en50221.c       |   1 +
+ drivers/media/dvb-core/dvb_frontend.c         | 213 ++++++++++--------
+ drivers/media/dvb-core/dvb_net.c              |  25 +-
+ drivers/media/dvb-core/dvbdev.c               |   3 +
+ drivers/media/i2c/adv7842.c                   |  33 ++-
+ drivers/media/pci/saa7134/saa7134-core.c      |  39 ++--
+ .../platform/sunxi/sun6i-csi/sun6i_video.c    |   4 +-
+ drivers/media/platform/xilinx/xilinx-dma.c    |   5 +-
+ drivers/media/platform/xilinx/xilinx-vip.c    |   6 +-
+ drivers/media/usb/ttusb-dec/ttusb_dec.c       |  25 +-
+ 11 files changed, 201 insertions(+), 157 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 89620da983ba..dddebea644bb 100644
---- a/drivers/media/dvb-core/dvb_net.c
-+++ b/drivers/media/dvb-core/dvb_net.c
-@@ -45,6 +45,7 @@
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
-+#include <linux/nospec.h>
- #include <linux/etherdevice.h>
- #include <linux/dvb/net.h>
- #include <linux/uio.h>
-@@ -1462,14 +1463,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct dvb_net_if *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
- 
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		if (!dvbnet->state[if_num]) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+
-+		netdev = dvbnet->device[if_num];
- 
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
-@@ -1522,14 +1529,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct __dvb_net_if_old *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
- 
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		if (!dvbnet->state[if_num]) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+
-+		netdev = dvbnet->device[if_num];
- 
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
 -- 
 2.31.1
+
 
