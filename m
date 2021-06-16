@@ -2,85 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 566D7C48BE6
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 15:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA80CC48BE6
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 15:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39F2960FE5
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 15:08:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA73B611CA
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 15:10:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbhFPPKl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Jun 2021 11:10:41 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:34194 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234390AbhFPPKg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Jun 2021 11:10:36 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1ltX9U-001o0I-3v; Wed, 16 Jun 2021 15:08:24 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1ltXDx-0004EI-9e; Wed, 16 Jun 2021 15:13:01 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.14] Support H264 4K on MT8192 (#75015)
-Date:   Wed, 16 Jun 2021 15:13:01 +0000
-Message-Id: <20210616151301.16217-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <f0d85b90-4fd1-50f6-632f-02d5fec120b2@xs4all.nl>
-References: 
+        id S234468AbhFPPMa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Jun 2021 11:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234469AbhFPPM3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Jun 2021 11:12:29 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F197C061574
+        for <linux-media@vger.kernel.org>; Wed, 16 Jun 2021 08:10:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 6A4971F43925
+Message-ID: <dcf9370f0e8f407182a92ad7e844fc1d8f654f4d.camel@collabora.com>
+Subject: Re: [v4l-utils v5 0/5] Add support for meson building
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Cc:     kieran.bingham@ideasonboard.com, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, ezequiel@collabora.com,
+        gjasny@googlemail.com, xavier.claessens@collabora.com,
+        user.vdr@gmail.com, sakari.ailus@iki.fi, rosenp@gmail.com
+Date:   Wed, 16 Jun 2021 11:10:10 -0400
+In-Reply-To: <20210616165947.70f73cec@coco.lan>
+References: <20210512184946.102863-1-ariel.dalessandro@collabora.com>
+         <f2f72ec5-e352-132f-b8d1-718589360bf0@ideasonboard.com>
+         <008aec9c-c1e6-7f8b-dde5-8fa53c1e9ee6@collabora.com>
+         <92b5c1bf-f4cf-5d5e-7c16-57d4a3446f67@ideasonboard.com>
+         <443286a1-b955-1ac1-742d-42b9182a435f@collabora.com>
+         <20210616165947.70f73cec@coco.lan>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.1 (3.40.1-1.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Le mercredi 16 juin 2021 à 16:59 +0200, Mauro Carvalho Chehab a écrit :
+> Em Wed, 16 Jun 2021 11:26:10 -0300
+> Ariel D'Alessandro <ariel.dalessandro@collabora.com> escreveu:
+> 
+> > Kieran,
+> > 
+> 
+> > >  - Meson decided to default libdir to
+> > >      /usr/local/lib/x86_64-linux-gnu
+> > >    while autoconf used
+> > >      /usr/local/lib
+> > >    (it's likely handled by the package managers anyway)  
+> > 
+> >   $ meson configure ../build-meson/ | grep libdir
+> >     libdir    lib/x86_64-linux-gnu    Library directory
+> 
+> The default isn't nice, and will likely cause troubles for the users, as 
+> /usr/local/lib/x86_64-linux-gnu would hardly be at the ld.so.conf list of 
+> paths for most people. So, when one would try to run a program, it will
+> fail.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/f0d85b90-4fd1-50f6-632f-02d5fec120b2@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/115851/
-Build time: 00:15:43
-Link: https://lore.kernel.org/linux-media/f0d85b90-4fd1-50f6-632f-02d5fec120b2@xs4all.nl
+It is the other way around, meson default to what ld.so.conf (your distribution)
+is configured to. In this case you are running a debian/unbutu system, and this
+is the proper path for multi-arch library placement.
 
-gpg: Signature made Mon 14 Jun 2021 10:30:00 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+If you try this on Fedora with a 64bit CPU, it would have picked
+/usr/local/lib64. Which is also the proper path for that Linux distribution.
+Debian has a more complex way, but it covers more use cases.
 
-Summary: got 1/6 patches with issues, being 1 at build time
+> 
+> > As mentioned in another response. Autotools is building with `-g -O2` by
+> > default, that'd the equivalent meson configuration option
+> > --buildtype=debugoptimized. 
+> 
+> I can't understand the Meson's default... no optimization and no debug!
+> Basically something that it is useless for both developers and for
+> production. I wonder why they chose a crap default like that...
 
-Error/warnings:
+Each projects have their own opinion on this. I believe debugoptimize is the
+right default. Here's how GStreamer project is setup (very first line of the
+meson code):
 
-patches/0001-media-mtk-vcodec-venc-remove-redundant-code.patch:
+project('gstreamer', 'c',
+  version : '1.19.1.1',
+  meson_version : '>= 0.54',
+  default_options : [ 'warning_level=1',
+                      'buildtype=debugoptimized' ])
 
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+This is trivially straightforward and I understood Ariel will fix it in next
+version. Thanks for spotting.
 
-    allyesconfig: return code #0:
-	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1969 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+> 
+> > With this configuration the installtion
+> > sizes are not that different:
+> > 
+> >   $ du -s installation_m*
+> >   37068	installation_make
+> >   37848	installation_meson
+> 
+> It sounds a lot more coherent.
+> 
+> > In this case the difference is related to libtool `.la` files not being
+> > generated by meson and gconv/ only installed by meson. The latest is
+> > probably a feature being only detected by meson in this case, will check
+> > that out.
+> 
+> It was opted to not enable gconv by default, as similar patchset - needed
+> to support ARIB STD B-24 charset used by Japanese digital TV - was sent to 
+> gconv upstream (not sure if it was merged or not). On other words, the 
+> contrib/gconv stuff is independent of v4l-utils itself: it basically
+> adds an extra charset to be used by gconv upstream.
+> 
+> The only reason why it is present at v4l2-utils is that this charset
+> is present on ISDB tables on TV broadcasts in Japan. The gconv library
+> needs to support it, in order to  convert characters from MPEG tables
+> to the system's charset.
+> 
+> Btw, that's basically one of the reasons why we print a summary of the
+> options when ./configure runs.
+
+We can and should definitely do that same.
+
+> 
+> Thanks,
+> Mauro
+
 
