@@ -2,207 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 088C2C48BE5
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 19:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BB2C48BE5
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 21:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6426613C2
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 19:43:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC53061375
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 21:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhFPTpd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Jun 2021 15:45:33 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33540 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbhFPTpc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Jun 2021 15:45:32 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5E3AEFC9;
-        Wed, 16 Jun 2021 21:43:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1623872604;
-        bh=QoljJieeX9Img5iH6etn4VYAB35CsGHvhXyqcSxnf/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PdAYSdpajhvJ67PS/DO2g4G1f6efIlvp7BIcw9XGlCdgiZSXAncZWfA6azBtPDiHQ
-         U2RRMD0Hi34EAN48XgW4Pvg6HN2AzUl0TfP7FTlLjsCJ8v5OnUC2MDBxEVUqMT7yFG
-         AWSHfrhXb/vdbOI7Z7Bh7+XRqpiMWkoepvXqSDYI=
-Date:   Wed, 16 Jun 2021 22:43:03 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: omap3isp: Extract struct group for memcpy() region
-Message-ID: <YMpUR34kFSbiyi+q@pendragon.ideasonboard.com>
-References: <20210616185938.1225218-1-keescook@chromium.org>
+        id S234133AbhFPVy1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Jun 2021 17:54:27 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:60312 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234090AbhFPVy0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Jun 2021 17:54:26 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1ltdSI-0008QL-EH; Wed, 16 Jun 2021 23:52:14 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     ezequiel@collabora.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com,
+        linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+        heiko@sntech.de, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Subject: [PATCH v4 03/10] dt-bindings: media: rkisp1: document different irq possibilities
+Date:   Wed, 16 Jun 2021 23:52:04 +0200
+Message-Id: <20210616215211.4002992-4-heiko@sntech.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210616215211.4002992-1-heiko@sntech.de>
+References: <20210616215211.4002992-1-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210616185938.1225218-1-keescook@chromium.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kees,
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Thank you for the patch.
+Some variants have one irq signaling all of MI, MIPI and ISP events
+while some rkisp1 variants use separate irqs for each.
 
-On Wed, Jun 16, 2021 at 11:59:38AM -0700, Kees Cook wrote:
-> Avoid writing past the end of a structure member by wrapping the target
-> region in a common named structure. This additionally fixes a
-> misalignment of the copy (since the size of "buf" changes between 64-bit
-> and 32-bit).
+Adapt the binding to handle both cases.
 
-Could you have been mislead by the data64 name ? The difference between
-omap3isp_stat_data_time and omap3isp_stat_data_time32 is the size of the
-ts field, using 32-bit timestamps with legacy userspace, and 64-bit
-timestamps with more recent userspace. In both cases we're dealing with
-a 32-bit platform, as the omap3isp is not used in any 64-bit ARM SoC.
-The size of void __user *buf is thus 4 bytes in all cases, as is __u32
-buf.
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+---
+ .../devicetree/bindings/media/rockchip-isp1.yaml         | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-> I actually think this code is completely unused in the real world:
-> I don't think it could have ever worked, as it would either always
-> fail (with an uninitialized data->buf_size) or would cause corruption
-> in userspace due to the copy_to_user() in the call path against an
-> uninitialized data->buf value:
-> 
-> omap3isp_stat_request_statistics_time32(...)
->     struct omap3isp_stat_data data64;
->     ...
->     omap3isp_stat_request_statistics(stat, &data64);
-> 
-> int omap3isp_stat_request_statistics(struct ispstat *stat,
->                                      struct omap3isp_stat_data *data)
->     ...
->     buf = isp_stat_buf_get(stat, data);
-> 
-> static struct ispstat_buffer *isp_stat_buf_get(struct ispstat *stat,
->                                                struct omap3isp_stat_data *data)
-> ...
->     if (buf->buf_size > data->buf_size) {
->             ...
->             return ERR_PTR(-EINVAL);
->     }
->     ...
->     rval = copy_to_user(data->buf,
->                         buf->virt_addr,
->                         buf->buf_size);
-> 
-> Regardless, additionally initialize data64 to be zero-filled to avoid
-> undefined behavior.
-> 
-> Fixes: 378e3f81cb56 ("media: omap3isp: support 64-bit version of omap3isp_stat_data")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/media/platform/omap3isp/ispstat.c |  5 +--
->  include/uapi/linux/omap3isp.h             | 44 +++++++++++++++++------
->  2 files changed, 36 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/media/platform/omap3isp/ispstat.c b/drivers/media/platform/omap3isp/ispstat.c
-> index 5b9b57f4d9bf..ea8222fed38e 100644
-> --- a/drivers/media/platform/omap3isp/ispstat.c
-> +++ b/drivers/media/platform/omap3isp/ispstat.c
-> @@ -512,7 +512,7 @@ int omap3isp_stat_request_statistics(struct ispstat *stat,
->  int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
->  					struct omap3isp_stat_data_time32 *data)
->  {
-> -	struct omap3isp_stat_data data64;
-> +	struct omap3isp_stat_data data64 = { };
->  	int ret;
->  
->  	ret = omap3isp_stat_request_statistics(stat, &data64);
-> @@ -521,7 +521,8 @@ int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
->  
->  	data->ts.tv_sec = data64.ts.tv_sec;
->  	data->ts.tv_usec = data64.ts.tv_usec;
-> -	memcpy(&data->buf, &data64.buf, sizeof(*data) - sizeof(data->ts));
-> +	data->buf = (uintptr_t)data64.buf;
-> +	memcpy(&data->frame, &data64.buf, sizeof(data->frame));
->  
->  	return 0;
->  }
-> diff --git a/include/uapi/linux/omap3isp.h b/include/uapi/linux/omap3isp.h
-> index 87b55755f4ff..0a16af91621f 100644
-> --- a/include/uapi/linux/omap3isp.h
-> +++ b/include/uapi/linux/omap3isp.h
-> @@ -159,13 +159,25 @@ struct omap3isp_h3a_aewb_config {
->  };
->  
->  /**
-> - * struct omap3isp_stat_data - Statistic data sent to or received from user
-> - * @ts: Timestamp of returned framestats.
-> - * @buf: Pointer to pass to user.
-> + * struct omap3isp_stat_frame - Statistic data without timestamp nor pointer.
-> + * @buf_size: Size of buffer.
->   * @frame_number: Frame number of requested stats.
->   * @cur_frame: Current frame number being processed.
->   * @config_counter: Number of the configuration associated with the data.
->   */
-> +struct omap3isp_stat_frame {
-> +	__u32 buf_size;
-> +	__u16 frame_number;
-> +	__u16 cur_frame;
-> +	__u16 config_counter;
-> +};
-> +
-> +/**
-> + * struct omap3isp_stat_data - Statistic data sent to or received from user
-> + * @ts: Timestamp of returned framestats.
-> + * @buf: Pointer to pass to user.
-> + * @frame: Statistic data for frame.
-> + */
->  struct omap3isp_stat_data {
->  #ifdef __KERNEL__
->  	struct {
-> @@ -176,10 +188,15 @@ struct omap3isp_stat_data {
->  	struct timeval ts;
->  #endif
->  	void __user *buf;
-> -	__u32 buf_size;
-> -	__u16 frame_number;
-> -	__u16 cur_frame;
-> -	__u16 config_counter;
-> +	union {
-> +		struct {
-> +			__u32 buf_size;
-> +			__u16 frame_number;
-> +			__u16 cur_frame;
-> +			__u16 config_counter;
-> +		};
-> +		struct omap3isp_stat_frame frame;
-> +	};
->  };
->  
->  #ifdef __KERNEL__
-> @@ -189,10 +206,15 @@ struct omap3isp_stat_data_time32 {
->  		__s32	tv_usec;
->  	} ts;
->  	__u32 buf;
-> -	__u32 buf_size;
-> -	__u16 frame_number;
-> -	__u16 cur_frame;
-> -	__u16 config_counter;
-> +	union {
-> +		struct {
-> +			__u32 buf_size;
-> +			__u16 frame_number;
-> +			__u16 cur_frame;
-> +			__u16 config_counter;
-> +		};
-> +		struct omap3isp_stat_frame frame;
-> +	};
->  };
->  #endif
->  
-
+diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+index 2f8f0625d22e..80709a01c6fd 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+@@ -21,7 +21,14 @@ properties:
+     maxItems: 1
+ 
+   interrupts:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 3
++
++  interrupt-names:
++    items:
++      - const: isp
++      - const: mi
++      - const: mipi
+ 
+   clocks:
+     minItems: 3
 -- 
-Regards,
+2.29.2
 
-Laurent Pinchart
