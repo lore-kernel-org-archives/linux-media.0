@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CBA9C48BE6
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06A0C49361
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63427613B9
-	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF249613D0
+	for <linux-media@archiver.kernel.org>; Wed, 16 Jun 2021 12:28:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbhFPMay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232951AbhFPMay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 16 Jun 2021 08:30:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49302 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:49304 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232620AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S232623AbhFPMaq (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 16 Jun 2021 08:30:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A353613CB;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F401613D3;
         Wed, 16 Jun 2021 12:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1623846520;
-        bh=nBySG9GXlvUgri5A+5P6So4wWVqRbxFEOGnkkfBp9EU=;
+        bh=qiN1R/jymLRTb35TqMu2Vqi01KiKSp/t9ibnV3ARPpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCcXMRBVhARM2ANw/W7/WRNnQtye4EnwW+IasEd+/pfCkOUxjPJZsgL4oi1KXmoJc
-         7VIoxryt4qcIWfa8AIAn8BS1xxYNsIKtHUntksfBrVkC53hi8p5TkdDa6agEH4h2PB
-         sm7iR/TywQYIvfUFT6ISKgluK81W+wwNVZghEFLzF1GabvIsSn40HftwT1VvCY/UE6
-         QGZbo+sfOkwsq9s97EJVxkO8Tos+xD6F73y3+lZkG5Qq8TCP02Kth6gSIF90P7cjbL
-         66daJgmUr/eRo4g5WQ7mP+CW+cirUOclKBlRFj3AazGhHng/OFL0n/7CSwPq+XdyFB
-         5yczfHRUtSsSg==
+        b=CKAJ8xCB6m+t0PmJyd97NrWc8V/6eSVq0EvSS0idBcB1dSYcQuv3qV2r4s/z+9pR8
+         SswpRbBTTn9KRYiDFVzF6loRCeVjJKGqnbDDM3AIEvB89qLiKvs2ftP5+k7iPBDpLF
+         t0S7VmTsqg+GbW9676pPmMYTRvYuX5JM31DHPDXymfn4G9gJMvn6fuNOLZf7EdBcx6
+         NgaHfLa8+yNaJc7Pp+HgeulYPZwP8CSBK+moq3jl9Hb2SNNnDNZ/noQmzdJrzWhIMz
+         k++YoTrA26R4ygZNP5YVcTmV94cya5mxjR0ucHFtmtCrE1OYxTo/poKIzC1quKj57C
+         bBNL8nLYRMWCw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1ltUes-004oin-DV; Wed, 16 Jun 2021 14:28:38 +0200
+        id 1ltUes-004oiv-FW; Wed, 16 Jun 2021 14:28:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
+        Allen Pais <allen.lkml@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Stuardo Diaz <nicolasstuardodiaz@gmail.com>,
-        Sean Young <sean@mess.org>, Ye Bin <yebin10@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 07/11] media: siano: fix device register error path
-Date:   Wed, 16 Jun 2021 14:28:33 +0200
-Message-Id: <73a7f08bb84ce2bd27045822fb66ad1f9c372dde.1623846327.git.mchehab+huawei@kernel.org>
+        Romain Perier <romain.perier@gmail.com>,
+        dingsenjie <dingsenjie@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 09/11] media: ttusb-dec: cleanup an error handling logic
+Date:   Wed, 16 Jun 2021 14:28:35 +0200
+Message-Id: <9d098284e97a5687f857671d1aa8e5716658d50a.1623846327.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1623846327.git.mchehab+huawei@kernel.org>
 References: <cover.1623846327.git.mchehab+huawei@kernel.org>
@@ -57,32 +57,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As reported by smatch:
-	drivers/media/common/siano/smsdvb-main.c:1231 smsdvb_hotplug() warn: '&client->entry' not removed from list
+Simplify the logic at ttusb_dec_send_command().
 
-If an error occur at the end of the registration logic, it won't
-drop the device from the list.
+Besides avoiding some code duplication, as a side effect,
+this could remove this false positive return with spatch:
+
+	drivers/media/usb/ttusb-dec/ttusb_dec.c:380 ttusb_dec_send_command() warn: inconsistent returns '&dec->usb_mutex'.
+	  Locked on  : 330
+	  Unlocked on: 354,365,380
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/common/siano/smsdvb-main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/usb/ttusb-dec/ttusb_dec.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
-index b8a163a47d09..f80caaa333da 100644
---- a/drivers/media/common/siano/smsdvb-main.c
-+++ b/drivers/media/common/siano/smsdvb-main.c
-@@ -1212,6 +1212,10 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
- 	return 0;
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index a852ee5f7ac9..bfda46a36dc5 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -324,10 +324,10 @@ static int ttusb_dec_send_command(struct ttusb_dec *dec, const u8 command,
+ 	if (!b)
+ 		return -ENOMEM;
  
- media_graph_error:
-+	mutex_lock(&g_smsdvb_clientslock);
-+	list_del(&client->entry);
-+	mutex_unlock(&g_smsdvb_clientslock);
+-	if ((result = mutex_lock_interruptible(&dec->usb_mutex))) {
+-		kfree(b);
++	result = mutex_lock_interruptible(&dec->usb_mutex);
++	if (result) {
+ 		printk("%s: Failed to lock usb mutex.\n", __func__);
+-		return result;
++		goto err;
+ 	}
+ 
+ 	b[0] = 0xaa;
+@@ -349,9 +349,7 @@ static int ttusb_dec_send_command(struct ttusb_dec *dec, const u8 command,
+ 	if (result) {
+ 		printk("%s: command bulk message failed: error %d\n",
+ 		       __func__, result);
+-		mutex_unlock(&dec->usb_mutex);
+-		kfree(b);
+-		return result;
++		goto err;
+ 	}
+ 
+ 	result = usb_bulk_msg(dec->udev, dec->result_pipe, b,
+@@ -360,9 +358,7 @@ static int ttusb_dec_send_command(struct ttusb_dec *dec, const u8 command,
+ 	if (result) {
+ 		printk("%s: result bulk message failed: error %d\n",
+ 		       __func__, result);
+-		mutex_unlock(&dec->usb_mutex);
+-		kfree(b);
+-		return result;
++		goto err;
+ 	} else {
+ 		if (debug) {
+ 			printk(KERN_DEBUG "%s: result: %*ph\n",
+@@ -373,12 +369,13 @@ static int ttusb_dec_send_command(struct ttusb_dec *dec, const u8 command,
+ 			*result_length = b[3];
+ 		if (cmd_result && b[3] > 0)
+ 			memcpy(cmd_result, &b[4], b[3]);
+-
+-		mutex_unlock(&dec->usb_mutex);
+-
+-		kfree(b);
+-		return 0;
+ 	}
 +
- 	smsdvb_debugfs_release(client);
++err:
++	mutex_unlock(&dec->usb_mutex);
++
++	kfree(b);
++	return result;
+ }
  
- client_error:
+ static int ttusb_dec_get_stb_state (struct ttusb_dec *dec, unsigned int *mode,
 -- 
 2.31.1
 
