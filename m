@@ -2,83 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6539C2B9F4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CECC2B9F4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:21:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C71AD613CA
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:09:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 452C461019
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:21:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbhFQNMB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Jun 2021 09:12:01 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:8260 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbhFQNMA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:12:00 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G5Mhw3F5nz1BNCr;
-        Thu, 17 Jun 2021 21:04:48 +0800 (CST)
-Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 17 Jun 2021 21:09:51 +0800
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 17 Jun 2021 21:09:50 +0800
-Subject: Re: [PATCH -next v4] media: staging: atomisp: use list_splice_init in
- atomisp_compat_css20.c
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <mchehab@kernel.org>, <sakari.ailus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <kaixuxia@tencent.com>,
-        <gustavoars@kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <yangjihong1@huawei.com>, <yukuai3@huawei.com>
-References: <20210617124709.670936-1-libaokun1@huawei.com>
- <YMtGPPgM+zv0iL5u@smile.fi.intel.com>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-Message-ID: <1f6e8096-3072-0535-f91d-e3c7e6046ca7@huawei.com>
-Date:   Thu, 17 Jun 2021 21:09:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S231523AbhFQNXk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Jun 2021 09:23:40 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:35922 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232488AbhFQNXk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:23:40 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1ltrxb-0039RI-Ot; Thu, 17 Jun 2021 13:21:31 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1lts24-0007mY-Vc; Thu, 17 Jun 2021 13:26:09 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.14] ti-vpe: cal: improvements towards multistream (#75189)
+Date:   Thu, 17 Jun 2021 13:26:08 +0000
+Message-Id: <20210617132608.29873-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <df45f248-fe1e-4dc7-b26a-51a36bba90bb@xs4all.nl>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <YMtGPPgM+zv0iL5u@smile.fi.intel.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sorry, I'm in bad shape today.
+From: builder@linuxtv.org
 
-I replied to this v4 patch to remind people to ignore it.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/df45f248-fe1e-4dc7-b26a-51a36bba90bb@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/116092/
+Build time: 00:29:09
+Link: https://lore.kernel.org/linux-media/df45f248-fe1e-4dc7-b26a-51a36bba90bb@xs4all.nl
 
-And I send a v5 patch to fix it.
+gpg: Signature made Thu 17 Jun 2021 12:42:15 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-You can refresh your mail list.
+Summary: got 1/35 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-Best Regards.
+Error/warnings:
+
+patches/0001-media-ti-vpe-cal-add-g-s_parm-for-legacy-API.patch:
+
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+
+    allyesconfig: return code #0:
+	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
+	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
+	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1969 vivid_create_instance() parse error: turning off implications after 60 seconds
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2835 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
 
 
-ÔÚ 2021/6/17 20:55, Andy Shevchenko Ð´µÀ:
-> On Thu, Jun 17, 2021 at 08:47:09PM +0800, Baokun Li wrote:
->> Using list_splice_init() instead of entire while-loops
->> in atomisp_compat_css20.c.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->> ---
-> You missed changelog.
-> And I believe you missed the changes.
-> So, what's the point?
->
+Error #512 when building PDF docs
+
