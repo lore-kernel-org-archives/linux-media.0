@@ -8,64 +8,64 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC627C2B9F4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 11:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85CEAC49361
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 11:16:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D519161369
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 11:16:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74E6861209
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 11:16:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbhFQLSQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232460AbhFQLSQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 17 Jun 2021 07:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbhFQLSP (ORCPT
+        with ESMTP id S232456AbhFQLSP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Jun 2021 07:18:15 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F95C061574
-        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 04:16:06 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id s6so3427149edu.10
-        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 04:16:06 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218AEC061574
+        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 04:16:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id s6so3427230edu.10
+        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 04:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Xa2i71Ri2eK/e91UCCTXEAoquyui6jF43BKEv04gN4g=;
-        b=J4G7oyFYVe/U+4ZAFn6M8m4z7Y24tHmXJPLZkUlymA1ekUAOM4VnvwV19yW7Txo/C/
-         QyY271dLeV6GK7cz/0wNgveeMKZFxeAZQrV06VU2lAkmNimfAEpwfO+VlsNHaQDGi12X
-         AgXYTEEOUY/JngrYoedtySNu2ZdWifo4EEkT9FLZmdDORsDbYui0QKIwJ6P5ACcRJj4i
-         TVddfMXrm+Y9dBDb0TWnfAmB1LcWfUhYkKsUlUekwaEZpNVH5v6z7vUxMq4+S9P9kx2i
-         rP/SD+UDsKrOr6Xgr3Y2g/U+4w735YyPIZOho+WV5a9e0TphJPeR2PrLciTY1cGZ060a
-         etwQ==
+        bh=byLSDqjdKi3+cE2IMMDe/R3eVJ9OpfF5t0/Jijtn6q0=;
+        b=sOQGBXqPZYb4VhHiZysul1mv0Y5S+MhCCItbz9UHtXicp3kUgp/stG1N3WEDg0WQNA
+         KuX+kWiSQcyHtd+4Q3yVKARfSprDU5SoZya210yjZ+7yxgF472bhYHycnphV0w17aEmG
+         cl/w93GKuJUqiPTDj78CNuPHdSmnWgrvFEeb3nHdfcN9j7kiP402JJsocFKh7gawRlVf
+         F4jfa+uvDDSOQ/3a4A675gYsIYpd3q2aJ5Yhp+qGdcYgJrohoHSxXL6YNEisPGWS0PgT
+         +7e0clwZ6uX0erSLNWWG9pQLaPg7eBt7DNTTXQ9KuAt6xohb5sh6m1AC5RGGNAn/KKpg
+         bjNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xa2i71Ri2eK/e91UCCTXEAoquyui6jF43BKEv04gN4g=;
-        b=Q/SNGbEYXH24F7eyokwhIaegb0Udilmq93pjV4BgpCp3Gx1N3mThmeBLP/QtQS7f1s
-         T3b+GtXV4WXblfUuA9L188LgsWB2eycVUvhZbLdNCpWTSbxPVF4cr+SEGFJGWwUWrdPc
-         FDGXrCWyDpW4go7g3x/oFdLpoc2R8siy9fnqVj12kuvgAoMDCmkNQ89uv8t1w7ClfTHZ
-         LqqsJKIsCXdV9NOo0X5Nh6wmkLQBK25B/s5i6Zz+GmZiL6LNowjA39JOq75+Yp0GIOnc
-         Jp1Wy5CpXOyacJKVXOFFQtyp1ONTxO3Ow8pyEuPFHcfthDKjdvIvm5hE5egFBo4ZtLLV
-         lRYg==
-X-Gm-Message-State: AOAM530b5Q3uMEtYjSmVRXdIJf6LxRh/zPylTP4hcey5jDBC5xE+jUy2
-        RjK8cYziagFlH6Ikh4JUqBI=
-X-Google-Smtp-Source: ABdhPJwtK+PmMG0EvZiApB5Ui9GYadZi0QPgMNTTpHdQN5LAPkkC9DhaLZn5j6xJ1lZxbulacF4yYQ==
-X-Received: by 2002:aa7:ce03:: with SMTP id d3mr5732594edv.360.1623928565462;
-        Thu, 17 Jun 2021 04:16:05 -0700 (PDT)
+        bh=byLSDqjdKi3+cE2IMMDe/R3eVJ9OpfF5t0/Jijtn6q0=;
+        b=AkOP4c/NbgphBR0VFtjx8n181cDIJ1cN8+iX9pPDDDQRjFewQPIFMjgBqcdq6OrxV/
+         zFcwYsHIZCWIiqHe2GOywI9q+exE3p/4IH3U4D+oDp2L1t/hoglnrvuwD9lYCPrtMS1B
+         W7LFETpltaufTGD1GL/TSlqyzfzLXup6KHSfXd6M6IjpxnumBwQJ2G4GJwoIuVA4GShL
+         6HwP8v8/Ekno+4tNjya17x6gLPKtY6iCRdRlaD6A4fjiDraFn05iQ02d0YJez8SHIIe8
+         j7RFmzKIKciq9YGXAmhJMv6VkZGw2ltYSPbXuKqwwVxPQQ/h3g66slW0Jq4bgtCRTK5m
+         LZ9w==
+X-Gm-Message-State: AOAM531wSllV03dEOUu7+//Igzcgse/wF7omBobducrYyVxns6N8ITve
+        CAgxKyQQndIBESneIhJ0J4PonKuMiqE=
+X-Google-Smtp-Source: ABdhPJxPES9M3EFm+goK97aBV/aqBmulWsvrxZXDpmswFtsIKGYgZSrLa6HNl26BpQgDFlDZEnIjWw==
+X-Received: by 2002:a05:6402:27c9:: with SMTP id c9mr5838983ede.371.1623928566809;
+        Thu, 17 Jun 2021 04:16:06 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:8534:5e76:1ee5:f3ad])
-        by smtp.gmail.com with ESMTPSA id y10sm3531353ejm.76.2021.06.17.04.16.04
+        by smtp.gmail.com with ESMTPSA id y10sm3531353ejm.76.2021.06.17.04.16.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 04:16:05 -0700 (PDT)
+        Thu, 17 Jun 2021 04:16:06 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     daniel@ffwll.ch, sumit.semwal@linaro.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 06/16] dma-buf: use new iterator in dma_resv_test_signaled
-Date:   Thu, 17 Jun 2021 13:15:48 +0200
-Message-Id: <20210617111558.28486-7-christian.koenig@amd.com>
+Subject: [PATCH 08/16] drm/i915: use the new iterator in i915_gem_busy_ioctl
+Date:   Thu, 17 Jun 2021 13:15:50 +0200
+Message-Id: <20210617111558.28486-9-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210617111558.28486-1-christian.koenig@amd.com>
 References: <20210617111558.28486-1-christian.koenig@amd.com>
@@ -77,91 +77,64 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 This makes the function much simpler since the complex
-retry logic is now handled elsewhere.
+retry logic is now handled else where.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-resv.c | 54 +++++---------------------------------
- 1 file changed, 7 insertions(+), 47 deletions(-)
+ drivers/gpu/drm/i915/gem/i915_gem_busy.c | 30 +++++++-----------------
+ 1 file changed, 9 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index 5192cf4271ac..85e07becdb93 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -586,22 +586,6 @@ long dma_resv_wait_timeout(struct dma_resv *obj, bool wait_all, bool intr,
- EXPORT_SYMBOL_GPL(dma_resv_wait_timeout);
- 
- 
--static inline int dma_resv_test_signaled_single(struct dma_fence *passed_fence)
--{
--	struct dma_fence *fence, *lfence = passed_fence;
--	int ret = 1;
--
--	if (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &lfence->flags)) {
--		fence = dma_fence_get_rcu(lfence);
--		if (!fence)
--			return -1;
--
--		ret = !!dma_fence_is_signaled(fence);
--		dma_fence_put(fence);
--	}
--	return ret;
--}
--
- /**
-  * dma_resv_test_signaled - Test if a reservation object's fences have been
-  * signaled.
-@@ -616,43 +600,19 @@ static inline int dma_resv_test_signaled_single(struct dma_fence *passed_fence)
-  */
- bool dma_resv_test_signaled(struct dma_resv *obj, bool test_all)
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_busy.c b/drivers/gpu/drm/i915/gem/i915_gem_busy.c
+index 6234e17259c1..c6c6d747b33e 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_busy.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_busy.c
+@@ -82,8 +82,8 @@ i915_gem_busy_ioctl(struct drm_device *dev, void *data,
  {
-+	struct dma_resv_cursor cursor;
- 	struct dma_fence *fence;
+ 	struct drm_i915_gem_busy *args = data;
+ 	struct drm_i915_gem_object *obj;
+-	struct dma_resv_list *list;
 -	unsigned int seq;
--	int ret;
++	struct dma_resv_cursor cursor;
++	struct dma_fence *fence;
+ 	int err;
  
- 	rcu_read_lock();
+ 	err = -ENOENT;
+@@ -109,28 +109,16 @@ i915_gem_busy_ioctl(struct drm_device *dev, void *data,
+ 	 * to report the overall busyness. This is what the wait-ioctl does.
+ 	 *
+ 	 */
 -retry:
--	ret = true;
--	seq = read_seqcount_begin(&obj->seq);
+-	seq = raw_read_seqcount(&obj->base.resv->seq);
 -
--	if (test_all) {
--		struct dma_resv_list *fobj = dma_resv_shared_list(obj);
--		unsigned int i, shared_count;
+-	/* Translate the exclusive fence to the READ *and* WRITE engine */
+-	args->busy = busy_check_writer(dma_resv_excl_fence(obj->base.resv));
 -
--		shared_count = fobj ? fobj->shared_count : 0;
+-	/* Translate shared fences to READ set of engines */
+-	list = dma_resv_shared_list(obj->base.resv);
+-	if (list) {
+-		unsigned int shared_count = list->shared_count, i;
+-
 -		for (i = 0; i < shared_count; ++i) {
--			fence = rcu_dereference(fobj->shared[i]);
--			ret = dma_resv_test_signaled_single(fence);
--			if (ret < 0)
--				goto retry;
--			else if (!ret)
--				break;
-+	dma_resv_for_each_fence_unlocked(obj, &cursor, test_all, fence) {
-+		if (!dma_fence_is_signaled(fence)) {
-+			rcu_read_unlock();
-+			dma_fence_put(fence);
-+			return false;
- 		}
+-			struct dma_fence *fence =
+-				rcu_dereference(list->shared[i]);
+-
++	args->busy = false;
++	dma_resv_for_each_fence_unlocked(obj->base.resv, &cursor, true, fence) {
++		if (cursor.is_exclusive)
++			/* Translate the exclusive fence to the READ *and* WRITE engine */
++			args->busy = busy_check_writer(fence);
++		else
++			/* Translate shared fences to READ set of engines */
+ 			args->busy |= busy_check_reader(fence);
+-		}
  	}
--
--	fence = dma_resv_excl_fence(obj);
--	if (ret && fence) {
--		ret = dma_resv_test_signaled_single(fence);
--		if (ret < 0)
--			goto retry;
--
--	}
--
--	if (read_seqcount_retry(&obj->seq, seq))
+ 
+-	if (args->busy && read_seqcount_retry(&obj->base.resv->seq, seq))
 -		goto retry;
 -
+ 	err = 0;
+ out:
  	rcu_read_unlock();
--	return ret;
-+	return true;
- }
- EXPORT_SYMBOL_GPL(dma_resv_test_signaled);
- 
 -- 
 2.25.1
 
