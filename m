@@ -2,439 +2,248 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 298C8C48BE8
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 02:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF7DC2B9F4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 04:22:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01C1C613B9
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 02:20:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F58D61185
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 04:22:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbhFQCWk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Jun 2021 22:22:40 -0400
-Received: from mail-eopbgr40080.outbound.protection.outlook.com ([40.107.4.80]:22339
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230155AbhFQCWi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Jun 2021 22:22:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AFKBpmRgvpS/u4b0Up8EK7iiNNPg280w8k25UqgAgVnu+JDuk79OEc8b1hAH6SQTf5wzemokZ0+4arrLV6/aDQnqJ8SWXkat35ONbEyCrnL6sT6l7iDUstUSsCGUp6FviXWujxrUu4mgfqpiJfH7CfffQPFRrm+XuZn3Yf4mS/u5eYdhcdKNywPk42w0Rv3MzzjoFsJU3msQ37RmMgugMf5FkS7Z4MUgZQkIQzCpGaSqaFdnPlSlatsmfIsAppypwgTodgdHrbG4TOKwb+0m8yBeYk/fenwUXwQAJiTPj+WiY5/2zuZ4VgL9Js/WwN6G24xZGUCwgDus+V9KsXeVTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XfKpVvvKK7/vOW0SEnJwtULRTPaDekY0dt78nSKSZVU=;
- b=MgNlzRp1xG0eNRj8Vgxk08QQm9c9jKzXYU51e7XWufx5QDzIm4gOijSSOMIKj18mFpisiSr/414qCQLKEvPMx1FYQ1TkxaSoW7FYY+XguySSiXyQ3WnluQLVfx3pszelwR8ToNU3AazNichl2NvmEwITwfoB+KApJbNAskBFu3E8JcpjMWNrh1G+BaS1MsXN8oMbZUTkJtGtTa2vy9YCsPBDNY5tvuXEQI6aGRWZH+LG+9XPncI3w4BCw79XB3dv6oVGPCQtAI85vvzXehL7F4jsAQ5TS3BICER+fzVniG4scY9Dh11KNYT5BZf2JiIFyHqeRDT7FgwHrY/n/oIaKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XfKpVvvKK7/vOW0SEnJwtULRTPaDekY0dt78nSKSZVU=;
- b=dq+wY6qGvBTHdxzKK9G5mv3YwNEC255/ppGhfzlFQ5458RKJ8Dmr1s9F3q5gQRRUdzIkaffD4X+puPLY/KmTgsEnAlW62OUJQqK1zxyG8hI0sFYcOS4sUsD779MkYw7111BNTnD2NAH3uXx0nAWsuQyvor6Gw1lHn+pJKx3+1D0=
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AS8PR04MB7654.eurprd04.prod.outlook.com (2603:10a6:20b:290::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.18; Thu, 17 Jun
- 2021 02:20:29 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::f91a:68d6:ffb8:1642]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::f91a:68d6:ffb8:1642%3]) with mapi id 15.20.4219.025; Thu, 17 Jun 2021
- 02:20:29 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [EXT] Re: [PATCH v2 01/13] dt-bindings: media: imx8q: add imx
- video codec bindings
-Thread-Topic: [EXT] Re: [PATCH v2 01/13] dt-bindings: media: imx8q: add imx
- video codec bindings
-Thread-Index: AQHXW3fHs2uPwPgs9U2+Dh0bHc7XIKsXYJQAgAAm15A=
-Date:   Thu, 17 Jun 2021 02:20:29 +0000
-Message-ID: <AM6PR04MB6341845B7065929EF4B425B4E70E9@AM6PR04MB6341.eurprd04.prod.outlook.com>
-References: <cover.1623054584.git.ming.qian@nxp.com>
- <7cd02157f9a9cc7a773bd02137a92a04077638e5.1623054584.git.ming.qian@nxp.com>
- <20210617000018.GA316656@robh.at.kernel.org>
-In-Reply-To: <20210617000018.GA316656@robh.at.kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4ac35576-5cbc-4b2c-5baa-08d931367a2a
-x-ms-traffictypediagnostic: AS8PR04MB7654:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AS8PR04MB765446054A8D0932A523AF56E70E9@AS8PR04MB7654.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7fZWjqbgw3ZkEAQXOi9kL/MfGnl5QSihUhH4QYCeQXyX25NbLjuPDzPGo3uGTzK7SpFF3XfTzATe+sRG7sNOpXDVoT6KduOKWNeujdfSsQszQoafVIdrUO3VSNZoS2qFFtni2/7W+9LpOoenHHYG58lOxwg7Q5BYqUxO8G7kBbliGSrauCgZIO4PX1PciDchlJPd9HQubDOjGTrK8icbCoTknEOGcBu+o2kK423OEsHRCXzQDb4hj9Qioozo5M7Z9CD73sibdjXkt6ayhTaFyEOpKjklWd8qaAYOGhUIMb65VBwhxI3+p2gZyls3KaA0azJqCN7ASvKOukAvI95r4LtslLhusO8zEBlYQ2SzM8DfXrYhCNuI7AJr2InSb5wRh/lMSTj/rYSwPAWhUnNX8aUbRDp9dYbDQsiqPOJWgK+SGhUVJFjNLdVhP0Ish1EIsF9SBrztu11MF+yz9bHdAGt6FVv+2taRQeAxEyDbQ2GcsHIoCX70L3GNHZ+U5fzbjNImkgn+kCJfftqnIN7u7fr/gGa29PJlqkmTRWVet+Ka/UNlAHnRDqy/v63x7UEXGJZeuHsUCcMzM+Y0yo3PYSqeu1/xgDVqsBUvIvo0zeOVwRFOE0ZovCfBWj/strAiHQNAp8OMTCJ52pqVN5XnQyjmbo6gu5dLAluaGC1Ap4BfosupFhcihxcljNzVcqFqLoBugz9X9/Q7M9kGuPiClb1lXP/lfBelWcOelVpygey41WCVRkQcnGaTJBcu51qYGkCtMiEIJkkY12bCzNOLpQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(39860400002)(346002)(316002)(54906003)(26005)(83380400001)(71200400001)(2906002)(8936002)(52536014)(186003)(8676002)(5660300002)(478600001)(45080400002)(66946007)(6916009)(64756008)(122000001)(4326008)(44832011)(38100700002)(86362001)(66476007)(6506007)(76116006)(55016002)(9686003)(7696005)(7416002)(53546011)(66446008)(33656002)(66556008)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rkjcokR4nAhxyniuntQUTJtWGph85uMlAFlEBOLhWTORMqN3LQIaG2kWq/Km?=
- =?us-ascii?Q?pZEiyKUPV1nwTVNAHYLnvDcTMN3KNlLlucNhooujWW8p+0x2WmUBqEKP4xRp?=
- =?us-ascii?Q?SU6zUDZm8xdKmT2f+KKVTqCBt1FB4+Lraq+dT4lL95t/jkYTS10DRtLU95BJ?=
- =?us-ascii?Q?+Cx9DKZqA7tdDuYm+Dw2VpmhdgiJI8H906O3Y/0sO4LcaEiBeSl9EteYJFn9?=
- =?us-ascii?Q?INSaL6qdUPoY/MDDBKcmN284sF6K3qcVYZtn55HNY7ulIaS3lDmcvT1c0qSL?=
- =?us-ascii?Q?NIg0VO6Xc39cRyKE1bwgq92YPzrIB52LD0Bh3PaXq/rPHDJwvItEgXf/CLm4?=
- =?us-ascii?Q?Ce6Z5YkYXJdEUbyttvillOgFBHR3N2899m2jExFn6zfXCqO9AqOoUCh5/kjM?=
- =?us-ascii?Q?JN1DkcI+OOnEDuWtV4jLv+sWPUnEl+HdGpW8dWrXl/0SD2qs/GBEMRqx5RJ4?=
- =?us-ascii?Q?LAcEpJkmb95w05kZRGZJqE1zP2AigqIw4G3+JSlo5RiwSW3KbsO2KvxsDP4J?=
- =?us-ascii?Q?kIzn4z7zDu54NmW8+q+V1ooXE0hgCRqdA0ne4GsjCyV3XjdNX8iySaAinmzB?=
- =?us-ascii?Q?hrTrWqXqfrR6+Ur/dZZoKojW739lD3ZyqFjlEiFyChDutkpBIbZihAbozhNG?=
- =?us-ascii?Q?c7zxnMrulXgfB3Bpi/d/M78lbdUJV54sAwNraktQbfcm8bQd4U5VB60oAN4w?=
- =?us-ascii?Q?bZD8dE3UMcRFkWanzgFowuttILJ6JgXYkkYlr4N9xrdjk+lgi14CilLRcWNd?=
- =?us-ascii?Q?iI5JBmmFCWQ+D9bfKH7yfA/3XNCqz1zyJSAWGUhDgtKQUWxm/1iEN/vC1avO?=
- =?us-ascii?Q?NWYqq8L07voB65y4VNduC8bF/J5F6LzO4S6wkCN/EB+mPJ2oMuwR5J+kMTam?=
- =?us-ascii?Q?THBVev/2seUJ2OhJFWm76Cxr/GxZG5xe72f60bge3jZCLkT5NUnD6aK0NlyG?=
- =?us-ascii?Q?1ciSJJWNS0jmm3gXOkzidRcEJm/Fep4x9ZdTthU1QxyHpGxzB4kK80G3ypwZ?=
- =?us-ascii?Q?EEIPi/BX2vxrmuVe2Yrk5PTn+BMH2zRq0rmIyUdhjDpO/WvelQle5UMbB/9j?=
- =?us-ascii?Q?PU8vmEihaX18O456JJuC2fQ+MX2AbP8dl0QXryebkgkZoP+ZjyUUdfZDsCEg?=
- =?us-ascii?Q?yM7FaUN/ZAbxN+FjYWABX+gXjqXphTcYVKw2lB3KEyfQZvcy38OkGwDP7fI/?=
- =?us-ascii?Q?r4eAuy9RmfzFJLPdsH9l+L+QRdNiQyKnIBc4yXz+9U01d5NVpKsMizxVOzFg?=
- =?us-ascii?Q?jxClKI9BlPM5I800Ju08PNoakNh0UyVYxJKRu/yK5CV5t7XmMusqLox+Hau/?=
- =?us-ascii?Q?380BexsqmCsqYfd7u2BvHNHw?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S229599AbhFQEYe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Jun 2021 00:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229447AbhFQEYd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Jun 2021 00:24:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A252FC061574
+        for <linux-media@vger.kernel.org>; Wed, 16 Jun 2021 21:22:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so5331019pjs.2
+        for <linux-media@vger.kernel.org>; Wed, 16 Jun 2021 21:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CrPkgLjFYI9pDTXOpVz36tZTA4Car3owMc7e2HcyHUQ=;
+        b=NGJ6Z9DZYKBavzR5sMWG+s5v7qSPUy+DtykG+R89TvWJH2BJy0oFL2qh0eQgdOwWXh
+         slSJrXvOj5r3QM/TGoL72kN/AMl7ioI17/LZxSWmJD9cm7NZnobNc/EfTsd79pp+pN19
+         2QY2mAdun4w4dhDEjUa+qXtGIrMHvKA7SaX3Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CrPkgLjFYI9pDTXOpVz36tZTA4Car3owMc7e2HcyHUQ=;
+        b=Nezc4Wv9EJWlgbbzmvuNyKOGhjXCGfnywd0bEcrKSyMjXIbOCqixNDyNRVDaUz+rjZ
+         0vKaT58itLQGDJi9vsCnvezF9kZTHj8nAfm7n+rWvBvXXn1uVK40Qc+DMwde8aHXsnRm
+         9LOVp4fPIv9uCsjvhXig6wALwYlVx6ClBHpd3YTAxRy51L/WdbV86PX4Q/Q6cKLvt4EX
+         PxyGuxQnuaHZ/FBo+cgyjef3iUKO8pSxyYMWUubT00mw5g6Y6oPH8eqYmoT4qmWwI+ld
+         bLgtzLfXYHb/4QKH6HzzGJwXBxVE5TigqRRaheRxYROt/aPnbPVblDxdSKfscp/LhDUE
+         agmA==
+X-Gm-Message-State: AOAM530dzkVCq1Az5MH5Joo0cfF2XKLH4gFuiiBABTN4fe7TrHJC3Yxy
+        S17oSRbQnsZdCOx+HMeHV7ER0g==
+X-Google-Smtp-Source: ABdhPJxdU10c5lMpAx+co146/isyntZhB47mLDloLf9t234l5Xv+hDh7rnTntKGdDkT+bcXmlFzisg==
+X-Received: by 2002:a17:90a:e541:: with SMTP id ei1mr3444120pjb.189.1623903746021;
+        Wed, 16 Jun 2021 21:22:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q2sm6988159pje.50.2021.06.16.21.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 21:22:24 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 21:22:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: omap3isp: Extract struct group for memcpy() region
+Message-ID: <202106162119.859E9A80B@keescook>
+References: <20210616185938.1225218-1-keescook@chromium.org>
+ <YMpUR34kFSbiyi+q@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac35576-5cbc-4b2c-5baa-08d931367a2a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2021 02:20:29.6447
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LT6FaTSu4rYKH7gcFR7glB31JEHIgyD58XdvB6s4bq8VYhpyqYbE9KZSqYL8S91NbOxYtB36sSQsVh3tuvOnmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7654
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMpUR34kFSbiyi+q@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> -----Original Message-----
-> From: Rob Herring [mailto:robh@kernel.org]
-> Sent: Thursday, June 17, 2021 8:00 AM
-> To: Ming Qian <ming.qian@nxp.com>
-> Cc: mchehab@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de;
-> hverkuil-cisco@xs4all.nl; kernel@pengutronix.de; festevam@gmail.com;
-> dl-linux-imx <linux-imx@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
-> linux-media@vger.kernel.org; linux-kernel@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> Subject: [EXT] Re: [PATCH v2 01/13] dt-bindings: media: imx8q: add imx vi=
-deo
-> codec bindings
->=20
-> Caution: EXT Email
->=20
-> On Mon, Jun 07, 2021 at 04:42:48PM +0800, Ming Qian wrote:
-> > Add devicetree binding documentation for IMX8Q Video Processing Unit
-> > IP
-> >
-> > Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> > Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
-> > Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
+On Wed, Jun 16, 2021 at 10:43:03PM +0300, Laurent Pinchart wrote:
+> Hi Kees,
+> 
+> Thank you for the patch.
+> 
+> On Wed, Jun 16, 2021 at 11:59:38AM -0700, Kees Cook wrote:
+> > Avoid writing past the end of a structure member by wrapping the target
+> > region in a common named structure. This additionally fixes a
+> > misalignment of the copy (since the size of "buf" changes between 64-bit
+> > and 32-bit).
+> 
+> Could you have been mislead by the data64 name ? The difference between
+> omap3isp_stat_data_time and omap3isp_stat_data_time32 is the size of the
+> ts field, using 32-bit timestamps with legacy userspace, and 64-bit
+> timestamps with more recent userspace. In both cases we're dealing with
+> a 32-bit platform, as the omap3isp is not used in any 64-bit ARM SoC.
+> The size of void __user *buf is thus 4 bytes in all cases, as is __u32
+> buf.
+
+Ah, yes, that's true. I was hitting this on arm64 builds
+(CONFIG_COMPILE_TEST) where __user *buf is 64-bit. So, the "additionally
+fixes" bit above is misleading in the sense that nothing was ever built
+in the real world like that.
+
+The patch still fixes the compile-time warnings, though.
+
+However, I don't think anything actually uses any of this code
+regardless. ;)
+
+-Kees
+
+> 
+> > I actually think this code is completely unused in the real world:
+> > I don't think it could have ever worked, as it would either always
+> > fail (with an uninitialized data->buf_size) or would cause corruption
+> > in userspace due to the copy_to_user() in the call path against an
+> > uninitialized data->buf value:
+> > 
+> > omap3isp_stat_request_statistics_time32(...)
+> >     struct omap3isp_stat_data data64;
+> >     ...
+> >     omap3isp_stat_request_statistics(stat, &data64);
+> > 
+> > int omap3isp_stat_request_statistics(struct ispstat *stat,
+> >                                      struct omap3isp_stat_data *data)
+> >     ...
+> >     buf = isp_stat_buf_get(stat, data);
+> > 
+> > static struct ispstat_buffer *isp_stat_buf_get(struct ispstat *stat,
+> >                                                struct omap3isp_stat_data *data)
+> > ...
+> >     if (buf->buf_size > data->buf_size) {
+> >             ...
+> >             return ERR_PTR(-EINVAL);
+> >     }
+> >     ...
+> >     rval = copy_to_user(data->buf,
+> >                         buf->virt_addr,
+> >                         buf->buf_size);
+> > 
+> > Regardless, additionally initialize data64 to be zero-filled to avoid
+> > undefined behavior.
+> > 
+> > Fixes: 378e3f81cb56 ("media: omap3isp: support 64-bit version of omap3isp_stat_data")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >  .../bindings/media/nxp,imx8q-vpu.yaml         | 198
-> ++++++++++++++++++
-> >  1 file changed, 198 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/nxp,imx8q-vpu.yaml
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/media/nxp,imx8q-vpu.yaml
-> > b/Documentation/devicetree/bindings/media/nxp,imx8q-vpu.yaml
-> > new file mode 100644
-> > index 000000000000..058ca69c107a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/nxp,imx8q-vpu.yaml
-> > @@ -0,0 +1,198 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >  drivers/media/platform/omap3isp/ispstat.c |  5 +--
+> >  include/uapi/linux/omap3isp.h             | 44 +++++++++++++++++------
+> >  2 files changed, 36 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/omap3isp/ispstat.c b/drivers/media/platform/omap3isp/ispstat.c
+> > index 5b9b57f4d9bf..ea8222fed38e 100644
+> > --- a/drivers/media/platform/omap3isp/ispstat.c
+> > +++ b/drivers/media/platform/omap3isp/ispstat.c
+> > @@ -512,7 +512,7 @@ int omap3isp_stat_request_statistics(struct ispstat *stat,
+> >  int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
+> >  					struct omap3isp_stat_data_time32 *data)
+> >  {
+> > -	struct omap3isp_stat_data data64;
+> > +	struct omap3isp_stat_data data64 = { };
+> >  	int ret;
+> >  
+> >  	ret = omap3isp_stat_request_statistics(stat, &data64);
+> > @@ -521,7 +521,8 @@ int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
+> >  
+> >  	data->ts.tv_sec = data64.ts.tv_sec;
+> >  	data->ts.tv_usec = data64.ts.tv_usec;
+> > -	memcpy(&data->buf, &data64.buf, sizeof(*data) - sizeof(data->ts));
+> > +	data->buf = (uintptr_t)data64.buf;
+> > +	memcpy(&data->frame, &data64.buf, sizeof(data->frame));
+> >  
+> >  	return 0;
+> >  }
+> > diff --git a/include/uapi/linux/omap3isp.h b/include/uapi/linux/omap3isp.h
+> > index 87b55755f4ff..0a16af91621f 100644
+> > --- a/include/uapi/linux/omap3isp.h
+> > +++ b/include/uapi/linux/omap3isp.h
+> > @@ -159,13 +159,25 @@ struct omap3isp_h3a_aewb_config {
+> >  };
+> >  
+> >  /**
+> > - * struct omap3isp_stat_data - Statistic data sent to or received from user
+> > - * @ts: Timestamp of returned framestats.
+> > - * @buf: Pointer to pass to user.
+> > + * struct omap3isp_stat_frame - Statistic data without timestamp nor pointer.
+> > + * @buf_size: Size of buffer.
+> >   * @frame_number: Frame number of requested stats.
+> >   * @cur_frame: Current frame number being processed.
+> >   * @config_counter: Number of the configuration associated with the data.
+> >   */
+> > +struct omap3isp_stat_frame {
+> > +	__u32 buf_size;
+> > +	__u16 frame_number;
+> > +	__u16 cur_frame;
+> > +	__u16 config_counter;
+> > +};
 > > +
-> > +%YAML 1.2
-> > +---
-> > +$id:
-> > +https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdev=
-i
-> >
-> +cetree.org%2Fschemas%2Fmedia%2Fnxp%2Cimx8q-vpu.yaml%23&amp;data
-> =3D04%7C
-> >
-> +01%7Cming.qian%40nxp.com%7Cb8af894b4dd946c3b96108d93122e833%7
-> C686ea1d
-> >
-> +3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637594848261515925%7CUnk
-> nown%7CTW
-> >
-> +FpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
-> VCI
-> >
-> +6Mn0%3D%7C1000&amp;sdata=3DFYRPH5nh6SysbLJ0bkKy%2Bv1QhNciUh4ijp
-> bNqAJCGN
-> > +8%3D&amp;reserved=3D0
-> > +$schema:
-> > +https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdev=
-i
-> >
-> +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=3D04%7C01%7Cmin
-> g.qian
-> >
-> +%40nxp.com%7Cb8af894b4dd946c3b96108d93122e833%7C686ea1d3bc2b
-> 4c6fa92cd
-> >
-> +99c5c301635%7C0%7C0%7C637594848261525925%7CUnknown%7CTWFp
-> bGZsb3d8eyJW
-> >
-> +IjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
-> 1000
-> >
-> +&amp;sdata=3D6O4zADjEKA0Mvfchy%2FNVzGEKMfdoYUa%2FoHQ9VEHqXaU%
-> 3D&amp;res
-> > +erved=3D0
-> > +
-> > +title: NXP i.MX8Q video encode and decode accelerators
-> > +
-> > +maintainers:
-> > +  - Ming Qian <ming.qian@nxp.com>
-> > +  - Shijie Qin <shijie.qin@nxp.com>
-> > +
-> > +description: |-
-> > +  The Amphion MXC video encoder(Windsor) and decoder(Malone)
-> > +accelerators present
-> > +  on NXP i.MX8Q SoCs.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/simple-bus.yaml#
->=20
-> This is not a 'simple-bus'. A simple bus doesn't have power-domains,
-> memory-region, or mailbox.
->=20
-> simple-mfd maybe, but looks like there's dependencies here so you should
-> trigger probing yourself.
+> > +/**
+> > + * struct omap3isp_stat_data - Statistic data sent to or received from user
+> > + * @ts: Timestamp of returned framestats.
+> > + * @buf: Pointer to pass to user.
+> > + * @frame: Statistic data for frame.
+> > + */
+> >  struct omap3isp_stat_data {
+> >  #ifdef __KERNEL__
+> >  	struct {
+> > @@ -176,10 +188,15 @@ struct omap3isp_stat_data {
+> >  	struct timeval ts;
+> >  #endif
+> >  	void __user *buf;
+> > -	__u32 buf_size;
+> > -	__u16 frame_number;
+> > -	__u16 cur_frame;
+> > -	__u16 config_counter;
+> > +	union {
+> > +		struct {
+> > +			__u32 buf_size;
+> > +			__u16 frame_number;
+> > +			__u16 cur_frame;
+> > +			__u16 config_counter;
+> > +		};
+> > +		struct omap3isp_stat_frame frame;
+> > +	};
+> >  };
+> >  
+> >  #ifdef __KERNEL__
+> > @@ -189,10 +206,15 @@ struct omap3isp_stat_data_time32 {
+> >  		__s32	tv_usec;
+> >  	} ts;
+> >  	__u32 buf;
+> > -	__u32 buf_size;
+> > -	__u16 frame_number;
+> > -	__u16 cur_frame;
+> > -	__u16 config_counter;
+> > +	union {
+> > +		struct {
+> > +			__u32 buf_size;
+> > +			__u16 frame_number;
+> > +			__u16 cur_frame;
+> > +			__u16 config_counter;
+> > +		};
+> > +		struct omap3isp_stat_frame frame;
+> > +	};
+> >  };
+> >  #endif
+> >  
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
 
-I will modify the driver and this document according to your suggestion
-
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "^vpu-bus@[0-9a-f]+$"
-> > +
-> > +  compatible:
-> > +    contains:
->=20
-> No, must be exact.
->=20
-> > +      items:
-> > +        - enum:
-> > +            - nxp,imx8qm-vpu
-> > +            - nxp,imx8qxp-vpu
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  memory-region:
-> > +    description:
-> > +      Phandle to a node describing reserved memory used by VPU.
-> > +      (see bindings/reserved-memory/reserved-memory.txt)
-> > +
-> > +  mailbox:
->=20
-> This needs to be a pattern looking at the example.
->=20
-> > +    description:
-> > +      Each vpu encoder or decoder correspond a MU, which used for
-> communication
-> > +      between driver and firmware. Implement via mailbox on driver.
-> > +      (see bindings/mailbox/fsl,mu.yaml)
->=20
-> Do a $ref to the file.
->=20
-> > +
-> > +patternProperties:
-> > +  "^vpu_[en, de]coder@[0-9a-f]+$":
->=20
-> (en|de)
->=20
-> > +    type: object
-> > +    description:
-> > +      Each core correspond a decoder or encoder, need to configure the=
-m
-> > +      separately. NXP i.MX8QM SoC has one decoder and two encoder,
-> i.MX8QXP SoC
-> > +      has one decoder and one encoder.
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        oneOf:
-> > +          - const: nxp,imx8q-vpu-decoder
-> > +          - const: nxp,imx8q-vpu-encoder
-> > +
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      power-domains:
-> > +        maxItems: 1
-> > +
-> > +      mbox-names:
-> > +        items:
-> > +          - const: tx0
-> > +          - const: tx1
-> > +          - const: rx
-> > +
-> > +      mboxes:
-> > +        description:
-> > +          List of phandle of 2 MU channels for tx, 1 MU channel for rx=
-.
->=20
-> How many? (maxItems: 1 or an 'items' list needed)
->=20
-> > +      boot-region:
-> > +        description:
-> > +          Phandle to a node describing reserved memory used by
-> firmware
-> > +          loading.
-> > +
-> > +      rpc-region:
-> > +        description:
-> > +          Phandle to a node describing reserved memory used by RPC
-> shared
-> > +          memory between firmware and driver.
-> > +
-> > +      print-offset:
-> > +        description:
-> > +          The memory offset from RPC address, used by reserve firmware
-> log.
->=20
-> These need vendor prefix and type ref.
->=20
-> > +
-> > +      id:
-> > +        description: Index of vpu core.
->=20
-> Nope. We don't do indexes.
->=20
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - reg
-> > +      - power-domains
-> > +      - mbox-names
-> > +      - mboxes
-> > +      - boot-region
-> > +      - rpc-region
-> > +      - print-offset
-> > +      - id
-> > +
-> > +    additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - power-domains
-> > +  - memory-region
-> > +
-> > +additionalProperties: true
-> > +
-> > +examples:
-> > +  # Device node example for i.MX8QM platform:
-> > +  - |
-> > +    #include <dt-bindings/firmware/imx/rsrc.h>
-> > +
-> > +    vpu: vpu-bus@2c000000 {
-> > +      compatible =3D "nxp,imx8qm-vpu", "simple-bus";
-> > +      ranges =3D <0x2c000000 0x2c000000 0x2000000>;
-> > +      reg =3D <0x2c000000 0x1000000>;
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <1>;
-> > +      power-domains =3D <&pd IMX_SC_R_VPU>;
-> > +      memory-region =3D <&vpu_reserved>;
-> > +
-> > +      mu_m0: mailbox@2d000000 {
-> > +        compatible =3D "fsl,imx6sx-mu";
-> > +        reg =3D <0x2d000000 0x20000>;
-> > +        interrupts =3D <0 472 4>;
-> > +        #mbox-cells =3D <2>;
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_MU_0>;
-> > +      };
-> > +
-> > +      mu1_m0: mailbox@2d020000 {
-> > +        compatible =3D "fsl,imx6sx-mu";
-> > +        reg =3D <0x2d020000 0x20000>;
-> > +        interrupts =3D <0 473 4>;
-> > +        #mbox-cells =3D <2>;
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_MU_1>;
-> > +      };
-> > +
-> > +      mu2_m0: mailbox@2d040000 {
-> > +        compatible =3D "fsl,imx6sx-mu";
-> > +        reg =3D <0x2d040000 0x20000>;
-> > +        interrupts =3D <0 474 4>;
-> > +        #mbox-cells =3D <2>;
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_MU_2>;
-> > +      };
-> > +
-> > +      vpu_core0: vpu_decoder@2d080000 {
-> > +        compatible =3D "nxp,imx8q-vpu-decoder";
-> > +        reg =3D <0x2d080000 0x10000>;
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_DEC_0>;
-> > +        mbox-names =3D "tx0", "tx1", "rx";
-> > +        mboxes =3D <&mu_m0 0 0
-> > +                  &mu_m0 0 1
-> > +                  &mu_m0 1 0>;
-> > +        boot-region =3D <&decoder_boot>;
-> > +        rpc-region =3D <&decoder_rpc>;
-> > +        print-offset =3D <0x180000>;
-> > +        id =3D <0>;
-> > +      };
-> > +
-> > +      vpu_core1: vpu_encoder@2d090000 {
-> > +        compatible =3D "nxp,imx8q-vpu-encoder";
-> > +        reg =3D <0x2d090000 0x10000>;
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_ENC_0>;
-> > +        mbox-names =3D "tx0", "tx1", "rx";
-> > +        mboxes =3D <&mu1_m0 0 0
-> > +                  &mu1_m0 0 1
-> > +                  &mu1_m0 1 0>;
-> > +        boot-region =3D <&encoder1_boot>;
-> > +        rpc-region =3D <&encoder1_rpc>;
-> > +        print-offset =3D <0x80000>;
-> > +        id =3D <1>;
-> > +      };
-> > +
-> > +      vpu_core2: vpu_encoder@2d0a0000 {
-> > +        reg =3D <0x2d0a0000 0x10000>;
-> > +        compatible =3D "nxp,imx8q-vpu-encoder";
-> > +        power-domains =3D <&pd IMX_SC_R_VPU_ENC_1>;
-> > +        mbox-names =3D "tx0", "tx1", "rx";
-> > +        mboxes =3D <&mu2_m0 0 0
-> > +                  &mu2_m0 0 1
-> > +                  &mu2_m0 1 0>;
-> > +        boot-region =3D <&encoder2_boot>;
-> > +        rpc-region =3D <&encoder2_rpc>;
-> > +        print-offset =3D <0x80000>;
-> > +        id =3D <2>;
-> > +      };
-> > +    };
-> > +
-> > +...
-> > --
-> > 2.31.1
+-- 
+Kees Cook
