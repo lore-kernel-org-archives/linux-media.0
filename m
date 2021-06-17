@@ -2,179 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDEC4C2B9F4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E18AC2B9F4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:26:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF58A61059
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:22:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBD9A610A2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 13:26:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbhFQNYM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Jun 2021 09:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbhFQNYM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:24:12 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1498EC061574
-        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 06:22:04 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id q25so4988309pfh.7
-        for <linux-media@vger.kernel.org>; Thu, 17 Jun 2021 06:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WSt5QdtnILdVT8QXJNquyip6D9ksPT+Ac5ft4M9K6W8=;
-        b=Ltgolmngu4wclLOC+4VNwpUmLUW0rQE3c5SgfIAP/GJONzP2qrQtZT52koui9sexBS
-         yrswNb5aZb2NV1qd9dkQXinZkBhMoBltGIBan146oWqlfH3/bP80lM1pVWzBs9wWe13n
-         1v4hYb4Nl+Hc1rG3Hm1ImOJB6wddTI9r7KtNki3vdBiDcQSiLf/mk79zB0zOALv2Dm67
-         Nil9GSCzcWhaunftZj5iU+/P1jR0/QXPduPycZ0AGCJNMQiBMryCm2MNgtW9vjmHViPX
-         OoPAPbn/QQKUz2Ovt62WW1VIw6uUkYQgTMqrH9YWS4vmn8Flgv2zKHtubMO+Z6aa2Fun
-         2cGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WSt5QdtnILdVT8QXJNquyip6D9ksPT+Ac5ft4M9K6W8=;
-        b=UwOPmcdWOrXVSuLH0dRrqf2vMkTavfkXTtXunauc8qmS8Q6vJvz7FvRTGQdGWhsJih
-         ogMDzPOnT6ps2e1btOSYS/uN4E+b7fGlj5lIQSLN8na5H395WG/T8UrULzizP+yFEmZS
-         3BjWBA//8jrl/J5cKNNzAVDtWkvbdxxLEXiXpR9y8vhpt/vcaZ1KQx9s+gg6+hxhTSkb
-         ATEQkrUY9xxvrNuf9raBuEsoyOGhMJGdnvcOBbFcS/67dUWazN92C1NTor76RI29R38q
-         E9BXPPi1ZZxtNWd/u+maGEApOVL8inN3SRlpOamkWPk5HlodO5n9jToBvmZSecXqe2L7
-         P0Zw==
-X-Gm-Message-State: AOAM532H570PN7OixWiQO53TmQwuMxK2HIvrKzDnkSvTpJoCQmHC/Q5k
-        Y+aWicy6iY/jomPNYwVTET6n0xi2uRkuRw==
-X-Google-Smtp-Source: ABdhPJzpxMtefgM6Cmophv2P+U7Cryr7JR4JuLvrVXZjbL/4DsrTVt4ukfKdsNnnto9+mGYx4eAr1A==
-X-Received: by 2002:a63:f4b:: with SMTP id 11mr5042521pgp.250.1623936123516;
-        Thu, 17 Jun 2021 06:22:03 -0700 (PDT)
-Received: from ada-comp.hitronhub.home (S0106ac202ecb0523.gv.shawcable.net. [70.67.120.89])
-        by smtp.gmail.com with ESMTPSA id i125sm5310962pfc.7.2021.06.17.06.22.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 06:22:03 -0700 (PDT)
-From:   Deborah Brouwer <deborahbrouwer3563@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, jaffe1@gmail.com,
-        Deborah Brouwer <deborahbrouwer3563@gmail.com>
-Subject: [PATCH] cec: expand One Touch Record TV Screen test
-Date:   Thu, 17 Jun 2021 06:21:52 -0700
-Message-Id: <20210617132152.5247-1-deborahbrouwer3563@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S232627AbhFQN2q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Jun 2021 09:28:46 -0400
+Received: from mga07.intel.com ([134.134.136.100]:37262 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232607AbhFQN2p (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:28:45 -0400
+IronPort-SDR: XTMP6wZoTp6+k/xSQ2Vm0eD06SUkJzHTI48+qI/Itbp8PIw4dwNJOKBqNDWfh5fHe3vmaAV/5d
+ j8qWfc2B6txw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="270215209"
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="270215209"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 06:26:37 -0700
+IronPort-SDR: CsOA3JyKINmJL7mwTbegK0PA8EHx/ohm0UjvZyEXLhIQQfcu3Ow9ZDnmv91mlKuqkqMKeVrEd+
+ oMIwGT7e+qZA==
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="554399326"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 06:26:34 -0700
+Received: from andy by smile with local (Exim 4.94.2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lts2R-003LwZ-Hl; Thu, 17 Jun 2021 16:26:31 +0300
+Date:   Thu, 17 Jun 2021 16:26:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, kaixuxia@tencent.com,
+        gustavoars@kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com,
+        yangjihong1@huawei.com, yukuai3@huawei.com,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next v5] media: staging: atomisp: use list_splice_init
+ in atomisp_compat_css20.c
+Message-ID: <YMtNh+yZAthTjFJn@smile.fi.intel.com>
+References: <20210617125357.675562-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210617125357.675562-1-libaokun1@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Check that the follower ignores the Record TV Screen message if the
-initiator has a logical address other than Record or Backup (aka Reserved
-in CEC Version < 2.0). If the follower replies correctly, check that the
-source operand is valid.
+On Thu, Jun 17, 2021 at 08:53:57PM +0800, Baokun Li wrote:
+> Using list_splice_init() instead of entire while-loops
+> in atomisp_compat_css20.c.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+> V1->V2:
+> 	CC mailist
+> V2->V3:
+>         Using list_move_tail() -> Using list_splice_init()
+> V3->V4:
+>         Remove redundant 'asd->'
+> V4->V5:
+>         Add the version information for 'V3->V4:'
 
-Signed-off-by: Deborah Brouwer <deborahbrouwer3563@gmail.com>
----
- utils/cec-compliance/cec-test.cpp | 48 +++++++++++++++++++++++++------
- utils/cec-follower/cec-tuner.cpp  |  8 ++++--
- 2 files changed, 45 insertions(+), 11 deletions(-)
+What about
 
-diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
-index 40d8369d..9512f319 100644
---- a/utils/cec-compliance/cec-test.cpp
-+++ b/utils/cec-compliance/cec-test.cpp
-@@ -1150,13 +1150,6 @@ static const vec_remote_subtests tuner_ctl_subtests{
- 
- static int one_touch_rec_tv_screen(struct node *node, unsigned me, unsigned la, bool interactive)
- {
--	/*
--	  TODO:
--	  - Page 36 in HDMI CEC 1.4b spec lists additional behaviors that should be
--	    checked for.
--	  - The TV should ignore this message when received from other LA than Recording or
--	    Reserved.
--	 */
- 	struct cec_msg msg;
- 
- 	cec_msg_init(&msg, me, la);
-@@ -1172,8 +1165,47 @@ static int one_touch_rec_tv_screen(struct node *node, unsigned me, unsigned la,
- 		return OK_REFUSED;
- 	if (cec_msg_status_is_abort(&msg))
- 		return OK_PRESUMED;
-+	/*
-+	 * Follower should ignore this message if initiator has a logical
-+	 * address other than Record or Backup (aka "Reserved" in CEC Version < 2.0).
-+	 */
-+	if (!cec_has_record(1 << me) && !cec_has_backup(1 << me)) {
-+		fail_on_test(!timed_out(&msg));
-+		return OK;
-+	}
-+	fail_on_test(timed_out(&msg));
- 
--	return 0;
-+	struct cec_op_record_src rec_src = {};
-+
-+	cec_ops_record_on(&msg, &rec_src);
-+
-+	if (rec_src.type < 1 || rec_src.type > 5)
-+		fail("Invalid source.\n");
-+
-+	if (rec_src.type == CEC_OP_RECORD_SRC_DIGITAL &&
-+	    rec_src.digital.service_id_method == CEC_OP_SERVICE_ID_METHOD_BY_DIG_ID) {
-+
-+		switch(rec_src.digital.dig_bcast_system) {
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ARIB_GEN:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ATSC_GEN:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_GEN:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ARIB_BS:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ARIB_CS:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ARIB_T:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ATSC_CABLE:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ATSC_SAT:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_ATSC_T:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_C:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_S:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_S2:
-+		case CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_T:
-+			break;
-+		default:
-+			fail("Invalid digital service broadcast system operand.\n");
-+		}
-+	}
-+
-+	return OK;
- }
- 
- static int one_touch_rec_on(struct node *node, unsigned me, unsigned la, bool interactive)
-diff --git a/utils/cec-follower/cec-tuner.cpp b/utils/cec-follower/cec-tuner.cpp
-index b9c21684..edf5016b 100644
---- a/utils/cec-follower/cec-tuner.cpp
-+++ b/utils/cec-follower/cec-tuner.cpp
-@@ -583,9 +583,6 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
- 		  This is only a basic implementation.
- 
- 		  TODO:
--		  - If we are a TV, we should only send Record On if the
--		    remote end is a Recording device or Reserved. Otherwise ignore.
--
- 		  - Device state should reflect whether we are recording, etc. In
- 		    recording mode we should ignore Standby messages.
- 		*/
-@@ -594,6 +591,11 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
- 		if (!node->has_rec_tv)
- 			break;
- 
-+		__u8 la = cec_msg_initiator(&msg);
-+
-+		if (!cec_has_record(1 << la) && !cec_has_backup(1 << la))
-+			return;
-+
- 		struct cec_op_record_src rec_src = {};
- 
- 		rec_src.type = CEC_OP_RECORD_SRC_OWN;
+drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:2107:31: warning: unused variable 'md_buf' [-Wunused-variable]
+2107 |  struct atomisp_metadata_buf *md_buf;
+drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:2106:26: warning: unused variable 'dis_buf' [-Wunused-variable]
+2106 |  struct atomisp_dis_buf *dis_buf;
+drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:2105:26: warning: unused variable 's3a_buf' [-Wunused-variable]
+2105 |  struct atomisp_s3a_buf *s3a_buf;
+
+?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
