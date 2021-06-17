@@ -2,137 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9B6C49361
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 16:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50DC6C49EB9
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 16:28:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0A91613CE
-	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 16:28:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3794D613BF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Jun 2021 16:28:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbhFQQaK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Jun 2021 12:30:10 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:38154 "EHLO gloria.sntech.de"
+        id S232363AbhFQQaL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Jun 2021 12:30:11 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:38152 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230343AbhFQQaH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S230269AbhFQQaH (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Jun 2021 12:30:07 -0400
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1lturz-00057p-5V; Thu, 17 Jun 2021 18:27:55 +0200
+        id 1lturw-00057p-Ps; Thu, 17 Jun 2021 18:27:52 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
 Cc:     ezequiel@collabora.com, dafna.hirschfeld@collabora.com,
         helen.koike@collabora.com, Laurent.pinchart@ideasonboard.com,
         linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-        heiko@sntech.de, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: [PATCH v5 06/10] media: rockchip: rkisp1: make some isp-stats functions variable
-Date:   Thu, 17 Jun 2021 18:27:41 +0200
-Message-Id: <20210617162745.4080975-7-heiko@sntech.de>
+        heiko@sntech.de, robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 0/7] rkisp1 support for px30
+Date:   Thu, 17 Jun 2021 18:27:35 +0200
+Message-Id: <20210617162745.4080975-1-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210617162745.4080975-1-heiko@sntech.de>
-References: <20210617162745.4080975-1-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+This series adds support for the slightly different v12
+variant of the ISP used for example in the px30 soc.
 
-The isp block evolved in subsequent socs, so some functions
-will behave differently on newer variants.
+changes in v5:
+- handle interrupt-names as conditional required property (Dafna)
+- add second example for showing interrupt-names (Dafna)
 
-Therefore make it possible to override the needed stats functions.
+changes in v4:
+- clean up multi-irq case (Dafna)
+  Now each variant can have a list of interrupts
+  and their respective handlers, with or without
+  interrupt-names
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
----
- .../media/platform/rockchip/rkisp1/rkisp1-common.h | 11 +++++++++++
- .../media/platform/rockchip/rkisp1/rkisp1-stats.c  | 14 +++++++++++---
- 2 files changed, 22 insertions(+), 3 deletions(-)
+changes in v3:
+- add necessary binding additions
+- fix pclk naming in binding
+- move v12 clk_ctrl register bits to v12 addition patch
+- fix rebase artefact with hst_enable
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 74ddd8256366..d7f93547fab6 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -236,6 +236,16 @@ struct rkisp1_capture {
- 	} pix;
- };
- 
-+struct rkisp1_stats;
-+struct rkisp1_stats_ops {
-+	void (*get_awb_meas)(struct rkisp1_stats *stats,
-+			     struct rkisp1_stat_buffer *pbuf);
-+	void (*get_aec_meas)(struct rkisp1_stats *stats,
-+			     struct rkisp1_stat_buffer *pbuf);
-+	void (*get_hst_meas)(struct rkisp1_stats *stats,
-+			     struct rkisp1_stat_buffer *pbuf);
-+};
-+
- /*
-  * struct rkisp1_stats - ISP Statistics device
-  *
-@@ -248,6 +258,7 @@ struct rkisp1_capture {
- struct rkisp1_stats {
- 	struct rkisp1_vdev_node vnode;
- 	struct rkisp1_device *rkisp1;
-+	struct rkisp1_stats_ops *ops;
- 
- 	spinlock_t lock; /* locks the buffers list 'stats' */
- 	struct list_head stat;
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-index c1d07a2e8839..f68a5e78e54a 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-@@ -287,6 +287,12 @@ static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
- 	}
- }
- 
-+static struct rkisp1_stats_ops rkisp1_stats_ops = {
-+	.get_awb_meas = rkisp1_stats_get_awb_meas,
-+	.get_aec_meas = rkisp1_stats_get_aec_meas,
-+	.get_hst_meas = rkisp1_stats_get_hst_meas,
-+};
-+
- static void
- rkisp1_stats_send_measurement(struct rkisp1_stats *stats, u32 isp_ris)
- {
-@@ -309,18 +315,18 @@ rkisp1_stats_send_measurement(struct rkisp1_stats *stats, u32 isp_ris)
- 		(struct rkisp1_stat_buffer *)(cur_buf->vaddr);
- 
- 	if (isp_ris & RKISP1_CIF_ISP_AWB_DONE)
--		rkisp1_stats_get_awb_meas(stats, cur_stat_buf);
-+		stats->ops->get_awb_meas(stats, cur_stat_buf);
- 
- 	if (isp_ris & RKISP1_CIF_ISP_AFM_FIN)
- 		rkisp1_stats_get_afc_meas(stats, cur_stat_buf);
- 
- 	if (isp_ris & RKISP1_CIF_ISP_EXP_END) {
--		rkisp1_stats_get_aec_meas(stats, cur_stat_buf);
-+		stats->ops->get_aec_meas(stats, cur_stat_buf);
- 		rkisp1_stats_get_bls_meas(stats, cur_stat_buf);
- 	}
- 
- 	if (isp_ris & RKISP1_CIF_ISP_HIST_MEASURE_RDY)
--		rkisp1_stats_get_hst_meas(stats, cur_stat_buf);
-+		stats->ops->get_hst_meas(stats, cur_stat_buf);
- 
- 	vb2_set_plane_payload(&cur_buf->vb.vb2_buf, 0,
- 			      sizeof(struct rkisp1_stat_buffer));
-@@ -354,6 +360,8 @@ static void rkisp1_init_stats(struct rkisp1_stats *stats)
- 		V4L2_META_FMT_RK_ISP1_STAT_3A;
- 	stats->vdev_fmt.fmt.meta.buffersize =
- 		sizeof(struct rkisp1_stat_buffer);
-+
-+	stats->ops = &rkisp1_stats_ops;
- }
- 
- int rkisp1_stats_register(struct rkisp1_device *rkisp1)
+changes in v2 (from rfc):
+- split out phy patch into a separate series
+- drop dts patches for now
+- split v12 addition and v10 prefixes into separate patches
+  to enable easier review (Dafna)
+- remove {stats,params}_config structs, we can just use the
+  correct constant (Dafna)
+- adapt to styling comments from Dafna and Helen
+- add patch to remove the unused irq variable in struct rkisp
+
+Heiko Stuebner (10):
+  media: rockchip: rkisp1: remove unused irq variable
+  dt-bindings: media: rkisp1: fix pclk clock-name
+  dt-bindings: media: rkisp1: document different irq possibilities
+  media: rockchip: rkisp1: allow separate interrupts
+  media: rockchip: rkisp1: make some isp-param functions variable
+  media: rockchip: rkisp1: make some isp-stats functions variable
+  media: rockchip: rkisp1: add prefixes for v10 specific parts
+  media: rockchip: rkisp1: add support for v12 isp variants
+  dt-bindings: media: rkisp1: document px30 isp compatible
+  media: rockchip: rkisp1: add support for px30 isp version
+
+ .../bindings/media/rockchip-isp1.yaml         | 113 +++-
+ .../platform/rockchip/rkisp1/rkisp1-capture.c |   9 +-
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  44 +-
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |  71 ++-
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     |  29 +-
+ .../platform/rockchip/rkisp1/rkisp1-params.c  | 557 ++++++++++++++----
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 406 ++++++++-----
+ .../platform/rockchip/rkisp1/rkisp1-stats.c   | 107 +++-
+ 8 files changed, 1044 insertions(+), 292 deletions(-)
+
 -- 
 2.29.2
 
