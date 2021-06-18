@@ -2,92 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7899AC48BDF
-	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 10:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44427C49361
+	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 10:18:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B579613C1
-	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 10:18:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29590613C1
+	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 10:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbhFRKVA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Jun 2021 06:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S233092AbhFRKVB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Jun 2021 06:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbhFRKVA (ORCPT
+        with ESMTP id S232716AbhFRKVA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 18 Jun 2021 06:21:00 -0400
 Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B70C061574;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27690C061760;
         Fri, 18 Jun 2021 03:18:50 -0700 (PDT)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id BE411C63DD; Fri, 18 Jun 2021 11:18:47 +0100 (BST)
+        id 0B7DAC645F; Fri, 18 Jun 2021 11:18:48 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1624011527; bh=3CYkxaPrtSAsMP1hfgeEp4xBfJ40V95crN5G3qJ8grE=;
-        h=From:To:Subject:Date:From;
-        b=YoXvJ1hm8jj2hXXmc8Kvn/GB7H02dj8x75GldwDPJt+ll4srfvvSgExYZp/0sOpD4
-         u3FZWFtIOPnSQNZx03+cI9pS/fM32jPHiZvG1AMRk89SXEULWq1plyY/iwa4AiA7pW
-         m1T1fQJN1q6CDgd1ICTW0LXy2ka7jtNBHUT0XFaVlNeg5SIWp9osTPA2ddObQ5oRjk
-         RvNfQh9cNFs8ppG2PeKyFEAWpYGy0nZ0QifkEgz4z9XpodIdbKxPBNXyPp/0s8bRUv
-         rA4Ip0dEWm0hR7hikq9WE36nu6gJOlq9s/kUQ/Whl4u+dH9oIw9z5/TQ+q+Z7KRsLH
-         Ot0nnUBD7vUTg==
+        t=1624011528; bh=z88cyJ/6ZTdtJYa3/06hDs2DGIOLoJGSCQAvrSG9Fiw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ePlydqj+K69SBO1uZAVOItNCRHHNTsA0x0Ag2+a7NnKJ7qyq639fN5UrIrZHN786Y
+         qhf3psZe4ecXwn8RNHC0sj8m6b9igpdvxb6QcMKfHo+HBaAKXAagL7+83vC8mhVVJ0
+         easYDjhNPDvUYsfVo4mXNzBNH3pEyHFLTzLZNJHDyloxsGEZRMBlcaqKkxHUIFOSWX
+         LgFhm5JdSnm+MqQNIzWm/DGAfomU0uo5iC1iLyE/VPWxtKYnf/tF09sZ719xTPBXhF
+         tXsmTsS7cN7NnHqI5+/k1n5ME9d7zfNXbS6Zrqw0hlyYzQE2QWnchcN8GDW10SRVZl
+         WRx7pFh65z81g==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Rhees <support@usbuirt.com>,
         Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH v5 0/2] IR driver for USB-UIRT device
-Date:   Fri, 18 Jun 2021 11:18:45 +0100
-Message-Id: <cover.1624006513.git.sean@mess.org>
+Subject: [PATCH v5 2/2] USB: serial: blacklist USB-UIRT when driver is selected
+Date:   Fri, 18 Jun 2021 11:18:47 +0100
+Message-Id: <3b51bfaa1889d38e5259affd826db7d9ff9ba4ca.1624006513.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1624006513.git.sean@mess.org>
+References: <cover.1624006513.git.sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a new rc-core driver for the USB-UIRT which you can see here
-http://www.usbuirt.com/
+The USB-UIRT device has its own driver, so blacklist the fdti driver
+from using it if the driver has been enabled.
 
-This device is supported in lirc, via the usb serial kernel driver. This
-driver is both for rc-core, which means it can use kernel/BPF decoding
-ec. Also this implement is superior because it can:
- - support learning mode
- - setting transmit carrier
- - larger transmits using streaming tx command
- - Much better latency since it is a kernel driver
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/usb/serial/ftdi_sio.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Changes since v4:
- - Fixed clang warning/uninitialized variable usage
- - Some cosmetic changes
-
-Changes since v3:
- - Review comments from Johan Hovold
- - Do not move the ftdi_sio.h file an copy FTDI_* definitions instead
-
-Changes since v2:
- - Fixed race condition is disconnect
- - Removed superfluous kmalloc in short tx
-
-Changes since v1:
- - Review comments from Oliver Neukum
- - Simplified wideband read function
-
-Sean Young (2):
-  media: rc: new driver for USB-UIRT device
-  USB: serial: blacklist USB-UIRT when driver is selected
-
- drivers/media/rc/Kconfig      |  11 +
- drivers/media/rc/Makefile     |   1 +
- drivers/media/rc/uirt.c       | 744 ++++++++++++++++++++++++++++++++++
- drivers/usb/serial/ftdi_sio.c |   6 +-
- 4 files changed, 760 insertions(+), 2 deletions(-)
- create mode 100644 drivers/media/rc/uirt.c
-
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 369ef140df78..2e9a9076a38d 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -106,7 +106,7 @@ static const struct ftdi_sio_quirk ftdi_NDI_device_quirk = {
+ 	.probe	= ftdi_NDI_device_setup,
+ };
+ 
+-static const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
++static __maybe_unused const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
+ 	.port_probe = ftdi_USB_UIRT_setup,
+ };
+ 
+@@ -568,8 +568,10 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
+ 	{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
+ 		.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
++#if !IS_ENABLED(CONFIG_IR_UIRT)
+ 	{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
+ 		.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
++#endif
+ 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_1) },
+ 	{ USB_DEVICE(FTDI_VID, PROTEGO_R2X0) },
+ 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_3) },
+@@ -2281,7 +2283,7 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ /* Setup for the USB-UIRT device, which requires hardwired
+  * baudrate (38400 gets mapped to 312500) */
+ /* Called from usbserial:serial_probe */
+-static void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
++static __maybe_unused void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
+ {
+ 	priv->flags |= ASYNC_SPD_CUST;
+ 	priv->custom_divisor = 77;
 -- 
 2.31.1
 
