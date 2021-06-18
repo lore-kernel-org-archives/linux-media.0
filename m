@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04423C48BDF
-	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 12:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BDDC49EA2
+	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 12:29:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E51EC61248
-	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 12:29:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5222A613EB
+	for <linux-media@archiver.kernel.org>; Fri, 18 Jun 2021 12:29:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbhFRMbs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Jun 2021 08:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S234354AbhFRMbu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Jun 2021 08:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbhFRMbk (ORCPT
+        with ESMTP id S234310AbhFRMbm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Jun 2021 08:31:40 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904D2C061760
-        for <linux-media@vger.kernel.org>; Fri, 18 Jun 2021 05:29:30 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id g20so15729521ejt.0
-        for <linux-media@vger.kernel.org>; Fri, 18 Jun 2021 05:29:30 -0700 (PDT)
+        Fri, 18 Jun 2021 08:31:42 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22DCC0617AF
+        for <linux-media@vger.kernel.org>; Fri, 18 Jun 2021 05:29:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id he7so15590128ejc.13
+        for <linux-media@vger.kernel.org>; Fri, 18 Jun 2021 05:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6wRX4HPCaGutJw3bYLjBLXUq3zLRyE1+eOW0JgncFJc=;
-        b=CEd97yYbtvV0v1LmO+q2bTBw7Qtl3xJMwvhd9t4Lil4+Fbw07BwVwoR9PLbsPWRjwd
-         18GAV1G219qqm8dsZ07IWcV9HUpy7chDMtm93N0Za8LJySolpyMELZqqbAaS6XFWD/53
-         OHnb7HV/yE38Q2nYFMEzRkLeddnSTu0QgPPG8=
+        bh=YVN2GH1uJUt11BT86iOdoVap8FgpXufLIoLmMZsImGM=;
+        b=OlFvdWVZy9J++4Uv/66i9nGMZ+mlU4jMEiKNofDnE11qudCf00XuTLntMLxna1pP9w
+         lYiZfEJYjNEvmsOOz+x647B/szA84R+8GEphng3SIUC0Ok0bWKaH4TvldyrLYf5CeQYh
+         PylNbeJIOPaXG7cyQ69P7zhjb0vuyQC5Hfif8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6wRX4HPCaGutJw3bYLjBLXUq3zLRyE1+eOW0JgncFJc=;
-        b=s5nPrQ6zyJP2L6YUn+EelmRNnSAOVqTghLT1CtYVof1kanKW9FfAmaYu5v4hBpcrJI
-         H/Vp+VoOlhZH++b+Y7kcmcyJPLVHHlA67ZNmWScuEWapg4RpygQWbfvrvUefG/uwv6gw
-         ku3pidHJFqlZuCfKFV9D7JjicxabH9e7uTaYv91xkWAS/Vy92zqUwqnuZKoqoS/yMibM
-         lVV8qbvExOpnx+J0/VqlXCgwLzNoj1cZYrusn1hnt7Ozrr5nll+Hya4vHogDJmdC7JCn
-         ei6ELpnARFABO0eDF4CVdH+70a/yvEk7xDSnuO8b5hLu/NO5/4WpbEpZtZPCTedILuLK
-         qXSw==
-X-Gm-Message-State: AOAM530dbdATrtvdlTTyfnTlHkzb5Vono+Q7ZFwWOl/19ZctuVDNH4b3
-        gTyvT9hW3m95WqLaXI0GUMjvFA==
-X-Google-Smtp-Source: ABdhPJzrSsLi4kK+p6sqOp0tWVQ2vgYcQmlx1l4mb/fEscINwlr4sslX/08TI/2aryQgIh8CKZ2yxw==
-X-Received: by 2002:a17:906:670c:: with SMTP id a12mr10565252ejp.249.1624019369226;
-        Fri, 18 Jun 2021 05:29:29 -0700 (PDT)
+        bh=YVN2GH1uJUt11BT86iOdoVap8FgpXufLIoLmMZsImGM=;
+        b=hoIlbCYykL+iAM1yqbWtv35WMObl/86XZRdwWI+Mc327b0Sm3rFValrgKnyn6ikh7u
+         m9vQmFNCoG8ljYUzsuUyTJWiAmQP64WWoAtgx1uLqdRHxKY2Kdg5mO6uqGi+1GJx/5Kd
+         z4o2qxpB+vHmIE+YEjwK/iQK3x64Z1etK7+m6eITRHh6ScAakvpJyUassgjmcNVpcidx
+         aa+05VClWeBdE3EosOBC4VIbmxEaa40486W8ekfuP78d55kMsAQ4B+XwoI1CFh5uzoU9
+         aso2RGHQJ2jf2cAfUxYWosffqoUZPMYLKhKUnNx5SkK9m6scWl7CHZ4MTVKPOfJJZfiI
+         ztnA==
+X-Gm-Message-State: AOAM530iky8gRU17BS2aWoVNICdapd188YR52xavb4VIX7HTXTars5KF
+        7wNBRjOlxufk4ytwIViwT1pI1A==
+X-Google-Smtp-Source: ABdhPJxP/vpTcS5nNlKGwpaEELS0h6vxsERbQ7/UT7a9M1SOPqOGOYL5EQ9J0EDNM7nFzi8gCss3vg==
+X-Received: by 2002:a17:906:1848:: with SMTP id w8mr10701160eje.277.1624019370427;
+        Fri, 18 Jun 2021 05:29:30 -0700 (PDT)
 Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id o26sm4336403edt.62.2021.06.18.05.29.28
+        by smtp.gmail.com with ESMTPSA id o26sm4336403edt.62.2021.06.18.05.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 05:29:28 -0700 (PDT)
+        Fri, 18 Jun 2021 05:29:30 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -61,9 +61,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v10 05/21] media: uvcvideo: Remove s_ctrl and g_ctrl
-Date:   Fri, 18 Jun 2021 14:29:07 +0200
-Message-Id: <20210618122923.385938-6-ribalda@chromium.org>
+Subject: [PATCH v10 07/21] media: uvcvideo: Return -EIO for control errors
+Date:   Fri, 18 Jun 2021 14:29:09 +0200
+Message-Id: <20210618122923.385938-8-ribalda@chromium.org>
 X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
 In-Reply-To: <20210618122923.385938-1-ribalda@chromium.org>
 References: <20210618122923.385938-1-ribalda@chromium.org>
@@ -73,91 +73,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If we do not implement these callbacks the framework will call the
-ext_ctrl callbaks instead, which are a superset of this functions.
+The device is doing something unspected with the control. Either because
+the protocol is not properly implemented or there has been a HW error.
 
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes v4l2-compliance:
+
+Control ioctls (Input 0):
+                fail: v4l2-test-controls.cpp(448): s_ctrl returned an error (22)
+        test VIDIOC_G/S_CTRL: FAIL
+                fail: v4l2-test-controls.cpp(698): s_ext_ctrls returned an error (22)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
+
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 56 --------------------------------
- 1 file changed, 56 deletions(-)
+ drivers/media/usb/uvc/uvc_video.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 47b0e3224205..ac98869d5a05 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -983,60 +983,6 @@ static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int uvc_ioctl_g_ctrl(struct file *file, void *fh,
--			    struct v4l2_control *ctrl)
--{
--	struct uvc_fh *handle = fh;
--	struct uvc_video_chain *chain = handle->chain;
--	struct v4l2_ext_control xctrl;
--	int ret;
--
--	memset(&xctrl, 0, sizeof(xctrl));
--	xctrl.id = ctrl->id;
--
--	ret = uvc_ctrl_begin(chain);
--	if (ret < 0)
--		return ret;
--
--	ret = uvc_ctrl_get(chain, &xctrl);
--	uvc_ctrl_rollback(handle);
--	if (ret < 0)
--		return ret;
--
--	ctrl->value = xctrl.value;
--	return 0;
--}
--
--static int uvc_ioctl_s_ctrl(struct file *file, void *fh,
--			    struct v4l2_control *ctrl)
--{
--	struct uvc_fh *handle = fh;
--	struct uvc_video_chain *chain = handle->chain;
--	struct v4l2_ext_control xctrl;
--	int ret;
--
--	memset(&xctrl, 0, sizeof(xctrl));
--	xctrl.id = ctrl->id;
--	xctrl.value = ctrl->value;
--
--	ret = uvc_ctrl_begin(chain);
--	if (ret < 0)
--		return ret;
--
--	ret = uvc_ctrl_set(handle, &xctrl);
--	if (ret < 0) {
--		uvc_ctrl_rollback(handle);
--		return ret;
--	}
--
--	ret = uvc_ctrl_commit(handle, &xctrl, 1);
--	if (ret < 0)
--		return ret;
--
--	ctrl->value = xctrl.value;
--	return 0;
--}
--
- static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
- 				 struct v4l2_ext_controls *ctrls)
- {
-@@ -1522,8 +1468,6 @@ const struct v4l2_ioctl_ops uvc_ioctl_ops = {
- 	.vidioc_s_input = uvc_ioctl_s_input,
- 	.vidioc_queryctrl = uvc_ioctl_queryctrl,
- 	.vidioc_query_ext_ctrl = uvc_ioctl_query_ext_ctrl,
--	.vidioc_g_ctrl = uvc_ioctl_g_ctrl,
--	.vidioc_s_ctrl = uvc_ioctl_s_ctrl,
- 	.vidioc_g_ext_ctrls = uvc_ioctl_g_ext_ctrls,
- 	.vidioc_s_ext_ctrls = uvc_ioctl_s_ext_ctrls,
- 	.vidioc_try_ext_ctrls = uvc_ioctl_try_ext_ctrls,
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index a777b389a66e..daba5fe352ea 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -115,6 +115,11 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+ 	case 5: /* Invalid unit */
+ 	case 6: /* Invalid control */
+ 	case 7: /* Invalid Request */
++		/*
++		 * The firmware has not properly implemented
++		 * the control or there has been a HW error.
++		 */
++		return -EIO;
+ 	case 8: /* Invalid value within range */
+ 		return -EINVAL;
+ 	default: /* reserved or unknown */
 -- 
 2.32.0.288.g62a8d224e6-goog
 
