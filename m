@@ -2,206 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0886C49EA4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Jun 2021 11:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2ED2C49EA4
+	for <linux-media@archiver.kernel.org>; Mon, 21 Jun 2021 11:58:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D644D61206
-	for <linux-media@archiver.kernel.org>; Mon, 21 Jun 2021 11:57:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBA8A610C7
+	for <linux-media@archiver.kernel.org>; Mon, 21 Jun 2021 11:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhFUL7O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Jun 2021 07:59:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34260 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229789AbhFUL7H (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Jun 2021 07:59:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FBBC61245;
-        Mon, 21 Jun 2021 11:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624276613;
-        bh=11eW0KcqaEnwVcqSAzyPNAdsSG+zIv8WUhOkdsd8c6A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jmBWtdlwqBDKNAm0dTHfHk3uqCFK1ZsHbkjcsduKsXqVvOuPet+GLsoDYXPdjlrHI
-         ck08bAldltzViQVZn+i1HyTKGKPchxS0WT6ipRn2IehNUswLZOyO91AbbVceEUlmkQ
-         12I+mXI7BXnIcZEfIpSCni2VR8SXYy6OnyECYPvDvpgcM16IXowGfQ1YvNoaTGttbM
-         5ttJwJzQyGLB+6U2ZBTy1aSWJ8GgtkamPMz6skmPi5S70ZwyO7UJAd2r0gomfwDWoE
-         NdkTvEDKY2JqJfK5vXrUzDHlb2Bh1Jexz2V6/8nG839FdrFaxkHqcjWH3kfR83FSDD
-         DXhKyvRindZfA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lvIXr-000Hcs-0m; Mon, 21 Jun 2021 13:56:51 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Walls <awalls@md.metrocast.net>,
+        id S230206AbhFUMAn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Jun 2021 08:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229663AbhFUMAk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Jun 2021 08:00:40 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9318CC061760;
+        Mon, 21 Jun 2021 04:58:26 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j1so2118276wrn.9;
+        Mon, 21 Jun 2021 04:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=80v3QdK6lvkTa+Gv+j5089kh4F58fian+x7X/sqsWnc=;
+        b=P7V1sZttRDo+gv7B209QjtKRej8sON6YfC+dLoFsoPq4CA8F251j2apZkqH+4pB0+2
+         m/cAVl7BEp+juNm9dbQIhvfxcfFQXhdNNbvQGXk+DtCEr8lmkBuzpBIMCG1uE5y37sCY
+         CexGSEG9dMFHFVYLdP2D8pGVsI4wPuy10J6ZRYidmtSdouQYEjbOj4COwiCqYTzlIyvR
+         YS/X/Dfm2oOhhci3ykaiyHOxSfwZS3XdezDqJc7VyJC/A2l/WHlDw6Jr6UVV/zanW2v9
+         ufcT0/Q34EPzXx9geuhVC3JI3cs+OUNPQ69Tlbj8Kz/TkV0OAPdM3S4fGBRJ5syZ/swm
+         C9gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=80v3QdK6lvkTa+Gv+j5089kh4F58fian+x7X/sqsWnc=;
+        b=nOd/nSKjKSMI1NXhHPblxaMreGyf25MoIqOZk08iJkX7DXgj1755yEUvFqJRkh5PJw
+         9KR3tIDPZFOgaDiYRAIaVAwgsO9YCQxLOXEumGMbimpxmUY8LvS2r9CgrOzA0UUMeBlR
+         CHtKRWrSu7txMo+SbVjfNnaFcKyBsGovYmv2cOOJPz0ViZ5U198XciKy37qpZyl9QoyE
+         PuQinVpyUGE+IpV/KxZ5qj4QuRzdR90EXIlU6dOEFoLAPNeWHSGNk3xNlvQCS4Dtx9B5
+         /M9Z7eaGidzkUvIyyX7uk1bOQghDuw+N8Nl8MQOOx7bsy8GW7oGTxH0QR+7Fhu8SxKeA
+         ducA==
+X-Gm-Message-State: AOAM532cHiFR+KQwTTJH9p/Fp+nqi06UUzRWVktrKDZSmGZtn0v+t8Sd
+        y65SynM/yoaFZUTq1+1GVq6r5PfXeesG
+X-Google-Smtp-Source: ABdhPJwFdShnzZcO1ddX2RbzeMUujpzXbXQzvHgGwyV+ILWRbHfPAIAbkr+xMsp7hH+KNcVvOyogDg==
+X-Received: by 2002:a05:6000:89:: with SMTP id m9mr27342835wrx.8.1624276705168;
+        Mon, 21 Jun 2021 04:58:25 -0700 (PDT)
+Received: from [192.168.200.247] (ip5b434b8b.dynamic.kabel-deutschland.de. [91.67.75.139])
+        by smtp.gmail.com with ESMTPSA id j17sm7254661wrx.0.2021.06.21.04.58.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jun 2021 04:58:24 -0700 (PDT)
+Subject: Re: [PATCH v2 08/12] ARM: dts: rockchip: add power controller for
+ RK3036
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 4/5] media: ivtv: prevent going past the hw arrays
-Date:   Mon, 21 Jun 2021 13:56:48 +0200
-Message-Id: <94334c02c246fad023ec04a02c43b708d853b0cc.1624276138.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1624276137.git.mchehab+huawei@kernel.org>
-References: <cover.1624276137.git.mchehab+huawei@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+References: <20210525152225.154302-1-knaerzche@gmail.com>
+ <20210527154455.358869-9-knaerzche@gmail.com>
+ <1dc782cd3956598b2eb5f89ad0680d2ce38ffd54.camel@collabora.com>
+ <3783580.yKVeVyVuyW@phil>
+From:   Alex Bee <knaerzche@gmail.com>
+Message-ID: <b7650d04-bfaf-696e-c492-e53c9a4408c1@gmail.com>
+Date:   Mon, 21 Jun 2021 13:58:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <3783580.yKVeVyVuyW@phil>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As warned by smatch:
+Hi Heiko,
 
-	drivers/media/pci/ivtv/ivtv-i2c.c:245 ivtv_i2c_register() error: buffer overflow 'hw_devicenames' 21 <= 31
-	drivers/media/pci/ivtv/ivtv-i2c.c:266 ivtv_i2c_register() error: buffer overflow 'hw_addrs' 21 <= 31
-	drivers/media/pci/ivtv/ivtv-i2c.c:269 ivtv_i2c_register() error: buffer overflow 'hw_addrs' 21 <= 31
-	drivers/media/pci/ivtv/ivtv-i2c.c:275 ivtv_i2c_register() error: buffer overflow 'hw_addrs' 21 <= 31
-	drivers/media/pci/ivtv/ivtv-i2c.c:280 ivtv_i2c_register() error: buffer overflow 'hw_addrs' 21 <= 31
-	drivers/media/pci/ivtv/ivtv-i2c.c:290 ivtv_i2c_register() error: buffer overflow 'hw_addrs' 21 <= 31
+Am 13.06.21 um 18:22 schrieb Heiko Stuebner:
+> Am Freitag, 11. Juni 2021, 17:58:58 CEST schrieb Ezequiel Garcia:
+>> Hi Heiko,
+>>
+>> On Thu, 2021-05-27 at 17:44 +0200, Alex Bee wrote:
+>>> Add the power controller node and the correspondending qos nodes for
+>>> RK3036.
+>>> Also add the power-domain property to the nodes that are already
+>>> present.
+>>> Note: Since the regiser offsets of the axi interconnect QoS are missing
+>>> in the TRM (RK3036 TRM V1.0), they have been taken from vendor kernel.
+>>>
+>> Can you take care of the device tree changes (patches 8 to 12)?
+> sure, I'll pick the power-domains now but need to wait for
+> the vpu nodes for the driver parts to land in the media tree.
 
-The logic at ivtv_i2c_register() could let buffer overflows at
-hw_devicenames and hw_addrs arrays.
+Looks like I'm too late for 5.14 - just in case you didn't follow or 
+didn't receive a notification:
 
-This won't happen in practice due to a carefully-contructed
-logic, but it is not error-prune.
+hantro patches of this series have been merged in media_tree and vpu 
+node patches (please pick from v2) could get reviewed/applied now.
 
-Change the logic in a way that will make clearer that the
-I2C hardware flags will affect the size of those two
-arrays, and add an explicit check to avoid buffer overflows.
+Thanks,
 
-While here, use the bit macro.
+Alex
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/pci/ivtv/ivtv-cards.h | 68 ++++++++++++++++++++---------
- drivers/media/pci/ivtv/ivtv-i2c.c   | 16 ++++---
- 2 files changed, 58 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/media/pci/ivtv/ivtv-cards.h b/drivers/media/pci/ivtv/ivtv-cards.h
-index f3e2c5634962..494982e4165d 100644
---- a/drivers/media/pci/ivtv/ivtv-cards.h
-+++ b/drivers/media/pci/ivtv/ivtv-cards.h
-@@ -78,27 +78,53 @@
- #define IVTV_PCI_ID_SONY		0x104d
- 
- /* hardware flags, no gaps allowed */
--#define IVTV_HW_CX25840			(1 << 0)
--#define IVTV_HW_SAA7115			(1 << 1)
--#define IVTV_HW_SAA7127			(1 << 2)
--#define IVTV_HW_MSP34XX			(1 << 3)
--#define IVTV_HW_TUNER			(1 << 4)
--#define IVTV_HW_WM8775			(1 << 5)
--#define IVTV_HW_CS53L32A		(1 << 6)
--#define IVTV_HW_TVEEPROM		(1 << 7)
--#define IVTV_HW_SAA7114			(1 << 8)
--#define IVTV_HW_UPD64031A		(1 << 9)
--#define IVTV_HW_UPD6408X		(1 << 10)
--#define IVTV_HW_SAA717X			(1 << 11)
--#define IVTV_HW_WM8739			(1 << 12)
--#define IVTV_HW_VP27SMPX		(1 << 13)
--#define IVTV_HW_M52790			(1 << 14)
--#define IVTV_HW_GPIO			(1 << 15)
--#define IVTV_HW_I2C_IR_RX_AVER		(1 << 16)
--#define IVTV_HW_I2C_IR_RX_HAUP_EXT	(1 << 17) /* External before internal */
--#define IVTV_HW_I2C_IR_RX_HAUP_INT	(1 << 18)
--#define IVTV_HW_Z8F0811_IR_HAUP		(1 << 19)
--#define IVTV_HW_I2C_IR_RX_ADAPTEC	(1 << 20)
-+enum ivtv_hw_bits {
-+	IVTV_HW_BIT_CX25840		= 0,
-+	IVTV_HW_BIT_SAA7115		= 1,
-+	IVTV_HW_BIT_SAA7127		= 2,
-+	IVTV_HW_BIT_MSP34XX		= 3,
-+	IVTV_HW_BIT_TUNER		= 4,
-+	IVTV_HW_BIT_WM8775		= 5,
-+	IVTV_HW_BIT_CS53L32A		= 6,
-+	IVTV_HW_BIT_TVEEPROM		= 7,
-+	IVTV_HW_BIT_SAA7114		= 8,
-+	IVTV_HW_BIT_UPD64031A		= 9,
-+	IVTV_HW_BIT_UPD6408X		= 10,
-+	IVTV_HW_BIT_SAA717X		= 11,
-+	IVTV_HW_BIT_WM8739		= 12,
-+	IVTV_HW_BIT_VP27SMPX		= 13,
-+	IVTV_HW_BIT_M52790		= 14,
-+	IVTV_HW_BIT_GPIO		= 15,
-+	IVTV_HW_BIT_I2C_IR_RX_AVER	= 16,
-+	IVTV_HW_BIT_I2C_IR_RX_HAUP_EXT	= 17, /* External before internal */
-+	IVTV_HW_BIT_I2C_IR_RX_HAUP_INT	= 18,
-+	IVTV_HW_BIT_Z8F0811_IR_HAUP	= 19,
-+	IVTV_HW_BIT_I2C_IR_RX_ADAPTEC	= 20,
-+
-+	IVTV_HW_MAX_BITS		= 21	/* Should be the last bit + 1 */
-+};
-+
-+#define IVTV_HW_CX25840			BIT(IVTV_HW_BIT_CX25840)
-+#define IVTV_HW_SAA7115			BIT(IVTV_HW_BIT_SAA7115)
-+#define IVTV_HW_SAA7127			BIT(IVTV_HW_BIT_SAA7127)
-+#define IVTV_HW_MSP34XX			BIT(IVTV_HW_BIT_MSP34XX)
-+#define IVTV_HW_TUNER			BIT(IVTV_HW_BIT_TUNER)
-+#define IVTV_HW_WM8775			BIT(IVTV_HW_BIT_WM8775)
-+#define IVTV_HW_CS53L32A		BIT(IVTV_HW_BIT_CS53L32A)
-+#define IVTV_HW_TVEEPROM		BIT(IVTV_HW_BIT_TVEEPROM)
-+#define IVTV_HW_SAA7114			BIT(IVTV_HW_BIT_SAA7114)
-+#define IVTV_HW_UPD64031A		BIT(IVTV_HW_BIT_UPD64031A)
-+#define IVTV_HW_UPD6408X		BIT(IVTV_HW_BIT_UPD6408X)
-+#define IVTV_HW_SAA717X			BIT(IVTV_HW_BIT_SAA717X)
-+#define IVTV_HW_WM8739			BIT(IVTV_HW_BIT_WM8739)
-+#define IVTV_HW_VP27SMPX		BIT(IVTV_HW_BIT_VP27SMPX)
-+#define IVTV_HW_M52790			BIT(IVTV_HW_BIT_M52790)
-+#define IVTV_HW_GPIO			BIT(IVTV_HW_BIT_GPIO)
-+#define IVTV_HW_I2C_IR_RX_AVER		BIT(IVTV_HW_BIT_I2C_IR_RX_AVER)
-+#define IVTV_HW_I2C_IR_RX_HAUP_EXT	BIT(IVTV_HW_BIT_I2C_IR_RX_HAUP_EXT)
-+#define IVTV_HW_I2C_IR_RX_HAUP_INT	BIT(IVTV_HW_BIT_I2C_IR_RX_HAUP_INT)
-+#define IVTV_HW_Z8F0811_IR_HAUP		BIT(IVTV_HW_BIT_Z8F0811_IR_HAUP)
-+#define IVTV_HW_I2C_IR_RX_ADAPTEC	BIT(IVTV_HW_BIT_I2C_IR_RX_ADAPTEC)
- 
- #define IVTV_HW_SAA711X   (IVTV_HW_SAA7115 | IVTV_HW_SAA7114)
- 
-diff --git a/drivers/media/pci/ivtv/ivtv-i2c.c b/drivers/media/pci/ivtv/ivtv-i2c.c
-index 982045c4eea8..c052c57c6dce 100644
---- a/drivers/media/pci/ivtv/ivtv-i2c.c
-+++ b/drivers/media/pci/ivtv/ivtv-i2c.c
-@@ -85,7 +85,7 @@
- #define IVTV_ADAPTEC_IR_ADDR		0x6b
- 
- /* This array should match the IVTV_HW_ defines */
--static const u8 hw_addrs[] = {
-+static const u8 hw_addrs[IVTV_HW_MAX_BITS] = {
- 	IVTV_CX25840_I2C_ADDR,
- 	IVTV_SAA7115_I2C_ADDR,
- 	IVTV_SAA7127_I2C_ADDR,
-@@ -110,7 +110,7 @@ static const u8 hw_addrs[] = {
- };
- 
- /* This array should match the IVTV_HW_ defines */
--static const char * const hw_devicenames[] = {
-+static const char * const hw_devicenames[IVTV_HW_MAX_BITS] = {
- 	"cx25840",
- 	"saa7115",
- 	"saa7127_auto",	/* saa7127 or saa7129 */
-@@ -240,10 +240,16 @@ void ivtv_i2c_new_ir_legacy(struct ivtv *itv)
- 
- int ivtv_i2c_register(struct ivtv *itv, unsigned idx)
- {
--	struct v4l2_subdev *sd;
- 	struct i2c_adapter *adap = &itv->i2c_adap;
--	const char *type = hw_devicenames[idx];
--	u32 hw = 1 << idx;
-+	struct v4l2_subdev *sd;
-+	const char *type;
-+	u32 hw;
-+
-+	if (idx >= IVTV_HW_MAX_BITS)
-+		return -ENODEV;
-+
-+	type = hw_devicenames[idx];
-+	hw = 1 << idx;
- 
- 	if (hw == IVTV_HW_TUNER) {
- 		/* special tuner handling */
--- 
-2.31.1
-
+>
+> Heiko
+>
+>
