@@ -7,29 +7,33 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EE23C48BE5
-	for <linux-media@archiver.kernel.org>; Tue, 22 Jun 2021 11:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8033FC49EA5
+	for <linux-media@archiver.kernel.org>; Tue, 22 Jun 2021 11:29:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC192613C2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Jun 2021 11:28:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C21A613BE
+	for <linux-media@archiver.kernel.org>; Tue, 22 Jun 2021 11:29:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbhFVLbM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Jun 2021 07:31:12 -0400
-Received: from retiisi.eu ([95.216.213.190]:59750 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230057AbhFVLbL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Jun 2021 07:31:11 -0400
+        id S230107AbhFVLbP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Jun 2021 07:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230057AbhFVLbN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Jun 2021 07:31:13 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A04C061574
+        for <linux-media@vger.kernel.org>; Tue, 22 Jun 2021 04:28:57 -0700 (PDT)
 Received: from lanttu.localdomain (unknown [192.168.2.193])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 855A0634C8B;
-        Tue, 22 Jun 2021 14:21:54 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0B5F1634C8F;
+        Tue, 22 Jun 2021 14:21:55 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH 2/6] Documentation: media: Fix v4l2-async kerneldoc syntax
-Date:   Tue, 22 Jun 2021 14:21:56 +0300
-Message-Id: <20210622112200.13914-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 6/6] Documentation: v4l: Fix V4L2_CID_PIXEL_RATE documentation
+Date:   Tue, 22 Jun 2021 14:22:00 +0300
+Message-Id: <20210622112200.13914-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210622112200.13914-1-sakari.ailus@linux.intel.com>
 References: <20210622112200.13914-1-sakari.ailus@linux.intel.com>
@@ -39,77 +43,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix kerneldoc syntax in v4l2-async. The references were not produced
-correctly.
+The V4L2_CID_PIXEL_RATE is nowadays used to tell pixel sampling rate in
+the sub-device's pixel array, not the pixel rate over a link (for which it
+also becomes unfit with the addition of multiplexed streams later on). Fix
+this.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/media/v4l2-async.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ .../userspace-api/media/v4l/ext-ctrls-image-process.rst         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-index 5b275a845c20..fa4901162663 100644
---- a/include/media/v4l2-async.h
-+++ b/include/media/v4l2-async.h
-@@ -129,11 +129,11 @@ void v4l2_async_debug_init(struct dentry *debugfs_dir);
-  *
-  * This function initializes the notifier @asd_list. It must be called
-  * before adding a subdevice to a notifier, using one of:
-- * @v4l2_async_notifier_add_fwnode_remote_subdev,
-- * @v4l2_async_notifier_add_fwnode_subdev,
-- * @v4l2_async_notifier_add_i2c_subdev,
-- * @__v4l2_async_notifier_add_subdev or
-- * @v4l2_async_notifier_parse_fwnode_endpoints.
-+ * v4l2_async_notifier_add_fwnode_remote_subdev(),
-+ * v4l2_async_notifier_add_fwnode_subdev(),
-+ * v4l2_async_notifier_add_i2c_subdev(),
-+ * __v4l2_async_notifier_add_subdev() or
-+ * v4l2_async_notifier_parse_fwnode_endpoints().
-  */
- void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+index 37dad2f4df8c..6d681af95624 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+@@ -38,7 +38,7 @@ Image Process Control IDs
+     of this control is Hz.
  
-@@ -145,9 +145,9 @@ void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
-  * @asd: pointer to &struct v4l2_async_subdev
-  *
-  * \warning: Drivers should avoid using this function and instead use one of:
-- * @v4l2_async_notifier_add_fwnode_subdev,
-- * @v4l2_async_notifier_add_fwnode_remote_subdev or
-- * @v4l2_async_notifier_add_i2c_subdev.
-+ * v4l2_async_notifier_add_fwnode_subdev(),
-+ * v4l2_async_notifier_add_fwnode_remote_subdev() or
-+ * v4l2_async_notifier_add_i2c_subdev().
-  *
-  * Call this function before registering a notifier to link the provided @asd to
-  * the notifiers master @asd_list. The @asd must be allocated with k*alloc() as
-@@ -200,7 +200,7 @@ __v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif
-  * function also gets a reference of the fwnode which is released later at
-  * notifier cleanup time.
-  *
-- * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
-+ * This is just like v4l2_async_notifier_add_fwnode_subdev(), but with the
-  * exception that the fwnode refers to a local endpoint, not the remote one.
-  */
- #define v4l2_async_notifier_add_fwnode_remote_subdev(notifier, ep, type) \
-@@ -265,13 +265,13 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
-  * sub-devices allocated for the purposes of the notifier but not the notifier
-  * itself. The user is responsible for calling this function to clean up the
-  * notifier after calling
-- * @v4l2_async_notifier_add_fwnode_remote_subdev,
-- * @v4l2_async_notifier_add_fwnode_subdev,
-- * @v4l2_async_notifier_add_i2c_subdev,
-- * @__v4l2_async_notifier_add_subdev or
-- * @v4l2_async_notifier_parse_fwnode_endpoints.
-+ * v4l2_async_notifier_add_fwnode_remote_subdev(),
-+ * v4l2_async_notifier_add_fwnode_subdev(),
-+ * v4l2_async_notifier_add_i2c_subdev(),
-+ * __v4l2_async_notifier_add_subdev() or
-+ * v4l2_async_notifier_parse_fwnode_endpoints().
-  *
-- * There is no harm from calling v4l2_async_notifier_cleanup in other
-+ * There is no harm from calling v4l2_async_notifier_cleanup() in other
-  * cases as long as its memory has been zeroed after it has been
-  * allocated.
-  */
+ ``V4L2_CID_PIXEL_RATE (64-bit integer)``
+-    Pixel rate in the source pads of the subdev. This control is
++    Pixel sampling rate in the device's pixel array. This control is
+     read-only and its unit is pixels / second.
+ 
+ ``V4L2_CID_TEST_PATTERN (menu)``
 -- 
 2.30.2
 
