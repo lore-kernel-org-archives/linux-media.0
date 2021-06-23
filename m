@@ -2,101 +2,190 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C675AC48BE5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 09:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28F8BC4743C
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 09:15:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB6ED6128D
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 09:03:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F862611AD
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 09:15:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbhFWJGA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Jun 2021 05:06:00 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4664 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229920AbhFWJF7 (ORCPT
+        id S230249AbhFWJRr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Jun 2021 05:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230205AbhFWJRq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Jun 2021 05:05:59 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15N8vkM4005340;
-        Wed, 23 Jun 2021 09:03:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=Cv+cJ7tElo4uSdvfpY16g0h7xDbBKSgZE6SdRDxGKQY=;
- b=jJAU9IBpWq7k99m/KirvW79yjuLO7Damjz/KiI+feYbiJyrAmrECI9MC06Ib7QUtObxQ
- Se7OOl8edhG0xgWqvbpONS+Tq6AIHuULFcsNhTGNb4/iAENEZ2mRnXbYnRQuFS32WUWJ
- wu/7K+L7LN4Zc2ISoHy8iun602E8qjTh7/1fM6puVa8YcFpv0P8R+Caw9iqTe6a9275K
- TlxQJIpWoKCzTVweKjBpVOhs6CoC3sdMq1azG4RCHCZyAgDx6qD3DtCi6Vz/AMZ8k++L
- /XCHk64IiSRWUbXsPIfSl0x0UTdooZ60hkhuO02NguyOcXjK4nSn97Bo2f6Z+YyKikV/ Tw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39ap66ndfw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Jun 2021 09:03:37 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15N8thi4085178;
-        Wed, 23 Jun 2021 09:03:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3030.oracle.com with ESMTP id 3996meuyug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Jun 2021 09:03:37 +0000
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 15N8xv4s100500;
-        Wed, 23 Jun 2021 09:03:36 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 3996meuytn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Jun 2021 09:03:36 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 15N93XH0017632;
-        Wed, 23 Jun 2021 09:03:33 GMT
-Received: from kadam (/102.222.70.252)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 23 Jun 2021 09:03:32 +0000
-Date:   Wed, 23 Jun 2021 12:03:26 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] media: v4l2-subdev: fix some NULL vs IS_ERR() checks
-Message-ID: <20210623090325.GA2116@kadam>
-References: <YNH0WU7BcQ/60UNG@mwanda>
- <YNH87qd4eJOR296R@pendragon.ideasonboard.com>
- <20210622155858.GN1861@kadam>
- <YNKdqFNSrSBXVNqo@pendragon.ideasonboard.com>
+        Wed, 23 Jun 2021 05:17:46 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CAEC061760;
+        Wed, 23 Jun 2021 02:15:28 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id q10so2586520oij.5;
+        Wed, 23 Jun 2021 02:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=quouQNx98OeM2JWkzBIUm3+vF8x4xm+zxWV/raoo3aQ=;
+        b=Fmu2kU2I9U/tO77+2EI8nnRLVsm1KZns9poRXkmFydncMdpd17HRS7jmpP6eSA7e9H
+         BPhqm28O6C2qLsEb6KXrV189fkUkVFRIdy10NA3Zi3UnajXBIYCYWRgiAEw+pfjA+jIR
+         Gd+28Lw0bfeU/z2KQNu9rTF9lSNYnw+7oQjwznJh9yhwQHK7meHufl25CdQfhM7NkSrV
+         x1wKS5LkejWdl4ftXDvaM7DGGXNZ15lP1fphbHDmeeUCuMuhLeLzYsDj20mIjg9ujadC
+         +W1Of5Blo0JBXkv/cliU89T7B/mKdUdRC+M3luCI7hIv9SUyco0iL10gFoVPIYistGGv
+         pC0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=quouQNx98OeM2JWkzBIUm3+vF8x4xm+zxWV/raoo3aQ=;
+        b=LZwPIIajNlKq7A4HUTDu59V1+/QzizxdpUv0KqKynRA4TgyjzhWZwvSRyhd/f7XxX7
+         A0bWtqXAwhSAw8wMwoIRA1ySICDhzRP0IdpDoJLMQu8nwvOMdP8cBz03Cw6RpgtNMD71
+         ZdxEBn0T+iqem8Yw4UnCIbE4XUGBbrWj6kmGxJKwcEFb9+Ab+lTvVvv7/NdsxRx1h/tv
+         PKxzzJUAifm3vH9C8+KqzNTNOfF5nh0RPaJ5q+v6VVmiW2YUkJBf4Km3nql3bgMIjbTe
+         9zeabWOG/7pVCvYHaX+5dh+gwWUGDqH/oIM5qYAO612Gnf9GrbhY4VEpKS0P6cA3GC3U
+         A2Qg==
+X-Gm-Message-State: AOAM530qQQyuHFc+H4qtCua1fATn5lXn4ifkj18th6AFRf3YmkCYmmfl
+        pEJ0BcdNoYBf8STHw2/Kee5mUk4zFotlR/f0LKE=
+X-Google-Smtp-Source: ABdhPJxlh6DW0WITP5HCozbR6iBRVIh8Cgnl5UHJUnk65FQPQ/9TS+t8xXDV2Gmdxn5HNi4XWlqIrc32l0TnSWanVgI=
+X-Received: by 2002:aca:3bc3:: with SMTP id i186mr2375999oia.102.1624439727422;
+ Wed, 23 Jun 2021 02:15:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YNKdqFNSrSBXVNqo@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-ORIG-GUID: I7aKClS1vRGlNSeVEBx9mrKH_DDUNGnO
-X-Proofpoint-GUID: I7aKClS1vRGlNSeVEBx9mrKH_DDUNGnO
+References: <CAFCwf11jOnewkbLuxUESswCJpyo7C0ovZj80UrnwUOZkPv2JYQ@mail.gmail.com>
+ <20210621232912.GK1096940@ziepe.ca> <d358c740-fd3a-9ecd-7001-676e2cb44ec9@gmail.com>
+ <CAFCwf11h_Nj_GEdCdeTzO5jgr-Y9em+W-v_pYUfz64i5Ac25yg@mail.gmail.com>
+ <20210622120142.GL1096940@ziepe.ca> <d497b0a2-897e-adff-295c-cf0f4ff93cb4@amd.com>
+ <20210622152343.GO1096940@ziepe.ca> <3fabe8b7-7174-bf49-5ffe-26db30968a27@amd.com>
+ <20210622154027.GS1096940@ziepe.ca> <09df4a03-d99c-3949-05b2-8b49c71a109e@amd.com>
+ <20210622160538.GT1096940@ziepe.ca> <d600a638-9e55-6249-b574-0986cd5cea1e@gmail.com>
+In-Reply-To: <d600a638-9e55-6249-b574-0986cd5cea1e@gmail.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Wed, 23 Jun 2021 12:14:59 +0300
+Message-ID: <CAFCwf12JXQ6XnQEPM6wa2ut8dV8VBLTJE_popZT2GTVVra5CLQ@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH v3 1/2] habanalabs: define uAPI to export
+ FD for DMA-BUF
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Tomer Tayar <ttayar@habana.ai>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 05:34:16AM +0300, Laurent Pinchart wrote:
-> 
-> Do you think an annotation could still help, by making it explicit in
-> headers whether a function returns NULL or an error pointer, thus
-> helping developers get it right in the first place ?
+On Wed, Jun 23, 2021 at 11:57 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 22.06.21 um 18:05 schrieb Jason Gunthorpe:
+> > On Tue, Jun 22, 2021 at 05:48:10PM +0200, Christian K=C3=B6nig wrote:
+> >> Am 22.06.21 um 17:40 schrieb Jason Gunthorpe:
+> >>> On Tue, Jun 22, 2021 at 05:29:01PM +0200, Christian K=C3=B6nig wrote:
+> >>>> [SNIP]
+> >>>> No absolutely not. NVidia GPUs work exactly the same way.
+> >>>>
+> >>>> And you have tons of similar cases in embedded and SoC systems where
+> >>>> intermediate memory between devices isn't directly addressable with =
+the CPU.
+> >>> None of that is PCI P2P.
+> >>>
+> >>> It is all some specialty direct transfer.
+> >>>
+> >>> You can't reasonably call dma_map_resource() on non CPU mapped memory
+> >>> for instance, what address would you pass?
+> >>>
+> >>> Do not confuse "I am doing transfers between two HW blocks" with PCI
+> >>> Peer to Peer DMA transfers - the latter is a very narrow subcase.
+> >>>
+> >>>> No, just using the dma_map_resource() interface.
+> >>> Ik, but yes that does "work". Logan's series is better.
+> >> No it isn't. It makes devices depend on allocating struct pages for th=
+eir
+> >> BARs which is not necessary nor desired.
+> > Which dramatically reduces the cost of establishing DMA mappings, a
+> > loop of dma_map_resource() is very expensive.
+>
+> Yeah, but that is perfectly ok. Our BAR allocations are either in chunks
+> of at least 2MiB or only a single 4KiB page.
+>
+> Oded might run into more performance problems, but those DMA-buf
+> mappings are usually set up only once.
+>
+> >> How do you prevent direct I/O on those pages for example?
+> > GUP fails.
+>
+> At least that is calming.
+>
+> >> Allocating a struct pages has their use case, for example for exposing=
+ VRAM
+> >> as memory for HMM. But that is something very specific and should not =
+limit
+> >> PCIe P2P DMA in general.
+> > Sure, but that is an ideal we are far from obtaining, and nobody wants
+> > to work on it prefering to do hacky hacky like this.
+> >
+> > If you believe in this then remove the scatter list from dmabuf, add a
+> > new set of dma_map* APIs to work on physical addresses and all the
+> > other stuff needed.
+>
+> Yeah, that's what I totally agree on. And I actually hoped that the new
+> P2P work for PCIe would go into that direction, but that didn't
+> materialized.
+>
+> But allocating struct pages for PCIe BARs which are essentially
+> registers and not memory is much more hacky than the dma_resource_map()
+> approach.
+>
+> To re-iterate why I think that having struct pages for those BARs is a
+> bad idea: Our doorbells on AMD GPUs are write and read pointers for ring
+> buffers.
+>
+> When you write to the BAR you essentially tell the firmware that you
+> have either filled the ring buffer or read a bunch of it. This in turn
+> then triggers an interrupt in the hardware/firmware which was eventually
+> asleep.
+>
+> By using PCIe P2P we want to avoid the round trip to the CPU when one
+> device has filled the ring buffer and another device must be woken up to
+> process it.
+>
+> Think of it as MSI-X in reverse and allocating struct pages for those
+> BARs just to work around the shortcomings of the DMA API makes no sense
+> at all to me.
+We would also like to do that *in the future*.
+In Gaudi it will never be supported (due to security limitations) but
+I definitely see it happening in future ASICs.
 
-Not really.  It wouldn't help with Smatch.  I really think error pointer
-bugs are handled pretty well currently.  Sometimes I have seen syzbot
-find them before the static checkers but I don't see them affecting
-users and production kernels.
+Oded
 
-There are few other things that Smatch looks for like passing positives,
-valid pointers or NULLs to PTR_ERR().  I do wish that when functions
-return a mix of negative error codes, 0 and 1 that they had comment
-explaining what the 1 means.
-
-regards,
-dan carpenter
+>
+>
+> We also do have the VRAM BAR, and for HMM we do allocate struct pages
+> for the address range exposed there. But this is a different use case.
+>
+> Regards,
+> Christian.
+>
+> >
+> > Otherwise, we have what we have and drivers don't get to opt out. This
+> > is why the stuff in AMDGPU was NAK'd.
+> >
+> > Jason
+>
