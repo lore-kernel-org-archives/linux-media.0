@@ -2,123 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08D7DC48BC2
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:15:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4479C48BE5
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:19:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6D446115A
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:15:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88618601FF
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:19:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhFWPRb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Jun 2021 11:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbhFWPR3 (ORCPT
+        id S231310AbhFWPV7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Jun 2021 11:21:59 -0400
+Received: from mslow1.mail.gandi.net ([217.70.178.240]:42337 "EHLO
+        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230430AbhFWPV6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:17:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1942EC061574
-        for <linux-media@vger.kernel.org>; Wed, 23 Jun 2021 08:15:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bg14so4564177ejb.9
-        for <linux-media@vger.kernel.org>; Wed, 23 Jun 2021 08:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DvsYEcXsNWTy6Jnkq47KIklkbgVvy5KtMShh7FtY3u0=;
-        b=WlyCtxxrit0F13PB5LKVc4W8ioTDxZGoz0BDxhp5ADy/+x0DPfJAboMCXqIWhMcdLM
-         fG/7Lud5ltzga56OxZ3HjQOTY4JYgDVcvHd5L5Es73O2G10XryTWLzzy68cbS0Bc9LMT
-         Vy9D6jY1Dy+wQUgKscUFQz8BiTIsqJcWTtFOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DvsYEcXsNWTy6Jnkq47KIklkbgVvy5KtMShh7FtY3u0=;
-        b=IQf6LSw7Ul9eTUsgoe+ydlwYsU1yBaQk3KeZ1pD9GjYe0NRJBCaMeuHGImDHKvhTYA
-         PfokmHfFEQSS4mhFCsN2NKpOkMcnWhfR/z6X4KjW6pqt7inFGXtvhitqqh8krkgeNDwp
-         LTdhkxXewblLmEt9znYg8GBQuy+aW6V2iWchhyNNxsA63uH3LZHLaTHiP2+/UIDbaAdI
-         XaDcs+tzyj8CWB4QWIpzpli9/xaGK7j50V7FBvVIpPhKdrdlFJ/QSuY4DphjiuXDQAix
-         pOMmDq/H8lg0jA/WfACMOcu9Hf96PXduSuccjy39Duzpx2g/RdVQTZscy4mxpZW4nfXh
-         pz/g==
-X-Gm-Message-State: AOAM530j5vAd1dfg7aRle6C/s6slnmMmB/7rbsggvXfyIB+fW4VxdwK+
-        gbc/qqZExMqaHESd9KdXs7ZLIQ==
-X-Google-Smtp-Source: ABdhPJzKLxUo3F8LpT0py8NX3d9PVLeW21ZVMvCiRMqKaQMl+9VP6WwlxqUsTydvPwu4FdZbDj+/aA==
-X-Received: by 2002:a17:906:2608:: with SMTP id h8mr531968ejc.380.1624461309756;
-        Wed, 23 Jun 2021 08:15:09 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id h6sm192144edj.91.2021.06.23.08.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 08:15:09 -0700 (PDT)
-Date:   Wed, 23 Jun 2021 17:15:07 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH 01/15] dma-resv: Fix kerneldoc
-Message-ID: <YNNP+0YuiqsBxpZK@phenom.ffwll.local>
-References: <20210622165511.3169559-1-daniel.vetter@ffwll.ch>
- <20210622165511.3169559-2-daniel.vetter@ffwll.ch>
- <87f6529c-caf0-6e4b-6506-b0e2d1a0f9e0@amd.com>
+        Wed, 23 Jun 2021 11:21:58 -0400
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7EF1BD28B3
+        for <linux-media@vger.kernel.org>; Wed, 23 Jun 2021 15:12:39 +0000 (UTC)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 145C4FF80B;
+        Wed, 23 Jun 2021 15:12:13 +0000 (UTC)
+Date:   Wed, 23 Jun 2021 17:13:03 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>
+Subject: Re: [PATCH 2/6] Documentation: media: Fix v4l2-async kerneldoc syntax
+Message-ID: <20210623151303.k5vb7yu7w2zwerqm@uno.localdomain>
+References: <20210622112200.13914-1-sakari.ailus@linux.intel.com>
+ <20210622112200.13914-3-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87f6529c-caf0-6e4b-6506-b0e2d1a0f9e0@amd.com>
-X-Operating-System: Linux phenom 5.10.0-7-amd64 
+In-Reply-To: <20210622112200.13914-3-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 10:31:18AM +0200, Christian König wrote:
-> Am 22.06.21 um 18:54 schrieb Daniel Vetter:
-> > Oversight from
-> > 
-> > commit 6edbd6abb783d54f6ac4c3ed5cd9e50cff6c15e9
-> > Author: Christian König <christian.koenig@amd.com>
-> > Date:   Mon May 10 16:14:09 2021 +0200
-> > 
-> >      dma-buf: rename and cleanup dma_resv_get_excl v3
-> > 
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > Cc: "Christian König" <christian.koenig@amd.com>
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linaro-mm-sig@lists.linaro.org
-> 
-> Reviewed-by: Christian König <christian.koenig@amd.com>
+Hi Sakari,
 
-Pushed to drm-misc-next.
--Daniel
+On Tue, Jun 22, 2021 at 02:21:56PM +0300, Sakari Ailus wrote:
+> Fix kerneldoc syntax in v4l2-async. The references were not produced
+> correctly.
+>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-> 
-> > ---
-> >   include/linux/dma-resv.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-> > index 562b885cf9c3..e1ca2080a1ff 100644
-> > --- a/include/linux/dma-resv.h
-> > +++ b/include/linux/dma-resv.h
-> > @@ -212,7 +212,7 @@ static inline void dma_resv_unlock(struct dma_resv *obj)
-> >   }
-> >   /**
-> > - * dma_resv_exclusive - return the object's exclusive fence
-> > + * dma_resv_excl_fence - return the object's exclusive fence
-> >    * @obj: the reservation object
-> >    *
-> >    * Returns the exclusive fence (if any). Caller must either hold the objects
-> 
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks
+  j
+
+> ---
+>  include/media/v4l2-async.h | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> index 5b275a845c20..fa4901162663 100644
+> --- a/include/media/v4l2-async.h
+> +++ b/include/media/v4l2-async.h
+> @@ -129,11 +129,11 @@ void v4l2_async_debug_init(struct dentry *debugfs_dir);
+>   *
+>   * This function initializes the notifier @asd_list. It must be called
+>   * before adding a subdevice to a notifier, using one of:
+> - * @v4l2_async_notifier_add_fwnode_remote_subdev,
+> - * @v4l2_async_notifier_add_fwnode_subdev,
+> - * @v4l2_async_notifier_add_i2c_subdev,
+> - * @__v4l2_async_notifier_add_subdev or
+> - * @v4l2_async_notifier_parse_fwnode_endpoints.
+> + * v4l2_async_notifier_add_fwnode_remote_subdev(),
+> + * v4l2_async_notifier_add_fwnode_subdev(),
+> + * v4l2_async_notifier_add_i2c_subdev(),
+> + * __v4l2_async_notifier_add_subdev() or
+> + * v4l2_async_notifier_parse_fwnode_endpoints().
+>   */
+>  void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+>
+> @@ -145,9 +145,9 @@ void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+>   * @asd: pointer to &struct v4l2_async_subdev
+>   *
+>   * \warning: Drivers should avoid using this function and instead use one of:
+> - * @v4l2_async_notifier_add_fwnode_subdev,
+> - * @v4l2_async_notifier_add_fwnode_remote_subdev or
+> - * @v4l2_async_notifier_add_i2c_subdev.
+> + * v4l2_async_notifier_add_fwnode_subdev(),
+> + * v4l2_async_notifier_add_fwnode_remote_subdev() or
+> + * v4l2_async_notifier_add_i2c_subdev().
+>   *
+>   * Call this function before registering a notifier to link the provided @asd to
+>   * the notifiers master @asd_list. The @asd must be allocated with k*alloc() as
+> @@ -200,7 +200,7 @@ __v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif
+>   * function also gets a reference of the fwnode which is released later at
+>   * notifier cleanup time.
+>   *
+> - * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
+> + * This is just like v4l2_async_notifier_add_fwnode_subdev(), but with the
+>   * exception that the fwnode refers to a local endpoint, not the remote one.
+>   */
+>  #define v4l2_async_notifier_add_fwnode_remote_subdev(notifier, ep, type) \
+> @@ -265,13 +265,13 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
+>   * sub-devices allocated for the purposes of the notifier but not the notifier
+>   * itself. The user is responsible for calling this function to clean up the
+>   * notifier after calling
+> - * @v4l2_async_notifier_add_fwnode_remote_subdev,
+> - * @v4l2_async_notifier_add_fwnode_subdev,
+> - * @v4l2_async_notifier_add_i2c_subdev,
+> - * @__v4l2_async_notifier_add_subdev or
+> - * @v4l2_async_notifier_parse_fwnode_endpoints.
+> + * v4l2_async_notifier_add_fwnode_remote_subdev(),
+> + * v4l2_async_notifier_add_fwnode_subdev(),
+> + * v4l2_async_notifier_add_i2c_subdev(),
+> + * __v4l2_async_notifier_add_subdev() or
+> + * v4l2_async_notifier_parse_fwnode_endpoints().
+>   *
+> - * There is no harm from calling v4l2_async_notifier_cleanup in other
+> + * There is no harm from calling v4l2_async_notifier_cleanup() in other
+>   * cases as long as its memory has been zeroed after it has been
+>   * allocated.
+>   */
+> --
+> 2.30.2
+>
