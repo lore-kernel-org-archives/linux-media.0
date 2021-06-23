@@ -7,50 +7,57 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4479C48BE5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC76C4743C
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:22:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88618601FF
-	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:19:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA9E26115A
+	for <linux-media@archiver.kernel.org>; Wed, 23 Jun 2021 15:22:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbhFWPV7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Jun 2021 11:21:59 -0400
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:42337 "EHLO
+        id S230243AbhFWPYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Jun 2021 11:24:47 -0400
+Received: from mslow1.mail.gandi.net ([217.70.178.240]:32873 "EHLO
         mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbhFWPV6 (ORCPT
+        with ESMTP id S229523AbhFWPYq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:21:58 -0400
+        Wed, 23 Jun 2021 11:24:46 -0400
 Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7EF1BD28B3
-        for <linux-media@vger.kernel.org>; Wed, 23 Jun 2021 15:12:39 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4F744D291F
+        for <linux-media@vger.kernel.org>; Wed, 23 Jun 2021 15:14:05 +0000 (UTC)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 145C4FF80B;
-        Wed, 23 Jun 2021 15:12:13 +0000 (UTC)
-Date:   Wed, 23 Jun 2021 17:13:03 +0200
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id E7E23FF806;
+        Wed, 23 Jun 2021 15:13:42 +0000 (UTC)
+Date:   Wed, 23 Jun 2021 17:14:32 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     linux-media@vger.kernel.org,
         Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: Re: [PATCH 2/6] Documentation: media: Fix v4l2-async kerneldoc syntax
-Message-ID: <20210623151303.k5vb7yu7w2zwerqm@uno.localdomain>
+Subject: Re: [PATCH 5/6] media: rcar-vin: Remove explicit device availability
+ check
+Message-ID: <20210623151432.xoupeveqgd6hswzz@uno.localdomain>
 References: <20210622112200.13914-1-sakari.ailus@linux.intel.com>
- <20210622112200.13914-3-sakari.ailus@linux.intel.com>
+ <20210622112200.13914-6-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210622112200.13914-3-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210622112200.13914-6-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Sakari,
 
-On Tue, Jun 22, 2021 at 02:21:56PM +0300, Sakari Ailus wrote:
-> Fix kerneldoc syntax in v4l2-async. The references were not produced
-> correctly.
+On Tue, Jun 22, 2021 at 02:21:59PM +0300, Sakari Ailus wrote:
+> From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 >
+> The fwnode is retrieved using fwnode_graph_get_endpoint_by_id() without
+> the FWNODE_GRAPH_DEVICE_DISABLED flag set. So there is no need to
+> explicitly check if the fwnode is available as it always will be when
+> the check is performed, remove it.
+>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
@@ -59,72 +66,27 @@ Thanks
   j
 
 > ---
->  include/media/v4l2-async.h | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+>  drivers/media/platform/rcar-vin/rcar-core.c | 7 -------
+>  1 file changed, 7 deletions(-)
 >
-> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-> index 5b275a845c20..fa4901162663 100644
-> --- a/include/media/v4l2-async.h
-> +++ b/include/media/v4l2-async.h
-> @@ -129,11 +129,11 @@ void v4l2_async_debug_init(struct dentry *debugfs_dir);
->   *
->   * This function initializes the notifier @asd_list. It must be called
->   * before adding a subdevice to a notifier, using one of:
-> - * @v4l2_async_notifier_add_fwnode_remote_subdev,
-> - * @v4l2_async_notifier_add_fwnode_subdev,
-> - * @v4l2_async_notifier_add_i2c_subdev,
-> - * @__v4l2_async_notifier_add_subdev or
-> - * @v4l2_async_notifier_parse_fwnode_endpoints.
-> + * v4l2_async_notifier_add_fwnode_remote_subdev(),
-> + * v4l2_async_notifier_add_fwnode_subdev(),
-> + * v4l2_async_notifier_add_i2c_subdev(),
-> + * __v4l2_async_notifier_add_subdev() or
-> + * v4l2_async_notifier_parse_fwnode_endpoints().
->   */
->  void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+> index 3b7052ff7117..a24aeda37e74 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-core.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
+> @@ -834,13 +834,6 @@ static int rvin_mc_parse_of(struct rvin_dev *vin, unsigned int id)
+>  		goto out;
+>  	}
 >
-> @@ -145,9 +145,9 @@ void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
->   * @asd: pointer to &struct v4l2_async_subdev
->   *
->   * \warning: Drivers should avoid using this function and instead use one of:
-> - * @v4l2_async_notifier_add_fwnode_subdev,
-> - * @v4l2_async_notifier_add_fwnode_remote_subdev or
-> - * @v4l2_async_notifier_add_i2c_subdev.
-> + * v4l2_async_notifier_add_fwnode_subdev(),
-> + * v4l2_async_notifier_add_fwnode_remote_subdev() or
-> + * v4l2_async_notifier_add_i2c_subdev().
->   *
->   * Call this function before registering a notifier to link the provided @asd to
->   * the notifiers master @asd_list. The @asd must be allocated with k*alloc() as
-> @@ -200,7 +200,7 @@ __v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier *notif
->   * function also gets a reference of the fwnode which is released later at
->   * notifier cleanup time.
->   *
-> - * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
-> + * This is just like v4l2_async_notifier_add_fwnode_subdev(), but with the
->   * exception that the fwnode refers to a local endpoint, not the remote one.
->   */
->  #define v4l2_async_notifier_add_fwnode_remote_subdev(notifier, ep, type) \
-> @@ -265,13 +265,13 @@ void v4l2_async_notifier_unregister(struct v4l2_async_notifier *notifier);
->   * sub-devices allocated for the purposes of the notifier but not the notifier
->   * itself. The user is responsible for calling this function to clean up the
->   * notifier after calling
-> - * @v4l2_async_notifier_add_fwnode_remote_subdev,
-> - * @v4l2_async_notifier_add_fwnode_subdev,
-> - * @v4l2_async_notifier_add_i2c_subdev,
-> - * @__v4l2_async_notifier_add_subdev or
-> - * @v4l2_async_notifier_parse_fwnode_endpoints.
-> + * v4l2_async_notifier_add_fwnode_remote_subdev(),
-> + * v4l2_async_notifier_add_fwnode_subdev(),
-> + * v4l2_async_notifier_add_i2c_subdev(),
-> + * __v4l2_async_notifier_add_subdev() or
-> + * v4l2_async_notifier_parse_fwnode_endpoints().
->   *
-> - * There is no harm from calling v4l2_async_notifier_cleanup in other
-> + * There is no harm from calling v4l2_async_notifier_cleanup() in other
->   * cases as long as its memory has been zeroed after it has been
->   * allocated.
->   */
+> -	if (!of_device_is_available(to_of_node(fwnode))) {
+> -		vin_dbg(vin, "OF device %pOF disabled, ignoring\n",
+> -			to_of_node(fwnode));
+> -		ret = -ENOTCONN;
+> -		goto out;
+> -	}
+> -
+>  	asd = v4l2_async_nf_add_fwnode(&vin->group->notifier, fwnode,
+>  				       struct v4l2_async_subdev);
+>  	if (IS_ERR(asd)) {
 > --
 > 2.30.2
 >
