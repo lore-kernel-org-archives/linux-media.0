@@ -2,78 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A42DC49EB7
-	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 19:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7817BC49EA7
+	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 19:23:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F68B6141A
-	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 19:23:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6205E61404
+	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 19:23:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbhFXTZa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Jun 2021 15:25:30 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48124 "EHLO
+        id S232920AbhFXTZ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Jun 2021 15:25:29 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48122 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbhFXTZY (ORCPT
+        with ESMTP id S232904AbhFXTZX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Jun 2021 15:25:24 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15OJMh2l089450;
-        Thu, 24 Jun 2021 14:22:43 -0500
+        Thu, 24 Jun 2021 15:25:23 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15OJMDxC089315;
+        Thu, 24 Jun 2021 14:22:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1624562563;
-        bh=pVOFEeZFA7vYQNY1cSs8WzQChlNhIdVwTzEBAtIu+8U=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GlArYuz4t8uzd71UZPl057SyVpB5x1f+XflA86XwPbxA/iqciFjJQxukfEJOrZGSl
-         WCaF2G4jFvY08j8pl283QDmkylAgfCkyLyWJN/keFSNdQzNLPAz92m97x02Gz1ZRxA
-         zsRB76OK4t76OKYMjPZN27F9A6JqFswhkBR3yrVo=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15OJMhMv028277
+        s=ti-com-17Q1; t=1624562533;
+        bh=VZ6m16c9xuSi2HlUS5J832ZblIHytqeoFVX8bO5xugw=;
+        h=From:To:CC:Subject:Date;
+        b=UMU2l/X1SJCcuzYuNTneRJhfXSeqwnO2q5ccMLc+LDkigT3HwfK9JtRcg2EQBg82I
+         88keoB9B/9eF+iABJBex9Bcu7VQZGbycbhhzRkDpQTeMnyXYcDZiT+pSg3g3+g1Bc0
+         pTFeS6s4131iSdAANEZeE6V0J5e0x7SRm4cpCNyw=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15OJMDlS085915
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Jun 2021 14:22:43 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 24 Jun 2021 14:22:13 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 24
- Jun 2021 14:22:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2021 14:22:13 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Thu, 24 Jun 2021 14:22:43 -0500
+ Frontend Transport; Thu, 24 Jun 2021 14:22:12 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15OJM14O120548;
-        Thu, 24 Jun 2021 14:22:37 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15OJM14G120548;
+        Thu, 24 Jun 2021 14:22:02 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Nikhil Devshatwar <nikhil.nd@ti.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Benoit Parrot <bparrot@ti.com>, Bert Vermeulen <bert@biot.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Benoit Parrot <bparrot@ti.com>,
+        Bert Vermeulen <bert@biot.com>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Helen Koike <helen.koike@collabora.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Martina Krasteva <martinax.krasteva@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Michael Tretter <m.tretter@pengutronix.de>,
         Mirela Rabulea <mirela.rabulea@nxp.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Qiushi Wu <wu000273@umn.edu>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Pratyush Yadav <p.yadav@ti.com>, Qiushi Wu <wu000273@umn.edu>,
+        Raag Jadav <raagjadav@gmail.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
-        Zou Wei <zou_wei@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>
-Subject: [PATCH v3 08/11] media: Re-structure TI platform drivers
-Date:   Fri, 25 Jun 2021 00:51:57 +0530
-Message-ID: <20210624192200.22559-9-p.yadav@ti.com>
+        Zou Wei <zou_wei@huawei.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH v3 00/11] CSI2RX support on J721E
+Date:   Fri, 25 Jun 2021 00:51:49 +0530
+Message-ID: <20210624192200.22559-1-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210624192200.22559-1-p.yadav@ti.com>
-References: <20210624192200.22559-1-p.yadav@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -82,48 +99,127 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ti-vpe/ sub-directory does not only contain the VPE-specific things.
-It also contains the CAL driver, which is a completely different
-subsystem. This is also not a good place to add new drivers for other TI
-platforms since they will all get mixed up.
+Hi,
 
-Separate the VPE and CAL parts into different sub-directories and rename
-the ti-vpe/ sub-directory to ti/. This is now the place where new TI
-platform drivers can be added.
+This series adds support for CSI2 capture on J721E. It includes some
+fixes to the Cadence CSI2RX driver, adds runtime PM support to OV5640
+driver, and finally adds the TI CSI2RX wrapper driver.
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+This series used to include the DPHY and DMA engine patches as well, but
+they have been split off to facilitate easier merging. Patch 3 is
+build-dependent on the DPHY series [0].
 
----
-Compile tested only. There should be no functional change.
+The DMA engine patch [1] can go in any order since that is only a run
+time dependency. Things probably won't work without it but it will still
+build fine.
+
+Tested on TI's J721E with OV5640 sensor.
+
+[0] https://patchwork.kernel.org/project/linux-phy/list/?series=506663&state=%2A&archive=both
+[1] https://patchwork.kernel.org/project/linux-dmaengine/patch/20210624182449.31164-1-p.yadav@ti.com/
 
 Changes in v3:
-- Add Tomi's R-by.
+- Clean up the logic in ov5640_s_stream() a bit.
+- Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync().
+- Rename the label error_pm to disable_pm.
+- Use v4l2_get_link_freq() to calculate pixel clock.
+- Move DMA related fields in struct ti_csi2rx_dma.
+- Protect DMA buffer queue with a spinlock to make sure the queue buffer
+  and DMA callback don't race on it.
+- Track the current DMA state. It might go idle because of a lack of
+  buffers. This state can be used to restart it if needed.
+- Do not include the current buffer in the pending queue. It is slightly
+  better modelling than leaving it at the head of the pending queue.
+- Use the buffer as the callback argument, and add a reference to csi in it.
+- If queueing a buffer to DMA fails, the buffer gets leaked and DMA gets
+  stalled with. Instead, report the error to vb2 and queue the next
+  buffer in the pending queue.
+- DMA gets stalled if we run out of buffers since the callback is the
+  only one that fires subsequent transfers and it is no longer being
+  called. Check for that when queueing buffers and restart DMA if
+  needed.
+- Do not put of node until we are done using the fwnode.
+- Set inital format to UYVY 640x480.
+- Add compatible: contains: const: cdns,csi2rx to allow SoC specific
+  compatible.
+- Add more constraints for data-lanes property.
 
 Changes in v2:
-- New in v2.
+- Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
+  calls to set PHY mode, etc. to make sure it is ready.
+- Use dmaengine_get_dma_device() instead of directly accessing
+  dma->device->dev.
+- Do not set dst_addr_width when configuring slave DMA.
+- Move to a separate subdir and rename to j721e-csi2rx.c
+- Convert compatible to ti,j721e-csi2rx.
+- Move to use Media Controller centric APIs.
+- Improve cleanup in probe when one of the steps fails.
+- Add colorspace to formats database.
+- Set hw_revision on media_device.
+- Move video device initialization to probe time instead of register time.
+- Rename to ti,j721e-csi2rx.yaml
+- Add an entry in MAINTAINERS.
+- Add a description for the binding.
+- Change compatible to ti,j721e-csi2rx to make it SoC specific.
+- Remove description from dmas, reg, power-domains.
+- Remove a limit of 2 from #address-cells and #size-cells.
+- Fix add ^ to csi-bridge subnode regex.
+- Make ranges mandatory.
+- Add unit address in example.
+- Add a reference to cdns,csi2rx in csi-bridge subnode.
+- Expand the example to include the csi-bridge subnode as well.
+- Re-order subject prefixes.
+- Convert OV5640 to use runtime PM and drop Cadence CSI2RX s_power patch.
+- Drop subdev call wrappers from cdns-csi2rx.
+- Move VPE and CAL to a separate subdir.
+- Rename ti-csi2rx.c to j721e-csi2rx.c
 
- MAINTAINERS                                              | 3 ++-
- drivers/media/platform/Makefile                          | 2 +-
- drivers/media/platform/ti/Makefile                       | 3 +++
- drivers/media/platform/ti/cal/Makefile                   | 3 +++
- drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c    | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal.c          | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal.h          | 0
- drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h     | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/Makefile       | 4 ----
- drivers/media/platform/{ti-vpe => ti/vpe}/csc.c          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/csc.h          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc.c           | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc.h           | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h     | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c        | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h        | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h   | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c          | 0
- drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h     | 0
- 20 files changed, 9 insertions(+), 6 deletions(-)
+Pratyush Yadav (11):
+  media: ov5640: Use runtime PM to control sensor power
+  media: cadence: csi2rx: Unregister v4l2 async notifier
+  media: cadence: csi2rx: Add external DPHY support
+  media: cadence: csi2rx: Soft reset the streams before starting capture
+  media: cadence: csi2rx: Set the STOP bit when stopping a stream
+  media: cadence: csi2rx: Fix stream data configuration
+  media: cadence: csi2rx: Populate subdev devnode
+  media: Re-structure TI platform drivers
+  media: ti: Add CSI2RX support for J721E
+  media: dt-bindings: Add DT bindings for TI J721E CSI2RX driver
+  media: dt-bindings: Convert Cadence CSI2RX binding to YAML
+
+ .../devicetree/bindings/media/cdns,csi2rx.txt | 100 --
+ .../bindings/media/cdns,csi2rx.yaml           | 169 +++
+ .../bindings/media/ti,j721e-csi2rx.yaml       | 101 ++
+ MAINTAINERS                                   |  10 +-
+ drivers/media/i2c/Kconfig                     |   2 +-
+ drivers/media/i2c/ov5640.c                    | 127 ++-
+ drivers/media/platform/Kconfig                |  12 +
+ drivers/media/platform/Makefile               |   2 +-
+ drivers/media/platform/cadence/cdns-csi2rx.c  | 189 +++-
+ drivers/media/platform/ti/Makefile            |   4 +
+ drivers/media/platform/ti/cal/Makefile        |   3 +
+ .../{ti-vpe => ti/cal}/cal-camerarx.c         |   0
+ .../platform/{ti-vpe => ti/cal}/cal-video.c   |   0
+ .../media/platform/{ti-vpe => ti/cal}/cal.c   |   0
+ .../media/platform/{ti-vpe => ti/cal}/cal.h   |   0
+ .../platform/{ti-vpe => ti/cal}/cal_regs.h    |   0
+ .../media/platform/ti/j721e-csi2rx/Makefile   |   2 +
+ .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 978 ++++++++++++++++++
+ .../platform/{ti-vpe => ti/vpe}/Makefile      |   4 -
+ .../media/platform/{ti-vpe => ti/vpe}/csc.c   |   0
+ .../media/platform/{ti-vpe => ti/vpe}/csc.h   |   0
+ .../media/platform/{ti-vpe => ti/vpe}/sc.c    |   0
+ .../media/platform/{ti-vpe => ti/vpe}/sc.h    |   0
+ .../platform/{ti-vpe => ti/vpe}/sc_coeff.h    |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpdma.c |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpdma.h |   0
+ .../platform/{ti-vpe => ti/vpe}/vpdma_priv.h  |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpe.c   |   0
+ .../platform/{ti-vpe => ti/vpe}/vpe_regs.h    |   0
+ 29 files changed, 1533 insertions(+), 170 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
  create mode 100644 drivers/media/platform/ti/Makefile
  create mode 100644 drivers/media/platform/ti/cal/Makefile
  rename drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c (100%)
@@ -131,6 +227,8 @@ Changes in v2:
  rename drivers/media/platform/{ti-vpe => ti/cal}/cal.c (100%)
  rename drivers/media/platform/{ti-vpe => ti/cal}/cal.h (100%)
  rename drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h (100%)
+ create mode 100644 drivers/media/platform/ti/j721e-csi2rx/Makefile
+ create mode 100644 drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
  rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (78%)
  rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
  rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
@@ -143,126 +241,6 @@ Changes in v2:
  rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
  rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9ae47618c857..5dad98f69683 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18584,7 +18584,8 @@ W:	http://linuxtv.org/
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	Documentation/devicetree/bindings/media/ti,cal.yaml
- F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
--F:	drivers/media/platform/ti-vpe/
-+F:	drivers/media/platform/ti/cal/
-+F:	drivers/media/platform/ti/vpe/
- 
- TI WILINK WIRELESS DRIVERS
- L:	linux-wireless@vger.kernel.org
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 73ce083c2fc6..26d15b377a79 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -15,7 +15,7 @@ obj-$(CONFIG_VIDEO_PXA27x)	+= pxa_camera.o
- 
- obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
- 
--obj-y	+= ti-vpe/
-+obj-y	+= ti/
- 
- obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
- obj-$(CONFIG_VIDEO_CODA)		+= coda/
-diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
-new file mode 100644
-index 000000000000..bbc737ccbbea
---- /dev/null
-+++ b/drivers/media/platform/ti/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-y += cal/
-+obj-y += vpe/
-diff --git a/drivers/media/platform/ti/cal/Makefile b/drivers/media/platform/ti/cal/Makefile
-new file mode 100644
-index 000000000000..45ac35585f0b
---- /dev/null
-+++ b/drivers/media/platform/ti/cal/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
-+ti-cal-y := cal.o cal-camerarx.o cal-video.o
-diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal-camerarx.c
-rename to drivers/media/platform/ti/cal/cal-camerarx.c
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal-video.c
-rename to drivers/media/platform/ti/cal/cal-video.c
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti/cal/cal.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal.c
-rename to drivers/media/platform/ti/cal/cal.c
-diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti/cal/cal.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal.h
-rename to drivers/media/platform/ti/cal/cal.h
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti/cal/cal_regs.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/cal_regs.h
-rename to drivers/media/platform/ti/cal/cal_regs.h
-diff --git a/drivers/media/platform/ti-vpe/Makefile b/drivers/media/platform/ti/vpe/Makefile
-similarity index 78%
-rename from drivers/media/platform/ti-vpe/Makefile
-rename to drivers/media/platform/ti/vpe/Makefile
-index ad624056e039..3fadfe084f87 100644
---- a/drivers/media/platform/ti-vpe/Makefile
-+++ b/drivers/media/platform/ti/vpe/Makefile
-@@ -10,7 +10,3 @@ ti-sc-y := sc.o
- ti-csc-y := csc.o
- 
- ccflags-$(CONFIG_VIDEO_TI_VPE_DEBUG) += -DDEBUG
--
--obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
--
--ti-cal-y := cal.o cal-camerarx.o cal-video.o
-diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti/vpe/csc.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/csc.c
-rename to drivers/media/platform/ti/vpe/csc.c
-diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti/vpe/csc.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/csc.h
-rename to drivers/media/platform/ti/vpe/csc.h
-diff --git a/drivers/media/platform/ti-vpe/sc.c b/drivers/media/platform/ti/vpe/sc.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc.c
-rename to drivers/media/platform/ti/vpe/sc.c
-diff --git a/drivers/media/platform/ti-vpe/sc.h b/drivers/media/platform/ti/vpe/sc.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc.h
-rename to drivers/media/platform/ti/vpe/sc.h
-diff --git a/drivers/media/platform/ti-vpe/sc_coeff.h b/drivers/media/platform/ti/vpe/sc_coeff.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/sc_coeff.h
-rename to drivers/media/platform/ti/vpe/sc_coeff.h
-diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti/vpe/vpdma.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma.c
-rename to drivers/media/platform/ti/vpe/vpdma.c
-diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti/vpe/vpdma.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma.h
-rename to drivers/media/platform/ti/vpe/vpdma.h
-diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti/vpe/vpdma_priv.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpdma_priv.h
-rename to drivers/media/platform/ti/vpe/vpdma_priv.h
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpe.c
-rename to drivers/media/platform/ti/vpe/vpe.c
-diff --git a/drivers/media/platform/ti-vpe/vpe_regs.h b/drivers/media/platform/ti/vpe/vpe_regs.h
-similarity index 100%
-rename from drivers/media/platform/ti-vpe/vpe_regs.h
-rename to drivers/media/platform/ti/vpe/vpe_regs.h
 -- 
 2.30.0
 
