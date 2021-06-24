@@ -7,20 +7,20 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ED11C49EAF
-	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 08:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFE2EC49EA5
+	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 08:40:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8470613EC
-	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 08:40:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA9FD613D8
+	for <linux-media@archiver.kernel.org>; Thu, 24 Jun 2021 08:40:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbhFXInQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Jun 2021 04:43:16 -0400
-Received: from retiisi.eu ([95.216.213.190]:51526 "EHLO hillosipuli.retiisi.eu"
+        id S229902AbhFXInO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Jun 2021 04:43:14 -0400
+Received: from retiisi.eu ([95.216.213.190]:51506 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229884AbhFXInM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S229878AbhFXInM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 24 Jun 2021 04:43:12 -0400
 Received: from lanttu.localdomain (unknown [192.168.2.193])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 5AA53634C8F;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 36619634C8D;
         Thu, 24 Jun 2021 11:40:32 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
@@ -28,43 +28,94 @@ Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Andrey Konovalov <andrey.konovalov@linaro.org>,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v3 6/6] Documentation: v4l: Fix V4L2_CID_PIXEL_RATE documentation
-Date:   Thu, 24 Jun 2021 11:40:46 +0300
-Message-Id: <20210624084046.13136-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 4/6] media: v4l2-fwnode: Simplify v4l2_async_nf_parse_fwnode_endpoints()
+Date:   Thu, 24 Jun 2021 11:40:44 +0300
+Message-Id: <20210624084046.13136-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210624084046.13136-1-sakari.ailus@linux.intel.com>
 References: <20210624084046.13136-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The V4L2_CID_PIXEL_RATE is nowadays used to tell pixel sampling rate in
-the sub-device's pixel array, not the pixel rate over a link (for which it
-also becomes unfit with the addition of multiplexed streams later on). Fix
-this.
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
+There are only one user left of __v4l2_async_nf_parse_fwnode_ep()
+since [1], v4l2_async_nf_parse_fwnode_endpoints(). The two
+functions can be merged.
+
+The merge of the two highlights a dead code block conditioned by the
+argument 'has_port' that always is false and can therefor be removed.
+
+1. commit 0ae426ebd0dcef81 ("media: v4l2-fwnode: Remove v4l2_async_notifier_parse_fwnode_endpoints_by_port()")
+
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+[Sakari Ailus: Aligned some lines to opening parentheses.]
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
- .../userspace-api/media/v4l/ext-ctrls-image-process.rst         | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-fwnode.c | 31 +++++----------------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-index ed65fb594cc8..2b5a13dc843f 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-@@ -40,7 +40,7 @@ Image Process Control IDs
- .. _v4l2-cid-pixel-rate:
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index e5507501b0f3..00457e1e93f6 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -839,12 +839,11 @@ v4l2_async_nf_fwnode_parse_endpoint(struct device *dev,
+ 	return ret == -ENOTCONN ? 0 : ret;
+ }
  
- ``V4L2_CID_PIXEL_RATE (64-bit integer)``
--    Pixel rate in the source pads of the subdev. This control is
-+    Pixel sampling rate in the device's pixel array. This control is
-     read-only and its unit is pixels / second.
+-static int
+-__v4l2_async_nf_parse_fwnode_ep(struct device *dev,
+-				struct v4l2_async_notifier *notifier,
+-				size_t asd_struct_size, unsigned int port,
+-				bool has_port,
+-				parse_endpoint_func parse_endpoint)
++int
++v4l2_async_nf_parse_fwnode_endpoints(struct device *dev,
++				     struct v4l2_async_notifier *notifier,
++				     size_t asd_struct_size,
++				     parse_endpoint_func parse_endpoint)
+ {
+ 	struct fwnode_handle *fwnode;
+ 	int ret = 0;
+@@ -862,16 +861,6 @@ __v4l2_async_nf_parse_fwnode_ep(struct device *dev,
+ 		if (!is_available)
+ 			continue;
  
- ``V4L2_CID_TEST_PATTERN (menu)``
+-		if (has_port) {
+-			struct fwnode_endpoint ep;
+-
+-			ret = fwnode_graph_parse_endpoint(fwnode, &ep);
+-			if (ret)
+-				break;
+-
+-			if (ep.port != port)
+-				continue;
+-		}
+ 
+ 		ret = v4l2_async_nf_fwnode_parse_endpoint(dev, notifier,
+ 							  fwnode,
+@@ -885,16 +874,6 @@ __v4l2_async_nf_parse_fwnode_ep(struct device *dev,
+ 
+ 	return ret;
+ }
+-
+-int
+-v4l2_async_nf_parse_fwnode_endpoints(struct device *dev,
+-				     struct v4l2_async_notifier *notifier,
+-				     size_t asd_struct_size,
+-				     parse_endpoint_func parse_endpoint)
+-{
+-	return __v4l2_async_nf_parse_fwnode_ep(dev, notifier, asd_struct_size,
+-					       0, false, parse_endpoint);
+-}
+ EXPORT_SYMBOL_GPL(v4l2_async_nf_parse_fwnode_endpoints);
+ 
+ /*
 -- 
 2.30.2
 
