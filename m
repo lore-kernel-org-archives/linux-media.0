@@ -2,106 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D7CC11F68
-	for <linux-media@archiver.kernel.org>; Tue, 29 Jun 2021 12:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA59C11F69
+	for <linux-media@archiver.kernel.org>; Tue, 29 Jun 2021 15:55:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5337061D97
-	for <linux-media@archiver.kernel.org>; Tue, 29 Jun 2021 12:28:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37A5961D4D
+	for <linux-media@archiver.kernel.org>; Tue, 29 Jun 2021 15:55:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbhF2MbY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Jun 2021 08:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S233859AbhF2P5s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Jun 2021 11:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbhF2MbY (ORCPT
+        with ESMTP id S233786AbhF2P5s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:31:24 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D65C061760
-        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 05:28:57 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 9049A1F42F46
-Message-ID: <454371a3c93cf2fccad868fee431124429837f18.camel@collabora.com>
-Subject: Re: [PATCH 09/12] media: hantro: Enable H.264 on Rockchip VDPU2
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Alex Bee <knaerzche@gmail.com>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Heiko Stuebner <heiko@sntech.de>, maccraft123mc@gmail.com,
-        Chris Healy <cphealy@gmail.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>, kernel@collabora.com
-Date:   Tue, 29 Jun 2021 09:28:44 -0300
-In-Reply-To: <1979d843-129a-8b48-2926-0f50157974ec@gmail.com>
-References: <20210624182612.177969-1-ezequiel@collabora.com>
-         <20210624182612.177969-10-ezequiel@collabora.com>
-         <2ae869f3-7f3a-f184-93cc-61fca0f9022f@gmail.com>
-         <c882d9c4f9eacd9d0f82e6e4ce3b33c383087d8c.camel@collabora.com>
-         <1979d843-129a-8b48-2926-0f50157974ec@gmail.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 29 Jun 2021 11:57:48 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9BC061766
+        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 08:55:19 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id u8so13145108wrq.8
+        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 08:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WEojPjsV3ykyxbi9z7NRgZv6sToKhUFLAsfPvjr4z+E=;
+        b=kav40qXis5AYEd1L7EDM6xxJivVvxbNSKSq+CBd5s+18VHu75OqZrXoI+sY+3/1k6t
+         +00O8pauIDVVjBILhvdBPu4wUErbUhmbZermGLoCv9sB5xLLeUgW9PhBNqBhLLlJd4R0
+         eXT70pVBcNa+evB30t/7wTKlxa/kXzLRBdMu0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=WEojPjsV3ykyxbi9z7NRgZv6sToKhUFLAsfPvjr4z+E=;
+        b=EH44FZPwmXvWgJWYPn1U79A/HudVOfwBJolIE/kWsm28k+f5u+WWTkZVOchveSTmm3
+         PNClB3PMuKTB7R3lQr37IuFRTw7gtrTMa7ISd5+A2eLg8wHCebeSvUyZZCA8sgQXRGvM
+         SlNvrChUdvMZsOv7VXhhH1eh7artCn+oZxclixighJjL2Coa4E8E6IhLZYAn/a70f+G4
+         OtW3JoIqNftTsF+XuKTFbtHJGMCHuGRom3QFrFRAtat3PJh09x5Iu42VpMR2ftmdQTtB
+         6hmWod8IPqdwDhPuwKMh1LANayR6Ulme98vUBcg/hPjpQdf7C6KCNG7R82JjElDMdDEW
+         0pOA==
+X-Gm-Message-State: AOAM5318esbjIJQ4bwi6baLAJW3O5X9VaJSIJ3cgWED45H5pKGJuGEqw
+        bTrYaEwkzMR/0uhkjDAQ04We2A==
+X-Google-Smtp-Source: ABdhPJwy//RfOpOtuDUFzUPw0qGyBWCU1xYg2FxNtD+pBORPuM1k7hT2WqXFwV1cl1tJjWezk3iDOA==
+X-Received: by 2002:adf:f246:: with SMTP id b6mr8264853wrp.331.1624982118145;
+        Tue, 29 Jun 2021 08:55:18 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id t16sm4438422wrx.89.2021.06.29.08.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jun 2021 08:55:17 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 17:55:15 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH -next] <linux/dma-resv.h>: correct a function name in
+ kernel-doc
+Message-ID: <YNtCYyHXOrObRUDK@phenom.ffwll.local>
+Mail-Followup-To: Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+References: <20210628004012.6792-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210628004012.6792-1-rdunlap@infradead.org>
+X-Operating-System: Linux phenom 5.10.0-7-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alex,
-
-On Sat, 2021-06-26 at 10:33 +0200, Alex Bee wrote:
-> Hi Ezequiel,
+On Sun, Jun 27, 2021 at 05:40:12PM -0700, Randy Dunlap wrote:
+> Fix kernel-doc function name warning:
 > 
-> Am 26.06.21 um 02:46 schrieb Ezequiel Garcia:
-> > (Adding Nicolas)
-> > 
-> > Hi Alex,
-> > 
-> > On Fri, 2021-06-25 at 01:13 +0200, Alex Bee wrote:
-> > > Hi Ezequiel,
-> > > 
-> > > Am 24.06.21 um 20:26 schrieb Ezequiel Garcia:
-> > > > Given H.264 support for VDPU2 was just added, let's enable it.
-> > > > For now, this is only enabled on platform that don't have
-> > > > an RKVDEC core, such as RK3328.
-> > > Is there any reason, you do not want to enabe H.264 on RK3399? I know
-> > > H.264 can be done by by rkvdec already, but from what I understand that
-> > > shouldn't be an issue: The first decoder found that meets the
-> > > requirements will be taken.
-> > > 
-> > Thanks a lot the review.
-> > 
-> > I really doubt userspace stacks are readily supporting that strategy.
-> > 
-> > The first decoder device supporting the codec format will be selected,
-> > I doubt features such as profile and levels are checked to decide
-> > which decoder to use.
-> > 
-> > I'd rather play safe on the kernel side and avoid offering
-> > two competing devices for the same codec.
+> ../include/linux/dma-resv.h:227: warning: expecting prototype for dma_resv_exclusive(). Prototype was for dma_resv_excl_fence() instead
 > 
-> I wasn't aware of that. Current ffmpeg v4l2_request implementation seems 
-> to not do VIDIOC_ENUM_FRAMESIZES - so we might end up being able to 
-> decode up to 1920x1088 only if hantro decoder is picked/checked first.
+> Fixes: 6edbd6abb783d ("ma-buf: rename and cleanup dma_resv_get_excl v3")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linaro-mm-sig@lists.linaro.org
+
+Queued up, thanks for your patch (and the handy -next signifier in the
+patch tag). I think Christian had the fix for this already, but queued up
+in the next branch (for the 5.15 merge window, we're already prepping
+stuff there to avoid late feature additions for 5.14), so applied yours
+once more to the right tree.
+
+Cheers, Daniel
+
+> ---
+>  include/linux/dma-resv.h |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> --- linux-next-20210625.orig/include/linux/dma-resv.h
+> +++ linux-next-20210625/include/linux/dma-resv.h
+> @@ -212,7 +212,7 @@ static inline void dma_resv_unlock(struc
+>  }
+>  
+>  /**
+> - * dma_resv_exclusive - return the object's exclusive fence
+> + * dma_resv_excl_fence - return the object's exclusive fence
+>   * @obj: the reservation object
+>   *
+>   * Returns the exclusive fence (if any). Caller must either hold the objects
 
-Speaking of ffmpeg, now that MPEG-2, VP8 and H.264 control interfaces
-are stable, I think one of the next priorities would be to push Jonas'
-ffmpeg patches.
-
-It would be really cool if someone could take the lead on that front,
-as it would reduce kodi's out of tree stack, enable mpv, and so on.
 -- 
-Kindly,
-Ezequiel
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
