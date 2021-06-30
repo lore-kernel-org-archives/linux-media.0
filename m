@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 154F6C11F69
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AAC2C11F65
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:55:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2BEE61D07
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:55:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13AC061CFC
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:55:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbhF3I52 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Jun 2021 04:57:28 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54795 "EHLO
+        id S233690AbhF3I5i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Jun 2021 04:57:38 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55081 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233442AbhF3I51 (ORCPT
+        with ESMTP id S233442AbhF3I5h (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Jun 2021 04:57:27 -0400
-X-UUID: 29cf1156aba845008e04bd239f3e3bfd-20210630
-X-UUID: 29cf1156aba845008e04bd239f3e3bfd-20210630
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        Wed, 30 Jun 2021 04:57:37 -0400
+X-UUID: ff3354f5fc0b4bc3829834d708b10193-20210630
+X-UUID: ff3354f5fc0b4bc3829834d708b10193-20210630
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 628572867; Wed, 30 Jun 2021 16:52:59 +0800
+        with ESMTP id 1218654307; Wed, 30 Jun 2021 16:52:55 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
  mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 30 Jun 2021 16:52:58 +0800
+ 15.0.1497.2; Wed, 30 Jun 2021 16:52:53 +0800
 Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 30 Jun 2021 16:52:56 +0800
+ Transport; Wed, 30 Jun 2021 16:52:52 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tzung-Bi Shih <tzungbi@chromium.org>,
@@ -54,9 +54,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 3/3] media: mtk-vcodec: Add MT8195 H264 venc driver
-Date:   Wed, 30 Jun 2021 16:52:47 +0800
-Message-ID: <20210630085247.27554-4-irui.wang@mediatek.com>
+Subject: [PATCH 1/3] media: mtk-vcodec: Clean redundant encoder format definition
+Date:   Wed, 30 Jun 2021 16:52:45 +0800
+Message-ID: <20210630085247.27554-2-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210630085247.27554-1-irui.wang@mediatek.com>
 References: <20210630085247.27554-1-irui.wang@mediatek.com>
@@ -67,57 +67,128 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MT8195 venc driver's compatible and device private data.
+The supported capture/output formats don't depend on models,
+clean redundant definitions and nameing with type instead.
 
 Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h  |  1 +
- .../media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c  | 13 +++++++++++++
- 2 files changed, 14 insertions(+)
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  | 50 ++++++++-----------
+ 1 file changed, 20 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index c6c7672fecfb..3f83710b4fa5 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -304,6 +304,7 @@ enum mtk_chip {
- 	MTK_MT8173,
- 	MTK_MT8183,
- 	MTK_MT8192,
-+	MTK_MT8195,
- };
- 
- /**
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 4489a9744cd7..7b3e0ea4c410 100644
+index 45d1870c83dd..4489a9744cd7 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -428,6 +428,18 @@ static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
- 	.core_id = VENC_SYS,
+@@ -26,7 +26,7 @@
+ module_param(mtk_v4l2_dbg_level, int, S_IRUGO | S_IWUSR);
+ module_param(mtk_vcodec_dbg, bool, S_IRUGO | S_IWUSR);
+ 
+-static const struct mtk_video_fmt mtk_video_formats_output_mt8173[] = {
++static const struct mtk_video_fmt mtk_video_formats_output[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_NV12M,
+ 		.type = MTK_FMT_FRAME,
+@@ -49,7 +49,7 @@ static const struct mtk_video_fmt mtk_video_formats_output_mt8173[] = {
+ 	},
  };
  
-+static const struct mtk_vcodec_enc_pdata mt8195_pdata = {
-+	.chip = MTK_MT8195,
-+	.uses_ext = true,
+-static const struct mtk_video_fmt mtk_video_formats_capture_mt8173_avc[] =  {
++static const struct mtk_video_fmt mtk_video_formats_capture_h264[] =  {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_H264,
+ 		.type = MTK_FMT_ENC,
+@@ -57,7 +57,7 @@ static const struct mtk_video_fmt mtk_video_formats_capture_mt8173_avc[] =  {
+ 	},
+ };
+ 
+-static const struct mtk_video_fmt mtk_video_formats_capture_mt8173_vp8[] =  {
++static const struct mtk_video_fmt mtk_video_formats_capture_vp8[] =  {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP8,
+ 		.type = MTK_FMT_ENC,
+@@ -65,14 +65,6 @@ static const struct mtk_video_fmt mtk_video_formats_capture_mt8173_vp8[] =  {
+ 	},
+ };
+ 
+-static const struct mtk_video_fmt mtk_video_formats_capture_mt8183[] =  {
+-	{
+-		.fourcc = V4L2_PIX_FMT_H264,
+-		.type = MTK_FMT_ENC,
+-		.num_planes = 1,
+-	},
+-};
+-
+ /* Wake up context wait_queue */
+ static void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
+ {
+@@ -392,10 +384,10 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 
+ static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
+ 	.chip = MTK_MT8173,
+-	.capture_formats = mtk_video_formats_capture_mt8173_avc,
+-	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8173_avc),
+-	.output_formats = mtk_video_formats_output_mt8173,
+-	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
 +	.capture_formats = mtk_video_formats_capture_h264,
 +	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
 +	.output_formats = mtk_video_formats_output,
 +	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output),
-+	.min_bitrate = 64,
-+	.max_bitrate = 100000000,
-+	.core_id = VENC_SYS,
-+};
+ 	.min_bitrate = 1,
+ 	.max_bitrate = 4000000,
+ 	.core_id = VENC_SYS,
+@@ -403,10 +395,10 @@ static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
+ 
+ static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
+ 	.chip = MTK_MT8173,
+-	.capture_formats = mtk_video_formats_capture_mt8173_vp8,
+-	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8173_vp8),
+-	.output_formats = mtk_video_formats_output_mt8173,
+-	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
++	.capture_formats = mtk_video_formats_capture_vp8,
++	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_vp8),
++	.output_formats = mtk_video_formats_output,
++	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output),
+ 	.min_bitrate = 64,
+ 	.max_bitrate = 4000000,
+ 	.core_id = VENC_LT_SYS,
+@@ -415,11 +407,10 @@ static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
+ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
+ 	.chip = MTK_MT8183,
+ 	.uses_ext = true,
+-	.capture_formats = mtk_video_formats_capture_mt8183,
+-	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8183),
+-	/* MT8183 supports the same output formats as MT8173 */
+-	.output_formats = mtk_video_formats_output_mt8173,
+-	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
++	.capture_formats = mtk_video_formats_capture_h264,
++	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
++	.output_formats = mtk_video_formats_output,
++	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output),
+ 	.min_bitrate = 64,
+ 	.max_bitrate = 40000000,
+ 	.core_id = VENC_SYS,
+@@ -428,16 +419,15 @@ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
+ static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
+ 	.chip = MTK_MT8192,
+ 	.uses_ext = true,
+-	/* MT8192 supports the same capture formats as MT8183 */
+-	.capture_formats = mtk_video_formats_capture_mt8183,
+-	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_mt8183),
+-	/* MT8192 supports the same output formats as MT8173 */
+-	.output_formats = mtk_video_formats_output_mt8173,
+-	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output_mt8173),
++	.capture_formats = mtk_video_formats_capture_h264,
++	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
++	.output_formats = mtk_video_formats_output,
++	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output),
+ 	.min_bitrate = 64,
+ 	.max_bitrate = 100000000,
+ 	.core_id = VENC_SYS,
+ };
 +
  static const struct of_device_id mtk_vcodec_enc_match[] = {
  	{.compatible = "mediatek,mt8173-vcodec-enc",
  			.data = &mt8173_avc_pdata},
-@@ -435,6 +447,7 @@ static const struct of_device_id mtk_vcodec_enc_match[] = {
- 			.data = &mt8173_vp8_pdata},
- 	{.compatible = "mediatek,mt8183-vcodec-enc", .data = &mt8183_pdata},
- 	{.compatible = "mediatek,mt8192-vcodec-enc", .data = &mt8192_pdata},
-+	{.compatible = "mediatek,mt8195-vcodec-enc", .data = &mt8195_pdata},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
 -- 
 2.18.0
 
