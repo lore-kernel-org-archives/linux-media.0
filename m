@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B60C11F65
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:52:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE74C11F69
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:54:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5631861CF6
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:52:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B2DA6141C
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 08:54:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbhF3IzY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Jun 2021 04:55:24 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:54548 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233108AbhF3IzX (ORCPT
+        id S233586AbhF3I4g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Jun 2021 04:56:36 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54016 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233442AbhF3I4f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Jun 2021 04:55:23 -0400
-X-UUID: cdda37024e1b42239ab2059ef8be67c0-20210630
-X-UUID: cdda37024e1b42239ab2059ef8be67c0-20210630
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        Wed, 30 Jun 2021 04:56:35 -0400
+X-UUID: bb419acdd9294b0fb71c52028481caec-20210630
+X-UUID: bb419acdd9294b0fb71c52028481caec-20210630
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2013370090; Wed, 30 Jun 2021 16:52:52 +0800
+        with ESMTP id 1415061851; Wed, 30 Jun 2021 16:52:57 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 30 Jun 2021 16:52:51 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 30 Jun 2021 16:52:56 +0800
 Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 30 Jun 2021 16:52:49 +0800
+ Transport; Wed, 30 Jun 2021 16:52:54 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tzung-Bi Shih <tzungbi@chromium.org>,
@@ -54,10 +54,12 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 0/3] Support h264 encoder on MT8195
-Date:   Wed, 30 Jun 2021 16:52:44 +0800
-Message-ID: <20210630085247.27554-1-irui.wang@mediatek.com>
+Subject: [PATCH 2/3] dt-bindings: media: mtk-vcodec: Add binding for MT8195 VENC
+Date:   Wed, 30 Jun 2021 16:52:46 +0800
+Message-ID: <20210630085247.27554-3-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210630085247.27554-1-irui.wang@mediatek.com>
+References: <20210630085247.27554-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -65,18 +67,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MT8195 H264 venc driver
+Updates binding document for mt8192 encoder driver.
 
-Irui Wang (3):
-  media: mtk-vcodec: Clean redundant encoder format definition
-  dt-bindings: media: mtk-vcodec: Add binding for MT8195 VENC
-  media: mtk-vcodec: Add MT8195 H264 venc driver
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+ Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/media/mediatek-vcodec.txt        |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  | 63 ++++++++++---------
- 3 files changed, 35 insertions(+), 30 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+index ad1321e5a22d..de961699ba0a 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+@@ -10,6 +10,7 @@ Required properties:
+   "mediatek,mt8183-vcodec-enc" for MT8183 encoder.
+   "mediatek,mt8173-vcodec-dec" for MT8173 decoder.
+   "mediatek,mt8192-vcodec-enc" for MT8192 encoder.
++  "mediatek,mt8195-vcodec-enc" for MT8195 encoder.
+ - reg : Physical base address of the video codec registers and length of
+   memory mapped region.
+ - interrupts : interrupt number to the cpu.
 -- 
 2.18.0
 
