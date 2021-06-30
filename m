@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D4A4C11F67
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 01:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D682C11F6A
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 01:34:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D52CF61CE5
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 01:34:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 284BF61D92
+	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 01:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhF3Bg6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Jun 2021 21:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S232135AbhF3BhG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Jun 2021 21:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbhF3Bg6 (ORCPT
+        with ESMTP id S232042AbhF3BhD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Jun 2021 21:36:58 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C83C061760
-        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 18:34:30 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id w15so552024pgk.13
-        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 18:34:30 -0700 (PDT)
+        Tue, 29 Jun 2021 21:37:03 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8CC061760
+        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 18:34:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b1so559637pls.5
+        for <linux-media@vger.kernel.org>; Tue, 29 Jun 2021 18:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FBEInOJoYqxwrlE52K6MZcC340XktufPlx9tQHJv3jk=;
-        b=fpOTxwV4zxW4Q0vXTnzAdyWRKSNOkJ6Yt5nUdEs8+fAMn3XqRToSnVNet0pTIFnaQR
-         cCMSSrzMa51N8/Ca9p8l+jqocYP7FxLde/JNiiOXRZpFjYvUZvmjGetBCLP3kAsvmSTu
-         vPYFOQyaPT9Nc9Ch2RPF7gKN/31atj/e33ZaTm42GJBlu+dsply2TCWz1h9jDasglrK2
-         lxd+aDaz4eznt1K2MTO1ZUdHwqjfof/Z0YadmFAefD1MZJ0VnjY/1G99vVC7naW8Orzn
-         AsBMrloc8ZhRKOkpgR1aURI0ECgbQu8TPF0eYWu1KJ4Sq+UEo+4orwgB5DI31WQzdTTg
-         N9xQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7lwmLoDhSeUynyw9WpwUoeXd78SHIQUhC9+ggRtjsFY=;
+        b=HBlk9uLZFBTPmMPZXa1DY3yBqmvzmoLq9Ga/hS6DV3Y3+0uu6Cm9LR/zISXJR6fOeZ
+         2MV8mIa2ielnvbs7nQz61soPcBst2ko+p169WKQAV9uGEe4EwPZ9oOpXACSwlTTk3NFQ
+         O1vj4a+RurTq2Ka/FeTf/1mYe+EKjH3Jq+4//h3Wy3gMamx6gpGvk/jWd3dTZ/Ike12A
+         bGHPqmy85MbuzF4v5xM+psqE8xDBcv0VTT2gs6X/Y23lHNgsX92PZV+dt3XuZmZXFP/i
+         HqZ1uMOuBPYk+T8NWnglX/M0CeHZjgJEsocYYOa1vY6Fjat5gILcJ0r0gUdVM9GrsFB1
+         3ODA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FBEInOJoYqxwrlE52K6MZcC340XktufPlx9tQHJv3jk=;
-        b=fEGNwq1BajPrJAK7lzdA21y5NV5rryQ8GCzG0I0TYpSCwZI09yicD/QsfzVpe86+mo
-         AK8L7ftW9GVgBwdh8WdONBNXNxF/bAKgq44/MDA59WPlmalf6D+H85Hcit3vQY0+MfxD
-         InAVOPhODNxKh8qWyTApwiiDex/UwOYojgdEYVhD6wCv/skwqeOJ5i3LU5UH3ZcEUvQK
-         BxWvP3TCZUwkJ/7SwmVMv3FarmnwKkvgpqmT47/AhhFPDCkC3kLIpJbEsosnQL+OQOuH
-         Nz6on1E6o+BwqugfrqIulfvDqGuKcZqvT+fK+1R6zbSwjgEhCkIuYXxfwIWukRuXU8fn
-         bvQA==
-X-Gm-Message-State: AOAM531sjSyk4qlMCHwMF43pFwmLSIC/7tlHSzLvVjsMsDDK9eolj20H
-        iPS3fLghKq8/OW7Df1VwzFpYow==
-X-Google-Smtp-Source: ABdhPJzSoY1EJeRDCOfTvywVVy/GFDhxptRl0SIl647lxALfT485QBgs8oQza+YKOuAOTR5gyn9Lag==
-X-Received: by 2002:a63:5966:: with SMTP id j38mr30913446pgm.451.1625016870033;
-        Tue, 29 Jun 2021 18:34:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7lwmLoDhSeUynyw9WpwUoeXd78SHIQUhC9+ggRtjsFY=;
+        b=skhQNEd6mosLknzXs47QkqQqtWx25nWqT6OJX3cmEoluii6Mgii4OkpTw4mHYVIjJj
+         57Ea4toeyzDWJIQEQvZaZB/ByjdYpce3EJenb7i4verUXMgmOx3wEEKVwOId385crnii
+         XJGMdwWWIjM3d9YSLbuQmSkNizCYINg4lx5OhsdG+ETOgf307O9AdpP9CMTlM69a6+z5
+         PSG3WOcoOusZb39TptN9yfOEQcAAf5NN2YD3m0zfxXmUiiDYqYwdSoUb5gAcHYlbg6Ae
+         y1agIVGeYDgE+PQkIc5o+/CbLTDMZQet2sjl27zl0dnnGkFgnfksfw0b6cXzPfEAGrGP
+         9cQg==
+X-Gm-Message-State: AOAM530ToQQpJw15f2L1M/ThjlHZBrCDcNh4C4oyaO0GLdJPSrWoTxKB
+        bZkWX5D3Bm0tN1xJ2wWaMcEQIA==
+X-Google-Smtp-Source: ABdhPJxMWCmXP/0OjhKqFlMasVLKq7rLdoTzTd5HNImYqVgNkNOOmmOdq+gMPC9r1CKc6CFEJnq2fQ==
+X-Received: by 2002:a17:90a:5889:: with SMTP id j9mr36864843pji.234.1625016874317;
+        Tue, 29 Jun 2021 18:34:34 -0700 (PDT)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id g8sm20252901pja.14.2021.06.29.18.34.28
+        by smtp.gmail.com with ESMTPSA id g8sm20252901pja.14.2021.06.29.18.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 18:34:29 -0700 (PDT)
+        Tue, 29 Jun 2021 18:34:33 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -76,10 +76,12 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Simon Ser <contact@emersion.fr>,
         James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v9 0/5] Generic page pool & deferred freeing for system dmabuf hea
-Date:   Wed, 30 Jun 2021 01:34:16 +0000
-Message-Id: <20210630013421.735092-1-john.stultz@linaro.org>
+Subject: [PATCH v9 3/5] dma-buf: system_heap: Add drm pagepool support to system heap
+Date:   Wed, 30 Jun 2021 01:34:19 +0000
+Message-Id: <20210630013421.735092-4-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210630013421.735092-1-john.stultz@linaro.org>
+References: <20210630013421.735092-1-john.stultz@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -87,62 +89,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After an unfortunately long pause (covid work-schedule burnout),
-I wanted to revive and resubmit this series.
+Utilize the drm pagepool code to speed up allocation
+performance.
 
-As before, the point of this series is trying to add both a page
-pool as well as deferred-freeingto the DMA-BUF system heap to
-improve allocation performance (so that it can match or beat the
-old ION system heaps performance).
-
-The combination of the page pool along with deferred freeing
-allows us to offload page-zeroing out of the allocation hot
-path. This was done originally with ION and this patch series
-allows the DMA-BUF system heap to match ION's system heap
-allocation performance in a simple microbenchmark [1] (ION
-re-added to the kernel for comparision, running on an x86 vm
-image):
-
-./dmabuf-heap-bench -i 0 1 system
-Testing dmabuf system vs ion heaptype 0 (flags: 0x1)
----------------------------------------------
-dmabuf heap: alloc 4096 bytes 5000 times in 79314244 ns          15862 ns/call
-ion heap:    alloc 4096 bytes 5000 times in 107390769 ns         21478 ns/call
-dmabuf heap: alloc 1048576 bytes 5000 times in 259083419 ns      51816 ns/call
-ion heap:    alloc 1048576 bytes 5000 times in 340497344 ns      68099 ns/call
-dmabuf heap: alloc 8388608 bytes 5000 times in 2603105563 ns     520621 ns/call
-ion heap:    alloc 8388608 bytes 5000 times in 3613592860 ns     722718 ns/call
-dmabuf heap: alloc 33554432 bytes 5000 times in 12212492979 ns   2442498 ns/call
-ion heap:    alloc 33554432 bytes 5000 times in 14584157792 ns   2916831 ns/call
-
-
-Daniel didn't like earlier attempts to re-use the network
-page-pool code to achieve this, and suggested the ttm_pool be
-used instead, so this series pulls the page pool functionality
-out of the ttm_pool logic and creates a generic page pool
-that can be shared.
-
-New in v9:
-* Tried to address Christian König's feedback on the page pool
-  changes (Kerneldoc, static functions, locking issues, duplicative
-  order tracking)
-* Fix up Kconfig dependency issue as Reported-by:
-  kernel test robot <lkp@intel.com>
-* Fix compiler warning Reported-by:
-  kernel test robot <lkp@intel.com>
-
-I know Christian had some less specific feedback on the deferred free
-work that I'd like to revisit, but I wanted to restart the discussion
-with this new series, rather then trying to dregdge up and reply to
-a ~4mo old thread.
-
-Input would be greatly appreciated. Testing as well, as I don't
-have any development hardware that utilizes the ttm pool.
-
-Thanks
--john
-
-[1] https://android.googlesource.com/platform/system/memory/libdmabufheap/+/refs/heads/master/tests/dmabuf_heap_bench.c
+This is similar to the ION pagepool usage, but tries to
+utilize generic code instead of a custom implementation.
 
 Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Christian Koenig <christian.koenig@amd.com>
@@ -162,31 +113,119 @@ Cc: Simon Ser <contact@emersion.fr>
 Cc: James Jones <jajones@nvidia.com>
 Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+v2:
+* Fix build issue caused by selecting PAGE_POOL w/o NET
+  as Reported-by: kernel test robot <lkp@intel.com>
+v3:
+* Simplify the page zeroing logic a bit by using kmap_atomic
+  instead of vmap as suggested by Daniel Mentz
+v5:
+* Shift away from networking page pool completely to
+  dmabuf page pool implementation
+v6:
+* Switch again to using the drm_page_pool code shared w/
+  ttm_pool
+v7:
+* Slight rework for drm_page_pool changes
+v8:
+* Rework to use the rewritten drm_page_pool logic
+* Drop explicit buffer zeroing, as the drm_page_pool handles that
+v9:
+* Fix compiler warning Reported-by: kernel test robot <lkp@intel.com>
+---
+ drivers/dma-buf/heaps/Kconfig       |  1 +
+ drivers/dma-buf/heaps/system_heap.c | 26 +++++++++++++++++++++++---
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-John Stultz (5):
-  drm: Add a sharable drm page-pool implementation
-  drm: ttm_pool: Rework ttm_pool to use drm_page_pool
-  dma-buf: system_heap: Add drm pagepool support to system heap
-  dma-buf: heaps: Add deferred-free-helper library code
-  dma-buf: system_heap: Add deferred freeing to the system heap
-
- drivers/dma-buf/heaps/Kconfig                |   5 +
- drivers/dma-buf/heaps/Makefile               |   1 +
- drivers/dma-buf/heaps/deferred-free-helper.c | 138 +++++++++
- drivers/dma-buf/heaps/deferred-free-helper.h |  55 ++++
- drivers/dma-buf/heaps/system_heap.c          |  46 ++-
- drivers/gpu/drm/Kconfig                      |   4 +
- drivers/gpu/drm/Makefile                     |   2 +
- drivers/gpu/drm/page_pool.c                  | 297 +++++++++++++++++++
- drivers/gpu/drm/ttm/ttm_pool.c               | 167 ++---------
- include/drm/page_pool.h                      |  68 +++++
- include/drm/ttm/ttm_pool.h                   |  14 +-
- 11 files changed, 643 insertions(+), 154 deletions(-)
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.c
- create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.h
- create mode 100644 drivers/gpu/drm/page_pool.c
- create mode 100644 include/drm/page_pool.h
-
+diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
+index a5eef06c4226..f19bf1f82bc2 100644
+--- a/drivers/dma-buf/heaps/Kconfig
++++ b/drivers/dma-buf/heaps/Kconfig
+@@ -1,6 +1,7 @@
+ config DMABUF_HEAPS_SYSTEM
+ 	bool "DMA-BUF System Heap"
+ 	depends on DMABUF_HEAPS
++	select DRM_PAGE_POOL
+ 	help
+ 	  Choose this option to enable the system dmabuf heap. The system heap
+ 	  is backed by pages from the buddy allocator. If in doubt, say Y.
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index f57a39ddd063..85ceca2ed61d 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -21,6 +21,8 @@
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ 
++#include <drm/page_pool.h>
++
+ static struct dma_heap *sys_heap;
+ 
+ struct system_heap_buffer {
+@@ -54,6 +56,7 @@ static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
+  */
+ static const unsigned int orders[] = {8, 4, 0};
+ #define NUM_ORDERS ARRAY_SIZE(orders)
++struct drm_page_pool pools[NUM_ORDERS];
+ 
+ static struct sg_table *dup_sg_table(struct sg_table *table)
+ {
+@@ -282,18 +285,27 @@ static void system_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
+ 	dma_buf_map_clear(map);
+ }
+ 
++static void system_heap_free_pages(struct drm_page_pool *pool, struct page *p)
++{
++	__free_pages(p, pool->order);
++}
++
+ static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
+ {
+ 	struct system_heap_buffer *buffer = dmabuf->priv;
+ 	struct sg_table *table;
+ 	struct scatterlist *sg;
+-	int i;
++	int i, j;
+ 
+ 	table = &buffer->sg_table;
+ 	for_each_sg(table->sgl, sg, table->nents, i) {
+ 		struct page *page = sg_page(sg);
+ 
+-		__free_pages(page, compound_order(page));
++		for (j = 0; j < NUM_ORDERS; j++) {
++			if (compound_order(page) == orders[j])
++				break;
++		}
++		drm_page_pool_add(&pools[j], page);
+ 	}
+ 	sg_free_table(table);
+ 	kfree(buffer);
+@@ -324,7 +336,9 @@ static struct page *alloc_largest_available(unsigned long size,
+ 		if (max_order < orders[i])
+ 			continue;
+ 
+-		page = alloc_pages(order_flags[i], orders[i]);
++		page = drm_page_pool_remove(&pools[i]);
++		if (!page)
++			page = alloc_pages(order_flags[i], orders[i]);
+ 		if (!page)
+ 			continue;
+ 		return page;
+@@ -425,6 +439,12 @@ static const struct dma_heap_ops system_heap_ops = {
+ static int system_heap_create(void)
+ {
+ 	struct dma_heap_export_info exp_info;
++	int i;
++
++	for (i = 0; i < NUM_ORDERS; i++) {
++		drm_page_pool_init(&pools[i], orders[i],
++				   system_heap_free_pages);
++	}
+ 
+ 	exp_info.name = "system";
+ 	exp_info.ops = &system_heap_ops;
 -- 
 2.25.1
 
