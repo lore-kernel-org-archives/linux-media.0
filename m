@@ -2,182 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCF63C11F69
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 22:24:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEA1C11F64
+	for <linux-media@archiver.kernel.org>; Thu,  1 Jul 2021 03:49:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B004E61469
-	for <linux-media@archiver.kernel.org>; Wed, 30 Jun 2021 22:24:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AAFA6144D
+	for <linux-media@archiver.kernel.org>; Thu,  1 Jul 2021 03:49:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbhF3W07 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Jun 2021 18:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbhF3W06 (ORCPT
+        id S233523AbhGADvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Jun 2021 23:51:41 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:48325 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229622AbhGADvl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Jun 2021 18:26:58 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92411C061756
-        for <linux-media@vger.kernel.org>; Wed, 30 Jun 2021 15:24:27 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id d25so5464394lji.7
-        for <linux-media@vger.kernel.org>; Wed, 30 Jun 2021 15:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3XjqNfOUEjY4PGf0oNIbcI1jIFS7SSN6noMXz/wL00o=;
-        b=ljmoMCp9mVecb3lsQyFfFIa8U3pjU5ywUrl5I7ojN4cPfsATW4/rFgvNjWe9sF02g9
-         SvkQChQZpn+GM/fS1xmFE6pf/pjMYEIL+obhVpUplH6kb1utPfVQHiHC1BdpkhGIlDPc
-         euB+F0Jf+NRFoBR+Utc642vD/wlc23ekLEw6cbZSW0Q2Le0SmskzND/Yz4qYHznIs4Kc
-         UfzsxM0Rvxd0SQ3dY7V6XmHsqzZFW2yo8oUlXg6v3Z5F93SmYVVrSk1P93QSFnm60ZiH
-         I5lK+t3HT1x9LbP+/g24vwhiP/Yrp0qlQAnkiccJybiQuhFoGH69Ucyq6/S5hdtPtVU5
-         PyrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3XjqNfOUEjY4PGf0oNIbcI1jIFS7SSN6noMXz/wL00o=;
-        b=mzTZeq4wEoyKB7Xjp6KS7nHW94K0qH1v7kTU9JqG+EF+sguEKHM9mQDfKBm1slwupa
-         6BBcQ8VlhaKAZHaB9oxoRBn2bmhOe5LI2WRIybH4Jknavtw+vw68bwwNw0CLtz4RCJeC
-         MImqQiU9FQnlgIfkx9pOXAbxPLSM9NZb17FG/y1NnMKL/Funjn+YyuUlj4Pvqgon9cRZ
-         0TOA6fFT11WRpahj5sfYkclbUmuSkvZfKvNyiml6Kkir2Q3MGjh9qvga03od32vzzV71
-         Rqmj+1VD8qzOayh/KGu0tdY5nCkgGpwOuzjYiAV+6z8SSmWIPOdecRwkQhsNCFkICR5W
-         E+Rw==
-X-Gm-Message-State: AOAM533UZU7pFIHUKTTNJH8tmPQB28zz2QFTkm1aw4l/VCvfk76kABnD
-        +9gxxGcf/JjgJfMCL823HJRFr3Pp3IHBMo2Hrid3KQ==
-X-Google-Smtp-Source: ABdhPJzBS7LRn1EU7cSbyqMzIUyrWcGYHfzzM9hInxY3/7q47dAHnynTrc93ZIGDiC54Nn8Oc0HhosYwCYqEwFoGG08=
-X-Received: by 2002:a05:651c:4ca:: with SMTP id e10mr9108153lji.503.1625091865800;
- Wed, 30 Jun 2021 15:24:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210630013421.735092-1-john.stultz@linaro.org>
- <20210630013421.735092-2-john.stultz@linaro.org> <ab35ed32-ead4-3dc4-550d-55f288810220@amd.com>
-In-Reply-To: <ab35ed32-ead4-3dc4-550d-55f288810220@amd.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 30 Jun 2021 15:24:14 -0700
-Message-ID: <CALAqxLXWDKp3BZJdO3nVd9vSVV6B+bWnTy+oP6bzBB6H3Yf4eA@mail.gmail.com>
-Subject: Re: [PATCH v9 1/5] drm: Add a sharable drm page-pool implementation
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Jun 2021 23:51:41 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id ynhLl1ck8hqx9ynhNl8QAh; Thu, 01 Jul 2021 05:49:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1625111350; bh=BIjzScj9JsKJdq1llMX1BaHkc9DHYhyYgK7piHWTgXY=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=PdP74qEywIkQg595UE3G3TI2g0pwwK1NAC9OXKl2PtkOxI7tnrTJJw5lavoxTRcUL
+         plRBUYJS5ci37OJf3fvdKbZ4LjdFXbZEmQRzAdvr2z2h/C1rMkv1r84CaeP+qYRX0I
+         vwq3XJZqPnm9vqW+J9qP/UpRJHg1a7vS7dEMlLI1D5GLH4iTfYUomH9w84N3AhwI62
+         2m8QZ81hcQcLftgq/PjhKYil16FN4KiV0gRrxSNZRd0B/ADV5N+0tSHrpIrLFsTzks
+         J0XEPP0bXP2xU7KWfVbKnY8ysSEqTbebjCeP0Wff4ZPu8TlzUFftN/FKWTXA5oL7ok
+         wrGV/gldAg7GQ==
+Message-ID: <271ea27b13c11aa399d75a6a870ec367@smtp-cloud9.xs4all.net>
+Date:   Thu, 01 Jul 2021 05:49:07 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4xfPPoqvU+a5nFLO6I2S+sCSRbpORXZKQ0WU972r0TS+yFoRRCBjV0rS/QHPEML30ggiNH2e+OEoqH1ZUhmDkWQoiY/0cnnNUzm0fwQW1/toJIiU7sCgZl
+ +TByQoKlnMn9kRH0LY9Sd9xqvCo+jD/mb9NL3XhOgaHw22D6qcumWJbSDaEmCcpQ1RmHC3v+nY67c7upEocjsGKFjc/ebY45Wj8pFfKrlejpVKdv3HiLIt/P
+ 4W9VgnUUi4N3O2Coxv1bnA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 2:10 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
-> Am 30.06.21 um 03:34 schrieb John Stultz:
-> > +static unsigned long page_pool_size; /* max size of the pool */
-> > +
-> > +MODULE_PARM_DESC(page_pool_size, "Number of pages in the drm page pool=
-");
-> > +module_param(page_pool_size, ulong, 0644);
-> > +
-> > +static atomic_long_t nr_managed_pages;
-> > +
-> > +static struct mutex shrinker_lock;
-> > +static struct list_head shrinker_list;
-> > +static struct shrinker mm_shrinker;
-> > +
-> > +/**
-> > + * drm_page_pool_set_max - Sets maximum size of all pools
-> > + *
-> > + * Sets the maximum number of pages allows in all pools.
-> > + * This can only be set once, and the first caller wins.
-> > + */
-> > +void drm_page_pool_set_max(unsigned long max)
-> > +{
-> > +     if (!page_pool_size)
-> > +             page_pool_size =3D max;
-> > +}
-> > +
-> > +/**
-> > + * drm_page_pool_get_max - Maximum size of all pools
-> > + *
-> > + * Return the maximum number of pages allows in all pools
-> > + */
-> > +unsigned long drm_page_pool_get_max(void)
-> > +{
-> > +     return page_pool_size;
-> > +}
->
-> Well in general I don't think it is a good idea to have getters/setters
-> for one line functionality, similar applies to locking/unlocking the
-> mutex below.
->
-> Then in this specific case what those functions do is to aid
-> initializing the general pool manager and that in turn should absolutely
-> not be exposed.
->
-> The TTM pool manager exposes this as function because initializing the
-> pool manager is done in one part of the module and calculating the
-> default value for the pages in another one. But that is not something I
-> would like to see here.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-So, I guess I'm not quite clear on what you'd like to see...
+Results of the daily build of media_tree:
 
-Part of what I'm balancing here is the TTM subsystem normally sets a
-global max size, whereas the old ION pool didn't have caps (instead
-just relying on the shrinker when needed).
-So I'm trying to come up with a solution that can serve both uses. So
-I've got this drm_page_pool_set_max() function to optionally set the
-maximum value, which is called in the TTM initialization path or set
-the boot argument. But for systems that use the dmabuf system heap,
-but don't use TTM, no global limit is enforced.
+date:			Thu Jul  1 05:00:16 CEST 2021
+media-tree git hash:	50e7a31d30e8221632675abed3be306382324ca2
+media_build git hash:	dc90f6c653a467465b5deb23d3310577f8ebf218
+v4l-utils git hash:	242ad0b774c726cabaced873864a03a52e99e315
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-342-g92ace436
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7481-g7f50411af
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 328d8f6242d952437e8dfc96047fda207fad8deb
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-Your earlier suggestion to have it as an argument to the
-drm_page_pool_shrinker_init() didn't make much sense to me, as then we
-may have multiple subsystems trying to initialize the pool shrinker,
-which doesn't seem ideal. So I'm not sure what would be preferred.
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.258-i686: OK
+linux-4.4.258-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.258-i686: OK
+linux-4.9.258-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.222-i686: OK
+linux-4.14.222-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.177-i686: OK
+linux-4.19.177-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.100-i686: OK
+linux-5.4.100-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10.18-i686: OK
+linux-5.10.18-x86_64: OK
+linux-5.11.1-i686: OK
+linux-5.11.1-x86_64: OK
+linux-5.12.1-i686: OK
+linux-5.12.1-x86_64: OK
+linux-5.13-rc1-i686: OK
+linux-5.13-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2983, Succeeded: 2983, Failed: 0, Warnings: 2
+virtme-32: OK: Final Summary: 3035, Succeeded: 3035, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
-I guess we could have subsystems allocate their own pool managers with
-their own shrinkers and per-manager-size-limits? But that also feels
-like a fair increase in complexity, for I'm not sure how much benefit.
+Detailed results are available here:
 
-> > +void drm_page_pool_add(struct drm_page_pool *pool, struct page *p)
-> > +{
-> > +     unsigned int i, num_pages =3D 1 << pool->order;
-> > +
-> > +     /* Make sure we won't grow larger then the max pool size */
-> > +     if (page_pool_size &&
-> > +            ((drm_page_pool_get_total()) + num_pages > page_pool_size)=
-) {
-> > +             pool->free(pool, p);
-> > +             return;
-> > +     }
->
-> That is not a good idea. See how ttm_pool_free() does this.
->
-> First the page is given back to the pool, then all pools are shrinked if
-> they are above the global limit.
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
 
-Ok, initially my thought was it seemed like wasteful overhead to add
-the page to the pool and then shrink the pool, so just freeing the
-given page directly if the pool was full seemed more straightforward.
-But on consideration here I do realize having most-recently-used hot
-pages in the pool would be good for performance, so I'll switch that
-back. Thanks for pointing this out!
+Detailed regression test results are available here:
 
-Thanks again so much for the review and feedback!
--john
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
