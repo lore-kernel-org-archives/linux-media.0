@@ -7,125 +7,148 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C56EC11F6C
-	for <linux-media@archiver.kernel.org>; Fri,  2 Jul 2021 09:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A99C5C11F68
+	for <linux-media@archiver.kernel.org>; Fri,  2 Jul 2021 09:59:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3591D613FA
-	for <linux-media@archiver.kernel.org>; Fri,  2 Jul 2021 09:59:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9312361413
+	for <linux-media@archiver.kernel.org>; Fri,  2 Jul 2021 09:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbhGBKB6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Jul 2021 06:01:58 -0400
-Received: from mickerik.phytec.de ([195.145.39.210]:55518 "EHLO
+        id S231572AbhGBKCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Jul 2021 06:02:02 -0400
+Received: from mickerik.phytec.de ([195.145.39.210]:55534 "EHLO
         mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbhGBKB4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Jul 2021 06:01:56 -0400
+        with ESMTP id S231575AbhGBKB6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Jul 2021 06:01:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1625219963; x=1627811963;
+        q=dns/txt; i=@phytec.de; t=1625219964; x=1627811964;
         h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Qr5s1r6Ub8Vj1bNnO6u1Muq3sTquNmzAkAvrU3k4hJM=;
-        b=Jl1XrQxUKM1r42lBlih67vIRFud53pGzcHLj/yGoYx4HuQaQWOLY1U9Qj6EhT2M7
-        tGvdSzkkPCt9onl87t/4LmhJq9zNborc+mAsZHBSTf5fHXh/gxqqOEsH856QNEoL
-        s28HbJAmM88l6kRc2xSO/q6dSaq43d2I4WtnYT0feOs=;
-X-AuditID: c39127d2-a9fbd70000001c5e-74-60dee37b6717
+        bh=w1EOePrvY2I1BmLZBTkVvG3gIYcpvhoOPqXSOjYRuAE=;
+        b=lZbFwNzsFncD70kQISfEMJ1B23bMiRjDeX1GX0ghYG5uIz4UCpP1QtQbOTSjDW6z
+        gdU1F2/PGXNFRhNvqatXYXuI7SUcrt/oDXzisDGOFdM6s7J5+ftmPH/qTPNzLS0Q
+        EiEyoCx3B2np4CXj25kWmHZr1AH0UCq2rwf6T5hqLlc=;
+X-AuditID: c39127d2-a77bc70000001c5e-7d-60dee37c68d7
 Received: from idefix.phytec.de (Unknown_Domain [172.16.0.10])
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id A3.01.07262.B73EED06; Fri,  2 Jul 2021 11:59:23 +0200 (CEST)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 56.01.07262.C73EED06; Fri,  2 Jul 2021 11:59:24 +0200 (CEST)
 Received: from lws-riedmueller.phytec.de ([172.16.23.108])
           by idefix.phytec.de (IBM Domino Release 9.0.1FP7)
-          with ESMTP id 2021070211592287-1081046 ;
-          Fri, 2 Jul 2021 11:59:22 +0200 
+          with ESMTP id 2021070211592393-1081050 ;
+          Fri, 2 Jul 2021 11:59:23 +0200 
 From:   Stefan Riedmueller <s.riedmueller@phytec.de>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
+        linux-kernel@vger.kernel.org, Dirk Bender <d.bender@phytec.de>,
         Stefan Riedmueller <s.riedmueller@phytec.de>
-Subject: [PATCH v3 1/6] media: mt9p031: Read back the real clock rate
-Date:   Fri, 2 Jul 2021 11:59:17 +0200
-Message-Id: <20210702095922.118614-2-s.riedmueller@phytec.de>
+Subject: [PATCH v3 5/6] media: mt9p031: Fix corrupted frame after restarting stream
+Date:   Fri, 2 Jul 2021 11:59:21 +0200
+Message-Id: <20210702095922.118614-6-s.riedmueller@phytec.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210702095922.118614-1-s.riedmueller@phytec.de>
 References: <20210702095922.118614-1-s.riedmueller@phytec.de>
 MIME-Version: 1.0
 X-MIMETrack: Itemize by SMTP Server on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
- 02.07.2021 11:59:23,
+ 02.07.2021 11:59:24,
         Serialize by Router on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
- 02.07.2021 11:59:23
+ 02.07.2021 11:59:24
 X-TNEFEvaluated: 1
 Content-Transfer-Encoding: quoted-printable
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCLMWRmVeSWpSXmKPExsWyRoCBS7f68b0Eg98LBSzmHznHarH32AUW
-        i86JS9gtLu+aw2bRs2Erq8WyTX+YLFr3HmG3+LTlG5MDh8fsjpmsHptWdbJ5zDsZ6LFi5X8m
-        j8+b5AJYo7hsUlJzMstSi/TtErgyZi/4zlxwiL9i58WPjA2MHbxdjJwcEgImEv/uXmLvYuTi
-        EBLYxihx7/hjKOcao8TiT+1MIFVsAkYSC6Y1gtkiAlESP8/3sIDYzAITmSQa92uA2MICrhKv
-        D55hBLFZBFQkNn3+AlbDK2Arce33I3aIbfISMy99B7M5Bewkztw8ClYjBFRztP8XK0S9oMTJ
-        mU9YQI6QELjCKDHj0jImiGYhidOLzzJDLNaWWLbwNfMERoFZSHpmIUktYGRaxSiUm5mcnVqU
-        ma1XkFFZkpqsl5K6iREY0ocnql/awdg3x+MQIxMH4yFGCQ5mJRHe0Hn3EoR4UxIrq1KL8uOL
-        SnNSiw8xSnOwKInzbuAtCRMSSE8sSc1OTS1ILYLJMnFwSjUw1vq5awtdqG+bd3R6/Kf7C2da
-        nZ5aVih3Weahj9mel5wLPkeKc3s+7amq5e/nlox567+2NOWcjFydyNn+l/MYUkS2Ve1fvj0j
-        Si37fJ3fdQnBR80WR4K9rkte+svLdDeA4dX5l3N4fuU7sTDdW+Ke9P3hRrlCe23euk1m3H1b
-        FF0rls8te7dQiaU4I9FQi7moOBEAw5y0f1cCAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBLMWRmVeSWpSXmKPExsWyRoCBS7fm8b0EgyO3pCzmHznHatE5cQm7
+        xeVdc9gsejZsZbVYtukPk0Xr3iPsFp+2fGNyYPeY3TGT1WPTqk42j3knAz0+b5ILYInisklJ
+        zcksSy3St0vgyvh6bz5zwTWRio6rO5gbGD8LdDFyckgImEis/XuZuYuRi0NIYBujxMqjF9lB
+        EkIC1xglOnttQGw2ASOJBdMamUBsEYEoiZ/ne1hAbGaBJiaJSxd1uxg5OIQFgiUenbEHCbMI
+        qEgs79nKCGLzCthK3P98lgVil7zEzEvfwcZzCthJnLl5lAVila3E0f5frBD1ghInZz5hAblH
+        QuAKo8TU49+ZIZqFJE4vPssMsVdbYtnC18wTGAVmIemZhSS1gJFpFaNQbmZydmpRZrZeQUZl
+        SWqyXkrqJkZg6B6eqH5pB2PfHI9DjEwcjIcYJTiYlUR4Q+fdSxDiTUmsrEotyo8vKs1JLT7E
+        KM3BoiTOu4G3JExIID2xJDU7NbUgtQgmy8TBKdXAuHGa/RwXh2xPv48yC+apn29Usigt+Zd6
+        LELNJ8nu9n0bV0P/axc/Ntg2zvN+1jb9bI01w59zDSYpW6/Fzjvp/j7d+l6rif5CJzZTp4op
+        kUEHt7K8MwrWf/nB/1zg1IojNy+onDSym1/zeNHH4NqrIc9nfxSKU3myrXmODtuevKnafw5V
+        m/37ocRSnJFoqMVcVJwIALe1pkVLAgAA
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+From: Dirk Bender <d.bender@phytec.de>
 
-The real and requested clock can differ and because it is used to
-calculate PLL values, the real clock rate should be read.
+To prevent corrupted frames after starting and stopping the sensor its
+datasheet specifies a specific pause sequence to follow:
 
-Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Stopping:
+	Set Pause=5FRestart Bit -> Set Restart Bit -> Set Chip=5FEnable Off
+
+Restarting:
+	Set Chip=5FEnable On -> Clear Pause=5FRestart Bit
+
+The Restart Bit is cleared automatically and must not be cleared
+manually as this would cause undefined behavior.
+
+Signed-off-by: Dirk Bender <d.bender@phytec.de>
 Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/mt9p031.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/i2c/mt9p031.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index 77567341ec98..3eaaa8d44523 100644
+index 6a6f16df3f4a..3511c4ff350d 100644
 --- a/drivers/media/i2c/mt9p031.c
 +++ b/drivers/media/i2c/mt9p031.c
-@@ -255,6 +255,7 @@ static int mt9p031=5Fclk=5Fsetup(struct mt9p031 *mt9p03=
-1)
-=20
- 	struct i2c=5Fclient *client =3D v4l2=5Fget=5Fsubdevdata(&mt9p031->subdev);
- 	struct mt9p031=5Fplatform=5Fdata *pdata =3D mt9p031->pdata;
-+	unsigned long ext=5Ffreq;
+@@ -79,7 +79,9 @@
+ #define		MT9P031=5FPIXEL=5FCLOCK=5FINVERT		(1 << 15)
+ #define		MT9P031=5FPIXEL=5FCLOCK=5FSHIFT(n)		((n) << 8)
+ #define		MT9P031=5FPIXEL=5FCLOCK=5FDIVIDE(n)		((n) << 0)
+-#define MT9P031=5FFRAME=5FRESTART				0x0b
++#define MT9P031=5FRESTART					0x0b
++#define		MT9P031=5FFRAME=5FPAUSE=5FRESTART		(1 << 1)
++#define		MT9P031=5FFRAME=5FRESTART			(1 << 0)
+ #define MT9P031=5FSHUTTER=5FDELAY				0x0c
+ #define MT9P031=5FRST					0x0d
+ #define		MT9P031=5FRST=5FENABLE			1
+@@ -482,9 +484,23 @@ static int mt9p031=5Fset=5Fparams(struct mt9p031 *mt9p=
+031)
+ static int mt9p031=5Fs=5Fstream(struct v4l2=5Fsubdev *subdev, int enable)
+ {
+ 	struct mt9p031 *mt9p031 =3D to=5Fmt9p031(subdev);
++	struct i2c=5Fclient *client =3D v4l2=5Fget=5Fsubdevdata(subdev);
++	int val;
  	int ret;
 =20
- 	mt9p031->clk =3D devm=5Fclk=5Fget(&client->dev, NULL);
-@@ -265,13 +266,15 @@ static int mt9p031=5Fclk=5Fsetup(struct mt9p031 *mt9p=
-031)
+ 	if (!enable) {
++		/* enable pause restart */
++		val =3D MT9P031=5FFRAME=5FPAUSE=5FRESTART;
++		ret =3D mt9p031=5Fwrite(client, MT9P031=5FRESTART, val);
++		if (ret < 0)
++			return ret;
++
++		/* enable restart + keep pause restart set */
++		val |=3D MT9P031=5FFRAME=5FRESTART;
++		ret =3D mt9p031=5Fwrite(client, MT9P031=5FRESTART, val);
++		if (ret < 0)
++			return ret;
++
+ 		/* Stop sensor readout */
+ 		ret =3D mt9p031=5Fset=5Foutput=5Fcontrol(mt9p031,
+ 						 MT9P031=5FOUTPUT=5FCONTROL=5FCEN, 0);
+@@ -504,6 +520,16 @@ static int mt9p031=5Fs=5Fstream(struct v4l2=5Fsubdev *=
+subdev, int enable)
  	if (ret < 0)
  		return ret;
 =20
-+	ext=5Ffreq =3D clk=5Fget=5Frate(mt9p031->clk);
++	/*
++	 * - clear pause restart
++	 * - don't clear restart as clearing restart manually can cause
++	 *   undefined behavior
++	 */
++	val =3D MT9P031=5FFRAME=5FRESTART;
++	ret =3D mt9p031=5Fwrite(client, MT9P031=5FRESTART, val);
++	if (ret < 0)
++		return ret;
 +
- 	/* If the external clock frequency is out of bounds for the PLL use the
- 	 * pixel clock divider only and disable the PLL.
- 	 */
--	if (pdata->ext=5Ffreq > limits.ext=5Fclock=5Fmax) {
-+	if (ext=5Ffreq > limits.ext=5Fclock=5Fmax) {
- 		unsigned int div;
-=20
--		div =3D DIV=5FROUND=5FUP(pdata->ext=5Ffreq, pdata->target=5Ffreq);
-+		div =3D DIV=5FROUND=5FUP(ext=5Ffreq, pdata->target=5Ffreq);
- 		div =3D roundup=5Fpow=5Fof=5Ftwo(div) / 2;
-=20
- 		mt9p031->clk=5Fdiv =3D min=5Ft(unsigned int, div, 64);
-@@ -280,7 +283,7 @@ static int mt9p031=5Fclk=5Fsetup(struct mt9p031 *mt9p03=
-1)
- 		return 0;
- 	}
-=20
--	mt9p031->pll.ext=5Fclock =3D pdata->ext=5Ffreq;
-+	mt9p031->pll.ext=5Fclock =3D ext=5Ffreq;
- 	mt9p031->pll.pix=5Fclock =3D pdata->target=5Ffreq;
- 	mt9p031->use=5Fpll =3D true;
+ 	return mt9p031=5Fpll=5Fenable(mt9p031);
+ }
 =20
 --=20
 2.25.1
