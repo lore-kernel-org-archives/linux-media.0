@@ -7,41 +7,40 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 013B5C07E9A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F77C07E96
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E53356197D
+	by mail.kernel.org (Postfix) with ESMTP id 00C716194E
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbhGDXMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:12:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
+        id S232363AbhGDXMj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:12:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231446AbhGDXLZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:11:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C13286195C;
-        Sun,  4 Jul 2021 23:08:16 +0000 (UTC)
+        id S232382AbhGDXLY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:11:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 72F20615FF;
+        Sun,  4 Jul 2021 23:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440097;
-        bh=roqyspRFC1/DgrllRoflMHE9bkjkXJi48MaQ1+M2RGU=;
+        s=k20201202; t=1625440096;
+        bh=uAPpcxsYPuPDVvfQ114HosmJn/2knSHCbfPiPY2r8DQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NPnaX3GIFpc2h/x8RfwgtJsp/2pGsuG8RorQGG+cU4S70qGBzLcnA/PtesgAyhyEa
-         qU0ktyJ52J0c2fXGn65dkzzJss3+9R6JZz5r8IiGnDWgNn2Twl/Wdd5qBpUajhNIY3
-         9Px3eXDNk5N+aTz9CfPihm2E/dGBArQiG9cltE2rhOUhLELKIrrX3FUnpMd0SWVK1v
-         VFA/EuhHpNGoDED7yvquPoTivvG44o2mz2+/JeL3ipdyaLliWikUhxH4BC/7zQn+Ab
-         VvhqUDITLvnjP4HKmrexGdWb3p7gi8zwhR94E0RUPY3D0F+cZ5bMA1/OUSilW6DsHN
-         7C+DnozvPuBjA==
+        b=sj/nXQdwuXNeooFIOYYnD67edU3qDSwGicf847A13bJW/4ZJM07qEt5PJqo5AXz07
+         WQugp9u3YEejJ5wlLm8HFdNejd0ZIKA68tgtoyJmlmEXsndb5eYo/DyCQXZBwKEZ24
+         FDBQDNWZTvfDbzfUDchKkblePfMyaW2N8Pfj7hWAbmamGbfLg9pKSwGLnbCzA3LTZS
+         TK10HqblLbgdLidbEWKLdD1UXm8a18VLhOdTyUzJMdtTcydwZmRdF87ZDAnFrvqpDO
+         WjAYSc2/KoBkqTEPmfzzBRQahoWl65nRKRRk/REi0zZnVbbFgTGFb37zUYaa+RTO7Y
+         LuEzYNSdm5M8g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 10/70] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:07:03 -0400
-Message-Id: <20210704230804.1490078-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 09/70] media: mtk-vcodec: fix PM runtime get logic
+Date:   Sun,  4 Jul 2021 19:07:02 -0400
+Message-Id: <20210704230804.1490078-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -55,45 +54,82 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 10343de268d10cf07b092b8b525e12ad558ead77 ]
+[ Upstream commit 908711f542c17fe61e5d653da1beb8e5ab5c7b50 ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+Currently, the driver just assumes that PM runtime logic
+succeded resuming the device.
 
-As a plus, pm_runtime_resume_and_get() doesn't return
-positive numbers, so the return code validation can
-be removed.
+That may not be the case, as pm_runtime_get_sync()
+can fail (but keeping the usage count incremented).
+
+Replace the code to use pm_runtime_resume_and_get(),
+and letting it return the error code.
+
+This way, if mtk_vcodec_dec_pw_on() fails, the logic
+under fops_vcodec_open() will do the right thing and
+return an error, instead of just assuming that the
+device is ready to be used.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 4 +++-
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c  | 8 +++++---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h  | 2 +-
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 9b22dd8e34f4..d515eb08c3ee 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2566,11 +2566,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
- static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
--	int ret;
--
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 145686d2c219..f59ef8c8c9db 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -126,7 +126,9 @@ static int fops_vcodec_open(struct file *file)
+ 	mtk_vcodec_dec_set_default_params(ctx);
  
--	return ret > 0 ? 0 : ret;
-+	return pm_runtime_resume_and_get(ctx->jpeg->dev);
+ 	if (v4l2_fh_is_singular(&ctx->fh)) {
+-		mtk_vcodec_dec_pw_on(&dev->pm);
++		ret = mtk_vcodec_dec_pw_on(&dev->pm);
++		if (ret < 0)
++			goto err_load_fw;
+ 		/*
+ 		 * Does nothing if firmware was already loaded.
+ 		 */
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index ddee7046ce42..6038db96f71c 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -88,13 +88,15 @@ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
+ 	put_device(dev->pm.larbvdec);
  }
  
- static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
+-void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ {
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(pm->dev);
++	ret = pm_runtime_resume_and_get(pm->dev);
+ 	if (ret)
+-		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
++		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
++
++	return ret;
+ }
+ 
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+index 872d8bf8cfaf..280aeaefdb65 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+@@ -12,7 +12,7 @@
+ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
+ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
+ 
+-void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm);
 -- 
 2.30.2
 
