@@ -5,45 +5,46 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D068DC11F67
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD64FC07E9A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:12:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1DD3619A5
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B00C661283
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbhGDXNq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:13:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46804 "EHLO mail.kernel.org"
+        id S232422AbhGDXOC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:14:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231864AbhGDXJ2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:09:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F26A613FC;
-        Sun,  4 Jul 2021 23:06:51 +0000 (UTC)
+        id S232536AbhGDXNG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CD3E61965;
+        Sun,  4 Jul 2021 23:08:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440012;
-        bh=nP61IyDwMKPULtKhpyhNvfOHA4ogTEHHQM3vW2uT22k=;
+        s=k20201202; t=1625440136;
+        bh=TaoS9g5TrRsUhghe3xa90/jrdsLyfglBekaPaQsb4d8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lNlUCAPd6Tlb2z7HmcEST6sjh0jcETodIGIuRWyG48lTX5KABrl2hYJKHWPwhrg04
-         MEHPxYiyrFURFScC0vLSUvqp2rJObsGbnQmABivcA7BdV47K5fwvnTQ3QMm+BuDqY/
-         XT/5GtiCJp4nDN7pl9AwNUX0YYceQQTjnnihmGXVwkjPB69nKfLG43s1pudhDf3pgP
-         j3D//YML79SF8/A21naUywK6rsKg/Iv1XabQ9LxB+xRnOEps68e6HxZkXJ1QxiK0hm
-         BeFV4DWzOb0FdE84gtRtnxThbVoOQ6G9n0qy1s7GSPdvVOGKHdN0sOiiyGx1PahDkl
-         P+liEH07lDjuQ==
+        b=vQ5ZyvRzjMHfWnTjnk7DaQzTQBpzYtaKlGCxSE18v4b7mbFrrv3uvle4DcZP3up1Z
+         a6ZVOJ+ivuTMmPcVIFsLP479ucIScsxCkkqt/Dg6cXYCY2Ndiw2kTB4qKd48OwCOTQ
+         CbV/CVLBATm1x745ytJfMJD93A8hl4pU1cTsda0HZ6vK+YiXNJMqkwKXEFmt/ynEMf
+         BuCVC04Tgm6657EWJ0M+kZnu03il2f0eM+KlO7BxJi5LkXfnnksLUQQFC5IE11fzSI
+         tfYlIU+qMVLKkSWDBzoynG8OzfcDpOSIBVudmmFq1jVsvWcR4HILpcvvJkeTAh15qG
+         3KGJQqTWx/l2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com,
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 26/80] media: cpia2: fix memory leak in cpia2_usb_probe
-Date:   Sun,  4 Jul 2021 19:05:22 -0400
-Message-Id: <20210704230616.1489200-26-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 38/70] media: cedrus: Fix .buf_prepare
+Date:   Sun,  4 Jul 2021 19:07:31 -0400
+Message-Id: <20210704230804.1490078-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
-References: <20210704230616.1489200-1-sashal@kernel.org>
+In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
+References: <20210704230804.1490078-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,102 +53,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-[ Upstream commit be8656e62e9e791837b606a027802b504a945c97 ]
+[ Upstream commit d84b9202d712309840f8b5abee0ed272506563bd ]
 
-syzbot reported leak in cpia2 usb driver. The problem was
-in invalid error handling.
+The driver should only set the payload on .buf_prepare if the
+buffer is CAPTURE type. If an OUTPUT buffer has a zero bytesused
+set by userspace then v4l2-core will set it to buffer length.
 
-v4l2_device_register() is called in cpia2_init_camera_struct(), but
-all error cases after cpia2_init_camera_struct() did not call the
-v4l2_device_unregister()
+If we overwrite bytesused for OUTPUT buffers, too, then
+vb2_get_plane_payload() will return incorrect value which might be then
+written to hw registers by the driver in cedrus_h264.c or cedrus_vp8.c.
 
-Reported-by: syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/cpia2/cpia2.h      |  1 +
- drivers/media/usb/cpia2/cpia2_core.c | 12 ++++++++++++
- drivers/media/usb/cpia2/cpia2_usb.c  | 13 +++++++------
- 3 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/cpia2/cpia2.h b/drivers/media/usb/cpia2/cpia2.h
-index 50835f5f7512..57b7f1ea68da 100644
---- a/drivers/media/usb/cpia2/cpia2.h
-+++ b/drivers/media/usb/cpia2/cpia2.h
-@@ -429,6 +429,7 @@ int cpia2_send_command(struct camera_data *cam, struct cpia2_command *cmd);
- int cpia2_do_command(struct camera_data *cam,
- 		     unsigned int command,
- 		     unsigned char direction, unsigned char param);
-+void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf);
- struct camera_data *cpia2_init_camera_struct(struct usb_interface *intf);
- int cpia2_init_camera(struct camera_data *cam);
- int cpia2_allocate_buffers(struct camera_data *cam);
-diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index e747548ab286..b5a2d06fb356 100644
---- a/drivers/media/usb/cpia2/cpia2_core.c
-+++ b/drivers/media/usb/cpia2/cpia2_core.c
-@@ -2163,6 +2163,18 @@ static void reset_camera_struct(struct camera_data *cam)
- 	cam->height = cam->params.roi.height;
- }
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index 911f607d9b09..16327be904d1 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -449,7 +449,13 @@ static int cedrus_buf_prepare(struct vb2_buffer *vb)
+ 	if (vb2_plane_size(vb, 0) < pix_fmt->sizeimage)
+ 		return -EINVAL;
  
-+/******************************************************************************
-+ *
-+ *  cpia2_init_camera_struct
-+ *
-+ *  Deinitialize camera struct
-+ *****************************************************************************/
-+void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf)
-+{
-+	v4l2_device_unregister(&cam->v4l2_dev);
-+	kfree(cam);
-+}
-+
- /******************************************************************************
-  *
-  *  cpia2_init_camera_struct
-diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
-index 3ab80a7b4498..76aac06f9fb8 100644
---- a/drivers/media/usb/cpia2/cpia2_usb.c
-+++ b/drivers/media/usb/cpia2/cpia2_usb.c
-@@ -844,15 +844,13 @@ static int cpia2_usb_probe(struct usb_interface *intf,
- 	ret = set_alternate(cam, USBIF_CMDONLY);
- 	if (ret < 0) {
- 		ERR("%s: usb_set_interface error (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
- 
- 
- 	if((ret = cpia2_init_camera(cam)) < 0) {
- 		ERR("%s: failed to initialize cpia2 camera (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
- 	LOG("  CPiA Version: %d.%02d (%d.%d)\n",
- 	       cam->params.version.firmware_revision_hi,
-@@ -872,11 +870,14 @@ static int cpia2_usb_probe(struct usb_interface *intf,
- 	ret = cpia2_register_camera(cam);
- 	if (ret < 0) {
- 		ERR("%s: Failed to register cpia2 camera (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
+-	vb2_set_plane_payload(vb, 0, pix_fmt->sizeimage);
++	/*
++	 * Buffer's bytesused must be written by driver for CAPTURE buffers.
++	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
++	 * it to buffer length).
++	 */
++	if (V4L2_TYPE_IS_CAPTURE(vq->type))
++		vb2_set_plane_payload(vb, 0, pix_fmt->sizeimage);
  
  	return 0;
-+
-+alt_err:
-+	cpia2_deinit_camera_struct(cam, intf);
-+	return ret;
  }
- 
- /******************************************************************************
 -- 
 2.30.2
 
