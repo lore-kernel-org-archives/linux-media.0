@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2EBDC47E4B
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4CE4C07E96
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0E7161364
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB85C6135D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbhGDXPw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:15:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57092 "EHLO mail.kernel.org"
+        id S233374AbhGDXQA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234206AbhGDXO5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 81AAC619C6;
-        Sun,  4 Jul 2021 23:11:34 +0000 (UTC)
+        id S234021AbhGDXOu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B60F613F1;
+        Sun,  4 Jul 2021 23:10:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440295;
-        bh=SIPfpxfa8ElFAK5ax8K3+1DMagt4u+7Okx+cyHPvZ3w=;
+        s=k20201202; t=1625440259;
+        bh=Ie9E3KfoOXpO4b4T/QmoeERDOkwD7tiKPIm7glLFSHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p7ZAQb2h7gh2XezfEi8nDq7EziVO3ytIrdGle3zInZIUvmnHhJ9UQcZ/7lgLOkKq9
-         3kWMqjXrnNSthuMrldG5VPlMt/vbuE2yoATxyCkgkkk9M7J4P60K3gCPYGcakr13Yg
-         CluAC3Yhb4W4iDbCnh7+SmskQ3iDTbvBtgMwNysB6oA8aj92KXm4ebodBP6u/kSVQY
-         tL9i+9X8KXyg3uvFILMFBX2WU9bijLQ5A9fXxDfmjlxcflrhuNbAdAeBt/HN+kAASM
-         UTh37LVCgdeAPLQQ2M6uZRmb1XkCESlAU05cIl+2dr8Tra2NCRqEbQ04uCtZ8bgage
-         V2IZXfBk4ELaw==
+        b=CufOHbzj5VASyYKYfdugsFsYSR7nANxir86R8W5xUvoGTOxlpdklVRQYFGCi8TQ45
+         h2ffyZVcrNhbO/Gl3t8C5IEW8Ko4AwwZGdOLR007SIxUhaq5xFdFsDpV0VGwVq8qX0
+         5UHTiE0LUE7mosRzWCXXMDjrDr/lxuFsjyi0M5rPIP/t2JVy9vSmQ2lA9hV5WQLxyK
+         Gj/Z3eC+THFMs9iksP57RR4LemKv4KBaLM6ocu31lFg3u4y59iinU/hPsC706l79eC
+         Sr1ihlgwX9sij+W9vtPUfuk3Q6+A0TAPOFo+9LVa3NBUdFaMQzDDHJTFSMkZpNZJpS
+         aBdO4cES4JSCg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
@@ -39,12 +39,12 @@ Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 09/25] media: pvrusb2: fix warning in pvr2_i2c_core_done
-Date:   Sun,  4 Jul 2021 19:11:07 -0400
-Message-Id: <20210704231123.1491517-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 12/31] media: pvrusb2: fix warning in pvr2_i2c_core_done
+Date:   Sun,  4 Jul 2021 19:10:24 -0400
+Message-Id: <20210704231043.1491209-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704231123.1491517-1-sashal@kernel.org>
-References: <20210704231123.1491517-1-sashal@kernel.org>
+In-Reply-To: <20210704231043.1491209-1-sashal@kernel.org>
+References: <20210704231043.1491209-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 18db7aaafcd6..fd1bd94cd78f 100644
+index fcb201a40920..d1bbfe4000dd 100644
 --- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
 +++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2670,9 +2670,8 @@ void pvr2_hdw_destroy(struct pvr2_hdw *hdw)
+@@ -2668,9 +2668,8 @@ void pvr2_hdw_destroy(struct pvr2_hdw *hdw)
  		pvr2_stream_destroy(hdw->vid_stream);
  		hdw->vid_stream = NULL;
  	}
@@ -97,7 +97,7 @@ index 18db7aaafcd6..fd1bd94cd78f 100644
  	mutex_lock(&pvr2_unit_mtx);
  	do {
  		if ((hdw->unit_number >= 0) &&
-@@ -2699,6 +2698,7 @@ void pvr2_hdw_disconnect(struct pvr2_hdw *hdw)
+@@ -2697,6 +2696,7 @@ void pvr2_hdw_disconnect(struct pvr2_hdw *hdw)
  {
  	pvr2_trace(PVR2_TRACE_INIT,"pvr2_hdw_disconnect(hdw=%p)",hdw);
  	LOCK_TAKE(hdw->big_lock);
