@@ -7,38 +7,40 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5346DC07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC2EFC07E9D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B644611ED
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9BC9613D2
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbhGDXHM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:07:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45084 "EHLO mail.kernel.org"
+        id S230018AbhGDXHN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:07:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229947AbhGDXHI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C407613E5;
-        Sun,  4 Jul 2021 23:04:31 +0000 (UTC)
+        id S229907AbhGDXHK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E0F956135D;
+        Sun,  4 Jul 2021 23:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439872;
-        bh=WoXSq2ICM3efq+BWozC2CMUcabEJzzaMVOvVVaY7IjM=;
+        s=k20201202; t=1625439874;
+        bh=c5RGKMO/Iij/OF/EMGrK9bgD+2TCuXmHaKdi0NSsXx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aREna3O+4UGJW9FKim2GJlkyvP9+rDlSC8kQrTFjn3X8iZfany1Az8CR9qAl4vVMc
-         RZPRWogWyVX8BxQqrsXVc3g3oKGGQYd4x0PZo2Dy5OVTYjnh0jX8Gl1y6FH/f7kVA8
-         EbZnmXsdzA37BUDJUDnzQ0PCxPA5lSz4uRBDmj2qufifQQFBUIu9zvn1iK1SLwbk/2
-         9aDXPtqNAUg08nSO8WrS4Nd5kc3SK7Ny7DGOUZVJqla3o9rDiQCRyjZlF104asrDTH
-         tmgI6v+9VO/6VKyI9wKkWW1CdCZsE8s/JfxgirIKPWcpPVnLgTMqHHGDxtOCjiSH8L
-         Hi3IFt8f3KeZw==
+        b=bxG34i/Jo+kUzeTkn7Wy9b6Elk+wejxTW5L3VampBPAzFiw1bhWHl3mi+BWTNuLYE
+         8M2d4ifn8Zn3fezwXmTDVh5FtogygoAnHkcyr5oOQ3QozCOQ2R0zXc2ew2KwxNlY+H
+         sSKPEhfEO67lXxH7iPHDHI5466ai/z6kW/aaOt3vP9gq+MGNIKox1FslX7dpmmTydI
+         Zo8PzOPXaadWgu/biOG5/ha+73z0FzAq5HPJFDYhSk1aIYys4TtA5i0xulivm3kNec
+         CfE5PhJEtPS5NA+Kn9H2jHoJewibf7u8cTz+uE1NfCDQGkxYO+Hb4rntGPSD1703FM
+         UlO5irO8bk3mw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 08/85] media: am437x: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:03:03 -0400
-Message-Id: <20210704230420.1488358-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.13 10/85] media: mtk-vcodec: fix PM runtime get logic
+Date:   Sun,  4 Jul 2021 19:03:05 -0400
+Message-Id: <20210704230420.1488358-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -52,65 +54,82 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit c41e02493334985cca1a22efd5ca962ce3abb061 ]
+[ Upstream commit 908711f542c17fe61e5d653da1beb8e5ab5c7b50 ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+Currently, the driver just assumes that PM runtime logic
+succeded resuming the device.
 
-While here, ensure that the driver will check if PM runtime
-resumed at vpfe_initialize_device().
+That may not be the case, as pm_runtime_get_sync()
+can fail (but keeping the usage count incremented).
+
+Replace the code to use pm_runtime_resume_and_get(),
+and letting it return the error code.
+
+This way, if mtk_vcodec_dec_pw_on() fails, the logic
+under fops_vcodec_open() will do the right thing and
+return an error, instead of just assuming that the
+device is ready to be used.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 4 +++-
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c  | 8 +++++---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h  | 2 +-
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 6cdc77dda0e4..1c9cb9e05fdf 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1021,7 +1021,9 @@ static int vpfe_initialize_device(struct vpfe_device *vpfe)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 147dfef1638d..f87dc47d9e63 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -126,7 +126,9 @@ static int fops_vcodec_open(struct file *file)
+ 	mtk_vcodec_dec_set_default_params(ctx);
+ 
+ 	if (v4l2_fh_is_singular(&ctx->fh)) {
+-		mtk_vcodec_dec_pw_on(&dev->pm);
++		ret = mtk_vcodec_dec_pw_on(&dev->pm);
++		if (ret < 0)
++			goto err_load_fw;
+ 		/*
+ 		 * Does nothing if firmware was already loaded.
+ 		 */
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index ddee7046ce42..6038db96f71c 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -88,13 +88,15 @@ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
+ 	put_device(dev->pm.larbvdec);
+ }
+ 
+-void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ {
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(pm->dev);
++	ret = pm_runtime_resume_and_get(pm->dev);
  	if (ret)
- 		return ret;
+-		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
++		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
++
++	return ret;
+ }
  
--	pm_runtime_get_sync(vpfe->pdev);
-+	ret = pm_runtime_resume_and_get(vpfe->pdev);
-+	if (ret < 0)
-+		return ret;
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+index 872d8bf8cfaf..280aeaefdb65 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+@@ -12,7 +12,7 @@
+ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
+ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
  
- 	vpfe_config_enable(&vpfe->ccdc, 1);
- 
-@@ -2443,7 +2445,11 @@ static int vpfe_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 
- 	/* for now just enable it here instead of waiting for the open */
--	pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		vpfe_err(vpfe, "Unable to resume device.\n");
-+		goto probe_out_v4l2_unregister;
-+	}
- 
- 	vpfe_ccdc_config_defaults(ccdc);
- 
-@@ -2530,6 +2536,11 @@ static int vpfe_suspend(struct device *dev)
- 
- 	/* only do full suspend if streaming has started */
- 	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
-+		/*
-+		 * ignore RPM resume errors here, as it is already too late.
-+		 * A check like that should happen earlier, either at
-+		 * open() or just before start streaming.
-+		 */
- 		pm_runtime_get_sync(dev);
- 		vpfe_config_enable(ccdc, 1);
- 
+-void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm);
 -- 
 2.30.2
 
