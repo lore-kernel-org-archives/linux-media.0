@@ -7,40 +7,39 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE5DDC07E9C
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 885E1C07E9C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A17766135A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 773486135A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbhGDXQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50600 "EHLO mail.kernel.org"
+        id S234308AbhGDXQe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233975AbhGDXOt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F063A61416;
-        Sun,  4 Jul 2021 23:10:45 +0000 (UTC)
+        id S234057AbhGDXOw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C15A06162A;
+        Sun,  4 Jul 2021 23:11:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440246;
-        bh=37z3XHH9xjvhReLs/bGj/iV8WdTVclypy0jnbAomuwI=;
+        s=k20201202; t=1625440264;
+        bh=S/VLIVkYk1uLWSewoxryVdCxBD48RHaJTth9LF1k63Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tTSaNV9DkjEAwS3ZV6ADwVq3uAZ4+8r9SlTtIuQ2q3dRmiPLX4fU2q6L8a+1GsE8g
-         Jufoznrsqhy3rZvtD+K3UE1jpeze7Pl1eRKZIlh4u8jrDFW5/kw0076GoIoac1oQns
-         YCBy2PRAdLf6l+k31z5ffB8fnsVO5lGuBQqR8uGF7isb8xhHyHGA0ctvUaQnnwxH++
-         UYyqwclthXVbVOGJvTtkbKBbtcX4fIjv5jucQQpXqbA1QUht8pnkqdeo7eddf5mERr
-         V2AeCaThEq1xJs+96cI6vx29Rf1tPm8qN4CMKE1FRSBGil/jNeWoDVfqL1ZQd+1efz
-         nHvNgsGqDAonw==
+        b=F6EPCciY5OQU120bYdBDZ+5zwTnC6NUdMnjiEHs5w1bmciEV7Ab0fOYBXT9jH5AqS
+         /rm6DSJ6caksR11n5UunOJCs5ez4pkj4gG1vxSIQkIl+VoBhmUppI9WsoHyLeV4ML0
+         WHaq/zKLinLHUEs3zfBzQXRQfmUKgxCiewfD4u9RwzIPqAC4xldgvzYsl+13ZA5hqn
+         87/efOxX8h24/FMgszh1uKQWIRL6cjfBOF8dhSDXvIZL7LxIbedHx2yY9MVeCMZq6N
+         9yvpj5Dwji4JtaCoEnadmW5bqqlZHJ0+IaS1qGr5MAmoAKdA24hybLi7VSFPaEYQ40
+         un7MCXqOybg9A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+Cc:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 02/31] media: s5p: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:10:14 -0400
-Message-Id: <20210704231043.1491209-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 16/31] media: em28xx: Fix possible memory leak of em28xx struct
+Date:   Sun,  4 Jul 2021 19:10:28 -0400
+Message-Id: <20210704231043.1491209-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704231043.1491209-1-sashal@kernel.org>
 References: <20210704231043.1491209-1-sashal@kernel.org>
@@ -52,47 +51,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
 
-[ Upstream commit fdc34e82c0f968ac4c157bd3d8c299ebc24c9c63 ]
+[ Upstream commit ac5688637144644f06ed1f3c6d4dd8bb7db96020 ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+The em28xx struct kref isn't being decreased after an error in the
+em28xx_ir_init, leading to a possible memory leak.
 
-While here, check if the PM runtime error was caught at
-s5p_cec_adap_enable().
+A kref_put and em28xx_shutdown_buttons is added to the error handler code.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-cec/s5p_cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/usb/em28xx/em28xx-input.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-cec/s5p_cec.c b/drivers/media/platform/s5p-cec/s5p_cec.c
-index 8837e2678bde..fe78292df8a6 100644
---- a/drivers/media/platform/s5p-cec/s5p_cec.c
-+++ b/drivers/media/platform/s5p-cec/s5p_cec.c
-@@ -39,10 +39,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
+diff --git a/drivers/media/usb/em28xx/em28xx-input.c b/drivers/media/usb/em28xx/em28xx-input.c
+index f84a1208d5d3..3612f0d730dd 100644
+--- a/drivers/media/usb/em28xx/em28xx-input.c
++++ b/drivers/media/usb/em28xx/em28xx-input.c
+@@ -736,7 +736,8 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 			dev->board.has_ir_i2c = 0;
+ 			dev_warn(&dev->intf->dev,
+ 				 "No i2c IR remote control device found.\n");
+-			return -ENODEV;
++			err = -ENODEV;
++			goto ref_put;
+ 		}
+ 	}
  
- static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
- {
-+	int ret;
- 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
+@@ -751,7 +752,7 @@ static int em28xx_ir_init(struct em28xx *dev)
  
- 	if (enable) {
--		pm_runtime_get_sync(cec->dev);
-+		ret = pm_runtime_resume_and_get(cec->dev);
-+		if (ret < 0)
-+			return ret;
- 
- 		s5p_cec_reset(cec);
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	if (!ir)
+-		return -ENOMEM;
++		goto ref_put;
+ 	rc = rc_allocate_device(RC_DRIVER_SCANCODE);
+ 	if (!rc)
+ 		goto error;
+@@ -862,6 +863,9 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 	dev->ir = NULL;
+ 	rc_free_device(rc);
+ 	kfree(ir);
++ref_put:
++	em28xx_shutdown_buttons(dev);
++	kref_put(&dev->ref, em28xx_free_device);
+ 	return err;
+ }
  
 -- 
 2.30.2
