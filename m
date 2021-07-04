@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C10FC07E9A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A61C11F77
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4646F6135D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C32746135D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbhGDXHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:07:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46062 "EHLO mail.kernel.org"
+        id S230335AbhGDXII (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:08:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46450 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230261AbhGDXHi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D89CF6192B;
-        Sun,  4 Jul 2021 23:05:01 +0000 (UTC)
+        id S230244AbhGDXHw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 79D59613E9;
+        Sun,  4 Jul 2021 23:05:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439902;
-        bh=ycmPIHPt6luVzIP71dxQy1C3huelF0s4SRfcO/QPdpc=;
+        s=k20201202; t=1625439916;
+        bh=RMOrC1frwt1UylxJ7TKcgEozTKZQbIES9glVwdgUp2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQaysxXXWXM7Fjz+ejvFtHZCgbXfUZ/P7yXKIqokwcb80lLcICtRrrQs+W45/yn6i
-         DBf3gQklBdz4F8DyW5uRP/ZfHqaoNkB45MDE38Wso8qV4F+Ib3DsZvmimB+M+bst4m
-         TVHOh2BzSHnHT/zoZK3Af71u6WORijnn7Pt5WPegRWE2SbkjLFsU/zNxSybenKIRe4
-         EeU+1rl3Rp35s3kSFYZ/v1LlBJJ7Y0bKKq8/ISMwxHlF/uoJyYrHoY4CN7BJ3tpQtg
-         CUDSgjx4wJUWKrWwpCN2lXxl9srJR/G/TQkQSGfG4ESEYi24XwG38ryjacQR6gPcFH
-         o/RspUMCKnhlA==
+        b=WYzyJAlKOLXrDSruS8JBQYvUTl62K/YJ3VS1tLy4tnnIqYlSo3Jm7jzBJla9263a3
+         Rk63t2hEpmAsIHXlUYS+ePKCe9wTcTy6TaFdWOQwK8fwsOZ6Gq7z5LgqMUqkSNoJ0G
+         npOXmFKlqIaHQpaMR2xunF/k89vW1JV5U+uJoL8n8OHE8FiMQVOhqB5BgCPdmWtp/4
+         KO+XHdhZVWlEGYpLpS/POt8JzlF1YjTVkhcIK0ByKTXtE3fhuBeNi8R3X157wkyxz7
+         TQvQntYG5vSS6Ruvo1f3Mdc9fbCprbOiVD7ndhc7YrrpQlvvVXhgqZV+u1LJW5XO0e
+         N9wbn3wGKRoaQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
+Cc:     Tong Zhang <ztong0001@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.13 30/85] media: imx: imx7_mipi_csis: Fix logging of only error event counters
-Date:   Sun,  4 Jul 2021 19:03:25 -0400
-Message-Id: <20210704230420.1488358-30-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 40/85] media: bt878: do not schedule tasklet when it is not setup
+Date:   Sun,  4 Jul 2021 19:03:35 -0400
+Message-Id: <20210704230420.1488358-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -53,46 +51,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Tong Zhang <ztong0001@gmail.com>
 
-[ Upstream commit d2fcc9c2de1191ea80366e3658711753738dd10a ]
+[ Upstream commit a3a54bf4bddaecda8b5767209cfc703f0be2841d ]
 
-The mipi_csis_events array ends with 6 non-error events, not 4. Update
-mipi_csis_log_counters() accordingly. While at it, log event counters in
-forward order, as there's no reason to log them backward.
+There is a problem with the tasklet in bt878. bt->tasklet is set by
+dvb-bt8xx.ko, and bt878.ko can be loaded independently.
+In this case if interrupt comes it may cause null-ptr-dereference.
+To solve this issue, we check if the tasklet is actually set before
+calling tasklet_schedule.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+[    1.750438] bt878(0): irq FDSR FBUS risc_pc=
+[    1.750728] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[    1.752969] RIP: 0010:0x0
+[    1.757526] Call Trace:
+[    1.757659]  <IRQ>
+[    1.757770]  tasklet_action_common.isra.0+0x107/0x110
+[    1.758041]  tasklet_action+0x22/0x30
+[    1.758237]  __do_softirq+0xe0/0x29b
+[    1.758430]  irq_exit_rcu+0xa4/0xb0
+[    1.758618]  common_interrupt+0x8d/0xa0
+[    1.758824]  </IRQ>
+
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/pci/bt8xx/bt878.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 025fdc488bd6..25d0f89b2e53 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -666,13 +666,15 @@ static void mipi_csis_clear_counters(struct csi_state *state)
- 
- static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
- {
--	int i = non_errors ? MIPI_CSIS_NUM_EVENTS : MIPI_CSIS_NUM_EVENTS - 4;
-+	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
-+				: MIPI_CSIS_NUM_EVENTS - 6;
- 	struct device *dev = &state->pdev->dev;
- 	unsigned long flags;
-+	unsigned int i;
- 
- 	spin_lock_irqsave(&state->slock, flags);
- 
--	for (i--; i >= 0; i--) {
-+	for (i = 0; i < num_events; ++i) {
- 		if (state->events[i].counter > 0 || state->debug)
- 			dev_info(dev, "%s events: %d\n", state->events[i].name,
- 				 state->events[i].counter);
+diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
+index 78dd35c9b65d..7ca309121fb5 100644
+--- a/drivers/media/pci/bt8xx/bt878.c
++++ b/drivers/media/pci/bt8xx/bt878.c
+@@ -300,7 +300,8 @@ static irqreturn_t bt878_irq(int irq, void *dev_id)
+ 		}
+ 		if (astat & BT878_ARISCI) {
+ 			bt->finished_block = (stat & BT878_ARISCS) >> 28;
+-			tasklet_schedule(&bt->tasklet);
++			if (bt->tasklet.callback)
++				tasklet_schedule(&bt->tasklet);
+ 			break;
+ 		}
+ 		count++;
 -- 
 2.30.2
 
