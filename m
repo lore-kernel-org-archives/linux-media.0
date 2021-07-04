@@ -4,42 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA33C11F67
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA2AC11F6B
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4839E613FB
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29F24613F1
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbhGDXQD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50590 "EHLO mail.kernel.org"
+        id S233517AbhGDXQG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48840 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232558AbhGDXNP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:13:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 647BF6194A;
-        Sun,  4 Jul 2021 23:08:59 +0000 (UTC)
+        id S232701AbhGDXNR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 26D546196E;
+        Sun,  4 Jul 2021 23:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440140;
-        bh=ics9+4LFLEdVrg/TAATc/op/qasecKi+weli1DrdSsI=;
+        s=k20201202; t=1625440152;
+        bh=ehz4wRZJTq5WtUVqNeuBwjXjAL4ZYS58kSqK78k9AMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PKg0zNs35WyWBUJRYVSheb++WosJcLH9T03+ozJOP7U7jA7sO/Kb1RJAlsZk9IVYZ
-         ZUO3OGg9FjUuOJ8Y2nVUHUdxWyHVbz6+KGc5vl8WRO0AUy4wflqGWKV8pdjqLI7Lmu
-         hF3AQprsj+6UFbfDWObK0YF3JMW80Fj7cYb0ZjcuzXjxpzDO6OfI3DQXRR0TtvllDr
-         9qKLnpdCuawI47gd8PYcN5y4cZyDcFEPbUJ8w9Mq2wlTsSOgU5MraY+MU3QhO5hbK3
-         4DQNtYL5Ca59u9nSo1vTDwG8fsf34tStZlNIOB9BSXOP8M7U2vjRNU3pnbXaoSz4hm
-         QR2kMuezbxHYg==
+        b=rVHOKRd63Sp4w0vaCwXgWL2V5EnTrv0qcmFdq+to9Xqw/jCaS4VNj30pcJJ9u5NlO
+         XNNBSDKuA1HEfyOpg/dWiet+9q8G9lg4ukV13pDW7eAyNnvGQQLqMQv0VGSl4byYWS
+         UsFu8kuAa8UABup55BXqPwBGEoezA1BIkIekBveYrgux65fVAsinK2ffs8/qjli0HO
+         vGR7rz3wVGd9wIgBvSPiNMs6iiJbdXDrRBBcQxuPhSmAKaUzTRAoCu0ZibpeJ41OF4
+         Qei4VZzTQ8ZsLYOMc2mV5H8NjTzeX4zSIe0pftSZz7kx6Rr9z0E2eF/L6gtDhOzTRA
+         jeli2YU09rzwg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 41/70] media: st-hva: Fix potential NULL pointer dereferences
-Date:   Sun,  4 Jul 2021 19:07:34 -0400
-Message-Id: <20210704230804.1490078-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 51/70] media: dvb_net: avoid speculation from net slot
+Date:   Sun,  4 Jul 2021 19:07:44 -0400
+Message-Id: <20210704230804.1490078-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -51,38 +49,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit b7fdd208687ba59ebfb09b2199596471c63b69e3 ]
+[ Upstream commit abc0226df64dc137b48b911c1fe4319aec5891bb ]
 
-When ctx_id >= HVA_MAX_INSTANCES in hva_hw_its_irq_thread() it tries to
-access fields of ctx that is NULL at that point. The patch gets rid of
-these accesses.
+The risk of especulation is actually almost-non-existing here,
+as there are very few users of TCP/IP using the DVB stack,
+as, this is mainly used with DVB-S/S2 cards, and only by people
+that receives TCP/IP from satellite connections, which limits
+a lot the number of users of such feature(*).
 
-Found by Linux Driver Verification project (linuxtesting.org).
+(*) In thesis, DVB-C cards could also benefit from it, but I'm
+yet to see a hardware that supports it.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Yet, fixing it is trivial.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/dvb-core/dvb_net.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index 43f279e2a6a3..cf4c891bf619 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -130,8 +130,7 @@ static irqreturn_t hva_hw_its_irq_thread(int irq, void *arg)
- 	ctx_id = (hva->sts_reg & 0xFF00) >> 8;
- 	if (ctx_id >= HVA_MAX_INSTANCES) {
- 		dev_err(dev, "%s     %s: bad context identifier: %d\n",
--			ctx->name, __func__, ctx_id);
--		ctx->hw_err = true;
-+			HVA_PREFIX, __func__, ctx_id);
- 		goto out;
- 	}
+diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
+index 89620da983ba..dddebea644bb 100644
+--- a/drivers/media/dvb-core/dvb_net.c
++++ b/drivers/media/dvb-core/dvb_net.c
+@@ -45,6 +45,7 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/netdevice.h>
++#include <linux/nospec.h>
+ #include <linux/etherdevice.h>
+ #include <linux/dvb/net.h>
+ #include <linux/uio.h>
+@@ -1462,14 +1463,20 @@ static int dvb_net_do_ioctl(struct file *file,
+ 		struct net_device *netdev;
+ 		struct dvb_net_priv *priv_data;
+ 		struct dvb_net_if *dvbnetif = parg;
++		int if_num = dvbnetif->if_num;
  
+-		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
+-		    !dvbnet->state[dvbnetif->if_num]) {
++		if (if_num >= DVB_NET_DEVICES_MAX) {
+ 			ret = -EINVAL;
+ 			goto ioctl_error;
+ 		}
++		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
+ 
+-		netdev = dvbnet->device[dvbnetif->if_num];
++		if (!dvbnet->state[if_num]) {
++			ret = -EINVAL;
++			goto ioctl_error;
++		}
++
++		netdev = dvbnet->device[if_num];
+ 
+ 		priv_data = netdev_priv(netdev);
+ 		dvbnetif->pid=priv_data->pid;
+@@ -1522,14 +1529,20 @@ static int dvb_net_do_ioctl(struct file *file,
+ 		struct net_device *netdev;
+ 		struct dvb_net_priv *priv_data;
+ 		struct __dvb_net_if_old *dvbnetif = parg;
++		int if_num = dvbnetif->if_num;
++
++		if (if_num >= DVB_NET_DEVICES_MAX) {
++			ret = -EINVAL;
++			goto ioctl_error;
++		}
++		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
+ 
+-		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
+-		    !dvbnet->state[dvbnetif->if_num]) {
++		if (!dvbnet->state[if_num]) {
+ 			ret = -EINVAL;
+ 			goto ioctl_error;
+ 		}
+ 
+-		netdev = dvbnet->device[dvbnetif->if_num];
++		netdev = dvbnet->device[if_num];
+ 
+ 		priv_data = netdev_priv(netdev);
+ 		dvbnetif->pid=priv_data->pid;
 -- 
 2.30.2
 
