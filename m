@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CB4C07E9D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23A19C07E9D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D69961474
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EAE7613E5
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbhGDXJt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:09:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48260 "EHLO mail.kernel.org"
+        id S231324AbhGDXJ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:09:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48840 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231781AbhGDXJI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231789AbhGDXJI (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sun, 4 Jul 2021 19:09:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 872FF613F3;
-        Sun,  4 Jul 2021 23:06:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E81A4613F1;
+        Sun,  4 Jul 2021 23:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439991;
-        bh=hSjnugpCRJfdhSCYyqirPRHugjApYrssbPiR6eQSbaA=;
+        s=k20201202; t=1625439992;
+        bh=VvBNWVfKMUPM1hXDvZqcj89kC+byaY2wtn0l6MzVFvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SyTphcY8UlBiYH7DJcF01DfWKLlj6Etaikx4Vy+Q9kjZiMjyiqiKnL2AeMnwu+lVI
-         CWNHToZNXuJkVYaSKY1Bk0k2EAaeLy+66ew1CCScWE4PEDrwCOtfyghAxIbcSOwNdY
-         eq86an74LmUVTk8UgnHHAvvpZdMyZbGE+5dan1d2CKJEnK87V/7LweM5jyK8Y2sCjV
-         VOFLjkP8NDdHn9/XYLixqZfo9FUgQrUX/EIXT3r7FxkqpBOrlc4sv1sDfRKBnj/V7O
-         46+oyvJtr5SkNWFEjyR/ZnxAw+MxCD3WalxeV5HPKL9R8o0/i8UWviZMsGQYXv5hoj
-         NrrNojG37qYrg==
+        b=NrRFKkUMYfJ7niNI3k/BIGn5No6wKQaqX6lpCAIoVEcBcQUtoZmr3hlC4BzOMOeJo
+         evVY0CzLjbYcPAzOpa3fPiWpYvff4gAaBsFr8LquUFBsZGQy7zlvF6LrHbAD32Znyj
+         6kuSjJ1/Re+JjAPUvbXMedz/CKVl3958PwMLdQAV5jYHHvCKQHaFPz742fVW5k75CV
+         KcjC/4r0kA1TjvhIBSZUyAbqo0W8JtkWS4ZNDWc8s5mYR0Ma0HHiDRAIqFCbLq5cBz
+         6J1w/5iR/2Sln8h/r9wNOjd/YGmyNZ3Xzj0CKI030xyeiqQsCaW4xhQ0+cd0oMVGKg
+         zytRx9x0OGQOw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 11/80] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:05:07 -0400
-Message-Id: <20210704230616.1489200-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.12 12/80] media: sunxi: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:05:08 -0400
+Message-Id: <20210704230616.1489200-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -55,7 +53,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 10343de268d10cf07b092b8b525e12ad558ead77 ]
+[ Upstream commit 9c298f82d8392f799a0595f50076afa1d91e9092 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
@@ -64,36 +62,26 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-As a plus, pm_runtime_resume_and_get() doesn't return
-positive numbers, so the return code validation can
-be removed.
-
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 026111505f5a..d402e456f27d 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2566,11 +2566,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
- static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
--	int ret;
--
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
+diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+index 3f81dd17755c..fbcca59a0517 100644
+--- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
++++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+@@ -494,7 +494,7 @@ static int rotate_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		struct device *dev = ctx->dev->dev;
+ 		int ret;
  
--	return ret > 0 ? 0 : ret;
-+	return pm_runtime_resume_and_get(ctx->jpeg->dev);
- }
+-		ret = pm_runtime_get_sync(dev);
++		ret = pm_runtime_resume_and_get(dev);
+ 		if (ret < 0) {
+ 			dev_err(dev, "Failed to enable module\n");
  
- static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
 -- 
 2.30.2
 
