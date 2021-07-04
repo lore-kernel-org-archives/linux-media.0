@@ -4,42 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA42FC07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A03DC07E9B
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC2706135A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2912F613FC
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbhGDXQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50660 "EHLO mail.kernel.org"
+        id S234651AbhGDXQo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234303AbhGDXPA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:15:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B2C436145D;
-        Sun,  4 Jul 2021 23:12:08 +0000 (UTC)
+        id S234339AbhGDXPE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:15:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D77F6195A;
+        Sun,  4 Jul 2021 23:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440329;
-        bh=dHX1inVFLxX/mAZfDaFUbZKuIuq3XDpHsC/pHKJDIA0=;
+        s=k20201202; t=1625440336;
+        bh=zrYboXMK70Pl5qXC/p9zvCsNi9myE2zUuzYTu+8hHLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DPxkQv4kBNCyYJeRGoV4pIYoAQfgxgOKAYAfv6NbsmEbn9yuCOCV0Suy5U8wQ2k7B
-         M4XLxTFyWVsmhQuf1YwvWU3K+sLjGAbTqTEATwuUJ19sxQIv5zHlm4dxTYUXuFJxlG
-         6L8ztPyCjQNuKuzOoWX1zxgZ91vpBR7oY2XvcXDB68/VV/7TDMr0CrcJDMW9cXXfjz
-         AbYUGqucOEjDGswCidIhRrQIElR3ouEo6AsvRCmkR6O1lBju3oagWxBNNmBVNCMsgB
-         p1HMf12mzUoeLuitYlZo5zjcqwCpZxmyq9qFyOq4WfvtO/2cc8dSh1/7HKYXvBqt3q
-         QTTvcaJcMSleA==
+        b=qqOm3KFd6VkjECuMEeiFti9+A6UqrIpyrLKe7RTuw9X68Eno5rinvPVnFXjZRB+3C
+         rqo8J/gnwJ5GtLGbSTY/mhXvCT5nK3jRHE1nTTUN83n3kFKJPNA4UDKpK0aRgNAFTp
+         CernY6WwFRgLaYGCxmJ0FjVFx+bCDVRsgh5OqOMvkzHzU83gd9K9q8oMwKSJ9M8Rwo
+         8HCBA24PuMOHFXyywZC3z+zRYGURhtoqMeSVc6DjzzDxwHcW8/FH+h3lobeHiGsDkc
+         wkBXys3u0AISmIopjmk6T4G7yyXVhVVSDxWL0gHW6oRFkQDPZLc0FGyc9Df2J8OsxQ
+         A7/GfRjmtWB+w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 10/20] media: v4l2-core: Avoid the dangling pointer in v4l2_fh_release
-Date:   Sun,  4 Jul 2021 19:11:45 -0400
-Message-Id: <20210704231155.1491795-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 16/20] media: siano: fix device register error path
+Date:   Sun,  4 Jul 2021 19:11:51 -0400
+Message-Id: <20210704231155.1491795-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704231155.1491795-1-sashal@kernel.org>
 References: <20210704231155.1491795-1-sashal@kernel.org>
@@ -51,37 +49,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 7dd0c9e547b6924e18712b6b51aa3cba1896ee2c ]
+[ Upstream commit 5368b1ee2939961a16e74972b69088433fc52195 ]
 
-A use after free bug caused by the dangling pointer
-filp->privitate_data in v4l2_fh_release.
-See https://lore.kernel.org/patchwork/patch/1419058/.
+As reported by smatch:
+	drivers/media/common/siano/smsdvb-main.c:1231 smsdvb_hotplug() warn: '&client->entry' not removed from list
 
-My patch sets the dangling pointer to NULL to provide
-robust.
+If an error occur at the end of the registration logic, it won't
+drop the device from the list.
 
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-fh.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/common/siano/smsdvb-main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
-index 0c5e69070586..d44b289205b4 100644
---- a/drivers/media/v4l2-core/v4l2-fh.c
-+++ b/drivers/media/v4l2-core/v4l2-fh.c
-@@ -109,6 +109,7 @@ int v4l2_fh_release(struct file *filp)
- 		v4l2_fh_del(fh);
- 		v4l2_fh_exit(fh);
- 		kfree(fh);
-+		filp->private_data = NULL;
- 	}
+diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
+index 9d5eb8b6aede..3a5b5f94398a 100644
+--- a/drivers/media/common/siano/smsdvb-main.c
++++ b/drivers/media/common/siano/smsdvb-main.c
+@@ -1187,6 +1187,10 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
  	return 0;
- }
+ 
+ media_graph_error:
++	mutex_lock(&g_smsdvb_clientslock);
++	list_del(&client->entry);
++	mutex_unlock(&g_smsdvb_clientslock);
++
+ 	smsdvb_debugfs_release(client);
+ 
+ client_error:
 -- 
 2.30.2
 
