@@ -7,42 +7,43 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CB41C07E9B
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAADC07E96
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F619611ED
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF7C46135A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbhGDXQr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50862 "EHLO mail.kernel.org"
+        id S232847AbhGDXQs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234312AbhGDXPA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:15:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D9F5F61953;
-        Sun,  4 Jul 2021 23:12:09 +0000 (UTC)
+        id S234380AbhGDXPG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:15:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 271B4613F9;
+        Sun,  4 Jul 2021 23:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440330;
-        bh=3Atcb+ZXwwJ52WrjbTl1/RCm42zpjGj5F8AglVM2PuU=;
+        s=k20201202; t=1625440348;
+        bh=qBkLDj45rb1PF1V9JD3djCM3r5QgQxga8StteyAHacw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O01Tc/hIemiMiNYlmF9CBdlIfXIhnBSqjC2Xk6jUFbfGeubz2flT4hmt3MnaPxIsJ
-         CWu+oRNjkdGTgJMP+XTlzb2k5LXzJ74n9ElIXFsCUYfoM6rBlWGyVxQwmZkTyFn2k1
-         DmzSHvx1RKboBXdW4PchpHMetRX4JyPpTdGlEF8J6kGJe2XnJ3dys0eR5JN2zCcMiM
-         7p84IpKcVdqHMeAY2mwZaZX0OrylYiRi7wLOhv2DEgVwZjJzJVBtKo2CbzVx8R4qA8
-         AwtmlX8VOWrUeg93QoUvLmXtSdrFGnR9gLGU9OE7vH7i6RtV4Gwv0y7SGXnq411bIN
-         UAiQKHXM9ldNQ==
+        b=t5t5JGx+NY82FZkogefPEtKPSOgeYJt11lq0YaHq9huJFxqHnCWoPZsMRCDmeIt2w
+         92bVIO5G0ZYcrUveRZ6OdGmqXJURT01Vt0kcM9fW7/nK+DDyEYdEC5yagpursQAYJD
+         fa+bX+zocs6fmXZnBdm1OSKC/XMIYbxLwXVIA94J0nfnrYznKH2LfxCxZ9ir8ErHPJ
+         YAn3mSK4gyOhJ9/XcQ7JwrAbSEzJjyClIn9Lkom7RukEcUt78tuIkYZvHgrA9J4cV+
+         32UA0W3khPkCWiMYIzV5vTPTvD9/G4k7fdoWMEe8AjxYKpkkWGLtNV+he0mKECs9m4
+         iB3dcih70oskw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 11/20] media: bt8xx: Fix a missing check bug in bt878_probe
-Date:   Sun,  4 Jul 2021 19:11:46 -0400
-Message-Id: <20210704231155.1491795-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 04/15] media: cpia2: fix memory leak in cpia2_usb_probe
+Date:   Sun,  4 Jul 2021 19:12:10 -0400
+Message-Id: <20210704231222.1492037-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704231155.1491795-1-sashal@kernel.org>
-References: <20210704231155.1491795-1-sashal@kernel.org>
+In-Reply-To: <20210704231222.1492037-1-sashal@kernel.org>
+References: <20210704231222.1492037-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,120 +52,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 1a4520090681853e6b850cbe54b27247a013e0e5 ]
+[ Upstream commit be8656e62e9e791837b606a027802b504a945c97 ]
 
-In 'bt878_irq', the driver calls 'tasklet_schedule', but this tasklet is
-set in 'dvb_bt8xx_load_card' of another driver 'dvb-bt8xx'.
-However, this two drivers are separate. The user may not load the
-'dvb-bt8xx' driver when loading the 'bt8xx' driver, that is, the tasklet
-has not been initialized when 'tasklet_schedule' is called, so it is
-necessary to check whether the tasklet is initialized in 'bt878_probe'.
+syzbot reported leak in cpia2 usb driver. The problem was
+in invalid error handling.
 
-Fix this by adding a check at the end of bt878_probe.
+v4l2_device_register() is called in cpia2_init_camera_struct(), but
+all error cases after cpia2_init_camera_struct() did not call the
+v4l2_device_unregister()
 
-The KASAN's report reveals it:
-
-BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-PGD 800000006aab2067 P4D 800000006aab2067 PUD 6b2ea067 PMD 0
-Oops: 0010 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 8724 Comm: syz-executor.0 Not tainted 4.19.177-
-gdba4159c14ef-dirty #40
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.0-59-
-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-RIP: 0010:          (null)
-Code: Bad RIP value.
-RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
-RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
-RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
-R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
-R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
-FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
-0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- tasklet_action_common.isra.17+0x141/0x420 kernel/softirq.c:522
- tasklet_action+0x50/0x70 kernel/softirq.c:540
- __do_softirq+0x224/0x92c kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:372 [inline]
- irq_exit+0x15a/0x180 kernel/softirq.c:412
- exiting_irq arch/x86/include/asm/apic.h:535 [inline]
- do_IRQ+0x123/0x1e0 arch/x86/kernel/irq.c:260
- common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
- </IRQ>
-RIP: 0010:__do_sys_interrupt kernel/sys.c:2593 [inline]
-RIP: 0010:__se_sys_interrupt kernel/sys.c:2584 [inline]
-RIP: 0010:__x64_sys_interrupt+0x5b/0x80 kernel/sys.c:2584
-Code: ba 00 04 00 00 48 c7 c7 c0 99 31 8c e8 ae 76 5e 01 48 85 c0 75 21 e8
-14 ae 24 00 48 c7 c3 c0 99 31 8c b8 0c 00 00 00 0f 01 c1 <31> db e8 fe ad
-24 00 48 89 d8 5b 5d c3 48 c7 c3 ea ff ff ff eb ec
-RSP: 0018:ffff888054167f10 EFLAGS: 00000212 ORIG_RAX: ffffffffffffffde
-RAX: 000000000000000c RBX: ffffffff8c3199c0 RCX: ffffc90001ca6000
-RDX: 000000000000001a RSI: ffffffff813478fc RDI: ffffffff8c319dc0
-RBP: ffff888054167f18 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000080 R11: fffffbfff18633b7 R12: ffff888054167f58
-R13: ffff88805f638000 R14: 0000000000000000 R15: 0000000000000000
- do_syscall_64+0xb0/0x4e0 arch/x86/entry/common.c:293
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4692a9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6b550e5c48 EFLAGS: 00000246 ORIG_RAX: 000000000000014f
-RAX: ffffffffffffffda RBX: 000000000077bf60 RCX: 00000000004692a9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000140
-RBP: 00000000004cf7eb R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf60
-R13: 0000000000000000 R14: 000000000077bf60 R15: 00007fff55a1dca0
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-CR2: 0000000000000000
----[ end trace 68e5849c3f77cbb6 ]---
-RIP: 0010:          (null)
-Code: Bad RIP value.
-RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
-RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
-RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
-R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
-R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
-FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
-0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Reported-by: syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/bt8xx/bt878.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/usb/cpia2/cpia2.h      |  1 +
+ drivers/media/usb/cpia2/cpia2_core.c | 12 ++++++++++++
+ drivers/media/usb/cpia2/cpia2_usb.c  | 13 +++++++------
+ 3 files changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
-index 90fcccc05b56..c678d7120727 100644
---- a/drivers/media/pci/bt8xx/bt878.c
-+++ b/drivers/media/pci/bt8xx/bt878.c
-@@ -494,6 +494,9 @@ static int bt878_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	btwrite(0, BT878_AINT_MASK);
- 	bt878_num++;
+diff --git a/drivers/media/usb/cpia2/cpia2.h b/drivers/media/usb/cpia2/cpia2.h
+index cdef677d57ec..80a7af6482ae 100644
+--- a/drivers/media/usb/cpia2/cpia2.h
++++ b/drivers/media/usb/cpia2/cpia2.h
+@@ -442,6 +442,7 @@ int cpia2_send_command(struct camera_data *cam, struct cpia2_command *cmd);
+ int cpia2_do_command(struct camera_data *cam,
+ 		     unsigned int command,
+ 		     unsigned char direction, unsigned char param);
++void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf);
+ struct camera_data *cpia2_init_camera_struct(struct usb_interface *intf);
+ int cpia2_init_camera(struct camera_data *cam);
+ int cpia2_allocate_buffers(struct camera_data *cam);
+diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
+index 187012ce444b..35c9e00267d5 100644
+--- a/drivers/media/usb/cpia2/cpia2_core.c
++++ b/drivers/media/usb/cpia2/cpia2_core.c
+@@ -2158,6 +2158,18 @@ static void reset_camera_struct(struct camera_data *cam)
+ 	cam->height = cam->params.roi.height;
+ }
  
-+	if (!bt->tasklet.func)
-+		tasklet_disable(&bt->tasklet);
++/******************************************************************************
++ *
++ *  cpia2_init_camera_struct
++ *
++ *  Deinitialize camera struct
++ *****************************************************************************/
++void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf)
++{
++	v4l2_device_unregister(&cam->v4l2_dev);
++	kfree(cam);
++}
 +
- 	return 0;
+ /******************************************************************************
+  *
+  *  cpia2_init_camera_struct
+diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
+index 76b9cb940b87..7bd50feadfe4 100644
+--- a/drivers/media/usb/cpia2/cpia2_usb.c
++++ b/drivers/media/usb/cpia2/cpia2_usb.c
+@@ -835,15 +835,13 @@ static int cpia2_usb_probe(struct usb_interface *intf,
+ 	ret = set_alternate(cam, USBIF_CMDONLY);
+ 	if (ret < 0) {
+ 		ERR("%s: usb_set_interface error (ret = %d)\n", __func__, ret);
+-		kfree(cam);
+-		return ret;
++		goto alt_err;
+ 	}
  
-       fail2:
+ 
+ 	if((ret = cpia2_init_camera(cam)) < 0) {
+ 		ERR("%s: failed to initialize cpia2 camera (ret = %d)\n", __func__, ret);
+-		kfree(cam);
+-		return ret;
++		goto alt_err;
+ 	}
+ 	LOG("  CPiA Version: %d.%02d (%d.%d)\n",
+ 	       cam->params.version.firmware_revision_hi,
+@@ -863,11 +861,14 @@ static int cpia2_usb_probe(struct usb_interface *intf,
+ 	ret = cpia2_register_camera(cam);
+ 	if (ret < 0) {
+ 		ERR("%s: Failed to register cpia2 camera (ret = %d)\n", __func__, ret);
+-		kfree(cam);
+-		return ret;
++		goto alt_err;
+ 	}
+ 
+ 	return 0;
++
++alt_err:
++	cpia2_deinit_camera_struct(cam, intf);
++	return ret;
+ }
+ 
+ /******************************************************************************
 -- 
 2.30.2
 
