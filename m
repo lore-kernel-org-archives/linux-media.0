@@ -4,40 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D8CCC11F6D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA33C11F67
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2FE5613F1
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4839E613FB
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbhGDXQE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48298 "EHLO mail.kernel.org"
+        id S233382AbhGDXQD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50590 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232710AbhGDXNR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:13:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3AD966135D;
-        Sun,  4 Jul 2021 23:09:13 +0000 (UTC)
+        id S232558AbhGDXNP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 647BF6194A;
+        Sun,  4 Jul 2021 23:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440153;
-        bh=BlGq8KKuCkSpLMk5NR9JZxmkyEyOdfvm0EvyJwhVNFY=;
+        s=k20201202; t=1625440140;
+        bh=ics9+4LFLEdVrg/TAATc/op/qasecKi+weli1DrdSsI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=om+KF5bxtH8aMNcpU9Yfo+nt5GCW+KwIAe4fqNK/1ASlIcYTz9UJM0FY8+r7xNWI+
-         hlO3ypxUpdbOAJ4OoCaxQI+GuYVunQXirwZaLRhmIg52eL1bJzLMlyc5io18xPgxTu
-         T+TMrITWru6OxqapnLfH6x9tDP4aiIHT3oJ4HAp2LeQWy0oacWTgDNpMMB/PzYqyL2
-         jAbCSoLuVTH7SMiVczRIzLEEq3iLy7HAKLJt1KvCEFs66TIkrb9Pn7PCe+Fqt7o4+s
-         8bWSSIBlaNrfT7fAoFR4ksBN17zivbm5IdWjcBU4H2hbrrP4UTqaghAQF4VOhRw4if
-         TV4olc12G9euQ==
+        b=PKg0zNs35WyWBUJRYVSheb++WosJcLH9T03+ozJOP7U7jA7sO/Kb1RJAlsZk9IVYZ
+         ZUO3OGg9FjUuOJ8Y2nVUHUdxWyHVbz6+KGc5vl8WRO0AUy4wflqGWKV8pdjqLI7Lmu
+         hF3AQprsj+6UFbfDWObK0YF3JMW80Fj7cYb0ZjcuzXjxpzDO6OfI3DQXRR0TtvllDr
+         9qKLnpdCuawI47gd8PYcN5y4cZyDcFEPbUJ8w9Mq2wlTsSOgU5MraY+MU3QhO5hbK3
+         4DQNtYL5Ca59u9nSo1vTDwG8fsf34tStZlNIOB9BSXOP8M7U2vjRNU3pnbXaoSz4hm
+         QR2kMuezbxHYg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 52/70] media: siano: fix device register error path
-Date:   Sun,  4 Jul 2021 19:07:45 -0400
-Message-Id: <20210704230804.1490078-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 41/70] media: st-hva: Fix potential NULL pointer dereferences
+Date:   Sun,  4 Jul 2021 19:07:34 -0400
+Message-Id: <20210704230804.1490078-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -49,37 +51,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit 5368b1ee2939961a16e74972b69088433fc52195 ]
+[ Upstream commit b7fdd208687ba59ebfb09b2199596471c63b69e3 ]
 
-As reported by smatch:
-	drivers/media/common/siano/smsdvb-main.c:1231 smsdvb_hotplug() warn: '&client->entry' not removed from list
+When ctx_id >= HVA_MAX_INSTANCES in hva_hw_its_irq_thread() it tries to
+access fields of ctx that is NULL at that point. The patch gets rid of
+these accesses.
 
-If an error occur at the end of the registration logic, it won't
-drop the device from the list.
+Found by Linux Driver Verification project (linuxtesting.org).
 
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/common/siano/smsdvb-main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/platform/sti/hva/hva-hw.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
-index ae17407e477a..7cc654bc52d3 100644
---- a/drivers/media/common/siano/smsdvb-main.c
-+++ b/drivers/media/common/siano/smsdvb-main.c
-@@ -1176,6 +1176,10 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
- 	return 0;
+diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
+index 43f279e2a6a3..cf4c891bf619 100644
+--- a/drivers/media/platform/sti/hva/hva-hw.c
++++ b/drivers/media/platform/sti/hva/hva-hw.c
+@@ -130,8 +130,7 @@ static irqreturn_t hva_hw_its_irq_thread(int irq, void *arg)
+ 	ctx_id = (hva->sts_reg & 0xFF00) >> 8;
+ 	if (ctx_id >= HVA_MAX_INSTANCES) {
+ 		dev_err(dev, "%s     %s: bad context identifier: %d\n",
+-			ctx->name, __func__, ctx_id);
+-		ctx->hw_err = true;
++			HVA_PREFIX, __func__, ctx_id);
+ 		goto out;
+ 	}
  
- media_graph_error:
-+	mutex_lock(&g_smsdvb_clientslock);
-+	list_del(&client->entry);
-+	mutex_unlock(&g_smsdvb_clientslock);
-+
- 	smsdvb_debugfs_release(client);
- 
- client_error:
 -- 
 2.30.2
 
