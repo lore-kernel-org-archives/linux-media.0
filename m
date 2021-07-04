@@ -7,41 +7,39 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBADCC07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D30E5C11F66
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C866261283
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1A4C6135D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbhGDXQR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
+        id S234048AbhGDXQU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233355AbhGDXOW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E9C06192E;
-        Sun,  4 Jul 2021 23:09:45 +0000 (UTC)
+        id S233565AbhGDXOc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E89861991;
+        Sun,  4 Jul 2021 23:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440187;
-        bh=oqXXELPSZ+EWrXn9i3R3Ms/gMlU6dKWMz5mClD4XVT4=;
+        s=k20201202; t=1625440211;
+        bh=mSgtgH7YEUl4727KVu2NypvL5nFwrrM2sSBIZQo+XxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bef8CXZTMZoIrFH/G+bmvvLe46BrU9M7BGlPDLe9jM25dpwd6dfQolNVuOxs6Ucph
-         15D/Wvi9gTDUYCZu3fOcKjvWl0YdHLhkRleJuPg8TQyozwZScbFhqspasnjFdonmsC
-         zccE0TPPnmTx9F2VxKg77+OtDhd1Byh3xI4Z1NmBAKRUAfbPh5phKMpYBDpZfbBzAC
-         oxZXWBsz7iNBd+fQRM+m4jamoXxkM90kw/9P5+IOQRaOwJ/faLEzsVEf8hbzMZEqrB
-         xqNYMOSy42Jfw/SVE4rnywHOVDgXGl9lx/EVdN95gk19caFZ9zsfbZfZqFkRSK/yFI
-         fsb7xoNojhWZA==
+        b=LbHgKFbUMyWKCZxSa0sDlsFi49OJGqepmtPfBBavgn68ynXyGrkeomSEYhpasf8I0
+         UKRpSDwL+x1EGOJdMBg8Lgu9eHIEo3Dd0JFgwW6xEujWjm7M7REPGwfFjfqPci+c23
+         O00Ne7yrs42GsyoJcQgsHJMIk3u5hmlwK3dNSfLJF7japcnBwYPWq5jkr1sfkssvEu
+         g2G+AQJ5hrN1j4oU1LFwbslBDwsV9sfC5C1uCeaHTUr2XdfMnoYlbhUfInrv/1W2rc
+         9ThBPNLOwWVFmuosD0YCoAsFQKF2+3sx0jPlePIWH8rw/wARgtFPliOeUpsuQlh2y0
+         WgUaepKHEAB5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 06/50] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:08:54 -0400
-Message-Id: <20210704230938.1490742-6-sashal@kernel.org>
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 25/50] media: bt8xx: Fix a missing check bug in bt878_probe
+Date:   Sun,  4 Jul 2021 19:09:13 -0400
+Message-Id: <20210704230938.1490742-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
 References: <20210704230938.1490742-1-sashal@kernel.org>
@@ -53,47 +51,120 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 10343de268d10cf07b092b8b525e12ad558ead77 ]
+[ Upstream commit 1a4520090681853e6b850cbe54b27247a013e0e5 ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+In 'bt878_irq', the driver calls 'tasklet_schedule', but this tasklet is
+set in 'dvb_bt8xx_load_card' of another driver 'dvb-bt8xx'.
+However, this two drivers are separate. The user may not load the
+'dvb-bt8xx' driver when loading the 'bt8xx' driver, that is, the tasklet
+has not been initialized when 'tasklet_schedule' is called, so it is
+necessary to check whether the tasklet is initialized in 'bt878_probe'.
 
-As a plus, pm_runtime_resume_and_get() doesn't return
-positive numbers, so the return code validation can
-be removed.
+Fix this by adding a check at the end of bt878_probe.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+The KASAN's report reveals it:
+
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+PGD 800000006aab2067 P4D 800000006aab2067 PUD 6b2ea067 PMD 0
+Oops: 0010 [#1] PREEMPT SMP KASAN PTI
+CPU: 2 PID: 8724 Comm: syz-executor.0 Not tainted 4.19.177-
+gdba4159c14ef-dirty #40
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.0-59-
+gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+RIP: 0010:          (null)
+Code: Bad RIP value.
+RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
+RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
+RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
+R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
+R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
+FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
+0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ tasklet_action_common.isra.17+0x141/0x420 kernel/softirq.c:522
+ tasklet_action+0x50/0x70 kernel/softirq.c:540
+ __do_softirq+0x224/0x92c kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:372 [inline]
+ irq_exit+0x15a/0x180 kernel/softirq.c:412
+ exiting_irq arch/x86/include/asm/apic.h:535 [inline]
+ do_IRQ+0x123/0x1e0 arch/x86/kernel/irq.c:260
+ common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
+ </IRQ>
+RIP: 0010:__do_sys_interrupt kernel/sys.c:2593 [inline]
+RIP: 0010:__se_sys_interrupt kernel/sys.c:2584 [inline]
+RIP: 0010:__x64_sys_interrupt+0x5b/0x80 kernel/sys.c:2584
+Code: ba 00 04 00 00 48 c7 c7 c0 99 31 8c e8 ae 76 5e 01 48 85 c0 75 21 e8
+14 ae 24 00 48 c7 c3 c0 99 31 8c b8 0c 00 00 00 0f 01 c1 <31> db e8 fe ad
+24 00 48 89 d8 5b 5d c3 48 c7 c3 ea ff ff ff eb ec
+RSP: 0018:ffff888054167f10 EFLAGS: 00000212 ORIG_RAX: ffffffffffffffde
+RAX: 000000000000000c RBX: ffffffff8c3199c0 RCX: ffffc90001ca6000
+RDX: 000000000000001a RSI: ffffffff813478fc RDI: ffffffff8c319dc0
+RBP: ffff888054167f18 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000080 R11: fffffbfff18633b7 R12: ffff888054167f58
+R13: ffff88805f638000 R14: 0000000000000000 R15: 0000000000000000
+ do_syscall_64+0xb0/0x4e0 arch/x86/entry/common.c:293
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4692a9
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b550e5c48 EFLAGS: 00000246 ORIG_RAX: 000000000000014f
+RAX: ffffffffffffffda RBX: 000000000077bf60 RCX: 00000000004692a9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000140
+RBP: 00000000004cf7eb R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf60
+R13: 0000000000000000 R14: 000000000077bf60 R15: 00007fff55a1dca0
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+CR2: 0000000000000000
+---[ end trace 68e5849c3f77cbb6 ]---
+RIP: 0010:          (null)
+Code: Bad RIP value.
+RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
+RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
+RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
+R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
+R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
+FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
+0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/pci/bt8xx/bt878.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-index 8dbbd5f2a40a..06e17946bbb6 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
-@@ -2579,11 +2579,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
- static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
--	int ret;
--
--	ret = pm_runtime_get_sync(ctx->jpeg->dev);
+diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
+index 53af26ad1dfb..1a741b47eaa1 100644
+--- a/drivers/media/pci/bt8xx/bt878.c
++++ b/drivers/media/pci/bt8xx/bt878.c
+@@ -477,6 +477,9 @@ static int bt878_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	btwrite(0, BT878_AINT_MASK);
+ 	bt878_num++;
  
--	return ret > 0 ? 0 : ret;
-+	return pm_runtime_resume_and_get(ctx->jpeg->dev);
- }
++	if (!bt->tasklet.func)
++		tasklet_disable(&bt->tasklet);
++
+ 	return 0;
  
- static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
+       fail2:
 -- 
 2.30.2
 
