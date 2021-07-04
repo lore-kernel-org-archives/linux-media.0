@@ -5,40 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09322C07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 013B5C07E9A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBCDA6195C
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E53356197D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbhGDXMd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:12:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48298 "EHLO mail.kernel.org"
+        id S230098AbhGDXMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:12:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232047AbhGDXLb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:11:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8781761483;
-        Sun,  4 Jul 2021 23:08:19 +0000 (UTC)
+        id S231446AbhGDXLZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:11:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C13286195C;
+        Sun,  4 Jul 2021 23:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440100;
-        bh=7kM2a15ZQmlJKy3BAp/RcYaPlz4U1rdIR5s2Vcfglg0=;
+        s=k20201202; t=1625440097;
+        bh=roqyspRFC1/DgrllRoflMHE9bkjkXJi48MaQ1+M2RGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzqI/cIzNnn0yVUKxLWDNGobb0NlV4rqGwjS1w208Zs6i6nA8LG25kkeHOxH/QZJy
-         TNUVtSG+nRx4ztYqesFWxPm+2MAOpecAbaNUrvafNMVcFZxsQ3D5zF0R+uUBWraSsu
-         /BVpNoCmIQx4dXOiUR4NDDMkEaV31N4f+YvkUNal+8HiB5+MJQfJpd5LJXecnzujtx
-         EEKbh0Te0P5uWfM+RW/6FJAS7uy3StxAzzSTidBMdjFq1cIGgec/ES3kEnMS5/o1Oa
-         V/lwf2cMT+lXQuf0L0V9Can/fVXIH5aXd1Qmq2ZIx4Tq5PuQjWndRicy348Pobsccg
-         VudtABG21mzLQ==
+        b=NPnaX3GIFpc2h/x8RfwgtJsp/2pGsuG8RorQGG+cU4S70qGBzLcnA/PtesgAyhyEa
+         qU0ktyJ52J0c2fXGn65dkzzJss3+9R6JZz5r8IiGnDWgNn2Twl/Wdd5qBpUajhNIY3
+         9Px3eXDNk5N+aTz9CfPihm2E/dGBArQiG9cltE2rhOUhLELKIrrX3FUnpMd0SWVK1v
+         VFA/EuhHpNGoDED7yvquPoTivvG44o2mz2+/JeL3ipdyaLliWikUhxH4BC/7zQn+Ab
+         VvhqUDITLvnjP4HKmrexGdWb3p7gi8zwhR94E0RUPY3D0F+cZ5bMA1/OUSilW6DsHN
+         7C+DnozvPuBjA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 12/70] media: sti/bdisp: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:07:05 -0400
-Message-Id: <20210704230804.1490078-12-sashal@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 10/70] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:07:03 -0400
+Message-Id: <20210704230804.1490078-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -52,63 +55,45 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit c44eac5b72e23c31eefc0e10a71d9650036b8341 ]
+[ Upstream commit 10343de268d10cf07b092b8b525e12ad558ead77 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
-
-The bdisp_start_streaming() doesn't take it into account, which
-would unbalance PM usage counter at bdisp_stop_streaming().
-
-The logic at bdisp_probe() is correct, but the best is to use
-the same call along the driver.
-
-So, replace it by the new pm_runtime_resume_and_get(), introduced by:
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
 commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
+As a plus, pm_runtime_resume_and_get() doesn't return
+positive numbers, so the return code validation can
+be removed.
+
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-index 060ca85f64d5..85288da9d2ae 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+index 9b22dd8e34f4..d515eb08c3ee 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+@@ -2566,11 +2566,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
+ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
  {
- 	struct bdisp_ctx *ctx = q->drv_priv;
- 	struct vb2_v4l2_buffer *buf;
--	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
-+	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
+ 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(ctx->jpeg->dev);
  
- 	if (ret < 0) {
- 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
-@@ -1364,10 +1364,10 @@ static int bdisp_probe(struct platform_device *pdev)
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(ctx->jpeg->dev);
+ }
  
- 	/* Power management */
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to set PM\n");
--		goto err_pm;
-+		goto err_remove;
- 	}
- 
- 	/* Filters */
-@@ -1395,6 +1395,7 @@ static int bdisp_probe(struct platform_device *pdev)
- 	bdisp_hw_free_filters(bdisp->dev);
- err_pm:
- 	pm_runtime_put(dev);
-+err_remove:
- 	bdisp_debugfs_remove(bdisp);
- 	v4l2_device_unregister(&bdisp->v4l2_dev);
- err_clk:
+ static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
 -- 
 2.30.2
 
