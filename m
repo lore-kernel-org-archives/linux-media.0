@@ -7,40 +7,41 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAFEC07E96
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FDCC07E9C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1783160234
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E3E361363
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbhGDXSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:18:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56964 "EHLO mail.kernel.org"
+        id S233619AbhGDXS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:18:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233185AbhGDXOO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E184F61375;
-        Sun,  4 Jul 2021 23:09:40 +0000 (UTC)
+        id S233513AbhGDXOa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4BD576195D;
+        Sun,  4 Jul 2021 23:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440181;
-        bh=ckir8RldbnMAvlDvA4IMDq+PDg7k94QnMDElRdgMxng=;
+        s=k20201202; t=1625440203;
+        bh=oM6rNDpqYweL1cftZv3xe5lFVrjsjChJGVwr3e8zkuk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jb17Yx80vH7NhFXdzzw5bpewlYUPgwqZBrHrS3+DFHhxvPGGE8AozqBoXKm6szP5i
-         Q5TxE5uFwa6J6VMqTQVaP+T4zqGTHfKGtBi/aRV2qMI0MmijOF66TuoX3a/Bi8tQYN
-         7X0BqDlKQJXpxqJk33qJ/Xuw4CNA5w0WWtkq0+7sJx1knyne+2pHasBd/nP/gB/62U
-         GrB0zVYChLMmp+WoL8HtuYfeYjpMgkLorYqRC3Fndp3ktis/3aPiW+895Nznw2DNd8
-         B2oHStU3X6B/gsIvbQJtpSGbIJqrh+QXIo/UNpSnbQfYaSD92IoZcfY0PBw1Qr5Ad3
-         5yK95Ck9yQvdQ==
+        b=APY4fmy644bXE6E1qPOZamwaL5DmCO4qByKYzajOl7THQD/M0npe5oLe/+R8SPwLP
+         67PK2AJordaoRvjTp9TV7TFsL309VIRtiQna8nEPKycGH6Pidv2tV0ksYLYF5dpQPF
+         DvvaffxWctUvTtX9mpuijkmk0AjOOM6yZGnkx3xgHvRk5wcjvsFEisCdjYvYGsMpLK
+         yCcgLZ4dOex+VGbsZlpQ2rKNEX2kE9KeljgRVeWpTXgyawvWOSI2tmRG3nHYozaKEQ
+         gs9MPK/iDlSE2U1eaQSB8RNcNa0Z7Z42WG84L9+JCZy3aLwlIB59nb2fF9C+rW4KWP
+         gIsymgmbPF2Uw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 02/50] media: mdk-mdp: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:08:50 -0400
-Message-Id: <20210704230938.1490742-2-sashal@kernel.org>
+        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 19/50] media: imx: imx7_mipi_csis: Fix logging of only error event counters
+Date:   Sun,  4 Jul 2021 19:09:07 -0400
+Message-Id: <20210704230938.1490742-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
 References: <20210704230938.1490742-1-sashal@kernel.org>
@@ -52,48 +53,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit d07bb9702cf5f5ccf3fb661e6cab54bbc33cd23f ]
+[ Upstream commit d2fcc9c2de1191ea80366e3658711753738dd10a ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+The mipi_csis_events array ends with 6 non-error events, not 4. Update
+mipi_csis_log_counters() accordingly. While at it, log event counters in
+forward order, as there's no reason to log them backward.
 
-While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
-as it doesn't make any sense to return 0 if the PM runtime failed
-to resume.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index 7c9e2d69e21a..34bc2949e1d6 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -402,12 +402,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mtk_mdp_ctx *ctx = q->drv_priv;
- 	int ret;
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 021bbd420390..63bc78e4cac8 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -528,13 +528,15 @@ static void mipi_csis_clear_counters(struct csi_state *state)
  
--	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
- 	if (ret < 0)
--		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
-+		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
- 			    ctx->id, ret);
+ static void mipi_csis_log_counters(struct csi_state *state, bool non_errors)
+ {
+-	int i = non_errors ? MIPI_CSIS_NUM_EVENTS : MIPI_CSIS_NUM_EVENTS - 4;
++	unsigned int num_events = non_errors ? MIPI_CSIS_NUM_EVENTS
++				: MIPI_CSIS_NUM_EVENTS - 6;
+ 	struct device *dev = &state->pdev->dev;
+ 	unsigned long flags;
++	unsigned int i;
  
--	return 0;
-+	return ret;
- }
+ 	spin_lock_irqsave(&state->slock, flags);
  
- static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
+-	for (i--; i >= 0; i--) {
++	for (i = 0; i < num_events; ++i) {
+ 		if (state->events[i].counter > 0 || state->debug)
+ 			dev_info(dev, "%s events: %d\n", state->events[i].name,
+ 				 state->events[i].counter);
 -- 
 2.30.2
 
