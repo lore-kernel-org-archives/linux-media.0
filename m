@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FE0DC07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B876CC07E9D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DDBB6194E
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7BFF61364
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbhGDXJ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:09:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
+        id S231335AbhGDXKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:10:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49476 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231768AbhGDXJG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:09:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 30BF6611ED;
-        Sun,  4 Jul 2021 23:06:29 +0000 (UTC)
+        id S232165AbhGDXKE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:10:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF60F613F9;
+        Sun,  4 Jul 2021 23:07:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439990;
-        bh=c5RGKMO/Iij/OF/EMGrK9bgD+2TCuXmHaKdi0NSsXx4=;
+        s=k20201202; t=1625440040;
+        bh=lJ3hh8R41P8DiijbBEOO6KYz41OVlnc6F8l5msauMoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a5E/5sojpdRZPuxteqBfJ6FRfBy+hYZZz+D0CBiEiPICeN+Vlyxr9X2UEMqMueCAM
-         iaC7kZ6PI2RnrkHdoggCoOF/6V9gBBWPGRThn0PErA0x0cHrLVTtelc/CJcZG0e4pm
-         0B4pk4BiK88dEqFE+NvKh61gRFXQazRNtD+gxCJjRvoLUs4YM7aHEuITEWKglsDVwb
-         lM3ztyW+djVUtot+8NIHr56Z4JwGFpIBCRj2pM3aj+oNowPxVQOR3uzMn5FUtcuZ5/
-         Oa3BpVNrEMf6rXH3EEfkNCJLvoUz4ZCA+RAKH3k9b1Zpd7G/DLCUijAt5x9hOGlJNm
-         wCQfy6Mc2c62g==
+        b=oaDgPZf5UgSKpSbuK7UFRlMOzBLABMGUU5ykP+G7dnTaRmtplkTM0Kxspzbw8WH9K
+         qIgLXh4EKJAy0Xm/ChWErXvj0Vo22f7G87ktRFBKS1ZYQMt8KerXGuUTBm5sYT9f8r
+         Tr9YVg36UB+FIYTR6m8qut7xSMOyDmSQQupXzSnoBAAnz9e0ssv2BA3BVC8TB4rg8Y
+         Q7vXIPHTWcsxi1Ow82zt8MOgkn9xXLj1TVzTpseylWCCASfcKCNGphca7oBntlb9X3
+         mWYlH8/bQUgNbWlw6SJsCUQw54IBvNb3Qy7BIF/ovvUcXg9HpZvn6tDbsh32siNXf1
+         m1dR56mCwQusA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.12 10/80] media: mtk-vcodec: fix PM runtime get logic
-Date:   Sun,  4 Jul 2021 19:05:06 -0400
-Message-Id: <20210704230616.1489200-10-sashal@kernel.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 47/80] media: dvd_usb: memory leak in cinergyt2_fe_attach
+Date:   Sun,  4 Jul 2021 19:05:43 -0400
+Message-Id: <20210704230616.1489200-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -52,84 +52,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 908711f542c17fe61e5d653da1beb8e5ab5c7b50 ]
+[ Upstream commit 9ad1efee086e0e913914fa2b2173efb830bad68c ]
 
-Currently, the driver just assumes that PM runtime logic
-succeded resuming the device.
+When the driver fails to talk with the hardware with dvb_usb_generic_rw,
+it will return an error to dvb_usb_adapter_frontend_init. However, the
+driver forgets to free the resource (e.g., struct cinergyt2_fe_state),
+which leads to a memory leak.
 
-That may not be the case, as pm_runtime_get_sync()
-can fail (but keeping the usage count incremented).
+Fix this by freeing struct cinergyt2_fe_state when dvb_usb_generic_rw
+fails in cinergyt2_frontend_attach.
 
-Replace the code to use pm_runtime_resume_and_get(),
-and letting it return the error code.
+backtrace:
+  [<0000000056e17b1a>] kmalloc include/linux/slab.h:552 [inline]
+  [<0000000056e17b1a>] kzalloc include/linux/slab.h:682 [inline]
+  [<0000000056e17b1a>] cinergyt2_fe_attach+0x21/0x80 drivers/media/usb/dvb-usb/cinergyT2-fe.c:271
+  [<00000000ae0b1711>] cinergyt2_frontend_attach+0x21/0x70 drivers/media/usb/dvb-usb/cinergyT2-core.c:74
+  [<00000000d0254861>] dvb_usb_adapter_frontend_init+0x11b/0x1b0 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:290
+  [<0000000002e08ac6>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:84 [inline]
+  [<0000000002e08ac6>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:173 [inline]
+  [<0000000002e08ac6>] dvb_usb_device_init.cold+0x4d0/0x6ae drivers/media/usb/dvb-usb/dvb-usb-init.c:287
 
-This way, if mtk_vcodec_dec_pw_on() fails, the logic
-under fops_vcodec_open() will do the right thing and
-return an error, instead of just assuming that the
-device is ready to be used.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reported-by: syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 4 +++-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c  | 8 +++++---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h  | 2 +-
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/usb/dvb-usb/cinergyT2-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 147dfef1638d..f87dc47d9e63 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -126,7 +126,9 @@ static int fops_vcodec_open(struct file *file)
- 	mtk_vcodec_dec_set_default_params(ctx);
+diff --git a/drivers/media/usb/dvb-usb/cinergyT2-core.c b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+index 969a7ec71dff..4116ba5c45fc 100644
+--- a/drivers/media/usb/dvb-usb/cinergyT2-core.c
++++ b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+@@ -78,6 +78,8 @@ static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
  
- 	if (v4l2_fh_is_singular(&ctx->fh)) {
--		mtk_vcodec_dec_pw_on(&dev->pm);
-+		ret = mtk_vcodec_dec_pw_on(&dev->pm);
-+		if (ret < 0)
-+			goto err_load_fw;
- 		/*
- 		 * Does nothing if firmware was already loaded.
- 		 */
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-index ddee7046ce42..6038db96f71c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-@@ -88,13 +88,15 @@ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
- 	put_device(dev->pm.larbvdec);
- }
- 
--void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
-+int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
- {
- 	int ret;
- 
--	ret = pm_runtime_get_sync(pm->dev);
-+	ret = pm_runtime_resume_and_get(pm->dev);
- 	if (ret)
--		mtk_v4l2_err("pm_runtime_get_sync fail %d", ret);
-+		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
-+
-+	return ret;
- }
- 
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-index 872d8bf8cfaf..280aeaefdb65 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-@@ -12,7 +12,7 @@
- int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
- void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
- 
--void mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
-+int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm);
+ 	ret = dvb_usb_generic_rw(d, st->data, 1, st->data, 3, 0);
+ 	if (ret < 0) {
++		if (adap->fe_adap[0].fe)
++			adap->fe_adap[0].fe->ops.release(adap->fe_adap[0].fe);
+ 		deb_rc("cinergyt2_power_ctrl() Failed to retrieve sleep state info\n");
+ 	}
+ 	mutex_unlock(&d->data_mutex);
 -- 
 2.30.2
 
