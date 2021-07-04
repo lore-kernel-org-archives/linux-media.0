@@ -2,43 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42A8EC07E96
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 521D3C07E95
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EE3E613F1
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:10:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C57C619A5
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbhGDXN3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:13:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50748 "EHLO mail.kernel.org"
+        id S232894AbhGDXNd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:13:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50660 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232165AbhGDXMT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:12:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1B7E161283;
-        Sun,  4 Jul 2021 23:08:38 +0000 (UTC)
+        id S232009AbhGDXMS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:12:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F29A6195B;
+        Sun,  4 Jul 2021 23:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440118;
-        bh=QscHBCdwyz845ByNO9AmsX1v5TFqG9DVE99wooaq7oI=;
+        s=k20201202; t=1625440116;
+        bh=EKY1OlRJO93TJiFmqfgVZB3HH1bgpwa6v7NyZcI16Qg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eu8yX6cyMbSQdS4FVX/4hiUaim2G2vaISuT2z8xZdgbt37xTm9LlPN9FaKF2DzRs6
-         Nd936SiLlGGagf2/EBwHcRZNENqYx8oabWXIgdNYuNEhwuOKXAeMqHXuLCGveFnJ+q
-         rpnoyLblzbPoXBNkhxQmPFUHzI89h1DfxNIW1gIgQwp6TZ8qU1bhBk4rRBYhIPJzHC
-         qDrqNFOJoFXI5dYWRp23m8bLCe5lysTsuV6rdHrXVAR5Qw+XFzuol+VAqSNesPQiqQ
-         engze+SdiPNpOl+Ce9gmjNM5roEYClJw7m3R6nsU5Mhf1YfSufawvJMuGbGKqXOctm
-         hD3l7Z4vApjlg==
+        b=cJcx1jJaVma9Qheak1V6kqGK3Tr9puzUal/G0sN7KB7k0aF8YuBA3wpBTJ7MqylLF
+         +VhlHsDcfDg+cEPl+261JO5gZOxDUzIdU4JIYvPpwywcloqQ92yGAbO5t2/v6I4l0w
+         4TofxzUpwlGyXkWYXLAFWP1gJkqyGX39giSXDUrqcsWmB2qtfZiYoK3uaP/Cg4lF6T
+         zkKJybqn3pV6+zlRoDtrB6IdPh+O9m7aF0T67Jz3ZYjtLonL+p/q30MGZipscVkV2E
+         HYLmt8WOCtIzc3wvVAjDe1217lgcbRYsl33E7xaImNG/PTtuJNeHJlQhuHoqN9dxsQ
+         HEVbfy0+zbKRw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 25/70] media: cobalt: fix race condition in setting HPD
-Date:   Sun,  4 Jul 2021 19:07:18 -0400
-Message-Id: <20210704230804.1490078-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 23/70] media: sti: fix obj-$(config) targets
+Date:   Sun,  4 Jul 2021 19:07:16 -0400
+Message-Id: <20210704230804.1490078-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -50,68 +49,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 3d37ef41bed0854805ab9af22c422267510e1344 ]
+[ Upstream commit 56c1f0876293888f686e31278d183d4af2cac3c3 ]
 
-The cobalt_s_bit_sysctrl reads the old register value over PCI,
-then changes a bit and sets writes the new value to the register.
+The right thing to do is to add a new object to the building
+system when a certain config option is selected, and *not*
+override them.
 
-This is used among other things for setting the HPD output pin.
+So, fix obj-$(config) logic at sti makefiles, using "+=",
+instead of ":=".
 
-But if the HPD is changed for multiple inputs at the same time,
-then this causes a race condition where a stale value is read.
-
-Serialize this function with a mutex.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cobalt/cobalt-driver.c | 1 +
- drivers/media/pci/cobalt/cobalt-driver.h | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/platform/sti/bdisp/Makefile | 2 +-
+ drivers/media/platform/sti/delta/Makefile | 2 +-
+ drivers/media/platform/sti/hva/Makefile   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
-index 0695078ef812..1bd8bbe57a30 100644
---- a/drivers/media/pci/cobalt/cobalt-driver.c
-+++ b/drivers/media/pci/cobalt/cobalt-driver.c
-@@ -667,6 +667,7 @@ static int cobalt_probe(struct pci_dev *pci_dev,
- 		return -ENOMEM;
- 	cobalt->pci_dev = pci_dev;
- 	cobalt->instance = i;
-+	mutex_init(&cobalt->pci_lock);
+diff --git a/drivers/media/platform/sti/bdisp/Makefile b/drivers/media/platform/sti/bdisp/Makefile
+index caf7ccd193ea..39ade0a34723 100644
+--- a/drivers/media/platform/sti/bdisp/Makefile
++++ b/drivers/media/platform/sti/bdisp/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_VIDEO_STI_BDISP) := bdisp.o
++obj-$(CONFIG_VIDEO_STI_BDISP) += bdisp.o
  
- 	retval = v4l2_device_register(&pci_dev->dev, &cobalt->v4l2_dev);
- 	if (retval) {
-diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
-index bca68572b324..12c33e035904 100644
---- a/drivers/media/pci/cobalt/cobalt-driver.h
-+++ b/drivers/media/pci/cobalt/cobalt-driver.h
-@@ -251,6 +251,8 @@ struct cobalt {
- 	int instance;
- 	struct pci_dev *pci_dev;
- 	struct v4l2_device v4l2_dev;
-+	/* serialize PCI access in cobalt_s_bit_sysctrl() */
-+	struct mutex pci_lock;
+ bdisp-objs := bdisp-v4l2.o bdisp-hw.o bdisp-debug.o
+diff --git a/drivers/media/platform/sti/delta/Makefile b/drivers/media/platform/sti/delta/Makefile
+index 92b37e216f00..32412fa4c632 100644
+--- a/drivers/media/platform/sti/delta/Makefile
++++ b/drivers/media/platform/sti/delta/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_VIDEO_STI_DELTA_DRIVER) := st-delta.o
++obj-$(CONFIG_VIDEO_STI_DELTA_DRIVER) += st-delta.o
+ st-delta-y := delta-v4l2.o delta-mem.o delta-ipc.o delta-debug.o
  
- 	void __iomem *bar0, *bar1;
- 
-@@ -320,10 +322,13 @@ static inline u32 cobalt_g_sysctrl(struct cobalt *cobalt)
- static inline void cobalt_s_bit_sysctrl(struct cobalt *cobalt,
- 					int bit, int val)
- {
--	u32 ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
-+	u32 ctrl;
- 
-+	mutex_lock(&cobalt->pci_lock);
-+	ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
- 	cobalt_write_bar1(cobalt, COBALT_SYS_CTRL_BASE,
- 			(ctrl & ~(1UL << bit)) | (val << bit));
-+	mutex_unlock(&cobalt->pci_lock);
- }
- 
- static inline u32 cobalt_g_sysstat(struct cobalt *cobalt)
+ # MJPEG support
+diff --git a/drivers/media/platform/sti/hva/Makefile b/drivers/media/platform/sti/hva/Makefile
+index 74b41ec52f97..b5a5478bdd01 100644
+--- a/drivers/media/platform/sti/hva/Makefile
++++ b/drivers/media/platform/sti/hva/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_VIDEO_STI_HVA) := st-hva.o
++obj-$(CONFIG_VIDEO_STI_HVA) += st-hva.o
+ st-hva-y := hva-v4l2.o hva-hw.o hva-mem.o hva-h264.o
+ st-hva-$(CONFIG_VIDEO_STI_HVA_DEBUGFS) += hva-debugfs.o
 -- 
 2.30.2
 
