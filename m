@@ -2,201 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF55AC07E98
-	for <linux-media@archiver.kernel.org>; Sat,  3 Jul 2021 15:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 132C8C07E95
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 03:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFBBF6192D
-	for <linux-media@archiver.kernel.org>; Sat,  3 Jul 2021 15:04:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E52FE613F3
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 03:48:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbhGCPGf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Jul 2021 11:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbhGCPGc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Jul 2021 11:06:32 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3531C061765
-        for <linux-media@vger.kernel.org>; Sat,  3 Jul 2021 08:03:57 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 6CDC2C6443; Sat,  3 Jul 2021 16:03:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1625324634; bh=jXANngPVv+yCgbd2Fd9USCVy42NvYUvLLqx3ymMHpQw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=JQnjIMthFSbq4eBT+mm3igQeEONC377q7juA+i+M8rM/l/x+w0rfPV7mUMIqgvUV7
-         RWUUjhmNd4w7vtYFfkv0Loy4ssjTSJm0gryVq8C+hMtcCqas5fc+PvGizahKJbmgw6
-         qprMssWYGLLWE5FPsDw3IerwlpQjW6sqhjoCx+R5TkIOKL9h3otKNG3Y9jqNrt1hOV
-         TicrHnk+kpriAkSDO+CniYq3x1rctusKUoF15H2U3Xokn/hOc+PwiBp4NO8K4EXu88
-         6gGEp9TxDyveSdxVmei5P8LKya0QDmD5emeOVGXTPo5KoaC1kUhsYHpaoSdNrGlFXe
-         xEu4G3k9t3U3Q==
-From:   Sean Young <sean@mess.org>
+        id S229725AbhGDDvZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Jul 2021 23:51:25 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:48449 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229639AbhGDDvY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 3 Jul 2021 23:51:24 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id zt7elJRK5hqx9zt7glDZcm; Sun, 04 Jul 2021 05:48:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1625370528; bh=Fxwh64BcpBwemS0DorPWSN/mWVZD2MNmZ/q7VSf0Qdg=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=vW+tB2lLU1FcouD7OS3athaTOnYSU1DwOitBc5AXtrz5RRrKpWQlrSbJZt4JkEDHE
+         b1XsV8BqMU3cSHLb2WIElbo+L7mkoalaynODuZ7AqPI60CnziNXsktFq000+YMPo0p
+         FnR14+WtyLLDhDzK40iPI4ekIbAFtgWHtnzri3o09fTPCDQ0xM2gYBlsSlu/6m4FCC
+         Ah8SLVi7EL2L0Ja4FefHE9YM3LBxxqcw4xtdC4dRvnH1FpP8Yuv94dgF+tY7k1tEjL
+         SeHcZY/fg31ZZg6b40ZEY+cr5mOGmNhs0xkBfVTfE8mRC5trOFT37+GbzXHD/qqd46
+         VFC1jnLv3Yn+A==
+Message-ID: <335bf3cd1a40467fdab039f9cd1f8173@smtp-cloud9.xs4all.net>
+Date:   Sun, 04 Jul 2021 05:48:46 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 2/4] media: rc-loopback: use dev_dbg() rather than handrolled debug
-Date:   Sat,  3 Jul 2021 16:03:52 +0100
-Message-Id: <b23884a0831318fbe13959d232767e1eec19153e.1625324530.git.sean@mess.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1625324530.git.sean@mess.org>
-References: <cover.1625324530.git.sean@mess.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4xfIk1ACRT8IjZuQRuP1XiywBasAqzTB7lybaKqSfyH1SoF1TNe2KpCVxEW09dMF9vxdNhiUJKvXhOyN8P9xB1j12fqd8ZcVWE68oD9oB8Wy4NGDT5NQR6
+ FCVEoELHyw94H9Dm4m48fyfOhRKvpZkVgIWkog1bBNwq3Ywvin0YaDtMSk0h0HU6Qr9UrBhjW4cBiLJNYkGa0EnZDcF+SHc/AYzd29j/ex+K8nutUSwd/WYk
+ sHKaj27isbVCz3Xzn+78Iw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/rc-loopback.c | 36 +++++++++++++---------------------
- 1 file changed, 14 insertions(+), 22 deletions(-)
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-diff --git a/drivers/media/rc/rc-loopback.c b/drivers/media/rc/rc-loopback.c
-index 15212244f83c..164a20fe1e75 100644
---- a/drivers/media/rc/rc-loopback.c
-+++ b/drivers/media/rc/rc-loopback.c
-@@ -16,12 +16,9 @@
- #include <media/rc-core.h>
- 
- #define DRIVER_NAME	"rc-loopback"
--#define dprintk(x...)	if (debug) printk(KERN_INFO DRIVER_NAME ": " x)
- #define RXMASK_REGULAR	0x1
- #define RXMASK_LEARNING	0x2
- 
--static bool debug;
--
- struct loopback_dev {
- 	struct rc_dev *dev;
- 	u32 txmask;
-@@ -41,11 +38,11 @@ static int loop_set_tx_mask(struct rc_dev *dev, u32 mask)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if ((mask & (RXMASK_REGULAR | RXMASK_LEARNING)) != mask) {
--		dprintk("invalid tx mask: %u\n", mask);
-+		dev_dbg(&dev->dev, "invalid tx mask: %u\n", mask);
- 		return RXMASK_REGULAR | RXMASK_LEARNING;
- 	}
- 
--	dprintk("setting tx mask: %u\n", mask);
-+	dev_dbg(&dev->dev, "setting tx mask: %u\n", mask);
- 	lodev->txmask = mask;
- 	return 0;
- }
-@@ -54,7 +51,7 @@ static int loop_set_tx_carrier(struct rc_dev *dev, u32 carrier)
- {
- 	struct loopback_dev *lodev = dev->priv;
- 
--	dprintk("setting tx carrier: %u\n", carrier);
-+	dev_dbg(&dev->dev, "setting tx carrier: %u\n", carrier);
- 	lodev->txcarrier = carrier;
- 	return 0;
- }
-@@ -64,11 +61,11 @@ static int loop_set_tx_duty_cycle(struct rc_dev *dev, u32 duty_cycle)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if (duty_cycle < 1 || duty_cycle > 99) {
--		dprintk("invalid duty cycle: %u\n", duty_cycle);
-+		dev_dbg(&dev->dev, "invalid duty cycle: %u\n", duty_cycle);
- 		return -EINVAL;
- 	}
- 
--	dprintk("setting duty cycle: %u\n", duty_cycle);
-+	dev_dbg(&dev->dev, "setting duty cycle: %u\n", duty_cycle);
- 	lodev->txduty = duty_cycle;
- 	return 0;
- }
-@@ -78,11 +75,11 @@ static int loop_set_rx_carrier_range(struct rc_dev *dev, u32 min, u32 max)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if (min < 1 || min > max) {
--		dprintk("invalid rx carrier range %u to %u\n", min, max);
-+		dev_dbg(&dev->dev, "invalid rx carrier range %u to %u\n", min, max);
- 		return -EINVAL;
- 	}
- 
--	dprintk("setting rx carrier range %u to %u\n", min, max);
-+	dev_dbg(&dev->dev, "setting rx carrier range %u to %u\n", min, max);
- 	lodev->rxcarriermin = min;
- 	lodev->rxcarriermax = max;
- 	return 0;
-@@ -97,7 +94,7 @@ static int loop_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count)
- 
- 	if (lodev->txcarrier < lodev->rxcarriermin ||
- 	    lodev->txcarrier > lodev->rxcarriermax) {
--		dprintk("ignoring tx, carrier out of range\n");
-+		dev_dbg(&dev->dev, "ignoring tx, carrier out of range\n");
- 		goto out;
- 	}
- 
-@@ -107,7 +104,7 @@ static int loop_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count)
- 		rxmask = RXMASK_REGULAR;
- 
- 	if (!(rxmask & lodev->txmask)) {
--		dprintk("ignoring tx, rx mask mismatch\n");
-+		dev_dbg(&dev->dev, "ignoring tx, rx mask mismatch\n");
- 		goto out;
- 	}
- 
-@@ -134,7 +131,7 @@ static void loop_set_idle(struct rc_dev *dev, bool enable)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if (lodev->idle != enable) {
--		dprintk("%sing idle mode\n", enable ? "enter" : "exit");
-+		dev_dbg(&dev->dev, "%sing idle mode\n", enable ? "enter" : "exit");
- 		lodev->idle = enable;
- 	}
- }
-@@ -144,7 +141,7 @@ static int loop_set_learning_mode(struct rc_dev *dev, int enable)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if (lodev->learning != enable) {
--		dprintk("%sing learning mode\n", enable ? "enter" : "exit");
-+		dev_dbg(&dev->dev, "%sing learning mode\n", enable ? "enter" : "exit");
- 		lodev->learning = !!enable;
- 	}
- 
-@@ -156,7 +153,7 @@ static int loop_set_carrier_report(struct rc_dev *dev, int enable)
- 	struct loopback_dev *lodev = dev->priv;
- 
- 	if (lodev->carrierreport != enable) {
--		dprintk("%sabling carrier reports\n", enable ? "en" : "dis");
-+		dev_dbg(&dev->dev, "%sabling carrier reports\n", enable ? "en" : "dis");
- 		lodev->carrierreport = !!enable;
- 	}
- 
-@@ -204,10 +201,8 @@ static int __init loop_init(void)
- 	int ret;
- 
- 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
--	if (!rc) {
--		printk(KERN_ERR DRIVER_NAME ": rc_dev allocation failed\n");
-+	if (!rc)
- 		return -ENOMEM;
--	}
- 
- 	rc->device_name		= "rc-core loopback device";
- 	rc->input_phys		= "rc-core/virtual";
-@@ -245,7 +240,7 @@ static int __init loop_init(void)
- 
- 	ret = rc_register_device(rc);
- 	if (ret < 0) {
--		printk(KERN_ERR DRIVER_NAME ": rc_dev registration failed\n");
-+		dev_err(&rc->dev, "rc_dev registration failed\n");
- 		rc_free_device(rc);
- 		return ret;
- 	}
-@@ -262,9 +257,6 @@ static void __exit loop_exit(void)
- module_init(loop_init);
- module_exit(loop_exit);
- 
--module_param(debug, bool, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(debug, "Enable debug messages");
--
- MODULE_DESCRIPTION("Loopback device for rc-core debugging");
- MODULE_AUTHOR("David Härdeman <david@hardeman.nu>");
- MODULE_LICENSE("GPL");
--- 
-2.31.1
+Results of the daily build of media_tree:
 
+date:			Sun Jul  4 05:00:12 CEST 2021
+media-tree git hash:	50e7a31d30e8221632675abed3be306382324ca2
+media_build git hash:	dc90f6c653a467465b5deb23d3310577f8ebf218
+v4l-utils git hash:	242ad0b774c726cabaced873864a03a52e99e315
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-342-g92ace436
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7481-g7f50411af
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 328d8f6242d952437e8dfc96047fda207fad8deb
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
+
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.258-i686: OK
+linux-4.4.258-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.258-i686: OK
+linux-4.9.258-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.222-i686: OK
+linux-4.14.222-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.177-i686: OK
+linux-4.19.177-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.100-i686: OK
+linux-5.4.100-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10.18-i686: OK
+linux-5.10.18-x86_64: OK
+linux-5.11.1-i686: OK
+linux-5.11.1-x86_64: OK
+linux-5.12.1-i686: OK
+linux-5.12.1-x86_64: OK
+linux-5.13-rc1-i686: OK
+linux-5.13-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 2
+virtme-32: OK: Final Summary: 3035, Succeeded: 3035, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
