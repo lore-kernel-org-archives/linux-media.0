@@ -7,41 +7,38 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D639C07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0FE8C07E96
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CBB461941
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:06:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0AAD61483
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbhGDXJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47798 "EHLO mail.kernel.org"
+        id S231909AbhGDXJe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:09:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231646AbhGDXJC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:09:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79CED61283;
-        Sun,  4 Jul 2021 23:06:25 +0000 (UTC)
+        id S231614AbhGDXJB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:09:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B5EC613FC;
+        Sun,  4 Jul 2021 23:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439986;
-        bh=Lz+/JlLUf0y6vdpM5zzN5Pg+5vyv1ERRqgWrhzFUI5w=;
+        s=k20201202; t=1625439983;
+        bh=IaLWchXqtwge6yNl+R9qPP2VlfBnURJKq1vPQED7chQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lls0rlpXPa9rgkC/6n/DQ0rbomZ/+doSazSrvSUpI49RARjy8hyWVICo0PkYciTXj
-         3FZyYsM9gdZR60dxOsqi386QsEsxX78zxHsgAy1mFHDEO/5GQkPwPmJGK10DFErNUS
-         WgbydxMaNqzcjUBIeFCtfzDeOTu6YO+h71I2jUa/U/y3b84F2vKidSow7wGPXjuD6I
-         t5Z1NTLWXpQqeSj5eu34kF9xF8ztj6T58dGDlP0g/DtJ12LxAarumYT3JCg7KhGwDy
-         W9cRelz0wInqqCWfDyGn4Q/lV41LwEECVY5BpdfGigO9Fsl3Gh16apARsWd1zIb9rS
-         azWM0+AYx/VHQ==
+        b=Onf4y0Tc5fsacsAQuVlBoFqxSpHTM8VL5Z+EovaqmLVSwUQkYBH3qSELl93w+6QR4
+         oVnxU5mEY5EKuZi6Cxl57YMv6/d9L4zqB2nCsb//TUqCvejU8HpxCA3jzn4Zl6hVw3
+         4X7IZygkvnpYDqkSZ2FY0Qq150Li/DK2mfVp/uKOUwgnfo3UfV/uZcktL/lecqUf2J
+         vIerWK3jdCcmRIi9cI/ZohHH6z9GQd1JWpA1mTOCGMfysBEIyvyASY+1Q538rJtbye
+         oH+RJIyAQfLHmL3hP2NmEAxwjNRqs9pB0sDFMbL53+kQOBo0+V9GCurKtQVJUeLm93
+         40cCPOAca4ecQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 07/80] media: s5p: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:05:03 -0400
-Message-Id: <20210704230616.1489200-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 05/80] media: marvel-ccic: fix some issues when getting pm_runtime
+Date:   Sun,  4 Jul 2021 19:05:01 -0400
+Message-Id: <20210704230616.1489200-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -55,46 +52,56 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit fdc34e82c0f968ac4c157bd3d8c299ebc24c9c63 ]
+[ Upstream commit e7c617cab7a522fba5b20f9033ee98565b6f3546 ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
-Replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
+Calling pm_runtime_get_sync() is bad, since even when it
+returns an error, pm_runtime_put*() should be called.
+So, use instead pm_runtime_resume_and_get().
 
-While here, check if the PM runtime error was caught at
-s5p_cec_adap_enable().
+While here, ensure that the error condition will be checked
+during clock enable an media open() calls.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/s5p/s5p_cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/marvell-ccic/mcam-core.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
-index 2a3e7ffefe0a..2250c1cbc64e 100644
---- a/drivers/media/cec/platform/s5p/s5p_cec.c
-+++ b/drivers/media/cec/platform/s5p/s5p_cec.c
-@@ -35,10 +35,13 @@ MODULE_PARM_DESC(debug, "debug level (0-2)");
- 
- static int s5p_cec_adap_enable(struct cec_adapter *adap, bool enable)
- {
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index 141bf5d97a04..ea87110d9073 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -918,6 +918,7 @@ static int mclk_enable(struct clk_hw *hw)
+ 	struct mcam_camera *cam = container_of(hw, struct mcam_camera, mclk_hw);
+ 	int mclk_src;
+ 	int mclk_div;
 +	int ret;
- 	struct s5p_cec_dev *cec = cec_get_drvdata(adap);
  
- 	if (enable) {
--		pm_runtime_get_sync(cec->dev);
-+		ret = pm_runtime_resume_and_get(cec->dev);
+ 	/*
+ 	 * Clock the sensor appropriately.  Controller clock should
+@@ -931,7 +932,9 @@ static int mclk_enable(struct clk_hw *hw)
+ 		mclk_div = 2;
+ 	}
+ 
+-	pm_runtime_get_sync(cam->dev);
++	ret = pm_runtime_resume_and_get(cam->dev);
++	if (ret < 0)
++		return ret;
+ 	clk_enable(cam->clk[0]);
+ 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
+ 	mcam_ctlr_power_up(cam);
+@@ -1611,7 +1614,9 @@ static int mcam_v4l_open(struct file *filp)
+ 		ret = sensor_call(cam, core, s_power, 1);
+ 		if (ret)
+ 			goto out;
+-		pm_runtime_get_sync(cam->dev);
++		ret = pm_runtime_resume_and_get(cam->dev);
 +		if (ret < 0)
-+			return ret;
- 
- 		s5p_cec_reset(cec);
- 
++			goto out;
+ 		__mcam_cam_reset(cam);
+ 		mcam_set_config_needed(cam, 1);
+ 	}
 -- 
 2.30.2
 
