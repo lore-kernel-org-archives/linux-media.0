@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78B7CC11F73
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9089C11F66
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AC6961364
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C562C6141C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbhGDXQL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
+        id S233650AbhGDXQN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233208AbhGDXOQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86CE16135A;
-        Sun,  4 Jul 2021 23:09:43 +0000 (UTC)
+        id S233403AbhGDXOZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9673861935;
+        Sun,  4 Jul 2021 23:09:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440184;
-        bh=LrLTm9w/kHOJ+FdwiIgnNgBM8M9WiMvLXdVAYHNZ3KQ=;
+        s=k20201202; t=1625440189;
+        bh=JSshXvAaGoLwfRbLDCHHeyzewaXyO04NzXWHw0dUZ7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W85l0P9bBsqP4WiK4SxiNRN7BmORoJaDAP2YKr3VMw3lR7D4k8w6AUzwgutKvSfpz
-         H+fVz89OVSdN4PbSPogE0zvlV6mGjvcuLEj3V76XhhSbfPY6C8gsKWh78xtWdT5jHr
-         n+mwqcCdL4O0xA41FLFZU4ti2/ZURFoNSUKP4g9H9Ip8iiXtp5VxhGiPL0B7qeihfy
-         rbJ/GjkEHFp3RrDki9k2zhjKkZ+JpD/szjFpwGU7GUPSGLRN1aYh4yId9YaOQJDbQW
-         ub6nymx9gJfVupjqCiiWFiYw41jRiuPEarLJ2FfhRbv7a3ZPDFdpWQICsHBD3M0Xgm
-         kHjNy65i6KzXQ==
+        b=iZ4mfFgQQiEJpmRa8r/9Rbeb9BNHobYe2mIEHOwcEhBTwDotL1m9E4GvRfjtkMUV9
+         Ri5wf8UBqOKJ9Ax/0nRXHSLPTsWlwTlh+RrKh8GRHkuM3Ka1olDTz5F3Yt5ce+e4Xk
+         tY8TOrWrJOxibWsWivCS2PO/MraT/9+ExZAI/VK96j29vsU7xDP0MHUySI9eiHCTCT
+         EQtJJyQAmN++SRrFY+hooH2UNHwHzJKpjRivhlAX/ha1fKpzOzHaxaOlf2hHvA9lUe
+         qdr+yhd07/1cefv0HAUfkzZYR66rX6npXXlBgZHFLAknR3S6/Y91Gr+2lTOJ3zITff
+         3C17YOodqlMOg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/50] media: sh_vou: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:08:52 -0400
-Message-Id: <20210704230938.1490742-4-sashal@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 08/50] media: exynos-gsc: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:08:56 -0400
+Message-Id: <20210704230938.1490742-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
 References: <20210704230938.1490742-1-sashal@kernel.org>
@@ -52,7 +55,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 6e8b1526db164c9d4b9dacfb9bc48e365d7c4860 ]
+[ Upstream commit 59087b66ea6730c130c57d23bd9fd139b78c1ba5 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
@@ -61,32 +64,33 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-While here, check if the PM runtime error was caught at open time.
+As a bonus, as pm_runtime_get_sync() always return 0 on
+success, the logic can be simplified.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sh_vou.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/platform/exynos-gsc/gsc-m2m.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
-index 2236702c21b4..84c4b19fb107 100644
---- a/drivers/media/platform/sh_vou.c
-+++ b/drivers/media/platform/sh_vou.c
-@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
- 	if (v4l2_fh_is_singular_file(file) &&
- 	    vou_dev->status == SH_VOU_INITIALISING) {
- 		/* First open */
--		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
-+		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
-+		if (err < 0) {
-+			v4l2_fh_release(file);
-+			goto done_open;
-+		}
- 		err = sh_vou_hw_init(vou_dev);
- 		if (err < 0) {
- 			pm_runtime_put(vou_dev->v4l2_dev.dev);
+diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+index 35a1d0d6dd66..42d1e4496efa 100644
+--- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
++++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+@@ -56,10 +56,8 @@ static void __gsc_m2m_job_abort(struct gsc_ctx *ctx)
+ static int gsc_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct gsc_ctx *ctx = q->drv_priv;
+-	int ret;
+ 
+-	ret = pm_runtime_get_sync(&ctx->gsc_dev->pdev->dev);
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(&ctx->gsc_dev->pdev->dev);
+ }
+ 
+ static void __gsc_m2m_cleanup_queue(struct gsc_ctx *ctx)
 -- 
 2.30.2
 
