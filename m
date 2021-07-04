@@ -7,43 +7,41 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA40FC07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D9FDC07E95
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98FE261961
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A2B16192E
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbhGDXMN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:12:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47610 "EHLO mail.kernel.org"
+        id S232391AbhGDXMT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:12:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49476 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231519AbhGDXLN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:11:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD5CB61405;
-        Sun,  4 Jul 2021 23:08:01 +0000 (UTC)
+        id S232100AbhGDXLR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:11:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 57CAB61941;
+        Sun,  4 Jul 2021 23:08:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440082;
-        bh=xX8VyNOodZXaJbZ6Zo8s39DpvovzD6FKkh4MDY9d7wE=;
+        s=k20201202; t=1625440090;
+        bh=JqY4SiH2kiDGdE/b30pk5GzvlmzpdykOaKKs2cllb4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gUY2PxAqNXEM12x62HkOlZmIKHJ1XFM8rJlIL6Mjb5iNLihnUn9Sggn8bPqxyf+Kj
-         iI5TEjt1bV0u0wI6K5cayV0dKD5fdUr+C9JGfY+fo1Lfv6tq22GVNw5jlv9HzobWuK
-         tkT/wQFH9/QAF5sLWhYkkryF9WQiQENcnJhm83FbpZVEO+hSy5gCNzODqyeCUcZhlP
-         z6jIum8Wex2Gt92pl3Ouc5LlP2Qv+xmBH3MeIEcbRDn+ngprrQDF2yjxzPzdn7wH0b
-         QS/w2crn5HsZeu79BRG5R8WN3LBSVD1WAkc5Rs243yEOBCPMuQP4DjcbCnBgAPtt/J
-         /gcu3vTKyvqaw==
+        b=LzXytif+rfSemklehvOzqQFH5AQTpqg+gys1Y54MM5PGwyyAmqML+2lxdJkMnPFbr
+         4XF7lcd5l5vmqys9/mjnHsZSzov8MJ642pIWuQ0UR/nrk2XXiDJ8lYdcgW87vLVEX9
+         HQBpcIZq70sXrGreaDhTz9a3+bGRLJ2bjPEqgHaN1A1YpkjkgoRilfWUrEHWsLsr3A
+         8JiB8w5RNvf2of8PonRBZL0odWXYF6uTNChbihGzhXnYPODDGJjz5rV8IvxavnDrIa
+         OR4Jk8lrlYKebApVXU1uFMKn9qEom+bElUIUaAY7y//HRpjRqXeRUF9G00Q/lswlah
+         zOn/qf2XiQ13A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 80/80] media: Fix Media Controller API config checks
-Date:   Sun,  4 Jul 2021 19:06:16 -0400
-Message-Id: <20210704230616.1489200-80-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 04/70] media: marvel-ccic: fix some issues when getting pm_runtime
+Date:   Sun,  4 Jul 2021 19:06:57 -0400
+Message-Id: <20210704230804.1490078-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
-References: <20210704230616.1489200-1-sashal@kernel.org>
+In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
+References: <20210704230804.1490078-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,86 +50,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 50e7a31d30e8221632675abed3be306382324ca2 ]
+[ Upstream commit e7c617cab7a522fba5b20f9033ee98565b6f3546 ]
 
-Smatch static checker warns that "mdev" can be null:
+Calling pm_runtime_get_sync() is bad, since even when it
+returns an error, pm_runtime_put*() should be called.
+So, use instead pm_runtime_resume_and_get().
 
-sound/usb/media.c:287 snd_media_device_create()
-    warn: 'mdev' can also be NULL
+While here, ensure that the error condition will be checked
+during clock enable an media open() calls.
 
-If CONFIG_MEDIA_CONTROLLER is disabled, this file should not be included
-in the build.
-
-The below conditions in the sound/usb/Makefile are in place to ensure that
-media.c isn't included in the build.
-
-sound/usb/Makefile:
-snd-usb-audio-$(CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER) += media.o
-
-select SND_USB_AUDIO_USE_MEDIA_CONTROLLER if MEDIA_CONTROLLER &&
-       (MEDIA_SUPPORT=y || MEDIA_SUPPORT=SND_USB_AUDIO)
-
-The following config check in include/media/media-dev-allocator.h is
-in place to enable the API only when CONFIG_MEDIA_CONTROLLER and
-CONFIG_USB are enabled.
-
- #if defined(CONFIG_MEDIA_CONTROLLER) && defined(CONFIG_USB)
-
-This check doesn't work as intended when CONFIG_USB=m. When CONFIG_USB=m,
-CONFIG_USB_MODULE is defined and CONFIG_USB is not. The above config check
-doesn't catch that CONFIG_USB is defined as a module and disables the API.
-This results in sound/usb enabling Media Controller specific ALSA driver
-code, while Media disables the Media Controller API.
-
-Fix the problem requires two changes:
-
-1. Change the check to use IS_ENABLED to detect when CONFIG_USB is enabled
-   as a module or static. Since CONFIG_MEDIA_CONTROLLER is a bool, leave
-   the check unchanged to be consistent with drivers/media/Makefile.
-
-2. Change the drivers/media/mc/Makefile to include mc-dev-allocator.o
-   in mc-objs when CONFIG_USB is enabled.
-
-Link: https://lore.kernel.org/alsa-devel/YLeAvT+R22FQ%2FEyw@mwanda/
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/mc/Makefile           | 2 +-
- include/media/media-dev-allocator.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/marvell-ccic/mcam-core.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/mc/Makefile b/drivers/media/mc/Makefile
-index 119037f0e686..2b7af42ba59c 100644
---- a/drivers/media/mc/Makefile
-+++ b/drivers/media/mc/Makefile
-@@ -3,7 +3,7 @@
- mc-objs	:= mc-device.o mc-devnode.o mc-entity.o \
- 	   mc-request.o
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index 34266fba824f..e56c5e56e824 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -918,6 +918,7 @@ static int mclk_enable(struct clk_hw *hw)
+ 	struct mcam_camera *cam = container_of(hw, struct mcam_camera, mclk_hw);
+ 	int mclk_src;
+ 	int mclk_div;
++	int ret;
  
--ifeq ($(CONFIG_USB),y)
-+ifneq ($(CONFIG_USB),)
- 	mc-objs += mc-dev-allocator.o
- endif
+ 	/*
+ 	 * Clock the sensor appropriately.  Controller clock should
+@@ -931,7 +932,9 @@ static int mclk_enable(struct clk_hw *hw)
+ 		mclk_div = 2;
+ 	}
  
-diff --git a/include/media/media-dev-allocator.h b/include/media/media-dev-allocator.h
-index b35ea6062596..2ab54d426c64 100644
---- a/include/media/media-dev-allocator.h
-+++ b/include/media/media-dev-allocator.h
-@@ -19,7 +19,7 @@
- 
- struct usb_device;
- 
--#if defined(CONFIG_MEDIA_CONTROLLER) && defined(CONFIG_USB)
-+#if defined(CONFIG_MEDIA_CONTROLLER) && IS_ENABLED(CONFIG_USB)
- /**
-  * media_device_usb_allocate() - Allocate and return struct &media device
-  *
+-	pm_runtime_get_sync(cam->dev);
++	ret = pm_runtime_resume_and_get(cam->dev);
++	if (ret < 0)
++		return ret;
+ 	clk_enable(cam->clk[0]);
+ 	mcam_reg_write(cam, REG_CLKCTRL, (mclk_src << 29) | mclk_div);
+ 	mcam_ctlr_power_up(cam);
+@@ -1611,7 +1614,9 @@ static int mcam_v4l_open(struct file *filp)
+ 		ret = sensor_call(cam, core, s_power, 1);
+ 		if (ret)
+ 			goto out;
+-		pm_runtime_get_sync(cam->dev);
++		ret = pm_runtime_resume_and_get(cam->dev);
++		if (ret < 0)
++			goto out;
+ 		__mcam_cam_reset(cam);
+ 		mcam_set_config_needed(cam, 1);
+ 	}
 -- 
 2.30.2
 
