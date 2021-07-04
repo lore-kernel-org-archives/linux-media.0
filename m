@@ -4,40 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA2AC11F6B
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C115C07E9A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29F24613F1
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74C56613FB
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbhGDXQG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48840 "EHLO mail.kernel.org"
+        id S231945AbhGDXQJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55624 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232701AbhGDXNR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:13:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 26D546196E;
-        Sun,  4 Jul 2021 23:09:12 +0000 (UTC)
+        id S233182AbhGDXOO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 876776141C;
+        Sun,  4 Jul 2021 23:09:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440152;
-        bh=ehz4wRZJTq5WtUVqNeuBwjXjAL4ZYS58kSqK78k9AMM=;
+        s=k20201202; t=1625440177;
+        bh=xX8VyNOodZXaJbZ6Zo8s39DpvovzD6FKkh4MDY9d7wE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rVHOKRd63Sp4w0vaCwXgWL2V5EnTrv0qcmFdq+to9Xqw/jCaS4VNj30pcJJ9u5NlO
-         XNNBSDKuA1HEfyOpg/dWiet+9q8G9lg4ukV13pDW7eAyNnvGQQLqMQv0VGSl4byYWS
-         UsFu8kuAa8UABup55BXqPwBGEoezA1BIkIekBveYrgux65fVAsinK2ffs8/qjli0HO
-         vGR7rz3wVGd9wIgBvSPiNMs6iiJbdXDrRBBcQxuPhSmAKaUzTRAoCu0ZibpeJ41OF4
-         Qei4VZzTQ8ZsLYOMc2mV5H8NjTzeX4zSIe0pftSZz7kx6Rr9z0E2eF/L6gtDhOzTRA
-         jeli2YU09rzwg==
+        b=tHGVAVeXwW5P+zIEQBmbi6NaNakJRk5ORKqu9HLH/R5qnr82rr7ywGo3PXQeMWvAQ
+         /FbAJBo5KC4yeyix/54m5f7GNBQS0zFiKrA9AafYvVf1R7PBd2oXyS+f/u+XUY+GFl
+         QTkfIkutV9YijutEfDclHd8hvJPmfG7U0+s9H0NNqSVrkGGkfO/S/TbHPRwgaA8gZs
+         w9NhMgJmKqJEsuYF5spKIjTb1YFx2lhxOhHZjOXgEZwoamLRsH9NWNQfRToSb3H8OS
+         KIbzEbc930xeBXR2S0xJ78/80GBiNSEXPSdRLyea+OeSwmpQkKPCv0CQS/ZQ+QyeKL
+         1eRlL6l2mYang==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 51/70] media: dvb_net: avoid speculation from net slot
-Date:   Sun,  4 Jul 2021 19:07:44 -0400
-Message-Id: <20210704230804.1490078-51-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 70/70] media: Fix Media Controller API config checks
+Date:   Sun,  4 Jul 2021 19:08:03 -0400
+Message-Id: <20210704230804.1490078-70-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -49,87 +52,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit abc0226df64dc137b48b911c1fe4319aec5891bb ]
+[ Upstream commit 50e7a31d30e8221632675abed3be306382324ca2 ]
 
-The risk of especulation is actually almost-non-existing here,
-as there are very few users of TCP/IP using the DVB stack,
-as, this is mainly used with DVB-S/S2 cards, and only by people
-that receives TCP/IP from satellite connections, which limits
-a lot the number of users of such feature(*).
+Smatch static checker warns that "mdev" can be null:
 
-(*) In thesis, DVB-C cards could also benefit from it, but I'm
-yet to see a hardware that supports it.
+sound/usb/media.c:287 snd_media_device_create()
+    warn: 'mdev' can also be NULL
 
-Yet, fixing it is trivial.
+If CONFIG_MEDIA_CONTROLLER is disabled, this file should not be included
+in the build.
 
+The below conditions in the sound/usb/Makefile are in place to ensure that
+media.c isn't included in the build.
+
+sound/usb/Makefile:
+snd-usb-audio-$(CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER) += media.o
+
+select SND_USB_AUDIO_USE_MEDIA_CONTROLLER if MEDIA_CONTROLLER &&
+       (MEDIA_SUPPORT=y || MEDIA_SUPPORT=SND_USB_AUDIO)
+
+The following config check in include/media/media-dev-allocator.h is
+in place to enable the API only when CONFIG_MEDIA_CONTROLLER and
+CONFIG_USB are enabled.
+
+ #if defined(CONFIG_MEDIA_CONTROLLER) && defined(CONFIG_USB)
+
+This check doesn't work as intended when CONFIG_USB=m. When CONFIG_USB=m,
+CONFIG_USB_MODULE is defined and CONFIG_USB is not. The above config check
+doesn't catch that CONFIG_USB is defined as a module and disables the API.
+This results in sound/usb enabling Media Controller specific ALSA driver
+code, while Media disables the Media Controller API.
+
+Fix the problem requires two changes:
+
+1. Change the check to use IS_ENABLED to detect when CONFIG_USB is enabled
+   as a module or static. Since CONFIG_MEDIA_CONTROLLER is a bool, leave
+   the check unchanged to be consistent with drivers/media/Makefile.
+
+2. Change the drivers/media/mc/Makefile to include mc-dev-allocator.o
+   in mc-objs when CONFIG_USB is enabled.
+
+Link: https://lore.kernel.org/alsa-devel/YLeAvT+R22FQ%2FEyw@mwanda/
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_net.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ drivers/media/mc/Makefile           | 2 +-
+ include/media/media-dev-allocator.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 89620da983ba..dddebea644bb 100644
---- a/drivers/media/dvb-core/dvb_net.c
-+++ b/drivers/media/dvb-core/dvb_net.c
-@@ -45,6 +45,7 @@
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
-+#include <linux/nospec.h>
- #include <linux/etherdevice.h>
- #include <linux/dvb/net.h>
- #include <linux/uio.h>
-@@ -1462,14 +1463,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct dvb_net_if *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
+diff --git a/drivers/media/mc/Makefile b/drivers/media/mc/Makefile
+index 119037f0e686..2b7af42ba59c 100644
+--- a/drivers/media/mc/Makefile
++++ b/drivers/media/mc/Makefile
+@@ -3,7 +3,7 @@
+ mc-objs	:= mc-device.o mc-devnode.o mc-entity.o \
+ 	   mc-request.o
  
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
+-ifeq ($(CONFIG_USB),y)
++ifneq ($(CONFIG_USB),)
+ 	mc-objs += mc-dev-allocator.o
+ endif
  
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		if (!dvbnet->state[if_num]) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+
-+		netdev = dvbnet->device[if_num];
+diff --git a/include/media/media-dev-allocator.h b/include/media/media-dev-allocator.h
+index b35ea6062596..2ab54d426c64 100644
+--- a/include/media/media-dev-allocator.h
++++ b/include/media/media-dev-allocator.h
+@@ -19,7 +19,7 @@
  
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
-@@ -1522,14 +1529,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct __dvb_net_if_old *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
-+
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
+ struct usb_device;
  
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (!dvbnet->state[if_num]) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		netdev = dvbnet->device[if_num];
- 
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
+-#if defined(CONFIG_MEDIA_CONTROLLER) && defined(CONFIG_USB)
++#if defined(CONFIG_MEDIA_CONTROLLER) && IS_ENABLED(CONFIG_USB)
+ /**
+  * media_device_usb_allocate() - Allocate and return struct &media device
+  *
 -- 
 2.30.2
 
