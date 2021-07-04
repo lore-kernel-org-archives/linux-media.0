@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A31C07E95
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F6EC07E9E
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDFF2613F1
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41930611ED
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbhGDXQu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56966 "EHLO mail.kernel.org"
+        id S232936AbhGDXQy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234478AbhGDXPJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:15:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE89E61364;
-        Sun,  4 Jul 2021 23:12:32 +0000 (UTC)
+        id S234120AbhGDXOy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A47FE619AC;
+        Sun,  4 Jul 2021 23:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440353;
-        bh=FSyh4ATv5z5J1QHnSLtm7oz7ME9uM7NWV2nCpkUkoMM=;
+        s=k20201202; t=1625440275;
+        bh=rLIR0S92aTlG9q/OkSLRKIJuW7+/bZqEm10UhBiwYL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftmkFaJ40a2OrnhFy5TNEelyV5VjVk2RhEAcgW96OK87MGb7HZ3XuXORwDp+6kFbw
-         DD7/jv7vrwXjpbpgKwUO9dIF5q1N49nIUIJ12TnFzfUNK93sZGz6vsvUJZ1Xb7BrNQ
-         xJvvk8/6QbTAcdxQOdBl1ZlXgYd/5YN0BEhfSqONAKlqyDGwM+V7gHNn06cs3futgf
-         BCg1GzK2PtEne23FLnF4l0PAmsAB6n3maRbNhuOumcu9E9zabTdNJ8D1dxKc+C7f7u
-         3AMi9rRN01qU3WvfI58pEErGaS8D1Bfl4xAXUEBcpEPWrqSqk6v8z7mFPFduhtHc/2
-         OKnwahW6cUsZg==
+        b=PsVS8KEYC6PnvvFYAqSbo6uIr2rYwZZ4KIJTFPSTRiMJ/cRry8pKeu7TgBOXPRmeL
+         SDu+/4hTD7uo0lgQrTwihfSxyfpJoa1glO7oKCiaOhBcEqRyRd8wO12Wnbri9pJ6FU
+         +dRJiizUK0/bJMfH1FMhxoyrJ3zZIohnWnxUv5aXR6I0e2VMZ1jVDH56rENT1pFNzi
+         oK0z5vHMV5GoxW/1lLj489GmMR48SI+E2PbtP8Pf75Ynt7QFPd7X3FPLVjw8ofOL/9
+         ByRCn5MdgCqiNddt7cLkJI9UGbGgpAiMBY98C3Ej5N+4HwRkZkCcgKiBeNUwBAeZzr
+         ohWiaJMt9srIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 08/15] media: v4l2-core: Avoid the dangling pointer in v4l2_fh_release
-Date:   Sun,  4 Jul 2021 19:12:14 -0400
-Message-Id: <20210704231222.1492037-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 25/31] media: imx-csi: Skip first few frames from a BT.656 source
+Date:   Sun,  4 Jul 2021 19:10:37 -0400
+Message-Id: <20210704231043.1491209-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704231222.1492037-1-sashal@kernel.org>
-References: <20210704231222.1492037-1-sashal@kernel.org>
+In-Reply-To: <20210704231043.1491209-1-sashal@kernel.org>
+References: <20210704231043.1491209-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,37 +54,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+From: Steve Longerbeam <slongerbeam@gmail.com>
 
-[ Upstream commit 7dd0c9e547b6924e18712b6b51aa3cba1896ee2c ]
+[ Upstream commit e198be37e52551bb863d07d2edc535d0932a3c4f ]
 
-A use after free bug caused by the dangling pointer
-filp->privitate_data in v4l2_fh_release.
-See https://lore.kernel.org/patchwork/patch/1419058/.
+Some BT.656 sensors (e.g. ADV718x) transmit frames with unstable BT.656
+sync codes after initial power on. This confuses the imx CSI,resulting
+in vertical and/or horizontal sync issues. Skip the first 20 frames
+to avoid the unstable sync codes.
 
-My patch sets the dangling pointer to NULL to provide
-robust.
+[fabio: fixed checkpatch warning and increased the frame skipping to 20]
 
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Tim Harvey <tharvey@gateworks.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-fh.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/imx/imx-media-csi.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
-index 1d076deb05a9..ce844ecc3340 100644
---- a/drivers/media/v4l2-core/v4l2-fh.c
-+++ b/drivers/media/v4l2-core/v4l2-fh.c
-@@ -107,6 +107,7 @@ int v4l2_fh_release(struct file *filp)
- 		v4l2_fh_del(fh);
- 		v4l2_fh_exit(fh);
- 		kfree(fh);
-+		filp->private_data = NULL;
- 	}
- 	return 0;
- }
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index 0f8fdc347091..c7df0ffb3510 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -730,9 +730,10 @@ static int csi_setup(struct csi_priv *priv)
+ 
+ static int csi_start(struct csi_priv *priv)
+ {
+-	struct v4l2_fract *output_fi;
++	struct v4l2_fract *input_fi, *output_fi;
+ 	int ret;
+ 
++	input_fi = &priv->frame_interval[CSI_SINK_PAD];
+ 	output_fi = &priv->frame_interval[priv->active_output_pad];
+ 
+ 	/* start upstream */
+@@ -741,6 +742,17 @@ static int csi_start(struct csi_priv *priv)
+ 	if (ret)
+ 		return ret;
+ 
++	/* Skip first few frames from a BT.656 source */
++	if (priv->upstream_ep.bus_type == V4L2_MBUS_BT656) {
++		u32 delay_usec, bad_frames = 20;
++
++		delay_usec = DIV_ROUND_UP_ULL((u64)USEC_PER_SEC *
++			input_fi->numerator * bad_frames,
++			input_fi->denominator);
++
++		usleep_range(delay_usec, delay_usec + 1000);
++	}
++
+ 	if (priv->dest == IPU_CSI_DEST_IDMAC) {
+ 		ret = csi_idmac_start(priv);
+ 		if (ret)
 -- 
 2.30.2
 
