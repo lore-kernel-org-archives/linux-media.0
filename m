@@ -7,40 +7,38 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2679FC07E9A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4C8C07E9A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0949461953
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D53A66193E
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:07:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbhGDXJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:09:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46804 "EHLO mail.kernel.org"
+        id S231749AbhGDXJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:09:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230106AbhGDXJB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:09:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 31F4F61936;
-        Sun,  4 Jul 2021 23:06:24 +0000 (UTC)
+        id S231747AbhGDXJE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:09:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 034FA61364;
+        Sun,  4 Jul 2021 23:06:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439985;
-        bh=/FSnNNOCk5OXokZXqDDrrMtWOMQjuygAvziNQZGw/TY=;
+        s=k20201202; t=1625439988;
+        bh=9I4P98nw/TH7inHBdRHqWHOLI2uqRL4qTkQnABJ42dA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pOEL9+L9TziJ64W5cojcAiLH5y2LRO0f8vCdALbqR9W5rMGMdlqXURbSGa/nmrgWI
-         xBBkGGkd4JVmErIivIQ740HawhJGlACzSIgMJN8dsadPNpKmTjV+YdIPCFDIDzKYBW
-         wAscwpdGAkosSRxn8XteVxAjdvr37BM8YGHItuLnnO3c/0UvtKE/S9dWluC3G2C01P
-         aE2ZdtedtQ3oYvEfekRSgTyLOBm4eWsFpGfUwkGrEgrQAs5+31NPyqD0QGI25q8KrJ
-         pOpT9hrb+7o8JrMbtgWGQEkIqlWDXGTWhKe7YmNunG5WkoEpkcV+33ScqT+oCn5fIa
-         uGndfT0VloYjQ==
+        b=B03aSRjU23rTMtsn7bAopyYhx6HmsrXK6I0LRMTMLFt8NrbLZL/foA0NmROmukz/C
+         ST5Q7HjSN7HwCc+ImP4kMgAtog5MvLod+TjY25+kErkY+0U3FFGb6FOLTi7EyVXpuV
+         6iR1kLkb7J4pIDxsefiivXxTKY0pKjj9qVzBQs3pZUHYHdLP+z3PxynX+97sWEcFf2
+         dmRIUJuFNQHUlkNBtVIMK1AQMU4JY/p+BlbIRYqr1aacqHmJeXyf7O/BgdF1IDC/5g
+         krcVdzl0svKAev45Joo2I99Zqy2lWnvSZF9qs9yqVy7YXtfioHS4QXURKfeAwOZn2l
+         sIgPpA5haXDTw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.12 06/80] media: mdk-mdp: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:05:02 -0400
-Message-Id: <20210704230616.1489200-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 09/80] media: sh_vou: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:05:05 -0400
+Message-Id: <20210704230616.1489200-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -54,7 +52,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit d07bb9702cf5f5ccf3fb661e6cab54bbc33cd23f ]
+[ Upstream commit 6e8b1526db164c9d4b9dacfb9bc48e365d7c4860 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
@@ -63,37 +61,32 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
-as it doesn't make any sense to return 0 if the PM runtime failed
-to resume.
+While here, check if the PM runtime error was caught at open time.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/sh_vou.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index ace4528cdc5e..f14779e7596e 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -391,12 +391,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mtk_mdp_ctx *ctx = q->drv_priv;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
- 	if (ret < 0)
--		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
-+		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
- 			    ctx->id, ret);
- 
--	return 0;
-+	return ret;
- }
- 
- static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
+diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
+index 4ac48441f22c..ca4310e26c49 100644
+--- a/drivers/media/platform/sh_vou.c
++++ b/drivers/media/platform/sh_vou.c
+@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
+ 	if (v4l2_fh_is_singular_file(file) &&
+ 	    vou_dev->status == SH_VOU_INITIALISING) {
+ 		/* First open */
+-		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
++		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
++		if (err < 0) {
++			v4l2_fh_release(file);
++			goto done_open;
++		}
+ 		err = sh_vou_hw_init(vou_dev);
+ 		if (err < 0) {
+ 			pm_runtime_put(vou_dev->v4l2_dev.dev);
 -- 
 2.30.2
 
