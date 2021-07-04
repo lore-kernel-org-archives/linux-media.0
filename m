@@ -4,40 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E84FAC07E96
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3D5C07E9C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC1FA613FB
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E69A26135D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbhGDXQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
+        id S231344AbhGDXQl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234242AbhGDXO6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93FB76194B;
-        Sun,  4 Jul 2021 23:11:48 +0000 (UTC)
+        id S234207AbhGDXO5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 602F1619C5;
+        Sun,  4 Jul 2021 23:11:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440309;
-        bh=KSDvRfzR54iZ9zef91Rxx7AkHUixUncTfwBbntOwQ68=;
+        s=k20201202; t=1625440294;
+        bh=FITr/NCjK1NzcgUtmbigP0i/c3mBj4z9cXPwIzaZrz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UQ+XM5+3FxIvRiOPc47D4nD9thP+kvJl+ckKyByBRvvKWGaw2LtDBS2L3FVNvSuY8
-         qXUy5REyDGOCxrjDHKqbGjuOd8Vp0VRq66gV6CXwb88nnYXE2L+hfcHeNFabByjc4c
-         Hky2l+j2UM+rpKnb2z1SU0aSQ4JBMjdCvpm3NEF47qN1XtJJZJICGGeXrRWgyfag8b
-         ZTcVpL3r9J7MPb5C/kwTgCr5fHncsmNkecNfzOnvEezmfSQQzG0vK77l6SpqetB6Pg
-         3bDYmd806OqVRYRY1FBu1JHoSj3rQtg0TADztZ0gMe0tF8m6sV9ASO0dp1TnQHAqAe
-         nD1M5DhV3jf2Q==
+        b=tbBr/Q0Wv97kTQwN7eQBjhk66De6/x4z54jgnSJrzj+/j8RliDyA1dUivldmvSu1i
+         8myPYIUCZVhj0UTmgiIQK0+csQXS9/hcimKl0BXce6PmwcRk/oUpwrW/MtpgHQWa0v
+         cqL5RIURNG8lFR/Gery+StIpQp6FwORPx1AOX/KKIrvD16wL7+fy/77mFM8RbjJukU
+         Rcb5c1adrvWvIOtNglBurYOfal96ypYBwFsLxP+Zuy7SihbYk5eKTWirco671VpHxL
+         Ty7x0sUGIv5tqHf/c7rqPbF02ClXW7B2hSj8KzXtt6BnNeqKNPgT9+STAGfRNdDxTu
+         Raep0CL1uBAAw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 20/25] media: siano: fix device register error path
-Date:   Sun,  4 Jul 2021 19:11:18 -0400
-Message-Id: <20210704231123.1491517-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 08/25] media: cobalt: fix race condition in setting HPD
+Date:   Sun,  4 Jul 2021 19:11:06 -0400
+Message-Id: <20210704231123.1491517-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704231123.1491517-1-sashal@kernel.org>
 References: <20210704231123.1491517-1-sashal@kernel.org>
@@ -49,37 +50,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 5368b1ee2939961a16e74972b69088433fc52195 ]
+[ Upstream commit 3d37ef41bed0854805ab9af22c422267510e1344 ]
 
-As reported by smatch:
-	drivers/media/common/siano/smsdvb-main.c:1231 smsdvb_hotplug() warn: '&client->entry' not removed from list
+The cobalt_s_bit_sysctrl reads the old register value over PCI,
+then changes a bit and sets writes the new value to the register.
 
-If an error occur at the end of the registration logic, it won't
-drop the device from the list.
+This is used among other things for setting the HPD output pin.
 
+But if the HPD is changed for multiple inputs at the same time,
+then this causes a race condition where a stale value is read.
+
+Serialize this function with a mutex.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/common/siano/smsdvb-main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/pci/cobalt/cobalt-driver.c | 1 +
+ drivers/media/pci/cobalt/cobalt-driver.h | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
-index 15e895c9f2e0..cbe5f08ae9ad 100644
---- a/drivers/media/common/siano/smsdvb-main.c
-+++ b/drivers/media/common/siano/smsdvb-main.c
-@@ -1187,6 +1187,10 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
- 	return 0;
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+index 98b6cb9505d1..0c827f488317 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.c
++++ b/drivers/media/pci/cobalt/cobalt-driver.c
+@@ -687,6 +687,7 @@ static int cobalt_probe(struct pci_dev *pci_dev,
+ 		return -ENOMEM;
+ 	cobalt->pci_dev = pci_dev;
+ 	cobalt->instance = i;
++	mutex_init(&cobalt->pci_lock);
  
- media_graph_error:
-+	mutex_lock(&g_smsdvb_clientslock);
-+	list_del(&client->entry);
-+	mutex_unlock(&g_smsdvb_clientslock);
-+
- 	smsdvb_debugfs_release(client);
+ 	retval = v4l2_device_register(&pci_dev->dev, &cobalt->v4l2_dev);
+ 	if (retval) {
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
+index 00f773ec359a..9f8db7eaa43c 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.h
++++ b/drivers/media/pci/cobalt/cobalt-driver.h
+@@ -262,6 +262,8 @@ struct cobalt {
+ 	int instance;
+ 	struct pci_dev *pci_dev;
+ 	struct v4l2_device v4l2_dev;
++	/* serialize PCI access in cobalt_s_bit_sysctrl() */
++	struct mutex pci_lock;
  
- client_error:
+ 	void __iomem *bar0, *bar1;
+ 
+@@ -331,10 +333,13 @@ static inline u32 cobalt_g_sysctrl(struct cobalt *cobalt)
+ static inline void cobalt_s_bit_sysctrl(struct cobalt *cobalt,
+ 					int bit, int val)
+ {
+-	u32 ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
++	u32 ctrl;
+ 
++	mutex_lock(&cobalt->pci_lock);
++	ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
+ 	cobalt_write_bar1(cobalt, COBALT_SYS_CTRL_BASE,
+ 			(ctrl & ~(1UL << bit)) | (val << bit));
++	mutex_unlock(&cobalt->pci_lock);
+ }
+ 
+ static inline u32 cobalt_g_sysstat(struct cobalt *cobalt)
 -- 
 2.30.2
 
