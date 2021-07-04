@@ -4,43 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23EBEC07E9D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAFEC07E96
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CD9C613E9
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:14:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1783160234
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:16:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbhGDXRE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:17:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57074 "EHLO mail.kernel.org"
+        id S233603AbhGDXSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:18:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234552AbhGDXPO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:15:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DD114613D2;
-        Sun,  4 Jul 2021 23:12:37 +0000 (UTC)
+        id S233185AbhGDXOO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E184F61375;
+        Sun,  4 Jul 2021 23:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440358;
-        bh=goPWnGR9FFZQkpBa1JFvefYOOvvJ/dsmy54RL39bWxg=;
+        s=k20201202; t=1625440181;
+        bh=ckir8RldbnMAvlDvA4IMDq+PDg7k94QnMDElRdgMxng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KCY+/zUON/ZiOdo2Q+mpaDPKVKzP0JeEWY1b/7QezAKnCh+woUGUc5C9XnleWs9dY
-         8yKBS3d9hRHAg94Q00Bot5Y09NR4M1VmYxtiBItIIc5DHF6AruiJ88yBnz1idf1D2/
-         iKKtXV5z+f24t1lHpZTdCu80T+CU9R/2+5VwGPAsEVRFSIcr+qpT0oYbCMvUSD7loE
-         qNuWapCmN2axX/g6HVyPKDp0mD4cw5iWzudwiTzQ1AyOYANc8V0MRrok7faE2sCgLY
-         dzwflFb4F8B4gxwipCFUAu8qIUf4i/FOvVJk4OrLGvG2s8G7qADnIUFlZ48ZNLDQ4p
-         8sDhvsTqE9Xsg==
+        b=Jb17Yx80vH7NhFXdzzw5bpewlYUPgwqZBrHrS3+DFHhxvPGGE8AozqBoXKm6szP5i
+         Q5TxE5uFwa6J6VMqTQVaP+T4zqGTHfKGtBi/aRV2qMI0MmijOF66TuoX3a/Bi8tQYN
+         7X0BqDlKQJXpxqJk33qJ/Xuw4CNA5w0WWtkq0+7sJx1knyne+2pHasBd/nP/gB/62U
+         GrB0zVYChLMmp+WoL8HtuYfeYjpMgkLorYqRC3Fndp3ktis/3aPiW+895Nznw2DNd8
+         B2oHStU3X6B/gsIvbQJtpSGbIJqrh+QXIo/UNpSnbQfYaSD92IoZcfY0PBw1Qr5Ad3
+         5yK95Ck9yQvdQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 12/15] media: dvb_net: avoid speculation from net slot
-Date:   Sun,  4 Jul 2021 19:12:18 -0400
-Message-Id: <20210704231222.1492037-12-sashal@kernel.org>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 02/50] media: mdk-mdp: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:08:50 -0400
+Message-Id: <20210704230938.1490742-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704231222.1492037-1-sashal@kernel.org>
-References: <20210704231222.1492037-1-sashal@kernel.org>
+In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
+References: <20210704230938.1490742-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,85 +54,46 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit abc0226df64dc137b48b911c1fe4319aec5891bb ]
+[ Upstream commit d07bb9702cf5f5ccf3fb661e6cab54bbc33cd23f ]
 
-The risk of especulation is actually almost-non-existing here,
-as there are very few users of TCP/IP using the DVB stack,
-as, this is mainly used with DVB-S/S2 cards, and only by people
-that receives TCP/IP from satellite connections, which limits
-a lot the number of users of such feature(*).
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
-(*) In thesis, DVB-C cards could also benefit from it, but I'm
-yet to see a hardware that supports it.
+While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
+as it doesn't make any sense to return 0 if the PM runtime failed
+to resume.
 
-Yet, fixing it is trivial.
-
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_net.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index ce4332e80a91..735baa74043c 100644
---- a/drivers/media/dvb-core/dvb_net.c
-+++ b/drivers/media/dvb-core/dvb_net.c
-@@ -57,6 +57,7 @@
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
-+#include <linux/nospec.h>
- #include <linux/etherdevice.h>
- #include <linux/dvb/net.h>
- #include <linux/uio.h>
-@@ -1350,14 +1351,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct dvb_net_if *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+index 7c9e2d69e21a..34bc2949e1d6 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+@@ -402,12 +402,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mtk_mdp_ctx *ctx = q->drv_priv;
+ 	int ret;
  
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
+-	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
++	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
+ 	if (ret < 0)
+-		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
++		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
+ 			    ctx->id, ret);
  
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		if (!dvbnet->state[if_num]) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+
-+		netdev = dvbnet->device[if_num];
+-	return 0;
++	return ret;
+ }
  
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
-@@ -1410,14 +1417,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct __dvb_net_if_old *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
-+
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
- 
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (!dvbnet->state[if_num]) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		netdev = dvbnet->device[if_num];
- 
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
+ static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
 -- 
 2.30.2
 
