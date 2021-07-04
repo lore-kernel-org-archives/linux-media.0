@@ -7,39 +7,38 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59F9FC11F7D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F115AC07E9C
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F5676194B
+	by mail.kernel.org (Postfix) with ESMTP id D5BC661364
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbhGDXPy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:15:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57068 "EHLO mail.kernel.org"
+        id S234608AbhGDXP7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:15:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234058AbhGDXOw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 07ED3619AD;
-        Sun,  4 Jul 2021 23:11:04 +0000 (UTC)
+        id S234014AbhGDXOu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D0B7561956;
+        Sun,  4 Jul 2021 23:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440265;
-        bh=uVfsS63Qi3htFTA0i7wUs5QP7thxs7kRT0WREXLPXCE=;
+        s=k20201202; t=1625440257;
+        bh=0uJ50+GR1GXb++JGu48gzrWZBY9aV7V3ZS3Fu0rd30c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RhM1bKMOo/qvkiinJwztq0+MRIyVugeC6Jhjez3h7iCwcCU133RIrVtJrPRstt1D7
-         2MnElsU1CXAf2TCfyaBOQnHS6XmjiYKnZjoWnqX7b7XEN+WU5k4Z8O4JFJ1RhRIGy3
-         ZGqs5ZWyuHMIsCSJcIGuS8EJcPOeI4hq9lps23OklUbNZ/30JFRBkQ16MTjbDX7BHM
-         QGVZwMthJPqH8Y4hfL4AbL6nKalDb0EWajZQBboJaHeTBzY14cakx9lrOQLY0YhkNp
-         KHl7YEylMUIvwg8tkv6Vqb3J7GbZmQXcwRD6F+Yytdgb+P/0IcMU57iKVaIvwKMPdm
-         LXX35Pp+VrlLQ==
+        b=C5ZUtyAfFuKLkEskz5YBjTpAYybxnlES+Z2OodAobfOKamFjDFZovAO/O/tk9m4VX
+         eWYUM4I4E50ml+VhgMYX+BIkO/HVbyeqGOoK9W/6lKOJyK6tc1Y2RbfYrhbuHoE0b3
+         U3b8QX+Qr/V1Ns/Y6q29DGw2o0rt/rF88qtjkCcIyk8Ewsn7qmPOt5RR+57yCGla6t
+         sj2sv8MjTM6WS5HD9c8GXI3xO727o/QXYLglrgawcnDHL+seikWPa1tydqIGP4q7Px
+         C2kDhQ+RWmC8RM1xDA+2zBjvZIIsrAftxI+vR9/7pSGkRJ5bgyOeJbVeL+OY1WTjwm
+         PfntLKZr+DljQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 17/31] media: v4l2-core: Avoid the dangling pointer in v4l2_fh_release
-Date:   Sun,  4 Jul 2021 19:10:29 -0400
-Message-Id: <20210704231043.1491209-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 11/31] media: cobalt: fix race condition in setting HPD
+Date:   Sun,  4 Jul 2021 19:10:23 -0400
+Message-Id: <20210704231043.1491209-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704231043.1491209-1-sashal@kernel.org>
 References: <20210704231043.1491209-1-sashal@kernel.org>
@@ -51,37 +50,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 7dd0c9e547b6924e18712b6b51aa3cba1896ee2c ]
+[ Upstream commit 3d37ef41bed0854805ab9af22c422267510e1344 ]
 
-A use after free bug caused by the dangling pointer
-filp->privitate_data in v4l2_fh_release.
-See https://lore.kernel.org/patchwork/patch/1419058/.
+The cobalt_s_bit_sysctrl reads the old register value over PCI,
+then changes a bit and sets writes the new value to the register.
 
-My patch sets the dangling pointer to NULL to provide
-robust.
+This is used among other things for setting the HPD output pin.
 
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+But if the HPD is changed for multiple inputs at the same time,
+then this causes a race condition where a stale value is read.
+
+Serialize this function with a mutex.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-fh.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/pci/cobalt/cobalt-driver.c | 1 +
+ drivers/media/pci/cobalt/cobalt-driver.h | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
-index c91a7bd3ecfc..ac8282d059fc 100644
---- a/drivers/media/v4l2-core/v4l2-fh.c
-+++ b/drivers/media/v4l2-core/v4l2-fh.c
-@@ -104,6 +104,7 @@ int v4l2_fh_release(struct file *filp)
- 		v4l2_fh_del(fh);
- 		v4l2_fh_exit(fh);
- 		kfree(fh);
-+		filp->private_data = NULL;
- 	}
- 	return 0;
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+index 4885e833c052..f422558e6392 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.c
++++ b/drivers/media/pci/cobalt/cobalt-driver.c
+@@ -675,6 +675,7 @@ static int cobalt_probe(struct pci_dev *pci_dev,
+ 		return -ENOMEM;
+ 	cobalt->pci_dev = pci_dev;
+ 	cobalt->instance = i;
++	mutex_init(&cobalt->pci_lock);
+ 
+ 	retval = v4l2_device_register(&pci_dev->dev, &cobalt->v4l2_dev);
+ 	if (retval) {
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
+index 429bee4ef79c..883093e5adea 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.h
++++ b/drivers/media/pci/cobalt/cobalt-driver.h
+@@ -250,6 +250,8 @@ struct cobalt {
+ 	int instance;
+ 	struct pci_dev *pci_dev;
+ 	struct v4l2_device v4l2_dev;
++	/* serialize PCI access in cobalt_s_bit_sysctrl() */
++	struct mutex pci_lock;
+ 
+ 	void __iomem *bar0, *bar1;
+ 
+@@ -319,10 +321,13 @@ static inline u32 cobalt_g_sysctrl(struct cobalt *cobalt)
+ static inline void cobalt_s_bit_sysctrl(struct cobalt *cobalt,
+ 					int bit, int val)
+ {
+-	u32 ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
++	u32 ctrl;
+ 
++	mutex_lock(&cobalt->pci_lock);
++	ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
+ 	cobalt_write_bar1(cobalt, COBALT_SYS_CTRL_BASE,
+ 			(ctrl & ~(1UL << bit)) | (val << bit));
++	mutex_unlock(&cobalt->pci_lock);
  }
+ 
+ static inline u32 cobalt_g_sysstat(struct cobalt *cobalt)
 -- 
 2.30.2
 
