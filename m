@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CBFEC07E9B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF668C07E9D
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 860DE61879
+	by mail.kernel.org (Postfix) with ESMTP id ABEA461961
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:09:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbhGDXMY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:12:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50748 "EHLO mail.kernel.org"
+        id S232481AbhGDXMU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:12:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50660 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230153AbhGDXLS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:11:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 71AB26135A;
-        Sun,  4 Jul 2021 23:08:10 +0000 (UTC)
+        id S232088AbhGDXLR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:11:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1B256194E;
+        Sun,  4 Jul 2021 23:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440091;
-        bh=pvaZu1fBmzhI5AQc1EG1dbL8CdZjLLTQkMdhxpOCUmM=;
+        s=k20201202; t=1625440088;
+        bh=VcFcH5ns65QNQL6Uh4A/eiq75KTpr/4XR8S+9m8uuIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TIWki2Zl6/doXNYAg6J3QHD6o6LJtfHxwrkCJkbE4o3klCwt9HqVJaMeMJdG4ZOcS
-         g1A/GN7bOrGiJItTRWEzW1eCMq2FzbsPovTJoENpkWbu8lc2pOjmNQiVeRmlWReaFf
-         CUwgOpZV1ffZvUbRZKVM/sDq08hmArPo0EYoXUcwMzoaoj+XiaFqAnao52a+Q8bvyK
-         5UWMBH7mB5n2FQTesUNHk9bUPlM8Lge/dppiuUnF0ZDqTUZEjvS/B3+jGHJNVq3IET
-         FVmq//HF03L2G4L0NFpJ1kJpTnRf9ulgaYJaihScXHixKxUZ8DvKKi+Rdu3tgUNWRK
-         40FRNG4RDXLzA==
+        b=tggSZIncA4H29GgnAE6zXa7woNtFmVVWJEXuYO7Bzg5btiCrVdTqKkztwjNkxVJ2s
+         Km0LqjqZxUH3mha3uW98nyJfycEV4mUGt5L14IbSHF2ywBOBFgilRUF3wrh22qJ2Bh
+         ywOuIkFeHr2CW3qs5rgE+Sr4dT73JNfsK9UWNpTLtXamFlMRVT1LnVEBiq8a5XGT1t
+         sVwVTa1g26jhvfooPAj4TAwh25AzqZJyVf7Tq4WGNN1ClMIHLRp5cMPpNKSrEmFhmb
+         LyLAfFpR845IqPYdJgLDAOeKD0hPuJ8SpzGlVizLqof2zyLqUc69GyyfE0DaAxIDeJ
+         XspdOXRsp0RLw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 05/70] media: mdk-mdp: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:06:58 -0400
-Message-Id: <20210704230804.1490078-5-sashal@kernel.org>
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 03/70] staging: media: rkvdec: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:06:56 -0400
+Message-Id: <20210704230804.1490078-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -54,7 +54,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit d07bb9702cf5f5ccf3fb661e6cab54bbc33cd23f ]
+[ Upstream commit e90812c47b958407b54d05780dc483fdc1b57a93 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
@@ -63,37 +63,27 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-While here, fix the return contition of mtk_mdp_m2m_start_streaming(),
-as it doesn't make any sense to return 0 if the PM runtime failed
-to resume.
-
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index 724c7333b6e5..45fc741c5541 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -394,12 +394,12 @@ static int mtk_mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mtk_mdp_ctx *ctx = q->drv_priv;
- 	int ret;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 1263991de76f..b630e161d4ce 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -691,7 +691,7 @@ static void rkvdec_device_run(void *priv)
+ 	if (WARN_ON(!desc))
+ 		return;
  
--	ret = pm_runtime_get_sync(&ctx->mdp_dev->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&ctx->mdp_dev->pdev->dev);
- 	if (ret < 0)
--		mtk_mdp_dbg(1, "[%d] pm_runtime_get_sync failed:%d",
-+		mtk_mdp_dbg(1, "[%d] pm_runtime_resume_and_get failed:%d",
- 			    ctx->id, ret);
- 
--	return 0;
-+	return ret;
- }
- 
- static void *mtk_mdp_m2m_buf_remove(struct mtk_mdp_ctx *ctx,
+-	ret = pm_runtime_get_sync(rkvdec->dev);
++	ret = pm_runtime_resume_and_get(rkvdec->dev);
+ 	if (ret < 0) {
+ 		rkvdec_job_finish_no_pm(ctx, VB2_BUF_STATE_ERROR);
+ 		return;
 -- 
 2.30.2
 
