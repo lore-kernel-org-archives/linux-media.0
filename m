@@ -7,41 +7,43 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 851FCC11F8E
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 929B2C07E9D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6CB95613F1
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EDF76195D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbhGDXPg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:15:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50748 "EHLO mail.kernel.org"
+        id S231972AbhGDXPj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:15:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233983AbhGDXOt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 62A9F613FB;
-        Sun,  4 Jul 2021 23:10:48 +0000 (UTC)
+        id S234230AbhGDXO5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A612961968;
+        Sun,  4 Jul 2021 23:11:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440249;
-        bh=w65wNTosxvkJpMQt77u2qGKGhUFqRbRGDrcnbeQE4FU=;
+        s=k20201202; t=1625440304;
+        bh=CwCNt3yYNT3YccVLM099YhA2gJ/GSS2zbts+Qyv2fxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gdtf3QYdx46yNYvdwHvcTOMmFEwS8BrsfDjqkWSQp83ESx3IkmOwXhfyV0LrPMO2J
-         ivmFvTOYeTQejFm2T3SU1EdOPIpshUmBXf9hKjgAC+zkdx5JlJMEJq2gTd2owKU7Jm
-         YOtjsiobTmhCI8+5+jxfmlaZEGq2YSWPeiiZOVeK2oMu/5vZ5bxUAfspyA4kD3px0b
-         ZBa6+ga5qK27C1e5p/vw++fAB571lB8lz49mwdjNS24JKzVr90GFq+p8F3nDCPzWm4
-         LrNgzvNPOslLGpP1IUJ4p6Flt0StRKxsaRcqg7ce0efyAOXtoGrGxlaYzviAz+IVQ9
-         i+Td+g8pgfHUQ==
+        b=NbTkb/8xutcAvULau5aIjgQbJmrBExDRAnw99pUXDMgQaMnU+LKCHfhQkjFR8Lgvy
+         y5uMhq0VChmKXtjX2Yy22X5DqTh6S/nv93PXdPwT3JRvHVV1QQOj+Mz8LEXAz05vuB
+         Vmh3GPybNt74INSY9nqMQUowgyKC1jBqPvbbV2ddDxsC4PVM6foJq69sS9YZ0hYupf
+         JW53lLm70jRvBN/vBsyrlgGnGY1gkZP9AR/AcEkYVhL2BLoN+nfYWhSTiHhG5bNpu6
+         aOECJfM90TQBKgeQVNm8rogUVkVmw121h5j9DaJ+s1lmCin7CWQeNoKfY9LNHnh285
+         gy5GIJoks48kQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 04/31] media: sti/bdisp: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:10:16 -0400
-Message-Id: <20210704231043.1491209-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 16/25] media: dvd_usb: memory leak in cinergyt2_fe_attach
+Date:   Sun,  4 Jul 2021 19:11:14 -0400
+Message-Id: <20210704231123.1491517-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704231043.1491209-1-sashal@kernel.org>
-References: <20210704231043.1491209-1-sashal@kernel.org>
+In-Reply-To: <20210704231123.1491517-1-sashal@kernel.org>
+References: <20210704231123.1491517-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -50,65 +52,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit c44eac5b72e23c31eefc0e10a71d9650036b8341 ]
+[ Upstream commit 9ad1efee086e0e913914fa2b2173efb830bad68c ]
 
-The pm_runtime_get_sync() internally increments the
-dev->power.usage_count without decrementing it, even on errors.
+When the driver fails to talk with the hardware with dvb_usb_generic_rw,
+it will return an error to dvb_usb_adapter_frontend_init. However, the
+driver forgets to free the resource (e.g., struct cinergyt2_fe_state),
+which leads to a memory leak.
 
-The bdisp_start_streaming() doesn't take it into account, which
-would unbalance PM usage counter at bdisp_stop_streaming().
+Fix this by freeing struct cinergyt2_fe_state when dvb_usb_generic_rw
+fails in cinergyt2_frontend_attach.
 
-The logic at bdisp_probe() is correct, but the best is to use
-the same call along the driver.
+backtrace:
+  [<0000000056e17b1a>] kmalloc include/linux/slab.h:552 [inline]
+  [<0000000056e17b1a>] kzalloc include/linux/slab.h:682 [inline]
+  [<0000000056e17b1a>] cinergyt2_fe_attach+0x21/0x80 drivers/media/usb/dvb-usb/cinergyT2-fe.c:271
+  [<00000000ae0b1711>] cinergyt2_frontend_attach+0x21/0x70 drivers/media/usb/dvb-usb/cinergyT2-core.c:74
+  [<00000000d0254861>] dvb_usb_adapter_frontend_init+0x11b/0x1b0 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:290
+  [<0000000002e08ac6>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:84 [inline]
+  [<0000000002e08ac6>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:173 [inline]
+  [<0000000002e08ac6>] dvb_usb_device_init.cold+0x4d0/0x6ae drivers/media/usb/dvb-usb/dvb-usb-init.c:287
 
-So, replace it by the new pm_runtime_resume_and_get(), introduced by:
-commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-in order to properly decrement the usage counter, avoiding
-a potential PM usage counter leak.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reported-by: syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/usb/dvb-usb/cinergyT2-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-index 00f6e3f06dac..1fb04dc0f7d0 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-@@ -499,7 +499,7 @@ static int bdisp_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct bdisp_ctx *ctx = q->drv_priv;
- 	struct vb2_v4l2_buffer *buf;
--	int ret = pm_runtime_get_sync(ctx->bdisp_dev->dev);
-+	int ret = pm_runtime_resume_and_get(ctx->bdisp_dev->dev);
+diff --git a/drivers/media/usb/dvb-usb/cinergyT2-core.c b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+index 6131aa7914a9..fb59dda7547a 100644
+--- a/drivers/media/usb/dvb-usb/cinergyT2-core.c
++++ b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+@@ -88,6 +88,8 @@ static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
  
+ 	ret = dvb_usb_generic_rw(d, st->data, 1, st->data, 3, 0);
  	if (ret < 0) {
- 		dev_err(ctx->bdisp_dev->dev, "failed to set runtime PM\n");
-@@ -1368,10 +1368,10 @@ static int bdisp_probe(struct platform_device *pdev)
- 
- 	/* Power management */
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to set PM\n");
--		goto err_pm;
-+		goto err_remove;
++		if (adap->fe_adap[0].fe)
++			adap->fe_adap[0].fe->ops.release(adap->fe_adap[0].fe);
+ 		deb_rc("cinergyt2_power_ctrl() Failed to retrieve sleep state info\n");
  	}
- 
- 	/* Filters */
-@@ -1399,6 +1399,7 @@ static int bdisp_probe(struct platform_device *pdev)
- 	bdisp_hw_free_filters(bdisp->dev);
- err_pm:
- 	pm_runtime_put(dev);
-+err_remove:
- 	bdisp_debugfs_remove(bdisp);
- err_v4l2:
- 	v4l2_device_unregister(&bdisp->v4l2_dev);
+ 	mutex_unlock(&d->data_mutex);
 -- 
 2.30.2
 
