@@ -7,39 +7,38 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E6C9C11F69
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A559C11F7C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6639E6135D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A89761364
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbhGDXPm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:15:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50794 "EHLO mail.kernel.org"
+        id S234586AbhGDXPx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:15:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234226AbhGDXO5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 754CD61960;
-        Sun,  4 Jul 2021 23:11:42 +0000 (UTC)
+        id S234144AbhGDXOz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EC8E61965;
+        Sun,  4 Jul 2021 23:11:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440303;
-        bh=miupIieA8N3u5xFBc+Zyeff4poumuKA0p+ZcrLMKpU4=;
+        s=k20201202; t=1625440286;
+        bh=ZwCIXI+anUKvUjBFbZwfOKZagOMJbFXhrHhA7no+JHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4RINcr4FB03Azuy7lSOPr7L+3Jr9QJd+h/dLAI51iPErEacTh7eZVpUgQUQl8dc4
-         B3mIJhwYEkoOz+WwvRtwRY71rdTrZAI0z7Me9iPkrzP87uLSY56pECEBKQrskcLGIU
-         FbGGXp992kZwSHYL6jz/HPfPct867GMK1OLBTTou/+zpBamJnSYhSR//s3W7ue0vDq
-         NZG+i9oLfz8YFBdW4OeGeyf1cggoGPE34/53bo908J0PBwkd8tmegNbRBJxMKcO2FE
-         0Vd5fjmU1vpp3fcj6NejPXdapm1YIzVFMukvjXZ4N8b+80tSoZ1ABP10xb0A7pee+N
-         kFhQILuIBo+xw==
+        b=Svs6O3mjp4hMbEvi3wlA13QW1Gi4amLQNEsqGGCRdHiBn2JBTGeg8JA8aGiZqV9RI
+         BRxVplMPoUK9hIoMm4oMyLntND8aRFZnD6RsVJ3s9EyFg6MXRfPfeFAQY5vaX7PBRo
+         41ylio+C19zp4o3p1c2EvpBrkLpWEZtPqMjdgM+jRBNakjKUQBaBhuh/tKz4QvuU+J
+         Qh3RZBEdYz/ntgOYutnriYlKIyT+eNrAY61gl7F7wu95q08yEpyhyzUByhTMHNj4V/
+         P6iLmiVQ5kbdBemgidMiqAX+XpzEQRb4arz8OvlBvU9/6pMdeMwbYF0I9QNWUHPshP
+         Gbzh05nwEgTIg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 15/25] media: st-hva: Fix potential NULL pointer dereferences
-Date:   Sun,  4 Jul 2021 19:11:13 -0400
-Message-Id: <20210704231123.1491517-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 02/25] media: sh_vou: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:11:00 -0400
+Message-Id: <20210704231123.1491517-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704231123.1491517-1-sashal@kernel.org>
 References: <20210704231123.1491517-1-sashal@kernel.org>
@@ -51,38 +50,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit b7fdd208687ba59ebfb09b2199596471c63b69e3 ]
+[ Upstream commit 6e8b1526db164c9d4b9dacfb9bc48e365d7c4860 ]
 
-When ctx_id >= HVA_MAX_INSTANCES in hva_hw_its_irq_thread() it tries to
-access fields of ctx that is NULL at that point. The patch gets rid of
-these accesses.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+While here, check if the PM runtime error was caught at open time.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/sh_vou.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index 1185f6b6721e..3bb4d55c2058 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -130,8 +130,7 @@ static irqreturn_t hva_hw_its_irq_thread(int irq, void *arg)
- 	ctx_id = (hva->sts_reg & 0xFF00) >> 8;
- 	if (ctx_id >= HVA_MAX_INSTANCES) {
- 		dev_err(dev, "%s     %s: bad context identifier: %d\n",
--			ctx->name, __func__, ctx_id);
--		ctx->hw_err = true;
-+			HVA_PREFIX, __func__, ctx_id);
- 		goto out;
- 	}
- 
+diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
+index 871da2a2a91c..06381c88229f 100644
+--- a/drivers/media/platform/sh_vou.c
++++ b/drivers/media/platform/sh_vou.c
+@@ -1147,7 +1147,11 @@ static int sh_vou_open(struct file *file)
+ 	if (v4l2_fh_is_singular_file(file) &&
+ 	    vou_dev->status == SH_VOU_INITIALISING) {
+ 		/* First open */
+-		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
++		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
++		if (err < 0) {
++			v4l2_fh_release(file);
++			goto done_open;
++		}
+ 		err = sh_vou_hw_init(vou_dev);
+ 		if (err < 0) {
+ 			pm_runtime_put(vou_dev->v4l2_dev.dev);
 -- 
 2.30.2
 
