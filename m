@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5762C11F84
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09730C11F83
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93B6C61364
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5C7E6195C
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbhGDXIT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:08:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46478 "EHLO mail.kernel.org"
+        id S231223AbhGDXIS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:08:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46686 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230346AbhGDXHx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEB63613FC;
-        Sun,  4 Jul 2021 23:05:16 +0000 (UTC)
+        id S230488AbhGDXIA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:08:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6660A613F9;
+        Sun,  4 Jul 2021 23:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439917;
-        bh=H6I1CzE8LzvNbpcekBj5LRlqnEHe8h7OLwJsoz0QF8M=;
+        s=k20201202; t=1625439924;
+        bh=b+dbzik4gF/bptX3LTN5yD5r59X5tqhaXyxGi2QAB1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IBg6+SReLSUjMc9tyNf9OWqnwD/hNatQ726up4E1jWJI+ZFmqym9A1Xs37TF9TYaD
-         LFJJ2Wjpa7Qc3T6PGQ9AfcJq/TE4EZzyUWI+hp/DhRANLnrZ4ShKq1fa9/fI/jmv5S
-         v0/xCyAQQj/tcJz3NPUPgnuOB+tDbdLbTWcirBi12Y0RR8al7uwJGCWYp6qOvhy8iT
-         feWGLWHMFPFIm6Wyhkxtp2y3AhkaGeSjX48UjO6LVcBNfHjj/79f8BLnzn/uhAu8bF
-         ZadbA3hBSx7Lbp3szjVGTRXOfyVyv9bvq3fGkQoQBQ5E2af3joGXYVAwpDO+pfWrsn
-         PC1/nLwqs7Tzg==
+        b=T9IzHrxQ4AZYeGak7mjV3nz3Jkrfzl3+WnbAunzaQ9b7qsjwHOQmVV03H3mmDXuN6
+         6gzHxzEz19PQbksLBQ4qRjMYJSrvcK5TRO2VDYKbdgTJ6C5x5OTRVWbMqd7plYwecT
+         f8ZR/HcSfkuUBryozrkGFg7QEC/6RHo7bWzcyUWJXLQfSRPTAffW7wNzYVeCO1hmAJ
+         hvESIcOud4axCX5KW5Fcz/dcStRkbUKsGNRKEm9rZJzDe5Wzk1Fiw5UuR8dMJtF4/T
+         Mvjnlb+e5pluaMTaphHGV06XdZ4FKjYVfSRZh43Xw5z29NvZYdmw6HcoDrhsRoFXmu
+         q41A7rN1TTgEw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 41/85] media: em28xx: Fix possible memory leak of em28xx struct
-Date:   Sun,  4 Jul 2021 19:03:36 -0400
-Message-Id: <20210704230420.1488358-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 46/85] media: st-hva: Fix potential NULL pointer dereferences
+Date:   Sun,  4 Jul 2021 19:03:41 -0400
+Message-Id: <20210704230420.1488358-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -51,55 +51,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit ac5688637144644f06ed1f3c6d4dd8bb7db96020 ]
+[ Upstream commit b7fdd208687ba59ebfb09b2199596471c63b69e3 ]
 
-The em28xx struct kref isn't being decreased after an error in the
-em28xx_ir_init, leading to a possible memory leak.
+When ctx_id >= HVA_MAX_INSTANCES in hva_hw_its_irq_thread() it tries to
+access fields of ctx that is NULL at that point. The patch gets rid of
+these accesses.
 
-A kref_put and em28xx_shutdown_buttons is added to the error handler code.
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Signed-off-by: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-input.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/platform/sti/hva/hva-hw.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-input.c b/drivers/media/usb/em28xx/em28xx-input.c
-index 5aa15a7a49de..59529cbf9cd0 100644
---- a/drivers/media/usb/em28xx/em28xx-input.c
-+++ b/drivers/media/usb/em28xx/em28xx-input.c
-@@ -720,7 +720,8 @@ static int em28xx_ir_init(struct em28xx *dev)
- 			dev->board.has_ir_i2c = 0;
- 			dev_warn(&dev->intf->dev,
- 				 "No i2c IR remote control device found.\n");
--			return -ENODEV;
-+			err = -ENODEV;
-+			goto ref_put;
- 		}
+diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
+index f59811e27f51..6eeee5017fac 100644
+--- a/drivers/media/platform/sti/hva/hva-hw.c
++++ b/drivers/media/platform/sti/hva/hva-hw.c
+@@ -130,8 +130,7 @@ static irqreturn_t hva_hw_its_irq_thread(int irq, void *arg)
+ 	ctx_id = (hva->sts_reg & 0xFF00) >> 8;
+ 	if (ctx_id >= HVA_MAX_INSTANCES) {
+ 		dev_err(dev, "%s     %s: bad context identifier: %d\n",
+-			ctx->name, __func__, ctx_id);
+-		ctx->hw_err = true;
++			HVA_PREFIX, __func__, ctx_id);
+ 		goto out;
  	}
- 
-@@ -735,7 +736,7 @@ static int em28xx_ir_init(struct em28xx *dev)
- 
- 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
- 	if (!ir)
--		return -ENOMEM;
-+		goto ref_put;
- 	rc = rc_allocate_device(RC_DRIVER_SCANCODE);
- 	if (!rc)
- 		goto error;
-@@ -839,6 +840,9 @@ static int em28xx_ir_init(struct em28xx *dev)
- 	dev->ir = NULL;
- 	rc_free_device(rc);
- 	kfree(ir);
-+ref_put:
-+	em28xx_shutdown_buttons(dev);
-+	kref_put(&dev->ref, em28xx_free_device);
- 	return err;
- }
  
 -- 
 2.30.2
