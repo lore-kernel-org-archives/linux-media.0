@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D340DC11F6B
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5762C11F84
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B712D613FB
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93B6C61364
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhGDXIP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:08:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45944 "EHLO mail.kernel.org"
+        id S230347AbhGDXIT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:08:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230285AbhGDXH7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D05361452;
-        Sun,  4 Jul 2021 23:05:22 +0000 (UTC)
+        id S230346AbhGDXHx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AEB63613FC;
+        Sun,  4 Jul 2021 23:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439922;
-        bh=gwnCwie+LU+Razt7Cq/sOgDreUV8VUwsRqswjxRYppU=;
+        s=k20201202; t=1625439917;
+        bh=H6I1CzE8LzvNbpcekBj5LRlqnEHe8h7OLwJsoz0QF8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aKags6i9KmWcRPBUdiA4dZ1W1aGIMcrumuWvX/u7WfnfQikWF1nmXbR92twAEbMXt
-         GLQeWLjuLkMKtG+IyJrTPm7cDCqYkSAz1wLOfyYyMuq86XekP26oveyj2ivPzX3nCr
-         BtMiyN3lXzvyj+7dNgK1f8cE8wp8lKqIyjzoOg5teIb0oomryQ7WDp7T9C1g/SqB4V
-         D2gPakU5w4ATdNu1V/GPRWfaFenf8RbV/0HybLxo4ZaJe/BYYcG912lmJ9f4w3m11y
-         Ie6TNoPug8AU2vXSKWF0W3fXgCcoiXAiQehM2SkFLfcIYTeJ8HFqKhjlPB9aHMnoVk
-         Lp83RUA07BhJA==
+        b=IBg6+SReLSUjMc9tyNf9OWqnwD/hNatQ726up4E1jWJI+ZFmqym9A1Xs37TF9TYaD
+         LFJJ2Wjpa7Qc3T6PGQ9AfcJq/TE4EZzyUWI+hp/DhRANLnrZ4ShKq1fa9/fI/jmv5S
+         v0/xCyAQQj/tcJz3NPUPgnuOB+tDbdLbTWcirBi12Y0RR8al7uwJGCWYp6qOvhy8iT
+         feWGLWHMFPFIm6Wyhkxtp2y3AhkaGeSjX48UjO6LVcBNfHjj/79f8BLnzn/uhAu8bF
+         ZadbA3hBSx7Lbp3szjVGTRXOfyVyv9bvq3fGkQoQBQ5E2af3joGXYVAwpDO+pfWrsn
+         PC1/nLwqs7Tzg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+Cc:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 45/85] media: bt8xx: Fix a missing check bug in bt878_probe
-Date:   Sun,  4 Jul 2021 19:03:40 -0400
-Message-Id: <20210704230420.1488358-45-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 41/85] media: em28xx: Fix possible memory leak of em28xx struct
+Date:   Sun,  4 Jul 2021 19:03:36 -0400
+Message-Id: <20210704230420.1488358-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -51,120 +51,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
 
-[ Upstream commit 1a4520090681853e6b850cbe54b27247a013e0e5 ]
+[ Upstream commit ac5688637144644f06ed1f3c6d4dd8bb7db96020 ]
 
-In 'bt878_irq', the driver calls 'tasklet_schedule', but this tasklet is
-set in 'dvb_bt8xx_load_card' of another driver 'dvb-bt8xx'.
-However, this two drivers are separate. The user may not load the
-'dvb-bt8xx' driver when loading the 'bt8xx' driver, that is, the tasklet
-has not been initialized when 'tasklet_schedule' is called, so it is
-necessary to check whether the tasklet is initialized in 'bt878_probe'.
+The em28xx struct kref isn't being decreased after an error in the
+em28xx_ir_init, leading to a possible memory leak.
 
-Fix this by adding a check at the end of bt878_probe.
+A kref_put and em28xx_shutdown_buttons is added to the error handler code.
 
-The KASAN's report reveals it:
-
-BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-PGD 800000006aab2067 P4D 800000006aab2067 PUD 6b2ea067 PMD 0
-Oops: 0010 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 8724 Comm: syz-executor.0 Not tainted 4.19.177-
-gdba4159c14ef-dirty #40
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.0-59-
-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-RIP: 0010:          (null)
-Code: Bad RIP value.
-RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
-RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
-RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
-R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
-R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
-FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
-0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- tasklet_action_common.isra.17+0x141/0x420 kernel/softirq.c:522
- tasklet_action+0x50/0x70 kernel/softirq.c:540
- __do_softirq+0x224/0x92c kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:372 [inline]
- irq_exit+0x15a/0x180 kernel/softirq.c:412
- exiting_irq arch/x86/include/asm/apic.h:535 [inline]
- do_IRQ+0x123/0x1e0 arch/x86/kernel/irq.c:260
- common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
- </IRQ>
-RIP: 0010:__do_sys_interrupt kernel/sys.c:2593 [inline]
-RIP: 0010:__se_sys_interrupt kernel/sys.c:2584 [inline]
-RIP: 0010:__x64_sys_interrupt+0x5b/0x80 kernel/sys.c:2584
-Code: ba 00 04 00 00 48 c7 c7 c0 99 31 8c e8 ae 76 5e 01 48 85 c0 75 21 e8
-14 ae 24 00 48 c7 c3 c0 99 31 8c b8 0c 00 00 00 0f 01 c1 <31> db e8 fe ad
-24 00 48 89 d8 5b 5d c3 48 c7 c3 ea ff ff ff eb ec
-RSP: 0018:ffff888054167f10 EFLAGS: 00000212 ORIG_RAX: ffffffffffffffde
-RAX: 000000000000000c RBX: ffffffff8c3199c0 RCX: ffffc90001ca6000
-RDX: 000000000000001a RSI: ffffffff813478fc RDI: ffffffff8c319dc0
-RBP: ffff888054167f18 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000080 R11: fffffbfff18633b7 R12: ffff888054167f58
-R13: ffff88805f638000 R14: 0000000000000000 R15: 0000000000000000
- do_syscall_64+0xb0/0x4e0 arch/x86/entry/common.c:293
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4692a9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6b550e5c48 EFLAGS: 00000246 ORIG_RAX: 000000000000014f
-RAX: ffffffffffffffda RBX: 000000000077bf60 RCX: 00000000004692a9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000140
-RBP: 00000000004cf7eb R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf60
-R13: 0000000000000000 R14: 000000000077bf60 R15: 00007fff55a1dca0
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-CR2: 0000000000000000
----[ end trace 68e5849c3f77cbb6 ]---
-RIP: 0010:          (null)
-Code: Bad RIP value.
-RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
-RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
-RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
-R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
-R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
-FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
-0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/bt8xx/bt878.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/usb/em28xx/em28xx-input.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
-index 7ca309121fb5..90972d6952f1 100644
---- a/drivers/media/pci/bt8xx/bt878.c
-+++ b/drivers/media/pci/bt8xx/bt878.c
-@@ -478,6 +478,9 @@ static int bt878_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	btwrite(0, BT878_AINT_MASK);
- 	bt878_num++;
+diff --git a/drivers/media/usb/em28xx/em28xx-input.c b/drivers/media/usb/em28xx/em28xx-input.c
+index 5aa15a7a49de..59529cbf9cd0 100644
+--- a/drivers/media/usb/em28xx/em28xx-input.c
++++ b/drivers/media/usb/em28xx/em28xx-input.c
+@@ -720,7 +720,8 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 			dev->board.has_ir_i2c = 0;
+ 			dev_warn(&dev->intf->dev,
+ 				 "No i2c IR remote control device found.\n");
+-			return -ENODEV;
++			err = -ENODEV;
++			goto ref_put;
+ 		}
+ 	}
  
-+	if (!bt->tasklet.func)
-+		tasklet_disable(&bt->tasklet);
-+
- 	return 0;
+@@ -735,7 +736,7 @@ static int em28xx_ir_init(struct em28xx *dev)
  
-       fail2:
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	if (!ir)
+-		return -ENOMEM;
++		goto ref_put;
+ 	rc = rc_allocate_device(RC_DRIVER_SCANCODE);
+ 	if (!rc)
+ 		goto error;
+@@ -839,6 +840,9 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 	dev->ir = NULL;
+ 	rc_free_device(rc);
+ 	kfree(ir);
++ref_put:
++	em28xx_shutdown_buttons(dev);
++	kref_put(&dev->ref, em28xx_free_device);
+ 	return err;
+ }
+ 
 -- 
 2.30.2
 
