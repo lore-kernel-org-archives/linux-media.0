@@ -4,40 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E320C11F66
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B20B0C11F6A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18F6761956
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D81C61970
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbhGDXKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:10:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
+        id S232129AbhGDXLA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:11:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230356AbhGDXKI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:10:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A70066135A;
-        Sun,  4 Jul 2021 23:07:31 +0000 (UTC)
+        id S232112AbhGDXKC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:10:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E209C613F3;
+        Sun,  4 Jul 2021 23:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440052;
-        bh=ehz4wRZJTq5WtUVqNeuBwjXjAL4ZYS58kSqK78k9AMM=;
+        s=k20201202; t=1625440031;
+        bh=I9lQf2lDW0MnmYwEu18O4W4OVDj02bCrE5JB6PVuLSs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jvuoJqHZcZPHEecDbhfBxyV/BcDPmsLs7cnqoYSRUGGWJkhVFy0wdQx/b5nyz3jP9
-         u2SDVuaecV/0Obyq4CVx76BxLw5s28LPsjDK5Jw60lgFLC5ZDXxhqac1dLTHf918Rk
-         jhDRNStueDrC6X8iEuCsONer1mN2rGsR/yC5C9aV23eNWTrv5UZZCgbMgyg5nAd5rq
-         rVZGqWAT9tKO9beYbAYq/i3TmM1Vmz7EdjA8Ac0A5ydAyk2Z5Rk5iOPNsy0H5GUmFC
-         ZzH5/grgsvsydIxt/p/uYgMpUwEQPK0two44wNvzGArmYkcQPCqn4J3UQPrGy8gPEk
-         LT/7XkXNTlINQ==
+        b=EYm41YaPv3RUCmjfu6wRfwXcD872AM1Fw+wIrO/uYFUEcyE9HlngeKVG95ngtGMeb
+         JkPWWPacaQqkkXyvq4RG4aJFIXSie525r1FOIPFlYqk1XmNEELgGh9dvhHvOBXEXi1
+         oeo9i7wyTS1rPLN47zir7wb+PBNlSw0wseYd3jIZ8mWHAfyW48mm391pSeMSCGyu2T
+         0I19w7Z7ydymvq/wVvJMCzSgwzvGEvVF1mj8DAzZsabC9BRzJFs5+Qw9gFeHzhND1U
+         WuvKzRq4LLSzxhA9HCpB1E43MB1PzDuatqukIZQkkvXaKLUKAum3n+Nz6Qa+1EjXln
+         GWXLJQLfISBhQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 56/80] media: dvb_net: avoid speculation from net slot
-Date:   Sun,  4 Jul 2021 19:05:52 -0400
-Message-Id: <20210704230616.1489200-56-sashal@kernel.org>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.12 40/80] media: hantro: Fix .buf_prepare
+Date:   Sun,  4 Jul 2021 19:05:36 -0400
+Message-Id: <20210704230616.1489200-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -49,87 +52,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-[ Upstream commit abc0226df64dc137b48b911c1fe4319aec5891bb ]
+[ Upstream commit 082aaecff35fbe1937531057911b1dd1fc6b496e ]
 
-The risk of especulation is actually almost-non-existing here,
-as there are very few users of TCP/IP using the DVB stack,
-as, this is mainly used with DVB-S/S2 cards, and only by people
-that receives TCP/IP from satellite connections, which limits
-a lot the number of users of such feature(*).
+The driver should only set the payload on .buf_prepare if the
+buffer is CAPTURE type. If an OUTPUT buffer has a zero bytesused
+set by userspace then v4l2-core will set it to buffer length.
 
-(*) In thesis, DVB-C cards could also benefit from it, but I'm
-yet to see a hardware that supports it.
+If we overwrite bytesused for OUTPUT buffers, too, then
+vb2_get_plane_payload() will return incorrect value which might be then
+written to hw registers by the driver in hantro_g1_h264_dec.c.
 
-Yet, fixing it is trivial.
-
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvb_net.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ drivers/staging/media/hantro/hantro_v4l2.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 89620da983ba..dddebea644bb 100644
---- a/drivers/media/dvb-core/dvb_net.c
-+++ b/drivers/media/dvb-core/dvb_net.c
-@@ -45,6 +45,7 @@
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
-+#include <linux/nospec.h>
- #include <linux/etherdevice.h>
- #include <linux/dvb/net.h>
- #include <linux/uio.h>
-@@ -1462,14 +1463,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct dvb_net_if *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
- 
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		if (!dvbnet->state[if_num]) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 1bc118e375a1..7ccc6405036a 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -639,7 +639,14 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
+ 	ret = hantro_buf_plane_check(vb, pix_fmt);
+ 	if (ret)
+ 		return ret;
+-	vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
++	/*
++	 * Buffer's bytesused must be written by driver for CAPTURE buffers.
++	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
++	 * it to buffer length).
++	 */
++	if (V4L2_TYPE_IS_CAPTURE(vq->type))
++		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
 +
-+		netdev = dvbnet->device[if_num];
+ 	return 0;
+ }
  
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
-@@ -1522,14 +1529,20 @@ static int dvb_net_do_ioctl(struct file *file,
- 		struct net_device *netdev;
- 		struct dvb_net_priv *priv_data;
- 		struct __dvb_net_if_old *dvbnetif = parg;
-+		int if_num = dvbnetif->if_num;
-+
-+		if (if_num >= DVB_NET_DEVICES_MAX) {
-+			ret = -EINVAL;
-+			goto ioctl_error;
-+		}
-+		if_num = array_index_nospec(if_num, DVB_NET_DEVICES_MAX);
- 
--		if (dvbnetif->if_num >= DVB_NET_DEVICES_MAX ||
--		    !dvbnet->state[dvbnetif->if_num]) {
-+		if (!dvbnet->state[if_num]) {
- 			ret = -EINVAL;
- 			goto ioctl_error;
- 		}
- 
--		netdev = dvbnet->device[dvbnetif->if_num];
-+		netdev = dvbnet->device[if_num];
- 
- 		priv_data = netdev_priv(netdev);
- 		dvbnetif->pid=priv_data->pid;
 -- 
 2.30.2
 
