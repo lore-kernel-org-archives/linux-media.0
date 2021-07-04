@@ -5,40 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFC9DC07E96
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26708C07E95
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A369261483
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D162611ED
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:04:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbhGDXHM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:07:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45134 "EHLO mail.kernel.org"
+        id S230091AbhGDXHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:07:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229957AbhGDXHJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A08336135A;
-        Sun,  4 Jul 2021 23:04:32 +0000 (UTC)
+        id S230082AbhGDXHR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AEE47613E9;
+        Sun,  4 Jul 2021 23:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439873;
-        bh=9I4P98nw/TH7inHBdRHqWHOLI2uqRL4qTkQnABJ42dA=;
+        s=k20201202; t=1625439881;
+        bh=ju547HHSoJneoZh4O62JWafGwz9NI9kYJ8MtTLOeHjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cdjUYJTCytsIDBUI//Fa4Flvwj5m3rlyQ0gr8NHcLhF7t5mL6kUtff78RxG46UdJp
-         S66zCqlGK4SAOnFKAUK9SbGDty4mAnc8Ucy9qikI0goIZui+S/iG3nGZknbVd9F6XU
-         uRYADVnPmU2JEFe9gKMbWC0mhHgNeJT02L9MDtd6+iTo1JlIaagqq5IrVGn79G10DZ
-         /tdiCJyXkFeJkrEBi9ymAZSbYTTVfCXKFHDHWmBsaOOPOScnp9A7R/vJoeU0B0g12Z
-         T/W1JjKpa43c6YmxXd2hUChR77TdkP2vmMfxXOrBVPWBAn2XbhhLFyQyPj92nooAWy
-         ClyeSAmD9u6DA==
+        b=qPO4NVTZMoPNA3XQKtHSaXEJrnvcPhP0MB5r+HKlVuEWJzKTRJePxVX+nFyzmDghV
+         7h3seivDnBvw7Y7ygagJdHiO+WziPVC7HlGDu+dC1rQgEKknCM7ZvkYcuBV37f8SFu
+         Ps6zNY7F/FjRACvD7xuTivvnrdE5cA2zjlpXX3mI3AliyhSbzIAYsys7D4T12crsK2
+         D8TPaZ59YkFEun2Sgn/C+hZyHnOH473kOvqmgwpbbHRfgNz0VEzRjcur7T0BdqP9V9
+         SpiDxroectHGC2NpL9PWtQbqAgXNiNg6XuPqTI677zDVBjJIlpqi0Kd6lJ6pCuyrKG
+         iwMMXaKh5x45A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 09/85] media: sh_vou: fix pm_runtime_get_sync() usage count
-Date:   Sun,  4 Jul 2021 19:03:04 -0400
-Message-Id: <20210704230420.1488358-9-sashal@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 15/85] media: exynos-gsc: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:03:10 -0400
+Message-Id: <20210704230420.1488358-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -52,7 +55,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 6e8b1526db164c9d4b9dacfb9bc48e365d7c4860 ]
+[ Upstream commit 59087b66ea6730c130c57d23bd9fd139b78c1ba5 ]
 
 The pm_runtime_get_sync() internally increments the
 dev->power.usage_count without decrementing it, even on errors.
@@ -61,32 +64,33 @@ commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with us
 in order to properly decrement the usage counter, avoiding
 a potential PM usage counter leak.
 
-While here, check if the PM runtime error was caught at open time.
+As a bonus, as pm_runtime_get_sync() always return 0 on
+success, the logic can be simplified.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sh_vou.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/platform/exynos-gsc/gsc-m2m.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/sh_vou.c
-index 4ac48441f22c..ca4310e26c49 100644
---- a/drivers/media/platform/sh_vou.c
-+++ b/drivers/media/platform/sh_vou.c
-@@ -1133,7 +1133,11 @@ static int sh_vou_open(struct file *file)
- 	if (v4l2_fh_is_singular_file(file) &&
- 	    vou_dev->status == SH_VOU_INITIALISING) {
- 		/* First open */
--		pm_runtime_get_sync(vou_dev->v4l2_dev.dev);
-+		err = pm_runtime_resume_and_get(vou_dev->v4l2_dev.dev);
-+		if (err < 0) {
-+			v4l2_fh_release(file);
-+			goto done_open;
-+		}
- 		err = sh_vou_hw_init(vou_dev);
- 		if (err < 0) {
- 			pm_runtime_put(vou_dev->v4l2_dev.dev);
+diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+index 27a3c92c73bc..f1cf847d1cc2 100644
+--- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
++++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
+@@ -56,10 +56,8 @@ static void __gsc_m2m_job_abort(struct gsc_ctx *ctx)
+ static int gsc_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct gsc_ctx *ctx = q->drv_priv;
+-	int ret;
+ 
+-	ret = pm_runtime_get_sync(&ctx->gsc_dev->pdev->dev);
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(&ctx->gsc_dev->pdev->dev);
+ }
+ 
+ static void __gsc_m2m_cleanup_queue(struct gsc_ctx *ctx)
 -- 
 2.30.2
 
