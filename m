@@ -7,41 +7,40 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D30FC11F8A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC61C47E4B
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 063E9613FC
+	by mail.kernel.org (Postfix) with ESMTP id 8801561364
 	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbhGDXPc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:15:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56956 "EHLO mail.kernel.org"
+        id S232165AbhGDXPe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:15:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233512AbhGDXOa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DD0626195C;
-        Sun,  4 Jul 2021 23:10:00 +0000 (UTC)
+        id S233641AbhGDXOe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 23DE861992;
+        Sun,  4 Jul 2021 23:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440201;
-        bh=pUMr10Mt4SCKAEeSUQG9mur+NfbW4jFFoQ3QkBymMrE=;
+        s=k20201202; t=1625440215;
+        bh=lJ3hh8R41P8DiijbBEOO6KYz41OVlnc6F8l5msauMoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZhoQlAus17pFgPjLX7ult0HJ9FSMLwN5uafUrCjqCgBTemWgkUY0Z8xz5gjFQTobq
-         a64Mm/DyTNC15gRInp/u3hz8w3J6JWr4RvWS+gendw8VJSC+8WFV8p3ZD40U6gTMmi
-         JI6wZx/zxohNuUN2wTWRAHghiqGDj2iGmEHDOuQP1Aqtou9LtnjYR5V6La7CuaCm8K
-         Cpl4aTMzkhQMr8J99w9ylVTwpnGjOwA4bIjV7yIbeXnba6utq2r+RDEL1ohdph1vkj
-         VbXjtnw9SHcQuMi+wB5vB04hg4DYBaakfQMljny/kbH51/myNK0sQ/RybWrm4lMxdD
-         BanCF93B5wYvQ==
+        b=XyJL9HwluwJ1xRwx6hmZpNvrAbXeVPj5KwuThPndX+xhdB4/ziChVRqMg5n9gSc6a
+         hvhMUBDqsJQ67soxW+ZxwnmKKdOV3UHVklOGrhOE2E7y9q0QXIVCkScv8YdAqgDxEc
+         fcQxx4cWj/VftEGnUF9oUo6A1O5k4X4mTyROkzkPqtBdJylcxev77UQ73W9UpqcNYM
+         gdABjfLNp6N18FyWU/wCQY76z6MFf2yk/tobcfeF/6kAuQS95pl+N2FyRkAZogcK/Y
+         5czX9md92ZLs2l4+qCsL288sTnXEOe/yj7kOZ8wO2UhKHzsq02tsmhUFy/DoU6ZG5K
+         8oEIZjk9dzgIA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 18/50] media: pvrusb2: fix warning in pvr2_i2c_core_done
-Date:   Sun,  4 Jul 2021 19:09:06 -0400
-Message-Id: <20210704230938.1490742-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 28/50] media: dvd_usb: memory leak in cinergyt2_fe_attach
+Date:   Sun,  4 Jul 2021 19:09:16 -0400
+Message-Id: <20210704230938.1490742-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
 References: <20210704230938.1490742-1-sashal@kernel.org>
@@ -53,58 +52,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Anirudh Rayabharam <mail@anirudhrb.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit f8194e5e63fdcb349e8da9eef9e574d5b1d687cb ]
+[ Upstream commit 9ad1efee086e0e913914fa2b2173efb830bad68c ]
 
-syzbot has reported the following warning in pvr2_i2c_done:
+When the driver fails to talk with the hardware with dvb_usb_generic_rw,
+it will return an error to dvb_usb_adapter_frontend_init. However, the
+driver forgets to free the resource (e.g., struct cinergyt2_fe_state),
+which leads to a memory leak.
 
-	sysfs group 'power' not found for kobject '1-0043'
+Fix this by freeing struct cinergyt2_fe_state when dvb_usb_generic_rw
+fails in cinergyt2_frontend_attach.
 
-When the device is disconnected (pvr_hdw_disconnect), the i2c adapter is
-not unregistered along with the USB and v4l2 teardown. As part of the USB
-device disconnect, the sysfs files of the subdevices are also deleted.
-So, by the time pvr_i2c_core_done is called by pvr_context_destroy, the
-sysfs files have been deleted.
+backtrace:
+  [<0000000056e17b1a>] kmalloc include/linux/slab.h:552 [inline]
+  [<0000000056e17b1a>] kzalloc include/linux/slab.h:682 [inline]
+  [<0000000056e17b1a>] cinergyt2_fe_attach+0x21/0x80 drivers/media/usb/dvb-usb/cinergyT2-fe.c:271
+  [<00000000ae0b1711>] cinergyt2_frontend_attach+0x21/0x70 drivers/media/usb/dvb-usb/cinergyT2-core.c:74
+  [<00000000d0254861>] dvb_usb_adapter_frontend_init+0x11b/0x1b0 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:290
+  [<0000000002e08ac6>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:84 [inline]
+  [<0000000002e08ac6>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:173 [inline]
+  [<0000000002e08ac6>] dvb_usb_device_init.cold+0x4d0/0x6ae drivers/media/usb/dvb-usb/dvb-usb-init.c:287
 
-To fix this, unregister the i2c adapter too in pvr_hdw_disconnect. Make
-the device deregistration code shared by calling pvr_hdw_disconnect from
-pvr2_hdw_destroy.
-
-Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
-Tested-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb/cinergyT2-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 1cfb7cf64131..4c991eae53cd 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2677,9 +2677,8 @@ void pvr2_hdw_destroy(struct pvr2_hdw *hdw)
- 		pvr2_stream_destroy(hdw->vid_stream);
- 		hdw->vid_stream = NULL;
+diff --git a/drivers/media/usb/dvb-usb/cinergyT2-core.c b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+index 969a7ec71dff..4116ba5c45fc 100644
+--- a/drivers/media/usb/dvb-usb/cinergyT2-core.c
++++ b/drivers/media/usb/dvb-usb/cinergyT2-core.c
+@@ -78,6 +78,8 @@ static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
+ 
+ 	ret = dvb_usb_generic_rw(d, st->data, 1, st->data, 3, 0);
+ 	if (ret < 0) {
++		if (adap->fe_adap[0].fe)
++			adap->fe_adap[0].fe->ops.release(adap->fe_adap[0].fe);
+ 		deb_rc("cinergyt2_power_ctrl() Failed to retrieve sleep state info\n");
  	}
--	pvr2_i2c_core_done(hdw);
- 	v4l2_device_unregister(&hdw->v4l2_dev);
--	pvr2_hdw_remove_usb_stuff(hdw);
-+	pvr2_hdw_disconnect(hdw);
- 	mutex_lock(&pvr2_unit_mtx);
- 	do {
- 		if ((hdw->unit_number >= 0) &&
-@@ -2706,6 +2705,7 @@ void pvr2_hdw_disconnect(struct pvr2_hdw *hdw)
- {
- 	pvr2_trace(PVR2_TRACE_INIT,"pvr2_hdw_disconnect(hdw=%p)",hdw);
- 	LOCK_TAKE(hdw->big_lock);
-+	pvr2_i2c_core_done(hdw);
- 	LOCK_TAKE(hdw->ctl_lock);
- 	pvr2_hdw_remove_usb_stuff(hdw);
- 	LOCK_GIVE(hdw->ctl_lock);
+ 	mutex_unlock(&d->data_mutex);
 -- 
 2.30.2
 
