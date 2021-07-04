@@ -4,43 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B20B0C11F6A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE02C07E9D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D81C61970
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 299C76195D
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbhGDXLA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:11:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46604 "EHLO mail.kernel.org"
+        id S230527AbhGDXK4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:10:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232112AbhGDXKC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:10:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E209C613F3;
-        Sun,  4 Jul 2021 23:07:10 +0000 (UTC)
+        id S230106AbhGDXKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:10:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADE3B613D2;
+        Sun,  4 Jul 2021 23:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440031;
-        bh=I9lQf2lDW0MnmYwEu18O4W4OVDj02bCrE5JB6PVuLSs=;
+        s=k20201202; t=1625440053;
+        bh=Oc/muHyp/WkHhV5wU9XuA3AaY1FnzFrQ4sTl6k/RmDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYm41YaPv3RUCmjfu6wRfwXcD872AM1Fw+wIrO/uYFUEcyE9HlngeKVG95ngtGMeb
-         JkPWWPacaQqkkXyvq4RG4aJFIXSie525r1FOIPFlYqk1XmNEELgGh9dvhHvOBXEXi1
-         oeo9i7wyTS1rPLN47zir7wb+PBNlSw0wseYd3jIZ8mWHAfyW48mm391pSeMSCGyu2T
-         0I19w7Z7ydymvq/wVvJMCzSgwzvGEvVF1mj8DAzZsabC9BRzJFs5+Qw9gFeHzhND1U
-         WuvKzRq4LLSzxhA9HCpB1E43MB1PzDuatqukIZQkkvXaKLUKAum3n+Nz6Qa+1EjXln
-         GWXLJQLfISBhQ==
+        b=Cy+P09zkzox1OU2k0obJ7e7X5Jrpp3+OKHbF6dmjA12lO8XxW4IePQuv2E4ho+ux+
+         kt/eoAO60Fe3qxjYXP0rayRT2csyoPfKaSo2p9ADhQHxKwV2IAKd3UnSFVpK8P15y7
+         ZFM009IreXtFRO30Ad6BBqlcJ+zzB4BiUGM2L9Lxk7AbPxCwDMnJw+P9t2bx5KxlZu
+         rFK0fZLfpLEjDdha5nchPgbHVI3a5cblhXrS0Dd9xOoj5cqlqlQeNRWEwlotifBAiq
+         tDpskfAKWQLjd4xgfS9gnrOYshMetCQIrrWYw6VT/cSSQRBa3DbfTq6mgDY9jDWWtG
+         3f1rccUXmOCQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.12 40/80] media: hantro: Fix .buf_prepare
-Date:   Sun,  4 Jul 2021 19:05:36 -0400
-Message-Id: <20210704230616.1489200-40-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 57/80] media: dvbdev: fix error logic at dvb_register_device()
+Date:   Sun,  4 Jul 2021 19:05:53 -0400
+Message-Id: <20210704230616.1489200-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -52,46 +49,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 082aaecff35fbe1937531057911b1dd1fc6b496e ]
+[ Upstream commit 1fec2ecc252301110e4149e6183fa70460d29674 ]
 
-The driver should only set the payload on .buf_prepare if the
-buffer is CAPTURE type. If an OUTPUT buffer has a zero bytesused
-set by userspace then v4l2-core will set it to buffer length.
+As reported by smatch:
 
-If we overwrite bytesused for OUTPUT buffers, too, then
-vb2_get_plane_payload() will return incorrect value which might be then
-written to hw registers by the driver in hantro_g1_h264_dec.c.
+	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:510 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
+	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:530 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
+	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:545 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
 
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+The error logic inside dvb_register_device() doesn't remove
+devices from the dvb_adapter_list in case of errors.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_v4l2.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/dvb-core/dvbdev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 1bc118e375a1..7ccc6405036a 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -639,7 +639,14 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
- 	ret = hantro_buf_plane_check(vb, pix_fmt);
- 	if (ret)
- 		return ret;
--	vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	/*
-+	 * Buffer's bytesused must be written by driver for CAPTURE buffers.
-+	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
-+	 * it to buffer length).
-+	 */
-+	if (V4L2_TYPE_IS_CAPTURE(vq->type))
-+		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+
- 	return 0;
- }
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 3862ddc86ec4..795d9bfaba5c 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -506,6 +506,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 			break;
  
+ 	if (minor == MAX_DVB_MINORS) {
++		list_del (&dvbdev->list_head);
+ 		kfree(dvbdevfops);
+ 		kfree(dvbdev);
+ 		up_write(&minor_rwsem);
+@@ -526,6 +527,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 		      __func__);
+ 
+ 		dvb_media_device_free(dvbdev);
++		list_del (&dvbdev->list_head);
+ 		kfree(dvbdevfops);
+ 		kfree(dvbdev);
+ 		mutex_unlock(&dvbdev_register_lock);
+@@ -541,6 +543,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 		pr_err("%s: failed to create device dvb%d.%s%d (%ld)\n",
+ 		       __func__, adap->num, dnames[type], id, PTR_ERR(clsdev));
+ 		dvb_media_device_free(dvbdev);
++		list_del (&dvbdev->list_head);
+ 		kfree(dvbdevfops);
+ 		kfree(dvbdev);
+ 		return PTR_ERR(clsdev);
 -- 
 2.30.2
 
