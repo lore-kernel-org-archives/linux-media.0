@@ -7,40 +7,39 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCA3C07E9A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B659C07E9B
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1648A6162A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2C02619A7
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:11:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbhGDXNc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:13:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49476 "EHLO mail.kernel.org"
+        id S232950AbhGDXNj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:13:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232016AbhGDXMS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:12:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4B6461954;
-        Sun,  4 Jul 2021 23:08:36 +0000 (UTC)
+        id S229530AbhGDXMr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:12:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C85E56196C;
+        Sun,  4 Jul 2021 23:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440117;
-        bh=nP61IyDwMKPULtKhpyhNvfOHA4ogTEHHQM3vW2uT22k=;
+        s=k20201202; t=1625440133;
+        bh=H6I1CzE8LzvNbpcekBj5LRlqnEHe8h7OLwJsoz0QF8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=coP5Q31/zj2pTKtAelSQx+RG7tR1bvkMjXsrn/KdjCY5+HU2d4+vi7ZFWMHnqXzes
-         GBLSYjvjsQzZG5iRQt9ixtZ7IU5t+DX1CL/ewvuIsGI1xAlwcRUdDj1+bjAjowhEhq
-         dklRaZEItrqPUDAL7JJsqSwFWKNOm9jMvzepIoCDq3EInAQnde7d55gqYcskluRlld
-         vF/dLp1+PNvTjtb445PEP4oTuohA+k2G4CwdlePXZR4nGHKA8w4FjT3k0zLv/7OkQT
-         b8c2q3C+GSnt27DDRZEJCNpsHy0gRo6YjOIb1RDm38b1WZmRgz6XuHcMksxLaswCec
-         mI74G2h+spR8g==
+        b=JpejvAOp7CZOsdmOtzi04sfg6xfjhUzl4Fnn1FvMcVnBWARraqoFl0qPqtnl7CNTT
+         RJi4G73jy3497PN7mNxonSAFDGftDenwDZwgEiLrQ7i3LLNgUyfSPkxqGGvw9W/iuI
+         M+8PrWwUidoSKkXeDf0LcBHllxHBFawVua5ArHZ0NxyF+aA/C+MnYu5cdoKnSTyrLz
+         /F00IsxTj/tMJkVmpAUu4GMVzckqU42aN7FnPXXTLvlcME+sJW+P7S/yZaW85g+yHH
+         lDxX65YPlFocGtOMat36k7ozvuyw6+BDyEs4K8eravhFs0IOCOu4OY6F+PJOtMDjNC
+         13p/jImO8W8xA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com,
+Cc:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 24/70] media: cpia2: fix memory leak in cpia2_usb_probe
-Date:   Sun,  4 Jul 2021 19:07:17 -0400
-Message-Id: <20210704230804.1490078-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 36/70] media: em28xx: Fix possible memory leak of em28xx struct
+Date:   Sun,  4 Jul 2021 19:07:29 -0400
+Message-Id: <20210704230804.1490078-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -52,102 +51,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
 
-[ Upstream commit be8656e62e9e791837b606a027802b504a945c97 ]
+[ Upstream commit ac5688637144644f06ed1f3c6d4dd8bb7db96020 ]
 
-syzbot reported leak in cpia2 usb driver. The problem was
-in invalid error handling.
+The em28xx struct kref isn't being decreased after an error in the
+em28xx_ir_init, leading to a possible memory leak.
 
-v4l2_device_register() is called in cpia2_init_camera_struct(), but
-all error cases after cpia2_init_camera_struct() did not call the
-v4l2_device_unregister()
+A kref_put and em28xx_shutdown_buttons is added to the error handler code.
 
-Reported-by: syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/cpia2/cpia2.h      |  1 +
- drivers/media/usb/cpia2/cpia2_core.c | 12 ++++++++++++
- drivers/media/usb/cpia2/cpia2_usb.c  | 13 +++++++------
- 3 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/media/usb/em28xx/em28xx-input.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/cpia2/cpia2.h b/drivers/media/usb/cpia2/cpia2.h
-index 50835f5f7512..57b7f1ea68da 100644
---- a/drivers/media/usb/cpia2/cpia2.h
-+++ b/drivers/media/usb/cpia2/cpia2.h
-@@ -429,6 +429,7 @@ int cpia2_send_command(struct camera_data *cam, struct cpia2_command *cmd);
- int cpia2_do_command(struct camera_data *cam,
- 		     unsigned int command,
- 		     unsigned char direction, unsigned char param);
-+void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf);
- struct camera_data *cpia2_init_camera_struct(struct usb_interface *intf);
- int cpia2_init_camera(struct camera_data *cam);
- int cpia2_allocate_buffers(struct camera_data *cam);
-diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index e747548ab286..b5a2d06fb356 100644
---- a/drivers/media/usb/cpia2/cpia2_core.c
-+++ b/drivers/media/usb/cpia2/cpia2_core.c
-@@ -2163,6 +2163,18 @@ static void reset_camera_struct(struct camera_data *cam)
- 	cam->height = cam->params.roi.height;
+diff --git a/drivers/media/usb/em28xx/em28xx-input.c b/drivers/media/usb/em28xx/em28xx-input.c
+index 5aa15a7a49de..59529cbf9cd0 100644
+--- a/drivers/media/usb/em28xx/em28xx-input.c
++++ b/drivers/media/usb/em28xx/em28xx-input.c
+@@ -720,7 +720,8 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 			dev->board.has_ir_i2c = 0;
+ 			dev_warn(&dev->intf->dev,
+ 				 "No i2c IR remote control device found.\n");
+-			return -ENODEV;
++			err = -ENODEV;
++			goto ref_put;
+ 		}
+ 	}
+ 
+@@ -735,7 +736,7 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	if (!ir)
+-		return -ENOMEM;
++		goto ref_put;
+ 	rc = rc_allocate_device(RC_DRIVER_SCANCODE);
+ 	if (!rc)
+ 		goto error;
+@@ -839,6 +840,9 @@ static int em28xx_ir_init(struct em28xx *dev)
+ 	dev->ir = NULL;
+ 	rc_free_device(rc);
+ 	kfree(ir);
++ref_put:
++	em28xx_shutdown_buttons(dev);
++	kref_put(&dev->ref, em28xx_free_device);
+ 	return err;
  }
  
-+/******************************************************************************
-+ *
-+ *  cpia2_init_camera_struct
-+ *
-+ *  Deinitialize camera struct
-+ *****************************************************************************/
-+void cpia2_deinit_camera_struct(struct camera_data *cam, struct usb_interface *intf)
-+{
-+	v4l2_device_unregister(&cam->v4l2_dev);
-+	kfree(cam);
-+}
-+
- /******************************************************************************
-  *
-  *  cpia2_init_camera_struct
-diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
-index 3ab80a7b4498..76aac06f9fb8 100644
---- a/drivers/media/usb/cpia2/cpia2_usb.c
-+++ b/drivers/media/usb/cpia2/cpia2_usb.c
-@@ -844,15 +844,13 @@ static int cpia2_usb_probe(struct usb_interface *intf,
- 	ret = set_alternate(cam, USBIF_CMDONLY);
- 	if (ret < 0) {
- 		ERR("%s: usb_set_interface error (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
- 
- 
- 	if((ret = cpia2_init_camera(cam)) < 0) {
- 		ERR("%s: failed to initialize cpia2 camera (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
- 	LOG("  CPiA Version: %d.%02d (%d.%d)\n",
- 	       cam->params.version.firmware_revision_hi,
-@@ -872,11 +870,14 @@ static int cpia2_usb_probe(struct usb_interface *intf,
- 	ret = cpia2_register_camera(cam);
- 	if (ret < 0) {
- 		ERR("%s: Failed to register cpia2 camera (ret = %d)\n", __func__, ret);
--		kfree(cam);
--		return ret;
-+		goto alt_err;
- 	}
- 
- 	return 0;
-+
-+alt_err:
-+	cpia2_deinit_camera_struct(cam, intf);
-+	return ret;
- }
- 
- /******************************************************************************
 -- 
 2.30.2
 
