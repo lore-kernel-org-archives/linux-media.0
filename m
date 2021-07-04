@@ -2,45 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C34C11F8A
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A1A1C11F6A
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9BF2E6194E
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAE71613F1
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbhGDXIX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:08:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
+        id S231185AbhGDXIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:08:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230514AbhGDXIG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:08:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A2BEC61958;
-        Sun,  4 Jul 2021 23:05:28 +0000 (UTC)
+        id S230467AbhGDXH5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E1BD96192E;
+        Sun,  4 Jul 2021 23:05:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439929;
-        bh=lJ3hh8R41P8DiijbBEOO6KYz41OVlnc6F8l5msauMoA=;
+        s=k20201202; t=1625439921;
+        bh=LYo60E9hzNfnIeU6O7W5VONI9WogMKheLf5JCQtvhwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bxUxEWfHaNARcDRTpbbju8O7cUDJRpg8+zzWq3KLLhDoMwQcrTd7CLJgV+7HIu4io
-         aUKQWIVC7FX5qZPFgDxwy3+CxqSXtDj7/cnSYNe+4AKJb3oX/f2rrPpYG4MdEQpuQB
-         vE8X9cF29iyQaTPa30AHC4v7PHKTkpEOYKQIeeAULqRSZjZCUZc9PKRdcFOaXtB8vu
-         jlrus60jcdpv0B9KD79Llmbb/ZYh/iLPfXzcVKqh7JhBJeyiyvHWRPJxGcsdA5T5wy
-         lQ2dbvwibXqNxl/Yi+bu5GltZSSdcOWSNgrLt7LhtalHnlXsNPCOSM4v49Ck+mlhQt
-         f3QDkQo2RbjZQ==
+        b=jc+4nPTiMNDKdgMy+DGPq8zVrpUxvb7riFR+AEIy6aE2bvoKdf35U+FNU51HqwwKU
+         oaW+A2FtLneHNPqRhxskVpJtSu8Bi1oxdJnrXsn5QqoiTxkoPDUwteAHS1F4yyJwUC
+         luLCIY6K3OBsUp4LXXZppbL5g0+InLc5NtOJxOuP18zt0GY+NF6fWm+Ejk0h/zWMH2
+         XtUEpwpbh8bOqL2JZAf+o8DXXcZVCug4e9pyAFHPuNWdTuHKxaxZJ7nWeqz2+t3no6
+         gEfHS0qLtSnuO8jFJNuOYo4VXpHaRsR2AR5fdi7e2tPd1a0kcdrxDr17gqfgiCxeAE
+         H5nhImzlT1/gA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 50/85] media: dvd_usb: memory leak in cinergyt2_fe_attach
-Date:   Sun,  4 Jul 2021 19:03:45 -0400
-Message-Id: <20210704230420.1488358-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 44/85] media: v4l2-core: Avoid the dangling pointer in v4l2_fh_release
+Date:   Sun,  4 Jul 2021 19:03:39 -0400
+Message-Id: <20210704230420.1488358-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -52,50 +51,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
 
-[ Upstream commit 9ad1efee086e0e913914fa2b2173efb830bad68c ]
+[ Upstream commit 7dd0c9e547b6924e18712b6b51aa3cba1896ee2c ]
 
-When the driver fails to talk with the hardware with dvb_usb_generic_rw,
-it will return an error to dvb_usb_adapter_frontend_init. However, the
-driver forgets to free the resource (e.g., struct cinergyt2_fe_state),
-which leads to a memory leak.
+A use after free bug caused by the dangling pointer
+filp->privitate_data in v4l2_fh_release.
+See https://lore.kernel.org/patchwork/patch/1419058/.
 
-Fix this by freeing struct cinergyt2_fe_state when dvb_usb_generic_rw
-fails in cinergyt2_frontend_attach.
+My patch sets the dangling pointer to NULL to provide
+robust.
 
-backtrace:
-  [<0000000056e17b1a>] kmalloc include/linux/slab.h:552 [inline]
-  [<0000000056e17b1a>] kzalloc include/linux/slab.h:682 [inline]
-  [<0000000056e17b1a>] cinergyt2_fe_attach+0x21/0x80 drivers/media/usb/dvb-usb/cinergyT2-fe.c:271
-  [<00000000ae0b1711>] cinergyt2_frontend_attach+0x21/0x70 drivers/media/usb/dvb-usb/cinergyT2-core.c:74
-  [<00000000d0254861>] dvb_usb_adapter_frontend_init+0x11b/0x1b0 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:290
-  [<0000000002e08ac6>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:84 [inline]
-  [<0000000002e08ac6>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:173 [inline]
-  [<0000000002e08ac6>] dvb_usb_device_init.cold+0x4d0/0x6ae drivers/media/usb/dvb-usb/dvb-usb-init.c:287
-
-Reported-by: syzbot+e1de8986786b3722050e@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/cinergyT2-core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/v4l2-core/v4l2-fh.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/dvb-usb/cinergyT2-core.c b/drivers/media/usb/dvb-usb/cinergyT2-core.c
-index 969a7ec71dff..4116ba5c45fc 100644
---- a/drivers/media/usb/dvb-usb/cinergyT2-core.c
-+++ b/drivers/media/usb/dvb-usb/cinergyT2-core.c
-@@ -78,6 +78,8 @@ static int cinergyt2_frontend_attach(struct dvb_usb_adapter *adap)
- 
- 	ret = dvb_usb_generic_rw(d, st->data, 1, st->data, 3, 0);
- 	if (ret < 0) {
-+		if (adap->fe_adap[0].fe)
-+			adap->fe_adap[0].fe->ops.release(adap->fe_adap[0].fe);
- 		deb_rc("cinergyt2_power_ctrl() Failed to retrieve sleep state info\n");
+diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
+index 684574f58e82..90eec79ee995 100644
+--- a/drivers/media/v4l2-core/v4l2-fh.c
++++ b/drivers/media/v4l2-core/v4l2-fh.c
+@@ -96,6 +96,7 @@ int v4l2_fh_release(struct file *filp)
+ 		v4l2_fh_del(fh);
+ 		v4l2_fh_exit(fh);
+ 		kfree(fh);
++		filp->private_data = NULL;
  	}
- 	mutex_unlock(&d->data_mutex);
+ 	return 0;
+ }
 -- 
 2.30.2
 
