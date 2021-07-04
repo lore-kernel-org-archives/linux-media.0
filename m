@@ -4,40 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE02C07E9D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5014C11F6B
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 299C76195D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90F1C61964
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbhGDXK4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:10:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49050 "EHLO mail.kernel.org"
+        id S231414AbhGDXLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:11:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230106AbhGDXKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:10:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ADE3B613D2;
-        Sun,  4 Jul 2021 23:07:32 +0000 (UTC)
+        id S232113AbhGDXKC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:10:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 48AA061941;
+        Sun,  4 Jul 2021 23:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440053;
-        bh=Oc/muHyp/WkHhV5wU9XuA3AaY1FnzFrQ4sTl6k/RmDA=;
+        s=k20201202; t=1625440033;
+        bh=v4eR9eBfNJKTlaalPEbz0PmDz4ulYk8/v1YOXOn6Qy8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cy+P09zkzox1OU2k0obJ7e7X5Jrpp3+OKHbF6dmjA12lO8XxW4IePQuv2E4ho+ux+
-         kt/eoAO60Fe3qxjYXP0rayRT2csyoPfKaSo2p9ADhQHxKwV2IAKd3UnSFVpK8P15y7
-         ZFM009IreXtFRO30Ad6BBqlcJ+zzB4BiUGM2L9Lxk7AbPxCwDMnJw+P9t2bx5KxlZu
-         rFK0fZLfpLEjDdha5nchPgbHVI3a5cblhXrS0Dd9xOoj5cqlqlQeNRWEwlotifBAiq
-         tDpskfAKWQLjd4xgfS9gnrOYshMetCQIrrWYw6VT/cSSQRBa3DbfTq6mgDY9jDWWtG
-         3f1rccUXmOCQg==
+        b=DGll1PnmWQGvmoLqXvhUs9ih9ftKqj4Svp2XG9r/RbP4ncJSsjCOafQWa2hSUP+R9
+         3UUDDPotFgOc+w/wtj1xdZhGFiYmMX9Kp6TEHpNevNVashJxFskJswkDcXPloVYuSp
+         YuE9NTP+pvq6VuyxBAdIYwEMhywtP1K65Zp47yOImahCaZ5YLRNk+Ck9+o8q0FmyCx
+         hmhjooNrlcmIPstxZLC7fkHJcTBACNa2w8Y6RSAEhGVARD4Vy9xgzs7F7U2eZQiGeL
+         J0O9QGDFQj+b73OrGy4AtQsmto2BRBHoRYL+0b1HxgQv3xYK0n58MCgIGxhJoCcSDG
+         gv+iSaf6CpJ4w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 57/80] media: dvbdev: fix error logic at dvb_register_device()
-Date:   Sun,  4 Jul 2021 19:05:53 -0400
-Message-Id: <20210704230616.1489200-57-sashal@kernel.org>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.12 41/80] media: cedrus: Fix .buf_prepare
+Date:   Sun,  4 Jul 2021 19:05:37 -0400
+Message-Id: <20210704230616.1489200-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
 References: <20210704230616.1489200-1-sashal@kernel.org>
@@ -49,53 +53,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-[ Upstream commit 1fec2ecc252301110e4149e6183fa70460d29674 ]
+[ Upstream commit d84b9202d712309840f8b5abee0ed272506563bd ]
 
-As reported by smatch:
+The driver should only set the payload on .buf_prepare if the
+buffer is CAPTURE type. If an OUTPUT buffer has a zero bytesused
+set by userspace then v4l2-core will set it to buffer length.
 
-	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:510 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
-	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:530 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
-	drivers/media/dvb-core/dvbdev.c: drivers/media/dvb-core/dvbdev.c:545 dvb_register_device() warn: '&dvbdev->list_head' not removed from list
+If we overwrite bytesused for OUTPUT buffers, too, then
+vb2_get_plane_payload() will return incorrect value which might be then
+written to hw registers by the driver in cedrus_h264.c or cedrus_vp8.c.
 
-The error logic inside dvb_register_device() doesn't remove
-devices from the dvb_adapter_list in case of errors.
-
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvbdev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index 3862ddc86ec4..795d9bfaba5c 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -506,6 +506,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 			break;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index b62eb8e84057..bf731caf2ed5 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -457,7 +457,13 @@ static int cedrus_buf_prepare(struct vb2_buffer *vb)
+ 	if (vb2_plane_size(vb, 0) < pix_fmt->sizeimage)
+ 		return -EINVAL;
  
- 	if (minor == MAX_DVB_MINORS) {
-+		list_del (&dvbdev->list_head);
- 		kfree(dvbdevfops);
- 		kfree(dvbdev);
- 		up_write(&minor_rwsem);
-@@ -526,6 +527,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 		      __func__);
+-	vb2_set_plane_payload(vb, 0, pix_fmt->sizeimage);
++	/*
++	 * Buffer's bytesused must be written by driver for CAPTURE buffers.
++	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
++	 * it to buffer length).
++	 */
++	if (V4L2_TYPE_IS_CAPTURE(vq->type))
++		vb2_set_plane_payload(vb, 0, pix_fmt->sizeimage);
  
- 		dvb_media_device_free(dvbdev);
-+		list_del (&dvbdev->list_head);
- 		kfree(dvbdevfops);
- 		kfree(dvbdev);
- 		mutex_unlock(&dvbdev_register_lock);
-@@ -541,6 +543,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 		pr_err("%s: failed to create device dvb%d.%s%d (%ld)\n",
- 		       __func__, adap->num, dnames[type], id, PTR_ERR(clsdev));
- 		dvb_media_device_free(dvbdev);
-+		list_del (&dvbdev->list_head);
- 		kfree(dvbdevfops);
- 		kfree(dvbdev);
- 		return PTR_ERR(clsdev);
+ 	return 0;
+ }
 -- 
 2.30.2
 
