@@ -2,45 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9EBC11F79
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D340DC11F6B
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82AA26135D
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B712D613FB
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbhGDXII (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:08:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46062 "EHLO mail.kernel.org"
+        id S231194AbhGDXIP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:08:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230427AbhGDXHu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:07:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D0E76135D;
-        Sun,  4 Jul 2021 23:05:14 +0000 (UTC)
+        id S230285AbhGDXH7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:07:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D05361452;
+        Sun,  4 Jul 2021 23:05:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439915;
-        bh=kzLbysrn0WTVXqGNPCytiyLqvBomL/QjZ69Hv/nPQ3Y=;
+        s=k20201202; t=1625439922;
+        bh=gwnCwie+LU+Razt7Cq/sOgDreUV8VUwsRqswjxRYppU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jvg4CMt1/j7FjW8NBBG8JctaI6ErzKPz1J//pSdHEQYQJDmAH7HQ/xhBwufmrJ5g4
-         q+HxFdo2dRUYdOyprmW7muDn5UbBIhPO4lHVdGn3WkQQV8+Sv9R16VValwpY9HhReo
-         4bSEkfAMwED1ZZzqs2U3+qWLgbFFflpwubPJyDVfyHeca8KzfToOaFWbRiGbFCxtOu
-         I2fqT+BW2HK5//RZvY3PcMDmZmAYmmmBm1uXAgWzKCljRgLe2HSZPtyl2ehAM4vRYP
-         Hg+U2CbLJy19f1k65ajfPM2jHGBs9Ar+QzCtBim1uEPzwtWN12AAcSLyYtJq/k81z/
-         qDtOx37IleCWw==
+        b=aKags6i9KmWcRPBUdiA4dZ1W1aGIMcrumuWvX/u7WfnfQikWF1nmXbR92twAEbMXt
+         GLQeWLjuLkMKtG+IyJrTPm7cDCqYkSAz1wLOfyYyMuq86XekP26oveyj2ivPzX3nCr
+         BtMiyN3lXzvyj+7dNgK1f8cE8wp8lKqIyjzoOg5teIb0oomryQ7WDp7T9C1g/SqB4V
+         D2gPakU5w4ATdNu1V/GPRWfaFenf8RbV/0HybLxo4ZaJe/BYYcG912lmJ9f4w3m11y
+         Ie6TNoPug8AU2vXSKWF0W3fXgCcoiXAiQehM2SkFLfcIYTeJ8HFqKhjlPB9aHMnoVk
+         Lp83RUA07BhJA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dillon Min <dillon.minfei@gmail.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 39/85] media: i2c: ov2659: Use clk_{prepare_enable,disable_unprepare}() to set xvclk on/off
-Date:   Sun,  4 Jul 2021 19:03:34 -0400
-Message-Id: <20210704230420.1488358-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 45/85] media: bt8xx: Fix a missing check bug in bt878_probe
+Date:   Sun,  4 Jul 2021 19:03:40 -0400
+Message-Id: <20210704230420.1488358-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
 References: <20210704230420.1488358-1-sashal@kernel.org>
@@ -52,103 +51,120 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dillon Min <dillon.minfei@gmail.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 24786ccd9c80fdb05494aa4d90fcb8f34295c193 ]
+[ Upstream commit 1a4520090681853e6b850cbe54b27247a013e0e5 ]
 
-On some platform(imx6q), xvclk might not switch on in advance,
-also for power save purpose, xvclk should not be always on.
-so, add clk_prepare_enable(), clk_disable_unprepare() in driver
-side to set xvclk on/off at proper stage.
+In 'bt878_irq', the driver calls 'tasklet_schedule', but this tasklet is
+set in 'dvb_bt8xx_load_card' of another driver 'dvb-bt8xx'.
+However, this two drivers are separate. The user may not load the
+'dvb-bt8xx' driver when loading the 'bt8xx' driver, that is, the tasklet
+has not been initialized when 'tasklet_schedule' is called, so it is
+necessary to check whether the tasklet is initialized in 'bt878_probe'.
 
-Add following changes:
-- add 'struct clk *clk;' in 'struct ov2659 {}'
-- enable xvclk in ov2659_power_on()
-- disable xvclk in ov2659_power_off()
+Fix this by adding a check at the end of bt878_probe.
 
-Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+The KASAN's report reveals it:
+
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+PGD 800000006aab2067 P4D 800000006aab2067 PUD 6b2ea067 PMD 0
+Oops: 0010 [#1] PREEMPT SMP KASAN PTI
+CPU: 2 PID: 8724 Comm: syz-executor.0 Not tainted 4.19.177-
+gdba4159c14ef-dirty #40
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.0-59-
+gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+RIP: 0010:          (null)
+Code: Bad RIP value.
+RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
+RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
+RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
+R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
+R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
+FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
+0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ tasklet_action_common.isra.17+0x141/0x420 kernel/softirq.c:522
+ tasklet_action+0x50/0x70 kernel/softirq.c:540
+ __do_softirq+0x224/0x92c kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:372 [inline]
+ irq_exit+0x15a/0x180 kernel/softirq.c:412
+ exiting_irq arch/x86/include/asm/apic.h:535 [inline]
+ do_IRQ+0x123/0x1e0 arch/x86/kernel/irq.c:260
+ common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
+ </IRQ>
+RIP: 0010:__do_sys_interrupt kernel/sys.c:2593 [inline]
+RIP: 0010:__se_sys_interrupt kernel/sys.c:2584 [inline]
+RIP: 0010:__x64_sys_interrupt+0x5b/0x80 kernel/sys.c:2584
+Code: ba 00 04 00 00 48 c7 c7 c0 99 31 8c e8 ae 76 5e 01 48 85 c0 75 21 e8
+14 ae 24 00 48 c7 c3 c0 99 31 8c b8 0c 00 00 00 0f 01 c1 <31> db e8 fe ad
+24 00 48 89 d8 5b 5d c3 48 c7 c3 ea ff ff ff eb ec
+RSP: 0018:ffff888054167f10 EFLAGS: 00000212 ORIG_RAX: ffffffffffffffde
+RAX: 000000000000000c RBX: ffffffff8c3199c0 RCX: ffffc90001ca6000
+RDX: 000000000000001a RSI: ffffffff813478fc RDI: ffffffff8c319dc0
+RBP: ffff888054167f18 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000080 R11: fffffbfff18633b7 R12: ffff888054167f58
+R13: ffff88805f638000 R14: 0000000000000000 R15: 0000000000000000
+ do_syscall_64+0xb0/0x4e0 arch/x86/entry/common.c:293
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4692a9
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b550e5c48 EFLAGS: 00000246 ORIG_RAX: 000000000000014f
+RAX: ffffffffffffffda RBX: 000000000077bf60 RCX: 00000000004692a9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000140
+RBP: 00000000004cf7eb R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf60
+R13: 0000000000000000 R14: 000000000077bf60 R15: 00007fff55a1dca0
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+CR2: 0000000000000000
+---[ end trace 68e5849c3f77cbb6 ]---
+RIP: 0010:          (null)
+Code: Bad RIP value.
+RSP: 0018:ffff88806c287ea0 EFLAGS: 00010246
+RAX: fffffbfff1b01774 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 1ffffffff1b01775 RDI: 0000000000000000
+RBP: ffff88806c287f00 R08: fffffbfff1b01774 R09: fffffbfff1b01774
+R10: 0000000000000001 R11: fffffbfff1b01773 R12: 0000000000000000
+R13: ffff88806c29f530 R14: ffffffff8d80bb88 R15: ffffffff8d80bb90
+FS:  00007f6b550e6700(0000) GS:ffff88806c280000(0000) knlGS:
+0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000005ec98000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov2659.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/media/pci/bt8xx/bt878.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index 42f64175a6df..fb78a1cedc03 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -204,6 +204,7 @@ struct ov2659 {
- 	struct i2c_client *client;
- 	struct v4l2_ctrl_handler ctrls;
- 	struct v4l2_ctrl *link_frequency;
-+	struct clk *clk;
- 	const struct ov2659_framesize *frame_size;
- 	struct sensor_register *format_ctrl_regs;
- 	struct ov2659_pll_ctrl pll;
-@@ -1270,6 +1271,8 @@ static int ov2659_power_off(struct device *dev)
+diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
+index 7ca309121fb5..90972d6952f1 100644
+--- a/drivers/media/pci/bt8xx/bt878.c
++++ b/drivers/media/pci/bt8xx/bt878.c
+@@ -478,6 +478,9 @@ static int bt878_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	btwrite(0, BT878_AINT_MASK);
+ 	bt878_num++;
  
- 	gpiod_set_value(ov2659->pwdn_gpio, 1);
- 
-+	clk_disable_unprepare(ov2659->clk);
++	if (!bt->tasklet.func)
++		tasklet_disable(&bt->tasklet);
 +
  	return 0;
- }
  
-@@ -1278,9 +1281,17 @@ static int ov2659_power_on(struct device *dev)
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct ov2659 *ov2659 = to_ov2659(sd);
-+	int ret;
- 
- 	dev_dbg(&client->dev, "%s:\n", __func__);
- 
-+	ret = clk_prepare_enable(ov2659->clk);
-+	if (ret) {
-+		dev_err(&client->dev, "%s: failed to enable clock\n",
-+			__func__);
-+		return ret;
-+	}
-+
- 	gpiod_set_value(ov2659->pwdn_gpio, 0);
- 
- 	if (ov2659->resetb_gpio) {
-@@ -1425,7 +1436,6 @@ static int ov2659_probe(struct i2c_client *client)
- 	const struct ov2659_platform_data *pdata = ov2659_get_pdata(client);
- 	struct v4l2_subdev *sd;
- 	struct ov2659 *ov2659;
--	struct clk *clk;
- 	int ret;
- 
- 	if (!pdata) {
-@@ -1440,11 +1450,11 @@ static int ov2659_probe(struct i2c_client *client)
- 	ov2659->pdata = pdata;
- 	ov2659->client = client;
- 
--	clk = devm_clk_get(&client->dev, "xvclk");
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
-+	ov2659->clk = devm_clk_get(&client->dev, "xvclk");
-+	if (IS_ERR(ov2659->clk))
-+		return PTR_ERR(ov2659->clk);
- 
--	ov2659->xvclk_frequency = clk_get_rate(clk);
-+	ov2659->xvclk_frequency = clk_get_rate(ov2659->clk);
- 	if (ov2659->xvclk_frequency < 6000000 ||
- 	    ov2659->xvclk_frequency > 27000000)
- 		return -EINVAL;
-@@ -1506,7 +1516,9 @@ static int ov2659_probe(struct i2c_client *client)
- 	ov2659->frame_size = &ov2659_framesizes[2];
- 	ov2659->format_ctrl_regs = ov2659_formats[0].format_ctrl_regs;
- 
--	ov2659_power_on(&client->dev);
-+	ret = ov2659_power_on(&client->dev);
-+	if (ret < 0)
-+		goto error;
- 
- 	ret = ov2659_detect(sd);
- 	if (ret < 0)
+       fail2:
 -- 
 2.30.2
 
