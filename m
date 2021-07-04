@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE4B7C11F6E
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBADCC07E95
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB2036141C
-	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C866261283
+	for <linux-media@archiver.kernel.org>; Sun,  4 Jul 2021 23:13:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbhGDXQQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:16:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50832 "EHLO mail.kernel.org"
+        id S233884AbhGDXQR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:16:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233510AbhGDXOa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF2E46198F;
-        Sun,  4 Jul 2021 23:09:59 +0000 (UTC)
+        id S233355AbhGDXOW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:14:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E9C06192E;
+        Sun,  4 Jul 2021 23:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440200;
-        bh=QscHBCdwyz845ByNO9AmsX1v5TFqG9DVE99wooaq7oI=;
+        s=k20201202; t=1625440187;
+        bh=oqXXELPSZ+EWrXn9i3R3Ms/gMlU6dKWMz5mClD4XVT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pbrdEEz4dDqMw0eStAvRtHmSNlNPndcKvleqUxT5lB4z0UZSjzBDj0q/bHPHBjQHh
-         UAld1omJ5Em0XLXHN9V4r5uyozB5XJ55i4v0xZtYwqjw8uh5m0fL2ua6zuhHVLAsle
-         5spZcj8y0Zax/R8qpy3kdD9mUmsQPz8/0EfzV43APimNSwiWN2Jmwy51bNyIeDkkS8
-         BDkv1cE0DMCdiH8JJjCiwseelkceTT8v8bXFzmsyrZ1QPgYrsgvo5kXYOVmcyycgbJ
-         iMJlJ74riDqOX0rb2uZpbwlEy/VqH49ECfMYMAaRZ8EVnoGBlTidylxl5PQaTXld0y
-         ObyVJ/vUfBM0A==
+        b=bef8CXZTMZoIrFH/G+bmvvLe46BrU9M7BGlPDLe9jM25dpwd6dfQolNVuOxs6Ucph
+         15D/Wvi9gTDUYCZu3fOcKjvWl0YdHLhkRleJuPg8TQyozwZScbFhqspasnjFdonmsC
+         zccE0TPPnmTx9F2VxKg77+OtDhd1Byh3xI4Z1NmBAKRUAfbPh5phKMpYBDpZfbBzAC
+         oxZXWBsz7iNBd+fQRM+m4jamoXxkM90kw/9P5+IOQRaOwJ/faLEzsVEf8hbzMZEqrB
+         xqNYMOSy42Jfw/SVE4rnywHOVDgXGl9lx/EVdN95gk19caFZ9zsfbZfZqFkRSK/yFI
+         fsb7xoNojhWZA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 17/50] media: cobalt: fix race condition in setting HPD
-Date:   Sun,  4 Jul 2021 19:09:05 -0400
-Message-Id: <20210704230938.1490742-17-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 06/50] media: s5p-jpeg: fix pm_runtime_get_sync() usage count
+Date:   Sun,  4 Jul 2021 19:08:54 -0400
+Message-Id: <20210704230938.1490742-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
 References: <20210704230938.1490742-1-sashal@kernel.org>
@@ -50,68 +53,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 3d37ef41bed0854805ab9af22c422267510e1344 ]
+[ Upstream commit 10343de268d10cf07b092b8b525e12ad558ead77 ]
 
-The cobalt_s_bit_sysctrl reads the old register value over PCI,
-then changes a bit and sets writes the new value to the register.
+The pm_runtime_get_sync() internally increments the
+dev->power.usage_count without decrementing it, even on errors.
+Replace it by the new pm_runtime_resume_and_get(), introduced by:
+commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+in order to properly decrement the usage counter, avoiding
+a potential PM usage counter leak.
 
-This is used among other things for setting the HPD output pin.
+As a plus, pm_runtime_resume_and_get() doesn't return
+positive numbers, so the return code validation can
+be removed.
 
-But if the HPD is changed for multiple inputs at the same time,
-then this causes a race condition where a stale value is read.
-
-Serialize this function with a mutex.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cobalt/cobalt-driver.c | 1 +
- drivers/media/pci/cobalt/cobalt-driver.h | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/platform/s5p-jpeg/jpeg-core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
-index 0695078ef812..1bd8bbe57a30 100644
---- a/drivers/media/pci/cobalt/cobalt-driver.c
-+++ b/drivers/media/pci/cobalt/cobalt-driver.c
-@@ -667,6 +667,7 @@ static int cobalt_probe(struct pci_dev *pci_dev,
- 		return -ENOMEM;
- 	cobalt->pci_dev = pci_dev;
- 	cobalt->instance = i;
-+	mutex_init(&cobalt->pci_lock);
- 
- 	retval = v4l2_device_register(&pci_dev->dev, &cobalt->v4l2_dev);
- 	if (retval) {
-diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
-index bca68572b324..12c33e035904 100644
---- a/drivers/media/pci/cobalt/cobalt-driver.h
-+++ b/drivers/media/pci/cobalt/cobalt-driver.h
-@@ -251,6 +251,8 @@ struct cobalt {
- 	int instance;
- 	struct pci_dev *pci_dev;
- 	struct v4l2_device v4l2_dev;
-+	/* serialize PCI access in cobalt_s_bit_sysctrl() */
-+	struct mutex pci_lock;
- 
- 	void __iomem *bar0, *bar1;
- 
-@@ -320,10 +322,13 @@ static inline u32 cobalt_g_sysctrl(struct cobalt *cobalt)
- static inline void cobalt_s_bit_sysctrl(struct cobalt *cobalt,
- 					int bit, int val)
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+index 8dbbd5f2a40a..06e17946bbb6 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+@@ -2579,11 +2579,8 @@ static void s5p_jpeg_buf_queue(struct vb2_buffer *vb)
+ static int s5p_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
  {
--	u32 ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
-+	u32 ctrl;
+ 	struct s5p_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+-	int ret;
+-
+-	ret = pm_runtime_get_sync(ctx->jpeg->dev);
  
-+	mutex_lock(&cobalt->pci_lock);
-+	ctrl = cobalt_read_bar1(cobalt, COBALT_SYS_CTRL_BASE);
- 	cobalt_write_bar1(cobalt, COBALT_SYS_CTRL_BASE,
- 			(ctrl & ~(1UL << bit)) | (val << bit));
-+	mutex_unlock(&cobalt->pci_lock);
+-	return ret > 0 ? 0 : ret;
++	return pm_runtime_resume_and_get(ctx->jpeg->dev);
  }
  
- static inline u32 cobalt_g_sysstat(struct cobalt *cobalt)
+ static void s5p_jpeg_stop_streaming(struct vb2_queue *q)
 -- 
 2.30.2
 
