@@ -2,115 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61A53C07E9B
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 05:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF65C07E9A
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 06:50:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CCA2613DD
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 05:34:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3525C613D1
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 06:50:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhGEFgk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Jul 2021 01:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbhGEFgh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Jul 2021 01:36:37 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBD8C061574
-        for <linux-media@vger.kernel.org>; Sun,  4 Jul 2021 22:34:01 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id i184so2748522pfc.12
-        for <linux-media@vger.kernel.org>; Sun, 04 Jul 2021 22:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1Wsby3LClrEo2/xvJaYmxPCAce43LH7aBkEp9Egxfy4=;
-        b=ciOeWZgPMFrOVTP7nqd3vh4BK2H/kDoECH0M4NTEkvLjqklwcEvMZ6pOyuiZv+QQ6h
-         lDrBMGCeKRXaGAWDSu0UEiP0bU0dHHUbj1LyFXD8974EHU34QZf923FQPLIIHzmY+Flg
-         kSfePNmu2lWtckpm/B5Wfe4iQykGWcWzyPyRU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1Wsby3LClrEo2/xvJaYmxPCAce43LH7aBkEp9Egxfy4=;
-        b=MtNDsujQi2vj1yQn+b73GQGek5ovVdu9hJAVosZ3MSBXUJwOOcPFiM886Ga7OveHEn
-         gM9arrIdK5fJfh7utn/lOzOO6geiUgqcnYINVDuALj2+wzRNJkDVc9UjZwH5a7/ZeXpk
-         pH2emCfJLCMtbodPH3U01PtcyKpt+sLdBLTh7LdgUBD2GvPHiK5Kwdsdbe/KCFLbI5eP
-         /CWFwYToeooaRYgsNBHmedqX4yfPZzhH+KDZ2oWVjxIggWJasHvGNq1RWQC2ec1vkS1m
-         7+V3thKK6pbDiAv7w0u9jRi/Hdz7fHKZ3afTXCLk6wUIFDJRnu9FUsq4CPOZY/aRRYdz
-         Nkiw==
-X-Gm-Message-State: AOAM533tW6iOeIuAsZ9u31eJGf0GMUbVZD/8Ri224YYlQ8GKdDe3gJRv
-        G3g8np7FMDhcozDiJnPA6qwJqg==
-X-Google-Smtp-Source: ABdhPJzP2yjoBz66yyuwQKfBYNR+vQPbMTqUfKLq82KBIzHKMAhnU++++X2fY97oynm7v9ff5u19nQ==
-X-Received: by 2002:a63:fb11:: with SMTP id o17mr13787214pgh.177.1625463240848;
-        Sun, 04 Jul 2021 22:34:00 -0700 (PDT)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:3fed:7130:60f:265a])
-        by smtp.gmail.com with ESMTPSA id x19sm6805245pfp.115.2021.07.04.22.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jul 2021 22:34:00 -0700 (PDT)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>
-Subject: [PATCH v6 14/14] media: mtk-vcodec: enable MT8183 decoder
-Date:   Mon,  5 Jul 2021 14:32:58 +0900
-Message-Id: <20210705053258.1614177-15-acourbot@chromium.org>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-In-Reply-To: <20210705053258.1614177-1-acourbot@chromium.org>
-References: <20210705053258.1614177-1-acourbot@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229919AbhGEGwn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Jul 2021 02:52:43 -0400
+Received: from mga09.intel.com ([134.134.136.24]:18004 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229823AbhGEGwl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Jul 2021 02:52:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10035"; a="208887850"
+X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
+   d="scan'208";a="208887850"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2021 23:50:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
+   d="scan'208";a="410108599"
+Received: from ipu5-build.bj.intel.com ([10.238.232.202])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2021 23:50:01 -0700
+From:   Bingbu Cao <bingbu.cao@intel.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com
+Cc:     senozhatsky@chromium.org, tfiga@chromium.org, bingbu.cao@intel.com,
+        bingbu.cao@linux.intel.com, tian.shu.qiu@intel.com
+Subject: [PATCH] media: ov2740: use group write for digital gain
+Date:   Mon,  5 Jul 2021 14:50:59 +0800
+Message-Id: <1625467859-27486-1-git-send-email-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+As the RGB digital gains of ov2740 were not applied as group, some
+artifacts were observed in low light environment, use group write for
+digital gain can make the RGB digital can be guaranteed to applied
+together at frame boundary.
 
-Now that all the supporting blocks are present, enable decoder for
-MT8183.
-
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[acourbot: refactor, cleanup and split]
-Co-developed-by: Alexandre Courbot <acourbot@chromium.org>
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/i2c/ov2740.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index c8a84fa11e4a..55ae198dbcf9 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -374,12 +374,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 599369a3d192..934c9d65cb09 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -51,7 +51,7 @@
+ #define OV2740_REG_MWB_R_GAIN		0x500a
+ #define OV2740_REG_MWB_G_GAIN		0x500c
+ #define OV2740_REG_MWB_B_GAIN		0x500e
+-#define OV2740_DGTL_GAIN_MIN		0
++#define OV2740_DGTL_GAIN_MIN		1024
+ #define OV2740_DGTL_GAIN_MAX		4095
+ #define OV2740_DGTL_GAIN_STEP		1
+ #define OV2740_DGTL_GAIN_DEFAULT	1024
+@@ -61,6 +61,12 @@
+ #define OV2740_TEST_PATTERN_ENABLE	BIT(7)
+ #define OV2740_TEST_PATTERN_BAR_SHIFT	2
+ 
++/* Group Access */
++#define OV2740_REG_GROUP_ACCESS		0x3208
++#define OV2740_GROUP_HOLD_START		0x0
++#define OV2740_GROUP_HOLD_END		0x10
++#define OV2740_GROUP_HOLD_LAUNCH	0xa0
++
+ /* ISP CTRL00 */
+ #define OV2740_REG_ISP_CTRL00		0x5000
+ /* ISP CTRL01 */
+@@ -438,6 +444,11 @@ static int ov2740_update_digital_gain(struct ov2740 *ov2740, u32 d_gain)
+ {
+ 	int ret = 0;
+ 
++	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
++			       OV2740_GROUP_HOLD_START);
++	if (ret)
++		return ret;
++
+ 	ret = ov2740_write_reg(ov2740, OV2740_REG_MWB_R_GAIN, 2, d_gain);
+ 	if (ret)
+ 		return ret;
+@@ -446,7 +457,18 @@ static int ov2740_update_digital_gain(struct ov2740 *ov2740, u32 d_gain)
+ 	if (ret)
+ 		return ret;
+ 
+-	return ov2740_write_reg(ov2740, OV2740_REG_MWB_B_GAIN, 2, d_gain);
++	ret = ov2740_write_reg(ov2740, OV2740_REG_MWB_B_GAIN, 2, d_gain);
++	if (ret)
++		return ret;
++
++	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
++			       OV2740_GROUP_HOLD_END);
++	if (ret)
++		return ret;
++
++	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
++			       OV2740_GROUP_HOLD_LAUNCH);
++	return ret;
  }
  
- extern const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata;
-+extern const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata;
- 
- static const struct of_device_id mtk_vcodec_match[] = {
- 	{
- 		.compatible = "mediatek,mt8173-vcodec-dec",
- 		.data = &mtk_vdec_8173_pdata,
- 	},
-+	{
-+		.compatible = "mediatek,mt8183-vcodec-dec",
-+		.data = &mtk_vdec_8183_pdata,
-+	},
- 	{},
- };
- 
+ static int ov2740_test_pattern(struct ov2740 *ov2740, u32 pattern)
 -- 
-2.32.0.93.g670b81a890-goog
+2.7.4
 
