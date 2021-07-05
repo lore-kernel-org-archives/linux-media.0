@@ -2,124 +2,198 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B293AC07E9C
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 16:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16614C07E99
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 18:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9725561278
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 16:52:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6B4261979
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 18:31:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhGEQzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Jul 2021 12:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbhGEQzG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Jul 2021 12:55:06 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CD9C061760
-        for <linux-media@vger.kernel.org>; Mon,  5 Jul 2021 09:52:28 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id j14so8499986qvu.6
-        for <linux-media@vger.kernel.org>; Mon, 05 Jul 2021 09:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TRW2liv0KvxRpEn1sZgxByQ6WPmBTh1GhCnSHVjnwbg=;
-        b=jBFIqWpkHJUwhFRIEXpavqYg2lOBnFUgtfMCAa51Keo5p1e7uaLLRwx5ShUDeIlhdM
-         2If2zjmjcfC5T6RoGkkweicUk3Qsx+2vRdseYI/0mJ+ciw96iBmUkpkVkiJE+86t8cyr
-         2oJc7CwvfA5oUIWZzMzGPAFug62Z67fj3p3Z3WgSBFHsqz4/BWGoOCucw+iLuagpvAH1
-         PpbSwCitf8MOcMx6/0YLotNGXe8rFb+KOw2NMKF5n5y/HAuQN75chVqThR99yPOEQKYA
-         xDWvGJSbbwBNR2Hg29azK+xEHKNYDfvZIIv02WRktmpruBPJPenBbq+963N6aPphnsv4
-         Bn7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TRW2liv0KvxRpEn1sZgxByQ6WPmBTh1GhCnSHVjnwbg=;
-        b=r5CAZAUQ6X111s1WM6384LMoDKfK8COTSPRR14NNcSnbzXrv0ucM1oZTdNg3DmVfsB
-         9oBv+8KFzYbJhEwaBWOjrweucPzKizmNL4BVh9531aoTDIJ4v8RlJfz/LB0LnyKjLB1I
-         mLdIsQ+gB/ubEEvlZacN/lj1yPtEEwyEdVPCogRCaMonplbEGHN4SrrJR5ghdrS8nplK
-         igT/SR/cT/OyDMDpA3MLo4y5af3Dv4l6eJTODg3f/xE6zIszp4kyJgis/tEosF2/stP3
-         YcP8oyVI9ne+0gqzF558si184XoHq+vFeZXJaP42mUmEzxb9apJb3KaeGznrgC8s0rg2
-         f4FA==
-X-Gm-Message-State: AOAM5307MRA75McdQ2wnKP3rjGYGLFSO1wg5DgchcUpjTTUg4rgLP828
-        cdPzP57Xju7vo2B8weRSyB9Rkg==
-X-Google-Smtp-Source: ABdhPJw/xzr3myWPCDkP4OYKH+JUqyzPcaaW7tJ0//CdDzso+M0bp2m0674/I/B/gC+TTQwFiqkSng==
-X-Received: by 2002:a0c:ef51:: with SMTP id t17mr13560008qvs.14.1625503947734;
-        Mon, 05 Jul 2021 09:52:27 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-113-94.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.113.94])
-        by smtp.gmail.com with ESMTPSA id 82sm5694070qke.63.2021.07.05.09.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 09:52:27 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1m0Rpa-003sCS-IC; Mon, 05 Jul 2021 13:52:26 -0300
-Date:   Mon, 5 Jul 2021 13:52:26 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        daniel.vetter@ffwll.ch, galpress@amazon.com, sleybo@amazon.com,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, dledford@redhat.com,
-        airlied@gmail.com, alexander.deucher@amd.com, leonro@nvidia.com,
-        hch@lst.de, amd-gfx@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, Tomer Tayar <ttayar@habana.ai>
-Subject: Re: [PATCH v4 2/2] habanalabs: add support for dma-buf exporter
-Message-ID: <20210705165226.GJ4604@ziepe.ca>
-References: <20210705130314.11519-1-ogabbay@kernel.org>
- <20210705130314.11519-3-ogabbay@kernel.org>
+        id S229812AbhGESeM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Jul 2021 14:34:12 -0400
+Received: from gofer.mess.org ([88.97.38.141]:38517 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229811AbhGESeM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Jul 2021 14:34:12 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 5CD5FC6463; Mon,  5 Jul 2021 19:31:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1625509893; bh=3CQhAHBSbs+Le8jsuowOR2MPNUM9ASGmL3ITMqEh9jk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=SUisFQJ2EE7WRTWXbo3kkc0kDb7nvGmMyNrWs0SZGK+VLNSP4Xg2gjGxvFNMuiVXU
+         CkfVjAJvHJflLHNEXj+MlYHkZ/vOmrOSR5gF0aONoifb/xlfdnRHgwGzFJfnSNO1xC
+         6ycMwKbVoByBRQzUzcSV5BeioT/uz0FilxDorRuTs3OtoPIHQG8Ak3NSett9l+X2Ni
+         bln76PMvk5ANTjOVVjAyOONfl9Q6sx1maDbb00VuwLObMRpcZj0W2A1LeTZveOZksq
+         G5sk1z4ReJoe3IVNmkSL8vJcP291nUHsMwExrUgRiR9vQsySy4Ppk5Z61Bv2EDQKjx
+         5ivAXeD0gVBSQ==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH v2 2/5] media: rc-loopback: use dev_dbg() rather than handrolled debug
+Date:   Mon,  5 Jul 2021 19:31:29 +0100
+Message-Id: <6543a93009d82ef136d942d5c87e626e22829cda.1625509803.git.sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1625509803.git.sean@mess.org>
+References: <cover.1625509803.git.sean@mess.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210705130314.11519-3-ogabbay@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jul 05, 2021 at 04:03:14PM +0300, Oded Gabbay wrote:
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/media/rc/rc-loopback.c | 36 +++++++++++++---------------------
+ 1 file changed, 14 insertions(+), 22 deletions(-)
 
-> +	rc = sg_alloc_table(*sgt, nents, GFP_KERNEL | __GFP_ZERO);
-> +	if (rc)
-> +		goto error_free;
+diff --git a/drivers/media/rc/rc-loopback.c b/drivers/media/rc/rc-loopback.c
+index 40ab66c850f2..5adfbb6989ee 100644
+--- a/drivers/media/rc/rc-loopback.c
++++ b/drivers/media/rc/rc-loopback.c
+@@ -16,12 +16,9 @@
+ #include <media/rc-core.h>
+ 
+ #define DRIVER_NAME	"rc-loopback"
+-#define dprintk(x...)	if (debug) printk(KERN_INFO DRIVER_NAME ": " x)
+ #define RXMASK_REGULAR	0x1
+ #define RXMASK_LEARNING	0x2
+ 
+-static bool debug;
+-
+ struct loopback_dev {
+ 	struct rc_dev *dev;
+ 	u32 txmask;
+@@ -41,11 +38,11 @@ static int loop_set_tx_mask(struct rc_dev *dev, u32 mask)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if ((mask & (RXMASK_REGULAR | RXMASK_LEARNING)) != mask) {
+-		dprintk("invalid tx mask: %u\n", mask);
++		dev_dbg(&dev->dev, "invalid tx mask: %u\n", mask);
+ 		return 2;
+ 	}
+ 
+-	dprintk("setting tx mask: %u\n", mask);
++	dev_dbg(&dev->dev, "setting tx mask: %u\n", mask);
+ 	lodev->txmask = mask;
+ 	return 0;
+ }
+@@ -54,7 +51,7 @@ static int loop_set_tx_carrier(struct rc_dev *dev, u32 carrier)
+ {
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+-	dprintk("setting tx carrier: %u\n", carrier);
++	dev_dbg(&dev->dev, "setting tx carrier: %u\n", carrier);
+ 	lodev->txcarrier = carrier;
+ 	return 0;
+ }
+@@ -64,11 +61,11 @@ static int loop_set_tx_duty_cycle(struct rc_dev *dev, u32 duty_cycle)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if (duty_cycle < 1 || duty_cycle > 99) {
+-		dprintk("invalid duty cycle: %u\n", duty_cycle);
++		dev_dbg(&dev->dev, "invalid duty cycle: %u\n", duty_cycle);
+ 		return -EINVAL;
+ 	}
+ 
+-	dprintk("setting duty cycle: %u\n", duty_cycle);
++	dev_dbg(&dev->dev, "setting duty cycle: %u\n", duty_cycle);
+ 	lodev->txduty = duty_cycle;
+ 	return 0;
+ }
+@@ -78,11 +75,11 @@ static int loop_set_rx_carrier_range(struct rc_dev *dev, u32 min, u32 max)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if (min < 1 || min > max) {
+-		dprintk("invalid rx carrier range %u to %u\n", min, max);
++		dev_dbg(&dev->dev, "invalid rx carrier range %u to %u\n", min, max);
+ 		return -EINVAL;
+ 	}
+ 
+-	dprintk("setting rx carrier range %u to %u\n", min, max);
++	dev_dbg(&dev->dev, "setting rx carrier range %u to %u\n", min, max);
+ 	lodev->rxcarriermin = min;
+ 	lodev->rxcarriermax = max;
+ 	return 0;
+@@ -97,7 +94,7 @@ static int loop_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count)
+ 
+ 	if (lodev->txcarrier < lodev->rxcarriermin ||
+ 	    lodev->txcarrier > lodev->rxcarriermax) {
+-		dprintk("ignoring tx, carrier out of range\n");
++		dev_dbg(&dev->dev, "ignoring tx, carrier out of range\n");
+ 		goto out;
+ 	}
+ 
+@@ -107,7 +104,7 @@ static int loop_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count)
+ 		rxmask = RXMASK_REGULAR;
+ 
+ 	if (!(rxmask & lodev->txmask)) {
+-		dprintk("ignoring tx, rx mask mismatch\n");
++		dev_dbg(&dev->dev, "ignoring tx, rx mask mismatch\n");
+ 		goto out;
+ 	}
+ 
+@@ -134,7 +131,7 @@ static void loop_set_idle(struct rc_dev *dev, bool enable)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if (lodev->idle != enable) {
+-		dprintk("%sing idle mode\n", enable ? "enter" : "exit");
++		dev_dbg(&dev->dev, "%sing idle mode\n", enable ? "enter" : "exit");
+ 		lodev->idle = enable;
+ 	}
+ }
+@@ -144,7 +141,7 @@ static int loop_set_learning_mode(struct rc_dev *dev, int enable)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if (lodev->learning != enable) {
+-		dprintk("%sing learning mode\n", enable ? "enter" : "exit");
++		dev_dbg(&dev->dev, "%sing learning mode\n", enable ? "enter" : "exit");
+ 		lodev->learning = !!enable;
+ 	}
+ 
+@@ -156,7 +153,7 @@ static int loop_set_carrier_report(struct rc_dev *dev, int enable)
+ 	struct loopback_dev *lodev = dev->priv;
+ 
+ 	if (lodev->carrierreport != enable) {
+-		dprintk("%sabling carrier reports\n", enable ? "en" : "dis");
++		dev_dbg(&dev->dev, "%sabling carrier reports\n", enable ? "en" : "dis");
+ 		lodev->carrierreport = !!enable;
+ 	}
+ 
+@@ -204,10 +201,8 @@ static int __init loop_init(void)
+ 	int ret;
+ 
+ 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
+-	if (!rc) {
+-		printk(KERN_ERR DRIVER_NAME ": rc_dev allocation failed\n");
++	if (!rc)
+ 		return -ENOMEM;
+-	}
+ 
+ 	rc->device_name		= "rc-core loopback device";
+ 	rc->input_phys		= "rc-core/virtual";
+@@ -245,7 +240,7 @@ static int __init loop_init(void)
+ 
+ 	ret = rc_register_device(rc);
+ 	if (ret < 0) {
+-		printk(KERN_ERR DRIVER_NAME ": rc_dev registration failed\n");
++		dev_err(&rc->dev, "rc_dev registration failed\n");
+ 		rc_free_device(rc);
+ 		return ret;
+ 	}
+@@ -262,9 +257,6 @@ static void __exit loop_exit(void)
+ module_init(loop_init);
+ module_exit(loop_exit);
+ 
+-module_param(debug, bool, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(debug, "Enable debug messages");
+-
+ MODULE_DESCRIPTION("Loopback device for rc-core debugging");
+ MODULE_AUTHOR("David Härdeman <david@hardeman.nu>");
+ MODULE_LICENSE("GPL");
+-- 
+2.31.1
 
-If you are not going to include a CPU list then I suggest setting
-sg_table->orig_nents == 0
-
-And using only the nents which is the length of the DMA list.
-
-At least it gives some hope that other parts of the system could
-detect this.
-
-> +
-> +	/* Merge pages and put them into the scatterlist */
-> +	cur_page = 0;
-> +	for_each_sgtable_sg((*sgt), sg, i) {
-
-for_each_sgtable_sg should never be used when working with
-sg_dma_address() type stuff, here and everywhere else. The DMA list
-should be iterated using the for_each_sgtable_dma_sg() macro.
-
-> +	/* In case we got a large memory area to export, we need to divide it
-> +	 * to smaller areas because each entry in the dmabuf sgt can only
-> +	 * describe unsigned int.
-> +	 */
-
-Huh? This is forming a SGL, it should follow the SGL rules which means
-you have to fragment based on the dma_get_max_seg_size() of the
-importer device.
-
-> +	hl_dmabuf->pages = kcalloc(hl_dmabuf->npages, sizeof(*hl_dmabuf->pages),
-> +								GFP_KERNEL);
-> +	if (!hl_dmabuf->pages) {
-> +		rc = -ENOMEM;
-> +		goto err_free_dmabuf_wrapper;
-> +	}
-
-Why not just create the SGL directly? Is there a reason it needs to
-make a page list?
-
-Jason
