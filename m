@@ -7,108 +7,99 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF65C07E9A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 06:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4282C07E98
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:13:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3525C613D1
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 06:50:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81B8B613F1
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:13:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbhGEGwn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Jul 2021 02:52:43 -0400
-Received: from mga09.intel.com ([134.134.136.24]:18004 "EHLO mga09.intel.com"
+        id S229958AbhGEHQA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Jul 2021 03:16:00 -0400
+Received: from mga04.intel.com ([192.55.52.120]:61398 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229823AbhGEGwl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 5 Jul 2021 02:52:41 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10035"; a="208887850"
+        id S229817AbhGEHP7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Jul 2021 03:15:59 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10035"; a="207108096"
 X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
-   d="scan'208";a="208887850"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2021 23:50:03 -0700
+   d="scan'208";a="207108096"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2021 00:13:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
-   d="scan'208";a="410108599"
+   d="scan'208";a="456623021"
 Received: from ipu5-build.bj.intel.com ([10.238.232.202])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2021 23:50:01 -0700
+  by orsmga008.jf.intel.com with ESMTP; 05 Jul 2021 00:13:16 -0700
 From:   Bingbu Cao <bingbu.cao@intel.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com
 Cc:     senozhatsky@chromium.org, tfiga@chromium.org, bingbu.cao@intel.com,
         bingbu.cao@linux.intel.com, tian.shu.qiu@intel.com
-Subject: [PATCH] media: ov2740: use group write for digital gain
-Date:   Mon,  5 Jul 2021 14:50:59 +0800
-Message-Id: <1625467859-27486-1-git-send-email-bingbu.cao@intel.com>
+Subject: [PATCH] media: ov9734: use group write for digital gain
+Date:   Mon,  5 Jul 2021 15:14:15 +0800
+Message-Id: <1625469255-27923-1-git-send-email-bingbu.cao@intel.com>
 X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the RGB digital gains of ov2740 were not applied as group, some
+As the RGB digital gains of ov9734 were not applied as group, some
 artifacts were observed in low light environment, use group write for
 digital gain can make the RGB digital can be guaranteed to applied
 together at frame boundary.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- drivers/media/i2c/ov2740.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov9734.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 599369a3d192..934c9d65cb09 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -51,7 +51,7 @@
- #define OV2740_REG_MWB_R_GAIN		0x500a
- #define OV2740_REG_MWB_G_GAIN		0x500c
- #define OV2740_REG_MWB_B_GAIN		0x500e
--#define OV2740_DGTL_GAIN_MIN		0
-+#define OV2740_DGTL_GAIN_MIN		1024
- #define OV2740_DGTL_GAIN_MAX		4095
- #define OV2740_DGTL_GAIN_STEP		1
- #define OV2740_DGTL_GAIN_DEFAULT	1024
-@@ -61,6 +61,12 @@
- #define OV2740_TEST_PATTERN_ENABLE	BIT(7)
- #define OV2740_TEST_PATTERN_BAR_SHIFT	2
+diff --git a/drivers/media/i2c/ov9734.c b/drivers/media/i2c/ov9734.c
+index af50c66cf5ce..df538ceb71c3 100644
+--- a/drivers/media/i2c/ov9734.c
++++ b/drivers/media/i2c/ov9734.c
+@@ -60,6 +60,12 @@
+ #define OV9734_TEST_PATTERN_ENABLE	BIT(7)
+ #define OV9734_TEST_PATTERN_BAR_SHIFT	2
  
 +/* Group Access */
-+#define OV2740_REG_GROUP_ACCESS		0x3208
-+#define OV2740_GROUP_HOLD_START		0x0
-+#define OV2740_GROUP_HOLD_END		0x10
-+#define OV2740_GROUP_HOLD_LAUNCH	0xa0
++#define OV9734_REG_GROUP_ACCESS		0x3208
++#define OV9734_GROUP_HOLD_START		0x0
++#define OV9734_GROUP_HOLD_END		0x10
++#define OV9734_GROUP_HOLD_LAUNCH	0xa0
 +
- /* ISP CTRL00 */
- #define OV2740_REG_ISP_CTRL00		0x5000
- /* ISP CTRL01 */
-@@ -438,6 +444,11 @@ static int ov2740_update_digital_gain(struct ov2740 *ov2740, u32 d_gain)
+ enum {
+ 	OV9734_LINK_FREQ_180MHZ_INDEX,
+ };
+@@ -433,6 +439,11 @@ static int ov9734_update_digital_gain(struct ov9734 *ov9734, u32 d_gain)
  {
- 	int ret = 0;
+ 	int ret;
  
-+	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
-+			       OV2740_GROUP_HOLD_START);
++	ret = ov9734_write_reg(ov9734, OV9734_REG_GROUP_ACCESS, 1,
++			       OV9734_GROUP_HOLD_START);
 +	if (ret)
 +		return ret;
 +
- 	ret = ov2740_write_reg(ov2740, OV2740_REG_MWB_R_GAIN, 2, d_gain);
+ 	ret = ov9734_write_reg(ov9734, OV9734_REG_MWB_R_GAIN, 2, d_gain);
  	if (ret)
  		return ret;
-@@ -446,7 +457,18 @@ static int ov2740_update_digital_gain(struct ov2740 *ov2740, u32 d_gain)
+@@ -441,7 +452,18 @@ static int ov9734_update_digital_gain(struct ov9734 *ov9734, u32 d_gain)
  	if (ret)
  		return ret;
  
--	return ov2740_write_reg(ov2740, OV2740_REG_MWB_B_GAIN, 2, d_gain);
-+	ret = ov2740_write_reg(ov2740, OV2740_REG_MWB_B_GAIN, 2, d_gain);
+-	return ov9734_write_reg(ov9734, OV9734_REG_MWB_B_GAIN, 2, d_gain);
++	ret = ov9734_write_reg(ov9734, OV9734_REG_MWB_B_GAIN, 2, d_gain);
 +	if (ret)
 +		return ret;
 +
-+	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
-+			       OV2740_GROUP_HOLD_END);
++	ret = ov9734_write_reg(ov9734, OV9734_REG_GROUP_ACCESS, 1,
++			       OV9734_GROUP_HOLD_END);
 +	if (ret)
 +		return ret;
 +
-+	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
-+			       OV2740_GROUP_HOLD_LAUNCH);
++	ret = ov9734_write_reg(ov9734, OV9734_REG_GROUP_ACCESS, 1,
++			       OV9734_GROUP_HOLD_LAUNCH);
 +	return ret;
  }
  
- static int ov2740_test_pattern(struct ov2740 *ov2740, u32 pattern)
+ static int ov9734_test_pattern(struct ov9734 *ov9734, u32 pattern)
 -- 
 2.7.4
 
