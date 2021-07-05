@@ -2,122 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE7FC07E99
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 035E0C07E98
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:42:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9AF361405
-	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:13:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDE67613F3
+	for <linux-media@archiver.kernel.org>; Mon,  5 Jul 2021 07:42:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhGEHQ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Jul 2021 03:16:29 -0400
-Received: from mga17.intel.com ([192.55.52.151]:47704 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229941AbhGEHQ2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 5 Jul 2021 03:16:28 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10035"; a="189314758"
-X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
-   d="scan'208";a="189314758"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2021 00:13:49 -0700
-X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
-   d="scan'208";a="422279299"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2021 00:13:46 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id BBB5420188;
-        Mon,  5 Jul 2021 10:13:43 +0300 (EEST)
-Date:   Mon, 5 Jul 2021 10:13:43 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Stefan Riedmueller <s.riedmueller@phytec.de>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+        id S230041AbhGEHok (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Jul 2021 03:44:40 -0400
+Received: from mickerik.phytec.de ([195.145.39.210]:63072 "EHLO
+        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbhGEHoj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Jul 2021 03:44:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1625470921; x=1628062921;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oN+CmVlIu09UCTNk0mqedlRbCDwPGEkJq9dVFVaU894=;
+        b=rwCrZmA9xBEwFtBK3DyjCjnaHtzoroEt5PJ2dIwfCgH80xExiclxJDsxQuErArb0
+        9IhRHh+pf/hwdHsd5hKFNRlQgwb/fiUbnW3Bdqjb1kyCSMLMIOusi4OBccbIshs9
+        JxwPFmHofuHOOdzkLRfSOWIoRcz9R3kbLDEEliLuWGA=;
+X-AuditID: c39127d2-a9fbd70000001c5e-35-60e2b7c9ac0e
+Received: from berlix.phytec.de (Berlix.phytec.de [172.16.0.117])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 3C.9C.07262.9C7B2E06; Mon,  5 Jul 2021 09:42:01 +0200 (CEST)
+Received: from Berlix.phytec.de (172.16.0.117) by Berlix.phytec.de
+ (172.16.0.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 5 Jul 2021
+ 09:42:01 +0200
+Received: from Berlix.phytec.de ([fe80::343f:7618:c7ce:97c9]) by
+ berlix.phytec.de ([fe80::343f:7618:c7ce:97c9%3]) with mapi id 15.01.2176.009;
+ Mon, 5 Jul 2021 09:42:01 +0200
+From:   =?utf-8?B?U3RlZmFuIFJpZWRtw7xsbGVy?= <S.Riedmueller@phytec.de>
+To:     "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
+CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "enrico.scholz@sigma-chemnitz.de" <enrico.scholz@sigma-chemnitz.de>
 Subject: Re: [PATCH v3 1/6] media: mt9p031: Read back the real clock rate
-Message-ID: <20210705071343.GR3@paasikivi.fi.intel.com>
+Thread-Topic: [PATCH v3 1/6] media: mt9p031: Read back the real clock rate
+Thread-Index: AQHXbyjvr3JmbrJuK0Kpw6M9Mr9fS6sz2rqAgAAH6IA=
+Date:   Mon, 5 Jul 2021 07:42:01 +0000
+Message-ID: <a1380e68485ace5125031c1123896355936372d1.camel@phytec.de>
 References: <20210702095922.118614-1-s.riedmueller@phytec.de>
- <20210702095922.118614-2-s.riedmueller@phytec.de>
+         <20210702095922.118614-2-s.riedmueller@phytec.de>
+         <20210705071343.GR3@paasikivi.fi.intel.com>
+In-Reply-To: <20210705071343.GR3@paasikivi.fi.intel.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.0.116]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <833BD82E0235884898280C8D021A28D5@phytec.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210702095922.118614-2-s.riedmueller@phytec.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsWyRoChVPfk9kcJBl/faVnMP3KO1WLvsQss
+        Fp0Tl7BbXN41h82iZ8NWVotlm/4wWbTuPcJu8WnLNyYHDo/ZHTNZPTat6mTzmHcy0GPFyv9M
+        Hp83yQWwRnHZpKTmZJalFunbJXBlNMzpZiz4JFcxodm6gbFHrouRk0NCwETi1pbjbF2MXBxC
+        AsuZJGZs3MsI4TxglPh5o50FwtnIKHFp01NWkBY2AReJz23f2EBsEQFHiVnPv7CCFDELrGSW
+        +Ph7BhNIQljAU+LquvNA3RxARV4SfSukIOqtJBZunswIEmYRUJF4vVQYJMwr4CZx6uQvZohd
+        Cxklft27yQyS4BSwkPg4qYEFxGYUkJXobHgHNp5ZQFxi07PvrBAvCEgs2XOeGcIWlXj5+B9U
+        XEGiraeTCWQXs4CmxPpd+hCmhUTPzRqIKYoSU7ofskOcIChxcuYTlgmM4rOQLJiF0DwLoXkW
+        kuZZSJoXMLKuYhTKzUzOTi3KzNYryKgsSU3WS0ndxAiM3MMT1S/tYOyb43GIkYmD8RCjBAez
+        kgivyJRHCUK8KYmVValF+fFFpTmpxYcYpTlYlMR5N/CWhAkJpCeWpGanphakFsFkmTg4pRoY
+        OR6wBKys7zmS0Pjy5tFHVToTanRrPtwNlZZ5GXHiCEuL5bTFrc1ev5Z2uDGsb4/a9z5XwOiu
+        9MFUy/LpD5YLR9QLflcovz1t/fJsae6kyZESOhwn5xz9mjilyfIW6xpvTn2J+a9Z4gRUZ/5f
+        7Oo8M1Sx6+c05jKRc37+Kls1Vbpn7ri9Ku+xEktxRqKhFnNRcSIAjhG0tMoCAAA=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Enrico,
-
-On Fri, Jul 02, 2021 at 11:59:17AM +0200, Stefan Riedmueller wrote:
-> From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
-> 
-> The real and requested clock can differ and because it is used to
-> calculate PLL values, the real clock rate should be read.
-
-Do you have a system where this happens? That suggests there's a wrong
-value in DT.
-
-The preference nowadays is to rely on assigned-clock-rates, even though
-it's inherently somewhat unreliable, just as clk_set_rate(). This is an
-existing driver though. The old ones could be kept for compatibility with
-older DT binaries.
-
-> 
-> Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
-> Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  drivers/media/i2c/mt9p031.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-> index 77567341ec98..3eaaa8d44523 100644
-> --- a/drivers/media/i2c/mt9p031.c
-> +++ b/drivers/media/i2c/mt9p031.c
-> @@ -255,6 +255,7 @@ static int mt9p031_clk_setup(struct mt9p031 *mt9p031)
->  
->  	struct i2c_client *client = v4l2_get_subdevdata(&mt9p031->subdev);
->  	struct mt9p031_platform_data *pdata = mt9p031->pdata;
-> +	unsigned long ext_freq;
->  	int ret;
->  
->  	mt9p031->clk = devm_clk_get(&client->dev, NULL);
-> @@ -265,13 +266,15 @@ static int mt9p031_clk_setup(struct mt9p031 *mt9p031)
->  	if (ret < 0)
->  		return ret;
->  
-> +	ext_freq = clk_get_rate(mt9p031->clk);
-> +
->  	/* If the external clock frequency is out of bounds for the PLL use the
->  	 * pixel clock divider only and disable the PLL.
->  	 */
-> -	if (pdata->ext_freq > limits.ext_clock_max) {
-> +	if (ext_freq > limits.ext_clock_max) {
->  		unsigned int div;
->  
-> -		div = DIV_ROUND_UP(pdata->ext_freq, pdata->target_freq);
-> +		div = DIV_ROUND_UP(ext_freq, pdata->target_freq);
->  		div = roundup_pow_of_two(div) / 2;
->  
->  		mt9p031->clk_div = min_t(unsigned int, div, 64);
-> @@ -280,7 +283,7 @@ static int mt9p031_clk_setup(struct mt9p031 *mt9p031)
->  		return 0;
->  	}
->  
-> -	mt9p031->pll.ext_clock = pdata->ext_freq;
-> +	mt9p031->pll.ext_clock = ext_freq;
->  	mt9p031->pll.pix_clock = pdata->target_freq;
->  	mt9p031->use_pll = true;
->  
-
--- 
-Kind regards,
-
-Sakari Ailus
+SGkgU2FrYXJpLA0KDQpPbiBNb24sIDIwMjEtMDctMDUgYXQgMTA6MTMgKzAzMDAsIFNha2FyaSBB
+aWx1cyB3cm90ZToNCj4gSGkgRW5yaWNvLA0KPiANCj4gT24gRnJpLCBKdWwgMDIsIDIwMjEgYXQg
+MTE6NTk6MTdBTSArMDIwMCwgU3RlZmFuIFJpZWRtdWVsbGVyIHdyb3RlOg0KPiA+IEZyb206IEVu
+cmljbyBTY2hvbHogPGVucmljby5zY2hvbHpAc2lnbWEtY2hlbW5pdHouZGU+DQo+ID4gDQo+ID4g
+VGhlIHJlYWwgYW5kIHJlcXVlc3RlZCBjbG9jayBjYW4gZGlmZmVyIGFuZCBiZWNhdXNlIGl0IGlz
+IHVzZWQgdG8NCj4gPiBjYWxjdWxhdGUgUExMIHZhbHVlcywgdGhlIHJlYWwgY2xvY2sgcmF0ZSBz
+aG91bGQgYmUgcmVhZC4NCj4gDQo+IERvIHlvdSBoYXZlIGEgc3lzdGVtIHdoZXJlIHRoaXMgaGFw
+cGVucz8gVGhhdCBzdWdnZXN0cyB0aGVyZSdzIGEgd3JvbmcNCj4gdmFsdWUgaW4gRFQuDQoNClRo
+ZSB1c2UgY2FzZSBoZXJlIGlzIHdoZW4gdGhlIGNsb2NrIGlzIHN1cHBsaWVkIGJ5IG9uZSBvZiB0
+aGUgY2xvY2sgb3V0cHV0cyBvZg0KYSBTT0Mgd2hpY2ggbWlnaHQgbm90IGhpdCB0aGUgcmVxdWVz
+dGVkIGZyZXF1ZW5jeSBleGFjdGx5IGR1ZSB0byBpbnRlcm5hbCBQTEwNCmNvbmZpZ3VyYXRpb24u
+IFNvIHRvIGdldCBhIGJldHRlciBwaXhlbCBjbG9jayB0aGUgYWN0dWFsIGNsb2NrIHJhdGUgaXMg
+cmVhZCB0bw0KY2FsY3VsYXRlIHRoZSBQTEwgcGFyYW1ldGVycyBvbiB0aGUgc2Vuc29yLiBBdCBs
+ZWFzdCB0aGF0J3MgdGhlIGlkZWEuDQoNClJlZ2FyZHMsDQpTdGVmYW4NCg0KPiANCj4gVGhlIHBy
+ZWZlcmVuY2Ugbm93YWRheXMgaXMgdG8gcmVseSBvbiBhc3NpZ25lZC1jbG9jay1yYXRlcywgZXZl
+biB0aG91Z2gNCj4gaXQncyBpbmhlcmVudGx5IHNvbWV3aGF0IHVucmVsaWFibGUsIGp1c3QgYXMg
+Y2xrX3NldF9yYXRlKCkuIFRoaXMgaXMgYW4NCj4gZXhpc3RpbmcgZHJpdmVyIHRob3VnaC4gVGhl
+IG9sZCBvbmVzIGNvdWxkIGJlIGtlcHQgZm9yIGNvbXBhdGliaWxpdHkgd2l0aA0KPiBvbGRlciBE
+VCBiaW5hcmllcy4NCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogRW5yaWNvIFNjaG9seiA8ZW5yaWNv
+LnNjaG9sekBzaWdtYS1jaGVtbml0ei5kZT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gUmll
+ZG11ZWxsZXIgPHMucmllZG11ZWxsZXJAcGh5dGVjLmRlPg0KPiA+IFJldmlld2VkLWJ5OiBMYXVy
+ZW50IFBpbmNoYXJ0IDxsYXVyZW50LnBpbmNoYXJ0QGlkZWFzb25ib2FyZC5jb20+DQo+ID4gLS0t
+DQo+ID4gIGRyaXZlcnMvbWVkaWEvaTJjL210OXAwMzEuYyB8IDkgKysrKysrLS0tDQo+ID4gIDEg
+ZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvaTJjL210OXAwMzEuYyBiL2RyaXZlcnMvbWVkaWEv
+aTJjL210OXAwMzEuYw0KPiA+IGluZGV4IDc3NTY3MzQxZWM5OC4uM2VhYWE4ZDQ0NTIzIDEwMDY0
+NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWVkaWEvaTJjL210OXAwMzEuYw0KPiA+ICsrKyBiL2RyaXZl
+cnMvbWVkaWEvaTJjL210OXAwMzEuYw0KPiA+IEBAIC0yNTUsNiArMjU1LDcgQEAgc3RhdGljIGlu
+dCBtdDlwMDMxX2Nsa19zZXR1cChzdHJ1Y3QgbXQ5cDAzMSAqbXQ5cDAzMSkNCj4gPiAgDQo+ID4g
+IAlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gdjRsMl9nZXRfc3ViZGV2ZGF0YSgmbXQ5cDAz
+MS0+c3ViZGV2KTsNCj4gPiAgCXN0cnVjdCBtdDlwMDMxX3BsYXRmb3JtX2RhdGEgKnBkYXRhID0g
+bXQ5cDAzMS0+cGRhdGE7DQo+ID4gKwl1bnNpZ25lZCBsb25nIGV4dF9mcmVxOw0KPiA+ICAJaW50
+IHJldDsNCj4gPiAgDQo+ID4gIAltdDlwMDMxLT5jbGsgPSBkZXZtX2Nsa19nZXQoJmNsaWVudC0+
+ZGV2LCBOVUxMKTsNCj4gPiBAQCAtMjY1LDEzICsyNjYsMTUgQEAgc3RhdGljIGludCBtdDlwMDMx
+X2Nsa19zZXR1cChzdHJ1Y3QgbXQ5cDAzMQ0KPiA+ICptdDlwMDMxKQ0KPiA+ICAJaWYgKHJldCA8
+IDApDQo+ID4gIAkJcmV0dXJuIHJldDsNCj4gPiAgDQo+ID4gKwlleHRfZnJlcSA9IGNsa19nZXRf
+cmF0ZShtdDlwMDMxLT5jbGspOw0KPiA+ICsNCj4gPiAgCS8qIElmIHRoZSBleHRlcm5hbCBjbG9j
+ayBmcmVxdWVuY3kgaXMgb3V0IG9mIGJvdW5kcyBmb3IgdGhlIFBMTCB1c2UNCj4gPiB0aGUNCj4g
+PiAgCSAqIHBpeGVsIGNsb2NrIGRpdmlkZXIgb25seSBhbmQgZGlzYWJsZSB0aGUgUExMLg0KPiA+
+ICAJICovDQo+ID4gLQlpZiAocGRhdGEtPmV4dF9mcmVxID4gbGltaXRzLmV4dF9jbG9ja19tYXgp
+IHsNCj4gPiArCWlmIChleHRfZnJlcSA+IGxpbWl0cy5leHRfY2xvY2tfbWF4KSB7DQo+ID4gIAkJ
+dW5zaWduZWQgaW50IGRpdjsNCj4gPiAgDQo+ID4gLQkJZGl2ID0gRElWX1JPVU5EX1VQKHBkYXRh
+LT5leHRfZnJlcSwgcGRhdGEtPnRhcmdldF9mcmVxKTsNCj4gPiArCQlkaXYgPSBESVZfUk9VTkRf
+VVAoZXh0X2ZyZXEsIHBkYXRhLT50YXJnZXRfZnJlcSk7DQo+ID4gIAkJZGl2ID0gcm91bmR1cF9w
+b3dfb2ZfdHdvKGRpdikgLyAyOw0KPiA+ICANCj4gPiAgCQltdDlwMDMxLT5jbGtfZGl2ID0gbWlu
+X3QodW5zaWduZWQgaW50LCBkaXYsIDY0KTsNCj4gPiBAQCAtMjgwLDcgKzI4Myw3IEBAIHN0YXRp
+YyBpbnQgbXQ5cDAzMV9jbGtfc2V0dXAoc3RydWN0IG10OXAwMzEgKm10OXAwMzEpDQo+ID4gIAkJ
+cmV0dXJuIDA7DQo+ID4gIAl9DQo+ID4gIA0KPiA+IC0JbXQ5cDAzMS0+cGxsLmV4dF9jbG9jayA9
+IHBkYXRhLT5leHRfZnJlcTsNCj4gPiArCW10OXAwMzEtPnBsbC5leHRfY2xvY2sgPSBleHRfZnJl
+cTsNCj4gPiAgCW10OXAwMzEtPnBsbC5waXhfY2xvY2sgPSBwZGF0YS0+dGFyZ2V0X2ZyZXE7DQo+
+ID4gIAltdDlwMDMxLT51c2VfcGxsID0gdHJ1ZTsNCj4gPiAgDQo=
