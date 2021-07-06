@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2404C11F72
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 11:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51471C11F68
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 11:35:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E2B961EC7
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 11:25:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3962161E6B
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 11:35:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbhGFL21 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 07:28:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54674 "EHLO mail.kernel.org"
+        id S237865AbhGFLhh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 07:37:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232968AbhGFLWT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:22:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEB3461CCF;
-        Tue,  6 Jul 2021 11:17:51 +0000 (UTC)
+        id S235663AbhGFLaS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:30:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE76B61DD1;
+        Tue,  6 Jul 2021 11:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570272;
+        s=k20201202; t=1625570492;
         bh=9oZV2sweLG7QNjxJq5lidgr3AufUJfafWyGDoLTwjao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQqPS8W+Jd7nHe7k1BuMziAnV5Ys9SxcLxb/1XmZIRqDEvUZvcLzlgUxaHTsggrux
-         DDOXUIuDWv0jrNIWhirDfFSfPo58HDfRytzceZylLy3F/gUnj9dafm5qNoZnMgQ5gb
-         2+pnrqscWtIZvHkZjhStySkhNLdEUTxlo1Fws4suCKuFXBDv6pQnVX/cKHqy929+dy
-         1osbaf6KPBoVKYm7VYzVzHNCbJRqWzxT65PHZKT9Ciax3Jrauqmlp/ZOEMNF0WqfkD
-         GEm0U81vwTE7MTt8Xv88WCnY3AnmJPJPiUKZT0zy+11YW9nNbquvTIoLCmxukCx5Hx
-         caM7U1jUdxJYg==
+        b=OBh7oQaSo0YYvvG4w7JMZAnm56UlJjVFW8KXVkQv2G+AzuKQskiM6OUdBpLTNGPSt
+         NBD31PyIM/x+OLSBCFgR8wSmb5Hw74IYrc/svIG4MoIETdtlj+H6QhUfBAjVam98yL
+         Qjs0wLKeg6rPK/Tc7ZDctkpLlVNEhC523Pb405rf1RuBqTG3GFOTJpN+inE2Qe7mfT
+         I5hFm10ukLqXglw83XkHWwilbAonD3hk/GC1xXZBtwTUmDvVga4/EdsIJpsjN7n5UU
+         wqlLXLcSPilliBD2bKqJGWRCcIUOHGLvQ6yWd6WWoJkGjHGMDz6MhSpCjoXTFkvzH2
+         mMqyjTQdJGvSA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sean Young <sean@mess.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 166/189] media, bpf: Do not copy more entries than user space requested
-Date:   Tue,  6 Jul 2021 07:13:46 -0400
-Message-Id: <20210706111409.2058071-166-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 138/160] media, bpf: Do not copy more entries than user space requested
+Date:   Tue,  6 Jul 2021 07:18:04 -0400
+Message-Id: <20210706111827.2060499-138-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706111409.2058071-1-sashal@kernel.org>
-References: <20210706111409.2058071-1-sashal@kernel.org>
+In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
+References: <20210706111827.2060499-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
