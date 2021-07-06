@@ -2,196 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C64C07E96
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFC65C07E9C
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:22:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0010161A0F
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:17:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5A68619AE
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:22:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbhGFPUC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 11:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
+        id S232513AbhGFPZf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 11:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbhGFPUB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 11:20:01 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F6CC0613E0;
-        Tue,  6 Jul 2021 08:17:23 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id l26so22298467oic.7;
-        Tue, 06 Jul 2021 08:17:23 -0700 (PDT)
+        with ESMTP id S232364AbhGFPZd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 11:25:33 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD63BC061760
+        for <linux-media@vger.kernel.org>; Tue,  6 Jul 2021 06:44:32 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id t19so5482202qkg.7
+        for <linux-media@vger.kernel.org>; Tue, 06 Jul 2021 06:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FwaqWZ2gM7ETfNHaJFAqbQre0tedwT8ScYbGRh8Cbj8=;
-        b=po09UcPqPUGTT3Ljzu6EyVVa2dGi0koL5gBUA7/Udu8Q8QUVocjo+71HHAr2UJVdoe
-         +/XySKVgn+quf+PcI5LZe6PDb4PC1nj6ObHgZDxeYDK99/vRpJDEhXxCqpsyKezGuOh2
-         SiTmIylHMow5BpLR/9fFJSFJEnBjkgjlW4fOQXYbslvJR5yTd6QMLSkIUYlv6Oin0JiL
-         UpBTfsTJNcUtwp8W1vZw3u76+oD5dvV4bZoN6Du3Sy/S0Hh0DIHr7eXg6dRxzy9+I65D
-         MGQAh71shEDxseAHis676rpRCIT1Ys9hx7vTdSo6KpQw0LREFFNsRZBwFi646wfzDCKm
-         1tyg==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nYMSUda7V/DmmAuzip7JbF6LIDuj8UtQ05rEhsj9lGA=;
+        b=V36CzWcFqXgQrH0S61JBopqFYw86l1KRRiKJIfDMvpGLy4yCd9hRFVr0veacKuzH9C
+         Zgqj20uE9eKfAWLyfKmwP+hpUiApugYVKPIUd+EFXMxS/jWvnL3mn8mSgjzu4iIFPcKJ
+         45inefBONCCkx8NgDhSgPV+1arRfzXXcfRNx3yJokZyujlPZfXzS0at11zwyPuA+RpQv
+         wjKe6ehncM5CybBy6YVtafHvR9nArwr4etCQhsgoD72pN8YiB6jEe/6xvn5lmExqOPcd
+         l2ikCxlts7bnffEllKLPSylZMJUJm44orkIDc9OCKJTeMjFkIgoY/LXb3bYUCoqdKvKg
+         KJhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FwaqWZ2gM7ETfNHaJFAqbQre0tedwT8ScYbGRh8Cbj8=;
-        b=Qt5R6i2i91bhsM8ryeIZRqxScslrPs8W4PZgY2PvXN65fyv1g3slGOvsq29tcLH5sA
-         cAZ2z3D6GxEE6mRfdXux876+Kr8vmZhsHRt0aYvDvIfedN3HzB6FdpK7XC7mrP2G/RLE
-         rg0wlOQWM04QztIJYaRCp4GMv43UGTgSZdiJq1qqJFyLykVdF8Nzew8co5IeAq0gsL2Z
-         VF5Z9Aijmc8/ccPilIA8LhJdUSEMgLhu7dyTZE8p70Yb1ANg+ecFCunwhi2d+p4qaGC7
-         rDGp0CXYsLKaTogXic0nE88x8pheECjJ9muLHQXYbgR08+dLpCQ7IklnNqzeAZQZv/EQ
-         yeuw==
-X-Gm-Message-State: AOAM532Yeep4iahVCTIgaoXVZm4J52nxr7Y3Uc7ET7DU3E2kwtLyBrFB
-        /bp6pz5GpGE/dNYFLcisn3qbIPTbA5qvrOs7ob4=
-X-Google-Smtp-Source: ABdhPJymL0sA+uyY2bY0Taf/qcTN+2FeV8VkDm0yVBABAYSlAHE/SPKfz1qUNtsLf6yjsu/TmxVUzJfvXQAW7RQ/wrA=
-X-Received: by 2002:aca:3904:: with SMTP id g4mr790145oia.129.1625584642630;
- Tue, 06 Jul 2021 08:17:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210519143011.1175546-1-acourbot@chromium.org>
- <20210519143011.1175546-6-acourbot@chromium.org> <9b37044d-f909-9169-3d22-fa6c5f788822@collabora.com>
- <CAPBb6MV35sJ-LY8w-nhpnndRHtJXapSN63xFzUiAbYQFLvm1dQ@mail.gmail.com>
-In-Reply-To: <CAPBb6MV35sJ-LY8w-nhpnndRHtJXapSN63xFzUiAbYQFLvm1dQ@mail.gmail.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Tue, 6 Jul 2021 17:17:10 +0200
-Message-ID: <CAFqH_50PAEzH5_LT+aQusGUos7BGYATjx1qYVq2O5UYYkkNW2A@mail.gmail.com>
-Subject: Re: [PATCH v5 05/14] media: mtk-vcodec: venc: support START and STOP commands
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nYMSUda7V/DmmAuzip7JbF6LIDuj8UtQ05rEhsj9lGA=;
+        b=ozfUD3LDu/4aUg/C0eHE4rCOfgwFN7NT6hnsEKQBgnOyf6e+Eqf75T2k0JYCsQbMo8
+         XsnR+7qjQcUmjJmH+VBv6S5xjtvEUOpVm1n3AimIBTxbSYm4QuNkDPOJPNpBnj5V0IL5
+         /sJlq3xhlJjV+NCzrxc5jVi8Y45InRWO9g4baFqmZI3g8hheGelKVxHygqz3rANplG7p
+         HZNseV4GpTSVfkULrOm90XWFyuYDoRIjlOX5iy+anIoMquQd1T5ctdcTmNAoo8o8bIHc
+         JCJPSz1lfFBRcXtAufD4oHqCpY8FeXpEqcL7M2XWsHx4exAaGqjnlnhp0jGQP06CoKrV
+         FXnA==
+X-Gm-Message-State: AOAM5322PjN8lYsFiEi0/3OK9qDQXgki2Shg9urPYWmGfoR8id0FOCsd
+        2n9xpdAGHkM5HZAz6g6FB5UvRA==
+X-Google-Smtp-Source: ABdhPJwbPsdj5abBUwRj+0D+UPcg9LktUa6esBS7MFcNQJN0mzluRvDbxhBXY3stdAxEO20KouenjQ==
+X-Received: by 2002:a37:68c6:: with SMTP id d189mr20223444qkc.186.1625579071862;
+        Tue, 06 Jul 2021 06:44:31 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id v5sm6919384qkh.39.2021.07.06.06.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jul 2021 06:44:31 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1m0lNG-004Qag-41; Tue, 06 Jul 2021 10:44:30 -0300
+Date:   Tue, 6 Jul 2021 10:44:30 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Oded Gabbay <oded.gabbay@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Doug Ledford <dledford@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH v4 0/2] Add p2p via dmabuf to habanalabs
+Message-ID: <20210706134430.GL4604@ziepe.ca>
+References: <20210705130314.11519-1-ogabbay@kernel.org>
+ <YOQXBWpo3whVjOyh@phenom.ffwll.local>
+ <CAFCwf10_rTYL2Fy6tCRVAUCf4-6_TtcWCv5gEEkGnQ0KxqMUBg@mail.gmail.com>
+ <CAKMK7uEAJZUHNLreBB839BZOfnTGNU4rCx-0k55+67Nbxtdx3A@mail.gmail.com>
+ <CAKMK7uHpKFVm55O_NB=WYCsv0iUt92ZUn6eCzifH=unbhe3J8g@mail.gmail.com>
+ <CAKMK7uFGr=ugyKj0H3ctbh28Jnr25vAgXPBaDBMmfErCxYVo3w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uFGr=ugyKj0H3ctbh28Jnr25vAgXPBaDBMmfErCxYVo3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna and Alex,
+On Tue, Jul 06, 2021 at 02:07:16PM +0200, Daniel Vetter wrote:
 
-Now in text format, sorry for the noise.
+> On the "rdma-core" idea, afaik rdma NIC do not have fully programmable
+> cores in their hw, for which you'd need some kind of compiler to make
+> use of the hardware and the interfaces the kernel provides? So not
+> really compareable, but also my understanding is that rdma-core does
+> actually allow you to reasonable use&drive all the hw features and
+> kernel interfaces fully.
 
-Missatge de Alexandre Courbot <acourbot@chromium.org> del dia dl., 5
-de jul. 2021 a les 7:05:
->
-> Hi Dafna, sorry for (again) taking so long to come back to this! >_<
->
-> On Fri, May 28, 2021 at 4:03 PM Dafna Hirschfeld
-> <dafna.hirschfeld@collabora.com> wrote:
-> >
-> > Hi,
-> >
-> > I applied this patchset and tested the stateful encoder on debian with the command:
-> >
-> > [gst-master] root@debian:~/gst-build# gst-launch-1.0 filesrc location=images/jelly-800-640.YU12 ! rawvideoparse width=800 height=640 format=i420 ! videoconvert ! v4l2h264enc ! h264parse ! mp4mux ! filesink location=jelly-800-640.mp4
-> >
-> > I get:
-> >
-> > Setting pipeline[   79.703879] [MTK_V4L2] level=0 fops_vcodec_open(),190: encoder capability 10000000
-> >   to PAUSED ...
-> > Pipeline is PREROLLING ...
-> > Redistribute latency...
-> > [   80.621076] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.631232] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.640878] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.650766] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.660430] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.670194] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.680967] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.691376] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.701718] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.712106] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
-> > [   80.722272] [MTK_V4L2] level=0 mtk_venc_set_param(),371: fmt 0x3, P/L 0/0, w/h 800/640, buf 800/640, fps/bps 25/4000000, gop 0, i_period 0
-> > Pipeline is PREROLLED ...
-> > Setting pipeline to PLAYING ...
-> > New clock: GstSystemClock
-> > [   81.918747] [MTK_V4L2][ERROR] mtk_vcodec_wait_for_done_ctx:32: [3] ctx->type=1, cmd=1, wait_event_interruptible_timeout time=1000ms out 0 0!
-> > [   81.931392] [MTK_VCODEC][ERROR][3]: h264_encode_frame() irq_status=0 failed
-> > [   81.938470] [MTK_V4L2][ERROR] mtk_venc_worker:1219: venc_if_encode failed=-5
-> > [   82.974746] [MTK_V4L2][ERROR] mtk_vcodec_wait_for_done_ctx:32: [3] ctx->type=1, cmd=1, wait_event_interruptible_timeout time=1000ms out 0 0!
-> > [   82.987392] [MTK_VCODEC][ERROR][3]: h264_encode_frame() irq_status=0 failed
-> > [   82.994471] [MTK_V4L2][ERROR] mtk_venc_worker:1219: venc_if_encode failed=-5
-> > [  104.163977] cros-ec-dev cros-ec-dev.2.auto: Some logs may have been dropped...
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > 0:00:00.4 / 99:99:99.
-> > ^Chandling interrupt.
-> >
-> > And then the streaming hangs. The same error happens without this patchset, but without
-> > this patchset the statful encoder does not support V4L2_ENC_CMD_STOP/START needed by the spec.
-> > I am not sure what cause the error and wether those mtk-iommu erros has to do with that. The issue
-> > could also come from the mtk-vpu used by the encoder.
-> > Do you have any idea where this can come from?
->
-> Mmm, this looks like the firmware is unhappy about something and
-> hangs. I wonder if the IOMMU messages above could not be linked to
-> that, I remember seeing similar problems when the buffers were not
-> properly synced on the device side.
->
-> I'll try and see if I can deploy gstreamer on the old MT8173
-> Chromebook I am using to see if I have more success here, but no
-> guarantee I can test in the same conditions as you unfortunately. :/
->
-> The MTK folks are the most qualified to look into this issue though.
-> Yunfei, do you have any idea about why this is happening?
->
+The whole HPC stack has speciality compilers of course. OpenMP, PGAS,
+etc. These compilers map onto library primitives that eventually boil
+down into rdma-core calls. Even the HW devices have various
+programmability that are being targetted with compilers now. People
+are making NIC devices with ARM cores/etc - P4 is emerging for some
+packet processing tasks.
 
-Pending to test with the Dafna's environment. but looks like this
-draft fix [1] (already under discussion in gerrit) needs to be applied
-to mainline in order to have vcodec working. At least I am able to use
-it now.
+rdma-core can drive all the kernel interfaces with at least an ioctl
+wrapper, and it has a test suite that tries to cover this. It does not
+exercise the full HW capability, programmability, etc of every single
+device.
 
-See https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2251840
+I actually don't entirely know what everyone has built on top of
+rdma-core, or how I'd try to map it the DRI ideas you are trying to
+explain.
 
-diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c
-b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index c8a56271b259..af71fcf6fbae 100644
---- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
-+++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-@@ -316,6 +316,7 @@ int vpu_ipi_send(struct platform_device *pdev,
- {
-        struct mtk_vpu *vpu = platform_get_drvdata(pdev);
-        struct share_obj __iomem *send_obj = vpu->send_buf;
-+       unsigned char data[SHARE_BUF_SIZE];
-        unsigned long timeout;
-        int ret = 0;
+Should we ban all Intel RDMA drivers because they are shipping
+proprietary Intel HPC compilers and proprietary Intel MPI which drives
+their RDMA HW? Or is that OK because there are open analogs for some
+of that stuff? And yes, the open versions are inferior in various
+metrics.
 
-@@ -349,7 +350,10 @@ int vpu_ipi_send(struct platform_device *pdev,
-                }
-        } while (vpu_cfg_readl(vpu, HOST_TO_VPU));
+Pragmatically what I want to see is enough RDMA common/open user space
+to understand the uAPI and thus more about how the kernel driver
+works. Forcing everyone into rdma-core has already prevented a number
+of uAPI mistakes in drivers that would have been bad - so at least
+this level really is valuable.
 
--       memcpy_toio(send_obj->share_buf, buf, len);
-+       //memcpy_toio(send_obj->share_buf, buf, len);
-+       memset(data, 0, sizeof(data));
-+       memcpy(data, buf, len);
-+       memcpy_toio(send_obj->share_buf, data, sizeof(data));
-        writel(len, &send_obj->len);
-        writel(id, &send_obj->id);
+> So we actually want less on dri-devel, because for compute/accel chips
+> we're currently happy with a vendor userspace. It just needs to be
+> functional and complete, and open in its entirety.
 
-Thanks,
-  Enric
+In a sense yes: DRI doesn't insist on a single code base to act as the
+kernel interface, but that is actually the thing that has brought the
+most value to RDMA, IMHO.
 
+We've certainly had some interesting successes because of this. The
+first submission for AWS's EFA driver proposed to skip the rdma-core
+step, which was rejected. However since EFA has been in that ecosystem
+it has benefited greatly, I think.
 
+However, in another sense no: RDMA hasn't been blocking, say Intel,
+just because they have built proprietary stuff on top of our open
+stack.
 
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Honestly, I think GPU is approaching this backwards. Wayland should
+have been designed to prevent proprietary userspace stacks.
+
+Jason
