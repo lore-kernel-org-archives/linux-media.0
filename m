@@ -2,292 +2,203 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 956D9C07E9C
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32A6BC07E9C
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 16:03:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AAEE6101C
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12CD2613D1
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 16:03:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhGFP6P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 11:58:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58749 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbhGFP6O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 11:58:14 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0nLI-0007mL-3h; Tue, 06 Jul 2021 17:50:36 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0nL5-0005Si-VW; Tue, 06 Jul 2021 17:50:23 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Geoff Levand <geoff@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
-        Jens Taprogge <jens.taprogge@taprogge.org>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joey Pabalan <jpabalanb@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Frank Li <lznuaa@gmail.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        Hannes Reinecke <hare@suse.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        SeongJae Park <sjpark@amazon.de>,
-        Julien Grall <jgrall@amazon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
-        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH v2 0/4] bus: Make remove callback return void
-Date:   Tue,  6 Jul 2021 17:47:59 +0200
-Message-Id: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S229812AbhGFQFx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 12:05:53 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:41323 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229770AbhGFQFw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 12:05:52 -0400
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id E7B5F1BF208;
+        Tue,  6 Jul 2021 16:03:11 +0000 (UTC)
+Date:   Tue, 6 Jul 2021 18:04:01 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 01/11] rcar-vin: Refactor controls creation for video
+ device
+Message-ID: <20210706160401.xssshab7nkxroxnp@uno.localdomain>
+References: <20210413180253.2575451-1-niklas.soderlund+renesas@ragnatech.se>
+ <20210413180253.2575451-2-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20210413180253.2575451-2-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Niklas,
 
-compared to (implicit) v1 that I sent earlier today
-(https://lore.kernel.org/r/20210706095037.1425211-1-u.kleine-koenig@pengutronix.de)
-the following is changed:
+On Tue, Apr 13, 2021 at 08:02:43PM +0200, Niklas Söderlund wrote:
+> The controls for the video device are created in different code paths
+> depending on if the driver is using the media graph centric model (Gen3)
+> or the device centric model (Gen2 and earlier). This have lead to code
+> duplication that can be consolidated.
+>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-core.c | 82 +++++++++++----------
+>  1 file changed, 45 insertions(+), 37 deletions(-)
+>
+> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+> index cb3025992817d625..c798dc9409e4cdcd 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-core.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
+> @@ -405,6 +405,45 @@ static const struct v4l2_ctrl_ops rvin_ctrl_ops = {
+>  	.s_ctrl = rvin_s_ctrl,
+>  };
+>
+> +static void rvin_free_controls(struct rvin_dev *vin)
+> +{
+> +	v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> +	vin->vdev.ctrl_handler = NULL;
+> +}
+> +
+> +static int rvin_create_controls(struct rvin_dev *vin, struct v4l2_subdev *subdev)
+> +{
+> +	int ret;
+> +
+> +	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 16);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* The VIN directly deals with alpha component. */
+> +	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
+> +			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
+> +
+> +	if (vin->ctrl_handler.error) {
+> +		ret = vin->ctrl_handler.error;
+> +		rvin_free_controls(vin);
+> +		return ret;
+> +	}
+> +
+> +	/* For the non-MC mode add controls from the subdevice. */
+> +	if (subdev) {
+> +		ret = v4l2_ctrl_add_handler(&vin->ctrl_handler,
+> +					    subdev->ctrl_handler, NULL, true);
+> +		if (ret < 0) {
+> +			rvin_free_controls(vin);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	vin->vdev.ctrl_handler = &vin->ctrl_handler;
+> +
+> +	return 0;
+> +}
+> +
+>  /* -----------------------------------------------------------------------------
+>   * Async notifier
+>   */
+> @@ -490,28 +529,10 @@ static int rvin_parallel_subdevice_attach(struct rvin_dev *vin,
+>  		return ret;
+>
+>  	/* Add the controls */
+> -	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 16);
+> +	ret = rvin_create_controls(vin, subdev);
+>  	if (ret < 0)
+>  		return ret;
+>
+> -	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
+> -			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
+> -
+> -	if (vin->ctrl_handler.error) {
+> -		ret = vin->ctrl_handler.error;
+> -		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> -		return ret;
+> -	}
+> -
+> -	ret = v4l2_ctrl_add_handler(&vin->ctrl_handler, subdev->ctrl_handler,
+> -				    NULL, true);
+> -	if (ret < 0) {
+> -		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> -		return ret;
+> -	}
+> -
+> -	vin->vdev.ctrl_handler = &vin->ctrl_handler;
+> -
+>  	vin->parallel.subdev = subdev;
+>
+>  	return 0;
+> @@ -522,10 +543,8 @@ static void rvin_parallel_subdevice_detach(struct rvin_dev *vin)
+>  	rvin_v4l2_unregister(vin);
+>  	vin->parallel.subdev = NULL;
+>
+> -	if (!vin->info->use_mc) {
+> -		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> -		vin->vdev.ctrl_handler = NULL;
+> -	}
+> +	if (!vin->info->use_mc)
 
- - Add three more patches preparing some s390 specific busses
-   and adapt them in the last patch. Thanks to Cornelia Huck for
-   pointing this out.
- - Add various Acks to the last patch
+I know it was there already, but give that rvin_parallel_notify_unbind()
+is only registered for parallel, can this happen ?
 
-I now tested allmodconfig on arm, powerpc, s390 and amd64.
+Apart this small nit:
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-As before this depends on "PCI: endpoint: Make struct pci_epf_driver::remove
-return void" that is not yet applied, see
-https://lore.kernel.org/r/20210223090757.57604-1-u.kleine-koenig@pengutronix.de.
+Thanks
+  j
 
-Best regards
-Uwe
-
-Uwe Kleine-König (4):
-  s390/cio: Make struct css_driver::remove return void
-  s390/ccwgroup: Drop if with an always false condition
-  s390/scm: Make struct scm_driver::remove return void
-  bus: Make remove callback return void
-
- arch/arm/common/locomo.c                  | 3 +--
- arch/arm/common/sa1111.c                  | 4 +---
- arch/arm/mach-rpc/ecard.c                 | 4 +---
- arch/mips/sgi-ip22/ip22-gio.c             | 3 +--
- arch/parisc/kernel/drivers.c              | 5 ++---
- arch/powerpc/platforms/ps3/system-bus.c   | 3 +--
- arch/powerpc/platforms/pseries/ibmebus.c  | 3 +--
- arch/powerpc/platforms/pseries/vio.c      | 3 +--
- arch/s390/include/asm/eadm.h              | 2 +-
- drivers/acpi/bus.c                        | 3 +--
- drivers/amba/bus.c                        | 4 +---
- drivers/base/auxiliary.c                  | 4 +---
- drivers/base/isa.c                        | 4 +---
- drivers/base/platform.c                   | 4 +---
- drivers/bcma/main.c                       | 6 ++----
- drivers/bus/sunxi-rsb.c                   | 4 +---
- drivers/cxl/core.c                        | 3 +--
- drivers/dax/bus.c                         | 4 +---
- drivers/dma/idxd/sysfs.c                  | 4 +---
- drivers/firewire/core-device.c            | 4 +---
- drivers/firmware/arm_scmi/bus.c           | 4 +---
- drivers/firmware/google/coreboot_table.c  | 4 +---
- drivers/fpga/dfl.c                        | 4 +---
- drivers/hid/hid-core.c                    | 4 +---
- drivers/hid/intel-ish-hid/ishtp/bus.c     | 4 +---
- drivers/hv/vmbus_drv.c                    | 5 +----
- drivers/hwtracing/intel_th/core.c         | 4 +---
- drivers/i2c/i2c-core-base.c               | 5 +----
- drivers/i3c/master.c                      | 4 +---
- drivers/input/gameport/gameport.c         | 3 +--
- drivers/input/serio/serio.c               | 3 +--
- drivers/ipack/ipack.c                     | 4 +---
- drivers/macintosh/macio_asic.c            | 4 +---
- drivers/mcb/mcb-core.c                    | 4 +---
- drivers/media/pci/bt8xx/bttv-gpio.c       | 3 +--
- drivers/memstick/core/memstick.c          | 3 +--
- drivers/mfd/mcp-core.c                    | 3 +--
- drivers/misc/mei/bus.c                    | 4 +---
- drivers/misc/tifm_core.c                  | 3 +--
- drivers/mmc/core/bus.c                    | 4 +---
- drivers/mmc/core/sdio_bus.c               | 4 +---
- drivers/net/netdevsim/bus.c               | 3 +--
- drivers/ntb/core.c                        | 4 +---
- drivers/ntb/ntb_transport.c               | 4 +---
- drivers/nvdimm/bus.c                      | 3 +--
- drivers/pci/endpoint/pci-epf-core.c       | 4 +---
- drivers/pci/pci-driver.c                  | 3 +--
- drivers/pcmcia/ds.c                       | 4 +---
- drivers/platform/surface/aggregator/bus.c | 4 +---
- drivers/platform/x86/wmi.c                | 4 +---
- drivers/pnp/driver.c                      | 3 +--
- drivers/rapidio/rio-driver.c              | 4 +---
- drivers/rpmsg/rpmsg_core.c                | 4 +---
- drivers/s390/block/scm_drv.c              | 4 +---
- drivers/s390/cio/ccwgroup.c               | 6 +-----
- drivers/s390/cio/chsc_sch.c               | 3 +--
- drivers/s390/cio/css.c                    | 7 +++----
- drivers/s390/cio/css.h                    | 2 +-
- drivers/s390/cio/device.c                 | 9 +++------
- drivers/s390/cio/eadm_sch.c               | 4 +---
- drivers/s390/cio/scm.c                    | 5 +++--
- drivers/s390/cio/vfio_ccw_drv.c           | 3 +--
- drivers/s390/crypto/ap_bus.c              | 4 +---
- drivers/scsi/scsi_debug.c                 | 3 +--
- drivers/siox/siox-core.c                  | 4 +---
- drivers/slimbus/core.c                    | 4 +---
- drivers/soc/qcom/apr.c                    | 4 +---
- drivers/spi/spi.c                         | 4 +---
- drivers/spmi/spmi.c                       | 3 +--
- drivers/ssb/main.c                        | 4 +---
- drivers/staging/fieldbus/anybuss/host.c   | 4 +---
- drivers/staging/greybus/gbphy.c           | 4 +---
- drivers/target/loopback/tcm_loop.c        | 5 ++---
- drivers/thunderbolt/domain.c              | 4 +---
- drivers/tty/serdev/core.c                 | 4 +---
- drivers/usb/common/ulpi.c                 | 4 +---
- drivers/usb/serial/bus.c                  | 4 +---
- drivers/usb/typec/bus.c                   | 4 +---
- drivers/vdpa/vdpa.c                       | 4 +---
- drivers/vfio/mdev/mdev_driver.c           | 4 +---
- drivers/virtio/virtio.c                   | 3 +--
- drivers/vme/vme.c                         | 4 +---
- drivers/xen/xenbus/xenbus.h               | 2 +-
- drivers/xen/xenbus/xenbus_probe.c         | 4 +---
- include/linux/device/bus.h                | 2 +-
- sound/aoa/soundbus/core.c                 | 4 +---
- 86 files changed, 95 insertions(+), 236 deletions(-)
-
-
-base-commit: 79160a603bdb51916226caf4a6616cc4e1c58a58
-prerequisite-patch-id: e5c7b97ea399fddc2695e8cf5d0c02d14175abac
--- 
-2.30.2
-
+> +		rvin_free_controls(vin);
+>  }
+>
+>  static int rvin_parallel_notify_complete(struct v4l2_async_notifier *notifier)
+> @@ -935,21 +954,10 @@ static int rvin_mc_init(struct rvin_dev *vin)
+>  	if (ret)
+>  		rvin_group_put(vin);
+>
+> -	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 1);
+> +	ret = rvin_create_controls(vin, NULL);
+>  	if (ret < 0)
+>  		return ret;
+>
+> -	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
+> -			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
+> -
+> -	if (vin->ctrl_handler.error) {
+> -		ret = vin->ctrl_handler.error;
+> -		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> -		return ret;
+> -	}
+> -
+> -	vin->vdev.ctrl_handler = &vin->ctrl_handler;
+> -
+>  	return ret;
+>  }
+>
+> @@ -1446,7 +1454,7 @@ static int rcar_vin_probe(struct platform_device *pdev)
+>  	return 0;
+>
+>  error_group_unregister:
+> -	v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> +	rvin_free_controls(vin);
+>
+>  	if (vin->info->use_mc) {
+>  		mutex_lock(&vin->group->lock);
+> @@ -1481,7 +1489,7 @@ static int rcar_vin_remove(struct platform_device *pdev)
+>  		rvin_group_put(vin);
+>  	}
+>
+> -	v4l2_ctrl_handler_free(&vin->ctrl_handler);
+> +	rvin_free_controls(vin);
+>
+>  	rvin_dma_unregister(vin);
+>
+> --
+> 2.31.1
+>
