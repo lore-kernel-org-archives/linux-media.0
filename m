@@ -2,300 +2,159 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83DE3C07E96
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ED4FC07E9C
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6691761184
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:35:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 234706135C
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:39:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbhGFOhj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:37:39 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:56179 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231485AbhGFOhi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 6 Jul 2021 10:37:38 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 0luHmghTh48Zv0luKmYskY; Tue, 06 Jul 2021 16:18:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1625581121; bh=049MmxfqwmsNjIBC/IxeukI+86tQaUVHkWEeFaCHqng=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=Zl7Y4Zyic5lmi7t6fPNVIdha6iHJdq8lo2rnjYHbzNXQgfxOTsIFUVSoiKf3W0fw3
-         N2qMtkpA954Sz9r+AED212EYK+T/BqcO0lZiSINChhM0fV2UUVVfv7UyjgwEan+w7m
-         91bLBTJ1U0BwsEhCFS6oYZjyucHIuQfXk7LEbuGhPDwO0sA1XjXJLsDJa3BIr7Jgua
-         0OzE+gbq886PtPOxoWSzQIoiFglL+O4wtRnTcaGKn3mo2qI5APHSNuqvbP9PmTRhHw
-         Bh18EgHYu5lXEav4ixwS7Gdk0bnLUdK06IpVvDlq0UdUpW1FohNGjDH+AQv0vY9+hN
-         Ws6lpAwokzdWQ==
-Subject: Re: [PATCH v10 21/21] media: uvcvideo: Return -EACCES to inactive
- controls
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, tfiga@chromium.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20210618122923.385938-1-ribalda@chromium.org>
- <20210618122923.385938-22-ribalda@chromium.org>
- <CANiDSCvNvJ_xyuqgvvFv6aZGSm=H-9=SeV6wp5C_0-acm+wC=A@mail.gmail.com>
- <820809c2-a564-8a79-c279-7570c3bcc801@xs4all.nl>
- <CANiDSCvwQvDYKNqxAZjtAKY6CGNrnn21LMoNnsg7FrrDiooi-A@mail.gmail.com>
- <d65ab386-370e-b2e9-dbac-a981993d9da7@xs4all.nl>
- <CANiDSCv=FMy6g1aQhVRxH1tADSyLAOAY7csMwPFtXZVMU8N6VA@mail.gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <1157542d-7088-fe70-965a-cfa128090bb3@xs4all.nl>
-Date:   Tue, 6 Jul 2021 16:18:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.11.0
+        id S232587AbhGFOmO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 10:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232584AbhGFOmM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 10:42:12 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73BC08EC37
+        for <linux-media@vger.kernel.org>; Tue,  6 Jul 2021 07:39:31 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id d21-20020a9d72d50000b02904604cda7e66so21747847otk.7
+        for <linux-media@vger.kernel.org>; Tue, 06 Jul 2021 07:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zm0DaryDqZq3vejGZ3jPeBiO1tR+wTWZk5xnShXCnO4=;
+        b=G30UzRcjxEx6Xt1b6aM3vMaunEynpsORVhKQH6x0woz09DwXifJzfkCwSyC/RCtJF6
+         0dlH0FE/N9kBHKK6ACyKzCL9AAOx7O6sYOnj6Loko6p9DlXanIsMowNmzYBNl9TxrrVf
+         GOw2Y2m6AMmOya+oUGFCdCcJKjukWk6zcmTM4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zm0DaryDqZq3vejGZ3jPeBiO1tR+wTWZk5xnShXCnO4=;
+        b=OePRTNEYEJb9C5otpCDlBw34b4YtmHIEi1slrT6bXbqArC8sQ5GlVvTZlq6ZjMigcQ
+         1xhFfh6lqfrhiA7c8EuUUjVuf2pIPQ/tqINHvYRI5yzLmoyfiiEMKMK40Ar/syiMRmhi
+         OjgQvDFACOLdzhdCs2ZDWha8ZVWTH+837Z+XGYfbYW3pUdGdljJGo+VLxs05H0GsVCUh
+         ITGLfRNhbzpBo7mcC8IpU4ovAF8yuM1akfqC6ugV61Zd9PzgWMbfkrRxEgPRXxciKCBn
+         aIOUG6DiQ3YQ8YXJ/JtkbYHYbC3LbrvHoDHGW0FqTgPXnDDqYrMgxZLTe+/spKtmzN2N
+         q5Sw==
+X-Gm-Message-State: AOAM530PkBdUptTIDa1KnF6nH6CRdna49AsXBlIEKX3TKCiXvXCPz113
+        IDPu0kbgVUY+/XqrX4xyhxljTKPSa3com7IQe2Da9Q==
+X-Google-Smtp-Source: ABdhPJzgkWaB0S4HP/SYLFWoigqz0+uVa0qbfzt618JpPtslruMLA86ntCgmp9G7+R8uc+hgYBv5HiSGfZAE493M7OE=
+X-Received: by 2002:a9d:27a4:: with SMTP id c33mr15519363otb.281.1625582370636;
+ Tue, 06 Jul 2021 07:39:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANiDSCv=FMy6g1aQhVRxH1tADSyLAOAY7csMwPFtXZVMU8N6VA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfC84eYssH0vb2sjutbVfPbOcKVeN4069DJvu1VeIDbuSK7U5HBLJZG+NUHBmCj9lySx3xelJji3CatW0g3gTSQoVIeWFywrUNfu74d9CaYFnt2nV/e5Z
- f77EdY56A7fMM4oN/9XSjT6LON31zh0OgZGz7C8qI0wZUB8PeFRsefZfpehmtWzUmZhNfnmPJSd2cKozQ9ZmFH392SwhD+2SMxZeJSJ9KoiDLhI+XSdngiv6
- k34Ouowmb5lMpvL+slD16nEyxSl1mmdFWlTdPDYN1kT/jAFze0wb7vYMEAOUkbe7s7ceIZUWJyMWEfHrlIcWc0+S+rTLmiCPtV3yC73iK7sGzSVVH1VCnBd7
- gybjOtzgTRfPXH9dvf1rKTfklhl0n9VmEzLvyzQ77xdZZtAfIiqNG7HBeUW713orBKiUZ45Qn0fbRF68XSxLAyqL2HnOCDnrJ8Sb/2DKUskW22sZcEo=
+References: <20210705130314.11519-1-ogabbay@kernel.org> <YOQXBWpo3whVjOyh@phenom.ffwll.local>
+ <CAFCwf10_rTYL2Fy6tCRVAUCf4-6_TtcWCv5gEEkGnQ0KxqMUBg@mail.gmail.com>
+ <CAKMK7uEAJZUHNLreBB839BZOfnTGNU4rCx-0k55+67Nbxtdx3A@mail.gmail.com> <20210706142357.GN4604@ziepe.ca>
+In-Reply-To: <20210706142357.GN4604@ziepe.ca>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Tue, 6 Jul 2021 16:39:19 +0200
+Message-ID: <CAKMK7uELNzwUe+hhVWRg=Pk5Wt_vOOX922H48Kd6dTyO2PeBbg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Add p2p via dmabuf to habanalabs
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Oded Gabbay <oded.gabbay@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/06/2021 14:51, Ricardo Ribalda wrote:
-> Hi Hans
-> 
-> 
-> On Wed, 30 Jun 2021 at 11:03, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>
->> Hi Ricardo,
->>
->> On 25/06/2021 15:55, Ricardo Ribalda wrote:
->>> Hi Hans
->>>
->>> On Fri, 25 Jun 2021 at 13:07, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>>>
->>>> On 25/06/2021 12:29, Ricardo Ribalda wrote:
->>>>> Hi Hans
->>>>>
->>>>> Did you have some hardware that did not work fine without this patch?
->>>>> Am I remembering correctly?
->>>>
->>>> Yes, that's correct. It's one of my webcams, but I can't remember which one
->>>> it is. You probably want me to test this v10?
->>>>
->>>> Regards,
->>>
->>> That would be awesome. Thanks!
->>
->> You can add my:
->>
->> Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> 
-> Thanks a lot for testing it!
-> 
-> Sorry to bother you, but could I ask you to try again, but with this
-> patch reverted? This is v10 1-20, without 21/21
+On Tue, Jul 6, 2021 at 4:23 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> On Tue, Jul 06, 2021 at 12:36:51PM +0200, Daniel Vetter wrote:
+>
+> > If that means AI companies don't want to open our their hw specs
+> > enough to allow that, so be it - all you get in that case is
+> > offloading the kernel side  of the stack for convenience, with zero
+> > long term prospects to ever make this into a cross vendor subsystem
+> > stack that does something useful.
+>
+> I don't think this is true at all - nouveau is probably the best
+> example.
+>
+> nouveau reverse engineered a userspace stack for one of these devices.
+>
+> How much further ahead would they have been by now if they had a
+> vendor supported, fully featured, open kernel driver to build the
+> userspace upon?
 
-I tried with and without this patch and I didn't see any difference. Unfortunately,
-I don't remember the exact details of what I tested last time and with which hardware.
+There is actually tons of example here, most of the arm socs have
+fully open kernel drivers, supported by the vendor (out of tree).
 
-I would drop this patch, it can always be added later.
+The hard part is the userspace driver and all the things you're
+submitting to it. We've had open kernel drivers for mail/qualcomm/...
+years before any believable open implementation started existing.
+Typing up the memory manager and hw submission queue handling is
+comparitively trivial. Generally the kernel driver is also done last,
+you bring up the userspace first, often by just directly programming
+the hw from userspace. Kernel driver only gets in the way with this
+stuff (nouveau is entirely developed as a userspace driver, as the
+most extreme example).
 
-Regards,
+This is a bit different for the display side, but nowadays those
+drivers are fully in-kernel so they're all open. Well except the
+nvidia one, and I've not heard of nvidia working on even an
+out-of-tree open display driver, so that won't help the in-tree effort
+at all.
 
-	Hans
+Where it would have helped is if this open driver would come with
+redistributable firmware, because that is right now the thing making
+nouveau reverse-engineering painful enough to be non-feasible. Well
+not the reverse-engineering, but the "shipping the result as a working
+driver stack".
 
-> 
-> 
-> Thanks!
->>
->> to this series.
->>
->> I do get these warnings (depends on the webcam model, though, some do, some don't):
->>
->> Streaming ioctls:
->>         test read/write: OK (Not Supported)
->>         test blocking wait: OK
->>                 warn: v4l2-test-buffers.cpp(438): got sequence number 1, expected 0
->>         test MMAP (no poll): OK
->>                 warn: v4l2-test-buffers.cpp(438): got sequence number 1, expected 0
->>         test MMAP (select): OK
->>                 warn: v4l2-test-buffers.cpp(438): got sequence number 1, expected 0
->>         test MMAP (epoll): OK
->>                 warn: v4l2-test-buffers.cpp(438): got sequence number 1, expected 0
->>         test USERPTR (no poll): OK
->>                 warn: v4l2-test-buffers.cpp(438): got sequence number 1, expected 0
->>         test USERPTR (select): OK
->>         test DMABUF: Cannot test, specify --expbuf-device
->>
->> It's something to do with the Field ID, but I'm not sure if this is really correctly
->> reporting a dropped frame, or if it is a false report and the sequence counter was
->> wrongly incremented.
->>
->> This is a separate issue, though, and doesn't block this series.
->>
->> Regards,
->>
->>         Hans
->>
->>>
->>>>
->>>>         Hans
->>>>
->>>>>
->>>>> Thanks!
->>>>>
->>>>> On Fri, 18 Jun 2021 at 14:29, Ricardo Ribalda <ribalda@chromium.org> wrote:
->>>>>>
->>>>>> If a control is inactive return -EACCES to let the userspace know that
->>>>>> the value will not be applied automatically when the control is active
->>>>>> again.
->>>>>>
->>>>>> Also make sure that query_v4l2_ctrl doesn't return an error.
->>>>>>
->>>>>> Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->>>>>> Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->>>>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->>>>>> ---
->>>>>>  drivers/media/usb/uvc/uvc_ctrl.c | 73 +++++++++++++++++++++-----------
->>>>>>  1 file changed, 49 insertions(+), 24 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
->>>>>> index da44d5c0b9ad..4f80c06d3c43 100644
->>>>>> --- a/drivers/media/usb/uvc/uvc_ctrl.c
->>>>>> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
->>>>>> @@ -1104,13 +1104,36 @@ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
->>>>>>         return "Unknown Control";
->>>>>>  }
->>>>>>
->>>>>> +static bool uvc_ctrl_is_inactive(struct uvc_video_chain *chain,
->>>>>> +                                struct uvc_control *ctrl,
->>>>>> +                                struct uvc_control_mapping *mapping)
->>>>>> +{
->>>>>> +       struct uvc_control_mapping *master_map = NULL;
->>>>>> +       struct uvc_control *master_ctrl = NULL;
->>>>>> +       s32 val;
->>>>>> +       int ret;
->>>>>> +
->>>>>> +       if (!mapping->master_id)
->>>>>> +               return false;
->>>>>> +
->>>>>> +       __uvc_find_control(ctrl->entity, mapping->master_id, &master_map,
->>>>>> +                          &master_ctrl, 0);
->>>>>> +
->>>>>> +       if (!master_ctrl || !(master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR))
->>>>>> +               return false;
->>>>>> +
->>>>>> +       ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
->>>>>> +       if (ret < 0 || val == mapping->master_manual)
->>>>>> +               return false;
->>>>>> +
->>>>>> +       return true;
->>>>>> +}
->>>>>> +
->>>>>>  static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->>>>>>         struct uvc_control *ctrl,
->>>>>>         struct uvc_control_mapping *mapping,
->>>>>>         struct v4l2_queryctrl *v4l2_ctrl)
->>>>>>  {
->>>>>> -       struct uvc_control_mapping *master_map = NULL;
->>>>>> -       struct uvc_control *master_ctrl = NULL;
->>>>>>         const struct uvc_menu_info *menu;
->>>>>>         unsigned int i;
->>>>>>
->>>>>> @@ -1126,18 +1149,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->>>>>>         if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR))
->>>>>>                 v4l2_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
->>>>>>
->>>>>> -       if (mapping->master_id)
->>>>>> -               __uvc_find_control(ctrl->entity, mapping->master_id,
->>>>>> -                                  &master_map, &master_ctrl, 0);
->>>>>> -       if (master_ctrl && (master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR)) {
->>>>>> -               s32 val;
->>>>>> -               int ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
->>>>>> -               if (ret < 0)
->>>>>> -                       return ret;
->>>>>> -
->>>>>> -               if (val != mapping->master_manual)
->>>>>> -                               v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
->>>>>> -       }
->>>>>> +       if (uvc_ctrl_is_inactive(chain, ctrl, mapping))
->>>>>> +               v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
->>>>>>
->>>>>>         if (!ctrl->cached) {
->>>>>>                 int ret = uvc_ctrl_populate_cache(chain, ctrl);
->>>>>> @@ -1660,25 +1673,37 @@ static int uvc_ctrl_commit_entity(struct uvc_device *dev,
->>>>>>         return 0;
->>>>>>  }
->>>>>>
->>>>>> -static int uvc_ctrl_find_ctrl_idx(struct uvc_entity *entity,
->>>>>> -                                 struct v4l2_ext_controls *ctrls,
->>>>>> -                                 struct uvc_control *uvc_control)
->>>>>> +static int uvc_ctrl_commit_error(struct uvc_video_chain *chain,
->>>>>> +                                struct uvc_entity *entity,
->>>>>> +                                struct v4l2_ext_controls *ctrls,
->>>>>> +                                struct uvc_control *err_control,
->>>>>> +                                int ret)
->>>>>>  {
->>>>>>         struct uvc_control_mapping *mapping;
->>>>>>         struct uvc_control *ctrl_found;
->>>>>>         unsigned int i;
->>>>>>
->>>>>> -       if (!entity)
->>>>>> -               return ctrls->count;
->>>>>> +       if (!entity) {
->>>>>> +               ctrls->error_idx = ctrls->count;
->>>>>> +               return ret;
->>>>>> +       }
->>>>>>
->>>>>>         for (i = 0; i < ctrls->count; i++) {
->>>>>>                 __uvc_find_control(entity, ctrls->controls[i].id, &mapping,
->>>>>>                                    &ctrl_found, 0);
->>>>>> -               if (uvc_control == ctrl_found)
->>>>>> -                       return i;
->>>>>> +               if (err_control == ctrl_found)
->>>>>> +                       break;
->>>>>>         }
->>>>>> +       ctrls->error_idx = i;
->>>>>> +
->>>>>> +       /* We could not find the control that failed. */
->>>>>> +       if (i == ctrls->count)
->>>>>> +               return ret;
->>>>>> +
->>>>>> +       if (uvc_ctrl_is_inactive(chain, err_control, mapping))
->>>>>> +               return -EACCES;
->>>>>>
->>>>>> -       return ctrls->count;
->>>>>> +       return ret;
->>>>>>  }
->>>>>>
->>>>>>  int __uvc_ctrl_commit(struct uvc_fh *handle, int rollback,
->>>>>> @@ -1701,8 +1726,8 @@ int __uvc_ctrl_commit(struct uvc_fh *handle, int rollback,
->>>>>>                 uvc_ctrl_send_events(handle, ctrls->controls, ctrls->count);
->>>>>>  done:
->>>>>>         if (ret < 0 && ctrls)
->>>>>> -               ctrls->error_idx = uvc_ctrl_find_ctrl_idx(entity, ctrls,
->>>>>> -                                                         err_ctrl);
->>>>>> +               ret = uvc_ctrl_commit_error(chain, entity, ctrls, err_ctrl,
->>>>>> +                                           ret);
->>>>>>         mutex_unlock(&chain->ctrl_mutex);
->>>>>>         return ret;
->>>>>>  }
->>>>>> --
->>>>>> 2.32.0.288.g62a8d224e6-goog
->>>>>>
->>>>>
->>>>>
->>>>
->>>
->>>
->>
-> 
-> 
+I don't think the facts on the ground support your claim here, aside
+from the practical problem that nvidia is unwilling to even create an
+open driver to begin with. So there isn't anything to merge.
 
+> > open up your hw enough for that, I really don't see the point in
+> > merging such a driver, it'll be an unmaintainable stack by anyone else
+> > who's not having access to those NDA covered specs and patents and
+> > everything.
+>
+> My perspective from RDMA is that the drivers are black boxes. I can
+> hack around the interface layers but there is a lot of wild stuff in
+> there that can't be understood without access to the HW documentation.
+
+There's shipping gpu drivers with entirely reverse-engineered stacks.
+And I don't mean "shipping in fedora" but "shipping in Chrome tablets
+sold by OEM partners of Google". So it's very much possible, even if
+the vendor is maximally stubborn about things.
+
+> I think only HW that has open specs, like say NVMe, can really be
+> properly community oriented. Otherwise we have to work in a community
+> partnership with the vendor.
+
+Well sure that's the ideal case, but most vendors in the accel space
+arent interested actual partnership with the wider community. It's
+"merge this kernel driver and have no further demands about anything
+else". Well there are some who are on board, but it does take pretty
+enormous amounts of coercion.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
