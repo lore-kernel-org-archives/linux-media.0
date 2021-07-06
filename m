@@ -2,206 +2,132 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D46C07E96
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 171F5C07E96
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:50:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A684561C23
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:47:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0294461447
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 14:50:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbhGFOuc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S232591AbhGFOxP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 10:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbhGFOub (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 10:50:31 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42EC0617AB
-        for <linux-media@vger.kernel.org>; Tue,  6 Jul 2021 07:20:30 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i18so34404166yba.13
-        for <linux-media@vger.kernel.org>; Tue, 06 Jul 2021 07:20:30 -0700 (PDT)
+        with ESMTP id S232564AbhGFOxO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 10:53:14 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9AFC0617AB;
+        Tue,  6 Jul 2021 07:50:34 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id v14so13204186lfb.4;
+        Tue, 06 Jul 2021 07:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oa36JT6ZXXdeNbOW7MRMPItJC85KRkSUT3t0lipsRGE=;
-        b=I3PSWk0qdtLFBmphAZxkzdBLbBanHnSZ0lDy0Hh/Ww45NThwfPWgOKeOhk0qySlDno
-         N76byVhIjKXABiEeqkETac6DodkM4w9tLHdTxMThwhYfWv577ISzp1xMGs578F8PpfZ1
-         q9Lvgwe7Uqz9k9WBl4dQSoOJQ0Uhiw8dS3XsY=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SwvFBRtYb9/G826Ka+AfHVChgd2wyc3iTfftqZfpyDc=;
+        b=mHwEnudSs0YuOe4477jeMklBqG8VxU3U27qu+qTT/Rvl2iKaz5Tx0P1bfRhIXWiMco
+         DymN6c1TBnoT199gao35Ku8N8UNJY+hu8muPi9x6+uOXhT2viTXPwDJ2sJ3JRYus19ha
+         ddDTvQRL13sHPOFAX2G/W4Eqzp/mcMxpP5DENR/uMH9chjcAEDbFHQwnxnwJNQ0YPsEX
+         ypVZunz8q0A9pWULeeoGuDkq+4rgUz4ctERUQWP4kujSP61nMMIYA1mVgVezKiemIPAU
+         U9EMAbPliZp+aGm9FYGesFx7mqgy0wwyIq9btglXVxzNVv3ZkqTIQLPdmDAu0kfUJcDs
+         wQCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oa36JT6ZXXdeNbOW7MRMPItJC85KRkSUT3t0lipsRGE=;
-        b=jfW511lET+0kekcXF6QDth5+nXAfpRUZELQjdlmAB5UDOHaxNGEh5x48aUG75Ndv+J
-         NhOmcOxS2QHqoPxEF04uGL+8MRmoMcs1N1xyATJV5foPcw+Oj98QUpBxKgTeCav4RYxk
-         0K/vEWHRzNhp1PLfCQamN+xY5cakpKeERM0TDst5+QdxeNcw4XJwE+Ve2mSx3z1W66HN
-         6F3BoMYSVvwY6wAr/aQkvi+65VCTN1NM6+8Z8+bxhgO0IkwWJS5AzgMfiMe/XKjBH8Bi
-         IzEzgmxMA9As6rkJoMqbnGNs5Q2qD/NvyiWJwR/xrsN9Lyv4umXRozX2vR3vaZ2iO0b+
-         yJeA==
-X-Gm-Message-State: AOAM530Zknket2Jq8nOj+68bac9pN4JBO3b0GxBRF+Ci6uuJ1TZGLpMz
-        o/v2QgYyLNjDNtLZnzR0U5+C4+hLyB4f/mhkIuzy64bK3fo=
-X-Google-Smtp-Source: ABdhPJwzXN/NwcfTnIiFRue1K5cnhWHoor7mzX3yGgIo+ac7YSL8ymVa3l8VD8fedtiFTq2s+GtWnKhr2VvW4LOuy6E=
-X-Received: by 2002:a05:6830:2366:: with SMTP id r6mr15034001oth.188.1625580576688;
- Tue, 06 Jul 2021 07:09:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SwvFBRtYb9/G826Ka+AfHVChgd2wyc3iTfftqZfpyDc=;
+        b=TRGgiMmrOA1sP8ulMa0DHs26mjBGlwCye92S2dy9NqCyNKGu9raa+v6MrNsE6msiTx
+         6TAMJTETQXviwN1F5F1JiSALCaDRQau6ABzKes5P8L0XBOTMfQKP/FQHaZelnJQoNmN9
+         sWYjW9aFKjksQEZGAJGL9Vvs7QS4blTzyf2FzQzyqZslnJO9IUb/c5BorIgZpHYhPL/M
+         pCiYIiL1LlFgAEGB7vn9oC6w2sG+U59sZPTBBglCSPXci+bLnMP5bPecgGDsvjcD8PBP
+         VQTLdjf4jwtz5YFWHwqNRxCyCk6eSTZvP/wEtDMWbfw+AG3nQfQF8mMfsJpcwaGgyg8D
+         /Kcg==
+X-Gm-Message-State: AOAM5306qjXLO6HZ8UNDPk8QxPkOYdMloIA9VC8xWPWrLFazvEiQQa5X
+        6h8aSQd1tfgQw7Fj/+4IC8kstdqJ+e3vLQ==
+X-Google-Smtp-Source: ABdhPJxAoXwLAsSI4g3LBzTXL0kvHp/LjRpZBpc/VVCmCeE2tRsgJSK3oPmWPh6wQollnwDYknjYcw==
+X-Received: by 2002:a19:6e43:: with SMTP id q3mr14946280lfk.265.1625583033035;
+        Tue, 06 Jul 2021 07:50:33 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.225.155])
+        by smtp.gmail.com with ESMTPSA id a15sm921337ljn.26.2021.07.06.07.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jul 2021 07:50:32 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
+Subject: [PATCH] media: em28xx: fix corrupted list
+Date:   Tue,  6 Jul 2021 17:50:25 +0300
+Message-Id: <20210706145025.25776-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20210705130314.11519-1-ogabbay@kernel.org> <YOQXBWpo3whVjOyh@phenom.ffwll.local>
- <CAFCwf10_rTYL2Fy6tCRVAUCf4-6_TtcWCv5gEEkGnQ0KxqMUBg@mail.gmail.com>
- <CAKMK7uEAJZUHNLreBB839BZOfnTGNU4rCx-0k55+67Nbxtdx3A@mail.gmail.com>
- <CAKMK7uHpKFVm55O_NB=WYCsv0iUt92ZUn6eCzifH=unbhe3J8g@mail.gmail.com>
- <CAKMK7uFGr=ugyKj0H3ctbh28Jnr25vAgXPBaDBMmfErCxYVo3w@mail.gmail.com> <20210706134430.GL4604@ziepe.ca>
-In-Reply-To: <20210706134430.GL4604@ziepe.ca>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Tue, 6 Jul 2021 16:09:25 +0200
-Message-ID: <CAKMK7uFEZjp2_WBhtkVxSNQ-1WcBSr3NDotY0fjz0iLRw8Barw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Add p2p via dmabuf to habanalabs
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Oded Gabbay <oded.gabbay@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Doug Ledford <dledford@redhat.com>,
-        Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 3:44 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Tue, Jul 06, 2021 at 02:07:16PM +0200, Daniel Vetter wrote:
->
-> > On the "rdma-core" idea, afaik rdma NIC do not have fully programmable
-> > cores in their hw, for which you'd need some kind of compiler to make
-> > use of the hardware and the interfaces the kernel provides? So not
-> > really compareable, but also my understanding is that rdma-core does
-> > actually allow you to reasonable use&drive all the hw features and
-> > kernel interfaces fully.
->
-> The whole HPC stack has speciality compilers of course. OpenMP, PGAS,
-> etc. These compilers map onto library primitives that eventually boil
-> down into rdma-core calls. Even the HW devices have various
-> programmability that are being targetted with compilers now. People
-> are making NIC devices with ARM cores/etc - P4 is emerging for some
-> packet processing tasks.
+Syzbot reported corrupted list in em28xx driver. The problem was in
+non-reinitialized lists on disconnect. Since all 2 lists are global
+variables and driver can be connected and disconnected many times we
+should call INIT_LIST_HEAD() in .disconnect method to prevent corrupted
+list entries.
 
-Well it depends which compilers we're talking about here, and what
-kind of features. Higher level compilers that break down some fancy
-language like OpenMP into what that actually should do on a given
-hardware like gpu, or rdma-connected cluster, or whatever, we really
-don't care about. You don't need that to drive the hardware. Usually
-that stuff works by breaking some of the code down into cpu compiler
-IR (most of this is built on top of LLVM IR nowadays), interspersed
-with library calls to the runtime.
+Fixes: 1a23f81b7dc3 ("V4L/DVB (9979): em28xx: move usb probe code to a proper place")
+Reported-by: syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/media/usb/em28xx/em28xx-cards.c | 2 ++
+ drivers/media/usb/em28xx/em28xx-core.c  | 6 ++++++
+ drivers/media/usb/em28xx/em28xx.h       | 1 +
+ 3 files changed, 9 insertions(+)
 
-Now the thing I care about here is if things doen't get compiled down
-to cpu code, but to some other IR (SPIR-V is starting to win, but very
-often ist still a hacked up version of LLVM IR), which then in a
-hw-specific backend gets compiled down to instructions that run on the
-hw. I had no idea that rdma NICs can do that, but it sounds like? I
-guess maybe some openmpi operations could be done directly on the rdma
-chip, but I'm not sure why you'd want a backend compiler here.
-
-Anyway, for anything that works like a gpu accelerator, like 3d accel,
-or parallel compute accel (aka gpgpu) or spatial compute accel (aka
-NN/AI) or maybe even fpga accel most of the magic to use the hardware
-is in this backend compiler, which translates from an IR into whatever
-your accelerator consumes. That's the part we really care about for
-modern accelerators because without that defacto the hardware is
-useless. Generally these chips have full-blown, if special purpose
-ISA, with register files, spilling, branches, loops and other control
-flow (sometimes only execution masks on simpler hw).
-
-> rdma-core can drive all the kernel interfaces with at least an ioctl
-> wrapper, and it has a test suite that tries to cover this. It does not
-> exercise the full HW capability, programmability, etc of every single
-> device.
->
-> I actually don't entirely know what everyone has built on top of
-> rdma-core, or how I'd try to map it the DRI ideas you are trying to
-> explain.
->
-> Should we ban all Intel RDMA drivers because they are shipping
-> proprietary Intel HPC compilers and proprietary Intel MPI which drives
-> their RDMA HW? Or is that OK because there are open analogs for some
-> of that stuff? And yes, the open versions are inferior in various
-> metrics.
->
-> Pragmatically what I want to see is enough RDMA common/open user space
-> to understand the uAPI and thus more about how the kernel driver
-> works. Forcing everyone into rdma-core has already prevented a number
-> of uAPI mistakes in drivers that would have been bad - so at least
-> this level really is valuable.
->
-> > So we actually want less on dri-devel, because for compute/accel chips
-> > we're currently happy with a vendor userspace. It just needs to be
-> > functional and complete, and open in its entirety.
->
-> In a sense yes: DRI doesn't insist on a single code base to act as the
-> kernel interface, but that is actually the thing that has brought the
-> most value to RDMA, IMHO.
-
-So in practice we're not that different in DRI wrt userspace - if
-there is an established cross-vendor project in the given area, we do
-expect the userspace side to be merged there. And nowadays most of the
-feature work is done that way, it's just that we don't have a single
-project like rdma-core for this. We do still allow per-driver submit
-interfaces because hw is just not standardized enough there, the
-standards are at a higher level. Which is why it just doesn't make
-sense to talk about a kernel driver as something that's useful
-stand-alone at all.
-
-> We've certainly had some interesting successes because of this. The
-> first submission for AWS's EFA driver proposed to skip the rdma-core
-> step, which was rejected. However since EFA has been in that ecosystem
-> it has benefited greatly, I think.
->
-> However, in another sense no: RDMA hasn't been blocking, say Intel,
-> just because they have built proprietary stuff on top of our open
-> stack.
-
-Oh we allow this too. We only block the initial submission if the
-proprietary stuff is the only thing out there.
-
-> Honestly, I think GPU is approaching this backwards. Wayland should
-> have been designed to prevent proprietary userspace stacks.
-
-That's not possible without some serious cans of worms though. Wayland
-is a protocol, and you can't forbid people from implementing it.
-Otherwise all the compatible open implementations of closed protocols
-wouldn't be possible either.
-
-Now the implementation is a different thing, and there a few
-compositors have succumbed to market pressure and enabled the nvidia
-stack, as a mostly separate piece from supporting the open stack. And
-that's largely because nvidia managed to completely kill the open
-source r/e effort through firmware licensing and crypto-key based
-verified loading, so unless you install the proprietary stack you
-actually can't make use of the hardware at all - well display works
-without the firmware, but 3d/compute just doesn't. So you just can't
-use nvidia hw without accepting their proprietary driver licenses and
-all that entails for the latest hardware.
-
-So I'm not clear what you're suggesting here we should do different.
--Daniel
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index ba9292e2a587..8b1ff79c37a0 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -4148,6 +4148,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+ 		dev->dev_next = NULL;
+ 	}
+ 	kref_put(&dev->ref, em28xx_free_device);
++
++	em28xx_reset_lists();
+ }
+ 
+ static int em28xx_usb_suspend(struct usb_interface *intf,
+diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
+index 584fa400cd7d..03970ed00dba 100644
+--- a/drivers/media/usb/em28xx/em28xx-core.c
++++ b/drivers/media/usb/em28xx/em28xx-core.c
+@@ -1131,6 +1131,12 @@ void em28xx_init_extension(struct em28xx *dev)
+ 	mutex_unlock(&em28xx_devlist_mutex);
+ }
+ 
++void em28xx_reset_lists(void)
++{
++	INIT_LIST_HEAD(&em28xx_devlist);
++	INIT_LIST_HEAD(&em28xx_extension_devlist);
++}
++
+ void em28xx_close_extension(struct em28xx *dev)
+ {
+ 	const struct em28xx_ops *ops = NULL;
+diff --git a/drivers/media/usb/em28xx/em28xx.h b/drivers/media/usb/em28xx/em28xx.h
+index ab167cd1f400..73caaaa398d3 100644
+--- a/drivers/media/usb/em28xx/em28xx.h
++++ b/drivers/media/usb/em28xx/em28xx.h
+@@ -835,6 +835,7 @@ void em28xx_stop_urbs(struct em28xx *dev);
+ int em28xx_set_mode(struct em28xx *dev, enum em28xx_mode set_mode);
+ int em28xx_gpio_set(struct em28xx *dev, const struct em28xx_reg_seq *gpio);
+ int em28xx_register_extension(struct em28xx_ops *dev);
++void em28xx_reset_lists(void);
+ void em28xx_unregister_extension(struct em28xx_ops *dev);
+ void em28xx_init_extension(struct em28xx *dev);
+ void em28xx_close_extension(struct em28xx *dev);
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.32.0
+
