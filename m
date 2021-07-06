@@ -4,200 +4,194 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 475D2C11F68
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C64C07E96
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:17:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3074461C24
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0010161A0F
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 15:17:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbhGFPPe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 11:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S232645AbhGFPUC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 11:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbhGFPPc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 11:15:32 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA6EC0613E6;
-        Tue,  6 Jul 2021 06:57:00 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id w127so24569941oig.12;
-        Tue, 06 Jul 2021 06:57:00 -0700 (PDT)
+        with ESMTP id S232632AbhGFPUB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 11:20:01 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F6CC0613E0;
+        Tue,  6 Jul 2021 08:17:23 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id l26so22298467oic.7;
+        Tue, 06 Jul 2021 08:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=P8uEMl95CcElB/VMdkCpxQdT/gNuuy9S+LwKiPgsqZY=;
-        b=JnNq6A1PzKrmVm04br5T+cm8I9KY4qBZPOkNrk9HUTPLW1TQXae287oX0gIMl2b7Aj
-         j5wgUydF+bW5O7Q3fktCfPQrM0ECZiLgktOTRS5J3yNaQET4mHFVw9+E/CJpJ3n1GuLb
-         pFwHGCkhVD6KMOsgTpUXYxoPcq2TS5uuW5uZO0YwtBvNUFkl9qR2cCHxd1ayML8jGo48
-         1suYx40m2Rf0rfmLTlPH5BjJKoplC6HETWN+YaD2M5oCVvMdIRoYvltAu1gVnLSTxv6k
-         4GQaE7IYqIo5B2rqHhACt9LSw9MjCsOc42qikKf4r988dlw+Yb7v89C8bFKoJ42a/tOw
-         uLgQ==
+        bh=FwaqWZ2gM7ETfNHaJFAqbQre0tedwT8ScYbGRh8Cbj8=;
+        b=po09UcPqPUGTT3Ljzu6EyVVa2dGi0koL5gBUA7/Udu8Q8QUVocjo+71HHAr2UJVdoe
+         +/XySKVgn+quf+PcI5LZe6PDb4PC1nj6ObHgZDxeYDK99/vRpJDEhXxCqpsyKezGuOh2
+         SiTmIylHMow5BpLR/9fFJSFJEnBjkgjlW4fOQXYbslvJR5yTd6QMLSkIUYlv6Oin0JiL
+         UpBTfsTJNcUtwp8W1vZw3u76+oD5dvV4bZoN6Du3Sy/S0Hh0DIHr7eXg6dRxzy9+I65D
+         MGQAh71shEDxseAHis676rpRCIT1Ys9hx7vTdSo6KpQw0LREFFNsRZBwFi646wfzDCKm
+         1tyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=P8uEMl95CcElB/VMdkCpxQdT/gNuuy9S+LwKiPgsqZY=;
-        b=ZhQNBoe1OSQ0KPXwN5nvPViJStNYl3OSuq3tMzR5apOUadSUdsstaXZJLjqUjcUZ/F
-         EoORiDCFSkhtnK7w8uJQV5NNQWddb1cFjhIZXQ2DhpjejBjbHfXTWBYPmtRO1rYKZgYX
-         2YS6MdnndJOvsmkp9WXuGRy5c0faJ+IQ5USQKn5vEX0hkrDl1fg8I3Z0zS2EYw9dkURD
-         AxFeTcFZtK3UR/fQiGTwK3u8Eri9In8zEpg9dCmSwmtoG3BppT7nq+HRrpMvN1Obzwv4
-         G0RR0nnd+Ys8myWd5PTo52nxnb2zvt2RkKBdgre/CXtqNc6DsMspDTQ8BF2uCXurDTIJ
-         RzpA==
-X-Gm-Message-State: AOAM5337Hw3gRYj8sl4l/9NRBnas1zxitZvjC7as69xexmue+VTZp0NO
-        2dbYHvlA88TlLxJnWuKm2tIoHoabMhq9dBzKO8uCUNybu5ljRA==
-X-Google-Smtp-Source: ABdhPJwkExmHGJOJByLgza0xDf2376NCdcPCGetUEbvBprZgERi3BWg3OcXrM2D0nNnQMkdKxEFEevgjnQXUmb/8m1o=
-X-Received: by 2002:aca:5843:: with SMTP id m64mr529242oib.130.1625579163840;
- Tue, 06 Jul 2021 06:46:03 -0700 (PDT)
+        bh=FwaqWZ2gM7ETfNHaJFAqbQre0tedwT8ScYbGRh8Cbj8=;
+        b=Qt5R6i2i91bhsM8ryeIZRqxScslrPs8W4PZgY2PvXN65fyv1g3slGOvsq29tcLH5sA
+         cAZ2z3D6GxEE6mRfdXux876+Kr8vmZhsHRt0aYvDvIfedN3HzB6FdpK7XC7mrP2G/RLE
+         rg0wlOQWM04QztIJYaRCp4GMv43UGTgSZdiJq1qqJFyLykVdF8Nzew8co5IeAq0gsL2Z
+         VF5Z9Aijmc8/ccPilIA8LhJdUSEMgLhu7dyTZE8p70Yb1ANg+ecFCunwhi2d+p4qaGC7
+         rDGp0CXYsLKaTogXic0nE88x8pheECjJ9muLHQXYbgR08+dLpCQ7IklnNqzeAZQZv/EQ
+         yeuw==
+X-Gm-Message-State: AOAM532Yeep4iahVCTIgaoXVZm4J52nxr7Y3Uc7ET7DU3E2kwtLyBrFB
+        /bp6pz5GpGE/dNYFLcisn3qbIPTbA5qvrOs7ob4=
+X-Google-Smtp-Source: ABdhPJymL0sA+uyY2bY0Taf/qcTN+2FeV8VkDm0yVBABAYSlAHE/SPKfz1qUNtsLf6yjsu/TmxVUzJfvXQAW7RQ/wrA=
+X-Received: by 2002:aca:3904:: with SMTP id g4mr790145oia.129.1625584642630;
+ Tue, 06 Jul 2021 08:17:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210705130314.11519-1-ogabbay@kernel.org> <YOQXBWpo3whVjOyh@phenom.ffwll.local>
- <20210706122110.GA18273@lst.de> <YORLTmyoXDtoM9Ta@phenom.ffwll.local>
- <CAFCwf114KEH-kO6w+nmbqKKdaGuqy3iOpHJi=5ZWqT3cgDm4Cw@mail.gmail.com> <CAKMK7uHfCbNQJwbXgLC9ibk71kVG7TBK4bfFxzX82ziSgqG9nw@mail.gmail.com>
-In-Reply-To: <CAKMK7uHfCbNQJwbXgLC9ibk71kVG7TBK4bfFxzX82ziSgqG9nw@mail.gmail.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Tue, 6 Jul 2021 16:45:36 +0300
-Message-ID: <CAFCwf12DJbk-CYJeRc3E5RCu+++ghO=9xwRo7vy=8VhH+z3bHA@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] [PATCH v4 0/2] Add p2p via dmabuf to habanalabs
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Christoph Hellwig <hch@lst.de>, Oded Gabbay <ogabbay@kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
+References: <20210519143011.1175546-1-acourbot@chromium.org>
+ <20210519143011.1175546-6-acourbot@chromium.org> <9b37044d-f909-9169-3d22-fa6c5f788822@collabora.com>
+ <CAPBb6MV35sJ-LY8w-nhpnndRHtJXapSN63xFzUiAbYQFLvm1dQ@mail.gmail.com>
+In-Reply-To: <CAPBb6MV35sJ-LY8w-nhpnndRHtJXapSN63xFzUiAbYQFLvm1dQ@mail.gmail.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Tue, 6 Jul 2021 17:17:10 +0200
+Message-ID: <CAFqH_50PAEzH5_LT+aQusGUos7BGYATjx1qYVq2O5UYYkkNW2A@mail.gmail.com>
+Subject: Re: [PATCH v5 05/14] media: mtk-vcodec: venc: support START and STOP commands
+To:     Alexandre Courbot <acourbot@chromium.org>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Doug Ledford <dledford@redhat.com>,
-        Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 4:17 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+Hi Dafna and Alex,
+
+Now in text format, sorry for the noise.
+
+Missatge de Alexandre Courbot <acourbot@chromium.org> del dia dl., 5
+de jul. 2021 a les 7:05:
 >
-> On Tue, Jul 6, 2021 at 2:46 PM Oded Gabbay <oded.gabbay@gmail.com> wrote:
-> >
-> > On Tue, Jul 6, 2021 at 3:23 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Tue, Jul 06, 2021 at 02:21:10PM +0200, Christoph Hellwig wrote:
-> > > > On Tue, Jul 06, 2021 at 10:40:37AM +0200, Daniel Vetter wrote:
-> > > > > > Greg, I hope this will be good enough for you to merge this code.
-> > > > >
-> > > > > So we're officially going to use dri-devel for technical details review
-> > > > > and then Greg for merging so we don't have to deal with other merge
-> > > > > criteria dri-devel folks have?
-> > > > >
-> > > > > I don't expect anything less by now, but it does make the original claim
-> > > > > that drivers/misc will not step all over accelerators folks a complete
-> > > > > farce under the totally-not-a-gpu banner.
-> > > > >
-> > > > > This essentially means that for any other accelerator stack that doesn't
-> > > > > fit the dri-devel merge criteria, even if it's acting like a gpu and uses
-> > > > > other gpu driver stuff, you can just send it to Greg and it's good to go.
-> > > > >
-> > > > > There's quite a lot of these floating around actually (and many do have
-> > > > > semi-open runtimes, like habanalabs have now too, just not open enough to
-> > > > > be actually useful). It's going to be absolutely lovely having to explain
-> > > > > to these companies in background chats why habanalabs gets away with their
-> > > > > stack and they don't.
-> > > >
-> > > > FYI, I fully agree with Daniel here.  Habanlabs needs to open up their
-> > > > runtime if they want to push any additional feature in the kernel.
-> > > > The current situation is not sustainable.
-> > Well, that's like, your opinion...
-> >
-> > >
-> > > Before anyone replies: The runtime is open, the compiler is still closed.
-> > > This has become the new default for accel driver submissions, I think
-> > > mostly because all the interesting bits for non-3d accelerators are in the
-> > > accel ISA, and no longer in the runtime. So vendors are fairly happy to
-> > > throw in the runtime as a freebie.
-> > >
-> > > It's still incomplete, and it's still useless if you want to actually hack
-> > > on the driver stack.
-> > > -Daniel
-> > > --
-> > I don't understand what's not sustainable here.
-> >
-> > There is zero code inside the driver that communicates or interacts
-> > with our TPC code (TPC is the Tensor Processing Core).
-> > Even submitting works to the TPC is done via a generic queue
-> > interface. And that queue IP is common between all our engines
-> > (TPC/DMA/NIC). The driver provides all the specs of that queue IP,
-> > because the driver's code is handling that queue. But why is the TPC
-> > compiler code even relevant here ?
+> Hi Dafna, sorry for (again) taking so long to come back to this! >_<
 >
-> Can I use the hw how it's intended to be used without it?
-You can use the h/w with the userspace stack we are providing in our
-github repos + website.
-Part of the userspace stack is open sourced, part is closed source.
-And I'm actively working on opening up more stuff as we go along.
+> On Fri, May 28, 2021 at 4:03 PM Dafna Hirschfeld
+> <dafna.hirschfeld@collabora.com> wrote:
+> >
+> > Hi,
+> >
+> > I applied this patchset and tested the stateful encoder on debian with the command:
+> >
+> > [gst-master] root@debian:~/gst-build# gst-launch-1.0 filesrc location=images/jelly-800-640.YU12 ! rawvideoparse width=800 height=640 format=i420 ! videoconvert ! v4l2h264enc ! h264parse ! mp4mux ! filesink location=jelly-800-640.mp4
+> >
+> > I get:
+> >
+> > Setting pipeline[   79.703879] [MTK_V4L2] level=0 fops_vcodec_open(),190: encoder capability 10000000
+> >   to PAUSED ...
+> > Pipeline is PREROLLING ...
+> > Redistribute latency...
+> > [   80.621076] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.631232] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.640878] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.650766] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.660430] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.670194] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.680967] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.691376] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.701718] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.712106] mtk-iommu 10205000.iommu: Partial TLB flush timed out, falling back to full flush
+> > [   80.722272] [MTK_V4L2] level=0 mtk_venc_set_param(),371: fmt 0x3, P/L 0/0, w/h 800/640, buf 800/640, fps/bps 25/4000000, gop 0, i_period 0
+> > Pipeline is PREROLLED ...
+> > Setting pipeline to PLAYING ...
+> > New clock: GstSystemClock
+> > [   81.918747] [MTK_V4L2][ERROR] mtk_vcodec_wait_for_done_ctx:32: [3] ctx->type=1, cmd=1, wait_event_interruptible_timeout time=1000ms out 0 0!
+> > [   81.931392] [MTK_VCODEC][ERROR][3]: h264_encode_frame() irq_status=0 failed
+> > [   81.938470] [MTK_V4L2][ERROR] mtk_venc_worker:1219: venc_if_encode failed=-5
+> > [   82.974746] [MTK_V4L2][ERROR] mtk_vcodec_wait_for_done_ctx:32: [3] ctx->type=1, cmd=1, wait_event_interruptible_timeout time=1000ms out 0 0!
+> > [   82.987392] [MTK_VCODEC][ERROR][3]: h264_encode_frame() irq_status=0 failed
+> > [   82.994471] [MTK_V4L2][ERROR] mtk_venc_worker:1219: venc_if_encode failed=-5
+> > [  104.163977] cros-ec-dev cros-ec-dev.2.auto: Some logs may have been dropped...
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > 0:00:00.4 / 99:99:99.
+> > ^Chandling interrupt.
+> >
+> > And then the streaming hangs. The same error happens without this patchset, but without
+> > this patchset the statful encoder does not support V4L2_ENC_CMD_STOP/START needed by the spec.
+> > I am not sure what cause the error and wether those mtk-iommu erros has to do with that. The issue
+> > could also come from the mtk-vpu used by the encoder.
+> > Do you have any idea where this can come from?
+>
+> Mmm, this looks like the firmware is unhappy about something and
+> hangs. I wonder if the IOMMU messages above could not be linked to
+> that, I remember seeing similar problems when the buffers were not
+> properly synced on the device side.
+>
+> I'll try and see if I can deploy gstreamer on the old MT8173
+> Chromebook I am using to see if I have more success here, but no
+> guarantee I can test in the same conditions as you unfortunately. :/
+>
+> The MTK folks are the most qualified to look into this issue though.
+> Yunfei, do you have any idea about why this is happening?
+>
+
+Pending to test with the Dafna's environment. but looks like this
+draft fix [1] (already under discussion in gerrit) needs to be applied
+to mainline in order to have vcodec working. At least I am able to use
+it now.
+
+See https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2251840
+
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c
+b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+index c8a56271b259..af71fcf6fbae 100644
+--- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
++++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+@@ -316,6 +316,7 @@ int vpu_ipi_send(struct platform_device *pdev,
+ {
+        struct mtk_vpu *vpu = platform_get_drvdata(pdev);
+        struct share_obj __iomem *send_obj = vpu->send_buf;
++       unsigned char data[SHARE_BUF_SIZE];
+        unsigned long timeout;
+        int ret = 0;
+
+@@ -349,7 +350,10 @@ int vpu_ipi_send(struct platform_device *pdev,
+                }
+        } while (vpu_cfg_readl(vpu, HOST_TO_VPU));
+
+-       memcpy_toio(send_obj->share_buf, buf, len);
++       //memcpy_toio(send_obj->share_buf, buf, len);
++       memset(data, 0, sizeof(data));
++       memcpy(data, buf, len);
++       memcpy_toio(send_obj->share_buf, data, sizeof(data));
+        writel(len, &send_obj->len);
+        writel(id, &send_obj->id);
+
+Thanks,
+  Enric
+
+
 
 >
-> If the answer is no, then essentially what you're doing with your
-> upstream driver is getting all the benefits of an upstream driver,
-> while upstream gets nothing. We can't use your stack, not as-is. Sure
-> we can use the queue, but we can't actually submit anything
-> interesting. And I'm pretty sure the point of your hw is to do more
-> than submit no-op packets to a queue.
->
-> This is all "I want my cake and eat it too" approach to upstreaming,
-> and it's totally fine attitude to have, but if you don't see why
-> there's maybe an different side to it then I don't get what you're
-> arguing. Upstream isn't free lunch for nothing.
->
-> Frankly I'm starting to assume you're arguing this all in bad faith
-> just because habanalabds doesn't want to actually have an open driver
-> stack, so any attack is good, no matter what. Which is also what
-> everyone else does who submits their accel driver to upstream, and
-> which gets us back to the starting point of this sub-thread of me
-> really appreciation how this will improve background discussions going
-> forward for everyone.
->
-> Like if the requirement for accel drivers truly is that you can submit
-> a dummy command to the queues then I have about 5-10 drivers at least
-> I could merge instantly. For something like the intel gpu driver it
-> would be about 50 lines of code (including all the structure boiler
-> plate the ioctls require)in userspace to submit a dummy queue command.
-> GPU and accel vendors would really love that, because it would allow
-> them to freeload on upstream and do essentially nothing in return.
->
-> And we'd end up with an unmaintainable disaster of a gpu or well
-> accelerator subsystem because there's nothing you can change or
-> improve because all the really useful bits of the stack are closed.
-> And ofc that's not any companies problem anymore, so ofc you with the
-> habanalabs hat on don't care and call this *extreme*.
->
-> > btw, you can today see our TPC code at
-> > https://github.com/HabanaAI/Habana_Custom_Kernel
-> > There is a link there to the TPC user guide and link to download the
-> > LLVM compiler.
->
-> I got stuck clicking links before I found the source for that llvm
-> compiler. Can you give me a direct link to the repo with sourcecode
-> instead please?
-The source code for the LLVM compiler is not available yet. That's one
-of the parts I'm working on getting in the open.
-Having said that, I don't think (and I'm not alone at this) that this
-should be a pre-requirement for upstreaming kernel drivers of any
-type.
-And we had this discussion in the past, I'm sure we are both tired of
-repeating ourselves.
-
->
-> Thanks, Daniel
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
