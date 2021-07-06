@@ -2,104 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63781C07E9E
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 12:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD8EC11F66
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 12:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C31061C88
-	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 12:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E14261C88
+	for <linux-media@archiver.kernel.org>; Tue,  6 Jul 2021 12:46:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240815AbhGFMsl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Jul 2021 08:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S240820AbhGFMsm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Jul 2021 08:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238472AbhGFMsk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 08:48:40 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A475C05BD38
-        for <linux-media@vger.kernel.org>; Tue,  6 Jul 2021 05:41:08 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id j16-20020a05600c1c10b0290204b096b0caso2164048wms.1
-        for <linux-media@vger.kernel.org>; Tue, 06 Jul 2021 05:41:08 -0700 (PDT)
+        with ESMTP id S240114AbhGFMsl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Jul 2021 08:48:41 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D31C0225A6
+        for <linux-media@vger.kernel.org>; Tue,  6 Jul 2021 05:41:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id n9so8573367wrs.13
+        for <linux-media@vger.kernel.org>; Tue, 06 Jul 2021 05:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZnlHLNnJd5GU0c7sfvbRXRKe3J+7AIP690BFavXKv1w=;
-        b=Tgdihnyrz7EvhoXM7zBn/7wdjxTn+9+TZAnba00UOq7jgBqH6P/RLawu3OCcSSkS5r
-         uT3uVAay9MiFXblkJgnjCsSyVvtuMpADlgH6oG1B02sTNA2s2UMFXxoWHKlJZknNk6Hp
-         cAb3kKvRh/tgoiFtFBf09SjMGCwyD9QmHby5qIf+TgbD2EWZlvb2wCV1WfJIr+zJ4jDu
-         a2x68i1M5MHokjcsbpqiMQQ5R1kYLQQP/dOilQdz6FBptzuHgnekoyaCWgVd9HCuBG80
-         Mw+snaA+Gosk9GobmtcCGtOP2IbKgiZQFx7cDhQ95ZEx/jUyaEO872DCzVvJcqgXA4yB
-         s5bA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iQ3yOn/VjqEGKTdI++jjchtNRpo4xx2SRNzVvDxUg3A=;
+        b=NkKdOFgL/b5cHNIFxbGHFGF/hyb+j3sLHFwCNN/eZlDyMXf/e/BCK6o88C2Fc7Jh9G
+         UWBUXL4BheLJhdJmlYaVr+Ld0BoZsfvHAO+BX8xkA4MjNFR01MNSMNiY0IE/DoHwo+wW
+         T6tDIO7ApOlpR35YKGOMzmNHsF6ojw49fInCnUIMmgxUkLNmtSlXG0IP5aE4TEfjs7w1
+         BUVF+KRfB63HPmLB5y+MrPBtoJ7Qi8l5QrC0jMJMp1bVT7AS6kjnxiLJCom0GEGW24x+
+         NRQDUu2Cxv5yg4VJxAhOlz48yab5eEFjQsOwD+GL0AwwtSDD+BsUh2ba4NFvodtLDAoo
+         HOxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZnlHLNnJd5GU0c7sfvbRXRKe3J+7AIP690BFavXKv1w=;
-        b=kABs5hvltlfEbXoGRMPR9g5idXkH88MoY+IyjGYbLs2TV9L7J+xsmuTw2Up+M1e3hn
-         WTNJxHCaRkmZprnFicqyLkG6JPqTZhOlh4GwDsEin7Fx+yJ61ZF9KJh0GsyqlOVyPowU
-         jFwJNrQSi75I8CQBPvF+gJzJdyXpLiiyFSSX6k4c1PiFswv+7dWi17SAE3BJ4VsaYMqC
-         SDTyX0tRj4V8GChgt7SS8XnmAkR7IseXMrw7KfNiOR6VaPt0i/F3/QBf/XbCKOcZBnt8
-         Y1rGSUBqh/sttT6FV7U9+QvX1iKEGtMm9EA2H9P3JQHcob4Sfcd5iAW15ONG5oxK/hOt
-         Q8ng==
-X-Gm-Message-State: AOAM530iklzkn7sRd6MOr1Z3yoPzAWWg8hrzDM7uxReK+kRv9JYZzCcG
-        MRBSYkdY78XjNEJ9yZuoSJyBKaB48LvXKw==
-X-Google-Smtp-Source: ABdhPJzWRZPLxPm5pkjpVSedfMNIICVpLIX53ZmQsrzAHGeoZVifZhAkmLeC18AjdSgx43eqXYMCPw==
-X-Received: by 2002:a05:600c:a45:: with SMTP id c5mr442364wmq.153.1625575266517;
-        Tue, 06 Jul 2021 05:41:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iQ3yOn/VjqEGKTdI++jjchtNRpo4xx2SRNzVvDxUg3A=;
+        b=LkKDLs2cGb86yDZ/QqD7Lc1fb3gcKcNtIU8SaVaXr0lwIVNTO/XepVZTvZ0gS2R+VJ
+         4jEEtHrxiFZM7zfa+63TUTQPi9Aq7QVeH/JB2zn2DBFOWF6CHOT4vh4uv+RB7k773+bD
+         9HitSwW/Tv7asxVOjUDGDh9SFri6Op1ksoe2Ycr2xVkU7kAPzzsnDNS0tTVNlUBLDRqK
+         G0J5i0v4TUCzaXbwvm6gcncK603z4ZEm9a20sT+Dif/YZlEYaMBGECNph10/Nn1ieLmN
+         OwM63ocfDlHs8TsiE4ph+TEwJHiiKgZ5D1gJqjgePGlxbIDAemEHYuAKBh24Du0plGEu
+         YY8g==
+X-Gm-Message-State: AOAM531fN/qj354e/LM41JjPPq0S6ZV/5UA2QwZVOlhDLPfbA8ZD2mh9
+        pKU2u9MFKn9hK3y62QGA67BRXAs0KHv5uQ==
+X-Google-Smtp-Source: ABdhPJy++XUxB7OhDLu0uCfjmQhtluIZGVNcY/UIg91uyEcaL+ImrvqcUrTsPv/AyLsfxLPEL78b6g==
+X-Received: by 2002:a05:6000:18a7:: with SMTP id b7mr21762185wri.348.1625575269997;
+        Tue, 06 Jul 2021 05:41:09 -0700 (PDT)
 Received: from localhost.localdomain (hst-221-27.medicom.bg. [84.238.221.27])
-        by smtp.gmail.com with ESMTPSA id n18sm2585979wms.3.2021.07.06.05.41.05
+        by smtp.gmail.com with ESMTPSA id n18sm2585979wms.3.2021.07.06.05.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 05:41:06 -0700 (PDT)
+        Tue, 06 Jul 2021 05:41:09 -0700 (PDT)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-api@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 0/5] Qualcomm custom compressed pixfmt
-Date:   Tue,  6 Jul 2021 15:40:29 +0300
-Message-Id: <20210706124034.773503-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 4/5] venus: hfi_platform: Correct supported compressed format
+Date:   Tue,  6 Jul 2021 15:40:33 +0300
+Message-Id: <20210706124034.773503-5-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210706124034.773503-1-stanimir.varbanov@linaro.org>
+References: <20210706124034.773503-1-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+In multistream mode HFI supports TP10_UBWC on output2. Correct this
+in supported formats capabilities list.
 
-Changes since v1:
- * rename QC8C to QC08C
- * rewrite the documentation part
- * handle correctly QC10C compressed format in the driver
- * correct compressed 10-bit formats for Venus v4 and v6
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/hfi_platform_v4.c | 4 ++--
+ drivers/media/platform/qcom/venus/hfi_platform_v6.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Stan
-
-v1: https://patchwork.linuxtv.org/project/linux-media/list/?series=5331
-
-Stanimir Varbanov (5):
-  v4l: Add Qualcomm custom compressed pixel formats
-  venus: helpers: Add helper to check supported pixel formats
-  venus: Add a handling of QC08C compressed format
-  venus: hfi_platform: Correct supported compressed format
-  venus: Add a handling of QC10C compressed format
-
- .../media/v4l/pixfmt-reserved.rst             | 18 +++++++
- drivers/media/platform/qcom/venus/helpers.c   | 48 +++++++++++--------
- drivers/media/platform/qcom/venus/helpers.h   |  1 +
- .../platform/qcom/venus/hfi_platform_v4.c     |  4 +-
- .../platform/qcom/venus/hfi_platform_v6.c     |  4 +-
- drivers/media/platform/qcom/venus/vdec.c      | 31 ++++++++++--
- drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
- include/uapi/linux/videodev2.h                |  2 +
- 8 files changed, 82 insertions(+), 28 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform_v4.c b/drivers/media/platform/qcom/venus/hfi_platform_v4.c
+index 3f7f5277a50e..e3f0a90a567b 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform_v4.c
++++ b/drivers/media/platform/qcom/venus/hfi_platform_v4.c
+@@ -55,7 +55,7 @@ static const struct hfi_plat_caps caps[] = {
+ 	.fmts[3] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV12},
+ 	.fmts[4] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV21},
+ 	.fmts[5] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_P010},
+-	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10},
++	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10_UBWC},
+ 	.num_fmts = 7,
+ }, {
+ 	.codec = HFI_VIDEO_CODEC_VP8,
+@@ -106,7 +106,7 @@ static const struct hfi_plat_caps caps[] = {
+ 	.fmts[3] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV12},
+ 	.fmts[4] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV21},
+ 	.fmts[5] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_P010},
+-	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10},
++	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10_UBWC},
+ 	.num_fmts = 7,
+ }, {
+ 	.codec = HFI_VIDEO_CODEC_MPEG2,
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform_v6.c b/drivers/media/platform/qcom/venus/hfi_platform_v6.c
+index d8243b22568a..d98caa6f1011 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform_v6.c
++++ b/drivers/media/platform/qcom/venus/hfi_platform_v6.c
+@@ -55,7 +55,7 @@ static const struct hfi_plat_caps caps[] = {
+ 	.fmts[3] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV12},
+ 	.fmts[4] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV21},
+ 	.fmts[5] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_P010},
+-	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10},
++	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10_UBWC},
+ 	.num_fmts = 7,
+ }, {
+ 	.codec = HFI_VIDEO_CODEC_VP8,
+@@ -106,7 +106,7 @@ static const struct hfi_plat_caps caps[] = {
+ 	.fmts[3] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV12},
+ 	.fmts[4] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_NV21},
+ 	.fmts[5] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_P010},
+-	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10},
++	.fmts[6] = {HFI_BUFFER_OUTPUT2, HFI_COLOR_FORMAT_YUV420_TP10_UBWC},
+ 	.num_fmts = 7,
+ }, {
+ 	.codec = HFI_VIDEO_CODEC_MPEG2,
 -- 
 2.25.1
 
