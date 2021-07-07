@@ -2,208 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 052E1C07E9E
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jul 2021 06:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1865EC07E95
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jul 2021 06:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E61C461CA2
-	for <linux-media@archiver.kernel.org>; Wed,  7 Jul 2021 06:24:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F30FB61CAA
+	for <linux-media@archiver.kernel.org>; Wed,  7 Jul 2021 06:38:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbhGGG0w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Jul 2021 02:26:52 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:50170 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230361AbhGGGZN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jul 2021 02:25:13 -0400
-X-UUID: d2fb3d9ebc4648e09ad8d3b63f2931ad-20210707
-X-UUID: d2fb3d9ebc4648e09ad8d3b63f2931ad-20210707
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1723803847; Wed, 07 Jul 2021 14:22:25 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 7 Jul 2021 14:22:18 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 7 Jul 2021 14:22:17 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1, 02/14] media: mtk-vcodec: Refactor vcodec pm interface
-Date:   Wed, 7 Jul 2021 14:21:45 +0800
-Message-ID: <20210707062157.21176-3-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210707062157.21176-1-yunfei.dong@mediatek.com>
-References: <20210707062157.21176-1-yunfei.dong@mediatek.com>
+        id S230297AbhGGGlO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Jul 2021 02:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhGGGlO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Jul 2021 02:41:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458F7C061574;
+        Tue,  6 Jul 2021 23:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bc4Z0xsNZ+Qib25Sb0XowG/YW6Uaak0wMUKXosyWUSc=; b=VVAbl5BoRPxb4NyG3wYR3XHH84
+        js9nmtGeUMcyPETf1DqawXv1d9riVJBY1fKovhK9jXHYOkoRU4ebXu2jZqmjDu4lgqPaNs6SeR+/A
+        z/JhLRTrred07bqtmWNcnS8f/5j7C3EjJEcMx5h7FExrcrnLAPbjl2VdNCvCdAo39ZN8pUbNAGreq
+        LdwCiPCOxZIEHZbWI+ymmJePW+BTJLid0hqmr6SZg3++ZLTT9J8W2j046jvY8x9+A/jecwIyUFsiO
+        s3fD6fbV9D0xXdz7WZGGIWJKtRNk1PRZpabt8RJKou7JgZxNddHi8/fhTmYa8ftIgMYxZ3dcGlwJB
+        +FpEkujQ==;
+Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m11CH-00C7za-Sn; Wed, 07 Jul 2021 06:38:19 +0000
+Date:   Wed, 7 Jul 2021 07:38:13 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        ??rjan Eide <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Mel Gorman <mgorman@suse.de>,
+        linux-mm@kvack.org
+Subject: page pools, was Re: [PATCH v9 1/5] drm: Add a sharable drm page-pool
+ implementation
+Message-ID: <YOVL1f4m+8ly9fyM@infradead.org>
+References: <20210630013421.735092-1-john.stultz@linaro.org>
+ <20210630013421.735092-2-john.stultz@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210630013421.735092-2-john.stultz@linaro.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Using the needed param for pm init/release function and remove unused
-param mtkdev in 'struct mtk_vcodec_pm'.
+On Wed, Jun 30, 2021 at 01:34:17AM +0000, John Stultz wrote:
+> This adds a shrinker controlled page pool, extracted
+> out of the ttm_pool logic, and abstracted out a bit
+> so it can be used by other non-ttm drivers.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  6 ++---
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 22 ++++++++-----------
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |  5 +++--
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  1 -
- .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   |  1 -
- 5 files changed, 15 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index d3f34cd04759..8d7ba881ef75 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -257,7 +257,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	if (IS_ERR(dev->fw_handler))
- 		return PTR_ERR(dev->fw_handler);
- 
--	ret = mtk_vcodec_init_dec_pm(dev);
-+	ret = mtk_vcodec_init_dec_pm(dev->plat_dev, &dev->pm);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to get mt vcodec clock source");
- 		goto err_dec_pm;
-@@ -387,7 +387,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- err_dec_alloc:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- err_res:
--	mtk_vcodec_release_dec_pm(dev);
-+	mtk_vcodec_release_dec_pm(&dev->pm);
- err_dec_pm:
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return ret;
-@@ -430,7 +430,7 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
- 		video_unregister_device(dev->vfd_dec);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
--	mtk_vcodec_release_dec_pm(dev);
-+	mtk_vcodec_release_dec_pm(&dev->pm);
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return 0;
- }
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-index 6038db96f71c..20bd157a855c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-@@ -13,18 +13,15 @@
- #include "mtk_vcodec_dec_pm.h"
- #include "mtk_vcodec_util.h"
- 
--int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
-+int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
-+	struct mtk_vcodec_pm *pm)
- {
- 	struct device_node *node;
--	struct platform_device *pdev;
--	struct mtk_vcodec_pm *pm;
-+	struct platform_device *larb_pdev;
- 	struct mtk_vcodec_clk *dec_clk;
- 	struct mtk_vcodec_clk_info *clk_info;
- 	int i = 0, ret = 0;
- 
--	pdev = mtkdev->plat_dev;
--	pm = &mtkdev->pm;
--	pm->mtkdev = mtkdev;
- 	dec_clk = &pm->vdec_clk;
- 	node = of_parse_phandle(pdev->dev.of_node, "mediatek,larb", 0);
- 	if (!node) {
-@@ -32,13 +29,12 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- 		return -1;
- 	}
- 
--	pdev = of_find_device_by_node(node);
-+	larb_pdev = of_find_device_by_node(node);
- 	of_node_put(node);
--	if (WARN_ON(!pdev)) {
-+	if (WARN_ON(!larb_pdev)) {
- 		return -1;
- 	}
--	pm->larbvdec = &pdev->dev;
--	pdev = mtkdev->plat_dev;
-+	pm->larbvdec = &larb_pdev->dev;
- 	pm->dev = &pdev->dev;
- 
- 	dec_clk->clk_num =
-@@ -82,10 +78,10 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- 	return ret;
- }
- 
--void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
-+void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
- {
--	pm_runtime_disable(dev->pm.dev);
--	put_device(dev->pm.larbvdec);
-+	pm_runtime_disable(pm->dev);
-+	put_device(pm->larbvdec);
- }
- 
- int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-index 280aeaefdb65..a3df6aef6cb9 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
-@@ -9,8 +9,9 @@
- 
- #include "mtk_vcodec_drv.h"
- 
--int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
--void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
-+	struct mtk_vcodec_pm *pm);
-+void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm);
- 
- int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index d4f840a7bbcb..19296fd41c31 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -195,7 +195,6 @@ struct mtk_vcodec_pm {
- 	struct mtk_vcodec_clk	venc_clk;
- 	struct device	*larbvenc;
- 	struct device	*dev;
--	struct mtk_vcodec_dev	*mtkdev;
- };
- 
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-index 1b2e4930ed27..0c8c8f86788c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-@@ -26,7 +26,6 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
- 	pdev = mtkdev->plat_dev;
- 	pm = &mtkdev->pm;
- 	memset(pm, 0, sizeof(struct mtk_vcodec_pm));
--	pm->mtkdev = mtkdev;
- 	pm->dev = &pdev->dev;
- 	dev = &pdev->dev;
- 	enc_clk = &pm->venc_clk;
--- 
-2.18.0
-
+Can you explain in detail why you need a differnt page pool over the one
+maintained by the page allocator?  Fragmenting the memory into all kinds
+of pools has lots of downsides, so the upsides need to be explained in
+detail.
