@@ -2,291 +2,369 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85DC9C07E99
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 15:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99546C07E96
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 65FC861493
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 15:46:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8747E61920
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbhGHPti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Jul 2021 11:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S229795AbhGHRkz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Jul 2021 13:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbhGHPtf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jul 2021 11:49:35 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EA9C06175F
-        for <linux-media@vger.kernel.org>; Thu,  8 Jul 2021 08:46:52 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id n14so17031455lfu.8
-        for <linux-media@vger.kernel.org>; Thu, 08 Jul 2021 08:46:52 -0700 (PDT)
+        with ESMTP id S229650AbhGHRky (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jul 2021 13:40:54 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAE0C061574
+        for <linux-media@vger.kernel.org>; Thu,  8 Jul 2021 10:38:12 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id f9so2862143wrq.11
+        for <linux-media@vger.kernel.org>; Thu, 08 Jul 2021 10:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TD8Smt1bXWAJ7MMJq+svsfAjl057mvEFrd7U4Uaqb+4=;
-        b=zvRA6A7C1CG1aPTKXwxdfxoSLUC1vszrgFrP/qa515sNWs2nE1Eb6xVKjWRs9Whvql
-         Xo2o1LPgnTdxhJNXxMk2yREqfURrMsFSubM3zo+dGzEfuqGFL56IgKUi9z9P996IueyZ
-         p+wPG2DSq/tFizlDMgTrl22WCyOcWdmT5FS8ZNeLVoA+MGtztrc3s9zNvgB/meuSWn76
-         xXs1u6Lhj+Uvleu/NofA1ag6tXDR36DgmX1hHKai8xrVoFrndN5Pw+p7Gq7Cu95xouLC
-         DJf5ZDaUb2kNbd2QFAQRW88EUFrEql7zXCAZ2VP2O5wZ31WOfpKvKQdGA8wH825n4RbH
-         j4zw==
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6BU0hbbARRWppYffO9U0YO5ajiPUOHOT/nRCLYKYZXQ=;
+        b=kr6ZcMmVDAflvEIUeFnswWB6ZiIkPVa9z9/fI0obC8Vb7Pvopx5YS5WJZv4bdsq/oW
+         mr4fL2pW/582V40IZxBd9PE34PFCk+il+cZxaEgWH/cz9pqjeUDY2JxD38dbImpgy4Zo
+         mJFuuypwHTPEUoZ4wTD1efLmhYU+C3NlBt/J0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=TD8Smt1bXWAJ7MMJq+svsfAjl057mvEFrd7U4Uaqb+4=;
-        b=uOZ740Sbn4173zLhMLpFeZK6sMTHgbr0xH4yh7bvbP311zvkG6XyXs5Jm9s4CNkc98
-         h13CSyI7fxaaz7lzjHhnABKg+IwtODVD3DgRekJmdKJm7v0qK0t5UYEQx3YweLUvhZnF
-         RBzrUSknDNlp8FhvBDnascfmTVsKnHOAcyRWeF9xJ3f2hGEvM6VvSgtF0XbGC0ZBTUXF
-         iq+fEXjBUx/LUT92FGl5jElMx79XipvmPoe9HqnuFv2LJ4/3DkOvSGSMuiPWTSw6XCVn
-         ZBjiO6N8WixYhsYaufmqETmk8CLy6xgg6rthu6dhOfcxj01SfIyaPX0EwD86ciwl0jux
-         7xmA==
-X-Gm-Message-State: AOAM5339UOrCtLQPQ9R9OmIgolLOdRKDeTP/qAoOHCjQ/rPkjgJufaO2
-        hSvynQv6Ef/0rZcm4md3KBd54Q==
-X-Google-Smtp-Source: ABdhPJw5YpEHXPgniVFiQCVAq8WVBxRpDZg+J0gslyaMPxKOyNcYVbyOmA9jGDYAsM7RlBrIA5NimQ==
-X-Received: by 2002:a05:6512:15a2:: with SMTP id bp34mr23897999lfb.40.1625759210804;
-        Thu, 08 Jul 2021 08:46:50 -0700 (PDT)
-Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
-        by smtp.gmail.com with ESMTPSA id x14sm246457lfg.220.2021.07.08.08.46.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6BU0hbbARRWppYffO9U0YO5ajiPUOHOT/nRCLYKYZXQ=;
+        b=ou4LU0jcCANqlPT9qIeSZyPP5Fp5reEuY78wVhXLqV18TyB9ZTnVuiJ3TuQt3wzcPd
+         uJcz7csTIQiTpDrwbTiOT8RctCJSuA/UWVYYeBfqffXTL9Q0d1jy+jtHeFYJ4gziTgSV
+         qY9T6qzpgfrMONb4fKbWCx55sSDz7FlKpzj0hybvS0nTyOpkiqd28tOJwuxPaCaTjIKj
+         9feSNyr3yk6nJp5K14QRCq7+oP3vbzJdbaLwVPcVS46WCX0q0Qh+Sf2AcpPCwYtyb1kt
+         as69rd8ZaJspMxzP13fPgnrz2YUhjIvFHMWnpCR3GQihwHhjEbTcsgInPWhO9jzhtRK4
+         aiXg==
+X-Gm-Message-State: AOAM5316+YqM1sfAqmwekbRtH19TZ1tqkaM7vC4Sq5hTfmbmrtnmja3+
+        IQ7+Eg7b9ROmLU6hFY8eFwXKVA==
+X-Google-Smtp-Source: ABdhPJy29DgncW3AGG5DBDPcJZXx3UPlvMJDuIqCzadTpGFlGvNjl+8mP5gWdAnwFH/LQzvEyC98jw==
+X-Received: by 2002:a5d:4252:: with SMTP id s18mr35789899wrr.88.1625765890822;
+        Thu, 08 Jul 2021 10:38:10 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id l4sm2521853wme.26.2021.07.08.10.38.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 08:46:49 -0700 (PDT)
-Date:   Thu, 8 Jul 2021 17:46:48 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 08/11] rcar-vin: Create a callback to setup media links
-Message-ID: <YOcd6FgzdSbUV5kk@oden.dyn.berto.se>
-References: <20210413180253.2575451-1-niklas.soderlund+renesas@ragnatech.se>
- <20210413180253.2575451-9-niklas.soderlund+renesas@ragnatech.se>
- <20210707103355.wu75k2zskwq2ofy4@uno.localdomain>
+        Thu, 08 Jul 2021 10:38:10 -0700 (PDT)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Steven Price <steven.price@arm.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nirmoy Das <nirmoy.aiemd@gmail.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jack Zhang <Jack.Zhang1@amd.com>, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v3 04/20] drm/sched: Add dependency tracking
+Date:   Thu,  8 Jul 2021 19:37:38 +0200
+Message-Id: <20210708173754.3877540-5-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210708173754.3877540-1-daniel.vetter@ffwll.ch>
+References: <20210708173754.3877540-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210707103355.wu75k2zskwq2ofy4@uno.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Instead of just a callback we can just glue in the gem helpers that
+panfrost, v3d and lima currently use. There's really not that many
+ways to skin this cat.
 
-Thanks for your review effort.
+On the naming bikeshed: The idea for using _await_ to denote adding
+dependencies to a job comes from i915, where that's used quite
+extensively all over the place, in lots of datastructures.
 
-On 2021-07-07 12:33:55 +0200, Jacopo Mondi wrote:
-> Hi Niklas,
-> 
-> On Tue, Apr 13, 2021 at 08:02:50PM +0200, Niklas Söderlund wrote:
-> > New IP versions will have different media graphs and require a different
-> > link setup. Breakout the specific link setup to a callback that are
-> > associated with the group.
-> >
-> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> > ---
-> >  drivers/media/platform/rcar-vin/rcar-core.c | 97 ++++++++++++---------
-> >  drivers/media/platform/rcar-vin/rcar-vin.h  |  3 +
-> >  2 files changed, 57 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> > index 2628637084ae2aa9..d03ecd443b01c2b3 100644
-> > --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> > +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> > @@ -247,7 +247,8 @@ static void rvin_group_cleanup(struct rvin_group *group)
-> >  	mutex_destroy(&group->lock);
-> >  }
-> >
-> > -static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin)
-> > +static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin,
-> > +			   void (*link_setup)(struct rvin_dev *))
-> >  {
-> >  	struct media_device *mdev = &group->mdev;
-> >  	const struct of_device_id *match;
-> > @@ -263,6 +264,8 @@ static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin)
-> >
-> >  	vin_dbg(vin, "found %u enabled VIN's in DT", group->count);
-> >
-> > +	group->link_setup = link_setup;
-> > +
-> >  	mdev->dev = vin->dev;
-> >  	mdev->ops = &rvin_media_ops;
-> >
-> > @@ -295,7 +298,8 @@ static void rvin_group_release(struct kref *kref)
-> >  	mutex_unlock(&rvin_group_lock);
-> >  }
-> >
-> > -static int rvin_group_get(struct rvin_dev *vin)
-> > +static int rvin_group_get(struct rvin_dev *vin,
-> > +			  void (*link_setup)(struct rvin_dev *))
-> >  {
-> >  	struct rvin_group *group;
-> >  	u32 id;
-> > @@ -327,7 +331,7 @@ static int rvin_group_get(struct rvin_dev *vin)
-> >  			goto err_group;
-> >  		}
-> >
-> > -		ret = rvin_group_init(group, vin);
-> > +		ret = rvin_group_init(group, vin, link_setup);
-> >  		if (ret) {
-> >  			kfree(group);
-> >  			vin_err(vin, "Failed to initialize group\n");
-> > @@ -386,7 +390,6 @@ static void rvin_group_put(struct rvin_dev *vin)
-> >  static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
-> >  {
-> >  	struct rvin_dev *vin = v4l2_dev_to_vin(notifier->v4l2_dev);
-> > -	const struct rvin_group_route *route;
-> >  	unsigned int i;
-> >  	int ret;
-> >
-> > @@ -410,44 +413,7 @@ static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
-> >  		}
-> >  	}
-> >
-> > -	/* Create all media device links between VINs and CSI-2's. */
-> > -	mutex_lock(&vin->group->lock);
-> > -	for (route = vin->info->routes; route->mask; route++) {
-> > -		struct media_pad *source_pad, *sink_pad;
-> > -		struct media_entity *source, *sink;
-> > -		unsigned int source_idx;
-> > -
-> > -		/* Check that VIN is part of the group. */
-> > -		if (!vin->group->vin[route->vin])
-> > -			continue;
-> > -
-> > -		/* Check that VIN' master is part of the group. */
-> > -		if (!vin->group->vin[rvin_group_id_to_master(route->vin)])
-> > -			continue;
-> > -
-> > -		/* Check that CSI-2 is part of the group. */
-> > -		if (!vin->group->remotes[route->csi].subdev)
-> > -			continue;
-> > -
-> > -		source = &vin->group->remotes[route->csi].subdev->entity;
-> > -		source_idx = rvin_group_csi_channel_to_pad(route->channel);
-> > -		source_pad = &source->pads[source_idx];
-> > -
-> > -		sink = &vin->group->vin[route->vin]->vdev.entity;
-> > -		sink_pad = &sink->pads[0];
-> > -
-> > -		/* Skip if link already exists. */
-> > -		if (media_entity_find_link(source_pad, sink_pad))
-> > -			continue;
-> > -
-> > -		ret = media_create_pad_link(source, source_idx, sink, 0, 0);
-> > -		if (ret) {
-> > -			vin_err(vin, "Error adding link from %s to %s\n",
-> > -				source->name, sink->name);
-> > -			break;
-> > -		}
-> > -	}
-> > -	mutex_unlock(&vin->group->lock);
-> > +	vin->group->link_setup(vin);
-> 
-> Compared to the previuous version, we've lost the ability to return
-> erros on failures in link creation. Is it intentional ?
+v2/3: Rebased.
 
-This is a good point, I will fix it for v2 (same for the comment in the 
-ISP case you point out in 11/11).
+Reviewed-by: Steven Price <steven.price@arm.com> (v1)
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian KÃ¶nig" <christian.koenig@amd.com>
+Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Nirmoy Das <nirmoy.aiemd@gmail.com>
+Cc: Boris Brezillon <boris.brezillon@collabora.com>
+Cc: Luben Tuikov <luben.tuikov@amd.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: Jack Zhang <Jack.Zhang1@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+---
+ drivers/gpu/drm/scheduler/sched_entity.c |  18 +++-
+ drivers/gpu/drm/scheduler/sched_main.c   | 103 +++++++++++++++++++++++
+ include/drm/gpu_scheduler.h              |  31 ++++++-
+ 3 files changed, 146 insertions(+), 6 deletions(-)
 
-> 
-> Thanks
->    j
-> 
-> >
-> >  	return ret;
-> >  }
-> > @@ -953,6 +919,51 @@ static int rvin_parallel_init(struct rvin_dev *vin)
-> >   * CSI-2
-> >   */
-> >
-> > +static void rvin_csi2_setup_links(struct rvin_dev *vin)
-> > +{
-> > +	const struct rvin_group_route *route;
-> > +	int ret;
-> > +
-> > +	/* Create all media device links between VINs and CSI-2's. */
-> > +	mutex_lock(&vin->group->lock);
-> > +	for (route = vin->info->routes; route->mask; route++) {
-> > +		struct media_pad *source_pad, *sink_pad;
-> > +		struct media_entity *source, *sink;
-> > +		unsigned int source_idx;
-> > +
-> > +		/* Check that VIN is part of the group. */
-> > +		if (!vin->group->vin[route->vin])
-> > +			continue;
-> > +
-> > +		/* Check that VIN' master is part of the group. */
-> > +		if (!vin->group->vin[rvin_group_id_to_master(route->vin)])
-> > +			continue;
-> > +
-> > +		/* Check that CSI-2 is part of the group. */
-> > +		if (!vin->group->remotes[route->csi].subdev)
-> > +			continue;
-> > +
-> > +		source = &vin->group->remotes[route->csi].subdev->entity;
-> > +		source_idx = rvin_group_csi_channel_to_pad(route->channel);
-> > +		source_pad = &source->pads[source_idx];
-> > +
-> > +		sink = &vin->group->vin[route->vin]->vdev.entity;
-> > +		sink_pad = &sink->pads[0];
-> > +
-> > +		/* Skip if link already exists. */
-> > +		if (media_entity_find_link(source_pad, sink_pad))
-> > +			continue;
-> > +
-> > +		ret = media_create_pad_link(source, source_idx, sink, 0, 0);
-> > +		if (ret) {
-> > +			vin_err(vin, "Error adding link from %s to %s\n",
-> > +				source->name, sink->name);
-> > +			break;
-> > +		}
-> > +	}
-> > +	mutex_unlock(&vin->group->lock);
-> > +}
-> > +
-> >  static void rvin_csi2_cleanup(struct rvin_dev *vin)
-> >  {
-> >  	rvin_group_notifier_cleanup(vin);
-> > @@ -973,7 +984,7 @@ static int rvin_csi2_init(struct rvin_dev *vin)
-> >  	if (ret < 0)
-> >  		return ret;
-> >
-> > -	ret = rvin_group_get(vin);
-> > +	ret = rvin_group_get(vin, rvin_csi2_setup_links);
-> >  	if (ret)
-> >  		goto err_controls;
-> >
-> > diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-> > index 39207aaf39ef9391..f2c32d5ceb7f83d9 100644
-> > --- a/drivers/media/platform/rcar-vin/rcar-vin.h
-> > +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-> > @@ -269,6 +269,7 @@ struct rvin_dev {
-> >   * @count:		number of enabled VIN instances found in DT
-> >   * @notifier:		group notifier for CSI-2 async subdevices
-> >   * @vin:		VIN instances which are part of the group
-> > + * @link_setup:		Callback to create all links for the media graph
-> >   * @remotes:		array of pairs of fwnode and subdev pointers
-> >   *			to all remote subdevices.
-> >   */
-> > @@ -282,6 +283,8 @@ struct rvin_group {
-> >  	struct v4l2_async_notifier notifier;
-> >  	struct rvin_dev *vin[RCAR_VIN_NUM];
-> >
-> > +	void (*link_setup)(struct rvin_dev *vin);
-> > +
-> >  	struct {
-> >  		struct v4l2_async_subdev *asd;
-> >  		struct v4l2_subdev *subdev;
-> > --
-> > 2.31.1
-> >
-
+diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+index 4e1124ed80e0..c7e6d29c9a33 100644
+--- a/drivers/gpu/drm/scheduler/sched_entity.c
++++ b/drivers/gpu/drm/scheduler/sched_entity.c
+@@ -211,6 +211,19 @@ static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
+ 	job->sched->ops->free_job(job);
+ }
+ 
++static struct dma_fence *
++drm_sched_job_dependency(struct drm_sched_job *job,
++			 struct drm_sched_entity *entity)
++{
++	if (!xa_empty(&job->dependencies))
++		return xa_erase(&job->dependencies, job->last_dependency++);
++
++	if (job->sched->ops->dependency)
++		return job->sched->ops->dependency(job, entity);
++
++	return NULL;
++}
++
+ /**
+  * drm_sched_entity_kill_jobs - Make sure all remaining jobs are killed
+  *
+@@ -229,7 +242,7 @@ static void drm_sched_entity_kill_jobs(struct drm_sched_entity *entity)
+ 		struct drm_sched_fence *s_fence = job->s_fence;
+ 
+ 		/* Wait for all dependencies to avoid data corruptions */
+-		while ((f = job->sched->ops->dependency(job, entity)))
++		while ((f = drm_sched_job_dependency(job, entity)))
+ 			dma_fence_wait(f, false);
+ 
+ 		drm_sched_fence_scheduled(s_fence);
+@@ -419,7 +432,6 @@ static bool drm_sched_entity_add_dependency_cb(struct drm_sched_entity *entity)
+  */
+ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
+ {
+-	struct drm_gpu_scheduler *sched = entity->rq->sched;
+ 	struct drm_sched_job *sched_job;
+ 
+ 	sched_job = to_drm_sched_job(spsc_queue_peek(&entity->job_queue));
+@@ -427,7 +439,7 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
+ 		return NULL;
+ 
+ 	while ((entity->dependency =
+-			sched->ops->dependency(sched_job, entity))) {
++			drm_sched_job_dependency(sched_job, entity))) {
+ 		trace_drm_sched_job_wait_dep(sched_job, entity->dependency);
+ 
+ 		if (drm_sched_entity_add_dependency_cb(entity))
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index 7e94754eb34c..ad62f1d2991c 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -594,6 +594,8 @@ int drm_sched_job_init(struct drm_sched_job *job,
+ 
+ 	INIT_LIST_HEAD(&job->list);
+ 
++	xa_init_flags(&job->dependencies, XA_FLAGS_ALLOC);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL(drm_sched_job_init);
+@@ -631,6 +633,98 @@ void drm_sched_job_arm(struct drm_sched_job *job)
+ }
+ EXPORT_SYMBOL(drm_sched_job_arm);
+ 
++/**
++ * drm_sched_job_await_fence - adds the fence as a job dependency
++ * @job: scheduler job to add the dependencies to
++ * @fence: the dma_fence to add to the list of dependencies.
++ *
++ * Note that @fence is consumed in both the success and error cases.
++ *
++ * Returns:
++ * 0 on success, or an error on failing to expand the array.
++ */
++int drm_sched_job_await_fence(struct drm_sched_job *job,
++			      struct dma_fence *fence)
++{
++	struct dma_fence *entry;
++	unsigned long index;
++	u32 id = 0;
++	int ret;
++
++	if (!fence)
++		return 0;
++
++	/* Deduplicate if we already depend on a fence from the same context.
++	 * This lets the size of the array of deps scale with the number of
++	 * engines involved, rather than the number of BOs.
++	 */
++	xa_for_each(&job->dependencies, index, entry) {
++		if (entry->context != fence->context)
++			continue;
++
++		if (dma_fence_is_later(fence, entry)) {
++			dma_fence_put(entry);
++			xa_store(&job->dependencies, index, fence, GFP_KERNEL);
++		} else {
++			dma_fence_put(fence);
++		}
++		return 0;
++	}
++
++	ret = xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, GFP_KERNEL);
++	if (ret != 0)
++		dma_fence_put(fence);
++
++	return ret;
++}
++EXPORT_SYMBOL(drm_sched_job_await_fence);
++
++/**
++ * drm_sched_job_await_implicit - adds implicit dependencies as job dependencies
++ * @job: scheduler job to add the dependencies to
++ * @obj: the gem object to add new dependencies from.
++ * @write: whether the job might write the object (so we need to depend on
++ * shared fences in the reservation object).
++ *
++ * This should be called after drm_gem_lock_reservations() on your array of
++ * GEM objects used in the job but before updating the reservations with your
++ * own fences.
++ *
++ * Returns:
++ * 0 on success, or an error on failing to expand the array.
++ */
++int drm_sched_job_await_implicit(struct drm_sched_job *job,
++				 struct drm_gem_object *obj,
++				 bool write)
++{
++	int ret;
++	struct dma_fence **fences;
++	unsigned int i, fence_count;
++
++	if (!write) {
++		struct dma_fence *fence = dma_resv_get_excl_unlocked(obj->resv);
++
++		return drm_sched_job_await_fence(job, fence);
++	}
++
++	ret = dma_resv_get_fences(obj->resv, NULL, &fence_count, &fences);
++	if (ret || !fence_count)
++		return ret;
++
++	for (i = 0; i < fence_count; i++) {
++		ret = drm_sched_job_await_fence(job, fences[i]);
++		if (ret)
++			break;
++	}
++
++	for (; i < fence_count; i++)
++		dma_fence_put(fences[i]);
++	kfree(fences);
++	return ret;
++}
++EXPORT_SYMBOL(drm_sched_job_await_implicit);
++
++
+ /**
+  * drm_sched_job_cleanup - clean up scheduler job resources
+  * @job: scheduler job to clean up
+@@ -646,6 +740,9 @@ EXPORT_SYMBOL(drm_sched_job_arm);
+  */
+ void drm_sched_job_cleanup(struct drm_sched_job *job)
+ {
++	struct dma_fence *fence;
++	unsigned long index;
++
+ 	if (kref_read(&job->s_fence->finished.refcount)) {
+ 		/* drm_sched_job_arm() has been called */
+ 		dma_fence_put(&job->s_fence->finished);
+@@ -655,6 +752,12 @@ void drm_sched_job_cleanup(struct drm_sched_job *job)
+ 	}
+ 
+ 	job->s_fence = NULL;
++
++	xa_for_each(&job->dependencies, index, fence) {
++		dma_fence_put(fence);
++	}
++	xa_destroy(&job->dependencies);
++
+ }
+ EXPORT_SYMBOL(drm_sched_job_cleanup);
+ 
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index 83afc3aa8e2f..74fb321dbc44 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -27,9 +27,12 @@
+ #include <drm/spsc_queue.h>
+ #include <linux/dma-fence.h>
+ #include <linux/completion.h>
++#include <linux/xarray.h>
+ 
+ #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
+ 
++struct drm_gem_object;
++
+ struct drm_gpu_scheduler;
+ struct drm_sched_rq;
+ 
+@@ -198,6 +201,16 @@ struct drm_sched_job {
+ 	enum drm_sched_priority		s_priority;
+ 	struct drm_sched_entity         *entity;
+ 	struct dma_fence_cb		cb;
++	/**
++	 * @dependencies:
++	 *
++	 * Contains the dependencies as struct dma_fence for this job, see
++	 * drm_sched_job_await_fence() and drm_sched_job_await_implicit().
++	 */
++	struct xarray			dependencies;
++
++	/** @last_dependency: tracks @dependencies as they signal */
++	unsigned long			last_dependency;
+ };
+ 
+ static inline bool drm_sched_invalidate_job(struct drm_sched_job *s_job,
+@@ -220,9 +233,14 @@ enum drm_gpu_sched_stat {
+  */
+ struct drm_sched_backend_ops {
+ 	/**
+-         * @dependency: Called when the scheduler is considering scheduling
+-         * this job next, to get another struct dma_fence for this job to
+-	 * block on.  Once it returns NULL, run_job() may be called.
++	 * @dependency:
++	 *
++	 * Called when the scheduler is considering scheduling this job next, to
++	 * get another struct dma_fence for this job to block on.  Once it
++	 * returns NULL, run_job() may be called.
++	 *
++	 * If a driver exclusively uses drm_sched_job_await_fence() and
++	 * drm_sched_job_await_implicit() this can be ommitted and left as NULL.
+ 	 */
+ 	struct dma_fence *(*dependency)(struct drm_sched_job *sched_job,
+ 					struct drm_sched_entity *s_entity);
+@@ -349,6 +367,13 @@ int drm_sched_job_init(struct drm_sched_job *job,
+ 		       struct drm_sched_entity *entity,
+ 		       void *owner);
+ void drm_sched_job_arm(struct drm_sched_job *job);
++int drm_sched_job_await_fence(struct drm_sched_job *job,
++			      struct dma_fence *fence);
++int drm_sched_job_await_implicit(struct drm_sched_job *job,
++				 struct drm_gem_object *obj,
++				 bool write);
++
++
+ void drm_sched_entity_modify_sched(struct drm_sched_entity *entity,
+ 				    struct drm_gpu_scheduler **sched_list,
+                                    unsigned int num_sched_list);
 -- 
-Regards,
-Niklas Söderlund
+2.32.0
+
