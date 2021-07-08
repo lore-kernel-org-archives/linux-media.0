@@ -7,64 +7,67 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D4EC07E9C
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1A60C11F66
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D25561879
-	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98BFB61921
+	for <linux-media@archiver.kernel.org>; Thu,  8 Jul 2021 17:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhGHRlA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Jul 2021 13:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S229949AbhGHRlF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Jul 2021 13:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbhGHRk7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jul 2021 13:40:59 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C6EC061574
-        for <linux-media@vger.kernel.org>; Thu,  8 Jul 2021 10:38:17 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso7348999wmh.4
-        for <linux-media@vger.kernel.org>; Thu, 08 Jul 2021 10:38:17 -0700 (PDT)
+        with ESMTP id S229815AbhGHRlE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Jul 2021 13:41:04 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A66C061574
+        for <linux-media@vger.kernel.org>; Thu,  8 Jul 2021 10:38:21 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id k32so1395493wms.4
+        for <linux-media@vger.kernel.org>; Thu, 08 Jul 2021 10:38:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mls2ejKErj4+c/cv4r8BLVM3Y5XNHv+hyokEAjrvlQQ=;
-        b=IIF9iyvY6exRnC2Tldk5pPDZhe3//qmZGbSZqZVy4/VVvTCp6g6CRT/VmThqsvLEUc
-         orLhRYsA2UKPlNNwkZwpYweBJMqmvrqVyMT4i72pFQwnFVgEVDKjXxceQ18N7NNjHRko
-         TxrnLU5FP7l84aSxsVgvPpnwu0IGIwtcmVWuo=
+        bh=PsoZ6J2M5QyGu071hd73Pkusw3eitnPHMAU0WekmIkg=;
+        b=B/gf2bBWcJQdmGLreTa1g8yBCnmVp12cOH/A3zekhg4iwgJ9EvGURKPdtbHfHOtgyl
+         0Az8KmZ54vPXDRCJTk/Vlq3fuk4eHCOSPrbUZ9UQ6GscieXjk9mxcY6SNoRwzdl8jyEV
+         zIoZvVJrBEoPyH+xuwztDtOIgMFEmrZDdSjb8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mls2ejKErj4+c/cv4r8BLVM3Y5XNHv+hyokEAjrvlQQ=;
-        b=aLL7eS6yJs6z0D42UVC2BnWMSRqyvB+mc1BVZQceZc3gi8dwhJpGGVvr3mPSdJmNVY
-         i/botjyRG7/XJdHRQx3+1SdZFQdPtLrG5oarmn7kHaZY5O8/4A39LuMtPXO1Pei3fKqt
-         V0MbjpztWy2o1O9FFPJpab7cpmynVwgXQp37LagExDrg5NqqGtb13Is4PlltyBpG3Y7M
-         Gin3r/iPPP4IzuYp27o3xnbwWROkAfMvcftI1MuGQcAMO8Pw1PqQexYNfJvisWVM7agK
-         tSpG+BnVX7D4Eh0X8hWqQgv49DD6D24j8pW6pGYVpq12eem0vbgx3aJrlymRxEX1nIPz
-         wYyQ==
-X-Gm-Message-State: AOAM531snyHScA0K/EETv4be62FpTw0HdOUP4M1h0sLUPxBY/a8ZgB0p
-        0nNa1BFXWdNMu21hJ8fPz96i8A==
-X-Google-Smtp-Source: ABdhPJxYS1PxW6pEpvMukPEy2FkcrmGfCw1y8tVGm6EpHZsEKDmHQd/ZnKUJ5sKhK1zprMgVk0lvEA==
-X-Received: by 2002:a7b:c955:: with SMTP id i21mr6605382wml.147.1625765896273;
-        Thu, 08 Jul 2021 10:38:16 -0700 (PDT)
+        bh=PsoZ6J2M5QyGu071hd73Pkusw3eitnPHMAU0WekmIkg=;
+        b=hq+rXgOuro59yU625e6FtsOyLhmaoV0gBJOS0mYiuDscrWnTqfURi0PpSJIKjOTZlC
+         i5sFsqnM/F5XbOC/qzUyLeuB1ZLGtngz6AUEHSQoWKlLi7h+i+lYdVOSQwoAAxQz/TtT
+         jVyuKcHHRRlMd71C5bl+aQivMZ0imkLxx0aAqLNyNWoB3z5kkfhNqHFbkPkdgkK862fS
+         uLtMRhxipms9QcC+vNLqwLBwBi7MRpbHQxOxBRL1E0msPsJk+h0IXkWj4AWBS0/CYZLj
+         h/kqxdPtpsdDnRfdYUb6O46u83OY/iTulmNIv2UNj6T1B2Onm8w3knqrsf/OcgthHEOl
+         F3uA==
+X-Gm-Message-State: AOAM533z1L/zH96UCNG1/Z3zWXhioC4fDzi3C1ksgcI9p75sctEQIQGO
+        TUjgnXX+rambCZh7nzUUm9HuEA==
+X-Google-Smtp-Source: ABdhPJxW6gbYAoCJRF7mwKLk5kN1rIiivUiCmm128TmY2TKo/ZiWv4FQqTe3fwoO0lIb4zo8awnmcA==
+X-Received: by 2002:a05:600c:19d2:: with SMTP id u18mr6637474wmq.21.1625765900281;
+        Thu, 08 Jul 2021 10:38:20 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id l4sm2521853wme.26.2021.07.08.10.38.15
+        by smtp.gmail.com with ESMTPSA id l4sm2521853wme.26.2021.07.08.10.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 10:38:15 -0700 (PDT)
+        Thu, 08 Jul 2021 10:38:19 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Qiang Yu <yuq825@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        lima@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v3 08/20] drm/lima: use scheduler dependency tracking
-Date:   Thu,  8 Jul 2021 19:37:42 +0200
-Message-Id: <20210708173754.3877540-9-daniel.vetter@ffwll.ch>
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v3 12/20] drm/gem: Delete gem array fencing helpers
+Date:   Thu,  8 Jul 2021 19:37:46 +0200
+Message-Id: <20210708173754.3877540-13-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210708173754.3877540-1-daniel.vetter@ffwll.ch>
 References: <20210708173754.3877540-1-daniel.vetter@ffwll.ch>
@@ -75,116 +78,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Nothing special going on here.
-
-Aside reviewing the code, it seems like drm_sched_job_arm() should be
-moved into lima_sched_context_queue_task and put under some mutex
-together with drm_sched_push_job(). See the kerneldoc for
-drm_sched_push_job().
+Integrated into the scheduler now and all users converted over.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Qiang Yu <yuq825@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: "Christian König" <christian.koenig@amd.com>
-Cc: lima@lists.freedesktop.org
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 ---
- drivers/gpu/drm/lima/lima_gem.c   |  4 ++--
- drivers/gpu/drm/lima/lima_sched.c | 21 ---------------------
- drivers/gpu/drm/lima/lima_sched.h |  3 ---
- 3 files changed, 2 insertions(+), 26 deletions(-)
+ drivers/gpu/drm/drm_gem.c | 96 ---------------------------------------
+ include/drm/drm_gem.h     |  5 --
+ 2 files changed, 101 deletions(-)
 
-diff --git a/drivers/gpu/drm/lima/lima_gem.c b/drivers/gpu/drm/lima/lima_gem.c
-index c528f40981bb..e54a88d5037a 100644
---- a/drivers/gpu/drm/lima/lima_gem.c
-+++ b/drivers/gpu/drm/lima/lima_gem.c
-@@ -267,7 +267,7 @@ static int lima_gem_sync_bo(struct lima_sched_task *task, struct lima_bo *bo,
- 	if (explicit)
- 		return 0;
- 
--	return drm_gem_fence_array_add_implicit(&task->deps, &bo->base.base, write);
-+	return drm_sched_job_await_implicit(&task->base, &bo->base.base, write);
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 68deb1de8235..24d49a2636e0 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1294,99 +1294,3 @@ drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+ 	ww_acquire_fini(acquire_ctx);
  }
- 
- static int lima_gem_add_deps(struct drm_file *file, struct lima_submit *submit)
-@@ -285,7 +285,7 @@ static int lima_gem_add_deps(struct drm_file *file, struct lima_submit *submit)
- 		if (err)
- 			return err;
- 
--		err = drm_gem_fence_array_add(&submit->task->deps, fence);
-+		err = drm_sched_job_await_fence(&submit->task->base, fence);
- 		if (err) {
- 			dma_fence_put(fence);
- 			return err;
-diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
-index e968b5a8f0b0..99d5f6f1a882 100644
---- a/drivers/gpu/drm/lima/lima_sched.c
-+++ b/drivers/gpu/drm/lima/lima_sched.c
-@@ -134,24 +134,15 @@ int lima_sched_task_init(struct lima_sched_task *task,
- 	task->num_bos = num_bos;
- 	task->vm = lima_vm_get(vm);
- 
--	xa_init_flags(&task->deps, XA_FLAGS_ALLOC);
+ EXPORT_SYMBOL(drm_gem_unlock_reservations);
 -
- 	return 0;
- }
- 
- void lima_sched_task_fini(struct lima_sched_task *task)
- {
--	struct dma_fence *fence;
--	unsigned long index;
- 	int i;
- 
- 	drm_sched_job_cleanup(&task->base);
- 
--	xa_for_each(&task->deps, index, fence) {
--		dma_fence_put(fence);
--	}
--	xa_destroy(&task->deps);
--
- 	if (task->bos) {
- 		for (i = 0; i < task->num_bos; i++)
- 			drm_gem_object_put(&task->bos[i]->base.base);
-@@ -186,17 +177,6 @@ struct dma_fence *lima_sched_context_queue_task(struct lima_sched_task *task)
- 	return fence;
- }
- 
--static struct dma_fence *lima_sched_dependency(struct drm_sched_job *job,
--					       struct drm_sched_entity *entity)
+-/**
+- * drm_gem_fence_array_add - Adds the fence to an array of fences to be
+- * waited on, deduplicating fences from the same context.
+- *
+- * @fence_array: array of dma_fence * for the job to block on.
+- * @fence: the dma_fence to add to the list of dependencies.
+- *
+- * This functions consumes the reference for @fence both on success and error
+- * cases.
+- *
+- * Returns:
+- * 0 on success, or an error on failing to expand the array.
+- */
+-int drm_gem_fence_array_add(struct xarray *fence_array,
+-			    struct dma_fence *fence)
 -{
--	struct lima_sched_task *task = to_lima_task(job);
+-	struct dma_fence *entry;
+-	unsigned long index;
+-	u32 id = 0;
+-	int ret;
 -
--	if (!xa_empty(&task->deps))
--		return xa_erase(&task->deps, task->last_dep++);
+-	if (!fence)
+-		return 0;
 -
--	return NULL;
+-	/* Deduplicate if we already depend on a fence from the same context.
+-	 * This lets the size of the array of deps scale with the number of
+-	 * engines involved, rather than the number of BOs.
+-	 */
+-	xa_for_each(fence_array, index, entry) {
+-		if (entry->context != fence->context)
+-			continue;
+-
+-		if (dma_fence_is_later(fence, entry)) {
+-			dma_fence_put(entry);
+-			xa_store(fence_array, index, fence, GFP_KERNEL);
+-		} else {
+-			dma_fence_put(fence);
+-		}
+-		return 0;
+-	}
+-
+-	ret = xa_alloc(fence_array, &id, fence, xa_limit_32b, GFP_KERNEL);
+-	if (ret != 0)
+-		dma_fence_put(fence);
+-
+-	return ret;
 -}
+-EXPORT_SYMBOL(drm_gem_fence_array_add);
 -
- static int lima_pm_busy(struct lima_device *ldev)
- {
- 	int ret;
-@@ -472,7 +452,6 @@ static void lima_sched_free_job(struct drm_sched_job *job)
- }
- 
- static const struct drm_sched_backend_ops lima_sched_ops = {
--	.dependency = lima_sched_dependency,
- 	.run_job = lima_sched_run_job,
- 	.timedout_job = lima_sched_timedout_job,
- 	.free_job = lima_sched_free_job,
-diff --git a/drivers/gpu/drm/lima/lima_sched.h b/drivers/gpu/drm/lima/lima_sched.h
-index ac70006b0e26..6a11764d87b3 100644
---- a/drivers/gpu/drm/lima/lima_sched.h
-+++ b/drivers/gpu/drm/lima/lima_sched.h
-@@ -23,9 +23,6 @@ struct lima_sched_task {
- 	struct lima_vm *vm;
- 	void *frame;
- 
--	struct xarray deps;
--	unsigned long last_dep;
+-/**
+- * drm_gem_fence_array_add_implicit - Adds the implicit dependencies tracked
+- * in the GEM object's reservation object to an array of dma_fences for use in
+- * scheduling a rendering job.
+- *
+- * This should be called after drm_gem_lock_reservations() on your array of
+- * GEM objects used in the job but before updating the reservations with your
+- * own fences.
+- *
+- * @fence_array: array of dma_fence * for the job to block on.
+- * @obj: the gem object to add new dependencies from.
+- * @write: whether the job might write the object (so we need to depend on
+- * shared fences in the reservation object).
+- */
+-int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
+-				     struct drm_gem_object *obj,
+-				     bool write)
+-{
+-	int ret;
+-	struct dma_fence **fences;
+-	unsigned int i, fence_count;
 -
- 	struct lima_bo **bos;
- 	int num_bos;
+-	if (!write) {
+-		struct dma_fence *fence =
+-			dma_resv_get_excl_unlocked(obj->resv);
+-
+-		return drm_gem_fence_array_add(fence_array, fence);
+-	}
+-
+-	ret = dma_resv_get_fences(obj->resv, NULL,
+-						&fence_count, &fences);
+-	if (ret || !fence_count)
+-		return ret;
+-
+-	for (i = 0; i < fence_count; i++) {
+-		ret = drm_gem_fence_array_add(fence_array, fences[i]);
+-		if (ret)
+-			break;
+-	}
+-
+-	for (; i < fence_count; i++)
+-		dma_fence_put(fences[i]);
+-	kfree(fences);
+-	return ret;
+-}
+-EXPORT_SYMBOL(drm_gem_fence_array_add_implicit);
+diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+index 240049566592..6d5e33b89074 100644
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -409,11 +409,6 @@ int drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+ 			      struct ww_acquire_ctx *acquire_ctx);
+ void drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+ 				 struct ww_acquire_ctx *acquire_ctx);
+-int drm_gem_fence_array_add(struct xarray *fence_array,
+-			    struct dma_fence *fence);
+-int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
+-				     struct drm_gem_object *obj,
+-				     bool write);
+ int drm_gem_dumb_map_offset(struct drm_file *file, struct drm_device *dev,
+ 			    u32 handle, u64 *offset);
  
 -- 
 2.32.0
