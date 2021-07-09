@@ -2,166 +2,196 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 799D0C11F66
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 16:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B34EDC07E99
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 18:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64A99613BF
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 16:58:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CC8A613CC
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 18:26:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbhGIRA6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jul 2021 13:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbhGIRA5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 13:00:57 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E558C0613E8
-        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 09:58:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id f30so24549803lfj.1
-        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 09:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=phystech-edu.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=n3cz26qHSCwc2rLWJL4aQ/NbqMK/zt0UOTvUQChL7jo=;
-        b=bTgfzISd1HbuqsxfiAosM+S7moL2fCkghg+dY8eRFy1+C0QEl1nosujiaZ+XJJl84S
-         ZqhuOlPycRTM6lCl9ehmX+W1QFnbMK/27MI0HI6W6CfoyJeekhGb7we+YzUFeBdlUiQ6
-         nrY2jnQTrwkMgok1djyrLfyD7OZlpV5XjqWMBMqoMBspD1WrEm717VkBMzr35HusPghi
-         CcFojq1Jqw0a5eQv03V6VoEVUDHRciOuuc+RLA4Y7vBtP5oLOwf11U0aTSaPGLZ6zU14
-         uCFTdhe6oLB3YR/6EEaBq1ONocXA7zFRFp94ZaBvaBzwhrP0MdB9hSO1q/OB71eDQ8g8
-         FqWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=n3cz26qHSCwc2rLWJL4aQ/NbqMK/zt0UOTvUQChL7jo=;
-        b=r8R/ntGR0I93uurMu8TtOGIrn/s9T14l0636zWPpmbiL4hfGo2m3CMLcC99FtT4yJQ
-         UtpHlh+cJpWN76+76rzWpED9a/3pP1KN02ivRCZw8DTHJnwR66lnCMK/yW7PySLyQFai
-         IhqwQyBBSxjp/rZHZDLHCG7icpO05fnJGgrmQ+L20fOHqK/HZzeflYbzi+x/SZNwY9Ac
-         5Ncn1FuqtBYvw/c9RWPbYOv+ta0TthV546hqOa/6n6ACYodGfLlTEAA5mkrusPUbsHUN
-         czlWuKTGFfN5+pgVGuMpyt2ALz5sbfFFH5NYioaBqwn2MsBjFEJf5iTQr+UqRGCeuh/4
-         /flw==
-X-Gm-Message-State: AOAM532hV1TW35VMgIZk6nDN90AT8IfEhift7S2HYDW0XH4XpmtDsUuu
-        uzelx65VqiXqp+G0OsLmhtrGYw==
-X-Google-Smtp-Source: ABdhPJz9VvpTDQBL+U/op1YR9gFF1JBbz7jbMDfOvRt9pYy+Xe2MbIx9mWD2BV+gau/jH/Xk4gBAlg==
-X-Received: by 2002:ac2:4d42:: with SMTP id 2mr7893418lfp.465.1625849888699;
-        Fri, 09 Jul 2021 09:58:08 -0700 (PDT)
-Received: from 192.168.1.3 ([2a00:1370:810e:abfe:9c62:44e3:b0ab:76fd])
-        by smtp.gmail.com with ESMTPSA id i130sm504107lfd.304.2021.07.09.09.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 09:58:08 -0700 (PDT)
-From:   Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-To:     sean@mess.org, mchehab@kernel.org, robh+dt@kernel.org,
-        khilman@baylibre.com, narmstrong@baylibre.com
-Cc:     jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, rockosov@gmail.com,
-        Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-Subject: [PATCH v3 1/2] media: rc: meson-irblaster: document device tree bindings
-Date:   Fri,  9 Jul 2021 19:57:52 +0300
-Message-Id: <20210709165753.29353-2-viktor.prutyanov@phystech.edu>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210709165753.29353-1-viktor.prutyanov@phystech.edu>
-References: <20210709165753.29353-1-viktor.prutyanov@phystech.edu>
+        id S229546AbhGIS2w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jul 2021 14:28:52 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:46440 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbhGIS2w (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 14:28:52 -0400
+Received: from [192.168.1.136] (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 950B7E7;
+        Fri,  9 Jul 2021 20:26:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1625855167;
+        bh=3UWC6QRjC/V9po3UsFog9fzW1K0lBXUKVl8tAp7mkOY=;
+        h=From:To:Cc:References:Subject:Date:In-Reply-To:From;
+        b=sE1racV8yI5TEQhDz6pvOGqNDo4l2p9gA1uSM1TmqW62ncMuL0yo9uM9BPg+/62hr
+         A7isYeYbzd8rpujEN9nHrb4pxNmEByWuwoY+vRbcHkDhD0gYNbf33oQnva9XPdYirl
+         x+vS7PTNk2neOTfB/glrmHmhw8+emRIP2XCY8M2k=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+References: <20210524104408.599645-1-tomi.valkeinen@ideasonboard.com>
+ <YLwReuwLm7S/4hgz@pendragon.ideasonboard.com>
+ <20210709151821.ogra3s2ulnsvkyqa@uno.localdomain>
+Subject: Re: [PATCH v7 00/27] v4l: subdev internal routing and streams
+Message-ID: <9b6ce019-8e38-886a-0c61-6f437ca9a915@ideasonboard.com>
+Date:   Fri, 9 Jul 2021 21:26:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210709151821.ogra3s2ulnsvkyqa@uno.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds binding documentation for the IR transmitter
-available in Amlogic Meson SoCs.
+Hi Jacopo,
 
-Signed-off-by: Viktor Prutyanov <viktor.prutyanov@phystech.edu>
----
- changes in v2:
-   - compatible = "amlogic,meson-g12a-irblaster" added
-   - clocks, clock-names and mod-clock updated
- changes in v3:
-   - mod-clock removed
-   - max-fifo-level added
+On 09/07/2021 18:18, Jacopo Mondi wrote:
+> Hi Tomi, Laurent,
+> 
+> On Sun, Jun 06, 2021 at 03:06:18AM +0300, Laurent Pinchart wrote:
+>> Hi Hans, Sakari,
+>>
+>> We need your feedback on this series, at least on the general approach.
+>> There are quite a few issues to be addressed, and it makes no sense to
+>> invest time in this if you don't think this is a good direction.
+>>
+>> If anyone else wants to give feedback, speak now or forever hold your
+>> peace :-)
+> 
+> Since you ask...
+> 
+> Having been involved a bit as the n-th person that tried to bring this
+> to completion I spent a bit of time trying to recollect how the
+> previous approach worked and how it compares to this one. Sorry if
+> this goes in length.
+> 
+> I share Tomi's concern on one part of the previous version:
+> 
+> - The resulting device topology gets complicated in a non-trivial way.
+> 
+>    The typical example of having to model one image sensor that sends
+>    embedded data and images with three sub-devices speaks for itself, I
+>    presume.
+> 
+>    However in one way, I feel like this is somehow correct and provides
+>    a more accurate representation of the actual sensor architecture.
+>    Splitting a sensor into components would allow to better handle
+>    devices which supports multiple buses (typically CSI-2 and
+>    parallel) through the internal routing tables, and allows
+>    better control of the components of the image sensor. [1]
 
- .../media/amlogic,meson-irblaster.yaml        | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,meson-irblaster.yaml
+I'm not sure what kind of setup you mean, but nothing prevents you from 
+splitting devices into multiple subdevs with the new approach if it 
+makes sense on your HW.
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-irblaster.yaml b/Documentation/devicetree/bindings/media/amlogic,meson-irblaster.yaml
-new file mode 100644
-index 000000000000..1e10aa0d3a94
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,meson-irblaster.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/amlogic,meson-irblaster.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Amlogic Meson IR blaster
-+
-+maintainers:
-+  - Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-+
-+description: |
-+  Some Amlogic SoCs such as A311D and T950D4 have IR transmitter
-+  (blaster) controller onboard. It is capable of sending IR signals
-+  with arbitrary carrier frequency and duty cycle.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: amlogic,meson-irblaster
-+      - items:
-+          - const: amlogic,meson-g12a-irblaster
-+          - const: amlogic,meson-irblaster
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: sysclk
-+      - const: xtal
-+
-+  max-fifo-level:
-+    maxItems: 1
-+    description:
-+      Maximum IR blaster FIFO fill level
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/g12a-clkc.h>
-+
-+    irblaster@ff80014c {
-+      compatible = "amlogic,meson-g12a-irblaster", "amlogic,meson-irblaster";
-+      reg = <0xff80014c 0x10>;
-+      interrupts = <0 198 IRQ_TYPE_EDGE_RISING>;
-+      clocks = <&clkc CLKID_CLK81>, <&xtal>;
-+      clock-names = "sysclk", "xtal";
-+    };
--- 
-2.21.0
+I have a parallel sensor that provides metadata on a line before the 
+actual frame. I have hard time understanding why that should be split 
+into 3 subdevs.
+
+> - Multiplexed source pads do not accept a format or any other configuration
+>    like crop/composing. Again this might seem odd, and it might be
+>    worth considering if those pads shouldn't be made 'special' somehow,
+>    but I again think it models a multiplexed bus quite accurately,
+>    doesn't it ? It's weird that the format of, in example, a CSI-2
+>    receiver source pad has to be propagated from the image sensor
+>    entity sink pad, crossing two entities, two routes and one
+>    media link. This makes rather complex to automate format propagation along
+>    pipelines, not only when done by abusing media-ctl like most people do,
+>    but also when done programmatically the task is not easy (I know I'm
+>    contradicting my [1] point here :)
+
+Hmm, but is it easy in the kernel side, then? I didn't feel so with the 
+previous version. The kernel needed to travel the graph back and forth 
+"all the time", just to figure out what's going on and where.
+
+If the userspace understands the HW topology (as it more or less must), 
+and it configures the routes (as it has to), and sets the formats on 
+certain subdevs, then I don't see that it would have any issues in 
+propagating the formats.
+
+>    Also link validation is of course a bit more complex as shown by
+>    731facccc987 ("v4l: subdev: Take routing information into account in link validation")
+>    which was part of the previous series, but it's totally up to the
+>    core..
+> 
+> Moving everything to the pads by adding a 'stream' field basically
+> makes all pads potentially multiplexed, reducing the problem of format
+> configuration/validation to a 1-to-1 {pad, stream} pair validation
+> which allows to collapse the topology and maintain the current one.
+
+Yes. I think I have problem understanding the counter arguments as I 
+don't really see a difference with a) two subdevs, each with two 
+non-multiplexed pads, linked 1-to-1 and b) two subdevs, each with one 
+multiplexed pad, with two routes.
+
+There is one particular issue I had with the previous version, which I 
+think is a big reason I like the new approach:
+
+I'm using TI CAL driver, which already exists in upstreams and supports 
+both non-MC and MC-without-streams. Adding support for streams, i.e 
+supporting non-MC, MC-without-streams and MC-with-streams made the 
+driver an unholy mess (including a new module parameter to enable 
+streams). With the new approach, the changes were relatively minor, as 
+MC with and without streams are really the same thing.
+
+With the previous approach you couldn't e.g. have a CSI2-RX bridge 
+driver that would support both old, non-multiplexed CSI2 sensor drivers 
+and multiplexed CSI2 sensor drivers. Unless you had something like the 
+module parameter mentioned above. Or perhaps a DT property to define 
+which mode the pad is in.
+
+Also, one problem is that I really only have a single multiplexed HW 
+setup, which limits my testing and the way I see multiplexed streams. 
+That setup is "luckily" not the simplest one:
+
+SoC CSI-2 RX <-> FPDLink Deserializer <-> FPDLink Serializer <-> Sensor
+
+4 serializer+sensor cameras can be connected to the deserializer. Each 
+sensor provides 2 streams (pixel and metadata). So I have 8 streams 
+coming in to the SoC.
+
+> Apart from the concerns expressed by Laurent (which I share but only
+> partially understand, as the implications of bulk moving the
+> v4l2-subdev configuration API to be stream-aware are not totally clear
+> to me yet) what I'm not convinced of is that now cross-entities
+> "routes" (or "streams") on a multiplexed bus do require a format
+> assigned, effectively exposing them to userspace, with the consequence
+> that the format configuration influences the routes setup up to the
+> point the two have to be kept consistent. The concept
+> could even be extended to inter-entities routes, as you suggested the
+> routing tables could even be dropped completely in this case, but I
+> feel mixing routing and format setup is a bit a layer violation and
+> forbids, in example, routing two streams to the same endpoint, which I
+> feel will be required to perform DT multiplexing on the same virtual
+> channel. The previous version had the multiplexed link configuration
+> completely hidden from userspace and controlled solely by the routing API,
+> which seems a tad more linear and offers more flexibility for drivers.
+> 
+> I'm not strongly pushing for one solution over the other, the only use
+> case I can reason on at the moment is a simple single-stream VC
+> multiplexing and both solutions works equally fine for that. This one
+> is certainly simpler regarding the required device topology.
+> 
+> Btw Tomi, do you have examples of drivers ported to your new proposal ?
+
+Yes. They're a bit messy, but I can share them with the next version. 
+I'm currently fixing a lot of things, and making full use of the new 
+v4l2_subdev_state.
+
+   Tomi
+
 
