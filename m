@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B626C11F66
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FD57C07E9B
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05EDA613BA
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44DA6613BA
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbhGIO3P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232023AbhGIO3P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 9 Jul 2021 10:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbhGIO3P (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:15 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDECC0613DD
-        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:32 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id l7so11471418wrv.7
-        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:31 -0700 (PDT)
+        with ESMTP id S231622AbhGIO3O (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:14 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5284DC0613DD
+        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r11so7146739wro.9
+        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9yjwjBH71B1Tr99bztBPhfwTmYUTMG61RRb8LVVQw1M=;
-        b=0SQTmUjerKyjVuxk3QxAnuwkWyCnjSWCiIzlZ6Je/Z/ZGiUbVrQGlTj7TGBLe941I5
-         GuLGHBIvKoS5jFwnh0Qt0ObM+aTRgXbQYugm1jD40pizb5exgsDn9fEVtc58qjyyr8RZ
-         0mqQITEF0MXCp5JoQrtmpZhprJtYElBJoWIP34/YwWcnoW4UB/TkExJ9BrEHGSIrqcnF
-         9lEpT9i56OaelJeDngcoaThjd2T0PwsWsnC5EEwGweqjaq4uokfymIH53XSfKZ7Gr+dJ
-         qb5QkVOvO89dU5uk9HYsgizQr3QwpIGaLae7UnMlMDcB2BuhsncbR3RPNgOOYuyyDTnt
-         FYjQ==
+        bh=GJbTV9HbgtZtuGVRujZ4GmQHg/F2jWWQ4ik4RBG2kic=;
+        b=vxhAEW7zhvlhX1tmL1Es4zdOvj03oJQSfNkveAAEXCP1DDEHWHcz4fnRyPlXSj7Gf6
+         CZFEyb2Uq4IUsJkQMFkxt5ovOSOj2ECDm+78mGOuCbimFfJpYf9oVhNDri3Y1Umt+w4e
+         3vvcVR35P2RwveluJ9J1Yz/hES8eBe+7qLpu48shxJGS7O2eignH/xMLaIJ5S3kfRdeN
+         TkgqUB63VvANg7EBkV1zQktlD4CeDeVGqT5Z9bJ2KNO230N9wBcMBiEzZshUIqmyVZxf
+         rziS+h+yhRHYz1tvTGr2rwLWBa/TKeQqkoBQFdVYXERHT2l9dmGXKIN9BLo4+pg2pe+J
+         2m9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9yjwjBH71B1Tr99bztBPhfwTmYUTMG61RRb8LVVQw1M=;
-        b=ErdQXxVQ0zDyF4yeQnTqoviP1sV7yZXmRB2h4POWyjmKDlxFvGGZ59SMajcM2scLBW
-         kD82SYNU1NRqka7JHq3ZsxsQcsTFzi27vzEbQGrye5bN3LGBdFD/xH873fw7K6ItTb09
-         91j7o6vFzHRsvvCSp2dj90rw+pOlg/t7pPY0ukY4iBFO8XGwDlFzfu4IIxfcYauCkf+H
-         Vb+Y88qxXgpdzvwUynmDjKI/w0pNvmJLse17aNs0ZHC2RcwnP6aILpPR+hg1DBRkeabl
-         00Y/EIvwNl3rRP4fJMhdgtv0JoUmh+0Iyu1X1w15rHwNOUY8ALvcd9q0J5ktmGoz0Kni
-         qYBg==
-X-Gm-Message-State: AOAM531wAXzFzPaNhf6nLseOlIR4PIoC5sQxNFpGhbLeejbkXl/Dqw2E
-        EdpcdXTD5V//3EsDgAvx0O2dMnCczcY5w/XB
-X-Google-Smtp-Source: ABdhPJxZORdOWEsDLv/rJ7UYLj8sVmeqmWMeQbEHhJWi0qQkoXDt7WC70HaG+5WtJsVVLoMFomCqhA==
-X-Received: by 2002:a5d:680c:: with SMTP id w12mr5237812wru.139.1625840790725;
-        Fri, 09 Jul 2021 07:26:30 -0700 (PDT)
+        bh=GJbTV9HbgtZtuGVRujZ4GmQHg/F2jWWQ4ik4RBG2kic=;
+        b=c168TNOO2gg3AMwIMZ3pCu3Ko7Ln779AvTJw5bg4EtNBiDZ++z6cDM9uzoOcXTpATk
+         5vnCcYxdePo8nruLgLo/d+FToeqhWyDCVXRzXI73uwNehClGCMJzBNDar+WhwQCjHRca
+         SdQ8JPq8q+ViRI1IXxH/kFhbBLfpdRr+Pp813whmDp7EE5Ql6dYge5K5EcVEOBsPk6Co
+         BCMKnAwuOtCxPlN39WJzf+2jm8Gxqogbz7tN5jYX1wGo2+OR7yYGll2WD+eKDOsj1Uyj
+         lKu2ZASw1jReq/KQ/VdMUs80NSMp7T3dNaCxV00HW0DQY4ChfC0U0CJp7V1ahZOKbDKp
+         p9Kg==
+X-Gm-Message-State: AOAM531HVOSnUqjlAwMIxh6PRm/C1vwK8EzTokduaqmIyKgZFf9eGNur
+        v5Ix/6jrmnnKh467blsu+HlCZA==
+X-Google-Smtp-Source: ABdhPJx3ApCr0sZhk8mSA2m/gLQ108Z6k9mAMVDM6a+qusTKVElEZ5VXEmVWkg4rAbGZT1Zc0AKJAg==
+X-Received: by 2002:a5d:46cc:: with SMTP id g12mr40516250wrs.136.1625840788960;
+        Fri, 09 Jul 2021 07:26:28 -0700 (PDT)
 Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
-        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.29
+        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 07:26:30 -0700 (PDT)
+        Fri, 09 Jul 2021 07:26:28 -0700 (PDT)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -64,9 +64,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v2 03/11] rcar-vin: Improve async notifier cleanup paths
-Date:   Fri,  9 Jul 2021 16:25:52 +0200
-Message-Id: <20210709142600.651718-4-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 01/11] rcar-vin: Refactor controls creation for video device
+Date:   Fri,  9 Jul 2021 16:25:50 +0200
+Message-Id: <20210709142600.651718-2-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
@@ -77,116 +77,150 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cleanup code for the async notifiers can be refactored to own
-functions to reduce code duplication and improve readability. While at
-it rename the CSI-2 initialization function _csi2_ instead of _mc_ to
-match.
+The controls for the video device are created in different code paths
+depending on if the driver is using the media graph centric model (Gen3)
+or the device centric model (Gen2 and earlier). This have lead to code
+duplication that can be consolidated.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-core.c | 51 ++++++++++++---------
- 1 file changed, 30 insertions(+), 21 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-core.c | 82 +++++++++++----------
+ 1 file changed, 45 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-index bea3880752169344..2957fa10252fd1e0 100644
+index 33957cc9118ca79e..6ea561fcd7a394fa 100644
 --- a/drivers/media/platform/rcar-vin/rcar-core.c
 +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-@@ -383,6 +383,16 @@ static void rvin_group_put(struct rvin_dev *vin)
- 	kref_put(&group->refcount, rvin_group_release);
- }
+@@ -405,6 +405,45 @@ static const struct v4l2_ctrl_ops rvin_ctrl_ops = {
+ 	.s_ctrl = rvin_s_ctrl,
+ };
  
-+static void rvin_group_notifier_cleanup(struct rvin_dev *vin)
++static void rvin_free_controls(struct rvin_dev *vin)
 +{
-+	mutex_lock(&vin->group->lock);
-+	if (&vin->v4l2_dev == vin->group->notifier.v4l2_dev) {
-+		v4l2_async_notifier_unregister(&vin->group->notifier);
-+		v4l2_async_notifier_cleanup(&vin->group->notifier);
++	v4l2_ctrl_handler_free(&vin->ctrl_handler);
++	vin->vdev.ctrl_handler = NULL;
++}
++
++static int rvin_create_controls(struct rvin_dev *vin, struct v4l2_subdev *subdev)
++{
++	int ret;
++
++	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 16);
++	if (ret < 0)
++		return ret;
++
++	/* The VIN directly deals with alpha component. */
++	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
++			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
++
++	if (vin->ctrl_handler.error) {
++		ret = vin->ctrl_handler.error;
++		rvin_free_controls(vin);
++		return ret;
 +	}
-+	mutex_unlock(&vin->group->lock);
++
++	/* For the non-MC mode add controls from the subdevice. */
++	if (subdev) {
++		ret = v4l2_ctrl_add_handler(&vin->ctrl_handler,
++					    subdev->ctrl_handler, NULL, true);
++		if (ret < 0) {
++			rvin_free_controls(vin);
++			return ret;
++		}
++	}
++
++	vin->vdev.ctrl_handler = &vin->ctrl_handler;
++
++	return 0;
 +}
 +
  /* -----------------------------------------------------------------------------
-  * Controls
+  * Async notifier
   */
-@@ -676,6 +686,12 @@ static int rvin_parallel_parse_of(struct rvin_dev *vin)
+@@ -490,28 +529,10 @@ static int rvin_parallel_subdevice_attach(struct rvin_dev *vin,
+ 		return ret;
+ 
+ 	/* Add the controls */
+-	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 16);
++	ret = rvin_create_controls(vin, subdev);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
+-			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
+-
+-	if (vin->ctrl_handler.error) {
+-		ret = vin->ctrl_handler.error;
+-		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+-		return ret;
+-	}
+-
+-	ret = v4l2_ctrl_add_handler(&vin->ctrl_handler, subdev->ctrl_handler,
+-				    NULL, true);
+-	if (ret < 0) {
+-		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+-		return ret;
+-	}
+-
+-	vin->vdev.ctrl_handler = &vin->ctrl_handler;
+-
+ 	vin->parallel.subdev = subdev;
+ 
+ 	return 0;
+@@ -522,10 +543,8 @@ static void rvin_parallel_subdevice_detach(struct rvin_dev *vin)
+ 	rvin_v4l2_unregister(vin);
+ 	vin->parallel.subdev = NULL;
+ 
+-	if (!vin->info->use_mc) {
+-		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+-		vin->vdev.ctrl_handler = NULL;
+-	}
++	if (!vin->info->use_mc)
++		rvin_free_controls(vin);
+ }
+ 
+ static int rvin_parallel_notify_complete(struct v4l2_async_notifier *notifier)
+@@ -935,21 +954,10 @@ static int rvin_mc_init(struct rvin_dev *vin)
+ 	if (ret)
+ 		rvin_group_put(vin);
+ 
+-	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 1);
++	ret = rvin_create_controls(vin, NULL);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
+-			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
+-
+-	if (vin->ctrl_handler.error) {
+-		ret = vin->ctrl_handler.error;
+-		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+-		return ret;
+-	}
+-
+-	vin->vdev.ctrl_handler = &vin->ctrl_handler;
+-
  	return ret;
  }
  
-+static void rvin_parallel_cleanup(struct rvin_dev *vin)
-+{
-+	v4l2_async_notifier_unregister(&vin->notifier);
-+	v4l2_async_notifier_cleanup(&vin->notifier);
-+}
-+
- static int rvin_parallel_init(struct rvin_dev *vin)
- {
- 	int ret;
-@@ -937,7 +953,16 @@ static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
+@@ -1450,7 +1458,7 @@ static int rcar_vin_probe(struct platform_device *pdev)
  	return 0;
- }
  
--static int rvin_mc_init(struct rvin_dev *vin)
-+static void rvin_csi2_cleanup(struct rvin_dev *vin)
-+{
-+	if (!vin->info->use_mc)
-+		return;
-+
-+	rvin_group_notifier_cleanup(vin);
-+	rvin_group_put(vin);
-+}
-+
-+static int rvin_csi2_init(struct rvin_dev *vin)
- {
- 	int ret;
- 
-@@ -1449,7 +1474,7 @@ static int rcar_vin_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, vin);
+ error_group_unregister:
+-	v4l2_ctrl_handler_free(&vin->ctrl_handler);
++	rvin_free_controls(vin);
  
  	if (vin->info->use_mc) {
--		ret = rvin_mc_init(vin);
-+		ret = rvin_csi2_init(vin);
- 		if (ret)
- 			goto error_dma_unregister;
+ 		mutex_lock(&vin->group->lock);
+@@ -1485,7 +1493,7 @@ static int rcar_vin_remove(struct platform_device *pdev)
+ 		rvin_group_put(vin);
  	}
-@@ -1462,20 +1487,9 @@ static int rcar_vin_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
  
- 	return 0;
--
- error_group_unregister:
- 	rvin_free_controls(vin);
--
--	if (vin->info->use_mc) {
--		mutex_lock(&vin->group->lock);
--		if (&vin->v4l2_dev == vin->group->notifier.v4l2_dev) {
--			v4l2_async_notifier_unregister(&vin->group->notifier);
--			v4l2_async_notifier_cleanup(&vin->group->notifier);
--		}
--		mutex_unlock(&vin->group->lock);
--		rvin_group_put(vin);
--	}
--
-+	rvin_csi2_cleanup(vin);
- error_dma_unregister:
+-	v4l2_ctrl_handler_free(&vin->ctrl_handler);
++	rvin_free_controls(vin);
+ 
  	rvin_dma_unregister(vin);
- 
-@@ -1490,14 +1504,9 @@ static int rcar_vin_remove(struct platform_device *pdev)
- 
- 	rvin_v4l2_unregister(vin);
- 
--	v4l2_async_notifier_unregister(&vin->notifier);
--	v4l2_async_notifier_cleanup(&vin->notifier);
-+	rvin_parallel_cleanup(vin);
- 
--	if (vin->info->use_mc) {
--		v4l2_async_notifier_unregister(&vin->group->notifier);
--		v4l2_async_notifier_cleanup(&vin->group->notifier);
--		rvin_group_put(vin);
--	}
-+	rvin_csi2_cleanup(vin);
- 
- 	rvin_free_controls(vin);
  
 -- 
 2.32.0
