@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB72BC07E99
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29EC8C07E9C
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1C706120D
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12581613BC
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbhGIO3N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jul 2021 10:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S231921AbhGIO3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jul 2021 10:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbhGIO3N (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:13 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B23C0613DD
-        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:29 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d12so11792468wre.13
-        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:29 -0700 (PDT)
+        with ESMTP id S229561AbhGIO3O (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:14 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D70C0613E5
+        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:31 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id v5so12419906wrt.3
+        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DbC5nJaoh+hWdWc67g+zjhO1RlIfhIErNWQTAaXY+Pk=;
-        b=CyUBP0y5kzTeCOA3wDLlYi/nrmG8nHNpxrQFRbRZodozeH85RnPwCUlkdA6OfmpwIa
-         LSNQt9WslBxxsUUG+r4kgdGFFvbIHaNjJQ/a3rzFPXZSxxFmhCMonlLz8ccoHJfgUjFJ
-         aJv7O6f+zbs7dLwldhzd1b8ISZSiM9Z5JW8crH3FRfXDZVQNMQITeLubkMDppX1txGUZ
-         gvR3C4ZL95W03g5h6SkBCSJp/3YGJ1yo8i6y+TZiasYBX/uHV9orp0FmMBD0l7mQN8JL
-         Sc/ZxM3m4zYNTZwVvjDu2StFzxK90rijwAFYzEcAxHPbDoufRncvHyPxMNMNpiG7+23Z
-         jKvA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=REDzv9+6s/N+X5U5gFn/O0gbvXr5/Mxy0tkymEivpfM=;
+        b=J8xPdC7LNcVfyQebl8RoVRlVv8lBRl9wsbT0WT0MibpfwU4KCFRfMB+rBJuox3qZ+w
+         d9cklezxxRTB0yFO8U/hbGpdjA7T4OhN4a2dGZhtEvBjRT7Kww77cG4HVNxzkw/mKP2i
+         TOCKOuVCLCmawep3pBglQFTth9rXthEL2Y5MFdRcmI4UXB/EOKaou/ZGX71NN2eSfuwc
+         1j57zpW1cnnWizohwBF9UVmy5CcpjVrr0VkiIivqxDZhUVyO0DQPdVkjsVHpDpfU9XZb
+         D0FWOFkA8DANcRNQmHVV8OjRgWM7q3382DQLpFxp8Yd2JxErvrF5XRhGSUm0ln7VKTwr
+         6RBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DbC5nJaoh+hWdWc67g+zjhO1RlIfhIErNWQTAaXY+Pk=;
-        b=eVJcvykHB9+kZQ7pUn/3ICkNmREuOmMGRvTsky0I4Jb1L01zAYx30XRY2zymf/FAeu
-         qI1rtZtL9hOWI2Zzzz4kWUp4nSRTMdTsflbJUHrUUsWa63UY3uQSlMip7AH8Ly8/NO6S
-         mrVojR4KsfbpCJ/9tr6UDM67+ftQl5LJDGWWKbsgabPRYnPxM92VqgQqRvjL647vvBR5
-         raZmafZJWJBgXgKSV+UyTPRpWnkwnIrRG/8Zxg8nZq35qq0Bs8JoY/TIMWGglDbx2cPA
-         /g3PHCnFVJGOsGEguUkq+UIkV1HWVX6G6VTAgCo/eC72LTauVwbuYnjOImUs3iNzJTOX
-         D9GQ==
-X-Gm-Message-State: AOAM532+6zFOOsSPEVZUBDLbb4t7wRHDDKCxHn4ukNidksempRExhEZY
-        EKuMW565AK46Gz6HMIF+yh0l0g==
-X-Google-Smtp-Source: ABdhPJxY+EC3lUAjIE9FkShh6ndNJWtH7/7l37Q57S3ImnBq2/uaJ2A3JO2VgWmWEFD+TccmYV2/nA==
-X-Received: by 2002:a5d:684f:: with SMTP id o15mr41131746wrw.134.1625840788138;
-        Fri, 09 Jul 2021 07:26:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=REDzv9+6s/N+X5U5gFn/O0gbvXr5/Mxy0tkymEivpfM=;
+        b=aBhjz0qhqgwMoHrT+bAnw2Il8V+OwyKoNUmNbDFU4dR5b0N9IT/JZnl7s5p3v/hRYH
+         UvFShxIp/R0Vv4wF9Ca8NzSzid8KSjSsfTfNjIKYFeemIEdzUTWHirmnpDyeQSkXEIzQ
+         FH45Mec5xuy3s0/9Zal2RDBEdzktxKNGi/kULw5A2HDd8XwsUkscMQ83g8F/3B8cXR/S
+         9+Yzew4kFFb9lKGY6stgaiE+PDpjgY0ArpMdNHKvrlrYRtwNAXR8ChTsdklhK/GIklmq
+         Hh/TY68Iu1C55jbkHWEx/K7iOvRdnVr+Gp76N425VD3TV8VkZLhIoeN0qVYLNJOonkGm
+         neSg==
+X-Gm-Message-State: AOAM532srNb682HrUG8Fnh0/5rF+k4tKBeitF4K/ivqQm8q3x51hU74s
+        KlXTpCDaI2rkX567FgrXYM5DNA==
+X-Google-Smtp-Source: ABdhPJzhiqwYFKTzIvTfyAQDaCoU6v/bYZ7b3ymddCIRsPCtD/0ElCBXcGC+/ASQxujm+vflsroK8A==
+X-Received: by 2002:adf:ee4f:: with SMTP id w15mr2983931wro.311.1625840789638;
+        Fri, 09 Jul 2021 07:26:29 -0700 (PDT)
 Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
-        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.27
+        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 07:26:27 -0700 (PDT)
+        Fri, 09 Jul 2021 07:26:29 -0700 (PDT)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -62,11 +62,14 @@ To:     Sakari Ailus <sakari.ailus@iki.fi>,
         linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2 00/11] rcar-vin: Add r8a779a0 support
-Date:   Fri,  9 Jul 2021 16:25:49 +0200
-Message-Id: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Subject: [PATCH v2 02/11] rcar-vin: Fix error paths for rvin_mc_init()
+Date:   Fri,  9 Jul 2021 16:25:51 +0200
+Message-Id: <20210709142600.651718-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,51 +77,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The error paths of rvin_mc_init() do not clean up properly, fix this.
 
-This series adds support for V3U (r8a779a0) to the R-Car VIN driver. The
-V3U SoC is different from other Renesas SoCs as a new IP block (the ISP
-channel selector) is added between the CSI-2 receiver and the VIN
-modules. This new ISP IP deals with CSI-2 channel filtering based on
-VC/DT which in turn makes the VIN drivers much simpler with regards to
-the media graph. But it also means the rcar-vin driver needs to support
-and generate both the generic Gen3 MC-graph and the specific V3U
-MC-graph.
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/platform/rcar-vin/rcar-core.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-The rcar-vin driver intertwines the VIN group concept and the usage of
-the media graph into a single implementation. This needs to be broken
-apart before the new V3U support can be added. The first 01/11 - 10/11
-patches deals with this separation and its fallout. Fortunately patch
-11/11 after all that preparation work is quiet simple and straight
-forward when adding the V3U support.
-
-There is a large patch (10/11) in the series, reviewers please fear not
-it only moves blocks of code around verbatim.
-
-While working on this series it have become even more apparent to me
-that the VIN group concept probably should be replaced with something
-like the Media Device Allocator API once it learns how to work with DT.
-This series separation of the two VIN concepts is a good first step for
-me to hope to find time to dig into that.
-
-Niklas Söderlund (11):
-  rcar-vin: Refactor controls creation for video device
-  rcar-vin: Fix error paths for rvin_mc_init()
-  rcar-vin: Improve async notifier cleanup paths
-  rcar-vin: Improve reuse of parallel notifier
-  rcar-vin: Rename array storing subdevice information
-  rcar-vin: Move group async notifier
-  rcar-vin: Extend group notifier DT parser to work with any port
-  rcar-vin: Create a callback to setup media links
-  rcar-vin: Specify media device ops at group creation time
-  rcar-vin: Move and rename CSI-2 link notifications
-  rcar-vin: Add r8a779a0 support
-
- drivers/media/platform/rcar-vin/rcar-core.c | 960 +++++++++++---------
- drivers/media/platform/rcar-vin/rcar-dma.c  |  20 +-
- drivers/media/platform/rcar-vin/rcar-vin.h  |  24 +-
- 3 files changed, 577 insertions(+), 427 deletions(-)
-
+diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+index 6ea561fcd7a394fa..bea3880752169344 100644
+--- a/drivers/media/platform/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/rcar-vin/rcar-core.c
+@@ -946,17 +946,23 @@ static int rvin_mc_init(struct rvin_dev *vin)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = rvin_create_controls(vin, NULL);
++	if (ret < 0)
++		return ret;
++
+ 	ret = rvin_group_get(vin);
+ 	if (ret)
+-		return ret;
++		goto err_controls;
+ 
+ 	ret = rvin_mc_parse_of_graph(vin);
+ 	if (ret)
+-		rvin_group_put(vin);
++		goto err_group;
+ 
+-	ret = rvin_create_controls(vin, NULL);
+-	if (ret < 0)
+-		return ret;
++	return 0;
++err_group:
++	rvin_group_put(vin);
++err_controls:
++	rvin_free_controls(vin);
+ 
+ 	return ret;
+ }
 -- 
 2.32.0
 
