@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B03F4C07E9E
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43202C07E9C
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 997C4613BC
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2958D613BD
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbhGIO3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jul 2021 10:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S232308AbhGIO3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jul 2021 10:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbhGIO3S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:18 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA23C0613E5
-        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso9212925wmh.4
-        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:34 -0700 (PDT)
+        with ESMTP id S231622AbhGIO3V (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:21 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24335C0613E5
+        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:38 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id i94so12391808wri.4
+        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lVYndLyj3uerm193pKMzGgivY6yXF4tA+XFaFHPGQK4=;
-        b=RpcKkLquo8tfZs7GMzXITV7Cld04/VHjdnYx3IzO0sGX5kCMnnMebKF3oO30dj0Ioz
-         +EMw3Jau27QO7ALn5k2oQkuEFozBvcG2Kw5oHUpNlF/i1tjZR+ieWXNLo4/fb2FdSNUV
-         nzfWWCN9nar96qgQGeuO7aoaXCT5S2uNtHltziD5Om9UcptN5q/l7gYOeNEPxj7nZd1p
-         fTJ67GblNmnh4aI14Ol5YMOXEX42aB5IzJs/5MV9YRMd9/J7r6dfYh9jiSK0kZIZnML/
-         evTtix8xQaKtbfRAA4VgFlnJG4tyP47J0zHlA1RkQFstxfhVye7v/NHRGTyEhSDxfglO
-         AGQA==
+        bh=sc3iYBo2cLOjGZ/GY0qFgmETJpJ6IqjGAI8ogbEtmjo=;
+        b=MO3WdUGNZkqS7J0OrXqM/al1Zr8pgZbxwvrv28Eh+iAUSSaHhRAZnMajOb4riSBN89
+         bUONAKE9cwHPVJZxjORMM1xI990r2LJ0U+Y/xpc2NcPSSM7NLB7llbvy4qh8CN/q2HvT
+         lTs8lOi1wzxrFrP+s//kaMjO4UA2+XtBt0AGULfTxezY1ydbbqufuNUg6zj0k30jFXyi
+         9MdD9O2FGVbECZ36E6imrEcf4BuD3RBmsv6yIhIOcJMhnIOo7Zk/cMC0vG8zYEGKAfZ6
+         lfu5lRh0ycSdZWznfDBRpIEN2c0ETjNOci5kSCDLWqs8y2wtVal9VGHJavtGV8hhW2h1
+         tfbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lVYndLyj3uerm193pKMzGgivY6yXF4tA+XFaFHPGQK4=;
-        b=SxC4yLAyRurU08d1LbD9SWLBE+hqePcgX552Wjr4zOSLmlPOtXeRk2IzJOYnzTaVFr
-         yto+y43NwnR9Eb2CUB9QHgW7Iut4USH8FRhVmSDgQId/tLYtzsfQY0wNyXGXDVUwIOGY
-         AWvaEtFDkAOphHEhuIEEqEsbFrg3bMYsFr9MUy8Fq5R+cTYMWyoUHxpOrHH9GQlRvYqB
-         6jT/tP5dHQdi73nunB/1AJKdojeZoBwT9tBmD7D6/YzYB/Qf1MFAPw6GkcEUz+hKtL6h
-         IBMcLX4G2l7Vaxp1mdlFmZH2Gd80fZQ0LLAIlhnlpn1LaupNY1zMhIKkQMP+Tjf9ibFq
-         u/dQ==
-X-Gm-Message-State: AOAM5333I+sJgI7O64zt4mWQ2NJpzIFRb+kHmRWrKqNRHUJdM7yRME07
-        P9BX01uot84Re2z1Is9xPx5xqBSXJT7JSJOs
-X-Google-Smtp-Source: ABdhPJwrePiBzsjJ4n4b0zF0BE+ZyHNQAlXZ+xnSEl/U7Xc4dxcbHToxNmsbaoD5Jm3OdH7/pUfpDA==
-X-Received: by 2002:a1c:1bd0:: with SMTP id b199mr22793507wmb.108.1625840793709;
-        Fri, 09 Jul 2021 07:26:33 -0700 (PDT)
+        bh=sc3iYBo2cLOjGZ/GY0qFgmETJpJ6IqjGAI8ogbEtmjo=;
+        b=lJdJXS2d6X+viOJdm3cJ+R5HiEDPjbB7IrDPNVnNFFNMwmnkpApy7O5C7cb4sH1OLx
+         56yT3Xc9kb0p4Rc2cXGcK0+vLmtxLpP1wdjOq6VpWTM+FcHHerUxCo27RbL9i2/L74Mz
+         bTGCjMZWEY8TcPIK2+XLeviXuoCeY7U8f7ptd7OUy4yjIeDgaJnv5911HPuymLY17RGL
+         2LcPPDGJz8DszSJz0HI8GnBSTViYZHgzK1Nx/6+Vk+4o64ch9Ge59mXBVBQyvPrEAmq+
+         9AXE0ZjbFvGPEDjw5TQCCmWUSc60K5GNSbIQuqS3xbzocWutm1Em/HoawtrMnUDuYC0d
+         WeJQ==
+X-Gm-Message-State: AOAM533VbJ9Rwg82VPYtbo+BC014oji1GxxmwLniHvb6ofPPqCYNr09j
+        ybklUUbQ2UNouj+SrWGdYByEyg==
+X-Google-Smtp-Source: ABdhPJwW9I535ZzDXN/H1tSiW2VgOQApDV7D2MQMysRZ4rSec3F+l9ZHY55V0NmPbAYc4IGuJcxmrA==
+X-Received: by 2002:a05:6000:1243:: with SMTP id j3mr4401214wrx.244.1625840796662;
+        Fri, 09 Jul 2021 07:26:36 -0700 (PDT)
 Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
-        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.32
+        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 07:26:33 -0700 (PDT)
+        Fri, 09 Jul 2021 07:26:36 -0700 (PDT)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Sakari Ailus <sakari.ailus@iki.fi>,
@@ -64,9 +64,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v2 07/11] rcar-vin: Extend group notifier DT parser to work with any port
-Date:   Fri,  9 Jul 2021 16:25:56 +0200
-Message-Id: <20210709142600.651718-8-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 11/11] rcar-vin: Add r8a779a0 support
+Date:   Fri,  9 Jul 2021 16:26:00 +0200
+Message-Id: <20210709142600.651718-12-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
@@ -77,87 +77,246 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The R-Car VIN group notifier will be extend to support a new group of
-subdevices, the R-Car ISP channel selector in addition to the existing
-R-Car CSI-2 receiver subdevices.
+Add support for the R-Car V3U (r8a779a0) to the driver. The V3U has the
+VIN modules connected to a ISP instead of directly to the R-Car CSI-2
+receivers. The reason being that the ISP performs channel selection
+based on CSI-2 VC/DT pairs and routes the video data to different VIN
+modules. In other SoC versions this filtering is done by the VIN modules
+themself.
 
-The existing DT parsing code can be reused if the port and max number of
-endpoints are provided as parameters instead of being hard-coded. While
-at it align the group notifier parser function names with the rest of
-the driver.
+While the media graph is very different from other SoCs the only
+difference in operating the VIN modules is that the VC/DT filtering
+should be skipped as that is performed by the ISP.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-core.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+* Changes since v1
+- Allow the link_setup() return an error.
+- Fix spelling in commit message.
+---
+ drivers/media/platform/rcar-vin/rcar-core.c | 106 +++++++++++++++++++-
+ drivers/media/platform/rcar-vin/rcar-dma.c  |  20 ++--
+ drivers/media/platform/rcar-vin/rcar-vin.h  |  15 ++-
+ 3 files changed, 128 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-index 3585985e822560ea..ae2a145b04f681f8 100644
+index 0653e1ce144860fe..690e3f7e5a1c68ca 100644
 --- a/drivers/media/platform/rcar-vin/rcar-core.c
 +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-@@ -506,7 +506,8 @@ static const struct v4l2_async_notifier_operations rvin_group_notify_ops = {
- 	.complete = rvin_group_notify_complete,
- };
- 
--static int rvin_mc_parse_of(struct rvin_dev *vin, unsigned int id)
-+static int rvin_group_parse_of(struct rvin_dev *vin, unsigned int port,
-+			       unsigned int id)
- {
- 	struct fwnode_handle *ep, *fwnode;
- 	struct v4l2_fwnode_endpoint vep = {
-@@ -515,7 +516,7 @@ static int rvin_mc_parse_of(struct rvin_dev *vin, unsigned int id)
- 	struct v4l2_async_subdev *asd;
- 	int ret;
- 
--	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(vin->dev), 1, id, 0);
-+	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(vin->dev), port, id, 0);
- 	if (!ep)
- 		return 0;
- 
-@@ -563,7 +564,8 @@ static void rvin_group_notifier_cleanup(struct rvin_dev *vin)
- 	mutex_unlock(&vin->group->lock);
+@@ -1007,6 +1007,91 @@ static int rvin_csi2_init(struct rvin_dev *vin)
+ 	return ret;
  }
  
--static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
-+static int rvin_group_notifier_init(struct rvin_dev *vin, unsigned int port,
-+				    unsigned int max_id)
- {
- 	unsigned int count = 0, vin_mask = 0;
- 	unsigned int i, id;
-@@ -589,19 +591,18 @@ static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
- 	v4l2_async_notifier_init(&vin->group->notifier);
++/* -----------------------------------------------------------------------------
++ * ISP
++ */
++
++static int rvin_isp_setup_links(struct rvin_dev *vin)
++{
++	unsigned int i;
++	int ret = -EINVAL;
++
++	/* Create all media device links between VINs and ISP's. */
++	mutex_lock(&vin->group->lock);
++	for (i = 0; i < RCAR_VIN_NUM; i++) {
++		struct media_pad *source_pad, *sink_pad;
++		struct media_entity *source, *sink;
++		unsigned int source_slot = i / 8;
++		unsigned int source_idx = i % 8 + 1;
++
++		if (!vin->group->vin[i])
++			continue;
++
++		/* Check that ISP is part of the group. */
++		if (!vin->group->remotes[source_slot].subdev)
++			continue;
++
++		source = &vin->group->remotes[source_slot].subdev->entity;
++		source_pad = &source->pads[source_idx];
++
++		sink = &vin->group->vin[i]->vdev.entity;
++		sink_pad = &sink->pads[0];
++
++		/* Skip if link already exists. */
++		if (media_entity_find_link(source_pad, sink_pad))
++			continue;
++
++		ret = media_create_pad_link(source, source_idx, sink, 0,
++					    MEDIA_LNK_FL_ENABLED |
++					    MEDIA_LNK_FL_IMMUTABLE);
++		if (ret) {
++			vin_err(vin, "Error adding link from %s to %s\n",
++				source->name, sink->name);
++			break;
++		}
++	}
++	mutex_unlock(&vin->group->lock);
++
++	return ret;
++}
++
++static void rvin_isp_cleanup(struct rvin_dev *vin)
++{
++	rvin_group_notifier_cleanup(vin);
++	rvin_group_put(vin);
++	rvin_free_controls(vin);
++}
++
++static int rvin_isp_init(struct rvin_dev *vin)
++{
++	int ret;
++
++	vin->pad.flags = MEDIA_PAD_FL_SINK;
++	ret = media_entity_pads_init(&vin->vdev.entity, 1, &vin->pad);
++	if (ret)
++		return ret;
++
++	ret = rvin_create_controls(vin, NULL);
++	if (ret < 0)
++		return ret;
++
++	ret = rvin_group_get(vin, rvin_isp_setup_links, NULL);
++	if (ret)
++		goto err_controls;
++
++	ret = rvin_group_notifier_init(vin, 2, RVIN_ISP_MAX);
++	if (ret)
++		goto err_group;
++
++	return 0;
++err_group:
++	rvin_group_put(vin);
++err_controls:
++	rvin_free_controls(vin);
++
++	return ret;
++}
++
+ /* -----------------------------------------------------------------------------
+  * Suspend / Resume
+  */
+@@ -1379,6 +1464,15 @@ static const struct rvin_info rcar_info_r8a77995 = {
+ 	.routes = rcar_info_r8a77995_routes,
+ };
  
- 	/*
--	 * Have all VIN's look for CSI-2 subdevices. Some subdevices will
--	 * overlap but the parser function can handle it, so each subdevice
--	 * will only be registered once with the group notifier.
-+	 * Some subdevices may overlap but the parser function can handle it and
-+	 * each subdevice will only be registered once with the group notifier.
- 	 */
- 	for (i = 0; i < RCAR_VIN_NUM; i++) {
- 		if (!(vin_mask & BIT(i)))
- 			continue;
++static const struct rvin_info rcar_info_r8a779a0 = {
++	.model = RCAR_GEN3,
++	.use_mc = true,
++	.use_isp = true,
++	.nv12 = true,
++	.max_width = 4096,
++	.max_height = 4096,
++};
++
+ static const struct of_device_id rvin_of_id_table[] = {
+ 	{
+ 		.compatible = "renesas,vin-r8a774a1",
+@@ -1440,6 +1534,10 @@ static const struct of_device_id rvin_of_id_table[] = {
+ 		.compatible = "renesas,vin-r8a77995",
+ 		.data = &rcar_info_r8a77995,
+ 	},
++	{
++		.compatible = "renesas,vin-r8a779a0",
++		.data = &rcar_info_r8a779a0,
++	},
+ 	{ /* Sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, rvin_of_id_table);
+@@ -1488,7 +1586,9 @@ static int rcar_vin_probe(struct platform_device *pdev)
  
--		for (id = 0; id < RVIN_CSI_MAX; id++) {
-+		for (id = 0; id < max_id; id++) {
- 			if (vin->group->remotes[id].asd)
- 				continue;
+ 	platform_set_drvdata(pdev, vin);
  
--			ret = rvin_mc_parse_of(vin->group->vin[i], id);
-+			ret = rvin_group_parse_of(vin->group->vin[i], port, id);
- 			if (ret)
- 				return ret;
- 		}
-@@ -982,7 +983,7 @@ static int rvin_csi2_init(struct rvin_dev *vin)
- 	if (ret && ret != -ENODEV)
- 		goto err_group;
+-	if (vin->info->use_mc)
++	if (vin->info->use_isp)
++		ret = rvin_isp_init(vin);
++	else if (vin->info->use_mc)
+ 		ret = rvin_csi2_init(vin);
+ 	else
+ 		ret = rvin_parallel_init(vin);
+@@ -1512,7 +1612,9 @@ static int rcar_vin_remove(struct platform_device *pdev)
  
--	ret = rvin_mc_parse_of_graph(vin);
-+	ret = rvin_group_notifier_init(vin, 1, RVIN_CSI_MAX);
- 	if (ret)
- 		goto err_parallel;
+ 	rvin_v4l2_unregister(vin);
  
+-	if (vin->info->use_mc)
++	if (vin->info->use_isp)
++		rvin_isp_cleanup(vin);
++	else if (vin->info->use_mc)
+ 		rvin_csi2_cleanup(vin);
+ 	else
+ 		rvin_parallel_cleanup(vin);
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index f5f722ab1d4e8461..58718e52ae541a87 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -783,16 +783,18 @@ static int rvin_setup(struct rvin_dev *vin)
+ 	/* Always update on field change */
+ 	vnmc |= VNMC_VUP;
+ 
+-	/* If input and output use the same colorspace, use bypass mode */
+-	if (input_is_yuv == output_is_yuv)
+-		vnmc |= VNMC_BPS;
++	if (!vin->info->use_isp) {
++		/* If input and output use the same colorspace, use bypass mode */
++		if (input_is_yuv == output_is_yuv)
++			vnmc |= VNMC_BPS;
+ 
+-	if (vin->info->model == RCAR_GEN3) {
+-		/* Select between CSI-2 and parallel input */
+-		if (vin->is_csi)
+-			vnmc &= ~VNMC_DPINE;
+-		else
+-			vnmc |= VNMC_DPINE;
++		if (vin->info->model == RCAR_GEN3) {
++			/* Select between CSI-2 and parallel input */
++			if (vin->is_csi)
++				vnmc &= ~VNMC_DPINE;
++			else
++				vnmc |= VNMC_DPINE;
++		}
+ 	}
+ 
+ 	/* Progressive or interlaced mode */
+diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
+index 49c148c40ea52b79..36a229c9bb35c3c1 100644
+--- a/drivers/media/platform/rcar-vin/rcar-vin.h
++++ b/drivers/media/platform/rcar-vin/rcar-vin.h
+@@ -29,7 +29,7 @@
+ #define HW_BUFFER_MASK 0x7f
+ 
+ /* Max number on VIN instances that can be in a system */
+-#define RCAR_VIN_NUM 8
++#define RCAR_VIN_NUM 32
+ 
+ struct rvin_group;
+ 
+@@ -48,7 +48,17 @@ enum rvin_csi_id {
+ 	RVIN_CSI_MAX,
+ };
+ 
+-#define RVIN_REMOTES_MAX RVIN_CSI_MAX
++enum rvin_isp_id {
++	RVIN_ISP0,
++	RVIN_ISP1,
++	RVIN_ISP2,
++	RVIN_ISP4,
++	RVIN_ISP_MAX,
++};
++
++#define RVIN_REMOTES_MAX \
++	(((unsigned int)RVIN_CSI_MAX) > ((unsigned int)RVIN_ISP_MAX) ? \
++	 RVIN_CSI_MAX : RVIN_ISP_MAX)
+ 
+ /**
+  * enum rvin_dma_state - DMA states
+@@ -158,6 +168,7 @@ struct rvin_group_route {
+ struct rvin_info {
+ 	enum model_id model;
+ 	bool use_mc;
++	bool use_isp;
+ 	bool nv12;
+ 
+ 	unsigned int max_width;
 -- 
 2.32.0
 
