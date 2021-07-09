@@ -2,494 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81080C11F68
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35AABC07E9E
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:47:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AA90613BD
-	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:26:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 093CB613BD
+	for <linux-media@archiver.kernel.org>; Fri,  9 Jul 2021 14:47:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhGIO3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Jul 2021 10:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbhGIO3V (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Jul 2021 10:29:21 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A48CC0613DD
-        for <linux-media@vger.kernel.org>; Fri,  9 Jul 2021 07:26:37 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id i8so12367487wrp.12
-        for <linux-media@vger.kernel.org>; Fri, 09 Jul 2021 07:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LfLrhSqXgUTyC6zm1rNKNMjeoTtRgEMqAjUYBFFVPaY=;
-        b=A1jTj/ZX3KBxXMR3ws5EaRRWwFDkh17JLf4CVmw2OhXxe8tpcp+7nv/k4PW6UI3q6S
-         An9aY73aGG5IaIXyQ7U1NInV6BBqqRzg3+N78j9S2d0gqCc5ZSP8NeGcAOfEmiAzwtlk
-         RQhPwkiGYe34EdTA6WH972Ie6U/VlZ8ROP2hqeUqHdtsMJbtk/OUBSXaqAXLHtC/nXK9
-         ad13gNdNSka9pupf5cOfy56ckgnxXdGkP2k1jltadCXzYGKpIELJIAxqg9gDMzHNqy7j
-         buimIqeK1hGnkzHP/qP3iE6Ce38yqENCP62h1zAukEoiwxEWVpyNtMtaoJ2MS34L/ftM
-         6zlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LfLrhSqXgUTyC6zm1rNKNMjeoTtRgEMqAjUYBFFVPaY=;
-        b=bwW40Lsu8z8Jx5Z47C3ODQevTsXiWFWVBh96eoN0MCGxzd/jGAAvbTIFe5hYnHOMNm
-         GIy22NdsfPUtztBLGe3t/c5uS1TNBT/XocVLQEVllLDckW8Ibag36VgfLCwcXDZUVN3j
-         jKdgdxUHDFMRdEakmrZyl+DedRYKxTsV3/2aBMLyeLIJWP58prk1NDZkRxxZbn0gjgpT
-         WN1pJ/TyVBPFumKRBs2nxfOueozIMrs+rBOh4M2PZ+ntCBP25Hsul8x20a7F0Gl+Nwdi
-         xxXACBJS1PNk/HDpGHZi/XpYXOi0q8fdnuqZWZ4kSezfO1kxSYAkRR64GTihNueXEGrF
-         FNNg==
-X-Gm-Message-State: AOAM530aGuasf+3y1JBovANbo+x12R4GJf7u1L2C6qqp1yMTpCArkdky
-        Y9jhXPISpxrjaehLZRd+do0UAg==
-X-Google-Smtp-Source: ABdhPJzHL/uPMe6Gxx8EvNkSi6/SAvBV+uyBd7ojoRNE6gWMePewgCXPeyy2w4Pc7LbYa+4fgxMpyw==
-X-Received: by 2002:adf:fa4c:: with SMTP id y12mr42699763wrr.302.1625840795960;
-        Fri, 09 Jul 2021 07:26:35 -0700 (PDT)
-Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
-        by smtp.googlemail.com with ESMTPSA id f82sm11034245wmf.25.2021.07.09.07.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 07:26:35 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v2 10/11] rcar-vin: Move and rename CSI-2 link notifications
-Date:   Fri,  9 Jul 2021 16:25:59 +0200
-Message-Id: <20210709142600.651718-11-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20210709142600.651718-1-niklas.soderlund+renesas@ragnatech.se>
+        id S232230AbhGIOuS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Jul 2021 10:50:18 -0400
+Received: from mail-bn1nam07on2138.outbound.protection.outlook.com ([40.107.212.138]:55649
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229561AbhGIOuQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 9 Jul 2021 10:50:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ipH03Ydo7Uabikw1Jnld22E9iOcgaRC8P+BuxmGRGgo8TsyEIDbk0G56Djvvt0B3/PIQ+jXPSN1LP9afI3FQ7jZIvbmivvvatgbn52uVE49tc3y1sUnWd35sjQ1ZLlaADQkLjTnHf1ExhXOa2O3v0UdHea2s6hKXGs16in5p8CbThb31sCrvFmPdV84RdxyrdS08r1LOitYZddW6DS/XTObJqHKPn9izg8OhFRqHgLIuA7CSExvhxJqpOCUX3EP/CAE1WXAdMICxUcQ6ldXaNriqDvrLXDbTuwtFezTTRVbEG1N0A9P5734n9bhEp8C37vgUQvTnf3UWLQZB8xlBEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1MUKbsfaW+NVKhsUNNP8gybNfHmbuDuajON6DDdjMec=;
+ b=TkNrfTkZzkSNrH59Q6LV/2iKJUUF51QOLF4o8kFsbrKUaNfS+qWbSZcwMSK+SUQpMV0CXJF9YS4Sw/azVu7m3OVKeQB0LqPGhZ73BLsoS7GEzXGHBecCEuKRvfHRfoFVA6/5QZYRj3cUyEUuG5NDbAtOQ5/qRCuhgqECOvUgeojAibiZshc06J467IFSa7o9aIGMrF8YRmOTGsZ88ria3Dw75oPspZOJygb6X9ThaZDt7JnDRTvOKeas1PXMnuLqxsR1X01wPg0lBJ02a3oDxdXcthfs7am2rbX6e6C9Dg3fjgdf07P0ubkuANR8LgZKgUMwTbdZaKL/BtjT+R8V5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
+ header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1MUKbsfaW+NVKhsUNNP8gybNfHmbuDuajON6DDdjMec=;
+ b=HPKIPNAGCIhWS9QhvzencuGfZ7xlrUbS2BuYF8jpJaQMVZsvUnAzBZXWrDGbNGfmaIucXSQo3pOIH0vdEWxIar0OL7hM2BdC4QE9VX225JMFaY2AO+SqWZxSI6EGplHjKadA5qrKoi0SnH4Yn8IMEj0Ic0vB43Ms4i3rDgaWI3vuH9b+X8VCRtVK30tu7WLL8B00GhlKLX3CP6+GtaVgQ6h+pTzxNcWMTD2JbZ3gpUb4laDXcCQav3t2nhEJ9PMLFOOUcp7lhbAZB+KFQODcnz3faARfCIc9gX+kQBYMHJRViiaPQ2RUpyBaMk9YBpTVZeFoPEjOPRKZV59wm/HfRQ==
+Authentication-Results: lists.linaro.org; dkim=none (message not signed)
+ header.d=none;lists.linaro.org; dmarc=none action=none
+ header.from=cornelisnetworks.com;
+Received: from PH0PR01MB6439.prod.exchangelabs.com (2603:10b6:510:d::22) by
+ PH0PR01MB6538.prod.exchangelabs.com (2603:10b6:510:77::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4308.23; Fri, 9 Jul 2021 14:47:30 +0000
+Received: from PH0PR01MB6439.prod.exchangelabs.com
+ ([fe80::5c02:2146:2b1:f1eb]) by PH0PR01MB6439.prod.exchangelabs.com
+ ([fe80::5c02:2146:2b1:f1eb%7]) with mapi id 15.20.4287.032; Fri, 9 Jul 2021
+ 14:47:30 +0000
+Subject: Re: [PATCH v4 0/2] Add p2p via dmabuf to habanalabs
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>, sleybo@amazon.com,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+References: <YOQXBWpo3whVjOyh@phenom.ffwll.local>
+ <CAFCwf10_rTYL2Fy6tCRVAUCf4-6_TtcWCv5gEEkGnQ0KxqMUBg@mail.gmail.com>
+ <CAKMK7uEAJZUHNLreBB839BZOfnTGNU4rCx-0k55+67Nbxtdx3A@mail.gmail.com>
+ <20210706142357.GN4604@ziepe.ca>
+ <CAKMK7uELNzwUe+hhVWRg=Pk5Wt_vOOX922H48Kd6dTyO2PeBbg@mail.gmail.com>
+ <20210706152542.GP4604@ziepe.ca>
+ <CAKMK7uH7Ar6+uAOU_Sj-mf89V9WCru+66CV5bO9h-WAAv7Mgdg@mail.gmail.com>
+ <CAKMK7uGvO0h7iZ3vKGe8GouESkr79y1gP1JXbfV82sRiaT-d1A@mail.gmail.com>
+ <20210706172828.GR4604@ziepe.ca> <20210706173137.GA7840@lst.de>
+ <20210706175935.GS4604@ziepe.ca>
+From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Message-ID: <398a6cbc-e740-f30f-ab0a-5be2d1673fa9@cornelisnetworks.com>
+Date:   Fri, 9 Jul 2021 10:47:24 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.11.0
+In-Reply-To: <20210706175935.GS4604@ziepe.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR22CA0007.namprd22.prod.outlook.com
+ (2603:10b6:208:238::12) To PH0PR01MB6439.prod.exchangelabs.com
+ (2603:10b6:510:d::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from Denniss-MacBook-Pro.local (24.154.216.5) by MN2PR22CA0007.namprd22.prod.outlook.com (2603:10b6:208:238::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend Transport; Fri, 9 Jul 2021 14:47:27 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 83f558fc-a3ef-4d0b-3940-08d942e87a13
+X-MS-TrafficTypeDiagnostic: PH0PR01MB6538:
+X-Microsoft-Antispam-PRVS: <PH0PR01MB6538F0017CC49A275653C179F4189@PH0PR01MB6538.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8HqKjvvVd3r7+clSgVEaMTX+iKSQhhFCJWYMUiR/MRUWrJdfqshs7dTTa+RdwJqteAXjhb9oIIVYewVc2p5TrkvSOljrXM2rxQHLUQuiHxvMwnFbYbqXMESz4YFQtipO8gQRESymMrTH7uqK/+eExCQX8FzU0xwbhzDpxbaR/LExYiX2PRymYXGLYbGf2ps/U2em22dFiI5BXaeozGfQfg57Lxv9BJMxVjBEY3le4HLAcFzcSkNUSzIpjRvatNUewFiI/o4GQqOlpGZN1sN6duCnsTEyRR2aGUUzDJJJqXG+03vE6TexJV3GwOcrsGSJCIqWbr88PGmZlABefPtMz8Cb/mzHQOl5fYUFEN5VhLFCDZDDurwxHhaSVUX62xvKxrfcqIpRHvxCMlnzdD0lP+X92uYCP3RndhfwTW+AfACbJlzYaLMMl71XW6vPi1SmWNd7krGkkXBrPJ07cWu1ggdk4Yyz7KOlFSORs617zpbuwCKZERy0/g2RPTnUTnRYOH6MSgEcGl7gTvd1IVFLVZs3OQq8UlkH3Vx63kC0UFQ02t7ZL4xCPvz7VULJFvIdh2qnSzO4GdP6UOcA3WpAYRkGmtzP0Cw2GI+An2tFqRJnHo9AcfT6Yw8hPRjMhP50KfXGGlAE3YFonVSt8D+AxZj2U9mrXcKhNWkctdT0akF3iJ+l4ApN3YY+ffQGvK5EpEMtFRSDHLXeBmzNEh4FIXJboo0o+uysdHuKxgouBOkOcI5GBJ2W4KRu/tc+YaIYidoxLjJH8SLP9ZesblgMVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB6439.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(366004)(39840400004)(396003)(31686004)(7416002)(5660300002)(6512007)(53546011)(6506007)(316002)(36756003)(86362001)(54906003)(26005)(2906002)(44832011)(4326008)(956004)(2616005)(110136005)(52116002)(6666004)(31696002)(66556008)(66476007)(8936002)(66946007)(4744005)(186003)(478600001)(38350700002)(8676002)(6486002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjBvU3FjWE1rNVE3MmdadE9vQjAwUnB4TFErTnJid09LcVFpWFFVUVlBTjlx?=
+ =?utf-8?B?OHVodDRVdmV0bkt5K291OUhXY3hxSEpmdmlLemNSejIrUmRMamlvT3RIYnVU?=
+ =?utf-8?B?QVB2S0VJdDJVVjZMMXBrQ1dBYW92NWVsMExFQ3hlMTlIb1RkdzlXVlhWM1A4?=
+ =?utf-8?B?L1FENldNSUErTExuRXhIVWtBelpYZ2JsV1h5Z1YrU21mNXh5TzU1SjNwOTBm?=
+ =?utf-8?B?TFRtLy8xU2NaT0x5dlU2MDMwRWtrazNBZXVxUyt0YkVKbWE2Uk96dVlXTFp6?=
+ =?utf-8?B?R1Rlalp1eFBLSXV2ZGRNWlhNM0V3bnFTczJNTzB5REJqeFFmWTBNOER0MHRj?=
+ =?utf-8?B?K2wwSWZMQ0Rqalp0Z28wam5jb3NjQ0tDTTVZQ2hSbGg1bmEzOHNqU2FVTlZi?=
+ =?utf-8?B?YnZsYmxGYjAwT3ZNVEVGaFR2K0tad3BGYjd6K0lFak5qOCtVbU1seEtYczRn?=
+ =?utf-8?B?bEVrQzJpYk12QUlGMXdFTkJFdXVpU1VaYTZ0NkpoYWtFcnE3SzVMdWJ2ZFlj?=
+ =?utf-8?B?RlYvUEhuQTF3am5POFBxeUdFNitOam9BcHB1VGpibXlzd3BIRTZJMzVPN3Z3?=
+ =?utf-8?B?MDgwVzFpWThxOHlRazRNT3IrbjJNeGZtWStGc3lWVzJNL3ZZdnBBM2tmUXBP?=
+ =?utf-8?B?RnVHSUVnZW5mZzg0bzViVlo1UC9URXNBdFVWaDJ3b1RpL2UyNi9VTGp6MVpE?=
+ =?utf-8?B?WW84ZkhmYnV4bjRLNHNyK0VzMVl4UTlxTkFPMGZPY3gwWGkxaXV4TXQvdzBo?=
+ =?utf-8?B?eU8remY4RnA1dFRXUnRhVVgyZGdPazFyNXVxSi9RUGZqZm1vWXpkWkVwSkh2?=
+ =?utf-8?B?aE44SWVYUlBaeDNrUzMrK1p5eStJNXpFZXh0WWptaVBxVHV1Y1JYc1p6NTdk?=
+ =?utf-8?B?ODhReXdkQ3lPK2VpeGk2RnpCOFlUaFRybVU5bkY2MjBRMTA0bWlLREpna0NL?=
+ =?utf-8?B?Z0lhSEFybitlbkY1VWRlWmV1QmtwUWhHdVJ0QnhRVTgvMDNmU2FrWExreHZS?=
+ =?utf-8?B?QWZkM1BCTkRRdHRzV0NnQ2tiZTF4Q0VhV3Z4bUZuT1pnTHlJWU9kVXU0bW0x?=
+ =?utf-8?B?NVpqSUpUcUUvVXduRmxnanIwRytXblBuOC8yY3NucHlRd2hvakc1T0xWVzJS?=
+ =?utf-8?B?SEFubVZvcyt1bmFGaUpvWWE3ZWNISmFsejI4algzR3dTbURQL3k2cnJvNHJC?=
+ =?utf-8?B?RjJGaUFvYjk5Tk1VU2lOOEhwTlBtbVgyTWpZMElxS1N3bUh1WkVZOXptWTVE?=
+ =?utf-8?B?R21kQTVMSmdRc2tSV3hDcnFGMmJIQS92MDA2eHpHVW5TUHlUMm5aQWwwZkk2?=
+ =?utf-8?B?Slg2d2RSekE4cUdvenB4RG5OeTFVZ1RIZE5jNkFGQTkwZ1hQYlphZFlTcDFT?=
+ =?utf-8?B?Qk9JVGZ5dFVOSWJ0Y2pBYUJzcVVhVTNWMFczVEtyYlNiQXdtUFVOZ21TUVht?=
+ =?utf-8?B?aHVnODNqVWFaS3ptaVNnUHJwM2xiOGJmQ0xRWjhBZUNFRGZDUHBxQU01VmxJ?=
+ =?utf-8?B?Q25wTFlQZzB6RmRmV0ljUzNmNXJPVTRUeFB6MWdkZmtYeVRDSVkzQ2s1MlRY?=
+ =?utf-8?B?MGN6MDNiOUpaYTI0czlTdXJlYlVJKzJvVGh2OGNiWHNRUXhmSk5iMUE3WXpi?=
+ =?utf-8?B?djYycnE0WEk4WjM1K2kyN2hpbGd0QVpueTBFUjZvdEEwVTl4c01CRGdFTm9K?=
+ =?utf-8?B?anZNTm90MlJ5YWJlSnhrRlZ2QUJaSjlGelVjSXVNQ1F2dW14bmxLUEhVVkV6?=
+ =?utf-8?Q?NiX6E9z/H6dMogbabSkLKSnulIGzmp9/13c6/3T?=
+X-OriginatorOrg: cornelisnetworks.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83f558fc-a3ef-4d0b-3940-08d942e87a13
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB6439.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2021 14:47:29.9433
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aZVkDAJCWLuKUc9lwXBCg+3qf+jfYDPQ1sBVgXr7UbF6us3LgG+gDvDAy/EXV1vsdmmGabBtZLkdGpBdssEP7K9OoSn/CSP2lkszt8733V3cBckgEDKKxfVkc+1JGF9H
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6538
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CSI-2 link notifications are no longer the only option for the VIN
-group. Change the symbol prefix to rvin_csi2_ for all CSI-2 specific
-code and move the link notification code to the correct section not to
-mix it with the soon to be added R-Car ISP channel selector notification
-helpers.
+On 7/6/21 1:59 PM, Jason Gunthorpe wrote:
+> I can not say the same about other company's RDMA driver
+> distributions, Daniel's description of "minimal effort to get
+> goodwill" would match others much better.
 
-There is no functional change and apart from the symbol prefix change
-all functions are moved verbatim.
+Not sure what other RDMA driver you are talking about but as for Cornelis
+Networks, we do have a packaged up version of our software. However it is meant
+to make things easier on end users to bridge the gap between the distro kernel
+drivers and the upstream kernel.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
-* Changes since v1
-- Fix a comment in the code that no long is CSI2 exclusive.
-- Fix spelling in commit message.
----
- drivers/media/platform/rcar-vin/rcar-core.c | 362 ++++++++++----------
- 1 file changed, 179 insertions(+), 183 deletions(-)
+It's definitely not a requirement and plenty of folks do use distro
+kernels/drivers. I'm not sure how many large sites are using something straight
+off kernel.org but the upstream hfi1 driver is 100% the real deal.
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-index 8c27d9d5ca7e42b5..0653e1ce144860fe 100644
---- a/drivers/media/platform/rcar-vin/rcar-core.c
-+++ b/drivers/media/platform/rcar-vin/rcar-core.c
-@@ -45,188 +45,7 @@
- #define v4l2_dev_to_vin(d)	container_of(d, struct rvin_dev, v4l2_dev)
- 
- /* -----------------------------------------------------------------------------
-- * Media Controller link notification
-- */
--
--/* group lock should be held when calling this function. */
--static int rvin_group_entity_to_remote_id(struct rvin_group *group,
--					  struct media_entity *entity)
--{
--	struct v4l2_subdev *sd;
--	unsigned int i;
--
--	sd = media_entity_to_v4l2_subdev(entity);
--
--	for (i = 0; i < RVIN_REMOTES_MAX; i++)
--		if (group->remotes[i].subdev == sd)
--			return i;
--
--	return -ENODEV;
--}
--
--static unsigned int rvin_group_get_mask(struct rvin_dev *vin,
--					enum rvin_csi_id csi_id,
--					unsigned char channel)
--{
--	const struct rvin_group_route *route;
--	unsigned int mask = 0;
--
--	for (route = vin->info->routes; route->mask; route++) {
--		if (route->vin == vin->id &&
--		    route->csi == csi_id &&
--		    route->channel == channel) {
--			vin_dbg(vin,
--				"Adding route: vin: %d csi: %d channel: %d\n",
--				route->vin, route->csi, route->channel);
--			mask |= route->mask;
--		}
--	}
--
--	return mask;
--}
--
--/*
-- * Link setup for the links between a VIN and a CSI-2 receiver is a bit
-- * complex. The reason for this is that the register controlling routing
-- * is not present in each VIN instance. There are special VINs which
-- * control routing for themselves and other VINs. There are not many
-- * different possible links combinations that can be enabled at the same
-- * time, therefor all already enabled links which are controlled by a
-- * master VIN need to be taken into account when making the decision
-- * if a new link can be enabled or not.
-- *
-- * 1. Find out which VIN the link the user tries to enable is connected to.
-- * 2. Lookup which master VIN controls the links for this VIN.
-- * 3. Start with a bitmask with all bits set.
-- * 4. For each previously enabled link from the master VIN bitwise AND its
-- *    route mask (see documentation for mask in struct rvin_group_route)
-- *    with the bitmask.
-- * 5. Bitwise AND the mask for the link the user tries to enable to the bitmask.
-- * 6. If the bitmask is not empty at this point the new link can be enabled
-- *    while keeping all previous links enabled. Update the CHSEL value of the
-- *    master VIN and inform the user that the link could be enabled.
-- *
-- * Please note that no link can be enabled if any VIN in the group is
-- * currently open.
-- */
--static int rvin_group_link_notify(struct media_link *link, u32 flags,
--				  unsigned int notification)
--{
--	struct rvin_group *group = container_of(link->graph_obj.mdev,
--						struct rvin_group, mdev);
--	unsigned int master_id, channel, mask_new, i;
--	unsigned int mask = ~0;
--	struct media_entity *entity;
--	struct video_device *vdev;
--	struct media_pad *csi_pad;
--	struct rvin_dev *vin = NULL;
--	int csi_id, ret;
--
--	ret = v4l2_pipeline_link_notify(link, flags, notification);
--	if (ret)
--		return ret;
--
--	/* Only care about link enablement for VIN nodes. */
--	if (!(flags & MEDIA_LNK_FL_ENABLED) ||
--	    !is_media_entity_v4l2_video_device(link->sink->entity))
--		return 0;
--
--	/*
--	 * Don't allow link changes if any entity in the graph is
--	 * streaming, modifying the CHSEL register fields can disrupt
--	 * running streams.
--	 */
--	media_device_for_each_entity(entity, &group->mdev)
--		if (entity->stream_count)
--			return -EBUSY;
--
--	mutex_lock(&group->lock);
--
--	/* Find the master VIN that controls the routes. */
--	vdev = media_entity_to_video_device(link->sink->entity);
--	vin = container_of(vdev, struct rvin_dev, vdev);
--	master_id = rvin_group_id_to_master(vin->id);
--
--	if (WARN_ON(!group->vin[master_id])) {
--		ret = -ENODEV;
--		goto out;
--	}
--
--	/* Build a mask for already enabled links. */
--	for (i = master_id; i < master_id + 4; i++) {
--		if (!group->vin[i])
--			continue;
--
--		/* Get remote CSI-2, if any. */
--		csi_pad = media_entity_remote_pad(
--				&group->vin[i]->vdev.entity.pads[0]);
--		if (!csi_pad)
--			continue;
--
--		csi_id = rvin_group_entity_to_remote_id(group, csi_pad->entity);
--		channel = rvin_group_csi_pad_to_channel(csi_pad->index);
--
--		mask &= rvin_group_get_mask(group->vin[i], csi_id, channel);
--	}
--
--	/* Add the new link to the existing mask and check if it works. */
--	csi_id = rvin_group_entity_to_remote_id(group, link->source->entity);
--
--	if (csi_id == -ENODEV) {
--		struct v4l2_subdev *sd;
--
--		/*
--		 * Make sure the source entity subdevice is registered as
--		 * a parallel input of one of the enabled VINs if it is not
--		 * one of the CSI-2 subdevices.
--		 *
--		 * No hardware configuration required for parallel inputs,
--		 * we can return here.
--		 */
--		sd = media_entity_to_v4l2_subdev(link->source->entity);
--		for (i = 0; i < RCAR_VIN_NUM; i++) {
--			if (group->vin[i] &&
--			    group->vin[i]->parallel.subdev == sd) {
--				group->vin[i]->is_csi = false;
--				ret = 0;
--				goto out;
--			}
--		}
--
--		vin_err(vin, "Subdevice %s not registered to any VIN\n",
--			link->source->entity->name);
--		ret = -ENODEV;
--		goto out;
--	}
--
--	channel = rvin_group_csi_pad_to_channel(link->source->index);
--	mask_new = mask & rvin_group_get_mask(vin, csi_id, channel);
--	vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask, mask_new);
--
--	if (!mask_new) {
--		ret = -EMLINK;
--		goto out;
--	}
--
--	/* New valid CHSEL found, set the new value. */
--	ret = rvin_set_channel_routing(group->vin[master_id], __ffs(mask_new));
--	if (ret)
--		goto out;
--
--	vin->is_csi = true;
--
--out:
--	mutex_unlock(&group->lock);
--
--	return ret;
--}
--
--static const struct media_device_ops rvin_media_ops = {
--	.link_notify = rvin_group_link_notify,
--};
--
--/* -----------------------------------------------------------------------------
-- * Gen3 CSI2 Group Allocator
-+ * Gen3 Group Allocator
-  */
- 
- /* FIXME:  This should if we find a system that supports more
-@@ -389,6 +208,22 @@ static void rvin_group_put(struct rvin_dev *vin)
- 	kref_put(&group->refcount, rvin_group_release);
- }
- 
-+/* group lock should be held when calling this function. */
-+static int rvin_group_entity_to_remote_id(struct rvin_group *group,
-+					  struct media_entity *entity)
-+{
-+	struct v4l2_subdev *sd;
-+	unsigned int i;
-+
-+	sd = media_entity_to_v4l2_subdev(entity);
-+
-+	for (i = 0; i < RVIN_REMOTES_MAX; i++)
-+		if (group->remotes[i].subdev == sd)
-+			return i;
-+
-+	return -ENODEV;
-+}
-+
- static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
- {
- 	struct rvin_dev *vin = v4l2_dev_to_vin(notifier->v4l2_dev);
-@@ -919,6 +754,167 @@ static int rvin_parallel_init(struct rvin_dev *vin)
-  * CSI-2
-  */
- 
-+static unsigned int rvin_csi2_get_mask(struct rvin_dev *vin,
-+				       enum rvin_csi_id csi_id,
-+				       unsigned char channel)
-+{
-+	const struct rvin_group_route *route;
-+	unsigned int mask = 0;
-+
-+	for (route = vin->info->routes; route->mask; route++) {
-+		if (route->vin == vin->id &&
-+		    route->csi == csi_id &&
-+		    route->channel == channel) {
-+			vin_dbg(vin,
-+				"Adding route: vin: %d csi: %d channel: %d\n",
-+				route->vin, route->csi, route->channel);
-+			mask |= route->mask;
-+		}
-+	}
-+
-+	return mask;
-+}
-+
-+/*
-+ * Link setup for the links between a VIN and a CSI-2 receiver is a bit
-+ * complex. The reason for this is that the register controlling routing
-+ * is not present in each VIN instance. There are special VINs which
-+ * control routing for themselves and other VINs. There are not many
-+ * different possible links combinations that can be enabled at the same
-+ * time, therefor all already enabled links which are controlled by a
-+ * master VIN need to be taken into account when making the decision
-+ * if a new link can be enabled or not.
-+ *
-+ * 1. Find out which VIN the link the user tries to enable is connected to.
-+ * 2. Lookup which master VIN controls the links for this VIN.
-+ * 3. Start with a bitmask with all bits set.
-+ * 4. For each previously enabled link from the master VIN bitwise AND its
-+ *    route mask (see documentation for mask in struct rvin_group_route)
-+ *    with the bitmask.
-+ * 5. Bitwise AND the mask for the link the user tries to enable to the bitmask.
-+ * 6. If the bitmask is not empty at this point the new link can be enabled
-+ *    while keeping all previous links enabled. Update the CHSEL value of the
-+ *    master VIN and inform the user that the link could be enabled.
-+ *
-+ * Please note that no link can be enabled if any VIN in the group is
-+ * currently open.
-+ */
-+static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
-+				 unsigned int notification)
-+{
-+	struct rvin_group *group = container_of(link->graph_obj.mdev,
-+						struct rvin_group, mdev);
-+	unsigned int master_id, channel, mask_new, i;
-+	unsigned int mask = ~0;
-+	struct media_entity *entity;
-+	struct video_device *vdev;
-+	struct media_pad *csi_pad;
-+	struct rvin_dev *vin = NULL;
-+	int csi_id, ret;
-+
-+	ret = v4l2_pipeline_link_notify(link, flags, notification);
-+	if (ret)
-+		return ret;
-+
-+	/* Only care about link enablement for VIN nodes. */
-+	if (!(flags & MEDIA_LNK_FL_ENABLED) ||
-+	    !is_media_entity_v4l2_video_device(link->sink->entity))
-+		return 0;
-+
-+	/*
-+	 * Don't allow link changes if any entity in the graph is
-+	 * streaming, modifying the CHSEL register fields can disrupt
-+	 * running streams.
-+	 */
-+	media_device_for_each_entity(entity, &group->mdev)
-+		if (entity->stream_count)
-+			return -EBUSY;
-+
-+	mutex_lock(&group->lock);
-+
-+	/* Find the master VIN that controls the routes. */
-+	vdev = media_entity_to_video_device(link->sink->entity);
-+	vin = container_of(vdev, struct rvin_dev, vdev);
-+	master_id = rvin_group_id_to_master(vin->id);
-+
-+	if (WARN_ON(!group->vin[master_id])) {
-+		ret = -ENODEV;
-+		goto out;
-+	}
-+
-+	/* Build a mask for already enabled links. */
-+	for (i = master_id; i < master_id + 4; i++) {
-+		if (!group->vin[i])
-+			continue;
-+
-+		/* Get remote CSI-2, if any. */
-+		csi_pad = media_entity_remote_pad(
-+				&group->vin[i]->vdev.entity.pads[0]);
-+		if (!csi_pad)
-+			continue;
-+
-+		csi_id = rvin_group_entity_to_remote_id(group, csi_pad->entity);
-+		channel = rvin_group_csi_pad_to_channel(csi_pad->index);
-+
-+		mask &= rvin_csi2_get_mask(group->vin[i], csi_id, channel);
-+	}
-+
-+	/* Add the new link to the existing mask and check if it works. */
-+	csi_id = rvin_group_entity_to_remote_id(group, link->source->entity);
-+
-+	if (csi_id == -ENODEV) {
-+		struct v4l2_subdev *sd;
-+
-+		/*
-+		 * Make sure the source entity subdevice is registered as
-+		 * a parallel input of one of the enabled VINs if it is not
-+		 * one of the CSI-2 subdevices.
-+		 *
-+		 * No hardware configuration required for parallel inputs,
-+		 * we can return here.
-+		 */
-+		sd = media_entity_to_v4l2_subdev(link->source->entity);
-+		for (i = 0; i < RCAR_VIN_NUM; i++) {
-+			if (group->vin[i] &&
-+			    group->vin[i]->parallel.subdev == sd) {
-+				group->vin[i]->is_csi = false;
-+				ret = 0;
-+				goto out;
-+			}
-+		}
-+
-+		vin_err(vin, "Subdevice %s not registered to any VIN\n",
-+			link->source->entity->name);
-+		ret = -ENODEV;
-+		goto out;
-+	}
-+
-+	channel = rvin_group_csi_pad_to_channel(link->source->index);
-+	mask_new = mask & rvin_csi2_get_mask(vin, csi_id, channel);
-+	vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask, mask_new);
-+
-+	if (!mask_new) {
-+		ret = -EMLINK;
-+		goto out;
-+	}
-+
-+	/* New valid CHSEL found, set the new value. */
-+	ret = rvin_set_channel_routing(group->vin[master_id], __ffs(mask_new));
-+	if (ret)
-+		goto out;
-+
-+	vin->is_csi = true;
-+
-+out:
-+	mutex_unlock(&group->lock);
-+
-+	return ret;
-+}
-+
-+static const struct media_device_ops rvin_csi2_media_ops = {
-+	.link_notify = rvin_csi2_link_notify,
-+};
-+
- static int rvin_csi2_setup_links(struct rvin_dev *vin)
- {
- 	const struct rvin_group_route *route;
-@@ -987,7 +983,7 @@ static int rvin_csi2_init(struct rvin_dev *vin)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = rvin_group_get(vin, rvin_csi2_setup_links, &rvin_media_ops);
-+	ret = rvin_group_get(vin, rvin_csi2_setup_links, &rvin_csi2_media_ops);
- 	if (ret)
- 		goto err_controls;
- 
--- 
-2.32.0
+We continually develop on and test the upstream kernel. Our goal is always to
+upstream patches first. We learned that lesson the hard way when we first tried
+to upstream hfi1.
 
+-Denny
