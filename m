@@ -2,29 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F30C11F68
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 11:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF54CC07E9C
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 11:20:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEA97613B2
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 11:19:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F015613BE
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 11:20:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239234AbhGNLWt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Jul 2021 07:22:49 -0400
-Received: from comms.puri.sm ([159.203.221.185]:36008 "EHLO comms.puri.sm"
+        id S239238AbhGNLXJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Jul 2021 07:23:09 -0400
+Received: from comms.puri.sm ([159.203.221.185]:36104 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230437AbhGNLWt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Jul 2021 07:22:49 -0400
+        id S230437AbhGNLXI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 14 Jul 2021 07:23:08 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 26C30E0092;
-        Wed, 14 Jul 2021 04:19:58 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 9FB8BDFAF7;
+        Wed, 14 Jul 2021 04:19:46 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PrSqXzKjZ--Q; Wed, 14 Jul 2021 04:19:57 -0700 (PDT)
+        with ESMTP id fzSRM8FsYn5l; Wed, 14 Jul 2021 04:19:45 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 To:     martin.kepplinger@puri.sm, festevam@gmail.com, krzk@kernel.org,
         laurent.pinchart@ideasonboard.com
@@ -34,143 +33,80 @@ Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de, kernel@puri.sm,
         linux-staging@lists.linux.dev, m.felsch@pengutronix.de,
         mchehab@kernel.org, phone-devel@vger.kernel.org, robh@kernel.org,
         shawnguo@kernel.org, slongerbeam@gmail.com
-Subject: [PATCH v6 3/3] arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
-Date:   Wed, 14 Jul 2021 13:19:31 +0200
-Message-Id: <20210714111931.324485-4-martin.kepplinger@puri.sm>
-In-Reply-To: <20210714111931.324485-1-martin.kepplinger@puri.sm>
-References: <20210714111931.324485-1-martin.kepplinger@puri.sm>
+Subject: [PATCH v6 0/3] media: imx: add support for imx8mq MIPI RX
+Date:   Wed, 14 Jul 2021 13:19:28 +0200
+Message-Id: <20210714111931.324485-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Describe the 2 available CSI interfaces on the i.MX8MQ with the MIPI-CSI2
-receiver (new driver) and the CSI Bridge that provides the user buffers
-(existing driver).
+hi,
 
-An image sensor is to be connected to the MIPIs' second port, to be described
-in board files.
+This patch series adds a driver for the i.MX8MQ CSI MIPI receiver / controller.
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 104 ++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+It includes the driver, the dt-bindings and the DT addition to the SoC dtsi.
+I test it using libcamera. Thanks to Laurent who helped a lot. I'm happy for
+any feedback,
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index 91df9c5350ae..e026a39bddce 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -1099,6 +1099,110 @@ uart4: serial@30a60000 {
- 				status = "disabled";
- 			};
- 
-+			mipi_csi1: csi@30a70000 {
-+				compatible = "fsl,imx8mq-mipi-csi2";
-+				reg = <0x30a70000 0x1000>;
-+				clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
-+				   <&clk IMX8MQ_CLK_CSI1_ESC>,
-+				   <&clk IMX8MQ_CLK_CSI1_PHY_REF>;
-+				clock-names = "core", "esc", "ui";
-+				assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
-+				    <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
-+				    <&clk IMX8MQ_CLK_CSI1_ESC>;
-+				assigned-clock-rates = <266000000>, <333000000>, <66000000>;
-+				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
-+					<&clk IMX8MQ_SYS2_PLL_1000M>,
-+					<&clk IMX8MQ_SYS1_PLL_800M>;
-+				power-domains = <&pgc_mipi_csi1>;
-+				resets = <&src IMX8MQ_RESET_MIPI_CSI1_CORE_RESET>,
-+					 <&src IMX8MQ_RESET_MIPI_CSI1_PHY_REF_RESET>,
-+					 <&src IMX8MQ_RESET_MIPI_CSI1_ESC_RESET>;
-+				fsl,mipi-phy-gpr = <&iomuxc_gpr 0x88>;
-+				interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
-+				interconnect-names = "dram";
-+				status = "disabled";
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+
-+						csi1_mipi_ep: endpoint {
-+							remote-endpoint = <&csi1_ep>;
-+						};
-+					};
-+				};
-+			};
-+
-+			csi1: csi@30a90000 {
-+				compatible = "fsl,imx8mq-csi", "fsl,imx7-csi";
-+				reg = <0x30a90000 0x10000>;
-+				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk IMX8MQ_CLK_CSI1_ROOT>;
-+				clock-names = "mclk";
-+				status = "disabled";
-+
-+				port {
-+					csi1_ep: endpoint {
-+						remote-endpoint = <&csi1_mipi_ep>;
-+					};
-+				};
-+			};
-+
-+			mipi_csi2: csi@30b60000 {
-+				compatible = "fsl,imx8mq-mipi-csi2";
-+				reg = <0x30b60000 0x1000>;
-+				clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
-+				   <&clk IMX8MQ_CLK_CSI2_ESC>,
-+				   <&clk IMX8MQ_CLK_CSI2_PHY_REF>;
-+				clock-names = "core", "esc", "ui";
-+				assigned-clocks = <&clk IMX8MQ_CLK_CSI2_CORE>,
-+				    <&clk IMX8MQ_CLK_CSI2_PHY_REF>,
-+				    <&clk IMX8MQ_CLK_CSI2_ESC>;
-+				assigned-clock-rates = <266000000>, <333000000>, <66000000>;
-+				assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
-+					<&clk IMX8MQ_SYS2_PLL_1000M>,
-+					<&clk IMX8MQ_SYS1_PLL_800M>;
-+				power-domains = <&pgc_mipi_csi2>;
-+				resets = <&src IMX8MQ_RESET_MIPI_CSI2_CORE_RESET>,
-+					 <&src IMX8MQ_RESET_MIPI_CSI2_PHY_REF_RESET>,
-+					 <&src IMX8MQ_RESET_MIPI_CSI2_ESC_RESET>;
-+				fsl,mipi-phy-gpr = <&iomuxc_gpr 0xa4>;
-+				interconnects = <&noc IMX8MQ_ICM_CSI2 &noc IMX8MQ_ICS_DRAM>;
-+				interconnect-names = "dram";
-+				status = "disabled";
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+
-+						csi2_mipi_ep: endpoint {
-+							remote-endpoint = <&csi2_ep>;
-+						};
-+					};
-+				};
-+			};
-+
-+			csi2: csi@30b80000 {
-+				compatible = "fsl,imx8mq-csi", "fsl,imx7-csi";
-+				reg = <0x30b80000 0x10000>;
-+				interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk IMX8MQ_CLK_CSI2_ROOT>;
-+				clock-names = "mclk";
-+				status = "disabled";
-+
-+				port {
-+					csi2_ep: endpoint {
-+						remote-endpoint = <&csi2_mipi_ep>;
-+					};
-+				};
-+			};
-+
- 			mu: mailbox@30aa0000 {
- 				compatible = "fsl,imx8mq-mu", "fsl,imx6sx-mu";
- 				reg = <0x30aa0000 0x10000>;
+                           martin
+
+revision history
+----------------
+v6: (thank you Laurent and Rob)
+* add reviewed-by tag to binding
+* statically allocate clk_bulk_data
+* fix how the hs_settle value is applied
+* remove s_power calls
+* remove the link_setup() callback implementation and make the link immutable
+* more cleanups according to Laurents' review from v5
+
+v5: (thank you Laurent)
+* fix reset usage by using the already supported reset controller driver
+* remove clko2 (totally unrelated clock / had been included by accident)
+* rename pxl clock to ui
+https://lore.kernel.org/linux-media/20210618095753.114557-1-martin.kepplinger@puri.sm/
+
+v4: (thank you Rob and Marco)
+* create fsl,mipi-phy-gpr custom dt property instead of confusing "phy"
+* add imx8mq-specific compatibile to imx8mq.dtsi for future use
+https://lore.kernel.org/linux-media/20210614121522.2944593-1-martin.kepplinger@puri.sm/
+
+v3: (thank you, Rob and Laurent)
+among minor other things according to v2 review, changes include:
+* better describe the clocks
+* rename DT property "phy-reset" to "reset" and "phy-gpr" to "phy"
+https://lore.kernel.org/linux-media/20210608104128.1616028-1-martin.kepplinger@puri.sm/T/#t
+
+v2: (thank you, Dan and Guido)
+among fixes according to v1 reviews, changes include:
+* remove status property from dt-bindings example
+* define a few bits in order to have less magic values
+* use "imx8mq_mipi_csi_" as local function prefix
+* read DT properties only during probe()
+* remove dead code (log_status)
+* add imx8mq_mipi_csi_release_icc()
+* fix imx8mq_mipi_csi_init_icc()
+https://lore.kernel.org/linux-media/20210531112326.90094-1-martin.kepplinger@puri.sm/
+
+v1:
+https://lore.kernel.org/linux-media/20210527075407.3180744-1-martin.kepplinger@puri.sm/T/#t
+
+
+Martin Kepplinger (3):
+  dt-bindings: media: document the nxp,imx8mq-mipi-csi2 receiver phy and
+    controller
+  media: imx: add a driver for i.MX8MQ mipi csi rx phy and controller
+  arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
+
+ .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 173 ++++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 104 ++
+ drivers/staging/media/imx/Makefile            |   1 +
+ drivers/staging/media/imx/imx8mq-mipi-csi2.c  | 949 ++++++++++++++++++
+ 4 files changed, 1227 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+ create mode 100644 drivers/staging/media/imx/imx8mq-mipi-csi2.c
+
 -- 
 2.30.2
 
