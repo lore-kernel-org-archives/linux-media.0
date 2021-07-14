@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C999AC11F67
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C33C5C07E9C
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0719613B6
-	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF3F06136E
+	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238212AbhGNHEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Jul 2021 03:04:36 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:57571 "EHLO
+        id S238225AbhGNHEk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Jul 2021 03:04:40 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:45255 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237948AbhGNHEf (ORCPT
+        with ESMTP id S238218AbhGNHEh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Jul 2021 03:04:35 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jul 2021 00:01:44 -0700
+        Wed, 14 Jul 2021 03:04:37 -0400
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jul 2021 00:01:46 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Jul 2021 00:01:43 -0700
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Jul 2021 00:01:44 -0700
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Jul 2021 12:31:31 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Jul 2021 12:31:24 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 7519E21B6B; Wed, 14 Jul 2021 12:31:30 +0530 (IST)
+        id 3960221B6F; Wed, 14 Jul 2021 12:31:23 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v3 5/7] venus: vdec: set work route to fw
-Date:   Wed, 14 Jul 2021 12:31:06 +0530
-Message-Id: <1626246068-21023-6-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH v3 3/7] media: venus: Add num_vpp_pipes to resource structure
+Date:   Wed, 14 Jul 2021 12:31:04 +0530
+Message-Id: <1626246068-21023-4-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1626246068-21023-1-git-send-email-dikshita@codeaurora.org>
 References: <1626246068-21023-1-git-send-email-dikshita@codeaurora.org>
@@ -44,96 +44,125 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set work route to FW based on num of vpp pipes.
+V6 HW can have vpp pipes as 1 or 4, add num_vpp_pipes
+to resource struture to differentiate.
 
 Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_cmds.c   |  7 +++++++
- drivers/media/platform/qcom/venus/hfi_helper.h |  5 +++++
- drivers/media/platform/qcom/venus/vdec.c       | 22 ++++++++++++++++++++++
- 3 files changed, 34 insertions(+)
+ drivers/media/platform/qcom/venus/core.c            |  2 ++
+ drivers/media/platform/qcom/venus/core.h            |  1 +
+ drivers/media/platform/qcom/venus/helpers.c         |  2 +-
+ drivers/media/platform/qcom/venus/hfi_platform.c    | 13 -------------
+ drivers/media/platform/qcom/venus/hfi_platform.h    |  2 --
+ drivers/media/platform/qcom/venus/hfi_platform_v6.c |  6 ------
+ 6 files changed, 4 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-index 11a8347..837fb80 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-@@ -1290,6 +1290,13 @@ pkt_session_set_property_6xx(struct hfi_session_set_property_pkt *pkt,
- 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*color);
- 		break;
- 	}
-+	case HFI_PROPERTY_PARAM_WORK_ROUTE: {
-+		struct hfi_video_work_route *in = pdata, *wr = prop_data;
-+
-+		wr->video_work_route = in->video_work_route;
-+		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*wr);
-+		break;
-+	}
- 	default:
- 		return pkt_session_set_property_4xx(pkt, cookie, ptype, pdata);
- 	}
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index 63cd347..185c302 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -451,6 +451,7 @@
- #define HFI_PROPERTY_PARAM_MVC_BUFFER_LAYOUT			0x100f
- #define HFI_PROPERTY_PARAM_MAX_SESSIONS_SUPPORTED		0x1010
- #define HFI_PROPERTY_PARAM_WORK_MODE				0x1015
-+#define HFI_PROPERTY_PARAM_WORK_ROUTE				0x1017
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 68acfc0..2e75fc7 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -729,6 +729,7 @@ static const struct venus_resources sm8250_res = {
+ 	.vcodec_num = 1,
+ 	.max_load = 7833600,
+ 	.hfi_version = HFI_VERSION_6XX,
++	.num_vpp_pipes = 4,
+ 	.vmem_id = VIDC_RESOURCE_NONE,
+ 	.vmem_size = 0,
+ 	.vmem_addr = 0,
+@@ -780,6 +781,7 @@ static const struct venus_resources sc7280_res = {
+ 	.opp_pmdomain = (const char *[]) { "cx", NULL },
+ 	.vcodec_num = 1,
+ 	.hfi_version = HFI_VERSION_6XX,
++	.num_vpp_pipes = 1,
+ 	.vmem_id = VIDC_RESOURCE_NONE,
+ 	.vmem_size = 0,
+ 	.vmem_addr = 0,
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 745f226..1ff20d9 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -68,6 +68,7 @@ struct venus_resources {
+ 	const char * const resets[VIDC_RESETS_NUM_MAX];
+ 	unsigned int resets_num;
+ 	enum hfi_version hfi_version;
++	u8 num_vpp_pipes;
+ 	u32 max_load;
+ 	unsigned int vmem_id;
+ 	u32 vmem_size;
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index b813d6dba..2223f55 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -583,7 +583,7 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
+ 		return -EINVAL;
  
- /*
-  * HFI_PROPERTY_CONFIG_COMMON_START
-@@ -864,6 +865,10 @@ struct hfi_video_work_mode {
- 	u32 video_work_mode;
+ 	params.version = version;
+-	params.num_vpp_pipes = hfi_platform_num_vpp_pipes(version);
++	params.num_vpp_pipes = inst->core->res->num_vpp_pipes;
+ 
+ 	if (is_dec) {
+ 		params.width = inst->width;
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform.c b/drivers/media/platform/qcom/venus/hfi_platform.c
+index 8f47804..683ab67 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform.c
++++ b/drivers/media/platform/qcom/venus/hfi_platform.c
+@@ -50,16 +50,3 @@ hfi_platform_get_codec_vsp_freq(enum hfi_version version, u32 codec, u32 session
+ 	return freq;
+ }
+ 
+-u8 hfi_platform_num_vpp_pipes(enum hfi_version version)
+-{
+-	const struct hfi_platform *plat;
+-
+-	plat = hfi_platform_get(version);
+-	if (!plat)
+-		return 0;
+-
+-	if (plat->num_vpp_pipes)
+-		return plat->num_vpp_pipes();
+-
+-	return 0;
+-}
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform.h b/drivers/media/platform/qcom/venus/hfi_platform.h
+index 3819bb2..ef768bf 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform.h
++++ b/drivers/media/platform/qcom/venus/hfi_platform.h
+@@ -50,7 +50,6 @@ struct hfi_platform {
+ 	unsigned long (*codec_vsp_freq)(u32 session_type, u32 codec);
+ 	void (*codecs)(u32 *enc_codecs, u32 *dec_codecs, u32 *count);
+ 	const struct hfi_plat_caps *(*capabilities)(unsigned int *entries);
+-	u8 (*num_vpp_pipes)(void);
+ 	int (*bufreq)(struct hfi_plat_buffers_params *params, u32 session_type,
+ 		      u32 buftype, struct hfi_buffer_requirements *bufreq);
  };
- 
-+struct hfi_video_work_route {
-+	u32 video_work_route;
-+};
-+
- struct hfi_h264_vui_timing_info {
- 	u32 enable;
- 	u32 fixed_framerate;
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index ddb7cd3..892be8d 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -653,6 +653,24 @@ static int vdec_set_properties(struct venus_inst *inst)
+@@ -63,5 +62,4 @@ unsigned long hfi_platform_get_codec_vpp_freq(enum hfi_version version, u32 code
+ 					      u32 session_type);
+ unsigned long hfi_platform_get_codec_vsp_freq(enum hfi_version version, u32 codec,
+ 					      u32 session_type);
+-u8 hfi_platform_num_vpp_pipes(enum hfi_version version);
+ #endif
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform_v6.c b/drivers/media/platform/qcom/venus/hfi_platform_v6.c
+index dd1a039..c1f00f8 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform_v6.c
++++ b/drivers/media/platform/qcom/venus/hfi_platform_v6.c
+@@ -311,16 +311,10 @@ static unsigned long codec_vsp_freq(u32 session_type, u32 codec)
  	return 0;
  }
  
-+static int vdec_set_work_route(struct venus_inst *inst)
-+{
-+	struct hfi_video_work_route wr;
-+	u32 ptype;
-+	int ret;
-+
-+	if(!IS_V6(inst->core))
-+		return 0;
-+
-+	wr.video_work_route = inst->core->res->num_vpp_pipes;
-+
-+	ptype = HFI_PROPERTY_PARAM_WORK_ROUTE;
-+	ret = hfi_session_set_property(inst, ptype, &wr);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
- #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
- 
- static int vdec_output_conf(struct venus_inst *inst)
-@@ -1039,6 +1057,10 @@ static int vdec_start_output(struct venus_inst *inst)
- 	if (ret)
- 		return ret;
- 
-+	ret = vdec_set_work_route(inst);
-+	if (ret)
-+		return ret;
-+
- 	ret = vdec_output_conf(inst);
- 	if (ret)
- 		return ret;
+-static u8 num_vpp_pipes(void)
+-{
+-	return 4;
+-}
+-
+ const struct hfi_platform hfi_plat_v6 = {
+ 	.codec_vpp_freq = codec_vpp_freq,
+ 	.codec_vsp_freq = codec_vsp_freq,
+ 	.codecs = get_codecs,
+ 	.capabilities = get_capabilities,
+-	.num_vpp_pipes = num_vpp_pipes,
+ 	.bufreq = hfi_plat_bufreq_v6,
+ };
 -- 
 2.7.4
 
