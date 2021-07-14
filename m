@@ -5,38 +5,38 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B5CFC11F66
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B39C11F6E
 	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24E15613B9
+	by mail.kernel.org (Postfix) with ESMTP id C653E613B6
 	for <linux-media@archiver.kernel.org>; Wed, 14 Jul 2021 07:01:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238244AbhGNHEn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Jul 2021 03:04:43 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:49325 "EHLO
+        id S238257AbhGNHEm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Jul 2021 03:04:42 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:28488 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238222AbhGNHEi (ORCPT
+        with ESMTP id S238227AbhGNHEj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Jul 2021 03:04:38 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jul 2021 00:01:47 -0700
+        Wed, 14 Jul 2021 03:04:39 -0400
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jul 2021 00:01:46 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Jul 2021 00:01:46 -0700
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Jul 2021 00:01:44 -0700
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Jul 2021 12:31:33 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Jul 2021 12:31:29 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id A405421B6B; Wed, 14 Jul 2021 12:31:32 +0530 (IST)
+        id D874921B6B; Wed, 14 Jul 2021 12:31:27 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v3 6/7] media: venus: helpers: update NUM_MBS macro calculation
-Date:   Wed, 14 Jul 2021 12:31:07 +0530
-Message-Id: <1626246068-21023-7-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH v3 4/7] media: venus: hfi: Skip AON register programming for V6 1pipe
+Date:   Wed, 14 Jul 2021 12:31:05 +0530
+Message-Id: <1626246068-21023-5-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1626246068-21023-1-git-send-email-dikshita@codeaurora.org>
 References: <1626246068-21023-1-git-send-email-dikshita@codeaurora.org>
@@ -44,50 +44,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Consider alignment while calculating NUM_MBS.
+AON register programming is used to set NOC to low
+power mode during V6 power off sequence. However
+AON register memory map is not applicable to 1pipe,
+hence skipping AON register programming.
 
 Co-developed-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+Co-developed-by: Vikash Garodia <vgarodia@codeaurora.org>
 Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 2223f55..ccf188a 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -18,8 +18,8 @@
- #include "hfi_platform.h"
- #include "hfi_parser.h"
+diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+index ce98c52..3a75a27 100644
+--- a/drivers/media/platform/qcom/venus/hfi_venus.c
++++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+@@ -551,6 +551,9 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
+ 	if (IS_V6(hdev->core)) {
+ 		writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
  
--#define NUM_MBS_720P	(((1280 + 15) >> 4) * ((720 + 15) >> 4))
--#define NUM_MBS_4K	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
-+#define NUM_MBS_720P	(((ALIGN(1280, 16)) >> 4) * ((ALIGN(736, 16)) >> 4))
-+#define NUM_MBS_4K	(((ALIGN(4096, 16)) >> 4) * ((ALIGN(2304, 16)) >> 4))
- 
- struct intbuf {
- 	struct list_head list;
-@@ -1099,16 +1099,17 @@ static u32 venus_helper_get_work_mode(struct venus_inst *inst)
- 	u32 num_mbs;
- 
- 	mode = VIDC_WORK_MODE_2;
++		if (hdev->core->res->num_vpp_pipes == 1)
++			goto skip_aon_mvp_noc;
 +
- 	if (inst->session_type == VIDC_SESSION_TYPE_DEC) {
--		num_mbs = (ALIGN(inst->height, 16) * ALIGN(inst->width, 16)) / 256;
-+		num_mbs = ((ALIGN(inst->height, 16))/16 * (ALIGN(inst->width, 16)))/16;
- 		if (inst->hfi_codec == HFI_VIDEO_CODEC_MPEG2 ||
--		    inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
--		    num_mbs <= NUM_MBS_720P)
-+			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
-+			num_mbs <= NUM_MBS_720P)
- 			mode = VIDC_WORK_MODE_1;
- 	} else {
- 		num_mbs = (ALIGN(inst->out_height, 16) * ALIGN(inst->out_width, 16)) / 256;
- 		if (inst->hfi_codec == HFI_VIDEO_CODEC_VP8 &&
--		    num_mbs <= NUM_MBS_4K)
-+			num_mbs <= NUM_MBS_4K)
- 			mode = VIDC_WORK_MODE_1;
- 	}
+ 		writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
+ 		ret = readl_poll_timeout(aon_base + AON_WRAPPER_MVP_NOC_LPI_STATUS,
+ 					 val,
+@@ -560,6 +563,7 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
+ 		if (ret)
+ 			return -ETIMEDOUT;
+ 
++skip_aon_mvp_noc:
+ 		mask_val = (BIT(2) | BIT(1) | BIT(0));
+ 		writel(mask_val, wrapper_base + WRAPPER_DEBUG_BRIDGE_LPI_CONTROL_V6);
  
 -- 
 2.7.4
