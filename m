@@ -2,153 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B89DC636C7
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jul 2021 17:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BECD8C636C8
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jul 2021 20:02:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61783613E0
-	for <linux-media@archiver.kernel.org>; Thu, 15 Jul 2021 17:23:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1EEB613BB
+	for <linux-media@archiver.kernel.org>; Thu, 15 Jul 2021 20:02:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbhGOR0b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Jul 2021 13:26:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53656 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229786AbhGOR0b (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Jul 2021 13:26:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCBE3613C3;
-        Thu, 15 Jul 2021 17:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626369818;
-        bh=OGUJau3scHdd64RSx5cFSqUwQcJpiG2djIeuei8VZG8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OdPNYAcFfgbsuPxqoZtCZvpLrCWmmtm+h5G/QUcmG0WayfrHgisLKB6+a3IohCqN9
-         kQc7+VLwXw7leCgLPAi8tZlm1GM0OROs7iRU7SaIJVOlhMlwjBTFDDtUMYnvyQOy29
-         raqTKd266KLvoDMSb/t2A/iuIXEZk7WZqZ8HmdFyi6gWHUz5Ne3PhyK3x5YgoHsLj/
-         RvnZBWQDX9FspIEqy8YdwLUtynF4je2ZjCiPTEdTTAcNOvG0GZiKhukBJoUnLMjSY1
-         zWIao0UUb3EMU5VarklADbrjKbVdxu4xnL378DY3Kf9uqchs0dk/ki8TA79hjDU31t
-         iXqapcLUNqFsQ==
-Date:   Thu, 15 Jul 2021 12:23:36 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dongdong Liu <liudongdong3@huawei.com>
-Cc:     hch@infradead.org, kw@linux.com, linux-pci@vger.kernel.org,
-        rajur@chelsio.com, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        Logan Gunthorpe <logang@deltatee.com>
-Subject: Re: [PATCH V5 4/6] PCI: Enable 10-Bit tag support for PCIe Endpoint
- devices
-Message-ID: <20210715172336.GA1972959@bjorn-Precision-5520>
+        id S240497AbhGOUFH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Jul 2021 16:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346563AbhGOUE4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Jul 2021 16:04:56 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518D7C0613E6;
+        Thu, 15 Jul 2021 12:50:02 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 70so4253768pgh.2;
+        Thu, 15 Jul 2021 12:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qko599Uq/EcKOeMa5T6Nbxwrwz7YFbQgmwQPU6o2zKk=;
+        b=TEHAbMt0EG92C22jB5zzkNiVLa1JG5U+5zkwDILA21nD3DHz4nsqWmpxMAXThr0ffx
+         GC0uOu5iHTM2FgDEGPCZyv1BxjtM+37RMZmVbn9s98aWdwueIyR/N9fwiDGrg9LZqg1A
+         Q+XAkVVGzgTbCG2HbM7IM/upocugVJVK3eUKk7Q8mE9CRYIEropQs9+PffCaVgv4Wgx7
+         Oi92j/iDLnuWRuTwQG2xqk4t8sSt3ezjXCDIb7vSzW9ZI7a2kECb7B+lM3kyrV2Ipa/J
+         QAhnoZ7cpE3UyZCnUxaAKXPJ7PnhJuBa/609Dp08uMSN2untVnkAh+/M4Lf2udX/bJqI
+         vVDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qko599Uq/EcKOeMa5T6Nbxwrwz7YFbQgmwQPU6o2zKk=;
+        b=Em8PjWllnT9CL96BI4TbY3CV7jIYq4epolhmAurIzMnmmZ6pOKpTrsCSEW+YXHgXwP
+         o/z5GlCu6XQsQoGvAcnrprYf25ZK1WHDmRCFsyoTg4JxtA15yHEmh51+XQOQksr8Jzo3
+         dor/ZODkKLv76I9YbvVIeS1k6l/+8PD/DA8Az9oOQzrHiOJUHh6pZlZP5I+1jU6XncFz
+         yS3l/YtGmheTipknDgA0fxcwZh9Ig2Xiv82yrwDiqB0ZGEGnn0JpdhDzD9XbW+htZAjq
+         K7a3FJRczgIMCVVxe8nOoFlIHWB9lp/QPY/TqQwTZaAU0Pv+9HdWrpP9bAV3XFIFoCST
+         1G+g==
+X-Gm-Message-State: AOAM5313pB2MFm8rWVuzYm8dIodIao7sqNeAMo1emPVZlEPbtOPImb0L
+        a0iS8ErsekMsg4Jew3pnmS8=
+X-Google-Smtp-Source: ABdhPJy5Iy1XdpWlOnr8lZfv6Wh0OYsaY+OZCiV2nQD/fxlHso3X3itJOJBriBz6LnzNHgMlXPrQKw==
+X-Received: by 2002:a63:1308:: with SMTP id i8mr6216999pgl.19.1626378601809;
+        Thu, 15 Jul 2021 12:50:01 -0700 (PDT)
+Received: from rishi-Nitro-AN515-52.. ([2405:201:9007:9a24:c780:f892:bcfb:77c9])
+        by smtp.googlemail.com with ESMTPSA id a22sm7418045pfv.113.2021.07.15.12.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jul 2021 12:50:01 -0700 (PDT)
+From:   Saptarshi Patra <saptarshi.patra.22@gmail.com>
+Cc:     saptarshi.patra.22@gmail.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH] media: usb: uvc: uvc_driver: Added a function pr_info() in uvc_driver and staging: android: Decleared file operation with const keyword in android keyword
+Date:   Fri, 16 Jul 2021 01:19:10 +0530
+Message-Id: <20210715194911.8267-1-saptarshi.patra.22@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1624271242-111890-5-git-send-email-liudongdong3@huawei.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-[+cc Logan]
+media: usb: uvc: uvc_driver: Decleared a function called
+ pr_info()  with a string input "I changed uvcvideo driver in the Linux
+ Kernel"
 
-On Mon, Jun 21, 2021 at 06:27:20PM +0800, Dongdong Liu wrote:
-> 10-Bit Tag capability, introduced in PCIe-4.0 increases the total Tag
-> field size from 8 bits to 10 bits.
-> 
-> For platforms where the RC supports 10-Bit Tag Completer capability,
-> it is highly recommended for platform firmware or operating software
+Added the function pr_info() to see the message / input string using dmesg
 
-Recommended by whom?  If the spec recommends it, we should provide the
-citation.
+staging: android: Decleared file operation with const keyword
 
-> that configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable
-> bit automatically in Endpoints with 10-Bit Tag Requester capability. This
-> enables the important class of 10-Bit Tag capable adapters that send
-> Memory Read Requests only to host memory.
+Warning found by the checkpatch.pl script
 
-What is the implication for P2PDMA?  What happens if we enable 10-bit
-tags for device A, and A generates Mem Read Requests to device B,
-which does not support 10-bit tags?
+Signed-off-by: Saptarshi Patra <saptarshi.patra.22@gmail.com>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 2 +-
+ drivers/staging/android/ashmem.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/pci/probe.c | 33 +++++++++++++++++++++++++++++++++
->  include/linux/pci.h |  2 ++
->  2 files changed, 35 insertions(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 0208865..33241fb 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2048,6 +2048,38 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
->  	return 0;
->  }
->  
-> +static void pci_configure_10bit_tags(struct pci_dev *dev)
-> +{
-> +	struct pci_dev *bridge;
-> +
-> +	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_COMP))
-> +		return;
-> +
-> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT) {
-> +		dev->ext_10bit_tag = 1;
-> +		return;
-> +	}
-> +
-> +	bridge = pci_upstream_bridge(dev);
-> +	if (bridge && bridge->ext_10bit_tag)
-> +		dev->ext_10bit_tag = 1;
-> +
-> +	/*
-> +	 * 10-Bit Tag Requester Enable in Device Control 2 Register is RsvdP
-> +	 * for VF.
-> +	 */
-> +	if (dev->is_virtfn)
-> +		return;
-> +
-> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT &&
-> +	    dev->ext_10bit_tag == 1 &&
-> +	    (dev->pcie_devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_REQ)) {
-> +		pci_dbg(dev, "enabling 10-Bit Tag Requester\n");
-> +		pcie_capability_set_word(dev, PCI_EXP_DEVCTL2,
-> +					PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
-> +	}
-> +}
-> +
->  /**
->   * pcie_relaxed_ordering_enabled - Probe for PCIe relaxed ordering enable
->   * @dev: PCI device to query
-> @@ -2184,6 +2216,7 @@ static void pci_configure_device(struct pci_dev *dev)
->  {
->  	pci_configure_mps(dev);
->  	pci_configure_extended_tags(dev, NULL);
-> +	pci_configure_10bit_tags(dev);
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9a791d8ef200..0b47ca75091b 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2352,7 +2352,7 @@ static int uvc_probe(struct usb_interface *intf,
+ 		(const struct uvc_device_info *)id->driver_info;
+ 	int function;
+ 	int ret;
+-
++	pr_info("I changed uvcvideo driver in the Linux Kernel\n");
+ 	/* Allocate memory for the device and initialize it. */
+ 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+ 	if (dev == NULL)
+diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
+index ddbde3f8430e..4c6b420fbf4d 100644
+--- a/drivers/staging/android/ashmem.c
++++ b/drivers/staging/android/ashmem.c
+@@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, unsigned long addr,
+ 
+ static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+ {
+-	static struct file_operations vmfile_fops;
++	static const struct file_operations vmfile_fops;
+ 	struct ashmem_area *asma = file->private_data;
+ 	int ret = 0;
+ 
+-- 
+2.30.2
 
-I think 10-bit tag support should be integrated with extended (8-bit)
-tag support instead of having two separate functions.
-
-If we have "no_ext_tags" set because some device doesn't support 8-bit
-tags correctly, we probably shouldn't try to enable 10-bit tags
-either.
-
->  	pci_configure_relaxed_ordering(dev);
->  	pci_configure_ltr(dev);
->  	pci_configure_eetlp_prefix(dev);
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index de1fc24..445d102 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -393,6 +393,8 @@ struct pci_dev {
->  #endif
->  	unsigned int	eetlp_prefix_path:1;	/* End-to-End TLP Prefix */
->  
-> +	unsigned int	ext_10bit_tag:1; /* 10-Bit Tag Completer Supported
-> +					    from root to here */
->  	pci_channel_state_t error_state;	/* Current connectivity state */
->  	struct device	dev;			/* Generic device interface */
->  
-> -- 
-> 2.7.4
-> 
