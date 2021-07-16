@@ -2,186 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6660C12002
-	for <linux-media@archiver.kernel.org>; Fri, 16 Jul 2021 11:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 346E7C07E95
+	for <linux-media@archiver.kernel.org>; Fri, 16 Jul 2021 12:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9B96613F5
-	for <linux-media@archiver.kernel.org>; Fri, 16 Jul 2021 11:12:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10165613F2
+	for <linux-media@archiver.kernel.org>; Fri, 16 Jul 2021 12:57:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbhGPLPP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Jul 2021 07:15:15 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15027 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbhGPLPO (ORCPT
+        id S239791AbhGPNAI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Jul 2021 09:00:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34194 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239590AbhGPNAH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Jul 2021 07:15:14 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GR7ls5x07zZqfH;
-        Fri, 16 Jul 2021 19:08:57 +0800 (CST)
-Received: from [10.67.103.235] (10.67.103.235) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Fri, 16 Jul 2021 19:12:16 +0800
-Subject: Re: [PATCH V5 4/6] PCI: Enable 10-Bit tag support for PCIe Endpoint
- devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20210715172336.GA1972959@bjorn-Precision-5520>
-CC:     <hch@infradead.org>, <kw@linux.com>, <linux-pci@vger.kernel.org>,
-        <rajur@chelsio.com>, <hverkuil-cisco@xs4all.nl>,
-        <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>
-From:   Dongdong Liu <liudongdong3@huawei.com>
-Message-ID: <db506d81-3cb9-4cdc-fb4a-f2d28587b9b2@huawei.com>
-Date:   Fri, 16 Jul 2021 19:12:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
-MIME-Version: 1.0
-In-Reply-To: <20210715172336.GA1972959@bjorn-Precision-5520>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.235]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+        Fri, 16 Jul 2021 09:00:07 -0400
+Received: from guri.fritz.box (unknown [IPv6:2a02:810a:880:f54:f07d:7270:7174:27c4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 099121F4407D;
+        Fri, 16 Jul 2021 13:57:11 +0100 (BST)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: [patch v4l-utils 1/2] v4l2-ctl: print specific error upon failure
+Date:   Fri, 16 Jul 2021 14:57:02 +0200
+Message-Id: <20210716125703.699-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210716125703.699-1-dafna.hirschfeld@collabora.com>
+References: <20210716125703.699-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bjorn
+When an operation fails, print an error message
+that specify the specific operation that failed
+prefixed with the current function name.
+This makes debugging less painful.
 
-Many thanks for your review.
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ utils/v4l2-ctl/v4l2-ctl-streaming.cpp | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-On 2021/7/16 1:23, Bjorn Helgaas wrote:
-> [+cc Logan]
->
-> On Mon, Jun 21, 2021 at 06:27:20PM +0800, Dongdong Liu wrote:
->> 10-Bit Tag capability, introduced in PCIe-4.0 increases the total Tag
->> field size from 8 bits to 10 bits.
->>
->> For platforms where the RC supports 10-Bit Tag Completer capability,
->> it is highly recommended for platform firmware or operating software
->
-> Recommended by whom?  If the spec recommends it, we should provide the
-> citation.
-PCIe spec 5.0 r1.0 section 2.2.6.2 IMPLEMENTATION NOTE says that.
-Will fix.
->
->> that configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable
->> bit automatically in Endpoints with 10-Bit Tag Requester capability. This
->> enables the important class of 10-Bit Tag capable adapters that send
->> Memory Read Requests only to host memory.
->
-> What is the implication for P2PDMA?  What happens if we enable 10-bit
-> tags for device A, and A generates Mem Read Requests to device B,
-> which does not support 10-bit tags?
-PCIe spec 5.0 r1.0 section 2.2.6.2 says
-If an Endpoint supports sending Requests to other Endpoints (as opposed 
-to host memory), the Endpoint must not send 10-Bit Tag Requests to 
-another given Endpoint unless an implementation-specific mechanism 
-determines that the Endpoint supports 10-Bit Tag Completer capability. 
-Not sending 10-Bit Tag Requests to other Endpoints at all
-may be acceptable for some implementations. More sophisticated 
-mechanisms are outside the scope of this specification.
+diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+index 62424e4c..0f28a537 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+@@ -1153,8 +1153,10 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
+ 			q.g_type() == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+ 	bool is_meta = q.g_type() == V4L2_BUF_TYPE_META_OUTPUT;
+ 
+-	if (q.obtain_bufs(&fd))
++	if (q.obtain_bufs(&fd)) {
++		fprintf(stderr, "%s q.obtain_bufs failed\n", __func__);
+ 		return QUEUE_ERROR;
++	}
+ 
+ 	fd.g_fmt(fmt, q.g_type());
+ 	{
+@@ -1226,8 +1228,10 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
+ 	for (unsigned i = 0; i < q.g_buffers(); i++) {
+ 		cv4l_buffer buf(q);
+ 
+-		if (fd.querybuf(buf, i))
++		if (fd.querybuf(buf, i)) {
++			fprintf(stderr, "%s fd.querybuf failed\n", __func__);
+ 			return QUEUE_ERROR;
++		}
+ 
+ 		buf.update(q, i);
+ 		for (unsigned j = 0; j < q.g_num_planes(); j++)
+@@ -2720,11 +2724,21 @@ static void streaming_set_cap2out(cv4l_fd &fd, cv4l_fd &out_fd)
+ 		fprintf(stderr, "mismatch between number of planes\n");
+ 		goto done;
+ 	}
++	if (in.obtain_bufs(&fd)) {
++		fprintf(stderr, "%s: in.obtain_bufs failed\n", __func__);
++		goto done;
++	}
+ 
+-	if (in.obtain_bufs(&fd) ||
+-	    in.queue_all(&fd) ||
+-	    do_setup_out_buffers(out_fd, out, file[OUT], false, false) == QUEUE_ERROR)
++	if (in.queue_all(&fd)) {
++		fprintf(stderr, "%s: in.queue_all failed\n", __func__);
+ 		goto done;
++	}
++
++
++	if (do_setup_out_buffers(out_fd, out, file[OUT], false, false) == QUEUE_ERROR) {
++		fprintf(stderr, "%s: do_setup_out_buffers failed\n", __func__);
++		goto done;
++	}
+ 
+ 	fps_ts[CAP].determine_field(fd.g_fd(), in.g_type());
+ 	fps_ts[OUT].determine_field(fd.g_fd(), out.g_type());
+-- 
+2.17.1
 
-Not sending 10-Bit Tag Requests to other Endpoints at all seems simple.
-Add kernel parameter pci=pcie_bus_peer2peer when boot kernel with 
-P2PDMA, then do not config 10-BIT Tag.
-
-if (pcie_bus_config != PCIE_BUS_PEER2PEER)
-	pci_configure_10bit_tags(dev);
-
-Bjorn and Logan, any suggestion?
->
->> Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
->> Reviewed-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  drivers/pci/probe.c | 33 +++++++++++++++++++++++++++++++++
->>  include/linux/pci.h |  2 ++
->>  2 files changed, 35 insertions(+)
->>
->> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
->> index 0208865..33241fb 100644
->> --- a/drivers/pci/probe.c
->> +++ b/drivers/pci/probe.c
->> @@ -2048,6 +2048,38 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
->>  	return 0;
->>  }
->>
->> +static void pci_configure_10bit_tags(struct pci_dev *dev)
->> +{
->> +	struct pci_dev *bridge;
->> +
->> +	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_COMP))
->> +		return;
->> +
->> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT) {
->> +		dev->ext_10bit_tag = 1;
->> +		return;
->> +	}
->> +
->> +	bridge = pci_upstream_bridge(dev);
->> +	if (bridge && bridge->ext_10bit_tag)
->> +		dev->ext_10bit_tag = 1;
->> +
->> +	/*
->> +	 * 10-Bit Tag Requester Enable in Device Control 2 Register is RsvdP
->> +	 * for VF.
->> +	 */
->> +	if (dev->is_virtfn)
->> +		return;
->> +
->> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT &&
->> +	    dev->ext_10bit_tag == 1 &&
->> +	    (dev->pcie_devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_REQ)) {
->> +		pci_dbg(dev, "enabling 10-Bit Tag Requester\n");
->> +		pcie_capability_set_word(dev, PCI_EXP_DEVCTL2,
->> +					PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
->> +	}
->> +}
->> +
->>  /**
->>   * pcie_relaxed_ordering_enabled - Probe for PCIe relaxed ordering enable
->>   * @dev: PCI device to query
->> @@ -2184,6 +2216,7 @@ static void pci_configure_device(struct pci_dev *dev)
->>  {
->>  	pci_configure_mps(dev);
->>  	pci_configure_extended_tags(dev, NULL);
->> +	pci_configure_10bit_tags(dev);
->
-> I think 10-bit tag support should be integrated with extended (8-bit)
-> tag support instead of having two separate functions.
->
-> If we have "no_ext_tags" set because some device doesn't support 8-bit
-> tags correctly, we probably shouldn't try to enable 10-bit tags
-> either.
-Looks good, will fix.
-
-Thanks
-Dongdong
->
->>  	pci_configure_relaxed_ordering(dev);
->>  	pci_configure_ltr(dev);
->>  	pci_configure_eetlp_prefix(dev);
->> diff --git a/include/linux/pci.h b/include/linux/pci.h
->> index de1fc24..445d102 100644
->> --- a/include/linux/pci.h
->> +++ b/include/linux/pci.h
->> @@ -393,6 +393,8 @@ struct pci_dev {
->>  #endif
->>  	unsigned int	eetlp_prefix_path:1;	/* End-to-End TLP Prefix */
->>
->> +	unsigned int	ext_10bit_tag:1; /* 10-Bit Tag Completer Supported
->> +					    from root to here */
->>  	pci_channel_state_t error_state;	/* Current connectivity state */
->>  	struct device	dev;			/* Generic device interface */
->>
->> --
->> 2.7.4
->>
-> .
->
