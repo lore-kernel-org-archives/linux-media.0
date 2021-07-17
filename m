@@ -2,236 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD16C636C9
-	for <linux-media@archiver.kernel.org>; Sat, 17 Jul 2021 08:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E56CC636C9
+	for <linux-media@archiver.kernel.org>; Sat, 17 Jul 2021 08:51:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08B49613C3
-	for <linux-media@archiver.kernel.org>; Sat, 17 Jul 2021 08:14:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3786B611C1
+	for <linux-media@archiver.kernel.org>; Sat, 17 Jul 2021 08:51:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbhGQIQy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 17 Jul 2021 04:16:54 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48156 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232906AbhGQIPv (ORCPT
+        id S231862AbhGQIxj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 17 Jul 2021 04:53:39 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:11437 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231812AbhGQIxj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 17 Jul 2021 04:15:51 -0400
-X-UUID: 6cf3f4caed814ae28a8ebef67692adf1-20210717
-X-UUID: 6cf3f4caed814ae28a8ebef67692adf1-20210717
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 608856626; Sat, 17 Jul 2021 16:12:52 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 17 Jul 2021 16:12:50 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 17 Jul 2021 16:12:50 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2, 12/14] dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for mt8192
-Date:   Sat, 17 Jul 2021 16:12:31 +0800
-Message-ID: <20210717081233.7809-13-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210717081233.7809-1-yunfei.dong@mediatek.com>
-References: <20210717081233.7809-1-yunfei.dong@mediatek.com>
+        Sat, 17 Jul 2021 04:53:39 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GRhYz48GGzcdyy;
+        Sat, 17 Jul 2021 16:47:19 +0800 (CST)
+Received: from [10.67.103.235] (10.67.103.235) by
+ dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Sat, 17 Jul 2021 16:50:38 +0800
+Subject: Re: [PATCH V5 4/6] PCI: Enable 10-Bit tag support for PCIe Endpoint
+ devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20210716141712.GA2096096@bjorn-Precision-5520>
+CC:     <hch@infradead.org>, <kw@linux.com>, <linux-pci@vger.kernel.org>,
+        <rajur@chelsio.com>, <hverkuil-cisco@xs4all.nl>,
+        <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>, <okaya@kernel.org>
+From:   Dongdong Liu <liudongdong3@huawei.com>
+Message-ID: <0f223592-16ff-626b-94ef-3e89a51d1971@huawei.com>
+Date:   Sat, 17 Jul 2021 16:50:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20210716141712.GA2096096@bjorn-Precision-5520>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.235]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds decoder dt-bindings for mt8192.
+[+cc Sinan]
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-v2: using yaml format to instead of txt file.
----
- .../media/mediatek-vcodec-comp-decoder.yaml   | 150 ++++++++++++++++++
- 1 file changed, 150 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-vcodec-comp-decoder.yaml
+On 2021/7/16 22:17, Bjorn Helgaas wrote:
+> On Fri, Jul 16, 2021 at 07:12:16PM +0800, Dongdong Liu wrote:
+>> Hi Bjorn
+>>
+>> Many thanks for your review.
+>>
+>> On 2021/7/16 1:23, Bjorn Helgaas wrote:
+>>> [+cc Logan]
+>>>
+>>> On Mon, Jun 21, 2021 at 06:27:20PM +0800, Dongdong Liu wrote:
+>>>> 10-Bit Tag capability, introduced in PCIe-4.0 increases the total Tag
+>>>> field size from 8 bits to 10 bits.
+>>>>
+>>>> For platforms where the RC supports 10-Bit Tag Completer capability,
+>>>> it is highly recommended for platform firmware or operating software
+>>>
+>>> Recommended by whom?  If the spec recommends it, we should provide the
+>>> citation.
+>>
+>> PCIe spec 5.0 r1.0 section 2.2.6.2 IMPLEMENTATION NOTE says that.
+>> Will fix.
+>
+> Thanks, that will be helpful.
+>
+>>>> that configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable
+>>>> bit automatically in Endpoints with 10-Bit Tag Requester capability. This
+>>>> enables the important class of 10-Bit Tag capable adapters that send
+>>>> Memory Read Requests only to host memory.
+>>>
+>>> What is the implication for P2PDMA?  What happens if we enable 10-bit
+>>> tags for device A, and A generates Mem Read Requests to device B,
+>>> which does not support 10-bit tags?
+>>
+>> PCIe spec 5.0 r1.0 section 2.2.6.2 says
+>> If an Endpoint supports sending Requests to other Endpoints (as opposed to
+>> host memory), the Endpoint must not send 10-Bit Tag Requests to another
+>> given Endpoint unless an implementation-specific mechanism determines that
+>> the Endpoint supports 10-Bit Tag Completer capability. Not sending 10-Bit
+>> Tag Requests to other Endpoints at all
+>> may be acceptable for some implementations. More sophisticated mechanisms
+>> are outside the scope of this specification.
+>>
+>> Not sending 10-Bit Tag Requests to other Endpoints at all seems simple.
+>> Add kernel parameter pci=pcie_bus_peer2peer when boot kernel with P2PDMA,
+>> then do not config 10-BIT Tag.
+>>
+>> if (pcie_bus_config != PCIE_BUS_PEER2PEER)
+>> 	pci_configure_10bit_tags(dev);
+>
+> Seems like a reasonable start.  I wish this were more dynamic and we
+> didn't have to rely on a kernel parameter to make P2PDMA safe, but
+> that seems to be the current situation.
+>
+> Does the same consideration apply to enabling Extended Tags (8-bit
+> tags)?  I would guess so, but sec 2.2.6.2 says "Receivers/Completers
+> must handle 8-bit Tag values correctly regardless of the setting of
+> their Extended Tag Field Enable bit" so there's some subtlety there
+> with regard to what "Extended Tag Field Supported" means.
+>
+> I don't know why the "Extended Tag Field Supported" bit exists if all
+> receivers are required to support 8-bit tags.
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec-comp-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek-vcodec-comp-decoder.yaml
-new file mode 100644
-index 000000000000..48ecfe440902
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek-vcodec-comp-decoder.yaml
-@@ -0,0 +1,150 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iommu/mediatek,vcodec-comp-decoder.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek Video Decode Accelerator With Component
-+
-+maintainers:
-+  - Yunfei Dong <yunfei.dong@mediatek.com>
-+
-+description: |+
-+  Mediatek Video Decode is the video decode hardware present in Mediatek
-+  SoCs which supports high resolution decoding functionalities. Required
-+  master and component node.
-+
-+properties:
-+  compatible:
-+      - description: used for master
-+          - const: mediatek,mt8192-vcodec-dec
-+      - description: used for component
-+          - const: mediatek,mtk-vcodec-lat
-+          - const: mediatek,mtk-vcodec-core
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 5
-+
-+  clock-names:
-+    items:
-+      - const: vdec_sel
-+      - const: vdec-soc-vdec
-+      - const: vdec-soc-lat
-+      - const: vdec-vdec
-+      - const: vdec-top
-+
-+  assigned-clocks: true
-+
-+  assigned-clock-parents: true
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  iommus:
-+    minItems: 1
-+    maxItems: 32
-+    description: |
-+      List of the hardware port in respective IOMMU block for current Socs.
-+      Refer to bindings/iommu/mediatek,iommu.yaml.
-+
-+  dma-ranges:
-+    maxItems: 1
-+    description: |
-+      Describes the physical address space of IOMMU maps to memory.
-+
-+  mediatek,scp:
-+    maxItems: 1
-+	
-+required:
-+  master:
-+      - compatible
-+      - reg
-+      - iommus
-+      - mediatek,scp
-+      - dma-ranges
-+  component:
-+      - compatible
-+      - reg
-+      - interrupts
-+      - clocks
-+      - clock-names
-+      - iommus
-+      - dma-ranges
-+      - assigned-clocks
-+      - assigned-clock-parents
-+      - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/memory/mt8192-larb-port.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    vcodec_dec: vcodec_dec@16000000 {
-+        compatible = "mediatek,mt8192-vcodec-dec";
-+        reg = <0 0x16000000 0 0x1000>;		/* VDEC_SYS */
-+        mediatek,scp = <&scp>;
-+        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-+        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+    };
-+
-+    vcodec_lat: vcodec_lat@0x16010000 {
-+        compatible = "mediatek,mtk-vcodec-lat";
-+        reg = <0 0x16010000 0 0x800>;		/* VDEC_MISC */
-+        interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-+        iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-+             <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-+        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+        clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+             <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+             <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+             <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-+             <&topckgen CLK_TOP_MAINPLL_D4>;
-+        clock-names = "vdec-sel", "vdec-soc-vdec", "vdec-soc-lat",
-+              "vdec-vdec", "vdec-top";
-+        assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+        assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+        power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-+    };
-+
-+    vcodec_core: vcodec_core@0x16025000 {
-+        compatible = "mediatek,mtk-vcodec-core";
-+        reg = <0 0x16025000 0 0x1000>;		/* VDEC_CORE_MISC */
-+        interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-+        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-+             <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-+        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+        clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+             <&vdecsys CLK_VDEC_VDEC>,
-+             <&vdecsys CLK_VDEC_LAT>,
-+             <&vdecsys CLK_VDEC_LARB1>,
-+             <&topckgen CLK_TOP_MAINPLL_D4>;
-+        clock-names = "vdec-sel", "vdec-soc-vdec", "vdec-soc-lat",
-+              "vdec-vdec", "vdec-top";
-+        assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+        assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+        power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-+    };
-\ No newline at end of file
--- 
-2.25.1
+The comment in the [PATCH] PCI: enable extended tags support for PCIe 
+endpoints 
+(https://patchwork.kernel.org/project/linux-arm-msm/patch/1474769434-5756-1-git-send-email-okaya@codeaurora.org/)
+says "All PCIe completers are required to support 8 bit tags.
+Generation of 8 bit tags is optional. That's why, there is a supported 
+and an enable/disable bit."
 
+So the completers can handle 8-bit Tag values correctly also regardless 
+of "Extended Tag Field Supported" ?  seems not very clearly, but current 
+code implement follow this.
+
+>
+> If we need a similar change to pci_configure_extended_tags() to check
+> pcie_bus_config, that should be a separate patch because it would be a
+> bug fix independent of 10-bit tag support.
+>
+Seems no need if All PCIe completers are required to support 8 bit tags.
+
+Thanks,
+Dongdong
+> Bjorn
+> .
+>
