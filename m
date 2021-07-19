@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0812C07E9B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E195CC636C9
 	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EDDA61175
+	by mail.kernel.org (Postfix) with ESMTP id 141A96113C
 	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349586AbhGSWjg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S1348998AbhGSWjQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387526AbhGSUOD (ORCPT
+        with ESMTP id S1387518AbhGSUNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 16:14:03 -0400
+        Mon, 19 Jul 2021 16:13:37 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A9EC0613DB;
-        Mon, 19 Jul 2021 13:52:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273F0C061766;
+        Mon, 19 Jul 2021 13:51:57 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id B46281F42DFC
+        with ESMTPSA id 6D8161F42DF0
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
@@ -37,11 +37,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Chris Healy <cphealy@gmail.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jonas Karlman <jonas@kwiboo.se>,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 10/10] arm64: dts: rockchip: Add VPU support for the PX30
-Date:   Mon, 19 Jul 2021 17:52:42 -0300
-Message-Id: <20210719205242.18807-11-ezequiel@collabora.com>
+        Kever Yang <kever.yang@rock-chips.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
+Subject: [PATCH v3 07/10] media: hantro: Enable H.264 on Rockchip VDPU2
+Date:   Mon, 19 Jul 2021 17:52:39 -0300
+Message-Id: <20210719205242.18807-8-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
 References: <20210719205242.18807-1-ezequiel@collabora.com>
@@ -51,51 +51,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Given H.264 support for VDPU2 was just added, let's enable it.
+For now, this is only enabled on platform that don't have
+an RKVDEC core, such as RK3328.
 
-The PX30 has a VPU (both decoder and encoder) with a dedicated IOMMU.
-Describe these two entities in device-tree.
-
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Alex Bee <knaerzche@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/px30.dtsi | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ .../staging/media/hantro/rockchip_vpu_hw.c    | 26 ++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 248ebb61aa79..05ce8ce5e4be 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -1024,6 +1024,29 @@ gpu: gpu@ff400000 {
- 		status = "disabled";
- 	};
+diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+index 3ccc16413f42..e4e3b5e7689b 100644
+--- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
++++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+@@ -162,6 +162,19 @@ static const struct hantro_fmt rk3399_vpu_dec_fmts[] = {
+ 		.fourcc = V4L2_PIX_FMT_NV12,
+ 		.codec_mode = HANTRO_MODE_NONE,
+ 	},
++	{
++		.fourcc = V4L2_PIX_FMT_H264_SLICE,
++		.codec_mode = HANTRO_MODE_H264_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 1920,
++			.step_width = MB_DIM,
++			.min_height = 48,
++			.max_height = 1088,
++			.step_height = MB_DIM,
++		},
++	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_MPEG2_SLICE,
+ 		.codec_mode = HANTRO_MODE_MPEG2_DEC,
+@@ -388,6 +401,12 @@ static const struct hantro_codec_ops rk3399_vpu_codec_ops[] = {
+ 		.init = hantro_jpeg_enc_init,
+ 		.exit = hantro_jpeg_enc_exit,
+ 	},
++	[HANTRO_MODE_H264_DEC] = {
++		.run = rockchip_vpu2_h264_dec_run,
++		.reset = rockchip_vpu2_dec_reset,
++		.init = hantro_h264_dec_init,
++		.exit = hantro_h264_dec_exit,
++	},
+ 	[HANTRO_MODE_MPEG2_DEC] = {
+ 		.run = rockchip_vpu2_mpeg2_dec_run,
+ 		.reset = rockchip_vpu2_dec_reset,
+@@ -433,6 +452,8 @@ static const char * const rockchip_vpu_clk_names[] = {
+ 	"aclk", "hclk"
+ };
  
-+	vpu: video-codec@ff442000 {
-+		compatible = "rockchip,px30-vpu";
-+		reg = <0x0 0xff442000 0x0 0x800>;
-+		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "vepu", "vdpu";
-+		clocks = <&cru ACLK_VPU>, <&cru HCLK_VPU>;
-+		clock-names = "aclk", "hclk";
-+		iommus = <&vpu_mmu>;
-+		power-domains = <&power PX30_PD_VPU>;
-+	};
++/* VDPU1/VEPU1 */
 +
-+	vpu_mmu: iommu@ff442800 {
-+		compatible = "rockchip,iommu";
-+		reg = <0x0 0xff442800 0x0 0x100>;
-+		interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "vpu_mmu";
-+		clocks = <&cru ACLK_VPU>, <&cru HCLK_VPU>;
-+		clock-names = "aclk", "iface";
-+		#iommu-cells = <0>;
-+		power-domains = <&power PX30_PD_VPU>;
-+	};
+ const struct hantro_variant rk3036_vpu_variant = {
+ 	.dec_offset = 0x400,
+ 	.dec_fmts = rk3066_vpu_dec_fmts,
+@@ -495,11 +516,14 @@ const struct hantro_variant rk3288_vpu_variant = {
+ 	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
+ };
+ 
++/* VDPU2/VEPU2 */
 +
- 	dsi: dsi@ff450000 {
- 		compatible = "rockchip,px30-mipi-dsi";
- 		reg = <0x0 0xff450000 0x0 0x10000>;
+ const struct hantro_variant rk3328_vpu_variant = {
+ 	.dec_offset = 0x400,
+ 	.dec_fmts = rk3399_vpu_dec_fmts,
+ 	.num_dec_fmts = ARRAY_SIZE(rk3399_vpu_dec_fmts),
+-	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER,
++	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
++		 HANTRO_H264_DECODER,
+ 	.codec_ops = rk3399_vpu_codec_ops,
+ 	.irqs = rockchip_vdpu2_irqs,
+ 	.num_irqs = ARRAY_SIZE(rockchip_vdpu2_irqs),
 -- 
 2.32.0
 
