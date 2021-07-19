@@ -7,22 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFFE6C07E9D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0812C07E9B
 	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F16386113E
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EDDA61175
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbhGSWjN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:39:13 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44782 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387515AbhGSUNh (ORCPT
+        id S1349586AbhGSWjg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387526AbhGSUOD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 16:13:37 -0400
+        Mon, 19 Jul 2021 16:14:03 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A9EC0613DB;
+        Mon, 19 Jul 2021 13:52:12 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id AD03F1F42DEB
+        with ESMTPSA id B46281F42DFC
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
@@ -34,11 +37,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Chris Healy <cphealy@gmail.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jonas Karlman <jonas@kwiboo.se>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v3 05/10] media: hantro: h264: Move reference picture number to a helper
-Date:   Mon, 19 Jul 2021 17:52:37 -0300
-Message-Id: <20210719205242.18807-6-ezequiel@collabora.com>
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 10/10] arm64: dts: rockchip: Add VPU support for the PX30
+Date:   Mon, 19 Jul 2021 17:52:42 -0300
+Message-Id: <20210719205242.18807-11-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
 References: <20210719205242.18807-1-ezequiel@collabora.com>
@@ -48,89 +51,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a hantro_h264_get_ref_nbr() helper function to get the reference
-picture numbers. This will be used by the Rockchip VDPU2 H.264 driver.
+From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-This idea was originally proposed by Jonas Karlman in
-"[RFC 09/12] media: hantro: Refactor G1 H264 code"
-posted a while ago.
+The PX30 has a VPU (both decoder and encoder) with a dedicated IOMMU.
+Describe these two entities in device-tree.
 
-Link: https://lore.kernel.org/linux-media/HE1PR06MB401165F2BA0AD8A634FDFAF2ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com/
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Tested-by: Alex Bee <knaerzche@gmail.com>
 ---
- drivers/staging/media/hantro/hantro_g1_h264_dec.c | 14 ++------------
- drivers/staging/media/hantro/hantro_h264.c        | 11 +++++++++++
- drivers/staging/media/hantro/hantro_hw.h          |  2 ++
- 3 files changed, 15 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/rockchip/px30.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-index 6faacfc44c7c..236ce24ca00c 100644
---- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-@@ -126,7 +126,6 @@ static void set_params(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *src_buf)
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index 248ebb61aa79..05ce8ce5e4be 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -1024,6 +1024,29 @@ gpu: gpu@ff400000 {
+ 		status = "disabled";
+ 	};
  
- static void set_ref(struct hantro_ctx *ctx)
- {
--	struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	const u8 *b0_reflist, *b1_reflist, *p_reflist;
- 	struct hantro_dev *vpu = ctx->dev;
- 	int reg_num;
-@@ -143,17 +142,8 @@ static void set_ref(struct hantro_ctx *ctx)
- 	 * subsequential reference pictures.
- 	 */
- 	for (i = 0; i < HANTRO_H264_DPB_SIZE; i += 2) {
--		reg = 0;
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--			reg |= G1_REG_REF_PIC_REFER0_NBR(dpb[i].pic_num);
--		else
--			reg |= G1_REG_REF_PIC_REFER0_NBR(dpb[i].frame_num);
--
--		if (dpb[i + 1].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--			reg |= G1_REG_REF_PIC_REFER1_NBR(dpb[i + 1].pic_num);
--		else
--			reg |= G1_REG_REF_PIC_REFER1_NBR(dpb[i + 1].frame_num);
--
-+		reg = G1_REG_REF_PIC_REFER0_NBR(hantro_h264_get_ref_nbr(ctx, i)) |
-+		      G1_REG_REF_PIC_REFER1_NBR(hantro_h264_get_ref_nbr(ctx, i + 1));
- 		vdpu_write_relaxed(vpu, reg, G1_REG_REF_PIC(i / 2));
- 	}
- 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 6d72136760e7..0b4d2491be3b 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -348,6 +348,17 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- 	return dma_addr;
- }
- 
-+u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
-+{
-+	const struct v4l2_h264_dpb_entry *dpb = &ctx->h264_dec.dpb[dpb_idx];
++	vpu: video-codec@ff442000 {
++		compatible = "rockchip,px30-vpu";
++		reg = <0x0 0xff442000 0x0 0x800>;
++		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "vepu", "vdpu";
++		clocks = <&cru ACLK_VPU>, <&cru HCLK_VPU>;
++		clock-names = "aclk", "hclk";
++		iommus = <&vpu_mmu>;
++		power-domains = <&power PX30_PD_VPU>;
++	};
 +
-+	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-+		return 0;
-+	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-+		return dpb->pic_num;
-+	return dpb->frame_num;
-+}
++	vpu_mmu: iommu@ff442800 {
++		compatible = "rockchip,iommu";
++		reg = <0x0 0xff442800 0x0 0x100>;
++		interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "vpu_mmu";
++		clocks = <&cru ACLK_VPU>, <&cru HCLK_VPU>;
++		clock-names = "aclk", "iface";
++		#iommu-cells = <0>;
++		power-domains = <&power PX30_PD_VPU>;
++	};
 +
- int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_h264_dec_hw_ctx *h264_ctx = &ctx->h264_dec;
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index ce678fedaad6..7a8048afe357 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -238,6 +238,8 @@ void hantro_jpeg_enc_done(struct hantro_ctx *ctx);
- 
- dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- 				   unsigned int dpb_idx);
-+u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx,
-+			    unsigned int dpb_idx);
- int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx);
- int hantro_g1_h264_dec_run(struct hantro_ctx *ctx);
- int hantro_h264_dec_init(struct hantro_ctx *ctx);
+ 	dsi: dsi@ff450000 {
+ 		compatible = "rockchip,px30-mipi-dsi";
+ 		reg = <0x0 0xff450000 0x0 0x10000>;
 -- 
 2.32.0
 
