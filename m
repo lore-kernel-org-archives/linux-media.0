@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E13B5C636CB
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 07:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC6DC636C9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 07:47:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC3BA611C0
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 07:46:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C713D6115B
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 07:47:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbhGSHt4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 03:49:56 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:40148 "EHLO
+        id S235028AbhGSHuI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 03:50:08 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:40460 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233759AbhGSHtz (ORCPT
+        with ESMTP id S235025AbhGSHuE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 03:49:55 -0400
-X-UUID: 3a42733cb4ad473f98bebb6ef44fb039-20210719
-X-UUID: 3a42733cb4ad473f98bebb6ef44fb039-20210719
+        Mon, 19 Jul 2021 03:50:04 -0400
+X-UUID: 676e8604a01942398d7ce64a0775aa2c-20210719
+X-UUID: 676e8604a01942398d7ce64a0775aa2c-20210719
 Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1223271936; Mon, 19 Jul 2021 15:46:53 +0800
+        with ESMTP id 1713407624; Mon, 19 Jul 2021 15:47:01 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 19 Jul 2021 15:46:52 +0800
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 19 Jul 2021 15:47:00 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 19 Jul 2021 15:46:52 +0800
+ Transport; Mon, 19 Jul 2021 15:47:00 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -53,10 +53,12 @@ CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
         <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
         <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
         <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v5 0/3] media: mediatek: support mdp3 on mt8183 platform
-Date:   Mon, 19 Jul 2021 15:46:37 +0800
-Message-ID: <20210719074640.25058-1-moudy.ho@mediatek.com>
+Subject: [PATCH v5 2/3] dts: arm64: mt8183: Add Mediatek MDP3 nodes
+Date:   Mon, 19 Jul 2021 15:46:39 +0800
+Message-ID: <20210719074640.25058-3-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210719074640.25058-1-moudy.ho@mediatek.com>
+References: <20210719074640.25058-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -64,119 +66,152 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes since v4:
-- Rebase on v5.13-rc1.
-- Remove the CMDQ flush flow to match the CMDQ API change.
-- Integrate four of MDP's direct-link subcomponents into MDP controller node
-  from syscon node to avoid illegal clock usage.
-- Rewrite dt-binding in a JSON compatible subset of YAML
-- Fix a bit of macro argument precedence.
+Add device nodes for Media Data Path 3 (MDP3) modules.
 
-Changes since v3:
-- Rebase on v5.9-rc1.
-- modify code for review comment from Rob Herring, cancel multiple nodes using
-  same register base situation.
-- control IOMMU port through pm runtime get/put to DMA components' device.
-- SCP(VPU) driver revision.
-- stop queuing jobs(remove flush_workqueue()) after mdp_m2m_release().
-- add computation of plane address with data_offset.
-- fix scale ratio check issue.
-- add default v4l2_format setting.
+Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+Depend on:
+   [1] https://lore.kernel.org/patchwork/patch/1164746/
+   [2] https://patchwork.kernel.org/patch/11703299/
+   [3] https://patchwork.kernel.org/patch/11283773/
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 114 +++++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-Changes since v2:
-- modify code for review comment from Tomasz Figa & Alexandre Courbot
-- review comment from Rob Herring will offer code revision in v4, due to
-  it's related to device node modification, will need to modify code
-  architecture
-
-Changes since v1:
-- modify code for CMDQ v3 API support
-- EC ipi cmd migration
-- fix compliance test fail item (m2m cmd with -f)
-due to there is two problem in runing all format(-f) cmd:
-1. out of memory before test complete
-        Due to capture buffer mmap (refcount + 1) after reqbuf but seems
-        no corresponding munmap called before device close.
-        There are total 12XX items(formats) in format test and each format
-        alloc 8 capture/output buffers.
-2. unceasingly captureBufs() (randomly)
-        Seems the break statement didn't catch the count == 0 situation:
-        In v4l2-test-buffers.cpp, function: captureBufs()
-                        ...
-                        count--;
-                        if (!node->is_m2m && !count)
-                                break;
-        Log is as attachment
-
-I will paste the test result with problem part in another e-mail
-
-Hi,
-
-This is the first version of RFC patch for Media Data Path 3 (MDP3),
-MDP3 is used for scaling and color format conversion.
-support using GCE to write register in critical time limitation.
-support V4L2 m2m device control.
-
-Moudy Ho (3):
-  dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
-  dts: arm64: mt8183: Add Mediatek MDP3 nodes
-  media: platform: mtk-mdp3: Add Mediatek MDP3 driver
-
- .../bindings/media/mediatek-mdp3.yaml         |  274 ++++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  114 ++
- drivers/media/platform/Kconfig                |   19 +
- drivers/media/platform/Makefile               |    2 +
- drivers/media/platform/mtk-mdp3/Makefile      |    7 +
- drivers/media/platform/mtk-mdp3/isp_reg.h     |   37 +
- .../media/platform/mtk-mdp3/mdp-platform.h    |   58 +
- .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   75 +
- .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |  206 +++
- drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |  109 ++
- .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |  125 ++
- .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |  115 ++
- .../media/platform/mtk-mdp3/mmsys_config.h    |  188 +++
- drivers/media/platform/mtk-mdp3/mmsys_mutex.h |   35 +
- .../media/platform/mtk-mdp3/mmsys_reg_base.h  |   38 +
- drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  282 ++++
- .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  524 ++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   52 +
- .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1439 +++++++++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  157 ++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  261 +++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   86 +
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  797 +++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   42 +
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  746 +++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  373 +++++
- .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  313 ++++
- .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   79 +
- 28 files changed, 6553 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-mdp3.yaml
- create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
- create mode 100644 drivers/media/platform/mtk-mdp3/isp_reg.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp-platform.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_config.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_mutex.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_reg_base.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index c5e822b6b77a..30920d6ce7d2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1127,6 +1127,112 @@
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+ 		};
+ 
++		mdp3_rdma0: mdp3_rdma0@14001000 {
++			compatible = "mediatek,mt8183-mdp3",
++				     "mediatek,mt8183-mdp3-rdma";
++			mediatek,scp = <&scp>;
++			mediatek,mdp3-id = <0>;
++			mdp3-comps = "mediatek,mt8183-mdp3-dl", "mediatek,mt8183-mdp3-dl",
++				     "mediatek,mt8183-mdp3-imgi", "mediatek,mt8183-mdp3-exto";
++			mdp3-comp-ids = <0 1 0 1>;
++			reg = <0 0x14001000 0 0x1000>,
++			      <0 0x14000000 0 0x1000>,
++			      <0 0x15020000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
++						  <&gce SUBSYS_1400XXXX 0 0x1000>,
++						  <&gce SUBSYS_1502XXXX 0 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++				 <&mmsys CLK_MM_MDP_RSZ1>,
++				 <&mmsys CLK_MM_MDP_DL_TXCK>,
++				 <&mmsys CLK_MM_MDP_DL_RX>,
++				 <&mmsys CLK_MM_IPU_DL_TXCK>,
++				 <&mmsys CLK_MM_IPU_DL_RX>;
++			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
++			mediatek,mmsys = <&mmsys>;
++			mediatek,mm-mutex = <&mutex>;
++			mediatek,mailbox-gce = <&gce>;
++			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
++			mdp3-rsz0 = <&mdp3_rsz0>; /* debug only */
++			mdp3-rsz1 = <&mdp3_rsz1>; /* debug only */
++			mdp3-wrot0 = <&mdp3_wrot0>; /* debug only */
++			mdp3-wdma0 = <&mdp3_wdma>; /* debug only */
++			mdp3-ccorr0 = <&mdp3_ccorr>; /* debug only */
++			gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
++				     <&gce 0x14010000 SUBSYS_1401XXXX>,
++				     <&gce 0x14020000 SUBSYS_1402XXXX>,
++				     <&gce 0x15020000 SUBSYS_1502XXXX>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_RDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_RDMA0_EOF>,
++					      <CMDQ_EVENT_MDP_RSZ0_SOF>,
++					      <CMDQ_EVENT_MDP_RSZ1_SOF>,
++					      <CMDQ_EVENT_MDP_TDSHP_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_EOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_EOF>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_0>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_1>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_2>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_3>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_4>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_5>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_6>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_7>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_8>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_9>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_10>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_11>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_12>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_13>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_14>,
++					      <CMDQ_EVENT_WPE_A_DONE>,
++					      <CMDQ_EVENT_SPE_B_DONE>;
++		};
++
++		mdp3_rsz0: mdp3_rsz0@14003000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x14003000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
++		};
++
++		mdp3_rsz1: mdp3_rsz1@14004000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			mediatek,mdp3-id = <1>;
++			reg = <0 0x14004000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
++		};
++
++		mdp3_wrot0: mdp3_wrot0@14005000 {
++			compatible = "mediatek,mt8183-mdp3-wrot";
++			mediatek,mdp3-id = <0>;
++			mdp3-comps = "mediatek,mt8183-mdp3-path";
++			mdp3-comp-ids = <0>;
++			reg = <0 0x14005000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WROT0>;
++			iommus = <&iommu M4U_PORT_MDP_WROT0>;
++		};
++
++		mdp3_wdma: mdp3_wdma@14006000 {
++			compatible = "mediatek,mt8183-mdp3-wdma";
++			mediatek,mdp3-id = <0>;
++			mdp3-comps = "mediatek,mt8183-mdp3-path";
++			mdp3-comp-ids = <1>;
++			reg = <0 0x14006000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
++		};
++
+ 		ovl0: ovl@14008000 {
+ 			compatible = "mediatek,mt8183-disp-ovl";
+ 			reg = <0 0x14008000 0 0x1000>;
+@@ -1272,6 +1378,14 @@
+ 			clock-names = "apb", "smi", "gals0", "gals1";
+ 		};
+ 
++		mdp3_ccorr: mdp3_ccorr@1401c000 {
++			compatible = "mediatek,mt8183-mdp3-ccorr";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x1401c000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_CCORR>;
++		};
++
+ 		imgsys: syscon@15020000 {
+ 			compatible = "mediatek,mt8183-imgsys", "syscon";
+ 			reg = <0 0x15020000 0 0x1000>;
 -- 
 2.18.0
 
