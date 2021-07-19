@@ -2,27 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E286C07E95
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE6DC07E9B
 	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71B3561165
+	by mail.kernel.org (Postfix) with ESMTP id 8364C6113A
 	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245293AbhGSWjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:39:08 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44674 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387508AbhGSUNh (ORCPT
+        id S240008AbhGSWjC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387512AbhGSUNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 19 Jul 2021 16:13:37 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F28C061762;
+        Mon, 19 Jul 2021 13:51:36 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id A10AD1F42015
+        with ESMTPSA id 356831F42DDD
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
@@ -36,90 +39,216 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Jonas Karlman <jonas@kwiboo.se>,
         Kever Yang <kever.yang@rock-chips.com>,
         Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v3 00/10] hantro: Enable H.264 VDPU2
-Date:   Mon, 19 Jul 2021 17:52:32 -0300
-Message-Id: <20210719205242.18807-1-ezequiel@collabora.com>
+Subject: [PATCH v3 03/10] media: hantro: Avoid redundant hantro_get_{dst,src}_buf() calls
+Date:   Mon, 19 Jul 2021 17:52:35 -0300
+Message-Id: <20210719205242.18807-4-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
+References: <20210719205242.18807-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for H.264 decoding on the PX30, RK3328
-and RK3326 platforms, enabling the VDPU2 core. This core is available
-on other SoCs as well, such as RK3568/RK3566.
+Getting the next src/dst buffer is relatively expensive
+so avoid doing it multiple times.
 
-Patches 1, 2 and 3 are just low-hanging fruit that was on my backlog.
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Alex Bee <knaerzche@gmail.com>
+---
+ .../staging/media/hantro/hantro_g1_h264_dec.c | 17 ++++++++---------
+ .../staging/media/hantro/hantro_g1_vp8_dec.c  | 18 +++++++++---------
+ .../media/hantro/rockchip_vpu2_hw_vp8_dec.c   | 19 +++++++++----------
+ 3 files changed, 26 insertions(+), 28 deletions(-)
 
-Patches 4 and 5 add some helpers to avoid duplicating some processes
-between Hantro G1 and VDPU2. Patches 6 and 7 enable the VDPU2 H.264.
-The implementation is based on a patch from Jonas Karlman [1], which
-I forwarded ported to mainline.
-
-Finally, patches 8 to 10  add support for the VPU on Rockchip PX30 SoCs.
-These patches are based on patches submitted by Paul Kocialkowski [2],
-which I ported and adjusted a bit.
-
-I'd like to thank Jonas and Paul for the good work, and Alex Bee
-for the additional testing.
-
-Tested on i.MX8MQ EVK and RK3326 Odroid Advance Go, the latter
-is able to decode a 1080p sample at ~100fps nicely.
-
-Fluster conformance testing is looking good as well, and producing
-expected results:
-
-RK3326:
-  Ran 135 tests in 480.067s
-  FAILED (failures=9, errors=54)
-
-i.MX8MQ:
-  Ran 135 tests in 337.491s
-  FAILED (failures=9, errors=54)
-
-[1] https://lore.kernel.org/linux-media/HE1PR06MB40119DE07D38060F531D1070ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com/
-[2] https://lore.kernel.org/patchwork/cover/1361795/
-
-v3:
-
-* Keep a single compatible string "rockchip,px30-vpu",
-  instead of making it compatible with rk3399. The SoCs may
-  have small (but important) differences in their integration
-  so it's better to just make sure the proper compatible is mandatory.
-
-Ezequiel Garcia (6):
-  hantro: vp8: Move noisy WARN_ON to vpu_debug
-  hantro: Make struct hantro_variant.init() optional
-  media: hantro: Avoid redundant hantro_get_{dst,src}_buf() calls
-  media: hantro: h264: Move DPB valid and long-term bitmaps
-  media: hantro: h264: Move reference picture number to a helper
-  media: hantro: Enable H.264 on Rockchip VDPU2
-
-Jonas Karlman (1):
-  media: hantro: Add H.264 support for Rockchip VDPU2
-
-Paul Kocialkowski (3):
-  media: hantro: Add support for the Rockchip PX30
-  dt-bindings: media: rockchip-vpu: Add PX30 compatible
-  arm64: dts: rockchip: Add VPU support for the PX30
-
- .../bindings/media/rockchip-vpu.yaml          |   1 +
- arch/arm64/boot/dts/rockchip/px30.dtsi        |  23 +
- drivers/staging/media/hantro/Makefile         |   1 +
- drivers/staging/media/hantro/hantro.h         |   4 +-
- drivers/staging/media/hantro/hantro_drv.c     |  11 +-
- .../staging/media/hantro/hantro_g1_h264_dec.c |  48 +-
- .../staging/media/hantro/hantro_g1_vp8_dec.c  |  31 +-
- drivers/staging/media/hantro/hantro_h264.c    |  24 +
- drivers/staging/media/hantro/hantro_hw.h      |   8 +
- .../media/hantro/rockchip_vpu2_hw_h264_dec.c  | 491 ++++++++++++++++++
- .../media/hantro/rockchip_vpu2_hw_vp8_dec.c   |  32 +-
- .../staging/media/hantro/rockchip_vpu_hw.c    |  43 +-
- .../staging/media/hantro/sama5d4_vdec_hw.c    |   6 -
- 13 files changed, 649 insertions(+), 74 deletions(-)
- create mode 100644 drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c
-
+diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
+index 5c792b7bcb79..2aa37baad0c3 100644
+--- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
+@@ -19,13 +19,12 @@
+ #include "hantro_hw.h"
+ #include "hantro_v4l2.h"
+ 
+-static void set_params(struct hantro_ctx *ctx)
++static void set_params(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *src_buf)
+ {
+ 	const struct hantro_h264_dec_ctrls *ctrls = &ctx->h264_dec.ctrls;
+ 	const struct v4l2_ctrl_h264_decode_params *dec_param = ctrls->decode;
+ 	const struct v4l2_ctrl_h264_sps *sps = ctrls->sps;
+ 	const struct v4l2_ctrl_h264_pps *pps = ctrls->pps;
+-	struct vb2_v4l2_buffer *src_buf = hantro_get_src_buf(ctx);
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	u32 reg;
+ 
+@@ -226,22 +225,20 @@ static void set_ref(struct hantro_ctx *ctx)
+ 	}
+ }
+ 
+-static void set_buffers(struct hantro_ctx *ctx)
++static void set_buffers(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *src_buf)
+ {
+ 	const struct hantro_h264_dec_ctrls *ctrls = &ctx->h264_dec.ctrls;
+-	struct vb2_v4l2_buffer *src_buf, *dst_buf;
++	struct vb2_v4l2_buffer *dst_buf;
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	dma_addr_t src_dma, dst_dma;
+ 	size_t offset = 0;
+ 
+-	src_buf = hantro_get_src_buf(ctx);
+-	dst_buf = hantro_get_dst_buf(ctx);
+-
+ 	/* Source (stream) buffer. */
+ 	src_dma = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
+ 	vdpu_write_relaxed(vpu, src_dma, G1_REG_ADDR_STR);
+ 
+ 	/* Destination (decoded frame) buffer. */
++	dst_buf = hantro_get_dst_buf(ctx);
+ 	dst_dma = hantro_get_dec_buf_addr(ctx, &dst_buf->vb2_buf);
+ 	/* Adjust dma addr to start at second line for bottom field */
+ 	if (ctrls->decode->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD)
+@@ -276,6 +273,7 @@ static void set_buffers(struct hantro_ctx *ctx)
+ int hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
++	struct vb2_v4l2_buffer *src_buf;
+ 	int ret;
+ 
+ 	/* Prepare the H264 decoder context. */
+@@ -284,9 +282,10 @@ int hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
+ 		return ret;
+ 
+ 	/* Configure hardware registers. */
+-	set_params(ctx);
++	src_buf = hantro_get_src_buf(ctx);
++	set_params(ctx, src_buf);
+ 	set_ref(ctx);
+-	set_buffers(ctx);
++	set_buffers(ctx, src_buf);
+ 
+ 	hantro_end_prepare_run(ctx);
+ 
+diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+index 2afd5996d75f..6180b23e7d94 100644
+--- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+@@ -367,13 +367,12 @@ static void cfg_tap(struct hantro_ctx *ctx,
+ }
+ 
+ static void cfg_ref(struct hantro_ctx *ctx,
+-		    const struct v4l2_ctrl_vp8_frame *hdr)
++		    const struct v4l2_ctrl_vp8_frame *hdr,
++		    struct vb2_v4l2_buffer *vb2_dst)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+-	struct vb2_v4l2_buffer *vb2_dst;
+ 	dma_addr_t ref;
+ 
+-	vb2_dst = hantro_get_dst_buf(ctx);
+ 
+ 	ref = hantro_get_ref(ctx, hdr->last_frame_ts);
+ 	if (!ref) {
+@@ -405,16 +404,14 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ }
+ 
+ static void cfg_buffers(struct hantro_ctx *ctx,
+-			const struct v4l2_ctrl_vp8_frame *hdr)
++			const struct v4l2_ctrl_vp8_frame *hdr,
++			struct vb2_v4l2_buffer *vb2_dst)
+ {
+ 	const struct v4l2_vp8_segment *seg = &hdr->segment;
+ 	struct hantro_dev *vpu = ctx->dev;
+-	struct vb2_v4l2_buffer *vb2_dst;
+ 	dma_addr_t dst_dma;
+ 	u32 reg;
+ 
+-	vb2_dst = hantro_get_dst_buf(ctx);
+-
+ 	/* Set probability table buffer address */
+ 	vdpu_write_relaxed(vpu, ctx->vp8_dec.prob_tbl.dma,
+ 			   G1_REG_ADDR_QTABLE);
+@@ -436,6 +433,7 @@ int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
+ {
+ 	const struct v4l2_ctrl_vp8_frame *hdr;
+ 	struct hantro_dev *vpu = ctx->dev;
++	struct vb2_v4l2_buffer *vb2_dst;
+ 	size_t height = ctx->dst_fmt.height;
+ 	size_t width = ctx->dst_fmt.width;
+ 	u32 mb_width, mb_height;
+@@ -499,8 +497,10 @@ int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
+ 	cfg_qp(ctx, hdr);
+ 	cfg_parts(ctx, hdr);
+ 	cfg_tap(ctx, hdr);
+-	cfg_ref(ctx, hdr);
+-	cfg_buffers(ctx, hdr);
++
++	vb2_dst = hantro_get_dst_buf(ctx);
++	cfg_ref(ctx, hdr, vb2_dst);
++	cfg_buffers(ctx, hdr, vb2_dst);
+ 
+ 	hantro_end_prepare_run(ctx);
+ 
+diff --git a/drivers/staging/media/hantro/rockchip_vpu2_hw_vp8_dec.c b/drivers/staging/media/hantro/rockchip_vpu2_hw_vp8_dec.c
+index 704607511b57..d079075448c9 100644
+--- a/drivers/staging/media/hantro/rockchip_vpu2_hw_vp8_dec.c
++++ b/drivers/staging/media/hantro/rockchip_vpu2_hw_vp8_dec.c
+@@ -444,14 +444,12 @@ static void cfg_tap(struct hantro_ctx *ctx,
+ }
+ 
+ static void cfg_ref(struct hantro_ctx *ctx,
+-		    const struct v4l2_ctrl_vp8_frame *hdr)
++		    const struct v4l2_ctrl_vp8_frame *hdr,
++		    struct vb2_v4l2_buffer *vb2_dst)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+-	struct vb2_v4l2_buffer *vb2_dst;
+ 	dma_addr_t ref;
+ 
+-	vb2_dst = hantro_get_dst_buf(ctx);
+-
+ 	ref = hantro_get_ref(ctx, hdr->last_frame_ts);
+ 	if (!ref) {
+ 		vpu_debug(0, "failed to find last frame ts=%llu\n",
+@@ -482,16 +480,14 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ }
+ 
+ static void cfg_buffers(struct hantro_ctx *ctx,
+-			const struct v4l2_ctrl_vp8_frame *hdr)
++			const struct v4l2_ctrl_vp8_frame *hdr,
++			struct vb2_v4l2_buffer *vb2_dst)
+ {
+ 	const struct v4l2_vp8_segment *seg = &hdr->segment;
+ 	struct hantro_dev *vpu = ctx->dev;
+-	struct vb2_v4l2_buffer *vb2_dst;
+ 	dma_addr_t dst_dma;
+ 	u32 reg;
+ 
+-	vb2_dst = hantro_get_dst_buf(ctx);
+-
+ 	/* Set probability table buffer address */
+ 	vdpu_write_relaxed(vpu, ctx->vp8_dec.prob_tbl.dma,
+ 			   VDPU_REG_ADDR_QTABLE);
+@@ -514,6 +510,7 @@ int rockchip_vpu2_vp8_dec_run(struct hantro_ctx *ctx)
+ {
+ 	const struct v4l2_ctrl_vp8_frame *hdr;
+ 	struct hantro_dev *vpu = ctx->dev;
++	struct vb2_v4l2_buffer *vb2_dst;
+ 	size_t height = ctx->dst_fmt.height;
+ 	size_t width = ctx->dst_fmt.width;
+ 	u32 mb_width, mb_height;
+@@ -590,8 +587,10 @@ int rockchip_vpu2_vp8_dec_run(struct hantro_ctx *ctx)
+ 	cfg_qp(ctx, hdr);
+ 	cfg_parts(ctx, hdr);
+ 	cfg_tap(ctx, hdr);
+-	cfg_ref(ctx, hdr);
+-	cfg_buffers(ctx, hdr);
++
++	vb2_dst = hantro_get_dst_buf(ctx);
++	cfg_ref(ctx, hdr, vb2_dst);
++	cfg_buffers(ctx, hdr, vb2_dst);
+ 
+ 	hantro_end_prepare_run(ctx);
+ 
 -- 
 2.32.0
 
