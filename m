@@ -2,158 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2ADAC07E9D
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 17:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD87C07E9B
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9BEEF610F7
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 17:23:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B95C61181
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353114AbhGSQmY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 12:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355321AbhGSQgO (ORCPT
+        id S243129AbhGSWgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:36:48 -0400
+Received: from mail-il1-f171.google.com ([209.85.166.171]:36523 "EHLO
+        mail-il1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385732AbhGSTIa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 12:36:14 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370D8C0258C3
-        for <linux-media@vger.kernel.org>; Mon, 19 Jul 2021 09:44:41 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id d17so7212908ljq.12
-        for <linux-media@vger.kernel.org>; Mon, 19 Jul 2021 10:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=phystech-edu.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SwQ5WIYCU+Iw0FKCHUpemUOKm2/bld2/msmvptg5xQo=;
-        b=LS9NBl4p0lof0NUwVXBpRejKAMayY3KAb9qd5S6zm+yblqlquYhOrdUY4SZfQmo4ya
-         ay85BuSGLOjWveXYjTDrLRf0vsC2J+ec+hlh6Ol1AWXu0hSEILtRytK+TtdHDLW6IH3q
-         a+bRO0I0/XYHqnUstI8Ych1ueWVauJpQvI0/jLJpW7D1xNqTlOSmmIqa6dU0FB1TKf3h
-         92kj3574+H97vvNvMNiDoxC43hqhQN34rRwbtbTg2ZMEwoG71fDYgIZY8XtTJr5rDg0W
-         S+e1n9sEF8/UY2KFLvHmRGWhbdkxL+B+6A6VFFxzBN+Y64FXtSCkbWJPrzfxsVZ9Q1no
-         V4NQ==
+        Mon, 19 Jul 2021 15:08:30 -0400
+Received: by mail-il1-f171.google.com with SMTP id j5so17112595ilk.3;
+        Mon, 19 Jul 2021 12:48:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SwQ5WIYCU+Iw0FKCHUpemUOKm2/bld2/msmvptg5xQo=;
-        b=IDcIjasjuC/ud0jS6ISZ0vq+lEx8FFsJpQ/gCSM4gt10ngvSy7SNf3X7qwyA0CdNcs
-         Y3zlojb/5smZJlEUpQYGBzlj0d5HNGoFShaRUqAYDhE7WFm4cREXovU9LskD9sUDh+hK
-         lOhTBBr/egUy2Z4JwlnEbYW5uIIYgNvyYcmf//BtImSIzGwC0TO0RgzpsnCVi0WtA+FS
-         YeafVkHThTShSW7LKd3lKJSEonUNl0PQXE5kCcRGIR6D+SHzBOq7/XR5pcBkRo17yyLc
-         zrdi53O31ft3Pp5PO52Gq1smowygxIQPTY1yFFT4wKwey0KxLko1IH0iraggA/yquSxS
-         WMwg==
-X-Gm-Message-State: AOAM531xO8Gvob9DkfMWcl3vH0zdjwphmXXj3UjTMMcEvMfTFHOeC8Um
-        +/3tnWpUfPBWdP6PThracLO3MtTLo1v0ybxH
-X-Google-Smtp-Source: ABdhPJz4RWfEM6/7kxVUqcXSf3tITVQ2PFomqMF6vQ1qfwkGAMyCQoKxRLRNgeJs96WSISiMczhVDQ==
-X-Received: by 2002:a2e:9c19:: with SMTP id s25mr23852580lji.478.1626714317299;
-        Mon, 19 Jul 2021 10:05:17 -0700 (PDT)
-Received: from 192.168.1.3 ([2a00:1370:810e:b7ea:7e3d:4f4b:921e:b1ff])
-        by smtp.gmail.com with ESMTPSA id z8sm1330749lfh.119.2021.07.19.10.05.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GDUH5kKZnOHRCAbBYePTCiIA1/WaZH91n3x0Dno6HFQ=;
+        b=pOBPpmIUxOFi9+EDBocKHUAb6m+mJ/KxYcJ63V9wxvHyP4BwmzWmz7B0bZ3Y4KYuQK
+         ocf78dq0hez9lXKVRKEAZLSGqFA5n+OleUYZCk/2ZdRR5S6Ti9CqAicgdO0YZ0WX5cc8
+         JxnhGe99DKIj1LywuwAQEy7YA9Of4lZsRU5i9aI1VSOUdiMfrqBOcMeOPuN7fKklvAxM
+         xOlvwoTiZOShIiQwHLi7N3vhLrA1lbzuvY8BeWOsz8yipDAJcb4er1uRmtXqc/2LLiY8
+         6kiz8+PGhKvXykZAyFSNFZ94sjP5caS5kFlK6DY2fYA8UOJTbTZRbUfjtJuEs0FoGexK
+         TZcA==
+X-Gm-Message-State: AOAM532glg2WgmxKxiUHyH8iOEWTZrXM9rxQvbDRaDtvd2ZJnXrBOvfy
+        cSjjTrlhNtcVFbnIWSKD+A==
+X-Google-Smtp-Source: ABdhPJxne2/ZNMI2QOulVi9xVIAfp9pBxOds/kvhM1c+nWxPLBJeFq+sM2PJlMNuUEgGjrxakSXCEw==
+X-Received: by 2002:a92:d5cb:: with SMTP id d11mr17647954ilq.133.1626724133543;
+        Mon, 19 Jul 2021 12:48:53 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id h10sm11306196ioe.43.2021.07.19.12.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jul 2021 10:05:16 -0700 (PDT)
-From:   Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-To:     sean@mess.org, mchehab@kernel.org, robh+dt@kernel.org,
-        khilman@baylibre.com, narmstrong@baylibre.com
-Cc:     jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, rockosov@gmail.com,
-        Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-Subject: [PATCH v7 1/2] media: rc: meson-ir-tx: document device tree bindings
-Date:   Mon, 19 Jul 2021 20:05:05 +0300
-Message-Id: <20210719170506.13539-2-viktor.prutyanov@phystech.edu>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210719170506.13539-1-viktor.prutyanov@phystech.edu>
-References: <20210719170506.13539-1-viktor.prutyanov@phystech.edu>
+        Mon, 19 Jul 2021 12:48:52 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] dt-bindings: media: Fix graph 'unevaluatedProperties' related warnings
+Date:   Mon, 19 Jul 2021 13:48:50 -0600
+Message-Id: <20210719194850.2410511-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds binding documentation for the IR transmitter
-available in Amlogic Meson SoCs.
+The graph schema doesn't allow custom properties on endpoint nodes for
+'#/properties/port' and '#/$defs/port-base' should be used instead. This
+doesn't matter until 'unevaluatedProperties' support is implemented.
 
-Signed-off-by: Viktor Prutyanov <viktor.prutyanov@phystech.edu>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: Ramesh Shanmugasundaram <rashanmu@gmail.com>
+Cc: linux-media@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- changes in v7:
-  - fifo-threshold property removed
+ Documentation/devicetree/bindings/media/atmel,isc.yaml      | 3 ++-
+ Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
+ Documentation/devicetree/bindings/media/renesas,drif.yaml   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
- .../bindings/media/amlogic,meson-ir-tx.yaml   | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-new file mode 100644
-index 000000000000..4432fea32650
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/amlogic,meson-ir-tx.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Amlogic Meson IR transmitter
-+
-+maintainers:
-+  - Viktor Prutyanov <viktor.prutyanov@phystech.edu>
-+
-+description: |
-+  Some Amlogic SoCs such as A311D and T950D4 have IR transmitter
-+  (also called blaster) controller onboard. It is capable of
-+  sending IR signals with arbitrary carrier frequency and duty cycle.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: amlogic,meson-ir-tx
-+      - items:
-+          - const: amlogic,meson-g12a-ir-tx
-+          - const: amlogic,meson-ir-tx
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: sysclk
-+      - const: xtal
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/g12a-clkc.h>
-+
-+    ir@ff80014c {
-+      compatible = "amlogic,meson-g12a-ir-tx", "amlogic,meson-ir-tx";
-+      reg = <0xff80014c 0x10>;
-+      interrupts = <0 198 IRQ_TYPE_EDGE_RISING>;
-+      clocks = <&clkc CLKID_CLK81>, <&xtal>;
-+      clock-names = "sysclk", "xtal";
-+    };
+diff --git a/Documentation/devicetree/bindings/media/atmel,isc.yaml b/Documentation/devicetree/bindings/media/atmel,isc.yaml
+index 3e4bb8892d94..cd6d7af0c768 100644
+--- a/Documentation/devicetree/bindings/media/atmel,isc.yaml
++++ b/Documentation/devicetree/bindings/media/atmel,isc.yaml
+@@ -44,7 +44,8 @@ properties:
+     const: isc-mck
+ 
+   port:
+-    $ref: /schemas/graph.yaml#/properties/port
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
+     description:
+       Input port node, single endpoint describing the input pad.
+ 
+diff --git a/Documentation/devicetree/bindings/media/microchip,xisc.yaml b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
+index 41afe2e5f133..086e1430af4f 100644
+--- a/Documentation/devicetree/bindings/media/microchip,xisc.yaml
++++ b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
+@@ -52,7 +52,7 @@ properties:
+       of the data and clock lines.
+ 
+   port:
+-    $ref: /schemas/graph.yaml#/properties/port
++    $ref: /schemas/graph.yaml#/$defs/port-base
+     description:
+       Input port node, single endpoint describing the input pad.
+ 
+diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+index 817a6d566738..2867d11fe156 100644
+--- a/Documentation/devicetree/bindings/media/renesas,drif.yaml
++++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+@@ -96,7 +96,7 @@ properties:
+       Indicates that the channel acts as primary among the bonded channels.
+ 
+   port:
+-    $ref: /schemas/graph.yaml#/properties/port
++    $ref: /schemas/graph.yaml#/$defs/port-base
+     unevaluatedProperties: false
+     description:
+       Child port node corresponding to the data input. The port node must
 -- 
-2.21.0
+2.27.0
 
