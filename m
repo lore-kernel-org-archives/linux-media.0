@@ -2,251 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D88BC636CB
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45507C12002
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:06:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03130600CD
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FE7E61006
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:06:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbhGSIYt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 04:24:49 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34036 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235795AbhGSIYt (ORCPT
+        id S234954AbhGSIZm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 04:25:42 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:54641 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235323AbhGSIZl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 04:24:49 -0400
-Received: from [IPv6:2a02:810a:880:f54:121:b44d:bc4b:65bc] (unknown [IPv6:2a02:810a:880:f54:121:b44d:bc4b:65bc])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 00DF41F42371;
-        Mon, 19 Jul 2021 10:05:26 +0100 (BST)
-Subject: Re: [PATCH v2, 04/14] dt-bindings: media: mtk-vcodec: Separate video
- encoder and decoder dt-bindings
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-References: <20210717081233.7809-1-yunfei.dong@mediatek.com>
- <20210717081233.7809-5-yunfei.dong@mediatek.com>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <aa7b0ea8-293d-5844-6b52-522983d58b44@collabora.com>
-Date:   Mon, 19 Jul 2021 11:05:24 +0200
+        Mon, 19 Jul 2021 04:25:41 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 5OT0mRjsW2bXB5OT1m9mSi; Mon, 19 Jul 2021 10:17:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1626682656; bh=Ww0EzuT42pJONbVMxgQXs2gNguJHAaMvbrZoE+9Qczo=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=I3nMkdTt/iO4TF8ancFjNyQGFAJ3EL1s4FaNx3JOjuFbDPozZwMYapy/m24lWVQHi
+         ynsyodvCIORUD/b2sscr9dLjtBP9fY2OXBHpmG6tC+jScmk9iEqKVWylUkrQdl4tvX
+         /Gdrry1jYi/O+pbTKsn8EPqkwHvCMNSKkM/+X+IpoDwx99FFyee4+Xa2qwPFiSrS2G
+         flQV1jAIQLoMEVOgtQre451hdpDpfdbkaKpsAF5kqHKEJkxX/qy5ByvgiC2AzdLZA3
+         VpWgcIS0tOeMQBD0qbbTCFREzplEY7Io6Al8IZRA9jo0uQGQ39wGEH9GgHigzBAZyW
+         vMJ1ov0gxSZBQ==
+Subject: Re: [RFC,WIP PATCH 1/2] media: cedrus: fix double free
+To:     daniel.almeida@collabora.com, jernej.skrabec@gmail.com,
+        ezequiel@collabora.com, paul.kocialkowski@bootlin.com,
+        mripard@kernel.org
+Cc:     kernel@collabora.com, linux-media@vger.kernel.org
+References: <20210702020129.470720-1-daniel.almeida@collabora.com>
+ <20210702020129.470720-2-daniel.almeida@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <37421d22-a1ba-319b-b90e-cfc840638623@xs4all.nl>
+Date:   Mon, 19 Jul 2021 10:17:34 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210717081233.7809-5-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210702020129.470720-2-daniel.almeida@collabora.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfBK4yo0J/F/bgpFhDlF/6WpRHhon4tt6hyWFXO3iohOyfFh61LHv3y+SQLEhvKdUsq1BOr7JGCaU0/x+6I9uTFaJZzwh8C1Ed8Dr8wJrEhQRqr7DGpKw
+ 1oekPvelpnZ6ygvCBgSykDVAQ59CheVdcmmbwyMiJWbE4cMyHw81syePLGSt5pE4k4VtbGQ2higwtMn9ewTsFh6LcpFtSAxWczLo7bB4v1gL8VmpSmB7jmGT
+ 9ndxa6NOSiYzRZxR1JpHXBf0oNd2jd3Q2oifCzc8fETiSBxDtqBJPCKwplbIVlPurhITUqjJLytRseroJvewPJSnqcMO1lGHnsW8AVNrUIyw44hth34XdxIg
+ q06hXBnQAT3FVCnvykpTpwllCYG1tUiQjJIfiiZVb8jysRVBJEfWeuiv9l29WT+TF27j2lZKIj+6e42bN5EO+93dRchvf0rMr8ziCrdPJsRSktAPj6VGHuS6
+ 6xWo1Nu1SnhKpddGCXvJiAx+7re7zm9rqo44+g==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi, new dt-binding files should be yaml files.
+On 02/07/2021 04:01, daniel.almeida@collabora.com wrote:
+> From: Daniel Almeida <daniel.almeida@collabora.com>
+> 
+> If v4l2_ctrl_new_custom fails in cedrus_init_ctrls the error path will
+> free ctx->ctrls, which is also freed in cedrus release. Fix this by
+> setting ctx->ctrls to NULL instead of inadvertently removing kfree
+> calls.
 
-Thanks,
-Dafna
+This is just a bug fix, right? Not really an RFC,WIP.
 
-On 17.07.21 10:12, Yunfei Dong wrote:
-> Decoder will use component framework to manage hardware, it is big
-> difference with encoder.
+Regards,
+
+	Hans
+
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
 > ---
-> v2: Remove useless code for this patch.
-> ---
->   ...vcodec.txt => mediatek-vcodec-decoder.txt} | 62 ++--------------
->   .../media/mediatek-vcodec-encoder.txt         | 73 +++++++++++++++++++
->   2 files changed, 79 insertions(+), 56 deletions(-)
->   rename Documentation/devicetree/bindings/media/{mediatek-vcodec.txt => mediatek-vcodec-decoder.txt} (56%)
->   create mode 100644 Documentation/devicetree/bindings/media/mediatek-vcodec-encoder.txt
+>  drivers/staging/media/sunxi/cedrus/cedrus.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec-decoder.txt
-> similarity index 56%
-> rename from Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-> rename to Documentation/devicetree/bindings/media/mediatek-vcodec-decoder.txt
-> index c44a6e6943af..7c6e608df8a9 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-> +++ b/Documentation/devicetree/bindings/media/mediatek-vcodec-decoder.txt
-> @@ -1,26 +1,20 @@
-> -Mediatek Video Codec
-> +Mediatek Video Decoder
->   
-> -Mediatek Video Codec is the video codec hw present in Mediatek SoCs which
-> -supports high resolution encoding and decoding functionalities.
-> +Mediatek Video Decoder is the video decode hw present in Mediatek SoCs which
-> +supports high resolution decoding functionalities.
->   
->   Required properties:
->   - compatible : must be one of the following string:
-> -  "mediatek,mt8173-vcodec-enc-vp8" for mt8173 vp8 encoder.
-> -  "mediatek,mt8173-vcodec-enc" for mt8173 avc encoder.
-> -  "mediatek,mt8183-vcodec-enc" for MT8183 encoder.
->     "mediatek,mt8173-vcodec-dec" for MT8173 decoder.
-> -  "mediatek,mt8192-vcodec-enc" for MT8192 encoder.
->     "mediatek,mt8183-vcodec-dec" for MT8183 decoder.
-> -- reg : Physical base address of the video codec registers and length of
-> +- reg : Physical base address of the video decoder registers and length of
->     memory mapped region.
->   - interrupts : interrupt number to the cpu.
->   - mediatek,larb : must contain the local arbiters in the current Socs.
->   - clocks : list of clock specifiers, corresponding to entries in
->     the clock-names property.
-> -- clock-names: avc encoder must contain "venc_sel", vp8 encoder must
-> -  contain "venc_lt_sel", decoder must contain "vcodecpll", "univpll_d2",
-> -  "clk_cci400_sel", "vdec_sel", "vdecpll", "vencpll", "venc_lt_sel",
-> -  "vdec_bus_clk_src".
-> +- clock-names: must contain "vcodecpll", "univpll_d2", "clk_cci400_sel"
-> +  "vdec_sel", "vdecpll", "vencpll", "venc_lt_sel", "vdec_bus_clk_src".
->   - iommus : should point to the respective IOMMU block with master port as
->     argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->     for details.
-> @@ -84,47 +78,3 @@ vcodec_dec: vcodec@16000000 {
->                                <&topckgen CLK_TOP_VCODECPLL>;
->       assigned-clock-rates = <0>, <0>, <0>, <1482000000>, <800000000>;
->     };
-> -
-> -vcodec_enc_avc: vcodec@18002000 {
-> -    compatible = "mediatek,mt8173-vcodec-enc";
-> -    reg = <0 0x18002000 0 0x1000>;
-> -    interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>;
-> -    iommus = <&iommu M4U_PORT_VENC_RCPU>,
-> -             <&iommu M4U_PORT_VENC_REC>,
-> -             <&iommu M4U_PORT_VENC_BSDMA>,
-> -             <&iommu M4U_PORT_VENC_SV_COMV>,
-> -             <&iommu M4U_PORT_VENC_RD_COMV>,
-> -             <&iommu M4U_PORT_VENC_CUR_LUMA>,
-> -             <&iommu M4U_PORT_VENC_CUR_CHROMA>,
-> -             <&iommu M4U_PORT_VENC_REF_LUMA>,
-> -             <&iommu M4U_PORT_VENC_REF_CHROMA>,
-> -             <&iommu M4U_PORT_VENC_NBM_RDMA>,
-> -             <&iommu M4U_PORT_VENC_NBM_WDMA>;
-> -    mediatek,larb = <&larb3>;
-> -    mediatek,vpu = <&vpu>;
-> -    clocks = <&topckgen CLK_TOP_VENC_SEL>;
-> -    clock-names = "venc_sel";
-> -    assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
-> -    assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
-> -  };
-> -
-> -vcodec_enc_vp8: vcodec@19002000 {
-> -    compatible = "mediatek,mt8173-vcodec-enc-vp8";
-> -    reg =  <0 0x19002000 0 0x1000>;	/* VENC_LT_SYS */
-> -    interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
-> -    iommus = <&iommu M4U_PORT_VENC_RCPU_SET2>,
-> -             <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
-> -             <&iommu M4U_PORT_VENC_BSDMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
-> -             <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
-> -    mediatek,larb = <&larb5>;
-> -    mediatek,vpu = <&vpu>;
-> -    clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-> -    clock-names = "venc_lt_sel";
-> -    assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-> -    assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL_370P5>;
-> -  };
-> diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec-encoder.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec-encoder.txt
-> new file mode 100644
-> index 000000000000..81c47fd44958
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek-vcodec-encoder.txt
-> @@ -0,0 +1,73 @@
-> +Mediatek Video Encoder
-> +
-> +Mediatek Video Encoder is the video encode hw present in Mediatek SoCs which
-> +supports high resolution encoding functionalities.
-> +
-> +Required properties:
-> +- compatible : must be one of the following string:
-> +  "mediatek,mt8173-vcodec-enc-vp8" for mt8173 vp8 encoder.
-> +  "mediatek,mt8173-vcodec-enc" for mt8173 avc encoder.
-> +  "mediatek,mt8183-vcodec-enc" for MT8183 encoder.
-> +  "mediatek,mt8192-vcodec-enc" for MT8192 encoder.
-> +- reg : Physical base address of the video encoder registers and length of
-> +  memory mapped region.
-> +- interrupts : interrupt number to the cpu.
-> +- mediatek,larb : must contain the local arbiters in the current Socs.
-> +- clocks : list of clock specifiers, corresponding to entries in
-> +  the clock-names property.
-> +- clock-names: avc encoder must contain "venc_sel", vp8 encoder must
-> +  contain "venc_lt_sel".
-> +- iommus : should point to the respective IOMMU block with master port as
-> +  argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> +  for details.
-> +- dma-ranges : describes the dma address range space that the codec hw access.
-> +One of the two following nodes:
-> +- mediatek,vpu : the node of the video processor unit, if using VPU.
-> +- mediatek,scp : the node of the SCP unit, if using SCP.
-> +
-> +
-> +Example:
-> +
-> +vcodec_enc_avc: vcodec@18002000 {
-> +    compatible = "mediatek,mt8173-vcodec-enc";
-> +    reg = <0 0x18002000 0 0x1000>;
-> +    interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>;
-> +    iommus = <&iommu M4U_PORT_VENC_RCPU>,
-> +             <&iommu M4U_PORT_VENC_REC>,
-> +             <&iommu M4U_PORT_VENC_BSDMA>,
-> +             <&iommu M4U_PORT_VENC_SV_COMV>,
-> +             <&iommu M4U_PORT_VENC_RD_COMV>,
-> +             <&iommu M4U_PORT_VENC_CUR_LUMA>,
-> +             <&iommu M4U_PORT_VENC_CUR_CHROMA>,
-> +             <&iommu M4U_PORT_VENC_REF_LUMA>,
-> +             <&iommu M4U_PORT_VENC_REF_CHROMA>,
-> +             <&iommu M4U_PORT_VENC_NBM_RDMA>,
-> +             <&iommu M4U_PORT_VENC_NBM_WDMA>;
-> +    mediatek,larb = <&larb3>;
-> +    mediatek,vpu = <&vpu>;
-> +    clocks = <&topckgen CLK_TOP_VENC_SEL>;
-> +    clock-names = "venc_sel";
-> +    assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
-> +    assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
-> +  };
-> +
-> +vcodec_enc_vp8: vcodec@19002000 {
-> +    compatible = "mediatek,mt8173-vcodec-enc-vp8";
-> +    reg =  <0 0x19002000 0 0x1000>;	/* VENC_LT_SYS */
-> +    interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
-> +    iommus = <&iommu M4U_PORT_VENC_RCPU_SET2>,
-> +             <&iommu M4U_PORT_VENC_REC_FRM_SET2>,
-> +             <&iommu M4U_PORT_VENC_BSDMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_SV_COMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_RD_COMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_CUR_LUMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
-> +             <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
-> +    mediatek,larb = <&larb5>;
-> +    mediatek,vpu = <&vpu>;
-> +    clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-> +    clock-names = "venc_lt_sel";
-> +    assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-> +    assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL_370P5>;
-> +  };
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> index c0d005dafc6c..e72810ace40f 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@ -207,6 +207,7 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
+>  
+>  			v4l2_ctrl_handler_free(hdl);
+>  			kfree(ctx->ctrls);
+> +			ctx->ctrls = NULL;
+>  			return hdl->error;
+>  		}
+>  
 > 
+
