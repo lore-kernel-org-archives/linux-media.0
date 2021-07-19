@@ -2,124 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD87C07E9B
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 203C4C07E95
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B95C61181
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F153460FE9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:18:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243129AbhGSWgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:36:48 -0400
-Received: from mail-il1-f171.google.com ([209.85.166.171]:36523 "EHLO
-        mail-il1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385732AbhGSTIa (ORCPT
+        id S239743AbhGSWhk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387522AbhGSUNc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 15:08:30 -0400
-Received: by mail-il1-f171.google.com with SMTP id j5so17112595ilk.3;
-        Mon, 19 Jul 2021 12:48:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GDUH5kKZnOHRCAbBYePTCiIA1/WaZH91n3x0Dno6HFQ=;
-        b=pOBPpmIUxOFi9+EDBocKHUAb6m+mJ/KxYcJ63V9wxvHyP4BwmzWmz7B0bZ3Y4KYuQK
-         ocf78dq0hez9lXKVRKEAZLSGqFA5n+OleUYZCk/2ZdRR5S6Ti9CqAicgdO0YZ0WX5cc8
-         JxnhGe99DKIj1LywuwAQEy7YA9Of4lZsRU5i9aI1VSOUdiMfrqBOcMeOPuN7fKklvAxM
-         xOlvwoTiZOShIiQwHLi7N3vhLrA1lbzuvY8BeWOsz8yipDAJcb4er1uRmtXqc/2LLiY8
-         6kiz8+PGhKvXykZAyFSNFZ94sjP5caS5kFlK6DY2fYA8UOJTbTZRbUfjtJuEs0FoGexK
-         TZcA==
-X-Gm-Message-State: AOAM532glg2WgmxKxiUHyH8iOEWTZrXM9rxQvbDRaDtvd2ZJnXrBOvfy
-        cSjjTrlhNtcVFbnIWSKD+A==
-X-Google-Smtp-Source: ABdhPJxne2/ZNMI2QOulVi9xVIAfp9pBxOds/kvhM1c+nWxPLBJeFq+sM2PJlMNuUEgGjrxakSXCEw==
-X-Received: by 2002:a92:d5cb:: with SMTP id d11mr17647954ilq.133.1626724133543;
-        Mon, 19 Jul 2021 12:48:53 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id h10sm11306196ioe.43.2021.07.19.12.48.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jul 2021 12:48:52 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] dt-bindings: media: Fix graph 'unevaluatedProperties' related warnings
-Date:   Mon, 19 Jul 2021 13:48:50 -0600
-Message-Id: <20210719194850.2410511-1-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        Mon, 19 Jul 2021 16:13:32 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736BAC061768;
+        Mon, 19 Jul 2021 13:52:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id EEF3C1F42DFA
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alex Bee <knaerzche@gmail.com>, maccraft123mc@gmail.com,
+        Chris Healy <cphealy@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 09/10] dt-bindings: media: rockchip-vpu: Add PX30 compatible
+Date:   Mon, 19 Jul 2021 17:52:41 -0300
+Message-Id: <20210719205242.18807-10-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
+References: <20210719205242.18807-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The graph schema doesn't allow custom properties on endpoint nodes for
-'#/properties/port' and '#/$defs/port-base' should be used instead. This
-doesn't matter until 'unevaluatedProperties' support is implemented.
+From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc: Ramesh Shanmugasundaram <rashanmu@gmail.com>
-Cc: linux-media@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
+The Rockchip PX30 SoC has a Hantro VPU that features a decoder (VDPU2)
+and an encoder (VEPU2).
+
+Suggested-by: Alex Bee <knaerzche@gmail.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- Documentation/devicetree/bindings/media/atmel,isc.yaml      | 3 ++-
- Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
- Documentation/devicetree/bindings/media/renesas,drif.yaml   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/media/atmel,isc.yaml b/Documentation/devicetree/bindings/media/atmel,isc.yaml
-index 3e4bb8892d94..cd6d7af0c768 100644
---- a/Documentation/devicetree/bindings/media/atmel,isc.yaml
-+++ b/Documentation/devicetree/bindings/media/atmel,isc.yaml
-@@ -44,7 +44,8 @@ properties:
-     const: isc-mck
- 
-   port:
--    $ref: /schemas/graph.yaml#/properties/port
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    unevaluatedProperties: false
-     description:
-       Input port node, single endpoint describing the input pad.
- 
-diff --git a/Documentation/devicetree/bindings/media/microchip,xisc.yaml b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-index 41afe2e5f133..086e1430af4f 100644
---- a/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-+++ b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-@@ -52,7 +52,7 @@ properties:
-       of the data and clock lines.
- 
-   port:
--    $ref: /schemas/graph.yaml#/properties/port
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-     description:
-       Input port node, single endpoint describing the input pad.
- 
-diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-index 817a6d566738..2867d11fe156 100644
---- a/Documentation/devicetree/bindings/media/renesas,drif.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-@@ -96,7 +96,7 @@ properties:
-       Indicates that the channel acts as primary among the bonded channels.
- 
-   port:
--    $ref: /schemas/graph.yaml#/properties/port
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-     unevaluatedProperties: false
-     description:
-       Child port node corresponding to the data input. The port node must
+diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+index b88172a59de7..bacb60a34989 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+@@ -22,6 +22,7 @@ properties:
+           - rockchip,rk3288-vpu
+           - rockchip,rk3328-vpu
+           - rockchip,rk3399-vpu
++          - rockchip,px30-vpu
+       - items:
+           - const: rockchip,rk3188-vpu
+           - const: rockchip,rk3066-vpu
 -- 
-2.27.0
+2.32.0
 
