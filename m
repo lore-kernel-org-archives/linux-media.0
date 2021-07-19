@@ -7,25 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4975C12002
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83634C07E95
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF7B86113C
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F44A60FE9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237017AbhGSWiv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387521AbhGSUNh (ORCPT
+        id S244726AbhGSWi6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:38:58 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44764 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387513AbhGSUNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 19 Jul 2021 16:13:37 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F1C061767;
-        Mon, 19 Jul 2021 13:52:02 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 355E41F42DF6
+        with ESMTPSA id EA1481F42DEA
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
@@ -37,11 +34,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Chris Healy <cphealy@gmail.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jonas Karlman <jonas@kwiboo.se>,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 08/10] media: hantro: Add support for the Rockchip PX30
-Date:   Mon, 19 Jul 2021 17:52:40 -0300
-Message-Id: <20210719205242.18807-9-ezequiel@collabora.com>
+        Kever Yang <kever.yang@rock-chips.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
+Subject: [PATCH v3 04/10] media: hantro: h264: Move DPB valid and long-term bitmaps
+Date:   Mon, 19 Jul 2021 17:52:36 -0300
+Message-Id: <20210719205242.18807-5-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
 References: <20210719205242.18807-1-ezequiel@collabora.com>
@@ -51,68 +48,106 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+In order to reuse these bitmaps, move this process to
+struct hantro_h264_dec_hw_ctx. This will be used by
+the Rockchip VDPU2 H.264 driver.
 
-The PX30 SoC includes both the VDPU2 and VEPU2 blocks which are similar
-to the RK3399 (Hantro G1/H1 with shuffled registers).
+This idea was originally proposed by Jonas Karlman
+in "[RFC 08/12] media: hantro: Fix H264 decoding of field encoded content"
+which was posted a while ago.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Link: https://lore.kernel.org/linux-media/HE1PR06MB4011EA39133818A85768B91FACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com/
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Alex Bee <knaerzche@gmail.com>
 ---
- drivers/staging/media/hantro/hantro_drv.c      |  1 +
- drivers/staging/media/hantro/hantro_hw.h       |  1 +
- drivers/staging/media/hantro/rockchip_vpu_hw.c | 17 +++++++++++++++++
- 3 files changed, 19 insertions(+)
+ .../staging/media/hantro/hantro_g1_h264_dec.c   | 17 ++---------------
+ drivers/staging/media/hantro/hantro_h264.c      | 13 +++++++++++++
+ drivers/staging/media/hantro/hantro_hw.h        |  4 ++++
+ 3 files changed, 19 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 9b5415176bfe..8a2edd67f2c6 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -582,6 +582,7 @@ static const struct v4l2_file_operations hantro_fops = {
+diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
+index 2aa37baad0c3..6faacfc44c7c 100644
+--- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
+@@ -129,25 +129,12 @@ static void set_ref(struct hantro_ctx *ctx)
+ 	struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
+ 	const u8 *b0_reflist, *b1_reflist, *p_reflist;
+ 	struct hantro_dev *vpu = ctx->dev;
+-	u32 dpb_longterm = 0;
+-	u32 dpb_valid = 0;
+ 	int reg_num;
+ 	u32 reg;
+ 	int i;
  
- static const struct of_device_id of_hantro_match[] = {
- #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
-+	{ .compatible = "rockchip,px30-vpu",   .data = &px30_vpu_variant, },
- 	{ .compatible = "rockchip,rk3036-vpu", .data = &rk3036_vpu_variant, },
- 	{ .compatible = "rockchip,rk3066-vpu", .data = &rk3066_vpu_variant, },
- 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+-	/*
+-	 * Set up bit maps of valid and long term DPBs.
+-	 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
+-	 */
+-	for (i = 0; i < HANTRO_H264_DPB_SIZE; ++i) {
+-		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+-			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
+-
+-		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+-			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
+-	}
+-	vdpu_write_relaxed(vpu, dpb_valid << 16, G1_REG_VALID_REF);
+-	vdpu_write_relaxed(vpu, dpb_longterm << 16, G1_REG_LT_REF);
++	vdpu_write_relaxed(vpu, ctx->h264_dec.dpb_valid, G1_REG_VALID_REF);
++	vdpu_write_relaxed(vpu, ctx->h264_dec.dpb_longterm, G1_REG_LT_REF);
+ 
+ 	/*
+ 	 * Set up reference frame picture numbers.
+diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+index ed6eaf11d96f..6d72136760e7 100644
+--- a/drivers/staging/media/hantro/hantro_h264.c
++++ b/drivers/staging/media/hantro/hantro_h264.c
+@@ -229,12 +229,25 @@ static void prepare_table(struct hantro_ctx *ctx)
+ 	const struct v4l2_ctrl_h264_decode_params *dec_param = ctrls->decode;
+ 	struct hantro_h264_dec_priv_tbl *tbl = ctx->h264_dec.priv.cpu;
+ 	const struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
++	u32 dpb_longterm = 0;
++	u32 dpb_valid = 0;
+ 	int i;
+ 
+ 	for (i = 0; i < HANTRO_H264_DPB_SIZE; ++i) {
+ 		tbl->poc[i * 2] = dpb[i].top_field_order_cnt;
+ 		tbl->poc[i * 2 + 1] = dpb[i].bottom_field_order_cnt;
++
++		/*
++		 * Set up bit maps of valid and long term DPBs.
++		 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
++		 */
++		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
++			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
++		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
++			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
+ 	}
++	ctx->h264_dec.dpb_valid = dpb_valid << 16;
++	ctx->h264_dec.dpb_longterm = dpb_longterm << 16;
+ 
+ 	tbl->poc[32] = dec_param->top_field_order_cnt;
+ 	tbl->poc[33] = dec_param->bottom_field_order_cnt;
 diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 9296624654a6..df7b5e3a57b9 100644
+index 5dcf65805396..ce678fedaad6 100644
 --- a/drivers/staging/media/hantro/hantro_hw.h
 +++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -209,6 +209,7 @@ enum hantro_enc_fmt {
- 
- extern const struct hantro_variant imx8mq_vpu_g2_variant;
- extern const struct hantro_variant imx8mq_vpu_variant;
-+extern const struct hantro_variant px30_vpu_variant;
- extern const struct hantro_variant rk3036_vpu_variant;
- extern const struct hantro_variant rk3066_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
-diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-index e4e3b5e7689b..d4f52957cc53 100644
---- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-@@ -548,3 +548,20 @@ const struct hantro_variant rk3399_vpu_variant = {
- 	.clk_names = rockchip_vpu_clk_names,
- 	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
+@@ -89,12 +89,16 @@ struct hantro_h264_dec_reflists {
+  * @dpb:	DPB
+  * @reflists:	P/B0/B1 reflists
+  * @ctrls:	V4L2 controls attached to a run
++ * @dpb_longterm: DPB long-term
++ * @dpb_valid:	  DPB valid
+  */
+ struct hantro_h264_dec_hw_ctx {
+ 	struct hantro_aux_buf priv;
+ 	struct v4l2_h264_dpb_entry dpb[HANTRO_H264_DPB_SIZE];
+ 	struct hantro_h264_dec_reflists reflists;
+ 	struct hantro_h264_dec_ctrls ctrls;
++	u32 dpb_longterm;
++	u32 dpb_valid;
  };
-+
-+const struct hantro_variant px30_vpu_variant = {
-+	.enc_offset = 0x0,
-+	.enc_fmts = rockchip_vpu_enc_fmts,
-+	.num_enc_fmts = ARRAY_SIZE(rockchip_vpu_enc_fmts),
-+	.dec_offset = 0x400,
-+	.dec_fmts = rk3399_vpu_dec_fmts,
-+	.num_dec_fmts = ARRAY_SIZE(rk3399_vpu_dec_fmts),
-+	.codec = HANTRO_JPEG_ENCODER | HANTRO_MPEG2_DECODER |
-+		 HANTRO_VP8_DECODER | HANTRO_H264_DECODER,
-+	.codec_ops = rk3399_vpu_codec_ops,
-+	.irqs = rockchip_vpu2_irqs,
-+	.num_irqs = ARRAY_SIZE(rockchip_vpu2_irqs),
-+	.init = rk3036_vpu_hw_init,
-+	.clk_names = rockchip_vpu_clk_names,
-+	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
-+};
+ 
+ /**
 -- 
 2.32.0
 
