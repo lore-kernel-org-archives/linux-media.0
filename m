@@ -2,154 +2,302 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2A2C636C9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D525C636C9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:25:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7664600CD
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:08:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CB9F6115B
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 09:25:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbhGSI1t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 04:27:49 -0400
-Received: from mail-lf1-f43.google.com ([209.85.167.43]:42751 "EHLO
-        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235129AbhGSI1s (ORCPT
+        id S235527AbhGSIo7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 04:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235013AbhGSIo6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Jul 2021 04:27:48 -0400
-Received: by mail-lf1-f43.google.com with SMTP id 8so28972763lfp.9;
-        Mon, 19 Jul 2021 02:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=BSOq/6LU7myFeRU9sVPe/x6k8J7ibQSkaSa7AKjKFSw=;
-        b=DjXoqORFiqtt4rE5ZyXDIb7/ln22JGSkGZaFHNCsrKxgS+jBCtKuODQNkTLOIEACqc
-         KLj44NNYb1P7JhBYYk333PjdMs6+/6wjl3wDOUhYRRNvkDKcU1b4BMBDUXkrALp/yR3c
-         eik4IoWYEHSBl3n48IG93J5JTgnKZkDE/rAVPc0uXwJsgyiJFeDlv9RAFS/lPFbBHUEx
-         xX7EuCM3Id9LBQ/tNf0BohPT15mRhDjLCYQWjOeU2HwZbnLVVOtb1uF+nZJjmK1m7bz0
-         kcQFHH6Tbo5xmxnZc+zVzIbZkEnV6N4K5ulew+NE+OpIoEbwR0fAmtMqASjkSZGJMF23
-         uVbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=BSOq/6LU7myFeRU9sVPe/x6k8J7ibQSkaSa7AKjKFSw=;
-        b=nM959NlR4b6GwoCw+E/ezFzJyflPWfDnHy0Kd4lm7PNXb7IpjVKm+JUlXCLgX/FKGK
-         h6bINAgRKjWIQgwL2o9NmC3+EVZYvtFByPQcm0StGb7IyBRvPFz1mSizCI1p+dj1sDv5
-         +plJlQKW9PK7qBvLVfdKYCmsdYXJGlU5LxwavXx3P7HMDVpfz8PYMmy59CHLWqq1Mz01
-         1Sdq4al/s3wjHktESlKZ1ut0aftN87dv4u1ZZoVMyHc1WmL8SKicDtbrexnbBXl8IA+5
-         0ZTtg8dzatrTIKnBkf/8FzjdPxKI4IO2j5ry19+zm+zgQ/uK9IZ9QWMf24Y9JXgWA9Ex
-         BqiA==
-X-Gm-Message-State: AOAM5328IGkKgOIYOsbu21xSbELY+KpouChycXp8hb2uV1C/gwsjvyc7
-        AbTRWQDZuOYOP7+NjQIoN2tdMnjJU/M=
-X-Google-Smtp-Source: ABdhPJx78JN8b/ZveBWU79Ei+AvwV8ONa7QAzZR4sp6UFDoSwGfCbcKq6sN7s1mjTYYeyCHxC/dWoQ==
-X-Received: by 2002:adf:c102:: with SMTP id r2mr27884871wre.22.1626684059448;
-        Mon, 19 Jul 2021 01:40:59 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1252:fb60:e48d:68a9:5ef4:9e09? ([2a02:908:1252:fb60:e48d:68a9:5ef4:9e09])
-        by smtp.gmail.com with ESMTPSA id e6sm22661717wrg.18.2021.07.19.01.40.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jul 2021 01:40:59 -0700 (PDT)
-Subject: Re: [Linaro-mm-sig] [PATCH 00/11] drm/msm: drm scheduler conversion
- and cleanups
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Emma Anholt <emma@anholt.net>, Bernard Zhao <bernard@vivo.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Zhenzhong Duan <zhenzhong.duan@gmail.com>,
-        "Kristian H. Kristensen" <hoegsberg@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dave Airlie <airlied@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Sharat Masetty <smasetty@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-References: <20210717202924.987514-1-robdclark@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Message-ID: <582b8869-f370-3803-60a8-df31088f8088@gmail.com>
-Date:   Mon, 19 Jul 2021 10:40:57 +0200
+        Mon, 19 Jul 2021 04:44:58 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3414C061574;
+        Mon, 19 Jul 2021 01:26:42 -0700 (PDT)
+Received: from [IPv6:2a02:810a:880:f54:121:b44d:bc4b:65bc] (unknown [IPv6:2a02:810a:880:f54:121:b44d:bc4b:65bc])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 762FA1F423B0;
+        Mon, 19 Jul 2021 10:25:35 +0100 (BST)
+Subject: Re: [PATCH v2, 06/14] media: mtk-vcodec: Add irq interface for core
+ hardware
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+References: <20210717081233.7809-1-yunfei.dong@mediatek.com>
+ <20210717081233.7809-7-yunfei.dong@mediatek.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <87713751-3938-fa68-dea0-ff48806f7d52@collabora.com>
+Date:   Mon, 19 Jul 2021 11:25:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210717202924.987514-1-robdclark@gmail.com>
+In-Reply-To: <20210717081233.7809-7-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 17.07.21 um 22:29 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
->
-> Conversion to gpu_scheduler, and bonus removal of
-> drm_gem_object_put_locked()
 
-Oh yes please!
 
-If I'm not completely mistaken that was the last puzzle piece missing to 
-unify TTMs and GEMs refcount of objects.
+On 17.07.21 10:12, Yunfei Dong wrote:
+> Adds irq interface for core hardware.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+> v2: Using enum mtk_vdec_hw_count instead of magic numbers
+> ---
+>   .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 31 ++++++++++++++++--
+>   .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   | 11 ++++---
+>   .../platform/mtk-vcodec/mtk_vcodec_drv.h      | 19 +++++++++++
+>   .../platform/mtk-vcodec/mtk_vcodec_intr.c     | 32 ++++++++++++++++++-
+>   .../platform/mtk-vcodec/mtk_vcodec_intr.h     |  4 ++-
+>   5 files changed, 88 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> index e7f60e948fe8..d1c4124f6092 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> @@ -75,6 +75,20 @@ static void wake_up_ctx(struct mtk_vcodec_ctx *ctx)
+>   	wake_up_interruptible(&ctx->queue);
+>   }
+>   
+> +static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
+> +{
+> +	switch (dev->vdec_pdata->hw_arch) {
+> +	case MTK_VDEC_PURE_SINGLE_CORE:
+> +		return MTK_VDEC_ONE_CORE;
+> +	case MTK_VDEC_LAT_SINGLE_CORE:
+> +		return MTK_VDEC_ONE_LAT_ONE_CORE;
+> +	default:
+> +		mtk_v4l2_err("not support hw arch:%d",
+> +			dev->vdec_pdata->hw_arch);
+> +		return MTK_VDEC_NO_HW;
+> +	}
+> +}
+> +
+>   static struct component_match *mtk_vcodec_match_add(
+>   	struct mtk_vcodec_dev *vdec_dev)
+>   {
+> @@ -246,7 +260,7 @@ static int fops_vcodec_open(struct file *file)
+>   {
+>   	struct mtk_vcodec_dev *dev = video_drvdata(file);
+>   	struct mtk_vcodec_ctx *ctx = NULL;
+> -	int ret = 0;
+> +	int ret = 0, i, hw_count;
+>   	struct vb2_queue *src_vq;
+>   
+>   	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+> @@ -260,7 +274,19 @@ static int fops_vcodec_open(struct file *file)
+>   	v4l2_fh_add(&ctx->fh);
+>   	INIT_LIST_HEAD(&ctx->list);
+>   	ctx->dev = dev;
+> -	init_waitqueue_head(&ctx->queue);
+> +
+> +	if (ctx->dev->is_support_comp) {
+> +		hw_count = mtk_vcodec_get_hw_count(dev);
+> +		if (!hw_count) {
+> +			ret = -EINVAL;
+> +			goto err_init_queue;
+> +		}
+> +		for (i = 0; i < hw_count; i++)
+> +			init_waitqueue_head(&ctx->core_queue[i]);
+> +	} else {
+> +		init_waitqueue_head(&ctx->queue);
+> +	}
+> +
+>   	mutex_init(&ctx->lock);
+>   
+>   	ctx->type = MTK_INST_DECODER;
+> @@ -317,6 +343,7 @@ static int fops_vcodec_open(struct file *file)
+>   err_m2m_ctx_init:
+>   	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+>   err_ctrls_setup:
+> +err_init_queue:
+>   	v4l2_fh_del(&ctx->fh);
+>   	v4l2_fh_exit(&ctx->fh);
+>   	kfree(ctx);
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+> index ea6d289d9773..34d51fe409c6 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+> @@ -59,11 +59,12 @@ static const struct component_ops mtk_vdec_hw_component_ops = {
+>   	.unbind = mtk_vdec_comp_unbind,
+>   };
+>   
+> -/* Wake up context wait_queue */
+> -static void mtk_vdec_comp_wake_up_ctx(struct mtk_vcodec_ctx *ctx)
+> +/* Wake up core context wait_queue */
+> +static void mtk_vdec_comp_wake_up_ctx(struct mtk_vcodec_ctx *ctx,
+> +	unsigned int hw_id)
+>   {
+> -	ctx->int_cond = 1;
+> -	wake_up_interruptible(&ctx->queue);
+> +	ctx->int_core_cond[hw_id] = 1;
+> +	wake_up_interruptible(&ctx->core_queue[hw_id]);
+>   }
+>   
+>   static irqreturn_t mtk_vdec_comp_irq_handler(int irq, void *priv)
+> @@ -94,7 +95,7 @@ static irqreturn_t mtk_vdec_comp_irq_handler(int irq, void *priv)
+>   	writel(readl(vdec_misc_addr) | VDEC_IRQ_CFG, vdec_misc_addr);
+>   	writel(readl(vdec_misc_addr) & ~VDEC_IRQ_CLR, vdec_misc_addr);
+>   
+> -	mtk_vdec_comp_wake_up_ctx(ctx);
+> +	mtk_vdec_comp_wake_up_ctx(ctx, dev->comp_idx);
+>   
+>   	mtk_v4l2_debug(3, "wake up ctx %d, dec_done_status=%x",
+>   		ctx->id, dec_done_status);
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index 9d05ee72b2a7..76160b6f4152 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -109,6 +109,16 @@ enum mtk_vdec_hw_id {
+>   	MTK_VDEC_HW_MAX,
+>   };
+>   
+> +/**
+> + * struct mtk_vdec_hw_count - Supported hardware count
+> + */
+> +enum mtk_vdec_hw_count {
+> +	MTK_VDEC_NO_HW = 0,
+> +	MTK_VDEC_ONE_CORE,
+> +	MTK_VDEC_ONE_LAT_ONE_CORE,
+> +	MTK_VDEC_MAX_HW_COUNT,
+> +};
+> +
+>   /*
+>    * struct mtk_video_fmt - Structure used to store information about pixelformats
+>    */
+> @@ -261,6 +271,11 @@ struct vdec_pic_info {
+>    *	   finish
+>    * @irq_status: irq status
+>    *
+> + * @int_core_cond: variable used by the waitqueue  for component arch
+> + * @int_core_type: type of the last interrupt for component arch
+> + * @core_queue: waitqueue that can be used to wait for this context to
+> + *	   finish for component arch
+> + *
+>    * @ctrl_hdl: handler for v4l2 framework
+>    * @decode_work: worker for the decoding
+>    * @encode_work: worker for the encoding
+> @@ -303,6 +318,10 @@ struct mtk_vcodec_ctx {
+>   	wait_queue_head_t queue;
+>   	unsigned int irq_status;
+>   
+> +	int int_core_cond[MTK_VDEC_HW_MAX];
+> +	int int_core_type[MTK_VDEC_HW_MAX];
+> +	wait_queue_head_t core_queue[MTK_VDEC_HW_MAX];
 
-Only problem is that I only see patch 7 and 9 in my inbox. Where is the 
-rest?
+can't the code be generalized so that, instead of having both fields
+'core_queue' and 'queue' and both fields
+'core_cond' + 'int_code' / 'core_type' + 'int_type' that only one of them is used
+we can have only the array version of the fields and access the index 0 if only one is used.
+So for example instead of accessing 'queue' field we can access 'core_queue[0]' etc and we can remove the field 'queue' from the struct.
+
+This why we don't need both "mtk_vcodec_wait_for_done_ctx" and "mtk_vcodec_wait_for_comp_done_ctx"
+for example.
+
+> +
+>   	struct v4l2_ctrl_handler ctrl_hdl;
+>   	struct work_struct decode_work;
+>   	struct work_struct encode_work;
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
+> index 70580c2525ba..306358d9bef0 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
+> @@ -11,7 +11,7 @@
+>   #include "mtk_vcodec_intr.h"
+>   #include "mtk_vcodec_util.h"
+>   
+> -int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx  *ctx, int command,
+> +int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *ctx, int command,
+
+This line just remove an extra space? better remove  from this patch
+
+>   				 unsigned int timeout_ms)
+>   {
+>   	wait_queue_head_t *waitqueue;
+> @@ -43,3 +43,33 @@ int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx  *ctx, int command,
+>   	return status;
+>   }
+>   EXPORT_SYMBOL(mtk_vcodec_wait_for_done_ctx);
+> +
+> +int mtk_vcodec_wait_for_comp_done_ctx(struct mtk_vcodec_ctx *ctx,
+> +	int command, unsigned int timeout_ms, unsigned hw_id)
+> +{
+> +	long timeout_jiff, ret;
+> +	int status = 0;
+> +
+> +	timeout_jiff = msecs_to_jiffies(timeout_ms);
+> +	ret = wait_event_interruptible_timeout(ctx->core_queue[hw_id],
+> +				ctx->int_core_cond[hw_id],
+> +				timeout_jiff);
+> +
+> +	if (!ret) {
+> +		status = -1;	/* timeout */
+> +		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec timeout=%ums (%d %d)",
+> +				ctx->id, command, ctx->type, timeout_ms,
+> +				ctx->int_core_cond[hw_id], ctx->int_core_type[hw_id]);
+> +	} else if (-ERESTARTSYS == ret) {
+> +		status = -1;
+> +		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec inter fail (%d %d)",
+> +				ctx->id, command, ctx->type,
+> +				ctx->int_core_cond[hw_id], ctx->int_core_type[hw_id]);
+> +	}
+> +
+> +	ctx->int_core_cond[hw_id] = 0;
+> +	ctx->int_core_type[hw_id] = 0;
+> +
+> +	return status;
+> +}
+> +EXPORT_SYMBOL(mtk_vcodec_wait_for_comp_done_ctx);
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
+> index 638cd1f3526a..5ca611a1ddab 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
+> @@ -12,7 +12,9 @@
+>   struct mtk_vcodec_ctx;
+>   
+>   /* timeout is ms */
+> -int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *data, int command,
+> +int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *ctx, int command,
+
+I would remove this line since it does not belong to the patch
 
 Thanks,
-Christian.
+Dafna
 
->
-> Rob Clark (11):
->    drm/msm: Docs and misc cleanup
->    drm/msm: Small submitqueue creation cleanup
->    drm/msm: drop drm_gem_object_put_locked()
->    drm: Drop drm_gem_object_put_locked()
->    drm/msm/submit: Simplify out-fence-fd handling
->    drm/msm: Consolidate submit bo state
->    drm/msm: Track "seqno" fences by idr
->    drm/msm: Return ERR_PTR() from submit_create()
->    drm/msm: Conversion to drm scheduler
->    drm/msm: Drop struct_mutex in submit path
->    drm/msm: Utilize gpu scheduler priorities
->
->   drivers/gpu/drm/drm_gem.c                   |  22 --
->   drivers/gpu/drm/msm/Kconfig                 |   1 +
->   drivers/gpu/drm/msm/adreno/a5xx_debugfs.c   |   4 +-
->   drivers/gpu/drm/msm/adreno/a5xx_gpu.c       |   6 +-
->   drivers/gpu/drm/msm/adreno/a5xx_power.c     |   2 +-
->   drivers/gpu/drm/msm/adreno/a5xx_preempt.c   |   7 +-
->   drivers/gpu/drm/msm/adreno/a6xx_gmu.c       |  12 +-
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c       |   2 +-
->   drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |   4 +-
->   drivers/gpu/drm/msm/adreno/adreno_gpu.c     |   6 +-
->   drivers/gpu/drm/msm/msm_drv.c               |  30 +-
->   drivers/gpu/drm/msm/msm_fence.c             |  39 ---
->   drivers/gpu/drm/msm/msm_fence.h             |   2 -
->   drivers/gpu/drm/msm/msm_gem.c               |  91 +-----
->   drivers/gpu/drm/msm/msm_gem.h               |  37 ++-
->   drivers/gpu/drm/msm/msm_gem_submit.c        | 300 ++++++++++++--------
->   drivers/gpu/drm/msm/msm_gpu.c               |  50 +---
->   drivers/gpu/drm/msm/msm_gpu.h               |  41 ++-
->   drivers/gpu/drm/msm/msm_ringbuffer.c        |  70 ++++-
->   drivers/gpu/drm/msm/msm_ringbuffer.h        |  12 +
->   drivers/gpu/drm/msm/msm_submitqueue.c       |  49 +++-
->   include/drm/drm_gem.h                       |   2 -
->   include/uapi/drm/msm_drm.h                  |  10 +-
->   23 files changed, 440 insertions(+), 359 deletions(-)
->
-
+>   				unsigned int timeout_ms);
+> +int mtk_vcodec_wait_for_comp_done_ctx(struct mtk_vcodec_ctx *ctx,
+> +				int command, unsigned int timeout_ms, unsigned int hw_id);
+>   
+>   #endif /* _MTK_VCODEC_INTR_H_ */
+> 
