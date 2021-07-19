@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83634C07E95
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E286C07E95
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F44A60FE9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:19:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71B3561165
+	for <linux-media@archiver.kernel.org>; Mon, 19 Jul 2021 23:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbhGSWi6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Jul 2021 18:38:58 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44764 "EHLO
+        id S245293AbhGSWjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Jul 2021 18:39:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44674 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387513AbhGSUNh (ORCPT
+        with ESMTP id S1387508AbhGSUNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 19 Jul 2021 16:13:37 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id EA1481F42DEA
+        with ESMTPSA id A10AD1F42015
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
@@ -36,118 +36,90 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Jonas Karlman <jonas@kwiboo.se>,
         Kever Yang <kever.yang@rock-chips.com>,
         Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v3 04/10] media: hantro: h264: Move DPB valid and long-term bitmaps
-Date:   Mon, 19 Jul 2021 17:52:36 -0300
-Message-Id: <20210719205242.18807-5-ezequiel@collabora.com>
+Subject: [PATCH v3 00/10] hantro: Enable H.264 VDPU2
+Date:   Mon, 19 Jul 2021 17:52:32 -0300
+Message-Id: <20210719205242.18807-1-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719205242.18807-1-ezequiel@collabora.com>
-References: <20210719205242.18807-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to reuse these bitmaps, move this process to
-struct hantro_h264_dec_hw_ctx. This will be used by
-the Rockchip VDPU2 H.264 driver.
+This series adds support for H.264 decoding on the PX30, RK3328
+and RK3326 platforms, enabling the VDPU2 core. This core is available
+on other SoCs as well, such as RK3568/RK3566.
 
-This idea was originally proposed by Jonas Karlman
-in "[RFC 08/12] media: hantro: Fix H264 decoding of field encoded content"
-which was posted a while ago.
+Patches 1, 2 and 3 are just low-hanging fruit that was on my backlog.
 
-Link: https://lore.kernel.org/linux-media/HE1PR06MB4011EA39133818A85768B91FACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com/
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Tested-by: Alex Bee <knaerzche@gmail.com>
----
- .../staging/media/hantro/hantro_g1_h264_dec.c   | 17 ++---------------
- drivers/staging/media/hantro/hantro_h264.c      | 13 +++++++++++++
- drivers/staging/media/hantro/hantro_hw.h        |  4 ++++
- 3 files changed, 19 insertions(+), 15 deletions(-)
+Patches 4 and 5 add some helpers to avoid duplicating some processes
+between Hantro G1 and VDPU2. Patches 6 and 7 enable the VDPU2 H.264.
+The implementation is based on a patch from Jonas Karlman [1], which
+I forwarded ported to mainline.
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-index 2aa37baad0c3..6faacfc44c7c 100644
---- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-@@ -129,25 +129,12 @@ static void set_ref(struct hantro_ctx *ctx)
- 	struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	const u8 *b0_reflist, *b1_reflist, *p_reflist;
- 	struct hantro_dev *vpu = ctx->dev;
--	u32 dpb_longterm = 0;
--	u32 dpb_valid = 0;
- 	int reg_num;
- 	u32 reg;
- 	int i;
- 
--	/*
--	 * Set up bit maps of valid and long term DPBs.
--	 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
--	 */
--	for (i = 0; i < HANTRO_H264_DPB_SIZE; ++i) {
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
--			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
--
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
--	}
--	vdpu_write_relaxed(vpu, dpb_valid << 16, G1_REG_VALID_REF);
--	vdpu_write_relaxed(vpu, dpb_longterm << 16, G1_REG_LT_REF);
-+	vdpu_write_relaxed(vpu, ctx->h264_dec.dpb_valid, G1_REG_VALID_REF);
-+	vdpu_write_relaxed(vpu, ctx->h264_dec.dpb_longterm, G1_REG_LT_REF);
- 
- 	/*
- 	 * Set up reference frame picture numbers.
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index ed6eaf11d96f..6d72136760e7 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -229,12 +229,25 @@ static void prepare_table(struct hantro_ctx *ctx)
- 	const struct v4l2_ctrl_h264_decode_params *dec_param = ctrls->decode;
- 	struct hantro_h264_dec_priv_tbl *tbl = ctx->h264_dec.priv.cpu;
- 	const struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
-+	u32 dpb_longterm = 0;
-+	u32 dpb_valid = 0;
- 	int i;
- 
- 	for (i = 0; i < HANTRO_H264_DPB_SIZE; ++i) {
- 		tbl->poc[i * 2] = dpb[i].top_field_order_cnt;
- 		tbl->poc[i * 2 + 1] = dpb[i].bottom_field_order_cnt;
-+
-+		/*
-+		 * Set up bit maps of valid and long term DPBs.
-+		 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
-+		 */
-+		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-+			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
-+		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-+			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
- 	}
-+	ctx->h264_dec.dpb_valid = dpb_valid << 16;
-+	ctx->h264_dec.dpb_longterm = dpb_longterm << 16;
- 
- 	tbl->poc[32] = dec_param->top_field_order_cnt;
- 	tbl->poc[33] = dec_param->bottom_field_order_cnt;
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 5dcf65805396..ce678fedaad6 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -89,12 +89,16 @@ struct hantro_h264_dec_reflists {
-  * @dpb:	DPB
-  * @reflists:	P/B0/B1 reflists
-  * @ctrls:	V4L2 controls attached to a run
-+ * @dpb_longterm: DPB long-term
-+ * @dpb_valid:	  DPB valid
-  */
- struct hantro_h264_dec_hw_ctx {
- 	struct hantro_aux_buf priv;
- 	struct v4l2_h264_dpb_entry dpb[HANTRO_H264_DPB_SIZE];
- 	struct hantro_h264_dec_reflists reflists;
- 	struct hantro_h264_dec_ctrls ctrls;
-+	u32 dpb_longterm;
-+	u32 dpb_valid;
- };
- 
- /**
+Finally, patches 8 to 10  add support for the VPU on Rockchip PX30 SoCs.
+These patches are based on patches submitted by Paul Kocialkowski [2],
+which I ported and adjusted a bit.
+
+I'd like to thank Jonas and Paul for the good work, and Alex Bee
+for the additional testing.
+
+Tested on i.MX8MQ EVK and RK3326 Odroid Advance Go, the latter
+is able to decode a 1080p sample at ~100fps nicely.
+
+Fluster conformance testing is looking good as well, and producing
+expected results:
+
+RK3326:
+  Ran 135 tests in 480.067s
+  FAILED (failures=9, errors=54)
+
+i.MX8MQ:
+  Ran 135 tests in 337.491s
+  FAILED (failures=9, errors=54)
+
+[1] https://lore.kernel.org/linux-media/HE1PR06MB40119DE07D38060F531D1070ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com/
+[2] https://lore.kernel.org/patchwork/cover/1361795/
+
+v3:
+
+* Keep a single compatible string "rockchip,px30-vpu",
+  instead of making it compatible with rk3399. The SoCs may
+  have small (but important) differences in their integration
+  so it's better to just make sure the proper compatible is mandatory.
+
+Ezequiel Garcia (6):
+  hantro: vp8: Move noisy WARN_ON to vpu_debug
+  hantro: Make struct hantro_variant.init() optional
+  media: hantro: Avoid redundant hantro_get_{dst,src}_buf() calls
+  media: hantro: h264: Move DPB valid and long-term bitmaps
+  media: hantro: h264: Move reference picture number to a helper
+  media: hantro: Enable H.264 on Rockchip VDPU2
+
+Jonas Karlman (1):
+  media: hantro: Add H.264 support for Rockchip VDPU2
+
+Paul Kocialkowski (3):
+  media: hantro: Add support for the Rockchip PX30
+  dt-bindings: media: rockchip-vpu: Add PX30 compatible
+  arm64: dts: rockchip: Add VPU support for the PX30
+
+ .../bindings/media/rockchip-vpu.yaml          |   1 +
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |  23 +
+ drivers/staging/media/hantro/Makefile         |   1 +
+ drivers/staging/media/hantro/hantro.h         |   4 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  11 +-
+ .../staging/media/hantro/hantro_g1_h264_dec.c |  48 +-
+ .../staging/media/hantro/hantro_g1_vp8_dec.c  |  31 +-
+ drivers/staging/media/hantro/hantro_h264.c    |  24 +
+ drivers/staging/media/hantro/hantro_hw.h      |   8 +
+ .../media/hantro/rockchip_vpu2_hw_h264_dec.c  | 491 ++++++++++++++++++
+ .../media/hantro/rockchip_vpu2_hw_vp8_dec.c   |  32 +-
+ .../staging/media/hantro/rockchip_vpu_hw.c    |  43 +-
+ .../staging/media/hantro/sama5d4_vdec_hw.c    |   6 -
+ 13 files changed, 649 insertions(+), 74 deletions(-)
+ create mode 100644 drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c
+
 -- 
 2.32.0
 
