@@ -2,193 +2,398 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ABA6C636CE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 131FEC636C9
 	for <linux-media@archiver.kernel.org>; Tue, 20 Jul 2021 15:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1D3D6113C
+	by mail.kernel.org (Postfix) with ESMTP id E5CA061165
 	for <linux-media@archiver.kernel.org>; Tue, 20 Jul 2021 15:16:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbhGTOeZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Jul 2021 10:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S239702AbhGTOeP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Jul 2021 10:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240273AbhGTOYt (ORCPT
+        with ESMTP id S238500AbhGTONY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Jul 2021 10:24:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD45C061794;
-        Tue, 20 Jul 2021 08:03:09 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id v14so11548788plg.9;
-        Tue, 20 Jul 2021 08:03:09 -0700 (PDT)
+        Tue, 20 Jul 2021 10:13:24 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24642C0613E7
+        for <linux-media@vger.kernel.org>; Tue, 20 Jul 2021 07:48:19 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w26so15474799qto.9
+        for <linux-media@vger.kernel.org>; Tue, 20 Jul 2021 07:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YjsQqg/cyLrvH6AHlxUB+OYVHKKVa13wNGyeIOclLuU=;
-        b=Bwya6iL1RBmmeGnDLmxE++cJ04phd36pitzI5Fg/6+79njD2oyBhzaQONWmikFuB3v
-         sWOWXVU3XANaWQj6Mi6PD79h7wIzAVu1HT5fHWRFBtYKzK/VsiyBK8irALWIFOIiPfxe
-         SumHHYYFE/6VlsrVL32MklAzmYQxlvTV8x+UX/RKxN55gzSmbxS8xlL4D7T69pZKCxbR
-         3hYVNceHlNyb9ju3HO0FaWK5vUkOa2sK4hDRDzVTPA6C74H9YQRSKcZpzQ6vKkwD7Vc1
-         wKRMpVzAniHaoAw89XEZFEc1YserHm/AzRtW2TvB5ztJbmXl6LqeWx5XcSyxPYcY6teZ
-         VvQg==
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=PVa7KxOOPDISu98s6IbsRPYczplGlrPqBRZEFHA/0lI=;
+        b=J1jzjIB3a65IKpjCydA4rawfWbUF6EQn1lHzc7HacpUcqCqP4t/Dr3qZKvmR1uAQT/
+         jusH6NHunz9Y6h/EMFW9T2sqrYpbs8K1MkfWgbliwqSG80pmzs8Ne797tEGzNKERMUFf
+         UO3wK1hjirnf7iNoZdkUtQPa3fny5jhmDDT/oOC1YWk+q5A6wAalR/lU6gtO8WKb3TKS
+         eEeLxyonAgHTbXgMogXPyX8ES4jqxiPgfg2KOQFK98+uLJp16MOlIvKWEAXp3+EmjJ2U
+         jbdBSPKxf1ui8c1HHGaDMOWwSgRgnfnziPULEVYNdKryZBcPkL57UpfL1ai0dGseBRS0
+         I+yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YjsQqg/cyLrvH6AHlxUB+OYVHKKVa13wNGyeIOclLuU=;
-        b=Kkw3/vWGJwy0H/qFNM4WtuMvBvSrY19P4zmkaJL3aD4XW32nh+Sl9IgvPxgruRxBCs
-         7Jxv20YBxxIqBFQI1fImR6buDrkLk5XVH2mhW3Jetu8e7MJi8vjUiyANHTky4fa4B6yz
-         LQY+BC3XXxauCQxXrQwYsdwmxkx8qK5nGqUmtwVc7C7fcFEDw8X9BKkfHC1oAAJNk6XY
-         Ee9ExCb/xya0U7gtfOjeeQ6jnKenBFYObgTOHsrFQEv/SolA2MrCLm2rFWplhApZeV6g
-         fCHT+gC8X9I1WcqvmOSWazZmXqHZxYiIoe2cIqpa6gP2Z38v+HOHEMmP/HnM9YgdZANK
-         C5qg==
-X-Gm-Message-State: AOAM532GkekWl9I7KYK5+JHs4t7Nv6wEiKpQmrWGpbTfPs+xsJRg6uah
-        gjG6Az5xBM3zl4m8f8saPlA=
-X-Google-Smtp-Source: ABdhPJwocdDotiRQoMrd8AmM4D5t8eT0K3LGBIo2EKCjfzv73zaEHoy2PrNocwn0na8156wCs4B80g==
-X-Received: by 2002:a17:903:2309:b029:12a:965b:333 with SMTP id d9-20020a1709032309b029012a965b0333mr23822909plh.31.1626793388619;
-        Tue, 20 Jul 2021 08:03:08 -0700 (PDT)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id k19sm20330779pji.32.2021.07.20.08.03.06
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=PVa7KxOOPDISu98s6IbsRPYczplGlrPqBRZEFHA/0lI=;
+        b=QzeYWUu+ECX24ggsq6rjZuznThqTdr8/SNIwZUEXlGWrlcaExcmwWlU9nBCUIbGRrj
+         rI9R/MrD4tFsqpyQOkB1MIlunTmgIkgonFr8iWWkUAzIbyr45c5hWG266OCCufDLH6I2
+         ARD9lhwyu96ziNt4zadIS5GoffpE2H+PA9Q42+5+47LPiA3BTOv/Q+v0BY0q8i48qEZL
+         b9bj2xs6A+Cyylmw4+hIoN3tGASxwdvaGkBbjMz8W4wpYg37UGwISNI0YFqRcoLmpOe3
+         GFlBMGkPKt2MhsCMEzZU1UotI8VlIEew86Pg0/UkL5o20PbLhHNo870H64UiF6VxcU0x
+         vaoA==
+X-Gm-Message-State: AOAM532GI96YzhxfBCn3/qf7Wy8fAiOcv0fI9H5Mo3taOc6hG/Gum5Rb
+        z3U6/VmHhJpjx4MGTJusq+bppw==
+X-Google-Smtp-Source: ABdhPJwPuMdGfLCs0bdR/gCThis59hiPfhPYPYohTlV7QcMmqEU0NqmAlea4WKTucevHUAvY9EpKWg==
+X-Received: by 2002:ac8:6c51:: with SMTP id z17mr26968603qtu.271.1626792498312;
+        Tue, 20 Jul 2021 07:48:18 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id g24sm5080296qtr.86.2021.07.20.07.48.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 08:03:06 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK)
-Subject: [PATCH] drm/msm: Add fence->wait() op
-Date:   Tue, 20 Jul 2021 08:07:15 -0700
-Message-Id: <20210720150716.1213775-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 20 Jul 2021 07:48:17 -0700 (PDT)
+Message-ID: <39ee643d7a7721f8ad61e7ebc92a21ebcdeb4172.camel@ndufresne.ca>
+Subject: Re: [PATCH 0/5] imx8q video decoder/encoder driver
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de
+Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, aisheng.dong@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Tue, 20 Jul 2021 10:48:15 -0400
+In-Reply-To: <cover.1622429025.git.ming.qian@nxp.com>
+References: <cover.1622429025.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.3 (3.40.3-1.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Le lundi 31 mai 2021 à 10:51 +0800, Ming Qian a écrit :
+> Hi all,
+> 
+> This patch series adds support for
+> the imx8q video encoder and decoder
+> via the VPU block present in imx8q platforms.
+> Currently, support for IMX8QXP and IMX8QM is included.
 
-Somehow we had neither ->wait() nor dma_fence_signal() calls, and no
-one noticed.  Oops.
+Hi, 
 
-Note that this removes the !timeout case, which has not been used in
-a long time.
+might be repeating myself a little, but again, thanks for this hard work, this
+is great. What I'd like to ask and raise is that this driver is mostly to
+support Amphion CODEC (now owned by Allegro). The IMX/NXP specific is likely
+larger then any other similar integration (like Hantro Codec or DesignWare HDMI
+etc.). We likely don't want to reproduce error from the past. We should learn
+from STM folks mistake. They created stmmac which we have to live with the name
+now even though this endup being a DesignWare generic driver, used on a very
+large amount of SoC today.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_fence.c | 59 +++++++++++++++++++--------------
- 1 file changed, 34 insertions(+), 25 deletions(-)
+So perhaps this driver should be renamed and moved into media/platform/amphion.
+If NXP remains the only SoC using it, it should have no side effect, you will
+keep maintaining / owning this driver, otherwise it other integration will just
+have to introduce a bit of infrastructure to abstract the SoC specific code
+(like was done in Hantro to support IMX8M).
 
-diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_fence.c
-index cd59a5918038..8ee96b90ded6 100644
---- a/drivers/gpu/drm/msm/msm_fence.c
-+++ b/drivers/gpu/drm/msm/msm_fence.c
-@@ -38,11 +38,10 @@ static inline bool fence_completed(struct msm_fence_context *fctx, uint32_t fenc
- 	return (int32_t)(fctx->completed_fence - fence) >= 0;
- }
- 
--/* legacy path for WAIT_FENCE ioctl: */
--int msm_wait_fence(struct msm_fence_context *fctx, uint32_t fence,
--		ktime_t *timeout, bool interruptible)
-+static signed long wait_fence(struct msm_fence_context *fctx, uint32_t fence,
-+		signed long remaining_jiffies, bool interruptible)
- {
--	int ret;
-+	signed long ret;
- 
- 	if (fence > fctx->last_fence) {
- 		DRM_ERROR_RATELIMITED("%s: waiting on invalid fence: %u (of %u)\n",
-@@ -50,33 +49,34 @@ int msm_wait_fence(struct msm_fence_context *fctx, uint32_t fence,
- 		return -EINVAL;
- 	}
- 
--	if (!timeout) {
--		/* no-wait: */
--		ret = fence_completed(fctx, fence) ? 0 : -EBUSY;
-+	if (interruptible) {
-+		ret = wait_event_interruptible_timeout(fctx->event,
-+			fence_completed(fctx, fence),
-+			remaining_jiffies);
- 	} else {
--		unsigned long remaining_jiffies = timeout_to_jiffies(timeout);
--
--		if (interruptible)
--			ret = wait_event_interruptible_timeout(fctx->event,
--				fence_completed(fctx, fence),
--				remaining_jiffies);
--		else
--			ret = wait_event_timeout(fctx->event,
--				fence_completed(fctx, fence),
--				remaining_jiffies);
--
--		if (ret == 0) {
--			DBG("timeout waiting for fence: %u (completed: %u)",
--					fence, fctx->completed_fence);
--			ret = -ETIMEDOUT;
--		} else if (ret != -ERESTARTSYS) {
--			ret = 0;
--		}
-+		ret = wait_event_timeout(fctx->event,
-+			fence_completed(fctx, fence),
-+			remaining_jiffies);
-+	}
-+
-+	if (ret == 0) {
-+		DBG("timeout waiting for fence: %u (completed: %u)",
-+				fence, fctx->completed_fence);
-+		ret = -ETIMEDOUT;
-+	} else if (ret != -ERESTARTSYS) {
-+		ret = 0;
- 	}
- 
- 	return ret;
- }
- 
-+/* legacy path for WAIT_FENCE ioctl: */
-+int msm_wait_fence(struct msm_fence_context *fctx, uint32_t fence,
-+		ktime_t *timeout, bool interruptible)
-+{
-+	return wait_fence(fctx, fence, timeout_to_jiffies(timeout), interruptible);
-+}
-+
- /* called from workqueue */
- void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)
- {
-@@ -114,10 +114,19 @@ static bool msm_fence_signaled(struct dma_fence *fence)
- 	return fence_completed(f->fctx, f->base.seqno);
- }
- 
-+static signed long msm_fence_wait(struct dma_fence *fence, bool intr,
-+		signed long timeout)
-+{
-+	struct msm_fence *f = to_msm_fence(fence);
-+
-+	return wait_fence(f->fctx, fence->seqno, timeout, intr);
-+}
-+
- static const struct dma_fence_ops msm_fence_ops = {
- 	.get_driver_name = msm_fence_get_driver_name,
- 	.get_timeline_name = msm_fence_get_timeline_name,
- 	.signaled = msm_fence_signaled,
-+	.wait = msm_fence_wait,
- };
- 
- struct dma_fence *
--- 
-2.31.1
+regards,
+Nicolas
+
+> 
+> It features decoding for the following formats:
+> - H.264
+> - HEVC
+> - MPEG4
+> - MPEG2
+> - MJPEG
+> - VC1
+> - VP8
+> - AVS
+> 
+> It features encoding for the following formats:
+> - H.264
+> 
+> The driver creates a separate device node for
+> the encoder and decoder.
+> 
+> Compliance
+> ==========
+> # v4l2-compliance -d /dev/video0
+> v4l2-compliance SHA: not available
+> , 64 bits, 64-bit time_t
+> 
+> Compliance test for vpu B0 device /dev/video0:
+> 
+> Driver Info:
+> 	Driver name      : vpu B0
+> 	Card type        : imx vpu decoder
+> 	Bus info         : platform: imx8q-vpu
+> 	Driver version   : 5.10.35
+> 	Capabilities     : 0x84204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 
+> Required ioctls:
+> 	test VIDIOC_QUERYCAP: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video0 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> 	test invalid ioctls: OK
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+> 	test VIDIOC_QUERYCTRL: OK
+> 	test VIDIOC_G/S_CTRL: OK
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 3 Private Controls: 2
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK (Not Supported)
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK
+> 	test Composing: OK
+> 	test Scaling: OK
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 
+> Total for vpu b0 device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 0
+> 
+> # v4l2-compliance -d /dev/video1
+> v4l2-compliance SHA: not available
+> , 64 bits, 64-bit time_t
+> 
+> Compliance test for imx vpu encoder device /dev/video1:
+> 
+> Driver Info:
+> 	Driver name      : imx vpu encoder
+> 	Card type        : imx vpu encoder
+> 	Bus info         : platform: imx8q-vpu
+> 	Driver version   : 5.10.35
+> 	Capabilities     : 0x84204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 	Detected Stateful Encoder
+> 
+> Required ioctls:
+> 	test VIDIOC_QUERYCAP: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video1 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> 	test invalid ioctls: OK
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+> 	test VIDIOC_QUERYCTRL: OK
+> 	test VIDIOC_G/S_CTRL: OK
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 20 Private Controls: 0
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK
+> 	test Composing: OK (Not Supported)
+> 	test Scaling: OK (Not Supported)
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 
+> Total for imx vpu encoder device /dev/video1: 45, Succeeded: 45, Failed: 0, Warnings: 0
+> 
+> Ming Qian (5):
+>   dt-bindings: media: imx8q: add imx video codec bindings
+>   media: v4l: add some definition of v4l2
+>     colorspace/xfer_func/ycbcr_encoding
+>   media: imx: imx8q: add v4l2 m2m video codec driver
+>   ARM64: dts: freescale: imx8q: add imx vpu codec entries
+>   firmware: imx: scu-pd: imx8q: add vpu mu resources
+> 
+>  .../bindings/media/nxp,imx8q-vpu.yaml         |  201 ++
+>  .../arm64/boot/dts/freescale/imx8-ss-vpu.dtsi |   76 +
+>  arch/arm64/boot/dts/freescale/imx8qxp-mek.dts |   22 +
+>  arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |   27 +
+>  drivers/firmware/imx/scu-pd.c                 |    4 +
+>  drivers/media/platform/Kconfig                |    2 +
+>  drivers/media/platform/Makefile               |    2 +
+>  drivers/media/platform/imx/Kconfig            |   19 +
+>  drivers/media/platform/imx/Makefile           |    1 +
+>  drivers/media/platform/imx/vpu-8q/Makefile    |   23 +
+>  drivers/media/platform/imx/vpu-8q/vdec.c      | 1783 +++++++++++++++++
+>  drivers/media/platform/imx/vpu-8q/venc.c      | 1411 +++++++++++++
+>  drivers/media/platform/imx/vpu-8q/vpu.h       |  339 ++++
+>  drivers/media/platform/imx/vpu-8q/vpu_cmds.c  |  443 ++++
+>  drivers/media/platform/imx/vpu-8q/vpu_cmds.h  |   34 +
+>  drivers/media/platform/imx/vpu-8q/vpu_codec.h |   77 +
+>  drivers/media/platform/imx/vpu-8q/vpu_color.c |  201 ++
+>  drivers/media/platform/imx/vpu-8q/vpu_core.c  |  923 +++++++++
+>  drivers/media/platform/imx/vpu-8q/vpu_core.h  |   26 +
+>  drivers/media/platform/imx/vpu-8q/vpu_dbg.c   |  505 +++++
+>  drivers/media/platform/imx/vpu-8q/vpu_defs.h  |  194 ++
+>  .../media/platform/imx/vpu-8q/vpu_dev_imx8q.c |   82 +
+>  drivers/media/platform/imx/vpu-8q/vpu_drv.c   |  248 +++
+>  .../media/platform/imx/vpu-8q/vpu_helpers.c   |  405 ++++
+>  .../media/platform/imx/vpu-8q/vpu_helpers.h   |   80 +
+>  drivers/media/platform/imx/vpu-8q/vpu_imx8q.c |  227 +++
+>  drivers/media/platform/imx/vpu-8q/vpu_imx8q.h |  125 ++
+>  drivers/media/platform/imx/vpu-8q/vpu_log.h   |   53 +
+>  .../media/platform/imx/vpu-8q/vpu_malone.c    | 1744 ++++++++++++++++
+>  .../media/platform/imx/vpu-8q/vpu_malone.h    |   51 +
+>  drivers/media/platform/imx/vpu-8q/vpu_mbox.c  |  135 ++
+>  drivers/media/platform/imx/vpu-8q/vpu_mbox.h  |   25 +
+>  drivers/media/platform/imx/vpu-8q/vpu_msgs.c  |  420 ++++
+>  drivers/media/platform/imx/vpu-8q/vpu_msgs.h  |   23 +
+>  drivers/media/platform/imx/vpu-8q/vpu_rpc.c   |  266 +++
+>  drivers/media/platform/imx/vpu-8q/vpu_rpc.h   |  472 +++++
+>  drivers/media/platform/imx/vpu-8q/vpu_v4l2.c  |  730 +++++++
+>  drivers/media/platform/imx/vpu-8q/vpu_v4l2.h  |   56 +
+>  .../media/platform/imx/vpu-8q/vpu_windsor.c   | 1253 ++++++++++++
+>  .../media/platform/imx/vpu-8q/vpu_windsor.h   |   48 +
+>  include/linux/imx_vpu.h                       |   19 +
+>  include/uapi/linux/imx_vpu.h                  |  120 ++
+>  include/uapi/linux/videodev2.h                |   30 +
+>  43 files changed, 12925 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8q-vpu.yaml
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+>  create mode 100644 drivers/media/platform/imx/Kconfig
+>  create mode 100644 drivers/media/platform/imx/Makefile
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/Makefile
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vdec.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/venc.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_cmds.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_cmds.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_codec.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_color.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_core.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_core.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_dbg.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_defs.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_dev_imx8q.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_drv.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_helpers.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_helpers.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_imx8q.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_imx8q.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_log.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_malone.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_malone.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_mbox.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_mbox.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_msgs.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_msgs.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_rpc.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_rpc.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_v4l2.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_v4l2.h
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_windsor.c
+>  create mode 100644 drivers/media/platform/imx/vpu-8q/vpu_windsor.h
+>  create mode 100644 include/linux/imx_vpu.h
+>  create mode 100644 include/uapi/linux/imx_vpu.h
+> 
+
 
