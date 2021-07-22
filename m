@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B9FC63798
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 09:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 891EFC63799
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 09:12:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA7616008E
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 09:12:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C30861001
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 09:12:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbhGVIbb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jul 2021 04:31:31 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:54013 "EHLO
+        id S231401AbhGVIbe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jul 2021 04:31:34 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:55103 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbhGVIb1 (ORCPT
+        with ESMTP id S231408AbhGVIbb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jul 2021 04:31:27 -0400
+        Thu, 22 Jul 2021 04:31:31 -0400
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id CE511200007;
-        Thu, 22 Jul 2021 09:11:59 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id DE5D8200011;
+        Thu, 22 Jul 2021 09:12:03 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
@@ -33,11 +33,10 @@ To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 2/8] dt-bindings: media: max9286: Define 'maxim,gpio-poc'
-Date:   Thu, 22 Jul 2021 11:12:33 +0200
-Message-Id: <20210722091239.26451-3-jacopo+renesas@jmondi.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 4/8] media: i2c: rdacm20: Re-program chip address earlier
+Date:   Thu, 22 Jul 2021 11:12:35 +0200
+Message-Id: <20210722091239.26451-5-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210722091239.26451-1-jacopo+renesas@jmondi.org>
 References: <20210722091239.26451-1-jacopo+renesas@jmondi.org>
@@ -47,115 +46,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Define a new vendor property in the maxim,max9286 binding schema.
+The current implementation of the camera module initialization
+re-programs the chip address during the post-registration phase, once
+the reverse channel amplitude has been compensated. While this guarantees
+more reliable communications, reprogramming the chip address at probe()
+time guarantees that the embedded MCU cannot over-write the settings
+programmed by the driver.
 
-The new property allows to declare that the remote camera
-power-over-coax is controlled by one of the MAX9286 gpio lines.
+Re-program the chip address at probe() time, to avoid conflicts on the
+i2c bus due to messages sent by the embedded MCU to the default chip
+address which render capture operations unstable.
 
-As it is currently not possible to establish a regulator as consumer
-of the MAX9286 gpio controller for this purpose, the property allows to
-declare that the camera power is controlled by the MAX9286 directly.
-
-The property accepts a gpio-index (0 or 1) and one line polarity
-flag as defined by dt-bindings/gpio/gpio.h.
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- .../bindings/media/i2c/maxim,max9286.yaml     | 67 ++++++++++++++++++-
- 1 file changed, 66 insertions(+), 1 deletion(-)
+ drivers/media/i2c/rdacm20.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-index 0e7162998b77..bf93fa73ce41 100644
---- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-@@ -70,6 +70,28 @@ properties:
-       a remote serializer whose high-threshold noise immunity is not enabled
-       is 100000 micro volts
+diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
+index ba956733aa89..eb0e3dc22cc3 100644
+--- a/drivers/media/i2c/rdacm20.c
++++ b/drivers/media/i2c/rdacm20.c
+@@ -462,11 +462,6 @@ static int rdacm20_post_register(struct v4l2_subdev *sd)
+ 	if (ret < 0)
+ 		return ret;
  
-+  maxim,gpio-poc:
-+    $ref: '/schemas/types.yaml#/definitions/uint32-array'
-+    minItems: 2
-+    maxItems: 2
-+    description: |
-+      Index of the MAX9286 gpio output line (0 or 1) that controls Power over
-+      Coax to the cameras and its associated polarity flag.
-+
-+      The property accepts an array of two unsigned integers, the first being
-+      the gpio line index (0 or 1) and the second being the gpio line polarity
-+      flag (GPIO_ACTIVE_HIGH or GPIO_ACTIVE_LOW) as defined in
-+      <include/dt-bindings/gpio/gpio.h>.
-+
-+      When the remote cameras power is controlled by one of the MAX9286 gpio
-+      lines, this property has to be used to specify which line among the two
-+      available ones controls the remote camera power enablement.
-+
-+      When this property is used it is not possible to register a gpio
-+      controller as the gpio lines are controlled directly by the MAX9286 and
-+      not available for consumers, nor the 'poc-supply' property should be
-+      specified.
-+
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
+-	ret = max9271_set_address(&dev->serializer, dev->addrs[0]);
+-	if (ret < 0)
+-		return ret;
+-	dev->serializer.client->addr = dev->addrs[0];
+-
+ 	/*
+ 	 * Release ov10635 from reset and initialize it. The image sensor
+ 	 * requires at least 2048 XVCLK cycles (85 micro-seconds at 24MHz)
+@@ -562,6 +557,11 @@ static int rdacm20_initialize(struct rdacm20_device *dev)
+ 	if (ret)
+ 		return ret;
  
-@@ -182,7 +204,16 @@ required:
-   - reg
-   - ports
-   - i2c-mux
--  - gpio-controller
++	ret = max9271_set_address(&dev->serializer, dev->addrs[0]);
++	if (ret < 0)
++		return ret;
++	dev->serializer.client->addr = dev->addrs[0];
 +
-+# If 'maxim,gpio-poc' is present, then 'poc-supply' and 'gpio-controller'
-+# are not allowed.
-+if:
-+  required:
-+    - maxim,gpio-poc
-+then:
-+  properties:
-+    poc-supply: false
-+    gpio-controller: false
- 
- additionalProperties: false
- 
-@@ -327,4 +358,38 @@ examples:
-                 };
-             };
-         };
-+
-+        /*
-+        * Example of a deserializer that controls the camera Power over Coax
-+        * through one of its gpio lines.
-+        */
-+        gmsl-deserializer@6c {
-+            compatible = "maxim,max9286";
-+            reg = <0x6c>;
-+            enable-gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
-+
-+            /*
-+            * The remote camera power is controlled by MAX9286 GPIO line #0.
-+            * No 'poc-supply' nor 'gpio-controller' are specified.
-+            */
-+            maxim,gpio-poc = <0 GPIO_ACTIVE_LOW>;
-+
-+            /*
-+            * Do not describe connections as they're the same as in the previous
-+            * example.
-+            */
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                port@4 {
-+                    reg = <4>;
-+                };
-+            };
-+
-+            i2c-mux {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+            };
-+        };
-     };
+ 	/*
+ 	 * Set reverse channel high threshold to increase noise immunity.
+ 	 *
 -- 
 2.32.0
 
