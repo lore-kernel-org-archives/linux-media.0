@@ -2,95 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE11DC63793
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 08:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FB7C63793
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 08:39:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD071610CC
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 08:11:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36DA661248
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 08:39:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbhGVHbW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jul 2021 03:31:22 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:34069 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230048AbhGVHbT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jul 2021 03:31:19 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 6To8m8TbnW9Qy6To9mm1r0; Thu, 22 Jul 2021 10:11:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1626941514; bh=aXglBLJbbrJHTf5O1siAI+ojHHMEN7098GWbPK/pt3Q=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=MezmrMGL5PhgT7u/Hrc/z3h7hHzO9iQdCJel+HHHlx7Gz4O3crFGPtv/XSR7NZ442
-         TIHRw+7f6jLhseeb35/CtE3JDZYGOQlgoPvJe4VpkW9ZaeMfTxXABNOjK697vh0nrr
-         V3Om06Rozb0A1ZyutinGNe0cg/X+IgfnZu6uJzlmlJL9YuhAx1u4guWU9NsHoLtCzv
-         x5bzCPqXKHJYj2G6AnmP/bVbdgdvZgmnIWWlOd6BDlB1EQ1AD8nbHLDYGj18Ls3uDp
-         aL51zk1hgHJQfesdgHo/YthzKUuAta8oobecZqTuSPkYu2SGI969eBDzkQU+LSttJm
-         TkqwrBwrMqSeg==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.15] rcar-vim/isp: add r8a779a0 support
-Message-ID: <a10d5622-62f2-57aa-6031-e937470dd83b@xs4all.nl>
-Date:   Thu, 22 Jul 2021 10:11:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230427AbhGVH6m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jul 2021 03:58:42 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:59878 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230330AbhGVH6f (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 22 Jul 2021 03:58:35 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1m6UEW-000Ler-Vu; Thu, 22 Jul 2021 08:39:08 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1m6UJD-0000Ms-C6; Thu, 22 Jul 2021 08:43:59 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.15] rcar-vim/isp: add r8a779a0 support (#75911)
+Date:   Thu, 22 Jul 2021 08:43:59 +0000
+Message-Id: <20210722084359.1372-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <a10d5622-62f2-57aa-6031-e937470dd83b@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfJVFs3WXTaYXfG/ZjAIgwBB6WxI08sNNocUVV7K376TCX30q19KJ9lbzqBmrnxUqiJJqmL2eruX4EIREbYDRDyhqPMVWmHriW/ARAmXABqX40McgkWmM
- t8YiYXU7sep0odAm8i3Z7fKliyQ5O76VcQ0DZQoJ77sBv9RtbludToyAHPbcci+Jlv3rURh+EZRGq0RsRyJ+riuEU8WMyGNWhoGd4xFfy66/hSArS+rW/jKH
- 0RAOqttsAhhh401G+NTqDBwxPTUIfxyB7ECqJPauOhdkyMdqjy2LY57nKoVC+A7ClR+5zLaHLYtuMYKXZemRDyRXay5ALAyeXi7v5AqJlHAvSZnUZx5MGGEj
- v95ZQy/i
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 379e205dab9d7f9761984728e7d6f5f8305cc424:
+From: builder@linuxtv.org
 
-  media: usb: dvb-usb-v2: af9035: let subdrv autoselect enable si2168 and si2157 (2021-07-12 14:28:49 +0200)
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/a10d5622-62f2-57aa-6031-e937470dd83b@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/126080/
+Build time: 00:21:05
+Link: https://lore.kernel.org/linux-media/a10d5622-62f2-57aa-6031-e937470dd83b@xs4all.nl
 
-are available in the Git repository at:
+gpg: Signature made Thu 22 Jul 2021 08:04:39 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.15c
+Summary: got 1/12 patches with issues, being 1 at build time
 
-for you to fetch changes up to 325f8c6441a46b549fce94b494c860bc730f4847:
+Error/warnings:
 
-  media: rcar-isp: Add Renesas R-Car Image Signal Processor driver (2021-07-22 10:00:30 +0200)
+patches/0001-rcar-vin-Refactor-controls-creation-for-video-device.patch:
 
-----------------------------------------------------------------
-Tag branch
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
 
-----------------------------------------------------------------
-Niklas Söderlund (12):
-      rcar-vin: Refactor controls creation for video device
-      rcar-vin: Fix error paths for rvin_mc_init()
-      rcar-vin: Improve async notifier cleanup paths
-      rcar-vin: Improve reuse of parallel notifier
-      rcar-vin: Rename array storing subdevice information
-      rcar-vin: Move group async notifier
-      rcar-vin: Extend group notifier DT parser to work with any port
-      rcar-vin: Create a callback to setup media links
-      rcar-vin: Specify media device ops at group creation time
-      rcar-vin: Move and rename CSI-2 link notifications
-      rcar-vin: Add r8a779a0 support
-      media: rcar-isp: Add Renesas R-Car Image Signal Processor driver
+    allyesconfig: return code #0:
+	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
+	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
+	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
+	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1971 vivid_create_instance() parse error: turning off implications after 60 seconds
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
 
- MAINTAINERS                                 |    1 +
- drivers/media/platform/Kconfig              |   16 +
- drivers/media/platform/Makefile             |    1 +
- drivers/media/platform/rcar-isp.c           |  505 ++++++++++++++++++++++++++++
- drivers/media/platform/rcar-vin/rcar-core.c | 1059 +++++++++++++++++++++++++++++++++-------------------------
- drivers/media/platform/rcar-vin/rcar-dma.c  |   22 +-
- drivers/media/platform/rcar-vin/rcar-vin.h  |   25 +-
- 7 files changed, 1151 insertions(+), 478 deletions(-)
- create mode 100644 drivers/media/platform/rcar-isp.c
