@@ -2,107 +2,167 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B883EC6379C
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0A7CC63793
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:14:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D5C861380
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92BA46128D
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:14:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbhGVLcf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jul 2021 07:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbhGVLc2 (ORCPT
+        id S231738AbhGVLd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jul 2021 07:33:58 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:46769 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231724AbhGVLd5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jul 2021 07:32:28 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24D6C0613C1
-        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 14-20020a05600c028eb0290228f19cb433so1448535wmk.0
-        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=52MfpyqjokIGwcHAbxbTdslNqMBGmWn7imp1R+Sfufg=;
-        b=QI7fNxqRsS4P7U4DU8JkdrkP2NMfeVSldHtiJUfgnBKbC8v+8182QfDezPtmkIgXFV
-         thWSRx3NwstpCBUaGQ3237xMJXOJt2TLtl1RaubfTCZhmZHekXlPNYDowfUsvpkWii6+
-         ulVcrYS2Aj9nciiOsStc1dNAlnr7JanEfIE4H/XGL4dMOKBz5ejPLQkYG7hIQbLHKr6M
-         yi6pa6lssNI3d5VKEaAtShYaT7VZfQKuP1IM7sW2vlcIzCuPpQHKuQsqXgjtSkSamGdO
-         ElatVJo0E2rPoevRoOK054FVup9GKQUqFba5nEtnxL3clfCJfgHj3T9kNpbRRikuhKyv
-         xY7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=52MfpyqjokIGwcHAbxbTdslNqMBGmWn7imp1R+Sfufg=;
-        b=J/V7GtOCkhA7d74O3LsJaLqFUaw5GCOCG8dFuf/Lmv9FGD+CSbxrhu8oOrpancx+mZ
-         VBxRRHVSM2RzCEiUdEjgbIAeEnQgHwlASXmv+GIXSmwcMV1Rgw5Q1+Qebzp1u919NxNM
-         fHkc95NPfQYYSHJ0bZBUFT9IW4Jvt0HCjNr/oSEjPesmoODI1Ew/NJLV3OJZdY/mUHny
-         LMPA0SjgCtWiohut+2PU7xHF2CMNGabozrBkup3Z04VB5GyVYn1nyYk9hHppJjXSdS1k
-         9BxuXApiNHOkTiLI3tusM+OvCQWK+ztKdSdpzwryXs3p1419VCqsfIUd4vurCTbnSE5V
-         uG5Q==
-X-Gm-Message-State: AOAM533tZ5o1/zoozJ2bIFv3BP5jo5G6F/UalkV7CtsaOSX/W1BrbHKH
-        32bYIhMCYjgPThmftLtvokdSrU1CF6Kcgw==
-X-Google-Smtp-Source: ABdhPJy/Grd8DplsB/n4C0l3rd21anapHB55iNRs+b6IwT2lMKHbthgNuwIzJxoUHMQH46hHDjlOdQ==
-X-Received: by 2002:a1c:7707:: with SMTP id t7mr8927223wmi.186.1626955981303;
-        Thu, 22 Jul 2021 05:13:01 -0700 (PDT)
-Received: from davidp-xps-13.pitowers.org ([2a00:1098:3142:14:b918:b36f:9ba:b778])
-        by smtp.gmail.com with ESMTPSA id e8sm8448228wrc.6.2021.07.22.05.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 05:13:00 -0700 (PDT)
-From:   David Plowman <david.plowman@raspberrypi.com>
-To:     linux-media@vger.kernel.org, sakari.ailus@iki.fi,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     David Plowman <david.plowman@raspberrypi.com>
-Subject: [PATCH v3 0/2] New V4L2 controls V4L2_CID_NOTIFY_GAIN_XXX
-Date:   Thu, 22 Jul 2021 13:12:47 +0100
-Message-Id: <20210722121249.16483-1-david.plowman@raspberrypi.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 22 Jul 2021 07:33:57 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 6Xavmy6lF4Jsb6XawmOwIm; Thu, 22 Jul 2021 14:14:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1626956071; bh=ooE9EXWeXbP9+ytDl+WRw4U80QmA9yWSJK8TrB9g9KY=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=g+lth7m0OIO2zED0XJ84tZgxdQ8bBrQQPcjnUWRwUTkM0fIj2b048fAQ5W2i4xPqU
+         nREjpPtvYENtblyIMv61ZPhEjwIJ7stjOsY5NKm8e9rNC8M8X5WiQXgO536CtZ5Hmm
+         HV7ZZlxFgvwMPZYDuAO6saMnQ0vU/BuI+QnhBrsE+hI/gv6ORxFWQGrk4ntnTjeD6X
+         Inv6Uxr1w8YrawY0i8sEdA6xS/eAsMZ9wVKV2c0WDhQKSobgQF7BcwZT2JtAvs+aVM
+         2hZdQDZf8yqDIM/2Q+8bGXQ+pPwSFZm69z7l1DT9v+T/h5ffHQoJIXJi8a60x62ION
+         lt8VKCzQrImYQ==
+Subject: Re: [GIT PULL FOR v5.15] Various fixes
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        rick.chang@mediatek.com, Bin Liu <bin.liu@mediatek.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>
+References: <4d9b08ca-ec5e-b75f-514c-950d2c2abd64@xs4all.nl>
+ <20210722083423.12dc646e@coco.lan>
+ <25e07ad2-26c9-eb5a-4296-37c2ef6f26b2@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <2e730281-ed26-add3-70eb-bfdd8c72fc1c@xs4all.nl>
+Date:   Thu, 22 Jul 2021 14:14:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <25e07ad2-26c9-eb5a-4296-37c2ef6f26b2@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfG+mjolw9XCM2ASxMTJxxSW4MCjnzqWR8GuwxmZaevACHjaG/7eT2bVAyoll7BEY/OWquaQT5PEho0ex2R24nxv9+fcUS/vmP/Ot7ynN93lEPaYdGDuQ
+ 1h5CwAh20PBm1/qaqBA/bDwKvj6jng+zdmwg3AkNhTAqd6QLfxXZn8nAjXIEdUli+ZY056o222kLUB+f/YYQtx1orR11GU/v4EYcrLSxfLhJHvbVGATAZXXg
+ o5g49/xTf/yGKqimls47Mgos2I97sWFjm/VpE5EQjpnFiDL8k7rvAbLi3w4OvRp7fWYIsbgxDixWEHC5e4YbY3WwkR7FIj9N8a1thGaHt28QAfP+1gPgjiFM
+ f7aSutKprLPu442deuR0buXluQuxi57/LFSZBeNowqy7VoSerG2qNrPl91NYq3Kws9ONKJk42A/+Ptzo37IIhDzH31LbKblo2vSGgchev1CR31Qruqkm9Sak
+ j9yKNL2GzdZOovoC5hLh4QJcmFCJvapfxOooNHUQqr1e5NgyBlIoY1fsdK+hcnaeOhuZGSA+lvnqu1r0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+Hi Dafna,
 
-Sorry for the delay with these patches, I think my previous attempt
-didn't cast the email net wide enough and they got rather lost - my
-apologies!
+On 22/07/2021 13:43, Dafna Hirschfeld wrote:
+> 
+> 
+> On 22.07.21 08:34, Mauro Carvalho Chehab wrote:
+>> Hi Hans,
+>>
+>> Em Tue, 20 Jul 2021 15:34:22 +0200
+>> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+>>
+>>> The following changes since commit 379e205dab9d7f9761984728e7d6f5f8305cc424:
+>>>
+>>>    media: usb: dvb-usb-v2: af9035: let subdrv autoselect enable si2168 and si2157 (2021-07-12 14:28:49 +0200)
+>>>
+>>> are available in the Git repository at:
+>>>
+>>>    git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.15a
+>>>
+>>> for you to fetch changes up to 8e8ee611c5aa4e1ddb6efd1395f1dd16e13eca98:
+>>>
+>>>    media: coda: fix frame_mem_ctrl for YUV420 and YVU420 formats (2021-07-20 15:17:45 +0200)
+>>
+>> It seems you forgot to add your own SOB at the patches on this series!
+>>
+>>>
+>>> ----------------------------------------------------------------
+>>> Tag branch
+>>>
+>>> ----------------------------------------------------------------
+>>> Dafna Hirschfeld (3):
+>>>        media: mtk-jpeg: fix setting plane paylod
+> 
+> I am actually not 100% sure about this patch. I think it is better if the driver maintainers review it
 
-Anyway, this version addresses the feedback I had received originally,
-so thank you for that. Therefore:
+Thanks for the heads-up, it's been dropped and the state in patchwork is now again 'New'.
 
-* The values are now specified to be linear gains.
+Regards,
 
-* The default value is defined to be the value that is equivalent to a
-  gain of 1x.
+	Hans
 
-* I think there was a minor comment over the repetitiveness of the
-  documentation, so I've tried to address that too.
-
-Thanks very much and best regards
-
-David
-
-David Plowman (2):
-  media: v4l2-ctrls: Add V4L2_CID_NOTIFY_GAIN_XXX controls
-  media: v4l2-ctrls: Document V4L2_CID_NOTIFY_GAIN_XXX controls
-
- .../media/v4l/ext-ctrls-image-source.rst      | 25 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  4 +++
- include/uapi/linux/v4l2-controls.h            |  4 +++
- 3 files changed, 33 insertions(+)
-
--- 
-2.30.2
+> 
+>>>        media: rkisp1: remove field 'vaddr' from 'rkisp1_buffer'
+>>>        media: rkisp1: cap: initialize dma buf address in 'buf_init' cb
+>>>
+>>> Dan Carpenter (2):
+>>>        media: v4l2-subdev: fix some NULL vs IS_ERR() checks
+>>>        media: rockchip/rga: fix error handling in probe
+>>>
+>>> Evgeny Novikov (1):
+>>>        media: platform: stm32: unprepare clocks at handling errors in probe
+>>>
+>>> Fabio Estevam (3):
+>>>        dt-bindings: adv7180: Introduce the 'reset-gpios' property
+>>>        media: i2c: adv7180: Print the chip ID on probe
+>>>        dt-bindings: adv7180: Introduce 'adv,force-bt656-4' property
+>>>
+>>> Frieder Schrempf (1):
+>>>        media: adv7180: Add optional reset GPIO
+>>>
+>>> Hans Verkuil (1):
+>>>        media/cec-core.rst: update adap_enable doc
+>>>
+>>> Matthew Michilot (1):
+>>>        media: i2c: adv7180: fix adv7280 BT.656-4 compatibility
+>>>
+>>> Pavel Skripkin (3):
+>>>        media: go7007: fix memory leak in go7007_usb_probe
+>>>        media: go7007: remove redundant initialization
+>>>        media: stkwebcam: fix memory leak in stk_camera_probe
+>>>
+>>> Philipp Zabel (1):
+>>>        media: coda: fix frame_mem_ctrl for YUV420 and YVU420 formats
+>>>
+>>> Tom Rix (1):
+>>>        media: ti-vpe: cal: fix indexing of cal->ctx[] in cal_probe()
+>>>
+>>>   Documentation/devicetree/bindings/media/i2c/adv7180.yaml |  8 ++++++
+>>>   Documentation/driver-api/media/cec-core.rst              |  9 ++++---
+>>>   drivers/media/cec/platform/stm32/stm32-cec.c             | 26 +++++++++++++------
+>>>   drivers/media/i2c/adv7180.c                              | 66 ++++++++++++++++++++++++++++++++++++++++++-----
+>>>   drivers/media/platform/coda/coda-bit.c                   | 18 +++++++++----
+>>>   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c          | 20 +++++++-------
+>>>   drivers/media/platform/rcar-vin/rcar-v4l2.c              |  4 +--
+>>>   drivers/media/platform/rockchip/rga/rga.c                | 27 +++++++++++++++----
+>>>   drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c  | 12 ++++++++-
+>>>   drivers/media/platform/rockchip/rkisp1/rkisp1-common.h   |  6 +----
+>>>   drivers/media/platform/rockchip/rkisp1/rkisp1-params.c   |  3 +--
+>>>   drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c    |  6 ++---
+>>>   drivers/media/platform/ti-vpe/cal.c                      |  6 ++---
+>>>   drivers/media/platform/vsp1/vsp1_entity.c                |  4 +--
+>>>   drivers/media/usb/go7007/go7007-driver.c                 | 26 -------------------
+>>>   drivers/media/usb/go7007/go7007-usb.c                    |  2 +-
+>>>   drivers/media/usb/stkwebcam/stk-webcam.c                 |  6 +++--
+>>>   drivers/staging/media/tegra-video/vi.c                   |  4 +--
+>>>   18 files changed, 167 insertions(+), 86 deletions(-)
+>>
+>>
+>>
+>> Thanks,
+>> Mauro
+>>
 
