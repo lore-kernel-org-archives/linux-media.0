@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 474C7C63798
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B883EC6379C
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FEAD61364
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D5C861380
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 12:13:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbhGVLce (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jul 2021 07:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S231853AbhGVLcf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jul 2021 07:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbhGVLc3 (ORCPT
+        with ESMTP id S231824AbhGVLc2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jul 2021 07:32:29 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF0C061575
-        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:04 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id k4so5699413wrc.8
-        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:04 -0700 (PDT)
+        Thu, 22 Jul 2021 07:32:28 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24D6C0613C1
+        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 14-20020a05600c028eb0290228f19cb433so1448535wmk.0
+        for <linux-media@vger.kernel.org>; Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mncn1LcgKDTMYAOw1LqPaDbPls59/gAmcd0XhWZpuA0=;
-        b=PSPdsAnyMY5YHTC5svsNCg83BJeayuLwNiKcYarcu6swHOzng6eC44jll52V8L28df
-         5sGWE9GoEKsInFd6xq7LDCnvCgIEOeVpJM+WP5bN0kSiS6Kjpb9m71xwEnG/uAwt+bsd
-         sJZaw4gqt52ojyBmfUHYuqbhEDzifPGdkGsKA6+wBE7tYwOCe6fvC0NJSKiEL740HmJo
-         KA6mHl7bK9rxOS0fPNijC/B7DJZk45UKXnl6IIfYwPdAL4zGOAfUQDHvHDztcOg469nD
-         yk0JDT1BPHTwWwyD1cU9y0s1aih42fV5oAjBuR/6T0IUJjOoBFJ43Cg5hmeKJdIoeOKl
-         ofIQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52MfpyqjokIGwcHAbxbTdslNqMBGmWn7imp1R+Sfufg=;
+        b=QI7fNxqRsS4P7U4DU8JkdrkP2NMfeVSldHtiJUfgnBKbC8v+8182QfDezPtmkIgXFV
+         thWSRx3NwstpCBUaGQ3237xMJXOJt2TLtl1RaubfTCZhmZHekXlPNYDowfUsvpkWii6+
+         ulVcrYS2Aj9nciiOsStc1dNAlnr7JanEfIE4H/XGL4dMOKBz5ejPLQkYG7hIQbLHKr6M
+         yi6pa6lssNI3d5VKEaAtShYaT7VZfQKuP1IM7sW2vlcIzCuPpQHKuQsqXgjtSkSamGdO
+         ElatVJo0E2rPoevRoOK054FVup9GKQUqFba5nEtnxL3clfCJfgHj3T9kNpbRRikuhKyv
+         xY7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mncn1LcgKDTMYAOw1LqPaDbPls59/gAmcd0XhWZpuA0=;
-        b=t0JwTB2ADznCgBeAyVHz05GkaEfuRDa1o5KL7bELZiwUlV14Rp996TuDn7R5hHWAy0
-         umPWcyUJmTQv0+8mtQUAvoz/1EFVzZTTDCnhfHU2uT1YRlYO0k9N5TwYz7Jq6khyJNFZ
-         5wP51QlH1uNIBW7d6rgzjESsWzEdCVku0IXCDQ5tIMF3JQ9WobctJ830xinWE2wuzRfG
-         1UBlfpZJcBZFhFhlBHui01gX8lVfoWtKgjzqyRnGDlQ+c8QPC3VQtkZO2aDayxcJq+Jn
-         XcuwcTRTxHWn0vCZvZRc3uYYK4HazEZ2mnVjNxEXaL3mluENbD7VRyuwW5hUCkfkDWpA
-         XIdw==
-X-Gm-Message-State: AOAM533MnV1lokK/6dbHGQdA9973aWD9KTq4R7OIG/JAjrNope/+Z2bh
-        r54JQxX/hJVaxVIoS+dktsEDK9rI4L8JLg==
-X-Google-Smtp-Source: ABdhPJzKQ/a55jqLrSruHHGIvgpSznPYEl0ExN2JrsP+oEwuYY3usJdWA0oSNwSq+1KdwBa5gxxmAw==
-X-Received: by 2002:a5d:4561:: with SMTP id a1mr46860919wrc.259.1626955982724;
-        Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52MfpyqjokIGwcHAbxbTdslNqMBGmWn7imp1R+Sfufg=;
+        b=J/V7GtOCkhA7d74O3LsJaLqFUaw5GCOCG8dFuf/Lmv9FGD+CSbxrhu8oOrpancx+mZ
+         VBxRRHVSM2RzCEiUdEjgbIAeEnQgHwlASXmv+GIXSmwcMV1Rgw5Q1+Qebzp1u919NxNM
+         fHkc95NPfQYYSHJ0bZBUFT9IW4Jvt0HCjNr/oSEjPesmoODI1Ew/NJLV3OJZdY/mUHny
+         LMPA0SjgCtWiohut+2PU7xHF2CMNGabozrBkup3Z04VB5GyVYn1nyYk9hHppJjXSdS1k
+         9BxuXApiNHOkTiLI3tusM+OvCQWK+ztKdSdpzwryXs3p1419VCqsfIUd4vurCTbnSE5V
+         uG5Q==
+X-Gm-Message-State: AOAM533tZ5o1/zoozJ2bIFv3BP5jo5G6F/UalkV7CtsaOSX/W1BrbHKH
+        32bYIhMCYjgPThmftLtvokdSrU1CF6Kcgw==
+X-Google-Smtp-Source: ABdhPJy/Grd8DplsB/n4C0l3rd21anapHB55iNRs+b6IwT2lMKHbthgNuwIzJxoUHMQH46hHDjlOdQ==
+X-Received: by 2002:a1c:7707:: with SMTP id t7mr8927223wmi.186.1626955981303;
+        Thu, 22 Jul 2021 05:13:01 -0700 (PDT)
 Received: from davidp-xps-13.pitowers.org ([2a00:1098:3142:14:b918:b36f:9ba:b778])
-        by smtp.gmail.com with ESMTPSA id e8sm8448228wrc.6.2021.07.22.05.13.02
+        by smtp.gmail.com with ESMTPSA id e8sm8448228wrc.6.2021.07.22.05.13.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 05:13:02 -0700 (PDT)
+        Thu, 22 Jul 2021 05:13:00 -0700 (PDT)
 From:   David Plowman <david.plowman@raspberrypi.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@iki.fi,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -63,67 +63,46 @@ To:     linux-media@vger.kernel.org, sakari.ailus@iki.fi,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     David Plowman <david.plowman@raspberrypi.com>
-Subject: [PATCH v3 2/2] media: v4l2-ctrls: Document V4L2_CID_NOTIFY_GAIN_XXX controls
-Date:   Thu, 22 Jul 2021 13:12:49 +0100
-Message-Id: <20210722121249.16483-3-david.plowman@raspberrypi.com>
+Subject: [PATCH v3 0/2] New V4L2 controls V4L2_CID_NOTIFY_GAIN_XXX
+Date:   Thu, 22 Jul 2021 13:12:47 +0100
+Message-Id: <20210722121249.16483-1-david.plowman@raspberrypi.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210722121249.16483-1-david.plowman@raspberrypi.com>
-References: <20210722121249.16483-1-david.plowman@raspberrypi.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation for each of the controls
+Hi
 
-V4L2_CID_NOTIFY_GAIN_RED
-V4L2_CID_NOTIFY_GAIN_GREENR
-V4L2_CID_NOTIFY_GAIN_BLUE
-V4L2_CID_NOTIFY_GAIN_GREENB
+Sorry for the delay with these patches, I think my previous attempt
+didn't cast the email net wide enough and they got rather lost - my
+apologies!
 
-These controls are required by sensors that need to know what colour
-gains will be applied to pixels by downstream processing (such as by
-an ISP), though the sensor does not apply these gains itself.
+Anyway, this version addresses the feedback I had received originally,
+so thank you for that. Therefore:
 
-Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
----
+* The values are now specified to be linear gains.
+
+* The default value is defined to be the value that is equivalent to a
+  gain of 1x.
+
+* I think there was a minor comment over the repetitiveness of the
+  documentation, so I've tried to address that too.
+
+Thanks very much and best regards
+
+David
+
+David Plowman (2):
+  media: v4l2-ctrls: Add V4L2_CID_NOTIFY_GAIN_XXX controls
+  media: v4l2-ctrls: Document V4L2_CID_NOTIFY_GAIN_XXX controls
+
  .../media/v4l/ext-ctrls-image-source.rst      | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  4 +++
+ include/uapi/linux/v4l2-controls.h            |  4 +++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-index de43f5c8486d..d50b56156a8e 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-@@ -72,3 +72,28 @@ Image Source Control IDs
-     * - __u32
-       - ``height``
-       - Height of the area.
-+
-+``V4L2_CID_NOTIFY_GAIN_RED (integer)``
-+    Please refer to ``V4L2_CID_NOTIFY_GAIN_GREENB`` below.
-+
-+``V4L2_CID_NOTIFY_GAIN_GREENR (integer)``
-+    Please refer to ``V4L2_CID_NOTIFY_GAIN_GREENB`` below.
-+
-+``V4L2_CID_NOTIFY_GAIN_BLUE (integer)``
-+    Please refer to ``V4L2_CID_NOTIFY_GAIN_GREENB`` below.
-+
-+``V4L2_CID_NOTIFY_GAIN_GREENB (integer)``
-+    Note: this description covers all four ``V4L2_CID_NOTIFY_GAIN``
-+    controls, according to the Bayer channel indicated at the end of
-+    the control name.
-+
-+    The sensor is notified what gain will be applied to this Bayer
-+    channel by subsequent processing (such as by an ISP). The sensor
-+    is merely informed of this value in case it performs processing
-+    that requires it, but it does not apply it to the output pixels
-+    themselves.
-+
-+    The units for the gain value are linear, with the default value
-+    being shared between all four controls and representing a gain of
-+    exactly 1. Other control properties, such as ranges, should also
-+    be common.
 -- 
 2.30.2
 
