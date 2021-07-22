@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FBA7C4338F
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 20:34:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99855C432BE
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 20:34:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B15A60EB5
-	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 20:34:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83EDD60EB6
+	for <linux-media@archiver.kernel.org>; Thu, 22 Jul 2021 20:34:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbhGVTyQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Jul 2021 15:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S231367AbhGVTyS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Jul 2021 15:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbhGVTyB (ORCPT
+        with ESMTP id S231166AbhGVTyF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Jul 2021 15:54:01 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3021DC061575;
-        Thu, 22 Jul 2021 13:34:36 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d12so7210132wre.13;
-        Thu, 22 Jul 2021 13:34:36 -0700 (PDT)
+        Thu, 22 Jul 2021 15:54:05 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5712FC061575;
+        Thu, 22 Jul 2021 13:34:40 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id z7so12437wrn.11;
+        Thu, 22 Jul 2021 13:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cGfNPzr1gE/pmw2DJmPe2VzUTwaf4gzOMzWZ5kc+WcA=;
-        b=pohVws68g8dDugN+8Ckyic30nOcpw662cgNlg2LoOUWpLq9W7/b5cpcYlBCa6wANtI
-         diU5M/mXeCRdX1N7tKzBYSsgzZGoShl6Sd37uYA5xeV+TJzdIZPgKG90fKXjSDLrxUd4
-         Jsshw/jMg1MpZaM1GJJr8gPfZLIZZFAwkMkyDQXB9YVDGRHGhKSPk6DrXKv7HSYSxTgx
-         TBA8kPTawYh14y+qBjiLv7t+58N5Mf4VDDA0/a0S8DzeSmRc/3MuMUtf/msEGBzC4BCn
-         D9aVBm/QhVagaG20zkBcqbOVY7kBNXu7uvfaPGrfiuERlJnsiADeySX0jZhv4mtqQzYA
-         4rrA==
+        bh=rd2Uui4SgiL/O80dzJvFPj/8vT3gw3tY+/vUri5pveI=;
+        b=IkQN4IJ/lADESUa47LmCZNJWrIUr7g+J6HXO8onCHCzoFN6Ii2khOlUL43nHdqpJ3t
+         sPQER/hJ9y6UV8d6B5YXuX76iw0r/InpzWoEJGtVATUbDekcyNQY5YZGSVPS+GcP+67k
+         miLUyFyjZ8aluJx07rx7QUqC71LAyWuwz69tHblgT/UrVXCWfSM1FGnq8PBY8vlzqU5H
+         2gTqWP0SXh1VgF+7MQ3cSPLWY0iieDkc3yyVBw39j+g9oIlK3TNhOY3ygZ8d4kJCgDvL
+         Kgh98RkXMunp9TwyCZkOJu43nfXh1jv1L7nNbsCztKhlVUWJuaiiI4/RlW1GbGevBOrT
+         sG6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cGfNPzr1gE/pmw2DJmPe2VzUTwaf4gzOMzWZ5kc+WcA=;
-        b=CfzhzVDLHg814qfxUGUWaE58tekuO5d2Qcd9b4Z4lxUX0i39ymBWetpqcjlfbLBofK
-         1xLy2iA/nCr5Lmy+PGz7sXxkYzyR/vtF7im25pvqDInhiN+zx081yTfqP+HfHFa1POfN
-         AvbyPNKneqKworXpIVFDLr659I2r8f7HfYPVSdKLLB8dmwijhDunTr++zrkd6Gw3FM3N
-         WfNr7ob+B8wvJS6MPscH/oSIU1CVl78NZ/J3+5fGyNVdxN2TWHQCqIeNy1jesuEidFuM
-         y0Bj9+GCuUv2bP9eVWZ8vh2IUvvqGJfnxHHs5Cm3WawN5eV+oqvI73E1bDPKngYSI2hb
-         lKfw==
-X-Gm-Message-State: AOAM533m3sF43ZXosoirZZ0wnDgs0kuOiZGecxJCG1ntfJfhg0tInYoI
-        /6X9+aQQlntcl54xnanF3UU=
-X-Google-Smtp-Source: ABdhPJxpI+UKEJmljycF/UrHfPNtBWUTZ1jPKGIcDqsoDHp1Epa+hJ9qAMEahjsAEYsCGF7fwlMgvw==
-X-Received: by 2002:a5d:456d:: with SMTP id a13mr1738806wrc.255.1626986074884;
-        Thu, 22 Jul 2021 13:34:34 -0700 (PDT)
+        bh=rd2Uui4SgiL/O80dzJvFPj/8vT3gw3tY+/vUri5pveI=;
+        b=PF35jPci7bLyrWMeBGB3sVbSi9NVOd00aCNIQTSmF6+RaNkrgcjzk36Qa/79gVfInA
+         zteek8nE/B8Kc/+T6R76ayPJP649ppUyLgAQKvkVztMoPkOwajzJAZwtEsmotCA7Ptse
+         9/Qq+jTMI+CMP2FA0u+l9s2hTKyhxAzHySC5Ronqg+hmRrN3D70c1LmNnq5WCyEgAhw+
+         lBqb7P7as3G5AWj0ceU6vTrJXfSi/2JZDDraWta4dmT5pNNeTj7wgDE0RK+uKXqLrC99
+         AHfSSHPfu7VZdaOo110VgBvwr9AU9nhMWkGT2lBWv1Y9hh3Bq3ynJRS5ymlrNCo+omC3
+         pI/g==
+X-Gm-Message-State: AOAM532F/vWtDpHdthr3ZYVnvdjNSVARPdLaK0i+f6xHll8Oj4g2mM4Q
+        L0XR8YP0uuO3mRbPIgxyt9M=
+X-Google-Smtp-Source: ABdhPJz9qYMOzyFPMiivE7abF/GUFcLsf6t8t8Bl0fQ2Wh0HtjQZoALY7LIqznQJDe99xhktf6L3kA==
+X-Received: by 2002:a05:6000:180b:: with SMTP id m11mr1802385wrh.6.1626986079030;
+        Thu, 22 Jul 2021 13:34:39 -0700 (PDT)
 Received: from valhalla.home ([2.29.20.106])
-        by smtp.gmail.com with ESMTPSA id b16sm31036455wrw.46.2021.07.22.13.34.34
+        by smtp.gmail.com with ESMTPSA id b16sm31036455wrw.46.2021.07.22.13.34.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 13:34:34 -0700 (PDT)
+        Thu, 22 Jul 2021 13:34:38 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     Yong Zhi <yong.zhi@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
         Tianshu Qiu <tian.shu.qiu@intel.com>,
         Colin Ian King <colin.king@canonical.com>,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH 09/13] media: i2c: cap exposure at height + vblank in ov8865
-Date:   Thu, 22 Jul 2021 21:34:03 +0100
-Message-Id: <20210722203407.3588046-10-djrscally@gmail.com>
+Subject: [PATCH 13/13] media: ipu3-cio2: Add INT347A to cio2-bridge
+Date:   Thu, 22 Jul 2021 21:34:07 +0100
+Message-Id: <20210722203407.3588046-14-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210722203407.3588046-1-djrscally@gmail.com>
 References: <20210722203407.3588046-1-djrscally@gmail.com>
@@ -83,78 +83,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Exposure limits depend on the total height; when vblank is altered (and
-thus the total height is altered), change the exposure limits to reflect
-the new cap.
+ACPI _HID INT347A represents the OV8865 sensor, the driver for which can
+support the platforms that the cio2-bridge serves. Add it to the array
+of supported sensors so the bridge will connect the sensor to the CIO2
+device.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
- drivers/media/i2c/ov8865.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ drivers/media/pci/intel/ipu3/cio2-bridge.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index e1d3c0d50fdc..941b0f94f249 100644
---- a/drivers/media/i2c/ov8865.c
-+++ b/drivers/media/i2c/ov8865.c
-@@ -662,6 +662,7 @@ struct ov8865_ctrls {
- 	struct v4l2_ctrl *pixel_rate;
- 	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *vblank;
-+	struct v4l2_ctrl *exposure;
- 
- 	struct v4l2_ctrl_handler handler;
+diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+index 4657e99df033..6195abd7582c 100644
+--- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
++++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+@@ -24,6 +24,8 @@ static const struct cio2_sensor_config cio2_supported_sensors[] = {
+ 	CIO2_SENSOR_CONFIG("INT33BE", 0),
+ 	/* Omnivision OV2680 */
+ 	CIO2_SENSOR_CONFIG("OVTI2680", 0),
++	/* Omnivision OV8865 */
++	CIO2_SENSOR_CONFIG("INT347A", 1, 360000000),
  };
-@@ -2455,6 +2456,18 @@ static int ov8865_s_ctrl(struct v4l2_ctrl *ctrl)
- 	unsigned int index;
- 	int ret;
  
-+	/* If VBLANK is altered we need to update exposure to compensate */
-+	if (ctrl->id == V4L2_CID_VBLANK) {
-+		int exposure_max;
-+
-+		exposure_max = sensor->state.mode->output_size_y + ctrl->val;
-+		__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-+					 sensor->ctrls.exposure->minimum,
-+					 exposure_max,
-+					 sensor->ctrls.exposure->step,
-+					 min(sensor->ctrls.exposure->val, exposure_max));
-+	}
-+
- 	/* Wait for the sensor to be on before setting controls. */
- 	if (pm_runtime_suspended(sensor->dev))
- 		return 0;
-@@ -2511,8 +2524,8 @@ static int ov8865_ctrls_init(struct ov8865_sensor *sensor)
- 
- 	/* Exposure */
- 
--	v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE, 16, 1048575, 16,
--			  512);
-+	ctrls->exposure = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE, 16,
-+					    1048575, 16, 512);
- 
- 	/* Gain */
- 
-@@ -2693,6 +2706,7 @@ static int ov8865_set_fmt(struct v4l2_subdev *subdev,
- 	u32 mbus_code = 0;
- 	unsigned int hblank;
- 	unsigned int index;
-+	int exposure_max;
- 	int ret = 0;
- 
- 	mutex_lock(&sensor->mutex);
-@@ -2740,6 +2754,12 @@ static int ov8865_set_fmt(struct v4l2_subdev *subdev,
- 	__v4l2_ctrl_modify_range(sensor->ctrls.hblank, hblank, hblank, 1,
- 				 hblank);
- 
-+	exposure_max = mode->vts;
-+	__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-+				 sensor->ctrls.exposure->minimum, exposure_max,
-+				 sensor->ctrls.exposure->step,
-+				 min(sensor->ctrls.exposure->val, exposure_max));
-+
- complete:
- 	mutex_unlock(&sensor->mutex);
- 
+ static const struct cio2_property_names prop_names = {
 -- 
 2.25.1
 
