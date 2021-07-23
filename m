@@ -2,82 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C51AC4338F
-	for <linux-media@archiver.kernel.org>; Fri, 23 Jul 2021 10:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3067EC432BE
+	for <linux-media@archiver.kernel.org>; Fri, 23 Jul 2021 10:23:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A81660EE2
-	for <linux-media@archiver.kernel.org>; Fri, 23 Jul 2021 10:22:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14B38600D3
+	for <linux-media@archiver.kernel.org>; Fri, 23 Jul 2021 10:23:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbhGWJl2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Jul 2021 05:41:28 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:35238 "EHLO www.linuxtv.org"
+        id S231688AbhGWJnW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Jul 2021 05:43:22 -0400
+Received: from comms.puri.sm ([159.203.221.185]:34922 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231620AbhGWJl2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Jul 2021 05:41:28 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1m6sJc-001w3i-NB; Fri, 23 Jul 2021 10:22:00 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1m6sOH-0001cz-NC; Fri, 23 Jul 2021 10:26:50 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT FIXES FOR v5.14] rtl28xxu: fix regression (#75957)
-Date:   Fri, 23 Jul 2021 10:26:47 +0000
-Message-Id: <20210723102648.6216-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210723095659.GA19002@gofer.mess.org>
-References: 
-MIME-Version: 1.0
+        id S230238AbhGWJnV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 23 Jul 2021 05:43:21 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 28BBDDFDE5;
+        Fri, 23 Jul 2021 03:23:55 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oK8xjK8x_jat; Fri, 23 Jul 2021 03:23:54 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     laurent.pinchart@ideasonboard.com, shawnguo@kernel.org
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, kernel@puri.sm, krzk@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, m.felsch@pengutronix.de,
+        mchehab@kernel.org, phone-devel@vger.kernel.org, robh@kernel.org,
+        slongerbeam@gmail.com,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v8 0/3] media: imx: add support for imx8mq MIPI RX
+Date:   Fri, 23 Jul 2021 12:12:14 +0200
+Message-Id: <20210723101217.1954805-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+hi,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210723095659.GA19002@gofer.mess.org/
-Build log: https://builder.linuxtv.org/job/patchwork/126386/
-Build time: 00:16:02
-Link: https://lore.kernel.org/linux-media/20210723095659.GA19002@gofer.mess.org
+This patch series adds a driver for the i.MX8MQ CSI MIPI receiver / controller.
 
-gpg: Signature made Fri 23 Jul 2021 09:47:21 AM UTC
-gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
-gpg:                issuer "sean@mess.org"
-gpg: Good signature from "Sean Young <sean@mess.org>" [full]
+It includes the driver, the dt-bindings and the DT addition to the SoC dtsi.
+I test it using libcamera. Thanks to Laurent who helped a lot. I'm happy for
+any feedback,
 
-Summary: got 1/2 patches with issues, being 1 at build time
+                           martin
 
-Error/warnings:
+revision history
+----------------
+v8: (thank you Laurent)
+* calculate hs_settle for any clk rate and mode
+* add reviewed-by tag
 
-patches/0001-Revert-media-rtl28xxu-fix-zero-length-control-reques.patch:
+v7: (thank you Laurent and Rob)
+* fix the binding example (include the reset driver)
+* use pm_runtime_resume_and_get()
+* fix some logic in init_cfg()
+* add some useful code comments and fix minor bits found by Laurent in v6
+https://lore.kernel.org/linux-media/20210716102244.581182-1-martin.kepplinger@puri.sm/T/#t
 
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+v6: (thank you Laurent and Rob)
+* add reviewed-by tag to binding
+* statically allocate clk_bulk_data
+* fix how the hs_settle value is applied
+* remove s_power calls
+* remove the link_setup() callback implementation and make the link immutable
+* more cleanups according to Laurents' review from v5
+https://lore.kernel.org/linux-media/20210714111931.324485-1-martin.kepplinger@puri.sm/
 
-    allyesconfig: return code #0:
-	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1969 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+v5: (thank you Laurent)
+* fix reset usage by using the already supported reset controller driver
+* remove clko2 (totally unrelated clock / had been included by accident)
+* rename pxl clock to ui
+https://lore.kernel.org/linux-media/20210618095753.114557-1-martin.kepplinger@puri.sm/
+
+v4: (thank you Rob and Marco)
+* create fsl,mipi-phy-gpr custom dt property instead of confusing "phy"
+* add imx8mq-specific compatibile to imx8mq.dtsi for future use
+https://lore.kernel.org/linux-media/20210614121522.2944593-1-martin.kepplinger@puri.sm/
+
+v3: (thank you, Rob and Laurent)
+among minor other things according to v2 review, changes include:
+* better describe the clocks
+* rename DT property "phy-reset" to "reset" and "phy-gpr" to "phy"
+https://lore.kernel.org/linux-media/20210608104128.1616028-1-martin.kepplinger@puri.sm/T/#t
+
+v2: (thank you, Dan and Guido)
+among fixes according to v1 reviews, changes include:
+* remove status property from dt-bindings example
+* define a few bits in order to have less magic values
+* use "imx8mq_mipi_csi_" as local function prefix
+* read DT properties only during probe()
+* remove dead code (log_status)
+* add imx8mq_mipi_csi_release_icc()
+* fix imx8mq_mipi_csi_init_icc()
+https://lore.kernel.org/linux-media/20210531112326.90094-1-martin.kepplinger@puri.sm/
+
+v1:
+https://lore.kernel.org/linux-media/20210527075407.3180744-1-martin.kepplinger@puri.sm/T/#t
+
+Martin Kepplinger (3):
+  dt-bindings: media: document the nxp,imx8mq-mipi-csi2 receiver phy and
+    controller
+  media: imx: add a driver for i.MX8MQ mipi csi rx phy and controller
+  arm64: dts: imx8mq: add mipi csi phy and csi bridge descriptions
+
+ .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 174 ++++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 104 ++
+ drivers/staging/media/imx/Makefile            |   1 +
+ drivers/staging/media/imx/imx8mq-mipi-csi2.c  | 979 ++++++++++++++++++
+ 4 files changed, 1258 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+ create mode 100644 drivers/staging/media/imx/imx8mq-mipi-csi2.c
+
+-- 
+2.30.2
 
