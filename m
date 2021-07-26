@@ -2,804 +2,172 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 315B7C4320A
-	for <linux-media@archiver.kernel.org>; Mon, 26 Jul 2021 14:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4642EC43214
+	for <linux-media@archiver.kernel.org>; Mon, 26 Jul 2021 15:51:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B99F60BD3
-	for <linux-media@archiver.kernel.org>; Mon, 26 Jul 2021 14:57:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27C5F60F6E
+	for <linux-media@archiver.kernel.org>; Mon, 26 Jul 2021 15:51:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbhGZOQe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Jul 2021 10:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbhGZOQ2 (ORCPT
+        id S236309AbhGZPK5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Jul 2021 11:10:57 -0400
+Received: from ale.deltatee.com ([204.191.154.188]:42738 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236409AbhGZPJB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Jul 2021 10:16:28 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8A0C061760;
-        Mon, 26 Jul 2021 07:56:56 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id b1-20020a17090a8001b029017700de3903so172676pjn.1;
-        Mon, 26 Jul 2021 07:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jHOVb6r3WpAofmlGsmL5mtg0yFx6CL86twSso5VEFMc=;
-        b=nASXoX0u7PbJ5b5yDhy2tDjlhCB1i3pzkZap/gO8wA+EpivKEaTfP6fVxGm1L26jd8
-         H2Wgrq1Pgnj0OA7zAdt6/U/+OIdSAFZIxSnQrbcEdVPodzQw7YXfJFr1gt42Pl/wK6LO
-         qhfX9UuJRI/bT440gaW+xkftI5+0atNWWYisOJi96rcup/PDRgp1JPTNiBj/TgUfkkYv
-         +Vchb3UV6V0b3dfFscYppZYo4Tq3cbEPzhrYDBtieRl0XtpTaq+oZ5yLr0ylFqHvk+jq
-         q0C1Jn3aLQkImlSog5JcVRSdhA/ANKfmr6RLmw+AePBMI6o6MlkZ01fU9/QV9yucK5jW
-         Wo6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jHOVb6r3WpAofmlGsmL5mtg0yFx6CL86twSso5VEFMc=;
-        b=jWFpNiFEqDv/6/JxP7SGTm3OwNjqmWN1A/1Tzk4FsvcEqlrkebYKtAcBroWR1Ftqbe
-         dwYnJNlsZl3//XJ+IQL5ennDqH4H3U/MiH2Mlp0c6yCfvTMSrhXiOL1gWOnewKC8e0FW
-         hz4hNHkllwtQmVoNldIRu+YM8psPL3QkZyzaiUkuUJZ97ZtggpQ8Exvv8yHWaNblNt7Q
-         L5Aya00BEQ5dzCexGDk3JhtNQF02o33qaBSXfb/Yl0NbuojCjAcB3NKikxu6BZY6loMU
-         Hhsrc3tC5G6Q0tZOQ2kzI8ODBnMufPFqcnnpdTiTBziL7aTIy8HxtJe8C3250uVom1av
-         5DiA==
-X-Gm-Message-State: AOAM530lAmloksQvDRdfnwKXcLKUjP3vLkh+rgicLZTvzGkS21vgZ8J0
-        qkwAiKE4CjFkWDeCxjoMKLI=
-X-Google-Smtp-Source: ABdhPJyU3D09tWWyq5XsRn3NEufDpH+uG/cjmiUcn5bNss01MB3N13+RNI0a0xXny1WftzqenLoAgg==
-X-Received: by 2002:a17:903:1cf:b029:12a:da08:f8e3 with SMTP id e15-20020a17090301cfb029012ada08f8e3mr14554030plh.15.1627311415760;
-        Mon, 26 Jul 2021 07:56:55 -0700 (PDT)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id g3sm232577pfi.197.2021.07.26.07.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 07:56:54 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK)
-Subject: [PATCH v2 09/12] drm/msm: Conversion to drm scheduler
-Date:   Mon, 26 Jul 2021 08:00:23 -0700
-Message-Id: <20210726150038.2187631-10-robdclark@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210726150038.2187631-1-robdclark@gmail.com>
-References: <20210726150038.2187631-1-robdclark@gmail.com>
+        Mon, 26 Jul 2021 11:09:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=eAmodO/I2oyyLqrI2JH2Q22VXuS5hxurk32hCdMAH8c=; b=VPCbQDUsFSNHjYATqc6JeTyQoq
+        R8jTkkKL4BraHobrBiWfjQPegIsCFcr45xSZ+AkiPXZahqEbkLdNk6spdXbBdnsXgfo2PqWpipbmK
+        FjLzcdQ93Qb6twJJeyBPh3unD1+rzf8L8cnkeXQYxJ5CCIj7vd+oCUXwvNeqXsTbsilP3UVHnV19u
+        x6aKzju4qMDhlbR6vGbH++A0In4OoYIvoCXGHEBmkhhtfFb2WNDd49FAhXAGuBZ143YLA1eBdjJvo
+        kwuzNqa7A78uR5nIbXPXELrNvt99OIKDz9F8I2olhs4mKA9Jw/f1AxNMUSfHh7F+ig1Ng9JLPNyq8
+        pwIZzgxQ==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtp (Exim 4.92)
+        (envelope-from <logang@deltatee.com>)
+        id 1m82qh-0003lM-R0; Mon, 26 Jul 2021 09:49:01 -0600
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Dongdong Liu <liudongdong3@huawei.com>, helgaas@kernel.org,
+        hch@infradead.org, kw@linux.com, linux-pci@vger.kernel.org,
+        rajur@chelsio.com, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org
+References: <1627038402-114183-1-git-send-email-liudongdong3@huawei.com>
+ <1627038402-114183-8-git-send-email-liudongdong3@huawei.com>
+ <YPqo6M0AKWLupvNU@unreal> <a8a8ffee-67e8-c899-3d04-1e28fb72560a@deltatee.com>
+ <YP0HOf7kE1aOkqjV@unreal>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <bc9b7b00-40eb-7d4e-f3b3-1d4174f10be5@deltatee.com>
+Date:   Mon, 26 Jul 2021 09:48:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YP0HOf7kE1aOkqjV@unreal>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: netdev@vger.kernel.org, linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl, rajur@chelsio.com, linux-pci@vger.kernel.org, kw@linux.com, hch@infradead.org, helgaas@kernel.org, liudongdong3@huawei.com, leon@kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
+Subject: Re: [PATCH V6 7/8] PCI: Add "pci=disable_10bit_tag=" parameter for
+ peer-to-peer support
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
 
-For existing adrenos, there is one or more ringbuffer, depending on
-whether preemption is supported.  When preemption is supported, each
-ringbuffer has it's own priority.  A submitqueue (which maps to a
-gl context or vk queue in userspace) is mapped to a specific ring-
-buffer at creation time, based on the submitqueue's priority.
 
-Each ringbuffer has it's own drm_gpu_scheduler.  Each submitqueue
-maps to a drm_sched_entity.  And each submit maps to a drm_sched_job.
+On 2021-07-25 12:39 a.m., Leon Romanovsky wrote:
+> On Fri, Jul 23, 2021 at 10:20:50AM -0600, Logan Gunthorpe wrote:
+>>
+>>
+>>
+>> On 2021-07-23 5:32 a.m., Leon Romanovsky wrote:
+>>> On Fri, Jul 23, 2021 at 07:06:41PM +0800, Dongdong Liu wrote:
+>>>> PCIe spec 5.0 r1.0 section 2.2.6.2 says that if an Endpoint supports
+>>>> sending Requests to other Endpoints (as opposed to host memory), the
+>>>> Endpoint must not send 10-Bit Tag Requests to another given Endpoint
+>>>> unless an implementation-specific mechanism determines that the Endpoint
+>>>> supports 10-Bit Tag Completer capability. Add "pci=disable_10bit_tag="
+>>>> parameter to disable 10-Bit Tag Requester if the peer device does not
+>>>> support the 10-Bit Tag Completer. This will make P2P traffic safe.
+>>>>
+>>>> Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
+>>>> ---
+>>>>  Documentation/admin-guide/kernel-parameters.txt |  7 ++++
+>>>>  drivers/pci/pci.c                               | 56 +++++++++++++++++++++++++
+>>>>  drivers/pci/pci.h                               |  1 +
+>>>>  drivers/pci/pcie/portdrv_pci.c                  | 13 +++---
+>>>>  drivers/pci/probe.c                             |  9 ++--
+>>>>  5 files changed, 78 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>>>> index bdb2200..c2c4585 100644
+>>>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>>>> @@ -4019,6 +4019,13 @@
+>>>>  				bridges without forcing it upstream. Note:
+>>>>  				this removes isolation between devices and
+>>>>  				may put more devices in an IOMMU group.
+>>>> +		disable_10bit_tag=<pci_dev>[; ...]
+>>>> +				  Specify one or more PCI devices (in the format
+>>>> +				  specified above) separated by semicolons.
+>>>> +				  Disable 10-Bit Tag Requester if the peer
+>>>> +				  device does not support the 10-Bit Tag
+>>>> +				  Completer.This will make P2P traffic safe.
+>>>
+>>> I can't imagine more awkward user experience than such kernel parameter.
+>>>
+>>> As a user, I will need to boot the system, hope for the best that system
+>>> works, write down all PCI device numbers, guess which one doesn't work
+>>> properly, update grub with new command line argument and reboot the
+>>> system. Any HW change and this dance should be repeated.
+>>
+>> There are already two such PCI parameters with this pattern and they are
+>> not that awkward. pci_dev may be specified with either vendor/device IDS
+>> or with a path of BDFs (which protects against renumbering).
+> 
+> Unfortunately, in the real world, BDF is not so stable. It changes with
+> addition of new hardware, BIOS upgrades and even broken servers.
 
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/4
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Acked-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/msm/Kconfig           |   1 +
- drivers/gpu/drm/msm/msm_gem.c         |  35 ------
- drivers/gpu/drm/msm/msm_gem.h         |  26 ++++-
- drivers/gpu/drm/msm/msm_gem_submit.c  | 161 +++++++++++++-------------
- drivers/gpu/drm/msm/msm_gpu.c         |  13 +--
- drivers/gpu/drm/msm/msm_gpu.h         |   2 +
- drivers/gpu/drm/msm/msm_rd.c          |   6 +-
- drivers/gpu/drm/msm/msm_ringbuffer.c  |  66 +++++++++++
- drivers/gpu/drm/msm/msm_ringbuffer.h  |  12 ++
- drivers/gpu/drm/msm/msm_submitqueue.c |  26 +++++
- 10 files changed, 217 insertions(+), 131 deletions(-)
+That's why it supports using a *path* of BDFs which tends not to catch
+the wrong device if the topology changes.
 
-diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-index 10f693ea89d3..896266267ad7 100644
---- a/drivers/gpu/drm/msm/Kconfig
-+++ b/drivers/gpu/drm/msm/Kconfig
-@@ -12,6 +12,7 @@ config DRM_MSM
- 	select REGULATOR
- 	select DRM_KMS_HELPER
- 	select DRM_PANEL
-+	select DRM_SCHED
- 	select SHMEM
- 	select TMPFS
- 	select QCOM_SCM if ARCH_QCOM
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 00a6289678dd..41a111c49cc7 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -806,41 +806,6 @@ void msm_gem_vunmap(struct drm_gem_object *obj)
- 	msm_obj->vaddr = NULL;
- }
- 
--/* must be called before _move_to_active().. */
--int msm_gem_sync_object(struct drm_gem_object *obj,
--		struct msm_fence_context *fctx, bool exclusive)
--{
--	struct dma_resv_list *fobj;
--	struct dma_fence *fence;
--	int i, ret;
--
--	fobj = dma_resv_get_list(obj->resv);
--	if (!fobj || (fobj->shared_count == 0)) {
--		fence = dma_resv_get_excl(obj->resv);
--		/* don't need to wait on our own fences, since ring is fifo */
--		if (fence && (fence->context != fctx->context)) {
--			ret = dma_fence_wait(fence, true);
--			if (ret)
--				return ret;
--		}
--	}
--
--	if (!exclusive || !fobj)
--		return 0;
--
--	for (i = 0; i < fobj->shared_count; i++) {
--		fence = rcu_dereference_protected(fobj->shared[i],
--						dma_resv_held(obj->resv));
--		if (fence->context != fctx->context) {
--			ret = dma_fence_wait(fence, true);
--			if (ret)
--				return ret;
--		}
--	}
--
--	return 0;
--}
--
- void msm_gem_active_get(struct drm_gem_object *obj, struct msm_gpu *gpu)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-index e0579abda5b9..a48114058ff9 100644
---- a/drivers/gpu/drm/msm/msm_gem.h
-+++ b/drivers/gpu/drm/msm/msm_gem.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/kref.h>
- #include <linux/dma-resv.h>
-+#include "drm/gpu_scheduler.h"
- #include "msm_drv.h"
- 
- /* Make all GEM related WARN_ON()s ratelimited.. when things go wrong they
-@@ -143,8 +144,6 @@ void *msm_gem_get_vaddr_active(struct drm_gem_object *obj);
- void msm_gem_put_vaddr_locked(struct drm_gem_object *obj);
- void msm_gem_put_vaddr(struct drm_gem_object *obj);
- int msm_gem_madvise(struct drm_gem_object *obj, unsigned madv);
--int msm_gem_sync_object(struct drm_gem_object *obj,
--		struct msm_fence_context *fctx, bool exclusive);
- void msm_gem_active_get(struct drm_gem_object *obj, struct msm_gpu *gpu);
- void msm_gem_active_put(struct drm_gem_object *obj);
- int msm_gem_cpu_prep(struct drm_gem_object *obj, uint32_t op, ktime_t *timeout);
-@@ -311,6 +310,7 @@ void msm_gem_vunmap(struct drm_gem_object *obj);
-  * make it easier to unwind when things go wrong, etc).
-  */
- struct msm_gem_submit {
-+	struct drm_sched_job base;
- 	struct kref ref;
- 	struct drm_device *dev;
- 	struct msm_gpu *gpu;
-@@ -319,7 +319,22 @@ struct msm_gem_submit {
- 	struct list_head bo_list;
- 	struct ww_acquire_ctx ticket;
- 	uint32_t seqno;		/* Sequence number of the submit on the ring */
--	struct dma_fence *fence;
-+
-+	/* Array of struct dma_fence * to block on before submitting this job.
-+	 */
-+	struct xarray deps;
-+	unsigned long last_dep;
-+
-+	/* Hw fence, which is created when the scheduler executes the job, and
-+	 * is signaled when the hw finishes (via seqno write from cmdstream)
-+	 */
-+	struct dma_fence *hw_fence;
-+
-+	/* Userspace visible fence, which is signaled by the scheduler after
-+	 * the hw_fence is signaled.
-+	 */
-+	struct dma_fence *user_fence;
-+
- 	int fence_id;       /* key into queue->fence_idr */
- 	struct msm_gpu_submitqueue *queue;
- 	struct pid *pid;    /* submitting process */
-@@ -350,6 +365,11 @@ struct msm_gem_submit {
- 	} bos[];
- };
- 
-+static inline struct msm_gem_submit *to_msm_submit(struct drm_sched_job *job)
-+{
-+	return container_of(job, struct msm_gem_submit, base);
-+}
-+
- void __msm_gem_submit_destroy(struct kref *kref);
- 
- static inline void msm_gem_submit_get(struct msm_gem_submit *submit)
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index f570155bc086..2b158433a6e5 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -33,6 +33,7 @@ static struct msm_gem_submit *submit_create(struct drm_device *dev,
- {
- 	struct msm_gem_submit *submit;
- 	uint64_t sz;
-+	int ret;
- 
- 	sz = struct_size(submit, bos, nr_bos) +
- 			((u64)nr_cmds * sizeof(submit->cmd[0]));
-@@ -44,6 +45,14 @@ static struct msm_gem_submit *submit_create(struct drm_device *dev,
- 	if (!submit)
- 		return ERR_PTR(-ENOMEM);
- 
-+	ret = drm_sched_job_init(&submit->base, &queue->entity, queue);
-+	if (ret) {
-+		kfree(submit);
-+		return ERR_PTR(ret);
-+	}
-+
-+	xa_init_flags(&submit->deps, XA_FLAGS_ALLOC);
-+
- 	kref_init(&submit->ref);
- 	submit->dev = dev;
- 	submit->aspace = queue->ctx->aspace;
-@@ -63,6 +72,8 @@ void __msm_gem_submit_destroy(struct kref *kref)
- {
- 	struct msm_gem_submit *submit =
- 			container_of(kref, struct msm_gem_submit, ref);
-+	unsigned long index;
-+	struct dma_fence *fence;
- 	unsigned i;
- 
- 	if (submit->fence_id) {
-@@ -71,7 +82,14 @@ void __msm_gem_submit_destroy(struct kref *kref)
- 		mutex_unlock(&submit->queue->lock);
- 	}
- 
--	dma_fence_put(submit->fence);
-+	xa_for_each (&submit->deps, index, fence) {
-+		dma_fence_put(fence);
-+	}
-+
-+	xa_destroy(&submit->deps);
-+
-+	dma_fence_put(submit->user_fence);
-+	dma_fence_put(submit->hw_fence);
- 
- 	put_pid(submit->pid);
- 	msm_submitqueue_put(submit->queue);
-@@ -307,7 +325,7 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
- 	int i, ret = 0;
- 
- 	for (i = 0; i < submit->nr_bos; i++) {
--		struct msm_gem_object *msm_obj = submit->bos[i].obj;
-+		struct drm_gem_object *obj = &submit->bos[i].obj->base;
- 		bool write = submit->bos[i].flags & MSM_SUBMIT_BO_WRITE;
- 
- 		if (!write) {
-@@ -316,8 +334,7 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
- 			 * strange place to call it.  OTOH this is a
- 			 * convenient can-fail point to hook it in.
- 			 */
--			ret = dma_resv_reserve_shared(msm_obj->base.resv,
--								1);
-+			ret = dma_resv_reserve_shared(obj->resv, 1);
- 			if (ret)
- 				return ret;
- 		}
-@@ -325,7 +342,7 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
- 		if (no_implicit)
- 			continue;
- 
--		ret = msm_gem_sync_object(&msm_obj->base, submit->ring->fctx,
-+		ret = drm_gem_fence_array_add_implicit(&submit->deps, obj,
- 			write);
- 		if (ret)
- 			break;
-@@ -376,9 +393,9 @@ static void submit_attach_object_fences(struct msm_gem_submit *submit)
- 		struct drm_gem_object *obj = &submit->bos[i].obj->base;
- 
- 		if (submit->bos[i].flags & MSM_SUBMIT_BO_WRITE)
--			dma_resv_add_excl_fence(obj->resv, submit->fence);
-+			dma_resv_add_excl_fence(obj->resv, submit->user_fence);
- 		else if (submit->bos[i].flags & MSM_SUBMIT_BO_READ)
--			dma_resv_add_shared_fence(obj->resv, submit->fence);
-+			dma_resv_add_shared_fence(obj->resv, submit->user_fence);
- 	}
- }
- 
-@@ -517,12 +534,12 @@ struct msm_submit_post_dep {
- 	struct dma_fence_chain *chain;
- };
- 
--static struct drm_syncobj **msm_wait_deps(struct drm_device *dev,
--                                          struct drm_file *file,
--                                          uint64_t in_syncobjs_addr,
--                                          uint32_t nr_in_syncobjs,
--                                          size_t syncobj_stride,
--                                          struct msm_ringbuffer *ring)
-+static struct drm_syncobj **msm_parse_deps(struct msm_gem_submit *submit,
-+                                           struct drm_file *file,
-+                                           uint64_t in_syncobjs_addr,
-+                                           uint32_t nr_in_syncobjs,
-+                                           size_t syncobj_stride,
-+                                           struct msm_ringbuffer *ring)
- {
- 	struct drm_syncobj **syncobjs = NULL;
- 	struct drm_msm_gem_submit_syncobj syncobj_desc = {0};
-@@ -546,7 +563,7 @@ static struct drm_syncobj **msm_wait_deps(struct drm_device *dev,
- 		}
- 
- 		if (syncobj_desc.point &&
--		    !drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE)) {
-+		    !drm_core_check_feature(submit->dev, DRIVER_SYNCOBJ_TIMELINE)) {
- 			ret = -EOPNOTSUPP;
- 			break;
- 		}
-@@ -561,10 +578,7 @@ static struct drm_syncobj **msm_wait_deps(struct drm_device *dev,
- 		if (ret)
- 			break;
- 
--		if (!dma_fence_match_context(fence, ring->fctx->context))
--			ret = dma_fence_wait(fence, true);
--
--		dma_fence_put(fence);
-+		ret = drm_gem_fence_array_add(&submit->deps, fence);
- 		if (ret)
- 			break;
- 
-@@ -741,47 +755,6 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	trace_msm_gpu_submit(pid_nr(pid), ring->id, submitid,
- 		args->nr_bos, args->nr_cmds);
- 
--	if (args->flags & MSM_SUBMIT_FENCE_FD_IN) {
--		struct dma_fence *in_fence;
--
--		in_fence = sync_file_get_fence(args->fence_fd);
--
--		if (!in_fence)
--			return -EINVAL;
--
--		/*
--		 * Wait if the fence is from a foreign context, or if the fence
--		 * array contains any fence from a foreign context.
--		 */
--		ret = 0;
--		if (!dma_fence_match_context(in_fence, ring->fctx->context))
--			ret = dma_fence_wait(in_fence, true);
--
--		dma_fence_put(in_fence);
--		if (ret)
--			return ret;
--	}
--
--	if (args->flags & MSM_SUBMIT_SYNCOBJ_IN) {
--		syncobjs_to_reset = msm_wait_deps(dev, file,
--		                                  args->in_syncobjs,
--		                                  args->nr_in_syncobjs,
--		                                  args->syncobj_stride, ring);
--		if (IS_ERR(syncobjs_to_reset))
--			return PTR_ERR(syncobjs_to_reset);
--	}
--
--	if (args->flags & MSM_SUBMIT_SYNCOBJ_OUT) {
--		post_deps = msm_parse_post_deps(dev, file,
--		                                args->out_syncobjs,
--		                                args->nr_out_syncobjs,
--		                                args->syncobj_stride);
--		if (IS_ERR(post_deps)) {
--			ret = PTR_ERR(post_deps);
--			goto out_post_unlock;
--		}
--	}
--
- 	ret = mutex_lock_interruptible(&dev->struct_mutex);
- 	if (ret)
- 		goto out_post_unlock;
-@@ -807,22 +780,50 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	if (args->flags & MSM_SUBMIT_SUDO)
- 		submit->in_rb = true;
- 
-+	if (args->flags & MSM_SUBMIT_FENCE_FD_IN) {
-+		struct dma_fence *in_fence;
-+
-+		in_fence = sync_file_get_fence(args->fence_fd);
-+
-+		if (!in_fence) {
-+			ret = -EINVAL;
-+			goto out_unlock;
-+		}
-+
-+		ret = drm_gem_fence_array_add(&submit->deps, in_fence);
-+		if (ret)
-+			goto out_unlock;
-+	}
-+
-+	if (args->flags & MSM_SUBMIT_SYNCOBJ_IN) {
-+		syncobjs_to_reset = msm_parse_deps(submit, file,
-+		                                   args->in_syncobjs,
-+		                                   args->nr_in_syncobjs,
-+		                                   args->syncobj_stride, ring);
-+		if (IS_ERR(syncobjs_to_reset)) {
-+			ret = PTR_ERR(syncobjs_to_reset);
-+			goto out_unlock;
-+		}
-+	}
-+
-+	if (args->flags & MSM_SUBMIT_SYNCOBJ_OUT) {
-+		post_deps = msm_parse_post_deps(dev, file,
-+		                                args->out_syncobjs,
-+		                                args->nr_out_syncobjs,
-+		                                args->syncobj_stride);
-+		if (IS_ERR(post_deps)) {
-+			ret = PTR_ERR(post_deps);
-+			goto out_unlock;
-+		}
-+	}
-+
- 	ret = submit_lookup_objects(submit, args, file);
- 	if (ret)
--		goto out_pre_pm;
-+		goto out;
- 
- 	ret = submit_lookup_cmds(submit, args, file);
- 	if (ret)
--		goto out_pre_pm;
--
--	/*
--	 * Thanks to dev_pm_opp opp_table_lock interactions with mm->mmap_sem
--	 * in the resume path, we need to to rpm get before we lock objs.
--	 * Which unfortunately might involve powering up the GPU sooner than
--	 * is necessary.  But at least in the explicit fencing case, we will
--	 * have already done all the fence waiting.
--	 */
--	pm_runtime_get_sync(&gpu->pdev->dev);
-+		goto out;
- 
- 	/* copy_*_user while holding a ww ticket upsets lockdep */
- 	ww_acquire_init(&submit->ticket, &reservation_ww_class);
-@@ -869,12 +870,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 
- 	submit->nr_cmds = i;
- 
--	submit->fence = msm_fence_alloc(ring->fctx);
--	if (IS_ERR(submit->fence)) {
--		ret = PTR_ERR(submit->fence);
--		submit->fence = NULL;
--		goto out;
--	}
-+	submit->user_fence = dma_fence_get(&submit->base.s_fence->finished);
- 
- 	/*
- 	 * Allocate an id which can be used by WAIT_FENCE ioctl to map back
-@@ -882,7 +878,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	 */
- 	mutex_lock(&queue->lock);
- 	submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
--			submit->fence, 0, INT_MAX, GFP_KERNEL);
-+			submit->user_fence, 0, INT_MAX, GFP_KERNEL);
- 	mutex_unlock(&queue->lock);
- 	if (submit->fence_id < 0) {
- 		ret = submit->fence_id = 0;
-@@ -891,7 +887,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	}
- 
- 	if (args->flags & MSM_SUBMIT_FENCE_FD_OUT) {
--		struct sync_file *sync_file = sync_file_create(submit->fence);
-+		struct sync_file *sync_file = sync_file_create(submit->user_fence);
- 		if (!sync_file) {
- 			ret = -ENOMEM;
- 			goto out;
-@@ -902,18 +898,19 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 
- 	submit_attach_object_fences(submit);
- 
--	msm_gpu_submit(gpu, submit);
-+	/* The scheduler owns a ref now: */
-+	msm_gem_submit_get(submit);
-+
-+	drm_sched_entity_push_job(&submit->base, &queue->entity);
- 
- 	args->fence = submit->fence_id;
- 
- 	msm_reset_syncobjs(syncobjs_to_reset, args->nr_in_syncobjs);
- 	msm_process_post_deps(post_deps, args->nr_out_syncobjs,
--	                      submit->fence);
-+	                      submit->user_fence);
- 
- 
- out:
--	pm_runtime_put(&gpu->pdev->dev);
--out_pre_pm:
- 	submit_cleanup(submit, !!ret);
- 	if (has_ww_ticket)
- 		ww_acquire_fini(&submit->ticket);
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index 5bfc4d24a956..8a3a592da3a4 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -176,8 +176,8 @@ static void update_fences(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
- 			break;
- 
- 		msm_update_fence(submit->ring->fctx,
--			submit->fence->seqno);
--		dma_fence_signal(submit->fence);
-+			submit->hw_fence->seqno);
-+		dma_fence_signal(submit->hw_fence);
- 	}
- 	spin_unlock_irqrestore(&ring->submit_lock, flags);
- }
-@@ -380,10 +380,6 @@ static void recover_worker(struct kthread_work *work)
- 			put_task_struct(task);
- 		}
- 
--		/* msm_rd_dump_submit() needs bo locked to dump: */
--		for (i = 0; i < submit->nr_bos; i++)
--			msm_gem_lock(&submit->bos[i].obj->base);
--
- 		if (comm && cmd) {
- 			DRM_DEV_ERROR(dev->dev, "%s: offending task: %s (%s)\n",
- 				gpu->name, comm, cmd);
-@@ -393,9 +389,6 @@ static void recover_worker(struct kthread_work *work)
- 		} else {
- 			msm_rd_dump_submit(priv->hangrd, submit, NULL);
- 		}
--
--		for (i = 0; i < submit->nr_bos; i++)
--			msm_gem_unlock(&submit->bos[i].obj->base);
- 	}
- 
- 	/* Record the crash state */
-@@ -704,7 +697,7 @@ static void retire_submits(struct msm_gpu *gpu)
- 			 * been signalled, then later submits are not signalled
- 			 * either, so we are also done.
- 			 */
--			if (submit && dma_fence_is_signaled(submit->fence)) {
-+			if (submit && dma_fence_is_signaled(submit->hw_fence)) {
- 				retire_submit(gpu, ring, submit);
- 			} else {
- 				break;
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 579627252540..b912cacaecc0 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -267,6 +267,7 @@ struct msm_gpu_perfcntr {
-  *             seqno, protected by submitqueue lock
-  * @lock:      submitqueue lock
-  * @ref:       reference count
-+ * @entity: the submit job-queue
-  */
- struct msm_gpu_submitqueue {
- 	int id;
-@@ -278,6 +279,7 @@ struct msm_gpu_submitqueue {
- 	struct idr fence_idr;
- 	struct mutex lock;
- 	struct kref ref;
-+	struct drm_sched_entity entity;
- };
- 
- struct msm_gpu_state_bo {
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index 659e5cc4b40a..b55398a34fa4 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -325,15 +325,19 @@ static void snapshot_buf(struct msm_rd_state *rd,
- 	if (!(submit->bos[idx].flags & MSM_SUBMIT_BO_READ))
- 		return;
- 
-+	msm_gem_lock(&obj->base);
- 	buf = msm_gem_get_vaddr_active(&obj->base);
- 	if (IS_ERR(buf))
--		return;
-+		goto out_unlock;
- 
- 	buf += offset;
- 
- 	rd_write_section(rd, RD_BUFFER_CONTENTS, buf, size);
- 
- 	msm_gem_put_vaddr_locked(&obj->base);
-+
-+out_unlock:
-+	msm_gem_unlock(&obj->base);
- }
- 
- /* called under struct_mutex */
-diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
-index 437cca57d005..5643f579ac46 100644
---- a/drivers/gpu/drm/msm/msm_ringbuffer.c
-+++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
-@@ -7,10 +7,64 @@
- #include "msm_ringbuffer.h"
- #include "msm_gpu.h"
- 
-+/**
-+ * The max # of jobs to write into the hw ringbuffer.
-+ */
-+static uint num_hw_submissions = 8;
-+MODULE_PARM_DESC(num_hw_submissions, "The max number of HW submissions (default 8)");
-+module_param(num_hw_submissions, uint, 0600);
-+
-+static struct dma_fence *msm_job_dependency(struct drm_sched_job *job,
-+		struct drm_sched_entity *s_entity)
-+{
-+	struct msm_gem_submit *submit = to_msm_submit(job);
-+
-+	if (!xa_empty(&submit->deps))
-+		return xa_erase(&submit->deps, submit->last_dep++);
-+
-+	return NULL;
-+}
-+
-+static struct dma_fence *msm_job_run(struct drm_sched_job *job)
-+{
-+	struct msm_gem_submit *submit = to_msm_submit(job);
-+	struct msm_gpu *gpu = submit->gpu;
-+
-+	submit->hw_fence = msm_fence_alloc(submit->ring->fctx);
-+
-+	pm_runtime_get_sync(&gpu->pdev->dev);
-+
-+	/* TODO move submit path over to using a per-ring lock.. */
-+	mutex_lock(&gpu->dev->struct_mutex);
-+
-+	msm_gpu_submit(gpu, submit);
-+
-+	mutex_unlock(&gpu->dev->struct_mutex);
-+
-+	pm_runtime_put(&gpu->pdev->dev);
-+
-+	return dma_fence_get(submit->hw_fence);
-+}
-+
-+static void msm_job_free(struct drm_sched_job *job)
-+{
-+	struct msm_gem_submit *submit = to_msm_submit(job);
-+
-+	drm_sched_job_cleanup(job);
-+	msm_gem_submit_put(submit);
-+}
-+
-+const struct drm_sched_backend_ops msm_sched_ops = {
-+	.dependency = msm_job_dependency,
-+	.run_job = msm_job_run,
-+	.free_job = msm_job_free
-+};
-+
- struct msm_ringbuffer *msm_ringbuffer_new(struct msm_gpu *gpu, int id,
- 		void *memptrs, uint64_t memptrs_iova)
- {
- 	struct msm_ringbuffer *ring;
-+	long sched_timeout;
- 	char name[32];
- 	int ret;
- 
-@@ -45,6 +99,16 @@ struct msm_ringbuffer *msm_ringbuffer_new(struct msm_gpu *gpu, int id,
- 	ring->memptrs = memptrs;
- 	ring->memptrs_iova = memptrs_iova;
- 
-+	 /* currently managing hangcheck ourselves: */
-+	sched_timeout = MAX_SCHEDULE_TIMEOUT;
-+
-+	ret = drm_sched_init(&ring->sched, &msm_sched_ops,
-+			num_hw_submissions, 0, sched_timeout,
-+			NULL, to_msm_bo(ring->bo)->name);
-+	if (ret) {
-+		goto fail;
-+	}
-+
- 	INIT_LIST_HEAD(&ring->submits);
- 	spin_lock_init(&ring->submit_lock);
- 	spin_lock_init(&ring->preempt_lock);
-@@ -65,6 +129,8 @@ void msm_ringbuffer_destroy(struct msm_ringbuffer *ring)
- 	if (IS_ERR_OR_NULL(ring))
- 		return;
- 
-+	drm_sched_fini(&ring->sched);
-+
- 	msm_fence_context_free(ring->fctx);
- 
- 	msm_gem_kernel_put(ring->bo, ring->gpu->aspace);
-diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.h b/drivers/gpu/drm/msm/msm_ringbuffer.h
-index fe55d4a1aa16..d8c63df4e9ca 100644
---- a/drivers/gpu/drm/msm/msm_ringbuffer.h
-+++ b/drivers/gpu/drm/msm/msm_ringbuffer.h
-@@ -7,6 +7,7 @@
- #ifndef __MSM_RINGBUFFER_H__
- #define __MSM_RINGBUFFER_H__
- 
-+#include "drm/gpu_scheduler.h"
- #include "msm_drv.h"
- 
- #define rbmemptr(ring, member)  \
-@@ -40,8 +41,19 @@ struct msm_ringbuffer {
- 	struct drm_gem_object *bo;
- 	uint32_t *start, *end, *cur, *next;
- 
-+	/*
-+	 * The job scheduler for this ring.
-+	 */
-+	struct drm_gpu_scheduler sched;
-+
- 	/*
- 	 * List of in-flight submits on this ring.  Protected by submit_lock.
-+	 *
-+	 * Currently just submits that are already written into the ring, not
-+	 * submits that are still in drm_gpu_scheduler's queues.  At a later
-+	 * step we could probably move to letting drm_gpu_scheduler manage
-+	 * hangcheck detection and keep track of submit jobs that are in-
-+	 * flight.
- 	 */
- 	struct list_head submits;
- 	spinlock_t submit_lock;
-diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
-index 66f8d0fb38b0..682ba2a7c0ec 100644
---- a/drivers/gpu/drm/msm/msm_submitqueue.c
-+++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-@@ -14,6 +14,8 @@ void msm_submitqueue_destroy(struct kref *kref)
- 
- 	idr_destroy(&queue->fence_idr);
- 
-+	drm_sched_entity_destroy(&queue->entity);
-+
- 	msm_file_private_put(queue->ctx);
- 
- 	kfree(queue);
-@@ -64,6 +66,9 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
- {
- 	struct msm_drm_private *priv = drm->dev_private;
- 	struct msm_gpu_submitqueue *queue;
-+	struct msm_ringbuffer *ring;
-+	struct drm_gpu_scheduler *sched;
-+	int ret;
- 
- 	if (!ctx)
- 		return -ENODEV;
-@@ -83,6 +88,27 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
- 	queue->flags = flags;
- 	queue->prio = prio;
- 
-+	ring = priv->gpu->rb[prio];
-+	sched = &ring->sched;
-+
-+	/*
-+	 * TODO we can allow more priorities than we have ringbuffers by
-+	 * mapping:
-+	 *
-+	 *    ring = prio / 3;
-+	 *    ent_prio = DRM_SCHED_PRIORITY_MIN + (prio % 3);
-+	 *
-+	 * Probably avoid using DRM_SCHED_PRIORITY_KERNEL as that is
-+	 * treated specially in places.
-+	 */
-+	ret = drm_sched_entity_init(&queue->entity,
-+			DRM_SCHED_PRIORITY_NORMAL,
-+			&sched, 1, NULL);
-+	if (ret) {
-+		kfree(queue);
-+		return ret;
-+	}
-+
- 	write_lock(&ctx->queuelock);
- 
- 	queue->ctx = msm_file_private_get(ctx);
--- 
-2.31.1
+> Vendor/device IDs doesn't work if you have multiple devices of same
+> vendor in the system.
 
+Yes, but it's fine for some use cases. That's why there's a range of
+options.
+
+>>
+>> This flag is only useful in P2PDMA traffic, and if the user attempts
+>> such a transfer, it prints a warning (see the next patch) with the exact
+>> parameter that needs to be added to the command line.
+> 
+> Dongdong citied PCI spec and it was very clear - don't enable this
+> feature unless you clearly know that it is safe to enable. This is
+> completely opposite to the proposal here - always enable and disable
+> if something is printed to the dmesg.
+
+Quoting from patch 4:
+
+"For platforms where the RC supports 10-Bit Tag Completer capability,
+it is highly recommended for platform firmware or operating software
+that configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable
+bit automatically in Endpoints with 10-Bit Tag Requester capability.
+This enables the important class of 10-Bit Tag capable adapters that
+send Memory Read Requests only to host memory."
+
+Notice the last sentence. It's saying that devices who only talk to host
+memory should have 10-bit tags enabled. In the kernel we call devices
+that talk to things besides host memory "P2PDMA". So the spec is saying
+not to enable 10bit tags for devices participating in P2PDMA. The kernel
+needs a way to allow users to do that. The kernel parameter only stops
+the feature from being enabled for a specific device, and the only
+use-case is P2PDMA which is not that common and requires the user to be
+aware of their topology. So I really don't think this is that big a problem.
+
+>>
+>> This has worked well for disable_acs_redir and was used for
+>> resource_alignment before that for quite some time. So save a better
+>> suggestion I think this is more than acceptable.
+> 
+> I don't know about other parameters and their history, but we are not in
+> 90s anymore and addition of modules parameters (for the PCI it is kernel
+> cmdline arguments) are better to be changed to some configuration tool/sysfs.
+
+The problem was that the ACS bits had to be set before the kernel
+enumerated the devices. The IOMMU code simply was not able to support
+dynamic adjustments to its groups. I assume changing 10bit tags
+dynamically is similarly tricky -- but if it's not then, yes a sysfs
+interface in addition to the kernel parameter would be a good idea.
+
+Logan
