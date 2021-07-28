@@ -2,228 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A31C432BE
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 15:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EFE1C04FE3
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 16:08:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C22661040
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 15:30:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 586506101C
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 16:08:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237354AbhG1PaM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Jul 2021 11:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbhG1PaH (ORCPT
+        id S237198AbhG1QIE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Jul 2021 12:08:04 -0400
+Received: from fanzine.igalia.com ([178.60.130.6]:59997 "EHLO
+        fanzine.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235688AbhG1QFu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Jul 2021 11:30:07 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08EDC061757;
-        Wed, 28 Jul 2021 08:30:05 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h14so3045573wrx.10;
-        Wed, 28 Jul 2021 08:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PGO5orqGxOkAQAyjuFowp4gIrUTAp7PM+7R6jiUynG4=;
-        b=BfMKIt0w2M+dV5hZ8Gi6+ugs+Y9MuZ8dsZffTOTGljdDv8TG0bHfCtbs0mS/zF3vRE
-         6UE+o3xXlhAduVywXjrQrBXPSaL93/QrwAP+LZWy4bRPoakL1RX9kp2q3V6sN0n+1Ccd
-         9NzHMwZgQVs9yYvmds7zEP4XBeMhAzpQ7u3PBOTKh6WNnBPbzQPy2MMFZnpl1dnHXJpU
-         eGgZd3z39zVgOHcd9KXKeDzHrVuDWSM4zDJdzPsdYDDs1OpaaYuZwNF9X6LnoadNKH7H
-         iFxgCg5K6frLy7kiDtadxWTe5DC8d91PzhkviKkfPiIxhVlE16JnU0qPW2mDFa3RQw42
-         IVmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PGO5orqGxOkAQAyjuFowp4gIrUTAp7PM+7R6jiUynG4=;
-        b=ElK52GrYpWCB5T7ze5qELLpYEftABnMV1QrWD6GD/alSkB7cWpmwH7IAtnlb5YlyEN
-         D5E+ruiGjXXvpnCmUCH5tTbOgbC6TRHK5AbdzIXT0vHdOzpFtU60hr/C5uVJcJ39WeBP
-         7YVlg0GqWfAbTMmH+mcdAf2nDmGVCKRkMBqmFGVZytVnbBS9Ag6Mz3ZQTR6FYfiAkr0t
-         yAr7IdA5fSAojoe6vL35MeVzMyAWftsHpmNJ+fGN+TmHyQtBJ8YalAnF2Kbn0UmhrkMK
-         bRYy+MLWxqSLfQaBrea6uv2YMwUFfxr9WRtvmFF2SFsr7CFoOEQ36ZaCrNvvf8GRboyz
-         13fQ==
-X-Gm-Message-State: AOAM532JTrVz/DQD+cFjBU6LgHhZyldd+S6Fjx86SrMPeCDMYTOhjngL
-        ekp0OcP8NRGiC6KnKXh/XSr/HNlqGh1fljP0Z7Y=
-X-Google-Smtp-Source: ABdhPJy2p+1wHDhRbufcHC7EWE4KRZmJktPfNZHrScfzWT3BeZBWBOqZvMA/tCI22TcDazN9EtCkVunxO93zYHXcxqY=
-X-Received: by 2002:a5d:4e43:: with SMTP id r3mr30512016wrt.132.1627486204224;
- Wed, 28 Jul 2021 08:30:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210726233854.2453899-1-robdclark@gmail.com> <28ca4167-4a65-0ccc-36be-5fb017f6f49d@daenzer.net>
- <CAF6AEGuhQ2=DSDaGGVwBz5O+FoZEjpgoVJOcFecpd--a9yDY1w@mail.gmail.com>
- <99984703-c3ca-6aae-5888-5997d7046112@daenzer.net> <CAJs_Fx4O4w5djx3-q5zja51-ko_nQ0X2nEk3qoZB_axpBVSrKA@mail.gmail.com>
- <f6d73ec5-85f9-1b18-f2d2-a5f3b7333efa@gmail.com> <c9ee242e-542e-e189-a1ec-c1be34d66c93@daenzer.net>
- <04d44873-d8e6-6ae7-f0f9-17bcb484d697@amd.com> <9d5f4415-d470-3bc1-7d52-61ba739706ae@daenzer.net>
-In-Reply-To: <9d5f4415-d470-3bc1-7d52-61ba739706ae@daenzer.net>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 28 Jul 2021 08:34:13 -0700
-Message-ID: <CAF6AEGu409eY9xznTAaBf2ZDcV_AaDELUzN2afWgiHwB_uBwqg@mail.gmail.com>
-Subject: Re: [RFC 0/4] dma-fence: Deadline awareness
-To:     =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Matthew Brost <matthew.brost@intel.com>,
+        Wed, 28 Jul 2021 12:05:50 -0400
+X-Greylist: delayed 2670 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Jul 2021 12:05:50 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; s=20170329;
+        h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date; bh=1WnwC+3EXs5c8VfBZDFJ7PRTMAGdpqCKrOWn6WyssQM=;
+        b=LUytcxR2nCFmj4M/m9Bfs7ollqulcS4j9XhLo19EvtUuIg+08LhkHn6ETW7uSK4YHf5//nGWXwkgl9zY6oXtyu7ph0tG62miVryuTl2e7ohcV9ss1LVulaJnriKJXI0JsD3SuVf5nfagNypD/siTUbXWveUoD0ctW2N63QXMP8AnkCw7v3v7k2loZaSYOhMphyn4bstLnzC8dShccqiAdVZsTS3i+079LoMFvxzn5UnS9pksbhQ5QNuGycNrwhsof+2x32rNNj2pdhN3rTvog3KSFzCdTpoVx6huCvAwb0Hx0HGaA/U24XGjsUh3J/DGbjwwXwS7dhaBAqdfAkredg==;
+Received: from a95-92-181-29.cpe.netcabo.pt ([95.92.181.29] helo=mail.igalia.com)
+        by fanzine.igalia.com with esmtpsa 
+        (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
+        id 1m8lMm-0002xE-LB; Wed, 28 Jul 2021 17:21:04 +0200
+Date:   Wed, 28 Jul 2021 16:20:44 +0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Christian =?utf-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
         Jack Zhang <Jack.Zhang1@amd.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Steven Price <steven.price@arm.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Nirmoy Das <nirmoy.aiemd@gmail.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
         "moderated list:DMA BUFFER SHARING FRAMEWORK" 
         <linaro-mm-sig@lists.linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>, Roy Sun <Roy.Sun@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [Linaro-mm-sig] [PATCH v4 03/18] drm/sched: Add dependency
+ tracking
+Message-ID: <20210728152044.ygq4cw7i2tm5mcyy@mail.igalia.com>
+References: <20210712175352.802687-1-daniel.vetter@ffwll.ch>
+ <20210712175352.802687-4-daniel.vetter@ffwll.ch>
+ <CAKMK7uG8bMuDP=7-z9nZ38WgMdbeUk96eNx3buTCiaKatYOJxw@mail.gmail.com>
+ <2bcfba05-b7d5-1bd9-d74a-b9aac1147e20@gmail.com>
+ <CAKMK7uE7GBZYih=KZm5t7-_0P8i7M0tA2KgSOgJsm+-HUE+HzA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xrz7dfzdxflucf5v"
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uE7GBZYih=KZm5t7-_0P8i7M0tA2KgSOgJsm+-HUE+HzA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 6:24 AM Michel D=C3=A4nzer <michel@daenzer.net> wro=
-te:
->
-> On 2021-07-28 3:13 p.m., Christian K=C3=B6nig wrote:
-> > Am 28.07.21 um 15:08 schrieb Michel D=C3=A4nzer:
-> >> On 2021-07-28 1:36 p.m., Christian K=C3=B6nig wrote:
-> >>> Am 27.07.21 um 17:37 schrieb Rob Clark:
-> >>>> On Tue, Jul 27, 2021 at 8:19 AM Michel D=C3=A4nzer <michel@daenzer.n=
-et> wrote:
-> >>>>> On 2021-07-27 5:12 p.m., Rob Clark wrote:
-> >>>>>> On Tue, Jul 27, 2021 at 7:50 AM Michel D=C3=A4nzer <michel@daenzer=
-.net> wrote:
-> >>>>>>> On 2021-07-27 1:38 a.m., Rob Clark wrote:
-> >>>>>>>> From: Rob Clark <robdclark@chromium.org>
-> >>>>>>>>
-> >>>>>>>> Based on discussion from a previous series[1] to add a "boost" m=
-echanism
-> >>>>>>>> when, for example, vblank deadlines are missed.  Instead of a bo=
-ost
-> >>>>>>>> callback, this approach adds a way to set a deadline on the fenc=
-e, by
-> >>>>>>>> which the waiter would like to see the fence signalled.
-> >>>>>>>>
-> >>>>>>>> I've not yet had a chance to re-work the drm/msm part of this, b=
-ut
-> >>>>>>>> wanted to send this out as an RFC in case I don't have a chance =
-to
-> >>>>>>>> finish the drm/msm part this week.
-> >>>>>>>>
-> >>>>>>>> Original description:
-> >>>>>>>>
-> >>>>>>>> In some cases, like double-buffered rendering, missing vblanks c=
-an
-> >>>>>>>> trick the GPU into running at a lower frequence, when really we
-> >>>>>>>> want to be running at a higher frequency to not miss the vblanks
-> >>>>>>>> in the first place.
-> >>>>>>>>
-> >>>>>>>> This is partially inspired by a trick i915 does, but implemented
-> >>>>>>>> via dma-fence for a couple of reasons:
-> >>>>>>>>
-> >>>>>>>> 1) To continue to be able to use the atomic helpers
-> >>>>>>>> 2) To support cases where display and gpu are different drivers
-> >>>>>>>>
-> >>>>>>>> [1] https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%=
-3A%2F%2Fpatchwork.freedesktop.org%2Fseries%2F90331%2F&amp;data=3D04%7C01%7C=
-christian.koenig%40amd.com%7C269b2df3e1dc4f0b856d08d951c8c768%7C3dd8961fe48=
-84e608e11a82d994e183d%7C0%7C0%7C637630745091538563%7CUnknown%7CTWFpbGZsb3d8=
-eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&a=
-mp;sdata=3DeYaSOSS5wOngNAd9wufp5eWCx5GtAwo6GkultJgrjmA%3D&amp;reserved=3D0
-> >>>>>>> Unfortunately, none of these approaches will have the full intend=
-ed effect once Wayland compositors start waiting for client buffers to beco=
-me idle before using them for an output frame (to prevent output frames fro=
-m getting delayed by client work). See https://nam11.safelinks.protection.o=
-utlook.com/?url=3Dhttps%3A%2F%2Fgitlab.gnome.org%2FGNOME%2Fmutter%2F-%2Fmer=
-ge_requests%2F1880&amp;data=3D04%7C01%7Cchristian.koenig%40amd.com%7C269b2d=
-f3e1dc4f0b856d08d951c8c768%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637=
-630745091538563%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzI=
-iLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3D1ZkOzLqbiKSyCixGZ0u7Hd%2=
-Fc1YnUZub%2F%2Fx7RuEclFKg%3D&amp;reserved=3D0 (shameless plug :) for a proo=
-f of concept of this for mutter. The boost will only affect the compositor'=
-s own GPU work, not the client work (which means no effect at all for fulls=
-creen apps where the compositor can scan out the client buffers directly).
-> >>>>>>>
-> >>>>>> I guess you mean "no effect at all *except* for fullscreen..."?
-> >>>>> I meant what I wrote: The compositor will wait for the next buffer =
-to become idle, so there's no boost from this mechanism for the client draw=
-ing to that buffer. And since the compositor does no drawing of its own in =
-this case, there's no boost from that either.
-> >>>>>
-> >>>>>
-> >>>>>> I'd perhaps recommend that wayland compositors, in cases where onl=
-y a
-> >>>>>> single layer is changing, not try to be clever and just push the
-> >>>>>> update down to the kernel.
-> >>>>> Even just for the fullscreen direct scanout case, that would requir=
-e some kind of atomic KMS API extension to allow queuing multiple page flip=
-s for the same CRTC.
-> >>>>>
-> >>>>> For other cases, this would also require a mechanism to cancel a pe=
-nding atomic commit, for when another surface update comes in before the co=
-mpositor's deadline, which affects the previously single updating surface a=
-s well.
-> >>>>>
-> >>>> Well, in the end, there is more than one compositor out there.. and =
-if
-> >>>> some wayland compositors are going this route, they can also impleme=
-nt
-> >>>> the same mechanism in userspace using the sysfs that devfreq exports=
-.
-> >>>>
-> >>>> But it sounds simpler to me for the compositor to have a sort of "ga=
-me
-> >>>> mode" for fullscreen games.. I'm less worried about UI interactive
-> >>>> workloads, boosting the GPU freq upon sudden activity after a period
-> >>>> of inactivity seems to work reasonably well there.
-> >>> At least AMD hardware is already capable of flipping frames on GPU ev=
-ents like finishing rendering (or uploading etc).
-> >>>
-> >>> By waiting in userspace on the CPU before send the frame to the hardw=
-are you are completely killing of such features.
-> >>>
-> >>> For composing use cases that makes sense, but certainly not for full =
-screen applications as far as I can see.
-> >> Even for fullscreen, the current KMS API only allows queuing a single =
-page flip per CRTC, with no way to cancel or otherwise modify it. Therefore=
-, a Wayland compositor has to set a deadline for the next refresh cycle, an=
-d when the deadline passes, it has to select the best buffer available for =
-the fullscreen surface. To make sure the flip will not miss the next refres=
-h cycle, the compositor has to pick an idle buffer. If it picks a non-idle =
-buffer, and the pending rendering does not finish in time for vertical blan=
-k, the flip will be delayed by at least one refresh cycle, which results in=
- visible stuttering.
-> >>
-> >> (Until the deadline passes, the Wayland compositor can't even know if =
-a previously fullscreen surface will still be fullscreen for the next refre=
-sh cycle)
+
+--xrz7dfzdxflucf5v
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 07/28, Daniel Vetter wrote:
+> On Wed, Jul 28, 2021 at 1:29 PM Christian K=F6nig
+> <ckoenig.leichtzumerken@gmail.com> wrote:
+> > Am 27.07.21 um 13:09 schrieb Daniel Vetter:
+> > > Adding a few more people to this bikeshed.
+> > >
+> > > On Mon, Jul 12, 2021 at 10:02 PM Daniel Vetter <daniel.vetter@ffwll.c=
+h> wrote:
+> > >
+> > >> @@ -349,6 +367,13 @@ int drm_sched_job_init(struct drm_sched_job *jo=
+b,
+> > >>                         struct drm_sched_entity *entity,
+> > >>                         void *owner);
+> > >>   void drm_sched_job_arm(struct drm_sched_job *job);
+> > >> +int drm_sched_job_await_fence(struct drm_sched_job *job,
+> > >> +                             struct dma_fence *fence);
+> > >> +int drm_sched_job_await_implicit(struct drm_sched_job *job,
+> > >> +                                struct drm_gem_object *obj,
+> > >> +                                bool write);
+> > >> +
+> > >> +
+> > > I'm still waiting on the paint delivery for these two functions so I
+> > > can finish this shed.
 > >
-> > Well then let's extend the KMS API instead of hacking together workarou=
-nds in userspace.
->
-> That's indeed a possible solution for the fullscreen / direct scanout cas=
-e.
->
-> Not for the general compositing case though, since a compositor does not =
-want to composite multiple output frames per display refresh cycle, so it h=
-as to make sure the one frame hits the target.
->
+> > Well I wouldn't call that bike shedding, good names are important.
+> >
+> > Just imaging we would have called the exclusive-fence write-fence inste=
+ad.
+>=20
+> Sure naming matters, but at least to my English understanding there's
+> not a semantic different between telling something to await for
+> something else (i.e. add a dependency) or to tell something to add a
+> dependency (i.e. await that thing later on before you start doing your
+> own thing).
+>=20
+> Exclusive vs write fence otoh is a pretty big difference in what it means.
+>=20
+> But also if there's consensus that I'm wrong then I'm happy to pick
+> the more preferred of the two options I deem equivalent.
+>=20
+> > What speaks against calling them add_dependency() and
+> > _add_implicit_depencencies() ?
+>=20
+> Nothing. I just like another ack on this before I rename it all. Also
+> I wasnt sure what you'd want to name the implicit dependency thing.
+>=20
+> Lucas, Boris, Melissa, any acks here?
 
-I think solving the fullscreen game case is sufficient enough forward
-progress to be useful.  And the results I'm seeing[1] are sufficiently
-positive to convince me that dma-fence deadline support is the right
-thing to do.
+so, my English is far from good; but _add_dependency sounds good to me.
 
-But maybe the solution to make this also useful for mutter is to, once
-we have deadline support, extend it with an ioctl to the dma-fence fd
-so userspace can be the one setting the deadline.
+Melissa
 
-[1] https://patchwork.freedesktop.org/patch/447138/
+> -Daniel
+>=20
+> > Regards,
+> > Christian.
+> >
+> > >
+> > > Thanks, Daniel
+> > >
+> > >>   void drm_sched_entity_modify_sched(struct drm_sched_entity *entity,
+> > >>                                      struct drm_gpu_scheduler **sche=
+d_list,
+> > >>                                      unsigned int num_sched_list);
+> > >> --
+> > >> 2.32.0
+> > >>
+> > >
+> >
+>=20
+>=20
+> --=20
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
-BR,
--R
+--xrz7dfzdxflucf5v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmEBdccACgkQwqF3j0dL
+ehyj8g/+NHSkYxFoA0/Cwejk1IUV9MmWHSH6GJ4Ri5WEI12QjJobZjaA3elSeseo
+EBSKRNf6Vlc/8qDfr0ngsKBt17MhjrvMy9RzQrc/c82097PQW1he/df2pMluLmBb
+caqvFQjyq8yo9pGXofnEO8otBLchuByLAhhAYCXLyTIfbfcglI7fe0y9kIcjfo6d
+vR0BEcfeZN3RHG2VAK3W383U8N29ChfO7fa3Z4UlMb+YYgYhDMqj0jkuTgyubvWl
+WDGdj4YM3rfBWQw62f5kc1bDgRHJa52/jGE2ZkeIxHYFihvvdnEPvKbTBQhY4fD2
+LZrKyzEmdMRrlHxzyEBZzhcu+ceyM4bMb04ETYkueVwYCcPsclKirNcmOkM7Vb8a
+XX6TGzj/u/Ho+/3bzsrHASi8EKHgWizzFSSoy+wlADtEZC2LedW5q6WjSBzSY0rS
+BVEDk61nc5bfyIvTJj6+E4qZy4uwmsbCTl4LVoZwFu5422oFEJ25vRdOsyU523xD
+MKs8IlfZ8HoC/A++CLO3luv+GDC8JuNLwal5ShZOuB+ej02TFM1W/NXE/8M5lUuv
+MQMarxCw5X4EhfuMi92SglwXo4Jw77von1L1ncOY3m0EBlcliRDObDf9TFe3jSte
+q6gZ7uhqats2HMrVm/zCOhpC295Z1qpYWy9hvIZu7j6ZNCeIcKA=
+=cI4x
+-----END PGP SIGNATURE-----
+
+--xrz7dfzdxflucf5v--
