@@ -4,128 +4,239 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E80EC4338F
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 08:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09CCCC432BE
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 09:13:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DE8C60F9D
-	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 08:55:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E998960FA0
+	for <linux-media@archiver.kernel.org>; Wed, 28 Jul 2021 09:13:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbhG1IzA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Jul 2021 04:55:00 -0400
-Received: from comms.puri.sm ([159.203.221.185]:36396 "EHLO comms.puri.sm"
+        id S235012AbhG1JNH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Jul 2021 05:13:07 -0400
+Received: from comms.puri.sm ([159.203.221.185]:37206 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229574AbhG1Iy7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Jul 2021 04:54:59 -0400
+        id S231392AbhG1JNG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Jul 2021 05:13:06 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 6C214E048D;
-        Wed, 28 Jul 2021 01:54:28 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 38B05E0F6A;
+        Wed, 28 Jul 2021 02:13:05 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jK_RTihMX_Ee; Wed, 28 Jul 2021 01:54:27 -0700 (PDT)
-Message-ID: <6461ee38c77b94c0c8853d814da6ae6ae4e684f6.camel@puri.sm>
-Subject: Re: [RFC PATCH 2/3] media: imx: imx7-media-csi: Set TWO_8BIT_SENSOR
- for >= 10-bit formats
+        with ESMTP id oG_DDe8G8-OZ; Wed, 28 Jul 2021 02:13:00 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marek Vasut <marex@denx.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Date:   Wed, 28 Jul 2021 10:54:23 +0200
-In-Reply-To: <20210516024216.4576-3-laurent.pinchart@ideasonboard.com>
-References: <20210516024216.4576-1-laurent.pinchart@ideasonboard.com>
-         <20210516024216.4576-3-laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+To:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        shawnguo@kernel.org
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, kernel@puri.sm, krzk@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, m.felsch@pengutronix.de,
+        mchehab@kernel.org, phone-devel@vger.kernel.org, robh@kernel.org,
+        slongerbeam@gmail.com,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v10 1/3] dt-bindings: media: document the nxp,imx8mq-mipi-csi2 receiver phy and controller
+Date:   Wed, 28 Jul 2021 11:12:43 +0200
+Message-Id: <20210728091245.231043-2-martin.kepplinger@puri.sm>
+In-Reply-To: <20210728091245.231043-1-martin.kepplinger@puri.sm>
+References: <20210728091245.231043-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Sonntag, dem 16.05.2021 um 05:42 +0300 schrieb Laurent Pinchart:
-> Sample code from NXP, as well as experiments on i.MX8MM with RAW10
-> capture with an OV5640 sensor connected over CSI-2, showed that the
-> TWO_8BIT_SENSOR field of the CSICR3 register needs to be set for
-> formats
-> larger than 8 bits. Do so, even if the reference manual doesn't
-> clearly
-> describe the effect of the field.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  drivers/staging/media/imx/imx7-media-csi.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx7-media-csi.c
-> b/drivers/staging/media/imx/imx7-media-csi.c
-> index f85a2f5f1413..256b9aa978f0 100644
-> --- a/drivers/staging/media/imx/imx7-media-csi.c
-> +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> @@ -422,6 +422,7 @@ static void imx7_csi_configure(struct imx7_csi
-> *csi)
->         int width = out_pix->width;
->         u32 stride = 0;
->         u32 cr1, cr18;
-> +       u32 cr3 = 0;
->  
->         cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
->  
-> @@ -464,6 +465,7 @@ static void imx7_csi_configure(struct imx7_csi
-> *csi)
->                 case MEDIA_BUS_FMT_SGBRG10_1X10:
->                 case MEDIA_BUS_FMT_SGRBG10_1X10:
->                 case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +                       cr3 |= BIT_TWO_8BIT_SENSOR;
->                         cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
->                         break;
->                 case MEDIA_BUS_FMT_Y12_1X12:
-> @@ -471,6 +473,7 @@ static void imx7_csi_configure(struct imx7_csi
-> *csi)
->                 case MEDIA_BUS_FMT_SGBRG12_1X12:
->                 case MEDIA_BUS_FMT_SGRBG12_1X12:
->                 case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +                       cr3 |= BIT_TWO_8BIT_SENSOR;
->                         cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
->                         break;
->                 case MEDIA_BUS_FMT_Y14_1X14:
-> @@ -478,6 +481,7 @@ static void imx7_csi_configure(struct imx7_csi
-> *csi)
->                 case MEDIA_BUS_FMT_SGBRG14_1X14:
->                 case MEDIA_BUS_FMT_SGRBG14_1X14:
->                 case MEDIA_BUS_FMT_SRGGB14_1X14:
-> +                       cr3 |= BIT_TWO_8BIT_SENSOR;
->                         cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
->                         break;
->                 /*
-> @@ -510,7 +514,7 @@ static void imx7_csi_configure(struct imx7_csi
-> *csi)
->  
->         imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
->         imx7_csi_reg_write(csi, BIT_DMA_BURST_TYPE_RFF_INCR16,
-> CSI_CSICR2);
-> -       imx7_csi_reg_write(csi, BIT_FRMCNT_RST, CSI_CSICR3);
-> +       imx7_csi_reg_write(csi, BIT_FRMCNT_RST | cr3, CSI_CSICR3);
->         imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
->  
->         imx7_csi_reg_write(csi, (width * out_pix->height) >> 2,
-> CSI_CSIRXCNT);
+The i.MX8MQ SoC integrates a different MIPI CSI receiver as the i.MX8MM so
+describe the DT bindings for it.
 
-this patch series looks good to me - I need it for the driver to run on
-imx8mq.
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 174 ++++++++++++++++++
+ 1 file changed, 174 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
 
-Reviewed-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-
-Could you either rebase and resend as non-RFC or queue them up more
-directly?
-
-thank you,
-
-                     martin
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..9c04fa85ee5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+@@ -0,0 +1,174 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nxp,imx8mq-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP i.MX8MQ MIPI CSI-2 receiver
++
++maintainers:
++  - Martin Kepplinger <martin.kepplinger@puri.sm>
++
++description: |-
++  This binding covers the CSI-2 RX PHY and host controller included in the
++  NXP i.MX8MQ SoC. It handles the sensor/image input and process for all the
++  input imaging devices.
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx8mq-mipi-csi2
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: core is the RX Controller Core Clock input. This clock
++                     must be exactly equal to or faster than the receive
++                     byteclock from the RX DPHY.
++      - description: esc is the Rx Escape Clock. This must be the same escape
++                     clock that the RX DPHY receives.
++      - description: ui is the pixel clock (phy_ref up to 333Mhz).
++                     See the reference manual for details.
++
++  clock-names:
++    items:
++      - const: core
++      - const: esc
++      - const: ui
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    items:
++      - description: CORE_RESET reset register bit definition
++      - description: PHY_REF_RESET reset register bit definition
++      - description: ESC_RESET reset register bit definition
++
++  fsl,mipi-phy-gpr:
++    description: |
++      The phandle to the imx8mq syscon iomux-gpr with the register
++      for setting RX_ENABLE for the mipi receiver.
++
++      The format should be as follows:
++      <gpr req_gpr>
++      gpr is the phandle to general purpose register node.
++      req_gpr is the gpr register offset of RX_ENABLE for the mipi phy.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: The 'gpr' is the phandle to general purpose register node.
++        - description: The 'req_gpr' is the gpr register offset containing
++                       CSI2_1_RX_ENABLE or CSI2_2_RX_ENABLE respectively.
++          maximum: 0xff
++
++  interconnects:
++    maxItems: 1
++
++  interconnect-names:
++    const: dram
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description:
++          Input port node, single endpoint describing the CSI-2 transmitter.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes:
++                items:
++                  minItems: 1
++                  maxItems: 4
++                  items:
++                    - const: 1
++                    - const: 2
++                    - const: 3
++                    - const: 4
++
++            required:
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Output port node
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - power-domains
++  - resets
++  - fsl,mipi-phy-gpr
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mq-clock.h>
++    #include <dt-bindings/interconnect/imx8mq.h>
++    #include <dt-bindings/reset/imx8mq-reset.h>
++
++    csi@30a70000 {
++        compatible = "fsl,imx8mq-mipi-csi2";
++        reg = <0x30a70000 0x1000>;
++        clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++                 <&clk IMX8MQ_CLK_CSI1_ESC>,
++                 <&clk IMX8MQ_CLK_CSI1_PHY_REF>;
++        clock-names = "core", "esc", "ui";
++        assigned-clocks = <&clk IMX8MQ_CLK_CSI1_CORE>,
++                          <&clk IMX8MQ_CLK_CSI1_PHY_REF>,
++                          <&clk IMX8MQ_CLK_CSI1_ESC>;
++        assigned-clock-rates = <266000000>, <200000000>, <66000000>;
++        assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_266M>,
++                                 <&clk IMX8MQ_SYS2_PLL_1000M>,
++                                 <&clk IMX8MQ_SYS1_PLL_800M>;
++        power-domains = <&pgc_mipi_csi1>;
++        resets = <&src IMX8MQ_RESET_MIPI_CSI1_CORE_RESET>,
++                 <&src IMX8MQ_RESET_MIPI_CSI1_PHY_REF_RESET>,
++                 <&src IMX8MQ_RESET_MIPI_CSI1_ESC_RESET>;
++        fsl,mipi-phy-gpr = <&iomuxc_gpr 0x88>;
++        interconnects = <&noc IMX8MQ_ICM_CSI1 &noc IMX8MQ_ICS_DRAM>;
++        interconnect-names = "dram";
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++
++                imx8mm_mipi_csi_in: endpoint {
++                    remote-endpoint = <&imx477_out>;
++                    data-lanes = <1 2 3 4>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++
++                imx8mm_mipi_csi_out: endpoint {
++                    remote-endpoint = <&csi_in>;
++                };
++            };
++        };
++    };
++
++...
+-- 
+2.30.2
 
