@@ -3,414 +3,331 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2170EC4338F
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 07:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B4AC4320E
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 07:03:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B9C961074
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 07:03:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58B4C61059
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 07:03:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbhG2HDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Jul 2021 03:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S234448AbhG2HDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Jul 2021 03:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234347AbhG2HDh (ORCPT
+        with ESMTP id S234437AbhG2HDj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Jul 2021 03:03:37 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D672FC061765
-        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 00:03:33 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id b11so186246wrx.6
-        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 00:03:33 -0700 (PDT)
+        Thu, 29 Jul 2021 03:03:39 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EF4C061765
+        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 00:03:36 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n21so3006616wmq.5
+        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 00:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=P06/wDjljvLTcx1hkh+6VSS2u+Qmgh2zG3JkU3VuM3o=;
-        b=RQlG2JN2cixyCnENA0RNSrhMF+N5O9W9x1kHPTFY/RHoYEXNN4qcQSw7nYwcvR8kJH
-         zFqwmZR0E2spuWiJcbHYqUSjbCCFshI2AkCDXBFRSd+dBNZozzz3YLuZJROc43GtdjN6
-         DRv1PmZN7YekdgNANrRoygvu6Snqjv6pn/9DLeZoaXW19vsRckJc071Y4S/a6kB9gpdW
-         /yA+Dssr/hLwK91M78dfEQ2L+w2YkGmBVnsIu/47zc1eH3XYsQbUS1UYMjHmG6dC5L3b
-         U7IsGT0LPwaVc3YFEJarvzUkkDSlGf98IreaxB5Zy3i+Ga5vmEE+vWwlyTqHBhE2bmSp
-         pDUQ==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=yjmoZLiUD+FWnyezF+2h89AQ15fOMkle7vS/pk0BQrk=;
+        b=CYR8Fi+P5EGNe3xUIak1oGG+oatnt/+x6BC4ocWfsDJ0OG6hWZPlm3OGOeViQJMCdI
+         UWclXE36+8hC86zTZkKVWdW5btkVTJSQq2YTENMQL0xa7ZHmW9YQazg4/NvC/1R8g51w
+         3PDiKAhYS6QM+IpddnmSyaPUtJ7Q4kq36fU0c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P06/wDjljvLTcx1hkh+6VSS2u+Qmgh2zG3JkU3VuM3o=;
-        b=VTKPq/JhuVSIiKA3zr2WrQNL2qVEtg4FmH3AY2EzrnUFMmgMno09oNl/sYpfU8Y3YG
-         LQmc/0qONDb6tzWJsrOl9LFPJ2LKn8gPe7EW9mnj5kMV/n8DHAvo3c7saea24Qq9cC2B
-         pptUERIft0M+sfxRvAzk3VnnFqUzEX8iIDYWTJkol0+KfCzPXe85z94fxUMmRJfhYKf6
-         h9wD0A6funZOAxC5FtCPT5rBFjOGvwvf0Fki+S//h2zMPnkVzl7ArH+HUu/S/x+0IwaT
-         J5xkKaBuhon/tzOKeCbe2WL0yKEm1FRFLHIlxfhptqVAUh9br14T9OnTtENDXBVzGuyg
-         D43Q==
-X-Gm-Message-State: AOAM532M9R7y46aIXncDYYO+FKpGeK2y2tq9C6w+3daqvqoM5BTZ0EwX
-        AGRcJVApZLvDxx/qimb5E30=
-X-Google-Smtp-Source: ABdhPJyy86twjvGmaQ0gMV2Px9gb/rPdfWDy5OE0mP1Q/unWj8BME/5PlqbCHnlb6m4njsx3qREmYw==
-X-Received: by 2002:adf:ebc5:: with SMTP id v5mr3130106wrn.269.1627542212459;
-        Thu, 29 Jul 2021 00:03:32 -0700 (PDT)
-Received: from abel.fritz.box ([2a02:908:1252:fb60:4e80:335d:252f:540b])
-        by smtp.gmail.com with ESMTPSA id h14sm2177527wrp.55.2021.07.29.00.03.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=yjmoZLiUD+FWnyezF+2h89AQ15fOMkle7vS/pk0BQrk=;
+        b=ZLGpwf9kG/dD2QUsUWY0FwMlQLbfQy9O0gEQhMiQdY2XFhgBA7DqXT6/wN35spKqqO
+         BVfd0FkWCkzJX9K8GM1wFNVvZ0wMyILO2Vsu5/WNR7XluyuZEYvsV5lB8hgJrR4Q7iGG
+         nE3pGrT9WLkF4zomuuFsZYPlPiIyvl6+ewNMyMmGbwNDi2IarmO5olNDs5gNhQ02RJxa
+         QR510l5/iJ1Ow6e0YqGyFqf4i8HjK8oaxZJsedhE+RM2zI1XAkwVKdDWyViP6zvCM3Rm
+         RAAkVGZUfRc+shWTaWSCozKzy/MU8uGRL2A+xn/vftbT9PP0gNaptzofp1bOFqIFbFwi
+         BgLw==
+X-Gm-Message-State: AOAM533+trKrI9L6btndj7R5/RmIOk0pO42w4yNqJk45yBLfuvuJkFpu
+        RNr1WjfIs2YP0YKQAugYk7VWkw==
+X-Google-Smtp-Source: ABdhPJxhDZGEhqp03BqW6NXSOqDd5aB+UkvkHgDcGsZFr8Q1/7QVZU8Ur8DP6zd16O+/MOBVdJtmzQ==
+X-Received: by 2002:a05:600c:3587:: with SMTP id p7mr12841259wmq.27.1627542215139;
+        Thu, 29 Jul 2021 00:03:35 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id p3sm8448882wmp.25.2021.07.29.00.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 00:03:32 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     sumit.semwal@linaro.org, gustavo@padovan.org, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 2/3] dma-buf: nuke DMA_FENCE_TRACE macros
-Date:   Thu, 29 Jul 2021 09:03:29 +0200
-Message-Id: <20210729070330.41443-2-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210729070330.41443-1-christian.koenig@amd.com>
-References: <20210729070330.41443-1-christian.koenig@amd.com>
+        Thu, 29 Jul 2021 00:03:34 -0700 (PDT)
+Date:   Thu, 29 Jul 2021 09:03:32 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 1/4] dma-fence: Add deadline awareness
+Message-ID: <YQJSxEVUkZmfL5Cb@phenom.ffwll.local>
+Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20210726233854.2453899-1-robdclark@gmail.com>
+ <20210726233854.2453899-2-robdclark@gmail.com>
+ <50b181fe-6605-b7ac-36a6-8bcda2930e6f@gmail.com>
+ <CAF6AEGuNxi_aeYE37FT3a-atCUWgepxs-9EwxMfpiMaU7wgqdQ@mail.gmail.com>
+ <9edd7083-e6b3-b230-c273-8f2fbe76ca17@amd.com>
+ <703dc9c3-5657-432e-ca0b-25bdd67a2abd@gmail.com>
+ <CAF6AEGvSpvc2po93b2eKB2cSzx_a+BtPWhQgRs-1NFFZfUbJNw@mail.gmail.com>
+ <e5e71356-1c58-04ac-2609-70d268941b8d@amd.com>
+ <CAF6AEGu3NMyRp1pC5iZQoHhKhu_xBFBqkkfbG36dx8bVzYdWMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGu3NMyRp1pC5iZQoHhKhu_xBFBqkkfbG36dx8bVzYdWMA@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-7-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only the DRM GPU scheduler, radeon and amdgpu where using them and they depend
-on a non existing config option to actually emit some code.
+On Wed, Jul 28, 2021 at 10:58:51AM -0700, Rob Clark wrote:
+> On Wed, Jul 28, 2021 at 10:23 AM Christian König
+> <christian.koenig@amd.com> wrote:
+> >
+> >
+> >
+> > Am 28.07.21 um 17:15 schrieb Rob Clark:
+> > > On Wed, Jul 28, 2021 at 4:37 AM Christian König
+> > > <ckoenig.leichtzumerken@gmail.com> wrote:
+> > >> Am 28.07.21 um 09:03 schrieb Christian König:
+> > >>> Am 27.07.21 um 16:25 schrieb Rob Clark:
+> > >>>> On Tue, Jul 27, 2021 at 12:11 AM Christian König
+> > >>>> <ckoenig.leichtzumerken@gmail.com> wrote:
+> > >>>>> Am 27.07.21 um 01:38 schrieb Rob Clark:
+> > >>>>>> From: Rob Clark <robdclark@chromium.org>
+> > >>>>>>
+> > >>>>>> Add a way to hint to the fence signaler of an upcoming deadline,
+> > >>>>>> such as
+> > >>>>>> vblank, which the fence waiter would prefer not to miss. This is to
+> > >>>>>> aid
+> > >>>>>> the fence signaler in making power management decisions, like boosting
+> > >>>>>> frequency as the deadline approaches and awareness of missing
+> > >>>>>> deadlines
+> > >>>>>> so that can be factored in to the frequency scaling.
+> > >>>>>>
+> > >>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > >>>>>> ---
+> > >>>>>>     drivers/dma-buf/dma-fence.c | 39
+> > >>>>>> +++++++++++++++++++++++++++++++++++++
+> > >>>>>>     include/linux/dma-fence.h   | 17 ++++++++++++++++
+> > >>>>>>     2 files changed, 56 insertions(+)
+> > >>>>>>
+> > >>>>>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> > >>>>>> index ce0f5eff575d..2e0d25ab457e 100644
+> > >>>>>> --- a/drivers/dma-buf/dma-fence.c
+> > >>>>>> +++ b/drivers/dma-buf/dma-fence.c
+> > >>>>>> @@ -910,6 +910,45 @@ dma_fence_wait_any_timeout(struct dma_fence
+> > >>>>>> **fences, uint32_t count,
+> > >>>>>>     }
+> > >>>>>>     EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> > >>>>>>
+> > >>>>>> +
+> > >>>>>> +/**
+> > >>>>>> + * dma_fence_set_deadline - set desired fence-wait deadline
+> > >>>>>> + * @fence:    the fence that is to be waited on
+> > >>>>>> + * @deadline: the time by which the waiter hopes for the fence to be
+> > >>>>>> + *            signaled
+> > >>>>>> + *
+> > >>>>>> + * Inform the fence signaler of an upcoming deadline, such as
+> > >>>>>> vblank, by
+> > >>>>>> + * which point the waiter would prefer the fence to be signaled
+> > >>>>>> by.  This
+> > >>>>>> + * is intended to give feedback to the fence signaler to aid in power
+> > >>>>>> + * management decisions, such as boosting GPU frequency if a periodic
+> > >>>>>> + * vblank deadline is approaching.
+> > >>>>>> + */
+> > >>>>>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t
+> > >>>>>> deadline)
+> > >>>>>> +{
+> > >>>>>> +     unsigned long flags;
+> > >>>>>> +
+> > >>>>>> +     if (dma_fence_is_signaled(fence))
+> > >>>>>> +             return;
+> > >>>>>> +
+> > >>>>>> +     spin_lock_irqsave(fence->lock, flags);
+> > >>>>>> +
+> > >>>>>> +     /* If we already have an earlier deadline, keep it: */
+> > >>>>>> +     if (test_bit(DMA_FENCE_FLAG_HAS_DEADLINE_BIT, &fence->flags) &&
+> > >>>>>> +         ktime_before(fence->deadline, deadline)) {
+> > >>>>>> +             spin_unlock_irqrestore(fence->lock, flags);
+> > >>>>>> +             return;
+> > >>>>>> +     }
+> > >>>>>> +
+> > >>>>>> +     fence->deadline = deadline;
+> > >>>>>> +     set_bit(DMA_FENCE_FLAG_HAS_DEADLINE_BIT, &fence->flags);
+> > >>>>>> +
+> > >>>>>> +     spin_unlock_irqrestore(fence->lock, flags);
+> > >>>>>> +
+> > >>>>>> +     if (fence->ops->set_deadline)
+> > >>>>>> +             fence->ops->set_deadline(fence, deadline);
+> > >>>>>> +}
+> > >>>>>> +EXPORT_SYMBOL(dma_fence_set_deadline);
+> > >>>>>> +
+> > >>>>>>     /**
+> > >>>>>>      * dma_fence_init - Initialize a custom fence.
+> > >>>>>>      * @fence: the fence to initialize
+> > >>>>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> > >>>>>> index 6ffb4b2c6371..4e6cfe4e6fbc 100644
+> > >>>>>> --- a/include/linux/dma-fence.h
+> > >>>>>> +++ b/include/linux/dma-fence.h
+> > >>>>>> @@ -88,6 +88,7 @@ struct dma_fence {
+> > >>>>>>                 /* @timestamp replaced by @rcu on
+> > >>>>>> dma_fence_release() */
+> > >>>>>>                 struct rcu_head rcu;
+> > >>>>>>         };
+> > >>>>>> +     ktime_t deadline;
+> > >>>>> Mhm, adding the flag sounds ok to me but I'm a bit hesitating adding
+> > >>>>> the
+> > >>>>> deadline as extra field here.
+> > >>>>>
+> > >>>>> We tuned the dma_fence structure intentionally so that it is only 64
+> > >>>>> bytes.
+> > >>>> Hmm, then I guess you wouldn't be a fan of also adding an hrtimer?
+> > >>>>
+> > >>>> We could push the ktime_t (and timer) down into the derived fence
+> > >>>> class, but I think there is going to need to be some extra storage
+> > >>>> *somewhere*.. maybe the fence signaler could get away with just
+> > >>>> storing the nearest upcoming deadline per fence-context instead?
+> > >>> I would just push that into the driver instead.
+> > >>>
+> > >>> You most likely don't want the deadline per fence anyway in complex
+> > >>> scenarios, but rather per frame. And a frame is usually composed from
+> > >>> multiple fences.
+> > > Right, I ended up keeping track of the nearest deadline in patch 5/4
+> > > which added drm/msm support:
+> > >
+> > >    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.freedesktop.org%2Fpatch%2F447138%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7Cce6ace85263d448bbc9f08d951d9f06c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637630819606427306%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=ameszAOlClaZNeUDlYr37ZdIytVXNgiEUKuctjXLqZ0%3D&amp;reserved=0
+> > >
+> > > But if we do have the ktime_t in dma_fence in dma_fence, we can add
+> > > some checks and avoid calling back to the driver if a later deadline
+> > > is set on a fence that already has an earlier deadline.  OTOH I
+> > > suppose I can push all that back to the driver to start, and we can
+> > > revisit once we have more drivers implementing deadline support.
+> >
+> > I still think that all of this is rather specific to your use case and
+> > have strong doubt that anybody else will implement that.
+> 
+> i915 does already have a similar thing in it's hand-rolled atomic
+> commit path.  So I think msm won't be the only one.  It should be also
+> useful to the other mobile GPUs with a gpu vs kms driver split,
+> although looking at the other gpu devfreq implementations, I don't
+> think they've yet gotten to this point in the fine tuning..
 
-Nuke them and clean up the dma_fence_signal* return value.
+Yeah I have a dream that maybe i915 will use the atomic commit helpers, I
+originally wrote them with i915 in mind :-) even had patches!
 
-Signed-off-by: Christian KÃ¶nig <christian.koenig@amd.com>
----
- drivers/dma-buf/dma-fence.c               | 44 +++++------------------
- drivers/dma-buf/st-dma-fence.c            | 12 ++-----
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 10 +-----
- drivers/gpu/drm/radeon/radeon_fence.c     | 24 +++----------
- drivers/gpu/drm/scheduler/sched_fence.c   | 18 ++--------
- include/linux/dma-fence.h                 | 32 +++--------------
- 6 files changed, 23 insertions(+), 117 deletions(-)
+I also think we'll need this eventually in other areas, Android also has
+some hacks like this to make sure idle->first touch doesn't suck and
+similar things.
+-Daniel
 
-diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-index ce0f5eff575d..21cba0f74e69 100644
---- a/drivers/dma-buf/dma-fence.c
-+++ b/drivers/dma-buf/dma-fence.c
-@@ -350,12 +350,9 @@ void __dma_fence_might_wait(void)
-  *
-  * Unlike dma_fence_signal_timestamp(), this function must be called with
-  * &dma_fence.lock held.
-- *
-- * Returns 0 on success and a negative error value when @fence has been
-- * signalled already.
-  */
--int dma_fence_signal_timestamp_locked(struct dma_fence *fence,
--				      ktime_t timestamp)
-+void dma_fence_signal_timestamp_locked(struct dma_fence *fence,
-+				       ktime_t timestamp)
- {
- 	struct dma_fence_cb *cur, *tmp;
- 	struct list_head cb_list;
-@@ -364,7 +361,7 @@ int dma_fence_signal_timestamp_locked(struct dma_fence *fence,
- 
- 	if (unlikely(test_and_set_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
- 				      &fence->flags)))
--		return -EINVAL;
-+		return;
- 
- 	/* Stash the cb_list before replacing it with the timestamp */
- 	list_replace(&fence->cb_list, &cb_list);
-@@ -377,8 +374,6 @@ int dma_fence_signal_timestamp_locked(struct dma_fence *fence,
- 		INIT_LIST_HEAD(&cur->node);
- 		cur->func(fence, cur);
- 	}
--
--	return 0;
- }
- EXPORT_SYMBOL(dma_fence_signal_timestamp_locked);
- 
-@@ -393,23 +388,14 @@ EXPORT_SYMBOL(dma_fence_signal_timestamp_locked);
-  * can only go from the unsignaled to the signaled state and not back, it will
-  * only be effective the first time. Set the timestamp provided as the fence
-  * signal timestamp.
-- *
-- * Returns 0 on success and a negative error value when @fence has been
-- * signalled already.
-  */
--int dma_fence_signal_timestamp(struct dma_fence *fence, ktime_t timestamp)
-+void dma_fence_signal_timestamp(struct dma_fence *fence, ktime_t timestamp)
- {
- 	unsigned long flags;
--	int ret;
--
--	if (!fence)
--		return -EINVAL;
- 
- 	spin_lock_irqsave(fence->lock, flags);
--	ret = dma_fence_signal_timestamp_locked(fence, timestamp);
-+	dma_fence_signal_timestamp_locked(fence, timestamp);
- 	spin_unlock_irqrestore(fence->lock, flags);
--
--	return ret;
- }
- EXPORT_SYMBOL(dma_fence_signal_timestamp);
- 
-@@ -425,13 +411,10 @@ EXPORT_SYMBOL(dma_fence_signal_timestamp);
-  *
-  * Unlike dma_fence_signal(), this function must be called with &dma_fence.lock
-  * held.
-- *
-- * Returns 0 on success and a negative error value when @fence has been
-- * signalled already.
-  */
--int dma_fence_signal_locked(struct dma_fence *fence)
-+void dma_fence_signal_locked(struct dma_fence *fence)
- {
--	return dma_fence_signal_timestamp_locked(fence, ktime_get());
-+	dma_fence_signal_timestamp_locked(fence, ktime_get());
- }
- EXPORT_SYMBOL(dma_fence_signal_locked);
- 
-@@ -444,28 +427,19 @@ EXPORT_SYMBOL(dma_fence_signal_locked);
-  * dma_fence_add_callback(). Can be called multiple times, but since a fence
-  * can only go from the unsignaled to the signaled state and not back, it will
-  * only be effective the first time.
-- *
-- * Returns 0 on success and a negative error value when @fence has been
-- * signalled already.
-  */
--int dma_fence_signal(struct dma_fence *fence)
-+void dma_fence_signal(struct dma_fence *fence)
- {
- 	unsigned long flags;
--	int ret;
- 	bool tmp;
- 
--	if (!fence)
--		return -EINVAL;
--
- 	tmp = dma_fence_begin_signalling();
- 
- 	spin_lock_irqsave(fence->lock, flags);
--	ret = dma_fence_signal_timestamp_locked(fence, ktime_get());
-+	dma_fence_signal_timestamp_locked(fence, ktime_get());
- 	spin_unlock_irqrestore(fence->lock, flags);
- 
- 	dma_fence_end_signalling(tmp);
--
--	return ret;
- }
- EXPORT_SYMBOL(dma_fence_signal);
- 
-diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fence.c
-index c8a12d7ad71a..e89001d8873f 100644
---- a/drivers/dma-buf/st-dma-fence.c
-+++ b/drivers/dma-buf/st-dma-fence.c
-@@ -122,21 +122,13 @@ static int test_signaling(void *arg)
- 		goto err_free;
- 	}
- 
--	if (dma_fence_signal(f)) {
--		pr_err("Fence reported being already signaled\n");
--		goto err_free;
--	}
--
-+	dma_fence_signal(f);
- 	if (!dma_fence_is_signaled(f)) {
- 		pr_err("Fence not reporting signaled\n");
- 		goto err_free;
- 	}
- 
--	if (!dma_fence_signal(f)) {
--		pr_err("Fence reported not being already signaled\n");
--		goto err_free;
--	}
--
-+	dma_fence_signal(f);
- 	err = 0;
- err_free:
- 	dma_fence_put(f);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index d4547d195173..397872779c31 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -246,7 +246,6 @@ bool amdgpu_fence_process(struct amdgpu_ring *ring)
- 	struct amdgpu_fence_driver *drv = &ring->fence_drv;
- 	struct amdgpu_device *adev = ring->adev;
- 	uint32_t seq, last_seq;
--	int r;
- 
- 	do {
- 		last_seq = atomic_read(&ring->fence_drv.last_seq);
-@@ -278,12 +277,7 @@ bool amdgpu_fence_process(struct amdgpu_ring *ring)
- 		if (!fence)
- 			continue;
- 
--		r = dma_fence_signal(fence);
--		if (!r)
--			DMA_FENCE_TRACE(fence, "signaled from irq context\n");
--		else
--			BUG();
--
-+		dma_fence_signal(fence);
- 		dma_fence_put(fence);
- 		pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
- 		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
-@@ -673,8 +667,6 @@ static bool amdgpu_fence_enable_signaling(struct dma_fence *f)
- 	if (!timer_pending(&ring->fence_drv.fallback_timer))
- 		amdgpu_fence_schedule_fallback(ring);
- 
--	DMA_FENCE_TRACE(&fence->base, "armed on ring %i!\n", ring->idx);
--
- 	return true;
- }
- 
-diff --git a/drivers/gpu/drm/radeon/radeon_fence.c b/drivers/gpu/drm/radeon/radeon_fence.c
-index 18f2c2e0dfb3..3f351d222cbb 100644
---- a/drivers/gpu/drm/radeon/radeon_fence.c
-+++ b/drivers/gpu/drm/radeon/radeon_fence.c
-@@ -176,18 +176,11 @@ static int radeon_fence_check_signaled(wait_queue_entry_t *wait, unsigned mode,
- 	 */
- 	seq = atomic64_read(&fence->rdev->fence_drv[fence->ring].last_seq);
- 	if (seq >= fence->seq) {
--		int ret = dma_fence_signal_locked(&fence->base);
--
--		if (!ret)
--			DMA_FENCE_TRACE(&fence->base, "signaled from irq context\n");
--		else
--			DMA_FENCE_TRACE(&fence->base, "was already signaled\n");
--
-+		dma_fence_signal_locked(&fence->base);
- 		radeon_irq_kms_sw_irq_put(fence->rdev, fence->ring);
- 		__remove_wait_queue(&fence->rdev->fence_queue, &fence->fence_wake);
- 		dma_fence_put(&fence->base);
--	} else
--		DMA_FENCE_TRACE(&fence->base, "pending\n");
-+	}
- 	return 0;
- }
- 
-@@ -422,8 +415,6 @@ static bool radeon_fence_enable_signaling(struct dma_fence *f)
- 	fence->fence_wake.func = radeon_fence_check_signaled;
- 	__add_wait_queue(&rdev->fence_queue, &fence->fence_wake);
- 	dma_fence_get(f);
--
--	DMA_FENCE_TRACE(&fence->base, "armed on ring %i!\n", fence->ring);
- 	return true;
- }
- 
-@@ -441,11 +432,7 @@ bool radeon_fence_signaled(struct radeon_fence *fence)
- 		return true;
- 
- 	if (radeon_fence_seq_signaled(fence->rdev, fence->seq, fence->ring)) {
--		int ret;
--
--		ret = dma_fence_signal(&fence->base);
--		if (!ret)
--			DMA_FENCE_TRACE(&fence->base, "signaled from radeon_fence_signaled\n");
-+		dma_fence_signal(&fence->base);
- 		return true;
- 	}
- 	return false;
-@@ -550,7 +537,6 @@ long radeon_fence_wait_timeout(struct radeon_fence *fence, bool intr, long timeo
- {
- 	uint64_t seq[RADEON_NUM_RINGS] = {};
- 	long r;
--	int r_sig;
- 
- 	/*
- 	 * This function should not be called on !radeon fences.
-@@ -567,9 +553,7 @@ long radeon_fence_wait_timeout(struct radeon_fence *fence, bool intr, long timeo
- 		return r;
- 	}
- 
--	r_sig = dma_fence_signal(&fence->base);
--	if (!r_sig)
--		DMA_FENCE_TRACE(&fence->base, "signaled from fence_wait\n");
-+	dma_fence_signal(&fence->base);
- 	return r;
- }
- 
-diff --git a/drivers/gpu/drm/scheduler/sched_fence.c b/drivers/gpu/drm/scheduler/sched_fence.c
-index 69de2c76731f..3736746c47bd 100644
---- a/drivers/gpu/drm/scheduler/sched_fence.c
-+++ b/drivers/gpu/drm/scheduler/sched_fence.c
-@@ -50,26 +50,12 @@ static void __exit drm_sched_fence_slab_fini(void)
- 
- void drm_sched_fence_scheduled(struct drm_sched_fence *fence)
- {
--	int ret = dma_fence_signal(&fence->scheduled);
--
--	if (!ret)
--		DMA_FENCE_TRACE(&fence->scheduled,
--				"signaled from irq context\n");
--	else
--		DMA_FENCE_TRACE(&fence->scheduled,
--				"was already signaled\n");
-+	dma_fence_signal(&fence->scheduled);
- }
- 
- void drm_sched_fence_finished(struct drm_sched_fence *fence)
- {
--	int ret = dma_fence_signal(&fence->finished);
--
--	if (!ret)
--		DMA_FENCE_TRACE(&fence->finished,
--				"signaled from irq context\n");
--	else
--		DMA_FENCE_TRACE(&fence->finished,
--				"was already signaled\n");
-+	dma_fence_signal(&fence->finished);
- }
- 
- static const char *drm_sched_fence_get_driver_name(struct dma_fence *fence)
-diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-index 6ffb4b2c6371..027db23fd4e3 100644
---- a/include/linux/dma-fence.h
-+++ b/include/linux/dma-fence.h
-@@ -370,11 +370,11 @@ static inline void dma_fence_end_signalling(bool cookie) {}
- static inline void __dma_fence_might_wait(void) {}
- #endif
- 
--int dma_fence_signal(struct dma_fence *fence);
--int dma_fence_signal_locked(struct dma_fence *fence);
--int dma_fence_signal_timestamp(struct dma_fence *fence, ktime_t timestamp);
--int dma_fence_signal_timestamp_locked(struct dma_fence *fence,
--				      ktime_t timestamp);
-+void dma_fence_signal(struct dma_fence *fence);
-+void dma_fence_signal_locked(struct dma_fence *fence);
-+void dma_fence_signal_timestamp(struct dma_fence *fence, ktime_t timestamp);
-+void dma_fence_signal_timestamp_locked(struct dma_fence *fence,
-+				       ktime_t timestamp);
- signed long dma_fence_default_wait(struct dma_fence *fence,
- 				   bool intr, signed long timeout);
- int dma_fence_add_callback(struct dma_fence *fence,
-@@ -590,26 +590,4 @@ struct dma_fence *dma_fence_get_stub(void);
- struct dma_fence *dma_fence_allocate_private_stub(void);
- u64 dma_fence_context_alloc(unsigned num);
- 
--#define DMA_FENCE_TRACE(f, fmt, args...) \
--	do {								\
--		struct dma_fence *__ff = (f);				\
--		if (IS_ENABLED(CONFIG_DMA_FENCE_TRACE))			\
--			pr_info("f %llu#%llu: " fmt,			\
--				__ff->context, __ff->seqno, ##args);	\
--	} while (0)
--
--#define DMA_FENCE_WARN(f, fmt, args...) \
--	do {								\
--		struct dma_fence *__ff = (f);				\
--		pr_warn("f %llu#%llu: " fmt, __ff->context, __ff->seqno,\
--			 ##args);					\
--	} while (0)
--
--#define DMA_FENCE_ERR(f, fmt, args...) \
--	do {								\
--		struct dma_fence *__ff = (f);				\
--		pr_err("f %llu#%llu: " fmt, __ff->context, __ff->seqno,	\
--			##args);					\
--	} while (0)
--
- #endif /* __LINUX_DMA_FENCE_H */
+> 
+> BR,
+> -R
+> 
+> > >> Thinking more about it we could probably kill the spinlock pointer and
+> > >> make the flags 32bit if we absolutely need that here.
+> > > If we had a 'struct dma_fence_context' we could push the spinlock, ops
+> > > pointer, and u64 context into that and replace with a single
+> > > dma_fence_context ptr, fwiw
+> >
+> > That won't work. We have a lot of use cases where you can't allocate
+> > memory, but must allocate a context.
+> >
+> > Christian.
+> >
+> > >
+> > > BR,
+> > > -R
+> > >
+> > >> But I still don't see the need for that, especially since most drivers
+> > >> probably won't implement it.
+> > >>
+> > >> Regards,
+> > >> Christian.
+> > >>
+> > >>> Regards,
+> > >>> Christian.
+> > >>>
+> > >>>> BR,
+> > >>>> -R
+> > >>>>
+> > >>>>> Regards,
+> > >>>>> Christian.
+> > >>>>>
+> > >>>>>>         u64 context;
+> > >>>>>>         u64 seqno;
+> > >>>>>>         unsigned long flags;
+> > >>>>>> @@ -99,6 +100,7 @@ enum dma_fence_flag_bits {
+> > >>>>>>         DMA_FENCE_FLAG_SIGNALED_BIT,
+> > >>>>>>         DMA_FENCE_FLAG_TIMESTAMP_BIT,
+> > >>>>>>         DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+> > >>>>>> +     DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
+> > >>>>>>         DMA_FENCE_FLAG_USER_BITS, /* must always be last member */
+> > >>>>>>     };
+> > >>>>>>
+> > >>>>>> @@ -261,6 +263,19 @@ struct dma_fence_ops {
+> > >>>>>>          */
+> > >>>>>>         void (*timeline_value_str)(struct dma_fence *fence,
+> > >>>>>>                                    char *str, int size);
+> > >>>>>> +
+> > >>>>>> +     /**
+> > >>>>>> +      * @set_deadline:
+> > >>>>>> +      *
+> > >>>>>> +      * Callback to allow a fence waiter to inform the fence
+> > >>>>>> signaler of an
+> > >>>>>> +      * upcoming deadline, such as vblank, by which point the
+> > >>>>>> waiter would
+> > >>>>>> +      * prefer the fence to be signaled by.  This is intended to
+> > >>>>>> give feedback
+> > >>>>>> +      * to the fence signaler to aid in power management
+> > >>>>>> decisions, such as
+> > >>>>>> +      * boosting GPU frequency.
+> > >>>>>> +      *
+> > >>>>>> +      * This callback is optional.
+> > >>>>>> +      */
+> > >>>>>> +     void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
+> > >>>>>>     };
+> > >>>>>>
+> > >>>>>>     void dma_fence_init(struct dma_fence *fence, const struct
+> > >>>>>> dma_fence_ops *ops,
+> > >>>>>> @@ -586,6 +601,8 @@ static inline signed long dma_fence_wait(struct
+> > >>>>>> dma_fence *fence, bool intr)
+> > >>>>>>         return ret < 0 ? ret : 0;
+> > >>>>>>     }
+> > >>>>>>
+> > >>>>>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t
+> > >>>>>> deadline);
+> > >>>>>> +
+> > >>>>>>     struct dma_fence *dma_fence_get_stub(void);
+> > >>>>>>     struct dma_fence *dma_fence_allocate_private_stub(void);
+> > >>>>>>     u64 dma_fence_context_alloc(unsigned num);
+> >
+
 -- 
-2.25.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
