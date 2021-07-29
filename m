@@ -2,123 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F84C4338F
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5ECDC4338F
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42C8260EFD
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:30:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A5C660F43
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238115AbhG2NaM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Jul 2021 09:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237849AbhG2N3N (ORCPT
+        id S237560AbhG2Ngg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Jul 2021 09:36:36 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:37857 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237559AbhG2Nge (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Jul 2021 09:29:13 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A101EC0613D3
-        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 06:29:09 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so4046268wmb.5
-        for <linux-media@vger.kernel.org>; Thu, 29 Jul 2021 06:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aHj6egrf+dvUFb8SGDQsPfGCwm+B2h/dnp7lsrxcZQE=;
-        b=k4KhjI3Yep2biAqm8ydx0PRBytl0AbsaL7TwaU79uOcCzMyav9VSuwZjJHBVJoo1Uc
-         Byr55yYCbbAqOKKhYDBsanBtpbrRYnNdPfZx04Yci2SULzJpbf6pMmrsYFvkfUBcEDnv
-         pkidH7je6ZYd0GxpEXFKvz6CpjJhKidA/IcJ+gpISBFTuMib0j3f41qs8wX6w/hhTCx1
-         TVY+wkArt7K5ViptYJpjJJFV975+f8M5pSZXINHyJ9AqQf/zNW5B2RS/P6FHbxadldtG
-         PSxLhII9tTlJqmh8IVWrI+tCDbp1bIcgkU6GiAi9++lXb1YGU4tObCqMfKRZNZa7OZ0s
-         7nSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aHj6egrf+dvUFb8SGDQsPfGCwm+B2h/dnp7lsrxcZQE=;
-        b=l1mOpAX4moQtdRSGy789qMJwN4aC6Bqzs++nb9FB/Q4KcUhZIN3UWD/YdKTEaBvNGJ
-         Vh/KZFokzauXIpMZwGFtGZixWjlm0fjuHmGSM7twPpngxsMglg+mP3u3co+V1R2yoZJ7
-         g1LdGkZMSKZfX+3EbofRkQvuf8nZW/zGZeGm9ieGHivbUagtRVSFyrQKnG4gABgPhF8h
-         5+8r7MSwWgMwBAFLZT43JQuIkUOBg5btBzF7u3PMJ4g3Lei5Pdq7DthHuxEE7xQbeoIL
-         sSx90bp4Z6Vb/BbI/4a1rBxsGn1g/RIUMDPaxn9U2CP9wbfeqDPKTBYb5+JKPO8vBAws
-         IOuA==
-X-Gm-Message-State: AOAM5312lHowA6qH5MGZenQCuK+sPIYT1u3XbbdhkntlQB9IGn0BbXVK
-        9lMz+VMIeZbazyOjE4HnaNkskwKEhHMvvQ==
-X-Google-Smtp-Source: ABdhPJxrExc3V8EYHjmlku7K2OIMcmpK+ergclGbTP4ct5YpZXQuT6RovJf/SQwnUA+hdVigPwTkHQ==
-X-Received: by 2002:a05:600c:1986:: with SMTP id t6mr3151426wmq.80.1627565347963;
-        Thu, 29 Jul 2021 06:29:07 -0700 (PDT)
-Received: from localhost.localdomain ([109.120.209.55])
-        by smtp.gmail.com with ESMTPSA id s9sm3489928wra.80.2021.07.29.06.29.07
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 06:29:07 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+        Thu, 29 Jul 2021 09:36:34 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 96D5mV4p4XTlc96D6mWuNC; Thu, 29 Jul 2021 15:36:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1627565788; bh=rzrhpy3yzELuVgi3XKMS0mbqNigQ+B03mCShxZDLq/g=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=NzdnGXy5e9FFEl8yKJlVrB5QY5CquRMt1dygFsKo+uPjMSg+VydgKhoCQYHdmYqJ1
+         emyDROz1kIKeYRFp0X2sPAlLe6msHvaEzF3S1nxG2qXaJI8Iyo1AJ5Z3Z6rXdmQnzH
+         CflmhFf44oJVd/p50nLARmslyoP8Ob7xFZgwtQQsQ2+QPMKHCBW34ST/XG2neQhAsf
+         SSIN1tHWAgLJD6WvizQ4lTjT2QDx9js95SDOZC1KRZgQXK8OyLnMgtwZqBedKlHIhF
+         MQIH7jz8TCMjye2Ey099+dcPoSbA0UX2AmZ2WlBwi/bb44cPQFJ3kmO5KdCxekExQq
+         NfjrtliMceY+Q==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.15] Venus updates
-Date:   Thu, 29 Jul 2021 16:28:54 +0300
-Message-Id: <20210729132854.136809-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH 1/3] cedrus: drop min_buffers_needed.
+Date:   Thu, 29 Jul 2021 15:36:25 +0200
+Message-Id: <20210729133627.1592672-2-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
+References: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGO50jq3zq15EklNILRdBPqiw3bRBKS+KTHcK5dj5eI2gxDuY+hjCkw5SSO5mN490Q939bLx8p8FD5SUNfS8NVrDTi2JiqDDJMYKH1QZ+VTOXGbILlq8
+ RG4j1C/sA6iK2rsLmCsjMWxHRRLpMtyE00+TFKsoDpregSTXXCdpw+aGQJHDIapUHDo/x2XM1cNrKlrNXWAzbWeP0aEjHW5uxjNA8166MZRcqMHJ4jBgdgqj
+ D3/wq0A+nSevuypcSzy1syzmPcZSyY0FP1MG+rTt6xLV/el6Tv/gLVGbQCq3UGDVW83NWK7mIzxLjguJZk1U4wuAOWswDo6OyM3Wfl7hv8jRPRQB64SdkjCW
+ irUDwhZrTlG1zdljlkHnv1aNkPzQDQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The update includes:
-  * Add intra-refresh period encoder standard control.
-  * Add h264 8x8 transform control in Venus driver.
-  * Few fixes.
+There is no reason for the cedrus driver to set min_buffers_needed.
+A non-zero min_buffers_needed can cause problems with the Request API
+if start_streaming fails when queueing a buffer from a request.
 
-Please pull.
+Since it is not needed for this driver, just remove it.
 
-regards,
-Stan
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-The following changes since commit c27479d762de4eda72ba9e0aa150d439970f2077:
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index c589fe9dae70..f3cd452575d4 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -570,7 +570,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
+ 	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	src_vq->drv_priv = ctx;
+ 	src_vq->buf_struct_size = sizeof(struct cedrus_buffer);
+-	src_vq->min_buffers_needed = 1;
+ 	src_vq->ops = &cedrus_qops;
+ 	src_vq->mem_ops = &vb2_dma_contig_memops;
+ 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+@@ -587,7 +586,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
+ 	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct cedrus_buffer);
+-	dst_vq->min_buffers_needed = 1;
+ 	dst_vq->ops = &cedrus_qops;
+ 	dst_vq->mem_ops = &vb2_dma_contig_memops;
+ 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+-- 
+2.30.2
 
-  media: atomisp: pci: reposition braces as per coding style (2021-07-22 14:01:57 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.15
-
-for you to fetch changes up to 7c526859a0789f96ff0cd8792356e24aeda948ce:
-
-  venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control (2021-07-29 16:19:51 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.15
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      media: venus: venc: Fix potential null pointer dereference on pointer fmt
-
-Mansur Alisha Shaik (2):
-      venus: helper: do not set constrained parameters for UBWC
-      venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control
-
-Stanimir Varbanov (3):
-      docs: ext-ctrls-codec: Document cyclic intra-refresh zero control value
-      media: v4l2-ctrls: Add intra-refresh period control
-      venus: venc: Add support for intra-refresh period
-
-Zhen Lei (1):
-      media: venus: hfi: fix return value check in sys_get_prop_image_version()
-
- .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 19 +++++++++-
- drivers/media/platform/qcom/venus/core.h           |  2 ++
- drivers/media/platform/qcom/venus/helpers.c        |  3 ++
- drivers/media/platform/qcom/venus/hfi_cmds.c       |  8 +++++
- drivers/media/platform/qcom/venus/hfi_helper.h     |  5 +++
- drivers/media/platform/qcom/venus/hfi_msgs.c       |  2 +-
- drivers/media/platform/qcom/venus/venc.c           | 40 ++++++++++++++++++++++
- drivers/media/platform/qcom/venus/venc_ctrls.c     | 38 +++++++++++++++-----
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  2 ++
- include/uapi/linux/v4l2-controls.h                 |  1 +
- 10 files changed, 110 insertions(+), 10 deletions(-)
