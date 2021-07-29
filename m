@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5ECDC4338F
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86481C4320A
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A5C660F43
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FE3460F23
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbhG2Ngg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Jul 2021 09:36:36 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:37857 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237559AbhG2Nge (ORCPT
+        id S234314AbhG2Ngh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Jul 2021 09:36:37 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:57879 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237569AbhG2Ngf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Jul 2021 09:36:34 -0400
+        Thu, 29 Jul 2021 09:36:35 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 96D5mV4p4XTlc96D6mWuNC; Thu, 29 Jul 2021 15:36:28 +0200
+        id 96D5mV4p4XTlc96D6mWuNO; Thu, 29 Jul 2021 15:36:28 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1627565788; bh=rzrhpy3yzELuVgi3XKMS0mbqNigQ+B03mCShxZDLq/g=;
+        t=1627565788; bh=zONAtePxRAqoT/SF1ePsWsWoQYDFACX6TfzVmWlASF4=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=NzdnGXy5e9FFEl8yKJlVrB5QY5CquRMt1dygFsKo+uPjMSg+VydgKhoCQYHdmYqJ1
-         emyDROz1kIKeYRFp0X2sPAlLe6msHvaEzF3S1nxG2qXaJI8Iyo1AJ5Z3Z6rXdmQnzH
-         CflmhFf44oJVd/p50nLARmslyoP8Ob7xFZgwtQQsQ2+QPMKHCBW34ST/XG2neQhAsf
-         SSIN1tHWAgLJD6WvizQ4lTjT2QDx9js95SDOZC1KRZgQXK8OyLnMgtwZqBedKlHIhF
-         MQIH7jz8TCMjye2Ey099+dcPoSbA0UX2AmZ2WlBwi/bb44cPQFJ3kmO5KdCxekExQq
-         NfjrtliMceY+Q==
+        b=oeDWfabecqVZ+crZPoiHyDpsqo37WoRcnzvU03uNiS3yAr73uiZj1Hdl5rMosKCt3
+         3rJjADbRfarBi+QCg2DqM7ltZ+QenzhLLN4yMtf2/gN3pxagIrG6GoSYy/yxsoclY+
+         QPaktgQtT2FVueh3U8iK3qLHgAmIHZ2eCgnoiONqNsGNxsRMHdyLtA7oEHDGivUOiD
+         5R2BXngGHzFa9ubTeC0LDasJ2MlkBNtpxRPSXDJZBlZn3QnBWfibiUDYUI2L0snwN5
+         DXN5mbeJ3pnF8lFXIPGmWxs6ZuXJ9WmRjJkodj/pu9MyiTvGh3mSrNZtD4P8EueW9z
+         Zg10O1pirQNhg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH 1/3] cedrus: drop min_buffers_needed.
-Date:   Thu, 29 Jul 2021 15:36:25 +0200
-Message-Id: <20210729133627.1592672-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/3] videobuf2-core: sanity checks for requests and qbuf
+Date:   Thu, 29 Jul 2021 15:36:27 +0200
+Message-Id: <20210729133627.1592672-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
 References: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
@@ -53,39 +53,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no reason for the cedrus driver to set min_buffers_needed.
-A non-zero min_buffers_needed can cause problems with the Request API
-if start_streaming fails when queueing a buffer from a request.
+The combination of supports_requests == 1 and min_buffers_needed > 0
+is not allowed, WARN on that and return an error.
 
-Since it is not needed for this driver, just remove it.
+Also check that if vb2_core_qbuf() is called from req_queue, that it
+doesn't return an error, unless it is -EIO.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc: Ezequiel Garcia <ezequiel@collabora.com>
 Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 2 --
- 1 file changed, 2 deletions(-)
+ .../media/common/videobuf2/videobuf2-core.c   | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index c589fe9dae70..f3cd452575d4 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -570,7 +570,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
- 	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
- 	src_vq->drv_priv = ctx;
- 	src_vq->buf_struct_size = sizeof(struct cedrus_buffer);
--	src_vq->min_buffers_needed = 1;
- 	src_vq->ops = &cedrus_qops;
- 	src_vq->mem_ops = &vb2_dma_contig_memops;
- 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-@@ -587,7 +586,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
- 	dst_vq->drv_priv = ctx;
- 	dst_vq->buf_struct_size = sizeof(struct cedrus_buffer);
--	dst_vq->min_buffers_needed = 1;
- 	dst_vq->ops = &cedrus_qops;
- 	dst_vq->mem_ops = &vb2_dma_contig_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 02281d13505f..3f0e816472d8 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -1421,9 +1421,19 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb,
+ static void vb2_req_queue(struct media_request_object *obj)
+ {
+ 	struct vb2_buffer *vb = container_of(obj, struct vb2_buffer, req_obj);
++	int err;
+ 
+ 	mutex_lock(vb->vb2_queue->lock);
+-	vb2_core_qbuf(vb->vb2_queue, vb->index, NULL, NULL);
++	/*
++	 * There is no method to propagate an error from vb2_core_qbuf(),
++	 * so if this returns a non-0 value, then WARN.
++	 *
++	 * The only exception is -EIO which is returned if q->error is
++	 * set. We just ignore that, and expect this will be caught the
++	 * next time vb2_req_prepare() is called.
++	 */
++	err = vb2_core_qbuf(vb->vb2_queue, vb->index, NULL, NULL);
++	WARN_ON_ONCE(err && err != -EIO);
+ 	mutex_unlock(vb->vb2_queue->lock);
+ }
+ 
+@@ -2331,6 +2341,17 @@ int vb2_core_queue_init(struct vb2_queue *q)
+ 	if (WARN_ON(q->requires_requests && !q->supports_requests))
+ 		return -EINVAL;
+ 
++	/*
++	 * This combination is not allowed since a non-zero value of
++	 * q->min_buffers_needed can cause vb2_core_qbuf() to fail if
++	 * it has to call start_streaming(), and the Request API expects
++	 * that queueing a request (and thus queueing a buffer contained
++	 * in that request) will always succeed. There is no method of
++	 * propagating an error back to userspace.
++	 */
++	if (WARN_ON(q->supports_requests && q->min_buffers_needed))
++		return -EINVAL;
++
+ 	INIT_LIST_HEAD(&q->queued_list);
+ 	INIT_LIST_HEAD(&q->done_list);
+ 	spin_lock_init(&q->done_lock);
 -- 
 2.30.2
 
