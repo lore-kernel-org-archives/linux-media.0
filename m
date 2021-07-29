@@ -2,105 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D8CC4320E
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DFDEC4338F
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:40:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31C3F60F46
-	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:36:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6A0860C41
+	for <linux-media@archiver.kernel.org>; Thu, 29 Jul 2021 13:40:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237559AbhG2Ngi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Jul 2021 09:36:38 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:50367 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237585AbhG2Ngf (ORCPT
+        id S237681AbhG2NlA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Jul 2021 09:41:00 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:59043 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237608AbhG2Nk7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Jul 2021 09:36:35 -0400
+        Thu, 29 Jul 2021 09:40:59 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 96D5mV4p4XTlc96D6mWuNK; Thu, 29 Jul 2021 15:36:28 +0200
+        id 96HOmVGdWXTlc96HPmWvER; Thu, 29 Jul 2021 15:40:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1627565788; bh=OwMw1SnB0FvNy7NkyLwMP52QS8Hi/dGXZSI4slqI8cI=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=qiG0/Z4ed8xeqHfDtb0ZMAiAsuSv1lPm8kjEMkgzS0BjRrodE7Dn5XkssTmZ0edmt
-         Xht4lCojt+yAgvzr5LQuIVM9OMdMDfmcNXJyM1z333R9FSepZmRnvLOb2ur3s/yI2J
-         j0Ua517eg3fZjmzkh9Ne8H86EnKrLBLAI6en1VNN+hM88PENwu5TA0hAyFtzJqpYnu
-         ZN/yv1TzICCqjuVSZXxRJzV8xpVbm28XJp+IIajvDSLYas1cFkkJU0DTb6DMbfrTlE
-         BNPMWj66cR+61TlcD6njsjz131SW1jYbwkAJsKrOTKA62YitCFmSedQ+oxv4bXnt3F
-         fLqfjYr7x66fQ==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/3] vivid: add module option to set request support mode
-Date:   Thu, 29 Jul 2021 15:36:26 +0200
-Message-Id: <20210729133627.1592672-3-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
-References: <20210729133627.1592672-1-hverkuil-cisco@xs4all.nl>
+        t=1627566055; bh=SKtdJbFBroNlyJ9v4WHCSY4r7YiyKHukivZf1WxfNk4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Sl73bZnWpPWVEnfzn/LHTcccUXHS2NlSDxUDFDdMCdnQ7ph/vmwm9m4OKL5bc2wLm
+         BbClShtuWe4nm7qq7lkEpep72EFdHBGGcdZK2hnt01H3naZD84XVZPtq0JcGhH3V7+
+         7Kyzk7bbZs2kMTp0axhbWxcTwZ4+ydQWPxS098aWg8bOeROZpIyz0TICMnTcWxo+YH
+         8vsKsiRQcZnHIE2KEzYXSpCfdL23l/ZnE8l1njH0ugE7Jx6msyQdeR+HCznZBiTnoN
+         q6c7Dj/W3hcgSSaH/JYqHal1aDnQlZqGNmzOcbmIdHDPPnbYaRde85BmMJdTPQgGde
+         bQV7PU0YcV8Vg==
+Subject: Re: [PATCH v2] media: em28xx: add missing em28xx_close_extension
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
+References: <7df1705e-b2c7-ddfc-9cc5-582fb1a304e5@xs4all.nl>
+ <20210721194307.12155-1-paskripkin@gmail.com>
+ <3b1de658-ebf0-e45f-49ef-953e3467e7d4@xs4all.nl>
+ <20210729154556.6e257405@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <aa8b3e18-7903-9380-d0d6-2303d09110fe@xs4all.nl>
+Date:   Thu, 29 Jul 2021 15:40:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfGO50jq3zq15EklNILRdBPqiw3bRBKS+KTHcK5dj5eI2gxDuY+hjCkw5SSO5mN490Q939bLx8p8FD5SUNfS8NVrDTi2JiqDDJMYKH1QZ+VTOXGbILlq8
- RG4j1C/sA6iK2rsLmCsjMWxHRRLpMtyE00+TFKsoDpregSTXXCdpw+aGQJHDIapUHDo/x2XM1cNrKiFwv3UbgCzWFdWln3Yj5m0I2CRraxCzk6e4pmxu0+Fl
- SYlATkBNTsgwAFX2OH7HdqMtDDwEIjE/skEGUig8ICNou5lf7E9xr7/JmyMiQIVV4xHs3aqISGTkLISX8xDD5w==
+In-Reply-To: <20210729154556.6e257405@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfOels+rWNGJsd3s1FgjYI5bgbUtAhGJnJzP4SYHlnrOYc0yuTc2XOpM2sV8FufbBeMYt6VY+dY8Cn07Cs9I4/IB8cb79M4I3PX4mzieq3aFKB7RRV4iF
+ jDiLRNF2sLIykgHLOUKa5OTWD2WGTY8wZZhLZtkHuaipr3AhpW4jcCwMPZ0UoC1ODLuxjfeoIiwaqxTmTBEWOLZF3Oh6GJgDm1LVdY0GLWx0oxLhjofgqgkF
+ pJCdiRTaxNSbPRbtjUgF8GtOEzx26xbAmMzbwR64sQOc3ba8bCfMWKGeP16NXQeYytnoLYBuw1p/ka2bixyN+EDeOhGO3qGBh8mbxPCizbUQtJA7TJRJzR6z
+ pfGh+X/r6yDXgfg6MdqDKmxHxvIb1v5tHCTyXnTYKY3f4uLIZS6FPcpxwVGuzDtu5KKRsCycwlh1XmIDYc7Fvhs8TUvZKgCau5/nPlrkuWoZEFjGddBAQfs3
+ eova3epiX1UysxPv
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently vivid supports the Request API, but it also sets
-min_buffers_needed in the vb2 queue. But the combination of
-support_requests and min_buffers_needed is not allowed due to
-the fact that vb2_core_qbuf() isn't supposed to fail when called
-from the request framework. And if min_buffers_needed > 0, then
-is can call start_streaming() which definitely can fail.
+On 29/07/2021 14:45, Pavel Skripkin wrote:
+> On Thu, 29 Jul 2021 11:45:19 +0200
+> Hans Verkuil <hverkuil@xs4all.nl> wrote:
+> 
+>> On 21/07/2021 21:43, Pavel Skripkin wrote:
+>>> If em28xx dev has ->dev_next pointer, we need to delete dev_next
+>>> list node from em28xx_extension_devlist on disconnect to avoid UAF
+>>> bugs and corrupted list bugs, since driver frees this pointer on
+>>> disconnect.
+>>>
+>>> Fixes: 1a23f81b7dc3 ("V4L/DVB (9979): em28xx: move usb probe code
+>>> to a proper place") Reported-and-tested-by:
+>>> syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
+>>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com> ---
+>>>
+>>> Changes in v2:
+>>> 	Previous patch was completely broken. I've done some
+>>> debugging again and found true root case of the reported bug.
+>>>
+>>> ---
+>>>  drivers/media/usb/em28xx/em28xx-cards.c | 4 +++-
+>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/usb/em28xx/em28xx-cards.c
+>>> b/drivers/media/usb/em28xx/em28xx-cards.c index
+>>> c1e0dccb7408..d56b040e1bd7 100644 ---
+>>> a/drivers/media/usb/em28xx/em28xx-cards.c +++
+>>> b/drivers/media/usb/em28xx/em28xx-cards.c @@ -4139,8 +4139,10 @@
+>>> static void em28xx_usb_disconnect(struct usb_interface *intf) 
+>>>  	em28xx_close_extension(dev);
+>>>  
+>>> -	if (dev->dev_next)
+>>> +	if (dev->dev_next) {
+>>>  		em28xx_release_resources(dev->dev_next);
+>>> +		em28xx_close_extension(dev->dev_next);
+>>
+>> Wouldn't it be better to swap these two?
+>>
+>> That order is also used for em28xx_close_extension(dev) and
+>> em28xx_release_resources(dev).
+>>
+>> You do need to store dev->dev_next in a temp variable, though.
+>>
+> 
+> Hi, Hans!
+> 
+> I don't understand why I need to store dev->dev_next in a temp
+> variable. I don't see code in em28xx_release_resources() or
+> em28xx_close_extension() that zeroes this pointer.
 
-With the new module option you can control if requests are not
-allowed (min_buffers_needed is 2 in that case), optionally allowed
-or are required. In the latter two cases min_buffers_needed is set
-to 0.
+Apologies for the confusion, just ignore that bit. I misunderstood
+what dev_next was for.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/test-drivers/vivid/vivid-core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+So check if swapping these two lines passes syzbot, and then that's
+the final version.
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index d2bd2653cf54..87f27c7524ec 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -177,6 +177,15 @@ MODULE_PARM_DESC(cache_hints, " user-space cache hints, default is 0.\n"
- 			     "\t\t    0 == forbid\n"
- 			     "\t\t    1 == allow");
- 
-+static unsigned int supports_requests[VIVID_MAX_DEVS] = {
-+	[0 ... (VIVID_MAX_DEVS - 1)] = 1
-+};
-+module_param_array(supports_requests, uint, NULL, 0444);
-+MODULE_PARM_DESC(supports_requests, " support for requests, default is 1.\n"
-+			     "\t\t    0 == no support\n"
-+			     "\t\t    1 == supports requests\n"
-+			     "\t\t    2 == requires requests");
-+
- static struct vivid_dev *vivid_devs[VIVID_MAX_DEVS];
- 
- const struct v4l2_rect vivid_min_rect = {
-@@ -883,10 +892,11 @@ static int vivid_create_queue(struct vivid_dev *dev,
- 	q->mem_ops = allocators[dev->inst] == 1 ? &vb2_dma_contig_memops :
- 						  &vb2_vmalloc_memops;
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	q->min_buffers_needed = min_buffers_needed;
-+	q->min_buffers_needed = supports_requests[dev->inst] ? 0 : min_buffers_needed;
- 	q->lock = &dev->mutex;
- 	q->dev = dev->v4l2_dev.dev;
--	q->supports_requests = true;
-+	q->supports_requests = supports_requests[dev->inst];
-+	q->requires_requests = supports_requests[dev->inst] >= 2;
- 	q->allow_cache_hints = (cache_hints[dev->inst] == 1);
- 
- 	return vb2_queue_init(q);
--- 
-2.30.2
+Regards,
+
+	Hans
+
+> 
+> 
+> 
+> With regards,
+> Pavel Skripkin
+> 
+> 
 
