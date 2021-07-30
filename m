@@ -2,121 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1336BC4320A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jul 2021 12:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 811D2C4338F
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jul 2021 12:07:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA87461059
-	for <linux-media@archiver.kernel.org>; Fri, 30 Jul 2021 12:05:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68A7261074
+	for <linux-media@archiver.kernel.org>; Fri, 30 Jul 2021 12:07:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238709AbhG3MFp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Jul 2021 08:05:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45638 "EHLO mail.kernel.org"
+        id S238792AbhG3MHP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Jul 2021 08:07:15 -0400
+Received: from mout.gmx.net ([212.227.17.21]:45619 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230263AbhG3MFp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Jul 2021 08:05:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 955DD60F01;
-        Fri, 30 Jul 2021 12:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627646740;
-        bh=/YlnU4V3aPDSJabKbYYPbeEQmm/CqFf1w/7AEVfRlFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OCnEFos0dJ2x7MMIS264xEhMeVRksdxI281u3TeuppryAu0qZNns6/HavEw2ZmnSM
-         JKkgPHFZGnTN0pMJha1YMZKpaCQ6kNcLwhd0uTn0r14upyD8smdxAuxOelTDFSBbUI
-         D3L7yIQqQerdQWBtOrecQCWzI23Bc5+u4/9/vUrYaHRl33+7MrP28hT799aiFzCfCB
-         n6hIc6yJAvd1uGh5uXRVws93pBX0j9yk0A9xsTCxvnF3XDlsi+rbEXwAV4oWEqMlQH
-         B2JSK7L96ho5qjc54RA/7zmg3vO56GEIFmcuJLQqzcyu4lDY4ufIYsYzixcs4x8e5e
-         82sjCEO1CaubA==
-Date:   Fri, 30 Jul 2021 07:08:13 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-hardening@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH v2 1/2] media: staging/intel-ipu3: css: Fix wrong size
- comparison
-Message-ID: <184d96f95d6261b1a91704eb68adbd0a2e1c2cc2.1627646101.git.gustavoars@kernel.org>
-References: <cover.1627646101.git.gustavoars@kernel.org>
+        id S238745AbhG3MHO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Jul 2021 08:07:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1627646799;
+        bh=FOQ3kf7nC91N2pAcyJy+ukr7C27FR3nQ3DekDqj8uEI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=SlQlS2e/5cr5IQ2fa8QR7A4b+mf+myEnxGLmMZJMRsxc7C6QbaN6sxtPbeJ9DKjcQ
+         KTKVbDH/GfqMcD9V/ooYsKa4KA0Vbhdx9noBM6+LD71cRA+6UXJPVBriHDvNN0DmKI
+         yyEtUDQVHUJ5U48CFjKqPjhfuocD8p842IRX/jRs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.152.200] ([217.61.152.200]) by web-mail.gmx.net
+ (3c-app-gmx-bs05.server.lan [172.19.170.54]) (via HTTP); Fri, 30 Jul 2021
+ 14:06:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1627646101.git.gustavoars@kernel.org>
+Message-ID: <trinity-166e2707-ca11-4d84-803f-43732de72e2b-1627646799181@3c-app-gmx-bs05>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, yong.wu@mediatek.com,
+        youlin.pei@mediatek.com, Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
+        ming-fan.chen@mediatek.com, yi.kuo@mediatek.com,
+        acourbot@chromium.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xia Jiang <xia.jiang@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>, anthony.huang@mediatek.com
+Subject: Aw: [PATCH v7 00/12] Clean up "mediatek,larb"
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 30 Jul 2021 14:06:39 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20210730025238.22456-1-yong.wu@mediatek.com>
+References: <20210730025238.22456-1-yong.wu@mediatek.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:Ju8UvQ9aQQ211RZizAddcu/LK0Fbm40eWbtOgPOujam+ZiApQCh89ygqJKUfghzFx3Em+
+ 2gYhue+9Tw2MD6gxpnG7k1n49GwJ96zbYr1t0dKh0XNlowbze19Bdjyh25AQrFqjwwEBD5zmvd83
+ mhgHUGlB8Ek/ujixS17y/tmLUcS6lj6J3JAEdYwCmEJOBtpSoiNFM3NNFkq6C1Kia0XV7mTPl8vn
+ vIhfuilUuastgrBdB7uKylodyw+GkvQKNLmACZ0chLIvF4sg96dcRXaudTEuldb+NRZCXQ2lp6Fe
+ X4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:A1JU1CJi+pQ=:iWEaNtvfYekBmQdj4p6NXW
+ UCTDP5kHinGH0vNnqhIZRPdE39sbNxHrVO/p9Q24RiiXHAyeUJq8L+93SGGOg4tPCbdTxfiKV
+ QNPWJF70uYhxy7mgbZlvInK5n6x9M1/K1gNBf3lccsTjt0t4n7WcI4NKCruv73h/djU0LVXne
+ u+0SY70AaL3ley93WPeezkfjb8VSz88R2HcvX9McS6Od/X98F06af4B/GbOm1djPXU1SXfpKo
+ KUIyySiyy6TRpyKROR56bXkdpixhsjixdqQCnx1NOPihzse8xL39ftyMRCoEojHVSiXTDrgV0
+ wYLpEHQ3csdA1t3aEvcUXJrFC/iilayKyvXe9HrWP5LjD5hZlvX++dSXMC2bS+sjJ+eOU4CkG
+ q5M0m7y1SLgWSah28VRg6keBpjwkiusGHwSeFrJBy9o+wBg7RZq2fwYkcq/79Mq9yixMZOoR6
+ nhiymGdyIERrtxqU6M7A2syxtcjcXbLCmxadopF91xMgIPyRJLQmESawqxIuX/JKCRU8WnICX
+ yaVOTYoq5ZT+yOg7fTBack7iK2KxkkNeuDn9dy/MhyU31tAOibr7pfGIyuHmU+MKjqOSn8sD2
+ yJIhbYA42sZeUNd4oYzJMShnDHIkHHbMBy5uAgWrxznbOECqrG5/wUBFgzPZW93EAvMmi7d6r
+ lk0vBXlmisYQWoMoO9WVZCx1Jf118gMwBc5emj7E35X/YicRI/KoVpTwSfgLVwFIUf/8E1yYK
+ NxOYhTRYoQfJZSsRL/ySFrn1KZ2Wx9AntKI1JV3pQblcuhCCvu9yfmLU+oxe/6k6j32YmVzRy
+ sVTI6932Tsaqfe0g/gNwzm3RroETnuenND43TwPhPdSsqPyflo=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is a wrong comparison of the total size of the loaded firmware
-css->fw->size with the size of a pointer to struct imgu_fw_header.
+Full Series tested on BPI-R2/MT7623
 
-Fix this by using the right operand 'struct imgu_fw_header' for
-sizeof, instead of 'struct imgu_fw_header *' and turn binary_header
-into a flexible-array member. Also, adjust the relational operator
-to be '<=' instead of '<', as it seems that the intention of the
-comparison is to determine if the loaded firmware contains any
-'struct imgu_fw_info' items in the binary_header[] array than merely
-the file_header (struct imgu_fw_bi_file_h).
+Tested-By: Frank Wunderlich <frank-w@public-files.de>
 
-The replacement of the one-element array with a flexible-array member
-also help with the ongoing efforts to globally enable -Warray-bounds
-and get us closer to being able to tighten the FORTIFY_SOURCE routines
-on memcpy().
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/109
-Fixes: 09d290f0ba21 ("media: staging/intel-ipu3: css: Add support for firmware management")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-
-It'd be just great if someone that knows this code better can confirm
-these changes are correct. In particular the adjustment of the
-relational operator. Thanks!
-
-Changes in v2:
- - Use flexible array and adjust relational operator, accordingly.
- - Update changelog text.
-
- drivers/staging/media/ipu3/ipu3-css-fw.c | 2 +-
- drivers/staging/media/ipu3/ipu3-css-fw.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/ipu3/ipu3-css-fw.c b/drivers/staging/media/ipu3/ipu3-css-fw.c
-index 45aff76198e2..630cb5186b48 100644
---- a/drivers/staging/media/ipu3/ipu3-css-fw.c
-+++ b/drivers/staging/media/ipu3/ipu3-css-fw.c
-@@ -124,7 +124,7 @@ int imgu_css_fw_init(struct imgu_css *css)
- 	/* Check and display fw header info */
- 
- 	css->fwp = (struct imgu_fw_header *)css->fw->data;
--	if (css->fw->size < sizeof(struct imgu_fw_header *) ||
-+	if (css->fw->size <= sizeof(struct imgu_fw_header) ||
- 	    css->fwp->file_header.h_size != sizeof(struct imgu_fw_bi_file_h))
- 		goto bad_fw;
- 	if (sizeof(struct imgu_fw_bi_file_h) +
-diff --git a/drivers/staging/media/ipu3/ipu3-css-fw.h b/drivers/staging/media/ipu3/ipu3-css-fw.h
-index 3c078f15a295..c0bc57fd678a 100644
---- a/drivers/staging/media/ipu3/ipu3-css-fw.h
-+++ b/drivers/staging/media/ipu3/ipu3-css-fw.h
-@@ -171,7 +171,7 @@ struct imgu_fw_bi_file_h {
- 
- struct imgu_fw_header {
- 	struct imgu_fw_bi_file_h file_header;
--	struct imgu_fw_info binary_header[1];	/* binary_nr items */
-+	struct imgu_fw_info binary_header[];	/* binary_nr items */
- };
- 
- /******************* Firmware functions *******************/
--- 
-2.27.0
-
+regards Frank
